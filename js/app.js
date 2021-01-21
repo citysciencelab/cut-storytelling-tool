@@ -41,7 +41,6 @@ import SaveSelectionView from "../modules/tools/saveSelection/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
 import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
-import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
 
 /**
@@ -199,10 +198,6 @@ async function loadApp () {
 
     Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}).forEach(tool => {
         switch (tool.id) {
-            case "compareFeatures": {
-                new CompareFeaturesView({model: tool});
-                break;
-            }
             case "lines": {
                 new LineView({model: tool});
                 break;

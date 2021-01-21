@@ -1,6 +1,7 @@
 import Draw from "./draw/components/Draw.vue";
 import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
 import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
+import CompareFeatures from "./compareFeatures/components/CompareFeatures.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
 import Gfi from "./gfi/components/Gfi.vue";
 /**
@@ -14,6 +15,7 @@ const state = {
         draw: Draw,
         scaleSwitcher: ScaleSwitcher,
         supplyCoord: SupplyCoord,
+        compareFeatures: CompareFeatures,
         fileImport: FileImport,
         gfi: Gfi
     },
