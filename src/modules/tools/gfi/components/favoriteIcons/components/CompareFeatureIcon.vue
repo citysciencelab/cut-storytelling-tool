@@ -1,5 +1,6 @@
 <script>
-import {mapGetters} from "vuex";
+import {mapGetters, mapActions} from "vuex";
+import actions from "../../../store/actionsGfi";
 import uniqueId from "../../../../../../utils/uniqueId.js";
 import componentExists from "../../../../../../utils/componentExists.js";
 
@@ -37,6 +38,7 @@ export default {
         this.initialize();
     },
     methods: {
+        ...mapActions("Tools/Gfi", Object.keys(actions)),
         componentExists,
 
         /**
@@ -104,10 +106,11 @@ export default {
 
                 this.olFeature.set("layerId", uniqueLayerId);
                 this.olFeature.set("layerName", this.feature.getTitle());
-                Radio.trigger("CompareFeatures", "addFeatureToList", this.olFeature);
+                this.addFeatureToList(this.olFeature);
+                // Radio.trigger("CompareFeatures", "addFeatureToList", this.olFeature);
             }
             else {
-                Radio.trigger("CompareFeatures", "removeFeatureFromList", this.olFeature);
+                this.removeFeatureFromList(this.olFeature);
             }
         }
     }

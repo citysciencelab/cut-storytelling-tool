@@ -13,6 +13,10 @@
 const state = {
     active: false,
     id: "compareFeatures",
+    featuresInList: [],
+    compareListHasFeatures: false,
+    emptyStar: "<span class=\"glyphicon glyphicon-star-empty\"></span>",
+    yellowStar: "<span class=\"glyphicon glyphicon-star\"></span>",
     // defaults for config.json parameters
     name: "common:menu.tools.compareFeatures",
     glyphicon: "glyphicon-th-list",

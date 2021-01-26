@@ -21,6 +21,11 @@ export default {
     created () {
         this.$on("close", this.close);
     },
+    updated () {
+        if (this.active === true && this.compareListHasFeatures === false) {
+            console.log(this.featuresInList, "List leer");
+        }
+    },
     methods: {
         ...mapActions("Tools/CompareFeatures", Object.keys(actions)),
         ...mapMutations("Tools/CompareFeatures", Object.keys(mutations)),
@@ -53,7 +58,22 @@ export default {
     >
         <template v-slot:toolBody>
             <div
-                v-if="active"
+                v-if="active && !compareListHasFeatures"
+                id="no-features"
+            >
+                <h1>
+                    {{ name }}
+                </h1>
+                <p>
+                    {{ $t("common:modules.tools.compareFeatures.noFeatures.nothingSelected", {objects: $t("common:modules.tools.compareFeatures.noFeatures.objectName")}) }}
+                </p>
+                <p>
+                    {{ $t("common:modules.tools.compareFeatures.noFeatures.info", {iconEmptyStar: emptyStar, iconYellowStar: yellowStar}) }}
+                    <!-- TODO: Glyphicons don´t work -->
+                </p>
+            </div>
+            <div
+                v-if="active && compareListHasFeatures"
                 id="compare-features"
             >
             </div>
@@ -66,5 +86,8 @@ export default {
 
     label {
         margin-top: 7px;
+    }
+    #no-features {
+        color: red;
     }
 </style>
