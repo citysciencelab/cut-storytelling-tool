@@ -13,8 +13,8 @@
 const state = {
     active: false,
     id: "compareFeatures",
-    numberOfFeaturesToShow: 3,
-    numberOfAttributesToShow: 12, // TODO: über Config???
+    // numberOfFeaturesToShow: 3,
+    // numberOfAttributesToShow: 12, // TODO: über Config???
     layerFeatures: {},
     selecetedLayer: "",
     showMoreInfo: false,

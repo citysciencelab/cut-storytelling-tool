@@ -10,16 +10,21 @@ const getters = {
 
             for (const feature of state.layerFeatures[layerId]) {
                 if (feature.featureId === gfiFeature.featureId) {
-                    console.log("feature id gefunden");
                     return true;
                 }
-                return false;
             }
         }
+        return false;
+    },
+    hasFeatures: (state) => {
+        for (const prop in state.layerFeatures) {
+            console.log(state.layerFeatures.hasOwnProperty(prop));
+            if (state.layerFeatures.hasOwnProperty(prop)) {
+                return true;
+            }
+        }
+        return false;
     }
-    // hasFeatures: (state) => {
-    //     console.log(state.layerFeatures);
-    // }
 
     // NOTE overwrite getters here if you need a special behaviour in a getter
 };

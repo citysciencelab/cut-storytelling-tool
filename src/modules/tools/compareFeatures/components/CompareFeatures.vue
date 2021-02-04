@@ -21,11 +21,6 @@ export default {
     created () {
         this.$on("close", this.close);
     },
-    updated () {
-        if (this.active === true && this.compareListHasFeatures === false) {
-            console.log(this.featuresInList, "List leer");
-        }
-    },
     methods: {
         ...mapActions("Tools/CompareFeatures", Object.keys(actions)),
         ...mapMutations("Tools/CompareFeatures", Object.keys(mutations)),
@@ -75,7 +70,7 @@ export default {
             <div
                 v-if="active && hasFeatures"
                 id="compare-features"
-            >
+            > <p>Ich habe Feature</p>
             </div>
         </template>
     </Tool>

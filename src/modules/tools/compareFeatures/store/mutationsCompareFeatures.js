@@ -24,15 +24,7 @@ const mutations = {
         const layerId = gfiFeature.layerId,
             index = state.layerFeatures[layerId].indexOf(gfiFeature);
 
-        console.log("mutation vorher", state.layerFeatures);
-
         state.layerFeatures[layerId].splice(index, 1);
-        console.log("mutation", state.layerFeatures);
-
-        // if (feature.featureId === gfiFeature.featureId) {
-        //     console.log("feature id gefunden");
-        //     return true;
-        // }
 
 
     }
