@@ -11,10 +11,10 @@ export default {
     /**
      * Sets the zoom level to the map.
      * @param {Object} context actions context object.
-     * @param {Number} featureInfo - featureInfo
+     * @param {Number} gfiFeature - feature
      * @returns {void}
      */
-    removeFeatureFromList: function ({dispatch}, featureInfo) {
-        dispatch("Tools/CompareFeatures/removeFeature", featureInfo, {root: true});
+    removeFeatureFromList: function ({dispatch}, gfiFeature) {
+        dispatch("Tools/CompareFeatures/removeFeature", gfiFeature, {root: true});
     }
 };

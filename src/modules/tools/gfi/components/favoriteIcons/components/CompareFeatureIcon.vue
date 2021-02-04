@@ -1,7 +1,7 @@
 <script>
 import {mapGetters, mapActions} from "vuex";
 import actions from "../../../store/actionsGfi";
-import uniqueId from "../../../../../../utils/uniqueId.js";
+import getters from "../../../../compareFeatures/store/gettersCompareFeatures";
 import componentExists from "../../../../../../utils/componentExists.js";
 
 export default {
@@ -14,12 +14,25 @@ export default {
     },
     data: () => {
         return {
-            featureIsOnCompareList: true,
+            // featureIsOnCompareList: false,
             olFeature: null
         };
     },
     computed: {
         ...mapGetters("Map", ["visibleLayerListWithChildrenFromGroupLayers"]),
+        ...mapGetters("Tools/CompareFeatures", Object.keys(getters)),
+        featureIsOnCompareList: {
+            get () {
+                const gfiFeature = {featureId: this.feature.getId(),
+                    layerId: this.feature.getLayerId(),
+                    attributesToShow: this.feature.getAttributesToShow()};
+
+                return this.isFeatureSelected(gfiFeature);
+            },
+            set (value) {
+                return value; // TODO: Ob das so richtig ist??? Setter nur wegen Fehlermeldung eingebaut.
+            }
+        },
 
         /**
          * Returns the correct title, depending on whether the feature is on the comparelist or not.
@@ -50,10 +63,10 @@ export default {
         initialize: function () {
             this.fetchOlFeature();
 
-            if (this.olFeature) {
-                this.featureIsOnCompareList = this.olFeature.get("isOnCompareList");
-                this.olFeature.on("propertychange", this.toggleFeatureIsOnCompareList.bind(this));
-            }
+            // if (this.olFeature) {
+            //     this.featureIsOnCompareList = this.olFeature.get("isOnCompareList");
+            //     this.olFeature.on("propertychange", this.toggleFeatureIsOnCompareList.bind(this));
+            // }
         },
 
         /**
@@ -89,11 +102,11 @@ export default {
          * @param {Event} event The given event.
          * @returns {void}
          */
-        toggleFeatureIsOnCompareList: function (event) {
-            if (event.key === "isOnCompareList") {
-                this.featureIsOnCompareList = event.target.get("isOnCompareList");
-            }
-        },
+        // toggleFeatureIsOnCompareList: function (event) {
+        //     if (event.key === "isOnCompareList") {
+        //         this.featureIsOnCompareList = event.target.get("isOnCompareList");
+        //     }
+        // },
 
         /**
          * Triggers the event "addFeatureToList" to the CompareFeatures module to add the feature.
@@ -101,16 +114,15 @@ export default {
          * @returns {void}
          */
         toogleFeatureToCompareList: function (event) {
-            if (event?.target?.classList?.contains("glyphicon-star-empty")) {
-                const uniqueLayerId = this.feature.getLayerId() + uniqueId("_");
+            const gfiFeature = {featureId: this.feature.getId(),
+                layerId: this.feature.getLayerId(),
+                attributesToShow: this.feature.getAttributesToShow()};
 
-                this.olFeature.set("layerId", uniqueLayerId);
-                this.olFeature.set("layerName", this.feature.getTitle());
-                this.addFeatureToList(this.olFeature);
-                // Radio.trigger("CompareFeatures", "addFeatureToList", this.olFeature);
+            if (event?.target?.classList?.contains("glyphicon-star-empty")) {
+                this.addFeatureToList(gfiFeature);
             }
             else {
-                this.removeFeatureFromList(this.olFeature);
+                this.removeFeatureFromList(gfiFeature);
             }
         }
     }

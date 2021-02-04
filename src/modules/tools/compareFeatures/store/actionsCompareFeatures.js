@@ -2,28 +2,26 @@ export default {
     /**
      * Sets the zoom level to the map.
      * @param {Object} _ actions context object.
-     * @param {Object} featureInfo - featureInfo
+     * @param {Object} feature - feature
      * @returns {void}
      */
-    isFeatureOnCompareList: function ({state}, featureInfo) {
-        const featureIndex = state.featuresInList.indexOf(featureInfo),
-            compareList = state.featuresInList;
+    isFeatureOnCompareList: function ({state, commit, getters}, gfiFeature) {
 
-        if (featureIndex === -1) {
-            console.log(featureIndex);
-            compareList.push(featureInfo);
-            state.compareListHasFeatures = true;
-            console.log(compareList);
+        if (!getters.isFeatureSelected(gfiFeature)) {
+            commit("addFeatureToLayer", gfiFeature);
+            console.log("getter wird von action angesteuert");
+            console.log(state.layerFeatures);
         }
-        else {
-            console.log(featureIndex);
-            console.log(compareList);
-            console.log("Remove Feature", featureInfo);
-            compareList.splice(featureIndex, 1);
-        }
-        if (compareList.length === 0) {
-            state.compareListHasFeatures = false;
-        }
+        // if (featureIndex === -1) {
+        //     console.log(feature);
+        // }
+        // else {
+        //     console.log(feature);
+        // }
+    },
+    removeFeature: function ({state, commit}, gfiFeature) {
+        console.log(state.layerFeatures);
+        commit("removeFeatureFromLayer", gfiFeature);
     }
 };
 

@@ -13,8 +13,11 @@
 const state = {
     active: false,
     id: "compareFeatures",
-    featuresInList: [],
-    compareListHasFeatures: false,
+    numberOfFeaturesToShow: 3,
+    numberOfAttributesToShow: 12, // TODO: über Config???
+    layerFeatures: {},
+    selecetedLayer: "",
+    showMoreInfo: false,
     emptyStar: "<span class=\"glyphicon glyphicon-star-empty\"></span>",
     yellowStar: "<span class=\"glyphicon glyphicon-star\"></span>",
     // defaults for config.json parameters

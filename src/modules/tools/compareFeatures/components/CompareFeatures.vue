@@ -58,7 +58,7 @@ export default {
     >
         <template v-slot:toolBody>
             <div
-                v-if="active && !compareListHasFeatures"
+                v-if="active && !hasFeatures"
                 id="no-features"
             >
                 <h1>
@@ -73,7 +73,7 @@ export default {
                 </p>
             </div>
             <div
-                v-if="active && compareListHasFeatures"
+                v-if="active && hasFeatures"
                 id="compare-features"
             >
             </div>
