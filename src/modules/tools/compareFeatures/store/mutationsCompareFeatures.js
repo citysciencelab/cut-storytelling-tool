@@ -26,7 +26,9 @@ const mutations = {
 
         state.layerFeatures[layerId].splice(index, 1);
 
-
+        if (state.layerFeatures[layerId].length === 0) {
+            delete state.layerFeatures[layerId];
+        }
     }
 };
 

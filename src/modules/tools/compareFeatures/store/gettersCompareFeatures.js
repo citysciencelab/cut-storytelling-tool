@@ -23,6 +23,20 @@ const getters = {
             }
         }
         return false;
+    },
+    selectableLayers: (state) => {
+        const layerArray = [];
+
+        for (const prop in state.layerFeatures) {
+            layerArray.push(prop);
+        }
+        return layerArray;
+    },
+    hasMultipleLayers: (state) => {
+        if (Object.keys(state.layerFeatures).length > 1) {
+            return true;
+        }
+        return false;
     }
 
     // NOTE overwrite getters here if you need a special behaviour in a getter

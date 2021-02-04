@@ -21,6 +21,9 @@ export default {
     created () {
         this.$on("close", this.close);
     },
+    updated () {
+        console.log(this.hasMultipleLayers);
+    },
     methods: {
         ...mapActions("Tools/CompareFeatures", Object.keys(actions)),
         ...mapMutations("Tools/CompareFeatures", Object.keys(mutations)),
@@ -52,6 +55,18 @@ export default {
         :deactivateGFI="deactivateGFI"
     >
         <template v-slot:toolBody>
+            <select
+                v-if="hasMultipleLayers"
+                class="font-arial form-control input-sm pull-left"
+            >
+                <option
+                    v-for="layer in selectableLayers"
+                    :key="layer"
+                    :value="layer"
+                >
+                    {{ layer }}
+                </option>
+            </select>
             <div
                 v-if="active && !hasFeatures"
                 id="no-features"

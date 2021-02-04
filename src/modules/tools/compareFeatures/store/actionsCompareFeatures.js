@@ -8,6 +8,7 @@ export default {
     isFeatureOnCompareList: function ({state, commit, getters}, gfiFeature) {
         const layerId = gfiFeature.layerId;
 
+
         if (state.layerFeatures[layerId] === undefined) {
             if (!getters.isFeatureSelected(gfiFeature)) {
                 commit("addFeatureToLayer", gfiFeature);
