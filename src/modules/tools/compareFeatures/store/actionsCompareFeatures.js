@@ -19,7 +19,7 @@ export default {
             }
         }
     },
-    removeFeature: function ({state, commit}, gfiFeature) {
+    removeFeature: function ({commit}, gfiFeature) {
         commit("removeFeatureFromLayer", gfiFeature);
     }
 };

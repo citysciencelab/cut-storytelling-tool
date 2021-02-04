@@ -18,7 +18,6 @@ const getters = {
     },
     hasFeatures: (state) => {
         for (const prop in state.layerFeatures) {
-            console.log(state.layerFeatures.hasOwnProperty(prop));
             if (state.layerFeatures.hasOwnProperty(prop)) {
                 return true;
             }

@@ -70,7 +70,8 @@ export default {
             <div
                 v-if="active && hasFeatures"
                 id="compare-features"
-            > <p>Ich habe Feature</p>
+            >
+                <p>Ich habe Feature</p>
             </div>
         </template>
     </Tool>
