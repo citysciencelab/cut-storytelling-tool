@@ -19,6 +19,9 @@ const mutations = {
                 feature
             ]
         };
+        if (Object.keys(state.layerFeatures).length > 1) {
+            state.hasMultipleLayers = true;
+        }
     },
     removeFeatureFromLayer: (state, gfiFeature) => {
         const layerId = gfiFeature.layerId,
@@ -28,6 +31,9 @@ const mutations = {
 
         if (state.layerFeatures[layerId].length === 0) {
             delete state.layerFeatures[layerId];
+            if (Object.keys(state.layerFeatures).length <= 1) {
+                state.hasMultipleLayers = false;
+            }
         }
     }
 };

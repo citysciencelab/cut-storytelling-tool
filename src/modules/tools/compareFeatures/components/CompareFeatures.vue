@@ -21,9 +21,6 @@ export default {
     created () {
         this.$on("close", this.close);
     },
-    updated () {
-        console.log(this.hasMultipleLayers);
-    },
     methods: {
         ...mapActions("Tools/CompareFeatures", Object.keys(actions)),
         ...mapMutations("Tools/CompareFeatures", Object.keys(mutations)),

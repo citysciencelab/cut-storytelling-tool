@@ -13,10 +13,9 @@
 const state = {
     active: false,
     id: "compareFeatures",
-    // numberOfFeaturesToShow: 3,
-    // numberOfAttributesToShow: 12, // TODO: über Config???
     layerFeatures: {},
     selecetedLayer: "",
+    hasMultipleLayers: false,
     showMoreInfo: false,
     emptyStar: "<span class=\"glyphicon glyphicon-star-empty\"></span>",
     yellowStar: "<span class=\"glyphicon glyphicon-star\"></span>",
