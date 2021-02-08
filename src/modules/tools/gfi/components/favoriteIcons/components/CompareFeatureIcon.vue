@@ -25,7 +25,8 @@ export default {
             get () {
                 const gfiFeature = {featureId: this.feature.getId(),
                     layerId: this.feature.getLayerId(),
-                    attributesToShow: this.feature.getAttributesToShow()};
+                    attributesToShow: this.feature.getAttributesToShow(),
+                    properties: this.feature.getMappedProperties()};
 
                 return this.isFeatureSelected(gfiFeature);
             },
@@ -116,7 +117,8 @@ export default {
         toogleFeatureToCompareList: function (event) {
             const gfiFeature = {featureId: this.feature.getId(),
                 layerId: this.feature.getLayerId(),
-                attributesToShow: this.feature.getAttributesToShow()};
+                attributesToShow: this.feature.getAttributesToShow(),
+                properties: this.feature.getMappedProperties()};
 
             if (event?.target?.classList?.contains("glyphicon-star-empty")) {
                 this.addFeatureToList(gfiFeature);

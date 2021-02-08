@@ -4,6 +4,10 @@ import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersCompareFeatures";
 import actions from "../store/actionsCompareFeatures";
 import mutations from "../store/mutationsCompareFeatures";
+import beautifyKey from "../../../../utils/beautifyKey.js";
+import {isWebLink} from "../../../../utils/urlHelper.js";
+import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../utils/isPhoneNumber.js";
+import {isEmailAddress} from "../../../../utils/isEmailAddress.js";
 
 export default {
     name: "CompareFeatures",
@@ -24,6 +28,11 @@ export default {
     methods: {
         ...mapActions("Tools/CompareFeatures", Object.keys(actions)),
         ...mapMutations("Tools/CompareFeatures", Object.keys(mutations)),
+        beautifyKey,
+        isWebLink,
+        isPhoneNumber,
+        getPhoneNumberAsWebLink,
+        isEmailAddress,
 
         /**
          * Closes this tool window by setting active to false.
@@ -83,7 +92,62 @@ export default {
                 v-if="active && hasFeatures"
                 id="compare-features"
             >
-                <p>Ich habe Feature</p>
+                <table
+                    v-for="features in layerFeatures"
+                    :key="features"
+                    class="table parent table-hover"
+                >
+                    <tbody class="child child-1">
+                        <tr
+                            v-for="(value, key) in features[0].properties"
+                            :key="key"
+                        >
+                            <td class="bold">
+                                {{ beautifyKey($t(key)) }}
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody
+                        v-for="feature in features"
+                        :key="feature"
+                        class="child child-2"
+                    >
+                        <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                            @click="removeFeature(feature)"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <tr
+                            v-for="(value, key) in feature.properties"
+                            :key="key"
+                        >
+                            <td v-if="isWebLink(value)">
+                                <a
+                                    :href="value"
+                                    target="_blank"
+                                >Link</a>
+                            </td>
+                            <td v-else-if="isPhoneNumber(value)">
+                                <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
+                            </td>
+                            <td v-else-if="isEmailAddress(value)">
+                                <a :href="`mailto:${value}`">{{ value }}</a>
+                            </td>
+                            <td
+                                v-else-if="typeof value === 'string' && value.includes('<br>')"
+                                v-html="value"
+                            >
+                            </td>
+                            <td v-else>
+                                {{ value }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </template>
     </Tool>
@@ -91,11 +155,31 @@ export default {
 
 <style lang="less" scoped>
     @import "~variables";
-
     label {
         margin-top: 7px;
     }
     #no-features {
         color: red;
+    }
+    .child {
+    top: 0;
+    border-top: hidden;
+    }
+
+    .child-1 {
+    position: absolute;
+    left: 0;
+    }
+
+    .child-2 {
+    position: relative;
+    left: 210px;
+    float: left;
+    }
+
+    .parent {
+    position: relative;
+    height: 100%;
+    width: 80vw;
     }
 </style>
