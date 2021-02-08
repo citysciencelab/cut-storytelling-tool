@@ -133,7 +133,7 @@ export default {
 
 <template>
     <span
-        v-if="olFeature && componentExists('compareFeatures')"
+        v-if="componentExists('compareFeatures')"
         :class="['glyphicon', featureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty']"
         :title="titleCompareList"
         @click="toogleFeatureToCompareList"
