@@ -22,6 +22,11 @@ export default {
     },
     removeFeature: function ({commit}, gfiFeature) {
         commit("removeFeatureFromLayer", gfiFeature);
+    },
+    selectLayerWithFeatures: function ({state}, selectedLayer) {
+        state.layerWithFeaturesToShow = [];
+        state.layerWithFeaturesToShow.push(state.layerFeatures[selectedLayer]);
+        console.log(state.layerFeatures[selectedLayer]);
     }
 };
 

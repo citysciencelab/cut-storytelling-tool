@@ -14,6 +14,11 @@ export default {
     components: {
         Tool
     },
+    data: function () {
+        return {
+            selected: ""
+        };
+    },
     computed: {
         ...mapGetters("Tools/CompareFeatures", Object.keys(getters))
     },
@@ -24,6 +29,9 @@ export default {
      */
     created () {
         this.$on("close", this.close);
+    },
+    updated () {
+        console.log(this.selected);
     },
     methods: {
         ...mapActions("Tools/CompareFeatures", Object.keys(actions)),
@@ -63,8 +71,17 @@ export default {
         <template v-slot:toolBody>
             <select
                 v-if="hasMultipleLayers"
+                v-model="selected"
                 class="font-arial form-control input-sm pull-left"
+                @change="selectLayerWithFeatures(selected)"
             >
+                <option
+                    disabled
+                    value=""
+                >
+                    Please select one
+                    <!-- https://vuejs.org/v2/guide/forms.html#Select -->
+                </option>
                 <option
                     v-for="layer in selectableLayers"
                     :key="layer"
@@ -89,11 +106,72 @@ export default {
                 </p>
             </div>
             <div
-                v-if="active && hasFeatures"
+                v-if="active && hasFeatures && !hasMultipleLayers"
                 id="compare-features"
             >
                 <table
                     v-for="features in layerFeatures"
+                    :key="features"
+                    class="table parent table-hover"
+                >
+                    <tbody class="child child-1">
+                        <tr
+                            v-for="(value, key) in features[0].properties"
+                            :key="key"
+                        >
+                            <td class="bold">
+                                {{ beautifyKey($t(key)) }}
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody
+                        v-for="feature in features"
+                        :key="feature"
+                        class="child child-2"
+                    >
+                        <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                            @click="removeFeature(feature)"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <tr
+                            v-for="(value, key) in feature.properties"
+                            :key="key"
+                        >
+                            <td v-if="isWebLink(value)">
+                                <a
+                                    :href="value"
+                                    target="_blank"
+                                >Link</a>
+                            </td>
+                            <td v-else-if="isPhoneNumber(value)">
+                                <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
+                            </td>
+                            <td v-else-if="isEmailAddress(value)">
+                                <a :href="`mailto:${value}`">{{ value }}</a>
+                            </td>
+                            <td
+                                v-else-if="typeof value === 'string' && value.includes('<br>')"
+                                v-html="value"
+                            >
+                            </td>
+                            <td v-else>
+                                {{ value }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div
+                v-if="active && hasFeatures && hasMultipleLayers"
+                id="compare-features"
+            >
+                <table
+                    v-for="features in layerWithFeaturesToShow"
                     :key="features"
                     class="table parent table-hover"
                 >
