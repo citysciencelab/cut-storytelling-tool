@@ -35,6 +35,10 @@ const mutations = {
                 state.hasMultipleLayers = false;
             }
         }
+    },
+    selectLayerWithFeatures: function (state, selectedLayer) {
+        state.layerWithFeaturesToShow = [];
+        state.layerWithFeaturesToShow.push(state.layerFeatures[selectedLayer]);
     }
 };
 

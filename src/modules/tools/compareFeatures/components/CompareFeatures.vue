@@ -84,7 +84,7 @@ export default {
                     :key="layer"
                     :value="layer"
                 >
-                    {{ layer }}
+                    {{ layerFeatures[layer][0].layerName }}
                 </option>
             </select>
             <div
@@ -107,8 +107,8 @@ export default {
                 id="compare-features"
             >
                 <table
-                    v-for="features in layerFeatures"
-                    :key="features"
+                    v-for="(features, idx) in layerFeatures"
+                    :key="idx"
                     class="table parent table-hover"
                 >
                     <tbody class="child child-1">
@@ -122,8 +122,8 @@ export default {
                         </tr>
                     </tbody>
                     <tbody
-                        v-for="feature in features"
-                        :key="feature"
+                        v-for="(feature, id) in features"
+                        :key="id"
                         class="child child-2"
                     >
                         <button
@@ -168,8 +168,8 @@ export default {
                 id="compare-features"
             >
                 <table
-                    v-for="features in layerWithFeaturesToShow"
-                    :key="features"
+                    v-for="(features, idx) in layerWithFeaturesToShow"
+                    :key="idx"
                     class="table parent table-hover"
                 >
                     <tbody class="child child-1">
@@ -183,8 +183,8 @@ export default {
                         </tr>
                     </tbody>
                     <tbody
-                        v-for="feature in features"
-                        :key="feature"
+                        v-for="(feature, id) in features"
+                        :key="id"
                         class="child child-2"
                     >
                         <button
@@ -248,6 +248,7 @@ export default {
 
     .child-2 {
     position: relative;
+    width: 25vw;
     left: 210px;
     float: left;
     }

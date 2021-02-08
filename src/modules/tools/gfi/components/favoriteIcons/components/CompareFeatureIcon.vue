@@ -25,6 +25,7 @@ export default {
             get () {
                 const gfiFeature = {featureId: this.feature.getId(),
                     layerId: this.feature.getLayerId(),
+                    layerName: this.feature.getTitle(),
                     attributesToShow: this.feature.getAttributesToShow(),
                     properties: this.feature.getMappedProperties()};
 
@@ -117,6 +118,7 @@ export default {
         toogleFeatureToCompareList: function (event) {
             const gfiFeature = {featureId: this.feature.getId(),
                 layerId: this.feature.getLayerId(),
+                layerName: this.feature.getTitle(),
                 attributesToShow: this.feature.getAttributesToShow(),
                 properties: this.feature.getMappedProperties()};
 
