@@ -133,7 +133,10 @@ export default {
                             aria-label="Close"
                             @click="removeFeature(feature)"
                         >
-                            <span aria-hidden="true">&times;</span>
+                            <span
+                                aria-hidden="true"
+                                class="glyphicon glyphicon-remove"
+                            ></span>
                         </button>
                         <tr
                             v-for="(value, key) in feature.properties"
@@ -194,7 +197,10 @@ export default {
                             aria-label="Close"
                             @click="removeFeature(feature)"
                         >
-                            <span aria-hidden="true">&times;</span>
+                            <span
+                                aria-hidden="true"
+                                class="glyphicon glyphicon-remove"
+                            ></span>
                         </button>
                         <tr
                             v-for="(value, key) in feature.properties"
@@ -235,6 +241,9 @@ export default {
     }
     #no-features {
         color: red;
+    }
+    .close {
+        float: right;
     }
     .child {
     top: 0;

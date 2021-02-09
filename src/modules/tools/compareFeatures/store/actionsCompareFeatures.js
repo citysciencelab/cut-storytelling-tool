@@ -5,18 +5,20 @@ export default {
      * @param {Object} gfiFeature - feature
      * @returns {void}
      */
-    isFeatureOnCompareList: function ({state, commit, getters}, gfiFeature) {
+    isFeatureOnCompareList: function ({state, commit, dispatch, getters}, gfiFeature) {
         const layerId = gfiFeature.layerId;
 
 
         if (state.layerFeatures[layerId] === undefined) {
             if (!getters.isFeatureSelected(gfiFeature)) {
                 commit("addFeatureToLayer", gfiFeature);
+                dispatch("prepareFeatureListToShow", gfiFeature);
             }
         }
         else if (state.layerFeatures[layerId] !== undefined) {
             if (!getters.isFeatureSelected(gfiFeature) && state.layerFeatures[layerId].length < state.numberOfFeaturesToShow) {
                 commit("addFeatureToLayer", gfiFeature);
+                dispatch("prepareFeatureListToShow", gfiFeature);
             }
         }
     },
