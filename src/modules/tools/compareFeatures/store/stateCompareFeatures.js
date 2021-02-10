@@ -18,6 +18,7 @@ const state = {
     layerWithFeaturesToShow: [],
     hasMultipleLayers: false,
     showMoreInfo: false,
+    preparedList: [],
     emptyStar: "<span class=\"glyphicon glyphicon-star-empty\"></span>",
     yellowStar: "<span class=\"glyphicon glyphicon-star\"></span>",
     // defaults for config.json parameters

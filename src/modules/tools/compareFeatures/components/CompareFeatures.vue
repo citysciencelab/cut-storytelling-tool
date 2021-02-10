@@ -106,124 +106,20 @@ export default {
                 v-if="active && hasFeatures && !hasMultipleLayers"
                 id="compare-features"
             >
-                <table
-                    v-for="(features, idx) in layerFeatures"
-                    :key="idx"
-                    class="table parent table-hover"
-                >
-                    <tbody class="child child-1">
+                <table>
+                    <tbody>
                         <tr
-                            v-for="(value, key) in features[0].properties"
-                            :key="key"
+                            v-for="(column, index) in preparedList"
+                            :key="'tool-compare-features-' + index"
                         >
-                            <td class="bold">
-                                {{ beautifyKey($t(key)) }}
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tbody
-                        v-for="(feature, id) in features"
-                        :key="id"
-                        class="child child-2"
-                    >
-                        <button
-                            type="button"
-                            class="close"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                            @click="removeFeature(feature)"
-                        >
-                            <span
-                                aria-hidden="true"
-                                class="glyphicon glyphicon-remove"
-                            ></span>
-                        </button>
-                        <tr
-                            v-for="(value, key) in feature.properties"
-                            :key="key"
-                        >
-                            <td v-if="isWebLink(value)">
-                                <a
-                                    :href="value"
-                                    target="_blank"
-                                >Link</a>
-                            </td>
-                            <td v-else-if="isPhoneNumber(value)">
-                                <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
-                            </td>
-                            <td v-else-if="isEmailAddress(value)">
-                                <a :href="`mailto:${value}`">{{ value }}</a>
-                            </td>
                             <td
-                                v-else-if="typeof value === 'string' && value.includes('<br>')"
-                                v-html="value"
+                                v-for="(value, key) in column"
+                                :key="'tool-compare-features-td' + key"
                             >
-                            </td>
-                            <td v-else>
-                                {{ value }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div
-                v-if="active && hasFeatures && hasMultipleLayers"
-                id="compare-features"
-            >
-                <table
-                    v-for="(features, idx) in layerWithFeaturesToShow"
-                    :key="idx"
-                    class="table parent table-hover"
-                >
-                    <tbody class="child child-1">
-                        <tr
-                            v-for="(value, key) in features[0].properties"
-                            :key="key"
-                        >
-                            <td class="bold">
-                                {{ beautifyKey($t(key)) }}
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tbody
-                        v-for="(feature, id) in features"
-                        :key="id"
-                        class="child child-2"
-                    >
-                        <button
-                            type="button"
-                            class="close"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                            @click="removeFeature(feature)"
-                        >
-                            <span
-                                aria-hidden="true"
-                                class="glyphicon glyphicon-remove"
-                            ></span>
-                        </button>
-                        <tr
-                            v-for="(value, key) in feature.properties"
-                            :key="key"
-                        >
-                            <td v-if="isWebLink(value)">
-                                <a
-                                    :href="value"
-                                    target="_blank"
-                                >Link</a>
-                            </td>
-                            <td v-else-if="isPhoneNumber(value)">
-                                <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
-                            </td>
-                            <td v-else-if="isEmailAddress(value)">
-                                <a :href="`mailto:${value}`">{{ value }}</a>
-                            </td>
-                            <td
-                                v-else-if="typeof value === 'string' && value.includes('<br>')"
-                                v-html="value"
-                            >
-                            </td>
-                            <td v-else>
+                                <span v-if="index === 0 && key !== 'col-1'">
+                                    Close
+                                    {{ key }}
+                                </span>
                                 {{ value }}
                             </td>
                         </tr>
@@ -236,6 +132,15 @@ export default {
 
 <style lang="less" scoped>
     @import "~variables";
+    table {
+        border-collapse: collapse;
+    }
+
+    td {
+        border: 1px solid #999;
+        padding: 0.5rem;
+        text-align: left;
+    }
     label {
         margin-top: 7px;
     }
@@ -244,27 +149,5 @@ export default {
     }
     .close {
         float: right;
-    }
-    .child {
-    top: 0;
-    border-top: hidden;
-    }
-
-    .child-1 {
-    position: absolute;
-    left: 0;
-    }
-
-    .child-2 {
-    position: relative;
-    width: 25vw;
-    left: 210px;
-    float: left;
-    }
-
-    .parent {
-    position: relative;
-    height: 100%;
-    width: 80vw;
     }
 </style>
