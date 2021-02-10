@@ -28,7 +28,6 @@
         "tools": {
             "name": "Strumenti",
             "compareFeatures": "Lista di confronto",
-            "parcelSearch": "Ricerca parcella catastale",
             "print": "Stampa mappa",
             "measure": "Misura distanza / area",
             "coord": "Richiedi coordinate",
@@ -396,9 +395,9 @@
                 "successfullyImportedLabel": "Importato con successo:",
                 "title": "Importa file"
             },
-            "parcelSearch": {
-                "wrongConfig": "Configurazione non valida o incompleta",
-                "districtsLoadFailed": "I quartieri del governo non potevano essere caricati",
+            "wfsSearch": {
+                "wrongConfig": "Configurazione non valida o incompleta ({{name}}).",
+                "districtsLoadFailed": "I quartieri del governo non potevano essere caricati ({{name}}).",
                 "wrongConfigParcelsearch": "La configurazione della ricerca dei pacchi non è corretta. Si prega di contattare il supporto.",
                 "parcelSearchImpossible": "Interrogazione attualmente impossibile!",
                 "tryAgainLater": "Si prega di provare più tardi.",

@@ -2,7 +2,7 @@ import Draw from "./draw/components/Draw.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
 import Gfi from "./gfi/components/Gfi.vue";
 import Measure from "./measure/components/Measure.vue";
-import ParcelSearch from "./parcelSearch/components/ParcelSearch.vue";
+import WfsSearch from "./wfsSearch/components/WfsSearch.vue";
 import SaveSelection from "./saveSelection/components/SaveSelection.vue";
 import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
 import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
@@ -19,10 +19,10 @@ const state = {
         fileImport: FileImport,
         gfi: Gfi,
         measure: Measure,
-        parcelSearch: ParcelSearch,
         saveSelection: SaveSelection,
         scaleSwitcher: ScaleSwitcher,
-        supplyCoord: SupplyCoord
+        supplyCoord: SupplyCoord,
+        wfsSearch: WfsSearch
     },
     configuredTools: []
 };

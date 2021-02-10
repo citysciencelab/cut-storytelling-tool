@@ -1,5 +1,5 @@
 import {generateSimpleMutations} from "../../../../app-store/utils/generators";
-import initialState from "./stateParcelSearch";
+import initialState from "./stateWfsSearch";
 
 const mutations = {
     ...generateSimpleMutations(initialState)

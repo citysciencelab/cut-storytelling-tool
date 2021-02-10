@@ -28,7 +28,6 @@
         "tools": {
             "name": "Werkzeuge",
             "compareFeatures": "Vergleichsliste",
-            "parcelSearch": "Flurstückssuche",
             "print": "Karte Drucken",
             "measure": "Strecke / Fläche messen",
             "coord": "Koordinaten abfragen",
@@ -48,7 +47,8 @@
             "addWms": "WMS hinzufügen",
             "wfsTransaction": "WFS-T Tool",
             "scaleSwitcher": "Maßstab umschalten",
-            "selectFeatures": "Features auswählen"
+            "selectFeatures": "Features auswählen",
+            "wfsSearch": "WFS Suche"
         },
         "contact": "Kontakt",
         "info": "Informationen"
@@ -397,9 +397,9 @@
                 "successfullyImportedLabel": "Erfolgreich importiert:",
                 "title": "Datei importieren"
             },
-            "parcelSearch": {
-                "wrongConfig": "Ungültige oder unvollständige Konfiguration",
-                "districtsLoadFailed": "Gemarkungen konnten nicht geladen werden",
+            "wfsSearch": {
+                "wrongConfig": "Ungültige oder unvollständige Konfiguration ({{name}}).",
+                "districtsLoadFailed": "Gemarkungen konnten nicht geladen werden ({{name}}).",
                 "wrongConfigParcelsearch": "Die Konfiguration der Flurstückssuche ist fehlerhaft. Bitte wenden Sie sich an den Support.",
                 "parcelSearchImpossible": "Flurstücksabfrage derzeit nicht möglich!",
                 "tryAgainLater": "Bitte versuchen Sie es später erneut.",

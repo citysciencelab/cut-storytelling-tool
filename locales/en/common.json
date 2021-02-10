@@ -28,7 +28,6 @@
         "tools": {
             "name": "More tools",
             "compareFeatures": "Compare features",
-            "parcelSearch": "Parcel search",
             "print": "Print map",
             "measure": "Measure distance / area",
             "coord": "Query coordinates",
@@ -47,7 +46,8 @@
             "getInfos": "Retrieve information",
             "addWms": "Add WMS",
             "scaleSwitcher": "Scale switcher",
-            "selectFeatures": "Select features"
+            "selectFeatures": "Select features",
+            "wfsSearch": "WFS search"
         },
         "contact": "Mail",
         "info": "Information"
@@ -396,9 +396,9 @@
                 "successfullyImportedLabel": "Successfully imported:",
                 "title": "Import file"
             },
-            "parcelSearch": {
-                "wrongConfig": "Invalid or incomplete configuration",
-                "districtsLoadFailed": "Districts could not be loaded",
+            "wfsSearch": {
+                "wrongConfig": "Invalid or incomplete configuration ({{name}}).",
+                "districtsLoadFailed": "Districts could not be loaded ({{name}}).",
                 "wrongConfigParcelsearch": "The parcel search configuration is incorrect. Please contact the support team",
                 "parcelSearchImpossible": "Land parcel query currently not possible!",
                 "tryAgainLater": "Please try again later.",

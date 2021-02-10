@@ -1,5 +1,5 @@
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
-import initialState from "./stateParcelSearch";
+import initialState from "./stateWfsSearch";
 
 const getters = {
     ...generateSimpleGetters(initialState)

@@ -10,7 +10,7 @@ import actions from "./actionsTools";
 import Draw from "./draw/store/indexDraw";
 import FileImport from "./fileImport/store/indexFileImport";
 import Gfi from "./gfi/store/indexGfi";
-import ParcelSearch from "./parcelSearch/store/indexParcelSearch";
+import WfsSearch from "./wfsSearch/store/indexWfsSearch";
 import SaveSelection from "./saveSelection/store/indexSaveSelection";
 import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
@@ -26,11 +26,11 @@ export default {
         Draw,
         FileImport,
         Gfi,
-        ParcelSearch,
+        Measure,
         SaveSelection,
         ScaleSwitcher,
         SupplyCoord,
-        Measure
+        WfsSearch
     },
     state,
     getters,
