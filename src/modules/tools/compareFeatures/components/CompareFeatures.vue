@@ -1,5 +1,6 @@
 <script>
 import Tool from "../../Tool.vue";
+import Modal from "../../../../share-components/modals/Modal.vue";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersCompareFeatures";
 import actions from "../store/actionsCompareFeatures";
@@ -12,7 +13,8 @@ import {isEmailAddress} from "../../../../utils/isEmailAddress.js";
 export default {
     name: "CompareFeatures",
     components: {
-        Tool
+        Tool,
+        Modal
     },
     data: function () {
         return {
@@ -57,15 +59,12 @@ export default {
 </script>
 
 <template lang="html">
-    <Tool
+    <Modal
         :title="$t(name)"
         :icon="glyphicon"
-        :active="active"
-        :render-to-window="renderToWindow"
-        :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
+        :showModal="active"
     >
-        <template v-slot:toolBody>
+        <template>
             <select
                 v-if="hasMultipleLayers"
                 v-model="selected"
@@ -97,9 +96,7 @@ export default {
                 <p>
                     {{ $t("common:modules.tools.compareFeatures.noFeatures.nothingSelected", {objects: $t("common:modules.tools.compareFeatures.noFeatures.objectName")}) }}
                 </p>
-                <p>
-                    {{ $t("common:modules.tools.compareFeatures.noFeatures.info", {iconEmptyStar: emptyStar, iconYellowStar: yellowStar}) }}
-                    <!-- TODO: Glyphicons don´t work -->
+                <p v-html="$t('common:modules.tools.compareFeatures.noFeatures.info', {iconEmptyStar: emptyStar, iconYellowStar: yellowStar, interpolation: {escapeValue: false}})">
                 </p>
             </div>
             <div
@@ -109,15 +106,43 @@ export default {
                 <table>
                     <tbody>
                         <tr
-                            v-for="(column, index) in preparedList"
+                            v-for="(column, index) in preparedList[Object.keys(preparedList)[0]]"
                             :key="'tool-compare-features-' + index"
                         >
                             <td
                                 v-for="(value, key) in column"
                                 :key="'tool-compare-features-td' + key"
                             >
-                                <span v-if="index === 0 && key !== 'col-1'">
-                                    Close
+                                <span
+                                    v-if="index === 0 && key !== 'col-1'"
+                                    class="glyphicon glyphicon-remove"
+                                >
+                                    {{ key }}
+                                </span>
+                                {{ value }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div
+                v-if="active && hasMultipleLayers"
+                id="compare-features"
+            >
+                <table>
+                    <tbody>
+                        <tr
+                            v-for="(column, index) in preparedList[selected]"
+                            :key="'tool-compare-features-' + index"
+                        >
+                            <td
+                                v-for="(value, key) in column"
+                                :key="'tool-compare-features-td' + key"
+                            >
+                                <span
+                                    v-if="index === 0 && key !== 'col-1'"
+                                    class="glyphicon glyphicon-remove"
+                                >
                                     {{ key }}
                                 </span>
                                 {{ value }}
@@ -127,7 +152,7 @@ export default {
                 </table>
             </div>
         </template>
-    </Tool>
+    </Modal>
 </template>
 
 <style lang="less" scoped>

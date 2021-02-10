@@ -12,20 +12,34 @@ export default {
         if (state.layerFeatures[layerId] === undefined) {
             if (!getters.isFeatureSelected(gfiFeature)) {
                 commit("addFeatureToLayer", gfiFeature);
-                dispatch("prepareFeatureListToShow", gfiFeature);
+                for (const feature of state.layerFeatures[layerId]) {
+                    dispatch("prepareFeatureListToShow", feature);
+                }
                 dispatch("prepareTableBody", state.layerFeatures[layerId]);
             }
         }
         else if (state.layerFeatures[layerId] !== undefined) {
             if (!getters.isFeatureSelected(gfiFeature) && state.layerFeatures[layerId].length < state.numberOfFeaturesToShow) {
                 commit("addFeatureToLayer", gfiFeature);
-                dispatch("prepareFeatureListToShow", gfiFeature);
+                for (const feature of state.layerFeatures[layerId]) {
+                    dispatch("prepareFeatureListToShow", feature);
+                }
                 dispatch("prepareTableBody", state.layerFeatures[layerId]);
             }
         }
     },
-    removeFeature: function ({commit}, gfiFeature) {
+    removeFeature: function ({commit, state, dispatch}, gfiFeature) {
+        const layerId = gfiFeature.layerId;
+
         commit("removeFeatureFromLayer", gfiFeature);
+        if (state.layerFeatures[layerId] !== undefined) {
+            for (const feature of state.layerFeatures[layerId]) {
+                dispatch("prepareFeatureListToShow", feature);
+            }
+        }
+        else if (state.layerFeatures[layerId] !== undefined) {
+            state.preparedList = [];
+        }
     },
     /**
      * prepares the list for rendering using the 'gfiAttributes'
@@ -40,6 +54,7 @@ export default {
             layerId = parseInt(gfiAttributes.layerId.split("_")[0], 10),
             featureList = state.layerFeatures[layerId];
 
+        console.log(gfiAttributes);
         Object.keys(gfiAttributes.properties).forEach(function (key) {
             const row = {};
 
@@ -49,7 +64,8 @@ export default {
             });
             list.push(row);
         });
-        state.preparedList = list;
+        state.preparedList[layerId] = list;
+        console.log(state.preparedList);
         console.log(list);
         return list;
     },
