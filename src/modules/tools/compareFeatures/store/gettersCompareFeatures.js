@@ -27,12 +27,13 @@ const getters = {
     selectableLayers: (state) => {
         const layerArray = [];
 
-        for (const prop in state.layerFeatures) {
-            layerArray.push(prop);
-        }
+        Object.keys(state.layerFeatures).forEach(function (key) {
+            if (state.layerFeatures[key][0] !== undefined) {
+                layerArray.push(state.layerFeatures[key][0]);
+            }
+        });
         return layerArray;
     }
-
     // NOTE overwrite getters here if you need a special behaviour in a getter
 };
 

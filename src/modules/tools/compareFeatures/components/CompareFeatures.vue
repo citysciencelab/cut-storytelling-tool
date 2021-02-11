@@ -1,5 +1,4 @@
 <script>
-import Tool from "../../Tool.vue";
 import Modal from "../../../../share-components/modals/Modal.vue";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersCompareFeatures";
@@ -13,7 +12,6 @@ import {isEmailAddress} from "../../../../utils/isEmailAddress.js";
 export default {
     name: "CompareFeatures",
     components: {
-        Tool,
         Modal
     },
     data: function () {
@@ -32,6 +30,9 @@ export default {
     created () {
         this.$on("close", this.close);
     },
+    updated () {
+        console.log(this.hasMultipleLayers);
+    },
     methods: {
         ...mapActions("Tools/CompareFeatures", Object.keys(actions)),
         ...mapMutations("Tools/CompareFeatures", Object.keys(mutations)),
@@ -40,6 +41,52 @@ export default {
         isPhoneNumber,
         getPhoneNumberAsWebLink,
         isEmailAddress,
+        buttonClicker (preparedList, key) {
+            if (!this.hasMultipleLayers) {
+                for (const feature of this.layerFeatures[Object.keys(this.layerFeatures)[0]]) {
+                    if (feature.featureId === key) {
+                        const index = this.layerFeatures[feature.layerId].indexOf(feature);
+
+                        this.layerFeatures[feature.layerId].splice(index, 1);
+                    }
+                    if (this.layerFeatures[feature.layerId].length === 0) {
+                        this.setPreparedList({});
+                    }
+                    else {
+                        this.setPreparedList({preparedList});
+                    }
+                }
+
+                for (const feature of preparedList) {
+                    if (Object.keys(feature).includes(key)) {
+                        delete feature[key];
+                    }
+                }
+            }
+            else {
+                for (const feature of this.layerFeatures[this.selected]) {
+                    if (feature.featureId === key) {
+                        const index = this.layerFeatures[feature.layerId].indexOf(feature);
+
+                        this.layerFeatures[this.selected].splice(index, 1);
+                    }
+                    if (this.layerFeatures[this.selected].length === 0) {
+                        delete this.preparedList[this.selected];
+                        delete this.layerFeatures[this.selected];
+                        this.hasLayers();
+                    }
+                    else {
+                        console.log("hier bin ich");
+                    }
+                }
+
+                for (const feature of preparedList) {
+                    if (Object.keys(feature).includes(key)) {
+                        delete feature[key];
+                    }
+                }
+            }
+        },
 
         /**
          * Closes this tool window by setting active to false.
@@ -69,7 +116,7 @@ export default {
                 v-if="hasMultipleLayers"
                 v-model="selected"
                 class="font-arial form-control input-sm pull-left"
-                @change="selectLayerWithFeatures(selected)"
+                @change="selectLayerWithFeatures(selected.layerId)"
             >
                 <option
                     disabled
@@ -80,10 +127,10 @@ export default {
                 </option>
                 <option
                     v-for="layer in selectableLayers"
-                    :key="layer"
-                    :value="layer"
+                    :key="'tool-compare-features-option' + layer.layerId"
+                    :value="layer.layerId"
                 >
-                    {{ layerFeatures[layer][0].layerName }}
+                    {{ layer.layerName }}
                 </option>
             </select>
             <div
@@ -113,12 +160,16 @@ export default {
                                 v-for="(value, key) in column"
                                 :key="'tool-compare-features-td' + key"
                             >
-                                <span
-                                    v-if="index === 0 && key !== 'col-1'"
-                                    class="glyphicon glyphicon-remove"
+                                <button
+                                    class="close"
+                                    @click="buttonClicker(preparedList[Object.keys(preparedList)[0]], key)"
                                 >
-                                    {{ key }}
-                                </span>
+                                    <span
+                                        v-if="index === 0 && key !== 'col-1'"
+                                        class="glyphicon glyphicon-remove closer"
+                                    ></span>
+                                </button>
+
                                 {{ value }}
                             </td>
                         </tr>
@@ -139,12 +190,15 @@ export default {
                                 v-for="(value, key) in column"
                                 :key="'tool-compare-features-td' + key"
                             >
-                                <span
-                                    v-if="index === 0 && key !== 'col-1'"
-                                    class="glyphicon glyphicon-remove"
+                                <button
+                                    class="close"
+                                    @click="buttonClicker(preparedList[selected], key)"
                                 >
-                                    {{ key }}
-                                </span>
+                                    <span
+                                        v-if="index === 0 && key !== 'col-1'"
+                                        class="glyphicon glyphicon-remove closer"
+                                    ></span>
+                                </button>
                                 {{ value }}
                             </td>
                         </tr>
@@ -160,7 +214,11 @@ export default {
     table {
         border-collapse: collapse;
     }
-
+    .closer {
+        position: relative !important;
+        right: 0px !important;
+        top: 0px !important;
+    }
     td {
         border: 1px solid #999;
         padding: 0.5rem;

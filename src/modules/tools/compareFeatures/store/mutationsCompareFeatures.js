@@ -28,17 +28,23 @@ const mutations = {
             index = state.layerFeatures[layerId].indexOf(gfiFeature);
 
         state.layerFeatures[layerId].splice(index, 1);
-
         if (state.layerFeatures[layerId].length === 0) {
             delete state.layerFeatures[layerId];
-            if (Object.keys(state.layerFeatures).length <= 1) {
-                state.hasMultipleLayers = false;
-            }
+        }
+
+        if (Object.keys(state.layerFeatures).length <= 1) {
+            state.hasMultipleLayers = false;
         }
     },
     selectLayerWithFeatures: function (state, selectedLayer) {
+        console.log(selectedLayer);
         state.layerWithFeaturesToShow = [];
         state.layerWithFeaturesToShow.push(state.layerFeatures[selectedLayer]);
+    },
+    hasLayers: (state) => {
+        if (Object.keys(state.layerFeatures).length <= 1) {
+            state.hasMultipleLayers = false;
+        }
     }
 };
 

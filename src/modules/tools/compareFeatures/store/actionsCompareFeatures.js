@@ -54,19 +54,16 @@ export default {
             layerId = parseInt(gfiAttributes.layerId.split("_")[0], 10),
             featureList = state.layerFeatures[layerId];
 
-        console.log(gfiAttributes);
         Object.keys(gfiAttributes.properties).forEach(function (key) {
             const row = {};
 
             row["col-1"] = key;
-            featureList.forEach(function (feature, index) {
-                row["col-" + (index + 2)] = feature.properties[key];
+            featureList.forEach(function (feature) {
+                row[feature.featureId] = feature.properties[key];
             });
             list.push(row);
         });
         state.preparedList[layerId] = list;
-        console.log(state.preparedList);
-        console.log(list);
         return list;
     },
     prepareTableBody: function ({state}, features) {
