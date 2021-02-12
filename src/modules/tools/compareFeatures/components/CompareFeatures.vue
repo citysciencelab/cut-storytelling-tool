@@ -32,6 +32,9 @@ export default {
     },
     updated () {
         console.log(this.hasMultipleLayers);
+        console.log(this.hasFeatures);
+        console.log(this.active);
+        console.log(this.layerFeatures);
     },
     methods: {
         ...mapActions("Tools/CompareFeatures", Object.keys(actions)),
@@ -48,13 +51,15 @@ export default {
                         const index = this.layerFeatures[feature.layerId].indexOf(feature);
 
                         this.layerFeatures[feature.layerId].splice(index, 1);
+                        if (this.layerFeatures[feature.layerId].length === 0) {
+                            this.setPreparedList({});
+                            delete this.layerFeatures[feature.layerId];
+                        }
+                        else {
+                            this.setPreparedList({preparedList});
+                        }
                     }
-                    if (this.layerFeatures[feature.layerId].length === 0) {
-                        this.setPreparedList({});
-                    }
-                    else {
-                        this.setPreparedList({preparedList});
-                    }
+
                 }
 
                 for (const feature of preparedList) {
