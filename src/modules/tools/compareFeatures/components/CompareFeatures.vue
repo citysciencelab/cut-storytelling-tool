@@ -38,51 +38,6 @@ export default {
         isPhoneNumber,
         getPhoneNumberAsWebLink,
         isEmailAddress,
-        buttonClicker (preparedList, key) {
-            if (!this.hasMultipleLayers) {
-                for (const feature of this.layerFeatures[Object.keys(this.layerFeatures)[0]]) {
-                    if (feature.featureId === key) {
-                        const index = this.layerFeatures[feature.layerId].indexOf(feature);
-
-                        this.layerFeatures[feature.layerId].splice(index, 1);
-                        if (this.layerFeatures[feature.layerId].length === 0) {
-                            this.setPreparedList({});
-                            delete this.layerFeatures[feature.layerId];
-                        }
-                        else {
-                            this.setPreparedList({preparedList});
-                        }
-                    }
-
-                }
-
-                for (const feature of preparedList) {
-                    if (Object.keys(feature).includes(key)) {
-                        delete feature[key];
-                    }
-                }
-            }
-            else {
-                for (const feature of this.layerFeatures[this.selected]) {
-                    if (feature.featureId === key) {
-                        const index = this.layerFeatures[feature.layerId].indexOf(feature);
-
-                        this.layerFeatures[this.selected].splice(index, 1);
-                    }
-                    if (this.layerFeatures[this.selected].length === 0) {
-                        delete this.preparedList[this.selected];
-                        delete this.layerFeatures[this.selected];
-                        this.hasLayers();
-                    }
-                }
-
-                for (const feature of preparedList) {
-                    if (Object.keys(feature).includes(key)) {
-                        delete feature[key];
-                    }
-                }
-            }
-        },
 
         /**
          * Closes this tool window by setting active to false.
@@ -158,7 +113,7 @@ export default {
                             >
                                 <button
                                     class="close"
-                                    @click="buttonClicker(preparedList[Object.keys(preparedList)[0]], key)"
+                                    @click="removeFeatureFromPreparedList({'features': preparedList[Object.keys(preparedList)[0]], 'featureId': key})"
                                 >
                                     <span
                                         v-if="index === 0 && key !== 'col-1'"
@@ -188,7 +143,7 @@ export default {
                             >
                                 <button
                                     class="close"
-                                    @click="buttonClicker(preparedList[selected], key)"
+                                    @click="removeFeatureFromPreparedList({'features': preparedList[selected], 'featureId': key, 'selectedLayer': selected})"
                                 >
                                     <span
                                         v-if="index === 0 && key !== 'col-1'"

@@ -37,9 +37,9 @@ const mutations = {
         }
     },
     selectLayerWithFeatures: function (state, selectedLayer) {
-        console.log(selectedLayer);
         state.layerWithFeaturesToShow = [];
         state.layerWithFeaturesToShow.push(state.layerFeatures[selectedLayer]);
+        state.selectedLayer = selectedLayer;
     },
     hasLayers: (state) => {
         if (Object.keys(state.layerFeatures).length <= 1) {

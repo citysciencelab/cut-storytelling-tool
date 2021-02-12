@@ -8,7 +8,6 @@ export default {
     isFeatureOnCompareList: function ({state, commit, dispatch, getters}, gfiFeature) {
         const layerId = gfiFeature.layerId;
 
-
         if (state.layerFeatures[layerId] === undefined) {
             if (!getters.isFeatureSelected(gfiFeature)) {
                 commit("addFeatureToLayer", gfiFeature);
@@ -89,6 +88,53 @@ export default {
             }
         });
         return tableBody;
+    },
+    removeFeatureFromPreparedList: function ({state, commit}, payload) {
+        const key = payload.featureId,
+            preparedList = payload.features,
+            selected = payload.selectedLayer;
+
+        if (!state.hasMultipleLayers) {
+            for (const feature of state.layerFeatures[Object.keys(state.layerFeatures)[0]]) {
+                if (feature.featureId === key) {
+                    const index = state.layerFeatures[feature.layerId].indexOf(feature);
+
+                    state.layerFeatures[feature.layerId].splice(index, 1);
+                    if (state.layerFeatures[feature.layerId].length === 0) {
+                        state.preparedList = {};
+                        delete state.layerFeatures[feature.layerId];
+                    }
+                    else {
+                        state.preparedList = {preparedList};
+                    }
+                }
+            }
+            for (const feature of preparedList) {
+                if (Object.keys(feature).includes(key)) {
+                    delete feature[key];
+                }
+            }
+        }
+        else {
+            for (const feature of state.layerFeatures[selected]) {
+                if (feature.featureId === key) {
+                    const index = state.layerFeatures[feature.layerId].indexOf(feature);
+
+                    state.layerFeatures[selected].splice(index, 1);
+                }
+                if (state.layerFeatures[selected].length === 0) {
+                    delete state.preparedList[selected];
+                    delete state.layerFeatures[selected];
+                    commit("hasLayers");
+                }
+            }
+
+            for (const feature of preparedList) {
+                if (Object.keys(feature).includes(key)) {
+                    delete feature[key];
+                }
+            }
+        }
     }
 };
 
