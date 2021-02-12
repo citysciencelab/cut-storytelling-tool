@@ -30,12 +30,6 @@ export default {
     created () {
         this.$on("close", this.close);
     },
-    updated () {
-        console.log(this.hasMultipleLayers);
-        console.log(this.hasFeatures);
-        console.log(this.active);
-        console.log(this.layerFeatures);
-    },
     methods: {
         ...mapActions("Tools/CompareFeatures", Object.keys(actions)),
         ...mapMutations("Tools/CompareFeatures", Object.keys(mutations)),
@@ -79,9 +73,6 @@ export default {
                         delete this.preparedList[this.selected];
                         delete this.layerFeatures[this.selected];
                         this.hasLayers();
-                    }
-                    else {
-                        console.log("hier bin ich");
                     }
                 }
 
