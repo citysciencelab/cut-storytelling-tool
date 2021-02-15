@@ -61,6 +61,7 @@ export default {
         :title="$t(name)"
         :icon="glyphicon"
         :showModal="active"
+        @modalHid="close"
     >
         <template>
             <select
