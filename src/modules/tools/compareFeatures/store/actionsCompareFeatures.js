@@ -27,17 +27,15 @@ export default {
             }
         }
     },
-    removeFeature: function ({commit, state, dispatch}, gfiFeature) {
-        const layerId = gfiFeature.layerId;
+    removeFeature: function ({state, dispatch}, gfiFeature) {
+        const payload1 = {"features": state.preparedList[Object.keys(state.preparedList)[0]], "featureId": gfiFeature.featureId, "selectedLayer": gfiFeature.layerId},
+            payload2 = {"features": state.preparedList[gfiFeature.layerId], "featureId": gfiFeature.featureId, "selectedLayer": gfiFeature.layerId};
 
-        commit("removeFeatureFromLayer", gfiFeature);
-        if (state.layerFeatures[layerId] !== undefined) {
-            for (const feature of state.layerFeatures[layerId]) {
-                dispatch("prepareFeatureListToShow", feature);
-            }
+        if (!state.hasMultipleLayers) {
+            dispatch("removeFeatureFromPreparedList", payload1);
         }
-        else if (state.layerFeatures[layerId] !== undefined) {
-            state.preparedList = [];
+        else {
+            dispatch("removeFeatureFromPreparedList", payload2);
         }
     },
     /**

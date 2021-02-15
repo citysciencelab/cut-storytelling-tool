@@ -24,6 +24,9 @@ export default {
         ...mapGetters("Tools/CompareFeatures", Object.keys(getters)),
         rowsToShow: () => {
             return state.numberOfAttributesToShow;
+        },
+        defaultSelection: () => {
+            return Object.keys(state.layerFeatures)[0];
         }
     },
 
@@ -33,6 +36,9 @@ export default {
      */
     created () {
         this.$on("close", this.close);
+    },
+    updated () {
+        console.log(this.defaultSelection);
     },
     methods: {
         ...mapActions("Tools/CompareFeatures", Object.keys(actions)),
@@ -75,19 +81,13 @@ export default {
                 class="font-arial form-control input-sm pull-left"
                 @change="selectLayerWithFeatures(selected.layerId)"
             >
-                <option
-                    disabled
-                    value=""
-                >
-                    Please select one
-                    <!-- https://vuejs.org/v2/guide/forms.html#Select -->
-                </option>
+                
                 <option
                     v-for="layer in selectableLayers"
                     :key="'tool-compare-features-option' + layer.layerId"
                     :value="layer.layerId"
                 >
-                    {{ layer.layerName }}
+                    {{ defaultSelection }}
                 </option>
             </select>
             <div
