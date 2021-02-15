@@ -45,6 +45,9 @@ const mutations = {
         if (Object.keys(state.layerFeatures).length <= 1) {
             state.hasMultipleLayers = false;
         }
+    },
+    moreInfo: function (state) {
+        state.showMoreInfo = !state.showMoreInfo;
     }
 };
 

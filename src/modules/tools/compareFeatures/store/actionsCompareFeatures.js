@@ -14,7 +14,7 @@ export default {
                 for (const feature of state.layerFeatures[layerId]) {
                     dispatch("prepareFeatureListToShow", feature);
                 }
-                dispatch("prepareTableBody", state.layerFeatures[layerId]);
+                // dispatch("prepareTableBody", state.layerFeatures[layerId]);
             }
         }
         else if (state.layerFeatures[layerId] !== undefined) {
@@ -23,7 +23,7 @@ export default {
                 for (const feature of state.layerFeatures[layerId]) {
                     dispatch("prepareFeatureListToShow", feature);
                 }
-                dispatch("prepareTableBody", state.layerFeatures[layerId]);
+                // dispatch("prepareTableBody", state.layerFeatures[layerId]);
             }
         }
     },
@@ -62,33 +62,34 @@ export default {
             });
             list.push(row);
         });
+
         state.preparedList[layerId] = list;
         return list;
     },
-    prepareTableBody: function ({state}, features) {
-        const tableBody = [],
-            rowsToShow = state.numberOfAttributesToShow;
+    // prepareTableBody: function ({state}, features) {
+    //     const tableBody = [],
+    //         rowsToShow = state.numberOfAttributesToShow;
 
-        features.forEach(function (rowFeature, rowIndex) {
-            const row = [];
+    //     features.forEach(function (rowFeature, rowIndex) {
+    //         const row = [];
 
-            if (rowIndex < rowsToShow) {
-                Object.keys(rowFeature.properties).forEach(function (key) {
-                    if (typeof rowFeature.properties[key] === "undefined") {
-                        row.push("");
-                    }
-                    else if (Array.isArray(rowFeature.properties[key])) {
-                        row.push(String(rowFeature.properties[key]).replace(/,/g, ",\n"));
-                    }
-                    else {
-                        row.push(String(rowFeature.properties[key]));
-                    }
-                });
-                tableBody.push(row);
-            }
-        });
-        return tableBody;
-    },
+    //         if (rowIndex < rowsToShow) {
+    //             Object.keys(rowFeature.properties).forEach(function (key) {
+    //                 if (typeof rowFeature.properties[key] === "undefined") {
+    //                     row.push("");
+    //                 }
+    //                 else if (Array.isArray(rowFeature.properties[key])) {
+    //                     row.push(String(rowFeature.properties[key]).replace(/,/g, ",\n"));
+    //                 }
+    //                 else {
+    //                     row.push(String(rowFeature.properties[key]));
+    //                 }
+    //             });
+    //             tableBody.push(row);
+    //         }
+    //     });
+    //     return tableBody;
+    // },
     removeFeatureFromPreparedList: function ({state, commit}, payload) {
         const key = payload.featureId,
             preparedList = payload.features,

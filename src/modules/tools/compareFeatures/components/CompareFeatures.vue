@@ -2,6 +2,7 @@
 import Modal from "../../../../share-components/modals/Modal.vue";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersCompareFeatures";
+import state from "../store/stateCompareFeatures";
 import actions from "../store/actionsCompareFeatures";
 import mutations from "../store/mutationsCompareFeatures";
 import beautifyKey from "../../../../utils/beautifyKey.js";
@@ -20,7 +21,10 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("Tools/CompareFeatures", Object.keys(getters))
+        ...mapGetters("Tools/CompareFeatures", Object.keys(getters)),
+        rowsToShow: () => {
+            return state.numberOfAttributesToShow;
+        }
     },
 
     /**
@@ -103,7 +107,31 @@ export default {
                 id="compare-features"
             >
                 <table>
-                    <tbody>
+                    <tbody v-if="!showMoreInfo">
+                        <tr
+                            v-for="(column, index) in preparedList[Object.keys(preparedList)[0]]"
+                            :key="'tool-compare-features-' + index"
+                        >
+                            <td
+                                v-for="(value, key) in column"
+                                v-if="index < rowsToShow"
+                                :key="'tool-compare-features-td' + key"
+                            >
+                                <button
+                                    class="close"
+                                    @click="removeFeatureFromPreparedList({'features': preparedList[Object.keys(preparedList)[0]], 'featureId': key})"
+                                >
+                                    <span
+                                        v-if="index === 0 && key !== 'col-1'"
+                                        class="glyphicon glyphicon-remove closer"
+                                    ></span>
+                                </button>
+
+                                {{ value }}
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody v-if="showMoreInfo">
                         <tr
                             v-for="(column, index) in preparedList[Object.keys(preparedList)[0]]"
                             :key="'tool-compare-features-' + index"
@@ -126,6 +154,9 @@ export default {
                             </td>
                         </tr>
                     </tbody>
+                    <button @click="moreInfo()">
+                        More Info
+                    </button>
                 </table>
             </div>
             <div
@@ -133,13 +164,14 @@ export default {
                 id="compare-features"
             >
                 <table>
-                    <tbody>
+                    <tbody v-if="!showMoreInfo">
                         <tr
                             v-for="(column, index) in preparedList[selected]"
                             :key="'tool-compare-features-' + index"
                         >
                             <td
                                 v-for="(value, key) in column"
+                                v-if="index < rowsToShow"
                                 :key="'tool-compare-features-td' + key"
                             >
                                 <button
@@ -155,6 +187,32 @@ export default {
                             </td>
                         </tr>
                     </tbody>
+                    <tbody v-if="showMoreInfo">
+                        <tr
+                            v-for="(column, index) in preparedList[selected]"
+                            :key="'tool-compare-features-' + index"
+                        >
+                            <td
+                                v-for="(value, key) in column"
+                                v-if="index < rowsToShow"
+                                :key="'tool-compare-features-td' + key"
+                            >
+                                <button
+                                    class="close"
+                                    @click="removeFeatureFromPreparedList({'features': preparedList[selected], 'featureId': key, 'selectedLayer': selected})"
+                                >
+                                    <span
+                                        v-if="index === 0 && key !== 'col-1'"
+                                        class="glyphicon glyphicon-remove closer"
+                                    ></span>
+                                </button>
+                                {{ value }}
+                            </td>
+                        </tr>
+                    </tbody>
+                    <button @click="moreInfo()">
+                        More Info
+                    </button>
                 </table>
             </div>
         </template>
