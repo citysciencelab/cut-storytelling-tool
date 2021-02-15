@@ -68,6 +68,7 @@ export default {
         @modalHid="close"
     >
         <template>
+            <h1>{{ name }}</h1>
             <select
                 v-if="hasMultipleLayers"
                 v-model="selected"
@@ -93,9 +94,6 @@ export default {
                 v-if="active && !hasFeatures"
                 id="no-features"
             >
-                <h1>
-                    {{ name }}
-                </h1>
                 <p>
                     {{ $t("common:modules.tools.compareFeatures.noFeatures.nothingSelected", {objects: $t("common:modules.tools.compareFeatures.noFeatures.objectName")}) }}
                 </p>
@@ -194,7 +192,6 @@ export default {
                         >
                             <td
                                 v-for="(value, key) in column"
-                                v-if="index < rowsToShow"
                                 :key="'tool-compare-features-td' + key"
                             >
                                 <button
