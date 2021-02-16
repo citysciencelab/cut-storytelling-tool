@@ -24,9 +24,6 @@ export default {
         ...mapGetters("Tools/CompareFeatures", Object.keys(getters)),
         rowsToShow: () => {
             return state.numberOfAttributesToShow;
-        },
-        defaultSelection: () => {
-            return Object.keys(state.layerFeatures)[0];
         }
     },
 
@@ -36,9 +33,6 @@ export default {
      */
     created () {
         this.$on("close", this.close);
-    },
-    updated () {
-        console.log(this.defaultSelection);
     },
     methods: {
         ...mapActions("Tools/CompareFeatures", Object.keys(actions)),
@@ -81,13 +75,18 @@ export default {
                 class="font-arial form-control input-sm pull-left"
                 @change="selectLayerWithFeatures(selected.layerId)"
             >
-                
+                <option
+                    disabled
+                    value=""
+                >
+                    {{ $t("common:modules.tools.compareFeatures.topicsSelection") }}
+                </option>
                 <option
                     v-for="layer in selectableLayers"
                     :key="'tool-compare-features-option' + layer.layerId"
                     :value="layer.layerId"
                 >
-                    {{ defaultSelection }}
+                    {{ layer.layerName }}
                 </option>
             </select>
             <div
@@ -153,7 +152,7 @@ export default {
                         </tr>
                     </tbody>
                     <button @click="moreInfo()">
-                        More Info
+                        {{ !showMoreInfo ? $t("common:modules.tools.compareFeatures.moreInfo") : $t("common:modules.tools.compareFeatures.lessInfo") }}
                     </button>
                 </table>
             </div>
@@ -208,7 +207,7 @@ export default {
                         </tr>
                     </tbody>
                     <button @click="moreInfo()">
-                        More Info
+                        {{ !showMoreInfo ? $t("common:modules.tools.compareFeatures.moreInfo") : $t("common:modules.tools.compareFeatures.lessInfo") }}
                     </button>
                 </table>
             </div>
@@ -233,9 +232,6 @@ export default {
     }
     label {
         margin-top: 7px;
-    }
-    #no-features {
-        color: red;
     }
     .close {
         float: right;
