@@ -68,7 +68,9 @@ export default {
         @modalHid="close"
     >
         <template>
-            <h1>{{ name }}</h1>
+            <h4 class="modal-title">
+                {{ name }}
+            </h4>
             <select
                 v-if="hasMultipleLayers"
                 v-model="selected"
@@ -115,16 +117,39 @@ export default {
                                 :key="'tool-compare-features-td' + key"
                             >
                                 <button
+                                    v-if="index === 0 && key !== 'col-1'"
                                     class="close"
                                     @click="removeFeatureFromPreparedList({'features': preparedList[Object.keys(preparedList)[0]], 'featureId': key})"
                                 >
                                     <span
-                                        v-if="index === 0 && key !== 'col-1'"
                                         class="glyphicon glyphicon-remove closer"
                                     ></span>
                                 </button>
-
-                                {{ value }}
+                                <p v-if="isWebLink(value)">
+                                    <a
+                                        :href="value"
+                                        target="_blank"
+                                    >Link</a>
+                                </p>
+                                <p v-else-if="isPhoneNumber(value)">
+                                    <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
+                                </p>
+                                <p v-else-if="isEmailAddress(value)">
+                                    <a :href="`mailto:${value}`">{{ value }}</a>
+                                </p>
+                                <p
+                                    v-else-if="typeof value === 'string' && value.includes('<br>')"
+                                    v-html="value"
+                                ></p>
+                                <p
+                                    v-else-if="key === 'col-1'"
+                                    class="bold"
+                                >
+                                    {{ beautifyKey($t(value)) }}
+                                </p>
+                                <p v-else>
+                                    {{ value }}
+                                </p>
                             </td>
                         </tr>
                     </tbody>
@@ -146,8 +171,31 @@ export default {
                                         class="glyphicon glyphicon-remove closer"
                                     ></span>
                                 </button>
-
-                                {{ value }}
+                                <p v-if="isWebLink(value)">
+                                    <a
+                                        :href="value"
+                                        target="_blank"
+                                    >Link</a>
+                                </p>
+                                <p v-else-if="isPhoneNumber(value)">
+                                    <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
+                                </p>
+                                <p v-else-if="isEmailAddress(value)">
+                                    <a :href="`mailto:${value}`">{{ value }}</a>
+                                </p>
+                                <p
+                                    v-else-if="typeof value === 'string' && value.includes('<br>')"
+                                    v-html="value"
+                                ></p>
+                                <p
+                                    v-else-if="key === 'col-1'"
+                                    class="bold"
+                                >
+                                    {{ beautifyKey($t(value)) }}
+                                </p>
+                                <p v-else>
+                                    {{ value }}
+                                </p>
                             </td>
                         </tr>
                     </tbody>
@@ -177,7 +225,31 @@ export default {
                                         class="glyphicon glyphicon-remove closer"
                                     ></span>
                                 </button>
-                                {{ value }}
+                                <p v-if="isWebLink(value)">
+                                    <a
+                                        :href="value"
+                                        target="_blank"
+                                    >Link</a>
+                                </p>
+                                <p v-else-if="isPhoneNumber(value)">
+                                    <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
+                                </p>
+                                <p v-else-if="isEmailAddress(value)">
+                                    <a :href="`mailto:${value}`">{{ value }}</a>
+                                </p>
+                                <p
+                                    v-else-if="typeof value === 'string' && value.includes('<br>')"
+                                    v-html="value"
+                                ></p>
+                                <p
+                                    v-else-if="key === 'col-1'"
+                                    class="bold"
+                                >
+                                    {{ beautifyKey($t(value)) }}
+                                </p>
+                                <p v-else>
+                                    {{ value }}
+                                </p>
                             </td>
                         </tr>
                     </tbody>
@@ -199,18 +271,50 @@ export default {
                                         class="glyphicon glyphicon-remove closer"
                                     ></span>
                                 </button>
-                                {{ value }}
+                                <p v-if="isWebLink(value)">
+                                    <a
+                                        :href="value"
+                                        target="_blank"
+                                    >Link</a>
+                                </p>
+                                <p v-else-if="isPhoneNumber(value)">
+                                    <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
+                                </p>
+                                <p v-else-if="isEmailAddress(value)">
+                                    <a :href="`mailto:${value}`">{{ value }}</a>
+                                </p>
+                                <p
+                                    v-else-if="typeof value === 'string' && value.includes('<br>')"
+                                    v-html="value"
+                                ></p>
+                                <p
+                                    v-else-if="key === 'col-1'"
+                                    class="bold"
+                                >
+                                    {{ beautifyKey($t(value)) }}
+                                </p>
+                                <p v-else>
+                                    {{ value }}
+                                </p>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div>
+            <div
+                v-if="hasFeatures"
+                id="buttons"
+            >
                 <button
-                    v-if="hasFeatures"
+                    class="btn btn-primary btn-infos"
                     @click="moreInfo()"
                 >
                     {{ !showMoreInfo ? $t("common:modules.tools.compareFeatures.moreInfo") : $t("common:modules.tools.compareFeatures.lessInfo") }}
+                </button>
+                <button
+                    class="btn btn-primary btn-infos"
+                >
+                    {{ $t("common:modules.tools.compareFeatures.exportAsPdf") }}
                 </button>
             </div>
         </template>
@@ -219,8 +323,22 @@ export default {
 
 <style lang="less" scoped>
     @import "~variables";
-    table {
-        border-collapse: collapse;
+    @background_color_1: rgb(0, 92, 169);
+    @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
+
+    .modal-title {
+        font-family: @font_family_1;
+    }
+
+    .btn {
+        background-color: @background_color_1;
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+    #buttons {
+        text-align: center;
+        margin: 10px;
     }
     .closer {
         position: relative !important;
@@ -232,6 +350,29 @@ export default {
         padding: 0.5rem;
         text-align: left;
     }
+    table {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    table td, table th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    table tr:nth-child(even){background-color: #f2f2f2;}
+
+    table tr:hover {background-color: #ddd;}
+
+    table th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #4CAF50;
+        color: white;
+    }
+
     label {
         margin-top: 7px;
     }
