@@ -17,10 +17,8 @@ const getters = {
         return false;
     },
     hasFeatures: (state) => {
-        for (const prop in state.layerFeatures) {
-            if (state.layerFeatures.hasOwnProperty(prop)) {
-                return true;
-            }
+        if (Object.keys(state.layerFeatures).length > 0) {
+            return true;
         }
         return false;
     },

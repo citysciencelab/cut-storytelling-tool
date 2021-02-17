@@ -151,9 +151,6 @@ export default {
                             </td>
                         </tr>
                     </tbody>
-                    <button @click="moreInfo()">
-                        {{ !showMoreInfo ? $t("common:modules.tools.compareFeatures.moreInfo") : $t("common:modules.tools.compareFeatures.lessInfo") }}
-                    </button>
                 </table>
             </div>
             <div
@@ -206,10 +203,15 @@ export default {
                             </td>
                         </tr>
                     </tbody>
-                    <button @click="moreInfo()">
-                        {{ !showMoreInfo ? $t("common:modules.tools.compareFeatures.moreInfo") : $t("common:modules.tools.compareFeatures.lessInfo") }}
-                    </button>
                 </table>
+            </div>
+            <div>
+                <button
+                    v-if="hasFeatures"
+                    @click="moreInfo()"
+                >
+                    {{ !showMoreInfo ? $t("common:modules.tools.compareFeatures.moreInfo") : $t("common:modules.tools.compareFeatures.lessInfo") }}
+                </button>
             </div>
         </template>
     </Modal>
