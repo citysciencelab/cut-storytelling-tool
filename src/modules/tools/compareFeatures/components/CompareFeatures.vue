@@ -329,6 +329,16 @@ export default {
     .modal-title {
         font-family: @font_family_1;
     }
+    select {
+        margin-bottom: 5px;
+        width: auto;
+    }
+    #compare-features {
+        max-height: 80vh;
+        display: inline-flex;
+        overflow-y: auto;
+        width: 100%;
+    }
 
     .btn {
         background-color: @background_color_1;
