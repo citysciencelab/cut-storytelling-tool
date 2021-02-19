@@ -64,30 +64,72 @@ export default {
         state.preparedList[layerId] = list;
         return list;
     },
-    // prepareTableBody: function ({state}, features) {
-    //     const tableBody = [],
-    //         rowsToShow = state.numberOfAttributesToShow;
+    preparePrint: async function ({state, dispatch}) {
+        if (!state.hasMultipleLayers) {
+            const layerId = Object.keys(state.layerFeatures)[0],
+                tableBody = await dispatch("prepareTableBody", state.layerFeatures[layerId]),
+                pdfDef = {
+                    "layout": "A4 Hochformat",
+                    "outputFormat": "pdf",
+                    "attributes": {
+                        "title": "Vergleichsliste",
+                        "datasource": [
+                            {
+                                "table": {
+                                    "columns": ["attr", "feature1", "feature2", "feature3"],
+                                    "data": tableBody
+                                }
+                            }
+                        ]
+                    }
+                };
 
-    //     features.forEach(function (rowFeature, rowIndex) {
-    //         const row = [];
+            Radio.trigger("Print", "createPrintJob", encodeURIComponent(JSON.stringify(pdfDef)), "compareFeatures", "pdf");
+        }
+        else {
+            const layerId = state.selectedLayer,
+                tableBody = await dispatch("prepareTableBody", state.layerFeatures[layerId]),
+                pdfDef = {
+                    "layout": "A4 Hochformat",
+                    "outputFormat": "pdf",
+                    "attributes": {
+                        "title": "Vergleichsliste",
+                        "datasource": [
+                            {
+                                "table": {
+                                    "columns": ["attr", "feature1", "feature2", "feature3"],
+                                    "data": tableBody
+                                }
+                            }
+                        ]
+                    }
+                };
 
-    //         if (rowIndex < rowsToShow) {
-    //             Object.keys(rowFeature.properties).forEach(function (key) {
-    //                 if (typeof rowFeature.properties[key] === "undefined") {
-    //                     row.push("");
-    //                 }
-    //                 else if (Array.isArray(rowFeature.properties[key])) {
-    //                     row.push(String(rowFeature.properties[key]).replace(/,/g, ",\n"));
-    //                 }
-    //                 else {
-    //                     row.push(String(rowFeature.properties[key]));
-    //                 }
-    //             });
-    //             tableBody.push(row);
-    //         }
-    //     });
-    //     return tableBody;
-    // },
+            Radio.trigger("Print", "createPrintJob", encodeURIComponent(JSON.stringify(pdfDef)), "compareFeatures", "pdf");
+        }
+    },
+    prepareTableBody: function ({state}, features) {
+        const tableBody = [],
+            rowsToShow = state.numberOfAttributesToShow;
+
+        for (const feature of features) {
+            if (features.indexOf(feature) === 0) {
+                Object.keys(feature.properties).forEach((key, index) => {
+
+                    tableBody.push([key, Object.values(feature.properties)[index]]);
+                });
+            }
+            else {
+                Object.keys(feature.properties).forEach((key, index) => {
+                    tableBody[index].push(Object.values(feature.properties)[index]);
+                });
+            }
+        }
+        if (!state.showMoreInfo) {
+            return tableBody.slice(0, rowsToShow);
+        }
+        return tableBody;
+    },
     removeFeatureFromPreparedList: function ({state, commit}, payload) {
         const key = payload.featureId,
             preparedList = payload.features,

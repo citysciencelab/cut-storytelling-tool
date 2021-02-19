@@ -313,6 +313,7 @@ export default {
                 </button>
                 <button
                     class="btn btn-primary btn-infos"
+                    @click="preparePrint()"
                 >
                     {{ $t("common:modules.tools.compareFeatures.exportAsPdf") }}
                 </button>
