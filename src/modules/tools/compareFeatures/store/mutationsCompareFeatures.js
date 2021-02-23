@@ -9,6 +9,12 @@ const mutations = {
      * will be returned.
      */
     ...generateSimpleMutations(stateCompareFeatures),
+    /**
+     * Adds feature to the comparison list.
+     * @param {Object} state context object.
+     * @param {Object} feature feature.
+     * @returns {void}
+     */
     addFeatureToLayer: (state, feature) => {
         const layerId = feature.layerId;
 
@@ -23,6 +29,12 @@ const mutations = {
             state.hasMultipleLayers = true;
         }
     },
+    /**
+     * Removes feature from the comparison list.
+     * @param {Object} state context object.
+     * @param {Object} gfiFeature feature.
+     * @returns {void}
+     */
     removeFeatureFromLayer: (state, gfiFeature) => {
         const layerId = gfiFeature.layerId,
             index = state.layerFeatures[layerId].indexOf(gfiFeature);
@@ -36,19 +48,45 @@ const mutations = {
             state.hasMultipleLayers = false;
         }
     },
+    /**
+     * Selects the layer with its features.
+     * @param {Object} state context object.
+     * @param {Object} selectedLayer from user selected layer.
+     * @returns {void}
+     */
     selectLayerWithFeatures: function (state, selectedLayer) {
         state.showMoreInfo = false;
         state.layerWithFeaturesToShow = [];
         state.layerWithFeaturesToShow.push(state.layerFeatures[selectedLayer]);
         state.selectedLayer = selectedLayer;
     },
+    /**
+     * If multiple layers are present the state variable will be true.
+     * @param {Object} state context object.
+     * @returns {void}
+     */
     hasLayers: (state) => {
         if (Object.keys(state.layerFeatures).length <= 1) {
             state.hasMultipleLayers = false;
         }
     },
+    /**
+     * Toggle mutation for the 'moreInfo' Button.
+     * @param {Object} state context object.
+     * @returns {void}
+     */
     moreInfo: function (state) {
         state.showMoreInfo = !state.showMoreInfo;
+    },
+    /**
+     * Opens the Compare Features Tool from within the Feedback Modal.
+     * @param {Object} state context object.
+     * @returns {void}
+     */
+    switchToList: function (state) {
+        console.log(state.active);
+        state.active = true;
+        console.log(state.active);
     }
 };
 

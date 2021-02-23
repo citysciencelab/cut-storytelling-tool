@@ -15,6 +15,7 @@ const state = {
     id: "compareFeatures",
     layerFeatures: {},
     selectedLayer: "",
+    showAlert: false,
     layerWithFeaturesToShow: [],
     hasMultipleLayers: false,
     showMoreInfo: false,

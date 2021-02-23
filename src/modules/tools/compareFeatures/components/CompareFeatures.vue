@@ -67,6 +67,25 @@ export default {
         :showModal="active"
         @modalHid="close"
     >
+        <Modal
+            :title="$t(name)"
+            :icon="glyphicon"
+            :showModal="showAlert && !active"
+            @modalHid="setShowAlert(false)"
+        >
+            <button
+                class="btn btn-primary btn-infos"
+                @click="setShowAlert(false)"
+            >
+                close
+            </button>
+            <button
+                class="btn btn-primary btn-infos"
+                @click="switchToList"
+            >
+                Zur Liste
+            </button>
+        </Modal>
         <template>
             <h4 class="modal-title">
                 {{ name }}

@@ -1,6 +1,6 @@
 export default {
     /**
-     * Sets the zoom level to the map.
+     * Checks if feature is on compare list and adds it to the list when star icon gets clicked.
      * @param {Object} _ actions context object.
      * @param {Object} gfiFeature - feature
      * @returns {void}
@@ -8,13 +8,13 @@ export default {
     isFeatureOnCompareList: function ({state, commit, dispatch, getters}, gfiFeature) {
         const layerId = gfiFeature.layerId;
 
+        state.showAlert = true;
         if (state.layerFeatures[layerId] === undefined) {
             if (!getters.isFeatureSelected(gfiFeature)) {
                 commit("addFeatureToLayer", gfiFeature);
                 for (const feature of state.layerFeatures[layerId]) {
                     dispatch("prepareFeatureListToShow", feature);
                 }
-                // dispatch("prepareTableBody", state.layerFeatures[layerId]);
             }
         }
         else if (state.layerFeatures[layerId] !== undefined) {
@@ -23,10 +23,15 @@ export default {
                 for (const feature of state.layerFeatures[layerId]) {
                     dispatch("prepareFeatureListToShow", feature);
                 }
-                // dispatch("prepareTableBody", state.layerFeatures[layerId]);
             }
         }
     },
+    /**
+     * Removes the feature if star icon is clicked.
+     * @param {Object} _ actions context object.
+     * @param {Object} gfiFeature - feature
+     * @returns {void}
+     */
     removeFeature: function ({state, dispatch}, gfiFeature) {
         const payload1 = {"features": state.preparedList[Object.keys(state.preparedList)[0]], "featureId": gfiFeature.featureId, "selectedLayer": gfiFeature.layerId},
             payload2 = {"features": state.preparedList[gfiFeature.layerId], "featureId": gfiFeature.featureId, "selectedLayer": gfiFeature.layerId};
@@ -40,7 +45,6 @@ export default {
     },
     /**
      * prepares the list for rendering using the 'gfiAttributes'
-     * creates a JSON where an object matches to a row
      * one object attribute is created for each feature (column)
      * @param {object} gfiAttributes -
      * @returns {object[]} list - one object per row
@@ -64,6 +68,11 @@ export default {
         state.preparedList[layerId] = list;
         return list;
     },
+    /**
+     * Prepares the Pdf file from currently selected layer and its features on the comparison list.
+     * @param {Object} _ actions context object.
+     * @returns {void}
+     */
     preparePrint: async function ({state, dispatch}) {
         if (!state.hasMultipleLayers) {
             const layerId = Object.keys(state.layerFeatures)[0],
@@ -108,6 +117,12 @@ export default {
             Radio.trigger("Print", "createPrintJob", encodeURIComponent(JSON.stringify(pdfDef)), "compareFeatures", "pdf");
         }
     },
+    /**
+     * Prepares the table body which is used for printing the pdf file from comparison list.
+     * @param {Object} _ actions context object.
+     * @param {Object} features - features
+     * @returns {void}
+     */
     prepareTableBody: function ({state}, features) {
         const tableBody = [],
             rowsToShow = state.numberOfAttributesToShow;
@@ -130,6 +145,13 @@ export default {
         }
         return tableBody;
     },
+    /**
+     * Removes feature from comparison list by clicking its X icon and also
+     * removes it from the layerFeatures array so the star icon will be deselected.
+     * @param {Object} _ actions context object.
+     * @param {Object} payload - current layer and its objects
+     * @returns {void}
+     */
     removeFeatureFromPreparedList: function ({state, commit}, payload) {
         const key = payload.featureId,
             preparedList = payload.features,

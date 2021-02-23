@@ -3,6 +3,12 @@ import compareFeaturesState from "./statecompareFeatures";
 
 const getters = {
     ...generateSimpleGetters(compareFeaturesState),
+    /**
+     * Checks if layer a feature is selected.
+     * @param {Object} state context object.
+     * @param {Object} gfiFeature - feature
+     * @returns {void}
+     */
     isFeatureSelected: (state) => (gfiFeature) => {
         const layerId = gfiFeature.layerId;
 
@@ -16,12 +22,22 @@ const getters = {
         }
         return false;
     },
+    /**
+     * Checks if features are on the comparison list.
+     * @param {Object} state context object.
+     * @returns {void}
+     */
     hasFeatures: (state) => {
         if (Object.keys(state.layerFeatures).length > 0) {
             return true;
         }
         return false;
     },
+    /**
+     * Gets the currently available layers.
+     * @param {Object} state context object.
+     * @returns {void}
+     */
     selectableLayers: (state) => {
         const layerArray = [];
 
@@ -32,7 +48,6 @@ const getters = {
         });
         return layerArray;
     }
-    // NOTE overwrite getters here if you need a special behaviour in a getter
 };
 
 export default getters;
