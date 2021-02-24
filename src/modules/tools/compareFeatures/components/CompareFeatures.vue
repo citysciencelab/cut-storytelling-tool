@@ -75,24 +75,29 @@ export default {
         >
             <div v-if="!listFull">
                 <h4>{{ $t("common:modules.tools.compareFeatures.feedback.added") }}</h4>
+                <hr>
             </div>
             <div v-if="listFull">
                 <h4>{{ $t("common:modules.tools.compareFeatures.feedback.notAdded") }}</h4>
+                <hr>
                 <p>{{ $t("common:modules.tools.compareFeatures.feedback.limitReached") }}</p>
                 <p>{{ $t("common:modules.tools.compareFeatures.feedback.removeObjects") }}</p>
+                <hr>
             </div>
-            <button
-                class="btn btn-primary btn-infos"
-                @click="setShowAlert(false)"
-            >
-                {{ $t("common:button.back") }}
-            </button>
-            <button
-                class="btn btn-primary btn-infos"
-                @click="switchToList"
-            >
-                {{ $t("common:modules.tools.compareFeatures.feedback.gotoComparisonlist") }}
-            </button>
+            <div id="buttons">
+                <button
+                    class="btn btn-primary btn-infos"
+                    @click="setShowAlert(false)"
+                >
+                    {{ $t("common:button.back") }}
+                </button>
+                <button
+                    class="btn btn-primary btn-infos"
+                    @click="switchToList"
+                >
+                    {{ $t("common:modules.tools.compareFeatures.feedback.gotoComparisonlist") }}
+                </button>
+            </div>
         </Modal>
         <template>
             <h4 class="modal-title">
@@ -362,6 +367,7 @@ export default {
         width: auto;
     }
     #compare-features {
+        z-index: -1;
         max-height: 80vh;
         display: inline-flex;
         overflow-y: auto;
