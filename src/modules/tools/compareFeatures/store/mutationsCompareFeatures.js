@@ -55,6 +55,7 @@ const mutations = {
      * @returns {void}
      */
     selectLayerWithFeatures: function (state, selectedLayer) {
+        console.log(selectedLayer);
         state.showMoreInfo = false;
         state.layerWithFeaturesToShow = [];
         state.layerWithFeaturesToShow.push(state.layerFeatures[selectedLayer]);

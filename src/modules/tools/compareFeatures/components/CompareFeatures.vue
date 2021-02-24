@@ -102,7 +102,7 @@ export default {
                 v-if="hasMultipleLayers"
                 v-model="selected"
                 class="font-arial form-control input-sm pull-left"
-                @change="selectLayerWithFeatures(selected.layerId)"
+                @change="selectLayerWithFeatures(selected)"
             >
                 <option
                     disabled
