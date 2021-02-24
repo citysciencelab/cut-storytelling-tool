@@ -383,8 +383,8 @@
                     "info": "Click on an object on the map. A window opens with the respective factual information. In the upper right corner there is a star symbol {{iconEmptyStar}}. Click on this icon to add the object to the comparison list. The star icon will be colored yellow {{iconYellowStar}}. Click the star icon again to remove the object from the comparison list."
                 },
                 "feedback": {
-                    "added": "{{object}} was added to the comparison list",
-                    "notAdded": "{{object}} could not be added to the comparison list",
+                    "added": "The feature was added to the comparison list",
+                    "notAdded": "The feature could not be added to the comparison list",
                     "limitReached": "The maximum number of objects in the comparison list has been reached.",
                     "removeObjects": "Please remove at least one object before proceeding.",
                     "gotoComparisonlist": "To the comparison list"

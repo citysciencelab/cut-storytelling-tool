@@ -47,6 +47,19 @@ const getters = {
             }
         });
         return layerArray;
+    },
+    /**
+     * Gets the currently available layers.
+     * @param {Object} state context object.
+     * @returns {void}
+     */
+    isCompareListFull: (state) => {
+        if (!state.hasMultipleLayers && state.layerFeatures[Object.keys(state.layerFeatures)] !== undefined) {
+            if (state.layerFeatures[Object.keys(state.layerFeatures)].length === state.numberOfFeaturesToShow) {
+                return true;
+            }
+        }
+        return false;
     }
 };
 

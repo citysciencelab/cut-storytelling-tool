@@ -84,9 +84,7 @@ const mutations = {
      * @returns {void}
      */
     switchToList: function (state) {
-        console.log(state.active);
         state.active = true;
-        console.log(state.active);
     }
 };
 
