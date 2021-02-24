@@ -55,7 +55,8 @@ const getters = {
      */
     isCompareListFull: (state) => {
         if (!state.hasMultipleLayers && state.layerFeatures[Object.keys(state.layerFeatures)] !== undefined) {
-            if (state.layerFeatures[Object.keys(state.layerFeatures)].length === state.numberOfFeaturesToShow) {
+            console.log(state.layerFeatures[Object.keys(state.layerFeatures)]);
+            if (state.layerFeatures[Object.keys(state.layerFeatures)].length < 4) {
                 return true;
             }
         }
