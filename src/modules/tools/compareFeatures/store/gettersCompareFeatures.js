@@ -47,20 +47,6 @@ const getters = {
             }
         });
         return layerArray;
-    },
-    /**
-     * Gets the currently available layers.
-     * @param {Object} state context object.
-     * @returns {void}
-     */
-    isCompareListFull: (state) => {
-        if (!state.hasMultipleLayers && state.layerFeatures[Object.keys(state.layerFeatures)] !== undefined) {
-            console.log(state.layerFeatures[Object.keys(state.layerFeatures)]);
-            if (state.layerFeatures[Object.keys(state.layerFeatures)].length < 4) {
-                return true;
-            }
-        }
-        return false;
     }
 };
 

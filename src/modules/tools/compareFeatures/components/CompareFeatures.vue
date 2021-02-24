@@ -73,10 +73,10 @@ export default {
             :showModal="showAlert && !active"
             @modalHid="setShowAlert(false)"
         >
-            <div v-if="!isCompareListFull">
+            <div v-if="!listFull">
                 <h4>{{ $t("common:modules.tools.compareFeatures.feedback.added") }}</h4>
             </div>
-            <div v-if="isCompareListFull">
+            <div v-if="listFull">
                 <h4>{{ $t("common:modules.tools.compareFeatures.feedback.notAdded") }}</h4>
                 <p>{{ $t("common:modules.tools.compareFeatures.feedback.limitReached") }}</p>
                 <p>{{ $t("common:modules.tools.compareFeatures.feedback.removeObjects") }}</p>

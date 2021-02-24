@@ -8,7 +8,8 @@ export default {
     isFeatureOnCompareList: function ({state, commit, dispatch, getters}, gfiFeature) {
         const layerId = gfiFeature.layerId;
 
-        state.showAlert = true;
+        commit("setShowAlert", true);
+        commit("setListFull", false);
         if (state.layerFeatures[layerId] === undefined) {
             if (!getters.isFeatureSelected(gfiFeature)) {
                 commit("addFeatureToLayer", gfiFeature);
@@ -23,6 +24,9 @@ export default {
                 for (const feature of state.layerFeatures[layerId]) {
                     dispatch("prepareFeatureListToShow", feature);
                 }
+            }
+            else {
+                commit("setListFull", true);
             }
         }
     },
