@@ -911,6 +911,7 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 [type:legend]: # (Portalconfig.menu.legend)
 [type:saveSelection]: # (Portalconfig.menu.tool.saveSelection)
 [type:searchByCoord]: # (Portalconfig.menu.tool.searchByCoord)
+[type:wfsSearch]: # (Portalconfig.menu.tool.wfsSearch)
 
 Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdown-header-portalconfigmenutool)** und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
 
@@ -933,7 +934,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |legend|nein|**[legend](#markdown-header-portalconfigmenulegend)**||In der Legende werden alle sichtbaren Layer dargestellt.|false|
 |lines|nein|**[lines](#markdown-header-portalconfigmenutoollines)**||Pendlerdarstellung als linienhafte Objekte.|false|
 |measure|nein|**[measure](#markdown-header-portalconfigmenutoolmeasure)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
-|parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||Mit dieser Flurstückssuche lassen sich Flurstücke über Gemarkung, Flur (in Hamburg ohne Flur) und Flurstück suchen.|false|
+|parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||_Deprecated im nächsten Major-Release. Bitte nutzen Sie stattdessen `wfsSearch`._ Mit dieser Flurstückssuche lassen sich Flurstücke über Gemarkung, Flur (in Hamburg ohne Flur) und Flurstück suchen.|false|
 |print|nein|**[print](#markdown-header-portalconfigmenutoolprint)**||Druckmodul mit dem die Karte als PDF exportiert werden kann.|false|
 |routing|nein|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Routing. Über dieses Werkzeug können Routen berechnet werden.|true|
 |saveSelection|nein|**[saveSelection](#markdown-header-portalconfigmenutoolsaveselection)**||Werkzeug mit dem sich die aktuellen Karteninhalte speichern lassen. Der Zustand der Karte wird als URL zum Abspeichern erzeugt. Dabei werden die Layer in deren Reihenfolge, Transparenz und Sichtbarkeit dargestellt. Zusätzlich wird die Zentrumskoordinate mit abgespeichert.|false|
@@ -945,7 +946,9 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |supplyCoord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "supplyCoord" verwenden. Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
 |virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|false|
 |wfsFeatureFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "filter" verwenden. Filtern von WFS Features. Über dieses Werkzeug können WFS features gefiltert werden. Dies setzt jedoch eine Konfiguration der "filterOptions" am WFS-Layer-Objekt voraus.|false|
+|wfsSearch|no|**[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)**||Ermöglicht es ein Formular zu erstellen, um einen WFS Layer abgekoppelt von der Suchleiste mittels Filter anzufragen. Es ist möglich entweder eine gespeicherte Anfrage (Stored Query, WFS@2.0.0) zu nutzen oder eine Anfrage mithilfe der konfigurierten Parameter zu definieren (WFS@1.1.0).|false|
 |wfst|nein|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||WFS-T Modul mit dem Features visualisiert, erstellt, aktualisiert und gelöscht werden können.|false|
+
 ***
 
 #### Portalconfig.menu.tool
@@ -1297,6 +1300,8 @@ Flurstückssuche.
 **Je nach Konfiguration werden spezielle Stored Queries eines WFS mit vorgegebenen Parametern abgefragt.**
 
 Beispiel: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0&&StoredQuery_ID=Flurstueck&gemarkung=0601&flurstuecksnummer=00011**
+
+>⚠️ Deprecated im nächsten Major-Release. Bitte verwenden Sie stattdessen **[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)**.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -2149,6 +2154,314 @@ Klassifizierung von WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Ermöglicht es ein Formular zu erstellen, um einen WFS Layer abgekoppelt von der Suchleiste mittels Filter anzufragen.
+Wenn ein WFS@2.0.0 verwendet wird, wird erwartet, dass eine gespeicherte Anfrage (Stored Query) verwendet wird. Wenn ein WFS@1.1.0 verwendet wird, wird erwartet, dass der Aufbau der Anfrage mittels der Konfiguration dieses Werkzeugs grundlegend vorgegeben wird.
+
+Es können mehrere Formulare (**[SearchInstances](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)**) definiert werden, welche als separate Werkzeuge im Menü auftauchen.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|instances|ja|**[searchInstance](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)**[]||Array an `searchInstances`, welche jeweils ein Formular darstellen.|false|
+
+**Beispiel**
+
+```json
+{
+    "wfsSearch": {
+        "instances": [
+            {
+                "requestConfig": {
+                    "layerId": "1234"
+                },
+                "selectSource": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
+                "clauses": [
+                    {
+                        "clause": {
+                            "type": "and",
+                            "literals": [
+                                {
+                                    "field": {
+                                        "type": "equal",
+                                        "options": ""
+                                    }
+                                },
+                                {
+                                    "field": {
+                                        "type": "equal",
+                                        "options": "flur"
+                                    }
+                                },
+                                {
+                                    "field": {
+                                        "type": "equal",
+                                        "fieldName": "Flüsse",
+                                        "options": [
+                                            {
+                                                "id": "0",
+                                                "displayName": "Elbe"
+                                            },
+                                            {
+                                                "id": "1",
+                                                "displayName": "Mosel"
+                                            },
+                                            {
+                                                "id": "2",
+                                                "displayName": "Rhein"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance
+
+Eine Instanz der WFS Suche, welche als einzelnes Tool dargestellt wird.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|clauses|ja|**[clause](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralclause)**[]||Array an `clauses`.|false|
+|requestConfig|ja|**[requestConfig](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfig)**||Id des WFS-Dienstes, welcher angefragt werden soll. Wenn ein WFS@2.0.0 verwendet werden soll, muss die id der gespeicherten Anfrage (Stored Query) angegeben werden.|false|
+|selectSource|nein|String||Optionale Url, unter welcher eine JSON-Datei mit den verschiedenen Optionen für den Input gespeichert ist. Für eine Beispiel siehe **[https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json]**.|false|
+|userHelp|nein|String||Informationstext hinsichtlich des Suchformulars, welches oberhalb des Formulars für den Nutzer angezeigt werden soll. Kann ein Übersetzungsschlüssel sein.|false|
+
+**Beispiel**
+
+```json
+{
+    "requestConfig": {
+        "layerId": "1234"
+    },
+    "selectSource": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
+    "clauses": [
+        {
+            "clause": {
+                "type": "and",
+                "literals": [
+                    {
+                        "field": {
+                            "type": "equal",
+                            "options": ""
+                        }
+                    },
+                    {
+                        "field": {
+                            "type": "equal",
+                            "options": "flur"
+                        }
+                    },
+                    {
+                        "field": {
+                            "type": "equal",
+                            "fieldName": "Flüsse",
+                            "options": [
+                                {
+                                    "id": "0",
+                                    "displayName": "Elbe"
+                                },
+                                {
+                                    "id": "1",
+                                    "displayName": "Mosel"
+                                },
+                                {
+                                    "id": "2",
+                                    "displayName": "Rhein"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.literal
+
+Ein Literal kann entweder eine Klausel (**clause**) als Parameter besitzen oder ein Feld (**field**). Falls beide gesetzt sind, wird das Literal ignoriert.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|clause|nein|**[clause](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralclause)**||Definiert die Art und Weise wie mehrere Literal miteinander angefragt werden sollen. Kann als Gruppe von Literalen angesehen werden.|true|
+|field|nein|**[field](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfield)**||Repräsentation eines Auswahlfeldes für einen Servicewert für den Nutzer.|true|
+
+**Beispiele**
+
+```json
+{
+    "clause": {
+        "type": "and",
+        "literals": [
+            {
+                "field": {
+                    "type": "equal",
+                    "options": ""
+                }
+            },
+            {
+                "field": {
+                    "type": "equal",
+                    "options": "flur"
+                }
+            }
+        ]
+    }
+}
+```
+
+```json
+{
+    "field": {
+        "type": "equal",
+        "fieldName": "Flüsse",
+        "options": [
+            {
+                "id": "0",
+                "displayName": "Elbe"
+            },
+            {
+                "id": "1",
+                "displayName": "Mosel"
+            },
+            {
+                "id": "2",
+                "displayName": "Rhein"
+            }
+        ]
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.literal.clause
+
+Eine Klausel definiert die Art und Weise wie verschiedene Literale miteinander anzufragen sind.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|literals|ja|**[literal](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral)**[]||Array an Literalen.|false|
+|type|ja|enum["and", "or"]||Die Art und Weise wie die Literale dieser Klausel angefragt werden sollen.|false|
+
+```json
+{
+    "clause": {
+        "type": "and",
+        "literals": [
+            {
+                "field": {
+                    "type": "equal",
+                    "options": ""
+                }
+            },
+            {
+                "field": {
+                    "type": "equal",
+                    "options": "flur"
+                }
+            }
+        ]
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.literal.field
+
+Ein Feld repräsentiert ein Auswahlfeld für einen Wert des Services für den Nutzer.
+Falls der Parameter `options` gesetzt wurde, wird ein `select`-Feld, andernfalls ein normaler Text Input verwendet.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|defaultValue|nein|String||Wenn das Feld nicht `required` ist wird dieser Wert beim Senden verwendet.|false|
+|fieldName|ja|String||Die Id des WFS Service Parameters für den Vergleich.|false|
+|inputLabel|nein|String||Label des UI Elementes. Kann ein Übersetzungsschlüssel sein.|false|
+|inputPlaceholder|nein|String||Platzhalter für das UI Element. Sollte Beispieldaten enthalten. Kann ein Übersetzungsschlüssel sein.|false|
+|inputTitle|nein|String||Wert, welcher beim hovern über das UI Element angezeigt wird. Kann ein Übersetzungsschlüssel sein.|false|
+|required|nein|Boolean|false|Legt fest, ob das Feld ausgefüllt werden muss.|false|
+|options|nein|String/**[options](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)[]**/Number[]/String[]||Falls `options` ein Array ist werden die gegeben Werte für die Auswahl verwendet. Falls `options` ein String ist, existieren verschiedene Möglichkeiten. Falls der String leer ist, werden die Schlüssel der **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** verwendet. Falls der String nicht leer ist, wird angenommen, dass ein anderes Feld mit `options=""` existiert; andernfalls wird das Feld deaktiviert. Es wird zudem angenommen, dass der String ein Array in **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** mit weiteren Optionen repräsentiert. Diese Optionen können entweder eine **[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)** oder einfache Werte (`String` / `Number`) sein. Im zweiten Fall werden die einfachen Werte sowohl für die Id als auch den `displayName` verwendet.|false|
+|type|nein|enum["equal", "like"]||Wird für die Verwendung mit einem WFS@1.1.0 vorausgesetzt. Der `type` legt fest, wie das Feld mit dem Wert des Dienstes verglichen werden soll.|false|
+
+```json
+{
+    "field": {
+        "type": "equal",
+        "fieldName": "Flüsse",
+        "options": [
+            {
+                "id": "0",
+                "displayName": "Elbe"
+            },
+            {
+                "id": "1",
+                "displayName": "Mosel"
+            },
+            {
+                "id": "2",
+                "displayName": "Rhein"
+            }
+        ]
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.literal.field.option
+
+Eine auswählbare Option für einen anzufragenden Parameter.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|displayName|nein|String||Anzuzeigender Wert für die Option. Kann ein Übersetzungsschlüssel sein. Wenn der Wert wird nicht gesetzt ist, wird die `id` angezeigt.|false|
+|id|ja|String||Eindeutige Id für die auswählbare Option.|false|
+
+```json
+{
+    "id": "0",
+    "displayName": "Elbe"
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.requestConfig
+
+Informationen über den WFS-Dienst, welcher angefragt werden soll.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|serviceId|true|String||Id des WFS Dienstes, welcher angefragt werden soll. Informationen werden aus der **[services.json](services.json.md)** bezogen.|false|
+|storedQueryId|false|String||Die Id der gespeichersten Anfrage (Stored Query) des WFS Dienstes, welche für die Anfrage an verwendet werden soll. Es wird angenommen, dass ein WFS@2.0.0 verwendet wird, falls dieses Feld gesetzt wurde.|false|
+
+```json
+{
+    "requestConfig": {
+        "layerId": "1234",
+        "storedQueryId": "Flurstuecke"
+    }
+}
+```
 
 ***
 
