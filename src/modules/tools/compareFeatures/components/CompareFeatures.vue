@@ -24,6 +24,9 @@ export default {
         ...mapGetters("Tools/CompareFeatures", Object.keys(getters)),
         rowsToShow: () => {
             return state.numberOfAttributesToShow;
+        },
+        showInfoButton: () => {
+            return state.showMoreInfoButton;
         }
     },
 
@@ -33,6 +36,19 @@ export default {
      */
     created () {
         this.$on("close", this.close);
+    },
+    updated () {
+        if (!state.hasMultipleLayers && Object.values(state.layerFeatures)[0] !== undefined) {
+            const firstObject = Object.values(state.layerFeatures)[0][0],
+                length = Object.keys(firstObject.properties).length;
+
+            if (length > state.numberOfAttributesToShow) {
+                state.showMoreInfoButton = true;
+            }
+            else {
+                state.showMoreInfoButton = false;
+            }
+        }
     },
     methods: {
         ...mapActions("Tools/CompareFeatures", Object.keys(actions)),
@@ -339,6 +355,7 @@ export default {
             >
                 <button
                     class="btn btn-primary btn-infos"
+                    :disabled="!showMoreInfoButton"
                     @click="moreInfo()"
                 >
                     {{ !showMoreInfo ? $t("common:modules.tools.compareFeatures.moreInfo") : $t("common:modules.tools.compareFeatures.lessInfo") }}

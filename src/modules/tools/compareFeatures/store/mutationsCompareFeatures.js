@@ -59,6 +59,12 @@ const mutations = {
         state.layerWithFeaturesToShow = [];
         state.layerWithFeaturesToShow.push(state.layerFeatures[selectedLayer]);
         state.selectedLayer = selectedLayer;
+        if (Object.keys(state.layerFeatures[selectedLayer][0].properties).length > state.numberOfAttributesToShow) {
+            state.showMoreInfoButton = true;
+        }
+        else {
+            state.showMoreInfoButton = false;
+        }
     },
     /**
      * If multiple layers are present the state variable will be true.

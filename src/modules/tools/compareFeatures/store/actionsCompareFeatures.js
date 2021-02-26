@@ -68,7 +68,6 @@ export default {
             });
             list.push(row);
         });
-
         state.preparedList[layerId] = list;
         return list;
     },

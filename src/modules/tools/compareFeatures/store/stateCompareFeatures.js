@@ -16,6 +16,7 @@ const state = {
     layerFeatures: {},
     selectedLayer: "",
     showAlert: false,
+    showMoreInfoButton: false,
     listFull: false,
     layerWithFeaturesToShow: [],
     hasMultipleLayers: false,
