@@ -9,17 +9,29 @@
  * @property {Boolean} resizableWindow If true, window is resizable. (config-param)
  * @property {Boolean} isVisibleInMenu If true, tool is selectable in menu. (config-param)
  * @property {Boolean} deactivateGFI Flag if tool should deactivate GFI. (config-param)
+ * @property {Object[]} clauses Array of clauses.
+ * @property {?String} requestConfig The id of the service that is supposed to be requested.
+ * @property {?String} selectSource Optional Url leading to the expected options for the different inputs
+ * @property {String} userHelp Information text regarding the search formular to be displayed to the user.
+ * @property {?JSON} parsedSource The requested and parced selectSource.
  */
 const state = {
     active: false,
     id: "wfsSearch",
     // defaults for config.json tool parameters
-    name: "common:menu.tools.wfsSearch",
+    name: "common:menu.tools.wfsSearch", // TODO: ADD ME
     glyphicon: "glyphicon-search",
+    instances: [],
     renderToWindow: true,
     resizableWindow: true,
     isVisibleInMenu: true,
-    deactivateGFI: true
+    deactivateGFI: true,
+    clauses: [],
+    requestConfig: null,
+    selectSource: null,
+    userHelp: "",
+    // state parameters
+    parsedSource: null
 };
 
 export default state;
