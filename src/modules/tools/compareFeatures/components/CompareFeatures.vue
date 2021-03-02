@@ -406,6 +406,7 @@ export default {
         &:hover {
             opacity: 0.9;
         }
+        padding-right: 10px;
     }
     #buttons {
         text-align: center;
