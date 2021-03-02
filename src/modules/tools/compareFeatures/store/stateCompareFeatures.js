@@ -23,10 +23,10 @@ const state = {
     hasMultipleLayers: false,
     showMoreInfo: false,
     preparedList: {},
-    emptyStar: "<span class=\"glyphicon glyphicon-star-empty\"></span>",
-    yellowStar: "<span class=\"glyphicon glyphicon-star\"></span>",
+    emptyStar: "<span class=\"glyphicon glyphicon-star-empty\" style=\"font-size:22px;\"></span>",
+    yellowStar: "<span class=\"glyphicon glyphicon-star\" style=\"color:#fec44f; font-size:22px;\"></span>",
     // defaults for config.json parameters
-    name: "common:menu.tools.compareFeatures",
+    name: "common:modules.tools.compareFeatures.title",
     glyphicon: "glyphicon-th-list",
     renderToWindow: true,
     resizableWindow: true,

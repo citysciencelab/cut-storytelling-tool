@@ -78,13 +78,13 @@ export default {
 
 <template lang="html">
     <Modal
-        :title="$t(name)"
+        :title="$t('common:modules.tools.compareFeatures.title')"
         :icon="glyphicon"
         :showModal="active"
         @modalHid="close"
     >
         <Modal
-            :title="$t(name)"
+            :title="$t('common:modules.tools.compareFeatures.title')"
             :icon="glyphicon"
             :showModal="showAlert && !active"
             @modalHid="setShowAlert(false)"
@@ -119,7 +119,7 @@ export default {
         </Modal>
         <template>
             <h4 class="modal-title">
-                {{ name }}
+                {{ $t('common:modules.tools.compareFeatures.title') }}
             </h4>
             <select
                 v-if="hasMultipleLayers"
@@ -145,9 +145,11 @@ export default {
                 v-if="active && !hasFeatures"
                 id="no-features"
             >
-                <p>
+                <hr>
+                <p class="bold">
                     {{ $t("common:modules.tools.compareFeatures.noFeatures.nothingSelected", {objects: $t("common:modules.tools.compareFeatures.noFeatures.objectName")}) }}
                 </p>
+                <br>
                 <p v-html="$t('common:modules.tools.compareFeatures.noFeatures.info', {iconEmptyStar: emptyStar, iconYellowStar: yellowStar, interpolation: {escapeValue: false}})">
                 </p>
             </div>
@@ -447,5 +449,15 @@ export default {
     }
     .close {
         float: right;
+    }
+    #no-features {
+        width: 50vh;
+        p {
+            line-height: 22px;
+            &:first-child {
+                font-family: @font_family_1;
+                font-size: 14px;
+            }
+        }
     }
 </style>
