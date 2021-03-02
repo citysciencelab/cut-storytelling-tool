@@ -10,9 +10,12 @@ import actions from "./actionsTools";
 import Draw from "./draw/store/indexDraw";
 import FileImport from "./fileImport/store/indexFileImport";
 import Gfi from "./gfi/store/indexGfi";
+import SaveSelection from "./saveSelection/store/indexSaveSelection";
 import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
 import CompareFeatures from "./compareFeatures/store/indexCompareFeatures";
+import SearchByCoord from "./searchByCoord/store/indexSearchByCoord";
+import Measure from "./measure/store/indexMeasure";
 
 /**
  * This is here to test app-store/utils/composeModules.
@@ -24,9 +27,12 @@ export default {
         Draw,
         FileImport,
         Gfi,
+        SaveSelection,
         ScaleSwitcher,
         SupplyCoord,
-        CompareFeatures
+        CompareFeatures,
+        SearchByCoord,
+        Measure
     },
     state,
     getters,

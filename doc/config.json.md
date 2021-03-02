@@ -271,6 +271,7 @@ GFI search service configuration.
             "params": {
                 "query_string": "%%searchString%%"
             }
+        }
     }
 }
 ```
@@ -574,7 +575,7 @@ The entry `attributions` may be of type boolean or object. If of type boolean, t
 {
     "attributions": {
         "isInitOpenDesktop": true,
-        "isInitOpenMobile": false,
+        "isInitOpenMobile": false
     }
 }
 ```
@@ -923,7 +924,7 @@ A folder object defined by a name, glyphicon, and its children.
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-            {
+            "legend": {
                 "name": "Legende",
                 "glyphicon": "glyphicon-book"
             }
@@ -966,6 +967,7 @@ A folder object defined by a name, glyphicon, and its children.
 [type:measure]: # (Portalconfig.menu.tool.measure)
 [type:styleWMS]: # (Portalconfig.menu.tool.styleWMS)
 [type:legend]: # (Portalconfig.menu.legend)
+[type:saveSelection]: # (Portalconfig.menu.tool.saveSelection)
 [type:searchByCoord]: # (Portalconfig.menu.tool.searchByCoord)
 
 List of all configurable tools. Each tool inherits the properties of **[tool](#markdown-header-portalconfigmenutool)** and can (or must, respectively) provide the defined attributes as mentioned in that definition.
@@ -992,7 +994,7 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |parcelSearch|no|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||The parcel search tool allows searching for parcels by district and parcel number. Many German administrative units feature a tripartite order, hence the tool offers searching by "Gemarkung" (district), "Flur" (parcel) (not used in Hamburg), and "Flurstück" (literally "parcel piece").|false|
 |print|no|**[print](#markdown-header-portalconfigmenutoolprint)**||Printing module that can be used to export the map's current view as PDF.|false|
 |routing|no|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Tool to compute routes.|true|
-|saveSelection|no|**[tool](#markdown-header-portalconfigmenutool)**||Tool that allows saving the map's current state as sharable URL. This will list all currently visible layers in order, transparency, and visibility, as well as saving the center coordinate.|false|
+|saveSelection|no|**[saveSelection](#markdown-header-portalconfigmenutoolsaveselection)**||Tool that allows saving the map's current state as sharable URL. This will list all currently visible layers in order, transparency, and visibility, as well as saving the center coordinate.|false|
 |searchByCoord|no|**[searchByCoord](#markdown-header-portalconfigmenutoolsearchbycoord)**||Coordinate search with switchable coordinate reference system. The tool will zoom to any given coordinate and set a marker on it.|false|
 |selectFeatures|no|**[tool](#markdown-header-portalconfigmenutool)**||Allows selecting a set of vector features by letting the user draw a box on the map. Features in that box will be displayed with GFI information.|false|
 |shadow|no|**[shadow](#markdown-header-portalconfigmenutoolshadow)**||Configuration object for the 3D mode shadow time.|false|
@@ -1400,6 +1402,18 @@ Example request: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=
 
 ***
 
+#### Portalconfig.menu.tool.saveSelection
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Tool to save the current map content as a url.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|simpleMap|no|Boolean|false|Adds a SimpleMap URL to the component. When calling this URL, the menu bar, layer tree, and map controls are deactivated.|false|
+
+***
+
 #### Portalconfig.menu.tool.searchByCoord
 
 [inherits]: # (Portalconfig.menu.tool)
@@ -1551,6 +1565,7 @@ Module used to draw features on the map. This includes points, which may also be
 |drawCircleSettings|no|**[drawCircleSet](#markdown-header-portalconfigmenutooldrawdrawcircleset)**|{"circleMethod": "interactive", "unit": "m", "circleRadius": null, "strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "opacityContour": 1, "tooltipStyle": {"fontSize": "16px", "paddingTop": "3px", "paddingLeft": "3px", "paddingRight": "3px", "backgroundColor": "rgba(255, 255, 255, .9)"}}|Pre-configuration for circle drawing.|false|
 |drawDoubleCircleSettings|no|**[drawDoubleCircleSet](#markdown-header-portalconfigmenutooldrawdrawdoublecircleset)**|{"circleMethod": "defined", "unit": "m", "circleRadius": 0, "circleOuterRadius": 0, "strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "outerColorContour": [0, 0, 0, 1], "opacityContour": 1}|Pre-configuration for double circle drawing.|false|
 |writeTextSettings|no|**[writeTextSet](#markdown-header-portalconfigmenutooldrawwritetextset)**|{"text": "", "fontSize": 10, "font": "Arial", "color": [55, 126, 184, 1], "opacity": 1}|Pre-configuration for text writing.|false|
+|download|no|**[download](#markdown-header-portalconfigmenutooldrawdownload)**|{"preSelectedFormat": "KML"}|Pre-configuration for download.|false|
 
 **Example**
 
@@ -1617,23 +1632,25 @@ Dot object consisting of text, type, and value.
 
 ```json
 {
-    {
-        "id": "iconPoint",
-        "type": "simple_point",
-        "value": "simple_point"
-    },
-    {
-        "id": "iconMeadow",
-        "type": "image",
-        "scale": 0.8,
-        "value": "meadow.png"
-    },
-    {
-        "id": "yellow pin",
-        "type": "image",
-        "scale": 0.5,
-        "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
-    }
+    "iconList": [
+        {
+            "id": "iconPoint",
+            "type": "simple_point",
+            "value": "simple_point"
+        },
+        {
+            "id": "iconMeadow",
+            "type": "image",
+            "scale": 0.8,
+            "value": "meadow.png"
+        },
+        {
+            "id": "yellow pin",
+            "type": "image",
+            "scale": 0.5,
+            "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
+        }
+    ]
 }
 ```
 
@@ -1826,6 +1843,24 @@ Object to change the drawing tool's configured text default value.
 
 ***
 
+#### Portalconfig.menu.tool.draw.download
+
+Object to change the drawing tool's download preselected format. It should be one of "KML", "GEOJSON" and "GPX".
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|preSelectedFormat|no|String|"KML"|Pre-configured pre-selected form.|false|
+
+**Example**
+
+```json
+{
+    "preSelectedFormat": "KML"
+}
+```
+
+***
+
 #### Portalconfig.menu.tool.featureLister
 
 [inherits]: # (Portalconfig.menu.tool)
@@ -1874,7 +1909,7 @@ A line-like depiction of commute movement used in the MRH (Metropolregion Hambur
         "featureType": "mrh_einpendler_gemeinde",
         "attrAnzahl": "anzahl_einpendler",
         "attrGemeinde": "wohnort",
-        "zoomlevel": 1,
+        "zoomlevel": 1
     }
 }
 ```
@@ -1889,7 +1924,7 @@ The measure tool allows measuring distances and areas. This includes the specifi
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|earthRadius|no|Number|6378137|Earth radius in meters.|false|
+|earthRadius|no|Number|6378137|Earth radius in meters. Please mind that the earth radius should be chosen in accordance with the reference ellipsoid. E.g., GRS80 should be used for ETRS89 (EPSG:25832).|false|
 
 **Example**
 
@@ -1921,25 +1956,32 @@ A commute animation used in the MRH (Metropolregion Hamburg, en.: Metropolitan a
 **Example**
 
 ```json
-"animation": {
-    "name": "Commute (Animation)",
-    "glyphicon": "glyphicon-play-circle",
-    "steps": 30,
-    "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
-    "params": {
-        "REQUEST": "GetFeature",
-        "SERVICE": "WFS",
-        "TYPENAME": "app:mrh_kreise",
-        "VERSION": "1.1.0",
-        "maxFeatures": "10000"
-    },
-    "featureType": "mrh_einpendler_gemeinde",
-    "attrAnzahl": "anzahl_einpendler",
-    "attrGemeinde": "wohnort",
-    "minPx": 5,
-    "maxPx": 30,
-    "zoomlevel": 1,
-    "colors": ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
+{
+    "animation": {
+        "name": "Commute (Animation)",
+        "glyphicon": "glyphicon-play-circle",
+        "steps": 30,
+        "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+        "params": {
+            "REQUEST": "GetFeature",
+            "SERVICE": "WFS",
+            "TYPENAME": "app:mrh_kreise",
+            "VERSION": "1.1.0",
+            "maxFeatures": "10000"
+        },
+        "featureType": "mrh_einpendler_gemeinde",
+        "attrAnzahl": "anzahl_einpendler",
+        "attrGemeinde": "wohnort",
+        "minPx": 5,
+        "maxPx": 30,
+        "zoomlevel": 1,
+        "colors": [
+            "rgba(255,0,0,0.5)",
+            "rgba(0,255,0,0.5)",
+            "rgba(0,0,255,0.5)",
+            "rgba(0,255,255,0.5)"
+        ]
+    }
 }
 ```
 
@@ -2548,6 +2590,7 @@ Folder definition. Folders may also be nested.
 |Layer|yes|**[Layer](#markdown-header-themenconfiglayer)**/**[GroupLayer](#markdown-header-themenconfiggrouplayer)**[]||Layer definition.|false|
 |Ordner|no|**[Ordner](#markdown-header-themenconfigordner)**[]||Folder definition.|false|
 |isFolderSelectable|no|Boolean|true|Defines whether all layers of a folder can be de-/activated at once by using a checkbox.|false|
+|invertLayerOrder|nein|Boolean|false|Defines wheather the order of layers added to the map should be invert when clicking the folder.|false|
 
 **Example folder with one layer**
 
@@ -2621,6 +2664,32 @@ Folder definition. Folders may also be nested.
     }
 }
 ```
+
+**Example folder with an inverted order of layers**
+
+In this example layer 123 will be added to the map first. This leads to 456 being above 123.
+
+```json
+{
+    "Fachdaten": {
+        "Ordner": [
+            {
+                "Titel": "My folder",
+                "invertLayerOrder": true,
+                "Layer": [
+                    {
+                        "id": "123"
+                    },
+                    {
+                        "id": "456"
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
 
 ***
 

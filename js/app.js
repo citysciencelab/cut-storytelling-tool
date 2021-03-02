@@ -1,5 +1,4 @@
 import Vue from "vue";
-import VueI18Next from "@panter/vue-i18next";
 import App from "../src/App.vue";
 import store from "../src/app-store";
 import loadAddons from "../src/addons";
@@ -11,7 +10,6 @@ import Preparser from "../modules/core/configLoader/preparser";
 import ParametricURL from "../modules/core/parametricURL";
 import Map from "../modules/core/map";
 import AddGeoJSON from "../modules/tools/addGeoJSON/model";
-import WPS from "../modules/core/wps";
 import RemoteInterface from "../modules/remoteInterface/model";
 import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
@@ -30,18 +28,16 @@ import MouseHoverPopupView from "../modules/mouseHover/view";
 import QuickHelpView from "../modules/quickHelp/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
-import MeasureView from "../modules/tools/measure/view";
 import ShadowView from "../modules/tools/shadow/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
-import SearchByCoordView from "../modules/tools/searchByCoord/view";
 import LineView from "../modules/tools/pendler/lines/view";
 import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
-import SaveSelectionView from "../modules/tools/saveSelection/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
 import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
+import {initiateVueI18Next} from "./vueI18Next";
 
 /**
  * WFSFeatureFilterView
@@ -97,7 +93,8 @@ async function loadApp () {
     const legacyAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
         utilConfig = {},
         layerInformationModelSettings = {},
-        style = Radio.request("Util", "getUiStyle");
+        style = Radio.request("Util", "getUiStyle"),
+        vueI18Next = initiateVueI18Next();
     /* eslint-disable no-undef */
     let app = {},
         searchbarAttributes = {};
@@ -130,14 +127,12 @@ async function loadApp () {
 
     store.commit("setConfigJs", Config);
 
-    Vue.use(VueI18Next);
-
     app = new Vue({
         el: "#masterportal-root",
         name: "VueApp",
         render: h => h(App),
         store,
-        i18n: new VueI18Next(i18next, {namespaces: ["additional", "common"]})
+        i18n: vueI18Next
     });
 
 
@@ -154,7 +149,6 @@ async function loadApp () {
         new ParametricURL();
     }
     new Map(Radio.request("Parser", "getPortalConfig").mapView);
-    new WPS();
     new AddGeoJSON();
     new WindowView();
 
@@ -214,10 +208,6 @@ async function loadApp () {
                 new ShadowView({model: tool});
                 break;
             }
-            case "measure": {
-                new MeasureView({model: tool});
-                break;
-            }
             case "print": {
                 /**
                  * PrintView2
@@ -236,14 +226,6 @@ async function loadApp () {
             }
             case "parcelSearch": {
                 new ParcelSearchView({model: tool});
-                break;
-            }
-            case "searchByCoord": {
-                new SearchByCoordView({model: tool});
-                break;
-            }
-            case "saveSelection": {
-                new SaveSelectionView({model: tool});
                 break;
             }
             /**
@@ -373,7 +355,7 @@ async function loadApp () {
 
     if (Config.addons !== undefined) {
         Radio.channel("Addons");
-        const i18nextLanguages = i18next && i18next.options.hasOwnProperty("getLanguages") ? i18next.options.getLanguages() : {};
+        const i18nextLanguages = vueI18Next?.i18next?.options?.getLanguages() ? vueI18Next.i18next.options.getLanguages() : {};
         let initCounter = 0;
 
         Config.addons.forEach((addonKey) => {
@@ -393,7 +375,7 @@ async function loadApp () {
                         /* webpackInclude: /[\\\/]additional.json$/ */
                         `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
-                            i18next.addResourceBundle(lng, "additional", additionalLocales, true);
+                            vueI18Next.i18next.addResourceBundle(lng, "additional", additionalLocales, true);
                             initCounter--;
                             checkInitCounter(initCounter, legacyAddons);
                         }).catch(error => {

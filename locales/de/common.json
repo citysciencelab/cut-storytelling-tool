@@ -48,7 +48,8 @@
             "addWms": "WMS hinzufügen",
             "wfsTransaction": "WFS-T Tool",
             "scaleSwitcher": "Maßstab umschalten",
-            "selectFeatures": "Features auswählen"
+            "selectFeatures": "Features auswählen",
+            "legend":"Legende"
         },
         "contact": "Kontakt",
         "info": "Informationen"
@@ -87,7 +88,10 @@
         "core": {
           "modelList": {
             "layer": {
-              "wrongStyleId": "Unter der angegeben StyleId: {{styleId}} konnte kein Styleobjekt gefunden werden. Bitte stellen Sie sicher, dass in der verwendeten Style.json ein Style mit der StyleId: {{styleId}} konfiguriert ist."
+              "wrongStyleId": "Unter der angegeben StyleId: {{styleId}} konnte kein Styleobjekt gefunden werden. Bitte stellen Sie sicher, dass in der verwendeten Style.json ein Style mit der StyleId: {{styleId}} konfiguriert ist.",
+              "sensor": {
+                "httpOnError": "<strong>Unerwarteter Fehler beim Laden der Sensordaten des Layers {{name}} aufgetreten</strong>"
+              }
             }
           },
           "parametricURL": {
@@ -186,32 +190,6 @@
                 "topicsHelp": "Mit der Themensuche können Sie Suchbegriffe eingeben (z.B. Schutzgebiete, Wahlen, Wohnungsbau usw.) und nach verfügbaren Geodaten zu diesem Thema suchen. Wenn Sie ein Resultat auswählen, wird es direkt in der Karte dargestellt.",
                 "parcelHelp": "Über die Flurstrücksnummer und die Gemarkungsnummer können Sie nach Flurstücken suchen. Geben Sie einfach die Gemarkungsnummer gefolgt von der Flurstücksnummer <strong>(1)</strong> (mit oder ohne Leerzeichen) in die Suchmaske ein und drücken die Enter-/Returntaste bzw. die Lupe. Daraufhin wird die Karte auf das gesuchte Flurstück zentriert <strong>(2)</strong>."
             },
-            "measureTool": {
-                "title": "Hilfe - Strecke/Fläche messen",
-                "statisticalApprox": "Statistische Annäherung",
-                "equalizationUTM": "Entzerrung in UTM",
-                "conversionInMap": "Umsetzungen in der Karte",
-                "influenceFactors": "Die angezeigten Werte unterliegen Ungenauigkeiten, die u.a. durch folgende Faktoren beeinflusst werden:",
-                "scale": "Maßstab",
-                "resolution": "Auflösung der Karte",
-                "screenResolution": "Auflösung des Bildschirmes",
-                "inputAccuracy": "Eingabegenauigkeit und Anzahl der digitalisierten Punkte und",
-                "measureDistance": "Strecke der Messlinie bzw. Größe der Messfläche",
-                "standardDeviation": "Da die oben angegebenen Fehlergrößen von Arbeitsplatz zu Arbeitsplatz unterschiedlich sein können wird eine Standardabweichung von 1mm pro Klick auf der Karte angenommen. Daraus ergibt sich für jeden Messpunkt auf der Karte ein maßstabsabhängiger Punktfehler von:",
-                "spotDefects": "Punktfehler [m]",
-                "errorPropagationLaw": "Nach dem Fehlerfortpflanzungsgesetz aus Koordinaten ohne Berücksichtigung von Korrelationen und einheitlicher Standardabweichung nach der Gauß’schen Dreiecksformel gilt:",
-                "forDistances": "Für Strecken:",
-                "forAreas": "Für Flächen:",
-                "errorReason": "Der Fehler ist also abhängig von der Standardabweichung des Einzelfehlers, des Maßstabes und der Anzahl der Punkte.",
-                "example": "Beispiel:",
-                "exampleContent": "Bei einem quadratischen Polygon mit 10m Seitenlänge (Fläche: 100 m²) ergibt sich bei einem Maßstab von 1:1000 ein zu erwartender Fehler von 10,00 m². Dieser Fehler entsteht durch ungenaue Messungen durch den Nutzer auf dem Bildschirm.",
-                "UTMHelp1": "Das UTM-Koordinaten-System ist ein globales Koordinatensystem, welches die Erdoberfläche in 6° breiten Streifen darstellt. Jeder Streifen stellt eine Zone dar, die fortlaufend von 180° West nach 180° Ost durchnummeriert werden. Deutschland liegt weitestgehend in der Zone 32 (6° bis 12° östliche Länge). Als Projektion der gekrümmten Erdoberfläche auf eine ebene Karte wird eine transversale Mercator-Projektion verwendet. Dabei schneidet der Projektionszylinder (<font color=\"red\">rot</font>) die Erdoberfläche, sodass ein 360km breiter Schnittstreifen entsteht, der \"über\" den Projektionszylinder herausragt. Die Koordinaten des Schnittstreifens werden folglich verkürzt auf der Abbildungsebene abgebildet, wohingegen die Koordinaten außerhalb des Schnittstreifens gestreckt werden.",
-                "UTM6": "UTM-Abbildung 6° breit",
-                "imageDistortion1": "Abbildungsverzerrung bei der UTM-Abbildung",
-                "imageDistortion2": "Dieser Verzerrung muss entgegengewirkt werden, da bei einer direkten Messung in der Karte die gemessenen Strecken/Flächen verzerrt und somit falsch sind. Für Hamburg macht die Verzerrung bspw. bei einer Streckenmessung von 1000m schon ca. 40cm aus. Dies ist ein nicht unerheblicher Fehler, der weit über den Toleranzen heutiger Messgeräte liegt. Mit Hilfe folgender Formeln lassen sich gemessene Strecken und Flächen wieder entzerren:",
-                "formulas": "Formeln zur Entzerrung der in UTM gemessenen Flächen/Strecken",
-                "useInMapHelp": "Der maximal zu erwartende absolute Fehler wird hinter der gemessenen Fläche/Strecke angezeigt und durch ein Plus-Minus-Symbol (\"+/-\") gekennzeichnet. Dies bedeutet, dass der wahre Wert maximal um den absoluten Fehler vom Messwert abweicht. Der angezeigte absolute Fehler ist folglich die Ungenauigkeit der gemessenen Fläche/Strecke. In dieser Anwendung werden die gemessenen Flächen/Strecken sofort entzerrt, sodass die angezeigte Messung der \"echten\" Fläche/Strecke auf der Erdoberfläche entspricht. Es muss keine weitere Entzerrung berechnet werden."
-            },
             "topicTree": {
                 "title": "Hilfe - Themenbaum",
                 "topics": "Wie baut sich der Themenbaum unter Fachdaten auf?",
@@ -243,7 +221,7 @@
                 "errorMessage": "Der angegebene Dienst konnte nicht geladen werden. Bitte stellen Sie sicher, dass die URL richtig angegeben wurde.<br><br> Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes mit folgendem Hinweis:<br><strong>Es soll sichergestellt werden, dass ein CORS-Header für den Dienst gesetzt ist. Dies wird von der <a target='_blank' href='https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile'>GDI-DE</a> im Kapitel 4.7.1 empfohlen.</strong>",
                 "errorHttpsMessage": "Das von Ihnen angeforderte WMS befindet sich unter einer http-Url. Das Masterportal kann nur WMS über https (SSL) einbinden.",
                 "placeholder": "Hier bitte die WMS-URL eingeben.",
-                "textExample": "Beispiel: https://geodienste.hamburg.de/HH_WMS_Gruenes_Netz",
+                "textExample": "Beispiel: https://geodienste.hamburg.de/HH_WMS_Fahrradrouten",
                 "textLoadLayer": "Layer Laden",
                 "ifInExtent": "Die über den WMS bereitgestellten Geodaten liegen außerhalb des darstellbaren Bereichs. WMS hinzufügen ist nicht möglich.",
                 "checkVersion": "WMS hinzufügen ist nur möglich wenn die Version des externen WMS Layers gleich oder größer als 1.3.0 ist."
@@ -393,9 +371,7 @@
                 }
             },
             "saveSelection": {
-                "saveSelectionText": "Speichern Sie diese URL als Lesezeichen ab",
-                "contentSaved": "Inhalt wurde in die Zwischenablage kopiert.",
-                "contenNotSaved": "Inhalt konnte nicht in die Zwischenablage kopiert werden."
+                "infoText": "Speichern Sie diese URL als Lesezeichen ab,"
             },
             "fileImport": {
                 "captions": {
@@ -445,7 +421,6 @@
             "supplyCoord": {
                 "title": "Koordinaten abfragen",
                 "coordSystemField": "Koordinatensystem",
-                "copyToClipboard": "Inhalt wurde in die Zwischenablage kopiert.",
                 "hdms": {
                     "eastingLabel": "Länge",
                     "northingLabel": "Breite"
@@ -468,7 +443,8 @@
                 },
                 "themes": {
                     "default": {
-                      "imgAlt": "Es konnte kein Bild geladen werden."
+                      "imgAlt": "Es konnte kein Bild geladen werden.",
+                      "noAttributeAvailable": "Kein Attribut vorhanden!"
                     },
                     "sensor": {
                       "sensor": {
@@ -533,16 +509,35 @@
                 "selectedDestination": "Gewähltes Ziel"
             },
             "searchByCoord": {
-                "exampleAcronym": "Bsp.",
+                "coordinateSystem": "Koordinatensystem",
+                "hdms": {
+                    "eastingLabel": "Breite",
+                    "northingLabel": "Länge"
+                },
+                "cartesian": {
+                    "eastingLabel": "Rechtswert",
+                    "northingLabel": "Hochwert"
+                },
+                "search": "Suche",
+                "exampleAcronym": "Bsp. ",
                 "errorMsg": {
                     "noCoord": "Bitte geben Sie Ihren {{valueKey}} vollständig ein.",
-                    "noMatch": "Die Eingabe für den {{valueKey}} ist nicht korrekt! (Beispiel: {{valueExample}})"
-                },
-                "hdmsEastingText": "Wert der $t(common:modules.tools.supplyCoord.hdms.eastingLabel)",
-                "hdmsNorthingText": "Wert der $t(common:modules.tools.supplyCoord.hdms.northingLabel)"
+                    "noMatch": "Die Eingabe für den {{valueKey}} ist nicht korrekt! Beispiel: ",
+                    "hdmsNoCoord": "Bitte geben Sie Ihren Wert der {{valueKey}} vollständig ein.",
+                    "hdmsNoMatch": "Die Eingabe für den Wert der {{valueKey}} ist nicht korrekt! Beispiel: "
+                }
             },
             "draw": {
                 "clickToPlaceText": "Klicken Sie auf die Karte um den Text zu platzieren",
+                "download": {
+                  "createFirst": "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!",
+                  "enterFilename": "Bitte Dateiname angeben",
+                  "filename": "Dateiname",
+                  "format": "Format",
+                  "formatNotSupported": "Das Format {{selectedFormat}} wird noch nicht unterstützt.",
+                  "pleaseChoose": "Bitte Auswählen",
+                  "unknownGeometry": "Unbekannte Geometrie: <strong>{{geometry}}</strong>"
+                },
                 "draw": "zeichnen",
                 "geometryDrawFailed": "Die übergebene Geometrie konnte nicht dargestellt werden.",
                 "undefinedTwoCircles": "Bitte definieren Sie beide Kreise.",
@@ -583,7 +578,8 @@
                     "redo": "Wiederholen",
                     "edit": "Geometrie bearbeiten",
                     "delete": "Geometrie / Text löschen",
-                    "deleteAll": "Alles löschen"
+                    "deleteAll": "Alles löschen",
+                    "saveDrawing": "Zeichnung speichern"
                 },
                 "symbol": "Symbol",
                 "iconList": {
@@ -593,25 +589,21 @@
                     "iconMeadow": "Wiese"
                 }
             },
-            "download": {
-                "format": "Format",
-                "pleaseChoose": "Bitte Auswählen",
-                "filename": "Dateiname",
-                "enterFilename": "Bitte Dateiname angeben",
-                "createFirst": "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!",
-                "formatNotSupported": "Das Format {{selectedFormat}} wird noch nicht unterstützt.",
-                "unknownGeometry": "Unbekannte Geometry:"
-            },
             "measure": {
                 "geometry": "Geometrie",
                 "measure": "Einheit",
-                "plzConsider": "Bitte beachten Sie",
-                "valuesNotExact": "Die angezeigten Werte unterliegen Ungenauigkeiten",
-                "findFurtherInf": "Weitere Informationen finden Sie hier",
                 "deleteMeasurements": "Messungen löschen",
                 "stretch": "Strecke",
                 "area": "Fläche",
-                "finishWithDoubleClick": "Abschließen mit Doppelklick"
+                "influenceFactors": "Die angezeigten Werte unterliegen Ungenauigkeiten, die u.a. durch folgende Faktoren beeinflusst werden:",
+                "scale": "Maßstab",
+                "resolution": "Auflösung der Karte",
+                "screenResolution": "Auflösung des Bildschirmes",
+                "inputAccuracy": "Eingabegenauigkeit und Anzahl der digitalisierten Punkte",
+                "measureDistance": "Strecke der Messlinie bzw. Größe der Messfläche",
+                "finishWithDoubleClick": "Abschließen mit Doppelklick",
+                "3dLength": "Länge: {{length}}",
+                "3dHeight": " Höhe: {{height}}"
             },
             "scaleSwitcher": {
                 "label": "Maßstab"
@@ -696,6 +688,7 @@
             "placeholder": {
                 "addressHospitalBplan": "Suche nach Adresse/Krankenhaus/B-Plan",
                 "addressTopicParcel": "Suche Adresse, Stadtteil, Themen, Flurstück",
+                "addressTopic": "Suche Adresse, Stadtteil, Themen",
                 "address": "Suche nach Adresse"
             },
             "locationFinder": {
@@ -749,6 +742,12 @@
           "alertNoFoundFeature" : "Es wurde kein Objekt gefunden! Bitte überprüfen Sie die Eingabeparameter.",
           "alertParameterizedAccess": "Der parametrisierte Aufruf des Portals ist leider schief gelaufen!",
           "alertRequiredService": "Details: Ein benötigter Dienst antwortet nicht."
+        },
+        "util": {
+            "copyToClipboard": {
+                "contentSaved": "Inhalt wurde in die Zwischenablage kopiert.",
+                "contentNotSaved": "Inhalt konnte nicht in die Zwischenablage kopiert werden."
+            }
         }
     },
     "snippets": {

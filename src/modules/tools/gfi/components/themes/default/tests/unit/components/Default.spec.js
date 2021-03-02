@@ -1,6 +1,7 @@
 import Vuex from "vuex";
 import {shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
+import sinon from "sinon";
 import DefaultTheme from "../../../components/Default.vue";
 
 const localVue = createLocalVue();
@@ -173,5 +174,66 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
         expect(wrapper2.find(".gfi-theme-images > div:nth-child(2) > a > img").attributes().src).equals("https://abc.jpeg");
     });
 
+    it("should show no attribute is available message if getMappedProperties is empty", () => {
+        const wrapper1 = shallowMount(DefaultTheme, {
+            propsData: {
+                feature: {
+                    getProperties: () => {
+                        return {};
+                    },
+                    getMappedProperties: () => {
+                        return {};
+                    },
+                    getTheme: () => {
+                        return {
+                            name: "images",
+                            params: {
+                                imageLink: "abc"
+                            }
+                        };
+                    },
+                    getGfiUrl: () => "",
+                    getMimeType: () => "text/xml"
+                }
+            },
+            localVue,
+            mocks: {
+                $t: (msg) => msg
+            }
+        });
 
+        expect(wrapper1.find("td").text()).equals("modules.tools.gfi.themes.default.noAttributeAvailable");
+    });
+
+    it("should show an iframe if the mimeType is text/html", () => {
+        const wrapperHtml = shallowMount(DefaultTheme, {
+            propsData: {
+                feature: {
+                    getTheme: () => sinon.stub(),
+                    getDocument: () => "lalala",
+                    getMimeType: () => "text/html"
+                }
+            },
+            localVue,
+            mocks: {
+                $t: (msg) => msg
+            }
+        });
+
+        expect(wrapperHtml.find("iframe").exists()).to.be.true;
+        expect(wrapperHtml.find("iframe").classes()).includes("gfi-iFrame");
+    });
+
+    it("should show an iframe after click trough the features", async () => {
+        await wrapper.setProps({
+            feature: {
+                getTheme: () => sinon.stub(),
+                getDocument: () => "abc",
+                getMimeType: () => "text/html"
+            }
+        });
+
+        expect(wrapper.find("iframe").exists()).to.be.true;
+        expect(wrapper.find("iframe").classes()).includes("gfi-iFrame");
+    });
 });

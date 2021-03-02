@@ -218,6 +218,11 @@ label {
     border-radius:14px;
     text-align:center;
 }
+@media (max-width: 767px) {
+    #portal-logo-box {
+        padding:15px 10px 30px 10px;
+    }
+}
 #portal-logo-box.initial-fadeout-animation {
     opacity:0;
 }

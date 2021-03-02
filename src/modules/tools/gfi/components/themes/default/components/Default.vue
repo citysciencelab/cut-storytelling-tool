@@ -52,12 +52,24 @@ export default {
             return this.feature.getMimeType();
         }
     },
+    watch: {
+        feature () {
+            this.$nextTick(() => {
+                this.addTextHtmlContentToIframe();
+            });
+        }
+    },
     created () {
         this.showFavoriteIcons = this.feature.getTheme()?.params?.hasOwnProperty("showFavoriteIcons") ?
             this.feature.getTheme().params.showFavoriteIcons : this.showFavoriteIcons;
 
         this.replacesConfiguredImageLinks();
         this.setImportedComponents();
+    },
+    mounted () {
+        this.$nextTick(() => {
+            this.addTextHtmlContentToIframe();
+        });
     },
     methods: {
         beautifyKey,
@@ -90,6 +102,18 @@ export default {
             }
             else if (typeof imageLinksAttribute === "string") {
                 this.imageLinks = [imageLinksAttribute];
+            }
+        },
+
+        /**
+         * Adds the text/html content to the iframe
+         * @returns {void}
+         */
+        addTextHtmlContentToIframe: function () {
+            const iframe = document.getElementsByClassName("gfi-iFrame")[0];
+
+            if (this.mimeType === "text/html" && iframe) {
+                iframe.src = "data:text/html;charset=utf-8," + encodeURIComponent(this.feature.getDocument());
             }
         }
     }
@@ -128,8 +152,14 @@ export default {
             class="table table-hover"
         >
             <tbody v-if="typeof feature.getMappedProperties === 'function'">
+                <tr v-if="Object.entries(feature.getMappedProperties()).length === 0">
+                    <td class="bold">
+                        {{ $t("modules.tools.gfi.themes.default.noAttributeAvailable") }}
+                    </td>
+                </tr>
                 <tr
                     v-for="(value, key) in feature.getMappedProperties()"
+                    v-else
                     :key="key"
                 >
                     <td class="bold">
@@ -160,7 +190,6 @@ export default {
         </table>
         <iframe
             v-if="mimeType === 'text/html'"
-            :src="feature.getGfiUrl()"
             class="gfi-iFrame"
         >
         </iframe>
@@ -170,7 +199,6 @@ export default {
 
 <style lang="less" scoped>
 @import "~variables";
-
 
 .table > tbody > tr > td {
     padding: 5px 8px;

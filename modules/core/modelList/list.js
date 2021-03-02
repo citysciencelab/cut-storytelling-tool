@@ -23,13 +23,9 @@ import Filter from "../../tools/filter/model";
 import PrintV2 from "../../tools/print/model";
 import Print from "../../tools/print_/mapfish3PlotService";
 import HighResolutionPrint from "../../tools/print_/highResolutionPlotService";
-import Measure from "../../tools/measure/model";
-import Download from "../../tools/download/model";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
 import Contact from "../../tools/contact/model";
-import SearchByCoord from "../../tools/searchByCoord/model";
-import SaveSelection from "../../tools/saveSelection/model";
 import Routing from "../../tools/viomRouting/model";
 /**
  * WfsFeatureFilter
@@ -270,18 +266,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "shadow") {
                 return new Shadow(attrs, options);
             }
-            else if (attrs.id === "measure") {
-                return new Measure(attrs, options);
-            }
-            else if (attrs.id === "download") {
-                return new Download(attrs, options);
-            }
-            else if (attrs.id === "searchByCoord") {
-                return new SearchByCoord(attrs, options);
-            }
-            else if (attrs.id === "saveSelection") {
-                return new SaveSelection(Object.assign(attrs, Config.hasOwnProperty("simpleMap") ? {simpleMap: Config.simpleMap} : {}), options);
-            }
             else if (attrs.id === "lines") {
                 return new Lines(attrs, options);
             }
@@ -475,6 +459,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     setIsSelectedOnChildLayers: function (model) {
+        const folder = Radio.request("Parser", "getItemsByAttributes", {id: model.get("id")});
         let descendantModels = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")}));
 
         // Layers in default tree are always sorted alphabetically while in other tree types, layers are
@@ -485,7 +470,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
         // Since each layer will be put into selected layers list seperately, their order changes because we
         // shift the layers from one stack to another. So just revert the stack order first.
-        descendantModels = descendantModels.reverse();
+        // This behavior can be avoided setting the invertLayerOrder flag to true.
+        if (!Array.isArray(folder) || !folder.length || !folder[0].invertLayerOrder) {
+            descendantModels = descendantModels.reverse();
+        }
 
         // Setting each layer as selected will trigger rerender of OL canvas and displayed selected layers.
         descendantModels.forEach(childModel => {

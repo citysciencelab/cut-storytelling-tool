@@ -443,7 +443,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * Returns the reference value. If necessary it loops through the feature properties object structure.
      * @param   {object} featureProperties properties of the feature
      * @param   {string} value attribute value or object path to check
-     * @returns {undefined} attribute property can be of any type
+     * @returns {void} attribute property can be of any type
      */
     getReferenceValue: function (featureProperties, value) {
         const valueIsObjectPath = this.isObjectPath(value);
@@ -470,7 +470,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * Returns feature value identified by key. If necessary it loops through the feature properties object structure.
      * @param   {object} featureProperties properties of the feature
      * @param   {string} key attribute name or object path to check
-     * @returns {undefined} attribute property can be of any type
+     * @returns {void} attribute property can be of any type
      */
     getFeatureValue: function (featureProperties, key) {
         const keyIsObjectPath = this.isObjectPath(key);
@@ -576,7 +576,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     },
 
     /**
-     * Returns a unique id created from geometryType and conditions using base64 decoding.
+     * Returns an id created from geometryType and conditions using encodeURIComponent.
      * @param   {string} geometryType features geometry type
      * @param   {object} rule         a rule description
      * @returns {string} id
@@ -584,7 +584,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     createLegendId: function (geometryType, rule) {
         const properties = rule.hasOwnProperty("conditions") ? rule.conditions : null;
 
-        return btoa(geometryType + JSON.stringify(properties));
+        return encodeURIComponent(geometryType + JSON.stringify(properties));
     },
 
     /**

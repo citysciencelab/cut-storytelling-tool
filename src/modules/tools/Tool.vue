@@ -134,8 +134,9 @@ export default {
 <template>
     <div
         v-if="active"
-        :id="renderToWindow ? 'tool-window-vue' : 'tool-sidebar-vue'"
+        :id="renderToWindow ? '' : 'tool-sidebar-vue'"
         :class="{
+            'tool-window-vue': renderToWindow,
             'table-tool-win-all-vue': uiStyle === 'TABLE',
             'is-minified': isMinified
         }"
@@ -146,7 +147,7 @@ export default {
             id="basic-resize-handle-sidebar"
             hPos="l"
             :minW="200"
-            targetEl="#tool-sidebar-vue"
+            targetSel="#tool-sidebar-vue"
             @endResizing="updateMap"
         >
             <div>&#8942;</div>
@@ -171,7 +172,7 @@ export default {
 
             <BasicDragHandle
                 v-if="renderToWindow"
-                targetEl="#tool-window-vue"
+                targetSel=".tool-window-vue"
                 :marginBottom="resizableWindow ? 25 : 0"
                 class="heading-element flex-grow"
             >
@@ -217,7 +218,7 @@ export default {
                 :id="'basic-resize-handle-' + hPos"
                 :key="hPos"
                 :hPos="hPos"
-                targetEl="#tool-window-vue"
+                targetSel=".tool-window-vue"
                 :minW="200"
                 :minH="100"
             />
@@ -227,7 +228,6 @@ export default {
 
 <style lang="less" scoped>
     @import "~variables";
-    @color_1: rgb(85, 85, 85);
     @color_2: rgb(255, 255, 255);
     @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
     @font_family_2: "MasterPortalFont", sans-serif;
@@ -239,18 +239,17 @@ export default {
     #vue-tool-content-body { display:block; }
 
     .win-heading{
-        padding: 12px 10px 12px 10px;
         border-bottom: 1px solid rgb(229, 229, 229);
         font-family: @font_family_1;
         display:flex;
         flex-direction:row;
         width:100%;
+        padding-left: 10px;
 
         .heading-element {
             white-space: nowrap;
-            color: @color_1;
+            color: @secondary_contrast;
             font-size: 14px;
-            padding: 6px;
 
             &.flex-grow {
                 flex-grow:99;
@@ -258,9 +257,14 @@ export default {
             }
 
             > .title {
-                margin:0;
-                overflow:hidden;
+                color: @secondary_contrast;
                 white-space: nowrap;
+                font-size: 14px;
+                padding-top: 10px;
+            }
+
+            > .glyphicon {
+                padding: 10px 8px 10px 0px;
             }
 
             > span {
@@ -272,7 +276,7 @@ export default {
         }
     }
 
-    #tool-window-vue {
+    .tool-window-vue {
         background-color: @background_color_1;
         display: block;
         position: absolute;
@@ -281,9 +285,11 @@ export default {
         left: 20px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
         z-index: 999;
-        max-height:72vh;
-        overflow: auto;
         min-width: 280px;
+
+        @media (max-width: 400px) {
+            right: 20px;
+        }
 
         .basic-resize-handle {
             position:absolute;
@@ -303,33 +309,39 @@ export default {
             .win-heading{
                 background-color:@background_color_2;
                 border-bottom:none;
-
-                .heading-element {
-                    .title { color: @color_2; }
-                }
+                overflow: hidden;
             }
         }
     }
 
     .win-body-vue {
-        position:relative;
-        padding:20px;
-        height:calc(100% - 58px);
-        width:100%;
+        position: relative;
+        padding: @padding;
+        height: calc(100% - 58px);
+        width: 100%;
         -webkit-overflow-scrolling: touch;
         background-color: @background_color_1;
-        overflow:auto;
+        overflow: auto;
+        max-height:72vh;
+        overflow: auto;
     }
 
     .table-tool-win-all-vue {
         font-family: @font_family_2;
         border-radius: 12px;
-        background-color: @background_color_4;
         margin-bottom: 30px;
-        .header {
+        .win-heading {
             font-family: @font_family_2;
-            > .title { color: @color_2; }
-            > .buttons { color: @color_2; }
+            font-size: 14px;
+            background-color: @background_color_4;
+            .heading-element {
+                > .title {
+                    color: @color_2;
+                    font-size: 14px;
+                }
+                > .buttons { color: @color_2; }
+                > .glyphicon { color: @color_2; }
+            }
         }
         .win-body-vue {
             border-bottom-left-radius: 12px;

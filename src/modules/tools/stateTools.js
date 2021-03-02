@@ -1,9 +1,13 @@
 import Draw from "./draw/components/Draw.vue";
-import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
-import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 import CompareFeatures from "./compareFeatures/components/CompareFeatures.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
 import Gfi from "./gfi/components/Gfi.vue";
+import SearchByCoord from "./searchByCoord/components/SearchByCoord.vue";
+import Measure from "./measure/components/Measure.vue";
+import SaveSelection from "./saveSelection/components/SaveSelection.vue";
+import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
+import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
+
 /**
  * User type definition
  * @typedef {Object} ToolsState
@@ -13,11 +17,14 @@ import Gfi from "./gfi/components/Gfi.vue";
 const state = {
     componentMap: {
         draw: Draw,
-        scaleSwitcher: ScaleSwitcher,
-        supplyCoord: SupplyCoord,
         compareFeatures: CompareFeatures,
         fileImport: FileImport,
-        gfi: Gfi
+        gfi: Gfi,
+        searchByCoord: SearchByCoord,
+        measure: Measure,
+        saveSelection: SaveSelection,
+        scaleSwitcher: ScaleSwitcher,
+        supplyCoord: SupplyCoord
     },
     configuredTools: []
 };
