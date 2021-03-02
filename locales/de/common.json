@@ -378,6 +378,7 @@
                 "moreInfo": "Mehr Infos",
                 "lessInfo": "Weniger Infos",
                 "exportAsPdf": "Export als PDF",
+                "removeFromList": "Von Liste entfernen ",
                 "noFeatures": {
                     "nothingSelected": "Es sind keine {{objects}} für die Vergleichsliste ausgewählt.",
                     "objectName": "Objekte",

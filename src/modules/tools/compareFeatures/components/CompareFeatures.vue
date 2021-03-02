@@ -103,12 +103,14 @@ export default {
             <div id="buttons">
                 <button
                     class="btn btn-primary btn-infos"
+                    :title="$t('common:button.back')"
                     @click="setShowAlert(false)"
                 >
                     {{ $t("common:button.back") }}
                 </button>
                 <button
                     class="btn btn-primary btn-infos"
+                    :title="$t('common:modules.tools.compareFeatures.feedback.gotoComparisonlist')"
                     @click="switchToList"
                 >
                     {{ $t("common:modules.tools.compareFeatures.feedback.gotoComparisonlist") }}
@@ -167,6 +169,7 @@ export default {
                                 <button
                                     v-if="index === 0 && key !== 'col-1'"
                                     class="close"
+                                    :title="$t('common:modules.tools.compareFeatures.removeFromList')"
                                     @click="removeFeatureFromPreparedList({'features': preparedList[Object.keys(preparedList)[0]], 'featureId': key})"
                                 >
                                     <span
@@ -212,6 +215,7 @@ export default {
                             >
                                 <button
                                     class="close"
+                                    :title="$t('common:modules.tools.compareFeatures.removeFromList')"
                                     @click="removeFeatureFromPreparedList({'features': preparedList[Object.keys(preparedList)[0]], 'featureId': key})"
                                 >
                                     <span
@@ -266,6 +270,7 @@ export default {
                             >
                                 <button
                                     class="close"
+                                    :title="$t('common:modules.tools.compareFeatures.removeFromList')"
                                     @click="removeFeatureFromPreparedList({'features': preparedList[selected], 'featureId': key, 'selectedLayer': selected})"
                                 >
                                     <span
@@ -312,6 +317,7 @@ export default {
                             >
                                 <button
                                     class="close"
+                                    :title="$t('common:modules.tools.compareFeatures.removeFromList')"
                                     @click="removeFeatureFromPreparedList({'features': preparedList[selected], 'featureId': key, 'selectedLayer': selected})"
                                 >
                                     <span
@@ -355,6 +361,7 @@ export default {
             >
                 <button
                     class="btn btn-primary btn-infos"
+                    :title="!showMoreInfo ? $t('common:modules.tools.compareFeatures.moreInfo') : $t('common:modules.tools.compareFeatures.lessInfo')"
                     :disabled="!showMoreInfoButton"
                     @click="moreInfo()"
                 >
@@ -362,6 +369,7 @@ export default {
                 </button>
                 <button
                     class="btn btn-primary btn-infos"
+                    :title="$t('common:modules.tools.compareFeatures.exportAsPdf')"
                     @click="preparePrint()"
                 >
                     {{ $t("common:modules.tools.compareFeatures.exportAsPdf") }}
