@@ -11,6 +11,7 @@ const getters = {
      */
     isFeatureSelected: (state) => (gfiFeature) => {
         const layerId = gfiFeature.layerId;
+        console.log(gfiFeature);
 
         if (state.layerFeatures.hasOwnProperty(layerId)) {
 
