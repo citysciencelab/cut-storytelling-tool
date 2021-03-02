@@ -53,7 +53,7 @@ export default {
      * @param {object} gfiAttributes -
      * @returns {object[]} list - one object per row
      */
-    prepareFeatureListToShow: function ({state}, gfiAttributes) {
+    prepareFeatureListToShow: function ({state, commit}, gfiAttributes) {
         const list = [],
             // In reaction to modules/tools/gfi/model.js @ prepareVectorGfiParam(), only use 1st part of underscore delimited layerId
             layerId = parseInt(gfiAttributes.layerId.split("_")[0], 10),
@@ -68,6 +68,7 @@ export default {
             });
             list.push(row);
         });
+        commit("setHasFeatures", true);
         state.preparedList[layerId] = list;
         return list;
     },
@@ -177,6 +178,9 @@ export default {
                     delete feature[key];
                 }
             }
+        }
+        if (Object.keys(state.layerFeatures).length === 0) {
+            commit("setHasFeatures", false);
         }
     }
 };

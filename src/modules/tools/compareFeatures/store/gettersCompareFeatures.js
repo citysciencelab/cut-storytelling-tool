@@ -24,17 +24,6 @@ const getters = {
         return false;
     },
     /**
-     * Checks if features are on the comparison list.
-     * @param {Object} state context object.
-     * @returns {void}
-     */
-    hasFeatures: (state) => {
-        if (Object.keys(state.layerFeatures).length > 0) {
-            return true;
-        }
-        return false;
-    },
-    /**
      * Gets the currently available layers.
      * @param {Object} state context object.
      * @returns {void}
