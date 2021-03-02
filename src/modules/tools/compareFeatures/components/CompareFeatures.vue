@@ -356,7 +356,7 @@ export default {
                 </table>
             </div>
             <div
-                v-if="hasFeatures"
+                v-if="showButtons"
                 id="buttons"
             >
                 <button

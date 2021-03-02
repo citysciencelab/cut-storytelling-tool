@@ -11,7 +11,6 @@ const getters = {
      */
     isFeatureSelected: (state) => (gfiFeature) => {
         const layerId = gfiFeature.layerId;
-        console.log(gfiFeature);
 
         if (state.layerFeatures.hasOwnProperty(layerId)) {
 
@@ -37,6 +36,15 @@ const getters = {
             }
         });
         return layerArray;
+    },
+    showButtons: (state) => {
+        if (state.hasFeatures && !state.hasMultipleLayers) {
+            return true;
+        }
+        else if (state.hasMultipleLayers && state.selectedLayer) {
+            return true;
+        }
+        return false;
     }
 };
 

@@ -18,7 +18,7 @@ const state = {
     showAlert: false,
     showMoreInfoButton: false,
     listFull: false,
-    hasFeatures : false,
+    hasFeatures: false,
     layerWithFeaturesToShow: [],
     hasMultipleLayers: false,
     showMoreInfo: false,

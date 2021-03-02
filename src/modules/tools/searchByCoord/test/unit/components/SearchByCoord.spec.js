@@ -70,7 +70,7 @@ describe("src/modules/tools/searchByCoord/components/SearchByCoord.vue", () => {
             await wrapper.vm.$nextTick();
 
             expect(store.state.Tools.SearchByCoord.active).to.be.false;
-            expect(wrapper.find("#supply-coord").exists()).to.be.false;
+            expect(wrapper.find("#search-by-coord").exists()).to.be.false;
         });
     });
 });
