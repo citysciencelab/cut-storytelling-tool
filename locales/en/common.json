@@ -377,6 +377,7 @@
                 "moreInfo": "More info",
                 "lessInfo": "Less info",
                 "exportAsPdf": "Export as PDF",
+                "removeFromList": "Remove from list",
                 "noFeatures": {
                     "nothingSelected": "There are no {{objects}} selected for the comparison list.",
                     "objectName": "objects",

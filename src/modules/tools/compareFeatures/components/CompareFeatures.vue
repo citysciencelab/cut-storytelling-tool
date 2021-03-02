@@ -169,7 +169,7 @@ export default {
                                 <button
                                     v-if="index === 0 && key !== 'col-1'"
                                     class="close"
-                                    :title="$t('common:button.close')"
+                                    :title="$t('common:modules.tools.compareFeatures.removeFromList')"
                                     @click="removeFeatureFromPreparedList({'features': preparedList[Object.keys(preparedList)[0]], 'featureId': key})"
                                 >
                                     <span
@@ -215,7 +215,7 @@ export default {
                             >
                                 <button
                                     class="close"
-                                    :title="$t('common:button.close')"
+                                    :title="$t('common:modules.tools.compareFeatures.removeFromList')"
                                     @click="removeFeatureFromPreparedList({'features': preparedList[Object.keys(preparedList)[0]], 'featureId': key})"
                                 >
                                     <span
@@ -270,7 +270,7 @@ export default {
                             >
                                 <button
                                     class="close"
-                                    :title="$t('common:button.close')"
+                                    :title="$t('common:modules.tools.compareFeatures.removeFromList')"
                                     @click="removeFeatureFromPreparedList({'features': preparedList[selected], 'featureId': key, 'selectedLayer': selected})"
                                 >
                                     <span
@@ -317,7 +317,7 @@ export default {
                             >
                                 <button
                                     class="close"
-                                    :title="$t('common:button.close')"
+                                    :title="$t('common:modules.tools.compareFeatures.removeFromList')"
                                     @click="removeFeatureFromPreparedList({'features': preparedList[selected], 'featureId': key, 'selectedLayer': selected})"
                                 >
                                     <span
