@@ -54,12 +54,12 @@ export default {
         },
         // TODO: Can this be moved somewhere else? -> Own store for a Field?
         selectableOptions () {
-            const {options, parsedSource, remoteOptions} = this;
+            const {options, parsedSource, addedOptions} = this;
 
             // Options are supposed to be retrieved from the external source
             if (typeof options === "string" && parsedSource !== null) {
                 if (options === "") {
-                    this.addRemoteOptions(options);
+                    this.addOptions(options);
                     return Object.keys(parsedSource);
                 }
 
@@ -69,7 +69,7 @@ export default {
                 let option = options;
 
                 // Root elements were not added yet
-                if (!remoteOptions.includes("")) {
+                if (!addedOptions.includes("")) {
                     this.disableField();
                     // TODO: Field needs to be disabled if '""' was not selected
                 }
@@ -78,11 +78,11 @@ export default {
                     // Found element to add
                     if (i === length - 1) {
                         option = optionsArr[i];
-                        this.addRemoteOptions(option);
+                        this.addOptions(option);
                     }
                     // As values are added like 'foo.bar', for 'bar' to be selectable, 'foo' needs to be present
                     // This is the case, because 'bar' is a parameter of 'foo'
-                    else if (!remoteOptions.includes(optionsArr[i])) {
+                    else if (!addedOptions.includes(optionsArr[i])) {
                         this.disableField();
                         // TODO: Field needs to be disabled if prior fields are not selected
                     }

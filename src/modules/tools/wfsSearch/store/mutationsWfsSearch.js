@@ -3,12 +3,12 @@ import initialState from "./stateWfsSearch";
 
 const mutations = {
     ...generateSimpleMutations(initialState),
-    addRemoteOptions: (state, val) => {
-        if (state.remoteOptions.includes(val)) {
+    addOptions: (state, val) => {
+        if (state.addedOptions.includes(val)) {
             console.warn(`WfsSearch: The value ${val} is added multiple times to the formular. This entry will be skipped.`);
         }
         else {
-            state.remoteOptions.push(val);
+            state.addedOptions.push(val);
         }
     }
 };

@@ -11,11 +11,12 @@
  * @property {Boolean} deactivateGFI Flag if tool should deactivate GFI. (config-param)
  * @property {Number} initialWidth Initial width of the tool window. (config-param)
  * @property {Object[]} clauses Array of clauses. (config-param)
+ * @property {?String[]} remoteOptions Array of serviceIds. These services are prequeried for a field that doesn't have the parameter `options` set to make a suggestion for the input.
  * @property {?String} requestConfig The id of the service that is supposed to be requested. (config-param)
  * @property {?String} selectSource Optional Url leading to the expected options for the different inputs. (config-param)
  * @property {String} userHelp Information text regarding the search formular to be displayed to the user. (config-param)
  * @property {?JSON} parsedSource The requested and parsed selectSource.
- * @property {String[]} remoteOptions List to keep track of the already added UI elements for the Literals.
+ * @property {String[]} addedOptions List to keep track of the already added UI elements for the Literals.
  */
 const state = {
     active: false,
@@ -30,12 +31,13 @@ const state = {
     deactivateGFI: true,
     initialWidth: 300,
     clauses: [],
+    remoteOptions: null,
     requestConfig: null,
     selectSource: null,
     userHelp: "",
     // state parameters
     parsedSource: null,
-    remoteOptions: []
+    addedOptions: []
 };
 
 export default state;
