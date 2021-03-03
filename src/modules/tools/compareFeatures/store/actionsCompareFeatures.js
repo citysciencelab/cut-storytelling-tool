@@ -168,7 +168,7 @@ export default {
                 if (state.layerFeatures[selected].length === 0) {
                     delete state.preparedList[selected];
                     delete state.layerFeatures[selected];
-                    commit("hasLayers");
+                    commit("resetLayerSelection");
                 }
             }
             for (const feature of preparedList) {

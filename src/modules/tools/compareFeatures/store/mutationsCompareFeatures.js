@@ -67,11 +67,12 @@ const mutations = {
         }
     },
     /**
-     * If multiple layers are present the state variable will be true.
+     * Sets hasMultipleLayers to false if list gets reduced to one layer
+     * after removing features from comparison list.
      * @param {Object} state context object.
      * @returns {void}
      */
-    hasLayers: (state) => {
+    resetLayerSelection: (state) => {
         if (Object.keys(state.layerFeatures).length <= 1) {
             state.hasMultipleLayers = false;
         }
