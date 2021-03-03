@@ -14,7 +14,6 @@ export default {
     },
     data: () => {
         return {
-            // featureIsOnCompareList: false,
             olFeature: null
         };
     },
@@ -64,11 +63,6 @@ export default {
          */
         initialize: function () {
             this.fetchOlFeature();
-
-            // if (this.olFeature) {
-            //     this.featureIsOnCompareList = this.olFeature.get("isOnCompareList");
-            //     this.olFeature.on("propertychange", this.toggleFeatureIsOnCompareList.bind(this));
-            // }
         },
 
         /**
@@ -100,18 +94,7 @@ export default {
         },
 
         /**
-         * Indicates whether the feature is on the comparelist.
-         * @param {Event} event The given event.
-         * @returns {void}
-         */
-        // toggleFeatureIsOnCompareList: function (event) {
-        //     if (event.key === "isOnCompareList") {
-        //         this.featureIsOnCompareList = event.target.get("isOnCompareList");
-        //     }
-        // },
-
-        /**
-         * Triggers the event "addFeatureToList" to the CompareFeatures module to add the feature.
+         * Triggers the event "addFeatureToList" of the CompareFeatures module to add the feature.
          * @param {Event} event The click event.
          * @returns {void}
          */

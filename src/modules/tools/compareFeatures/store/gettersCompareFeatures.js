@@ -37,6 +37,11 @@ const getters = {
         });
         return layerArray;
     },
+    /**
+     * Getter for only showing moreInfo & PDF button when in comparison list.
+     * @param {Object} state context object.
+     * @returns {void}
+     */
     showButtons: (state) => {
         if (state.hasFeatures && !state.hasMultipleLayers) {
             return true;

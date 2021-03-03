@@ -1,6 +1,6 @@
 export default {
     /**
-     * Sets the zoom level to the map.
+     * Dispatches an action from the Compare Features Tool to add a feature to a comparison list.
      * @param {Object} context actions context object.
      * @param {Number} featureInfo - featureInfo
      * @returns {void}
@@ -9,7 +9,7 @@ export default {
         dispatch("Tools/CompareFeatures/isFeatureOnCompareList", featureInfo, {root: true});
     },
     /**
-     * Sets the zoom level to the map.
+     * Dispatches an action from the Compare Features Tool to remove a feature to a comparison list.
      * @param {Object} context actions context object.
      * @param {Number} gfiFeature - feature
      * @returns {void}

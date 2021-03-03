@@ -55,7 +55,6 @@ export default {
      */
     prepareFeatureListToShow: function ({state, commit}, gfiAttributes) {
         const list = [],
-            // In reaction to modules/tools/gfi/model.js @ prepareVectorGfiParam(), only use 1st part of underscore delimited layerId
             layerId = parseInt(gfiAttributes.layerId.split("_")[0], 10),
             featureList = state.layerFeatures[layerId];
 
@@ -172,7 +171,6 @@ export default {
                     commit("hasLayers");
                 }
             }
-
             for (const feature of preparedList) {
                 if (Object.keys(feature).includes(key)) {
                     delete feature[key];
