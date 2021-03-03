@@ -2189,33 +2189,17 @@ Es können mehrere Formulare (**[SearchInstances](#markdown-header-portalconfigm
                                 {
                                     "field": {
                                         "type": "equal",
+                                        "fieldName": "gemarkung",
+                                        "inputLabel": "Gemarkung",
                                         "options": ""
                                     }
                                 },
                                 {
                                     "field": {
                                         "type": "equal",
+                                        "fieldName": "flur",
+                                        "inputLabel": "Flur",
                                         "options": "flur"
-                                    }
-                                },
-                                {
-                                    "field": {
-                                        "type": "equal",
-                                        "fieldName": "Flüsse",
-                                        "options": [
-                                            {
-                                                "id": "0",
-                                                "displayName": "Elbe"
-                                            },
-                                            {
-                                                "id": "1",
-                                                "displayName": "Mosel"
-                                            },
-                                            {
-                                                "id": "2",
-                                                "displayName": "Rhein"
-                                            }
-                                        ]
                                     }
                                 }
                             ]
@@ -2257,33 +2241,17 @@ Eine Instanz der WFS Suche, welche als einzelnes Tool dargestellt wird.
                     {
                         "field": {
                             "type": "equal",
+                            "fieldName": "gemarkung",
+                            "inputLabel": "Gemarkung",
                             "options": ""
                         }
                     },
                     {
                         "field": {
                             "type": "equal",
+                            "fieldName": "flur",
+                            "inputLabel": "Flur",
                             "options": "flur"
-                        }
-                    },
-                    {
-                        "field": {
-                            "type": "equal",
-                            "fieldName": "Flüsse",
-                            "options": [
-                                {
-                                    "id": "0",
-                                    "displayName": "Elbe"
-                                },
-                                {
-                                    "id": "1",
-                                    "displayName": "Mosel"
-                                },
-                                {
-                                    "id": "2",
-                                    "displayName": "Rhein"
-                                }
-                            ]
                         }
                     }
                 ]
@@ -2314,12 +2282,16 @@ Ein Literal kann entweder eine Klausel (**clause**) als Parameter besitzen oder 
             {
                 "field": {
                     "type": "equal",
+                    "fieldName": "gemarkung",
+                    "inputLabel": "Gemarkung",
                     "options": ""
                 }
             },
             {
                 "field": {
                     "type": "equal",
+                    "fieldName": "flur",
+                    "inputLabel": "Flur",
                     "options": "flur"
                 }
             }
@@ -2332,7 +2304,8 @@ Ein Literal kann entweder eine Klausel (**clause**) als Parameter besitzen oder 
 {
     "field": {
         "type": "equal",
-        "fieldName": "Flüsse",
+        "fieldName": "rivers",
+        "inputLabel": "Flüsse",
         "options": [
             {
                 "id": "0",
@@ -2340,11 +2313,11 @@ Ein Literal kann entweder eine Klausel (**clause**) als Parameter besitzen oder 
             },
             {
                 "id": "1",
-                "displayName": "Mosel"
+                "displayName": "Moselle"
             },
             {
                 "id": "2",
-                "displayName": "Rhein"
+                "displayName": "Rhine"
             }
         ]
     }
@@ -2370,12 +2343,16 @@ Eine Klausel definiert die Art und Weise wie verschiedene Literale miteinander a
             {
                 "field": {
                     "type": "equal",
+                    "fieldName": "gemarkung",
+                    "inputLabel": "Gemarkung",
                     "options": ""
                 }
             },
             {
                 "field": {
                     "type": "equal",
+                    "fieldName": "flur",
+                    "inputLabel": "Flur",
                     "options": "flur"
                 }
             }
@@ -2391,22 +2368,79 @@ Eine Klausel definiert die Art und Weise wie verschiedene Literale miteinander a
 Ein Feld repräsentiert ein Auswahlfeld für einen Wert des Services für den Nutzer.
 Falls der Parameter `options` gesetzt wurde, wird ein `select`-Feld, andernfalls ein normaler Text Input verwendet.
 
+Falls der Parameter `options` ein String ist, ist es wichtig, dass die Reihenfolge der Felder mit der Ordnung der Objekte der externen Quelle übereinstimmt.
+Man nehme an, dass die Quelle wie folgt aussieht:
+
+```json
+{
+    "one": {
+        "foo": {
+            "id": "foo_one",
+            "bar": ["f1_bar_one", "f1_bar_two"]
+        }
+    },
+    "two": {
+        "foo": {
+            "id": "foo_two",
+            "bar": ["f2_bar_one", "f2_bar_two"]
+        }
+    }
+}
+```
+
+In diesem Fall sollte die Reihenfolge in der Konfiguration wie folgt aussehen:
+
+```json
+{
+    "clause": {
+        "type": "and",
+        "literals": [
+            {
+                "field": {
+                    "type": "equal",
+                    "fieldName": "objects",
+                    "inputLabel": "Objekte",
+                    "options": ""
+                }
+            },
+            {
+                "field": {
+                    "type": "equal",
+                    "fieldName": "foo",
+                    "inputLabel": "Foo",
+                    "options": "foo"
+                }
+            },
+            {
+                "field": {
+                    "type": "equal",
+                    "fieldName": "bar",
+                    "inputLabel": "Bar",
+                    "options": "foo.bar"
+                }
+            }
+        ]
+    }
+}
+```
+
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |defaultValue|nein|String||Wenn das Feld nicht `required` ist wird dieser Wert beim Senden verwendet.|false|
 |fieldName|ja|String||Die Id des WFS Service Parameters für den Vergleich.|false|
-|inputLabel|nein|String||Label des UI Elementes. Kann ein Übersetzungsschlüssel sein.|false|
+|inputLabel|ja|String||Label des UI Elementes. Kann ein Übersetzungsschlüssel sein.|false|
 |inputPlaceholder|nein|String||Platzhalter für das UI Element. Sollte Beispieldaten enthalten. Kann ein Übersetzungsschlüssel sein.|false|
 |inputTitle|nein|String||Wert, welcher beim hovern über das UI Element angezeigt wird. Kann ein Übersetzungsschlüssel sein.|false|
 |required|nein|Boolean|false|Legt fest, ob das Feld ausgefüllt werden muss.|false|
-|options|nein|String/**[options](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)[]**/Number[]/String[]||Falls `options` ein Array ist werden die gegeben Werte für die Auswahl verwendet. Falls `options` ein String ist, existieren verschiedene Möglichkeiten. Falls der String leer ist, werden die Schlüssel der **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** verwendet. Falls der String nicht leer ist, wird angenommen, dass ein anderes Feld mit `options=""` existiert; andernfalls wird das Feld deaktiviert. Es wird zudem angenommen, dass der String ein Array in **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** mit weiteren Optionen repräsentiert. Diese Optionen können entweder eine **[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)** oder einfache Werte (`String` / `Number`) sein. Im zweiten Fall werden die einfachen Werte sowohl für die Id als auch den `displayName` verwendet.|false|
+|options|nein|String/**[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)[]**/Number[]/String[]||Falls `options` ein Array ist werden die gegeben Werte für die Auswahl verwendet. Falls `options` ein String ist, existieren verschiedene Möglichkeiten. Falls der String leer ist, werden die Schlüssel der **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** verwendet. Falls der String nicht leer ist, wird angenommen, dass ein anderes Feld mit `options=""` existiert; andernfalls wird das Feld deaktiviert. Es wird zudem angenommen, dass der String ein Array in **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** mit weiteren Optionen repräsentiert. Diese Optionen können entweder eine **[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)** oder einfache Werte (`String` / `Number`) sein. Im zweiten Fall werden die einfachen Werte sowohl für die Id als auch den `displayName` verwendet.|false|
 |type|nein|enum["equal", "like"]||Wird für die Verwendung mit einem WFS@1.1.0 vorausgesetzt. Der `type` legt fest, wie das Feld mit dem Wert des Dienstes verglichen werden soll.|false|
 
 ```json
 {
     "field": {
         "type": "equal",
-        "fieldName": "Flüsse",
+        "fieldName": "rivers",
+        "inputLabel": "Flüsse",
         "options": [
             {
                 "id": "0",

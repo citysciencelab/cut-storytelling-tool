@@ -9,11 +9,13 @@
  * @property {Boolean} resizableWindow If true, window is resizable. (config-param)
  * @property {Boolean} isVisibleInMenu If true, tool is selectable in menu. (config-param)
  * @property {Boolean} deactivateGFI Flag if tool should deactivate GFI. (config-param)
- * @property {Object[]} clauses Array of clauses.
- * @property {?String} requestConfig The id of the service that is supposed to be requested.
- * @property {?String} selectSource Optional Url leading to the expected options for the different inputs
- * @property {String} userHelp Information text regarding the search formular to be displayed to the user.
- * @property {?JSON} parsedSource The requested and parced selectSource.
+ * @property {Number} initialWidth Initial width of the tool window. (config-param)
+ * @property {Object[]} clauses Array of clauses. (config-param)
+ * @property {?String} requestConfig The id of the service that is supposed to be requested. (config-param)
+ * @property {?String} selectSource Optional Url leading to the expected options for the different inputs. (config-param)
+ * @property {String} userHelp Information text regarding the search formular to be displayed to the user. (config-param)
+ * @property {?JSON} parsedSource The requested and parsed selectSource.
+ * @property {String[]} remoteOptions List to keep track of the already added UI elements for the Literals.
  */
 const state = {
     active: false,
@@ -26,12 +28,14 @@ const state = {
     resizableWindow: true,
     isVisibleInMenu: true,
     deactivateGFI: true,
+    initialWidth: 300,
     clauses: [],
     requestConfig: null,
     selectSource: null,
     userHelp: "",
     // state parameters
-    parsedSource: null
+    parsedSource: null,
+    remoteOptions: []
 };
 
 export default state;

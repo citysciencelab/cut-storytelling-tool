@@ -1,5 +1,7 @@
 <script>
 import Field from "./Field.vue";
+import {mapGetters} from "vuex";
+import getters from "../store/gettersWfsSearch";
 
 export default {
     name: "Literal",
@@ -11,6 +13,9 @@ export default {
             type: Object,
             required: true
         }
+    },
+    computed: {
+        ...mapGetters("Tools/WfsSearch", Object.keys(getters))
     }
 };
 </script>
@@ -18,27 +23,28 @@ export default {
 <template>
     <!-- TODO: Warn if both clause and field are defined -->
     <!-- TODO: Find a way for the visual indicator for the "and" and "or"; also do something with the type -->
-    <!-- TODO: Should clauses have the below class or should this be set on the Field -> Grouping of elements of a clause -->
-    <div
-        v-if="literal.clause"
-        class="form-group form-group-sm"
-    >
+    <!-- TODO: Grouping of elements of a clause for visualization-->
+    <div v-if="literal.clause">
         <template
-            v-for="lit of literal.clause.literals"
+            v-for="(lit, i) of literal.clause.literals"
         >
-            <!-- TODO: Add proper keys -->
             <Literal
-                :key="'lit' + lit"
+                :key="'tool-wfsSearch-clause-literal' + i"
                 :literal="lit"
             />
         </template>
     </div>
-    <!-- TODO: Check if the v-bind does the trick -> Leads to prop invalidity (console warning) -->
     <Field
         v-else
-        v-bind="literal.field"
+        :default-value="literal.field.defaultValue"
+        :field-name="literal.field.fieldName"
+        :input-label="literal.field.inputLabel"
+        :input-placeholder="literal.field.inputPlaceholder"
+        :input-title="literal.field.inputTitle"
+        :required="literal.field.required"
+        :options="literal.field.options"
+        :type="literal.field.type"
     />
-    <!-- TODO: Maybe conditionally add a divider? -->
 </template>
 
 <style scoped>

@@ -2290,33 +2290,17 @@ Multiple formulars (**[SearchInstances](#markdown-header-portalconfigmenutoolwfs
                                 {
                                     "field": {
                                         "type": "equal",
+                                        "fieldName": "gemarkung",
+                                        "inputLabel": "District",
                                         "options": ""
                                     }
                                 },
                                 {
                                     "field": {
                                         "type": "equal",
+                                        "fieldName": "flur",
+                                        "inputLabel": "Cadastral District",
                                         "options": "flur"
-                                    }
-                                },
-                                {
-                                    "field": {
-                                        "type": "equal",
-                                        "fieldName": "Rivers",
-                                        "options": [
-                                            {
-                                                "id": "0",
-                                                "displayName": "Elbe"
-                                            },
-                                            {
-                                                "id": "1",
-                                                "displayName": "Moselle"
-                                            },
-                                            {
-                                                "id": "2",
-                                                "displayName": "Rhine"
-                                            }
-                                        ]
                                     }
                                 }
                             ]
@@ -2358,33 +2342,17 @@ A singular instance of the WFS Search which will be displayed as an individual t
                     {
                         "field": {
                             "type": "equal",
+                            "fieldName": "gemarkung",
+                            "inputLabel": "District",
                             "options": ""
                         }
                     },
                     {
                         "field": {
                             "type": "equal",
+                            "fieldName": "flur",
+                            "inputLabel": "Cadastral District",
                             "options": "flur"
-                        }
-                    },
-                    {
-                        "field": {
-                            "type": "equal",
-                            "fieldName": "Rivers",
-                            "options": [
-                                {
-                                    "id": "0",
-                                    "displayName": "Elbe"
-                                },
-                                {
-                                    "id": "1",
-                                    "displayName": "Moselle"
-                                },
-                                {
-                                    "id": "2",
-                                    "displayName": "Rhine"
-                                }
-                            ]
                         }
                     }
                 ]
@@ -2415,12 +2383,16 @@ A literal can either have the parameter **clause** or the parameter **field**. I
             {
                 "field": {
                     "type": "equal",
+                    "fieldName": "gemarkung",
+                    "inputLabel": "District",
                     "options": ""
                 }
             },
             {
                 "field": {
                     "type": "equal",
+                    "fieldName": "flur",
+                    "inputLabel": "Cadastral District",
                     "options": "flur"
                 }
             }
@@ -2433,7 +2405,8 @@ A literal can either have the parameter **clause** or the parameter **field**. I
 {
     "field": {
         "type": "equal",
-        "fieldName": "Rivers",
+        "fieldName": "rivers",
+        "inputLabel": "Rivers",
         "options": [
             {
                 "id": "0",
@@ -2473,12 +2446,16 @@ A clause defines the way multiple literals should be queried together.
             {
                 "field": {
                     "type": "equal",
+                    "fieldName": "gemarkung",
+                    "inputLabel": "District",
                     "options": ""
                 }
             },
             {
                 "field": {
                     "type": "equal",
+                    "fieldName": "flur",
+                    "inputLabel": "Cadastral District",
                     "options": "flur"
                 }
             }
@@ -2494,22 +2471,79 @@ A clause defines the way multiple literals should be queried together.
 A field is the representation for the selection field for the user for a value in the service.
 If the parameter `options` is set, a select field is used, otherwise a simple text input.
 
+If `options` is a String, it is important that the order of the Fields corresponds to the order of the objects in the external source.
+Assume the source looks like this:
+
+```json
+{
+    "one": {
+        "foo": {
+            "id": "foo_one",
+            "bar": ["f1_bar_one", "f1_bar_two"]
+        }
+    },
+    "two": {
+        "foo": {
+            "id": "foo_two",
+            "bar": ["f2_bar_one", "f2_bar_two"]
+        }
+    }
+}
+```
+
+Then the order of the config should look like this:
+
+```json
+{
+    "clause": {
+        "type": "and",
+        "literals": [
+            {
+                "field": {
+                    "type": "equal",
+                    "fieldName": "objects",
+                    "inputLabel": "Objects",
+                    "options": ""
+                }
+            },
+            {
+                "field": {
+                    "type": "equal",
+                    "fieldName": "foo",
+                    "inputLabel": "Foo",
+                    "options": "foo"
+                }
+            },
+            {
+                "field": {
+                    "type": "equal",
+                    "fieldName": "bar",
+                    "inputLabel": "Bar",
+                    "options": "foo.bar"
+                }
+            }
+        ]
+    }
+}
+```
+
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |defaultValue|no|String||If the field is not `required`, this value will be used on sending.|false|
 |fieldName|yes|String||The wfs service parameter name for the comparison.|false|
-|inputLabel|no|String||Label for the UI element. May be a locale key.|false|
+|inputLabel|yes|String||Label for the UI element. May be a locale key.|false|
 |inputPlaceholder|no|String||Placeholder for the UI element; only used if `options` is not set. Should contain example data. May be a locale key.|false|
 |inputTitle|no|String||Value to be shown when hovering the UI element. May be a locale key.|false|
 |required|no|Boolean|false|Whether the field has to be filled.|false|
-|options|no|String/**[options](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)[]**/Number[]/String[]||If `options` is an array, the given values are used for selection. If it is a String, there are different possibilities. If the String is empty, the keys of **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** are used. If the String is not empty, it is assumed that another field with `options=""` exists; otherwise the field is disabled. It is also assumed that the String represents an array in **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** providing further options. These options may either match **[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)** or are plain values (`String` / `Number`). In the latter case, the plain value is used as both id and `displayName`.|false|
+|options|no|String/**[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)[]**/Number[]/String[]||If `options` is an array, the given values are used for selection. If it is a String, there are different possibilities. If the String is empty, the keys of **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** are used. If the String is not empty, it is assumed that another field with `options=""` exists; otherwise the field is disabled. It is also assumed that the String represents an array in **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** providing further options. These options may either match **[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)** or are plain values (`String` / `Number`). In the latter case, the plain value is used as both id and `displayName`.|false|
 |type|no|enum["equal", "like"]||Required for usage with WFS@1.1.0. The `type` declared how the field should be compared to the value in the service.|false|
 
 ```json
 {
     "field": {
         "type": "equal",
-        "fieldName": "Rivers",
+        "fieldName": "rivers",
+        "inputLabel": "Rivers",
         "options": [
             {
                 "id": "0",

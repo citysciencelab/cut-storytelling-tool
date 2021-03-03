@@ -13,11 +13,6 @@ export default {
         Literal,
         Tool
     },
-    data () {
-        return {
-            storePath: this.$store.state.Tools.WfsSearch // TODO: Needed?
-        };
-    },
     computed: {
         ...mapGetters("Tools/WfsSearch", Object.keys(getters))
     },
@@ -36,13 +31,8 @@ export default {
         * TODO
         * Logic:
         * - Create a separate Tool for each SearchInstance
-        * - Connection between UI and store
-        * - Query of the service
+        * - Query of the service --> Next up after commit
         *   + Difference between WFS@2.0.0 (Stored Query) and WFS@1.1.0 (query has to be built)
-        *
-        * Components:
-        * - Result Table / List --> reusable?
-        * - Add Search and Reset Buttons to the Search Component
         */
     },
     methods: {
@@ -61,7 +51,6 @@ export default {
 </script>
 
 <template>
-    <!-- TODO: Add appropriate initialWidth to state -->
     <Tool
         :title="$t(name)"
         :icon="glyphicon"
@@ -69,20 +58,54 @@ export default {
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
         :deactivateGFI="deactivateGFI"
+        :initial-width="initialWidth"
     >
         <template v-slot:toolBody>
-            <template v-if="userHelp">
-                <span>{{ userHelp }}</span>
-                <hr>
-            </template>
-            <form class="form-horizontal">
-                <!-- TODO: Add proper keys -->
-                <template v-for="clause of clauses">
+            <form
+                class="form-horizontal"
+                role="form"
+            >
+                <div
+                    v-if="userHelp"
+                    class="form-group form-group-sm"
+                >
+                    <div class="col-md-12 col-sm-12">
+                        <!-- TODO: May need to add $t() to be properly displayed -->
+                        {{ userHelp }}
+                        <hr>
+                    </div>
+                </div>
+                <template v-for="(clause, i) of clauses">
                     <Literal
-                        :key="'Klaus' + clause"
+                        :key="'tool-wfsSearch-clause' + i"
                         :literal="clause"
                     />
+                    <hr :key="'tool-wfsSearch-clause-divider' + i">
                 </template>
+                <div class="form-group form-group-sm">
+                    <div class="col-md-6 col-sm-6">
+                        <button
+                            type="button"
+                            class="btn btn-lgv-grey col-md-12 col-sm-12"
+                            @click="todoReset"
+                        >
+                            <!-- TODO: Translation -->
+                            Reset
+                        </button>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        <button
+                            type="button"
+                            class="btn btn-lgv-grey col-md-12 col-sm-12"
+                            @click="todoSuche"
+                        >
+                            <!-- TODO: Translation -->
+                            Suche
+                        </button>
+                    </div>
+                </div>
+                <hr>
+                <!-- TODO: - Result Table / List -> reusable? -->
             </form>
         </template>
     </Tool>
