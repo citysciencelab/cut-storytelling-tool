@@ -2321,7 +2321,7 @@ A singular instance of the WFS Search which will be displayed as an individual t
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|clauses|yes|**[clause](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralclause)**[]||Array of `clauses`.|true|
+|clauses|yes|**[clause](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralclause)**[]||Array of `clauses`. Each of them contains an array of **[literals](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral)** which can either be a **[clause](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralclause)** or a **[field](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfield)**.|true|
 |remoteOptions|no|String[]||Array of serviceIds. These services are prequeried for a field that doesn't have the parameter `options` set to make a suggestion for the input.|false|
 |requestConfig|yes|**[requestConfig](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfig)**||The id of the service that is supposed to be requested. If a WFS@2.0.0 is supposed to be used the id of the stored query needs to be provided.|false|
 |selectSource|no|String||Optional Url leading to the expected options for the different inputs. See **[https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json]** for an example.|false|
@@ -2367,7 +2367,7 @@ A singular instance of the WFS Search which will be displayed as an individual t
 
 #### Portalconfig.menu.tool.wfsSearch.searchInstance.literal
 
-A literal can either have the parameter **clause** or the parameter **field**. If both are set, the literal is ignored.
+A literal can either have the parameter **clause**, or the parameter **field**. If both are set, the literal is ignored.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
@@ -2589,8 +2589,8 @@ Information about the WFS service that is supposed to be requested.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|serviceId|true|String||Id of the WFS service that should be queried. Information is fetched from **[services.json](services.json.md)**.|false|
-|storedQueryId|false|String||The id of the Stored Query of the WFS that should be used to query the service. If this field is set, it is assumed that a WFS@2.0.0 is used.|false|
+|serviceId|yes|String||Id of the WFS service that should be queried. Information is fetched from **[services.json](services.json.md)**.|false|
+|storedQueryId|no|String||The id of the Stored Query of the WFS that should be used to query the service. If this field is set, it is assumed that a WFS@2.0.0 is used.|false|
 
 ```json
 {
