@@ -2329,6 +2329,8 @@ Ein Literal kann entweder eine Klausel (**clause**) als Parameter besitzen oder 
 
 #### Portalconfig.menu.tool.wfsSearch.searchInstance.literal.clause
 
+[type:literal]: # (Portalconfig.menu.tool.wfsSearch.searchInstance.literal)
+
 Eine Klausel definiert die Art und Weise wie verschiedene Literale miteinander anzufragen sind.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|

@@ -2430,6 +2430,8 @@ A literal can either have the parameter **clause**, or the parameter **field**. 
 
 #### Portalconfig.menu.tool.wfsSearch.searchInstance.literal.clause
 
+[type:literal]: # (Portalconfig.menu.tool.wfsSearch.searchInstance.literal)
+
 A clause defines the way multiple literals should be queried together.
 
 |Name|Required|Type|Default|Description|Expert|
