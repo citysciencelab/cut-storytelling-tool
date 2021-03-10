@@ -2220,7 +2220,7 @@ Eine Instanz der WFS Suche, welche als einzelnes Tool dargestellt wird.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|clauses|ja|**[clause](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralclause)**[]||Array an `clauses`.|false|
+|literals|ja|**[literal](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral)**[]||Array an `literals`.|false|
 |remoteOptions|nein|String[]||Array an serviceIds. Diese Dienste werden dafür verwendet, um bei einem Feld bei welchem der Parameter `options` nicht gesetzt ist einen Vorschlag für die Eingabe zu geben.|false|
 |requestConfig|ja|**[requestConfig](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfig)**||Id des WFS-Dienstes, welcher angefragt werden soll. Wenn ein WFS@2.0.0 verwendet werden soll, muss die id der gespeicherten Anfrage (Stored Query) angegeben werden.|false|
 |selectSource|nein|String||Optionale Url, unter welcher eine JSON-Datei mit den verschiedenen Optionen für den Input gespeichert ist. Für eine Beispiel siehe **[https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json]**.|false|
