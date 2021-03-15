@@ -12,11 +12,6 @@ export default {
             required: true
         }
     },
-    data: () => {
-        return {
-            olFeature: null
-        };
-    },
     computed: {
         ...mapGetters("Map", ["visibleLayerListWithChildrenFromGroupLayers"]),
         ...mapGetters("Tools/CompareFeatures", Object.keys(getters)),
@@ -43,55 +38,9 @@ export default {
             return this.featureIsOnCompareList ? this.$t("modules.tools.gfi.favoriteIcons.compareFeatureIcon.fromCompareList") : this.$t("modules.tools.gfi.favoriteIcons.compareFeatureIcon.toCompareList");
         }
     },
-    watch: {
-        feature () {
-            this.initialize();
-        }
-    },
-    created () {
-        this.initialize();
-    },
     methods: {
         ...mapActions("Tools/Gfi", Object.keys(actions)),
         componentExists,
-
-        /**
-         * Checks if the feature is on the comparelist.
-         * Starts to prepare the data and sets up the listener.
-         * @param {Object} feature The feature from property
-         * @returns {void}
-         */
-        initialize: function () {
-            this.fetchOlFeature();
-        },
-
-        /**
-         * Returns the olFeature from layer in the layerList associated with the feature.
-         * It also searches in clustered features.
-         * @returns {ol/Feature} The olFeature
-         */
-        fetchOlFeature: function () {
-            if (this.visibleLayerListWithChildrenFromGroupLayers?.length > 0) {
-                const foundLayer = this.visibleLayerListWithChildrenFromGroupLayers.find(layer => layer.get("id") === this.feature.getLayerId());
-
-                if (foundLayer && typeof foundLayer.get("source").getFeatures === "function") {
-                    const foundFeatures = foundLayer.get("source").getFeatures();
-
-                    foundFeatures.forEach(feature => {
-                        if (feature.get("features")) {
-                            feature.get("features").forEach(feat => {
-                                if (feat?.getId() === this.feature.getId()) {
-                                    this.olFeature = feat;
-                                }
-                            });
-                        }
-                        else if (feature?.getId() === this.feature.getId()) {
-                            this.olFeature = feature;
-                        }
-                    });
-                }
-            }
-        },
 
         /**
          * Triggers the event "addFeatureToList" of the CompareFeatures module to add the feature.
