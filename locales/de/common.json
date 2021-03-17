@@ -397,7 +397,7 @@
                 "successfullyImportedLabel": "Erfolgreich importiert:",
                 "title": "Datei importieren"
             },
-            "wfsSearch": {
+            "parcelSearch": {
                 "wrongConfig": "Ungültige oder unvollständige Konfiguration ({{name}}).",
                 "districtsLoadFailed": "Gemarkungen konnten nicht geladen werden ({{name}}).",
                 "wrongConfigParcelsearch": "Die Konfiguration der Flurstückssuche ist fehlerhaft. Bitte wenden Sie sich an den Support.",
@@ -595,6 +595,11 @@
             },
             "scaleSwitcher": {
                 "label": "Maßstab"
+            },
+            "wfsSearch": {
+                "optionPlaceholder": "Bitte wählen Sie eine Option aus!",
+                "resetButton": "Zurücksetzen",
+                "searchButton": "Suchen"
             }
         },
         "controls": {

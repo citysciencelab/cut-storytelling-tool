@@ -396,7 +396,7 @@
                 "successfullyImportedLabel": "Successfully imported:",
                 "title": "Import file"
             },
-            "wfsSearch": {
+            "parcelSearch": {
                 "wrongConfig": "Invalid or incomplete configuration ({{name}}).",
                 "districtsLoadFailed": "Districts could not be loaded ({{name}}).",
                 "wrongConfigParcelsearch": "The parcel search configuration is incorrect. Please contact the support team",
@@ -594,6 +594,11 @@
             },
             "scaleSwitcher": {
                 "label": "Scale"
+            },
+            "wfsSearch": {
+                "optionPlaceholder": "Please choose an option!",
+                "resetButton": "Reset",
+                "searchButton": "Search"
             }
         },
         "controls": {
