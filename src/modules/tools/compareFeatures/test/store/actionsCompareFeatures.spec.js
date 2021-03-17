@@ -24,12 +24,17 @@ describe("src/modules/tools/compareFeatures/store/actionsCompareFeatures.js", ()
         });
         it("adds feature", () => {
             const state = {
-                gfiFeature: {layerId: "1711", featureId: "1234"},
-                layerFeatures: {"1711": [{featureId: "feature1", layerId: "1711"}]}
+                gfiFeature: {featureId: "feature2", layerId: "1711"},
+                layerFeatures: {"1711": [{featureId: "feature1", layerId: "1711"}]},
+                numberOfFeaturesToShow: 3
             };
 
             actions.isFeatureOnCompareList({state, dispatch, commit, getters}, state.gfiFeature);
-            
+            expect(commit.firstCall.args[0]).to.equal("setShowAlert");
+            expect(commit.secondCall.args[0]).to.equal("setListFull");
+            expect(commit.secondCall.args[1]).to.equal(false);
+            expect(commit.thirdCall.args[0]).to.equal("addFeatureToLayer");
+            expect(dispatch.firstCall.args[0]).to.equal("prepareFeatureListToShow");
         });
     });
 
