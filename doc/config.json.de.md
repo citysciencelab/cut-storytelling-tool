@@ -2181,7 +2181,7 @@ Es können mehrere Formulare (**[SearchInstances](#markdown-header-portalconfigm
                     "layerId": "1234"
                 },
                 "selectSource": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
-                "clauses": [
+                "literals": [
                     {
                         "clause": {
                             "type": "and",
@@ -2234,7 +2234,7 @@ Eine Instanz der WFS Suche, welche als einzelnes Tool dargestellt wird.
         "layerId": "1234"
     },
     "selectSource": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
-    "clauses": [
+    "literals": [
         {
             "clause": {
                 "type": "and",

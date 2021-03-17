@@ -2282,7 +2282,7 @@ Multiple formulars (**[SearchInstances](#markdown-header-portalconfigmenutoolwfs
                     "layerId": "1234"
                 },
                 "selectSource": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
-                "clauses": [
+                "literals": [
                     {
                         "clause": {
                             "type": "and",
@@ -2335,7 +2335,7 @@ A singular instance of the WFS Search which will be displayed as an individual t
         "layerId": "1234"
     },
     "selectSource": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
-    "clauses": [
+    "literals": [
         {
             "clause": {
                 "type": "and",
