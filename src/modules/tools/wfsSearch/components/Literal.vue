@@ -37,6 +37,7 @@ export default {
     <Field
         v-else
         :default-value="literal.field.defaultValue"
+        :field-id="literal.field.id"
         :field-name="literal.field.fieldName"
         :input-label="literal.field.inputLabel"
         :input-placeholder="literal.field.inputPlaceholder"

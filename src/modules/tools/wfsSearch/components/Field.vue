@@ -2,6 +2,7 @@
 import {mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersWfsSearch";
 import mutations from "../store/mutationsWfsSearch";
+import {fieldValueChanged} from "../utils/literalFunctions";
 
 export default {
     name: "Field",
@@ -9,6 +10,10 @@ export default {
         defaultValue: {
             type: String,
             default: ""
+        },
+        fieldId: {
+            type: String,
+            required: true
         },
         fieldName: {
             type: String,
@@ -42,76 +47,101 @@ export default {
             }
         }
     },
-    data () {
-        return {
-            disabled: false
-        };
-    },
     computed: {
         ...mapGetters("Tools/WfsSearch", Object.keys(getters)),
         htmlElement () {
             return this.options === null ? "input" : "select";
         },
-        // TODO: Can this be moved somewhere else? -> Own store for a Field?
+        /**
+         * If the options of the field are from an external source, it is disabled if:
+         * - Is not the root element and the root element has not been added yet
+         * - The prior needed element (e.g. 'foo' is needed to have the field 'foo.bar') is not added yet
+         * - TODO The prior needed / root element (example above) is not selected yet
+         *
+         * @returns {boolean} Whether the input is disabled or not.
+         */
+        /* disabled () {
+            if (typeof this.options === "string" && this.parsedSource !== null && Object.keys(this.selectedOptions).length > 0) {
+
+                const optionsArr = this.options.split("."),
+                    selectedValues = [];
+
+                this.selectedOptions.forEach(option => {
+                    console.log(option)
+                })
+
+                return false
+
+                // Check if the prior needed parameters are selected
+                this.selectedOptions.forEach(option => selectedValues.push(Object.keys(option)[0]));
+
+                console.log("lol", selectedValues)
+
+                return this.options !== ""
+                    && !(this.addedOptions.includes("")
+                        || optionsArr.every(option => this.addedOptions.includes(option))
+                        || (selectedValues.includes("") && optionsArr.slice(0, optionsArr.length - 1).every(option => selectedValues.includes(option))));
+            }
+            return false;
+        },*/
         selectableOptions () {
-            const {options, parsedSource, addedOptions} = this;
-
+            // TODO: The required part is rather important for the concrete search than this component
             // Options are supposed to be retrieved from the external source
-            if (typeof options === "string" && parsedSource !== null) {
-                if (options === "") {
-                    this.addOptions(options);
-                    return Object.keys(parsedSource);
+            if (typeof this.options === "string" && this.parsedSource !== null) {
+                let keys = [];
+
+                if (this.options === "") {
+                    keys = Object.keys(this.parsedSource);
+                    return keys;
                 }
 
-                const keys = [],
-                    optionsArr = options.split("."),
-                    {length} = optionsArr;
-                let option = options;
+                const optionsArr = this.options.split("."),
+                    currentOption = optionsArr[optionsArr.length - 1];
 
-                // Root elements were not added yet
-                if (!addedOptions.includes("")) {
-                    this.disableField();
-                    // TODO: Field needs to be disabled if '""' was not selected
-                }
-                // It needs to be checked whether all the necessary values have already been added
-                for (let i = 0; i < length; i++) {
-                    // Found element to add
-                    if (i === length - 1) {
-                        option = optionsArr[i];
-                        this.addOptions(option);
+                if (Object.keys(this.selectedOptions).includes("")) {
+                    if (optionsArr.length === 1) {
+                        keys = this.parsedSource[this.selectedOptions[""]][currentOption];
                     }
-                    // As values are added like 'foo.bar', for 'bar' to be selectable, 'foo' needs to be present
-                    // This is the case, because 'bar' is a parameter of 'foo'
-                    else if (!addedOptions.includes(optionsArr[i])) {
-                        this.disableField();
-                        // TODO: Field needs to be disabled if prior fields are not selected
+                    else if (this.selectedOptions.includes("ALL DA VALUES")) {
+                        // TODO: Implement me against a usable external file, which uses the dot separated syntax; nesting
                     }
                 }
-
-                Object.values(parsedSource).forEach(obj => {
-                    keys.push(obj[option]);
-                });
                 return keys;
             }
             // Options are already given through the config
-            else if (typeof options === "object") {
-                return options;
+            else if (typeof this.options === "object") {
+                return this.options;
             }
             return null;
         }
     },
+    mounted () {
+        if (typeof this.options === "string") {
+            if (this.options === "") {
+                this.addOptions(this.options);
+            }
+            else {
+                const optionsArr = this.options.split(".");
+
+                // Current option is always the last part of the string
+                this.addOptions(optionsArr[optionsArr.length - 1]);
+            }
+        }
+    },
     methods: {
         ...mapMutations("Tools/WfsSearch", Object.keys(mutations)),
+        valueChanged (value) {
+            fieldValueChanged(this.fieldId, value, this.literals);
+
+            if (typeof this.options === "string") {
+                this.setSelectedOptions({options: this.options, value});
+            }
+        },
         isObject (val) {
             return typeof val === "object";
-        },
-        disableField () {
-            this.disabled = true;
         }
     }
 };
-// TODO: Utilize fieldName
-// TODO: Utilize type
 </script>
 
 <template>
@@ -124,6 +154,7 @@ export default {
             {{ inputLabel }}
         </label>
         <div class="col-md-7 col-sm-7">
+            <!-- TODO: It might be possible, that the fieldName is used multiple times to have multiple inputs -> Adjust the ids to that! -->
             <component
                 :is="htmlElement"
                 :id="`tool-wfsSearch-${fieldName}-input`"
@@ -135,15 +166,13 @@ export default {
                 :defaultValue="htmlElement === 'input' ? defaultValue : ''"
                 :required="required"
                 :disabled="disabled"
-                @change="todoEventCall($event.currentTarget.value)"
+                @change="valueChanged($event.currentTarget.value)"
             >
                 <template v-if="htmlElement === 'select'">
                     <option
-                        v-if="required"
                         value=""
                     >
-                        <!-- TODO: Make this a translation -->
-                        Please choose an element!
+                        {{ $t("common:modules.tools.wfsSearch.optionsPlaceholder") }}
                     </option>
                     <option
                         v-for="option of selectableOptions"

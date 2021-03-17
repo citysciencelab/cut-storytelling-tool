@@ -47,7 +47,8 @@
             "addWms": "Add WMS",
             "scaleSwitcher": "Scale switcher",
             "selectFeatures": "Select features",
-            "wfsSearch": "WFS search"
+            "wfsSearch": "WFS search",
+            "parcelSearch": "Parcel search"
         },
         "contact": "Mail",
         "info": "Information"

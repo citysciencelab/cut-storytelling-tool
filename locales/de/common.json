@@ -48,7 +48,8 @@
             "wfsTransaction": "WFS-T Tool",
             "scaleSwitcher": "Maßstab umschalten",
             "selectFeatures": "Features auswählen",
-            "wfsSearch": "WFS Suche"
+            "wfsSearch": "WFS Suche",
+            "parcelSearch": "Flurstückssuche"
         },
         "contact": "Kontakt",
         "info": "Informationen"

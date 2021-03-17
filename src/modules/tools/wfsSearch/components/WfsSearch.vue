@@ -6,6 +6,7 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 import actions from "../store/actionsWfsSearch";
 import getters from "../store/gettersWfsSearch";
 import mutations from "../store/mutationsWfsSearch";
+import {addIdsToLiterals} from "../utils/literalFunctions";
 
 export default {
     name: "WfsSearch",
@@ -17,16 +18,37 @@ export default {
         ...mapGetters("Tools/WfsSearch", Object.keys(getters))
     },
     watch: {
-        active () {
-            if (this.selectSource) {
-                this.retrieveData();
+        active (val) {
+            // TODO: Move this to an action
+            if (val) {
+                // TODO: The layer can only be requested if it is configured in the config.json
+                const service = Radio.request("ModelList", "getModelByAttributes", {id: this.requestConfig.layerId});
+
+                if (service) {
+                    const featureNS = service.get("featureNS"),
+                        srsName = Radio.request("MapView", "getProjection").code_;
+
+                    addIdsToLiterals(this.literals);
+                    this.setService({
+                        srsName,
+                        featureNS,
+                        featurePrefix: featureNS,
+                        featureTypes: [service.get("featureType")],
+                        url: service.get("url")
+                    });
+                    if (this.selectSource) {
+                        this.retrieveData();
+                    }
+                }
+                else {
+                    this.$store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.wfsSearch.wrongConfig", {name: this.name}));
+                }
             }
         }
     },
     created () {
         // TODO: For each entry in 'instances', a WfsSearch Tool should be created
         this.$on("close", this.close);
-
         /*
         * TODO
         * Logic:
@@ -49,6 +71,7 @@ export default {
         }
     }
 };
+// TODO: Prequeries should be used through the requestConfig; the fieldName is known
 </script>
 
 <template>
@@ -73,13 +96,13 @@ export default {
                     <div class="col-md-12 col-sm-12">
                         <!-- TODO: May need to add $t() to be properly displayed -->
                         {{ userHelp }}
-                        <hr>
                     </div>
+                    <hr>
                 </div>
-                <template v-for="(clause, i) of clauses">
+                <template v-for="(literal, i) of literals">
                     <Literal
                         :key="'tool-wfsSearch-clause' + i"
-                        :literal="clause"
+                        :literal="literal"
                     />
                     <hr :key="'tool-wfsSearch-clause-divider' + i">
                 </template>
@@ -88,24 +111,22 @@ export default {
                         <button
                             type="button"
                             class="btn btn-lgv-grey col-md-12 col-sm-12"
-                            @click="todoReset"
                         >
-                            <!-- TODO: Translation -->
-                            Reset
+                            <!-- TODO: Add @click event -->
+                            {{ $t("common:modules.tools.wfsSearch.resetButton") }}
                         </button>
                     </div>
                     <div class="col-md-6 col-sm-6">
                         <button
                             type="button"
                             class="btn btn-lgv-grey col-md-12 col-sm-12"
-                            @click="todoSuche"
+                            @click="searchFeatures"
                         >
-                            <!-- TODO: Translation -->
-                            Suche
+                            {{ $t("common:modules.tools.wfsSearch.searchButton") }}
                         </button>
                     </div>
                 </div>
-                <hr>
+                <hr> <!-- TODO: The divider should only be shown if there is a result table / list -->
                 <!-- TODO: - Result Table / List -> reusable? -->
             </form>
         </template>
