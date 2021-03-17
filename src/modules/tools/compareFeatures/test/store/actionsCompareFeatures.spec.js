@@ -8,10 +8,30 @@ describe("src/modules/tools/compareFeatures/store/actionsCompareFeatures.js", ()
     beforeEach(() => {
         commit = sinon.spy();
         dispatch = sinon.spy();
-        getters = sinon.spy();
+        getters = {
+        };
     });
 
     afterEach(sinon.restore);
+
+    describe("isFeatureOnCompareList", () => {
+        const isFeatureSelected = sinon.fake.returns(false);
+
+        beforeEach(() => {
+            getters = {
+                isFeatureSelected
+            };
+        });
+        it("adds feature", () => {
+            const state = {
+                gfiFeature: {layerId: "1711", featureId: "1234"},
+                layerFeatures: {"1711": [{featureId: "feature1", layerId: "1711"}]}
+            };
+
+            actions.isFeatureOnCompareList({state, dispatch, commit, getters}, state.gfiFeature);
+            
+        });
+    });
 
     describe("removeFeature", () => {
         it("removes the feature from the layer", () => {

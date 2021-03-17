@@ -15,19 +15,14 @@ export default {
     computed: {
         ...mapGetters("Map", ["visibleLayerListWithChildrenFromGroupLayers"]),
         ...mapGetters("Tools/CompareFeatures", Object.keys(getters)),
-        featureIsOnCompareList: {
-            get () {
-                const gfiFeature = {featureId: this.feature.getId(),
-                    layerId: this.feature.getLayerId(),
-                    layerName: this.feature.getTitle(),
-                    attributesToShow: this.feature.getAttributesToShow(),
-                    properties: this.feature.getMappedProperties()};
+        featureIsOnCompareList () {
+            const gfiFeature = {featureId: this.feature.getId(),
+                layerId: this.feature.getLayerId(),
+                layerName: this.feature.getTitle(),
+                attributesToShow: this.feature.getAttributesToShow(),
+                properties: this.feature.getMappedProperties()};
 
-                return this.isFeatureSelected(gfiFeature);
-            },
-            set (value) {
-                return value; // TODO: Ob das so richtig ist??? Setter nur wegen Fehlermeldung eingebaut.
-            }
+            return this.isFeatureSelected(gfiFeature);
         },
 
         /**
