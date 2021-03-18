@@ -6,7 +6,6 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 import actions from "../store/actionsWfsSearch";
 import getters from "../store/gettersWfsSearch";
 import mutations from "../store/mutationsWfsSearch";
-import {addIdsToLiterals} from "../utils/literalFunctions";
 
 export default {
     name: "WfsSearch",
@@ -19,31 +18,7 @@ export default {
     },
     watch: {
         active (val) {
-            // TODO: Move this to an action
-            if (val) {
-                // TODO: The layer can only be requested if it is configured in the config.json
-                const service = Radio.request("ModelList", "getModelByAttributes", {id: this.requestConfig.layerId});
-
-                if (service) {
-                    const featureNS = service.get("featureNS"),
-                        srsName = Radio.request("MapView", "getProjection").code_;
-
-                    addIdsToLiterals(this.literals);
-                    this.setService({
-                        srsName,
-                        featureNS,
-                        featurePrefix: featureNS,
-                        featureTypes: [service.get("featureType")],
-                        url: service.get("url")
-                    });
-                    if (this.selectSource) {
-                        this.retrieveData();
-                    }
-                }
-                else {
-                    this.$store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.wfsSearch.wrongConfig", {name: this.name}));
-                }
-            }
+            (val ? this.prepareModule : this.resetModule)();
         }
     },
     created () {
