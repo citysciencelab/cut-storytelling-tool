@@ -35,7 +35,6 @@
             "supplyCoord": "Query coordinates",
             "searchByCoord": "Coordinate search",
             "fileImport": "Import file",
-            "routing": "Route planner",
             "draw": "Drawing / writing",
             "shadow": "Shadows",
             "styleWMS": "Style WMS",
@@ -48,7 +47,8 @@
             "addWms": "Add WMS",
             "scaleSwitcher": "Scale switcher",
             "selectFeatures": "Select features",
-            "legend":"Legend"
+            "legend":"Legend",
+            "styleVt": "Style VT"
         },
         "contact": "Mail",
         "info": "Information"
@@ -215,28 +215,42 @@
                 }
             },
             "addWMS": {
-                "completeMessage": "The layers of the requested WMS were added to the topic tree under the menu item <strong>External Subject Data</strong>!",
-                "error": "Unfortunately no (valid) WMS could be found under the given URL!",
-                "errorMessage": "The specified service could not be loaded. Please make sure that the URL was entered correctly.<br><br> If the problem persists, please contact the operator of the service with the following note:<br><strong>It should be ensured that a CORS header is set for the service. This is recommended by the <a target='_blank' href='https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile'>GDI-DE</a> in chapter 4.7.1.</strong>",
-                "errorHttpsMessage": "The WMS you requested is located under a http-url. The master portal can only integrate WMS via https (SSL).",
+                "completeMessage": "The layers of the requested WMS were added to the topic tree under the menu item <strong>External Subject Data</strong>! &#9989;",
+                "error": "Unfortunately no (valid) WMS could be found under the given URL! &#10060;",
+                "errorMessage": "The specified service could not be loaded. Please make sure that the URL was entered correctly.<br><br> If the problem persists, please contact the operator of the service with the following note:<br><strong>It should be ensured that a CORS header is set for the service. This is recommended by the <a target='_blank' href='https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile'>GDI-DE</a> in chapter 4.7.1.</strong> &#10060;",
+                "errorHttpsMessage": "The WMS you requested is located under a http-url. The master portal can only integrate WMS via https (SSL). &#10060;",
+                "errorEmptyUrl": "Please input an wms Url in the input field!",
                 "placeholder": "Please enter the WMS-URL here.",
                 "textExample": "Example: https://geodienste.hamburg.de/HH_WMS_Fahrradrouten",
                 "textLoadLayer": "Load layer",
-                "ifInExtent": "The geodata provided via the WMS are outside the displayable range. Adding WMS is not possible.",
-                "checkVersion": "Adding WMS is possible only if the version of external wms layer equals or is greater than 1.3.0."
+                "ifInExtent": "The geodata provided via the WMS are outside the displayable range. Adding WMS is not possible. &#10060;",
+                "checkVersion": "Adding WMS is possible only if the version of external wms layer equals or is greater than 1.3.0. &#10060;"
             },
             "contact": {
-                "textPlaceholder": "Please write down your message in here and press &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
-                "userNamePlaceholder": "Your name",
-                "textSendButton": "send message",
-                "emailAddressPlaceholder": "Your E-mail Address",
-                "telephonePlaceholder": "Your phone number",
-                "errorName": "Please input your name",
-                "errorEmail": "Please input a valid E-mail address",
-                "errorNumber": "Please input your phone number",
-                "errorMessage": "Sending Email failed!",
-                "successMessage": "Your request was sent successfully",
-                "successTicket": "Your ticket number is: "
+              "error": {
+                "mail": "Please input a valid E-mail address",
+                "message": "Sending Email failed!",
+                "phone": "Please input your phone number",
+                "username": "Please input your name"
+              },
+              "placeholder": {
+                "mail": "Your E-mail Address",
+                "message": "Please write down your message in here and press \"$t(common:modules.tools.contact.sendButton)\".",
+                "messageInput": "Your message has to be at least {{length}} characters long.",
+                "phone": "Your phone number",
+                "username": "Your name"
+              },
+              "errorIncompleteDeclarations": "Please fill out all fields of the contact form correctly so that your request can be sent.",
+              "mailSubject": "Support request for the portal ",
+              "messageLabel": "Your message",
+              "privacyPolicy": {
+                "info": "You agree that your data may be used to process your request. You will find further information and revocation notices in the <a href=\"{{privacyPolicyLink}}\" target=\"_blank\">privacy policy</a>.",
+                "label": "Please accept the privacy policy."
+              },
+              "sendButton": "send message",
+              "successMessage": "Your request was sent successfully.",
+              "successTicket": "Your ticket number is: "
+
             },
             "print": {
                 "titleLabel": "Title",
@@ -317,8 +331,8 @@
                 "animation": {
                     "domicile": "Domicile",
                     "workplace": "Workplace",
-                    "chooseDistrict": "Choose district",
-                    "chooseBorough": "Choose borough",
+                    "chooseDistrict": "Choose county/district",
+                    "chooseBorough": "Choose town/municipality",
                     "relationshipsToDisplay": "Number of relationships to display",
                     "deleteGeometries": "Delete geometries",
                     "noCommutersKnown": "No commuting people known!",
@@ -333,8 +347,8 @@
                 "lines": {
                     "domicile": "Domicile",
                     "workplace": "Workplace",
-                    "chooseDistrict": "Choose district",
-                    "chooseBorough": "Choose borough",
+                    "chooseDistrict": "Choose county/district",
+                    "chooseBorough": "Choose town/municipality",
                     "relationshipsToDisplay": "Number of relationships to display",
                     "deleteGeometries": "Delete geometries",
                     "noCommutersKnown": "No commuting people known!",
@@ -435,9 +449,6 @@
                     "compareFeatureIcon": {
                       "toCompareList": "Add to compare list",
                       "fromCompareList": "Remove from compare list"
-                    },
-                    "routingicon": {
-                        "routingDestination": "Assign as destination"
                     }
                 },
                 "themes": {
@@ -490,22 +501,6 @@
                 "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
                 "shortMonths": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
               }
-            },
-            "viomRouting": {
-                "startAddressLabel": "Start address",
-                "destinationAddressLabel": "Destination address",
-                "fromPlaceholder": "From",
-                "toPlaceholder": "To",
-                "setStartTimeText": "Set start time",
-                "routingError": "Error",
-                "enterStartDestHoverText": "Enter start and destination",
-                "enterOptionsText": "Enter options",
-                "calculateRoute": "Calculate route",
-                "currentPosition": "Current position",
-                "routingCalcError": "Sorry, the request could not be processed. Please contact the administrator",
-                "routingCalcAborted": "Sorry, the request failed. Please contact the administrator. The following error has occurred",
-                "addressRequestFailed": "Address request failed",
-                "selectedDestination": "Selected destination"
             },
             "searchByCoord": {
                 "coordinateSystem": "Coordinate system",

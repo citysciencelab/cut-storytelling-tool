@@ -9,6 +9,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
         showSettings: true,
+        isSecured: false,
         isClustered: false,
         allowedVersions: ["1.1.0"],
         altitudeMode: "clampToGround",
@@ -107,7 +108,6 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             name: this.get("name"),
             typ: this.get("typ"),
             gfiAttributes: this.get("gfiAttributes"),
-            routable: this.get("routable"),
             gfiTheme: this.get("gfiTheme"),
             id: this.get("id"),
             hitTolerance: this.get("hitTolerance"),
@@ -144,16 +144,26 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
          * getProxyUrl()
          */
         const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
+            prefix = this.get("featurePrefix"),
+            namespace = this.get("featureNS"),
+            typename = this.get("featureType"),
             params = {
                 REQUEST: "GetFeature",
                 SERVICE: "WFS",
                 SRSNAME: Radio.request("MapView", "getProjection").getCode(),
-                TYPENAME: this.get("featureType"),
+                TYPENAME: typename,
                 VERSION: this.get("version"),
                 // loads only the features in the extent of this geometry
                 BBOX: this.get("bboxGeometry") ? this.get("bboxGeometry").getExtent().toString() : undefined
             },
             mapInitialLoading = Radio.request("Map", "getInitialLoading");
+
+        if (prefix !== undefined && typeof prefix === "string" && namespace !== undefined && typeof namespace === "string") {
+            params.NAMESPACE = `xmlns(${prefix}=${namespace})`;
+            if (typename.indexOf(`${prefix}:`) !== 0) {
+                params.TYPENAME = `${prefix}:${typename}`;
+            }
+        }
 
         $.ajax({
             beforeSend: function () {
@@ -166,6 +176,9 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             async: true,
             type: "GET",
             context: this,
+            xhrFields: {
+                withCredentials: true
+            },
             success: this.handleResponse,
             complete: function () {
                 if (showLoader) {
@@ -262,7 +275,8 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     createLegend: function () {
-        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId")),
+            isSecured = this.attributes.isSecured;
         let legend = this.get("legend");
 
         /**
@@ -284,8 +298,11 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             this.setLegend(legend);
         }
         else if (styleModel && legend === true) {
-            if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
+            if (!isSecured && Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
                 styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
+            }
+            else if (isSecured && Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
+                styleModel.getGeometryTypeFromSecuredWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
             }
             this.setLegend(styleModel.getLegendInfos());
         }

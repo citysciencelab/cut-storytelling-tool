@@ -1,7 +1,7 @@
 const Config = {
     addons: ["continuousCountingBike", "dataTable", "solaratlas", "trinkwasser", "verkehrsstaerken"],
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
-    wfsImgPath: "https://geoportal-hamburg.de/lgv-config/img/",
+    wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
     metadata: {
         useProxy: [
             "https://metaver.de/csw"
@@ -60,7 +60,7 @@ const Config = {
         urls: [
             {
                 "bezeichnung": "common:modules.footer.designation",
-                "url": "https://www.geoinfo.hamburg.de/",
+                "url": "https://geoinfo.hamburg.de/",
                 "alias": "Landesbetrieb Geoinformation und Vermessung",
                 "alias_mobil": "LGV Hamburg"
             },
@@ -119,7 +119,8 @@ const Config = {
             it: "italienisch"
         },
         fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],
+        loadPath: "/locales/{{lng}}/{{ns}}.json"
     },
     /**
      * @deprecated to be deleted with version 3.0

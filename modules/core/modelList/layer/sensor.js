@@ -190,7 +190,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             typ: this.get("typ"),
             gfiAttributes: this.get("gfiAttributes"),
             gfiTheme: this.get("gfiTheme"),
-            routable: this.get("routable"),
             id: this.get("id"),
             altitudeMode: this.get("altitudeMode")
         }));
@@ -247,6 +246,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 this.styling(isClustered);
                 this.get("layer").setStyle(this.get("style"));
             }
+
+            features.forEach(feature => Radio.trigger("GFI", "changeFeature", feature));
 
             if (typeof onsuccess === "function") {
                 onsuccess();

@@ -240,13 +240,6 @@
                  "glyphicon":"glyphicon-filter",
                  "deactivateGFI":false
               },
-              "routing":{
-                 "name": "translate#common:menu.tools.routing",
-                 "glyphicon":"glyphicon-road",
-                 "viomRoutingID":"7",
-                 "bkgSuggestID":"4",
-                 "bkgGeosearchID":"5"
-              },
               "draw":{
                 "name":"translate#common:menu.tools.draw",
                 "glyphicon":"glyphicon-pencil",
@@ -326,10 +319,22 @@
           "showCollapseAllButton": true
         },
         "contact":{
-         "name": "translate#common:menu.contact",
-           "glyphicon":"glyphicon-envelope",
-           "serviceID":"80001",
-           "includeSystemInfo":true
+          "name": "translate#common:menu.contact",
+          "glyphicon":"glyphicon-envelope",
+          "serviceId":"80001",
+          "includeSystemInfo":true,
+          "from": [
+              {
+                  "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                  "name": "LGVGeoportalHilfe"
+              }
+          ],
+          "to": [
+              {
+                  "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                  "name": "LGVGeoportalHilfe"
+              }
+          ]
         },
         "info":{
          "name": "translate#common:menu.info",
