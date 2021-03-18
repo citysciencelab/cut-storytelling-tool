@@ -1,112 +1,77 @@
-// import Vuex from "vuex";
-// import {shallowMount, createLocalVue} from "@vue/test-utils";
-// import {expect} from "chai";
-// import CompareFeatureIcon from "../../../components/CompareFeatureIcon.vue";
-// import Feature from "ol/Feature";
-// import VectorSource from "ol/source/Vector";
-// import VectorLayer from "ol/layer/Vector";
+import sinon from "sinon";
+import {expect} from "chai";
+import {shallowMount} from "@vue/test-utils";
+import CompareFeatureIcon from "../../../components/CompareFeatureIcon.vue";
 
-// const localVue = createLocalVue();
+describe("src/modules/tools/gfi/favoriteIcons/components/CompareFeatureIcon.vue", () => {
+    let wrapper;
 
-// localVue.use(Vuex);
+    beforeEach(() => {
+        const featureIsOnCompareList = sinon.fake.returns(false);
 
-// describe("src/modules/tools/gfi/components/favoriteIcons/components/CompareFeatureIcon.vue", () => {
-//     const olFeature = new Feature({
-//             isOnCompareList: false
-//         }),
-//         vectorLayer = new VectorLayer({
-//             id: "1234",
-//             source: new VectorSource()
-//         });
-//     let wrapper;
+        wrapper = shallowMount(CompareFeatureIcon, {
+            methods: {
+                componentExists: () => true
+            },
+            computed: {
+                featureIsOnCompareList
+            }
+        });
+    });
+    afterEach(sinon.restore);
 
-//     olFeature.setId("feature1");
-//     vectorLayer.getSource().addFeature(olFeature);
+    it("should draw a star if the compareFeatures is configured", () => {
+        expect(wrapper.find("span").exists()).to.be.true;
+    });
+    it("should render empty star button if feature is already on compare list", () => {
+        expect(wrapper.find("span").classes("glyphicon-star-empty")).to.be.true;
+        expect(wrapper.find("span").classes("glyphicon-star")).to.be.false;
+        expect(wrapper.find("span").attributes().title).equals("modules.tools.gfi.favoriteIcons.compareFeatureIcon.toCompareList");
+    });
+});
 
-//     beforeEach(() => {
-//         wrapper = shallowMount(CompareFeatureIcon, {
-//             propsData: {
-//                 feature: {
-//                     getId: () => "feature1",
-//                     getLayerId: () => "1234",
-//                     getTitle: () => "TestTitle",
-//                     getAttributesToShow: () => "TestTitle",
-//                     getProperties: () => "Test",
-//                     getMappedProperties: () => "TestTitle"
-//                 }
-//             },
-//             methods: {
-//                 componentExists: () => true
-//             },
-//             localVue,
-//             mocks: {
-//                 $t: (msg) => msg
-//             },
-//             store: new Vuex.Store({
-//                 namespaces: true,
-//                 modules: {
-//                     Map: {
-//                         namespaced: true,
-//                         getters: {
-//                             visibleLayerListWithChildrenFromGroupLayers: () => [vectorLayer]
-//                         }
-//                     }
-//                 }
-//             })
-//         });
-//     });
+describe("src/modules/tools/gfi/favoriteIcons/components/CompareFeatureIcon.vue", () => {
+    let wrapper;
 
-//     it("should not draw a star by the tool compareFeatures is not configured", () => {
-//         wrapper = shallowMount(CompareFeatureIcon, {
-//             propsData: {
-//                 feature: {
-//                     getId: () => "feature1",
-//                     getLayerId: () => "1234",
-//                     getTitle: () => "TestTitle"
-//                 }
-//             },
-//             localVue,
-//             mocks: {
-//                 $t: (msg) => msg
-//             },
-//             store: new Vuex.Store({
-//                 namespaces: true,
-//                 modules: {
-//                     Map: {
-//                         namespaced: true,
-//                         getters: {
-//                             visibleLayerListWithChildrenFromGroupLayers: () => [vectorLayer]
-//                         }
-//                     }
-//                 }
-//             })
-//         });
-//         expect(wrapper.find("span").exists()).to.be.false;
-//     });
+    beforeEach(() => {
+        const featureIsOnCompareList = sinon.fake.returns(true);
 
-//     it("should not draw a star by the no olFeature is finding", async () => {
-//         wrapper.setData({olFeature: null});
+        wrapper = shallowMount(CompareFeatureIcon, {
+            methods: {
+                componentExists: () => true
+            },
+            computed: {
+                featureIsOnCompareList
+            }
+        });
+    });
+    afterEach(sinon.restore);
 
-//         await wrapper.vm.$nextTick();
-//         expect(wrapper.find("span").exists()).to.be.false;
-//     });
+    it("should render star button if feature is already on compare list", () => {
+        expect(wrapper.find("span").classes("glyphicon-star-empty")).to.be.false;
+        expect(wrapper.find("span").classes("glyphicon-star")).to.be.true;
+        expect(wrapper.find("span").attributes().title).equals("modules.tools.gfi.favoriteIcons.compareFeatureIcon.fromCompareList");
+    });
+});
 
-//     it("should draw a star by the tool compareFeatures is configured", () => {
-//         expect(wrapper.find("span").exists()).to.be.true;
-//     });
+describe("src/modules/tools/gfi/favoriteIcons/components/CompareFeatureIcon.vue", () => {
+    let wrapper;
 
-//     it("should render empty star buttons by first start gfi", () => {
-//         expect(wrapper.find("span").classes("glyphicon-star-empty")).to.be.true;
-//         expect(wrapper.find("span").classes("glyphicon-star")).to.be.false;
-//         expect(wrapper.find("span").attributes().title).equals("modules.tools.gfi.favoriteIcons.compareFeatureIcon.toCompareList");
-//     });
+    beforeEach(() => {
+        const featureIsOnCompareList = sinon.fake.returns(false);
 
-//     it("should render star button if featureIsOnCompareList is true", async () => {
-//         wrapper.setData({featureIsOnCompareList: true});
+        wrapper = shallowMount(CompareFeatureIcon, {
+            methods: {
+                componentExists: () => false
+            },
+            computed: {
+                featureIsOnCompareList
+            }
+        });
+    });
+    afterEach(sinon.restore);
 
-//         await wrapper.vm.$nextTick();
-//         expect(wrapper.find("span").classes("glyphicon-star-empty")).to.be.false;
-//         expect(wrapper.find("span").classes("glyphicon-star")).to.be.true;
-//         expect(wrapper.find("span").attributes().title).equals("modules.tools.gfi.favoriteIcons.compareFeatureIcon.fromCompareList");
-//     });
-// });
+    it("should not draw a star if compareFeatures is not configured", () => {
+        expect(wrapper.find("span").exists()).to.be.false;
+    });
+});
