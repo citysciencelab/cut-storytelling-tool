@@ -1,38 +1,26 @@
 export default {
     /**
      * Checks if feature is on compare list and adds it to the list when star icon gets clicked.
-     * @param {Object} _ actions context object.
      * @param {Object} gfiFeature - feature
      * @returns {void}
      */
     isFeatureOnCompareList: function ({state, commit, dispatch, getters}, gfiFeature) {
-        const layerId = gfiFeature.layerId;
+        const {layerId} = gfiFeature;
 
         commit("setShowAlert", true);
         commit("setListFull", false);
-        if (state.layerFeatures[layerId] === undefined) {
-            if (!getters.isFeatureSelected(gfiFeature)) {
-                commit("addFeatureToLayer", gfiFeature);
-                for (const feature of state.layerFeatures[layerId]) {
-                    dispatch("prepareFeatureListToShow", feature);
-                }
+        if (!getters.isFeatureSelected(gfiFeature) && state.layerFeatures[layerId] === undefined || state.layerFeatures[layerId].length < state.numberOfFeaturesToShow) {
+            commit("addFeatureToLayer", gfiFeature);
+            for (const feature of state.layerFeatures[layerId]) {
+                dispatch("prepareFeatureListToShow", feature);
             }
         }
-        else if (state.layerFeatures[layerId] !== undefined) {
-            if (!getters.isFeatureSelected(gfiFeature) && state.layerFeatures[layerId].length < state.numberOfFeaturesToShow) {
-                commit("addFeatureToLayer", gfiFeature);
-                for (const feature of state.layerFeatures[layerId]) {
-                    dispatch("prepareFeatureListToShow", feature);
-                }
-            }
-            else {
-                commit("setListFull", true);
-            }
+        else {
+            commit("setListFull", true);
         }
     },
     /**
      * Removes the feature if star icon is clicked.
-     * @param {Object} _ actions context object.
      * @param {Object} gfiFeature - feature
      * @returns {void}
      */
@@ -73,7 +61,6 @@ export default {
     },
     /**
      * Prepares the Pdf file from currently selected layer and its features on the comparison list.
-     * @param {Object} _ actions context object.
      * @returns {void}
      */
     preparePrint: async function ({state, dispatch}) {
@@ -99,7 +86,6 @@ export default {
     },
     /**
      * Prepares the table body which is used for printing the pdf file from comparison list.
-     * @param {Object} _ actions context object.
      * @param {Object} features - features
      * @returns {void}
      */
@@ -128,7 +114,6 @@ export default {
     /**
      * Removes feature from comparison list by clicking its X icon and also
      * removes it from the layerFeatures array so the star icon will be deselected.
-     * @param {Object} _ actions context object.
      * @param {Object} payload - current layer and its objects
      * @returns {void}
      */
