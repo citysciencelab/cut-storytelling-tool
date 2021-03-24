@@ -142,13 +142,13 @@ export default {
                 id="tool-compareFeatures"
             >
                 <table>
-                    <tbody v-if="!showMoreInfo">
+                    <tbody>
                         <tr
                             v-for="(column, index) in preparedList[Object.keys(preparedList)[0]]"
                             :key="'tool-compareFeatures-' + index"
                         >
                             <template
-                                v-if="index < rowsToShow"
+                                v-if="index < rowsToShow && !showMoreInfo"
                             >
                                 <td
                                     v-for="(value, key) in column"
@@ -161,7 +161,7 @@ export default {
                                         @click="removeFeatureFromPreparedList({'features': preparedList[Object.keys(preparedList)[0]], 'featureId': key})"
                                     >
                                         <span
-                                            class="glyphicon glyphicon-remove closer"
+                                            class="glyphicon glyphicon-remove remove-feature"
                                         />
                                     </button>
                                     <p v-if="isWebLink(value)">
@@ -178,7 +178,47 @@ export default {
                                     </p>
                                     <p
                                         v-else-if="typeof value === 'string' && value.includes('<br>')"
-                                        v-html="value"
+                                    ></p>
+                                    <p
+                                        v-else-if="key === 'col-1'"
+                                        class="bold"
+                                    >
+                                        {{ beautifyKey($t(value)) }}
+                                    </p>
+                                    <p v-else>
+                                        {{ value }}
+                                    </p>
+                                </td>
+                            </template>
+                            <template v-if="showMoreInfo">
+                                <td
+                                    v-for="(value, key) in column"
+                                    :key="'tool-compareFeatures-td' + key"
+                                >
+                                    <button
+                                        class="close"
+                                        :title="$t('common:modules.tools.compareFeatures.removeFromList')"
+                                        @click="removeFeatureFromPreparedList({'features': preparedList[Object.keys(preparedList)[0]], 'featureId': key})"
+                                    >
+                                        <span
+                                            v-if="index === 0 && key !== 'col-1'"
+                                            class="glyphicon glyphicon-remove remove-feature"
+                                        />
+                                    </button>
+                                    <p v-if="isWebLink(value)">
+                                        <a
+                                            :href="value"
+                                            target="_blank"
+                                        >Link</a>
+                                    </p>
+                                    <p v-else-if="isPhoneNumber(value)">
+                                        <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
+                                    </p>
+                                    <p v-else-if="isEmailAddress(value)">
+                                        <a :href="`mailto:${value}`">{{ value }}</a>
+                                    </p>
+                                    <p
+                                        v-else-if="typeof value === 'string' && value.includes('<br>')"
                                     ></p>
                                     <p
                                         v-else-if="key === 'col-1'"
@@ -193,53 +233,6 @@ export default {
                             </template>
                         </tr>
                     </tbody>
-                    <tbody v-if="showMoreInfo">
-                        <tr
-                            v-for="(column, index) in preparedList[Object.keys(preparedList)[0]]"
-                            :key="'tool-compareFeatures-' + index"
-                        >
-                            <td
-                                v-for="(value, key) in column"
-                                :key="'tool-compareFeatures-td' + key"
-                            >
-                                <button
-                                    class="close"
-                                    :title="$t('common:modules.tools.compareFeatures.removeFromList')"
-                                    @click="removeFeatureFromPreparedList({'features': preparedList[Object.keys(preparedList)[0]], 'featureId': key})"
-                                >
-                                    <span
-                                        v-if="index === 0 && key !== 'col-1'"
-                                        class="glyphicon glyphicon-remove closer"
-                                    />
-                                </button>
-                                <p v-if="isWebLink(value)">
-                                    <a
-                                        :href="value"
-                                        target="_blank"
-                                    >Link</a>
-                                </p>
-                                <p v-else-if="isPhoneNumber(value)">
-                                    <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
-                                </p>
-                                <p v-else-if="isEmailAddress(value)">
-                                    <a :href="`mailto:${value}`">{{ value }}</a>
-                                </p>
-                                <p
-                                    v-else-if="typeof value === 'string' && value.includes('<br>')"
-                                    v-html="value"
-                                ></p>
-                                <p
-                                    v-else-if="key === 'col-1'"
-                                    class="bold"
-                                >
-                                    {{ beautifyKey($t(value)) }}
-                                </p>
-                                <p v-else>
-                                    {{ value }}
-                                </p>
-                            </td>
-                        </tr>
-                    </tbody>
                 </table>
             </div>
             <div
@@ -247,13 +240,13 @@ export default {
                 id="tool-compareFeatures"
             >
                 <table>
-                    <tbody v-if="!showMoreInfo">
+                    <tbody>
                         <tr
                             v-for="(column, index) in preparedList[selected]"
                             :key="'tool-compareFeatures-' + index"
                         >
                             <template
-                                v-if="index < rowsToShow"
+                                v-if="index < rowsToShow && !showMoreInfo"
                             >
                                 <td
                                     v-for="(value, key) in column"
@@ -266,7 +259,7 @@ export default {
                                     >
                                         <span
                                             v-if="index === 0 && key !== 'col-1'"
-                                            class="glyphicon glyphicon-remove closer"
+                                            class="glyphicon glyphicon-remove remove-feature"
                                         />
                                     </button>
                                     <p v-if="isWebLink(value)">
@@ -283,7 +276,6 @@ export default {
                                     </p>
                                     <p
                                         v-else-if="typeof value === 'string' && value.includes('<br>')"
-                                        v-html="value"
                                     ></p>
                                     <p
                                         v-else-if="key === 'col-1'"
@@ -296,53 +288,49 @@ export default {
                                     </p>
                                 </td>
                             </template>
-                        </tr>
-                    </tbody>
-                    <tbody v-if="showMoreInfo">
-                        <tr
-                            v-for="(column, index) in preparedList[selected]"
-                            :key="'tool-compareFeatures-' + index"
-                        >
-                            <td
-                                v-for="(value, key) in column"
-                                :key="'tool-compareFeatures-td' + key"
+                            <template
+                                v-if="showMoreInfo"
                             >
-                                <button
-                                    class="close"
-                                    :title="$t('common:modules.tools.compareFeatures.removeFromList')"
-                                    @click="removeFeatureFromPreparedList({'features': preparedList[selected], 'featureId': key, 'selectedLayer': selected})"
+                                <td
+                                    v-for="(value, key) in column"
+                                    :key="'tool-compareFeatures-td' + key"
                                 >
-                                    <span
-                                        v-if="index === 0 && key !== 'col-1'"
-                                        class="glyphicon glyphicon-remove closer"
-                                    />
-                                </button>
-                                <p v-if="isWebLink(value)">
-                                    <a
-                                        :href="value"
-                                        target="_blank"
-                                    >Link</a>
-                                </p>
-                                <p v-else-if="isPhoneNumber(value)">
-                                    <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
-                                </p>
-                                <p v-else-if="isEmailAddress(value)">
-                                    <a :href="`mailto:${value}`">{{ value }}</a>
-                                </p>
-                                <p
-                                    v-else-if="typeof value === 'string' && value.includes('<br>')"
-                                    v-html="value"
-                                ></p>
-                                <p
-                                    v-else-if="key === 'col-1'"
-                                    class="bold"
-                                >
-                                    {{ beautifyKey($t(value)) }}
-                                </p>
-                                <p v-else>
-                                    {{ value }}
-                                </p>
-                            </td>
+                                    <button
+                                        class="close"
+                                        :title="$t('common:modules.tools.compareFeatures.removeFromList')"
+                                        @click="removeFeatureFromPreparedList({'features': preparedList[selected], 'featureId': key, 'selectedLayer': selected})"
+                                    >
+                                        <span
+                                            v-if="index === 0 && key !== 'col-1'"
+                                            class="glyphicon glyphicon-remove remove-feature"
+                                        />
+                                    </button>
+                                    <p v-if="isWebLink(value)">
+                                        <a
+                                            :href="value"
+                                            target="_blank"
+                                        >Link</a>
+                                    </p>
+                                    <p v-else-if="isPhoneNumber(value)">
+                                        <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
+                                    </p>
+                                    <p v-else-if="isEmailAddress(value)">
+                                        <a :href="`mailto:${value}`">{{ value }}</a>
+                                    </p>
+                                    <p
+                                        v-else-if="typeof value === 'string' && value.includes('<br>')"
+                                    ></p>
+                                    <p
+                                        v-else-if="key === 'col-1'"
+                                        class="bold"
+                                    >
+                                        {{ beautifyKey($t(value)) }}
+                                    </p>
+                                    <p v-else>
+                                        {{ value }}
+                                    </p>
+                                </td>
+                            </template>
                         </tr>
                     </tbody>
                 </table>
@@ -401,7 +389,7 @@ export default {
         text-align: center;
         margin: 10px;
     }
-    .closer {
+    .remove-feature {
         position: relative !important;
         right: 0px !important;
         top: 0px !important;
