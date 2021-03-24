@@ -380,7 +380,7 @@
                     "notAdded": "The feature could not be added to the comparison list",
                     "limitReached": "The maximum number of objects in the comparison list has been reached.",
                     "removeObjects": "Please remove at least one object before proceeding.",
-                    "gotoComparisonlist": "To the comparison list"
+                    "goToComparisonlist": "To the comparison list"
                 }
             },
             "saveSelection": {

@@ -369,7 +369,7 @@
                     "notAdded": "Non è stato possibile aggiungere la funzione all'elenco di confronto",
                     "limitReached": "Raggiunto il numero massimo di oggetti nella lista di confronto.",
                     "removeObjects": "Rimuovere almeno un oggetto prima di procedere.",
-                    "gotoComparisonlist": "Vai alla lista di confronto"
+                    "goToComparisonlist": "Vai alla lista di confronto"
                 }
             },
             "saveSelection": {
