@@ -25,15 +25,9 @@ export default {
      * @returns {void}
      */
     removeFeature: function ({state, dispatch}, gfiFeature) {
-        const payload1 = {"features": state.preparedList[Object.keys(state.preparedList)[0]], "featureId": gfiFeature.featureId, "selectedLayer": gfiFeature.layerId},
-            payload2 = {"features": state.preparedList[gfiFeature.layerId], "featureId": gfiFeature.featureId, "selectedLayer": gfiFeature.layerId};
+        const features = state.hasMultipleLayers ? state.preparedList[gfiFeature.layerId] : state.preparedList[Object.keys(state.preparedList)[0]];
 
-        if (!state.hasMultipleLayers) {
-            dispatch("removeFeatureFromPreparedList", payload1);
-        }
-        else {
-            dispatch("removeFeatureFromPreparedList", payload2);
-        }
+        dispatch("removeFeatureFromPreparedList", {features: features, featureId: gfiFeature.featureId, selectedLayer: gfiFeature.layerId});
     },
     /**
      * prepares the list for rendering using the 'gfiAttributes'
@@ -47,9 +41,8 @@ export default {
             featureList = state.layerFeatures[layerId];
 
         Object.keys(gfiAttributes.properties).forEach(function (key) {
-            const row = {};
+            const row = {"col-1": key};
 
-            row["col-1"] = key;
             featureList.forEach(function (feature) {
                 row[feature.featureId] = feature.properties[key];
             });
@@ -64,18 +57,18 @@ export default {
      * @returns {void}
      */
     preparePrint: async function ({state, dispatch}) {
-        const layerId = !state.hasMultipleLayers ? Object.keys(state.layerFeatures)[0] : state.selectedLayer,
+        const layerId = state.hasMultipleLayers ? state.selectedLayer : Object.keys(state.layerFeatures)[0],
             tableBody = await dispatch("prepareTableBody", state.layerFeatures[layerId]),
             pdfDef = {
-                "layout": "A4 Hochformat",
-                "outputFormat": "pdf",
-                "attributes": {
-                    "title": "Vergleichsliste",
-                    "datasource": [
+                layout: "A4 Hochformat",
+                outputFormat: "pdf",
+                attributes: {
+                    title: i18next.t("common:modules.tools.compareFeatures.title"),
+                    datasource: [
                         {
-                            "table": {
-                                "columns": ["attr", "feature1", "feature2", "feature3"],
-                                "data": tableBody
+                            table: {
+                                columns: ["attr", "feature1", "feature2", "feature3"],
+                                data: tableBody
                             }
                         }
                     ]
@@ -86,25 +79,22 @@ export default {
     },
     /**
      * Prepares the table body which is used for printing the pdf file from comparison list.
-     * @param {Object} features - features
-     * @returns {void}
+     * @param {Array} features - features
+     * @returns {Array} tableBody with selected features from comparison list
      */
     prepareTableBody: function ({state}, features) {
         const tableBody = [],
             rowsToShow = state.numberOfAttributesToShow;
 
         for (const feature of features) {
-            if (features.indexOf(feature) === 0) {
-                Object.keys(feature.properties).forEach((key, index) => {
-
+            Object.keys(feature.properties).forEach((key, index) => {
+                if (features.indexOf(feature) === 0) {
                     tableBody.push([key, Object.values(feature.properties)[index]]);
-                });
-            }
-            else {
-                Object.keys(feature.properties).forEach((key, index) => {
+                }
+                else {
                     tableBody[index].push(Object.values(feature.properties)[index]);
-                });
-            }
+                }
+            });
         }
         if (!state.showMoreInfo) {
             return tableBody.slice(0, rowsToShow);
