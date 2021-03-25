@@ -9,6 +9,18 @@
  * @property {Boolean} resizableWindow if true, window is resizable (config-param)
  * @property {Boolean} isVisibleInMenu if true, tool is selectable in menu (config-param)
  * @property {Boolean} deactivateGFI flag if tool should deactivate gfi (config-param)
+ * @property {Object} layerFeatures object with the features of a layer
+ * @property {String} selectedLayer the currently selcted layer
+ * @property {Boolean} showAlert if true modal gets shown
+ * @property {Boolean} showMoreInfoButton if true the button for more Info is clickable
+ * @property {Boolean} listFull if true no more features can be added to comparison list
+ * @property {Boolean} hasFeatures if true comparison list gets rendered otherwise an infobox shows up
+ * @property {Array} layerWithFeaturesToShow Array of the features to a selected layer
+ * @property {Boolean} hasMultipleLayers if true multiple layers can be selected within the comparison list
+ * @property {Boolean} showMoreInfo if true more info rows get rendered to comparison list
+ * @property {Object} preparedList Object with the selected layers and their selected features
+ * @property {String} emptyStar html element for empty star glyphicon in feedback modal
+ * @property {String} yellowStar html element for yellow star glyphicon in feedback modal
  */
 const state = {
     active: false,
