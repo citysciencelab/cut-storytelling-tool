@@ -4,18 +4,15 @@ import compareFeaturesState from "./statecompareFeatures";
 const getters = {
     ...generateSimpleGetters(compareFeaturesState),
     /**
-     * Checks if layer a feature is selected.
+     * Checks if a feature is selected.
      * @param {Object} state context object.
      * @param {Object} gfiFeature - feature
      * @returns {void}
      */
-    isFeatureSelected: (state) => (gfiFeature) => {
-        const layerId = gfiFeature.layerId;
-
+    isFeatureSelected: state => ({featureId, layerId}) => {
         if (state.layerFeatures.hasOwnProperty(layerId)) {
-
             for (const feature of state.layerFeatures[layerId]) {
-                if (feature.featureId === gfiFeature.featureId) {
+                if (feature.featureId === featureId) {
                     return true;
                 }
             }
@@ -27,11 +24,11 @@ const getters = {
      * @param {Object} state context object.
      * @returns {void}
      */
-    selectableLayers: (state) => {
+    selectableLayers: state => {
         const layerArray = [];
 
         Object.keys(state.layerFeatures).forEach(function (key) {
-            if (state.layerFeatures[key][0] !== undefined) {
+            if (state.layerFeatures[key][0]) {
                 layerArray.push(state.layerFeatures[key][0]);
             }
         });
@@ -42,7 +39,7 @@ const getters = {
      * @param {Object} state context object.
      * @returns {void}
      */
-    showButtons: (state) => {
+    showButtons: state => {
         if (state.hasFeatures && !state.hasMultipleLayers) {
             return true;
         }
