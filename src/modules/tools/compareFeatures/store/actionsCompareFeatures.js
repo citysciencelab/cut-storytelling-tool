@@ -108,13 +108,13 @@ export default {
      * @returns {void}
      */
     removeFeatureFromPreparedList: function ({state, commit}, payload) {
-        const key = payload.featureId,
-            preparedList = payload.features,
-            selected = payload.selectedLayer;
+        const {featureId} = payload,
+            {features} = payload,
+            {selectedLayer} = payload;
 
         if (!state.hasMultipleLayers) {
             for (const feature of state.layerFeatures[Object.keys(state.layerFeatures)[0]]) {
-                if (feature.featureId === key) {
+                if (feature.featureId === featureId) {
                     const index = state.layerFeatures[feature.layerId].indexOf(feature);
 
                     state.layerFeatures[feature.layerId].splice(index, 1);
@@ -123,33 +123,32 @@ export default {
                         delete state.layerFeatures[feature.layerId];
                     }
                     else {
-                        state.preparedList = {preparedList};
+                        state.preparedList = {features};
                     }
-                }
-            }
-            for (const feature of preparedList) {
-                if (Object.keys(feature).includes(key)) {
-                    delete feature[key];
                 }
             }
         }
         else {
-            for (const feature of state.layerFeatures[selected]) {
-                if (feature.featureId === key) {
+            for (const feature of state.layerFeatures[selectedLayer]) {
+                if (feature.featureId === featureId) {
                     const index = state.layerFeatures[feature.layerId].indexOf(feature);
 
-                    state.layerFeatures[selected].splice(index, 1);
+                    state.layerFeatures[selectedLayer].splice(index, 1);
                 }
-                if (state.layerFeatures[selected].length === 0) {
-                    delete state.preparedList[selected];
-                    delete state.layerFeatures[selected];
+                if (state.layerFeatures[selectedLayer].length === 0) {
+                    delete state.preparedList[selectedLayer];
+                    delete state.layerFeatures[selectedLayer];
                     commit("resetLayerSelection");
                 }
             }
-            for (const feature of preparedList) {
-                if (Object.keys(feature).includes(key)) {
-                    delete feature[key];
-                }
+        }
+        /**
+             * if multiple features from one layer are on the comparison list, this function deletes
+             * the chosen feature and is responsible for rerendering the comparison list.
+             */
+        for (const feature of features) {
+            if (Object.keys(feature).includes(featureId)) {
+                delete feature[featureId];
             }
         }
         if (Object.keys(state.layerFeatures).length === 0) {
