@@ -16,7 +16,7 @@ const mutations = {
      * @returns {void}
      */
     addFeatureToLayer: (state, feature) => {
-        const layerId = feature.layerId;
+        const {layerId} = feature;
 
         state.layerFeatures = {
             ...state.layerFeatures,
@@ -36,7 +36,7 @@ const mutations = {
      * @returns {void}
      */
     removeFeatureFromLayer: (state, gfiFeature) => {
-        const layerId = gfiFeature.layerId,
+        const {layerId} = gfiFeature,
             index = state.layerFeatures[layerId].indexOf(gfiFeature);
 
         state.layerFeatures[layerId].splice(index, 1);
@@ -54,17 +54,12 @@ const mutations = {
      * @param {Object} selectedLayer from user selected layer.
      * @returns {void}
      */
-    selectLayerWithFeatures: function (state, selectedLayer) {
+    selectLayerWithFeatures: (state, selectedLayer) => {
         state.showMoreInfo = false;
         state.layerWithFeaturesToShow = [];
         state.layerWithFeaturesToShow.push(state.layerFeatures[selectedLayer]);
         state.selectedLayer = selectedLayer;
-        if (Object.keys(state.layerFeatures[selectedLayer][0].properties).length > state.numberOfAttributesToShow) {
-            state.showMoreInfoButton = true;
-        }
-        else {
-            state.showMoreInfoButton = false;
-        }
+        state.showMoreInfoButton = Object.keys(state.layerFeatures[selectedLayer][0].properties).length > state.numberOfAttributesToShow;
     },
     /**
      * Sets hasMultipleLayers to false if list gets reduced to one layer
@@ -72,7 +67,7 @@ const mutations = {
      * @param {Object} state context object.
      * @returns {void}
      */
-    resetLayerSelection: (state) => {
+    resetLayerSelection: state => {
         if (Object.keys(state.layerFeatures).length <= 1) {
             state.hasMultipleLayers = false;
         }
@@ -82,7 +77,7 @@ const mutations = {
      * @param {Object} state context object.
      * @returns {void}
      */
-    moreInfo: function (state) {
+    moreInfo: state => {
         state.showMoreInfo = !state.showMoreInfo;
     },
     /**
@@ -90,7 +85,7 @@ const mutations = {
      * @param {Object} state context object.
      * @returns {void}
      */
-    switchToList: function (state) {
+    switchToList: state => {
         state.active = true;
     }
 };
