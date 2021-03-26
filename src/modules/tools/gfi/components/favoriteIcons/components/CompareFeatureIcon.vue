@@ -1,7 +1,6 @@
 <script>
 import {mapGetters, mapActions} from "vuex";
 import actions from "../../../store/actionsGfi";
-import getters from "../../../../compareFeatures/store/gettersCompareFeatures";
 import componentExists from "../../../../../../utils/componentExists.js";
 
 export default {
@@ -12,17 +11,20 @@ export default {
             required: true
         }
     },
-    computed: {
-        ...mapGetters("Map", ["visibleLayerListWithChildrenFromGroupLayers"]),
-        ...mapGetters("Tools/CompareFeatures", Object.keys(getters)),
-        featureIsOnCompareList () {
-            const gfiFeature = {featureId: this.feature.getId(),
+    data: function () {
+        return {
+            gfiFeature: {featureId: this.feature.getId(),
                 layerId: this.feature.getLayerId(),
                 layerName: this.feature.getTitle(),
                 attributesToShow: this.feature.getAttributesToShow(),
-                properties: this.feature.getMappedProperties()};
-
-            return this.isFeatureSelected(gfiFeature);
+                properties: this.feature.getMappedProperties()}
+        };
+    },
+    computed: {
+        ...mapGetters("Map", ["visibleLayerListWithChildrenFromGroupLayers"]),
+        ...mapGetters("Tools/CompareFeatures", ["isFeatureSelected"]),
+        featureIsOnCompareList () {
+            return this.isFeatureSelected(this.gfiFeature);
         },
 
         /**
@@ -35,6 +37,7 @@ export default {
     },
     methods: {
         ...mapActions("Tools/Gfi", Object.keys(actions)),
+        ...mapActions("Tools/CompareFeatures", ["isFeatureOnCompareList", "removeFeature"]),
         componentExists,
 
         /**
@@ -43,17 +46,11 @@ export default {
          * @returns {void}
          */
         toogleFeatureToCompareList: function (event) {
-            const gfiFeature = {featureId: this.feature.getId(),
-                layerId: this.feature.getLayerId(),
-                layerName: this.feature.getTitle(),
-                attributesToShow: this.feature.getAttributesToShow(),
-                properties: this.feature.getMappedProperties()};
-
             if (event?.target?.classList?.contains("glyphicon-star-empty")) {
-                this.addFeatureToList(gfiFeature);
+                this.isFeatureOnCompareList(this.gfiFeature);
             }
             else {
-                this.removeFeatureFromList(gfiFeature);
+                this.removeFeature(this.gfiFeature);
             }
         }
     }
