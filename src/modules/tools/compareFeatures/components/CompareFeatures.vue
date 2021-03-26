@@ -108,6 +108,7 @@ export default {
             </h4>
             <select
                 v-if="hasMultipleLayers"
+                id="tool-compareFeatures-select"
                 v-model="selected"
                 class="font-arial form-control input-sm pull-left"
                 @change="selectLayerWithFeatures(selected)"
@@ -158,7 +159,7 @@ export default {
                                         v-if="index === 0 && key !== 'col-1'"
                                         class="close"
                                         :title="$t('common:modules.tools.compareFeatures.removeFromList')"
-                                        @click="removeFeatureFromPreparedList({'features': preparedList[Object.keys(preparedList)[0]], 'featureId': key})"
+                                        @click="removeFeatureFromPreparedList({features: preparedList[Object.keys(preparedList)[0]], featureId: key})"
                                     >
                                         <span
                                             class="glyphicon glyphicon-remove remove-feature"
@@ -198,7 +199,7 @@ export default {
                                     <button
                                         class="close"
                                         :title="$t('common:modules.tools.compareFeatures.removeFromList')"
-                                        @click="removeFeatureFromPreparedList({'features': preparedList[Object.keys(preparedList)[0]], 'featureId': key})"
+                                        @click="removeFeatureFromPreparedList({features: preparedList[Object.keys(preparedList)[0]], featureId: key})"
                                     >
                                         <span
                                             v-if="index === 0 && key !== 'col-1'"
@@ -255,7 +256,7 @@ export default {
                                     <button
                                         class="close"
                                         :title="$t('common:modules.tools.compareFeatures.removeFromList')"
-                                        @click="removeFeatureFromPreparedList({'features': preparedList[selected], 'featureId': key, 'selectedLayer': selected})"
+                                        @click="removeFeatureFromPreparedList({features: preparedList[selected], featureId: key, selectedLayer: selected})"
                                     >
                                         <span
                                             v-if="index === 0 && key !== 'col-1'"
@@ -298,7 +299,7 @@ export default {
                                     <button
                                         class="close"
                                         :title="$t('common:modules.tools.compareFeatures.removeFromList')"
-                                        @click="removeFeatureFromPreparedList({'features': preparedList[selected], 'featureId': key, 'selectedLayer': selected})"
+                                        @click="removeFeatureFromPreparedList({features: preparedList[selected], featureId: key, selectedLayer: selected})"
                                     >
                                         <span
                                             v-if="index === 0 && key !== 'col-1'"
