@@ -12,18 +12,20 @@ const mutations = {
         }
     },
     setSelectedOptions (state, {options, value}) {
-        // The updates need to be done this way to be able to update the computed properties of the Field components
-        const obj = state.selectedOptions;
-
         // Remove the options if no value is selected
         if (value === "") {
-            delete obj[options];
+            delete state.selectedOptions[options];
+            // NOTE: This is sadly needed so that the object is reactive :(
+            state.selectedOptions = {
+                ...state.selectedOptions
+            };
         }
         else {
-            obj[options] = value;
+            state.selectedOptions = {
+                ...state.selectedOptions,
+                [options]: value
+            };
         }
-
-        state.selectedOptions = {...obj}; // TODO: This kinda breaks it, because the value is not really accessible anymore <.<; no "Vue object"
     }
 };
 

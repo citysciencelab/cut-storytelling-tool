@@ -56,34 +56,28 @@ export default {
          * If the options of the field are from an external source, it is disabled if:
          * - Is not the root element and the root element has not been added yet
          * - The prior needed element (e.g. 'foo' is needed to have the field 'foo.bar') is not added yet
-         * - TODO The prior needed / root element (example above) is not selected yet
+         * - The prior needed / root element (example above) is not selected yet
          *
          * @returns {boolean} Whether the input is disabled or not.
          */
-        /* disabled () {
-            if (typeof this.options === "string" && this.parsedSource !== null && Object.keys(this.selectedOptions).length > 0) {
+        disabled () {
+            const notRoot = this.options !== "";
 
+            // TODO: Test me against a usable external file, which uses the dot separated syntax; nesting
+            if (typeof this.options === "string" && notRoot && this.parsedSource !== null && Object.keys(this.selectedOptions).length > 0) {
                 const optionsArr = this.options.split("."),
                     selectedValues = [];
 
-                this.selectedOptions.forEach(option => {
-                    console.log(option)
-                })
-
-                return false
-
                 // Check if the prior needed parameters are selected
-                this.selectedOptions.forEach(option => selectedValues.push(Object.keys(option)[0]));
+                selectedValues.push(...Object.keys(this.selectedOptions));
 
-                console.log("lol", selectedValues)
-
-                return this.options !== ""
-                    && !(this.addedOptions.includes("")
-                        || optionsArr.every(option => this.addedOptions.includes(option))
-                        || (selectedValues.includes("") && optionsArr.slice(0, optionsArr.length - 1).every(option => selectedValues.includes(option))));
+                return !(this.addedOptions.includes("")
+                    && optionsArr.every(option => this.addedOptions.includes(option))
+                    && (selectedValues.includes("") && optionsArr.slice(0, optionsArr.length - 1).every(option => selectedValues.includes(option))));
             }
-            return false;
-        },*/
+            // Disable all options depending on the root source in the beginning or if the external source hasn't been loaded yet
+            return typeof this.options === "string" ? this.parsedSource === null || notRoot : false;
+        },
         selectableOptions () {
             // TODO: The required part is rather important for the concrete search than this component
             // Options are supposed to be retrieved from the external source
