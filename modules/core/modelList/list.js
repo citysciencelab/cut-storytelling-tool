@@ -25,8 +25,6 @@ import Print from "../../tools/print_/mapfish3PlotService";
 import HighResolutionPrint from "../../tools/print_/highResolutionPlotService";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
-import Contact from "../../tools/contact/model";
-import Routing from "../../tools/viomRouting/model";
 /**
  * WfsFeatureFilter
  * @deprecated in 3.0.0
@@ -39,12 +37,10 @@ import TreeFilter from "../../treeFilter/model";
  */
 import ExtendedFilter from "../../tools/extendedFilter/model";
 import FeatureLister from "../../tools/featureLister/model";
-import AddWms from "../../tools/addWMS/model";
 import Shadow from "../../tools/shadow/model";
 import CompareFeatures from "../../tools/compareFeatures/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
-import StyleVT from "../../tools/styleVT/model";
 import LayerSliderModel from "../../tools/layerSlider/model";
 import Viewpoint from "./viewPoint/model";
 import ColorScale from "../../tools/colorScale/model";
@@ -258,9 +254,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "styleWMS") {
                 return new StyleWMS(attrs, options);
             }
-            else if (attrs.id === "styleVT") {
-                return new StyleVT(attrs, options);
-            }
             else if (attrs.id === "compareFeatures") {
                 return new CompareFeatures(attrs, options);
             }
@@ -276,17 +269,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "animation") {
                 return new Animation(attrs, options);
             }
-            else if (attrs.id === "routing") {
-                return new Routing(attrs, options);
-            }
-            else if (attrs.id === "addWMS") {
-                return new AddWms(attrs, options);
-            }
             else if (attrs.id === "treeFilter") {
                 return new TreeFilter(Object.assign(attrs, Config.hasOwnProperty("treeConf") ? {treeConf: Config.treeConf} : {}), options);
-            }
-            else if (attrs.id === "contact") {
-                return new Contact(attrs, options);
             }
             /**
              * wfsFeatureFilter

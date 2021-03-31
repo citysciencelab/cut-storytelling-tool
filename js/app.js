@@ -34,7 +34,6 @@ import LineView from "../modules/tools/pendler/lines/view";
 import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
-import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
@@ -50,9 +49,6 @@ import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
  * @deprecated in 3.0.0
  */
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
-import AddWMSView from "../modules/tools/addWMS/view";
-import RoutingView from "../modules/tools/viomRouting/view";
-import Contact from "../modules/tools/contact/view";
 import TreeFilterView from "../modules/treeFilter/view";
 import FeatureLister from "../modules/tools/featureLister/view";
 import PrintView from "../modules/tools/print_/view";
@@ -253,18 +249,6 @@ async function loadApp () {
                 new TreeFilterView({model: tool});
                 break;
             }
-            case "routing": {
-                new RoutingView({model: tool});
-                break;
-            }
-            case "contact": {
-                new Contact({model: tool});
-                break;
-            }
-            case "addWMS": {
-                new AddWMSView({model: tool});
-                break;
-            }
             case "featureLister": {
                 new FeatureLister({model: tool});
                 break;
@@ -275,10 +259,6 @@ async function loadApp () {
             }
             case "wfst": {
                 new WfstView({model: tool});
-                break;
-            }
-            case "styleVT": {
-                new StyleVTView({model: tool});
                 break;
             }
             /**
@@ -425,7 +405,7 @@ function loadAddOnsAfterLanguageLoaded (legacyAddons) {
             import(
                 /* webpackChunkName: "[request]" */
                 /* webpackInclude: /addons[\\\/].*[\\\/]*.js$/ */
-                /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
+                /* webpackExclude: /(node_modules)|(.+unittests.)|(.+test.)+/ */
                 "../addons/" + entryPoint + ".js").then(module => {
                 /* eslint-disable new-cap */
                 let addon;

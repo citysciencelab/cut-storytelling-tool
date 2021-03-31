@@ -4,13 +4,11 @@ import {isWebLink} from "../../../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
 import CompareFeatureIcon from "../../../favoriteIcons/components/CompareFeatureIcon.vue";
-import RoutingIcon from "../../../favoriteIcons/components/RoutingIcon.vue";
 
 export default {
     name: "Default",
     components: {
-        CompareFeatureIcon,
-        RoutingIcon
+        CompareFeatureIcon
     },
     props: {
         feature: {
@@ -113,7 +111,7 @@ export default {
             const iframe = document.getElementsByClassName("gfi-iFrame")[0];
 
             if (this.mimeType === "text/html" && iframe) {
-                iframe.src = "data:text/html;charset=utf-8," + encodeURIComponent(this.feature.getDocument());
+                iframe.contentWindow.document.write(this.feature.getDocument());
             }
         }
     }

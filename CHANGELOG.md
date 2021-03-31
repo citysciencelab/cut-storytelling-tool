@@ -3,12 +3,51 @@
 
 [Semantic versioning](https://semver.org/spec/v2.0.0.html) is used.
 
-### Known Issues
-- 3D: Klickt man auf ein 3D-Objekt verschwindet der Positions-Anzeiger im Objekt
+## Known Issues
+- 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 
 ---
 
 ## Unreleased - in development
+### Added
+- External WMS Layers with version lower than 1.3.0 can also be imported.
+- Added possibility to prepend prefix to GFI attribute.
+- WMTS Layers can now be printed with MapFish.
+
+### Changed
+- The tool AddWMS switched from backbone to vue module.
+- Consolidate the mqttOptions in the layer sensor with the documentation (services.json.md).
+- In config.json.md, the attribute `isActive` was changed to `active` in Portalconfig.menu.tool.gfi.
+- External WMS Layers with version lower than 1.3.0 can also be imported.
+- Legends are only printed from layers that are switched visible.
+
+### Deprecated
+
+### Removed
+- SensorThings address tab in layerInformation removed.
+
+### Fixed
+- GFI of type text/html now also loads css files of the body.
+- Show metadata if the MD_Identification node is implemented as MD_DataIdentification or SV_ServiceIdentification.
+- Fixed a bug that made single layer info legend appear multiple times when activating additional layers while opened.
+- Printing of tooltip of measure-tool works: The tooltip of the measure tool is no longer implemented as an overlay, it is created now as vectorlayer.
+- Printing of big amount of features now works.
+
+---
+
+## v2.7.2 - 2021-03-09
+### Fixed
+- SensorThings: Fix the bug where initially data has not been fetched, resulting display of "no data" on mousehover.
+
+---
+
+## v2.7.1 - 2021-03-05
+### Fixed
+- The representation in the legend has been corrected.
+
+---
+
+## v2.7.0 - 2021-03-03
 ### Added
 - Integration and use of WMS-services secured via User / Password (HTTP-Basic). Thy are marked in the topic tree by lock symbol.
 - On draw tool Double Circle configuration available in config.json
@@ -16,6 +55,7 @@
 - On tools Imported Layer in theme tree integrated function under Addons
 - On tools Geometrie/Gebäude Analyse funtion on tools under Addons
 - On tools Taktische Zeichen on tools under Addons
+- Added the parameters 'contactInfo', 'includeSystemInfo', 'locationOfCustomerService', 'maxLines', 'showPrivacyPolicy' and 'subject' to the configuration of the contact tool.
 
 ### Changed
 - The language of the changelog has been changed to English.
@@ -24,15 +64,22 @@
 - Migrated the Download Tool from Backbone.js to Vue.js and integrated it into the Draw Tool.
 - Migrated the SaveSelection Tool from Backbone.js to Vue.js. It also no longer has a Radio channel.
 - copyToClipboard is now a reusable action and can no longer be triggered through the Radio.
-- WPS migrated to vue.
+- Migrated the Contact Tool from Backbone.js to Vue.js. In doing so, the functionality of the config parameter 'deleteAfterSend' was split into two parameters; 'closeAfterSend' and 'deleteAfterSend'.
+- Migrated the StyleVT Tool from Backbone.js to Vue.js.
+- WPS migrated to Vue.js.
 
 ### Deprecated
+- Deprecated the parameter 'serviceID' for the contact tool; 'serviceId' should be used instead.
+- Migrated the SaveSelection Tool from Backbone.js to Vue.js. It also no longer has a Radio channel.
+- copyToClipboard is now a reusable action and can no longer be triggered through the Radio.
 - Deprecated the parameter `simpleMap` in the config.js and moved its configuration to the `saveSelection` tool in the config.json.
 
 ### Removed
+- The routing-tool was removed.
 
 ### Fixed
 - If the Save selection tool is not configured, the button for it is no longer displayed in the topic tree.
+- Various bugfixes.
 
 ---
 

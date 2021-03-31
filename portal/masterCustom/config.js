@@ -5,7 +5,7 @@ const Config = {
         urls: [
             {
                 "bezeichnung": "common:modules.footer.designation",
-                "url": "http://www.geoinfo.hamburg.de/",
+                "url": "https://geoinfo.hamburg.de/",
                 "alias": "Landesbetrieb Geoinformation und Vermessung",
                 "alias_mobil": "LGV"
             }
@@ -37,13 +37,13 @@ const Config = {
     },
     proxyURL: "/cgi-bin/proxy.cgi",
     quickHelp: {
-        imgPath: "https://geoportal-hamburg.de/lgv-config/img/"
+        imgPath: "https://geoportal-hamburg.de.de/lgv-config/img/"
     },
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
     restConf: "https://geoportal-hamburg.de/lgv-config/rest-services-internet.json",
     styleConf: "https://geoportal-hamburg.de/lgv-config/style_v3.json",
     useVectorStyleBeta: true,
-    wfsImgPath: "https://geoportal-hamburg.de/lgv-config/img/",
+    wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
     zoomToFeature: {
         attribute: "flaechenid",
         styleId: "location_eventlotse",
@@ -68,11 +68,11 @@ const Config = {
         debug: false,
         languages: {
             de: "deutsch",
-            en: "englisch",
-            it: "italienisch"
+            en: "englisch"
         },
         fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],
+        loadPath: "/locales/{{lng}}/{{ns}}.json"
     }
 };
 

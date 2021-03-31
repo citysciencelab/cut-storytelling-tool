@@ -28,6 +28,7 @@ describe("src/modules/tools/measure/components/Measure.vue", () => {
                     namespaced: true,
                     getters: {
                         layerById: () => id => ({})[id],
+                        is3d: () => false,
                         map: () => ({
                             addInteraction: sinon.spy(),
                             removeInteraction: sinon.spy()
@@ -118,5 +119,16 @@ describe("src/modules/tools/measure/components/Measure.vue", () => {
 
         deleteButton.trigger("click");
         expect(MeasureModule.actions.deleteFeatures.calledOnce).to.be.true;
+    });
+
+    it("createDrawInteraction should not called if active is false and setSelectedGeometry is changend", async () => {
+        store.commit("Tools/Measure/setActive", false);
+
+        const wrapper = shallowMount(MeasureComponent, {store, localVue});
+
+        store.commit("Tools/Measure/setSelectedGeometry", "123");
+        await wrapper.vm.$nextTick;
+
+        expect(MeasureModule.actions.createDrawInteraction.called).to.be.false;
     });
 });

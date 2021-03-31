@@ -325,14 +325,6 @@
             "glyphicon": "glyphicon-filter",
             "deactivateGFI": false
           },
-          "routing": {
-            "name": "translate#common:menu.tools.routing",
-            "glyphicon": "glyphicon-road",
-            "viomRoutingID": "7",
-            "bkgSuggestID": "4",
-            "bkgGeosearchID": "5",
-            "isInitOpen": false
-          },
           "draw": {
             "name": "translate#common:menu.tools.draw",
             "glyphicon": "glyphicon-pencil",
@@ -441,8 +433,20 @@
       "contact": {
         "name": "translate#common:menu.contact",
         "glyphicon": "glyphicon-envelope",
-        "serviceID": "80001",
-        "includeSystemInfo": true
+        "serviceId": "80001",
+        "includeSystemInfo": true,
+        "from": [
+          {
+            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+            "name": "LGVGeoportalHilfe"
+          }
+        ],
+        "to": [
+          {
+            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+            "name": "LGVGeoportalHilfe"
+          }
+        ]
       },
       "info": {
         "name": "translate#common:menu.info",
@@ -452,7 +456,7 @@
             {
               "name": "translate#common:modules.tools.info.disclaimer",
               "glyphicon": "glyphicon-globe",
-              "url": "http://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
+              "url": "https://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
             },
             {
               "name": "translate#common:modules.tools.info.home.name",
@@ -660,7 +664,6 @@
           "id": "10882",
           "styleId": "10882",
           "clusterDistance": 40,
-          "routable": true,
           "searchField": "bezeichnung",
           "styleGeometryType": "Point"
         },
