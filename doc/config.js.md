@@ -12,7 +12,6 @@ In the following, all configuration options are described. For all configuration
 |----|--------|----|-------|-----------|-------|
 |layerConf|yes|String||Path to the **[services.json](services.json.md)** file containing all available WMS layers and WFS feature types. The path is relative to *js/main.js*.|`"../components/lgv-config/services-internet.json"`|
 |namedProjections|yes|String[]||Definition of the usable coordinate systems. See **[syntax definition](http://proj4js.org/#named-projections)** for details..|`[["EPSG:25832", "+title=ETRS89/UTM 32N +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]]`|
-|proxyUrl|yes|String||_Deprecated in the next major release. Please use Mapfish-Print 3 instead._ Absolute server path to a proxy script called with *"?url="*. Required for the print service, see **[print](#markdown-header-print)**.|`"/cgi-bin/proxy.cgi"`|
 |restConf|yes|String||Path to the **[rest-services.json](rest-services.json.md)** file describing further services, e.g. print service, WPS, CSW. The path is relative to *js/main.js*.|`"../components/lgv-config/rest-services-internet.json"`|
 |styleConf|yes|String||Path to the **[style.json](style.json.md)** file describing vector layer (WFS) styles. The path is relative to *js/main.js*.|`"../components/lgv-config/style.json"`|
 |addons|no|String[]|`[]`|List of names for custom modules. The modules are to be placed in the folder `/addons/`, with their entry points being defined in the `addonsConf.json`.|`["myAddon1", "myAddon2"]`|
@@ -46,7 +45,6 @@ In the following, all configuration options are described. For all configuration
 |startingMap3D|bi|Boolean|`false`|Controls whether the map should start in 3D mode.||
 |tree|no|**[tree](#tree)**||||
 |uiStyle|no|String|`"default"`|Sets the control element layout. |`table`|
-|useVectorStyleBeta|no|Boolean|`false`|If set to `true`, the new styling module currently in development is used to create vector styles; else, the system currently in production is used. Please mind that the `style.json` file requires a different syntax than before if setting this flag to `true`. _Deprecated in major release 3.0._|useVectorStyleBeta: true|
 |wfsImgPath|no|String||Path to the folder holding images for the WFS styles. The path is relative to *js/main.js*.|`"../components/lgv-config/img/"`|
 |wpsID|no|String|`""`|Reference to a WPS interface used in various modules. The ID is resolved to a service defined in the **[rest-services.json](rest-services.json.md)** file.|`""`|
 |zoomToFeature|no|**[zoomToFeature](#markdown-header-zoomtofeature)**||Optional configuration of the URL query parameter `featureid`. For details, see **[urlParameter](urlParameter.md)**.||

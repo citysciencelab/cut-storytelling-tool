@@ -50,19 +50,10 @@ import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import TreeFilterView from "../modules/treeFilter/view";
 import FeatureLister from "../modules/tools/featureLister/view";
-import PrintView from "../modules/tools/print_/view";
-/**
- * PrintView2
- * @deprecated in 3.0.0
- * remove "version" in doc and config.
- * rename "print_" to "print"
- * only load PrintView
- */
-import PrintView2 from "../modules/tools/print/view";
+import PrintView from "../modules/tools/print/view";
 import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
-import OrientationView from "../modules/controls/orientation/view";
 import SearchbarView from "../modules/searchbar/view";
 import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonOblique/view";
@@ -205,19 +196,7 @@ async function loadApp () {
                 break;
             }
             case "print": {
-                /**
-                 * PrintView2
-                 * @deprecated in 3.0.0
-                 * remove "version" in doc and config.
-                 * rename "print_" to "print"
-                 * only load correct view
-                 */
-                if (tool.has("version") && (tool.get("version") === "mapfish_print_3" || tool.get("version") === "HighResolutionPlotService")) {
-                    new PrintView({model: tool});
-                }
-                else {
-                    new PrintView2({model: tool});
-                }
+                new PrintView({model: tool});
                 break;
             }
             case "parcelSearch": {
@@ -287,16 +266,9 @@ async function loadApp () {
         controlsView = new ControlsView();
 
         controls.forEach(control => {
-            const orientationConfigAttr = typeof control.attr === "string" ? {zoomMode: control.attr} : control;
             let element;
 
             switch (control.id) {
-                case "orientation": {
-                    element = controlsView.addRowTR(control.id, true);
-                    orientationConfigAttr.epsg = Radio.request("MapView", "getProjection").getCode();
-                    new OrientationView({el: element, config: orientationConfigAttr});
-                    break;
-                }
                 case "button3d": {
                     if (control.attr === true) {
                         element = controlsView.addRowTR(control.id);

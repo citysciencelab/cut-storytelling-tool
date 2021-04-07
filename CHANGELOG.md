@@ -7,7 +7,6 @@
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 
 ---
-
 ## Unreleased - in development
 ### Added
 
@@ -18,6 +17,37 @@
 ### Removed
 
 ### Fixed
+
+---
+## v2.8.0 - 2021-04-07
+### Added
+- External WMS Layers with version lower than 1.3.0 can also be imported.
+- Added possibility to prepend prefix to GFI attribute.
+- WMTS Layers can now be printed with MapFish.
+- The user can search visible wfs features by clicking a position on the map by clicking the "Nearby button" on the controls
+- The user can search visible wfs features after searching an address from search field by clicking the "Nearby button" on the controls
+
+### Changed
+- The tool AddWMS switched from backbone to vue module.
+- Consolidate the mqttOptions in the layer sensor with the documentation (services.json.md).
+- In config.json.md, the attribute `isActive` was changed to `active` in Portalconfig.menu.tool.gfi.
+- External WMS Layers with version lower than 1.3.0 can also be imported.
+- Legends are only printed from layers that are switched visible.
+
+### Deprecated
+
+### Removed
+- SensorThings address tab in layerInformation removed.
+- The print module for using mapfishprint v2 has been removed. In this case the attribute `proxyurl` has been removed too
+- The vector style module for using the style_v2.json has been removed. In this case the atteibute `useVectorStyleBeta` has been removed too.
+
+### Fixed
+- GFI of type text/html now also loads css files of the body.
+- Show metadata if the MD_Identification node is implemented as MD_DataIdentification or SV_ServiceIdentification.
+- Fixed a bug that made single layer info legend appear multiple times when activating additional layers while opened.
+- Printing of tooltip of measure-tool works: The tooltip of the measure tool is no longer implemented as an overlay, it is created now as vectorlayer.
+- Printing of big amount of features now works.
+- Removed a bug causing an irritating map focus after using BKG search and leave search field
 
 ---
 

@@ -1,13 +1,14 @@
-import BuildSpecModel from "@modules/tools/print_/buildSpec.js";
+import BuildSpecModel from "@modules/tools/print/buildSpec.js";
 import Util from "@testUtil";
-import Style from "@modules/vectorStyle/model";
 import {Style as OlStyle} from "ol/style.js";
-import {TileWMS, ImageWMS} from "ol/source.js";
+import WMTSTileGrid from "ol/tilegrid/WMTS";
+import {TileWMS, ImageWMS, WMTS} from "ol/source.js";
 import {Tile, Vector} from "ol/layer.js";
 import {expect} from "chai";
 import {EOL} from "os";
+import Feature from "ol/Feature.js";
 
-describe("tools/print_/buildSpec", function () {
+describe("tools/print/buildSpec", function () {
     let buildSpecModel,
         utilModel,
         pointFeatures,
@@ -40,6 +41,36 @@ describe("tools/print_/buildSpec", function () {
         multiPolygonFeatures = utilModel.createTestFeatures("resources/testFeaturesBplanMultiPolygon.xml");
         lineStringFeatures = utilModel.createTestFeatures("resources/testFeaturesVerkehrsnetzLineString.xml");
         multiLineStringFeatures = utilModel.createTestFeatures("resources/testFeaturesVeloroutenMultiLineString.xml");
+    });
+    describe("unsetStringPropertiesOfFeature", function () {
+        it("unsetStringPropertiesOfFeature - remove one prop other one should stay", function () {
+            const props = {"a": "a", "b": "b"},
+                feature = new Feature({
+                    name: "feature123"
+                });
+
+            feature.setProperties(props);
+
+            buildSpecModel.unsetStringPropertiesOfFeature(feature, "a");
+            expect(feature.getProperties()).to.have.property("a");
+            expect(feature.getProperties()).not.to.have.property("b");
+        });
+
+        it("unsetStringPropertiesOfFeature - remove not existing prop should remove all", function () {
+            const props = {"a": "a", "b": "b"},
+                feature = new Feature({
+                    name: "feature123"
+                });
+
+            feature.setProperties(props);
+
+            buildSpecModel.unsetStringPropertiesOfFeature(feature, "c");
+            expect(feature.getProperties()).not.to.have.property("a");
+            expect(feature.getProperties()).not.to.have.property("b");
+            expect(feature.getProperties()).not.to.have.property("c");
+        });
+
+
     });
 
     describe("parseAddressToString", function () {
@@ -378,6 +409,58 @@ describe("tools/print_/buildSpec", function () {
         });
         it("should create hex string from rgbArray with transparency", function () {
             expect(buildSpecModel.rgbArrayToHex([255, 0, 0, 1])).to.deep.include("#ff0000");
+        });
+    });
+    describe("buildWmts", () => {
+        const matrixIds = [0, 1, 2],
+            matrixSizes = [[1, 1], [2, 2], [4, 4]],
+            origin = [0, 0],
+            scales = [2, 1, 0],
+            tileSize = 512,
+            wmtsLayer = new Tile({
+                source: new WMTS({
+                    tileGrid: new WMTSTileGrid({
+                        origin,
+                        resolutions: [2, 1, 0],
+                        matrixIds,
+                        tileSize
+                    }),
+                    urls: ["url"],
+                    matrixSet: "tileMatrixSet",
+                    layer: "my_layer",
+                    style: "lit",
+                    requestEncoding: "REST"
+                }),
+                opacity: 1
+            });
+
+        wmtsLayer.getSource().matrixSizes = matrixSizes;
+        wmtsLayer.getSource().scales = scales;
+
+        it("should buildWmts", function () {
+            const matrices = [];
+
+            for (let i = 0; i < matrixIds.length; i++) {
+                matrices.push({
+                    identifier: matrixIds[i],
+                    matrixSize: matrixSizes[i],
+                    topLeftCorner: origin,
+                    scaleDenominator: scales[i],
+                    tileSize: [tileSize, tileSize]
+                });
+            }
+
+            expect(buildSpecModel.buildWmts(wmtsLayer, wmtsLayer.getSource())).to.deep.own.include({
+                baseURL: "url",
+                opacity: 1,
+                type: "WMTS",
+                layer: "my_layer",
+                style: "lit",
+                imageFormat: "image/jpeg",
+                matrixSet: "tileMatrixSet",
+                matrices,
+                requestEncoding: "REST"
+            });
         });
     });
     describe("buildTileWms", function () {
@@ -874,130 +957,6 @@ describe("tools/print_/buildSpec", function () {
         });
         it("should return \"[kh_nummer='20']\" if styleAttribute is \"kh_nummer\"", function () {
             expect(buildSpecModel.getStylingRule(vectorLayer, pointFeatures[0], "kh_nummer")).to.equal("[kh_nummer='20']");
-        });
-    });
-    describe("buildPointStyleCircle", function () {
-        it("should convert circleStyle into style object for print", function () {
-            const circleStyleModel = new Style({
-                    layerId: "1711",
-                    class: "POINT",
-                    subClass: "CIRCLE",
-                    circleRadius: 20,
-                    circleFillColor: [255, 0, 0, 1],
-                    circleStrokeColor: [0, 0, 255, 1],
-                    circleStrokeWidth: 5
-                }),
-                vectorLayer = new Vector({
-                    style: function (feature) {
-                        return circleStyleModel.createStyle(feature, false);
-                    }
-                }),
-                style = buildSpecModel.getFeatureStyle(pointFeatures[0], vectorLayer)[0];
-
-            expect(buildSpecModel.buildPointStyleCircle(style.getImage())).to.deep.own.include({
-                fillColor: "#ff0000",
-                fillOpacity: 1,
-                pointRadius: 20,
-                strokeColor: "#0000ff",
-                strokeOpacity: 1,
-                strokeWidth: 5,
-                type: "point"
-            });
-        });
-
-    });
-    describe("buildPointStyleIcon", function () {
-        it("should convert iconStyle into style object for print", function () {
-            const iconStyleModel = new Style({
-                    layerId: "1711",
-                    class: "POINT",
-                    subClass: "SIMPLE",
-                    clusterImageName: "krankenhaus.png",
-                    imageName: "krankenhaus.png",
-                    imageScale: "0.7"
-                }),
-                vectorLayer = new Vector({
-                    style: function (feature) {
-                        return iconStyleModel.createStyle(feature, false);
-                    }
-                }),
-                style = buildSpecModel.getFeatureStyle(pointFeatures[0], vectorLayer)[0];
-
-            expect(buildSpecModel.buildPointStyleIcon(style.getImage(), vectorLayer)).to.deep.own.include({
-                externalGraphic: "null/lgv-config/img/krankenhaus.png",
-                graphicHeight: NaN, // image kann im test nicht gefunden werden, daher kann size nicht berechnet werden
-                graphicWidth: NaN,
-                type: "point"
-            });
-        });
-    });
-    describe("buildPolygonStyle", function () {
-        it("should convert polygonStyle into style object for print", function () {
-            const polygonStyleModel = new Style({
-                    class: "POLYGON",
-                    subClass: "SIMPLE",
-                    polygonFillColor: [189, 189, 0, 1],
-                    polygonStrokeColor: [98, 98, 0, 1],
-                    polygonStrokeWidth: 2
-                }),
-                vectorLayer = new Vector({
-                    style: function (feature) {
-                        return polygonStyleModel.createStyle(feature, false);
-                    }
-                }),
-                style = buildSpecModel.getFeatureStyle(polygonFeatures[0], vectorLayer)[0];
-
-            expect(buildSpecModel.buildPolygonStyle(style, vectorLayer)).to.deep.own.include({
-                fillColor: "#bdbd00",
-                fillOpacity: 1,
-                strokeColor: "#626200",
-                strokeOpacity: 1,
-                strokeWidth: 2,
-                type: "polygon"
-            });
-        });
-    });
-    describe("buildLineStringStyle", function () {
-        it("should convert lineStringStyle into style object for print", function () {
-            const lineStyleModel = new Style({
-                    class: "Line",
-                    subClass: "SIMPLE",
-                    lineStrokeColor: [51, 153, 0, 1],
-                    lineStrokeWidth: 3
-                }),
-                vectorLayer = new Vector({
-                    style: function (feature) {
-                        return lineStyleModel.createStyle(feature, false);
-                    }
-                }),
-                style = buildSpecModel.getFeatureStyle(lineStringFeatures[0], vectorLayer)[0];
-
-            expect(buildSpecModel.buildLineStringStyle(style, vectorLayer)).to.deep.own.include({
-                strokeColor: "#339900",
-                strokeOpacity: 1,
-                strokeWidth: 3,
-                type: "line"
-            });
-        });
-    });
-    describe("getImageName", function () {
-        it("should return everything behind last \"/\" inclusive", function () {
-            const iconStyleModel = new Style({
-                    layerId: "1711",
-                    class: "POINT",
-                    subClass: "SIMPLE",
-                    clusterImageName: "krankenhaus.png",
-                    imageName: "krankenhaus.png",
-                    imageScale: "0.7"
-                }),
-                vectorLayer = new Vector({
-                    style: function (feature) {
-                        return iconStyleModel.createStyle(feature, false);
-                    }
-                }),
-                style = buildSpecModel.getFeatureStyle(pointFeatures[0], vectorLayer)[0];
-
-            expect(buildSpecModel.getImageName(style.getImage().getSrc())).to.equal("krankenhaus.png");
         });
     });
     describe("rgbStringToRgbArray", function () {
