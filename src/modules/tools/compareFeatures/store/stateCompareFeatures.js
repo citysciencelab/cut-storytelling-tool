@@ -45,8 +45,8 @@ const state = {
     hasMultipleLayers: false,
     showMoreInfo: false,
     preparedList: {},
-    emptyStar: "<span class=\"glyphicon glyphicon-star-empty\" style=\"font-size:22px;\"></span>",
-    yellowStar: "<span class=\"glyphicon glyphicon-star\" style=\"color:#fec44f; font-size:22px;\"></span>"
+    iconEmptyStar: "<span class=\"glyphicon glyphicon-star-empty\" style=\"font-size:22px;\"></span>",
+    iconYellowStar: "<span class=\"glyphicon glyphicon-star\" style=\"color:#fec44f; font-size:22px;\"></span>"
 };
 
 export default state;
