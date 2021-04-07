@@ -23,6 +23,16 @@
  * @property {String} yellowStar html element for yellow star glyphicon in feedback modal
  */
 const state = {
+    // defaults for config.json parameters
+    name: "common:modules.tools.compareFeatures.title",
+    glyphicon: "glyphicon-th-list",
+    renderToWindow: true,
+    resizableWindow: true,
+    isVisibleInMenu: true,
+    deactivateGFI: false,
+    numberOfAttributesToShow: 12,
+    numberOfFeaturesToShow: 3,
+    // compareFeatures state
     active: false,
     id: "compareFeatures",
     layerFeatures: {},
@@ -36,14 +46,7 @@ const state = {
     showMoreInfo: false,
     preparedList: {},
     emptyStar: "<span class=\"glyphicon glyphicon-star-empty\" style=\"font-size:22px;\"></span>",
-    yellowStar: "<span class=\"glyphicon glyphicon-star\" style=\"color:#fec44f; font-size:22px;\"></span>",
-    // defaults for config.json parameters
-    name: "common:modules.tools.compareFeatures.title",
-    glyphicon: "glyphicon-th-list",
-    renderToWindow: true,
-    resizableWindow: true,
-    isVisibleInMenu: true,
-    deactivateGFI: false
+    yellowStar: "<span class=\"glyphicon glyphicon-star\" style=\"color:#fec44f; font-size:22px;\"></span>"
 };
 
 export default state;

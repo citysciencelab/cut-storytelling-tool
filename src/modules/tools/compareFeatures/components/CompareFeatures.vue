@@ -21,10 +21,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("Tools/CompareFeatures", Object.keys(getters)),
-        rowsToShow: () => {
-            return state.numberOfAttributesToShow;
-        }
+        ...mapGetters("Tools/CompareFeatures", Object.keys(getters))
     },
     created () {
         this.$on("close", this.close);
@@ -149,7 +146,7 @@ export default {
                             :key="'tool-compareFeatures-' + index"
                         >
                             <template
-                                v-if="index < rowsToShow && !showMoreInfo"
+                                v-if="index < numberOfAttributesToShow && !showMoreInfo"
                             >
                                 <td
                                     v-for="(value, key) in column"
@@ -247,7 +244,7 @@ export default {
                             :key="'tool-compareFeatures-' + index"
                         >
                             <template
-                                v-if="index < rowsToShow && !showMoreInfo"
+                                v-if="index < numberOfAttributesToShow && !showMoreInfo"
                             >
                                 <td
                                     v-for="(value, key) in column"
@@ -400,6 +397,7 @@ export default {
         padding: 0.5rem;
         text-align: left;
     }
+    // scss schachteln
     table {
         font-family: Arial, Helvetica, sans-serif;
         border-collapse: collapse;
