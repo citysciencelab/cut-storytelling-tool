@@ -54,7 +54,7 @@ describe("src/modules/tools/compareFeatures/components/CompareFeatures.vue", () 
         store.commit("Tools/CompareFeatures/setActive", true);
         wrapper = shallowMount(CompareFeaturesComponent, {store, localVue});
 
-        expect(wrapper.find("#compare-features").exists()).to.be.true;
+        expect(wrapper.find("#tool-compareFeatures").exists()).to.be.true;
     });
 
     it("renders CompareFeatures when tool is active and has multiple layers", () => {
@@ -62,7 +62,7 @@ describe("src/modules/tools/compareFeatures/components/CompareFeatures.vue", () 
         store.commit("Tools/CompareFeatures/setHasMultipleLayers", true);
         wrapper = shallowMount(CompareFeaturesComponent, {store, localVue});
 
-        expect(wrapper.find("#compare-features").exists()).to.be.true;
+        expect(wrapper.find("#tool-compareFeatures").exists()).to.be.true;
     });
     describe("CompareFeatures.vue methods", () => {
         it("close sets active to false", async () => {
@@ -72,7 +72,7 @@ describe("src/modules/tools/compareFeatures/components/CompareFeatures.vue", () 
             await wrapper.vm.$nextTick();
 
             expect(store.state.Tools.CompareFeatures.active).to.be.false;
-            expect(wrapper.find("#compare-features").exists()).to.be.false;
+            expect(wrapper.find("#tool-compareFeatures").exists()).to.be.false;
         });
     });
 });
