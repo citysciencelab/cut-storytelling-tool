@@ -14,6 +14,7 @@
 ### Changed
 - Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.
 - Tool addons are now also written in config.json in camelCase.
+- Migrated the CompareFeatures Tool from Backbone.js to Vue.js.
 
 ### Deprecated
 
