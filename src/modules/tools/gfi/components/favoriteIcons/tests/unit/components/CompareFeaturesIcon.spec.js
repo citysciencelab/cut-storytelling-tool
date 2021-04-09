@@ -10,6 +10,15 @@ describe("src/modules/tools/gfi/favoriteIcons/components/CompareFeatureIcon.vue"
         const featureIsOnCompareList = sinon.fake.returns(false);
 
         wrapper = shallowMount(CompareFeatureIcon, {
+            propsData: {
+                feature: {
+                    getId: () => "feature1",
+                    getLayerId: () => "1234",
+                    getTitle: () => "TestTitle",
+                    getAttributesToShow: () => "TestAttributes",
+                    getMappedProperties: () => "TestProperties"
+                }
+            },
             methods: {
                 componentExists: () => true
             },
@@ -37,6 +46,15 @@ describe("src/modules/tools/gfi/favoriteIcons/components/CompareFeatureIcon.vue"
         const featureIsOnCompareList = sinon.fake.returns(true);
 
         wrapper = shallowMount(CompareFeatureIcon, {
+            propsData: {
+                feature: {
+                    getId: () => "feature1",
+                    getLayerId: () => "1234",
+                    getTitle: () => "TestTitle",
+                    getAttributesToShow: () => "TestAttributes",
+                    getMappedProperties: () => "TestProperties"
+                }
+            },
             methods: {
                 componentExists: () => true
             },
@@ -61,6 +79,15 @@ describe("src/modules/tools/gfi/favoriteIcons/components/CompareFeatureIcon.vue"
         const featureIsOnCompareList = sinon.fake.returns(false);
 
         wrapper = shallowMount(CompareFeatureIcon, {
+            propsData: {
+                feature: {
+                    getId: () => "feature1",
+                    getLayerId: () => "1234",
+                    getTitle: () => "TestTitle",
+                    getAttributesToShow: () => "TestAttributes",
+                    getMappedProperties: () => "TestProperties"
+                }
+            },
             methods: {
                 componentExists: () => false
             },
