@@ -4,13 +4,13 @@ import handleAxiosResponse from "../../../../utils/handleAxiosResponse";
 const actions = {
     prepareModule ({state, commit, dispatch}) {
         // TODO: The layer currently can only be requested if it is configured in the config.json
-        const service = Radio.request("ModelList", "getModelByAttributes", {id: state.requestConfig.layerId});
+        const service = Radio.request("ModelList", "getModelByAttributes", {id: state.instances[state.currentInstance].requestConfig.layerId});
 
         if (service) {
             const featureNS = service.get("featureNS"),
                 srsName = Radio.request("MapView", "getProjection").code_;
 
-            addIdsToLiterals(state.literals);
+            addIdsToLiterals(state.instances[state.currentInstance].literals);
             commit("setService", {
                 srsName,
                 featureNS,
@@ -19,7 +19,7 @@ const actions = {
                 url: service.get("url")
             });
 
-            if (state.selectSource) {
+            if (state.instances[state.currentInstance].selectSource) {
                 dispatch("retrieveData");
             }
         }
@@ -31,7 +31,8 @@ const actions = {
         // TODO: Do something
     },
     retrieveData ({state, commit}) {
-        const {selectSource} = state;
+        const {currentInstance, instances} = state,
+            {selectSource} = instances[currentInstance];
 
         axios.get(selectSource)
             .then(response => handleAxiosResponse(response, "WfsSearch, retrieveData"))

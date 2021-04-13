@@ -2322,9 +2322,9 @@ A singular instance of the WFS Search which will be displayed as an individual t
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |literals|yes|**[literal](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral)**[]||Array of `literals`.|true|
-|remoteOptions|no|String[]||Array of serviceIds. These services are prequeried for a field that doesn't have the parameter `options` set to make a suggestion for the input.|false|
 |requestConfig|yes|**[requestConfig](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfig)**||The id of the service that is supposed to be requested. If a WFS@2.0.0 is supposed to be used the id of the stored query needs to be provided.|false|
 |selectSource|no|String||Optional Url leading to the expected options for the different inputs. See **[https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json]** for an example.|false|
+|title|yes|String||Title of the search to be displayed in the selection dropdown in the tool.|false|
 |userHelp|no|String||Information text regarding the search formular to be displayed to the user. May be a locale key.|false|
 
 **Example**
@@ -2335,6 +2335,7 @@ A singular instance of the WFS Search which will be displayed as an individual t
         "layerId": "1234"
     },
     "selectSource": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
+    "title": "Parcel Search",
     "literals": [
         {
             "clause": {

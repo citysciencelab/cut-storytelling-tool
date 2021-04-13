@@ -65,16 +65,45 @@ export default {
                 role="form"
             >
                 <div
-                    v-if="userHelp"
+                    v-if="instances.length > 1"
+                    class="form-group form-group-sm"
+                >
+                    <label
+                        class="col-md-5 col-sm-5 control-label"
+                        for="tool-wfsSearch-instances-select"
+                    >
+                        {{ $t("common:modules.tools.wfsSearch.instancesSelectLabel") }}
+                        <!-- TODO: Add me to the language files-->
+                    </label>
+                    <div class="col-md-7 col-sm-7">
+                        <select
+                            id="tool-wfsSearch-instances-select"
+                            class="form-control input-sm"
+                            required
+                            @change="setCurrentInstance($event.currentTarget.value)"
+                        >
+                            <option
+                                v-for="({title}, i) of instances"
+                                :key="title + i"
+                                :value="i"
+                            >
+                                {{ title }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <hr v-if="instances.length > 1">
+                <div
+                    v-if="instances[currentInstance].userHelp"
                     class="form-group form-group-sm"
                 >
                     <div class="col-md-12 col-sm-12">
                         <!-- TODO: May need to add $t() to be properly displayed -->
-                        {{ userHelp }}
+                        {{ instances[currentInstance].userHelp }}
                     </div>
                     <hr>
                 </div>
-                <template v-for="(literal, i) of literals">
+                <template v-for="(literal, i) of instances[currentInstance].literals">
                     <Literal
                         :key="'tool-wfsSearch-clause' + i"
                         :literal="literal"
