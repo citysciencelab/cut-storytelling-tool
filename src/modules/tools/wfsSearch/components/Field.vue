@@ -79,7 +79,6 @@ export default {
             return typeof this.options === "string" ? this.parsedSource === null || notRoot : false;
         },
         selectableOptions () {
-            // TODO: The required part is rather important for the concrete search than this component
             // Options are supposed to be retrieved from the external source
             if (typeof this.options === "string" && this.parsedSource !== null) {
                 let keys = [];
@@ -144,15 +143,14 @@ export default {
         <label
             v-if="inputLabel"
             class="col-md-5 col-sm-5 control-label"
-            :for="`tool-wfsSearch-${fieldName}-input`"
+            :for="`tool-wfsSearch-${fieldName}-${fieldId}-input`"
         >
             {{ inputLabel }}
         </label>
         <div class="col-md-7 col-sm-7">
-            <!-- TODO: It might be possible, that the fieldName is used multiple times to have multiple inputs -> Adjust the ids to that! -->
             <component
                 :is="htmlElement"
-                :id="`tool-wfsSearch-${fieldName}-input`"
+                :id="`tool-wfsSearch-${fieldName}-${fieldId}-input`"
                 :class="{
                     'form-control': true,
                     'input-sm': htmlElement === 'select'
