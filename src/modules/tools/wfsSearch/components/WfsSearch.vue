@@ -124,6 +124,7 @@ export default {
                         <button
                             type="button"
                             class="btn btn-lgv-grey col-md-12 col-sm-12"
+                            :disabled="requiredFields"
                             @click="searchFeatures"
                         >
                             {{ $t("common:modules.tools.wfsSearch.searchButton") }}

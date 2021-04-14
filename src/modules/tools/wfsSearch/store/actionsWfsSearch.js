@@ -10,7 +10,8 @@ const actions = {
             const featureNS = service.get("featureNS"),
                 srsName = Radio.request("MapView", "getProjection").code_;
 
-            addIdsToLiterals(state.instances[state.currentInstance].literals);
+            // NOTE: The extra object is sadly needed so that the object is reactive :(
+            commit("setRequiredValues", {...prepareLiterals(state.instances[state.currentInstance].literals)});
             commit("setService", {
                 srsName,
                 featureNS,

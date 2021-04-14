@@ -125,7 +125,8 @@ export default {
     methods: {
         ...mapMutations("Tools/WfsSearch", Object.keys(mutations)),
         valueChanged (value) {
-            fieldValueChanged(this.fieldId, value, this.literals);
+            // NOTE: The extra object is sadly needed so that the object is reactive :(
+            this.setRequiredValues({...fieldValueChanged(this.fieldId, value, this.instances[this.currentInstance].literals, this.requiredValues)});
 
             if (typeof this.options === "string") {
                 this.setSelectedOptions({options: this.options, value});
