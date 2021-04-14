@@ -2,6 +2,10 @@ import axios from "axios";
 import handleAxiosResponse from "../../../../utils/handleAxiosResponse";
 
 const actions = {
+    instanceChanged ({commit, dispatch}, instanceId) {
+        commit("setCurrentInstance", instanceId);
+        dispatch("prepareModule");
+    },
     prepareModule ({state, commit, dispatch}) {
         // TODO: The layer currently can only be requested if it is configured in the config.json
         const service = Radio.request("ModelList", "getModelByAttributes", {id: state.instances[state.currentInstance].requestConfig.layerId});

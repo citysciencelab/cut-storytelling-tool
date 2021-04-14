@@ -80,7 +80,7 @@ export default {
                             id="tool-wfsSearch-instances-select"
                             class="form-control input-sm"
                             required
-                            @change="setCurrentInstance($event.currentTarget.value)"
+                            @change="instanceChanged($event.currentTarget.value)"
                         >
                             <option
                                 v-for="({title}, i) of instances"
