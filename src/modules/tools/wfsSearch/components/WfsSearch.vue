@@ -22,13 +22,11 @@ export default {
         }
     },
     created () {
-        // TODO: For each entry in 'instances', a WfsSearch Tool should be created
         this.$on("close", this.close);
         /*
         * TODO
         * Logic:
         * - Integration for remoteOptions regarding suggestions for input fields -> Find a way to make it look properly in the UI
-        * - Create a separate Tool for each SearchInstance
         * - Query of the service --> Next up after commit
         *   + Difference between WFS@2.0.0 (Stored Query) and WFS@1.1.0 (query has to be built)
         */
