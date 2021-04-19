@@ -54,14 +54,28 @@ export default {
         close () {
             this.$emit("close");
         },
+
+        /**
+         * Rotates the gfi window in the table mode.
+         * The position is set so that the turntable always stays at the same position.
+         * @returns {void}
+         */
         rotate () {
-            const className = this.$el.className.substring(0, this.$el.className.indexOf("rotate")).trim();
+            const headerwidth = this.$el.getElementsByClassName("tool-window-heading")[0].offsetWidth,
+                headerHeight = this.$el.getElementsByClassName("tool-window-heading")[0].offsetHeight,
+                className = this.$el.className.substring(0, this.$el.className.indexOf("rotate")).trim(),
+                transformOrigin = `${headerwidth - 40}px ${headerHeight - 20}px`;
 
             this.rotateAngle = this.rotateAngle - 90;
             if (this.rotateAngle === -360) {
                 this.rotateAngle = 0;
             }
+
             this.$el.className = className + " rotate" + this.rotateAngle;
+            this.$el.style.transformOrigin = transformOrigin;
+            this.$el.style.webkitTransformOrigin = transformOrigin;
+            this.$el.style.msTransformOrigin = transformOrigin;
+            this.$el.style.mozTransformOrigin = transformOrigin;
         }
     }
 };
@@ -84,11 +98,15 @@ export default {
             <span>{{ $t(title) }}</span>
         </template>
         <template v-slot:body>
-            <component
-                :is="theme"
-                :feature="feature"
-            />
-            <slot name="footer" />
+            <div class="body">
+                <component
+                    :is="theme"
+                    :feature="feature"
+                />
+            </div>
+            <div class="footer">
+                <slot name="footer" />
+            </div>
         </template>
     </ToolWindow>
 </template>
@@ -120,21 +138,22 @@ export default {
             text-overflow: ellipsis;
         }
     }
-    .vue-tool-content-body {
+    .vue-tool-content-body .body {
         max-height: 175px;
         overflow-x: hidden;
+        overflow: auto;
     }
-    .vue-tool-content-body::-webkit-scrollbar {
+    .vue-tool-content-body .body::-webkit-scrollbar {
         width: 20px;
     }
-    .vue-tool-content-body::-webkit-scrollbar-track {
+    .vue-tool-content-body .body::-webkit-scrollbar-track {
         border: 5px solid transparent;
         border-radius: 12px;
         background-clip: content-box;
         background-color: #d3d3d3;
     }
 
-    .vue-tool-content-body::-webkit-scrollbar-thumb {
+    .vue-tool-content-body .body::-webkit-scrollbar-thumb {
         background-color: #003063;
         border: 6px solid transparent;
         border-radius: 12px;

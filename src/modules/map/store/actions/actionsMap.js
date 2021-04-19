@@ -138,6 +138,12 @@ const actions = {
             dispatch("MapMarker/removePolygonMarker", null, {root: true});
             dispatch("collectGfiFeatures");
         }
+
+        if (!rootGetters["controls/orientation/poiModeCurrentPositionEnabled"]) {
+            dispatch("MapMarker/placingPointMarker", evt.coordinate, {root: true});
+            commit("controls/orientation/setPosition", evt.coordinate, {root: true});
+            commit("controls/orientation/setShowPoi", true, {root: true});
+        }
     },
 
     /**

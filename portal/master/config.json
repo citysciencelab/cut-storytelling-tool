@@ -307,7 +307,6 @@
             "filename": "Ausdruck",
             "title": "Mein Titel",
             "legendText": "Mit Legende",
-            "version" : "mapfish_print_3",
             "currentLayoutName": "A3 Hochformat",
             "dpiForPdf": 120
           },
@@ -415,11 +414,11 @@
             "name": "translate#common:menu.tools.scaleSwitcher",
             "glyphicon": "glyphicon-resize-full"
           },
-          "VueAddon": {
+          "vueAddon": {
             "name": "AddonTool",
             "glyphicon": "glyphicon-screenshot"
           },
-          "TacticalMark": {
+          "tacticalMark": {
             "name": "Taktische Zeichen",
             "glyphicon": "glyphicon-map-marker"
           }

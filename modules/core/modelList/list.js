@@ -16,13 +16,8 @@ import Folder from "./folder/model";
 import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
 import Filter from "../../tools/filter/model";
-/**
- * PrintV2
- * @deprecated in 3.0.0
- */
-import PrintV2 from "../../tools/print/model";
-import Print from "../../tools/print_/mapfish3PlotService";
-import HighResolutionPrint from "../../tools/print_/highResolutionPlotService";
+import Print from "../../tools/print/mapfish3PlotService";
+import HighResolutionPrint from "../../tools/print/highResolutionPlotService";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
 /**
@@ -235,15 +230,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }
         else if (attrs.type === "tool") {
             if (attrs.id === "print") {
-                /**
-                 * PrintV2
-                 * do not use the attribute "version"
-                 * @deprecated in 3.0.0
-                 */
-                if (attrs.version === undefined) {
-                    return new PrintV2(Object.assign(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
-                }
-                else if (attrs.version === "HighResolutionPlotService") {
+                if (attrs.version === "HighResolutionPlotService") {
                     return new HighResolutionPrint(Object.assign(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                 }
                 return new Print(attrs, options);
@@ -596,13 +583,22 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
     /**
      * Sets Layer indeces initially. Background layers are treatet seperatly from normal layers to ensure
-     * they will be put into background.
+     * they will be put into background, if they haven't been defined in the URL Parameters array.
+     * @param  {array} paramLayers The Layer Array according the URL Parameters
      * @return {void}
      */
-    initLayerIndeces: function () {
+    initLayerIndeces: function (paramLayers) {
         const allLayerModels = this.getTreeLayers(),
-            baseLayerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") === true),
-            layerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") !== true);
+            baseLayerModels = allLayerModels.filter(function (layerModel) {
+                return layerModel.get("isBaseLayer") === true && paramLayers.find(model => {
+                    return model.id === layerModel.id;
+                }) === undefined;
+            }),
+            layerModels = allLayerModels.filter(function (layerModel) {
+                return layerModel.get("isBaseLayer") !== true || paramLayers.find(model => {
+                    return model.id === layerModel.id;
+                }) !== undefined;
+            });
 
         let initialLayers = [];
 
@@ -787,7 +783,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             this.addModelsByAttributes({typ: "Oblique"});
         }
 
-        this.initLayerIndeces();
+        this.initLayerIndeces(paramLayers);
         this.updateLayerView();
     },
 

@@ -1440,11 +1440,11 @@ Coordinate search.
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Print module, configurable for 3 print services: *High Resolution PlotService*, *MapfishPrint 2* (_Deprecated in 3.0.0_), and *MapfishPrint 3*. Printing vector tile layers is not supported, since the print services themselves do not support it. Should users try to print such layers, a warning will be shown.
+Print module, configurable for 2 print services: *High Resolution PlotService* and *MapfishPrint 3*. Printing vector tile layers is not supported, since the print services themselves do not support it. Should users try to print such layers, a warning will be shown.
 
 >**⚠️ This requires a backend!**
 >
->**A [Mapfish-Print2](http://www.mapfish.org/doc/print/index.html), [Mapfish-Print3](http://mapfish.github.io/mapfish-print-doc), or *HighResolutionPlotService* is required as backend.**
+>**A [Mapfish-Print3](https://mapfish.github.io/mapfish-print-doc), or *HighResolutionPlotService* is required as backend.**
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
@@ -1453,31 +1453,11 @@ Print module, configurable for 3 print services: *High Resolution PlotService*, 
 |printAppId|no|String|"master"|Print service print app id. This tells the print service which template(s) to use.|false|
 |filename|no|String|"report"|Print result file name.|false|
 |title|no|String|"PrintResult"|Document title appearing as header.|false|
-|version|no|String||Flag determining which print service is in use. `"HighResolutionPlotService"` activates the *High Resolution PlotService*, if the parameter is not set, *Mapfish 2* is used. Else, *MapfishPrint 3* is used.|false|
-|printID|no|String||_Deprecated in 3.0.0._ Id of the print service to use. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
-|outputFilename|no|String|"report"|_Deprecated in 3.0.0._ Print result file name.|false|
-|gfi|no|Boolean|false|_Deprecated in 3.0.0._|false|
-|configYAML|no|String|"/master"|_Deprecated in 3.0.0._ Configuration of the template to be used.|false|
+|version|no|String||Flag determining which print service is in use. `"HighResolutionPlotService"` activates the *High Resolution PlotService*, if the parameter is not set, *Mapfish 3* is used.|false|
 |isLegendSelected|no|Boolean|false|Defines whether a checkbox to print the legend is offered. Only used for print services supporting legend printing (Mapfish Print 3).|false|
 |legendText|no|String|"Mit Legende"|Descriptive text for the legend print checkbox.|false|
 |dpiForPdf|no|Number|200|DPI resolution for the map in the PDF file.|false|
 |useProxy|no|Boolean|false|_Deprecated in the next major release. [GDI-DE](https://www.gdi-de.org/en) recommends setting CORS headers on the required services instead of using proxies._ Defines whether a service URL should be requested via proxy. For this, dots in the URL are replaced with underscores.|false|
-
-**MapfishPrint2 example configuration**
-
-```json
-{
-    "print": {
-        "name": "Karte drucken",
-        "glyphicon": "glyphicon-print",
-        "printID": "123456",
-        "configYAML": "/master",
-        "outputFilename": "report",
-        "title": "My Title",
-        "gfi": true
-    }
-}
-```
 
 **High Resolution PlotService example configuration**
 
@@ -1504,8 +1484,7 @@ Print module, configurable for 3 print services: *High Resolution PlotService*, 
         "mapfishServiceId": "mapfish_printservice_id",
         "printAppId": "mrh",
         "filename": "Print",
-        "title": "Mein Titel",
-        "version" : "mapfish_print_3"
+        "title": "Mein Titel"
     }
 }
 ```
@@ -3041,6 +3020,7 @@ List of attributes typically used in vector layers. Vector layers are WFS, GeoJS
 |extendedFilter|no|Boolean||Defines whether the **[tool](#markdown-header-portalconfigmenutools)** `extendedFilter` may use this layer.|false|
 |filterOptions|no|**[filterOption](#markdown-header-themenconfiglayervectorfilteroption)**[]||Filter options required by **[tool](#markdown-header-portalconfigmenutools)** `wfsFeatureFilter`.|false|
 |mouseHoverField|no|String/String[]||Attribute name or array thereorf to be shown on mouse hovering a feature.|false|
+|nearbyTitle|no|String/String[]||Attribute name or array of features to be shown on nearby search results.|false|
 |additionalInfoField|no|String|"name"|Feature's attribute name to use in the search bar's hit list. Should this attribute not exist in a hit feature, the layer name is used instead.|false|
 |styleId|no|String||Style ID. Resolved using the **[style.json](style.json.md)** file.|false|
 |styleGeometryType|no|String/String[]||WFS style geometry type to reduce visible features to the ones sharing the given geometry types. **[More information](style.json.md#markdown-header-abbildungsvorschriften)**.|false|
@@ -3080,6 +3060,7 @@ List of attributes typically used in vector layers. Vector layers are WFS, GeoJS
         }
     ],
     "mouseHoverField": "name",
+    "nearbyTitle": "name",
     "searchField": "name",
     "styleId": "123456",
     "hitTolerance": 50

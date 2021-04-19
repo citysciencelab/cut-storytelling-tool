@@ -10,9 +10,30 @@
 
 ## Unreleased - in development
 ### Added
+- New attribute 'nearbyTitle' implemented in config.json for the title in the list of nearby serach results
+
+### Changed
+- Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.
+- Tool addons are now also written in config.json in camelCase.
+- colorTools are renamed into convertColor (src/utils/convertColor)
+
+### Deprecated
+- colorArrayToRgb (src/utils/colorArrayToRgb) is deprecated. Use convertColor (src/utils/convertColor) instead.
+
+### Removed
+
+### Fixed
+- Fixed a bug that prevented the gfi of a wms from being requested via a reverseproxy.
+
+---
+
+## v2.8.0 - 2021-04-07
+### Added
 - External WMS Layers with version lower than 1.3.0 can also be imported.
 - Added possibility to prepend prefix to GFI attribute.
 - WMTS Layers can now be printed with MapFish.
+- The user can search visible wfs features by clicking a position on the map by clicking the "Nearby button" on the controls
+- The user can search visible wfs features after searching an address from search field by clicking the "Nearby button" on the controls
 
 ### Changed
 - The tool AddWMS switched from backbone to vue module.
@@ -21,10 +42,10 @@
 - External WMS Layers with version lower than 1.3.0 can also be imported.
 - Legends are only printed from layers that are switched visible.
 
-### Deprecated
-
 ### Removed
 - SensorThings address tab in layerInformation removed.
+- The print module for using mapfishprint v2 has been removed. In this case the attribute `proxyurl` has been removed too
+- The vector style module for using the style_v2.json has been removed. In this case the atteibute `useVectorStyleBeta` has been removed too.
 
 ### Fixed
 - GFI of type text/html now also loads css files of the body.
@@ -32,6 +53,7 @@
 - Fixed a bug that made single layer info legend appear multiple times when activating additional layers while opened.
 - Printing of tooltip of measure-tool works: The tooltip of the measure tool is no longer implemented as an overlay, it is created now as vectorlayer.
 - Printing of big amount of features now works.
+- Removed a bug causing an irritating map focus after using BKG search and leave search field
 
 ---
 
@@ -450,7 +472,7 @@
 ### Added
   - Dependencies: Die Äbhängigkeit "lgv-config" wird nicht mehr benötigt, extern geladene Dateien (z.B. "services.json") werden über einen direkten Pfad oder eine URL bezogen
   - Dependencies: Aktualisierung der Versionen diverser Abhängigkeiten
-  - Basic-Portal: Das Basic-Portal wurde überarbeitet und enthält nun einen "ressources" Ordner mit Beispiel Daten
+  - Basic-Portal: Das Basic-Portal wurde überarbeitet und enthält nun einen "resources" Ordner mit Beispiel Daten
   - Pre-push-Hook: Code wird beim Pushen vor dem Push mit ES-Lint überprüft
   - GroupLayer: Es ist nun möglich, bei Gruppenlayern die Attribute "layerAttribution", "mouseHoverField", "maxScale" und "minScale" zu konfigurieren
   - Shadow-Tool: Im 3D-Modus gibt es jetzt ein Werkzeug zur Darstellung des Schattenwurfes, mit einstellbarem Datum und Uhrzeit-

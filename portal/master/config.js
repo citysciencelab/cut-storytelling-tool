@@ -1,5 +1,5 @@
 const Config = {
-    addons: ["einwohnerabfrage", "VueAddon", "TacticalMark", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable", "reisezeiten"],
+    addons: ["einwohnerabfrage", "vueAddon", "tacticalMark", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable", "reisezeiten"],
     alerting: {
         fetchBroadcastUrl: "https://geoportal-hamburg.de/lgv-config/newsFeedPortalAlerts.json"
     },
@@ -56,7 +56,6 @@ const Config = {
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
     restConf: "https://geoportal-hamburg.de/lgv-config/rest-services-internet.json",
     styleConf: "https://geoportal-hamburg.de/lgv-config/style_v3.json",
-    proxyURL: "/cgi-bin/proxy.cgi",
     scaleLine: true,
     mouseHover: {
         numFeaturesToShow: 2,
@@ -87,13 +86,7 @@ const Config = {
         },
         fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
-    },
-    /**
-     * @deprecated to be deleted with version 3.0
-     * @property {boolean} Config.useVectorStyleBeta Flag to use the new vectorStyling module for backward compatibility
-     * @default false
-     */
-    useVectorStyleBeta: true
+    }
 };
 
 // conditional export to make config readable by e2e tests

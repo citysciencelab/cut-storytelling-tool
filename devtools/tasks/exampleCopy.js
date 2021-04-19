@@ -8,9 +8,11 @@ const fs = require("fs-extra"),
     destinationFolder = path.resolve(rootPath, "dist/examples_" + mastercodeVersionFolderName),
     zipFilename1 = path.resolve(rootPath, "dist/examples.zip"),
     zipFilename2 = path.resolve(rootPath, "dist/examples-" + getStableVersionNumber + ".zip"),
+    // eslint-disable-next-line no-process-env
+    appendix = process.env.BITBUCKET_BRANCH ? "_" + process.env.BITBUCKET_BRANCH : "",
     portal = {
         name: "Basic",
-        source: "./dist/basic",
+        source: "./dist/basic" + appendix,
         mastercode: "./dist/mastercode"
     };
 
