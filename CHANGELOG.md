@@ -16,13 +16,10 @@
 ### Changed
 - Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.
 - Tool addons are now also written in config.json in camelCase.
-<<<<<<< HEAD
 - Migrated the CompareFeatures Tool from Backbone.js to Vue.js.
-=======
 - colorTools are renamed into convertColor (src/utils/convertColor)
 - Updates the core-js and babel dependencies in the package.json
 - Update the dependency caniuse-lite.
->>>>>>> dev
 
 ### Deprecated
 - colorArrayToRgb (src/utils/colorArrayToRgb) is deprecated. Use convertColor (src/utils/convertColor) instead.
