@@ -56,7 +56,10 @@ export default {
 };
 </script>
 
-<template lang="html">
+<template
+    lang="html"
+    class="template"
+>
     <Modal
         :title="$t('common:modules.tools.compareFeatures.title')"
         :icon="glyphicon"
@@ -103,33 +106,44 @@ export default {
             <h4 class="tool-compareFeatures-modal-title">
                 {{ $t('common:modules.tools.compareFeatures.title') }}
             </h4>
-            <select
+            <hr>
+            <div
                 v-if="hasMultipleLayers"
-                id="tool-compareFeatures-select"
-                v-model="selected"
-                class="font-arial form-control input-sm pull-left"
-                @change="selectLayerWithFeatures(selected)"
+                class="row"
             >
-                <option
-                    disabled
-                    value=""
-                >
-                    {{ $t("common:modules.tools.compareFeatures.topicsSelection") }}
-                </option>
-                <option
-                    v-for="layer in selectableLayers"
-                    :key="'tool-compareFeatures-option' + layer.layerId"
-                    :value="layer.layerId"
-                >
-                    {{ layer.layerName }}
-                </option>
-            </select>
+                <label
+                    id="tool-compareFeatures-select-label"
+                    class="col-xs-5"
+                >{{ $t("common:modules.tools.compareFeatures.topicsSelection") }}</label>
+                <div class="col-xs-4">
+                    <select
+                        id="tool-compareFeatures-select"
+                        v-model="selected"
+                        class="form-control"
+                        @change="selectLayerWithFeatures(selected)"
+                    >
+                        <option
+                            disabled
+                            value=""
+                        >
+                            {{ $t("common:modules.tools.compareFeatures.topicsSelection") }}
+                        </option>
+                        <option
+                            v-for="layer in selectableLayers"
+                            :key="'tool-compareFeatures-option' + layer.layerId"
+                            :value="layer.layerId"
+                        >
+                            {{ layer.layerName }}
+                        </option>
+                    </select>
+                </div>
+            </div>
             <div
                 v-if="!hasFeatures"
                 id="tool-compareFeatures-no-features"
             >
                 <hr>
-                <p class="bold">
+                <p>
                     {{ $t("common:modules.tools.compareFeatures.noFeatures.nothingSelected", {objects: $t("common:modules.tools.compareFeatures.noFeatures.objectName")}) }}
                 </p>
                 <p v-html="$t('common:modules.tools.compareFeatures.noFeatures.info', {iconEmptyStar, iconYellowStar, interpolation: {escapeValue: false}})">
@@ -360,14 +374,25 @@ export default {
 <style lang="less" scoped>
     @import "~variables";
     @background_color_1: rgb(0, 92, 169);
+    @background_color_2: #eee;
+    @background_color_3: #ddd;
+    @background_color_4: #ccc;
     @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
 
     .tool-compareFeatures-modal-title {
         font-family: @font_family_1;
     }
-    select {
+    #tool-compareFeatures-select {
         margin-bottom: 5px;
         width: auto;
+        font-family: @font_family_default;
+    }
+    #tool-compareFeatures-select-label {
+        font-family: @font_family_1;
+        font-size: 13px;
+        font-weight: normal;
+        line-height: 17px;
+        color: #646262;
     }
     #tool-compareFeatures {
         z-index: -1;
@@ -393,22 +418,39 @@ export default {
         top: 0px !important;
     }
     td {
-        border: 1px solid #999;
         padding: 0.5rem;
         text-align: left;
     }
     // scss schachteln
     table {
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: @font_family_default;
         border-collapse: collapse;
         width: 100%;
     }
-    table td, table th {
-        border: 1px solid #ddd;
+    table th {
+        border-top: 1px solid #ccc;
         padding: 8px;
     }
-    table tr:nth-child(even) {
-        background-color: #f2f2f2;
+    table tr {
+        &:first-child {
+            border-top: 1px solid #ccc;
+        }
+        &:nth-child(odd) {
+            background-color: @background_color_2;
+        }
+        &:nth-child(even) {
+            background-color: @background_color_3;
+        }
+        &:hover {
+            background-color: @background_color_4;
+            td {
+                border-left: 1px solid #bbb;
+            }
+        }
+    }
+    table td {
+        padding: 8px;
+        border-left: 1px solid #ccc;
     }
     table tr:hover {
         background-color: #ddd;
@@ -435,5 +477,14 @@ export default {
                 font-size: 14px;
             }
         }
+    }
+</style>
+
+<style lang="less">
+    #modal-1-container #modal-1-overlay {
+        z-index: 1000;
+    }
+    #modal-1-container #modal-1-inner-wrapper #modal-1-content-container {
+        padding: 0;
     }
 </style>
