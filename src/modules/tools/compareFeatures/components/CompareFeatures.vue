@@ -106,16 +106,16 @@ export default {
             <h4 class="tool-compareFeatures-modal-title">
                 {{ $t('common:modules.tools.compareFeatures.title') }}
             </h4>
-            <hr>
             <div
                 v-if="hasMultipleLayers"
-                class="row"
+                id="tool-compareFeatures-select-container"
             >
+                <hr>
                 <label
                     id="tool-compareFeatures-select-label"
-                    class="col-xs-5"
+                    class="col-xs-3"
                 >{{ $t("common:modules.tools.compareFeatures.topicsSelection") }}</label>
-                <div class="col-xs-4">
+                <div class="col-xs-3">
                     <select
                         id="tool-compareFeatures-select"
                         v-model="selected"
@@ -382,8 +382,13 @@ export default {
     .tool-compareFeatures-modal-title {
         font-family: @font_family_1;
     }
+    h4 {
+        padding: 20px;
+    }
+    #tool-compareFeatures-select-container {
+        padding-bottom: 50px;
+    }
     #tool-compareFeatures-select {
-        margin-bottom: 5px;
         width: auto;
         font-family: @font_family_default;
     }
@@ -393,6 +398,8 @@ export default {
         font-weight: normal;
         line-height: 17px;
         color: #646262;
+        margin-right: 20px;
+        white-space: nowrap;
     }
     #tool-compareFeatures {
         z-index: -1;
@@ -403,6 +410,8 @@ export default {
     }
     .btn {
         background-color: @background_color_1;
+        margin-right: 20px;
+        margin-left: 20px;
         &:hover {
             opacity: 0.9;
         }
@@ -411,6 +420,7 @@ export default {
     #tool-compareFeatures-buttons {
         text-align: center;
         margin: 10px;
+        padding-right: 10px;
     }
     .remove-feature {
         position: relative !important;
@@ -470,6 +480,8 @@ export default {
     }
     #tool-compareFeatures-no-features {
         width: 50vh;
+        padding: 5px;
+        padding-top: 0;
         p {
             line-height: 22px;
             &:first-child {
