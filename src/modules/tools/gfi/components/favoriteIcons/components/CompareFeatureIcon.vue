@@ -1,6 +1,5 @@
 <script>
 import {mapGetters, mapActions} from "vuex";
-import actions from "../../../store/actionsGfi";
 import componentExists from "../../../../../../utils/componentExists.js";
 
 export default {
@@ -39,7 +38,6 @@ export default {
         }
     },
     methods: {
-        ...mapActions("Tools/Gfi", Object.keys(actions)),
         ...mapActions("Tools/CompareFeatures", ["isFeatureOnCompareList", "removeFeature"]),
         componentExists,
 
