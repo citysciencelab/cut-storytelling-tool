@@ -76,7 +76,10 @@ export default {
                 <h4>{{ $t("common:modules.tools.compareFeatures.feedback.added") }}</h4>
                 <hr>
             </div>
-            <div v-if="listFull">
+            <div
+                v-else
+                id="tool-compareFeatures-buttons-feedback-listFull"
+            >
                 <h4>{{ $t("common:modules.tools.compareFeatures.feedback.notAdded") }}</h4>
                 <hr>
                 <p>{{ $t("common:modules.tools.compareFeatures.feedback.limitReached") }}</p>
@@ -381,6 +384,9 @@ export default {
 
     .tool-compareFeatures-modal-title {
         font-family: @font_family_1;
+    }
+    #tool-compareFeatures-buttons-feedback-listFull {
+        text-align: center;
     }
     h4 {
         padding: 20px;
