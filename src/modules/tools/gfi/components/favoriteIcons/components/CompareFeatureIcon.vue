@@ -21,8 +21,11 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("Map", ["visibleLayerListWithChildrenFromGroupLayers"]),
         ...mapGetters("Tools/CompareFeatures", ["isFeatureSelected"]),
+        /**
+         * Returns Boolean after checking if feature is on comparison list.
+         * @returns {String} Title for the comparelist.
+         */
         featureIsOnCompareList () {
             return this.isFeatureSelected(this.gfiFeature);
         },
