@@ -3,6 +3,8 @@ import TileWMS from "ol/source/TileWMS.js";
 import TileGrid from "ol/tilegrid/TileGrid.js";
 import ImageWMS from "ol/source/ImageWMS.js";
 import {Image, Tile} from "ol/layer.js";
+import WMSCapabilities from "ol/format/WMSCapabilities";
+import store from "../../../../src/app-store";
 
 const WMSLayer = Layer.extend({
     defaults: function () {
@@ -46,6 +48,34 @@ const WMSLayer = Layer.extend({
     createLayerSource: function () {
         let params,
             source;
+
+        if (this.get("timeSeries")) {
+            const url = this.get("capabilitiesUrl");
+
+            this.fetchWMSCapabilities(url)
+                .then((result) => {
+                    result.Capability.Layer.Layer.forEach(layer => {
+                        layer.Dimension.forEach(dimension => {
+                            if (dimension.name === "time") {
+                                // Start timeslider tool here:
+                                store.dispatch("Tools/addTool", "timeslider"); // Doesnt work now
+                            }
+                        });
+                    });
+                })
+                .catch((error) => {
+                    this.removeLayer();
+                    // remove layer from project completely
+                    Radio.trigger("Parser", "removeItem", this.get("id"));
+                    // refresh layer tree
+                    Radio.trigger("Util", "refreshTree");
+                    if (error === "Fetch error") {
+                        // error message has already been printed earlier
+                        return;
+                    }
+                    this.showErrorMessage(error, this.get("name"));
+                });
+        }
 
         params = {
             CACHEID: this.get("cacheId"),
@@ -326,8 +356,34 @@ const WMSLayer = Layer.extend({
      */
     getGfiAsNewWindow: function () {
         return this.get("gfiAsNewWindow");
-    }
+    },
 
+    /**
+     * Fetch the WMS-GetCapabilities document and parse it
+     * @param {string} url url to fetch
+     * @returns {promise} promise resolves to parsed WMS-GetCapabilities object
+     */
+    fetchWMSCapabilities: function (url) {
+        return fetch(url)
+            .then((result) => {
+                if (!result.ok) {
+                    throw Error(result.statusText);
+                }
+                return result.text();
+            })
+            .then(result => {
+                const parser = new WMSCapabilities();
+
+                // Parsing capabilities doesnt work now. WMSCapabilities parser removes necessary field "Extent"
+                return parser.read(result);
+            })
+            .catch(function (error) {
+                const errorMessage = " WMS-Capabilities fetch Error: " + error;
+
+                this.showErrorMessage(errorMessage, this.get("name"));
+                return Promise.reject("Fetch error");
+            }.bind(this));
+    }
 });
 
 export default WMSLayer;
