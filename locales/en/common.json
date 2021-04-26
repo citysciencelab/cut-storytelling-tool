@@ -377,7 +377,9 @@
                 },
                 "feedback": {
                     "added": "The feature was added to the comparison list",
+                    "addedWithName": "{{currentFeatureName}} was added to the comparison list",
                     "notAdded": "The feature could not be added to the comparison list",
+                    "notAddedWithName": "{{currentFeatureName}} could not be added to the comparison list",
                     "limitReached": "The maximum number of objects in the comparison list has been reached.",
                     "removeObjects": "Please remove at least one object before proceeding.",
                     "goToComparisonlist": "To the comparison list"

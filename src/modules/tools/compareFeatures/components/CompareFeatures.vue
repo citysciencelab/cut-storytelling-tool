@@ -73,14 +73,24 @@ export default {
             @modalHid="setShowAlert(false)"
         >
             <div v-if="!listFull">
-                <h4>{{ $t("common:modules.tools.compareFeatures.feedback.added") }}</h4>
+                <h4 v-if="currentFeatureName">
+                    {{ $t("common:modules.tools.compareFeatures.feedback.addedWithName", {currentFeatureName}) }}
+                </h4>
+                <h4 v-else>
+                    {{ $t("common:modules.tools.compareFeatures.feedback.added") }}
+                </h4>
                 <hr>
             </div>
             <div
                 v-else
                 id="tool-compareFeatures-buttons-feedback-listFull"
             >
-                <h4>{{ $t("common:modules.tools.compareFeatures.feedback.notAdded") }}</h4>
+                <h4 v-if="currentFeatureName">
+                    {{ $t("common:modules.tools.compareFeatures.feedback.notAddedWithName", {currentFeatureName}) }}
+                </h4>
+                <h4 v-else>
+                    {{ $t("common:modules.tools.compareFeatures.feedback.notAdded") }}
+                </h4>
                 <hr>
                 <p>{{ $t("common:modules.tools.compareFeatures.feedback.limitReached") }}</p>
                 <p>{{ $t("common:modules.tools.compareFeatures.feedback.removeObjects") }}</p>

@@ -366,7 +366,9 @@
                 },
                 "feedback": {
                     "added": "La funzione è stata aggiunta all'elenco di confronto",
+                    "addedWithName": "{{currentFeatureName}} è stata aggiunta all'elenco di confronto",
                     "notAdded": "Non è stato possibile aggiungere la funzione all'elenco di confronto",
+                    "notAddedWithName": "Non è stato possibile aggiungere {{currentFeatureName}} all'elenco di confronto",
                     "limitReached": "Raggiunto il numero massimo di oggetti nella lista di confronto.",
                     "removeObjects": "Rimuovere almeno un oggetto prima di procedere.",
                     "goToComparisonlist": "Vai alla lista di confronto"

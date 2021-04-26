@@ -37,6 +37,7 @@ const state = {
     id: "compareFeatures",
     layerFeatures: {},
     selectedLayer: "",
+    currentFeatureName: "",
     showAlert: false,
     showMoreInfoButton: false,
     listFull: false,

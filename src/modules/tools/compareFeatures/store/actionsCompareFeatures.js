@@ -11,6 +11,7 @@ export default {
         commit("setListFull", false);
         if (!getters.isFeatureSelected(gfiFeature) && state.layerFeatures[layerId] === undefined || state.layerFeatures[layerId].length < state.numberOfFeaturesToShow) {
             commit("addFeatureToLayer", gfiFeature);
+            commit("setCurrentFeatureName", gfiFeature.properties.Name);
             for (const feature of state.layerFeatures[layerId]) {
                 dispatch("prepareFeatureListToShow", feature);
             }
