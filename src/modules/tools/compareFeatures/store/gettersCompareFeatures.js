@@ -25,14 +25,14 @@ const getters = {
      * @returns {void}
      */
     selectableLayers: state => {
-        const layerArray = [];
+        const layers = [];
 
-        Object.keys(state.layerFeatures).forEach(function (key) {
+        Object.keys(state.layerFeatures).forEach((key) => {
             if (state.layerFeatures[key][0]) {
-                layerArray.push(state.layerFeatures[key][0]);
+                layers.push(state.layerFeatures[key][0]);
             }
         });
-        return layerArray;
+        return layers;
     },
     /**
      * Getter for only showing moreInfo & PDF button when in comparison list.

@@ -108,7 +108,7 @@ export default {
                     <button
                         class="btn btn-primary btn-infos"
                         :title="$t('common:modules.tools.compareFeatures.feedback.goToComparisonlist')"
-                        @click="switchToList"
+                        @click="setActive(true)"
                     >
                         {{ $t("common:modules.tools.compareFeatures.feedback.goToComparisonlist") }}
                     </button>

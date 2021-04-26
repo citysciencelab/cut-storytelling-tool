@@ -56,8 +56,7 @@ const mutations = {
      */
     selectLayerWithFeatures: (state, selectedLayer) => {
         state.showMoreInfo = false;
-        state.layerWithFeaturesToShow = [];
-        state.layerWithFeaturesToShow.push(state.layerFeatures[selectedLayer]);
+        state.layerWithFeaturesToShow = [state.layerFeatures[selectedLayer]];
         state.selectedLayer = selectedLayer;
         state.showMoreInfoButton = Object.keys(state.layerFeatures[selectedLayer][0].properties).length > state.numberOfAttributesToShow;
     },
@@ -81,13 +80,11 @@ const mutations = {
         state.showMoreInfo = !state.showMoreInfo;
     },
     /**
-     * Opens the Compare Features Tool from within the Feedback Modal.
+     * Sets the compare List.
      * @param {Object} state context object.
+     * @param {Object} payload object with prepared list and selected layerId.
      * @returns {void}
      */
-    switchToList: state => {
-        state.active = true;
-    },
     setList: (state, payload) => {
         const layerId = payload.a,
             list = payload.b;
