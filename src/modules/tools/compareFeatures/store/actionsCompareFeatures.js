@@ -40,6 +40,7 @@ export default {
         const list = [],
             layerId = parseInt(gfiAttributes.layerId.split("_")[0], 10),
             featureList = state.layerFeatures[layerId];
+        let payload = {};
 
         Object.keys(gfiAttributes.properties).forEach(function (key) {
             const row = {"col-1": key};
@@ -49,9 +50,12 @@ export default {
             });
             list.push(row);
         });
+        payload = {
+            a: layerId,
+            b: list
+        };
         commit("setHasFeatures", true);
-        state.preparedList[layerId] = list;
-        return list;
+        commit("setList", payload);
     },
     /**
      * Prepares the Pdf file from currently selected layer and its features on the comparison list.

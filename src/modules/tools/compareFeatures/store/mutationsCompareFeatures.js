@@ -87,6 +87,12 @@ const mutations = {
      */
     switchToList: state => {
         state.active = true;
+    },
+    setList: (state, payload) => {
+        const layerId = payload.a,
+            list = payload.b;
+
+        state.preparedList[layerId] = list;
     }
 };
 
