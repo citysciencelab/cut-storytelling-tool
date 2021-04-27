@@ -35,7 +35,6 @@ export default {
 
             state.showMoreInfoButton = length > state.numberOfAttributesToShow;
         }
-        console.log(this.preparedList);
     },
     methods: {
         ...mapActions("Tools/CompareFeatures", Object.keys(actions)),
