@@ -25,10 +25,10 @@ export default {
      * @param {Object} gfiFeature - feature
      * @returns {void}
      */
-    removeFeature: function ({state, dispatch}, gfiFeature) {
+    removeFeature: function ({state, commit}, gfiFeature) {
         const features = state.hasMultipleLayers ? state.preparedList[gfiFeature.layerId] : state.preparedList[Object.keys(state.preparedList)[0]];
 
-        dispatch("removeFeatureFromPreparedList", {features: features, featureId: gfiFeature.featureId, selectedLayer: gfiFeature.layerId});
+        commit("removeFeatureFromPreparedList", {features: features, featureId: gfiFeature.featureId, selectedLayer: gfiFeature.layerId});
     },
     /**
      * prepares the list for rendering using the 'gfiAttributes'
@@ -105,60 +105,6 @@ export default {
             return tableBody.slice(0, rowsToShow);
         }
         return tableBody;
-    },
-    /**
-     * Removes feature from comparison list by clicking its X icon and also
-     * removes it from the layerFeatures array so the star icon will be deselected.
-     * @param {Object} payload - current layer and its objects
-     * @returns {void}
-     */
-    removeFeatureFromPreparedList: function ({state, commit}, payload) {
-        const {featureId} = payload,
-            {features} = payload,
-            {selectedLayer} = payload;
-
-        if (!state.hasMultipleLayers) {
-            for (const feature of state.layerFeatures[Object.keys(state.layerFeatures)[0]]) {
-                if (feature.featureId === featureId) {
-                    const index = state.layerFeatures[feature.layerId].indexOf(feature);
-
-                    state.layerFeatures[feature.layerId].splice(index, 1);
-                    if (state.layerFeatures[feature.layerId].length === 0) {
-                        state.preparedList = {};
-                        delete state.layerFeatures[feature.layerId];
-                    }
-                    else {
-                        state.preparedList = {features};
-                    }
-                }
-            }
-        }
-        else {
-            for (const feature of state.layerFeatures[selectedLayer]) {
-                if (feature.featureId === featureId) {
-                    const index = state.layerFeatures[feature.layerId].indexOf(feature);
-
-                    state.layerFeatures[selectedLayer].splice(index, 1);
-                }
-                if (state.layerFeatures[selectedLayer].length === 0) {
-                    delete state.preparedList[selectedLayer];
-                    delete state.layerFeatures[selectedLayer];
-                    commit("resetLayerSelection");
-                }
-            }
-        }
-        /**
-             * if multiple features from one layer are on the comparison list, this function deletes
-             * the chosen feature and is responsible for rerendering the comparison list.
-             */
-        for (const feature of features) {
-            if (Object.keys(feature).includes(featureId)) {
-                delete feature[featureId];
-            }
-        }
-        if (Object.keys(state.layerFeatures).length === 0) {
-            commit("setHasFeatures", false);
-        }
     }
 };
 

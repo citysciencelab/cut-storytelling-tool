@@ -1,0 +1,227 @@
+<script>
+import {mapGetters, mapActions, mapMutations} from "vuex";
+import getters from "../store/gettersCompareFeatures";
+import actions from "../store/actionsCompareFeatures";
+import mutations from "../store/mutationsCompareFeatures";
+import beautifyKey from "../../../../utils/beautifyKey.js";
+import {isWebLink} from "../../../../utils/urlHelper.js";
+import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../utils/isPhoneNumber.js";
+import {isEmailAddress} from "../../../../utils/isEmailAddress.js";
+
+export default {
+    name: "ComparisonList",
+    props: {
+        listOfFeatures: {
+            type: Array,
+            default: () => []
+        },
+        maxAttributesToShow: {
+            type: Number,
+            default: 12
+        },
+        enableMoreInfo: {
+            type: Boolean,
+            default: false
+        },
+        titleRemoveButton: {
+            type: String,
+            default: ""
+        }
+    },
+    computed: {
+        ...mapGetters("Tools/CompareFeatures", Object.keys(getters)),
+        // TODO: bei :is prop vom component einbinden
+        htmlElement () {
+            return this.options === null ? "input" : "select";
+        }
+    },
+    methods: {
+        ...mapActions("Tools/CompareFeatures", Object.keys(actions)),
+        ...mapMutations("Tools/CompareFeatures", Object.keys(mutations)),
+        beautifyKey,
+        isWebLink,
+        isPhoneNumber,
+        getPhoneNumberAsWebLink,
+        isEmailAddress
+    }
+};
+</script>
+
+<template>
+    <Component
+        :is="'table'"
+    >
+        <table>
+            <tbody>
+                <tr
+                    v-for="(column, index) in listOfFeatures"
+                    :key="'tool-compareFeatures-' + index"
+                >
+                    <template
+                        v-if="index < maxAttributesToShow && !enableMoreInfo"
+                    >
+                        <td
+                            v-for="(value, key) in column"
+                            :key="'tool-compareFeatures-td' + key"
+                        >
+                            <button
+                                v-if="index === 0 && key !== 'col-1'"
+                                class="close"
+                                :title="titleRemoveButton"
+                                @click="removeFeatureFromPreparedList({features: listOfFeatures, featureId: key})"
+                            >
+                                <span
+                                    class="glyphicon glyphicon-remove remove-feature"
+                                />
+                            </button>
+                            <p v-if="isWebLink(value)">
+                                <a
+                                    :href="value"
+                                    target="_blank"
+                                >Link</a>
+                            </p>
+                            <p v-else-if="isPhoneNumber(value)">
+                                <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
+                            </p>
+                            <p v-else-if="isEmailAddress(value)">
+                                <a :href="`mailto:${value}`">{{ value }}</a>
+                            </p>
+                            <p
+                                v-else-if="typeof value === 'string' && value.includes('<br>')"
+                            ></p>
+                            <p
+                                v-else-if="key === 'col-1'"
+                                class="bold"
+                            >
+                                {{ beautifyKey($t(value)) }}
+                            </p>
+                            <p v-else>
+                                {{ value }}
+                            </p>
+                        </td>
+                    </template>
+                    <template v-if="enableMoreInfo">
+                        <td
+                            v-for="(value, key) in column"
+                            :key="'tool-compareFeatures-td' + key"
+                        >
+                            <button
+                                class="close"
+                                :title="titleRemoveButton"
+                                @click="removeFeatureFromPreparedList({features: listOfFeatures, featureId: key})"
+                            >
+                                <span
+                                    v-if="index === 0 && key !== 'col-1'"
+                                    class="glyphicon glyphicon-remove remove-feature"
+                                />
+                            </button>
+                            <p v-if="isWebLink(value)">
+                                <a
+                                    :href="value"
+                                    target="_blank"
+                                >Link</a>
+                            </p>
+                            <p v-else-if="isPhoneNumber(value)">
+                                <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
+                            </p>
+                            <p v-else-if="isEmailAddress(value)">
+                                <a :href="`mailto:${value}`">{{ value }}</a>
+                            </p>
+                            <p
+                                v-else-if="typeof value === 'string' && value.includes('<br>')"
+                            ></p>
+                            <p
+                                v-else-if="key === 'col-1'"
+                                class="bold"
+                            >
+                                {{ beautifyKey($t(value)) }}
+                            </p>
+                            <p v-else>
+                                {{ value }}
+                            </p>
+                        </td>
+                    </template>
+                </tr>
+            </tbody>
+        </table>
+    </Component>
+</template>
+
+<style lang="less" scoped>
+    @import "~variables";
+    @background_color_1: rgb(0, 92, 169);
+    @background_color_2: #eee;
+    @background_color_3: #ddd;
+    @background_color_4: #ccc;
+    @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
+.remove-feature {
+        position: relative !important;
+        right: 0px !important;
+        top: 0px !important;
+    }
+    td {
+        padding: 0.5rem;
+        text-align: left;
+    }
+    // scss schachteln
+    table {
+        font-family: @font_family_default;
+        border-collapse: collapse;
+        width: 100%;
+    }
+    table th {
+        border-top: 1px solid #ccc;
+        padding: 8px;
+    }
+    table tr {
+        &:first-child {
+            border-top: 1px solid #ccc;
+        }
+        &:nth-child(odd) {
+            background-color: @background_color_2;
+        }
+        &:nth-child(even) {
+            background-color: @background_color_3;
+        }
+        &:hover {
+            background-color: @background_color_4;
+            td {
+                border-left: 1px solid #bbb;
+            }
+        }
+    }
+    table td {
+        padding: 8px;
+        border-left: 1px solid #ccc;
+    }
+    table tr:hover {
+        background-color: #ddd;
+    }
+    table th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #4CAF50;
+        color: white;
+    }
+    label {
+        margin-top: 7px;
+    }
+    .close {
+        float: right;
+    }
+    #tool-compareFeatures-no-features {
+        width: 50vh;
+        padding: 5px;
+        padding-top: 0;
+        p {
+            line-height: 22px;
+            &:first-child {
+                font-family: @font_family_1;
+                font-size: 14px;
+            }
+        }
+    }
+
+
+</style>

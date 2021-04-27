@@ -30,22 +30,62 @@ const mutations = {
         }
     },
     /**
-     * Removes feature from the comparison list.
+     * Removes feature from comparison list by clicking its X icon and also
+     * removes it from the layerFeatures array so the star icon will be deselected.
      * @param {Object} state context object.
-     * @param {Object} gfiFeature feature.
+     * @param {Object} payload - current layer and its objects
      * @returns {void}
      */
-    removeFeatureFromLayer: (state, gfiFeature) => {
-        const {layerId} = gfiFeature,
-            index = state.layerFeatures[layerId].indexOf(gfiFeature);
+    removeFeatureFromPreparedList: function (state, payload) {
+        const {featureId} = payload,
+            {features} = payload,
+            {selectedLayer} = payload;
 
-        state.layerFeatures[layerId].splice(index, 1);
-        if (state.layerFeatures[layerId].length === 0) {
-            delete state.layerFeatures[layerId];
+        if (!state.hasMultipleLayers) {
+            for (const feature of state.layerFeatures[Object.keys(state.layerFeatures)[0]]) {
+                if (feature.featureId === featureId) {
+                    const index = state.layerFeatures[feature.layerId].indexOf(feature);
+
+                    state.layerFeatures[feature.layerId].splice(index, 1);
+
+                    if (state.layerFeatures[feature.layerId].length === 0) {
+                        state.preparedList = {};
+                        delete state.layerFeatures[feature.layerId];
+                    }
+                    else {
+                        // TODO: Warum?
+                        state.preparedList = {[feature.layerId]: [...features]};
+                    }
+                }
+            }
         }
+        else {
+            for (const feature of state.layerFeatures[selectedLayer]) {
+                if (feature.featureId === featureId) {
+                    const index = state.layerFeatures[feature.layerId].indexOf(feature);
 
-        if (Object.keys(state.layerFeatures).length <= 1) {
-            state.hasMultipleLayers = false;
+                    state.layerFeatures[selectedLayer].splice(index, 1);
+                }
+                if (state.layerFeatures[selectedLayer].length === 0) {
+                    delete state.preparedList[selectedLayer];
+                    delete state.layerFeatures[selectedLayer];
+                    if (Object.keys(state.layerFeatures).length <= 1) {
+                        state.hasMultipleLayers = false;
+                    }
+                }
+            }
+        }
+        /**
+         * if multiple features from one layer are on the comparison list, this function deletes
+         * the chosen feature and is responsible for rerendering the comparison list.
+         */
+        for (const feature of features) {
+            if (Object.keys(feature).includes(featureId)) {
+                delete feature[featureId];
+            }
+        }
+        if (Object.keys(state.layerFeatures).length === 0) {
+            state.hasFeatures = false;
         }
     },
     /**

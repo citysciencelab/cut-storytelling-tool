@@ -1,6 +1,7 @@
 <script>
 import Modal from "../../../../share-components/modals/Modal.vue";
 import {mapGetters, mapActions, mapMutations} from "vuex";
+import ComparisonList from "./ComparisonList.vue";
 import getters from "../store/gettersCompareFeatures";
 import state from "../store/stateCompareFeatures";
 import actions from "../store/actionsCompareFeatures";
@@ -13,7 +14,8 @@ import {isEmailAddress} from "../../../../utils/isEmailAddress.js";
 export default {
     name: "CompareFeatures",
     components: {
-        Modal
+        Modal,
+        ComparisonList
     },
     data: function () {
         return {
@@ -33,6 +35,7 @@ export default {
 
             state.showMoreInfoButton = length > state.numberOfAttributesToShow;
         }
+        console.log(this.preparedList);
     },
     methods: {
         ...mapActions("Tools/CompareFeatures", Object.keys(actions)),
@@ -166,99 +169,12 @@ export default {
                 v-if="hasFeatures && !hasMultipleLayers"
                 id="tool-compareFeatures"
             >
-                <table>
-                    <tbody>
-                        <tr
-                            v-for="(column, index) in preparedList[Object.keys(preparedList)[0]]"
-                            :key="'tool-compareFeatures-' + index"
-                        >
-                            <template
-                                v-if="index < numberOfAttributesToShow && !showMoreInfo"
-                            >
-                                <td
-                                    v-for="(value, key) in column"
-                                    :key="'tool-compareFeatures-td' + key"
-                                >
-                                    <button
-                                        v-if="index === 0 && key !== 'col-1'"
-                                        class="close"
-                                        :title="$t('common:modules.tools.compareFeatures.removeFromList')"
-                                        @click="removeFeatureFromPreparedList({features: preparedList[Object.keys(preparedList)[0]], featureId: key})"
-                                    >
-                                        <span
-                                            class="glyphicon glyphicon-remove remove-feature"
-                                        />
-                                    </button>
-                                    <p v-if="isWebLink(value)">
-                                        <a
-                                            :href="value"
-                                            target="_blank"
-                                        >Link</a>
-                                    </p>
-                                    <p v-else-if="isPhoneNumber(value)">
-                                        <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
-                                    </p>
-                                    <p v-else-if="isEmailAddress(value)">
-                                        <a :href="`mailto:${value}`">{{ value }}</a>
-                                    </p>
-                                    <p
-                                        v-else-if="typeof value === 'string' && value.includes('<br>')"
-                                    ></p>
-                                    <p
-                                        v-else-if="key === 'col-1'"
-                                        class="bold"
-                                    >
-                                        {{ beautifyKey($t(value)) }}
-                                    </p>
-                                    <p v-else>
-                                        {{ value }}
-                                    </p>
-                                </td>
-                            </template>
-                            <template v-if="showMoreInfo">
-                                <td
-                                    v-for="(value, key) in column"
-                                    :key="'tool-compareFeatures-td' + key"
-                                >
-                                    <button
-                                        class="close"
-                                        :title="$t('common:modules.tools.compareFeatures.removeFromList')"
-                                        @click="removeFeatureFromPreparedList({features: preparedList[Object.keys(preparedList)[0]], featureId: key})"
-                                    >
-                                        <span
-                                            v-if="index === 0 && key !== 'col-1'"
-                                            class="glyphicon glyphicon-remove remove-feature"
-                                        />
-                                    </button>
-                                    <p v-if="isWebLink(value)">
-                                        <a
-                                            :href="value"
-                                            target="_blank"
-                                        >Link</a>
-                                    </p>
-                                    <p v-else-if="isPhoneNumber(value)">
-                                        <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
-                                    </p>
-                                    <p v-else-if="isEmailAddress(value)">
-                                        <a :href="`mailto:${value}`">{{ value }}</a>
-                                    </p>
-                                    <p
-                                        v-else-if="typeof value === 'string' && value.includes('<br>')"
-                                    ></p>
-                                    <p
-                                        v-else-if="key === 'col-1'"
-                                        class="bold"
-                                    >
-                                        {{ beautifyKey($t(value)) }}
-                                    </p>
-                                    <p v-else>
-                                        {{ value }}
-                                    </p>
-                                </td>
-                            </template>
-                        </tr>
-                    </tbody>
-                </table>
+                <ComparisonList
+                    :listOfFeatures="preparedList[Object.keys(preparedList)[0]]"
+                    :maxAttributesToShow="numberOfAttributesToShow"
+                    :enableMoreInfo="showMoreInfo"
+                    :titleRemoveButton="$t('common:modules.tools.compareFeatures.removeFromList')"
+                />
             </div>
             <div
                 v-if="active && hasMultipleLayers"
