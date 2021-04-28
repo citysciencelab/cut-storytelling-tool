@@ -194,7 +194,7 @@ export default {
                         </td>
                     </template>
                     <template
-                        v-if="showMoreInfo"
+                        v-if="enableMoreInfo"
                     >
                         <td
                             v-for="(value, key) in column"
