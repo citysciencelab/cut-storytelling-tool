@@ -164,117 +164,23 @@ export default {
                 <p v-html="$t('common:modules.tools.compareFeatures.noFeatures.info', {iconEmptyStar, iconYellowStar, interpolation: {escapeValue: false}})">
                 </p>
             </div>
-            <div
+            <ComparisonList
                 v-if="hasFeatures && !hasMultipleLayers"
-                id="tool-compareFeatures"
-            >
-                <ComparisonList
-                    :listOfFeatures="preparedList[Object.keys(preparedList)[0]]"
-                    :maxAttributesToShow="numberOfAttributesToShow"
-                    :enableMoreInfo="showMoreInfo"
-                    :titleRemoveButton="$t('common:modules.tools.compareFeatures.removeFromList')"
-                />
-            </div>
-            <div
+                id="tool-compareFeatures-comparisonListSingleLayer"
+                :listOfFeatures="preparedList[Object.keys(preparedList)[0]]"
+                :maxAttributesToShow="numberOfAttributesToShow"
+                :enableMoreInfo="showMoreInfo"
+                :titleRemoveButton="$t('common:modules.tools.compareFeatures.removeFromList')"
+            />
+            <ComparisonList
                 v-if="active && hasMultipleLayers"
-                id="tool-compareFeatures"
-            >
-                <table>
-                    <tbody>
-                        <tr
-                            v-for="(column, index) in preparedList[selected]"
-                            :key="'tool-compareFeatures-' + index"
-                        >
-                            <template
-                                v-if="index < numberOfAttributesToShow && !showMoreInfo"
-                            >
-                                <td
-                                    v-for="(value, key) in column"
-                                    :key="'tool-compareFeatures-td' + key"
-                                >
-                                    <button
-                                        class="close"
-                                        :title="$t('common:modules.tools.compareFeatures.removeFromList')"
-                                        @click="removeFeatureFromPreparedList({features: preparedList[selected], featureId: key, selectedLayer: selected})"
-                                    >
-                                        <span
-                                            v-if="index === 0 && key !== 'col-1'"
-                                            class="glyphicon glyphicon-remove remove-feature"
-                                        />
-                                    </button>
-                                    <p v-if="isWebLink(value)">
-                                        <a
-                                            :href="value"
-                                            target="_blank"
-                                        >Link</a>
-                                    </p>
-                                    <p v-else-if="isPhoneNumber(value)">
-                                        <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
-                                    </p>
-                                    <p v-else-if="isEmailAddress(value)">
-                                        <a :href="`mailto:${value}`">{{ value }}</a>
-                                    </p>
-                                    <p
-                                        v-else-if="typeof value === 'string' && value.includes('<br>')"
-                                    ></p>
-                                    <p
-                                        v-else-if="key === 'col-1'"
-                                        class="bold"
-                                    >
-                                        {{ beautifyKey($t(value)) }}
-                                    </p>
-                                    <p v-else>
-                                        {{ value }}
-                                    </p>
-                                </td>
-                            </template>
-                            <template
-                                v-if="showMoreInfo"
-                            >
-                                <td
-                                    v-for="(value, key) in column"
-                                    :key="'tool-compareFeatures-td' + key"
-                                >
-                                    <button
-                                        class="close"
-                                        :title="$t('common:modules.tools.compareFeatures.removeFromList')"
-                                        @click="removeFeatureFromPreparedList({features: preparedList[selected], featureId: key, selectedLayer: selected})"
-                                    >
-                                        <span
-                                            v-if="index === 0 && key !== 'col-1'"
-                                            class="glyphicon glyphicon-remove remove-feature"
-                                        />
-                                    </button>
-                                    <p v-if="isWebLink(value)">
-                                        <a
-                                            :href="value"
-                                            target="_blank"
-                                        >Link</a>
-                                    </p>
-                                    <p v-else-if="isPhoneNumber(value)">
-                                        <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
-                                    </p>
-                                    <p v-else-if="isEmailAddress(value)">
-                                        <a :href="`mailto:${value}`">{{ value }}</a>
-                                    </p>
-                                    <p
-                                        v-else-if="typeof value === 'string' && value.includes('<br>')"
-                                    ></p>
-                                    <p
-                                        v-else-if="key === 'col-1'"
-                                        class="bold"
-                                    >
-                                        {{ beautifyKey($t(value)) }}
-                                    </p>
-                                    <p v-else>
-                                        {{ value }}
-                                    </p>
-                                </td>
-                            </template>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                id="tool-compareFeatures-comparisonListMultipleLayers"
+                :listOfFeatures="preparedList[selectedLayer]"
+                :selectedLayer="selectedLayer"
+                :maxAttributesToShow="numberOfAttributesToShow"
+                :enableMoreInfo="showMoreInfo"
+                :titleRemoveButton="$t('common:modules.tools.compareFeatures.removeFromList')"
+            />
             <div
                 v-if="showButtons"
                 id="tool-compareFeatures-buttons"
