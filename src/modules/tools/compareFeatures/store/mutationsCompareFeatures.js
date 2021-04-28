@@ -69,6 +69,7 @@ const mutations = {
                 if (state.layerFeatures[selectedLayer].length === 0) {
                     delete state.preparedList[selectedLayer];
                     delete state.layerFeatures[selectedLayer];
+                    state.selectedLayer = Object.keys(state.layerFeatures)[0];
                     if (Object.keys(state.layerFeatures).length <= 1) {
                         state.hasMultipleLayers = false;
                     }

@@ -17,13 +17,16 @@ export default {
         Modal,
         ComparisonList
     },
-    data: function () {
-        return {
-            selected: ""
-        };
-    },
     computed: {
-        ...mapGetters("Tools/CompareFeatures", Object.keys(getters))
+        ...mapGetters("Tools/CompareFeatures", Object.keys(getters)),
+        selected: {
+            get () {
+                return state.selectedLayer;
+            },
+            set (newValue) {
+                this.selectLayerWithFeatures(newValue);
+            }
+        }
     },
     created () {
         this.$on("close", this.close);
@@ -135,14 +138,7 @@ export default {
                         id="tool-compareFeatures-select"
                         v-model="selected"
                         class="form-control"
-                        @change="selectLayerWithFeatures(selected)"
                     >
-                        <option
-                            disabled
-                            value=""
-                        >
-                            {{ $t("common:modules.tools.compareFeatures.topicsSelection") }}
-                        </option>
                         <option
                             v-for="layer in selectableLayers"
                             :key="'tool-compareFeatures-option' + layer.layerId"
