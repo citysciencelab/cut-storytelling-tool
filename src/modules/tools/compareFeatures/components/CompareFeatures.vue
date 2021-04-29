@@ -172,6 +172,7 @@ export default {
                 :enableMoreInfo="showMoreInfo"
                 :titleRemoveButton="$t('common:modules.tools.compareFeatures.removeFromList')"
             />
+            <hr>
             <div
                 v-if="showButtons"
                 id="tool-compareFeatures-buttons"
