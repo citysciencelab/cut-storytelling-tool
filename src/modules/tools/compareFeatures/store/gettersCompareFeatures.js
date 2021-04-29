@@ -40,13 +40,7 @@ const getters = {
      * @returns {void}
      */
     showButtons: state => {
-        if (state.hasFeatures && !state.hasMultipleLayers) {
-            return true;
-        }
-        else if (state.hasMultipleLayers && state.selectedLayer) {
-            return true;
-        }
-        return false;
+        return (state.hasFeatures && !state.hasMultipleFeatures) || (state.hasMultipleFeatures && state.selectedLayer);
     }
 };
 
