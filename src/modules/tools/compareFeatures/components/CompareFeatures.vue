@@ -1,6 +1,7 @@
 <script>
 import Modal from "../../../../share-components/modals/Modal.vue";
 import {mapGetters, mapActions, mapMutations} from "vuex";
+import * as constants from "../store/constantsCompareFeatures";
 import ComparisonList from "./ComparisonList.vue";
 import getters from "../store/gettersCompareFeatures";
 import state from "../store/stateCompareFeatures";
@@ -17,6 +18,12 @@ export default {
     components: {
         Modal,
         ComparisonList
+    },
+    data () {
+        return {
+            iconEmptyStar: constants.iconEmptyStar,
+            iconYellowStar: constants.iconYellowStar
+        };
     },
     computed: {
         ...mapGetters("Tools/CompareFeatures", Object.keys(getters)),

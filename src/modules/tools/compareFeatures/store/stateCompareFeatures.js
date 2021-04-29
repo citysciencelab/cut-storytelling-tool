@@ -45,9 +45,7 @@ const state = {
     layerWithFeaturesToShow: [],
     hasMultipleLayers: false,
     showMoreInfo: false,
-    preparedList: {},
-    iconEmptyStar: "<span class=\"glyphicon glyphicon-star-empty\" style=\"font-size:22px;\"></span>",
-    iconYellowStar: "<span class=\"glyphicon glyphicon-star\" style=\"color:#fec44f; font-size:22px;\"></span>"
+    preparedList: {}
 };
 
 export default state;
