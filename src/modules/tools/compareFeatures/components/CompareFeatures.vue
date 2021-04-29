@@ -6,6 +6,7 @@ import getters from "../store/gettersCompareFeatures";
 import state from "../store/stateCompareFeatures";
 import actions from "../store/actionsCompareFeatures";
 import mutations from "../store/mutationsCompareFeatures";
+import preparePrint from "../utils/preparePrint.js";
 import beautifyKey from "../../../../utils/beautifyKey.js";
 import {isWebLink} from "../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../utils/isPhoneNumber.js";
@@ -37,6 +38,7 @@ export default {
     methods: {
         ...mapActions("Tools/CompareFeatures", Object.keys(actions)),
         ...mapMutations("Tools/CompareFeatures", Object.keys(mutations)),
+        preparePrint,
         beautifyKey,
         isWebLink,
         isPhoneNumber,
