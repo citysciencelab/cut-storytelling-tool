@@ -135,6 +135,26 @@ const mutations = {
             list = payload.b;
 
         state.preparedList[layerId] = list;
+    },
+    /**
+     * Enables the more Info Button if there are more Attributes to show.
+     * @param {Object} state context object.
+     * @param {Object} payload object with prepared list and selected layerId.
+     * @returns {void}
+     */
+    enableButton: state => {
+        let firstObject = {},
+            length = "";
+
+        if (!state.hasMultipleLayers && Object.values(state.layerFeatures)[0] !== undefined) {
+            firstObject = Object.values(state.layerFeatures)[0][0];
+            length = Object.keys(firstObject.properties).length;
+        }
+        else if (state.hasMultipleLayers && state.layerFeatures[state.selectedLayer] !== undefined) {
+            firstObject = state.layerFeatures[state.selectedLayer][0];
+            length = Object.keys(firstObject.properties).length;
+        }
+        state.showMoreInfoButton = length > state.numberOfAttributesToShow;
     }
 };
 

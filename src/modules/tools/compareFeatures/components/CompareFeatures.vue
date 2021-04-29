@@ -32,12 +32,7 @@ export default {
         this.$on("close", this.close);
     },
     updated () {
-        if (!state.hasMultipleLayers && Object.values(state.layerFeatures)[0] !== undefined) {
-            const firstObject = Object.values(state.layerFeatures)[0][0],
-                length = Object.keys(firstObject.properties).length;
-
-            state.showMoreInfoButton = length > state.numberOfAttributesToShow;
-        }
+        this.enableButton();
     },
     methods: {
         ...mapActions("Tools/CompareFeatures", Object.keys(actions)),
@@ -234,13 +229,6 @@ export default {
         margin-right: 20px;
         white-space: nowrap;
     }
-    #tool-compareFeatures {
-        z-index: -1;
-        max-height: 80vh;
-        display: inline-flex;
-        overflow-y: auto;
-        width: 100%;
-    }
     .btn {
         background-color: @background_color_1;
         margin-right: 20px;
@@ -255,64 +243,8 @@ export default {
         margin: 10px;
         padding-right: 10px;
     }
-    .remove-feature {
-        position: relative !important;
-        right: 0px !important;
-        top: 0px !important;
-    }
-    td {
-        padding: 0.5rem;
-        text-align: left;
-    }
-    // scss schachteln
-    table {
-        font-family: @font_family_default;
-        border-collapse: collapse;
-        width: 100%;
-    }
-    table th {
-        border-top: 1px solid #ccc;
-        padding: 8px;
-    }
-    table tr {
-        &:first-child {
-            border-top: 1px solid #ccc;
-        }
-        &:nth-child(odd) {
-            background-color: @background_color_2;
-        }
-        &:nth-child(even) {
-            background-color: @background_color_3;
-        }
-        &:hover {
-            background-color: @background_color_4;
-            td {
-                border-left: 1px solid #bbb;
-            }
-        }
-    }
-    table td {
-        padding: 8px;
-        border-left: 1px solid #ccc;
-    }
-    table tr:hover {
-        background-color: #ddd;
-    }
-    table th {
-        padding-top: 12px;
-        padding-bottom: 12px;
-        text-align: left;
-        background-color: #4CAF50;
-        color: white;
-    }
-    label {
-        margin-top: 7px;
-    }
-    .close {
-        float: right;
-    }
     #tool-compareFeatures-no-features {
-        width: 50vh;
+        max-width: 60vh;
         padding: 5px;
         padding-top: 0;
         p {
@@ -331,5 +263,10 @@ export default {
     }
     #modal-1-container #modal-1-inner-wrapper #modal-1-content-container {
         padding: 0;
+        overflow-y: auto;
+        max-height: 80vh;
+    }
+    #modal-1-inner-wrapper .glyphicon.glyphicon-remove {
+        right: 18px !important;
     }
 </style>

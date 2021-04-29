@@ -203,7 +203,7 @@ export default {
                             <button
                                 class="close"
                                 :title="$t('common:modules.tools.compareFeatures.removeFromList')"
-                                @click="removeFeatureFromPreparedList({features: preparedList[selected], featureId: key, selectedLayer: selected})"
+                                @click="removeFeatureFromPreparedList({features: preparedList[selectedLayer], featureId: key, selectedLayer: selectedLayer})"
                             >
                                 <span
                                     v-if="index === 0 && key !== 'col-1'"
@@ -249,55 +249,51 @@ export default {
     @background_color_3: #ddd;
     @background_color_4: #ccc;
     @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
-.remove-feature {
-        position: relative !important;
-        right: 0px !important;
+
+    #tool-compareFeatures {
+        z-index: -1;
+        display: inline-flex;
+        width: 100%;
+    }
+    .remove-feature {
         top: 0px !important;
+        left: 0px;
     }
-    td {
-        padding: 0.5rem;
-        text-align: left;
-    }
-    // scss schachteln
     table {
         font-family: @font_family_default;
         border-collapse: collapse;
         width: 100%;
-    }
-    table th {
-        border-top: 1px solid #ccc;
-        padding: 8px;
-    }
-    table tr {
-        &:first-child {
+        th {
             border-top: 1px solid #ccc;
+            padding: 8px;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
         }
-        &:nth-child(odd) {
-            background-color: @background_color_2;
-        }
-        &:nth-child(even) {
-            background-color: @background_color_3;
-        }
-        &:hover {
-            background-color: @background_color_4;
-            td {
-                border-left: 1px solid #bbb;
+        tr {
+            &:first-child {
+                border-top: 1px solid #ccc;
+            }
+            &:nth-child(odd) {
+                background-color: @background_color_2;
+            }
+            &:nth-child(even) {
+                background-color: @background_color_3;
+            }
+            &:hover {
+                background-color: @background_color_4;
+                td {
+                    border-left: 1px solid #bbb;
+                }
             }
         }
-    }
-    table td {
-        padding: 8px;
-        border-left: 1px solid #ccc;
-    }
-    table tr:hover {
-        background-color: #ddd;
-    }
-    table th {
-        padding-top: 12px;
-        padding-bottom: 12px;
-        text-align: left;
-        background-color: #4CAF50;
-        color: white;
+        td {
+            padding: 8px;
+            text-align: left;
+            border-left: 1px solid #ccc;
+        }
     }
     label {
         margin-top: 7px;
@@ -305,18 +301,4 @@ export default {
     .close {
         float: right;
     }
-    #tool-compareFeatures-no-features {
-        width: 50vh;
-        padding: 5px;
-        padding-top: 0;
-        p {
-            line-height: 22px;
-            &:first-child {
-                font-family: @font_family_1;
-                font-size: 14px;
-            }
-        }
-    }
-
-
 </style>
