@@ -256,6 +256,9 @@ export default {
             }
         }
     }
+    label {
+        margin-top: 7px;
+    }
 </style>
 
 <style lang="less">

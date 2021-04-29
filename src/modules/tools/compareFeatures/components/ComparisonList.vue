@@ -295,9 +295,6 @@ export default {
             border-left: 1px solid #ccc;
         }
     }
-    label {
-        margin-top: 7px;
-    }
     .close {
         float: right;
     }
