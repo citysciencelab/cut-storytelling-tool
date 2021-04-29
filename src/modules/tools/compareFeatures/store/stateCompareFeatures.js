@@ -19,8 +19,6 @@
  * @property {Boolean} hasMultipleLayers if true multiple layers can be selected within the comparison list
  * @property {Boolean} showMoreInfo if true more info rows get rendered to comparison list
  * @property {Object} preparedList Object with the selected layers and their selected features
- * @property {String} emptyStar html element for empty star glyphicon in feedback modal
- * @property {String} yellowStar html element for yellow star glyphicon in feedback modal
  */
 const state = {
     // defaults for config.json parameters
