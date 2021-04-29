@@ -54,7 +54,7 @@ describe("src/modules/tools/compareFeatures/components/CompareFeatures.vue", () 
         store.commit("Tools/CompareFeatures/setActive", true);
         wrapper = shallowMount(CompareFeaturesComponent, {store, localVue});
 
-        expect(wrapper.find("#tool-compareFeatures-modal").exists()).to.be.true;
+        expect(wrapper.find("#tool-compareFeatures-comparisonListSingleLayer").exists()).to.be.true;
     });
 
     it("renders CompareFeatures when tool is active and has multiple layers", () => {
@@ -62,7 +62,7 @@ describe("src/modules/tools/compareFeatures/components/CompareFeatures.vue", () 
         store.commit("Tools/CompareFeatures/setHasMultipleLayers", true);
         wrapper = shallowMount(CompareFeaturesComponent, {store, localVue});
 
-        expect(wrapper.find("#tool-compareFeatures-modal").exists()).to.be.true;
+        expect(wrapper.find("#tool-compareFeatures-comparisonListMultipleLayers").exists()).to.be.true;
     });
     describe("CompareFeatures.vue methods", () => {
         it("close sets active to false", async () => {
