@@ -96,24 +96,22 @@ export default {
                 <p>{{ $t("common:modules.tools.compareFeatures.feedback.removeObjects") }}</p>
                 <hr>
             </div>
-            <template>
-                <div id="tool-compareFeatures-buttons">
-                    <button
-                        class="btn btn-primary btn-infos"
-                        :title="$t('common:button.back')"
-                        @click="setShowAlert(false)"
-                    >
-                        {{ $t("common:button.back") }}
-                    </button>
-                    <button
-                        class="btn btn-primary btn-infos"
-                        :title="$t('common:modules.tools.compareFeatures.feedback.goToComparisonlist')"
-                        @click="setActive(true)"
-                    >
-                        {{ $t("common:modules.tools.compareFeatures.feedback.goToComparisonlist") }}
-                    </button>
-                </div>
-            </template>
+            <div id="tool-compareFeatures-buttons">
+                <button
+                    class="btn btn-primary btn-infos"
+                    :title="$t('common:button.back')"
+                    @click="setShowAlert(false)"
+                >
+                    {{ $t("common:button.back") }}
+                </button>
+                <button
+                    class="btn btn-primary btn-infos"
+                    :title="$t('common:modules.tools.compareFeatures.feedback.goToComparisonlist')"
+                    @click="setActive(true)"
+                >
+                    {{ $t("common:modules.tools.compareFeatures.feedback.goToComparisonlist") }}
+                </button>
+            </div>
         </Modal>
         <template>
             <h4 class="tool-compareFeatures-modal-title">
@@ -245,7 +243,7 @@ export default {
         padding-right: 10px;
     }
     #tool-compareFeatures-no-features {
-        max-width: 60vh;
+        max-width: 50vw;
         padding: 5px;
         padding-top: 0;
         p {
@@ -269,6 +267,7 @@ export default {
         padding: 0;
         overflow-y: auto;
         max-height: 80vh;
+        min-width: 40vw;
     }
     #modal-1-inner-wrapper .glyphicon.glyphicon-remove {
         right: 18px !important;

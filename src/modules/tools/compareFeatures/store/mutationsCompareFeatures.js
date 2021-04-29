@@ -53,7 +53,7 @@ const mutations = {
                         delete state.layerFeatures[feature.layerId];
                     }
                     else {
-                        // Neccessary to trigger a rerendering of the UI, otherwise the feature get deleted in the state but the UI won´t change.
+                        // Neccessary to trigger a rerendering of the UI, otherwise the feature gets deleted in the state but the UI won´t change.
                         state.preparedList = {[feature.layerId]: [...features]};
                     }
                 }
@@ -75,7 +75,7 @@ const mutations = {
                     }
                 }
                 else {
-                    // Neccessary to trigger a rerendering of the UI, otherwise the feature get deleted in the state but the UI won´t change.
+                    // Neccessary to trigger a rerendering of the UI, otherwise the feature gets deleted in the state but the UI won´t change.
                     state.preparedList[selectedLayer] = [...features];
                 }
             }
