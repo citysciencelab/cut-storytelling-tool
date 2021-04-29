@@ -70,6 +70,7 @@ export default {
     class="template"
 >
     <Modal
+        id="tool-compareFeatures-modal"
         :title="$t('common:modules.tools.compareFeatures.title')"
         :icon="glyphicon"
         :showModal="active"
