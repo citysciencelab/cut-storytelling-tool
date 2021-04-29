@@ -1,7 +1,12 @@
 import {expect} from "chai";
 import mutations from "../../store/mutationsCompareFeatures";
 
-const {resetLayerSelection, selectLayerWithFeatures, addFeatureToLayer, removeFeatureFromLayer} = mutations;
+const {
+    resetLayerSelection,
+    selectLayerWithFeatures,
+    addFeatureToLayer,
+    removeFeatureFromPreparedList
+} = mutations;
 
 describe("src/modules/tools/compareFeatures/store/mutationsCompareFeatures.js", () => {
 
@@ -38,15 +43,63 @@ describe("src/modules/tools/compareFeatures/store/mutationsCompareFeatures.js", 
             expect(state.layerFeatures).to.eql({"1711": [{featureId: "feature1", layerId: "1711"}]});
         });
     });
-    describe("removeFeatureFromLayer", () => {
-        it("removes feature from the related layer", () => {
+    describe("removeFeatureFromPreparedList", () => {
+        it("removes feature from prepared list if only one layer is on comparison list", () => {
             const state = {
-                layerFeatures: {"1711": [{featureId: "feature1", layerId: "1711"}]},
-                feature: {featureId: "feature1", layerId: "1711"}
+                tableBody: [],
+                rowsToShow: 12,
+                layerFeatures: {"1711": [{layerId: "1711", featureId: "Feature-1", properties: {name: "Krankenhaus-1", id: "Feature-1", Ort: "Hamburg"}}]},
+                hasMultipleLayers: false,
+                payload: {featureId: "Feature-1", features: [{"Feature-1": "Krankenhaus-1", "col-1": "name"},
+                    {"Feature-1": "Feature-1", "col-1": "id"},
+                    {"Feature-1": "Hamburg", "col-1": "Ort"}]}
             };
 
-            removeFeatureFromLayer(state, state.feature);
+            removeFeatureFromPreparedList(state, state.payload);
+            expect(state.preparedList).to.eql({});
             expect(state.layerFeatures).to.eql({});
+        });
+        it("removes  specific feature from prepared list if multiple layers are on comparison list", () => {
+            const state = {
+                tableBody: [],
+                rowsToShow: 12,
+                layerFeatures: {1711: [{layerId: "1711", featureId: "Feature-1", properties: {name: "Krankenhaus-1", id: "Feature-1", Ort: "Hamburg"}}],
+                    8123: [{layerId: "8123", featureId: "Feature-2", properties: {name: "Schule-1", id: "Feature-2", Ort: "Hamburg"}}]},
+                hasMultipleLayers: true,
+                payload: {featureId: "Feature-1", features: [{"Feature-1": "Krankenhaus-1", "col-1": "name"},
+                    {"Feature-1": "Feature-1", "col-1": "id"},
+                    {"Feature-1": "Hamburg", "col-1": "Ort"}], selectedLayer: "1711"},
+                preparedList: {
+                    "1711": [
+                        {"Feature-1": "Krankenhaus-1", "col-1": "name"},
+                        {"Feature-1": "Feature-1", "col-1": "id"},
+                        {"Feature-1": "Hamburg", "col-1": "Ort"}
+                    ],
+                    "8123": [
+                        {"Feature-2": "Schule-1", "col-1": "name"},
+                        {"Feature-2": "Feature-2", "col-1": "id"},
+                        {"Feature-2": "Hamburg", "col-1": "Ort"}
+                    ]
+                }
+            };
+
+            mutations.removeFeatureFromPreparedList(state, state.payload);
+            expect(state.preparedList).to.eql({"8123": [
+                {"Feature-2": "Schule-1", "col-1": "name"},
+                {"Feature-2": "Feature-2", "col-1": "id"},
+                {"Feature-2": "Hamburg", "col-1": "Ort"}
+            ]});
+            expect(state.layerFeatures).to.eql({"8123": [
+                {
+                    "featureId": "Feature-2",
+                    "layerId": "8123",
+                    "properties": {
+                        "Ort": "Hamburg",
+                        "id": "Feature-2",
+                        "name": "Schule-1"
+                    }
+                }
+            ]});
         });
     });
 });
