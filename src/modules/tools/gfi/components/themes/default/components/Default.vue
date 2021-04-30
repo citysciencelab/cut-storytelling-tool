@@ -93,7 +93,7 @@ export default {
          * @returns {void}
          */
         replacesConfiguredImageLinks: function () {
-            const imageLinksAttribute = this.feature.getTheme()?.params?.imageLinks;
+            const imageLinksAttribute = this.feature.getTheme()?.params?.imageLink;
 
             if (Array.isArray(imageLinksAttribute)) {
                 this.imageLinks = imageLinksAttribute;
