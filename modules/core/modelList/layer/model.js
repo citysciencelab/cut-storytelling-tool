@@ -616,9 +616,10 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
 
         metaID.push(layerMetaId);
 
-        Radio.trigger("LayerInformation", "add", {
+        store.dispatch("LayerInformation/layerInfo", {
             "id": this.get("id"),
-            "metaID": metaID,
+            "metaID": layerMetaId,
+            "metaIdArray": metaID,
             "layername": name,
             "url": this.get("url"),
             "typ": this.get("typ"),
@@ -626,6 +627,23 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             "showDocUrl": showDocUrl,
             "urlIsVisible": this.get("urlIsVisible")
         });
+
+        // Radio.trigger("LayerInformation", "add", {
+        //     "id": this.get("id"),
+        //     "metaID": metaID,
+        //     "layername": name,
+        //     "url": this.get("url"),
+        //     "typ": this.get("typ"),
+        //     "cswUrl": cswUrl,
+        //     "showDocUrl": showDocUrl,
+        //     "urlIsVisible": this.get("urlIsVisible")
+        // });
+
+        store.dispatch("LayerInformation/setActive", true);
+
+        store.dispatch("LayerInformation/additionalLayerInfo");
+
+        store.dispatch("LayerInformation/setMetadataURL");
 
         if (this.createLegend && {}.toString.call(this.createLegend) === "[object Function]") {
             this.createLegend();

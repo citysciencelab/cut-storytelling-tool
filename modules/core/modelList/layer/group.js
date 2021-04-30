@@ -6,6 +6,7 @@ import WFSLayer from "./wfs";
 import GeoJSONLayer from "./geojson";
 import SensorLayer from "./sensor";
 import HeatmapLayer from "./heatmap";
+import store from "../../../../src/app-store";
 
 const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -147,10 +148,11 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
             showDocUrls.push(showDocUrl);
         });
 
-        Radio.trigger("LayerInformation", "add", {
+        store.dispatch("LayerInformation/layerInfo", {
             "id": this.get("id"),
             "legend": legend,
-            "metaID": metaID,
+            "metaID": layerMetaId,
+            "metaIdArray": metaID,
             "layername": name,
             "url": null,
             "typ": null,
@@ -158,6 +160,12 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
             "showDocUrl": showDocUrls[0],
             "urlIsVisible": this.get("urlIsVisible")
         });
+
+        store.dispatch("LayerInformation/setActive", true);
+
+        store.dispatch("LayerInformation/additionalLayerInfo");
+
+        store.dispatch("LayerInformation/setMetadataURL");
 
         this.setLayerInfoChecked(true);
     },
