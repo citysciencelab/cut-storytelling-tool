@@ -1,4 +1,4 @@
-import {getRecordById} from "../../../api/csw/getRecordById";
+import {getMetadata, getRecordById} from "../../../api/csw/getRecordById";
 import getProxyUrl from "../../../utils/getProxyUrl";
 
 const actions = {
@@ -33,6 +33,7 @@ const actions = {
         else {
             metadata = await getRecordById(state.layerInfo.cswUrl, state.layerInfo.metaID);
         }
+
 
         if (typeof metadata === "undefined") {
             dispatch("Alerting/addSingleAlert", i18next.t("common:modules.layerInformation.errorMessage", {cswObjCswUrl: state.layerInfo.cswUrl}));
@@ -75,13 +76,12 @@ const actions = {
             service,
             metaDataCatalogueId = rootGetters.metaDataCatalogueId;
 
+        // todo: set in vue
         if (metaDataCatalogueId === "") {
             metaDataCatalogueId = state.metaDataCatalogueId;
         }
 
-        console.log("metaID: " + metaDataCatalogueId);
-
-        state.layerInfo.metaIdArray.forEach(function (metaID) {
+        state.layerInfo.metaIdArray.forEach(metaID => {
             service = Radio.request("RestReader", "getServiceById", metaDataCatalogueId);
             if (service === undefined) {
                 console.warn("Rest Service mit der ID " + metaDataCatalogueId + " ist rest-services.json nicht konfiguriert!");
@@ -96,7 +96,7 @@ const actions = {
             if (metaID !== null && metaID !== "" && metaURLs.indexOf(metaURL) === -1) {
                 metaURLs.push(metaURL);
             }
-        }, this);
+        });
         commit("setMetaURLs", metaURLs);
     }
 

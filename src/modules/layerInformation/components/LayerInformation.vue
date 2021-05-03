@@ -13,7 +13,7 @@ export default {
         ToolWindow
     },
     computed: {
-        ...mapGetters("LayerInformation", Object.keys(getters)),
+        ...mapGetters("LayerInformation", Object.keys(getters)),
         ...mapMutations("LayerInformation", Object.keys(mutations)),
         showAdditionalMetaData () {
             return this.layerInfo.metaURL !== null && typeof this.abstractText !== "undefined" && this.abstractText !== this.noMetaDataMessage && this.abstractText !== this.noMetadataLoaded;
@@ -35,15 +35,15 @@ export default {
         },
         showAttachFile () {
             return this.downloadLinks && this.downloadLinks.length > 1;
+        },
+        layerUrl () {
+            return this.layerInfo.url + "?SERVICE=" + this.layerInfo.typ + "&REQUEST=GetCapabilities";
         }
-        // newUrl () {
-        //     return this.layerInfo.url? + "SERVICE=" + this.layerInfo.typ + "&REQUEST=GetCapabilities";
-        // }
 
     },
 
     created () {
-        console.log("created");
+        // this.metaDataCatalogueId = rootGetters.metaDataCatalogueId;
     },
 
     methods: {
@@ -51,7 +51,9 @@ export default {
             "additionalLayerInfo"
         ]),
         close () {
+            this.setActive(false);
             this.$emit("close");
+            this.unhighlightLayerInformationIcon();
         },
         /**
          * Highlights the Layer Information Icon in the layertree

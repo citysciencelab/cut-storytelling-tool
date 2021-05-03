@@ -148,10 +148,22 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
             showDocUrls.push(showDocUrl);
         });
 
+        // Radio.trigger("LayerInformation", "add", {
+        //     "id": this.get("id"),
+        //     "legend": legend,
+        //     "metaID": metaID,
+        //     "layername": name,
+        //     "url": null,
+        //     "typ": null,
+        //     "cswUrl": cswUrls[0],
+        //     "showDocUrl": showDocUrls[0],
+        //     "urlIsVisible": this.get("urlIsVisible")
+        // });
+
         store.dispatch("LayerInformation/layerInfo", {
             "id": this.get("id"),
             "legend": legend,
-            "metaID": layerMetaId,
+            "metaID": metaID,
             "metaIdArray": metaID,
             "layername": name,
             "url": null,
@@ -167,6 +179,12 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
 
         store.dispatch("LayerInformation/setMetadataURL");
 
+        store.dispatch("Legend/setLayerIdForLayerInfo", this.get("id"));
+        store.dispatch("Legend/setLayerCounterIdForLayerInfo", Date.now());
+
+        if (this.createLegend && {}.toString.call(this.createLegend) === "[object Function]") {
+            this.createLegend();
+        }
         this.setLayerInfoChecked(true);
     },
 

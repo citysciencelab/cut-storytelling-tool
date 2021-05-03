@@ -4,6 +4,7 @@ import store from "../../src/app-store/index";
 
 Radio.channel("CswParser").on({
     "getMetaDataForLayerInformation": async function (cswObj) {
+        debugger;
         let metadata;
 
         cswObj.parsedData = {};
@@ -21,6 +22,7 @@ Radio.channel("CswParser").on({
          * getProxyUrl()
          */
         if (store?.getters?.metadata?.useProxy?.includes(cswObj?.cswUrl)) {
+            debugger;
             metadata = await getRecordById(getProxyUrl(cswObj.cswUrl), cswObj.metaId);
         }
         else {

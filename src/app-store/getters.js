@@ -15,7 +15,7 @@ export default {
     ignoredKeys: state => state?.configJs.ignoredKeys || [],
     // metadata is deprecated in the next major-relase, because it is only used for proxyUrl
     metadata: state => state?.configJs.metadata || {},
-    metaDataCatalogueId: state => state?.configJs.metaDataCatalogueId || "",
+    metaDataCatalogueId: state => state?.configJs?.metaDataCatalogueId || "",
     // proxyHost is deprecated in the next major-release
     proxyHost: state => state?.configJs?.proxyHost || "",
     // configJSON desctructuring
