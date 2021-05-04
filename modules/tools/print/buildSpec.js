@@ -515,8 +515,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     buildPointStyleIcon: function (style, layer) {
         return {
             type: "point",
-            graphicWidth: style.getSize()[0] * style.getScale(),
-            graphicHeight: style.getSize()[1] * style.getScale(),
+            graphicWidth: style.getSize()[0] ? style.getSize()[0] * style.getScale() : 60,
+            graphicHeight: style.getSize()[1] ? style.getSize()[1] * style.getScale() : 60,
             externalGraphic: this.buildGraphicPath(style.getSrc()),
             graphicOpacity: layer.getOpacity()
         };
@@ -541,6 +541,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         else if (origin.indexOf("localhost") === -1) {
             // backwards-compatibility:
             url = origin + "/lgv-config/img" + this.getImageName(src);
+        }
+        else if (src.indexOf("data:image/svg+xml;charset=utf-8") === 0) {
+            url = src;
         }
         return url;
     },
@@ -645,7 +648,10 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 strokeOpacity: layer.getOpacity()
             };
 
-        this.buildFillStyle(fillStyle, obj);
+        if (fillStyle !== null) {
+            this.buildFillStyle(fillStyle, obj);
+            this.buildStrokeStyle(fillStyle, obj);
+        }
         if (strokeStyle !== null) {
             this.buildStrokeStyle(strokeStyle, obj);
         }
@@ -666,7 +672,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 strokeOpacity: layer.getOpacity()
             };
 
-        this.buildStrokeStyle(strokeStyle, obj);
+        if (strokeStyle !== null) {
+            this.buildStrokeStyle(strokeStyle, obj);
+        }
         return obj;
     },
 
@@ -858,7 +866,30 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             labelField,
             labelValue;
 
-        if (styleAttr === "") {
+        if (styleAttr === "" && feature.get("features") && feature.get("features").length === 1) {
+            const singleFeature = new Feature({
+                properties: feature.get("features")[0].getProperties(),
+                geometry: feature.get("features")[0].getGeometry()
+            });
+
+            feature.get("features")[0] = singleFeature;
+            if (style.getImage().getSrc().indexOf("data:image/svg+xml;charset=utf-8") === 0) {
+                singleFeature.setId("first_svg_" + singleFeature.ol_uid);
+            }
+            else {
+                singleFeature.setId("second_png_" + singleFeature.ol_uid);
+            }
+            singleFeature.set(singleFeature.getId(), String(feature.get("features").length));
+            return "[" + singleFeature.getId() + "='" + String(feature.get("features").length) + "']";
+
+        }
+        else if (styleAttr === "" && feature.get("features") !== undefined) {
+            if (style !== undefined && style.getText().getText() !== undefined) {
+                feature.set("sensorClusterStyle", feature.get("features")[0].ol_uid + "_" + String(style.getText().getText()));
+                return "[sensorClusterStyle='" + feature.get("features")[0].ol_uid + "_" + String(style.getText().getText()) + "']";
+            }
+        }
+        else if (styleAttr === "") {
             return "*";
         }
         // cluster feature with geometry style
@@ -1027,8 +1058,11 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         return legend.some(legendPart => {
             let isPdf = false;
 
-            if (typeof legendPart === "object") {
+            if (typeof legendPart === "object" && !Array.isArray(legendPart.graphic)) {
                 isPdf = legendPart.graphic.endsWith(".pdf");
+            }
+            else if (typeof legendPart === "object" && Array.isArray(legendPart.graphic)) {
+                return isPdf;
             }
             else {
                 isPdf = legendPart.endsWith(".pdf");
@@ -1078,7 +1112,22 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 },
                 graphic = typeof legendPart === "object" ? legendPart.graphic : legendPart;
 
-            if (graphic.toUpperCase().includes("GETLEGENDGRAPHIC")) {
+            if (Array.isArray(graphic)) {
+                graphic.forEach(graphicPart => {
+                    if (graphicPart.indexOf("svg") !== -1) {
+                        legendObj.svg = decodeURIComponent(graphicPart).split("data:image/svg+xml;charset=utf-8,")[1];
+                    }
+                    else {
+                        legendObj.imageUrl = graphicPart;
+                    }
+                });
+                legendObj.legendType = "svgAndPng";
+            }
+            else if (graphic.indexOf("data:image/svg+xml;charset=utf-8,<svg") !== -1) {
+                legendObj.svg = decodeURIComponent(graphic).split("data:image/svg+xml;charset=utf-8,")[1];
+                legendObj.legendType = "svg";
+            }
+            else if (graphic.toUpperCase().includes("GETLEGENDGRAPHIC")) {
                 legendObj.legendType = "wmsGetLegendGraphic";
                 legendObj.imageUrl = graphic;
             }

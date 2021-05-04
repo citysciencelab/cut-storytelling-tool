@@ -1,6 +1,6 @@
 image: node:12.13.1
 
-definitions: 
+definitions:
   steps:
     - step: &install-e2e-tests-server-on-test-geoportal
         name: install masterportals master, basic etc. on test.geoportal
@@ -18,6 +18,9 @@ definitions:
             - tmp=$BITBUCKET_BRANCH
             - branchname=${tmp//[\/]/_}
             - export FTP_UNTRACKED_PATH=$'!dist/master_'$branchname$'\n!dist/basic_'$branchname$'\n!dist/masterCustom_'$branchname$'\n!dist/masterDefault_'$branchname$'\n!dist/mastercode'
+            - git clone git@bitbucket.org:geowerkstatt-hamburg/ci_scripts.git
+            - mv ./ci_scripts/* ./devtools
+            - rm -rf ./ci_scripts
             - rm -rf ./addons/readme.txt
             # because of use of "git-ftp" for transfering files every change in repository has to be comittet, see https://git-ftp.github.io/
             - git commit ./addons/readme.txt -m "deleted before add addons in e2e test run"
@@ -33,7 +36,6 @@ definitions:
             # make script executable
             - chmod +x ./devtools/scripts/transfer_ftp.sh
             # commit changed file for "git-ftp"
-            - git commit devtools/scripts/transfer_ftp.sh -m "made transfer_ftp.sh executable"
             - /bin/bash devtools/scripts/transfer_ftp.sh
 
 pipelines:
@@ -60,6 +62,23 @@ pipelines:
                     - for zipFilePath in $(find dist -name \*.zip); do
                         curl -X POST --user "${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"$zipFilePath" -v;
                       done
+            #- step:
+                #name: trigger portalconfigs to deploy
+                #caches:
+                    #- node
+                #script:
+                    #- pipe: atlassian/trigger-pipeline:4.2.1
+                      #variables:
+                        #BITBUCKET_USERNAME: ${BITBUCKET_USERNAME}
+                        #BITBUCKET_APP_PASSWORD: ${BITBUCKET_APP_PASSWORD}
+                        #REPOSITORY: 'portalconfigs'
+                        # ACCOUNT: '<string>' # Optional
+                        #BRANCH_NAME: 'dev'
+                        #CUSTOM_PIPELINE_NAME: 'deployReleasePortals'
+                        # PIPELINE_VARIABLES: '<json>' # Optional
+                        # WAIT: '<boolean>' # Optional
+                        # WAIT_MAX_TIMEOUT: '<string>' # Optional
+                        # DEBUG: '<boolean>' # Optional
     custom: # Pipelines that are triggered manually
         End2End-Tests on browserstack:
             - step: *install-e2e-tests-server-on-test-geoportal
@@ -70,7 +89,8 @@ pipelines:
                 script:
                     # run e2e tests
                     - ./devtools/scripts/run_browserstack_local.bash
-                    - npm run browsertestOnGeoportalTest --testservice=browserstack
+                    - export url=https://test.geoportal-hamburg.de
+                    - npm run browsertestOnExternalServer --testservice=browserstack
         End2End-Tests on saucelabs:
             - step: *install-e2e-tests-server-on-test-geoportal
             - step:
@@ -79,7 +99,8 @@ pipelines:
                     - node
                 script:
                     # run e2e tests
-                    - npm run browsertestOnGeoportalTest --testservice=saucelabs
+                    - export url=https://test.geoportal-hamburg.de
+                    - npm run browsertestOnExternalServer --testservice=saucelabs
         End2End-Tests on browserstack/ use existing server:
             - step:
                 name: run e2e tests on browserstack url=test.geoportal_buildname
@@ -87,12 +108,13 @@ pipelines:
                     - node
                 script:
                     - ./devtools/scripts/run_browserstack_local.bash
-                    - npm run browsertestOnGeoportalTest --testservice=browserstack
+                    - export url=https://test.geoportal-hamburg.de
+                    - npm run browsertestOnExternalServer --testservice=browserstack
         End2End-Tests on saucelabs/ use existing server:
             - step:
                 name: run e2e tests on saucelabs url=test.geoportal_buildname
                 caches:
                     - node
                 script:
-                    - npm run browsertestOnGeoportalTest --testservice=saucelabs                    
-
+                    - export url=https://test.geoportal-hamburg.de
+                    - npm run browsertestOnExternalServer --testservice=saucelabs
