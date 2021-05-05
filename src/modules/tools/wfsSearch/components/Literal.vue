@@ -41,6 +41,7 @@ export default {
         :required="literal.field.required"
         :options="literal.field.options"
         :type="literal.field.type"
+        :dropdownInputUsesId="literal.field.usesId"
     />
     <div v-else-if="literal.clause">
         <template

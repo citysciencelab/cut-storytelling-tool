@@ -2576,11 +2576,11 @@ A selectable option for a queryable parameter.
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |displayName|no|String||Value to be displayed for the value. May be a locale key. If not set, the `id` will be shown.|false|
-|id|yes|String||Unique id for the selectable option.|false|
+|fieldValue|yes|String||Value that is supposed to be sent to the service.|false|
 
 ```json
 {
-    "id": "0",
+    "fieldValue": "elbe",
     "displayName": "Elbe"
 }
 ```

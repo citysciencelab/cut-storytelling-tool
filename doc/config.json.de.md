@@ -2473,11 +2473,11 @@ Eine auswählbare Option für einen anzufragenden Parameter.
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |displayName|nein|String||Anzuzeigender Wert für die Option. Kann ein Übersetzungsschlüssel sein. Wenn der Wert wird nicht gesetzt ist, wird die `id` angezeigt.|false|
-|id|ja|String||Eindeutige Id für die auswählbare Option.|false|
+|fieldValue|ja|String||Wert, welcher an den Dienst gesendet werden soll.|false|
 
 ```json
 {
-    "id": "0",
+    "fieldValue": "elbe",
     "displayName": "Elbe"
 }
 ```

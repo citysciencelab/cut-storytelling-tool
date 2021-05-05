@@ -39,6 +39,10 @@ export default {
             type: [String, Array],
             default: null
         },
+        dropdownInputUsesId: {
+            type: Boolean,
+            default: false
+        },
         type: {
             type: String,
             default: "equal",
@@ -84,14 +88,20 @@ export default {
                 let keys = [];
 
                 if (this.options === "") {
-                    keys = Object.keys(this.parsedSource);
-                    return keys;
+                    if (this.dropdownInputUsesId) {
+                        // TODO: The loop below can be copied for the significant parts below
+                        Object.entries(this.parsedSource).forEach(([key, {id}]) => keys.push({fieldValue: id, displayName: `${key} (${id})`}));
+                        return keys;
+                    }
+
+                    return Object.keys(this.parsedSource);
                 }
 
                 const optionsArr = this.options.split("."),
                     currentOption = optionsArr[optionsArr.length - 1];
 
                 if (Object.keys(this.selectedOptions).includes("")) {
+                    // TODO: Implement the dropdownInputUsesId part against a usable external file, which uses the dot separated syntax
                     if (optionsArr.length === 1) {
                         keys = this.parsedSource[this.selectedOptions[""]][currentOption];
                     }
@@ -167,13 +177,14 @@ export default {
                     >
                         {{ $t("common:modules.tools.wfsSearch.optionsPlaceholder") }}
                     </option>
+                    <!-- TODO: The value part can and will lead to problems when using with objects that are not from the external source -->
                     <option
                         v-for="option of selectableOptions"
-                        :key="isObject(option) ? option.id : option"
-                        :value="isObject(option) ? option.id : option"
+                        :key="isObject(option) ? option.fieldValue : option"
+                        :value="isObject(option) ? option.fieldValue : option"
                         :selected="defaultValue && !required ? defaultValue : ''"
                     >
-                        {{ isObject(option) ? (option.displayName ? option.displayName : option.id) : option }}
+                        {{ isObject(option) ? (option.displayName ? option.displayName : option.fieldValue) : option }}
                     </option>
                 </template>
             </component>
