@@ -2541,6 +2541,7 @@ Then the order of the config should look like this:
 |required|no|Boolean|false|Whether the field has to be filled.|false|
 |options|no|String/**[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)[]**/Number[]/String[]||If `options` is an array, the given values are used for selection. If it is a String, there are different possibilities. If the String is empty, the keys of **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** are used. If the String is not empty, it is assumed that another field with `options=""` exists; otherwise the field is disabled. It is also assumed that the String represents an array in **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** providing further options. These options may either match **[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)** or are plain values (`String` / `Number`). In the latter case, the plain value is used as both id and `displayName`.|false|
 |type|no|enum["equal", "like"]||Required for usage with WFS@1.1.0. The `type` declared how the field should be compared to the value in the service.|false|
+|usesId|no|Boolean|false|Only relevant if the Parameters `options` is set and a String. Determines whether the key of the object of the external source should be used as a value for the query or if the object has an Id which should be used.|false|
 
 ```json
 {
@@ -2589,16 +2590,19 @@ A selectable option for a queryable parameter.
 #### Portalconfig.menu.tool.wfsSearch.searchInstance.requestConfig
 
 Information about the WFS service that is supposed to be requested.
+Either `layerId` or `restLayerId` need to be present. If `layerId` is chosen, the layer needs to be configured in the **[config.json](config.json.md)**.
+If both are defined `restLayerId` is used.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|serviceId|yes|String||Id of the WFS service that should be queried. Information is fetched from **[services.json](services.json.md)**.|false|
+|layerId|no|String||Id of the WFS service that should be queried. Information is fetched from **[services.json](services.json.md)**.|false|
+|restLayerId|no|String||Id of the WFS service that should be queried. Information is fetched from **[rest-services.json](rest-services.json.md)**.|false|
 |storedQueryId|no|String||The id of the Stored Query of the WFS that should be used to query the service. If this field is set, it is assumed that a WFS@2.0.0 is used.|false|
 
 ```json
 {
     "requestConfig": {
-        "layerId": "1234",
+        "restLayerId": "1234",
         "storedQueryId": "Flurstuecke"
     }
 }

@@ -2438,6 +2438,7 @@ In diesem Fall sollte die Reihenfolge in der Konfiguration wie folgt aussehen:
 |required|nein|Boolean|false|Legt fest, ob das Feld ausgefüllt werden muss.|false|
 |options|nein|String/**[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)[]**/Number[]/String[]||Falls `options` ein Array ist werden die gegeben Werte für die Auswahl verwendet. Falls `options` ein String ist, existieren verschiedene Möglichkeiten. Falls der String leer ist, werden die Schlüssel der **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** verwendet. Falls der String nicht leer ist, wird angenommen, dass ein anderes Feld mit `options=""` existiert; andernfalls wird das Feld deaktiviert. Es wird zudem angenommen, dass der String ein Array in **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** mit weiteren Optionen repräsentiert. Diese Optionen können entweder eine **[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)** oder einfache Werte (`String` / `Number`) sein. Im zweiten Fall werden die einfachen Werte sowohl für die Id als auch den `displayName` verwendet.|false|
 |type|nein|enum["equal", "like"]||Wird für die Verwendung mit einem WFS@1.1.0 vorausgesetzt. Der `type` legt fest, wie das Feld mit dem Wert des Dienstes verglichen werden soll.|false|
+|usesId|nein|Boolean|false|Nur relevant, wenn der Parameter `options` gesetzt und ein String ist. Legt fest, ob der Schlüssel des Objektes aus der externen Quelle verwendet als Wert für die Query werden soll oder ob das Objekt eine Id gesetzt hat, welche stattdessen Anwendung finden soll. Determines whether the key of the object of the external source should be used or if the object has an Id which should be used.|false|
 
 ```json
 {
@@ -2486,16 +2487,19 @@ Eine auswählbare Option für einen anzufragenden Parameter.
 #### Portalconfig.menu.tool.wfsSearch.searchInstance.requestConfig
 
 Informationen über den WFS-Dienst, welcher angefragt werden soll.
+Es muss entweder `layerId` oder `restLayerId` definiert sein. Wenn `layerId` verwendet wird, dann muss zusätzlich der Layer in der **[config.json](config.json.de.md)** konfiguriert werden.
+Falls beide Parameter gesetzt wurden, dann wird `restLayerId` verwendet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|serviceId|ja|String||Id des WFS Dienstes, welcher angefragt werden soll. Informationen werden aus der **[services.json](services.json.md)** bezogen.|false|
+|layerId|nein|String||Id des WFS Dienstes, welcher angefragt werden soll. Informationen werden aus der **[services.json](services.json.de.md)** bezogen.|false|
+|restLayerId|nein|String||Id des WFS Dienstes, welcher angefragt werden soll. Informationen werden aus der **[rest-services.json](rest-services.json.de.md)** bezogen.|false|
 |storedQueryId|nein|String||Die Id der gespeichersten Anfrage (Stored Query) des WFS Dienstes, welche für die Anfrage an verwendet werden soll. Es wird angenommen, dass ein WFS@2.0.0 verwendet wird, falls dieses Feld gesetzt wurde.|false|
 
 ```json
 {
     "requestConfig": {
-        "layerId": "1234",
+        "restLayerId": "1234",
         "storedQueryId": "Flurstuecke"
     }
 }
