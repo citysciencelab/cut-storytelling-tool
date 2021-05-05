@@ -4,7 +4,7 @@ import initialState from "./stateWfsSearch";
 const getters = {
     ...generateSimpleGetters(initialState),
     requiredFields ({requiredValues}) {
-        return !Object.values(requiredValues).every(val => val !== "");
+        return !Object.values(requiredValues).every(val => typeof val === "string" && val !== "");
     }
 };
 
