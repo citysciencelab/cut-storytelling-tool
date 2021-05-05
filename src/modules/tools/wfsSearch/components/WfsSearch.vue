@@ -44,7 +44,8 @@ export default {
         }
     }
 };
-// TODO: Prequeries should be used through the requestConfig; the fieldName is known
+// TODO: Formular breaks when choosing a value in a different searchInstance and switching to another.
+// TODO: Also some weird UI behaviour when a field is "dangling" between clauses
 </script>
 
 <template>
