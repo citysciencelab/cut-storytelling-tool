@@ -5,19 +5,19 @@
  * @param {Object[]} stateLiterals The literals set in the state.
  * @param {?(Object[])} literals As the structure is recursively traversed, this value is an inner array of the stateLiterals.
  * @param {String} clauseId The id of an outer clause.
+ * @param {Object} requiredValues The values required to be set by the user.
  * @returns {Object} Returns the current values for the required fields.
  */
-function prepareLiterals (stateLiterals, literals = null, clauseId = "") {
+function prepareLiterals (stateLiterals, literals = null, clauseId = "", requiredValues = {}) {
     const arr = literals === null ? stateLiterals : literals,
-        idPrefix = clauseId ? clauseId + "+" : "",
-        requiredValues = {};
+        idPrefix = clauseId ? clauseId + "+" : "";
 
     arr.forEach((literal, i) => {
         if (literal.clause) {
             const id = `${idPrefix}clause-${i}`;
 
             literal.clause.id = id;
-            prepareLiterals(stateLiterals, literal.clause.literals, id);
+            prepareLiterals(stateLiterals, literal.clause.literals, id, requiredValues);
         }
         else {
             literal.field.id = `${idPrefix}field-${i}`;
