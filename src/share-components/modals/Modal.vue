@@ -91,6 +91,11 @@ export default {
                 >
                     <slot />
                 </div>
+                <div
+                    id="modal-1-footer-container"
+                >
+                <slot name="footer"></slot>
+                </div>
             </div>
         </div>
     </div>

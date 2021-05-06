@@ -179,11 +179,13 @@ export default {
                 :enableMoreInfo="showMoreInfo"
                 :titleRemoveButton="$t('common:modules.tools.compareFeatures.removeFromList')"
             />
-            <hr>
+        </template>
+        <template v-slot:footer>
             <div
                 v-if="showButtons"
                 id="tool-compareFeatures-buttons"
-            >
+            >    <hr>
+            
                 <button
                     class="btn btn-primary btn-infos"
                     :title="!showMoreInfo ? $t('common:modules.tools.compareFeatures.moreInfo') : $t('common:modules.tools.compareFeatures.lessInfo')"
