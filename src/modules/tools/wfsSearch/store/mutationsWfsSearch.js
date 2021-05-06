@@ -1,6 +1,7 @@
 import {generateSimpleMutations} from "../../../../app-store/utils/generators";
 import initialState from "./stateWfsSearch";
 
+// TODO: JSDoc
 const mutations = {
     ...generateSimpleMutations(initialState),
     addOptions: (state, val) => {
@@ -13,6 +14,7 @@ const mutations = {
     },
     setSelectedOptions (state, {options, value}) {
         // Remove the options if no value is selected
+        // TODO: Reusable utility function for updating objects in the store?
         if (value === "") {
             delete state.selectedOptions[options];
             // NOTE: This is sadly needed so that the object is reactive :(

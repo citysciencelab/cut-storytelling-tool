@@ -1,6 +1,7 @@
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
 import initialState from "./stateWfsSearch";
 
+// TODO: JSDoc
 const getters = {
     ...generateSimpleGetters(initialState),
     requiredFields ({requiredValues}) {
