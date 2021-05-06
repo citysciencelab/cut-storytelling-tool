@@ -262,6 +262,7 @@ export default {
     table {
         font-family: @font_family_default;
         border-collapse: collapse;
+        table-layout: fixed;
         width: 100%;
         th {
             border-top: 1px solid #ccc;
@@ -275,6 +276,7 @@ export default {
         tr {
             &:first-child {
                 border-top: 1px solid #ccc;
+                max-width: 25px !important;
             }
             &:nth-child(odd) {
                 background-color: @background_color_2;
@@ -294,6 +296,9 @@ export default {
             text-align: left;
             border-left: 1px solid #ccc;
             vertical-align: top;
+            &:nth-child(1) {
+                width: 20%;
+            }
         }
     }
     .close {

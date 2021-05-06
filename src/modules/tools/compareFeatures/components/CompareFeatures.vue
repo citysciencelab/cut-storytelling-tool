@@ -276,9 +276,8 @@ export default {
     }
     #modal-1-container #modal-1-inner-wrapper #modal-1-content-container {
         padding: 0;
-        overflow-y: auto;
+        overflow: auto;
         max-height: 80vh;
-        min-width: 40vw;
     }
     #modal-1-inner-wrapper .glyphicon.glyphicon-remove {
         right: 18px !important;
