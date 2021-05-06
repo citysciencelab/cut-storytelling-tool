@@ -12,6 +12,11 @@ export default {
     components: {
         ToolWindow
     },
+    data: function () {
+        return {
+            layerInfoIsActive: false
+        };
+    },
     computed: {
         ...mapGetters("LayerInformation", Object.keys(getters)),
         ...mapMutations("LayerInformation", Object.keys(mutations)),
@@ -38,6 +43,15 @@ export default {
         },
         layerUrl () {
             return this.layerInfo.url + "?SERVICE=" + this.layerInfo.typ + "&REQUEST=GetCapabilities";
+        },
+        showMoreLayers () {
+            if (this.layerInfo.metaIdArray) {
+                return this.layerInfo.metaIdArray.length > 1;
+            }
+            return false;
+        },
+        showInformation () {
+            return this.active;
         }
 
     },
@@ -48,34 +62,38 @@ export default {
 
     methods: {
         ...mapActions("LayerInformation", [
-            "additionalLayerInfo"
+            "changeLayerInfo",
+            "activate"
         ]),
         close () {
-            this.setActive(false);
+            this.activate(false);
             this.$emit("close");
-            this.unhighlightLayerInformationIcon();
         },
-        /**
-         * Highlights the Layer Information Icon in the layertree
-         * @returns {void}
-         */
-        highlightLayerInformationIcon: function () {
-            this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerInformationIcon");
+        changeLayerAbstract (ev) {
+            this.changeLayerInfo(ev.target.text);
+            this.setDropDownActive(ev.target);
         },
+        setDropDownActive (el) {
+            document.querySelectorAll(".abstractChange").forEach(element => {
+                if (element.innerHTML === el.text && !el.classList.contains("active")) {
+                    element.classList.add("active");
+                }
+                else {
+                    element.classList.remove("active");
+                }
+            });
 
-        /**
-         * Unhighlights the Layer Information Icon in the layertree
-         * @returns {void}
-         */
-        unhighlightLayerInformationIcon: function () {
-            this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
         }
     }
 };
 </script>
 
 <template lang="html">
-    <ToolWindow @close="close">
+    <ToolWindow
+        v-if="showInformation"
+        class="layerInformation"
+        @close="close"
+    >
         <template v-slot:title>
             <span>{{ $t("common:modules.layerInformation.informationAndLegend") }}</span>
         </template>
@@ -87,6 +105,34 @@ export default {
                 >
                     {{ $t(layerInfo.layername) }}
                 </h4>
+
+                <div
+                    v-if="showMoreLayers"
+                    class="dropdown mb-2"
+                >
+                    <button
+                        class="btn btn-default dropdown-toggle"
+                        type="button"
+                        data-toggle="dropdown"
+                    >
+                        {{ $t("common:modules.layerInformation.changeLayerInfo") }}
+                        <span class="caret"></span>
+                    </button>
+                    <ul
+                        class="dropdown-menu"
+                    >
+                        <li
+                            v-for="name in layerInfo.layerNames"
+                            :key="name"
+                        >
+                            <a
+                                href="#"
+                                class="abstractChange"
+                                @click="changeLayerAbstract"
+                            >{{ $t(name) }}</a>
+                        </li>
+                    </ul>
+                </div>
                 <div v-html="abstractText"></div>
                 <div v-if="showAdditionalMetaData">
                     <p
@@ -142,7 +188,7 @@ export default {
                         <a
                             data-toggle="tab"
                             href="#url"
-                        >{{ $t(layerInfo.typ) }}-{{ $t("common:modules.layerInformation.addressSuffix") }}
+                        >{{ $t(layerInfo.typ) }} - {{ $t("common:modules.layerInformation.addressSuffix") }}
                         </a>
                     </li>
                 </ul>
@@ -154,47 +200,48 @@ export default {
                     </div>
                     <div
                         id="LayerInfoDataDownload"
-                        class="tab-pane fade"
+                        class="tab-pane fade row"
                     >
-                        <div class="layerInfoDownloadFirstCol pull-left"></div>
-                        <ul
-                            v-if="showDownloadLinks"
-                            class="list-unstyled"
-                        >
-                            <li
-                                v-for="downloadLink in downloadLinks"
-                                :key="downloadLink"
+                        <div class="col-md-7">
+                            <ul
+                                v-if="showDownloadLinks"
+                                class="list-unstyled"
                             >
-                                <a
-                                    :href="downloadLink.link"
-                                    target="_blank"
+                                <li
+                                    v-for="downloadLink in downloadLinks"
+                                    :key="downloadLink"
                                 >
-                                    {{ $t(downloadLink.linkName) }}
-                                </a>
-                            </li>
-                        </ul>
+                                    <a
+                                        :href="downloadLink.link"
+                                        target="_blank"
+                                    >
+                                        {{ $t(downloadLink.linkName) }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                         <div
                             v-if="(showAttachFile)"
-                            class="layerInfoDownloadSecCol pull-right"
+                            class="col-md-5"
                         >
                             <span class="download-note">{{ $t(("common:modules.layerInformation.attachFileMessage")) }}</span>
                         </div>
                     </div>
-                </div>
-                <div
-                    id="url"
-                    class="tab-pane fade"
-                >
-                    <ul class="list-unstyled">
-                        <li>
-                            <a
-                                :href="layerUrl"
-                                target="_blank"
-                            >
-                                {{ layerInfo.url }}
-                            </a>
-                        </li>
-                    </ul>
+                    <div
+                        id="url"
+                        class="tab-pane fade"
+                    >
+                        <ul class="list-unstyled">
+                            <li>
+                                <a
+                                    :href="layerUrl"
+                                    target="_blank"
+                                >
+                                    {{ layerInfo.url }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </template>
@@ -203,5 +250,115 @@ export default {
 
 <style lang="less" scoped>
     @import "~variables";
+    @color_1: #E10019;
+    @background_color_1: white;
+    @background_color_2: rgb(255, 255, 255);
+
+/***** Destop *****/
+    .subtitle {
+        color: @color_1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+        max-width: 100%;
+        padding-top: 1px;
+        margin-bottom: 9px;
+    }
+    hr {
+        margin: 15px 0px 10px 0px;
+    }
+    .body {
+        p {
+            padding: 2px 10px 2px 0;
+        }
+        >ul {
+            background-color: @background_color_1;
+        }
+        max-height: 66vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    .layerInformation {
+        position: absolute;
+        top: 20px;
+        right: 60px;
+        max-width:600px;
+        width: 45vw;
+        max-width:600px;
+        margin: 0 10px 30px 10px;
+        z-index: 1010;
+        background-color: @background_color_2;
+        box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.176);
+        border: 1px solid rgb(229, 229, 229);
+    }
+
+    .header {
+        padding: 10px 10px 5px 10px;
+        border-bottom: 1px solid rgb(229, 229, 229);
+        cursor: move;
+    }
+    .glyphicon-remove {
+        &:hover {
+            opacity: 0.7;
+            cursor: pointer;
+        }
+    }
+
+    .nav-tabs {
+        display: flex;
+        >li {
+            font-size: 12px;
+            >a {
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+        }
+    }
+    .tab-content {
+        .tab-pane {
+            >ul {
+                >li {
+                    >a {
+                        font-size: 12px;
+                        text-overflow: ellipsis;
+                        display: inline-block;
+                        max-width: 95%;
+                        overflow: hidden;
+                    }
+                }
+            }
+        }
+        #layerinfo-legend {
+            max-width: 95%;
+            overflow: auto;
+        }
+    }
+
+.mb-2 {
+    margin-bottom: 2rem;
+}
+
+.dropdown-toggle {
+    width: 100%;
+}
+
+.dropdown-menu {
+    width: 100%;
+    a.active {
+        background-color: @accent_active;
+        color: white;
+    }
+    a:hover {
+        background-color: @accent_hover;
+    }
+}
+
+.download-note {
+    font-weight: bold;
+}
 
 </style>

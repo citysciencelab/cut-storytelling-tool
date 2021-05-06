@@ -16,6 +16,9 @@ export default {
     periodicity: null,
     idCounter: 0,
     layerInfo: {},
+    additionalLayer_1: {},
+    additionalLayer_2: {},
+    additionalLayer_3: {},
     abstractText: "Test",
     noMetadataLoaded: "",
     metaURLs: []

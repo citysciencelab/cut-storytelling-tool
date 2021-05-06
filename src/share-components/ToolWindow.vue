@@ -102,7 +102,7 @@ export default {
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
         z-index: 999;
         max-height:72vh;
-        overflow: auto;
+        // overflow: auto;
         min-width: 280px;
 
         .basic-resize-handle {

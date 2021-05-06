@@ -121,11 +121,13 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
      * @returns {void}
      */
     showLayerInformation: function () {
-        let legend = "";
+        let legend = "",
+            additionalLayerNumber = 0;
         const metaID = [],
             cswUrls = [],
             showDocUrls = [],
-            name = this.get("name");
+            name = this.get("name"),
+            layerNames = [];
 
         if (!this.get("layerSource")) {
             this.prepareLayerObject();
@@ -135,17 +137,26 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
         this.get("children").forEach(layer => {
             let cswUrl = null,
                 showDocUrl = null,
-                layerMetaId = null;
+                layerMetaId = null,
+                layerName = null;
 
             if (layer.datasets && Array.isArray(layer.datasets) && layer.datasets[0] !== null && typeof layer.datasets[0] === "object") {
                 cswUrl = layer.datasets[0].hasOwnProperty("csw_url") ? layer.datasets[0].csw_url : null;
                 showDocUrl = layer.datasets[0].hasOwnProperty("show_doc_url") ? layer.datasets[0].show_doc_url : null;
                 layerMetaId = layer.datasets[0].hasOwnProperty("md_id") ? layer.datasets[0].md_id : null;
+                layerName = layer.name;
             }
 
             metaID.push(layerMetaId);
             cswUrls.push(cswUrl);
             showDocUrls.push(showDocUrl);
+            layerNames.push(layerName);
+            additionalLayerNumber++;
+            store.dispatch("LayerInformation/additionalLayer_" + additionalLayerNumber, {
+                "metaID": layerMetaId,
+                "layerName": layerName,
+                "cswUrl": cswUrl
+            });
         });
 
         // Radio.trigger("LayerInformation", "add", {
@@ -163,9 +174,10 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
         store.dispatch("LayerInformation/layerInfo", {
             "id": this.get("id"),
             "legend": legend,
-            "metaID": metaID,
+            "metaID": metaID[0],
             "metaIdArray": metaID,
             "layername": name,
+            "layerNames": layerNames,
             "url": null,
             "typ": null,
             "cswUrl": cswUrls[0],
@@ -173,11 +185,12 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
             "urlIsVisible": this.get("urlIsVisible")
         });
 
-        store.dispatch("LayerInformation/setActive", true);
 
-        store.dispatch("LayerInformation/additionalLayerInfo");
+        store.dispatch("LayerInformation/activate", true);
 
-        store.dispatch("LayerInformation/setMetadataURL");
+        store.dispatch("LayerInformation/additionalSingleLayerInfo");
+
+        store.dispatch("LayerInformation/setMetadataURL", metaID[0]);
 
         store.dispatch("Legend/setLayerIdForLayerInfo", this.get("id"));
         store.dispatch("Legend/setLayerCounterIdForLayerInfo", Date.now());

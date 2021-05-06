@@ -1,4 +1,4 @@
-import {getMetadata, getRecordById} from "../../../api/csw/getRecordById";
+import {getRecordById} from "../../../api/csw/getRecordById";
 import getProxyUrl from "../../../utils/getProxyUrl";
 
 const actions = {
@@ -13,13 +13,62 @@ const actions = {
         commit("setLayerInfo", layerInformation);
     },
 
-    setActive: function ({commit}, active) {
+    additionalLayer_1: function ({commit}, additionalLayer) {
+        commit("setAdditionalLayer_1", additionalLayer);
+    },
+    additionalLayer_2: function ({commit}, additionalLayer) {
+        commit("setAdditionalLayer_2", additionalLayer);
+    },
+    additionalLayer_3: function ({commit}, additionalLayer) {
+        commit("setAdditionalLayer_3", additionalLayer);
+    },
+
+    activate: function ({commit}, active) {
         commit("setActive", active);
     },
 
     // get the layer Infos that aren't in the store but saved in the object
-    additionalLayerInfo: async function ({commit, dispatch, state, rootGetters}) {
-        debugger;
+    additionalSingleLayerInfo: async function ({dispatch, state}) {
+        let metaId;
+
+        if (typeof state.layerInfo.metaID === "string") {
+            metaId = state.layerInfo.metaID;
+        }
+        else {
+            metaId = state.layerInfo.metaID[0];
+        }
+        const cswUrl = state.layerInfo.cswUrl,
+            metaInfo = {metaId, cswUrl};
+
+        dispatch("getAbstractInfo", metaInfo);
+
+    },
+    changeLayerInfo: async function ({dispatch, state}, chosenElementTitle) {
+        let metaId,
+            cswUrl;
+
+        if (state.additionalLayer_1.layerName === chosenElementTitle) {
+            metaId = state.additionalLayer_1.metaID;
+            cswUrl = state.additionalLayer_1.cswUrl;
+        }
+        else if (state.additionalLayer_2.layerName === chosenElementTitle) {
+            metaId = state.additionalLayer_2.metaID;
+            cswUrl = state.additionalLayer_2.cswUrl;
+        }
+        else if (state.additionalLayer_3.layerName === chosenElementTitle) {
+            metaId = state.additionalLayer_3.metaID;
+            cswUrl = state.additionalLayer_3.cswUrl;
+        }
+
+        const metaInfo = {metaId, cswUrl};
+
+        dispatch("getAbstractInfo", metaInfo);
+
+        dispatch("setMetadataURL", metaId);
+
+    },
+
+    getAbstractInfo: async function ({commit, dispatch, state, rootGetters}, metaInfo) {
         let metadata;
 
         /**
@@ -27,11 +76,11 @@ const actions = {
          * useProxy
          * getProxyUrl()
          */
-        if (rootGetters["metadata"].useProxy.includes(state.layerInfo.cswUrl)) {
-            metadata = await getRecordById(getProxyUrl(state.layerInfo.cswUrl), state.layerInfo.metaID);
+        if (rootGetters.metadata.useProxy.includes(metaInfo.cswUrl)) {
+            metadata = await getRecordById(getProxyUrl(metaInfo.cswUrl), metaInfo.metaId);
         }
         else {
-            metadata = await getRecordById(state.layerInfo.cswUrl, state.layerInfo.metaID);
+            metadata = await getRecordById(metaInfo.cswUrl, metaInfo.metaId);
         }
 
 
@@ -42,7 +91,6 @@ const actions = {
             commit("noMetadataLoaded", i18next.t("common:modules.layerInformation.noMetadataLoaded"));
         }
         else {
-            debugger;
             commit("setAbstractText", metadata?.getAbstract());
             commit("setPeriodicityKey", metadata?.getFrequenzy());
             commit("setDateRevision", metadata?.getRevisionDate());
@@ -62,18 +110,17 @@ const actions = {
         else {
             // nothing?
         }
-
     },
 
     /**
      * Checks the array of metaIDs and creates array metaURL with complete URL for template. Does not allow duplicated entries
+     * @param {Object} metaId the given metaId for one layer
      * @returns {void}
      */
-    setMetadataURL: function ({state, commit, rootGetters}) {
-        debugger;
+    setMetadataURL: function ({state, commit, rootGetters}, metaId) {
         const metaURLs = [];
         let metaURL = "",
-            service,
+            service = null,
             metaDataCatalogueId = rootGetters.metaDataCatalogueId;
 
         // todo: set in vue
@@ -81,22 +128,20 @@ const actions = {
             metaDataCatalogueId = state.metaDataCatalogueId;
         }
 
-        state.layerInfo.metaIdArray.forEach(metaID => {
-            service = Radio.request("RestReader", "getServiceById", metaDataCatalogueId);
-            if (service === undefined) {
-                console.warn("Rest Service mit der ID " + metaDataCatalogueId + " ist rest-services.json nicht konfiguriert!");
-            }
-            else if (typeof state.layerInfo.showDocUrl !== "undefined" && state.layerInfo.showDocUrl !== null) {
-                metaURL = state.layerInfo.showDocUrl + metaID;
-            }
-            else {
-                metaURL = Radio.request("RestReader", "getServiceById", metaDataCatalogueId).get("url") + metaID;
-            }
+        service = Radio.request("RestReader", "getServiceById", metaDataCatalogueId);
+        if (service === undefined) {
+            console.warn("Rest Service mit der ID " + metaDataCatalogueId + " ist rest-services.json nicht konfiguriert!");
+        }
+        else if (typeof state.layerInfo.showDocUrl !== "undefined" && state.layerInfo.showDocUrl !== null) {
+            metaURL = state.layerInfo.showDocUrl + metaId;
+        }
+        else {
+            metaURL = Radio.request("RestReader", "getServiceById", metaDataCatalogueId).get("url") + metaId;
+        }
 
-            if (metaID !== null && metaID !== "" && metaURLs.indexOf(metaURL) === -1) {
-                metaURLs.push(metaURL);
-            }
-        });
+        if (metaId !== null && metaId !== "" && metaURLs.indexOf(metaURL) === -1) {
+            metaURLs.push(metaURL);
+        }
         commit("setMetaURLs", metaURLs);
     }
 

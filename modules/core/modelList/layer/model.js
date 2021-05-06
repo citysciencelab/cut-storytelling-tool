@@ -639,11 +639,11 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         //     "urlIsVisible": this.get("urlIsVisible")
         // });
 
-        store.dispatch("LayerInformation/setActive", true);
+        store.dispatch("LayerInformation/activate", true);
 
-        store.dispatch("LayerInformation/additionalLayerInfo");
+        store.dispatch("LayerInformation/additionalSingleLayerInfo");
 
-        store.dispatch("LayerInformation/setMetadataURL");
+        store.dispatch("LayerInformation/setMetadataURL", layerMetaId);
 
         store.dispatch("Legend/setLayerIdForLayerInfo", this.get("id"));
         store.dispatch("Legend/setLayerCounterIdForLayerInfo", Date.now());
