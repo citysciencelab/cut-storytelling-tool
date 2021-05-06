@@ -252,7 +252,6 @@ export default {
         padding-right: 10px;
     }
     #tool-compareFeatures-no-features {
-        max-width: 50vw;
         padding: 5px;
         padding-top: 0;
         p {
@@ -271,6 +270,9 @@ export default {
 <style lang="less">
     #modal-1-container #modal-1-overlay {
         z-index: 1000;
+    }
+    #modal-1-inner-wrapper {
+        min-width: 95%;
     }
     #modal-1-container #modal-1-inner-wrapper #modal-1-content-container {
         padding: 0;

@@ -78,7 +78,7 @@ export default {
                                 <a
                                     :href="value"
                                     target="_blank"
-                                >Link</a>
+                                >{{ value }}</a>
                             </p>
                             <p v-else-if="isPhoneNumber(value)">
                                 <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
@@ -119,7 +119,7 @@ export default {
                                 <a
                                     :href="value"
                                     target="_blank"
-                                >Link</a>
+                                >{{ value }}</a>
                             </p>
                             <p v-else-if="isPhoneNumber(value)">
                                 <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
@@ -171,7 +171,7 @@ export default {
                                 <a
                                     :href="value"
                                     target="_blank"
-                                >Link</a>
+                                >{{ value }}</a>
                             </p>
                             <p v-else-if="isPhoneNumber(value)">
                                 <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
@@ -214,7 +214,7 @@ export default {
                                 <a
                                     :href="value"
                                     target="_blank"
-                                >Link</a>
+                                >{{ value }}</a>
                             </p>
                             <p v-else-if="isPhoneNumber(value)">
                                 <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
@@ -293,6 +293,7 @@ export default {
             padding: 8px;
             text-align: left;
             border-left: 1px solid #ccc;
+            vertical-align: top;
         }
     }
     .close {
