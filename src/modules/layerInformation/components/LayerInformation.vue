@@ -12,6 +12,11 @@ export default {
     components: {
         ToolWindow
     },
+    data: function () {
+        return {
+            layerInfoIsActive: false
+        };
+    },
     computed: {
         ...mapGetters("LayerInformation", Object.keys(getters)),
         ...mapGetters(["metaDataCatalogueId"]),

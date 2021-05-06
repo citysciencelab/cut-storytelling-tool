@@ -278,7 +278,6 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
             service;
 
         this.get("metaID").forEach(function (metaID) {
-            debugger;
             service = Radio.request("RestReader", "getServiceById", this.get("metaDataCatalogueId"));
             if (service === undefined) {
                 console.warn("Rest Service mit der ID " + this.get("metaDataCatalogueId") + " ist rest-services.json nicht konfiguriert!");

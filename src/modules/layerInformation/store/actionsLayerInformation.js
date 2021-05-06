@@ -1,4 +1,4 @@
-import {getMetadata, getRecordById} from "../../../api/csw/getRecordById";
+import {getRecordById} from "../../../api/csw/getRecordById";
 import getProxyUrl from "../../../utils/getProxyUrl";
 
 const actions = {
