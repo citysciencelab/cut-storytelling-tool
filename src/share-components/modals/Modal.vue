@@ -87,6 +87,11 @@ export default {
                     @click="discardByClickX"
                 />
                 <div
+                    id="modal-1-header-container"
+                >
+                <slot name="header"></slot>
+                </div>
+                <div
                     id="modal-1-content-container"
                 >
                     <slot />

@@ -81,48 +81,50 @@ export default {
             :showModal="showAlert && !active"
             @modalHid="setShowAlert(false)"
         >
-            <div v-if="!listFull">
-                <h4 v-if="currentFeatureName">
-                    {{ $t("common:modules.tools.compareFeatures.feedback.addedWithName", {currentFeatureName}) }}
-                </h4>
-                <h4 v-else>
-                    {{ $t("common:modules.tools.compareFeatures.feedback.added") }}
-                </h4>
-                <hr>
-            </div>
-            <div
-                v-else
-                id="tool-compareFeatures-buttons-feedback-listFull"
-            >
-                <h4 v-if="currentFeatureName">
-                    {{ $t("common:modules.tools.compareFeatures.feedback.notAddedWithName", {currentFeatureName}) }}
-                </h4>
-                <h4 v-else>
-                    {{ $t("common:modules.tools.compareFeatures.feedback.notAdded") }}
-                </h4>
-                <hr>
-                <p>{{ $t("common:modules.tools.compareFeatures.feedback.limitReached") }}</p>
-                <p>{{ $t("common:modules.tools.compareFeatures.feedback.removeObjects") }}</p>
-                <hr>
-            </div>
-            <div id="tool-compareFeatures-buttons">
-                <button
-                    class="btn btn-primary btn-infos"
-                    :title="$t('common:button.back')"
-                    @click="setShowAlert(false)"
+            <template>
+                <div v-if="!listFull">
+                    <h4 v-if="currentFeatureName">
+                        {{ $t("common:modules.tools.compareFeatures.feedback.addedWithName", {currentFeatureName}) }}
+                    </h4>
+                    <h4 v-else>
+                        {{ $t("common:modules.tools.compareFeatures.feedback.added") }}
+                    </h4>
+                    <hr>
+                </div>
+                <div
+                    v-else
+                    id="tool-compareFeatures-buttons-feedback-listFull"
                 >
-                    {{ $t("common:button.back") }}
-                </button>
-                <button
-                    class="btn btn-primary btn-infos"
-                    :title="$t('common:modules.tools.compareFeatures.feedback.goToComparisonlist')"
-                    @click="setActive(true)"
-                >
-                    {{ $t("common:modules.tools.compareFeatures.feedback.goToComparisonlist") }}
-                </button>
-            </div>
+                    <h4 v-if="currentFeatureName">
+                        {{ $t("common:modules.tools.compareFeatures.feedback.notAddedWithName", {currentFeatureName}) }}
+                    </h4>
+                    <h4 v-else>
+                        {{ $t("common:modules.tools.compareFeatures.feedback.notAdded") }}
+                    </h4>
+                    <hr>
+                    <p>{{ $t("common:modules.tools.compareFeatures.feedback.limitReached") }}</p>
+                    <p>{{ $t("common:modules.tools.compareFeatures.feedback.removeObjects") }}</p>
+                    <hr>
+                </div>
+                <div id="tool-compareFeatures-buttons">
+                    <button
+                        class="btn btn-primary btn-infos"
+                        :title="$t('common:button.back')"
+                        @click="setShowAlert(false)"
+                    >
+                        {{ $t("common:button.back") }}
+                    </button>
+                    <button
+                        class="btn btn-primary btn-infos"
+                        :title="$t('common:modules.tools.compareFeatures.feedback.goToComparisonlist')"
+                        @click="setActive(true)"
+                    >
+                        {{ $t("common:modules.tools.compareFeatures.feedback.goToComparisonlist") }}
+                    </button>
+                </div>
+            </template>
         </Modal>
-        <template>
+        <template v-slot:header>
             <h4 class="tool-compareFeatures-modal-title">
                 {{ $t('common:modules.tools.compareFeatures.title') }}
             </h4>
@@ -151,14 +153,17 @@ export default {
                     </select>
                 </div>
             </div>
+        </template>
+        <template>
             <div
                 v-if="!hasFeatures"
                 id="tool-compareFeatures-no-features"
             >
                 <hr>
-                <p>
+                <p class="bold">
                     {{ $t("common:modules.tools.compareFeatures.noFeatures.nothingSelected", {objects: $t("common:modules.tools.compareFeatures.noFeatures.objectName")}) }}
                 </p>
+                <br>
                 <p v-html="$t('common:modules.tools.compareFeatures.noFeatures.info', {iconEmptyStar, iconYellowStar, interpolation: {escapeValue: false}})">
                 </p>
             </div>
@@ -184,8 +189,9 @@ export default {
             <div
                 v-if="showButtons"
                 id="tool-compareFeatures-buttons"
-            >    <hr>
-            
+            >
+                <hr>
+
                 <button
                     class="btn btn-primary btn-infos"
                     :title="!showMoreInfo ? $t('common:modules.tools.compareFeatures.moreInfo') : $t('common:modules.tools.compareFeatures.lessInfo')"
@@ -197,7 +203,7 @@ export default {
                 <button
                     class="btn btn-primary btn-infos"
                     :title="$t('common:modules.tools.compareFeatures.exportAsPdf')"
-                    @click="preparePrint()"
+                    @click="preparePrint();"
                 >
                     {{ $t("common:modules.tools.compareFeatures.exportAsPdf") }}
                 </button>
@@ -221,7 +227,8 @@ export default {
         text-align: center;
     }
     h4 {
-        padding: 20px;
+        padding-top: 10px;
+        padding-left: 20px;
     }
     #tool-compareFeatures-select-container {
         padding-bottom: 50px;
@@ -254,7 +261,7 @@ export default {
         padding-right: 10px;
     }
     #tool-compareFeatures-no-features {
-        padding: 5px;
+        padding: 15px;
         padding-top: 0;
         p {
             line-height: 22px;
@@ -267,21 +274,19 @@ export default {
     label {
         margin-top: 7px;
     }
+    #test {
+        width: 20px;
+    }
 </style>
 
 <style lang="less">
+
     #modal-1-container #modal-1-overlay {
         z-index: 1000;
-    }
-    #modal-1-inner-wrapper {
-        min-width: 95%;
     }
     #modal-1-container #modal-1-inner-wrapper #modal-1-content-container {
         padding: 0;
         overflow: auto;
-        max-height: 80vh;
-    }
-    #modal-1-inner-wrapper .glyphicon.glyphicon-remove {
-        right: 18px !important;
+        max-height: 70vh;
     }
 </style>
