@@ -48,8 +48,7 @@ export default {
     formatInput ({state, commit, getters}, coords) {
         const {currentSelection} = state,
             formatters = {
-                // ETRS89: coord=>coord.value,
-                "EPSG:8395": coord=>coord.value,
+                ETRS89: coord=>coord.value,
                 WGS84: coord=>coord.value.split(/[\s°′″'"´`]+/),
                 "WGS84(Dezimalgrad)": coord=>coord.value.split(/[\s°]+/)
             };
@@ -74,10 +73,9 @@ export default {
             validWGS84_dez = /[0-9]{1,3}[.,][0-9]{0,5}[\s]{0,1}[°]\s*$/,
             {currentSelection} = state,
             validators = {
-                // ETRS89: validETRS89,
-                "EPSG:8395": validETRS89,
+                ETRS89: validETRS89,
                 WGS84: validWGS84,
-                "WGS84(Dezimalgrad)": validWGS84_dez // todo inka: gibt es epsg-code  dazu?
+                "WGS84(Dezimalgrad)": validWGS84_dez
             };
 
         if (coord.id === "easting") {
@@ -108,8 +106,7 @@ export default {
         if (state.selectedCoordinates.length === 2) {
             dispatch("setZoom", state.zoomLevel);
 
-            // if (state.currentSelection !== "ETRS89") {
-            if (state.currentSelection !== "EPSG:8395") {
+            if (state.currentSelection !== "ETRS89") {
 
                 const latitude = state.selectedCoordinates[0],
                     newLatitude = Number(latitude[0]) +
@@ -159,13 +156,6 @@ export default {
      * @returns {void}
      */
     selectionChanged ({commit, dispatch}, {currentTarget}) {
-        // console.log("setCurrentSelection:", currentTarget.value);
-        /*
-        setCurrentSelection: EPSG:31467
-actionsSearchByCoord.js?0c87:159 setCurrentSelection: http://www.opengis.net/gml/srs/epsg.xml#25832
-actionsSearchByCoord.js?0c87:159 setCurrentSelection: EPSG:4326
-actionsSearchByCoord.js?0c87:159 setCurrentSelection: EPSG:8395
-*/
         commit("setCurrentSelection", currentTarget.value);
         commit("setExample");
         commit("resetValues");

@@ -1,8 +1,8 @@
 export const mode = {
-    SUPPLY: "supply",
-    SEARCH: "search"
-};
-/**
+        SUPPLY: "supply",
+        SEARCH: "search"
+    },
+    /**
  * User type definition
  * @typedef {Object} CoordToolkitState
  * @property {Boolean} active if true, CoordToolkit will rendered
@@ -24,28 +24,28 @@ export const mode = {
  * @property {Boolean} isVisibleInMenu if true, tool is selectable in menu (config-param)
  * @property {Boolean} deactivateGFI flag if tool should deactivate gfi (config-param)
  */
-const state = {
-    active: false,
-    id: "coordToolkit",
-    mode: mode.SUPPLY,
-    selectPointerMove: null,
-    projections: [],
-    mapProjection: null,
-    positionMapProjection: [],
-    updatePosition: true,
-    currentProjectionName: "EPSG:25832",
-    currentProjection: null,
-    currentSelection: "EPSG:25832",
-    coordinatesEastingField: "",
-    coordinatesNorthingField: "",
+    state = {
+        active: false,
+        id: "coordToolkit",
+        mode: mode.SUPPLY,
+        selectPointerMove: null,
+        projections: [],
+        mapProjection: null,
+        positionMapProjection: [],
+        updatePosition: true,
+        currentProjectionName: "EPSG:25832",
+        currentProjection: null,
+        currentSelection: "EPSG:25832",
+        coordinatesEastingField: "",
+        coordinatesNorthingField: "",
 
-    // defaults for config.json parameters
-    name: "common:menu.tools.coordToolkit",
-    glyphicon: "glyphicon-screenshot",
-    renderToWindow: true,
-    resizableWindow: true,
-    isVisibleInMenu: true,
-    deactivateGFI: true
-};
+        // defaults for config.json parameters
+        name: "common:menu.tools.coordToolkit",
+        glyphicon: "glyphicon-screenshot",
+        renderToWindow: true,
+        resizableWindow: true,
+        isVisibleInMenu: true,
+        deactivateGFI: true
+    };
 
 export default state;

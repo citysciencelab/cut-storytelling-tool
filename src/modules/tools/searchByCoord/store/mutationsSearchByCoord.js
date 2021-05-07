@@ -15,8 +15,7 @@ const mutations = {
      * @returns {void}
      */
     setExample (state) {
-        // if (state.currentSelection === "ETRS89") {
-        if (state.currentSelection === "EPSG:8395") {
+        if (state.currentSelection === "ETRS89") {
             state.coordinatesEastingExample = "564459.13";
             state.coordinatesNorthingExample = "5935103.67";
         }

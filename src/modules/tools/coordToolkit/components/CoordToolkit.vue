@@ -142,23 +142,28 @@ export default {
 
             return "modules.tools.coordToolkit." + type + "." + key;
         },
-        isEnabled (mode) {
-            console.log("this.mode:", this.mode);
-            console.log("mode:", mode);
-            return this.mode === mode;
+        /**
+         * Returns true, if given checkboxId is equals curent mode in state.
+         * @param {String} checkboxId "supply" or "search"
+         * @returns {Boolean} true, if given checkboxId is equals curent mode in state
+         */
+        isEnabled (checkboxId) {
+            return this.mode === checkboxId;
         },
-        changeMode () {
+        /**
+         * Toggles the mode "supply" or "search".
+         * @returns {void}
+         */
+        toggleMode () {
             if (this.mode === mode.SUPPLY) {
                 this.setMode(mode.SEARCH);
                 this.$refs.supplyCoordCheckBox.setActive(false);
                 this.$refs.searchByCoordCheckBox.setActive(true);
-                console.log("mode changed to ", this.mode, " =SEARCH");
             }
             else {
                 this.setMode(mode.SUPPLY);
                 this.$refs.searchByCoordCheckBox.setActive(false);
                 this.$refs.supplyCoordCheckBox.setActive(true);
-                console.log("mode changed to ", this.mode, " =SUPPLY");
             }
         }
     }
@@ -188,7 +193,7 @@ export default {
                             <div class="title-checkbox">
                                 <label
                                     :class="{ enabled: isEnabled('supply') }"
-                                    @click="changeMode()"
+                                    @click="toggleMode"
                                 >{{ $t("modules.tools.coordToolkit.supply") }}</label>
                                 <ToggleCheckbox
                                     ref="supplyCoordCheckBox"
@@ -196,7 +201,7 @@ export default {
                                     :title="$t('common:modules.tools.coordToolkit.supply')"
                                     :textOn="$t('common:snippets.checkbox.on')"
                                     :textOff="$t('common:snippets.checkbox.off')"
-                                    @change="changeMode"
+                                    @change="toggleMode"
                                 />
                             </div>
                         </div>
@@ -204,7 +209,7 @@ export default {
                             <div class="title-checkbox">
                                 <label
                                     :class="{ enabled: isEnabled('search') }"
-                                    @click="changeMode()"
+                                    @click="toggleMode"
                                 >{{ $t("modules.tools.coordToolkit.search") }}</label>
                                 <ToggleCheckbox
                                     ref="searchByCoordCheckBox"
@@ -212,7 +217,7 @@ export default {
                                     :title="$t('additional:modules.tools.populationRequest.switchOffFilter')"
                                     :textOn="$t('common:snippets.checkbox.on')"
                                     :textOff="$t('common:snippets.checkbox.off')"
-                                    @change="changeMode"
+                                    @change="toggleMode"
                                 />
                             </div>
                         </div>
