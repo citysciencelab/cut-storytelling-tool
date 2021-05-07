@@ -651,7 +651,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         if (this.createLegend && {}.toString.call(this.createLegend) === "[object Function]") {
             this.createLegend();
         }
-        // this.setLayerInfoChecked(true);
+        this.setLayerInfoChecked(true);
     },
 
     /**
