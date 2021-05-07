@@ -1,6 +1,7 @@
 <script>
 import Tool from "../../Tool.vue";
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {getProjections} from "masterportalAPI/src/crs";
+import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersSearchByCoord";
 import actions from "../store/actionsSearchByCoord";
 import mutations from "../store/mutationsSearchByCoord";
@@ -36,6 +37,17 @@ export default {
                 return this.$t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: this.$t(this.getLabel("eastingLabel"))});
             }
             return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.getLabel("eastingLabel"))});
+        },
+        /**
+         * Must be a two-way computed property, because it is used as v-model for select-Element, see https://vuex.vuejs.org/guide/forms.html.
+         */
+        currentSelection: {
+            get () {
+                return this.$store.state.Tools.SearchByCoord.currentSelection;
+            },
+            set (newValue) {
+                this.setCurrentSelection(newValue);
+            }
         }
     },
     watch: {
@@ -53,6 +65,10 @@ export default {
         }
     },
     created () {
+        this.setCoordinateSystems(getProjections());
+        // this.coordinateSystems.forEach(element => {
+        //     console.log("searchbycoord:", element.name, ", ", element.title);
+        // });
         this.$on("close", this.close);
         this.setExample();
     },
@@ -71,6 +87,9 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
+        },
+        isSelected (name) {
+            return name === this.currentSelection;
         }
     }
 };
@@ -101,16 +120,17 @@ export default {
                         <div class="col-md-7 col-sm-7">
                             <select
                                 id="coordSystemField"
+                                v-model="currentSelection"
                                 class="font-arial form-control input-sm pull-left"
-                                :value="currentSelection"
                                 @change="selectionChanged"
                             >
                                 <option
-                                    v-for="coordinateSystem in coordinateSystems"
-                                    :key="coordinateSystem"
-                                    :value="coordinateSystem"
+                                    v-for="(projection, i) in coordinateSystems"
+                                    :key="i"
+                                    :value="projection.name"
+                                    :SELECTED="isSelected(projection.name)"
                                 >
-                                    {{ coordinateSystem }}
+                                    {{ projection.title ? projection.title : projection.name }}
                                 </option>
                             </select>
                         </div>

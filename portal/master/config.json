@@ -280,8 +280,8 @@
             "name": "translate#common:menu.tools.supplyCoord",
             "glyphicon": "glyphicon-screenshot"
           },
-          "coord": {
-            "name": "translate#common:menu.tools.coord",
+          "coordToolkit": {
+            "name": "translate#common:menu.tools.coordToolkit",
             "glyphicon": "glyphicon-globe"
           },
           "shadow": {

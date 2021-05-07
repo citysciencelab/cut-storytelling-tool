@@ -1,11 +1,11 @@
 import {expect} from "chai";
 import sinon from "sinon";
-import getters from "../../../store/gettersCoord";
-import stateCoord from "../../../store/stateCoord";
+import getters from "../../../store/gettersCoordToolkit";
+import stateCoord from "../../../store/stateCoordToolkit";
 
-describe("src/modules/tools/coord/store/gettersCoord.js", () => {
+describe("src/modules/tools/coordToolkit/store/gettersCoordToolkit.js", () => {
 
-    describe("Coord getters", () => {
+    describe("CoordToolkit getters", () => {
         it("returns the selectPointerMove from state", () => {
             const emptyFunc = sinon.stub(),
                 state = {

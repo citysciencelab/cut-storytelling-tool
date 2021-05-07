@@ -36,7 +36,7 @@
             "parcelSearch": "Flurstückssuche",
             "print": "Karte Drucken",
             "measure": "Strecke / Fläche messen",
-            "coord": "Koordinaten",
+            "coordToolkit": "Koordinaten",
             "supplyCoord": "Koordinaten abfragen",
             "searchByCoord": "Koordinatensuche",
             "fileImport": "Datei-Import",
@@ -456,8 +456,10 @@
                     "northingLabel": "Hochwert"
                 }
             },
-            "coord": {
+            "coordToolkit": {
                 "title": "Koordinaten abfragen",
+                "supply":"Koordinaten abfragen",
+                "search":"Koordinaten suchen",
                 "coordSystemField": "Koordinatensystem",
                 "hdms": {
                     "eastingLabel": "Länge",

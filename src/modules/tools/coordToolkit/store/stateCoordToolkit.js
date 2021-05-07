@@ -1,8 +1,12 @@
+export const mode = {
+    SUPPLY: "supply",
+    SEARCH: "search"
+};
 /**
  * User type definition
- * @typedef {Object} CoordState
- * @property {Boolean} active if true, Coord will rendered
- * @property {String} id id of the Coord component
+ * @typedef {Object} CoordToolkitState
+ * @property {Boolean} active if true, CoordToolkit will rendered
+ * @property {String} id id of the CoordToolkit component
  * @property {module:ol/interaction/Pointer} selectPointerMove contains interaction listener to map
  * @property {Object[]} projections list of available projections
  * @property {Object} mapProjection projection of the map
@@ -22,7 +26,8 @@
  */
 const state = {
     active: false,
-    id: "coord",
+    id: "coordToolkit",
+    mode: mode.SUPPLY,
     selectPointerMove: null,
     projections: [],
     mapProjection: null,
@@ -35,7 +40,7 @@ const state = {
     coordinatesNorthingField: "",
 
     // defaults for config.json parameters
-    name: "common:menu.tools.coord",
+    name: "common:menu.tools.coordToolkit",
     glyphicon: "glyphicon-screenshot",
     renderToWindow: true,
     resizableWindow: true,

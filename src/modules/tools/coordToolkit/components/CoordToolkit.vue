@@ -4,23 +4,26 @@ import getComponent from "../../../../utils/getComponent";
 import {Pointer} from "ol/interaction.js";
 import {getProjections} from "masterportalAPI/src/crs";
 import {mapGetters, mapActions, mapMutations} from "vuex";
-import getters from "../store/gettersCoord";
-import mutations from "../store/mutationsCoord";
+import getters from "../store/gettersCoordToolkit";
+import mutations from "../store/mutationsCoordToolkit";
+import {mode} from "../store/stateCoordToolkit";
+import ToggleCheckbox from "../../../../share-components/ToggleCheckbox.vue";
 
 export default {
-    name: "Coord",
+    name: "CoordToolkit",
     components: {
-        Tool
+        Tool,
+        ToggleCheckbox
     },
     computed: {
-        ...mapGetters("Tools/Coord", Object.keys(getters)),
+        ...mapGetters("Tools/CoordToolkit", Object.keys(getters)),
         ...mapGetters("Map", ["projection", "mouseCoord"]),
         /**
          * Must be a two-way computed property, because it is used as v-model for select-Element, see https://vuex.vuejs.org/guide/forms.html.
          */
         currentSelection: {
             get () {
-                return this.$store.state.Tools.Coord.currentSelection;
+                return this.$store.state.Tools.CoordToolkit.currentSelection;
             },
             set (newValue) {
                 this.setCurrentSelection(newValue);
@@ -53,8 +56,8 @@ export default {
         this.$on("close", this.close);
     },
     methods: {
-        ...mapMutations("Tools/Coord", Object.keys(mutations)),
-        ...mapActions("Tools/Coord", [
+        ...mapMutations("Tools/CoordToolkit", Object.keys(mutations)),
+        ...mapActions("Tools/CoordToolkit", [
             "checkPosition",
             "changedPosition",
             "copyToClipboard",
@@ -123,7 +126,7 @@ export default {
             // TODO replace trigger when Menu is migrated
             // set the backbone model to active false for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
             // else the menu-entry for this tool is always highlighted
-            const model = getComponent(this.$store.state.Tools.Coord.id);
+            const model = getComponent(this.$store.state.Tools.CoordToolkit.id);
 
             if (model) {
                 model.set("isActive", false);
@@ -137,7 +140,26 @@ export default {
         label (key) {
             const type = this.currentProjectionName === "EPSG:4326" ? "hdms" : "cartesian";
 
-            return "modules.tools.coord." + type + "." + key;
+            return "modules.tools.coordToolkit." + type + "." + key;
+        },
+        isEnabled (mode) {
+            console.log("this.mode:", this.mode);
+            console.log("mode:", mode);
+            return this.mode === mode;
+        },
+        changeMode () {
+            if (this.mode === mode.SUPPLY) {
+                this.setMode(mode.SEARCH);
+                this.$refs.supplyCoordCheckBox.setActive(false);
+                this.$refs.searchByCoordCheckBox.setActive(true);
+                console.log("mode changed to ", this.mode, " =SEARCH");
+            }
+            else {
+                this.setMode(mode.SUPPLY);
+                this.$refs.searchByCoordCheckBox.setActive(false);
+                this.$refs.supplyCoordCheckBox.setActive(true);
+                console.log("mode changed to ", this.mode, " =SUPPLY");
+            }
         }
     }
 };
@@ -155,17 +177,51 @@ export default {
         <template v-slot:toolBody>
             <div
                 v-if="active"
-                id="supply-coord"
+                id="coordToolkit"
             >
                 <form
                     class="form-horizontal"
                     role="form"
                 >
+                    <div class="checkbox-container">
+                        <div class="form-inline">
+                            <div class="title-checkbox">
+                                <label
+                                    :class="{ enabled: isEnabled('supply') }"
+                                    @click="changeMode()"
+                                >{{ $t("modules.tools.coordToolkit.supply") }}</label>
+                                <ToggleCheckbox
+                                    ref="supplyCoordCheckBox"
+                                    :defaultState="true"
+                                    :title="$t('common:modules.tools.coordToolkit.supply')"
+                                    :textOn="$t('common:snippets.checkbox.on')"
+                                    :textOff="$t('common:snippets.checkbox.off')"
+                                    @change="changeMode"
+                                />
+                            </div>
+                        </div>
+                        <div class="form-inline">
+                            <div class="title-checkbox">
+                                <label
+                                    :class="{ enabled: isEnabled('search') }"
+                                    @click="changeMode()"
+                                >{{ $t("modules.tools.coordToolkit.search") }}</label>
+                                <ToggleCheckbox
+                                    ref="searchByCoordCheckBox"
+                                    :defaultState="false"
+                                    :title="$t('additional:modules.tools.populationRequest.switchOffFilter')"
+                                    :textOn="$t('common:snippets.checkbox.on')"
+                                    :textOff="$t('common:snippets.checkbox.off')"
+                                    @change="changeMode"
+                                />
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group form-group-sm">
                         <label
                             for="coordSystemField"
                             class="col-md-5 col-sm-5 control-label"
-                        >{{ $t("modules.tools.coord.coordSystemField") }}</label>
+                        >{{ $t("modules.tools.coordToolkit.coordSystemField") }}</label>
                         <div class="col-md-7 col-sm-7">
                             <select
                                 id="coordSystemField"
@@ -225,3 +281,24 @@ export default {
         </template>
     </Tool>
 </template>
+
+<style lang="less" scoped>
+    @media (max-width: 767px) {
+        .checkbox-container .form-inline {
+            font-size: 12px;
+        }
+    }
+    .checkbox-container .form-inline .title-checkbox label {
+        font-size: 14px;
+    }
+    .enabled {
+        font-weight: bold;
+    }
+    .checkbox-container .form-inline {
+        padding: 0px 15px;
+    }
+    .checkbox-container{
+        padding-bottom: 25px;
+    }
+</style>
+

@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
     {By, until, Key} = webdriver;
 
 /**
- * Tests regarding coord tool.
+ * Tests regarding coordToolkit tool.
  * @param {Object} params e2eTestParams
  * @param {module:selenium-webdriver.Builder} params.builder the selenium.Builder object
  * @param {String} params.url the url to test
@@ -21,7 +21,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function CoordTests ({builder, url, resolution, config, capability}) {
-    describe("Coord", function () {
+    describe("CoordToolkit", function () {
         const selectors = {
             tools: By.xpath("//ul[@id='tools']/.."),
             toolCoord: By.css("ul#tools span.glyphicon-screenshot"),

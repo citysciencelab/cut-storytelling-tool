@@ -1,5 +1,5 @@
 import {generateSimpleMutations} from "../../../../app-store/utils/generators";
-import coordState from "./stateCoord";
+import coordState from "./stateCoordToolkit";
 
 const mutations = {
     /**

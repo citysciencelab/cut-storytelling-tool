@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import * as crs from "masterportalAPI/src/crs";
 import {getProjections} from "masterportalAPI/src/crs";
-import mutations from "../../../store/mutationsCoord";
+import mutations from "../../../store/mutationsCoordToolkit";
 
 const {setProjections} = mutations,
     namedProjections = [
@@ -11,7 +11,7 @@ const {setProjections} = mutations,
         ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
     ];
 
-describe("src/modules/tools/coord/store/mutationsCoord.js", () => {
+describe("src/modules/tools/coordToolkit/store/mutationsCoordToolkit.js", () => {
 
     before(() => {
         crs.registerProjections(namedProjections);

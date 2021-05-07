@@ -1,7 +1,7 @@
 
 import {transformFromMapProjection} from "masterportalAPI/src/crs";
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
-import coordState from "./stateCoord";
+import coordState from "./stateCoordToolkit";
 
 const getters = {
     ...generateSimpleGetters(coordState),

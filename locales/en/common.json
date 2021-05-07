@@ -36,7 +36,7 @@
             "parcelSearch": "Parcel search",
             "print": "Print map",
             "measure": "Measure distance / area",
-            "coord": "Coordinates",
+            "coordToolkit": "Coordinates",
             "supplyCoord": "Query coordinates",
             "searchByCoord": "Coordinate search",
             "fileImport": "Import file",
@@ -456,8 +456,10 @@
                     "northingLabel": "Northing"
                 }
             },
-            "coord": {
-                "title": "Query Coordinates",
+            "coordToolkit": {
+                "title": "Coordinates",
+                "supply":"Query Coordinates",
+                "search":"Coordinate search",
                 "coordSystemField": "Coordinate system",
                 "hdms": {
                     "eastingLabel": "Longitude",

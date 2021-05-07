@@ -33,7 +33,7 @@
             "parcelSearch": "Ricerca parcella catastale",
             "print": "Stampa mappa",
             "measure": "Misura distanza / area",
-            "coord": "Coordinate",
+            "coordToolkit": "Coordinate",
             "supplyCoord": "Richiedi coordinate",
             "searchByCoord": "Ricerca di coordinate",
             "fileImport": "Importa file",
@@ -435,8 +435,10 @@
                     "northingLabel": "Latitudine"
                 }
             }, 
-            "coord": {
+            "coordToolkit": {
                 "title": "Richiedi coordinate",
+                "supply": "Richiedi coordinate",
+                "search": "Ricerca di coordinate",
                 "coordSystemField": "Sistema di riferimento",
                 "hdms": {
                     "eastingLabel": "Longitudine",
