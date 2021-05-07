@@ -277,8 +277,12 @@
             "glyphicon": "glyphicon-resize-full"
           },
           "supplyCoord": {
-            "name": "translate#common:menu.tools.coord",
+            "name": "translate#common:menu.tools.supplyCoord",
             "glyphicon": "glyphicon-screenshot"
+          },
+          "coord": {
+            "name": "translate#common:menu.tools.coord",
+            "glyphicon": "glyphicon-globe"
           },
           "shadow": {
             "name": "translate#common:menu.tools.shadow",

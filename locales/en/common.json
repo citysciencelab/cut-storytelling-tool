@@ -36,7 +36,7 @@
             "parcelSearch": "Parcel search",
             "print": "Print map",
             "measure": "Measure distance / area",
-            "coord": "Query coordinates",
+            "coord": "Coordinates",
             "supplyCoord": "Query coordinates",
             "searchByCoord": "Coordinate search",
             "fileImport": "Import file",
@@ -445,6 +445,18 @@
               "propertylessFeature": "Element without attributes"
             },
             "supplyCoord": {
+                "title": "Query Coordinates",
+                "coordSystemField": "Coordinate system",
+                "hdms": {
+                    "eastingLabel": "Longitude",
+                    "northingLabel": "Latitude"
+                },
+                "cartesian": {
+                    "eastingLabel": "Easting",
+                    "northingLabel": "Northing"
+                }
+            },
+            "coord": {
                 "title": "Query Coordinates",
                 "coordSystemField": "Coordinate system",
                 "hdms": {
