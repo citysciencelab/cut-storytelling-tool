@@ -182,7 +182,7 @@ export default {
         <template v-slot:toolBody>
             <div
                 v-if="active"
-                id="coordToolkit"
+                id="coord-toolkit"
             >
                 <form
                     class="form-horizontal"

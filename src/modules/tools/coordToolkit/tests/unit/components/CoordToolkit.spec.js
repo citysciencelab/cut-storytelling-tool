@@ -84,14 +84,14 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
         store.commit("Tools/CoordToolkit/setActive", true);
         wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
 
-        expect(wrapper.find("#supply-coord").exists()).to.be.true;
+        expect(wrapper.find("#coord-toolkit").exists()).to.be.true;
     });
 
     it("not renders CoordToolkit", () => {
         store.commit("Tools/CoordToolkit/setActive", false);
         wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
 
-        expect(wrapper.find("#supply-coord").exists()).to.be.false;
+        expect(wrapper.find("#coord-toolkit").exists()).to.be.false;
     });
 
     it("has initially selected projection \"EPSG:25832\"", async () => {
@@ -158,15 +158,15 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             store.commit("Tools/CoordToolkit/setActive", true);
             store.commit("Tools/CoordToolkit/setCurrentProjectionName", "EPSG:4326");
             ret = wrapper.vm.label(key);
-            expect(ret).to.be.equals("modules.tools.CoordToolkit.hdms.key");
+            expect(ret).to.be.equals("modules.tools.coordToolkit.hdms.key");
 
             store.commit("Tools/CoordToolkit/setCurrentProjectionName", "EPSG:31467");
             ret = wrapper.vm.label(key);
-            expect(ret).to.be.equals("modules.tools.CoordToolkit.cartesian.key");
+            expect(ret).to.be.equals("modules.tools.coordToolkit.cartesian.key");
 
             store.commit("Tools/CoordToolkit/setCurrentProjectionName", null);
             ret = wrapper.vm.label(key);
-            expect(ret).to.be.equals("modules.tools.CoordToolkit.cartesian.key");
+            expect(ret).to.be.equals("modules.tools.coordToolkit.cartesian.key");
         });
     });
     describe("CoordToolkit.vue watcher", () => {
