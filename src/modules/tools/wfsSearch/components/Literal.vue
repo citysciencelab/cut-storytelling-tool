@@ -29,9 +29,9 @@ export default {
 
 <template>
     <!-- TODO: Find a way for the visual indicator for the "and" and "or"; also do something with the type -->
-    <!-- TODO: Grouping of elements of a clause for visualization-->
     <Field
         v-if="literal.field"
+        :key="`tool-wfsSearch-clause-literal-field-${literal.field.id}-${literal.field.fieldName}`"
         :default-value="literal.field.defaultValue"
         :field-id="literal.field.id"
         :field-name="literal.field.fieldName"
@@ -43,6 +43,7 @@ export default {
         :type="literal.field.type"
         :dropdownInputUsesId="literal.field.usesId"
     />
+    <!-- TODO: This div can be styled for visual highlighting -> Also, visual error probably comes from here! -->
     <div v-else-if="literal.clause">
         <template
             v-for="(lit, i) of literal.clause.literals"
