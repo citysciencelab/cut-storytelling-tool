@@ -38,8 +38,16 @@ const actions = {
             // TODO: Module should be reset and closed, if currently open
         }
     },
-    resetModule () {
-        // TODO: Do something
+    resetModule ({commit}, closedTool) {
+        commit("setAddedOptions", []);
+        commit("setRequiredValues", null);
+        commit("setSelectedOptions", {});
+        commit("setService", null);
+
+        if (closedTool) {
+            commit("setCurrentInstance", 0);
+            commit("setParsedSource", null);
+        }
     },
     retrieveData ({state, commit}) {
         const {currentInstance, instances} = state,
