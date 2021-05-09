@@ -12,9 +12,17 @@ const mutations = {
             state.addedOptions.push(val);
         }
     },
-    setSelectedOptions (state, {options, value}) {
-        // Remove the options if no value is selected
+    setSelectedOptions (state, payload) {
+        // If, for example, the selectedOptions need to be reset, the value gets set directly
+        if (!payload || (Object.keys(payload).length === 0 && payload.constructor === Object)) {
+            state.selectedOptions = payload;
+            return;
+        }
+
         // TODO: Reusable utility function for updating objects in the store?
+        const {options, value} = payload;
+
+        // Remove the options if no value is selected
         if (value === "") {
             delete state.selectedOptions[options];
             // NOTE: This is sadly needed so that the object is reactive :(
