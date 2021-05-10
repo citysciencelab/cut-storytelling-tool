@@ -12,6 +12,8 @@ const actions = {
         dispatch("prepareModule");
     },
     prepareModule ({state, commit, dispatch}) {
+        dispatch("resetModule", false);
+
         const currentInstance = state.instances[state.currentInstance],
             {layerId, restLayerId, storedQueryId} = currentInstance.requestConfig,
             restService = restLayerId
@@ -34,8 +36,8 @@ const actions = {
             commit("setService", service);
         }
         else {
+            dispatch("resetModule", true);
             dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.wfsSearch.wrongConfig", {name: this.name}), {root: true});
-            // TODO: Module should be reset and closed, if currently open
         }
     },
     resetModule ({commit}, closedTool) {
@@ -47,6 +49,7 @@ const actions = {
         if (closedTool) {
             commit("setCurrentInstance", 0);
             commit("setParsedSource", null);
+            commit("setActive", false);
         }
     },
     retrieveData ({state, commit}) {

@@ -3,6 +3,7 @@ import {mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersWfsSearch";
 import mutations from "../store/mutationsWfsSearch";
 import {fieldValueChanged} from "../utils/literalFunctions";
+import {buildPath, getOptions, prepareOptionsWithId} from "../utils/pathFunctions";
 
 export default {
     name: "Field",
@@ -67,13 +68,9 @@ export default {
         disabled () {
             const notRoot = this.options !== "";
 
-            // TODO: Test me against a usable external file, which uses the dot separated syntax; nesting
             if (typeof this.options === "string" && notRoot && this.parsedSource !== null && Object.keys(this.selectedOptions).length > 0) {
                 const optionsArr = this.options.split("."),
-                    selectedValues = [];
-
-                // Check if the prior needed parameters are selected
-                selectedValues.push(...Object.keys(this.selectedOptions));
+                    selectedValues = Object.keys(this.selectedOptions);
 
                 return !(this.addedOptions.includes("")
                     && optionsArr.every(option => this.addedOptions.includes(option))
@@ -85,34 +82,32 @@ export default {
         selectableOptions () {
             // Options are supposed to be retrieved from the external source
             if (typeof this.options === "string" && this.parsedSource !== null) {
-                let keys = [];
-
                 if (this.options === "") {
                     if (this.dropdownInputUsesId) {
-                        // TODO: The loop below can be copied for the significant parts below
-                        Object.entries(this.parsedSource).forEach(([key, {id}]) => keys.push({fieldValue: id, displayName: `${key} (${id})`}));
-                        return keys;
+                        return prepareOptionsWithId(this.parsedSource, true);
                     }
 
                     return Object.keys(this.parsedSource);
                 }
 
                 const optionsArr = this.options.split("."),
-                    currentOption = optionsArr[optionsArr.length - 1];
+                    lastIndex = optionsArr.length - 1;
 
                 if (Object.keys(this.selectedOptions).includes("")) {
-                    // TODO: Implement the dropdownInputUsesId part against a usable external file, which uses the dot separated syntax
-                    if (optionsArr.length === 1) {
-                        keys = this.parsedSource[this.selectedOptions[""]][currentOption];
-                    }
-                    else if (this.selectedOptions.includes("ALL DA VALUES")) {
-                        // TODO: Implement me against a usable external file, which uses the dot separated syntax; nesting
+                    const optionKeysWithoutRoot = Object.keys(this.selectedOptions)
+                            .filter(option => option !== ""),
+                        previousElementsSelected = optionsArr.slice(0, lastIndex)
+                            .every(option => optionKeysWithoutRoot.includes(option));
+
+                    if (previousElementsSelected) {
+                        return getOptions(buildPath(this.selectedOptions, optionsArr[lastIndex]), this.parsedSource);
                     }
                 }
-                return keys;
+
+                return [];
             }
             // Options are already given through the config
-            else if (typeof this.options === "object") {
+            if (typeof this.options === "object") {
                 return this.options;
             }
             return null;
@@ -133,12 +128,16 @@ export default {
     },
     methods: {
         ...mapMutations("Tools/WfsSearch", Object.keys(mutations)),
-        valueChanged (value) {
+        valueChanged (val) {
+            const value = this.htmlElement === "input" || val === "" ? val : JSON.parse(val).value;
+
             // NOTE: The extra object is sadly needed so that the object is reactive :(
             this.setRequiredValues({...fieldValueChanged(this.fieldId, value, this.instances[this.currentInstance].literals, this.requiredValues)});
 
             if (typeof this.options === "string") {
-                this.setSelectedOptions({options: this.options, value});
+                const index = val === "" ? 0 : JSON.parse(val).index;
+
+                this.setSelectedOptions({options: this.options, value, index});
             }
         },
         isObject (val) {
@@ -177,11 +176,10 @@ export default {
                     >
                         {{ $t("common:modules.tools.wfsSearch.optionsPlaceholder") }}
                     </option>
-                    <!-- TODO: The value part can and will lead to problems when using with objects that are not from the external source -->
                     <option
-                        v-for="option of selectableOptions"
+                        v-for="(option, index) of selectableOptions"
                         :key="isObject(option) ? option.fieldValue : option"
-                        :value="isObject(option) ? option.fieldValue : option"
+                        :value="JSON.stringify(isObject(option) ? {value: option.fieldValue, index} : {value: option, index})"
                         :selected="defaultValue && !required ? defaultValue : ''"
                     >
                         {{ isObject(option) ? (option.displayName ? option.displayName : option.fieldValue) : option }}

@@ -1,5 +1,6 @@
 import {generateSimpleMutations} from "../../../../app-store/utils/generators";
 import initialState from "./stateWfsSearch";
+import {removePath} from "../utils/pathFunctions";
 
 // TODO: JSDoc
 const mutations = {
@@ -19,12 +20,19 @@ const mutations = {
             return;
         }
 
-        // TODO: Reusable utility function for updating objects in the store?
-        const {options, value} = payload;
+        const {options, value, index} = payload;
 
         // Remove the options if no value is selected
         if (value === "") {
-            delete state.selectedOptions[options];
+            const keys = Object.keys(state.selectedOptions).reverse();
+
+            for (const key of keys) {
+                delete state.selectedOptions[key];
+
+                if (key === removePath(options)) {
+                    break;
+                }
+            }
             // NOTE: This is sadly needed so that the object is reactive :(
             state.selectedOptions = {
                 ...state.selectedOptions
@@ -33,7 +41,7 @@ const mutations = {
         else {
             state.selectedOptions = {
                 ...state.selectedOptions,
-                [options]: value
+                [removePath(options)]: {value, index}
             };
         }
     }
