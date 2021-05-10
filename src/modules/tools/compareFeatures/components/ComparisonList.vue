@@ -90,7 +90,7 @@ export default {
                                 v-else-if="typeof value === 'string' && value.includes('<br>')"
                             ></p>
                             <p
-                                v-else-if="key === 'col-1'"
+                                v-else-if="key === 'col-1' || index === 0"
                                 class="bold"
                             >
                                 {{ beautifyKey($t(value)) }}
@@ -131,7 +131,7 @@ export default {
                                 v-else-if="typeof value === 'string' && value.includes('<br>')"
                             ></p>
                             <p
-                                v-else-if="key === 'col-1'"
+                                v-else-if="key === 'col-1' || index === 0"
                                 class="bold"
                             >
                                 {{ beautifyKey($t(value)) }}
@@ -183,7 +183,7 @@ export default {
                                 v-else-if="typeof value === 'string' && value.includes('<br>')"
                             ></p>
                             <p
-                                v-else-if="key === 'col-1'"
+                                v-else-if="key === 'col-1' || index === 0"
                                 class="bold"
                             >
                                 {{ beautifyKey($t(value)) }}
@@ -226,7 +226,7 @@ export default {
                                 v-else-if="typeof value === 'string' && value.includes('<br>')"
                             ></p>
                             <p
-                                v-else-if="key === 'col-1'"
+                                v-else-if="key === 'col-1' || index === 0"
                                 class="bold"
                             >
                                 {{ beautifyKey($t(value)) }}
