@@ -5,8 +5,7 @@ import state from "../store/stateCompareFeatures";
  * @returns {void}
  */
 async function preparePrint () {
-    const layerId = state.hasMultipleLayers ? state.selectedLayer : Object.keys(state.layerFeatures)[0],
-        tableBody = await prepareTableBody(state.layerFeatures[layerId]),
+    const tableBody = await prepareTableBody(),
         pdfDef = {
             layout: "A4 Hochformat",
             outputFormat: "pdf",
@@ -28,21 +27,25 @@ async function preparePrint () {
 
 /**
  * Prepares the table body which is used for printing the pdf file from comparison list.
- * @param {Array} features - features from comparison list
+ * It takes the preparedList from the state and converts it to a format, that is printable.
+ * All fields that are undefined get changed to "-".
  * @returns {Array} tableBody with selected features from comparison list
  */
-function prepareTableBody (features) {
+function prepareTableBody () {
     const tableBody = [],
-        rowsToShow = state.numberOfAttributesToShow;
+        rowsToShow = state.numberOfAttributesToShow,
+        features = state.preparedList;
 
-    for (const feature of features) {
-        Object.keys(feature.properties).forEach((key, index) => {
-            if (features.indexOf(feature) === 0) {
-                tableBody.push([key, Object.values(feature.properties)[index]]);
-            }
-            else {
-                tableBody[index].push(Object.values(feature.properties)[index]);
-            }
+    if (!state.hasMultipleLayers) {
+        Object.values(features).forEach(feature => {
+            Object.entries(feature).forEach(key => {
+                tableBody.push(Object.values(key[1]).map(value => value === undefined ? "-" : value));
+            });
+        });
+    }
+    else {
+        Object.values(features[state.selectedLayer]).forEach(feature => {
+            tableBody.push(Object.values(feature).map(value => value === undefined ? "-" : value));
         });
     }
     if (!state.showMoreInfo) {
