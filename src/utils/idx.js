@@ -11,4 +11,3 @@ export default (path, object) => path.reduce(
     (acc, currentVal) => acc && acc[currentVal] ? acc[currentVal] : null,
     object
 );
-

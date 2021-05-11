@@ -12,9 +12,7 @@ function buildPath (optionsObject, currentOption) {
         path = [];
 
     for (const entry of entries) {
-        const [longKey, {value, index}] = entry,
-            keys = longKey.split("."),
-            key = keys.length === 1 ? keys[0] : keys[keys.length - 1];
+        const [key, {value, index}] = entry;
 
         // This would otherwise lead to weird path behaviour as the option of this Field has already been added to the selectedOptions
         if (key === currentOption) {
@@ -33,16 +31,17 @@ function buildPath (optionsObject, currentOption) {
  *
  * @param {Array} path The path to the values.
  * @param {Object} source The source from which the values should be retrieved.
- * @returns {?[]} If found, return the values as an array, otherwise null.
+ * @returns {[]} If found, return the values as an array, otherwise return an empty array.
  */
 function getOptions (path, source) {
     const selectableOptions = idx(path, source);
 
-    if (typeof selectableOptions[0] === "object") {
+    if (selectableOptions && typeof selectableOptions[0] === "object") {
         return prepareOptionsWithId(selectableOptions);
     }
 
-    return selectableOptions;
+    // idx returns null if the value could not be found
+    return selectableOptions === null ? [] : selectableOptions;
 }
 
 /**
@@ -68,7 +67,15 @@ function prepareOptionsWithId (elements, showKey) {
  * @returns {String} The adjusted element.
  */
 function removePath (el) {
-    return el.includes(".") ? el.slice(el.indexOf(".") + 1) : el;
+    let element = el;
+
+    if (el.includes(".")) {
+        do {
+            element = element.slice(element.indexOf(".") + 1);
+        }
+        while (element.includes("."));
+    }
+    return element;
 }
 
 export {buildPath, getOptions, prepareOptionsWithId, removePath};

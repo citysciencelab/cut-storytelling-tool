@@ -43,7 +43,7 @@ export default {
         :type="literal.field.type"
         :dropdownInputUsesId="literal.field.usesId"
     />
-    <!-- TODO: This div can be styled for visual highlighting -> Also, visual error probably comes from here! -->
+    <!-- TODO: This div can be styled for visual highlighting -> Also, weird UI behaviour when a field is "dangling" between clauses cause of this -->
     <div v-else-if="literal.clause">
         <template
             v-for="(lit, i) of literal.clause.literals"
