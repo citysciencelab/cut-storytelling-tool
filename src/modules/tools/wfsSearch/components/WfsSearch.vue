@@ -23,19 +23,13 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-        /*
-        * TODO
-        * Logic:
-        * - Integration for remoteOptions regarding suggestions for input fields -> Find a way to make it look properly in the UI
-        * - Query of the service --> Next up after commit
-        *   + Difference between WFS@2.0.0 (Stored Query) and WFS@1.1.0 (query has to be built)
-        */
     },
     methods: {
         ...mapMutations("Tools/WfsSearch", Object.keys(mutations)),
         ...mapActions("Tools/WfsSearch", Object.keys(actions)),
         close () {
             this.setActive(false);
+            this.resetModule(true);
             const model = getComponent(this.id);
 
             if (model) {
@@ -44,8 +38,7 @@ export default {
         }
     }
 };
-// TODO: Formular breaks when choosing a value in a different searchInstance and switching to another.
-// TODO: Also some weird UI behaviour when a field is "dangling" between clauses
+// TODO: Vorschläge für Inputfelder und Dropdowns für fieldNames sind noch zu implementieren
 </script>
 
 <template>

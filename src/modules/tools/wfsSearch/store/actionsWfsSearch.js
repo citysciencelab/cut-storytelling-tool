@@ -71,6 +71,17 @@ const actions = {
             const parser = new WFS({version: storedQueryId ? "2.0.0" : "1.1.0"}),
                 features = parser.readFeatures(data);
 
+            /*
+            TODO
+            Creation of the result elements for the list:
+            - Iterate over all the features
+            - For each feature
+            -- Put the 'values_' parameter in a new object
+            -- Remove the parameter that is described by 'geometryName_' from the object --> RLP: geometryName_: "the_geom" -> remove 'the_geom' from the object
+            -- Idea: Don't remove it, just don't display it in the list
+            - Return the value array in the list
+            - Make it possible that when clicking on an element of the list, it is zoomed towards the geometry
+             */
             console.log("Ladies and Gentlemen, we got 'em!", features);
             // TODO: Add the features to a layer? Or show them in general for the time until the tool is closed or is reset.
         });
