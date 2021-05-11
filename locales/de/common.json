@@ -460,6 +460,7 @@
                 "title": "Koordinaten abfragen",
                 "supply":"Koordinaten abfragen",
                 "search":"Koordinaten suchen",
+                "searchBtn": "Suche",
                 "coordSystemField": "Koordinatensystem",
                 "hdms": {
                     "eastingLabel": "Länge",

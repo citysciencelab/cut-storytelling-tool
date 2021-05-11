@@ -38,6 +38,13 @@ export const mode = {
         currentSelection: "EPSG:25832",
         coordinatesEastingField: "",
         coordinatesNorthingField: "",
+        // aus searchbycoord:
+        eastingNoCoord: false,
+        eastingNoMatch: false,
+        northingNoCoord: false,
+        northingNoMatch: false,
+        coordinatesEasting: {id: "easting", value: ""},
+        coordinatesNorthing: {id: "northing", value: ""},
 
         // defaults for config.json parameters
         name: "common:menu.tools.coordToolkit",

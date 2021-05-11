@@ -71,8 +71,8 @@ export default {
                 easting = coord.split(",")[0].trim();
                 northing = coord.split(",")[1].trim();
             }
-            commit("setCoordinatesEastingField", easting);
-            commit("setCoordinatesNorthingField", northing);
+            commit("setCoordinatesEasting", {id: "easting", value: easting});
+            commit("setCoordinatesNorthing", {id: "northing", value: northing});
         }
     },
     /**
@@ -99,5 +99,21 @@ export default {
 
             commit("setPositionMapProjection", position);
         }
+    },
+    // aus searchbycoord:
+    /**
+     * Resets the error messages, calls the validation function with the entered coordinates
+     * and calls the transformCoordinates function.
+     * @param {Object} context actions context object.
+     * @param {String} coordinatesEasting the coordinates user entered
+     * @param {String} coordinatesNorthing the coordinates user entered
+     * @returns {void}
+     */
+    searchCoordinate ({dispatch, commit, state}) {
+        const coords = [state.coordinatesEasting, state.coordinatesNorthing];
+
+        commit("resetErrorMessages");
+        dispatch("formatInput", coords);
+        dispatch("transformCoordinates");
     }
 };

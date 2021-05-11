@@ -38,6 +38,23 @@ const getters = {
         return projections.find(projection => {
             return projection.name === name;
         });
+    },
+    // aus searchbycoord:
+    /**
+     * Returns true to easting coordinate error variable if one test case fails.
+     * @param {Object} state state of this tool
+     * @returns {Boolean} true if an error for the coordinate occurs
+     */
+    getEastingError: state => {
+        return Boolean(state.eastingNoCoord || state.eastingNoMatch);
+    },
+    /**
+     * Returns true to northing coordinate error variable if one test case fails.
+     * @param {Object} state state of this tool
+     * @returns {Boolean} true if an error for the coordinate occurs
+     */
+    getNorthingError: state => {
+        return Boolean(state.northingNoCoord || state.northingNoMatch);
     }
 };
 

@@ -439,6 +439,7 @@
                 "title": "Richiedi coordinate",
                 "supply": "Richiedi coordinate",
                 "search": "Ricerca di coordinate",
+                "searchBtn": "Cerca",
                 "coordSystemField": "Sistema di riferimento",
                 "hdms": {
                     "eastingLabel": "Longitudine",

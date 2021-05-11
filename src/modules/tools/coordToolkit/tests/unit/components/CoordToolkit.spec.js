@@ -133,7 +133,7 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             expect(store.state.Tools.CoordToolkit.currentSelection).to.be.equals(value);
             expect(store.state.Tools.CoordToolkit.currentProjectionName).to.be.equals(value);
             expect(store.state.Tools.CoordToolkit.currentProjection.name).to.be.equals(value);
-            expect(store.state.Tools.CoordToolkit.coordinatesEastingField).to.be.equals("0.00");
+            expect(store.state.Tools.CoordToolkit.coordinatesEasting.value).to.be.equals("0.00");
             expect(store.state.Tools.CoordToolkit.coordinatesNorthingField).to.be.equals("0.00");
 
         });

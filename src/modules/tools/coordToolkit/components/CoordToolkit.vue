@@ -165,6 +165,16 @@ export default {
                 this.$refs.searchByCoordCheckBox.setActive(false);
                 this.$refs.supplyCoordCheckBox.setActive(true);
             }
+        },
+        onInputClicked (event) {
+            if (this.mode === mode.SUPPLY) {
+                this.copyToClipboard(event.currentTarget);
+            }
+        },
+        onInputEvent (coordinatesEasting) {
+            if (this.mode === mode.SEARCH) {
+                this.validateInput(coordinatesEasting);
+            }
         }
     }
 };
@@ -240,7 +250,7 @@ export default {
                                     :value="projection.name"
                                     :SELECTED="projection.name === currentProjectionName"
                                 >
-                                    {{ projection.title ? projection.title : projection.name }}
+                                    {{ projection.title ? projection.title + " ("+projection.name+")" : projection.name }}
                                 </option>
                             </select>
                         </div>
@@ -254,12 +264,15 @@ export default {
                         <div class="col-md-7 col-sm-7">
                             <input
                                 id="coordinatesEastingField"
-                                v-model="coordinatesEastingField"
+                                v-model="coordinatesEasting.value"
                                 type="text"
                                 class="form-control"
-                                readonly
-                                contenteditable="false"
-                                @click="copyToClipboard($event.currentTarget)"
+                                :readonly="isEnabled('search') ? true : false"
+                                :contenteditable="isEnabled('search') ? true : false"
+                                :class="{ inputError: getEastingError, 'form-control': true}"
+                                :placeholder="isEnabled('search') ? $t('modules.tools.searchByCoord.exampleAcronym') + coordinatesEastingExample : ''"
+                                @click="onInputClicked($event)"
+                                @input="onInputEvent(coordinatesEasting)"
                             >
                         </div>
                     </div>
@@ -272,13 +285,30 @@ export default {
                         <div class="col-md-7 col-sm-7">
                             <input
                                 id="coordinatesNorthingField"
-                                v-model="coordinatesNorthingField"
+                                v-model="coordinatesNorthing.value"
                                 type="text"
-                                class="form-control"
-                                readonly
-                                contenteditable="false"
-                                @click="copyToClipboard($event.currentTarget)"
+                                :class="{ inputError: getNorthingError , 'form-control': true}"
+                                :readonly="isEnabled('search') ? true : false"
+                                :contenteditable="isEnabled('search') ? true : false"
+                                :placeholder="isEnabled('search') ? $t('modules.tools.searchByCoord.exampleAcronym') + coordinatesNorthingExample : ''"
+                                @click="onInputClicked($event)"
+                                @input="onInputEvent(coordinatesEasting)"
                             >
+                        </div>
+                    </div>
+                    <div
+                        v-if="isEnabled('search')"
+                        class="form-group form-group-sm"
+                    >
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <button
+                                class="btn btn-block"
+                                :disabled="getEastingError || getNorthingError || !coordinatesEasting.value || !coordinatesNorthing.value"
+                                type="button"
+                                @click="searchCoordinate(coordinatesEasting, coordinatesNorthing)"
+                            >
+                                {{ $t("common:modules.tools.coordToolkit.searchBtn") }}
+                            </button>
                         </div>
                     </div>
                 </form>
