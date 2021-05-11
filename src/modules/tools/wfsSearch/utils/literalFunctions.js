@@ -13,19 +13,22 @@ function prepareLiterals (stateLiterals, literals = null, clauseId = "", require
         idPrefix = clauseId ? clauseId + "+" : "";
 
     arr.forEach((literal, i) => {
-        if (literal.clause) {
-            const id = `${idPrefix}clause-${i}`;
-
-            literal.clause.id = id;
-            prepareLiterals(stateLiterals, literal.clause.literals, id, requiredValues);
-        }
-        else {
+        if (literal.field) {
             literal.field.id = `${idPrefix}field-${i}`;
             literal.field.value = null;
 
             if (literal.field.required) {
                 requiredValues[literal.field.id] = null;
             }
+            if (literal.clause) {
+                delete literal.clause;
+            }
+        }
+        else {
+            const id = `${idPrefix}clause-${i}`;
+
+            literal.clause.id = id;
+            prepareLiterals(stateLiterals, literal.clause.literals, id, requiredValues);
         }
     });
 

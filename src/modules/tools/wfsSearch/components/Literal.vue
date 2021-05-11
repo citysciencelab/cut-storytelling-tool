@@ -16,13 +16,6 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/WfsSearch", Object.keys(getters))
-    },
-    mounted () {
-        const {clause, field} = this.literal;
-
-        if (clause && field) {
-            console.warn("WfsSearch: Both 'clause' and 'field' were defined on the literal. The clause part will be skipped and the field will be used.");
-        }
     }
 };
 </script>
