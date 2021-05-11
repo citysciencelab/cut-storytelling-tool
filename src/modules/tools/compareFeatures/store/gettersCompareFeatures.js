@@ -1,5 +1,5 @@
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
-import compareFeaturesState from "./statecompareFeatures";
+import compareFeaturesState from "./stateCompareFeatures";
 
 const getters = {
     ...generateSimpleGetters(compareFeaturesState),
