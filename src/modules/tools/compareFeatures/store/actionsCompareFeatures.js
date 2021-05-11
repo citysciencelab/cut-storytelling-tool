@@ -6,7 +6,7 @@ export default {
      */
     isFeatureOnCompareList: function ({state, commit, dispatch, getters}, gfiFeature) {
         const {layerId} = gfiFeature;
-
+console.log(this);
         commit("setShowAlert", true);
         commit("setListFull", false);
         if (!getters.isFeatureSelected(gfiFeature) && state.layerFeatures[layerId] === undefined || state.layerFeatures[layerId].length < state.numberOfFeaturesToShow) {
