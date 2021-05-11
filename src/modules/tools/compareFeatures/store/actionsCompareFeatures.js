@@ -34,16 +34,23 @@ export default {
     /**
      * prepares the list for rendering using the 'gfiAttributes'
      * one object attribute is created for each feature (column)
+     * the feature with the most attributes dictates the number of infos that are shown.
      * @param {object} gfiAttributes -
      * @returns {object[]} list - one object per row
      */
     prepareFeatureListToShow: function ({state, commit}, gfiAttributes) {
         const list = [],
             layerId = parseInt(gfiAttributes.layerId.split("_")[0], 10),
-            featureList = state.layerFeatures[layerId];
-        let payload = {};
+            featureList = state.layerFeatures[layerId],
+            lengths = [];
+        let payload = {},
+            indexOfFeatureWithMostAttributes = "";
 
-        Object.keys(gfiAttributes.properties).forEach(function (key) {
+        Object.values(featureList).forEach(element => {
+            lengths.push(Object.keys(element.properties).length);
+        });
+        indexOfFeatureWithMostAttributes = lengths.indexOf(Math.max(...lengths));
+        Object.keys(featureList[indexOfFeatureWithMostAttributes].properties).forEach(function (key) {
             const row = {"col-1": key};
 
             featureList.forEach(function (feature) {
