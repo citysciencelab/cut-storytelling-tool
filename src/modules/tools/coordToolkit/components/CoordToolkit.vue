@@ -18,6 +18,30 @@ export default {
     computed: {
         ...mapGetters("Tools/CoordToolkit", Object.keys(getters)),
         ...mapGetters("Map", ["projection", "mouseCoord"]),
+        eastingNoCoordMessage: function () {
+            if (this.currentProjection.proj !== "longlat") {
+                return this.$t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: this.$t(this.getLabel("eastingLabel"))});
+            }
+            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.getLabel("eastingLabel"))});
+        },
+        northingNoCoordMessage: function () {
+            if (this.currentProjection.proj !== "longlat") {
+                return this.$t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: this.$t(this.getLabel("northingLabel"))});
+            }
+            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.getLabel("northingLabel"))});
+        },
+        northingNoMatchMessage: function () {
+            if (this.currentProjection.proj !== "longlat") {
+                return this.$t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: this.$t(this.getLabel("northingLabel"))});
+            }
+            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.getLabel("northingLabel"))});
+        },
+        eastingNoMatchMessage: function () {
+            if (this.currentProjection.proj !== "longlat") {
+                return this.$t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: this.$t(this.getLabel("eastingLabel"))});
+            }
+            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.getLabel("eastingLabel"))});
+        },
         /**
          * Must be a two-way computed property, because it is used as v-model for select-Element, see https://vuex.vuejs.org/guide/forms.html.
          */
@@ -37,18 +61,19 @@ export default {
          * @returns {void}
          */
         active (value) {
-            this.removePointMarker();
+            this.removeMarker();
 
             if (value) {
-                this.addPointerMoveHandlerToMap(this.setCoordinates);
-                this.createInteraction();
-                this.setPositionMapProjection(this.mouseCoord);
-                this.changedPosition();
+                this.setMode(mode.SUPPLY);
+                this.initProjections();
+                if (this.mode === mode.SUPPLY) {
+                    this.setSupplyCoordActive();
+                }
             }
             else {
-                this.removePointerMoveHandlerFromMap(this.setCoordinates);
-                this.setUpdatePosition(true);
-                this.removeInteraction();
+                this.resetErrorMessages();
+                this.resetValues();
+                this.setSupplyCoordInactive();
             }
         }
     },
@@ -63,9 +88,11 @@ export default {
             "copyToClipboard",
             "positionClicked",
             "setCoordinates",
+            "removeMarker",
+            "searchCoordinate",
+            "validateInput",
             "newProjectionSelected"
         ]),
-        ...mapActions("MapMarker", ["removePointMarker"]),
         ...mapActions("Alerting", ["addSingleAlert"]),
         ...mapActions("Map", {
             addPointerMoveHandlerToMap: "addPointerMoveHandler",
@@ -73,27 +100,56 @@ export default {
             addInteractionToMap: "addInteraction",
             removeInteractionFromMap: "removeInteraction"
         }),
+        initProjections () {
+            const pr = getProjections(),
+                wgs84Proj = pr.filter(proj => proj.name === "EPSG:4326");
+
+            if (wgs84Proj) {
+                const index = pr.findIndex(proj => proj.name === "EPSG:4326"),
+                    wgs84ProjDez = {};
+
+                for (const key in wgs84Proj[0]) {
+                    wgs84ProjDez[key] = wgs84Proj[0][key];
+                }
+
+                wgs84ProjDez.name = "EPSG:4326-DG";
+                wgs84ProjDez.title = "WGS 84(Dezimalgrad)";
+                pr.splice(index, 0, wgs84ProjDez);
+            }
+            this.setProjections(pr);
+            this.setExample();
+        },
+        setSupplyCoordInactive () {
+            this.removePointerMoveHandlerFromMap(this.setCoordinates);
+            this.setUpdatePosition(true);
+            this.removeInteraction();
+        },
+        setSupplyCoordActive () {
+            this.addPointerMoveHandlerToMap(this.setCoordinates);
+            this.setMapProjection(this.projection);
+            this.createInteraction();
+            this.setPositionMapProjection(this.mouseCoord);
+            this.changedPosition();
+        },
         /**
          * Called if selection of projection changed. Sets the current scprojectionale to state and changes the position.
          * @param {Event} event changed selection event
          * @returns {void}
          */
         selectionChanged (event) {
+            this.onInputEvent(this.coordinatesEasting);
+            this.onInputEvent(this.coordinatesNorthing);
             this.setCurrentSelection(event.target.value);
             this.newProjectionSelected();
             this.changedPosition(event.target.value);
+            this.setExample();
         },
         /**
          * Stores the projections and adds interaction pointermove to map.
          * @returns {void}
          */
         createInteraction () {
-            const pr = getProjections();
-            let pointerMove = null;
-
-            this.setProjections(pr);
-            this.setMapProjection(this.projection);
-            pointerMove = new Pointer(
+            const pointerMove = new Pointer(
                 {
                     handleMoveEvent: function (evt) {
                         this.checkPosition(evt.coordinate);
@@ -133,16 +189,6 @@ export default {
             }
         },
         /**
-         * Returns the label mame depending on the selected projection.
-         * @param {String} key in the language files
-         * @returns {String} the name of the label
-         */
-        label (key) {
-            const type = this.currentProjectionName === "EPSG:4326" ? "hdms" : "cartesian";
-
-            return "modules.tools.coordToolkit." + type + "." + key;
-        },
-        /**
          * Returns true, if given checkboxId is equals curent mode in state.
          * @param {String} checkboxId "supply" or "search"
          * @returns {Boolean} true, if given checkboxId is equals curent mode in state
@@ -155,15 +201,20 @@ export default {
          * @returns {void}
          */
         toggleMode () {
+            this.removeMarker();
             if (this.mode === mode.SUPPLY) {
                 this.setMode(mode.SEARCH);
                 this.$refs.supplyCoordCheckBox.setActive(false);
                 this.$refs.searchByCoordCheckBox.setActive(true);
+                this.setSupplyCoordInactive();
+
             }
             else {
                 this.setMode(mode.SUPPLY);
                 this.$refs.searchByCoordCheckBox.setActive(false);
                 this.$refs.supplyCoordCheckBox.setActive(true);
+                this.resetErrorMessages();
+                this.setSupplyCoordActive();
             }
         },
         onInputClicked (event) {
@@ -248,7 +299,7 @@ export default {
                                     v-for="(projection, i) in projections"
                                     :key="i"
                                     :value="projection.name"
-                                    :SELECTED="projection.name === currentProjectionName"
+                                    :SELECTED="projection.name === currentSelection"
                                 >
                                     {{ projection.title ? projection.title + " ("+projection.name+")" : projection.name }}
                                 </option>
@@ -260,20 +311,30 @@ export default {
                             id="coordinatesEastingLabel"
                             for="coordinatesEastingField"
                             class="col-md-5 col-sm-5 control-label"
-                        >{{ $t(label("eastingLabel")) }}</label>
+                        >{{ $t(getLabel("eastingLabel")) }}</label>
                         <div class="col-md-7 col-sm-7">
                             <input
                                 id="coordinatesEastingField"
                                 v-model="coordinatesEasting.value"
                                 type="text"
-                                class="form-control"
-                                :readonly="isEnabled('search') ? true : false"
-                                :contenteditable="isEnabled('search') ? true : false"
+                                :readonly="isEnabled( mode.SEARCH)"
+                                :contenteditable="isEnabled( mode.SEARCH)"
                                 :class="{ inputError: getEastingError, 'form-control': true}"
-                                :placeholder="isEnabled('search') ? $t('modules.tools.searchByCoord.exampleAcronym') + coordinatesEastingExample : ''"
+                                :placeholder="isEnabled( mode.SEARCH) ? $t('modules.tools.searchByCoord.exampleAcronym') + coordinatesEastingExample : ''"
                                 @click="onInputClicked($event)"
                                 @input="onInputEvent(coordinatesEasting)"
+                            ><p
+                                v-if="eastingNoCoord"
+                                class="error-text"
                             >
+                                {{ eastingNoCoordMessage }}
+                            </p>
+                            <p
+                                v-if="eastingNoMatch"
+                                class="error-text"
+                            >
+                                {{ eastingNoMatchMessage + coordinatesEastingExample }}
+                            </p>
                         </div>
                     </div>
                     <div class="form-group form-group-sm">
@@ -281,19 +342,30 @@ export default {
                             id="coordinatesNorthingLabel"
                             for="coordinatesNorthingField"
                             class="col-md-5 col-sm-5 control-label"
-                        >{{ $t(label("northingLabel")) }}</label>
+                        >{{ $t(getLabel("northingLabel")) }}</label>
                         <div class="col-md-7 col-sm-7">
                             <input
                                 id="coordinatesNorthingField"
                                 v-model="coordinatesNorthing.value"
                                 type="text"
                                 :class="{ inputError: getNorthingError , 'form-control': true}"
-                                :readonly="isEnabled('search') ? true : false"
-                                :contenteditable="isEnabled('search') ? true : false"
-                                :placeholder="isEnabled('search') ? $t('modules.tools.searchByCoord.exampleAcronym') + coordinatesNorthingExample : ''"
+                                :readonly="isEnabled( mode.SEARCH)"
+                                :contenteditable="isEnabled( mode.SEARCH)"
+                                :placeholder="isEnabled( mode.SEARCH) ? $t('modules.tools.searchByCoord.exampleAcronym') + coordinatesNorthingExample : ''"
                                 @click="onInputClicked($event)"
                                 @input="onInputEvent(coordinatesEasting)"
+                            ><p
+                                v-if="northingNoCoord"
+                                class="error-text"
                             >
+                                {{ northingNoCoordMessage }}
+                            </p>
+                            <p
+                                v-if="northingNoMatch"
+                                class="error-text"
+                            >
+                                {{ northingNoMatchMessage + coordinatesNorthingExample }}
+                            </p>
                         </div>
                     </div>
                     <div
@@ -335,5 +407,9 @@ export default {
     .checkbox-container{
         padding-bottom: 25px;
     }
+    .error-text {
+    font-size: 85%;
+    color: #a94442;
+}
 </style>
 

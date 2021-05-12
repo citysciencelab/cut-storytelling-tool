@@ -12,7 +12,6 @@ export const mode = {
  * @property {Object} mapProjection projection of the map
  * @property {Number[]} positionMapProjection position of the projection in the map
  * @property {Boolean} updatePosition if true, position is updated in tool
- * @property {String} currentProjectionName name of the current projection
  * @property {Object} currentProjection the current projection
  * @property {String} currentSelection currently selected projection value
  * @property {String} coordinatesEastingField label of the easting field
@@ -33,7 +32,6 @@ export const mode = {
         mapProjection: null,
         positionMapProjection: [],
         updatePosition: true,
-        currentProjectionName: "EPSG:25832",
         currentProjection: null,
         currentSelection: "EPSG:25832",
         coordinatesEastingField: "",
@@ -45,6 +43,9 @@ export const mode = {
         northingNoMatch: false,
         coordinatesEasting: {id: "easting", value: ""},
         coordinatesNorthing: {id: "northing", value: ""},
+        coordinatesEastingExample: "",
+        coordinatesNorthingExample: "",
+        selectedCoordinates: [],
 
         // defaults for config.json parameters
         name: "common:menu.tools.coordToolkit",

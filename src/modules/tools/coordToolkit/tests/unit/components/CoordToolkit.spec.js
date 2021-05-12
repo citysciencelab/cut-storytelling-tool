@@ -131,7 +131,6 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
             wrapper.vm.selectionChanged(event);
             expect(store.state.Tools.CoordToolkit.currentSelection).to.be.equals(value);
-            expect(store.state.Tools.CoordToolkit.currentProjectionName).to.be.equals(value);
             expect(store.state.Tools.CoordToolkit.currentProjection.name).to.be.equals(value);
             expect(store.state.Tools.CoordToolkit.coordinatesEasting.value).to.be.equals("0.00");
             expect(store.state.Tools.CoordToolkit.coordinatesNorthingField).to.be.equals("0.00");
@@ -156,15 +155,15 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
 
             wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
             store.commit("Tools/CoordToolkit/setActive", true);
-            store.commit("Tools/CoordToolkit/setCurrentProjectionName", "EPSG:4326");
+            store.commit("Tools/CoordToolkit/setCurrentSelection", "EPSG:4326");
             ret = wrapper.vm.label(key);
             expect(ret).to.be.equals("modules.tools.coordToolkit.hdms.key");
 
-            store.commit("Tools/CoordToolkit/setCurrentProjectionName", "EPSG:31467");
+            store.commit("Tools/CoordToolkit/setCurrentSelection", "EPSG:31467");
             ret = wrapper.vm.label(key);
             expect(ret).to.be.equals("modules.tools.coordToolkit.cartesian.key");
 
-            store.commit("Tools/CoordToolkit/setCurrentProjectionName", null);
+            store.commit("Tools/CoordToolkit/setCurrentSelection", null);
             ret = wrapper.vm.label(key);
             expect(ret).to.be.equals("modules.tools.coordToolkit.cartesian.key");
         });

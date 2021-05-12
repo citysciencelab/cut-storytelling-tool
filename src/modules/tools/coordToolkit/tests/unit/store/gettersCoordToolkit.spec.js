@@ -51,15 +51,15 @@ describe("src/modules/tools/coordToolkit/store/gettersCoordToolkit.js", () => {
             expect(getters.updatePosition(stateCoord)).to.be.true;
             expect(getters.updatePosition(state)).to.be.false;
         });
-        it("returns the currentProjectionName from state", () => {
+        it("returns the currentSelection from state", () => {
             const name = "EPSG:25832",
                 name2 = "EPSG:4326",
                 state = {
-                    currentProjectionName: name2
+                    currentSelection: name2
                 };
 
-            expect(getters.currentProjectionName(stateCoord)).to.be.equals(name);
-            expect(getters.currentProjectionName(state)).to.be.equals(name2);
+            expect(getters.currentSelection(stateCoord)).to.be.equals(name);
+            expect(getters.currentSelection(state)).to.be.equals(name2);
         });
         it("returns the currentProjection from state", () => {
             const proj = {name: "projection 1", projName: "utm"},

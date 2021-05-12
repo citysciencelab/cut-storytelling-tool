@@ -40,7 +40,7 @@ describe("src/modules/tools/coord/store/actionsCoord.js", () => {
             };
 
             testAction(newProjectionSelected, null, state, {}, [
-                {type: "setCurrentProjectionName", payload: "projection 2"},
+                {type: "setCurrentSelection", payload: "projection 2"},
                 {type: "setCurrentProjection", payload: {name: "projection 2"}}
             ], {getProjectionByName: () => {
                 return {name: "projection 2"};
