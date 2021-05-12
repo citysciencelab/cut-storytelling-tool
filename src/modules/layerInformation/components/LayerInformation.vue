@@ -30,7 +30,7 @@ export default {
             return typeof this.dateRevision !== "undefined" && this.dateRevision !== null;
         },
         showPeriodicity () {
-            return this.periodicityKey !== "";
+            return this.periodicityKey !== "" && this.periodicityKey !== null && this.periodicityKey !== undefined;
         },
         showDownloadLinks () {
             return this.downloadLinks !== null;
@@ -68,6 +68,8 @@ export default {
         close () {
             this.activate(false);
             this.$emit("close");
+            Radio.trigger("Layer", "setLayerInfoChecked", false);
+            Radio.trigger("LayerInformation", "unhighlightLayerInformationIcon");
         },
         changeLayerAbstract (ev) {
             this.changeLayerInfo(ev.target.text);
@@ -91,6 +93,7 @@ export default {
 <template lang="html">
     <ToolWindow
         v-if="showInformation"
+        id="layerInformation"
         class="layerInformation"
         @close="close"
     >
@@ -101,9 +104,9 @@ export default {
             <div class="body">
                 <h4
                     class="subtitle"
-                    :title="layerInfo.layername"
+                    :title="title"
                 >
-                    {{ $t(layerInfo.layername) }}
+                    {{ $t(title) }}
                 </h4>
 
                 <div
@@ -133,7 +136,10 @@ export default {
                         </li>
                     </ul>
                 </div>
-                <div v-html="abstractText"></div>
+                <div
+                    class="mb-2 abstract"
+                    v-html="abstractText"
+                ></div>
                 <div v-if="showAdditionalMetaData">
                     <p
                         v-for="url in metaURLs"
@@ -254,7 +260,6 @@ export default {
     @background_color_1: white;
     @background_color_2: rgb(255, 255, 255);
 
-/***** Destop *****/
     .subtitle {
         color: @color_1;
         white-space: nowrap;
@@ -268,10 +273,12 @@ export default {
     hr {
         margin: 15px 0px 10px 0px;
     }
+
+    //das wird nicht auf die Absätze angewendet, beispiel: master - Bebauungspläne im Verfahren LayerInfo
+    #layerInformation .abstract p {
+        padding: 2px 10px 2px 0;
+    }
     .body {
-        p {
-            padding: 2px 10px 2px 0;
-        }
         >ul {
             background-color: @background_color_1;
         }
@@ -288,12 +295,17 @@ export default {
         right: 60px;
         max-width:600px;
         width: 45vw;
-        max-width:600px;
         margin: 0 10px 30px 10px;
         z-index: 1010;
         background-color: @background_color_2;
         box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.176);
         border: 1px solid rgb(229, 229, 229);
+        @media (max-width: 768px) {
+            inset: 12px auto auto 0px;
+            max-width:750px;
+            width: 95vw;
+            max-height: 80vh;
+        }
     }
 
     .header {
@@ -315,6 +327,7 @@ export default {
             >a {
                 text-overflow: ellipsis;
                 overflow: hidden;
+                height: 100%;
             }
         }
     }
@@ -338,27 +351,31 @@ export default {
         }
     }
 
-.mb-2 {
-    margin-bottom: 2rem;
-}
-
-.dropdown-toggle {
-    width: 100%;
-}
-
-.dropdown-menu {
-    width: 100%;
-    a.active {
-        background-color: @accent_active;
-        color: white;
+    .mb-2 {
+        margin-bottom: 2rem;
     }
-    a:hover {
-        background-color: @accent_hover;
-    }
-}
 
-.download-note {
-    font-weight: bold;
-}
+    .dropdown-toggle {
+        width: 100%;
+    }
+
+    .dropdown-menu {
+        width: 100%;
+        a.active {
+            background-color: @accent_active;
+            color: white;
+        }
+        a:hover {
+            background-color: @accent_hover;
+        }
+    }
+
+    .download-note {
+        font-weight: bold;
+    }
+
+    .list-unstyled {
+        padding-top: 5px;
+    }
 
 </style>

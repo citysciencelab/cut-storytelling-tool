@@ -11,6 +11,7 @@ const actions = {
      */
     layerInfo: function ({commit}, layerInformation) {
         commit("setLayerInfo", layerInformation);
+        Radio.trigger("LayerInformation", "unhighlightLayerInformationIcon");
     },
 
     additionalLayer_1: function ({commit}, additionalLayer) {
@@ -91,6 +92,7 @@ const actions = {
             commit("noMetadataLoaded", i18next.t("common:modules.layerInformation.noMetadataLoaded"));
         }
         else {
+            commit("setTitle", metadata?.getTitle());
             commit("setAbstractText", metadata?.getAbstract());
             commit("setPeriodicityKey", metadata?.getFrequenzy());
             commit("setDateRevision", metadata?.getRevisionDate());

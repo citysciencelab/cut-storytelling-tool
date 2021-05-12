@@ -162,9 +162,6 @@ function parseDownloadLinks (json) {
             }
         });
     }
-    else {
-        console.error(`parseDownloadLinks: ${transferOptions} has to be an object (not null).`);
-    }
 
     return downloadResources.length > 0 ? downloadResources : null;
 }

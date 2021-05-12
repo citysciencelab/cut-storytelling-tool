@@ -20,6 +20,7 @@ export default {
     additionalLayer_2: {},
     additionalLayer_3: {},
     abstractText: "Test",
+    title: "",
     noMetadataLoaded: "",
     metaURLs: []
 };
