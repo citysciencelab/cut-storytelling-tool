@@ -2263,13 +2263,13 @@ WMS service classification. This tool is used in the MRH (Metropolregion Hamburg
 [inherits]: # (Portalconfig.menu.tool)
 
 Makes it possible to create a formular to query WFS layers using filters through a separate interface.
-It is assumed that a stored query is used when using a WFS@2.0.0. When using a WFS@1.1.0 it is assumed that the way the WFS should be filtered is defined through the configuration.
+It is assumed that a stored query is used when using a WFS@2.0.0. When using a WFS@1.1.0, it is assumed that the way the WFS should be filtered is defined through the configuration.
 
-Multiple formulars (**[SearchInstances](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)**) can be defined that are added as separate tools to the menu.
+Multiple formulars (**[SearchInstances](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)**) can be defined, which will be selectable through a dropdown menu.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|instances|yes|**[searchInstance](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)**[]||Array of `searchInstances` which correspond to one search formular each.|false|
+|instances|yes|**[searchInstance](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)**[]||Array of `searchInstances`. A singular **[searchInstance](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** corresponds to its own search formular.|false|
 
 **Example**
 
@@ -2317,14 +2317,14 @@ Multiple formulars (**[SearchInstances](#markdown-header-portalconfigmenutoolwfs
 
 #### Portalconfig.menu.tool.wfsSearch.searchInstance
 
-A singular instance of the WFS Search which will be displayed as an individual tool.
+A singular instance of the WFS Search which will be selectable through a dropdown in the tool.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |literals|yes|**[literal](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral)**[]||Array of `literals`.|true|
-|requestConfig|yes|**[requestConfig](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfig)**||The id of the service that is supposed to be requested. If a WFS@2.0.0 is supposed to be used the id of the stored query needs to be provided.|false|
+|requestConfig|yes|**[requestConfig](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfig)**||An object, which mainly contains id of the service (`layerId` or `restLayerId`) that is supposed to be requested. If a WFS@2.0.0 will be used, the `storedQueryId` needs to be provided as well.|false|
 |selectSource|no|String||Optional Url leading to the expected options for the different inputs. See **[https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json]** for an example.|false|
-|title|yes|String||Title of the search to be displayed in the selection dropdown in the tool.|false|
+|title|yes|String||Title of the search instance to be displayed in a dropdown inside the tool.|false|
 |userHelp|no|String||Information text regarding the search formular to be displayed to the user. May be a locale key.|false|
 
 **Example**
@@ -2368,11 +2368,11 @@ A singular instance of the WFS Search which will be displayed as an individual t
 
 #### Portalconfig.menu.tool.wfsSearch.searchInstance.literal
 
-A literal can either have the parameter **clause**, or the parameter **field**. If both are set, the literal is ignored.
+A `literal` can either have the parameter `clause`, or the parameter `field`. If both are set, the `clause`-part will be ignored.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|clause|no|**[clause](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralclause)**||Defines the way multiple literals should be queried together. Can be seen as a group of literals.|true|
+|clause|no|**[clause](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralclause)**||Defines the way multiple `literals` should be queried together. Can be seen as a group of `literals`.|true|
 |field|no|**[field](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfield)**||Representation for the selection field of a service value for the user.|true|
 
 **Examples**
@@ -2433,12 +2433,12 @@ A literal can either have the parameter **clause**, or the parameter **field**. 
 
 [type:literal]: # (Portalconfig.menu.tool.wfsSearch.searchInstance.literal)
 
-A clause defines the way multiple literals should be queried together.
+A `clause` defines the way multiple `literals` should be queried together.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|literals|yes|**[literal](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral)**[]||Array of literals.|true|
-|type|yes|enum["and", "or"]||The way the literals in this clause should be queried.|false|
+|literals|yes|**[literal](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral)**[]||Array of `literals`.|true|
+|type|yes|enum["and", "or"]||The way the `literals` in this `clause` should be queried together.|false|
 
 **Example**
 
@@ -2472,9 +2472,25 @@ A clause defines the way multiple literals should be queried together.
 
 #### Portalconfig.menu.tool.wfsSearch.searchInstance.literal.field
 
-A field is the representation for the selection field for the user for a value in the service.
-If the parameter `options` is set, a select field is used, otherwise a simple text input.
+A `field` represents the selection field for a value in the service.
 
+It is possible to use a `field` for multiple search parameters. To do this, each parameter needs to be an array where each element of the array corresponds to a single parameter of the service.
+A configuration like
+
+```json
+{
+    "field": {
+        "type": ["equal", "like"],
+        "fieldName": ["objects", "arrays"],
+        "inputLabel": ["Objects", "Arrays"]
+    }
+}
+```
+
+would create a single `field` with which the user can decide whether he wants to use the input field to search for `Objects` or `Arrays` by selecting the value through a dropdown.
+If the values are not an array, a label for the `field` will be shown instead of the dropdown.
+
+If the parameter `options` is set, a select field is used, otherwise a simple text input.
 If `options` is a String, it is important that the order of the Fields corresponds to the order of the objects in the external source.
 Assume the source looks like this:
 
@@ -2533,15 +2549,17 @@ Then the order of the config should look like this:
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|defaultValue|no|String||If the field is not `required`, this value will be used on sending.|false|
-|fieldName|yes|String||The wfs service parameter name for the comparison.|false|
-|inputLabel|yes|String||Label for the UI element. May be a locale key.|false|
-|inputPlaceholder|no|String||Placeholder for the UI element; only used if `options` is not set. Should contain example data. May be a locale key.|false|
-|inputTitle|no|String||Value to be shown when hovering the UI element. May be a locale key.|false|
-|required|no|Boolean|false|Whether the field has to be filled.|false|
-|options|no|String/**[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)[]**/Number[]/String[]||If `options` is an array, the given values are used for selection. If it is a String, there are different possibilities. If the String is empty, the keys of **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** are used. If the String is not empty, it is assumed that another field with `options=""` exists; otherwise the field is disabled. It is also assumed that the String represents an array in **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** providing further options. These options may either match **[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)** or are plain values (`String` / `Number`). In the latter case, the plain value is used as both id and `displayName`.|false|
-|type|no|enum["equal", "like"]||Required for usage with WFS@1.1.0. The `type` declared how the field should be compared to the value in the service.|false|
-|usesId|no|Boolean|false|Only relevant if the Parameters `options` is set and an empty String (root element). Determines whether the key of the object of the external source should be used as a value for the query or if the object has an Id which should be used.|false|
+|defaultValue|no|String/String[]||If the field is not `required`, this value will be used on sending.|false|
+|fieldName|yes|String/String[]||The wfs service parameter name for the comparison.|false|
+|inputLabel|yes|String/String[]||Label for the UI element. May be a locale key.|false|
+|inputPlaceholder|no|String/String[]||Placeholder for the UI element; only used if `options` is not set. Should contain example data. May be a locale key.|false|
+|inputTitle|no|String/String[]||Value to be shown when hovering the UI element. May be a locale key.|false|
+|required|no|Boolean/Boolean[]|false|Whether the field has to be filled.|false|
+|options|no|String/**[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)**[]/String[]/**[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)**[][]||If `options` is an array, the given values are used for selection. If it is a String, there are different possibilities. If the String is empty, the keys of **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** are used. If the String is not empty, it is assumed that another field with `options=""` exists; otherwise the field is disabled. It is also assumed that the String represents an array in **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** providing further options. These options may either match **[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)** or are plain values (`String` / `Number`). In the latter case, the plain value is used as both id and `displayName`.|false|
+|type|no|enum["equal", "like"]/enum["equal", "like"][]||Required for usage with WFS@1.1.0. The `type` declared how the field should be compared to the value in the service.|false|
+|usesId|no|Boolean/Boolean[]|false|Only relevant if the Parameters `options` is set and an empty String (root element). Determines whether the key of the object of the external source should be used as a value for the query or if the object has an Id which should be used.|false|
+
+**Example**
 
 ```json
 {
@@ -2551,16 +2569,16 @@ Then the order of the config should look like this:
         "inputLabel": "Rivers",
         "options": [
             {
-                "id": "0",
-                "displayName": "Elbe"
+                "displayName": "Elbe",
+                "fieldValue": "0"
             },
             {
-                "id": "1",
-                "displayName": "Moselle"
+                "displayName": "Moselle",
+                "fieldValue": "1"
             },
             {
-                "id": "2",
-                "displayName": "Rhine"
+                "displayName": "Rhine",
+                "fieldValue": "2"
             }
         ]
     }
@@ -2577,6 +2595,8 @@ A selectable option for a queryable parameter.
 |----|--------|----|-------|-----------|------|
 |displayName|no|String||Value to be displayed for the value. May be a locale key. If not set, the `id` will be shown.|false|
 |fieldValue|yes|String||Value that is supposed to be sent to the service.|false|
+
+**Example**
 
 ```json
 {
@@ -2599,6 +2619,8 @@ If both are defined `restLayerId` is used.
 |maxFeatures|no|Number|8|Maximum amount of features that are supposed to be returned from the service.|false|
 |restLayerId|no|String||Id of the WFS service that should be queried. Information is fetched from **[rest-services.json](rest-services.json.md)**.|false|
 |storedQueryId|no|String||The id of the Stored Query of the WFS that should be used to query the service. If this field is set, it is assumed that a WFS@2.0.0 is used.|false|
+
+**Example**
 
 ```json
 {
