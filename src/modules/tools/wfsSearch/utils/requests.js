@@ -60,7 +60,7 @@ export function sendRequest ({url, typeName}, filter, fromServicesJson, storedQu
     requestUrl += `&maxFeatures=${maxFeatures}`;
     requestUrl += storedQueryId ? storedFilter(filter, storedQueryId) : xmlFilter(filter);
 
-    return axios.get(requestUrl)
+    return axios.get(encodeURI(requestUrl))
         .then(response => handleAxiosResponse(response, "WfsSearch, searchFeatures, sendRequest"))
         .catch(err => console.error("OHOH", err)); // TODO: Proper Error handling
 }

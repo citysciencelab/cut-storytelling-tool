@@ -56,7 +56,7 @@ const actions = {
         const {currentInstance, instances} = state,
             {selectSource} = instances[currentInstance];
 
-        axios.get(selectSource)
+        axios.get(encodeURI(selectSource))
             .then(response => handleAxiosResponse(response, "WfsSearch, retrieveData"))
             .then(data => commit("setParsedSource", data));
     },
@@ -71,6 +71,7 @@ const actions = {
             const parser = new WFS({version: storedQueryId ? "2.0.0" : "1.1.0"}),
                 features = parser.readFeatures(data);
 
+            // TODO: Documentation for the external source (syntax)
             /*
             TODO
             Creation of the result elements for the list:
