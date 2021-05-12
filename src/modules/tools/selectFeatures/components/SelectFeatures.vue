@@ -319,10 +319,10 @@ export default {
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
+        :deactivate-gfi="deactivateGFI"
         class="selectFeatures"
     >
-        <template v-slot:toolBody>
+        <template #:toolBody>
             <div
                 v-if="active"
                 id="selectFeatures"
@@ -371,8 +371,7 @@ export default {
                                         v-else-if="property[1].includes('<br') || property[1].includes('<a')"
                                         class="featureValue"
                                         v-html="property[1]"
-                                    >
-                                    </td>
+                                    />
                                     <td
                                         v-else
                                         class="featureValue"
@@ -400,7 +399,7 @@ export default {
                         <hr
                             v-if="index !== selectedFeaturesWithRenderInformation.length - 1"
                             :key="'h' + index"
-                        />
+                        >
                     </template>
                 </div>
             </div>

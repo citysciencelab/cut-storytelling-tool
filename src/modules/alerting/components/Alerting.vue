@@ -197,7 +197,7 @@ export default {
                         <div
                             class="singleAlertMessage"
                             v-html="singleAlert.content"
-                        ></div>
+                        />
 
                         <p
                             v-if="singleAlert.mustBeConfirmed"

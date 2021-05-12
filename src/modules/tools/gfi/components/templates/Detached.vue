@@ -152,7 +152,7 @@ export default {
         <template v-slot:title>
             <span>{{ translate(title) }}</span>
         </template>
-        <template v-slot:body>
+        <template #:body>
             <component
                 :is="theme"
                 :feature="feature"

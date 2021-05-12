@@ -324,9 +324,9 @@ export default {
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
+        :deactivate-gfi="deactivateGFI"
     >
-        <template v-slot:toolBody>
+        <template #:toolBody>
             <div
                 v-if="active"
                 id="add-wms"
@@ -361,7 +361,7 @@ export default {
                     <span
                         class="glyphicon glyphicon-ok"
                         aria-hidden="true"
-                    ></span>
+                    />
                 </button>
             </div>
         </template>

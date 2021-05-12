@@ -22,7 +22,7 @@
     ],
     "parserOptions": {
         "parser": "@babel/eslint-parser",
-        "ecmaVersion": 2017,
+        "ecmaVersion": 2020,
         "sourceType": "module",
         "allowImportExportEverywhere": true
     },
@@ -30,34 +30,41 @@
         "plugin:you-dont-need-lodash-underscore/all",
         "plugin:backbone/recommended",
         // version 6.x.x
-        "plugin:vue/essential"
+        "plugin:vue/recommended"
     ],
     "rules": {
         // vue plugin Base Rules
         "vue/comment-directive": ["off"],
         "vue/jsx-uses-vars": ["off"],
         // vue plugin Strongly Recommended Rules
+        "vue/attribute-hyphenation": ["error"],
         "vue/component-definition-name-casing": ["error"],
         "vue/html-closing-bracket-newline": ["error"],
         "vue/html-closing-bracket-spacing": ["error"],
         "vue/html-end-tags": ["error"],
         "vue/html-indent": ["error", 4],
         "vue/html-quotes": ["error"],
+        "vue/html-self-closing": ["error"],
         "vue/max-attributes-per-line": ["error"],
         "vue/multiline-html-element-content-newline": ["error"],
         "vue/mustache-interpolation-spacing": ["error"],
         "vue/no-multi-spaces": ["error"],
         "vue/no-spaces-around-equal-signs-in-attribute": ["error"],
         "vue/no-template-shadow": ["error"],
+        "vue/one-component-per-file": ["error"],
         "vue/prop-name-casing": ["error"],
         "vue/require-default-prop": ["error"],
         "vue/require-prop-types": ["error"],
         "vue/singleline-html-element-content-newline": ["error"],
         "vue/v-bind-style": ["error"],
         "vue/v-on-style": ["error"],
+        "vue/v-slot-style": ["error"],
         // vue plugin Recommended Rules
         "vue/attributes-order": ["error"],
         "vue/component-tags-order": ["error"],
+        "vue/no-lone-template": ["error"],
+        "vue/no-multiple-slot-args": ["error"],
+        "vue/no-v-html": ["off"],
         "vue/order-in-components": ["error"],
         "vue/this-in-template": ["error"],
         // vue plugin Uncategorizied Rules

@@ -58,9 +58,9 @@ export default {
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
+        :deactivate-gfi="deactivateGFI"
     >
-        <template v-slot:toolBody>
+        <template #:toolBody>
             <form id="tool-saveSelection-form">
                 <div class="form-group form-group-sm">
                     <label for="tool-saveSelection-input-url">{{ simpleMap ? "Geoportal" : "" }} URL</label>

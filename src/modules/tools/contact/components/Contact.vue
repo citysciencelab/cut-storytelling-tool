@@ -45,9 +45,9 @@ export default {
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
+        :deactivate-gfi="deactivateGFI"
     >
-        <template v-slot:toolBody>
+        <template #:toolBody>
             <div
                 v-if="contactInfo"
                 id="tool-contact-addionalInformation"
@@ -108,8 +108,7 @@ export default {
                         >
                         {{ $t("common:modules.tools.contact.privacyPolicy.label") }}
                     </label>
-                    <p v-html="$t('common:modules.tools.contact.privacyPolicy.info', {privacyPolicyLink})">
-                    </p>
+                    <p v-html="$t('common:modules.tools.contact.privacyPolicy.info', {privacyPolicyLink})" />
                 </div>
                 <button
                     id="tool-contact-send-message"

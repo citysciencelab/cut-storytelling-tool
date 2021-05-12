@@ -122,8 +122,7 @@ export default {
             >
                 <span
                     class="glyphicon glyphicon-remove"
-                >
-                </span>
+                />
             </button>
             <h5>
                 {{ translate(title) }}

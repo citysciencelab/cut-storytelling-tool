@@ -181,8 +181,7 @@ export default {
                     <td
                         v-else-if="typeof value === 'string' && value.includes('<br>')"
                         v-html="value"
-                    >
-                    </td>
+                    />
                     <td v-else>
                         {{ value }}
                     </td>
@@ -192,8 +191,7 @@ export default {
         <iframe
             v-if="mimeType === 'text/html'"
             class="gfi-iFrame"
-        >
-        </iframe>
+        />
     </div>
 </template>
 

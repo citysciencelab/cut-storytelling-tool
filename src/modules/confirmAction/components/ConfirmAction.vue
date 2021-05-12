@@ -55,8 +55,7 @@ export default {
                 <p
                     id="confirmation-textContent"
                     v-html="currentConfirmAction.textContent"
-                >
-                </p>
+                />
                 <div id="confirmation-button-container">
                     <button
                         id="modal-button-left"

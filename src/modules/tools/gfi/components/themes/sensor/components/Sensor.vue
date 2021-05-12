@@ -296,12 +296,12 @@ export default {
                 :key="`sensorCharts-barChartComponent-${key}`"
                 :class="getTabPaneClasses(key)"
                 :show="isActiveTab(key)"
-                :chartValue="typeof value === 'object' ? value : {title: value}"
-                :targetValue="typeof key === 'number' ? value : key"
-                :chartsParams="gfiParams.charts"
-                :periodLength="periodLength"
-                :periodUnit="periodUnit"
-                :processedHistoricalDataByWeekday="processedHistoricalDataByWeekday"
+                :chart-value="typeof value === 'object' ? value : {title: value}"
+                :target-value="typeof key === 'number' ? value : key"
+                :charts-params="gfiParams.charts"
+                :period-length="periodLength"
+                :period-unit="periodUnit"
+                :processed-historical-data-by-weekday="processedHistoricalDataByWeekday"
             />
         </div>
     </div>
