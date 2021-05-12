@@ -49,6 +49,7 @@ function Button3DTests ({builder, url, resolution, mode, capability}) {
         before(async function () {
             if (capability) {
                 capability.name = this.currentTest.fullTitle();
+                capability["sauce:options"].name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);
@@ -66,6 +67,13 @@ function Button3DTests ({builder, url, resolution, mode, capability}) {
         });
 
         afterEach(async function () {
+            if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+                await driver.quit();
+                driver = await initDriver(builder, url, resolution);
+                await driver.wait(until.elementLocated(By.css("#buttonOblique")));
+                buttonOB = await driver.findElement(By.css("#buttonOblique"));
+            }
             await driver.wait(new Promise(r => setTimeout(r, 2000)));
         });
 

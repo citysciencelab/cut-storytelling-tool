@@ -22,6 +22,7 @@ async function GdiSearch ({builder, url, resolution, capability}) {
         before(async function () {
             if (capability) {
                 capability.name = this.currentTest.fullTitle();
+                capability["sauce:options"].name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);
@@ -36,6 +37,16 @@ async function GdiSearch ({builder, url, resolution, capability}) {
                 });
             }
             await driver.quit();
+        });
+
+        afterEach(async function () {
+            if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+                await driver.quit();
+                driver = await initDriver(builder, url, resolution);
+                await driver.wait(until.elementLocated(searchInputSelector), 5000);
+                searchInput = await driver.findElement(searchInputSelector);
+            }
         });
 
         if (isMaster(url) || isCustom(url)) {

@@ -5,7 +5,7 @@ import axios from "axios";
 import getComponent from "../../../../../../../utils/getComponent";
 import SensorChartsData from "./SensorData.vue";
 import SensorChartsBarChart from "./SensorBarChart.vue";
-import {processHistoricalDataByWeekdays} from "../library/processHistoricalDataByWeekdays";
+import {processHistoricalDataByWeekdays} from "../utils/processHistoricalDataByWeekdays";
 
 export default {
     name: "Sensor",
@@ -315,5 +315,6 @@ export default {
     .gfi-theme-sensor {
         width: 65vh;
         height: 45vh;
+        overflow: auto;
     }
 </style>
