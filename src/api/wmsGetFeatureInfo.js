@@ -44,9 +44,9 @@ export function handleResponseAxios (response) {
     if (
         response === null
         || typeof response !== "object"
-        || !response.hasOwnProperty("status")
-        || !response.hasOwnProperty("statusText")
-        || !response.hasOwnProperty("data")
+        || !Object.prototype.hasOwnProperty.call(response, "status")
+        || !Object.prototype.hasOwnProperty.call(response, "statusText")
+        || !Object.prototype.hasOwnProperty.call(response, "data")
     ) {
         console.warn("requestGfi, handleResponseAxios: response", response);
         throw Error("requestGfi, handleResponseAxios: the received response is not valid");

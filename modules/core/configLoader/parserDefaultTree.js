@@ -41,7 +41,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      */
     filterValidLayer: function (layerList = [], validLayerTypes) {
         return layerList.filter(element => {
-            if (!element.hasOwnProperty("datasets")) {
+            if (!element?.datasets) {
                 return false;
             }
 

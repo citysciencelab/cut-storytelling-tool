@@ -27,6 +27,7 @@
         "allowImportExportEverywhere": true
     },
     "extends": [
+        "eslint:recommended",
         "plugin:backbone/recommended",
         "plugin:vue/recommended",
         "plugin:you-dont-need-lodash-underscore/all"
@@ -149,6 +150,7 @@
         "no-param-reassign": "error",
         "no-proto": "error",
         "no-redeclare": "error",
+        "no-restricted-exports": "error",
         "no-restricted-properties": "error",
         "no-return-assign": "error",
         "no-return-await": "error",
@@ -208,6 +210,7 @@
         "new-cap": "error",
         "new-parens": "error",
         "no-array-constructor": "error",
+        "no-control-regex": "off",
         "no-lonely-if": "error",
         "no-mixed-operators": "off",
         "no-mixed-spaces-and-tabs": "error",

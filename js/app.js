@@ -80,24 +80,24 @@ async function loadApp () {
     let app = {},
         searchbarAttributes = {};
 
-    if (Config.hasOwnProperty("uiStyle")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
     }
-    if (Config.hasOwnProperty("proxyHost")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "proxyHost")) {
         utilConfig.proxyHost = Config.proxyHost;
     }
-    if (Config.hasOwnProperty("proxy")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "proxy")) {
         utilConfig.proxy = Config.proxy;
     }
 
     // RemoteInterface laden
-    if (Config.hasOwnProperty("remoteInterface")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "remoteInterface")) {
         new RemoteInterface(Config.remoteInterface);
         new RadioMasterportalAPI();
         Vue.use(RemoteInterfaceVue, Config.remoteInterface);
     }
 
-    if (Config.hasOwnProperty("quickHelp")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "quickHelp")) {
         new QuickHelpView(Config.quickHelp);
     }
 
@@ -126,7 +126,7 @@ async function loadApp () {
 
 
     new StyleList();
-    if (!Config.hasOwnProperty("allowParametricURL") || Config.allowParametricURL === true) {
+    if (!Object.prototype.hasOwnProperty.call(Config, "allowParametricURL") || Config.allowParametricURL === true) {
         new ParametricURL();
     }
     new Map(Radio.request("Parser", "getPortalConfig").mapView);
@@ -138,13 +138,13 @@ async function loadApp () {
     new WFSTransactionModel();
     new MenuLoader();
 
-    if (Config.hasOwnProperty("zoomToGeometry")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "zoomToGeometry")) {
         new ZoomToGeometry(Config.zoomToGeometry);
     }
-    if (Config.hasOwnProperty("zoomToFeature")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "zoomToFeature")) {
         new ZoomToFeature(Config.zoomToFeature);
     }
-    if (Config.hasOwnProperty("featureViaURL")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "featureViaURL")) {
         new FeatureViaURL(Config.featureViaURL);
     }
 
@@ -156,7 +156,7 @@ async function loadApp () {
         new ClickCounterModel(Config.clickCounter.desktop, Config.clickCounter.mobile, Config.clickCounter.staticLink);
     }
 
-    if (Config.hasOwnProperty("mouseHover")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "mouseHover")) {
         new MouseHoverPopupView(Config.mouseHover);
     }
 
@@ -277,7 +277,7 @@ async function loadApp () {
     }
 
     searchbarAttributes = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
-    sbconfig = Object.assign({}, Config.hasOwnProperty("quickHelp") ? {quickHelp: Config.quickHelp} : {});
+    sbconfig = Object.assign({}, Object.prototype.hasOwnProperty.call(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
     sbconfig = Object.assign(sbconfig, searchbarAttributes);
 
     if (searchbarAttributes !== undefined && sbconfig) {

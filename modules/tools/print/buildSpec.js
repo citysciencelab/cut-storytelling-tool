@@ -71,16 +71,16 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {void}
      */
     updateMetaData: function (layerName, parsedData) {
-        const layers = this.get("attributes").hasOwnProperty("legend") && this.get("attributes").legend.hasOwnProperty("layers") ? this.get("attributes").legend.layers : undefined,
+        const layers = Object.prototype.hasOwnProperty.call(this.get("attributes"), "legend") && this.get("attributes").legend?.layers ? this.get("attributes").legend.layers : undefined,
             layer = Radio.request("Util", "findWhereJs", layers, {layerName: layerName});
 
         if (layer !== undefined) {
-            layer.metaDate = parsedData.hasOwnProperty("date") ? parsedData.date : "n.N.";
-            layer.metaOwner = parsedData.hasOwnProperty("orgaOwner") ? parsedData.orgaOwner : "n.N.";
-            layer.metaAddress = parsedData.hasOwnProperty("address") ? this.parseAddressToString(parsedData.address) : "n.N.";
-            layer.metaEmail = parsedData.hasOwnProperty("email") ? parsedData.email : "n.N.";
-            layer.metaTel = parsedData.hasOwnProperty("tel") ? parsedData.tel : "n.N.";
-            layer.metaUrl = parsedData.hasOwnProperty("url") ? parsedData.url : "n.N.";
+            layer.metaDate = parsedData?.date ? parsedData.date : "n.N.";
+            layer.metaOwner = parsedData?.orgaOwner ? parsedData.orgaOwner : "n.N.";
+            layer.metaAddress = parsedData?.address ? this.parseAddressToString(parsedData.address) : "n.N.";
+            layer.metaEmail = parsedData?.email ? parsedData.email : "n.N.";
+            layer.metaTel = parsedData?.tel ? parsedData.tel : "n.N.";
+            layer.metaUrl = parsedData?.url ? parsedData.url : "n.N.";
         }
     },
 
@@ -330,7 +330,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 }
             };
 
-        if (source.getParams().hasOwnProperty("SLD_BODY") && source.getParams().SLD_BODY !== undefined) {
+        if (Object.prototype.hasOwnProperty.call(source.getParams(), "SLD_BODY") && source.getParams().SLD_BODY !== undefined) {
             mapObject.customParams.SLD_BODY = source.getParams().SLD_BODY;
             mapObject.styles = ["style"];
         }
@@ -419,7 +419,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                     this.addFeatureToGeoJsonList(clonedFeature, geojsonList);
 
                     // do nothing if we already have a style object for this CQL rule
-                    if (mapfishStyleObject.hasOwnProperty(stylingRule)) {
+                    if (Object.prototype.hasOwnProperty.call(mapfishStyleObject, stylingRule)) {
                         return;
                     }
 
@@ -822,7 +822,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             convertedFeature = undefined;
         }
         // if its a cluster remove property features
-        if (convertedFeature.properties.hasOwnProperty("features")) {
+        if (convertedFeature.properties?.features) {
             delete convertedFeature.properties.features;
         }
         return convertedFeature;
@@ -939,7 +939,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             if (layerModel.get("styleId")) {
                 if (styleList !== undefined) {
                     ruleFeature = styleList.getRulesForFeature(feature);
-                    styleField = ruleFeature.length && ruleFeature[0] && ruleFeature[0].hasOwnProperty("conditions") ? Object.keys(ruleFeature[0].conditions.properties)[0] : "";
+                    styleField = ruleFeature.length && ruleFeature[0] && ruleFeature[0]?.conditions ? Object.keys(ruleFeature[0].conditions.properties)[0] : "";
                 }
                 else {
                     styleField = styleList.get("styleField");

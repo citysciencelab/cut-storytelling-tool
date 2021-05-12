@@ -307,7 +307,7 @@ export default {
                         }
                     }
                     /** Style WMS */
-                    else if (legendInfo.hasOwnProperty("name") && legendInfo.hasOwnProperty("graphic")) {
+                    else if (legendInfo?.name && legendInfo?.graphic) {
                         legendObj = legendInfo;
                     }
                     if (Array.isArray(legendObj)) {

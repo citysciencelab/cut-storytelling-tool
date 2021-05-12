@@ -35,7 +35,7 @@ export default {
                 return undefined;
             }
             for (const key of this.imageLinks) {
-                if (properties.hasOwnProperty(key)) {
+                if (Object.prototype.hasOwnProperty.call(properties, key)) {
                     return properties[key];
                 }
             }
@@ -58,7 +58,7 @@ export default {
         }
     },
     created () {
-        this.showFavoriteIcons = this.feature.getTheme()?.params?.hasOwnProperty("showFavoriteIcons") ?
+        this.showFavoriteIcons = this.feature.getTheme()?.params?.showFavoriteIcons ?
             this.feature.getTheme().params.showFavoriteIcons : this.showFavoriteIcons;
 
         this.replacesConfiguredImageLinks();

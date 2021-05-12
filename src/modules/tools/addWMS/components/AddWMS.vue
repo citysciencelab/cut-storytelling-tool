@@ -202,7 +202,7 @@ export default {
          * @return {void}
          */
         parseLayer: function (object, parentId, level) {
-            if (object.hasOwnProperty("Layer")) {
+            if (Object.prototype.hasOwnProperty.call(object, "Layer")) {
                 object.Layer.forEach(layer => {
                     this.parseLayer(layer, this.getParsedTitle(object.Title), level + 1);
                 });

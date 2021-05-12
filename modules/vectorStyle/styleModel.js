@@ -43,7 +43,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         const rules = this.getRulesForFeature(feature),
             // Takes first rule in array for labeling so that is giving precedence to the order in the style.json
             style = Array.isArray(rules) && rules.length > 0 ? rules[0].style : null,
-            hasLabelField = style && style.hasOwnProperty("labelField"),
+            hasLabelField = style?.labelField,
             styleObject = this.getGeometryStyle(feature, rules, isClustered);
 
         // label style is optional and depends on some fields
@@ -267,11 +267,11 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
         // For simple geometries the first styling rule is used.
         // That algorithm implements an OR statement between multiple valid conditions giving precedence to its order in the style.json.
-        if (!isMultiGeometry && rules.hasOwnProperty(0) && rules[0].hasOwnProperty("style")) {
+        if (!isMultiGeometry && Object.prototype.hasOwnProperty.call(rules, 0) && Object.prototype.hasOwnProperty.call(rules[0], "style")) {
             return this.getSimpleGeometryStyle(geometryType, feature, rules[0], isClustered);
         }
         // MultiGeometries must be checked against all rules because there might be a "sequence" in the condition.
-        else if (isMultiGeometry && rules.length > 0 && rules.every(element => element.hasOwnProperty("style"))) {
+        else if (isMultiGeometry && rules.length > 0 && rules.every(element => element?.style)) {
             return this.getMultiGeometryStyle(geometryType, feature, rules, isClustered);
         }
 
@@ -395,10 +395,10 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     getRuleForIndex: function (rules, index) {
         const indexedRule = this.getIndexedRule(rules, index),
             propertiesRule = rules.find(rule => {
-                return rule.hasOwnProperty("conditions") && !rule.conditions.hasOwnProperty("sequence");
+                return rule?.conditions && !Object.prototype.hasOwnProperty.call(rule.conditions, "sequence");
             }),
             fallbackRule = rules.find(rule => {
-                return !rule.hasOwnProperty("conditions");
+                return !rule?.conditions;
             });
 
         if (indexedRule) {
@@ -423,7 +423,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      */
     getIndexedRule: function (rules, index) {
         return rules.find(rule => {
-            const sequence = rule.hasOwnProperty("conditions") && rule.conditions.hasOwnProperty("sequence") ? rule.conditions.sequence : null,
+            const sequence = rule.conditions?.sequence ? rule.conditions.sequence : null,
                 isSequenceValid = sequence && Array.isArray(sequence) && sequence.every(element => typeof element === "number") && sequence.length === 2 && sequence[1] >= sequence[0],
                 minValue = isSequenceValid ? sequence[0] : -1,
                 maxValue = isSequenceValid ? sequence[1] : -1;
@@ -462,7 +462,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {Boolean} true if all properties are satisfied
      */
     checkProperties: function (feature, rule) {
-        if (rule.hasOwnProperty("conditions") && rule.conditions.hasOwnProperty("properties")) {
+        if (rule?.conditions?.properties) {
             const featureProperties = feature.getProperties(),
                 properties = rule.conditions.properties;
 
@@ -496,7 +496,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         let featureProperty = featureProperties;
 
         // if they are clustered features, then the first one is taken from the array
-        if (typeof featureProperties === "object" && featureProperties.hasOwnProperty("features")) {
+        if (typeof featureProperties === "object" && Object.prototype.hasOwnProperty.call(featureProperties, "features")) {
             if (Array.isArray(featureProperties.features) && featureProperties.features.length > 0) {
                 featureProperty = featureProperties.features[0].getProperties();
             }
@@ -553,7 +553,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         if (keyIsObjectPath) {
             return this.getFeaturePropertyByPath(featureProperties, key);
         }
-        else if (featureProperties.hasOwnProperty(key)) {
+        else if (Object.prototype.hasOwnProperty.call(featureProperties, key)) {
             return featureProperties[key];
         }
 
@@ -574,7 +574,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         for (let i = 0; i < pathArray.length; i++) {
             const element = pathArray[i];
 
-            if (!(featureProperty.hasOwnProperty(element) && featureProperty[element])) {
+            if (!(Object.prototype.hasOwnProperty.call(featureProperty, element) && featureProperty[element])) {
                 return null;
             }
             featureProperty = featureProperty[element];
@@ -670,7 +670,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {string} id
      */
     createLegendId: function (geometryType, rule) {
-        const properties = rule.hasOwnProperty("conditions") ? rule.conditions : null;
+        const properties = rule?.conditions ? rule.conditions : null;
 
         return encodeURIComponent(geometryType + JSON.stringify(properties));
     },
@@ -706,17 +706,17 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {String | null} label for this styleObject
      */
     createLegendLabel: function (rule, styleObject) {
-        if (styleObject?.attributes?.hasOwnProperty("legendValue")) {
+        if (styleObject?.attributes?.legendValue) {
             return styleObject.attributes.legendValue.toString();
         }
-        else if (rule.hasOwnProperty("conditions")) {
+        else if (rule?.conditions) {
             let label = "";
 
-            if (rule.conditions.hasOwnProperty("properties")) {
+            if (rule.conditions?.properties) {
                 label = Object.values(rule.conditions.properties).join(", ");
             }
 
-            if (rule.conditions.hasOwnProperty("sequence") && Array.isArray(rule.conditions.sequence)
+            if (rule.conditions?.sequence && Array.isArray(rule.conditions.sequence)
             && rule.conditions.sequence.every(element => typeof element === "number") && rule.conditions.sequence.length === 2
             && rule.conditions.sequence[1] >= rule.conditions.sequence[0]) {
                 label = label + " (" + rule.conditions.sequence.join("-") + ")";

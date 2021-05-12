@@ -163,7 +163,7 @@ function isCssColorString (color) {
     if (typeof color !== "string") {
         return false;
     }
-    else if (!getCssColorMap().hasOwnProperty(color.toLowerCase())) {
+    else if (Object.prototype.hasOwnProperty.call(!getCssColorMap(), color.toLowerCase())) {
         return false;
     }
     return true;

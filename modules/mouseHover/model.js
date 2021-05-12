@@ -104,7 +104,7 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
 
         // now filter all layers with mouse hover functionality
         mouseHoverLayers = vectorLayers.filter(function (layer) {
-            return layer.hasOwnProperty("mouseHoverField") && layer.mouseHoverField !== "";
+            return layer?.mouseHoverField && layer.mouseHoverField !== "";
         });
         mouseHoverInfos = mouseHoverLayers.map(layer => {
             return {id: layer.id, mouseHoverField: layer.mouseHoverField};
@@ -305,7 +305,7 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
      */
     pickValue: function (mouseHoverField, featureProperties) {
         if (typeof mouseHoverField === "string") {
-            return featureProperties.hasOwnProperty(mouseHoverField) ? featureProperties[mouseHoverField] : "";
+            return Object.prototype.hasOwnProperty.call(featureProperties, mouseHoverField) ? featureProperties[mouseHoverField] : "";
         }
         else if (!Array.isArray(mouseHoverField)) {
             return "";

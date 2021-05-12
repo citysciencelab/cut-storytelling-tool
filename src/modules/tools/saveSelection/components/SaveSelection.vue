@@ -27,7 +27,7 @@ export default {
             "updatedSelectedLayerList": this.filterExternalLayer
         });
 
-        if (Config.hasOwnProperty("simpleMap")) {
+        if (Object.prototype.hasOwnProperty.call(Config, "simpleMap")) {
             console.warn("The Parameter 'simpleMap' in the config.js is deprecated in the next major release. Please use the parameter 'simpleMap' as part of the configuration of the 'saveSelection' tool in the config.json.");
             this.setSimpleMap(Config.simpleMap);
         }

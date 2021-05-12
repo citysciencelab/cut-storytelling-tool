@@ -205,9 +205,9 @@ export default {
          * @returns {*} - Prepared Value from gfi.
          */
         prepareGfiValueFromObject: function (key, obj, gfi) {
-            const type = obj.hasOwnProperty("type") ? obj.type : "string",
-                format = obj.hasOwnProperty("format") ? obj.format : "DD.MM.YYYY HH:mm:ss",
-                condition = obj.hasOwnProperty("condition") ? obj.condition : null;
+            const type = obj?.type ? obj.type : "string",
+                format = obj?.format ? obj.format : "DD.MM.YYYY HH:mm:ss",
+                condition = obj?.condition ? obj.condition : null;
             let preparedValue = this.prepareGfiValue(gfi, key),
                 date;
 

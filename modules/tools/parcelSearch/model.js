@@ -168,7 +168,7 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
 
         Object.entries(obj).forEach(([key, value]) => {
             Object.assign(districts, Radio.request("Util", "toObject", [key], [value.id]));
-            if (value && value.hasOwnProperty("flur") && Array.isArray(value.flur) && value.flur.length > 0) {
+            if (value && value?.flur && Array.isArray(value.flur) && value.flur.length > 0) {
                 Object.assign(cadastralDistricts, Radio.request("Util", "toObject", [value.id], [value.flur]));
             }
         });
