@@ -27,10 +27,9 @@
         "allowImportExportEverywhere": true
     },
     "extends": [
-        "plugin:you-dont-need-lodash-underscore/all",
         "plugin:backbone/recommended",
-        // version 6.x.x
-        "plugin:vue/recommended"
+        "plugin:vue/recommended",
+        "plugin:you-dont-need-lodash-underscore/all"
     ],
     "rules": {
         // vue plugin Base Rules
