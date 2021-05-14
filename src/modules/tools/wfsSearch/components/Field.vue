@@ -201,7 +201,7 @@ export default {
             >
                 <option
                     v-for="(label, index) of inputLabel"
-                    :key="label + index"
+                    :key="index + label"
                     :value="index"
                 >
                     {{ label }}
@@ -238,7 +238,7 @@ export default {
                     </option>
                     <option
                         v-for="(option, index) of selectableOptions"
-                        :key="isObject(option) ? option.fieldValue : option"
+                        :key="index + isObject(option) ? option.fieldValue : option"
                         :value="JSON.stringify(isObject(option) ? {value: option.fieldValue, index} : {value: option, index})"
                         :selected="defaultValue && !required ? defaultValue : ''"
                     >
