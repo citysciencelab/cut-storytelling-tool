@@ -11,11 +11,11 @@ const actions = {
         commit("setCurrentInstance", instanceId);
         dispatch("prepareModule");
     },
-    prepareModule ({state, commit, dispatch}) {
+    prepareModule ({commit, dispatch, getters}) {
         dispatch("resetModule", false);
 
-        const currentInstance = state.instances[state.currentInstance],
-            {layerId, restLayerId, storedQueryId} = currentInstance.requestConfig,
+        const {currentInstance} = getters,
+            {requestConfig: {layerId, restLayerId, storedQueryId}} = currentInstance,
             restService = restLayerId
                 ? Radio.request("RestReader", "getServiceById", restLayerId)
                 : Radio.request("ModelList", "getModelByAttributes", {id: layerId});
@@ -52,22 +52,20 @@ const actions = {
             commit("setActive", false);
         }
     },
-    retrieveData ({state, commit}) {
-        const {currentInstance, instances} = state,
-            {selectSource} = instances[currentInstance];
+    retrieveData ({commit, getters}) {
+        const {currentInstance: {selectSource}} = getters;
 
         axios.get(selectSource)
             .then(response => handleAxiosResponse(response, "WfsSearch, retrieveData"))
             .then(data => commit("setParsedSource", data));
     },
-    searchFeatures ({state}) {
+    searchFeatures ({state, getters}) {
         // TODO: Move this function somewhere else, if the results of the request are not committed to the store
-        const {currentInstance, instances, service} = state,
-            {literals, requestConfig: {layerId, maxFeatures, storedQueryId}} = instances[currentInstance],
+        const {currentInstance: {literals, requestConfig: {layerId, maxFeatures, storedQueryId}}} = getters,
             fromServicesJson = Boolean(layerId),
             filter = storedQueryId ? buildStoredFilter(literals) : buildFilter(literals);
 
-        sendRequest(service, filter, fromServicesJson, storedQueryId, maxFeatures).then(data => {
+        sendRequest(state.service, filter, fromServicesJson, storedQueryId, maxFeatures).then(data => {
             const parser = new WFS({version: storedQueryId ? "2.0.0" : "1.1.0"}),
                 features = parser.readFeatures(data);
 

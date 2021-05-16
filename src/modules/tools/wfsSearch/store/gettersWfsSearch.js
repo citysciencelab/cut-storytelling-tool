@@ -6,6 +6,9 @@ const getters = {
     ...generateSimpleGetters(initialState),
     requiredFields ({requiredValues}) {
         return !Object.values(requiredValues).every(val => typeof val === "string" && val !== "");
+    },
+    currentInstance ({instances, currentInstanceId}) {
+        return instances[currentInstanceId];
     }
 };
 

@@ -12,7 +12,7 @@
  * @property {Number} initialWidth Initial width of the tool window. (config-param)
  * @property {Object[]} instances Array of search configurations. Each object contains the parameters literals, requestConfig and title and may also contain the parameters selectSource and userHelp. More information in the documentation.
  * @property {String[]} addedOptions List to keep track of the already added UI elements for the Literals.
- * @property {Number} currentInstance Position of the current search instance in the instances array.
+ * @property {Number} currentInstanceId Position of the current search instance in the instances array.
  * @property {?JSON} parsedSource The requested and parsed selectSource.
  * @property {?Object} requiredValues The key value pairs for the required fields.
  * @property {Object} selectedOptions The values of options which the user has entered / selected a value. The options here present are only the fields which had the parameter "options" as a String. The values inserted, have its "options" parameter as the key and the input as the value.
@@ -32,7 +32,7 @@ const state = {
     instances: [],
     // state parameters
     addedOptions: [],
-    currentInstance: 0,
+    currentInstanceId: 0,
     parsedSource: null,
     requiredValues: null,
     selectedOptions: {},

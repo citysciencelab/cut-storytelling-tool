@@ -86,16 +86,16 @@ export default {
                 </div>
                 <hr v-if="instances.length > 1">
                 <div
-                    v-if="instances[currentInstance].userHelp"
+                    v-if="currentInstance.userHelp"
                     class="form-group form-group-sm"
                 >
                     <div class="col-md-12 col-sm-12">
                         <!-- TODO: May need to add $t() to be properly displayed -->
-                        {{ instances[currentInstance].userHelp }}
+                        {{ currentInstance.userHelp }}
                     </div>
                     <hr>
                 </div>
-                <template v-for="(literal, i) of instances[currentInstance].literals">
+                <template v-for="(literal, i) of currentInstance.literals">
                     <Literal
                         :key="'tool-wfsSearch-clause' + i"
                         :literal="literal"

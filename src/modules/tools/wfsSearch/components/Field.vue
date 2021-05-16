@@ -132,7 +132,7 @@ export default {
             const value = this.htmlElement === "input" || val === "" ? val : JSON.parse(val).value;
 
             // NOTE: The extra object is sadly needed so that the object is reactive :(
-            this.setRequiredValues({...fieldValueChanged(this.fieldId, value, this.instances[this.currentInstance].literals, this.requiredValues)});
+            this.setRequiredValues({...fieldValueChanged(this.fieldId, value, this.currentInstance.literals, this.requiredValues)});
 
             if (typeof this.options === "string") {
                 const index = val === "" ? 0 : JSON.parse(val).index;
