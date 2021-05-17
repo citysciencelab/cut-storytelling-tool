@@ -1,16 +1,22 @@
 import axios from "axios";
+import {WFS} from "ol/format";
+import store from "../../../../app-store";
 import handleAxiosResponse from "../../../../utils/handleAxiosResponse";
+import {buildFilter, buildStoredFilter} from "./buildFilter";
 
 /**
  * Makes sure that the filter is ready to be used.
  * When in the config no outer clause is defined, this is added here.
  *
  * @param {(XML | XML[])} filter The filter to be adjusted.
- * @returns {XML} The adjusted Filter.
+ * @returns {String} The adjusted Filter.
  */
 function adjustFilter (filter) {
     if (Array.isArray(filter)) {
-        // TODO: Add case for when the filter array is empty because a user didn't insert a value -> all features!
+        // If the user didn't insert a value, the array will be empty
+        if (filter.length === 0) {
+            return "";
+        }
         return filter.length > 1 ? `<And>${filter.join("")}</And>` : filter[0];
     }
 
@@ -39,6 +45,33 @@ function xmlFilter (filter) {
 }
 
 /**
+ * Searches the service for features based on the build or given filter.
+ *
+ * @param {Object} currentInstance The currently selected searchInstance.
+ * @param {Object[]} currentInstance.literals Array of literals.
+ * @param {String} currentInstance.requestConfig.layerId Id of the layer defined in the services.json. Here it is used to check if that is the case or if the layer was defined in the rest-service.json.
+ * @param {Number} currentInstance.requestConfig.maxFeatures The maximum amount of features allowed.
+ * @param {String} currentInstance.requestConfig.storedQueryId Id of the stored Query. If given, a WFS@2.0.0 is queried.
+ * @param {Object} service The service to send the request to.
+ * @param {?String} singleValueFilter If given, this filter should be used.
+ * @returns {Promise} If the send request was successful, the found features are converted from XML to OL Features and returned.
+ */
+export function searchFeatures ({literals, requestConfig: {layerId, maxFeatures, storedQueryId}}, service, singleValueFilter = null) {
+    const fromServicesJson = Boolean(layerId);
+    let filter;
+
+    if (singleValueFilter) {
+        filter = singleValueFilter;
+    }
+    else {
+        filter = storedQueryId ? buildStoredFilter(literals) : buildFilter(literals);
+    }
+
+    return sendRequest(service, filter, fromServicesJson, storedQueryId, maxFeatures)
+        .then(data => new WFS({version: storedQueryId ? "2.0.0" : "1.1.0"}).readFeatures(data));
+}
+
+/**
  * Builds the request url and sends a GetFeature request via GET to the service.
  *
  * @param {Object} service The service to send the request to.
@@ -49,9 +82,9 @@ function xmlFilter (filter) {
  * @param {String} storedQueryId The Id of the Stored Query. Present when using a WFS@2.0.0.
  * @param {Number} [maxFeatures=8] Maximum amount of features to be returned by the service.
  * @returns {Promise} If the request was successful, the data of the response gets resolved.
- *                    If an error occurs (e.g. the service is not reachable or there was no such feature) the promise gets rejected.
+ *                    If an error occurs (e.g. the service is not reachable or there was no such feature) the error is caught and the message is displayed as an alert.
  */
-export function sendRequest ({url, typeName}, filter, fromServicesJson, storedQueryId, maxFeatures = 8) {
+function sendRequest ({url, typeName}, filter, fromServicesJson, storedQueryId, maxFeatures = 8) {
     let requestUrl = url;
 
     if (fromServicesJson) {
@@ -62,5 +95,6 @@ export function sendRequest ({url, typeName}, filter, fromServicesJson, storedQu
 
     return axios.get(requestUrl)
         .then(response => handleAxiosResponse(response, "WfsSearch, searchFeatures, sendRequest"))
-        .catch(err => console.error("OHOH", err)); // TODO: Proper Error handling
+        .catch(error => store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.wfsSearch.searchError", {error})));
+    // TODO: Add the key to the language files
 }
