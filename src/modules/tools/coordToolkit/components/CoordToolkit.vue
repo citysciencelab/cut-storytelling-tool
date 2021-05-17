@@ -7,13 +7,11 @@ import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersCoordToolkit";
 import mutations from "../store/mutationsCoordToolkit";
 import {mode} from "../store/stateCoordToolkit";
-import ToggleCheckbox from "../../../../share-components/ToggleCheckbox.vue";
 
 export default {
     name: "CoordToolkit",
     components: {
-        Tool,
-        ToggleCheckbox
+        Tool
     },
     computed: {
         ...mapGetters("Tools/CoordToolkit", Object.keys(getters)),
@@ -204,15 +202,11 @@ export default {
             this.removeMarker();
             if (this.mode === mode.SUPPLY) {
                 this.setMode(mode.SEARCH);
-                this.$refs.supplyCoordCheckBox.setActive(false);
-                this.$refs.searchByCoordCheckBox.setActive(true);
                 this.setSupplyCoordInactive();
 
             }
             else {
                 this.setMode(mode.SUPPLY);
-                this.$refs.searchByCoordCheckBox.setActive(false);
-                this.$refs.supplyCoordCheckBox.setActive(true);
                 this.resetErrorMessages();
                 this.setSupplyCoordActive();
             }
@@ -249,38 +243,33 @@ export default {
                     class="form-horizontal"
                     role="form"
                 >
-                    <div class="checkbox-container">
-                        <div class="form-inline">
-                            <div class="title-checkbox">
-                                <label
-                                    :class="{ enabled: isEnabled('supply') }"
-                                    @click="toggleMode"
-                                >{{ $t("modules.tools.coordToolkit.supply") }}</label>
-                                <ToggleCheckbox
-                                    ref="supplyCoordCheckBox"
-                                    :defaultState="true"
-                                    :title="$t('common:modules.tools.coordToolkit.supply')"
-                                    :textOn="$t('common:snippets.checkbox.on')"
-                                    :textOff="$t('common:snippets.checkbox.off')"
-                                    @change="toggleMode"
-                                />
-                            </div>
+                    <div class="radio-container form-group form-group-sm">
+                        <div class="form-check">
+                            <input
+                                id="supplyCoordRadio"
+                                type="radio"
+                                name="mode"
+                                checked="true"
+                                @change="toggleMode"
+                            />
+                            <label
+                                for="supplyCoordRadio"
+                                class="col-md-5 col-sm-5 control-label"
+                                @click="toggleMode"
+                            >{{ $t("modules.tools.coordToolkit.supply") }}</label>
                         </div>
-                        <div class="form-inline">
-                            <div class="title-checkbox">
-                                <label
-                                    :class="{ enabled: isEnabled('search') }"
-                                    @click="toggleMode"
-                                >{{ $t("modules.tools.coordToolkit.search") }}</label>
-                                <ToggleCheckbox
-                                    ref="searchByCoordCheckBox"
-                                    :defaultState="false"
-                                    :title="$t('additional:modules.tools.populationRequest.switchOffFilter')"
-                                    :textOn="$t('common:snippets.checkbox.on')"
-                                    :textOff="$t('common:snippets.checkbox.off')"
-                                    @change="toggleMode"
-                                />
-                            </div>
+                        <div class="form-check">
+                            <input
+                                id="searchByCoordRadio"
+                                type="radio"
+                                name="mode"
+                                @change="toggleMode"
+                            />
+                            <label
+                                for="searchByCoordRadio"
+                                class="col-md-5 col-sm-5 control-label"
+                                @click="toggleMode"
+                            >{{ $t("modules.tools.coordToolkit.search") }}</label>
                         </div>
                     </div>
                     <div class="form-group form-group-sm">
@@ -395,17 +384,17 @@ export default {
             font-size: 12px;
         }
     }
-    .checkbox-container .form-inline .title-checkbox label {
-        font-size: 14px;
+    .radio-container{
+        padding-bottom: 25px;
+        label{
+            margin-left: 5px;
+        }
+        input{
+            margin-left: 10px;
+        }
     }
     .enabled {
         font-weight: bold;
-    }
-    .checkbox-container .form-inline {
-        padding: 0px 15px;
-    }
-    .checkbox-container{
-        padding-bottom: 25px;
     }
     .error-text {
     font-size: 85%;
