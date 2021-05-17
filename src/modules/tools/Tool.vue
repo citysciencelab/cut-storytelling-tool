@@ -140,7 +140,7 @@ export default {
          */
         close (event) {
             this.updateMap();
-            // emit event to parent e.g. SupplyCoord (which uses the tool as component and is therefor the parent)
+            // emit event to parent e.g. coordToolkit (which uses the tool as component and is therefor the parent)
             this.$parent.$emit("close", event);
         }
     }

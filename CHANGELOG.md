@@ -42,6 +42,7 @@
 ### Added
 - Add possibility to test end2end-tests with `MicrosoftEdge` driver.
 - VTC-Layer supports Sprites and Fonts in Style definitions.
+- A new Tool named coordToolkit is available. It contains the functionality of the tools supplyCord and searchByCoord. Both provide the same projections configured under the key "namedProjections" in config.js.
 
 ### Changed
 - The version of the package selenium-webdriver was updated to version 4.0.0-beta.4.
