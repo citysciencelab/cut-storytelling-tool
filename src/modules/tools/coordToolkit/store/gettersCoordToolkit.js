@@ -27,19 +27,18 @@ const getters = {
         return positionTargetProjection;
     },
     /**
-     * Returns the projection to the given name.
+     * Returns the projection to the given id.
      * @param {Object} state state of this tool
-     * @param {String} name of the projection
+     * @param {String} id of the projection, is like the name and in case of decimal "-DG" is appended to name
      * @returns {Object} projection
      */
-    getProjectionByName: state => (name) => {
+    getProjectionById: state => (id) => {
         const projections = state.projections;
 
         return projections.find(projection => {
-            return projection.name === name;
+            return projection.id === id;
         });
     },
-    // aus searchbycoord:
     /**
      * Returns true to easting coordinate error variable if one test case fails.
      * @param {Object} state state of this tool

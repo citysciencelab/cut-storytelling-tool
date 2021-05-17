@@ -37,6 +37,7 @@
             "print": "Print map",
             "measure": "Measure distance / area",
             "coordToolkit": "Coordinates",
+            "coord": "Query coordinates",
             "supplyCoord": "Query coordinates",
             "searchByCoord": "Coordinate search",
             "fileImport": "Import file",

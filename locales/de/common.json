@@ -37,6 +37,7 @@
             "print": "Karte Drucken",
             "measure": "Strecke / Fläche messen",
             "coordToolkit": "Koordinaten",
+            "coord": "Koordinaten abfragen",
             "supplyCoord": "Koordinaten abfragen",
             "searchByCoord": "Koordinatensuche",
             "fileImport": "Datei-Import",

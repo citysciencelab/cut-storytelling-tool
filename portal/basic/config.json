@@ -37,6 +37,10 @@
 					"supplyCoord": {
 						"name": "Koordinaten abfragen"
 					},
+					"coordToolkit": {
+						"name": "translate#common:menu.tools.coordToolkit",
+						"glyphicon": "glyphicon-globe"
+					},
 					"measure": {
 						"name": "Strecke / Fläche messen"
 					},

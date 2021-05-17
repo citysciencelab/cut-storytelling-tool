@@ -16,7 +16,7 @@ const mutations = {
      * @returns {void}
      */
     setProjections: (state, projections = []) => {
-        const found = projections.filter(projection => projection.name === state.currentSelection);
+        const found = projections.filter(projection => projection.id === state.currentProjection?.id);
 
         if (found.length === 0) {
             // EPSG:25832 must be the first one
@@ -28,7 +28,7 @@ const mutations = {
                 projections.splice(index, 1);
                 projections.unshift(firstProj);
             }
-            state.currentSelection = projections[0]?.name;
+            state.currentSelection = projections[0]?.id;
             state.currentProjection = projections[0];
         }
         state.projections = projections;
@@ -39,17 +39,17 @@ const mutations = {
      * @returns {void}
      */
     setExample (state) {
-        if (state.currentSelection === "http://www.opengis.net/gml/srs/epsg.xml#25832"
-        || state.currentSelection === "EPSG:31467"
-        || state.currentSelection === "EPSG:8395") {
+        if (state.currentProjection.id === "http://www.opengis.net/gml/srs/epsg.xml#25832"
+        || state.currentProjection.id === "EPSG:31467"
+        || state.currentProjection.id === "EPSG:8395") {
             state.coordinatesEastingExample = "564459.13";
             state.coordinatesNorthingExample = "5935103.67";
         }
-        else if (state.currentSelection === "EPSG:4326") {
+        else if (state.currentProjection.id === "EPSG:4326") {
             state.coordinatesEastingExample = "53° 33′ 25″";
             state.coordinatesNorthingExample = "9° 59′ 50″";
         }
-        else if (state.currentSelection === "EPSG:4326-DG") {
+        else if (state.currentProjection.id === "EPSG:4326-DG") {
             state.coordinatesEastingExample = "53.55555°";
             state.coordinatesNorthingExample = "10.01234°";
         }

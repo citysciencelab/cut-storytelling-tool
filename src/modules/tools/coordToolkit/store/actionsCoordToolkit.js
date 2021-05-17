@@ -34,8 +34,8 @@ export default {
      * @returns {void}
      */
     newProjectionSelected ({commit, state, getters}) {
-        const targetProjectionName = state.currentSelection,
-            targetProjection = getters.getProjectionByName(targetProjectionName);
+        const targetProjectionId = state.currentSelection,
+            targetProjection = getters.getProjectionById(targetProjectionId);
 
         commit("setCurrentProjection", targetProjection);
     },
@@ -45,7 +45,7 @@ export default {
      */
     changedPosition ({dispatch, state, rootState, getters}) {
         if (state.mode === mode.SUPPLY) {
-            const targetProjectionName = state.currentSelection.replace("-DG", ""),
+            const targetProjectionName = state.currentProjection.name,
                 position = getters.getTransformedPosition(rootState.Map.map, targetProjectionName);
 
             if (position) {
@@ -66,7 +66,7 @@ export default {
             // geographical coordinates
             if (targetProjection.projName === "longlat") {
                 coord = toStringHDMS(position);
-                if (targetProjection.name === "EPSG:4326-DG") {
+                if (targetProjection.id === "EPSG:4326-DG") {
                     const converted = convertSexagesimalToDecimal(coord);
 
                     easting = converted.easting;
@@ -154,7 +154,7 @@ export default {
         const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
             validWGS84 = /^\d[0-9]{0,2}[°]{1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["″]{0,2}\s*$/,
             validWGS84_dez = /[0-9]{1,3}[.,][0-9]{0,5}[\s]{0,1}[°]\s*$/,
-            {currentSelection} = state,
+            {currentProjection} = state,
             validators = {
                 "http://www.opengis.net/gml/srs/epsg.xml#25832": validETRS89,
                 "EPSG:31467": validETRS89,
@@ -168,7 +168,7 @@ export default {
             if (coord.value === "") {
                 commit("setEastingNoCoord", true);
             }
-            else if (!coord.value.match(validators[currentSelection])) {
+            else if (!coord.value.match(validators[currentProjection.id])) {
                 commit("setEastingNoMatch", true);
             }
         }
@@ -177,7 +177,7 @@ export default {
             if (coord.value === "") {
                 commit("setNorthingNoCoord", true);
             }
-            else if (!coord.value.match(validators[currentSelection])) {
+            else if (!coord.value.match(validators[currentProjection.id])) {
                 commit("setNorthingNoMatch", true);
             }
         }
@@ -189,7 +189,7 @@ export default {
      * @returns {void}
      */
     formatInput ({state, commit, getters}, coords) {
-        const {currentSelection} = state,
+        const {currentProjection} = state,
             formatters = {
                 "http://www.opengis.net/gml/srs/epsg.xml#25832": coord=>coord.value,
                 "EPSG:31467": coord=>coord.value,
@@ -202,7 +202,7 @@ export default {
         for (const coord of coords) {
             if (!getters.getEastingError && !getters.getNorthingError) {
                 commit("resetErrorMessages");
-                commit("pushCoordinates", formatters[currentSelection](coord));
+                commit("pushCoordinates", formatters[currentProjection.id](coord));
             }
         }
     },
@@ -215,7 +215,7 @@ export default {
         if (state.selectedCoordinates.length === 2) {
             dispatch("setZoom", state.zoomLevel);
 
-            if (state.currentSelection === "EPSG:4326" || state.currentSelection === "EPSG:4326-DG") {
+            if (state.currentProjection.id === "EPSG:4326" || state.currentProjection.id === "EPSG:4326-DG") {
                 const latitude = state.selectedCoordinates[0],
                     newLatitude = Number(latitude[0]) +
             (Number(latitude[1] ? latitude[1] : 0) / 60) +
@@ -229,13 +229,13 @@ export default {
                 state.transformedCoordinates = proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [newLongitude, newLatitude]); // turning the coordinates around to make it work for WGS84
                 dispatch("moveToCoordinates", state.transformedCoordinates);
             }
-            else if (state.currentSelection === "EPSG:31467") {
+            else if (state.currentProjection.id === "EPSG:31467") {
                 const coordinates = [Math.round(state.selectedCoordinates[0]), Math.round(state.selectedCoordinates[1])];
 
                 state.transformedCoordinates = proj4(proj4("EPSG:31467"), proj4("EPSG:25832"), coordinates);
                 dispatch("moveToCoordinates", state.transformedCoordinates);
             }
-            else if (state.currentSelection === "EPSG:8395") {
+            else if (state.currentProjection.id === "EPSG:8395") {
                 const coordinates = [Math.round(state.selectedCoordinates[0]), Math.round(state.selectedCoordinates[1])];
 
                 state.transformedCoordinates = proj4(proj4("EPSG:8395"), proj4("EPSG:25832"), coordinates);

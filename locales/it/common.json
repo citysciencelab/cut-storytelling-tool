@@ -34,6 +34,7 @@
             "print": "Stampa mappa",
             "measure": "Misura distanza / area",
             "coordToolkit": "Coordinate",
+            "coord": "Richiedi coordinate",
             "supplyCoord": "Richiedi coordinate",
             "searchByCoord": "Ricerca di coordinate",
             "fileImport": "Importa file",

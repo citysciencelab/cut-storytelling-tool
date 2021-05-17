@@ -54,7 +54,8 @@ export default {
     },
     watch: {
         /**
-         * Sets the active property of the state to the given value.
+         * If true, mode is set to "supply", projections are initialized.
+         * If false, error messages and values are resetted.
          * @param {Boolean} value Value deciding whether the tool gets activated or deactivated.
          * @returns {void}
          */
@@ -64,6 +65,7 @@ export default {
             if (value) {
                 this.setMode(mode.SUPPLY);
                 this.initProjections();
+                this.setExample();
                 if (this.mode === mode.SUPPLY) {
                     this.setSupplyCoordActive();
                 }
@@ -98,30 +100,57 @@ export default {
             addInteractionToMap: "addInteraction",
             removeInteractionFromMap: "removeInteraction"
         }),
+        /**
+         * Initializes the projections to select. If projection EPSG:4326 is available same is added in decimal-degree.
+         * @returns {void}
+         */
         initProjections () {
             const pr = getProjections(),
                 wgs84Proj = pr.filter(proj => proj.name === "EPSG:4326");
 
-            if (wgs84Proj) {
-                const index = pr.findIndex(proj => proj.name === "EPSG:4326"),
-                    wgs84ProjDez = {};
+            // id is set to the name and in case of decimal "-DG" is appended to name later on
+            // for use in select-box
+            pr.forEach(proj => {
+                proj.id = proj.name;
+            });
 
-                for (const key in wgs84Proj[0]) {
-                    wgs84ProjDez[key] = wgs84Proj[0][key];
-                }
-
-                wgs84ProjDez.name = "EPSG:4326-DG";
-                wgs84ProjDez.title = "WGS 84(Dezimalgrad)";
-                pr.splice(index, 0, wgs84ProjDez);
+            if (wgs84Proj && wgs84Proj.length === 1) {
+                this.addWGS84Decimal(pr, wgs84Proj);
             }
             this.setProjections(pr);
-            this.setExample();
         },
+        /**
+         * Adds EPSG:4326 in decimal-degree to list of projections.
+         * @param {Array} projections list of all available projections
+         * @param {Object} wgs84Proj the WGS84 projection contained in list of projections
+         * @returns {void}
+         */
+        addWGS84Decimal (projections, wgs84Proj) {
+            const index = projections.findIndex(proj => proj.name === "EPSG:4326"),
+                wgs84ProjDez = {};
+
+            for (const key in wgs84Proj[0]) {
+                wgs84ProjDez[key] = wgs84Proj[0][key];
+            }
+
+            wgs84ProjDez.name = "EPSG:4326";
+            wgs84ProjDez.id = "EPSG:4326-DG";
+            wgs84ProjDez.title = "WGS 84(Dezimalgrad)";
+            projections.splice(index + 1, 0, wgs84ProjDez);
+        },
+        /**
+         * Removes pointer-move-handler and interaction from map.
+         * @returns {void}
+         */
         setSupplyCoordInactive () {
             this.removePointerMoveHandlerFromMap(this.setCoordinates);
             this.setUpdatePosition(true);
             this.removeInteraction();
         },
+        /**
+         * Adds pointer-move-handler and interaction to map.
+         * @returns {void}
+         */
         setSupplyCoordActive () {
             this.addPointerMoveHandlerToMap(this.setCoordinates);
             this.setMapProjection(this.projection);
@@ -211,14 +240,24 @@ export default {
                 this.setSupplyCoordActive();
             }
         },
+        /**
+         * If curent mode is "supply" content of input is copied to clipboard.
+         * @param {Event} event click-event
+         * @returns {void}
+         */
         onInputClicked (event) {
             if (this.mode === mode.SUPPLY) {
                 this.copyToClipboard(event.currentTarget);
             }
         },
-        onInputEvent (coordinatesEasting) {
+        /**
+         * If curent mode is "search" input is validated.
+         * @param {Object} coordinatesValue value of input
+         * @returns {void}
+         */
+        onInputEvent (coordinatesValue) {
             if (this.mode === mode.SEARCH) {
-                this.validateInput(coordinatesEasting);
+                this.validateInput(coordinatesValue);
             }
         }
     }
@@ -254,7 +293,7 @@ export default {
                             />
                             <label
                                 for="supplyCoordRadio"
-                                class="col-md-5 col-sm-5 control-label"
+                                :class="{ 'control-label': true, 'enabled': isEnabled('supply') }"
                                 @click="toggleMode"
                             >{{ $t("modules.tools.coordToolkit.supply") }}</label>
                         </div>
@@ -267,7 +306,7 @@ export default {
                             />
                             <label
                                 for="searchByCoordRadio"
-                                class="col-md-5 col-sm-5 control-label"
+                                :class="{'control-label': true, 'enabled': isEnabled('search') }"
                                 @click="toggleMode"
                             >{{ $t("modules.tools.coordToolkit.search") }}</label>
                         </div>
@@ -287,8 +326,8 @@ export default {
                                 <option
                                     v-for="(projection, i) in projections"
                                     :key="i"
-                                    :value="projection.name"
-                                    :SELECTED="projection.name === currentSelection"
+                                    :value="projection.id"
+                                    :SELECTED="projection.id === currentSelection"
                                 >
                                     {{ projection.title ? projection.title + " ("+projection.name+")" : projection.name }}
                                 </option>
@@ -342,7 +381,7 @@ export default {
                                 :contenteditable="isEnabled( mode.SEARCH)"
                                 :placeholder="isEnabled( mode.SEARCH) ? $t('modules.tools.searchByCoord.exampleAcronym') + coordinatesNorthingExample : ''"
                                 @click="onInputClicked($event)"
-                                @input="onInputEvent(coordinatesEasting)"
+                                @input="onInputEvent(coordinatesNorthing)"
                             ><p
                                 v-if="northingNoCoord"
                                 class="error-text"
@@ -386,6 +425,8 @@ export default {
     }
     .radio-container{
         padding-bottom: 25px;
+        display: flex;
+        justify-content: space-around;
         label{
             margin-left: 5px;
         }
@@ -397,8 +438,8 @@ export default {
         font-weight: bold;
     }
     .error-text {
-    font-size: 85%;
-    color: #a94442;
-}
+        font-size: 85%;
+        color: #a94442;
+    }
 </style>
 
