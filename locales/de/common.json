@@ -607,7 +607,8 @@
             "wfsSearch": {
                 "optionPlaceholder": "Bitte wählen Sie eine Option aus!",
                 "resetButton": "Zurücksetzen",
-                "searchButton": "Suchen"
+                "searchButton": "Suchen",
+                "searchError": "Fehler bei der Suche von Feature: {{error}}."
             }
         },
         "controls": {

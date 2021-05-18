@@ -96,5 +96,4 @@ function sendRequest ({url, typeName}, filter, fromServicesJson, storedQueryId, 
     return axios.get(requestUrl)
         .then(response => handleAxiosResponse(response, "WfsSearch, searchFeatures, sendRequest"))
         .catch(error => store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.wfsSearch.searchError", {error})));
-    // TODO: Add the key to the language files
 }
