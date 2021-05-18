@@ -2548,7 +2548,7 @@ If both are defined `restLayerId` is used.
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |layerId|no|String||Id of the WFS service that should be queried. Information is fetched from **[services.json](services.json.md)**.|false|
-|likeFilter|no|**[likeFilter](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfiglikefilter)**|`{wildCard: "*", singleChar: "#", escape: "!"}`|The configuration of the service for the like filter.|true|
+|likeFilter|no|**[likeFilter](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfiglikefilter)**|`{"wildCard": "*", "singleChar": "#", "escape": "!"}`|The configuration of the service for the like filter.|true|
 |maxFeatures|no|Number|8|Maximum amount of features that are supposed to be returned from the service.|false|
 |restLayerId|no|String||Id of the WFS service that should be queried. Information is fetched from **[rest-services.json](rest-services.json.md)**.|false|
 |storedQueryId|no|String||The id of the Stored Query of the WFS that should be used to query the service. If this field is set, it is assumed that a WFS@2.0.0 is used.|false|
@@ -2572,9 +2572,9 @@ For the documentation, it is assumed that the properties are called `wildCard`, 
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|wildCard|yes|String|`*`|The wildcard value for the like filter.|true|
-|singleChar|yes|String|`#`|The single character value for the like filter.|true|
-|escape|yes|String|`!`|The escape character value for the like filter.|true|
+|wildCard|yes|String|`"*"`|The wildcard value for the like filter.|true|
+|singleChar|yes|String|`"#"`|The single character value for the like filter.|true|
+|escape|yes|String|`"!"`|The escape character value for the like filter.|true|
 
 ***
 
