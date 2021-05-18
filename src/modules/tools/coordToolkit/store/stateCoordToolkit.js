@@ -34,9 +34,6 @@ export const mode = {
         updatePosition: true,
         currentProjection: null,
         currentSelection: "EPSG:25832",
-        coordinatesEastingField: "",
-        coordinatesNorthingField: "",
-        // aus searchbycoord:
         eastingNoCoord: false,
         eastingNoMatch: false,
         northingNoCoord: false,

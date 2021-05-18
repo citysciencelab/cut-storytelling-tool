@@ -35,7 +35,7 @@ const mutations = {
     },
     /**
      * Sets the example values to state.
-     * @param {Object} state the state of searchByCoord-module
+     * @param {Object} state the state of coordToolkit-module
      * @returns {void}
      */
     setExample (state) {
@@ -56,7 +56,7 @@ const mutations = {
     },
     /**
      * Resets the error messages in the state.
-     * @param {Object} state the state of searchByCoord-module
+     * @param {Object} state the state of coordToolkit-module
      * @returns {void}
      */
     resetErrorMessages: (state) => {
@@ -67,7 +67,7 @@ const mutations = {
     },
     /**
      * Resets the easting error messages in the state which is used for live validation of input.
-     * @param {Object} state the state of searchByCoord-module
+     * @param {Object} state the state of coordToolkit-module
      * @returns {void}
      */
     resetEastingMessages: (state) => {
@@ -76,7 +76,7 @@ const mutations = {
     },
     /**
      * Resets the northing error messages  in the state which is used for live validation of input.
-     * @param {Object} state the state of searchByCoord-module
+     * @param {Object} state the state of coordToolkit-module
      * @returns {void}
      */
     resetNorthingMessages: (state) => {
@@ -85,7 +85,7 @@ const mutations = {
     },
     /**
      * Resets the coordinate values in the state.
-     * @param {Object} state the state of searchByCoord-module
+     * @param {Object} state the state of coordToolkit-module
      * @returns {void}
      */
     resetValues: (state) => {
@@ -94,7 +94,7 @@ const mutations = {
     },
     /**
      * Pushes the coordinates to the selectedCoordinates Array in the state.
-     * @param {Object} state the state of searchByCoord-module
+     * @param {Object} state the state of coordToolkit-module
      * @param {Object} payload payload object.
      * @returns {void}
      */

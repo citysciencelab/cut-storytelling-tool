@@ -449,6 +449,11 @@
                 "cartesian": {
                     "eastingLabel": "Longitudine",
                     "northingLabel": "Latitudine"
+                },
+                "exampleAcronym": "Es.",
+                "errorMsg": {
+                    "noCoord": "Si prega di inserire {{valueKey}} completo.",
+                    "noMatch": "L'input per {{valueKey}} non è corretto! Esempio: "
                 }
             },
             "gfi": {

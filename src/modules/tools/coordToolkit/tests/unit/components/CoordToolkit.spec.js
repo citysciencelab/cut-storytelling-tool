@@ -39,10 +39,10 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
                 menu: {
                     tools: {
                         children: {
-                            coord:
+                            coordToolkit:
                             {
                                 "name": "translate#common:menu.tools.coordToolkit",
-                                "glyphicon": "glyphicon-screenshot"
+                                "glyphicon": "glyphicon-globe"
                             }
                         }
                     }
@@ -104,7 +104,7 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
         await wrapper.vm.$nextTick();
 
         options = wrapper.findAll("option");
-        expect(options.length).to.equal(namedProjections.length);
+        expect(options.length).to.equal(namedProjections.length + 1);
 
         selected = options.filter(o => o.attributes().selected === "true");
         expect(selected.length).to.equal(1);
@@ -133,7 +133,7 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             expect(store.state.Tools.CoordToolkit.currentSelection).to.be.equals(value);
             expect(store.state.Tools.CoordToolkit.currentProjection.name).to.be.equals(value);
             expect(store.state.Tools.CoordToolkit.coordinatesEasting.value).to.be.equals("0.00");
-            expect(store.state.Tools.CoordToolkit.coordinatesNorthingField).to.be.equals("0.00");
+            expect(store.state.Tools.CoordToolkit.coordinatesNorthing.value).to.be.equals("0.00");
 
         });
         it("createInteraction sets projections and adds interaction", () => {
@@ -156,7 +156,7 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
             store.commit("Tools/CoordToolkit/setActive", true);
             store.commit("Tools/CoordToolkit/setCurrentSelection", "EPSG:4326");
-            ret = wrapper.vm.label(key);
+            ret = wrapper.vm.getLabel(key);
             expect(ret).to.be.equals("modules.tools.coordToolkit.hdms.key");
 
             store.commit("Tools/CoordToolkit/setCurrentSelection", "EPSG:31467");

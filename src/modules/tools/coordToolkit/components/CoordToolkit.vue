@@ -18,27 +18,27 @@ export default {
         ...mapGetters("Map", ["projection", "mouseCoord"]),
         eastingNoCoordMessage: function () {
             if (this.currentProjection.proj !== "longlat") {
-                return this.$t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: this.$t(this.getLabel("eastingLabel"))});
+                return this.$t("common:modules.tools.coordToolkit.errorMsg.noCoord", {valueKey: this.$t(this.getLabel("eastingLabel"))});
             }
-            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.getLabel("eastingLabel"))});
+            return this.$t("common:modules.tools.coordToolkit.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.getLabel("eastingLabel"))});
         },
         northingNoCoordMessage: function () {
             if (this.currentProjection.proj !== "longlat") {
-                return this.$t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: this.$t(this.getLabel("northingLabel"))});
+                return this.$t("common:modules.tools.coordToolkit.errorMsg.noCoord", {valueKey: this.$t(this.getLabel("northingLabel"))});
             }
-            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.getLabel("northingLabel"))});
+            return this.$t("common:modules.tools.coordToolkit.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.getLabel("northingLabel"))});
         },
         northingNoMatchMessage: function () {
             if (this.currentProjection.proj !== "longlat") {
-                return this.$t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: this.$t(this.getLabel("northingLabel"))});
+                return this.$t("common:modules.tools.coordToolkit.errorMsg.noMatch", {valueKey: this.$t(this.getLabel("northingLabel"))});
             }
-            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.getLabel("northingLabel"))});
+            return this.$t("common:modules.tools.coordToolkit.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.getLabel("northingLabel"))});
         },
         eastingNoMatchMessage: function () {
             if (this.currentProjection.proj !== "longlat") {
-                return this.$t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: this.$t(this.getLabel("eastingLabel"))});
+                return this.$t("common:modules.tools.coordToolkit.errorMsg.noMatch", {valueKey: this.$t(this.getLabel("eastingLabel"))});
             }
-            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.getLabel("eastingLabel"))});
+            return this.$t("common:modules.tools.coordToolkit.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.getLabel("eastingLabel"))});
         },
         /**
          * Must be a two-way computed property, because it is used as v-model for select-Element, see https://vuex.vuejs.org/guide/forms.html.
@@ -348,7 +348,7 @@ export default {
                                 :readonly="isEnabled( mode.SEARCH)"
                                 :contenteditable="isEnabled( mode.SEARCH)"
                                 :class="{ inputError: getEastingError, 'form-control': true}"
-                                :placeholder="isEnabled( mode.SEARCH) ? $t('modules.tools.searchByCoord.exampleAcronym') + coordinatesEastingExample : ''"
+                                :placeholder="isEnabled( mode.SEARCH) ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesEastingExample : ''"
                                 @click="onInputClicked($event)"
                                 @input="onInputEvent(coordinatesEasting)"
                             ><p
@@ -379,7 +379,7 @@ export default {
                                 :class="{ inputError: getNorthingError , 'form-control': true}"
                                 :readonly="isEnabled( mode.SEARCH)"
                                 :contenteditable="isEnabled( mode.SEARCH)"
-                                :placeholder="isEnabled( mode.SEARCH) ? $t('modules.tools.searchByCoord.exampleAcronym') + coordinatesNorthingExample : ''"
+                                :placeholder="isEnabled( mode.SEARCH) ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesNorthingExample : ''"
                                 @click="onInputClicked($event)"
                                 @input="onInputEvent(coordinatesNorthing)"
                             ><p
