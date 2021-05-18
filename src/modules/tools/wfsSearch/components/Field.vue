@@ -1,9 +1,12 @@
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
+import actions from "../store/actionsWfsSearch";
 import getters from "../store/gettersWfsSearch";
 import mutations from "../store/mutationsWfsSearch";
+import {buildXmlFilter} from "../utils/buildFilter";
 import {fieldValueChanged} from "../utils/literalFunctions";
 import {buildPath, getOptions, prepareOptionsWithId} from "../utils/pathFunctions";
+import {searchFeatures} from "../utils/requests";
 
 export default {
     name: "Field",
@@ -11,6 +14,10 @@ export default {
         defaultValue: {
             type: String,
             default: ""
+        },
+        dropdownInputUsesId: {
+            type: Boolean,
+            default: false
         },
         fieldId: {
             type: String,
@@ -32,17 +39,17 @@ export default {
             type: String,
             default: ""
         },
-        required: {
-            type: Boolean,
-            default: false
-        },
         options: {
             type: [String, Array],
             default: null
         },
-        dropdownInputUsesId: {
+        required: {
             type: Boolean,
             default: false
+        },
+        suggestionsLength: {
+            type: Number,
+            default: undefined
         },
         type: {
             type: String,
@@ -52,6 +59,7 @@ export default {
             }
         }
     },
+    data: () => ({showLoader: false, suggestions: [], value: ""}),
     computed: {
         ...mapGetters("Tools/WfsSearch", Object.keys(getters)),
         htmlElement () {
@@ -111,6 +119,9 @@ export default {
                 return this.options;
             }
             return null;
+        },
+        showSuggestions () {
+            return !this.options && typeof this.suggestionsLength !== "undefined" && this.value.length >= this.suggestionsLength;
         }
     },
     mounted () {
@@ -128,8 +139,9 @@ export default {
     },
     methods: {
         ...mapMutations("Tools/WfsSearch", Object.keys(mutations)),
-        valueChanged (val) {
-            const value = this.htmlElement === "input" || val === "" ? val : JSON.parse(val).value;
+        ...mapActions("Tools/WfsSearch", Object.keys(actions)),
+        async valueChanged (val) {
+            const value = this.value = this.htmlElement === "input" || val === "" ? val : JSON.parse(val).value;
 
             // NOTE: The extra object is sadly needed so that the object is reactive :(
             this.setRequiredValues({...fieldValueChanged(this.fieldId, value, this.currentInstance.literals, this.requiredValues)});
@@ -138,6 +150,15 @@ export default {
                 const index = val === "" ? 0 : JSON.parse(val).index;
 
                 this.setSelectedOptions({options: this.options, value, index});
+            }
+            else if (this.showSuggestions) {
+                this.showLoader = true;
+                const xmlFilter = buildXmlFilter({fieldName: this.fieldName, type: "like", value}),
+                    suggestions = await searchFeatures(this.currentInstance, this.service, xmlFilter);
+
+                this.showLoader = false;
+                // Retrieve the values for the fieldName and make sure they are unique.
+                this.suggestions = [...new Set(suggestions.map(v => v.values_[this.fieldName]))];
             }
         },
         isObject (val) {
@@ -168,6 +189,7 @@ export default {
                 :defaultValue="htmlElement === 'input' ? defaultValue : ''"
                 :required="required"
                 :disabled="disabled"
+                :list="htmlElement === 'input' && showSuggestions ? `tool-wfsSearch-${fieldName}-${fieldId}-input-suggestions` : ''"
                 @change="valueChanged($event.currentTarget.value)"
             >
                 <template v-if="htmlElement === 'select'">
@@ -186,10 +208,69 @@ export default {
                     </option>
                 </template>
             </component>
+            <!-- TODO: Can this be made barrierefrei or is it already? -->
+            <i
+                v-if="htmlElement === 'input' && showLoader"
+                id="todo"
+                class="loader"
+            />
+            <datalist
+                v-if="htmlElement === 'input'"
+                :id="`tool-wfsSearch-${fieldName}-${fieldId}-input-suggestions`"
+            >
+                <option
+                    v-for="(value, index) in suggestions"
+                    :key="value + index"
+                    :value="value"
+                >
+                    {{ value }}
+                </option>
+            </datalist>
         </div>
     </div>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
+/* Loader CSS based on https://codepen.io/lopis/pen/zwprzP  */
 
+.loader {
+    position: relative;
+    bottom: 2em;
+    left: 87.5%;
+    height: 1.5em;
+    width: 1.5em;
+    display: inline-block;
+    animation: around 5.4s infinite;
+
+    &:after, &:before {
+        content: "";
+        background: white;
+        position: absolute;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        border-width: 0.15em;
+        border-color: #333 #333 transparent transparent;
+        border-style: solid;
+        border-radius: 1em;
+        box-sizing: border-box;
+        top: 0;
+        left: 0;
+        animation: around 0.7s ease-in-out infinite;
+    }
+
+    &:after {
+        animation: around 0.7s ease-in-out 0.1s infinite;
+        background: transparent;
+    }
+}
+
+@keyframes around {
+    0% {
+        transform: rotate(0deg)
+    }
+    100% {
+        transform: rotate(360deg)
+    }
+}
 </style>

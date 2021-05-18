@@ -1,5 +1,6 @@
 import axios from "axios";
 import handleAxiosResponse from "../../../../utils/handleAxiosResponse";
+import {setLikeFilterProperties} from "../utils/buildFilter";
 import {prepareLiterals} from "../utils/literalFunctions";
 
 // TODO: JSDoc
@@ -12,14 +13,14 @@ const actions = {
         dispatch("resetModule", false);
 
         const {currentInstance} = getters,
-            {requestConfig: {layerId, restLayerId, storedQueryId}} = currentInstance,
-            restService = restLayerId
+            {requestConfig: {layerId, likeFilter, restLayerId, storedQueryId}} = currentInstance,
+            wfs = restLayerId
                 ? Radio.request("RestReader", "getServiceById", restLayerId)
                 : Radio.request("ModelList", "getModelByAttributes", {id: layerId});
 
-        if (restService) {
+        if (wfs) {
             const {selectSource} = currentInstance,
-                service = {url: restService.get("url")};
+                service = {url: wfs.get("url")};
 
             // NOTE: The extra object is sadly needed so that the object is reactive :(
             commit("setRequiredValues", {...prepareLiterals(currentInstance.literals)});
@@ -27,8 +28,11 @@ const actions = {
             if (selectSource) {
                 dispatch("retrieveData");
             }
+            if (likeFilter) {
+                setLikeFilterProperties(likeFilter);
+            }
             if (!storedQueryId && layerId) {
-                service.typeName = restService.get("featureType");
+                service.typeName = wfs.get("featureType");
             }
             commit("setService", service);
         }

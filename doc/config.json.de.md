@@ -2181,6 +2181,7 @@ Eine Instanz der WFS Suche, welche als einzelnes Tool dargestellt wird.
 |literals|ja|**[literal](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral)**[]||Array an `literals`.|true|
 |requestConfig|ja|**[requestConfig](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfig)**||Id des WFS-Dienstes, welcher angefragt werden soll. Wenn ein WFS@2.0.0 verwendet werden soll, muss die id der gespeicherten Anfrage (Stored Query) angegeben werden.|false|
 |selectSource|nein|String||Optionale Url, unter welcher eine JSON-Datei mit den verschiedenen Optionen für den Input gespeichert ist. Für eine Beispiel siehe **[https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json]**.|false|
+|suggestionsLength|nein|Number||Wenn gegeben, dann wird der Service angefragt, wenn ein Nutzer etwas in ein Inputfeld eingibt, um einen Vorschlag für die weitere Eingabe zu geben. Die Anfrage wird dann getriggered, wenn die Inputlänge mindestens so lang ist wie der Wert dieses Parameters.|false|
 |title|ja|String||Der Titel der Suche, welcher in dem Dropdown im Werkzeug dargestellt wird.|false|
 |userHelp|nein|String||Informationstext hinsichtlich des Suchformulars, welches oberhalb des Formulars für den Nutzer angezeigt werden soll. Kann ein Übersetzungsschlüssel sein.|false|
 
@@ -2451,6 +2452,7 @@ Falls beide Parameter gesetzt wurden, dann wird `restLayerId` verwendet.
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |layerId|nein|String||Id des WFS Dienstes, welcher angefragt werden soll. Informationen werden aus der **[services.json](services.json.de.md)** bezogen.|false|
+|likeFilter|nein|**[likeFilter](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfiglikefilter)**|`{wildCard: "*", singleChar: "#", escape: "!"}`|Die Konfiguration des Services hinsichtlich des like Filters.|true|
 |maxFeatures|nein|Number|8|Maximale Anzahl an Features, welche der Dienst zurückgeben soll.|false|
 |restLayerId|nein|String||Id des WFS Dienstes, welcher angefragt werden soll. Informationen werden aus der **[rest-services.json](rest-services.json.de.md)** bezogen.|false|
 |storedQueryId|nein|String||Die Id der gespeichersten Anfrage (Stored Query) des WFS Dienstes, welche für die Anfrage an verwendet werden soll. Es wird angenommen, dass ein WFS@2.0.0 verwendet wird, falls dieses Feld gesetzt wurde.|false|
@@ -2463,6 +2465,20 @@ Falls beide Parameter gesetzt wurden, dann wird `restLayerId` verwendet.
     }
 }
 ```
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.requestConfig.likeFilter
+
+Innerhalb eines Filters für einen WFS-Dienst können Werte mit einem `equal` oder einem `like` verglichen werden.
+Wenn der Vergleich mit einem `like` durchgeführt werden soll, dann werden weitere Eigenschaften benötigt. Diese können sowohl im Werte, als auch in der Eigenschaftsdefintion variieren.
+Es wird für die Dokumentation angenommen, dass die Eigenschaften `wildCard`, `singleChar` und `escape` heißen; Variationen wie `wildCard`, `single` und `escape` sind jedoch auch möglich.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|wildCard|ja|String|`*`|Der Wildcardwert für den like Filter.|true|
+|singleChar|ja|String|`#`|Der Wert für einen einzelnen Charakter für den like Filter.|true|
+|escape|ja|String|`!`|Der Escape-Wert für den like Filter.|true|
 
 ***
 

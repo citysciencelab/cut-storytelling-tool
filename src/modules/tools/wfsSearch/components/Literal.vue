@@ -15,7 +15,10 @@ export default {
         }
     },
     computed: {
-        ...mapGetters("Tools/WfsSearch", Object.keys(getters))
+        ...mapGetters("Tools/WfsSearch", Object.keys(getters)),
+        suggestionsLength () {
+            return this.currentInstance?.suggestionsLength;
+        }
     }
 };
 </script>
@@ -26,15 +29,16 @@ export default {
         v-if="literal.field"
         :key="`tool-wfsSearch-clause-literal-field-${literal.field.id}-${literal.field.fieldName}`"
         :default-value="literal.field.defaultValue"
+        :dropdown-input-uses-id="literal.field.usesId"
         :field-id="literal.field.id"
         :field-name="literal.field.fieldName"
         :input-label="literal.field.inputLabel"
         :input-placeholder="literal.field.inputPlaceholder"
         :input-title="literal.field.inputTitle"
-        :required="literal.field.required"
         :options="literal.field.options"
+        :required="literal.field.required"
+        :suggestions-length="suggestionsLength"
         :type="literal.field.type"
-        :dropdownInputUsesId="literal.field.usesId"
     />
     <!-- TODO: This div can be styled for visual highlighting -> Also, weird UI behaviour when a field is "dangling" between clauses cause of this -->
     <div v-else-if="literal.clause">
