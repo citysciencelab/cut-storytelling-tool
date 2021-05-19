@@ -42,7 +42,11 @@ export default {
         isWebLink,
         isPhoneNumber,
         getPhoneNumberAsWebLink,
-        isEmailAddress
+        isEmailAddress,
+        removeVerticalBar (value) {
+            const newValue = value.replaceAll("|", ", ");
+            return newValue
+        }
     }
 };
 </script>
@@ -95,6 +99,9 @@ export default {
                             >
                                 {{ beautifyKey($t(value)) }}
                             </p>
+                            <p v-else-if="typeof value === 'string' && value.includes('|')">
+                                {{ removeVerticalBar(value) }}
+                            </p>
                             <p v-else>
                                 {{ value }}
                             </p>
@@ -135,6 +142,9 @@ export default {
                                 class="bold"
                             >
                                 {{ beautifyKey($t(value)) }}
+                            </p>
+                            <p v-else-if="typeof value === 'string' && value.includes('|')">
+                                {{ removeVerticalBar(value) }}
                             </p>
                             <p v-else>
                                 {{ value }}
@@ -188,6 +198,9 @@ export default {
                             >
                                 {{ beautifyKey($t(value)) }}
                             </p>
+                            <p v-else-if="typeof value === 'string' && value.includes('|')">
+                                {{ removeVerticalBar(value) }}
+                            </p>
                             <p v-else>
                                 {{ value }}
                             </p>
@@ -230,6 +243,9 @@ export default {
                                 class="bold"
                             >
                                 {{ beautifyKey($t(value)) }}
+                            </p>
+                            <p v-else-if="typeof value === 'string' && value.includes('|')">
+                                {{ removeVerticalBar(value) }}
                             </p>
                             <p v-else>
                                 {{ value }}
