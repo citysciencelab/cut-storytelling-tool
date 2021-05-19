@@ -62,7 +62,7 @@ const getters = {
      * @returns {String} the name of the label
      */
     getLabel: (state) => (key) => {
-        const type = state.currentProjection?.proj !== "longlat" ? "cartesian" : "hdms";
+        const type = state.currentProjection?.projName !== "longlat" ? "cartesian" : "hdms";
 
         return "modules.tools.coordToolkit." + type + "." + key;
     }

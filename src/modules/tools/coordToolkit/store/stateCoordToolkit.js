@@ -1,8 +1,4 @@
-export const mode = {
-        SUPPLY: "supply",
-        SEARCH: "search"
-    },
-    /**
+/**
  * User type definition
  * @typedef {Object} CoordToolkitState
  * @property {Boolean} active if true, CoordToolkit will rendered
@@ -23,34 +19,33 @@ export const mode = {
  * @property {Boolean} isVisibleInMenu if true, tool is selectable in menu (config-param)
  * @property {Boolean} deactivateGFI flag if tool should deactivate gfi (config-param)
  */
-    state = {
-        active: false,
-        id: "coordToolkit",
-        mode: mode.SUPPLY,
-        selectPointerMove: null,
-        projections: [],
-        mapProjection: null,
-        positionMapProjection: [],
-        updatePosition: true,
-        currentProjection: null,
-        currentSelection: "EPSG:25832",
-        eastingNoCoord: false,
-        eastingNoMatch: false,
-        northingNoCoord: false,
-        northingNoMatch: false,
-        coordinatesEasting: {id: "easting", value: ""},
-        coordinatesNorthing: {id: "northing", value: ""},
-        coordinatesEastingExample: "",
-        coordinatesNorthingExample: "",
-        selectedCoordinates: [],
+const state = {
+    active: false,
+    id: "coordToolkit",
+    mode: "supply",
+    selectPointerMove: null,
+    projections: [],
+    mapProjection: null,
+    positionMapProjection: [],
+    updatePosition: true,
+    currentProjection: {name: "EPSG:25832"},
+    eastingNoCoord: false,
+    eastingNoMatch: false,
+    northingNoCoord: false,
+    northingNoMatch: false,
+    coordinatesEasting: {id: "easting", value: ""},
+    coordinatesNorthing: {id: "northing", value: ""},
+    coordinatesEastingExample: "",
+    coordinatesNorthingExample: "",
+    selectedCoordinates: [],
 
-        // defaults for config.json parameters
-        name: "common:menu.tools.coordToolkit",
-        glyphicon: "glyphicon-screenshot",
-        renderToWindow: true,
-        resizableWindow: true,
-        isVisibleInMenu: true,
-        deactivateGFI: true
-    };
+    // defaults for config.json parameters
+    name: "common:menu.tools.coordToolkit",
+    glyphicon: "glyphicon-screenshot",
+    renderToWindow: true,
+    resizableWindow: true,
+    isVisibleInMenu: true,
+    deactivateGFI: true
+};
 
 export default state;

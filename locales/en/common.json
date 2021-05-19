@@ -477,7 +477,9 @@
                     "noMatch": "Your chosen {{valueKey}} is not correct! Example: ",
                     "hdmsNoCoord": "Please enter your value for the {{valueKey}}.",
                     "hdmsNoMatch": "Your chosen value for the {{valueKey}} is not correct! Example: "
-                }
+                },
+                "hintSupply": "Click in the map to request coordinates",
+                "hintSearch": "Enter the coordinates to search for"
             },
             "gfi": {
                 "errorMessage": "An error has occurred  during the information request (GetFeatureInfo).<br>Please try again later. If the problem persists, please contact the operator of the service.",

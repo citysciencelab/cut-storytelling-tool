@@ -53,6 +53,9 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
         wrapper;
 
     beforeEach(() => {
+        CoordToolkit.actions.copyToClipboard = sinon.spy(CoordToolkit.actions.copyToClipboard);
+        CoordToolkit.actions.validateInput = sinon.spy(CoordToolkit.actions.validateInput);
+
         store = new Vuex.Store({
             namespaced: true,
             modules: {
@@ -72,6 +75,12 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
                     namespaced: true,
                     actions: mockMapMarkerActions
                 }
+            },
+            actions: {
+                copyToClipboard: sinon.spy()
+            },
+            getters: {
+                isDefaultStyle: () => true
             },
             state: {
                 configJson: mockConfigJson
@@ -113,14 +122,14 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
     describe("CoordToolkit.vue methods", () => {
         it("close sets active to false", async () => {
             wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
-
+            expect(store.state.Tools.CoordToolkit.active).to.be.true;
             wrapper.vm.close();
             await wrapper.vm.$nextTick();
 
             expect(store.state.Tools.CoordToolkit.active).to.be.false;
             expect(wrapper.find("#supply-coord").exists()).to.be.false;
         });
-        it("method selectionChanged sets currentSelection", () => {
+        it("method selectionChanged sets currentProjection", () => {
             const value = "EPSG:25832",
                 event = {
                     target: {
@@ -130,11 +139,10 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
 
             wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
             wrapper.vm.selectionChanged(event);
-            expect(store.state.Tools.CoordToolkit.currentSelection).to.be.equals(value);
             expect(store.state.Tools.CoordToolkit.currentProjection.name).to.be.equals(value);
+            expect(store.state.Tools.CoordToolkit.currentProjection.projName).to.be.equals("utm");
             expect(store.state.Tools.CoordToolkit.coordinatesEasting.value).to.be.equals("0.00");
             expect(store.state.Tools.CoordToolkit.coordinatesNorthing.value).to.be.equals("0.00");
-
         });
         it("createInteraction sets projections and adds interaction", () => {
             wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
@@ -143,45 +151,127 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             expect(typeof store.state.Tools.CoordToolkit.selectPointerMove).to.be.equals("object");
             expect(typeof store.state.Tools.CoordToolkit.selectPointerMove.handleMoveEvent).to.be.equals("function");
         });
-        it("removeInteraction removes interaction", () => {
+        it("setSupplyCoordInactive removes interaction", () => {
             wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
             expect(typeof store.state.Tools.CoordToolkit.selectPointerMove).to.be.equals("object");
-            wrapper.vm.removeInteraction();
+            wrapper.vm.setSupplyCoordInactive();
             expect(store.state.Tools.CoordToolkit.selectPointerMove).to.be.null;
+        });
+        it("setSupplyCoordActive adds interaction", () => {
+            wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
+            expect(store.state.Tools.CoordToolkit.selectPointerMove).to.be.null;
+            wrapper.vm.setSupplyCoordActive();
+            expect(typeof store.state.Tools.CoordToolkit.selectPointerMove).to.be.equals("object");
+        });
+        it("initProjections adds WGS84 decimal projection", () => {
+            let projections = [];
+
+            wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
+            wrapper.vm.initProjections();
+
+            projections = store.state.Tools.CoordToolkit.projections;
+            expect(projections.length).to.be.equals(5);
+            expect(projections[0].id).to.be.not.null;
+            expect(projections.filter(proj => proj.id === "EPSG:4326-DG").length).to.be.equals(1);
         });
         it("label returns correct path", () => {
             const key = "key";
-            let ret = "";
+            let value = "EPSG:4326",
+                event = {
+                    target: {
+                        value: value
+                    }
+                },
+                ret = "";
 
-            wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
             store.commit("Tools/CoordToolkit/setActive", true);
-            store.commit("Tools/CoordToolkit/setCurrentSelection", "EPSG:4326");
+            wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
+            wrapper.vm.selectionChanged(event);
+
             ret = wrapper.vm.getLabel(key);
             expect(ret).to.be.equals("modules.tools.coordToolkit.hdms.key");
 
-            store.commit("Tools/CoordToolkit/setCurrentSelection", "EPSG:31467");
-            ret = wrapper.vm.label(key);
+            value = "EPSG:31467";
+            event = {
+                target: {
+                    value: value
+                }
+            };
+            wrapper.vm.selectionChanged(event);
+            ret = wrapper.vm.getLabel(key);
             expect(ret).to.be.equals("modules.tools.coordToolkit.cartesian.key");
 
-            store.commit("Tools/CoordToolkit/setCurrentSelection", null);
-            ret = wrapper.vm.label(key);
+            value = null;
+            event = {
+                target: {
+                    value: value
+                }
+            };
+            wrapper.vm.selectionChanged(event);
+            ret = wrapper.vm.getLabel(key);
             expect(ret).to.be.equals("modules.tools.coordToolkit.cartesian.key");
+        });
+        it("changeMode changes the mode 'supply' or 'search'", async () => {
+            wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
+            expect(store.state.Tools.CoordToolkit.mode).to.be.equals("supply");
+            expect(wrapper.vm.isEnabled("supply")).to.be.true;
+            wrapper.vm.changeMode("search");
+            await wrapper.vm.$nextTick();
+            expect(store.state.Tools.CoordToolkit.mode).to.be.equals("search");
+            expect(wrapper.vm.isEnabled("search")).to.be.true;
+        });
+        it("onInputClicked should call copyToClipboard if mode is 'supply'", async () => {
+            const value = "EPSG:4326",
+                event = {
+                    target: {
+                        value: value
+                    }
+                };
+
+            wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
+            expect(store.state.Tools.CoordToolkit.mode).to.be.equals("search");
+            wrapper.vm.onInputClicked(event);
+            expect(CoordToolkit.actions.copyToClipboard.calledOnce).to.be.false;
+
+            wrapper.vm.changeMode("supply");
+            await wrapper.vm.$nextTick();
+            expect(store.state.Tools.CoordToolkit.mode).to.be.equals("supply");
+            wrapper.vm.onInputClicked(event);
+            expect(CoordToolkit.actions.copyToClipboard.calledOnce).to.be.true;
+        });
+        it("onInputEvent should call validateInput if mode is 'search'", async () => {
+            wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
+            expect(store.state.Tools.CoordToolkit.mode).to.be.equals("supply");
+            wrapper.vm.onInputEvent("input");
+            expect(CoordToolkit.actions.validateInput.calledOnce).to.be.false;
+
+            wrapper.vm.changeMode("search");
+            await wrapper.vm.$nextTick();
+            expect(store.state.Tools.CoordToolkit.mode).to.be.equals("search");
+            wrapper.vm.onInputEvent("input");
+            expect(CoordToolkit.actions.validateInput.calledOnce).to.be.true;
         });
     });
     describe("CoordToolkit.vue watcher", () => {
-        it("watch to active shall create/remove PointerMove interaction", async () => {
+        it("watch to active shall set mode to 'supply'", async () => {
+            store.commit("Tools/CoordToolkit/setActive", false);
             wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
 
             store.commit("Tools/CoordToolkit/setActive", true);
             await wrapper.vm.$nextTick();
+            expect(store.state.Tools.CoordToolkit.mode).to.be.equals("supply");
             expect(typeof store.state.Tools.CoordToolkit.selectPointerMove).to.be.equals("object");
             expect(typeof store.state.Tools.CoordToolkit.selectPointerMove.handleMoveEvent).to.be.equals("function");
 
             store.commit("Tools/CoordToolkit/setActive", false);
             await wrapper.vm.$nextTick();
 
-            expect(store.state.Tools.CoordToolkit.updatePosition).to.be.true;
-            expect(store.state.Tools.CoordToolkit.selectPointerMove).to.be.null;
+            expect(store.state.Tools.CoordToolkit.eastingNoCoord).to.be.false;
+            expect(store.state.Tools.CoordToolkit.eastingNoMatch).to.be.false;
+            expect(store.state.Tools.CoordToolkit.northingNoCoord).to.be.false;
+            expect(store.state.Tools.CoordToolkit.northingNoMatch).to.be.false;
+            expect(store.state.Tools.CoordToolkit.coordinatesEasting.value).to.be.equals("");
+            expect(store.state.Tools.CoordToolkit.coordinatesNorthing.value).to.be.equals("");
         });
     });
 });

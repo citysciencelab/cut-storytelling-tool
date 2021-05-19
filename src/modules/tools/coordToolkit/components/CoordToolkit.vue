@@ -6,7 +6,6 @@ import {getProjections} from "masterportalAPI/src/crs";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersCoordToolkit";
 import mutations from "../store/mutationsCoordToolkit";
-import {mode} from "../store/stateCoordToolkit";
 
 export default {
     name: "CoordToolkit",
@@ -16,40 +15,30 @@ export default {
     computed: {
         ...mapGetters("Tools/CoordToolkit", Object.keys(getters)),
         ...mapGetters("Map", ["projection", "mouseCoord"]),
+        ...mapGetters(["isDefaultStyle"]),
         eastingNoCoordMessage: function () {
-            if (this.currentProjection.proj !== "longlat") {
+            if (this.currentProjection.projName !== "longlat") {
                 return this.$t("common:modules.tools.coordToolkit.errorMsg.noCoord", {valueKey: this.$t(this.getLabel("eastingLabel"))});
             }
             return this.$t("common:modules.tools.coordToolkit.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.getLabel("eastingLabel"))});
         },
         northingNoCoordMessage: function () {
-            if (this.currentProjection.proj !== "longlat") {
+            if (this.currentProjection.projName !== "longlat") {
                 return this.$t("common:modules.tools.coordToolkit.errorMsg.noCoord", {valueKey: this.$t(this.getLabel("northingLabel"))});
             }
             return this.$t("common:modules.tools.coordToolkit.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.getLabel("northingLabel"))});
         },
         northingNoMatchMessage: function () {
-            if (this.currentProjection.proj !== "longlat") {
+            if (this.currentProjection.projName !== "longlat") {
                 return this.$t("common:modules.tools.coordToolkit.errorMsg.noMatch", {valueKey: this.$t(this.getLabel("northingLabel"))});
             }
             return this.$t("common:modules.tools.coordToolkit.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.getLabel("northingLabel"))});
         },
         eastingNoMatchMessage: function () {
-            if (this.currentProjection.proj !== "longlat") {
+            if (this.currentProjection.projName !== "longlat") {
                 return this.$t("common:modules.tools.coordToolkit.errorMsg.noMatch", {valueKey: this.$t(this.getLabel("eastingLabel"))});
             }
             return this.$t("common:modules.tools.coordToolkit.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.getLabel("eastingLabel"))});
-        },
-        /**
-         * Must be a two-way computed property, because it is used as v-model for select-Element, see https://vuex.vuejs.org/guide/forms.html.
-         */
-        currentSelection: {
-            get () {
-                return this.$store.state.Tools.CoordToolkit.currentSelection;
-            },
-            set (newValue) {
-                this.setCurrentSelection(newValue);
-            }
         }
     },
     watch: {
@@ -63,12 +52,10 @@ export default {
             this.removeMarker();
 
             if (value) {
-                this.setMode(mode.SUPPLY);
+                this.setMode("supply");
                 this.initProjections();
                 this.setExample();
-                if (this.mode === mode.SUPPLY) {
-                    this.setSupplyCoordActive();
-                }
+                this.setSupplyCoordActive();
             }
             else {
                 this.resetErrorMessages();
@@ -143,20 +130,25 @@ export default {
          * @returns {void}
          */
         setSupplyCoordInactive () {
-            this.removePointerMoveHandlerFromMap(this.setCoordinates);
-            this.setUpdatePosition(true);
-            this.removeInteraction();
+            if (this.selectPointerMove !== null) {
+                this.removePointerMoveHandlerFromMap(this.setCoordinates);
+                this.setUpdatePosition(true);
+                this.removeInteractionFromMap(this.selectPointerMove);
+                this.setSelectPointerMove(null);
+            }
         },
         /**
          * Adds pointer-move-handler and interaction to map.
          * @returns {void}
          */
         setSupplyCoordActive () {
-            this.addPointerMoveHandlerToMap(this.setCoordinates);
-            this.setMapProjection(this.projection);
-            this.createInteraction();
-            this.setPositionMapProjection(this.mouseCoord);
-            this.changedPosition();
+            if (this.selectPointerMove === null) {
+                this.addPointerMoveHandlerToMap(this.setCoordinates);
+                this.setMapProjection(this.projection);
+                this.createInteraction();
+                this.setPositionMapProjection(this.mouseCoord);
+                this.changedPosition();
+            }
         },
         /**
          * Called if selection of projection changed. Sets the current scprojectionale to state and changes the position.
@@ -164,15 +156,18 @@ export default {
          * @returns {void}
          */
         selectionChanged (event) {
-            this.onInputEvent(this.coordinatesEasting);
-            this.onInputEvent(this.coordinatesNorthing);
-            this.setCurrentSelection(event.target.value);
-            this.newProjectionSelected();
-            this.changedPosition(event.target.value);
-            this.setExample();
+            if (event.target.value) {
+                this.onInputEvent(this.coordinatesEasting);
+                this.onInputEvent(this.coordinatesNorthing);
+                this.newProjectionSelected(event.target.value);
+                if (this.mode === "search") {
+                    this.validateInput(this.coordinatesEasting);
+                    this.validateInput(this.coordinatesNorthing);
+                }
+            }
         },
         /**
-         * Stores the projections and adds interaction pointermove to map.
+         * Adds interaction pointermove to map.
          * @returns {void}
          */
         createInteraction () {
@@ -190,14 +185,6 @@ export default {
 
             this.setSelectPointerMove(pointerMove);
             this.addInteractionToMap(pointerMove);
-        },
-        /**
-         * Removes the interaction from map.
-         * @returns {void}
-         */
-        removeInteraction () {
-            this.removeInteractionFromMap(this.selectPointerMove);
-            this.setSelectPointerMove(null);
         },
         /**
          * Closes this tool window by setting active to false
@@ -225,17 +212,16 @@ export default {
         },
         /**
          * Toggles the mode "supply" or "search".
+         * @param {String} newMode "supply" or "search"
          * @returns {void}
          */
-        toggleMode () {
-            this.removeMarker();
-            if (this.mode === mode.SUPPLY) {
-                this.setMode(mode.SEARCH);
+        changeMode (newMode) {
+            this.setMode(newMode);
+            if (newMode === "search") {
+                this.removeMarker();
                 this.setSupplyCoordInactive();
-
             }
             else {
-                this.setMode(mode.SUPPLY);
                 this.resetErrorMessages();
                 this.setSupplyCoordActive();
             }
@@ -246,7 +232,7 @@ export default {
          * @returns {void}
          */
         onInputClicked (event) {
-            if (this.mode === mode.SUPPLY) {
+            if (this.mode === "supply") {
                 this.copyToClipboard(event.currentTarget);
             }
         },
@@ -256,7 +242,7 @@ export default {
          * @returns {void}
          */
         onInputEvent (coordinatesValue) {
-            if (this.mode === mode.SEARCH) {
+            if (this.mode === "search") {
                 this.validateInput(coordinatesValue);
             }
         }
@@ -289,12 +275,12 @@ export default {
                                 type="radio"
                                 name="mode"
                                 checked="true"
-                                @change="toggleMode"
+                                @click="changeMode('supply')"
                             />
                             <label
                                 for="supplyCoordRadio"
                                 :class="{ 'control-label': true, 'enabled': isEnabled('supply') }"
-                                @click="toggleMode"
+                                @click="changeMode('supply')"
                             >{{ $t("modules.tools.coordToolkit.supply") }}</label>
                         </div>
                         <div class="form-check">
@@ -302,14 +288,26 @@ export default {
                                 id="searchByCoordRadio"
                                 type="radio"
                                 name="mode"
-                                @change="toggleMode"
+                                @click="changeMode('search')"
                             />
                             <label
                                 for="searchByCoordRadio"
                                 :class="{'control-label': true, 'enabled': isEnabled('search') }"
-                                @click="toggleMode"
+                                @click="changeMode('search')"
                             >{{ $t("modules.tools.coordToolkit.search") }}</label>
                         </div>
+                    </div>
+                    <div
+                        v-if="mode === 'supply'"
+                        class="hint col-md-12 col-sm-12"
+                    >
+                        {{ $t("modules.tools.coordToolkit.hintSupply") }}
+                    </div>
+                    <div
+                        v-if="mode === 'search'"
+                        class="hint col-md-12 col-sm-12"
+                    >
+                        {{ $t("modules.tools.coordToolkit.hintSearch") }}
                     </div>
                     <div class="form-group form-group-sm">
                         <label
@@ -319,7 +317,6 @@ export default {
                         <div class="col-md-7 col-sm-7">
                             <select
                                 id="coordSystemField"
-                                v-model="currentSelection"
                                 class="font-arial form-control input-sm pull-left"
                                 @change="selectionChanged($event)"
                             >
@@ -327,7 +324,7 @@ export default {
                                     v-for="(projection, i) in projections"
                                     :key="i"
                                     :value="projection.id"
-                                    :SELECTED="projection.id === currentSelection"
+                                    :SELECTED="projection.id === currentProjection.id"
                                 >
                                     {{ projection.title ? projection.title + " ("+projection.name+")" : projection.name }}
                                 </option>
@@ -345,10 +342,10 @@ export default {
                                 id="coordinatesEastingField"
                                 v-model="coordinatesEasting.value"
                                 type="text"
-                                :readonly="isEnabled( mode.SEARCH)"
-                                :contenteditable="isEnabled( mode.SEARCH)"
+                                :readonly="isEnabled('supply')"
+                                :contenteditable="isEnabled( 'search')"
                                 :class="{ inputError: getEastingError, 'form-control': true}"
-                                :placeholder="isEnabled( mode.SEARCH) ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesEastingExample : ''"
+                                :placeholder="isEnabled( 'search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesEastingExample : ''"
                                 @click="onInputClicked($event)"
                                 @input="onInputEvent(coordinatesEasting)"
                             ><p
@@ -377,9 +374,9 @@ export default {
                                 v-model="coordinatesNorthing.value"
                                 type="text"
                                 :class="{ inputError: getNorthingError , 'form-control': true}"
-                                :readonly="isEnabled( mode.SEARCH)"
-                                :contenteditable="isEnabled( mode.SEARCH)"
-                                :placeholder="isEnabled( mode.SEARCH) ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesNorthingExample : ''"
+                                :readonly="isEnabled( 'supply')"
+                                :contenteditable="isEnabled( 'search')"
+                                :placeholder="isEnabled( 'search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesNorthingExample : ''"
                                 @click="onInputClicked($event)"
                                 @input="onInputEvent(coordinatesNorthing)"
                             ><p
@@ -394,6 +391,19 @@ export default {
                             >
                                 {{ northingNoMatchMessage + coordinatesNorthingExample }}
                             </p>
+                        </div>
+                    </div>
+                    <div
+                        v-if="isDefaultStyle"
+                        class="form-group form-group-sm"
+                    >
+                        <div class="col-md-12 col-sm-12">
+                            {{ $t("modules.tools.measure.influenceFactors") }}
+                            <ul>
+                                <li>{{ $t("modules.tools.measure.scale") }}</li>
+                                <li>{{ $t("modules.tools.measure.resolution") }}</li>
+                                <li>{{ $t("modules.tools.measure.screenResolution") }}</li>
+                            </ul>
                         </div>
                     </div>
                     <div
@@ -424,7 +434,6 @@ export default {
         }
     }
     .radio-container{
-        padding-bottom: 25px;
         display: flex;
         justify-content: space-around;
         label{
@@ -440,6 +449,12 @@ export default {
     .error-text {
         font-size: 85%;
         color: #a94442;
+    }
+    .hint{
+        margin: 5px 0px 25px;
+        text-align:center;
+        color: #7aa9d0;
+        transition: color 0.35s;
     }
 </style>
 

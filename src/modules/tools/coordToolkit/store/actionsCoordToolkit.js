@@ -1,7 +1,6 @@
 import {toStringHDMS, toStringXY} from "ol/coordinate.js";
 import isMobile from "../../../../utils/isMobile";
 import convertSexagesimalToDecimal from "../../../../utils/convertSexagesimalToDecimal";
-import {mode} from "../store/stateCoordToolkit";
 import proj4 from "proj4";
 
 export default {
@@ -30,22 +29,25 @@ export default {
         dispatch("MapMarker/placingPointMarker", position, {root: true});
     },
     /**
-     * Sets the current projection and its name to state.
+     * Reacts on new selected projection. Sets the current projection and its name to state,
+     * changes position and sets examples.
+     * @param {String} value id of the new selected projection
      * @returns {void}
      */
-    newProjectionSelected ({commit, state, getters}) {
-        const targetProjectionId = state.currentSelection,
-            targetProjection = getters.getProjectionById(targetProjectionId);
+    newProjectionSelected ({dispatch, commit, getters}, value) {
+        const targetProjection = getters.getProjectionById(value);
 
         commit("setCurrentProjection", targetProjection);
+        dispatch("changedPosition", value);
+        commit("setExample");
     },
     /**
      * Delegates the calculation and transformation of the position according to the projection
      * @returns {void}
      */
     changedPosition ({dispatch, state, rootState, getters}) {
-        if (state.mode === mode.SUPPLY) {
-            const targetProjectionName = state.currentProjection.name,
+        if (state.mode === "supply") {
+            const targetProjectionName = state.currentProjection?.name,
                 position = getters.getTransformedPosition(rootState.Map.map, targetProjectionName);
 
             if (position) {
@@ -152,7 +154,7 @@ export default {
      */
     validateInput ({state, commit}, coord) {
         const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
-            validWGS84 = /^\d[0-9]{0,2}[°]{1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["″]{0,2}\s*$/,
+            validWGS84 = /^\d[0-9]{0,2}[°]{1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["″]{0,2}[\sNS]*\s*$/,
             validWGS84_dez = /[0-9]{1,3}[.,][0-9]{0,5}[\s]{0,1}[°]\s*$/,
             {currentProjection} = state,
             validators = {
