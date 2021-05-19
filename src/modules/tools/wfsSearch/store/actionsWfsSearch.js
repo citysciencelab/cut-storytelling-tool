@@ -59,6 +59,26 @@ const actions = {
         axios.get(selectSource)
             .then(response => handleAxiosResponse(response, "WfsSearch, retrieveData"))
             .then(data => commit("setParsedSource", data));
+    },
+    /**
+     * Takes the selected coordinates and centers the map to the new position.
+     * @param {Object} context actions context object.
+     * @param {String[]} coords - coordinates for new center position
+     * @returns {void}
+     */
+    setCenter ({commit, dispatch}, coords) {
+        // coordinates come as string and have to be changed to numbers for setCenter from mutations to work.
+        const transformedCoords = [parseFloat(coords[0]), parseFloat(coords[1])];
+
+        commit("Map/setCenter", transformedCoords, {root: true});
+        dispatch("Map/setZoomLevel", 6, {root: true});
+        dispatch("MapMarker/placingPointMarker", transformedCoords, {root: true});
+    },
+    resetResult ({commit, dispatch}) {
+        // Beim Reset des Moduls bedenken, dass der Marker auch weg müsste!
+        commit("setResults", []);
+        dispatch("MapMarker/removePointMarker", null, {root: true});
+        commit("setSelectedOptions", {});
     }
 };
 

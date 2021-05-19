@@ -607,7 +607,11 @@
             "wfsSearch": {
                 "optionPlaceholder": "Please choose an option!",
                 "resetButton": "Reset",
-                "searchButton": "Search"
+                "searchButton": "Search",
+                "resultListTitle": "Search results:",
+                "instancesSelectLabel": "Instance selection",
+                "showResults": "Show results",
+                "zoomToResult": "Zoom to result"
             }
         },
         "controls": {

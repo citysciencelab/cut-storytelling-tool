@@ -36,7 +36,9 @@ const state = {
     parsedSource: null,
     requiredValues: null,
     selectedOptions: {},
-    service: null
+    service: null,
+    results: [],
+    showResultList: false
 };
 
 export default state;

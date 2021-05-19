@@ -1,5 +1,7 @@
 <script>
+import Modal from "../../../../share-components/modals/Modal.vue";
 import Literal from "./Literal.vue";
+import List from "./List.vue";
 import Tool from "../../Tool.vue";
 import getComponent from "../../../../utils/getComponent";
 import {mapActions, mapGetters, mapMutations} from "vuex";
@@ -11,10 +13,25 @@ export default {
     name: "WfsSearch",
     components: {
         Literal,
-        Tool
+        List,
+        Tool,
+        Modal
     },
     computed: {
-        ...mapGetters("Tools/WfsSearch", Object.keys(getters))
+        ...mapGetters("Tools/WfsSearch", Object.keys(getters)),
+        headers () {
+            const lengths = [];
+            let indexOfFeatureWithMostAttr = "";
+
+            this.results.forEach(feature => {
+                lengths.push(Object.keys(feature).length);
+            });
+            indexOfFeatureWithMostAttr = lengths.indexOf(Math.max(...lengths));
+            return Object.keys(this.results[indexOfFeatureWithMostAttr]);
+        },
+        showResults () {
+            return this.showResultList;
+        }
     },
     watch: {
         active (val) {
@@ -35,6 +52,12 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
+        },
+        showList () {
+            this.setShowResultList(true);
+        },
+        hideList () {
+            this.setShowResultList(false);
         }
     }
 };
@@ -42,94 +65,140 @@ export default {
 </script>
 
 <template>
-    <Tool
-        :title="$t(name)"
-        :icon="glyphicon"
-        :active="active"
-        :render-to-window="renderToWindow"
-        :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
-        :initial-width="initialWidth"
-    >
-        <template v-slot:toolBody>
-            <form
-                class="form-horizontal"
-                role="form"
+    <div>
+        <template>
+            <Tool
+                :title="$t(name)"
+                :icon="glyphicon"
+                :active="active"
+                :render-to-window="renderToWindow"
+                :resizable-window="resizableWindow"
+                :deactivateGFI="deactivateGFI"
+                :initial-width="initialWidth"
             >
-                <div
-                    v-if="instances.length > 1"
-                    class="form-group form-group-sm"
-                >
-                    <label
-                        class="col-md-5 col-sm-5 control-label"
-                        for="tool-wfsSearch-instances-select"
+                <template v-slot:toolBody>
+                    <form
+                        class="form-horizontal"
+                        role="form"
                     >
-                        {{ $t("common:modules.tools.wfsSearch.instancesSelectLabel") }}
-                        <!-- TODO: Add me to the language files-->
-                    </label>
-                    <div class="col-md-7 col-sm-7">
-                        <select
-                            id="tool-wfsSearch-instances-select"
-                            class="form-control input-sm"
-                            required
-                            @change="instanceChanged($event.currentTarget.value)"
+                        <div
+                            v-if="instances.length > 1"
+                            class="form-group form-group-sm"
                         >
-                            <option
-                                v-for="({title}, i) of instances"
-                                :key="title + i"
-                                :value="i"
+                            <label
+                                class="col-md-5 col-sm-5 control-label"
+                                for="tool-wfsSearch-instances-select"
                             >
-                                {{ title }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <hr v-if="instances.length > 1">
-                <div
-                    v-if="currentInstance.userHelp"
-                    class="form-group form-group-sm"
-                >
-                    <div class="col-md-12 col-sm-12">
-                        <!-- TODO: May need to add $t() to be properly displayed -->
-                        {{ currentInstance.userHelp }}
-                    </div>
-                    <hr>
-                </div>
-                <template v-for="(literal, i) of currentInstance.literals">
-                    <Literal
-                        :key="'tool-wfsSearch-clause' + i"
-                        :literal="literal"
-                    />
-                    <hr :key="'tool-wfsSearch-clause-divider' + i">
+                                {{ $t("common:modules.tools.wfsSearch.instancesSelectLabel") }}
+                                <!-- TODO: Add me to the language files-->
+                            </label>
+                            <div class="col-md-7 col-sm-7">
+                                <select
+                                    id="tool-wfsSearch-instances-select"
+                                    class="form-control input-sm"
+                                    required
+                                    @change="instanceChanged($event.currentTarget.value)"
+                                >
+                                    <option
+                                        v-for="({title}, i) of instances"
+                                        :key="title + i"
+                                        :value="i"
+                                    >
+                                        {{ title }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <hr v-if="instances.length > 1">
+                        <div
+                            v-if="instances[currentInstance].userHelp"
+                            class="form-group form-group-sm"
+                        >
+                            <div class="col-md-12 col-sm-12">
+                                <!-- TODO: May need to add $t() to be properly displayed -->
+                                {{ instances[currentInstance].userHelp }}
+                            </div>
+                            <hr>
+                        </div>
+                        <template v-for="(literal, i) of instances[currentInstance].literals">
+                            <Literal
+                                :key="'tool-wfsSearch-clause' + i"
+                                :literal="literal"
+                            />
+                            <hr :key="'tool-wfsSearch-clause-divider' + i">
+                        </template>
+                        <div class="form-group form-group-sm">
+                            <div class="col-md-6 col-sm-6">
+                                <button
+                                    type="button"
+                                    class="btn btn-lgv-grey col-md-12 col-sm-12"
+                                    @click="resetResult"
+                                >
+                                    <!-- TODO: Add @click event -->
+                                    {{ $t("common:modules.tools.wfsSearch.resetButton") }}
+                                </button>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <button
+                                    type="button"
+                                    class="btn btn-lgv-grey col-md-12 col-sm-12"
+                                    :disabled="requiredFields"
+                                    @click="searchFeatures"
+                                >
+                                    {{ $t("common:modules.tools.wfsSearch.searchButton") }}
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                            v-if="results.length > 0"
+                        >
+                            <button
+                                type="button"
+                                class="btn btn-lgv-grey"
+                                @click="showList"
+                            >
+                                {{ $t("common:modules.tools.wfsSearch.showResults") + "(" + results.length + ")" }}
+                            </button>
+                        </div>
+                    </form>
                 </template>
-                <div class="form-group form-group-sm">
-                    <div class="col-md-6 col-sm-6">
-                        <button
-                            type="button"
-                            class="btn btn-lgv-grey col-md-12 col-sm-12"
-                        >
-                            <!-- TODO: Add @click event -->
-                            {{ $t("common:modules.tools.wfsSearch.resetButton") }}
-                        </button>
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        <button
-                            type="button"
-                            class="btn btn-lgv-grey col-md-12 col-sm-12"
-                            :disabled="requiredFields"
-                            @click="searchFeatures(currentInstance, service)"
-                        >
-                            {{ $t("common:modules.tools.wfsSearch.searchButton") }}
-                        </button>
-                    </div>
-                </div>
-                <hr> <!-- TODO: The divider should only be shown if there is a result table / list -->
-                <!-- TODO: - Result Table / List -> reusable? -->
-            </form>
+            </Tool>
         </template>
-    </Tool>
+        <template>
+            <!-- Erst nach Reset kann ein neues Ergebnis-Modal geöffnet werden TODO: anpassen bei modalHid -->
+            <Modal
+                :title="$t(name)"
+                :icon="glyphicon"
+                :showModal="showResults"
+                @modalHid="hideList"
+            >
+                <div v-if="showResults">
+                    <List
+                        :key="'tool-wfsSearch-list'"
+                        :tableTitle="$t(&quot;common:modules.tools.wfsSearch.resultListTitle&quot;)"
+                        :tableHeads="headers"
+                        :tableData="results"
+                    />
+                </div>
+            </Modal>
+        </template>
+    </div>
 </template>
 
 <style lang="less" scoped>
 @import "~variables";
+</style>
+
+<style lang="less">
+    #modal-1-container #modal-1-overlay {
+        z-index: 1000;
+    }
+    #modal-1-container #modal-1-inner-wrapper #modal-1-content-container {
+        padding: 0;
+        overflow: auto;
+        max-height: 70vh;
+    }
+    #modal-1-inner-wrapper .glyphicon.glyphicon-remove {
+        right: 30px !important;
+    }
 </style>

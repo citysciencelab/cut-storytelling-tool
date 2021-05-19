@@ -49,7 +49,6 @@
             "wfsTransaction": "WFS-T Tool",
             "scaleSwitcher": "Maßstab umschalten",
             "selectFeatures": "Features auswählen",
-            "selectFeatures": "Features auswählen",
             "legend":"Legende",
             "styleVt": "Style VT",
             "wfsSearch": "WFS Suche"
@@ -607,7 +606,11 @@
             "wfsSearch": {
                 "optionPlaceholder": "Bitte wählen Sie eine Option aus!",
                 "resetButton": "Zurücksetzen",
-                "searchButton": "Suchen"
+                "searchButton": "Suchen",
+                "resultListTitle": "Suchergebnisse:",
+                "instancesSelectLabel": "Instanzenauswahl",
+                "showResults": "Zeige Ergebnisse",
+                "zoomToResult": "Zum Ergebnis zoomen"
             }
         },
         "controls": {
