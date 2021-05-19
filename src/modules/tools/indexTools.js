@@ -18,6 +18,7 @@ import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
 import StyleVT from "./styleVT/store/indexStyleVT";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
 import CompareFeatures from "./compareFeatures/store/indexCompareFeatures";
+import SelectFeatures from "./selectFeatures/store/indexSelectFeatures";
 
 /**
  * This is here to test app-store/utils/composeModules.
@@ -37,7 +38,9 @@ export default {
         SupplyCoord,
         CompareFeatures,
         SearchByCoord,
-        StyleVT
+        StyleVT,
+        SupplyCoord,
+        SelectFeatures
     },
     state,
     getters,

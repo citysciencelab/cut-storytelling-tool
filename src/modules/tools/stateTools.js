@@ -10,6 +10,7 @@ import SaveSelection from "./saveSelection/components/SaveSelection.vue";
 import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
 import StyleVT from "./styleVT/components/StyleVT.vue";
 import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
+import SelectFeatures from "./selectFeatures/components/SelectFeatures.vue";
 /**
  * User type definition
  * @typedef {Object} ToolsState
@@ -29,7 +30,8 @@ const state = {
         saveSelection: SaveSelection,
         scaleSwitcher: ScaleSwitcher,
         styleVT: StyleVT,
-        supplyCoord: SupplyCoord
+        supplyCoord: SupplyCoord,
+        selectFeatures: SelectFeatures
     },
     configuredTools: []
 };
