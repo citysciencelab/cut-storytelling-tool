@@ -111,16 +111,16 @@ export default {
                         </div>
                         <hr v-if="instances.length > 1">
                         <div
-                            v-if="instances[currentInstance].userHelp"
+                            v-if="currentInstance.userHelp"
                             class="form-group form-group-sm"
                         >
                             <div class="col-md-12 col-sm-12">
                                 <!-- TODO: May need to add $t() to be properly displayed -->
-                                {{ instances[currentInstance].userHelp }}
+                                {{ currentInstance.userHelp }}
                             </div>
                             <hr>
                         </div>
-                        <template v-for="(literal, i) of instances[currentInstance].literals">
+                        <template v-for="(literal, i) of currentInstance.literals">
                             <Literal
                                 :key="'tool-wfsSearch-clause' + i"
                                 :literal="literal"
@@ -132,7 +132,6 @@ export default {
                                 <button
                                     type="button"
                                     class="btn btn-lgv-grey col-md-12 col-sm-12"
-                                    @click="resetResult"
                                 >
                                     <!-- TODO: Add @click event -->
                                     {{ $t("common:modules.tools.wfsSearch.resetButton") }}
@@ -143,22 +142,23 @@ export default {
                                     type="button"
                                     class="btn btn-lgv-grey col-md-12 col-sm-12"
                                     :disabled="requiredFields"
-                                    @click="searchFeatures"
+                                    @click="searchFeatures(currentInstance, service)"
                                 >
                                     {{ $t("common:modules.tools.wfsSearch.searchButton") }}
                                 </button>
                             </div>
-                        </div>
-                        <div
-                            v-if="results.length > 0"
-                        >
-                            <button
-                                type="button"
-                                class="btn btn-lgv-grey"
-                                @click="showList"
+                            <div
+                                v-if="results.length > 0"
+                                class="col-md-12 col-sm-12"
                             >
-                                {{ $t("common:modules.tools.wfsSearch.showResults") + "(" + results.length + ")" }}
-                            </button>
+                                <button
+                                    type="button"
+                                    class="btn btn-lgv-grey col-md-12 col-sm-12"
+                                    @click="showList"
+                                >
+                                    {{ $t("common:modules.tools.wfsSearch.showResults") + " " + "(" + results.length + ")" }}
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </template>
@@ -187,6 +187,9 @@ export default {
 
 <style lang="less" scoped>
 @import "~variables";
+.btn {
+    margin-top: 10px;
+}
 </style>
 
 <style lang="less">

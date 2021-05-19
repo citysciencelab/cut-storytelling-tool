@@ -37,7 +37,7 @@ const state = {
     requiredValues: null,
     selectedOptions: {},
     service: null,
-    results: [],
+    results: [{feature: "sdfjsöfj", name: "lsdfjsdljf"}, {feature2: "slfjsdflj", name: "ssdlfj"}],
     showResultList: false
 };
 
