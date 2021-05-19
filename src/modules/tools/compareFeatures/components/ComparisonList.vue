@@ -45,7 +45,8 @@ export default {
         isEmailAddress,
         removeVerticalBar (value) {
             const newValue = value.replaceAll("|", ", ");
-            return newValue
+
+            return newValue;
         }
     }
 };
