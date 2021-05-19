@@ -1,4 +1,5 @@
 import {generateSimpleMutations} from "../../../../app-store/utils/generators";
+import Vue from "vue";
 import stateCompareFeatures from "./stateCompareFeatures";
 
 const mutations = {
@@ -41,20 +42,24 @@ const mutations = {
             {features} = payload,
             {selectedLayer} = payload;
 
+        for (const feature of features) {
+            if (Object.keys(feature).includes(featureId)) {
+                delete feature[featureId];
+            }
+        }
+
         if (!state.hasMultipleLayers) {
             for (const feature of state.layerFeatures[Object.keys(state.layerFeatures)[0]]) {
                 if (feature.featureId === featureId) {
                     const index = state.layerFeatures[feature.layerId].indexOf(feature);
 
                     state.layerFeatures[feature.layerId].splice(index, 1);
+                    // Necessary to trigger a rerendering of the UI, otherwise the feature gets deleted in the state but the UI won´t change.
+                    state.preparedList = {[feature.layerId]: [...features]};
 
                     if (state.layerFeatures[feature.layerId].length === 0) {
                         state.preparedList = {};
                         delete state.layerFeatures[feature.layerId];
-                    }
-                    else {
-                        // Necessary to trigger a rerendering of the UI, otherwise the feature gets deleted in the state but the UI won´t change.
-                        state.preparedList = {[feature.layerId]: [...features]};
                     }
                 }
             }
@@ -62,32 +67,24 @@ const mutations = {
         else {
             for (const feature of state.layerFeatures[selectedLayer]) {
                 if (feature.featureId === featureId) {
-                    const index = state.layerFeatures[feature.layerId].indexOf(feature);
+                    const index = state.layerFeatures[selectedLayer].indexOf(feature);
 
                     state.layerFeatures[selectedLayer].splice(index, 1);
+                    // Necessary to trigger a rerendering of the UI, otherwise the feature gets deleted in the state but the UI won´t change.
+                    state.preparedList = {
+                        ...state.preparedList,
+                        [selectedLayer]: [...features]
+                    }
                 }
                 if (state.layerFeatures[selectedLayer].length === 0) {
                     delete state.preparedList[selectedLayer];
                     delete state.layerFeatures[selectedLayer];
                     state.selectedLayer = Object.keys(state.layerFeatures)[0];
-                    if (Object.keys(state.layerFeatures).length <= 1) {
-                        state.hasMultipleLayers = false;
-                    }
-                }
-                else {
-                    // Necessary to trigger a rerendering of the UI, otherwise the feature gets deleted in the state but the UI won´t change.
-                    state.preparedList[selectedLayer] = [...features];
                 }
             }
         }
-        /**
-         * if multiple features from one layer are on the comparison list, this function deletes
-         * the chosen feature and is responsible for rerendering the comparison list.
-         */
-        for (const feature of features) {
-            if (Object.keys(feature).includes(featureId)) {
-                delete feature[featureId];
-            }
+        if (Object.keys(state.layerFeatures).length <= 1) {
+            state.hasMultipleLayers = false;
         }
         if (Object.keys(state.layerFeatures).length === 0) {
             state.hasFeatures = false;

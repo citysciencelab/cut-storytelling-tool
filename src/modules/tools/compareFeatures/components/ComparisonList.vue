@@ -160,7 +160,7 @@ export default {
                             <button
                                 class="close"
                                 :title="$t('common:modules.tools.compareFeatures.removeFromList')"
-                                @click="removeFeatureFromPreparedList({features: preparedList[selectedLayer], featureId: key, selectedLayer: selectedLayer})"
+                                @click="removeFeatureFromPreparedList({features: listOfFeatures, featureId: key, selectedLayer: selectedLayer})"
                             >
                                 <span
                                     v-if="index === 0 && key !== 'col-1'"
@@ -203,7 +203,7 @@ export default {
                             <button
                                 class="close"
                                 :title="$t('common:modules.tools.compareFeatures.removeFromList')"
-                                @click="removeFeatureFromPreparedList({features: preparedList[selectedLayer], featureId: key, selectedLayer: selectedLayer})"
+                                @click="removeFeatureFromPreparedList({features: listOfFeatures, featureId: key, selectedLayer: selectedLayer})"
                             >
                                 <span
                                     v-if="index === 0 && key !== 'col-1'"
