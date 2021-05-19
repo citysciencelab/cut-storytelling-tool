@@ -11,6 +11,8 @@ import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
 import StyleVT from "./styleVT/components/StyleVT.vue";
 import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 import SelectFeatures from "./selectFeatures/components/SelectFeatures.vue";
+import BufferAnalysis from "./bufferAnalysis/components/BufferAnalysis.vue";
+
 /**
  * User type definition
  * @typedef {Object} ToolsState
@@ -31,7 +33,8 @@ const state = {
         scaleSwitcher: ScaleSwitcher,
         styleVT: StyleVT,
         supplyCoord: SupplyCoord,
-        selectFeatures: SelectFeatures
+        selectFeatures: SelectFeatures,
+        bufferAnalysis: BufferAnalysis
     },
     configuredTools: []
 };

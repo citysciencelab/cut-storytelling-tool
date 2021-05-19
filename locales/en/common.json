@@ -49,7 +49,8 @@
             "scaleSwitcher": "Scale switcher",
             "selectFeatures": "Select features",
             "legend":"Legend",
-            "styleVt": "Style VT"
+            "styleVt": "Style VT",
+            "bufferAnalysis": "Buffer Analysis"
         },
         "contact": "Mail",
         "info": "Information"
@@ -102,7 +103,8 @@
           },
           "parametricURL": {
             "alertZoomToGeometry": "The parameterized call of the portal has unfortunately gone wrong!<br>Please make sure that all parameters were entered correctly.",
-            "alertWrongLayerIds": "<strong>The parameterized call is faulty!</strong>  The LAYERIDS at positions: <b>{{wrongIdsPositionsConcat}}</b> do not exist and are ignored!"
+            "alertWrongLayerIds": "<strong>The parameterized call is faulty!</strong>  The LAYERIDS at positions: <b>{{wrongIdsPositionsConcat}}</b> do not exist and are ignored!",
+            "alertWrongInitValues": "<strong>Der parametrisierte Aufruf ist fehlerhaft!</strong> Die gespeicherten Parameter wurden verändert oder sind unvollständig!"
           }
         },
         "alerting": {
@@ -604,7 +606,19 @@
             },
             "scaleSwitcher": {
                 "label": "Scale"
-            }
+            },
+          "bufferAnalysis": {
+            "sourceSelectLabel": "source layer",
+            "targetSelectLabel": "target layer",
+            "resultTypeLabel": "result type",
+            "overlapping": "inside radius",
+            "notOverlapping": "outside radius",
+            "rangeLabel": "radius (m)",
+            "clearButton": "Reset",
+            "saveButton": "Save",
+            "sourceLayerNotFound": "Der gespeicherte Quell-Layer mit der ID {{layerId}} wurde nicht gefunden.",
+            "targetLayerNotFound": "Der gespeicherte Ziel-Layer mit der ID {{layerId}} wurde nicht gefunden."
+          }
         },
         "controls": {
             "fullScreen": {
