@@ -40,7 +40,6 @@ export default {
         CompareFeatures,
         SearchByCoord,
         StyleVT,
-        SupplyCoord,
         SelectFeatures,
         BufferAnalysis
     },

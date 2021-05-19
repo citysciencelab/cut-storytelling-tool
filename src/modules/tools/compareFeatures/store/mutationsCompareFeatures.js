@@ -1,5 +1,4 @@
 import {generateSimpleMutations} from "../../../../app-store/utils/generators";
-import Vue from "vue";
 import stateCompareFeatures from "./stateCompareFeatures";
 
 const mutations = {
@@ -74,7 +73,7 @@ const mutations = {
                     state.preparedList = {
                         ...state.preparedList,
                         [selectedLayer]: [...features]
-                    }
+                    };
                 }
                 if (state.layerFeatures[selectedLayer].length === 0) {
                     delete state.preparedList[selectedLayer];
