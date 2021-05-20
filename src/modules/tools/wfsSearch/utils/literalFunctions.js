@@ -4,9 +4,9 @@
  * @param {Object[]} literals The literals for which the structure is built and which are parsed.
  * @returns {String} String representation for the structure of the given literal.
  */
-function createSearchInformation (literals) {
+function createUserHelp (literals) {
     const structure = createLiteralStructure(literals);
-    let searchInformation = "",
+    let userHelp = "",
         marker = "";
 
     for (const el of structure) {
@@ -15,19 +15,19 @@ function createSearchInformation (literals) {
             continue;
         }
         if (el !== "(" && el !== ")") {
-            searchInformation += el + " " + marker + " ";
+            userHelp += el + " " + marker + " ";
             continue;
         }
 
         if (el === ")" && marker !== "") {
-            searchInformation = searchInformation.substring(0, searchInformation.length - (marker.length + 2));
+            userHelp = userHelp.substring(0, userHelp.length - (marker.length + 2));
             marker = "";
         }
 
-        searchInformation += el;
+        userHelp += el;
     }
 
-    return searchInformation.replaceAll(")(", ") and (");
+    return userHelp.replaceAll(")(", ") and (");
 }
 
 /**
@@ -35,26 +35,26 @@ function createSearchInformation (literals) {
  *
  * @param {Object[]} stateLiterals Literals from the state. This is the root element.
  * @param {?(Object[])} [literals = null] Literals from the clause of the current function call.
- * @param {String[]} [searchInformation = []] The current values collected for the representation of the literals.
+ * @param {String[]} [userHelp = []] The current values collected for the representation of the literals.
  * @returns {String[]} The information of regarding the logical dependency of the elements of the current clause.
  */
-function createLiteralStructure (stateLiterals, literals = null, searchInformation = []) {
+function createLiteralStructure (stateLiterals, literals = null, userHelp = []) {
     const lit = literals === null ? stateLiterals : literals;
 
     for (const literal of lit) {
         const {field, clause} = literal;
 
         if (field) {
-            searchInformation.push(field.inputLabel);
+            userHelp.push(field.inputLabel);
             continue;
         }
 
-        searchInformation.push(clause.type, "(");
-        createLiteralStructure(stateLiterals, clause.literals, searchInformation);
-        searchInformation.push(")");
+        userHelp.push(clause.type, "(");
+        createLiteralStructure(stateLiterals, clause.literals, userHelp);
+        userHelp.push(")");
     }
 
-    return searchInformation;
+    return userHelp;
 }
 
 /**
@@ -123,4 +123,4 @@ function fieldValueChanged (id, value, stateLiterals, requiredValues, literals =
     return requiredValues;
 }
 
-export {createSearchInformation, prepareLiterals, fieldValueChanged};
+export {createUserHelp, prepareLiterals, fieldValueChanged};

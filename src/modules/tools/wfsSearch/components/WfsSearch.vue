@@ -21,11 +21,13 @@ export default {
     watch: {
         active (val) {
             (val ? this.prepareModule : this.resetModule)();
-            this.adjustSearchInformation();
+            if (this.userHelp !== "hide") {
+                this.adjustUserHelp();
+            }
         },
         currentLocale () {
-            if (this.active) {
-                this.adjustSearchInformation();
+            if (this.active && this.userHelp !== "hide") {
+                this.adjustUserHelp();
             }
         }
     },
@@ -35,11 +37,11 @@ export default {
     methods: {
         ...mapMutations("Tools/WfsSearch", Object.keys(mutations)),
         ...mapActions("Tools/WfsSearch", Object.keys(actions)),
-        adjustSearchInformation () {
-            const translatedAnd = i18next.t("common:modules.tools.wfsSearch.searchInformation.and"),
-                translatedOr = i18next.t("common:modules.tools.wfsSearch.searchInformation.or");
+        adjustUserHelp () {
+            const translatedAnd = i18next.t("common:modules.tools.wfsSearch.userHelp.and"),
+                translatedOr = i18next.t("common:modules.tools.wfsSearch.userHelp.or");
 
-            this.setSearchInformation(this.searchInformation
+            this.setUserHelp(this.userHelp
                 .replaceAll(this.and, translatedAnd)
                 .replaceAll(this.or, translatedOr));
 
@@ -74,49 +76,44 @@ export default {
                 class="form-horizontal"
                 role="form"
             >
+                <template v-if="instances.length > 1">
+                    <div class="form-group form-group-sm">
+                        <label
+                            class="col-md-5 col-sm-5 control-label"
+                            for="tool-wfsSearch-instances-select"
+                        >
+                            {{ $t("common:modules.tools.wfsSearch.instancesSelectLabel") }}
+                            <!-- TODO: Add me to the language files-->
+                        </label>
+                        <div class="col-md-7 col-sm-7">
+                            <select
+                                id="tool-wfsSearch-instances-select"
+                                class="form-control input-sm"
+                                required
+                                @change="instanceChanged($event.currentTarget.value)"
+                            >
+                                <option
+                                    v-for="({title}, i) of instances"
+                                    :key="title + i"
+                                    :value="i"
+                                >
+                                    {{ title }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                </template>
                 <div
-                    v-if="instances.length > 1"
+                    v-if="userHelp !== 'hide'"
                     class="form-group form-group-sm"
                 >
-                    <label
-                        class="col-md-5 col-sm-5 control-label"
-                        for="tool-wfsSearch-instances-select"
-                    >
-                        {{ $t("common:modules.tools.wfsSearch.instancesSelectLabel") }}
-                        <!-- TODO: Add me to the language files-->
-                    </label>
-                    <div class="col-md-7 col-sm-7">
-                        <select
-                            id="tool-wfsSearch-instances-select"
-                            class="form-control input-sm"
-                            required
-                            @change="instanceChanged($event.currentTarget.value)"
-                        >
-                            <option
-                                v-for="({title}, i) of instances"
-                                :key="title + i"
-                                :value="i"
-                            >
-                                {{ title }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <hr v-if="instances.length > 1">
-                <div class="form-group form-group-sm">
-                    <span
-                        v-if="currentInstance.userHelp"
-                        class="col-md-12 col-sm-12"
-                    >
-                        <!-- TODO: May need to add $t() to be properly displayed -->
-                        {{ currentInstance.userHelp }}
-                    </span>
                     <i class="col-md-1 col-sm-1 glyphicon glyphicon-info-sign" />
                     <span
                         class="col-md-11 col-sm-11"
-                        :aria-label="$t('common:modules.tools.wfsSearch.searchInformation.label')"
+                        :aria-label="$t('common:modules.tools.wfsSearch.userHelp.label')"
                     >
-                        {{ $t("common:modules.tools.wfsSearch.searchInformation.text", {searchInformation}) }}
+                        {{ $t("common:modules.tools.wfsSearch.userHelp.text", {userHelp}) }}
                     </span>
                 </div>
                 <hr>

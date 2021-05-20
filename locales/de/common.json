@@ -609,11 +609,11 @@
                 "resetButton": "Zurücksetzen",
                 "searchButton": "Suchen",
                 "searchError": "Fehler bei der Suche von Feature: {{error}}.",
-                "searchInformation": {
+                "userHelp": {
                   "and": "und",
                   "or": "oder",
                   "label": "Informationen bezüglich der Suchergebnisse",
-                  "text": "Die Ergebnisse der Suche werden die Bedingungen (Klauseln) {{searchInformation}} erfüllen."
+                  "text": "Die Ergebnisse der Suche werden die Bedingungen (Klauseln) {{userHelp}} erfüllen."
                 }
             }
         },

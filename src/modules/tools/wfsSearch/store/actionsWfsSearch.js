@@ -1,7 +1,7 @@
 import axios from "axios";
 import handleAxiosResponse from "../../../../utils/handleAxiosResponse";
 import {setLikeFilterProperties} from "../utils/buildFilter";
-import {createSearchInformation, prepareLiterals} from "../utils/literalFunctions";
+import {createUserHelp, prepareLiterals} from "../utils/literalFunctions";
 
 const actions = {
     /**
@@ -35,7 +35,7 @@ const actions = {
 
             // NOTE: The extra object is sadly needed so that the object is reactive :(
             commit("setRequiredValues", {...prepareLiterals(currentInstance.literals)});
-            commit("setSearchInformation", currentInstance.searchInformation ? currentInstance.searchInformation : createSearchInformation(currentInstance.literals));
+            commit("setUserHelp", currentInstance.userHelp ? currentInstance.userHelp : createUserHelp(currentInstance.literals));
 
             if (selectSource) {
                 dispatch("retrieveData");
@@ -63,9 +63,9 @@ const actions = {
     resetModule ({commit}, closeTool) {
         commit("setAddedOptions", []);
         commit("setRequiredValues", null);
-        commit("setSearchInformation", "");
         commit("setSelectedOptions", {});
         commit("setService", null);
+        commit("setUserHelp", "");
 
         if (closeTool) {
             commit("setCurrentInstanceIndex", 0);

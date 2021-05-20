@@ -24,7 +24,6 @@ export default {
 </script>
 
 <template>
-    <!-- TODO: Find a way for the visual indicator for the "and" and "or"; also do something with the type -->
     <Field
         v-if="literal.field"
         :key="`tool-wfsSearch-clause-literal-field-${literal.field.id}-${literal.field.fieldName}`"
@@ -40,7 +39,7 @@ export default {
         :suggestions-length="suggestionsLength"
         :type="literal.field.type"
     />
-    <!-- TODO: This div can be styled for visual highlighting -> Also, weird UI behaviour when a field is "dangling" between clauses cause of this -->
+    <!-- NOTE: This div can be styled for visual highlighting -> TODO: Also, weird UI behaviour when a field is "dangling" between clauses cause of this -->
     <div v-else-if="literal.clause">
         <template
             v-for="(lit, i) of literal.clause.literals"
