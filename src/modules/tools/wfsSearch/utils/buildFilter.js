@@ -61,11 +61,11 @@ function buildXmlFilter ({fieldName, type, value}) {
     let likeFilterValues = "";
 
     Object.entries(likeFilterProperties).forEach(([key, val]) => {
-        likeFilterValues += `${key}="${val}" `;
+        likeFilterValues += `${key}="${encodeURIComponent(val)}" `;
     });
-    // %23 stands for '#' and needs to be escaped here as the function encodeURI doesn't encode the String
+
     return likeFilter
-        ? `<PropertyIsLike ${likeFilterValues.replace("#", "%23").slice(0, -1)}>${property}</PropertyIsLike>`
+        ? `<PropertyIsLike ${likeFilterValues.slice(0, -1)}>${property}</PropertyIsLike>`
         : `<PropertyIsEqualTo>${property}</PropertyIsEqualTo>`;
 }
 

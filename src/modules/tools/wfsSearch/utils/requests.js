@@ -95,7 +95,7 @@ function sendRequest ({url, typeName}, filter, fromServicesJson, storedQueryId, 
     requestUrl += maxFeatures === "showAll" ? "" : `&maxFeatures=${maxFeatures}`;
     requestUrl += storedQueryId ? storedFilter(filter, storedQueryId) : xmlFilter(filter);
 
-    return axios.get(requestUrl)
+    return axios.get(encodeURI(requestUrl))
         .then(response => handleAxiosResponse(response, "WfsSearch, searchFeatures, sendRequest"))
         .catch(error => store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.wfsSearch.searchError", {error})));
 }
