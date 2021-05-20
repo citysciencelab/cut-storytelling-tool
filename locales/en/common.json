@@ -608,7 +608,13 @@
                 "optionPlaceholder": "Please choose an option!",
                 "resetButton": "Reset",
                 "searchButton": "Search",
-              "searchError": "Error while searching for the features: {{error}}."
+                "searchError": "Error while searching for the features: {{error}}.",
+                "searchInformation": {
+                    "and": "and",
+                    "or": "or",
+                    "label": "Information regarding the results of the search",
+                    "text": "The results of the search will fulfill the conditions (clauses) {{searchInformation}}."
+                }
             }
         },
         "controls": {

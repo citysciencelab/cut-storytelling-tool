@@ -1,8 +1,8 @@
 <script>
-import Literal from "./Literal.vue";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import Tool from "../../Tool.vue";
 import getComponent from "../../../../utils/getComponent";
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import Literal from "./Literal.vue";
 import actions from "../store/actionsWfsSearch";
 import getters from "../store/gettersWfsSearch";
 import mutations from "../store/mutationsWfsSearch";
@@ -13,12 +13,20 @@ export default {
         Literal,
         Tool
     },
+    data: () => ({and: "and", or: "or"}),
     computed: {
-        ...mapGetters("Tools/WfsSearch", Object.keys(getters))
+        ...mapGetters("Tools/WfsSearch", Object.keys(getters)),
+        ...mapGetters("Language", ["currentLocale"])
     },
     watch: {
         active (val) {
             (val ? this.prepareModule : this.resetModule)();
+            this.adjustSearchInformation();
+        },
+        currentLocale () {
+            if (this.active) {
+                this.adjustSearchInformation();
+            }
         }
     },
     created () {
@@ -27,6 +35,17 @@ export default {
     methods: {
         ...mapMutations("Tools/WfsSearch", Object.keys(mutations)),
         ...mapActions("Tools/WfsSearch", Object.keys(actions)),
+        adjustSearchInformation () {
+            const translatedAnd = i18next.t("common:modules.tools.wfsSearch.searchInformation.and"),
+                translatedOr = i18next.t("common:modules.tools.wfsSearch.searchInformation.or");
+
+            this.setSearchInformation(this.searchInformation
+                .replaceAll(this.and, translatedAnd)
+                .replaceAll(this.or, translatedOr));
+
+            this.and = translatedAnd;
+            this.or = translatedOr;
+        },
         close () {
             this.setActive(false);
             this.resetModule(true);
@@ -38,7 +57,6 @@ export default {
         }
     }
 };
-// TODO: Vorschläge für Inputfelder und Dropdowns für fieldNames sind noch zu implementieren
 </script>
 
 <template>
@@ -85,16 +103,23 @@ export default {
                     </div>
                 </div>
                 <hr v-if="instances.length > 1">
-                <div
-                    v-if="currentInstance.userHelp"
-                    class="form-group form-group-sm"
-                >
-                    <div class="col-md-12 col-sm-12">
+                <div class="form-group form-group-sm">
+                    <span
+                        v-if="currentInstance.userHelp"
+                        class="col-md-12 col-sm-12"
+                    >
                         <!-- TODO: May need to add $t() to be properly displayed -->
                         {{ currentInstance.userHelp }}
-                    </div>
-                    <hr>
+                    </span>
+                    <i class="col-md-1 col-sm-1 glyphicon glyphicon-info-sign" />
+                    <span
+                        class="col-md-11 col-sm-11"
+                        :aria-label="$t('common:modules.tools.wfsSearch.searchInformation.label')"
+                    >
+                        {{ $t("common:modules.tools.wfsSearch.searchInformation.text", {searchInformation}) }}
+                    </span>
                 </div>
+                <hr>
                 <template v-for="(literal, i) of currentInstance.literals">
                     <Literal
                         :key="'tool-wfsSearch-clause' + i"

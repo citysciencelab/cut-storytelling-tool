@@ -15,6 +15,7 @@
  * @property {Number} currentInstanceIndex Position of the current search instance in the instances array.
  * @property {?JSON} parsedSource The requested and parsed selectSource.
  * @property {?Object} requiredValues The key value pairs for the required fields.
+ * @property {String} searchInformation Information for the user regarding the structure of the search.
  * @property {Object} selectedOptions The values of options which the user has entered / selected a value. The options here present are only the fields which had the parameter "options" as a String. The values inserted, have its "options" parameter as the key and the input as the value.
  * @property {?Object} service An object containing information about the WFS service, which will later be filtered.
  */
@@ -35,6 +36,7 @@ const state = {
     currentInstanceIndex: 0,
     parsedSource: null,
     requiredValues: null,
+    searchInformation: "",
     selectedOptions: {},
     service: null
 };

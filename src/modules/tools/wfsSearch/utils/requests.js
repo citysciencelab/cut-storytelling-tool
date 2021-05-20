@@ -80,7 +80,7 @@ export function searchFeatures ({literals, requestConfig: {layerId, maxFeatures,
  * @param {(XML | String)} filter The filter to constrain the returned features.
  * @param {Boolean} fromServicesJson Whether the service was defined in the services.json or the rest-service.json.
  * @param {String} storedQueryId The Id of the Stored Query. Present when using a WFS@2.0.0.
- * @param {Number} [maxFeatures=8] Maximum amount of features to be returned by the service.
+ * @param {(Number | String)} [maxFeatures=8] Maximum amount of features to be returned by the service. If it is the String 'showAll' there are no restrictions.
  * @returns {Promise} If the request was successful, the data of the response gets resolved.
  *                    If an error occurs (e.g. the service is not reachable or there was no such feature) the error is caught and the message is displayed as an alert.
  */
@@ -90,7 +90,7 @@ function sendRequest ({url, typeName}, filter, fromServicesJson, storedQueryId, 
     if (fromServicesJson) {
         requestUrl += `?service=WFS&request=GetFeature&typeName=${typeName}`;
     }
-    requestUrl += `&maxFeatures=${maxFeatures}`;
+    requestUrl += maxFeatures === "showAll" ? "" : `&maxFeatures=${maxFeatures}`;
     requestUrl += storedQueryId ? storedFilter(filter, storedQueryId) : xmlFilter(filter);
 
     return axios.get(requestUrl)

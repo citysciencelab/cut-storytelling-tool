@@ -608,7 +608,13 @@
                 "optionPlaceholder": "Bitte wählen Sie eine Option aus!",
                 "resetButton": "Zurücksetzen",
                 "searchButton": "Suchen",
-                "searchError": "Fehler bei der Suche von Feature: {{error}}."
+                "searchError": "Fehler bei der Suche von Feature: {{error}}.",
+                "searchInformation": {
+                  "and": "und",
+                  "or": "oder",
+                  "label": "Informationen bezüglich der Suchergebnisse",
+                  "text": "Die Ergebnisse der Suche werden die Bedingungen (Klauseln) {{searchInformation}} erfüllen."
+                }
             }
         },
         "controls": {

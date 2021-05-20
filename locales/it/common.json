@@ -400,20 +400,6 @@
                 "successfullyImportedLabel": "Importato con successo:",
                 "title": "Importa file"
             },
-            "wfsSearch": {
-                "wrongConfig": "Configurazione non valida o incompleta ({{name}}).",
-                "districtsLoadFailed": "I quartieri del governo non potevano essere caricati ({{name}}).",
-                "wrongConfigParcelsearch": "La configurazione della ricerca dei pacchi non è corretta. Si prega di contattare il supporto.",
-                "parcelSearchImpossible": "Interrogazione attualmente impossibile!",
-                "tryAgainLater": "Si prega di provare più tardi.",
-                "parcelNotFound": "Nessun pacco trovato con il numero {{flstNr}}.",
-                "district": "Quartiere",
-                "choose": "seleziona quartiere",
-                "parcelNumber": "Numero del pacco",
-                "plot": "Trama",
-                "parcelNumberPlaceholder": "Inserire numero",
-                "generateReport": "Genera rapporto"
-            },
             "selectFeatures": {
               "zoomToFeature": "Zoom su questa voce",
               "noFeatureChosen": "Nessuna voce selezionata. Selezionare le voci tenendo premuto il tasto Ctrl e trascinando una casella attorno alle voci da selezionare.",
