@@ -16,8 +16,8 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/WfsSearch", Object.keys(getters)),
-        suggestionsLength () {
-            return this.currentInstance?.suggestionsLength;
+        suggestions () {
+            return this.currentInstance?.suggestions;
         }
     }
 };
@@ -36,7 +36,7 @@ export default {
         :input-title="literal.field.inputTitle"
         :options="literal.field.options"
         :required="literal.field.required"
-        :suggestions-length="suggestionsLength"
+        :suggestions-config="suggestions"
         :type="literal.field.type"
     />
     <!-- NOTE: This div can be styled for visual highlighting -> TODO: Also, weird UI behaviour when a field is "dangling" between clauses cause of this -->
