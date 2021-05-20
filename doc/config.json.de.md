@@ -2452,7 +2452,7 @@ Falls beide Parameter gesetzt wurden, dann wird `restLayerId` verwendet.
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |layerId|nein|String||Id des WFS Dienstes, welcher angefragt werden soll. Informationen werden aus der **[services.json](services.json.de.md)** bezogen.|false|
-|likeFilter|nein|**[likeFilter](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfiglikefilter)**|`{"wildCard": "*", "singleChar": "#", "escape": "!"}|Die Konfiguration des Services hinsichtlich des like Filters.|true|
+|likeFilter|nein|**[likeFilter](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfiglikefilter)**|{"wildCard": "*", "singleChar": "#", "escape": "!"}|Die Konfiguration des Services hinsichtlich des like Filters.|true|
 |maxFeatures|nein|Number/String|8|Maximale Anzahl an Features, welche der Dienst zurückgeben soll. Alternativ kann auch der String `showAll` übergeben werden, um alle Ergebnisse anzuzeigen.|false|
 |restLayerId|nein|String||Id des WFS Dienstes, welcher angefragt werden soll. Informationen werden aus der **[rest-services.json](rest-services.json.de.md)** bezogen.|false|
 |storedQueryId|nein|String||Die Id der gespeichersten Anfrage (Stored Query) des WFS Dienstes, welche für die Anfrage an verwendet werden soll. Es wird angenommen, dass ein WFS@2.0.0 verwendet wird, falls dieses Feld gesetzt wurde.|false|
@@ -2476,9 +2476,9 @@ Es wird für die Dokumentation angenommen, dass die Eigenschaften `wildCard`, `s
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|wildCard|ja|String|`"*"`|Der Wildcardwert für den like Filter.|true|
-|singleChar|ja|String|`"#"`|Der Wert für einen einzelnen Charakter für den like Filter.|true|
-|escape|ja|String|`"!"`|Der Escape-Wert für den like Filter.|true|
+|wildCard|ja|String|"*"|Der Wildcardwert für den like Filter.|true|
+|singleChar|ja|String|"#"|Der Wert für einen einzelnen Charakter für den like Filter.|true|
+|escape|ja|String|"!"|Der Escape-Wert für den like Filter.|true|
 
 ***
 

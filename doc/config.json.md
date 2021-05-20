@@ -2277,7 +2277,7 @@ A singular instance of the WFS Search which will be displayed as an individual t
 |selectSource|no|String||Optional Url leading to the expected options for the different inputs. See **[https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json]** for an example.|false|
 |suggestions|no|**[suggestions](#markdown-header-portalconfigmenutoolwfssearchsearchinstancesuggestions)**||If given, the service will be queried whenever a user inserts values into an input field to suggest a value.|false|
 |title|yes|String||Title of the search to be displayed in the selection dropdown in the tool.|false|
-|userHelp|no|String/Boolean||Information text regarding the search formular to be displayed to the user. If not given, it will be generated from the structure of the config. May be a locale key. If the value explicitly set to `hide`, no information regarding the structure of the formular will be displayed.|false|
+|userHelp|no|String||Information text regarding the search formular to be displayed to the user. If not given, it will be generated from the structure of the config. May be a locale key. If the value explicitly set to `hide`, no information regarding the structure of the formular will be displayed.|false|
 
 **Example**
 
