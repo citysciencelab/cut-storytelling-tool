@@ -2488,7 +2488,7 @@ Konfiguration für die Vorschläge von Nutzereingaben.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|featureType|nein|String||Wenn gegeben wird die Anfrage mit diesem featureType statt dem aus der Definition des Services.|false|
+|featureType|nein|String||Wenn gegeben wird die Anfrage mit diesem featureType statt dem aus der Definition des Services. Nur verwendbar, wenn der Dienst in der **[services.json](services.json.de.md)** definiert wurde.|false|
 |length|nein|Number|3|Die Anfrage wird dann getriggered, wenn die Inputlänge mindestens so lang ist wie der Wert dieses Parameters.|false|
 
 ***

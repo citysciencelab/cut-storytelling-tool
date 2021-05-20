@@ -2584,7 +2584,7 @@ Configuration for the suggestions of the user input.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|featureType|no|String||If given, the query will be sent with this featureType instead of the one configured for the service itself.|false|
+|featureType|no|String||If given, the query will be sent with this featureType instead of the one configured for the service itself. Only usable if the layer was defined in the **[services.json](services.json.md)**.|false|
 |length|no|Number|3|The query is triggered when the length of the input is at least as long as this parameter.|false|
 
 ***
