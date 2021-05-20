@@ -604,7 +604,7 @@
                 "label": "Maßstab"
             },
             "wfsSearch": {
-                "optionPlaceholder": "Bitte wählen Sie eine Option aus!",
+                "optionsPlaceholder": "Bitte wählen Sie eine Option aus!",
                 "resetButton": "Zurücksetzen",
                 "searchButton": "Suchen",
                 "resultListTitle": "Suchergebnisse:",

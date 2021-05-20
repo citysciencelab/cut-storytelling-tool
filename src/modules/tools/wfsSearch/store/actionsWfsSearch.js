@@ -62,7 +62,6 @@ const actions = {
     },
     /**
      * Takes the selected coordinates and centers the map to the new position.
-     * @param {Object} context actions context object.
      * @param {String[]} coords - coordinates for new center position
      * @returns {void}
      */
@@ -74,6 +73,11 @@ const actions = {
         dispatch("Map/setZoomLevel", 6, {root: true});
         dispatch("MapMarker/placingPointMarker", transformedCoords, {root: true});
     },
+    /**
+     * Resets the results in the state as well as the inputs/dropdowns in the UI.
+     * Also removes the map marker.
+     * @returns {void}
+     */
     resetResult ({commit, dispatch}) {
         // Beim Reset des Moduls bedenken, dass der Marker auch weg müsste!
         commit("setResults", []);

@@ -605,7 +605,7 @@
                 "label": "Scale"
             },
             "wfsSearch": {
-                "optionPlaceholder": "Please choose an option!",
+                "optionsPlaceholder": "Please choose an option!",
                 "resetButton": "Reset",
                 "searchButton": "Search",
                 "resultListTitle": "Search results:",

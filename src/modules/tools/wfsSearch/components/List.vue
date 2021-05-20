@@ -3,6 +3,9 @@ import {mapActions, mapGetters} from "vuex";
 import actions from "../store/actionsWfsSearch";
 import getters from "../store/gettersWfsSearch";
 import state from "../store/stateWfsSearch";
+import {isWebLink} from "../../../../utils/urlHelper.js";
+import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../utils/isPhoneNumber.js";
+import {isEmailAddress} from "../../../../utils/isEmailAddress.js";
 
 export default {
     name: "List",
@@ -25,22 +28,42 @@ export default {
     },
     methods: {
         ...mapActions("Tools/WfsSearch", Object.keys(actions)),
+        isWebLink,
+        isPhoneNumber,
+        getPhoneNumberAsWebLink,
+        isEmailAddress,
         sendCoords (data) {
             const index = this.tableData.indexOf(data),
                 coords = state.results[index].the_geom.flatCoordinates;
 
             this.setCenter(coords);
         },
-        fillGaps (value) {
+        removeVerticalBar (value) {
             if (typeof value === "string") {
-                const newValue = value.replaceAll("|", " ");
+                const newValue = value.replaceAll("|", ", ");
 
                 return newValue;
             }
-            else if (typeof value === "object") {
+            return "";
+        },
+        replaceGeom (value) {
+            if (typeof value === "object") {
                 return this.$t("common:modules.tools.wfsSearch.zoomToResult");
             }
             return "";
+        },
+        replaceBoolean (value) {
+            let newValue = "";
+
+            if (typeof value === "string" && value === "true") {
+                newValue = value.replaceAll("true", "ja");
+
+            }
+            else if (typeof value === "string" && value === "No") {
+                newValue = value.replaceAll("No", "nein");
+
+            }
+            return newValue;
         }
     }
 };
@@ -50,8 +73,6 @@ export default {
     <div
         id="tool-wfsSearch-list"
     >
-        <h4>{{ tableTitle }}</h4>
-        <hr>
         <table>
             <tr>
                 <th
@@ -74,8 +95,31 @@ export default {
                     v-for="(key, j) in tableHeads"
                     :key="key + j"
                 >
-                    <p>
-                        {{ fillGaps(data[key]) }}
+                    <p v-if="key === 'the_geom'">
+                        <button
+                            type="button"
+                            class="btn btn-lgv-grey col-md-12 col-sm-12"
+                        >
+                            {{ replaceGeom(data[key]) }}
+                        </button>
+                    </p>
+                    <p v-else-if="isWebLink(data[key])">
+                        <a
+                            :href="data[key]"
+                            target="_blank"
+                        >{{ data[key] }}</a>
+                    </p>
+                    <p v-else-if="isPhoneNumber(data[key])">
+                        <a :href="getPhoneNumberAsWebLink(data[key])">{{ data[key] }}</a>
+                    </p>
+                    <p v-else-if="isEmailAddress(data[key])">
+                        <a :href="`mailto:${data[key]}`">{{ data[key] }}</a>
+                    </p>
+                    <p v-else-if="data[key] === 'true' || data[key] === 'No'">
+                        {{ replaceBoolean(data[key]) }}
+                    </p>
+                    <p v-else>
+                        {{ removeVerticalBar(data[key]) }}
                     </p>
                 </td>
             </tr>
@@ -110,9 +154,6 @@ table {
     }
     tr:nth-child(even) {
         background-color: #f2f2f2;
-    }
-    tr:hover {
-        background-color: #ddd;
     }
 }
 </style>

@@ -68,7 +68,13 @@ export function searchFeatures ({literals, requestConfig: {layerId, maxFeatures,
     }
 
     return sendRequest(service, filter, fromServicesJson, storedQueryId, maxFeatures)
-        .then(data => new WFS({version: storedQueryId ? "2.0.0" : "1.1.0"}).readFeatures(data));
+        .then(data => {
+            const features = new WFS({version: storedQueryId ? "2.0.0" : "1.1.0"}).readFeatures(data);
+
+            features.forEach(feature => {
+                this.results.push(feature.values_);
+            });
+        });
 }
 
 /**

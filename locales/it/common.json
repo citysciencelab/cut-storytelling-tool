@@ -48,7 +48,9 @@
             "wfsTransaction": "Strumento WFS-T",
             "scaleSwitcher": "Cambia scala",
             "selectFeatures": "Seleziona",
-            "styleVt": "Style VT"
+            "styleVt": "Style VT",
+            "parcelSearch": "Ricerca pacchi",
+            "wfsSearch": "Ricerca WFS"
         },
         "contact": "Contatti",
         "info": "Informazioni"
@@ -400,7 +402,7 @@
                 "successfullyImportedLabel": "Importato con successo:",
                 "title": "Importa file"
             },
-            "wfsSearch": {
+            "parcelSearch": {
                 "wrongConfig": "Configurazione non valida o incompleta ({{name}}).",
                 "districtsLoadFailed": "I quartieri del governo non potevano essere caricati ({{name}}).",
                 "wrongConfigParcelsearch": "La configurazione della ricerca dei pacchi non è corretta. Si prega di contattare il supporto.",
@@ -571,6 +573,15 @@
             },
             "scaleSwitcher": {
                 "label": "Scala"
+            },
+            "wfsSearch": {
+                "optionsPlaceholder": "Per favore, scegli un'opzione!",
+                "resetButton": "Azzerare",
+                "searchButton": "Cerca",
+                "resultListTitle": "Risultati della ricerca:",
+                "instancesSelectLabel": "Selezione dell'istanza",
+                "showResults": "Mostra i risultati",
+                "zoomToResult": "Zoom sul risultato"
             }
         },
         "controls": {

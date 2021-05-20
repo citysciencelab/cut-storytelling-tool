@@ -8,6 +8,7 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 import actions from "../store/actionsWfsSearch";
 import getters from "../store/gettersWfsSearch";
 import mutations from "../store/mutationsWfsSearch";
+import {searchFeatures} from "../utils/requests";
 
 export default {
     name: "WfsSearch",
@@ -44,6 +45,7 @@ export default {
     methods: {
         ...mapMutations("Tools/WfsSearch", Object.keys(mutations)),
         ...mapActions("Tools/WfsSearch", Object.keys(actions)),
+        searchFeatures,
         close () {
             this.setActive(false);
             this.resetModule(true);
@@ -90,7 +92,6 @@ export default {
                                 for="tool-wfsSearch-instances-select"
                             >
                                 {{ $t("common:modules.tools.wfsSearch.instancesSelectLabel") }}
-                                <!-- TODO: Add me to the language files-->
                             </label>
                             <div class="col-md-7 col-sm-7">
                                 <select
@@ -115,8 +116,7 @@ export default {
                             class="form-group form-group-sm"
                         >
                             <div class="col-md-12 col-sm-12">
-                                <!-- TODO: May need to add $t() to be properly displayed -->
-                                {{ currentInstance.userHelp }}
+                                {{ $t(currentInstance.userHelp) }}
                             </div>
                             <hr>
                         </div>
@@ -132,8 +132,8 @@ export default {
                                 <button
                                     type="button"
                                     class="btn btn-lgv-grey col-md-12 col-sm-12"
+                                    @click="resetResult"
                                 >
-                                    <!-- TODO: Add @click event -->
                                     {{ $t("common:modules.tools.wfsSearch.resetButton") }}
                                 </button>
                             </div>
@@ -172,10 +172,13 @@ export default {
                 :showModal="showResults"
                 @modalHid="hideList"
             >
+                <div slot="header">
+                    <h4>{{ $t("common:modules.tools.wfsSearch.resultListTitle") }}</h4>
+                    <hr>
+                </div>
                 <div v-if="showResults">
                     <List
                         :key="'tool-wfsSearch-list'"
-                        :tableTitle="$t(&quot;common:modules.tools.wfsSearch.resultListTitle&quot;)"
                         :tableHeads="headers"
                         :tableData="results"
                     />
@@ -200,8 +203,10 @@ export default {
         padding: 0;
         overflow: auto;
         max-height: 70vh;
+        overflow: auto;
     }
-    #modal-1-inner-wrapper .glyphicon.glyphicon-remove {
-        right: 30px !important;
+    #modal-1-container #modal-1-inner-wrapper {
+        padding: 10px;
+        min-width: 70vw;
     }
 </style>
