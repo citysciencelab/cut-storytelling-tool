@@ -24,7 +24,21 @@ export default {
         }
     },
     computed: {
-        ...mapGetters("Tools/WfsSearch", Object.keys(getters))
+        ...mapGetters("Tools/WfsSearch", Object.keys(getters)),
+        newTableHeads: function () {
+            const visibleAttributes = [],
+                newTable = [];
+
+            this.currentInstance.result_list.forEach(element => {
+                visibleAttributes.push(element);
+            });
+
+            visibleAttributes.forEach(attribute => {
+                newTable.push(attribute);
+
+            });
+            return newTable;
+        }
     },
     methods: {
         ...mapActions("Tools/WfsSearch", Object.keys(actions)),
@@ -76,13 +90,11 @@ export default {
         <table>
             <tr>
                 <th
-                    v-for="(header, i) in tableHeads"
+                    v-for="(header, i) in newTableHeads"
                     :key="header + i"
                 >
-                    <p v-if="header !== 'the_geom'">
-                        {{ header }}
-                    </p>
-                    <p v-else>
+                    <p>
+                        {{ header.title }}
                     </p>
                 </th>
             </tr>
@@ -92,7 +104,7 @@ export default {
                 @click="sendCoords(data)"
             >
                 <td
-                    v-for="(key, j) in tableHeads"
+                    v-for="(key, j) in newTableHeads"
                     :key="key + j"
                 >
                     <p v-if="key === 'the_geom'">
@@ -100,26 +112,26 @@ export default {
                             type="button"
                             class="btn btn-lgv-grey col-md-12 col-sm-12"
                         >
-                            {{ replaceGeom(data[key]) }}
+                            {{ replaceGeom(data[key.attribute]) }}
                         </button>
                     </p>
-                    <p v-else-if="isWebLink(data[key])">
+                    <p v-else-if="isWebLink(data[key.attribute])">
                         <a
-                            :href="data[key]"
+                            :href="data[key.attribute]"
                             target="_blank"
                         >{{ data[key] }}</a>
                     </p>
-                    <p v-else-if="isPhoneNumber(data[key])">
-                        <a :href="getPhoneNumberAsWebLink(data[key])">{{ data[key] }}</a>
+                    <p v-else-if="isPhoneNumber(data[key.attribute])">
+                        <a :href="getPhoneNumberAsWebLink(data[key.attribute])">{{ data[key.attribute] }}</a>
                     </p>
-                    <p v-else-if="isEmailAddress(data[key])">
-                        <a :href="`mailto:${data[key]}`">{{ data[key] }}</a>
+                    <p v-else-if="isEmailAddress(data[key.attribute])">
+                        <a :href="`mailto:${data[key.attribute]}`">{{ data[key.attribute] }}</a>
                     </p>
-                    <p v-else-if="data[key] === 'true' || data[key] === 'No'">
-                        {{ replaceBoolean(data[key]) }}
+                    <p v-else-if="data[key.attribute] === 'true' || data[key.attribute] === 'No'">
+                        {{ replaceBoolean(data[key.attribute]) }}
                     </p>
                     <p v-else>
-                        {{ removeVerticalBar(data[key]) }}
+                        {{ removeVerticalBar(data[key.attribute]) }}
                     </p>
                 </td>
             </tr>
