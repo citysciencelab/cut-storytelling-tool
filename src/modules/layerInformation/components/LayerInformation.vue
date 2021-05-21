@@ -12,14 +12,9 @@ export default {
     components: {
         ToolWindow
     },
-    data: function () {
-        return {
-            layerInfoIsActive: false
-        };
-    },
     computed: {
         ...mapGetters("LayerInformation", Object.keys(getters)),
-        ...mapMutations("LayerInformation", Object.keys(mutations)),
+        ...mapGetters(["metaDataCatalogueId"]),
         showAdditionalMetaData () {
             return this.layerInfo.metaURL !== null && typeof this.abstractText !== "undefined" && this.abstractText !== this.noMetaDataMessage && this.abstractText !== this.noMetadataLoaded;
         },
@@ -56,8 +51,10 @@ export default {
 
     },
 
-    created () {
-        // this.metaDataCatalogueId = rootGetters.metaDataCatalogueId;
+    mounted () {
+        if (this.metaDataCatalogueId) {
+            this.setMetaDataCatalogueId(this.metaDataCatalogueId);
+        }
     },
 
     methods: {
@@ -65,6 +62,7 @@ export default {
             "changeLayerInfo",
             "activate"
         ]),
+        ...mapMutations("LayerInformation", Object.keys(mutations)),
         close () {
             this.activate(false);
             this.$emit("close");
@@ -215,7 +213,7 @@ export default {
                             >
                                 <li
                                     v-for="downloadLink in downloadLinks"
-                                    :key="downloadLink"
+                                    :key="downloadLink.linkName"
                                 >
                                     <a
                                         :href="downloadLink.link"
@@ -274,8 +272,7 @@ export default {
         margin: 15px 0px 10px 0px;
     }
 
-    //das wird nicht auf die Absätze angewendet, beispiel: master - Bebauungspläne im Verfahren LayerInfo
-    #layerInformation .abstract p {
+    #layerInformation .abstract /deep/ p {
         padding: 2px 10px 2px 0;
     }
     .body {

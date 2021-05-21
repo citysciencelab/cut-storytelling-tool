@@ -121,13 +121,13 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
      * @returns {void}
      */
     showLayerInformation: function () {
-        let legend = "",
-            additionalLayerNumber = 0;
+        let legend = "";
         const metaID = [],
             cswUrls = [],
             showDocUrls = [],
             name = this.get("name"),
-            layerNames = [];
+            layerNames = [],
+            additionalLayers = [];
 
         if (!this.get("layerSource")) {
             this.prepareLayerObject();
@@ -151,12 +151,14 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
             cswUrls.push(cswUrl);
             showDocUrls.push(showDocUrl);
             layerNames.push(layerName);
-            additionalLayerNumber++;
-            store.dispatch("LayerInformation/additionalLayer_" + additionalLayerNumber, {
+
+            const layerInfo = {
                 "metaID": layerMetaId,
                 "layerName": layerName,
                 "cswUrl": cswUrl
-            });
+            };
+
+            additionalLayers.push(layerInfo);
         });
 
         // Radio.trigger("LayerInformation", "add", {
@@ -191,6 +193,7 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
         store.dispatch("LayerInformation/additionalSingleLayerInfo");
 
         store.dispatch("LayerInformation/setMetadataURL", metaID[0]);
+        store.dispatch("LayerInformation/setAdditionalLayer", additionalLayers);
 
         store.dispatch("Legend/setLayerIdForLayerInfo", this.get("id"));
         store.dispatch("Legend/setLayerCounterIdForLayerInfo", Date.now());

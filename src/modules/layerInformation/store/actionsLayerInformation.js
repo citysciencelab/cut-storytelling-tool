@@ -4,7 +4,7 @@ import getProxyUrl from "../../../utils/getProxyUrl";
 const actions = {
 
     /**
-     * This will check the Layer Information
+     * This will set the Layer Information
      * @param {Object} param.commit the commit
      * @param {Object} layerInformation the layerInformation that we get from the module
      * @returns {void}
@@ -14,14 +14,9 @@ const actions = {
         Radio.trigger("LayerInformation", "unhighlightLayerInformationIcon");
     },
 
-    additionalLayer_1: function ({commit}, additionalLayer) {
-        commit("setAdditionalLayer_1", additionalLayer);
-    },
-    additionalLayer_2: function ({commit}, additionalLayer) {
-        commit("setAdditionalLayer_2", additionalLayer);
-    },
-    additionalLayer_3: function ({commit}, additionalLayer) {
-        commit("setAdditionalLayer_3", additionalLayer);
+    // This sets additional layerInformations in case of group layers
+    setAdditionalLayer: function ({commit}, additionalLayer) {
+        commit("setAdditionalLayer", additionalLayer);
     },
 
     activate: function ({commit}, active) {
@@ -44,24 +39,21 @@ const actions = {
         dispatch("getAbstractInfo", metaInfo);
 
     },
+
+    // if the user changes the layerInfo Abstract Text via the dropdown for the group layers
     changeLayerInfo: async function ({dispatch, state}, chosenElementTitle) {
-        let metaId,
-            cswUrl;
+        let metaId = "",
+            cswUrl = "",
+            metaInfo = {},
+            layer = "";
+        const additionalLayer = state.additionalLayer;
 
-        if (state.additionalLayer_1.layerName === chosenElementTitle) {
-            metaId = state.additionalLayer_1.metaID;
-            cswUrl = state.additionalLayer_1.cswUrl;
-        }
-        else if (state.additionalLayer_2.layerName === chosenElementTitle) {
-            metaId = state.additionalLayer_2.metaID;
-            cswUrl = state.additionalLayer_2.cswUrl;
-        }
-        else if (state.additionalLayer_3.layerName === chosenElementTitle) {
-            metaId = state.additionalLayer_3.metaID;
-            cswUrl = state.additionalLayer_3.cswUrl;
-        }
+        layer = additionalLayer.find(({layerName}) => layerName === chosenElementTitle);
 
-        const metaInfo = {metaId, cswUrl};
+        metaId = layer.metaID;
+        cswUrl = layer.cswUrl;
+
+        metaInfo = {metaId, cswUrl};
 
         dispatch("getAbstractInfo", metaInfo);
 
@@ -69,6 +61,7 @@ const actions = {
 
     },
 
+    // set all the abstract Infos for the layer
     getAbstractInfo: async function ({commit, dispatch, state, rootGetters}, metaInfo) {
         let metadata;
 
@@ -119,26 +112,21 @@ const actions = {
      * @param {Object} metaId the given metaId for one layer
      * @returns {void}
      */
-    setMetadataURL: function ({state, commit, rootGetters}, metaId) {
-        const metaURLs = [];
-        let metaURL = "",
-            service = null,
-            metaDataCatalogueId = rootGetters.metaDataCatalogueId;
-
-        // todo: set in vue
-        if (metaDataCatalogueId === "") {
+    setMetadataURL: function ({state, commit}, metaId) {
+        const metaURLs = [],
             metaDataCatalogueId = state.metaDataCatalogueId;
-        }
+        let metaURL = "",
+            service = null;
 
         service = Radio.request("RestReader", "getServiceById", metaDataCatalogueId);
         if (service === undefined) {
-            console.warn("Rest Service mit der ID " + metaDataCatalogueId + " ist rest-services.json nicht konfiguriert!");
+            console.warn("Rest Service with the ID " + metaDataCatalogueId + " is not configured in rest-services.json!");
         }
         else if (typeof state.layerInfo.showDocUrl !== "undefined" && state.layerInfo.showDocUrl !== null) {
             metaURL = state.layerInfo.showDocUrl + metaId;
         }
         else {
-            metaURL = Radio.request("RestReader", "getServiceById", metaDataCatalogueId).get("url") + metaId;
+            metaURL = service.get("url") + metaId;
         }
 
         if (metaId !== null && metaId !== "" && metaURLs.indexOf(metaURL) === -1) {
