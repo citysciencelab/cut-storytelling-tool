@@ -74,8 +74,8 @@ describe("src/modules/layerInformation/store/actionsLayerInformation.js", () => 
                         "urlIsVisible": true
                     },
                     metaDataCatalogueId: "2"
-                },
-                metaURLs = ["https://metaver.de/trefferanzeige?cmd=doShowDocument&docuuid=73A344E9-CDB5-4A17-89C1-05E202989755"];
+                };
+                // metaURLs = ["https://metaver.de/trefferanzeige?cmd=doShowDocument&docuuid=73A344E9-CDB5-4A17-89C1-05E202989755"];
 
             // Once the RestReader (Radiorequest) is a vue component change the payload to metaURLs
             testAction(setMetadataURL, metaId, state, {}, [
