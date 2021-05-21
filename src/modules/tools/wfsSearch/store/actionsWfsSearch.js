@@ -8,6 +8,7 @@ const actions = {
     instanceChanged ({commit, dispatch}, instanceId) {
         commit("setCurrentInstanceId", instanceId);
         dispatch("prepareModule");
+        dispatch("resetResult");
     },
     prepareModule ({commit, dispatch, getters}) {
         dispatch("resetModule", false);
