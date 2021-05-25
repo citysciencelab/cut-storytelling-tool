@@ -6,6 +6,7 @@ import Literal from "./Literal.vue";
 import actions from "../store/actionsWfsSearch";
 import getters from "../store/gettersWfsSearch";
 import mutations from "../store/mutationsWfsSearch";
+import {searchFeatures} from "../utils/requests";
 
 export default {
     name: "WfsSearch",
@@ -56,6 +57,13 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
+        },
+        async search () {
+            const features = await searchFeatures(this.currentInstance, this.service);
+
+            features.forEach(feature => {
+                console.log(feature.values_);
+            });
         }
     }
 };
@@ -139,7 +147,7 @@ export default {
                             type="button"
                             class="btn btn-lgv-grey col-md-12 col-sm-12"
                             :disabled="requiredFields"
-                            @click="searchFeatures(currentInstance, service)"
+                            @click="search"
                         >
                             {{ $t("common:modules.tools.wfsSearch.searchButton") }}
                         </button>
