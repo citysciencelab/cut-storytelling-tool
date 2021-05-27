@@ -28,7 +28,7 @@ const state = {
     mapProjection: null,
     positionMapProjection: [],
     updatePosition: true,
-    currentProjection: {name: "EPSG:25832"},
+    currentProjection: {id: "EPSG:25832", name: "EPSG:25832", projName: "utm"},
     eastingNoCoord: false,
     eastingNoMatch: false,
     northingNoCoord: false,

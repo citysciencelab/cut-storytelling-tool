@@ -1,187 +1,434 @@
 import testAction from "../../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../store/actionsCoordToolkit";
-
-const {
-    positionClicked,
-    newProjectionSelected,
-    changedPosition,
-    adjustPosition,
-    setCoordinates,
-    checkPosition
-} = actions;
+import sinon from "sinon";
+import {expect} from "chai";
+import * as proj4 from "proj4";
 
 describe("src/modules/tools/coord/store/actionsCoord.js", () => {
-    describe("positionClicked", () => {
-        it("positionClicked", done => {
-            const payload = {
-                    coordinate: [1000, 2000]
-                },
-                state = {
-                    updatePosition: true,
-                    positionMapProjection: [300, 300]
-                };
+    describe("supplyCoord actions", () => {
+        describe("positionClicked", () => {
+            it("positionClicked", done => {
+                const payload = {
+                        coordinate: [1000, 2000]
+                    },
+                    state = {
+                        updatePosition: true,
+                        positionMapProjection: [300, 300]
+                    };
 
-            testAction(positionClicked, payload, state, {}, [
-                {type: "setPositionMapProjection", payload: payload.coordinate},
-                {type: "changedPosition", payload: payload.coordinate, dispatch: true},
-                {type: "setUpdatePosition", payload: false},
-                {type: "MapMarker/placingPointMarker", payload: payload.coordinate, dispatch: true}
-            ], {}, done);
+                testAction(actions.positionClicked, payload, state, {}, [
+                    {type: "setPositionMapProjection", payload: payload.coordinate},
+                    {type: "changedPosition", payload: payload.coordinate, dispatch: true},
+                    {type: "setUpdatePosition", payload: false},
+                    {type: "MapMarker/placingPointMarker", payload: payload.coordinate, dispatch: true}
+                ], {}, done);
+            });
         });
-    });
-    describe("newProjectionSelected", () => {
-        it("newProjectionSelected", done => {
-            const state = {
-                currentSelection: "projection 2",
-                projections: [
-                    {name: "projection 1", projName: "longlat"},
-                    {name: "projection 2", projName: "longlat"}
-                ]
-            };
+        describe("newProjectionSelected", () => {
+            it("newProjectionSelected", done => {
+                const
+                    proj1 = {id: "projection 1", name: "projection 1", projName: "longlat"},
+                    proj2 = {id: "projection 2", name: "projection 2", projName: "longlat"},
+                    state = {
+                        projections: [
+                            proj1,
+                            proj2
+                        ]
+                    };
 
-            testAction(newProjectionSelected, null, state, {}, [
-                {type: "setCurrentSelection", payload: "projection 2"},
-                {type: "setCurrentProjection", payload: {name: "projection 2"}}
-            ], {getProjectionByName: () => {
-                return {name: "projection 2"};
-            }}, done);
-        });
-    });
-    describe("changedPosition", () => {
-        const rootState = {
-                Map: {
-                    map: {}
-                }
-            },
-            proj1 = {name: "projection 1", projName: "longlat"},
-            proj2 = {name: "projection 2", projName: "longlat"},
-            state = {
-                currentSelection: "projection 2",
-                projections: [proj1, proj2],
-                currentProjection: proj2,
-                positionMapProjection: [300, 400]
-            };
-
-        it("changedPosition will call adjustPosition", done => {
-            const payload = {
-                position: [100, 200],
-                targetProjection: proj2
-            };
-
-            testAction(changedPosition, null, state, rootState, [
-                {type: "adjustPosition", payload: payload, dispatch: true}
-            ], {getTransformedPosition: () => {
-                return [100, 200];
-            }}, done);
-        });
-        it("changedPosition will not call adjustPosition", done => {
-            testAction(changedPosition, null, state, rootState, [],
-                {getTransformedPosition: () => {
-                    return null;
+                testAction(actions.newProjectionSelected, proj2.id, state, {}, [
+                    {type: "setCurrentProjection", payload: proj2},
+                    {type: "changedPosition", payload: proj2.id, dispatch: true},
+                    {type: "setExample"}
+                ], {getProjectionById: () => {
+                    return proj2;
                 }}, done);
+            });
         });
-    });
-    describe("adjustPosition", () => {
-        const rootState = {
-                Map: {
-                    map: {}
-                }
-            },
-            proj1 = {name: "projection 1", projName: "utm"},
-            proj2 = {name: "projection 2", projName: "longlat"};
-
-        it("adjustPosition sets coordinate fields - longlat", done => {
-            const payload = {
-                position: [100, 200],
-                targetProjection: proj2
-            };
-
-            testAction(adjustPosition, payload, {}, rootState, [
-                {type: "setCoordinatesEastingField", payload: "160° 00′ 00″"},
-                {type: "setCoordinatesNorthingField", payload: "100° 00′ 00″ E"}
-            ], {}, done);
-        });
-        it("adjustPosition sets coordinate fields - utm", done => {
-            const payload = {
-                position: [100, 200],
-                targetProjection: proj1
-            };
-
-            testAction(adjustPosition, payload, {}, rootState, [
-                {type: "setCoordinatesEastingField", payload: "100.00"},
-                {type: "setCoordinatesNorthingField", payload: "200.00"}
-            ], {}, done);
-        });
-        it("adjustPosition sets coordinate fields - no projection and position does nothing", done => {
-            const payload = {
-                position: [],
-                targetProjection: null
-            };
-
-            testAction(adjustPosition, payload, {}, rootState, [], {}, done);
-        });
-        it("adjustPosition sets coordinate fields - no position does not fail", done => {
-            const payload = {
-                position: null,
-                targetProjection: proj1
-            };
-
-            testAction(adjustPosition, payload, {}, rootState, [], {}, done);
-        });
-        it("adjustPosition sets coordinate fields - empty position does not fail", done => {
-            const payload = {
-                position: [],
-                targetProjection: proj1
-            };
-
-            testAction(adjustPosition, payload, {}, rootState, [], {}, done);
-        });
-    });
-    describe("setCoordinates", () => {
-        it("setCoordinates updates position", done => {
-            const state = {
-                    updatePosition: true
+        describe("changedPosition", () => {
+            const rootState = {
+                    Map: {
+                        map: {}
+                    }
                 },
-                position = [100, 200],
-                payload = {
-                    coordinate: position
+                proj1 = {id: "projection 1", name: "projection 1", projName: "longlat"},
+                proj2 = {id: "projection 2", name: "projection 2", projName: "longlat"},
+                state = {
+                    mode: "supply",
+                    projections: [proj1, proj2],
+                    currentProjection: proj2,
+                    positionMapProjection: [300, 400]
                 };
 
-            testAction(setCoordinates, payload, state, {}, [
-                {type: "setPositionMapProjection", payload: position},
-                {type: "changedPosition", payload: undefined, dispatch: true}
-            ], {}, done);
-        });
-        it("setCoordinates not updates position", done => {
-            const state = {
-                    updatePosition: false
-                },
-                position = [100, 200],
-                payload = {
-                    coordinate: position
+            it("changedPosition will call adjustPosition in mode 'supply'", done => {
+                const payload = {
+                    position: [100, 200],
+                    targetProjection: proj2
                 };
 
-            testAction(setCoordinates, payload, state, {}, [], {}, done);
+                testAction(actions.changedPosition, null, state, rootState, [
+                    {type: "adjustPosition", payload: payload, dispatch: true}
+                ], {getTransformedPosition: () => {
+                    return [100, 200];
+                }}, done);
+            });
+            it("changedPosition will not call adjustPosition in mode 'serach'", done => {
+                state.mode = "search";
+
+                testAction(actions.changedPosition, null, state, rootState, [
+                ], {getTransformedPosition: () => {
+                    return [100, 200];
+                }}, done);
+            });
+            it("changedPosition will not call adjustPosition if position is null", done => {
+                testAction(actions.changedPosition, null, state, rootState, [],
+                    {getTransformedPosition: () => {
+                        return null;
+                    }}, done);
+            });
+        });
+        describe("adjustPosition", () => {
+            const rootState = {
+                    Map: {
+                        map: {}
+                    }
+                },
+                proj1 = {id: "projection 1", name: "projection 1", projName: "utm"},
+                proj2 = {id: "projection 2", name: "projection 2", projName: "longlat"},
+                proj3 = {id: "EPSG:4326-DG", name: "EPSG:4326", projName: "longlat"};
+
+            it("adjustPosition sets coordinate fields - longlat", done => {
+                const payload = {
+                    position: [100, 200],
+                    targetProjection: proj2
+                };
+
+                testAction(actions.adjustPosition, payload, {}, rootState, [
+                    {type: "setCoordinatesEasting", payload: {id: "easting", value: "160° 00′ 00″"}},
+                    {type: "setCoordinatesNorthing", payload: {id: "northing", value: "100° 00′ 00″ E"}}
+                ], {}, done);
+            });
+            it("adjustPosition sets coordinate fields - longlat - decimal degree", done => {
+                const payload = {
+                    position: [100, 200],
+                    targetProjection: proj3
+                };
+
+                testAction(actions.adjustPosition, payload, {}, rootState, [
+                    {type: "setCoordinatesEasting", payload: {id: "easting", value: "160.0000°"}},
+                    {type: "setCoordinatesNorthing", payload: {id: "northing", value: "100.0000°"}}
+                ], {}, done);
+            });
+            it("adjustPosition sets coordinate fields - utm", done => {
+                const payload = {
+                    position: [100, 200],
+                    targetProjection: proj1
+                };
+
+                testAction(actions.adjustPosition, payload, {}, rootState, [
+                    {type: "setCoordinatesEasting", payload: {id: "easting", value: "100.00"}},
+                    {type: "setCoordinatesNorthing", payload: {id: "northing", value: "200.00"}}
+                ], {}, done);
+            });
+            it("adjustPosition sets coordinate fields - no projection and position does nothing", done => {
+                const payload = {
+                    position: [],
+                    targetProjection: null
+                };
+
+                testAction(actions.adjustPosition, payload, {}, rootState, [], {}, done);
+            });
+            it("adjustPosition sets coordinate fields - no position does not fail", done => {
+                const payload = {
+                    position: null,
+                    targetProjection: proj1
+                };
+
+                testAction(actions.adjustPosition, payload, {}, rootState, [], {}, done);
+            });
+            it("adjustPosition sets coordinate fields - empty position does not fail", done => {
+                const payload = {
+                    position: [],
+                    targetProjection: proj1
+                };
+
+                testAction(actions.adjustPosition, payload, {}, rootState, [], {}, done);
+            });
+        });
+        describe("setCoordinates", () => {
+            it("setCoordinates updates position", done => {
+                const state = {
+                        updatePosition: true
+                    },
+                    position = [100, 200],
+                    payload = {
+                        coordinate: position
+                    };
+
+                testAction(actions.setCoordinates, payload, state, {}, [
+                    {type: "setPositionMapProjection", payload: position},
+                    {type: "changedPosition", payload: undefined, dispatch: true}
+                ], {}, done);
+            });
+            it("setCoordinates not updates position", done => {
+                const state = {
+                        updatePosition: false
+                    },
+                    position = [100, 200],
+                    payload = {
+                        coordinate: position
+                    };
+
+                testAction(actions.setCoordinates, payload, state, {}, [], {}, done);
+            });
+        });
+        describe("checkPosition", () => {
+            it("checkPosition sets positionMapProjection", done => {
+                const state = {
+                        updatePosition: true
+                    },
+                    position = [100, 200];
+
+                testAction(actions.checkPosition, position, state, {}, [
+                    {type: "setPositionMapProjection", payload: position}
+                ], {}, done);
+            });
+            it("checkPosition not sets positionMapProjection", done => {
+                const state = {
+                        updatePosition: false
+                    },
+                    position = [100, 200];
+
+                testAction(actions.checkPosition, position, state, {}, [], {}, done);
+            });
         });
     });
-    describe("checkPosition", () => {
-        it("checkPosition sets positionMapProjection", done => {
-            const state = {
-                    updatePosition: true
-                },
-                position = [100, 200];
+    describe("searchByCoord actions", () => {
+        let commit, dispatch, getters;
 
-            testAction(checkPosition, position, state, {}, [
-                {type: "setPositionMapProjection", payload: position}
-            ], {}, done);
+        beforeEach(() => {
+            commit = sinon.spy();
+            dispatch = sinon.spy();
+            getters = sinon.spy();
         });
-        it("checkPosition not sets positionMapProjection", done => {
-            const state = {
-                    updatePosition: false
-                },
-                position = [100, 200];
 
-            testAction(checkPosition, position, state, {}, [], {}, done);
+        afterEach(sinon.restore);
+
+        describe("validateInput", () => {
+            it("Validates the coordinates according to the ETRS89 coordinate system", () => {
+                const state = {
+                    currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#25832"},
+                    coordinatesEasting: {id: "easting", name: "", value: "564459.13", errorMessage: ""}
+                };
+
+                actions.validateInput({state, commit, dispatch, getters}, state.coordinatesEasting);
+
+                expect(commit.firstCall.args[0]).to.equal("resetEastingMessages");
+            });
+            it("Throws an Error for missing coordinates - ETRS89", () => {
+                const state = {
+                    currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#25832"},
+                    coordinatesEasting: {id: "easting", name: "", value: "", errorMessage: ""}
+                };
+
+                actions.validateInput({state, commit, dispatch}, state.coordinatesEasting);
+
+                expect(commit.firstCall.args[0]).to.equal("resetEastingMessages");
+                expect(commit.secondCall.args[0]).to.equal("setEastingNoCoord");
+            });
+            it("Throws an Error for wrong coordinates - ETRS89", () => {
+                const state = {
+                    currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#25832"},
+                    coordinatesNorthing: {id: "northing", name: "", value: "falsche Eingabe", errorMessage: ""}
+                };
+
+                actions.validateInput({state, commit, dispatch}, state.coordinatesNorthing);
+
+                expect(commit.firstCall.args[0]).to.equal("resetNorthingMessages");
+                expect(commit.secondCall.args[0]).to.equal("setNorthingNoMatch");
+            });
+            it("Validates the coordinates according to the WGS84 coordinate system", () => {
+                const state = {
+                    currentProjection: {id: "EPSG:4326"},
+                    coordinatesEasting: {id: "easting", name: "", value: "53° 33′ 25", errorMessage: ""}
+                };
+
+                actions.validateInput({state, commit, dispatch, getters}, state.coordinatesEasting);
+
+                expect(commit.firstCall.args[0]).to.equal("resetEastingMessages");
+            });
+            it("Throws an Error for missing coordinates - WGS84", () => {
+                const state = {
+                    currentProjection: {id: "EPSG:4326"},
+                    coordinatesEasting: {id: "easting", name: "", value: "", errorMessage: ""}
+                };
+
+                actions.validateInput({state, commit, dispatch}, state.coordinatesEasting);
+
+                expect(commit.firstCall.args[0]).to.equal("resetEastingMessages");
+                expect(commit.secondCall.args[0]).to.equal("setEastingNoCoord");
+            });
+            it("Throws an Error for wrong coordinates - WGS84", () => {
+                const state = {
+                    currentProjection: {id: "EPSG:4326"},
+                    coordinatesNorthing: {id: "northing", name: "", value: "falsche Eingabe", errorMessage: ""}
+                };
+
+                actions.validateInput({state, commit, dispatch}, state.coordinatesNorthing);
+
+                expect(commit.firstCall.args[0]).to.equal("resetNorthingMessages");
+                expect(commit.secondCall.args[0]).to.equal("setNorthingNoMatch");
+            });
+            it("Validates the coordinates according to the WGS84(Dezimalgrad) coordinate system", () => {
+                const state = {
+                    currentProjection: {id: "EPSG:4326-DG"},
+                    coordinatesEasting: {id: "easting", name: "", value: "53.55555°", errorMessage: ""}
+                };
+
+                actions.validateInput({state, commit, dispatch, getters}, state.coordinatesEasting);
+
+                expect(commit.firstCall.args[0]).to.equal("resetEastingMessages");
+            });
+            it("Throws an Error for missing coordinates - WGS84(Dezimalgrad)", () => {
+                const state = {
+                    currentProjection: {id: "EPSG:4326-DG"},
+                    coordinatesEasting: {id: "easting", name: "", value: "", errorMessage: ""}
+                };
+
+                actions.validateInput({state, commit, dispatch}, state.coordinatesEasting);
+
+                expect(commit.firstCall.args[0]).to.equal("resetEastingMessages");
+                expect(commit.secondCall.args[0]).to.equal("setEastingNoCoord");
+            });
+            it("Throws an Error for wrong coordinates - WGS84(Dezimalgrad)", () => {
+                const state = {
+                    currentProjection: {id: "EPSG:4326-DG"},
+                    coordinatesNorthing: {id: "northing", name: "", value: "falsche Eingabe", errorMessage: ""}
+                };
+
+                actions.validateInput({state, commit, dispatch}, state.coordinatesNorthing);
+
+                expect(commit.firstCall.args[0]).to.equal("resetNorthingMessages");
+                expect(commit.secondCall.args[0]).to.equal("setNorthingNoMatch");
+            });
         });
+        describe("formatInput", () => {
+            it("Does not format coordinates of the ETRS89 format and moves to coordinates", () => {
+                const state = {
+                    currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#25832"},
+                    coordinatesEasting: {id: "easting", name: "", value: "564459.13", errorMessage: ""},
+                    coordinatesNorthing: {id: "northing", name: "", value: "5935103.67", errorMessage: ""}
+                };
+
+                actions.formatInput({state, commit, getters}, [state.coordinatesEasting, state.coordinatesNorthing]);
+
+                expect(commit.firstCall.args[0]).to.equal("setSelectedCoordinates");
+                expect(commit.secondCall.args[0]).to.equal("resetErrorMessages");
+                expect(commit.thirdCall.args[0]).to.equal("pushCoordinates");
+                expect(commit.thirdCall.args[1]).to.equal("564459.13");
+            });
+        });
+        describe("transformCoordinates", () => {
+            it("Does not transform coordinates of the ETRS89 format and moves to coordinates", () => {
+                const state = {
+                    currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#25832"},
+                    selectedCoordinates: ["564459.13", "5935103.67"]
+                };
+
+                actions.transformCoordinates({state, dispatch});
+
+                expect(dispatch.firstCall.args[0]).to.equal("setZoom");
+                expect(dispatch.secondCall.args[0]).to.equal("moveToCoordinates");
+                expect(dispatch.secondCall.args[1]).to.eql(["564459.13", "5935103.67"]);
+            });
+            it("Transforms coordinates of the WGS84 format and moves to coordinates", () => {
+                const state = {
+                        currentProjection: {id: "EPSG:4326"},
+                        selectedCoordinates: [["53", "33", "25"], ["9", "59", "50"]]
+                    },
+                    proj4Result = Symbol(),
+                    proj4Spy = sinon.spy(() => {
+                        return proj4Result;
+                    });
+
+                sinon.stub(proj4, "default").callsFake(proj4Spy);
+                actions.transformCoordinates({state, dispatch});
+
+                expect(proj4Spy.firstCall.args[0]).to.equal("EPSG:4326");
+                expect(proj4Spy.secondCall.args[0]).to.equal("EPSG:25832");
+                expect(dispatch.firstCall.args[0]).to.equal("setZoom");
+                expect(dispatch.secondCall.args[0]).to.equal("moveToCoordinates");
+                expect(dispatch.secondCall.args[1]).to.eql(proj4Result);
+            });
+            it("Transforms coordinates of the WGS84(Dezimalgrad) format and moves to coordinates", () => {
+                const state = {
+                        currentProjection: {id: "EPSG:4326-DG"},
+                        selectedCoordinates: [["53.55555", ""], ["10.01234", ""]]
+                    },
+                    proj4Result = Symbol(),
+                    proj4Spy = sinon.spy(() => {
+                        return proj4Result;
+                    });
+
+                sinon.stub(proj4, "default").callsFake(proj4Spy);
+                actions.transformCoordinates({state, dispatch});
+
+                expect(proj4Spy.firstCall.args[0]).to.equal("EPSG:4326");
+                expect(proj4Spy.secondCall.args[0]).to.equal("EPSG:25832");
+                expect(dispatch.firstCall.args[0]).to.equal("setZoom");
+                expect(dispatch.secondCall.args[0]).to.equal("moveToCoordinates");
+                expect(dispatch.secondCall.args[1]).to.eql(proj4Result);
+            });
+            it("Transforms coordinates of the EPSG:31467 format and moves to coordinates", () => {
+                const state = {
+                        currentProjection: {id: "EPSG:31467"},
+                        selectedCoordinates: [["53.55555", ""], ["10.01234", ""]]
+                    },
+                    proj4Result = Symbol(),
+                    proj4Spy = sinon.spy(() => {
+                        return proj4Result;
+                    });
+
+                sinon.stub(proj4, "default").callsFake(proj4Spy);
+                actions.transformCoordinates({state, dispatch});
+
+                expect(proj4Spy.firstCall.args[0]).to.equal("EPSG:31467");
+                expect(proj4Spy.secondCall.args[0]).to.equal("EPSG:25832");
+                expect(dispatch.firstCall.args[0]).to.equal("setZoom");
+                expect(dispatch.secondCall.args[0]).to.equal("moveToCoordinates");
+                expect(dispatch.secondCall.args[1]).to.eql(proj4Result);
+            });
+            it("Transforms coordinates of the EPSG:8395 format and moves to coordinates", () => {
+                const state = {
+                        currentProjection: {id: "EPSG:8395"},
+                        selectedCoordinates: [["53.55555", ""], ["10.01234", ""]]
+                    },
+                    proj4Result = Symbol(),
+                    proj4Spy = sinon.spy(() => {
+                        return proj4Result;
+                    });
+
+                sinon.stub(proj4, "default").callsFake(proj4Spy);
+                actions.transformCoordinates({state, dispatch});
+
+                expect(proj4Spy.firstCall.args[0]).to.equal("EPSG:8395");
+                expect(proj4Spy.secondCall.args[0]).to.equal("EPSG:25832");
+                expect(dispatch.firstCall.args[0]).to.equal("setZoom");
+                expect(dispatch.secondCall.args[0]).to.equal("moveToCoordinates");
+                expect(dispatch.secondCall.args[1]).to.eql(proj4Result);
+            });
+            it("Transforms coordinates of the http://www.opengis.net/gml/srs/epsg.xml#25832 format and moves to coordinates", () => {
+                const state = {
+                    currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#25832"},
+                    selectedCoordinates: [["53.55555", ""], ["10.01234", ""]]
+                };
+
+                actions.transformCoordinates({state, dispatch});
+
+                expect(dispatch.firstCall.args[0]).to.equal("setZoom");
+                expect(dispatch.secondCall.args[0]).to.equal("moveToCoordinates");
+            });
+        });
+
     });
 });

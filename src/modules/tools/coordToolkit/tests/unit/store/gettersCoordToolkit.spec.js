@@ -5,7 +5,7 @@ import stateCoord from "../../../store/stateCoordToolkit";
 
 describe("src/modules/tools/coordToolkit/store/gettersCoordToolkit.js", () => {
 
-    describe("CoordToolkit getters", () => {
+    describe("getters supplyCoord", () => {
         it("returns the selectPointerMove from state", () => {
             const emptyFunc = sinon.stub(),
                 state = {
@@ -51,52 +51,45 @@ describe("src/modules/tools/coordToolkit/store/gettersCoordToolkit.js", () => {
             expect(getters.updatePosition(stateCoord)).to.be.true;
             expect(getters.updatePosition(state)).to.be.false;
         });
-        it("returns the currentSelection from state", () => {
-            const name = "EPSG:25832",
-                name2 = "EPSG:4326",
+        it("returns the currentProjection from state", () => {
+            const proj1 = {id: "EPSG:25832", name: "EPSG:25832", projName: "utm"},
+                proj2 = {id: "EPSG:4326", name: "EPSG:4326", projName: "longlat"},
                 state = {
-                    currentSelection: name2
+                    currentProjection: proj2
                 };
 
-            expect(getters.currentSelection(stateCoord)).to.be.equals(name);
-            expect(getters.currentSelection(state)).to.be.equals(name2);
+            expect(getters.currentProjection(stateCoord).id).to.be.equals(proj1.id);
+            expect(getters.currentProjection(stateCoord).name).to.be.equals(proj1.name);
+            expect(getters.currentProjection(stateCoord).projName).to.be.equals(proj1.projName);
+            expect(getters.currentProjection(state)).to.be.equals(proj2);
         });
         it("returns the currentProjection from state", () => {
-            const proj = {name: "projection 1", projName: "utm"},
-                state = {
-                    currentProjection: proj
-                };
-
-            expect(getters.currentProjection(stateCoord)).to.be.null;
-            expect(getters.currentProjection(state)).to.equals(proj);
-        });
-        it("returns the currentSelection from state", () => {
             const name = "EPSG:25832",
                 name2 = "EPSG:4326",
                 state = {
-                    currentSelection: name2
+                    currentProjection: {name: name2}
                 };
 
-            expect(getters.currentSelection(stateCoord)).to.be.equals(name);
-            expect(getters.currentSelection(state)).to.be.equals(name2);
+            expect(getters.currentProjection(stateCoord).name).to.be.equals(name);
+            expect(getters.currentProjection(state).name).to.be.equals(name2);
         });
         it("returns the coordinatesEastingField from state", () => {
-            const value = "160° 00′ 00″",
+            const easting = {id: "easting", value: "160° 00′ 00″"},
                 state = {
-                    coordinatesEastingField: value
+                    coordinatesEasting: easting
                 };
 
-            expect(getters.coordinatesEastingField(stateCoord)).to.be.equals("");
-            expect(getters.coordinatesEastingField(state)).to.be.equals(value);
+            expect(getters.coordinatesEasting(stateCoord).value).to.be.equals("");
+            expect(getters.coordinatesEasting(state).value).to.be.equals(easting.value);
         });
         it("returns the coordinatesNorthingField from state", () => {
-            const value = "100° 00′ 00″ E",
+            const northing = {id: "northing", value: "100° 00′ 00″ E"},
                 state = {
-                    coordinatesNorthingField: value
+                    coordinatesNorthing: northing
                 };
 
-            expect(getters.coordinatesNorthingField(stateCoord)).to.be.equals("");
-            expect(getters.coordinatesNorthingField(state)).to.be.equals(value);
+            expect(getters.coordinatesNorthing(stateCoord).value).to.be.equals("");
+            expect(getters.coordinatesNorthing(state).value).to.be.equals(northing.value);
         });
     });
     describe("testing default values", () => {
@@ -119,5 +112,60 @@ describe("src/modules/tools/coordToolkit/store/gettersCoordToolkit.js", () => {
             expect(getters.deactivateGFI(stateCoord)).to.be.true;
         });
 
+    });
+    describe("getters SearchByCoord", () => {
+
+        describe("getEastingError", () => {
+            it("Returns true if the easting coordinates don´t match the specified format", () => {
+                const state = {
+                    eastingNoCoord: false,
+                    eastingNoMatch: true
+                };
+
+                expect(getters.getEastingError(state)).to.be.true;
+            });
+            it("Returns true if no easting coordinates were entered", () => {
+                const state = {
+                    eastingNoCoord: true,
+                    eastingNoMatch: false
+                };
+
+                expect(getters.getEastingError(state)).to.be.true;
+            });
+            it("Returns false when there are no easting errors", () => {
+                const state = {
+                    eastingNoCoord: false,
+                    eastingNoMatch: false
+                };
+
+                expect(getters.getEastingError(state)).to.be.false;
+            });
+        });
+        describe("getNorthingError", () => {
+            it("Returns true if the northing coordinates don´t match the specified format", () => {
+                const state = {
+                    northingNoCoord: false,
+                    northingNoMatch: true
+                };
+
+                expect(getters.getNorthingError(state)).to.be.true;
+            });
+            it("Returns true if no northing coordinates were entered", () => {
+                const state = {
+                    northingNoCoord: true,
+                    northingNoMatch: false
+                };
+
+                expect(getters.getNorthingError(state)).to.be.true;
+            });
+            it("Returns false when there are no northing errors", () => {
+                const state = {
+                    northingNoCoord: false,
+                    northingNoMatch: false
+                };
+
+                expect(getters.getNorthingError(state)).to.be.false;
+            });
+        });
     });
 });
