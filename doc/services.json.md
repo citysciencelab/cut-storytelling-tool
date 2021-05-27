@@ -37,8 +37,8 @@ All layer information the portal needs to use the services is stored here. Confi
 |url|yes|String||Service URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 |version|yes|String||Service version used for *GetMap* requests.|`"1.3.0"`|
-|isSecured|nein|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
-|authenticationUrl|nein|String||Additional url called to trigger basic authentication in the browser..|"https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities"|
+|isSecured|no|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
+|authenticationUrl|no|String||Additional url called to trigger basic authentication in the browser..|"https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities"|
 
 **WMS example:**
 
@@ -228,8 +228,8 @@ WMTS layers can be added by
 |altitudeOffset|no|Number||Height offset for display in 3D mode in meters. If given, any existing z coordinates will be increased by this value. If no z coordinate exists, this value is used as z coordinate.|`10`|
 |gfiTheme|yes|String/Object||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
-|isSecured|nein|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
-|authenticationUrl|nein|String||Additional url called to trigger basic authentication in the browser..|"https://geodienste.hamburg.de/HH_WMS_DOP10?SERVICE=WFS&VERSION=1.1.0&REQUEST=DescribeFeatureType"|
+|isSecured|no|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
+|authenticationUrl|no|String||Additional url called to trigger basic authentication in the browser..|"https://geodienste.hamburg.de/HH_WMS_DOP10?SERVICE=WFS&VERSION=1.1.0&REQUEST=DescribeFeatureType"|
 
 **WFS example:**
 
