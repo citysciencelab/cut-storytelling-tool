@@ -46,6 +46,7 @@
 - The GFI is now active if this is configured and no other active tool explicitly prevents this.
 - Issue #616: Fixed a bug where the live zoom in the tool filter did not take into account the configured minScale.
 - Fixed an error that caused the historical data in the gfiTheme sensor to not be formatted correctly at times.
+- Issue #618: now the line breaks for long search results
 
 ---
 
