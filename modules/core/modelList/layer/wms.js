@@ -49,6 +49,7 @@ const WMSLayer = Layer.extend({
      * @return {void}
      */
     createLayerSource: function () {
+        const time = this.get("time");
         let params,
             source;
 
@@ -60,20 +61,20 @@ const WMSLayer = Layer.extend({
             TRANSPARENT: this.get("transparent").toString()
         };
 
-        if (this.get("time")) {
+        if (time) {
             this.requestCapabilities(this.get("url"))
                 .then(result => {
                     const {Dimension, Extent} = result.Capability.Layer.Layer[0],
                         // NOTE: It is assumed that the syntax for the values is always min/max/resolution as described in Table C.1 at http://cite.opengeospatial.org/OGCTestData/wms/1.1.1/spec/wms1.1.1.html#dims.declaring
-                        values = Extent?.values.split("/");
+                        [min, max, resolution] = Extent?.values.split("/");
 
                     if (!Dimension || !Extent || Dimension[0].name !== "time" || Extent.name !== "time") {
                         throw Error(i18next.t("common:modules.core.modelList.layer.wms.invalidTimeLayer", {id: this.id}));
                     }
 
-                    params.TIME = Extent.default;
+                    params.TIME = typeof time === "object" && time.default >= min && time.default <= max ? time.default : Extent.default;
                     // NOTE: It is assumed that the syntax for the resolution is always P|NUMBER|PERIOD (| are for separation and not part of the String); the PERIOD will be interpreted as Y for year, M for month and D for day
-                    this.set("time", {min: values[0], max: values[1], resolution: values[2]});
+                    this.set("time", {min, max, resolution});
                 })
                 .catch(error => {
                     this.removeLayer();
