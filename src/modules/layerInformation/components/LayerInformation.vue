@@ -40,6 +40,8 @@ export default {
             return this.layerInfo.url + "?SERVICE=" + this.layerInfo.typ + "&REQUEST=GetCapabilities";
         },
         showMoreLayers () {
+            console.log("this.layerInfo.active", this.layerInfo.active);
+            console.log("this.layerInfo.metaIdArray", this.layerInfo.metaIdArray);
             if (this.layerInfo.metaIdArray) {
                 return this.layerInfo.metaIdArray.length > 1;
             }
@@ -63,16 +65,30 @@ export default {
             "activate"
         ]),
         ...mapMutations("LayerInformation", Object.keys(mutations)),
+        /**
+         * Closes the LayerInformation
+         * @returns {void}
+         */
         close () {
-            this.activate(false);
+            this.setActive(false);
             this.$emit("close");
             Radio.trigger("Layer", "setLayerInfoChecked", false);
             Radio.trigger("LayerInformation", "unhighlightLayerInformationIcon");
         },
+        /**
+         * Changes the abstract Text in case of group layer
+         * @param {Event} ev click event of dropdown
+         * @returns {void}
+         */
         changeLayerAbstract (ev) {
             this.changeLayerInfo(ev.target.text);
             this.setDropDownActive(ev.target);
         },
+        /**
+         * Adds the active class to chosen layerInfo in DropDown menu
+         * @param {HTMLElement} el the chosen Element in DropDown
+         * @returns {void}
+         */
         setDropDownActive (el) {
             document.querySelectorAll(".abstractChange").forEach(element => {
                 if (element.innerHTML === el.text && !el.classList.contains("active")) {
@@ -112,6 +128,7 @@ export default {
                     class="dropdown mb-2"
                 >
                     <button
+                        id="changeLayerInfo"
                         class="btn btn-default dropdown-toggle"
                         type="button"
                         data-toggle="dropdown"

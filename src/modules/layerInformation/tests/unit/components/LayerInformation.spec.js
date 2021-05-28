@@ -1,8 +1,8 @@
 import Vuex from "vuex";
-import {config, mount, createLocalVue} from "@vue/test-utils";
+import {config, mount, shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import LayerInformationComponent from "../../../components/LayerInformation.vue";
-import Sinon from "sinon";
+import sinon from "sinon";
 
 const localVue = createLocalVue();
 
@@ -20,10 +20,12 @@ describe("LayerInformation.vue", () => {
                     namespaced: true,
                     state: {
                         active: true,
-                        metaDataCatalogueId: "2"
+                        metaDataCatalogueId: "2",
+                        layerInfo: {"metaIdArray": ["123", "456"]}
                     },
                     mutations: {
-                        setMetaDataCatalogueId: () => Sinon.stub()
+                        setMetaDataCatalogueId: () => sinon.stub(),
+                        setLayerInfo: () => sinon.stub()
                     },
                     getters: {
                         active: () => true,
@@ -44,7 +46,8 @@ describe("LayerInformation.vue", () => {
                         metaURLs: () => []
                     },
                     actions: {
-                        activate: () => Sinon.stub()
+                        activate: () => sinon.stub(),
+                        layerInfo: () => sinon.stub()
                     }
                 }
             },
@@ -52,7 +55,7 @@ describe("LayerInformation.vue", () => {
                 metaDataCatalogueId: () => "2"
             }
         });
-        // store.dispatch("LayerInformation/activate", true);
+        store.dispatch("LayerInformation/layerInfo", {"metaIdArray": ["123", "456"]});
     });
 
 
@@ -86,6 +89,21 @@ describe("LayerInformation.vue", () => {
         await button.trigger("click");
         expect(wrapper.emitted()).to.have.property("close");
         expect(wrapper.emitted().close).to.have.lengthOf(1);
+    });
+
+    it("should check the changeLayerAbstract method", () => {
+        const spyRemoveInteractions = sinon.spy(LayerInformationComponent.methods, "changeLayerAbstract"),
+            wrapper = mount(LayerInformationComponent, {store, localVue});
+
+        const dropEntries = wrapper.find(".abstractChange");
+
+        console.log("store", store.state.LayerInformation.layerInfo.metaIdArray);
+        console.log(dropEntries);
+        console.log("change", wrapper.find("#changeLayerInfo"));
+
+        expect(wrapper.find("#changeLayerInfo")).to.exist;
+
+        spyRemoveInteractions.restore();
     });
 
 });

@@ -1,7 +1,7 @@
 import testAction from "../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../store/actionsLayerInformation";
 
-const {activate, layerInfo, additionalSingleLayerInfo, setMetadataURL} = actions;
+const {activate, layerInfo, additionalSingleLayerInfo, setMetadataURL, changeLayerInfo} = actions;
 
 describe("src/modules/layerInformation/store/actionsLayerInformation.js", () => {
     describe("setActive", () => {
@@ -79,6 +79,27 @@ describe("src/modules/layerInformation/store/actionsLayerInformation.js", () => 
 
             // Once the RestReader (Radiorequest) is a vue component change the payload to metaURLs
             testAction(setMetadataURL, metaId, state, {}, [
+                {type: "setMetaURLs", payload: [""]}
+            ], {}, done);
+
+        });
+
+        it("should change the Layer Info", done => {
+            const metaId = "73A344E9-CDB5-4A17-89C1-05E202989755",
+                state = {
+                    layerInfo: {
+                        "id": "123",
+                        "metaID": "layerMetaId",
+                        "layername": "name",
+                        "url": "google.de",
+                        "urlIsVisible": true
+                    },
+                    metaDataCatalogueId: "2"
+                };
+                // metaURLs = ["https://metaver.de/trefferanzeige?cmd=doShowDocument&docuuid=73A344E9-CDB5-4A17-89C1-05E202989755"];
+
+            // Once the RestReader (Radiorequest) is a vue component change the payload to metaURLs
+            testAction(changeLayerInfo, metaId, state, {}, [
                 {type: "setMetaURLs", payload: [""]}
             ], {}, done);
 

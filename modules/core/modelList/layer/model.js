@@ -628,23 +628,9 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             "urlIsVisible": this.get("urlIsVisible")
         });
 
-        // Radio.trigger("LayerInformation", "add", {
-        //     "id": this.get("id"),
-        //     "metaID": metaID,
-        //     "layername": name,
-        //     "url": this.get("url"),
-        //     "typ": this.get("typ"),
-        //     "cswUrl": cswUrl,
-        //     "showDocUrl": showDocUrl,
-        //     "urlIsVisible": this.get("urlIsVisible")
-        // });
-
         store.dispatch("LayerInformation/activate", true);
-
         store.dispatch("LayerInformation/additionalSingleLayerInfo");
-
         store.dispatch("LayerInformation/setMetadataURL", layerMetaId);
-
         store.dispatch("Legend/setLayerIdForLayerInfo", this.get("id"));
         store.dispatch("Legend/setLayerCounterIdForLayerInfo", Date.now());
 

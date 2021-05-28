@@ -17,7 +17,7 @@ export default {
     idCounter: 0,
     layerInfo: {},
     additionalLayer: {},
-    abstractText: "Test",
+    abstractText: "",
     title: "",
     noMetadataLoaded: "",
     metaURLs: []

@@ -14,16 +14,32 @@ const actions = {
         Radio.trigger("LayerInformation", "unhighlightLayerInformationIcon");
     },
 
-    // This sets additional layerInformations in case of group layers
+    /**
+     * This sets additional layerInformations in case of group layers
+     * @param {Object} param.commit the commit
+     * @param {Object} additionalLayer the layerInformation for each other group layer
+     * @returns {void}
+     */
     setAdditionalLayer: function ({commit}, additionalLayer) {
         commit("setAdditionalLayer", additionalLayer);
     },
 
+    /**
+     * This sets the layerInformation active (needed in model.js and group.js)
+     * @param {Object} param.commit the commit
+     * @param {Object} active the active state
+     * @returns {void}
+     */
     activate: function ({commit}, active) {
         commit("setActive", active);
     },
 
-    // get the layer Infos that aren't in the store but saved in the object
+    /**
+     * get the layer Infos that aren't in the store but saved in the object
+     * @param {Object} param.dispatch the dispatch
+     * @param {Object} param.state the state
+     * @returns {void}
+     */
     additionalSingleLayerInfo: async function ({dispatch, state}) {
         let metaId;
 
@@ -40,12 +56,19 @@ const actions = {
 
     },
 
-    // if the user changes the layerInfo Abstract Text via the dropdown for the group layers
+    /**
+     * if the user changes the layerInfo Abstract Text via the dropdown for the group layers
+     * @param {Object} param.dispatch the dispatch
+     * @param {Object} param.state the state
+     * @param {Object} chosenElementTitle the chosen Elementtitle, grouplayer, in the dropDown
+     * @returns {void}
+     */
     changeLayerInfo: async function ({dispatch, state}, chosenElementTitle) {
         let metaId = "",
             cswUrl = "",
             metaInfo = {},
             layer = "";
+
         const additionalLayer = state.additionalLayer;
 
         layer = additionalLayer.find(({layerName}) => layerName === chosenElementTitle);
@@ -61,7 +84,15 @@ const actions = {
 
     },
 
-    // set all the abstract Infos for the layer
+    /**
+     * set all the abstract Infos for the layer
+     * @param {Object} param.dispatch the dispatch
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} param.rootGetters the rootGetters
+     * @param {Object} metaInfo the metaInformation that is necessary
+     * @returns {void}
+     */
     getAbstractInfo: async function ({commit, dispatch, state, rootGetters}, metaInfo) {
         let metadata;
 
@@ -93,7 +124,6 @@ const actions = {
             commit("setDatePublication", metadata?.getPublicationDate() || metadata?.getCreationDate());
         }
 
-        // necessary?
         if (state.downloadLinks) {
             const downloadLinks = [];
 
@@ -102,13 +132,12 @@ const actions = {
             });
             commit("setDownloadLinks", Radio.request("Util", "sortBy", downloadLinks, "linkName"));
         }
-        else {
-            // nothing?
-        }
     },
 
     /**
      * Checks the array of metaIDs and creates array metaURL with complete URL for template. Does not allow duplicated entries
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
      * @param {Object} metaId the given metaId for one layer
      * @returns {void}
      */
