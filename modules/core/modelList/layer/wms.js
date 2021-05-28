@@ -1,3 +1,4 @@
+import axios from "axios";
 import Layer from "./model";
 import TileWMS from "ol/source/TileWMS.js";
 import TileGrid from "ol/tilegrid/TileGrid.js";
@@ -5,6 +6,7 @@ import ImageWMS from "ol/source/ImageWMS.js";
 import {Image, Tile} from "ol/layer.js";
 import WMSCapabilities from "ol/format/WMSCapabilities";
 import store from "../../../../src/app-store";
+import handleAxiosResponse from "../../../../src/utils/handleAxiosResponse";
 
 const WMSLayer = Layer.extend({
     defaults: function () {
@@ -19,7 +21,8 @@ const WMSLayer = Layer.extend({
             extent: null,
             isSecured: false,
             notSupportedFor3D: ["1747", "1749", "1750", "9822", "12600", "9823", "1752", "9821", "1750", "1751", "12599", "2297"],
-            useProxy: false
+            useProxy: false,
+            time: false
         });
     },
 
@@ -49,34 +52,6 @@ const WMSLayer = Layer.extend({
         let params,
             source;
 
-        if (this.get("timeSeries")) {
-            const url = this.get("capabilitiesUrl");
-
-            this.fetchWMSCapabilities(url)
-                .then((result) => {
-                    result.Capability.Layer.Layer.forEach(layer => {
-                        layer.Dimension.forEach(dimension => {
-                            if (dimension.name === "time") {
-                                // Start timeslider tool here:
-                                store.dispatch("Tools/addTool", "timeslider"); // Doesnt work now
-                            }
-                        });
-                    });
-                })
-                .catch((error) => {
-                    this.removeLayer();
-                    // remove layer from project completely
-                    Radio.trigger("Parser", "removeItem", this.get("id"));
-                    // refresh layer tree
-                    Radio.trigger("Util", "refreshTree");
-                    if (error === "Fetch error") {
-                        // error message has already been printed earlier
-                        return;
-                    }
-                    this.showErrorMessage(error, this.get("name"));
-                });
-        }
-
         params = {
             CACHEID: this.get("cacheId"),
             LAYERS: this.get("layers"),
@@ -84,6 +59,32 @@ const WMSLayer = Layer.extend({
             VERSION: this.get("version"),
             TRANSPARENT: this.get("transparent").toString()
         };
+
+        if (this.get("time")) {
+            this.requestCapabilities(this.get("url"))
+                .then(result => {
+                    const {Dimension, Extent} = result.Capability.Layer.Layer[0],
+                        // NOTE: It is assumed that the syntax for the values is always min/max/resolution as described in Table C.1 at http://cite.opengeospatial.org/OGCTestData/wms/1.1.1/spec/wms1.1.1.html#dims.declaring
+                        values = Extent?.values.split("/");
+
+                    if (!Dimension || !Extent || Dimension[0].name !== "time" || Extent.name !== "time") {
+                        throw Error(i18next.t("common:modules.core.modelList.layer.wms.invalidTimeLayer", {id: this.id}));
+                    }
+
+                    params.TIME = Extent.default;
+                    // NOTE: It is assumed that the syntax for the resolution is always P|NUMBER|PERIOD (| are for separation and not part of the String); the PERIOD will be interpreted as Y for year, M for month and D for day
+                    this.set("time", {min: values[0], max: values[1], resolution: values[2]});
+                })
+                .catch(error => {
+                    this.removeLayer();
+                    // remove layer from project completely
+                    Radio.trigger("Parser", "removeItem", this.get("id"));
+                    Radio.trigger("Util", "refreshTree");
+
+                    // TODO: (Discussion) Alert or rather console.error?
+                    store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.core.modelList.layer.wms.errorTimeLayer", {error, id: this.id}));
+                });
+        }
 
         if (this.get("styles") && this.get("styles") !== "" && this.get("styles") !== "nicht vorhanden") {
             params = Object.assign(params, {
@@ -357,32 +358,56 @@ const WMSLayer = Layer.extend({
     getGfiAsNewWindow: function () {
         return this.get("gfiAsNewWindow");
     },
-
     /**
-     * Fetch the WMS-GetCapabilities document and parse it
-     * @param {string} url url to fetch
-     * @returns {promise} promise resolves to parsed WMS-GetCapabilities object
+     * Requests the GetCapabilities document and parses the result.
+     *
+     * @param {String} url url to request.
+     * @returns {Promise} A promise which will resolve the parsed GetCapabilities object.
      */
-    fetchWMSCapabilities: function (url) {
-        return fetch(url)
-            .then((result) => {
-                if (!result.ok) {
-                    throw Error(result.statusText);
-                }
-                return result.text();
-            })
+    requestCapabilities: function (url) {
+        return axios.get(encodeURI(`${url}?service=WMS&version=${this.get("version")}&layers=${this.get("layers")}&request=GetCapabilities`))
+            .then(response => handleAxiosResponse(response, "WMS, createLayerSource, requestCapabilities"))
             .then(result => {
-                const parser = new WMSCapabilities();
+                const capabilities = new WMSCapabilities().read(result);
 
-                // Parsing capabilities doesnt work now. WMSCapabilities parser removes necessary field "Extent"
-                return parser.read(result);
-            })
-            .catch(function (error) {
-                const errorMessage = " WMS-Capabilities fetch Error: " + error;
+                capabilities.Capability.Layer.Layer[0].Extent = this.findTimeDimensionalExtent(new DOMParser().parseFromString(result, "text/xml").activeElement);
+                return capabilities;
+            });
+    },
+    /**
+     * Search for the time dimensional Extent in the given HTMLCollection returned from a request to a WMS-T.
+     *
+     * @param {HTMLCollection} element The root HTMLCollection returned from a GetCapabilities request to a WMS-T.
+     * @returns {?Object} An object containing the needed Values from the time dimensional Extent for further usage.
+     */
+    findTimeDimensionalExtent (element) {
+        const capability = this.findNode(element, "Capability"),
+            outerLayer = this.findNode(capability, "Layer"),
+            innerFirstLayer = this.findNode(outerLayer, "Layer"),
+            extent = this.findNode(innerFirstLayer, "Extent");
 
-                this.showErrorMessage(errorMessage, this.get("name"));
-                return Promise.reject("Fetch error");
-            }.bind(this));
+        return extent ? this.retrieveExtentValues(extent) : null;
+    },
+    /**
+     * Finds the Element with the given name inside the given HTMLCollection.
+     *
+     * @param {HTMLCollection} element HTMLCollection to be found.
+     * @param {String} nodeName Name of the Element to be searched for.
+     * @returns {HTMLCollection} If found, the HTMLCollection with given name, otherwise undefined.
+     */
+    findNode (element, nodeName) {
+        return [...element.children].find(el => el.nodeName === nodeName);
+    },
+    /**
+     * Retrieves the attributes from the given HTMLCollection and adds the key value pairs to an Object.
+     * Also retrieves its value.
+     *
+     * @param {HTMLCollection} extent The Collection of values for the time dimensional Extent.
+     * @returns {Object} An Object containing the attributes of the time dimensional Extent as well as its value.
+     */
+    retrieveExtentValues (extent) {
+        return [...extent.attributes]
+            .reduce((acc, att) => ({...acc, [att.name]: att.value}), {values: extent.innerHTML});
     }
 });
 

@@ -32,6 +32,7 @@ All layer information the portal needs to use the services is stored here. Confi
 |name|yes|String||Arbitrary display name used in the layer tree.|`"Aerial View DOP 10"`|
 |singleTile|no|Boolean||`true`: Request map as a single tile of the current view. `false`: Build map from multiple smaller tiles.|`false`|
 |tilesize|yes|String||Tile height and width in pixels. Used if `singleTile` is `false`.|`"512"`|
+|time|no|Boolean|false|Determines whether the current Layer is a WMS-T.|`false`|
 |transparent|yes|Boolean||Whether the tile background should be transparent. Corresponds to the *GetMap* parameter *TRANSPARENT*.|`true`|
 |typ|yes|String||Service type; in this case, "WMS". (**[WMTS docs](#markdown-header-wmts-layer)**, **[WFS docs](#markdown-header-wfs-layer)**, **[SensorThings-API docs](#markdown-header-sensor-layer)**)|`"WMS"`|
 |url|yes|String||Service URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|

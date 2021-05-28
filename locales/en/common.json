@@ -96,6 +96,10 @@
               "wrongStyleId": "No style object could be found with the specified StyleId: {{styleId}}. Please make sure that a style with the StyleId: {{styleId}} is configured in the Style.json used.",
               "sensor": {
                 "httpOnError": "<strong>Unexpected error occurred while loading sensor data of layer {{name}}</strong>"
+              },
+              "wms": {
+                "errorTimeLayer": "Error while retrieving information for the layer with the id {{id}}: {{error}}",
+                "invalidTimeLayer": "The configured layer with the id {{id}} does not contain the necessary values for a WMS-T."
               }
             }
           },
