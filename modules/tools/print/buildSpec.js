@@ -866,7 +866,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @param {ol.Feature} layer -
      * @param {ol.Feature} feature -
      * @param {String[]} styleAttributes The attribute by whose value the feature is styled.
-     * @param {ol.style} style style
+     * @param {ol.style.Style} style style
      * @returns {string} an ECQL Expression
      */
     getStylingRules: function (layer, feature, styleAttributes, style) {
