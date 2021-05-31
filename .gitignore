@@ -13,12 +13,12 @@
 styleguide
 
 addons/*
-!addons/readme.txt
+!portal/analysetool/readme.txt
 
 bowerupdate.log
 build
 coverage
-
+ci_scripts
 css/bootstrap.css
 css/modules.css
 

@@ -10,8 +10,34 @@
 
 ## Unreleased - in development
 ### Added
+- A locale file for Portuguese language was added.
+
+### Changed
+- The Id in config.json for every layer could be in an object format, to allow any number of menu entries with the same layer id.
+- New Parameter propertyNames could be added in config.json for WFS layer to receive filtered response.
+
+### Deprecated
+
+### Removed
+
+### Fixed
+- Now Sensor Layer will show 0 if the dataValue is 0 and not "no data".
+- In GFI the layerTitle was shortened in case it contains a colon.
+- The GFI is now active if this is configured and no other active tool explicitly prevents this.
+
+---
+
+## v2.9.1 - 2021-05-25
+### Fixed
+- Fixed no data in gfi theme of verkehrs layers in geo-online
+
+---
+
+## v2.9.0 - 2021-05-05
+### Added
 - New attribute 'nearbyTitle' implemented in config.json for the title in the list of nearby search results.
 - Add @babel/eslint-parser to the package.json
+- Added the new tool "bufferAnalysis"
 
 ### Changed
 - Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.
@@ -19,15 +45,24 @@
 - colorTools are renamed into convertColor (src/utils/convertColor)
 - Updates the core-js and babel dependencies in the package.json
 - Update the dependency caniuse-lite.
+- The module addGeoJSON switched from backbone to vue and is provided as a util now.
+- The loading image is now displayed longer when switching to map mode: Oblique (max. 80000ms).
 
 ### Deprecated
 - colorArrayToRgb (src/utils/colorArrayToRgb) is deprecated. Use convertColor (src/utils/convertColor) instead.
 
 ### Removed
 - remove babel-eslint from the package.json
+- Documentation files in German language have been removed. From now on the documentation will only be maintained in English. The only exception is config.json.de.md, because a German language file is necessary for the mp-admin.
 
 ### Fixed
 - Fixed a bug that prevented the gfi of a wms from being requested via a reverseproxy.
+- Printing wfs cluster features and features with multiple styles.
+- If the transparency of a layer is defined as string, it will be parsed to an integer now.
+- When clicking on layers of type TERRAIN3D, TILESET3D or OBLIQUE in the search, a query is now displayed that can be used to switch to the respective map mode.
+- Fixed a bug that for the gfi in infoFormat "text/html" did not execute the script part when starting the iFrame.
+- Fixed an issue in searchbar, that after finding a result and zooming to it the 3D mode couldn't be activated anymore
+- Fixed an issue in fileImport that when the imported KML File is missing the isVisible setting the feature wouldn't be displayed when printing
 
 ---
 
@@ -43,8 +78,8 @@
 - The tool AddWMS switched from backbone to vue module.
 - Consolidate the mqttOptions in the layer sensor with the documentation (services.json.md).
 - In config.json.md, the attribute `isActive` was changed to `active` in Portalconfig.menu.tool.gfi.
-- External WMS Layers with version lower than 1.3.0 can also be imported.
 - Legends are only printed from layers that are switched visible.
+- Layers of type `SensorThings` are now automatically displayed in the default topic tree. The attribute `related_wms_layers` can be used to hide related layers of type `WMS`.
 
 ### Removed
 - SensorThings address tab in layerInformation removed.

@@ -674,7 +674,7 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 #!json
 "portalTitle": {
     "title": "Master",
-    "logo": "../../lgv-config/img/hh-logo.png",
+    "logo": "https://geodienste.hamburg.de/lgv-config/img/hh-logo.png",
     "link": "https://geoinfo.hamburg.de",
     "toolTip": "Landesbetrieb Geoinformation und Vermessung"
 }
@@ -701,7 +701,7 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 ```
 #!json
 "mapView": {
-    "backgroundImage": "/lgv-config/img/backgroundCanvas.jpeg",
+    "backgroundImage": "https://geodienste.hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
     "startCenter": [561210, 5932600],
     "options": [
         {
@@ -811,6 +811,7 @@ Konfigurations-Optionen der Legende.
 |name|ja|String||Name der Legende.|false|
 |glyphicon|nein|String|"glyphicon-book"|Glyphicon der Legende.|false|
 |showCollapseAllButton|nein|Boolean|false|Option zum Ein- bzw. Ausblenden aller Legenden|false|
+|showLegend|nein|Boolean|false|Option zum Anzeigen der Legende beim Start des Portals|false|
 
 ***
 
@@ -945,6 +946,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|false|
 |wfsFeatureFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "filter" verwenden. Filtern von WFS Features. Über dieses Werkzeug können WFS features gefiltert werden. Dies setzt jedoch eine Konfiguration der "filterOptions" am WFS-Layer-Objekt voraus.|false|
 |wfst|nein|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||WFS-T Modul mit dem Features visualisiert, erstellt, aktualisiert und gelöscht werden können.|false|
+|bufferAnalysis|nein|**[tool](#markdown-header-portalconfigmenutool)**||In der Buffer-Analyse muss ein Quell-Layer, ein Buffer-Radius und ein Ziel-Layer ausgewählt werden. Buffer-Radien werden um die Features des Quell-Layers dargestellt. Sobald ein Ziel-Layer gewählt wurde, werden nur die Features dieses Layers hervorgehoben, welche sich außerhalb der Buffer-Radien befinden. Auch eine invertierte Anzeige ist möglich. Bei dieser werden nur die Features des Ziel-Layers innerhalb der Radien hervorgehoben werden.|false|
 ***
 
 #### Portalconfig.menu.tool
@@ -1301,7 +1303,7 @@ Beispiel: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeat
 |----|-------------|---|-------|------------|------|
 |serviceId|ja|String||Id des Dienstes der abgefragt werden soll. Wird in der rest-services.json abgelegt.|false|
 |storedQueryId|ja|String||Id der stored query die verwendet werden soll.|true|
-|configJSON|ja|String||Pfad zur Konfigurationsdatei, die die Gemarkungen enthält. **[Beispiel](https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json)**.|false|
+|configJSON|ja|String||Pfad zur Konfigurationsdatei, die die Gemarkungen enthält. **[Beispiel](https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json)**.|false|
 |parcelDenominator|nein|Boolean|false|Flag, ob Flurnummern auch zur Suche verwendet werden sollen. Besonderheit Hamburg: Hamburg besitzt als Stadtstaat keine Fluren.|false|
 |styleId|nein|String||Hier kann eine StyleId aus der style.json angegeben werden um den Standard-Style vom MapMarker zu überschreiben.|false|
 |zoomLevel|nein|Number|7|Gibt an, auf welches ZoomLevel gezoomt werden soll.|false|
@@ -1314,7 +1316,7 @@ Beispiel: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeat
     "glyphicon": "glyphicon-search",
     "serviceId": "6",
     "storedQueryID": "Flurstueck",
-    "configJSON": "/lgv-config/gemarkungen_hh.json",
+    "configJSON": "https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json",
     "parcelDenominator": false,
     "styleId": "flaecheninfo"
 }
