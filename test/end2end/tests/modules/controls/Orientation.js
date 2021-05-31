@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {isMaster} = require("../../../settings"),
-    {logBrowserstackUrlToTest} = require("../../../library/utils"),
+    {logTestingCloudUrlToTest} = require("../../../library/utils"),
     {getCenter, mockGeoLocationAPI} = require("../../../library/scripts"),
     {initDriver} = require("../../../library/driver"),
     {By, until} = webdriver;
@@ -17,6 +17,7 @@ function Orientation ({builder, url, resolution, capability}) {
         before(async function () {
             if (capability) {
                 capability.name = this.currentTest.fullTitle();
+                capability["sauce:options"].name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);
@@ -26,7 +27,7 @@ function Orientation ({builder, url, resolution, capability}) {
         after(async function () {
             if (capability) {
                 driver.session_.then(function (sessionData) {
-                    logBrowserstackUrlToTest(sessionData.id_);
+                    logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
             await driver.quit();
@@ -62,12 +63,13 @@ function Orientation ({builder, url, resolution, capability}) {
 
     // only configured in portal/master
     if (isMaster(url)) {
-        describe("Modules Controls ProximitySearch", function () {
+        describe.skip("Modules Controls ProximitySearch", function () {
             let driver, poiButton;
 
             before(async function () {
                 if (capability) {
                     capability.name = this.currentTest.fullTitle();
+                    capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);
@@ -85,7 +87,7 @@ function Orientation ({builder, url, resolution, capability}) {
             after(async function () {
                 if (capability) {
                     driver.session_.then(function (sessionData) {
-                        logBrowserstackUrlToTest(sessionData.id_);
+                        logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();

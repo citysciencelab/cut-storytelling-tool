@@ -4,7 +4,7 @@ const webdriver = require("selenium-webdriver"),
     {onMoveEnd} = require("../../../../../../test/end2end/library/scriptsAsync"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {isCustom, isMaster, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
-    {logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
+    {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {until, By} = webdriver;
 
 /**
@@ -27,6 +27,7 @@ function BackForwardTests ({builder, url, resolution, browsername, capability}) 
             before(async function () {
                 if (capability) {
                     capability.name = this.currentTest.fullTitle();
+                    capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);
@@ -35,7 +36,7 @@ function BackForwardTests ({builder, url, resolution, browsername, capability}) 
             after(async function () {
                 if (capability) {
                     driver.session_.then(function (sessionData) {
-                        logBrowserstackUrlToTest(sessionData.id_);
+                        logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();

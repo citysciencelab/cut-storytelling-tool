@@ -22,7 +22,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             "animation",
             "addWMS",
             "shadow"
-        ]
+        ],
+        extendedLayerIdAssoc: {}
     },
 
     /**
@@ -92,7 +93,13 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             "getSnippetInfos": function () {
                 return this.get("snippetInfos");
             },
-            "getInitVisibBaselayer": this.getInitVisibBaselayer
+            "getInitVisibBaselayer": this.getInitVisibBaselayer,
+            "getOriginId": function (layerId) {
+                if (this.get("extendedLayerIdAssoc").hasOwnProperty(layerId)) {
+                    return this.get("extendedLayerIdAssoc")[layerId];
+                }
+                return layerId;
+            }
         }, this);
 
         channel.on({
@@ -519,7 +526,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                         $("#Overlayer").parent().after($("#ExternalLayer").parent());
                     }
                     if (!this.getItemByAttributes({id: parentId})) {
-                        this.addFolder("Fachthema", parentId, "ExternalLayer", 1, true, "common:tree.subjectData");
+                        this.addFolder("Fachthema", parentId, "ExternalLayer", 1, false, "common:tree.subjectData");
                     }
                 }
                 gdiLayer = Object.assign(gdiLayer, {

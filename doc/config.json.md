@@ -724,7 +724,7 @@ The menu bar allows showing a portal name and portal image if sufficient horizon
 {
     "portalTitle": {
         "title": "Master",
-        "logo": "../../lgv-config/img/hh-logo.png",
+        "logo": "https://geodienste.hamburg.de/lgv-config/img/hh-logo.png",
         "link": "https://geoinfo.hamburg.de",
         "toolTip": "Landesbetrieb Geoinformation und Vermessung"
     }
@@ -754,7 +754,7 @@ The menu bar allows showing a portal name and portal image if sufficient horizon
 ```json
 {
     "mapView": {
-        "backgroundImage": "/lgv-config/img/backgroundCanvas.jpeg",
+        "backgroundImage": "https://geodienste.hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
         "startCenter": [561210, 5932600],
         "options": [
             {
@@ -866,6 +866,7 @@ Legend configuration options.
 |name|yes|String||Legend name.|false|
 |glyphicon|no|String|"glyphicon-book"|Legend glyphicon.|false|
 |showCollapseAllButton|no|Boolean|false|Option to en-/disable all legends.|false|
+|showLegend|no|Boolean|false|Option to display the legend when starting the portal|false|
 
 ***
 
@@ -1003,7 +1004,7 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |virtualcity|no|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||*virtualcityPLANNER* planning viewer|false|
 |wfsFeatureFilter|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use `filter` instead._ Filters WFS features. This required configuring `"filterOptions"` on the WFS layer object.|false|
 |wfst|no|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||WFS-T module to visualize, create, update, and delete features.|false|
-
+|bufferAnalysis|no|**[tool](#markdown-header-portalconfigmenutool)**||This buffer analysis allows the selection of a source layer, a buffer radius and a target layer. The chosen buffer radius will then be shown around features of the selected source layer. At the moment a target layer is selected, only the features of this layer will be shown, if they are outside the buffer radii. It is also possible to invert the result. In this case the resulting features will only be show if they are inside the radii.|false|
 ***
 
 #### Portalconfig.menu.tool
@@ -1378,7 +1379,7 @@ Example request: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=
 |----|--------|----|-------|-----------|------|
 |serviceId|yes|String||Id of the service to request. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
 |storedQueryId|yes|String||Id of the stored query to use.|true|
-|configJSON|yes|String||Path to the configuration file holding districts. **[Example file](https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json)**.|false|
+|configJSON|yes|String||Path to the configuration file holding districts. **[Example file](https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json)**.|false|
 |parcelDenominator|no|Boolean|false|Flag defining whether parcel denominators are used as a level. (Hamburg special: As a city state, Hamburg has no parcel denominators.)|false|
 |styleId|no|String||Allows choosing a style id from the `style.json` file to overwrite the map marker default style.|false|
 |zoomLevel|no|Number|7|Defines to which zoom level the tool should zoom.|false|
@@ -1392,7 +1393,7 @@ Example request: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=
         "glyphicon": "glyphicon-search",
         "serviceId": "6",
         "storedQueryID": "Flurstueck",
-        "configJSON": "/lgv-config/gemarkungen_hh.json",
+        "configJSON": "https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json",
         "parcelDenominator": false,
         "styleId": "flaecheninfo"
     }
@@ -2278,7 +2279,8 @@ The attributes `pointButton`/`lineButton`/`areaButton` may be of type boolean or
 }
 ```
 
-```json
+```
+#!json
 {
     "layerId": "1234",
     "show": true,
@@ -2810,7 +2812,8 @@ For such cases, define `gfiAsNewWindow` manually as described above.
 
 **Example**
 
-```js
+```
+#!json
 {
     "id": "123456",
     // (...)
@@ -3030,7 +3033,8 @@ List of attributes typically used in vector layers. Vector layers are WFS, GeoJS
 
 **Example**
 
-```json
+```
+#!json
 {
     "id": "123456",
     "name": "MyVectorLayerName",

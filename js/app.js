@@ -9,7 +9,6 @@ import StyleList from "../modules/vectorStyle/list";
 import Preparser from "../modules/core/configLoader/preparser";
 import ParametricURL from "../modules/core/parametricURL";
 import Map from "../modules/core/map";
-import AddGeoJSON from "../modules/tools/addGeoJSON/model";
 import RemoteInterface from "../modules/remoteInterface/model";
 import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
@@ -60,7 +59,6 @@ import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonOblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
-import SelectFeaturesView from "../modules/tools/selectFeatures/view";
 import LoaderOverlay from "../src/utils/loaderOverlay";
 
 let sbconfig,
@@ -137,7 +135,6 @@ async function loadApp () {
         new ParametricURL();
     }
     new Map(Radio.request("Parser", "getPortalConfig").mapView);
-    new AddGeoJSON();
     new WindowView();
 
     app.$mount();
@@ -254,10 +251,6 @@ async function loadApp () {
             }
             case "virtualCity": {
                 new VirtualcityModel(tool.attributes);
-                break;
-            }
-            case "selectFeatures": {
-                new SelectFeaturesView({model: tool});
                 break;
             }
             default: {
