@@ -368,6 +368,7 @@ export default {
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
         :initialWidth="500"
+        :initialWidthMobile="300"
         :deactivateGFI="deactivateGFI"
     >
         <template v-slot:toolBody>

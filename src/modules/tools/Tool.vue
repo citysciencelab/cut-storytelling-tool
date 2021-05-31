@@ -38,6 +38,11 @@ export default {
             default: -1,
             required: false
         },
+        initialWidthMobile: {
+            type: Number,
+            default: -1,
+            required: false
+        },
         deactivateGFI: {
             type: Boolean,
             default: true,
@@ -67,6 +72,33 @@ export default {
             }
 
             return Math.floor(pixelWidth) + "px";
+        },
+        /**
+         * Calculates initial width of sidebar or window.
+         * @returns {String}    Width style in px
+         */
+        initialToolWidthMobile () {
+            let pixelWidth = parseFloat(this.initialWidthMobile, 10);
+
+            if (pixelWidth < 0 || isNaN(pixelWidth)) {
+                return "auto";
+            }
+
+            if (pixelWidth <= 1) {
+                pixelWidth = this.width * window.innerWidth;
+            }
+
+            return Math.floor(pixelWidth) + "px";
+        },
+        /**
+         * Calculates initial width of sidebar or window for Desktop and Mobile (if props are given).
+         * @returns {Array} initialToolWidth and initialToolWidthMobile for CSS
+         */
+        widths () {
+            return {
+                "--initialToolWidth": this.initialToolWidth,
+                "--initialToolWidthMobile": this.initialToolWidthMobile
+            };
         }
     },
     watch: {
@@ -140,7 +172,7 @@ export default {
             'table-tool-win-all-vue': uiStyle === 'TABLE',
             'is-minified': isMinified
         }"
-        :style="{width: initialToolWidth}"
+        :style="widths"
     >
         <BasicResizeHandle
             v-if="resizableWindow && !renderToWindow"
@@ -286,9 +318,14 @@ export default {
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
         z-index: 999;
         min-width: 280px;
+        width: var(--initialToolWidth);
 
         @media (max-width: 400px) {
             right: 20px;
+        }
+
+        @media (max-width: 767px) {
+            width: var(--initialToolWidthMobile);
         }
 
         .win-body-vue {
@@ -356,6 +393,11 @@ export default {
         background-color: @background_color_1;
         padding:0 0 0 12px;
         height:100%;
+        width: var(--initialToolWidth);
+
+        @media (max-width: 767px) {
+            width: var(--initialToolWidthMobile);
+        }
 
         .win-body-vue {
             height: calc(100% - 35px);
@@ -385,12 +427,12 @@ export default {
         #tool-sidebar-vue {
             position: fixed;
             top: 0;
-            left: 0;
+            right: 0;
             bottom: 0;
             z-index: 1050;
             overflow-x: hidden;
             overflow-y: auto;
-            margin: 3%;
+            margin: 0%;
         }
     }
 </style>
