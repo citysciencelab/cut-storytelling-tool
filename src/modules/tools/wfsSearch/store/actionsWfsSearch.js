@@ -8,7 +8,6 @@ const actions = {
     instanceChanged ({commit, dispatch}, instanceId) {
         commit("setCurrentInstanceId", instanceId);
         dispatch("prepareModule");
-        dispatch("resetResult");
     },
     prepareModule ({commit, dispatch, getters}) {
         dispatch("resetModule", false);
@@ -42,11 +41,12 @@ const actions = {
             dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.wfsSearch.wrongConfig", {name: this.name}), {root: true});
         }
     },
-    resetModule ({commit}, closedTool) {
+    resetModule ({commit, dispatch}, closedTool) {
         commit("setAddedOptions", []);
         commit("setRequiredValues", null);
         commit("setSelectedOptions", {});
         commit("setService", null);
+        dispatch("resetResult");
 
         if (closedTool) {
             commit("setCurrentInstance", 0);
@@ -63,7 +63,7 @@ const actions = {
     },
     /**
      * Takes the selected coordinates and centers the map to the new position.
-     * @param {String[]} coords - coordinates for new center position
+     * @param {String[]} coords coordinates for new center position
      * @returns {void}
      */
     setCenter ({commit, dispatch}, coords) {

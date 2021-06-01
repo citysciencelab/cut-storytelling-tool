@@ -165,20 +165,20 @@ export default {
             </Tool>
         </template>
         <template>
-            <!-- Erst nach Reset kann ein neues Ergebnis-Modal geöffnet werden TODO: anpassen bei modalHid -->
             <Modal
                 :title="$t(name)"
                 :icon="glyphicon"
                 :showModal="showResults"
                 @modalHid="hideList"
             >
-                <div slot="header">
-                    <h4>{{ $t("common:modules.tools.wfsSearch.resultListTitle") }}</h4>
+                <div v-if="showResults" slot="header">
+                    <h4>{{ $t(currentInstance.result_dialog_title) }}</h4>
                     <hr>
                 </div>
                 <div v-if="showResults">
                     <List
                         :key="'tool-wfsSearch-list'"
+                        :tableTitle="currentInstance.title"
                         :tableHeads="headers"
                         :tableData="results"
                     />

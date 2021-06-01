@@ -58,7 +58,7 @@ export default {
 
 <template>
     <div
-        id="tool-wfsSearch-list"
+        :id="`tool-wfsSearch-list-${tableTitle}`"
     >
         <table>
             <tr>
