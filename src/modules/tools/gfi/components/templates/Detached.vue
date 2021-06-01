@@ -149,10 +149,10 @@ export default {
 
 <template>
     <ToolWindow @close="close">
-        <template v-slot:title>
+        <template #title>
             <span>{{ translate(title) }}</span>
         </template>
-        <template #:body>
+        <template #body>
             <component
                 :is="theme"
                 :feature="feature"

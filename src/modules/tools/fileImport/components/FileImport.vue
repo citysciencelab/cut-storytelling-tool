@@ -119,7 +119,7 @@ export default {
         :deactivate-gfi="deactivateGFI"
         :initial-width="300"
     >
-        <template #:toolBody>
+        <template #toolBody>
             <div
                 v-if="active"
                 id="tool-file-import"

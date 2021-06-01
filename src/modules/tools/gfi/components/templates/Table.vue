@@ -101,16 +101,16 @@ export default {
         :initial-width="360"
         @close="close"
     >
-        <template #:rightOfTitle>
+        <template #rightOfTitle>
             <span
                 class="icon-turnarticle glyphicon"
                 @click="rotate"
             />
         </template>
-        <template v-slot:title>
+        <template #title>
             <span>{{ translate(title) }}</span>
         </template>
-        <template #:body>
+        <template #body>
             <div class="body">
                 <component
                     :is="theme"

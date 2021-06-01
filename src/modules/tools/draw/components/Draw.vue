@@ -371,7 +371,7 @@ export default {
         :initialWidthMobile="initialWidthMobile"
         :deactivateGFI="deactivateGFI"
     >
-        <template #:toolBody>
+        <template #toolBody>
             <select
                 id="tool-draw-drawType"
                 class="form-control input-sm"

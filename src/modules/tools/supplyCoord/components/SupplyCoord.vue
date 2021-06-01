@@ -152,7 +152,7 @@ export default {
         :resizable-window="resizableWindow"
         :deactivate-gfi="deactivateGFI"
     >
-        <template #:toolBody>
+        <template #toolBody>
             <div
                 v-if="active"
                 id="supply-coord"

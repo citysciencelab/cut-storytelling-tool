@@ -322,7 +322,7 @@ export default {
         :deactivate-gfi="deactivateGFI"
         class="selectFeatures"
     >
-        <template #:toolBody>
+        <template #toolBody>
             <div
                 v-if="active"
                 id="selectFeatures"

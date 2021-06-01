@@ -60,7 +60,7 @@ export default {
         :resizable-window="resizableWindow"
         :deactivate-gfi="deactivateGFI"
     >
-        <template #:toolBody>
+        <template #toolBody>
             <form id="tool-saveSelection-form">
                 <div class="form-group form-group-sm">
                     <label for="tool-saveSelection-input-url">{{ simpleMap ? "Geoportal" : "" }} URL</label>

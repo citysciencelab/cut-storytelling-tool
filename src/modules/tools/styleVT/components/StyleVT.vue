@@ -62,7 +62,7 @@ export default {
         :deactivate-gfi="deactivateGFI"
         :initial-width="initialWidth"
     >
-        <template #:toolBody>
+        <template #toolBody>
             <p
                 v-if="vectorTileLayerList.length === 0"
                 id="tool-styleVT-noStyleableLayers"
