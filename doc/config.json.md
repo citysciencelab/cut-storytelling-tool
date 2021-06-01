@@ -2430,6 +2430,7 @@ The `Themenconfig` entry defines the contents and their order in the topic selec
 |Hintergrundkarten|yes|**[Hintergrundkarten](#markdown-header-themenconfighintergrundkarten)**||Background map definition.|false|
 |Fachdaten|no|**[Fachdaten](#markdown-header-themenconfigfachdaten)**||Technical data definition.|false|
 |Fachdaten_3D|no|**[Fachdaten_3D](#markdown-header-themenconfigfachdaten_3d)**||Technical data definition used in 3D mode.|false|
+|Fachdaten_Zeit|no|**[Fachdaten_Zeit](#markdown-header-themenconfigfachdaten_zeit)**||Definition of WMS-T layers in their own folder.|false|
 
 **Example**
 
@@ -2438,7 +2439,8 @@ The `Themenconfig` entry defines the contents and their order in the topic selec
     "Themenconfig": {
         "Hintergrundkarten": {},
         "Fachdaten": {},
-        "Fachdaten_3D": {}
+        "Fachdaten_3D": {},
+        "Fachdaten_Zeit": {}
     }
 }
 ```
@@ -2525,6 +2527,34 @@ Technical data definition.
         "Layer": [
             {
             "id": "12883"
+            }
+        ]
+    }
+}
+```
+
+***
+
+### Themenconfig.Fachdaten_Zeit
+
+[type:Layer]: # (Themenconfig.Layer)
+
+Definition for WMS-T layers `treeType` `custom` and `default`. Can also be defined under **[Fachdaten](#markdown-header-themenconfigfachdaten)**.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|name|no|String|"common:tree.subjectDataTime"|Name of the WMS-T layer button area.|false|
+|Layer|yes|**[Layer](#markdown-header-themenconfiglayer)**[]||WMS-T layer definition.|false|
+
+**Example**
+
+```json
+{
+    "Fachdaten_Zeit": {
+        "name": "My Time Series",
+        "Layer": [
+            {
+              "id": "my_wms_time"
             }
         ]
     }

@@ -2329,14 +2329,18 @@ Die Themenconfig definiert, welche Inhalte an welcher Stelle im Themenbaum vorko
 |Hintergrundkarten|ja|**[Hintergrundkarten](#markdown-header-themenconfighintergrundkarten)**||Definition der Hintergrundkarten.|false|
 |Fachdaten|nein|**[Fachdaten](#markdown-header-themenconfigfachdaten)**||Definition der Fachdaten.|false|
 |Fachdaten_3D|nein|**[Fachdaten_3D](#markdown-header-themenconfigfachdaten_3d)**||Definition der Fachdaten für den 3D-Modus.|false|
+|Fachdaten_Zeit|nein|**[Fachdaten_Zeit](#markdown-header-themenconfigfachdaten_zeit)**||Definition der WMS-T Layer in einem eigenen Ordner.|false|
 
 **Beispiel**
-```
-#!json
-"Themenconfig": {
-    "Hintergrundkarten": {},
-    "Fachdaten": {},
-    "Fachdaten_3D": {}
+
+```json
+{
+    "Themenconfig": {
+        "Hintergrundkarten": {},
+        "Fachdaten": {},
+        "Fachdaten_3D": {},
+        "Fachdaten_Zeit": {}
+    }
 }
 ```
 
@@ -2422,6 +2426,34 @@ Hier werden die 3D-Daten für die 3D-Ansicht definiert. Im custom tree und defau
         }
        ]
     }
+```
+
+***
+
+### Themenconfig.Fachdaten_Zeit
+
+[type:Layer]: # (Themenconfig.Layer)
+
+Definition für WMS-T Layer für den `treeType` `custom` and `default`. Kann auch unter **[Fachdaten](#markdown-header-themenconfigfachdaten)** definiert werden.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|nein|String|"common:tree.subjectDataTime"|Name der Schaltfläche für WMS-T Layer.|false|
+|Layer|ja|**[Layer](#markdown-header-themenconfiglayer)**[]||WMS-T layer Definition.|false|
+
+**Beispiel**
+
+```json
+{
+    "Fachdaten_Zeit": {
+        "name": "Meine Zeitreihen",
+        "Layer": [
+            {
+              "id": "my_wms_time"
+            }
+        ]
+    }
+}
 ```
 
 ***
