@@ -156,7 +156,7 @@ export default {
                                     class="btn btn-lgv-grey col-md-12 col-sm-12"
                                     @click="showList"
                                 >
-                                    {{ $t("common:modules.tools.wfsSearch.showResults") + " " + "(" + results.length + ")" }}
+                                    {{ $t("common:modules.tools.wfsSearch.showResults") + " " + `(${results.length})` }}
                                 </button>
                             </div>
                         </div>

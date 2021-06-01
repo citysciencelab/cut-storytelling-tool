@@ -2,7 +2,6 @@
 import {mapActions, mapGetters} from "vuex";
 import actions from "../store/actionsWfsSearch";
 import getters from "../store/gettersWfsSearch";
-import state from "../store/stateWfsSearch";
 import {isWebLink} from "../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../utils/isEmailAddress.js";
@@ -16,28 +15,18 @@ export default {
         },
         tableHeads: {
             type: Array,
-            default: () => []
+            default: []
         },
         tableData: {
             type: Array,
-            default: () => []
+            default: []
         }
     },
     computed: {
         ...mapGetters("Tools/WfsSearch", Object.keys(getters)),
-        newTableHeads: function () {
-            const visibleAttributes = [],
-                newTable = [];
-
-            this.currentInstance.result_list.forEach(element => {
-                visibleAttributes.push(element);
-            });
-
-            visibleAttributes.forEach(attribute => {
-                newTable.push(attribute);
-
-            });
-            return newTable;
+        visibleTableHeads () {
+            console.log([...this.currentInstance.result_list]);
+            return [...this.currentInstance.result_list];
         }
     },
     methods: {
@@ -46,12 +35,6 @@ export default {
         isPhoneNumber,
         getPhoneNumberAsWebLink,
         isEmailAddress,
-        sendCoords (data) {
-            const index = this.tableData.indexOf(data),
-                coords = state.results[index].the_geom.flatCoordinates;
-
-            this.setCenter(coords);
-        },
         removeVerticalBar (value) {
             if (typeof value === "string") {
                 const newValue = value.replaceAll("|", ", ");
@@ -60,24 +43,14 @@ export default {
             }
             return "";
         },
-        replaceGeom (value) {
-            if (typeof value === "object") {
-                return this.$t("common:modules.tools.wfsSearch.zoomToResult");
+        replaceBoolean (value) {
+            if (typeof value === "string" && value === "true") {
+                return value.replaceAll("true", "ja");
+            }
+            if (typeof value === "string" && value === "No") {
+                return value.replaceAll("No", "nein");
             }
             return "";
-        },
-        replaceBoolean (value) {
-            let newValue = "";
-
-            if (typeof value === "string" && value === "true") {
-                newValue = value.replaceAll("true", "ja");
-
-            }
-            else if (typeof value === "string" && value === "No") {
-                newValue = value.replaceAll("No", "nein");
-
-            }
-            return newValue;
         }
     }
 };
@@ -90,7 +63,7 @@ export default {
         <table>
             <tr>
                 <th
-                    v-for="(header, i) in newTableHeads"
+                    v-for="(header, i) in visibleTableHeads"
                     :key="header + i"
                 >
                     <p>
@@ -101,18 +74,18 @@ export default {
             <tr
                 v-for="(data, i) in tableData"
                 :key="data + i"
-                @click="sendCoords(data)"
+                @click="setCenter(results[i])"
             >
                 <td
-                    v-for="(key, j) in newTableHeads"
+                    v-for="(key, j) in visibleTableHeads"
                     :key="key + j"
                 >
-                    <p v-if="key === 'the_geom'">
+                    <p v-if="key.attribute === 'the_geom'">
                         <button
                             type="button"
                             class="btn btn-lgv-grey col-md-12 col-sm-12"
                         >
-                            {{ replaceGeom(data[key.attribute]) }}
+                            {{ $t("common:modules.tools.wfsSearch.zoomToResult") }}
                         </button>
                     </p>
                     <p v-else-if="isWebLink(data[key.attribute])">
@@ -140,7 +113,10 @@ export default {
 </template>
 
 <style lang="less" scoped>
+@table-borders: 1px solid #ddd;
+@table-padding: 8px;
 @import "~variables";
+
 hr {
     width: 100%;
 }
@@ -150,14 +126,14 @@ table {
     width: 100%;
     table-layout: auto;
     td {
-        border: 1px solid #ddd;
-        padding: 8px;
+        border: @table-borders;
+        padding: @table-padding;
         cursor: pointer;
         vertical-align: top;
     }
     th {
-        border: 1px solid #ddd;
-        padding: 8px;
+        border: @table-borders;
+        padding: @table-padding;
         padding-top: 12px;
         padding-bottom: 12px;
         text-align: left;
