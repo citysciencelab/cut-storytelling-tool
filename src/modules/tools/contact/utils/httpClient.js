@@ -36,7 +36,7 @@ function httpClient (url, data, onSuccess, onError) {
 
     axios.post(url, convertJsonToPost(data))
         .then(response => {
-            if (response.status === 200 && response.data.success) {
+            if (response.status === 200) {
                 onSuccess();
             }
             else {
