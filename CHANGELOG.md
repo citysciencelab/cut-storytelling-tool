@@ -8,7 +8,21 @@
 
 ---
 
-## Unreleased - in development
+##  Unreleased - in development
+### Added
+- ...
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+---
+
+## v2.10.0 - 2021-06-02
 ### Added
 - A locale file for Portuguese language was added.
 - New WFS Layer attribute "wfsFilter" in configuration to filter the data from wfs layer.
