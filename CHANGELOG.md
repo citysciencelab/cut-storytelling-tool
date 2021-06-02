@@ -37,6 +37,7 @@
 - New WFS Layer attribute "wfsFilter" in configuration to filter the data from wfs layer.
 - Added possibility in gfiTheme sensor to display an explanation text for the data.
 - Spanish is available as a new language selection.
+- New recommended eslint rules were introduced by updates of the eslint packages.
 
 ### Changed
 - The Id in config.json for every layer could be in an object format, to allow any number of menu entries with the same layer id.
@@ -44,6 +45,14 @@
 - The documentation for WMTS layers, legend field has been adapted. Only one specification in a string[] is possible.
 - The translation for the url in the staticlink in config.json has been removed.
 - Issue #617: Update description of the attribute '"extent"' for layer configurations in config.json.md.
+- The package eslint was updated to version 7.27.0.
+- The package eslint-plugin-chai-friendly was updated to version 0.7.1.
+- The package eslint-plugin-vue was updated to version 7.10.0.
+- The package eslint-plugin-you-dont-need-lodash-underscore was updated to version 6.12.0.
+
+### Deprecated
+
+### Removed
 
 ### Fixed
 - Now Sensor Layer will show 0 if the dataValue is 0 and not "no data".
