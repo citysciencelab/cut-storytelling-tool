@@ -38,7 +38,8 @@ const state = {
     selectedOptions: {},
     service: null,
     results: [],
-    showResultList: false
+    showResultList: false,
+    customTableHeaders: false
 };
 
 export default state;

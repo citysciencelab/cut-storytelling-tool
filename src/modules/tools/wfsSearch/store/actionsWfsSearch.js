@@ -63,12 +63,13 @@ const actions = {
     },
     /**
      * Takes the selected coordinates and centers the map to the new position.
-     * @param {String[]} coords coordinates for new center position
+     * @param {String[]} feature clicked feature to zoom to
      * @returns {void}
      */
-    setCenter ({commit, dispatch}, coords) {
-        // coordinates come as string and have to be changed to numbers for setCenter from mutations to work.
-        const transformedCoords = [parseFloat(coords[0]), parseFloat(coords[1])];
+    setCenter ({commit, dispatch}, feature) {
+        const coords = feature.getGeometry().flatCoordinates,
+            // coordinates come as string and have to be changed to numbers for setCenter from mutations to work.
+            transformedCoords = [parseFloat(coords[0]), parseFloat(coords[1])];
 
         commit("Map/setCenter", transformedCoords, {root: true});
         dispatch("Map/setZoomLevel", 6, {root: true});

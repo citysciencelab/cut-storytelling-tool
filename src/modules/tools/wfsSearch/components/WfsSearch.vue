@@ -21,14 +21,22 @@ export default {
     computed: {
         ...mapGetters("Tools/WfsSearch", Object.keys(getters)),
         headers () {
-            const lengths = [];
-            let indexOfFeatureWithMostAttr = "";
+            if (Array.isArray(this.currentInstance.result_list)) {
+                this.setCustomTableHeaders(true);
+                return [...this.currentInstance.result_list];
+            }
+            else if (this.currentInstance.result_list === "showAll") {
+                const lengths = [];
+                let indexOfFeatureWithMostAttr = "";
 
-            this.results.forEach(feature => {
-                lengths.push(Object.keys(feature).length);
-            });
-            indexOfFeatureWithMostAttr = lengths.indexOf(Math.max(...lengths));
-            return Object.keys(this.results[indexOfFeatureWithMostAttr]);
+                this.results.forEach(feature => {
+                    lengths.push(Object.keys(feature.values_).length);
+                });
+                indexOfFeatureWithMostAttr = lengths.indexOf(Math.max(...lengths));
+                console.log(this.results);
+                return Object.keys(this.results[indexOfFeatureWithMostAttr].values_);
+            }
+            return console.error("Missing configuration for result list");
         },
         showResults () {
             return this.showResultList;
@@ -171,7 +179,10 @@ export default {
                 :showModal="showResults"
                 @modalHid="hideList"
             >
-                <div v-if="showResults" slot="header">
+                <div
+                    v-if="showResults"
+                    slot="header"
+                >
                     <h4>{{ $t(currentInstance.result_dialog_title) }}</h4>
                     <hr>
                 </div>

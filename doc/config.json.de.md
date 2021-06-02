@@ -2184,6 +2184,8 @@ Eine Instanz der WFS Suche, welche als einzelnes Tool dargestellt wird.
 |suggestionsLength|nein|Number||Wenn gegeben, dann wird der Service angefragt, wenn ein Nutzer etwas in ein Inputfeld eingibt, um einen Vorschlag für die weitere Eingabe zu geben. Die Anfrage wird dann getriggered, wenn die Inputlänge mindestens so lang ist wie der Wert dieses Parameters.|false|
 |title|ja|String||Der Titel der Suche, welcher in dem Dropdown im Werkzeug dargestellt wird.|false|
 |userHelp|nein|String||Informationstext hinsichtlich des Suchformulars, welches oberhalb des Formulars für den Nutzer angezeigt werden soll. Kann ein Übersetzungsschlüssel sein.|false|
+|result_dialog_title|ja|String|Trefferliste|Überschrift der Ergebnisliste. Kann ein Übersetzungsschlüssel sein.|false|
+|result_list|ja|String/Array|showAll|Einstellungen für die Ausgabe der gefundenen Feature in der Ergebnisliste. Mit der Angabe von `showAll` werden alle Attribute der gefundenen Feature in ihrer Ursprungsform dargestellt. Durch Anlegen eines Arrays können die darzustellenden Attribute festgelegt werden. Hierfür muss in diesem Array für jedes Attribut ein Objekt mit den Properties `attribute` und `title` angelegt werden. Der Wert `attribute` muss hierbei eines der Attribute des Features wiedergeben, während mit `title` die textliche Ausgabe dieses Attributes festgelegt wird.|false|
 
 **Beispiel**
 
@@ -2192,6 +2194,14 @@ Eine Instanz der WFS Suche, welche als einzelnes Tool dargestellt wird.
     "requestConfig": {
         "layerId": "1234"
     },
+    "result_list": [{
+        "attribute": "schulname",
+        "title": "Schulname"
+    },
+    {
+        "attribute": "abschluss",
+        "title": "Abschluss"
+    }],
     "selectSource": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
     "title": "Flurstücksuche",
     "literals": [

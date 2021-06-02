@@ -71,8 +71,9 @@ export function searchFeatures ({literals, requestConfig: {layerId, maxFeatures,
         .then(data => {
             const features = new WFS({version: storedQueryId ? "2.0.0" : "1.1.0"}).readFeatures(data);
 
+            this.setResults([]);
             features.forEach(feature => {
-                this.results.push(feature.values_);
+                this.results.push(feature);
             });
         });
 }

@@ -15,19 +15,15 @@ export default {
         },
         tableHeads: {
             type: Array,
-            default: []
+            default: () => []
         },
         tableData: {
             type: Array,
-            default: []
+            default: () => []
         }
     },
     computed: {
-        ...mapGetters("Tools/WfsSearch", Object.keys(getters)),
-        visibleTableHeads () {
-            console.log([...this.currentInstance.result_list]);
-            return [...this.currentInstance.result_list];
-        }
+        ...mapGetters("Tools/WfsSearch", Object.keys(getters))
     },
     methods: {
         ...mapActions("Tools/WfsSearch", Object.keys(actions)),
@@ -60,10 +56,59 @@ export default {
     <div
         :id="`tool-wfsSearch-list-${tableTitle}`"
     >
-        <table>
+        <table v-if="!customTableHeaders">
             <tr>
                 <th
-                    v-for="(header, i) in visibleTableHeads"
+                    v-for="(header, i) in tableHeads"
+                    :key="header + i"
+                >
+                    <p>
+                        {{ header }}
+                    </p>
+                </th>
+            </tr>
+            <tr
+                v-for="(data, i) in tableData"
+                :key="data + i"
+                @click="setCenter(results[i])"
+            >
+                <td
+                    v-for="(key, j) in tableHeads"
+                    :key="key + j"
+                >
+                    <p v-if="key === 'the_geom'">
+                        <button
+                            type="button"
+                            class="btn btn-lgv-grey col-md-12 col-sm-12"
+                        >
+                            {{ $t("common:modules.tools.wfsSearch.zoomToResult") }}
+                        </button>
+                    </p>
+                    <p v-else-if="isWebLink(data.values_[key])">
+                        <a
+                            :href="data.values_[key]"
+                            target="_blank"
+                        >{{ data.values_[key] }}</a>
+                    </p>
+                    <p v-else-if="isPhoneNumber(data.values_[key])">
+                        <a :href="getPhoneNumberAsWebLink(data.values_[key])">{{ data.values_[key] }}</a>
+                    </p>
+                    <p v-else-if="isEmailAddress(data.values_[key])">
+                        <a :href="`mailto:${data.values_[key]}`">{{ data.values_[key] }}</a>
+                    </p>
+                    <p v-else-if="data.values_[key] === 'true' || data.values_[key] === 'No'">
+                        {{ replaceBoolean(data.values_[key]) }}
+                    </p>
+                    <p v-else>
+                        {{ removeVerticalBar(data.values_[key]) }}
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table v-if="customTableHeaders">
+            <tr>
+                <th
+                    v-for="(header, i) in tableHeads"
                     :key="header + i"
                 >
                     <p>
@@ -77,7 +122,7 @@ export default {
                 @click="setCenter(results[i])"
             >
                 <td
-                    v-for="(key, j) in visibleTableHeads"
+                    v-for="(key, j) in tableHeads"
                     :key="key + j"
                 >
                     <p v-if="key.attribute === 'the_geom'">
@@ -88,23 +133,23 @@ export default {
                             {{ $t("common:modules.tools.wfsSearch.zoomToResult") }}
                         </button>
                     </p>
-                    <p v-else-if="isWebLink(data[key.attribute])">
+                    <p v-else-if="isWebLink(data.values_[key.attribute])">
                         <a
-                            :href="data[key.attribute]"
+                            :href="data.values_[key.attribute]"
                             target="_blank"
-                        >{{ data[key] }}</a>
+                        >{{ data.values_[key] }}</a>
                     </p>
-                    <p v-else-if="isPhoneNumber(data[key.attribute])">
-                        <a :href="getPhoneNumberAsWebLink(data[key.attribute])">{{ data[key.attribute] }}</a>
+                    <p v-else-if="isPhoneNumber(data.values_[key.attribute])">
+                        <a :href="getPhoneNumberAsWebLink(data.values_[key.attribute])">{{ data.values_[key.attribute] }}</a>
                     </p>
-                    <p v-else-if="isEmailAddress(data[key.attribute])">
-                        <a :href="`mailto:${data[key.attribute]}`">{{ data[key.attribute] }}</a>
+                    <p v-else-if="isEmailAddress(data.values_[key.attribute])">
+                        <a :href="`mailto:${data.values_[key.attribute]}`">{{ data.values_[key.attribute] }}</a>
                     </p>
-                    <p v-else-if="data[key.attribute] === 'true' || data[key.attribute] === 'No'">
-                        {{ replaceBoolean(data[key.attribute]) }}
+                    <p v-else-if="data.values_[key.attribute] === 'true' || data.values_[key.attribute] === 'No'">
+                        {{ replaceBoolean(data.values_[key.attribute]) }}
                     </p>
                     <p v-else>
-                        {{ removeVerticalBar(data[key.attribute]) }}
+                        {{ removeVerticalBar(data.values_[key.attribute]) }}
                     </p>
                 </td>
             </tr>
