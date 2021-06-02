@@ -36,13 +36,13 @@ function httpClient (url, data, onSuccess, onError) {
 
     axios.post(url, convertJsonToPost(data))
         .then(response => {
-            if (response.status === 200) {
-                onSuccess();
-            }
-            else {
+            if (response.status !== 200 || response.data.hasOwnProperty("success") && response.data.success === false) {
                 console.error(`An error occurred sending an email. Server response: ${response.data.message}`);
                 console.error(response);
                 onError();
+            }
+            else {
+                onSuccess();
             }
         })
         .catch(err => {
