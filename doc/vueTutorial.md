@@ -98,7 +98,7 @@ const state = {
     id: "scaleSwitcher",
     // mandatory defaults for config.json parameters
     name: "common:menu.tools.coord",
-    glyphicon: "glyphicon-resize-full",
+    glyphicon: "glyphicon-resize-small",
     renderToWindow: true,
     resizableWindow: true,
     isVisibleInMenu: true,
@@ -416,7 +416,7 @@ To make the tool usable within a portal, it has to be configured in the portal's
         "children": {
             "scaleSwitcher": {
                 "name": "translate#common:menu.tools.scaleSwitcher",
-                "glyphicon": "glyphicon-resize-full",
+                "glyphicon": "glyphicon-resize-small",
                 "renderToWindow": true
             }
         }

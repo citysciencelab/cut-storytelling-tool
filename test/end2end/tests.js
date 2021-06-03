@@ -86,6 +86,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 require("./tests/modules/tools/List.js"),
                 require("../../src/modules/tools/supplyCoord/tests/end2end/SupplyCoord.e2e.js"),
                 require("../../src/modules/tools/measure/tests/end2end/Measure.e2e.js"),
+                require("../../src/modules/tools/scaleswitcher/tests/end2end/ScaleSwitcher.e2e.js"),
                 require("./tests/modules/tools/ParcelSearch.js"),
                 require("../../src/modules/tools/searchByCoord/tests/end2end/SearchByCoord.e2e.js"),
 
