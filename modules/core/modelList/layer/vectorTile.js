@@ -225,8 +225,21 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
                     );
                 }
 
-                stylefunction(this.get("layer"), style, Object.keys(style.sources)[0]);
-                this.set("selectedStyleID", id);
+                if (style.sprite) {
+                    const spriteDataUrl = style.sprite.concat(".json"),
+                        spriteImageUrl = style.sprite.concat(".png");
+
+                    this.fetchSpriteData(spriteDataUrl)
+                        .then(spriteData => {
+                            stylefunction(this.get("layer"), style, Object.keys(style.sources)[0], undefined, spriteData, spriteImageUrl);
+                            this.set("selectedStyleID", id);
+                        }
+                        );
+                }
+                else {
+                    stylefunction(this.get("layer"), style, Object.keys(style.sources)[0]);
+                    this.set("selectedStyleID", id);
+                }
             });
     },
 
@@ -240,6 +253,21 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
             Boolean(style.layers) &&
             Boolean(style.sources) &&
             Boolean(style.version);
+    },
+
+    /**
+     * Fetches SpriteData Object
+     * @param {string} spriteUrl url to spriteData as found in StyleDefinition
+     * @returns {object} spriteData
+     */
+    fetchSpriteData: function (spriteUrl) {
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        return fetch(this.get("useProxy") ? getProxyUrl(spriteUrl) : spriteUrl)
+            .then(response => response.json());
     },
 
     /**
