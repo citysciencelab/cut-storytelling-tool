@@ -780,7 +780,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         return index > -1 ? index + 1 : itemList.length + 1;
     },
     /**
-     * Returns the folder that should ne before the folder with the id.
+     * Returns the folder that should be before the folder with the id.
      *
      * @param {String} id Id of the folder that should be added.
      * @returns {String} Name of the previous folder in the tree.
