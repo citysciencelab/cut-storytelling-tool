@@ -31,7 +31,7 @@ describe("LayerInformation.vue", () => {
                         active: () => true,
                         metaDataCatalogueId: () => "2",
                         title: () => "",
-                        layerInfo: () => "",
+                        layerInfo: () => ({"metaIdArray": ["123", "456"], "layerNames": ["name", "name_name"]}),
                         isVisible: () => false,
                         uniqueIdList: () => [],
                         datePublication: () => null,
@@ -91,17 +91,13 @@ describe("LayerInformation.vue", () => {
         expect(wrapper.emitted().close).to.have.lengthOf(1);
     });
 
-    it("should check the changeLayerAbstract method", () => {
+    it("should check if dropdown for group layer exists", () => {
         const spyRemoveInteractions = sinon.spy(LayerInformationComponent.methods, "changeLayerAbstract"),
-            wrapper = mount(LayerInformationComponent, {store, localVue});
-
-        const dropEntries = wrapper.find(".abstractChange");
-
-        console.log("store", store.state.LayerInformation.layerInfo.metaIdArray);
-        console.log(dropEntries);
-        console.log("change", wrapper.find("#changeLayerInfo"));
+            wrapper = mount(LayerInformationComponent, {store, localVue}),
+            dropEntries = wrapper.findAll(".abstractChange");
 
         expect(wrapper.find("#changeLayerInfo")).to.exist;
+        expect(dropEntries.at(1)).to.exist;
 
         spyRemoveInteractions.restore();
     });

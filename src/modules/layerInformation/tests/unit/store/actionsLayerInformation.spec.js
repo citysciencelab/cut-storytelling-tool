@@ -85,22 +85,33 @@ describe("src/modules/layerInformation/store/actionsLayerInformation.js", () => 
         });
 
         it("should change the Layer Info", done => {
-            const metaId = "73A344E9-CDB5-4A17-89C1-05E202989755",
-                state = {
-                    layerInfo: {
-                        "id": "123",
-                        "metaID": "layerMetaId",
-                        "layername": "name",
-                        "url": "google.de",
-                        "urlIsVisible": true
+            const state = {
+                layerInfo: {
+                    "id": "123",
+                    "metaID": "73A344E9-CDB5-4A17-89C1-05E202989755",
+                    "layername": "name",
+                    "url": "google.de",
+                    "urlIsVisible": true,
+                    "cswUrl": "https://metaver.de/csw"
+                },
+                metaDataCatalogueId: "2",
+                additionalLayer: [
+                    {
+                        "metaID": "73A344E9-CDB5-4A17-89C1-05E202989755",
+                        "layerName": "name",
+                        "cswUrl": "https://metaver.de/csw"
                     },
-                    metaDataCatalogueId: "2"
-                };
-                // metaURLs = ["https://metaver.de/trefferanzeige?cmd=doShowDocument&docuuid=73A344E9-CDB5-4A17-89C1-05E202989755"];
+                    {
+                        "metaID": "73A344E9-CDB5-4A17-89C1-05E202989755",
+                        "layerName": "name_name",
+                        "cswUrl": "https://metaver.de/csw"
+                    }
+                ]
+            };
 
-            // Once the RestReader (Radiorequest) is a vue component change the payload to metaURLs
-            testAction(changeLayerInfo, metaId, state, {}, [
-                {type: "setMetaURLs", payload: [""]}
+            testAction(changeLayerInfo, "name", state, {}, [
+                {type: "getAbstractInfo", payload: {metaId: state.layerInfo.metaID, cswUrl: state.layerInfo.cswUrl}, dispatch: true},
+                {type: "setMetadataURL", payload: state.layerInfo.metaID, dispatch: true}
             ], {}, done);
 
         });

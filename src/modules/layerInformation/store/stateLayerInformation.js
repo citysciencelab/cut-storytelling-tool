@@ -20,5 +20,6 @@ export default {
     abstractText: "",
     title: "",
     noMetadataLoaded: "",
-    metaURLs: []
+    metaURLs: [],
+    currentLayerName: ""
 };

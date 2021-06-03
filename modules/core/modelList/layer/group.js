@@ -176,6 +176,7 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
         });
 
         store.dispatch("LayerInformation/activate", true);
+        store.dispatch("LayerInformation/setCurrentLayerName", layerNames[0]);
         store.dispatch("LayerInformation/additionalSingleLayerInfo");
         store.dispatch("LayerInformation/setMetadataURL", metaID[0]);
         store.dispatch("LayerInformation/setAdditionalLayer", additionalLayers);

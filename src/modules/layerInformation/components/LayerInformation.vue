@@ -40,8 +40,6 @@ export default {
             return this.layerInfo.url + "?SERVICE=" + this.layerInfo.typ + "&REQUEST=GetCapabilities";
         },
         showMoreLayers () {
-            console.log("this.layerInfo.active", this.layerInfo.active);
-            console.log("this.layerInfo.metaIdArray", this.layerInfo.metaIdArray);
             if (this.layerInfo.metaIdArray) {
                 return this.layerInfo.metaIdArray.length > 1;
             }
@@ -82,24 +80,8 @@ export default {
          */
         changeLayerAbstract (ev) {
             this.changeLayerInfo(ev.target.text);
-            this.setDropDownActive(ev.target);
+            this.setCurrentLayerName(ev.target.text);
         },
-        /**
-         * Adds the active class to chosen layerInfo in DropDown menu
-         * @param {HTMLElement} el the chosen Element in DropDown
-         * @returns {void}
-         */
-        setDropDownActive (el) {
-            document.querySelectorAll(".abstractChange").forEach(element => {
-                if (element.innerHTML === el.text && !el.classList.contains("active")) {
-                    element.classList.add("active");
-                }
-                else {
-                    element.classList.remove("active");
-                }
-            });
-
-        }
     }
 };
 </script>
@@ -146,6 +128,7 @@ export default {
                             <a
                                 href="#"
                                 class="abstractChange"
+                                :class="{ active: name === currentLayerName }"
                                 @click="changeLayerAbstract"
                             >{{ $t(name) }}</a>
                         </li>
@@ -226,7 +209,7 @@ export default {
                         <div class="col-md-7">
                             <ul
                                 v-if="showDownloadLinks"
-                                class="list-unstyled"
+                                class="pt-5"
                             >
                                 <li
                                     v-for="downloadLink in downloadLinks"
@@ -243,7 +226,7 @@ export default {
                         </div>
                         <div
                             v-if="(showAttachFile)"
-                            class="col-md-5"
+                            class="col-md-5 pt-5"
                         >
                             <span class="download-note">{{ $t(("common:modules.layerInformation.attachFileMessage")) }}</span>
                         </div>
@@ -252,7 +235,7 @@ export default {
                         id="url"
                         class="tab-pane fade"
                     >
-                        <ul class="list-unstyled">
+                        <ul class="pt-5">
                             <li>
                                 <a
                                     :href="layerUrl"
@@ -388,7 +371,7 @@ export default {
         font-weight: bold;
     }
 
-    .list-unstyled {
+    .pt-5 {
         padding-top: 5px;
     }
 

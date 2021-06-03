@@ -19,20 +19,21 @@ export default {
     computed: {
         /**
          * Calculates initial width of sidebar or window.
+         * Returns nothing if no number is set so that it can be overwritten
          * @returns {String}    Width style in px
          */
         initialToolWidth () {
             let pixelWidth = parseFloat(this.initialWidth, 10);
 
             if (pixelWidth < 0 || isNaN(pixelWidth)) {
-                return "auto";
+                return "";
             }
 
             if (pixelWidth <= 1) {
                 pixelWidth = this.width * window.innerWidth;
             }
 
-            return Math.floor(pixelWidth) + "px";
+            return "width: " + Math.floor(pixelWidth) + "px";
         }
     },
     methods: {
@@ -46,7 +47,7 @@ export default {
 <template>
     <div
         class="tool-window-vue"
-        :style="{width: initialToolWidth}"
+        :style="{initialToolWidth}"
     >
         <div class="tool-window-heading">
             <slot name="leftOfTitle" />

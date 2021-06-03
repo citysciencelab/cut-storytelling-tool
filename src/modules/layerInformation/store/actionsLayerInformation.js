@@ -1,4 +1,4 @@
-import {getMetadata, getRecordById} from "../../../api/csw/getRecordById";
+import {getRecordById} from "../../../api/csw/getRecordById";
 import getProxyUrl from "../../../utils/getProxyUrl";
 
 const actions = {
@@ -32,6 +32,16 @@ const actions = {
      */
     activate: function ({commit}, active) {
         commit("setActive", active);
+    },
+
+    /**
+     * This sets the layerInformation active (needed in model.js and group.js)
+     * @param {Object} param.commit the commit
+     * @param {Object} currentLayerName the layerName
+     * @returns {void}
+     */
+    setCurrentLayerName: function ({commit}, currentLayerName) {
+        commit("setCurrentLayerName", currentLayerName);
     },
 
     /**
