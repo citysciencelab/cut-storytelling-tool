@@ -36,7 +36,7 @@ const Config = {
         postMessageUrl: "https://localhost:9001"
     },
     quickHelp: {
-        imgPath: "https://geodienste.hamburg.de.de/lgv-config/img/"
+        imgPath: "https://geodienste.hamburg.de/lgv-config/img/"
     },
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
     restConf: "https://geodienste.hamburg.de/lgv-config/rest-services-internet.json",
