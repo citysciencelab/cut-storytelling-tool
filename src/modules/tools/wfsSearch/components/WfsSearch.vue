@@ -1,7 +1,7 @@
 <script>
 import Modal from "../../../../share-components/modals/Modal.vue";
 import Literal from "./Literal.vue";
-import List from "./List.vue";
+import List from "../../../../share-components/list/List.vue";
 import Tool from "../../Tool.vue";
 import getComponent from "../../../../utils/getComponent";
 import {mapActions, mapGetters, mapMutations} from "vuex";
@@ -21,11 +21,11 @@ export default {
     computed: {
         ...mapGetters("Tools/WfsSearch", Object.keys(getters)),
         headers () {
-            if (Array.isArray(this.currentInstance.result_list)) {
+            if (Array.isArray(this.currentInstance.resultList)) {
                 this.setCustomTableHeaders(true);
-                return [...this.currentInstance.result_list];
+                return [...this.currentInstance.resultList];
             }
-            else if (this.currentInstance.result_list === "showAll") {
+            else if (this.currentInstance.resultList === "showAll") {
                 const lengths = [];
                 let indexOfFeatureWithMostAttr = "";
 
@@ -33,7 +33,6 @@ export default {
                     lengths.push(Object.keys(feature.values_).length);
                 });
                 indexOfFeatureWithMostAttr = lengths.indexOf(Math.max(...lengths));
-                console.log(this.results);
                 return Object.keys(this.results[indexOfFeatureWithMostAttr].values_);
             }
             return console.error("Missing configuration for result list");
@@ -62,12 +61,6 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
-        },
-        showList () {
-            this.setShowResultList(true);
-        },
-        hideList () {
-            this.setShowResultList(false);
         }
     }
 };
@@ -162,7 +155,7 @@ export default {
                                 <button
                                     type="button"
                                     class="btn btn-lgv-grey col-md-12 col-sm-12"
-                                    @click="showList"
+                                    @click="setShowResultList(true)"
                                 >
                                     {{ $t("common:modules.tools.wfsSearch.showResults") + " " + `(${results.length})` }}
                                 </button>
@@ -177,19 +170,19 @@ export default {
                 :title="$t(name)"
                 :icon="glyphicon"
                 :showModal="showResults"
-                @modalHid="hideList"
+                @modalHid="setShowResultList(false)"
             >
                 <div
                     v-if="showResults"
                     slot="header"
                 >
-                    <h4>{{ $t(currentInstance.result_dialog_title) }}</h4>
+                    <h4>{{ $t(currentInstance.resultDialogTitle) }}</h4>
                     <hr>
                 </div>
                 <div v-if="showResults">
                     <List
                         :key="'tool-wfsSearch-list'"
-                        :tableTitle="currentInstance.title"
+                        :identifier="$t(name)"
                         :tableHeads="headers"
                         :tableData="results"
                     />

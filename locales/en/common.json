@@ -610,8 +610,7 @@
                 "searchButton": "Search",
                 "resultListTitle": "Search results:",
                 "instancesSelectLabel": "Instance selection",
-                "showResults": "Show results",
-                "zoomToResult": "Zoom to result"
+                "showResults": "Show results"
             }
         },
         "controls": {
@@ -793,6 +792,11 @@
             "to":" to",
             "incorrectEntry": "Incorrect entry, please enter a whole number!",
             "outOfRangeErrorMessage": "The input value must be within the validity range {{minValueSlider}} and {{{maxValueSlider}}!"
+        }
+    },
+    "share-components": {
+        "list": {
+            "zoomToResult":"Zoom to result"
         }
     }
 }

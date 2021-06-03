@@ -580,8 +580,7 @@
                 "searchButton": "Cerca",
                 "resultListTitle": "Risultati della ricerca:",
                 "instancesSelectLabel": "Selezione dell'istanza",
-                "showResults": "Mostra i risultati",
-                "zoomToResult": "Zoom sul risultato"
+                "showResults": "Mostra i risultati"
             }
         },
         "controls": {
@@ -745,6 +744,11 @@
             "to":" a",
             "incorrectEntry": "Inserimento errato, inserire un numero intero!",
             "outOfRangeErrorMessage": "Il valore di input deve rientrare nell'intervallo di validità {{minValueSlider}} e {{maxValueSlider}}!"
+        }
+    },
+    "share-components": {
+        "list": {
+            "zoomToResult": "Zoom sul risultato"
         }
     }
 }

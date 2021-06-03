@@ -609,8 +609,7 @@
                 "searchButton": "Suchen",
                 "resultListTitle": "Suchergebnisse:",
                 "instancesSelectLabel": "Instanzenauswahl",
-                "showResults": "Zeige Ergebnisse",
-                "zoomToResult": "Zum Ergebnis zoomen"
+                "showResults": "Zeige Ergebnisse"
             }
         },
         "controls": {
@@ -792,6 +791,11 @@
             "to":" bis",
             "incorrectEntry": "Fehlerhafte Eingabe, bitte eine ganze Zahl eingeben!",
             "outOfRangeErrorMessage": "Der Eingabewert muss innerhalb des Gültigkeitsbereiches {{minValueSlider}} und {{maxValueSlider}} liegen!"
+        }
+    },
+    "share-components": {
+        "list": {
+            "zoomToResult":"Zum Ergebnis zoomen"
         }
     }
 }

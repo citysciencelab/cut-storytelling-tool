@@ -1,15 +1,15 @@
 <script>
-import {mapActions, mapGetters} from "vuex";
-import actions from "../store/actionsWfsSearch";
-import getters from "../store/gettersWfsSearch";
-import {isWebLink} from "../../../../utils/urlHelper.js";
-import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../utils/isPhoneNumber.js";
-import {isEmailAddress} from "../../../../utils/isEmailAddress.js";
+import {mapGetters} from "vuex";
+import store from "../../../src/app-store/index";
+import getters from "../../modules/tools/wfsSearch/store/gettersWfsSearch";
+import {isWebLink} from "../../utils/urlHelper.js";
+import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../utils/isPhoneNumber.js";
+import {isEmailAddress} from "../../utils/isEmailAddress.js";
 
 export default {
     name: "List",
     props: {
-        tableTitle: {
+        identifier: {
             type: String,
             default: ""
         },
@@ -26,18 +26,26 @@ export default {
         ...mapGetters("Tools/WfsSearch", Object.keys(getters))
     },
     methods: {
-        ...mapActions("Tools/WfsSearch", Object.keys(actions)),
+        /**
+         * Takes the selected coordinates and centers the map to the new position.
+         * @param {String[]} feature clicked feature to zoom to
+         * @returns {void}
+         */
+        setCenter (feature) {
+            const coords = feature.getGeometry().flatCoordinates,
+                // coordinates come as string and have to be changed to numbers for setCenter from mutations to work.
+                transformedCoords = [parseFloat(coords[0]), parseFloat(coords[1])];
+
+            store.commit("Map/setCenter", transformedCoords, {root: true});
+            store.dispatch("Map/setZoomLevel", 6, {root: true});
+            store.dispatch("MapMarker/placingPointMarker", transformedCoords, {root: true});
+        },
         isWebLink,
         isPhoneNumber,
         getPhoneNumberAsWebLink,
         isEmailAddress,
         removeVerticalBar (value) {
-            if (typeof value === "string") {
-                const newValue = value.replaceAll("|", ", ");
-
-                return newValue;
-            }
-            return "";
+            return typeof value === "string" ? value.replaceAll("|", ", ") : "";
         },
         replaceBoolean (value) {
             if (typeof value === "string" && value === "true") {
@@ -54,7 +62,7 @@ export default {
 
 <template>
     <div
-        :id="`tool-wfsSearch-list-${tableTitle}`"
+        :id="`${identifier}-list`"
     >
         <table v-if="!customTableHeaders">
             <tr>
@@ -81,7 +89,7 @@ export default {
                             type="button"
                             class="btn btn-lgv-grey col-md-12 col-sm-12"
                         >
-                            {{ $t("common:modules.tools.wfsSearch.zoomToResult") }}
+                            {{ $t("common:modules.share-components.list.zoomToResult") }}
                         </button>
                     </p>
                     <p v-else-if="isWebLink(data.values_[key])">
@@ -162,9 +170,6 @@ export default {
 @table-padding: 8px;
 @import "~variables";
 
-hr {
-    width: 100%;
-}
 table {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;

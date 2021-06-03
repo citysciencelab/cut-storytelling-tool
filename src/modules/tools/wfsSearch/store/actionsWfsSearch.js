@@ -62,20 +62,6 @@ const actions = {
             .then(data => commit("setParsedSource", data));
     },
     /**
-     * Takes the selected coordinates and centers the map to the new position.
-     * @param {String[]} feature clicked feature to zoom to
-     * @returns {void}
-     */
-    setCenter ({commit, dispatch}, feature) {
-        const coords = feature.getGeometry().flatCoordinates,
-            // coordinates come as string and have to be changed to numbers for setCenter from mutations to work.
-            transformedCoords = [parseFloat(coords[0]), parseFloat(coords[1])];
-
-        commit("Map/setCenter", transformedCoords, {root: true});
-        dispatch("Map/setZoomLevel", 6, {root: true});
-        dispatch("MapMarker/placingPointMarker", transformedCoords, {root: true});
-    },
-    /**
      * Resets the results in the state as well as the inputs/dropdowns in the UI.
      * Also removes the map marker.
      * @returns {void}
