@@ -1,5 +1,5 @@
 import Vuex from "vuex";
-import {config, mount, shallowMount, createLocalVue} from "@vue/test-utils";
+import {config, mount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import LayerInformationComponent from "../../../components/LayerInformation.vue";
 import sinon from "sinon";

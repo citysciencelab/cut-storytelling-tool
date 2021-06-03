@@ -81,7 +81,7 @@ export default {
         changeLayerAbstract (ev) {
             this.changeLayerInfo(ev.target.text);
             this.setCurrentLayerName(ev.target.text);
-        },
+        }
     }
 };
 </script>
