@@ -144,7 +144,8 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
             id: this.get("id"),
             typ: this.get("typ"),
             name: this.get("name"),
-            visible: this.get("visibility")
+            visible: this.get("visibility"),
+            declutter: true
         }));
         this.setConfiguredLayerStyle();
     },
