@@ -37,6 +37,7 @@ src
 |   |   |   |	|   |-- store
 |   |   |   |   |	|   |-- actionsScaleSwitcher.spec.js
 |   |   |   |   |	|   |-- gettersScaleSwitcher.spec.js
+|   |   |   |   |	|   |-- mutationsScaleSwitcher.spec.js
 ```
 
 ## Creating the ScaleSwitcher.vue

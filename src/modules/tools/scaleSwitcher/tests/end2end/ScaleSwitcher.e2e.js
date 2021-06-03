@@ -1,10 +1,10 @@
 const webdriver = require("selenium-webdriver"),
-    {expect} = require("chai"),
-    {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {isMaster} = require("../../../../../../test/end2end/settings"),
+    {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
-    {getScale} = require("../../../../../../test/end2end/library/scripts"),
-    {By, until} = webdriver;
+    {expect} = require("chai"),
+    {By, until} = webdriver,
+    {getScale} = require("../../../../../../test/end2end/library/scripts");
 
 
 /**
@@ -21,6 +21,7 @@ async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
 
             before(async function () {
                 if (capability) {
+
                     capability.name = this.currentTest.fullTitle();
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
@@ -59,7 +60,7 @@ async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
                     label = await driver.findElement(By.css("div#scale-switcher label"), 5000),
                     select = await driver.findElement(By.id("scale-switcher-select"), 5000),
                     selectValue = await select.getAttribute("value"),
-                    selectContent = await driver.findElement(By.css(`#scale-switcher-select option[value="${selectValue}"]`));
+                    selectContent = await driver.findElement(By.css(`#scale-switcher-select option[value="${selectValue}"]`), 5000);
 
                 expect(await header.getText()).to.equals("Maßstab umschalten");
                 expect(await label.getText()).to.equals("Maßstab");
