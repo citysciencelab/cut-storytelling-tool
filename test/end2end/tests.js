@@ -10,6 +10,7 @@ const {isBasic, is2D} = require("./settings");
  * @property {String} config key that defines which config the Masterportal should run on
  * @property {String} mode key that defines which steps should be taken before testing (e.g. activating 3D)
  * @property {String} browsername string indicating which browser is in use
+ * @property {Object} capability containes browserstack capability
  */
 
 /**
@@ -25,82 +26,83 @@ const {isBasic, is2D} = require("./settings");
  * @param {String} config key that defines which config the Masterportal should run on
  * @param {String} mode key that defines which steps should be taken before testing (e.g. activating 3D)
  * @param {Object} capability containes browserstack capability
+ * @param {Boolean} deploymentTest if true, only one test for a deployed portal is running
  * @returns {void}
  */
-function tests (builder, url, browsername, resolution, config, mode, capability) {
-    try {
-        if (capability) {
-            /* eslint-disable-next-line no-process-env */
-            capability.build = "branch: " + process.env.BITBUCKET_BRANCH + " - commit: " + process.env.BITBUCKET_COMMIT;
-            builder.withCapabilities(capability);
+function tests (builder, url, browsername, resolution, config, mode, capability, deploymentTest) {
+    describe(`${browsername} (${mode}, ${resolution}, ${config})`, function () {
+        this.timeout(3600000);
+
+        if (isBasic(url) && !is2D(mode)) {
+            // portal/basic does not offer any mode besides 2D; skip all suites for non-2D basic
+            return;
         }
 
-        describe(`${browsername} (mode=${mode},resolution=${resolution},config=${config})`, function () {
-            this.timeout(3600000);
+        // TODO remove to activate OB/3D testing (not used in first iteration, and OB may be moved to a different test run)
+        if (mode === "OB" || mode === "3D") {
+            return;
+        }
 
-            if (isBasic(url) && !is2D(mode)) {
-                // portal/basic does not offer any mode besides 2D; skip all suites for non-2D basic
-                return;
-            }
+        /*
+        * TODO Check/Fix/Implement and re-activate tests one by one. Each running
+        * test shall then be PR'd back to dev to avoid tests and dev diverging again.
+        */
+        const suites = [
+                // modules/controls
+                require("../../src/modules/controls/attributions/tests/end2end/Attributions.e2e.js"),
+                require("../../src/modules/controls/backForward/tests/end2end/BackForward.e2e.js"),
+                // require("./tests/modules/controls/Button3D.js"),
+                // TODO pull OB to different suites array - maybe depending on environment variable? up for discussion
+                require("./tests/modules/controls/ButtonOblique.js"),
+                require("../../src/modules/controls/freeze/tests/end2end/Freeze.e2e.js"),
+                require("../../src/modules/controls/fullScreen/tests/end2end/FullScreen.e2e.js"),
+                require("./tests/modules/controls/Orientation.js"),
+                require("../../src/modules/controls/overviewMap/tests/end2end/OverviewMap.e2e.js"),
+                require("../../src/modules/controls/totalView/tests/end2end/TotalView.e2e.js"),
+                require("../../src/modules/controls/zoom/test/end2end/Zoom.e2e.js"),
 
-            // TODO remove to activate OB/3D testing (not used in first iteration, and OB may be moved to a different test run)
-            if (mode === "OB" || mode === "3D") {
-                return;
-            }
+                // modules/core
+                // require("./tests/modules/core/ParametricUrl.js"),
 
-            /*
-            * TODO Check/Fix/Implement and re-activate tests one by one. Each running
-            * test shall then be PR'd back to dev to avoid tests and dev diverging again.
-            */
-            const suites = [
-                    // modules/controls
-                    require("../../src/modules/controls/attributions/test/end2end/Attributions.e2e.js"),
-                    require("../../src/modules/controls/backForward/test/end2end/BackForward.e2e.js"),
-                    // require("./tests/modules/controls/Button3D.js"),
-                    // TODO pull OB to different suites array - maybe depending on environment variable? up for discussion
-                    require("./tests/modules/controls/ButtonOblique.js"),
-                    require("../../src/modules/controls/freeze/test/end2end/Freeze.e2e.js"),
-                    require("../../src/modules/controls/fullScreen/test/end2end/FullScreen.e2e.js"),
-                    require("./tests/modules/controls/Orientation.js"),
-                    require("../../src/modules/controls/overviewMap/test/end2end/OverviewMap.e2e.js"),
-                    require("../../src/modules/controls/totalView/test/end2end/TotalView.e2e.js"),
-                    require("../../src/modules/controls/zoom/test/end2end/Zoom.e2e.js"),
+                // modules/menu
+                // require("./tests/modules/menu/Layers.js"),
 
-                    // modules/core
-                    // require("./tests/modules/core/ParametricUrl.js"),
+                // modules/searchbar
+                // require("./tests/modules/searchbar/SearchCategories.js"),
+                // require("./tests/modules/searchbar/GdiSearch.js"),
 
-                    // modules/menu
-                    // require("./tests/modules/menu/Layers.js"),
+                // modules/tools
+                require("../../src/modules/tools/contact/tests/end2end/Contact.e2e.js"),
+                // require("./tests/modules/tools/PopulationRequest_HH.js"),
+                // require("../../src/modules/tools/supplyCoord/test/end2end/SupplyCoord.e2e.js"),
+                require("./tests/modules/tools/ExtendedFilter.js"),
+                require("../../src/modules/tools/gfi/tests/end2end/Gfi.e2e.js"),
+                // require("./tests/modules/tools/Gfi.js"),old GFI-Test do not delete!
+                require("./tests/modules/Legend.js"),
+                require("./tests/modules/tools/List.js"),
+                require("../../src/modules/tools/measure/tests/end2end/Measure.e2e.js"),
+                // require("./tests/modules/tools/ParcelSearch.js"),
+                // require("./tests/modules/tools/SearchByCoord.js"),
 
-                    // modules/searchbar
-                    // require("./tests/modules/searchbar/SearchCategories.js"),
-                    // require("./tests/modules/searchbar/GdiSearch.js"),
+                // non-module tests
+                require("../../src/tests/end2end/Pan.e2e.js"),
+                require("../../src/tests/end2end/Zoom.e2e.js")
+            ],
+            deplomentTestSuites = [
+                require("../../src/tests/end2end/DeployedPortals.e2e.js")
+            ],
+            e2eTestParams = {builder, url, resolution, config, mode, browsername, capability};
+        let suitesToRun = suites;
 
-                    // modules/tools
-                    require("./tests/modules/tools/Contact.js"),
-                    require("../../src/modules/tools/supplyCoord/test/end2end/SupplyCoord.e2e.js"),
-                    require("./tests/modules/tools/ExtendedFilter.js"),
-                    // require("./tests/modules/tools/Gfi.js"),
-                    require("./tests/modules/Legend.js"),
-                    require("./tests/modules/tools/List.js"),
-                    require("../../src/modules/tools/measure/test/end2end/Measure.e2e.js"),
-                    // require("./tests/modules/tools/ParcelSearch.js"),
-                    // require("./tests/modules/tools/SearchByCoord.js"),
+        if (deploymentTest !== false) {
+            suitesToRun = deplomentTestSuites;
+        }
 
-                    // non-module tests
-                    require("../../src/test/end2end/Pan.e2e.js"),
-                    require("../../src/test/end2end/Zoom.e2e.js")
-                ],
-                e2eTestParams = {builder, url, resolution, config, mode, browsername, capability};
-
-            for (const suite of suites) {
-                suite(e2eTestParams);
-            }
-        });
-    }
-    catch (err) {
-        console.error(err);
-    }
+        for (const suite of suitesToRun) {
+            this.retries(2);
+            suite(e2eTestParams);
+        }
+    });
 }
 
 module.exports = tests;

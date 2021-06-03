@@ -24,6 +24,7 @@ async function LegendTests ({builder, config, url, resolution, capability}) {
             before(async function () {
                 if (capability) {
                     capability.name = this.currentTest.fullTitle();
+                    capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);
@@ -36,6 +37,14 @@ async function LegendTests ({builder, config, url, resolution, capability}) {
                     });
                 }
                 await driver.quit();
+            });
+
+            afterEach(async function () {
+                if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+                    await driver.quit();
+                    driver = await initDriver(builder, url, resolution);
+                }
             });
 
             it("should contain active layers", async function () {

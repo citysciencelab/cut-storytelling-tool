@@ -95,8 +95,8 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     initialize: function () {
         const portalConfig = Radio.request("Parser", "getPortalConfig");
 
-        // prevents the use of the isSecured parameter for layers other than WMS
-        if (this.get("typ") !== "WMS" && this.get("isSecured") === true) {
+        // prevents the use of the isSecured parameter for layers other than WMS and WFS
+        if (this.get("typ") !== "WMS" && this.get("typ") !== "WFS" && this.get("isSecured") === true) {
             this.setIsSecured(false);
         }
 
@@ -180,7 +180,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      **/
     checkForScale: function (options) {
-        if (parseFloat(options.scale, 10) <= parseInt(this.get("maxScale"), 10) && parseFloat(options.scale, 10) >= parseInt(this.get("minScale"), 10)) {
+        if (options && parseFloat(options.scale, 10) <= parseInt(this.get("maxScale"), 10) && parseFloat(options.scale, 10) >= parseInt(this.get("minScale"), 10)) {
             this.setIsOutOfRange(false);
         }
         else {
@@ -450,8 +450,10 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @return {void}
      */
     incTransparency: function () {
-        if (this.get("transparency") <= 90) {
-            this.setTransparency(this.get("transparency") + 10);
+        const transparency = parseInt(this.get("transparency"), 10);
+
+        if (transparency <= 90) {
+            this.setTransparency(transparency + 10);
         }
     },
 
@@ -460,8 +462,10 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @return {void}
      */
     decTransparency: function () {
-        if (this.get("transparency") >= 10) {
-            this.setTransparency(this.get("transparency") - 10);
+        const transparency = parseInt(this.get("transparency"), 10);
+
+        if (transparency >= 10) {
+            this.setTransparency(transparency - 10);
         }
     },
 

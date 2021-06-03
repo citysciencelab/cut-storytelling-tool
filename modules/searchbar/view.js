@@ -461,7 +461,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
 
             // desktop - topics tree is expanded
             if (isMobile === false) {
-                Radio.trigger("ModelList", "showModelInTree", hit.id);
+                this.zoomToDesktopTopicTree(hit.id, hit.name);
             }
             // mobil
             else {
@@ -483,21 +483,97 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     },
 
     /**
+     * checks for the coordinates being strings anjd converts them to float in this case
+     * @param {Array} point coordinates Array
+     * @returns {Array} converted coordinates
+     */
+    sanitizePoint: function (point) {
+        const sanitizedPoint = point;
+
+        if (typeof point[0] === "string" && typeof point[1] === "string") {
+            sanitizedPoint[0] = parseFloat(point[0]);
+            sanitizedPoint[1] = parseFloat(point[1]);
+        }
+        return sanitizedPoint;
+
+    },
+
+    /**
+     * Switches the map mode depending on the type of the selected layer and opens the topic tree in 2D and 3D mode.
+     * @param {String} hitId The hit id.
+     * @param {String} hitName The hit name.
+     * @returns {void}
+     */
+    zoomToDesktopTopicTree: function (hitId, hitName) {
+        const layerTyp = Radio.request("Parser", "getItemByAttributes", {id: hitId})?.typ?.toUpperCase(),
+            mapMode = Radio.request("Map", "getMapMode");
+
+        if (layerTyp === "OBLIQUE" && mapMode !== "OBLIQUE") {
+            this.switchToObliqueMapMode(hitName);
+
+        }
+        else if ((layerTyp === "TILESET3D" || layerTyp === "TERRAIN3D") && mapMode !== "3D") {
+            this.switchTo3dMapMode(hitId, hitName);
+        }
+        else {
+            Radio.trigger("ModelList", "showModelInTree", hitId);
+        }
+    },
+
+    /**
+     * The map switches to Oblique mode when this is confirmed.
+     * @param {String} hitName The hit name.
+     * @returns {void}
+     */
+    switchToObliqueMapMode: function (hitName) {
+        store.dispatch("ConfirmAction/addSingleAction", {
+            actionConfirmedCallback: () => Radio.trigger("Map", "mapChangeToOblique"),
+            confirmCaption: "common:button.confirm",
+            textContent: i18next.t("common:modules.searchbar.tree.chooseObliqueLayer", {hitName})
+        });
+    },
+
+    /**
+     * The map switches to 3D mode when this is confirmed.
+     * A timeout is necessary to expand the topic tree.
+     * This is smoothed out with the migration to Vue.
+     * @param {String} hitId The hit id.
+     * @param {String} hitName The hit name.
+     * @returns {void}
+     */
+    switchTo3dMapMode: function (hitId, hitName) {
+        store.dispatch("ConfirmAction/addSingleAction", {
+            actionConfirmedCallback: () => {
+                Radio.trigger("Map", "mapChangeTo3d");
+                setTimeout(() => {
+                    Radio.trigger("ModelList", "showModelInTree", hitId);
+                }, 300);
+            },
+            confirmCaption: "common:button.confirm",
+            textContent: i18next.t("common:modules.searchbar.tree.choose3dLayer", {hitName})
+        });
+    },
+
+    /**
      * sets a Marker and triggers the zooming
      * @param {Object} hit search result
      * @returns {void}
      */
     setMarkerZoom: function (hit) {
         const resolutions = Radio.request("MapView", "getResolutions"),
-            index = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105);
+            index = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105),
+            zoomLevel = this.model.get("zoomLevel") !== undefined ? this.model.get("zoomLevel") : index;
         let extent = [];
 
         if (hit.coordinate.length === 2) {
+            store.dispatch("MapMarker/removePolygonMarker");
+            hit.coordinate = this.sanitizePoint(hit.coordinate);
             store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
-            Radio.trigger("MapView", "setCenter", hit.coordinate, index);
+            Radio.trigger("MapView", "setCenter", hit.coordinate, zoomLevel);
         }
         else {
             store.dispatch("MapMarker/removePolygonMarker");
+            store.dispatch("MapMarker/removePointMarker");
             store.dispatch("MapMarker/placingPolygonMarker", getWKTGeom(hit));
             extent = store.getters["MapMarker/markerPolygon"].getSource().getExtent();
             Radio.trigger("Map", "zoomToExtent", extent, {maxZoom: index});
@@ -915,7 +991,16 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             return;
         }
         else if (hit && hit.hasOwnProperty("coordinate")) {
-            store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
+            store.dispatch("MapMarker/removePolygonMarker");
+            store.dispatch("MapMarker/removePointMarker");
+
+            if (hit.coordinate.length === 2) {
+                hit.coordinate = this.sanitizePoint(hit.coordinate);
+                store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
+            }
+            else {
+                store.dispatch("MapMarker/placingPolygonMarker", getWKTGeom(hit));
+            }
             return;
         }
         else if (hit && hit.hasOwnProperty("type") && (hit.type === i18next.t("common:modules.searchbar.type.topic") || hit.type === i18next.t("common:modules.searchbar.type.subject"))) {

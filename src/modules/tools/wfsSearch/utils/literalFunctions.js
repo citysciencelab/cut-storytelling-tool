@@ -1,18 +1,77 @@
 /**
+ * Creates a String representation for the built literals structure.
+ *
+ * @param {Object[]} literals The literals for which the structure is built and which are parsed.
+ * @returns {String} String representation for the structure of the given literal.
+ */
+function createUserHelp (literals) {
+    const structure = createLiteralStructure(literals);
+    let userHelp = "",
+        marker = "";
+
+    for (const el of structure) {
+        if (el === "and" || el === "or") {
+            marker = el;
+            continue;
+        }
+        if (el !== "(" && el !== ")") {
+            userHelp += el + " " + marker + " ";
+            continue;
+        }
+
+        if (el === ")" && marker !== "") {
+            userHelp = userHelp.substring(0, userHelp.length - (marker.length + 2));
+            marker = "";
+        }
+
+        userHelp += el;
+    }
+
+    return userHelp.replaceAll(")(", ") and (");
+}
+
+/**
+ * Recursively creates a logical representation of the literals as array to be later parsed to a String.
+ *
+ * @param {Object[]} stateLiterals Literals from the state. This is the root element.
+ * @param {?(Object[])} [literals = null] Literals from the clause of the current function call.
+ * @param {String[]} [userHelp = []] The current values collected for the representation of the literals.
+ * @returns {String[]} The information of regarding the logical dependency of the elements of the current clause.
+ */
+function createLiteralStructure (stateLiterals, literals = null, userHelp = []) {
+    const lit = literals === null ? stateLiterals : literals;
+
+    for (const literal of lit) {
+        const {field, clause} = literal;
+
+        if (field) {
+            userHelp.push(field.inputLabel);
+            continue;
+        }
+
+        userHelp.push(clause.type, "(");
+        createLiteralStructure(stateLiterals, clause.literals, userHelp);
+        userHelp.push(")");
+    }
+
+    return userHelp;
+}
+
+/**
  * Recursively adds unique ids to the clauses and fields to be able to properly update the values set for a field.
  * Also prepares the list of required fields.
  *
  * @param {Object[]} stateLiterals The literals set in the state.
- * @param {?(Object[])} literals As the structure is recursively traversed, this value is an inner array of the stateLiterals.
- * @param {String} clauseId The id of an outer clause.
- * @param {Object} requiredValues The values required to be set by the user.
+ * @param {?(Object[])} [literals = null] As the structure is recursively traversed, this value is an inner array of the stateLiterals.
+ * @param {String} [clauseId = ""] The id of an outer clause.
+ * @param {Object} [requiredValues = {}] The values required to be set by the user.
  * @returns {Object} Returns the current values for the required fields.
  */
 function prepareLiterals (stateLiterals, literals = null, clauseId = "", requiredValues = {}) {
-    const arr = literals === null ? stateLiterals : literals,
+    const lit = literals === null ? stateLiterals : literals,
         idPrefix = clauseId ? clauseId + "+" : "";
 
-    arr.forEach((literal, i) => {
+    lit.forEach((literal, i) => {
         if (literal.field) {
             literal.field.id = `${idPrefix}field-${i}`;
             literal.field.value = null;
@@ -64,4 +123,4 @@ function fieldValueChanged (id, value, stateLiterals, requiredValues, literals =
     return requiredValues;
 }
 
-export {prepareLiterals, fieldValueChanged};
+export {createUserHelp, prepareLiterals, fieldValueChanged};

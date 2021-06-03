@@ -1,11 +1,12 @@
 <script>
-import Literal from "./Literal.vue";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import Tool from "../../Tool.vue";
 import getComponent from "../../../../utils/getComponent";
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import Literal from "./Literal.vue";
 import actions from "../store/actionsWfsSearch";
 import getters from "../store/gettersWfsSearch";
 import mutations from "../store/mutationsWfsSearch";
+import {searchFeatures} from "../utils/requests";
 
 export default {
     name: "WfsSearch",
@@ -13,12 +14,22 @@ export default {
         Literal,
         Tool
     },
+    data: () => ({and: "and", or: "or"}),
     computed: {
-        ...mapGetters("Tools/WfsSearch", Object.keys(getters))
+        ...mapGetters("Tools/WfsSearch", Object.keys(getters)),
+        ...mapGetters("Language", ["currentLocale"])
     },
     watch: {
         active (val) {
             (val ? this.prepareModule : this.resetModule)();
+            if (this.userHelp !== "hide") {
+                this.adjustUserHelp();
+            }
+        },
+        currentLocale () {
+            if (this.active && this.userHelp !== "hide") {
+                this.adjustUserHelp();
+            }
         }
     },
     created () {
@@ -27,6 +38,17 @@ export default {
     methods: {
         ...mapMutations("Tools/WfsSearch", Object.keys(mutations)),
         ...mapActions("Tools/WfsSearch", Object.keys(actions)),
+        adjustUserHelp () {
+            const translatedAnd = i18next.t("common:modules.tools.wfsSearch.userHelp.and"),
+                translatedOr = i18next.t("common:modules.tools.wfsSearch.userHelp.or");
+
+            this.setUserHelp(this.userHelp
+                .replaceAll(this.and, translatedAnd)
+                .replaceAll(this.or, translatedOr));
+
+            this.and = translatedAnd;
+            this.or = translatedOr;
+        },
         close () {
             this.setActive(false);
             this.resetModule(true);
@@ -35,10 +57,16 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
+        },
+        async search () {
+            const features = await searchFeatures(this.currentInstance, this.service);
+
+            features.forEach(feature => {
+                console.log(feature.values_);
+            });
         }
     }
 };
-// TODO: Vorschläge für Inputfelder und Dropdowns für fieldNames sind noch zu implementieren
 </script>
 
 <template>
@@ -56,46 +84,48 @@ export default {
                 class="form-horizontal"
                 role="form"
             >
-                <div
-                    v-if="instances.length > 1"
-                    class="form-group form-group-sm"
-                >
-                    <label
-                        class="col-md-5 col-sm-5 control-label"
-                        for="tool-wfsSearch-instances-select"
-                    >
-                        {{ $t("common:modules.tools.wfsSearch.instancesSelectLabel") }}
-                        <!-- TODO: Add me to the language files-->
-                    </label>
-                    <div class="col-md-7 col-sm-7">
-                        <select
-                            id="tool-wfsSearch-instances-select"
-                            class="form-control input-sm"
-                            required
-                            @change="instanceChanged($event.currentTarget.value)"
+                <template v-if="instances.length > 1">
+                    <div class="form-group form-group-sm">
+                        <label
+                            class="col-md-5 col-sm-5 control-label"
+                            for="tool-wfsSearch-instances-select"
                         >
-                            <option
-                                v-for="({title}, i) of instances"
-                                :key="title + i"
-                                :value="i"
+                            {{ $t("common:modules.tools.wfsSearch.instancesSelectLabel") }}
+                            <!-- TODO: Add me to the language files-->
+                        </label>
+                        <div class="col-md-7 col-sm-7">
+                            <select
+                                id="tool-wfsSearch-instances-select"
+                                class="form-control input-sm"
+                                required
+                                @change="instanceChanged($event.currentTarget.value)"
                             >
-                                {{ title }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <hr v-if="instances.length > 1">
-                <div
-                    v-if="instances[currentInstance].userHelp"
-                    class="form-group form-group-sm"
-                >
-                    <div class="col-md-12 col-sm-12">
-                        <!-- TODO: May need to add $t() to be properly displayed -->
-                        {{ instances[currentInstance].userHelp }}
+                                <option
+                                    v-for="({title}, i) of instances"
+                                    :key="title + i"
+                                    :value="i"
+                                >
+                                    {{ title }}
+                                </option>
+                            </select>
+                        </div>
                     </div>
                     <hr>
+                </template>
+                <div
+                    v-if="userHelp !== 'hide'"
+                    class="form-group form-group-sm"
+                >
+                    <i class="col-md-1 col-sm-1 glyphicon glyphicon-info-sign" />
+                    <span
+                        class="col-md-11 col-sm-11"
+                        :aria-label="$t('common:modules.tools.wfsSearch.userHelp.label')"
+                    >
+                        {{ $t("common:modules.tools.wfsSearch.userHelp.text", {userHelp}) }}
+                    </span>
                 </div>
-                <template v-for="(literal, i) of instances[currentInstance].literals">
+                <hr>
+                <template v-for="(literal, i) of currentInstance.literals">
                     <Literal
                         :key="'tool-wfsSearch-clause' + i"
                         :literal="literal"
@@ -117,7 +147,7 @@ export default {
                             type="button"
                             class="btn btn-lgv-grey col-md-12 col-sm-12"
                             :disabled="requiredFields"
-                            @click="searchFeatures"
+                            @click="search"
                         >
                             {{ $t("common:modules.tools.wfsSearch.searchButton") }}
                         </button>

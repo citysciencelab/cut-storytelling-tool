@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     capabilities = {
         firefox: {"browserName": "firefox", acceptSslCerts: true, acceptInsecureCerts: true},
-        chrome: {"browserName": "chrome", version: "87", acceptSslCerts: true, acceptInsecureCerts: true},
+        chrome: {"browserName": "chrome", version: "88", acceptSslCerts: true, acceptInsecureCerts: true},
         ie: webdriver.Capabilities.ie()
     },
     /** TODO
@@ -14,10 +14,10 @@ const webdriver = require("selenium-webdriver"),
         // "600x800"
     ],
     configs = new Map([
-        ["basic", "/portal/basic"],
-        ["master", "/portal/master"],
-        ["custom", "/portal/masterCustom"],
-        ["default", "/portal/masterDefault"]
+        ["basic", "basic"],
+        ["master", "master"],
+        ["custom", "masterCustom"],
+        ["default", "masterDefault"]
     ]),
     modes = [
         "2D"
@@ -67,7 +67,7 @@ function isOB (mode) {
  * @returns {boolean} whether configuration is basic
  */
 function isBasic (url) {
-    return url.split("?")[0].endsWith(configs.get("basic"));
+    return url.split("?")[0].indexOf(configs.get("basic") + "_") > -1 || url.split("?")[0].endsWith(configs.get("basic"));
 }
 
 /**
@@ -76,7 +76,8 @@ function isBasic (url) {
  * @returns {boolean} whether configuration is basic
  */
 function isMaster (url) {
-    return url.split("?")[0].endsWith(configs.get("master"));
+    // e.g. "https://test.geoportal-hamburg.de/master_BG-1320
+    return url.split("?")[0].indexOf(configs.get("master") + "_") > -1 || url.split("?")[0].endsWith(configs.get("master"));
 }
 
 /**
@@ -85,7 +86,7 @@ function isMaster (url) {
  * @returns {boolean} whether configuration is default
  */
 function isDefault (url) {
-    return url.split("?")[0].endsWith(configs.get("default"));
+    return url.split("?")[0].indexOf(configs.get("default") + "_") > -1 || url.split("?")[0].endsWith(configs.get("default"));
 }
 
 /**
@@ -94,7 +95,7 @@ function isDefault (url) {
  * @returns {boolean} whether configuration is custom
  */
 function isCustom (url) {
-    return url.split("?")[0].endsWith(configs.get("custom"));
+    return url.split("?")[0].indexOf(configs.get("custom") + "_") > -1 || url.split("?")[0].endsWith(configs.get("custom"));
 }
 
 /**
@@ -116,45 +117,71 @@ function isFirefox (browsername) {
 }
 
 /**
- * Produces browserstack configurations.
- * @param {String} browserstackuser username
- * @param {String} browserstackkey key
+ * Produces browserstack or saucelabs configurations.
+ * @param {String} testService "browserstack" or "saucelabs"
  * @returns {Array} array of bs configuration objects
  */
-function getBsCapabilities (browserstackuser, browserstackkey) {
-    const base = {
+function getCapabilities (testService) {
+    const baseBrowserstack = {
         // do not set selenium version here, then selenium uses the detected_language, see "Input Capabilities" of each test in browserstack
-        "acceptSslCerts": true,
-        "project": "MasterPortal",
-        "browserstack.local": true,
-        "browserstack.user": browserstackuser,
-        "browserstack.key": browserstackkey,
-        // resolution of device, not resolution of browser window
-        "resolution": "1920x1080",
-        "browserstack.debug": false,
-        "browserstack.networkLogs": true,
-        "browserstack.console": "verbose",
-        "browserstack.idleTimeout": 300,
-        // Use this capability to specify a custom delay between the execution of Selenium commands
-        "browserstack.autoWait": 50
-    };
+            "acceptSslCerts": true,
+            "project": "MasterPortal",
+            "browserstack.local": true,
+            /* eslint-disable-next-line no-process-env */
+            "browserstack.user": process.env.bs_user,
+            /* eslint-disable-next-line no-process-env */
+            "browserstack.key": process.env.bs_key,
+            // resolution of device, not resolution of browser window
+            "resolution": "1920x1080",
+            "browserstack.debug": false,
+            "browserstack.networkLogs": true,
+            "browserstack.console": "verbose",
+            "browserstack.idleTimeout": 300,
+            // Use this capability to specify a custom delay between the execution of Selenium commands
+            "browserstack.autoWait": 50,
+            // is used for autologin to a webpage with a predefined username and password (login to geoportal test)
+            "unhandledPromptBehavior": "ignore"
+        },
+        baseSaucelabs = {
+            "host": "saucelabs",
+            "sauce:options": {
+                "screenResolution": "1920x1080",
+                /* eslint-disable-next-line no-process-env */
+                "username": process.env.SAUCE_USERNAME,
+                /* eslint-disable-next-line no-process-env */
+                "accessKey": process.env.SAUCE_ACCESS_KEY,
+                "extendedDebugging": true
+            }
+        };
+
+    if (testService === "browserstack") {
+        return [
+            {
+                ...baseBrowserstack,
+                "browserName": "Chrome",
+                "browser_version": "89.0",
+                "os": "Windows",
+                "os_version": "10"
+            }/*
+            {
+                ...base,
+                "browserName": "Safari",
+                "browser_version": "12.0",
+                "os": "OS X",
+                "os_version": "Mojave"
+            }*/
+        ];
+    }
 
     return [
         {
-            ...base,
-            "browserName": "Chrome",
-            "browser_version": "87.0",
-            "os": "Windows",
-            "os_version": "10"
-        }/*
-        {
-            ...base,
-            "browserName": "Safari",
-            "browser_version": "12.0",
-            "os": "OS X",
-            "os_version": "Mojave"
-        }*/
+            ...baseSaucelabs,
+            "browserName": "chrome",
+            "browserVersion": "89",
+            "platformName": "Windows 10"
+        }
     ];
+
 }
 
 module.exports = {
@@ -172,5 +199,5 @@ module.exports = {
     isMaster,
     isDefault,
     isCustom,
-    getBsCapabilities
+    getCapabilities
 };

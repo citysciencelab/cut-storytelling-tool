@@ -1,7 +1,5 @@
 const {until, By} = require("selenium-webdriver"),
-    {closeSingleAlert} = require("./utils"),
-    {isMaster} = require("../settings"),
-    {getResolution, isInitalLoadingFinished} = require("./scripts");
+    {basicAuth, getResolution, isInitalLoadingFinished} = require("./scripts");
 
 /**
  * Activates 3D mode for opened Masterportal.
@@ -41,9 +39,13 @@ async function prepareOB (driver) {
  * @returns {void}
  */
 async function loadUrl (driver, url, mode) {
-    await driver.get(url);
+    doLoadUrl(driver, url);
 
-    await driver.wait(async () => await driver.executeScript(isInitalLoadingFinished) === true, 90000);
+    await driver.wait(async () => await driver.executeScript(isInitalLoadingFinished) === true, 90000).catch(err => {
+        console.warn("isInitalLoadingFinished err:", err);
+        console.warn("Try again to load url ", url);
+        doLoadUrl(driver, url);
+    });
 
     // wait until resolution is ready, else Firefox will often find uninitialized Backbone initially
     await driver.wait(async () => await driver.executeScript(getResolution) !== null, 90000);
@@ -54,6 +56,34 @@ async function loadUrl (driver, url, mode) {
     }
     else if (mode === "OB") {
         await prepareOB(driver);
+    }
+}
+
+/**
+ * Loads the given url and if not localhost executes basic auth.
+ * @param {selenium-webdriver.driver} driver driver object
+ * @param {String} url url to load
+ * @returns {void}
+ */
+async function doLoadUrl (driver, url) {
+    /* eslint-disable no-process-env */
+    const testService = process.env.npm_config_testservice;
+
+    await driver.get(url);
+
+    if (url.indexOf("localhost") === -1) {
+
+        if (testService === "browserstack") {
+            driver.executeScript(basicAuth("lgv", "test"));
+        }
+        else {
+            const firstPart = url.substring(0, 8),
+                secondPart = url.substring(8),
+                urlWithBasicAuth = firstPart + "lgv:test@" + secondPart;
+
+            await driver.get(urlWithBasicAuth);
+        }
+
     }
 }
 
@@ -92,11 +122,6 @@ async function initDriver (builder, url, resolution, mode) {
     const driver = await getUnnavigatedDriver(builder, resolution);
 
     await loadUrl(driver, url, mode);
-
-    if (isMaster(url)) {
-        await closeSingleAlert(driver);
-    }
-
     return driver;
 }
 

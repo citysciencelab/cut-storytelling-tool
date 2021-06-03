@@ -1,9 +1,25 @@
+let likeFilterProperties = {
+    wildCard: "*",
+    singleChar: "#",
+    escape: "!"
+};
+
+/**
+ * Sets the likeFilterProperties to the given value
+ *
+ * @param {Object} properties The properties for the like filter in the way the service needs them.
+ * @returns{void}
+ */
+export function setLikeFilterProperties (properties) {
+    likeFilterProperties = properties;
+}
+
 /**
  * Builds a XML filter based upon the literal structure defined in the config
  * and the given user inputs.
  *
  * @param {Object} values The literals containing the values to be parsed.
- * @returns {XML} A filter to constrain returned features from the service.
+ * @returns {XML[]} A filter to constrain returned features from the service.
  */
 function buildFilter (values) {
     const filters = [];
@@ -23,21 +39,34 @@ function buildFilter (values) {
                 }
             }
         }
-        else if (val.field) {
-            const {fieldName, type, value} = val.field;
-
-            if (value) {
-                const property = `<PropertyName>${fieldName}</PropertyName><Literal>${value}</Literal>`,
-                    filter = type === "like"
-                        ? `<PropertyIsLike>${property}</PropertyIsLike>`
-                        : `<PropertyIsEqualTo>${property}</PropertyIsEqualTo>`;
-
-                filters.push(filter);
-            }
+        else if (val?.field?.value) {
+            filters.push(buildXmlFilter(val.field));
         }
     });
 
     return filters;
+}
+
+/**
+ * Builds the XML filter for the given fieldName and value.
+ *
+ * @param {String} fieldName The name of the property.
+ * @param {String} type Either 'equal' or 'like; determines the type of equality check.
+ * @param {String} value The value to be queried.
+ * @returns {String} XML Filter.
+ */
+function buildXmlFilter ({fieldName, type, value}) {
+    const likeFilter = type === "like",
+        property = `<PropertyName>${fieldName}</PropertyName><Literal>${value}${likeFilter ? likeFilterProperties.wildCard : ""}</Literal>`;
+    let likeFilterValues = "";
+
+    Object.entries(likeFilterProperties).forEach(([key, val]) => {
+        likeFilterValues += `${key}="${encodeURIComponent(val)}" `;
+    });
+
+    return likeFilter
+        ? `<PropertyIsLike ${likeFilterValues.slice(0, -1)}>${property}</PropertyIsLike>`
+        : `<PropertyIsEqualTo>${property}</PropertyIsEqualTo>`;
 }
 
 /**
@@ -66,4 +95,4 @@ function buildStoredFilter (values) {
     return filter;
 }
 
-export {buildFilter, buildStoredFilter};
+export {buildFilter, buildStoredFilter, buildXmlFilter};

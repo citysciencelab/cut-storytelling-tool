@@ -5,7 +5,7 @@
 ***
 
 # config.json
-Die *config.json* enthält die gesamte Konfiguration der Portal-Oberfläche. In ihr wird geregelt welche Elemente sich wo in der Menüleiste befinden, worauf die Karte zentriert werden soll und welche Layer geladen werden sollen. Hier geht es zu einem **[Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/stable/portal/basic/config.json)**.
+Die *config.json* enthält die gesamte Konfiguration der Portal-Oberfläche. In ihr wird geregelt welche Elemente sich wo in der Menüleiste befinden, worauf die Karte zentriert werden soll und welche Layer geladen werden sollen. Hier geht es zu einem **[Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/portal/basic/config.json)**.
 Die config.json besteht aus der **[Portalconfig](#markdown-header-Portalconfig)** und der **[Themenconfig](#markdown-header-Themenconfig)**
 
 ```
@@ -674,7 +674,7 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 #!json
 "portalTitle": {
     "title": "Master",
-    "logo": "../../lgv-config/img/hh-logo.png",
+    "logo": "https://geodienste.hamburg.de/lgv-config/img/hh-logo.png",
     "link": "https://geoinfo.hamburg.de",
     "toolTip": "Landesbetrieb Geoinformation und Vermessung"
 }
@@ -692,7 +692,8 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 |startCenter|nein|**[Coordinate](#markdown-header-datatypescoordinate)**|[565874, 5934140]|Die initiale Zentrumskoordinate.|false|
 |extent|nein|**[Extent](#markdown-header-datatypesextent)**|[510000.0, 5850000.0, 625000.4, 6000000.0]|Der Map-Extent.|false|
 |resolution|nein|Float|15.874991427504629|Die initiale Auflösung der Karte aus options. Vorzug vor zoomLevel.|false|
-|zoomLevel|nein|Integer||Der initiale ZoomLevel aus Options. Nachrangig zu resolution.|false|
+|startZoomLevel|nein|Integer||Der initiale ZoomLevel aus Options. Nachrangig zu resolution.|false|
+|zoomLevel|nein|Integer||Deprecated in 3.0.0 Bitte "startZoomLevel" verwenden.|false|
 |epsg|nein|String|"EPSG:25832"|Der EPSG-Code der Projektion der Karte. Der EPSG-Code muss als namedProjection definiert sein.|false|
 |options|nein|[option](#markdown-header-portalconfigmapviewoption)[]|[{"resolution":66.14579761460263,"scale":250000,"zoomLevel":0}, {"resolution":26.458319045841044,"scale":100000,"zoomLevel":1}, {"resolution":15.874991427504629,"scale":60000,"zoomLevel":2}, {"resolution": 10.583327618336419,"scale":40000,"zoomLevel":3}, {"resolution":5.2916638091682096,"scale":20000,"zoomLevel":4}, {"resolution":2.6458319045841048,"scale":10000,"zoomLevel":5}, {"resolution":1.3229159522920524,"scale":5000,"zoomLevel":6}, {"resolution":0.6614579761460262,"scale":2500,"zoomLevel":7}, {"resolution":0.2645831904584105,"scale": 1000,"zoomLevel":8}, {"resolution":0.13229159522920521,"scale":500,"zoomLevel":9}]|Die initialen Maßstabsstufen und deren Auflösungen.|false|
 
@@ -700,7 +701,7 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 ```
 #!json
 "mapView": {
-    "backgroundImage": "/lgv-config/img/backgroundCanvas.jpeg",
+    "backgroundImage": "https://geodienste.hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
     "startCenter": [561210, 5932600],
     "options": [
         {
@@ -894,7 +895,6 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 [type:compareFeatures]: # (Portalconfig.menu.tool.compareFeatures)
 [type:parcelSearch]: # (Portalconfig.menu.tool.parcelSearch)
 [type:print]: # (Portalconfig.menu.tool.print)
-[type:routing]: # (Portalconfig.menu.tool.routing)
 [type:draw]: # (Portalconfig.menu.tool.draw)
 [type:featureLister]: # (Portalconfig.menu.tool.featureLister)
 [type:lines]: # (Portalconfig.menu.tool.lines)
@@ -936,7 +936,6 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |measure|nein|**[measure](#markdown-header-portalconfigmenutoolmeasure)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
 |parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||_Deprecated im nächsten Major-Release. Bitte nutzen Sie stattdessen `wfsSearch`._ Mit dieser Flurstückssuche lassen sich Flurstücke über Gemarkung, Flur (in Hamburg ohne Flur) und Flurstück suchen.|false|
 |print|nein|**[print](#markdown-header-portalconfigmenutoolprint)**||Druckmodul mit dem die Karte als PDF exportiert werden kann.|false|
-|routing|nein|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Routing. Über dieses Werkzeug können Routen berechnet werden.|true|
 |saveSelection|nein|**[saveSelection](#markdown-header-portalconfigmenutoolsaveselection)**||Werkzeug mit dem sich die aktuellen Karteninhalte speichern lassen. Der Zustand der Karte wird als URL zum Abspeichern erzeugt. Dabei werden die Layer in deren Reihenfolge, Transparenz und Sichtbarkeit dargestellt. Zusätzlich wird die Zentrumskoordinate mit abgespeichert.|false|
 |searchByCoord|nein|**[searchByCoord](#markdown-header-portalconfigmenutoolsearchbycoord)**||Koordinatensuche. Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf.|false|
 |selectFeatures|nein|**[tool](#markdown-header-portalconfigmenutool)**||Ermöglicht Auswahl von Features durch Ziehen einer Box und Einsehen derer GFI-Attribute.|false|
@@ -988,7 +987,7 @@ Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Reques
 |name|ja|String||Name des Werkzeuges im Menu.|false|
 |centerMapToClickPoint|nein|Boolean|false|Wenn der Parameter auf true gesetzt wird, verschiebt sich die Karte beim Klick auf ein Feature so, dass das Feature im Mittelpunkt der sichtbaren Karte liegt. Dies ist nur bei der Verwendung des desktopTypes "Detached" relevant.|false|
 |glyphicon|nein|String|"glyphicon-info-sign"|CSS Klasse des Glyphicons, das vor dem GFI im Menu angezeigt wird.|false|
-|isActive|nein|Boolean|true|Gibt an, ob das GFI per default aktiviert ist.|false|
+|active|nein|Boolean|true|Gibt an, ob das GFI per default aktiviert ist.|false|
 |desktopType|nein|String|"detached"|Gibt an welches Template für die GetFeatureInfo im Desktopmodus verwendet wird. Bei Attached wird das GFI direkt auf dem Punkt positioniert. Bei Detached wird ein Marker auf den geklickten Punkt gesetzt und das GFI wird rechts auf der Karte platziert.|false|
 |centerMapMarkerPolygon|nein|Boolean|false|Angabe, ob für ein angeklicktes Feature die Koordinaten des Zentrums ermittelt werden sollen oder ob die Koordinaten der tatsächlich angeklickten Koordinate bestimmt werden.|false|
 |highlightVectorRules|nein|**[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)**||Regeldefinitionen zum Überschreiben des Stylings von abgefragten Vektordaten.[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)|false|
@@ -999,7 +998,7 @@ Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Reques
 "gfi":{
     "name":"Informationen abfragen",
     "glyphicon":"glyphicon-info-sign",
-    "isActive":true,
+    "active":true,
     "centerMapMarkerPolygon":true,
     "highlightVectorRules": {
         "fill": {
@@ -1024,7 +1023,7 @@ Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Reques
 "gfi":{
     "name":"Informationen abfragen",
     "glyphicon":"glyphicon-info-sign",
-    "isActive":true,
+    "active":true,
     "centerMapMarkerPolygon":true
 }
 ```
@@ -1307,7 +1306,7 @@ Beispiel: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeat
 |----|-------------|---|-------|------------|------|
 |serviceId|ja|String||Id des Dienstes der abgefragt werden soll. Wird in der rest-services.json abgelegt.|false|
 |storedQueryId|ja|String||Id der stored query die verwendet werden soll.|true|
-|configJSON|ja|String||Pfad zur Konfigurationsdatei, die die Gemarkungen enthält. **[Beispiel](https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json)**.|false|
+|configJSON|ja|String||Pfad zur Konfigurationsdatei, die die Gemarkungen enthält. **[Beispiel](https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json)**.|false|
 |parcelDenominator|nein|Boolean|false|Flag, ob Flurnummern auch zur Suche verwendet werden sollen. Besonderheit Hamburg: Hamburg besitzt als Stadtstaat keine Fluren.|false|
 |styleId|nein|String||Hier kann eine StyleId aus der style.json angegeben werden um den Standard-Style vom MapMarker zu überschreiben.|false|
 |zoomLevel|nein|Number|7|Gibt an, auf welches ZoomLevel gezoomt werden soll.|false|
@@ -1320,7 +1319,7 @@ Beispiel: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeat
     "glyphicon": "glyphicon-search",
     "serviceId": "6",
     "storedQueryID": "Flurstueck",
-    "configJSON": "/lgv-config/gemarkungen_hh.json",
+    "configJSON": "https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json",
     "parcelDenominator": false,
     "styleId": "flaecheninfo"
 }
@@ -1365,11 +1364,11 @@ Koordinatensuche.
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService, MapfishPrint 2 (Deprecated in 3.0.0) oder MapfishPrint 3. Das Drucken von Vector Tile Layern wird nicht unterstützt, da die Druckdienste es nicht unterstützen; falls der User versucht die Anzeige zu so einem Layer zu drucken, wird ihm eine Hinweismeldung dazu angezeigt.
+Druckmodul. Konfigurierbar für 2 Druckdienste: den High Resolution PlotService oder MapfishPrint 3. Das Drucken von Vector Tile Layern wird nicht unterstützt, da die Druckdienste es nicht unterstützen; falls der User versucht die Anzeige zu so einem Layer zu drucken, wird ihm eine Hinweismeldung dazu angezeigt.
 
 **ACHTUNG: Backend notwendig!**
 
-**Es wird mit einem [Mapfish-Print2](http://www.mapfish.org/doc/print/index.html), [Mapfish-Print3](http://mapfish.github.io/mapfish-print-doc) oder einem HighResolutionPlotService im Backend kommuniziert.**
+**Es wird mit einem [Mapfish-Print3](https://mapfish.github.io/mapfish-print-doc) oder einem HighResolutionPlotService im Backend kommuniziert.**
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -1378,29 +1377,11 @@ Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService,
 |printAppId|nein|String|"master"|Id der print app des Druckdienstes. Dies gibt dem Druckdienst vor welche/s Template/s er zu verwenden hat.|false|
 |filename|nein|String|"report"|Dateiname des Druckergebnisses.|false|
 |title|nein|String|"PrintResult"|Titel des Dokuments. Erscheint als Kopfzeile.|false|
-|version|nein|String|| Flag welcher Druckdienst verwendet werden soll. Bei "HighResolutionPlotService" wird der High Resolution PlotService verwendet, wenn der Parameter nicht gesetzt wird, wird Mapfish 2 verwendet, sonst wird MapfishPrint 3 verwendet.|false|
-|printID|nein|String||Deprecated in 3.0.0. Id des Druckdienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|false|
-|outputFilename|nein|String|"report"|Deprecated in 3.0.0. Dateiname des Druckergebnisses.|false|
-|gfi|nein|Boolean|false|Deprecated in 3.0.0. Dateiname des Druckergebnisses.|false|
-|configYAML|nein|String|"/master"|Deprecated in 3.0.0. Konfiguration des Templates das verwendet werden soll.|false|
+|version|nein|String||Flag welcher Druckdienst verwendet werden soll. Bei "HighResolutionPlotService" wird der High Resolution PlotService verwendet, wenn der Parameter nicht gesetzt wird, wird Mapfish 3 verwendet.|false|
 |isLegendSelected|nein|Boolean|false|Gibt an, ob die Checkbox, zum Legende mitdrucken, aktiviert sein soll. Wird nur angezeigt wenn der Druckdienst (Mapfish Print 3) das Drucken der Legende unterstützt.|false|
 |legendText|nein|String|"Mit Legende"|Beschreibender Text für die printLegend-Checkbox.|false|
 |dpiForPdf|nein|Number|200|Auflösung der Karte im PDF.|false|
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
-
-**Beispiel Konfiguration mit MapfishPrint2**
-```
-#!json
-"print": {
-    "name": "Karte drucken",
-    "glyphicon": "glyphicon-print",
-    "printID": "123456",
-    "configYAML": "/master",
-    "outputFilename": "report",
-    "title": "Mein Titel",
-    "gfi": true
-}
-```
 
 **Beispiel Konfiguration mit High Resolution PlotService**
 ```
@@ -1424,40 +1405,7 @@ Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService,
     "mapfishServiceId": "mapfish_printservice_id",
     "printAppId": "mrh",
     "filename": "Ausdruck",
-    "title": "Mein Titel",
-    "version" : "mapfish_print_3"
-}
-```
-
-***
-
-#### Portalconfig.menu.tool.routing
-
-[inherits]: # (Portalconfig.menu.tool)
-
-Routing Modul.
-
-**ACHTUNG: Backend notwendig!**
-
-**Das Routing findet auf externen Daten statt und ist nur in wenigen Portalen vorenthalten, u.a. das [Verkehrsportal](https://geoportal-hamburg.de/verkehrsportal).**
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-|----|-------------|---|-------|------------|------|
-|viomRoutingID|ja|String||Id des Routingdienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|false|
-|bkgSuggestID|ja|String||Id des Vorschlagsdienstes des BKG. Er wird verwendet um Adressvorschläge zu liefern. Wird in der rest-services.json abgelegt.|false|
-|bkgGeosearchID|ja|String||Id des Geokodierungsdienstes des BKG. Er wird verwendet um gewählte Adressen in Koordinaten umzuwandeln. Wird in der rest-services.json abgelegt.|false|
-|isInitOpen|nein|Boolean|false|Flag, ob das Tool initial geöffnet sein soll.|false|
-
-**Beispiel**
-```
-#!json
-"routing": {
-    "name": "Routenplaner",
-    "glyphicon": "glyphicon-road",
-    "viomRoutingID": "1",
-    "bkgSuggestID": "2",
-    "bkgGeosearchID": "3",
-    "isInitOpen": false
+    "title": "Mein Titel"
 }
 ```
 
@@ -1932,41 +1880,50 @@ Werkzeug, wodurch der Nutzer/die Nutzerin mit einem definierten Postfach Kontakt
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|serviceID|ja|String||Id des Emaildienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|false|
-|from|nein|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name":"LGVGeoportalHilfe"}]|Absender der Email. Bitte den **[Hinweis zur Email-Sicherheit](#markdown-header-hinweis-zur-email-sicherheit)** beachten.|false|
-|to|nein|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name": "LGVGeoportalHilfe"}]|Adressat der Email. Bitte den **[Hinweis zur Email-Sicherheit](#markdown-header-hinweis-zur-email-sicherheit)** beachten.|false|
-|textPlaceholder|nein|String|"Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;"|Platzhaltertext im Freitextfeld.|false|
-|includeSystemInfo|nein|Boolean|false|Flag, ob Systeminfos des Absendern mitgeschickt werden sollen.|false|
-|deleteAfterSend|nein|Boolean|false|Flag, ob das Kontaktfenster nach erfolgreichem Versenden der Nachricht geschlossen und der Inhalt gelöscht werden soll.|false|
+|serviceId|ja|String||Id des E-Mail-Dienstes der verwendet werden soll. Wird aus der **[rest-services.json](rest-services.json.md)** bezogen.|false|
+|serviceID|nein|String||_Deprecated im nächsten Major Release. Bitte nutzen Sie stattdessen **serviceId**._ Id des E-Mail-Dienstes der verwendet werden soll. Wird aus der **[rest-services.json](rest-services.json.md)** bezogen.|false|
+|from|ja|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]||Absender der E-Mail. Bitte den **[Hinweis zur E-Mail-Sicherheit](#markdown-header-hinweis-zur-e-mail-sicherheit)** beachten.|false|
+|to|ja|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]||Adressat der E-Mail. Bitte den **[Hinweis zur E-Mail-Sicherheit](#markdown-header-hinweis-zur-e-mail-sicherheit)** beachten.|false|
+|closeAfterSend|nein|Boolean|false|Flag, ob das Kontaktfenster nach erfolgreichem Versenden einer Nachricht geschlossen werden soll.|false|
+|contactInfo|nein|String||Weitere Informationen, welche oberhalb des Kontaktformulars angezeigt werden würden.|false|
+|deleteAfterSend|nein|Boolean|false|Flag, ob der Inhalt des Kontaktfensters nach erfolgreichem Versenden der Nachricht gelöscht werden soll.|false|
+|includeSystemInfo|nein|Boolean|false|Flag, ob Systeminformationen des Absenders mitgeschickt werden sollen.|false|
+|locationOfCustomerService|nein|String|"de"|Land, in welchem sich der Kundensupport befindet. Wird verwendet für das Datum innerhalb der ticketId.|false|
+|maxLines|nein|Number|5|Anzahl der Zeilen (Höhe) des Textbereiches des Formulars.|false|
+|showPrivacyPolicy|nein|Boolean|false|Flag, ob eine Checkbox angezeigt werden soll, um der Datenschutzerklärung zuzustimmen.|false|
+|privacyPolicyLink|no|String|"https://www.masterportal.org/datenschutz.html"|Link zur Datenschutzerklärung. Sollte gesetzt werden, wenn `showPrivacyPolicy` true ist.|false|
+|subject|nein|String||Der Betreff, welcher für die E-Mail verwendet wird.|false|
 |withTicketNo|nein|Boolean|true|Flag, ob bei erfolgreichem Versand der Anfrage eine Ticketnummer zurückgegeben werden soll.|false|
 
 **Beispiel**
-```
-#!json
-"contact":{
-    "name": "Kontakt",
-    "glyphicon": "glyphicon-envelope",
-    "serviceID": "123",
-    "from": [
-        {
-            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
-            "name":"LGVGeoportalHilfe"
-        }
-    ],
-    "to": [
-        {
-            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
-            "name":"LGVGeoportalHilfe"
-        }
-    ],
-    "textPlaceholder": "Hier Text eingeben.",
-    "includeSystemInfo": true,
-    "deleteAfterSend": true,
-    "withTicketNo": false
+
+```json
+{
+    "contact": {
+        "name": "common:menu.contact",
+        "glyphicon": "glyphicon-envelope",
+        "serviceId": "123",
+        "from": [
+            {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+            }
+        ],
+        "to": [
+            {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+            }
+        ],
+        "includeSystemInfo": true,
+        "closeAfterSend": true,
+        "deleteAfterSend": true,
+        "withTicketNo": false
+    }
 }
 ```
 
->Hinweis zur Email-Sicherheit
+>Hinweis zur E-Mail-Sicherheit
 
 Von der ungeprüften Übernahme von *Sender (FROM)*, *Empfänger (TO)*, *Kopie (CC)* und *Blindkopie (BCC)* durch den SMTP-Server wird hiermit aus Sicherheitsgründen **ausdrücklich abgeraten**.
 Vor der ungeprüften Übernahme durch den SMTP-Server der Kunden-Email als *Antwort an* (REPLY-TO) wird gewarnt.
@@ -1990,7 +1947,8 @@ Wir warnen vor der automatischen Einstellung der Kunden-Mail als *REPLY-TO*.
 ***
 
 #### Portalconfig.menu.tool.contact.email
-Email Objekt bestehend aus der email und aus dem Anzeigename.
+
+E-Mail Objekt bestehend aus der E-Mail und dem Anzeigenamen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -1998,8 +1956,8 @@ Email Objekt bestehend aus der email und aus dem Anzeigename.
 |name|nein|String||Anzeigename.|false|
 
 **Beispiel**
-```
-#!json
+
+```json
 {
     "email": "lgvgeoportal-hilfe@gv.hamburg.de",
     "name":"LGVGeoportalHilfe"
@@ -2220,11 +2178,12 @@ Eine Instanz der WFS Suche, welche durch ein Dropdown Menü im Werkzeug ausgewä
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|literals|ja|**[literal](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral)**[]||Array an `literals`.|false|
+|literals|ja|**[literal](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral)**[]||Array an `literals`.|true|
 |requestConfig|ja|**[requestConfig](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfig)**||Ein Objekt, welches hauptsächlich die Id des WFS-Dienstes (`layerId` oder `restLayerId`), welcher angefragt werden soll, beinhaltet. Wenn ein WFS@2.0.0 verwendet werden soll, muss die id der gespeicherten Anfrage (Stored Query, `storedQueryId`) angegeben werden.|false|
 |selectSource|nein|String||Optionale Url, unter welcher eine JSON-Datei mit den verschiedenen Optionen für den Input gespeichert ist. Für eine Beispiel siehe **[https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json]**.|false|
-|title|ja|String||Der Titel der Suche, welcher in einem Dropdown im Werkzeug dargestellt wird.|false|
-|userHelp|nein|String||Informationstext hinsichtlich des Suchformulars, welches oberhalb des Formulars für den Nutzer angezeigt werden soll. Kann ein Übersetzungsschlüssel sein.|false|
+|suggestions|nein|**[suggestions](#markdown-header-portalconfigmenutoolwfssearchsearchinstancesuggestions)**||enn gegeben, dann wird der Service angefragt, wenn ein Nutzer etwas in ein Eingabefeld eingibt, um einen Vorschlag für die weitere Eingabe zu geben.|false|
+|title|ja|String||Der Titel der Suche, welcher in einem Dropdown im Werkzeug dargestellt wird. Kann ein Übersetzungsschlüssel sein.|false|
+|userHelp|nein|String||Informationstext hinsichtlich des Suchformulars, welches oberhalb des Formulars für den Nutzer angezeigt werden soll. Wenn der Parameter nicht gegeben ist, dann wird die Struktur aus der Konfiguration abgeleitet. Kann ein Übersetzungsschlüssel sein. Falls der Wert explizit auf `hide` gesetzt wurde, dann wird keine Beschreibung der Struktur des Formulars angezeigt.|false|
 
 **Beispiel**
 
@@ -2336,7 +2295,7 @@ Eine Klausel (`clause`) definiert die Art und Weise wie verschiedene `literals` 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|literals|ja|**[literal](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral)**[]||Array an `literals`.|false|
+|literals|ja|**[literal](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral)**[]||Array an `literals`.|true|
 |type|ja|enum["and", "or"]||Die Art und Weise wie die `literals` dieser `clause` angefragt werden sollen.|false|
 
 **Beispiel**
@@ -2514,7 +2473,8 @@ Falls beide Parameter gesetzt wurden, dann wird `restLayerId` verwendet.
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |layerId|nein|String||Id des WFS Dienstes, welcher angefragt werden soll. Informationen werden aus der **[services.json](services.json.de.md)** bezogen.|false|
-|maxFeatures|nein|Number|8|Maximale Anzahl an Features, welche der Dienst zurückgeben soll.|false|
+|likeFilter|nein|**[likeFilter](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfiglikefilter)**|{"wildCard": "*", "singleChar": "#", "escape": "!"}|Die Konfiguration des Services hinsichtlich des like Filters.|true|
+|maxFeatures|nein|Number/String|8|Maximale Anzahl an Features, welche der Dienst zurückgeben soll. Alternativ kann auch der String `showAll` übergeben werden, um alle Ergebnisse anzuzeigen.|false|
 |restLayerId|nein|String||Id des WFS Dienstes, welcher angefragt werden soll. Informationen werden aus der **[rest-services.json](rest-services.json.de.md)** bezogen.|false|
 |storedQueryId|nein|String||Die Id der gespeichersten Anfrage (Stored Query) des WFS Dienstes, welche für die Anfrage an verwendet werden soll. Es wird angenommen, dass ein WFS@2.0.0 verwendet wird, falls dieses Feld gesetzt wurde.|false|
 
@@ -2531,6 +2491,31 @@ Falls beide Parameter gesetzt wurden, dann wird `restLayerId` verwendet.
 
 ***
 
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.requestConfig.likeFilter
+
+Innerhalb eines Filters für einen WFS-Dienst können Werte mit einem `equal` oder einem `like` verglichen werden.
+Wenn der Vergleich mit einem `like` durchgeführt werden soll, dann werden weitere Eigenschaften benötigt. Diese können sowohl im Werte, als auch in der Eigenschaftsdefintion variieren.
+Es wird für die Dokumentation angenommen, dass die Eigenschaften `wildCard`, `singleChar` und `escape` heißen; Variationen wie `wildCard`, `single` und `escape` sind jedoch auch möglich.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|wildCard|ja|String|"*"|Der Wildcardwert für den like Filter.|true|
+|singleChar|ja|String|"#"|Der Wert für einen einzelnen Charakter für den like Filter.|true|
+|escape|ja|String|"!"|Der Escape-Wert für den like Filter.|true|
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.suggestions
+
+Konfiguration für die Vorschläge von Nutzereingaben.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|featureType|nein|String||Wenn gegeben wird die Anfrage mit diesem featureType statt dem aus der Definition des Services. Nur verwendbar, wenn der Dienst in der **[services.json](services.json.de.md)** definiert wurde.|false|
+|length|nein|Number|3|Die Anfrage wird dann getriggered, wenn die Inputlänge mindestens so lang ist wie der Wert dieses Parameters.|false|
+
+***
+
 #### Portalconfig.menu.tool.wfst
 
 [inherits]: # (Portalconfig.menu.tool)
@@ -2544,9 +2529,9 @@ Zur Vorbereitung muss ein WFS-T Service bereitgestellt werden (siehe services.js
 |layerIds|ja|String[]||Array von Layer IDs.|false|
 |toggleLayer|nein|Boolean|false|Flag ob die Features eines Layers beim Hinzufügen eines neuen Features sichtbar bleiben.|
 |layerSelect|nein|String|"aktueller Layer:"|Möglichkeit die Beschriftung der Layer Auswahl zu konfigurieren.|
-|pointButton|nein|[Button](#markdown-header-portalconfigmenutoolwfstbutton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen eines Punktes zur Verfügung steht und welche Beschriftung der Button haben soll.|
-|lineButton|nein|[Button](#markdown-header-portalconfigmenutoolwfstbutton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen einer Linie zur Verfügung steht und welche Beschriftung der Button haben soll.|
-|areaButton|nein|[Button](#markdown-header-portalconfigmenutoolwfstbutton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen einer Fläche zur Verfügung steht und welche Beschriftung der Button haben soll.|
+|pointButton|nein|[Button](#markdown-header-portalconfigmenutoolwfstbutton)[]|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen eines Punktes zur Verfügung steht und welche Beschriftung der Button haben soll.|
+|lineButton|nein|[Button](#markdown-header-portalconfigmenutoolwfstbutton)[]|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen einer Linie zur Verfügung steht und welche Beschriftung der Button haben soll.|
+|areaButton|nein|[Button](#markdown-header-portalconfigmenutoolwfstbutton)[]|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen einer Fläche zur Verfügung steht und welche Beschriftung der Button haben soll.|
 |edit|nein|[EditDelete](#markdown-header-portalconfigmenutoolwfsteditdelete)|false|Möglichkeit zu konfigurieren, ob der edit Button angezeigt wird und mit wekcher Beschriftung er angezeigt wird.|
 |delete|nein|[EditDelete](#markdown-header-portalconfigmenutoolwfsteditdelete)|false|Möglichkeit zu konfigurieren, ob der delete Button angezeigt wird und mit welcher Beschriftung er angezeigt wird.|
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
@@ -2595,30 +2580,38 @@ Das Attribut pointButton/lineButton/areaButton kann vom Typ Boolean oder Object 
 
 
 **Beispiel als Boolean**
-```
-#!json
-"pointButton": true
+
+```json
+{
+    "pointButton": true
+}
 ```
 
 **Beispiel als Object**
-```
-#!json
-"pointButton": {
-    {
-        "layerId":"1234"
-        "show": true
-        "caption": "Punkt-Test",
-    },
-    {
-        "layerId": "5678"
-        "show": true
-    },
-    {
-        "layerId": "5489"
-        "show": false
-    }
+
+```json
+{
+    "layerId": "1234",
+    "show": true,
+    "caption": "Punkt-Test"
 }
 ```
+
+```json
+{
+    "layerId": "5678",
+    "show": true
+}
+```
+
+```json
+{
+    "layerId": "5489",
+    "show": false
+}
+```
+
+***
 
 #### Portalconfig.menu.tool.wfst.EditDelete
 Das Attribut edit / delete kann vom Typ Boolean oder String sein. Wenn es vom Typ Boolean ist, zeigt diese flag ob der Editier-/ Lösch-Button zur Verfügung stehen soll. Ist es vom Typ String so wird der Button mit der dort angegebenen Beschriftung angezeigt.
@@ -2646,7 +2639,7 @@ Das Attribut edit / delete kann vom Typ Boolean oder String sein. Wenn es vom Ty
 ***
 
 ### Portalconfig.menu.staticlinks
-Das Array staticlink beinhaltet Objekte die entweder als Link zu einer anderen Webressource dienen oder als Trigger eines zu definierenden Events.
+Das Array staticlink beinhaltet Objekte die entweder als Link zu einer anderen Webresource dienen oder als Trigger eines zu definierenden Events.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -2851,6 +2844,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 |Layer|ja|**[Layer](#markdown-header-themenconfiglayer)**/**[GroupLayer](#markdown-header-themenconfiggrouplayer)**[]||Definition der Layer.|false|
 |Ordner|nein|**[Ordner](#markdown-header-themenconfigordner)**[]||Definition der Ordner.|false|
 |isFolderSelectable|nein|Boolean|true|Legt fest, ob alle Layer eines Ordners auf einmal über einen Haken aktiviert bzw. deaktiviert werden dürfen.|false|
+|invertLayerOrder|nein|Boolean|false|Legt fest, ob bei Klick auf den Ordner die Reihenfolge, in der die Layer der Map hinzugefügt werden, umgekehrt werden soll.|false|
 
 **Beispiel Ordner mit einem Layer**
 ```
@@ -2916,6 +2910,31 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
             ]
         }
     ]
+}
+```
+
+**Beispiel Ordner mit invertierter Layer-Reihenfolge**
+
+In diesem Beispiel wird der Layer mit der Id 123 vor dem Layer 456 der Map hinzugefügt. Das führt dazu, dass Layer 123 unter Layer 456 dargestellt wird.
+
+```json
+{
+    "Fachdaten": {
+        "Ordner": [
+            {
+                "Titel": "Mein Ordner",
+                "invertLayerOrder": true,
+                "Layer": [
+                    {
+                        "id": "123"
+                    },
+                    {
+                        "id": "456"
+                    }
+                ]
+            }
+        ]
+    }
 }
 ```
 
@@ -3298,7 +3317,7 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
 |extendedFilter|nein|Boolean||Gibt an, ob dieser Layer vom Werkzeug "extendedFilter" in **[tools](#markdown-header-portalconfigmenutools)** verwendet werden kann.|false|
 |filterOptions|nein|**[filterOption](#markdown-header-themenconfiglayervectorfilteroption)**[]||Filteroptionen die vom Werkzeug "wfsFeatureFilter" in **[tools](#markdown-header-portalconfigmenutools)** benötigt werden.|false|
 |mouseHoverField|nein|String/String[]||Attributname oder Array von Attributnamen, die angezeigt werden sollen, sobald der User mit der Maus über ein Feature hovert.|false|
-|routable|nein|Boolean||Gibt an, ob die Position der GFI-Abfrage als Routing Ziel verwendet werden kann. Hierzu muss das Werkzeug **[routing](#markdown-header-portalconfigmenutoolrouting)** konfiguriert sein.|false|
+|nearbyTitle|nein|String/String[]||Attributname oder Array von Attributnamen die bei der Umkreissuche in der Ergebnisliste als Titel angezeigt werden sollen.|false|
 |searchField|nein|String||Attributname nach dem die Searchbar diesen Layer durchsucht.|false|
 |additionalInfoField|nein|String|"name"|Attributname des Features für die Hitlist in der Searchbar. Ist das Attribut nicht vorhanden, wird der Layername angegeben.|false|
 |styleId|nein|String||Id die den Style definiert. Id wird in der **[style.json](style.json.de.md)** aufgelöst.|false|
@@ -3339,7 +3358,7 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
         }
     ],
     "mouseHoverField": "name",
-    "routable": false,
+    "nearbyTitle": "name",
     "searchField": "name",
     "styleId": "123456",
     "hitTolerance": 50

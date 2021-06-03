@@ -6,7 +6,7 @@
 
 # config.json
 
-The *config.json* file contains all configuration of the portal interface. It controls which elements are placed where on the menu bar, how the map is to be centered initially, and which layers are to be loaded. See **[this file for an example](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/stable/portal/basic/config.json)**.
+The *config.json* file contains all configuration of the portal interface. It controls which elements are placed where on the menu bar, how the map is to be centered initially, and which layers are to be loaded. See **[this file for an example](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/portal/basic/config.json)**.
 
 The configuration is separated into two sections, **[Portalconfig](#markdown-header-Portalconfig)** and **[Themenconfig](#markdown-header-Themenconfig)**
 
@@ -724,7 +724,7 @@ The menu bar allows showing a portal name and portal image if sufficient horizon
 {
     "portalTitle": {
         "title": "Master",
-        "logo": "../../lgv-config/img/hh-logo.png",
+        "logo": "https://geodienste.hamburg.de/lgv-config/img/hh-logo.png",
         "link": "https://geoinfo.hamburg.de",
         "toolTip": "Landesbetrieb Geoinformation und Vermessung"
     }
@@ -744,7 +744,8 @@ The menu bar allows showing a portal name and portal image if sufficient horizon
 |startCenter|no|**[Coordinate](#markdown-header-datatypescoordinate)**|[565874, 5934140]|Initial center coordinate.|false|
 |extent|no|**[Extent](#markdown-header-datatypesextent)**|[510000.0, 5850000.0, 625000.4, 6000000.0]|Map extent - map may not be moved outside these boundaries.|false|
 |resolution|no|Float|15.874991427504629|The initial map resolution from the `options` element. Used in preference to `zoomLevel`.|false|
-|zoomLevel|no|Integer||The initial map zoom level from the `options` element. If `resolutions` is set, this is ignored.|false|
+|startZoomLevel|no|Integer||The initial map zoom level from the `options` element. If `resolutions` is set, this is ignored.|false|
+|zoomLevel|no|Integer||Deprecated in 3.0.0 Please use "startZoomLevel".|false|
 |epsg|no|String|"EPSG:25832"|Coordinate reference system EPSG code. The code must be defined as a `namedProjection`.|false|
 |options|no|[option](#markdown-header-portalconfigmapviewoption)[]|[{"resolution":66.14579761460263,"scale":250000,"zoomLevel":0}, {"resolution":26.458319045841044,"scale":100000,"zoomLevel":1}, {"resolution":15.874991427504629,"scale":60000,"zoomLevel":2}, {"resolution": 10.583327618336419,"scale":40000,"zoomLevel":3}, {"resolution":5.2916638091682096,"scale":20000,"zoomLevel":4}, {"resolution":2.6458319045841048,"scale":10000,"zoomLevel":5}, {"resolution":1.3229159522920524,"scale":5000,"zoomLevel":6}, {"resolution":0.6614579761460262,"scale":2500,"zoomLevel":7}, {"resolution":0.2645831904584105,"scale": 1000,"zoomLevel":8}, {"resolution":0.13229159522920521,"scale":500,"zoomLevel":9}]|Available scale levels and their resolutions.|false|
 
@@ -753,7 +754,7 @@ The menu bar allows showing a portal name and portal image if sufficient horizon
 ```json
 {
     "mapView": {
-        "backgroundImage": "/lgv-config/img/backgroundCanvas.jpeg",
+        "backgroundImage": "https://geodienste.hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
         "startCenter": [561210, 5932600],
         "options": [
             {
@@ -952,7 +953,6 @@ A folder object defined by a name, glyphicon, and its children.
 [type:compareFeatures]: # (Portalconfig.menu.tool.compareFeatures)
 [type:parcelSearch]: # (Portalconfig.menu.tool.parcelSearch)
 [type:print]: # (Portalconfig.menu.tool.print)
-[type:routing]: # (Portalconfig.menu.tool.routing)
 [type:draw]: # (Portalconfig.menu.tool.draw)
 [type:featureLister]: # (Portalconfig.menu.tool.featureLister)
 [type:lines]: # (Portalconfig.menu.tool.lines)
@@ -994,7 +994,6 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |measure|no|**[measure](#markdown-header-portalconfigmenutoolmeasure)**||Allows measuring areas and distances in the units m/km resp. m²/km².|false|
 |parcelSearch|no|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||_Deprecated in the next major release. Please use `wfsSearch` instead._ The parcel search tool allows searching for parcels by district and parcel number. Many German administrative units feature a tripartite order, hence the tool offers searching by "Gemarkung" (district), "Flur" (parcel) (not used in Hamburg), and "Flurstück" (literally "parcel piece").|false|
 |print|no|**[print](#markdown-header-portalconfigmenutoolprint)**||Printing module that can be used to export the map's current view as PDF.|false|
-|routing|no|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Tool to compute routes.|true|
 |saveSelection|no|**[saveSelection](#markdown-header-portalconfigmenutoolsaveselection)**||Tool that allows saving the map's current state as sharable URL. This will list all currently visible layers in order, transparency, and visibility, as well as saving the center coordinate.|false|
 |searchByCoord|no|**[searchByCoord](#markdown-header-portalconfigmenutoolsearchbycoord)**||Coordinate search with switchable coordinate reference system. The tool will zoom to any given coordinate and set a marker on it.|false|
 |selectFeatures|no|**[tool](#markdown-header-portalconfigmenutool)**||Allows selecting a set of vector features by letting the user draw a box on the map. Features in that box will be displayed with GFI information.|false|
@@ -1048,7 +1047,7 @@ Displays information to a clicked feature by firing a *GetFeatureInfo* or *GetFe
 |name|yes|String||Name displayed in the menu.|false|
 |centerMapToClickPoint|no|Boolean|false|If true, centers any clicked feature on the map. Only relevant if the `desktopType` attribute is "detached".|false|
 |glyphicon|no|String|"glyphicon-info-sign"|CSS glyphicon class. Glyphicon is shown before the tool name.|false|
-|isActive|no|Boolean|true|Whether GFI is active initially.|false|
+|active|no|Boolean|true|Whether GFI is active initially.|false|
 |desktopType|no|String|"detached"|Used to choose a GFI template in desktop mode. If using "attached", the GFI will be positioned next to the feature. Using "detached" will place a marker on the feature and create the GFI window to the right of the map.|false|
 |centerMapMarkerPolygon|no|Boolean|false|Specification of whether the clicked feature is used to get the center coordinate or the actually clicked coordinate is used.|false|
 |highlightVectorRules|no|**[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)**||Rule definition to override the styling of clicked vector data.|false|
@@ -1060,7 +1059,7 @@ Displays information to a clicked feature by firing a *GetFeatureInfo* or *GetFe
     "gfi":{
         "name": "Request information",
         "glyphicon": "glyphicon-info-sign",
-        "isActive": true,
+        "active": true,
         "centerMapMarkerPolygon": true,
         "highlightVectorRules": {
             "fill": {
@@ -1085,7 +1084,7 @@ Displays information to a clicked feature by firing a *GetFeatureInfo* or *GetFe
     "gfi": {
         "name": "Request information",
         "glyphicon": "glyphicon-info-sign",
-        "isActive": true,
+        "active": true,
         "centerMapMarkerPolygon": true
     }
 }
@@ -1383,7 +1382,7 @@ Example request: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=
 |----|--------|----|-------|-----------|------|
 |serviceId|yes|String||Id of the service to request. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
 |storedQueryId|yes|String||Id of the stored query to use.|true|
-|configJSON|yes|String||Path to the configuration file holding districts. **[Example file](https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json)**.|false|
+|configJSON|yes|String||Path to the configuration file holding districts. **[Example file](https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json)**.|false|
 |parcelDenominator|no|Boolean|false|Flag defining whether parcel denominators are used as a level. (Hamburg special: As a city state, Hamburg has no parcel denominators.)|false|
 |styleId|no|String||Allows choosing a style id from the `style.json` file to overwrite the map marker default style.|false|
 |zoomLevel|no|Number|7|Defines to which zoom level the tool should zoom.|false|
@@ -1397,7 +1396,7 @@ Example request: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=
         "glyphicon": "glyphicon-search",
         "serviceId": "6",
         "storedQueryID": "Flurstueck",
-        "configJSON": "/lgv-config/gemarkungen_hh.json",
+        "configJSON": "https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json",
         "parcelDenominator": false,
         "styleId": "flaecheninfo"
     }
@@ -1446,11 +1445,11 @@ Coordinate search.
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Print module, configurable for 3 print services: *High Resolution PlotService*, *MapfishPrint 2* (_Deprecated in 3.0.0_), and *MapfishPrint 3*. Printing vector tile layers is not supported, since the print services themselves do not support it. Should users try to print such layers, a warning will be shown.
+Print module, configurable for 2 print services: *High Resolution PlotService* and *MapfishPrint 3*. Printing vector tile layers is not supported, since the print services themselves do not support it. Should users try to print such layers, a warning will be shown.
 
 >**⚠️ This requires a backend!**
 >
->**A [Mapfish-Print2](http://www.mapfish.org/doc/print/index.html), [Mapfish-Print3](http://mapfish.github.io/mapfish-print-doc), or *HighResolutionPlotService* is required as backend.**
+>**A [Mapfish-Print3](https://mapfish.github.io/mapfish-print-doc), or *HighResolutionPlotService* is required as backend.**
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
@@ -1459,31 +1458,11 @@ Print module, configurable for 3 print services: *High Resolution PlotService*, 
 |printAppId|no|String|"master"|Print service print app id. This tells the print service which template(s) to use.|false|
 |filename|no|String|"report"|Print result file name.|false|
 |title|no|String|"PrintResult"|Document title appearing as header.|false|
-|version|no|String||Flag determining which print service is in use. `"HighResolutionPlotService"` activates the *High Resolution PlotService*, if the parameter is not set, *Mapfish 2* is used. Else, *MapfishPrint 3* is used.|false|
-|printID|no|String||_Deprecated in 3.0.0._ Id of the print service to use. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
-|outputFilename|no|String|"report"|_Deprecated in 3.0.0._ Print result file name.|false|
-|gfi|no|Boolean|false|_Deprecated in 3.0.0._|false|
-|configYAML|no|String|"/master"|_Deprecated in 3.0.0._ Configuration of the template to be used.|false|
+|version|no|String||Flag determining which print service is in use. `"HighResolutionPlotService"` activates the *High Resolution PlotService*, if the parameter is not set, *Mapfish 3* is used.|false|
 |isLegendSelected|no|Boolean|false|Defines whether a checkbox to print the legend is offered. Only used for print services supporting legend printing (Mapfish Print 3).|false|
 |legendText|no|String|"Mit Legende"|Descriptive text for the legend print checkbox.|false|
 |dpiForPdf|no|Number|200|DPI resolution for the map in the PDF file.|false|
 |useProxy|no|Boolean|false|_Deprecated in the next major release. [GDI-DE](https://www.gdi-de.org/en) recommends setting CORS headers on the required services instead of using proxies._ Defines whether a service URL should be requested via proxy. For this, dots in the URL are replaced with underscores.|false|
-
-**MapfishPrint2 example configuration**
-
-```json
-{
-    "print": {
-        "name": "Karte drucken",
-        "glyphicon": "glyphicon-print",
-        "printID": "123456",
-        "configYAML": "/master",
-        "outputFilename": "report",
-        "title": "My Title",
-        "gfi": true
-    }
-}
-```
 
 **High Resolution PlotService example configuration**
 
@@ -1510,42 +1489,7 @@ Print module, configurable for 3 print services: *High Resolution PlotService*, 
         "mapfishServiceId": "mapfish_printservice_id",
         "printAppId": "mrh",
         "filename": "Print",
-        "title": "Mein Titel",
-        "version" : "mapfish_print_3"
-    }
-}
-```
-
-***
-
-#### Portalconfig.menu.tool.routing
-
-[inherits]: # (Portalconfig.menu.tool)
-
-Routing module.
-
->**⚠️ This requires a backend!**
->
->**Routing is performed on external data and included in just a few portals, e.g. the [Traffic portal](https://geoportal-hamburg.de/verkehrsportal).**
-
-|Name|Required|Type|Default|Description|Expert|
-|----|--------|----|-------|-----------|------|
-|viomRoutingID|yes|String||ID of the routing service to use. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
-|bkgSuggestID|yes|String||BKG suggestion service id. Used to retrieve address suggestions. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
-|bkgGeosearchID|yes|String||BKG geocoding service. Used to convert chosen addresses to coordinates. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
-|isInitOpen|no|Boolean|false|Whether the tool is initially open.|false|
-
-**Example**
-
-```json
-{
-    "routing": {
-        "name": "Routing Planner",
-        "glyphicon": "glyphicon-road",
-        "viomRoutingID": "1",
-        "bkgSuggestID": "2",
-        "bkgGeosearchID": "3",
-        "isInitOpen": false
+        "title": "Mein Titel"
     }
 }
 ```
@@ -2034,12 +1978,19 @@ The contact form allows users to send messages to a configured mail address.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|serviceID|yes|String||Email service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
-|from|no|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name":"LGVGeoportalHilfe"}]|Email sender. Please mind our **[hints regarding mail safety](#markdown-header-hints-regarding-email-safety)**.|false|
-|to|no|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name": "LGVGeoportalHilfe"}]|Email receiver. Please mind out **[hints regarding mail safety](#markdown-header-hints-regarding-email-safety)**.|false|
-|textPlaceholder|no|String|"Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;"|Placeholder text for the user message input element.|false|
-|includeSystemInfo|no|Boolean|false|Flag determining if the sender's system information is to be included in the email.|false|
-|deleteAfterSend|no|Boolean|false|Flag determining whether the contact form is emptied and closed after successfully sending a message.|false|
+|serviceId|yes|String||Email service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
+|serviceID|no|String||_Deprecated in the next major release. Please use **serviceId** instead._ Email service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
+|from|yes|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]||Email sender. Please mind our **[hints regarding E-Mail safety](#markdown-header-hints-regarding-e-mail-safety)**.|false|
+|to|yes|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]||Recipient of the E-Mail. Please mind our **[hints regarding E-Mail safety](#markdown-header-hints-regarding-e-mail-safety)**.|false|
+|closeAfterSend|no|Boolean|false|Flag determining if the contact window should be closed after successfully sending a message.|false|
+|contactInfo|no|String||Additional text shown above the contact form.|false|
+|deleteAfterSend|no|Boolean|false|Flag determining whether the contact form is emptied after successfully sending a message.|false|
+|includeSystemInfo|no|Boolean|false|Flag determining if the senders system information should be included in the E-Mail.|false|
+|locationOfCustomerService|no|String|"de"|The country the customer service is based in. The parameter is used for the date in the ticketId.|false|
+|maxLines|no|Number|5|Amount of lines (height) for the textArea of the form|false|
+|showPrivacyPolicy|no|Boolean|false|Flag determining if a checkbox should be displayed for agreeing to the privacy policy.|false|
+|privacyPolicyLink|no|String|"https://www.masterportal.org/datenschutz.html"|Link to the full privacy policy. Should be given if `showPrivacyPolicy` is set to true.|false|
+|subject|no|String||The subject to be used for the E-Mail.|false|
 |withTicketNo|no|Boolean|true|Whether successfully sending a email retrieves a ticket number for the user.|false|
 
 **Example**
@@ -2047,9 +1998,9 @@ The contact form allows users to send messages to a configured mail address.
 ```json
 {
     "contact": {
-        "name": "Kontakt",
+        "name": "common:menu.contact",
         "glyphicon": "glyphicon-envelope",
-        "serviceID": "123",
+        "serviceId": "123",
         "from": [
             {
                 "email": "lgvgeoportal-hilfe@gv.hamburg.de",
@@ -2062,15 +2013,15 @@ The contact form allows users to send messages to a configured mail address.
                 "name":"LGVGeoportalSupport"
             }
         ],
-        "textPlaceholder": "Please enter your message in this field.",
         "includeSystemInfo": true,
+        "closeAfterSend": true,
         "deleteAfterSend": true,
         "withTicketNo": false
     }
 }
 ```
 
->Hints regarding email safety
+>Hints regarding E-Mail safety
 
 The unchecked usage of *sender (FROM)*, *recipient (TO)*, *copy (CC)*, and *blind copy (BCC)* by the SMTP server is hereby **expressly discouraged** for security reasons. The unchecked usage of the customer email as a *reply to (REPLY-TO)* by the SMTP server is warned against.
 
@@ -2094,11 +2045,11 @@ We warn against automatically setting the customer email as *REPLY-TO*.
 
 #### Portalconfig.menu.tool.contact.email
 
-Email object containing a mail address and a display name.
+E-Mail object containing a mail address, and a display name.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|email|no|String||Email address.|false|
+|email|no|String||E-Mail address.|false|
 |name|no|String||Display name.|false|
 
 **Example**
@@ -2324,8 +2275,9 @@ A singular instance of the WFS Search which will be selectable through a dropdow
 |literals|yes|**[literal](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral)**[]||Array of `literals`.|true|
 |requestConfig|yes|**[requestConfig](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfig)**||An object, which mainly contains the id of the service (`layerId` or `restLayerId`) that is supposed to be requested. If a WFS@2.0.0 will be used, the `storedQueryId` needs to be provided as well.|false|
 |selectSource|no|String||Optional Url leading to the expected options for the different inputs. See **[https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json]** for an example.|false|
+|suggestions|no|**[suggestions](#markdown-header-portalconfigmenutoolwfssearchsearchinstancesuggestions)**||If given, the service will be queried whenever a user inserts values into an input field to suggest a value.|false|
 |title|yes|String||Title of the search instance to be displayed in a dropdown inside the tool.|false|
-|userHelp|no|String||Information text regarding the search formular to be displayed to the user. May be a locale key.|false|
+|userHelp|no|String||Information text regarding the search formular to be displayed to the user. If not given, it will be generated from the structure of the config. May be a locale key. If the value explicitly set to `hide`, no information regarding the structure of the formular will be displayed.|false|
 
 **Example**
 
@@ -2616,7 +2568,8 @@ If both are defined `restLayerId` is used.
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |layerId|no|String||Id of the WFS service that should be queried. Information is fetched from **[services.json](services.json.md)**.|false|
-|maxFeatures|no|Number|8|Maximum amount of features that are supposed to be returned from the service.|false|
+|likeFilter|no|**[likeFilter](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfiglikefilter)**|{"wildCard": "*", "singleChar": "#", "escape": "!"}|The configuration of the service for the like filter.|true|
+|maxFeatures|no|Number/String|8|Maximum amount of features that are supposed to be returned from the service. Alternatively, the String `showAll` can be assigned to `maxFeatures` to load all features.|false|
 |restLayerId|no|String||Id of the WFS service that should be queried. Information is fetched from **[rest-services.json](rest-services.json.md)**.|false|
 |storedQueryId|no|String||The id of the Stored Query of the WFS that should be used to query the service. If this field is set, it is assumed that a WFS@2.0.0 is used.|false|
 
@@ -2633,6 +2586,31 @@ If both are defined `restLayerId` is used.
 
 ***
 
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.requestConfig.likeFilter
+
+Values inside a filter for a WFS service can be compared with an `equal` or a `like`.
+If the comparison should be with a `like` then the filter needs additional properties. These may vary in value and property definition.
+For the documentation, it is assumed that the properties are called `wildCard`, `singleChar` and `escape`; variations like e.g. `wildCard`, `single` and `escape` are possible.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|wildCard|yes|String|"*"|The wildcard value for the like filter.|true|
+|singleChar|yes|String|"#"|The single character value for the like filter.|true|
+|escape|yes|String|"!"|The escape character value for the like filter.|true|
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.suggestions
+
+Configuration for the suggestions of the user input.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|featureType|no|String||If given, the query will be sent with this featureType instead of the one configured for the service itself. Only usable if the layer was defined in the **[services.json](services.json.md)**.|false|
+|length|no|Number|3|The query is triggered when the length of the input is at least as long as this parameter.|false|
+
+***
+
 #### Portalconfig.menu.tool.wfst
 
 [inherits]: # (Portalconfig.menu.tool)
@@ -2645,9 +2623,9 @@ WFS-T module to visualize (*GetFeature*), create (*insert*), update (*update*), 
 |layerIds|yes|String[]||Array of layer ids.|false|
 |toggleLayer|no|Boolean|false|Whether layer feature stay visible when adding a new feature.|
 |layerSelect|no|String|"aktueller Layer:"|Option to change the layer selection label.|
-|pointButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)|false|Configuration of which layers allow creating points and what label the button should have.|
-|lineButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)|false|Configuration of which layers allow creating lines and what label the button should have.|
-|areaButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)|false|Configuration of which layers allow creating areas and what label the button should have.|
+|pointButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)[]|false|Configuration of which layers allow creating points and what label the button should have.|
+|lineButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)[]|false|Configuration of which layers allow creating lines and what label the button should have.|
+|areaButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)[]|false|Configuration of which layers allow creating areas and what label the button should have.|
 |edit|no|[EditDelete](#markdown-header-portalconfigmenutoolwfsteditdelete)|false|Whether the edit button should be shown, and if, with which label.|
 |delete|no|[EditDelete](#markdown-header-portalconfigmenutoolwfsteditdelete)|false|Whether the delete button should be shown, and if, with which label.|
 |useProxy|no|Boolean|false|_Deprecated in the next major release. [GDI-DE](https://www.gdi-de.org/en) recommends setting CORS headers on the required services instead of using proxies._ Defines whether a service URL should be requested via proxy. For this, dots in the URL are replaced with underscores.|false|
@@ -2696,7 +2674,7 @@ The attributes `pointButton`/`lineButton`/`areaButton` may be of type boolean or
 |----|--------|----|-------|-----------|------|
 |layerId|yes|String||Layer to be configured.|false|
 |show|yes|Boolean|true|Whether the button is available.|false|
-|caption|no|String|"Erfassen"|Button text. If no value is given, the Masterportal will use, depending on circumstances, "Punkt erfassen", "Linie erfassen", or "Fläche erfassen".|false|
+|caption|no|String|"Erfassen"|Button text. If no value is given, the Masterportal will use, depending on the type of button, "Punkt erfassen", "Linie erfassen", or "Fläche erfassen".|false|
 
 **Examples**
 
@@ -2708,23 +2686,27 @@ The attributes `pointButton`/`lineButton`/`areaButton` may be of type boolean or
 
 ```json
 {
-    "pointButton": {
-        {
-            "layerId":"1234",
-            "show": true,
-            "caption": "Point test",
-        },
-        {
-            "layerId": "5678",
-            "show": true
-        },
-        {
-            "layerId": "5489",
-            "show": false
-        }
-    }
+    "layerId": "1234",
+    "show": true,
+    "caption": "Point test"
 }
 ```
+
+```json
+{
+    "layerId": "5678",
+    "show": true
+}
+```
+
+```json
+{
+    "layerId": "5489",
+    "show": false
+}
+```
+
+***
 
 #### Portalconfig.menu.tool.wfst.EditDelete
 
@@ -2969,6 +2951,7 @@ Folder definition. Folders may also be nested.
 |Layer|yes|**[Layer](#markdown-header-themenconfiglayer)**/**[GroupLayer](#markdown-header-themenconfiggrouplayer)**[]||Layer definition.|false|
 |Ordner|no|**[Ordner](#markdown-header-themenconfigordner)**[]||Folder definition.|false|
 |isFolderSelectable|no|Boolean|true|Defines whether all layers of a folder can be de-/activated at once by using a checkbox.|false|
+|invertLayerOrder|nein|Boolean|false|Defines wheather the order of layers added to the map should be invert when clicking the folder.|false|
 
 **Example folder with one layer**
 
@@ -3042,6 +3025,32 @@ Folder definition. Folders may also be nested.
     }
 }
 ```
+
+**Example folder with an inverted order of layers**
+
+In this example layer 123 will be added to the map first. This leads to 456 being above 123.
+
+```json
+{
+    "Fachdaten": {
+        "Ordner": [
+            {
+                "Titel": "My folder",
+                "invertLayerOrder": true,
+                "Layer": [
+                    {
+                        "id": "123"
+                    },
+                    {
+                        "id": "456"
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
 
 ***
 
@@ -3418,8 +3427,7 @@ List of attributes typically used in vector layers. Vector layers are WFS, GeoJS
 |extendedFilter|no|Boolean||Defines whether the **[tool](#markdown-header-portalconfigmenutools)** `extendedFilter` may use this layer.|false|
 |filterOptions|no|**[filterOption](#markdown-header-themenconfiglayervectorfilteroption)**[]||Filter options required by **[tool](#markdown-header-portalconfigmenutools)** `wfsFeatureFilter`.|false|
 |mouseHoverField|no|String/String[]||Attribute name or array thereorf to be shown on mouse hovering a feature.|false|
-|routable|no|Boolean||Whether die GFI request's position may be used as routing target. For this to work, the tool **[routing](#markdown-header-portalconfigmenutoolrouting)** must be configured.|false|
-|searchField|no|String||Attribute name by which the searchbar would search in this layer.|false|
+|nearbyTitle|no|String/String[]||Attribute name or array of features to be shown on nearby search results.|false|
 |additionalInfoField|no|String|"name"|Feature's attribute name to use in the search bar's hit list. Should this attribute not exist in a hit feature, the layer name is used instead.|false|
 |styleId|no|String||Style ID. Resolved using the **[style.json](style.json.md)** file.|false|
 |styleGeometryType|no|String/String[]||WFS style geometry type to reduce visible features to the ones sharing the given geometry types. **[More information](style.json.md#markdown-header-abbildungsvorschriften)**.|false|
@@ -3459,7 +3467,7 @@ List of attributes typically used in vector layers. Vector layers are WFS, GeoJS
         }
     ],
     "mouseHoverField": "name",
-    "routable": false,
+    "nearbyTitle": "name",
     "searchField": "name",
     "styleId": "123456",
     "hitTolerance": 50

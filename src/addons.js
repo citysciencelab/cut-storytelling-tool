@@ -75,9 +75,9 @@ async function loadAddon (addonKey) {
     const addonModule = await import(
         /* webpackChunkName: "[request]" */
         /* webpackInclude: /addons[\\\/].*[\\\/]index.js$/ */
-        /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
-        `../addons/${allAddons[addonKey].entry}`
-    ),
+        /* webpackExclude: /(node_modules)|(.+unittests.)|(.+test.)+/ */
+            `../addons/${allAddons[addonKey].entry}`
+        ),
         addon = addonModule.default;
 
     // Add the locale

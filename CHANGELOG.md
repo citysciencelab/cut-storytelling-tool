@@ -3,8 +3,99 @@
 
 [Semantic versioning](https://semver.org/spec/v2.0.0.html) is used.
 
+## Known Issues
+- 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
+
+---
 
 ## Unreleased - in development
+### Added
+
+### Changed
+- The Id in config.json for every layer could be in an object format, to allow any number of menu entries with the same layer id.
+- New Parameter propertyNames could be added in config.json for WFS layer to receive filtered response.
+### Deprecated
+
+### Removed
+
+### Fixed
+- Now Sensor Layer will show 0 if the dataValue is 0 and not "no data"
+---
+
+## v2.9.0 - 2021-05-05
+### Added
+- New attribute 'nearbyTitle' implemented in config.json for the title in the list of nearby search results.
+- Add @babel/eslint-parser to the package.json
+
+### Changed
+- Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.
+- Tool addons are now also written in config.json in camelCase.
+- colorTools are renamed into convertColor (src/utils/convertColor)
+- Updates the core-js and babel dependencies in the package.json
+- Update the dependency caniuse-lite.
+- The module addGeoJSON switched from backbone to vue and is provided as a util now.
+- The loading image is now displayed longer when switching to map mode: Oblique (max. 80000ms).
+
+### Deprecated
+- colorArrayToRgb (src/utils/colorArrayToRgb) is deprecated. Use convertColor (src/utils/convertColor) instead.
+
+### Removed
+- remove babel-eslint from the package.json
+- Documentation files in German language have been removed. From now on the documentation will only be maintained in English. The only exception is config.json.de.md, because a German language file is necessary for the mp-admin.
+
+### Fixed
+- Fixed a bug that prevented the gfi of a wms from being requested via a reverseproxy.
+- Printing wfs cluster features and features with multiple styles.
+- If the transparency of a layer is defined as string, it will be parsed to an integer now.
+- When clicking on layers of type TERRAIN3D, TILESET3D or OBLIQUE in the search, a query is now displayed that can be used to switch to the respective map mode.
+- Fixed a bug that for the gfi in infoFormat "text/html" did not execute the script part when starting the iFrame.
+- Fixed an issue in searchbar, that after finding a result and zooming to it the 3D mode couldn't be activated anymore
+- Fixed an issue in fileImport that when the imported KML File is missing the isVisible setting the feature wouldn't be displayed when printing
+---
+
+## v2.8.0 - 2021-04-07
+### Added
+- External WMS Layers with version lower than 1.3.0 can also be imported.
+- Added possibility to prepend prefix to GFI attribute.
+- WMTS Layers can now be printed with MapFish.
+- The user can search visible wfs features by clicking a position on the map by clicking the "Nearby button" on the controls
+- The user can search visible wfs features after searching an address from search field by clicking the "Nearby button" on the controls
+
+### Changed
+- The tool AddWMS switched from backbone to vue module.
+- Consolidate the mqttOptions in the layer sensor with the documentation (services.json.md).
+- In config.json.md, the attribute `isActive` was changed to `active` in Portalconfig.menu.tool.gfi.
+- Legends are only printed from layers that are switched visible.
+- Layers of type `SensorThings` are now automatically displayed in the default topic tree. The attribute `related_wms_layers` can be used to hide related layers of type `WMS`.
+
+### Removed
+- SensorThings address tab in layerInformation removed.
+- The print module for using mapfishprint v2 has been removed. In this case the attribute `proxyurl` has been removed too
+- The vector style module for using the style_v2.json has been removed. In this case the atteibute `useVectorStyleBeta` has been removed too.
+
+### Fixed
+- GFI of type text/html now also loads css files of the body.
+- Show metadata if the MD_Identification node is implemented as MD_DataIdentification or SV_ServiceIdentification.
+- Fixed a bug that made single layer info legend appear multiple times when activating additional layers while opened.
+- Printing of tooltip of measure-tool works: The tooltip of the measure tool is no longer implemented as an overlay, it is created now as vectorlayer.
+- Printing of big amount of features now works.
+- Removed a bug causing an irritating map focus after using BKG search and leave search field
+
+---
+
+## v2.7.2 - 2021-03-09
+### Fixed
+- SensorThings: Fix the bug where initially data has not been fetched, resulting display of "no data" on mousehover.
+
+---
+
+## v2.7.1 - 2021-03-05
+### Fixed
+- The representation in the legend has been corrected.
+
+---
+
+## v2.7.0 - 2021-03-03
 ### Added
 - Integration and use of WMS-services secured via User / Password (HTTP-Basic). Thy are marked in the topic tree by lock symbol.
 - On draw tool Double Circle configuration available in config.json
@@ -12,21 +103,72 @@
 - On tools Imported Layer in theme tree integrated function under Addons
 - On tools Geometrie/Gebäude Analyse funtion on tools under Addons
 - On tools Taktische Zeichen on tools under Addons
+- Added the parameters 'contactInfo', 'includeSystemInfo', 'locationOfCustomerService', 'maxLines', 'showPrivacyPolicy' and 'subject' to the configuration of the contact tool.
 
 ### Changed
 - The language of the changelog has been changed to English.
+- Migrated the SearchByCoord Tool from Backbone.js to Vue.js.
 - The measure tool has been migrated to Vue.
 - Migrated the Download Tool from Backbone.js to Vue.js and integrated it into the Draw Tool.
 - Migrated the SaveSelection Tool from Backbone.js to Vue.js. It also no longer has a Radio channel.
 - copyToClipboard is now a reusable action and can no longer be triggered through the Radio.
+- Migrated the Contact Tool from Backbone.js to Vue.js. In doing so, the functionality of the config parameter 'deleteAfterSend' was split into two parameters; 'closeAfterSend' and 'deleteAfterSend'.
+- Migrated the StyleVT Tool from Backbone.js to Vue.js.
+- WPS migrated to Vue.js.
 
 ### Deprecated
+- Deprecated the parameter 'serviceID' for the contact tool; 'serviceId' should be used instead.
+- Migrated the SaveSelection Tool from Backbone.js to Vue.js. It also no longer has a Radio channel.
+- copyToClipboard is now a reusable action and can no longer be triggered through the Radio.
 - Deprecated the parameter `simpleMap` in the config.js and moved its configuration to the `saveSelection` tool in the config.json.
 
 ### Removed
+- The routing-tool was removed.
 
 ### Fixed
 - If the Save selection tool is not configured, the button for it is no longer displayed in the topic tree.
+- Various bugfixes.
+
+---
+
+## v2.6.3 - 2021-02-12
+### Fixed
+- Mehrere Darstellungsfehler bei den Layern "Dauerzählstellen (Rad) Hamburg" und "Verkehrsdaten Rad (Infrarotdetektoren) Hamburg" wurden behoben.
+- Ein Fehler wurde behoben, durch den bei Maßstabbeschränkten Layern beim Drucken Warnungen ausgegeben wurden,
+- obwohl alles in Ordnung war.
+
+---
+
+## v2.6.2 - 2021-02-10
+### Changed
+- Der Download im Druckmodul wird nun ohne ein Popup durchgeführt. Somit kann der Ausdruck auch mit einem aktiven Popup Blocker heruntergeladen werden.
+- Die Italienische Sprachdatei wurde erweitert und angepasst.
+- Die Angabe der restrictedAlerts im Alerting Modul ist nun nicht mehr Case-Sensitive
+- Die Anzeige der Schrägluftbilder wird im Internet Explorer 11 nicht mehr unterstützt, es erscheint eine Meldung mit dem Vorschlag für diese Funktionalität einen aktuellen Browser zu nutzen.
+- Die Beschreibung des Attributes "infoFormat" wurde aus der config.json.md in die services.json.md verschoben.
+- Die Angabe von gfiAttributes ist jetzt case-insensitive.
+- Im SensorLayer lässt sich das Laden der Observations über retained message nun in der config.json aus- bzw. einschalten.
+- Daten aus der SensorThings-API lassen sich nun auch mittles Datastreams als Wurzelelment laden.
+- Beim verschieben der Karte werden Features aus der SensorThings-API nun ohne Anzeige des Loaders direkt nachgeladen.
+
+### Fixed
+- Ein Fehler wurde behoben, der beim Öffnen des Themenbaumes zu langen Ladezeiten führte.
+- Ein Download-Link wurde hinzugefügt, da manche Browser den automatischen Download blockieren.
+- Das Alerting Modul ignoriert Groß- und Kleinschreibung beim Filtern der URLs.
+- Im Werkzeug WFST wurden einige Bugs behoben. Unter anderem wurden bei Meldungen keine Buttons mehr angezeigt.
+- Ein Fehler wurde behoben, der bei geclusterten Features vom Layertyp Sensor dazu führte, dass die Clusterung in einigen Fällen beim Hereinzoomen nicht aufgelöst wurde.
+- In bestimmten Fällen wurde beim Drucken eine falsche Url erstellt.
+- Bei D3 Grafiken wurden bei der linken Achsen Beschriftung die Tausender Trennzeichen in Anführungszeichen dargestellt.
+- Ein Fehler wurde behoben, der auftrat wenn ein Layer angeschaltet wurde, der verschiedene Sonderzeichen im Namen enthielt.
+- Wenn der MapMarker in Kombination mit einer Projektion als URL Parameter angegeben wird, wird der MapMarker nun korrekt projiziert.
+- Ein Fehler wurde behoben der dazu führte, dass die Legende im Menü angezeigt wurde, auch wenn diese nicht konfiguriert war.
+- 3D: Das GFI von Gebäuden zeigt wieder alle verfügbaren Attribute an und das GFI für Brückenflächen wird wieder angezeigt.
+- Ein Fehler wurde behoben der verhindert hat, dass eine Get Feature Info für WMS vom Mapserver mit dem "infoFormat": "application/vnd.ogc.gml" angezeigt wurde.
+- Wenn Layer über die Url als Parameter selektiert wurden und die Transparenz nicht übergeben wurde, war deren Transparenz im Themenbaum nicht einstellbar, das ist behoben.
+- Das Drucken eines Ausschnitts in dem der MapMarker sichtbar ist funktioniert jetzt. Der MapMarker wird im Druck nicht dargestellt.
+- Bei der WFS-Suche wurde der Such-Begriff bei der Anfrage fälschlicherweise kodiert, das wurde beseitigt.
+- Eine Meldung wurde im IE11 hinzugefügt, dass die Schrägluftbilder nicht unterstützt werden.
+- Bei der Legende waren einige Bilder verschwommen dargestelt.
 
 ---
 
@@ -356,7 +498,7 @@
 ### Added
   - Dependencies: Die Äbhängigkeit "lgv-config" wird nicht mehr benötigt, extern geladene Dateien (z.B. "services.json") werden über einen direkten Pfad oder eine URL bezogen
   - Dependencies: Aktualisierung der Versionen diverser Abhängigkeiten
-  - Basic-Portal: Das Basic-Portal wurde überarbeitet und enthält nun einen "ressources" Ordner mit Beispiel Daten
+  - Basic-Portal: Das Basic-Portal wurde überarbeitet und enthält nun einen "resources" Ordner mit Beispiel Daten
   - Pre-push-Hook: Code wird beim Pushen vor dem Push mit ES-Lint überprüft
   - GroupLayer: Es ist nun möglich, bei Gruppenlayern die Attribute "layerAttribution", "mouseHoverField", "maxScale" und "minScale" zu konfigurieren
   - Shadow-Tool: Im 3D-Modus gibt es jetzt ein Werkzeug zur Darstellung des Schattenwurfes, mit einstellbarem Datum und Uhrzeit-

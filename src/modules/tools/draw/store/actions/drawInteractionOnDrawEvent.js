@@ -11,14 +11,18 @@ const errorBorder = "#E10019";
  * @param {String} drawInteraction Either an empty String or "Two" to identify for which drawInteraction this is used.
  * @returns {void}
  */
-export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState, getters}, drawInteraction) {
-    const {styleSettings} = getters,
+export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState}, drawInteraction) {
+    const stateKey = state.drawType.id + "Settings",
+        // we need a clone of styleSettings each time a draw event is called, otherwise the copy will influence former drawn objects
+        // using "{styleSettings} = getters," would lead to a copy not a clone - don't use getters for styleSettings here
+        styleSettings = JSON.parse(JSON.stringify(state[stateKey])),
         interaction = state["drawInteraction" + drawInteraction],
         circleMethod = styleSettings.circleMethod,
         drawType = state.drawType,
         layerSource = state.layer.getSource();
 
     commit("setAddFeatureListener", layerSource.once("addfeature", event => {
+        event.feature.set("fromDrawTool", true);
         if (circleMethod === "defined" && drawType.geometry === "Circle") {
             const innerRadius = !isNaN(styleSettings.circleRadius) ? parseFloat(styleSettings.circleRadius) : null,
                 outerRadius = !isNaN(styleSettings.circleOuterRadius) ? parseFloat(styleSettings.circleOuterRadius) : null,
@@ -74,6 +78,9 @@ export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState,
             }
             return undefined;
         });
+
+        event.feature.set("invisibleStyle", createStyle(event.feature.get("drawState"), styleSettings));
+
         commit("setZIndex", state.zIndex + 1);
     }));
 

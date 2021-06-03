@@ -1,6 +1,7 @@
 import {Circle} from "ol/geom.js";
 import {fromCircle} from "ol/geom/Polygon.js";
 import {GeoJSON, GPX} from "ol/format.js";
+import convertFeaturesToKml from "../../../../../../src/utils/convertFeaturesToKml.js";
 
 import {transform, transformPoint} from "../../utils/download/transformGeometry";
 
@@ -34,9 +35,7 @@ async function convertFeatures ({state, dispatch}, format) {
  * @returns {void}
  */
 function fileDownloaded ({state, commit}) {
-    commit("setDownloadEnabled");
-    commit("setDownloadFileName", "");
-    commit("setDownloadSelectedFormat", state.download.preSelectedFormat);
+    commit("setDownloadSelectedFormat", state.download.selectedFormat);
 }
 
 /**
@@ -55,7 +54,7 @@ async function prepareData ({state, commit, dispatch}) {
             features = await dispatch("convertFeatures", new GPX());
             break;
         case "KML":
-            features = await dispatch("convertFeaturesToKml");
+            features = await convertFeaturesToKml(state.download.features);
             break;
         case "none":
             commit("setDownloadSelectedFormat", "");
@@ -110,9 +109,15 @@ function setDownloadFeatures ({state, commit, dispatch}) {
         const feature = drawnFeature.clone(),
             geometry = feature.getGeometry();
 
+        // If the feature is invisible from filter, the style will be reset by printing.
+        if (!feature.get("isVisible") && feature.get("invisibleStyle")) {
+            feature.setStyle(feature.get("invisibleStyle"));
+        }
+
         if (geometry instanceof Circle) {
             feature.setGeometry(fromCircle(geometry));
         }
+
         downloadFeatures.push(feature);
     });
 
