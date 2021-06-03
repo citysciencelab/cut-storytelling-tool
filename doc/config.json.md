@@ -2278,8 +2278,8 @@ A singular instance of the WFS Search which will be displayed as an individual t
 |suggestionsLength|no|Number||If given, the service will be queried whenever a user inserts values into an input field to suggest a value. The query is triggered when the length of the input is at least as long as this parameter.|false|
 |title|yes|String||Title of the search to be displayed in the selection dropdown in the tool.|false|
 |userHelp|no|String||Information text regarding the search formular to be displayed to the user. May be a locale key.|false|
-|resultDialogTitle|yes|String|Hitlist|Heading of the result list. May be a translation key.|false|
-|resultList|yes|String/Array|showAll|Settings for the output of the found features in the result list. By specifying `showAll` all attributes of the found features are displayed in their original form. By creating an array, the attributes to be displayed can be specified. For this purpose, an object with the properties `attribute` and `title` must be created in this array for each attribute. The value `attribute` must represent one of the attributes of the feature, while `title` defines the textual output of this attribute.|false|
+|resultDialogTitle|yes|String||Heading of the result list. If not configured the name `WFS search` will be displayed. May be a translation key.|false|
+|resultList|yes|String/Array||Settings for the output of the found features in the result list. By specifying `showAll` all attributes of the found features are displayed in their original form. By creating an array, the attributes to be displayed can be specified. For this purpose, an object with the properties `attribute` and `title` must be created in this array for each attribute. The value `attribute` must represent one of the attributes of the feature, while `title` defines the textual output of this attribute.|false|
 
 **Example**
 

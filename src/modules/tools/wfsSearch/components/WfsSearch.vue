@@ -176,7 +176,7 @@ export default {
                     v-if="showResults"
                     slot="header"
                 >
-                    <h4>{{ $t(currentInstance.resultDialogTitle) }}</h4>
+                    <h4>{{ currentInstance.resultDialogTitle ? $t(currentInstance.resultDialogTitle) : $t(name) }}</h4>
                     <hr>
                 </div>
                 <div v-if="showResults">
