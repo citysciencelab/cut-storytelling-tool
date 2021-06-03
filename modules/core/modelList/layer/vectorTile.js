@@ -226,8 +226,17 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
                 }
 
                 if (style.sprite) {
-                    const spriteDataUrl = style.sprite.concat(".json"),
-                        spriteImageUrl = style.sprite.concat(".png");
+                    let spriteUrl = style.sprite;
+
+                    // support relative spriteUrls
+                    if (spriteUrl.includes("./")) {
+                        spriteUrl = new URL(spriteUrl, url);
+                    }
+
+
+                    const spriteDataUrl = spriteUrl.toString().concat(".json"),
+                        spriteImageUrl = spriteUrl.toString().concat(".png");
+
 
                     this.fetchSpriteData(spriteDataUrl)
                         .then(spriteData => {
