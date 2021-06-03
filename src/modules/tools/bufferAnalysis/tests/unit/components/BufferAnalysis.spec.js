@@ -5,6 +5,7 @@ import BufferAnalysis from "../../../store/indexBufferAnalysis";
 import {expect} from "chai";
 import sinon from "sinon";
 import {createLayersArray} from "../utils/functions";
+import FakeTimers from "@sinonjs/fake-timers";
 
 const localVue = createLocalVue();
 
@@ -106,7 +107,8 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
             selectSource = wrapper.find("#tool-bufferAnalysis-selectSourceInput"),
             range = wrapper.find("#tool-bufferAnalysis-radiusTextInput"),
             layers = createLayersArray(3),
-            clock = sinon.useFakeTimers();
+            clock = FakeTimers.install();
+
 
         let sourceOptions = [];
 
@@ -122,6 +124,6 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
         await wrapper.vm.$nextTick();
         clock.tick(1000);
         expect(BufferAnalysis.actions.showBuffer.calledOnce).to.equal(true);
-        clock.restore();
+        clock.uninstall();
     });
 });
