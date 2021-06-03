@@ -1,7 +1,5 @@
 <script>
-import {mapGetters} from "vuex";
 import store from "../../../src/app-store/index";
-import getters from "../../modules/tools/wfsSearch/store/gettersWfsSearch";
 import {isWebLink} from "../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../utils/isEmailAddress.js";
@@ -20,10 +18,11 @@ export default {
         tableData: {
             type: Array,
             default: () => []
+        },
+        customHeaders: {
+            type: Boolean,
+            default: false
         }
-    },
-    computed: {
-        ...mapGetters("Tools/WfsSearch", Object.keys(getters))
     },
     methods: {
         /**
@@ -64,7 +63,7 @@ export default {
     <div
         :id="`${identifier}-list`"
     >
-        <table v-if="!customTableHeaders">
+        <table v-if="!customHeaders">
             <tr>
                 <th
                     v-for="(header, i) in tableHeads"
@@ -113,7 +112,7 @@ export default {
                 </td>
             </tr>
         </table>
-        <table v-if="customTableHeaders">
+        <table v-if="customHeaders">
             <tr>
                 <th
                     v-for="(header, i) in tableHeads"

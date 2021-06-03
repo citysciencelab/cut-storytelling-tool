@@ -182,6 +182,7 @@ export default {
                 <div v-if="showResults">
                     <List
                         :key="'tool-wfsSearch-list'"
+                        :customHeaders="customTableHeaders"
                         :identifier="$t(name)"
                         :tableHeads="headers"
                         :tableData="results"
