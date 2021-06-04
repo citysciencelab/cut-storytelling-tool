@@ -92,7 +92,7 @@ const actions = {
      * @returns {void}
      */
     resetResult ({commit, dispatch}) {
-        // Beim Reset des Moduls bedenken, dass der Marker auch weg müsste!
+        commit("setRequiredValues", {});
         commit("setResults", []);
         dispatch("MapMarker/removePointMarker", null, {root: true});
         commit("setSelectedOptions", {});
