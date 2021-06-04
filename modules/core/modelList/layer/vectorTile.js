@@ -13,6 +13,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
     defaults: {
         ...Layer.prototype.defaults,
         selectedStyleID: undefined,
+        useMpFonts: true,
         useProxy: false
     },
 
@@ -218,6 +219,8 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
         return fetch(this.get("useProxy") ? getProxyUrl(url) : url)
             .then(response => response.json())
             .then(style => {
+                let spriteUrl, spriteDataUrl, spriteImageUrl, addMpFonts;
+
                 // check if style is defined and required fields exist
                 if (!this.isStyleValid(style)) {
                     throw new Error(
@@ -225,28 +228,30 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
                     );
                 }
 
+                if (this.get("useMpFonts")) {
+                    addMpFonts = this.addMpFonts;
+                }
+
                 if (style.sprite) {
-                    let spriteUrl = style.sprite;
+                    spriteUrl = style.sprite;
 
                     // support relative spriteUrls
                     if (spriteUrl.includes("./")) {
                         spriteUrl = new URL(spriteUrl, url);
                     }
 
-
-                    const spriteDataUrl = spriteUrl.toString().concat(".json"),
-                        spriteImageUrl = spriteUrl.toString().concat(".png");
-
+                    spriteDataUrl = spriteUrl.toString().concat(".json");
+                    spriteImageUrl = spriteUrl.toString().concat(".png");
 
                     this.fetchSpriteData(spriteDataUrl)
                         .then(spriteData => {
-                            stylefunction(this.get("layer"), style, Object.keys(style.sources)[0], undefined, spriteData, spriteImageUrl, this.addFonts);
+                            stylefunction(this.get("layer"), style, Object.keys(style.sources)[0], undefined, spriteData, spriteImageUrl, addMpFonts);
                             this.set("selectedStyleID", id);
                         }
                         );
                 }
                 else {
-                    stylefunction(this.get("layer"), style, Object.keys(style.sources)[0]);
+                    stylefunction(this.get("layer"), style, Object.keys(style.sources)[0], undefined, undefined, undefined, addMpFonts);
                     this.set("selectedStyleID", id);
                 }
             });
@@ -255,21 +260,16 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
     /**
      * Changes fontstack of VT-Style to MP-font if configured.
      * @param {array} fontstack text-font as found in VT-Style
-     * @returns {array} returns MP-font or original fontstack
+     * @returns {array} returns relevant MP-font
      */
-    addFonts: function (fontstack) {
-        const useMpFont = true;
-
-        if (useMpFont) {
-            if (fontstack.includes("Bold")) {
-                return "MasterPortalFont Bold";
-            }
-            else if (fontstack.includes("Italic")) {
-                return "MasterPortalFont Italic";
-            }
-            return "MasterPortalFont";
+    addMpFonts: function (fontstack) {
+        if (fontstack.includes("Bold")) {
+            return "MasterPortalFont Bold";
         }
-        return fontstack;
+        else if (fontstack.includes("Italic")) {
+            return "MasterPortalFont Italic";
+        }
+        return "MasterPortalFont";
     },
 
     /**
