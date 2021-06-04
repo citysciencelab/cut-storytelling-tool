@@ -21,7 +21,7 @@ describe("LayerInformation.vue", () => {
                     state: {
                         active: true,
                         metaDataCatalogueId: "2",
-                        layerInfo: {}
+                        layerInfo: {"metaIdArray": ["123", "456"]}
                     },
                     mutations: {
                         setMetaDataCatalogueId: () => sinon.stub(),
@@ -33,7 +33,7 @@ describe("LayerInformation.vue", () => {
                         active: () => true,
                         metaDataCatalogueId: () => "2",
                         title: () => "",
-                        layerInfo: () => ({"metaIdArray": []}),
+                        layerInfo: () => ({"metaIdArray": ["123", "456"], "layerNames": ["name", "name_name"]}),
                         datePublication: () => null,
                         dateRevision: () => null,
                         downloadLinks: () => null,
@@ -55,6 +55,7 @@ describe("LayerInformation.vue", () => {
                 metaDataCatalogueId: () => "2"
             }
         });
+        store.dispatch("LayerInformation/layerInfo", {"metaIdArray": ["123", "456"]});
     });
 
 
@@ -90,10 +91,18 @@ describe("LayerInformation.vue", () => {
         expect(wrapper.emitted().close).to.have.lengthOf(1);
     });
 
-    it("should check if dropdown for group layer to not exists", async () => {
-        const wrapper = mount(LayerInformationComponent, {store, localVue});
+    it("should check if dropdown for group layer exists", async () => {
+        const spyChangeLayerAbstract = sinon.spy(LayerInformationComponent.methods, "changeLayerAbstract"),
+            wrapper = mount(LayerInformationComponent, {store, localVue}),
+            dropEntries = wrapper.findAll(".abstractChange");
 
-        expect(wrapper.find("#changeLayerInfo").exists()).to.be.false;
+        expect(wrapper.find("#changeLayerInfo")).to.exist;
+        expect(dropEntries.at(1)).to.exist;
+        dropEntries.at(1).trigger("click");
+        await wrapper.vm.$nextTick();
+
+        expect(spyChangeLayerAbstract.calledOnce).to.be.true;
+        spyChangeLayerAbstract.restore();
     });
 
 });

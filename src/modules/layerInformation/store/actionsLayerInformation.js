@@ -78,20 +78,15 @@ const actions = {
             cswUrl = "",
             metaInfo = {},
             layer = "";
-
         const additionalLayer = state.additionalLayer;
 
         layer = additionalLayer.find(({layerName}) => layerName === chosenElementTitle);
-
         metaId = layer.metaID;
         cswUrl = layer.cswUrl;
-
         metaInfo = {metaId, cswUrl};
 
         dispatch("getAbstractInfo", metaInfo);
-
         dispatch("setMetadataURL", metaId);
-
     },
 
     /**

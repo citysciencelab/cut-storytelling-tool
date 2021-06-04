@@ -5,7 +5,7 @@ import ToolWindow from "../../../share-components/ToolWindow.vue";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 
 /**
- *
+ * The Layer Information that gives the user information, links and the legend for a layer
  */
 export default {
     name: "LayerInformation",
@@ -235,16 +235,18 @@ export default {
                         id="url"
                         class="tab-pane fade"
                     >
-                        <ul class="pt-5">
-                            <li>
-                                <a
-                                    :href="layerUrl"
-                                    target="_blank"
-                                >
-                                    {{ layerInfo.url }}
-                                </a>
-                            </li>
-                        </ul>
+                        <div>
+                            <ul class="pt-5">
+                                <li>
+                                    <a
+                                        :href="layerUrl"
+                                        target="_blank"
+                                    >
+                                        {{ layerInfo.url }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
