@@ -17,7 +17,7 @@ const webdriver = require("selenium-webdriver"),
     /* eslint-disable no-process-env */
     // contains "browserstack" or "saucelabs"
     testService = process.env.npm_config_testservice,
-    browser = process.env.browser || "firefox,chrome",
+    browser = process.env.browser || "firefox,chrome,edge",
     url = process.env.url || "https://localhost:9001/",
     urlPart = process.env.urlPart.replace(/\\/g, "") || "portal/",
     // proxy for browserstack
