@@ -10,7 +10,7 @@
 
 ##  Unreleased - in development
 ### Added
-- ...
+- VTC-Layer supports Sprites and Fonts in Styledefinitions.
 
 ### Changed
 
@@ -19,7 +19,7 @@
 ### Removed
 
 ### Fixed
-
+- Labels of VTC-Layer-Objects aren't cut off anymore. 
 ---
 
 ## v2.10.0 - 2021-06-02
