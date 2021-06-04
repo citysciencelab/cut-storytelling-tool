@@ -25,6 +25,8 @@ export default {
         headers () {
             const {resultList} = this.currentInstance;
 
+            this.setCustomTableHeaders(false);
+
             if (Array.isArray(resultList)) {
                 this.setCustomTableHeaders(true);
                 return [...resultList];
@@ -84,6 +86,7 @@ export default {
                 model.set("isActive", false);
             }
         },
+        // Wie soll searchFeatures aufgerufen werden?
         async search () {
             const features = await searchFeatures(this.currentInstance, this.service);
 
