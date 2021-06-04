@@ -47,8 +47,8 @@ export default {
             type: Boolean,
             default: false
         },
-        suggestionsLength: {
-            type: Number,
+        suggestionsConfig: {
+            type: Object,
             default: undefined
         },
         type: {
@@ -121,7 +121,9 @@ export default {
             return null;
         },
         showSuggestions () {
-            return !this.options && typeof this.suggestionsLength !== "undefined" && this.value.length >= this.suggestionsLength;
+            const length = typeof this?.suggestionsConfig?.length !== "undefined" ? this.suggestionsConfig.length : 3;
+
+            return !this.options && this.suggestionsConfig && this.value.length >= length;
         }
     },
     mounted () {
@@ -154,7 +156,7 @@ export default {
             else if (this.showSuggestions) {
                 this.showLoader = true;
                 const xmlFilter = buildXmlFilter({fieldName: this.fieldName, type: "like", value}),
-                    suggestions = await searchFeatures(this.currentInstance, this.service, xmlFilter);
+                    suggestions = await searchFeatures(this.currentInstance, this.service, xmlFilter, this?.suggestionsConfig?.featureType);
 
                 this.showLoader = false;
                 // Retrieve the values for the fieldName and make sure they are unique.

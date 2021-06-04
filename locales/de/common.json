@@ -609,7 +609,14 @@
                 "searchButton": "Suchen",
                 "resultListTitle": "Suchergebnisse:",
                 "instancesSelectLabel": "Instanzenauswahl",
-                "showResults": "Zeige Ergebnisse"
+                "showResults": "Zeige Ergebnisse",
+                "searchError": "Fehler bei der Suche von Feature: {{error}}.",
+                "userHelp": {
+                    "and": "und",
+                    "or": "oder",
+                    "label": "Informationen bezüglich der Suchergebnisse",
+                    "text": "Die Ergebnisse der Suche werden die Bedingungen (Klauseln) {{userHelp}} erfüllen."
+                }
             }
         },
         "controls": {

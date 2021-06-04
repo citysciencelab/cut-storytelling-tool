@@ -2275,9 +2275,9 @@ A singular instance of the WFS Search which will be displayed as an individual t
 |literals|yes|**[literal](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral)**[]||Array of `literals`.|true|
 |requestConfig|yes|**[requestConfig](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfig)**||The id of the service that is supposed to be requested. If a WFS@2.0.0 is supposed to be used the id of the stored query needs to be provided.|false|
 |selectSource|no|String||Optional Url leading to the expected options for the different inputs. See **[https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json]** for an example.|false|
-|suggestionsLength|no|Number||If given, the service will be queried whenever a user inserts values into an input field to suggest a value. The query is triggered when the length of the input is at least as long as this parameter.|false|
+|suggestions|no|**[suggestions](#markdown-header-portalconfigmenutoolwfssearchsearchinstancesuggestions)**||If given, the service will be queried whenever a user inserts values into an input field to suggest a value.|false|
 |title|yes|String||Title of the search to be displayed in the selection dropdown in the tool.|false|
-|userHelp|no|String||Information text regarding the search formular to be displayed to the user. May be a locale key.|false|
+|userHelp|no|String||Information text regarding the search formular to be displayed to the user. If not given, it will be generated from the structure of the config. May be a locale key. If the value explicitly set to `hide`, no information regarding the structure of the formular will be displayed.|false|
 |resultDialogTitle|yes|String||Heading of the result list. If not configured the name `WFS search` will be displayed. May be a translation key.|false|
 |resultList|yes|String/Array||Settings for the output of the found features in the result list. By specifying `showAll` all attributes of the found features are displayed in their original form. By creating an array, the attributes to be displayed can be specified. For this purpose, an object with the properties `attribute` and `title` must be created in this array for each attribute. The value `attribute` must represent one of the attributes of the feature, while `title` defines the textual output of this attribute.|false|
 
@@ -2558,8 +2558,8 @@ If both are defined `restLayerId` is used.
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |layerId|no|String||Id of the WFS service that should be queried. Information is fetched from **[services.json](services.json.md)**.|false|
-|likeFilter|no|**[likeFilter](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfiglikefilter)**|`{"wildCard": "*", "singleChar": "#", "escape": "!"}`|The configuration of the service for the like filter.|true|
-|maxFeatures|no|Number|8|Maximum amount of features that are supposed to be returned from the service.|false|
+|likeFilter|no|**[likeFilter](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfiglikefilter)**|{"wildCard": "*", "singleChar": "#", "escape": "!"}|The configuration of the service for the like filter.|true|
+|maxFeatures|no|Number/String|8|Maximum amount of features that are supposed to be returned from the service. Alternatively, the String `showAll` can be assigned to `maxFeatures` to load all features.|false|
 |restLayerId|no|String||Id of the WFS service that should be queried. Information is fetched from **[rest-services.json](rest-services.json.md)**.|false|
 |storedQueryId|no|String||The id of the Stored Query of the WFS that should be used to query the service. If this field is set, it is assumed that a WFS@2.0.0 is used.|false|
 
@@ -2582,9 +2582,20 @@ For the documentation, it is assumed that the properties are called `wildCard`, 
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|wildCard|yes|String|`"*"`|The wildcard value for the like filter.|true|
-|singleChar|yes|String|`"#"`|The single character value for the like filter.|true|
-|escape|yes|String|`"!"`|The escape character value for the like filter.|true|
+|wildCard|yes|String|"*"|The wildcard value for the like filter.|true|
+|singleChar|yes|String|"#"|The single character value for the like filter.|true|
+|escape|yes|String|"!"|The escape character value for the like filter.|true|
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.suggestions
+
+Configuration for the suggestions of the user input.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|featureType|no|String||If given, the query will be sent with this featureType instead of the one configured for the service itself. Only usable if the layer was defined in the **[services.json](services.json.md)**.|false|
+|length|no|Number|3|The query is triggered when the length of the input is at least as long as this parameter.|false|
 
 ***
 

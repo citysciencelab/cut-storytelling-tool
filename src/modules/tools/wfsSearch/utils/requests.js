@@ -54,9 +54,10 @@ function xmlFilter (filter) {
  * @param {String} currentInstance.requestConfig.storedQueryId Id of the stored Query. If given, a WFS@2.0.0 is queried.
  * @param {Object} service The service to send the request to.
  * @param {?String} singleValueFilter If given, this filter should be used.
+ * @param {?String} [featureType = null] FeatureType of the features which should be requested. Only given for queries for suggestions.
  * @returns {Promise} If the send request was successful, the found features are converted from XML to OL Features and returned.
  */
-export function searchFeatures ({literals, requestConfig: {layerId, maxFeatures, storedQueryId}}, service, singleValueFilter = null) {
+export function searchFeatures ({literals, requestConfig: {layerId, maxFeatures, storedQueryId}}, service, singleValueFilter = null, featureType = null) {
     const fromServicesJson = Boolean(layerId);
     let filter;
 
@@ -87,21 +88,21 @@ export function searchFeatures ({literals, requestConfig: {layerId, maxFeatures,
  * @param {(XML | String)} filter The filter to constrain the returned features.
  * @param {Boolean} fromServicesJson Whether the service was defined in the services.json or the rest-service.json.
  * @param {String} storedQueryId The Id of the Stored Query. Present when using a WFS@2.0.0.
- * @param {Number} [maxFeatures=8] Maximum amount of features to be returned by the service.
+ * @param {(Number | String)} [maxFeatures = 8] Maximum amount of features to be returned by the service. If it is the String 'showAll' there are no restrictions.
+ * @param {?String} [featureType = null] FeatureType of the features which should be requested. Only given for queries for suggestions.
  * @returns {Promise} If the request was successful, the data of the response gets resolved.
  *                    If an error occurs (e.g. the service is not reachable or there was no such feature) the error is caught and the message is displayed as an alert.
  */
-function sendRequest ({url, typeName}, filter, fromServicesJson, storedQueryId, maxFeatures = 8) {
+function sendRequest ({url, typeName}, filter, fromServicesJson, storedQueryId, maxFeatures = 8, featureType = null) {
     let requestUrl = url;
 
     if (fromServicesJson) {
-        requestUrl += `?service=WFS&request=GetFeature&typeName=${typeName}`;
+        requestUrl += `?service=WFS&request=GetFeature&typeName=${featureType ? featureType : typeName}`;
     }
-    requestUrl += `&maxFeatures=${maxFeatures}`;
+    requestUrl += maxFeatures === "showAll" ? "" : `&maxFeatures=${maxFeatures}`;
     requestUrl += storedQueryId ? storedFilter(filter, storedQueryId) : xmlFilter(filter);
 
-    return axios.get(requestUrl)
+    return axios.get(encodeURI(requestUrl))
         .then(response => handleAxiosResponse(response, "WfsSearch, searchFeatures, sendRequest"))
         .catch(error => store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.wfsSearch.searchError", {error})));
-    // TODO: Add the key to the language files
 }

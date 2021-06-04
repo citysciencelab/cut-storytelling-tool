@@ -610,7 +610,14 @@
                 "searchButton": "Search",
                 "resultListTitle": "Search results:",
                 "instancesSelectLabel": "Instance selection",
-                "showResults": "Show results"
+                "showResults": "Show results",
+                "searchError": "Error while searching for the features: {{error}}.",
+                "userHelp": {
+                    "and": "and",
+                    "or": "or",
+                    "label": "Information regarding the results of the search",
+                    "text": "The results of the search will fulfill the conditions (clauses) {{userHelp}}."
+                }
             }
         },
         "controls": {
