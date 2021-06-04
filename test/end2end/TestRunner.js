@@ -44,35 +44,16 @@ function cleanProxyUrl (proxyUrl) {
 
 /**
  * Adds proxy to builder for local testing.
- * @param {string} currentBrowser name of current browser
- * @param {object} builder given builder
+ * @param {String} currentBrowser name of current browser
+ * @param {Object} builder given builder
  * @returns {void}
  */
 function setLocalProxy (currentBrowser, builder) {
     if (currentBrowser === "chrome") {
-        let options = new webdriverChrome.Options();
-
-        options = options.addArguments(`--proxy-server=${localHttpProxy}`);
-        options = options.addArguments(`--proxy-bypass-list=${localBypassList.join(",")}`);
-        options = options.addArguments("--ignore-certificate-errors");
-        options = options.addArguments("--ignore-ssl-errors");
-        if (testService === undefined) {
-            options = options.addArguments("--no-sandbox");
-        }
-        builder.setChromeOptions(options);
+        setLocalProxyChrome(builder);
     }
     else if (currentBrowser === "edge") {
-        let options = new webdriverEdge.Options();
-
-        options = options.addArguments(`--proxy-server=${localHttpProxy}`);
-        options = options.addArguments(`--proxy-bypass-list=${localBypassList.join(",")}`);
-        options = options.addArguments("--ignore-certificate-errors");
-        options = options.addArguments("--ignore-ssl-errors");
-        if (testService === undefined) {
-            options = options.addArguments("--no-sandbox");
-        }
-
-        builder.setEdgeOptions(options);
+        setLocalProxyEdge(builder);
     }
     else {
         builder.setProxy(
@@ -83,6 +64,46 @@ function setLocalProxy (currentBrowser, builder) {
             })
         );
     }
+}
+
+/**
+ * Adds proxy to builder for local testing in chrome browser.
+ * @param {Object} builder given builder
+ * @returns {void}
+ */
+function setLocalProxyChrome (builder) {
+    let options = new webdriverChrome.Options();
+
+    options = options.addArguments(`--proxy-server=${localHttpProxy}`);
+    options = options.addArguments(`--proxy-bypass-list=${localBypassList.join(",")}`);
+    options = options.addArguments("--ignore-certificate-errors");
+    options = options.addArguments("--ignore-ssl-errors");
+
+    if (testService === undefined) {
+        options = options.addArguments("--no-sandbox");
+    }
+
+    builder.setChromeOptions(options);
+}
+
+/**
+ * Adds proxy to builder for local testing in MicrosoftEdge browser.
+ * @param {Object} builder given builder
+ * @returns {void}
+ */
+function setLocalProxyEdge (builder) {
+    let options = new webdriverEdge.Options();
+
+    options = options.addArguments(`--proxy-server=${localHttpProxy}`);
+    options = options.addArguments(`--proxy-bypass-list=${localBypassList.join(",")}`);
+    options = options.addArguments("--ignore-certificate-errors");
+    options = options.addArguments("--ignore-ssl-errors");
+
+    if (testService === undefined) {
+        options = options.addArguments("--no-sandbox");
+    }
+
+    builder.setEdgeOptions(options);
 }
 
 /**

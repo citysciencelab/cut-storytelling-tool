@@ -40,7 +40,7 @@ function FreezeTests ({builder, url, resolution, browsername, capability}) {
             async function init () {
                 topicButton = await driver.findElement(By.css("#root .dropdown:first-child"));
                 tree = await driver.findElement(By.id("tree"));
-                topicButton.click(); // close tree for upcoming tests
+                await topicButton.click(); // close tree for upcoming tests
             }
 
             after(async function () {
