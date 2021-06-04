@@ -21,21 +21,22 @@ export default {
     computed: {
         ...mapGetters("Tools/WfsSearch", Object.keys(getters)),
         headers () {
-            if (Array.isArray(this.currentInstance.resultList)) {
-                this.setCustomTableHeaders(true);
-                return [...this.currentInstance.resultList];
-            }
-            else if (this.currentInstance.resultList === "showAll") {
-                const lengths = [];
-                let indexOfFeatureWithMostAttr = "";
+            const {resultList} = this.currentInstance;
 
-                this.results.forEach(feature => {
-                    lengths.push(Object.keys(feature.values_).length);
-                });
-                indexOfFeatureWithMostAttr = lengths.indexOf(Math.max(...lengths));
+            if (Array.isArray(resultList)) {
+                this.setCustomTableHeaders(true);
+                return [...resultList];
+            }
+            else if (resultList === "showAll") {
+                const lengths = this.results.map(feature => Object.keys(feature.values_).length),
+                    indexOfFeatureWithMostAttr = lengths.indexOf(Math.max(...lengths));
+
                 return Object.keys(this.results[indexOfFeatureWithMostAttr].values_);
             }
-            return console.error("Missing configuration for result list");
+            return console.error("WfsSearch: Missing configuration for parameter resultList.");
+        },
+        geometryName () {
+            return this.results[0].getGeometryName();
         },
         showResults () {
             return this.showResultList;
@@ -149,7 +150,7 @@ export default {
                                 </button>
                             </div>
                             <div
-                                v-if="results.length > 0"
+                                v-if="results.length > 0 && headers"
                                 class="col-md-12 col-sm-12"
                             >
                                 <button
@@ -172,18 +173,19 @@ export default {
                 :showModal="showResults"
                 @modalHid="setShowResultList(false)"
             >
-                <div
+                <header
                     v-if="showResults"
                     slot="header"
                 >
                     <h4>{{ currentInstance.resultDialogTitle ? $t(currentInstance.resultDialogTitle) : $t(name) }}</h4>
                     <hr>
-                </div>
+                </header>
                 <div v-if="showResults">
                     <List
                         :key="'tool-wfsSearch-list'"
                         :customHeaders="customTableHeaders"
                         :identifier="$t(name)"
+                        :geometryName="geometryName"
                         :tableHeads="headers"
                         :tableData="results"
                     />
@@ -208,7 +210,6 @@ export default {
         padding: 0;
         overflow: auto;
         max-height: 70vh;
-        overflow: auto;
     }
     #modal-1-container #modal-1-inner-wrapper {
         padding: 10px;

@@ -11,6 +11,10 @@ export default {
             type: String,
             default: ""
         },
+        geometryName: {
+            type: String,
+            default: ""
+        },
         tableHeads: {
             type: Array,
             default: () => []
@@ -77,18 +81,18 @@ export default {
             <tr
                 v-for="(data, i) in tableData"
                 :key="data + i"
-                @click="setCenter(results[i])"
+                @click="setCenter(data)"
             >
                 <td
                     v-for="(key, j) in tableHeads"
                     :key="key + j"
                 >
-                    <p v-if="key === 'the_geom'">
+                    <p v-if="key === geometryName">
                         <button
                             type="button"
                             class="btn btn-lgv-grey col-md-12 col-sm-12"
                         >
-                            {{ $t("common:modules.share-components.list.zoomToResult") }}
+                            {{ $t("common:share-components.list.zoomToResult") }}
                         </button>
                     </p>
                     <p v-else-if="isWebLink(data.values_[key])">
@@ -126,18 +130,18 @@ export default {
             <tr
                 v-for="(data, i) in tableData"
                 :key="data + i"
-                @click="setCenter(results[i])"
+                @click="setCenter(data)"
             >
                 <td
                     v-for="(key, j) in tableHeads"
                     :key="key + j"
                 >
-                    <p v-if="key.attribute === 'the_geom'">
+                    <p v-if="key.attribute === geometryName">
                         <button
                             type="button"
                             class="btn btn-lgv-grey col-md-12 col-sm-12"
                         >
-                            {{ $t("common:modules.tools.wfsSearch.zoomToResult") }}
+                            {{ $t("common:share-components.list.zoomToResult") }}
                         </button>
                     </p>
                     <p v-else-if="isWebLink(data.values_[key.attribute])">
