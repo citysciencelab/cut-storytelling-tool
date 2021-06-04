@@ -13,6 +13,7 @@
 - ...
 
 ### Changed
+- The version of the package selenium-webdriver was updated to version 4.0.0-beta.3.
 
 ### Deprecated
 
@@ -35,10 +36,6 @@
 - The documentation for WMTS layers, legend field has been adapted. Only one specification in a string[] is possible.
 - The translation for the url in the staticlink in config.json has been removed.
 - Issue #617: Update description of the attribute '"extent"' for layer configurations in config.json.md.
-
-### Deprecated
-
-### Removed
 
 ### Fixed
 - Now Sensor Layer will show 0 if the dataValue is 0 and not "no data".
