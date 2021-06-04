@@ -1,9 +1,7 @@
-const webdriver = require("selenium-webdriver"),
-    capabilities = {
+const capabilities = {
         firefox: {"browserName": "firefox", acceptSslCerts: true, acceptInsecureCerts: true},
         chrome: {"browserName": "chrome", version: "latest", acceptSslCerts: true, acceptInsecureCerts: true},
-        edge: {"browserName": "MicrosoftEdge", version: "latest", acceptSslCerts: true, acceptInsecureCerts: true},
-        ie: webdriver.Capabilities.ie()
+        edge: {"browserName": "MicrosoftEdge", version: "latest", acceptSslCerts: true, acceptInsecureCerts: true}
     },
     /** TODO
      * when changing the following values, also change the functions beneath; the values there should eventually

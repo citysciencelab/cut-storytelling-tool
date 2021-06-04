@@ -4,6 +4,7 @@ require("./fixes");
 const webdriver = require("selenium-webdriver"),
     webdriverProxy = require("selenium-webdriver/proxy"),
     webdriverChrome = require("selenium-webdriver/chrome"),
+    webdriverEdge = require("selenium-webdriver/edge"),
     path = require("path"),
     http = require("http"),
     tests = require(path.resolve(__dirname, "./tests.js")),
@@ -59,6 +60,19 @@ function setLocalProxy (currentBrowser, builder) {
             options = options.addArguments("--no-sandbox");
         }
         builder.setChromeOptions(options);
+    }
+    else if (currentBrowser === "edge") {
+        let options = new webdriverEdge.Options();
+
+        options = options.addArguments(`--proxy-server=${localHttpProxy}`);
+        options = options.addArguments(`--proxy-bypass-list=${localBypassList.join(",")}`);
+        options = options.addArguments("--ignore-certificate-errors");
+        options = options.addArguments("--ignore-ssl-errors");
+        if (testService === undefined) {
+            options = options.addArguments("--no-sandbox");
+        }
+
+        builder.setEdgeOptions(options);
     }
     else {
         builder.setProxy(
