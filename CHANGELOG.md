@@ -10,7 +10,7 @@
 
 ##  Unreleased - in development
 ### Added
-- ...
+- Add possibility to test end2end-tests with `MicrosoftEdge` driver.
 
 ### Changed
 - The version of the package selenium-webdriver was updated to version 4.0.0-beta.3.

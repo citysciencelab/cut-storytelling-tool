@@ -71,7 +71,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 await reopenCategories();
 
                 await driver.wait(until.elementLocated(categorySelector), 12000);
-                await driver.wait(until.elementIsVisible(await driver.findElement(categorySelector)));
+                await driver.wait(until.elementIsVisible(await driver.findElement(categorySelector)), 12000);
 
                 /** sometimes needs another click to really open; retry after 100ms if it didn't work */
                 do {
@@ -136,7 +136,9 @@ async function SearchCategories ({builder, url, resolution, capability}) {
             });
 
             it("searches show some results in a dropdown", async function () {
-                await searchInput.sendKeys(searchString);
+                if (await (await driver.findElement(By.id("searchInput"))).getAttribute("value") === "") {
+                    await searchInput.sendKeys(searchString);
+                }
 
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#searchInputUL"))));
                 expect(await driver.findElements(By.css("#searchInputUL > li.hit"))).to.have.length(5);
@@ -144,6 +146,10 @@ async function SearchCategories ({builder, url, resolution, capability}) {
             });
 
             it("provides all results aggregated by categories, including sum of hits per category", async function () {
+                if (await (await driver.findElement(By.id("searchInput"))).getAttribute("value") === "") {
+                    await searchInput.sendKeys(searchString);
+                }
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#searchInputUL > li.results"))), 5000);
                 await (await driver.findElement(By.css("#searchInputUL > li.results"))).click();
                 expect(await driver.findElements(By.css("#searchInputUL > li.list-group-item.type > span.badge"))).to.not.equals(0);
             });
