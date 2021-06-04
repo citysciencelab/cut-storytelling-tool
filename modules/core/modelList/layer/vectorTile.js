@@ -240,7 +240,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
 
                     this.fetchSpriteData(spriteDataUrl)
                         .then(spriteData => {
-                            stylefunction(this.get("layer"), style, Object.keys(style.sources)[0], undefined, spriteData, spriteImageUrl);
+                            stylefunction(this.get("layer"), style, Object.keys(style.sources)[0], undefined, spriteData, spriteImageUrl, this.addFonts);
                             this.set("selectedStyleID", id);
                         }
                         );
@@ -250,6 +250,26 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
                     this.set("selectedStyleID", id);
                 }
             });
+    },
+
+    /**
+     * Changes fontstack of VT-Style to MP-font if configured.
+     * @param {array} fontstack text-font as found in VT-Style
+     * @returns {array} returns MP-font or original fontstack
+     */
+    addFonts: function (fontstack) {
+        const useMpFont = true;
+
+        if (useMpFont) {
+            if (fontstack.includes("Bold")) {
+                return "MasterPortalFont Bold";
+            }
+            else if (fontstack.includes("Italic")) {
+                return "MasterPortalFont Italic";
+            }
+            return "MasterPortalFont";
+        }
+        return fontstack;
     },
 
     /**
