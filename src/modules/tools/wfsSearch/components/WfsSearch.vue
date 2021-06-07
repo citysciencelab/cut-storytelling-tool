@@ -230,16 +230,17 @@ export default {
 </style>
 
 <style lang="less">
-    #modal-1-container #modal-1-overlay {
-        z-index: 1000;
-    }
-    #modal-1-container #modal-1-inner-wrapper #modal-1-content-container {
-        padding: 0;
-        overflow: auto;
-        max-height: 70vh;
-    }
-    #modal-1-container #modal-1-inner-wrapper {
-        padding: 10px;
-        min-width: 70vw;
-    }
+    #modal-1-container {
+        #modal-1-inner-wrapper {
+            padding: 10px;
+            min-width: 70vw;
+
+            #modal-1-content-container {
+            padding: 0;
+            overflow: auto;
+            max-height: 70vh;
+            overflow: auto;
+            }
+        }
+}
 </style>
