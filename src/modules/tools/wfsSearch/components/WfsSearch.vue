@@ -23,19 +23,21 @@ export default {
         ...mapGetters("Tools/WfsSearch", Object.keys(getters)),
         ...mapGetters("Language", ["currentLocale"]),
         headers () {
-            const {resultList} = this.currentInstance;
+            const {resultList} = this.currentInstance,
+                isObject = typeof resultList === "object";
 
-            this.setCustomTableHeaders(false);
-
-            if (Array.isArray(resultList)) {
-                this.setCustomTableHeaders(true);
-                return [...resultList];
+            if (isObject) {
+                return Object.assign({}, resultList);
             }
-            else if (resultList === "showAll") {
+            if (resultList === "showAll") {
                 const lengths = this.results.map(feature => Object.keys(feature.values_).length),
                     indexOfFeatureWithMostAttr = lengths.indexOf(Math.max(...lengths));
 
-                return Object.keys(this.results[indexOfFeatureWithMostAttr].values_);
+                return Object.keys(this.results[indexOfFeatureWithMostAttr].values_)
+                    .reduce((acc, curr) => {
+                        acc[curr] = curr;
+                        return acc;
+                    }, {});
             }
             return console.error("WfsSearch: Missing configuration for parameter resultList.");
         },
@@ -87,8 +89,10 @@ export default {
             }
         },
         async search () {
+            Radio.trigger("Util", "showLoader");
             const features = await searchFeatures(this.$store, this.currentInstance, this.service);
 
+            Radio.trigger("Util", "hideLoader");
             this.setResults([]);
             features.forEach(feature => {
                 this.results.push(feature);
@@ -211,11 +215,10 @@ export default {
                 </header>
                 <List
                     :key="'tool-wfsSearch-list'"
-                    :customHeaders="customTableHeaders"
                     :identifier="$t(name)"
-                    :geometryName="geometryName"
-                    :tableHeads="headers"
-                    :tableData="results"
+                    :geometry-name="geometryName"
+                    :table-heads="headers"
+                    :table-data="results"
                 />
             </template>
         </Modal>
@@ -236,10 +239,9 @@ export default {
             min-width: 70vw;
 
             #modal-1-content-container {
-            padding: 0;
-            overflow: auto;
-            max-height: 70vh;
-            overflow: auto;
+                padding: 0;
+                overflow: auto;
+                max-height: 70vh;
             }
         }
 }

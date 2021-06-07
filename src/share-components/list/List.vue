@@ -7,33 +7,21 @@ import {isEmailAddress} from "../../utils/isEmailAddress.js";
 export default {
     name: "List",
     props: {
+        identifier: {
+            type: String,
+            required: true
+        },
         tableHeads: {
-            type: Array,
+            type: Object,
             required: true
         },
         tableData: {
             type: Array,
             required: true
         },
-        customHeaders: {
-            type: Boolean,
-            default: false
-        },
         geometryName: {
             type: String,
             default: ""
-        },
-        identifier: {
-            type: String,
-            default: ""
-        }
-    },
-    computed: {
-        headers () {
-            if (this.customHeaders) {
-                return this.tableHeads;
-            }
-            return this.tableHeads.map(x => ({title: x, attribute: x}));
         }
     },
     methods: {
@@ -64,10 +52,10 @@ export default {
         replaceBoolean (value) {
             if (typeof value === "string") {
                 if (value === "true") {
-                    return value.replaceAll("true", "ja");
+                    return value.replaceAll("true", this.i18n.$t("common:share-components.list.replace.true"));
                 }
                 if (value === "No") {
-                    return value.replaceAll("No", "nein");
+                    return value.replaceAll("No", this.i18n.$t("common:share-components.list.replace.No"));
                 }
             }
             return "";
@@ -83,11 +71,11 @@ export default {
         <table>
             <tr>
                 <th
-                    v-for="(header, i) in headers"
-                    :key="header + i"
+                    v-for="([key, title], i) of Object.entries(tableHeads)"
+                    :key="key + title + i"
                 >
                     <p>
-                        {{ header.title }}
+                        {{ title }}
                     </p>
                 </th>
             </tr>
@@ -97,10 +85,10 @@ export default {
                 @click="geometryName ? setCenter(data) : ''"
             >
                 <td
-                    v-for="(key, j) in headers"
-                    :key="key + j"
+                    v-for="([key, title], j) of Object.entries(tableHeads)"
+                    :key="key + title + j"
                 >
-                    <p v-if="key.attribute === geometryName">
+                    <p v-if="key === geometryName">
                         <button
                             type="button"
                             class="btn btn-lgv-grey col-md-12 col-sm-12"
@@ -108,23 +96,23 @@ export default {
                             {{ $t("common:share-components.list.zoomToResult") }}
                         </button>
                     </p>
-                    <p v-else-if="isWebLink(data.values_[key.attribute])">
+                    <p v-else-if="isWebLink(data.values_[key])">
                         <a
-                            :href="data.values_[key.attribute]"
+                            :href="data.values_[key]"
                             target="_blank"
                         >{{ data.values_[key] }}</a>
                     </p>
-                    <p v-else-if="isPhoneNumber(data.values_[key.attribute])">
-                        <a :href="getPhoneNumberAsWebLink(data.values_[key.attribute])">{{ data.values_[key.attribute] }}</a>
+                    <p v-else-if="isPhoneNumber(data.values_[key])">
+                        <a :href="getPhoneNumberAsWebLink(data.values_[key])">{{ data.values_[key] }}</a>
                     </p>
-                    <p v-else-if="isEmailAddress(data.values_[key.attribute])">
-                        <a :href="`mailto:${data.values_[key.attribute]}`">{{ data.values_[key.attribute] }}</a>
+                    <p v-else-if="isEmailAddress(data.values_[key])">
+                        <a :href="`mailto:${data.values_[key]}`">{{ data.values_[key] }}</a>
                     </p>
-                    <p v-else-if="data.values_[key.attribute] === 'true' || data.values_[key.attribute] === 'No'">
-                        {{ replaceBoolean(data.values_[key.attribute]) }}
+                    <p v-else-if="data.values_[key] === 'true' || data.values_[key] === 'No'">
+                        {{ replaceBoolean(data.values_[key]) }}
                     </p>
                     <p v-else>
-                        {{ removeVerticalBar(data.values_[key.attribute]) }}
+                        {{ removeVerticalBar(data.values_[key]) }}
                     </p>
                 </td>
             </tr>

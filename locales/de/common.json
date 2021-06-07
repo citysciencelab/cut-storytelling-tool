@@ -802,6 +802,10 @@
     },
     "share-components": {
         "list": {
+            "replace": {
+                "true": "ja",
+                "No": "nein"
+            },
             "zoomToResult":"Zum Ergebnis zoomen"
         }
     }

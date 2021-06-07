@@ -2185,7 +2185,7 @@ Eine Instanz der WFS Suche, welche durch ein Dropdown Menü im Werkzeug ausgewä
 |title|ja|String||Der Titel der Suche, welcher in einem Dropdown im Werkzeug dargestellt wird. Kann ein Übersetzungsschlüssel sein.|false|
 |userHelp|nein|String||Informationstext hinsichtlich des Suchformulars, welches oberhalb des Formulars für den Nutzer angezeigt werden soll. Wenn der Parameter nicht gegeben ist, dann wird die Struktur aus der Konfiguration abgeleitet. Kann ein Übersetzungsschlüssel sein. Falls der Wert explizit auf `hide` gesetzt wurde, dann wird keine Beschreibung der Struktur des Formulars angezeigt.|false|
 |resultDialogTitle|ja|String||Überschrift der Ergebnisliste. Wenn dies nicht konfiguriert ist, wird der Name `WFS Suche` angezeigt. Kann ein Übersetzungsschlüssel sein.|false|
-|resultList|ja|String/String[]||Einstellungen für die Ausgabe der gefundenen Feature in der Ergebnisliste. Mit der Angabe von `showAll` werden alle Attribute der gefundenen Feature in ihrer Ursprungsform dargestellt. Durch Anlegen eines Arrays können die darzustellenden Attribute festgelegt werden. Hierfür muss in diesem Array für jedes Attribut ein Objekt mit den Properties `attribute` und `title` angelegt werden. Der Wert `attribute` muss hierbei eines der Attribute des Features wiedergeben, während mit `title` die textliche Ausgabe dieses Attributes festgelegt wird.|false|
+|resultList|ja|**[resultList](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceresultlist)**||Einstellungen für die Ausgabe der gefundenen Feature in der Ergebnisliste.|true|
 
 **Beispiel**
 
@@ -2194,14 +2194,10 @@ Eine Instanz der WFS Suche, welche durch ein Dropdown Menü im Werkzeug ausgewä
     "requestConfig": {
         "layerId": "1234"
     },
-    "resultList": [{
-        "attribute": "schulname",
-        "title": "Schulname"
+    "resultList": {
+        "schulname": "Schulname",
+        "abschluss": "Abschluss"
     },
-    {
-        "attribute": "abschluss",
-        "title": "Abschluss"
-    }],
     "selectSource": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
     "title": "Flurstücksuche",
     "literals": [
@@ -2469,6 +2465,34 @@ Eine auswählbare Option für einen anzufragenden Parameter.
 {
     "fieldValue": "elbe",
     "displayName": "Elbe"
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.resultList
+
+Einstellungen für die Ausgabe der gefundenen Feature in der Ergebnisliste.
+
+Mit der Angabe von `showAll` werden alle Attribute der gefundenen Feature in ihrer Ursprungsform dargestellt.
+
+Bei Verwendung eines Objektes können die darzustellenden Attribute festgelegt werden.
+Ein Schlüssel des Objektes muss eines der Attribute des Features wiedergeben, während durch den entsprechenden Wert die textliche Ausgabe dieses Attributes festgelegt wird.
+
+**Beispiele**:
+
+```json
+{
+    "resultList": "showAll"
+}
+```
+
+```json
+{
+    "resultList": {
+        "schulname": "Schulname",
+        "abschluss": "Abschluss"
+    }
 }
 ```
 

@@ -803,6 +803,10 @@
     },
     "share-components": {
         "list": {
+            "replace": {
+              "true": "yes",
+              "No": "no"
+            },
             "zoomToResult":"Zoom to result"
         }
     }
