@@ -1,5 +1,5 @@
 <script>
-import store from "../../../src/app-store/index";
+import {mapActions, mapMutations} from "vuex";
 import {isWebLink} from "../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../utils/isEmailAddress.js";
@@ -37,6 +37,9 @@ export default {
         }
     },
     methods: {
+        ...mapMutations("Map", {setMapCenter: "setCenter"}),
+        ...mapActions("Map", ["setZoomLevel"]),
+        ...mapActions("MapMarker", ["placingPointMarker"]),
         /**
          * Takes the selected coordinates and centers the map to the new position.
          * @param {String[]} feature clicked feature to zoom to
@@ -47,9 +50,9 @@ export default {
                 // coordinates come as a string and have to be changed to numbers for the mutation setCenter to work.
                 transformedCoords = [parseFloat(coords[0]), parseFloat(coords[1])];
 
-            store.commit("Map/setCenter", transformedCoords, {root: true});
-            store.dispatch("Map/setZoomLevel", 6, {root: true});
-            store.dispatch("MapMarker/placingPointMarker", transformedCoords, {root: true});
+            this.setMapCenter(transformedCoords);
+            this.setZoomLevel(6);
+            this.placingPointMarker(transformedCoords);
         },
         isWebLink,
         isPhoneNumber,
