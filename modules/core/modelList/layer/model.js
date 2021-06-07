@@ -634,7 +634,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         store.dispatch("Legend/setLayerIdForLayerInfo", this.get("id"));
         store.dispatch("Legend/setLayerCounterIdForLayerInfo", Date.now());
 
-        if (this.createLegend && {}.toString.call(this.createLegend) === "[object Function]") {
+        if (this.createLegend && typeof this.createLegend === "function") {
             this.createLegend();
         }
         this.setLayerInfoChecked(true);
