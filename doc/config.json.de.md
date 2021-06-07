@@ -2181,9 +2181,11 @@ Eine Instanz der WFS Suche, welche durch ein Dropdown Menü im Werkzeug ausgewä
 |literals|ja|**[literal](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral)**[]||Array an `literals`.|true|
 |requestConfig|ja|**[requestConfig](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfig)**||Ein Objekt, welches hauptsächlich die Id des WFS-Dienstes (`layerId` oder `restLayerId`), welcher angefragt werden soll, beinhaltet. Wenn ein WFS@2.0.0 verwendet werden soll, muss die id der gespeicherten Anfrage (Stored Query, `storedQueryId`) angegeben werden.|false|
 |selectSource|nein|String||Optionale Url, unter welcher eine JSON-Datei mit den verschiedenen Optionen für den Input gespeichert ist. Für eine Beispiel siehe **[https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json]**.|false|
-|suggestions|nein|**[suggestions](#markdown-header-portalconfigmenutoolwfssearchsearchinstancesuggestions)**||enn gegeben, dann wird der Service angefragt, wenn ein Nutzer etwas in ein Eingabefeld eingibt, um einen Vorschlag für die weitere Eingabe zu geben.|false|
+|suggestions|nein|**[suggestions](#markdown-header-portalconfigmenutoolwfssearchsearchinstancesuggestions)**||Wenn gegeben, dann wird der Service angefragt, wenn ein Nutzer etwas in ein Eingabefeld eingibt, um einen Vorschlag für die weitere Eingabe zu geben.|false|
 |title|ja|String||Der Titel der Suche, welcher in einem Dropdown im Werkzeug dargestellt wird. Kann ein Übersetzungsschlüssel sein.|false|
 |userHelp|nein|String||Informationstext hinsichtlich des Suchformulars, welches oberhalb des Formulars für den Nutzer angezeigt werden soll. Wenn der Parameter nicht gegeben ist, dann wird die Struktur aus der Konfiguration abgeleitet. Kann ein Übersetzungsschlüssel sein. Falls der Wert explizit auf `hide` gesetzt wurde, dann wird keine Beschreibung der Struktur des Formulars angezeigt.|false|
+|resultDialogTitle|ja|String||Überschrift der Ergebnisliste. Wenn dies nicht konfiguriert ist, wird der Name `WFS Suche` angezeigt. Kann ein Übersetzungsschlüssel sein.|false|
+|resultList|ja|String/String[]||Einstellungen für die Ausgabe der gefundenen Feature in der Ergebnisliste. Mit der Angabe von `showAll` werden alle Attribute der gefundenen Feature in ihrer Ursprungsform dargestellt. Durch Anlegen eines Arrays können die darzustellenden Attribute festgelegt werden. Hierfür muss in diesem Array für jedes Attribut ein Objekt mit den Properties `attribute` und `title` angelegt werden. Der Wert `attribute` muss hierbei eines der Attribute des Features wiedergeben, während mit `title` die textliche Ausgabe dieses Attributes festgelegt wird.|false|
 
 **Beispiel**
 
@@ -2192,6 +2194,14 @@ Eine Instanz der WFS Suche, welche durch ein Dropdown Menü im Werkzeug ausgewä
     "requestConfig": {
         "layerId": "1234"
     },
+    "resultList": [{
+        "attribute": "schulname",
+        "title": "Schulname"
+    },
+    {
+        "attribute": "abschluss",
+        "title": "Abschluss"
+    }],
     "selectSource": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
     "title": "Flurstücksuche",
     "literals": [

@@ -197,7 +197,7 @@ export default {
             else if (this.showSuggestions) {
                 this.showLoader = true;
                 const xmlFilter = buildXmlFilter({fieldName: this.fieldName, type: "like", value}),
-                    suggestions = await searchFeatures(this.currentInstance, this.service, xmlFilter, this?.suggestionsConfig?.featureType);
+                    suggestions = await searchFeatures(this.$store, this.currentInstance, this.service, xmlFilter, this?.suggestionsConfig?.featureType);
 
                 this.showLoader = false;
                 // Retrieve the values for the fieldName and make sure they are unique.

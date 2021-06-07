@@ -60,12 +60,13 @@ const actions = {
      * @param {Boolean} closeTool Whether the tool was closed or not.
      * @returns {void}
      */
-    resetModule ({commit}, closeTool) {
+    resetModule ({commit, dispatch}, closeTool) {
         commit("setAddedOptions", []);
         commit("setRequiredValues", null);
         commit("setSelectedOptions", {});
         commit("setService", null);
         commit("setUserHelp", "");
+        dispatch("resetResult");
 
         if (closeTool) {
             commit("setCurrentInstanceIndex", 0);
@@ -84,6 +85,17 @@ const actions = {
         axios.get(encodeURI(selectSource))
             .then(response => handleAxiosResponse(response, "WfsSearch, retrieveData"))
             .then(data => commit("setParsedSource", data));
+    },
+    /**
+     * Resets the results in the state as well as the inputs/dropdowns in the UI.
+     * Also removes the map marker.
+     * @returns {void}
+     */
+    resetResult ({commit, dispatch}) {
+        commit("setRequiredValues", {});
+        commit("setResults", []);
+        commit("setSelectedOptions", {});
+        dispatch("MapMarker/removePointMarker", null, {root: true});
     }
 };
 

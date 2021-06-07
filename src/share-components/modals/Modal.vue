@@ -87,9 +87,19 @@ export default {
                     @click="discardByClickX"
                 />
                 <div
+                    id="modal-1-header-container"
+                >
+                    <slot name="header" />
+                </div>
+                <div
                     id="modal-1-content-container"
                 >
                     <slot />
+                </div>
+                <div
+                    id="modal-1-footer-container"
+                >
+                    <slot name="footer" />
                 </div>
             </div>
         </div>
@@ -111,7 +121,7 @@ export default {
         left:0;
         right:0;
         bottom:0;
-        z-index:1;
+        z-index:1000;
     }
     #modal-1-outer-wrapper {
         position:absolute;

@@ -605,9 +605,12 @@
                 "label": "Scale"
             },
             "wfsSearch": {
-                "optionPlaceholder": "Please choose an option!",
+                "optionsPlaceholder": "Please choose an option!",
                 "resetButton": "Reset",
                 "searchButton": "Search",
+                "resultListTitle": "Search results:",
+                "instancesSelectLabel": "Instance selection",
+                "showResults": "Show results",
                 "searchError": "Error while searching for the features: {{error}}.",
                 "userHelp": {
                     "and": "and",
@@ -796,6 +799,11 @@
             "to":" to",
             "incorrectEntry": "Incorrect entry, please enter a whole number!",
             "outOfRangeErrorMessage": "The input value must be within the validity range {{minValueSlider}} and {{{maxValueSlider}}!"
+        }
+    },
+    "share-components": {
+        "list": {
+            "zoomToResult":"Zoom to result"
         }
     }
 }

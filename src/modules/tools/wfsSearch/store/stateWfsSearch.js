@@ -38,7 +38,10 @@ const state = {
     requiredValues: null,
     userHelp: "",
     selectedOptions: {},
-    service: null
+    service: null,
+    results: [],
+    showResultList: false,
+    customTableHeaders: false
 };
 
 export default state;

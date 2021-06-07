@@ -2278,6 +2278,8 @@ A singular instance of the WFS Search which will be selectable through a dropdow
 |suggestions|no|**[suggestions](#markdown-header-portalconfigmenutoolwfssearchsearchinstancesuggestions)**||If given, the service will be queried whenever a user inserts values into an input field to suggest a value.|false|
 |title|yes|String||Title of the search instance to be displayed in a dropdown inside the tool.|false|
 |userHelp|no|String||Information text regarding the search formular to be displayed to the user. If not given, it will be generated from the structure of the config. May be a locale key. If the value explicitly set to `hide`, no information regarding the structure of the formular will be displayed.|false|
+|resultDialogTitle|yes|String||Heading of the result list. If not configured the name `WFS search` will be displayed. May be a translation key.|false|
+|resultList|yes|String/String[]||Settings for the output of the found features in the result list. By specifying `showAll` all attributes of the found features are displayed in their original form. By creating an array, the attributes to be displayed can be specified. For this purpose, an object with the properties `attribute` and `title` must be created in this array for each attribute. The value `attribute` must represent one of the attributes of the feature, while `title` defines the textual output of this attribute.|false|
 
 **Example**
 
@@ -2286,6 +2288,14 @@ A singular instance of the WFS Search which will be selectable through a dropdow
     "requestConfig": {
         "layerId": "1234"
     },
+    "resultList": [{
+        "attribute": "schulname",
+        "title": "School name"
+    },
+    {
+        "attribute": "abschluss",
+        "title": "Degree"
+    }],
     "selectSource": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
     "title": "Parcel Search",
     "literals": [

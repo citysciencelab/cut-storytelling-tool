@@ -48,7 +48,9 @@
             "wfsTransaction": "Strumento WFS-T",
             "scaleSwitcher": "Cambia scala",
             "selectFeatures": "Seleziona",
-            "styleVt": "Style VT"
+            "styleVt": "Style VT",
+            "parcelSearch": "Ricerca pacchi",
+            "wfsSearch": "Ricerca WFS"
         },
         "contact": "Contatti",
         "info": "Informazioni"
@@ -557,6 +559,21 @@
             },
             "scaleSwitcher": {
                 "label": "Scala"
+            },
+            "wfsSearch": {
+                "optionsPlaceholder": "Per favore, scegli un'opzione!",
+                "resetButton": "Azzerare",
+                "searchButton": "Cerca",
+                "resultListTitle": "Risultati della ricerca:",
+                "instancesSelectLabel": "Selezione dell'istanza",
+                "showResults": "Mostra i risultati",
+                "searchError": "Errore durante la ricerca delle caratteristiche: {{error}}.",
+                "userHelp": {
+                    "and": "e",
+                    "or": "o",
+                    "label": "Informazioni sui risultati della ricerca",
+                    "text": "I risultati della ricerca soddisfano le condizioni (clausole) {{userHelp}}."
+                }
             }
         },
         "controls": {
@@ -720,6 +737,11 @@
             "to":" a",
             "incorrectEntry": "Inserimento errato, inserire un numero intero!",
             "outOfRangeErrorMessage": "Il valore di input deve rientrare nell'intervallo di validità {{minValueSlider}} e {{maxValueSlider}}!"
+        }
+    },
+    "share-components": {
+        "list": {
+            "zoomToResult": "Zoom sul risultato"
         }
     }
 }
