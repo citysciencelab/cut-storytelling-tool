@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
-    {logBrowserstackUrlToTest} = require("../../../library/utils"),
+    {logTestingCloudUrlToTest} = require("../../../library/utils"),
     {getDirection, getCenter, areAllLayersHidden, isObModeOn, getObModeResolution} = require("../../../library/scripts"),
     {isDefault, isCustom, is2D, isMobile} = require("../../../settings"),
     {By, until} = webdriver,
@@ -49,6 +49,7 @@ function Button3DTests ({builder, url, resolution, mode, capability}) {
         before(async function () {
             if (capability) {
                 capability.name = this.currentTest.fullTitle();
+                capability["sauce:options"].name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);
@@ -59,7 +60,7 @@ function Button3DTests ({builder, url, resolution, mode, capability}) {
         after(async function () {
             if (capability) {
                 driver.session_.then(function (sessionData) {
-                    logBrowserstackUrlToTest(sessionData.id_);
+                    logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
             await driver.quit();

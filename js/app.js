@@ -29,8 +29,6 @@ import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import ShadowView from "../modules/tools/shadow/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
-import LineView from "../modules/tools/pendler/lines/view";
-import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
@@ -59,7 +57,6 @@ import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonOblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
-import SelectFeaturesView from "../modules/tools/selectFeatures/view";
 import LoaderOverlay from "../src/utils/loaderOverlay";
 
 let sbconfig,
@@ -182,14 +179,6 @@ async function loadApp () {
                 new CompareFeaturesView({model: tool});
                 break;
             }
-            case "lines": {
-                new LineView({model: tool});
-                break;
-            }
-            case "animation": {
-                new AnimationView({model: tool});
-                break;
-            }
             case "filter": {
                 new FilterView({model: tool});
                 break;
@@ -252,10 +241,6 @@ async function loadApp () {
             }
             case "virtualCity": {
                 new VirtualcityModel(tool.attributes);
-                break;
-            }
-            case "selectFeatures": {
-                new SelectFeaturesView({model: tool});
                 break;
             }
             default: {

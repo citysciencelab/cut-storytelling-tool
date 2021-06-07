@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {isCustom, isMaster, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
-    {losesCenter, logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
+    {losesCenter, logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {getCenter} = require("../../../../../../test/end2end/library/scripts"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {until, By, Button} = webdriver;
@@ -25,6 +25,7 @@ function OverviewMap ({builder, url, resolution, browsername, capability}) {
             before(async function () {
                 if (capability) {
                     capability.name = this.currentTest.fullTitle();
+                    capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);
@@ -33,7 +34,7 @@ function OverviewMap ({builder, url, resolution, browsername, capability}) {
             after(async function () {
                 if (capability) {
                     driver.session_.then(function (sessionData) {
-                        logBrowserstackUrlToTest(sessionData.id_);
+                        logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();

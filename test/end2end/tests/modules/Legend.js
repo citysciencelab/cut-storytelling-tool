@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../library/driver"),
-    {getTextOfElements, logBrowserstackUrlToTest} = require("../../library/utils"),
+    {getTextOfElements, logTestingCloudUrlToTest} = require("../../library/utils"),
     {isMaster, isCustom} = require("../../settings"),
     {By, until} = webdriver;
 
@@ -24,6 +24,7 @@ async function LegendTests ({builder, config, url, resolution, capability}) {
             before(async function () {
                 if (capability) {
                     capability.name = this.currentTest.fullTitle();
+                    capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);
@@ -32,7 +33,7 @@ async function LegendTests ({builder, config, url, resolution, capability}) {
             after(async function () {
                 if (capability) {
                     driver.session_.then(function (sessionData) {
-                        logBrowserstackUrlToTest(sessionData.id_);
+                        logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();

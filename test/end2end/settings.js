@@ -1,8 +1,7 @@
-const webdriver = require("selenium-webdriver"),
-    capabilities = {
+const capabilities = {
         firefox: {"browserName": "firefox", acceptSslCerts: true, acceptInsecureCerts: true},
-        chrome: {"browserName": "chrome", version: "88", acceptSslCerts: true, acceptInsecureCerts: true},
-        ie: webdriver.Capabilities.ie()
+        chrome: {"browserName": "chrome", version: "latest", acceptSslCerts: true, acceptInsecureCerts: true},
+        edge: {"browserName": "MicrosoftEdge", version: "latest", acceptSslCerts: true, acceptInsecureCerts: true}
     },
     /** TODO
      * when changing the following values, also change the functions beneath; the values there should eventually
@@ -108,6 +107,15 @@ function isChrome (browsername) {
 }
 
 /**
+ * Returns true for browsername indicating edge is running.
+ * @param {String} browsername is browsername or contains browsername
+ * @returns {boolean} whether running browser is edge
+ */
+function isEdge (browsername) {
+    return browsername.toLowerCase().includes("edge");
+}
+
+/**
  * Returns true for browsername indicating firefox is running.
  * @param {String} browsername is browsername or contains browsername
  * @returns {boolean} whether running browser is firefox
@@ -174,12 +182,25 @@ function getCapabilities (testService) {
     }
 
     return [
+        // {
+        //     ...baseSaucelabs,
+        //     "browserName": "chrome",
+        //     "browserVersion": "latest",
+        //     "platformName": "Windows 10"
+        // },
+        // {
+        //     ...baseSaucelabs,
+        //     "browserName": "firefox",
+        //     "browserVersion": "latest",
+        //     "platformName": "Windows 10"
+        // },
         {
             ...baseSaucelabs,
-            "browserName": "chrome",
-            "browserVersion": "89",
+            "browserName": "MicrosoftEdge",
+            "browserVersion": "latest",
             "platformName": "Windows 10"
         }
+
     ];
 
 }
@@ -194,6 +215,7 @@ module.exports = {
     isOB,
     isMobile,
     isChrome,
+    isEdge,
     isFirefox,
     isBasic,
     isMaster,

@@ -4,6 +4,7 @@ require("./fixes");
 const webdriver = require("selenium-webdriver"),
     webdriverProxy = require("selenium-webdriver/proxy"),
     webdriverChrome = require("selenium-webdriver/chrome"),
+    webdriverEdge = require("selenium-webdriver/edge"),
     path = require("path"),
     http = require("http"),
     tests = require(path.resolve(__dirname, "./tests.js")),
@@ -17,11 +18,7 @@ const webdriver = require("selenium-webdriver"),
     /* eslint-disable no-process-env */
     // contains "browserstack" or "saucelabs"
     testService = process.env.npm_config_testservice,
-    // if running a deploymentTest, name of the portal to test is contained
-    portalName = process.env.npm_config_portalname,
-    // if true, only one test on a deplyed portal is running, see portalName
-    deploymentTest = process.env.npm_config_deploymenttest || false,
-    browser = process.env.browser || "firefox,chrome",
+    browser = process.env.browser || "firefox,chrome,edge",
     url = process.env.url || "https://localhost:9001/",
     urlPart = process.env.urlPart.replace(/\\/g, "") || "portal/",
     // proxy for browserstack
@@ -29,15 +26,9 @@ const webdriver = require("selenium-webdriver"),
     // proxy for local testing
     localHttpProxy = process.env.http_proxy,
     localHttpsProxy = process.env.https_proxy,
-    localBypassList = ["localhost", "127.0.0.1", "10.*", "geodienste.hamburg.de", "test-geodienste.hamburg.de"];
+    localBypassList = ["localhost", "127.0.0.1", "10.*", "geodienste.hamburg.de", "test-geodienste.hamburg.de"],
     /* eslint-enable no-process-env */
-let portalConfigs = configs;
-
-if (deploymentTest && portalName) {
-    portalConfigs = new Map([
-        [portalName, portalName]
-    ]);
-}
+    portalConfigs = configs;
 
 // pulling execution to separate function for JSDoc; expected input is e.g. "chrome", "bs", "chrome,firefox"
 runTests(browser.split(","));
@@ -53,22 +44,16 @@ function cleanProxyUrl (proxyUrl) {
 
 /**
  * Adds proxy to builder for local testing.
- * @param {string} currentBrowser name of current browser
- * @param {object} builder given builder
+ * @param {String} currentBrowser name of current browser
+ * @param {Object} builder given builder
  * @returns {void}
  */
 function setLocalProxy (currentBrowser, builder) {
     if (currentBrowser === "chrome") {
-        let options = new webdriverChrome.Options();
-
-        options = options.addArguments(`--proxy-server=${localHttpProxy}`);
-        options = options.addArguments(`--proxy-bypass-list=${localBypassList.join(",")}`);
-        options = options.addArguments("--ignore-certificate-errors");
-        options = options.addArguments("--ignore-ssl-errors");
-        if (testService === undefined) {
-            options = options.addArguments("--no-sandbox");
-        }
-        builder.setChromeOptions(options);
+        setLocalProxyChrome(builder);
+    }
+    else if (currentBrowser === "edge") {
+        setLocalProxyEdge(builder);
     }
     else {
         builder.setProxy(
@@ -79,6 +64,46 @@ function setLocalProxy (currentBrowser, builder) {
             })
         );
     }
+}
+
+/**
+ * Adds proxy to builder for local testing in chrome browser.
+ * @param {Object} builder given builder
+ * @returns {void}
+ */
+function setLocalProxyChrome (builder) {
+    let options = new webdriverChrome.Options();
+
+    options = options.addArguments(`--proxy-server=${localHttpProxy}`);
+    options = options.addArguments(`--proxy-bypass-list=${localBypassList.join(",")}`);
+    options = options.addArguments("--ignore-certificate-errors");
+    options = options.addArguments("--ignore-ssl-errors");
+
+    if (testService === undefined) {
+        options = options.addArguments("--no-sandbox");
+    }
+
+    builder.setChromeOptions(options);
+}
+
+/**
+ * Adds proxy to builder for local testing in MicrosoftEdge browser.
+ * @param {Object} builder given builder
+ * @returns {void}
+ */
+function setLocalProxyEdge (builder) {
+    let options = new webdriverEdge.Options();
+
+    options = options.addArguments(`--proxy-server=${localHttpProxy}`);
+    options = options.addArguments(`--proxy-bypass-list=${localBypassList.join(",")}`);
+    options = options.addArguments("--ignore-certificate-errors");
+    options = options.addArguments("--ignore-ssl-errors");
+
+    if (testService === undefined) {
+        options = options.addArguments("--no-sandbox");
+    }
+
+    builder.setEdgeOptions(options);
 }
 
 /**
@@ -94,7 +119,7 @@ function runTests (browsers) {
 
 
     /* eslint-disable-next-line no-process-env */
-    if (!deploymentTest && process.env.BITBUCKET_BRANCH) {
+    if (process.env.BITBUCKET_BRANCH) {
         /* eslint-disable-next-line no-process-env */
         build = "branch: " + process.env.BITBUCKET_BRANCH + " - commit: " + process.env.BITBUCKET_COMMIT + " - date:" + date;
         console.warn("Running tests on " + testService + " with name:\"" + build + "\" on Urls:");
@@ -103,10 +128,6 @@ function runTests (browsers) {
     browsers.forEach(currentBrowser => {
         portalConfigs.forEach((pathEnd, config) => {
             let completeUrl = url + urlPart + pathEnd;
-
-            if (deploymentTest) {
-                console.warn("Running test on deployed portal using url:", completeUrl);
-            }
 
             modes.forEach(mode => {
                 if (currentBrowser !== "fromCapabilities") {
@@ -117,14 +138,14 @@ function runTests (browsers) {
                     }
 
                     resolutions.forEach(resolution => {
-                        tests(builder, completeUrl, currentBrowser, resolution, config, mode, null, deploymentTest);
+                        tests(builder, completeUrl, currentBrowser, resolution, config, mode, null);
                     });
                 }
                 else {
                     const caps = getCapabilities(testService);
 
                     /* eslint-disable-next-line no-process-env */
-                    if (!deploymentTest && process.env.BITBUCKET_BRANCH) {
+                    if (process.env.BITBUCKET_BRANCH) {
                         /* eslint-disable-next-line no-process-env */
                         completeUrl += "_" + process.env.BITBUCKET_BRANCH.replace(/\//g, "_");
                         console.warn(completeUrl);
@@ -134,7 +155,7 @@ function runTests (browsers) {
                         const builder = createBuilder(testService, capability, build);
 
                         resolutions.forEach(resolution => {
-                            tests(builder, completeUrl, testService + "/ " + capability.browserName, resolution, config, mode, capability, deploymentTest);
+                            tests(builder, completeUrl, capability.browserName, resolution, config, mode, capability);
                         });
                     });
                 }

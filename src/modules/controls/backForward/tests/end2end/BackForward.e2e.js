@@ -3,8 +3,8 @@ const webdriver = require("selenium-webdriver"),
     {getCenter} = require("../../../../../../test/end2end/library/scripts"),
     {onMoveEnd} = require("../../../../../../test/end2end/library/scriptsAsync"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
-    {isCustom, isMaster, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
-    {logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
+    {isCustom, isMaster, isMobile} = require("../../../../../../test/end2end/settings"),
+    {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {until, By} = webdriver;
 
 /**
@@ -16,7 +16,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {module:selenium-webdriver.Capabilities} param.capability sets the capability when requesting a new session - overwrites all previously set capabilities
  * @returns {void}
  */
-function BackForwardTests ({builder, url, resolution, browsername, capability}) {
+function BackForwardTests ({builder, url, resolution, capability}) {
     const testIsApplicable = !isMobile(resolution) && // buttons not visible mobile
         (isCustom(url) || isMaster(url)); // backForward active in these portals
 
@@ -27,6 +27,7 @@ function BackForwardTests ({builder, url, resolution, browsername, capability}) 
             before(async function () {
                 if (capability) {
                     capability.name = this.currentTest.fullTitle();
+                    capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);
@@ -35,7 +36,7 @@ function BackForwardTests ({builder, url, resolution, browsername, capability}) 
             after(async function () {
                 if (capability) {
                     driver.session_.then(function (sessionData) {
-                        logBrowserstackUrlToTest(sessionData.id_);
+                        logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();
@@ -60,7 +61,7 @@ function BackForwardTests ({builder, url, resolution, browsername, capability}) 
             });
 
             // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-            (isChrome(browsername) ? it.skip : it)("should move forwards/backwards after panning on button click", async function () {
+            it.skip("should move forwards/backwards after panning on button click", async function () {
                 const viewport = await driver.findElement(By.css(".ol-viewport")),
                     positions = [];
 

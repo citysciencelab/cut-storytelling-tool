@@ -25,7 +25,7 @@
       },
       "elasticSearch": {
         "minChars": 3,
-        "serviceId": "elastic_test",
+        "serviceId": "elastic",
         "type": "GET",
         "payload": {
           "id": "query",
@@ -314,6 +314,10 @@
             "name": "translate#common:menu.tools.searchByCoord",
             "glyphicon": "glyphicon-record"
           },
+          "selectFeatures":
+          {
+            "name": "translate#common:menu.tools.selectFeatures"
+          },
           "fileImport": {
             "name": "translate#common:menu.tools.fileImport",
             "glyphicon": "glyphicon-import"
@@ -459,7 +463,7 @@
             {
               "name": "translate#common:modules.tools.info.home.name",
               "glyphicon": "glyphicon-globe",
-              "url": "translate#common:modules.tools.info.home.url"
+              "url": "https://www.hamburg.de/"
             }
           ]
         }
@@ -649,11 +653,6 @@
           "clusterDistance": 50
         },
         {
-          "id": "2714",
-          "gfiTheme": "reisezeiten",
-          "styleId": "2119"
-        },
-        {
           "id": "4905",
           "gfiTheme": "DataTable",
           "featureCount": 20
@@ -672,7 +671,7 @@
           ],
           "name": "Eignungsflächen",
           "legendURL": [
-            "https://www.geoportal-hamburg.de/legende/legende_solar.png"
+            "https://geoportal-hamburg.de/legende/legende_solar.png"
           ],
           "gfiTheme": "solaratlas",
           "attributions": "<span>Darstellung der Eignungsflächen ab Maßstab 1: 5000 </span>"
@@ -774,15 +773,18 @@
                 "values": {
                   "available": {
                     "title": "common:modules.tools.gfi.themes.sensor.chargingStations.available",
-                    "color": "rgba(0, 220, 0, 1)"
+                    "color": "rgba(0, 220, 0, 1)",
+                    "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextAvailable"
                   },
                   "charging": {
                     "title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
-                    "color": "rgba(220, 0, 0, 1)"
+                    "color": "rgba(220, 0, 0, 1)",
+                    "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextCharging"
                   },
                   "outoforder": {
                       "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
-                      "color": "rgba(175, 175, 175, 1)"
+                      "color": "rgba(175, 175, 175, 1)",
+                      "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextOutoforder"
                   }
                 }
               }

@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
-    {reclickUntilNotStale, logBrowserstackUrlToTest, closeSingleAlert} = require("../../../../../../test/end2end/library/utils"),
+    {reclickUntilNotStale, logTestingCloudUrlToTest, closeSingleAlert} = require("../../../../../../test/end2end/library/utils"),
     {isMobile, isBasic} = require("../../../../../../test/end2end/settings"),
     namedProjectionsBasic = require("../../../../../../portal/basic/config").namedProjections,
     namedProjectionsMaster = require("../../../../../../portal/master/config").namedProjections,
@@ -79,6 +79,7 @@ async function CoordTests ({builder, url, resolution, config, capability}) {
         before(async function () {
             if (capability) {
                 capability.name = this.currentTest.fullTitle();
+                capability["sauce:options"].name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);
@@ -87,7 +88,7 @@ async function CoordTests ({builder, url, resolution, config, capability}) {
         after(async function () {
             if (capability) {
                 driver.session_.then(function (sessionData) {
-                    logBrowserstackUrlToTest(sessionData.id_);
+                    logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
             await driver.quit();

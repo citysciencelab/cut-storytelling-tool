@@ -3,8 +3,8 @@ const webdriver = require("selenium-webdriver"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {getCenter} = require("../../../../../../test/end2end/library/scripts"),
     {losesCenter} = require("../../../../../../test/end2end/library/utils"),
-    {isMaster, isCustom, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
-    {logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
+    {isMaster, isCustom, isEdge, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
+    {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {By, Button, until} = webdriver;
 
 /**
@@ -27,6 +27,7 @@ function TotalViewTests ({builder, url, resolution, browsername, capability}) {
             before(async function () {
                 if (capability) {
                     capability.name = this.currentTest.fullTitle();
+                    capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);
@@ -35,7 +36,7 @@ function TotalViewTests ({builder, url, resolution, browsername, capability}) {
             after(async function () {
                 if (capability) {
                     driver.session_.then(function (sessionData) {
-                        logBrowserstackUrlToTest(sessionData.id_);
+                        logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();
@@ -57,7 +58,7 @@ function TotalViewTests ({builder, url, resolution, browsername, capability}) {
             });
 
             // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-            (isChrome(browsername) ? it.skip : it)("should reset position on click after panning", async function () {
+            (isChrome(browsername) || isEdge(browsername) ? it.skip : it)("should reset position on click after panning", async function () {
                 const center = await driver.executeScript(getCenter),
                     viewport = await driver.findElement(By.css(".ol-viewport"));
 

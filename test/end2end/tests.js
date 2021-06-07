@@ -26,11 +26,10 @@ const {isBasic, is2D} = require("./settings");
  * @param {String} config key that defines which config the Masterportal should run on
  * @param {String} mode key that defines which steps should be taken before testing (e.g. activating 3D)
  * @param {Object} capability containes browserstack capability
- * @param {Boolean} deploymentTest if true, only one test for a deployed portal is running
  * @returns {void}
  */
-function tests (builder, url, browsername, resolution, config, mode, capability, deploymentTest) {
-    describe(`${browsername} (mode=${mode},resolution=${resolution},config=${config})`, function () {
+function tests (builder, url, browsername, resolution, config, mode, capability) {
+    describe(`${browsername} (${mode}, ${resolution}, ${config})`, function () {
         this.timeout(3600000);
 
         if (isBasic(url) && !is2D(mode)) {
@@ -51,6 +50,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
                 // modules/controls
                 require("../../src/modules/controls/attributions/tests/end2end/Attributions.e2e.js"),
                 require("../../src/modules/controls/backForward/tests/end2end/BackForward.e2e.js"),
+                // TODO - uncommented Button3D because the pipeline takes too long
                 // require("./tests/modules/controls/Button3D.js"),
                 // TODO pull OB to different suites array - maybe depending on environment variable? up for discussion
                 require("./tests/modules/controls/ButtonOblique.js"),
@@ -62,43 +62,35 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
                 require("../../src/modules/controls/zoom/test/end2end/Zoom.e2e.js"),
 
                 // modules/core
-                // require("./tests/modules/core/ParametricUrl.js"),
+                require("./tests/modules/core/ParametricUrl.js"),
 
                 // modules/menu
-                // require("./tests/modules/menu/Layers.js"),
+                require("./tests/modules/menu/Layers.js"),
 
                 // modules/searchbar
-                // require("./tests/modules/searchbar/SearchCategories.js"),
-                // require("./tests/modules/searchbar/GdiSearch.js"),
+                require("./tests/modules/searchbar/SearchCategories.js"),
+                require("./tests/modules/searchbar/ElasticSearch.js"),
 
                 // modules/tools
                 require("../../src/modules/tools/contact/tests/end2end/Contact.e2e.js"),
                 // require("./tests/modules/tools/PopulationRequest_HH.js"),
-                // require("../../src/modules/tools/supplyCoord/test/end2end/SupplyCoord.e2e.js"),
+                require("../../src/modules/tools/supplyCoord/tests/end2end/SupplyCoord.e2e.js"),
                 require("./tests/modules/tools/ExtendedFilter.js"),
                 require("../../src/modules/tools/gfi/tests/end2end/Gfi.e2e.js"),
                 // require("./tests/modules/tools/Gfi.js"),old GFI-Test do not delete!
                 require("./tests/modules/Legend.js"),
                 require("./tests/modules/tools/List.js"),
                 require("../../src/modules/tools/measure/tests/end2end/Measure.e2e.js"),
-                // require("./tests/modules/tools/ParcelSearch.js"),
+                require("./tests/modules/tools/ParcelSearch.js"),
                 // require("./tests/modules/tools/SearchByCoord.js"),
 
                 // non-module tests
                 require("../../src/tests/end2end/Pan.e2e.js"),
                 require("../../src/tests/end2end/Zoom.e2e.js")
             ],
-            deplomentTestSuites = [
-                require("../../src/tests/end2end/DeployedPortals.e2e.js")
-            ],
             e2eTestParams = {builder, url, resolution, config, mode, browsername, capability};
-        let suitesToRun = suites;
 
-        if (deploymentTest !== false) {
-            suitesToRun = deplomentTestSuites;
-        }
-
-        for (const suite of suitesToRun) {
+        for (const suite of suites) {
             this.retries(2);
             suite(e2eTestParams);
         }
