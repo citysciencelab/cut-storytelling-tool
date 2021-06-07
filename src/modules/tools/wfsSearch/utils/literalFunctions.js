@@ -101,21 +101,29 @@ function prepareLiterals (stateLiterals, literals = null, clauseId = "", require
  * @param {String} value New value to be set on the field.
  * @param {Object[]} stateLiterals The literals set in the state.
  * @param {Object} requiredValues The fields that are required to be set.
+ * @param {Number} [parameterIndex] If multiple parameters can be chosen from one Field, the value needs to set on the parameter that is currently selectable.
  * @param {?(Object[])} [literals = null] As the structure is recursively traversed, this value is an inner array of the stateLiterals.
  * @returns {Object} Returns the current values for the required fields.
  */
-function fieldValueChanged (id, value, stateLiterals, requiredValues, literals = null) {
+function fieldValueChanged (id, value, stateLiterals, requiredValues, parameterIndex, literals = null) {
     const arr = literals ? literals : stateLiterals;
 
     arr.forEach(literal => {
         if (literal.clause) {
-            fieldValueChanged(id, value, stateLiterals, requiredValues, literal.clause.literals);
+            fieldValueChanged(id, value, stateLiterals, requiredValues, parameterIndex, literal.clause.literals);
         }
-        else if (literal.field.id === id) {
-            literal.field.value = value;
+        else if (literal.field) {
+            const fieldRequired = Array.isArray(literal.field.required) ? literal.field.required[parameterIndex] : literal.field.required;
 
-            if (literal.field.required) {
-                requiredValues[id] = value;
+            if (literal.field.id === id) {
+                literal.field.value = value;
+
+                if (fieldRequired) {
+                    requiredValues[id] = value;
+                }
+                if (Array.isArray(literal.field.required)) {
+                    literal.field.parameterIndex = parameterIndex;
+                }
             }
         }
     });

@@ -11,12 +11,17 @@ const mutations = {
      * @param {String} option The option to be added.
      * @returns {void}
      */
-    addOptions: (state, option) => {
-        if (state.addedOptions.includes(option)) {
+    addOptions: ({currentInstanceIndex, instances}, option) => {
+        const currentInstance = instances[currentInstanceIndex];
+
+        if (typeof currentInstance.addedOptions !== "object") {
+            currentInstance.addedOptions = [];
+        }
+        if (currentInstance.addedOptions.includes(option)) {
             console.warn(`WfsSearch: The option ${option} is added multiple times to the formular. This entry will be skipped.`);
         }
         else {
-            state.addedOptions.push(option);
+            currentInstance.addedOptions.push(option);
         }
     },
     /**

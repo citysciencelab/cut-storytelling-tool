@@ -50,14 +50,16 @@ function buildFilter (values) {
 /**
  * Builds the XML filter for the given fieldName and value.
  *
- * @param {String} fieldName The name of the property.
- * @param {String} type Either 'equal' or 'like; determines the type of equality check.
- * @param {String} value The value to be queried.
+ * @param {Object} field The field for which the filter is build.
  * @returns {String} XML Filter.
  */
-function buildXmlFilter ({fieldName, type, value}) {
-    const likeFilter = type === "like",
-        property = `<PropertyName>${fieldName}</PropertyName><Literal>${value}${likeFilter ? likeFilterProperties.wildCard : ""}</Literal>`;
+function buildXmlFilter (field) {
+    const {fieldName, parameterIndex, type, value} = field,
+        isNumber = typeof parameterIndex === "number",
+        fieldType = isNumber ? type[parameterIndex] : type,
+        currentFieldName = isNumber ? fieldName[parameterIndex] : fieldName,
+        likeFilter = fieldType === "like",
+        property = `<PropertyName>${currentFieldName}</PropertyName><Literal>${value}${likeFilter ? likeFilterProperties.wildCard : ""}</Literal>`;
     let likeFilterValues = "";
 
     Object.entries(likeFilterProperties).forEach(([key, val]) => {
@@ -84,10 +86,11 @@ function buildStoredFilter (values) {
             filter += buildStoredFilter(val.clause.literals);
         }
         else if (val.field) {
-            const {fieldName, value} = val.field;
+            const {fieldName, parameterIndex, value} = val.field,
+                currentFieldName = typeof parameterIndex === "number" ? fieldName[parameterIndex] : fieldName;
 
             if (value) {
-                filter += `&${fieldName}=${value}`;
+                filter += `&${currentFieldName}=${value}`;
             }
         }
     });

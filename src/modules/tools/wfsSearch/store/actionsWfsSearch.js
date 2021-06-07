@@ -61,7 +61,6 @@ const actions = {
      * @returns {void}
      */
     resetModule ({commit, dispatch}, closeTool) {
-        commit("setAddedOptions", []);
         commit("setRequiredValues", null);
         commit("setSelectedOptions", {});
         commit("setService", null);

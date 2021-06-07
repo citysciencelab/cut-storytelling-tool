@@ -78,7 +78,7 @@ export default {
                 // The array check needs to be done for every property which is not required
                 // The "options" part is special, as it already can be an array. The second check makes sure, that the elements of the array should not be displayed but are part of a single field config.
                 return {
-                    fieldId: this.fieldId[this.parameterIndex],
+                    fieldId: this.fieldId,
                     fieldName: this.fieldName[this.parameterIndex],
                     inputLabel: this.inputLabel[this.parameterIndex],
                     defaultValue: Array.isArray(this.defaultValue) ? this.defaultValue[this.parameterIndex] : this.defaultValue,
@@ -124,8 +124,8 @@ export default {
                 const optionsArr = this.selectableParameters.options.split("."),
                     selectedValues = Object.keys(this.selectedOptions);
 
-                return !(this.addedOptions.includes("")
-                    && optionsArr.every(option => this.addedOptions.includes(option))
+                return !(this.currentInstance.addedOptions.includes("")
+                    && optionsArr.every(option => this.currentInstance.addedOptions.includes(option))
                     && (selectedValues.includes("") && optionsArr.slice(0, optionsArr.length - 1).every(option => selectedValues.includes(option))));
             }
             // Disable all options depending on the root source in the beginning or if the external source hasn't been loaded yet
@@ -187,7 +187,7 @@ export default {
             const value = this.value = this.htmlElement === "input" || val === "" ? val : JSON.parse(val).value;
 
             // NOTE: The extra object is sadly needed so that the object is reactive :(
-            this.setRequiredValues({...fieldValueChanged(this.selectableParameters.fieldId, value, this.currentInstance.literals, this.requiredValues)});
+            this.setRequiredValues({...fieldValueChanged(this.selectableParameters.fieldId, value, this.currentInstance.literals, this.requiredValues, this.parameterIndex)});
 
             if (typeof this.selectableParameters.options === "string") {
                 const index = val === "" ? 0 : JSON.parse(val).index;
