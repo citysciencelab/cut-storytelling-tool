@@ -87,7 +87,7 @@ export default {
             }
         },
         async search () {
-            const features = await searchFeatures(this.currentInstance, this.service);
+            const features = await searchFeatures(this.$store, this.currentInstance, this.service);
 
             this.setResults([]);
             features.forEach(feature => {
