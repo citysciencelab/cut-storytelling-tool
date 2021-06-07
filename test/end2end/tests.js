@@ -1,4 +1,5 @@
-const {isBasic, is2D} = require("./settings");
+const {isBasic, is2D} = require("./settings"),
+    {quitDriver} = require("./library/driver");
 
 /**
  * Description of the parameter set forwarded to each test suite. Each test suite may decide in itself
@@ -53,7 +54,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 // TODO - uncommented Button3D because the pipeline takes too long
                 // require("./tests/modules/controls/Button3D.js"),
                 // TODO pull OB to different suites array - maybe depending on environment variable? up for discussion
-                require("./tests/modules/controls/ButtonOblique.js"),
+                // require("./tests/modules/controls/ButtonOblique.js"),
                 require("../../src/modules/controls/freeze/tests/end2end/Freeze.e2e.js"),
                 require("../../src/modules/controls/fullScreen/tests/end2end/FullScreen.e2e.js"),
                 require("../../src/modules/controls/orientation/tests/end2end/Orientation.e2e.js"),
@@ -62,12 +63,12 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 require("../../src/modules/controls/zoom/test/end2end/Zoom.e2e.js"),
 
                 // modules/core
-                require("./tests/modules/core/ParametricUrl.js"),
+                // require("./tests/modules/core/ParametricUrl.js"),
 
-                // modules/menu
+                // // modules/menu
                 require("./tests/modules/menu/Layers.js"),
 
-                // modules/searchbar
+                // // modules/searchbar
                 require("./tests/modules/searchbar/SearchCategories.js"),
                 require("./tests/modules/searchbar/ElasticSearch.js"),
 
@@ -86,15 +87,33 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
 
                 // non-module tests
                 require("../../src/tests/end2end/Pan.e2e.js"),
-                require("../../src/tests/end2end/Zoom.e2e.js")
+                require("../../src/tests/end2end/Zoom.e2e.js"),
+                closeDriver
             ],
             e2eTestParams = {builder, url, resolution, config, mode, browsername, capability};
 
         for (const suite of suites) {
             this.retries(2);
+
             suite(e2eTestParams);
         }
     });
+
+    /**
+     * @returns {void}
+     */
+    function closeDriver () {
+        describe("Quit driver", function () {
+            after(async function () {
+                await quitDriver();
+            });
+
+            it("closedriver", async function () {
+                // nothing
+            });
+        });
+    }
+
 }
 
 module.exports = tests;
