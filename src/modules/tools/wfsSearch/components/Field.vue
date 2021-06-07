@@ -296,12 +296,14 @@ export default {
 <style lang="less" scoped>
 /* Loader CSS based on https://codepen.io/lopis/pen/zwprzP  */
 
+@length: 1.5em;
+
 .loader {
     position: relative;
     bottom: 2em;
     left: 87.5%;
-    height: 1.5em;
-    width: 1.5em;
+    height: @length;
+    width: @length;
     display: inline-block;
     animation: around 5.4s infinite;
 
