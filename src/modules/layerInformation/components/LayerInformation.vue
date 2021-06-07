@@ -119,6 +119,7 @@ export default {
         /**
          * stops the click event from closing the menu tree
          * @param {String} evt click event
+         * @returns {void}
          */
         onClick (evt) {
             evt.stopPropagation();
@@ -126,6 +127,7 @@ export default {
         /**
          * stops the click event from closing the menu tree but also opens the dropdown Menu
          * @param {String} evt click event
+         * @returns {void}
          */
         onClickDropdown (evt) {
             evt.stopPropagation();
