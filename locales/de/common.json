@@ -615,7 +615,7 @@
                     "and": "und",
                     "or": "oder",
                     "label": "Informationen bezüglich der Suchergebnisse",
-                    "text": "Die Ergebnisse der Suche werden die Bedingungen (Klauseln) {{userHelp}} erfüllen."
+                    "text": "Die Ergebnisse der Suche werden die Bedingungen / Klauseln {{userHelp}} erfüllen."
                 }
             }
         },
