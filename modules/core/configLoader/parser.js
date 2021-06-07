@@ -137,8 +137,9 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         });
 
         this.listenTo(Radio.channel("Util"), {
-            "isViewMobileChanged": function (isViewMobile) {
-                this.addOrRemove3DFolder(this.get("treeType"), isViewMobile, this.get("overlayer_3d"));
+            "isViewMobileChanged": () => {
+                this.addOrRemoveFolder("3d_daten", "common:tree.subjectData3D", this.get("overlayer_3d"));
+                this.addOrRemoveFolder("Timelayer", "common:tree.subjectDataTime", this.get("overlayer_time"));
             }
         });
 
@@ -153,17 +154,19 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
         if (this.get("treeType") === "light") {
             this.parseTree(this.get("overlayer"), "tree", 0);
+            this.parseTree(this.get("overlayer_time"), "tree", 0);
             this.parseTree(this.get("baselayer"), "tree", 0);
         }
         else if (this.get("treeType") === "custom") {
-            this.addTreeMenuItems("custom", this.get("overlayer_3d"));
+            this.addTreeMenuItems();
             this.parseTree(this.get("baselayer"), "Baselayer", 0);
             this.parseTree(this.get("overlayer"), "Overlayer", 0);
             this.parseTree(this.get("overlayer_3d"), "3d_daten", 0);
+            this.parseTree(this.get("overlayer_time"), "Timelayer", 0);
         }
         else {
-            this.addTreeMenuItems(this.get("treeType"));
-            this.parseTree(getLayerList(), this.get("overlayer_3d") ? this.get("overlayer_3d") : null);
+            this.addTreeMenuItems();
+            this.parseTree(getLayerList(), this.get("overlayer_3d"), this.get("overlayer_time"));
         }
         this.createModelList();
     },
@@ -636,22 +639,17 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
     /**
      * regulates the folder structure of the theme tree taking into account the map mode
-     * @param {String} treeType - type of topic tree
-     * @fires Core#RadioRequestUtilIsViewMobile
      * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @returns {void}
      */
-    addTreeMenuItems: function (treeType) {
+    addTreeMenuItems: function () {
         const menu = this.get("portalConfig").hasOwnProperty("menu") ? this.get("portalConfig").menu : undefined,
             tree = menu !== undefined && menu.hasOwnProperty("tree") ? menu.tree : undefined,
             isAlwaysExpandedList = tree !== undefined && tree.hasOwnProperty("isAlwaysExpanded") ? tree.isAlwaysExpanded : [],
-            isMobile = Radio.request("Util", "isViewMobile"),
             baseLayers = this.get("baselayer"),
             overLayers = this.get("overlayer"),
-            overLayers3d = this.get("overlayer_3d"),
-            baseLayersName = baseLayers && baseLayers.hasOwnProperty("name") ? baseLayers.name : null,
-            overLayersName = overLayers && overLayers.hasOwnProperty("name") ? overLayers.name : null,
-            overLayers3DName = overLayers3d && overLayers3d.hasOwnProperty("name") ? overLayers3d.name : null,
+            baseLayersName = baseLayers?.name ? baseLayers.name : null,
+            overLayersName = overLayers?.name ? overLayers.name : null,
             isQuickHelpSet = Radio.request("QuickHelp", "isSet"),
             baseLayersDefaultKey = "common:tree.backgroundMaps",
             overLayersDefaultKey = "common:tree.subjectData";
@@ -688,8 +686,6 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             quickHelp: isQuickHelpSet
         });
 
-        this.addOrRemove3DFolder(treeType, isMobile, overLayers3d, overLayers3DName);
-
         this.addItem({
             type: "folder",
             name: overLayersName ? overLayersName : i18next.t(overLayersDefaultKey),
@@ -703,6 +699,10 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             level: 0,
             quickHelp: isQuickHelpSet
         });
+
+        this.addOrRemoveFolder("3d_daten", "common:tree.subjectData3D", this.get("overlayer_3d"));
+        this.addOrRemoveFolder("Timelayer", "common:tree.subjectDataTime", this.get("overlayer_time"));
+
         this.addItem({
             type: "folder",
             name: i18next.t("common:tree.selectedTopics"),
@@ -724,63 +724,76 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     },
 
     /**
-     * adds or removes a folder for 3d data to topic tree considering the map mode
-     * @param {String} treeType type of tree
-     * @param {boolean} isMobile vsible map mode from portal
-     * @param {object} overLayer3d contains layer fro 3d mode
-     * @param {String} overLayers3DName name of the layer
-     * @fires QuickHelp#RadioRequestQuickHelpIsSet
+     * Adds or removes a folder for 3d data or WMS-T for the topic tree considering the type of the tree.
+     *
+     * @param {String} id Id of the folder which should be added or removed.
+     * @param {String} defaultTranslationKey Default translation key for the given folder.
+     * @param {Object} overLayer Contains the layers for either the 3D Mode or WMS-T.
      * @fires Core.ModelList#RadioTriggerModelListRemoveModelsById
+     * @fires Core#RadioRequestUtilIsViewMobile
+     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @returns {void}
      */
-    addOrRemove3DFolder: function (treeType, isMobile, overLayer3d, overLayers3DName) {
-        const id3d = "3d_daten";
+    addOrRemoveFolder: function (id, defaultTranslationKey, overLayer) {
+        // The folder for the 3D data is disabled on mobile whereas the other folders (e.g. TimeLayers) are enabled
+        const enabled = id === "3d_daten" ? Radio.request("Util", "isViewMobile") : true;
 
-        if (!isMobile && (treeType === "default" || overLayer3d !== undefined)) {
-            const defaultKey = "common:tree.subjectData3D";
-            let i18nextTranslate = null;
+        if (enabled && (this.get("treeType") === "default" || overLayer !== undefined)) {
+            const name = overLayer?.name ? overLayer.name : i18next.t(defaultTranslationKey),
+                // If no name and no translation-function was found, the translation of the default value is used
+                i18nextTranslate = overLayer?.name && overLayer?.i18nextTranslate
+                    ? overLayer.i18nextTranslate
+                    : setter => {
+                        if (typeof setter === "function" && i18next.exists(defaultTranslationKey)) {
+                            setter("name", i18next.t(defaultTranslationKey));
+                        }
+                    };
 
-            if (!overLayers3DName && !overLayer3d.i18nextTranslate) {
-                // no name and no translation-function found: provide translation of default key
-                i18nextTranslate = function (setter) {
-                    if (typeof setter === "function" && i18next.exists(defaultKey)) {
-                        setter("name", i18next.t(defaultKey));
-                    }
-                };
-            }
             this.addItemByPosition({
                 type: "folder",
-                name: overLayers3DName ? overLayers3DName : i18next.t(defaultKey),
-                i18nextTranslate: overLayer3d.i18nextTranslate ? overLayer3d.i18nextTranslate : i18nextTranslate,
-                id: id3d,
+                name,
+                i18nextTranslate,
+                id,
                 parentId: "tree",
                 isInThemen: true,
                 isInitiallyExpanded: false,
                 level: 0,
                 quickHelp: Radio.request("QuickHelp", "isSet")
-            }, this.postionFor3DFolder(this.get("itemList")));
+            }, this.postionForFolder(this.getPreviousFolderName(id)));
         }
         else {
-            this.removeItem(id3d);
-            Radio.trigger("ModelList", "removeModelsById", id3d);
+            this.removeItem(id);
+            Radio.trigger("ModelList", "removeModelsById", id);
         }
     },
 
     /**
-     * get the position where the 3d folder has to be inserted in the itemlist
-     * @param {array} itemList - contains the items
-     * @returns {number} postion for 3d folder
+     * Receive the position where a folder has to be inserted in the itemList.
+     *
+     * @param {String} previousFolderName Name of the previous folder in the tree
+     * @returns {Number} Position for the folder after the folder with the given name.
      */
-    postionFor3DFolder: function (itemList) {
-        let position = itemList.length + 1;
+    postionForFolder: function (previousFolderName) {
+        const itemList = this.get("itemList"),
+            index = itemList.findIndex(item => item.name === previousFolderName);
 
-        itemList.forEach((item, index) => {
-            if (item.name === "Hintergrundkarten") {
-                position = index + 1;
-            }
-        });
-
-        return position;
+        return index > -1 ? index + 1 : itemList.length + 1;
+    },
+    /**
+     * Returns the folder that should be before the folder with the id.
+     *
+     * @param {String} id Id of the folder that should be added.
+     * @returns {String} Name of the previous folder in the tree.
+     */
+    getPreviousFolderName (id) {
+        switch (id) {
+            case "3d_daten":
+                return "Hintergrundkarten";
+            case "Timelayer":
+                return "Fachdaten";
+            default:
+                return "Fachdaten";
+        }
     },
 
     /**
