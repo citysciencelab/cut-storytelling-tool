@@ -12,6 +12,12 @@ export default {
     components: {
         ToolWindow
     },
+    data () {
+        return {
+            activeTab: "layerinfo-legend",
+            openDropdown: false
+        };
+    },
     computed: {
         ...mapGetters("LayerInformation", Object.keys(getters)),
         ...mapGetters(["metaDataCatalogueId"]),
@@ -74,13 +80,56 @@ export default {
             Radio.trigger("LayerInformation", "unhighlightLayerInformationIcon");
         },
         /**
-         * Changes the abstract Text in case of group layer
+         * Changes the abstract Text in case of group layer, closes the dropdown manually
          * @param {Event} ev click event of dropdown
          * @returns {void}
          */
         changeLayerAbstract (ev) {
+            ev.stopPropagation();
             this.changeLayerInfo(ev.target.text);
             this.setCurrentLayerName(ev.target.text);
+            this.openDropdown = false;
+        },
+        /**
+         * checks if the given tab name is currently active
+         * @param {String} tab the tab name
+         * @returns {Boolean}  true if the given tab name is active
+         */
+        isActiveTab (tab) {
+            return this.activeTab === tab;
+        },
+        /**
+         * set the current tab id after clicking.
+         * @param {Object[]} evt the target of current click event
+         * @returns {void}
+         */
+        setActiveTab (evt) {
+            if (evt && evt.target && evt.target.hash) {
+                this.activeTab = evt.target.hash.substring(1);
+            }
+        },
+        /**
+         * returns the classnames for the tab
+         * @param {String} tab name of the tab depending on property activeTab
+         * @returns {String} classNames of the tab
+         */
+        getTabPaneClasses (tab) {
+            return {active: this.isActiveTab(tab), in: this.isActiveTab(tab), "tab-pane": true, fade: true};
+        },
+        /**
+         * stops the click event from closing the menu tree
+         * @param {String} evt click event
+         */
+        onClick (evt) {
+            evt.stopPropagation();
+        },
+        /**
+         * stops the click event from closing the menu tree but also opens the dropdown Menu
+         * @param {String} evt click event
+         */
+        onClickDropdown (evt) {
+            evt.stopPropagation();
+            this.openDropdown = true;
         }
     }
 };
@@ -108,12 +157,13 @@ export default {
                 <div
                     v-if="showMoreLayers"
                     class="dropdown mb-2"
+                    :class="{ open: openDropdown }"
                 >
                     <button
                         id="changeLayerInfo"
                         class="btn btn-default dropdown-toggle"
                         type="button"
-                        data-toggle="dropdown"
+                        @click="onClickDropdown"
                     >
                         {{ $t("common:modules.layerInformation.changeLayerInfo") }}
                         <span class="caret"></span>
@@ -147,6 +197,7 @@ export default {
                         <a
                             :href="url"
                             target="_blank"
+                            @click="onClick"
                         >
                             {{ $t("common:modules.layerInformation.additionalMetadata") }}
                         </a>
@@ -165,33 +216,36 @@ export default {
                 <ul class="nav nav-tabs">
                     <li
                         value="layerinfo-legend"
-                        class="tab-toggle active"
+                        :class="{active: isActiveTab('layerinfo-legend') }"
+                        @click="onClick"
                     >
                         <a
-                            data-toggle="tab"
                             href="#layerinfo-legend"
+                            @click="setActiveTab"
                         >{{ $t("common:modules.layerInformation.legend") }}
                         </a>
                     </li>
                     <li
                         v-if="showDownloadLinks"
                         value="LayerInfoDataDownload"
-                        class="tab-toggle"
+                        :class="{active: isActiveTab('LayerInfoDataDownload') }"
+                        @click="onClick"
                     >
                         <a
-                            data-toggle="tab"
                             href="#LayerInfoDataDownload"
+                            @click="setActiveTab"
                         >{{ $t("common:modules.layerInformation.downloadDataset") }}
                         </a>
                     </li>
                     <li
                         v-if="showUrl"
                         value="url"
-                        class="tab-toggle"
+                        :class="{active: isActiveTab('url') }"
+                        @click="onClick"
                     >
                         <a
-                            data-toggle="tab"
                             href="#url"
+                            @click="setActiveTab"
                         >{{ $t(layerInfo.typ) }} - {{ $t("common:modules.layerInformation.addressSuffix") }}
                         </a>
                     </li>
@@ -199,12 +253,17 @@ export default {
                 <div class="tab-content">
                     <div
                         id="layerinfo-legend"
-                        class="tab-pane fade in active"
+                        :class="getTabPaneClasses('layerinfo-legend')"
+                        :show="isActiveTab('layerinfo-legend')"
+                        :type="String('layerinfo-legend')"
                     >
                     </div>
                     <div
                         id="LayerInfoDataDownload"
-                        class="tab-pane fade row"
+                        class="row"
+                        :class="getTabPaneClasses('LayerInfoDataDownload')"
+                        :show="isActiveTab('LayerInfoDataDownload')"
+                        :type="String('LayerInfoDataDownload')"
                     >
                         <div class="col-md-7">
                             <ul
@@ -218,6 +277,7 @@ export default {
                                     <a
                                         :href="downloadLink.link"
                                         target="_blank"
+                                        @click="onClick"
                                     >
                                         {{ $t(downloadLink.linkName) }}
                                     </a>
@@ -233,7 +293,9 @@ export default {
                     </div>
                     <div
                         id="url"
-                        class="tab-pane fade"
+                        :show="isActiveTab('url')"
+                        :class="getTabPaneClasses('url')"
+                        :type="String('url')"
                     >
                         <div>
                             <ul class="pt-5">
@@ -241,6 +303,7 @@ export default {
                                     <a
                                         :href="layerUrl"
                                         target="_blank"
+                                        @click="onClick"
                                     >
                                         {{ layerInfo.url }}
                                     </a>
@@ -290,6 +353,7 @@ export default {
 
     .layerInformation {
         position: absolute;
+        overflow: unset;
         top: 20px;
         right: 60px;
         max-width:600px;
