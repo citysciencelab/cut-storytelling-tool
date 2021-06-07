@@ -57,47 +57,13 @@ export default {
     computed: {
         ...mapGetters(["uiStyle"]),
         /**
-         * Calculates initial width of sidebar or window.
-         * @returns {String}    Width style in px
-         */
-        initialToolWidth () {
-            let pixelWidth = parseFloat(this.initialWidth, 10);
-
-            if (pixelWidth < 0 || isNaN(pixelWidth)) {
-                return "auto";
-            }
-
-            if (pixelWidth <= 1) {
-                pixelWidth = this.width * window.innerWidth;
-            }
-
-            return Math.floor(pixelWidth) + "px";
-        },
-        /**
-         * Calculates initial width of sidebar or window.
-         * @returns {String}    Width style in px
-         */
-        initialToolWidthMobile () {
-            let pixelWidth = parseFloat(this.initialWidthMobile, 10);
-
-            if (pixelWidth < 0 || isNaN(pixelWidth)) {
-                return "auto";
-            }
-
-            if (pixelWidth <= 1) {
-                pixelWidth = this.width * window.innerWidth;
-            }
-
-            return Math.floor(pixelWidth) + "px";
-        },
-        /**
          * Calculates initial width of sidebar or window for Desktop and Mobile (if props are given).
          * @returns {Array} initialToolWidth and initialToolWidthMobile for CSS
          */
         widths () {
             return {
-                "--initialToolWidth": this.initialToolWidth,
-                "--initialToolWidthMobile": this.initialToolWidthMobile
+                "--initialToolWidth": this.getWidth(this.initialWidth),
+                "--initialToolWidthMobile": this.getWidth(this.initialWidthMobile)
             };
         }
     },
@@ -123,6 +89,24 @@ export default {
         }
     },
     methods: {
+        /**
+         * Calculates initial width of input parameter.
+         * @param {String} inputWidth the width setting
+         * @returns {String}    Width style in px
+         */
+        getWidth (inputWidth) {
+            let pixelWidth = parseFloat(inputWidth, 10);
+
+            if (pixelWidth < 0 || isNaN(pixelWidth)) {
+                return "auto";
+            }
+
+            if (pixelWidth <= 1) {
+                pixelWidth = this.width * window.innerWidth;
+            }
+
+            return Math.floor(pixelWidth) + "px";
+        },
         /**
          * Minifies tool and emits evnt.
          *  @return {void}
