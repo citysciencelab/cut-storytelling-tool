@@ -114,6 +114,14 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
                 expect(await (await driver.findElement(selectedLayerFirstEntrySelector)).getText()).to.contain(layerName);
             });
         }
+
+        if (isMaster(url) || isCustom(url)) {
+            it("remove searchbar input", async function () {
+                if (await (await driver.findElement(By.id("searchInput"))).getAttribute("value") !== "") {
+                    await (await driver.findElement(By.css("div#searchbar div#searchForm div.input-group span.glyphicon.glyphicon-remove"))).click();
+                }
+            });
+        }
     });
 }
 

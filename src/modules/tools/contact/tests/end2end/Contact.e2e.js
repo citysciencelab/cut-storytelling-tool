@@ -39,14 +39,12 @@ async function ContactTests ({builder, url, resolution, capability}) {
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
                     console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
-                    driver = await initDriver(builder, url, resolution);
+                    driver = await initDriver(builder, url, resolution, null, true);
                 }
             });
 
@@ -104,6 +102,10 @@ async function ContactTests ({builder, url, resolution, capability}) {
                 // top and bottom border of tool within window
                 expect(y).to.be.greaterThan(0).and.to.be.lessThan(windowHeight);
                 expect(y + height).to.be.greaterThan(0).and.to.be.lessThan(windowHeight);
+            });
+
+            it("making the view larger keeps form in window", async function () {
+                await driver.manage().window().setRect({width: 1920, height: 1080});
             });
         });
     }

@@ -266,6 +266,12 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
                     expect(mapOrderedLayerIds[lastMapIdOrderIndex])
                         .to.equal(newMapOrder[lastNewIdOrderIndex]);
                 });
+
+                it("close the layerInformation", async function () {
+                    await (
+                        await driver.findElement(By.css("div#layerinformation-desktop div.header p.pull-right span.glyphicon.glyphicon-remove"))
+                    ).click();
+                });
             });
         }
     });

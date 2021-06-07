@@ -122,11 +122,12 @@ async function getUnnavigatedDriver (builder, resolution) {
  * @returns {selenium.webdriver.Driver} driver instance
  */
 async function initDriver (builder, url, resolution, mode, retry) {
-    if (retry || url !== lastUrl) {
+    if (lastDriver === undefined || retry || url !== lastUrl) {
         await quitDriver();
         const driver = await getUnnavigatedDriver(builder, resolution);
 
         await loadUrl(driver, url, mode);
+
         lastUrl = url;
         lastDriver = driver;
     }

@@ -17,7 +17,7 @@ function AttributionsTests ({builder, url, resolution, capability}) {
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
-        describe("Modules Controls Attributions", function () {
+        describe("Modules Controls Attributions", async function () {
             let driver, attributionsButton, attributionsDiv;
 
             before(async function () {

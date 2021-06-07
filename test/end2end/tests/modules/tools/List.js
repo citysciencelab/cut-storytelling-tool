@@ -22,7 +22,7 @@ async function ListTests ({builder, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await initDriver(builder, url, resolution, null, true);
             });
 
             after(async function () {
@@ -31,20 +31,22 @@ async function ListTests ({builder, url, resolution, capability}) {
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
                     console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
-                    driver = await initDriver(builder, url, resolution);
+                    driver = await initDriver(builder, url, resolution, null, true);
+                    await (await driver.findElement(By.xpath("//ul[@id='tools']//.."))).click();
+                    await (await driver.findElement(By.css("#tools .glyphicon-menu-hamburger"))).click();
                 }
             });
 
             it("tool opens with 3 tabs, initially listing active vector layers", async function () {
-                await (await driver.findElement(By.xpath("//ul[@id='tools']//.."))).click();
-                await (await driver.findElement(By.css("#tools .glyphicon-menu-hamburger"))).click();
+                if ((await driver.findElements(By.css("ul.nav.nav-tabs.featurelist-navtabs"))).length === 0) {
+                    await (await driver.findElement(By.xpath("//ul[@id='tools']//.."))).click();
+                    await (await driver.findElement(By.css("#tools .glyphicon-menu-hamburger"))).click();
+                }
 
                 await driver.wait(until.elementIsVisible(
                     await driver.findElement(By.css("div#window li#featurelistThemeChooser.active")),

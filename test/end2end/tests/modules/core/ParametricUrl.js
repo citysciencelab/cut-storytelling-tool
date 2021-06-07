@@ -1,9 +1,10 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {getUnnavigatedDriver, loadUrl} = require("../../../library/driver"),
+    {loadUrl} = require("../../../library/driver"),
     {getCenter, getResolution, isLayerVisible, areLayersOrdered, doesLayerWithFeaturesExist} = require("../../../library/scripts"),
     {centersTo, clickFeature, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {isBasic, isCustom, isDefault, isMaster} = require("../../../settings"),
+    {initDriver} = require("../../../library/driver"),
     {By, until} = webdriver;
 
 /**
@@ -21,7 +22,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 capability["sauce:options"].name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
-            driver = await getUnnavigatedDriver(builder, resolution);
+            driver = await initDriver(builder, url, resolution);
         });
 
         after(async function () {
@@ -30,14 +31,13 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                     logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
-            await driver.quit();
+            await loadUrl(driver, url, mode);
         });
 
         afterEach(async function () {
             if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
                 console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                await driver.quit();
-                driver = await getUnnavigatedDriver(builder, resolution);
+                driver = await initDriver(builder, url, resolution, null, true);
             }
         });
 

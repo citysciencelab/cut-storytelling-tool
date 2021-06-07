@@ -98,7 +98,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await initDriver(builder, url, resolution, null, true);
                 await init();
             });
 
@@ -208,6 +208,12 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                     changesResolution: true,
                     idPart: "Stadtteil"
                 });
+            });
+
+            it("remove searchbar input", async function () {
+                if (await (await driver.findElement(By.id("searchInput"))).getAttribute("value") !== "") {
+                    await (await driver.findElements(By.css("div#searchbar div#searchForm div.input-group span.glyphicon.glyphicon-remove"))).click();
+                }
             });
         });
     }

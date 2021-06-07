@@ -48,7 +48,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
         * test shall then be PR'd back to dev to avoid tests and dev diverging again.
         */
         const suites = [
-                // modules/controls
+                // src/modules/controls
                 require("../../src/modules/controls/attributions/tests/end2end/Attributions.e2e.js"),
                 require("../../src/modules/controls/backForward/tests/end2end/BackForward.e2e.js"),
                 // TODO - uncommented Button3D because the pipeline takes too long
@@ -62,15 +62,15 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 require("../../src/modules/controls/totalView/tests/end2end/TotalView.e2e.js"),
                 require("../../src/modules/controls/zoom/test/end2end/Zoom.e2e.js"),
 
-                // modules/core
-                // require("./tests/modules/core/ParametricUrl.js"),
-
-                // // modules/menu
-                require("./tests/modules/menu/Layers.js"),
-
-                // // modules/searchbar
+                // modules/searchbar
                 require("./tests/modules/searchbar/SearchCategories.js"),
                 require("./tests/modules/searchbar/ElasticSearch.js"),
+
+                // modules/core
+                require("./tests/modules/core/ParametricUrl.js"),
+
+                // modules/menu
+                require("./tests/modules/menu/Layers.js"),
 
                 // modules/tools
                 require("../../src/modules/tools/contact/tests/end2end/Contact.e2e.js"),
@@ -109,7 +109,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
             });
 
             it("closedriver", async function () {
-                // nothing
+                // do nothing
             });
         });
     }

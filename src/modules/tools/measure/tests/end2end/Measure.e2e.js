@@ -36,14 +36,12 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                                 logTestingCloudUrlToTest(sessionData.id_);
                             });
                         }
-                        await driver.quit();
                     });
 
                     afterEach(async function () {
                         if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
                             console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                            await driver.quit();
-                            driver = await initDriver(builder, url, resolution);
+                            driver = await initDriver(builder, url, resolution, null, true);
                         }
                     });
 
@@ -151,7 +149,11 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                     });
 
                     after(async function () {
-                        await driver.quit();
+                        if (capability) {
+                            driver.session_.then(function (sessionData) {
+                                logTestingCloudUrlToTest(sessionData.id_);
+                            });
+                        }
                     });
 
                     it("sets 3D measurement option in 3D mode", async function () {
