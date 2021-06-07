@@ -65,8 +65,8 @@ const actions = {
         commit("setRequiredValues", null);
         commit("setSelectedOptions", {});
         commit("setService", null);
-        dispatch("resetResult");
         commit("setUserHelp", "");
+        dispatch("resetResult");
 
         if (closeTool) {
             commit("setCurrentInstanceIndex", 0);
@@ -94,8 +94,8 @@ const actions = {
     resetResult ({commit, dispatch}) {
         commit("setRequiredValues", {});
         commit("setResults", []);
-        dispatch("MapMarker/removePointMarker", null, {root: true});
         commit("setSelectedOptions", {});
+        dispatch("MapMarker/removePointMarker", null, {root: true});
     }
 };
 
