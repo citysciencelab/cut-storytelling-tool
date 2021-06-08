@@ -175,23 +175,29 @@ function getCapabilities (testService) {
     }
 
     return [
+        // {
+        //     ...baseSaucelabs,
+        //     "browserName": "chrome",
+        //     "browserVersion": "latest",
+        //     "platformName": "Windows 10"
+        // },
+        // {
+        //     ...baseSaucelabs,
+        //     "browserName": "firefox",
+        //     "browserVersion": "latest",
+        //     "platformName": "Windows 10"
+        // },
+        // {
+        //     ...baseSaucelabs,
+        //     "browserName": "MicrosoftEdge",
+        //     "browserVersion": "latest",
+        //     "platformName": "Windows 10"
+        // },
         {
             ...baseSaucelabs,
-            "browserName": "chrome",
+            "browserName": "safari",
             "browserVersion": "latest",
-            "platformName": "Windows 10"
-        },
-        {
-            ...baseSaucelabs,
-            "browserName": "firefox",
-            "browserVersion": "latest",
-            "platformName": "Windows 10"
-        },
-        {
-            ...baseSaucelabs,
-            "browserName": "MicrosoftEdge",
-            "browserVersion": "latest",
-            "platformName": "Windows 10"
+            "platformName": "macOS 10.15"
         }
     ];
 
