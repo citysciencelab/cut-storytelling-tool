@@ -701,6 +701,9 @@
                 "hint": "Bewegen Sie die Maus über die Karte",
                 "showMousePosition": "Einblenden",
                 "hideMousePosition": "Ausblenden"
+            },
+            "layerSwiper": {
+                "title": "Layerwischer"
             }
         },
         "searchbar": {

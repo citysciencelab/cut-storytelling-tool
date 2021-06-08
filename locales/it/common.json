@@ -646,6 +646,9 @@
                 "hint": "Muovi il mouse sulla mappa",
                 "showMousePosition": "Mostra",
                 "hideMousePosition": "Nascondi"
+            },
+            "layerSwiper": {
+                "title": "Stratificatore"
             }
         },
         "searchbar": {
