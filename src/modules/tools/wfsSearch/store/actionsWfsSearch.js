@@ -62,7 +62,6 @@ const actions = {
      */
     resetModule ({commit, dispatch}, closeTool) {
         commit("setRequiredValues", null);
-        commit("setSelectedOptions", {});
         commit("setService", null);
         commit("setUserHelp", "");
         dispatch("resetResult");
@@ -90,11 +89,24 @@ const actions = {
      * Also removes the map marker.
      * @returns {void}
      */
-    resetResult ({commit, dispatch}) {
-        commit("setRequiredValues", {});
+    resetResult ({commit, dispatch, state}) {
+        commit("setValuesReset", true);
         commit("setResults", []);
         commit("setSelectedOptions", {});
         dispatch("MapMarker/removePointMarker", null, {root: true});
+
+        // Reset dropdowns
+        if (state.requiredValues !== null) {
+            Object.keys(state.requiredValues).forEach(val => {
+                state.requiredValues[val] = "";
+            });
+        }
+        // Reset input fields
+        const inputFields = document.getElementsByClassName("tool-wfsSearch-field-input");
+
+        for (const input of inputFields) {
+            input.value = "";
+        }
     }
 };
 

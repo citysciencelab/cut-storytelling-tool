@@ -17,8 +17,9 @@
  * @property {String} userHelp IInformation text regarding the search formular to be displayed to the user.
  * @property {ol.Feature[]} results Current results of the search query.
  * @property {Object} selectedOptions The values of options which the user has entered / selected a value. The options here present are only the fields which had the parameter "options" as a String. The values inserted, have its "options" parameter as the key and the input as the value.
- * @property {Boolean} showResultList Whether the modal containing the results should be shpwn.
  * @property {?Object} service An object containing information about the WFS service, which will later be filtered.
+ * @property {Boolean} showResultList Whether the modal containing the results should be shown.
+ * @property {Boolean} valuesReset If the values are reset, no values should be set on a select element.
  */
 const state = {
     active: false,
@@ -39,8 +40,9 @@ const state = {
     userHelp: "",
     results: [],
     selectedOptions: {},
+    service: null,
     showResultList: false,
-    service: null
+    valuesReset: false
 };
 
 export default state;

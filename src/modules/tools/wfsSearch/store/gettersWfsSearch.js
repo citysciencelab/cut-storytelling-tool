@@ -5,12 +5,13 @@ const getters = {
     ...generateSimpleGetters(initialState),
     /**
      * Tests whether all required values contain a value.
+     * The result is negated as it is used for the disable button of the search.
      *
      * @param {Object} requiredValues The object containing the values which should be set before starting the search.
      * @returns {Boolean} Whether all required values have been set or not.
      */
     requiredFields ({requiredValues}) {
-        return !Object.values(requiredValues).every(val => typeof val === "string" && val !== "");
+        return !(requiredValues !== null && Object.values(requiredValues).every(val => typeof val === "string" && val !== ""));
     },
     /**
      * Returns the currently selected searchInstance.

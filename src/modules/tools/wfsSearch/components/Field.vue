@@ -186,6 +186,7 @@ export default {
         async valueChanged (val) {
             const value = this.value = this.htmlElement === "input" || val === "" ? val : JSON.parse(val).value;
 
+            this.setValuesReset(false);
             // NOTE: The extra object is sadly needed so that the object is reactive :(
             this.setRequiredValues({...fieldValueChanged(this.selectableParameters.fieldId, value, this.currentInstance.literals, this.requiredValues, this.parameterIndex)});
 
@@ -245,7 +246,8 @@ export default {
                 :id="`tool-wfsSearch-${selectableParameters.fieldName}-${selectableParameters.fieldId}-input`"
                 :class="{
                     'form-control': true,
-                    'input-sm': htmlElement === 'select'
+                    'input-sm': htmlElement === 'select',
+                    'tool-wfsSearch-field-input': htmlElement === 'input'
                 }"
                 :placeholder="htmlElement === 'input' ? selectableParameters.inputPlaceholder : ''"
                 :defaultValue="htmlElement === 'input' ? selectableParameters.defaultValue : ''"
@@ -258,6 +260,7 @@ export default {
                 <template v-if="htmlElement === 'select'">
                     <option
                         value=""
+                        :selected="valuesReset"
                     >
                         {{ $t("common:modules.tools.wfsSearch.optionsPlaceholder") }}
                     </option>
