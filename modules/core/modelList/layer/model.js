@@ -486,9 +486,11 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             // This only works for treeType 'custom', otherwise the parentId is not set on the layer
             if (singleBaselayer) {
                 layerGroup.forEach(layer => {
-                    layer.setIsSelected(false);
-                    // This makes sure that the Oblique Layer, if present in the layerList, is not selectable if switching between baseLayers
-                    layer.checkForScale(Radio.request("MapView", "getOptions"));
+                    if (layer.get("id") !== this.get("id")) {
+                        layer.setIsSelected(false);
+                        // This makes sure that the Oblique Layer, if present in the layerList, is not selectable if switching between baseLayers
+                        layer.checkForScale(Radio.request("MapView", "getOptions"));
+                    }
                 });
             }
             if (timeLayer) {
