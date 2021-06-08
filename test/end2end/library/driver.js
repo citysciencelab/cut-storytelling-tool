@@ -119,14 +119,17 @@ async function getUnnavigatedDriver (builder, resolution) {
  * @param {String} resolution formatted as "AxB" with A, B integers
  * @param {String} mode additional instance preparation before tests can be executed
  * @param {Boolean} retry true if a test is to be run a second time
+ * @param {Boolean} load true if the url is to be loaded
  * @returns {selenium.webdriver.Driver} driver instance
  */
-async function initDriver (builder, url, resolution, mode, retry) {
+async function initDriver (builder, url, resolution, mode, retry, load = true) {
     if (lastDriver === undefined || retry || url !== lastUrl) {
         await quitDriver();
         const driver = await getUnnavigatedDriver(builder, resolution);
 
-        await loadUrl(driver, url, mode);
+        if (load) {
+            await loadUrl(driver, url, mode);
+        }
 
         lastUrl = url;
         lastDriver = driver;

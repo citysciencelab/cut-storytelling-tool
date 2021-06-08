@@ -13,7 +13,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function ParameterTests ({builder, url, resolution, mode, capability}) {
-    describe("URL Query Parameters", function () {
+    describe.only("URL Query Parameters", function () {
         let driver; // , gfi, counter;
 
         before(async function () {
@@ -22,7 +22,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 capability["sauce:options"].name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
-            driver = await initDriver(builder, url, resolution);
+            driver = await initDriver(builder, url, resolution, null, true, false);
         });
 
         after(async function () {
@@ -37,7 +37,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
         afterEach(async function () {
             if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
                 console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                driver = await initDriver(builder, url, resolution, null, true);
+                driver = await initDriver(builder, url, resolution, null, true, false);
             }
         });
 
@@ -363,7 +363,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
 
         if (isDefault(url)) {
             it("opening and configuring lots of layers works", async function () {
-                //  ?layerIDs=368,717,2423,1562_0,2432,1754,1757,1935geofox-bahn,2444,1561_6,2941,2452&visibility=true,false,false,false,false,false,false,false,false,false,false,false&transparency=0,0,0,0,0,0,0,0,0,0,0,0&center=572765.7219565103,5940389.380731404&zoomlevel=5
+                //  ?layerIDs=368,717,2423,1562_0,2432,1935geofox-bahn,2444,1561_6,2941,2452&visibility=true,false,false,false,false,false,false,false,false,false&transparency=0,0,0,0,0,0,0,0,0,0&center=572765.7219565103,5940389.380731404&zoomlevel=5
                 let layers = "368,717,2423,1562_0,2432,1935geofox-bahn,2444,1561_6,2941,2452",
                     visibility = "true,false,false,false,false,false,false,false,false,false",
                     transparency = "0,0,0,0,0,0,0,0,0,0",
