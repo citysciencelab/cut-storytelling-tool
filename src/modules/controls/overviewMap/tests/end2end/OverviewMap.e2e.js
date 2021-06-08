@@ -1,6 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {isMaster, isChrome} = require("../../../../../../test/end2end/settings"),
+    {isMaster} = require("../../../../../../test/end2end/settings"),
     {losesCenter, logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {getCenter} = require("../../../../../../test/end2end/library/scripts"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
@@ -15,11 +15,11 @@ const webdriver = require("selenium-webdriver"),
  * @param {module:selenium-webdriver.Capabilities} param.capability sets the capability when requesting a new session - overwrites all previously set capabilities
  * @returns {void}
  */
-function OverviewMap ({builder, url, resolution, browsername, capability}) {
+function OverviewMap ({builder, url, resolution, capability}) {
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
-        describe("Modules Controls OverviewMap", function () {
+        describe("Modules Controls OverviewMap", async function () {
             let driver, overviewMapButton, overviewMap, overviewMapViewport, overviewMapBox;
 
             before(async function () {
@@ -94,8 +94,7 @@ function OverviewMap ({builder, url, resolution, browsername, capability}) {
                 expect(overviewMapViewport).to.exist;
             });
 
-            // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-            (isChrome(browsername) ? it.skip : it)("allows panning the map from the overview map", async function () {
+            it("allows panning the map from the overview map", async function () {
                 const center = await driver.executeScript(getCenter);
 
                 overviewMapBox = await driver.findElement(By.css(".ol-overviewmap-box"));

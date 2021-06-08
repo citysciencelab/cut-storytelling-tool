@@ -13,7 +13,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function ParameterTests ({builder, url, resolution, mode, capability}) {
-    describe("URL Query Parameters", function () {
+    describe.only("URL Query Parameters", function () {
         let driver; // , gfi, counter;
 
         before(async function () {
@@ -110,7 +110,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
         it("?layerids=, &visibility=, and &transparency= work together to display a layer in tree and map as configured", async function () {
             // 2426 is "Bezirke"
             await loadUrl(driver, `${url}?layerids=2426&visibility=true&transparency=0`, mode);
-            await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
+            await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
 
             const treeEntry = await driver.findElement(
                     isBasic(url) || isMaster(url)
@@ -129,7 +129,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
             // 2426 is "Bezirke"
             // 452 is "Digitale Orthophotos (belaubt) Hamburg || Luftbilder DOP 20 (DOP 40 mit Umland)"
             await loadUrl(driver, `${url}?layerIDs=452,2426&visibility=true,true&transparency=40,20&center=560478.8,5937293.5&zoomlevel=3`, mode);
-            await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
+            await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
 
             if (isBasic(url) || isMaster(url)) {
                 ortho = "ul#tree li [title^=\"Digitale Orthophotos (belaubt) Hamburg\"]";
@@ -171,9 +171,9 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                     await driver.wait(new Promise(r => setTimeout(r, 100)));
                 } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
 
-                await driver.wait(until.elementLocated(By.css("div.gfi")));
-                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
-                await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'KiTa Stadt-Land-Fluss')]")));
+                await driver.wait(until.elementLocated(By.css("div.gfi")), 12000);
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))), 12000);
+                await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'KiTa Stadt-Land-Fluss')]")), 12000);
                 await driver.actions({bridge: true})
                     .dragAndDrop(
                         await driver.findElement(By.css(".gfi .tool-window-vue .tool-window-heading .basic-drag-handle")),
@@ -195,9 +195,9 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                     await driver.wait(new Promise(r => setTimeout(r, 1000)));
                 } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
 
-                await driver.wait(until.elementLocated(By.css("div.gfi")));
-                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
-                await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'Krankenhaus Tabea')]")));
+                await driver.wait(until.elementLocated(By.css("div.gfi")), 12000);
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))), 12000);
+                await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'Krankenhaus Tabea')]")), 12000);
                 await (await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[contains(@class, 'glyphicon-remove')]"))).click();
                 expect((await driver.findElements(By.css("div.gfi"))).length).to.equal(0);
             });
@@ -221,7 +221,6 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
 
                 expect(await driver.findElements(By.xpath("//*[contains(text(),'Fehler beim Laden der Vorschau der Metadaten.')]"))).to.be.empty;
             });
-            // });
 
             it("?layerIDs=, &visibility=, and &transparency= with set zoom level have working gfi/legend/info", async function () {
                 await loadUrl(driver, `${url}?layerIDs=4736,4537&visibility=true,true&transparency=0,0&zoomLevel=6`, mode);
@@ -233,8 +232,8 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                     await driver.wait(new Promise(r => setTimeout(r, 100)));
                 } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
 
-                await driver.wait(until.elementLocated(By.css("div.gfi")));
-                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
+                await driver.wait(until.elementLocated(By.css("div.gfi")), 12000);
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))), 12000);
                 expect(await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//h6[contains(.,'Steintorwall 20')]"))).to.exist;
                 await driver.actions({bridge: true})
                     .dragAndDrop(
@@ -247,7 +246,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
 
                 // check whether layer has its legend loaded
                 await (await driver.findElement(By.id("legend-menu"))).click();
-                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.legend-window"))));
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.legend-window"))), 12000);
                 expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-window')]//img[contains(@src,'https://geoportal-hamburg.de/legende/legende_solar.png')]"))).to.exist;
                 await (await driver.findElement(By.xpath("//div[contains(@class,'legend-window')]//span[contains(@class, 'glyphicon-remove')]"))).click();
                 expect((await driver.findElements(By.css("div.legend-window"))).length).to.equal(0);
@@ -265,7 +264,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
         if (isMaster(url) || isCustom(url)) {
             it("?featureid= displays markers for features", async function () {
                 await loadUrl(driver, `${url}?featureid=18,26`, mode);
-                await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
+                await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
                 await driver.wait(async () => driver.executeScript(doesLayerWithFeaturesExist, [
                     {coordinate: [568814.3835, 5931819.377], image: "https://geodienste.hamburg.de/lgv-config/img/location_eventlotse.svg"},
                     {coordinate: [567043.565, 5934455.808], image: "https://geodienste.hamburg.de/lgv-config/img/location_eventlotse.svg"}
@@ -281,7 +280,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
             it("?query= fills and executes query field", async function () {
                 await loadUrl(driver, `${url}?query=Neuenfeld`, mode);
 
-                await driver.wait(until.elementLocated(By.css("#searchInput")), 10000);
+                await driver.wait(until.elementLocated(By.css("#searchInput")), 12000);
                 const input = await driver.findElement(By.css("#searchInput"));
 
                 // value is set to search field

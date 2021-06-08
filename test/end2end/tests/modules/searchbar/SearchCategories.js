@@ -127,13 +127,14 @@ async function SearchCategories ({builder, url, resolution, capability}) {
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    driver = await initDriver(builder, url, resolution, null, true);
-                    await init();
+                    // console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+                    // driver = await initDriver(builder, url, resolution, null, true);
+                    // await init();
                 }
             });
 
             it("searches show some results in a dropdown", async function () {
+                await driver.wait(until.elementLocated(By.id("searchInput")), 12000);
                 if (await (await driver.findElement(By.id("searchInput"))).getAttribute("value") === "") {
                     await searchInput.sendKeys(searchString);
                 }
@@ -211,8 +212,9 @@ async function SearchCategories ({builder, url, resolution, capability}) {
             });
 
             it("remove searchbar input", async function () {
+                await driver.wait(until.elementLocated(By.id("searchInput")), 12000);
                 if (await (await driver.findElement(By.id("searchInput"))).getAttribute("value") !== "") {
-                    await (await driver.findElements(By.css("div#searchbar div#searchForm div.input-group span.glyphicon.glyphicon-remove"))).click();
+                    await (await driver.findElement(By.css("div#searchbar div#searchForm div.input-group span.glyphicon.glyphicon-remove"))).click();
                 }
             });
         });
