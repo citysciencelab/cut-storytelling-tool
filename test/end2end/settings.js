@@ -170,14 +170,7 @@ function getCapabilities (testService) {
                 "browser_version": "89.0",
                 "os": "Windows",
                 "os_version": "10"
-            }/*
-            {
-                ...base,
-                "browserName": "Safari",
-                "browser_version": "12.0",
-                "os": "OS X",
-                "os_version": "Mojave"
-            }*/
+            }
         ];
     }
 
@@ -200,7 +193,6 @@ function getCapabilities (testService) {
             "browserVersion": "latest",
             "platformName": "Windows 10"
         }
-
     ];
 
 }

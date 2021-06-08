@@ -54,7 +54,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 // TODO - uncommented Button3D because the pipeline takes too long
                 // require("./tests/modules/controls/Button3D.js"),
                 // TODO pull OB to different suites array - maybe depending on environment variable? up for discussion
-                // require("./tests/modules/controls/ButtonOblique.js"),
+                require("./tests/modules/controls/ButtonOblique.js"),
                 require("../../src/modules/controls/freeze/tests/end2end/Freeze.e2e.js"),
                 require("../../src/modules/controls/fullScreen/tests/end2end/FullScreen.e2e.js"),
                 require("../../src/modules/controls/orientation/tests/end2end/Orientation.e2e.js"),
@@ -77,13 +77,17 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 // require("./tests/modules/tools/PopulationRequest_HH.js"),
                 require("../../src/modules/tools/supplyCoord/tests/end2end/SupplyCoord.e2e.js"),
                 require("./tests/modules/tools/ExtendedFilter.js"),
-                require("../../src/modules/tools/gfi/tests/end2end/Gfi.e2e.js"),
-                // require("./tests/modules/tools/Gfi.js"),old GFI-Test do not delete!
-                require("../../src/modules/legend/tests/end2end/Legend.e2e.js"),
                 require("./tests/modules/tools/List.js"),
                 require("../../src/modules/tools/measure/tests/end2end/Measure.e2e.js"),
                 require("./tests/modules/tools/ParcelSearch.js"),
                 require("./tests/modules/tools/SearchByCoord.js"),
+
+                // src/modules/tools/gfi
+                require("../../src/modules/tools/gfi/tests/end2end/Gfi.e2e.js"),
+                // require("./tests/modules/tools/Gfi.js"),old GFI-Test do not delete!
+
+                // src/modules/legend
+                require("../../src/modules/legend/tests/end2end/Legend.e2e.js"),
 
                 // non-module tests
                 require("../../src/tests/end2end/Pan.e2e.js"),
