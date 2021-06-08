@@ -13,7 +13,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function ParameterTests ({builder, url, resolution, mode, capability}) {
-    describe.only("URL Query Parameters", function () {
+    describe("URL Query Parameters", function () {
         let driver; // , gfi, counter;
 
         before(async function () {
@@ -31,13 +31,12 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                     logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
-            await loadUrl(driver, url, mode);
         });
 
         afterEach(async function () {
             if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
                 console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                driver = await initDriver(builder, url, resolution, null, true, false);
+                // driver = await initDriver(builder, url, resolution, null, true, false);
             }
         });
 
@@ -162,12 +161,12 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
         if (isMaster(url)) {
             it("?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - KiTa layer GFI with example 'KiTa Stadt-Land-Fluss' shows gfi", async function () {
                 await loadUrl(driver, `${url}?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`, mode);
-                // at coords '550115.420 5935760.220'
+                // at coords '550116.08, 5935758.60'
                 let counter = 0;
 
                 do {
                     expect(counter++).to.be.below(25);
-                    await clickFeature(driver, [550115.420, 5935760.220]);
+                    await clickFeature(driver, [550116.08, 5935758.60]);
                     await driver.wait(new Promise(r => setTimeout(r, 100)));
                 } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
 

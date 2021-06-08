@@ -43,10 +43,15 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
             return;
         }
 
-        /*
-        * TODO Check/Fix/Implement and re-activate tests one by one. Each running
-        * test shall then be PR'd back to dev to avoid tests and dev diverging again.
-        */
+        before(async function () {
+            console.warn("before");
+        });
+
+        after(async function () {
+            console.warn("after");
+            await quitDriver();
+        });
+
         const suites = [
                 // src/modules/controls
                 require("../../src/modules/controls/attributions/tests/end2end/Attributions.e2e.js"),
@@ -62,15 +67,12 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 require("../../src/modules/controls/totalView/tests/end2end/TotalView.e2e.js"),
                 require("../../src/modules/controls/zoom/test/end2end/Zoom.e2e.js"),
 
+                // modules/menu
+                require("./tests/modules/menu/Layers.js"),
+
                 // modules/searchbar
                 require("./tests/modules/searchbar/SearchCategories.js"),
                 require("./tests/modules/searchbar/ElasticSearch.js"),
-
-                // modules/core
-                require("./tests/modules/core/ParametricUrl.js"),
-
-                // modules/menu
-                require("./tests/modules/menu/Layers.js"),
 
                 // modules/tools
                 require("../../src/modules/tools/contact/tests/end2end/Contact.e2e.js"),
@@ -92,7 +94,9 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 // non-module tests
                 require("../../src/tests/end2end/Pan.e2e.js"),
                 require("../../src/tests/end2end/Zoom.e2e.js"),
-                closeDriver
+
+                // modules/core
+                require("./tests/modules/core/ParametricUrl.js")
             ],
             e2eTestParams = {builder, url, resolution, config, mode, browsername, capability};
 
@@ -101,23 +105,11 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
 
             suite(e2eTestParams);
         }
-    });
 
-    /**
-     * @returns {void}
-     */
-    function closeDriver () {
-        describe("Quit driver", function () {
-            after(async function () {
-                await quitDriver();
-            });
-
-            it("closedriver", async function () {
-                // do nothing
-            });
+        it("run all end2end tests", async function () {
+            // do nothing
         });
-    }
-
+    });
 }
 
 module.exports = tests;

@@ -13,10 +13,10 @@ const capabilities = {
         // "600x800"
     ],
     configs = new Map([
-        // ["basic", "basic"],
-        ["master", "master"]
-        // ["custom", "masterCustom"],
-        // ["default", "masterDefault"]
+        ["basic", "basic"],
+        ["master", "master"],
+        ["custom", "masterCustom"],
+        ["default", "masterDefault"]
     ]),
     modes = [
         "2D"

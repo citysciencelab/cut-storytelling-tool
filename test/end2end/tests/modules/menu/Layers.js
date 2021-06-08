@@ -8,7 +8,7 @@ const webdriver = require("selenium-webdriver"),
     {getOrderedLayerIds, isLayerVisible} = require("../../../library/scripts"),
     {initDriver} = require("../../../library/driver"),
     {getOrderedTitleTexts, getOrderedTitlesFromConfig, getOrderedIdsFromConfig, logTestingCloudUrlToTest} = require("../../../library/utils"),
-    {isMaster, isChrome} = require("../../../settings"),
+    {isMaster} = require("../../../settings"),
     {By, until} = webdriver;
 
 /**
@@ -31,7 +31,7 @@ function arrayDeepEqualsWithOptions (arrayWithOptions, compareArray) {
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function MenuLayersTests ({builder, url, resolution, browsername, capability}) {
+async function MenuLayersTests ({builder, url, resolution, capability}) {
     describe("Menu Layers", function () {
         let driver,
             services,
@@ -77,7 +77,7 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
          * Tests only work in Chrome. The scripts and utils return a different order of elements
          * for chromedriver and geckodriver. Element order is probably simply not guaranteed in WebDrivers?
          */
-        if (isMaster(url) && isChrome(browsername)) {
+        if (isMaster(url)) {
             it("shows layers in order of config.json in LT", async function () {
                 await (await driver.wait(
                     until.elementLocated(By.css("ul#root li:first-child")),
