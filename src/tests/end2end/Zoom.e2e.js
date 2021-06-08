@@ -3,7 +3,7 @@ const webdriver = require("selenium-webdriver"),
     {getResolution, mouseWheelUp, mouseWheelDown} = require("../../../test/end2end/library/scripts"),
     {logTestingCloudUrlToTest} = require("../../../test/end2end/library/utils"),
     {initDriver} = require("../../../test/end2end/library/driver"),
-    {isMobile} = require("../../../test/end2end/settings"),
+    {isMaster, isMobile} = require("../../../test/end2end/settings"),
     {By} = webdriver;
 
 /**
@@ -16,7 +16,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function ZoomTests ({builder, url, resolution, capability}) {
-    const testIsApplicable = !isMobile(resolution); // no mouse wheel on mobile devices
+    const testIsApplicable = isMaster(url) && !isMobile(resolution); // no mouse wheel on mobile devices
 
     if (testIsApplicable) {
         describe("Map Zoom with MouseWheel", function () {

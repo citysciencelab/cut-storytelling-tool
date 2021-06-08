@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {getCenter} = require("../../../../../../test/end2end/library/scripts"),
-    {isCustom, isMaster, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
+    {isMaster, isChrome} = require("../../../../../../test/end2end/settings"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {By, Button} = webdriver;
 
@@ -16,8 +16,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function FreezeTests ({builder, url, resolution, browsername, capability}) {
-    const testIsApplicable = !isMobile(resolution) && // function not available mobile
-        (isCustom(url) || isMaster(url)); // freeze only active in these
+    const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
         describe("Modules Controls Freeze", function () {

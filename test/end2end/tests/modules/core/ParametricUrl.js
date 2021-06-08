@@ -41,26 +41,26 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
             }
         });
 
-        it("?style=simple hides control elements", async function () {
-            await loadUrl(driver, `${url}?style=simple`, mode);
-
-            await driver.wait(until.elementIsNotVisible(driver.findElement(By.id("main-nav"))), 10000);
-            expect(await driver.findElements(By.className("ol-viewport"))).to.not.be.empty;
-            expect(await driver.findElements(By.className("mouse-position"))).to.be.empty;
-            expect(await driver.findElements(By.className("top-controls"))).to.be.empty;
-            expect(await driver.findElements(By.className("bottom-controls"))).to.be.empty;
-        });
-
-        it("?center= allows setting coordinates of map", async function () {
-            await loadUrl(driver, `${url}?center=566499,5942803`, mode);
-            await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
-
-            const center = await driver.executeScript(getCenter);
-
-            expect([566499, 5942803]).to.eql(center);
-        });
-
         if (isMaster(url)) {
+            it("?style=simple hides control elements", async function () {
+                await loadUrl(driver, `${url}?style=simple`, mode);
+
+                await driver.wait(until.elementIsNotVisible(driver.findElement(By.id("main-nav"))), 10000);
+                expect(await driver.findElements(By.className("ol-viewport"))).to.not.be.empty;
+                expect(await driver.findElements(By.className("mouse-position"))).to.be.empty;
+                expect(await driver.findElements(By.className("top-controls"))).to.be.empty;
+                expect(await driver.findElements(By.className("bottom-controls"))).to.be.empty;
+            });
+
+            it("?center= allows setting coordinates of map", async function () {
+                await loadUrl(driver, `${url}?center=566499,5942803`, mode);
+                await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
+
+                const center = await driver.executeScript(getCenter);
+
+                expect([566499, 5942803]).to.eql(center);
+            });
+
             it("?zoomtogeometry=[number] zooms to a district", async function () {
                 const expectedCoordinate = [556535.269, 5937846.413000001];
 
@@ -76,6 +76,34 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 await loadUrl(driver, `${url}?zoomtogeometry=bergedorf`, mode);
                 await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
                 expect(await centersTo(driver, expectedCoordinate)).to.be.true;
+            });
+
+            it("?zoomlevel= sets the chosen zoom level", async function () {
+                await loadUrl(driver, `${url}?zoomlevel=8`, mode);
+
+                expect(0.2645831904584105).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:1.000
+            });
+
+            it("?isinitopen= allows opening tools initially in window", async function () {
+                const toolName = "fileimport",
+                    toolwindow = By.css(".tool-window-vue");
+
+                await loadUrl(driver, `${url}?isinitopen=${toolName}`, mode);
+
+                await driver.wait(until.elementLocated(toolwindow), 5000);
+
+                expect(await driver.findElement(toolwindow)).to.exist;
+            });
+
+            it("?isinitopen= allows opening tools initially in sidebar", async function () {
+                const toolName = "draw",
+                    toolSidebar = By.css("#tool-sidebar-vue");
+
+                await loadUrl(driver, `${url}?isinitopen=${toolName}`, mode);
+
+                await driver.wait(until.elementLocated(toolSidebar), 5000);
+
+                expect(await driver.findElement(toolSidebar)).to.exist;
             });
         }
 
@@ -245,34 +273,6 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
             });
         }
 
-        it("?zoomlevel= sets the chosen zoom level", async function () {
-            await loadUrl(driver, `${url}?zoomlevel=8`, mode);
-
-            expect(0.2645831904584105).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:1.000
-        });
-
-        it("?isinitopen= allows opening tools initially in window", async function () {
-            const toolName = "fileimport",
-                toolwindow = By.css(".tool-window-vue");
-
-            await loadUrl(driver, `${url}?isinitopen=${toolName}`, mode);
-
-            await driver.wait(until.elementLocated(toolwindow), 5000);
-
-            expect(await driver.findElement(toolwindow)).to.exist;
-        });
-
-        it("?isinitopen= allows opening tools initially in sidebar", async function () {
-            const toolName = "draw",
-                toolSidebar = By.css("#tool-sidebar-vue");
-
-            await loadUrl(driver, `${url}?isinitopen=${toolName}`, mode);
-
-            await driver.wait(until.elementLocated(toolSidebar), 5000);
-
-            expect(await driver.findElement(toolSidebar)).to.exist;
-        });
-
         /**
          * Tests only in the default tree, because there only the gazetteer is configured.
          * With the BKG address service can not be tested, because this is only available in the fhhnet and therefore does not work on the Internet.
@@ -364,9 +364,9 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
         if (isDefault(url)) {
             it("opening and configuring lots of layers works", async function () {
                 //  ?layerIDs=368,717,2423,1562_0,2432,1754,1757,1935geofox-bahn,2444,1561_6,2941,2452&visibility=true,false,false,false,false,false,false,false,false,false,false,false&transparency=0,0,0,0,0,0,0,0,0,0,0,0&center=572765.7219565103,5940389.380731404&zoomlevel=5
-                let layers = "368,717,2423,1562_0,2432,1754,1757,1935geofox-bahn,2444,1561_6,2941,2452",
-                    visibility = "true,false,false,false,false,false,false,false,false,false,false,false",
-                    transparency = "0,0,0,0,0,0,0,0,0,0,0,0",
+                let layers = "368,717,2423,1562_0,2432,1935geofox-bahn,2444,1561_6,2941,2452",
+                    visibility = "true,false,false,false,false,false,false,false,false,false",
+                    transparency = "0,0,0,0,0,0,0,0,0,0",
                     center = "572765.7219565103,5940389.380731404";
 
                 await loadUrl(driver, `${url}?layerIDs=${layers}&visibility=${visibility}&transparency=${transparency}&center=${center}&zoomlevel=5`, mode);

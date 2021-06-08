@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {getCenter} = require("../../../test/end2end/library/scripts"),
     {losesCenter, logTestingCloudUrlToTest} = require("../../../test/end2end/library/utils"),
     {initDriver} = require("../../../test/end2end/library/driver"),
-    {isChrome, isEdge} = require("../../../test/end2end/settings"),
+    {isMaster, isChrome, isEdge} = require("../../../test/end2end/settings"),
     {By, Button} = webdriver;
 
 /**
@@ -16,52 +16,56 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function PanTests ({builder, url, resolution, browsername, capability}) {
-    // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-    (isChrome(browsername) || isEdge(browsername) ? describe.skip : describe)("Map Pan", function () {
-        let driver;
+    const testIsApplicable = isMaster(url);
 
-        before(async function () {
-            if (capability) {
-                capability.name = this.currentTest.fullTitle();
-                capability["sauce:options"].name = this.currentTest.fullTitle();
-                builder.withCapabilities(capability);
-            }
-            driver = await initDriver(builder, url, resolution);
-        });
+    if (testIsApplicable) {
+        // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
+        (isChrome(browsername) || isEdge(browsername) ? describe.skip : describe)("Map Pan", function () {
+            let driver;
 
-        after(async function () {
-            if (capability) {
-                driver.session_.then(function (sessionData) {
-                    logTestingCloudUrlToTest(sessionData.id_);
-                });
-            }
-            await driver.quit();
-        });
-
-        afterEach(async function () {
-            if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                await driver.quit();
+            before(async function () {
+                if (capability) {
+                    capability.name = this.currentTest.fullTitle();
+                    capability["sauce:options"].name = this.currentTest.fullTitle();
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
-            }
-        });
+            });
 
-        it("should move when panned", async function () {
-            this.timeout(10000);
-            const center = await driver.executeScript(getCenter),
-                viewport = await driver.findElement(By.css(".ol-viewport"));
+            after(async function () {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logTestingCloudUrlToTest(sessionData.id_);
+                    });
+                }
+                await driver.quit();
+            });
 
-            // since there's no clear sign when panning is active, retry for the timeout written above
-            do {
-                await driver.actions({bridge: true})
-                    .move({origin: viewport})
-                    .press(Button.LEFT)
-                    .move({origin: viewport, x: 10, y: 10})
-                    .release(Button.LEFT)
-                    .perform();
-            } while (!await losesCenter(driver, center));
+            afterEach(async function () {
+                if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+                    await driver.quit();
+                    driver = await initDriver(builder, url, resolution);
+                }
+            });
+
+            it("should move when panned", async function () {
+                this.timeout(10000);
+                const center = await driver.executeScript(getCenter),
+                    viewport = await driver.findElement(By.css(".ol-viewport"));
+
+                // since there's no clear sign when panning is active, retry for the timeout written above
+                do {
+                    await driver.actions({bridge: true})
+                        .move({origin: viewport})
+                        .press(Button.LEFT)
+                        .move({origin: viewport, x: 10, y: 10})
+                        .release(Button.LEFT)
+                        .perform();
+                } while (!await losesCenter(driver, center));
+            });
         });
-    });
+    }
 }
 
 module.exports = PanTests;

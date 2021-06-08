@@ -3,7 +3,7 @@ const webdriver = require("selenium-webdriver"),
     {getCenter} = require("../../../../../../test/end2end/library/scripts"),
     {onMoveEnd} = require("../../../../../../test/end2end/library/scriptsAsync"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
-    {isCustom, isMaster, isMobile} = require("../../../../../../test/end2end/settings"),
+    {isMaster} = require("../../../../../../test/end2end/settings"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {until, By} = webdriver;
 
@@ -17,8 +17,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 function BackForwardTests ({builder, url, resolution, capability}) {
-    const testIsApplicable = !isMobile(resolution) && // buttons not visible mobile
-        (isCustom(url) || isMaster(url)); // backForward active in these portals
+    const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
         describe("Modules Controls BackForward", function () {

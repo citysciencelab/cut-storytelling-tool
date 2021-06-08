@@ -1,6 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {isCustom, isMaster, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
+    {isMaster, isChrome} = require("../../../../../../test/end2end/settings"),
     {losesCenter, logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {getCenter} = require("../../../../../../test/end2end/library/scripts"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
@@ -16,7 +16,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 function OverviewMap ({builder, url, resolution, browsername, capability}) {
-    const testIsApplicable = !isMobile(resolution) && (isCustom(url) || isMaster(url));
+    const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
         describe("Modules Controls OverviewMap", function () {

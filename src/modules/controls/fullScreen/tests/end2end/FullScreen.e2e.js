@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {isFullscreen} = require("../../../../../../test/end2end/library/scripts"),
-    {isMobile, isMaster, isCustom, isDefault} = require("../../../../../../test/end2end/settings"),
+    {isMaster} = require("../../../../../../test/end2end/settings"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {writeScreenshot} = require("../../../../../../test/end2end/library/screenshot"),
     {until, By} = webdriver;
@@ -16,8 +16,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 function FullScreenTest ({builder, url, resolution, capability}) {
-    const testIsApplicable = !isMobile(resolution) &&
-        (isMaster(url) || isCustom(url) || isDefault(url));
+    const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
         describe("Modules Controls FullScreen", function () {

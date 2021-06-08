@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
-    {isMobile, isMaster, isCustom, isDefault} = require("../../../../../../test/end2end/settings"),
+    {isMaster} = require("../../../../../../test/end2end/settings"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {By, until} = webdriver;
 
@@ -15,9 +15,7 @@ const webdriver = require("selenium-webdriver"),
  */
 async function ContactTests ({builder, url, resolution, capability}) {
     // for a start, testing from 2D desktop mode
-    const testIsApplicable = !isMobile(resolution) && (
-        isMaster(url) || isCustom(url) || isDefault(url)
-    );
+    const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
         describe("Contact", function () {

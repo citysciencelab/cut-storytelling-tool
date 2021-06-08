@@ -3,7 +3,7 @@ const webdriver = require("selenium-webdriver"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {hasVectorLayerLength} = require("../../../../../../test/end2end/library/scripts"),
     {reclickUntilNotStale, logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
-    {isMobile, is3D, isBasic} = require("../../../../../../test/end2end/settings"),
+    {isMobile, is3D, isMaster} = require("../../../../../../test/end2end/settings"),
     {getMeasureLayersTexts, areRegExpsInMeasureLayer} = require("../../../../../../test/end2end/library/scripts"),
     {By} = webdriver;
 
@@ -13,7 +13,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function MeasureTests ({builder, url, resolution, mode, capability}) {
-    const testIsApplicable = !isMobile(resolution) && isBasic(url);
+    const testIsApplicable = !isMobile(resolution) && isMaster(url);
 
     if (testIsApplicable) {
         describe("Measure Tool", function () {

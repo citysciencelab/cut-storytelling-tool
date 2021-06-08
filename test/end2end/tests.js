@@ -56,7 +56,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 require("./tests/modules/controls/ButtonOblique.js"),
                 require("../../src/modules/controls/freeze/tests/end2end/Freeze.e2e.js"),
                 require("../../src/modules/controls/fullScreen/tests/end2end/FullScreen.e2e.js"),
-                require("./tests/modules/controls/Orientation.js"),
+                require("../../src/modules/controls/orientation/tests/end2end/Orientation.e2e.js"),
                 require("../../src/modules/controls/overviewMap/tests/end2end/OverviewMap.e2e.js"),
                 require("../../src/modules/controls/totalView/tests/end2end/TotalView.e2e.js"),
                 require("../../src/modules/controls/zoom/test/end2end/Zoom.e2e.js"),
@@ -78,7 +78,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 require("./tests/modules/tools/ExtendedFilter.js"),
                 require("../../src/modules/tools/gfi/tests/end2end/Gfi.e2e.js"),
                 // require("./tests/modules/tools/Gfi.js"),old GFI-Test do not delete!
-                require("./tests/modules/Legend.js"),
+                require("../../src/modules/legend/tests/end2end/Legend.e2e.js"),
                 require("./tests/modules/tools/List.js"),
                 require("../../src/modules/tools/measure/tests/end2end/Measure.e2e.js"),
                 require("./tests/modules/tools/ParcelSearch.js"),

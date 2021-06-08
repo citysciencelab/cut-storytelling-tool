@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
-    {isCustom, isMaster} = require("../../../../../../test/end2end/settings"),
+    {isMaster} = require("../../../../../../test/end2end/settings"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {until, By} = webdriver;
 
@@ -14,7 +14,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 function AttributionsTests ({builder, url, resolution, capability}) {
-    const testIsApplicable = isCustom(url) || isMaster(url); // attributions only active in custom/master
+    const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
         describe("Modules Controls Attributions", function () {

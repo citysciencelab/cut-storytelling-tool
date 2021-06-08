@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
     {getCenter} = require("../../../library/scripts"),
-    {/* isDefault, isCustom,*/ isMaster, isChrome} = require("../../../settings"),
+    {isMaster} = require("../../../settings"),
     {logTestingCloudUrlToTest} = require("../../../library/utils"),
     {By, until} = webdriver;
 
@@ -17,7 +17,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ParcelSearchTests ({builder, url, resolution, browsername, capability}) {
+async function ParcelSearchTests ({builder, url, resolution, capability}) {
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
@@ -62,7 +62,7 @@ async function ParcelSearchTests ({builder, url, resolution, browsername, capabi
                 }
             });
 
-            (!isChrome(browsername) ? it.skip : it)("opens a modal on activation providing input elements", async () => {
+            it("opens a modal on activation providing input elements", async () => {
                 const toolsLink = await driver.findElement(selectors.tools, 5000),
                     toolParcelSearch = await driver.findElement(selectors.toolParcelSearch, 1000),
                     parcelSearchLink = await toolParcelSearch.findElement(By.xpath("./.."), 1000);
@@ -90,7 +90,7 @@ async function ParcelSearchTests ({builder, url, resolution, browsername, capabi
                 submitButton = await driver.findElement(selectors.submitButton);
             });
 
-            (!isChrome(browsername) ? it.skip : it)("search results in centering and setting of a map marker", async () => {
+            it("search results in centering and setting of a map marker", async () => {
                 await driver.wait(until.elementIsVisible(districtField), 5000, "districtField did not appear");
                 await districtField.click();
                 await (await driver.findElement(By.xpath("//option[@value='0601']"))).click(); // Allermöhe
@@ -101,7 +101,7 @@ async function ParcelSearchTests ({builder, url, resolution, browsername, capabi
                 expect(await driver.executeScript(getCenter)).to.deep.equal([576184.954, 5927013.002]);
             });
 
-            (!isChrome(browsername) ? it.skip : it)("can be minimized", async () => {
+            it("can be minimized", async () => {
                 await driver.wait(until.elementLocated(selectors.minimize), 5000, "minimize button did not appear");
 
                 const minimize = await driver.findElement(selectors.minimize);
@@ -118,7 +118,7 @@ async function ParcelSearchTests ({builder, url, resolution, browsername, capabi
                 expect(await submitButton.isDisplayed()).to.be.false;
             });
 
-            (!isChrome(browsername) ? it.skip : it)("can be maximized again", async () => {
+            it("can be maximized again", async () => {
                 await driver.wait(until.elementLocated(selectors.maximize), 5000, "maximize button did not appear");
 
                 const maximize = await driver.findElement(selectors.maximize);

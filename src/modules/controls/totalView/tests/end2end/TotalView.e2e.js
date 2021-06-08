@@ -3,7 +3,7 @@ const webdriver = require("selenium-webdriver"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {getCenter} = require("../../../../../../test/end2end/library/scripts"),
     {losesCenter} = require("../../../../../../test/end2end/library/utils"),
-    {isMaster, isCustom, isEdge, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
+    {isMaster, isEdge, isChrome} = require("../../../../../../test/end2end/settings"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {By, Button, until} = webdriver;
 
@@ -17,8 +17,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 function TotalViewTests ({builder, url, resolution, browsername, capability}) {
-    const testIsApplicable = (isMaster(url) || isCustom(url)) && // only active here
-        !isMobile(resolution); // not visible on mobile devices
+    const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
         describe("Modules Controls TotalView", function () {

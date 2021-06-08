@@ -3,7 +3,7 @@ const webdriver = require("selenium-webdriver"),
     {getResolution} = require("../../../../../../test/end2end/library/scripts"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
-    {isMobile} = require("../../../../../../test/end2end/settings"),
+    {isMaster} = require("../../../../../../test/end2end/settings"),
     {until, By} = webdriver;
 
 /**
@@ -16,7 +16,7 @@ const webdriver = require("selenium-webdriver"),
  */
 function ZoomTests ({builder, url, resolution, capability}) {
     // no zoom control on mobile devices - skip
-    const testIsApplicable = !isMobile(resolution);
+    const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
         describe("Modules Controls Zoom", function () {
