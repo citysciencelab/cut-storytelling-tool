@@ -150,28 +150,22 @@ function getCapabilities (testService) {
             // is used for autologin to a webpage with a predefined username and password (login to geoportal test)
             "unhandledPromptBehavior": "ignore"
         },
-        // baseSaucelabs = {
-        //     "host": "saucelabs",
-        //     "sauce:options": {
-        //         "screenResolution": "1920x1080",
-        //         /* eslint-disable-next-line no-process-env */
-        //         "username": process.env.SAUCE_USERNAME,
-        //         /* eslint-disable-next-line no-process-env */
-        //         "accessKey": process.env.SAUCE_ACCESS_KEY,
-        //         "extendedDebugging": true
-        //     }
-        // },
-        baseSaucelabsOS = {
+        baseSaucelabs = {
             "host": "saucelabs",
             "sauce:options": {
-                "screenResolution": "1920x1440",
+                "screenResolution": "1920x1080",
                 /* eslint-disable-next-line no-process-env */
                 "username": process.env.SAUCE_USERNAME,
                 /* eslint-disable-next-line no-process-env */
                 "accessKey": process.env.SAUCE_ACCESS_KEY,
                 "extendedDebugging": true
             }
-        };
+        },
+        baseSaucelabsMacOS = Object.assign(baseSaucelabs, {
+            "sauce:options": {
+                "screenResolution": "1920x1440"
+            }
+        });
 
     if (testService === "browserstack") {
         return [
@@ -205,7 +199,7 @@ function getCapabilities (testService) {
         //     "platformName": "Windows 10"
         // },
         {
-            ...baseSaucelabsOS,
+            ...baseSaucelabsMacOS,
             "browserName": "safari",
             "browserVersion": "latest",
             "platformName": "macOS 10.15"
