@@ -6,7 +6,7 @@ import Footer from "./modules/footer/components/Footer.vue";
 import LegendWindow from "./modules/legend/components/LegendWindow.vue";
 import MapMarker from "./modules/mapMarker/components/MapMarker.vue";
 import ToolManager from "./modules/tools/ToolManager.vue";
-import LayerSwiper from "./modules/wmst//layerSwiper/components/layerSwiper.vue";
+import LayerSwiper from "./modules/wmts/layerSwiper/components/LayerSwiper.vue";
 import {mapState} from "vuex";
 
 export default {
