@@ -965,7 +965,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {void}
      */
     deleteSearchString: function () {
-        this.model.setSearchString("");
+        this.model.set("searchString", "");
         this.setSearchbarString("");
         this.hideMarker();
         store.dispatch("MapMarker/removePointMarker");

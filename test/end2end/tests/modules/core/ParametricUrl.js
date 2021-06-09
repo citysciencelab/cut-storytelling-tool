@@ -36,7 +36,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
         afterEach(async function () {
             if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
                 console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                // driver = await initDriver(builder, url, resolution, null, true, false);
+                driver = await initDriver(builder, url, resolution, null, true, false);
             }
         });
 

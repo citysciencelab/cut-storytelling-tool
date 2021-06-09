@@ -216,6 +216,8 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 if (await (await driver.findElement(By.id("searchInput"))).getAttribute("value") !== "") {
                     await (await driver.findElement(By.css("div#searchbar div#searchForm div.input-group span.glyphicon.glyphicon-remove"))).click();
                 }
+
+                expect(await (await driver.findElement(By.id("searchInput"))).getAttribute("value")).to.equals("");
             });
         });
     }
