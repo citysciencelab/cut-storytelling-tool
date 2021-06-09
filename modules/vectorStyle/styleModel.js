@@ -578,9 +578,9 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         }
         // compare value in range
         else if (Array.isArray(referenceValue) && referenceValue.every(element => typeof element === "number") && (referenceValue.length === 2 || referenceValue.length === 4)) {
-            value = parseFloat(value);
+            value = parseFloat(value.replace(",", "."));
 
-            if (!isNaN(featureValue)) {
+            if (!isNaN(featureValue.replace(",", "."))) {
                 // value in absolute range of numbers [minValue, maxValue]
                 if (referenceValue.length === 2) {
                     // do nothing
