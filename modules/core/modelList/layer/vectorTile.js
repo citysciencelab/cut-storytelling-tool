@@ -259,8 +259,8 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
 
     /**
      * Changes fontstack of VT-Style to MP-font if configured.
-     * @param {array} fontstack text-font as found in VT-Style
-     * @returns {array} returns relevant MP-font
+     * @param {String[]} fontstack text-font as found in VT-Style
+     * @returns {String[]} returns relevant MP-font
      */
     addMpFonts: function (fontstack) {
         if (fontstack.includes("Bold")) {
@@ -286,8 +286,8 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
 
     /**
      * Fetches SpriteData Object
-     * @param {string} spriteUrl url to spriteData as found in StyleDefinition
-     * @returns {object} spriteData
+     * @param {String} spriteUrl url to spriteData as found in StyleDefinition
+     * @returns {Object} spriteData
      */
     fetchSpriteData: function (spriteUrl) {
         /**
