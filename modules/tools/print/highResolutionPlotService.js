@@ -47,8 +47,6 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
             }
         },
         glyphicon: "glyphicon-print",
-        precomposeListener: {},
-        postcomposeListener: {},
         MM_PER_INCHES: 25.4,
         POINTS_PER_INCH: 72,
         DOTS_PER_INCH: 72,
@@ -99,8 +97,6 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @property {String} printurl="" - Url to plot service
      * @property {Object} gfiMarker - Style settings for an gfi marker
      * @property {String} glyphicon="glyphicon-print" - Icon for the print button
-     * @property {Object} precomposeListener={} - Holder for an PrecomposeListener
-     * @property {Object} postcomposeListener={} - Holder for an PostcomposeListener
      * @property {Number} MM_PER_INCHES=25.4 - Millimeter per inches
      * @property {Number} POINTS_PER_INCH=72 - Points per Inch
      * @property {Number} DOTS_PER_INCH=72 - Dots per inch
@@ -372,7 +368,6 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * a callback function is registered to the postcompose event of the map
      * @param {Backbone.Model} model - this
      * @param {boolean} value - is this tool activated or not
-     * @param {String} postcompose - postcomposeListener
      * @param {String} - eventlistener
      * @fires Map#RadioRequestMapRegisterListenerWithPostcompose
      * @fires Map#RadioTriggerMapUnregisterListenerWithEventListener
