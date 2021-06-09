@@ -12,24 +12,15 @@ export default {
         return {
         };
     },
-    computed: {
-        component () {
-            return Radio.request("Util", "getUiStyle") === "TABLE"
-                ? TableStyleControl
-                : ControlIcon;
-        }
-    },
     methods: {
         move (event) {
             state.isMoving = true;
-            console.log("I wanna move");
             state.swiper = event.target;
             window.addEventListener("mousemove", this.moveSwiper);
             window.addEventListener("mouseup", this.moveStop);
         },
         moveStop () {
             state.isMoving = false;
-            console.log("I stopped moving");
             window.removeEventListener("mousemove", this.moveSwiper);
             window.removeEventListener("mouseup", this.moveStop);
         },
@@ -48,7 +39,8 @@ export default {
             class="ol-swipe btn"
             title="$t(`common:modules.controls.layerSwiper.title`)"
             @mousedown.self="move"
-        ></button>
+        >
+        </button>
     </div>
 </template>
 
