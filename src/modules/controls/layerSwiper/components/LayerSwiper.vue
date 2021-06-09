@@ -24,14 +24,13 @@ export default {
                 : ControlIcon;
         }
     },
-    mounted () {
-        document.addEventListener("mousemove", this.moveSwiper);
-        document.addEventListener("mouseup", this.moveStop);
-    },
     methods: {
         move (event) {
             state.isMoving = true;
             console.log("I wanna move");
+            state.swiper = event.target;
+            window.addEventListener("mousemove", this.moveSwiper);
+            window.addEventListener("mouseup", this.moveStop);
         },
         moveStop () {
             state.isMoving = false;
@@ -39,8 +38,7 @@ export default {
         },
         moveSwiper (event) {
             if (state.isMoving) {
-                console.log(event);
-                event.target.style.left = event.clientX + "px";
+                state.swiper.style.left = event.clientX + "px";
             }
         }
     }
@@ -50,8 +48,7 @@ export default {
 <template>
     <div
         class="ol-swipe"
-        draggable="true"
-        @mousedown="move"
+        @mousedown.self="move"
     >
         <component
             :is="component"
