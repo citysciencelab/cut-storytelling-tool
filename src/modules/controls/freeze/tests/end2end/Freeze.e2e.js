@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {getCenter} = require("../../../../../../test/end2end/library/scripts"),
-    {isMaster, isChrome} = require("../../../../../../test/end2end/settings"),
+    {isMaster} = require("../../../../../../test/end2end/settings"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {By, Button} = webdriver;
 
@@ -15,7 +15,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {module:selenium-webdriver.Capabilities} param.capability sets the capability when requesting a new session - overwrites all previously set capabilities
  * @returns {void}
  */
-async function FreezeTests ({builder, url, resolution, browsername, capability}) {
+async function FreezeTests ({builder, url, resolution, capability}) {
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
@@ -71,8 +71,7 @@ async function FreezeTests ({builder, url, resolution, browsername, capability})
                 expect(await driver.findElement(By.css(".freeze-view.freeze-activated"))).to.exist;
             });
 
-            // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-            (isChrome(browsername) ? it.skip : it)("should prevent panning", async function () {
+            it("should prevent panning", async function () {
                 const center = await driver.executeScript(getCenter),
                     viewport = await driver.findElement(By.css(".ol-viewport"));
 
