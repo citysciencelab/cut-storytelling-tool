@@ -82,7 +82,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 require("./tests/modules/tools/List.js"),
                 require("../../src/modules/tools/measure/tests/end2end/Measure.e2e.js"),
                 require("./tests/modules/tools/ParcelSearch.js"),
-                // require("./tests/modules/tools/SearchByCoord.js"),
+                require("./tests/modules/tools/SearchByCoord.js"),
 
                 // non-module tests
                 require("../../src/tests/end2end/Pan.e2e.js"),
