@@ -158,6 +158,31 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
                 subElements = Array.from(element.getElementsByTagName("element"));
             }
         });
+        if (subElements.length === 0) {
+            subElements = this.getSubelementsFromXMLOtherStructure(xml, featureType);
+        }
+        return subElements;
+    },
+
+    /**
+     * Parses the xml with another structure to get the subelements from the layer
+     * @param   {string} xml response xml
+     * @param   {string} featureType wfs feature type from layer
+     * @returns {object[]} subElements of the xml element
+     */
+    getSubelementsFromXMLOtherStructure: function (xml, featureType) {
+        const elements = xml ? Array.from(xml.getElementsByTagName("element")) : [];
+        let subElements = [];
+
+        elements.forEach(element => {
+            if (element.getAttribute("name") === featureType) {
+                const sibling = element.nextElementSibling;
+
+                if (sibling && sibling.tagName === "complexType" && sibling.hasAttribute("name")) {
+                    subElements = Array.from(sibling.getElementsByTagName("element"));
+                }
+            }
+        });
         return subElements;
     },
 

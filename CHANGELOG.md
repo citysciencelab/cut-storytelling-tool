@@ -15,7 +15,7 @@
 
 ### Changed
 - The version of the package selenium-webdriver was updated to version 4.0.0-beta.3.
-- changed LayerInformation from backbone to vue
+- Changed LayerInformation from backbone to vue.
 
 ### Deprecated
 
@@ -24,6 +24,9 @@
 ### Fixed
 - BG-1541 further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2
 - Labels of VTC-Layer-Objects aren't cut off anymore. 
+- Further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2.
+- Issue #615: parsing of the DescribeFeatureType of a WFS has been extended so that it also satisfies a different interpretation of the schema description. As a result, elements in the legend are displayed in the order specified in the style.json.
+
 ---
 
 ## v2.10.0 - 2021-06-02

@@ -159,7 +159,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
                 SRSNAME: Radio.request("MapView", "getProjection")?.getCode(),
                 TYPENAME: typename,
                 VERSION: this.get("version"),
-                PROPERTYNAME: propertyname ? propertyname : "",
+                PROPERTYNAME: propertyname ? propertyname : undefined,
                 // loads only the features in the extent of this geometry
                 BBOX: this.get("bboxGeometry") ? this.get("bboxGeometry").getExtent().toString() : undefined
             },
