@@ -35,6 +35,8 @@ export default {
         moveStop () {
             state.isMoving = false;
             console.log("I stopped moving");
+            window.removeEventListener("mousemove", this.moveSwiper);
+            window.removeEventListener("mouseup", this.moveStop);
         },
         moveSwiper (event) {
             if (state.isMoving) {
