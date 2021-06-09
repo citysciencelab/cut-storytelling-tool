@@ -21,7 +21,6 @@ import FeatureViaURL from "../modules/featureViaURL/model";
 import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
-import LayerinformationModel from "../modules/layerInformation/model";
 import ClickCounterModel from "../modules/clickCounter/model";
 import MouseHoverPopupView from "../modules/mouseHover/view";
 import QuickHelpView from "../modules/quickHelp/view";
@@ -76,7 +75,6 @@ async function loadApp () {
     /* eslint-disable no-undef */
     const legacyAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
         utilConfig = {},
-        layerInformationModelSettings = {},
         style = Radio.request("Util", "getUiStyle"),
         vueI18Next = initiateVueI18Next();
     /* eslint-disable no-undef */
@@ -155,11 +153,6 @@ async function loadApp () {
     new SliderView();
     new SliderRangeView();
     new DropdownView();
-
-    if (Config.hasOwnProperty("metaDataCatalogueId")) {
-        layerInformationModelSettings.metaDataCatalogueId = Config.metaDataCatalogueId;
-    }
-    new LayerinformationModel(layerInformationModelSettings);
 
     if (Config.hasOwnProperty("clickCounter") && Config.clickCounter.hasOwnProperty("desktop") && Config.clickCounter.desktop !== "" && Config.clickCounter.hasOwnProperty("mobile") && Config.clickCounter.mobile !== "") {
         new ClickCounterModel(Config.clickCounter.desktop, Config.clickCounter.mobile, Config.clickCounter.staticLink);

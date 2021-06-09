@@ -14,12 +14,14 @@
 
 ### Changed
 - The version of the package selenium-webdriver was updated to version 4.0.0-beta.3.
+- changed LayerInformation from backbone to vue
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+- BG-1541 further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2
 
 ---
 

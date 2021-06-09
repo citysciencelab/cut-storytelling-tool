@@ -80,7 +80,6 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @fires Layer#RadioTriggerVectorLayerFeaturesLoaded
      * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
      * @fires Core#RadioRequestMapViewGetResoByScale
-     * @fires LayerInformation#RadioTriggerLayerInformationAdd
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires LegendComponent:RadioTriggerLegendComponentUpdateLegend
      * @listens Layer#changeIsSelected
@@ -357,11 +356,6 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         }
 
         this.listenTo(channel, {
-            "updateLayerInfo": function (name) {
-                if (this.get("name") === name && this.get("layerInfoChecked") === true) {
-                    this.showLayerInformation();
-                }
-            },
             "setLayerInfoChecked": function (layerInfoChecked) {
                 this.setLayerInfoChecked(layerInfoChecked);
             },
@@ -598,7 +592,6 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
     /**
      * Initiates the presentation of layer information.
-     * @fires LayerInformation#event:RadioTriggerLayerInformationAdd
      * @returns {void}
      */
     showLayerInformation: function () {

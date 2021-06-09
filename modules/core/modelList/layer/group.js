@@ -20,7 +20,6 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
      * @constructs
      * @property {String[]} supported=["2D","3D"] Shows that group layern are supported in "2D" and "3D" mode.
      * @property {Boolean} showSettings=true Flag that shows if Layer has settings to be shown
-     * @fires LayerInformation#RadioTriggerLayerInformationAdd
      * @fires Legend#RadioRequestLegendGetLegend
      */
     initialize: function () {
@@ -116,7 +115,6 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
 
     /**
      * This function start the presentation of the layerinformation and legend.
-     * @fires LayerInformation#RadioTriggerLayerInformationAdd
      * @fires Legend#RadioRequestLegendGetLegend
      * @returns {void}
      */
