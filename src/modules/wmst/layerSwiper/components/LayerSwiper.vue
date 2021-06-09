@@ -1,10 +1,5 @@
 <script>
-import {mapGetters, mapMutations} from "vuex";
-import getters from "../store/gettersLayerSwiper";
-import mutations from "../store/mutationsLayerSwiper";
 import state from "../store/stateLayerSwiper";
-import ControlIcon from "../../ControlIcon.vue";
-import TableStyleControl from "../../TableStyleControl.vue";
 
 /**
  * FullScreen control that allows switching between fullscreen
@@ -48,21 +43,24 @@ export default {
 </script>
 
 <template>
-    <div
-        class="ol-swipe"
-        @mousedown.self="move"
-    >
-        <component
-            :is="component"
-            :title="$t(`common:modules.controls.layerSwiper.title`)"
-            :iconName="$t(`common:modules.controls.layerSwiper.title`)"
-        />
+    <div>
+        <button
+            class="ol-swipe btn"
+            title="$t(`common:modules.controls.layerSwiper.title`)"
+            @mousedown.self="move"
+        ></button>
     </div>
 </template>
 
 <style lang="less" scoped>
 @import "~variables";
+button {
+    width: 50px;
+    background-color: red;
+    height: 30px;
+}
 .ol-swipe {
+    max-height: 100px;
     position: absolute;
     top: 50%;
     left: 50%;

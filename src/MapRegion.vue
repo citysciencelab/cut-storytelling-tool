@@ -6,6 +6,7 @@ import Footer from "./modules/footer/components/Footer.vue";
 import LegendWindow from "./modules/legend/components/LegendWindow.vue";
 import MapMarker from "./modules/mapMarker/components/MapMarker.vue";
 import ToolManager from "./modules/tools/ToolManager.vue";
+import LayerSwiper from "./modules/wmst//layerSwiper/components/layerSwiper.vue";
 import {mapState} from "vuex";
 
 export default {
@@ -17,6 +18,7 @@ export default {
         Alerting,
         LegendWindow,
         MapMarker,
+        LayerSwiper,
         Footer
     },
     computed: {
@@ -41,6 +43,7 @@ export default {
             />
             <div class="elements-positioned-over-map">
                 <ControlBar class="controls" />
+                <LayerSwiper />
                 <Footer />
                 <MapMarker />
             </div>
@@ -85,6 +88,7 @@ export default {
 
         #map-wrapper {
             position:relative;
+            overflow: hidden;
             flex-grow:1;
             order:1;
         }

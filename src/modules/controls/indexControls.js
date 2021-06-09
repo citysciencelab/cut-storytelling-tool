@@ -9,7 +9,6 @@ import FullScreen from "./fullScreen/components/FullScreen.vue";
 import Orientation from "./orientation/components/Orientation.vue";
 import OverviewMap from "./overviewMap/components/OverviewMap.vue";
 import TotalView from "./totalView/components/TotalView.vue";
-import LayerSwiper from "./layerSwiper/components/LayerSwiper.vue";
 import Zoom from "./zoom/components/Zoom.vue";
 import Freeze from "./freeze/components/Freeze.vue";
 
@@ -36,7 +35,6 @@ export default {
             orientation: Orientation,
             overviewMap: OverviewMap,
             totalView: TotalView,
-            layerSwiper: LayerSwiper,
             zoom: Zoom,
             freeze: Freeze
         },
