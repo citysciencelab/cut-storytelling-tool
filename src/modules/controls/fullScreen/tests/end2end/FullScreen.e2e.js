@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
     {isFullscreen} = require("../../../../../../test/end2end/library/scripts"),
-    {isMaster} = require("../../../../../../test/end2end/settings"),
+    {isMaster, isSafari} = require("../../../../../../test/end2end/settings"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {writeScreenshot} = require("../../../../../../test/end2end/library/screenshot"),
     {until, By} = webdriver;
@@ -12,10 +12,11 @@ const webdriver = require("selenium-webdriver"),
  * @param {module:selenium-webdriver.Builder} params.builder the selenium.Builder object
  * @param {String} params.url the url to test
  * @param {String} params.resolution formatted as "AxB" with A, B integers
+ * @param {String} params.browsername the name of the broser (to use chrome put "chrome" into the name)
  * @param {module:selenium-webdriver.Capabilities} param.capability sets the capability when requesting a new session - overwrites all previously set capabilities
  * @returns {void}
  */
-function FullScreenTest ({builder, url, resolution, capability}) {
+function FullScreenTest ({builder, url, resolution, browsername, capability}) {
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
@@ -55,7 +56,7 @@ function FullScreenTest ({builder, url, resolution, capability}) {
                 expect(await driver.findElement(fullScreenButtonSelector)).to.exist;
             });
 
-            it("should switch to fullscreen after click fullscreenbutton", async function () {
+            (isSafari(browsername) ? it.skip : it)("should switch to fullscreen after click fullscreenbutton", async function () {
                 await driver.actions({bridge: true})
                     .click(await driver.findElement(fullScreenButtonSelector))
                     .perform();

@@ -128,6 +128,15 @@ function isFirefox (browsername) {
 }
 
 /**
+ * Returns true for browsername indicating safari is running.
+ * @param {String} browsername is browsername or contains browsername
+ * @returns {boolean} whether running browser is safari
+ */
+function isSafari (browsername) {
+    return browsername.toLowerCase().includes("safari");
+}
+
+/**
  * Produces browserstack or saucelabs configurations.
  * @param {String} testService "browserstack" or "saucelabs"
  * @returns {Array} array of bs configuration objects
@@ -230,6 +239,7 @@ module.exports = {
     isChrome,
     isEdge,
     isFirefox,
+    isSafari,
     isBasic,
     isMaster,
     isDefault,
