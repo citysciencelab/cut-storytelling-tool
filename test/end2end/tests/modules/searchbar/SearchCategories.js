@@ -212,12 +212,12 @@ async function SearchCategories ({builder, url, resolution, capability}) {
             });
 
             it("remove searchbar input", async function () {
-                await driver.wait(until.elementLocated(By.id("searchInput")), 12000);
-                if (await (await driver.findElement(By.id("searchInput"))).getAttribute("value") !== "") {
-                    await (await driver.findElement(By.css("div#searchbar div#searchForm div.input-group span.glyphicon.glyphicon-remove"))).click();
-                }
+                it("remove searchbar input", async function () {
+                    await driver.wait(until.elementLocated(By.id("searchInput")), 12000);
+                    await (await driver.findElement(By.css("#searchInput"))).clear();
 
-                expect(await (await driver.findElement(By.id("searchInput"))).getAttribute("value")).to.equals("");
+                    expect(await (await driver.findElement(By.id("searchInput"))).getAttribute("value")).to.equals("");
+                });
             });
         });
     }
