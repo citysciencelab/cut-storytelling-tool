@@ -1,8 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
+    {initDriver, getDriver, quitDriver, loadUrl} = require("../../../library/driver"),
     {isMaster, isMobile} = require("../../../settings"),
-    // {getCenter, getResolution} = require("../../../library/scripts"),
     {logTestingCloudUrlToTest} = require("../../../library/utils"),
     {By, until} = webdriver;
 
@@ -11,7 +10,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ListTests ({builder, url, resolution, capability}) {
+async function ListTests ({builder, url, resolution, capability, mode}) {
     if (isMaster(url) && !isMobile(resolution)) {
         describe("List", function () {
             let driver, hospitalLayerEntry, featureListEntries;
@@ -22,7 +21,8 @@ async function ListTests ({builder, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution, null, true);
+                driver = await getDriver();
+                await loadUrl(driver, url, mode);
             });
 
             after(async function () {
@@ -35,8 +35,8 @@ async function ListTests ({builder, url, resolution, capability}) {
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    driver = await initDriver(builder, url, resolution, null, true);
+                    await quitDriver();
+                    driver = await initDriver(builder, url, resolution);
                     await (await driver.findElement(By.xpath("//ul[@id='tools']//.."))).click();
                     await (await driver.findElement(By.css("#tools .glyphicon-menu-hamburger"))).click();
                 }

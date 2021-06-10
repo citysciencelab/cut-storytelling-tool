@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {getCenter} = require("../../../test/end2end/library/scripts"),
     {losesCenter, logTestingCloudUrlToTest} = require("../../../test/end2end/library/utils"),
-    {initDriver} = require("../../../test/end2end/library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../test/end2end/library/driver"),
     {isMaster, isChrome, isEdge} = require("../../../test/end2end/settings"),
     {By, Button} = webdriver;
 
@@ -29,7 +29,7 @@ async function PanTests ({builder, url, resolution, browsername, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
             });
 
             after(async function () {
@@ -42,10 +42,11 @@ async function PanTests ({builder, url, resolution, browsername, capability}) {
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    driver = await initDriver(builder, url, resolution, null, true);
+                    await quitDriver();
+                    driver = await initDriver(builder, url, resolution);
                 }
             });
+
 
             it("should move when panned", async function () {
                 this.timeout(10000);

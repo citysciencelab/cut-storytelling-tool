@@ -3,11 +3,15 @@ const webdriver = require("selenium-webdriver"),
     {isMaster} = require("../../../../../../test/end2end/settings"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {getCenter, mockGeoLocationAPI} = require("../../../../../../test/end2end/library/scripts"),
-    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
     {By, until} = webdriver;
 
 /**
- * @param {e2eTestParams} params parameter set
+ * @param {Object} params e2eTestParams
+ * @param {module:selenium-webdriver.Builder} params.builder the selenium.Builder object
+ * @param {String} params.url the url to test
+ * @param {String} params.resolution formatted as "AxB" with A, B integers
+ * @param {module:selenium-webdriver.Capabilities} param.capability sets the capability when requesting a new session - overwrites all previously set capabilities
  * @returns {void}
  */
 function Orientation ({builder, url, resolution, capability}) {
@@ -23,7 +27,7 @@ function Orientation ({builder, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
                 await driver.executeScript(mockGeoLocationAPI);
             });
 
@@ -33,12 +37,13 @@ function Orientation ({builder, url, resolution, capability}) {
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
+                await geolocateButton.click();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    driver = await initDriver(builder, url, resolution, null, true);
+                    await quitDriver();
+                    driver = await initDriver(builder, url, resolution);
                     await driver.executeScript(mockGeoLocationAPI);
                 }
             });
@@ -73,7 +78,7 @@ function Orientation ({builder, url, resolution, capability}) {
                         capability["sauce:options"].name = this.currentTest.fullTitle();
                         builder.withCapabilities(capability);
                     }
-                    driver = await initDriver(builder, url, resolution);
+                    driver = await getDriver();
                     await driver.executeScript(mockGeoLocationAPI);
 
                     const bikeAndRideSelector = By.xpath("//ul[@id='tree']/li[.//span[contains(.,'Bike and Ride')]]"),
@@ -91,16 +96,8 @@ function Orientation ({builder, url, resolution, capability}) {
                             logTestingCloudUrlToTest(sessionData.id_);
                         });
                     }
-                    await driver.quit();
                 });
 
-                afterEach(async function () {
-                    if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                        console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                        await driver.quit();
-                        driver = await initDriver(builder, url, resolution);
-                    }
-                });
 
                 it("should have a poi button", async function () {
                     poiButton = await driver.findElement(By.id("geolocatePOI"));

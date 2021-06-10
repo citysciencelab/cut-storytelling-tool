@@ -1,5 +1,5 @@
 const {isBasic, is2D} = require("./settings"),
-    {quitDriver} = require("./library/driver");
+    {initDriver, quitDriver} = require("./library/driver");
 
 /**
  * Description of the parameter set forwarded to each test suite. Each test suite may decide in itself
@@ -44,12 +44,17 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
         }
 
         before(async function () {
-            console.warn("before");
+            await initDriver(builder, url, resolution);
         });
 
         after(async function () {
-            console.warn("after");
             await quitDriver();
+        });
+
+        afterEach(async function () {
+            if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+            }
         });
 
         const suites = [
@@ -59,7 +64,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 // TODO - uncommented Button3D because the pipeline takes too long
                 // require("./tests/modules/controls/Button3D.js"),
                 // TODO pull OB to different suites array - maybe depending on environment variable? up for discussion
-                require("./tests/modules/controls/ButtonOblique.js"),
+                // require("./tests/modules/controls/ButtonOblique.js"),
                 require("../../src/modules/controls/freeze/tests/end2end/Freeze.e2e.js"),
                 require("../../src/modules/controls/fullScreen/tests/end2end/FullScreen.e2e.js"),
                 require("../../src/modules/controls/orientation/tests/end2end/Orientation.e2e.js"),
@@ -76,7 +81,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
 
                 // modules/tools
                 require("../../src/modules/tools/contact/tests/end2end/Contact.e2e.js"),
-                // require("./tests/modules/tools/PopulationRequest_HH.js"),
+                // // require("./tests/modules/tools/PopulationRequest_HH.js"),
                 require("../../src/modules/tools/supplyCoord/tests/end2end/SupplyCoord.e2e.js"),
                 require("./tests/modules/tools/ExtendedFilter.js"),
                 require("./tests/modules/tools/List.js"),

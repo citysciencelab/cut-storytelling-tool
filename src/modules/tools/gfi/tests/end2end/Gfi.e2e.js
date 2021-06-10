@@ -1,6 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {initDriver, getDriver, quitDriver, loadUrl} = require("../../../../../../test/end2end/library/driver"),
     {clickFeature, logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {isMaster} = require("../../../../../../test/end2end/settings"),
     {By, until} = webdriver;
@@ -10,7 +10,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function GfiTests ({builder, url, resolution, capability}) {
+async function GfiTests ({builder, url, resolution, capability, mode}) {
     describe("Gfi", function () {
         /*
         NOTE: Many of the tests currently do not work consistently right now. They are commented out
@@ -29,7 +29,8 @@ async function GfiTests ({builder, url, resolution, capability}) {
                 capability["sauce:options"].name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
-            driver = await initDriver(builder, url, resolution, null, true);
+            driver = await getDriver();
+            await loadUrl(driver, url, mode);
         });
 
         after(async function () {
@@ -42,10 +43,11 @@ async function GfiTests ({builder, url, resolution, capability}) {
 
         afterEach(async function () {
             if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                driver = await initDriver(builder, url, resolution, null, true);
+                await quitDriver();
+                driver = await initDriver(builder, url, resolution);
             }
         });
+
 
         if (isMaster(url)) {
             it("default tree gfi windows can be dragged, but not outside the screen", async function () {

@@ -1,6 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../library/driver"),
     {isLayerVisible} = require("../../../library/scripts"),
     {reclickUntilNotStale, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {isCustom, isMaster} = require("../../../settings"),
@@ -25,7 +25,7 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
                 capability["sauce:options"].name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
-            driver = await initDriver(builder, url, resolution);
+            driver = await getDriver();
             await driver.wait(until.elementLocated(searchInputSelector), 5000);
             searchInput = await driver.findElement(searchInputSelector);
         });
@@ -40,8 +40,8 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
 
         afterEach(async function () {
             if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                driver = await initDriver(builder, url, resolution, null, true);
+                await quitDriver();
+                driver = await initDriver(builder, url, resolution);
                 await driver.wait(until.elementLocated(searchInputSelector), 5000);
                 searchInput = await driver.findElement(searchInputSelector);
             }

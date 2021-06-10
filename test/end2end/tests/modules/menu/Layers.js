@@ -6,7 +6,7 @@ const webdriver = require("selenium-webdriver"),
     masterConfigJson = require("../../../../../portal/master/config.json"),
     masterConfigJs = require("../../../../../portal/master/config.js"),
     {getOrderedLayerIds, isLayerVisible} = require("../../../library/scripts"),
-    {initDriver} = require("../../../library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../library/driver"),
     {getOrderedTitleTexts, getOrderedTitlesFromConfig, getOrderedIdsFromConfig, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {isMaster} = require("../../../settings"),
     {By, until} = webdriver;
@@ -53,7 +53,7 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
                 .then(text => resolve(JSON.parse(text.trim())))
                 .catch(reject)
             );
-            driver = await initDriver(builder, url, resolution);
+            driver = await getDriver();
 
             configGivenIdOrder = getOrderedIdsFromConfig(masterConfigJson);
         });
@@ -68,10 +68,11 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
 
         afterEach(async function () {
             if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                driver = await initDriver(builder, url, resolution, null, true);
+                await quitDriver();
+                driver = await initDriver(builder, url, resolution);
             }
         });
+
 
         /*
          * Tests only work in Chrome. The scripts and utils return a different order of elements

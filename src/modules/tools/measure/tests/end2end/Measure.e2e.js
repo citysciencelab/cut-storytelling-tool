@@ -1,6 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
     {hasVectorLayerLength} = require("../../../../../../test/end2end/library/scripts"),
     {reclickUntilNotStale, logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {isMobile, is3D, isMaster} = require("../../../../../../test/end2end/settings"),
@@ -27,7 +27,7 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                             capability["sauce:options"].name = this.currentTest.fullTitle();
                             builder.withCapabilities(capability);
                         }
-                        driver = await initDriver(builder, url, resolution);
+                        driver = await getDriver();
                     });
 
                     after(async function () {
@@ -40,10 +40,11 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
 
                     afterEach(async function () {
                         if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                            console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                            driver = await initDriver(builder, url, resolution, null, true);
+                            await quitDriver();
+                            driver = await initDriver(builder, url, resolution);
                         }
                     });
+
 
                     it("opens a widget with distance/meters preconfigured for geometry/unit", async function () {
                         await reclickUntilNotStale(driver, By.xpath("//ul[@id='tools']//.."));

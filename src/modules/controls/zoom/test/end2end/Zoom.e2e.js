@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getResolution} = require("../../../../../../test/end2end/library/scripts"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
-    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
     {isMaster} = require("../../../../../../test/end2end/settings"),
     {until, By} = webdriver;
 
@@ -15,7 +15,6 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 function ZoomTests ({builder, url, resolution, capability}) {
-    // no zoom control on mobile devices - skip
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
@@ -28,7 +27,7 @@ function ZoomTests ({builder, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
             });
 
             after(async function () {
@@ -41,10 +40,11 @@ function ZoomTests ({builder, url, resolution, capability}) {
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    driver = await initDriver(builder, url, resolution, null, true);
+                    await quitDriver();
+                    driver = await initDriver(builder, url, resolution);
                 }
             });
+
 
             it("should have a plus button", async function () {
                 plus = await driver.wait(until.elementLocated(By.css("button.control-icon.glyphicon-plus")), 5000);

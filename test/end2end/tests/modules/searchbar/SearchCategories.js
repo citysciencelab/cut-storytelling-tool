@@ -1,6 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../library/driver"),
     {reclickUntilNotStale, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {getCenter, setCenter, getResolution, setResolution, hasVectorLayerLength, hasVectorLayerStyle} = require("../../../library/scripts"),
     {isMaster} = require("../../../settings"),
@@ -98,7 +98,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution, null, true);
+                driver = await getDriver();
                 await init();
             });
 
@@ -127,9 +127,9 @@ async function SearchCategories ({builder, url, resolution, capability}) {
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    // console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    // driver = await initDriver(builder, url, resolution, null, true);
-                    // await init();
+                    await quitDriver();
+                    driver = await initDriver(builder, url, resolution);
+                    await init();
                 }
             });
 
