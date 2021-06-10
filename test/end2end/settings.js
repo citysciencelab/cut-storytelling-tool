@@ -162,21 +162,10 @@ function getCapabilities (testService) {
             // is used for autologin to a webpage with a predefined username and password (login to geoportal test)
             "unhandledPromptBehavior": "ignore"
         },
-        // baseSaucelabs = {
-        //     "host": "saucelabs",
-        //     "sauce:options": {
-        //         "screenResolution": "1920x1080",
-        //         /* eslint-disable-next-line no-process-env */
-        //         "username": process.env.SAUCE_USERNAME,
-        //         /* eslint-disable-next-line no-process-env */
-        //         "accessKey": process.env.SAUCE_ACCESS_KEY,
-        //         "extendedDebugging": true
-        //     }
-        // },
-        baseSaucelabsMacOS = {
+        baseSaucelabs = {
             "host": "saucelabs",
             "sauce:options": {
-                "screenResolution": "1920x1440",
+                "screenResolution": "1920x1080",
                 /* eslint-disable-next-line no-process-env */
                 "username": process.env.SAUCE_USERNAME,
                 /* eslint-disable-next-line no-process-env */
@@ -198,29 +187,23 @@ function getCapabilities (testService) {
     }
 
     return [
-        // {
-        //     ...baseSaucelabs,
-        //     "browserName": "chrome",
-        //     "browserVersion": "latest",
-        //     "platformName": "Windows 10"
-        // },
-        // {
-        //     ...baseSaucelabs,
-        //     "browserName": "firefox",
-        //     "browserVersion": "latest",
-        //     "platformName": "Windows 10"
-        // },
-        // {
-        //     ...baseSaucelabs,
-        //     "browserName": "MicrosoftEdge",
-        //     "browserVersion": "latest",
-        //     "platformName": "Windows 10"
-        // },
         {
-            ...baseSaucelabsMacOS,
-            "browserName": "safari",
+            ...baseSaucelabs,
+            "browserName": "chrome",
             "browserVersion": "latest",
-            "platformName": "macOS 10.15"
+            "platformName": "Windows 10"
+        },
+        {
+            ...baseSaucelabs,
+            "browserName": "firefox",
+            "browserVersion": "latest",
+            "platformName": "Windows 10"
+        },
+        {
+            ...baseSaucelabs,
+            "browserName": "MicrosoftEdge",
+            "browserVersion": "latest",
+            "platformName": "Windows 10"
         }
     ];
 
