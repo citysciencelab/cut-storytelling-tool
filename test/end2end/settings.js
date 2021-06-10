@@ -12,6 +12,9 @@ const capabilities = {
         "1920x1080"
         // "600x800"
     ],
+    resolutionsMacOS = [
+        "1920x1440"
+    ],
     configs = new Map([
         ["basic", "basic"],
         ["master", "master"],
@@ -217,6 +220,7 @@ function getCapabilities (testService) {
 module.exports = {
     capabilities,
     resolutions,
+    resolutionsMacOS,
     configs,
     modes,
     is2D,

@@ -12,6 +12,7 @@ const webdriver = require("selenium-webdriver"),
         getCapabilities,
         capabilities,
         resolutions,
+        resolutionsMacOS,
         configs,
         modes
     } = require("./settings"),
@@ -152,9 +153,10 @@ function runTests (browsers) {
                     }
 
                     caps.forEach(capability => {
-                        const builder = createBuilder(testService, capability, build);
+                        const builder = createBuilder(testService, capability, build),
+                            usedresolutions = capability.browserName === "safari" ? resolutionsMacOS : resolutions;
 
-                        resolutions.forEach(resolution => {
+                        usedresolutions.forEach(resolution => {
                             tests(builder, completeUrl, capability.browserName, resolution, config, mode, capability);
                         });
                     });
