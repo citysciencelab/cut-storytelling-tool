@@ -276,7 +276,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
          * With the BKG address service can not be tested, because this is only available in the fhhnet and therefore does not work on the Internet.
          */
         if (isDefault(url)) {
-            it("?query= fills and executes query field", async function () {
+            it.skip("?query= fills and executes query field", async function () {
                 await loadUrl(driver, `${url}?query=Neuenfeld`, mode);
 
                 await driver.wait(until.elementLocated(By.css("#searchInput")), 12000);
@@ -295,7 +295,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
          * With the BKG address service can not be tested, because this is only available in the fhhnet and therefore does not work on the Internet.
          */
         if (isDefault(url)) {
-            it("?query= fills and executes search and zooms to result if unique address", async function () {
+            it.skip("?query= fills and executes search and zooms to result if unique address", async function () {
                 await loadUrl(driver, `${url}?query=Neuenfelder Straße,19`, mode);
 
                 await driver.wait(until.elementLocated(By.css("#searchInput")), 10000);

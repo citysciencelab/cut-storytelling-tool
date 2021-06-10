@@ -63,7 +63,7 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
                 listEntrySelector = By.xpath(`//li[@id='${layerId}']`),
                 checkboxSelector = By.xpath(`//ul[@id='tree']//li//span[text()='${layerName}'][..//span[contains(@class,'glyphicon-check')]]`);
 
-            it("renders the chosen layer", async function () {
+            it.skip("renders the chosen layer", async function () {
                 do {
                     await reclickUntilNotStale(driver, listEntrySelector);
                     await driver.wait(new Promise(r => setTimeout(r, 100)));
@@ -72,7 +72,7 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
                 expect(await driver.executeScript(isLayerVisible, layerId)).to.be.true;
             });
 
-            it("shows the selection in the topic tree", async function () {
+            it.skip("shows the selection in the topic tree", async function () {
                 await driver.wait(until.elementIsVisible(await driver.findElement(treeSelector)));
                 await driver.wait(until.elementIsVisible(await driver.findElement(checkboxSelector)));
             });
@@ -85,7 +85,7 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
                 selectedLayerGlyphSelector = By.css(".SelectedLayer .glyphicon-plus-sign"),
                 selectedLayerFirstEntrySelector = By.css("#SelectedLayer .layer-item:nth-child(1) .layer-item .title");
 
-            it("renders the chosen layer", async function () {
+            it.skip("renders the chosen layer", async function () {
                 const treeButton = await driver.findElement(By.xpath("//span[contains(.,'Themen')]")),
                     tree = await driver.findElement(treeSelector);
 
@@ -103,12 +103,12 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
                 await driver.wait(async () => driver.executeScript(isLayerVisible, layerId), 10000, "Layer was not shown.");
             });
 
-            it("selects and shows the layer in 'Fachdaten'", async function () {
+            it.skip("selects and shows the layer in 'Fachdaten'", async function () {
                 await driver.wait(until.elementIsVisible(await driver.findElement(treeSelector)));
                 await driver.wait(until.elementIsVisible(await driver.findElement(checkboxSelector)));
             });
 
-            it("selects the layer as first layer in 'Selected Layers'", async function () {
+            it.skip("selects the layer as first layer in 'Selected Layers'", async function () {
                 await (await driver.findElement(selectedLayerGlyphSelector)).click();
                 await driver.wait(until.elementLocated(selectedLayerFirstEntrySelector), 5000);
                 expect(await (await driver.findElement(selectedLayerFirstEntrySelector)).getText()).to.contain(layerName);

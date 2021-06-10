@@ -32,7 +32,7 @@ function arrayDeepEqualsWithOptions (arrayWithOptions, compareArray) {
  * @returns {void}
  */
 async function MenuLayersTests ({builder, url, resolution, capability}) {
-    describe("Menu Layers", function () {
+    describe("Menu Layers", async function () {
         let driver,
             services,
             // as seen in Map
@@ -82,19 +82,19 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
             it("shows layers in order of config.json in LT", async function () {
                 await (await driver.wait(
                     until.elementLocated(By.css("ul#root li:first-child")),
-                    5000,
+                    12000,
                     "navigation bar did not appear"
                 )).click();
 
                 const tree = await driver.wait(
                     until.elementLocated(By.css("ul#tree")),
-                    5000,
+                    12000,
                     "layer tree did not appear"
                 );
 
                 await driver.wait(
                     until.elementIsVisible(tree),
-                    5000,
+                    12000,
                     "layer tree did not become visible"
                 );
 
@@ -123,20 +123,22 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
             });
 
             it("opens an information window with the info button", async function () {
+                await driver.wait(until.elementLocated(By.css("ul#root li.layer span.glyphicon-info-sign")), 12000);
                 await (await driver.findElement(By.css("ul#root li.layer span.glyphicon-info-sign"))).click();
                 await driver.wait(
                     until.elementLocated(By.css("div#layerinformation-desktop")),
-                    5000,
+                    12000,
                     "Info window did not appear"
                 );
             });
 
             describe("LT options cog", function () {
                 it("displays an option row", async function () {
+                    await driver.wait(until.elementLocated(By.css("ul#root li.layer span.glyphicon-cog")), 12000);
                     await (await driver.findElement(By.css("ul#root li.layer span.glyphicon-cog"))).click();
                     await driver.wait(
                         until.elementLocated(By.css("ul#root li.layer div.layer-settings")),
-                        5000,
+                        12000,
                         "layer settings menu did not appear upon clicking cog symbol"
                     );
 
