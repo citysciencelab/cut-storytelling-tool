@@ -20,7 +20,7 @@ function FullScreenTest ({builder, url, resolution, browsername, capability}) {
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
-        describe("Modules Controls FullScreen", function () {
+        describe("Modules Controls FullScreen", async function () {
             const fullScreenButtonSelector = By.css(".fullscreen-button .control-icon"),
                 removeIconSelector = By.css(".fullscreen-button .control-icon.glyphicon-resize-small"),
                 fullscreenIconSelector = By.css(".fullscreen-button .control-icon.glyphicon-fullscreen");
@@ -52,7 +52,7 @@ function FullScreenTest ({builder, url, resolution, browsername, capability}) {
 
 
             it("should have a fullscreen button", async function () {
-                await driver.wait(until.elementLocated(fullScreenButtonSelector), 9000);
+                await driver.wait(until.elementLocated(fullScreenButtonSelector), 12000);
                 expect(await driver.findElement(fullScreenButtonSelector)).to.exist;
             });
 
@@ -69,9 +69,9 @@ function FullScreenTest ({builder, url, resolution, browsername, capability}) {
                 await driver.actions({bridge: true})
                     .click(await driver.findElement(fullScreenButtonSelector))
                     .perform();
-                await driver.wait(until.elementLocated(fullscreenIconSelector), 9000);
+                await driver.wait(until.elementLocated(fullscreenIconSelector), 12000);
                 await writeScreenshot(driver, "FullscreenBack.png");
-                await driver.wait(async () => !await driver.executeScript(isFullscreen), 5000, "Fullscreen was not deactivated.");
+                await driver.wait(async () => !await driver.executeScript(isFullscreen), 12000, "Fullscreen was not deactivated.");
             });
         });
     }

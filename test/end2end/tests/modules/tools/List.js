@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver, getDriver, quitDriver, loadUrl} = require("../../../library/driver"),
-    {isMaster, isMobile} = require("../../../settings"),
+    {isMaster, isMobile, isSafari} = require("../../../settings"),
     {logTestingCloudUrlToTest} = require("../../../library/utils"),
     {By, until} = webdriver;
 
@@ -10,7 +10,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ListTests ({builder, url, resolution, capability, mode}) {
+async function ListTests ({builder, url, resolution, browsername, capability, mode}) {
     if (isMaster(url) && !isMobile(resolution)) {
         describe("List", function () {
             let driver, hospitalLayerEntry, featureListEntries;
@@ -85,7 +85,7 @@ async function ListTests ({builder, url, resolution, capability, mode}) {
                 expect(featureListEntries).to.have.lengthOf(20);
             });
 
-            it("hovering a feature changes the feature style", async function () {
+            (isSafari(browsername) ? it.skip : it)("hovering a feature changes the feature style", async function () {
                 await driver
                     .actions({bridge: true})
                     .move({origin: featureListEntries[14]})
