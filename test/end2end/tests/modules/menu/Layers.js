@@ -126,7 +126,7 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
                 await driver.wait(until.elementLocated(By.css("ul#root li.layer span.glyphicon-info-sign")), 12000);
                 await (await driver.findElement(By.css("ul#root li.layer span.glyphicon-info-sign"))).click();
                 await driver.wait(
-                    until.elementLocated(By.css("div#layerinformation-desktop")),
+                    until.elementLocated(By.css("div#layerInformation")),
                     12000,
                     "Info window did not appear"
                 );
@@ -272,7 +272,7 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
 
                 it("close the layerInformation", async function () {
                     await (
-                        await driver.findElement(By.css("div#layerinformation-desktop div.header p.pull-right span.glyphicon.glyphicon-remove"))
+                        await driver.findElement(By.css("div#layerInformation div.tool-window-heading div.heading-element span.glyphicon.glyphicon-remove"))
                     ).click();
                 });
             });
