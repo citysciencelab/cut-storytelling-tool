@@ -482,6 +482,17 @@ describe("vectorStyleModel", function () {
         });
     });
 
+    describe("getValueWithoutComma", function () {
+        it("should return original value", function () {
+            expect(styleModel.getValueWithoutComma("22")).to.equal("22");
+            expect(styleModel.getValueWithoutComma("test")).to.equal("test");
+        });
+        it("should return the value without comma", function () {
+            expect(styleModel.getValueWithoutComma("22,6")).to.equal(22.6);
+            expect(styleModel.getValueWithoutComma("22,667")).to.equal(22.667);
+        });
+    });
+
     describe("isObjectPath", function () {
         it("should return true if value is an object path", function () {
             expect(styleModel.isObjectPath("@id")).to.be.true;
