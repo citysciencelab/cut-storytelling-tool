@@ -182,18 +182,18 @@ function getCapabilities (testService) {
     }
 
     return [
-        // {
-        //     ...baseSaucelabs,
-        //     "browserName": "chrome",
-        //     "browserVersion": "latest",
-        //     "platformName": "Windows 10"
-        // },
-        // {
-        //     ...baseSaucelabs,
-        //     "browserName": "firefox",
-        //     "browserVersion": "latest",
-        //     "platformName": "Windows 10"
-        // },
+        {
+            ...baseSaucelabs,
+            "browserName": "chrome",
+            "browserVersion": "latest",
+            "platformName": "Windows 10"
+        },
+        {
+            ...baseSaucelabs,
+            "browserName": "firefox",
+            "browserVersion": "latest",
+            "platformName": "Windows 10"
+        },
         {
             ...baseSaucelabs,
             "browserName": "MicrosoftEdge",
