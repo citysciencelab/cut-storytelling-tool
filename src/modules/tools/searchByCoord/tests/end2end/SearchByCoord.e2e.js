@@ -1,9 +1,9 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {getCenter, getResolution, setResolution, hasVectorLayerLength} = require("../../../library/scripts"),
-    {logTestingCloudUrlToTest} = require("../../../library/utils"),
-    {isMaster} = require("../../../settings"),
-    {initDriver} = require("../../../library/driver"),
+    {getCenter, getResolution, setResolution, hasVectorLayerLength} = require("../../../../../../test/end2end/library/scripts"),
+    {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
+    {isMaster} = require("../../../../../../test/end2end/settings"),
+    {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
     {By, until} = webdriver;
 
 /**
@@ -37,7 +37,7 @@ async function SearchByCoordTests ({builder, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
             });
 
             after(async function () {
@@ -46,13 +46,11 @@ async function SearchByCoordTests ({builder, url, resolution, capability}) {
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
+                    await quitDriver();
                     driver = await initDriver(builder, url, resolution);
                 }
             });
