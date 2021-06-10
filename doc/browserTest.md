@@ -44,7 +44,7 @@ $ BrowserStackLocal.exe --key [browserstackkey] --proxy-host [proxyurl] --proxy-
 
 ### Test file location
 
-Test files are to be saved with the file extension `.e2e.js`. All test files are to be placed next to the component and store being tested in a separate `tests/end2end` folder. For illustration, the following example was constructed using the `ScaleSwitcher` component.
+Test files have to be saved with the file extension `.e2e.js`. All test files have to be placed next to the component and store being tested in a separate `tests/end2end` folder. For illustration, the following example was constructed using the `ScaleSwitcher` component.
 
 ```
 src
@@ -123,7 +123,7 @@ const suites = [
 
 The tests should only be tested in the `portal/master`, because the scale switcher is only configured in this portal.
 At the beginning, an `only` can be appended to the `describe`. This way, when starting the End2End tests, only the tests within this describe will be tested. This is especially helpful when creating tests.
-Note: After completion of the tests the `only` must be removed again, so that **all** tests are run again.
+Note: After completion of the tests the `only` must be removed again, so that **all** tests are running again.
 
 ```js
 const webdriver = require("selenium-webdriver"),
