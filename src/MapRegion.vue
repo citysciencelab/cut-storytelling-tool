@@ -5,7 +5,7 @@ import ControlBar from "./modules/controls/ControlBar.vue";
 import Footer from "./modules/footer/components/Footer.vue";
 import LegendWindow from "./modules/legend/components/LegendWindow.vue";
 import MapMarker from "./modules/mapMarker/components/MapMarker.vue";
-import Wmst from "./modules/wmst/Wmst.vue";
+import Wmst from "./modules/wmst/components/Wmst.vue";
 import ToolManager from "./modules/tools/ToolManager.vue";
 import {mapState} from "vuex";
 

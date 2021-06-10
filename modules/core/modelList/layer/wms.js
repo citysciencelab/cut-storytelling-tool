@@ -90,10 +90,11 @@ const WMSLayer = Layer.extend({
                     params.TIME = defaultValue;
                     // TODO: Above assumption is invalid -> Do it like it is described inside TimeSlider.vue
                     this.set("time", typeof this.get("time") === "object" ? Object.assign(this.get("time"), {min, max, resolution}) : {min, max, resolution});
-                    store.commit("Wmst/TimeSlider/setDefaultValue", defaultValue); // TODO: In WMST verschieben und dann als prop
-                    store.commit("Wmst/TimeSlider/setMin", min);
-                    store.commit("Wmst/TimeSlider/setMax", max);
-                    store.commit("Wmst/TimeSlider/setStep", step);
+                    store.commit("Wmst/setDefaultValue", defaultValue);
+                    store.commit("Wmst/setMin", min);
+                    store.commit("Wmst/setMax", max);
+                    store.commit("Wmst/setStep", step);
+                    // TODO: Add a parameter "timeId" to identify to which TimeSlider the layer belongs
                 })
                 .catch(error => {
                     this.removeLayer();

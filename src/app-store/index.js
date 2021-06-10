@@ -10,7 +10,7 @@ import Title from "../modules/title/store/indexTitle";
 import Map from "../modules/map/store/indexMap";
 import MapMarker from "../modules/mapMarker/store/indexMapMarker";
 import Legend from "../modules/legend/store/indexLegend";
-import Wmst from "../modules/wmst/indexWmst";
+import Wmst from "../modules/wmst/store/indexWmst";
 
 import getters from "./getters";
 import mutations from "./mutations";

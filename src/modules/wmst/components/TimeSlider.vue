@@ -1,14 +1,13 @@
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
-import actions from "../store/actionsTimeSlider";
-import getters from "../store/gettersTimeSlider";
-import mutations from "../store/mutationsTimeSlider";
+import getters from "../store/gettersWmst";
+import mutations from "../store/mutationsWmst";
 
 export default {
     name: "TimeSlider",
     data: () => ({direction: "stop", inputValue: 0, sliderValue: 0}),
     computed: {
-        ...mapGetters("Wmst/TimeSlider", Object.keys(getters))
+        ...mapGetters("Wmst", Object.keys(getters))
     },
     watch: {
         defaultValue () {
@@ -18,9 +17,12 @@ export default {
             Radio.trigger("WMST", "updateTime", this.inputValue);
         }
     },
+    created () {
+        this.inputValue = this.sliderValue = this.defaultValue;
+    },
     methods: {
-        ...mapMutations("Wmst/TimeSlider", Object.keys(mutations)),
-        ...mapActions("Wmst/TimeSlider", Object.keys(actions)),
+        ...mapActions("Wmst", ["toggleSwiper"]),
+        ...mapMutations("Wmst", Object.keys(mutations)),
         animate () {
             // TODO: Klärung: Wie würde ein Nutzer dieses Bedienelement erwarten? -> Abklären, wie dies zu implementieren ist!
             if (this.direction !== "stop") {
@@ -67,7 +69,10 @@ export default {
 
 <template>
     <div class="timeSlider-wrapper centered-box-wrapper">
-        <!-- TODO: Integration von dem Button für Swiper-->
+        <!-- TODO: Integrate me like it is specified! -->
+        <button @click="toggleSwiper">
+            Click Me
+        </button>
         <fieldset class="timeSlider-button-group">
             <!-- TODO: Label inkl. Übersetzungen für die Buttons-->
             <button @click="changeDirection('backward')">
@@ -129,8 +134,7 @@ export default {
     position: absolute;
     bottom: 4em;
     left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
+    z-index: 3;
 
     display: flex;
     background: white;
