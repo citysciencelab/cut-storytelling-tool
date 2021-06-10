@@ -38,10 +38,19 @@ const state = {
     coordinatesEastingExample: "",
     coordinatesNorthingExample: "",
     selectedCoordinates: [],
+    height: "",
+    heightLayer: null,
+
+    // must be set in config.json to display the height
+    heightLayerId: null,
+    heightInfoFormat: "application/vnd.ogc.gml",
+    heightAttributeKey: null,
+    heightValueWater: null,
+    heightValueBuilding: null,
 
     // defaults for config.json parameters
     name: "common:menu.tools.coordToolkit",
-    glyphicon: "glyphicon-screenshot",
+    glyphicon: "glyphicon-globe",
     renderToWindow: true,
     resizableWindow: true,
     isVisibleInMenu: true,

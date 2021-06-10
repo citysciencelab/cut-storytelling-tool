@@ -463,6 +463,10 @@
                 "search":"Koordinaten suchen",
                 "searchBtn": "Suche",
                 "coordSystemField": "Koordinatensystem",
+                "heightLabel": "Höhe",
+                "noHeightWater": "Gewässerfläche, keine Höhen vorhanden",
+                "noHeightBuilding": "Gebäudefläche, keine Höhen vorhanden",
+                "heightLayerInfo": "Grundlage der Höheninformation ist \"{{layer}}\" mit Höhenangaben über Normalhöhennull (NHN).",
                 "hdms": {
                     "eastingLabel": "Länge",
                     "northingLabel": "Breite"

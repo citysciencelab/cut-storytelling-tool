@@ -1,7 +1,11 @@
 import {toStringHDMS, toStringXY} from "ol/coordinate.js";
+import proj4 from "proj4";
 import isMobile from "../../../../utils/isMobile";
 import convertSexagesimalToDecimal from "../../../../utils/convertSexagesimalToDecimal";
-import proj4 from "proj4";
+import getProxyUrl from "../../../../utils/getProxyUrl";
+import {requestGfi} from "../../../../api/wmsGetFeatureInfo";
+import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
+import WMSLayer from "../../../../../modules/core/modelList/layer/wms.js";
 
 export default {
     /**
@@ -23,10 +27,67 @@ export default {
             position = event.coordinate;
 
         commit("setPositionMapProjection", position);
-        dispatch("changedPosition", position);
+        dispatch("changedPosition");
         commit("setUpdatePosition", !updatePosition);
 
         dispatch("MapMarker/placingPointMarker", position, {root: true});
+        if (state.heightLayer) {
+            if (updatePosition) {
+                dispatch("getHeight", position);
+            }
+            else {
+                commit("setHeight", "");
+            }
+        }
+    },
+
+    /**
+     * Creates a new WMSLayer to get the height from with id stored in state.heightLayerId and sets the layer to state.
+     * @returns {void}
+     */
+    initHeightLayer ({commit, state}) {
+        const layer = new WMSLayer(getLayerWhere({id: state.heightLayerId}));
+
+        commit("setHeightLayer", layer);
+    },
+
+    /**
+     * Requests the layer with id state.heightLayerId and parses the response for the height.
+     * Sets the height to the state.
+     * @param {*} position  {Number[]} position of the projection in the map
+     * @returns {void}
+     */
+    async getHeight ({commit, rootGetters, state}, position) {
+        const projection = rootGetters["Map/projection"],
+            resolution = rootGetters["Map/resolution"],
+            infoFormat = state.heightInfoFormat ? state.heightInfoFormat : "application/vnd.ogc.gml",
+            gfiParams = {INFO_FORMAT: infoFormat, FEATURE_COUNT: 1};
+        let url = state.heightLayer.get("layerSource").getFeatureInfoUrl(position, resolution, projection, gfiParams);
+
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        url = state.heightLayer.get("useProxy") ? getProxyUrl(url) : url;
+
+        requestGfi("text/xml", url, false).then(features => {
+            let height = "";
+
+            if (features.length >= 1) {
+                height = features[0].get(state.heightAttributeKey);
+                if (height === "-20") {
+                    height = "common:modules.tools.coordToolkit.noHeightWater";
+                }
+                else if (height === state.heightValueBuilding) {
+                    height = "common:modules.tools.coordToolkit.noHeightBuilding";
+                }
+                else {
+                    height = Number.parseFloat(height).toFixed(1);
+                }
+            }
+            commit("setHeight", height);
+        });
     },
     /**
      * Reacts on new selected projection. Sets the current projection and its name to state,
@@ -38,7 +99,7 @@ export default {
         const targetProjection = getters.getProjectionById(value);
 
         commit("setCurrentProjection", targetProjection);
-        dispatch("changedPosition", value);
+        dispatch("changedPosition");
         commit("setExample");
     },
     /**

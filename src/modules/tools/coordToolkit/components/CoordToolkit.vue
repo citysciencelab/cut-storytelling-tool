@@ -67,6 +67,16 @@ export default {
     created () {
         this.$on("close", this.close);
     },
+    mounted () {
+        /**
+         * Do this in next tick, only then heightLayerId is in state
+         */
+        this.$nextTick(() => {
+            if (this.heightLayerId !== null) {
+                this.initHeightLayer();
+            }
+        });
+    },
     methods: {
         ...mapMutations("Tools/CoordToolkit", Object.keys(mutations)),
         ...mapActions("Tools/CoordToolkit", [
@@ -78,7 +88,8 @@ export default {
             "removeMarker",
             "searchCoordinate",
             "validateInput",
-            "newProjectionSelected"
+            "newProjectionSelected",
+            "initHeightLayer"
         ]),
         ...mapActions("Alerting", ["addSingleAlert"]),
         ...mapActions("Map", {
@@ -394,16 +405,39 @@ export default {
                         </div>
                     </div>
                     <div
+                        v-if="isEnabled( 'supply') && heightLayer !== null"
+                        class="form-group form-group-sm"
+                    >
+                        <label
+                            id="coordinatesHeightLabel"
+                            for="coordinatesHeightField"
+                            class="col-md-5 col-sm-5 control-label"
+                        >{{ $t("modules.tools.coordToolkit.heightLabel") }}</label>
+                        <div class="col-md-7 col-sm-7">
+                            <input
+                                id="coordinatesHeightField"
+                                :value="$t(height)"
+                                type="text"
+                                class="form-control"
+                                :readonly="true"
+                                :contenteditable="false"
+                            >
+                        </div>
+                    </div>
+                    <div
                         v-if="isDefaultStyle"
                         class="form-group form-group-sm"
                     >
-                        <div class="col-md-12 col-sm-12">
+                        <div class="col-md-12 col-sm-12 info">
                             {{ $t("modules.tools.measure.influenceFactors") }}
                             <ul>
                                 <li>{{ $t("modules.tools.measure.scale") }}</li>
                                 <li>{{ $t("modules.tools.measure.resolution") }}</li>
                                 <li>{{ $t("modules.tools.measure.screenResolution") }}</li>
                             </ul>
+                            <span v-if="heightLayer !== null">
+                                {{ $t("modules.tools.coordToolkit.heightLayerInfo", {layer: heightLayer.get("name")}) }}
+                            </span>
                         </div>
                     </div>
                     <div
@@ -455,6 +489,9 @@ export default {
         text-align:center;
         color: #7aa9d0;
         transition: color 0.35s;
+    }
+    .info{
+        max-width: 550px;
     }
 </style>
 
