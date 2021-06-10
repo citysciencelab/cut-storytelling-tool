@@ -1,5 +1,7 @@
 <script>
 import state from "../store/stateLayerSwiper";
+import {mapGetters, mapActions, mapMutations} from "vuex";
+import {getRenderPixel} from "ol/render";
 
 /**
  * FullScreen control that allows switching between fullscreen
@@ -12,12 +14,18 @@ export default {
         return {
         };
     },
+    computed: {
+        ...mapGetters("Map", ["visibleLayerList", "map"])
+    },
     methods: {
+        ...mapMutations("Map", ["addLayerToMap", "removeLayerFromMap"]),
         move (event) {
+
             state.isMoving = true;
             state.swiper = event.target;
             window.addEventListener("mousemove", this.moveSwiper);
             window.addEventListener("mouseup", this.moveStop);
+
         },
         moveStop () {
             state.isMoving = false;
@@ -26,7 +34,34 @@ export default {
         },
         moveSwiper (event) {
             if (state.isMoving) {
+                const map = this.$store.getters["Map/map"];
+
+                state.valueX = event.clientX;
                 state.swiper.style.left = event.clientX + "px";
+                map.render();
+                this.$store.getters["Map/visibleLayerList"][3].on("prerender", function (e) {
+                    const ctx = e.context,
+                        mapSize = map.getSize(),
+                        width = state.valueX,
+                        tl = getRenderPixel(e, [width, 0]),
+                        tr = getRenderPixel(e, [mapSize[0], 0]),
+                        bl = getRenderPixel(e, [width, mapSize[1]]),
+                        br = getRenderPixel(e, mapSize);
+
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.moveTo(tl[0], tl[1]);
+                    ctx.lineTo(bl[0], bl[1]);
+                    ctx.lineTo(br[0], br[1]);
+                    ctx.lineTo(tr[0], tr[1]);
+                    ctx.closePath();
+                    ctx.clip();
+                });
+                this.$store.getters["Map/visibleLayerList"][3].on("postrender", function (e) {
+                    const ctx = e.context;
+
+                    ctx.restore();
+                });
             }
         }
     }

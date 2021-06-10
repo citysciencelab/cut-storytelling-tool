@@ -9,7 +9,8 @@ const state = {
     id: "layerSwiper",
     name: "controls.layerSwiper.title",
     isMoving: false,
-    swiper: {}
+    swiper: {},
+    valueX: ""
 };
 
 export default state;
