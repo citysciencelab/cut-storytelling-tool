@@ -217,7 +217,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 await (await driver.findElement(By.css("div#navbarRow li:first-child"))).click();
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#tree"))));
                 await (await driver.findElement(By.css(".layer:nth-child(4) .glyphicon-info-sign"))).click();
-                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#layerinformation-desktop"))));
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#layerInformation"))));
 
                 expect(await driver.findElements(By.xpath("//*[contains(text(),'Fehler beim Laden der Vorschau der Metadaten.')]"))).to.be.empty;
             });
@@ -256,7 +256,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 await (await driver.findElement(By.css("div#navbarRow li:first-child"))).click();
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#tree"))));
                 await (await driver.findElement(By.xpath("//ul[@id='tree']/li[.//span[@title='Eignungsflächen']]//span[contains(@class,'glyphicon-info-sign')]"))).click();
-                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#layerinformation-desktop"))));
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#layerInformation"))));
 
                 expect(await driver.findElements(By.xpath("//*[contains(text(),'Fehler beim Laden der Vorschau der Metadaten.')]"))).to.be.empty;
             });
