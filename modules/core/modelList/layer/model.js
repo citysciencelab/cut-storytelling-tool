@@ -494,11 +494,11 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
                 });
             }
             if (timeLayer) {
-                // TODO: Open TimeSlider
+                store.commit("Wmst/setTimeSliderActive", true);
             }
         }
         else if (timeLayer) {
-            // TODO: Close TimeSlider
+            store.commit("Wmst/setTimeSliderActive", false);
         }
     },
 
