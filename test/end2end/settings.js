@@ -172,6 +172,17 @@ function getCapabilities (testService) {
                 "accessKey": process.env.SAUCE_ACCESS_KEY,
                 "extendedDebugging": true
             }
+        },
+        baseSaucelabsMacOS = {
+            "host": "saucelabs",
+            "sauce:options": {
+                "screenResolution": "1920x1080",
+                /* eslint-disable-next-line no-process-env */
+                "username": process.env.SAUCE_USERNAME,
+                /* eslint-disable-next-line no-process-env */
+                "accessKey": process.env.SAUCE_ACCESS_KEY,
+                "extendedDebugging": true
+            }
         };
 
     if (testService === "browserstack") {
