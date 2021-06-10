@@ -1,4 +1,5 @@
 import actions from "../app-store/actions"; // https://stackoverflow.com/questions/40487627/can-i-call-commit-from-one-of-mutations-in-vuex-store
+import {setValueToState} from "../utils/converter";
 
 // The objects deprecatedParamsConfigJson and deprecatedParamsConfigJs store the current respectively new parameters and the related deprecated parameters.
 // The key describes the current parameter or more precisely the path to the new/current path.
@@ -70,5 +71,12 @@ export default {
      */
     setI18Nextinitialized (state, isInitialized) {
         state.i18NextInitialized = isInitialized;
+    },
+    setUrlParams (state, params) {
+        params.forEach(function (value, key) {
+            const keySplitted = key.split("/");
+
+            setValueToState(state, keySplitted, value, 0);
+        });
     }
 };
