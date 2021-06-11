@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
     {reclickUntilNotStale, logTestingCloudUrlToTest, closeSingleAlert} = require("../../../../../../test/end2end/library/utils"),
-    {isMobile, isMaster, isSafari} = require("../../../../../../test/end2end/settings"),
+    {isMobile, isMaster} = require("../../../../../../test/end2end/settings"),
     namedProjectionsBasic = require("../../../../../../portal/basic/config").namedProjections,
     namedProjectionsMaster = require("../../../../../../portal/master/config").namedProjections,
     namedProjectionsCustom = require("../../../../../../portal/masterCustom/config").namedProjections,
@@ -17,11 +17,10 @@ const webdriver = require("selenium-webdriver"),
  * @param {String} params.url the url to test
  * @param {String} params.resolution formatted as "AxB" with A, B integers
  * @param {String} param.config to switch the config between namedProjectionsBasic, -Master -Default or -Custom ("basic", "master", "default", "custom")
- * @param {String} params.browsername the name of the broser (to use chrome put "chrome" into the name)
  * @param {module:selenium-webdriver.Capabilities} param.capability sets the capability when requesting a new session - overwrites all previously set capabilities
  * @returns {void}
  */
-async function CoordTests ({builder, url, resolution, config, browsername, capability}) {
+async function CoordTests ({builder, url, resolution, config, capability}) {
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
