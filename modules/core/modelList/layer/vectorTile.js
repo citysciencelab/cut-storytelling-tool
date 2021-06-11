@@ -264,10 +264,10 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
      * @returns {String[]} returns relevant MP-font
      */
     addMpFonts: function (fontstack) {
-        if (fontstack.includes("Bold")) {
+        if (fontstack.includes("Bold") | fontstack.includes("bold")) {
             return "MasterPortalFont Bold";
         }
-        else if (fontstack.includes("Italic")) {
+        else if (fontstack.includes("Italic") | fontstack.includes("italic")) {
             return "MasterPortalFont Italic";
         }
         return "MasterPortalFont";
