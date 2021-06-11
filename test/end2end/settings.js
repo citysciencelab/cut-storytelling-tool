@@ -176,7 +176,7 @@ function getCapabilities (testService) {
         baseSaucelabsMacOS = {
             "host": "saucelabs",
             "sauce:options": {
-                "screenResolution": "1920x1080",
+                "screenResolution": "1920x1440",
                 /* eslint-disable-next-line no-process-env */
                 "username": process.env.SAUCE_USERNAME,
                 /* eslint-disable-next-line no-process-env */
@@ -215,6 +215,12 @@ function getCapabilities (testService) {
             "browserName": "MicrosoftEdge",
             "browserVersion": "latest",
             "platformName": "Windows 10"
+        },
+        {
+            ...baseSaucelabsMacOS,
+            "browserName": "safari",
+            "browserVersion": "latest",
+            "platformName": "macOS 10.15"
         }
     ];
 
