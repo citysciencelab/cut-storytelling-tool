@@ -104,16 +104,14 @@ const suites = [
 
                 // modules/tools
                 require("../../src/modules/tools/contact/tests/end2end/Contact.e2e.js"),
-                require("./tests/modules/tools/ExtendedFilter.js"),
-                require("../../src/modules/tools/gfi/tests/end2end/Gfi.e2e.js"),
-                // require("./tests/modules/tools/Gfi.js"),old GFI-Test do not delete!
-                require("./tests/modules/tools/List.js"),
-                require("../../src/modules/tools/measure/tests/end2end/Measure.e2e.js"),
-                require("./tests/modules/tools/ParcelSearch.js"),
                 // require("./tests/modules/tools/PopulationRequest_HH.js"),
-                require("../../src/modules/tools/scaleswitcher/tests/end2end/ScaleSwitcher.e2e.js"), // The end2end tests of the scaleSwitcher.
-                // require("./tests/modules/tools/SearchByCoord.js"),
+                require("./tests/modules/tools/ExtendedFilter.js"),
+                require("./tests/modules/tools/List.js"),
                 require("../../src/modules/tools/supplyCoord/tests/end2end/SupplyCoord.e2e.js"),
+                require("../../src/modules/tools/measure/tests/end2end/Measure.e2e.js"),
+                require("../../src/modules/tools/scaleswitcher/tests/end2end/ScaleSwitcher.e2e.js"), // add the tool scaleSwitcher
+                require("./tests/modules/tools/ParcelSearch.js"),
+                require("../../src/modules/tools/searchByCoord/tests/end2end/SearchByCoord.e2e.js"),
 
 ...
             ],
@@ -156,7 +154,7 @@ There are basically 3 hooks added.
 ### Before
 
 Executed once in describe.
-Sets the title of the test, if the tests are executed via a pipeline on Saucelabs. Initializes the driver.
+Sets the title of the test, if the tests are executed via a pipeline on Saucelabs. Get the driver.
 
 ```js
  before(async function () {
@@ -168,15 +166,15 @@ Sets the title of the test, if the tests are executed via a pipeline on Saucelab
         // After a change, this must be communicated to the builder
         builder.withCapabilities(capability);
     }
-    // Initialize the driver
-    driver = await initDriver(builder, url, resolution);
+    // Get the driver
+    driver = await getDriver();
 });
 ```
 
 ### After
 
 Will be executed once after all tests have been run.
-If the tests are piped to Saucelabs, the URL to executed tests is logged to Saucelabs. Then the driver is terminated.
+If the tests are piped to Saucelabs, the URL to executed tests is logged to Saucelabs.
 
 ```js
 after(async function () {
@@ -186,8 +184,6 @@ after(async function () {
             logTestingCloudUrlToTest(sessionData.id_);
         });
     }
-    // Quit the driver
-    await driver.quit();
 });
 ```
 
@@ -200,9 +196,8 @@ It serves as a fallback, if a test fails it will be restarted. This is done beca
 afterEach(async function () {
     // Executed only once after the failure of a test
     if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-        console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
         // Quit the driver
-        await driver.quit();
+        await quitDriver();
         // Initialize the driver again
         driver = await initDriver(builder, url, resolution);
     }
@@ -214,7 +209,7 @@ All hooks together:
 ```js
 const webdriver = require("selenium-webdriver"),
     {isMaster} = require("../../../../../../test/end2end/settings"),
-    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils");
 
 
@@ -232,11 +227,12 @@ async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
 
             before(async function () {
                 if (capability) {
+
                     capability.name = this.currentTest.fullTitle();
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
             });
 
             after(async function () {
@@ -245,13 +241,11 @@ async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
+                    await quitDriver();
                     driver = await initDriver(builder, url, resolution);
                 }
             });
@@ -270,7 +264,7 @@ When testing a tool, it is generally advisable to open it first. To do this, you
 ```js
 const webdriver = require("selenium-webdriver"),
     {isMaster} = require("../../../../../../test/end2end/settings"),
-    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {expect} = require("chai"),
     {By, until} = webdriver;
@@ -314,7 +308,7 @@ masterportal/src/modules/tools/scaleSwitcher/tests/end2end/ScaleSwitcher.e2e.js
 ```js
 const webdriver = require("selenium-webdriver"),
     {isMaster} = require("../../../../../../test/end2end/settings"),
-    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {expect} = require("chai"),
     {By, until} = webdriver,
@@ -323,8 +317,7 @@ const webdriver = require("selenium-webdriver"),
 ...
 afterEach(async function () {
     if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-        console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-        await driver.quit();
+        await quitDriver();
         driver = await initDriver(builder, url, resolution);
         // Open the scaleSwitcher tool again
         await (await driver.findElement(By.xpath("//ul[@id='tools']//.."))).click();
@@ -420,7 +413,7 @@ Remove the `only` from the `describe`. After that the file looks like this.
 ```js
 const webdriver = require("selenium-webdriver"),
     {isMaster} = require("../../../../../../test/end2end/settings"),
-    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {expect} = require("chai"),
     {By, until} = webdriver,
@@ -446,7 +439,7 @@ async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
             });
 
             after(async function () {
@@ -455,13 +448,11 @@ async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
+                    await quitDriver();
                     driver = await initDriver(builder, url, resolution);
                     await (await driver.findElement(By.xpath("//ul[@id='tools']//.."))).click();
                     await (await driver.findElement(By.css("#tools .glyphicon-resize-small"))).click();

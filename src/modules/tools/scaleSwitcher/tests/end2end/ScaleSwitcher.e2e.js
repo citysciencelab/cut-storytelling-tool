@@ -1,6 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {isMaster} = require("../../../../../../test/end2end/settings"),
-    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {expect} = require("chai"),
     {By, until} = webdriver,
@@ -26,7 +26,7 @@ async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
             });
 
             after(async function () {
@@ -35,13 +35,11 @@ async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
+                    await quitDriver();
                     driver = await initDriver(builder, url, resolution);
                     await (await driver.findElement(By.xpath("//ul[@id='tools']//.."))).click();
                     await (await driver.findElement(By.css("#tools .glyphicon-resize-small"))).click();
