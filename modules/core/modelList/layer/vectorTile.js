@@ -6,6 +6,7 @@ import {extentFromProjection} from "ol/tilegrid";
 import stylefunction from "ol-mapbox-style/dist/stylefunction";
 import store from "../../../../src/app-store/index";
 import getProxyUrl from "../../../../src/utils/getProxyUrl";
+import axios from "axios";
 
 import Layer from "./model";
 
@@ -216,8 +217,8 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
          * useProxy
          * getProxyUrl()
          */
-        return fetch(this.get("useProxy") ? getProxyUrl(url) : url)
-            .then(response => response.json())
+        return axios.get(this.get("useProxy") ? getProxyUrl(url) : url)
+            .then(response => response.data)
             .then(style => {
                 let spriteUrl, spriteDataUrl, spriteImageUrl, addMpFonts;
 
@@ -295,8 +296,8 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
          * useProxy
          * getProxyUrl()
          */
-        return fetch(this.get("useProxy") ? getProxyUrl(spriteUrl) : spriteUrl)
-            .then(response => response.json());
+        return axios.get(this.get("useProxy") ? getProxyUrl(spriteUrl) : spriteUrl)
+            .then(resp => resp.data);
     },
 
     /**
