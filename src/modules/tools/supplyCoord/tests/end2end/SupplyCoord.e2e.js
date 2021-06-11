@@ -159,7 +159,7 @@ async function CoordTests ({builder, url, resolution, config, capability}) {
                 });
             }
 
-            it("copies coordinate values on click to clipboard", async () => {
+            it.skip("copies coordinate values on click to clipboard", async () => {
                 /* Since there seems to be no universally supported way to check what
                 * Strg+V produces, we're just dumping the information to the search
                 * bar and check if the expected value arrived. */
