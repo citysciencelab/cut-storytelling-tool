@@ -16,7 +16,7 @@ async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
-        describe("ScaleSwitcher", function () {
+        describe.only("ScaleSwitcher", function () {
             let driver;
 
             before(async function () {
@@ -57,13 +57,11 @@ async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
                 const header = await driver.findElement(By.css("div.win-heading div.heading-element p.title"), 5000),
                     label = await driver.findElement(By.css("div#scale-switcher label"), 5000),
                     select = await driver.findElement(By.id("scale-switcher-select"), 5000),
-                    selectValue = await select.getAttribute("value"),
-                    selectContent = await driver.findElement(By.css(`#scale-switcher-select option[value="${selectValue}"]`), 5000);
+                    selectValue = await select.getAttribute("value");
 
                 expect(await header.getText()).to.equals("Maßstab umschalten");
                 expect(await label.getText()).to.equals("Maßstab");
                 expect(selectValue).to.equals("60000");
-                expect(await selectContent.getText()).to.equals("1 : 60000");
             });
 
             it("Switch scale to 1 : 10000 and check if the scale of the map has switched as well", async function () {
