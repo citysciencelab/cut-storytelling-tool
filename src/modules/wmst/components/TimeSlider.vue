@@ -5,63 +5,62 @@ import mutations from "../store/mutationsWmst";
 
 export default {
     name: "TimeSlider",
-    data: () => ({direction: "stop", inputValue: 0, sliderValue: 0}),
+    props: {
+        layerId: {
+            type: String,
+            default: ""
+        }
+    },
+    data: () => ({playing: false, sliderValue: 0}),
     computed: {
         ...mapGetters("Wmst", Object.keys(getters))
     },
     watch: {
         defaultValue () {
-            this.inputValue = this.sliderValue = this.defaultValue;
+            this.sliderValue = this.defaultValue;
         },
-        inputValue () {
-            Radio.trigger("WMST", "updateTime", this.inputValue);
+        sliderValue () {
+            Radio.trigger("WMST", "updateTime", this.sliderValue); // TODO: Add id so that only the correct layeer gets updated
         }
     },
     created () {
-        this.inputValue = this.sliderValue = this.defaultValue;
+        this.sliderValue = this.defaultValue;
     },
     methods: {
         ...mapActions("Wmst", ["toggleSwiper"]),
         ...mapMutations("Wmst", Object.keys(mutations)),
         animate () {
-            // TODO: Klärung: Wie würde ein Nutzer dieses Bedienelement erwarten? -> Abklären, wie dies zu implementieren ist!
-            if (this.direction !== "stop") {
-                let index = this.timeRange.indexOf(this.inputValue);
+            // TODO: Klärung: Wie würde ein Nutzer dieses Bedienelement erwarten? -> Abklären, wie dies zu implementieren ist! Im bsp is forward einfach der nächste, backward einfach einen zurück und play das richtige Filmchen --> Film hört am Ende auf und beginnt nicht neu bei 0
+            if (this.playing) {
+                const index = this.nextIndex(true);
 
-                if (this.direction === "forward") {
-                    index = index + 1 < this.timeRange.length ? index + 1 : 0;
+                if (index === this.timeRange.length) {
+                    this.playing = false;
                 }
-                if (this.direction === "backward") {
-                    index = (index > 0 ? index : this.timeRange.length) - 1;
-                }
-
-                this.inputValue = this.sliderValue = this.timeRange[index];
+                this.sliderValue = this.timeRange[index];
             }
         },
-        changeDirection (value) {
-            let direction = value;
+        nextIndex (forward) {
+            const next = forward ? 1 : -1;
 
-            // TODO: setInterval, clearInterval diggi
-
-            if (value === "") { // TODO: button put :(
-                direction = this.direction === "stop" ? "play" : "stop";
-            }
-
-            this.direction = direction;
-            this.animate();
+            // If the value is changed by user input instead of the "play"-function, the value is a String.
+            return this.timeRange.indexOf(typeof this.sliderValue === "number" ? this.sliderValue : parseInt(this.sliderValue, 10)) + next;
         },
-        inputValueChanged (value) {
-            if (this.timeRange.indexOf(value) > -1) {
-                this.inputValue = this.sliderValue = value;
+        play () {
+            let interval;
+
+            this.playing = !this.playing;
+
+            if (this.playing) {
+                // TODO: Wait for answer of service before next call if possible
+                interval = setInterval(this.animate, 1000);
             }
             else {
-                this.inputValue = this.sliderValue = this.defaultValue;
-                console.warn("TimeSlider: The selected value is outside of the possible range or is not a valid input for the selected layer!");
+                clearInterval(interval);
             }
         },
-        sliderValueChanged (value) {
-            // TODO: Later on: If value is not inside timeRange, then, depending on the direction, the next higher / lower value needs to be received; standard direction is forward for this
-            this.sliderValue = this.inputValue = value;
+        setSliderValue (value) {
+            this.sliderValue = value;
         }
     }
 };
@@ -69,95 +68,106 @@ export default {
 
 <template>
     <div class="timeSlider-wrapper centered-box-wrapper">
-        <!-- TODO: Integrate me like it is specified! -->
-        <button @click="toggleSwiper">
-            Click Me
-        </button>
-        <fieldset class="timeSlider-button-group">
-            <!-- TODO: Label inkl. Übersetzungen für die Buttons-->
-            <button @click="changeDirection('backward')">
-                <i class="glyphicon glyphicon-backward" />
-            </button> <!-- TODO: Abgängig vom 'step' wird von max zu min gegangen -->
-            <button @click="changeDirection('')">
-                <i
-                    :class="{
-                        'glyphicon': true,
-                        'glyphicon-play': direction === 'stop',
-                        'glyphicon-stop': direction === 'play'
-                    }"
-                />
+        <div class="timeSlider-innerWrapper">
+            <!-- TODO: Integrate me like it is specified! -->
+            <button @click="toggleSwiper(layerId)">
+                Click Me
             </button>
-            <button @click="changeDirection('forward')">
-                <i class="glyphicon glyphicon-forward" />
-            </button> <!-- TODO: Abgängig vom 'step' wird von min zu max gegangen -->
-        </fieldset>
-        <!-- TODO: Add proper labels -->
-        <input
-            class="timeSlider-currentTime"
-            placeholder="Aktuelles Jahr"
-            :value="inputValue"
-            aria-label="Current Time"
-            @change="inputValueChanged($event.target.value)"
-        > <!-- TODO: Kein Input, sondern span(nend) -->
-        <input
-            class="timeSlider-rangeSlider"
-            type="range"
-            :value="sliderValue"
-            :min="min"
-            :max="max"
-            :step="step"
-            aria-label="slide time"
-            @change="sliderValueChanged($event.target.value)"
-        >
-        <!-- TODO:
-                value - A single value
-                value1,value2,value3,...^a - A list of multiple values
-                min/max/resolution - An interval defined by its lower and upper bounds and its resolution.
-                min1/max1/res1,min2/max2/res2,...^a - A list of multiple intervals
-                ^a Whitespace is allowed following commas in a list in an <Extent> element.
-
-                TODO: Impl:
-                    value -> Nur der Wert
-                    value1,value2,value3,... -> Nur diese Werte
-                    min/max/resolution -> Alle Werte zwischen min & max, wobei resolution die Abstandsart angibt
-                    min1/max1/res1,min2/max2/res2,... -> Wie einen oben, mit dem Unterschied, das zwischen den einzelnen Bereichen nichts angezeigt wird
-                -->
+            <!-- TODO: Add another "label" for the slider here that shows the information verticaly -->
+        </div>
+        <div class="timeSlider-innerWrapper-interactions">
+            <fieldset>
+                <!-- TODO: aria-label incl. translations for buttons -->
+                <button
+                    class="btn btn-sm btn-block"
+                    @click="setSliderValue(timeRange[nextIndex(false)])"
+                >
+                    <i class="glyphicon glyphicon-backward" />
+                </button>
+                <button
+                    class="btn btn-sm btn-block"
+                    @click="play"
+                >
+                    <i
+                        :class="{
+                            'glyphicon': true,
+                            'glyphicon-play': !playing,
+                            'glyphicon-stop': playing
+                        }"
+                    />
+                </button>
+                <button
+                    class="btn btn-sm btn-block"
+                    @click="setSliderValue(timeRange[nextIndex(true)])"
+                >
+                    <i class="glyphicon glyphicon-forward" />
+                </button>
+            </fieldset>
+            <fieldset>
+                <label>{{ sliderValue }}</label>
+            </fieldset>
+            <fieldset>
+                <input
+                    class="timeSlider-rangeSlider"
+                    type="range"
+                    :value="sliderValue"
+                    :min="min"
+                    :max="max"
+                    :step="step"
+                    aria-label="slide time"
+                    @change="setSliderValue($event.target.value)"
+                >
+            </fieldset>
+        </div>
     </div>
 </template>
 
 <style lang="less" scoped>
 @import "~variables";
 
-@margin: 1em;
-
 .timeSlider-wrapper {
+    @base-space: 0.25em;
+
     position: absolute;
-    bottom: 4em;
+    bottom: 6em;
     left: 50%;
     z-index: 3;
 
     display: flex;
+    flex-direction: column;
     background: white;
     box-shadow: @tool_box_shadow;
 
-    & > * {
-        margin: @margin;
+    .timeSlider-innerWrapper {
+        margin-top: calc(@base-space * 3);
     }
 
-    // TODO: Why is the margin of the last element on the right not the above? Or is it?
-    .timeSlider-button-group {
-        button {
-            margin: calc(@margin / 4);
+    .timeSlider-innerWrapper-interactions {
+        @border-style: 1px solid black;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 28em;
+        margin: calc(@base-space * 3);
+        border: 1px solid black;
+
+        & > fieldset {
+            display: flex;
+
+            button {
+                margin: @base-space;
+            }
+            input {
+                margin-right: @base-space;
+            }
+            label {
+                border-left: @border-style;
+                border-right: @border-style;
+                margin: 0;
+                padding: calc(@base-space * 3);
+            }
         }
-    }
-
-    .timeSlider-currentTime {
-        width: 6em;
-    }
-
-    .timeSlider-rangeSlider {
-        width: 50%;
-        margin-left: 0;
     }
 }
 </style>

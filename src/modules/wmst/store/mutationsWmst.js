@@ -10,6 +10,9 @@ const mutations = {
     setDefaultValue (state, defaultValue) {
         state.timeSlider.defaultValue = defaultValue;
     },
+    setLayerId (state, layerId) {
+        state.timeSlider.layerId = layerId;
+    },
     setMin (state, min) {
         state.timeSlider.min = min;
     },
