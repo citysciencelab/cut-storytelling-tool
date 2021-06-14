@@ -342,7 +342,10 @@ export default {
                             </select>
                         </div>
                     </div>
-                    <div class="form-group form-group-sm">
+                    <div
+                        class="form-group form-group-sm"
+                        :class="[currentProjection.id.indexOf('EPSG:4326') > -1 ? 'eastingToBottom' : '']"
+                    >
                         <label
                             id="coordinatesEastingLabel"
                             for="coordinatesEastingField"
@@ -373,7 +376,10 @@ export default {
                             </p>
                         </div>
                     </div>
-                    <div class="form-group form-group-sm">
+                    <div
+                        class="form-group form-group-sm"
+                        :class="[currentProjection.id.indexOf('EPSG:4326') > -1 ? 'northingToTop' : '']"
+                    >
                         <label
                             id="coordinatesNorthingLabel"
                             for="coordinatesNorthingField"
@@ -492,6 +498,12 @@ export default {
     }
     .info{
         max-width: 550px;
+    }
+    .eastingToBottom{
+        transform: translate(0px, 45px)
+    }
+    .northingToTop{
+        transform: translate(0px, -45px)
     }
 </style>
 

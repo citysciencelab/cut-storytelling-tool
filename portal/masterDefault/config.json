@@ -314,7 +314,6 @@
             "Layer": [
               {
                     "id" : "19173",
-                    "name" : "Digitales Höhenmodell Hamburg (DGM1)",
                     "url" : "https://qs-geodienste.hamburg.de/HH_WMS_DGM1",
                     "infoFormat" :  "application/vnd.ogc.gml"
               }]
