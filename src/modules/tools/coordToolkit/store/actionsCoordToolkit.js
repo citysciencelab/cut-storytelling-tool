@@ -5,7 +5,6 @@ import convertSexagesimalToDecimal from "../../../../utils/convertSexagesimalToD
 import getProxyUrl from "../../../../utils/getProxyUrl";
 import {requestGfi} from "../../../../api/wmsGetFeatureInfo";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
-import WMSLayer from "../../../../../modules/core/modelList/layer/wms.js";
 
 export default {
     /**
@@ -46,22 +45,39 @@ export default {
      * @returns {void}
      */
     initHeightLayer ({commit, state}) {
-        const layer = new WMSLayer(getLayerWhere({id: state.heightLayerId}));
+        const rawLayer = getLayerWhere({id: state.heightLayerId});
+        let layer = null;
 
-        commit("setHeightLayer", layer);
+        if (rawLayer) {
+            layer = Radio.request("ModelList", "getModelsByAttributes", {id: state.heightLayerId});
+            if (Array.isArray(layer) && layer.length > 0) {
+                layer = layer[0];
+                if (!layer.has("layerSource")) {
+                    Radio.trigger("Layer", "prepareLayerObject", layer);
+                }
+                if (layer.has("layerSource")) {
+                    commit("setHeightLayer", layer);
+                }
+                else {
+                    console.warn("CoordToolkit: Layer with id " + state.heightLayerId + " to retrieve height from has no layerSource. Heights are not available!");
+                }
+            }
+        }
+        if (!layer) {
+            console.warn("CoordToolkit: the layer with id " + state.heightLayerId + " to retrieve height from is not available. Check the Id in config.json with path 'Portalconfig.menu.tools.children.coordToolkit.heightLayerId'!");
+        }
     },
 
     /**
-     * Requests the layer with id state.heightLayerId and parses the response for the height.
+     * Requests the layer with id state.heightLayerId and parses the xml-response for the height.
      * Sets the height to the state.
-     * @param {*} position  {Number[]} position of the projection in the map
+     * @param {Number[]} position position of the projection in the map
      * @returns {void}
      */
-    async getHeight ({commit, rootGetters, state}, position) {
+    getHeight ({dispatch, rootGetters, state}, position) {
         const projection = rootGetters["Map/projection"],
             resolution = rootGetters["Map/resolution"],
-            infoFormat = state.heightInfoFormat ? state.heightInfoFormat : "application/vnd.ogc.gml",
-            gfiParams = {INFO_FORMAT: infoFormat, FEATURE_COUNT: 1};
+            gfiParams = {INFO_FORMAT: state.heightInfoFormat, FEATURE_COUNT: 1};
         let url = state.heightLayer.get("layerSource").getFeatureInfoUrl(position, resolution, projection, gfiParams);
 
         /**
@@ -72,22 +88,35 @@ export default {
         url = state.heightLayer.get("useProxy") ? getProxyUrl(url) : url;
 
         requestGfi("text/xml", url, false).then(features => {
-            let height = "";
+            dispatch("retrieveHeightFromGfiResponse", features);
+        });
+    },
+    /**
+     * Reads the height value from feature and sets it to state.
+     * @param {Array} features to get the height value from
+     * @returns {void}
+     */
+    retrieveHeightFromGfiResponse ({commit, state}, features) {
+        let height = "";
 
-            if (features.length >= 1) {
-                height = features[0].get(state.heightAttributeKey);
-                if (height === "-20") {
-                    height = "common:modules.tools.coordToolkit.noHeightWater";
-                }
-                else if (height === state.heightValueBuilding) {
-                    height = "common:modules.tools.coordToolkit.noHeightBuilding";
-                }
-                else {
-                    height = Number.parseFloat(height).toFixed(1);
+        if (features.length >= 1) {
+            height = features[0].get(state.heightElementName);
+            if (height === state.heightValueWater) {
+                height = "common:modules.tools.coordToolkit.noHeightWater";
+            }
+            else if (height === state.heightValueBuilding) {
+                height = "common:modules.tools.coordToolkit.noHeightBuilding";
+            }
+            else {
+                const heightParsed = Number.parseFloat(height);
+
+                if (!isNaN(heightParsed)) {
+                    height = heightParsed.toFixed(1);
+
                 }
             }
-            commit("setHeight", height);
-        });
+        }
+        commit("setHeight", height);
     },
     /**
      * Reacts on new selected projection. Sets the current projection and its name to state,

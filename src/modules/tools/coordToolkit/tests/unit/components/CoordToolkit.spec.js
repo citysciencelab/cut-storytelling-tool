@@ -55,6 +55,7 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
     beforeEach(() => {
         CoordToolkit.actions.copyToClipboard = sinon.spy(CoordToolkit.actions.copyToClipboard);
         CoordToolkit.actions.validateInput = sinon.spy(CoordToolkit.actions.validateInput);
+        CoordToolkit.actions.initHeightLayer = sinon.spy(CoordToolkit.actions.initHeightLayer);
 
         store = new Vuex.Store({
             namespaced: true,
@@ -89,11 +90,13 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
         crs.registerProjections(namedProjections);
     });
 
-    it("renders CoordToolkit", () => {
+    it("renders CoordToolkit without height field", () => {
         store.commit("Tools/CoordToolkit/setActive", true);
         wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
 
         expect(wrapper.find("#coord-toolkit").exists()).to.be.true;
+        expect(wrapper.find("#coordinatesHeightField").exists()).to.be.false;
+        expect(CoordToolkit.actions.initHeightLayer.calledOnce).to.be.false;
     });
 
     it("not renders CoordToolkit", () => {
@@ -101,6 +104,26 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
         wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
 
         expect(wrapper.find("#coord-toolkit").exists()).to.be.false;
+    });
+    it("renders CoordToolkit with height field", () => {
+        const layer = {id: "123", get: () => sinon.spy};
+
+        store.commit("Tools/CoordToolkit/setActive", true);
+        store.state.configJson.Portalconfig.menu.tools.children.coordToolkit.heightLayerId = "123";
+        store.state.Tools.CoordToolkit.heightLayer = layer;
+        wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
+
+        expect(wrapper.find("#coord-toolkit").exists()).to.be.true;
+        expect(wrapper.find("#coordinatesHeightField").exists()).to.be.true;
+    });
+    it("CoordToolkit mounting with heightLayerId shall call initHeightLayer", async () => {
+        store.state.configJson.Portalconfig.menu.tools.children.coordToolkit.heightLayerId = "123";
+        store.state.Tools.CoordToolkit.heightLayerId = "123";
+        wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
+        await wrapper.vm.$nextTick();
+
+        expect(CoordToolkit.actions.initHeightLayer.calledOnce).to.be.true;
+        store.state.Tools.CoordToolkit.heightLayerId = null;
     });
 
     it("has initially selected projection \"EPSG:25832\"", async () => {

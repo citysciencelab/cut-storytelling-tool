@@ -6,44 +6,238 @@ import * as proj4 from "proj4";
 
 describe("src/modules/tools/coord/store/actionsCoord.js", () => {
     describe("supplyCoord actions", () => {
-        describe("positionClicked", () => {
-            it("positionClicked", done => {
-                const payload = {
-                        coordinate: [1000, 2000]
-                    },
-                    state = {
-                        updatePosition: true,
-                        positionMapProjection: [300, 300]
-                    };
+        it("positionClicked without height", done => {
+            const payload = {
+                    coordinate: [1000, 2000]
+                },
+                state = {
+                    updatePosition: true,
+                    positionMapProjection: [300, 300]
+                };
 
-                testAction(actions.positionClicked, payload, state, {}, [
-                    {type: "setPositionMapProjection", payload: payload.coordinate},
-                    {type: "changedPosition", payload: payload.coordinate, dispatch: true},
-                    {type: "setUpdatePosition", payload: false},
-                    {type: "MapMarker/placingPointMarker", payload: payload.coordinate, dispatch: true}
-                ], {}, done);
-            });
+            testAction(actions.positionClicked, payload, state, {}, [
+                {type: "setPositionMapProjection", payload: payload.coordinate},
+                {type: "changedPosition", payload: undefined, dispatch: true},
+                {type: "setUpdatePosition", payload: false},
+                {type: "MapMarker/placingPointMarker", payload: payload.coordinate, dispatch: true}
+            ], {}, done);
         });
-        describe("newProjectionSelected", () => {
-            it("newProjectionSelected", done => {
-                const
-                    proj1 = {id: "projection 1", name: "projection 1", projName: "longlat"},
-                    proj2 = {id: "projection 2", name: "projection 2", projName: "longlat"},
-                    state = {
-                        projections: [
-                            proj1,
-                            proj2
-                        ]
-                    };
+        it("positionClicked with height and update position is true", done => {
+            const payload = {
+                    coordinate: [1000, 2000]
+                },
+                state = {
+                    updatePosition: true,
+                    heightLayer: {
+                        id: "19173",
+                        name: "Digitales Höhenmodell Hamburg (DGM1)"
+                    },
+                    positionMapProjection: [300, 300]
+                };
 
-                testAction(actions.newProjectionSelected, proj2.id, state, {}, [
-                    {type: "setCurrentProjection", payload: proj2},
-                    {type: "changedPosition", payload: proj2.id, dispatch: true},
-                    {type: "setExample"}
-                ], {getProjectionById: () => {
-                    return proj2;
-                }}, done);
-            });
+            testAction(actions.positionClicked, payload, state, {}, [
+                {type: "setPositionMapProjection", payload: payload.coordinate},
+                {type: "changedPosition", payload: undefined, dispatch: true},
+                {type: "setUpdatePosition", payload: false},
+                {type: "MapMarker/placingPointMarker", payload: payload.coordinate, dispatch: true},
+                {type: "getHeight", payload: payload.coordinate, dispatch: true}
+            ], {}, done);
+        });
+        it("positionClicked with height and update position is false", done => {
+            const payload = {
+                    coordinate: [1000, 2000]
+                },
+                state = {
+                    updatePosition: false,
+                    heightLayer: {
+                        id: "19173",
+                        name: "Digitales Höhenmodell Hamburg (DGM1)"
+                    },
+                    positionMapProjection: [300, 300]
+                };
+
+            testAction(actions.positionClicked, payload, state, {}, [
+                {type: "setPositionMapProjection", payload: payload.coordinate},
+                {type: "changedPosition", payload: undefined, dispatch: true},
+                {type: "setUpdatePosition", payload: true},
+                {type: "MapMarker/placingPointMarker", payload: payload.coordinate, dispatch: true},
+                {type: "setHeight", payload: ""}
+            ], {}, done);
+        });
+        it("retrieveHeightFromGfiResponse - real height", done => {
+            const heightElementName = "value_0",
+                heightFromLayer = "1.100",
+                payload = [
+                    {
+                        get: (attr) => {
+                            if (attr === heightElementName) {
+                                return heightFromLayer;
+                            }
+                            return null;
+                        }
+                    }
+                ],
+                expectedHeight = Number.parseFloat(heightFromLayer).toFixed(1),
+                state = {
+                    heightElementName: heightElementName
+                };
+
+            testAction(actions.retrieveHeightFromGfiResponse, payload, state, {}, [
+                {type: "setHeight", payload: expectedHeight}
+            ], {}, done);
+        });
+        it("retrieveHeightFromGfiResponse - height on water area", done => {
+            const heightElementName = "value_0",
+                heightValueWater = "-20",
+                payload = [
+                    {
+                        get: (attr) => {
+                            if (attr === heightElementName) {
+                                return heightValueWater;
+                            }
+                            return null;
+                        }
+                    }
+                ],
+                expectedHeight = "common:modules.tools.coordToolkit.noHeightWater",
+                state = {
+                    heightElementName: heightElementName,
+                    heightValueWater: heightValueWater
+                };
+
+            testAction(actions.retrieveHeightFromGfiResponse, payload, state, {}, [
+                {type: "setHeight", payload: expectedHeight}
+            ], {}, done);
+        });
+        it("retrieveHeightFromGfiResponse - height on building area", done => {
+            const heightElementName = "value_0",
+                heightValueBuilding = "200",
+                payload = [
+                    {
+                        get: (attr) => {
+                            if (attr === heightElementName) {
+                                return heightValueBuilding;
+                            }
+                            return null;
+                        }
+                    }
+                ],
+                expectedHeight = "common:modules.tools.coordToolkit.noHeightBuilding",
+                state = {
+                    heightElementName: heightElementName,
+                    heightValueBuilding: heightValueBuilding
+                };
+
+            testAction(actions.retrieveHeightFromGfiResponse, payload, state, {}, [
+                {type: "setHeight", payload: expectedHeight}
+            ], {}, done);
+        });
+        it("retrieveHeightFromGfiResponse - height on water area, heightValueWater not translated", done => {
+            const heightElementName = "value_0",
+                heightValueWater = "-20",
+                payload = [
+                    {
+                        get: (attr) => {
+                            if (attr === heightElementName) {
+                                return heightValueWater;
+                            }
+                            return null;
+                        }
+                    }
+                ],
+                expectedHeight = Number.parseFloat(heightValueWater).toFixed(1),
+                state = {
+                    heightElementName: heightElementName
+                };
+
+            testAction(actions.retrieveHeightFromGfiResponse, payload, state, {}, [
+                {type: "setHeight", payload: expectedHeight}
+            ], {}, done);
+        });
+        it("retrieveHeightFromGfiResponse - height on building area, heightValueBuilding not translated", done => {
+            const heightElementName = "value_0",
+                heightValueBuilding = "200",
+                payload = [
+                    {
+                        get: (attr) => {
+                            if (attr === heightElementName) {
+                                return heightValueBuilding;
+                            }
+                            return null;
+                        }
+                    }
+                ],
+                expectedHeight = Number.parseFloat(heightValueBuilding).toFixed(1),
+                state = {
+                    heightElementName: heightElementName
+                };
+
+            testAction(actions.retrieveHeightFromGfiResponse, payload, state, {}, [
+                {type: "setHeight", payload: expectedHeight}
+            ], {}, done);
+        });
+        it("retrieveHeightFromGfiResponse - height on water area, heightValueWater not translated and is no number", done => {
+            const heightElementName = "value_0",
+                heightValueWater = "water",
+                payload = [
+                    {
+                        get: (attr) => {
+                            if (attr === heightElementName) {
+                                return heightValueWater;
+                            }
+                            return null;
+                        }
+                    }
+                ],
+                expectedHeight = heightValueWater,
+                state = {
+                    heightElementName: heightElementName
+                };
+
+            testAction(actions.retrieveHeightFromGfiResponse, payload, state, {}, [
+                {type: "setHeight", payload: expectedHeight}
+            ], {}, done);
+        });
+        it("retrieveHeightFromGfiResponse - height on building area, heightValueBuilding not translated and is no number", done => {
+            const heightElementName = "value_0",
+                heightValueBuilding = "building",
+                payload = [
+                    {
+                        get: (attr) => {
+                            if (attr === heightElementName) {
+                                return heightValueBuilding;
+                            }
+                            return null;
+                        }
+                    }
+                ],
+                expectedHeight = heightValueBuilding,
+                state = {
+                    heightElementName: heightElementName
+                };
+
+            testAction(actions.retrieveHeightFromGfiResponse, payload, state, {}, [
+                {type: "setHeight", payload: expectedHeight}
+            ], {}, done);
+        });
+        it("newProjectionSelected", done => {
+            const
+                proj1 = {id: "projection 1", name: "projection 1", projName: "longlat"},
+                proj2 = {id: "projection 2", name: "projection 2", projName: "longlat"},
+                state = {
+                    projections: [
+                        proj1,
+                        proj2
+                    ]
+                };
+
+            testAction(actions.newProjectionSelected, proj2.id, state, {}, [
+                {type: "setCurrentProjection", payload: proj2},
+                {type: "changedPosition", payload: undefined, dispatch: true},
+                {type: "setExample"}
+            ], {getProjectionById: () => {
+                return proj2;
+            }}, done);
         });
         describe("changedPosition", () => {
             const rootState = {

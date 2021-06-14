@@ -284,9 +284,10 @@
             "name": "translate#common:menu.tools.coordToolkit",
             "glyphicon": "glyphicon-globe",
             "heightLayerId" : "19173",
-            "heightAttributeKey": "value_0",
+            "heightElementName": "value_0",
             "heightValueWater": "-20",
-            "heightValueBuilding": "200"
+            "heightValueBuilding": "200",
+            "zoomLevel": 5
           },
           "shadow": {
             "name": "translate#common:menu.tools.shadow",
@@ -514,7 +515,8 @@
         {
           "id" : "19173",
           "name" : "Digitales Höhenmodell Hamburg (DGM1)",
-          "url" : "https://qs-geodienste.hamburg.de/HH_WMS_DGM1"
+          "url" : "https://qs-geodienste.hamburg.de/HH_WMS_DGM1",
+          "infoFormat" :  "application/vnd.ogc.gml"
         },
         {
           "id": "1132",

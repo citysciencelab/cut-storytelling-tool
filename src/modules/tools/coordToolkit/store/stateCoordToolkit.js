@@ -40,11 +40,12 @@ const state = {
     selectedCoordinates: [],
     height: "",
     heightLayer: null,
+    zoomLevel: 7,
 
-    // must be set in config.json to display the height
+    // 'heightLayerId': must be set in config.json to display the height
     heightLayerId: null,
     heightInfoFormat: "application/vnd.ogc.gml",
-    heightAttributeKey: null,
+    heightElementName: null,
     heightValueWater: null,
     heightValueBuilding: null,
 
