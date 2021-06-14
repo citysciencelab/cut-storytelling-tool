@@ -184,8 +184,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     handleData: function (data) {
         const mapCrs = Radio.request("MapView", "getProjection"),
             jsonCrs = this.getJsonProjection(data),
-            newFeatures = [],
-            isClustered = this.has("clusterDistance");
+            newFeatures = [];
 
         let features = this.parseDataToFeatures(data, mapCrs, jsonCrs);
 
@@ -214,7 +213,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         this.prepareFeaturesFor3D(features);
         this.featuresLoaded(features);
         if (features) {
-            this.styling(isClustered);
+            this.styling();
             this.get("layer").setStyle(this.get("style"));
         }
     },
@@ -230,8 +229,6 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
 
         if (styleModel !== undefined) {
             this.setStyle(function (feature) {
-                // in manchen Fällen war feature undefined und in "this" geschrieben.
-                // konnte nicht nachvollziehen, wann das so ist.
                 const feat = feature !== undefined ? feature : this;
 
                 isClusterFeature = typeof feat.get("features") === "function" || typeof feat.get("features") === "object" && Boolean(feat.get("features"));
@@ -311,12 +308,10 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         try {
             jsonObjects = geojsonReader.readFeatures(data);
 
-            /*
-            // Nur die Features verwenden, die eine Geometrie haben. Aufgefallen bei KITAs am 05.01.2018 (JW)
+            // Use only Features that have a geometry.
             jsonObjects = jsonObjects.filter(function (feature) {
                 return feature.getGeometry() !== undefined;
             });
-            */
         }
         catch (err) {
             console.error("GeoJSON cannot be parsed.");
@@ -498,7 +493,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      */
     hideAllFeatures: function () {
         const layerSource = this.get("layerSource"),
-            features = this.get("layerSource").getFeatures();
+            features = layerSource.getFeatures();
 
         // optimization - clear and re-add to prevent cluster updates on each change
         layerSource.clear();
