@@ -3,6 +3,7 @@ const webdriver = require("selenium-webdriver"),
     {initDriver, getDriver, quitDriver, loadUrl} = require("../../../library/driver"),
     {isMaster, isMobile, isSafari} = require("../../../settings"),
     {logTestingCloudUrlToTest} = require("../../../library/utils"),
+    {getCenter, getResolution} = require("../../../library/scripts"),
     {By, until} = webdriver;
 
 /**
@@ -116,19 +117,21 @@ async function ListTests ({builder, url, resolution, browsername, capability, mo
                 expect(enlargedScale).to.be.greaterThan(1);
             });
 
-            // it("clicking a feature zooms and centers on it", async function () {
-            //     /* clicking featureListEntries[0] - chromedriver can, geckodriver can't manage to
-            //      * vertically scroll the tr center into view; workaround: click first cell of first row */
-            //     await (await driver.findElement(By.css("#featurelist-list-table tbody tr td"))).click();
-            //     await driver.wait(
-            //         until.elementLocated(By.css("#featurelistFeaturedetails.active")),
-            //         5000,
-            //         "details tab was not activated"
-            //     );
+            it("clicking a feature zooms and centers on it", async function () {
+                /* clicking featureListEntries[0] - chromedriver can, geckodriver can't manage to
+                 * vertically scroll the tr center into view; workaround: click first cell of first row */
+                await (await driver.findElement(By.css("#featurelist-list-table tbody tr td"))).click();
+                await driver.wait(
+                    until.elementLocated(By.css("#featurelistFeaturedetails.active")),
+                    12000,
+                    "details tab was not activated"
+                );
 
-            //     expect(await driver.executeScript(getCenter)).to.deep.equal([569773.549, 5937127.029]);
-            //     expect(await driver.executeScript(getResolution)).to.equal(0.13229159522920522);
-            // });
+                // wait with buffer until zooming is finished, because a fit is set to 800 milliseconds when zooming.
+                await driver.wait(new Promise(r => setTimeout(r, 1000)));
+                expect(await driver.executeScript(getCenter)).to.deep.equal([569773.549, 5937127.029]);
+                expect(await driver.executeScript(getResolution)).to.equal(0.13229159522920522);
+            });
         });
     }
 }
