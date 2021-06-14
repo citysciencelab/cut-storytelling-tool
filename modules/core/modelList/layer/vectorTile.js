@@ -6,6 +6,7 @@ import {extentFromProjection} from "ol/tilegrid";
 import stylefunction from "ol-mapbox-style/dist/stylefunction";
 import store from "../../../../src/app-store/index";
 import getProxyUrl from "../../../../src/utils/getProxyUrl";
+import axios from "axios";
 
 import Layer from "./model";
 
@@ -13,6 +14,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
     defaults: {
         ...Layer.prototype.defaults,
         selectedStyleID: undefined,
+        useMpFonts: true,
         useProxy: false
     },
 
@@ -144,7 +146,8 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
             id: this.get("id"),
             typ: this.get("typ"),
             name: this.get("name"),
-            visible: this.get("visibility")
+            visible: this.get("visibility"),
+            declutter: true
         }));
         this.setConfiguredLayerStyle();
     },
@@ -214,9 +217,11 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
          * useProxy
          * getProxyUrl()
          */
-        return fetch(this.get("useProxy") ? getProxyUrl(url) : url)
-            .then(response => response.json())
+        return axios.get(this.get("useProxy") ? getProxyUrl(url) : url)
+            .then(response => response.data)
             .then(style => {
+                let spriteUrl, spriteDataUrl, spriteImageUrl, addMpFonts;
+
                 // check if style is defined and required fields exist
                 if (!this.isStyleValid(style)) {
                     throw new Error(
@@ -224,9 +229,48 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
                     );
                 }
 
-                stylefunction(this.get("layer"), style, Object.keys(style.sources)[0]);
-                this.set("selectedStyleID", id);
+                if (this.get("useMpFonts")) {
+                    addMpFonts = this.addMpFonts;
+                }
+
+                if (style.sprite) {
+                    spriteUrl = style.sprite;
+
+                    // support relative spriteUrls
+                    if (spriteUrl.includes("./")) {
+                        spriteUrl = new URL(spriteUrl, url);
+                    }
+
+                    spriteDataUrl = spriteUrl.toString().concat(".json");
+                    spriteImageUrl = spriteUrl.toString().concat(".png");
+
+                    this.fetchSpriteData(spriteDataUrl)
+                        .then(spriteData => {
+                            stylefunction(this.get("layer"), style, Object.keys(style.sources)[0], undefined, spriteData, spriteImageUrl, addMpFonts);
+                            this.set("selectedStyleID", id);
+                        }
+                        );
+                }
+                else {
+                    stylefunction(this.get("layer"), style, Object.keys(style.sources)[0], undefined, undefined, undefined, addMpFonts);
+                    this.set("selectedStyleID", id);
+                }
             });
+    },
+
+    /**
+     * Changes fontstack of VT-Style to MP-font if configured.
+     * @param {String[]} fontstack text-font as found in VT-Style
+     * @returns {String[]} returns relevant MP-font
+     */
+    addMpFonts: function (fontstack) {
+        if (fontstack.includes("Bold") | fontstack.includes("bold")) {
+            return "MasterPortalFont Bold";
+        }
+        else if (fontstack.includes("Italic") | fontstack.includes("italic")) {
+            return "MasterPortalFont Italic";
+        }
+        return "MasterPortalFont";
     },
 
     /**
@@ -239,6 +283,21 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
             Boolean(style.layers) &&
             Boolean(style.sources) &&
             Boolean(style.version);
+    },
+
+    /**
+     * Fetches SpriteData Object
+     * @param {String} spriteUrl url to spriteData as found in StyleDefinition
+     * @returns {Object} spriteData
+     */
+    fetchSpriteData: function (spriteUrl) {
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        return axios.get(this.get("useProxy") ? getProxyUrl(spriteUrl) : spriteUrl)
+            .then(resp => resp.data);
     },
 
     /**
