@@ -1,4 +1,5 @@
 import Template from "text-loader!./templateMenu.html";
+import IdGenerator from "../../../core/idGenerator";
 
 /**
  * @member Template
@@ -7,6 +8,7 @@ import Template from "text-loader!./templateMenu.html";
  */
 
 const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype */{
+
     /**
      * @class FolderViewMenu
      * @extends Backbone.View
@@ -30,6 +32,10 @@ const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype 
     tagName: "li",
     className: "dropdown dropdown-folder",
     template: _.template(Template),
+    attributes: function () {
+        return {tabindex: IdGenerator.getNextMenuItemTabindex()};
+        // return {tabindex: "-1"};
+    },
 
     /**
      * Renders the data to DOM.

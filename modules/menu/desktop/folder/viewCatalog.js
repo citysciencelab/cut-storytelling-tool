@@ -14,6 +14,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         "click .Baselayer .catalog_buttons .glyphicon-question-sign": function () {
             Radio.trigger("QuickHelp", "showWindowHelp", "tree");
         },
+        "keydown": "keyAction",
         "click .glyphicon-adjust": "toggleBackground",
         "click .rotate-pin": "unfixTree",
         "click .rotate-pin-back": "fixTree",
@@ -102,6 +103,15 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
             this.model.setIsExpanded(true);
         }
         return this;
+    },
+    keyAction: function (event) {
+        if (event.which === 32) {
+            const aElement = this.$el.find("a." + this.model.get("id"));
+
+            if (aElement.get(0) === document.activeElement) {
+                this.model.toggleIsExpanded();
+            }
+        }
     },
 
     /**

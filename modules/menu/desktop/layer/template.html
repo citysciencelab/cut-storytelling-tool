@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <% if (typeof treeType === "undefined") { %>
-<div class="layer-info-item pull-right">
+<a id="<%= id %>" tabindex="-1">
+  <div class="layer-info-item pull-right">
     <% if (typeof datasets !== "undefined" && datasets !== false) { %>
         <span class="glyphicon glyphicon-info-sign" title="<%=infosAndLegendText%>"></span>
     <% } %>
 </div>
 <% } else { %>
-<div class="layer-info-item pull-right">
+<a id="<%= id %>" tabindex="-1">
+  <div class="layer-info-item pull-right">
     <span class="glyphicon glyphicon-cog rotate"></span>
 </div>
 <% } %>
@@ -21,3 +23,4 @@
     <% } %>
     <span class="title" title="<%= name %>"><%= name %></span>
 </div>
+</a>

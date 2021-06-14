@@ -2,13 +2,15 @@ import Template from "text-loader!./template.html";
 import checkChildrenDatasets from "../../checkChildrenDatasets.js";
 import store from "../../../../src/app-store/index";
 import axios from "axios";
+import IdGenerator from "../../../core/idGenerator";
 
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {
         "click .layer-item": "preToggleIsSelected",
         "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
         "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
-        "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp"
+        "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
+        "keydown": "keyAction"
     },
 
     /**
@@ -27,6 +29,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     initialize: function () {
         checkChildrenDatasets(this.model);
+        this.initializeId();
         this.listenTo(this.model, {
             "change:isSelected": this.rerender,
             "change:isVisibleInTree": this.removeIfNotVisible,
@@ -57,6 +60,10 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     className: "layer list-group-item",
     template: _.template(Template),
 
+    initializeId () {
+        this.model.set({"id": "layer-list-group-item-" + IdGenerator.getNextMenuLayerItemId()});
+    },
+
     /**
      * Renders the selection view.
      * @returns {void}
@@ -75,6 +82,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             }
             this.$el.css("padding-left", ((this.model.get("level") * 15) + 5) + "px");
         }
+        this.setFocusToAElement();
         return this;
     },
     /**
@@ -101,6 +109,11 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             }
         }
     },
+    keyAction: function (event) {
+        if (event.which === 32) {
+            this.preToggleIsSelected();
+        }
+    },
 
     /**
      * Rerenders the model with updated elements.
@@ -119,6 +132,15 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         // If the the model should not be selectable make sure that is not selectable!
         if (!this.model.get("isSelected") && (this.model.get("maxScale") < scale || this.model.get("minScale") > scale)) {
             this.addDisableClass();
+        }
+        this.setFocusToAElement();
+    },
+
+    setFocusToAElement: function () {
+        const htmlAElement = document.querySelector("#" + this.model.get("id"));
+
+        if (htmlAElement) {
+            htmlAElement.focus();
         }
     },
 

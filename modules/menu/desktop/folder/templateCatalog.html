@@ -1,9 +1,11 @@
 <!DOCTYPE html>
  <% if (isExpanded === true) { %>
-    <div class="header <%= id %>">
+<a class="<%= id %>" tabindex="-1">
+    <div class="header <%= id %>" >
         <span class="glyphicon glyphicon-minus-sign"></span>
  <% } else {%>
-    <div class="header <%= id %> closed">
+  <a class="<%= id %>" tabindex="-1">
+    <div class="header <%= id %> closed" >
         <span class="glyphicon glyphicon-plus-sign"></span>
 <% } %>
         <span class="control-label"><%= name %></span>
@@ -40,4 +42,5 @@
     </div>
 <% } %>
     </div>
-    <ul id="<%= id %>"></ul>
+</a>
+<ul id="<%= id %>"></ul>
