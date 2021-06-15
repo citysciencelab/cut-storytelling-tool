@@ -195,14 +195,14 @@ async function ParameterTests ({builder, url, resolution, browsername, mode, cap
                 }
 
                 do {
-                    expect(counter++).to.be.below(10);
+                    expect(counter++).to.be.below(25);
                     await clickFeature(driver, [565596.456, 5940130.858]);
-                    await driver.wait(new Promise(r => setTimeout(r, 1000)));
+                    await driver.wait(new Promise(r => setTimeout(r, 100)));
                 } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
 
                 await driver.wait(until.elementLocated(By.css("div.gfi")), 12000);
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))), 12000);
-                await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'Israelitisches Krankenhaus)]")), 12000);
+                await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'Israelitisches Krankenhaus')]")), 12000);
                 await (await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[contains(@class, 'glyphicon-remove')]"))).click();
                 expect((await driver.findElements(By.css("div.gfi"))).length).to.equal(0);
             });
