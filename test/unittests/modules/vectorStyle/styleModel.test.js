@@ -529,6 +529,9 @@ describe("vectorStyleModel", function () {
             expect(styleModel.getSubelementsFromXML(xmlDescribeFeatureType, featureType)).to.be.an("array").to.have.lengthOf(63);
             expect(styleModel.getSubelementsFromXML(xmlDescribefeatureType_nrw, featureType_nrw)).to.be.an("array").to.have.lengthOf(10);
         });
+        it("featureType with namespace -> should return an Array with elements", function () {
+            expect(styleModel.getSubelementsFromXML(xmlDescribefeatureType_nrw, "tfis:" + featureType_nrw)).to.be.an("array").to.have.lengthOf(10);
+        });
         it("should return an empty Array", function () {
             expect(styleModel.getSubelementsFromXML(undefined, featureType)).to.be.an("array").to.be.empty;
         });

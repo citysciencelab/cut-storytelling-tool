@@ -146,20 +146,25 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     /**
      * Parses the xml to get the subelements from the layer
      * @param   {string} xml response xml
-     * @param   {string} featureType wfs feature type from layer
+     * @param   {string} featureType wfs feature type from layer. Namespace is taken into account.
      * @returns {object[]} subElements of the xml element
      */
     getSubelementsFromXML: function (xml, featureType) {
         const elements = xml ? Array.from(xml.getElementsByTagName("element")) : [];
-        let subElements = [];
+        let subElements = [],
+            featureTypeWithoutNamespace = featureType;
+
+        if (featureType && featureType.indexOf(":") > -1) {
+            featureTypeWithoutNamespace = featureType.substr(featureType.indexOf(":") + 1, featureType.length);
+        }
 
         elements.forEach(element => {
-            if (element.getAttribute("name") === featureType) {
+            if (element.getAttribute("name") === featureTypeWithoutNamespace) {
                 subElements = Array.from(element.getElementsByTagName("element"));
             }
         });
         if (subElements.length === 0) {
-            subElements = this.getSubelementsFromXMLOtherStructure(xml, featureType);
+            subElements = this.getSubelementsFromXMLOtherStructure(xml, featureTypeWithoutNamespace);
         }
         return subElements;
     },
@@ -167,7 +172,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     /**
      * Parses the xml with another structure to get the subelements from the layer
      * @param   {string} xml response xml
-     * @param   {string} featureType wfs feature type from layer
+     * @param   {string} featureType wfs feature type from layer without namespace
      * @returns {object[]} subElements of the xml element
      */
     getSubelementsFromXMLOtherStructure: function (xml, featureType) {
