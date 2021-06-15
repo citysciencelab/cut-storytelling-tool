@@ -1,5 +1,5 @@
 const {isBasic, is2D} = require("./settings"),
-    {logTestingCloudUrlToTest} = require("/library/utils"),
+    {logTestingCloudUrlToTest} = require("./library/utils"),
     {initDriver, getDriver, quitDriver} = require("./library/driver");
 
 /**
