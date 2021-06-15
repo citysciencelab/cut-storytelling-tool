@@ -578,9 +578,9 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         }
         // compare value in range
         else if (Array.isArray(referenceValue) && referenceValue.every(element => typeof element === "number") && (referenceValue.length === 2 || referenceValue.length === 4)) {
-            value = parseFloat(value);
+            value = parseFloat(this.getValueWithoutComma(value));
 
-            if (!isNaN(featureValue)) {
+            if (!isNaN(this.getValueWithoutComma(featureValue))) {
                 // value in absolute range of numbers [minValue, maxValue]
                 if (referenceValue.length === 2) {
                     // do nothing
@@ -609,6 +609,19 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
 
         return false;
+    },
+
+    /**
+     * get value without comma and into number format
+     * @param   {string|number} value the parameter
+     * @returns {number} the parsed value
+     */
+    getValueWithoutComma: function (value) {
+        if (typeof value === "string" && value.indexOf(",") > -1) {
+            return parseFloat(value.replace(",", "."));
+        }
+
+        return value;
     },
 
     /**

@@ -124,7 +124,8 @@ describe("core/modelList/layer/vectorTile", function () {
             const {setStyleByDefinition} = VectorTileModel.prototype,
                 context = makeContext(done);
 
-            setStyleByDefinition.call(context, {id: "l0", url: "example.com/root.json"});
+            setStyleByDefinition.call(context, {id: "l0", url: "example.com/root.json"})
+                .catch(() => done());
         });
 
         it("rejects invalid json", function (done) {
@@ -214,6 +215,48 @@ describe("core/modelList/layer/vectorTile", function () {
             expect(setStyleById.notCalled).to.be.true;
             expect(setStyleByDefinition.notCalled).to.be.true;
             expect(console.warn.calledOnce).to.be.true;
+        });
+    });
+
+    describe("addMpFonts", function () {
+
+        it("returns Masterportal italic font if style is italic", function () {
+            const italicFont1 = "Font italic",
+                italicFont2 = "Font Italic",
+                italicFont3 = "Fontitalic",
+                returnedItalicFont1 = VectorTileModel.prototype.addMpFonts(italicFont1),
+                returnedItalicFont2 = VectorTileModel.prototype.addMpFonts(italicFont2),
+                returnedItalicFont3 = VectorTileModel.prototype.addMpFonts(italicFont3);
+
+            expect(returnedItalicFont1).to.equal("MasterPortalFont Italic");
+            expect(returnedItalicFont2).to.equal("MasterPortalFont Italic");
+            expect(returnedItalicFont3).to.equal("MasterPortalFont Italic");
+        });
+
+        it("returns Masterportal bold font if style is bold", function () {
+            const boldFont1 = "Font bold",
+                boldFont2 = "Font Bold",
+                boldFont3 = "Fontbold",
+                returnedBoldFont1 = VectorTileModel.prototype.addMpFonts(boldFont1),
+                returnedBoldFont2 = VectorTileModel.prototype.addMpFonts(boldFont2),
+                returnedBoldFont3 = VectorTileModel.prototype.addMpFonts(boldFont3);
+
+            expect(returnedBoldFont1).to.equal("MasterPortalFont Bold");
+            expect(returnedBoldFont2).to.equal("MasterPortalFont Bold");
+            expect(returnedBoldFont3).to.equal("MasterPortalFont Bold");
+        });
+
+        it("returns Masterportal font if style is not bold or italic", function () {
+            const Font1 = "Font",
+                Font2 = "Font Regular",
+                Font3 = "Font Extra",
+                returnedFont1 = VectorTileModel.prototype.addMpFonts(Font1),
+                returnedFont2 = VectorTileModel.prototype.addMpFonts(Font2),
+                returnedFont3 = VectorTileModel.prototype.addMpFonts(Font3);
+
+            expect(returnedFont1).to.equal("MasterPortalFont");
+            expect(returnedFont2).to.equal("MasterPortalFont");
+            expect(returnedFont3).to.equal("MasterPortalFont");
         });
     });
 });

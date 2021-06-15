@@ -154,7 +154,8 @@
           "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)",
           "periodicityTitle": "Periodicity",
           "publicationCreation": "Publication / Creation",
-          "buildings":"Buildings"
+          "buildings":"Buildings",
+          "changeLayerInfo": "Switch infotext"
         },
         "mapMarker": {
           "noStyleModel": "No style could be found for the specified StyleId: {{styleId}}. Please check your configuration."

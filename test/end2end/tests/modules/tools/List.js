@@ -1,8 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
-    {isMaster, isMobile} = require("../../../settings"),
-    // {getCenter, getResolution} = require("../../../library/scripts"),
+    {initDriver, getDriver, quitDriver, loadUrl} = require("../../../library/driver"),
+    {isMaster, isMobile, isSafari} = require("../../../settings"),
     {logTestingCloudUrlToTest} = require("../../../library/utils"),
     {By, until} = webdriver;
 
@@ -11,7 +10,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ListTests ({builder, url, resolution, capability}) {
+async function ListTests ({builder, url, resolution, browsername, capability, mode}) {
     if (isMaster(url) && !isMobile(resolution)) {
         describe("List", function () {
             let driver, hospitalLayerEntry, featureListEntries;
@@ -22,7 +21,8 @@ async function ListTests ({builder, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
+                await loadUrl(driver, url, mode);
             });
 
             after(async function () {
@@ -31,20 +31,22 @@ async function ListTests ({builder, url, resolution, capability}) {
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
+                    await quitDriver();
                     driver = await initDriver(builder, url, resolution);
+                    await (await driver.findElement(By.xpath("//ul[@id='tools']//.."))).click();
+                    await (await driver.findElement(By.css("#tools .glyphicon-menu-hamburger"))).click();
                 }
             });
 
             it("tool opens with 3 tabs, initially listing active vector layers", async function () {
-                await (await driver.findElement(By.xpath("//ul[@id='tools']//.."))).click();
-                await (await driver.findElement(By.css("#tools .glyphicon-menu-hamburger"))).click();
+                if ((await driver.findElements(By.css("ul.nav.nav-tabs.featurelist-navtabs"))).length === 0) {
+                    await (await driver.findElement(By.xpath("//ul[@id='tools']//.."))).click();
+                    await (await driver.findElement(By.css("#tools .glyphicon-menu-hamburger"))).click();
+                }
 
                 await driver.wait(until.elementIsVisible(
                     await driver.findElement(By.css("div#window li#featurelistThemeChooser.active")),
@@ -83,7 +85,7 @@ async function ListTests ({builder, url, resolution, capability}) {
                 expect(featureListEntries).to.have.lengthOf(20);
             });
 
-            it("hovering a feature changes the feature style", async function () {
+            (isSafari(browsername) ? it.skip : it)("hovering a feature changes the feature style", async function () {
                 await driver
                     .actions({bridge: true})
                     .move({origin: featureListEntries[14]})

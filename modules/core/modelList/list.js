@@ -37,7 +37,6 @@ import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
 import LayerSliderModel from "../../tools/layerSlider/model";
 import Viewpoint from "./viewPoint/model";
-import ColorScale from "../../tools/colorScale/model";
 import VirtualCityModel from "../../tools/virtualCity/model";
 import store from "../../../src/app-store/index";
 import WfstModel from "../../tools/wfst/model";
@@ -269,9 +268,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "featureLister") {
                 return new FeatureLister(attrs, options);
-            }
-            else if (attrs.id === "colorScale") {
-                return new ColorScale(attrs, options);
             }
             else if (attrs.id === "wfst") {
                 return new WfstModel(attrs, options);

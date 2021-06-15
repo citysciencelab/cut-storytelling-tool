@@ -6,9 +6,9 @@ const webdriver = require("selenium-webdriver"),
     masterConfigJson = require("../../../../../portal/master/config.json"),
     masterConfigJs = require("../../../../../portal/master/config.js"),
     {getOrderedLayerIds, isLayerVisible} = require("../../../library/scripts"),
-    {initDriver} = require("../../../library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../library/driver"),
     {getOrderedTitleTexts, getOrderedTitlesFromConfig, getOrderedIdsFromConfig, logTestingCloudUrlToTest} = require("../../../library/utils"),
-    {isMaster, isChrome} = require("../../../settings"),
+    {isMaster} = require("../../../settings"),
     {By, until} = webdriver;
 
 /**
@@ -31,8 +31,8 @@ function arrayDeepEqualsWithOptions (arrayWithOptions, compareArray) {
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function MenuLayersTests ({builder, url, resolution, browsername, capability}) {
-    describe("Menu Layers", function () {
+async function MenuLayersTests ({builder, url, resolution, capability}) {
+    describe("Menu Layers", async function () {
         let driver,
             services,
             // as seen in Map
@@ -53,7 +53,7 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
                 .then(text => resolve(JSON.parse(text.trim())))
                 .catch(reject)
             );
-            driver = await initDriver(builder, url, resolution);
+            driver = await getDriver();
 
             configGivenIdOrder = getOrderedIdsFromConfig(masterConfigJson);
         });
@@ -64,38 +64,37 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
                     logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
-            await driver.quit();
         });
 
         afterEach(async function () {
             if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                await driver.quit();
+                await quitDriver();
                 driver = await initDriver(builder, url, resolution);
             }
         });
+
 
         /*
          * Tests only work in Chrome. The scripts and utils return a different order of elements
          * for chromedriver and geckodriver. Element order is probably simply not guaranteed in WebDrivers?
          */
-        if (isMaster(url) && isChrome(browsername)) {
+        if (isMaster(url)) {
             it("shows layers in order of config.json in LT", async function () {
                 await (await driver.wait(
                     until.elementLocated(By.css("ul#root li:first-child")),
-                    5000,
+                    12000,
                     "navigation bar did not appear"
                 )).click();
 
                 const tree = await driver.wait(
                     until.elementLocated(By.css("ul#tree")),
-                    5000,
+                    12000,
                     "layer tree did not appear"
                 );
 
                 await driver.wait(
                     until.elementIsVisible(tree),
-                    5000,
+                    12000,
                     "layer tree did not become visible"
                 );
 
@@ -124,20 +123,22 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
             });
 
             it("opens an information window with the info button", async function () {
+                await driver.wait(until.elementLocated(By.css("ul#root li.layer span.glyphicon-info-sign")), 12000);
                 await (await driver.findElement(By.css("ul#root li.layer span.glyphicon-info-sign"))).click();
                 await driver.wait(
-                    until.elementLocated(By.css("div#layerinformation-desktop")),
-                    5000,
+                    until.elementLocated(By.css("div#layerInformation")),
+                    12000,
                     "Info window did not appear"
                 );
             });
 
             describe("LT options cog", function () {
                 it("displays an option row", async function () {
+                    await driver.wait(until.elementLocated(By.css("ul#root li.layer span.glyphicon-cog")), 12000);
                     await (await driver.findElement(By.css("ul#root li.layer span.glyphicon-cog"))).click();
                     await driver.wait(
                         until.elementLocated(By.css("ul#root li.layer div.layer-settings")),
-                        5000,
+                        12000,
                         "layer settings menu did not appear upon clicking cog symbol"
                     );
 
@@ -267,6 +268,12 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
                         .to.equal(newMapOrder[lastNewIdOrderIndex - 1]);
                     expect(mapOrderedLayerIds[lastMapIdOrderIndex])
                         .to.equal(newMapOrder[lastNewIdOrderIndex]);
+                });
+
+                it("close the layerInformation", async function () {
+                    await (
+                        await driver.findElement(By.css("div#layerInformation div.tool-window-heading div.heading-element span.glyphicon.glyphicon-remove"))
+                    ).click();
                 });
             });
         }

@@ -1,9 +1,9 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
     {getCenter} = require("../../../../../../test/end2end/library/scripts"),
     {losesCenter} = require("../../../../../../test/end2end/library/utils"),
-    {isMaster, isCustom, isEdge, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
+    {isMaster, isEdge, isChrome, isSafari} = require("../../../../../../test/end2end/settings"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {By, Button, until} = webdriver;
 
@@ -17,8 +17,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 function TotalViewTests ({builder, url, resolution, browsername, capability}) {
-    const testIsApplicable = (isMaster(url) || isCustom(url)) && // only active here
-        !isMobile(resolution); // not visible on mobile devices
+    const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
         describe("Modules Controls TotalView", function () {
@@ -30,7 +29,7 @@ function TotalViewTests ({builder, url, resolution, browsername, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
             });
 
             after(async function () {
@@ -39,16 +38,15 @@ function TotalViewTests ({builder, url, resolution, browsername, capability}) {
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
+                    await quitDriver();
                     driver = await initDriver(builder, url, resolution);
                 }
             });
+
 
             it("should have a total view button", async function () {
                 await driver.wait(until.elementLocated(By.css(".total-view-button")), 9000);
@@ -58,7 +56,7 @@ function TotalViewTests ({builder, url, resolution, browsername, capability}) {
             });
 
             // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-            (isChrome(browsername) || isEdge(browsername) ? it.skip : it)("should reset position on click after panning", async function () {
+            (isChrome(browsername) || isEdge(browsername) || isSafari(browsername) ? it.skip : it)("should reset position on click after panning", async function () {
                 const center = await driver.executeScript(getCenter),
                     viewport = await driver.findElement(By.css(".ol-viewport"));
 

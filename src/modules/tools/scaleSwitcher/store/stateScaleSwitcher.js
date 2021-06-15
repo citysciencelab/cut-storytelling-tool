@@ -16,7 +16,7 @@ const state = {
     id: "scaleSwitcher",
     // defaults for config.json parameters
     name: "common:menu.tools.scaleSwitcher",
-    glyphicon: "glyphicon-resize-full",
+    glyphicon: "glyphicon-resize-small",
     renderToWindow: true,
     resizableWindow: true,
     isVisibleInMenu: true,

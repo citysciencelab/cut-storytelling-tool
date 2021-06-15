@@ -112,8 +112,8 @@
     "mapView": {
       "backgroundImage": "https://geodienste.hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
       "startCenter": [
-        561210,
-        5932600
+        565874,
+        5934140
       ]
     },
     "menu": {
@@ -415,7 +415,7 @@
           "scaleSwitcher":
           {
             "name": "translate#common:menu.tools.scaleSwitcher",
-            "glyphicon": "glyphicon-resize-full"
+            "glyphicon": "glyphicon-resize-small"
           },
           "vueAddon": {
             "name": "AddonTool",

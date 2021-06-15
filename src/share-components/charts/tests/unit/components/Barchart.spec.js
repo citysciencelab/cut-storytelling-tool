@@ -1,14 +1,14 @@
 import Vuex from "vuex";
 import {shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
+import ChartJs from "chart.js";
 import Barchart from "../../../components/Barchart.vue";
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
 
-describe("share-components/charts/components/Barchart.vue", () => {
-
+describe("src/share-components/charts/components/Barchart.vue", () => {
     let wrapper;
 
     beforeEach(() => {
@@ -16,62 +16,90 @@ describe("share-components/charts/components/Barchart.vue", () => {
             propsData: {
                 data: {
                     labels: [],
-                    datasets: [],
-                    defaultOptions: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: "top"
-                            }
-                        }
-                    }
+                    datasets: []
                 },
-                givenOptions: {
-                    responsive: false,
-                    plugins: {
-                        legend: {
-                            position: "bottom"
-                        }
-                    }
-                }
+                givenOptions: {}
             },
             localVue
         });
     });
 
-    describe("getChartJsOptions", () => {
-        it("should return chartjs options by replacing defaults with the given options", () => {
-
-            const result = wrapper.vm.getChartJsOptions(wrapper.vm.givenOptions, wrapper.vm.defaultOptions);
-
-            expect(result).to.be.an("object");
-            expect(result).to.deep.equal(wrapper.vm.givenOptions);
-            expect(result.responsive).to.be.false;
+    describe("mounted", () => {
+        it("should create an instance of ChartJS when mounted", () => {
+            expect(wrapper.vm.chart).to.be.an.instanceof(ChartJs);
+        });
+        it("should create a chart of type bar when mounted", () => {
+            expect(wrapper.vm.chart.config.type).to.equal("bar");
+        });
+        it("should create a canvas element in its component", () => {
             expect(wrapper.find("canvas").exists()).to.be.true;
         });
+    });
+    describe("resetChart", () => {
+        it("should destroy the former chart and create a new one", () => {
+            let destroyCalled = false;
 
-        it("should return the default options, if the given options are empty", () => {
+            wrapper.vm.chart.destroy = () => {
+                destroyCalled = true;
+            };
+            wrapper.vm.resetChart({});
 
-            const result = wrapper.vm.getChartJsOptions({}, wrapper.vm.defaultOptions);
-
-            expect(result).to.be.an("object");
-            expect(result).to.deep.equal(wrapper.vm.defaultOptions);
+            expect(destroyCalled).to.be.true;
         });
-
-        it("should return the given options, if the default options are empty", () => {
-
-            const result = wrapper.vm.getChartJsOptions(wrapper.vm.givenOptions, {});
-
-            expect(result).to.be.an("object");
-            expect(result).to.deep.equal(wrapper.vm.givenOptions);
+    });
+    describe("getChartJsOptions", () => {
+        it("should return an empty object in case everything is fishy", () => {
+            expect(wrapper.vm.getChartJsOptions(undefined, undefined)).to.be.an("object").and.to.be.empty;
+            expect(wrapper.vm.getChartJsOptions(null, null)).to.be.an("object").and.to.be.empty;
+            expect(wrapper.vm.getChartJsOptions("string", "string")).to.be.an("object").and.to.be.empty;
+            expect(wrapper.vm.getChartJsOptions(123, 123)).to.be.an("object").and.to.be.empty;
+            expect(wrapper.vm.getChartJsOptions(true, true)).to.be.an("object").and.to.be.empty;
+            expect(wrapper.vm.getChartJsOptions(false, false)).to.be.an("object").and.to.be.empty;
         });
+        it("should return the first param in case the second param is not an object", () => {
+            const obj = {test: true};
 
-        it("should return empty object, if given and default options are empty", () => {
+            expect(wrapper.vm.getChartJsOptions(obj, undefined)).to.deep.equal(obj);
+            expect(wrapper.vm.getChartJsOptions(obj, null)).to.deep.equal(obj);
+            expect(wrapper.vm.getChartJsOptions(obj, "string")).to.deep.equal(obj);
+            expect(wrapper.vm.getChartJsOptions(obj, 123)).to.deep.equal(obj);
+            expect(wrapper.vm.getChartJsOptions(obj, true)).to.deep.equal(obj);
+            expect(wrapper.vm.getChartJsOptions(obj, false)).to.deep.equal(obj);
+        });
+        it("should return the second param in case the first param is not an object", () => {
+            const obj = {test: true};
 
-            const result = wrapper.vm.getChartJsOptions({}, {});
+            expect(wrapper.vm.getChartJsOptions(undefined, obj)).to.deep.equal(obj);
+            expect(wrapper.vm.getChartJsOptions(null, obj)).to.deep.equal(obj);
+            expect(wrapper.vm.getChartJsOptions("string", obj)).to.deep.equal(obj);
+            expect(wrapper.vm.getChartJsOptions(123, obj)).to.deep.equal(obj);
+            expect(wrapper.vm.getChartJsOptions(true, obj)).to.deep.equal(obj);
+            expect(wrapper.vm.getChartJsOptions(false, obj)).to.deep.equal(obj);
+        });
+        it("should deep assign the given params", () => {
+            const objA = {
+                    test: {
+                        a: 1,
+                        b: 2
+                    }
+                },
+                objB = {
+                    test: {
+                        b: 3,
+                        d: 4
+                    },
+                    e: 5
+                },
+                expected = {
+                    test: {
+                        a: 1,
+                        b: 3,
+                        d: 4
+                    },
+                    e: 5
+                };
 
-            expect(result).to.be.an("object");
-            expect(result).to.deep.equal({});
+            expect(wrapper.vm.getChartJsOptions(objA, objB)).to.deep.equal(expected);
         });
     });
 });

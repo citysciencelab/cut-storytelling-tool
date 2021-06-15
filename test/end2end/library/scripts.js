@@ -432,6 +432,15 @@ function getCenter () {
 }
 
 /**
+ * @returns {String} The scale of the map.
+ */
+function getScale () {
+    const options = Backbone.Radio.request("MapView", "getOptions");
+
+    return options ? options.scale : null;
+}
+
+/**
  * @returns {Number} current resolution of MapView
  */
 function getResolution () {
@@ -562,6 +571,7 @@ module.exports = {
     doesLayerWithFeaturesExist,
     getCenter,
     getResolution,
+    getScale,
     getTilt,
     getHeading,
     getDirection,

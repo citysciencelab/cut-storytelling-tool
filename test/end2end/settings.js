@@ -12,6 +12,9 @@ const capabilities = {
         "1920x1080"
         // "600x800"
     ],
+    resolutionsMacOS = [
+        "1920x1440"
+    ],
     configs = new Map([
         ["basic", "basic"],
         ["master", "master"],
@@ -125,6 +128,15 @@ function isFirefox (browsername) {
 }
 
 /**
+ * Returns true for browsername indicating safari is running.
+ * @param {String} browsername is browsername or contains browsername
+ * @returns {boolean} whether running browser is safari
+ */
+function isSafari (browsername) {
+    return browsername.toLowerCase().includes("safari");
+}
+
+/**
  * Produces browserstack or saucelabs configurations.
  * @param {String} testService "browserstack" or "saucelabs"
  * @returns {Array} array of bs configuration objects
@@ -160,6 +172,17 @@ function getCapabilities (testService) {
                 "accessKey": process.env.SAUCE_ACCESS_KEY,
                 "extendedDebugging": true
             }
+        },
+        baseSaucelabsMacOS = {
+            "host": "saucelabs",
+            "sauce:options": {
+                "screenResolution": "1920x1440",
+                /* eslint-disable-next-line no-process-env */
+                "username": process.env.SAUCE_USERNAME,
+                /* eslint-disable-next-line no-process-env */
+                "accessKey": process.env.SAUCE_ACCESS_KEY,
+                "extendedDebugging": true
+            }
         };
 
     if (testService === "browserstack") {
@@ -170,37 +193,35 @@ function getCapabilities (testService) {
                 "browser_version": "89.0",
                 "os": "Windows",
                 "os_version": "10"
-            }/*
-            {
-                ...base,
-                "browserName": "Safari",
-                "browser_version": "12.0",
-                "os": "OS X",
-                "os_version": "Mojave"
-            }*/
+            }
         ];
     }
 
     return [
-        // {
-        //     ...baseSaucelabs,
-        //     "browserName": "chrome",
-        //     "browserVersion": "latest",
-        //     "platformName": "Windows 10"
-        // },
-        // {
-        //     ...baseSaucelabs,
-        //     "browserName": "firefox",
-        //     "browserVersion": "latest",
-        //     "platformName": "Windows 10"
-        // },
+        {
+            ...baseSaucelabs,
+            "browserName": "chrome",
+            "browserVersion": "latest",
+            "platformName": "Windows 10"
+        },
+        {
+            ...baseSaucelabs,
+            "browserName": "firefox",
+            "browserVersion": "latest",
+            "platformName": "Windows 10"
+        },
         {
             ...baseSaucelabs,
             "browserName": "MicrosoftEdge",
             "browserVersion": "latest",
             "platformName": "Windows 10"
+        },
+        {
+            ...baseSaucelabsMacOS,
+            "browserName": "safari",
+            "browserVersion": "latest",
+            "platformName": "macOS 10.15"
         }
-
     ];
 
 }
@@ -208,6 +229,7 @@ function getCapabilities (testService) {
 module.exports = {
     capabilities,
     resolutions,
+    resolutionsMacOS,
     configs,
     modes,
     is2D,
@@ -217,6 +239,7 @@ module.exports = {
     isChrome,
     isEdge,
     isFirefox,
+    isSafari,
     isBasic,
     isMaster,
     isDefault,

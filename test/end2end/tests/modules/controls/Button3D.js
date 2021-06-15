@@ -64,14 +64,12 @@ function Button3DTests ({builder, url, resolution, mode, capability}) {
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
                     console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
-                    driver = await initDriver(builder, url, resolution);
+                    driver = await initDriver(builder, url, resolution, null, true);
                     await init();
                     await driver.executeScript(setCenter, [566199.8456237861, 5934751.631548104], 8);
                     await button3D.click();

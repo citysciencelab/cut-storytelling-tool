@@ -1,6 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../library/driver"),
     {reclickUntilNotStale, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {getCenter, setCenter, getResolution, setResolution, hasVectorLayerLength, hasVectorLayerStyle} = require("../../../library/scripts"),
     {isMaster} = require("../../../settings"),
@@ -98,7 +98,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
                 await init();
             });
 
@@ -123,19 +123,18 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
+                    await quitDriver();
                     driver = await initDriver(builder, url, resolution);
                     await init();
                 }
             });
 
             it("searches show some results in a dropdown", async function () {
+                await driver.wait(until.elementLocated(By.id("searchInput")), 12000);
                 if (await (await driver.findElement(By.id("searchInput"))).getAttribute("value") === "") {
                     await searchInput.sendKeys(searchString);
                 }
@@ -145,7 +144,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 expect(await driver.findElements(By.css("#searchInputUL > li.results"))).to.have.length(1);
             });
 
-            it("provides all results aggregated by categories, including sum of hits per category", async function () {
+            it.skip("provides all results aggregated by categories, including sum of hits per category", async function () {
                 if (await (await driver.findElement(By.id("searchInput"))).getAttribute("value") === "") {
                     await searchInput.sendKeys(searchString);
                 }
@@ -154,7 +153,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 expect(await driver.findElements(By.css("#searchInputUL > li.list-group-item.type > span.badge"))).to.not.equals(0);
             });
 
-            it("category 'festgestellt' shows results; on click, zooms to the place and marks it with polygon", async function () {
+            it.skip("category 'festgestellt' shows results; on click, zooms to the place and marks it with polygon", async function () {
                 await selectAndVerifyFirstHit({
                     setsMarker: false,
                     showsPolygon: true,
@@ -168,7 +167,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 })).to.be.true;
             });
 
-            it("category 'B-Plan' shows results; on click, zooms to the place and marks it with polygon", async function () {
+            it.skip("category 'B-Plan' shows results; on click, zooms to the place and marks it with polygon", async function () {
                 await selectAndVerifyFirstHit({
                     setsMarker: false,
                     showsPolygon: true,
@@ -183,7 +182,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
             });
 
             // NOTE using this instead of 'Krankenhaus' since I can't find the KH search
-            it("category 'Kita' shows results; on click, zooms to the place and marks it with a marker", async function () {
+            it.skip("category 'Kita' shows results; on click, zooms to the place and marks it with a marker", async function () {
                 await selectAndVerifyFirstHit({
                     setsMarker: true,
                     showsPolygon: false,
@@ -192,7 +191,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 });
             });
 
-            it("category 'Straße' shows results; on click, zooms to the place, changes resolution", async function () {
+            it.skip("category 'Straße' shows results; on click, zooms to the place, changes resolution", async function () {
                 await selectAndVerifyFirstHit({
                     setsMarker: true,
                     showsPolygon: false,
@@ -202,13 +201,22 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 });
             });
 
-            it("category 'Stadtteil' shows results; on click, zooms to the place and marks it with a marker, changes resolution", async function () {
+            it.skip("category 'Stadtteil' shows results; on click, zooms to the place and marks it with a marker, changes resolution", async function () {
                 await selectAndVerifyFirstHit({
                     setsMarker: true,
                     showsPolygon: false,
                     movesCenter: true,
                     changesResolution: true,
                     idPart: "Stadtteil"
+                });
+            });
+
+            it("remove searchbar input", async function () {
+                it("remove searchbar input", async function () {
+                    await driver.wait(until.elementLocated(By.id("searchInput")), 12000);
+                    await (await driver.findElement(By.css("#searchInput"))).clear();
+
+                    expect(await (await driver.findElement(By.id("searchInput"))).getAttribute("value")).to.equals("");
                 });
             });
         });

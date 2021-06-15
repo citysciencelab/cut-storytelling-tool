@@ -1,8 +1,8 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../library/driver"),
-    {getTextOfElements, logTestingCloudUrlToTest} = require("../../library/utils"),
-    {isMaster, isCustom} = require("../../settings"),
+    {initDriver, getDriver, quitDriver} = require("../../../../../test/end2end/library/driver"),
+    {getTextOfElements, logTestingCloudUrlToTest} = require("../../../../../test/end2end/library/utils"),
+    {isMaster} = require("../../../../../test/end2end/settings"),
     {By, until} = webdriver;
 
 /**
@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function LegendTests ({builder, config, url, resolution, capability}) {
-    const testIsApplicable = isMaster(url) || isCustom(url),
+    const testIsApplicable = isMaster(url),
         expectedEntries = {
             master: ["Krankenhäuser", "Schulinfosystem"],
             custom: ["Krankenhäuser und Schulen", "Geobasiskarten (farbig)"]
@@ -27,7 +27,7 @@ async function LegendTests ({builder, config, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
             });
 
             after(async function () {
@@ -36,16 +36,15 @@ async function LegendTests ({builder, config, url, resolution, capability}) {
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
+                    await quitDriver();
                     driver = await initDriver(builder, url, resolution);
                 }
             });
+
 
             it("should contain active layers", async function () {
                 // retry until functionality is active - may get stuck else
