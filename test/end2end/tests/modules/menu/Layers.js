@@ -114,11 +114,11 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
                 // The first layer in tree "100 jahre Stadtgruen POIS" has a transparency of "0.25"
                 const checkLayerId = configGivenIdOrder[0];
 
-                await (await driver.findElement(By.css("ul#root li.layer span.layer-item"))).click();
+                await (await (await driver.findElements(By.css("ul#root li.layer")))[0].findElement(By.css("span.layer-item.pull-left span.pull-left"))).click();
                 expect(await driver.executeScript(isLayerVisible, checkLayerId, "0.25")).to.be.true;
-                await (await driver.findElement(By.css("ul#root li.layer span.layer-item"))).click();
+                await (await (await driver.findElements(By.css("ul#root li.layer")))[0].findElement(By.css("span.layer-item.pull-left span.pull-left"))).click();
                 expect(await driver.executeScript(isLayerVisible, checkLayerId, "0.25")).to.be.false;
-                await (await driver.findElement(By.css("ul#root li.layer span.layer-item"))).click();
+                await (await (await driver.findElements(By.css("ul#root li.layer")))[0].findElement(By.css("span.layer-item.pull-left span.pull-left"))).click();
                 expect(await driver.executeScript(isLayerVisible, checkLayerId, "0.25")).to.be.true;
             });
 
@@ -132,149 +132,145 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
                 );
             });
 
-            describe("LT options cog", function () {
-                it("displays an option row", async function () {
-                    await driver.wait(until.elementLocated(By.css("ul#root li.layer span.glyphicon-cog")), 12000);
-                    await (await driver.findElement(By.css("ul#root li.layer span.glyphicon-cog"))).click();
-                    await driver.wait(
-                        until.elementLocated(By.css("ul#root li.layer div.layer-settings")),
-                        12000,
-                        "layer settings menu did not appear upon clicking cog symbol"
-                    );
+            it("displays an option row", async function () {
+                await driver.wait(until.elementLocated(By.css("ul#root li.layer span.glyphicon-cog")), 12000);
+                await (await driver.findElement(By.css("ul#root li.layer span.glyphicon-cog"))).click();
+                await driver.wait(
+                    until.elementLocated(By.css("ul#root li.layer div.layer-settings")),
+                    12000,
+                    "layer settings menu did not appear upon clicking cog symbol"
+                );
 
-                    // wait for animation to finish
-                    await new Promise(r => setTimeout(r, 200));
-                });
+                // wait for animation to finish
+                await new Promise(r => setTimeout(r, 200));
+            });
 
-                it("allows manipulating layer transparency", async function () {
-                    /**
-                     * @param {string} sign must be "plus" or "minus"
-                     * @returns {WebdriverWebElement} fresh transparency button
-                     */
-                    async function getButton (sign) {
-                        return driver.findElement(By.css(`span.transparency span.glyphicon-${sign}-sign`));
-                    }
+            it("allows manipulating layer transparency", async function () {
+                /**
+                 * @param {string} sign must be "plus" or "minus"
+                 * @returns {WebdriverWebElement} fresh transparency button
+                 */
+                async function getButton (sign) {
+                    return driver.findElement(By.css(`span.transparency span.glyphicon-${sign}-sign`));
+                }
 
-                    const id = mapOrderedLayerIds[0];
+                const id = mapOrderedLayerIds[0];
 
-                    expect(await driver.executeScript(isLayerVisible, id, "0.25")).to.be.true;
+                expect(await driver.executeScript(isLayerVisible, id, "0.25")).to.be.true;
 
-                    // buttons have to be re-fetched each click since they tend to go stale
-                    await (await getButton("minus")).click();
-                    await (await getButton("minus")).click();
-                    await (await getButton("minus")).click();
+                // buttons have to be re-fetched each click since they tend to go stale
+                await (await getButton("minus")).click();
+                await (await getButton("minus")).click();
+                await (await getButton("minus")).click();
 
-                    expect(await driver.executeScript(isLayerVisible, id, "0.55")).to.be.true;
+                expect(await driver.executeScript(isLayerVisible, id, "0.55")).to.be.true;
 
-                    await (await getButton("plus")).click();
-                    await (await getButton("plus")).click();
-                    await (await getButton("plus")).click();
+                await (await getButton("plus")).click();
+                await (await getButton("plus")).click();
+                await (await getButton("plus")).click();
 
-                    expect(await driver.executeScript(isLayerVisible, id, "0.25")).to.be.true;
+                expect(await driver.executeScript(isLayerVisible, id, "0.25")).to.be.true;
+            });
 
+            it("arrows allow moving layers up in tree and map order", async function () {
+                await (await driver.findElement(By.css("ul#root li.layer div.layer-settings span.glyphicon-arrow-down"))).click();
 
-                });
+                const newTitleOrder = await getOrderedTitleTexts(driver),
+                    newMapOrder = await driver.executeScript(getOrderedLayerIds);
 
-                it("arrows allow moving layers up in tree and map order", async function () {
-                    await (await driver.findElement(By.css("ul#root li.layer div.layer-settings span.glyphicon-arrow-down"))).click();
+                expect(newTitleOrder[0])
+                    .to.equal(mapOrderedElementTexts[1]);
+                expect(newTitleOrder[1])
+                    .to.equal(mapOrderedElementTexts[0]);
+                expect(mapOrderedLayerIds[0])
+                    .to.equal(newMapOrder[1]);
+                expect(mapOrderedLayerIds[1])
+                    .to.equal(newMapOrder[0]);
+            });
 
-                    const newTitleOrder = await getOrderedTitleTexts(driver),
-                        newMapOrder = await driver.executeScript(getOrderedLayerIds);
+            it("arrows allow moving layers down in tree and map order", async function () {
+                await (await driver.findElement(By.css("ul#root li.layer div.layer-settings span.glyphicon-arrow-up"))).click();
 
-                    expect(newTitleOrder[0])
-                        .to.equal(mapOrderedElementTexts[1]);
-                    expect(newTitleOrder[1])
-                        .to.equal(mapOrderedElementTexts[0]);
-                    expect(mapOrderedLayerIds[0])
-                        .to.equal(newMapOrder[1]);
-                    expect(mapOrderedLayerIds[1])
-                        .to.equal(newMapOrder[0]);
-                });
+                const newTitleOrder = await getOrderedTitleTexts(driver),
+                    newMapOrder = await driver.executeScript(getOrderedLayerIds),
+                    lastMapOrderIndex = mapOrderedLayerIds.length - 1;
 
-                it("arrows allow moving layers down in tree and map order", async function () {
-                    await (await driver.findElement(By.css("ul#root li.layer div.layer-settings span.glyphicon-arrow-up"))).click();
+                expect(newTitleOrder[0])
+                    .to.equal(mapOrderedElementTexts[0]);
+                expect(newTitleOrder[1])
+                    .to.equal(mapOrderedElementTexts[1]);
+                expect(mapOrderedLayerIds[lastMapOrderIndex - 1])
+                    .to.equal(newMapOrder[lastMapOrderIndex - 1]);
+                expect(mapOrderedLayerIds[lastMapOrderIndex])
+                    .to.equal(newMapOrder[lastMapOrderIndex]);
+            });
 
-                    const newTitleOrder = await getOrderedTitleTexts(driver),
-                        newMapOrder = await driver.executeScript(getOrderedLayerIds),
-                        lastMapOrderIndex = mapOrderedLayerIds.length - 1;
+            it("arrows moving up do nothing if layer is already first", async function () {
+                await (await driver.findElement(By.css("ul#root li.layer div.layer-settings span.glyphicon-arrow-up"))).click();
 
-                    expect(newTitleOrder[0])
-                        .to.equal(mapOrderedElementTexts[0]);
-                    expect(newTitleOrder[1])
-                        .to.equal(mapOrderedElementTexts[1]);
-                    expect(mapOrderedLayerIds[lastMapOrderIndex - 1])
-                        .to.equal(newMapOrder[lastMapOrderIndex - 1]);
-                    expect(mapOrderedLayerIds[lastMapOrderIndex])
-                        .to.equal(newMapOrder[lastMapOrderIndex]);
-                });
+                const newTitleOrder = await getOrderedTitleTexts(driver),
+                    newMapOrder = await driver.executeScript(getOrderedLayerIds),
+                    lastMapOrderIndex = mapOrderedLayerIds.length - 1;
 
-                it("arrows moving up do nothing if layer is already first", async function () {
-                    await (await driver.findElement(By.css("ul#root li.layer div.layer-settings span.glyphicon-arrow-up"))).click();
+                expect(newTitleOrder[0])
+                    .to.equal(mapOrderedElementTexts[0]);
+                expect(newTitleOrder[1])
+                    .to.equal(mapOrderedElementTexts[1]);
+                expect(mapOrderedLayerIds[lastMapOrderIndex - 1])
+                    .to.equal(newMapOrder[lastMapOrderIndex - 1]);
+                expect(mapOrderedLayerIds[lastMapOrderIndex])
+                    .to.equal(newMapOrder[lastMapOrderIndex]);
+            });
 
-                    const newTitleOrder = await getOrderedTitleTexts(driver),
-                        newMapOrder = await driver.executeScript(getOrderedLayerIds),
-                        lastMapOrderIndex = mapOrderedLayerIds.length - 1;
+            it("allows removing layer from tree and map", async function () {
+                await (await driver.wait(
+                    until.elementLocated(By.css("ul#root li.layer div.layer-settings span.remove-layer")),
+                    12000,
+                    "layer removal button did not appear in layer cog menu"
+                )).click();
 
-                    expect(newTitleOrder[0])
-                        .to.equal(mapOrderedElementTexts[0]);
-                    expect(newTitleOrder[1])
-                        .to.equal(mapOrderedElementTexts[1]);
-                    expect(mapOrderedLayerIds[lastMapOrderIndex - 1])
-                        .to.equal(newMapOrder[lastMapOrderIndex - 1]);
-                    expect(mapOrderedLayerIds[lastMapOrderIndex])
-                        .to.equal(newMapOrder[lastMapOrderIndex]);
-                });
+                await new Promise(r => setTimeout(r, 1000));
 
-                it("allows removing layer from tree and map", async function () {
-                    await (await driver.wait(
-                        until.elementLocated(By.css("ul#root li.layer div.layer-settings span.remove-layer")),
-                        5000,
-                        "layer removal button did not appear in layer cog menu"
-                    )).click();
+                const newTitleOrder = await getOrderedTitleTexts(driver);
 
-                    await new Promise(r => setTimeout(r, 1000));
+                expect(newTitleOrder.length).to.equal(mapOrderedElementTexts.length - 1);
+                expect(newTitleOrder.includes(mapOrderedElementTexts[0])).to.be.false;
+                expect(await driver.executeScript(isLayerVisible, mapOrderedLayerIds[0])).to.be.false;
+            });
 
-                    const newTitleOrder = await getOrderedTitleTexts(driver);
+            it("arrows moving down do nothing if layer is already last", async function () {
+                await (
+                    await driver.findElement(By.css("ul#root li.layer:nth-child(28) span.glyphicon-cog"))
+                ).click();
+                await driver.wait(until.elementLocated(By.css("ul#root li.layer div.layer-settings")));
 
-                    expect(newTitleOrder.length).to.equal(mapOrderedElementTexts.length - 1);
-                    expect(newTitleOrder.includes(mapOrderedElementTexts[0])).to.be.false;
-                    expect(await driver.executeScript(isLayerVisible, mapOrderedLayerIds[0])).to.be.false;
-                });
+                // wait for animation to finish
+                await new Promise(r => setTimeout(r, 200));
 
-                it("arrows moving down do nothing if layer is already last", async function () {
-                    await (
-                        await driver.findElement(By.css("ul#root li.layer:nth-child(28) span.glyphicon-cog"))
-                    ).click();
-                    await driver.wait(until.elementLocated(By.css("ul#root li.layer div.layer-settings")));
+                await (await driver.findElement(By.css("ul#root li.layer div.layer-settings span.glyphicon-arrow-down"))).click();
 
-                    // wait for animation to finish
-                    await new Promise(r => setTimeout(r, 200));
+                const newTitleOrder = await getOrderedTitleTexts(driver),
+                    newMapOrder = await driver.executeScript(getOrderedLayerIds),
+                    lastMapTitleOrderIndex = mapOrderedLayerIds.length - 1,
+                    lastNewTitleOrderIndex = newTitleOrder.length - 1,
+                    lastMapIdOrderIndex = mapOrderedElementTexts.length - 1,
+                    lastNewIdOrderIndex = newMapOrder.length - 1;
 
-                    await (await driver.findElement(By.css("ul#root li.layer div.layer-settings span.glyphicon-arrow-down"))).click();
+                expect(newTitleOrder[lastNewTitleOrderIndex - 1])
+                    .to.equal(mapOrderedElementTexts[lastMapTitleOrderIndex - 1]);
+                expect(newTitleOrder[lastNewTitleOrderIndex])
+                    .to.equal(mapOrderedElementTexts[lastMapTitleOrderIndex]);
 
-                    const newTitleOrder = await getOrderedTitleTexts(driver),
-                        newMapOrder = await driver.executeScript(getOrderedLayerIds),
-                        lastMapTitleOrderIndex = mapOrderedLayerIds.length - 1,
-                        lastNewTitleOrderIndex = newTitleOrder.length - 1,
-                        lastMapIdOrderIndex = mapOrderedElementTexts.length - 1,
-                        lastNewIdOrderIndex = newMapOrder.length - 1;
+                expect(mapOrderedLayerIds[lastMapIdOrderIndex - 1])
+                    .to.equal(newMapOrder[lastNewIdOrderIndex - 1]);
+                expect(mapOrderedLayerIds[lastMapIdOrderIndex])
+                    .to.equal(newMapOrder[lastNewIdOrderIndex]);
+            });
 
-                    expect(newTitleOrder[lastNewTitleOrderIndex - 1])
-                        .to.equal(mapOrderedElementTexts[lastMapTitleOrderIndex - 1]);
-                    expect(newTitleOrder[lastNewTitleOrderIndex])
-                        .to.equal(mapOrderedElementTexts[lastMapTitleOrderIndex]);
-
-                    expect(mapOrderedLayerIds[lastMapIdOrderIndex - 1])
-                        .to.equal(newMapOrder[lastNewIdOrderIndex - 1]);
-                    expect(mapOrderedLayerIds[lastMapIdOrderIndex])
-                        .to.equal(newMapOrder[lastNewIdOrderIndex]);
-                });
-
-                it("close the layerInformation", async function () {
-                    await (
-                        await driver.findElement(By.css("div#layerInformation div.tool-window-heading div.heading-element span.glyphicon.glyphicon-remove"))
-                    ).click();
-                });
+            it("close the layerInformation", async function () {
+                await (
+                    await driver.findElement(By.css("div#layerInformation div.tool-window-heading div.heading-element span.glyphicon.glyphicon-remove"))
+                ).click();
             });
         }
     });
