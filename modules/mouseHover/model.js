@@ -9,7 +9,7 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
         textArray: null,
         minShift: 5,
         numFeaturesToShow: 2,
-        infoText: "(weitere Objekte. Bitte zoomen.)"
+        infoText: ""
     },
 
     /**
@@ -44,7 +44,33 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
             document.getElementById("map").addEventListener("mouseleave", this.destroyPopup.bind(this));
 
             this.getMouseHoverInfosFromConfig();
+            if (Config.mouseHover?.numFeaturesToShow) {
+                this.set("numFeaturesToShow", Config.mouseHover?.numFeaturesToShow);
+            }
+            if (Config.mouseHover?.infoText) {
+                this.set("infoText", Config.mouseHover?.infoText);
+            }
+            this.listenTo(Radio.channel("i18next"), {
+                "languageChanged": this.changeLang
+            });
+            this.changeLang();
         }
+    },
+
+    /**
+    * change language - sets default values for the language
+    * @param {String} lng the language changed to
+    * @returns {Void} -
+    */
+    changeLang: function () {
+        let key = "common:mouseHover.infoText";
+
+        if (Config.mouseHover?.infoText) {
+            key = Config.mouseHover?.infoText;
+        }
+        this.set({
+            infoText: i18next.t(key)
+        });
     },
 
     /**
@@ -333,7 +359,8 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
     checkTextArray: function (featureArray) {
         const mouseHoverInfos = this.get("mouseHoverInfos"),
             textArray = [],
-            infoText = this.get("infoText") ? "<span class='info'>" + this.get("infoText") + "</span>" : "";
+            infoText = this.get("infoText") ? "<span class='info'>" + this.get("infoText") + "</span>" : "",
+            numFeatures = this.get("numFeaturesToShow");
         let textArrayCheckedLength = "",
             textArrayBroken = "";
 
@@ -348,7 +375,7 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
                 textArray.push(this.pickValue(layerInfos.mouseHoverField, featureProperties));
             }
         });
-        textArrayCheckedLength = this.checkMaxFeaturesToShow(textArray, this.get("numFeaturesToShow"), infoText);
+        textArrayCheckedLength = this.checkMaxFeaturesToShow(textArray, numFeatures, infoText);
         textArrayBroken = this.addBreak(textArrayCheckedLength);
 
         return textArrayBroken;
