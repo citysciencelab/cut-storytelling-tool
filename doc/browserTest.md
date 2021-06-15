@@ -109,7 +109,7 @@ const suites = [
                 require("./tests/modules/tools/List.js"),
                 require("../../src/modules/tools/supplyCoord/tests/end2end/SupplyCoord.e2e.js"),
                 require("../../src/modules/tools/measure/tests/end2end/Measure.e2e.js"),
-                require("../../src/modules/tools/scaleswitcher/tests/end2end/ScaleSwitcher.e2e.js"), // add the tool scaleSwitcher
+                require("../../src/modules/tools/scaleSwitcher/tests/end2end/ScaleSwitcher.e2e.js"), // add the tool scaleSwitcher
                 require("./tests/modules/tools/ParcelSearch.js"),
                 require("../../src/modules/tools/searchByCoord/tests/end2end/SearchByCoord.e2e.js"),
 
@@ -272,12 +272,18 @@ const webdriver = require("selenium-webdriver"),
 ...
 
 it("Open the tool scaleSwitcher and check if all elements are visible", async function () {
-    // Check if scaleSwitcher is already open
-    if ((await driver.findElements(By.id("scale-switcher"))).length === 0) {
+    let counter = 0;
+
+    do {
+        // Try to open the tool a maximum of 10 times in intervals of 100 milliseconds
+        expect(counter++).to.be.below(10);
         // Open the scaleSwitcher with two clicks
         await (await driver.findElement(By.xpath("//ul[@id='tools']//.."))).click();
         await (await driver.findElement(By.css("#tools .glyphicon-resize-small"))).click();
-    }
+        // Interval of 100 milliseconds.
+        await driver.wait(new Promise(r => setTimeout(r, 100)));
+    // If the tool was found the condition is fulfilled
+    } while ((await driver.findElements(By.id("scale-switcher"))).length === 0);
 
     // Check if the scaleSwitcher is visible
     await driver.wait(until.elementIsVisible(await driver.findElement(By.id("scale-switcher"))));
@@ -458,10 +464,14 @@ async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
             });
 
             it("Open the tool scaleSwitcher and check if all elements are visible", async function () {
-                if ((await driver.findElements(By.id("scale-switcher"))).length === 0) {
+                let counter = 0;
+
+                do {
+                    expect(counter++).to.be.below(10);
                     await (await driver.findElement(By.xpath("//ul[@id='tools']//.."))).click();
                     await (await driver.findElement(By.css("#tools .glyphicon-resize-small"))).click();
-                }
+                    await driver.wait(new Promise(r => setTimeout(r, 100)));
+                } while ((await driver.findElements(By.id("scale-switcher"))).length === 0);
 
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.id("scale-switcher"))));
 
