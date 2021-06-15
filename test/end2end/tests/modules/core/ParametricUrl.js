@@ -290,7 +290,7 @@ async function ParameterTests ({builder, url, resolution, browsername, mode, cap
          * With the BKG address service can not be tested, because this is only available in the fhhnet and therefore does not work on the Internet.
          */
         if (isDefault(url)) {
-            it("?query= fills and executes query field", async function () {
+            (isSafari(browsername) ? it.skip : it)("?query= fills and executes query field", async function () {
                 await loadUrl(driver, `${url}?query=Neuenfeld`, mode);
 
                 await driver.wait(until.elementLocated(By.css("#searchInput")), 12000);
