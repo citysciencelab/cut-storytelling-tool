@@ -5,21 +5,21 @@ import ControlBar from "./modules/controls/ControlBar.vue";
 import Footer from "./modules/footer/components/Footer.vue";
 import LegendWindow from "./modules/legend/components/LegendWindow.vue";
 import MapMarker from "./modules/mapMarker/components/MapMarker.vue";
+import Wmst from "./modules/wmst/components/Wmst.vue";
 import ToolManager from "./modules/tools/ToolManager.vue";
-import LayerSwiper from "./modules/wmst/layerSwiper/components/LayerSwiper.vue";
 import {mapState} from "vuex";
 
 export default {
     name: "MapRegion",
     components: {
+        Alerting,
         ConfirmAction,
         ControlBar,
-        ToolManager,
-        Alerting,
+        Footer,
         LegendWindow,
         MapMarker,
-        LayerSwiper,
-        Footer
+        Wmst,
+        ToolManager
     },
     computed: {
         ...mapState([
@@ -43,7 +43,7 @@ export default {
             />
             <div class="elements-positioned-over-map">
                 <ControlBar class="controls" />
-                <LayerSwiper />
+                <Wmst /> <!-- TODO: Wie macht man das später mit 2x Elementen, wenn man den Swiper anmacht? Visuell als auch Store -->
                 <Footer />
                 <MapMarker />
             </div>

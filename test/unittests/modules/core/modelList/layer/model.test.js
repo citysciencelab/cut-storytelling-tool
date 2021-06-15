@@ -18,9 +18,11 @@ describe("core/modelList/layer/model", function () {
             model.set("isSelected", false);
             model.set("parentId", "Baselayer");
             model.set("layerSource", {});
+            model.set("id", "modelOne");
             secondModel.attributes.isSelected = true;
             secondModel.attributes.parentId = "Baselayer";
             secondModel.attributes.layerSource = {};
+            secondModel.attributes.id = "modelTwo";
 
             Radio.trigger("ModelList", "addModel", model);
             Radio.trigger("ModelList", "addModel", secondModel);

@@ -22,12 +22,12 @@ const WMSLayer = Layer.extend({
             isSecured: false,
             notSupportedFor3D: ["1747", "1749", "1750", "9822", "12600", "9823", "1752", "9821", "1750", "1751", "12599", "2297"],
             useProxy: false,
-            time: false
+            time: false,
+            timeDefault: null
         });
     },
 
     initialize: function () {
-
         this.checkForScale(Radio.request("MapView", "getOptions"));
 
         if (!this.get("isChildLayer")) {
@@ -38,10 +38,18 @@ const WMSLayer = Layer.extend({
             "change:SLDBody": this.updateSourceSLDBody
         });
 
+        this.listenTo(Radio.channel("WMST"), {
+            "updateTime": this.updateTime
+        });
+
         // Hack for services that do not support EPSG:4326
         if (this.get("notSupportedFor3D").includes(this.get("id"))) {
             this.set("supported", ["2D"]);
         }
+    },
+
+    updateTime (newValue) {
+        this.get("layerSource").updateParams({"TIME": newValue});
     },
 
     /**
@@ -64,17 +72,42 @@ const WMSLayer = Layer.extend({
         if (time) {
             this.requestCapabilities(this.get("url"))
                 .then(result => {
+                    /* TODO:
+                        value - A single value
+                        value1,value2,value3,...^a - A list of multiple values
+                        min/max/resolution - An interval defined by its lower and upper bounds and its resolution.
+                        min1/max1/res1,min2/max2/res2,...^a - A list of multiple intervals
+                        ^a Whitespace is allowed following commas in a list in an <Extent> element.
+
+                            TODO: Impl:
+                                value -> Nur der Wert
+                                value1,value2,value3,... -> Nur diese Werte
+                                min/max/resolution -> Alle Werte zwischen min & max, wobei resolution die Abstandsart angibt
+                                min1/max1/res1,min2/max2/res2,... -> Wie einen oben, mit dem Unterschied, das zwischen den einzelnen Bereichen nichts angezeigt wird
+                */
+
                     const {Dimension, Extent} = result.Capability.Layer.Layer[0],
-                        // NOTE: It is assumed that the syntax for the values is always min/max/resolution as described in Table C.1 at http://cite.opengeospatial.org/OGCTestData/wms/1.1.1/spec/wms1.1.1.html#dims.declaring
-                        [min, max, resolution] = Extent?.values.split("/");
+                        // NOTE: For the first implementation, it is assumed that the syntax for the values is always min/max/resolution as described in Table C.1 at http://cite.opengeospatial.org/OGCTestData/wms/1.1.1/spec/wms1.1.1.html#dims.declaring
+                        [min, max, resolution] = Extent?.values.split("/"),
+                        // NOTE: For the first implementation, it is assumed that the syntax for the resolution is always P|NUMBER|PERIOD (| are for separation and not part of the String)
+                        // NOTE: The PERIOD will be interpreted as Y for year, M for month and D for day, while it is implemented against year
+                        resolutionChars = [...resolution],
+                        step = resolutionChars[2].toUpperCase() === "Y" ? parseInt(resolutionChars[1], 10) : 1,
+                        defaultValue = typeof time === "object" && min <= time.default && time.default <= max ? time.default : Extent.default;
 
                     if (!Dimension || !Extent || Dimension[0].name !== "time" || Extent.name !== "time") {
                         throw Error(i18next.t("common:modules.core.modelList.layer.wms.invalidTimeLayer", {id: this.id}));
                     }
 
-                    params.TIME = typeof time === "object" && time.default >= min && time.default <= max ? time.default : Extent.default;
-                    // NOTE: It is assumed that the syntax for the resolution is always P|NUMBER|PERIOD (| are for separation and not part of the String); the PERIOD will be interpreted as Y for year, M for month and D for day
-                    this.set("time", {min, max, resolution});
+                    params.TIME = defaultValue;
+
+                    this.set("time", typeof this.get("time") === "object" ? Object.assign(this.get("time"), {min, max, resolution}) : {min, max, resolution});
+                    store.commit("Wmst/setDefaultValue", defaultValue);
+                    store.commit("Wmst/setLayerId", this.get("id"));
+                    store.commit("Wmst/setMin", min);
+                    store.commit("Wmst/setMax", max);
+                    store.commit("Wmst/setStep", step);
+                    // TODO: The parameters needs to be added to an object inside an array so that, when multiple WMS-T are added, every layer is useable
                 })
                 .catch(error => {
                     this.removeLayer();
@@ -82,8 +115,7 @@ const WMSLayer = Layer.extend({
                     Radio.trigger("Parser", "removeItem", this.get("id"));
                     Radio.trigger("Util", "refreshTree");
 
-                    // TODO: (Discussion) Alert or rather console.error?
-                    store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.core.modelList.layer.wms.errorTimeLayer", {error, id: this.id}));
+                    console.error(i18next.t("common:modules.core.modelList.layer.wms.errorTimeLayer", {error, id: this.id}));
                 });
         }
 

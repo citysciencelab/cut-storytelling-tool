@@ -471,27 +471,34 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
 
     /**
      * Toggles the attribute isSelected.
-     * If the layer is a baselayer, the other selected baselayers are deselected.
+     * If configured and the layer is a baseLayer, the other selected baseLayers are deselected.
      *
-     * @return {void}
+     * @returns {void}
      */
     toggleIsSelected: function () {
         const layerGroup = Radio.request("ModelList", "getModelsByAttributes", {parentId: this.get("parentId")}),
-            singleBaselayer = this.get("singleBaselayer") && this.get("parentId") === "Baselayer";
+            singleBaselayer = this.get("singleBaselayer") && this.get("parentId") === "Baselayer",
+            timeLayer = this.get("typ") === "WMS" && this.get("time");
 
-        if (this.get("isSelected") === true) {
-            this.setIsSelected(false);
-        }
-        else {
-            // This only works for treeType Custom, otherwise the parentId is not set on the layer
+        this.setIsSelected(!this.get("isSelected"));
+
+        if (this.get("isSelected")) {
+            // This only works for treeType 'custom', otherwise the parentId is not set on the layer
             if (singleBaselayer) {
                 layerGroup.forEach(layer => {
-                    layer.setIsSelected(false);
-                    // This makes sure that the Oblique Layer, if present in the layerlist, is not selectable if switching between baselayers
-                    layer.checkForScale(Radio.request("MapView", "getOptions"));
+                    if (layer.get("id") !== this.get("id")) {
+                        layer.setIsSelected(false);
+                        // This makes sure that the Oblique Layer, if present in the layerList, is not selectable if switching between baseLayers
+                        layer.checkForScale(Radio.request("MapView", "getOptions"));
+                    }
                 });
             }
-            this.setIsSelected(true);
+            if (timeLayer) {
+                store.commit("Wmst/setTimeSliderActive", true);
+            }
+        }
+        else if (timeLayer) {
+            store.commit("Wmst/setTimeSliderActive", false);
         }
     },
 
