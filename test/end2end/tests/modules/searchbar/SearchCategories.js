@@ -144,7 +144,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 expect(await driver.findElements(By.css("#searchInputUL > li.results"))).to.have.length(1);
             });
 
-            it.skip("provides all results aggregated by categories, including sum of hits per category", async function () {
+            it("provides all results aggregated by categories, including sum of hits per category", async function () {
                 if (await (await driver.findElement(By.id("searchInput"))).getAttribute("value") === "") {
                     await searchInput.sendKeys(searchString);
                 }
@@ -153,7 +153,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 expect(await driver.findElements(By.css("#searchInputUL > li.list-group-item.type > span.badge"))).to.not.equals(0);
             });
 
-            it.skip("category 'festgestellt' shows results; on click, zooms to the place and marks it with polygon", async function () {
+            it("category 'festgestellt' shows results; on click, zooms to the place and marks it with polygon", async function () {
                 await selectAndVerifyFirstHit({
                     setsMarker: false,
                     showsPolygon: true,
@@ -167,7 +167,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 })).to.be.true;
             });
 
-            it.skip("category 'B-Plan' shows results; on click, zooms to the place and marks it with polygon", async function () {
+            it("category 'B-Plan' shows results; on click, zooms to the place and marks it with polygon", async function () {
                 await selectAndVerifyFirstHit({
                     setsMarker: false,
                     showsPolygon: true,
@@ -182,7 +182,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
             });
 
             // NOTE using this instead of 'Krankenhaus' since I can't find the KH search
-            it.skip("category 'Kita' shows results; on click, zooms to the place and marks it with a marker", async function () {
+            it("category 'Kita' shows results; on click, zooms to the place and marks it with a marker", async function () {
                 await selectAndVerifyFirstHit({
                     setsMarker: true,
                     showsPolygon: false,
@@ -191,7 +191,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 });
             });
 
-            it.skip("category 'Straße' shows results; on click, zooms to the place, changes resolution", async function () {
+            it("category 'Straße' shows results; on click, zooms to the place, changes resolution", async function () {
                 await selectAndVerifyFirstHit({
                     setsMarker: true,
                     showsPolygon: false,
@@ -201,7 +201,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 });
             });
 
-            it.skip("category 'Stadtteil' shows results; on click, zooms to the place and marks it with a marker, changes resolution", async function () {
+            it("category 'Stadtteil' shows results; on click, zooms to the place and marks it with a marker, changes resolution", async function () {
                 await selectAndVerifyFirstHit({
                     setsMarker: true,
                     showsPolygon: false,
@@ -212,12 +212,10 @@ async function SearchCategories ({builder, url, resolution, capability}) {
             });
 
             it("remove searchbar input", async function () {
-                it("remove searchbar input", async function () {
-                    await driver.wait(until.elementLocated(By.id("searchInput")), 12000);
-                    await (await driver.findElement(By.css("#searchInput"))).clear();
+                await driver.wait(until.elementLocated(By.id("searchInput")), 12000);
+                await (await driver.findElement(By.css("#searchInput"))).clear();
 
-                    expect(await (await driver.findElement(By.id("searchInput"))).getAttribute("value")).to.equals("");
-                });
+                expect(await (await driver.findElement(By.id("searchInput"))).getAttribute("value")).to.equals("");
             });
         });
     }
