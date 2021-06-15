@@ -369,17 +369,6 @@ describe("tools/print/HighResolutionPlotService", function () {
         });
     });
 
-    // Getter
-    describe("getCapabilities", function () {
-        it("should return the expected response from the plot service", function () {
-
-            print2Model.getCapabilities();
-            setTimeout(function () {
-                expect(print2Model.get("response")).to.deep.equal(response);
-            }, 100);
-        });
-    });
-
     describe("getAttributeInLayoutByName", function () {
         it("should return undefined if the passed value do not exist in currentLayout", function () {
             const currentLayout = response.layouts[0];
@@ -556,11 +545,6 @@ describe("tools/print/HighResolutionPlotService", function () {
         it("should return an Error if the passed response is undefined or null", function () {
             expect(print2Model.updateParameter(undefined)).to.deep.equal("Error");
         });
-
-        // currently not working because of canvas model problem
-        // it("should return an Success if the passed response is valid", function () {
-        //     expect(print2Model.updateParameter(response)).to.deep.equal("success");
-        // });
     });
 
     describe("createImagePath", function () {
