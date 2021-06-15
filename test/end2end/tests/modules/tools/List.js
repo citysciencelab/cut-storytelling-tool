@@ -3,7 +3,7 @@ const webdriver = require("selenium-webdriver"),
     {initDriver, getDriver, quitDriver, loadUrl} = require("../../../library/driver"),
     {isMaster, isMobile, isSafari} = require("../../../settings"),
     {logTestingCloudUrlToTest} = require("../../../library/utils"),
-    {getCenter, getResolution} = require("../../../library/scripts"),
+    {getCenter, getResolution, setResolution} = require("../../../library/scripts"),
     {By, until} = webdriver;
 
 /**
@@ -32,6 +32,7 @@ async function ListTests ({builder, url, resolution, browsername, capability, mo
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
+                await driver.executeScript(setResolution, 15.874991427504629);
             });
 
             afterEach(async function () {
