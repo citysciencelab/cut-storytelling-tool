@@ -32,7 +32,7 @@
 - Issue #602: further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2.
 - Issue #615: parsing of the DescribeFeatureType of a WFS has been extended so that it also satisfies a different interpretation of the schema description. As a result, elements in the legend are displayed in the order specified in the style.json.
 - Issue #623: filter error in connection with provided vectorstyles is fixed.
-
+- Style ist provided for datastreams with result 0.
 ---
 
 ## v2.10.0 - 2021-06-02
