@@ -3,7 +3,7 @@ const webdriver = require("selenium-webdriver"),
     {loadUrl} = require("../../../library/driver"),
     {getCenter, getResolution, isLayerVisible, areLayersOrdered, doesLayerWithFeaturesExist} = require("../../../library/scripts"),
     {centersTo, clickFeature, logTestingCloudUrlToTest} = require("../../../library/utils"),
-    {isBasic, isCustom, isDefault, isMaster, isSafari, isChrome, isFirefox} = require("../../../settings"),
+    {isBasic, isCustom, isDefault, isMaster, isSafari, isEdge} = require("../../../settings"),
     {initDriver, getDriver, quitDriver} = require("../../../library/driver"),
     {By, until} = webdriver;
 
@@ -14,7 +14,7 @@ const webdriver = require("selenium-webdriver"),
  */
 async function ParameterTests ({builder, url, resolution, browsername, mode, capability}) {
     // Run only in Edge Browser on BB Pipeline to improve perfomance of tests
-    if ((isSafari(browsername) || isChrome(browsername) || isFirefox(browsername)) && capability) {
+    if (!capability || isEdge(browsername)) {
         describe("URL Query Parameters", function () {
             let driver;
 
