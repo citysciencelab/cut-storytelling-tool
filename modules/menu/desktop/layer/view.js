@@ -2,7 +2,7 @@ import Template from "text-loader!./template.html";
 import checkChildrenDatasets from "../../checkChildrenDatasets.js";
 import store from "../../../../src/app-store/index";
 import axios from "axios";
-import IdGenerator from "../../../core/idGenerator";
+import TabIndexUtils from "../../../core/tabIndexUtils";
 
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {
@@ -10,7 +10,8 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
         "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
         "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
-        "keydown": "keyAction"
+        "keydown .layer-item": "toggleLayerKeyAction",
+        "keydown .layer-info-item": "showLayerInfoKeyAction"
     },
 
     /**
@@ -60,8 +61,15 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     className: "layer list-group-item",
     template: _.template(Template),
 
-    initializeId () {
-        this.model.set({"id": "layer-list-group-item-" + IdGenerator.getNextMenuLayerItemId()});
+    /**
+     * Initializes the id of this component with a fix prefix followed by a sequential number.
+     * The id is needed for refocussing after the render-cycle.
+     * @returns {void}
+     */
+    initializeId: function () {
+        this.model.set({
+            id: _.uniqueId("layer-list-group-item-")
+        });
     },
 
     /**
@@ -82,7 +90,9 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             }
             this.$el.css("padding-left", ((this.model.get("level") * 15) + 5) + "px");
         }
+        this.setAllTabIndices();
         this.setFocusToAElement();
+
         return this;
     },
     /**
@@ -109,9 +119,27 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             }
         }
     },
-    keyAction: function (event) {
-        if (event.which === 32) {
+
+    /**
+     * Handles the Space and Enter key to toggle the layer selection.
+     * @param {Event} event - the event instance
+     * @returns {void}
+     */
+    toggleLayerKeyAction: function (event) {
+        if (event.which === 32 || event.which === 13) {
             this.preToggleIsSelected();
+            event.stopPropagation();
+        }
+    },
+    /**
+     * Handles the Space and Enter key to start the info action.
+     * @param {Event} event - the event instance
+     * @returns {void}
+     */
+    showLayerInfoKeyAction: function (event) {
+        if (event.which === 32 || event.which === 13) {
+            this.showLayerInformation();
+            event.stopPropagation();
         }
     },
 
@@ -133,15 +161,36 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         if (!this.model.get("isSelected") && (this.model.get("maxScale") < scale || this.model.get("minScale") > scale)) {
             this.addDisableClass();
         }
+        this.setAllTabIndices();
         this.setFocusToAElement();
     },
 
+    /**
+     * Sets the focus to the <a> element of this component.
+     * @param {Event} event - the event instance
+     * @returns {void}
+     */
     setFocusToAElement: function () {
         const htmlAElement = document.querySelector("#" + this.model.get("id"));
 
         if (htmlAElement) {
             htmlAElement.focus();
         }
+    },
+
+    /**
+     * Resets all tabindices to enable keyboard navigation. Because the order of creation the components
+     * reflects not the order in the dom, we need to set all tabindices of all elements.
+     * @returns {void}
+     */
+    setAllTabIndices: function () {
+        const parentTabIndexElement = $("a." + this.model.get("parentId")),
+            // search for all <a> elements (layer text) and <span> elements (info-icons)
+            allComponentsSiblingTabIndexElements = $("#" + this.model.get("parentId") + ">li a" +
+            ",#" + this.model.get("parentId") + ">li button"
+            );
+
+        TabIndexUtils.setAllTabIndicesFromParent(parentTabIndexElement, allComponentsSiblingTabIndexElements);
     },
 
     /**

@@ -1,18 +1,8 @@
 <!DOCTYPE html>
-<% if (typeof treeType === "undefined") { %>
-<a id="<%= id %>" tabindex="-1">
-  <div class="layer-info-item pull-right">
-    <% if (typeof datasets !== "undefined" && datasets !== false) { %>
-        <span class="glyphicon glyphicon-info-sign" title="<%=infosAndLegendText%>"></span>
-    <% } %>
-</div>
-<% } else { %>
-<a id="<%= id %>" tabindex="-1">
-  <div class="layer-info-item pull-right">
-    <span class="glyphicon glyphicon-cog rotate"></span>
-</div>
-<% } %>
-<div class="layer-item">
+
+
+<a id="<%= id %>" class="dropdown-item layer-item">
+  <!-- <div class="layer-item"> -->
     <% if (isSelected) { %>
         <span class="glyphicon glyphicon-check" title="<%=removeTopicText%>"></span>
     <% } else { %>
@@ -22,5 +12,22 @@
         <span class="glyphicon glyphicon-lock" title="<%=securedTopicText%>"></span>
     <% } %>
     <span class="title" title="<%= name %>"><%= name %></span>
-</div>
+<!-- </div> -->
 </a>
+
+<% if (typeof treeType === "undefined") { %>
+  <button class="layer-info-item pull-right btn btn-menu-icon hidden-xs" type="button">
+  <!-- <div class="layer-info-item pull-right"> -->
+    <% if (typeof datasets !== "undefined" && datasets !== false) { %>
+          <span class="glyphicon glyphicon-info-sign" title="<%=infosAndLegendText%>"></span>
+    <% } %>
+    <!-- </div> -->
+    </button>
+<% } else { %>
+  <button class="layer-info-item pull-right btn btn-menu-icon hidden-xs" type="button">
+  <!-- <div class="layer-info-item pull-right"> -->
+    <span class="glyphicon glyphicon-cog rotate"></span>
+  <!-- </div> -->
+  </button>
+<% } %>
+

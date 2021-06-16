@@ -1,5 +1,6 @@
 import CatalogTemplate from "text-loader!./templateCatalog.html";
 import store from "../../../../src/app-store";
+import TabIndexUtils from "../../../core/tabIndexUtils";
 
 /**
  * @member CatalogTemplate
@@ -65,11 +66,11 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         this.listenTo(this.model, {
             "change:isExpanded": this.toggleGlyphicon
         }, this);
-
         this.$el.on({
             click: function (e) {
                 e.stopPropagation();
-            }});
+            }
+        });
         this.render();
         this.togle3dCatalog(Radio.request("Map", "getMapMode"));
     },
@@ -102,16 +103,26 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
             this.model.setIsExpanded(false);
             this.model.setIsExpanded(true);
         }
+        this.setAllTabIndices();
         return this;
     },
-    keyAction: function (event) {
-        if (event.which === 32) {
-            const aElement = this.$el.find("a." + this.model.get("id"));
 
-            if (aElement.get(0) === document.activeElement) {
-                this.model.toggleIsExpanded();
-            }
+    // TODO JG
+    keyAction: function (event) {
+        if (event.which === 32 || event.which === 13) {
+            this.model.toggleIsExpanded();
+            event.stopPropagation();
         }
+    },
+    /**
+     * TODO JG
+     * @returns {void}
+     */
+    setAllTabIndices: function () {
+        const parentTabIndexElement = $("a." + this.model.get("parentId")),
+            allElementsOfThisComponent = $("#" + this.model.get("parentId") + ">li.layer-catalog>a");
+
+        TabIndexUtils.setAllTabIndicesFromParentByOffset(parentTabIndexElement, allElementsOfThisComponent, 1000);
     },
 
     /**

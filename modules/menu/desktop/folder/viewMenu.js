@@ -1,5 +1,5 @@
 import Template from "text-loader!./templateMenu.html";
-import IdGenerator from "../../../core/idGenerator";
+import TabIndexUtils from "../../../core/tabIndexUtils";
 
 /**
  * @member Template
@@ -32,10 +32,6 @@ const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype 
     tagName: "li",
     className: "dropdown dropdown-folder",
     template: _.template(Template),
-    attributes: function () {
-        return {tabindex: IdGenerator.getNextMenuItemTabindex()};
-        // return {tabindex: "-1"};
-    },
 
     /**
      * Renders the data to DOM.
@@ -54,10 +50,20 @@ const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype 
         else {
             this.$el.removeClass("open");
         }
+        this.resetAllTabIndices();
 
         return this;
     },
 
+    /**
+     * TODO JG
+     * @returns {void}
+     */
+    resetAllTabIndices: function () {
+        const allElementsOfThisComponent = $("#root>li>a");
+
+        TabIndexUtils.setAllTabIndicesByOffset(allElementsOfThisComponent, 10000);
+    },
     /**
      * adds only layers to the tree that support the current mode of the map
      * e.g. 2D, 3D
