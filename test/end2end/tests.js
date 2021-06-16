@@ -1,6 +1,5 @@
 const {isBasic, is2D} = require("./settings"),
-    {logTestingCloudUrlToTest} = require("./library/utils"),
-    {initDriver, getDriver, quitDriver} = require("./library/driver");
+    {initDriver, quitDriver} = require("./library/driver");
 
 /**
  * Description of the parameter set forwarded to each test suite. Each test suite may decide in itself
@@ -54,11 +53,6 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
 
         afterEach(async function () {
             if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                if (capability) {
-                    await getDriver().session_.then(function (sessionData) {
-                        logTestingCloudUrlToTest(sessionData.id_);
-                    });
-                }
                 console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
             }
         });
