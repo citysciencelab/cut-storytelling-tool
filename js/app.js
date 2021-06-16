@@ -152,7 +152,7 @@ async function loadApp () {
     new SliderRangeView();
     new DropdownView();
 
-    if (Config.hasOwnProperty("clickCounter") && Config.clickCounter.hasOwnProperty("desktop") && Config.clickCounter.desktop !== "" && Config.clickCounter.hasOwnProperty("mobile") && Config.clickCounter.mobile !== "") {
+    if (Object.prototype.hasOwnProperty.call(Config, "clickCounter") && Object.prototype.hasOwnProperty.call(Config, "desktop") && Config.clickCounter.desktop !== "" && Object.prototype.hasOwnProperty.call(Config, "mobile") && Config.clickCounter.mobile !== "") {
         new ClickCounterModel(Config.clickCounter.desktop, Config.clickCounter.mobile, Config.clickCounter.staticLink);
     }
 

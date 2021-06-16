@@ -367,9 +367,9 @@ export default {
         :active="active && !withoutGUI"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :initialWidth="initialWidth"
-        :initialWidthMobile="initialWidthMobile"
-        :deactivateGFI="deactivateGFI"
+        :initial-width="initialWidth"
+        :initial-width-mobile="initialWidthMobile"
+        :deactivate-gfi="deactivateGFI"
     >
         <template #toolBody>
             <select

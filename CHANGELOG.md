@@ -17,6 +17,10 @@
 - The version of the package selenium-webdriver was updated to version 4.0.0-beta.4.
 - Changed LayerInformation from backbone to vue.
 - MasterportalAPI is updated to v1.4.0. The new version brings OpenLayers v6.5.0 with WFS 2.0.0 support to the Masterportal.
+- The package eslint was updated to version 7.28.0.
+- The package eslint-plugin-chai-friendly was updated to version 0.7.1.
+- The package eslint-plugin-vue was updated to version 7.11.1.
+- The package eslint-plugin-you-dont-need-lodash-underscore was updated to version 6.12.0.
 
 ### Deprecated
 
@@ -45,10 +49,6 @@
 - The documentation for WMTS layers, legend field has been adapted. Only one specification in a string[] is possible.
 - The translation for the url in the staticlink in config.json has been removed.
 - Issue #617: Update description of the attribute '"extent"' for layer configurations in config.json.md.
-- The package eslint was updated to version 7.27.0.
-- The package eslint-plugin-chai-friendly was updated to version 0.7.1.
-- The package eslint-plugin-vue was updated to version 7.10.0.
-- The package eslint-plugin-you-dont-need-lodash-underscore was updated to version 6.12.0.
 
 ### Deprecated
 
