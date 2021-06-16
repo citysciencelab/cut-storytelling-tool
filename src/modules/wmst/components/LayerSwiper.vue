@@ -1,6 +1,8 @@
 <script>
-import state from "../store/stateLayerSwiper";
-import {mapGetters, mapActions, mapMutations} from "vuex";
+import state from "../store/stateWmst";
+import {mapGetters, mapMutations} from "vuex";
+import getters from "../store/gettersWmst";
+import mutations from "../store/mutationsWmst";
 import {getRenderPixel} from "ol/render";
 
 /**
@@ -15,34 +17,39 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("Map", ["visibleLayerList", "map"])
+        ...mapGetters("Map", ["visibleLayerList", "map"]),
+        ...mapGetters("Wmst", Object.keys(getters))
+    },
+    created: function () {
+        state.layerSwiper.targetLayer = this.visibleLayerList.find(element => element.values_.id === "wmst");
     },
     methods: {
         ...mapMutations("Map", ["addLayerToMap", "removeLayerFromMap"]),
+        ...mapMutations("Wmst", Object.keys(mutations)),
         move (event) {
 
-            state.isMoving = true;
-            state.swiper = event.target;
+            state.layerSwiper.isMoving = true;
+            state.layerSwiper.swiper = event.target;
             window.addEventListener("mousemove", this.moveSwiper);
             window.addEventListener("mouseup", this.moveStop);
 
         },
         moveStop () {
-            state.isMoving = false;
+            state.layerSwiper.isMoving = false;
             window.removeEventListener("mousemove", this.moveSwiper);
             window.removeEventListener("mouseup", this.moveStop);
         },
         moveSwiper (event) {
-            if (state.isMoving) {
-                const map = this.$store.getters["Map/map"];
+            if (state.layerSwiper.isMoving) {
+                const map = this.map;
 
-                state.valueX = event.clientX;
-                state.swiper.style.left = event.clientX + "px";
+                state.layerSwiper.valueX = event.clientX;
+                state.layerSwiper.swiper.style.left = event.clientX + "px";
                 map.render();
-                this.$store.getters["Map/visibleLayerList"][3].on("prerender", function (e) {
+                state.layerSwiper.targetLayer.on("prerender", function (e) {
                     const ctx = e.context,
                         mapSize = map.getSize(),
-                        width = state.valueX,
+                        width = state.layerSwiper.valueX,
                         tl = getRenderPixel(e, [width, 0]),
                         tr = getRenderPixel(e, [mapSize[0], 0]),
                         bl = getRenderPixel(e, [width, mapSize[1]]),
@@ -57,7 +64,7 @@ export default {
                     ctx.closePath();
                     ctx.clip();
                 });
-                this.$store.getters["Map/visibleLayerList"][3].on("postrender", function (e) {
+                state.layerSwiper.targetLayer.on("postrender", function (e) {
                     const ctx = e.context;
 
                     ctx.restore();

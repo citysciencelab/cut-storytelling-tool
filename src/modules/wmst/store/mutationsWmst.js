@@ -24,7 +24,10 @@ const mutations = {
     },
     // Swiper mutations
     setSwiperActive (state, active) {
-        state.swiper.active = active;
+        state.layerSwiper.active = active;
+    },
+    setLayerSwiperValueX (state, ClientX) {
+        state.layerSwiper.valueX = ClientX;
     }
 };
 
