@@ -9,7 +9,6 @@
    - "chrome": Chrome-Browser
    - "firefox": Firefox
    - "edge": Microsoft Edge
-   - "bs": arbitrary browsers at BrowserStack.com
 
    For installation, [download the required drivers](https://docs.seleniumhq.org/download/) and make them available to the system environment. On Windows, this is done by adding the driver's paths to the `path` variable in your system environment variables. The `.exe` file must have been placed in a folder where `.exe` files are allowed to be executed.
 
@@ -30,14 +29,7 @@ You may also define the variables for your test environment by creating a file `
 
 ## Run tests on SauceLabs.com
 
-You may also run the start script to execute the tests directly on BrowserStack.
-
-
-```console
-$ browser=bs bs_user=[browserstackusername] bs_key=[browserstackkey] url=[url] proxy=[proxyurl] ./node_modules/.bin/mocha ./test/end2end/TestRunner.js
-```
-
-To run the local system's tests on SauceLabs, you need to open a [sauce trusted connection](https://docs.saucelabs.com/secure-connections):
+To run the local systems tests on Sauce Labs, you need to open a [sauce trusted connection](https://docs.saucelabs.com/secure-connections):
 
    -  You need to download [Sauce Connect Proxy](https://docs.saucelabs.com/secure-connections/sauce-connect/installation)
    -  Then define your [setup and configuration](https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/setup-configuration)
@@ -51,20 +43,6 @@ $ bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -x $SAUCE_DC -i TUNNEL_ID'
 
 ```console
 $ npm run browsertestOnSauceLabs
-```
-
-## Run tests on BrowserStack.com
-
-You may also run the start script to execute the tests directly on BrowserStack.
-
-```console
-$ browser=bs bs_user=[browserstackusername] bs_key=[browserstackkey] url=[url] proxy=[proxyurl] ./node_modules/.bin/mocha ./test/end2end/TestRunner.js
-```
-
-To run the local system's tests on BrowserStack, you need to run a BrowserStack script locally before starting the test procedure. See [local testing on BrowserStack](https://www.browserstack.com/local-testing#command-line).
-
-```console
-$ BrowserStackLocal.exe --key [browserstackkey] --proxy-host [proxyurl] --proxy-port [proxyport]
 ```
 
 ## How to write tests
