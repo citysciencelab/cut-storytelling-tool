@@ -14,7 +14,8 @@ const state = {
         isMoving: false,
         swiper: {},
         valueX: "",
-        targetLayer: {}
+        targetLayer: {},
+        mapObject: {}
     }
 };
 
