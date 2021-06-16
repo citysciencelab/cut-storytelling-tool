@@ -12,10 +12,10 @@ const state = {
         id: "layerSwiper",
         name: "controls.layerSwiper.title",
         isMoving: false,
+        mapObject: {},
         swiper: {},
-        valueX: "",
         targetLayer: {},
-        mapObject: {}
+        valueX: ""
     }
 };
 
