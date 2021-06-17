@@ -16,6 +16,7 @@
 ### Changed
 - The version of the package selenium-webdriver was updated to version 4.0.0-beta.4.
 - Changed LayerInformation from backbone to vue.
+- MasterportalAPI is updated to v1.4.0. The new version brings OpenLayers v6.5.0 with WFS 2.0.0 support to the Masterportal.
 
 ### Deprecated
 
@@ -26,6 +27,7 @@
 - Labels of VTC-Layer-Objects aren't cut off anymore.
 - Issue #602: further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2.
 - Issue #615: parsing of the DescribeFeatureType of a WFS has been extended so that it also satisfies a different interpretation of the schema description. As a result, elements in the legend are displayed in the order specified in the style.json.
+- Issue #623: filter error in connection with provided vectorstyles is fixed.
 
 ---
 
