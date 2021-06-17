@@ -150,7 +150,6 @@
         "no-param-reassign": "error",
         "no-proto": "error",
         "no-redeclare": "error",
-        "no-restricted-exports": "error",
         "no-restricted-properties": "error",
         "no-return-assign": "error",
         "no-return-await": "error",
