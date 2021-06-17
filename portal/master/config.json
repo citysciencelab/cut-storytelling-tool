@@ -55,15 +55,6 @@
         "timeout": 10000,
         "definitions": [
           {
-            "url": "/geodienste.hamburg.de/MRH_WFS_Rotenburg",
-            "typeName": "app:mrh_row_bplan",
-            "propertyNames": [
-              "app:name"
-            ],
-            "name": "translate#common:modules.searchbar.specialWFS.bplan",
-            "namespaces": "xmlns:app='http://www.deegree.org/app'"
-          },
-          {
             "url": "/geodienste.hamburg.de/HH_WFS_Bebauungsplaene",
             "typeName": "app:hh_hh_festgestellt",
             "propertyNames": [
