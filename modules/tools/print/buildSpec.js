@@ -822,7 +822,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             convertedFeature = undefined;
         }
         // if its a cluster remove property features
-        if (convertedFeature.properties?.features) {
+        if (Object.prototype.hasOwnProperty.call(convertedFeature.properties, "features")) {
             delete convertedFeature.properties.features;
         }
         return convertedFeature;
@@ -939,7 +939,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             if (layerModel.get("styleId")) {
                 if (styleList !== undefined) {
                     ruleFeature = styleList.getRulesForFeature(feature);
-                    styleField = ruleFeature.length && ruleFeature[0] && ruleFeature[0]?.conditions ? Object.keys(ruleFeature[0].conditions.properties)[0] : "";
+                    styleField = ruleFeature.length && ruleFeature[0] && Object.prototype.hasOwnProperty.call(ruleFeature[0], "conditions") ? Object.keys(ruleFeature[0].conditions.properties)[0] : "";
                 }
                 else {
                     styleField = styleList.get("styleField");

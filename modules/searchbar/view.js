@@ -422,12 +422,12 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         const modelHitList = this.model.get("hitList");
 
         // distingiush hit
-        if (evt?.cid) { // in this case, evt = model
+        if (Object.prototype.hasOwnProperty.call(evt, "cid")) { // in this case, evt = model
             pick = Radio.request("Util", "pick", modelHitList, [0]);
 
             hit = Object.values(pick)[0];
         }
-        else if (evt?.currentTarget === true && evt.currentTarget.id) {
+        else if (Object.prototype.hasOwnProperty.call(evt, "currentTarget") === true && evt.currentTarget.id) {
             hitID = evt.currentTarget.id;
             hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), {"id": hitID});
 
@@ -1024,7 +1024,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), {"id": hitId});
         }
 
-        if (hit && hit?.triggerEvent) {
+        if (hit && Object.prototype.hasOwnProperty.call(hit, "triggerEvent")) {
             if (hit.type !== "Fachthema" && hit.triggerEvent.event !== "gfiOnClick" && !this.model.get("hitIsClick")) {
                 Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, false);
             }
