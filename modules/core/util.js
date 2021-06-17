@@ -98,6 +98,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         channel.on({
             "hideLoader": this.hideLoader,
             "hideLoadingModule": this.hideLoadingModule,
+            "refreshTree": this.refreshTree,
             "showLoader": this.showLoader,
             "setUiStyle": this.setUiStyle
         }, this);
