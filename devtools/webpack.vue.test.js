@@ -1,4 +1,8 @@
+/**
+ * See https://www.digitalocean.com/community/tutorials/vuejs-demistifying-vue-webpack
+ */
 const webpack = require("webpack"),
+    Vue = require("vue"),
     VueLoaderPlugin = require("vue-loader/lib/plugin");
 
 require("regenerator-runtime/runtime");
@@ -11,14 +15,14 @@ global.XMLSerializer = window.XMLSerializer;
 URL.createObjectURL = function () {
     return false;
 };
+Vue.config.devtools = false;
 
 module.exports = {
     mode: "development",
-    devtool: "inline-cheap-module-source-map",
+    target: "node",
+    devtool: "cheap-module-eval-source-map",
     output: {
-        // use absolute paths in sourcemaps (important for debugging via IDE)
-        devtoolModuleFilenameTemplate: "[absolute-resource-path]",
-        devtoolFallbackModuleFilenameTemplate: "[absolute-resource-path]?[hash]"
+        devtoolModuleFilenameTemplate: "[absolute-resource-path]"
     },
     resolve: {
         alias: {
@@ -36,7 +40,11 @@ module.exports = {
             },
             {
                 test: /\.vue$/,
-                use: "vue-loader"
+                loader: "vue-loader",
+                options: {
+                    loaders: {},
+                    optimizeSSR: false
+                }
             },
             {
                 test: /\.(le|c|sa)ss$/,
@@ -44,13 +52,16 @@ module.exports = {
             }
         ]
     },
+    performance: {
+        hints: false
+    },
     plugins: [
         new webpack.ProvidePlugin({
             jQuery: "jquery",
             $: "jquery",
             Backbone: "backbone",
             Radio: "backbone.radio",
-            // _: "underscore",
+            _: "underscore",
             i18next: ["i18next/dist/cjs/i18next.js"]
             // Config: path.resolve(__dirname, "../test/unittests/deps/testConfig"),
             // XMLSerializer: path.resolve(__dirname, "../test/unittests/deps/testXmlSerializer"),

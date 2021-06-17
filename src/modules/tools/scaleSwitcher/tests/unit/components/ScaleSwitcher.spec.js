@@ -31,7 +31,7 @@ describe("src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue", () => {
                             scaleSwitcher:
                             {
                                 "name": "translate#common:menu.tools.scaleSwitcher",
-                                "glyphicon": "glyphicon-resize-full",
+                                "glyphicon": "glyphicon-resize-small",
                                 "renderToWindow": true
                             }
                         }

@@ -16,7 +16,7 @@ function normalizeLayers (layerArray) {
         layerIds = [];
 
     layerArray.forEach(layer => {
-        const id = layer.get("id");
+        const id = layer?.get("id");
 
         if (typeof id !== "undefined") {
             layerIds.push(id);

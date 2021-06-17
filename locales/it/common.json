@@ -20,6 +20,7 @@
     },
     "menu": {
         "topics": "Livelli",
+        "name": "Menu",
         "views": {
             "name": "Visualizzazioni",
             "view01": "Visualizzazione 1"
@@ -116,7 +117,8 @@
             "de": "Deutsch",
             "en": "English",
             "it": "Italiano",
-            "pt": "Português"
+            "pt": "Português",
+            "es": "Español"
         },
         "cswParser": {
             "noMetadataMessage": "Metadati non disponibili.",
@@ -209,8 +211,7 @@
             "info": {
                 "disclaimer": "Esclusione di responsabilità",
                 "home": {
-                    "name": "Amburgo",
-                    "url": "https://www.hamburg.de/"
+                    "name": "Amburgo"
                 }
             },
             "addWMS": {

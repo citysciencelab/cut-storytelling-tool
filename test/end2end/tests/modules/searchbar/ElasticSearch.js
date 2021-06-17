@@ -1,6 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../library/driver"),
     {isLayerVisible} = require("../../../library/scripts"),
     {reclickUntilNotStale, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {isCustom, isMaster} = require("../../../settings"),
@@ -25,7 +25,7 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
                 capability["sauce:options"].name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
-            driver = await initDriver(builder, url, resolution);
+            driver = await getDriver();
             await driver.wait(until.elementLocated(searchInputSelector), 5000);
             searchInput = await driver.findElement(searchInputSelector);
         });
@@ -36,13 +36,11 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
                     logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
-            await driver.quit();
         });
 
         afterEach(async function () {
             if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                await driver.quit();
+                await quitDriver();
                 driver = await initDriver(builder, url, resolution);
                 await driver.wait(until.elementLocated(searchInputSelector), 5000);
                 searchInput = await driver.findElement(searchInputSelector);
@@ -114,6 +112,15 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
                 await (await driver.findElement(selectedLayerGlyphSelector)).click();
                 await driver.wait(until.elementLocated(selectedLayerFirstEntrySelector), 5000);
                 expect(await (await driver.findElement(selectedLayerFirstEntrySelector)).getText()).to.contain(layerName);
+            });
+        }
+
+        if (isMaster(url) || isCustom(url)) {
+            it("remove searchbar input", async function () {
+                await driver.wait(until.elementLocated(By.id("searchInput")), 12000);
+                await (await driver.findElement(By.css("#searchInput"))).clear();
+
+                expect(await (await driver.findElement(By.id("searchInput"))).getAttribute("value")).to.equals("");
             });
         }
     });

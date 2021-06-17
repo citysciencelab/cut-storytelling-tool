@@ -6,6 +6,7 @@ import WFSLayer from "./wfs";
 import GeoJSONLayer from "./geojson";
 import SensorLayer from "./sensor";
 import HeatmapLayer from "./heatmap";
+import store from "../../../../src/app-store";
 
 const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -19,7 +20,6 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
      * @constructs
      * @property {String[]} supported=["2D","3D"] Shows that group layern are supported in "2D" and "3D" mode.
      * @property {Boolean} showSettings=true Flag that shows if Layer has settings to be shown
-     * @fires LayerInformation#RadioTriggerLayerInformationAdd
      * @fires Legend#RadioRequestLegendGetLegend
      */
     initialize: function () {
@@ -115,7 +115,6 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
 
     /**
      * This function start the presentation of the layerinformation and legend.
-     * @fires LayerInformation#RadioTriggerLayerInformationAdd
      * @fires Legend#RadioRequestLegendGetLegend
      * @returns {void}
      */
@@ -124,7 +123,9 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
         const metaID = [],
             cswUrls = [],
             showDocUrls = [],
-            name = this.get("name");
+            name = this.get("name"),
+            layerNames = [],
+            additionalLayers = [];
 
         if (!this.get("layerSource")) {
             this.prepareLayerObject();
@@ -134,24 +135,37 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
         this.get("children").forEach(layer => {
             let cswUrl = null,
                 showDocUrl = null,
-                layerMetaId = null;
+                layerMetaId = null,
+                layerName = null;
 
             if (layer.datasets && Array.isArray(layer.datasets) && layer.datasets[0] !== null && typeof layer.datasets[0] === "object") {
                 cswUrl = layer.datasets[0].hasOwnProperty("csw_url") ? layer.datasets[0].csw_url : null;
                 showDocUrl = layer.datasets[0].hasOwnProperty("show_doc_url") ? layer.datasets[0].show_doc_url : null;
                 layerMetaId = layer.datasets[0].hasOwnProperty("md_id") ? layer.datasets[0].md_id : null;
+                layerName = layer.name;
             }
 
             metaID.push(layerMetaId);
             cswUrls.push(cswUrl);
             showDocUrls.push(showDocUrl);
+            layerNames.push(layerName);
+
+            const layerInfo = {
+                "metaID": layerMetaId,
+                "layerName": layerName,
+                "cswUrl": cswUrl
+            };
+
+            additionalLayers.push(layerInfo);
         });
 
-        Radio.trigger("LayerInformation", "add", {
+        store.dispatch("LayerInformation/layerInfo", {
             "id": this.get("id"),
             "legend": legend,
-            "metaID": metaID,
+            "metaID": metaID[0],
+            "metaIdArray": metaID,
             "layername": name,
+            "layerNames": layerNames,
             "url": null,
             "typ": null,
             "cswUrl": cswUrls[0],
@@ -159,6 +173,17 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
             "urlIsVisible": this.get("urlIsVisible")
         });
 
+        store.dispatch("LayerInformation/activate", true);
+        store.dispatch("LayerInformation/setCurrentLayerName", layerNames[0]);
+        store.dispatch("LayerInformation/additionalSingleLayerInfo");
+        store.dispatch("LayerInformation/setMetadataURL", metaID[0]);
+        store.dispatch("LayerInformation/setAdditionalLayer", additionalLayers);
+        store.dispatch("Legend/setLayerIdForLayerInfo", this.get("id"));
+        store.dispatch("Legend/setLayerCounterIdForLayerInfo", Date.now());
+
+        if (this.createLegend && typeof this.createLegend === "function") {
+            this.createLegend();
+        }
         this.setLayerInfoChecked(true);
     },
 

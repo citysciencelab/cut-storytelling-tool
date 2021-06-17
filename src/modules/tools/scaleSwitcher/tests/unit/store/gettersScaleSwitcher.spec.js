@@ -28,7 +28,7 @@ describe("src/modules/tools/scaleSwitcher/store/gettersScaleSwitcher.js", () => 
             expect(name(stateScaleSwitcher)).to.be.equals("common:menu.tools.scaleSwitcher");
         });
         it("returns the glyphicon default value from state", () => {
-            expect(glyphicon(stateScaleSwitcher)).to.equals("glyphicon-resize-full");
+            expect(glyphicon(stateScaleSwitcher)).to.equals("glyphicon-resize-small");
         });
         it("returns the renderToWindow default value from state", () => {
             expect(renderToWindow(stateScaleSwitcher)).to.be.true;

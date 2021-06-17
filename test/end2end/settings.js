@@ -1,8 +1,7 @@
-const webdriver = require("selenium-webdriver"),
-    capabilities = {
+const capabilities = {
         firefox: {"browserName": "firefox", acceptSslCerts: true, acceptInsecureCerts: true},
-        chrome: {"browserName": "chrome", version: "88", acceptSslCerts: true, acceptInsecureCerts: true},
-        ie: webdriver.Capabilities.ie()
+        chrome: {"browserName": "chrome", version: "latest", acceptSslCerts: true, acceptInsecureCerts: true},
+        edge: {"browserName": "MicrosoftEdge", version: "latest", acceptSslCerts: true, acceptInsecureCerts: true}
     },
     /** TODO
      * when changing the following values, also change the functions beneath; the values there should eventually
@@ -12,6 +11,9 @@ const webdriver = require("selenium-webdriver"),
     resolutions = [
         "1920x1080"
         // "600x800"
+    ],
+    resolutionsMacOS = [
+        "1920x1440"
     ],
     configs = new Map([
         ["basic", "basic"],
@@ -108,12 +110,30 @@ function isChrome (browsername) {
 }
 
 /**
+ * Returns true for browsername indicating edge is running.
+ * @param {String} browsername is browsername or contains browsername
+ * @returns {boolean} whether running browser is edge
+ */
+function isEdge (browsername) {
+    return browsername.toLowerCase().includes("edge");
+}
+
+/**
  * Returns true for browsername indicating firefox is running.
  * @param {String} browsername is browsername or contains browsername
  * @returns {boolean} whether running browser is firefox
  */
 function isFirefox (browsername) {
     return browsername.toLowerCase().includes("firefox");
+}
+
+/**
+ * Returns true for browsername indicating safari is running.
+ * @param {String} browsername is browsername or contains browsername
+ * @returns {boolean} whether running browser is safari
+ */
+function isSafari (browsername) {
+    return browsername.toLowerCase().includes("safari");
 }
 
 /**
@@ -152,6 +172,17 @@ function getCapabilities (testService) {
                 "accessKey": process.env.SAUCE_ACCESS_KEY,
                 "extendedDebugging": true
             }
+        },
+        baseSaucelabsMacOS = {
+            "host": "saucelabs",
+            "sauce:options": {
+                "screenResolution": "1920x1440",
+                /* eslint-disable-next-line no-process-env */
+                "username": process.env.SAUCE_USERNAME,
+                /* eslint-disable-next-line no-process-env */
+                "accessKey": process.env.SAUCE_ACCESS_KEY,
+                "extendedDebugging": true
+            }
         };
 
     if (testService === "browserstack") {
@@ -162,14 +193,7 @@ function getCapabilities (testService) {
                 "browser_version": "89.0",
                 "os": "Windows",
                 "os_version": "10"
-            }/*
-            {
-                ...base,
-                "browserName": "Safari",
-                "browser_version": "12.0",
-                "os": "OS X",
-                "os_version": "Mojave"
-            }*/
+            }
         ];
     }
 
@@ -177,14 +201,26 @@ function getCapabilities (testService) {
         {
             ...baseSaucelabs,
             "browserName": "chrome",
-            "browserVersion": "89",
+            "browserVersion": "latest",
             "platformName": "Windows 10"
         },
         {
             ...baseSaucelabs,
             "browserName": "firefox",
-            "browserVersion": "88",
+            "browserVersion": "latest",
             "platformName": "Windows 10"
+        },
+        {
+            ...baseSaucelabs,
+            "browserName": "MicrosoftEdge",
+            "browserVersion": "latest",
+            "platformName": "Windows 10"
+        },
+        {
+            ...baseSaucelabsMacOS,
+            "browserName": "safari",
+            "browserVersion": "latest",
+            "platformName": "macOS 10.15"
         }
     ];
 
@@ -193,6 +229,7 @@ function getCapabilities (testService) {
 module.exports = {
     capabilities,
     resolutions,
+    resolutionsMacOS,
     configs,
     modes,
     is2D,
@@ -200,7 +237,9 @@ module.exports = {
     isOB,
     isMobile,
     isChrome,
+    isEdge,
     isFirefox,
+    isSafari,
     isBasic,
     isMaster,
     isDefault,

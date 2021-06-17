@@ -12,7 +12,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         showSettings: true,
         isSecured: false,
         isClustered: false,
-        allowedVersions: ["1.1.0"],
+        allowedVersions: ["1.1.0", "2.0.0"],
         altitudeMode: "clampToGround",
         useProxy: false
     }),
@@ -24,7 +24,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @property {String[]} supported=["2D", "3D"] Supported map modes.
      * @property {Boolean} showSettings=true Flag if settings selectable.
      * @property {Boolean} isClustered=false Flag if layer is clustered.
-     * @property {String[]} allowedVersions=["1.1.0"] Allowed Version of WFS requests.
+     * @property {String[]} allowedVersions=["1.1.0", "2.0.0"] Allowed Version of WFS requests.
      * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      * @fires Layer#RadioTriggerVectorLayerResetFeatures
      * @listens Layer#RadioRequestVectorLayerGetFeatures
@@ -159,7 +159,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
                 SRSNAME: Radio.request("MapView", "getProjection")?.getCode(),
                 TYPENAME: typename,
                 VERSION: this.get("version"),
-                PROPERTYNAME: propertyname ? propertyname : "",
+                PROPERTYNAME: propertyname ? propertyname : undefined,
                 // loads only the features in the extent of this geometry
                 BBOX: this.get("bboxGeometry") ? this.get("bboxGeometry").getExtent().toString() : undefined
             },
@@ -302,7 +302,8 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
     getFeaturesFromData: function (data) {
         let features;
         const wfsReader = new WFS({
-            featureNS: this.get("featureNS")
+            featureNS: this.get("featureNS"),
+            version: this.get("version")
         });
 
         features = wfsReader.readFeatures(data);
