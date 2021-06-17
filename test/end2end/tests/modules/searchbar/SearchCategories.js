@@ -23,16 +23,17 @@ async function SearchCategories ({builder, url, resolution, capability}) {
 
             /**
              * Clears search bar (if necessary), re-enters search word, opens category view.
+             * @param {String} [searchKey=searchString] String that is searched for.
              * @returns {void}
              */
-            async function reopenCategories () {
+            async function reopenCategories (searchKey = searchString) {
                 if (await clear.isDisplayed()) {
                     await clear.click();
                 }
                 await driver.executeScript(setResolution, initialResolution);
                 await driver.executeScript(setCenter, initialCenter);
 
-                await searchInput.sendKeys(searchString);
+                await searchInput.sendKeys(searchKey);
                 await driver.wait(until.elementIsVisible(searchList));
                 /* clicking this element may do nothing (especially in Firefox) when
                 * searches are still running; to circumvent this issue, the element
@@ -52,10 +53,11 @@ async function SearchCategories ({builder, url, resolution, capability}) {
              * @param {boolean} params.movesCenter if true, checks if center point moved (assuming it was set to initialCenter beforehand)
              * @param {boolean} params.changesResolution if true, checks if resolution changed (assuming it was set to initialResolution beforehand)
              * @param {boolean} [params.categoryName=idPart] if set, will be used to search for the category label; else, idPart is used
+             * @param {String} params.searchKey String that is searched for.
              * @param {boolean} params.idPart part of the id for hits sufficient for identifying it
              * @returns {void}
              */
-            async function selectAndVerifyFirstHit ({setsMarker, showsPolygon, movesCenter, changesResolution, categoryName, idPart}) {
+            async function selectAndVerifyFirstHit ({setsMarker, showsPolygon, movesCenter, changesResolution, categoryName, idPart, searchKey}) {
                 const categorySelector = By.xpath(`//li[contains(@class,'type')][contains(.,'${categoryName || idPart}')]`),
                     categoryOpenSelector = By.xpath(`//li[contains(@class,'type')][contains(@class,'open')][contains(.,'${categoryName || idPart}')]`),
                     entrySelector = By.xpath(`//li[contains(@id,'${idPart}')][contains(@class,'hit')]`);
@@ -68,7 +70,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                     marker = "markerPolygon";
                 }
 
-                await reopenCategories();
+                await reopenCategories(searchKey);
 
                 await driver.wait(until.elementLocated(categorySelector), 12000);
                 await driver.wait(until.elementIsVisible(await driver.findElement(categorySelector)), 12000);
@@ -167,12 +169,13 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 })).to.be.true;
             });
 
-            it("category 'B-Plan' shows results; on click, zooms to the place and marks it with polygon", async function () {
+            it("category 'im Verfahren' shows results; on click, zooms to the place and marks it with polygon", async function () {
                 await selectAndVerifyFirstHit({
                     setsMarker: false,
                     showsPolygon: true,
                     movesCenter: true,
-                    idPart: "B-Plan"
+                    idPart: "im Verfahren",
+                    searchKey: "Heim"
                 });
 
                 expect(await driver.executeScript(hasVectorLayerStyle, "markerPolygon", {
