@@ -206,6 +206,7 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
             });
 
             it("arrows moving up do nothing if layer is already first", async function () {
+                await driver.wait(until.elementLocated(By.css("ul#root li.layer div.layer-settings span.glyphicon-arrow-up")), 12000);
                 await (await driver.findElement(By.css("ul#root li.layer div.layer-settings span.glyphicon-arrow-up"))).click();
 
                 const newTitleOrder = await getOrderedTitleTexts(driver),
@@ -223,11 +224,8 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
             });
 
             it("allows removing layer from tree and map", async function () {
-                await (await driver.wait(
-                    until.elementLocated(By.css("ul#root li.layer div.layer-settings span.remove-layer")),
-                    12000,
-                    "layer removal button did not appear in layer cog menu"
-                )).click();
+                await driver.wait(until.elementLocated(By.css("ul#root li.layer div.layer-settings span.remove-layer")), 12000);
+                await (await driver.findElement(By.css("ul#root li.layer div.layer-settings span.remove-layer"))).click();
 
                 await new Promise(r => setTimeout(r, 1000));
 
@@ -239,13 +237,13 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
             });
 
             it("arrows moving down do nothing if layer is already last", async function () {
-                await (
-                    await driver.findElement(By.css("ul#root li.layer:nth-child(28) span.glyphicon-cog"))
-                ).click();
+                await driver.wait(until.elementLocated(By.css("ul#root li.layer:nth-child(28) span.glyphicon-cog")), 12000);
+                await (await driver.findElement(By.css("ul#root li.layer:nth-child(28) span.glyphicon-cog"))).click();
+
                 await driver.wait(until.elementLocated(By.css("ul#root li.layer div.layer-settings")));
 
                 // wait for animation to finish
-                await new Promise(r => setTimeout(r, 200));
+                await new Promise(r => setTimeout(r, 500));
 
                 await (await driver.findElement(By.css("ul#root li.layer div.layer-settings span.glyphicon-arrow-down"))).click();
 
