@@ -9,12 +9,10 @@ const state = {
     },
     layerSwiper: {
         active: false,
-        id: "layerSwiper",
-        name: "controls.layerSwiper.title",
         isMoving: false,
-        mapObject: {},
-        swiper: {},
-        targetLayer: {},
+        mapObject: null,
+        swiper: null,
+        targetLayer: null,
         valueX: ""
     }
 };

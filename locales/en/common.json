@@ -703,7 +703,7 @@
                 "hideMousePosition": "Fade out"
             },
             "layerSwiper": {
-                "title": "Layer swiper"
+                "title": "Compare layers"
             }
         },
         "searchbar": {

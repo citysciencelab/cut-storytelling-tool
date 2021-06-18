@@ -1,14 +1,11 @@
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersWmst";
 import mutations from "../store/mutationsWmst";
+import actions from "../store/actionsWmst";
 
 export default {
     name: "LayerSwiper",
-    data: function () {
-        return {
-        };
-    },
     computed: {
         ...mapGetters("Map", ["visibleLayerList", "map"]),
         ...mapGetters("Wmst", Object.keys(getters))
@@ -16,7 +13,7 @@ export default {
     created: function () {
         window.addEventListener("mousemove", this.moveSwiper);
         window.addEventListener("mouseup", this.moveStop);
-        this.setLayerSwiperTargetLayer(this.visibleLayerList.find(element => element.values_.id === "wmst"));
+        this.setLayerSwiperTargetLayer(this.visibleLayerList.find(element => element.values_.id === this.timeSlider.layerId));
         this.setLayerSwiperMapObject(this.map);
     },
     beforeDestroy: function () {
@@ -24,7 +21,8 @@ export default {
         window.removeEventListener("mouseup", this.moveStop);
     },
     methods: {
-        ...mapMutations("Wmst", Object.keys(mutations))
+        ...mapMutations("Wmst", Object.keys(mutations)),
+        ...mapActions("Wmst", Object.keys(actions))
     }
 };
 </script>
@@ -54,57 +52,73 @@ button {
     left: 50%;
     transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
-}
-
-.ol-swipe:before {
-    content: "";
-    position: absolute;
-    top: -5000px;
-    bottom: -5000px;
-    left: 50%;
-    width: 4px;
-    background: #fff;
-    z-index: -1;
-    transform: translate(-2px, 0);
-    -webkit-transform: translate(-2px, 0);
-}
-.ol-swipe.horizontal:before {
-    left: -5000px;
-    right: -5000px;
-    top: 50%;
-    bottom: auto;
-    width: auto;
-    height: 4px;
-}
-
-.ol-swipe,
-.ol-swipe button {
     cursor: ew-resize;
+    &:before {
+        content: "";
+        position: absolute;
+        top: -5000px;
+        bottom: -5000px;
+        left: 50%;
+        width: 4px;
+        background: #fff;
+        z-index: -1;
+        transform: translate(-2px, 0);
+        -webkit-transform: translate(-2px, 0);
+    }
+    button {
+        cursor: ew-resize;
+        &:before {
+            content: "";
+            position: absolute;
+            top: 25%;
+            bottom: 25%;
+            left: 50%;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.8);
+            transform: translate(-1px, 0);
+            -webkit-transform: translate(-1px, 0);
+            transform: translateX(-7px);
+            -webkit-transform: translateX(-7px);
+        }
+        &:after {
+            content: "";
+            position: absolute;
+            top: 25%;
+            bottom: 25%;
+            left: 50%;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.8);
+            transform: translate(-1px, 0);
+            -webkit-transform: translate(-1px, 0);
+            transform: translateX(5px);
+            -webkit-transform: translateX(5px);
+        }
+    }
+    &:after {
+        content: "";
+        position: absolute;
+        top: 25%;
+        bottom: 25%;
+        left: 50%;
+        width: 2px;
+        background: rgba(255, 255, 255, 0.8);
+        transform: translate(-1px, 0);
+        -webkit-transform: translate(-1px, 0);
+    }
 }
-.ol-swipe.horizontal,
-.ol-swipe.horizontal button {
+.ol-swipe.horizontal {
+    &:before {
+        left: -5000px;
+        right: -5000px;
+        top: 50%;
+        bottom: auto;
+        width: auto;
+        height: 4px;
+    }
     cursor: ns-resize;
+    button {
+        cursor: ns-resize;
+    }
 }
 
-.ol-swipe:after,
-.ol-swipe button:before,
-.ol-swipe button:after {
-    content: "";
-    position: absolute;
-    top: 25%;
-    bottom: 25%;
-    left: 50%;
-    width: 2px;
-    background: rgba(255, 255, 255, 0.8);
-    transform: translate(-1px, 0);
-    -webkit-transform: translate(-1px, 0);
-}
-.ol-swipe button:after {
-    transform: translateX(5px);
-    -webkit-transform: translateX(5px);
-}
-.ol-swipe button:before {
-    transform: translateX(-7px);
-    -webkit-transform: translateX(-7px);
-}
 </style>
