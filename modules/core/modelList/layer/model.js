@@ -476,7 +476,8 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     toggleIsSelected: function () {
-        const layerGroup = Radio.request("ModelList", "getModelsByAttributes", {parentId: this.get("parentId")}),
+        const id = this.get("id"),
+            layerGroup = Radio.request("ModelList", "getModelsByAttributes", {parentId: this.get("parentId")}),
             singleBaselayer = this.get("singleBaselayer") && this.get("parentId") === "Baselayer",
             timeLayer = this.get("typ") === "WMS" && this.get("time");
 
@@ -486,7 +487,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             // This only works for treeType 'custom', otherwise the parentId is not set on the layer
             if (singleBaselayer) {
                 layerGroup.forEach(layer => {
-                    if (layer.get("id") !== this.get("id")) {
+                    if (layer.get("id") !== id) {
                         layer.setIsSelected(false);
                         // This makes sure that the Oblique Layer, if present in the layerList, is not selectable if switching between baseLayers
                         layer.checkForScale(Radio.request("MapView", "getOptions"));
@@ -494,11 +495,20 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
                 });
             }
             if (timeLayer) {
-                store.commit("Wmst/setTimeSliderActive", true);
+                store.commit("WmsTime/setTimeSliderActive", {active: true, currentLayerId: id});
             }
         }
         else if (timeLayer) {
-            store.commit("Wmst/setTimeSliderActive", false);
+            // If the swiper is active, two WMS-T are currently active TODO: rename 'swiper' after merge
+            if (store.getters["WmsTime/swiper"].active) {
+                if (!id.endsWith("_secondLayer")) {
+                    this.setIsSelected(true);
+                }
+                store.dispatch("WmsTime/toggleSwiper", id);
+            }
+            else {
+                store.commit("WmsTime/setTimeSliderActive", {active: false, currentLayerId: ""});
+            }
         }
     },
 

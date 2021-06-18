@@ -225,7 +225,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
 
                 this.addItem(Object.assign({
                     type: "layer",
-                    parentId: "Timelayer",
+                    parentId: "TimeLayer",
                     level: 0,
                     isVisibleInTree: true,
                     isSelected

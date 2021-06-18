@@ -139,7 +139,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         this.listenTo(Radio.channel("Util"), {
             "isViewMobileChanged": () => {
                 this.addOrRemoveFolder("3d_daten", "common:tree.subjectData3D", this.get("overlayer_3d"));
-                this.addOrRemoveFolder("Timelayer", "common:tree.subjectDataTime", this.get("overlayer_time"));
+                this.addOrRemoveFolder("TimeLayer", "common:tree.subjectDataTime", this.get("overlayer_time"));
             }
         });
 
@@ -162,7 +162,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             this.parseTree(this.get("baselayer"), "Baselayer", 0);
             this.parseTree(this.get("overlayer"), "Overlayer", 0);
             this.parseTree(this.get("overlayer_3d"), "3d_daten", 0);
-            this.parseTree(this.get("overlayer_time"), "Timelayer", 0);
+            this.parseTree(this.get("overlayer_time"), "TimeLayer", 0);
         }
         else {
             this.addTreeMenuItems();
@@ -358,35 +358,39 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {*} layers - todo
      * @param {*} url - todo
      * @param {*} version - todo
+     * @param {boolean} [isSelected = false] Whether the given layer is selected or not.
+     * @param {(boolean/object)} [time = false] If set to `true` or and Object, the configured Layer is expected to be a WMS-T.
      * @returns {void}
      */
-    addLayer: function (name, id, parentId, level, layers, url, version) {
+    addLayer: function (name, id, parentId, level, layers, url, version, isSelected = false, time = false) {
         const layer = {
+            id,
+            name,
+            parentId,
+            level,
+            layers,
+            url,
+            version,
+            isSelected,
+            time,
             cache: false,
             datasets: [],
             featureCount: 3,
             format: "image/png",
             gfiAttributes: "showAll",
             gutter: "0",
-            id: id,
             isBaseLayer: false,
             layerAttribution: "nicht vorhanden",
-            layers: layers,
             legendURL: "",
-            level: level,
             maxScale: "2500000",
             minScale: "0",
-            name: name,
-            parentId: parentId,
             singleTile: false,
             supported: ["2D", "3D"],
             tilesize: "512",
             transparent: true,
             typ: "WMS",
             type: "layer",
-            url: url,
-            urlIsVsible: true,
-            version: version
+            urlIsVisible: true
         };
 
         this.addItem(layer);
@@ -701,7 +705,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         });
 
         this.addOrRemoveFolder("3d_daten", "common:tree.subjectData3D", this.get("overlayer_3d"));
-        this.addOrRemoveFolder("Timelayer", "common:tree.subjectDataTime", this.get("overlayer_time"));
+        this.addOrRemoveFolder("TimeLayer", "common:tree.subjectDataTime", this.get("overlayer_time"));
 
         this.addItem({
             type: "folder",
@@ -789,7 +793,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         switch (id) {
             case "3d_daten":
                 return "Hintergrundkarten";
-            case "Timelayer":
+            case "TimeLayer":
                 return "Fachdaten";
             default:
                 return "Fachdaten";
