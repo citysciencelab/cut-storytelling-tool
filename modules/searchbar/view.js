@@ -422,12 +422,12 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         const modelHitList = this.model.get("hitList");
 
         // distingiush hit
-        if (Object.prototype.hasOwnProperty.call(evt, "cid")) { // in this case, evt = model
+        if (evt && Object.prototype.hasOwnProperty.call(evt, "cid")) { // in this case, evt = model
             pick = Radio.request("Util", "pick", modelHitList, [0]);
 
             hit = Object.values(pick)[0];
         }
-        else if (Object.prototype.hasOwnProperty.call(evt, "currentTarget") === true && evt.currentTarget.id) {
+        else if (evt && Object.prototype.hasOwnProperty.call(evt, "currentTarget") === true && evt.currentTarget.id) {
             hitID = evt.currentTarget.id;
             hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), {"id": hitID});
 

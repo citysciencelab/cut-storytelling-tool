@@ -24,12 +24,12 @@ const ElasticModel = Backbone.Model.extend(/** @lends ElasticModel.prototype */{
      * @returns {Object} - The result object of the request.
      */
     search: function (xhrConfig) {
-        const serviceId = xhrConfig?.serviceId ? xhrConfig.serviceId : undefined,
+        const serviceId = Object.prototype.hasOwnProperty.call(xhrConfig, "serviceId") ? xhrConfig.serviceId : undefined,
             /**
              * @deprecated in the next major-release!
              * useProxy
              */
-            useProxy = xhrConfig?.useProxy ? xhrConfig.useProxy : false,
+            useProxy = Object.prototype.hasOwnProperty.call(xhrConfig, "useProxy") ? xhrConfig.useProxy : false,
             restService = Radio.request("RestReader", "getServiceById", serviceId);
         let xhrRequests = this.get("xhrRequests"),
             result = {
