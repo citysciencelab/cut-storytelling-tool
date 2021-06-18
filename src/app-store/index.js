@@ -10,7 +10,7 @@ import Title from "../modules/title/store/indexTitle";
 import Map from "../modules/map/store/indexMap";
 import MapMarker from "../modules/mapMarker/store/indexMapMarker";
 import Legend from "../modules/legend/store/indexLegend";
-import Wmst from "../modules/wmst/store/indexWmst";
+import WmsTime from "../modules/wmsTime/store/indexWmsTime";
 
 import getters from "./getters";
 import mutations from "./mutations";
@@ -35,7 +35,7 @@ const store = new Vuex.Store({
         Map,
         MapMarker,
         Title,
-        Wmst,
+        WmsTime,
         controls: {
             ...controlsModule
         },
