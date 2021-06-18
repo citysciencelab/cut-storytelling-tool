@@ -1484,23 +1484,28 @@
  */
 
 /**
- * @event Core#RadioTriggerUtilSetUiStyle
+ * @event Core#RadioRequestUtilSetUiStyle
  * @description sets the ui style
  * @example Radio.request("Util", "setUiStyle");
  */
 
 /**
- * @event Core#RadioTriggerUtilPick
+ * @event Core#RadioRequestUtilPick
  * @description Return a copy of the object, filtered to only have values for the whitelisted keys (or array of valid keys).
  * @example Radio.request("Util", "pick");
  */
 
 /**
- * @event Core#RadioTriggerUtilOmit
+ * @event Core#RadioRequestUtilOmit
  * @description Returns a copy of the object, filtered to omit the keys specified (or array of blacklisted keys).
  * @example Radio.request("Util", "omit");
  */
 
+/**
+ * @event Core#RadioTriggerUtilRefreshTree
+ * @description Calls the treeType specific function to rerender the tree.
+ * @example Radio.trigger("Util", "refreshTree")
+ */
 
 /**
  * @event Core#changeIsViewMobile
@@ -2440,3 +2445,12 @@
  * @description Trigger hide POI modal.
  * @example Radio.trigger("POI", "hidePOIModal");
  */
+
+/** -------------------- WMS-T -------------------- */
+
+/**
+ * @event WMS-T#RadioTriggerWMS-TUpdateTime
+ * @description Updates the 'TIME' parameter of the layer with the given Id.
+ * @example Radio.trigger("WMS-T", "updateTime", "myTimeLayer", 4020);
+ */
+

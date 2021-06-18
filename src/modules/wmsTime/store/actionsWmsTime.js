@@ -1,4 +1,18 @@
 const actions = {
+    /**
+     * Toggles the LayerSwiper.
+     * If the LayerSwiper is deactivated, the second layer is deactivated and removed from the ModelList.
+     *
+     * @param {String} id Id of the Layer that should be toggled.
+     * @fires Core#RadioTriggerUtilRefreshTree
+     * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
+     * @fires Core.ModelList#RadioTriggerModelListRemoveModelsById
+     * @fires Core.ModelList#RadioTriggerModelListSetModelAttributesById
+     * @fires Core.ConfigLoader#RadioTriggerParserAddLayer
+     * @fires Core.ConfigLoader#RadioTriggerParserRemoveItem
+     * @returns {void}
+     */
     toggleSwiper ({commit, state}, id) {
         commit("setSwiperActive", !state.swiper.active);
 
