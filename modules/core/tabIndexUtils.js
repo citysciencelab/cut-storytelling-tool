@@ -56,7 +56,7 @@ const TabIndexUtils = Backbone.Model.extend({
     },
 
     /**
-     * Starting with the offset value the tabindex for all elements is set by incrementing each with the given increment value. 
+     * Starting with the offset value the tabindex for all elements is set by incrementing each with the given increment value.
      * The order of the elements in the DOM is used.
      * @param {String} elementsSelector - the $-selector for all children which tabindices should be set
      * @param {Number} incrementValue - the increment value to use
