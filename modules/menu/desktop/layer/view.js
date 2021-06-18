@@ -7,10 +7,11 @@ import TabIndexUtils from "../../../core/tabIndexUtils";
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {
         "click .layer-item": "preToggleIsSelected",
+        "keydown .layer-item": "toggleLayerKeyAction",
+
         "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
         "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
         "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
-        "keydown .layer-item": "toggleLayerKeyAction",
         "keydown .layer-info-item": "showLayerInfoKeyAction"
     },
 
@@ -39,13 +40,13 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
                 if (this.model.get("supported").indexOf(mode) >= 0) {
-                    this.removeDisableClass();
+                    this.enableComponent();
                 }
                 else if (mode === "2D") {
-                    this.addDisableClass("Layer im 2D-Modus nicht verfügbar");
+                    this.disableComponent("Layer im 2D-Modus nicht verfügbar");
                 }
                 else {
-                    this.addDisableClass("Layer im 3D-Modus nicht verfügbar");
+                    this.disableComponent("Layer im 3D-Modus nicht verfügbar");
                 }
             }
         });
@@ -91,7 +92,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             this.$el.css("padding-left", ((this.model.get("level") * 15) + 5) + "px");
         }
         this.setAllTabIndices();
-        this.setFocusToAElement();
+        // this.setFocus();
 
         return this;
     },
@@ -106,16 +107,16 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
 
         if (model.has("minScale") === true) {
             if (value === true) {
-                this.addDisableClass("Layer wird in dieser Zoomstufe nicht angezeigt");
+                this.disableComponent("Layer wird in dieser Zoomstufe nicht angezeigt");
             }
             else if (this.model.get("supported").indexOf(mode) >= 0) {
-                this.removeDisableClass();
+                this.enableComponent();
             }
             else if (mode === "2D") {
-                this.addDisableClass("Layer im 2D-Modus nicht verfügbar");
+                this.disableComponent("Layer im 2D-Modus nicht verfügbar");
             }
             else {
-                this.addDisableClass("Layer im 3D-Modus nicht verfügbar");
+                this.disableComponent("Layer im 3D-Modus nicht verfügbar");
             }
         }
     },
@@ -129,6 +130,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         if (event.which === 32 || event.which === 13) {
             this.preToggleIsSelected();
             event.stopPropagation();
+            event.preventDefault();
         }
     },
     /**
@@ -159,10 +161,10 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         }
         // If the the model should not be selectable make sure that is not selectable!
         if (!this.model.get("isSelected") && (this.model.get("maxScale") < scale || this.model.get("minScale") > scale)) {
-            this.addDisableClass();
+            this.disableComponent();
         }
         this.setAllTabIndices();
-        this.setFocusToAElement();
+        this.setFocus();
     },
 
     /**
@@ -170,7 +172,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @param {Event} event - the event instance
      * @returns {void}
      */
-    setFocusToAElement: function () {
+    setFocus: function () {
         const htmlAElement = document.querySelector("#" + this.model.get("id"));
 
         if (htmlAElement) {
@@ -179,18 +181,16 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * Resets all tabindices to enable keyboard navigation. Because the order of creation the components
-     * reflects not the order in the dom, we need to set all tabindices of all elements.
+     * Sets all tabindices in the whole menu tree to enable keyboard navigation.
      * @returns {void}
      */
     setAllTabIndices: function () {
-        const parentTabIndexElement = $("a." + this.model.get("parentId")),
-            // search for all <a> elements (layer text) and <span> elements (info-icons)
-            allComponentsSiblingTabIndexElements = $("#" + this.model.get("parentId") + ">li a" +
-            ",#" + this.model.get("parentId") + ">li button"
-            );
+        const treeRootId = TabIndexUtils.getTreeRootItemId(this.model.get("parentId")),
+            parentTabIndexElement = $("a." + treeRootId),
+            allComponentsSiblingTabIndexElements = $("#" + treeRootId + " .tabable"),
+            offset = 10;
 
-        TabIndexUtils.setAllTabIndicesFromParent(parentTabIndexElement, allComponentsSiblingTabIndexElements);
+        TabIndexUtils.setAllTabIndicesFromParent(parentTabIndexElement, allComponentsSiblingTabIndexElements, offset);
     },
 
     /**
@@ -283,6 +283,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.model.showLayerInformation();
         // Navigation wird geschlossen
         this.$("div.collapse.navbar-collapse").removeClass("in");
+        // TODO REFACTOR-384 Keyboard-nav: set focus to info window
         this.highlightLayerInformationIcon();
     },
 
@@ -321,11 +322,11 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Disables the component for interaction, e.g. if the zoom level changes.
      * @param {string} text -
      * @returns {void}
      */
-    addDisableClass: function (text) {
+    disableComponent: function (text) {
         const statusCheckbox = this.$el.find("span.glyphicon.glyphicon-unchecked").length;
 
         this.$el.addClass("disabled");
@@ -335,17 +336,22 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             this.$el.find("span.pull-left").css({"pointer-events": "auto", "cursor": "pointer"});
         }
         this.$el.attr("title", text);
+        this.$el.find("a").addClass("disabled");
+        this.$el.find("a").removeClass("tabable");
+        this.$el.find("a").removeAttr("tabindex");
     },
 
     /**
-     * todo
+     * Enables the component for interaction.
      * @returns {void}
      */
-    removeDisableClass: function () {
+    enableComponent: function () {
         this.$el.removeClass("disabled");
         this.$el.find("*").css("pointer-events", "auto");
         this.$el.find("*").css("cursor", "pointer");
         this.$el.attr("title", "");
+        this.$el.find("a").addClass("tabable");
+        this.setAllTabIndices();
     },
 
     /**

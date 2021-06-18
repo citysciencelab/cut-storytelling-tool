@@ -16,51 +16,89 @@ const TabIndexUtils = Backbone.Model.extend({
      * in the DOM is used.
      * @param {String} parentSelector - the $-selector for the parent element
      * @param {String} childrenSelector  - the $-selector  for all children which tabindices should be set
+     * @param {Number} offset - the initial offset value to use (optional)
      * @returns {void}
      **/
-    setAllTabIndicesFromParent: function (parentSelector, childrenSelector) {
+    setAllTabIndicesFromParent: function (parentSelector, childrenSelector, offset) {
 
-        let runningTabindex = parseInt(parentSelector.attr("tabindex"), 10);
+        let runningTabIndex = parseInt(parentSelector.attr("tabindex"), 10);
 
+        if (offset) {
+            runningTabIndex = runningTabIndex + offset;
+        }
         childrenSelector.each(function () {
-            $(this).attr("tabindex", ++runningTabindex);
+            $(this).attr("tabindex", ++runningTabIndex);
         });
     },
 
     /**
      * Retrieves the current tabindex from the parent element. Starting with the value of the parents tabindex
-     * the tabindex for all child elements is set by incrementing each with the given offset. The order of the elements
+     * the tabindex for all child elements is set by incrementing each with the given increment value. The order of the elements
      * in the DOM is used.
      * @param {String} parentSelector - the $-selector for the parent element
      * @param {String} childrenSelector - the $-selector for all children which tabindices should be set
-     * @param {Number} offset - the offset to use
+     * @param {Number} incrementValue - the increment value to use
+     * @param {Number} offset - the initial offset value to use (optional)
      * @returns {void}
      */
-    setAllTabIndicesFromParentByOffset: function (parentSelector, childrenSelector, offset) {
+    setAllTabIndicesFromParentWithIncrement: function (parentSelector, childrenSelector, incrementValue, offset) {
 
         let runningTabIndex = parseInt(parentSelector.attr("tabindex"), 10);
 
-        childrenSelector.each(function () {
+        if (offset) {
             runningTabIndex = runningTabIndex + offset;
+        }
+
+        childrenSelector.each(function () {
+            runningTabIndex = runningTabIndex + incrementValue;
             $(this).attr("tabindex", runningTabIndex);
         });
     },
 
     /**
-     * Starting with the offset value the tabindex for all elements is set by incrementing each with the given offset. The order of the elements
-     * in the DOM is used.
+     * Starting with the offset value the tabindex for all elements is set by incrementing each with the given increment value. 
+     * The order of the elements in the DOM is used.
      * @param {String} elementsSelector - the $-selector for all children which tabindices should be set
-     * @param {Number} offset - the offset to use
+     * @param {Number} incrementValue - the increment value to use
+     * @param {Number} offset - the initial offset value to use (optional)
      * @returns {void}
      */
-    setAllTabIndicesByOffset: function (elementsSelector, offset) {
+    setAllTabIndicesWithIncrement: function (elementsSelector, incrementValue, offset) {
 
-        let runningTabindex = 0;
+        let runningTabIndex = 0;
+
+        if (offset) {
+            runningTabIndex = runningTabIndex + offset;
+        }
 
         elementsSelector.each(function () {
-            runningTabindex = runningTabindex + offset;
-            $(this).attr("tabindex", runningTabindex);
+            runningTabIndex = runningTabIndex + incrementValue;
+            $(this).attr("tabindex", runningTabIndex);
         });
+    },
+
+    /**
+     * Retrieves the last tree item before the root item of the tree, starting by the given parent id. Walks through the tree in
+     * the upper direction.
+     * @param {String} startingParentId - the parent id to start with
+     * @returns {String} the last id found before the root item of the tree.
+     */
+    getTreeRootItemId: function (startingParentId) {
+
+        let id = null,
+            parentId = startingParentId;
+
+        do {
+
+            const parentItem = Radio.request("Parser", "getItemByAttributes", {id: parentId});
+
+            if (parentItem) {
+                parentId = parentItem.parentId;
+                id = parentItem.id;
+            }
+        } while (parentId && parentId !== "tree");
+
+        return id;
     }
 });
 

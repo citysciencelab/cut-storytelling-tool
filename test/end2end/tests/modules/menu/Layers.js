@@ -115,11 +115,11 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
                 // The first layer in tree "100 jahre Stadtgruen POIS" has a transparency of "0.25"
                 const checkLayerId = configGivenIdOrder[0];
 
-                await (await driver.findElement(By.css("ul#root li.layer span.layer-item"))).click();
+                await (await driver.findElement(By.css("ul#root li.layer a.layer-item"))).click();
                 expect(await driver.executeScript(isLayerVisible, checkLayerId, "0.25")).to.be.true;
-                await (await driver.findElement(By.css("ul#root li.layer span.layer-item"))).click();
+                await (await driver.findElement(By.css("ul#root li.layer a.layer-item"))).click();
                 expect(await driver.executeScript(isLayerVisible, checkLayerId, "0.25")).to.be.false;
-                await (await driver.findElement(By.css("ul#root li.layer span.layer-item"))).click();
+                await (await driver.findElement(By.css("ul#root li.layer a.layer-item"))).click();
                 expect(await driver.executeScript(isLayerVisible, checkLayerId, "0.25")).to.be.true;
             });
 

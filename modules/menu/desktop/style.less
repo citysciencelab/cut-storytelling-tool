@@ -4,8 +4,8 @@
 @color_2: rgb(255, 255, 255);
 @color_3: rgb(255, 127, 0);
 @color_4: rgb(82, 82, 82);
-@font_family_1: "MasterPortalFont","Arial Narrow",Arial,sans-serif;
-@font_family_2: MasterPortalFont,"Arial Narrow",Arial,sans-serif;
+@font_family_1: "MasterPortalFont", "Arial Narrow", Arial, sans-serif;
+@font_family_2: MasterPortalFont, "Arial Narrow", Arial, sans-serif;
 @background_color_1: rgb(51, 51, 51);
 
 /**************** Menu ***********************/
@@ -19,27 +19,53 @@
     border-bottom: 1px solid rgb(229, 229, 229);
 }
 
+ul#root {
+    a {
+        text-decoration: none;
+        opacity: 0.8;
+        &:hover {
+            opacity: 1.0;
+        }
+        &:focus {
+            opacity: 1.0;
+            outline: 3px solid @accent_focus;
+            outline: 3px auto  Highlight;
+            outline: 3px auto -webkit-focus-ring-color;
+        }
+        .disabled {
+            pointer-events: none;
+            cursor: default;
+        }
+    }
+
+}
 ul#tree {
     border: none;
     font-family: @font_family_1;
     padding: 0px 0;
     min-width: 380px;
-
-    a {
+    li a {
         text-decoration: none;
+        font-size: 15px;
         opacity: 0.8;
         margin: 0px;
-        padding: 0px;
-        cursor: pointer; 
+        color: @color_1;
+        cursor: pointer;
+        padding: 5px;
         &:hover {
-            opacity: 1;
+            opacity: 1.0;
         }
         &:focus {
-           opacity: 1;
-           color: @secondary_focus;
+            opacity: 1.0;
+            outline: 3px solid @accent_focus;
+            outline: 3px auto  Highlight;
+            outline: 3px auto -webkit-focus-ring-color;
         }
-     }
-
+        .disabled {
+            pointer-events: none;
+            cursor: default;
+        }
+    }
     .glyphicon {
         cursor: pointer;
         font-size: 15px;
@@ -65,7 +91,7 @@ ul#tree {
         overflow-y: auto;
         overflow-x: auto;
         max-width: 500px;
-        max-height: 55vH;
+        max-height: 55vh;
         .title {
             font-family: @font_family_2;
             font-size: 12px;
@@ -73,7 +99,7 @@ ul#tree {
         }
         li {
             border-bottom: 1px solid #ddd;
-            padding: 5px 15px;
+            padding: 5px 5px;
         }
     }
     .catalog_buttons {
@@ -85,39 +111,36 @@ ul#tree {
             font-size: 14px;
         }
     }
-    .btn-menu-icon {
-        border: 0;
-        background: 0;
-        padding: 0;
-        margin-top: 3px;
-        opacity: 1;
-        >span {
-            // font-size: 14px;
+    .layer-info-item {
+        > span {
             color: @color_4;
             opacity: 0.6;
             &:hover {
                 opacity: 1;
             }
+            &:focus {
+              opacity: 0.9;
+              outline: 3px solid @accent_focus;
+              outline: 3px auto  Highlight;
+              outline: 3px auto -webkit-focus-ring-color;
+          }
         }
     }
     li.layer-catalog {
-        >a {
+        >.header {
+            padding: 8px 5px 7px 5px;
             background-color: @background_color_1;
             color: @color_2;
             font-size: 13px;
-            &:focus {
-                opacity: 1;
-                background-color: @secondary_focus;
-             }
-            >.header {
-                padding: 8px 5px 7px 5px;
-            }
+        }
+        >div>a {
+            color: @color_2;
         }
     }
     .catalog-selection {
         font-size: 11px;
         font-weight: 400;
-        >select {
+        > select {
             height: 20px;
             padding: 0;
             font-size: 11px;
@@ -128,25 +151,25 @@ ul#tree {
     }
     .rotate-adjust {
         transform: rotate(180deg);
-        transition: .5s;
+        transition: 0.5s;
         font-size: 15px;
         cursor: pointer;
     }
     .rotate-adjust-back {
         transform: rotate(0deg);
-        transition: .5s;
+        transition: 0.5s;
         font-size: 15px;
         cursor: pointer;
     }
     .rotate-pin {
         transform: rotate(270deg);
-        transition: .5s;
+        transition: 0.5s;
         font-size: 14px;
         cursor: pointer;
     }
     .rotate-pin-back {
         transform: rotate(360deg);
-        transition: .5s;
+        transition: 0.5s;
         font-size: 14px;
         cursor: pointer;
     }
@@ -181,10 +204,10 @@ ul#tree.light {
         }
     }
 }
-ul#Overlayer {
+ul#Overlayer, ul#Baselayer {
     .glyphicon-check {
         color: @color_3;
-        &+.title {
+        & + .title {
             color: @color_3;
         }
     }

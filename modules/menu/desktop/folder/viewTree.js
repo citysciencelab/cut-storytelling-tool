@@ -1,4 +1,5 @@
 import FolderTemplate from "text-loader!./templateTree.html";
+import TabIndexUtils from "../../../core/tabIndexUtils";
 
 /**
  * @member FolderTemplate
@@ -9,7 +10,8 @@ import FolderTemplate from "text-loader!./templateTree.html";
 const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype */{
     events: {
         "click .title, .glyphicon-minus-sign, .glyphicon-plus-sign": "toggleIsExpanded",
-        "click .selectall": "toggleIsSelected"
+        "click .selectall": "toggleIsSelected",
+        "keydown": "toggleKeyAction"
     },
     /**
      * @class FolderViewTree
@@ -88,7 +90,59 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
             // fixes Bug BG-750: IE11 height was negative
             $("#" + this.model.get("parentId")).css("height", "0px");
         }
+        this.setAllTabIndices();
         return this;
+    },
+
+    /**
+     * Handles all keyboard events, e.g. for open/close the folder or selecting the whole component.
+     * @param {Event} event - the event instance
+     * @returns {void}
+     */
+    toggleKeyAction: function (event) {
+        if (event.which === 32 || event.which === 13) {
+            if (this.model.get("isFolderSelectable")) {
+                this.toggleIsSelected();
+            }
+            event.stopPropagation();
+            event.preventDefault();
+        }
+        else if (event.which === 37) {
+            this.model.setIsExpanded(false);
+            event.stopPropagation();
+            event.preventDefault();
+        }
+        else if (event.which === 39) {
+            this.model.setIsExpanded(true);
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    },
+
+    /**
+     * Sets the focus to the <a> element of this component.
+     * @param {Event} event - the event instance
+     * @returns {void}
+     */
+    setFocus: function () {
+        const htmlAElement = document.querySelector("#" + this.model.get("id") + ">a");
+
+        if (htmlAElement) {
+            htmlAElement.focus();
+        }
+    },
+
+    /**
+     * Sets all tabindices in the whole menu tree to enable keyboard navigation.
+     * @returns {void}
+     */
+    setAllTabIndices: function () {
+        const treeRootId = TabIndexUtils.getTreeRootItemId(this.model.get("parentId")),
+            parentTabIndexElement = $("a." + treeRootId),
+            allComponentsSiblingTabIndexElements = $("#" + treeRootId + " .tabable"),
+            offset = 10;
+
+        TabIndexUtils.setAllTabIndicesFromParent(parentTabIndexElement, allComponentsSiblingTabIndexElements, offset);
     },
 
     /**
@@ -99,6 +153,8 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
         const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
+        this.setAllTabIndices();
+        this.setFocus();
     },
     /**
      * Toogle Expanded
@@ -114,6 +170,7 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
      */
     toggleIsSelected: function () {
         this.model.toggleIsSelected();
+        // TODO BUG dependent on the (de) selection the children must also be deselected
         Radio.trigger("ModelList", "setIsSelectedOnChildLayers", this.model);
         this.model.setIsExpanded(true);
     },

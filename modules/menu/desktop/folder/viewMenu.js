@@ -50,19 +50,19 @@ const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype 
         else {
             this.$el.removeClass("open");
         }
-        this.resetAllTabIndices();
+        this.setAllTabIndices();
 
         return this;
     },
 
     /**
-     * TODO JG
+     * Sets the tabindices of all menu entries with an increment of 10000.
      * @returns {void}
      */
-    resetAllTabIndices: function () {
+    setAllTabIndices: function () {
         const allElementsOfThisComponent = $("#root>li>a");
 
-        TabIndexUtils.setAllTabIndicesByOffset(allElementsOfThisComponent, 10000);
+        TabIndexUtils.setAllTabIndicesWithIncrement(allElementsOfThisComponent, 10000);
     },
     /**
      * adds only layers to the tree that support the current mode of the map

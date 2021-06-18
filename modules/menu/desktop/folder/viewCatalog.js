@@ -11,14 +11,53 @@ import TabIndexUtils from "../../../core/tabIndexUtils";
 const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prototype */{
     events: {
         "change select": "setSelection",
-        "click .header > .glyphicon, .header > .control-label": "toggleIsExpanded",
+        "keydown .form-control": function (event) {
+            event.stopPropagation();
+        },
+
+        "click .header > a > .glyphicon, .header > a > .control-label": "toggleIsExpanded",
+        "keydown .header > a": "keyAction",
+
         "click .Baselayer .catalog_buttons .glyphicon-question-sign": function () {
             Radio.trigger("QuickHelp", "showWindowHelp", "tree");
+            // TODO REFACTOR-384 Keyboard-nav: setFocus to help window
         },
-        "keydown": "keyAction",
+        "keydown .Baselayer .catalog_buttons .glyphicon-question-sign": function (event) {
+            if (event.which === 32 || event.which === 13) {
+                Radio.trigger("QuickHelp", "showWindowHelp", "tree");
+                // TODO REFACTOR-384 Keyboard-nav: setFocus to help window
+                event.stopPropagation();
+                event.preventDefault();
+            }
+        },
+
         "click .glyphicon-adjust": "toggleBackground",
+        "keydown .glyphicon-adjust": function (event) {
+            if (event.which === 32 || event.which === 13) {
+                this.toggleBackground();
+                event.stopPropagation();
+                event.preventDefault();
+            }
+        },
+
         "click .rotate-pin": "unfixTree",
+        "keydown .rotate-pin": function (event) {
+            if (event.which === 32 || event.which === 13) {
+                this.unfixTree();
+                event.stopPropagation();
+                event.preventDefault();
+            }
+        },
+
         "click .rotate-pin-back": "fixTree",
+        "keydown .rotate-pin-back": function (event) {
+            if (event.which === 32 || event.which === 13) {
+                this.fixTree();
+                event.stopPropagation();
+                event.preventDefault();
+            }
+        },
+
         "click .layer-selection-save": function () {
             this.model.collection.setActiveToolsToFalse(this.model);
             this.model.collection.get("saveSelection").setIsActive(true);
@@ -107,22 +146,48 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         return this;
     },
 
-    // TODO JG
+    /**
+      * Handles all key action for open/close the layer list.
+      * @param {*} event - the event
+      * @returns {void}
+      */
     keyAction: function (event) {
         if (event.which === 32 || event.which === 13) {
             this.model.toggleIsExpanded();
             event.stopPropagation();
+            event.preventDefault();
+        }
+        else if (event.which === 37) {
+            this.model.setIsExpanded(false);
+            this.model.toggleCatalogs();
+            event.stopPropagation();
+            event.preventDefault();
+        }
+        else if (event.which === 39) {
+            this.model.setIsExpanded(true);
+            this.model.toggleCatalogs();
+            event.stopPropagation();
+            event.preventDefault();
         }
     },
     /**
-     * TODO JG
+     * Sets the tabindices of all layer catalog elements with an increment of 1000.
      * @returns {void}
      */
     setAllTabIndices: function () {
         const parentTabIndexElement = $("a." + this.model.get("parentId")),
-            allElementsOfThisComponent = $("#" + this.model.get("parentId") + ">li.layer-catalog>a");
+            allElementsOfThisComponent = $("#" + this.model.get("parentId") + ">li.layer-catalog>div>a"),
+            increment = 1000;
+            // offset = 10;
 
-        TabIndexUtils.setAllTabIndicesFromParentByOffset(parentTabIndexElement, allElementsOfThisComponent, 1000);
+        TabIndexUtils.setAllTabIndicesFromParentWithIncrement(parentTabIndexElement, allElementsOfThisComponent, increment);
+
+        let runningTabindex = parseInt(this.$el.find("div>a").attr("tabindex"), 10);
+
+        this.$el.find("div span .tabable, div form .tabable").each(function () {
+            runningTabindex = runningTabindex + 1;
+            $(this).attr("tabindex", runningTabindex);
+        });
     },
 
     /**
@@ -147,6 +212,9 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         else {
             elem.removeClass("glyphicon-plus-sign");
             elem.addClass("glyphicon-minus-sign");
+            // console.log(this.$el.find(".list-group-item").length)
+            // console.log($("ul#" + this.model.get("id") + ">li").length)
+            // $("ul#" + this.model.get("id") + " a").first().trigger("focusin");
         }
         // Hässlicher IE Bugfix, weil IE 11 mit overflow: auto und remove probleme macht (leerer Katalog wird sehr hoch und bekommt die Höhe -0.01)
         if (!this.model.get("isExpanded")) {
@@ -222,6 +290,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
     */
     setSelection: function (evt) {
         Radio.trigger("Parser", "setCategory", evt.currentTarget.value);
+        $("." + this.model.get("id") + " select.tabable").trigger("focus");
     }
 });
 
