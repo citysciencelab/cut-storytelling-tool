@@ -38,7 +38,7 @@ const WMSLayer = Layer.extend({
             "change:SLDBody": this.updateSourceSLDBody
         });
 
-        this.listenTo(Radio.channel("WMST"), {
+        this.listenTo(Radio.channel("WMS-T"), {
             "updateTime": this.updateTime
         });
 
@@ -48,8 +48,10 @@ const WMSLayer = Layer.extend({
         }
     },
 
-    updateTime (newValue) {
-        this.get("layerSource").updateParams({"TIME": newValue});
+    updateTime (id, newValue) {
+        if (id === this.get("id")) {
+            this.get("layerSource").updateParams({"TIME": newValue});
+        }
     },
 
     /**
@@ -88,12 +90,14 @@ const WMSLayer = Layer.extend({
 
                     const {Dimension, Extent} = result.Capability.Layer.Layer[0],
                         // NOTE: For the first implementation, it is assumed that the syntax for the values is always min/max/resolution as described in Table C.1 at http://cite.opengeospatial.org/OGCTestData/wms/1.1.1/spec/wms1.1.1.html#dims.declaring
-                        [min, max, resolution] = Extent?.values.split("/"),
+                        extentValues = Extent?.values.split("/"),
+                        [min, max] = extentValues.map(Number),
+                        resolution = extentValues[2],
                         // NOTE: For the first implementation, it is assumed that the syntax for the resolution is always P|NUMBER|PERIOD (| are for separation and not part of the String)
-                        // NOTE: The PERIOD will be interpreted as Y for year, M for month and D for day, while it is implemented against year
+                        // NOTE: The PERIOD will     be interpreted as Y for year, M for month and D for day, while it is implemented against year
                         resolutionChars = [...resolution],
-                        step = resolutionChars[2].toUpperCase() === "Y" ? parseInt(resolutionChars[1], 10) : 1,
-                        defaultValue = typeof time === "object" && min <= time.default && time.default <= max ? time.default : Extent.default;
+                        step = resolutionChars[2].toUpperCase() === "Y" ? Number(resolutionChars[1]) : 1,
+                        defaultValue = typeof time === "object" && min <= time.default && time.default <= max ? time.default : Number(Extent.default);
 
                     if (!Dimension || !Extent || Dimension[0].name !== "time" || Extent.name !== "time") {
                         throw Error(i18next.t("common:modules.core.modelList.layer.wms.invalidTimeLayer", {id: this.id}));
@@ -102,12 +106,11 @@ const WMSLayer = Layer.extend({
                     params.TIME = defaultValue;
 
                     this.set("time", typeof this.get("time") === "object" ? Object.assign(this.get("time"), {min, max, resolution}) : {min, max, resolution});
-                    store.commit("Wmst/setDefaultValue", defaultValue);
-                    store.commit("Wmst/setLayerId", this.get("id"));
-                    store.commit("Wmst/setMin", min);
-                    store.commit("Wmst/setMax", max);
-                    store.commit("Wmst/setStep", step);
-                    // TODO: The parameters needs to be added to an object inside an array so that, when multiple WMS-T are added, every layer is useable
+                    store.commit("WmsTime/addTimeSliderObject", {
+                        defaultValue,
+                        layerId: this.get("id"),
+                        min, max, step
+                    });
                 })
                 .catch(error => {
                     this.removeLayer();
@@ -378,7 +381,7 @@ const WMSLayer = Layer.extend({
      * @param {Object} value see doc/config.json.md for more information
      * @param {String} [value.name="_blank"] the browsing context or the target attribute to open the window (see https://developer.mozilla.org/en-US/docs/Web/API/Window/open)
      * @param {String} [value.specs=""] a comma-separated list of items - the setup to open the window with (see https://developer.mozilla.org/en-US/docs/Web/API/Window/open)
-     * @returns {Void}  -
+     * @returns {void}  -
      */
     setGfiAsNewWindow: function (value) {
         this.set("gfiAsNewWindow", value);

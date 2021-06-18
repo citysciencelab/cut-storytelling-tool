@@ -3,13 +3,13 @@ import {mapGetters} from "vuex";
 import TimeSlider from "./TimeSlider.vue";
 
 export default {
-    name: "Wmst",
+    name: "WmsTime",
     components: {
         TimeSlider
     },
     data: () => ({width: window.innerWidth, mobileWidth: 800}),
     computed: {
-        ...mapGetters("Wmst", ["swiper", "timeSlider"]),
+        ...mapGetters("WmsTime", ["currentTimeSliderObject", "swiper", "timeSlider"]),
         minWidth () {
             return this.width > this.mobileWidth;
         }
@@ -26,16 +26,16 @@ export default {
 </script>
 
 <template>
-    <div id="wmst">
+    <div id="wmsTime">
         <TimeSlider
             v-if="timeSlider.active"
             :class="{'moveLeft': swiper.active && minWidth}"
-            :layer-id="timeSlider.layerId"
+            :layer-id="currentTimeSliderObject.layerId"
         />
         <TimeSlider
             v-if="timeSlider.active && swiper.active && minWidth"
             :class="{'moveRight': swiper.active}"
-            :layer-id="timeSlider.layerId + '_secondLayer'"
+            :layer-id="currentTimeSliderObject.layerId + '_secondLayer'"
         />
         <!-- <LayerSwiper v-if="swiper.active && minWidth" />-->
     </div>
