@@ -68,6 +68,7 @@
         "backgroundMaps": "Hintergrundkarten",
         "subjectData": "Fachdaten",
         "subjectData3D": "3D Daten",
+        "subjectDataTime": "Zeitreihen",
         "selectedTopics": "Ausgewählte Themen",
         "removeSelection": "Auswahl entfernen",
         "infosAndLegend": "Informationen und Legende",
@@ -753,6 +754,16 @@
             "styleModel": {
                 "getGeometryTypeFromWFSFetchfailed": "Die Legende konnte in der Layerinformation nicht erstellt werden!",
                 "getGeometryTypeFromWFSFetchfailedMessage": "Details: Ein benötigter Dienst antwortet nicht."
+            }
+        },
+        "wmsTime": {
+            "timeSlider": {
+                "buttons": {
+                    "backward": "Einen Zeitpunkt zurück",
+                    "forward": "Einen Zeitpunkt voran",
+                    "layerSwiper": "Zeitpunkte vergleichen",
+                    "play": "Ein automatisches Abspielen aller Zeitpunkte, ausgehend vom aktuell ausgewählten Zeitpunkt"
+                }
             }
         },
         "legend": {

@@ -67,6 +67,7 @@
         "backgroundMaps": "Background maps",
         "subjectData": "Subject data",
         "subjectData3D": "3D data",
+        "subjectDataTime": "Time Series",
         "selectedTopics": "Selected topics",
         "removeSelection": "Remove selection",
         "infosAndLegend": "Information und explanations",
@@ -753,6 +754,16 @@
             "styleModel": {
                 "getGeometryTypeFromWFSFetchfailed": "The legend could not be created in the layer information!",
                 "getGeometryTypeFromWFSFetchfailedMessage": "Details: A required service is not responding."
+            }
+        },
+        "wmsTime": {
+            "timeSlider": {
+                "buttons": {
+                    "backward": "Move one moment backward",
+                    "forward": "Move one moment forward",
+                    "layerSwiper": "Compare two points in time",
+                    "play": "Play-back of all points in time of the layer, starting from the currently selected moment"
+                }
             }
         },
         "legend": {
