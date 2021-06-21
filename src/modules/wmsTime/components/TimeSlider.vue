@@ -112,18 +112,18 @@ export default {
                 </button>
             </fieldset>
             <fieldset>
-                <label :for="'timeSlider-activate-layerSwiper-' + layerId">{{ sliderValue }}</label>
+                <label :for="'timeSlider-input-range-' + layerId">{{ sliderValue }}</label>
             </fieldset>
             <fieldset>
-                <!-- TODO: Probable bug with the input 'range' -> Lowest value can not be selected, one value over the maximum can be selected. -> -1 @ max gets rid of a weird bug caused by this -->
+                <!-- TODO: Probable bug with the input 'range' -> Lowest value can not be selected, one value over the maximum can be selected. -> -1 @ max gets rid of one bug caused by this -->
                 <input
-                    :id="'timeSlider-activate-layerSwiper-' + layerId"
+                    :id="'timeSlider-input-range-' + layerId"
                     type="range"
                     :value="sliderValue"
                     :min="min"
                     :max="max - 1"
                     :step="step"
-                    aria-label="slide time"
+                    :aria-label="$t('common:modules.wmsTime.timeSlider.inputRangeLabel')"
                     @input="sliderValue = $event.target.value"
                 >
             </fieldset>
@@ -170,7 +170,7 @@ export default {
         margin: @bigger-margin;
         border: 1px solid black;
 
-        & > fieldset {
+        > fieldset {
             display: flex;
 
             button {

@@ -763,7 +763,8 @@
                     "forward": "Einen Zeitpunkt voran",
                     "layerSwiper": "Zeitpunkte vergleichen",
                     "play": "Ein automatisches Abspielen aller Zeitpunkte, ausgehend vom aktuell ausgewählten Zeitpunkt"
-                }
+                },
+                "inputRangeLabel": "Einen Zeitpunkt auswählen"
             }
         },
         "legend": {
