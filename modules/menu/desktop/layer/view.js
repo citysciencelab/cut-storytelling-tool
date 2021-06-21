@@ -31,6 +31,9 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             "change:isVisibleInTree": this.removeIfNotVisible,
             "change:isOutOfRange": this.toggleColor
         });
+        this.listenTo(Radio.channel("LayerInformation"), {
+            "unhighlightLayerInformationIcon": this.unhighlightLayerInformationIcon
+        });
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
                 if (this.model.get("supported").indexOf(mode) >= 0) {
@@ -132,6 +135,15 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         else {
             this.toggleIsSelected();
         }
+    },
+
+    /**
+     * Init the LayerInformation window and inits the highlighting of the informationIcon.
+     * @returns {void}
+     */
+    showLayerInformation: function () {
+        this.model.showLayerInformation();
+        this.highlightLayerInformationIcon();
     },
 
     /**
