@@ -1,6 +1,5 @@
 import {generateSimpleGetters} from "../../../app-store/utils/generators";
 import initialState from "./stateWmsTime";
-import createTimeRange from "../utils/createTimeRange";
 import findCurrentTimeSliderObject from "../utils/findCurrentTimeSliderObject";
 
 const getters = {
@@ -12,24 +11,17 @@ const getters = {
     defaultValue (_, {currentTimeSliderObject}) {
         return currentTimeSliderObject.defaultValue;
     },
-    min (_, {currentTimeSliderObject}) {
-        return currentTimeSliderObject.min;
+    min (_, {timeRange}) {
+        return timeRange.length > 0 ? timeRange[0] : 0;
     },
-    max (_, {currentTimeSliderObject}) {
-        return currentTimeSliderObject.max;
+    max (_, {timeRange}) {
+        return timeRange.length > 0 ? timeRange[timeRange.length - 1] : Number.MAX_SAFE_INTEGER;
     },
     step (_, {currentTimeSliderObject}) {
         return currentTimeSliderObject.step;
     },
-    timeRange (_, {min, max, step}) {
-        if (!min || !max || !step) {
-            return [];
-        }
-        if (min > max) {
-            throw Error(i18next.t("common:modules.wmsTime.timeSlider.invalidTimeParameters"));
-        }
-
-        return createTimeRange(min, max, step);
+    timeRange (_, {currentTimeSliderObject}) {
+        return currentTimeSliderObject?.timeRange ? currentTimeSliderObject.timeRange : [];
     }
 };
 

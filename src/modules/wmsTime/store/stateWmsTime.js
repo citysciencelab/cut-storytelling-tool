@@ -1,11 +1,10 @@
 /**
  * @typedef timeSliderObject
  * @type {object}
- * @property {string} layerId Id of the WMS-T layer for which these values are saved.
- * @property {number} min Lower bound for the selectable time values.
- * @property {number} max Upper bound for the selectable time values.
  * @property {number} defaultValue Initially selected time value.
+ * @property {string} layerId Id of the WMS-T layer for which these values are saved.
  * @property {number} step Distance between each time value.
+ * @property {number[]} timeRange Range of possible time values in ascending order. May not be continuous.
  */
 
 /**
