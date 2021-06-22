@@ -22,6 +22,10 @@ export default {
         },
         sliderValue () {
             // TODO: Test with two WMS-T
+            // If the value is changed through a user input (not the playback-function), the value is a String and needs to be converted.
+            if (typeof this.sliderValue === "string") {
+                this.sliderValue = Number(this.sliderValue);
+            }
             if (this.timeRange.indexOf(this.sliderValue) === -1) {
                 // If possible, find the next higher (or if not existent, lower) value inside the timeRange.
                 const valTooHigh = this.timeRange[this.timeRange.length - 1] < this.sliderValue,
@@ -50,8 +54,7 @@ export default {
             }, this.timeSlider.playbackDelay * 1000);
         },
         nextIndex (forward = true) {
-            // If the value is changed through a user input instead of the "play"-function, the value is a String.
-            return this.timeRange.indexOf(typeof this.sliderValue === "number" ? this.sliderValue : parseInt(this.sliderValue, 10)) + (forward ? 1 : -1);
+            return this.timeRange.indexOf(this.sliderValue) + (forward ? 1 : -1);
         },
         moveOne (forward) {
             this.sliderValue = this.timeRange[this.nextIndex(forward)];
@@ -116,13 +119,12 @@ export default {
                 <label :for="'timeSlider-input-range-' + layerId">{{ sliderValue }}</label>
             </fieldset>
             <fieldset>
-                <!-- TODO: Probable bug with the input 'range' -> Lowest value can not be selected, one value over the maximum can be selected. -> -1 @ max gets rid of one bug caused by this -->
                 <input
                     :id="'timeSlider-input-range-' + layerId"
                     type="range"
                     :value="sliderValue"
                     :min="min"
-                    :max="max - 1"
+                    :max="max"
                     :step="step"
                     :aria-label="$t('common:modules.wmsTime.timeSlider.inputRangeLabel')"
                     @input="sliderValue = $event.target.value"
