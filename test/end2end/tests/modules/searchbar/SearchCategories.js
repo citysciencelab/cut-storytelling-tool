@@ -184,12 +184,13 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 })).to.be.true;
             });
 
-            it("category 'Krankenhäuser' shows results; on click, zooms to the place and marks it with a marker", async function () {
+            // NOTE using this instead of 'Krankenhaus' since I can't find the KH search
+            it("category 'Kita' shows results; on click, zooms to the place and marks it with a marker", async function () {
                 await selectAndVerifyFirstHit({
                     setsMarker: true,
                     showsPolygon: false,
                     movesCenter: true,
-                    idPart: "Krankenhäuser"
+                    idPart: "Kita"
                 });
             });
 
