@@ -10,7 +10,6 @@ const state = {
     layerSwiper: {
         active: false,
         isMoving: false,
-        mapObject: null,
         swiper: null,
         targetLayer: null,
         valueX: ""
