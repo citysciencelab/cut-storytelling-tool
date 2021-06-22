@@ -574,7 +574,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         for (let i = 0; i < pathArray.length; i++) {
             const element = pathArray[i];
 
-            if (!featureProperty.hasOwnProperty(element) || typeof featureProperty[element] === "undefined" || featureProperty[element] === null) {
+            if (!Object.prototype.hasOwnProperty.call(featureProperty, element) || typeof featureProperty[element] === "undefined" || featureProperty[element] === null) {
                 return null;
             }
             featureProperty = featureProperty[element];
