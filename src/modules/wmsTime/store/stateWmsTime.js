@@ -14,12 +14,14 @@
  * @property {boolean} timeSlider.active Whether the timeSlider window should be active.
  * @property {string} timeSlider.currentLayerId Id of the currently selected WMS-T.
  * @property {timeSliderObject[]} timeSlider.objects Array of objects containing values that are relevant for every WMS-T layer configured.
+ * @property {number} playbackDelay Delay for the playback in seconds.
  */
 const state = {
     timeSlider: {
         active: false,
         currentLayerId: "",
-        objects: []
+        objects: [],
+        playbackDelay: 1
     },
     swiper: {
         active: false

@@ -47,7 +47,7 @@ export default {
                     return;
                 }
                 this.sliderValue = this.timeRange[index];
-            }, 1000);
+            }, this.timeSlider.playbackDelay * 1000);
         },
         nextIndex (forward = true) {
             // If the value is changed through a user input instead of the "play"-function, the value is a String.
