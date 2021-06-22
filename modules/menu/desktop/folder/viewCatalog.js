@@ -20,54 +20,29 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
 
         "click .Baselayer .catalog_buttons .glyphicon-question-sign": function () {
             Radio.trigger("QuickHelp", "showWindowHelp", "tree");
-            // TODO REFACTOR-384 Keyboard-nav: setFocus to help window
         },
         "keydown .Baselayer .catalog_buttons .glyphicon-question-sign": function (event) {
-            if (event.which === 32 || event.which === 13) {
-                Radio.trigger("QuickHelp", "showWindowHelp", "tree");
-                // TODO REFACTOR-384 Keyboard-nav: setFocus to help window
-                event.stopPropagation();
-                event.preventDefault();
-            }
+            this.handleKeyboardTriggeredAction(event, "openHelp");
         },
 
         "click .glyphicon-adjust": "toggleBackground",
         "keydown .glyphicon-adjust": function (event) {
-            if (event.which === 32 || event.which === 13) {
-                this.toggleBackground();
-                event.stopPropagation();
-                event.preventDefault();
-            }
+            this.handleKeyboardTriggeredAction(event, "toggleBackground");
         },
 
         "click .rotate-pin": "unfixTree",
         "keydown .rotate-pin": function (event) {
-            if (event.which === 32 || event.which === 13) {
-                this.unfixTree();
-                event.stopPropagation();
-                event.preventDefault();
-            }
+            this.handleKeyboardTriggeredAction(event, "unfixTree");
         },
 
         "click .rotate-pin-back": "fixTree",
         "keydown .rotate-pin-back": function (event) {
-            if (event.which === 32 || event.which === 13) {
-                this.fixTree();
-                event.stopPropagation();
-                event.preventDefault();
-            }
+            this.handleKeyboardTriggeredAction(event, "fixTree");
         },
 
-        "click .layer-selection-save": function () {
-            this.model.collection.setActiveToolsToFalse(this.model);
-            this.model.collection.get("saveSelection").setIsActive(true);
-            store.dispatch("Tools/setToolActive", {id: "saveSelection", active: true});
-            // Schließt den Baum
-            $(".nav li:first-child").removeClass("open");
-            // Schließt die Mobile Navigation
-            $(".navbar-collapse").removeClass("in");
-            // Selektiert die URL
-            $(".input-save-url").select();
+        "click .layer-selection-save": "saveSelection",
+        "keydown .layer-selection-save": function (event) {
+            this.handleKeyboardTriggeredAction(event, "saveSelection");
         }
     },
 
@@ -147,7 +122,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
     },
 
     /**
-      * Handles all key action for open/close the layer list.
+      * Handles all keys for open/close actions of the layer list.
       * @param {*} event - the event
       * @returns {void}
       */
@@ -170,6 +145,31 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
             event.preventDefault();
         }
     },
+
+    /**
+     * Executes the given function callback if a execution key has been triggered.
+     * @param {Event} event - the dom event
+     * @param {Function} callback - the callback function of the view to be executed
+     * @returns {boolean} if the action has been triggered
+     */
+    handleKeyboardTriggeredAction: function (event, callback) {
+        if (event.which === 32 || event.which === 13) {
+            this[callback]();
+            event.stopPropagation();
+            event.preventDefault();
+            return true;
+        }
+        return false;
+    },
+
+    /**
+     * Opens the help window.
+     * @returns {void}
+     */
+    openHelp: function () {
+        Radio.trigger("QuickHelp", "showWindowHelp", "tree");
+    },
+
     /**
      * Sets the tabindices of all layer catalog elements with an increment of 1000.
      * @returns {void}
@@ -178,16 +178,31 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         const parentTabIndexElement = $("a." + this.model.get("parentId")),
             allElementsOfThisComponent = $("#" + this.model.get("parentId") + ">li.layer-catalog>div>a"),
             increment = 1000;
-            // offset = 10;
 
         TabIndexUtils.setAllTabIndicesFromParentWithIncrement(parentTabIndexElement, allElementsOfThisComponent, increment);
 
         let runningTabindex = parseInt(this.$el.find("div>a").attr("tabindex"), 10);
 
-        this.$el.find("div span .tabable, div form .tabable").each(function () {
+        this.$el.find("div span .tabable, div form .tabable, div.tabable").each(function () {
             runningTabindex = runningTabindex + 1;
             $(this).attr("tabindex", runningTabindex);
         });
+    },
+
+    /**
+     * open dialog to save the layer selection.
+     * @returns {void}
+     */
+    saveSelection: function () {
+        this.model.collection.setActiveToolsToFalse(this.model);
+        this.model.collection.get("saveSelection").setIsActive(true);
+        store.dispatch("Tools/setToolActive", {id: "saveSelection", active: true});
+        // Schließt den Baum
+        $(".nav li:first-child").removeClass("open");
+        // Schließt die Mobile Navigation
+        $(".navbar-collapse").removeClass("in");
+        // Selektiert die URL
+        $(".input-save-url").select();
     },
 
     /**
@@ -212,9 +227,6 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         else {
             elem.removeClass("glyphicon-plus-sign");
             elem.addClass("glyphicon-minus-sign");
-            // console.log(this.$el.find(".list-group-item").length)
-            // console.log($("ul#" + this.model.get("id") + ">li").length)
-            // $("ul#" + this.model.get("id") + " a").first().trigger("focusin");
         }
         // Hässlicher IE Bugfix, weil IE 11 mit overflow: auto und remove probleme macht (leerer Katalog wird sehr hoch und bekommt die Höhe -0.01)
         if (!this.model.get("isExpanded")) {

@@ -1,18 +1,32 @@
 import Template from "text-loader!./template.html";
 import checkChildrenDatasets from "../../checkChildrenDatasets.js";
-import store from "../../../../src/app-store/index";
-import axios from "axios";
-import TabIndexUtils from "../../../core/tabIndexUtils";
+import LayerBaseView from "./viewBase.js";
 
-const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
+const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
     events: {
-        "click .layer-item": "preToggleIsSelected",
-        "keydown .layer-item": "toggleLayerKeyAction",
-
+        "click .layer-item": function () {
+            this.preToggleIsSelected();
+            this.setFocus();
+        },
+        "keydown .layer-item": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "preToggleIsSelected")) {
+                this.setFocus();
+            }
+        },
         "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
+        "keydown .layer-info-item": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "showLayerInformation")) {
+                // TODO MPREFACTOR-384 set focus to new layer info window?
+            }
+        },
         "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
+        "keydown .layer-info-item > .glyphicon-cog": function (event) {
+            this.handleKeyboardTriggeredAction(event, "toggleIsSettingVisible");
+        },
         "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
-        "keydown .layer-info-item": "showLayerInfoKeyAction"
+        "keydown .layer-sort-item > .glyphicon-triangle-top": function (event) {
+            this.handleKeyboardTriggeredAction(event, "moveModelUp");
+        }
     },
 
     /**
@@ -30,7 +44,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     initialize: function () {
         checkChildrenDatasets(this.model);
-        this.initializeId();
+        this.initializeDomId();
         this.listenTo(this.model, {
             "change:isSelected": this.rerender,
             "change:isVisibleInTree": this.removeIfNotVisible,
@@ -49,6 +63,9 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
                 }
             }
         });
+        this.listenTo(Radio.channel("LayerInformation"), {
+            "unhighlightLayerInformationIcon": this.unhighlightLayerInformationIcon
+        });
         // translates the i18n-props into current user-language. is done this way, because model's listener to languageChange reacts too late (after render, which ist riggered by creating new Menu)
         this.model.changeLang();
         this.render();
@@ -57,17 +74,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     tagName: "li",
     className: "layer list-group-item",
     template: _.template(Template),
-
-    /**
-     * Initializes the id of this component with a fix prefix followed by a sequential number.
-     * The id is needed for refocussing after the render-cycle.
-     * @returns {void}
-     */
-    initializeId: function () {
-        this.model.set({
-            id: _.uniqueId("layer-list-group-item-")
-        });
-    },
 
     /**
      * Renders the selection view.
@@ -88,57 +94,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             this.$el.css("padding-left", ((this.model.get("level") * 15) + 5) + "px");
         }
         this.setAllTabIndices();
-        // this.setFocus();
-
         return this;
-    },
-    /**
-     * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
-     * @param {Backbone.Model} model -
-     * @param {boolean} value -
-     * @returns {void}
-     */
-    toggleColor: function (model, value) {
-        const mode = Radio.request("Map", "getMapMode");
-
-        if (model.has("minScale") === true) {
-            if (value === true) {
-                this.disableComponent("Layer wird in dieser Zoomstufe nicht angezeigt");
-            }
-            else if (this.model.get("supported").indexOf(mode) >= 0) {
-                this.enableComponent();
-            }
-            else if (mode === "2D") {
-                this.disableComponent("Layer im 2D-Modus nicht verfügbar");
-            }
-            else {
-                this.disableComponent("Layer im 3D-Modus nicht verfügbar");
-            }
-        }
-    },
-
-    /**
-     * Handles the Space and Enter key to toggle the layer selection.
-     * @param {Event} event - the event instance
-     * @returns {void}
-     */
-    toggleLayerKeyAction: function (event) {
-        if (event.which === 32 || event.which === 13) {
-            this.preToggleIsSelected();
-            event.stopPropagation();
-            event.preventDefault();
-        }
-    },
-    /**
-     * Handles the Space and Enter key to start the info action.
-     * @param {Event} event - the event instance
-     * @returns {void}
-     */
-    showLayerInfoKeyAction: function (event) {
-        if (event.which === 32 || event.which === 13) {
-            this.showLayerInformation();
-            event.stopPropagation();
-        }
     },
 
     /**
@@ -160,127 +116,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             this.disableComponent();
         }
         this.setAllTabIndices();
-        this.setFocus();
-    },
-
-    /**
-     * Sets the focus to the <a> element of this component.
-     * @param {Event} event - the event instance
-     * @returns {void}
-     */
-    setFocus: function () {
-        const htmlAElement = document.querySelector("#" + this.model.get("id"));
-
-        if (htmlAElement) {
-            htmlAElement.focus();
-        }
-    },
-
-    /**
-     * Sets all tabindices in the whole menu tree to enable keyboard navigation.
-     * @returns {void}
-     */
-    setAllTabIndices: function () {
-        const treeRootId = TabIndexUtils.getTreeRootItemId(this.model.get("parentId")),
-            parentTabIndexElement = $("a." + treeRootId),
-            allComponentsSiblingTabIndexElements = $("#" + treeRootId + " .tabable"),
-            offset = 10;
-
-        TabIndexUtils.setAllTabIndicesFromParent(parentTabIndexElement, allComponentsSiblingTabIndexElements, offset);
-    },
-
-    /**
-     * handles toggeling of secured and not-secured layers
-     * @returns {void}
-     */
-    preToggleIsSelected: function () {
-        const isErrorCalled = false;
-
-        // if layer is secured and not selected
-        if (this.model.get("isSecured") && !this.model.get("isSelected")) {
-            this.triggerBrowserAuthentication(this.toggleIsSelected.bind(this), isErrorCalled);
-        }
-        else {
-            this.toggleIsSelected();
-        }
-    },
-
-    /**
-     * triggers the browser basic authentication if the selected layer is secured
-     * @param {Function} successFunction - Function called after triggering the browser basic authentication successfully
-     * @param {Boolean} isErrorCalled - Flag if the function is called from error function
-     * @returns {void}
-     */
-    triggerBrowserAuthentication: function (successFunction, isErrorCalled) {
-        const that = this;
-
-        axios({
-            method: "get",
-            url: this.model.get("authenticationUrl"),
-            withCredentials: true
-        }).then(function () {
-            that.toggleIsSelected();
-        }).catch(function () {
-            that.errorFunction(successFunction, isErrorCalled);
-        });
-    },
-
-    /**
-     * Error handling for triggering the browser basic authentication
-     * @param {Function} successFunction - Function called after triggering the browser basic authentication successfully
-     * @param {Number} isErrorCalled - Flag if the function is called from error function
-     * @returns {void}
-     */
-    errorFunction: function (successFunction, isErrorCalled) {
-        const isError = isErrorCalled,
-            layerName = this.model.get("name"),
-            authenticationUrl = this.model.get("authenticationUrl");
-
-        if (isError === false) {
-            this.triggerBrowserAuthentication(successFunction, !isError);
-        }
-        else if (isError === true) {
-            store.dispatch("Alerting/addSingleAlert", {
-                category: i18next.t("common:modules.alerting.categories.error"),
-                displayClass: "error",
-                content: i18next.t("common:modules.menu.layer.basicAuthError") + "\"" + layerName + "\"",
-                kategorie: "alert-danger"
-            });
-            console.warn("Triggering the basic browser authentication for the secured layer \"" + layerName + "\" was not successfull. Something went wrong with the authenticationUrl (" + authenticationUrl + ")");
-        }
-    },
-
-    /**
-     * Executes toggleIsSelected in the model
-     * @returns {void}
-     */
-    toggleIsSelected: function () {
-        this.model.toggleIsSelected();
-        Radio.trigger("ModelList", "setIsSelectedOnParent", this.model);
-        this.rerender();
-        this.toggleColor(this.model, this.model.get("isOutOfRange"));
-    },
-
-    /**
-     * Executes setIsSettingVisible and setIsSelected in the model
-     * removes the element
-     * @returns {void}
-     */
-    removeFromSelection: function () {
-        this.model.setIsInSelection(false);
-        this.$el.remove();
-    },
-
-    /**
-     * Init the LayerInformation window and inits the highlighting of the informationIcon.
-     * @returns {void}
-     */
-    showLayerInformation: function () {
-        this.model.showLayerInformation();
-        // Navigation wird geschlossen
-        this.$("div.collapse.navbar-collapse").removeClass("in");
-        // TODO REFACTOR-384 Keyboard-nav: set focus to info window
-        this.highlightLayerInformationIcon();
     },
 
     /**
@@ -315,58 +150,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         if (!this.model.get("isVisibleInTree")) {
             this.remove();
         }
-    },
-
-    /**
-     * Disables the component for interaction, e.g. if the zoom level changes.
-     * @param {string} text -
-     * @returns {void}
-     */
-    disableComponent: function (text) {
-        const statusCheckbox = this.$el.find("span.glyphicon.glyphicon-unchecked").length;
-
-        this.$el.addClass("disabled");
-        this.$el.find("*").css("cursor", "not-allowed");
-        this.$el.find("*").css("pointer-events", "none");
-        if (statusCheckbox === 0) {
-            this.$el.find("span.pull-left").css({"pointer-events": "auto", "cursor": "pointer"});
-        }
-        this.$el.attr("title", text);
-        this.$el.find("a").addClass("disabled");
-        this.$el.find("a").removeClass("tabable");
-        this.$el.find("a").removeAttr("tabindex");
-    },
-
-    /**
-     * Enables the component for interaction.
-     * @returns {void}
-     */
-    enableComponent: function () {
-        this.$el.removeClass("disabled");
-        this.$el.find("*").css("pointer-events", "auto");
-        this.$el.find("*").css("cursor", "pointer");
-        this.$el.attr("title", "");
-        this.$el.find("a").addClass("tabable");
-        this.setAllTabIndices();
-    },
-
-    /**
-     * Highlights the Layerinformation Icon in the layertree
-     * @returns {void}
-     */
-    highlightLayerInformationIcon: function () {
-        if (this.model.get("layerInfoChecked")) {
-            this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerInformationIcon");
-        }
-    },
-
-    /**
-     * Unhighlights the Layerinformation Icon in the layertree
-     * @returns {void}
-     */
-    unhighlightLayerInformationIcon: function () {
-        this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
-        this.model.setLayerInfoChecked(false);
     }
 });
 

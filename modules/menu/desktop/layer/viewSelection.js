@@ -1,20 +1,67 @@
 import Template from "text-loader!./templateSelection.html";
 import TemplateSettings from "text-loader!./templateSettings.html";
 import checkChildrenDatasets from "../../checkChildrenDatasets.js";
+import LayerBaseView from "./viewBase.js";
+import TabIndexUtils from "../../../core/tabIndexUtils";
 
-const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
+const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
     events: {
-        "click .glyphicon-check, .title": "toggleIsVisibleInMap",
-        "click .glyphicon-unchecked": "toggleIsVisibleInMap",
+        "click .glyphicon-check, glyphicon-checked, .title": "toggleIsVisibleInMap",
+        "keydown .layer-item": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "toggleIsVisibleInMap")) {
+                this.setFocus();
+            }
+        },
         "click .glyphicon-info-sign": "showLayerInformation",
+        "keydown .glyphicon-info-sign": function (event) {
+            this.handleKeyboardTriggeredAction(event, "showLayerInformation");
+        },
         "click .glyphicon-remove-circle": "removeFromSelection",
+        "keydown .glyphicon-remove-circle": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "removeFromSelection")) {
+                this.setFocus(".glyphicon-remove-circle");
+            }
+        },
         "click .glyphicon-cog": "toggleIsSettingVisible",
+        "keydown .glyphicon-cog": function (event) {
+            this.handleKeyboardTriggeredAction(event, "toggleIsSettingVisible");
+        },
         "click .arrows > .glyphicon-arrow-up": "moveModelUp",
+        "keydown .arrows > .glyphicon-arrow-up": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "moveModelUp")) {
+                this.setFocus(".arrows > .glyphicon-arrow-up");
+            }
+        },
         "click .arrows > .glyphicon-arrow-down": "moveModelDown",
+        "keydown .arrows > .glyphicon-arrow-down": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "moveModelDown")) {
+                this.setFocus(".arrows > .glyphicon-arrow-down");
+            }
+        },
         "click .glyphicon-plus-sign": "incTransparency",
+        "keydown .glyphicon-plus-sign": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "incTransparency")) {
+                this.setFocus(".transparency .glyphicon-plus-sign");
+            }
+        },
         "click .glyphicon-minus-sign": "decTransparency",
+        "keydown .glyphicon-minus-sign": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "decTransparency")) {
+                this.setFocus(".transparency .glyphicon-minus-sign");
+            }
+        },
         "click .glyphicon-tint": "openStyleWMS",
-        "click .remove-layer": "removeLayer"
+        "keydown .glyphicon-tint": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "openStyleWMS")) {
+                this.setFocus(".styleWMS");
+            }
+        },
+        "click .remove-layer": "removeLayer",
+        "keydown .remove-layer": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "removeLayer")) {
+                this.setFocus();
+            }
+        }
     },
 
     /**
@@ -25,6 +72,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     initialize: function () {
         checkChildrenDatasets(this.model);
+        this.initializeDomId();
         this.listenTo(this.model, {
             "change:isVisibleInMap": this.rerender,
             "change:isSettingVisible": this.renderSetting,
@@ -42,6 +90,17 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     templateSettings: _.template(TemplateSettings),
 
     /**
+ * Sets the tabindices of all layer catalog elements with an increment of 1000.
+ * @returns {void}
+ */
+    setAllTabIndices: function () {
+        const parentTabIndexElement = $("a.SelectedLayer"),
+            allElementsOfThisComponent = $("#SelectedLayer .tabable");
+
+        TabIndexUtils.setAllTabIndicesFromParentWithIncrement(parentTabIndexElement, allElementsOfThisComponent, 1);
+    },
+
+    /**
      * Renders the selection view.
      * @returns {void}
      */
@@ -56,6 +115,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         if (this.model.get("layerInfoChecked")) {
             this.highlightLayerInformationIcon();
         }
+        this.setAllTabIndices();
         return this;
     },
 
@@ -73,6 +133,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         if (this.model.get("layerInfoChecked")) {
             this.highlightLayerInformationIcon();
         }
+        this.setAllTabIndices();
     },
 
     /**
@@ -96,6 +157,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             this.$el.find(".layer-settings").hide();
             this.$el.find(".layer-settings").slideDown();
         }
+        this.setAllTabIndices();
     },
 
     /**
@@ -186,35 +248,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         Radio.trigger("Parser", "removeItem", this.model.get("id"));
         this.model.removeLayer();
         this.$el.remove();
-    },
-
-    /**
-     * Enables and disables the layer depending upon the sclae of the map
-     * @param {Backbone.Model} model layer model
-     * @param {boolean} value Flag for isOutOfRange
-     * @returns {void}
-     */
-    toggleColor: function (model, value) {
-        if (model.has("minScale") === true) {
-            let statusCheckbox = 0;
-
-            if (value === true) {
-                statusCheckbox = this.$el.find("span.glyphicon.glyphicon-unchecked").length;
-                this.$el.addClass("disabled");
-                this.$el.find("*").css("cursor", "not-allowed");
-                this.$el.find("*").css("pointer-events", "none");
-                if (statusCheckbox === 0) {
-                    this.$el.find("span.pull-left").css({"pointer-events": "auto", "cursor": "pointer"});
-                }
-                this.$el.attr("title", "Layer wird in dieser Zoomstufe nicht angezeigt");
-            }
-            else {
-                this.$el.removeClass("disabled");
-                this.$el.find("*").css("pointer-events", "auto");
-                this.$el.find("*").css("cursor", "pointer");
-                this.$el.attr("title", "");
-            }
-        }
     },
 
     /**

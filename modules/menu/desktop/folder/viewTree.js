@@ -170,7 +170,6 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
      */
     toggleIsSelected: function () {
         this.model.toggleIsSelected();
-        // TODO BUG dependent on the (de) selection the children must also be deselected
         Radio.trigger("ModelList", "setIsSelectedOnChildLayers", this.model);
         this.model.setIsExpanded(true);
     },

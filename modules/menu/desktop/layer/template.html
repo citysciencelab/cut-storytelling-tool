@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-
-<a id="<%= id %>" class="dropdown-item layer-item tabable">
+<a id="<%= domId %>" class="dropdown-item layer-item tabable">
     <% if (isSelected) { %>
         <span class="glyphicon glyphicon-check" title="<%=removeTopicText%>"></span>
     <% } else { %>
@@ -19,7 +18,7 @@
     <% } %>
     </div>
 <% } else { %>
-  <div class="layer-info-item pull-right">di
+  <div class="layer-info-item pull-right">
     <span class="glyphicon glyphicon-cog rotate tabable"></span>
   </div>
 <% } %>

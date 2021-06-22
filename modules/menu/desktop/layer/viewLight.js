@@ -2,23 +2,70 @@ import TemplateSettings from "text-loader!./templateSettings.html";
 import Template from "text-loader!./templateLight.html";
 import checkChildrenDatasets from "../../checkChildrenDatasets.js";
 import store from "../../../../src/app-store";
-import axios from "axios";
+import LayerBaseView from "./viewBase.js";
 
-const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
+const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
     events: {
-        "click .glyphicon-unchecked, .glyphicon-check, .title": "preToggleIsSelected",
+        "click .glyphicon-unchecked, .glyphicon-check, .title": function () {
+            this.preToggleIsSelected();
+            this.setFocus();
+        },
+        "keydown .layer-item": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "preToggleIsSelected")) {
+                this.setFocus();
+            }
+        },
         "click .glyphicon-info-sign": "showLayerInformation",
+        "keydown .glyphicon-info-sign": function (event) {
+            this.handleKeyboardTriggeredAction(event, "showLayerInformation");
+        },
         "click .glyphicon-cog": "toggleIsSettingVisible",
+        "keydown .glyphicon-cog": function (event) {
+            this.handleKeyboardTriggeredAction(event, "toggleIsSettingVisible");
+        },
         "click .arrows > .glyphicon-arrow-up": "moveModelUp",
+        "keydown .arrows > .glyphicon-arrow-up": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "moveModelUp")) {
+                this.setFocus(".arrows > .glyphicon-arrow-up");
+            }
+        },
         "click .arrows > .glyphicon-arrow-down": "moveModelDown",
+        "keydown .arrows > .glyphicon-arrow-down": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "moveModelDown")) {
+                this.setFocus(".arrows > .glyphicon-arrow-down");
+            }
+        },
         "click .glyphicon-plus-sign": "incTransparency",
+        "keydown .glyphicon-plus-sign": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "incTransparency")) {
+                this.setFocus(".glyphicon-plus-sign");
+            }
+        },
         "click .glyphicon-minus-sign": "decTransparency",
-        "change select": "setTransparency",
+        "keydown .glyphicon-minus-sign": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "decTransparency")) {
+                this.setFocus(".glyphicon-minus-sign");
+            }
+        },
         "click .styleWMS": "openStyleWMS",
+        "keydown .styleWMS": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "openStyleWMS")) {
+                this.setFocus(".styleWMS");
+            }
+        },
         "click .styleVT": "openStyleVT",
-        "click .remove-layer": "removeLayer"
+        "keydown .styleVT": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "openStyleVT")) {
+                this.setFocus(".styleVT");
+            }
+        },
+        "click .remove-layer": "removeLayer",
+        "keydown .remove-layer": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "removeLayer")) {
+                this.setFocus();
+            }
+        }
     },
-
     /**
      * @class LayerView
      * @extends Backbone.View
@@ -39,6 +86,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     initialize: function () {
         checkChildrenDatasets(this.model);
+        this.initializeDomId();
         this.listenTo(this.model, {
             "change:isSelected": this.rerender,
             "change:isSettingVisible": this.renderSetting,
@@ -54,9 +102,10 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.listenTo(Radio.channel("LayerInformation"), {
             "unhighlightLayerInformationIcon": this.unhighlightLayerInformationIcon
         });
-        this.listenTo(Radio.channel("ModelList"), {
-            "updatedSelectedLayerList": this.rerender
-        });
+        // TODO JG why is this necessary?
+        // this.listenTo(Radio.channel("ModelList"), {
+        //     "updatedSelectedLayerList": this.rerender
+        // });
         this.$el.on({
             click: function (e) {
                 e.stopPropagation();
@@ -84,6 +133,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         if (this.model.get("isSettingVisible") === true) {
             this.$el.append(this.templateSettings(attr));
         }
+        this.setAllTabIndices();
         return this;
     },
 
@@ -101,6 +151,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         if (this.model.get("isSettingVisible")) {
             this.$el.append(this.templateSettings(attr));
         }
+        this.setAllTabIndices();
     },
 
     /**
@@ -123,88 +174,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             this.$el.find(".layer-settings").hide();
             this.$el.find(".layer-settings").slideDown();
         }
-    },
-
-    /**
-     * handles toggeling of secured and not-secured layers
-     * @returns {void}
-     */
-    preToggleIsSelected: function () {
-        const isErrorCalled = false;
-
-        // if layer is secured and not selected
-        if (this.model.get("isSecured") && !this.model.get("isSelected")) {
-            this.triggerBrowserAuthentication(this.toggleIsSelected.bind(this), isErrorCalled);
-        }
-        else {
-            this.toggleIsSelected();
-        }
-    },
-
-    /**
-     * triggers the browser basic authentication if the selected layer is secured
-     * @param {Function} successFunction - Function called after triggering the browser basic authentication successfully
-     * @param {Boolean} isErrorCalled - Flag if the function is called from error function
-     * @returns {void}
-     */
-    triggerBrowserAuthentication: function (successFunction, isErrorCalled) {
-        const that = this;
-
-        axios({
-            method: "get",
-            url: this.model.get("authenticationUrl"),
-            withCredentials: true
-        }).then(function () {
-            that.toggleIsSelected();
-        }).catch(function () {
-            that.errorFunction(successFunction, isErrorCalled);
-        });
-    },
-
-    /**
-     * Error handling for triggering the browser basic authentication
-     * @param {Function} successFunction - Function called after triggering the browser basic authentication successfully
-     * @param {Number} isErrorCalled - Flag if the function is called from error function
-     * @returns {void}
-     */
-    errorFunction: function (successFunction, isErrorCalled) {
-        const isError = isErrorCalled,
-            layerName = this.model.get("name"),
-            authenticationUrl = this.model.get("authenticationUrl");
-
-        if (isError === false) {
-            this.triggerBrowserAuthentication(successFunction, !isError);
-        }
-        else if (isError === true) {
-            store.dispatch("Alerting/addSingleAlert", {
-                category: i18next.t("common:modules.alerting.categories.error"),
-                displayClass: "error",
-                content: i18next.t("common:modules.menu.layer.basicAuthError") + "\"" + layerName + "\"",
-                kategorie: "alert-danger"
-            });
-            console.warn("Triggering the basic browser authentication for the secured layer \"" + layerName + "\" was not successfull. Something went wrong with the authenticationUrl (" + authenticationUrl + ")");
-        }
-    },
-
-    /**
-     * Executes toggleIsSelected in the model
-     * @returns {void}
-     */
-    toggleIsSelected: function () {
-        this.model.toggleIsSelected();
-        this.rerender();
-        this.toggleColor(this.model, this.model.get("isOutOfRange"));
-    },
-
-    /**
-     * Init the LayerInformation window and inits the highlighting of the informationIcon.
-     * @returns {void}
-     */
-    showLayerInformation: function () {
-        this.model.showLayerInformation();
-        // Navigation wird geschlossen
-        $("div.collapse.navbar-collapse").removeClass("in");
-        this.highlightLayerInformationIcon();
+        this.setAllTabIndices();
     },
 
     /**
@@ -285,37 +255,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         Radio.trigger("Parser", "removeItem", this.model.get("id"));
         this.model.removeLayer();
         this.$el.remove();
-    },
-
-    /**
-     * If the layer is outside its scale range,
-     * if the view is grayed out and not clickable
-     * @param {Backbone.Model} model - todo
-     * @param {boolean} value - todo
-     * @returns {void}
-     */
-    toggleColor: function (model, value) {
-        if (model.has("minScale") === true) {
-            let statusCheckbox = 0;
-
-            if (value === true) {
-                statusCheckbox = this.$el.find("span.glyphicon.glyphicon-unchecked").length;
-                this.$el.addClass("disabled");
-                this.$el.find("*").css("cursor", "not-allowed");
-                this.$el.find("*").css("pointer-events", "none");
-                if (statusCheckbox === 0) {
-                    this.$el.find("span.pull-left").css({"pointer-events": "auto", "cursor": "pointer"});
-                }
-                this.$el.attr("title", "Layer wird in dieser Zoomstufe nicht angezeigt");
-            }
-            else {
-
-                this.$el.removeClass("disabled");
-                this.$el.find("*").css("pointer-events", "auto");
-                this.$el.find("*").css("cursor", "pointer");
-                this.$el.attr("title", "");
-            }
-        }
     },
 
     /**

@@ -78,8 +78,8 @@ const TabIndexUtils = Backbone.Model.extend({
     },
 
     /**
-     * Retrieves the last tree item before the root item of the tree, starting by the given parent id. Walks through the tree in
-     * the upper direction.
+     * Finds the root menu entry starting from the given parent id, by retrieving the uppermost tree item
+     * before the root item of the tree (id="tree") is reached.
      * @param {String} startingParentId - the parent id to start with
      * @returns {String} the last id found before the root item of the tree.
      */
@@ -87,6 +87,10 @@ const TabIndexUtils = Backbone.Model.extend({
 
         let id = null,
             parentId = startingParentId;
+
+        if (!parentId || parentId === "tree") {
+            return parentId;
+        }
 
         do {
 

@@ -19,12 +19,14 @@
     border-bottom: 1px solid rgb(229, 229, 229);
 }
 
-ul#root {
-    a {
+
+ul#root {       
+    .tabable {
         text-decoration: none;
+        cursor: pointer;
         opacity: 0.8;
         &:hover {
-            opacity: 1.0;
+            opacity: 1;
         }
         &:focus {
             opacity: 1.0;
@@ -32,12 +34,12 @@ ul#root {
             outline: 3px auto  Highlight;
             outline: 3px auto -webkit-focus-ring-color;
         }
-        .disabled {
-            pointer-events: none;
-            cursor: default;
+    }
+    a {
+        &:hover {
+            background-color: transparent;
         }
     }
-
 }
 ul#tree {
     border: none;
@@ -45,39 +47,11 @@ ul#tree {
     padding: 0px 0;
     min-width: 380px;
     li a {
-        text-decoration: none;
         font-size: 15px;
-        opacity: 0.8;
         margin: 0px;
         color: @color_1;
         cursor: pointer;
         padding: 5px;
-        &:hover {
-            opacity: 1.0;
-        }
-        &:focus {
-            opacity: 1.0;
-            outline: 3px solid @accent_focus;
-            outline: 3px auto  Highlight;
-            outline: 3px auto -webkit-focus-ring-color;
-        }
-        .disabled {
-            pointer-events: none;
-            cursor: default;
-        }
-    }
-    .glyphicon {
-        cursor: pointer;
-        font-size: 15px;
-        padding: 2px;
-        // top: 3px;
-    }
-    .glyphicon-cog {
-        font-size: 18px;
-        // padding: 0;
-    }
-    .glyphicon-info-sign {
-        font-size: 18px;
     }
     .closed {
         &:not(.SelectedLayer) {
@@ -102,6 +76,19 @@ ul#tree {
             padding: 5px 5px;
         }
     }
+    .glyphicon {
+        cursor: pointer;
+        font-size: 15px;
+        padding: 2px;
+    }
+    .glyphicon-info-sign, .glyphicon-cog, .glyphicon-tint, .glyphicon-remove-circle {
+        font-size: 18px;
+        color: @color_4;
+
+    }
+    .highlightLayerInformationIcon {
+        color: #08589e;
+    }
     .catalog_buttons {
         .glyphicon {
             padding: 0px 0;
@@ -109,21 +96,6 @@ ul#tree {
         }
         .glyphicon-adjust {
             font-size: 14px;
-        }
-    }
-    .layer-info-item {
-        > span {
-            color: @color_4;
-            opacity: 0.6;
-            &:hover {
-                opacity: 1;
-            }
-            &:focus {
-              opacity: 0.9;
-              outline: 3px solid @accent_focus;
-              outline: 3px auto  Highlight;
-              outline: 3px auto -webkit-focus-ring-color;
-          }
         }
     }
     li.layer-catalog {
@@ -178,6 +150,9 @@ ul#tree {
             overflow: auto;
             padding: 8px 6px;
         }
+        a {
+            padding: 2px 0px 0px 5px;
+        }
     }
     .SelectedLayer {
         .layer-selection-save {
@@ -194,17 +169,20 @@ ul#tree.light {
     li {
         border-left: 0;
         border-right: 0;
-        padding: 8px 6px;
+        padding: 0px;
         max-width: 500px;
         overflow: auto;
-        font-weight: normal;
+        >a {
+            font-weight: normal;
+            font-size: 12px;
+        }
         span.title {
             vertical-align: sub;
             cursor: pointer;
         }
     }
 }
-ul#Overlayer, ul#Baselayer {
+ul#tree {
     .glyphicon-check {
         color: @color_3;
         & + .title {
