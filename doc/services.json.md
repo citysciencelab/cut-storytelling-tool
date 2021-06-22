@@ -84,8 +84,11 @@ All layer information the portal needs to use the services is stored here. Confi
       ]
    }
 ```
+
 ***
+
 ## WMS-Layer.isSecured ##
+
 WMS layer belonging to a secured WMS service.
 
 **CAUTION: If the layer belongs to a secured service, the following changes must be made to the service!**
@@ -97,6 +100,17 @@ WMS layer belonging to a secured WMS service.
 `Access-Control-Allow-Origin: *` <br>
 to <br>
 `Access-Control-Allow-Origin: URL of the accessing portal`.
+
+***
+
+## WMS-Layer.time ##
+
+Possible configuration for the time related parameters for a WMS-T.
+If a parameter is also defined in the service, the parameter defined in this config is used.
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|default|no|Number||Initial moment to be display for the WMS-T. **Beware**: If the configured value is not inside the time range of the possible values of the service, the value from the service is used instead.|`1970`|
 
 ***
 
