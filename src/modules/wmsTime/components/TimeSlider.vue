@@ -13,7 +13,8 @@ export default {
     },
     data: () => ({playing: false, sliderValue: 0}),
     computed: {
-        ...mapGetters("WmsTime", Object.keys(getters))
+        ...mapGetters("WmsTime", Object.keys(getters)),
+        ...mapGetters("Map", ["map"])
     },
     watch: {
         defaultValue () {
@@ -38,7 +39,7 @@ export default {
         ...mapActions("WmsTime", ["toggleSwiper"]),
         ...mapMutations("WmsTime", Object.keys(mutations)),
         animate () {
-            if (this.playing) {
+            setTimeout(() => {
                 const index = this.nextIndex();
 
                 if (index === this.timeRange.length) {
@@ -46,7 +47,7 @@ export default {
                     return;
                 }
                 this.sliderValue = this.timeRange[index];
-            }
+            }, 1000);
         },
         nextIndex (forward = true) {
             // If the value is changed through a user input instead of the "play"-function, the value is a String.
@@ -56,16 +57,16 @@ export default {
             this.sliderValue = this.timeRange[this.nextIndex(forward)];
         },
         play () {
-            let interval;
-
             this.playing = !this.playing;
 
             if (this.playing) {
-                // TODO: If possible in OL: Wait for update until next animation
-                interval = setInterval(this.animate, 1000);
+                // Initial play
+                this.animate();
+                // Play whenever the layer has finished rendering
+                this.map.on("rendercomplete", this.animate);
             }
             else {
-                clearInterval(interval);
+                this.map.un("rendercomplete", this.animate);
             }
         }
     }
@@ -153,11 +154,6 @@ export default {
         justify-content: flex-start;
         // No margin on bottom
         margin: @bigger-margin @bigger-margin 0;
-
-        .vertical {
-            transform: rotate(90deg);
-            height: 100%
-        }
     }
 
     .timeSlider-innerWrapper-interactions {
