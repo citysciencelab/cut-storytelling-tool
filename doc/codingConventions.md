@@ -18,7 +18,7 @@ All the following rules must hold.
 
 #### A.1 Linter and functionality
 
-* A.1.1 The code works on Internet Explorer 11+, Chrome, and Firefox.
+* A.1.1 The code works on Edge, Chrome, and Firefox.
 * A.1.2 The code works on the mobile view of the browsers mentioned in A.1.1.
 * A.1.3 The linter is active.
 * A.1.4 The linter detects no errors.
@@ -33,7 +33,7 @@ All the following rules must hold.
 * A.2.2 No methods of *Underscore.js* are in use, except for calls to `_.template()`.
 * A.2.3 No redundant packages are installed.
 * A.2.4 JQuery is only to be used in combination with Backbone.js.
-* A.2.5 The addition of large packages/libraries has to be agreed on by the *LGV* team.
+* A.2.5 The addition of packages/libraries has to be agreed on by the *LGV* team. At least 3 libs need to be evaluated before decisions can be made. Use a form from **[library evalutaion](./library evaluation/)** and add to PR. 
 
 ---
 

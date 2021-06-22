@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../../../../test/end2end/library/driver"),
-    {isCustom, isMaster} = require("../../../../../../test/end2end/settings"),
+    {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
+    {isMaster} = require("../../../../../../test/end2end/settings"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {until, By} = webdriver;
 
@@ -14,10 +14,10 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 function AttributionsTests ({builder, url, resolution, capability}) {
-    const testIsApplicable = isCustom(url) || isMaster(url); // attributions only active in custom/master
+    const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
-        describe("Modules Controls Attributions", function () {
+        describe("Modules Controls Attributions", async function () {
             let driver, attributionsButton, attributionsDiv;
 
             before(async function () {
@@ -26,7 +26,7 @@ function AttributionsTests ({builder, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
             });
 
             after(async function () {
@@ -35,19 +35,18 @@ function AttributionsTests ({builder, url, resolution, capability}) {
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
+                    await quitDriver();
                     driver = await initDriver(builder, url, resolution);
                 }
             });
 
+
             it("should have an attributions button", async function () {
-                await driver.wait(until.elementLocated(By.css(".attributions-button")), 50000);
+                await driver.wait(until.elementLocated(By.css(".attributions-button")), 12000);
                 attributionsButton = await driver.findElement(By.css(".attributions-button"));
 
                 expect(attributionsButton).to.exist;

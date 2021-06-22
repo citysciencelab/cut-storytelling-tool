@@ -168,6 +168,13 @@ li.results {
             color: @color_4;
         }
     }
+    .line-break { 
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        hyphens: auto;
+    } 
 
     .list-group-item {
 
@@ -181,9 +188,13 @@ li.results {
                 display: inline-block;
                 text-overflow: ellipsis;
                 overflow: hidden;
-                white-space: nowrap;
+                // has to be normal so the line break works
+                white-space: normal;
                 max-width: 70%;
                 clear: both;
+            }
+            p {
+                padding-top: 10px;
             }
 
         }

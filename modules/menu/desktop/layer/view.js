@@ -24,7 +24,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @listens Layer#changeIsVisibleInTree
      * @listens Layer#changeIsOutOfRange
      * @listens Map#RadioTriggerMapChange
-     * @listens LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
      * @listens i18next#RadioTriggerLanguageChanged
      * @fires ModelList#RadioRequestModelListSetIsSelectedOnParent
      * @fires Alerting#RadioTriggerAlertAlert
@@ -49,9 +48,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
                     this.disableComponent("Layer im 3D-Modus nicht verfügbar");
                 }
             }
-        });
-        this.listenTo(Radio.channel("LayerInformation"), {
-            "unhighlightLayerInformationIcon": this.unhighlightLayerInformationIcon
         });
         // translates the i18n-props into current user-language. is done this way, because model's listener to languageChange reacts too late (after render, which ist riggered by creating new Menu)
         this.model.changeLang();

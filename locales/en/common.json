@@ -20,6 +20,7 @@
     },
     "menu": {
         "topics": "Issues & Topics",
+        "name": "Menu",
         "views": {
             "name": "Views",
             "view01": "View 1"
@@ -88,9 +89,11 @@
     "modules": {
         "language": {
             "languageTitle": "Please choose a language",
-            "de": "German",
+            "de": "Deutsch",
             "en": "English",
-            "it": "Italian"
+            "it": "Italiano",
+            "pt": "Português",
+            "es": "Español"
         },
         "core": {
           "modelList": {
@@ -151,7 +154,8 @@
           "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)",
           "periodicityTitle": "Periodicity",
           "publicationCreation": "Publication / Creation",
-          "buildings":"Buildings"
+          "buildings":"Buildings",
+          "changeLayerInfo": "Switch infotext"
         },
         "mapMarker": {
           "noStyleModel": "No style could be found for the specified StyleId: {{styleId}}. Please check your configuration."
@@ -213,8 +217,7 @@
             "info": {
                 "disclaimer": "Legal disclaimer",
                 "home": {
-                    "name": "Hamburg Town",
-                    "url": "https://www.hamburg.com/"
+                    "name": "Hamburg Town"
                 }
             },
             "addWMS": {
@@ -475,7 +478,10 @@
                         "year": "{{count}} year",
                         "year_plural": "{{count}} years",
                         "previousWeekday": "Previous Weekday",
-                        "nextWeekday": "Next weekday"
+                        "nextWeekday": "Next weekday",
+                        "noticeTextAvailable": "(Only data with the value available are considered)",
+                        "noticeTextCharging": "(Only data with the value charging are considered).",
+                        "noticeTextOutoforder": "(Only data with the value outoforder are considered)."
                       },
                       "sensorData": {
                         "firstColumnHeaderName": "Properties"
@@ -582,7 +588,8 @@
                     "iconPoint": "Point",
                     "iconLeaf": "Leaf",
                     "iconCloud": "Cloud",
-                    "iconMeadow": "Meadow"
+                    "iconMeadow": "Meadow",
+                    "gelber Pin": "yellow Pin"
                 }
             },
             "measure": {

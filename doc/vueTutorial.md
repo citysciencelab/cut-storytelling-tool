@@ -37,6 +37,7 @@ src
 |   |   |   |	|   |-- store
 |   |   |   |   |	|   |-- actionsScaleSwitcher.spec.js
 |   |   |   |   |	|   |-- gettersScaleSwitcher.spec.js
+|   |   |   |   |	|   |-- mutationsScaleSwitcher.spec.js
 ```
 
 ## Creating the ScaleSwitcher.vue
@@ -89,7 +90,7 @@ export default state;
 
 ## Defining state
 
-[Vuex state](https://vuex.vuejs.org/guide/state.html) is defined in the `modules/tools/scale/store/stateScaleSwitcher.js` file.
+[Vuex state](https://vuex.vuejs.org/guide/state.html) is defined in the `modules/tools/scaleSwitcher/store/stateScaleSwitcher.js` file.
 
 ```js
 const state = {
@@ -98,7 +99,7 @@ const state = {
     id: "scaleSwitcher",
     // mandatory defaults for config.json parameters
     name: "common:menu.tools.coord",
-    glyphicon: "glyphicon-resize-full",
+    glyphicon: "glyphicon-resize-small",
     renderToWindow: true,
     resizableWindow: true,
     isVisibleInMenu: true,
@@ -245,7 +246,7 @@ import getters from "../store/gettersScaleSwitcher";
 
 ## Use mutations as methods in the ScaleSwitcher.vue
 
-Import the vuex helper function `mapMutations` in the `modules/tools/scale/components/ScaleSwitcher.vue`, and the *ScaleSwitcher* mutations. All mutation keys of the *ScaleSwitcher* are added.
+Import the vuex helper function `mapMutations` in the `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue`, and the *ScaleSwitcher* mutations. All mutation keys of the *ScaleSwitcher* are added.
 
 ```js
 import Tool from "../../Tool.vue";
@@ -416,7 +417,7 @@ To make the tool usable within a portal, it has to be configured in the portal's
         "children": {
             "scaleSwitcher": {
                 "name": "translate#common:menu.tools.scaleSwitcher",
-                "glyphicon": "glyphicon-resize-full",
+                "glyphicon": "glyphicon-resize-small",
                 "renderToWindow": true
             }
         }

@@ -18,8 +18,7 @@ import StaticLink from "./staticlink/model";
 import Filter from "../../tools/filter/model";
 import Print from "../../tools/print/mapfish3PlotService";
 import HighResolutionPrint from "../../tools/print/highResolutionPlotService";
-import Animation from "../../tools/pendler/animation/model";
-import Lines from "../../tools/pendler/lines/model";
+
 /**
  * WfsFeatureFilter
  * @deprecated in 3.0.0
@@ -38,7 +37,6 @@ import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
 import LayerSliderModel from "../../tools/layerSlider/model";
 import Viewpoint from "./viewPoint/model";
-import ColorScale from "../../tools/colorScale/model";
 import VirtualCityModel from "../../tools/virtualCity/model";
 import store from "../../../src/app-store/index";
 import WfstModel from "../../tools/wfst/model";
@@ -249,12 +247,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "shadow") {
                 return new Shadow(attrs, options);
             }
-            else if (attrs.id === "lines") {
-                return new Lines(attrs, options);
-            }
-            else if (attrs.id === "animation") {
-                return new Animation(attrs, options);
-            }
             else if (attrs.id === "treeFilter") {
                 return new TreeFilter(Object.assign(attrs, Config.hasOwnProperty("treeConf") ? {treeConf: Config.treeConf} : {}), options);
             }
@@ -276,9 +268,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "featureLister") {
                 return new FeatureLister(attrs, options);
-            }
-            else if (attrs.id === "colorScale") {
-                return new ColorScale(attrs, options);
             }
             else if (attrs.id === "wfst") {
                 return new WfstModel(attrs, options);

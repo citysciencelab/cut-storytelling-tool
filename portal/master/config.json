@@ -112,8 +112,8 @@
     "mapView": {
       "backgroundImage": "https://geodienste.hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
       "startCenter": [
-        561210,
-        5932600
+        565874,
+        5934140
       ]
     },
     "menu": {
@@ -415,7 +415,7 @@
           "scaleSwitcher":
           {
             "name": "translate#common:menu.tools.scaleSwitcher",
-            "glyphicon": "glyphicon-resize-full"
+            "glyphicon": "glyphicon-resize-small"
           },
           "vueAddon": {
             "name": "AddonTool",
@@ -463,7 +463,7 @@
             {
               "name": "translate#common:modules.tools.info.home.name",
               "glyphicon": "glyphicon-globe",
-              "url": "translate#common:modules.tools.info.home.url"
+              "url": "https://www.hamburg.de/"
             }
           ]
         }
@@ -773,15 +773,18 @@
                 "values": {
                   "available": {
                     "title": "common:modules.tools.gfi.themes.sensor.chargingStations.available",
-                    "color": "rgba(0, 220, 0, 1)"
+                    "color": "rgba(0, 220, 0, 1)",
+                    "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextAvailable"
                   },
                   "charging": {
                     "title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
-                    "color": "rgba(220, 0, 0, 1)"
+                    "color": "rgba(220, 0, 0, 1)",
+                    "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextCharging"
                   },
                   "outoforder": {
                       "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
-                      "color": "rgba(175, 175, 175, 1)"
+                      "color": "rgba(175, 175, 175, 1)",
+                      "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextOutoforder"
                   }
                 }
               }

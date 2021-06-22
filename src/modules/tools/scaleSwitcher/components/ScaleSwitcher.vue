@@ -85,7 +85,7 @@ export default {
                             :key="i"
                             :value="scaleValue"
                         >
-                            1:{{ scaleValue }}
+                            1 : {{ scaleValue }}
                         </option>
                     </select>
                 </div>

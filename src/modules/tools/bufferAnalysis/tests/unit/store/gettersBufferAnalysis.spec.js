@@ -30,7 +30,7 @@ const {
     bufferStyle
 } = getters;
 
-describe.skip("src/modules/tools/bufferAnalysis/store/gettersBufferAnalysis.js", () => {
+describe("src/modules/tools/bufferAnalysis/store/gettersBufferAnalysis.js", () => {
     describe("BufferAnalysis getters", () => {
         it("returns the active from state", () => {
             expect(active(stateBufferAnalysis)).to.be.false;
@@ -41,7 +41,7 @@ describe.skip("src/modules/tools/bufferAnalysis/store/gettersBufferAnalysis.js",
     });
     describe("testing default values", () => {
         it("returns the name default value from state", () => {
-            expect(name(stateBufferAnalysis)).to.be.equals("BufferAnalysis");
+            expect(name(stateBufferAnalysis)).to.be.equals("common:menu.tools.bufferAnalysis");
         });
         it("returns the glyphicon default value from state", () => {
             expect(glyphicon(stateBufferAnalysis)).to.equals("glyphicon-resize-full");

@@ -116,7 +116,9 @@ const Config = {
         languages: {
             de: "deutsch",
             en: "englisch",
-            it: "italienisch"
+            it: "italienisch",
+            pt: "portugiesisch",
+            es: "spanisch"
         },
         fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"],

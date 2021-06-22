@@ -402,12 +402,6 @@
  */
 
 /**
- * @event Layer#RadioTriggerLayerUpdateLayerInfo
- * @param {String} name The name of the layer.
- * @example Radio.trigger("Layer", "updateLayerInfo", name)
- */
-
-/**
  * @event Layer#RadioTriggerLayerSetLayerInfoChecked
  * @param {Boolean} value Flag that signs that the layer informations has been checked.
  * @example Radio.trigger("Layer", "setLayerInfoChecked", value)
@@ -825,36 +819,6 @@
  * @event Core#RadioTriggerMapViewChangedZoomLevel
  * @description todo
  */
-
-/** -------------------- LAYER INFORMATION -------------------- */
-
-/**
- * @event LayerInformation#RadioTriggerLayerInformationAdd
- * @param {Object} options Options of mapview status
- * @example Radio.trigger("LayerInformation", "add", options)
- */
-
-/**
- * @event LayerInformation#RadioTriggerLayerInformationSync
- * @description todo
- */
-
-/**
- * @event LayerInformation#RadioTriggerLayerInformationRemoveView
- * @description todo
- */
-
-/**
- * @event LayerInformation#RadioTriggerSetIsVisibleToFalse
- * @description todo
- */
-
-/**
- * @event LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
- * @description Unhighlight the icon in the layertree for layerinformation
- * @example Radio.trigger("LayerInformation", "unhighlightLayerInfomationIcon")
- */
-
 
 /** -------------------- OBLIQUE MAP-------------------- */
 
