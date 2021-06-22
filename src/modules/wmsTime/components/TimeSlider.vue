@@ -103,7 +103,7 @@ export default {
                     @click="play"
                 >
                     <i
-                        :class="['glyphicon', playing ? 'glyphicon-stop' : 'glyphicon-play']"
+                        :class="['glyphicon', playing ? 'glyphicon-pause' : 'glyphicon-play']"
                     />
                 </button>
                 <button
