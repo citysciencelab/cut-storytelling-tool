@@ -27,6 +27,12 @@ const actions = {
         }
     },
     // LayerSwiper actions
+    /**
+     * Sets the postion of the swiper to state according to the x-coordinate of the mousedown event.
+     * Adds the event listeners to the target layer on pre- and postrender.
+     * @param {*} event the DOM-event
+     * @returns {void}
+     */
     moveSwiper ({state, commit, rootGetters, dispatch}, event) {
         const {clientX} = event;
 
@@ -45,8 +51,8 @@ const actions = {
         }
     },
     /**
-     * todo
-     * @param {*} renderEvent ToDo
+     * Manipulates the width of the target layer according to the position of the swiper.
+     * @param {*} renderEvent the render event from the target layer
      * @returns {void}
      */
     drawLayer ({state, rootGetters}, renderEvent) {

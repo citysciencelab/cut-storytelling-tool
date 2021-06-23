@@ -35,12 +35,7 @@ const mutations = {
     setLayerSwiperTargetLayer (state, layer) {
         state.layerSwiper.targetLayer = layer;
     },
-    setLayerSwiperMapObject (state, map) {
-        state.layerSwiper.mapObject = map;
-    },
-    move (state, event) {
-        const {target} = event;
-
+    move (state, target) {
         state.layerSwiper.isMoving = true;
         state.layerSwiper.swiper = target;
     },

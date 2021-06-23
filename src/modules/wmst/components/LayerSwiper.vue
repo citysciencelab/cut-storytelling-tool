@@ -28,22 +28,20 @@ export default {
 </script>
 
 <template>
-    <div id="layerSwiper-wrapper">
-        <button
-            class="ol-swipe btn"
-            :title="$t(`common:modules.controls.layerSwiper.title`)"
-            @mousedown.self="move"
-        >
-        </button>
-    </div>
+    <button
+        class="swiper btn"
+        :title="$t(`common:modules.controls.layerSwiper.title`)"
+        @mousedown.self="move($event.target)"
+    >
+    </button>
 </template>
 
 <style lang="less" scoped>
 @import "~variables";
 
-.ol-swipe {
+.swiper {
     width: 50px;
-    background-color: red;
+    background-color: @primary;
     height: 30px;
     max-height: 100px;
     position: absolute;
@@ -59,7 +57,7 @@ export default {
         bottom: -5000px;
         left: 50%;
         width: 4px;
-        background: #fff;
+        background: @primary_contrast;
         z-index: -1;
         transform: translate(-2px, 0);
         -webkit-transform: translate(-2px, 0);

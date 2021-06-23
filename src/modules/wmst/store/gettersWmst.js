@@ -40,9 +40,6 @@ const getters = {
     // LayerSwiper getters
     targetLayer ({layerSwiper}) {
         return layerSwiper.targetLayer;
-    },
-    mapObject ({layerSwiper}) {
-        return layerSwiper.mapObject;
     }
 };
 
