@@ -1,6 +1,5 @@
 import {getRenderPixel} from "ol/render";
 
-
 const actions = {
     toggleSwiper ({commit, state}, id) {
         commit("setSwiperActive", !state.layerSwiper.active);
