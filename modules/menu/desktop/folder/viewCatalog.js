@@ -123,16 +123,12 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
 
     /**
       * Handles all keys for open/close actions of the layer list.
-      * @param {*} event - the event
+      * @param {Event} event - the event
       * @returns {void}
       */
     keyAction: function (event) {
-        if (event.which === 32 || event.which === 13) {
-            this.model.toggleIsExpanded();
-            event.stopPropagation();
-            event.preventDefault();
-        }
-        else if (event.which === 37) {
+        this.handleKeyboardTriggeredAction(event, "toggleIsExpanded");
+        if (event.which === 37) {
             this.model.setIsExpanded(false);
             this.model.toggleCatalogs();
             event.stopPropagation();

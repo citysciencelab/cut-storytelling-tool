@@ -129,7 +129,6 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
      */
     toggleIsSelected: function () {
         this.model.toggleIsSelected();
-        // TODO will this work with light version?
         Radio.trigger("ModelList", "setIsSelectedOnParent", this.model);
         this.rerender();
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
