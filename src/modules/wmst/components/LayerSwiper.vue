@@ -7,7 +7,7 @@ import actions from "../store/actionsWmst";
 export default {
     name: "LayerSwiper",
     computed: {
-        ...mapGetters("Map", ["visibleLayerList"]),
+        ...mapGetters("Map", ["visibleLayerList", "map"]),
         ...mapGetters("Wmst", Object.keys(getters))
     },
     created: function () {
@@ -18,7 +18,7 @@ export default {
     beforeDestroy: function () {
         window.removeEventListener("mousemove", this.moveSwiper);
         window.removeEventListener("mouseup", this.moveStop);
-        this.resetLayer();
+        this.map.render();
     },
     methods: {
         ...mapMutations("Wmst", Object.keys(mutations)),
