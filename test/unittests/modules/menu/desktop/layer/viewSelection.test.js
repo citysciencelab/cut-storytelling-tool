@@ -19,11 +19,14 @@ describe("menu/desktop/layer/viewSelection", function () {
             supported: ["2D"],
             isRemovable: false,
             isSecured: false,
+            domId: 0,
 
             setIsSettingVisible: function (value) {
                 this.isSettingVisible = value;
             },
-
+            set: function () {
+                // dummy function
+            },
             get: function (key) {
                 switch (key) {
                     case "removeTopicText":
@@ -82,7 +85,8 @@ describe("menu/desktop/layer/viewSelection", function () {
                     reduceTransparencyText: "reduceTransparencyText",
                     levelUpText: "levelUpText",
                     levelDownText: "levelDownText",
-                    selectedTopicsText: "selectedTopicsText"
+                    selectedTopicsText: "selectedTopicsText",
+                    domId: 0
                 };
             }
         };

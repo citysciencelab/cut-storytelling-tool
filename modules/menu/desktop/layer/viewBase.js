@@ -129,7 +129,9 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
      */
     toggleIsSelected: function () {
         this.model.toggleIsSelected();
-        Radio.trigger("ModelList", "setIsSelectedOnParent", this.model);
+        if (this.model.get("parentId")) {
+            Radio.trigger("ModelList", "setIsSelectedOnParent", this.model);
+        }
         this.rerender();
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },

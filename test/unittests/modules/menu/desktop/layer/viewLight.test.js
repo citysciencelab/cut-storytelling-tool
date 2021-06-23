@@ -132,7 +132,7 @@ describe("menu/desktop/layer/viewLight", function () {
     describe("the layer checkbox", function () {
         it("should react to key events", function () {
 
-            const layerView = new LayerView({model: fakeModel}),
+            const layerView = new CustomLayerView({model: fakeModel}),
                 keyEvent = new $.Event("keydown", {which: 13});
 
             expect(layerView.$el.find("span.glyphicon-check").length).to.be.equal(0);

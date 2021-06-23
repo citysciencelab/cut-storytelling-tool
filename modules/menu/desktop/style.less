@@ -20,7 +20,15 @@
 }
 
 
-ul#root {       
+// ul#root {       
+
+
+// }
+ul#tree {
+    border: none;
+    font-family: @font_family_1;
+    padding: 0px 0;
+    min-width: 380px;
     .tabable {
         text-decoration: none;
         cursor: pointer;
@@ -35,23 +43,15 @@ ul#root {
             outline: 3px auto -webkit-focus-ring-color;
         }
     }
-    a {
-        &:hover {
-            background-color: transparent;
-        }
-    }
-}
-ul#tree {
-    border: none;
-    font-family: @font_family_1;
-    padding: 0px 0;
-    min-width: 380px;
     li a {
         font-size: 15px;
         margin: 0px;
         color: @color_1;
         cursor: pointer;
         padding: 5px;
+        &:hover {
+            background-color: transparent;
+        }
     }
     .closed {
         &:not(.SelectedLayer) {
