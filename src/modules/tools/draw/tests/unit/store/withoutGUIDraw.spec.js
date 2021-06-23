@@ -1,6 +1,9 @@
 import sinon from "sinon";
 import {expect} from "chai";
 import actions from "../../../store/actionsDraw";
+import Feature from "ol/Feature";
+import Polygon from "ol/geom/Polygon";
+import MultiPolygon from "ol/geom/MultiPolygon";
 
 describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
     let commit, dispatch, state, getters;
@@ -34,25 +37,15 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
                 [559656.9477852482, 5930649.742761639]
             ]],
             featureCollectionFromJson = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]}, "properties": null}]},
-            geometryName = Symbol(),
-            itemSymbol = Symbol(),
-            multiPolygonfeatColFromJson = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "MultiPolygon", "coordinates": [[[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]]}, "properties": null}]},
-            properties = Symbol();
+            multiPolygonfeatColFromJson = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "MultiPolygon", "coordinates": [[[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]]}, "properties": null}]};
         let downloadedFeatures,
             item,
-            rootState,
-            type;
+            rootState;
 
         beforeEach(() => {
-            item = {
-                getGeometry: () => ({
-                    getCoordinates: () => type.match(/^Multi/) ? [coordinates] : coordinates,
-                    getType: () => type
-                }),
-                getGeometryName: () => geometryName,
-                getId: () => itemSymbol,
-                getProperties: () => properties
-            };
+            item = new Feature({
+                geometry: new Polygon(coordinates)
+            });
             rootState = {
                 Map: {
                     map: {
@@ -70,14 +63,15 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
         });
 
         it("should return a FeatureCollection for normal geometries", () => {
-            type = "Polygon";
             downloadedFeatures = actions.downloadFeaturesWithoutGUI({state, rootState});
 
             expect(downloadedFeatures).to.eql(JSON.stringify(featureCollectionFromJson));
         });
 
         it("should return a multiPolygon in the FeatureCollection for multigeometries", () => {
-            type = "MultiPolygon";
+            item = new Feature({
+                geometry: new MultiPolygon([coordinates])
+            });
             downloadedFeatures = actions.downloadFeaturesWithoutGUI({state, rootState}, {"geomType": "multiGeometry"});
 
             expect(downloadedFeatures).to.eql(JSON.stringify(multiPolygonfeatColFromJson));

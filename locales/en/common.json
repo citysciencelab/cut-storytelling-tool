@@ -20,6 +20,7 @@
     },
     "menu": {
         "topics": "Issues & Topics",
+        "name": "Menu",
         "views": {
             "name": "Views",
             "view01": "View 1"
@@ -50,6 +51,7 @@
             "selectFeatures": "Select features",
             "legend":"Legend",
             "styleVt": "Style VT",
+            "bufferAnalysis": "Buffer Analysis",
             "parcelSearch": "Parcel search",
             "wfsSearch": "WFS search"
         },
@@ -89,9 +91,11 @@
     "modules": {
         "language": {
             "languageTitle": "Please choose a language",
-            "de": "German",
+            "de": "Deutsch",
             "en": "English",
-            "it": "Italian"
+            "it": "Italiano",
+            "pt": "Português",
+            "es": "Español"
         },
         "core": {
           "modelList": {
@@ -104,7 +108,8 @@
           },
           "parametricURL": {
             "alertZoomToGeometry": "The parameterized call of the portal has unfortunately gone wrong!<br>Please make sure that all parameters were entered correctly.",
-            "alertWrongLayerIds": "<strong>The parameterized call is faulty!</strong>  The LAYERIDS at positions: <b>{{wrongIdsPositionsConcat}}</b> do not exist and are ignored!"
+            "alertWrongLayerIds": "<strong>The parameterized call is faulty!</strong>  The LAYERIDS at positions: <b>{{wrongIdsPositionsConcat}}</b> do not exist and are ignored!",
+            "alertWrongInitValues": "<strong>Der parametrisierte Aufruf ist fehlerhaft!</strong> Die gespeicherten Parameter wurden verändert oder sind unvollständig!"
           }
         },
         "alerting": {
@@ -151,7 +156,8 @@
           "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)",
           "periodicityTitle": "Periodicity",
           "publicationCreation": "Publication / Creation",
-          "buildings":"Buildings"
+          "buildings":"Buildings",
+          "changeLayerInfo": "Switch infotext"
         },
         "mapMarker": {
           "noStyleModel": "No style could be found for the specified StyleId: {{styleId}}. Please check your configuration."
@@ -213,8 +219,7 @@
             "info": {
                 "disclaimer": "Legal disclaimer",
                 "home": {
-                    "name": "Hamburg Town",
-                    "url": "https://www.hamburg.com/"
+                    "name": "Hamburg Town"
                 }
             },
             "addWMS": {
@@ -233,13 +238,13 @@
               "error": {
                 "mail": "Please input a valid E-mail address",
                 "message": "Sending Email failed!",
+                "messageInput": "Your message has to be at least {{length}} characters long.",
                 "phone": "Please input your phone number",
                 "username": "Please input your name"
               },
               "placeholder": {
                 "mail": "Your E-mail Address",
                 "message": "Please write down your message in here and press \"$t(common:modules.tools.contact.sendButton)\".",
-                "messageInput": "Your message has to be at least {{length}} characters long.",
                 "phone": "Your phone number",
                 "username": "Your name"
               },
@@ -475,7 +480,10 @@
                         "year": "{{count}} year",
                         "year_plural": "{{count}} years",
                         "previousWeekday": "Previous Weekday",
-                        "nextWeekday": "Next weekday"
+                        "nextWeekday": "Next weekday",
+                        "noticeTextAvailable": "(Only data with the value available are considered)",
+                        "noticeTextCharging": "(Only data with the value charging are considered).",
+                        "noticeTextOutoforder": "(Only data with the value outoforder are considered)."
                       },
                       "sensorData": {
                         "firstColumnHeaderName": "Properties"
@@ -582,7 +590,8 @@
                     "iconPoint": "Point",
                     "iconLeaf": "Leaf",
                     "iconCloud": "Cloud",
-                    "iconMeadow": "Meadow"
+                    "iconMeadow": "Meadow",
+                    "gelber Pin": "yellow Pin"
                 }
             },
             "measure": {
@@ -603,6 +612,18 @@
             },
             "scaleSwitcher": {
                 "label": "Scale"
+            },
+            "bufferAnalysis": {
+              "sourceSelectLabel": "source layer",
+              "targetSelectLabel": "target layer",
+              "resultTypeLabel": "result type",
+              "overlapping": "inside radius",
+              "notOverlapping": "outside radius",
+              "rangeLabel": "radius (m)",
+              "clearButton": "Reset",
+              "saveButton": "Save",
+              "sourceLayerNotFound": "Der gespeicherte Quell-Layer mit der ID {{layerId}} wurde nicht gefunden.",
+              "targetLayerNotFound": "Der gespeicherte Ziel-Layer mit der ID {{layerId}} wurde nicht gefunden."
             },
             "wfsSearch": {
                 "optionsPlaceholder": "Please choose an option!",
@@ -807,7 +828,7 @@
               "true": "yes",
               "No": "no"
             },
-            "zoomToResult":"Zoom to result"
+            "zoomToResult": "Zoom to result"
         }
     }
 }

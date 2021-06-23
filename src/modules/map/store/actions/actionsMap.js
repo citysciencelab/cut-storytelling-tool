@@ -5,6 +5,9 @@ import {getWmsFeaturesByMimeType} from "../../../../api/gfi/getWmsFeaturesByMime
 import {MapMode} from "../enums";
 import getProxyUrl from "../../../../utils/getProxyUrl";
 
+import VectorLayer from "ol/layer/Vector.js";
+import VectorSource from "ol/source/Vector.js";
+
 let unsubscribes = [],
     loopId = null;
 
@@ -42,8 +45,13 @@ const actions = {
             unsubscribes = [];
         }
 
-        const mapView = map.getView();
+        const mapView = map.getView(),
+            channel = Radio.channel("VectorLayer");
 
+        // listen to featuresLoaded event to be able to determine if all features of a layer are completely loaded
+        channel.on({"featuresLoaded": id => {
+            commit("addLoadedLayerId", id);
+        }});
         // set map to store
         commit("setMap", map);
         commit("setLayerList", map.getLayers().getArray());
@@ -331,9 +339,35 @@ const actions = {
             ...options
         });
     },
+    /**
+     * Creates a new vector layer and adds it to the map.
+     * If it already exists, this layer is returned.
+     * @param {String} name - The name and the id for the layer.
+     * @returns {module:ol/layer} The created or the already existing layer.
+     */
+    createLayer ({state}, name) {
+        const layerList = state.layerList;
+
+        let resultLayer = layerList.find(layer => {
+            return layer.get("name") === name;
+        });
+
+        if (resultLayer !== undefined) {
+            return resultLayer;
+        }
+
+        resultLayer = new VectorLayer({
+            id: name,
+            name: name,
+            source: new VectorSource(),
+            zIndex: 999
+        });
+
+        state.map.addLayer(resultLayer);
+        return resultLayer;
+    },
     ...highlightFeature,
     ...removeHighlightFeature
-
 };
 
 export default actions;

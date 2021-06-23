@@ -1,8 +1,8 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../library/driver"),
     {areAllFeaturesOfLayerVisible} = require("../../../library/scripts"),
-    {logBrowserstackUrlToTest} = require("../../../library/utils"),
+    {logTestingCloudUrlToTest} = require("../../../library/utils"),
     {isMobile, isMaster} = require("../../../settings"),
     {By, until} = webdriver;
 
@@ -35,25 +35,24 @@ async function ExtendedFilterTests ({builder, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
             });
 
             after(async function () {
                 if (capability) {
                     driver.session_.then(function (sessionData) {
-                        logBrowserstackUrlToTest(sessionData.id_);
+                        logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
+                    await quitDriver();
                     driver = await initDriver(builder, url, resolution);
                 }
             });
+
 
             it("tool opens with select box for filter creation", async function () {
                 await (await driver.findElement(By.xpath("//ul[@id='tools']//.."))).click();

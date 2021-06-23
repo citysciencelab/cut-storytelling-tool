@@ -19,7 +19,6 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             "fileImport",
             "draw",
             "featureLister",
-            "animation",
             "addWMS",
             "shadow"
         ],
@@ -41,7 +40,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @property {String[]} categories=["Opendata", "Inspire", "Behörde"] categories for Fachdaten in DefaultTree
      * @property {String} category="Opendata" selected category for Fachdaten in DefaultTree
      * @property {Number} selectionIDX=-1 Index of the last inserted layers. Required for sorting/moving (only for the treeType lightTree)
-     * @property {String[]} onlyDesktopTools=["measure", "print", "kmlimport" or "fileImport", "draw", "featureLister", "animation", "addWMS"]
+     * @property {String[]} onlyDesktopTools=["measure", "print", "kmlimport" or "fileImport", "draw", "featureLister", "addWMS"]
      * @listens Core.ConfigLoader#RadioRequestParserGetItemByAttributes
      * @listens Core.ConfigLoader#RadioRequestParserGetItemsByAttributes
      * @listens Core.ConfigLoader#RadioRequestParserGetTreeType
@@ -526,7 +525,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                         $("#Overlayer").parent().after($("#ExternalLayer").parent());
                     }
                     if (!this.getItemByAttributes({id: parentId})) {
-                        this.addFolder("Fachthema", parentId, "ExternalLayer", 1, true, "common:tree.subjectData");
+                        this.addFolder("Fachthema", parentId, "ExternalLayer", 1, false, "common:tree.subjectData");
                     }
                 }
                 gdiLayer = Object.assign(gdiLayer, {

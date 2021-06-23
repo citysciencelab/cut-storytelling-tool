@@ -225,7 +225,7 @@ export default {
 
         /**
          * Checks if there are visible features from draw tool.
-         * @param {module:ol/Feature[]} features - The features to be checked.
+         *
          * @returns {Boolean} True if there are visible features otherwise false.
          */
         isFromDrawTool () {
@@ -367,7 +367,8 @@ export default {
         :active="active && !withoutGUI"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :initialWidth="500"
+        :initialWidth="initialWidth"
+        :initialWidthMobile="initialWidthMobile"
         :deactivateGFI="deactivateGFI"
     >
         <template v-slot:toolBody>

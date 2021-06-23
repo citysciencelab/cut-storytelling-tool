@@ -146,16 +146,46 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     /**
      * Parses the xml to get the subelements from the layer
      * @param   {string} xml response xml
-     * @param   {string} featureType wfs feature type from layer
+     * @param   {string} featureType wfs feature type from layer. Namespace is taken into account.
      * @returns {object[]} subElements of the xml element
      */
     getSubelementsFromXML: function (xml, featureType) {
+        const elements = xml ? Array.from(xml.getElementsByTagName("element")) : [];
+        let subElements = [],
+            featureTypeWithoutNamespace = featureType;
+
+        if (featureType && featureType.indexOf(":") > -1) {
+            featureTypeWithoutNamespace = featureType.substr(featureType.indexOf(":") + 1, featureType.length);
+        }
+
+        elements.forEach(element => {
+            if (element.getAttribute("name") === featureTypeWithoutNamespace) {
+                subElements = Array.from(element.getElementsByTagName("element"));
+            }
+        });
+        if (subElements.length === 0) {
+            subElements = this.getSubelementsFromXMLOtherStructure(xml, featureTypeWithoutNamespace);
+        }
+        return subElements;
+    },
+
+    /**
+     * Parses the xml with another structure to get the subelements from the layer
+     * @param   {string} xml response xml
+     * @param   {string} featureType wfs feature type from layer without namespace
+     * @returns {object[]} subElements of the xml element
+     */
+    getSubelementsFromXMLOtherStructure: function (xml, featureType) {
         const elements = xml ? Array.from(xml.getElementsByTagName("element")) : [];
         let subElements = [];
 
         elements.forEach(element => {
             if (element.getAttribute("name") === featureType) {
-                subElements = Array.from(element.getElementsByTagName("element"));
+                const sibling = element.nextElementSibling;
+
+                if (sibling && sibling.tagName === "complexType" && sibling.hasAttribute("name")) {
+                    subElements = Array.from(sibling.getElementsByTagName("element"));
+                }
             }
         });
         return subElements;
@@ -578,9 +608,9 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         }
         // compare value in range
         else if (Array.isArray(referenceValue) && referenceValue.every(element => typeof element === "number") && (referenceValue.length === 2 || referenceValue.length === 4)) {
-            value = parseFloat(value);
+            value = parseFloat(this.getValueWithoutComma(value));
 
-            if (!isNaN(featureValue)) {
+            if (!isNaN(this.getValueWithoutComma(featureValue))) {
                 // value in absolute range of numbers [minValue, maxValue]
                 if (referenceValue.length === 2) {
                     // do nothing
@@ -609,6 +639,19 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
 
         return false;
+    },
+
+    /**
+     * get value without comma and into number format
+     * @param   {string|number} value the parameter
+     * @returns {number} the parsed value
+     */
+    getValueWithoutComma: function (value) {
+        if (typeof value === "string" && value.indexOf(",") > -1) {
+            return parseFloat(value.replace(",", "."));
+        }
+
+        return value;
     },
 
     /**

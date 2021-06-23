@@ -201,7 +201,7 @@ function hasVectorLayerStyle () {
 
     if (stroke) {
         if (stroke.color) {
-            if (JSON.stringify(layer.getStyle().getStroke().getColor()) !== JSON.stringify(stroke.color)) {
+            if (JSON.stringify(layer.getSource().getFeatures()[0].getStyle()[0].getStroke().getColor()) !== JSON.stringify(stroke.color)) {
                 return false;
             }
         }
@@ -209,16 +209,13 @@ function hasVectorLayerStyle () {
 
     if (fill) {
         if (fill.color) {
-            if (JSON.stringify(layer.getStyle().getFill().getColor()) !== JSON.stringify(fill.color)) {
+            if (JSON.stringify(layer.getSource().getFeatures()[0].getStyle()[0].getFill().getColor()) !== JSON.stringify(fill.color)) {
                 return false;
             }
         }
     }
 
     return true;
-
-    // fill color [ 8, 119, 95, 0.3 ]
-    // stroke color "#08775f"
 }
 
 /**
@@ -435,6 +432,15 @@ function getCenter () {
 }
 
 /**
+ * @returns {String} The scale of the map.
+ */
+function getScale () {
+    const options = Backbone.Radio.request("MapView", "getOptions");
+
+    return options ? options.scale : null;
+}
+
+/**
  * @returns {Number} current resolution of MapView
  */
 function getResolution () {
@@ -476,7 +482,7 @@ function getObModeResolution () {
  * @returns {void}
  */
 function setCenter () {
-    Backbone.Radio.trigger("MapView", "setCenter", arguments[0]);
+    Backbone.Radio.trigger("MapView", "setCenter", arguments[0], arguments[1]);
 }
 
 /**
@@ -534,7 +540,7 @@ function getOrderedLayerIds () {
             return false;
         })
         .filter(id => id) // sort out functional layers, e.g. mapMarker layer
-        .filter(id => !["12883", "12884", "13032"].includes(id)) // sort out e.g. oblique layer not initially visible
+        .filter(id => !["12883", "12884", "13032", "zoom_to_feature_layer", "measure_layer", "import_draw_layer"].includes(id)) // sort out e.g. oblique layer not initially visible
         .map(id => Array.isArray(id) ? id[0] : id) // MP always uses first id as representant
         .map(id => String(parseInt(id, 10))) // e.g. "1933geofox_stations" should only be 1933 for comparison
         .reverse(); // layers are returned in "inverted" order (last is first in tree)
@@ -565,6 +571,7 @@ module.exports = {
     doesLayerWithFeaturesExist,
     getCenter,
     getResolution,
+    getScale,
     getTilt,
     getHeading,
     getDirection,

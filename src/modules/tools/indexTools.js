@@ -7,6 +7,7 @@ import actions from "./actionsTools";
  * The imported tools.
  */
 import AddWMS from "./addWMS/store/indexAddWMS";
+import BufferAnalysis from "./bufferAnalysis/store/indexBufferAnalysis";
 import Contact from "./contact/store/indexContact";
 import Draw from "./draw/store/indexDraw";
 import FileImport from "./fileImport/store/indexFileImport";
@@ -28,6 +29,7 @@ export default {
     namespaced: true,
     modules: {
         AddWMS,
+        BufferAnalysis,
         Contact,
         Draw,
         FileImport,

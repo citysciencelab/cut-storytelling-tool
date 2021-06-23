@@ -31,7 +31,7 @@ describe("src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue", () => {
                             scaleSwitcher:
                             {
                                 "name": "translate#common:menu.tools.scaleSwitcher",
-                                "glyphicon": "glyphicon-resize-full",
+                                "glyphicon": "glyphicon-resize-small",
                                 "renderToWindow": true
                             }
                         }
@@ -107,7 +107,6 @@ describe("src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue", () => {
         await wrapper.vm.$nextTick();
         expect(wrapper.find("select").element.value).to.equals("10000");
     });
-
 
     it("calls store action setResolutionByIndex when select is changed", async () => {
         const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue}),
