@@ -59,7 +59,7 @@ const Config = {
     scaleLine: true,
     mouseHover: {
         numFeaturesToShow: 2,
-        infoText: "(weitere Objekte. Bitte zoomen.)"
+        infoText: "common:mouseHover.infoText"
     },
     clickCounter: {},
     startingMap3D: false,
@@ -83,7 +83,8 @@ const Config = {
             de: "deutsch",
             en: "englisch",
             it: "italienisch",
-            pt: "portugiesisch"
+            pt: "portugiesisch",
+            es: "spanisch"
         },
         fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"]

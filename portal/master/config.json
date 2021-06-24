@@ -55,15 +55,6 @@
         "timeout": 10000,
         "definitions": [
           {
-            "url": "/geodienste.hamburg.de/MRH_WFS_Rotenburg",
-            "typeName": "app:mrh_row_bplan",
-            "propertyNames": [
-              "app:name"
-            ],
-            "name": "translate#common:modules.searchbar.specialWFS.bplan",
-            "namespaces": "xmlns:app='http://www.deegree.org/app'"
-          },
-          {
             "url": "/geodienste.hamburg.de/HH_WFS_Bebauungsplaene",
             "typeName": "app:hh_hh_festgestellt",
             "propertyNames": [
@@ -112,8 +103,8 @@
     "mapView": {
       "backgroundImage": "https://geodienste.hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
       "startCenter": [
-        561210,
-        5932600
+        565874,
+        5934140
       ]
     },
     "menu": {
@@ -359,35 +350,6 @@
             "glyphicon": "glyphicon-menu-hamburger",
             "lister": 10
           },
-          "lines": {
-            "name": "translate#common:menu.tools.commuterLines",
-            "glyphicon": "glyphicon-play-circle"
-          },
-          "animation": {
-            "name": "translate#common:menu.tools.commuterAnimation",
-            "glyphicon": "glyphicon-play-circle",
-            "steps": 30,
-            "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
-            "params": {
-              "REQUEST": "GetFeature",
-              "SERVICE": "WFS",
-              "TYPENAME": "app:mrh_kreise",
-              "VERSION": "1.1.0",
-              "maxFeatures": "10000"
-            },
-            "featureType": "mrh_einpendler_gemeinde",
-            "attrAnzahl": "anzahl_einpendler",
-            "attrGemeinde": "wohnort",
-            "minPx": 5,
-            "maxPx": 30,
-            "zoomlevel": 1,
-            "colors": [
-              "rgba(255,0,0,0.5)",
-              "rgba(0,255,0,0.5)",
-              "rgba(0,0,255,0.5)",
-              "rgba(0,255,255,0.5)"
-            ]
-          },
           "saveSelection": {
             "name": "translate#common:menu.tools.saveSelection",
             "glyphicon": "glyphicon-share"
@@ -415,7 +377,7 @@
           "scaleSwitcher":
           {
             "name": "translate#common:menu.tools.scaleSwitcher",
-            "glyphicon": "glyphicon-resize-full"
+            "glyphicon": "glyphicon-resize-small"
           },
           "vueAddon": {
             "name": "AddonTool",
@@ -463,7 +425,7 @@
             {
               "name": "translate#common:modules.tools.info.home.name",
               "glyphicon": "glyphicon-globe",
-              "url": "translate#common:modules.tools.info.home.url"
+              "url": "https://www.hamburg.de/"
             }
           ]
         }
@@ -773,15 +735,18 @@
                 "values": {
                   "available": {
                     "title": "common:modules.tools.gfi.themes.sensor.chargingStations.available",
-                    "color": "rgba(0, 220, 0, 1)"
+                    "color": "rgba(0, 220, 0, 1)",
+                    "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextAvailable"
                   },
                   "charging": {
                     "title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
-                    "color": "rgba(220, 0, 0, 1)"
+                    "color": "rgba(220, 0, 0, 1)",
+                    "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextCharging"
                   },
                   "outoforder": {
-                      "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
-                      "color": "rgba(175, 175, 175, 1)"
+                    "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
+                    "color": "rgba(175, 175, 175, 1)",
+                    "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextOutoforder"
                   }
                 }
               }
