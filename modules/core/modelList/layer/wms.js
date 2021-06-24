@@ -38,7 +38,7 @@ const WMSLayer = Layer.extend({
             "change:SLDBody": this.updateSourceSLDBody
         });
 
-        this.listenTo(Radio.channel("WMS-T"), {
+        this.listenTo(Radio.channel("WmsTime"), {
             "updateTime": this.updateTime
         });
 

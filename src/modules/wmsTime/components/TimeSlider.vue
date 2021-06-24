@@ -33,7 +33,7 @@ export default {
 
                 this.sliderValue = this.timeRange[index];
             }
-            Radio.trigger("WMS-T", "updateTime", this.layerId, this.sliderValue);
+            Radio.trigger("WmsTime", "updateTime", this.layerId, this.sliderValue);
         }
     },
     created () {

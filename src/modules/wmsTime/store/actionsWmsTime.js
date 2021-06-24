@@ -36,7 +36,7 @@ const actions = {
                 const {TIME} = layerModel.get("layerSource").params_,
                     {transparency} = layerModel.attributes;
 
-                Radio.trigger("WMS-T", "updateTime", id, TIME);
+                Radio.trigger("WmsTime", "updateTime", id, TIME);
                 Radio.trigger("ModelList", "setModelAttributesById", id, {transparency});
                 commit("setTimeSliderDefaultValue", TIME);
             }
