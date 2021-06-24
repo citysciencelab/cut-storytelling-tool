@@ -22,10 +22,6 @@ export default {
         },
         sliderValue () {
             // TODO: Test with two WMS-T
-            // If the value is changed through a user input (not the playback-function), the value is a String and needs to be converted.
-            if (typeof this.sliderValue === "string") {
-                this.sliderValue = Number(this.sliderValue);
-            }
             if (this.timeRange.indexOf(this.sliderValue) === -1) {
                 // If possible, find the next higher (or if not existent, lower) value inside the timeRange.
                 const valTooHigh = this.timeRange[this.timeRange.length - 1] < this.sliderValue,
@@ -81,7 +77,7 @@ export default {
         <div class="timeSlider-innerWrapper">
             <button
                 :id="'timeSlider-activate-layerSwiper-' + layerId"
-                :class="['btn', 'btn-sm', swiper.active ? 'btn-primary' : 'btn-lgv-grey']"
+                :class="['btn', 'btn-sm', layerSwiper.active ? 'btn-primary' : 'btn-lgv-grey']"
                 @click="toggleSwiper(layerId)"
             >
                 {{ $t("common:modules.wmsTime.timeSlider.buttons.layerSwiper") }}
@@ -127,7 +123,7 @@ export default {
                     :max="max"
                     :step="step"
                     :aria-label="$t('common:modules.wmsTime.timeSlider.inputRangeLabel')"
-                    @input="sliderValue = $event.target.value"
+                    @input="sliderValue = Number($event.target.value)"
                 >
             </fieldset>
         </div>
