@@ -110,8 +110,8 @@ If a parameter is also defined in the service, the parameter defined in this con
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|default|no|Number||Initial moment to be display for the WMS-T. **Beware**: If the configured value is not inside the time range of the possible values of the service, the value from the service is used instead.|`1970`|
-|playbackDelay|no|Number|`1`|Time in seconds which a moment should be shown before the rendering of the next moment is initiated.|`42`|
+|default|no|Number||Initial moment to be displayed for the WMS-T. **Beware**: If the configured value is not inside the time range of the possible values of the service, the value from the service is used instead.|`1970`|
+|playbackDelay|no|Number|`1`|When using the playback function, this is the time in seconds which a moment should be shown before the rendering of the next moment is initiated.|`42`|
 
 ***
 

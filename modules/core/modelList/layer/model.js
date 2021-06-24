@@ -499,8 +499,8 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             }
         }
         else if (timeLayer) {
-            // If the swiper is active, two WMS-T are currently active TODO: rename 'swiper' after merge
-            if (store.getters["WmsTime/swiper"].active) {
+            // If the swiper is active, two WMS-T are currently active
+            if (store.getters["WmsTime/layerSwiper"].active) {
                 if (!id.endsWith("_secondLayer")) {
                     this.setIsSelected(true);
                 }
