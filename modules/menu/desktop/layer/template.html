@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<a id="<%= domId %>" class="dropdown-item layer-item tabable">
-    <% if (isSelected) { %>
-        <span class="glyphicon glyphicon-check" title="<%=removeTopicText%>"></span>
-    <% } else { %>
-        <span class="glyphicon glyphicon-unchecked" title="<%=showTopicText%>"></span>
-    <% } %>
-    <% if (isSecured) { %>
-        <span class="glyphicon glyphicon-lock" title="<%=securedTopicText%>"></span>
-    <% } %>
+<% if (isSelected) { %>
+  <a href="#" id="<%= domId %>" class="dropdown-item layer-item tabable checked">
+    <span class="glyphicon glyphicon-check" title="<%=removeTopicText%>"></span>
+<% } else { %>
+  <a href="#" id="<%= domId %>" class="dropdown-item layer-item tabable">
+    <span class="glyphicon glyphicon-unchecked" title="<%=showTopicText%>"></span>
+<% } %>
+  <% if (isSecured) { %>
+      <span class="glyphicon glyphicon-lock" title="<%=securedTopicText%>"></span>
+  <% } %>
     <span class="title" title="<%= name %>"><%= name %></span>
 </a>
 

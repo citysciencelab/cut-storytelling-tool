@@ -113,6 +113,7 @@ export default {
             :data-toggle="title"
             data-placement="bottom"
             :title="toolTip"
+            class="tabable"
         >
 
             <img

@@ -2,7 +2,7 @@
 
 @color_1: rgb(51, 51, 51);
 @color_2: rgb(255, 255, 255);
-@color_3: rgb(255, 127, 0);
+// @color_3: rgb(255, 127, 0);
 @color_4: rgb(82, 82, 82);
 @font_family_1: "MasterPortalFont", "Arial Narrow", Arial, sans-serif;
 @font_family_2: MasterPortalFont, "Arial Narrow", Arial, sans-serif;
@@ -18,23 +18,15 @@
     padding: 5px 0;
     border-bottom: 1px solid rgb(229, 229, 229);
 }
-
-
-// ul#root {       
-
-
-// }
-ul#tree {
-    border: none;
-    font-family: @font_family_1;
-    padding: 0px 0;
-    min-width: 380px;
+#root, ul#tree, ul#legend-menu, .portal-title {
     .tabable {
         text-decoration: none;
         cursor: pointer;
         opacity: 0.8;
         &:hover {
             opacity: 1;
+            background-color: @accent_hover;
+            color: @color_2;
         }
         &:focus {
             opacity: 1.0;
@@ -42,15 +34,26 @@ ul#tree {
             outline: 3px auto  Highlight;
             outline: 3px auto -webkit-focus-ring-color;
         }
+        &:active {
+            opacity: 1.0;
+        }
     }
+}
+
+ul#tree {
+    border: none;
+    font-family: @font_family_1;
+    padding: 0px 0;
+    min-width: 380px;
+
     li a {
         font-size: 15px;
         margin: 0px;
         color: @color_1;
-        cursor: pointer;
         padding: 5px;
         &:hover {
-            background-color: transparent;
+            color: @color_1;
+            background-color: lighten(@primary_inactive, 40%);
         }
     }
     .closed {
@@ -107,6 +110,9 @@ ul#tree {
         }
         >div>a {
             color: @color_2;
+            // &:hover {
+            //     background-color: @color_4;
+            // }
         }
     }
     .catalog-selection {
@@ -173,7 +179,6 @@ ul#tree.light {
         max-width: 500px;
         overflow: auto;
         >a {
-            font-weight: normal;
             font-size: 12px;
         }
         span.title {
@@ -183,10 +188,12 @@ ul#tree.light {
     }
 }
 ul#tree {
-    .glyphicon-check {
-        color: @color_3;
-        & + .title {
-            color: @color_3;
+    a.checked {
+        background-color: @accent_active;
+        color: @color_2;
+        &:hover {
+            background-color: @accent_active;
+            color: @color_2;
         }
     }
 }

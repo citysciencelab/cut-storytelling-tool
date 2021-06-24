@@ -81,10 +81,10 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
      */
     showLayerInformation: function () {
         this.model.showLayerInformation();
+        this.highlightLayerInformationIcon();
         // Navigation wird geschlossen
         this.$("div.collapse.navbar-collapse").removeClass("in");
-        // TODO REFACTOR-384 Keyboard-nav: set focus to info window
-        this.highlightLayerInformationIcon();
+        // $("li.dropdown-folder.open").removeClass("open"); // TODO JG
     },
 
     /**

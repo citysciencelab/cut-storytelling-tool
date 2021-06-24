@@ -15,9 +15,7 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
         },
         "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
         "keydown .layer-info-item": function (event) {
-            if (this.handleKeyboardTriggeredAction(event, "showLayerInformation")) {
-                // TODO MPREFACTOR-384 set focus to new layer info window?
-            }
+            this.handleKeyboardTriggeredAction(event, "showLayerInformation");
         },
         "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
         "keydown .layer-info-item > .glyphicon-cog": function (event) {

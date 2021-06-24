@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<a id="<%= domId %>" class="dropdown-item layer-item pull-left tabable">
-    <% if (isVisibleInMap === true) { %>
+<% if (isVisibleInMap === true) { %>
+    <a href="#" id="<%= domId %>" class="dropdown-item layer-item pull-left tabable checked">
         <span class="glyphicon glyphicon-check pull-left" title="<%=removeTopicText%>"></span>
-    <% } else { %>
+<% } else { %>
+    <a href="#" id="<%= domId %>" class="dropdown-item layer-item pull-left tabable">
         <span class="glyphicon glyphicon-unchecked pull-left" title="<%=showTopicText%>"></span>
-    <% } %>
+<% } %>
     <% if (isSecured) { %>
         <span class="glyphicon glyphicon-lock" title="<%=securedTopicText%>"></span>
     <% } %>
