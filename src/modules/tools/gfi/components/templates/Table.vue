@@ -98,20 +98,19 @@ export default {
 <template>
     <ToolWindow
         class="gfi-detached-table rotate0"
-        :initialWidth="360"
+        :initial-width="360"
         @close="close"
     >
-        <template v-slot:rightOfTitle>
+        <template #rightOfTitle>
             <span
                 class="icon-turnarticle glyphicon"
                 @click="rotate"
-            >
-            </span>
+            />
         </template>
-        <template v-slot:title>
+        <template #title>
             <span>{{ translate(title) }}</span>
         </template>
-        <template v-slot:body>
+        <template #body>
             <div class="body">
                 <component
                     :is="theme"

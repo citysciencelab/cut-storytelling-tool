@@ -118,11 +118,11 @@ export function getLayerModelFromTileFeature (tileFeature, getModelByAttributesO
     else if (
         typeof isCesium3dTileFeatureOpt === "function" ? isCesium3dTileFeatureOpt(tileFeature) : isCesium3dTileFeature(tileFeature)
         && typeof tileFeature.tileset === "object"
-        && tileFeature.tileset.hasOwnProperty("layerReferenceId")
+        && tileFeature?.tileset?.layerReferenceId
     ) {
         filter = {id: tileFeature.tileset.layerReferenceId};
     }
-    else if (!tileFeature.hasOwnProperty("primitive") || tileFeature.primitive === null || typeof tileFeature.primitive !== "object") {
+    else if (!tileFeature?.primitive || tileFeature.primitive === null || typeof tileFeature.primitive !== "object") {
         return undefined;
     }
     else if (tileFeature.primitive.olLayer) {
@@ -251,7 +251,7 @@ export function getGfiFeaturesByOlFeature (olFeature, attributes, getGfiFeatureB
 
     const result = [];
 
-    if (olFeature.getProperties().hasOwnProperty("features") && Array.isArray(olFeature.get("features"))) {
+    if (Object.prototype.hasOwnProperty.call(olFeature.getProperties(), "features") && Array.isArray(olFeature.get("features"))) {
         // clustered feature
         olFeature.get("features").forEach(feature => {
             let gfiFeature = null;

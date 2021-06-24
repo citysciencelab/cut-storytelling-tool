@@ -116,10 +116,10 @@ export default {
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
-        :initialWidth="300"
+        :deactivate-gfi="deactivateGFI"
+        :initial-width="300"
     >
-        <template v-slot:toolBody>
+        <template #toolBody>
             <div
                 v-if="active"
                 id="tool-file-import"
@@ -127,13 +127,11 @@ export default {
                 <p
                     class="cta"
                     v-html="$t('modules.tools.fileImport.captions.introInfo')"
-                >
-                </p>
+                />
                 <p
                     class="cta"
                     v-html="$t('modules.tools.fileImport.captions.introFormats')"
-                >
-                </p>
+                />
                 <div
                     class="vh-center-outer-wrapper drop-area-fake"
                     :class="dropZoneAdditionalClass"
@@ -164,7 +162,7 @@ export default {
                         <input
                             type="file"
                             @change="onInputChange"
-                        />
+                        >
                         {{ $t("modules.tools.fileImport.captions.browse") }}
                     </label>
                 </div>
@@ -188,14 +186,13 @@ export default {
                     <p
                         class="cta introDrawTool"
                         v-html="$t('modules.tools.fileImport.captions.introDrawTool')"
-                    >
-                    </p>
+                    />
                     <div>
                         <label class="upload-button-wrapper">
                             <input
                                 type="button"
                                 @click="openDrawTool"
-                            />
+                            >
                             {{ $t("modules.tools.fileImport.captions.drawTool") }}
                         </label>
                     </div>

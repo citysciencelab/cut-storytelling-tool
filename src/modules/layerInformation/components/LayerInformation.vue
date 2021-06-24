@@ -144,10 +144,10 @@ export default {
         class="layerInformation"
         @close="close"
     >
-        <template v-slot:title>
+        <template #title>
             <span>{{ $t("common:modules.layerInformation.informationAndLegend") }}</span>
         </template>
-        <template v-slot:body>
+        <template #body>
             <div class="body">
                 <h4
                     class="subtitle"
@@ -168,7 +168,7 @@ export default {
                         @click="onClickDropdown"
                     >
                         {{ $t("common:modules.layerInformation.changeLayerInfo") }}
-                        <span class="caret"></span>
+                        <span class="caret" />
                     </button>
                     <ul
                         class="dropdown-menu"
@@ -189,7 +189,7 @@ export default {
                 <div
                     class="mb-2 abstract"
                     v-html="abstractText"
-                ></div>
+                />
                 <div v-if="showAdditionalMetaData">
                     <p
                         v-for="url in metaURLs"
@@ -258,8 +258,7 @@ export default {
                         :class="getTabPaneClasses('layerinfo-legend')"
                         :show="isActiveTab('layerinfo-legend')"
                         :type="String('layerinfo-legend')"
-                    >
-                    </div>
+                    />
                     <div
                         id="LayerInfoDataDownload"
                         class="row"

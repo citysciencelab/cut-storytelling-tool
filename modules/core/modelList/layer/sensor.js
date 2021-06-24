@@ -267,7 +267,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         if (Array.isArray(sensorData)) {
             sensorData.forEach(function (data, index) {
-                if (data.hasOwnProperty("location") && data.location && epsg !== undefined) {
+                if (data?.location && data.location && epsg !== undefined) {
                     feature = this.parseJson(data.location);
                 }
                 else {
@@ -477,14 +477,14 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
             things.push({});
             Object.keys(stream).forEach(key => {
-                if (datastreamAttributesAssociation.hasOwnProperty(key)) {
+                if (Object.prototype.hasOwnProperty.call(datastreamAttributesAssociation, key)) {
                     datastreamNewAttributes[key] = stream[key];
                     delete things[index][key];
                 }
             });
             things[index].Datastreams = [datastreamNewAttributes];
             Object.keys(stream.Thing).forEach(key => {
-                if (thingAttributesAssociation.hasOwnProperty(key)) {
+                if (Object.prototype.hasOwnProperty.call(thingAttributesAssociation, key)) {
                     things[index][key] = stream.Thing[key];
                 }
             });
@@ -551,9 +551,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         dataStreams.forEach(dataStream => {
             const dataStreamId = String(dataStream["@iot.id"]),
                 dataStreamName = dataStream.name,
-                dataStreamValue = dataStream.hasOwnProperty("Observations") ? dataStream.Observations[0]?.result : "",
+                dataStreamValue = dataStream?.Observations ? dataStream.Observations[0]?.result : "",
                 key = "dataStream_" + dataStreamId + "_" + dataStreamName;
-            let phenomenonTime = dataStream.hasOwnProperty("Observations") ? dataStream.Observations[0]?.phenomenonTime : "";
+            let phenomenonTime = dataStream?.Observations ? dataStream.Observations[0]?.phenomenonTime : "";
 
             this.addDatastreamProperties(thing.properties, dataStream.properties);
             phenomenonTime = changeTimeZone(phenomenonTime?.split("/")[0], this.get("utc"));
@@ -611,11 +611,11 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         allThingsWithSensorData.forEach(thing => {
 
             // A thing may not have properties. So we ensure we can access them.
-            if (!thing.hasOwnProperty("properties")) {
+            if (!thing?.properties) {
                 thing.properties = {};
             }
 
-            if (thing.hasOwnProperty("Datastreams")) {
+            if (thing?.Datastreams) {
                 this.getNewestSensorDataOfDatastream(thing);
             }
 
@@ -668,12 +668,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      */
     getJsonGeometry: function (thing, index) {
         const Locations = thing?.Locations || thing?.Thing?.Locations,
-            location = Locations && Locations.hasOwnProperty(index) && Locations[index].hasOwnProperty("location") ? Locations[index].location : null;
+            location = Locations && Object.prototype.hasOwnProperty.call(Locations, index) && Locations[index]?.location ? Locations[index].location : null;
 
-        if (location && location.hasOwnProperty("geometry") && location.geometry.hasOwnProperty("type")) {
+        if (location && location?.geometry && location.geometry?.type) {
             return location.geometry;
         }
-        else if (location && location.hasOwnProperty("type")) {
+        else if (location && location?.type) {
             return location;
         }
 
@@ -732,7 +732,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 thing.forEach(thing2 => {
                     keys.push(Object.keys(thing2.properties));
                     props = Object.assign(props, thing2.properties);
-                    if (thing2.hasOwnProperty("Datastreams")) {
+                    if (thing2?.Datastreams) {
                         datastreams = datastreams.concat(thing2.Datastreams);
                     }
                 });
@@ -753,7 +753,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 aggregatedThing.properties.description = thing.description;
                 aggregatedThing.properties["@iot.id"] = thing["@iot.id"];
 
-                if (thing.hasOwnProperty("Datastreams")) {
+                if (thing?.Datastreams) {
                     aggregatedThing.properties.Datastreams = thing.Datastreams;
                 }
             }
@@ -901,7 +901,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         });
 
         for (id in subscriptionTopics) {
-            if (client && id && (isSelected === false || isSelected === true && subscriptionTopics[id] === true && !dataStreamIdsInverted.hasOwnProperty(id))) {
+            if (client && id && (isSelected === false || isSelected === true && subscriptionTopics[id] === true && !Object.prototype.hasOwnProperty.call(dataStreamIdsInverted, id))) {
                 client.unsubscribe("v" + version + "/Datastreams(" + id + ")/Observations");
                 subscriptionTopics[id] = false;
             }
@@ -1014,7 +1014,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     liveUpdate: function (feature, dataStreamId, result, phenomenonTime) {
         const dataStreamIdIdx = feature.get("dataStreamId").split(" | ").indexOf(String(dataStreamId)),
             dataStreamNameArray = feature.get("dataStreamName").split(" | "),
-            dataStreamName = dataStreamNameArray.hasOwnProperty(dataStreamIdIdx) ? dataStreamNameArray[dataStreamIdIdx] : "",
+            dataStreamName = Object.prototype.hasOwnProperty.call(dataStreamNameArray, dataStreamIdIdx) ? dataStreamNameArray[dataStreamIdIdx] : "",
             preparedResult = result === "" && this.get("showNoDataValue") ? this.get("noDataValue") : result;
 
         // Here we only work with a reference to the feature, otherwise it leads to blinking behavior with clustered features.

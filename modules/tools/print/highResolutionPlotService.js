@@ -1,4 +1,6 @@
 import Tool from "../../core/modelList/tool/model";
+import store from "../../../src/app-store/index";
+import BuildCanvasModel from "./buildCanvas";
 import {Icon} from "ol/style.js";
 import {Circle, Polygon} from "ol/geom.js";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
@@ -45,8 +47,6 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
             }
         },
         glyphicon: "glyphicon-print",
-        precomposeListener: {},
-        postcomposeListener: {},
         MM_PER_INCHES: 25.4,
         POINTS_PER_INCH: 72,
         DOTS_PER_INCH: 72,
@@ -59,7 +59,12 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
         withLegendLabel: "",
         withInfoLabel: "",
         printLabel: "",
-        layoutNameList: []
+        layoutNameList: [],
+        visibleLayer: [],
+        invisibleLayer: [],
+        currentMapScale: "",
+        hintInfoScale: "",
+        hintInfo: ""
     }),
 
     /**
@@ -92,8 +97,6 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @property {String} printurl="" - Url to plot service
      * @property {Object} gfiMarker - Style settings for an gfi marker
      * @property {String} glyphicon="glyphicon-print" - Icon for the print button
-     * @property {Object} precomposeListener={} - Holder for an PrecomposeListener
-     * @property {Object} postcomposeListener={} - Holder for an PostcomposeListener
      * @property {Number} MM_PER_INCHES=25.4 - Millimeter per inches
      * @property {Number} POINTS_PER_INCH=72 - Points per Inch
      * @property {Number} DOTS_PER_INCH=72 - Dots per inch
@@ -106,6 +109,11 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @property {String} withLegendLabel="" Label text for print-window
      * @property {String} printLabel="" Label text for print-window
      * @property {String} layoutNameList=[] Label text for the Layouts
+     * @property {ol/Layer[]} visibleLayer the list of visibile layers
+     * @property {ol/Layer[]} invisibleLayer the list of invisible but active layer
+     * @property {String} currentMapScale="" the current map scale
+     * @property {String} hintInfoScale the hint information when the current print scale and map scale are not the same
+     * @property {String} hintInfo the hint text for the layer could not be printed
      * @listens Print#ChangeIsAvtive
      * @listens Print#ChangeSpecification
      * @listens MapView#RadioTriggerMapViewChangedOptions
@@ -123,8 +131,10 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
                 if (model.get("layoutList").length === 0) {
                     this.getCapabilities(model, value);
                 }
-                this.togglePostcomposeListener(model, value);
-                this.updatePrintPage();
+                this.togglePostrenderListener(model, value);
+                if (value) {
+                    this.setCurrentMapScale(store.state.Map.scale);
+                }
             },
             "change:specification": this.getPDFURL
         });
@@ -133,8 +143,20 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
             "changedOptions": function () {
                 this.setIsScaleSelectedManually(false);
                 this.setScaleByMapView();
+                if (typeof this.get("eventListener") !== "undefined") {
+                    this.updateCanvasLayer();
+                }
             },
             "changedCenter": this.setCenter
+        });
+
+        this.listenTo(Radio.channel("ModelList"), {
+            "updatedSelectedLayerList": function () {
+                if (typeof this.get("eventListener") !== "undefined") {
+                    this.setVisibleLayer(this.getVisibleLayer().concat(this.get("invisibleLayer")));
+                    this.updateCanvasLayer();
+                }
+            }
         });
 
         this.listenTo(Radio.channel("GFI"), {
@@ -184,6 +206,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
             printLabel: i18next.t("common:modules.tools.print.printLabel"),
             withInfoLabel: i18next.t("common:modules.tools.print.withInfoLabel"),
             layoutNameList: i18next.t("common:modules.tools.print.layoutNameList", {returnObjects: true}),
+            hintInfoScale: i18next.t("common:modules.tools.print.hintInfoScale"),
             currentLng: lng
         });
     },
@@ -244,7 +267,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
             this.setIsLegendAvailable(this.getAttributeInLayoutByName("legend") !== undefined);
             this.setIsScaleAvailable(this.getAttributeInLayoutByName("scale") !== undefined);
             this.setIsMetaDataAvailable(this.getAttributeInLayoutByName("metadata") !== undefined);
-            this.togglePostcomposeListener(this, true);
+            this.togglePostrenderListener(this, true);
             isError = false;
         }
 
@@ -300,6 +323,37 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     },
 
     /**
+     * returns the visible layers and set into variable
+     * @returns {Number[]} scale list
+     */
+    getVisibleLayer: function () {
+        let visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(layer => {
+            return layer.getVisible() === true && layer.get("name") !== "markerPoint";
+        });
+
+        visibleLayerList = this.sortVisibleLayerListByZindex(visibleLayerList);
+
+        return visibleLayerList;
+    },
+
+    /**
+     * sorts the visible layer list by zIndex from layer
+     * layers with undefined zIndex come to the beginning of array
+     * @param {array} visibleLayerList with visble layer
+     * @returns {array} sorted visibleLayerList
+     */
+    sortVisibleLayerListByZindex: function (visibleLayerList) {
+        const visibleLayerListWithZIndex = visibleLayerList.filter(layer => {
+                return layer.getZIndex() !== undefined;
+            }),
+            visibleLayerListWithoutZIndex = Radio.request("Util", "differenceJs", visibleLayerList, visibleLayerListWithZIndex);
+
+        visibleLayerListWithoutZIndex.push(Radio.request("Util", "sortBy", visibleLayerListWithZIndex, (layer) => layer.getZIndex()));
+
+        return [].concat(...visibleLayerListWithoutZIndex);
+    },
+
+    /**
      * sorts an array numerically and ascanding
      * @param {number} a - first value
      * @param {number} b - next value
@@ -314,21 +368,49 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * a callback function is registered to the postcompose event of the map
      * @param {Backbone.Model} model - this
      * @param {boolean} value - is this tool activated or not
-     * @param {String} postcompose - postcomposeListener
      * @param {String} - eventlistener
      * @fires Map#RadioRequestMapRegisterListenerWithPostcompose
      * @fires Map#RadioTriggerMapUnregisterListenerWithEventListener
      * @fires Map#RadioTriggerMapRender
      * @returns {void}
      */
-    togglePostcomposeListener: function (model, value) {
-        if (value && model.get("layoutList").length !== 0) {
-            this.setEventListener(Radio.request("Map", "registerListener", "postcompose", this.createPrintMask.bind(this)));
+    togglePostrenderListener: function (model, value) {
+        const visibleLayerList = this.getVisibleLayer(),
+            canvasModel = new BuildCanvasModel();
+
+        this.setVisibleLayer(visibleLayerList);
+
+        if (value && model.get("layoutList").length !== 0 && visibleLayerList.length >= 1) {
+            const canvasLayer = canvasModel.getCanvasLayer(visibleLayerList);
+
+            this.setEventListener(canvasLayer.on("postrender", this.createPrintMask.bind(this)));
         }
         else {
             Radio.trigger("Map", "unregisterListener", this.get("eventListener"));
+            this.setEventListener(undefined);
+            if (this.get("invisibleLayer").length) {
+                this.setOriginalPrintLayer();
+                this.setHintInfo("");
+            }
         }
         Radio.trigger("Map", "render");
+    },
+
+    /**
+     * update to draw the print page rectangle onto the canvas when the map changes
+     * @returns {void}
+     */
+    updateCanvasLayer: function () {
+        const canvasModel = new BuildCanvasModel(),
+            visibleLayerList = this.getVisibleLayer();
+        let canvasLayer = {};
+
+        Radio.trigger("Map", "unregisterListener", this.get("eventListener"));
+        canvasLayer = canvasModel.getCanvasLayer(visibleLayerList);
+        this.setCurrentMapScale(store.state.Map.scale);
+        if (Object.keys(canvasLayer).length) {
+            this.setEventListener(canvasLayer.on("postrender", this.createPrintMask.bind(this)));
+        }
     },
 
     /**
@@ -347,7 +429,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
             scale = this.get("currentScale");
         }
         else {
-            scale = this.getOptimalScale(frameState.size, frameState.viewState.resolution, this.getPrintMapSize(), this.get("scaleList"));
+            scale = this.getOptimalScale(frameState.size, frameState.viewState.resolution, this.getPrintMapSize(), this.getPrintMapScales());
             this.setCurrentScale(scale);
         }
         this.drawMask(frameState.size, context);
@@ -470,33 +552,6 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
                 text: "Error! Der übergebene Wert ist ist entweder kein Array oder die Werte im Array sind nicht vom Typ Number",
                 kategorie: "alert-warning"
             });
-        }
-    },
-
-    /**
-     * Updates the Print Page
-     * @fires Map#RadioRequestMapRegisterListenerWithPrecompose
-     * @fires Map#RadioRequestMapRegisterListenerWithPostcompose
-     * @fires Map#RadioTriggerMapUnregisterListenerWithPrecomposeListener
-     * @fires Map#RadioTriggerMapUnregisterListenerWithPostcomposeListener
-     * @fires Map#RadioTriggerMapRender
-     * @returns {void}
-     */
-    updatePrintPage: function () {
-        if (this.has("scale") && this.has("currentLayout")) {
-            if (this.get("isActive")) {
-                if (Object.keys(this.get("precomposeListener")).length === 0) {
-                    this.setPrecomposeListener(Radio.request("Map", "registerListener", "precompose", this.handlePreCompose.bind(this)));
-                }
-                if (Object.keys(this.get("postcomposeListener")).length === 0) {
-                    this.setPostcomposeListener(Radio.request("Map", "registerListener", "postcompose", this.handlePostCompose.bind(this)));
-                }
-            }
-            else {
-                Radio.trigger("Map", "unregisterListener", this.get("precomposeListener"));
-                Radio.trigger("Map", "unregisterListener", this.get("postcomposeListener"));
-            }
-            Radio.trigger("Map", "render");
         }
     },
 
@@ -771,7 +826,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
                 pages: [
                     {
                         center: Radio.request("MapView", "getCenter"),
-                        scale: this.get("currentScale"),
+                        scale: this.get("currentScale").toString(),
                         scaleText: "1 : " + this.get("currentScale"),
                         geodetic: true,
                         dpi: "96",
@@ -859,10 +914,10 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
         this.set("gfiTitle", gfiTitle);
         // If GFIPos exists and number of gfiParameter is != 0
         if (gfiPosition !== null && printGFI === true && gfiParams && gfiParams.length > 0) {
-            this.set("createURL", printurl + "_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
+            this.set("createURL", printurl + "_gfi_" + this.get("gfiParams").length.toString() + "create.json");
         }
         else {
-            this.set("createURL", printurl + "/create.json");
+            this.set("createURL", printurl + "create.json");
         }
 
         this.setGFIPos(gfiPosition);
@@ -992,98 +1047,6 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     },
 
     /**
-     * Saves event contex of Precompose
-     * @param {*} evt - event
-     * @returns {void}
-     */
-    handlePreCompose: function (evt) {
-        const ctx = evt.context;
-
-        ctx.save();
-    },
-
-    /**
-     * create print bounding box
-     * @param {*} evt - event
-     * @fires Map#RadioRequestMapGetSize
-     * @returns {void}
-     */
-    handlePostCompose: function (evt) {
-        const ctx = evt.context,
-            size = Radio.request("Map", "getSize"),
-            height = size[1] * DEVICE_PIXEL_RATIO,
-            width = size[0] * DEVICE_PIXEL_RATIO,
-            printPageRectangle = this.calculatePageBoundsPixels(size),
-            minx = printPageRectangle[0],
-            miny = printPageRectangle[1],
-            maxx = printPageRectangle[2],
-            maxy = printPageRectangle[3];
-
-        ctx.beginPath();
-        // Outside polygon, must be clockwise
-        ctx.moveTo(0, 0);
-        ctx.lineTo(width, 0);
-        ctx.lineTo(width, height);
-        ctx.lineTo(0, height);
-        ctx.lineTo(0, 0);
-        ctx.closePath();
-        // Inner polygon,must be counter-clockwise
-        ctx.moveTo(minx, miny);
-        ctx.lineTo(minx, maxy);
-        ctx.lineTo(maxx, maxy);
-        ctx.lineTo(maxx, miny);
-        ctx.lineTo(minx, miny);
-        ctx.closePath();
-        ctx.fillStyle = "rgba(0, 5, 25, 0.55)";
-        ctx.fill();
-        ctx.restore();
-    },
-
-    /**
-     * calculate the pixels of page bounds
-     * @param {Array} mapSize - size of the map
-     * @fires MapView#RadioRequestMapViewGetOptions
-     * @return {Array | String} - page bounds in pixels or an Error String
-     */
-    calculatePageBoundsPixels: function (mapSize) {
-        const s = this.get("scale");
-
-        let w = "",
-            h = "",
-            center = "",
-            minx = "",
-            miny = "",
-            maxx = "",
-            maxy = "",
-            width = this.get("currentLayout"),
-            height = this.get("currentLayout"),
-            resolution = Radio.request("MapView", "getOptions");
-
-        if (s === undefined || width === undefined || height === undefined || resolution === undefined || mapSize === undefined || mapSize === null) {
-            return "Error";
-        }
-
-        width = width.map.width;
-        height = height.map.height;
-        resolution = resolution.resolution;
-        w = width / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * DEVICE_PIXEL_RATIO;
-        h = height / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * DEVICE_PIXEL_RATIO;
-        center = [mapSize[0] * DEVICE_PIXEL_RATIO / 2,
-            mapSize[1] * DEVICE_PIXEL_RATIO / 2];
-
-        if (isNaN(w) || isNaN(h) || isNaN(center[0]) || isNaN(center[1])) {
-            return "Error";
-        }
-
-        minx = center[0] - (w / 2);
-        miny = center[1] - (h / 2);
-        maxx = center[0] + (w / 2);
-        maxy = center[1] + (h / 2);
-
-        return [minx, miny, maxx, maxy];
-    },
-
-    /**
      * gets the optimal map resolution for a print scale and a map size
      * @param {number} scale - print scale for the report
      * @param {number[]} mapSize - the current map size
@@ -1129,21 +1092,27 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     },
 
     /**
-     * Sets a precompose Listener for the model
-     * @param {*} value - eventlistener on Map for precompose
-     * @returns {void}
+     * Getting und showing the layer which is visible in map scale
+     * @returns {void} -
      */
-    setPrecomposeListener: function (value) {
-        this.set("precomposeListener", value);
-    },
+    setOriginalPrintLayer: function () {
+        const invisibleLayer = this.get("invisibleLayer"),
+            mapScale = this.get("currentMapScale"),
+            resoByMaxScale = Radio.request("MapView", "getResoByScale", mapScale, "max"),
+            resoByMinScale = Radio.request("MapView", "getResoByScale", mapScale, "min");
 
-    /**
-     * Sets a  postcompose Listener for the model
-     * @param {*} value - eventlistener on Map for postcompose
-     * @returns {void}
-     */
-    setPostcomposeListener: function (value) {
-        this.set("postcomposeListener", value);
+        invisibleLayer.forEach(layer => {
+            const layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layer.get("id")});
+
+            if (resoByMaxScale <= layer.getMaxResolution() && resoByMinScale > layer.getMinResolution()) {
+                layerModel.setIsOutOfRange(false);
+            }
+            else {
+                layerModel.setIsOutOfRange(true);
+            }
+            layer.setVisible(true);
+
+        });
     },
 
     /**
@@ -1311,7 +1280,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      */
     setCurrentScale: function (value) {
         if (value !== undefined) {
-            this.set("currentScale", value.toString());
+            this.set("currentScale", value);
         }
         else {
             Radio.trigger("Alert", "alert", {
@@ -1361,7 +1330,12 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
 
         if (Array.isArray(scales)) {
             scales.forEach(scale => {
-                that.get("scaleList").push(scale.value);
+                if (typeof scale.value === "number") {
+                    that.get("scaleList").push(scale.value);
+                }
+                else if (typeof scale.value === "string") {
+                    that.get("scaleList").push(parseInt(scale.value, 10));
+                }
             });
         }
     },
@@ -1387,6 +1361,33 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      */
     setEventListener: function (value) {
         this.set("eventListener", value);
+    },
+
+    /**
+     * setter the current map scale
+     * @param {String} value - the current map scale
+     * @returns {void}
+     */
+    setCurrentMapScale: function (value) {
+        this.set("currentMapScale", value);
+    },
+
+    /**
+     * setter for the hint information
+     * @param {String} value - the hint text
+     * @returns {void}
+     */
+    setHintInfo: function (value) {
+        this.set("hintInfo", value);
+    },
+
+    /**
+     * setter the visible layer list before printing
+     * @param {ol/Layer[]} value - the visible layer list
+     * @returns {void}
+     */
+    setVisibleLayer: function (value) {
+        this.set("visibleLayer", value);
     },
 
     /**

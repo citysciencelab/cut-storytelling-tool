@@ -193,15 +193,15 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
 
         if (this.canShowHit(searched)) {
             params.forEach(param => {
-                if ((address.hasOwnProperty("house_number") && address.house_number !== null && address.house_number.toLowerCase() === param.toLowerCase()) ||
-                    (address.hasOwnProperty("road") && address.road !== null && address.road.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (address.hasOwnProperty("pedestrian") && address.pedestrian !== null && address.pedestrian.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (address.hasOwnProperty("county") && address.county !== null && address.county.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (address.hasOwnProperty("city") && address.city !== null && address.city.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (address.hasOwnProperty("city_district") && address.city_district !== null && address.city_district.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (address.hasOwnProperty("town") && address.town !== null && address.town.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (address.hasOwnProperty("village") && address.village !== null && address.village.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (address.hasOwnProperty("suburb") && address.suburb !== null && address.suburb.toLowerCase().indexOf(param.toLowerCase()) > -1)
+                if ((address?.house_number && address.house_number !== null && address.house_number.toLowerCase() === param.toLowerCase()) ||
+                    (address?.road && address.road !== null && address.road.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (address?.pedestrian && address.pedestrian !== null && address.pedestrian.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (address?.county && address.county !== null && address.county.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (address?.city && address.city !== null && address.city.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (address?.city_district && address.city_district !== null && address.city_district.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (address?.town && address.town !== null && address.town.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (address?.village && address.village !== null && address.village.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (address?.suburb && address.suburb !== null && address.suburb.toLowerCase().indexOf(param.toLowerCase()) > -1)
                 ) {
                     hits.push(param);
                 }
@@ -225,7 +225,7 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
         }
 
         classesToShow.forEach(classToShow => {
-            if (hit?.class === classToShow || hit.hasOwnProperty("extratags") && hit.extratags[classToShow] !== undefined) {
+            if (hit?.class === classToShow || hit?.extratags && hit.extratags[classToShow] !== undefined) {
                 result = true;
             }
         });

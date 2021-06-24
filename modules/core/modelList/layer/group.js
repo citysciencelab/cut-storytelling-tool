@@ -139,9 +139,9 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
                 layerName = null;
 
             if (layer.datasets && Array.isArray(layer.datasets) && layer.datasets[0] !== null && typeof layer.datasets[0] === "object") {
-                cswUrl = layer.datasets[0].hasOwnProperty("csw_url") ? layer.datasets[0].csw_url : null;
-                showDocUrl = layer.datasets[0].hasOwnProperty("show_doc_url") ? layer.datasets[0].show_doc_url : null;
-                layerMetaId = layer.datasets[0].hasOwnProperty("md_id") ? layer.datasets[0].md_id : null;
+                cswUrl = Object.prototype.hasOwnProperty.call(layer.datasets[0], "csw_url") ? layer.datasets[0].csw_url : null;
+                showDocUrl = Object.prototype.hasOwnProperty.call(layer.datasets[0], "show_doc_url") ? layer.datasets[0].show_doc_url : null;
+                layerMetaId = Object.prototype.hasOwnProperty.call(layer.datasets[0], "md_id") ? layer.datasets[0].md_id : null;
                 layerName = layer.name;
             }
 
