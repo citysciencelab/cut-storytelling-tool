@@ -55,18 +55,26 @@ const actions = {
      * @param {number} event.clientX Current position on the x-axis in px of the mouse.
      * @returns {void}
      */
-    moveSwiper ({state, commit, rootGetters, dispatch}, {clientX}) {
+    moveSwiper ({state, commit, dispatch}, {clientX}) {
         if (state.layerSwiper.isMoving) {
             commit("setLayerSwiperValueX", clientX);
             commit("setLayerSwiperStyleLeft", clientX);
-            rootGetters["Map/map"].render();
-            state.layerSwiper.targetLayer.once("prerender", renderEvent => {
-                dispatch("drawLayer", renderEvent);
-            });
-            state.layerSwiper.targetLayer.once("postrender", ({context}) => {
-                context.restore();
-            });
+            dispatch("updateMap");
         }
+    },
+    /**
+     * Updates the map so that the layer is displayed clipped again.
+     *
+     * @returns {void}
+     */
+    updateMap ({state, dispatch, rootGetters}) {
+        rootGetters["Map/map"].render();
+        state.layerSwiper.targetLayer.once("prerender", renderEvent => {
+            dispatch("drawLayer", renderEvent);
+        });
+        state.layerSwiper.targetLayer.once("postrender", ({context}) => {
+            context.restore();
+        });
     },
     /**
      * Manipulates the width of the target layer according to the position of the layerSwiper.

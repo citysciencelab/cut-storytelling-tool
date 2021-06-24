@@ -30,13 +30,17 @@ export default {
                 this.sliderValue = this.timeRange[index];
             }
             Radio.trigger("WmsTime", "updateTime", this.layerId, this.sliderValue);
+
+            if (this.layerSwiper.active) {
+                this.updateMap();
+            }
         }
     },
     created () {
         this.sliderValue = this.defaultValue;
     },
     methods: {
-        ...mapActions("WmsTime", ["toggleSwiper"]),
+        ...mapActions("WmsTime", ["toggleSwiper", "updateMap"]),
         ...mapMutations("WmsTime", Object.keys(mutations)),
         animate () {
             setTimeout(() => {
