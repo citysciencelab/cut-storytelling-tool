@@ -88,6 +88,7 @@ export default {
 
         #map-wrapper {
             position:relative;
+            overflow: hidden;
             flex-grow:1;
             order:1;
         }

@@ -14,7 +14,12 @@
  * @property {boolean} timeSlider.active Whether the timeSlider window should be active.
  * @property {string} timeSlider.currentLayerId Id of the currently selected WMS-T.
  * @property {timeSliderObject[]} timeSlider.objects Array of objects containing values that are relevant for every WMS-T layer configured.
- * @property {number} playbackDelay Delay for the playback in seconds.
+ * @property {object} layerSwiper Values for the layerSwiper.
+ * @property {number} layerSwiper.active Whether the swiper should be active.
+ * @property {number} layerSwiper.isMoving Whether the swiper is currently being moved.
+ * @property {number} layerSwiper.swiper The DOM element for the swiper.
+ * @property {number} layerSwiper.targetLayer The layer that is supposed to be manipulated.
+ * @property {number} layerSwiper.valueX The current x-axis position of the swiper.
  */
 const state = {
     timeSlider: {
@@ -23,8 +28,12 @@ const state = {
         objects: [],
         playbackDelay: 1
     },
-    swiper: {
-        active: false
+    layerSwiper: {
+        active: false,
+        isMoving: false,
+        swiper: null,
+        targetLayer: null,
+        valueX: ""
     }
 };
 

@@ -1,15 +1,17 @@
 <script>
 import {mapGetters} from "vuex";
+import LayerSwiper from "./LayerSwiper.vue";
 import TimeSlider from "./TimeSlider.vue";
 
 export default {
     name: "WmsTime",
     components: {
+        LayerSwiper,
         TimeSlider
     },
     data: () => ({width: window.innerWidth, mobileWidth: 800}),
     computed: {
-        ...mapGetters("WmsTime", ["currentTimeSliderObject", "swiper", "timeSlider"]),
+        ...mapGetters("WmsTime", ["currentTimeSliderObject", "layerSwiper", "timeSlider"]),
         minWidth () {
             return this.width > this.mobileWidth;
         }
@@ -29,15 +31,15 @@ export default {
     <div id="wmsTime">
         <TimeSlider
             v-if="timeSlider.active"
-            :class="{'moveLeft': swiper.active && minWidth}"
+            :class="{'moveLeft': layerSwiper.active && minWidth}"
             :layer-id="currentTimeSliderObject.layerId"
         />
         <TimeSlider
-            v-if="timeSlider.active && swiper.active && minWidth"
-            :class="{'moveRight': swiper.active}"
+            v-if="timeSlider.active && layerSwiper.active && minWidth"
+            :class="{'moveRight': layerSwiper.active}"
             :layer-id="currentTimeSliderObject.layerId + '_secondLayer'"
         />
-        <!-- <LayerSwiper v-if="swiper.active && minWidth" />-->
+        <LayerSwiper v-if="layerSwiper.active && minWidth" />
     </div>
 </template>
 
