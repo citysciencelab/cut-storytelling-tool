@@ -127,7 +127,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
         this.superInitialize();
 
         this.listenTo(this, {
-            "change:isActive": function (model, value) {
+            "change:isActiveee": function (model, value) {
                 if (model.get("layoutList").length === 0) {
                     this.getCapabilities(model, value);
                 }
@@ -552,6 +552,33 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
                 text: "Error! Der übergebene Wert ist ist entweder kein Array oder die Werte im Array sind nicht vom Typ Number",
                 kategorie: "alert-warning"
             });
+        }
+    },
+
+    /**
+     * Updates the Print Page
+     * @fires Map#RadioRequestMapRegisterListenerWithPrecompose
+     * @fires Map#RadioRequestMapRegisterListenerWithPostcompose
+     * @fires Map#RadioTriggerMapUnregisterListenerWithPrecomposeListener
+     * @fires Map#RadioTriggerMapUnregisterListenerWithPostcomposeListener
+     * @fires Map#RadioTriggerMapRender
+     * @returns {void}
+     */
+    updatePrintPage: function () {
+        if (this.has("scale") && this.has("currentLayout")) {
+            if (this.get("isActiveee")) {
+                if (Object.keys(this.get("precomposeListener")).length === 0) {
+                    this.setPrecomposeListener(Radio.request("Map", "registerListener", "precompose", this.handlePreCompose.bind(this)));
+                }
+                if (Object.keys(this.get("postcomposeListener")).length === 0) {
+                    this.setPostcomposeListener(Radio.request("Map", "registerListener", "postcompose", this.handlePostCompose.bind(this)));
+                }
+            }
+            else {
+                Radio.trigger("Map", "unregisterListener", this.get("precomposeListener"));
+                Radio.trigger("Map", "unregisterListener", this.get("postcomposeListener"));
+            }
+            Radio.trigger("Map", "render");
         }
     },
 
