@@ -18,8 +18,7 @@ const actions = {
     toggleSwiper ({commit, state, rootGetters}, id) {
         commit("setLayerSwiperActive", !state.layerSwiper.active);
 
-        const secondIdPart = "_secondLayer",
-            secondId = !id.endsWith(secondIdPart) ? id + secondIdPart : id,
+        const secondId = !id.endsWith(state.layerAppendix) ? id + state.layerAppendix : id,
             layerModel = Radio.request("ModelList", "getModelByAttributes", {id: state.layerSwiper.active ? id : secondId});
 
         if (state.layerSwiper.active) {
@@ -34,7 +33,7 @@ const actions = {
         }
         else {
             // If the button of the "original" window is clicked, it is assumed, that the time value selected in the added window is desired to be further displayed.
-            if (!id.endsWith(secondIdPart)) {
+            if (!id.endsWith(state.layerAppendix)) {
                 const {TIME} = layerModel.get("layerSource").params_,
                     {transparency} = layerModel.attributes;
 
@@ -84,6 +83,7 @@ const actions = {
             bottomLeft = getRenderPixel(renderEvent, [width, mapSize[1]]),
             bottomRight = getRenderPixel(renderEvent, mapSize);
 
+        // Clip everything that is to the left side of the swiper
         context.save();
         context.beginPath();
         context.moveTo(topLeft[0], topLeft[1]);

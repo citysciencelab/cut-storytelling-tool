@@ -11,7 +11,7 @@ export default {
     },
     data: () => ({width: window.innerWidth, mobileWidth: 800}),
     computed: {
-        ...mapGetters("WmsTime", ["currentTimeSliderObject", "layerSwiper", "timeSlider"]),
+        ...mapGetters("WmsTime", ["currentTimeSliderObject", "layerAppendix", "layerSwiper", "timeSlider"]),
         minWidth () {
             return this.width > this.mobileWidth;
         }
@@ -37,7 +37,7 @@ export default {
         <TimeSlider
             v-if="timeSlider.active && layerSwiper.active && minWidth"
             :class="{'moveRight': layerSwiper.active}"
-            :layer-id="currentTimeSliderObject.layerId + '_secondLayer'"
+            :layer-id="currentTimeSliderObject.layerId + layerAppendix"
         />
         <LayerSwiper v-if="layerSwiper.active && minWidth" />
     </div>

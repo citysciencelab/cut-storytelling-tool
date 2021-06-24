@@ -13,7 +13,7 @@ export default {
     created: function () {
         window.addEventListener("mousemove", this.moveSwiper);
         window.addEventListener("mouseup", this.moveStop);
-        this.setLayerSwiperTargetLayer(this.visibleLayerList.find(element => element.values_.id === this.currentTimeSliderObject.layerId));
+        this.setLayerSwiperTargetLayer(this.visibleLayerList.find(element => element.values_.id === this.currentTimeSliderObject.layerId + this.layerAppendix));
     },
     beforeDestroy: function () {
         window.removeEventListener("mousemove", this.moveSwiper);
