@@ -21,8 +21,8 @@ import SearchByCoord from "./searchByCoord/store/indexSearchByCoord";
 import SelectFeatures from "./selectFeatures/store/indexSelectFeatures";
 import StyleVT from "./styleVT/store/indexStyleVT";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
+import Print from "./print/store/indexPrint";
 import WfsSearch from "./wfsSearch/store/indexWfsSearch";
-
 /**
  * This is here to test app-store/utils/composeModules.
  * Also provides actions.
@@ -43,6 +43,7 @@ export default {
         ScaleSwitcher,
         SearchByCoord,
         SelectFeatures,
+        Print,
         StyleVT,
         SupplyCoord,
         WfsSearch

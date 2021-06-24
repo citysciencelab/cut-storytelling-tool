@@ -19,7 +19,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         // available layouts of the specified print configuration
         layoutList: [],
         currentLayout: undefined,
-        currentLayoutName: "",
+        currentLayoutName: "mapfish",
         // available formats of the specified print configuration
         formatList: [],
         currentFormat: "pdf",
@@ -69,7 +69,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         invisibleLayer: [],
         zoomLevel: null,
         hintInfo: "",
-        spec: new BuildSpecModel(),
+        // spec: new BuildSpecModel(),
         /**
          * @deprecated in the next major-release!
          * useProxy
@@ -641,7 +641,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         }
 
         this.setInvisibleLayer(invisibleLayer);
-        this.updateCanvasLayer();
+        // this.updateCanvasLayer();
     },
 
     /**
