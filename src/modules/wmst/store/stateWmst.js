@@ -7,8 +7,12 @@ const state = {
         max: 0,
         step: 0
     },
-    swiper: {
-        active: false
+    layerSwiper: {
+        active: false,
+        isMoving: false,
+        swiper: null,
+        targetLayer: null,
+        valueX: ""
     }
 };
 

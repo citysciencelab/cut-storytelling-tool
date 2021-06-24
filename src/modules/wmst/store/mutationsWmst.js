@@ -22,9 +22,25 @@ const mutations = {
     setStep (state, step) {
         state.timeSlider.step = step;
     },
-    // Swiper mutations
+    // LayerSwiper mutations
     setSwiperActive (state, active) {
-        state.swiper.active = active;
+        state.layerSwiper.active = active;
+    },
+    setLayerSwiperValueX (state, clientX) {
+        state.layerSwiper.valueX = clientX;
+    },
+    setLayerSwiperStyleLeft (state, clientX) {
+        state.layerSwiper.swiper.style.left = clientX + "px";
+    },
+    setLayerSwiperTargetLayer (state, layer) {
+        state.layerSwiper.targetLayer = layer;
+    },
+    move (state, target) {
+        state.layerSwiper.isMoving = true;
+        state.layerSwiper.swiper = target;
+    },
+    moveStop (state) {
+        state.layerSwiper.isMoving = false;
     }
 };
 

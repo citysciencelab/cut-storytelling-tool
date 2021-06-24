@@ -686,6 +686,9 @@
                 "hint": "Mova o rato sobre o mapa",
                 "showMousePosition": "Mostrar",
                 "hideMousePosition": "Ocultar"
+            },
+            "layerSwiper": {
+                "title": "Confrontare gli strati"
             }
         },
         "searchbar": {

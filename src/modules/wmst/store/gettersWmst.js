@@ -36,6 +36,10 @@ const getters = {
         }
 
         return createTimeRange(parseInt(min, 10), parseInt(max, 10), Number(step));
+    },
+    // LayerSwiper getters
+    targetLayer ({layerSwiper}) {
+        return layerSwiper.targetLayer;
     }
 };
 
