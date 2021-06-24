@@ -29,17 +29,16 @@ export default {
 
 <template>
     <button
-        class="swiper btn"
+        class="btn"
         :title="$t(`common:modules.controls.layerSwiper.title`)"
         @mousedown.self="move($event.target)"
-    >
-    </button>
+    />
 </template>
 
 <style lang="less" scoped>
 @import "~variables";
 
-.swiper {
+button {
     width: 50px;
     background-color: @primary;
     height: 30px;
