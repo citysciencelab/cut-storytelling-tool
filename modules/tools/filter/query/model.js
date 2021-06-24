@@ -150,7 +150,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
             this.get("snippetCollection").add(new SnippetDropdownModel(snippetAttribute));
         }
         else if (snippetAttribute.type === "boolean") {
-            if (snippetAttribute.hasOwnProperty("preselectedValues")) {
+            if (snippetAttribute?.preselectedValues) {
                 isSelected = snippetAttribute.preselectedValues[0];
             }
             snippetAttribute = Object.assign(snippetAttribute, {"snippetType": "checkbox", "label": snippetAttribute.displayName, "isSelected": isSelected});
@@ -234,7 +234,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
             attrObj.name = attr;
             attrObj.matchingMode = "OR";
         }
-        else if (attr.hasOwnProperty("name") && attr.hasOwnProperty("matchingMode")) {
+        else if (attr?.name && attr?.matchingMode) {
             attrObj = attr;
         }
         return attrObj;
@@ -250,7 +250,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
             displayNames = Array.isArray(whiteList) ? attributeNames : whiteList;
 
         featureAttributesMap.forEach(featureAttribute => {
-            if (displayNames instanceof Object && displayNames.hasOwnProperty(featureAttribute.name) === true) {
+            if (displayNames instanceof Object && Object.prototype.hasOwnProperty.call(displayNames, featureAttribute.name) === true) {
                 featureAttribute.displayName = displayNames[featureAttribute.name];
             }
             else {

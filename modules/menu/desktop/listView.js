@@ -47,7 +47,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
         });
         let firstTime = true;
 
-        if (args && args.hasOwnProperty("firstTime")) {
+        if (args && Object.prototype.hasOwnProperty.call(args, "firstTime")) {
             firstTime = args.firstTime;
         }
         this.renderMain();

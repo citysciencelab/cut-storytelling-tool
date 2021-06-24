@@ -49,7 +49,7 @@ export default {
             </div>
             <ToolManager
                 v-if="configJson"
-                :showInSidebar="false"
+                :show-in-sidebar="false"
             />
         </div>
 
@@ -57,7 +57,7 @@ export default {
             <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
             <ToolManager
                 v-if="configJson"
-                :showInSidebar="true"
+                :show-in-sidebar="true"
             />
         </div>
 

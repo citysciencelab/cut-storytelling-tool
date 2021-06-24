@@ -1,5 +1,5 @@
 <script>
-import {mapGetters, mapActions, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersLegend";
 import mutations from "../store/mutationsLegend";
 import actions from "../store/actionsLegend";
@@ -58,7 +58,7 @@ export default {
                     <span
                         :class="glyphicon"
                         class="glyphicon hidden-sm"
-                    ></span>
+                    />
                     <span class="menuitem">{{ $t(name) }}</span>
                 </a>
             </li>
@@ -78,7 +78,7 @@ export default {
                     <span
                         :class="glyphicon"
                         class="glyphicon hidden-sm"
-                    ></span>
+                    />
                     <span class="title">{{ $t(name) }}</span>
                 </div>
             </li>
@@ -92,7 +92,7 @@ export default {
             <span
                 :class="glyphicon"
                 class="glyphicon hidden-sm"
-            ></span>
+            />
             <span class="menuitem">{{ $t(name) }}</span>
         </a>
     </div>

@@ -270,7 +270,7 @@ export default {
                 :title="$t('common:modules.tools.gfi.themes.sensor.sensorBarChart.previousWeekday')"
                 @click="showPreviousWeekDay"
             >
-                <span class="glyphicon glyphicon-chevron-left"></span>
+                <span class="glyphicon glyphicon-chevron-left" />
             </button>
             <span class="day">{{ weekday }}</span>
             <button
@@ -280,7 +280,7 @@ export default {
                 :title="$t('common:modules.tools.gfi.themes.sensor.sensorBarChart.nextWeekday')"
                 @click="showNextWeekDay"
             >
-                <span class="glyphicon glyphicon-chevron-right"></span>
+                <span class="glyphicon glyphicon-chevron-right" />
             </button>
         </div>
         <div class="sensor-chart-container">

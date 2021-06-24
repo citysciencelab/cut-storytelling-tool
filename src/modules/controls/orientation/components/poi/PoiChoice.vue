@@ -2,6 +2,7 @@
 import {mapGetters, mapMutations} from "vuex";
 import getters from "../../store/gettersOrientation";
 import mutations from "../../store/mutationsOrientation";
+
 export default {
     name: "PoiChoice",
     computed: {
@@ -81,9 +82,9 @@ export default {
                         data-dismiss="modal"
                         :title="$t('button.close')"
                         @click="hidePoiChoice"
-                    ></span>
+                    />
                     <h4 class="modal-title">
-                        <span class="control-icon glyphicon glyphicon-record standalone"></span>
+                        <span class="control-icon glyphicon glyphicon-record standalone" />
                         {{ $t("common:modules.controls.orientation.titleGeolocatePOI") }}
                     </h4>
                 </div>
@@ -123,7 +124,7 @@ export default {
         <div
             class="modal-backdrop fade in"
             @click="hidePoiChoice"
-        ></div>
+        />
     </div>
 </template>
 

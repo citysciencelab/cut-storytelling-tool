@@ -1,5 +1,8 @@
 import "../model";
-import {transformFromMapProjection as mpapiTransformToMapProjection, getProjection as mpapiGetProjection} from "masterportalAPI/src/crs";
+import {
+    getProjection as mpapiGetProjection,
+    transformFromMapProjection as mpapiTransformToMapProjection
+} from "masterportalAPI/src/crs";
 import getProxyUrl from "../../../src/utils/getProxyUrl";
 
 const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel.prototype */{
@@ -141,7 +144,7 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
         const crs = "EPSG:" + data.sref;
 
         // Test for sucess-status of service
-        if (!(data.hasOwnProperty("ok") && data.ok)) {
+        if (!data?.ok) {
             let statusText = i18next.t("common:modules.searchbar.locationFinder.serverError");
 
             if (data.info) {

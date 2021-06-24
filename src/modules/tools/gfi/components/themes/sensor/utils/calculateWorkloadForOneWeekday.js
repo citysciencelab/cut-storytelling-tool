@@ -21,12 +21,12 @@ export function calculateOneHour (dataByActualTimeStep = [], actualState, actual
         actualPhenomenonTime = moment(actualTimeStep).toDate().getTime();
 
     dataByActualTimeStep.forEach(data => {
-        const state = data.hasOwnProperty("result") ? data.result : currentState;
+        const state = data?.result || currentState;
         let phenomenonTime,
             res;
 
         if (state !== currentState) {
-            phenomenonTime = data.hasOwnProperty("phenomenonTime") ? moment(data.phenomenonTime).toDate().getTime() : "";
+            phenomenonTime = data?.phenomenonTime ? moment(data.phenomenonTime).toDate().getTime() : "";
 
             res = (phenomenonTime - actualPhenomenonTime) * currentStateAsNumber;
             timeDiff = timeDiff + res;
@@ -59,7 +59,7 @@ export function filterDataByActualTimeStep (dayData, actualTimeStep, nextTimeSte
     }
 
     return dayData.filter(data => {
-        const dataToCheck = data.hasOwnProperty("phenomenonTime") ? moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss") : "";
+        const dataToCheck = data?.phenomenonTime ? moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss") : "";
 
         return dataToCheck >= actualTimeStep && dataToCheck < nextTimeStep;
     });
@@ -74,10 +74,10 @@ export function filterDataByActualTimeStep (dayData, actualTimeStep, nextTimeSte
  */
 export function calculateWorkloadforOneDay (emptyDay, dayData, targetResult) {
     const dataFromDay = dayData || [],
-        startDate = dataFromDay.length > 0 && dataFromDay[0].hasOwnProperty("phenomenonTime") ? moment(dataFromDay[0].phenomenonTime).format("YYYY-MM-DD") : "",
+        startDate = dataFromDay.length > 0 && dataFromDay[0]?.phenomenonTime ? moment(dataFromDay[0].phenomenonTime).format("YYYY-MM-DD") : "",
         day = emptyDay || {};
 
-    let actualState = dataFromDay.length > 0 && dataFromDay[0].hasOwnProperty("result") ? dataFromDay[0].result : "",
+    let actualState = dataFromDay.length > 0 && dataFromDay[0]?.result ? dataFromDay[0].result : "",
         actualStateAsNumber = targetResult === actualState ? 1 : 0;
 
     Object.keys(day).forEach(key => {

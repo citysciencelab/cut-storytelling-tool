@@ -6,7 +6,7 @@ import Tool from "../../Tool.vue";
 import mutations from "../store/mutationsAddWMS";
 import {WMSCapabilities} from "ol/format.js";
 import {intersects} from "ol/extent";
-import {transform as transformCoord, getProjection} from "masterportalAPI/src/crs";
+import {getProjection, transform as transformCoord} from "masterportalAPI/src/crs";
 import axios from "axios";
 
 export default {
@@ -202,7 +202,7 @@ export default {
          * @return {void}
          */
         parseLayer: function (object, parentId, level) {
-            if (object.hasOwnProperty("Layer")) {
+            if (Object.prototype.hasOwnProperty.call(object, "Layer")) {
                 object.Layer.forEach(layer => {
                     this.parseLayer(layer, this.getParsedTitle(object.Title), level + 1);
                 });
@@ -324,9 +324,9 @@ export default {
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
+        :deactivate-gfi="deactivateGFI"
     >
-        <template v-slot:toolBody>
+        <template #toolBody>
             <div
                 v-if="active"
                 id="add-wms"
@@ -361,7 +361,7 @@ export default {
                     <span
                         class="glyphicon glyphicon-ok"
                         aria-hidden="true"
-                    ></span>
+                    />
                 </button>
             </div>
         </template>

@@ -146,7 +146,7 @@ export class SensorThingsMqtt {
                 return;
             }
 
-            if (typeof onsuccess === "function" && Array.isArray(granted) && granted.length >= 1 && granted[0].hasOwnProperty("topic") && granted[0].hasOwnProperty("qos")) {
+            if (typeof onsuccess === "function" && Array.isArray(granted) && granted.length >= 1 && granted[0]?.topic && granted[0]?.qos) {
                 onsuccess(granted[0].topic, granted[0].qos);
             }
 

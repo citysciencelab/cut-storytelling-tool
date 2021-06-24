@@ -600,9 +600,9 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             layerMetaId = null;
 
         if (this.get("datasets") && Array.isArray(this.get("datasets")) && this.get("datasets")[0] !== null && typeof this.get("datasets")[0] === "object") {
-            cswUrl = this.get("datasets")[0].hasOwnProperty("csw_url") ? this.get("datasets")[0].csw_url : null;
-            showDocUrl = this.get("datasets")[0].hasOwnProperty("show_doc_url") ? this.get("datasets")[0].show_doc_url : null;
-            layerMetaId = this.get("datasets")[0].hasOwnProperty("md_id") ? this.get("datasets")[0].md_id : null;
+            cswUrl = this.get("datasets")[0]?.csw_url ? this.get("datasets")[0].csw_url : null;
+            showDocUrl = this.get("datasets")[0]?.show_doc_url ? this.get("datasets")[0].show_doc_url : null;
+            layerMetaId = this.get("datasets")[0]?.md_id ? this.get("datasets")[0].md_id : null;
         }
         const metaID = [],
             name = this.get("name");

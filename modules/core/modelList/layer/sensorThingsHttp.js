@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import UrlParser from "url-parse";
 import {transform as transformProjectionToProjection} from "masterportalAPI/src/crs";
@@ -155,7 +154,7 @@ export class SensorThingsHttp {
         }
 
         points.forEach(function (coord) {
-            if (!coord || !coord.hasOwnProperty("x") || !coord.hasOwnProperty("y")) {
+            if (!coord || !coord?.x || !coord?.y) {
                 return;
             }
 
@@ -251,7 +250,7 @@ export class SensorThingsHttp {
         // use UrlParser.set to parse query into object
         parsedUrl.set("query", parsedUrl.query);
 
-        if (polygonQuery && !parsedUrl.query.hasOwnProperty("$filter")) {
+        if (polygonQuery && !Object.prototype.hasOwnProperty.call(parsedUrl.query, "$filter")) {
             parsedUrl.query.$filter = polygonQuery;
         }
         else if (polygonQuery && parsedUrl.query.$filter.indexOf("geography'POLYGON") === -1 && parsedUrl.query.$filter.indexOf("geography%27POLYGON") === -1) {
@@ -298,7 +297,7 @@ export class SensorThingsHttp {
                 return;
             }
 
-            if (progressRef !== null && typeof progressRef === "object" && !Array.isArray(progressRef) && response.hasOwnProperty("@iot.count")) {
+            if (progressRef !== null && typeof progressRef === "object" && !Array.isArray(progressRef) && Object.prototype.hasOwnProperty.call(response, "@iot.count")) {
                 // the number of entities to receive is @iot.count - except if $top=X is given via url
                 const topX = this.fetchTopX(url),
                     skipX = this.fetchSkipX(url),
@@ -309,13 +308,13 @@ export class SensorThingsHttp {
                 progressRef.progress = skipX;
             }
 
-            if (response.hasOwnProperty("value") && Array.isArray(response.value)) {
+            if (response?.value && Array.isArray(response.value)) {
                 response.value.forEach(value => {
                     resultRef.push(value);
                 });
 
                 // all responses in a row of @iot.nextLink followups have following @iot.nextLink except the last one
-                if (response.hasOwnProperty("@iot.nextLink")) {
+                if (Object.prototype.hasOwnProperty.call(response, "@iot.nextLink")) {
                     if (Array.isArray(nextLinkFiFo)) {
                         nextLinkFiFo.push({
                             nextLink: response["@iot.nextLink"],
@@ -430,7 +429,7 @@ export class SensorThingsHttp {
      * @returns {(Object|Boolean)}  the next fifo object to be followed or false if depth barrier has been triggert
      */
     getNextFiFoObj (nextLinkFiFo) {
-        if (!Array.isArray(nextLinkFiFo) || nextLinkFiFo.length === 0 || !nextLinkFiFo[0].hasOwnProperty("nextLink")) {
+        if (!Array.isArray(nextLinkFiFo) || nextLinkFiFo.length === 0 || !nextLinkFiFo[0]?.nextLink) {
             return false;
         }
         const obj = nextLinkFiFo.shift(),
@@ -467,7 +466,7 @@ export class SensorThingsHttp {
             parsedUrl.query.$count = true;
             parsedUrl.set("query", parsedUrl.query);
 
-            if (parsedUrl.hasOwnProperty("href")) {
+            if (parsedUrl?.href) {
                 parsedUrlHref = parsedUrl.href;
             }
         }
@@ -487,7 +486,7 @@ export class SensorThingsHttp {
         const regex = /[$|%24]top=([0-9]+)/,
             result = regex.exec(url);
 
-        if (!Array.isArray(result) || !result.hasOwnProperty(1)) {
+        if (!Array.isArray(result) || !Object.prototype.hasOwnProperty.call(result, 1)) {
             return 0;
         }
 
@@ -506,7 +505,7 @@ export class SensorThingsHttp {
         const regex = /[$|%24]skip=([0-9]+)/,
             result = regex.exec(url);
 
-        if (!Array.isArray(result) || !result.hasOwnProperty(1)) {
+        if (!Array.isArray(result) || !Object.prototype.hasOwnProperty.call(result, 1)) {
             return 0;
         }
 

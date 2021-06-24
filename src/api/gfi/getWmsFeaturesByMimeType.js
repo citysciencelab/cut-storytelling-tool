@@ -60,8 +60,8 @@ export function openFeaturesInNewWindow (url, gfiAsNewWindow, openWindow) {
 
     if (newWindowProps !== null && typeof newWindowProps === "object") {
         // do not add to gfiFeatures, open a new window with given specs instead
-        const name = newWindowProps.hasOwnProperty("name") ? newWindowProps.name : "",
-            specs = newWindowProps.hasOwnProperty("specs") ? newWindowProps.specs : "";
+        const name = newWindowProps?.name ? newWindowProps.name : "",
+            specs = newWindowProps?.specs ? newWindowProps.specs : "";
 
         openWindow(url, name, specs);
         return true;

@@ -3,7 +3,7 @@ import OLCesium from "olcs/OLCesium.js";
 import VectorSynchronizer from "olcs/VectorSynchronizer.js";
 import FixedOverlaySynchronizer from "./3dUtils/fixedOverlaySynchronizer.js";
 import WMSRasterSynchronizer from "./3dUtils/wmsRasterSynchronizer.js";
-import {transform, get} from "ol/proj.js";
+import {get, transform} from "ol/proj.js";
 import Store from "../../src/app-store";
 
 const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
@@ -107,7 +107,7 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
      */
     prepareCamera: function (scene) {
         const camera = scene.camera,
-            cameraParameter = Config.hasOwnProperty("cameraParameter") ? Config.cameraParameter : null;
+            cameraParameter = Object.prototype.hasOwnProperty.call(Config, "cameraParameter") ? Config.cameraParameter : null;
 
         if (cameraParameter) {
             this.setCameraParameter(cameraParameter);
@@ -290,13 +290,13 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
         }
         else if (map3d !== undefined && params !== null) {
             camera = map3d.getCamera();
-            if (params.hasOwnProperty("tilt")) {
+            if (params?.tilt) {
                 camera.setTilt(parseFloat(params.tilt));
             }
-            if (params.hasOwnProperty("heading")) {
+            if (params?.heading) {
                 camera.setHeading(parseFloat(params.heading));
             }
-            if (params.hasOwnProperty("altitude")) {
+            if (params?.altitude) {
                 camera.setAltitude(parseFloat(params.altitude));
             }
         }
@@ -310,21 +310,21 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
     setCesiumSceneDefaults: function (scene) {
         let params;
 
-        if (Config.hasOwnProperty("cesiumParameter")) {
+        if (Object.prototype.hasOwnProperty.call(Config, "cesiumParameter")) {
             params = Config.cesiumParameter;
-            if (params.hasOwnProperty("fog")) {
-                scene.fog.enabled = params.fog.hasOwnProperty("enabled") ? params.fog.enabled : scene.fog.enabled;
-                scene.fog.density = params.fog.hasOwnProperty("density") ? parseFloat(params.fog.density) : scene.fog.density;
-                scene.fog.screenSpaceErrorFactor = params.fog.hasOwnProperty("screenSpaceErrorFactor") ? parseFloat(params.fog.screenSpaceErrorFactor) : scene.fog.screenSpaceErrorFactor;
+            if (params?.fog) {
+                scene.fog.enabled = params.fog?.enabled ? params.fog.enabled : scene.fog.enabled;
+                scene.fog.density = params.fog?.density ? parseFloat(params.fog.density) : scene.fog.density;
+                scene.fog.screenSpaceErrorFactor = params.fog?.screenSpaceErrorFactor ? parseFloat(params.fog.screenSpaceErrorFactor) : scene.fog.screenSpaceErrorFactor;
             }
 
-            scene.globe.tileCacheSize = params.hasOwnProperty("tileCacheSize") ? parseInt(params.tileCacheSize, 10) : scene.globe.tileCacheSize;
-            scene.globe.maximumScreenSpaceError = params.hasOwnProperty("maximumScreenSpaceError") ? params.maximumScreenSpaceError : scene.globe.maximumScreenSpaceError;
+            scene.globe.tileCacheSize = params?.tileCacheSize ? parseInt(params.tileCacheSize, 10) : scene.globe.tileCacheSize;
+            scene.globe.maximumScreenSpaceError = params?.maximumScreenSpaceError ? params.maximumScreenSpaceError : scene.globe.maximumScreenSpaceError;
             scene.shadowMap.maximumDistance = 5000.0;
             scene.shadowMap.darkness = 0.6;
             scene.shadowMap.size = 2048;
-            scene.fxaa = params.hasOwnProperty("fxaa") ? params.fxaa : scene.fxaa;
-            scene.globe.enableLighting = params.hasOwnProperty("enableLighting") ? params.enableLighting : scene.globe.enableLighting;
+            scene.fxaa = params?.fxaa ? params.fxaa : scene.fxaa;
+            scene.globe.enableLighting = params?.enableLighting ? params.enableLighting : scene.globe.enableLighting;
             scene.globe.depthTestAgainstTerrain = true;
             scene.highDynamicRange = false;
             scene.pickTranslucentDepth = true;

@@ -1,5 +1,5 @@
 import StyleModel from "./style.js";
-import {Circle as CircleStyle, Fill, Stroke, Style, Icon} from "ol/style.js";
+import {Circle as CircleStyle, Fill, Icon, Stroke, Style} from "ol/style.js";
 
 const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype */{
     /**
@@ -455,7 +455,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
         states = states.split(" | ");
 
         states.forEach(function (state) {
-            if (scalingObject.hasOwnProperty(state)) {
+            if (Object.prototype.hasOwnProperty.call(scalingObject, state)) {
                 scalingObject[state] = scalingObject[state] + 1;
             }
             else {

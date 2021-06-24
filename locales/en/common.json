@@ -18,6 +18,9 @@
         "black": "Black",
         "white": "White"
     },
+    "mouseHover": {
+        "infoText": "(more objects. Please zoom.)"
+    },
     "menu": {
         "topics": "Issues & Topics",
         "name": "Menu",
