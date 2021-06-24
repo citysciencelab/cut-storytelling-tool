@@ -1,5 +1,5 @@
 import StyleModel from "./style.js";
-import {Circle as CircleStyle, Fill, Icon, Stroke, Style} from "ol/style.js";
+import {Circle as CircleStyle, Fill, Stroke, Style, Icon} from "ol/style.js";
 
 const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype */{
     /**

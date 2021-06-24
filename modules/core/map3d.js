@@ -3,7 +3,7 @@ import OLCesium from "olcs/OLCesium.js";
 import VectorSynchronizer from "olcs/VectorSynchronizer.js";
 import FixedOverlaySynchronizer from "./3dUtils/fixedOverlaySynchronizer.js";
 import WMSRasterSynchronizer from "./3dUtils/wmsRasterSynchronizer.js";
-import {get, transform} from "ol/proj.js";
+import {transform, get} from "ol/proj.js";
 import Store from "../../src/app-store";
 
 const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{

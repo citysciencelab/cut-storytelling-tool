@@ -1,8 +1,5 @@
 import "../model";
-import {
-    getProjection as mpapiGetProjection,
-    transformFromMapProjection as mpapiTransformToMapProjection
-} from "masterportalAPI/src/crs";
+import {transformFromMapProjection as mpapiTransformToMapProjection, getProjection as mpapiGetProjection} from "masterportalAPI/src/crs";
 import getProxyUrl from "../../../src/utils/getProxyUrl";
 
 const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel.prototype */{

@@ -1,7 +1,7 @@
 <script>
 import beautifyKey from "../../../../../../../utils/beautifyKey.js";
 import {isWebLink} from "../../../../../../../utils/urlHelper.js";
-import {getPhoneNumberAsWebLink, isPhoneNumber} from "../../../../../../../utils/isPhoneNumber.js";
+import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
 import CompareFeatureIcon from "../../../favoriteIcons/components/CompareFeatureIcon.vue";
 

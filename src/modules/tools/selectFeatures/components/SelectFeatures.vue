@@ -10,7 +10,7 @@ import mutations from "../store/mutationsSelectFeatures";
 
 import {isUrl} from "../../../../utils/urlHelper";
 import {isEmailAddress} from "../../../../utils/isEmailAddress.js";
-import {getPhoneNumberAsWebLink, isPhoneNumber} from "../../../../utils/isPhoneNumber.js";
+import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../utils/isPhoneNumber.js";
 
 export default {
     name: "SelectFeatures",
