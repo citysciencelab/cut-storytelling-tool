@@ -53,11 +53,10 @@ const actions = {
      * Adds the event listeners to the target layer on pre- and postRender.
      *
      * @param {MouseEvent.mousemove} event DOM Event.
+     * @param {number} event.clientX Current position on the x-axis in px of the mouse.
      * @returns {void}
      */
-    moveSwiper ({state, commit, rootGetters, dispatch}, event) {
-        const {clientX} = event;
-
+    moveSwiper ({state, commit, rootGetters, dispatch}, {clientX}) {
         if (state.layerSwiper.isMoving) {
             commit("setLayerSwiperValueX", clientX);
             commit("setLayerSwiperStyleLeft", clientX);
