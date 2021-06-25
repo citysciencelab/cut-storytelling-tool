@@ -11,19 +11,16 @@ export default {
         ...mapGetters("WmsTime", Object.keys(getters))
     },
     created: function () {
-        const mid = this.map.getSize()[0] / 2;
-
         window.addEventListener("mousemove", this.moveSwiper);
         window.addEventListener("mouseup", this.moveStop);
         this.setLayerSwiperTargetLayer(this.visibleLayerList.find(element => element.values_.id === this.currentTimeSliderObject.layerId + this.layerAppendix));
-        this.setLayerSwiperValueX(mid);
-        // TODO: If this is present, the setTimeout gets ignored :o
-        this.map.on("rendercomplete", this.updateMap);
+        this.setLayerSwiperValueX(this.map.getSize()[0] / 2);
+        this.map.on("postcompose", this.updateMap);
     },
     beforeDestroy: function () {
         window.removeEventListener("mousemove", this.moveSwiper);
         window.removeEventListener("mouseup", this.moveStop);
-        this.map.un("rendercomplete", this.updateMap);
+        this.map.un("postcompose", this.updateMap);
     },
     methods: {
         ...mapMutations("WmsTime", Object.keys(mutations)),

@@ -15,6 +15,9 @@ const mutations = {
     setTimeSliderDefaultValue ({timeSlider: {objects, currentLayerId}}, newValue) {
         findCurrentTimeSliderObject(objects, currentLayerId).defaultValue = newValue;
     },
+    setTimeSliderPlaying ({timeSlider}, playing) {
+        timeSlider.playing = playing;
+    },
     // LayerSwiper mutations
     setLayerSwiperActive (state, active) {
         state.layerSwiper.active = active;

@@ -21,6 +21,8 @@
  * @property {boolean} timeSlider.active Whether the timeSlider window should be active.
  * @property {string} timeSlider.currentLayerId Id of the currently selected WMS-T.
  * @property {timeSliderObject[]} timeSlider.objects Array of objects containing values that are relevant for every WMS-T layer configured.
+ * @property {number} timeSlider.playbackDelay Time in seconds that a moment should be shown when using the playback function.
+ * @property {boolean} timeSlider.playing Whether the playback function is currently active in either of the TimeSlider windows.
  */
 const state = {
     layerAppendix: "_secondLayer",
@@ -35,7 +37,8 @@ const state = {
         active: false,
         currentLayerId: "",
         objects: [],
-        playbackDelay: 1
+        playbackDelay: 1,
+        playing: false
     }
 };
 

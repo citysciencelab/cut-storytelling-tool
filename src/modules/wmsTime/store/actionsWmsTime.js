@@ -68,7 +68,9 @@ const actions = {
      * @returns {void}
      */
     updateMap ({state, dispatch, rootGetters}) {
-        rootGetters["Map/map"].render();
+        if (!state.timeSlider.playing) {
+            rootGetters["Map/map"].render();
+        }
         state.layerSwiper.targetLayer.once("prerender", renderEvent => {
             dispatch("drawLayer", renderEvent);
         });

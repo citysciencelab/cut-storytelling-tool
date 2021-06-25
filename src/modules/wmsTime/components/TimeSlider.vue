@@ -62,6 +62,9 @@ export default {
         play () {
             this.playing = !this.playing;
 
+            // This is true whenever any of the two players is being used.
+            this.setTimeSliderPlaying(this.playing);
+
             if (this.playing) {
                 // Initial play
                 this.animate();
