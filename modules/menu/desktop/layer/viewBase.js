@@ -8,7 +8,7 @@ import TabIndexUtils from "../../../core/tabIndexUtils";
 const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */{
 
     /**
-     * Initializes the domId of this component with a fix prefix followed by a sequential number.
+     * Initializes the domId of this component with a fix prefix followed by the component id.
      * The id is needed for refocussing after the render-cycle.
      * The available id is a plain number and hence not a valid html id.
      * @param {String} prefix - optional prefix for the id
