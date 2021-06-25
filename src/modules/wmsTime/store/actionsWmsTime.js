@@ -49,7 +49,6 @@ const actions = {
     },
     /**
      * Sets the postion of the layerSwiper to state according to the x-coordinate of the mousedown event.
-     * Adds the event listeners to the target layer on pre- and postRender.
      *
      * @param {MouseEvent.mousemove} event DOM Event.
      * @param {number} event.clientX Current position on the x-axis in px of the mouse.

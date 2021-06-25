@@ -214,7 +214,7 @@ const WMSLayer = Layer.extend({
     },
 
     /**
-     * Creates an array with values ascending values from min to max separated by step.
+     * Creates an array with ascending values from min to max separated by step.
      *
      * @param {number} min Minimum value.
      * @param {number} max Maximum value.
