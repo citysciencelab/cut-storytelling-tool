@@ -4,11 +4,11 @@ import LayerBaseView from "./viewBase.js";
 
 const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
     events: {
-        "click .layer-item": function () {
+        "click .layer-item.tabable": function () {
             this.preToggleIsSelected();
             this.setFocus();
         },
-        "keydown .layer-item": function (event) {
+        "keydown .layer-item.tabable": function (event) {
             if (this.handleKeyboardTriggeredAction(event, "preToggleIsSelected")) {
                 this.setFocus();
             }

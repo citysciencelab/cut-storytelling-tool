@@ -1,16 +1,15 @@
-import TemplateSettings from "text-loader!./templateSettings.html";
 import Template from "text-loader!./templateLight.html";
+import TemplateSettings from "text-loader!./templateSettings.html";
 import checkChildrenDatasets from "../../checkChildrenDatasets.js";
-import store from "../../../../src/app-store";
 import LayerBaseView from "./viewBase.js";
 
 const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
     events: {
-        "click .glyphicon-unchecked, .glyphicon-check, .title": function () {
+        "click .layer-item.tabable": function () {
             this.preToggleIsSelected();
             this.setFocus();
         },
-        "keydown .layer-item": function (event) {
+        "keydown .layer-item.tabable": function (event) {
             if (this.handleKeyboardTriggeredAction(event, "preToggleIsSelected")) {
                 this.setFocus();
             }
@@ -102,10 +101,6 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
         this.listenTo(Radio.channel("LayerInformation"), {
             "unhighlightLayerInformationIcon": this.unhighlightLayerInformationIcon
         });
-        // TODO JG why is this necessary?
-        // this.listenTo(Radio.channel("ModelList"), {
-        //     "updatedSelectedLayerList": this.rerender
-        // });
         this.$el.on({
             click: function (e) {
                 e.stopPropagation();
@@ -155,109 +150,6 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * Draws the settings (transparency, metainfo, ...)
-     * @return {void}
-     */
-    renderSetting: function () {
-        const attr = this.model.toJSON();
-
-        // Animation Zahnrad
-        this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
-        // Slide-Animation templateSetting
-        if (this.model.get("isSettingVisible") === false) {
-            this.$el.find(".layer-settings").slideUp("slow", function () {
-                $(this).remove();
-            });
-        }
-        else {
-            this.$el.append(this.templateSettings(attr));
-            this.$el.find(".layer-settings").hide();
-            this.$el.find(".layer-settings").slideDown();
-        }
-        this.setAllTabIndices();
-    },
-
-    /**
-     * Executes toggleIsSettingVisible in the model
-     * @returns {void}
-     */
-    toggleIsSettingVisible: function () {
-        this.model.toggleIsSettingVisible();
-    },
-
-    /**
-     * todo
-     * @param {*} evt - todo
-     * @returns {void}
-     */
-    setTransparency: function (evt) {
-        this.model.setTransparency(parseInt(evt.target.value, 10));
-    },
-
-    /**
-     * Executes moveDown in the model
-     * @returns {void}
-     */
-    moveModelDown: function () {
-        this.model.moveDown();
-    },
-
-    /**
-     * Executes moveUp in the model
-     * @returns {void}
-     */
-    moveModelUp: function () {
-        this.model.moveUp();
-    },
-
-    /**
-     * Executes incTransparency in the model
-     * @returns {void}
-     */
-    incTransparency: function () {
-        this.model.incTransparency(10);
-    },
-
-    /**
-     * Executes decTransparency in the model
-     * @returns {void}
-     */
-    decTransparency: function () {
-        this.model.decTransparency(10);
-    },
-
-    /**
-     * Triggers the styleWMS tool to open
-     * Removes the class "open" from ".nav li:first-child"
-     * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
-     * @returns {void}
-     */
-    openStyleWMS: function () {
-        Radio.trigger("StyleWMS", "openStyleWMS", this.model);
-        $(".nav li:first-child").removeClass("open");
-    },
-
-    /**
-     * Activates the StyleVT Tool and commits the current layer model to the state.
-     *
-     * @returns {void}
-     */
-    openStyleVT: function () {
-        store.dispatch("Tools/StyleVT/setActive", {active: true, layerModel: this.model}, {root: true});
-    },
-
-    /**
-     * todo
-     * @fires Parser#RadioTriggerParserRemoveItem
-     * @returns {void}
-     */
-    removeLayer: function () {
-        Radio.trigger("Parser", "removeItem", this.model.get("id"));
-        this.model.removeLayer();
-        this.$el.remove();
-    },
-
-    /**
      * adds only layers to the tree that support the current mode of the map
      * e.g. 2D, 3D
      * @param {String} mapMode - current mode from map
@@ -270,25 +162,6 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
         else {
             this.$el.hide();
         }
-    },
-
-    /**
-     * Highlights the Layer Information Icon in the layertree
-     * @returns {void}
-     */
-    highlightLayerInformationIcon: function () {
-        if (this.model.get("layerInfoChecked")) {
-            this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerInformationIcon");
-        }
-    },
-
-    /**
-     * Unhighlights the Layer Information Icon in the layertree
-     * @returns {void}
-     */
-    unhighlightLayerInformationIcon: function () {
-        this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
-        this.model.setLayerInfoChecked(false);
     }
 });
 

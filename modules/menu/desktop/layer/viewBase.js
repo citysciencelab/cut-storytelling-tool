@@ -15,16 +15,38 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
      * @returns {void}
      */
     initializeDomId: function (prefix) {
-        let idPrexfix = "layer-list-group-item-";
+        let idPrefix = "layer-list-group-item-";
 
         if (prefix) {
-            idPrexfix = prefix;
+            idPrefix = prefix;
         }
         this.model.set({
-            domId: _.uniqueId(idPrexfix)
+            domId: idPrefix + this.model.get("id")
         });
     },
 
+    /**
+     * Draws the settings (transparency, metainfo, ...)
+     * @return {void}
+     */
+    renderSetting: function () {
+        const attr = this.model.toJSON();
+
+        // Animation Zahnrad
+        this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
+        // Slide-Animation templateSetting
+        if (this.model.get("isSettingVisible") === false) {
+            this.$el.find(".layer-settings").slideUp("slow", function () {
+                $(this).remove();
+            });
+        }
+        else {
+            this.$el.append(this.templateSettings(attr));
+            this.$el.find(".layer-settings").hide();
+            this.$el.find(".layer-settings").slideDown();
+        }
+        this.setAllTabIndices();
+    },
     /**
      * Sets all tabindices in the whole menu tree to enable keyboard navigation.
      * @returns {void}
@@ -215,7 +237,7 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
         this.$el.find(".tabable").addClass("disable-tabable");
         this.$el.find("*").removeClass("tabable");
         // no focus -> no keyboard events possible
-        this.$el.find("*").removeAttr("tabindex");
+        // this.$el.find("*").removeAttr("tabindex");
     },
 
     /**
@@ -232,7 +254,7 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
         this.$el.find(".disable-tabable").addClass("tabable");
         this.$el.find("*").removeClass("disable-tabable");
         // activate tabindex
-        this.setAllTabIndices();
+        // this.setAllTabIndices();
     },
 
     /**
@@ -252,6 +274,86 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
     unhighlightLayerInformationIcon: function () {
         this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
         this.model.setLayerInfoChecked(false);
+    },
+
+    /**
+      * Executes toggleIsSettingVisible in the model
+      * @returns {void}
+      */
+    toggleIsSettingVisible: function () {
+        this.model.toggleIsSettingVisible();
+    },
+
+    /**
+     * todo
+     * @param {*} evt - todo
+     * @returns {void}
+     */
+    setTransparency: function (evt) {
+        this.model.setTransparency(parseInt(evt.target.value, 10));
+    },
+
+    /**
+     * Executes moveDown in the model
+     * @returns {void}
+     */
+    moveModelDown: function () {
+        this.model.moveDown();
+    },
+
+    /**
+     * Executes moveUp in the model
+     * @returns {void}
+     */
+    moveModelUp: function () {
+        this.model.moveUp();
+    },
+
+    /**
+     * Executes incTransparency in the model
+     * @returns {void}
+     */
+    incTransparency: function () {
+        this.model.incTransparency(10);
+    },
+
+    /**
+     * Executes decTransparency in the model
+     * @returns {void}
+     */
+    decTransparency: function () {
+        this.model.decTransparency(10);
+    },
+
+    /**
+     * Triggers the styleWMS tool to open
+     * Removes the class "open" from ".nav li:first-child"
+     * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
+     * @returns {void}
+     */
+    openStyleWMS: function () {
+        Radio.trigger("StyleWMS", "openStyleWMS", this.model);
+        $(".nav li:first-child").removeClass("open");
+    },
+
+    /**
+     * Activates the StyleVT Tool and commits the current layer model to the state.
+     *
+     * @returns {void}
+     */
+    openStyleVT: function () {
+        store.dispatch("Tools/StyleVT/setActive", {active: true, layerModel: this.model}, {root: true});
+    },
+
+    /**
+     * todo
+     * @fires Parser#RadioTriggerParserRemoveItem
+     * @returns {void}
+     */
+    removeLayer: function () {
+        Radio.trigger("Parser", "removeItem", this.model.get("id"));
+        this.model.removeLayer();
+        this.$el.remove();
     }
 });
 

@@ -90,9 +90,9 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
     templateSettings: _.template(TemplateSettings),
 
     /**
- * Sets the tabindices of all layer catalog elements with an increment of 1000.
- * @returns {void}
- */
+     * Sets the tabindices of all elements in the Selected Layer component.
+     * @returns {void}
+     */
     setAllTabIndices: function () {
         const parentTabIndexElement = $("a.SelectedLayer"),
             allElementsOfThisComponent = $("#SelectedLayer .tabable");
@@ -137,38 +137,6 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * Draws the settings like transparence, metainfos etc.
-     * @returns {void}
-     */
-    renderSetting: function () {
-        const attr = this.model.toJSON();
-
-        // Slide-Animation templateSetting
-        if (this.model.get("isSettingVisible") === false) {
-            // Animation Zahnrad
-            this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
-            this.$el.find(".layer-settings").slideUp("slow", function () {
-                $(this).remove();
-            });
-        }
-        else {
-            this.$(".glyphicon-cog").toggleClass("rotate-back rotate");
-            this.$el.append(this.templateSettings(attr));
-            this.$el.find(".layer-settings").hide();
-            this.$el.find(".layer-settings").slideDown();
-        }
-        this.setAllTabIndices();
-    },
-
-    /**
-     * Executes toggleIsSelected in the model
-     * @returns {void}
-     */
-    toggleIsSelected: function () {
-        this.model.toggleIsSelected();
-    },
-
-    /**
      * Executes setIsSettingVisible and setIsSelected in the model
      * removes the element
      * @returns {void}
@@ -186,87 +154,6 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
     toggleIsVisibleInMap: function () {
         this.model.toggleIsVisibleInMap();
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
-    },
-
-    /**
-     * Executes toggleIsSettingVisible in the model
-     * @returns {void}
-     */
-    toggleIsSettingVisible: function () {
-        this.model.toggleIsSettingVisible();
-    },
-
-    /**
-     * Executes moveDown in the model
-     * @returns {void}
-     */
-    moveModelDown: function () {
-        this.model.moveDown();
-    },
-
-    /**
-     * Executes moveUp in the model
-     * @returns {void}
-     */
-    moveModelUp: function () {
-        this.model.moveUp();
-    },
-
-    /**
-     * Executes incTransparency in the model
-     * @returns {void}
-     */
-    incTransparency: function () {
-        this.model.incTransparency(10);
-    },
-
-    /**
-     * Executes decTransparency in the model
-     * @returns {void}
-     */
-    decTransparency: function () {
-        this.model.decTransparency(10);
-    },
-
-    /**
-     * Triggers the styleWMS tool to open
-     * Removes the class "open" from ".nav li:first-child"
-     * @returns {void}
-     */
-    openStyleWMS: function () {
-        Radio.trigger("StyleWMS", "openStyleWMS", this.model);
-        $(".nav li:first-child").removeClass("open");
-    },
-
-    /**
-     * Triggers the parser to remove the item/layer
-     * Executes removeLayer in the model
-     * Removes the element
-     * @returns {void}
-     */
-    removeLayer: function () {
-        Radio.trigger("Parser", "removeItem", this.model.get("id"));
-        this.model.removeLayer();
-        this.$el.remove();
-    },
-
-    /**
-     * Highlights the Layer Information Icon in the layertree
-     * @returns {void}
-     */
-    highlightLayerInformationIcon: function () {
-        if (this.model.get("layerInfoChecked")) {
-            this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerInformationIcon");
-        }
-    },
-
-    /**
-     * Unhighlights the Layer Information Icon in the layertree
-     * @returns {void}
-     */
-    unhighlightLayerInformationIcon: function () {
-        this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
-        this.model.setLayerInfoChecked(false);
     }
 });
 
