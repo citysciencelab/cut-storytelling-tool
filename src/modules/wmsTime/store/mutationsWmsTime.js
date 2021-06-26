@@ -13,7 +13,15 @@ const mutations = {
         timeSlider.currentLayerId = currentLayerId;
     },
     setTimeSliderDefaultValue ({timeSlider: {objects, currentLayerId}}, newValue) {
-        findCurrentTimeSliderObject(objects, currentLayerId).defaultValue = newValue;
+        const currentObject = findCurrentTimeSliderObject(objects, currentLayerId);
+
+        // NOTE: This is needed when the LayerSwiper is closed and no new value was selected in the second
+        // TimeSlider thus newValue would be the same as defaultValue and would not trigger the update Event.
+        currentObject.defaultValue = currentObject.timeRange[0];
+        // If the timeout is not, no update is triggered.
+        setTimeout(() => {
+            currentObject.defaultValue = newValue;
+        }, 1);
     },
     setTimeSliderPlaying ({timeSlider}, playing) {
         timeSlider.playing = playing;
