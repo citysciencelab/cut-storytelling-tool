@@ -27,7 +27,7 @@ function createUserHelp (literals) {
         userHelp += el;
     }
 
-    return userHelp.replaceAll(")(", ") and (");
+    return userHelp.replaceAll(")(", ") and (").replaceAll(",", " / ");
 }
 
 /**
