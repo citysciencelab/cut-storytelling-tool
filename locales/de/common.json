@@ -763,6 +763,7 @@
             "timeSlider": {
                 "buttons": {
                     "backward": "Einen Zeitpunkt zurück",
+                    "deactivateLayerSwiper": "Layer entfernen",
                     "forward": "Einen Zeitpunkt voran",
                     "layerSwiper": "Zeitpunkte vergleichen",
                     "play": "Ein automatisches Abspielen aller Zeitpunkte, ausgehend vom aktuell ausgewählten Zeitpunkt"
