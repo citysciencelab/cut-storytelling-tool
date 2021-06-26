@@ -26,8 +26,8 @@ const actions = {
 
             Radio.trigger("Parser", "addLayer",
                 name + "_second", secondId, parentId,
-                level, layers, url,
-                version, true, time
+                level, layers, url, version,
+                {transparent: false, isSelected: true, time}
             );
             Radio.trigger("ModelList", "addModelsByAttributes", {id: secondId});
         }

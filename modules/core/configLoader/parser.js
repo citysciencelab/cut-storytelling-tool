@@ -358,11 +358,13 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {*} layers - todo
      * @param {*} url - todo
      * @param {*} version - todo
-     * @param {boolean} [isSelected = false] Whether the given layer is selected or not.
-     * @param {(boolean/object)} [time = false] If set to `true` or and Object, the configured Layer is expected to be a WMS-T.
+     * @param {object} [optionalParameters] Object of optional parameters to be set for the layer.
+     * @param {boolean} [optionalParameters.transparent = true] Whether the given layer is transparent.
+     * @param {boolean} [optionalParameters.isSelected = false] Whether the given layer is selected .
+     * @param {(boolean/object)} [optionalParameters.time = false] If set to `true` or and Object, the configured Layer is expected to be a WMS-T.
      * @returns {void}
      */
-    addLayer: function (name, id, parentId, level, layers, url, version, isSelected = false, time = false) {
+    addLayer: function (name, id, parentId, level, layers, url, version, {transparent = true, isSelected = false, time = false}) {
         const layer = {
             id,
             name,
@@ -371,6 +373,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             layers,
             url,
             version,
+            transparent,
             isSelected,
             time,
             cache: false,
@@ -387,7 +390,6 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             singleTile: false,
             supported: ["2D", "3D"],
             tilesize: "512",
-            transparent: true,
             typ: "WMS",
             type: "layer",
             urlIsVisible: true
