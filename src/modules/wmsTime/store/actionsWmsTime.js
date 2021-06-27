@@ -1,4 +1,4 @@
-import {getRenderPixel} from "ol/render";
+import drawLayer from "../utils/drawLayer";
 
 const actions = {
     /**
@@ -66,41 +66,14 @@ const actions = {
      *
      * @returns {void}
      */
-    updateMap ({state, dispatch, rootGetters}) {
+    updateMap ({state, rootGetters}) {
         if (!state.timeSlider.playing) {
             rootGetters["Map/map"].render();
         }
-        state.layerSwiper.targetLayer.once("prerender", renderEvent => {
-            dispatch("drawLayer", renderEvent);
-        });
+        state.layerSwiper.targetLayer.once("prerender", renderEvent => drawLayer(rootGetters["Map/map"].getSize(), renderEvent, state.layerSwiper.valueX));
         state.layerSwiper.targetLayer.once("postrender", ({context}) => {
             context.restore();
         });
-    },
-    /**
-     * Manipulates the width of the target layer according to the position of the layerSwiper.
-     *
-     * @param {module:ol/render/Event} renderEvent The render event from the target layer.
-     * @returns {void}
-     */
-    drawLayer ({state, rootGetters}, renderEvent) {
-        const {context} = renderEvent,
-            mapSize = rootGetters["Map/map"].getSize(),
-            width = state.layerSwiper.valueX,
-            topLeft = getRenderPixel(renderEvent, [width, 0]),
-            topRight = getRenderPixel(renderEvent, [mapSize[0], 0]),
-            bottomLeft = getRenderPixel(renderEvent, [width, mapSize[1]]),
-            bottomRight = getRenderPixel(renderEvent, mapSize);
-
-        // Clip everything that is to the left side of the swiper
-        context.save();
-        context.beginPath();
-        context.moveTo(topLeft[0], topLeft[1]);
-        context.lineTo(bottomLeft[0], bottomLeft[1]);
-        context.lineTo(bottomRight[0], bottomRight[1]);
-        context.lineTo(topRight[0], topRight[1]);
-        context.closePath();
-        context.clip();
     }
 };
 
