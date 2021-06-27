@@ -7,7 +7,9 @@
  */
 export default function findCurrentTimeSliderObject (objects, currentLayerId) {
     if (objects.length > 0 && currentLayerId !== "") {
-        return objects.find(({layerId}) => currentLayerId === layerId);
+        const currentObject = objects.find(({layerId}) => currentLayerId === layerId);
+
+        return currentObject ? currentObject : {};
     }
     return {};
 }
