@@ -5,8 +5,8 @@ import findCurrentTimeSliderObject from "../utils/findCurrentTimeSliderObject";
 const getters = {
     ...generateSimpleGetters(initialState),
     // TimeSlider getters
-    currentTimeSliderObject ({timeSlider: {objects, currentLayerId}}) {
-        return findCurrentTimeSliderObject(objects, currentLayerId);
+    currentTimeSliderObject ({timeSlider: {currentLayerId, objects}}) {
+        return findCurrentTimeSliderObject(currentLayerId, objects);
     },
     defaultValue (_, {currentTimeSliderObject}) {
         return currentTimeSliderObject.defaultValue;
