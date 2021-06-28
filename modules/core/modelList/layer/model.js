@@ -501,7 +501,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         else if (timeLayer) {
             // If the swiper is active, two WMS-T are currently active
             if (store.getters["WmsTime/layerSwiper"].active) {
-                if (!id.endsWith(store.getters("WmsTime/layerAppendix"))) {
+                if (!id.endsWith(store.getters["WmsTime/layerAppendix"])) {
                     this.setIsSelected(true);
                 }
                 store.dispatch("WmsTime/toggleSwiper", id);
