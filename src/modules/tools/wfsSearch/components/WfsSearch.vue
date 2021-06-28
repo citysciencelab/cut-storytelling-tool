@@ -154,9 +154,8 @@ export default {
                         <span
                             class="col-md-11 col-sm-11"
                             :aria-label="$t('common:modules.tools.wfsSearch.userHelp.label')"
-                        >
-                            {{ $t("common:modules.tools.wfsSearch.userHelp.text", {userHelp}) }}
-                        </span>
+                            v-html="$t('common:modules.tools.wfsSearch.userHelp.text', {userHelp})"
+                        />
                     </div>
                     <hr>
                     <template v-for="(literal, i) of currentInstance.literals">
@@ -230,6 +229,10 @@ export default {
 .btn {
     margin-top: 10px;
 }
+.form-group > span {
+    display: inline-block;
+}
+
 </style>
 
 <style lang="less">

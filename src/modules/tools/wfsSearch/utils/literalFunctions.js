@@ -27,7 +27,7 @@ function createUserHelp (literals) {
         userHelp += el;
     }
 
-    return userHelp.replaceAll(")(", ") and (").replaceAll(",", " / ");
+    return userHelp.replaceAll(")(", ") and (").replaceAll(",", " / ").replaceAll("*", "");
 }
 
 /**
@@ -78,6 +78,10 @@ function prepareLiterals (stateLiterals, literals = null, clauseId = "", require
 
             if (literal.field.required) {
                 requiredValues[literal.field.id] = null;
+
+                literal.field.inputLabel = typeof literal.field.inputLabel === "object"
+                    ? literal.field.inputLabel.map(label => label + "*")
+                    : literal.field.inputLabel + "*";
             }
             if (literal.clause) {
                 delete literal.clause;
