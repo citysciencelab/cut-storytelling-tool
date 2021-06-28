@@ -305,23 +305,14 @@ const ObliqueMap = Backbone.Model.extend({
 
         }
     },
+    /**
+     * The postRenderHandler in vcs-oblique\src\vcs\oblique\direction.js loads new image, if currentImage does not match the coordinates.
+     * @returns {void}
+     */
     postRenderHandler: function () {
         if (this.currentDirection && this.switchOnEdge) {
             const coord = this.get("map").getView().getCenter(),
-                currentImage = this.currentDirection.currentImage,
-                ratioLower = this.switchThreshold,
-                ratioUpper = 1 - ratioLower;
-
-            if (
-                !currentImage || (
-                    coord[0] / currentImage.size[0] > ratioLower &&
-                    coord[0] / currentImage.size[0] < ratioUpper &&
-                    coord[1] / currentImage.size[1] > ratioLower &&
-                    coord[1] / currentImage.size[1] < ratioUpper
-                )
-            ) {
-                return;
-            }
+                currentImage = this.currentDirection.currentImage;
 
             if (currentImage.averageHeight === null) {
                 return;
@@ -334,6 +325,7 @@ const ObliqueMap = Backbone.Model.extend({
             transformFromImage(this.currentDirection.currentImage, event.coordinate, {
                 dataProjection: this.get("projection")
             }).then(function (coords) {
+                // provides coordinates for tool getCoord - not used now
                 Radio.trigger("ObliqueMap", "clicked", coords.coords);
             });
         }

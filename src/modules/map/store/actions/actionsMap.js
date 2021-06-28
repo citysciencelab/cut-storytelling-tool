@@ -131,7 +131,7 @@ const actions = {
     updateClick ({getters, commit, dispatch, rootGetters}, evt) {
         const {mapMode} = getters;
 
-        if (mapMode === MapMode.MODE_2D) {
+        if (mapMode === MapMode.MODE_2D || mapMode === MapMode.MODE_OB) {
             commit("setClickCoord", evt.coordinate);
             commit("setClickPixel", evt.pixel);
         }
