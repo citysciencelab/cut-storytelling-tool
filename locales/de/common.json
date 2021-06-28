@@ -702,9 +702,6 @@
                 "hint": "Bewegen Sie die Maus über die Karte",
                 "showMousePosition": "Einblenden",
                 "hideMousePosition": "Ausblenden"
-            },
-            "layerSwiper": {
-                "title": "Layer vergleichen"
             }
         },
         "searchbar": {
@@ -760,6 +757,9 @@
             }
         },
         "wmsTime": {
+            "layerSwiper": {
+              "title": "Layer vergleichen"
+            },
             "timeSlider": {
                 "buttons": {
                     "backward": "Einen Zeitpunkt zurück",

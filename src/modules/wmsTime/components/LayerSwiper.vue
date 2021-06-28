@@ -32,7 +32,7 @@ export default {
 <template>
     <button
         class="btn"
-        :title="$t(`common:modules.controls.layerSwiper.title`)"
+        :title="$t(`common:modules.wmsTime.layerSwiper.title`)"
         @mousedown.self="move($event.target)"
     />
 </template>

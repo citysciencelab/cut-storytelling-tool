@@ -702,9 +702,6 @@
                 "hint": "Move the computer mouse over your screen.",
                 "showMousePosition": "Mouse position - fade in",
                 "hideMousePosition": "Fade out"
-            },
-            "layerSwiper": {
-                "title": "Compare layers"
             }
         },
         "searchbar": {
@@ -760,6 +757,9 @@
             }
         },
         "wmsTime": {
+            "layerSwiper": {
+              "title": "Compare layers"
+            },
             "timeSlider": {
                 "buttons": {
                     "backward": "Move one moment backward",

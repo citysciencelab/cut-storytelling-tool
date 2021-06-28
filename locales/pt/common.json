@@ -686,9 +686,6 @@
                 "hint": "Mova o rato sobre o mapa",
                 "showMousePosition": "Mostrar",
                 "hideMousePosition": "Ocultar"
-            },
-            "layerSwiper": {
-                "title": "Confrontare gli strati"
             }
         },
         "searchbar": {
@@ -736,6 +733,11 @@
             "styleModel": {
                 "getGeometryTypeFromWFSFetchfailed": "A legenda não podia ser criada na camada de informação!",
                 "getGeometryTypeFromWFSFetchfailedMessage": "Detalhes: Um serviço necessário não responde."
+            }
+        },
+        "wmsTime": {
+            "layerSwiper": {
+              "title": "Confrontare gli strati"
             }
         },
         "legend": {

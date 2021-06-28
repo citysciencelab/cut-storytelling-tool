@@ -646,9 +646,6 @@
                 "hint": "Muovi il mouse sulla mappa",
                 "showMousePosition": "Mostra",
                 "hideMousePosition": "Nascondi"
-            },
-            "layerSwiper": {
-                "title": "Stratificatore"
             }
         },
         "searchbar": {
@@ -696,6 +693,11 @@
             "styleModel": {
                 "getGeometryTypeFromWFSFetchfailed": "La legenda non poteva essere creata!",
                 "getGeometryTypeFromWFSFetchfailedMessage": "Dettagli: Un servizio richiesto non risponde."
+            }
+        },
+        "wmsTime": {
+            "layerSwiper": {
+              "title": "Stratificatore"
             }
         },
         "legend": {
