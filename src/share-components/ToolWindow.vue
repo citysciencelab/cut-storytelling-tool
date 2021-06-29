@@ -102,7 +102,6 @@ export default {
         right: 20px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
         z-index: 999;
-        max-height:72vh;
         min-width: 280px;
 
         .basic-resize-handle {
@@ -154,6 +153,7 @@ export default {
         position: relative;
         height: calc(100% - 58px);
         width: 100%;
+        max-height:72vh;
         -webkit-overflow-scrolling: touch;
         background-color: @background_color_1;
         overflow: auto;
