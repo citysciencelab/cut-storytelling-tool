@@ -89,7 +89,7 @@ export default {
                 <div
                     id="modal-1-header-container"
                 >
-                    <slot name="header"></slot>
+                    <slot name="header" />
                 </div>
                 <div
                     id="modal-1-content-container"
@@ -99,7 +99,7 @@ export default {
                 <div
                     id="modal-1-footer-container"
                 >
-                    <slot name="footer"></slot>
+                    <slot name="footer" />
                 </div>
             </div>
         </div>
