@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<div class="menu-row">
 <% if (isSelected) { %>
-  <a href="#" id="<%= domId %>" class="dropdown-item layer-item tabable checked">
+  <a href="#" id="<%= domId %>" class="dropdown-item layer-item tabable checked" tabindex="0">
     <span class="glyphicon glyphicon-check" title="<%=removeTopicText%>"></span>
 <% } else { %>
-  <a href="#" id="<%= domId %>" class="dropdown-item layer-item tabable">
+  <a href="#" id="<%= domId %>" class="dropdown-item layer-item tabable" tabindex="0">
     <span class="glyphicon glyphicon-unchecked" title="<%=showTopicText%>"></span>
 <% } %>
   <% if (isSecured) { %>
@@ -13,14 +14,14 @@
 </a>
 
 <% if (typeof treeType === "undefined") { %>
-  <div class="layer-info-item pull-right">
+  <div class="layer-info-item last-item">
     <% if (typeof datasets !== "undefined" && datasets !== false) { %>
-          <span class="glyphicon glyphicon-info-sign tabable" title="<%=infosAndLegendText%>"></span>
+          <span class="glyphicon glyphicon-info-sign tabable" tabindex="0" title="<%=infosAndLegendText%>"></span>
     <% } %>
     </div>
 <% } else { %>
-  <div class="layer-info-item pull-right">
-    <span class="glyphicon glyphicon-cog rotate tabable"></span>
+  <div class="layer-info-item last-item">
+    <span class="glyphicon glyphicon-cog rotate tabable" tabindex="0"></span>
   </div>
 <% } %>
-
+</div>

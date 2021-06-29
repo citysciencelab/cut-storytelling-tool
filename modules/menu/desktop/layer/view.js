@@ -91,7 +91,6 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
             }
             this.$el.css("padding-left", ((this.model.get("level") * 15) + 5) + "px");
         }
-        this.setAllTabIndices();
         return this;
     },
 
@@ -113,31 +112,6 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
         if (!this.model.get("isSelected") && (this.model.get("maxScale") < scale || this.model.get("minScale") > scale)) {
             this.disableComponent();
         }
-        this.setAllTabIndices();
-    },
-
-    /**
-     * Executes toggleIsSettingVisible in the model
-     * @returns {void}
-     */
-    toggleIsSettingVisible: function () {
-        this.model.toggleIsSettingVisible();
-    },
-
-    /**
-     * Executes moveDown in the model
-     * @returns {void}
-     */
-    moveModelDown: function () {
-        this.model.moveDown();
-    },
-
-    /**
-     * Executes moveUp in the model
-     * @returns {void}
-     */
-    moveModelUp: function () {
-        this.model.moveUp();
     },
 
     /**

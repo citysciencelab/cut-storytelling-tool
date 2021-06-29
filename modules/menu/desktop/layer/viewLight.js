@@ -128,7 +128,6 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
         if (this.model.get("isSettingVisible") === true) {
             this.$el.append(this.templateSettings(attr));
         }
-        this.setAllTabIndices();
         return this;
     },
 
@@ -146,7 +145,6 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
         if (this.model.get("isSettingVisible")) {
             this.$el.append(this.templateSettings(attr));
         }
-        this.setAllTabIndices();
     },
 
     /**

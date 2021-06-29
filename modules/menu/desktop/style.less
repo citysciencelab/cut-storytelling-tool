@@ -2,7 +2,7 @@
 
 @color_1: rgb(51, 51, 51);
 @color_2: rgb(255, 255, 255);
-// @color_3: rgb(255, 127, 0);
+@color_3: rgb(255, 127, 0);
 @color_4: rgb(82, 82, 82);
 @font_family_1: "MasterPortalFont", "Arial Narrow", Arial, sans-serif;
 @font_family_2: MasterPortalFont, "Arial Narrow", Arial, sans-serif;
@@ -46,11 +46,23 @@ ul#tree {
     padding: 0px 0;
     min-width: 380px;
 
+    .menu-row {
+        flex-basis: 100%;
+        display: flex;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        >a {
+            display: flex;
+        }
+    }
+
     li a {
         font-size: 15px;
         margin: 0px;
         color: @color_1;
-        padding: 5px;
+        overflow: auto;
+        flex-grow: 1;
         &:hover {
             color: @color_1;
             background-color: lighten(@primary_inactive, 40%);
@@ -61,6 +73,9 @@ ul#tree {
             border-bottom: 1px solid #ddd;
         }
     }
+    .last-item {
+        margin-left: auto;
+    }
     ul {
         list-style: none;
         padding: 0 0 0 0px;
@@ -70,13 +85,17 @@ ul#tree {
         max-width: 500px;
         max-height: 55vh;
         .title {
+            padding: 3px 0 0 5px;
             font-family: @font_family_2;
             font-size: 12px;
             cursor: pointer;
         }
         li {
+            display: flex;
+            flex-wrap: wrap;
             border-bottom: 1px solid #ddd;
             padding: 5px 5px;
+            overflow: auto;
         }
     }
     .glyphicon {
@@ -149,12 +168,8 @@ ul#tree {
         cursor: pointer;
     }
     #SelectedLayer {
-        li {
-            overflow: auto;
-            padding: 8px 6px;
-        }
         a {
-            padding: 2px 0px 0px 5px;
+            padding: 1px 0px 0px 5px;
         }
     }
     .SelectedLayer {
@@ -172,13 +187,17 @@ ul#tree.light {
     li {
         border-left: 0;
         border-right: 0;
-        padding: 0px;
+        padding: 5px;
         max-width: 500px;
         overflow: auto;
+        display: flex;
+        flex-wrap: wrap;
         >a {
             font-size: 12px;
+            flex-grow: 1;
         }
         span.title {
+            padding: 2px 0 0 5px; 
             vertical-align: sub;
             cursor: pointer;
         }
@@ -186,11 +205,12 @@ ul#tree.light {
 }
 ul#tree {
     a.checked {
-        background-color: @accent_active;
-        color: @color_2;
+        color: @color_3;
+        // background-color: @accent_active;
+        // color: @color_2;
         &:hover {
             background-color: @accent_active;
-            color: @color_2;
+            // color: @color_2;
         }
     }
 }

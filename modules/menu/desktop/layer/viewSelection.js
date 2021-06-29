@@ -2,12 +2,11 @@ import Template from "text-loader!./templateSelection.html";
 import TemplateSettings from "text-loader!./templateSettings.html";
 import checkChildrenDatasets from "../../checkChildrenDatasets.js";
 import LayerBaseView from "./viewBase.js";
-import TabIndexUtils from "../../../core/tabIndexUtils";
 
 const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
     events: {
-        "click .glyphicon-check, glyphicon-checked, .title": "toggleIsVisibleInMap",
-        "keydown .layer-item": function (event) {
+        "click a.layer-item": "toggleIsVisibleInMap",
+        "keydown a.layer-item": function (event) {
             if (this.handleKeyboardTriggeredAction(event, "toggleIsVisibleInMap")) {
                 this.setFocus();
             }
@@ -90,17 +89,6 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
     templateSettings: _.template(TemplateSettings),
 
     /**
-     * Sets the tabindices of all elements in the Selected Layer component.
-     * @returns {void}
-     */
-    setAllTabIndices: function () {
-        const parentTabIndexElement = $("a.SelectedLayer"),
-            allElementsOfThisComponent = $("#SelectedLayer .tabable");
-
-        TabIndexUtils.setAllTabIndicesFromParentWithIncrement(parentTabIndexElement, allElementsOfThisComponent, 1);
-    },
-
-    /**
      * Renders the selection view.
      * @returns {void}
      */
@@ -115,7 +103,6 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
         if (this.model.get("layerInfoChecked")) {
             this.highlightLayerInformationIcon();
         }
-        this.setAllTabIndices();
         return this;
     },
 
@@ -133,7 +120,6 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
         if (this.model.get("layerInfoChecked")) {
             this.highlightLayerInformationIcon();
         }
-        this.setAllTabIndices();
     },
 
     /**

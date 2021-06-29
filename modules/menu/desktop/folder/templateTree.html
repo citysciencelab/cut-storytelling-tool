@@ -1,31 +1,33 @@
 <!DOCTYPE html>
-<% if(isLeafFolder && isFolderSelectable && isSelected) { %>
-    <a class="<%= id %> dropdown-item tabable checked">
-<%} else {%>
-    <a class="<%= id %> dropdown-item tabable">
-<% } %>
+<div class="menu-row">
 
-
-    <% if (this.model.get("isExpanded")) { %>
-    <span class="glyphicon glyphicon-minus-sign"> </span>
-    <% } else { %>
-    <span class="glyphicon glyphicon-plus-sign"> </span>
-    <% } %> 
-    <% if(isLeafFolder && isFolderSelectable) { %> <% if(isSelected) { %>
-    <span
-        class="glyphicon glyphicon-check selectall"
-        title="<%= hideAllTopicsText %>"
-    ></span>
+    <% if(isLeafFolder && isFolderSelectable && isSelected) { %>
+        <a class="<%= id %> dropdown-item tabable checked" tabindex="0">
     <%} else {%>
-    <span
-        class="glyphicon glyphicon-unchecked selectall"
-        title="<%= showAllTopicsText %>"
-    ></span>
-    <%}%> <%}%> <% if (isSecured) { %>
-    <span
-        class="glyphicon glyphicon-lock"
-        title="<%=securedAllTopicsText%>"
-    ></span>
+        <a class="<%= id %> dropdown-item tabable" tabindex="0">
     <% } %>
-    <span class="title"><%= name %></span>
-</a>
+
+        <% if (this.model.get("isExpanded")) { %>
+        <span class="glyphicon glyphicon-minus-sign"> </span>
+        <% } else { %>
+        <span class="glyphicon glyphicon-plus-sign"> </span>
+        <% } %> 
+        <% if(isLeafFolder && isFolderSelectable) { %> <% if(isSelected) { %>
+        <span
+            class="glyphicon glyphicon-check selectall"
+            title="<%= hideAllTopicsText %>"
+        ></span>
+        <%} else {%>
+        <span
+            class="glyphicon glyphicon-unchecked selectall"
+            title="<%= showAllTopicsText %>"
+        ></span>
+        <%}%> <%}%> <% if (isSecured) { %>
+        <span
+            class="glyphicon glyphicon-lock"
+            title="<%=securedAllTopicsText%>"
+        ></span>
+        <% } %>
+        <span class="title"><%= name %></span>
+    </a>
+</div>

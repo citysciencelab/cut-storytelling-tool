@@ -1,5 +1,4 @@
 import FolderTemplate from "text-loader!./templateTree.html";
-import TabIndexUtils from "../../../core/tabIndexUtils";
 
 /**
  * @member FolderTemplate
@@ -90,7 +89,6 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
             // fixes Bug BG-750: IE11 height was negative
             $("#" + this.model.get("parentId")).css("height", "0px");
         }
-        this.setAllTabIndices();
         return this;
     },
 
@@ -128,24 +126,11 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
      * @returns {void}
      */
     setFocus: function () {
-        const htmlAElement = document.querySelector("#" + this.model.get("id") + ">a");
+        const htmlAElement = document.querySelector("#" + this.model.get("id") + ">div>a");
 
         if (htmlAElement) {
             htmlAElement.focus();
         }
-    },
-
-    /**
-     * Sets all tabindices in the whole menu tree to enable keyboard navigation.
-     * @returns {void}
-     */
-    setAllTabIndices: function () {
-        const treeRootId = TabIndexUtils.getTreeRootItemId(this.model.get("parentId")),
-            parentTabIndexElement = $("a." + treeRootId),
-            allComponentsSiblingTabIndexElements = $("#" + treeRootId + " .tabable"),
-            offset = 10;
-
-        TabIndexUtils.setAllTabIndicesFromParent(parentTabIndexElement, allComponentsSiblingTabIndexElements, offset);
     },
 
     /**
@@ -156,7 +141,6 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
         const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
-        this.setAllTabIndices();
         this.setFocus();
     },
     /**

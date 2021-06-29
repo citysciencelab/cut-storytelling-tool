@@ -1,6 +1,5 @@
 import CatalogTemplate from "text-loader!./templateCatalog.html";
 import store from "../../../../src/app-store";
-import TabIndexUtils from "../../../core/tabIndexUtils";
 
 /**
  * @member CatalogTemplate
@@ -117,7 +116,6 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
             this.model.setIsExpanded(false);
             this.model.setIsExpanded(true);
         }
-        this.setAllTabIndices();
         return this;
     },
 
@@ -164,25 +162,6 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
      */
     openHelp: function () {
         Radio.trigger("QuickHelp", "showWindowHelp", "tree");
-    },
-
-    /**
-     * Sets the tabindices of all layer catalog elements with an increment of 1000.
-     * @returns {void}
-     */
-    setAllTabIndices: function () {
-        const parentTabIndexElement = $("a." + this.model.get("parentId")),
-            allElementsOfThisComponent = $("#" + this.model.get("parentId") + ">li.layer-catalog>div>a"),
-            increment = 1000;
-
-        TabIndexUtils.setAllTabIndicesFromParentWithIncrement(parentTabIndexElement, allElementsOfThisComponent, increment);
-
-        let runningTabindex = parseInt(this.$el.find("div>a").attr("tabindex"), 10);
-
-        this.$el.find("div span .tabable, div form .tabable, div.tabable").each(function () {
-            runningTabindex = runningTabindex + 1;
-            $(this).attr("tabindex", runningTabindex);
-        });
     },
 
     /**

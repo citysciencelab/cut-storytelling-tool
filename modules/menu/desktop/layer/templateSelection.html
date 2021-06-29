@@ -1,26 +1,28 @@
 <!DOCTYPE html>
-<span class="layer-item pull-left">
-    <span class="glyphicon glyphicon-remove-circle pull-left tabable" title="<%=selectedTopicsText%>"></span>
-    <a href="#" id="<%= domId %>" class="dropdown-item layer-item pull-left tabable">
-        <% if (isVisibleInMap === true) { %>
-            <span class="glyphicon glyphicon-check pull-left" title="<%=removeTopicText%>"></span>
-        <% } else { %>
-            <span class="glyphicon glyphicon-unchecked pull-left" title="<%=showTopicText%>"></span>
+<div class="menu-row">
+    <!-- <span class="layer-item "> -->
+        <span class="glyphicon glyphicon-remove-circle tabable" tabindex="0" title="<%=selectedTopicsText%>"></span>
+        <a href="#" id="<%= domId %>" class="dropdown-item layer-item tabable" tabindex="0">
+            <% if (isVisibleInMap === true) { %>
+                <span class="glyphicon glyphicon-check" title="<%=removeTopicText%>"></span>
+            <% } else { %>
+                <span class="glyphicon glyphicon-unchecked" title="<%=showTopicText%>"></span>
+            <% } %>
+            <% if (isSecured) { %>
+                <span class="glyphicon glyphicon-lock" title="<%=securedTopicText%>"></span>
+            <% } %>
+            <span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span>
+        </a>
+    <!-- </span> -->
+    <span class="last-item">
+        <% if (styleable === true) { %>
+            <span class="glyphicon glyphicon-tint tabable" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="<%=changeClassDivisionText%>"></span>
         <% } %>
-        <% if (isSecured) { %>
-            <span class="glyphicon glyphicon-lock" title="<%=securedTopicText%>"></span>
+        <% if (typeof datasets !== "undefined" && datasets !== false) { %>
+            <span class="glyphicon glyphicon-info-sign tabable" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="<%=infosAndLegendText%>"></span>
         <% } %>
-        <span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span>
-    </a>
-</span>
-<span class="pull-right">
-    <% if (styleable === true) { %>
-        <span class="glyphicon glyphicon-tint tabable" data-toggle="tooltip" data-placement="bottom" title="<%=changeClassDivisionText%>"></span>
-    <% } %>
-    <% if (typeof datasets !== "undefined" && datasets !== false) { %>
-        <span class="glyphicon glyphicon-info-sign tabable" data-toggle="tooltip" data-placement="bottom" title="<%=infosAndLegendText%>"></span>
-    <% } %>
-    <% if (showSettings === true) { %>
-        <span class="glyphicon glyphicon-cog rotate tabable" title="<%=settingsText%>"></span>
-    <% } %>
-</span>
+        <% if (showSettings === true) { %>
+            <span class="glyphicon glyphicon-cog rotate tabable" tabindex="0" title="<%=settingsText%>"></span>
+        <% } %>
+    </span>
+</div>

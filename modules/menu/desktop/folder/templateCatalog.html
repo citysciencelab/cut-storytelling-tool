@@ -1,11 +1,11 @@
 <!DOCTYPE html>
  <% if (isExpanded === true) { %>
 <div class="header <%= id %>" >
-    <a class="<%= id %> dropdown-item tabable">
+    <a class="<%= id %> dropdown-item tabable" tabindex="0">
         <span class="glyphicon glyphicon-minus-sign"></span>
  <% } else {%>
 <div class="header <%= id %> closed" >
-    <a class="<%= id %> dropdown-item tabable">
+    <a class="<%= id %> dropdown-item tabable" tabindex="0">
         <span class="glyphicon glyphicon-plus-sign"></span>
 <% } %>
         <span class="control-label"><%= name %></span>
@@ -14,19 +14,19 @@
 <% if (id === "Baselayer") { %>
     <span class="catalog_buttons pull-right">
         <% if (this.model.get("quickHelp") === true) { %>
-            <span class="glyphicon glyphicon-question-sign tabable" data-toggle="tooltip" data-placement="bottom" title="<%= topicsHelpText%>"></span>
+            <span class="glyphicon glyphicon-question-sign tabable" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="<%= topicsHelpText%>"></span>
         <% } %>
         <% if (backgroundImage) { %>
-            <span class="glyphicon glyphicon-adjust rotate-adjust-back tabable" data-toggle="tooltip" data-placement="bottom" title="<%= mapBackgroundText%>"></span>
+            <span class="glyphicon glyphicon-adjust rotate-adjust-back tabable" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="<%= mapBackgroundText%>"></span>
         <% } %>
-        <span class="glyphicon glyphicon-pushpin rotate-pin-back tabable" data-toggle="tooltip" data-placement="bottom" title="<%= pinTopicsTreeText%>"></span>
+        <span class="glyphicon glyphicon-pushpin rotate-pin-back tabable" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="<%= pinTopicsTreeText%>"></span>
     <span>
 <% } %>
 <% if (id === "Overlayer" && treeType === "default") { %>
         <form class="form-inline pull-right">
             <div class="form-group catalog-selection">
                 <span class="control-label"><%= categoryText %></span>
-                <select class="form-control tabable">
+                <select class="form-control tabable" tabindex="0">
                     <% categories.forEach(function (cat) { %>
                         <% if (cat === category) { %>
                             <option <% print ("SELECTED") %>><%= cat %></option>
@@ -38,7 +38,7 @@
         </form>
 <% } %>
 <% if (id === "SelectedLayer" && this.model.collection.has("saveSelection")) { %>
-    <div class="layer-selection-save pull-right tabable">
+    <div class="layer-selection-save pull-right tabable" tabindex="0">
         <span><%= saveSelectionText %></span>
         <span class="glyphicon glyphicon-share"></span>
     </div>

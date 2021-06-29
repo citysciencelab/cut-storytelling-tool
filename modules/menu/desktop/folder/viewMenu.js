@@ -1,5 +1,4 @@
 import Template from "text-loader!./templateMenu.html";
-import TabIndexUtils from "../../../core/tabIndexUtils";
 
 /**
  * @member Template
@@ -50,20 +49,10 @@ const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype 
         else {
             this.$el.removeClass("open");
         }
-        this.setAllTabIndices();
 
         return this;
     },
 
-    /**
-     * Sets the tabindices of all menu entries with an increment of 10000.
-     * @returns {void}
-     */
-    setAllTabIndices: function () {
-        const allElementsOfThisComponent = $("#root>li>a");
-
-        TabIndexUtils.setAllTabIndicesWithIncrement(allElementsOfThisComponent, 10000);
-    },
     /**
      * adds only layers to the tree that support the current mode of the map
      * e.g. 2D, 3D

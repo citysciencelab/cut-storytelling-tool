@@ -1,6 +1,5 @@
 import axios from "axios";
 import store from "../../../../src/app-store";
-import TabIndexUtils from "../../../core/tabIndexUtils";
 
 /**
  * Base class for layer view that provides common functionality.
@@ -45,31 +44,6 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
             this.$el.find(".layer-settings").hide();
             this.$el.find(".layer-settings").slideDown();
         }
-        this.setAllTabIndices();
-    },
-    /**
-     * Sets all tabindices in the whole menu tree to enable keyboard navigation.
-     * @returns {void}
-     */
-    setAllTabIndices: function () {
-
-        // if we are part of a simple list (e.g. light menu) we are located under the root (id="tree") element
-        if (this.model.get("parentId") === "tree") {
-            const allComponentsSiblingTabIndexElements = $("#tree .tabable"),
-                parentTabIndexElement = $("a.tree");
-
-            TabIndexUtils.setAllTabIndicesFromParentWithIncrement(parentTabIndexElement, allComponentsSiblingTabIndexElements, 1);
-        }
-        else {
-            // ... otherwise we are part of a menu tree and must find the root node of the tree and need an offset to reserve
-            // some tabindex range for our our own actions
-            const treeRootId = TabIndexUtils.getTreeRootItemId(this.model.get("parentId")),
-                parentTabIndexElement = $("a." + treeRootId),
-                allComponentsSiblingTabIndexElements = $("#" + treeRootId + " .tabable"),
-                offset = 10;
-
-            TabIndexUtils.setAllTabIndicesFromParent(parentTabIndexElement, allComponentsSiblingTabIndexElements, offset);
-        }
     },
 
     /**
@@ -106,7 +80,7 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
         this.highlightLayerInformationIcon();
         // Navigation wird geschlossen
         this.$("div.collapse.navbar-collapse").removeClass("in");
-        // $("li.dropdown-folder.open").removeClass("open"); // TODO JG
+        // $("li.dropdown-folder.open").removeClass("open");
     },
 
     /**
@@ -190,11 +164,13 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
      * @returns {boolean} if the action has been triggered
      */
     handleKeyboardTriggeredAction: function (event, callback) {
-        if (event.which === 32 || event.which === 13) {
-            this[callback]();
-            event.stopPropagation();
-            event.preventDefault();
-            return true;
+        if (this.model.get("isOutOfRange") === false) {
+            if (event.which === 32 || event.which === 13) {
+                this[callback]();
+                event.stopPropagation();
+                event.preventDefault();
+                return true;
+            }
         }
         return false;
     },
@@ -237,7 +213,7 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
         this.$el.find(".tabable").addClass("disable-tabable");
         this.$el.find("*").removeClass("tabable");
         // no focus -> no keyboard events possible
-        // this.$el.find("*").removeAttr("tabindex");
+        this.$el.find("*").removeAttr("tabindex");
     },
 
     /**
@@ -250,11 +226,10 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
         this.$el.find("*").css("cursor", "pointer");
         this.$el.attr("title", "");
 
-        // toggle tabable class
+        // toggle tabable class / tabindex
+        this.$el.find(".disable-tabable").attr("tabindex", "0");
         this.$el.find(".disable-tabable").addClass("tabable");
         this.$el.find("*").removeClass("disable-tabable");
-        // activate tabindex
-        // this.setAllTabIndices();
     },
 
     /**
