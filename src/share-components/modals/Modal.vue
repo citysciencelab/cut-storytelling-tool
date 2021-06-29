@@ -150,8 +150,8 @@ export default {
 
         .glyphicon.glyphicon-remove {
             position:absolute;
-            right:8px;
-            top:12px;
+            right:2px;
+            top:4px;
             color:#555555;
             z-index:4;
 

@@ -72,13 +72,13 @@ export default {
     <Modal
         :title="$t('common:modules.tools.compareFeatures.title')"
         :icon="glyphicon"
-        :showModal="active"
+        :show-modal="active"
         @modalHid="close"
     >
         <Modal
             :title="$t('common:modules.tools.compareFeatures.title')"
             :icon="glyphicon"
-            :showModal="showAlert && !active"
+            :show-modal="showAlert && !active"
             @modalHid="setShowAlert(false)"
         >
             <template>
@@ -124,7 +124,7 @@ export default {
                 </div>
             </template>
         </Modal>
-        <template v-slot:header>
+        <template #header>
             <h4 class="tool-compareFeatures-modal-title">
                 {{ $t('common:modules.tools.compareFeatures.title') }}
             </h4>
@@ -164,28 +164,27 @@ export default {
                     {{ $t("common:modules.tools.compareFeatures.noFeatures.nothingSelected", {objects: $t("common:modules.tools.compareFeatures.noFeatures.objectName")}) }}
                 </p>
                 <br>
-                <p v-html="$t('common:modules.tools.compareFeatures.noFeatures.info', {iconEmptyStar, iconYellowStar, interpolation: {escapeValue: false}})">
-                </p>
+                <p v-html="$t('common:modules.tools.compareFeatures.noFeatures.info', {iconEmptyStar, iconYellowStar, interpolation: {escapeValue: false}})" />
             </div>
             <ComparisonList
                 v-if="hasFeatures && !hasMultipleLayers"
                 id="tool-compareFeatures-comparisonListSingleLayer"
-                :listOfFeatures="preparedList[Object.keys(preparedList)[0]]"
-                :maxAttributesToShow="numberOfAttributesToShow"
-                :enableMoreInfo="showMoreInfo"
-                :titleRemoveButton="$t('common:modules.tools.compareFeatures.removeFromList')"
+                :list-of-features="preparedList[Object.keys(preparedList)[0]]"
+                :max-attributes-to-show="numberOfAttributesToShow"
+                :enable-more-info="showMoreInfo"
+                :title-remove-button="$t('common:modules.tools.compareFeatures.removeFromList')"
             />
             <ComparisonList
                 v-if="active && hasMultipleLayers"
                 id="tool-compareFeatures-comparisonListMultipleLayers"
-                :listOfFeatures="preparedList[selectedLayer]"
-                :selectedLayer="selectedLayer"
-                :maxAttributesToShow="numberOfAttributesToShow"
-                :enableMoreInfo="showMoreInfo"
-                :titleRemoveButton="$t('common:modules.tools.compareFeatures.removeFromList')"
+                :list-of-features="preparedList[selectedLayer]"
+                :selected-layer="selectedLayer"
+                :max-attributes-to-show="numberOfAttributesToShow"
+                :enable-more-info="showMoreInfo"
+                :title-remove-button="$t('common:modules.tools.compareFeatures.removeFromList')"
             />
         </template>
-        <template v-slot:footer>
+        <template #footer>
             <div
                 v-if="showButtons"
                 id="tool-compareFeatures-buttons"
@@ -229,6 +228,7 @@ export default {
     h4 {
         padding-top: 10px;
         padding-left: 20px;
+        padding-right: 20px;
     }
     #tool-compareFeatures-select-container {
         padding-bottom: 50px;
