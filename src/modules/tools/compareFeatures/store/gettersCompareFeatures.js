@@ -10,7 +10,7 @@ const getters = {
      * @returns {void}
      */
     isFeatureSelected: state => ({featureId, layerId}) => {
-        if (state.layerFeatures.hasOwnProperty(layerId)) {
+        if (Object.prototype.hasOwnProperty.call(state.layerFeatures, layerId)) {
             for (const feature of state.layerFeatures[layerId]) {
                 if (feature.featureId === featureId) {
                     return true;

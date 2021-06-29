@@ -92,9 +92,6 @@ export default {
                                 <a :href="`mailto:${value}`">{{ value }}</a>
                             </p>
                             <p
-                                v-else-if="typeof value === 'string' && value.includes('<br>')"
-                            />
-                            <p
                                 v-else-if="key === 'col-1' || index === 0"
                                 class="bold"
                             >
@@ -137,9 +134,6 @@ export default {
                             <p v-else-if="isEmailAddress(value)">
                                 <a :href="`mailto:${value}`">{{ value }}</a>
                             </p>
-                            <p
-                                v-else-if="typeof value === 'string' && value.includes('<br>')"
-                            />
                             <p
                                 v-else-if="key === 'col-1' || index === 0"
                                 class="bold"
@@ -195,9 +189,6 @@ export default {
                                 <a :href="`mailto:${value}`">{{ value }}</a>
                             </p>
                             <p
-                                v-else-if="typeof value === 'string' && value.includes('<br>')"
-                            />
-                            <p
                                 v-else-if="key === 'col-1' || index === 0"
                                 class="bold"
                             >
@@ -242,9 +233,6 @@ export default {
                             <p v-else-if="isEmailAddress(value)">
                                 <a :href="`mailto:${value}`">{{ value }}</a>
                             </p>
-                            <p
-                                v-else-if="typeof value === 'string' && value.includes('<br>')"
-                            />
                             <p
                                 v-else-if="key === 'col-1' || index === 0"
                                 class="bold"
