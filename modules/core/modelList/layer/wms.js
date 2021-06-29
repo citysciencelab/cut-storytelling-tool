@@ -462,7 +462,7 @@ const WMSLayer = Layer.extend({
             .then(result => {
                 const capabilities = new WMSCapabilities().read(result);
 
-                capabilities.Capability.Layer.Layer[0].Extent = this.findTimeDimensionalExtent(new DOMParser().parseFromString(result, "text/xml").activeElement);
+                capabilities.Capability.Layer.Layer[0].Extent = this.findTimeDimensionalExtent(new DOMParser().parseFromString(result, "text/xml").firstElementChild);
                 return capabilities;
             });
     },
