@@ -55,6 +55,8 @@ describe("menu/desktop/layer/viewLight", function () {
                         return "levelUpText";
                     case "levelDownText":
                         return "levelDownText";
+                    case "isOutOfRange":
+                        return false;
                     default:
                         return this[key] || null;
                 }
@@ -109,11 +111,11 @@ describe("menu/desktop/layer/viewLight", function () {
 
             const layerView = new CustomLayerView({model: fakeModel});
 
-            expect(layerView.$el.find(".pull-right").find(".glyphicon-tint").length).to.be.equal(1);
+            expect(layerView.$el.find(".glyphicon-tint").length).to.be.equal(1);
 
             layerView.rerender();
 
-            expect(layerView.$el.find(".pull-right").find(".glyphicon-tint").length).to.be.equal(1);
+            expect(layerView.$el.find(".glyphicon-tint").length).to.be.equal(1);
         });
         it("should be hidden for other not styleable layers", function () {
 

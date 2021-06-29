@@ -112,11 +112,11 @@ describe("menu/desktop/layer/viewSelection", function () {
 
             const layerView = new CustomLayerView({model: fakeModel});
 
-            expect(layerView.$el.find(".pull-right").find(".glyphicon-tint").length).to.be.equal(1);
+            expect(layerView.$el.find(".glyphicon-tint").length).to.be.equal(1);
 
             layerView.rerender();
 
-            expect(layerView.$el.find(".pull-right").find(".glyphicon-tint").length).to.be.equal(1);
+            expect(layerView.$el.find(".glyphicon-tint").length).to.be.equal(1);
         });
 
         it("should be hidden for other not styleable layers", function () {
