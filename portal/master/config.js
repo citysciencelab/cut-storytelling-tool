@@ -1,10 +1,10 @@
 const Config = {
-    addons: ["einwohnerabfrage", "VueAddon", "TacticalMark", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable", "reisezeiten"],
+    addons: ["populationRequest", "vueAddon", "tacticalMark", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable", "reisezeiten"],
     alerting: {
-        fetchBroadcastUrl: "https://geoportal-hamburg.de/lgv-config/newsFeedPortalAlerts.json"
+        fetchBroadcastUrl: "https://geodienste.hamburg.de/lgv-config/newsFeedPortalAlerts.json"
     },
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
-    wfsImgPath: "https://geoportal-hamburg.de/lgv-config/img/",
+    wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
     zoomToFeature: {
         attribute: "flaechenid",
         wfsId: "4560",
@@ -41,22 +41,21 @@ const Config = {
     footer: {
         urls: [{
             "bezeichnung": "common:modules.footer.designation",
-            "url": "https://www.geoinfo.hamburg.de/",
+            "url": "https://geoinfo.hamburg.de/",
             "alias": "Landesbetrieb Geoinformation und Vermessung",
             "alias_mobil": "LGV"
         }],
         showVersion: true
     },
     quickHelp: {
-        imgPath: "https://geoportal-hamburg.de/lgv-config/img/"
+        imgPath: "https://geodienste.hamburg.de/lgv-config/img/"
     },
     cswId: "3",
     metaDataCatalogueId: "2",
     portalConf: "./",
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
-    restConf: "https://geoportal-hamburg.de/lgv-config/rest-services-internet.json",
-    styleConf: "https://geoportal-hamburg.de/lgv-config/style_v3.json",
-    proxyURL: "/cgi-bin/proxy.cgi",
+    restConf: "https://geodienste.hamburg.de/lgv-config/rest-services-internet.json",
+    styleConf: "https://geodienste.hamburg.de/lgv-config/style_v3.json",
     scaleLine: true,
     mouseHover: {
         numFeaturesToShow: 2,
@@ -83,17 +82,13 @@ const Config = {
         languages: {
             de: "deutsch",
             en: "englisch",
-            it: "italienisch"
+            it: "italienisch",
+            pt: "portugiesisch",
+            es: "spanisch"
         },
         fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
-    },
-    /**
-     * @deprecated to be deleted with version 3.0
-     * @property {boolean} Config.useVectorStyleBeta Flag to use the new vectorStyling module for backward compatibility
-     * @default false
-     */
-    useVectorStyleBeta: true
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"]
+    }
 };
 
 // conditional export to make config readable by e2e tests

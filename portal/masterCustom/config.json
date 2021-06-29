@@ -40,7 +40,7 @@
         },
         "elasticSearch": {
          "minChars":3,
-         "serviceId":"elastic_test",
+         "serviceId":"elastic",
          "type": "GET",
          "payload": {
             "id":"query",
@@ -201,7 +201,7 @@
                  "glyphicon":"glyphicon-search",
                  "serviceId":"6",
                  "storedQueryID":"Flurstueck",
-                 "configJSON": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
+                 "configJSON": "https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json",
                  "parcelDenominator":false
               },
               "measure":{
@@ -224,8 +224,7 @@
                  "mapfishServiceId":"mapfish_qs",
                  "printAppId":"master",
                  "filename":"Ausdruck",
-                 "title":"Mein Titel",
-                 "version":"mapfish_print_3"
+                 "title":"Mein Titel"
               },
               "searchByCoord":{
                "name": "translate#common:menu.tools.searchByCoord",
@@ -239,13 +238,6 @@
                  "name":"Erweiterter Filter",
                  "glyphicon":"glyphicon-filter",
                  "deactivateGFI":false
-              },
-              "routing":{
-                 "name": "translate#common:menu.tools.routing",
-                 "glyphicon":"glyphicon-road",
-                 "viomRoutingID":"7",
-                 "bkgSuggestID":"4",
-                 "bkgGeosearchID":"5"
               },
               "draw":{
                 "name":"translate#common:menu.tools.draw",
@@ -326,10 +318,22 @@
           "showCollapseAllButton": true
         },
         "contact":{
-         "name": "translate#common:menu.contact",
-           "glyphicon":"glyphicon-envelope",
-           "serviceID":"80001",
-           "includeSystemInfo":true
+          "name": "translate#common:menu.contact",
+          "glyphicon":"glyphicon-envelope",
+          "serviceId":"80001",
+          "includeSystemInfo":true,
+          "from": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+            }
+          ],
+          "to": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+            }
+          ]
         },
         "info":{
          "name": "translate#common:menu.info",
@@ -344,7 +348,7 @@
                  {
                   "name": "translate#common:modules.tools.info.home.name",
                     "glyphicon": "glyphicon-globe",
-                    "url": "translate#common:modules.tools.info.home.url"
+                    "url": "https://www.hamburg.de/"
                  }
               ]
            }
@@ -727,8 +731,7 @@
                        "425",
                        "424"
                     ],
-                    "name":"Bauschutzbereiche Verkehrsflughafen Hamburg (§ 12 LuftVG)",
-                    "legendURL":"https:/geoportal-hamburg.de/legende/bauschutz_flughafen_legende.png"
+                    "name":"Bauschutzbereiche Verkehrsflughafen Hamburg (§ 12 LuftVG)"
                  }
               ]
            },

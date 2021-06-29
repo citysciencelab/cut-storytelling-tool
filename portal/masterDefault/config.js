@@ -1,7 +1,7 @@
 const Config = {
-    addons: ["continuousCountingBike", "dataTable", "solaratlas", "trinkwasser", "verkehrsstaerken"],
+    addons: ["populationRequest", "trinkwasser", "verkehrsstaerken", "continuousCountingBike", "dataTable", "trafficCount", "solaratlas"],
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
-    wfsImgPath: "https://geoportal-hamburg.de/lgv-config/img/",
+    wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
     metadata: {
         useProxy: [
             "https://metaver.de/csw"
@@ -76,7 +76,7 @@ const Config = {
         ]
     },
     quickHelp: {
-        imgPath: "https://geoportal-hamburg.de/lgv-config/img/"
+        imgPath: "https://geodienste.hamburg.de/lgv-config/img/"
     },
     allowParametricURL: true,
     view: {
@@ -93,10 +93,10 @@ const Config = {
         ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
     ],
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
-    restConf: "https://geoportal-hamburg.de/lgv-config/rest-services-internet.json",
-    styleConf: "https://geoportal-hamburg.de/lgv-config/style_v3.json",
+    restConf: "https://geodienste.hamburg.de/lgv-config/rest-services-internet.json",
+    styleConf: "https://geodienste.hamburg.de/lgv-config/style_v3.json",
     isMenubarVisible: true,
-    gemarkungen: "https://geoportal-hamburg.de/lgv-config/gemarkung.json",
+    gemarkungen: "https://geodienste.hamburg.de/lgv-config/gemarkung.json",
     obliqueMap: true,
     cesiumParameter: {
         tileCacheSize: 20,
@@ -116,18 +116,14 @@ const Config = {
         languages: {
             de: "deutsch",
             en: "englisch",
-            it: "italienisch"
+            it: "italienisch",
+            pt: "portugiesisch",
+            es: "spanisch"
         },
         fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"],
         loadPath: "/locales/{{lng}}/{{ns}}.json"
-    },
-    /**
-     * @deprecated to be deleted with version 3.0
-     * @property {boolean} Config.useVectorStyleBeta Flag to use the new vectorStyling module for backward compatibility
-     * @default false
-     */
-    useVectorStyleBeta: true
+    }
 };
 
 // conditional export to make config readable by e2e tests
