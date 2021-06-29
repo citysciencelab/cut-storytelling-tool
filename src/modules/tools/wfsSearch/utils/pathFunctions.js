@@ -34,7 +34,7 @@ function buildPath (optionsObject, currentOption) {
  * @returns {[]} If found, return the values as an array, otherwise return an empty array.
  */
 function getOptions (path, source) {
-    const selectableOptions = idx(path, source);
+    const selectableOptions = idx(source, path);
 
     if (selectableOptions && typeof selectableOptions[0] === "object") {
         return prepareOptionsWithId(selectableOptions);
