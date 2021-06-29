@@ -44,7 +44,7 @@ export default {
         getPhoneNumberAsWebLink,
         isEmailAddress,
         removeVerticalBar (value) {
-            const newValue = value.replaceAll("|", ", ");
+            const newValue = value.replaceAll("|", "<br>");
 
             return newValue;
         }
@@ -93,15 +93,17 @@ export default {
                             </p>
                             <p
                                 v-else-if="typeof value === 'string' && value.includes('<br>')"
-                            ></p>
+                            />
                             <p
                                 v-else-if="key === 'col-1' || index === 0"
                                 class="bold"
                             >
                                 {{ beautifyKey($t(value)) }}
                             </p>
-                            <p v-else-if="typeof value === 'string' && value.includes('|')">
-                                {{ removeVerticalBar(value) }}
+                            <p
+                                v-else-if="typeof value === 'string' && value.includes('|')"
+                            >
+                                <span v-html="removeVerticalBar(value)" />
                             </p>
                             <p v-else>
                                 {{ value }}
@@ -137,15 +139,17 @@ export default {
                             </p>
                             <p
                                 v-else-if="typeof value === 'string' && value.includes('<br>')"
-                            ></p>
+                            />
                             <p
                                 v-else-if="key === 'col-1' || index === 0"
                                 class="bold"
                             >
                                 {{ beautifyKey($t(value)) }}
                             </p>
-                            <p v-else-if="typeof value === 'string' && value.includes('|')">
-                                {{ removeVerticalBar(value) }}
+                            <p
+                                v-else-if="typeof value === 'string' && value.includes('|')"
+                            >
+                                <span v-html="removeVerticalBar(value)" />
                             </p>
                             <p v-else>
                                 {{ value }}
@@ -192,15 +196,17 @@ export default {
                             </p>
                             <p
                                 v-else-if="typeof value === 'string' && value.includes('<br>')"
-                            ></p>
+                            />
                             <p
                                 v-else-if="key === 'col-1' || index === 0"
                                 class="bold"
                             >
                                 {{ beautifyKey($t(value)) }}
                             </p>
-                            <p v-else-if="typeof value === 'string' && value.includes('|')">
-                                {{ removeVerticalBar(value) }}
+                            <p
+                                v-else-if="typeof value === 'string' && value.includes('|')"
+                            >
+                                <span v-html="removeVerticalBar(value)" />
                             </p>
                             <p v-else>
                                 {{ value }}
@@ -238,15 +244,17 @@ export default {
                             </p>
                             <p
                                 v-else-if="typeof value === 'string' && value.includes('<br>')"
-                            ></p>
+                            />
                             <p
                                 v-else-if="key === 'col-1' || index === 0"
                                 class="bold"
                             >
                                 {{ beautifyKey($t(value)) }}
                             </p>
-                            <p v-else-if="typeof value === 'string' && value.includes('|')">
-                                {{ removeVerticalBar(value) }}
+                            <p
+                                v-else-if="typeof value === 'string' && value.includes('|')"
+                            >
+                                <span v-html="removeVerticalBar(value)" />
                             </p>
                             <p v-else>
                                 {{ value }}
