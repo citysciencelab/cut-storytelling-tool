@@ -1,6 +1,13 @@
 import drawLayer from "../utils/drawLayer";
 
 const actions = {
+    windowWidthChanged ({commit, dispatch, state, getters}) {
+        commit("setWindowWidth");
+
+        if (!getters.minWidth && state.layerSwiper.active) {
+            dispatch("toggleSwiper", state.timeSlider.currentLayerId + state.layerAppendix);
+        }
+    },
     /**
      * Toggles the LayerSwiper.
      * If the LayerSwiper is deactivated, the second layer is deactivated and removed from the ModelList.

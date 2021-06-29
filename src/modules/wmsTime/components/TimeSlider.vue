@@ -85,9 +85,10 @@ export default {
             <button
                 :id="'timeSlider-activate-layerSwiper-' + layerId"
                 class="btn btn-sm btn-lgv-grey"
+                :disabled="!minWidth"
                 @click="toggleSwiper(layerId)"
             >
-                {{ $t(`common:modules.wmsTime.timeSlider.buttons.${layerSwiper.active ? "deactivateL" : "l"}ayerSwiper`) }}
+                {{ $t(`common:modules.wmsTime.timeSlider.buttons.${minWidth && layerSwiper.active ? "deactivateL" : "l"}ayerSwiper`) }}
             </button>
         </div>
         <div class="timeSlider-innerWrapper-interactions">

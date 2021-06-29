@@ -4,6 +4,9 @@ import findCurrentTimeSliderObject from "../utils/findCurrentTimeSliderObject";
 
 const mutations = {
     ...generateSimpleMutations(initialState),
+    setWindowWidth (state) {
+        state.windowWith = window.innerWidth;
+    },
     // TimeSlider mutations
     addTimeSliderObject (state, object) {
         state.timeSlider.objects.push(object);

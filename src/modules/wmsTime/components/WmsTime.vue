@@ -1,5 +1,5 @@
 <script>
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import LayerSwiper from "./LayerSwiper.vue";
 import TimeSlider from "./TimeSlider.vue";
 
@@ -9,20 +9,18 @@ export default {
         LayerSwiper,
         TimeSlider
     },
-    data: () => ({width: window.innerWidth, mobileWidth: 800}),
+    data: () => ({width: window.innerWidth}),
     computed: {
-        ...mapGetters("WmsTime", ["currentTimeSliderObject", "layerAppendix", "layerSwiper", "timeSlider"]),
-        minWidth () {
-            return this.width > this.mobileWidth;
-        }
+        ...mapGetters("WmsTime", ["currentTimeSliderObject", "layerAppendix", "layerSwiper", "minWidth", "timeSlider"])
     },
     created () {
-        window.addEventListener("resize", this.innerWidthChanged);
+        window.addEventListener("resize", this.windowWidthChanged);
+    },
+    beforeDestroy () {
+        window.removeEventListener("resize", this.windowWidthChanged);
     },
     methods: {
-        innerWidthChanged () {
-            this.width = window.innerWidth;
-        }
+        ...mapActions("WmsTime", ["windowWidthChanged"])
     }
 };
 </script>
