@@ -30,6 +30,7 @@
         "tools": {
             "name": "Strumenti",
             "compareFeatures": "Lista di confronto",
+            "parcelSearch": "Ricerca parcella catastale",
             "print": "Stampa mappa",
             "measure": "Misura distanza / area",
             "coord": "Richiedi coordinate",
@@ -50,7 +51,6 @@
             "scaleSwitcher": "Cambia scala",
             "selectFeatures": "Seleziona",
             "styleVt": "Style VT",
-            "parcelSearch": "Ricerca pacchi",
             "wfsSearch": "Ricerca WFS"
         },
         "contact": "Contatti",
@@ -401,6 +401,20 @@
                 },
                 "successfullyImportedLabel": "Importato con successo:",
                 "title": "Importa file"
+            },
+            "parcelSearch": {
+              "wrongConfig": "Configurazione non valida o incompleta",
+              "districtsLoadFailed": "I quartieri del governo non potevano essere caricati",
+              "wrongConfigParcelsearch": "La configurazione della ricerca dei pacchi non è corretta. Si prega di contattare il supporto.",
+              "parcelSearchImpossible": "Interrogazione attualmente impossibile!",
+              "tryAgainLater": "Si prega di provare più tardi.",
+              "parcelNotFound": "Nessun pacco trovato con il numero {{flstNr}}.",
+              "district": "Quartiere",
+              "choose": "seleziona quartiere",
+              "parcelNumber": "Numero del pacco",
+              "plot": "Trama",
+              "parcelNumberPlaceholder": "Inserire numero",
+              "generateReport": "Genera rapporto"
             },
             "selectFeatures": {
               "zoomToFeature": "Zoom su questa voce",
