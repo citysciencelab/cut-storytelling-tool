@@ -19,20 +19,21 @@ export default {
     computed: {
         /**
          * Calculates initial width of sidebar or window.
+         * Returns nothing if no number is set so that it can be overwritten
          * @returns {String}    Width style in px
          */
         initialToolWidth () {
             let pixelWidth = parseFloat(this.initialWidth, 10);
 
             if (pixelWidth < 0 || isNaN(pixelWidth)) {
-                return "auto";
+                return "";
             }
 
             if (pixelWidth <= 1) {
                 pixelWidth = this.width * window.innerWidth;
             }
 
-            return Math.floor(pixelWidth) + "px";
+            return "width: " + Math.floor(pixelWidth) + "px";
         }
     },
     methods: {
@@ -46,13 +47,13 @@ export default {
 <template>
     <div
         class="tool-window-vue"
-        :style="{width: initialToolWidth}"
+        :style="{initialToolWidth}"
     >
         <div class="tool-window-heading">
             <slot name="leftOfTitle" />
 
             <BasicDragHandle
-                targetSel=".tool-window-vue"
+                target-sel=".tool-window-vue"
                 class="heading-element flex-grow"
             >
                 <p class="tool-window-heading-title">
@@ -78,10 +79,10 @@ export default {
             v-for="hPos in ['tl', 'tr', 'br', 'bl']"
             :id="'basic-resize-handle-' + hPos"
             :key="hPos"
-            :hPos="hPos"
-            targetSel=".tool-window-vue"
-            :minW="200"
-            :minH="100"
+            :h-pos="hPos"
+            target-sel=".tool-window-vue"
+            :min-w="200"
+            :min-h="100"
         />
     </div>
 </template>
@@ -102,7 +103,6 @@ export default {
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
         z-index: 999;
         max-height:72vh;
-        overflow: auto;
         min-width: 280px;
 
         .basic-resize-handle {

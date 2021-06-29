@@ -58,7 +58,7 @@ export default {
                     <span
                         :class="glyphicon"
                         class="glyphicon hidden-sm"
-                    ></span>
+                    />
                     <span class="menuitem">{{ $t(name) }}</span>
                 </a>
             </li>
@@ -78,7 +78,7 @@ export default {
                     <span
                         :class="glyphicon"
                         class="glyphicon hidden-sm"
-                    ></span>
+                    />
                     <span class="title">{{ $t(name) }}</span>
                 </div>
             </li>
@@ -92,7 +92,7 @@ export default {
             <span
                 :class="glyphicon"
                 class="glyphicon hidden-sm"
-            ></span>
+            />
             <span class="menuitem">{{ $t(name) }}</span>
         </a>
     </div>

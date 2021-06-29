@@ -6,6 +6,7 @@ import Footer from "./modules/footer/components/Footer.vue";
 import LegendWindow from "./modules/legend/components/LegendWindow.vue";
 import MapMarker from "./modules/mapMarker/components/MapMarker.vue";
 import ToolManager from "./modules/tools/ToolManager.vue";
+import LayerInformation from "./modules/layerInformation/components/LayerInformation.vue";
 import {mapState} from "vuex";
 
 export default {
@@ -17,7 +18,8 @@ export default {
         Alerting,
         LegendWindow,
         MapMarker,
-        Footer
+        Footer,
+        LayerInformation
     },
     computed: {
         ...mapState([
@@ -43,10 +45,11 @@ export default {
                 <ControlBar class="controls" />
                 <Footer />
                 <MapMarker />
+                <LayerInformation />
             </div>
             <ToolManager
                 v-if="configJson"
-                :showInSidebar="false"
+                :show-in-sidebar="false"
             />
         </div>
 
@@ -54,7 +57,7 @@ export default {
             <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
             <ToolManager
                 v-if="configJson"
-                :showInSidebar="true"
+                :show-in-sidebar="true"
             />
         </div>
 

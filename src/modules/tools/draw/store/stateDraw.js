@@ -86,6 +86,8 @@ const symbol = {
      * @property {String} writeTextSettings.font The font used for the text interaction.
      * @property {String[]} writeTextSettings.color The color of the drawn feature represented as an array.
      * @property {Number} writeTextSettings.opacity The opacity of the color of the drawn features. NOTE: The values of the transparencySettings are opacity values.
+     * @property {Number} initialWidth Size of the sidebar when opening.
+     * @property {Number} initialWidthMobile Mobile size of the sidebar when opening.
      */
     state = {
         active: false,
@@ -202,7 +204,9 @@ const symbol = {
             font: "Arial",
             color: [55, 126, 184, 1],
             opacity: 1
-        }
+        },
+        initialWidth: 500,
+        initialWidthMobile: 300
     };
 
 export default state;

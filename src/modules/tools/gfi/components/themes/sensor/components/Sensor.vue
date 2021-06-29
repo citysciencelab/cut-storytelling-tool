@@ -57,7 +57,7 @@ export default {
             };
 
             // "useConfigName" is set in the preparser, should be removed, with the refactoring of the core
-            if (header.hasOwnProperty("useConfigName")) {
+            if (header?.useConfigName) {
                 delete this.header.useConfigName;
             }
 
@@ -100,7 +100,7 @@ export default {
                     filterDate = this.createFilterDate(this.periodLength, this.periodUnit),
                     filterDataStream = this.createFilterDataStream(this.feature.getProperties()?.dataStreamId),
                     requestQuery = `${url}/v${version}/Datastreams?$select=@iot.id&$expand=Observations`
-                        + `($select=result,phenomenonTime;$orderby=phenomenonTime desc;$filter=phenomenonTime gt ${filterDate})`
+                        + `($select=result,phenomenonTime;$orderby=phenomenonTime%20desc;$filter=phenomenonTime%20gt%20${filterDate})`
                         + `&$filter=${filterDataStream}`;
 
                 this.fetchObservations(requestQuery);
@@ -132,10 +132,10 @@ export default {
 
             dataStreamIds.forEach((id, index) => {
                 if (index === 0) {
-                    dataStreamFilter = `@iot.id eq ${id}`;
+                    dataStreamFilter = `@iot.id%20eq%20${id}`;
                 }
                 else {
-                    dataStreamFilter = `${dataStreamFilter} or @iot.id eq ${id}`;
+                    dataStreamFilter = `${dataStreamFilter}%20or%20@iot.id%20eq%20${id}`;
                 }
             });
 
@@ -149,14 +149,14 @@ export default {
          * @returns {void}
          */
         fetchObservations: function (requestQuery) {
-            const loadedDataStreamIndices = [];
-            let historicalObservations = [];
+            const loadedDataStreamIndices = [],
+                historicalObservations = [];
 
             axios.get(requestQuery)
                 .then(response => {
                     response.data.value.forEach((result, index) => {
-                        historicalObservations = historicalObservations.concat(result);
-                        if (result.hasOwnProperty("Observations@iot.nextLink")) {
+                        historicalObservations.push(result);
+                        if (Object.prototype.hasOwnProperty.call(result, "Observations@iot.nextLink")) {
                             this.fetchNextLinks(result["Observations@iot.nextLink"], index, historicalObservations, loadedDataStreamIndices, response.data.value.length);
                         }
                     });
@@ -176,10 +176,10 @@ export default {
         fetchNextLinks: function (requestQuery, index, historicalObservations, loadedDataStreamIndices, numberOfDataStreams) {
             axios.get(requestQuery)
                 .then(response => {
-                    if (response?.data.hasOwnProperty("value")) {
+                    if (response?.data?.value) {
                         historicalObservations[index].Observations = historicalObservations[index].Observations.concat(response.data.value);
                     }
-                    if (response?.data.hasOwnProperty("@iot.nextLink")) {
+                    if (Object.prototype.hasOwnProperty.call(response?.data, "@iot.nextLink")) {
                         this.fetchNextLinks(response.data["@iot.nextLink"], index, historicalObservations, loadedDataStreamIndices, numberOfDataStreams);
                     }
                     else {
@@ -295,12 +295,12 @@ export default {
                 :key="`sensorCharts-barChartComponent-${key}`"
                 :class="getTabPaneClasses(key)"
                 :show="isActiveTab(key)"
-                :chartValue="typeof value === 'object' ? value : {title: value}"
-                :targetValue="typeof key === 'number' ? value : key"
-                :chartsParams="gfiParams.charts"
-                :periodLength="periodLength"
-                :periodUnit="periodUnit"
-                :processedHistoricalDataByWeekday="processedHistoricalDataByWeekday"
+                :chart-value="typeof value === 'object' ? value : {title: value}"
+                :target-value="typeof key === 'number' ? value : key"
+                :charts-params="gfiParams.charts"
+                :period-length="periodLength"
+                :period-unit="periodUnit"
+                :processed-historical-data-by-weekday="processedHistoricalDataByWeekday"
             />
         </div>
     </div>
@@ -314,7 +314,8 @@ export default {
     }
     .gfi-theme-sensor {
         width: 65vh;
-        height: 45vh;
+        height: 47vh;
         overflow: auto;
+        padding: 15px 0 0 0;
     }
 </style>

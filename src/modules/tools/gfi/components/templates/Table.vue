@@ -76,6 +76,20 @@ export default {
             this.$el.style.webkitTransformOrigin = transformOrigin;
             this.$el.style.msTransformOrigin = transformOrigin;
             this.$el.style.mozTransformOrigin = transformOrigin;
+        },
+
+        /**
+         * In case they key exists, returns its translation. In case the key doesn't exist returns the key.
+         * @param {String} key the key to translate
+         * @param {Object} [options=null] for interpolation, formating and plurals
+         * @returns {String} the translation or the key itself
+         */
+        translate (key, options = null) {
+            if (i18next.exists(key)) {
+                return this.$t(key, options);
+            }
+
+            return key;
         }
     }
 };
@@ -84,20 +98,19 @@ export default {
 <template>
     <ToolWindow
         class="gfi-detached-table rotate0"
-        :initialWidth="360"
+        :initial-width="360"
         @close="close"
     >
-        <template v-slot:rightOfTitle>
+        <template #rightOfTitle>
             <span
                 class="icon-turnarticle glyphicon"
                 @click="rotate"
-            >
-            </span>
+            />
         </template>
-        <template v-slot:title>
-            <span>{{ $t(title) }}</span>
+        <template #title>
+            <span>{{ translate(title) }}</span>
         </template>
-        <template v-slot:body>
+        <template #body>
             <div class="body">
                 <component
                     :is="theme"

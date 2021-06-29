@@ -19,7 +19,6 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             "fileImport",
             "draw",
             "featureLister",
-            "animation",
             "addWMS",
             "shadow"
         ],
@@ -41,7 +40,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @property {String[]} categories=["Opendata", "Inspire", "Behörde"] categories for Fachdaten in DefaultTree
      * @property {String} category="Opendata" selected category for Fachdaten in DefaultTree
      * @property {Number} selectionIDX=-1 Index of the last inserted layers. Required for sorting/moving (only for the treeType lightTree)
-     * @property {String[]} onlyDesktopTools=["measure", "print", "kmlimport" or "fileImport", "draw", "featureLister", "animation", "addWMS"]
+     * @property {String[]} onlyDesktopTools=["measure", "print", "kmlimport" or "fileImport", "draw", "featureLister", "addWMS"]
      * @listens Core.ConfigLoader#RadioRequestParserGetItemByAttributes
      * @listens Core.ConfigLoader#RadioRequestParserGetItemsByAttributes
      * @listens Core.ConfigLoader#RadioRequestParserGetTreeType
@@ -95,7 +94,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             },
             "getInitVisibBaselayer": this.getInitVisibBaselayer,
             "getOriginId": function (layerId) {
-                if (this.get("extendedLayerIdAssoc").hasOwnProperty(layerId)) {
+                if (Object.prototype.hasOwnProperty.call(this.get("extendedLayerIdAssoc"), layerId)) {
                     return this.get("extendedLayerIdAssoc")[layerId];
                 }
                 return layerId;
@@ -184,7 +183,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 ansicht,
                 downloadItem;
 
-            if (value.hasOwnProperty("children") || key === "tree") {
+            if (value?.children || key === "tree") {
                 item = {
                     type: "folder",
                     parentId: parentId,
@@ -205,7 +204,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                     this.addItem(toolitem);
                 });
             }
-            else if (value.hasOwnProperty("type") && value.type === "viewpoint") {
+            else if (value?.type && value.type === "viewpoint") {
                 ansicht = Object.assign(value, {parentId: parentId, id: Radio.request("Util", "uniqueId", key + "_")});
                 this.addItem(ansicht);
             }
@@ -213,7 +212,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 toolitem = Object.assign(value, {type: "tool", parentId: parentId, id: key});
 
                 // wenn tool noch kein "onlyDesktop" aus der Config bekommen hat
-                if (!toolitem.hasOwnProperty("onlyDesktop")) {
+                if (!toolitem?.onlyDesktop) {
                     // wenn tool in onlyDesktopTools enthalten ist, setze onlyDesktop auf true
                     if (this.get("onlyDesktopTools").indexOf(toolitem.id) !== -1) {
                         toolitem = Object.assign(toolitem, {onlyDesktop: true});
@@ -526,7 +525,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                         $("#Overlayer").parent().after($("#ExternalLayer").parent());
                     }
                     if (!this.getItemByAttributes({id: parentId})) {
-                        this.addFolder("Fachthema", parentId, "ExternalLayer", 1, true, "common:tree.subjectData");
+                        this.addFolder("Fachthema", parentId, "ExternalLayer", 1, false, "common:tree.subjectData");
                     }
                 }
                 gdiLayer = Object.assign(gdiLayer, {
@@ -642,16 +641,16 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     addTreeMenuItems: function (treeType) {
-        const menu = this.get("portalConfig").hasOwnProperty("menu") ? this.get("portalConfig").menu : undefined,
-            tree = menu !== undefined && menu.hasOwnProperty("tree") ? menu.tree : undefined,
-            isAlwaysExpandedList = tree !== undefined && tree.hasOwnProperty("isAlwaysExpanded") ? tree.isAlwaysExpanded : [],
+        const menu = this.get("portalConfig")?.menu ? this.get("portalConfig").menu : undefined,
+            tree = menu !== undefined && menu?.tree ? menu.tree : undefined,
+            isAlwaysExpandedList = tree !== undefined && tree?.isAlwaysExpanded ? tree.isAlwaysExpanded : [],
             isMobile = Radio.request("Util", "isViewMobile"),
             baseLayers = this.get("baselayer"),
             overLayers = this.get("overlayer"),
             overLayers3d = this.get("overlayer_3d"),
-            baseLayersName = baseLayers && baseLayers.hasOwnProperty("name") ? baseLayers.name : null,
-            overLayersName = overLayers && overLayers.hasOwnProperty("name") ? overLayers.name : null,
-            overLayers3DName = overLayers3d && overLayers3d.hasOwnProperty("name") ? overLayers3d.name : null,
+            baseLayersName = baseLayers && baseLayers?.name ? baseLayers.name : null,
+            overLayersName = overLayers && overLayers?.name ? overLayers.name : null,
+            overLayers3DName = overLayers3d && overLayers3d?.name ? overLayers3d.name : null,
             isQuickHelpSet = Radio.request("QuickHelp", "isSet"),
             baseLayersDefaultKey = "common:tree.backgroundMaps",
             overLayersDefaultKey = "common:tree.subjectData";

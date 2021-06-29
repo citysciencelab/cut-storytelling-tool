@@ -1,6 +1,7 @@
 <script>
 import ChartJs from "chart.js";
 import deepAssign from "../../../utils/deepAssign.js";
+import thousandsSeparator from "../../../utils/thousandsSeparator.js";
 
 export default {
     name: "Linechart",
@@ -12,9 +13,7 @@ export default {
         givenOptions: {
             type: Object,
             required: false,
-            default: function () {
-                return {};
-            }
+            default: null
         },
         /**
          * the data for the linechart to hand over to chartJS data attribute
@@ -29,9 +28,26 @@ export default {
         return {
             defaultOptions: {
                 responsive: true,
-                plugins: {
-                    legend: {
-                        position: "top"
+                legend: {
+                    align: "start"
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            precision: 0,
+                            beginAtZero: true,
+                            callback: (value) => {
+                                return thousandsSeparator(value);
+                            }
+                        }
+                    }]
+                },
+                tooltips: {
+                    callbacks: {
+                        // use label callback to return the desired label
+                        label: (tooltipItem, data) => {
+                            return data.datasets[tooltipItem.datasetIndex].label + ": " + thousandsSeparator(tooltipItem.value);
+                        }
                     }
                 }
             },
@@ -69,7 +85,7 @@ export default {
                 config = {
                     type: "line",
                     data: data,
-                    options: this.getChartJsOptions(this.givenOptions, this.defaultOptions)
+                    options: this.getChartJsOptions(this.defaultOptions, this.givenOptions)
                 };
 
             if (this.chart instanceof ChartJs) {
@@ -80,11 +96,11 @@ export default {
         },
         /**
          * replace default options with given options on hand deepAssign method and returns the options for chart js
-         * @param {Object} givenOptions an object with given options following chartJS options (see https://www.chartjs.org/docs/latest/general/options.html)
          * @param {Object} defaultOptions an object with the default options following chartJS options (see https://www.chartjs.org/docs/latest/general/options.html)
+         * @param {Object} givenOptions an object with given options following chartJS options (see https://www.chartjs.org/docs/latest/general/options.html)
          * @returns {Object} an object to use as options for chartjs
          */
-        getChartJsOptions (givenOptions, defaultOptions) {
+        getChartJsOptions (defaultOptions, givenOptions) {
             if (typeof defaultOptions !== "object" || defaultOptions === null) {
                 return typeof givenOptions === "object" && givenOptions !== null ? givenOptions : {};
             }

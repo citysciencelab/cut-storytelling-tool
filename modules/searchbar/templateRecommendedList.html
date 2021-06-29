@@ -7,23 +7,30 @@
             <% } else { %>
                 <img src="<%= hit.imageSrc %>">
             <% } %>
-            <span class="list-group-item-name"><%= hit.shortName === undefined ? hit.name : hit.shortName %></span>
+            <span class="list-group-item-name line-break"><%= hit.shortName === undefined ? hit.name : hit.shortName %></span>
             <small class="list-group-item-theme"><%= hit.additionalInfo === undefined ? hit.type: hit.additionalInfo %></small>
         </p>
     </li>
 <% }); %>
 <% if (uiStyle === "TABLE") { %>
+
     <% if (hitList.length >= recommendedListLength && hitList.length !== 0) { %>
         <li class="list-group-item results"><div><span><%= showAllResultsText %></span><span class="glyphicon glyphicon-play-circle"></span></div></li>
+
         <div class="search-funnel"></div>
+
         <div class="search-right-funnel-corner"></div>
     <% } else if (hitList.length < recommendedListLength && hitList.length !== 0) { %>
+
         <li class="list-group-item results"></li>
+
         <div class="search-funnel"></div>
+
         <div class="search-right-funnel-corner"></div>
     <% } %>
 <% } else { %>
     <% if (hitList.length >= recommendedListLength) { %>
+
          <li class="list-group-item results"><div><span><%= showAllResultsText %></span><span class="glyphicon glyphicon-play-circle"></span></div></li>
     <% } %>
 <% } %>

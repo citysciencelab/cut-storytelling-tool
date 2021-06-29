@@ -455,7 +455,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
         states = states.split(" | ");
 
         states.forEach(function (state) {
-            if (scalingObject.hasOwnProperty(state)) {
+            if (Object.prototype.hasOwnProperty.call(scalingObject, state)) {
                 scalingObject[state] = scalingObject[state] + 1;
             }
             else {

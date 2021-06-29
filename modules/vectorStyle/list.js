@@ -13,7 +13,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         return new StyleModel(attrs, options);
     },
     url: function () {
-        if (!Config.hasOwnProperty("styleConf") || Config.styleConf === "") {
+        if (!Object.prototype.hasOwnProperty.call(Config, "styleConf") || Config.styleConf === "") {
             return "keine Style JSON";
         }
         return Config.styleConf;
@@ -40,7 +40,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
             "getDefaultStyle": this.model.getDefaultStyle
         }, this);
 
-        if (Config.hasOwnProperty("styleConf") && Config.styleConf !== "") {
+        if (Object.prototype.hasOwnProperty.call(Config, "styleConf") && Config.styleConf !== "") {
             this.fetchStyles(Config.styleConf);
         }
     },
@@ -155,13 +155,13 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         if (layers) {
             layers.forEach(layer => {
                 if (layer.typ === "WFS" || layer.typ === "GeoJSON" || layer.typ === "SensorThings" || layer.typ === "TileSet3D") {
-                    if (layer.hasOwnProperty("styleId")) {
+                    if (layer?.styleId) {
                         styleIds.push(layer.styleId);
                     }
                 }
                 else if (layer.typ === "GROUP") {
                     layer.children.forEach(child => {
-                        if (child.hasOwnProperty("styleId")) {
+                        if (child?.styleId) {
                             styleIds.push(child.styleId);
                         }
                     });
@@ -181,7 +181,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
 
         if (tools) {
             tools.forEach(tool => {
-                if (tool.hasOwnProperty("styleId")) {
+                if (tool?.styleId) {
                     if (Array.isArray(tool.styleId)) {
                         tool.styleId.forEach(styleIdInArray => {
                             if (styleIdInArray instanceof Object) {
@@ -208,7 +208,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
     getStyleIdForZoomToFeature: function () {
         let styleId;
 
-        if (Config && Config.hasOwnProperty("zoomToFeature") && Config.zoomToFeature.hasOwnProperty("styleId")) {
+        if (Object.prototype.hasOwnProperty.call(Config, "zoomToFeature") && Object.prototype.hasOwnProperty.call(Config.zoomToFeature, "styleId")) {
             styleId = Config.zoomToFeature.styleId;
         }
         return styleId;

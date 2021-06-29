@@ -1,5 +1,6 @@
 const {until, By} = require("selenium-webdriver"),
     {basicAuth, getResolution, isInitalLoadingFinished} = require("./scripts");
+let lastDriver;
 
 /**
  * Activates 3D mode for opened Masterportal.
@@ -116,17 +117,44 @@ async function getUnnavigatedDriver (builder, resolution) {
  * @param {String} url to get
  * @param {String} resolution formatted as "AxB" with A, B integers
  * @param {String} mode additional instance preparation before tests can be executed
+ * @param {Boolean} [load=true] if true, then load url
  * @returns {selenium.webdriver.Driver} driver instance
  */
-async function initDriver (builder, url, resolution, mode) {
+async function initDriver (builder, url, resolution, mode, load = true) {
     const driver = await getUnnavigatedDriver(builder, resolution);
 
-    await loadUrl(driver, url, mode);
-    return driver;
+    if (load) {
+        await loadUrl(driver, url, mode);
+    }
+
+    lastDriver = driver;
+
+    return lastDriver;
 }
 
+/**
+ * Quits the driver
+ * @returns {void}
+ */
+async function quitDriver () {
+    if (lastDriver) {
+        await lastDriver.quit();
+    }
+}
+
+/**
+ * Gets the driver
+ * @returns {selenium.webdriver.Driver} driver instance
+ */
+async function getDriver () {
+    return lastDriver;
+}
+
+
 module.exports = {
+    getDriver,
     getUnnavigatedDriver,
     initDriver,
-    loadUrl
+    loadUrl,
+    quitDriver
 };

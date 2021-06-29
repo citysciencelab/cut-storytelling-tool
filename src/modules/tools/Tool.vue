@@ -38,6 +38,11 @@ export default {
             default: -1,
             required: false
         },
+        initialWidthMobile: {
+            type: Number,
+            default: -1,
+            required: false
+        },
         deactivateGFI: {
             type: Boolean,
             default: true,
@@ -52,21 +57,14 @@ export default {
     computed: {
         ...mapGetters(["uiStyle"]),
         /**
-         * Calculates initial width of sidebar or window.
-         * @returns {String}    Width style in px
+         * Calculates initial width of sidebar or window for Desktop and Mobile (if props are given).
+         * @returns {Array} initialToolWidth and initialToolWidthMobile for CSS
          */
-        initialToolWidth () {
-            let pixelWidth = parseFloat(this.initialWidth, 10);
-
-            if (pixelWidth < 0 || isNaN(pixelWidth)) {
-                return "auto";
-            }
-
-            if (pixelWidth <= 1) {
-                pixelWidth = this.width * window.innerWidth;
-            }
-
-            return Math.floor(pixelWidth) + "px";
+        widths () {
+            return {
+                "--initialToolWidth": this.getWidth(this.initialWidth),
+                "--initialToolWidthMobile": this.getWidth(this.initialWidthMobile)
+            };
         }
     },
     watch: {
@@ -91,6 +89,24 @@ export default {
         }
     },
     methods: {
+        /**
+         * Calculates initial width of input parameter.
+         * @param {String} inputWidth the width setting
+         * @returns {String}    Width style in px
+         */
+        getWidth (inputWidth) {
+            let pixelWidth = parseFloat(inputWidth, 10);
+
+            if (pixelWidth < 0 || isNaN(pixelWidth)) {
+                return "auto";
+            }
+
+            if (pixelWidth <= 1) {
+                pixelWidth = this.width * window.innerWidth;
+            }
+
+            return Math.floor(pixelWidth) + "px";
+        },
         /**
          * Minifies tool and emits evnt.
          *  @return {void}
@@ -140,14 +156,14 @@ export default {
             'table-tool-win-all-vue': uiStyle === 'TABLE',
             'is-minified': isMinified
         }"
-        :style="{width: initialToolWidth}"
+        :style="widths"
     >
         <BasicResizeHandle
             v-if="resizableWindow && !renderToWindow"
             id="basic-resize-handle-sidebar"
-            hPos="l"
-            :minW="200"
-            targetSel="#tool-sidebar-vue"
+            h-pos="l"
+            :min-w="200"
+            target-sel="#tool-sidebar-vue"
             @endResizing="updateMap"
         >
             <div>&#8942;</div>
@@ -172,8 +188,8 @@ export default {
 
             <BasicDragHandle
                 v-if="renderToWindow"
-                targetSel=".tool-window-vue"
-                :marginBottom="resizableWindow ? 25 : 0"
+                target-sel=".tool-window-vue"
+                :margin-bottom="resizableWindow ? 25 : 0"
                 class="heading-element flex-grow"
             >
                 <p class="title">
@@ -217,10 +233,10 @@ export default {
                 v-for="hPos in ['tl', 'tr', 'br', 'bl']"
                 :id="'basic-resize-handle-' + hPos"
                 :key="hPos"
-                :hPos="hPos"
-                targetSel=".tool-window-vue"
-                :minW="200"
-                :minH="100"
+                :h-pos="hPos"
+                target-sel=".tool-window-vue"
+                :min-w="200"
+                :min-h="100"
             />
         </div>
     </div>
@@ -286,9 +302,14 @@ export default {
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
         z-index: 999;
         min-width: 280px;
+        width: var(--initialToolWidth);
 
         @media (max-width: 400px) {
             right: 20px;
+        }
+
+        @media (max-width: 767px) {
+            width: var(--initialToolWidthMobile);
         }
 
         .win-body-vue {
@@ -356,6 +377,11 @@ export default {
         background-color: @background_color_1;
         padding:0 0 0 12px;
         height:100%;
+        width: var(--initialToolWidth);
+
+        @media (max-width: 767px) {
+            width: var(--initialToolWidthMobile);
+        }
 
         .win-body-vue {
             height: calc(100% - 35px);
@@ -385,12 +411,12 @@ export default {
         #tool-sidebar-vue {
             position: fixed;
             top: 0;
-            left: 0;
+            right: 0;
             bottom: 0;
             z-index: 1050;
             overflow-x: hidden;
             overflow-y: auto;
-            margin: 3%;
+            margin: 0%;
         }
     }
 </style>

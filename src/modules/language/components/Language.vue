@@ -38,7 +38,7 @@ export default {
             aria-role="button"
             @click="toggleLanguageWindow"
         >
-            {{ this.$i18n.i18next.language }}
+            {{ $i18n.i18next.language }}
         </a>
         <div
             v-if="showWindow"

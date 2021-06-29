@@ -1,8 +1,10 @@
 const webpack = require("webpack"),
     path = require("path"),
+    Vue = require("vue"),
     VueLoaderPlugin = require("vue-loader/lib/plugin");
 
 require("regenerator-runtime/runtime");
+require("chai/register-expect");
 require("jsdom-global")();
 global.DOMParser = window.DOMParser;
 
@@ -10,8 +12,14 @@ URL.createObjectURL = function () {
     return false;
 };
 
+Vue.config.devtools = false;
+
 module.exports = {
     target: "node",
+    devtool: "cheap-module-eval-source-map",
+    output: {
+        devtoolModuleFilenameTemplate: "[absolute-resource-path]"
+    },
     mode: "development",
     resolve: {
         alias: {
@@ -23,12 +31,8 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.node$/,
-                use: "node-loader"
-            },
-            {
                 test: /\.js$/,
-                exclude: /\bcore-js\b|\bvideo.js\b|\bsinon\b|\bturf\b/,
+                exclude: /\bcore-js\b|\bvideo.js\b|\bsinon\b|\bturf\b|\bjsts\b/,
                 use: {
                     loader: "babel-loader"
                 }
@@ -67,6 +71,9 @@ module.exports = {
             }
         ]
     },
+    performance: {
+        hints: false
+    },
     plugins: [
         new webpack.ProvidePlugin({
             jQuery: "jquery",
@@ -88,5 +95,11 @@ module.exports = {
             ADDONS: {},
             VUE_ADDONS: {}
         })
+        // if you want to see progress of compiling, activate this
+        // ,new webpack.ProgressPlugin({
+        //     handler(percentage, message, ...args) {
+        //         console.info(percentage, message, ...args);
+        //     }
+        //   })
     ]
 };

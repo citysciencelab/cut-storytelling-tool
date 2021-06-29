@@ -122,7 +122,7 @@ const ObliqueMap = Backbone.Model.extend({
         gfi.setIsActive(true);
         map2D = Radio.request("Map", "getMap");
 
-        if (this.isActive() && this.currentCollection && this.currentDirection.hasOwnProperty("currentImage")) {
+        if (this.isActive() && this.currentCollection && this.currentDirection?.currentImage) {
             Radio.trigger("Map", "beforeChange", "2D");
             Radio.trigger("ObliqueMap", "isActivated", false);
             this.getCenter().then(function (center) {

@@ -14,7 +14,7 @@ const Config = {
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     mouseHover: {
         numFeaturesToShow: 2,
-        infoText: "(weitere Objekte. Bitte zoomen.)"
+        infoText: "common:mouseHover.infoText"
     },
     metadata: {
         useProxy: [
@@ -66,10 +66,13 @@ const Config = {
         debug: false,
         languages: {
             de: "deutsch",
-            en: "englisch"
+            en: "englisch",
+            it: "italienisch",
+            es: "spanisch",
+            pt: "portugiesisch"
         },
         fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"],
         loadPath: "/locales/{{lng}}/{{ns}}.json"
     }
 };

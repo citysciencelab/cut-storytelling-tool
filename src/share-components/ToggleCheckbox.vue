@@ -79,7 +79,7 @@ export default {
             data-toggle="toggle"
             :checked="isActive"
             @click="toggle"
-        />
+        >
         <div class="toggle-group">
             <label
                 class="btn btn-primary btn-sm toggle-on"
@@ -98,8 +98,7 @@ export default {
             <span
                 class="toggle-handle btn btn-default btn-sm"
                 @click="toggle"
-            >
-            </span>
+            />
         </div>
     </div>
 </template>

@@ -250,6 +250,7 @@ export default {
             else if (zoomMode === "always") {
                 this.positionMarker(centerPosition);
                 this.zoomAndCenter(centerPosition);
+                this.firstGeolocation = false;
             }
             else {
                 console.error("The configured zoomMode: " + zoomMode + " does not exist. Please use the params 'once' or 'always'!");
@@ -297,6 +298,7 @@ export default {
                 }
                 else {
                     geolocation = this.geolocation;
+                    this.setPosition(null);
                     this.showPoiWindow();
                 }
                 geolocation.on("change", this.showPoiWindow);
@@ -469,21 +471,18 @@ export default {
             :icon-name="'record'"
             :title="$t('common:modules.controls.orientation.titleGeolocatePOI')"
             :on-click="getPOI"
-        >
-        </ControlIcon>
+        />
         <PoiChoice
             v-if="showPoiChoice"
             id="geolocatePoiChoice"
             @track="trackPOI"
-        >
-        </PoiChoice>
+        />
         <PoiOrientation
             v-if="showPoi"
-            :poiDistances="poiDistances"
-            :getFeaturesInCircle="getVectorFeaturesInCircle"
+            :poi-distances="poiDistances"
+            :get-features-in-circle="getVectorFeaturesInCircle"
             @hide="untrackPOI"
-        >
-        </PoiOrientation>
+        />
     </div>
 </template>
 

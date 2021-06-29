@@ -122,35 +122,35 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         this.model.setInitialSearchTasks(config);
 
         // On-demand loading of the search algorithms.
-        if (config.hasOwnProperty("gazetteer")) {
+        if (Object.prototype.hasOwnProperty.call(config, "gazetteer")) {
             new GAZModel(config.gazetteer);
         }
-        if (config.hasOwnProperty("specialWFS")) {
+        if (Object.prototype.hasOwnProperty.call(config, "specialWFS")) {
             new SpecialWFSModel(config.specialWFS);
         }
-        if (config.hasOwnProperty("visibleVector")) {
+        if (Object.prototype.hasOwnProperty.call(config, "visibleVector")) {
             new VisibleVectorModel(config.visibleVector);
         }
-        else if (config.hasOwnProperty("visibleWFS")) {
+        else if (Object.prototype.hasOwnProperty.call(config, "visibleWFS")) {
             // Deprecated in new stable
             new VisibleVectorModel(config.visibleWFS);
         }
-        if (config.hasOwnProperty("bkg")) {
+        if (Object.prototype.hasOwnProperty.call(config, "bkg")) {
             new BKGModel(config.bkg);
         }
-        if (config.hasOwnProperty("tree")) {
+        if (Object.prototype.hasOwnProperty.call(config, "tree")) {
             new TreeModel(config.tree);
         }
-        if (config.hasOwnProperty("osm")) {
+        if (Object.prototype.hasOwnProperty.call(config, "osm")) {
             new OSMModel(config.osm);
         }
-        if (config.hasOwnProperty("locationFinder")) {
+        if (Object.prototype.hasOwnProperty.call(config, "locationFinder")) {
             new LocationFinderModel(config.locationFinder);
         }
-        if (config.hasOwnProperty("gdi")) {
+        if (Object.prototype.hasOwnProperty.call(config, "gdi")) {
             new GdiModel(config.gdi);
         }
-        if (config.hasOwnProperty("elasticSearch")) {
+        if (Object.prototype.hasOwnProperty.call(config, "elasticSearch")) {
             new ElasticSearchModel(config.elasticSearch);
         }
 
@@ -397,7 +397,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             // $("ul.dropdown-menu-search").html(_.template(SearchbarHitListTemplate, attr));
         }
 
-        if (attr.hasOwnProperty("typeList")) {
+        if (attr?.typeList) {
             this.$("ul.dropdown-menu-search").html(this.templateHitList(attr));
         }
     },
@@ -422,12 +422,12 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         const modelHitList = this.model.get("hitList");
 
         // distingiush hit
-        if (evt?.hasOwnProperty("cid")) { // in this case, evt = model
+        if (evt && Object.prototype.hasOwnProperty.call(evt, "cid")) { // in this case, evt = model
             pick = Radio.request("Util", "pick", modelHitList, [0]);
 
             hit = Object.values(pick)[0];
         }
-        else if (evt?.hasOwnProperty("currentTarget") === true && evt.currentTarget.id) {
+        else if (evt && Object.prototype.hasOwnProperty.call(evt, "currentTarget") === true && evt.currentTarget.id) {
             hitID = evt.currentTarget.id;
             hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), {"id": hitID});
 
@@ -445,7 +445,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         // 3. Hide the GFI
         Radio.trigger("GFI", "setIsVisible", false);
         // 4. Zoom if necessary on the result otherwise special handling
-        if (hit.hasOwnProperty("triggerEvent")) {
+        if (hit?.triggerEvent) {
             this.model.setHitIsClick(true);
             Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true, evt.handleObj.type);
 
@@ -965,7 +965,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {void}
      */
     deleteSearchString: function () {
-        this.model.setSearchString("");
+        this.model.set("searchString", "");
         this.setSearchbarString("");
         this.hideMarker();
         store.dispatch("MapMarker/removePointMarker");
@@ -986,11 +986,11 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             hitName = isEvent ? hit.name : "undefined";
 
         // with gdi-search no action on mousehover or on GFI onClick
-        if (hit && hit.hasOwnProperty("triggerEvent") && hit.type !== i18next.t("common:modules.searchbar.type.subject") && hit.triggerEvent.event !== "gfiOnClick") {
+        if (hit && hit?.triggerEvent && hit.type !== i18next.t("common:modules.searchbar.type.subject") && hit.triggerEvent.event !== "gfiOnClick") {
             Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true, evt.handleObj.type);
             return;
         }
-        else if (hit && hit.hasOwnProperty("coordinate")) {
+        else if (hit && hit?.coordinate) {
             store.dispatch("MapMarker/removePolygonMarker");
             store.dispatch("MapMarker/removePointMarker");
 
@@ -1003,7 +1003,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             }
             return;
         }
-        else if (hit && hit.hasOwnProperty("type") && (hit.type === i18next.t("common:modules.searchbar.type.topic") || hit.type === i18next.t("common:modules.searchbar.type.subject"))) {
+        else if (hit && hit?.type && (hit.type === i18next.t("common:modules.searchbar.type.topic") || hit.type === i18next.t("common:modules.searchbar.type.subject"))) {
             return;
         }
 
@@ -1024,7 +1024,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), {"id": hitId});
         }
 
-        if (hit && hit.hasOwnProperty("triggerEvent")) {
+        if (hit && Object.prototype.hasOwnProperty.call(hit, "triggerEvent")) {
             if (hit.type !== "Fachthema" && hit.triggerEvent.event !== "gfiOnClick" && !this.model.get("hitIsClick")) {
                 Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, false);
             }

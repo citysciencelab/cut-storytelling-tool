@@ -116,10 +116,12 @@ const Config = {
         languages: {
             de: "deutsch",
             en: "englisch",
-            it: "italienisch"
+            it: "italienisch",
+            pt: "portugiesisch",
+            es: "spanisch"
         },
         fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"],
         loadPath: "/locales/{{lng}}/{{ns}}.json"
     }
 };

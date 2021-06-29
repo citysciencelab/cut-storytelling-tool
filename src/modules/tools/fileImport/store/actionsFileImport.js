@@ -77,8 +77,8 @@ function checkIsVisibleSetting (features) {
 
     resFeatures.forEach(feature => {
         // in case File doesn't have the isVisible setting
-        if (feature.hasOwnProperty("values_")) {
-            if (!feature.values_.hasOwnProperty("isVisible")) {
+        if (Object.prototype.hasOwnProperty.call(feature, "values_")) {
+            if (!Object.prototype.hasOwnProperty.call(feature.values_, "isVisible")) {
                 feature.values_.isVisible = true;
             }
         }

@@ -1,9 +1,9 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {isCustom, isMaster, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
-    {losesCenter, logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
+    {isMaster} = require("../../../../../../test/end2end/settings"),
+    {losesCenter, logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {getCenter} = require("../../../../../../test/end2end/library/scripts"),
-    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
     {until, By, Button} = webdriver;
 
 /**
@@ -11,15 +11,14 @@ const webdriver = require("selenium-webdriver"),
  * @param {module:selenium-webdriver.Builder} params.builder the selenium.Builder object
  * @param {String} params.url the url to test
  * @param {String} params.resolution formatted as "AxB" with A, B integers
- * @param {String} params.browsername the name of the broser (to use chrome put "chrome" into the name)
  * @param {module:selenium-webdriver.Capabilities} param.capability sets the capability when requesting a new session - overwrites all previously set capabilities
  * @returns {void}
  */
-function OverviewMap ({builder, url, resolution, browsername, capability}) {
-    const testIsApplicable = !isMobile(resolution) && (isCustom(url) || isMaster(url));
+function OverviewMap ({builder, url, resolution, capability}) {
+    const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
-        describe("Modules Controls OverviewMap", function () {
+        describe("Modules Controls OverviewMap", async function () {
             let driver, overviewMapButton, overviewMap, overviewMapViewport, overviewMapBox;
 
             before(async function () {
@@ -28,25 +27,24 @@ function OverviewMap ({builder, url, resolution, browsername, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
             });
 
             after(async function () {
                 if (capability) {
                     driver.session_.then(function (sessionData) {
-                        logBrowserstackUrlToTest(sessionData.id_);
+                        logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
+                    await quitDriver();
                     driver = await initDriver(builder, url, resolution);
                 }
             });
+
 
             it("has an overview map button", async function () {
                 await driver.wait(until.elementLocated(By.css(".overviewmap-button")), 9000);
@@ -96,8 +94,7 @@ function OverviewMap ({builder, url, resolution, browsername, capability}) {
                 expect(overviewMapViewport).to.exist;
             });
 
-            // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-            (isChrome(browsername) ? it.skip : it)("allows panning the map from the overview map", async function () {
+            it("allows panning the map from the overview map", async function () {
                 const center = await driver.executeScript(getCenter);
 
                 overviewMapBox = await driver.findElement(By.css(".ol-overviewmap-box"));

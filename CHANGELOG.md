@@ -8,18 +8,66 @@
 
 ---
 
-## Unreleased - in development
+##  Unreleased - in development
 ### Added
+- Add possibility to test end2end-tests with `MicrosoftEdge` driver.
+- VTC-Layer supports Sprites and Fonts in Styledefinitions.
 
 ### Changed
-- The Id in config.json for every layer could be in an object format, to allow any number of menu entries with the same layer id.
-- New Parameter propertyNames could be added in config.json for WFS layer to receive filtered response.
+- The version of the package selenium-webdriver was updated to version 4.0.0-beta.4.
+- Changed LayerInformation from backbone to vue.
+- MasterportalAPI is updated to v1.4.0. The new version brings OpenLayers v6.5.0 with WFS 2.0.0 support to the Masterportal.
+- The package eslint was updated to version 7.28.0.
+- The package eslint-plugin-chai-friendly was updated to version 0.7.1.
+- The package eslint-plugin-vue was updated to version 7.11.1.
+- The package eslint-plugin-you-dont-need-lodash-underscore was updated to version 6.12.0.
+
 ### Deprecated
 
 ### Removed
 
 ### Fixed
-- Now Sensor Layer will show 0 if the dataValue is 0 and not "no data"
+- BG-1541 further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2
+- Labels of VTC-Layer-Objects aren't cut off anymore.
+- Issue #602: further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2.
+- Issue #615: parsing of the DescribeFeatureType of a WFS has been extended so that it also satisfies a different interpretation of the schema description. As a result, elements in the legend are displayed in the order specified in the style.json.
+- Issue #623: filter error in connection with provided vectorstyles is fixed.
+- Style configuration is provided for datastreams with result 0.
+---
+
+## v2.10.0 - 2021-06-02
+### Added
+- A locale file for Portuguese language was added.
+- New WFS Layer attribute "wfsFilter" in configuration to filter the data from wfs layer.
+- Added possibility in gfiTheme sensor to display an explanation text for the data.
+- Spanish is available as a new language selection.
+- New recommended eslint rules were introduced by updates of the eslint packages.
+
+### Changed
+- The Id in config.json for every layer could be in an object format, to allow any number of menu entries with the same layer id.
+- New Parameter propertyNames could be added in config.json for WFS layer to receive filtered response.
+- The documentation for WMTS layers, legend field has been adapted. Only one specification in a string[] is possible.
+- The translation for the url in the staticlink in config.json has been removed.
+- Issue #617: Update description of the attribute '"extent"' for layer configurations in config.json.md.
+
+### Deprecated
+
+### Removed
+
+### Fixed
+- Now Sensor Layer will show 0 if the dataValue is 0 and not "no data".
+- In GFI the layerTitle was shortened in case it contains a colon.
+- The GFI is now active if this is configured and no other active tool explicitly prevents this.
+- Issue #616: Fixed a bug where the live zoom in the tool filter did not take into account the configured minScale.
+- Fixed an error that caused the historical data in the gfiTheme sensor to not be formatted correctly at times.
+- Issue #618: now the line breaks for long search results
+
+---
+
+## v2.9.1 - 2021-05-25
+### Fixed
+- Fixed no data in gfi theme of verkehrs layers in geo-online
+
 ---
 
 ## v2.9.0 - 2021-05-05
@@ -53,6 +101,7 @@
 - Fixed a bug that for the gfi in infoFormat "text/html" did not execute the script part when starting the iFrame.
 - Fixed an issue in searchbar, that after finding a result and zooming to it the 3D mode couldn't be activated anymore
 - Fixed an issue in fileImport that when the imported KML File is missing the isVisible setting the feature wouldn't be displayed when printing
+
 ---
 
 ## v2.8.0 - 2021-04-07
