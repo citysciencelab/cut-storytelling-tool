@@ -472,7 +472,6 @@ const ObliqueMap = Backbone.Model.extend({
             transformFromImage(this.currentDirection.currentImage, event.coordinate, {
                 dataProjection: this.get("projection")
             }).then(function (coords) {
-                // provides coordinates for tool getCoord - not used now
                 Radio.trigger("ObliqueMap", "clicked", coords.coords);
             });
         }
