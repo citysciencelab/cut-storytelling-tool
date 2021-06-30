@@ -118,6 +118,20 @@ const ObliqueMap = Backbone.Model.extend({
         Radio.trigger("ObliqueMap", "newImage", currentImage);
     },
     /**
+     * Deactivates open tree on topic search if the obliqueMap is activated.
+     * @returns {void}
+     */
+    deactivateOpenTreeOnTopicSearch: function () {
+        Radio.trigger("ObliqueMap", "isActivated", false);
+    },
+    /**
+     * Activates open tree on topic search if the obliqueMap is deactivated.
+     * @returns {void}
+     */
+     activateOpenTreeOnTopicSearch: function () {
+        Radio.trigger("ObliqueMap", "isActivated", true);
+    },
+    /**
      * Is called on activate this oblique map and triggers loading of image meta data.
      * Sets current direction to north, centers to given coordinates and loads dedicated image.
      * @param {Object} layer of type "oblique" to activate
@@ -151,7 +165,7 @@ const ObliqueMap = Backbone.Model.extend({
                 this.currentDirection = direction;
                 return direction.activate(this.get("map"), coordinate, resolution).then(function () {
                     this.triggerRotationOfCompass(direction.currentImage);
-                    Radio.trigger("ObliqueMap", "setCenter", coordinate, resolution);
+                    this.setCenter(coordinate, resolution);
                 }.bind(this));
             }
             return Promise.reject(new Error("there is no direction"));
@@ -182,7 +196,7 @@ const ObliqueMap = Backbone.Model.extend({
 
         if (this.isActive() && this.currentCollection && this.currentDirection?.currentImage) {
             Radio.trigger("Map", "beforeChange", "2D");
-            Radio.trigger("ObliqueMap", "isActivated", false);
+            this.deactivateOpenTreeOnTopicSearch();
             this.getCenter().then(function (center) {
                 const resolutionFactor = this.currentLayer.get("resolution"),
                     resolution = this.currentDirection.currentView.view.getResolution() / resolutionFactor;
@@ -376,7 +390,7 @@ const ObliqueMap = Backbone.Model.extend({
 
         if (!this.isActive()) {
             Radio.trigger("Map", "beforeChange", "Oblique");
-            Radio.trigger("ObliqueMap", "isActivated", true);
+            this.activateOpenTreeOnTopicSearch();
             const center = Radio.request("MapView", "getCenter"),
                 resolution = Radio.request("MapView", "getOptions").resolution;
 
