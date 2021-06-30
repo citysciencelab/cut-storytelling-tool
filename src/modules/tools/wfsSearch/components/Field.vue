@@ -165,7 +165,7 @@ export default {
                     'input-sm': htmlElement === 'select'
                 }"
                 :placeholder="htmlElement === 'input' ? inputPlaceholder : ''"
-                :defaultValue="htmlElement === 'input' ? defaultValue : ''"
+                :default-value="htmlElement === 'input' ? defaultValue : ''"
                 :required="required"
                 :disabled="disabled"
                 @change="valueChanged($event.currentTarget.value)"
