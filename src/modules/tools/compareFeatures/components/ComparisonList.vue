@@ -343,6 +343,9 @@ export default {
                 width: 20%;
             }
         }
+        p {
+            overflow-wrap: break-word;
+        }
     }
     .close {
         float: right;
