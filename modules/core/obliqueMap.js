@@ -119,6 +119,7 @@ const ObliqueMap = Backbone.Model.extend({
     },
     /**
      * Deactivates open tree on topic search if the obliqueMap is activated.
+     * @fires Core#RadioTriggerObliqueMapIsActivated
      * @returns {void}
      */
     deactivateOpenTreeOnTopicSearch: function () {
@@ -126,9 +127,10 @@ const ObliqueMap = Backbone.Model.extend({
     },
     /**
      * Activates open tree on topic search if the obliqueMap is deactivated.
+     * @fires Core#RadioTriggerObliqueMapIsActivated
      * @returns {void}
      */
-     activateOpenTreeOnTopicSearch: function () {
+    activateOpenTreeOnTopicSearch: function () {
         Radio.trigger("ObliqueMap", "isActivated", true);
     },
     /**
@@ -183,8 +185,10 @@ const ObliqueMap = Backbone.Model.extend({
      * Deactivates the oblique map if it is active by setting the target-container to visibility hidden.
      * Shows the 2D-map with the current resolution and centers it. Handles and restores interactions.
      * Sets the tool gfi active.
-     * @fires Core#RadioTriggerMapChange
+     * @fires Core#RadioTriggerMapViewSetCenter
      * @fires Core#RadioTriggerMapBeforeChange
+     * @fires Core#RadioTriggerMapViewSetConstrainedResolution
+     * @fires Core#RadioTriggerMapChange
      * @return {void}
      */
     deactivate: function () {
@@ -461,7 +465,7 @@ const ObliqueMap = Backbone.Model.extend({
     /**
      * Provides transformed coordinates for tools, that use coordinates e.g. getCoord.
      * @param {Object} event the click-event
-     *  @returns {void}
+     * @returns {void}
      */
     reactToClickEvent: function (event) {
         if (this.currentDirection && this.currentDirection.currentImage) {
