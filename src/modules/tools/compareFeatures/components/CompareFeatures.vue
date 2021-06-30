@@ -81,7 +81,7 @@ export default {
             :show-modal="showAlert && !active"
             @modalHid="setShowAlert(false)"
         >
-            <template>
+            <div>
                 <div v-if="!listFull">
                     <h4 v-if="currentFeatureName">
                         {{ $t("common:modules.tools.compareFeatures.feedback.addedWithName", {currentFeatureName}) }}
@@ -122,7 +122,7 @@ export default {
                         {{ $t("common:modules.tools.compareFeatures.feedback.goToComparisonlist") }}
                     </button>
                 </div>
-            </template>
+            </div>
         </Modal>
         <template #header>
             <h4 class="tool-compareFeatures-modal-title">
@@ -154,7 +154,7 @@ export default {
                 </div>
             </div>
         </template>
-        <template>
+        <div>
             <div
                 v-if="!hasFeatures"
                 id="tool-compareFeatures-no-features"
@@ -183,7 +183,7 @@ export default {
                 :enable-more-info="showMoreInfo"
                 :title-remove-button="$t('common:modules.tools.compareFeatures.removeFromList')"
             />
-        </template>
+        </div>
         <template #footer>
             <div
                 v-if="showButtons"
