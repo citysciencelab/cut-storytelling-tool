@@ -126,6 +126,49 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
     },
 
     /**
+<<<<<<< HEAD
+=======
+     * Draws the settings like transparence, metainfos etc.
+     * @returns {void}
+     */
+    renderSetting: function () {
+        const attr = this.model.toJSON();
+
+        // Slide-Animation templateSetting
+        if (this.model.get("isSettingVisible") === false) {
+            // Animation Zahnrad
+            this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
+            this.$el.find(".layer-settings").slideUp("slow", function () {
+                $(this).remove();
+            });
+        }
+        else {
+            this.$(".glyphicon-cog").toggleClass("rotate-back rotate");
+            this.$el.append(this.templateSettings(attr));
+            this.$el.find(".layer-settings").hide();
+            this.$el.find(".layer-settings").slideDown();
+        }
+    },
+
+    /**
+     * Executes toggleIsSelected in the model
+     * @returns {void}
+     */
+    toggleIsSelected: function () {
+        this.model.toggleIsSelected();
+    },
+
+    /**
+     * Init the LayerInformation window and inits the highlighting of the informationIcon.
+     * @returns {void}
+     */
+    showLayerInformation: function () {
+        this.model.showLayerInformation();
+        this.highlightLayerInformationIcon();
+    },
+
+    /**
+>>>>>>> dev
      * Executes setIsSettingVisible and setIsSelected in the model
      * removes the element
      * @returns {void}
