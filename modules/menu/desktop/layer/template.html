@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <div class="menu-row">
-<% if (isSelected) { %>
-  <a href="#" id="<%= domId %>" class="dropdown-item layer-item tabable checked" tabindex="0">
-    <span class="glyphicon glyphicon-check" title="<%=removeTopicText%>"></span>
-<% } else { %>
-  <a href="#" id="<%= domId %>" class="dropdown-item layer-item tabable" tabindex="0">
-    <span class="glyphicon glyphicon-unchecked" title="<%=showTopicText%>"></span>
-<% } %>
-  <% if (isSecured) { %>
-      <span class="glyphicon glyphicon-lock" title="<%=securedTopicText%>"></span>
-  <% } %>
-    <span class="title" title="<%= name %>"><%= name %></span>
-</a>
-
-<% if (typeof treeType === "undefined") { %>
-  <div class="layer-info-item last-item">
-    <% if (typeof datasets !== "undefined" && datasets !== false) { %>
-          <span class="glyphicon glyphicon-info-sign tabable" tabindex="0" title="<%=infosAndLegendText%>"></span>
+    <% if (isSelected) { %>
+        <a href="#" id="<%= domId %>" class="dropdown-item layer-item tabable checked" tabindex="0">
+        <span class="glyphicon glyphicon-check" title="<%=removeTopicText%>"></span>
+    <% } else { %>
+        <a href="#" id="<%= domId %>" class="dropdown-item layer-item tabable" tabindex="0">
+        <span class="glyphicon glyphicon-unchecked" title="<%=showTopicText%>"></span>
     <% } %>
-    </div>
-<% } else { %>
-  <div class="layer-info-item last-item">
-    <span class="glyphicon glyphicon-cog rotate tabable" tabindex="0"></span>
-  </div>
-<% } %>
+        <% if (isSecured) { %>
+            <span class="glyphicon glyphicon-lock" title="<%=securedTopicText%>"></span>
+        <% } %>
+        <span class="title" title="<%= name %>"><%= name %></span>
+    </a>
+
+    <% if (typeof treeType === "undefined") { %>
+        <div class="layer-info-item last-item">
+        <% if (typeof datasets !== "undefined" && datasets !== false) { %>
+                <span class="glyphicon glyphicon-info-sign tabable" tabindex="0" title="<%=infosAndLegendText%>"></span>
+        <% } %>
+        </div>
+    <% } else { %>
+        <div class="layer-info-item last-item">
+        <span class="glyphicon glyphicon-cog rotate tabable" tabindex="0"></span>
+        </div>
+    <% } %>
 </div>
