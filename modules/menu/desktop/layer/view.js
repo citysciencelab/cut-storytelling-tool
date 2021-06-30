@@ -48,6 +48,9 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
             "change:isVisibleInTree": this.removeIfNotVisible,
             "change:isOutOfRange": this.toggleColor
         });
+        this.listenTo(Radio.channel("LayerInformation"), {
+            "unhighlightLayerInformationIcon": this.unhighlightLayerInformationIcon
+        });
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
                 if (this.model.get("supported").indexOf(mode) >= 0) {

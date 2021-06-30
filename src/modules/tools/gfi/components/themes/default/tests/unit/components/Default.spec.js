@@ -27,7 +27,8 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
                             Test_String: "Hallo Welt",
                             emptyValue: "",
                             undefinedValue: undefined,
-                            testBrTag: "moin<br>123"
+                            testBrTag: "moinA<br>123",
+                            testArray: ["moinB", "123"]
                         };
                     },
                     getProperties: function () {
@@ -99,7 +100,14 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
     it("should the value as html if the value includes the tag <br>", () => {
         const countTdTags = wrapper.findAll("td").wrappers.length;
 
-        expect(wrapper.findAll("td").wrappers[countTdTags - 1].text()).equals("moin123");
+        expect(wrapper.findAll("td").wrappers[countTdTags - 4].text()).equals("TestBrTag");
+        expect(wrapper.findAll("td").wrappers[countTdTags - 3].text()).equals("moinA123");
+    });
+    it("should render as string with <br> tags for each part of an array if value is an array", () => {
+        const countTdTags = wrapper.findAll("td").wrappers.length;
+
+        expect(wrapper.findAll("td").wrappers[countTdTags - 2].text()).equals("TestArray");
+        expect(wrapper.findAll("td").wrappers[countTdTags - 1].text()).equals("moinB123");
     });
 
     it("should render an a and img if imageAttribute is existst in feature.properties", () => {
