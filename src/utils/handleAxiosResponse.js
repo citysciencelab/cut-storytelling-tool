@@ -10,9 +10,9 @@ export default function handleAxiosResponse (response, callContext) {
     if (
         response === null
         || typeof response !== "object"
-        || !response.hasOwnProperty("status")
-        || !response.hasOwnProperty("statusText")
-        || !response.hasOwnProperty("data")
+        || !Object.prototype.hasOwnProperty.call(response, "status")
+        || !Object.prototype.hasOwnProperty.call(response, "statusText")
+        || !Object.prototype.hasOwnProperty.call(response, "data")
     ) {
         console.warn(`${callContext}, handleAxiosResponse: response`, response);
         throw Error(`${callContext}, handleAxiosResponse: The received response is not valid.`);
