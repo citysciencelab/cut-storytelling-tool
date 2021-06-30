@@ -14,12 +14,16 @@ export default function handleAxiosResponse (response, callContext) {
         || !Object.prototype.hasOwnProperty.call(response, "statusText")
         || !Object.prototype.hasOwnProperty.call(response, "data")
     ) {
-        console.warn(`${callContext}, handleAxiosResponse: response`, response);
+        console.warn(`${callContext}, handleAxiosResponse:`, response);
         throw Error(`${callContext}, handleAxiosResponse: The received response is not valid.`);
     }
     else if (response.status !== 200) {
-        console.warn(`${callContext}, handleAxiosResponse: response`, response);
-        throw Error(`${callContext}, handleAxiosResponse: The received status code indicates an error.`);
+        const errorMessage = `${callContext}, handleAxiosResponse: ${response.status === 418
+            ? "The server refuses to brew coffee because it is, permanently, a teapot."
+            : "The received status code indicates an error."}`;
+
+        console.warn(`${callContext}, handleAxiosResponse:`, response);
+        throw Error(errorMessage);
     }
 
     return response.data;
