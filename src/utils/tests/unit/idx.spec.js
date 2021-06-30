@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import idx from "../../idx";
+import idx, {badPathSymbol} from "../../idx";
 
 describe("src/utils/idx.js", () => {
     const firstFinish = "We want this!",
@@ -29,9 +29,9 @@ describe("src/utils/idx.js", () => {
 
         expect(idx(object, path)).to.eql(secondFinish);
     });
-    it("should return null if the path does not exist inside the given object", () => {
+    it("should return badPathSymbol if the path does not exist inside the given object", () => {
         path = ["prm", "arr", "whoops"];
 
-        expect(idx(object, path)).to.equal(null);
+        expect(idx(object, path)).to.equal(badPathSymbol);
     });
 });
