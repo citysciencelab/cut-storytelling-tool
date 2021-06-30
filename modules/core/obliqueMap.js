@@ -240,7 +240,7 @@ const ObliqueMap = Backbone.Model.extend({
                 this.currentDirection = newDirection;
                 newDirection.activate(this.get("map"), center.coords, resolution).then(function () {
                     this.triggerRotationOfCompass(newDirection.currentImage);
-                });
+                }.bind(this));
             }.bind(this));
         }
     },
