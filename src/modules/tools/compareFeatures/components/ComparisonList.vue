@@ -47,6 +47,16 @@ export default {
             const newValue = value.replaceAll("|", "<br>");
 
             return newValue;
+        },
+        makeOberstufenprofileBold (value) {
+            const oldProfiles = value;
+            let newProfiles = "";
+
+            oldProfiles.replaceAll("|", "<br>");
+
+            newProfiles = oldProfiles.split("|").map(teilstring => teilstring.split(";")).map(([first, last]) => [`<b>${first}</b>`, last].join("; ")).join("<br>");
+
+            return newProfiles;
         }
     }
 };
@@ -98,6 +108,11 @@ export default {
                                 {{ beautifyKey($t(value)) }}
                             </p>
                             <p
+                                v-else-if="typeof value === 'string' && value.includes(';') && key.includes('SCHULEN')"
+                            >
+                                <span v-html="makeOberstufenprofileBold(value, key)" />
+                            </p>
+                            <p
                                 v-else-if="typeof value === 'string' && value.includes('|')"
                             >
                                 <span v-html="removeVerticalBar(value)" />
@@ -139,6 +154,11 @@ export default {
                                 class="bold"
                             >
                                 {{ beautifyKey($t(value)) }}
+                            </p>
+                            <p
+                                v-else-if="typeof value === 'string' && value.includes(';') && key.includes('SCHULEN')"
+                            >
+                                <span v-html="makeOberstufenprofileBold(value, key)" />
                             </p>
                             <p
                                 v-else-if="typeof value === 'string' && value.includes('|')"
@@ -195,6 +215,11 @@ export default {
                                 {{ beautifyKey($t(value)) }}
                             </p>
                             <p
+                                v-else-if="typeof value === 'string' && value.includes(';') && key.includes('SCHULEN')"
+                            >
+                                <span v-html="makeOberstufenprofileBold(value, key)" />
+                            </p>
+                            <p
                                 v-else-if="typeof value === 'string' && value.includes('|')"
                             >
                                 <span v-html="removeVerticalBar(value)" />
@@ -238,6 +263,11 @@ export default {
                                 class="bold"
                             >
                                 {{ beautifyKey($t(value)) }}
+                            </p>
+                            <p
+                                v-else-if="typeof value === 'string' && value.includes(';') && key.includes('SCHULEN')"
+                            >
+                                <span v-html="makeOberstufenprofileBold(value, key)" />
                             </p>
                             <p
                                 v-else-if="typeof value === 'string' && value.includes('|')"
