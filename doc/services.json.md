@@ -420,7 +420,7 @@ For more details, consider reading the [extensive SensorThings-API documentation
 |altitudeMode|no|enum["clampToGround","absolute","relativeToGround"]|`"clampToGround"`|Height mode in 3D mode.|`"absolute"`|
 |altitudeOffset|no|Number||Height offset for display in 3D mode in meters. If given, any existing z coordinates will be increased by this value. If no z coordinate exists, this value is used as z coordinate.|`10`|
 |epsg|no|String|`"EPSG:4326"`|SensorThings-API coordinate reference system|`"EPSG:4326"`|
-|gfiAttributes|yes|String/**[gfiAttributes](#markdown-header-gfi_attributes)**||GFI attributes to be shown.|`"ignore"`|
+|gfiAttributes|yes|String/**[gfiAttributes](#markdown-header-gfi_attributes)**||GFI attributes to be shown. Set to "ignore" to deactivate gfiTheme.|`"ignore"`|
 |gfiTheme|yes|**[gfiTheme](#markdown-header-gfi_theme)**||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 |id|yes|String||Arbitrary id|`"999999"`|
 |legend|no|Boolean/String/String[]||Value of the **[services.json](services.json.md)** file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.|`false`|
