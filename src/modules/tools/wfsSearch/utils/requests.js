@@ -53,7 +53,7 @@ function xmlFilter (filter) {
  * @param {Number} currentInstance.requestConfig.maxFeatures The maximum amount of features allowed.
  * @param {String} currentInstance.requestConfig.storedQueryId Id of the stored Query. If given, a WFS@2.0.0 is queried.
  * @param {Object} service The service to send the request to.
- * @param {?String} singleValueFilter If given, this filter should be used.
+ * @param {?String} [singleValueFilter = null] If given, this filter should be used.
  * @param {?String} [featureType = null] FeatureType of the features which should be requested. Only given for queries for suggestions.
  * @returns {Promise} If the send request was successful, the found features are converted from XML to OL Features and returned.
  */
