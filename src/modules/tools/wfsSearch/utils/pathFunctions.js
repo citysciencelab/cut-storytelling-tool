@@ -1,4 +1,4 @@
-import idx from "../../../../utils/idx";
+import idx, {badPathSymbol} from "../../../../utils/idx";
 
 /**
  * Builds the path to the given option in the external source object.
@@ -36,12 +36,12 @@ function buildPath (optionsObject, currentOption) {
 function getOptions (path, source) {
     const selectableOptions = idx(path, source);
 
-    if (selectableOptions && typeof selectableOptions[0] === "object") {
+    if (selectableOptions && selectableOptions !== badPathSymbol && typeof selectableOptions[0] === "object") {
         return prepareOptionsWithId(selectableOptions);
     }
 
-    // idx returns null if the value could not be found
-    return selectableOptions === null ? [] : selectableOptions;
+    // idx returns badPathSymbol if the value could not be found. It is also possible that the value is defined, but holds null or undefined.
+    return selectableOptions === badPathSymbol || selectableOptions === null || selectableOptions === undefined ? [] : selectableOptions;
 }
 
 /**
