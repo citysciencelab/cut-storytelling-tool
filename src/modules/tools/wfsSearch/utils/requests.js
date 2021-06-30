@@ -30,17 +30,17 @@ function adjustFilter (filter) {
  * @returns {String} The added parts for the request url.
  */
 function storedFilter (filter, storedQueryId) {
-    return `&version=2.0.0&StoredQuery_ID=${storedQueryId + filter}`;
+    return `&version=2.0.0${filter !== "" ? "&StoredQuery_ID=" + storedQueryId + filter : ""}`;
 }
 
 /**
  * Returns the version and filter to the request url for a WFS@1.1.0
  *
- * @param {XML} filter The filter written in XML.
+ * @param {XML[]} filter The filter written in XML.
  * @returns {String} The added parts for the request Url.
  */
 function xmlFilter (filter) {
-    return `&version=1.1.0&filter=${adjustFilter(filter)}`;
+    return `&version=1.1.0${filter.length > 0 ? "&filter=" + adjustFilter(filter) : ""}`;
 }
 
 /**
