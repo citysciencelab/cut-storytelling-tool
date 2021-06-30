@@ -88,32 +88,32 @@ export default {
                     v-for="([key, title], j) of Object.entries(tableHeads)"
                     :key="key + title + j"
                 >
-                    <p v-if="key === geometryName">
+                    <template v-if="key === geometryName">
                         <button
                             type="button"
                             class="btn btn-lgv-grey col-md-12 col-sm-12"
                         >
                             {{ $t("common:share-components.list.zoomToResult") }}
                         </button>
-                    </p>
-                    <p v-else-if="isWebLink(data.values_[key])">
+                    </template>
+                    <template v-else-if="isWebLink(data.values_[key])">
                         <a
                             :href="data.values_[key]"
                             target="_blank"
                         >{{ data.values_[key] }}</a>
-                    </p>
-                    <p v-else-if="isPhoneNumber(data.values_[key])">
+                    </template>
+                    <template v-else-if="isPhoneNumber(data.values_[key])">
                         <a :href="getPhoneNumberAsWebLink(data.values_[key])">{{ data.values_[key] }}</a>
-                    </p>
-                    <p v-else-if="isEmailAddress(data.values_[key])">
+                    </template>
+                    <template v-else-if="isEmailAddress(data.values_[key])">
                         <a :href="`mailto:${data.values_[key]}`">{{ data.values_[key] }}</a>
-                    </p>
-                    <p v-else-if="data.values_[key] === 'true' || data.values_[key] === 'No'">
+                    </template>
+                    <template v-else-if="data.values_[key] === 'true' || data.values_[key] === 'No'">
                         {{ replaceBoolean(data.values_[key]) }}
-                    </p>
-                    <p v-else>
+                    </template>
+                    <template v-else>
                         {{ removeVerticalBar(data.values_[key]) }}
-                    </p>
+                    </template>
                 </td>
             </tr>
         </table>
@@ -121,30 +121,31 @@ export default {
 </template>
 
 <style lang="less" scoped>
+@import "~variables";
 @table-borders: 1px solid #ddd;
 @table-padding: 8px;
-@import "~variables";
 
 table {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
     table-layout: auto;
+
     td {
         border: @table-borders;
         padding: @table-padding;
         cursor: pointer;
         vertical-align: top;
     }
+
     th {
         border: @table-borders;
-        padding: @table-padding;
-        padding-top: 12px;
-        padding-bottom: 12px;
+        padding: 12px @table-padding;
         text-align: left;
         background-color: #fb001c;
         color: white;
     }
+
     tr:nth-child(even) {
         background-color: #f2f2f2;
     }
