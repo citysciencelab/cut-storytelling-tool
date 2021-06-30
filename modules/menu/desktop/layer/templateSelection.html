@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <div class="menu-row">
-    <!-- <span class="layer-item "> -->
-        <span class="glyphicon glyphicon-remove-circle tabable" tabindex="0" title="<%=selectedTopicsText%>"></span>
-        <a href="#" id="<%= domId %>" class="dropdown-item layer-item tabable" tabindex="0">
-            <% if (isVisibleInMap === true) { %>
-                <span class="glyphicon glyphicon-check" title="<%=removeTopicText%>"></span>
-            <% } else { %>
-                <span class="glyphicon glyphicon-unchecked" title="<%=showTopicText%>"></span>
-            <% } %>
-            <% if (isSecured) { %>
-                <span class="glyphicon glyphicon-lock" title="<%=securedTopicText%>"></span>
-            <% } %>
-            <span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span>
-        </a>
-    <!-- </span> -->
+    <span class="glyphicon glyphicon-remove-circle tabable" tabindex="0" title="<%=selectedTopicsText%>"></span>
+    <a href="#" id="<%= domId %>" class="dropdown-item layer-item tabable" tabindex="0">
+        <% if (isVisibleInMap === true) { %>
+            <span class="glyphicon glyphicon-check" title="<%=removeTopicText%>"></span>
+        <% } else { %>
+            <span class="glyphicon glyphicon-unchecked" title="<%=showTopicText%>"></span>
+        <% } %>
+        <% if (isSecured) { %>
+            <span class="glyphicon glyphicon-lock" title="<%=securedTopicText%>"></span>
+        <% } %>
+        <span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span>
+    </a>
     <span class="last-item">
         <% if (styleable === true) { %>
             <span class="glyphicon glyphicon-tint tabable" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="<%=changeClassDivisionText%>"></span>
