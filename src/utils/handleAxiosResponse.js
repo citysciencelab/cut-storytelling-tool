@@ -2,17 +2,17 @@
  * Returns the data from the axios response.
  *
  * @throws Will throw an error if the response is not valid.
- * @param {Object} response The response received by axios.
- * @param {String} callContext Name of the outer function and Component (if given) which used axios.
- * @returns {Object} The received data or undefined if an error occurred.
+ * @param {object} response The response received by axios.
+ * @param {string} callContext Name of the outer function and Component (if given) which used axios.
+ * @returns {object} The received data or undefined if an error occurred.
  */
 export default function handleAxiosResponse (response, callContext) {
     if (
         response === null
         || typeof response !== "object"
-        || !response.hasOwnProperty("status")
-        || !response.hasOwnProperty("statusText")
-        || !response.hasOwnProperty("data")
+        || !Object.prototype.hasOwnProperty.call(response, "status")
+        || !Object.prototype.hasOwnProperty.call(response, "statusText")
+        || !Object.prototype.hasOwnProperty.call(response, "data")
     ) {
         console.warn(`${callContext}, handleAxiosResponse: response`, response);
         throw Error(`${callContext}, handleAxiosResponse: The received response is not valid.`);
