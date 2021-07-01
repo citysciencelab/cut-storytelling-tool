@@ -75,23 +75,21 @@ export default {
         selectableParameters () {
             // This could be checked with any required value
             if (Array.isArray(this.fieldName)) {
-                // The array check needs to be done for every property which is not required
                 // The "options" part is special, as it already can be an array. The second check makes sure, that the elements of the array should not be displayed but are part of a single field config.
                 return {
                     fieldId: this.fieldId,
                     fieldName: this.fieldName[this.parameterIndex],
                     inputLabel: this.inputLabel[this.parameterIndex],
-                    defaultValue: Array.isArray(this.defaultValue) ? this.defaultValue[this.parameterIndex] : this.defaultValue,
-                    dropdownInputUsesId: Array.isArray(this.dropdownInputUsesId) ? this.dropdownInputUsesId[this.parameterIndex] : this.dropdownInputUsesId,
-                    inputPlaceholder: Array.isArray(this.inputPlaceholder) ? this.inputPlaceholder[this.parameterIndex] : this.inputPlaceholder,
-                    inputTitle: Array.isArray(this.inputTitle) ? this.inputTitle[this.parameterIndex] : this.inputTitle,
+                    defaultValue: this.multipleValues(this.defaultValue),
+                    dropdownInputUsesId: this.multipleValues(this.dropdownInputUsesId),
+                    inputPlaceholder: this.multipleValues(this.inputPlaceholder),
+                    inputTitle: this.multipleValues(this.inputTitle),
                     options: Array.isArray(this.options) && Object.prototype.toString.call(this.options[0]) !== "[object Object]" ? this.options[this.parameterIndex] : this.options,
-                    required: Array.isArray(this.required) ? this.required[this.parameterIndex] : this.required,
-                    suggestionsConfig: Array.isArray(this.suggestionsConfig) ? this.suggestionsConfig[this.parameterIndex] : this.suggestionsConfig,
-                    type: Array.isArray(this.type) ? this.type[this.parameterIndex] : this.type
+                    required: this.multipleValues(this.required),
+                    suggestionsConfig: this.multipleValues(this.suggestionsConfig),
+                    type: this.multipleValues(this.type)
                 };
             }
-
             return this.$props;
         },
         htmlElement () {
@@ -171,6 +169,17 @@ export default {
     methods: {
         ...mapMutations("Tools/WfsSearch", Object.keys(mutations)),
         ...mapActions("Tools/WfsSearch", Object.keys(actions)),
+        /**
+         * The array check needs to be done for every property which is not required
+         * to check if multiple parameters can be selected from this field and if every
+         * parameter has different values set.
+         *
+         * @param {Boolean/Object/String/Array} prm The parameter to be checked.
+         * @returns {String} The currently selected value.
+         */
+        multipleValues (prm) {
+            return Array.isArray(prm) ? prm[this.parameterIndex] : prm;
+        },
         async valueChanged (val) {
             const value = this.value = this.htmlElement === "input" || val === "" ? val : JSON.parse(val).value;
 
