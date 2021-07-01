@@ -41,16 +41,16 @@ export default {
             <div
                 id="map"
             />
+            <ToolManager
+                v-if="configJson"
+                :show-in-sidebar="false"
+            />
             <div class="elements-positioned-over-map">
                 <ControlBar class="controls" />
                 <Footer />
                 <MapMarker />
                 <LayerInformation />
             </div>
-            <ToolManager
-                v-if="configJson"
-                :show-in-sidebar="false"
-            />
         </div>
 
         <div id="sidebar">

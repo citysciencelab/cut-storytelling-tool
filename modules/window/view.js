@@ -151,7 +151,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
             }
             else {
                 this.$el.html(this.templateMax(attr));
-                document.body.appendChild(this.el);
+                document.getElementById("map").after(this.el);
             }
             this.$el.show("slow");
         }
