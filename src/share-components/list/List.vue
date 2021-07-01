@@ -52,10 +52,10 @@ export default {
         replaceBoolean (value) {
             if (typeof value === "string") {
                 if (value === "true") {
-                    return value.replaceAll("true", this.i18n.$t("common:share-components.list.replace.true"));
+                    return value.replaceAll("true", i18next.t("common:share-components.list.replace.true"));
                 }
                 if (value === "No") {
-                    return value.replaceAll("No", this.i18n.$t("common:share-components.list.replace.No"));
+                    return value.replaceAll("No", i18next.t("common:share-components.list.replace.No"));
                 }
             }
             return "";
