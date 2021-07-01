@@ -10,23 +10,38 @@ import store from "../../../../src/app-store";
 const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prototype */{
     events: {
         "change select": "setSelection",
-        "click .header > .glyphicon, .header > .control-label": "toggleIsExpanded",
+        "keydown .form-control": function (event) {
+            event.stopPropagation();
+        },
+
+        "click .header > a > .glyphicon, .header > a > .control-label": "toggleIsExpanded",
+        "keydown .header > a": "keyAction",
+
         "click .Baselayer .catalog_buttons .glyphicon-question-sign": function () {
             Radio.trigger("QuickHelp", "showWindowHelp", "tree");
         },
+        "keydown .Baselayer .catalog_buttons .glyphicon-question-sign": function (event) {
+            this.handleKeyboardTriggeredAction(event, "openHelp");
+        },
+
         "click .glyphicon-adjust": "toggleBackground",
+        "keydown .glyphicon-adjust": function (event) {
+            this.handleKeyboardTriggeredAction(event, "toggleBackground");
+        },
+
         "click .rotate-pin": "unfixTree",
+        "keydown .rotate-pin": function (event) {
+            this.handleKeyboardTriggeredAction(event, "unfixTree");
+        },
+
         "click .rotate-pin-back": "fixTree",
-        "click .layer-selection-save": function () {
-            this.model.collection.setActiveToolsToFalse(this.model);
-            this.model.collection.get("saveSelection").setIsActive(true);
-            store.dispatch("Tools/setToolActive", {id: "saveSelection", active: true});
-            // Schließt den Baum
-            $(".nav li:first-child").removeClass("open");
-            // Schließt die Mobile Navigation
-            $(".navbar-collapse").removeClass("in");
-            // Selektiert die URL
-            $(".input-save-url").select();
+        "keydown .rotate-pin-back": function (event) {
+            this.handleKeyboardTriggeredAction(event, "fixTree");
+        },
+
+        "click .layer-selection-save": "saveSelection",
+        "keydown .layer-selection-save": function (event) {
+            this.handleKeyboardTriggeredAction(event, "saveSelection");
         }
     },
 
@@ -64,11 +79,11 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         this.listenTo(this.model, {
             "change:isExpanded": this.toggleGlyphicon
         }, this);
-
         this.$el.on({
             click: function (e) {
                 e.stopPropagation();
-            }});
+            }
+        });
         this.render();
         this.togle3dCatalog(Radio.request("Map", "getMapMode"));
     },
@@ -102,6 +117,67 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
             this.model.setIsExpanded(true);
         }
         return this;
+    },
+
+    /**
+      * Handles all keys for open/close actions of the layer list.
+      * @param {Event} event - the event
+      * @returns {void}
+      */
+    keyAction: function (event) {
+        this.handleKeyboardTriggeredAction(event, "toggleIsExpanded");
+        if (event.which === 37) {
+            this.model.setIsExpanded(false);
+            this.model.toggleCatalogs();
+            event.stopPropagation();
+            event.preventDefault();
+        }
+        else if (event.which === 39) {
+            this.model.setIsExpanded(true);
+            this.model.toggleCatalogs();
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    },
+
+    /**
+     * Executes the given function callback if a execution key has been triggered.
+     * @param {Event} event - the dom event
+     * @param {Function} callback - the callback function of the view to be executed
+     * @returns {boolean} if the action has been triggered
+     */
+    handleKeyboardTriggeredAction: function (event, callback) {
+        if (event.which === 32 || event.which === 13) {
+            this[callback]();
+            event.stopPropagation();
+            event.preventDefault();
+            return true;
+        }
+        return false;
+    },
+
+    /**
+     * Opens the help window.
+     * @returns {void}
+     */
+    openHelp: function () {
+        Radio.trigger("QuickHelp", "showWindowHelp", "tree");
+    },
+
+    /**
+     * open dialog to save the layer selection.
+     * @returns {void}
+     */
+    saveSelection: function () {
+        this.model.collection.setActiveToolsToFalse(this.model);
+        this.model.collection.get("saveSelection").setIsActive(true);
+        store.dispatch("Tools/setToolActive", {id: "saveSelection", active: true});
+        // Schließt den Baum
+        $(".nav li:first-child").removeClass("open");
+        // Schließt die Mobile Navigation
+        $(".navbar-collapse").removeClass("in");
+        // Selektiert die URL
+        $(".input-save-url").select();
     },
 
     /**
@@ -201,6 +277,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
     */
     setSelection: function (evt) {
         Radio.trigger("Parser", "setCategory", evt.currentTarget.value);
+        $("." + this.model.get("id") + " select.tabable").trigger("focus");
     }
 });
 

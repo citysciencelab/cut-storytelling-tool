@@ -114,11 +114,11 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
                 // The first layer in tree "100 jahre Stadtgruen POIS" has a transparency of "0.25"
                 const checkLayerId = configGivenIdOrder[0];
 
-                await (await (await driver.findElements(By.css("ul#root li.layer")))[0].findElement(By.css("span.layer-item.pull-left span.pull-left"))).click();
+                await (await (await driver.findElements(By.css("ul#root li.layer a.layer-item")))[0].findElement(By.css("span.title"))).click();
                 expect(await driver.executeScript(isLayerVisible, checkLayerId, "0.25")).to.be.true;
-                await (await (await driver.findElements(By.css("ul#root li.layer")))[0].findElement(By.css("span.layer-item.pull-left span.pull-left"))).click();
+                await (await (await driver.findElements(By.css("ul#root li.layer a.layer-item")))[0].findElement(By.css("span.title"))).click();
                 expect(await driver.executeScript(isLayerVisible, checkLayerId, "0.25")).to.be.false;
-                await (await (await driver.findElements(By.css("ul#root li.layer")))[0].findElement(By.css("span.layer-item.pull-left span.pull-left"))).click();
+                await (await (await driver.findElements(By.css("ul#root li.layer a.layer-item")))[0].findElement(By.css("span.title"))).click();
                 expect(await driver.executeScript(isLayerVisible, checkLayerId, "0.25")).to.be.true;
             });
 

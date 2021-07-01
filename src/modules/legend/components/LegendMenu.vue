@@ -29,6 +29,7 @@ export default {
         ...mapMutations("Legend", Object.keys(mutations)),
         /**
          * Toggles the visibility of the legend
+         * @param {Eevent} event - the dom event
          * @returns {void}
          */
         toggleLegend () {
@@ -50,10 +51,12 @@ export default {
                 :class="{ 'open': showLegend }"
                 class="dropdown dropdown-folder"
                 @click="toggleLegend"
+                @keydown.enter.stop.prevent="toggleLegend"
+                @keydown.space.stop.prevent="toggleLegend"
             >
                 <a
                     href="#"
-                    class="dropdown-toggle"
+                    class="dropdown-toggle tabable"
                 >
                     <span
                         :class="glyphicon"

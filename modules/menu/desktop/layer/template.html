@@ -1,23 +1,27 @@
 <!DOCTYPE html>
-<% if (typeof treeType === "undefined") { %>
-<div class="layer-info-item pull-right">
-    <% if (typeof datasets !== "undefined" && datasets !== false) { %>
-        <span class="glyphicon glyphicon-info-sign" title="<%=infosAndLegendText%>"></span>
-    <% } %>
-</div>
-<% } else { %>
-<div class="layer-info-item pull-right">
-    <span class="glyphicon glyphicon-cog rotate"></span>
-</div>
-<% } %>
-<div class="layer-item">
+<div class="menu-row">
     <% if (isSelected) { %>
+        <a href="#" id="<%= domId %>" class="dropdown-item layer-item tabable checked" tabindex="0">
         <span class="glyphicon glyphicon-check" title="<%=removeTopicText%>"></span>
     <% } else { %>
+        <a href="#" id="<%= domId %>" class="dropdown-item layer-item tabable" tabindex="0">
         <span class="glyphicon glyphicon-unchecked" title="<%=showTopicText%>"></span>
     <% } %>
-    <% if (isSecured) { %>
-        <span class="glyphicon glyphicon-lock" title="<%=securedTopicText%>"></span>
+        <% if (isSecured) { %>
+            <span class="glyphicon glyphicon-lock" title="<%=securedTopicText%>"></span>
+        <% } %>
+        <span class="title" title="<%= name %>"><%= name %></span>
+    </a>
+
+    <% if (typeof treeType === "undefined") { %>
+        <div class="layer-info-item last-item">
+        <% if (typeof datasets !== "undefined" && datasets !== false) { %>
+                <span class="glyphicon glyphicon-info-sign tabable" tabindex="0" title="<%=infosAndLegendText%>"></span>
+        <% } %>
+        </div>
+    <% } else { %>
+        <div class="layer-info-item last-item">
+        <span class="glyphicon glyphicon-cog rotate tabable" tabindex="0"></span>
+        </div>
     <% } %>
-    <span class="title" title="<%= name %>"><%= name %></span>
 </div>

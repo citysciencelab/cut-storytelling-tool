@@ -14,11 +14,13 @@ describe("menu/desktop/layer/viewLight", function () {
 
             children: [{datasets: false}],
             isSettingVisible: false,
+            isVisibleInMap: false,
             isStyleable: false,
             showSettings: true,
             supported: ["2D"],
             isRemovable: false,
             isSecured: false,
+            domId: 0,
 
             setIsSettingVisible: function (value) {
                 this.isSettingVisible = value;
@@ -27,7 +29,12 @@ describe("menu/desktop/layer/viewLight", function () {
             setIsStyleable: function (value) {
                 this.isStyleable = value;
             },
-
+            set: function () {
+                // dummy function
+            },
+            toggleIsSelected: function () {
+                this.isVisibleInMap = true;
+            },
             get: function (key) {
                 switch (key) {
                     case "removeTopicText":
@@ -48,6 +55,8 @@ describe("menu/desktop/layer/viewLight", function () {
                         return "levelUpText";
                     case "levelDownText":
                         return "levelDownText";
+                    case "isOutOfRange":
+                        return false;
                     default:
                         return this[key] || null;
                 }
@@ -64,7 +73,7 @@ describe("menu/desktop/layer/viewLight", function () {
                     isSettingVisible: this.isSettingVisible,
                     showSettings: this.showSettings,
                     transparency: 42,
-                    isVisibleInMap: true,
+                    isVisibleInMap: this.isVisibleInMap,
                     isRemovable: false,
                     isSecured: false,
                     removeTopicText: "removeTopicText",
@@ -75,7 +84,9 @@ describe("menu/desktop/layer/viewLight", function () {
                     increaseTransparencyText: "increaseTransparencyText",
                     reduceTransparencyText: "reduceTransparencyText",
                     levelUpText: "levelUpText",
-                    levelDownText: "levelDownText"
+                    levelDownText: "levelDownText",
+                    showTopicText: "showTopicText",
+                    domId: 0
                 };
             }
         };
@@ -100,11 +111,11 @@ describe("menu/desktop/layer/viewLight", function () {
 
             const layerView = new CustomLayerView({model: fakeModel});
 
-            expect(layerView.$el.find(".pull-right").find(".glyphicon-tint").length).to.be.equal(1);
+            expect(layerView.$el.find(".glyphicon-tint").length).to.be.equal(1);
 
             layerView.rerender();
 
-            expect(layerView.$el.find(".pull-right").find(".glyphicon-tint").length).to.be.equal(1);
+            expect(layerView.$el.find(".glyphicon-tint").length).to.be.equal(1);
         });
         it("should be hidden for other not styleable layers", function () {
 
@@ -118,6 +129,21 @@ describe("menu/desktop/layer/viewLight", function () {
             layerView.rerender();
 
             expect(layerView.$el.find(".glyphicon-tint").length).to.be.equal(0);
+        });
+    });
+    describe("the layer checkbox", function () {
+        it("should react to key events", function () {
+
+            const layerView = new CustomLayerView({model: fakeModel}),
+                keyEvent = new $.Event("keydown", {which: 13});
+
+            expect(layerView.$el.find("span.glyphicon-check").length).to.be.equal(0);
+
+            layerView.$el.find("a.layer-item").trigger(keyEvent);
+
+            layerView.rerender();
+
+            expect(layerView.$el.find("span.glyphicon-check").length).to.be.equal(1);
         });
     });
 });

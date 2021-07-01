@@ -179,6 +179,10 @@ export default {
                         <a :href="`mailto:${value}`">{{ value }}</a>
                     </td>
                     <td
+                        v-else-if="Array.isArray(value)"
+                        v-html="value.join('<br>')"
+                    />
+                    <td
                         v-else-if="typeof value === 'string' && value.includes('<br>')"
                         v-html="value"
                     />
