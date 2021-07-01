@@ -14,7 +14,7 @@ const mutations = {
     addOptions: ({currentInstanceIndex, instances}, option) => {
         const currentInstance = instances[currentInstanceIndex];
 
-        if (typeof currentInstance.addedOptions !== "object") {
+        if (!Array.isArray(currentInstance.addedOptions)) {
             currentInstance.addedOptions = [];
         }
         if (currentInstance.addedOptions.includes(option)) {
