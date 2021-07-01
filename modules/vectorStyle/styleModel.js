@@ -233,7 +233,11 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             simpleGeom;
 
         geometryType.forEach(geom => rules.forEach(rule => {
-            if (geom.includes("Multi")) {
+            if (geom === "MultiSurface") {
+                simpleGeom = "Polygon";
+                styleObject = this.getSimpleGeometryStyle(simpleGeom, "", rule, false);
+            }
+            else if (geom.includes("Multi")) {
                 simpleGeom = geom.replace("Multi", "");
                 styleObject = this.getMultiGeometryStyle(simpleGeom, "", rule, false);
             }
