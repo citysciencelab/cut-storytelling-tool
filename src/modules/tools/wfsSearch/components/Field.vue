@@ -92,19 +92,7 @@ export default {
                 };
             }
 
-            return {
-                fieldId: this.fieldId,
-                fieldName: this.fieldName,
-                inputLabel: this.inputLabel,
-                defaultValue: this.defaultValue,
-                dropdownInputUsesId: this.dropdownInputUsesId,
-                inputPlaceholder: this.inputPlaceholder,
-                inputTitle: this.inputTitle,
-                options: this.options,
-                required: this.required,
-                suggestionsConfig: this.suggestionsConfig,
-                type: this.type
-            };
+            return this.$props;
         },
         htmlElement () {
             return this.selectableParameters.options === null ? "input" : "select";
