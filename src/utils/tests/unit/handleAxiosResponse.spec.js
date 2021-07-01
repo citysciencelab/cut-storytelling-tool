@@ -23,7 +23,7 @@ describe("src/utils/handleAxiosResponse.js", () => {
     });
     afterEach(sinon.restore);
 
-    Assertion.addMethod("getResponse", function (errMessage, res) {
+    Assertion.addMethod("getAxiosErrorResponse", function (errMessage, res) {
         new Assertion(this._obj).to.throw(errMessage);
         expect(warn.calledOnce).to.be.true;
         expect(warn.firstCall.args).to.eql([ccString, res]);
@@ -34,35 +34,35 @@ describe("src/utils/handleAxiosResponse.js", () => {
 
         expect(() => {
             handleAxiosResponse(response, callContext);
-        }).to.getResponse(invalidResponse, response);
+        }).to.getAxiosErrorResponse(invalidResponse, response);
     });
     it("throw an error and put a warning on the console if the response is no object", () => {
         response = "I'm no object! :o";
 
         expect(() => {
             handleAxiosResponse(response, callContext);
-        }).to.getResponse(invalidResponse, response);
+        }).to.getAxiosErrorResponse(invalidResponse, response);
     });
     it("throw an error and put a warning on the console if the response does not contain the property 'status'", () => {
         response = {};
 
         expect(() => {
             handleAxiosResponse(response, callContext);
-        }).to.getResponse(invalidResponse, response);
+        }).to.getAxiosErrorResponse(invalidResponse, response);
     });
     it("throw an error and put a warning on the console if the response does not contain the property 'statusText'", () => {
         response = {status};
 
         expect(() => {
             handleAxiosResponse(response, callContext);
-        }).to.getResponse(invalidResponse, response);
+        }).to.getAxiosErrorResponse(invalidResponse, response);
     });
     it("throw an error and put a warning on the console if the response does not contain the property 'data'", () => {
         response = {status, statusText};
 
         expect(() => {
             handleAxiosResponse(response, callContext);
-        }).to.getResponse(invalidResponse, response);
+        }).to.getAxiosErrorResponse(invalidResponse, response);
     });
     it("should refuse to brew coffee if the server is permanently a teapot", () => {
         status = 418;
@@ -71,7 +71,7 @@ describe("src/utils/handleAxiosResponse.js", () => {
 
         expect(() => {
             handleAxiosResponse(response, callContext);
-        }).to.getResponse(teapot, response);
+        }).to.getAxiosErrorResponse(teapot, response);
     });
     it("throw an error and put a warning on the console if the status code is not 200", () => {
         status = 503;
@@ -79,7 +79,7 @@ describe("src/utils/handleAxiosResponse.js", () => {
 
         expect(() => {
             handleAxiosResponse(response, callContext);
-        }).to.getResponse(errorResponse, response);
+        }).to.getAxiosErrorResponse(errorResponse, response);
     });
     it("should return the data from the response if it is a valid response", () => {
         response = {status, statusText, data};
