@@ -5,7 +5,9 @@
  * @returns {String} String representation for the structure of the given literal.
  */
 function createUserHelp (literals) {
-    const structure = createLiteralStructure(literals);
+    const and = i18next.t("common:modules.tools.wfsSearch.userHelp.and"),
+        or = i18next.t("common:modules.tools.wfsSearch.userHelp.or"),
+        structure = createLiteralStructure(literals);
     let userHelp = "",
         marker = "";
 
@@ -15,7 +17,7 @@ function createUserHelp (literals) {
             continue;
         }
         if (el !== "(" && el !== ")") {
-            userHelp += el + " " + marker + " ";
+            userHelp += `${el} ${marker} `;
             continue;
         }
 
@@ -27,7 +29,12 @@ function createUserHelp (literals) {
         userHelp += el;
     }
 
-    return userHelp.replaceAll(")(", ") and (").replaceAll(",", " / ").replaceAll("*", "");
+    return userHelp
+        .replaceAll(" and ", ` ${and} `)
+        .replaceAll(" or ", ` ${or} `)
+        .replaceAll(")(", `) ${and} (`)
+        .replaceAll(",", " / ")
+        .replaceAll("*", "");
 }
 
 /**
@@ -110,7 +117,7 @@ function prepareLiterals (stateLiterals, literals = null, clauseId = "", require
  * @returns {Object} Returns the current values for the required fields.
  */
 function fieldValueChanged (id, value, stateLiterals, requiredValues, parameterIndex, literals = null) {
-    const arr = literals ? literals : stateLiterals;
+    const arr = literals || stateLiterals;
 
     arr.forEach(literal => {
         if (literal.clause) {

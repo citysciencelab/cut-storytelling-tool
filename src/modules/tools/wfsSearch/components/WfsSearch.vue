@@ -8,6 +8,7 @@ import Literal from "./Literal.vue";
 import actions from "../store/actionsWfsSearch";
 import getters from "../store/gettersWfsSearch";
 import mutations from "../store/mutationsWfsSearch";
+import {createUserHelp} from "../utils/literalFunctions";
 import {searchFeatures} from "../utils/requests";
 
 export default {
@@ -18,7 +19,6 @@ export default {
         Tool,
         Modal
     },
-    data: () => ({and: "and", or: "or"}),
     computed: {
         ...mapGetters("Tools/WfsSearch", Object.keys(getters)),
         ...mapGetters("Language", ["currentLocale"]),
@@ -51,13 +51,10 @@ export default {
     watch: {
         active (val) {
             (val ? this.prepareModule : this.resetModule)();
-            if (this.userHelp !== "hide") {
-                this.adjustUserHelp();
-            }
         },
         currentLocale () {
             if (this.active && this.userHelp !== "hide") {
-                this.adjustUserHelp();
+                createUserHelp(this.currentInstance.literals);
             }
         }
     },
@@ -68,17 +65,6 @@ export default {
         ...mapMutations("Tools/WfsSearch", Object.keys(mutations)),
         ...mapActions("Tools/WfsSearch", Object.keys(actions)),
         searchFeatures,
-        adjustUserHelp () {
-            const translatedAnd = i18next.t("common:modules.tools.wfsSearch.userHelp.and"),
-                translatedOr = i18next.t("common:modules.tools.wfsSearch.userHelp.or");
-
-            this.setUserHelp(this.userHelp
-                .replaceAll(this.and, translatedAnd)
-                .replaceAll(this.or, translatedOr));
-
-            this.and = translatedAnd;
-            this.or = translatedOr;
-        },
         close () {
             this.setActive(false);
             this.resetModule(true);

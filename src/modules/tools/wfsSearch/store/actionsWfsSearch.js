@@ -35,7 +35,7 @@ const actions = {
 
             // NOTE: The extra object is sadly needed so that the object is reactive :(
             commit("setRequiredValues", {...prepareLiterals(currentInstance.literals)});
-            commit("setUserHelp", currentInstance.userHelp ? currentInstance.userHelp : createUserHelp(currentInstance.literals));
+            commit("setUserHelp", currentInstance.userHelp || createUserHelp(currentInstance.literals));
 
             if (selectSource) {
                 dispatch("retrieveData");
