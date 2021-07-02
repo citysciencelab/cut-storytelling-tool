@@ -85,7 +85,7 @@ export default {
                     dropdownInputUsesId: this.multipleValues(this.dropdownInputUsesId),
                     inputPlaceholder: this.multipleValues(this.inputPlaceholder),
                     inputTitle: this.multipleValues(this.inputTitle),
-                    options: Array.isArray(this.options) && isObject(this.options[0]) ? this.options[this.parameterIndex] : this.options,
+                    options: Array.isArray(this.options) && !isObject(this.options[0]) ? this.options[this.parameterIndex] : this.options,
                     required: this.multipleValues(this.required),
                     suggestionsConfig: this.multipleValues(this.suggestionsConfig),
                     type: this.multipleValues(this.type)
