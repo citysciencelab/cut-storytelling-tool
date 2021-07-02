@@ -92,6 +92,7 @@ const actions = {
      */
     resetResult ({commit, dispatch, state}) {
         commit("setValuesReset", true);
+        commit("setSearched", false);
         commit("setResults", []);
         commit("setSelectedOptions", {});
         dispatch("MapMarker/removePointMarker", null, {root: true});
