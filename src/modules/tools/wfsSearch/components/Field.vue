@@ -194,6 +194,7 @@ export default {
                 this.setSelectedOptions({options: this.selectableParameters.options, value, index});
             }
             else if (this.showSuggestions) {
+                // TODO: Functionality like lodash.throttle would be nice to have here
                 this.showLoader = true;
                 const xmlFilter = buildXmlFilter({fieldName: this.fieldName, type: "like", value}),
                     suggestions = await searchFeatures(this.$store, this.currentInstance, this.service, xmlFilter, this?.suggestionsConfig?.featureType);
@@ -253,7 +254,7 @@ export default {
                 :disabled="disabled"
                 :list="htmlElement === 'input' && showSuggestions ? `tool-wfsSearch-${fieldName}-${fieldId}-input-suggestions` : ''"
                 :aria-label="Array.isArray(inputLabel) ? selectableParameters.inputLabel : ''"
-                @change="valueChanged($event.currentTarget.value)"
+                @input="valueChanged($event.currentTarget.value)"
             >
                 <template v-if="htmlElement === 'select'">
                     <option

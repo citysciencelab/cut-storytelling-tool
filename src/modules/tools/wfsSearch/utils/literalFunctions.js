@@ -76,7 +76,7 @@ function createLiteralStructure (stateLiterals, literals = null, userHelp = []) 
  */
 function prepareLiterals (stateLiterals, literals = null, clauseId = "", requiredValues = {}) {
     const lit = literals === null ? stateLiterals : literals,
-        idPrefix = clauseId ? clauseId + "+" : "";
+        idPrefix = clauseId ? clauseId + "+" : "wfsSearch-";
 
     lit.forEach((literal, i) => {
         if (literal.field) {
