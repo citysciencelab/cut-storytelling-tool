@@ -62,6 +62,7 @@ const actions = {
      */
     resetModule ({commit, dispatch}, closeTool) {
         commit("setRequiredValues", null);
+        commit("setSearched", false);
         commit("setService", null);
         commit("setUserHelp", "");
         dispatch("resetResult");
