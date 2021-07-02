@@ -84,6 +84,8 @@ export default {
             const features = await searchFeatures(this.$store, this.currentInstance, this.service);
 
             Radio.trigger("Util", "hideLoader");
+
+            document.getElementById("tool-wfsSearch-showResults-button").focus();
             this.setResults([]);
             features.forEach(feature => {
                 this.results.push(feature);
@@ -181,7 +183,7 @@ export default {
                             class="col-md-12 col-sm-12"
                         >
                             <button
-                                type="button"
+                                id="tool-wfsSearch-showResults-button"
                                 class="btn btn-lgv-grey col-md-12 col-sm-12"
                                 :disabled="results.length === 0 || !headers"
                                 @click="setShowResultList(true)"
