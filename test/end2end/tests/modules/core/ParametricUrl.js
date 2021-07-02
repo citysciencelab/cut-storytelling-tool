@@ -237,7 +237,7 @@ async function ParameterTests ({builder, url, resolution, browsername, mode, cap
                     expect(await driver.findElements(By.xpath("//*[contains(text(),'Fehler beim Laden der Vorschau der Metadaten.')]"))).to.be.empty;
                 });
 
-                it.only("?layerIDs=, &visibility=, and &transparency= with set zoom level have working gfi/legend/info", async function () {
+                it("?layerIDs=, &visibility=, and &transparency= with set zoom level have working gfi/legend/info", async function () {
                     await loadUrl(driver, `${url}?layerIDs=4736,4537&visibility=true,true&transparency=0,0&zoomLevel=6`, mode);
                     const coords = [566688.25, 5934320.50];
 
