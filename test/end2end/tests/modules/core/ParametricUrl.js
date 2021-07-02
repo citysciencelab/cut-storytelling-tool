@@ -231,13 +231,13 @@ async function ParameterTests ({builder, url, resolution, browsername, mode, cap
                     await loadUrl(driver, `${url}?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`, mode);
                     await (await driver.findElement(By.css("div#navbarRow li:first-child"))).click();
                     await driver.wait(until.elementIsVisible(await driver.findElement(By.id("tree"))));
-                    await (await driver.findElement(By.css(".layer:nth-child(4) .glyphicon-info-sign"))).click();
+                    await (await driver.findElement(By.css("li.layer span.glyphicon-info-sign"))).click();
                     await driver.wait(until.elementIsVisible(await driver.findElement(By.id("layerInformation"))));
 
                     expect(await driver.findElements(By.xpath("//*[contains(text(),'Fehler beim Laden der Vorschau der Metadaten.')]"))).to.be.empty;
                 });
 
-                it("?layerIDs=, &visibility=, and &transparency= with set zoom level have working gfi/legend/info", async function () {
+                it.only("?layerIDs=, &visibility=, and &transparency= with set zoom level have working gfi/legend/info", async function () {
                     await loadUrl(driver, `${url}?layerIDs=4736,4537&visibility=true,true&transparency=0,0&zoomLevel=6`, mode);
                     const coords = [566688.25, 5934320.50];
 
