@@ -7,10 +7,11 @@ import initialState from "../../../store/stateWmsTime";
 const layerString = "When I grow up I will be a real layer!";
 
 describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
-    let commit, rootGetters, state, trigger;
+    let commit, dispatch, rootGetters, state, trigger;
 
     beforeEach(() => {
         commit = sinon.spy();
+        dispatch = sinon.spy();
         trigger = sinon.spy();
     });
 
@@ -139,6 +140,18 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             expect(trigger.lastCall.args).to.eql(["Util", "refreshTree"]);
             expect(removeLayer.calledOnce).to.be.true;
             expect(removeLayer.firstCall.args).to.eql([layerString]);
+        });
+    });
+    describe("moveSwiper", () => {
+
+        it("it should call the functions to set the swiper according to the x-coordinate of the mousedown event", () => {
+            const target = {clientX: 750};
+
+            state.layerSwiper.isMoving = true;
+            actions.moveSwiper({state, commit, dispatch}, target);
+            expect(commit.firstCall.args).to.eql(["setLayerSwiperValueX", 750]);
+            expect(commit.secondCall.args).to.eql(["setLayerSwiperStyleLeft", 750]);
+            expect(dispatch.firstCall.args[0]).to.equal("updateMap");
         });
     });
 });
