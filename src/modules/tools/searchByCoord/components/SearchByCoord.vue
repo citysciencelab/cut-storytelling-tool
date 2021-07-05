@@ -51,7 +51,7 @@ export default {
                 this.resetValues();
             }
             else {
-                this.focusInput();
+                this.setFocusToFirstControl();
             }
         }
     },
@@ -75,7 +75,11 @@ export default {
                 model.set("isActive", false);
             }
         },
-        focusInput () {
+        /**
+         * Sets the focus to the first control
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
             this.$nextTick(() => {
                 if (this.$refs.coordSystemField) {
                     this.$refs.coordSystemField.focus();

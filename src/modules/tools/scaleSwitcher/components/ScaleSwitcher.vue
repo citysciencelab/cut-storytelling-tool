@@ -24,7 +24,18 @@ export default {
             }
         }
     },
-
+    watch: {
+        /**
+         * Listens to the active property change.
+         * @param {Boolean} isActive Value deciding whether the tool gets activated or deactivated.
+         * @returns {void}
+         */
+        active (isActive) {
+            if (isActive) {
+                this.setFocusToFirstControl();
+            }
+        }
+    },
     /**
      * Lifecycle hook: adds a "close"-Listener to close the tool.
      * @returns {void}
@@ -50,6 +61,17 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
+        },
+        /**
+         * Sets the focus to the first control
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
+            this.$nextTick(() => {
+                if (this.$refs["scale-switcher-select"]) {
+                    this.$refs["scale-switcher-select"].focus();
+                }
+            });
         }
     }
 };
@@ -76,6 +98,7 @@ export default {
                 <div class="col-md-7 col-sm-7">
                     <select
                         id="scale-switcher-select"
+                        ref="scale-switcher-select"
                         v-model="scale"
                         class="font-arial form-control input-sm pull-left"
                         @change="setResolutionByIndex($event.target.selectedIndex)"
