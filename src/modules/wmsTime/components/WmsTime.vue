@@ -9,7 +9,6 @@ export default {
         LayerSwiper,
         TimeSlider
     },
-    data: () => ({width: window.innerWidth}),
     computed: {
         ...mapGetters("WmsTime", ["currentTimeSliderObject", "layerAppendix", "layerSwiper", "minWidth", "timeSlider"])
     },

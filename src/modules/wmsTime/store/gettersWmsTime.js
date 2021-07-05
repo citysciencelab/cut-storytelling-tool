@@ -33,7 +33,7 @@ const getters = {
         return currentTimeSliderObject.step;
     },
     timeRange (_, {currentTimeSliderObject}) {
-        return currentTimeSliderObject?.timeRange ? currentTimeSliderObject.timeRange : [];
+        return currentTimeSliderObject?.timeRange || [];
     }
 };
 
