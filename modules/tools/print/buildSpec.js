@@ -421,8 +421,12 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
                     stylingRules = stylingRules.replaceAll(",", " AND ");
 
-                    if (stylingRulesSplit.length > 0 && stylingRulesSplit.some(rule => rule.length > 0)) {
-                        stylingRulesSplit.forEach(rule => this.unsetStringPropertiesOfFeature(clonedFeature, rule[0]));
+                    if (Array.isArray(stylingRulesSplit) && stylingRulesSplit.length) {
+                        stylingRulesSplit.forEach(rule => {
+                            if (Array.isArray(rule) && rule.length) {
+                                this.unsetStringPropertiesOfFeature(clonedFeature, rule[0].substring(1));
+                            }
+                        });
                     }
                     this.addFeatureToGeoJsonList(clonedFeature, geojsonList);
 
