@@ -11,7 +11,7 @@
  * @typedef WmsTimeState
  * @type {object}
  * @property {string} layerAppendix Value to be added to the second layer, which is added when using the layerSwiper.
- * @property {number} windowWith Current width (window.innerWidth) of the window in px.
+ * @property {number} windowWidth Current width (window.innerWidth) of the window in px.
  * @property {object} layerSwiper Values for the layerSwiper.
  * @property {number} layerSwiper.active Whether the swiper should be active.
  * @property {number} layerSwiper.isMoving Whether the swiper is currently being moved.
@@ -27,7 +27,7 @@
  */
 const state = {
     layerAppendix: "_secondLayer",
-    windowWith: 1280,
+    windowWidth: 1280,
     layerSwiper: {
         active: false,
         isMoving: false,
