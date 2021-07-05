@@ -2434,7 +2434,7 @@ Hier werden die 3D-Daten für die 3D-Ansicht definiert. Im custom tree und defau
 
 [type:Layer]: # (Themenconfig.Layer)
 
-Definition für WMS-T Layer für den `treeType` `custom` and `default`. Kann auch unter **[Fachdaten](#markdown-header-themenconfigfachdaten)** definiert werden.
+Definition für WMS-T Layer für den `treeType` `custom` und `default`. Kann auch unter **[Fachdaten](#markdown-header-themenconfigfachdaten)** definiert werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
