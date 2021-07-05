@@ -11,6 +11,7 @@
 ## Unreleased - in development
 ### Added
 - A locale file for Portuguese language was added.
+- Added the new layer type 'WMS-T' along with its manipulation functionalities 'TimeSlider' and 'LayerSwiper'.
 
 ### Changed
 - The Id in config.json for every layer could be in an object format, to allow any number of menu entries with the same layer id.
