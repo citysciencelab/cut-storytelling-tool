@@ -119,6 +119,10 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.model.setIsSettingVisible(false);
         this.model.setIsSelected(false);
         this.$el.remove();
+
+        if (this.model.get("typ") === "WMS" && this.model.get("time")) {
+            this.model.removeTimeLayer(this.model.get("id"));
+        }
     },
 
     /**
