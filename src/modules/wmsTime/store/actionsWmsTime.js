@@ -25,7 +25,7 @@ const actions = {
     toggleSwiper ({commit, state, rootGetters}, id) {
         commit("setLayerSwiperActive", !state.layerSwiper.active);
 
-        const secondId = !id.endsWith(state.layerAppendix) ? id + state.layerAppendix : id,
+        const secondId = id.endsWith(state.layerAppendix) ? id : id + state.layerAppendix,
             layerModel = Radio.request("ModelList", "getModelByAttributes", {id: state.layerSwiper.active ? id : secondId});
 
         if (state.layerSwiper.active) {
