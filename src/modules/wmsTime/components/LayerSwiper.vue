@@ -10,6 +10,11 @@ export default {
         ...mapGetters("Map", ["visibleLayerList", "map"]),
         ...mapGetters("WmsTime", Object.keys(getters))
     },
+    watch: {
+        windowWidth () {
+            this.setLayerSwiperValueX(this.map.getSize()[0] / 2);
+        }
+    },
     created: function () {
         window.addEventListener("mousemove", this.moveSwiper);
         window.addEventListener("mouseup", this.moveStop);
