@@ -33,6 +33,9 @@ const mutations = {
     setLayerSwiperActive (state, active) {
         state.layerSwiper.active = active;
     },
+    setLayerSwiperDomSwiper (state, target) {
+        state.layerSwiper.swiper = target;
+    },
     setLayerSwiperValueX (state, clientX) {
         state.layerSwiper.valueX = clientX;
     },
@@ -41,13 +44,6 @@ const mutations = {
     },
     setLayerSwiperTargetLayer (state, layer) {
         state.layerSwiper.targetLayer = layer;
-    },
-    move (state, target) {
-        state.layerSwiper.isMoving = true;
-        state.layerSwiper.swiper = target;
-    },
-    moveStop (state) {
-        state.layerSwiper.isMoving = false;
     }
 };
 

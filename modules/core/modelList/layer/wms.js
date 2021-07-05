@@ -150,7 +150,7 @@ const WMSLayer = Layer.extend({
                         : Number(extent.default),
                     timeData = {defaultValue, step, timeRange};
 
-                this.set("time", typeof time === "object" ? Object.assign(time, timeData) : timeData);
+                this.set("time", typeof time === "object" ? Object.assign({keyboardMovement: 5}, time, timeData) : timeData);
                 timeData.layerId = this.get("id");
                 store.commit("WmsTime/addTimeSliderObject", timeData);
 
