@@ -575,6 +575,7 @@
                 "label": "Scala"
             },
             "wfsSearch": {
+                "noResults": "Non sono stati trovati risultati per i tuoi criteri di ricerca",
                 "optionsPlaceholder": "Per favore, scegli un'opzione!",
                 "resetButton": "Azzerare",
                 "searchButton": "Cerca",

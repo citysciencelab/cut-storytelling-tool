@@ -194,7 +194,7 @@ export default {
             :showModal="showResults"
             @modalHid="setShowResultList(false)"
         >
-            <template v-if="showResults">
+            <template v-if="showResults && results.length">
                 <header slot="header">
                     <h4>{{ currentInstance.resultDialogTitle ? $t(currentInstance.resultDialogTitle) : $t(name) }}</h4>
                     <hr>
@@ -206,6 +206,13 @@ export default {
                     :table-heads="headers"
                     :table-data="results"
                 />
+            </template>
+            <template v-else>
+                <header slot="header">
+                    <h4>{{ $t(name) }}</h4>
+                    <hr>
+                </header>
+                <span>{{ $t("common:modules.tools.wfsSearch.noResults") }}</span>
             </template>
         </Modal>
     </div>
