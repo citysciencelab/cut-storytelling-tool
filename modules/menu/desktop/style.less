@@ -22,20 +22,20 @@
     .tabable {
         text-decoration: none;
         cursor: pointer;
-        opacity: 0.8;
+        // opacity: 0.8;
         &:hover {
             opacity: 1;
             background-color: @accent_hover;
             color: @color_2;
         }
         &:focus {
-            opacity: 1.0;
+            // opacity: 1.0;
             outline: 3px solid @accent_focus;
             outline: 3px auto  Highlight;
             outline: 3px auto -webkit-focus-ring-color;
         }
         &:active {
-            opacity: 1.0;
+            // opacity: 1.0;
         }
     }
 }
@@ -92,13 +92,14 @@ ul#tree {
                     color: @color_1;
                     background-color: lighten(@primary_inactive, 40%);
                 }
-                .checked {
-                    color: @color_3;
-                    &:hover {
-                        background-color: @accent_active;
-                    }
-                }
+
             }
+        }
+    }
+    .checked {
+        color: @color_3;
+        &:hover {
+            background-color: @accent_active;
         }
     }
     .glyphicon {
