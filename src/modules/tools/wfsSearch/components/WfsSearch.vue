@@ -83,6 +83,7 @@ export default {
             features.forEach(feature => {
                 this.results.push(feature);
             });
+            this.setShowResultList(true);
         }
     }
 };
