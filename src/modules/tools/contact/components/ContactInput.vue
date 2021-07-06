@@ -39,10 +39,24 @@ export default {
         validInput: {
             type: Boolean,
             required: true
+        },
+        focusOnCreation: {
+            type: Boolean,
+            default: false,
+            required: false
         }
     },
     data: function () {
         return {minMessageLength};
+    },
+    created () {
+        if (this.focusOnCreation) {
+            this.$nextTick(() => {
+                if (this.$refs[`tool-contact-${this.inputName}-input`]) {
+                    this.$refs[`tool-contact-${this.inputName}-input`].focus();
+                }
+            });
+        }
     }
 };
 </script>
@@ -68,6 +82,7 @@ export default {
             <component
                 :is="htmlElement"
                 :id="`tool-contact-${inputName}-input`"
+                :ref="`tool-contact-${inputName}-input`"
                 :value="inputValue"
                 :type="htmlElement === 'input' ? inputType : ''"
                 class="form-control"

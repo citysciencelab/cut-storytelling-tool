@@ -34,6 +34,7 @@ export default {
             }
             else {
                 this.createDrawInteraction();
+                this.setFocusToFirstControl();
             }
         },
         /**
@@ -59,6 +60,18 @@ export default {
         ...mapMutations("Tools/Measure", Object.keys(mutations)),
         ...mapActions("Tools/Measure", Object.keys(actions)),
         ...mapMutations("Map", ["addLayerToMap"]),
+
+        /**
+         * Sets the focus to the first control
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
+            this.$nextTick(() => {
+                if (this.$refs["measure-tool-geometry-select"]) {
+                    this.$refs["measure-tool-geometry-select"].focus();
+                }
+            });
+        },
         /**
          * Sets active to false.
          * @returns {void}
@@ -121,6 +134,7 @@ export default {
                         <div class="col-md-7 col-sm-7">
                             <select
                                 id="measure-tool-geometry-select"
+                                ref="measure-tool-geometry-select"
                                 class="font-arial form-control input-sm pull-left"
                                 :disabled="is3d"
                                 :value="selectedGeometry"

@@ -14,6 +14,11 @@ export default {
             type: Number,
             default: -1,
             required: false
+        },
+        focusToCloseIcon: {
+            type: Boolean,
+            default: false,
+            required: false
         }
     },
     computed: {
@@ -36,9 +41,20 @@ export default {
             return "width: " + Math.floor(pixelWidth) + "px";
         }
     },
+    created () {
+        if (this.focusToCloseIcon) {
+            this.$nextTick(() => {
+                if (this.$refs["close-icon"]) {
+                    this.$refs["close-icon"].focus();
+                }
+            });
+        }
+    },
     methods: {
-        close () {
-            this.$emit("close");
+        close (event) {
+            if (event.type === "click" || event.which === 32 || event.which === 13) {
+                this.$emit("close");
+            }
         }
     }
 };
@@ -65,8 +81,11 @@ export default {
 
             <div class="heading-element">
                 <span
+                    ref="close-icon"
+                    tabindex="0"
                     class="glyphicon glyphicon-remove"
                     @click="close($event)"
+                    @keydown="close($event)"
                 />
             </div>
         </div>
@@ -88,6 +107,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
+    @import "~variables";
 
     @color_1: rgb(85, 85, 85);
     @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
@@ -132,6 +152,13 @@ export default {
             &.flex-grow {
                 flex-grow:99;
                 overflow: hidden;
+            }
+            .glyphicon {
+                &:focus {
+                    outline: 3px solid @accent_focus;
+                    outline: 3px auto  Highlight;
+                    outline: 3px auto -webkit-focus-ring-color;
+                }
             }
 
             > span {

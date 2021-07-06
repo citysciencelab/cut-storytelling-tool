@@ -65,6 +65,7 @@ export default {
                     :input-value="username"
                     label-text="Name"
                     :valid-input="validUsername"
+                    :focus-on-creation="true"
                 />
                 <ContactInput
                     :change-function="setMail"

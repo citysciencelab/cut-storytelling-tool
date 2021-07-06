@@ -320,6 +320,7 @@ export default {
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
         :deactivate-gfi="deactivateGFI"
+        :focus-to-close-icon="true"
         class="selectFeatures"
     >
         <template #toolBody>
@@ -335,7 +336,7 @@ export default {
                 </div>
                 <div
                     v-else
-                    class="select-features-tables"
+                    ref="select-features-tables"
                 >
                     <template
                         v-for="(selectedFeature, index) in selectedFeaturesWithRenderInformation"

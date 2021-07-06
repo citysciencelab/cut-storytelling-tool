@@ -141,6 +141,7 @@ export default {
     <ToolWindow
         v-if="showInformation"
         id="layerInformation"
+        :focus-to-close-icon="true"
         class="layerInformation"
         @close="close"
     >

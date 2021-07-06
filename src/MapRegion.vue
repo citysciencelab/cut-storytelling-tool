@@ -37,6 +37,15 @@ export default {
         <div class="menu">
             <LegendWindow />
         </div>
+
+        <div id="sidebar">
+            <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
+            <ToolManager
+                v-if="configJson"
+                :show-in-sidebar="true"
+            />
+        </div>
+
         <div id="map-wrapper">
             <div
                 id="map"
@@ -53,13 +62,6 @@ export default {
             </div>
         </div>
 
-        <div id="sidebar">
-            <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
-            <ToolManager
-                v-if="configJson"
-                :show-in-sidebar="true"
-            />
-        </div>
 
         <!-- elements that are somewhere above the map, but don't have a fixed position or are not always present -->
         <ConfirmAction />
