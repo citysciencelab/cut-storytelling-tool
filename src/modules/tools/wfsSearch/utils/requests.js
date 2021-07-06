@@ -43,6 +43,8 @@ function xmlFilter (filter) {
     return `&version=1.1.0${filter.length > 0 ? "&filter=" + adjustFilter(filter) : ""}`;
 }
 
+let currentRequest = null;
+
 /**
  * Searches the service for features based on the build or given filter.
  *
@@ -95,6 +97,11 @@ function sendRequest (store, {url, typeName}, filter, fromServicesJson, storedQu
     }
     requestUrl += maxFeatures === "showAll" ? "" : `&maxFeatures=${maxFeatures}`;
     requestUrl += storedQueryId ? storedFilter(filter, storedQueryId) : xmlFilter(filter);
+
+    if (currentRequest) {
+        currentRequest.cancel();
+    }
+    currentRequest = axios.CancelToken.source();
 
     return axios.get(encodeURI(requestUrl))
         .then(response => handleAxiosResponse(response, "WfsSearch, searchFeatures, sendRequest"))

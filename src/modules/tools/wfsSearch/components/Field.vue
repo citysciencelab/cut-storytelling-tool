@@ -3,6 +3,7 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 import actions from "../store/actionsWfsSearch";
 import getters from "../store/gettersWfsSearch";
 import mutations from "../store/mutationsWfsSearch";
+import isObject from "../../../../utils/isObject";
 import {buildXmlFilter} from "../utils/buildFilter";
 import {fieldValueChanged} from "../utils/literalFunctions";
 import {buildPath, getOptions, prepareOptionsWithId} from "../utils/pathFunctions";
@@ -84,7 +85,7 @@ export default {
                     dropdownInputUsesId: this.multipleValues(this.dropdownInputUsesId),
                     inputPlaceholder: this.multipleValues(this.inputPlaceholder),
                     inputTitle: this.multipleValues(this.inputTitle),
-                    options: Array.isArray(this.options) && Object.prototype.toString.call(this.options[0]) !== "[object Object]" ? this.options[this.parameterIndex] : this.options,
+                    options: Array.isArray(this.options) && !isObject(this.options[0]) ? this.options[this.parameterIndex] : this.options,
                     required: this.multipleValues(this.required),
                     suggestionsConfig: this.multipleValues(this.suggestionsConfig),
                     type: this.multipleValues(this.type)
@@ -193,6 +194,7 @@ export default {
                 this.setSelectedOptions({options: this.selectableParameters.options, value, index});
             }
             else if (this.showSuggestions) {
+                // TODO: Functionality like lodash.throttle would be nice to have here
                 this.showLoader = true;
                 const xmlFilter = buildXmlFilter({fieldName: this.fieldName, type: "like", value}),
                     suggestions = await searchFeatures(this.$store, this.currentInstance, this.service, xmlFilter, this?.suggestionsConfig?.featureType);
@@ -252,7 +254,7 @@ export default {
                 :disabled="disabled"
                 :list="htmlElement === 'input' && showSuggestions ? `tool-wfsSearch-${fieldName}-${fieldId}-input-suggestions` : ''"
                 :aria-label="Array.isArray(inputLabel) ? selectableParameters.inputLabel : ''"
-                @change="valueChanged($event.currentTarget.value)"
+                @input="valueChanged($event.currentTarget.value)"
             >
                 <template v-if="htmlElement === 'select'">
                     <option

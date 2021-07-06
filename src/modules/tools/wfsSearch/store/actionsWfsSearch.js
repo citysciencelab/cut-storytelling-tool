@@ -62,6 +62,7 @@ const actions = {
      */
     resetModule ({commit, dispatch}, closeTool) {
         commit("setRequiredValues", null);
+        commit("setSearched", false);
         commit("setService", null);
         commit("setUserHelp", "");
         dispatch("resetResult");
@@ -91,6 +92,7 @@ const actions = {
      */
     resetResult ({commit, dispatch, state}) {
         commit("setValuesReset", true);
+        commit("setSearched", false);
         commit("setResults", []);
         commit("setSelectedOptions", {});
         dispatch("MapMarker/removePointMarker", null, {root: true});

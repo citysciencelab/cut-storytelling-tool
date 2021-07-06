@@ -23,6 +23,10 @@ export default {
         ...mapGetters("Tools/WfsSearch", Object.keys(getters)),
         ...mapGetters("Language", ["currentLocale"]),
         headers () {
+            if (this.results.length === 0) {
+                return null;
+            }
+
             const {resultList} = this.currentInstance,
                 isObject = typeof resultList === "object";
 
@@ -75,10 +79,13 @@ export default {
             }
         },
         async search () {
+            this.setSearched(true);
             Radio.trigger("Util", "showLoader");
             const features = await searchFeatures(this.$store, this.currentInstance, this.service);
 
             Radio.trigger("Util", "hideLoader");
+
+            document.getElementById("tool-wfsSearch-showResults-button").focus();
             this.setResults([]);
             features.forEach(feature => {
                 this.results.push(feature);
@@ -173,12 +180,13 @@ export default {
                             </button>
                         </div>
                         <div
-                            v-if="results.length > 0 && headers"
+                            v-if="searched"
                             class="col-md-12 col-sm-12"
                         >
                             <button
-                                type="button"
+                                id="tool-wfsSearch-showResults-button"
                                 class="btn btn-lgv-grey col-md-12 col-sm-12"
+                                :disabled="results.length === 0 || !headers"
                                 @click="setShowResultList(true)"
                             >
                                 {{ $t("common:modules.tools.wfsSearch.showResults") + " " + `(${results.length})` }}

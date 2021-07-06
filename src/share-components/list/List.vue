@@ -1,5 +1,6 @@
 <script>
-import {mapActions, mapMutations} from "vuex";
+import {mapActions, mapGetters} from "vuex";
+import {getCenter as getCenterExtent} from "ol/extent";
 import {isWebLink} from "../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../utils/isEmailAddress.js";
@@ -24,9 +25,11 @@ export default {
             default: ""
         }
     },
+    computed: {
+        ...mapGetters("Map", ["map"])
+    },
     methods: {
-        ...mapMutations("Map", {setMapCenter: "setCenter"}),
-        ...mapActions("Map", ["setZoomLevel"]),
+        ...mapActions("Map", ["zoomTo"]),
         ...mapActions("MapMarker", ["placingPointMarker"]),
         /**
          * Takes the selected coordinates and centers the map to the new position.
@@ -34,13 +37,10 @@ export default {
          * @returns {void}
          */
         setCenter (feature) {
-            const coords = feature.getGeometry().flatCoordinates,
-                // coordinates come as a string and have to be changed to numbers for the mutation setCenter to work.
-                transformedCoords = [parseFloat(coords[0]), parseFloat(coords[1])];
+            const geometry = feature.getGeometry();
 
-            this.setMapCenter(transformedCoords);
-            this.setZoomLevel(6);
-            this.placingPointMarker(transformedCoords);
+            this.placingPointMarker(getCenterExtent(geometry.getExtent()));
+            this.zoomTo({geometryOrExtent: geometry, options: {maxZoom: 5}});
         },
         isWebLink,
         isPhoneNumber,
