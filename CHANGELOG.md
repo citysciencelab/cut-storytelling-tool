@@ -8,6 +8,20 @@
 
 ---
 
+##  Unreleased - in development
+### Added
+- ...
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+---
+
 ## v2.11.0 - 2021-07-07
 ### Added
 - Add possibility to test end2end-tests with `MicrosoftEdge` driver.
