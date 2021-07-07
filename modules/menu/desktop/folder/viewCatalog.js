@@ -143,12 +143,14 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
     /**
      * Executes the given function callback if a execution key has been triggered.
      * @param {Event} event - the dom event
-     * @param {Function} callback - the callback function of the view to be executed
+     * @param {String} callback - the name of the callback function called on this
      * @returns {boolean} if the action has been triggered
      */
     handleKeyboardTriggeredAction: function (event, callback) {
         if (event.which === 32 || event.which === 13) {
-            this[callback]();
+            if (typeof this[callback] === "function") {
+                this[callback]();
+            }
             event.stopPropagation();
             event.preventDefault();
             return true;
@@ -172,11 +174,11 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         this.model.collection.setActiveToolsToFalse(this.model);
         this.model.collection.get("saveSelection").setIsActive(true);
         store.dispatch("Tools/setToolActive", {id: "saveSelection", active: true});
-        // Schließt den Baum
+        // closes the menu tree
         $(".nav li:first-child").removeClass("open");
-        // Schließt die Mobile Navigation
+        // closes the mobile menu
         $(".navbar-collapse").removeClass("in");
-        // Selektiert die URL
+        // selects the url
         $(".input-save-url").select();
     },
 

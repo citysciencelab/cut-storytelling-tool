@@ -29,7 +29,6 @@ export default {
         ...mapMutations("Legend", Object.keys(mutations)),
         /**
          * Toggles the visibility of the legend
-         * @param {Eevent} event - the dom event
          * @returns {void}
          */
         toggleLegend () {

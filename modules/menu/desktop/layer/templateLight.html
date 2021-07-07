@@ -13,7 +13,7 @@
         <span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span>
     </a>
     <span class="last-item">
-        <% if (typeof styleable !== "undefined" && styleable === true) { %>
+        <% if (styleable === true) { %>
             <span class="glyphicon glyphicon-tint styleWMS tabable" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="<%=changeClassDivisionText%>"></span>
         <% } %>
         <% if (typeof typ !== "undefined" && typ === "VectorTile" && vtStyles && vtStyles.length > 1) { %>

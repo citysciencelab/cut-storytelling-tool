@@ -140,7 +140,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
     },
     /**
      * @todo Write the documentation.
-     * @param {Event} event - the key event id triggered by keyboard (optional)
+     * @param {Event} event - the key event id triggered by keyboard
      * @returns {void}
      */
     checkItem: function (event) {
@@ -180,9 +180,9 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
                 }
             }
 
-            // Navigation is closed
+            // menu navigation is closed
             $("div.collapse.navbar-collapse").removeClass("in");
-            $("li.dropdown-folder.open").removeClass("open"); // TODO JG: this helps
+            $("li.dropdown-folder.open").removeClass("open");
         }
     }
 });
