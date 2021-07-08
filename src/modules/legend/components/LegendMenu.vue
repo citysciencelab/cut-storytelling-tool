@@ -20,7 +20,19 @@ export default {
                 root.append(this.$el);
             }
             else {
-                root.parentNode.insertBefore(this.$el, root.nextSibling);
+                const span = root.querySelector("[name=legend]");
+
+                // replace legend in menu to provide order of menu in config.json
+                // root.replaceChild must be removed on refactoring menu to vue, then only use the else case
+                if (this.mobile && span.parentNode) {
+                    root.replaceChild(this.$el, span.parentNode);
+                }
+                else if (span && span.parentNode && span.parentNode.parentNode) {
+                    root.replaceChild(this.$el.childNodes[0], span.parentNode.parentNode);
+                }
+                else {
+                    root.parentNode.insertBefore(this.$el, root.nextSibling);
+                }
             }
         }
     },

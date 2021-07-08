@@ -19,6 +19,7 @@
 ### Removed
 
 ### Fixed
+- Issue #626: The Legend menu item is placed according to the order of the menu items in config.json.
 
 ---
 
