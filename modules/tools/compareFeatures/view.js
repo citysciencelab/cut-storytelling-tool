@@ -72,6 +72,7 @@ const CompareFeaturesView = Backbone.View.extend({
             });
 
         this.$el.html(this.template(attr));
+        this.setFocus();
     },
 
     /**
@@ -86,6 +87,7 @@ const CompareFeaturesView = Backbone.View.extend({
 
         this.$el.html(this.templateFeedback(attr));
         this.$el.modal("show");
+        this.setFocus();
     },
 
     /**
@@ -111,6 +113,21 @@ const CompareFeaturesView = Backbone.View.extend({
         nothingSelectedText = i18next.t("common:modules.tools.compareFeatures.noFeatures.nothingSelected", {objects: objectsText});
         attr = Object.assign(model.toJSON(), {nothingSelected: nothingSelectedText, info: info});
         this.$el.html(this.templateNoFeatures(attr));
+        this.setFocus();
+    },
+
+    /**
+     * Sets the focus to the first control.
+     * @returns {void}
+     */
+    setFocus: function () {
+
+        if (this.model.getLayerSelection(this.model.get("groupedFeatureList")).length > 1) {
+            this.$el.find("#layer-selection").trigger("focus");
+        }
+        else {
+            this.$el.find("#close-button").trigger("focus");
+        }
     },
 
     /**

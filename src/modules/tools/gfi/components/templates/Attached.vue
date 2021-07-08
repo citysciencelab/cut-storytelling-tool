@@ -53,8 +53,10 @@ export default {
         Radio.trigger("Map", "removeOverlay", this.overlay);
     },
     methods: {
-        close () {
-            this.$emit("close");
+        close (event) {
+            if (event.type === "click" || event.which === 32 || event.which === 13) {
+                this.$emit("close");
+            }
         },
 
         /**
@@ -119,6 +121,7 @@ export default {
                 class="close"
                 aria-label="Close"
                 @click="close"
+                @keydown="close"
             >
                 <span
                     class="glyphicon glyphicon-remove"
@@ -142,6 +145,15 @@ export default {
 </template>
 
 <style lang="less" scoped>
+    @import "~variables";
+
+    button.close > span {
+        &:focus {
+            outline: 3px solid @accent_focus;
+            outline: 3px auto  Highlight;
+            outline: 3px auto -webkit-focus-ring-color;
+        }
+    }
     .gfi-attached {
         background-color: #ffffff;
     }

@@ -264,7 +264,6 @@ export default {
         transition: background 0.25s;
         &:focus {
             outline: 3px solid @accent_focus;
-
             outline: 3px auto  Highlight;
             outline: 3px auto -webkit-focus-ring-color;
         }
