@@ -758,7 +758,8 @@
         },
         "wmsTime": {
             "layerSwiper": {
-              "title": "Layer vergleichen"
+                "description": "Der Swiper kann mithilfe der Maus oder den Pfeiltasten der Tastatur bewegt werden. Bei der Nutzung der Pfeiltasten wird der Swiper {{amount}}px in die entsprechende Richtung bewegt.",
+                "title": "Layer vergleichen"
             },
             "timeSlider": {
                 "buttons": {

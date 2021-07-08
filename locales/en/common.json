@@ -758,17 +758,18 @@
         },
         "wmsTime": {
             "layerSwiper": {
-              "title": "Compare layers"
+                "description": "To move the swiper one can use the mouse or the arrow keys. When using the left and right arrow keys the layer is moved {{amount}}px to the respective side.",
+                "title": "Compare layers"
             },
             "timeSlider": {
                 "buttons": {
-                    "backward": "Move one moment backward",
+                    "backward": "Move one step back",
                     "deactivateLayerSwiper": "Remove layer",
-                    "forward": "Move one moment forward",
+                    "forward": "Move one step forward",
                     "layerSwiper": "Compare two points in time",
-                    "play": "Play-back of all points in time of the layer, starting from the currently selected moment"
+                    "play": "Playback of all points in time of the layer, starting from the currently selected point in time."
                 },
-                "inputRangeLabel": "Choose a moment"
+                "inputRangeLabel": "Choose a point in time"
             }
         },
         "legend": {

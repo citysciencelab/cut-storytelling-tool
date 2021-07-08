@@ -1,4 +1,5 @@
 import drawLayer from "../utils/drawLayer";
+import getPosition from "../utils/getPosition";
 
 const actions = {
     windowWidthChanged ({commit, dispatch, state, getters}) {
@@ -25,7 +26,7 @@ const actions = {
     toggleSwiper ({commit, state, rootGetters}, id) {
         commit("setLayerSwiperActive", !state.layerSwiper.active);
 
-        const secondId = !id.endsWith(state.layerAppendix) ? id + state.layerAppendix : id,
+        const secondId = id.endsWith(state.layerAppendix) ? id : id + state.layerAppendix,
             layerModel = Radio.request("ModelList", "getModelByAttributes", {id: state.layerSwiper.active ? id : secondId});
 
         if (state.layerSwiper.active) {
@@ -55,18 +56,18 @@ const actions = {
         Radio.trigger("Util", "refreshTree");
     },
     /**
-     * Sets the postion of the layerSwiper to state according to the x-coordinate of the mousedown event.
+     * Sets the postion of the layerSwiper to state according to the x-coordinate of the mousedown event
+     * or adjusts it based on the direction of the key pressed by the state defined value.
      *
-     * @param {MouseEvent.mousemove} event DOM Event.
-     * @param {number} event.clientX Current position on the x-axis in px of the mouse.
+     * @param {KeyboardEvent.keydown | MouseEvent.mousemove} event DOM Event.
      * @returns {void}
      */
-    moveSwiper ({state, commit, dispatch}, {clientX}) {
-        if (state.layerSwiper.isMoving) {
-            commit("setLayerSwiperValueX", clientX);
-            commit("setLayerSwiperStyleLeft", clientX);
-            dispatch("updateMap");
-        }
+    moveSwiper ({state, commit, dispatch, getters}, event) {
+        const position = getPosition(event, state.layerSwiper.valueX, getters.currentTimeSliderObject.keyboardMovement);
+
+        commit("setLayerSwiperValueX", position);
+        commit("setLayerSwiperStyleLeft", position);
+        dispatch("updateMap");
     },
     /**
      * Updates the map so that the layer is displayed clipped again.

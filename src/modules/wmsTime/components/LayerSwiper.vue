@@ -10,30 +10,42 @@ export default {
         ...mapGetters("Map", ["visibleLayerList", "map"]),
         ...mapGetters("WmsTime", Object.keys(getters))
     },
-    created: function () {
-        window.addEventListener("mousemove", this.moveSwiper);
-        window.addEventListener("mouseup", this.moveStop);
+    mounted () {
+        const target = document.getElementById("wmsTime-layerSwiper-button");
+
         this.setLayerSwiperTargetLayer(this.visibleLayerList.find(element => element.values_.id === this.currentTimeSliderObject.layerId + this.layerAppendix));
         this.setLayerSwiperValueX(this.map.getSize()[0] / 2);
         this.map.on("postcompose", this.updateMap);
+
+        this.setLayerSwiperDomSwiper(target);
     },
     beforeDestroy: function () {
-        window.removeEventListener("mousemove", this.moveSwiper);
-        window.removeEventListener("mouseup", this.moveStop);
         this.map.un("postcompose", this.updateMap);
     },
     methods: {
         ...mapMutations("WmsTime", Object.keys(mutations)),
-        ...mapActions("WmsTime", Object.keys(actions))
+        ...mapActions("WmsTime", Object.keys(actions)),
+        mouseMovement () {
+            window.addEventListener("mousemove", this.moveSwiper);
+            window.addEventListener("mouseup", this.mouseMovementStopped);
+        },
+        mouseMovementStopped () {
+            window.removeEventListener("mousemove", this.moveSwiper);
+            window.removeEventListener("mouseup", this.mouseMovementStopped);
+        }
     }
 };
 </script>
 
 <template>
     <button
+        id="wmsTime-layerSwiper-button"
         class="btn"
-        :title="$t(`common:modules.wmsTime.layerSwiper.title`)"
-        @mousedown.self="move($event.target)"
+        :title="$t('common:modules.wmsTime.layerSwiper.title')"
+        :aria-description="$t('common:modules.wmsTime.layerSwiper.description', {amount: currentTimeSliderObject.keyboardMovement})"
+        @keydown.left="moveSwiper"
+        @keydown.right="moveSwiper"
+        @mousedown="mouseMovement"
     />
 </template>
 
