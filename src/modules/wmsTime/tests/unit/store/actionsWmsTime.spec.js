@@ -7,11 +7,12 @@ import initialState from "../../../store/stateWmsTime";
 const layerString = "When I grow up I will be a real layer!";
 
 describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
-    let commit, dispatch, rootGetters, state, trigger;
+    let commit, dispatch, getters, rootGetters, state, trigger;
 
     beforeEach(() => {
         commit = sinon.spy();
         dispatch = sinon.spy();
+        getters = {currentTimeSliderObject: {step: 1}};
         trigger = sinon.spy();
     });
 
@@ -144,14 +145,33 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
     });
     describe("moveSwiper", () => {
 
-        it("should call the functions to set the swiper according to the x-coordinate of the mousedown event", () => {
-            const target = {clientX: 750};
+        it("should call the functions to set the swiper according to the x-coordinate of the keydown and ArrowRight event", () => {
+            const event = {
+                type: "keydown",
+                key: "ArrowRight",
+                clientX: 750
+            };
 
+            state.layerSwiper.valueX = 750;
             state.layerSwiper.isMoving = true;
-            actions.moveSwiper({state, commit, dispatch}, target);
+            actions.moveSwiper({state, commit, dispatch, getters}, event);
             expect(commit.calledTwice).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setLayerSwiperValueX", 750]);
-            expect(commit.secondCall.args).to.eql(["setLayerSwiperStyleLeft", 750]);
+            expect(commit.firstCall.args).to.eql(["setLayerSwiperValueX", 755]);
+            expect(commit.secondCall.args).to.eql(["setLayerSwiperStyleLeft", 755]);
+            expect(dispatch.firstCall.args).to.eql(["updateMap"]);
+        });
+        it("should call the functions to set the swiper according to the x-coordinate of the mousemove event", () => {
+            const event = {
+                type: "mousemove",
+                clientX: 800
+            };
+
+            state.layerSwiper.valueX = 750;
+            state.layerSwiper.isMoving = true;
+            actions.moveSwiper({state, commit, dispatch, getters}, event);
+            expect(commit.calledTwice).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setLayerSwiperValueX", 800]);
+            expect(commit.secondCall.args).to.eql(["setLayerSwiperStyleLeft", 800]);
             expect(dispatch.firstCall.args).to.eql(["updateMap"]);
         });
     });

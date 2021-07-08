@@ -63,7 +63,8 @@ const actions = {
      * @returns {void}
      */
     moveSwiper ({state, commit, dispatch, getters}, event) {
-        const position = getPosition(event, state.layerSwiper.valueX, getters.currentTimeSliderObject.keyboardMovement);
+        // TODO: Probleme mit currentTimeSliderObject.keyboardMovement in wms.js
+        const position = getPosition(event, state.layerSwiper.valueX, getters.currentTimeSliderObject.step + 4);
 
         commit("setLayerSwiperValueX", position);
         commit("setLayerSwiperStyleLeft", position);
