@@ -337,6 +337,7 @@ export default {
                 <div
                     v-else
                     ref="select-features-tables"
+                    class="select-features-tables"
                 >
                     <template
                         v-for="(selectedFeature, index) in selectedFeaturesWithRenderInformation"
