@@ -79,11 +79,11 @@ const FilterView = Backbone.View.extend({
      * @returns {void}
      */
     setFocus: function () {
-        if (this.$el.find("#filter-view div.simple-view").length > 0) {
-            this.$el.find("#filter-view div.simple-view > button").first().trigger("focus");
+        if (this.$el.find("div.simple-view > button").length > 0) {
+            this.$el.find("div.simple-view > button").first().trigger("focus");
         }
         else {
-            this.$("#filter-view button.close").trigger("focus");
+            this.$("button.close").trigger("focus");
         }
     },
 

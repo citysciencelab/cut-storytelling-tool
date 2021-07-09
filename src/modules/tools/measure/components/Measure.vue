@@ -67,8 +67,11 @@ export default {
          */
         setFocusToFirstControl () {
             this.$nextTick(() => {
-                if (this.$refs["measure-tool-geometry-select"]) {
+                if (this.$refs["measure-tool-geometry-select"] && !this.$refs["measure-tool-geometry-select"].disabled) {
                     this.$refs["measure-tool-geometry-select"].focus();
+                }
+                else if (this.$refs["measure-tool-unit-select"]) {
+                    this.$refs["measure-tool-unit-select"].focus();
                 }
             });
         },
@@ -164,6 +167,7 @@ export default {
                         <div class="col-md-7 col-sm-7">
                             <select
                                 id="measure-tool-unit-select"
+                                ref="measure-tool-unit-select"
                                 class="font-arial form-control input-sm pull-left"
                                 :value="selectedUnit"
                                 @change="setSelectedUnit($event.target.value)"
