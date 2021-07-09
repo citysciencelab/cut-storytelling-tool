@@ -499,19 +499,29 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             }
         }
         else if (timeLayer) {
-            // If the swiper is active, two WMS-T are currently active
-            if (store.getters["WmsTime/layerSwiper"].active) {
-                if (!id.endsWith(store.getters["WmsTime/layerAppendix"])) {
-                    this.setIsSelected(true);
-                }
-                store.dispatch("WmsTime/toggleSwiper", id);
-            }
-            else {
-                store.commit("WmsTime/setTimeSliderActive", {active: false, currentLayerId: ""});
-            }
+            this.removeTimeLayer();
         }
     },
+    /**
+     * If a single WMS-T is shown: Remove the TimeSlider.
+     * If two WMS-T are shown: Remove the LayerSwiper; depending if the original layer was closed, update the layer with a new time value.
+     *
+     * @returns {void}
+     */
+    removeTimeLayer: function () {
+        const id = this.get("id");
 
+        // If the swiper is active, two WMS-T are currently active
+        if (store.getters["WmsTime/layerSwiper"].active) {
+            if (!id.endsWith(store.getters["WmsTime/layerAppendix"])) {
+                this.setIsSelected(true);
+            }
+            store.dispatch("WmsTime/toggleSwiper", id);
+        }
+        else {
+            store.commit("WmsTime/setTimeSliderActive", {active: false, currentLayerId: ""});
+        }
+    },
     /**
      * Toggles the attribute isVisibleInMap
      * @return {void}
