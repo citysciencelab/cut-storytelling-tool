@@ -12,7 +12,7 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
     beforeEach(() => {
         commit = sinon.spy();
         dispatch = sinon.spy();
-        getters = {currentTimeSliderObject: {step: 1}};
+        getters = {currentTimeSliderObject: {step: 1, keyboardMovement: 5}};
         trigger = sinon.spy();
     });
 

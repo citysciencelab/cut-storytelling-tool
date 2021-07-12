@@ -22,6 +22,7 @@ const WMSLayer = Layer.extend({
             isSecured: false,
             notSupportedFor3D: ["1747", "1749", "1750", "9822", "12600", "9823", "1752", "9821", "1750", "1751", "12599", "2297"],
             useProxy: false,
+            keyboardMovement: 5,
             time: false,
             timeDefault: null
         });
@@ -148,11 +149,15 @@ const WMSLayer = Layer.extend({
                     defaultValue = typeof time === "object" && timeRange[0] <= time.default && time.default <= timeRange[timeRange.length - 1]
                         ? time.default
                         : Number(extent.default),
-                    timeData = {defaultValue, step, timeRange};
+                    timeData = {defaultValue, step, timeRange},
+                    base = {keyboardMovement: this.get("keyboardMovement") || 5};
 
-                this.set("time", typeof time === "object" ? Object.assign({keyboardMovement: 5}, time, timeData) : timeData);
+                this.set(
+                    "time",
+                    typeof time === "object" ? {...base, ...time, ...timeData} : timeData
+                );
                 timeData.layerId = this.get("id");
-                store.commit("WmsTime/addTimeSliderObject", timeData);
+                store.commit("WmsTime/addTimeSliderObject", {...base, ...timeData});
 
                 return defaultValue;
             })
