@@ -11,20 +11,20 @@
 ##  Unreleased - in development
 ### Added
 - Add possibility to test end2end-tests with `MicrosoftEdge` driver.
-- VTC-Layer supports Sprites and Fonts in Styledefinitions.
+- VTC-Layer supports Sprites and Fonts in Style definitions.
+- Added the new Tool `WfsSearch`.
 
 ### Changed
 - The version of the package selenium-webdriver was updated to version 4.0.0-beta.4.
-- Changed LayerInformation from backbone to vue.
+- Changed LayerInformation from backbone to Vue.
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
-- BG-1541 further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2
 - Labels of VTC-Layer-Objects aren't cut off anymore.
-- Issue #602: further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2.
+- BG-1541 & Issue #602: further metadata link is set on MetaDataCatalogueID from rootGetters now, default is 2.
 - Issue #615: parsing of the DescribeFeatureType of a WFS has been extended so that it also satisfies a different interpretation of the schema description. As a result, elements in the legend are displayed in the order specified in the style.json.
 
 ---
@@ -49,27 +49,27 @@
 - The GFI is now active if this is configured and no other active tool explicitly prevents this.
 - Issue #616: Fixed a bug where the live zoom in the tool filter did not take into account the configured minScale.
 - Fixed an error that caused the historical data in the gfiTheme sensor to not be formatted correctly at times.
-- Issue #618: now the line breaks for long search results
+- Issue #618: now the line breaks for long search results.
 
 ---
 
 ## v2.9.1 - 2021-05-25
 ### Fixed
-- Fixed no data in gfi theme of verkehrs layers in geo-online
+- Fixed no data in gfi theme of verkehrs layers in geo-online.
 
 ---
 
 ## v2.9.0 - 2021-05-05
 ### Added
-- New attribute 'nearbyTitle' implemented in config.json for the title in the list of nearby search results.
-- Add @babel/eslint-parser to the package.json
-- Added the new tool "bufferAnalysis"
+- New attribute `nearbyTitle` implemented in config.json for the title in the list of nearby search results.
+- Add @babel/eslint-parser to the package.json.
+- Added the new tool `BufferAnalysis`.
 
 ### Changed
 - Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.
 - Tool addons are now also written in config.json in camelCase.
-- colorTools are renamed into convertColor (src/utils/convertColor)
-- Updates the core-js and babel dependencies in the package.json
+- colorTools are renamed into convertColor (src/utils/convertColor).
+- Updates the core-js and babel dependencies in the package.json.
 - Update the dependency caniuse-lite.
 - The module addGeoJSON switched from backbone to vue and is provided as a util now.
 - The loading image is now displayed longer when switching to map mode: Oblique (max. 80000ms).

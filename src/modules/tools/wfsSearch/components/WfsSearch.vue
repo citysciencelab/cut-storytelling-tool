@@ -8,6 +8,7 @@ import Literal from "./Literal.vue";
 import actions from "../store/actionsWfsSearch";
 import getters from "../store/gettersWfsSearch";
 import mutations from "../store/mutationsWfsSearch";
+import {createUserHelp} from "../utils/literalFunctions";
 import {searchFeatures} from "../utils/requests";
 
 export default {
@@ -18,11 +19,14 @@ export default {
         Tool,
         Modal
     },
-    data: () => ({and: "and", or: "or"}),
     computed: {
         ...mapGetters("Tools/WfsSearch", Object.keys(getters)),
         ...mapGetters("Language", ["currentLocale"]),
         headers () {
+            if (this.results.length === 0) {
+                return null;
+            }
+
             const {resultList} = this.currentInstance,
                 isObject = typeof resultList === "object";
 
@@ -51,13 +55,10 @@ export default {
     watch: {
         active (val) {
             (val ? this.prepareModule : this.resetModule)();
-            if (this.userHelp !== "hide") {
-                this.adjustUserHelp();
-            }
         },
         currentLocale () {
             if (this.active && this.userHelp !== "hide") {
-                this.adjustUserHelp();
+                createUserHelp(this.currentInstance.literals);
             }
         }
     },
@@ -68,17 +69,6 @@ export default {
         ...mapMutations("Tools/WfsSearch", Object.keys(mutations)),
         ...mapActions("Tools/WfsSearch", Object.keys(actions)),
         searchFeatures,
-        adjustUserHelp () {
-            const translatedAnd = i18next.t("common:modules.tools.wfsSearch.userHelp.and"),
-                translatedOr = i18next.t("common:modules.tools.wfsSearch.userHelp.or");
-
-            this.setUserHelp(this.userHelp
-                .replaceAll(this.and, translatedAnd)
-                .replaceAll(this.or, translatedOr));
-
-            this.and = translatedAnd;
-            this.or = translatedOr;
-        },
         close () {
             this.setActive(false);
             this.resetModule(true);
@@ -89,14 +79,18 @@ export default {
             }
         },
         async search () {
+            this.setSearched(true);
             Radio.trigger("Util", "showLoader");
             const features = await searchFeatures(this.$store, this.currentInstance, this.service);
 
             Radio.trigger("Util", "hideLoader");
+
+            document.getElementById("tool-wfsSearch-showResults-button").focus();
             this.setResults([]);
             features.forEach(feature => {
                 this.results.push(feature);
             });
+            this.setShowResultList(true);
         }
     }
 };
@@ -186,12 +180,13 @@ export default {
                             </button>
                         </div>
                         <div
-                            v-if="results.length > 0 && headers"
+                            v-if="searched"
                             class="col-md-12 col-sm-12"
                         >
                             <button
-                                type="button"
+                                id="tool-wfsSearch-showResults-button"
                                 class="btn btn-lgv-grey col-md-12 col-sm-12"
+                                :disabled="results.length === 0 || !headers"
                                 @click="setShowResultList(true)"
                             >
                                 {{ $t("common:modules.tools.wfsSearch.showResults") + " " + `(${results.length})` }}
@@ -207,7 +202,7 @@ export default {
             :showModal="showResults"
             @modalHid="setShowResultList(false)"
         >
-            <template v-if="showResults">
+            <template v-if="showResults && results.length">
                 <header slot="header">
                     <h4>{{ currentInstance.resultDialogTitle ? $t(currentInstance.resultDialogTitle) : $t(name) }}</h4>
                     <hr>
@@ -219,6 +214,13 @@ export default {
                     :table-heads="headers"
                     :table-data="results"
                 />
+            </template>
+            <template v-else>
+                <header slot="header">
+                    <h4>{{ $t(name) }}</h4>
+                    <hr>
+                </header>
+                <span>{{ $t("common:modules.tools.wfsSearch.noResults") }}</span>
             </template>
         </Modal>
     </div>

@@ -30,18 +30,20 @@ function adjustFilter (filter) {
  * @returns {String} The added parts for the request url.
  */
 function storedFilter (filter, storedQueryId) {
-    return `&version=2.0.0&StoredQuery_ID=${storedQueryId + filter}`;
+    return `&version=2.0.0${filter !== "" ? "&StoredQuery_ID=" + storedQueryId + filter : ""}`;
 }
 
 /**
  * Returns the version and filter to the request url for a WFS@1.1.0
  *
- * @param {XML} filter The filter written in XML.
+ * @param {XML[]} filter The filter written in XML.
  * @returns {String} The added parts for the request Url.
  */
 function xmlFilter (filter) {
-    return `&version=1.1.0&filter=${adjustFilter(filter)}`;
+    return `&version=1.1.0${filter.length > 0 ? "&filter=" + adjustFilter(filter) : ""}`;
 }
+
+let currentRequest = null;
 
 /**
  * Searches the service for features based on the build or given filter.
@@ -53,7 +55,7 @@ function xmlFilter (filter) {
  * @param {Number} currentInstance.requestConfig.maxFeatures The maximum amount of features allowed.
  * @param {String} currentInstance.requestConfig.storedQueryId Id of the stored Query. If given, a WFS@2.0.0 is queried.
  * @param {Object} service The service to send the request to.
- * @param {?String} singleValueFilter If given, this filter should be used.
+ * @param {?String} [singleValueFilter = null] If given, this filter should be used.
  * @param {?String} [featureType = null] FeatureType of the features which should be requested. Only given for queries for suggestions.
  * @returns {Promise} If the send request was successful, the found features are converted from XML to OL Features and returned.
  */
@@ -95,6 +97,11 @@ function sendRequest (store, {url, typeName}, filter, fromServicesJson, storedQu
     }
     requestUrl += maxFeatures === "showAll" ? "" : `&maxFeatures=${maxFeatures}`;
     requestUrl += storedQueryId ? storedFilter(filter, storedQueryId) : xmlFilter(filter);
+
+    if (currentRequest) {
+        currentRequest.cancel();
+    }
+    currentRequest = axios.CancelToken.source();
 
     return axios.get(encodeURI(requestUrl))
         .then(response => handleAxiosResponse(response, "WfsSearch, searchFeatures, sendRequest"))

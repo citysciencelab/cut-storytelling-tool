@@ -27,17 +27,10 @@ export default {
     <Field
         v-if="literal.field"
         :key="`tool-wfsSearch-clause-literal-field-${literal.field.id}-${literal.field.fieldName}`"
-        :default-value="literal.field.defaultValue"
         :dropdown-input-uses-id="literal.field.usesId"
         :field-id="literal.field.id"
-        :field-name="literal.field.fieldName"
-        :input-label="literal.field.inputLabel"
-        :input-placeholder="literal.field.inputPlaceholder"
-        :input-title="literal.field.inputTitle"
-        :options="literal.field.options"
-        :required="literal.field.required"
         :suggestions-config="suggestions"
-        :type="literal.field.type"
+        v-bind="literal.field"
     />
     <!-- NOTE: This div can be styled for visual highlighting -> TODO: Also, weird UI behaviour when a field is "dangling" between clauses cause of this -->
     <div v-else-if="literal.clause">

@@ -35,7 +35,7 @@ const actions = {
 
             // NOTE: The extra object is sadly needed so that the object is reactive :(
             commit("setRequiredValues", {...prepareLiterals(currentInstance.literals)});
-            commit("setUserHelp", currentInstance.userHelp ? currentInstance.userHelp : createUserHelp(currentInstance.literals));
+            commit("setUserHelp", currentInstance.userHelp || createUserHelp(currentInstance.literals));
 
             if (selectSource) {
                 dispatch("retrieveData");
@@ -62,6 +62,7 @@ const actions = {
      */
     resetModule ({commit, dispatch}, closeTool) {
         commit("setRequiredValues", null);
+        commit("setSearched", false);
         commit("setService", null);
         commit("setUserHelp", "");
         dispatch("resetResult");
@@ -91,6 +92,7 @@ const actions = {
      */
     resetResult ({commit, dispatch, state}) {
         commit("setValuesReset", true);
+        commit("setSearched", false);
         commit("setResults", []);
         commit("setSelectedOptions", {});
         dispatch("MapMarker/removePointMarker", null, {root: true});

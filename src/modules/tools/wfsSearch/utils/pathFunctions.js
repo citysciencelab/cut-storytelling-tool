@@ -69,11 +69,8 @@ function prepareOptionsWithId (elements, showKey = false) {
 function removePath (el) {
     let element = el;
 
-    if (el.includes(".")) {
-        do {
-            element = element.slice(element.indexOf(".") + 1);
-        }
-        while (element.includes("."));
+    while (element.includes(".")) {
+        element = element.slice(element.indexOf(".") + 1);
     }
     return element;
 }

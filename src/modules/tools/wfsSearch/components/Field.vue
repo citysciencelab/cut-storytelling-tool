@@ -3,6 +3,7 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 import actions from "../store/actionsWfsSearch";
 import getters from "../store/gettersWfsSearch";
 import mutations from "../store/mutationsWfsSearch";
+import isObject from "../../../../utils/isObject";
 import {buildXmlFilter} from "../utils/buildFilter";
 import {fieldValueChanged} from "../utils/literalFunctions";
 import {buildPath, getOptions, prepareOptionsWithId} from "../utils/pathFunctions";
@@ -75,36 +76,22 @@ export default {
         selectableParameters () {
             // This could be checked with any required value
             if (Array.isArray(this.fieldName)) {
-                // The array check needs to be done for every property which is not required
                 // The "options" part is special, as it already can be an array. The second check makes sure, that the elements of the array should not be displayed but are part of a single field config.
                 return {
                     fieldId: this.fieldId,
                     fieldName: this.fieldName[this.parameterIndex],
                     inputLabel: this.inputLabel[this.parameterIndex],
-                    defaultValue: Array.isArray(this.defaultValue) ? this.defaultValue[this.parameterIndex] : this.defaultValue,
-                    dropdownInputUsesId: Array.isArray(this.dropdownInputUsesId) ? this.dropdownInputUsesId[this.parameterIndex] : this.dropdownInputUsesId,
-                    inputPlaceholder: Array.isArray(this.inputPlaceholder) ? this.inputPlaceholder[this.parameterIndex] : this.inputPlaceholder,
-                    inputTitle: Array.isArray(this.inputTitle) ? this.inputTitle[this.parameterIndex] : this.inputTitle,
-                    options: Array.isArray(this.options) && Object.prototype.toString.call(this.options[0]) !== "[object Object]" ? this.options[this.parameterIndex] : this.options,
-                    required: Array.isArray(this.required) ? this.required[this.parameterIndex] : this.required,
-                    suggestionsConfig: Array.isArray(this.suggestionsConfig) ? this.suggestionsConfig[this.parameterIndex] : this.suggestionsConfig,
-                    type: Array.isArray(this.type) ? this.type[this.parameterIndex] : this.type
+                    defaultValue: this.multipleValues(this.defaultValue),
+                    dropdownInputUsesId: this.multipleValues(this.dropdownInputUsesId),
+                    inputPlaceholder: this.multipleValues(this.inputPlaceholder),
+                    inputTitle: this.multipleValues(this.inputTitle),
+                    options: Array.isArray(this.options) && !isObject(this.options[0]) ? this.options[this.parameterIndex] : this.options,
+                    required: this.multipleValues(this.required),
+                    suggestionsConfig: this.multipleValues(this.suggestionsConfig),
+                    type: this.multipleValues(this.type)
                 };
             }
-
-            return {
-                fieldId: this.fieldId,
-                fieldName: this.fieldName,
-                inputLabel: this.inputLabel,
-                defaultValue: this.defaultValue,
-                dropdownInputUsesId: this.dropdownInputUsesId,
-                inputPlaceholder: this.inputPlaceholder,
-                inputTitle: this.inputTitle,
-                options: this.options,
-                required: this.required,
-                suggestionsConfig: this.suggestionsConfig,
-                type: this.type
-            };
+            return this.$props;
         },
         htmlElement () {
             return this.selectableParameters.options === null ? "input" : "select";
@@ -183,6 +170,17 @@ export default {
     methods: {
         ...mapMutations("Tools/WfsSearch", Object.keys(mutations)),
         ...mapActions("Tools/WfsSearch", Object.keys(actions)),
+        /**
+         * The array check needs to be done for every property which is not required
+         * to check if multiple parameters can be selected from this field and if every
+         * parameter has different values set.
+         *
+         * @param {Boolean/Object/String/Array} prm The parameter to be checked.
+         * @returns {String} The currently selected value.
+         */
+        multipleValues (prm) {
+            return Array.isArray(prm) ? prm[this.parameterIndex] : prm;
+        },
         async valueChanged (val) {
             const value = this.value = this.htmlElement === "input" || val === "" ? val : JSON.parse(val).value;
 
@@ -196,6 +194,7 @@ export default {
                 this.setSelectedOptions({options: this.selectableParameters.options, value, index});
             }
             else if (this.showSuggestions) {
+                // TODO: Functionality like lodash.throttle would be nice to have here
                 this.showLoader = true;
                 const xmlFilter = buildXmlFilter({fieldName: this.fieldName, type: "like", value}),
                     suggestions = await searchFeatures(this.$store, this.currentInstance, this.service, xmlFilter, this?.suggestionsConfig?.featureType);
@@ -255,7 +254,7 @@ export default {
                 :disabled="disabled"
                 :list="htmlElement === 'input' && showSuggestions ? `tool-wfsSearch-${fieldName}-${fieldId}-input-suggestions` : ''"
                 :aria-label="Array.isArray(inputLabel) ? selectableParameters.inputLabel : ''"
-                @change="valueChanged($event.currentTarget.value)"
+                @input="valueChanged($event.currentTarget.value)"
             >
                 <template v-if="htmlElement === 'select'">
                     <option

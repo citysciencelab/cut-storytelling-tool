@@ -1,33 +1,11 @@
 /**
- * Creates a String representation for the built literals structure.
+ * Adds an asterix to the end of the given String if not already present.
  *
- * @param {Object[]} literals The literals for which the structure is built and which are parsed.
- * @returns {String} String representation for the structure of the given literal.
+ * @param {string} val The value to check.
+ * @returns {string} The given value with a single asterix at the end.
  */
-function createUserHelp (literals) {
-    const structure = createLiteralStructure(literals);
-    let userHelp = "",
-        marker = "";
-
-    for (const el of structure) {
-        if (el === "and" || el === "or") {
-            marker = el;
-            continue;
-        }
-        if (el !== "(" && el !== ")") {
-            userHelp += el + " " + marker + " ";
-            continue;
-        }
-
-        if (el === ")" && marker !== "") {
-            userHelp = userHelp.substring(0, userHelp.length - (marker.length + 2));
-            marker = "";
-        }
-
-        userHelp += el;
-    }
-
-    return userHelp.replaceAll(")(", ") and (").replaceAll(",", " / ").replaceAll("*", "");
+function addStar (val) {
+    return val.endsWith("*") ? val : val + "*";
 }
 
 /**
@@ -58,6 +36,45 @@ function createLiteralStructure (stateLiterals, literals = null, userHelp = []) 
 }
 
 /**
+ * Creates a String representation for the built literals structure.
+ *
+ * @param {Object[]} literals The literals for which the structure is built and which are parsed.
+ * @returns {String} String representation for the structure of the given literal.
+ */
+export function createUserHelp (literals) {
+    const and = i18next.t("common:modules.tools.wfsSearch.userHelp.and"),
+        or = i18next.t("common:modules.tools.wfsSearch.userHelp.or"),
+        structure = createLiteralStructure(literals);
+    let userHelp = "",
+        marker = "";
+
+    for (const el of structure) {
+        if (el === "and" || el === "or") {
+            marker = el;
+            continue;
+        }
+        if (el !== "(" && el !== ")") {
+            userHelp += `${el} ${marker} `;
+            continue;
+        }
+
+        if (el === ")" && marker !== "") {
+            userHelp = userHelp.substring(0, userHelp.length - (marker.length + 2));
+            marker = "";
+        }
+
+        userHelp += el;
+    }
+
+    return userHelp
+        .replaceAll(" and ", ` ${and} `)
+        .replaceAll(" or ", ` ${or} `)
+        .replaceAll(")(", `) ${and} (`)
+        .replaceAll(",", " / ")
+        .replaceAll("*", "");
+}
+
+/**
  * Recursively adds unique ids to the clauses and fields to be able to properly update the values set for a field.
  * Also prepares the list of required fields.
  *
@@ -67,9 +84,9 @@ function createLiteralStructure (stateLiterals, literals = null, userHelp = []) 
  * @param {Object} [requiredValues = {}] The values required to be set by the user.
  * @returns {Object} Returns the current values for the required fields.
  */
-function prepareLiterals (stateLiterals, literals = null, clauseId = "", requiredValues = {}) {
+export function prepareLiterals (stateLiterals, literals = null, clauseId = "", requiredValues = {}) {
     const lit = literals === null ? stateLiterals : literals,
-        idPrefix = clauseId ? clauseId + "+" : "";
+        idPrefix = clauseId ? clauseId + "+" : "wfsSearch-";
 
     lit.forEach((literal, i) => {
         if (literal.field) {
@@ -80,8 +97,8 @@ function prepareLiterals (stateLiterals, literals = null, clauseId = "", require
                 requiredValues[literal.field.id] = null;
 
                 literal.field.inputLabel = typeof literal.field.inputLabel === "object"
-                    ? literal.field.inputLabel.map(label => label + "*")
-                    : literal.field.inputLabel + "*";
+                    ? literal.field.inputLabel.map(label => addStar(label))
+                    : addStar(literal.field.inputLabel);
             }
             if (literal.clause) {
                 delete literal.clause;
@@ -109,8 +126,8 @@ function prepareLiterals (stateLiterals, literals = null, clauseId = "", require
  * @param {?(Object[])} [literals = null] As the structure is recursively traversed, this value is an inner array of the stateLiterals.
  * @returns {Object} Returns the current values for the required fields.
  */
-function fieldValueChanged (id, value, stateLiterals, requiredValues, parameterIndex, literals = null) {
-    const arr = literals ? literals : stateLiterals;
+export function fieldValueChanged (id, value, stateLiterals, requiredValues, parameterIndex, literals = null) {
+    const arr = literals || stateLiterals;
 
     arr.forEach(literal => {
         if (literal.clause) {
@@ -134,5 +151,3 @@ function fieldValueChanged (id, value, stateLiterals, requiredValues, parameterI
 
     return requiredValues;
 }
-
-export {createUserHelp, prepareLiterals, fieldValueChanged};
