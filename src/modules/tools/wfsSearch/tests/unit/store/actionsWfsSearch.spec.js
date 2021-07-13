@@ -12,21 +12,14 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
 
     afterEach(sinon.restore);
 
-    describe("resetResult", () => {
-        it("should reset the results in the state", () => {
-            const state = {
-                requiredValues: {Gemarkung: "Waldesch", Flur: 5}
-            };
+    describe("instanceChanged", () => {
+        it("should update the currently set search instance", () => {
+            const instanceIndex = 1;
 
-            actions.resetResult({state, commit, dispatch});
+            actions.instanceChanged({commit, dispatch}, instanceIndex);
 
-            expect(commit.getCall(0).args).to.eql(["setValuesReset", true]);
-            expect(commit.getCall(1).args).to.eql(["setSearched", false]);
-            expect(commit.getCall(2).args).to.eql(["setResults", []]);
-            expect(commit.getCall(3).args).to.eql(["setSelectedOptions", {}]);
-            expect(commit.callCount).to.equal(4);
-            expect(dispatch.firstCall.args).to.eql(["MapMarker/removePointMarker", null, {root: true}]);
-            expect(state.requiredValues).to.eql({Gemarkung: "", Flur: ""});
+            expect(commit.getCall(0).args).to.eql(["setCurrentInstanceIndex", instanceIndex]);
+            expect(dispatch.firstCall.args).to.eql(["prepareModule"]);
         });
     });
     describe("resetModule", () => {
@@ -58,6 +51,23 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
             expect(commit.getCall(6).args).to.eql(["setActive", false]);
 
             expect(commit.callCount).to.equal(7);
+        });
+    });
+    describe("resetResult", () => {
+        it("should reset the results in the state", () => {
+            const state = {
+                requiredValues: {Gemarkung: "Waldesch", Flur: 5}
+            };
+
+            actions.resetResult({state, commit, dispatch});
+
+            expect(commit.getCall(0).args).to.eql(["setValuesReset", true]);
+            expect(commit.getCall(1).args).to.eql(["setSearched", false]);
+            expect(commit.getCall(2).args).to.eql(["setResults", []]);
+            expect(commit.getCall(3).args).to.eql(["setSelectedOptions", {}]);
+            expect(commit.callCount).to.equal(4);
+            expect(dispatch.firstCall.args).to.eql(["MapMarker/removePointMarker", null, {root: true}]);
+            expect(state.requiredValues).to.eql({Gemarkung: "", Flur: ""});
         });
     });
 });
