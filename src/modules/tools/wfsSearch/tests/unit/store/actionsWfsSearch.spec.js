@@ -47,6 +47,7 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
             expect(dispatch.thirdCall.args[2]).to.eql({root: true});
 
             expect(dispatch.callCount).to.equal(3);
+            // TODO: If ist noch nicht abgedeckt
         });
     });
 
@@ -79,6 +80,18 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
             expect(commit.getCall(6).args).to.eql(["setActive", false]);
 
             expect(commit.callCount).to.equal(7);
+        });
+    });
+
+    describe("retrieveData", () => {
+        it("should retrieve information from the external file", () => {
+            const getters = {
+                currentInstance: {
+                    selectSource: 122
+                }
+            };
+
+            actions.retrieveData({commit, getters});
         });
     });
 
