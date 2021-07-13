@@ -13,7 +13,7 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
     afterEach(sinon.restore);
 
     describe("resetResult", () => {
-        it("resets the results in the state", () => {
+        it("should reset the results in the state", () => {
             const state = {
                 requiredValues: {Gemarkung: "Waldesch", Flur: 5}
             };
@@ -27,6 +27,37 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
             expect(commit.callCount).to.equal(4);
             expect(dispatch.firstCall.args).to.eql(["MapMarker/removePointMarker", null, {root: true}]);
             expect(state.requiredValues).to.eql({Gemarkung: "", Flur: ""});
+        });
+    });
+    describe("resetModule", () => {
+        it("should reset state parameters to their initial state", () => {
+            const closeTool = false;
+
+            actions.resetModule({commit, dispatch}, closeTool);
+
+            expect(commit.getCall(0).args).to.eql(["setRequiredValues", null]);
+            expect(commit.getCall(1).args).to.eql(["setSearched", false]);
+            expect(commit.getCall(2).args).to.eql(["setService", null]);
+            expect(commit.getCall(3).args).to.eql(["setUserHelp", ""]);
+            expect(commit.callCount).to.equal(4);
+            expect(dispatch.firstCall.args).to.eql(["resetResult"]);
+        });
+        it("should reset state parameters to their initial state and reset the tool completely", () => {
+            const closeTool = true;
+
+            actions.resetModule({commit, dispatch}, closeTool);
+
+            expect(commit.getCall(0).args).to.eql(["setRequiredValues", null]);
+            expect(commit.getCall(1).args).to.eql(["setSearched", false]);
+            expect(commit.getCall(2).args).to.eql(["setService", null]);
+            expect(commit.getCall(3).args).to.eql(["setUserHelp", ""]);
+            expect(dispatch.firstCall.args).to.eql(["resetResult"]);
+
+            expect(commit.getCall(4).args).to.eql(["setCurrentInstanceIndex", 0]);
+            expect(commit.getCall(5).args).to.eql(["setParsedSource", null]);
+            expect(commit.getCall(6).args).to.eql(["setActive", false]);
+
+            expect(commit.callCount).to.equal(7);
         });
     });
 });
