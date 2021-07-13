@@ -106,17 +106,22 @@ export default {
                 :key="className"
                 :class="className"
             >
-                <template v-for="(control, index) in categorizedControls[categoryName]">
-                    <component
-                        :is="control.component"
-                        :key="'control-' + control.key"
-                        :class="[
-                            index !== categorizedControls[categoryName].length - 1 ? 'spaced' : '',
-                            mobile && hiddenMobile(control.key) ? 'hidden' : ''
-                        ]"
-                        v-bind="control.props"
-                    />
-                </template>
+                <ul>
+                    <li
+                        v-for="(control, index) in categorizedControls[categoryName]"
+                        :key="index"
+                    >
+                        <component
+                            :is="control.component"
+                            :key="'control-' + control.key"
+                            :class="[
+                                index !== categorizedControls[categoryName].length - 1 ? 'spaced' : '',
+                                mobile && hiddenMobile(control.key) ? 'hidden' : ''
+                            ]"
+                            v-bind="control.props"
+                        />
+                    </li>
+                </ul>
             </div>
         </template>
     </div>
