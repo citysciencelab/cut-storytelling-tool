@@ -22,6 +22,34 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
             expect(dispatch.firstCall.args).to.eql(["prepareModule"]);
         });
     });
+
+    describe("prepareModule", () => {
+        it("should prepare the module if the WFS is given", () => {
+            const getters = {
+                    currentInstance: {
+                        selectSource: 122,
+                        requestConfig: {
+                            layerId: 123,
+                            likeFilter: "equal",
+                            restLayerId: 456,
+                            storedQueryId: 5
+                        }
+                    }
+                },
+                name = "wfsName";
+
+            actions.prepareModule({commit, dispatch, getters});
+
+            expect(dispatch.firstCall.args).to.eql(["resetModule", false]);
+            expect(dispatch.secondCall.args).to.eql(["resetModule", true]);
+            expect(dispatch.thirdCall.args[0]).to.eql("Alerting/addSingleAlert");
+            expect(dispatch.thirdCall.args[1]).to.eql(i18next.t("common:modules.tools.wfsSearch.wrongConfig", {name: name}));
+            expect(dispatch.thirdCall.args[2]).to.eql({root: true});
+
+            expect(dispatch.callCount).to.equal(3);
+        });
+    });
+
     describe("resetModule", () => {
         it("should reset state parameters to their initial state", () => {
             const closeTool = false;
@@ -53,6 +81,7 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
             expect(commit.callCount).to.equal(7);
         });
     });
+
     describe("resetResult", () => {
         it("should reset the results in the state", () => {
             const state = {
