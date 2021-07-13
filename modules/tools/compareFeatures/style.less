@@ -1,3 +1,5 @@
+@import "../../../css/variables.less";
+
 @color_1: #fec44f;
 @color_2: transparent;
 @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
@@ -9,6 +11,13 @@
 .compare-feature-modal {
     z-index: 1080;
     font-size: 14px;
+    button.close {
+        &:focus {
+            outline: 3px solid @accent_focus;
+            outline: 3px auto  Highlight;
+            outline: 3px auto -webkit-focus-ring-color;
+        }
+    }
     label {
         font-family: @font_family_1;
         padding-top: 7px;

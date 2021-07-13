@@ -49,6 +49,9 @@ export default {
             this.createPopover();
         });
     },
+    created () {
+        this.setFocusToFirstControl();
+    },
     beforeDestroy () {
         Radio.trigger("Map", "removeOverlay", this.overlay);
     },
@@ -91,7 +94,6 @@ export default {
 
                 }
             });
-
             $(this.overlay.getElement()).popover("show");
         },
 
@@ -107,6 +109,19 @@ export default {
             }
 
             return key;
+        },
+        /**
+         * Sets the focus to the first control (close-button)
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
+            this.$nextTick(() => {
+                setTimeout(() => {
+                    if (this.$refs["gfi-close-button"]) {
+                        this.$refs["gfi-close-button"].focus();
+                    }
+                }, 100);
+            });
         }
     }
 };
@@ -117,9 +132,11 @@ export default {
         <!-- header -->
         <div class="gfi-header">
             <button
+                ref="gfi-close-button"
                 type="button"
                 class="close"
                 aria-label="Close"
+                tabindex="0"
                 @click="close"
                 @keydown="close"
             >
@@ -147,7 +164,7 @@ export default {
 <style lang="less" scoped>
     @import "~variables";
 
-    button.close > span {
+    button.close {
         &:focus {
             outline: 3px solid @accent_focus;
             outline: 3px auto  Highlight;
