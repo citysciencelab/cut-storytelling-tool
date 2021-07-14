@@ -373,7 +373,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         if (value && model.get("layoutList").length !== 0 && visibleLayerList.length >= 1) {
             const canvasLayer = canvasModel.getCanvasLayer(visibleLayerList);
 
-            this.setEventListener(canvasLayer.on("postrender", this.createPrintMask.bind(this)));
+            // this.setEventListener(canvasLayer.on("postrender", this.createPrintMask.bind(this)));
         }
         else {
             Radio.trigger("Map", "unregisterListener", this.get("eventListener"));
