@@ -1,6 +1,6 @@
 <script>
 import Tool from "../../Tool.vue";
-import {mapGetters, mapActions, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersSearchByCoord";
 import actions from "../store/actionsSearchByCoord";
 import mutations from "../store/mutationsSearchByCoord";
