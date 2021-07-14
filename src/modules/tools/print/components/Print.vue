@@ -253,6 +253,7 @@ export default {
                                 :key="i"
                                 :value="scale"
                                 :selected="scale === currentScale"
+                                @click="updateScale(scale)"
                             >
                                 1 : {{ returnScale(scale) }}
                             </option>
