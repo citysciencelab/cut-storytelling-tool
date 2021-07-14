@@ -19,7 +19,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         // available layouts of the specified print configuration
         layoutList: [],
         currentLayout: undefined,
-        currentLayoutName: "mapfish",
+        currentLayoutName: "",
         // available formats of the specified print configuration
         formatList: [],
         currentFormat: "pdf",
@@ -129,7 +129,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @listens Print#CreatePrintJob
      */
     initialize: function () {
-        const channel = Radio.channel("Print");
+        const channel = Radio.channel("Printer");
 
         this.superInitialize();
 
@@ -414,7 +414,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         if (value && model.get("layoutList").length !== 0 && visibleLayerList.length >= 1) {
             const canvasLayer = canvasModel.getCanvasLayer(visibleLayerList);
 
-            this.setEventListener(canvasLayer.on("postrender", this.createPrintMask.bind(this)));
+            // this.setEventListener(canvasLayer.on("postrender", this.createPrintMask.bind(this)));
         }
         else {
             Radio.trigger("Map", "unregisterListener", this.get("eventListener"));
@@ -641,7 +641,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         }
 
         this.setInvisibleLayer(invisibleLayer);
-        // this.updateCanvasLayer();
+        this.updateCanvasLayer();
     },
 
     /**
