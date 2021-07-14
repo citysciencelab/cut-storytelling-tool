@@ -15,7 +15,26 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/Print", Object.keys(getters)),
-        ...mapActions("Tools/Print", Object.keys(actions))
+        ...mapGetters(["printSettings"]),
+        ...mapActions("Tools/Print", Object.keys(actions)),
+        ...mapGetters("Map", ["scales, clickCoord"]),
+        ...mapGetters("Tools/Gfi", ["currentFeature"]),
+        currentMapScale: {
+            get () {
+                return this.$store.state.Map.scale;
+            },
+            set (value) {
+                this.$store.commit("Map/setScale", value);
+            }
+        }
+    },
+    watch: {
+        active: function () {
+            if (this.active) {
+                this.setCurrentMapScale(this.$store.state.Map.scale);
+                this.togglePostrenderListener();
+            }
+        }
     },
 
     /**
@@ -23,26 +42,81 @@ export default {
      * @returns {void}
      */
     created () {
-        debugger;
         this.$on("close", this.close);
+        this.setPrintSettings(this.printSettings);
+        this.setCurrentLayoutName(this.printSettings.currentLayoutName);
 
         if (this.layoutList.length === 0) {
             this.retrieveCapabilites();
-        }
-        this.togglePostrenderListener();
-        if (this.active) {
-            this.setCurrentMapScale(this.$store.state.Map.scale);
         }
     },
     methods: {
         ...mapMutations("Tools/Print", Object.keys(mutations)),
         ...mapActions("Tools/Print", [
             "retrieveCapabilites",
-            "togglePostrenderListener"
+            "togglePostrenderListener",
+            "getVisibleLayer"
         ]),
 
         returnScale (scale) {
             return scale < 10000 ? scale : scale.toString().substring(0, scale.toString().length - 3) + " " + scale.toString().substring(scale.toString().length - 3);
+        },
+        /**
+         * Showing the hint information if the current print scale and the current map scale are not the same
+         * @param {Event} evt - event that triggered from the mouseenter or mouseleave action
+         * @returns {void}
+         */
+        showHintInfoScale (evt) {
+            if (!evt?.type) {
+                return;
+            }
+
+            if (evt.type === "mouseenter") {
+                document.querySelector(".hint-info").style.display = "block";
+            }
+            else {
+                document.querySelector(".hint-info").style.display = "none";
+            }
+        },
+
+        isGfiAvailable () {
+            return this.isGfiAvailable;
+        },
+
+        isGfiActive () {
+            if (this.currentFeature !== null) {
+                return true;
+            }
+            return false;
+        },
+
+        getGfiForPrint () {
+            if (this.currentFeature !== null) {
+                return [this.currentFeature.getMappedProperties(), this.currentFeature.getTitle(), this.clickCoord];
+            }
+            return [];
+        },
+
+        /**
+         * todo
+         * @returns {void}
+         */
+        print () {
+            // set the Title to the input shit
+            // dispatch them print
+        },
+
+        updateScale (scale) {
+            debugger;
+            this.setCurrentScale = scale;
+        },
+
+        selectGfi (evt) {
+            this.setIsGfiSelected = evt.target.checked;
+        },
+
+        isGfiSelected () {
+            return this.isGfiSelected;
         },
 
         /**
@@ -107,10 +181,12 @@ export default {
                     <div class="col-sm-7">
                         <select
                             id="printFormat"
-                            :for="format in formatList"
                             class="form-control input-sm"
                         >
                             <option
+                                v-for="(format, i) in formatList"
+                                :key="i"
+                                :value="format"
                                 :selected="format === currentFormat"
                             >
                                 {{ format }}
@@ -123,13 +199,16 @@ export default {
                     <div class="col-sm-7">
                         <select
                             id="printScale"
-                            :for="scale in scaleList"
                             class="form-control input-sm"
                         >
                             <option
+                                v-for="(scale, i) in scaleList"
+                                :key="i"
+                                :value="scale"
                                 :selected="scale === currentScale"
+                                @click="updateScale(scale)"
                             >
-                                1 : {{ scale }}
+                                1 : {{ returnScale(scale) }}
                             </option>
                         </select>
                     </div>
@@ -171,7 +250,9 @@ export default {
                             <input
                                 id="printGfi"
                                 type="checkbox"
+                                :value="isGfiSelected"
                                 :checked="isGfiSelected"
+                                @click="selectGfi"
                             >
                         </div>
                     </div>

@@ -1,14 +1,6 @@
 import {Image, Tile, Vector, Group} from "ol/layer.js";
 
-const BuildCanvasModel = Backbone.Model.extend(/** @lends BuildCanvasModel.prototype */{
-    defaults: {},
-    /**
-     * Model to generate the canvas layer for the print mask
-     * @class BuildCanvasModel.
-     * @memberof Tools.Print
-     * @extends Backbone.Model
-     * @constructs
-     */
+const CanvasModel = {
     /**
      * Getting the canvas layer for the print mask
      * @param {ol.layer.Layer[]} layerList All visible layers on the map.
@@ -94,6 +86,6 @@ const BuildCanvasModel = Backbone.Model.extend(/** @lends BuildCanvasModel.proto
 
         return isInScale;
     }
-});
+};
 
-export default BuildCanvasModel;
+export default CanvasModel;

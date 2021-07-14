@@ -6,6 +6,8 @@
 const state = {
     active: false,
     name: "common:menu.tools.print",
+    id: "print",
+    printSettings: "",
     renderToWindow: false,
     resizableWindow: true,
     deactivateGFI: true,
@@ -16,20 +18,7 @@ const state = {
     // the identifier of one of the available mapfish print configurations
     printAppId: "master",
     // available layouts of the specified print configuration
-    layoutList: [
-        {
-            name: "A4 Hochformat"
-        },
-        {
-            name: "A4 Querformat"
-        },
-        {
-            name: "A3 Hochformat"
-        },
-        {
-            name: "A3 Querformat"
-        }
-    ],
+    layoutList: [],
     currentLayout: undefined,
     currentLayoutName: "",
     // available formats of the specified print configuration
@@ -44,18 +33,26 @@ const state = {
     isScaleSelectedManually: false,
     // true if the current layout supports meta data
     isMetaDataAvailable: false,
+    metaDataAttribute: null,
     // true if the current layout supports gfi
     isGfiAvailable: false,
+    gfiAttribute: null,
     // true if gfi is to be printed
     isGfiSelected: false,
     // true if gfi is active
     isGfiActive: false,
     // true if the current layout supports legend
     isLegendAvailable: false,
+    legendAttribute: null,
     // true if the legend is to be printed
     isLegendSelected: false,
     // true if the current layout supports scale
     isScaleAvailable: false,
+    scaleAttribute: null,
+    isMapAvailable: false,
+    mapAttribute: null,
+    layoutMapInfo: null,
+    optimalScale: null,
     // the id from the rest services json for the plot app
     plotServiceId: undefined,
     DOTS_PER_INCH: 72,
@@ -63,21 +60,12 @@ const state = {
     glyphicon: "glyphicon-print",
     eventListener: undefined,
     dpiForPdf: 300,
-    currentLng: "",
-    // translations
-    titleLabel: "",
-    titlePlaceholder: "",
-    layoutLabel: "",
-    formatLabel: "",
-    scaleLabel: "",
-    withLegendLabel: "",
-    withInfoLabel: "",
-    printLabel: "",
     layoutNameList: [],
     currentMapScale: "",
     hintInfoScale: "",
     visibleLayer: [],
     invisibleLayer: [],
+    visibleLayerList: [],
     zoomLevel: null,
     hintInfo: "",
     // spec: new BuildSpecModel(),
