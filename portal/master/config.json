@@ -513,9 +513,7 @@
     "Fachdaten": {
       "Layer": [
         {
-          "id" : "19173",
-          "url" : "https://qs-geodienste.hamburg.de/HH_WMS_DGM1",
-          "infoFormat" :  "application/vnd.ogc.gml"
+          "id" : "19173"
         },
         {
           "id": "1132",

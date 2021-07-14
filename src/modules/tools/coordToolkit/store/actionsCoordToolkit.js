@@ -49,9 +49,12 @@ export default {
         let layer = null;
 
         if (rawLayer) {
-            layer = Radio.request("ModelList", "getModelsByAttributes", {id: state.heightLayerId});
-            if (Array.isArray(layer) && layer.length > 0) {
-                layer = layer[0];
+            layer = Radio.request("ModelList", "getModelByAttributes", {id: state.heightLayerId});
+            if (layer === undefined) {
+                Radio.trigger("ModelList", "addModelsByAttributes", {id: state.heightLayerId});
+                layer = Radio.request("ModelList", "getModelByAttributes", {id: state.heightLayerId});
+            }
+            if (layer) {
                 if (!layer.has("layerSource")) {
                     Radio.trigger("Layer", "prepareLayerObject", layer);
                 }

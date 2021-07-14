@@ -268,9 +268,9 @@ export default {
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
+        :deactivate-g-f-i="deactivateGFI"
     >
-        <template v-slot:toolBody>
+        <template #toolBody>
             <div
                 v-if="active"
                 id="coord-toolkit"
@@ -287,7 +287,7 @@ export default {
                                 name="mode"
                                 checked="true"
                                 @click="changeMode('supply')"
-                            />
+                            >
                             <label
                                 for="supplyCoordRadio"
                                 :class="{ 'control-label': true, 'enabled': isEnabled('supply') }"
@@ -300,7 +300,7 @@ export default {
                                 type="radio"
                                 name="mode"
                                 @click="changeMode('search')"
-                            />
+                            >
                             <label
                                 for="searchByCoordRadio"
                                 :class="{'control-label': true, 'enabled': isEnabled('search') }"
