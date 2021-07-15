@@ -116,6 +116,7 @@ export default {
          */
         setFocusToFirstControl () {
             this.$nextTick(() => {
+                // otherwise setting the focus was not possible in modal dialog
                 setTimeout(() => {
                     if (this.$refs["gfi-close-button"]) {
                         this.$refs["gfi-close-button"].focus();

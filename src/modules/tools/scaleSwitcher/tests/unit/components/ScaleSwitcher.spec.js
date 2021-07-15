@@ -39,7 +39,7 @@ describe("src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue", () => {
                 }
             }
         };
-    let store;
+    let store, wrapper;
 
     beforeEach(() => {
         store = new Vuex.Store({
@@ -65,22 +65,28 @@ describe("src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue", () => {
         store.commit("Tools/ScaleSwitcher/setActive", true);
     });
 
+    afterEach(() => {
+        if (wrapper) {
+            wrapper.destroy();
+        }
+    });
+
     it("renders the scaleSwitcher", () => {
-        const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue});
+        wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue});
 
         expect(wrapper.find("#scale-switcher").exists()).to.be.true;
     });
 
     it("do not render the scaleSwitchers select if not active", () => {
         store.commit("Tools/ScaleSwitcher/setActive", false);
-        const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue});
+        wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue});
 
         expect(wrapper.find("#scale-switcher").exists()).to.be.false;
     });
 
     it("has initially set all scales to select", () => {
-        const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue}),
-            options = wrapper.findAll("option");
+        wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue});
+        const options = wrapper.findAll("option");
 
         expect(options.length).to.equal(scales.length);
         scales.forEach((scale, index) => {
@@ -89,15 +95,15 @@ describe("src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue", () => {
     });
 
     it("has initially selected scale", async () => {
-        const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue}),
-            select = wrapper.find("select");
+        wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue});
+        const select = wrapper.find("select");
 
         expect(select.element.value).to.equals("1000");
     });
 
     it("renders the correct value when select is changed", async () => {
-        const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue}),
-            select = wrapper.find("select"),
+        wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue});
+        const select = wrapper.find("select"),
             options = wrapper.findAll("option");
 
         select.setValue(options.at(1).element.value);
@@ -109,8 +115,8 @@ describe("src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue", () => {
     });
 
     it("calls store action setResolutionByIndex when select is changed", async () => {
-        const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue}),
-            select = wrapper.find("select"),
+        wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue});
+        const select = wrapper.find("select"),
             options = wrapper.findAll("option");
 
         mockMapActions.setResolutionByIndex.reset();
@@ -119,8 +125,20 @@ describe("src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue", () => {
         expect(mockMapActions.setResolutionByIndex.calledOnce).to.equal(true);
     });
 
+    it("sets focus to first input control", async () => {
+        const elem = document.createElement("div");
+
+        if (document.body) {
+            document.body.appendChild(elem);
+        }
+        wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue, attachTo: elem});
+        wrapper.vm.setFocusToFirstControl();
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find("#scale-switcher-select").element).to.equal(document.activeElement);
+    });
+
     it("method close sets active to false", async () => {
-        const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue});
+        wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue});
 
         wrapper.vm.close();
         await wrapper.vm.$nextTick();
@@ -128,6 +146,4 @@ describe("src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue", () => {
         expect(store.state.Tools.ScaleSwitcher.active).to.be.false;
         expect(wrapper.find("#scale-switcher").exists()).to.be.false;
     });
-
-
 });
