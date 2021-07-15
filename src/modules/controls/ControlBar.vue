@@ -106,6 +106,7 @@ export default {
                 v-if="categoryName === 'separator'"
                 :key="categoryIndex"
                 :class="className"
+                aria-hidden="true"
             />
             <template
                 v-for="(control, index) in categorizedControls[categoryName]"
