@@ -68,6 +68,20 @@ async function LegendTests ({builder, config, url, resolution, capability}) {
                     expect(text).to.include(entry);
                 }
             });
+            it("should respect order of menu entries in portal/master/config.json", async function () {
+                const allEntries = await driver.findElements(By.css("#root li a span.menuitem")),
+                    // check only the entries with className 'menuitem', visible entries are more
+                    expectedEntryNames = ["Themen", "Ansichten", "Werkzeuge", "Legende", "Informationen"];
+
+
+                for (const [index, entry] of allEntries.entries()) {
+                    entry.getText().then(function (text) {
+                        const existingIndex = expectedEntryNames.indexOf(text);
+
+                        expect(index).to.be.equals(existingIndex);
+                    });
+                }
+            });
         });
     }
 }
