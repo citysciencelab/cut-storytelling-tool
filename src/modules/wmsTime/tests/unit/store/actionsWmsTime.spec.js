@@ -175,4 +175,23 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             expect(dispatch.firstCall.args).to.eql(["updateMap"]);
         });
     });
+    describe("windowWidthChanged", () => {
+
+        it("should call the mutation to set the windowWidth", () => {
+            state.timeSlider.currentLayerId = "123";
+
+            actions.windowWidthChanged({commit, dispatch, state, getters});
+            expect(commit.firstCall.args).to.eql(["setWindowWidth"]);
+        });
+
+        it("should set the windowWidth and toggle the swiper if conditional is met", () => {
+            delete getters.minWidth;
+            state.layerSwiper.active = true;
+            state.timeSlider.currentLayerId = "123";
+
+            actions.windowWidthChanged({commit, dispatch, state, getters});
+            expect(commit.firstCall.args).to.eql(["setWindowWidth"]);
+            expect(dispatch.firstCall.args).to.eql(["toggleSwiper", "123_secondLayer"]);
+        });
+    });
 });
