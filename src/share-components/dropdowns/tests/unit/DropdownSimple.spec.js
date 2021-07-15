@@ -15,7 +15,8 @@ describe("src/share-components/dropdowns/DropdownSimple.vue", () => {
             die: "Dienstag",
             mit: "Mittwoch",
             don: "Donnerstag"
-        }
+        },
+        focusOnCreation: true
     };
 
     it("should have a select element", () => {
@@ -117,6 +118,23 @@ describe("src/share-components/dropdowns/DropdownSimple.vue", () => {
 
         await wrapper.find("select").trigger("input");
         expect(wrapper.emitted().input[0]).to.deep.equal(["mon"]);
+    });
+
+    it("sets focus to select control", async () => {
+        const elem = document.createElement("div");
+
+        if (document.body) {
+            document.body.appendChild(elem);
+        }
+        // eslint-disable-next-line one-var
+        const wrapper = shallowMount(Dropdown, {
+            propsData: props,
+            attachTo: elem,
+            localVue
+        });
+
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find(".form-control").element).to.equal(document.activeElement);
     });
 
 });

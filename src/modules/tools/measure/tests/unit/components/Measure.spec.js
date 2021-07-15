@@ -133,7 +133,6 @@ describe("src/modules/tools/measure/components/Measure.vue", () => {
         if (document.body) {
             document.body.appendChild(elem);
         }
-        // eslint-disable-next-line one-var
         wrapper = shallowMount(MeasureComponent, {store, localVue, attachTo: elem});
 
         wrapper.vm.setFocusToFirstControl();
