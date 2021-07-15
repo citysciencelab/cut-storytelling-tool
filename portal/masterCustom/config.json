@@ -232,8 +232,7 @@
               },
               "coordToolkit": {
                "name": "translate#common:menu.tools.coordToolkit",
-               "glyphicon": "glyphicon-globe",
-               "zoomLevel": 5
+               "glyphicon": "glyphicon-globe"
              },
               "fileImport":{
                "name": "translate#common:menu.tools.fileImport",

@@ -452,6 +452,7 @@ export default {
                     >
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <button
+                                id="searchByCoordBtn"
                                 class="btn btn-block"
                                 :disabled="getEastingError || getNorthingError || !coordinatesEasting.value || !coordinatesNorthing.value"
                                 type="button"
