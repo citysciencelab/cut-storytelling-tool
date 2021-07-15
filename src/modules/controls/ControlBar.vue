@@ -167,7 +167,7 @@ export default {
         }
 
         .spaced {
-            margin-bottom: 1em;
+            margin-bottom: 0.5em;
         }
 
         .top-controls, .bottom-controls {
