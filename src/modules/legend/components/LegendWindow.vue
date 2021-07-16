@@ -1,6 +1,6 @@
 <script>
 import Feature from "ol/Feature.js";
-import {mapGetters, mapActions, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersLegend";
 import mutations from "../store/mutationsLegend";
 import actions from "../store/actionsLegend";

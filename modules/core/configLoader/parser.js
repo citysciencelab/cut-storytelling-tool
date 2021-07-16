@@ -232,11 +232,9 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 }
                 /**
                  * @deprecated Due to refactorment, legend is no longer considered a tool.
-                 * Item for legend MUST NOT be added.
+                 * Item for legend MUST be added to replace it in LegendMenue.vue for respecting order of menu-entries in config.json
                  */
-                if (toolitem.id !== "legend") {
-                    this.addItem(toolitem);
-                }
+                this.addItem(toolitem);
             }
         }, this);
     },

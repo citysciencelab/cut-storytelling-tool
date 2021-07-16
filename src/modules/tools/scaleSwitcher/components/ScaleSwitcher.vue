@@ -1,9 +1,10 @@
 <script>
-import {mapGetters, mapActions, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import getComponent from "../../../../utils/getComponent";
 import Tool from "../../Tool.vue";
 import getters from "../store/gettersScaleSwitcher";
 import mutations from "../store/mutationsScaleSwitcher";
+
 /**
  * Tool to switch the scale of the map. Listens to changes of the map's scale and sets the scale to this value.
  */

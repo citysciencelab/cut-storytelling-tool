@@ -744,9 +744,9 @@
                     "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextCharging"
                   },
                   "outoforder": {
-                      "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
-                      "color": "rgba(175, 175, 175, 1)",
-                      "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextOutoforder"
+                    "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
+                    "color": "rgba(175, 175, 175, 1)",
+                    "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextOutoforder"
                   }
                 }
               }
