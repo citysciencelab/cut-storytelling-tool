@@ -47,15 +47,15 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
     },
 
     /**
-     * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
-     * @param {Backbone.Model} model -
-     * @param {boolean} value -
+     * Enables/disables the menu entry of the layer if minScale is set, checkes if the current mode is supported.
+     * @param {Backbone.Model} model the model to check for
+     * @param {Boolean} value true if the entry should be disabled if it has a minScale, false will enable if mode check is ok
      * @returns {void}
      */
     toggleColor: function (model, value) {
         const mode = Radio.request("Map", "getMapMode");
 
-        if (model.has("minScale") === true) {
+        if (model.has("minScale")) {
             if (value === true) {
                 this.disableComponent("Layer wird in dieser Zoomstufe nicht angezeigt");
             }
@@ -78,9 +78,8 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
     showLayerInformation: function () {
         this.model.showLayerInformation();
         this.highlightLayerInformationIcon();
-        // Navigation wird geschlossen
+        // close navigation
         this.$("div.collapse.navbar-collapse").removeClass("in");
-        // $("li.dropdown-folder.open").removeClass("open");
     },
 
     /**
@@ -92,7 +91,7 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
 
         // if layer is secured and not selected
         if (this.model.get("isSecured") && !this.model.get("isSelected")) {
-            this.triggerBrowserAuthentication(this.toggleIsSelected.bind(this), isErrorCalled);
+            this.triggerBrowserAuthentication(isErrorCalled);
         }
         else {
             this.toggleIsSelected();
@@ -101,21 +100,18 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
 
     /**
      * triggers the browser basic authentication if the selected layer is secured
-     * @param {Function} successFunction - Function called after triggering the browser basic authentication successfully
-     * @param {Boolean} isErrorCalled - Flag if the function is called from error function
+     * @param {Boolean} isErrorCalled - Flag if the function is called from error function, set to true to avoid recursion of errorFunction
      * @returns {void}
      */
-    triggerBrowserAuthentication: function (successFunction, isErrorCalled) {
-        const that = this;
-
+    triggerBrowserAuthentication: function (isErrorCalled) {
         axios({
             method: "get",
             url: this.model.get("authenticationUrl"),
             withCredentials: true
-        }).then(function () {
-            that.toggleIsSelected();
-        }).catch(function () {
-            that.errorFunction(successFunction, isErrorCalled);
+        }).then(() => {
+            this.toggleIsSelected();
+        }).catch(() => {
+            this.errorFunction(isErrorCalled);
         });
     },
 
@@ -134,17 +130,16 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
 
     /**
      * Error handling for triggering the browser basic authentication
-     * @param {Function} successFunction - Function called after triggering the browser basic authentication successfully
      * @param {Number} isErrorCalled - Flag if the function is called from error function
      * @returns {void}
      */
-    errorFunction: function (successFunction, isErrorCalled) {
+    errorFunction: function (isErrorCalled) {
         const isError = isErrorCalled,
             layerName = this.model.get("name"),
             authenticationUrl = this.model.get("authenticationUrl");
 
         if (isError === false) {
-            this.triggerBrowserAuthentication(successFunction, !isError);
+            this.triggerBrowserAuthentication(true);
         }
         else if (isError === true) {
             store.dispatch("Alerting/addSingleAlert", {
@@ -160,13 +155,15 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
     /**
      * Executes the given function callback if a execution key has been triggered.
      * @param {Event} event - the dom event
-     * @param {Function} callback - the callback function of the view to be executed
+     * @param {String} callback - the name of the callback function to be executed on this
      * @returns {boolean} if the action has been triggered
      */
     handleKeyboardTriggeredAction: function (event, callback) {
         if (this.model.get("isOutOfRange") === false) {
             if (event.which === 32 || event.which === 13) {
-                this[callback]();
+                if (typeof this[callback] === "function") {
+                    this[callback]();
+                }
                 event.stopPropagation();
                 event.preventDefault();
                 return true;
@@ -177,10 +174,10 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
 
     /**
      * Sets the focus to an element of this component.
-     * @param {String} selector - the selector to use to set focus (optional)
+     * @param {String|Boolean} [selector=false] selector - the selector to use to set focus (optional)
      * @returns {void}
      */
-    setFocus: function (selector) {
+    setFocus: function (selector = false) {
         let focusElementSelector = null;
 
         if (selector) {
@@ -196,7 +193,7 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
 
     /**
      * Disables the component for interaction, e.g. if the zoom level changes.
-     * @param {string} text -
+     * @param {string} text - the text to show as title
      * @returns {void}
      */
     disableComponent: function (text) {
@@ -260,8 +257,8 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
     },
 
     /**
-     * todo
-     * @param {*} evt - todo
+     * Sets the transparency of the model via the event target value
+     * @param {Event} evt - the event to read the transparency from
      * @returns {void}
      */
     setTransparency: function (evt) {
@@ -321,7 +318,7 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
     },
 
     /**
-     * todo
+     * Rmoves the layer from the model, triggers removeItem event
      * @fires Parser#RadioTriggerParserRemoveItem
      * @returns {void}
      */

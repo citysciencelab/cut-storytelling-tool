@@ -22,20 +22,15 @@
     .tabable {
         text-decoration: none;
         cursor: pointer;
-        // opacity: 0.8;
         &:hover {
             opacity: 1;
             background-color: @accent_hover;
             color: @color_2;
         }
         &:focus {
-            // opacity: 1.0;
             outline: 3px solid @accent_focus;
             outline: 3px auto  Highlight;
             outline: 3px auto -webkit-focus-ring-color;
-        }
-        &:active {
-            // opacity: 1.0;
         }
     }
 }
@@ -53,7 +48,7 @@ ul#tree {
         margin: 0;
         padding: 0;
         border: 0;
-        >a {
+        > a {
             display: flex;
         }
     }
@@ -116,13 +111,13 @@ ul#tree {
         color: #08589e;
     }
     li.layer-catalog {
-        >.header {
+        > .header {
             padding: 8px 5px 7px 5px;
             background-color: @background_color_1;
             color: @color_2;
             font-size: 13px;
         }
-        >div>a {
+        > div > a {
             flex-grow: 1;
             color: @color_2;
             .control-label {
@@ -187,7 +182,7 @@ ul#tree.light {
         padding: 5px 5px 0px 5px;
         display: flex;
         flex-wrap: wrap;
-        >div>a {
+        > div > a {
             color: @color_1;
             flex-grow: 1;
         }

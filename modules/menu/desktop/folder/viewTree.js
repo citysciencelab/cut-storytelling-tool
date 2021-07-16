@@ -122,7 +122,6 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
 
     /**
      * Sets the focus to the <a> element of this component.
-     * @param {Event} event - the event instance
      * @returns {void}
      */
     setFocus: function () {
