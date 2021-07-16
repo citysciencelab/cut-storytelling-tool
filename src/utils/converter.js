@@ -1,37 +1,40 @@
 
-export function setValueToState (state, keySplitted, value, i, found = false) {
-    Object.values(state).forEach( () => {
-        if (!found && state.hasOwnProperty(keySplitted[i])) {
-            if (i === keySplitted.length - 2) {
-                if (state[keySplitted[i]].hasOwnProperty(keySplitted[i + 1])) {
-                    state[keySplitted[i]][keySplitted[i + 1]] = convertStringToBoolean(value);
-                    found = true;
-                    console.log("set ", keySplitted.join("/"), " to ", value);
-                }
-            }
-            else {
-                setValueToState(state[keySplitted[i]], keySplitted, value, ++i, found);
-            }
-        }
-    });
-}
-
+/**
+ *  Converts a boolean string to a boolean.
+ * @param {String} string representation of a boolean as string
+ * @returns {boolean} the converted string
+ */
 function convertStringToBoolean (string) {
-    switch (string.toLowerCase().trim()) {
-        case "yes": case "true": case "1": return true;
-        case "no": case "false": case "0": case null: return false;
-        default: string;
+    let toCheck = string;
+
+    if (typeof string === "string") {
+        toCheck = toCheck.toLowerCase().trim();
+    }
+    switch (toCheck) {
+        case "yes": case "true": case "1": case "": case 1: return true;
+        case "no": case "false": case "0": case 0: case null: case undefined: return false;
+        default: return string;
     }
 }
 
+/**
+ * Converts an array string to an array.
+ * @param {String} string array as string (a valid JSON string)
+ * @returns {Array} the converted array
+ */
 function convertStringToArray (string) {
-    if (string.charAt(0) === "[" && string.charAt(string.length - 1) === "]") {
+    if (typeof string === "string" && string.charAt(0) === "[" && string.charAt(string.length - 1) === "]") {
         return JSON.parse(string);
     }
     return string;
 }
 
-export function convert (string) {
+/**
+ * Converts a string to boolean or array.
+ * @param {String} string to convert to boolean or array
+ * @returns {*} the converted string
+ */
+export default function convert (string) {
     let ret = convertStringToBoolean(string);
 
     if (typeof ret === "boolean") {

@@ -110,12 +110,6 @@ async function loadApp () {
     app = new Vue({
         el: "#masterportal-root",
         name: "VueApp",
-        mounted () {
-            this.$nextTick(() => {
-                // store.commit("setUrlParams", new URLSearchParams(window.location.search));
-                store.dispatch("setUrlParamByAction", new URLSearchParams(window.location.search));
-            });
-        },
         render: h => h(App),
         store,
         i18n: vueI18Next

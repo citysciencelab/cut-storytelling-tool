@@ -132,30 +132,6 @@ describe("src/modules/tools/actionsTools.js", () => {
         });
     });
 
-    describe("activateByUrlParam", () => {
-        it("activateByUrlParam  isinitopen=scaleSwitcher", done => {
-            const rootState = {
-                    queryParams: {
-                        "isinitopen": "scaleSwitcher"
-                    }
-                },
-                toolName = "ScaleSwitcher";
-
-            testAction(activateByUrlParam, toolName, {}, rootState, [
-                {type: "controlActivationOfTools", payload: toolName, dispatch: true}
-            ], {}, done);
-        });
-        it("activateByUrlParam no isinitopen", done => {
-            const rootState = {
-                    queryParams: {
-                    }
-                },
-                toolName = "ScaleSwitcher";
-
-            testAction(activateByUrlParam, toolName, {}, rootState, [], {}, done);
-        });
-    });
-
     describe("setToolActiveByConfig", () => {
         it("activate a tool with active = true", done => {
             const state = {

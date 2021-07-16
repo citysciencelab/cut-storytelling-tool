@@ -1,5 +1,4 @@
 import {getByArraySyntax} from "../utils/fetchFirstModuleConfig";
-import {convert} from "../utils/converter";
 
 export default {
     /**
@@ -126,22 +125,22 @@ export default {
         });
 
         return updatedConfig;
-    },
-
-    setUrlParamByAction ({commit}, params) {
-        params.forEach(function (value, key) {
-            const keySplitted = key.split("/"),
-                lastKey = keySplitted[keySplitted.length - 1],
-                lastKeySetter = "set" + lastKey.charAt(0).toUpperCase() + lastKey.slice(1),
-                payload = convert(value);
-             let   mutation;
-                
-
-            keySplitted.pop();
-            mutation = keySplitted.join("/") + "/" + lastKeySetter;
-
-            console.log("commit ", mutation, "payload:", payload);
-            commit(mutation, payload);
-        });
     }
+
+    // setUrlParamByAction ({commit}, params) {
+    //     params.forEach(function (value, key) {
+    //         const keySplitted = key.split("/"),
+    //             lastKey = keySplitted[keySplitted.length - 1],
+    //             lastKeySetter = "set" + lastKey.charAt(0).toUpperCase() + lastKey.slice(1),
+    //             payload = convert(value);
+    //          let   mutation;
+
+
+    //         keySplitted.pop();
+    //         mutation = keySplitted.join("/") + "/" + lastKeySetter;
+
+    //         console.log("commit ", mutation, "payload:", payload);
+    //         commit(mutation, payload);
+    //     });
+    // }
 };

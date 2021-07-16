@@ -88,10 +88,10 @@ const actions = {
      * @returns {void}
      */
     activateByUrlParam: ({rootState, dispatch}, toolName) => {
-        if (rootState.queryParams instanceof Object && toolName?.toLowerCase() === rootState?.queryParams?.isinitopen?.toLowerCase()) {
-            dispatch("controlActivationOfTools", toolName);
-            dispatch("setToolInitValues", toolName);
-        }
+        // if (rootState.queryParams instanceof Object && toolName?.toLowerCase() === rootState?.queryParams?.isinitopen?.toLowerCase()) {
+        //     dispatch("controlActivationOfTools", toolName);
+        //     dispatch("setToolInitValues", toolName);
+        // }
     },
 
     /**

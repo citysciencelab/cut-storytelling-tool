@@ -1910,11 +1910,6 @@
  */
 
 /**
- * @event Core#RadioRequestParametricURLGetIsInitOpen
- * @description todo
- */
-
-/**
  * @event Core#RadioRequestParametricURLGetInitString
  * @description todo
  */

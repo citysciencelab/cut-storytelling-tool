@@ -187,7 +187,6 @@ export default {
     >
         <template #toolBody>
             <div
-                v-if="active"
                 id="tool-bufferAnalysis"
             >
                 <label

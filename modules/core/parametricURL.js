@@ -46,7 +46,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      */
     initialize: function () {
         const channel = Radio.channel("ParametricURL"),
-            query = location.search.substr(1);
+            query = "";// location.search.substr(1);
 
         channel.reply({
             "getResult": function () {
@@ -54,9 +54,6 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             },
             "getLayerParams": function () {
                 return this.get("layerParams");
-            },
-            "getIsInitOpen": function () {
-                return this.get("isInitOpen")[0];
             },
             "getInitString": function () {
                 return this.get("initString");
@@ -107,7 +104,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         else {
             console.warn("The URL-parameters contain illegal information!");
         }
-        channel.trigger("ready");
+        // channel.trigger("ready");
     },
 
     /**
