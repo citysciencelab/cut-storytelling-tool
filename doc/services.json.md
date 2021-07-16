@@ -476,10 +476,12 @@ Used to configure the target of a mqtt web socket connection. If nothing is set,
 
 |Name|Required|Type|Default|Description|Example|
 |----|--------|----|-------|-----------|-------|
-|host|no|String||Host address|`"example.com"`|
-|port|no|String||Host port|`"9876"`|
-|path|no|String|"/mqtt"|Path|`"/mqtt"`|
-|protocol|no|String|"wss"|Used protocol|`"ws"`, `"wss"`|
+|host|no|String|https://localhost|the server to connect to, keep in mind that port and path are seperate parameters|`"https://www.example.com"`|
+|port|no|String||the port to connect to, leave empty to use default by protocol|`"8883"`|
+|path|no|String|/mqtt|the path on the server to connect to, keep in mind with Versions 3.1 or 3.1.1 to give a seperate rhPath if you want to simulate retained messaging|`"/mqtt"`|
+|protocol|no|String|wss|the protocol to use|`"wss"`|
+|mqttVersion|no|String|3.1.1|the mqtt version to use (3.1, 3.1.1 or 5.0) if any other is given, latest is used|`"3.1.1"`|
+|rhPath|no|String||for mqttVersion 3.1 and 3.1.1 to simulate retained handling based on SensorThingsApi, hint: the topic will be put onto this url to call the SensorThingsApi via http|`"https://example.com/"`|
 
 **Example mqttOptions:**
 ```json
