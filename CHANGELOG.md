@@ -33,6 +33,7 @@
 - Issue #615: parsing of the DescribeFeatureType of a WFS has been extended so that it also satisfies a different interpretation of the schema description. As a result, elements in the legend are displayed in the order specified in the style.json.
 - Issue #623: filter error in connection with provided vectorstyles is fixed.
 - Style configuration is provided for datastreams with result 0.
+- Seamless map panning in the oblique aerial views is possible in all directions again.
 ---
 
 ## v2.10.0 - 2021-06-02
