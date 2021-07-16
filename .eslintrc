@@ -18,7 +18,8 @@
         "i18next": true
     },
     "plugins": [
-        "chai-friendly"
+        "chai-friendly",
+        "vuejs-accessibility"
     ],
     "parserOptions": {
         "parser": "@babel/eslint-parser",
@@ -30,7 +31,8 @@
         "eslint:recommended",
         "plugin:backbone/recommended",
         "plugin:vue/recommended",
-        "plugin:you-dont-need-lodash-underscore/all"
+        "plugin:you-dont-need-lodash-underscore/all",
+        "plugin:vuejs-accessibility/recommended"
     ],
     "rules": {
         // vue plugin Base Rules
