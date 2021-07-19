@@ -352,7 +352,10 @@ export default {
                                                 <span v-html="feat.imgPath" />
                                             </td>
                                             <td v-else-if="feat.imgPath.length > 0">
-                                                <img :src="feat.imgPath">
+                                                <img
+                                                    :src="feat.imgPath"
+                                                    alt=""
+                                                >
                                             </td>
                                             <td>
                                                 <p
@@ -375,6 +378,7 @@ export default {
         <div
             class="modal-backdrop fade in"
             @click="hidePoi"
+            @keypress="hidePoi"
         />
     </div>
 </template>
