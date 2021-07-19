@@ -215,7 +215,9 @@
         },
         "footer": {
             "designation": "Kartographie und Gestaltung:",
-            "mapDiscrepancy": "Kartenunstimmigkeit"
+            "mapDiscrepancy": "Kartenunstimmigkeit",
+            "scale": "Skalierung der Karte",
+            "mouse": "Position der Maus"
         },
         "tools": {
             "info": {

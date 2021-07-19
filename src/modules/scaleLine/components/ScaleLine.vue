@@ -10,6 +10,7 @@ export default {
             return this.scaleLineConfig && !this.mobile && this.mapMode === 0;
         }
     }
+
 };
 </script>
 
@@ -17,6 +18,7 @@ export default {
     <div
         v-if="showScale"
         id="scales"
+        :title="$t('modules.footer.scale')"
     >
         <span class="scale-as-a-ratio">
             {{ scaleToOne }}

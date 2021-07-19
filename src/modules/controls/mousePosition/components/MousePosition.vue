@@ -42,6 +42,7 @@ export default {
     <div
         v-if="show"
         :class="['mouse-position', open ? 'open' : 'closed']"
+        :title="$t('modules.footer.mouse')"
     >
         <span
             :class="['mouse-position-span', open ? 'open' : 'closed']"
