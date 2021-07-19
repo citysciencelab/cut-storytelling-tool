@@ -1,0 +1,184 @@
+
+/home/klaas/Projects/masterportal/src/modules/alerting/components/Alerting.vue
+  206:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/src/modules/controls/TableStyleControl.vue
+  67:13  error  aria-role This attribute is an invalid ARIA attribute  vuejs-accessibility/aria-props
+
+/home/klaas/Projects/masterportal/src/modules/controls/freeze/components/FreezeWindow.vue
+  64:9  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/src/modules/controls/orientation/components/poi/PoiChoice.vue
+   95:21  error  Form label must have an associated control                                                      vuejs-accessibility/label-has-for
+  124:9   error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/src/modules/controls/orientation/components/poi/PoiOrientation.vue
+  314:25  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  323:33  error  Elements with ARIA roles must use a valid, non-abstract ARIA role                                          vuejs-accessibility/aria-role
+  354:49  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  374:9   error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/src/modules/language/components/Language.vue
+  36:9   error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+  38:13  error  aria-role This attribute is an invalid ARIA attribute                                           vuejs-accessibility/aria-props
+  48:17  error  Form label must have an associated control                                                      vuejs-accessibility/label-has-for
+  51:17  error  Anchors must have content and the content must be accessible by a screen reader                 vuejs-accessibility/anchor-has-content
+  51:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/src/modules/layerInformation/components/LayerInformation.vue
+  219:21  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+  230:21  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+  242:21  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/src/modules/legend/components/LegendMenu.vue
+  60:13  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+  83:13  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/src/modules/legend/components/LegendSingleLayer.vue
+   59:21  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   86:25  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   95:25  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  104:25  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+
+/home/klaas/Projects/masterportal/src/modules/legend/components/LegendWindow.vue
+  732:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+  736:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/src/modules/map/components/MapModuleDebug.vue
+  53:9   error  Form label must have an associated control  vuejs-accessibility/label-has-for
+  87:29  error  Form label must have an associated control  vuejs-accessibility/label-has-for
+  98:29  error  Form label must have an associated control  vuejs-accessibility/label-has-for
+
+/home/klaas/Projects/masterportal/src/modules/tools/Tool.vue
+  204:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+  210:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+  218:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/src/modules/tools/addWMS/components/AddWMS.vue
+  341:17  error  Each form element must have a programmatically associated label element  vuejs-accessibility/form-control-has-label
+
+/home/klaas/Projects/masterportal/src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue
+  171:17  error  Form label must have an associated control  vuejs-accessibility/label-has-for
+  190:17  error  Form label must have an associated control  vuejs-accessibility/label-has-for
+  218:17  error  Form label must have an associated control  vuejs-accessibility/label-has-for
+  243:17  error  Form label must have an associated control  vuejs-accessibility/label-has-for
+
+/home/klaas/Projects/masterportal/src/modules/tools/contact/components/ContactInput.vue
+  60:13  error  Form label must have an associated control  vuejs-accessibility/label-has-for
+
+/home/klaas/Projects/masterportal/src/modules/tools/draw/components/Download.vue
+  35:17  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  39:21  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  59:17  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+
+/home/klaas/Projects/masterportal/src/modules/tools/draw/components/Draw.vue
+  375:13  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  409:21  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  413:25  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  438:21  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  459:21  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  479:21  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  483:25  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  504:21  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  523:21  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  527:25  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  548:21  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  552:25  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  573:21  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  577:25  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  599:21  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  603:25  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  624:21  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  628:25  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  650:21  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  654:25  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  676:21  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  680:25  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  701:21  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  705:25  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  726:21  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  730:25  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  751:21  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  755:25  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+
+/home/klaas/Projects/masterportal/src/modules/tools/draw/components/DrawFeaturesFilter.vue
+  95:17  error  Form label must have an associated control  vuejs-accessibility/label-has-for
+
+/home/klaas/Projects/masterportal/src/modules/tools/fileImport/components/FileImport.vue
+  149:21  error  @mouseover, @mouseenter, or @hover must be accompanied by @focusin or @focus for accessibility  vuejs-accessibility/mouse-events-have-key-events
+  149:21  error  @mouseout or @mouseleave must be accompanied by @focusout or @blur for accessibility            vuejs-accessibility/mouse-events-have-key-events
+  161:21  error  Form label must have an associated control                                                      vuejs-accessibility/label-has-for
+  173:25  error  Form label must have an associated control                                                      vuejs-accessibility/label-has-for
+  191:25  error  Form label must have an associated control                                                      vuejs-accessibility/label-has-for
+
+/home/klaas/Projects/masterportal/src/modules/tools/gfi/components/Gfi.vue
+  355:21  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+  361:21  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/src/modules/tools/gfi/components/favoriteIcons/components/CompareFeatureIcon.vue
+  118:5  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/src/modules/tools/gfi/components/templates/Mobile.vue
+  75:5  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/src/modules/tools/gfi/components/templates/Table.vue
+  105:13  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/src/modules/tools/gfi/components/themes/default/components/Default.vue
+  195:9  error  <iframe> elements must have a unique title property  vuejs-accessibility/iframe-has-title
+
+/home/klaas/Projects/masterportal/src/modules/tools/measure/components/Measure.vue
+  115:25  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  122:29  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  144:25  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  151:29  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+
+/home/klaas/Projects/masterportal/src/modules/tools/saveSelection/components/SaveSelection.vue
+  66:21  error  Form label must have an associated control  vuejs-accessibility/label-has-for
+  80:21  error  Form label must have an associated control  vuejs-accessibility/label-has-for
+
+/home/klaas/Projects/masterportal/src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue
+  73:17  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  78:21  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+
+/home/klaas/Projects/masterportal/src/modules/tools/searchByCoord/components/SearchByCoord.vue
+   98:25  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  102:29  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  119:25  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  148:25  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+
+/home/klaas/Projects/masterportal/src/modules/tools/styleVT/components/StyleVT.vue
+   80:25  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+   86:25  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  113:25  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  119:25  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+
+/home/klaas/Projects/masterportal/src/modules/tools/supplyCoord/components/SupplyCoord.vue
+  165:25  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  170:29  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  188:25  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+  206:25  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
+
+/home/klaas/Projects/masterportal/src/share-components/BasicResizeHandle.vue
+  402:5  error  @mouseover, @mouseenter, or @hover must be accompanied by @focusin or @focus for accessibility  vuejs-accessibility/mouse-events-have-key-events
+
+/home/klaas/Projects/masterportal/src/share-components/Loader.vue
+  62:9   error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  82:13  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+
+/home/klaas/Projects/masterportal/src/share-components/ToggleCheckbox.vue
+  75:9   error  Each form element must have a programmatically associated label element                         vuejs-accessibility/form-control-has-label
+  84:13  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+  84:13  error  Form label must have an associated control                                                      vuejs-accessibility/label-has-for
+  91:13  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+  91:13  error  Form label must have an associated control                                                      vuejs-accessibility/label-has-for
+  98:13  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/src/share-components/ToolWindow.vue
+  67:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/src/share-components/modals/Modal.vue
+  84:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+✖ 111 problems (111 errors, 0 warnings)
+
