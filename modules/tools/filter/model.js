@@ -79,7 +79,9 @@ const FilterModel = Tool.extend({
                     });
 
                     filterModels.forEach(filterModel => {
-                        this.createQuery(filterModel);
+                        const layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+
+                        this.createQuery(filterModel, layer);
                     });
                 }
             }

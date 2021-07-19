@@ -10,8 +10,7 @@ import {register} from "ol/proj/proj4.js";
 import proj4 from "proj4";
 import {createMap} from "masterportalAPI";
 import {getLayerList} from "masterportalAPI/src/rawLayerList";
-import {transformToMapProjection} from "masterportalAPI/src/crs";
-import {transform as transformCoord, transformFromMapProjection, getMapProjection} from "masterportalAPI/src/crs";
+import {transform as transformCoord, transformFromMapProjection, transformToMapProjection, getMapProjection} from "masterportalAPI/src/crs";
 import store from "../../src/app-store";
 import WMTSLayer from "./modelList/layer/wmts";
 

@@ -1,4 +1,4 @@
-import {KML, GeoJSON, GPX} from "ol/format.js";
+import {GeoJSON, GPX, KML} from "ol/format.js";
 
 const supportedFormats = {
     kml: new KML({extractStyles: true}),

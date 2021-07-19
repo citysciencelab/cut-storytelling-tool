@@ -10,8 +10,23 @@
 
 ##  Unreleased - in development
 ### Added
+- ...
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+- Issue #626: The Legend menu item is placed according to the order of the menu items in config.json.
+
+---
+
+## v2.11.0 - 2021-07-07
+### Added
 - Add possibility to test end2end-tests with `MicrosoftEdge` driver.
-- VTC-Layer supports Sprites and Fonts in Styledefinitions.
+- VTC-Layer supports Sprites and Fonts in Style definitions.
 
 ### Changed
 - The version of the package selenium-webdriver was updated to version 4.0.0-beta.4.
@@ -27,12 +42,14 @@
 ### Removed
 
 ### Fixed
+- Styled Vector Layers with multiple conditions can now be printed.
 - BG-1541 further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2
 - Labels of VTC-Layer-Objects aren't cut off anymore.
 - Issue #602: further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2.
 - Issue #615: parsing of the DescribeFeatureType of a WFS has been extended so that it also satisfies a different interpretation of the schema description. As a result, elements in the legend are displayed in the order specified in the style.json.
 - Issue #623: filter error in connection with provided vectorstyles is fixed.
 - Style configuration is provided for datastreams with result 0.
+- Seamless map panning in the oblique aerial views is possible in all directions again.
 ---
 
 ## v2.10.0 - 2021-06-02

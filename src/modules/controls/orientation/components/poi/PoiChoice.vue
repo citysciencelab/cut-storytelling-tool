@@ -2,6 +2,7 @@
 import {mapGetters, mapMutations} from "vuex";
 import getters from "../../store/gettersOrientation";
 import mutations from "../../store/mutationsOrientation";
+
 export default {
     name: "PoiChoice",
     computed: {
