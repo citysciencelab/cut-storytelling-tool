@@ -316,6 +316,7 @@ export default {
                             :key="index"
                             :class="feature.category === activeCategory ? 'active' : ''"
                             @click="changedCategory"
+                            @keypress="changedCategory"
                         >
                             <a
                                 :href="'#' + feature.category"

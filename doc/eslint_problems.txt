@@ -1,20 +1,22 @@
 
 /home/klaas/Projects/masterportal/src/modules/alerting/components/Alerting.vue
-  206:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+✓  206:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
 
 /home/klaas/Projects/masterportal/src/modules/controls/TableStyleControl.vue
-  67:13  error  aria-role This attribute is an invalid ARIA attribute  vuejs-accessibility/aria-props
+✓  67:13  error  aria-role This attribute is an invalid ARIA attribute  vuejs-accessibility/aria-props
 
 /home/klaas/Projects/masterportal/src/modules/controls/freeze/components/FreezeWindow.vue
-  64:9  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+✓  64:9  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
 
 /home/klaas/Projects/masterportal/src/modules/controls/orientation/components/poi/PoiChoice.vue
    95:21  error  Form label must have an associated control                                                      vuejs-accessibility/label-has-for
-  124:9   error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+// inputs werden mit Label in v-for generiert
+✓  124:9   error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
 
 /home/klaas/Projects/masterportal/src/modules/controls/orientation/components/poi/PoiOrientation.vue
-  314:25  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+✓  314:25  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
   323:33  error  Elements with ARIA roles must use a valid, non-abstract ARIA role                                          vuejs-accessibility/aria-role
+// role "pill" not existing 
   354:49  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
   374:9   error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
 
