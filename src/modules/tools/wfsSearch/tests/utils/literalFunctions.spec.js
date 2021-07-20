@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {createUserHelp, fieldValueChanged, prepareLiterals} from "../../utils/literalFunctions";
+import {fieldValueChanged, prepareLiterals} from "../../utils/literalFunctions";
 
 describe("src/modules/tools/wfsSearch/utils/literalFunctions.js", () => {
 
