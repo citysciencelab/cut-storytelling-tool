@@ -376,7 +376,7 @@ export default {
                 id="tool-draw-drawType"
                 class="form-control input-sm"
                 :disabled="drawHTMLElements"
-                @change="setDrawType"
+                @blur="setDrawType"
             >
                 <option
                     v-for="option in constants.drawTypeOptions"
@@ -414,7 +414,7 @@ export default {
                             id="tool-draw-circleMethod"
                             class="form-control input-sm"
                             :disabled="drawHTMLElementsModifyFeature"
-                            @change="setCircleMethod"
+                            @blur="setCircleMethod"
                         >
                             <option
                                 value="interactive"
@@ -484,7 +484,7 @@ export default {
                             id="tool-draw-circleUnit"
                             class="form-control input-sm"
                             :disabled="drawHTMLElementsModifyFeature"
-                            @change="setUnit"
+                            @blur="setUnit"
                         >
                             <option
                                 v-for="option in constants.unitOptions"
@@ -528,7 +528,7 @@ export default {
                             id="tool-draw-fontSize"
                             class="form-control input-sm"
                             :disabled="drawHTMLElementsModifyFeature"
-                            @change="setFontSize"
+                            @blur="setFontSize"
                         >
                             <option
                                 v-for="option in constants.fontSizeOptions"
@@ -553,7 +553,7 @@ export default {
                             id="tool-draw-font"
                             class="form-control input-sm"
                             :disabled="drawHTMLElementsModifyFeature"
-                            @change="setFont"
+                            @blur="setFont"
                         >
                             <option
                                 v-for="option in constants.fontOptions"
@@ -578,7 +578,7 @@ export default {
                             id="tool-draw-symbol"
                             class="form-control input-sm"
                             :disabled="drawHTMLElementsModifyFeature"
-                            @change="setSymbol"
+                            @blur="setSymbol"
                         >
                             <!-- NOTE: caption of the iconList is deprecated in 3.0.0 -->
                             <option
@@ -604,7 +604,7 @@ export default {
                             id="tool-draw-strokeWidth"
                             class="form-control input-sm"
                             :disabled="drawHTMLElementsModifyFeature"
-                            @change="setStrokeWidth"
+                            @blur="setStrokeWidth"
                         >
                             <option
                                 v-for="option in constants.strokeOptions"
@@ -630,7 +630,7 @@ export default {
                             :key="`tool-draw-opacity-select`"
                             class="form-control input-sm"
                             :disabled="drawHTMLElementsModifyFeature"
-                            @change="setOpacity"
+                            @blur="setOpacity"
                         >
                             <option
                                 v-for="option in constants.transparencyOptions"
@@ -656,7 +656,7 @@ export default {
                             :key="`tool-draw-opacityContour-select`"
                             class="form-control input-sm"
                             :disabled="drawHTMLElementsModifyFeature"
-                            @change="setOpacityContour"
+                            @blur="setOpacityContour"
                         >
                             <option
                                 v-for="option in constants.transparencyOptions.slice(0, constants.transparencyOptions.length -1)"
@@ -681,7 +681,7 @@ export default {
                             id="tool-draw-colorContour"
                             class="form-control input-sm"
                             :disabled="drawHTMLElementsModifyFeature"
-                            @change="setColorContour"
+                            @blur="setColorContour"
                         >
                             <option
                                 v-for="option in constants.colorContourOptions"
@@ -706,7 +706,7 @@ export default {
                             id="tool-draw-outerColorContour"
                             class="form-control input-sm"
                             :disabled="drawHTMLElementsModifyFeature"
-                            @change="setOuterColorContour"
+                            @blur="setOuterColorContour"
                         >
                             <option
                                 v-for="option in constants.colorContourOptions"
@@ -731,7 +731,7 @@ export default {
                             id="tool-draw-pointColor"
                             class="form-control input-sm"
                             :disabled="drawHTMLElementsModifyFeature"
-                            @change="setColor"
+                            @blur="setColor"
                         >
                             <option
                                 v-for="option in constants.colorOptions"
@@ -756,7 +756,7 @@ export default {
                             id="tool-draw-color"
                             class="form-control input-sm"
                             :disabled="drawHTMLElementsModifyFeature"
-                            @change="setColor"
+                            @blur="setColor"
                         >
                             <option
                                 v-for="option in constants.colorOptions"

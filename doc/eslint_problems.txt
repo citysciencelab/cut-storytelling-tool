@@ -9,14 +9,14 @@
 ✓  64:9  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
 
 /home/klaas/Projects/masterportal/src/modules/controls/orientation/components/poi/PoiChoice.vue
-   95:21  error  Form label must have an associated control                                                      vuejs-accessibility/label-has-for
 // inputs werden mit Label in v-for generiert
+   95:21  error  Form label must have an associated control                                                      vuejs-accessibility/label-has-for
 ✓  124:9   error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
 
 /home/klaas/Projects/masterportal/src/modules/controls/orientation/components/poi/PoiOrientation.vue
 ✓  314:25  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
-  323:33  error  Elements with ARIA roles must use a valid, non-abstract ARIA role                                          vuejs-accessibility/aria-role
 // role "pill" not existing 
+  323:33  error  Elements with ARIA roles must use a valid, non-abstract ARIA role                                          vuejs-accessibility/aria-role
 ✓  354:49  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
 ✓  374:9   error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
 
@@ -24,8 +24,8 @@
 ✓  36:9   error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
 ✓  38:13  error  aria-role This attribute is an invalid ARIA attribute                                           vuejs-accessibility/aria-props
 ✓  48:17  error  Form label must have an associated control                                                      vuejs-accessibility/label-has-for
-  51:17  error  Anchors must have content and the content must be accessible by a screen reader                 vuejs-accessibility/anchor-has-content
 // cant fix
+  51:17  error  Anchors must have content and the content must be accessible by a screen reader                 vuejs-accessibility/anchor-has-content
 ✓  51:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
 
 /home/klaas/Projects/masterportal/src/modules/layerInformation/components/LayerInformation.vue
@@ -57,14 +57,15 @@
   98:29  error  Form label must have an associated control  vuejs-accessibility/label-has-for
 
 /home/klaas/Projects/masterportal/src/modules/tools/Tool.vue
-  204:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
-  210:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
-  218:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+✓  204:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+✓  210:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+✓  218:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
 
 /home/klaas/Projects/masterportal/src/modules/tools/addWMS/components/AddWMS.vue
-  341:17  error  Each form element must have a programmatically associated label element  vuejs-accessibility/form-control-has-label
+✓  341:17  error  Each form element must have a programmatically associated label element  vuejs-accessibility/form-control-has-label
 
 /home/klaas/Projects/masterportal/src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue
+//label missing control elements, are used for divs
   171:17  error  Form label must have an associated control  vuejs-accessibility/label-has-for
   190:17  error  Form label must have an associated control  vuejs-accessibility/label-has-for
   218:17  error  Form label must have an associated control  vuejs-accessibility/label-has-for
@@ -74,8 +75,10 @@
   60:13  error  Form label must have an associated control  vuejs-accessibility/label-has-for
 
 /home/klaas/Projects/masterportal/src/modules/tools/draw/components/Download.vue
+//label missing control elements, are used for divs
   35:17  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
-  39:21  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+✓  39:21  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+//label missing control elements, are used for divs
   59:17  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
 
 /home/klaas/Projects/masterportal/src/modules/tools/draw/components/Draw.vue
