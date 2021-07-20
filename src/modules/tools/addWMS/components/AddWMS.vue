@@ -340,6 +340,7 @@ export default {
                 </div>
                 <input
                     id="wmsUrl"
+                    aria-label="WMS-Url"
                     type="text"
                     class="form-control wmsUrlsChanged"
                     :placeholder="placeholder"

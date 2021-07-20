@@ -220,6 +220,7 @@ export default {
                         value="layerinfo-legend"
                         :class="{active: isActiveTab('layerinfo-legend') }"
                         @click="onClick"
+                        @keypress="onClick"
                     >
                         <a
                             href="#layerinfo-legend"
@@ -232,6 +233,7 @@ export default {
                         value="LayerInfoDataDownload"
                         :class="{active: isActiveTab('LayerInfoDataDownload') }"
                         @click="onClick"
+                        @keypress="onClick"
                     >
                         <a
                             href="#LayerInfoDataDownload"
@@ -244,6 +246,7 @@ export default {
                         value="url"
                         :class="{active: isActiveTab('url') }"
                         @click="onClick"
+                        @keypress="onClick"
                     >
                         <a
                             href="#url"

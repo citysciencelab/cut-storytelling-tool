@@ -732,12 +732,14 @@ export default {
                 <span
                     class="glyphicon glyphicon-remove close-legend float-right"
                     @click="closeLegend"
+                    @keypress="closeLegend"
                 />
                 <span
                     v-if="showCollapseAllButton"
                     class="glyphicon glyphicon-arrow-up toggle-collapse-all legend float-right"
                     :title="$t('common:modules.legend.toggleCollapseAll')"
                     @click="toggleCollapseAll"
+                    @keypress="toggleCollapseAll"
                 />
             </div>
             <div class="legend-content">

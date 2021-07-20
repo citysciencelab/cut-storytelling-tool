@@ -17,38 +17,43 @@
 ✓  314:25  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
   323:33  error  Elements with ARIA roles must use a valid, non-abstract ARIA role                                          vuejs-accessibility/aria-role
 // role "pill" not existing 
-  354:49  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
-  374:9   error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+✓  354:49  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+✓  374:9   error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
 
 /home/klaas/Projects/masterportal/src/modules/language/components/Language.vue
-  36:9   error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
-  38:13  error  aria-role This attribute is an invalid ARIA attribute                                           vuejs-accessibility/aria-props
-  48:17  error  Form label must have an associated control                                                      vuejs-accessibility/label-has-for
+✓  36:9   error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+✓  38:13  error  aria-role This attribute is an invalid ARIA attribute                                           vuejs-accessibility/aria-props
+✓  48:17  error  Form label must have an associated control                                                      vuejs-accessibility/label-has-for
   51:17  error  Anchors must have content and the content must be accessible by a screen reader                 vuejs-accessibility/anchor-has-content
-  51:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+// cant fix
+✓  51:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
 
 /home/klaas/Projects/masterportal/src/modules/layerInformation/components/LayerInformation.vue
-  219:21  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
-  230:21  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
-  242:21  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+// stopPropagation for keypress?
+✓  219:21  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+✓  230:21  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+✓  242:21  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
 
 /home/klaas/Projects/masterportal/src/modules/legend/components/LegendMenu.vue
-  60:13  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
-  83:13  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+✓  60:13  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+✓  83:13  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
 
 /home/klaas/Projects/masterportal/src/modules/legend/components/LegendSingleLayer.vue
-   59:21  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
-   86:25  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
-   95:25  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
-  104:25  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+// what kind of legend? decorative img? only empty alt to now
+✓   59:21  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+✓   86:25  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+✓   95:25  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+✓  104:25  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
 
 /home/klaas/Projects/masterportal/src/modules/legend/components/LegendWindow.vue
-  732:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
-  736:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+✓  732:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+✓  736:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
 
 /home/klaas/Projects/masterportal/src/modules/map/components/MapModuleDebug.vue
-  53:9   error  Form label must have an associated control  vuejs-accessibility/label-has-for
+✓  53:9   error  Form label must have an associated control  vuejs-accessibility/label-has-for
+//gernerated "for" from vue directive
   87:29  error  Form label must have an associated control  vuejs-accessibility/label-has-for
+//gernerated "for" from vue directive
   98:29  error  Form label must have an associated control  vuejs-accessibility/label-has-for
 
 /home/klaas/Projects/masterportal/src/modules/tools/Tool.vue
