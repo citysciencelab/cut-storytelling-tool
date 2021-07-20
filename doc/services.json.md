@@ -32,7 +32,7 @@ All layer information the portal needs to use the services is stored here. Confi
 |name|yes|String||Arbitrary display name used in the layer tree.|`"Aerial View DOP 10"`|
 |singleTile|no|Boolean||`true`: Request map as a single tile of the current view. `false`: Build map from multiple smaller tiles.|`false`|
 |tilesize|yes|String||Tile height and width in pixels. Used if `singleTile` is `false`.|`"512"`|
-|time|no|Boolean/**[time](#markdown-header-wms-layertime)**|false|If set to `true` or and Object (**[time](#markdown-header-wms-layertime)**), the configured Layer is expected to be a WMS-T.|`false`|
+|time|no|Boolean/**[time](#markdown-header-wms-layertime)**|false|If set to `true` or an object (**[time](#markdown-header-wms-layertime)**), the configured Layer is expected to be a WMS-T.|`false`|
 |transparent|yes|Boolean||Whether the tile background should be transparent. Corresponds to the *GetMap* parameter *TRANSPARENT*.|`true`|
 |typ|yes|String||Service type; in this case, "WMS". (**[WMTS docs](#markdown-header-wmts-layer)**, **[WFS docs](#markdown-header-wfs-layer)**, **[SensorThings-API docs](#markdown-header-sensor-layer)**)|`"WMS"`|
 |url|yes|String||Service URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|
@@ -105,12 +105,12 @@ to <br>
 
 ## WMS-Layer.time ##
 
-Possible configuration for the time related parameters for a WMS-T.
-If a parameter is also defined in the service, the parameter defined in this config is used.
+Possible configuration for the time related parameters of a WMS-T.
+If a parameter is also present in the service, the definition in this config is used.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|default|no|Number||Initial moment to be displayed for the WMS-T. **Beware**: If the configured value is not inside the time range of the possible values of the service, the value from the service is used instead.|`1970`|
+|default|no|Number||Initial moment to be displayed for the WMS-T. **Beware**: If the configured value is not part of the time range of possible values, the default of the service is used instead.|`1970`|
 |keyboardMovement|no|Number|`5`| Value in pixels that the swiper should be moved when using the arrow keys.|`5`|
 |playbackDelay|no|Number|`1`|When using the playback function, this is the time in seconds which a moment should be shown before the rendering of the next moment is initiated.|`42`|
 

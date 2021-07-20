@@ -2539,7 +2539,7 @@ Technical data definition.
 
 [type:Layer]: # (Themenconfig.Layer)
 
-Definition for WMS-T layers `treeType` `custom` and `default`. Can also be defined under **[Fachdaten](#markdown-header-themenconfigfachdaten)**.
+Definition for WMS-T layers `treeType` `custom` and `default`. The layers can also be defined under **[Fachdaten](#markdown-header-themenconfigfachdaten)**.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
