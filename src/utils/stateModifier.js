@@ -26,20 +26,31 @@ function searchAndSetValue (state, keySplitted, value, found = false) {
             }
         }
         else if (keySplitted.find(key=>key.toLowerCase() === "active")) {
-            // search in Tools:
-            const tool = Object.keys(state.Tools).find(toolName=>toolName.toLowerCase() === keySplitted[0].toLowerCase());
-
-            if (tool) {
-                // console.log("found tool in state:", tool);
-                keySplitted[0] = tool;
-                keySplitted.unshift("Tools");
-                vuexState = nestedAssign(state, makeObject(keySplitted, value));
-                foundInState = true;
-            }
-            else {
-                console.warn("Parametric url: cannot start tool with name ", keySplitted[0]);
-            }
+            inspectStateForTools(vuexState, keySplitted, value);
         }
+    }
+    return foundInState;
+}
+
+/**
+ * If param key does not contain 'Tools', but contains 'active' tool ist activated by state.
+ * @param {Object} vuexState vuex state
+ * @param {Array} keySplitted keys of the url param as array
+ * @param {String} value of the url param
+ * @returns {boolean} true, if keys found in state
+ */
+function inspectStateForTools (vuexState, keySplitted, value) {
+    const tool = Object.keys(vuexState.Tools).find(toolName=>toolName.toLowerCase() === keySplitted[0].toLowerCase());
+    let foundInState = false;
+
+    if (tool) {
+        keySplitted[0] = tool;
+        keySplitted.unshift("Tools");
+        nestedAssign(vuexState, makeObject(keySplitted, value));
+        foundInState = true;
+    }
+    else {
+        console.warn("Parametric url: cannot start tool with name ", keySplitted[0]);
     }
     return foundInState;
 }
@@ -65,7 +76,7 @@ function makeObject (keys, value) {
  */
 function nestedAssign (target, source) {
     for (const sourcekey of Object.keys(source)) {
-        // console.log("sourcekey=",sourcekey);
+        // console.log("nestedAssign sourcekey=", sourcekey);
         if (target === null || target === undefined) {
             // console.log("return null");
             return null;
@@ -103,8 +114,9 @@ export default function setValueToState (state, key, value) {
 
     if (typeof key === "string") {
         const entry = translate(key.trim(), value);
-        // console.log("translated key=",entry.key);
-        // console.log("translated value=",entry.value);
+
+        // console.log("translated key=", entry.key);
+        // console.log("translated value=", entry.value);
 
         found = searchAndSetValue(state, entry.key.split("/"), entry.value);
 
