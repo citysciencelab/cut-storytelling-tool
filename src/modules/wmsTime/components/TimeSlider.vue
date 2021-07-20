@@ -21,7 +21,6 @@ export default {
             this.sliderValue = this.defaultValue;
         },
         sliderValue () {
-            // TODO: Test with two WMS-T
             if (this.timeRange.indexOf(this.sliderValue) === -1) {
                 // If possible, find the next higher (or if not existent, lower) value inside the timeRange.
                 const valTooHigh = this.timeRange[this.timeRange.length - 1] < this.sliderValue,
