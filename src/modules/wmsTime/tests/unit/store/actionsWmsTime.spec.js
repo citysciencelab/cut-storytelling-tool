@@ -12,7 +12,7 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
     beforeEach(() => {
         commit = sinon.spy();
         dispatch = sinon.spy();
-        getters = {currentTimeSliderObject: {step: 1, keyboardMovement: 5}};
+        getters = {currentTimeSliderObject: {keyboardMovement: 5}};
         trigger = sinon.spy();
     });
 
@@ -144,7 +144,6 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
         });
     });
     describe("moveSwiper", () => {
-
         it("should call the functions to set the swiper according to the x-coordinate of the keydown and ArrowRight event", () => {
             const event = {
                 type: "keydown",
@@ -160,6 +159,7 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             expect(commit.secondCall.args).to.eql(["setLayerSwiperStyleLeft", 755]);
             expect(dispatch.firstCall.args).to.eql(["updateMap"]);
         });
+
         it("should call the functions to set the swiper according to the x-coordinate of the mousemove event", () => {
             const event = {
                 type: "mousemove",
@@ -175,22 +175,27 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             expect(dispatch.firstCall.args).to.eql(["updateMap"]);
         });
     });
+
     describe("windowWidthChanged", () => {
+        beforeEach(() => {
+            state.timeSlider.currentLayerId = "123";
+        });
 
         it("should call the mutation to set the windowWidth", () => {
-            state.timeSlider.currentLayerId = "123";
-
             actions.windowWidthChanged({commit, dispatch, state, getters});
+
+            expect(commit.calledOnce).to.be.true;
             expect(commit.firstCall.args).to.eql(["setWindowWidth"]);
         });
 
         it("should set the windowWidth and toggle the swiper if conditional is met", () => {
-            delete getters.minWidth;
             state.layerSwiper.active = true;
-            state.timeSlider.currentLayerId = "123";
 
             actions.windowWidthChanged({commit, dispatch, state, getters});
+
+            expect(commit.calledOnce).to.be.true;
             expect(commit.firstCall.args).to.eql(["setWindowWidth"]);
+            expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["toggleSwiper", "123_secondLayer"]);
         });
     });
