@@ -1,4 +1,5 @@
 import convert from "./converter";
+import requestConfig from "../configLoader";
 
 /**
  * Translates key and value to vuex state readable kind. Converts the value from string to type.
@@ -6,7 +7,7 @@ import convert from "./converter";
  * @param {String} urlParamsValue value of url params
  * @returns {Object} containes translated key and value
  */
-export function translate (urlParamsKey, urlParamsValue) {
+export async function translate (urlParamsKey, urlParamsValue) {
     const checked = check(urlParamsKey, urlParamsValue),
         checkedKey = checked.key,
         checkedValue = checked.value;
@@ -18,6 +19,25 @@ export function translate (urlParamsKey, urlParamsValue) {
                 value = true;
 
             return {key: key, value: value};
+        }
+        case "lng": {
+            checkIfLanguageEnabled();
+            return {key: checkedKey, value: convert(checkedValue)};
+        }
+        case "center": {
+            const key = "Map/" + checkedKey,
+                value = convert(urlParamsValue);
+
+            return {key: key, value: value};
+        }
+        case "config":
+        case "configjson": {
+            const key = "configJson",
+                value = requestConfig(urlParamsValue).then(response => {
+                    return response.data;
+                });
+
+            return {key: key, value: await value};
         }
         default: {
             // console.log("will convert value:", urlParamsValue);
@@ -36,8 +56,7 @@ function check (key, value) {
     let checkedKey = checkForTools(key);
     const checkedValue = checkForKmlImport(value);
 
-    checkedKey = checkForKmlImport(key);
-
+    checkedKey = checkForKmlImport(checkedKey);
     return {key: checkedKey, value: checkedValue};
 
 }
@@ -62,4 +81,14 @@ function checkForKmlImport (string) {
         return string.replace(/kmlimport/i, "FileImport");
     }
     return string;
+}
+
+/**
+     * Checks, if the language is dis- or enabled in the config.js
+     * @returns {void}
+     */
+function checkIfLanguageEnabled () {
+    if (Config.portalLanguage !== undefined && !Config.portalLanguage.enabled) {
+        console.warn("You specified the URL-parameter lng, but disabled the language in the config.js.");
+    }
 }

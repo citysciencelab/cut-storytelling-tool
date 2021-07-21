@@ -1,3 +1,5 @@
+const toolsNotInState = ["compareFeatures", "parcelSearch", "print", "featureLister", "layerSlider", "filter", "shadow", "virtualcity", "wfst", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
+
 /**
  * Triggers at backbone Radio channel "ParametricURL": "ready".
  * @returns {void}
@@ -20,6 +22,9 @@ export function translateToBackbone (urlParamsKey, urlParamsValue) {
         const toolSplitted = urlParamsKey.trim().split("/");
 
         return {key: "isinitopen", value: toolSplitted[toolSplitted.length - 2]};
+    }
+    else if (toolsNotInState.find(toolName=>toolName.toLowerCase() === paramsKey.toLocaleLowerCase())) {
+        return {key: "isinitopen", value: paramsKey};
     }
     return {key: urlParamsKey, value: urlParamsValue};
 }

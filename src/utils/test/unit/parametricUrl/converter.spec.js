@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import convert from "../../converter";
+import convert from "../../../parametricUrl/converter";
 
 describe("src/utils/converter.js", () => {
     describe("convert", () => {
@@ -27,4 +27,12 @@ describe("src/utils/converter.js", () => {
         });
 
     });
+    it("convert 2 numbers as String or String[] to Array with numbers", () => {
+        expect(convert("[]")).to.be.deep.equals([]);
+        expect(convert("[553925,5931898]")).to.be.deep.equals([553925, 5931898]);
+        expect(convert("553925,5931898")).to.be.deep.equals([553925, 5931898]);
+        expect(convert(",5931898")).to.be.equals(",5931898");
+        expect(convert(",")).to.be.equals(",");
+    });
+
 });

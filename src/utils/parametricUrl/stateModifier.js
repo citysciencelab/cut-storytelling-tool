@@ -1,4 +1,4 @@
-import {translate} from "./urlParamsTranslator";
+import {translate} from "./translator";
 import {translateToBackbone} from "./ParametricUrlBrige";
 
 /**
@@ -21,12 +21,9 @@ function searchAndSetValue (state, keySplitted, value, found = false) {
                 foundInState = true;
                 vuexState = newState;
             }
-            else {
-                foundInState = false;
-            }
         }
-        else if (keySplitted.find(key=>key.toLowerCase() === "active")) {
-            inspectStateForTools(vuexState, keySplitted, value);
+        else {
+            foundInState = inspectStateForTools(vuexState, keySplitted, value);
         }
     }
     return foundInState;
@@ -40,21 +37,20 @@ function searchAndSetValue (state, keySplitted, value, found = false) {
  * @returns {boolean} true, if keys found in state
  */
 function inspectStateForTools (vuexState, keySplitted, value) {
-    const tool = Object.keys(vuexState.Tools).find(toolName=>toolName.toLowerCase() === keySplitted[0].toLowerCase());
+    const tool = vuexState.Tools ? Object.keys(vuexState.Tools).find(toolName=>toolName.toLowerCase() === keySplitted[0].toLowerCase()) : null;
     let foundInState = false;
 
     if (tool) {
         keySplitted[0] = tool;
         keySplitted.unshift("Tools");
+        if (!keySplitted.find(key=>key.toLowerCase() === "active")) {
+            keySplitted.push("active");
+        }
         nestedAssign(vuexState, makeObject(keySplitted, value));
         foundInState = true;
     }
-    else {
-        console.warn("Parametric url: cannot start tool with name ", keySplitted[0]);
-    }
     return foundInState;
 }
-
 /**
  * Creates an object from an array and sets the value at it.
  * @param {Array} keys to make an object from
@@ -105,31 +101,31 @@ function nestedAssign (target, source) {
  * @param {Object} state vuex state
  * @param {String} key of the url param
  * @param {String} value of the url param
- * @returns {boolean} if true, key was found in vuex state
+ * @returns {void}
  */
-export default function setValueToState (state, key, value) {
-    // console.log("key=",key);
-    // console.log("value=",value);
-    let found = false;
+export default async function setValueToState (state, key, value) {
+    // console.log("---- key=", key);
+    // console.log("value=", value);
 
     if (typeof key === "string") {
-        const entry = translate(key.trim(), value);
+        translate(key.trim(), value).then(entry => {
+            // console.log("translated key=", entry.key);
+            // console.log("translated value=", entry.value);
 
-        // console.log("translated key=", entry.key);
-        // console.log("translated value=", entry.value);
+            const found = searchAndSetValue(state, entry.key.split("/"), entry.value);
 
-        found = searchAndSetValue(state, entry.key.split("/"), entry.value);
+            // console.log(state);
 
-        if (!found) {
-            const oldParam = translateToBackbone(entry.key, entry.value);
+            if (!found) {
+                const oldParam = translateToBackbone(entry.key, entry.value);
 
-            if (oldParam) {
-                state[oldParam.key] = oldParam.value;
+                if (oldParam) {
+                    state[oldParam.key] = oldParam.value;
+                }
+                else {
+                    state[key] = value;
+                }
             }
-            else {
-                state[key] = value;
-            }
-        }
+        });
     }
-    return found;
 }

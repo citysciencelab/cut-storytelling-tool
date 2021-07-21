@@ -3,7 +3,7 @@ import {mapMutations} from "vuex";
 import MainNav from "./MainNav.vue";
 import MapRegion from "./MapRegion.vue";
 import isDevMode from "./utils/isDevMode";
-import initParametricURL from "./utils/ParametricUrlBrige";
+import initParametricURL from "./utils/parametricUrl/ParametricUrlBrige";
 
 export default {
     name: "App",

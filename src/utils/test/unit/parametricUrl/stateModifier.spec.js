@@ -1,5 +1,12 @@
 import {expect} from "chai";
-import setValueToState from "../../stateModifier.js";
+import setValueToState from "../../../parametricUrl/stateModifier";
+
+// before(() => {
+//     i18next.init({
+//         lng: "cimode",
+//         debug: false
+//     });
+// });
 
 describe("src/utils/stateModifier.js", () => {
     describe("setValueToState", () => {
@@ -22,7 +29,7 @@ describe("src/utils/stateModifier.js", () => {
             setValueToState(state, {}, value);
             expect(state.Tools.Measure.active).to.be.equals(false);
         });
-        it("setValueToState sets a boolean", () => {
+        it("setValueToState sets a boolean", async () => {
             const key = "Tools/Measure/active",
                 state = {
                     Tools: {
@@ -32,30 +39,30 @@ describe("src/utils/stateModifier.js", () => {
                     }
                 };
 
-            setValueToState(state, key, "true");
+            await setValueToState(state, key, "true");
             expect(state.Tools.Measure.active).to.be.equals(true);
 
             state.Tools.Measure.active = false;
-            setValueToState(state, key, "1");
+            await setValueToState(state, key, "1");
             expect(state.Tools.Measure.active).to.be.equals(true);
 
             state.Tools.Measure.active = false;
-            setValueToState(state, key, true);
+            await setValueToState(state, key, true);
             expect(state.Tools.Measure.active).to.be.equals(true);
 
-            setValueToState(state, key, "false");
+            await setValueToState(state, key, "false");
             expect(state.Tools.Measure.active).to.be.equals(false);
 
             state.Tools.Measure.active = true;
-            setValueToState(state, key, "0");
+            await setValueToState(state, key, "0");
             expect(state.Tools.Measure.active).to.be.equals(false);
 
             state.Tools.Measure.active = true;
-            setValueToState(state, key, false);
+            await setValueToState(state, key, false);
             expect(state.Tools.Measure.active).to.be.equals(false);
 
             state.Tools.Measure.active = true;
-            setValueToState(state, key, null);
+            await setValueToState(state, key, null);
             expect(state.Tools.Measure.active).to.be.equals(false);
         });
 
@@ -75,7 +82,7 @@ describe("src/utils/stateModifier.js", () => {
         *  ?startupmodul=draw
         */
         describe("test start tool by urlparams", () => {
-            it("setValueToState sets tool active with param without incomplete key, no value or key has not expected case", () => {
+            it("setValueToState sets tool active with param without incomplete key, no value or key has not expected case", async () => {
                 let key = "Tools/Measure/active";
                 const state = {
                     Tools: {
@@ -85,41 +92,46 @@ describe("src/utils/stateModifier.js", () => {
                     }
                 };
 
-                setValueToState(state, key, "true");
+                await setValueToState(state, key, "true");
                 expect(state.Tools.Measure.active).to.be.equals(true);
 
                 state.Tools.Measure.active = false;
                 key = "tools/Measure/active";
-                setValueToState(state, key, "true");
+                await setValueToState(state, key, "true");
                 expect(state.Tools.Measure.active).to.be.equals(true);
 
                 state.Tools.Measure.active = false;
                 key = "tools/measure/active";
-                setValueToState(state, key, "true");
+                await setValueToState(state, key, "true");
                 expect(state.Tools.Measure.active).to.be.equals(true);
 
                 state.Tools.Measure.active = false;
                 key = "Measure/active";
-                setValueToState(state, key, "true");
+                await setValueToState(state, key, "true");
                 expect(state.Tools.Measure.active).to.be.equals(true);
 
                 state.Tools.Measure.active = false;
                 key = "measure/active";
-                setValueToState(state, key, "true");
+                await setValueToState(state, key, "true");
                 expect(state.Tools.Measure.active).to.be.equals(true);
 
                 state.Tools.Measure.active = false;
                 key = "Measure/active";
-                setValueToState(state, key, "");
+                await setValueToState(state, key, "");
                 expect(state.Tools.Measure.active).to.be.equals(true);
 
                 state.Tools.Measure.active = false;
                 key = "measure/active";
-                setValueToState(state, key, "");
+                await setValueToState(state, key, "");
+                expect(state.Tools.Measure.active).to.be.equals(true);
+
+                state.Tools.Measure.active = false;
+                key = "measure";
+                await setValueToState(state, key, "true");
                 expect(state.Tools.Measure.active).to.be.equals(true);
 
             });
-            it("setValueToState with isinitopen, tool is in state", () => {
+            it("setValueToState with isinitopen, tool is in state", async () => {
                 const key = "isinitopen",
                     state = {
                         Tools: {
@@ -130,19 +142,19 @@ describe("src/utils/stateModifier.js", () => {
                     };
                 let value = "measure";
 
-                setValueToState(state, key, value);
+                await setValueToState(state, key, value);
                 expect(state.Tools.Measure.active).to.be.equals(true);
                 expect(state[key]).to.be.equals(undefined);
 
                 state.Tools.Measure.active = false;
                 state.isinitopen = undefined;
                 value = "Measure";
-                setValueToState(state, key, value);
+                await setValueToState(state, key, value);
                 expect(state.Tools.Measure.active).to.be.equals(true);
                 expect(state[key]).to.be.equals(undefined);
 
             });
-            it("setValueToState with isinitopen, tool is not in state", () => {
+            it("setValueToState with isinitopen, tool is not in state", async () => {
                 const key = "isinitopen",
                     state = {
                         Tools: {
@@ -150,20 +162,20 @@ describe("src/utils/stateModifier.js", () => {
                     };
                 let value = "print";
 
-                setValueToState(state, key, value);
+                await setValueToState(state, key, value);
                 expect(state.Tools.Print).to.be.equals(undefined);
                 expect(state[key]).to.be.equals("print");
 
                 state.Tools.Print = undefined;
                 state.isinitopen = undefined;
                 value = "Print";
-                setValueToState(state, key, value);
+                await setValueToState(state, key, value);
                 expect(state.Tools.Print).to.be.equals(undefined);
                 expect(state[key]).to.be.equals("Print");
             });
 
 
-            it("setValueToState with startupmodul, tool is in state", () => {
+            it("setValueToState with startupmodul, tool is in state", async () => {
                 const key = "startupmodul",
                     state = {
                         Tools: {
@@ -174,19 +186,19 @@ describe("src/utils/stateModifier.js", () => {
                     };
                 let value = "measure";
 
-                setValueToState(state, key, value);
+                await setValueToState(state, key, value);
                 expect(state.Tools.Measure.active).to.be.equals(true);
                 expect(state.isinitopen).to.be.equals(undefined);
 
                 state.Tools.Measure.active = false;
                 state.startupmodul = undefined;
                 value = "Measure";
-                setValueToState(state, key, value);
+                await setValueToState(state, key, value);
                 expect(state.Tools.Measure.active).to.be.equals(true);
                 expect(state.isinitopen).to.be.equals(undefined);
 
             });
-            it("setValueToState with startupmodul, tool is not in state", () => {
+            it("setValueToState with startupmodul, tool is not in state", async () => {
                 const key = "startupmodul",
                     state = {
                         Tools: {
@@ -194,16 +206,48 @@ describe("src/utils/stateModifier.js", () => {
                     };
                 let value = "print";
 
-                setValueToState(state, key, value);
+                await setValueToState(state, key, value);
                 expect(state.Tools.Print).to.be.equals(undefined);
                 expect(state.isinitopen).to.be.equals("print");
 
                 state.Tools.Print = undefined;
                 state.isinitopen = undefined;
                 value = "Print";
-                setValueToState(state, key, value);
+                await setValueToState(state, key, value);
                 expect(state.Tools.Print).to.be.equals(undefined);
                 expect(state.isinitopen).to.be.equals("Print");
+            });
+        });
+        describe("UrlParam center", () => {
+            it("?Map/center or only center as param-key is set to state", async () => {
+                let key = "Map/center",
+                    valueAsString = "[553925,5931898]";
+                const state = {
+                        Map: {
+                            center: [0, 0]
+                        }
+                    },
+                    value = [553925, 5931898];
+
+                await setValueToState(state, key, valueAsString);
+                expect(state.Map.center).to.be.deep.equals(value);
+
+                state.Map.center = [0, 0];
+                key = "center";
+                await setValueToState(state, key, valueAsString);
+                expect(state.Map.center).to.be.deep.equals(value);
+
+                state.Map.center = [0, 0];
+                key = "Map/center";
+                valueAsString = "553925,5931898";
+                await setValueToState(state, key, valueAsString);
+                expect(state.Map.center).to.be.deep.equals(value);
+
+                state.Map.center = [0, 0];
+                key = "center";
+                valueAsString = "553925,5931898";
+                await setValueToState(state, key, valueAsString);
+                expect(state.Map.center).to.be.deep.equals(value);
             });
         });
     });

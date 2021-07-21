@@ -1,4 +1,3 @@
-
 /**
  *  Converts a boolean string to a boolean.
  * @param {String} string representation of a boolean as string
@@ -23,8 +22,22 @@ function convertStringToBoolean (string) {
  * @returns {Array} the converted array
  */
 function convertStringToArray (string) {
-    if (typeof string === "string" && string.charAt(0) === "[" && string.charAt(string.length - 1) === "]") {
-        return JSON.parse(string);
+    if (typeof string === "string") {
+        if (string.charAt(0) === "[" && string.charAt(string.length - 1) === "]") {
+            return JSON.parse(string);
+        }
+        const index = string.indexOf(",");
+
+        if (index > -1) {
+            let firstPart = string.slice(0, index),
+                secondPart = string.slice(index + 1, string.length);
+
+            firstPart = Number.parseInt(firstPart, 10);
+            secondPart = Number.parseInt(secondPart, 10);
+            if (!isNaN(firstPart) && !isNaN(secondPart)) {
+                return [firstPart, secondPart];
+            }
+        }
     }
     return string;
 }
