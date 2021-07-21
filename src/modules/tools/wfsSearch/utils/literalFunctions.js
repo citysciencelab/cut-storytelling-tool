@@ -37,6 +37,7 @@ function createLiteralStructure (stateLiterals, literals = null, userHelp = []) 
 
 /**
  * Creates a String representation for the built literals structure.
+ * TODO: write unit tests for this function when replaceAll is supported by mocha.
  *
  * @param {Object[]} literals The literals for which the structure is built and which are parsed.
  * @returns {String} String representation for the structure of the given literal.
