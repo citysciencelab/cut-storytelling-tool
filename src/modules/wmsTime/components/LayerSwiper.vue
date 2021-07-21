@@ -17,6 +17,7 @@ export default {
         this.setLayerSwiperValueX(this.map.getSize()[0] / 2);
         this.map.on("postcompose", this.updateMap);
 
+        target.focus();
         this.setLayerSwiperDomSwiper(target);
     },
     beforeDestroy: function () {
