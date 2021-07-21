@@ -42,15 +42,13 @@ export default {
         ...mapActions("WmsTime", ["toggleSwiper", "updateMap"]),
         ...mapMutations("WmsTime", Object.keys(mutations)),
         animate () {
-            setTimeout(() => {
-                const index = this.nextIndex();
+            const index = this.nextIndex();
 
-                if (index === this.timeRange.length) {
-                    this.playing = false;
-                    return;
-                }
-                this.sliderValue = this.timeRange[index];
-            }, this.timeSlider.playbackDelay * 1000);
+            if (index === this.timeRange.length) {
+                this.playing = false;
+                return;
+            }
+            this.sliderValue = this.timeRange[index];
         },
         nextIndex (forward = true) {
             return this.timeRange.indexOf(this.sliderValue) + (forward ? 1 : -1);
@@ -59,19 +57,19 @@ export default {
             this.sliderValue = this.timeRange[this.nextIndex(forward)];
         },
         play () {
+            let handle;
+
             this.playing = !this.playing;
 
             // This is true whenever any of the two players is being used.
             this.setTimeSliderPlaying(this.playing);
 
             if (this.playing) {
-                // Initial play
-                this.animate();
-                // Play whenever the layer has finished rendering
-                this.map.on("rendercomplete", this.animate);
+                handle = setInterval(this.animate, this.timeSlider.playbackDelay * 1000);
             }
             else {
-                this.map.un("rendercomplete", this.animate);
+                clearInterval(handle);
+                handle = undefined;
             }
         }
     }
