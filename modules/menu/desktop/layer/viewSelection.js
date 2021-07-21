@@ -22,7 +22,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @extends Backbone.View
      * @memberof Menu.Desktop.Layer
      * @constructs
-     * @listens LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
      */
     initialize: function () {
         checkChildrenDatasets(this.model);
@@ -111,6 +110,15 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
+     * Init the LayerInformation window and inits the highlighting of the informationIcon.
+     * @returns {void}
+     */
+    showLayerInformation: function () {
+        this.model.showLayerInformation();
+        this.highlightLayerInformationIcon();
+    },
+
+    /**
      * Executes setIsSettingVisible and setIsSelected in the model
      * removes the element
      * @returns {void}
@@ -132,19 +140,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     toggleIsVisibleInMap: function () {
         this.model.toggleIsVisibleInMap();
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
-    },
-
-    /**
-     * Executes showLayerInformation in the model
-     * removes the class "in" from "div.collapse.navbar-collapse"
-     * Executes highlightLayerInformationIcon
-     * @returns {void}
-     */
-    showLayerInformation: function () {
-        this.model.showLayerInformation();
-        // Navigation wird geschlossen
-        $("div.collapse.navbar-collapse").removeClass("in");
-        this.highlightLayerInformationIcon();
     },
 
     /**

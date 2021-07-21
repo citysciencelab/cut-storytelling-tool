@@ -10,6 +10,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
         "click .selected-layer-item > div": "toggleIsVisibleInMap",
         "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
+        "click .layer-info-item > .glyphicon-switch": "toggleIsSettingVisible",
         "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
         "click .layer-sort-item > .glyphicon-triangle-bottom": "moveModelDown",
         "change select": "setTransparency",
@@ -104,6 +105,8 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
 
         // Animation Zahnrad
         this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
+        this.$(".glyphicon-switch").toggleClass("rotate rotate-back");
+        this.$(".glyphicon-switch").toggleClass("glyphicon-minus glyphicon-plus");
         // Slide-Animation templateSetting
         if (this.model.get("isSettingVisible") === false) {
             this.$el.find(".item-settings").slideUp("slow", function () {

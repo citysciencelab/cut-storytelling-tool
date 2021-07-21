@@ -47,7 +47,7 @@ function deepAssignHelper (target, source, depthBarrier, depth = 0) {
 
     Object.keys(source).forEach(key => {
         if (typeof source[key] === "object" && source[key] !== null) {
-            if (!target.hasOwnProperty(key) || typeof target[key] !== "object" || target[key] === null) {
+            if (!Object.prototype.hasOwnProperty.call(target, key) || typeof target[key] !== "object" || target[key] === null) {
                 target[key] = {};
             }
             deepAssignHelper(target[key], source[key], depthBarrier, depth + 1);

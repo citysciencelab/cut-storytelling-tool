@@ -13,7 +13,6 @@ import RemoteInterface from "../modules/remoteInterface/model";
 import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
 import GraphModel from "../modules/tools/graph/model";
-import ColorScale from "../modules/tools/colorScale/model";
 import MenuLoader from "../modules/menu/menuLoader";
 import ZoomToGeometry from "../modules/zoomToGeometry/model";
 import ZoomToFeature from "../modules/zoomToFeature/model";
@@ -21,7 +20,6 @@ import FeatureViaURL from "../modules/featureViaURL/model";
 import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
-import LayerinformationModel from "../modules/layerInformation/model";
 import ClickCounterModel from "../modules/clickCounter/model";
 import MouseHoverPopupView from "../modules/mouseHover/view";
 import QuickHelpView from "../modules/quickHelp/view";
@@ -29,12 +27,9 @@ import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import ShadowView from "../modules/tools/shadow/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
-import LineView from "../modules/tools/pendler/lines/view";
-import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
-import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
 import {initiateVueI18Next} from "./vueI18Next";
 
@@ -78,31 +73,30 @@ async function loadApp () {
     /* eslint-disable no-undef */
     const legacyAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
         utilConfig = {},
-        layerInformationModelSettings = {},
         style = Radio.request("Util", "getUiStyle"),
         vueI18Next = initiateVueI18Next();
     /* eslint-disable no-undef */
     let app = {},
         searchbarAttributes = {};
 
-    if (Config.hasOwnProperty("uiStyle")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
     }
-    if (Config.hasOwnProperty("proxyHost")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "proxyHost")) {
         utilConfig.proxyHost = Config.proxyHost;
     }
-    if (Config.hasOwnProperty("proxy")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "proxy")) {
         utilConfig.proxy = Config.proxy;
     }
 
     // RemoteInterface laden
-    if (Config.hasOwnProperty("remoteInterface")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "remoteInterface")) {
         new RemoteInterface(Config.remoteInterface);
         new RadioMasterportalAPI();
         Vue.use(RemoteInterfaceVue, Config.remoteInterface);
     }
 
-    if (Config.hasOwnProperty("quickHelp")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "quickHelp")) {
         new QuickHelpView(Config.quickHelp);
     }
 
@@ -131,7 +125,7 @@ async function loadApp () {
 
 
     new StyleList();
-    if (!Config.hasOwnProperty("allowParametricURL") || Config.allowParametricURL === true) {
+    if (!Object.prototype.hasOwnProperty.call(Config, "allowParametricURL") || Config.allowParametricURL === true) {
         new ParametricURL();
     }
     new Map(Radio.request("Parser", "getPortalConfig").mapView);
@@ -142,15 +136,14 @@ async function loadApp () {
     new GraphModel();
     new WFSTransactionModel();
     new MenuLoader();
-    new ColorScale();
 
-    if (Config.hasOwnProperty("zoomToGeometry")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "zoomToGeometry")) {
         new ZoomToGeometry(Config.zoomToGeometry);
     }
-    if (Config.hasOwnProperty("zoomToFeature")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "zoomToFeature")) {
         new ZoomToFeature(Config.zoomToFeature);
     }
-    if (Config.hasOwnProperty("featureViaURL")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "featureViaURL")) {
         new FeatureViaURL(Config.featureViaURL);
     }
 
@@ -158,16 +151,11 @@ async function loadApp () {
     new SliderRangeView();
     new DropdownView();
 
-    if (Config.hasOwnProperty("metaDataCatalogueId")) {
-        layerInformationModelSettings.metaDataCatalogueId = Config.metaDataCatalogueId;
-    }
-    new LayerinformationModel(layerInformationModelSettings);
-
-    if (Config.hasOwnProperty("clickCounter") && Config.clickCounter.hasOwnProperty("desktop") && Config.clickCounter.desktop !== "" && Config.clickCounter.hasOwnProperty("mobile") && Config.clickCounter.mobile !== "") {
+    if (Object.prototype.hasOwnProperty.call(Config, "clickCounter") && Object.prototype.hasOwnProperty.call(Config, "desktop") && Config.clickCounter.desktop !== "" && Object.prototype.hasOwnProperty.call(Config, "mobile") && Config.clickCounter.mobile !== "") {
         new ClickCounterModel(Config.clickCounter.desktop, Config.clickCounter.mobile, Config.clickCounter.staticLink);
     }
 
-    if (Config.hasOwnProperty("mouseHover")) {
+    if (Object.prototype.hasOwnProperty.call(Config, "mouseHover")) {
         new MouseHoverPopupView(Config.mouseHover);
     }
 
@@ -177,10 +165,6 @@ async function loadApp () {
 
     Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}).forEach(tool => {
         switch (tool.id) {
-            case "compareFeatures": {
-                new CompareFeaturesView({model: tool});
-                break;
-            }
             case "lines": {
                 new LineView({model: tool});
                 break;
@@ -296,7 +280,7 @@ async function loadApp () {
     }
 
     searchbarAttributes = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
-    sbconfig = Object.assign({}, Config.hasOwnProperty("quickHelp") ? {quickHelp: Config.quickHelp} : {});
+    sbconfig = Object.assign({}, Object.prototype.hasOwnProperty.call(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
     sbconfig = Object.assign(sbconfig, searchbarAttributes);
 
     if (searchbarAttributes !== undefined && sbconfig) {

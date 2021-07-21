@@ -668,11 +668,6 @@
  */
 
 /**
- * @namespace LayerInformation
- * @description Shows the layer-information in a popup on the map.
- */
-
-/**
  * @namespace Main
  * @description Loading basic requirements such as the css. Then it starts the App.
  */

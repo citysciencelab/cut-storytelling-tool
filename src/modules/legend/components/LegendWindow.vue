@@ -1,6 +1,6 @@
 <script>
 import Feature from "ol/Feature.js";
-import {mapGetters, mapActions, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersLegend";
 import mutations from "../store/mutationsLegend";
 import actions from "../store/actionsLegend";
@@ -227,7 +227,7 @@ export default {
 
         /**
          * Prepares the legend array for a grouplayer by iterating over its layers and generating the legend of each child.
-         * @param {ol/Layer/Soure} layerSource Layer sources of group layer.
+         * @param {ol/Layer/Source} layerSource Layer sources of group layer.
          * @returns {Object[]} - merged Legends.
          */
         prepareLegendForGroupLayer (layerSource) {
@@ -307,7 +307,7 @@ export default {
                         }
                     }
                     /** Style WMS */
-                    else if (legendInfo.hasOwnProperty("name") && legendInfo.hasOwnProperty("graphic")) {
+                    else if (legendInfo?.name && legendInfo?.graphic) {
                         legendObj = legendInfo;
                     }
                     if (Array.isArray(legendObj)) {
@@ -442,15 +442,12 @@ export default {
             const olFeature = new Feature(),
                 circleBarScalingFactor = style.get("circleBarScalingFactor"),
                 barHeight = String(20 / circleBarScalingFactor),
-                clonedStyle = style.clone();
-            let olStyle = null,
-                intervalCircleBar = null;
+                clonedStyle = style.clone(),
+                intervalCircleBar = clonedStyle.getStyle().getImage().getSrc();
 
             olFeature.set(scalingAttribute, barHeight);
             clonedStyle.setFeature(olFeature);
             clonedStyle.setIsClustered(false);
-            olStyle = clonedStyle.getStyle();
-            intervalCircleBar = olStyle.getImage().getSrc();
 
             return intervalCircleBar;
         },
@@ -732,13 +729,13 @@ export default {
                 <span
                     class="glyphicon glyphicon-remove close-legend float-right"
                     @click="closeLegend"
-                ></span>
+                />
                 <span
                     v-if="showCollapseAllButton"
                     class="glyphicon glyphicon-arrow-up toggle-collapse-all legend float-right"
                     :title="$t('common:modules.legend.toggleCollapseAll')"
                     @click="toggleCollapseAll"
-                ></span>
+                />
             </div>
             <div class="legend-content">
                 <div
@@ -755,15 +752,15 @@ export default {
                     </div>
                     <LegendSingleLayer
                         :id="generateId(legendObj.name)"
-                        :legendObj="legendObj"
-                        :renderToId="''"
+                        :legend-obj="legendObj"
+                        :render-to-id="''"
                     />
                 </div>
             </div>
         </div>
         <LegendSingleLayer
-            :legendObj="layerInfoLegend"
-            :renderToId="'layerinfo-legend'"
+            :legend-obj="layerInfoLegend"
+            :render-to-id="'layerinfo-legend'"
         />
     </div>
 </template>
@@ -784,7 +781,7 @@ export default {
             position: absolute;
             min-width:200px;
             max-width:600px;
-            right: 0px;
+            right: 0;
             margin: 10px 10px 30px 10px;
             background-color: #ffffff;
             z-index: 9999;
@@ -831,7 +828,7 @@ export default {
 
     .legend-window-table {
         position: absolute;
-        right: 0px;
+        right: 0;
         font-family: @font_family_2;
         border-radius: 12px;
         background-color: @background_color_4;

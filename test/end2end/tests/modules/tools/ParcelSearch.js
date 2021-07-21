@@ -1,8 +1,8 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../library/driver"),
     {getCenter} = require("../../../library/scripts"),
-    {/* isDefault, isCustom,*/ isMaster} = require("../../../settings"),
+    {isMaster} = require("../../../settings"),
     {logTestingCloudUrlToTest} = require("../../../library/utils"),
     {By, until} = webdriver;
 
@@ -42,7 +42,7 @@ async function ParcelSearchTests ({builder, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
             });
 
             after(async function () {
@@ -51,16 +51,15 @@ async function ParcelSearchTests ({builder, url, resolution, capability}) {
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
+                    await quitDriver();
                     driver = await initDriver(builder, url, resolution);
                 }
             });
+
 
             it("opens a modal on activation providing input elements", async () => {
                 const toolsLink = await driver.findElement(selectors.tools, 5000),

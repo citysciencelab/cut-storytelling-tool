@@ -121,8 +121,7 @@ export default {
     <div
         v-else
         :class="{hideButton: 'overviewmap-button'}"
-    >
-    </div>
+    />
 </template>
 
 <style lang="less" scoped>
@@ -149,7 +148,7 @@ export default {
             left: auto;
             right: 100%;
             box-shadow: @box-shadow;
-            border: 0px;
+            border: 0;
 
             .ol-overviewmap-box {
                 border: 2px solid @primary;

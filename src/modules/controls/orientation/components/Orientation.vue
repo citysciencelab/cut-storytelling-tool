@@ -419,10 +419,9 @@ export default {
          */
         getDistance (feat, centerPosition) {
             const closestPoint = feat.getGeometry().getClosestPoint(centerPosition),
-                line = new LineString([closestPoint, centerPosition]),
-                dist = Math.round(line.getLength());
+                line = new LineString([closestPoint, centerPosition]);
 
-            return dist;
+            return Math.round(line.getLength());
         },
 
         /**
@@ -471,21 +470,18 @@ export default {
             :icon-name="'record'"
             :title="$t('common:modules.controls.orientation.titleGeolocatePOI')"
             :on-click="getPOI"
-        >
-        </ControlIcon>
+        />
         <PoiChoice
             v-if="showPoiChoice"
             id="geolocatePoiChoice"
             @track="trackPOI"
-        >
-        </PoiChoice>
+        />
         <PoiOrientation
             v-if="showPoi"
-            :poiDistances="poiDistances"
-            :getFeaturesInCircle="getVectorFeaturesInCircle"
+            :poi-distances="poiDistances"
+            :get-features-in-circle="getVectorFeaturesInCircle"
             @hide="untrackPOI"
-        >
-        </PoiOrientation>
+        />
     </div>
 </template>
 

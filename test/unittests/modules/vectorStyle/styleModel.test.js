@@ -206,6 +206,7 @@ describe("vectorStyleModel", function () {
     let styleModel,
         utilModel,
         xmlDescribeFeatureType,
+        xmlDescribefeatureType_nrw,
         jsonObjects;
 
 
@@ -213,6 +214,7 @@ describe("vectorStyleModel", function () {
         styleModel = new Model();
         utilModel = new Util();
         xmlDescribeFeatureType = utilModel.getDescribeFeatureTypeResponse("resources/testDescribeFeatureTypeResponse.xml");
+        xmlDescribefeatureType_nrw = utilModel.getDescribeFeatureTypeResponse("resources/testDescribeFeatureTypeResonse_nrw.xml");
         jsonObjects = geojsonReader.readFeatures(jsonFeatures);
     });
 
@@ -482,6 +484,17 @@ describe("vectorStyleModel", function () {
         });
     });
 
+    describe("getValueWithoutComma", function () {
+        it("should return original value", function () {
+            expect(styleModel.getValueWithoutComma("22")).to.equal("22");
+            expect(styleModel.getValueWithoutComma("test")).to.equal("test");
+        });
+        it("should return the value without comma", function () {
+            expect(styleModel.getValueWithoutComma("22,6")).to.equal(22.6);
+            expect(styleModel.getValueWithoutComma("22,667")).to.equal(22.667);
+        });
+    });
+
     describe("isObjectPath", function () {
         it("should return true if value is an object path", function () {
             expect(styleModel.isObjectPath("@id")).to.be.true;
@@ -509,24 +522,41 @@ describe("vectorStyleModel", function () {
     });
 
     describe("getSubelementsFromXML", function () {
-        const featureType = "staatliche_schulen";
+        const featureType = "staatliche_schulen",
+            featureType_nrw = "SWD01_P";
 
         it("should return an Array with elements", function () {
-            expect(styleModel.getSubelementsFromXML(xmlDescribeFeatureType, featureType)).to.be.an("array");
+            expect(styleModel.getSubelementsFromXML(xmlDescribeFeatureType, featureType)).to.be.an("array").to.have.lengthOf(63);
+            expect(styleModel.getSubelementsFromXML(xmlDescribefeatureType_nrw, featureType_nrw)).to.be.an("array").to.have.lengthOf(10);
+        });
+        it("featureType with namespace -> should return an Array with elements", function () {
+            expect(styleModel.getSubelementsFromXML(xmlDescribefeatureType_nrw, "tfis:" + featureType_nrw)).to.be.an("array").to.have.lengthOf(10);
         });
         it("should return an empty Array", function () {
             expect(styleModel.getSubelementsFromXML(undefined, featureType)).to.be.an("array").to.be.empty;
         });
         it("should return an empty Array", function () {
             expect(styleModel.getSubelementsFromXML(xmlDescribeFeatureType, undefined)).to.be.an("array").to.be.empty;
+            expect(styleModel.getSubelementsFromXML(xmlDescribefeatureType_nrw, undefined)).to.be.an("array").to.be.empty;
         });
     });
     describe("getTypeAttributesFromSubelements", function () {
+        const featureType = "staatliche_schulen",
+            featureType_nrw = "SWD01_P";
         let subElements;
 
-        it("should return an Array with element Point", function () {
-            subElements = styleModel.getSubelementsFromXML(xmlDescribeFeatureType, "staatliche_schulen");
+        it("should return an Array with element Point or with Point, Polygon and Linestring", function () {
+            subElements = styleModel.getSubelementsFromXML(xmlDescribeFeatureType, featureType);
+            expect(subElements).to.be.an("array").to.have.lengthOf(63);
             expect(styleModel.getTypeAttributesFromSubelements(subElements)).to.be.an("array").to.include("Point");
+            expect(styleModel.getTypeAttributesFromSubelements(subElements)).to.be.an("array").not.to.include("Polygon");
+            expect(styleModel.getTypeAttributesFromSubelements(subElements)).to.be.an("array").not.to.include("LineString");
+
+            subElements = styleModel.getSubelementsFromXML(xmlDescribefeatureType_nrw, featureType_nrw);
+            expect(subElements).to.be.an("array").to.have.lengthOf(10);
+            expect(styleModel.getTypeAttributesFromSubelements(subElements)).to.be.an("array").to.include("Point");
+            expect(styleModel.getTypeAttributesFromSubelements(subElements)).to.be.an("array").to.include("Polygon");
+            expect(styleModel.getTypeAttributesFromSubelements(subElements)).to.be.an("array").to.include("LineString");
         });
         it("should return an empty Array", function () {
             expect(styleModel.getTypeAttributesFromSubelements(undefined)).to.be.an("array").to.be.empty;

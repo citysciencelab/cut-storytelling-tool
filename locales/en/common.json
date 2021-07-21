@@ -18,8 +18,12 @@
         "black": "Black",
         "white": "White"
     },
+    "mouseHover": {
+        "infoText": "(more objects. Please zoom.)"
+    },
     "menu": {
         "topics": "Issues & Topics",
+        "name": "Menu",
         "views": {
             "name": "Views",
             "view01": "View 1"
@@ -92,7 +96,8 @@
             "de": "Deutsch",
             "en": "English",
             "it": "Italiano",
-            "pt": "Português"
+            "pt": "Português",
+            "es": "Español"
         },
         "core": {
           "modelList": {
@@ -157,7 +162,8 @@
           "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)",
           "periodicityTitle": "Periodicity",
           "publicationCreation": "Publication / Creation",
-          "buildings":"Buildings"
+          "buildings":"Buildings",
+          "changeLayerInfo": "Switch infotext"
         },
         "mapMarker": {
           "noStyleModel": "No style could be found for the specified StyleId: {{styleId}}. Please check your configuration."
@@ -219,8 +225,7 @@
             "info": {
                 "disclaimer": "Legal disclaimer",
                 "home": {
-                    "name": "Hamburg Town",
-                    "url": "https://www.hamburg.com/"
+                    "name": "Hamburg Town"
                 }
             },
             "addWMS": {
@@ -378,17 +383,20 @@
                 "moreInfo": "More info",
                 "lessInfo": "Less info",
                 "exportAsPdf": "Export as PDF",
+                "removeFromList": "Remove from list",
                 "noFeatures": {
                     "nothingSelected": "There are no {{objects}} selected for the comparison list.",
                     "objectName": "objects",
                     "info": "Click on an object on the map. A window opens with the respective factual information. In the upper right corner there is a star symbol {{iconEmptyStar}}. Click on this icon to add the object to the comparison list. The star icon will be colored yellow {{iconYellowStar}}. Click the star icon again to remove the object from the comparison list."
                 },
                 "feedback": {
-                    "added": "{{object}} was added to the comparison list",
-                    "notAdded": "{{object}} could not be added to the comparison list",
+                    "added": "The feature was added to the comparison list",
+                    "addedWithName": "{{currentFeatureName}} was added to the comparison list",
+                    "notAdded": "The feature could not be added to the comparison list",
+                    "notAddedWithName": "{{currentFeatureName}} could not be added to the comparison list",
                     "limitReached": "The maximum number of objects in the comparison list has been reached.",
                     "removeObjects": "Please remove at least one object before proceeding.",
-                    "gotoComparisonlist": "To the comparison list"
+                    "goToComparisonlist": "To the comparison list"
                 }
             },
             "saveSelection": {
@@ -481,7 +489,10 @@
                         "year": "{{count}} year",
                         "year_plural": "{{count}} years",
                         "previousWeekday": "Previous Weekday",
-                        "nextWeekday": "Next weekday"
+                        "nextWeekday": "Next weekday",
+                        "noticeTextAvailable": "(Only data with the value available are considered)",
+                        "noticeTextCharging": "(Only data with the value charging are considered).",
+                        "noticeTextOutoforder": "(Only data with the value outoforder are considered)."
                       },
                       "sensorData": {
                         "firstColumnHeaderName": "Properties"
@@ -588,7 +599,8 @@
                     "iconPoint": "Point",
                     "iconLeaf": "Leaf",
                     "iconCloud": "Cloud",
-                    "iconMeadow": "Meadow"
+                    "iconMeadow": "Meadow",
+                    "gelber Pin": "yellow Pin"
                 }
             },
             "measure": {

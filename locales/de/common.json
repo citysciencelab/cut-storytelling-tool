@@ -18,8 +18,12 @@
         "black": "Schwarz",
         "white": "Weiß"
     },
+    "mouseHover": {
+        "infoText": "(weitere Objekte. Bitte zoomen.)"
+    },
     "menu": {
         "topics": "Themen",
+        "name": "Menü",
         "views": {
             "name": "Ansichten",
             "view01": "Ansicht 1"
@@ -127,7 +131,8 @@
             "de": "Deutsch",
             "en": "English",
             "it": "Italiano",
-            "pt": "Português"
+            "pt": "Português",
+            "es": "Español"
         },
         "cswParser": {
             "noMetadataMessage": "Keine Metadaten vorhanden.",
@@ -151,14 +156,15 @@
           "closeButton": "Schließen",
           "downloadDataset": "Datensatz herunterladen",
           "errorMessage": "Die Abfrage der Metadaten ist fehlgeschlagen. Falls das Problem weiterhin besteht, wenden Sie sich bitte an den Eigentümer des Dienstes: <b>{{cswObjCswUrl}}</b>",
-          "informationAndLegend": "Informationen und Legend",
+          "informationAndLegend": "Informationen und Legende",
           "lastModified": "Letzte Änderung",
           "legend": "Legende",
           "noMetadataLoaded": "Es konnten keine Metadaten geladen werden!",
           "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)",
           "periodicityTitle": "Periodizität",
           "publicationCreation": "Publikation / Erstellung",
-          "buildings":"Gebäude"
+          "buildings":"Gebäude",
+          "changeLayerInfo": "Informationstext wechseln"
         },
         "mapMarker": {
           "noStyleModel": "Zu der angegebenen StyleId: {{styleId}} konnte keine Style gefunden werden. Bitte überprüfen sie ihre Konfiguration."
@@ -220,8 +226,7 @@
             "info": {
                 "disclaimer": "Haftungsausschluss",
                 "home": {
-                    "name": "Hamburg",
-                    "url": "https://www.hamburg.de/"
+                    "name": "Hamburg"
                 }
             },
             "addWMS": {
@@ -378,17 +383,20 @@
                 "moreInfo": "Mehr Infos",
                 "lessInfo": "Weniger Infos",
                 "exportAsPdf": "Export als PDF",
+                "removeFromList": "Von Liste entfernen",
                 "noFeatures": {
                     "nothingSelected": "Es sind keine {{objects}} für die Vergleichsliste ausgewählt.",
                     "objectName": "Objekte",
                     "info": "Klicken Sie auf ein Objekt in der Karte. Es öffnet sich ein Fenster mit den jeweiligen Sachinformationen. In der rechten oberen Ecke befindet sich ein Sternsymbol {{iconEmptyStar}}. Klicken Sie auf dieses Symbol, um das Objekt zur Vergleichsliste hinzuzufügen. Das Sternsymbol wird gelb eingefärbt {{iconYellowStar}}. Ein erneuter Klick auf das Sternsymbol entfernt das Objekt wieder von der Vergleichsliste."
                 },
                 "feedback": {
-                    "added": "{{object}} wurde zur Vergleichsliste hinzugefügt",
-                    "notAdded": "{{object}} konnte nicht zur Vergleichsliste hinzugefügt werden",
+                    "added": "Das Feature wurde zur Vergleichsliste hinzugefügt",
+                    "addedWithName": "{{currentFeatureName}} wurde zur Vergleichsliste hinzugefügt",
+                    "notAdded": "Das Feature konnte nicht zur Vergleichsliste hinzugefügt werden",
+                    "notAddedWithName": "{{currentFeatureName}} konnte nicht zur Vergleichsliste hinzugefügt werden",
                     "limitReached": "Die maximale Anzahl an Objekten in der Vergleichsliste wurde erreicht.",
                     "removeObjects": "Bitte entfernen Sie zuerst mindestens ein Objekt bevor Sie fortfahren.",
-                    "gotoComparisonlist": "Zur Vergleichsliste"
+                    "goToComparisonlist": "Zur Vergleichsliste"
                 }
             },
             "saveSelection": {
@@ -481,7 +489,10 @@
                         "year": "{{count}} Jahr",
                         "year_plural": "{{count}} Jahren",
                         "previousWeekday": "Vorheriger Wochentag",
-                        "nextWeekday": "Nächster Wochentag"
+                        "nextWeekday": "Nächster Wochentag",
+                        "noticeTextAvailable": "(Es werden ausschließlich Daten mit dem Wert available / verfügbar berücksichtigt)",
+                        "noticeTextCharging": "(Es werden ausschließlich Daten mit dem Wert charging / ladend berücksichtigt)",
+                        "noticeTextOutoforder": "(Es werden ausschließlich Daten mit dem Wert outoforder / Außer Betrieb berücksichtigt)"
                       },
                       "sensorData": {
                         "firstColumnHeaderName": "Eigenschaften"
@@ -588,7 +599,8 @@
                     "iconPoint": "Punkt",
                     "iconLeaf": "Blatt",
                     "iconCloud": "Wolke",
-                    "iconMeadow": "Wiese"
+                    "iconMeadow": "Wiese",
+                    "gelber Pin": "gelber Pin"
                 }
             },
             "measure": {

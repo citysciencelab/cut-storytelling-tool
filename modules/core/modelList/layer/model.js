@@ -80,7 +80,6 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @fires Layer#RadioTriggerVectorLayerFeaturesLoaded
      * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
      * @fires Core#RadioRequestMapViewGetResoByScale
-     * @fires LayerInformation#RadioTriggerLayerInformationAdd
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires LegendComponent:RadioTriggerLegendComponentUpdateLegend
      * @listens Layer#changeIsSelected
@@ -357,11 +356,6 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         }
 
         this.listenTo(channel, {
-            "updateLayerInfo": function (name) {
-                if (this.get("name") === name && this.get("layerInfoChecked") === true) {
-                    this.showLayerInformation();
-                }
-            },
             "setLayerInfoChecked": function (layerInfoChecked) {
                 this.setLayerInfoChecked(layerInfoChecked);
             },
@@ -625,7 +619,6 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
     /**
      * Initiates the presentation of layer information.
-     * @fires LayerInformation#event:RadioTriggerLayerInformationAdd
      * @returns {void}
      */
     showLayerInformation: function () {
@@ -634,18 +627,19 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             layerMetaId = null;
 
         if (this.get("datasets") && Array.isArray(this.get("datasets")) && this.get("datasets")[0] !== null && typeof this.get("datasets")[0] === "object") {
-            cswUrl = this.get("datasets")[0].hasOwnProperty("csw_url") ? this.get("datasets")[0].csw_url : null;
-            showDocUrl = this.get("datasets")[0].hasOwnProperty("show_doc_url") ? this.get("datasets")[0].show_doc_url : null;
-            layerMetaId = this.get("datasets")[0].hasOwnProperty("md_id") ? this.get("datasets")[0].md_id : null;
+            cswUrl = this.get("datasets")[0]?.csw_url ? this.get("datasets")[0].csw_url : null;
+            showDocUrl = this.get("datasets")[0]?.show_doc_url ? this.get("datasets")[0].show_doc_url : null;
+            layerMetaId = this.get("datasets")[0]?.md_id ? this.get("datasets")[0].md_id : null;
         }
         const metaID = [],
             name = this.get("name");
 
         metaID.push(layerMetaId);
 
-        Radio.trigger("LayerInformation", "add", {
+        store.dispatch("LayerInformation/layerInfo", {
             "id": this.get("id"),
-            "metaID": metaID,
+            "metaID": layerMetaId,
+            "metaIdArray": metaID,
             "layername": name,
             "url": this.get("url"),
             "typ": this.get("typ"),
@@ -654,7 +648,13 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             "urlIsVisible": this.get("urlIsVisible")
         });
 
-        if (this.createLegend && {}.toString.call(this.createLegend) === "[object Function]") {
+        store.dispatch("LayerInformation/activate", true);
+        store.dispatch("LayerInformation/additionalSingleLayerInfo");
+        store.dispatch("LayerInformation/setMetadataURL", layerMetaId);
+        store.dispatch("Legend/setLayerIdForLayerInfo", this.get("id"));
+        store.dispatch("Legend/setLayerCounterIdForLayerInfo", Date.now());
+
+        if (this.createLegend && typeof this.createLegend === "function") {
             this.createLegend();
         }
         this.setLayerInfoChecked(true);

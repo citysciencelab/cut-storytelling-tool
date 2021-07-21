@@ -5,6 +5,7 @@ import BufferAnalysis from "../../../store/indexBufferAnalysis";
 import {expect} from "chai";
 import sinon from "sinon";
 import {createLayersArray} from "../utils/functions";
+import FakeTimers from "@sinonjs/fake-timers";
 
 const localVue = createLocalVue();
 
@@ -30,10 +31,11 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
                 }
             }
         };
-    let store;
+    let store, originalCheckIntersection, originalShowBuffer;
 
     beforeEach(() => {
-
+        originalCheckIntersection = BufferAnalysis.actions.checkIntersection;
+        originalShowBuffer = BufferAnalysis.actions.showBuffer;
         BufferAnalysis.actions.checkIntersection = sinon.spy();
         BufferAnalysis.actions.showBuffer = sinon.spy();
 
@@ -56,6 +58,14 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
             }
         });
         store.commit("Tools/BufferAnalysis/setActive", true);
+    });
+
+    afterEach(() => {
+        BufferAnalysis.actions.checkIntersection = originalCheckIntersection;
+        BufferAnalysis.actions.showBuffer = originalShowBuffer;
+        store.commit("Tools/BufferAnalysis/setActive", false);
+        store.commit("Tools/BufferAnalysis/setSelectOptions", []);
+        store.dispatch("Tools/BufferAnalysis/resetModule");
     });
 
     it("renders the bufferAnalysis", () => {
@@ -95,22 +105,25 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
     it("triggers showBuffer action when source layer and buffer radius are set", async () => {
         const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
             selectSource = wrapper.find("#tool-bufferAnalysis-selectSourceInput"),
-            sourceOptions = selectSource.findAll("option"),
             range = wrapper.find("#tool-bufferAnalysis-radiusTextInput"),
             layers = createLayersArray(3),
-            clock = sinon.useFakeTimers();
+            clock = FakeTimers.install();
+
+
+        let sourceOptions = [];
 
         await store.commit("Tools/BufferAnalysis/setSelectOptions", layers);
+        sourceOptions = selectSource.findAll("option");
         await wrapper.vm.$nextTick();
 
         sourceOptions.at(1).setSelected();
         await wrapper.vm.$nextTick();
-        expect(layers[1].setIsSelectedSpy.calledOnce).to.equal(true);
+        expect(layers[1].setIsSelected.calledOnce).to.equal(true);
 
         range.setValue(1000);
         await wrapper.vm.$nextTick();
         clock.tick(1000);
         expect(BufferAnalysis.actions.showBuffer.calledOnce).to.equal(true);
-        clock.restore();
+        clock.uninstall();
     });
 });

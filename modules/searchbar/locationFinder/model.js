@@ -141,7 +141,7 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
         const crs = "EPSG:" + data.sref;
 
         // Test for sucess-status of service
-        if (!(data.hasOwnProperty("ok") && data.ok)) {
+        if (!data?.ok) {
             let statusText = i18next.t("common:modules.searchbar.locationFinder.serverError");
 
             if (data.info) {

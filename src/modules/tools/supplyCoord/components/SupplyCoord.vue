@@ -3,7 +3,7 @@ import Tool from "../../Tool.vue";
 import getComponent from "../../../../utils/getComponent";
 import {Pointer} from "ol/interaction.js";
 import {getProjections} from "masterportalAPI/src/crs";
-import {mapGetters, mapActions, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersSupplyCoord";
 import mutations from "../store/mutationsSupplyCoord";
 
@@ -150,9 +150,9 @@ export default {
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
+        :deactivate-gfi="deactivateGFI"
     >
-        <template v-slot:toolBody>
+        <template #toolBody>
             <div
                 v-if="active"
                 id="supply-coord"

@@ -46,23 +46,29 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         this.addIsActiveCheckbox();
         this.listenTo(this.get("snippetCollection"), {
             "valuesChanged": function () {
-                let options;
-
                 this.setIsActive(true);
                 this.get("btnIsActive").setIsSelected(true);
                 this.runFilter();
                 if (this.get("liveZoomToFeatures")) {
-                    Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
-                    options = Radio.request("MapView", "getOptions");
-                    if (this.get("minScale") && options.scale < this.get("minScale")) {
-                        Radio.trigger("MapView", "setScale", this.get("minScale"));
-                    }
+                    this.liveZoom();
                 }
             }
         }, this);
         this.checkLayerVisibility();
         this.listenTo(Radio.channel("Layer"), {
             "layerVisibleChanged": function (layerId, visible) {
+                const layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+
+                if (
+                    typeof layer === "object" && layer !== null && typeof layer.get === "function"
+                    && Array.isArray(layer.get("children")) && layer.get("children").length
+                ) {
+                    layer.get("children").forEach(child => {
+                        if (typeof child === "object" && child !== null && child.id === this.get("layerId")) {
+                            this.setIsLayerVisible(visible);
+                        }
+                    });
+                }
                 if (layerId === this.get("layerId")) {
                     this.setIsLayerVisible(visible);
                 }
@@ -89,6 +95,16 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
             "deleteAll": i18next.t("common:modules.tools.filter.deleteAll"),
             "currentLng": lng
         });
+    },
+
+    /**
+     * Zooms to an extent of a feature considering the min scale.
+     * @returns {void}
+     */
+    liveZoom: function () {
+        const minResolution = Radio.request("MapView", "getResoByScale", this.get("minScale"));
+
+        Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"), {minResolution});
     },
 
     isSearchInMapExtentActive: function () {
@@ -146,7 +162,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
             this.get("snippetCollection").add(new SnippetDropdownModel(snippetAttribute));
         }
         else if (snippetAttribute.type === "boolean") {
-            if (snippetAttribute.hasOwnProperty("preselectedValues")) {
+            if (snippetAttribute?.preselectedValues) {
                 isSelected = snippetAttribute.preselectedValues[0];
             }
             snippetAttribute = Object.assign(snippetAttribute, {"snippetType": "checkbox", "label": snippetAttribute.displayName, "isSelected": isSelected});
@@ -182,8 +198,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
      * @return {void}
      */
     createSnippets: function (featureAttributes) {
-        let featureAttributesMap = this.trimAttributes(featureAttributes),
-            options;
+        let featureAttributesMap = this.trimAttributes(featureAttributes);
 
         featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
         featureAttributesMap = this.collectSelectableOptions(this.get("features"), [], featureAttributesMap);
@@ -194,11 +209,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         if (this.get("isSelected") === true) {
             this.runFilter();
             if (this.get("liveZoomToFeatures")) {
-                Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
-                options = Radio.request("MapView", "getOptions");
-                if (this.get("minScale") && options.scale < this.get("minScale")) {
-                    Radio.trigger("MapView", "setScale", this.get("minScale"));
-                }
+                this.liveZoom();
             }
             this.trigger("renderDetailView");
         }
@@ -235,7 +246,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
             attrObj.name = attr;
             attrObj.matchingMode = "OR";
         }
-        else if (attr.hasOwnProperty("name") && attr.hasOwnProperty("matchingMode")) {
+        else if (attr?.name && attr?.matchingMode) {
             attrObj = attr;
         }
         return attrObj;
@@ -251,7 +262,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
             displayNames = Array.isArray(whiteList) ? attributeNames : whiteList;
 
         featureAttributesMap.forEach(featureAttribute => {
-            if (displayNames instanceof Object && displayNames.hasOwnProperty(featureAttribute.name) === true) {
+            if (displayNames instanceof Object && Object.prototype.hasOwnProperty.call(displayNames, featureAttribute.name) === true) {
                 featureAttribute.displayName = displayNames[featureAttribute.name];
             }
             else {
@@ -304,8 +315,6 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         this.set("isDefault", value);
     },
     selectThis: function () {
-        let options;
-
         if (!this.get("isSelected")) {
             // the query collection listens to this trigger in the filter model
             this.collection.trigger("deselectAllModels", this);
@@ -314,11 +323,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
             if (this.get("isActive")) {
                 this.runFilter();
                 if (this.get("liveZoomToFeatures")) {
-                    Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
-                    options = Radio.request("MapView", "getOptions");
-                    if (this.get("minScale") && options.scale < this.get("minScale")) {
-                        Radio.trigger("MapView", "setScale", this.get("minScale"));
-                    }
+                    this.liveZoom();
                 }
             }
         }

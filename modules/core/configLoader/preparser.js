@@ -103,7 +103,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
             overlayer: response.Themenconfig.Fachdaten,
             overlayer_3d: response.Themenconfig.Fachdaten_3D,
             overlayer_time: response.Themenconfig.Fachdaten_Zeit,
-            treeType: response.Portalconfig.hasOwnProperty("treeType") ? response.Portalconfig.treeType : "light",
+            treeType: response.Portalconfig?.treeType ? response.Portalconfig.treeType : "light",
             isFolderSelectable: this.parseIsFolderSelectable(Config?.tree?.isFolderSelectable),
             snippetInfos: this.requestSnippetInfos()
         };
@@ -155,7 +155,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
 
                 // each entry should get a translation function: in the translationfile might be stuff that is not keyed in the config.json (like pure ids from the Dienstemanager)
                 // at this point pure arrays in the config.json can't be translated with a translation function
-                if (!Array.isArray(subconf) && !subconf.hasOwnProperty("i18nextTranslate")) {
+                if (!Array.isArray(subconf) && !subconf?.i18nextTranslate) {
                     /**
                      * callback function i18nextTranslate
                      * @param {Function} setter a function(translation) to set the value of key
@@ -174,7 +174,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                         }
                     };
                 }
-                else if (subconf.hasOwnProperty("i18nextTranslate") && typeof subconf.i18nextTranslate === "function") {
+                else if (subconf?.i18nextTranslate && typeof subconf.i18nextTranslate === "function") {
                     // a function already exists - this means more then one value of this object in the config.json must be translated
                     // put former i18nextTranslate function into scope
                     const cascadeFunction = subconf.i18nextTranslate;
@@ -225,10 +225,10 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
      * @deprecated in 3.0.0. Remove whole function and call!
      */
     updateTreeType: function (attributes, response) {
-        if (response.Portalconfig.hasOwnProperty("treeType")) {
+        if (response.Portalconfig?.treeType) {
             attributes.treeType = response.Portalconfig.treeType;
         }
-        else if (response.Portalconfig.hasOwnProperty("Baumtyp")) {
+        else if (response.Portalconfig?.Baumtyp) {
             attributes.treeType = response.Portalconfig.Baumtyp;
             console.warn("Attribute 'Baumtyp' is deprecated. Please use 'treeType' instead.");
         }
@@ -272,7 +272,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
         let infos,
             url;
 
-        if (Config.hasOwnProperty("infoJson")) {
+        if (Object.prototype.hasOwnProperty.call(Config, "infoJson")) {
             url = Config.infoJson;
         }
 

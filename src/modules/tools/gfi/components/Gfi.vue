@@ -205,9 +205,9 @@ export default {
          * @returns {*} - Prepared Value from gfi.
          */
         prepareGfiValueFromObject: function (key, obj, gfi) {
-            const type = obj.hasOwnProperty("type") ? obj.type : "string",
-                format = obj.hasOwnProperty("format") ? obj.format : "DD.MM.YYYY HH:mm:ss",
-                condition = obj.hasOwnProperty("condition") ? obj.condition : null;
+            const type = obj?.type ? obj.type : "string",
+                format = obj?.format ? obj.format : "DD.MM.YYYY HH:mm:ss",
+                condition = obj?.condition ? obj.condition : null;
             let preparedValue = this.prepareGfiValue(gfi, key),
                 date;
 
@@ -308,7 +308,7 @@ export default {
          * @returns {*} - Value from key.
          */
         prepareGfiValue: function (gfi, key) {
-            const isPath = key.startsWith("@");
+            const isPath = key.startsWith("@") && key.length > 1;
             let value = gfi[Object.keys(gfi).find(gfiKey => gfiKey.toLowerCase() === key.toLowerCase())];
 
             if (isPath) {
@@ -356,13 +356,13 @@ export default {
                         :class="[pagerIndex < 1 ? 'disabled' : '', 'pager-left', 'pager']"
                         @click="decreasePagerIndex"
                     >
-                        <span class="glyphicon glyphicon-chevron-left"></span>
+                        <span class="glyphicon glyphicon-chevron-left" />
                     </div>
                     <div
                         :class="[pagerIndex === gfiFeatures.length - 1 ? 'disabled' : '', 'pager-right', 'pager']"
                         @click="increasePagerIndex"
                     >
-                        <span class="glyphicon glyphicon-chevron-right"></span>
+                        <span class="glyphicon glyphicon-chevron-right" />
                     </div>
                 </div>
             </template>

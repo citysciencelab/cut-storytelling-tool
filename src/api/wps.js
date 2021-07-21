@@ -41,10 +41,9 @@ export default {
      * @returns {object} xml parsed as object
      */
     parseDataString: function (dataString) {
-        const xml = parse(dataString),
-            obj = this.parseXmlToObject(xml);
+        const xml = parse(dataString);
 
-        return obj;
+        return this.parseXmlToObject(xml);
     },
     /**
      * @desc parses an xml document to js
@@ -66,7 +65,7 @@ export default {
                 const localName = child?.localName || child.innerHTML;
                 let old;
 
-                if (!obj.hasOwnProperty(localName) && localName !== undefined) {
+                if (!Object.prototype.hasOwnProperty.call(obj, localName) && localName !== undefined) {
                     obj[localName] = this.parseXmlToObject(child);
                 }
                 else {
@@ -95,9 +94,9 @@ export default {
         Object.entries(data).forEach(dat => {
             const obj = dat[1],
                 key = dat[0],
-                dataType = obj.hasOwnProperty("dataType") ? obj.dataType : undefined,
-                value = obj.hasOwnProperty("value") ? obj.value : obj;
-            let attributeString = "";
+                dataType = obj?.dataType ? obj.dataType : undefined,
+                value = obj?.value ? obj.value : obj;
+            let attributeString;
 
             attributeString = this.setXMLElement(dataInputXmlTemplate, "</ows:Identifier>", key);
             attributeString = this.setXMLElement(attributeString, "</wps:LiteralData>", value, dataType);

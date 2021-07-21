@@ -5,6 +5,9 @@ import {getWmsFeaturesByMimeType} from "../../../../api/gfi/getWmsFeaturesByMime
 import {MapMode} from "../enums";
 import getProxyUrl from "../../../../utils/getProxyUrl";
 
+import VectorLayer from "ol/layer/Vector.js";
+import VectorSource from "ol/source/Vector.js";
+
 let unsubscribes = [],
     loopId = null;
 
@@ -128,7 +131,7 @@ const actions = {
     updateClick ({getters, commit, dispatch, rootGetters}, evt) {
         const {mapMode} = getters;
 
-        if (mapMode === MapMode.MODE_2D) {
+        if (mapMode === MapMode.MODE_2D || mapMode === MapMode.MODE_OB) {
             commit("setClickCoord", evt.coordinate);
             commit("setClickPixel", evt.pixel);
         }
@@ -336,9 +339,35 @@ const actions = {
             ...options
         });
     },
+    /**
+     * Creates a new vector layer and adds it to the map.
+     * If it already exists, this layer is returned.
+     * @param {String} name - The name and the id for the layer.
+     * @returns {module:ol/layer} The created or the already existing layer.
+     */
+    createLayer ({state}, name) {
+        const layerList = state.layerList;
+
+        let resultLayer = layerList.find(layer => {
+            return layer.get("name") === name;
+        });
+
+        if (resultLayer !== undefined) {
+            return resultLayer;
+        }
+
+        resultLayer = new VectorLayer({
+            id: name,
+            name: name,
+            source: new VectorSource(),
+            zIndex: 999
+        });
+
+        state.map.addLayer(resultLayer);
+        return resultLayer;
+    },
     ...highlightFeature,
     ...removeHighlightFeature
-
 };
 
 export default actions;

@@ -10,8 +10,7 @@ import {register} from "ol/proj/proj4.js";
 import proj4 from "proj4";
 import {createMap} from "masterportalAPI";
 import {getLayerList} from "masterportalAPI/src/rawLayerList";
-import {transformToMapProjection} from "masterportalAPI/src/crs";
-import {transform as transformCoord, transformFromMapProjection, getMapProjection} from "masterportalAPI/src/crs";
+import {transform as transformCoord, transformFromMapProjection, transformToMapProjection, getMapProjection} from "masterportalAPI/src/crs";
 import store from "../../src/app-store";
 import WMTSLayer from "./modelList/layer/wmts";
 
@@ -142,7 +141,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
          * resolution
          * @deprecated in 3.0.0
          */
-        if (mapViewSettings && mapViewSettings.hasOwnProperty("resolution")) {
+        if (mapViewSettings && mapViewSettings?.resolution) {
             console.warn("MapView parameter 'resolution' is deprecated. Please use 'startResolution' instead.");
             mapViewSettings.startResolution = mapViewSettings.resolution;
         }
@@ -150,7 +149,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
          * zoomLevel
          * @deprecated in 3.0.0
          */
-        if (mapViewSettings && mapViewSettings.hasOwnProperty("zoomLevel")) {
+        if (mapViewSettings && mapViewSettings?.zoomLevel) {
             console.warn("MapView parameter 'zoomLevel' is deprecated. Please use 'startZoomLevel' instead.");
             mapViewSettings.startZoomLevel = mapViewSettings.zoomLevel;
         }
@@ -541,7 +540,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
 
         this.get("view").fit(extentToZoom, {
             size: this.get("map").getSize(),
-            duration: options && options.hasOwnProperty("duration") ? options.duration : 800,
+            duration: options && options?.duration ? options.duration : 800,
             ...options
         });
     },
@@ -558,13 +557,14 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     },
 
     /**
-     * todo
-     * @param {*} ids - todo
-     * @param {*} layerId - todo
+     * Get extent of features.
+     * @param {String[]} ids - The feature ids.
+     * @param {String} layerId - The layer id.
+     * @param {Object} zoomOptions - The options for zoom to extent.
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @returns {void}
      */
-    zoomToFilteredFeatures: function (ids, layerId) {
+    zoomToFilteredFeatures: function (ids, layerId, zoomOptions) {
         const layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId, type: "layer"}),
             olLayer = layer.get("layer");
 
@@ -594,7 +594,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
 
         if (features.length > 0) {
             extent = this.calculateExtent(features);
-            this.zoomToExtent(extent);
+            this.zoomToExtent(extent, zoomOptions);
         }
     },
 

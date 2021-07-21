@@ -6,10 +6,11 @@ import ConfirmAction from "../modules/confirmAction/store/indexConfirmAction";
 import Footer from "../modules/footer/store/indexFooter";
 import GraphicalSelect from "../share-components/graphicalSelect/store/indexGraphicalSelect";
 import Language from "../modules/language/store/indexLanguage";
-import Title from "../modules/title/store/indexTitle";
+import LayerInformation from "../modules/layerInformation/store/indexLayerInformation";
+import Legend from "../modules/legend/store/indexLegend";
 import Map from "../modules/map/store/indexMap";
 import MapMarker from "../modules/mapMarker/store/indexMapMarker";
-import Legend from "../modules/legend/store/indexLegend";
+import Title from "../modules/title/store/indexTitle";
 import WmsTime from "../modules/wmsTime/store/indexWmsTime";
 
 import getters from "./getters";
@@ -26,11 +27,12 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     modules: {
-        ConfirmAction,
         Alerting,
+        ConfirmAction,
         Footer,
         GraphicalSelect,
         Language,
+        LayerInformation,
         Legend,
         Map,
         MapMarker,

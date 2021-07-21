@@ -35,10 +35,8 @@ export default {
         return {
             defaultOptions: {
                 responsive: true,
-                plugins: {
-                    legend: {
-                        position: "top"
-                    }
+                legend: {
+                    align: "start"
                 }
             },
             chart: null
@@ -75,7 +73,7 @@ export default {
                 config = {
                     type: this.diagramType,
                     data: data,
-                    options: this.getChartJsOptions(this.givenOptions, this.defaultOptions)
+                    options: this.getChartJsOptions(this.defaultOptions, this.givenOptions)
                 };
 
             if (this.chart instanceof ChartJs) {
@@ -87,11 +85,11 @@ export default {
 
         /**
          * replace default options with given options on hand deepAssign method and returns the options for chart js
-         * @param {Object} givenOptions an object with given options following chartJS options (see https://www.chartjs.org/docs/latest/general/options.html)
          * @param {Object} defaultOptions an object with the default options following chartJS options (see https://www.chartjs.org/docs/latest/general/options.html)
+         * @param {Object} givenOptions an object with given options following chartJS options (see https://www.chartjs.org/docs/latest/general/options.html)
          * @returns {Object} an object to use as options for chartjs
          */
-        getChartJsOptions (givenOptions, defaultOptions) {
+        getChartJsOptions (defaultOptions, givenOptions) {
             if (typeof defaultOptions !== "object" || defaultOptions === null) {
                 return typeof givenOptions === "object" && givenOptions !== null ? givenOptions : {};
             }

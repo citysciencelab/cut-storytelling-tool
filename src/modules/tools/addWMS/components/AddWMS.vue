@@ -202,7 +202,7 @@ export default {
          * @return {void}
          */
         parseLayer: function (object, parentId, level) {
-            if (object.hasOwnProperty("Layer")) {
+            if (Object.prototype.hasOwnProperty.call(object, "Layer")) {
                 object.Layer.forEach(layer => {
                     this.parseLayer(layer, this.getParsedTitle(object.Title), level + 1);
                 });
@@ -309,9 +309,7 @@ export default {
          * @returns {String} parsedTitle - The parsed title
          */
         getParsedTitle: function (title) {
-            const finalTitle = String(title).replace(/\s+/g, "-").replace(/\//g, "-");
-
-            return finalTitle;
+            return String(title).replace(/\s+/g, "-").replace(/\//g, "-");
         }
     }
 };
@@ -324,9 +322,9 @@ export default {
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
+        :deactivate-gfi="deactivateGFI"
     >
-        <template v-slot:toolBody>
+        <template #toolBody>
             <div
                 v-if="active"
                 id="add-wms"
@@ -361,7 +359,7 @@ export default {
                     <span
                         class="glyphicon glyphicon-ok"
                         aria-hidden="true"
-                    ></span>
+                    />
                 </button>
             </div>
         </template>

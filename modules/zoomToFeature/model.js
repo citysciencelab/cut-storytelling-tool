@@ -126,6 +126,7 @@ const ZoomToFeature = Backbone.Model.extend({
      */
     createIconVectorLayer: function (iconFeatures) {
         return new VectorLayer({
+            id: "zoom_to_feature_layer",
             source: new VectorSource({
                 features: iconFeatures
             })
@@ -165,9 +166,9 @@ const ZoomToFeature = Backbone.Model.extend({
     // baut sich aus den Config-prefs die URL zusammen
     requestFeaturesFromWFS: function (wfsId) {
         const LayerPrefs = getLayerWhere({id: wfsId}),
-            url = LayerPrefs && LayerPrefs.hasOwnProperty("url") ? LayerPrefs.url : "",
-            version = LayerPrefs && LayerPrefs.hasOwnProperty("version") ? LayerPrefs.version : "",
-            typename = LayerPrefs && LayerPrefs.hasOwnProperty("featureType") ? LayerPrefs.featureType : "",
+            url = LayerPrefs && LayerPrefs?.url ? LayerPrefs.url : "",
+            version = LayerPrefs && LayerPrefs?.version ? LayerPrefs.version : "",
+            typename = LayerPrefs && LayerPrefs?.featureType ? LayerPrefs.featureType : "",
             data = "service=WFS&version=" + version + "&request=GetFeature&TypeName=" + typename;
 
         this.sendRequest(url, data);
