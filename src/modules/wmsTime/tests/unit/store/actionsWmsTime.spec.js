@@ -143,6 +143,7 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             expect(removeLayer.firstCall.args).to.eql([layerString]);
         });
     });
+
     describe("moveSwiper", () => {
         it("should call the functions to set the swiper according to the x-coordinate of the keydown and ArrowRight event", () => {
             const event = {
@@ -159,7 +160,6 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             expect(commit.secondCall.args).to.eql(["setLayerSwiperStyleLeft", 755]);
             expect(dispatch.firstCall.args).to.eql(["updateMap"]);
         });
-
         it("should call the functions to set the swiper according to the x-coordinate of the mousemove event", () => {
             const event = {
                 type: "mousemove",
@@ -187,7 +187,6 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             expect(commit.calledOnce).to.be.true;
             expect(commit.firstCall.args).to.eql(["setWindowWidth"]);
         });
-
         it("should set the windowWidth and toggle the swiper if conditional is met", () => {
             state.layerSwiper.active = true;
 
