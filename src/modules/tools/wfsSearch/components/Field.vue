@@ -276,7 +276,6 @@ export default {
             <!-- TODO: Can this be made barrierefrei or is it already? -->
             <i
                 v-if="htmlElement === 'input' && showLoader"
-                id="todo"
                 class="loader"
             />
             <datalist
@@ -284,11 +283,11 @@ export default {
                 :id="`tool-wfsSearch-${fieldName}-${fieldId}-input-suggestions`"
             >
                 <option
-                    v-for="(value, index) in suggestions"
-                    :key="value + index"
-                    :value="value"
+                    v-for="(val, index) in suggestions"
+                    :key="val + index"
+                    :value="val"
                 >
-                    {{ value }}
+                    {{ val }}
                 </option>
             </datalist>
         </div>
