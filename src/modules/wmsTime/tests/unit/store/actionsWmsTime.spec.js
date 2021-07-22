@@ -154,10 +154,13 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
 
             state.layerSwiper.valueX = 750;
             state.layerSwiper.isMoving = true;
+
             actions.moveSwiper({state, commit, dispatch, getters}, event);
+
             expect(commit.calledTwice).to.be.true;
             expect(commit.firstCall.args).to.eql(["setLayerSwiperValueX", 755]);
             expect(commit.secondCall.args).to.eql(["setLayerSwiperStyleLeft", 755]);
+            expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["updateMap"]);
         });
         it("should call the functions to set the swiper according to the x-coordinate of the mousemove event", () => {
@@ -168,10 +171,13 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
 
             state.layerSwiper.valueX = 750;
             state.layerSwiper.isMoving = true;
+
             actions.moveSwiper({state, commit, dispatch, getters}, event);
+
             expect(commit.calledTwice).to.be.true;
             expect(commit.firstCall.args).to.eql(["setLayerSwiperValueX", 800]);
             expect(commit.secondCall.args).to.eql(["setLayerSwiperStyleLeft", 800]);
+            expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["updateMap"]);
         });
     });
