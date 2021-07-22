@@ -77,10 +77,27 @@ function callMutations (state) {
     if (state.urlParams["Map/center"]) {
         let centerCoords = state.Map.center;
 
-        if (state.urlParams["Map/projection"] !== undefined) {
-            centerCoords = transformToMapProjection(state.Map.map, state.Map.projection, centerCoords);
+        if (state.urlParams.projection !== undefined) {
+            centerCoords = transformToMapProjection(state.Map.map, state.urlParams.projection, centerCoords);
         }
         store.commit("Map/setCenter", centerCoords);
+    }
+}
+/**
+ * Calls actions, if necessary.
+ * @param {Object} state vuex state
+ * @returns {void}
+ */
+function callActions (state) {
+    if (state.urlParams["MapMarker/coordinates"]) {
+        let coordinates = state.MapMarker.coordinates;
+
+        if (state.urlParams.projection !== undefined) {
+            coordinates = transformToMapProjection(state.Map.map, state.urlParams.projection, coordinates);
+        }
+        setTimeout(() => {
+            store.dispatch("MapMarker/placingPointMarker", coordinates);
+        }, 500);
     }
 }
 /**
@@ -94,6 +111,8 @@ export default async function setValuesToState (state, params) {
         setValueToState(state, key, value);
     });
     triggerParametricURLReady();
+    callMutations(state);
+    callActions(state);
 }
 
 /**
@@ -104,23 +123,21 @@ export default async function setValuesToState (state, params) {
  * @returns {void}
  */
 export async function setValueToState (state, key, value) {
-    // console.log("state vorher=",state);
     // console.log("---- key=", key);
     // console.log("value=", value);
 
     if (typeof key === "string") {
         translate(key.trim(), value).then(entry => {
             let setToState = false;
+
             // console.log("translated key=", entry.key);
             // console.log("translated value=", entry.value);
 
 
             const found = searchAndSetValue(state, entry.key.split("/"), entry.value);
 
-            // console.log("state:",state);
-            // console.log("found:",found);
-
-            callMutations(state);
+            // console.log("state:", state);
+            // console.log("found:", found);
 
             if (!found) {
                 const oldParam = translateToBackbone(entry.key, entry.value);
@@ -133,6 +150,7 @@ export async function setValueToState (state, key, value) {
             if (!setToState) {
                 state.urlParams[entry.key] = value;
             }
+            // console.log("state.urlParams=", state.urlParams);
         }).catch(error => {
             console.warn("Error occured during applying url param to state ", error);
         });

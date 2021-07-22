@@ -83,18 +83,6 @@ const actions = {
     },
 
     /**
-     * Checks if a tool should be open initially controlled by the url param "isinitopen".
-     * @param {String} toolName - Name from the toolComponent
-     * @returns {void}
-     */
-    activateByUrlParam: ({rootState, dispatch}, toolName) => {
-        // if (rootState.queryParams instanceof Object && toolName?.toLowerCase() === rootState?.queryParams?.isinitopen?.toLowerCase()) {
-        //     dispatch("controlActivationOfTools", toolName);
-        //     dispatch("setToolInitValues", toolName);
-        // }
-    },
-
-    /**
      * Checks if a tool should initialized with certain values controlled by the url param "initvalues".
      * @param {Object} context - context object for actions
      * @param {String} toolName - Name from the toolComponent

@@ -30,8 +30,10 @@ export async function translate (urlParamsKey, urlParamsValue) {
 
             return {key: key, value: value};
         }
-        case "projection": {
-            const key = "Map/" + checkedKey,
+        case "projection":
+        case "map/projection": {
+            // do not set projection to state, is only used for transforming coordinates
+            const key = "projection",
                 value = convert(urlParamsValue);
 
             return {key: key, value: value};
@@ -44,6 +46,13 @@ export async function translate (urlParamsKey, urlParamsValue) {
                 });
 
             return {key: key, value: await value};
+        }
+        case "marker":
+        case "mapmarker": {
+            const key = "MapMarker/coordinates",
+                value = convert(urlParamsValue);
+
+            return {key: key, value: value};
         }
         default: {
             // console.log("will convert value:", urlParamsValue);

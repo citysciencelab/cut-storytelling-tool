@@ -67,10 +67,15 @@ function deepAssignHelper (target, source, depthBarrier, depth = 0, ignoreCase =
             if (createTargetKey && (!Object.prototype.hasOwnProperty.call(target, targetKey) || typeof target[targetKey] !== "object" || target[targetKey] === null)) {
                 target[targetKey] = {};
             }
-            const assigned = deepAssignHelper(target[targetKey], source[key], depthBarrier, depth + 1, ignoreCase, createTargetKey);
+            if (Array.isArray(source[key]) && typeof source[key][0] !== "object") {
+                target[targetKey] = source[key];
+            }
+            else {
+                const assigned = deepAssignHelper(target[targetKey], source[key], depthBarrier, depth + 1, ignoreCase, createTargetKey);
 
-            if (!createTargetKey && (assigned === null || assigned === undefined)) {
-                return null;
+                if (!createTargetKey && (assigned === null || assigned === undefined)) {
+                    return null;
+                }
             }
         }
         else {
@@ -79,3 +84,42 @@ function deepAssignHelper (target, source, depthBarrier, depth = 0, ignoreCase =
     }
     return target;
 }
+
+
+/**
+ * Assignes nested source object to nested target object.
+ * @param {Object} target object to assign source at
+ * @param {Object} source to assign at target
+ * @returns {Object} target with source assigned to
+ */
+// function nestedAssign (target, source, keyToAssignAt) {
+//     for (const sourcekey of Object.keys(source)) {
+//         // console.log("nestedAssign sourcekey=", sourcekey);
+//         if (target === null || target === undefined) {
+//             // console.log("return null");
+//             return null;
+//         }
+//         const targetKey = target === null || target === undefined ? null : Object.keys(target).find(key=>key.toLowerCase() === sourcekey.toLowerCase());
+
+//         // console.log("sourcekey:",sourcekey);
+//         // console.log("targetKey:",targetKey);
+//         if (Object.keys(source).find(key=>key.toLowerCase() === sourcekey.toLowerCase()) !== undefined && typeof source[sourcekey] === "object") {
+//             // if(sourcekey === keyToAssignAt){
+//             //     target[targetKey] = source[sourcekey];
+//             //     source = {};
+//             // }
+//             // else{
+//                 const ret = nestedAssign(target[targetKey], source[sourcekey], keyToAssignAt);
+
+//                 if (ret === null) {
+//                     return ret;
+//                 }
+//                 target[targetKey] = ret;
+//             // }
+//         }
+//         else {
+//             target[targetKey] = source[sourcekey];
+//         }
+//     }
+//     return target;
+// }

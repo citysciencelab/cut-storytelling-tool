@@ -79,7 +79,6 @@ export default {
      * @returns {void}
      */
     setUrlParams (state, params) {
-
         setValuesToState(state, params);
     }
 };

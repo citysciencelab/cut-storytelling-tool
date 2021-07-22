@@ -7,7 +7,6 @@ const {
     setToolActive,
     languageChanged,
     addTool,
-    activateByUrlParam,
     setToolActiveByConfig
 } = actions;
 

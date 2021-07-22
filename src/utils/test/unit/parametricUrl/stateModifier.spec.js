@@ -1,6 +1,13 @@
 import {expect} from "chai";
 import {setValueToState} from "../../../parametricUrl/stateModifier";
+import * as crs from "masterportalAPI/src/crs";
 
+const namedProjections = [
+    ["EPSG:31467", "+title=Bessel/Gauß-Krüger 3 +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
+    ["EPSG:25832", "+title=ETRS89/UTM 32N +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"],
+    ["EPSG:8395", "+title=ETRS89/Gauß-Krüger 3 +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=GRS80 +datum=GRS80 +units=m +no_defs"],
+    ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
+];
 
 describe("src/utils/stateModifier.js", () => {
     describe("setValueToState", () => {
@@ -251,6 +258,57 @@ describe("src/utils/stateModifier.js", () => {
                 valueAsString = "553925,5931898";
                 await setValueToState(state, key, valueAsString);
                 expect(state.Map.center).to.be.deep.equals(value);
+            });
+        });
+        describe("UrlParam marker", () => {
+            it("test param marker and MapMarker, coordinates as array or comma separated", async () => {
+                let key = "marker",
+                    valueAsString = "[553925,5931898]";
+                const state = {
+                        urlParams: {},
+                        MapMarker: {
+                            coordinates: [0, 0]
+                        }
+                    },
+                    value = [553925, 5931898];
+
+                await setValueToState(state, key, valueAsString);
+                expect(state.MapMarker.coordinates).to.be.deep.equals(value);
+
+                state.MapMarker.coordinates = [0, 0];
+                key = "MapMarker";
+                await setValueToState(state, key, valueAsString);
+                expect(state.MapMarker.coordinates).to.be.deep.equals(value);
+
+                state.MapMarker.coordinates = [0, 0];
+                key = "mapmarker";
+                await setValueToState(state, key, valueAsString);
+                expect(state.MapMarker.coordinates).to.be.deep.equals(value);
+
+                state.MapMarker.coordinates = [0, 0];
+                key = "mapmarker";
+                valueAsString = "553925,5931898";
+                await setValueToState(state, key, valueAsString);
+                expect(state.MapMarker.coordinates).to.be.deep.equals(value);
+            });
+            it("test param marker with projection", async () => {
+                crs.registerProjections(namedProjections);
+
+                // ?Map/projection=EPSG:8395&marker=[3565836,5945355]
+                const key = "marker",
+                    valueAsString = "[3565836,5945355]",
+                    state = {
+                        urlParams: {},
+                        MapMarker: {
+                            coordinates: [0, 0]
+                        }
+                    },
+                    value = [3565836, 5945355];
+
+                await setValueToState(state, key, valueAsString);
+                await setValueToState(state, "Map/projection", "EPSG:8395");
+                expect(state.MapMarker.coordinates).to.be.deep.equals(value);
+                expect(state.urlParams.projection.name).to.be.deep.equals("EPSG:8395");
             });
         });
     });
