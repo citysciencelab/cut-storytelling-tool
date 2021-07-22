@@ -63,6 +63,7 @@ export default {
             v-if="simple"
             class="simple-loader"
             :src="imgUrl"
+            alt=""
         >
         <div
             v-else
@@ -82,6 +83,7 @@ export default {
             <img
                 class="loader-icon"
                 :src="imgUrl"
+                alt=""
             >
         </div>
     </div>

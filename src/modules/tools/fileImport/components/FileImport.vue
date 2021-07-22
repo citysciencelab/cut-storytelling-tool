@@ -170,10 +170,13 @@ export default {
                 <div v-if="importedFileNames.length > 0">
                     <div class="h-seperator" />
                     <p class="cta">
-                        <label class="successfullyImportedLabel">
+                        <label
+                            class="successfullyImportedLabel"
+                            for="succesfully-imported-files"
+                        >
                             {{ $t("modules.tools.fileImport.successfullyImportedLabel") }}
                         </label>
-                        <ul>
+                        <ul id="succesfully-imported-files">
                             <li
                                 v-for="(filename, index) in importedFileNames"
                                 :key="index"

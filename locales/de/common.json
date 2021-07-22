@@ -123,6 +123,7 @@
         },
         "language": {
             "languageTitle": "Bitte wählen Sie eine Sprache aus",
+            "toggleWindow": "Fenster öffnen oder schließen",
             "de": "Deutsch",
             "en": "English",
             "it": "Italiano",

@@ -92,6 +92,7 @@
     "modules": {
         "language": {
             "languageTitle": "Please choose a language",
+            "toggleWindow": "Toggle Window",
             "de": "Deutsch",
             "en": "English",
             "it": "Italiano",

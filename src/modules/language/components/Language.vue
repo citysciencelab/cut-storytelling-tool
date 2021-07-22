@@ -60,6 +60,7 @@ export default {
                     <span
                         class="glyphicon glyphicon-remove"
                     />
+                    <span class="screenreader">$t("modules.language.toggleWindow"</span>
                 </a>
             </div>
             <div class="form-group form-group-sm">
@@ -94,6 +95,10 @@ export default {
 
             text-transform: uppercase;
             font-weight: bold;
+        }
+        .screenreader {
+            position: absolute;
+            left:-9999px;
         }
         .popup-language {
             position: absolute;

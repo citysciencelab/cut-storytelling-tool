@@ -97,6 +97,7 @@ export default {
                     <div class="form-group form-group-sm">
                         <label
                             class="col-md-5 col-sm-5 control-label"
+                            for="coordSystemField"
                         >{{ $t("modules.tools.searchByCoord.coordinateSystem") }}</label>
                         <div class="col-md-7 col-sm-7">
                             <select
