@@ -10,7 +10,7 @@
 
 ##  Unreleased - in development
 ### Added
-- ...
+- Start of a calendar library "src/utils/calendar.js" with the first function "getPublicHolidays" to get a list of german public holidays using gaussian easter algorithm and advent algorithm.
 
 ### Changed
 
