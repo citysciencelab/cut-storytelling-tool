@@ -58,7 +58,7 @@ export default {
                     <!--Legend as Image-->
                     <img
                         v-if="!legendPart.endsWith('.pdf') && !legendPart.endsWith('</svg>')"
-                        alt=""
+                        :alt="legendPart.name ? legendPart.name : legendObj.name"
                         :src="legendPart"
                     >
                     <!--Legend as SVG-->
@@ -85,7 +85,7 @@ export default {
                     <div v-if="Array.isArray(legendPart.graphic)">
                         <!--Legend as Image or SVG -->
                         <img
-                            alt=""
+                            :alt="legendPart.name ? legendPart.name : legendObj.name"
                             :src="legendPart.graphic[1]"
                             :style="{
                                 width: legendPart.iconSize[0] + 'px',
@@ -95,7 +95,7 @@ export default {
                             class="first-image"
                         >
                         <img
-                            alt=""
+                            :alt="legendPart.name ? legendPart.name : legendObj.name"
                             :src="Array.isArray(legendPart.graphic) ? legendPart.graphic[0] : legendPart.graphic"
                         >
                         <span>
@@ -106,7 +106,7 @@ export default {
                         <!--Legend as Image or SVG -->
                         <img
                             v-if="!legendPart.graphic.endsWith('.pdf')"
-                            alt=""
+                            :alt="legendPart.name ? legendPart.name : legendObj.name"
                             :src="legendPart.graphic"
                             class="left"
                         >
