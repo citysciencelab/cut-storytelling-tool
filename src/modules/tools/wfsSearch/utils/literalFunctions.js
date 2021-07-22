@@ -9,7 +9,7 @@ function addStar (val) {
 }
 
 /**
- * Recursively creates a logical representation of the literals as array to be later parsed to a String.
+ * Recursively creates a logical representation of the literals as an array to be later parsed to a String.
  *
  * @param {Object[]} stateLiterals Literals from the state. This is the root element.
  * @param {?(Object[])} [literals = null] Literals from the clause of the current function call.
@@ -37,7 +37,7 @@ function createLiteralStructure (stateLiterals, literals = null, userHelp = []) 
 
 /**
  * Creates a String representation for the built literals structure.
- * TODO: write unit tests for this function when replaceAll is supported by mocha.
+ * TODO: Write unit tests for this function when replaceAll is supported by mocha.
  *
  * @param {Object[]} literals The literals for which the structure is built and which are parsed.
  * @returns {String} String representation for the structure of the given literal.
