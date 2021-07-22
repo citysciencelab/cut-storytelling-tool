@@ -204,9 +204,7 @@ export default {
                 this.suggestions = [...new Set(suggestions.map(v => v.values_[this.fieldName]))];
             }
         },
-        isObject (val) {
-            return typeof val === "object";
-        }
+        isObject
     }
 };
 </script>
