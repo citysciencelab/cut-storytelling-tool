@@ -1,7 +1,38 @@
 import {expect} from "chai";
-import deepAssign from "../../deepAssign.js";
+import deepAssign, {deepAssignIgnoreCase} from "../../deepAssign.js";
 
 describe("src/utils/deepAssign.js", () => {
+    describe("deepAssignIgnoreCase", () => {
+        it("should alter the given target ignoring case and return it", () => {
+            const target = {urlParams: {}, Tools: {Measure: {active: false}}},
+                source = {Tools: {measure: {active: true}}},
+                expected = {urlParams: {}, Tools: {Measure: {active: true}}},
+                result = deepAssignIgnoreCase(target, source);
+
+            expect(result).to.deep.equal(expected);
+        });
+        it("should alter the given target ignoring case and assigns an array", () => {
+            const target = {
+                    urlParams: {},
+                    Map: {center: [0, 0]}
+                },
+                source = {Map: {center: [553925, 5931898]}},
+                expected = {
+                    urlParams: {},
+                    Map: {center: [553925, 5931898]}
+                },
+                result = deepAssignIgnoreCase(target, source);
+
+            expect(result).to.deep.equal(expected);
+        });
+        it("should return null, if source not available in target", () => {
+            const target = {urlParams: {}, Tools: { }},
+                source = {Tools: {Print: {active: true}}},
+                result = deepAssignIgnoreCase(target, source);
+
+            expect(result).to.be.null;
+        });
+    });
     describe("deepAssign", () => {
         it("should alter the given target and return it", () => {
             const target = {a: 1},

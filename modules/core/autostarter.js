@@ -56,7 +56,7 @@ const Autostarter = Backbone.Model.extend({
      * @returns {Void}  -
      */
     parametersAnalysed: function () {
-        const isInitOpen = store.state.isinitopen,
+        const isInitOpen = store.state.urlParams?.isinitopen,
             parametricAutostart = isInitOpen !== undefined ? isInitOpen.toString() : undefined,
             autostartParameter = parametricAutostart ? parametricAutostart : null,
             autostartModules = this.get("autostartModules");

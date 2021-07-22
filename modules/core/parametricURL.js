@@ -61,9 +61,9 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "getProjectionFromUrl": function () {
                 return this.get("projectionFromUrl");
             },
-            "getCenter": function () {
-                return this.get("center");
-            },
+            // "getCenter": function () {
+            //     return this.get("center");
+            // },
             "getZoomLevel": function () {
                 return this.get("zoomLevel");
             },
@@ -162,14 +162,14 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "BEZIRK": this.parseZoomToGeometry.bind(this), // @deprecated in version 3.0.0
             "BRWID": this.setBrwId.bind(this),
             "BRWLAYERNAME": this.setBrwLayerName.bind(this),
-            "CENTER": this.setCenter.bind(this),
+            // "CENTER": this.setCenter.bind(this),
             "CLICKCOUNTER": this.setClickCounter.bind(this),
             "FEATUREID": this.setZoomToFeatureIds.bind(this),
             "FEATUREVIAURL": this.setFeatureViaURL.bind(this),
             "FILTER": this.setFilter.bind(this),
             "HEADING": this.evaluateCameraParameters.bind(this),
             "HIGHLIGHTFEATURE": this.setHighlightfeature.bind(this),
-            "ISINITOPEN": this.parseIsInitOpen.bind(this),
+            // "ISINITOPEN": this.parseIsInitOpen.bind(this),
             "LAYERIDS": this.createLayerParams.bind(this),
             "MAP": this.adjustStartingMap3DParameter.bind(this),
             "MDID": this.parseMDID.bind(this),
@@ -180,8 +180,8 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "TILT": this.evaluateCameraParameters.bind(this),
             "ZOOMLEVEL": this.setZoomLevel.bind(this),
             "ZOOMTOEXTENT": this.parseZOOMTOEXTENT.bind(this),
-            "ZOOMTOGEOMETRY": this.parseZoomToGeometry.bind(this),
-            "LNG": this.checkIfLanguageEnabled.bind(this)
+            "ZOOMTOGEOMETRY": this.parseZoomToGeometry.bind(this)
+            // "LNG": this.checkIfLanguageEnabled.bind(this)
         };
     },
 
@@ -546,46 +546,46 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     updateQueryStringParam: function (key, value) {
-        const baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
-            urlQueryString = document.location.search,
-            newParam = key + "=" + value;
+        // const baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
+        //     urlQueryString = document.location.search,
+        //     newParam = key + "=" + value;
 
-        let keyRegex,
-            params = "?" + newParam;
+        // let keyRegex,
+        //     params = "?" + newParam;
 
-        // If the "search" string exists, then build params from it
-        if (urlQueryString) {
-            keyRegex = new RegExp("([?,&])" + key + "[^&]*");
+        // // If the "search" string exists, then build params from it
+        // if (urlQueryString) {
+        //     keyRegex = new RegExp("([?,&])" + key + "[^&]*");
 
-            // If param exists already, update it
-            if (urlQueryString.match(keyRegex) !== null) {
-                params = urlQueryString.replace(keyRegex, "$1" + newParam);
-            }
-            // Otherwise, add it to end of query string
-            else {
-                params = urlQueryString + "&" + newParam;
-            }
-        }
-        // iframe
-        if (window !== window.top) {
-            Radio.trigger("RemoteInterface", "postMessage", {"urlParams": params});
-        }
-        else {
-            window.history.replaceState({}, "", baseUrl + params);
-        }
+        //     // If param exists already, update it
+        //     if (urlQueryString.match(keyRegex) !== null) {
+        //         params = urlQueryString.replace(keyRegex, "$1" + newParam);
+        //     }
+        //     // Otherwise, add it to end of query string
+        //     else {
+        //         params = urlQueryString + "&" + newParam;
+        //     }
+        // }
+        // // iframe
+        // if (window !== window.top) {
+        //     Radio.trigger("RemoteInterface", "postMessage", {"urlParams": params});
+        // }
+        // else {
+        //     window.history.replaceState({}, "", baseUrl + params);
+        // }
 
-        this.parseURL(location.search.substr(1), this.possibleUrlParameters());
+        // this.parseURL(location.search.substr(1), this.possibleUrlParameters());
     },
 
-    /**
-     * Checks, if the language is dis- or enabled in the config.js
-     * @returns {void}
-     */
-    checkIfLanguageEnabled: function () {
-        if (Config.portalLanguage !== undefined && !Config.portalLanguage.enabled) {
-            console.warn("You specified the URL-parameter lng, but disabled the language in the config.js.");
-        }
-    },
+    // /**
+    //  * Checks, if the language is dis- or enabled in the config.js
+    //  * @returns {void}
+    //  */
+    // checkIfLanguageEnabled: function () {
+    //     if (Config.portalLanguage !== undefined && !Config.portalLanguage.enabled) {
+    //         console.warn("You specified the URL-parameter lng, but disabled the language in the config.js.");
+    //     }
+    // },
 
     /**
      * Setter for brwId.
@@ -611,7 +611,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     setCenter: function (coordinate) {
-        this.set("center", this.parseCoordinates(coordinate, "CENTER"));
+        // this.set("center", this.parseCoordinates(coordinate, "CENTER"));
     },
 
     /**

@@ -569,7 +569,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     },
 
     /**
-     * todo
+     * NOTICE: dies kann bei Portierung nach Vue über die src/utils/ParametricUrl/* gemacht werden.
+     * Dort wird dieser UrlParam bereits verarbeitet und das Ergebnis in den store geschrieben.
      * @fires Alerting#RadioTriggerAlertAlert
      * @returns {void}
      */
@@ -585,8 +586,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
         });
 
-        if (Object.prototype.hasOwnProperty.call(result, "CONFIG")) {
-            config = result.CONFIG;
+        if (Object.prototype.hasOwnProperty.call(result, "CONFIG") || Object.prototype.hasOwnProperty.call(result, "CONFIGJSON")) {
+            config = result.CONFIG || result.CONFIGJSON;
 
             if (config.slice(-5) === ".json") {
                 this.setConfig(config);

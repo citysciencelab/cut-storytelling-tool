@@ -1,5 +1,8 @@
 import {translate} from "./translator";
-import {translateToBackbone} from "./ParametricUrlBrige";
+import {deepAssignIgnoreCase} from "../deepAssign";
+import {triggerParametricURLReady, translateToBackbone} from "./ParametricUrlBrige";
+import store from "../../app-store";
+import {transformToMapProjection} from "masterportalAPI/src/crs";
 
 /**
  * Searches for the keys in state and if found, sets the value at it.
@@ -15,7 +18,8 @@ function searchAndSetValue (state, keySplitted, value, found = false) {
 
     if (Array.isArray(keySplitted)) {
         if (vuexState[keySplitted[0]]) {
-            const newState = nestedAssign(state, makeObject(keySplitted, value));
+            const source = makeObject(keySplitted, value),
+                newState = deepAssignIgnoreCase(state, source);
 
             if (newState) {
                 foundInState = true;
@@ -46,7 +50,7 @@ function inspectStateForTools (vuexState, keySplitted, value) {
         if (!keySplitted.find(key=>key.toLowerCase() === "active")) {
             keySplitted.push("active");
         }
-        nestedAssign(vuexState, makeObject(keySplitted, value));
+        deepAssignIgnoreCase(vuexState, makeObject(keySplitted, value));
         foundInState = true;
     }
     return foundInState;
@@ -65,35 +69,31 @@ function makeObject (keys, value) {
 }
 
 /**
- * Assignes nested source object to nested target object.
- * @param {Object} target object to assign source at
- * @param {Object} source to assign at target
- * @returns {Object} target with source assigned to
+ * Calls muatations, if necessary.
+ * @param {Object} state vuex state
+ * @returns {void}
  */
-function nestedAssign (target, source) {
-    for (const sourcekey of Object.keys(source)) {
-        // console.log("nestedAssign sourcekey=", sourcekey);
-        if (target === null || target === undefined) {
-            // console.log("return null");
-            return null;
-        }
-        const targetKey = target === null || target === undefined ? null : Object.keys(target).find(key=>key.toLowerCase() === sourcekey.toLowerCase());
+function callMutations (state) {
+    if (state.urlParams["Map/center"]) {
+        let centerCoords = state.Map.center;
 
-        // console.log("sourcekey:",sourcekey);
-        // console.log("targetKey:",targetKey);
-        if (Object.keys(source).find(key=>key.toLowerCase() === sourcekey.toLowerCase()) !== undefined && typeof source[sourcekey] === "object") {
-            const ret = nestedAssign(target[targetKey], source[sourcekey]);
-
-            if (ret === null) {
-                return ret;
-            }
-            target[targetKey] = ret;
+        if (state.urlParams["Map/projection"] !== undefined) {
+            centerCoords = transformToMapProjection(state.Map.map, state.Map.projection, centerCoords);
         }
-        else {
-            target[targetKey] = source[sourcekey];
-        }
+        store.commit("Map/setCenter", centerCoords);
     }
-    return target;
+}
+/**
+ * Sets the url params at state and produces desired reaction.
+ * @param {Object} state vuex state
+ * @param {URLSearchParams} params an instance of URLSearchParams
+ *  @returns {void}
+ */
+export default async function setValuesToState (state, params) {
+    await params.forEach(function (value, key) {
+        setValueToState(state, key, value);
+    });
+    triggerParametricURLReady();
 }
 
 /**
@@ -103,29 +103,38 @@ function nestedAssign (target, source) {
  * @param {String} value of the url param
  * @returns {void}
  */
-export default async function setValueToState (state, key, value) {
+export async function setValueToState (state, key, value) {
+    // console.log("state vorher=",state);
     // console.log("---- key=", key);
     // console.log("value=", value);
 
     if (typeof key === "string") {
         translate(key.trim(), value).then(entry => {
+            let setToState = false;
             // console.log("translated key=", entry.key);
             // console.log("translated value=", entry.value);
 
+
             const found = searchAndSetValue(state, entry.key.split("/"), entry.value);
 
-            // console.log(state);
+            // console.log("state:",state);
+            // console.log("found:",found);
+
+            callMutations(state);
 
             if (!found) {
                 const oldParam = translateToBackbone(entry.key, entry.value);
 
                 if (oldParam) {
-                    state[oldParam.key] = oldParam.value;
-                }
-                else {
-                    state[key] = value;
+                    state.urlParams[oldParam.key] = oldParam.value;
+                    setToState = true;
                 }
             }
+            if (!setToState) {
+                state.urlParams[entry.key] = value;
+            }
+        }).catch(error => {
+            console.warn("Error occured during applying url param to state ", error);
         });
     }
 }

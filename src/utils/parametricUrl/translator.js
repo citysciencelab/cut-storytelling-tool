@@ -30,6 +30,12 @@ export async function translate (urlParamsKey, urlParamsValue) {
 
             return {key: key, value: value};
         }
+        case "projection": {
+            const key = "Map/" + checkedKey,
+                value = convert(urlParamsValue);
+
+            return {key: key, value: value};
+        }
         case "config":
         case "configjson": {
             const key = "configJson",

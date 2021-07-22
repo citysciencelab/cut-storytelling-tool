@@ -4,7 +4,7 @@ const toolsNotInState = ["compareFeatures", "parcelSearch", "print", "featureLis
  * Triggers at backbone Radio channel "ParametricURL": "ready".
  * @returns {void}
  */
-export default function initParametricURL () {
+export function triggerParametricURLReady () {
     Radio.channel("ParametricURL").trigger("ready");
 }
 

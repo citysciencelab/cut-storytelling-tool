@@ -1,3 +1,5 @@
+import {getProjections} from "masterportalAPI/src/crs";
+
 /**
  *  Converts a boolean string to a boolean.
  * @param {String} string representation of a boolean as string
@@ -43,13 +45,37 @@ function convertStringToArray (string) {
 }
 
 /**
+ * Returns the projection object to given EPSG code.
+ * @param {String} string EPSG code of the projection
+ * @returns {Object} projection object to given EPSG code
+ */
+function findProjection (string) {
+    let projection = null;
+
+    if (string === "EPSG:25832") {
+        projection = getProjections().find(proj => proj.name === "http://www.opengis.net/gml/srs/epsg.xml#25832");
+        if (!projection) {
+            projection = getProjections().find(proj => proj.name === string);
+        }
+    }
+    else {
+        projection = getProjections().find(proj => proj.name === string);
+    }
+    return projection;
+}
+
+/**
  * Converts a string to boolean or array.
  * @param {String} string to convert to boolean or array
  * @returns {*} the converted string
  */
 export default function convert (string) {
-    let ret = convertStringToBoolean(string);
+    let ret = string;
 
+    if (typeof string === "string" && string.startsWith("EPSG")) {
+        return findProjection(string);
+    }
+    ret = convertStringToBoolean(string);
     if (typeof ret === "boolean") {
         return ret;
     }

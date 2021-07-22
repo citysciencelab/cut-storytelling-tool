@@ -32,7 +32,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     fetchData: function () {
         this.fetch({async: false,
             error: (model, xhr, error) => {
-                Radio.trigger("Alert", "alert", {text: "Die gewünschte Konfigurationsdatei konnte unter folgendem Pfad nicht geladen werden:<br>" + this.url});
+                store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.core.parametricURL.errorLoadConfig", {url: this.url}), {root: true});
 
                 if (error.textStatus === "parsererror") {
                     // reload page once

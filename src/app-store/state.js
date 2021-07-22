@@ -14,7 +14,8 @@ const state = {
     masterPortalVersionNumber,
     isDevMode,
     i18NextInitialized: false,
-    idCounter: 1
+    idCounter: 1,
+    urlParams: {}
 };
 
 export default state;
