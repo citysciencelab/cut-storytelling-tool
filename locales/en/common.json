@@ -781,6 +781,32 @@
             }
         }
     },
+    "utils": {
+        "calendar": {
+            "newYearsDay": "New Year's Day",
+            "epiphany": "Epiphany",
+            "goodFriday": "Good Friday",
+            "easterSunday": "Easter Sunday",
+            "easterMonday": "Easter Monday",
+            "laborDay": "Labor Day",
+            "ascensionDay": "Ascension Day",
+            "pentecostSunday": "Pentecost Sunday",
+            "pentecostMonday": "Pentecost Monday",
+            "corpusChristi": "Corpus Christi",
+            "peaceFestival": "Peace Festival",
+            "assumptionDay": "Assumption Day",
+            "germanUnityDay": "German Unity Day",
+            "reformationDay": "Reformation Day",
+            "allSaintsDay": "All Saints Day",
+            "penanceDay": "Penance Day",
+            "firstAdvent": "First Advent",
+            "secondAdvent": "Second Advent",
+            "thirdAdvent": "Third Advent",
+            "fourthAdvent": "Fourth Of Advent",
+            "christmasDay": "Christmas Day",
+            "secondDayOfChristmas": "Second Day Of Christmas"
+        }
+    },
     "snippets": {
         "checkbox": {
             "on": "On",

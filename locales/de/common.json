@@ -781,6 +781,32 @@
             }
         }
     },
+    "utils": {
+        "calendar": {
+            "newYearsDay": "Neujahrstag",
+            "epiphany": "Heiligedreikönigstag",
+            "goodFriday": "Karfreitag",
+            "easterSunday": "Ostersonntag",
+            "easterMonday": "Ostermontag",
+            "laborDay": "Tag der Arbeit",
+            "ascensionDay": "Christi Himmelfahrt",
+            "pentecostSunday": "Pfingstsonntag",
+            "pentecostMonday": "Pfingstmontag",
+            "corpusChristi": "Fronleichnam",
+            "peaceFestival": "Friedensfest",
+            "assumptionDay": "Mariä Himmelfahrt",
+            "germanUnityDay": "Tag der Deutschen Einheit",
+            "reformationDay": "Reformationstag",
+            "allSaintsDay": "Allerheiligen",
+            "penanceDay": "Buß- und Bettag",
+            "firstAdvent": "1. Advent",
+            "secondAdvent": "2. Advent",
+            "thirdAdvent": "3. Advent",
+            "fourthAdvent": "4. Advent",
+            "christmasDay": "1. Weihnachtstag",
+            "secondDayOfChristmas": "2. Weihnachtstag"
+        }
+    },
     "snippets": {
         "checkbox": {
             "on": "An",
