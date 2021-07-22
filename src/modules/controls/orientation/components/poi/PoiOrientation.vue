@@ -316,12 +316,12 @@ export default {
                             :key="index"
                             :class="feature.category === activeCategory ? 'active' : ''"
                             @click="changedCategory"
-                            @keypress="changedCategory"
+                            @keydown="changedCategory"
                         >
                             <a
                                 :href="'#' + feature.category"
                                 :aria-controls="feature.category"
-                                role="pill"
+                                role="button"
                                 data-toggle="pill"
                             >{{ feature.category + 'm' }}
                                 <span
@@ -378,7 +378,7 @@ export default {
         <div
             class="modal-backdrop fade in"
             @click="hidePoi"
-            @keypress="hidePoi"
+            @keydown="hidePoi"
         />
     </div>
 </template>

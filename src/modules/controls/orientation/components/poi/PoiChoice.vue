@@ -124,7 +124,7 @@ export default {
         <div
             class="modal-backdrop fade in"
             @click="hidePoiChoice"
-            @keypress="hidePoiChoice"
+            @keydown="hidePoiChoice"
         />
     </div>
 </template>

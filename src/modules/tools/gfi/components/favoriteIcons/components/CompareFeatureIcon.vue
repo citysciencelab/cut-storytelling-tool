@@ -120,6 +120,7 @@ export default {
         :class="['glyphicon', featureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty']"
         :title="titleCompareList"
         @click="toogleFeatureToCompareList"
+        @keydown="toogleFeatureToCompareList"
     />
 </template>
 

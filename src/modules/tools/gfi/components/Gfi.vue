@@ -355,12 +355,14 @@ export default {
                     <div
                         :class="[pagerIndex < 1 ? 'disabled' : '', 'pager-left', 'pager']"
                         @click="decreasePagerIndex"
+                        @keydown="decreasePagerIndex"
                     >
                         <span class="glyphicon glyphicon-chevron-left" />
                     </div>
                     <div
                         :class="[pagerIndex === gfiFeatures.length - 1 ? 'disabled' : '', 'pager-right', 'pager']"
                         @click="increasePagerIndex"
+                        @keydown="increasePagerIndex"
                     >
                         <span class="glyphicon glyphicon-chevron-right" />
                     </div>

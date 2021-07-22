@@ -206,21 +206,21 @@ export default {
                     class="glyphicon glyphicon-minus"
                     title="Minimieren"
                     @click="minifyTool"
-                    @keypress="minifyTool"
+                    @keydown="minifyTool"
                 />
                 <span
                     v-else
                     class="glyphicon glyphicon-plus"
                     title="Maximieren"
                     @click="maximizeTool"
-                    @keypress="maximizeTool"
+                    @keydown="maximizeTool"
                 />
             </div>
             <div class="heading-element">
                 <span
                     class="glyphicon glyphicon-remove"
                     @click="close($event)"
-                    @keypress="close($event)"
+                    @keydown="close($event)"
                 />
             </div>
         </div>

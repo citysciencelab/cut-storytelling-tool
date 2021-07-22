@@ -67,6 +67,7 @@ export default {
                 <span
                     class="glyphicon glyphicon-remove"
                     @click="close($event)"
+                    @keydown="close($event)"
                 />
             </div>
         </div>

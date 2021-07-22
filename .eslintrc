@@ -35,6 +35,14 @@
         "plugin:vuejs-accessibility/recommended"
     ],
     "rules": {
+        "vuejs-accessibility/label-has-for": [
+            "error",
+            {
+                "required": {
+                    "some": ["nesting", "id"]
+                }
+            }
+        ],
         // vue plugin Base Rules
         "vue/comment-directive": ["off"],
         "vue/jsx-uses-vars": ["off"],

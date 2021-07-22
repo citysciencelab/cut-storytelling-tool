@@ -66,7 +66,7 @@ export default {
             :title="$t(`common:modules.controls.freeze.unfreeze`)"
             :style="isTable ? cssVars : ''"
             @click="hideFreezeWin"
-            @keypress="hideFreezeWin"
+            @keydown="hideFreezeWin"
         >
             {{ $t(`common:modules.controls.freeze.unfreeze`) }}
         </p>

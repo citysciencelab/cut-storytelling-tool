@@ -85,6 +85,7 @@ export default {
                     class="glyphicon glyphicon-remove"
                     title="Discard"
                     @click="discardByClickX"
+                    @keydown="discardByClickX"
                 />
                 <div
                     id="modal-1-content-container"

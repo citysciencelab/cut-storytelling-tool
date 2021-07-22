@@ -205,7 +205,7 @@ export default {
                         >
                             <a
                                 @click="markAsRead(singleAlert.hash)"
-                                @keypress="markAsRead(singleAlert.hash)"
+                                @keydown="markAsRead(singleAlert.hash)"
                             >
                                 {{ $t(singleAlert.confirmText) }}
                             </a>

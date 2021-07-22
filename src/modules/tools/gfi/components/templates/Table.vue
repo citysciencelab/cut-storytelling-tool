@@ -105,6 +105,7 @@ export default {
             <span
                 class="icon-turnarticle glyphicon"
                 @click="rotate"
+                @keydown="rotate"
             />
         </template>
         <template #title>

@@ -38,7 +38,7 @@ export default {
             role="button"
             tabindex="0"
             @click="toggleLanguageWindow"
-            @keypress="toggleLanguageWindow"
+            @keydown="toggleLanguageWindow"
         >
             {{ $i18n.i18next.language }}
         </a>
@@ -55,7 +55,7 @@ export default {
                     class="buttons pull-right"
                     tabindex="0"
                     @click="toggleLanguageWindow"
-                    @keypress="toggleLanguageWindow"
+                    @keydown="toggleLanguageWindow"
                 >
                     <span
                         class="glyphicon glyphicon-remove"

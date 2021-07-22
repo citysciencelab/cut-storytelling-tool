@@ -79,12 +79,14 @@ export default {
             data-toggle="toggle"
             :checked="isActive"
             @click="toggle"
+            @keydown="toggle"
         >
         <div class="toggle-group">
             <label
                 class="btn btn-primary btn-sm toggle-on"
                 :class="{'active': isActive}"
                 @click="toggle"
+                @keydown="toggle"
             >
                 {{ textOn }}
             </label>
@@ -92,12 +94,14 @@ export default {
                 class="btn btn-default btn-sm toggle-off"
                 :class="{'active': !isActive}"
                 @click="toggle"
+                @keydown="toggle"
             >
                 {{ textOff }}
             </label>
             <span
                 class="toggle-handle btn btn-default btn-sm"
                 @click="toggle"
+                @keydown="toggle"
             />
         </div>
     </div>
