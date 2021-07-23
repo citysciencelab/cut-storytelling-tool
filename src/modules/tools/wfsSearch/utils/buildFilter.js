@@ -72,16 +72,18 @@ function buildStoredFilter (values) {
  */
 function buildXmlFilter (field) {
     const {fieldName, parameterIndex, type, value} = field,
-        isNumber = typeof parameterIndex === "number",
-        fieldType = isNumber ? type[parameterIndex] : type,
-        currentFieldName = isNumber ? fieldName[parameterIndex] : fieldName,
+        multipleValuesInField = typeof parameterIndex === "number",
+        fieldType = multipleValuesInField ? type[parameterIndex] : type,
+        currentFieldName = multipleValuesInField ? fieldName[parameterIndex] : fieldName,
         likeFilter = fieldType === "like",
         property = `<PropertyName>${currentFieldName}</PropertyName><Literal>${value}${likeFilter ? likeFilterProperties.wildCard : ""}</Literal>`;
     let likeFilterValues = "";
 
-    Object.entries(likeFilterProperties).forEach(([key, val]) => {
-        likeFilterValues += `${key}="${encodeURIComponent(val)}" `;
-    });
+    if (likeFilter) {
+        Object.entries(likeFilterProperties).forEach(([key, val]) => {
+            likeFilterValues += `${key}="${encodeURIComponent(val)}" `;
+        });
+    }
 
     return likeFilter
         ? `<PropertyIsLike ${likeFilterValues.slice(0, -1)}>${property}</PropertyIsLike>`
