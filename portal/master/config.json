@@ -55,15 +55,6 @@
         "timeout": 10000,
         "definitions": [
           {
-            "url": "/geodienste.hamburg.de/MRH_WFS_Rotenburg",
-            "typeName": "app:mrh_row_bplan",
-            "propertyNames": [
-              "app:name"
-            ],
-            "name": "translate#common:modules.searchbar.specialWFS.bplan",
-            "namespaces": "xmlns:app='http://www.deegree.org/app'"
-          },
-          {
             "url": "/geodienste.hamburg.de/HH_WFS_Bebauungsplaene",
             "typeName": "app:hh_hh_festgestellt",
             "propertyNames": [
@@ -269,7 +260,9 @@
           },
           "compareFeatures": {
             "name": "translate#common:menu.tools.compareFeatures",
-            "glyphicon": "glyphicon-th-list"
+            "glyphicon": "glyphicon-th-list",
+            "numberOfFeaturesToShow": 3,
+            "numberOfAttributesToShow": 12
           },
           "parcelSearch": {
             "name": "translate#common:menu.tools.parcelSearch",
@@ -309,11 +302,13 @@
             "currentLayoutName": "A3 Hochformat",
             "dpiForPdf": 120
           },
-          "searchByCoord": {
+          "searchByCoord":
+          {
             "name": "translate#common:menu.tools.searchByCoord",
             "glyphicon": "glyphicon-record"
           },
-          "selectFeatures": {
+          "selectFeatures":
+          {
             "name": "translate#common:menu.tools.selectFeatures"
           },
           "fileImport": {
@@ -357,35 +352,6 @@
             "glyphicon": "glyphicon-menu-hamburger",
             "lister": 10
           },
-          "lines": {
-            "name": "translate#common:menu.tools.commuterLines",
-            "glyphicon": "glyphicon-play-circle"
-          },
-          "animation": {
-            "name": "translate#common:menu.tools.commuterAnimation",
-            "glyphicon": "glyphicon-play-circle",
-            "steps": 30,
-            "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
-            "params": {
-              "REQUEST": "GetFeature",
-              "SERVICE": "WFS",
-              "TYPENAME": "app:mrh_kreise",
-              "VERSION": "1.1.0",
-              "maxFeatures": "10000"
-            },
-            "featureType": "mrh_einpendler_gemeinde",
-            "attrAnzahl": "anzahl_einpendler",
-            "attrGemeinde": "wohnort",
-            "minPx": 5,
-            "maxPx": 30,
-            "zoomlevel": 1,
-            "colors": [
-              "rgba(255,0,0,0.5)",
-              "rgba(0,255,0,0.5)",
-              "rgba(0,0,255,0.5)",
-              "rgba(0,255,255,0.5)"
-            ]
-          },
           "saveSelection": {
             "name": "translate#common:menu.tools.saveSelection",
             "glyphicon": "glyphicon-share"
@@ -410,7 +376,8 @@
               }
             ]
           },
-          "scaleSwitcher": {
+          "scaleSwitcher":
+          {
             "name": "translate#common:menu.tools.scaleSwitcher",
             "glyphicon": "glyphicon-resize-small"
           },
