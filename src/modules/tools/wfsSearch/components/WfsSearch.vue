@@ -104,10 +104,10 @@ export default {
             :active="active"
             :render-to-window="renderToWindow"
             :resizable-window="resizableWindow"
-            :deactivateGFI="deactivateGFI"
+            :deactivate-g-f-i="deactivateGFI"
             :initial-width="initialWidth"
         >
-            <template v-slot:toolBody>
+            <template #toolBody>
                 <form
                     class="form-horizontal"
                     role="form"
@@ -199,7 +199,7 @@ export default {
         <Modal
             :title="$t(name)"
             :icon="glyphicon"
-            :showModal="showResults"
+            :show-modal="showResults"
             @modalHid="setShowResultList(false)"
         >
             <template v-if="showResults && results.length">

@@ -249,7 +249,7 @@ export default {
                     'tool-wfsSearch-field-input': htmlElement === 'input'
                 }"
                 :placeholder="htmlElement === 'input' ? selectableParameters.inputPlaceholder : ''"
-                :defaultValue="htmlElement === 'input' ? selectableParameters.defaultValue : ''"
+                :default-value="htmlElement === 'input' ? selectableParameters.defaultValue : ''"
                 :required="selectableParameters.required"
                 :disabled="disabled"
                 :list="htmlElement === 'input' && showSuggestions ? `tool-wfsSearch-${fieldName}-${fieldId}-input-suggestions` : ''"
@@ -284,11 +284,11 @@ export default {
                 :id="`tool-wfsSearch-${fieldName}-${fieldId}-input-suggestions`"
             >
                 <option
-                    v-for="(value, index) in suggestions"
-                    :key="value + index"
-                    :value="value"
+                    v-for="(val, index) in suggestions"
+                    :key="val + index"
+                    :value="val"
                 >
-                    {{ value }}
+                    {{ val }}
                 </option>
             </datalist>
         </div>
