@@ -40,7 +40,7 @@ const Autostarter = Backbone.Model.extend({
         const configAutostart = Radio.request("Parser", "getItemsByAttributes", {isInitOpen: true});
 
         configAutostart.forEach(function (modul) {
-            if (modul.hasOwnProperty("id")) {
+            if (modul?.id) {
                 this.get("autostartModules").push(modul.id.toLowerCase());
             }
         }, this);

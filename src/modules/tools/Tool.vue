@@ -161,9 +161,9 @@ export default {
         <BasicResizeHandle
             v-if="resizableWindow && !renderToWindow"
             id="basic-resize-handle-sidebar"
-            hPos="l"
-            :minW="200"
-            targetSel="#tool-sidebar-vue"
+            h-pos="l"
+            :min-w="200"
+            target-sel="#tool-sidebar-vue"
             @endResizing="updateMap"
         >
             <div>&#8942;</div>
@@ -188,8 +188,8 @@ export default {
 
             <BasicDragHandle
                 v-if="renderToWindow"
-                targetSel=".tool-window-vue"
-                :marginBottom="resizableWindow ? 25 : 0"
+                target-sel=".tool-window-vue"
+                :margin-bottom="resizableWindow ? 25 : 0"
                 class="heading-element flex-grow"
             >
                 <p class="title">
@@ -233,10 +233,10 @@ export default {
                 v-for="hPos in ['tl', 'tr', 'br', 'bl']"
                 :id="'basic-resize-handle-' + hPos"
                 :key="hPos"
-                :hPos="hPos"
-                targetSel=".tool-window-vue"
-                :minW="200"
-                :minH="100"
+                :h-pos="hPos"
+                target-sel=".tool-window-vue"
+                :min-w="200"
+                :min-h="100"
             />
         </div>
     </div>

@@ -531,7 +531,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     },
 
     isUseProxy: function () {
-        return this.hasOwnProperty("isUseProxy") && this.get("isUseProxy") === true;
+        return Object.prototype.hasOwnProperty.call(this, "isUseProxy") && this.get("isUseProxy") === true;
     }
 });
 

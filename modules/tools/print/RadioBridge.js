@@ -42,7 +42,7 @@ Radio.channel("CswParser").on({
         let metadata;
 
         if (layer.get("datasets") && Array.isArray(layer.get("datasets")) && layer.get("datasets")[0] !== null && typeof layer.get("datasets")[0] === "object") {
-            cswObj.cswUrl = layer.get("datasets")[0].hasOwnProperty("csw_url") ? layer.get("datasets")[0].csw_url : null;
+            cswObj.cswUrl = Object.prototype.hasOwnProperty.call(layer.get("datasets")[0], "csw_url") ? layer.get("datasets")[0].csw_url : null;
         }
 
         cswObj.parsedData = {};

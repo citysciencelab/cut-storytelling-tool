@@ -10,23 +10,46 @@
 
 ##  Unreleased - in development
 ### Added
-- Add possibility to test end2end-tests with `MicrosoftEdge` driver.
-- VTC-Layer supports Sprites and Fonts in Style definitions.
+- Start of a calendar library "src/utils/calendar.js" with the first function "getPublicHolidays" to get a list of german public holidays using gaussian easter algorithm and advent algorithm.
 - Added the new Tool `WfsSearch`.
 
 ### Changed
-- The version of the package selenium-webdriver was updated to version 4.0.0-beta.4.
-- Changed LayerInformation from backbone to Vue.
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+- Issue #626: The Legend menu item is placed according to the order of the menu items in config.json.
+
+---
+
+## v2.11.0 - 2021-07-07
+### Added
+- Add possibility to test end2end-tests with `MicrosoftEdge` driver.
+- VTC-Layer supports Sprites and Fonts in Style definitions.
+
+### Changed
+- The version of the package selenium-webdriver was updated to version 4.0.0-beta.4.
+- Changed LayerInformation from backbone to Vue.
+- MasterportalAPI is updated to v1.4.0. The new version brings OpenLayers v6.5.0 with WFS 2.0.0 support to the Masterportal.
+- The package eslint was updated to version 7.28.0.
+- The package eslint-plugin-chai-friendly was updated to version 0.7.1.
+- The package eslint-plugin-vue was updated to version 7.11.1.
+- The package eslint-plugin-you-dont-need-lodash-underscore was updated to version 6.12.0.
+
+### Deprecated
+
+### Removed
+
+### Fixed
+- Styled Vector Layers with multiple conditions can now be printed.
 - Labels of VTC-Layer-Objects aren't cut off anymore.
 - BG-1541 & Issue #602: further metadata link is set on MetaDataCatalogueID from rootGetters now, default is 2.
 - Issue #615: parsing of the DescribeFeatureType of a WFS has been extended so that it also satisfies a different interpretation of the schema description. As a result, elements in the legend are displayed in the order specified in the style.json.
-
+- Issue #623: filter error in connection with provided vectorStyles is fixed.
+- Style configuration is provided for dataStreams with result 0.
+- Seamless map panning in the oblique aerial views is possible in all directions again.
 ---
 
 ## v2.10.0 - 2021-06-02
@@ -35,6 +58,7 @@
 - New WFS Layer attribute "wfsFilter" in configuration to filter the data from wfs layer.
 - Added possibility in gfiTheme sensor to display an explanation text for the data.
 - Spanish is available as a new language selection.
+- New recommended eslint rules were introduced by updates of the eslint packages.
 
 ### Changed
 - The Id in config.json for every layer could be in an object format, to allow any number of menu entries with the same layer id.
@@ -42,6 +66,10 @@
 - The documentation for WMTS layers, legend field has been adapted. Only one specification in a string[] is possible.
 - The translation for the url in the staticlink in config.json has been removed.
 - Issue #617: Update description of the attribute '"extent"' for layer configurations in config.json.md.
+
+### Deprecated
+
+### Removed
 
 ### Fixed
 - Now Sensor Layer will show 0 if the dataValue is 0 and not "no data".
@@ -68,6 +96,7 @@
 ### Changed
 - Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.
 - Tool addons are now also written in config.json in camelCase.
+- Migrated the CompareFeatures Tool from Backbone.js to Vue.js.
 - colorTools are renamed into convertColor (src/utils/convertColor).
 - Updates the core-js and babel dependencies in the package.json.
 - Update the dependency caniuse-lite.

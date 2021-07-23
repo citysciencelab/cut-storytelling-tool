@@ -2,6 +2,7 @@ import AddWMS from "./addWMS/components/AddWMS.vue";
 import BufferAnalysis from "./bufferAnalysis/components/BufferAnalysis.vue";
 import Contact from "./contact/components/Contact.vue";
 import Draw from "./draw/components/Draw.vue";
+import CompareFeatures from "./compareFeatures/components/CompareFeatures.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
 import Gfi from "./gfi/components/Gfi.vue";
 import Measure from "./measure/components/Measure.vue";
@@ -24,6 +25,7 @@ const state = {
         bufferAnalysis: BufferAnalysis,
         contact: Contact,
         draw: Draw,
+        compareFeatures: CompareFeatures,
         fileImport: FileImport,
         gfi: Gfi,
         measure: Measure,

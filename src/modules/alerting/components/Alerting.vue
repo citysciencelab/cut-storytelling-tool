@@ -2,7 +2,7 @@
 
 import Modal from "../../../share-components/modals/Modal.vue";
 import axios from "axios";
-import {mapGetters, mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "Alerting",
@@ -197,7 +197,7 @@ export default {
                         <div
                             class="singleAlertMessage"
                             v-html="singleAlert.content"
-                        ></div>
+                        />
 
                         <p
                             v-if="singleAlert.mustBeConfirmed"

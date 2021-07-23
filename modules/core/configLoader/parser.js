@@ -94,7 +94,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             },
             "getInitVisibBaselayer": this.getInitVisibBaselayer,
             "getOriginId": function (layerId) {
-                if (this.get("extendedLayerIdAssoc").hasOwnProperty(layerId)) {
+                if (Object.prototype.hasOwnProperty.call(this.get("extendedLayerIdAssoc"), layerId)) {
                     return this.get("extendedLayerIdAssoc")[layerId];
                 }
                 return layerId;
@@ -183,7 +183,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 ansicht,
                 downloadItem;
 
-            if (value.hasOwnProperty("children") || key === "tree") {
+            if (value?.children || key === "tree") {
                 item = {
                     type: "folder",
                     parentId: parentId,
@@ -204,7 +204,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                     this.addItem(toolitem);
                 });
             }
-            else if (value.hasOwnProperty("type") && value.type === "viewpoint") {
+            else if (value?.type && value.type === "viewpoint") {
                 ansicht = Object.assign(value, {parentId: parentId, id: Radio.request("Util", "uniqueId", key + "_")});
                 this.addItem(ansicht);
             }
@@ -212,7 +212,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 toolitem = Object.assign(value, {type: "tool", parentId: parentId, id: key});
 
                 // wenn tool noch kein "onlyDesktop" aus der Config bekommen hat
-                if (!toolitem.hasOwnProperty("onlyDesktop")) {
+                if (!toolitem?.onlyDesktop) {
                     // wenn tool in onlyDesktopTools enthalten ist, setze onlyDesktop auf true
                     if (this.get("onlyDesktopTools").indexOf(toolitem.id) !== -1) {
                         toolitem = Object.assign(toolitem, {onlyDesktop: true});
@@ -232,11 +232,9 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 }
                 /**
                  * @deprecated Due to refactorment, legend is no longer considered a tool.
-                 * Item for legend MUST NOT be added.
+                 * Item for legend MUST be added to replace it in LegendMenue.vue for respecting order of menu-entries in config.json
                  */
-                if (toolitem.id !== "legend") {
-                    this.addItem(toolitem);
-                }
+                this.addItem(toolitem);
             }
         }, this);
     },
@@ -641,16 +639,16 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     addTreeMenuItems: function (treeType) {
-        const menu = this.get("portalConfig").hasOwnProperty("menu") ? this.get("portalConfig").menu : undefined,
-            tree = menu !== undefined && menu.hasOwnProperty("tree") ? menu.tree : undefined,
-            isAlwaysExpandedList = tree !== undefined && tree.hasOwnProperty("isAlwaysExpanded") ? tree.isAlwaysExpanded : [],
+        const menu = this.get("portalConfig")?.menu ? this.get("portalConfig").menu : undefined,
+            tree = menu !== undefined && menu?.tree ? menu.tree : undefined,
+            isAlwaysExpandedList = tree !== undefined && tree?.isAlwaysExpanded ? tree.isAlwaysExpanded : [],
             isMobile = Radio.request("Util", "isViewMobile"),
             baseLayers = this.get("baselayer"),
             overLayers = this.get("overlayer"),
             overLayers3d = this.get("overlayer_3d"),
-            baseLayersName = baseLayers && baseLayers.hasOwnProperty("name") ? baseLayers.name : null,
-            overLayersName = overLayers && overLayers.hasOwnProperty("name") ? overLayers.name : null,
-            overLayers3DName = overLayers3d && overLayers3d.hasOwnProperty("name") ? overLayers3d.name : null,
+            baseLayersName = baseLayers && baseLayers?.name ? baseLayers.name : null,
+            overLayersName = overLayers && overLayers?.name ? overLayers.name : null,
+            overLayers3DName = overLayers3d && overLayers3d?.name ? overLayers3d.name : null,
             isQuickHelpSet = Radio.request("QuickHelp", "isSet"),
             baseLayersDefaultKey = "common:tree.backgroundMaps",
             overLayersDefaultKey = "common:tree.subjectData";

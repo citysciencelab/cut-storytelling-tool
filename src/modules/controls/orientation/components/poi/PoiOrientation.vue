@@ -301,7 +301,7 @@ export default {
                         data-dismiss="modal"
                         :title="$t('button.close')"
                         @click="hidePoi"
-                    ></span>
+                    />
                     <h4 class="modal-title">
                         {{ $t("common:modules.controls.orientation.titleGeolocatePOI") }}
                     </h4>
@@ -348,7 +348,7 @@ export default {
                                             @click="zoomFeature"
                                         >
                                             <td v-if="feat.imgPath.indexOf('</svg>') !== -1">
-                                                <span v-html="feat.imgPath"></span>
+                                                <span v-html="feat.imgPath" />
                                             </td>
                                             <td v-else-if="feat.imgPath.length > 0">
                                                 <img :src="feat.imgPath">
@@ -374,7 +374,7 @@ export default {
         <div
             class="modal-backdrop fade in"
             @click="hidePoi"
-        ></div>
+        />
     </div>
 </template>
 

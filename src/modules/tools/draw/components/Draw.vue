@@ -367,11 +367,11 @@ export default {
         :active="active && !withoutGUI"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :initialWidth="initialWidth"
-        :initialWidthMobile="initialWidthMobile"
-        :deactivateGFI="deactivateGFI"
+        :initial-width="initialWidth"
+        :initial-width-mobile="initialWidthMobile"
+        :deactivate-gfi="deactivateGFI"
     >
-        <template v-slot:toolBody>
+        <template #toolBody>
             <select
                 id="tool-draw-drawType"
                 class="form-control input-sm"
@@ -393,7 +393,7 @@ export default {
                 v-if="isFromDrawTool && isFilterListValid"
             >
                 <DrawFeaturesFilter
-                    :filterList="filterList"
+                    :filter-list="filterList"
                     :features="featuresFromDrawTool"
                 />
             </template>
@@ -449,7 +449,7 @@ export default {
                             :placeholder="$t('common:modules.tools.draw.doubleCirclePlaceholder')"
                             :disabled="drawCircleMethods"
                             min="0"
-                        />
+                        >
                     </div>
                 </div>
                 <div

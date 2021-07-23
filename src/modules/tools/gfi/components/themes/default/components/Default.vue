@@ -35,7 +35,7 @@ export default {
                 return undefined;
             }
             for (const key of this.imageLinks) {
-                if (properties.hasOwnProperty(key)) {
+                if (Object.prototype.hasOwnProperty.call(properties, key)) {
                     return properties[key];
                 }
             }
@@ -58,7 +58,7 @@ export default {
         }
     },
     created () {
-        this.showFavoriteIcons = this.feature.getTheme()?.params?.hasOwnProperty("showFavoriteIcons") ?
+        this.showFavoriteIcons = this.feature.getTheme()?.params?.showFavoriteIcons ?
             this.feature.getTheme().params.showFavoriteIcons : this.showFavoriteIcons;
 
         this.replacesConfiguredImageLinks();
@@ -179,10 +179,13 @@ export default {
                         <a :href="`mailto:${value}`">{{ value }}</a>
                     </td>
                     <td
+                        v-else-if="Array.isArray(value)"
+                        v-html="value.join('<br>')"
+                    />
+                    <td
                         v-else-if="typeof value === 'string' && value.includes('<br>')"
                         v-html="value"
-                    >
-                    </td>
+                    />
                     <td v-else>
                         {{ value }}
                     </td>
@@ -192,8 +195,7 @@ export default {
         <iframe
             v-if="mimeType === 'text/html'"
             class="gfi-iFrame"
-        >
-        </iframe>
+        />
     </div>
 </template>
 

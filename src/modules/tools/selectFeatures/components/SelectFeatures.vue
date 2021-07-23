@@ -1,11 +1,10 @@
 <script>
-import {Select, DragBox} from "ol/interaction";
-import {platformModifierKeyOnly} from "ol/events/condition";
+import {DragBox, Select} from "ol/interaction";
+import {never, platformModifierKeyOnly} from "ol/events/condition";
 import VectorSource from "ol/source/Vector.js";
-import {never} from "ol/events/condition";
 
 import Tool from "../../../../modules/tools/Tool.vue";
-import {mapGetters, mapMutations, mapActions} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersSelectFeatures";
 import mutations from "../store/mutationsSelectFeatures";
 
@@ -319,10 +318,10 @@ export default {
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
+        :deactivate-gfi="deactivateGFI"
         class="selectFeatures"
     >
-        <template v-slot:toolBody>
+        <template #toolBody>
             <div
                 v-if="active"
                 id="selectFeatures"
@@ -371,8 +370,7 @@ export default {
                                         v-else-if="property[1].includes('<br') || property[1].includes('<a')"
                                         class="featureValue"
                                         v-html="property[1]"
-                                    >
-                                    </td>
+                                    />
                                     <td
                                         v-else
                                         class="featureValue"
@@ -400,7 +398,7 @@ export default {
                         <hr
                             v-if="index !== selectedFeaturesWithRenderInformation.length - 1"
                             :key="'h' + index"
-                        />
+                        >
                     </template>
                 </div>
             </div>

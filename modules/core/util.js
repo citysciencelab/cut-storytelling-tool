@@ -156,10 +156,10 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
                     return -1;
                 }
                 else if (iteratee !== undefined) {
-                    if (typeof a !== "object" || !a.hasOwnProperty(iteratee)) {
+                    if (typeof a !== "object" || !Object.prototype.hasOwnProperty.call(a, iteratee)) {
                         return 1;
                     }
-                    else if (typeof b !== "object" || !b.hasOwnProperty(iteratee)) {
+                    else if (typeof b !== "object" || !Object.prototype.hasOwnProperty.call(b, iteratee)) {
                         return -1;
                     }
                     else if (a[iteratee] > b[iteratee]) {
@@ -584,7 +584,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
         });
 
-        if (result.hasOwnProperty("CONFIG")) {
+        if (Object.prototype.hasOwnProperty.call(result, "CONFIG")) {
             config = result.CONFIG;
 
             if (config.slice(-5) === ".json") {
@@ -682,7 +682,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         const result = {};
 
         keys.forEach(function (key) {
-            if (obj.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
                 result[key] = obj[key];
             }
         });
@@ -791,7 +791,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     pick: function (object, keys) {
         return keys.reduce((obj, key) => {
-            if (object && object.hasOwnProperty(key)) {
+            if (object && Object.prototype.hasOwnProperty.call(object, key)) {
                 obj[key] = object[key];
             }
             return obj;

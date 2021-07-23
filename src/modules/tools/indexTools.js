@@ -8,6 +8,7 @@ import actions from "./actionsTools";
  */
 import AddWMS from "./addWMS/store/indexAddWMS";
 import BufferAnalysis from "./bufferAnalysis/store/indexBufferAnalysis";
+import CompareFeatures from "./compareFeatures/store/indexCompareFeatures";
 import Contact from "./contact/store/indexContact";
 import Draw from "./draw/store/indexDraw";
 import FileImport from "./fileImport/store/indexFileImport";
@@ -30,6 +31,7 @@ export default {
     modules: {
         AddWMS,
         BufferAnalysis,
+        CompareFeatures,
         Contact,
         Draw,
         FileImport,

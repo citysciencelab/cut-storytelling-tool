@@ -53,7 +53,7 @@ export default {
             <slot name="leftOfTitle" />
 
             <BasicDragHandle
-                targetSel=".tool-window-vue"
+                target-sel=".tool-window-vue"
                 class="heading-element flex-grow"
             >
                 <p class="tool-window-heading-title">
@@ -79,10 +79,10 @@ export default {
             v-for="hPos in ['tl', 'tr', 'br', 'bl']"
             :id="'basic-resize-handle-' + hPos"
             :key="hPos"
-            :hPos="hPos"
-            targetSel=".tool-window-vue"
-            :minW="200"
-            :minH="100"
+            :h-pos="hPos"
+            target-sel=".tool-window-vue"
+            :min-w="200"
+            :min-h="100"
         />
     </div>
 </template>
@@ -102,8 +102,6 @@ export default {
         right: 20px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
         z-index: 999;
-        max-height:72vh;
-        overflow: auto;
         min-width: 280px;
 
         .basic-resize-handle {
@@ -155,6 +153,7 @@ export default {
         position: relative;
         height: calc(100% - 58px);
         width: 100%;
+        max-height:72vh;
         -webkit-overflow-scrolling: touch;
         background-color: @background_color_1;
         overflow: auto;
