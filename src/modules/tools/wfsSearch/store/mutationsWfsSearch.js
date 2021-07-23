@@ -1,6 +1,7 @@
 import {generateSimpleMutations} from "../../../../app-store/utils/generators";
 import initialState from "./stateWfsSearch";
 import {removePath} from "../utils/pathFunctions";
+import isObject from "../../../../utils/isObject";
 
 const mutations = {
     ...generateSimpleMutations(initialState),
@@ -14,7 +15,7 @@ const mutations = {
     addOptions: ({currentInstanceIndex, instances}, option) => {
         const currentInstance = instances[currentInstanceIndex];
 
-        if (!Array.isArray(currentInstance.addedOptions)) {
+        if (!Array.isArray(currentInstance?.addedOptions)) {
             currentInstance.addedOptions = [];
         }
         if (currentInstance.addedOptions.includes(option)) {
@@ -38,7 +39,7 @@ const mutations = {
      * @returns {void}
      */
     setSelectedOptions (state, payload) {
-        if (!payload || (Object.keys(payload).length === 0 && payload.constructor === Object)) {
+        if (!payload || (isObject(payload) && Object.keys(payload).length === 0)) {
             state.selectedOptions = payload;
             return;
         }
