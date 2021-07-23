@@ -168,8 +168,12 @@ export default {
                     northing = converted.northing;
                 }
                 else {
-                    easting = coord.substr(0, 13).trim();
-                    northing = coord.substr(14).trim();
+                    const index = coord.indexOf("″");
+
+                    if (index > -1) {
+                        easting = coord.substr(0, index + 1).trim();
+                        northing = coord.substr(index + 3).trim();
+                    }
                 }
             }
             // cartesian coordinates

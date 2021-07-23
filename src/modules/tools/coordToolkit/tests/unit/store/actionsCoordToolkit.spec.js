@@ -4,7 +4,7 @@ import sinon from "sinon";
 import {expect} from "chai";
 import * as proj4 from "proj4";
 
-describe("src/modules/tools/coord/store/actionsCoord.js", () => {
+describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
     describe("supplyCoord actions", () => {
         it("positionClicked without height", done => {
             const payload = {

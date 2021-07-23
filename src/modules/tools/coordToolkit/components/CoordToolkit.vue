@@ -6,6 +6,7 @@ import {getProjections} from "masterportalAPI/src/crs";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersCoordToolkit";
 import mutations from "../store/mutationsCoordToolkit";
+import {MapMode} from "../../../map/store/enums";
 
 export default {
     name: "CoordToolkit",
@@ -14,7 +15,7 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/CoordToolkit", Object.keys(getters)),
-        ...mapGetters("Map", ["projection", "mouseCoord"]),
+        ...mapGetters("Map", ["projection", "mouseCoord", "mapMode"]),
         ...mapGetters(["isDefaultStyle"]),
         eastingNoCoordMessage: function () {
             if (this.currentProjection.projName !== "longlat") {
@@ -61,6 +62,11 @@ export default {
                 this.resetErrorMessages();
                 this.resetValues();
                 this.setSupplyCoordInactive();
+            }
+        },
+        mapMode (value) {
+            if (MapMode.MODE_3D === value) {
+                this.changeMode("search");
             }
         }
     },
@@ -256,6 +262,33 @@ export default {
             if (this.mode === "search") {
                 this.validateInput(coordinatesValue);
             }
+        },
+        /**
+         * Returns the className for the easting input field.
+         * @returns {String} the className for the easting input field
+         */
+        getClassForEasting () {
+            if (this.currentProjection.id.indexOf("EPSG:4326") > -1) {
+                return this.eastingNoCoord || this.eastingNoMatch ? "eastingToBottomSearch" : "eastingToBottomSupply";
+            }
+            return "";
+        },
+        /**
+         * Returns the className for the northing input field.
+         * @returns {String} the className for the northing input field
+         */
+        getClassForNorthing () {
+            if (this.currentProjection.id.indexOf("EPSG:4326") > -1) {
+                return this.northingNoCoord || this.northingNoMatch ? "northingToTopSearch" : "northingToTopSupply";
+            }
+            return "";
+        },
+        /**
+         * Returns true, if mapMode is 2D.
+         * @returns {boolean} true, if mapMode is 2D.
+         */
+        isSupplyCoordDisabled () {
+            return MapMode.MODE_3D === this.mapMode;
         }
     }
 };
@@ -285,11 +318,13 @@ export default {
                                 id="supplyCoordRadio"
                                 type="radio"
                                 name="mode"
-                                checked="true"
+                                :checked="!isSupplyCoordDisabled()"
+                                :disabled="isSupplyCoordDisabled()"
                                 @click="changeMode('supply')"
                             >
                             <label
                                 for="supplyCoordRadio"
+                                :title="isSupplyCoordDisabled()? $t('modules.tools.coordToolkit.disabledTooltip'): ''"
                                 :class="{ 'control-label': true, 'enabled': isEnabled('supply') }"
                                 @click="changeMode('supply')"
                             >{{ $t("modules.tools.coordToolkit.supply") }}</label>
@@ -299,6 +334,7 @@ export default {
                                 id="searchByCoordRadio"
                                 type="radio"
                                 name="mode"
+                                :checked="isSupplyCoordDisabled()"
                                 @click="changeMode('search')"
                             >
                             <label
@@ -344,7 +380,7 @@ export default {
                     </div>
                     <div
                         class="form-group form-group-sm"
-                        :class="[currentProjection.id.indexOf('EPSG:4326') > -1 ? 'eastingToBottom' : '']"
+                        :class="getClassForEasting()"
                     >
                         <label
                             id="coordinatesEastingLabel"
@@ -372,13 +408,15 @@ export default {
                                 v-if="eastingNoMatch"
                                 class="error-text"
                             >
-                                {{ eastingNoMatchMessage + coordinatesEastingExample }}
+                                {{ eastingNoMatchMessage }}
+                                <br>
+                                {{ $t("modules.tools.coordToolkit.errorMsg.example") + coordinatesEastingExample }}
                             </p>
                         </div>
                     </div>
                     <div
                         class="form-group form-group-sm"
-                        :class="[currentProjection.id.indexOf('EPSG:4326') > -1 ? 'northingToTop' : '']"
+                        :class="getClassForNorthing()"
                     >
                         <label
                             id="coordinatesNorthingLabel"
@@ -406,7 +444,9 @@ export default {
                                 v-if="northingNoMatch"
                                 class="error-text"
                             >
-                                {{ northingNoMatchMessage + coordinatesNorthingExample }}
+                                {{ northingNoMatchMessage }}
+                                <br>
+                                {{ $t("modules.tools.coordToolkit.errorMsg.example") + coordinatesNorthingExample }}
                             </p>
                         </div>
                     </div>
@@ -427,6 +467,7 @@ export default {
                                 class="form-control"
                                 :readonly="true"
                                 :contenteditable="false"
+                                @click="onInputClicked($event)"
                             >
                         </div>
                     </div>
@@ -436,12 +477,9 @@ export default {
                     >
                         <div class="col-md-12 col-sm-12 info">
                             {{ $t("modules.tools.measure.influenceFactors") }}
-                            <ul>
-                                <li>{{ $t("modules.tools.measure.scale") }}</li>
-                                <li>{{ $t("modules.tools.measure.resolution") }}</li>
-                                <li>{{ $t("modules.tools.measure.screenResolution") }}</li>
-                            </ul>
                             <span v-if="heightLayer !== null">
+                                <br>
+                                <br>
                                 {{ $t("modules.tools.coordToolkit.heightLayerInfo", {layer: heightLayer.get("name")}) }}
                             </span>
                         </div>
@@ -500,11 +538,17 @@ export default {
     .info{
         max-width: 550px;
     }
-    .eastingToBottom{
+    .eastingToBottomSupply{
         transform: translate(0px, 45px)
     }
-    .northingToTop{
+    .northingToTopSupply{
         transform: translate(0px, -45px)
+    }
+    .eastingToBottomSearch{
+        transform: translate(0px, 75px)
+    }
+    .northingToTopSearch{
+        transform: translate(0px, -75px)
     }
 </style>
 

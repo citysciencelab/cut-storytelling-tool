@@ -466,7 +466,7 @@
                 "heightLabel": "Höhe",
                 "noHeightWater": "Gewässerfläche, keine Höhen vorhanden",
                 "noHeightBuilding": "Gebäudefläche, keine Höhen vorhanden",
-                "heightLayerInfo": "Grundlage der Höheninformation ist \"{{layer}}\" mit Höhenangaben über Normalhöhennull (NHN).",
+                "heightLayerInfo": "Grundlage der Höheninformation ist \"{{layer}}\" mit Höhenangaben in Metern über Normalhöhennull (NHN).",
                 "hdms": {
                     "eastingLabel": "Länge",
                     "northingLabel": "Breite"
@@ -478,12 +478,14 @@
                 "exampleAcronym": "Bsp. ",
                 "errorMsg": {
                     "noCoord": "Bitte geben Sie Ihren {{valueKey}} vollständig ein.",
-                    "noMatch": "Die Eingabe für den {{valueKey}} ist nicht korrekt! Beispiel: ",
+                    "noMatch": "Die Eingabe für den {{valueKey}} ist nicht korrekt! ",
                     "hdmsNoCoord": "Bitte geben Sie Ihren Wert der {{valueKey}} vollständig ein.",
-                    "hdmsNoMatch": "Die Eingabe für den Wert der {{valueKey}} ist nicht korrekt! Beispiel: "
+                    "hdmsNoMatch": "Die Eingabe für den Wert der {{valueKey}} ist nicht korrekt!",
+                    "example": "Beispiel: "
                 },
                 "hintSupply": "Klicken Sie in die Karte um Koordinaten abzufragen",
-                "hintSearch": "Geben Sie die zu suchenden Koordinaten ein"
+                "hintSearch": "Geben Sie die zu suchenden Koordinaten ein",
+                "disabledTooltip": "Diese Funktion steht nicht in der 3D Ansicht zur Verfügung"
             },
             "gfi": {
                 "errorMessage": "Bei der Informationsabfrage (GetFeatureInfo) ist ein Fehler aufgetreten.<br>Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes.",
@@ -635,7 +637,7 @@
                 "deleteMeasurements": "Messungen löschen",
                 "stretch": "Strecke",
                 "area": "Fläche",
-                "influenceFactors": "Die angezeigten Werte unterliegen Ungenauigkeiten, die u.a. durch folgende Faktoren beeinflusst werden:",
+                "influenceFactors": "Die angezeigten Werte unterliegen Ungenauigkeiten, die u.a. durch folgende Faktoren beeinflusst werden, z.B. Maßstab, Auflösung der Karte und des Bildschirmes.",
                 "scale": "Maßstab",
                 "resolution": "Auflösung der Karte",
                 "screenResolution": "Auflösung des Bildschirmes",
