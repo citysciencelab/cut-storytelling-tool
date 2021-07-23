@@ -1,7 +1,28 @@
 import {expect} from "chai";
-import {prepareOptionsWithId, removePath} from "../../utils/pathFunctions";
+import {buildPath, prepareOptionsWithId, removePath} from "../../utils/pathFunctions";
 
 describe("src/modules/tools/wfsSearch/utils/pathFunctions.js", () => {
+    describe("buildPath", () => {
+        it("should build a path to the currentOption based on the optionsObject", () => {
+            const currentOption = "nenner",
+                optionsObject = {
+                    "": {
+                        value: "Waldesch"
+                    },
+                    flur: {
+                        index: 0,
+                        value: "1"
+                    },
+                    zaehler: {
+                        index: 2,
+                        value: "2038"
+                    }
+                };
+
+            expect(buildPath(optionsObject, currentOption)).to.eql(["Waldesch", "flur", 0, "zaehler", 2, currentOption]);
+        });
+    });
+
     describe("prepareOptionsWithId", () => {
         it("should return an array of option-objects containing the parameter 'fieldValue' and 'displayName'", () => {
             const ids = ["741", "879", "2038", "3954"],
