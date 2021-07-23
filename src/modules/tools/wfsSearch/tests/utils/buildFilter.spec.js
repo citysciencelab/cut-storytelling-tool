@@ -57,22 +57,18 @@ describe("src/modules/tools/wfsSearch/utils/buildFilter.js", () => {
 
     describe("buildFilter", () => {
         it("should build a XML filter based upon the literal structure defined in the config and given user inputs", () => {
-
-            buildFilter(values);
-
             expect(buildFilter(values)).to.eql([
                 "<And><PropertyIsEqualTo><PropertyName>gemname</PropertyName><Literal>Waldesch</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>flur</PropertyName><Literal>1</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>zaehler</PropertyName><Literal>741</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>nenner</PropertyName><Literal>0</Literal></PropertyIsEqualTo></And>"
             ]);
         });
     });
+
     describe("buildStoredFilter", () => {
         it("should build a filter based upon the literal structure defined in the config and given user inputs", () => {
-
-            buildStoredFilter(values);
-
             expect(buildStoredFilter(values)).to.equal("&gemname=Waldesch&flur=1&zaehler=741&nenner=0");
         });
     });
+
     describe("buildXmlFilter", () => {
         it("should build the XML filter for the given fieldName and value", () => {
             const field = {
@@ -84,8 +80,6 @@ describe("src/modules/tools/wfsSearch/utils/buildFilter.js", () => {
                 "id": "wfsSearch-clause-0+field-0",
                 "value": "Waldesch"
             };
-
-            buildXmlFilter(field);
 
             expect(buildXmlFilter(field)).to.equal("<PropertyIsEqualTo><PropertyName>gemname</PropertyName><Literal>Waldesch</Literal></PropertyIsEqualTo>");
         });
