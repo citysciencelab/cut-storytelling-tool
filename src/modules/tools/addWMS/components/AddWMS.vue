@@ -344,7 +344,7 @@ export default {
                     type="text"
                     class="form-control wmsUrlsChanged"
                     :placeholder="placeholder"
-                    @keydown="inputUrl"
+                    @keydown.enter="inputUrl"
                 >
                 <div class="WMS_example_text">
                     {{ textExample }}

@@ -316,7 +316,7 @@ export default {
                             :key="index"
                             :class="feature.category === activeCategory ? 'active' : ''"
                             @click="changedCategory"
-                            @keydown="changedCategory"
+                            @keydown.enter="changedCategory"
                         >
                             <a
                                 :href="'#' + feature.category"
@@ -378,7 +378,7 @@ export default {
         <div
             class="modal-backdrop fade in"
             @click="hidePoi"
-            @keydown="hidePoi"
+            @keydown.enter="hidePoi"
         />
     </div>
 </template>

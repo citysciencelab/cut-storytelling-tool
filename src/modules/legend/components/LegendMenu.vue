@@ -62,7 +62,7 @@ export default {
                 :class="{ 'open': showLegend }"
                 class="dropdown dropdown-folder"
                 @click="toggleLegend"
-                @keydown="toggleLegend"
+                @keydown.enter="toggleLegend"
             >
                 <a
                     href="#"
@@ -86,7 +86,7 @@ export default {
                 :class="{ open: showLegend }"
                 class="list-group-item"
                 @click="toggleLegend"
-                @keydown="toggleLegend"
+                @keydown.enter="toggleLegend"
             >
                 <div>
                     <span

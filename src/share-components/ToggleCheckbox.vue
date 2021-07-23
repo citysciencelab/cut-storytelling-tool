@@ -77,13 +77,13 @@ export default {
                 class="btn btn-primary btn-sm toggle-on"
                 :class="{'active': isActive}"
                 @click="toggle"
-                @keydown="toggle"
+                @keydown.enter="toggle"
             >
                 <label
                     class="btn btn-default btn-sm toggle-off"
                     :class="{'active': !isActive}"
                     @click="toggle"
-                    @keydown="toggle"
+                    @keydown.enter="toggle"
                 >
                     <input
                         v-model="checkedValue"
@@ -92,7 +92,7 @@ export default {
                         data-toggle="toggle"
                         :checked="isActive"
                         @click="toggle"
-                        @keydown="toggle"
+                        @keydown.enter="toggle"
                     >
                     {{ textOff }}
                 </label>
@@ -102,7 +102,7 @@ export default {
             <span
                 class="toggle-handle btn btn-default btn-sm"
                 @click="toggle"
-                @keydown="toggle"
+                @keydown.enter="toggle"
             />
         </div>
     </div>

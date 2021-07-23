@@ -75,7 +75,7 @@ export default {
     <div
         class="modal-mask"
         @click="closeByClickOutside"
-        @keydown="closeByClickOutside"
+        @keydown.enter="closeByClickOutside"
     >
         <div class="modal-dialog">
             <div class="modal-content">
