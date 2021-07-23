@@ -1,3 +1,5 @@
+@import "~variables";
+
 @color_1: #f3f3f3;
 @color_2: #E10019;
 @color_3: #F3F3F3;
@@ -281,7 +283,11 @@
     margin-top: 4px;
     padding: 10px 6px 6px 6px;
     font-family: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
-    border: none;
+    border: 0;
+    &:focus {
+        background-color: @primary_focus;
+        outline: 1px solid @primary_outline;
+    }
 
 }
 /***** Oblique *****/
@@ -292,7 +298,11 @@
     font-size: 22px;
     margin-top: 4px;
     padding: 5px 5px 7px 8px;
-    border: none;
+    border: 0;
+    &:focus {
+        background-color: @primary_focus;
+        outline: 1px solid @primary_outline;
+    }
 
 }
 
