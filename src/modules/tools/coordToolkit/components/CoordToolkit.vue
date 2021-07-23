@@ -53,13 +53,18 @@ export default {
             this.removeMarker();
 
             if (value) {
-                this.setMode("supply");
                 this.initProjections();
                 this.setExample();
-                this.setSupplyCoordActive();
+                if (this.mapMode === MapMode.MODE_2D) {
+                    this.setMode("supply");
+                    this.setSupplyCoordActive();
+                }
+                else {
+                    this.setMode("search");
+                }
             }
             else {
-                this.resetErrorMessages();
+                this.resetErrorMessages("all");
                 this.resetValues();
                 this.setSupplyCoordInactive();
             }
@@ -110,15 +115,17 @@ export default {
          */
         initProjections () {
             const pr = getProjections(),
-                wgs84Proj = pr.filter(proj => proj.name === "EPSG:4326");
+                wgs84Proj = [];
 
             // id is set to the name and in case of decimal "-DG" is appended to name later on
             // for use in select-box
             pr.forEach(proj => {
                 proj.id = proj.name;
+                if (proj.name === "EPSG:4326") {
+                    wgs84Proj.push(proj);
+                }
             });
-
-            if (wgs84Proj && wgs84Proj.length === 1) {
+            if (wgs84Proj.length > 0) {
                 this.addWGS84Decimal(pr, wgs84Proj);
             }
             this.setProjections(pr);
@@ -168,7 +175,7 @@ export default {
             }
         },
         /**
-         * Called if selection of projection changed. Sets the current scprojectionale to state and changes the position.
+         * Called if selection of projection changed. Sets the current projection to state and changes the position.
          * @param {Event} event changed selection event
          * @returns {void}
          */
@@ -239,7 +246,7 @@ export default {
                 this.setSupplyCoordInactive();
             }
             else {
-                this.resetErrorMessages();
+                this.resetErrorMessages("all");
                 this.setSupplyCoordActive();
             }
         },
@@ -264,22 +271,58 @@ export default {
             }
         },
         /**
-         * Returns the className for the easting input field.
+         * Returns the className for the easting input field. Special Handling because fields positions are transformed.
          * @returns {String} the className for the easting input field
          */
         getClassForEasting () {
             if (this.currentProjection.id.indexOf("EPSG:4326") > -1) {
-                return this.eastingNoCoord || this.eastingNoMatch ? "eastingToBottomSearch" : "eastingToBottomSupply";
+                if (!this.eastingNoCoord && !this.eastingNoMatch && !this.northingNoCoord && !this.northingNoMatch) {
+                    return "eastingToBottomNoError";
+                }
+                if ((this.eastingNoCoord || this.eastingNoMatch) && (this.northingNoCoord || this.northingNoMatch)) {
+                    if (this.eastingNoCoord && this.northingNoCoord) {
+                        return "eastingToBottomOneError";
+                    }
+                    return "eastingToBottomTwoErrors";
+                }
+                if ((this.northingNoCoord || this.northingNoMatch) && !this.eastingNoCoord && !this.eastingNoMatch) {
+                    return "eastingToBottomOneError";
+                }
+                if ((this.eastingNoCoord || this.eastingNoMatch) && !this.northingNoCoord || !this.northingNoMatch) {
+                    if (this.eastingNoCoord) {
+                        return "eastingToBottomNoError";
+                    }
+                    return "eastingToBottomOneError";
+                }
+                return "eastingToBottomNoError";
             }
             return "";
         },
         /**
-         * Returns the className for the northing input field.
+         * Returns the className for the northing input field. Special Handling because fields positions are transformed.
          * @returns {String} the className for the northing input field
          */
         getClassForNorthing () {
             if (this.currentProjection.id.indexOf("EPSG:4326") > -1) {
-                return this.northingNoCoord || this.northingNoMatch ? "northingToTopSearch" : "northingToTopSupply";
+                if (!this.eastingNoCoord && !this.eastingNoMatch && !this.northingNoCoord && !this.northingNoMatch) {
+                    return "northingToTopNoError";
+                }
+                if ((this.eastingNoCoord || this.eastingNoMatch) && (this.northingNoCoord || this.northingNoMatch)) {
+                    if (this.eastingNoCoord && this.northingNoCoord) {
+                        return "northingToTopOneError";
+                    }
+                    return "northingToTopTwoErrors";
+                }
+                if ((this.eastingNoCoord || this.eastingNoMatch) && !this.northingNoCoord && !this.northingNoMatch) {
+                    return "northingToTopOneError";
+                }
+                if ((this.northingNoCoord || this.northingNoMatch) && !this.eastingNoCoord || !this.eastingNoMatch) {
+                    if (this.northingNoCoord) {
+                        return "northingToTopNoError";
+                    }
+                    return "northingToTopOneError";
+                }
+                return "northingToTopNoError";
             }
             return "";
         },
@@ -289,6 +332,16 @@ export default {
          */
         isSupplyCoordDisabled () {
             return MapMode.MODE_3D === this.mapMode;
+        },
+        /**
+         * Returns true, if supplyCoord is active.
+         * @returns {boolean} true, true, if supplyCoord is active
+         */
+        isSupplyCoordChecked () {
+            if (this.mapMode === MapMode.MODE_3D) {
+                return false;
+            }
+            return this.mode === "supply";
         }
     }
 };
@@ -301,7 +354,7 @@ export default {
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivate-g-f-i="deactivateGFI"
+        :deactivate-gfi="deactivateGFI"
     >
         <template #toolBody>
             <div
@@ -318,7 +371,7 @@ export default {
                                 id="supplyCoordRadio"
                                 type="radio"
                                 name="mode"
-                                :checked="!isSupplyCoordDisabled()"
+                                :checked="isSupplyCoordChecked()"
                                 :disabled="isSupplyCoordDisabled()"
                                 @click="changeMode('supply')"
                             >
@@ -334,7 +387,7 @@ export default {
                                 id="searchByCoordRadio"
                                 type="radio"
                                 name="mode"
-                                :checked="isSupplyCoordDisabled()"
+                                :checked="!isSupplyCoordChecked()"
                                 @click="changeMode('search')"
                             >
                             <label
@@ -538,16 +591,22 @@ export default {
     .info{
         max-width: 550px;
     }
-    .eastingToBottomSupply{
+    .eastingToBottomNoError{
         transform: translate(0px, 45px)
     }
-    .northingToTopSupply{
+    .northingToTopNoError{
         transform: translate(0px, -45px)
     }
-    .eastingToBottomSearch{
+    .eastingToBottomOneError{
+        transform: translate(0px, 55px)
+    }
+    .northingToTopOneError{
+        transform: translate(0px, -65px)
+    }
+    .eastingToBottomTwoErrors{
         transform: translate(0px, 75px)
     }
-    .northingToTopSearch{
+    .northingToTopTwoErrors{
         transform: translate(0px, -75px)
     }
 </style>

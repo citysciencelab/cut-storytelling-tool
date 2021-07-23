@@ -5,6 +5,7 @@ import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import * as crs from "masterportalAPI/src/crs";
 import CoordToolkitComponent from "../../../components/CoordToolkit.vue";
 import CoordToolkit from "../../../store/indexCoordToolkit";
+import {MapMode} from "../../../../../map/store/enums";
 
 const localVue = createLocalVue(),
     namedProjections = [
@@ -21,7 +22,8 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
     const mockMapGetters = {
             map: () => sinon.stub(),
             projection: () => sinon.stub(),
-            mouseCoord: () => sinon.stub()
+            mouseCoord: () => sinon.stub(),
+            mapMode: () => MapMode.MODE_2D
         },
         mockMapMarkerActions = {
             removePointMarker: sinon.stub()

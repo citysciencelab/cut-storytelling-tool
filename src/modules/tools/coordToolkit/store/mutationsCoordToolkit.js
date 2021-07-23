@@ -28,7 +28,6 @@ const mutations = {
                 projections.splice(index, 1);
                 projections.unshift(firstProj);
             }
-            // state.currentSelection = projections[0]?.id;
             state.currentProjection = projections[0];
         }
         state.projections = projections;
@@ -57,33 +56,26 @@ const mutations = {
         }
     },
     /**
-     * Resets the error messages in the state.
+     * Resets the northing or easting error messages  in the state which is used for live validation of input.
      * @param {Object} state the state of coordToolkit-module
+     * @param {boolean} id if id === "northing" northing-messages are resetted, if id === "easting" easting-messages, else if id === "all" all messages are resetted
      * @returns {void}
      */
-    resetErrorMessages: (state) => {
-        state.eastingNoCoord = false;
-        state.eastingNoMatch = false;
-        state.northingNoCoord = false;
-        state.northingNoMatch = false;
-    },
-    /**
-     * Resets the easting error messages in the state which is used for live validation of input.
-     * @param {Object} state the state of coordToolkit-module
-     * @returns {void}
-     */
-    resetEastingMessages: (state) => {
-        state.eastingNoCoord = false;
-        state.eastingNoMatch = false;
-    },
-    /**
-     * Resets the northing error messages  in the state which is used for live validation of input.
-     * @param {Object} state the state of coordToolkit-module
-     * @returns {void}
-     */
-    resetNorthingMessages: (state) => {
-        state.northingNoCoord = false;
-        state.northingNoMatch = false;
+    resetErrorMessages: (state, id) => {
+        if (id === "northing") {
+            state.northingNoCoord = false;
+            state.northingNoMatch = false;
+        }
+        else if (id === "easting") {
+            state.eastingNoCoord = false;
+            state.eastingNoMatch = false;
+        }
+        else if (id === "all") {
+            state.eastingNoCoord = false;
+            state.eastingNoMatch = false;
+            state.northingNoCoord = false;
+            state.northingNoMatch = false;
+        }
     },
     /**
      * Resets the coordinate values in the state.

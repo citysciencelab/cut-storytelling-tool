@@ -39,7 +39,6 @@ export default {
             }
         }
     },
-
     /**
      * Creates a new WMSLayer to get the height from with id stored in state.heightLayerId and sets the layer to state.
      * @returns {void}
@@ -70,7 +69,6 @@ export default {
             console.warn("CoordToolkit: the layer with id " + state.heightLayerId + " to retrieve height from is not available. Check the Id in config.json with path 'Portalconfig.menu.tools.children.coordToolkit.heightLayerId'!");
         }
     },
-
     /**
      * Requests the layer with id state.heightLayerId and parses the xml-response for the height.
      * Sets the height to the state.
@@ -222,7 +220,7 @@ export default {
     searchCoordinate ({dispatch, commit, state}) {
         const coords = [state.coordinatesEasting, state.coordinatesNorthing];
 
-        commit("resetErrorMessages");
+        commit("resetErrorMessages", "all");
         dispatch("formatInput", coords);
         dispatch("transformCoordinates");
     },
@@ -263,7 +261,7 @@ export default {
             };
 
         if (coord.id === "easting") {
-            commit("resetEastingMessages");
+            commit("resetErrorMessages", coord.id);
             if (coord.value === "") {
                 commit("setEastingNoCoord", true);
             }
@@ -272,7 +270,7 @@ export default {
             }
         }
         else if (coord.id === "northing") {
-            commit("resetNorthingMessages");
+            commit("resetErrorMessages", coord.id);
             if (coord.value === "") {
                 commit("setNorthingNoCoord", true);
             }
@@ -300,7 +298,7 @@ export default {
         commit("setSelectedCoordinates", []);
         for (const coord of coords) {
             if (!getters.getEastingError && !getters.getNorthingError) {
-                commit("resetErrorMessages");
+                commit("resetErrorMessages", "all");
                 commit("pushCoordinates", formatters[currentProjection.id](coord));
             }
         }

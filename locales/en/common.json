@@ -460,7 +460,7 @@
             "coordToolkit": {
                 "title": "Coordinates",
                 "supply":"Query Coordinates",
-                "search":"Coordinate search",
+                "search":"Search Coordinates",
                 "searchBtn": "Search",
                 "coordSystemField": "Coordinate system",
                 "heightLabel": "Height",

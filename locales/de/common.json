@@ -466,7 +466,7 @@
                 "heightLabel": "Höhe",
                 "noHeightWater": "Gewässerfläche, keine Höhen vorhanden",
                 "noHeightBuilding": "Gebäudefläche, keine Höhen vorhanden",
-                "heightLayerInfo": "Grundlage der Höheninformation ist \"{{layer}}\" mit Höhenangaben in Metern über Normalhöhennull (NHN).",
+                "heightLayerInfo": "Grundlage der Höheninformation ist das \"{{layer}}\" mit Höhenangaben in Metern über Normalhöhennull (NHN).",
                 "hdms": {
                     "eastingLabel": "Länge",
                     "northingLabel": "Breite"

@@ -417,7 +417,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
                 actions.validateInput({state, commit, dispatch, getters}, state.coordinatesEasting);
 
-                expect(commit.firstCall.args[0]).to.equal("resetEastingMessages");
+                expect(commit.firstCall.args[0]).to.equal("resetErrorMessages");
             });
             it("Throws an Error for missing coordinates - ETRS89", () => {
                 const state = {
@@ -427,7 +427,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
                 actions.validateInput({state, commit, dispatch}, state.coordinatesEasting);
 
-                expect(commit.firstCall.args[0]).to.equal("resetEastingMessages");
+                expect(commit.firstCall.args[0]).to.equal("resetErrorMessages");
                 expect(commit.secondCall.args[0]).to.equal("setEastingNoCoord");
             });
             it("Throws an Error for wrong coordinates - ETRS89", () => {
@@ -438,7 +438,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
                 actions.validateInput({state, commit, dispatch}, state.coordinatesNorthing);
 
-                expect(commit.firstCall.args[0]).to.equal("resetNorthingMessages");
+                expect(commit.firstCall.args[0]).to.equal("resetMessages");
                 expect(commit.secondCall.args[0]).to.equal("setNorthingNoMatch");
             });
             it("Validates the coordinates according to the WGS84 coordinate system", () => {
@@ -449,7 +449,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
                 actions.validateInput({state, commit, dispatch, getters}, state.coordinatesEasting);
 
-                expect(commit.firstCall.args[0]).to.equal("resetEastingMessages");
+                expect(commit.firstCall.args[0]).to.equal("resetErrorMessages");
             });
             it("Throws an Error for missing coordinates - WGS84", () => {
                 const state = {
@@ -459,7 +459,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
                 actions.validateInput({state, commit, dispatch}, state.coordinatesEasting);
 
-                expect(commit.firstCall.args[0]).to.equal("resetEastingMessages");
+                expect(commit.firstCall.args[0]).to.equal("resetErrorMessages");
                 expect(commit.secondCall.args[0]).to.equal("setEastingNoCoord");
             });
             it("Throws an Error for wrong coordinates - WGS84", () => {
@@ -470,7 +470,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
                 actions.validateInput({state, commit, dispatch}, state.coordinatesNorthing);
 
-                expect(commit.firstCall.args[0]).to.equal("resetNorthingMessages");
+                expect(commit.firstCall.args[0]).to.equal("resetErrorMessages");
                 expect(commit.secondCall.args[0]).to.equal("setNorthingNoMatch");
             });
             it("Validates the coordinates according to the WGS84(Dezimalgrad) coordinate system", () => {
@@ -481,7 +481,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
                 actions.validateInput({state, commit, dispatch, getters}, state.coordinatesEasting);
 
-                expect(commit.firstCall.args[0]).to.equal("resetEastingMessages");
+                expect(commit.firstCall.args[0]).to.equal("resetErrorMessages");
             });
             it("Throws an Error for missing coordinates - WGS84(Dezimalgrad)", () => {
                 const state = {
@@ -491,7 +491,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
                 actions.validateInput({state, commit, dispatch}, state.coordinatesEasting);
 
-                expect(commit.firstCall.args[0]).to.equal("resetEastingMessages");
+                expect(commit.firstCall.args[0]).to.equal("resetErrorMessages");
                 expect(commit.secondCall.args[0]).to.equal("setEastingNoCoord");
             });
             it("Throws an Error for wrong coordinates - WGS84(Dezimalgrad)", () => {
@@ -502,7 +502,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
                 actions.validateInput({state, commit, dispatch}, state.coordinatesNorthing);
 
-                expect(commit.firstCall.args[0]).to.equal("resetNorthingMessages");
+                expect(commit.firstCall.args[0]).to.equal("resetErrorMessages");
                 expect(commit.secondCall.args[0]).to.equal("setNorthingNoMatch");
             });
         });
