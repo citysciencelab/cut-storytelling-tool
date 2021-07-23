@@ -42,9 +42,14 @@ export default {
     <div
         v-if="show"
         :class="['mouse-position', open ? 'open' : 'closed']"
+        tabindex="0"
         :title="$t('modules.footer.mouse')"
+        :aria-label="$t('modules.footer.mouse')"
     >
         <span
+            tabindex="0"
+            :title="$t('modules.footer.mouse')"
+            :aria-label="$t('modules.footer.mouse')"
             :class="['mouse-position-span', open ? 'open' : 'closed']"
         >
             {{ prettyMouseCoord || $t(`common:modules.controls.mousePosition.hint`) }}
