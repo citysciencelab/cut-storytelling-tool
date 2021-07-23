@@ -46,18 +46,10 @@ describe("src/utils/stateModifier.js", () => {
             expect(state.Tools.Measure.active).to.be.equals(true);
 
             state.Tools.Measure.active = false;
-            await setValueToState(state, key, "1");
-            expect(state.Tools.Measure.active).to.be.equals(true);
-
-            state.Tools.Measure.active = false;
             await setValueToState(state, key, true);
             expect(state.Tools.Measure.active).to.be.equals(true);
 
             await setValueToState(state, key, "false");
-            expect(state.Tools.Measure.active).to.be.equals(false);
-
-            state.Tools.Measure.active = true;
-            await setValueToState(state, key, "0");
             expect(state.Tools.Measure.active).to.be.equals(false);
 
             state.Tools.Measure.active = true;
@@ -309,6 +301,27 @@ describe("src/utils/stateModifier.js", () => {
                 await setValueToState(state, "Map/projection", "EPSG:8395");
                 expect(state.MapMarker.coordinates).to.be.deep.equals(value);
                 expect(state.urlParams.projection.name).to.be.deep.equals("EPSG:8395");
+            });
+        });
+        describe("UrlParam zoomLevel", () => {
+            it("test param zoomLevel", async () => {
+                let key = "zoomLevel",
+                    valueAsString = "5";
+                const state = {
+                        urlParams: {},
+                        Map: {
+                            zoomLevel: 2
+                        }
+                    };
+
+                await setValueToState(state, key, valueAsString);
+                expect(state.Map.zoomLevel).to.be.equals(5);
+
+                state.Map.zoomLevel = 2;
+                key = "zoomlevel";
+                await setValueToState(state, key, valueAsString);
+                expect(state.Map.zoomLevel).to.be.deep.equals(5);
+
             });
         });
     });

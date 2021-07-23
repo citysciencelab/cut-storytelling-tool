@@ -20,6 +20,7 @@ function searchAndSetValue (state, keySplitted, value, found = false) {
         if (vuexState[keySplitted[0]]) {
             const source = makeObject(keySplitted, value),
                 newState = deepAssignIgnoreCase(state, source);
+                // console.log(newState);
 
             if (newState) {
                 foundInState = true;
@@ -98,6 +99,9 @@ function callActions (state) {
         setTimeout(() => {
             store.dispatch("MapMarker/placingPointMarker", coordinates);
         }, 500);
+    } 
+    if (state.urlParams["Map/zoomLevel"]) {
+        store.dispatch("Map/setZoomLevel", state.Map.zoomLevel);
     }
 }
 /**

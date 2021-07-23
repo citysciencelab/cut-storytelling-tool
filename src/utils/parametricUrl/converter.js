@@ -12,8 +12,8 @@ function convertStringToBoolean (string) {
         toCheck = toCheck.toLowerCase().trim();
     }
     switch (toCheck) {
-        case "yes": case "true": case "1": case "": case 1: return true;
-        case "no": case "false": case "0": case 0: case null: case undefined: return false;
+        case "yes": case "true": case "": return true;
+        case "no": case "false": case null: case undefined: return false;
         default: return string;
     }
 }

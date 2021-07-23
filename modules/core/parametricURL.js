@@ -64,9 +64,9 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             // "getCenter": function () {
             //     return this.get("center");
             // },
-            "getZoomLevel": function () {
-                return this.get("zoomLevel");
-            },
+            // "getZoomLevel": function () {
+            //     return this.get("zoomLevel");
+            // },
             "getZoomToGeometry": function () {
                 return this.get("zoomToGeometry");
             },

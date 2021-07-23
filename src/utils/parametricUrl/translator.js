@@ -29,6 +29,12 @@ export async function translate (urlParamsKey, urlParamsValue) {
                 value = convert(urlParamsValue);
 
             return {key: key, value: value};
+        } 
+        case "zoomlevel": {
+            const key = "Map/zoomLevel",
+                value = parseInt(urlParamsValue, 10);
+
+            return {key: key, value: value};
         }
         case "projection":
         case "map/projection": {
