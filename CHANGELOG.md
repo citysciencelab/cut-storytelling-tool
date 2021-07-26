@@ -10,7 +10,7 @@
 
 ##  Unreleased - in development
 ### Added
-- ...
+- Start of a calendar library "src/utils/calendar.js" with the first function "getPublicHolidays" to get a list of german public holidays using gaussian easter algorithm and advent algorithm.
 
 ### Changed
 
@@ -96,6 +96,7 @@
 ### Changed
 - Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.
 - Tool addons are now also written in config.json in camelCase.
+- Migrated the CompareFeatures Tool from Backbone.js to Vue.js.
 - colorTools are renamed into convertColor (src/utils/convertColor)
 - Updates the core-js and babel dependencies in the package.json
 - Update the dependency caniuse-lite.

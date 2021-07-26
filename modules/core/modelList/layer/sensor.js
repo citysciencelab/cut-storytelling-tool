@@ -854,10 +854,14 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         // messages from the server
         mqtt.on("message", (topic, jsonData) => {
-            const regex = /\((.*)\)/; // search value in topic, that represents the datastreamid on position 1
+            // search value in topic, that represents the datastreamid on position 1
+            const regex = /\((.*)\)/,
+                result = topic.match(regex);
 
-            jsonData.dataStreamId = topic.match(regex)[1];
-            this.updateFromMqtt(jsonData);
+            if (Array.isArray(result) && result.length > 1) {
+                jsonData.dataStreamId = result[1];
+                this.updateFromMqtt(jsonData);
+            }
         });
     },
 
