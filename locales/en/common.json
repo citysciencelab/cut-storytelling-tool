@@ -380,17 +380,20 @@
                 "moreInfo": "More info",
                 "lessInfo": "Less info",
                 "exportAsPdf": "Export as PDF",
+                "removeFromList": "Remove from list",
                 "noFeatures": {
                     "nothingSelected": "There are no {{objects}} selected for the comparison list.",
                     "objectName": "objects",
                     "info": "Click on an object on the map. A window opens with the respective factual information. In the upper right corner there is a star symbol {{iconEmptyStar}}. Click on this icon to add the object to the comparison list. The star icon will be colored yellow {{iconYellowStar}}. Click the star icon again to remove the object from the comparison list."
                 },
                 "feedback": {
-                    "added": "{{object}} was added to the comparison list",
-                    "notAdded": "{{object}} could not be added to the comparison list",
+                    "added": "The feature was added to the comparison list",
+                    "addedWithName": "{{currentFeatureName}} was added to the comparison list",
+                    "notAdded": "The feature could not be added to the comparison list",
+                    "notAddedWithName": "{{currentFeatureName}} could not be added to the comparison list",
                     "limitReached": "The maximum number of objects in the comparison list has been reached.",
                     "removeObjects": "Please remove at least one object before proceeding.",
-                    "gotoComparisonlist": "To the comparison list"
+                    "goToComparisonlist": "To the comparison list"
                 }
             },
             "saveSelection": {
@@ -778,6 +781,32 @@
                 "contentSaved": "Content was copied to the clipboard.",
                 "contentNotSaved": "Content could not be copied to the clipboard."
             }
+        }
+    },
+    "utils": {
+        "calendar": {
+            "newYearsDay": "New Year's Day",
+            "epiphany": "Epiphany",
+            "goodFriday": "Good Friday",
+            "easterSunday": "Easter Sunday",
+            "easterMonday": "Easter Monday",
+            "laborDay": "Labor Day",
+            "ascensionDay": "Ascension Day",
+            "pentecostSunday": "Pentecost Sunday",
+            "pentecostMonday": "Pentecost Monday",
+            "corpusChristi": "Corpus Christi",
+            "peaceFestival": "Peace Festival",
+            "assumptionDay": "Assumption Day",
+            "germanUnityDay": "German Unity Day",
+            "reformationDay": "Reformation Day",
+            "allSaintsDay": "All Saints Day",
+            "penanceDay": "Penance Day",
+            "firstAdvent": "First Advent",
+            "secondAdvent": "Second Advent",
+            "thirdAdvent": "Third Advent",
+            "fourthAdvent": "Fourth Of Advent",
+            "christmasDay": "Christmas Day",
+            "secondDayOfChristmas": "Second Day Of Christmas"
         }
     },
     "snippets": {
