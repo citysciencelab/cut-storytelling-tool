@@ -438,7 +438,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
                 actions.validateInput({state, commit, dispatch}, state.coordinatesNorthing);
 
-                expect(commit.firstCall.args[0]).to.equal("resetMessages");
+                expect(commit.firstCall.args[0]).to.equal("resetErrorMessages");
                 expect(commit.secondCall.args[0]).to.equal("setNorthingNoMatch");
             });
             it("Validates the coordinates according to the WGS84 coordinate system", () => {
