@@ -94,6 +94,7 @@ async function ContactTests ({builder, url, resolution, capability}) {
 
             it("making the view smaller keeps form in window", async function () {
                 await driver.manage().window().setRect({width: windowWidth, height: windowHeight});
+                await driver.wait(new Promise(r => setTimeout(r, 1000)));
 
                 const {height, width, x, y} = await toolWindow.getRect();
 
