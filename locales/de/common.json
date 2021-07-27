@@ -631,7 +631,7 @@
                 "targetLayerNotFound": "Der gespeicherte Ziel-Layer mit der ID {{layerId}} wurde nicht gefunden."
             },
             "wfsSearch": {
-                "noResults": "Es wurden keine Ergebnisse für Ihre Suchkriterien gefunden",
+                "noResults": "Es wurden keine Ergebnisse für Ihre Suchkriterien gefunden. Bitte versuchen Sie es erneut.",
                 "optionsPlaceholder": "Bitte wählen Sie eine Option aus!",
                 "resetButton": "Zurücksetzen",
                 "searchButton": "Suchen",

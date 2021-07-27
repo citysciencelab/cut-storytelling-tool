@@ -204,9 +204,7 @@ export default {
                 this.suggestions = [...new Set(suggestions.map(v => v.values_[this.fieldName]))];
             }
         },
-        isObject (val) {
-            return typeof val === "object";
-        }
+        isObject
     }
 };
 </script>
@@ -276,7 +274,6 @@ export default {
             <!-- TODO: Can this be made barrierefrei or is it already? -->
             <i
                 v-if="htmlElement === 'input' && showLoader"
-                id="todo"
                 class="loader"
             />
             <datalist

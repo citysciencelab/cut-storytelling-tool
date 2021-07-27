@@ -3,9 +3,9 @@ import idx, {badPathSymbol} from "../../../../utils/idx";
 /**
  * Builds the path to the given option in the external source object.
  *
- * @param {Object} optionsObject The currently set values by the user.
- * @param {String} currentOption The option for which the path needs to be build.
- * @returns {Array} The path to the given option as an array.
+ * @param {object} optionsObject The currently set values by the user.
+ * @param {string} currentOption The option for which the path needs to be build.
+ * @returns {array} The path to the given option as an array.
  */
 function buildPath (optionsObject, currentOption) {
     const entries = Object.entries(optionsObject),
@@ -29,12 +29,12 @@ function buildPath (optionsObject, currentOption) {
 /**
  * Retrieves the options from the path in the given source.
  *
- * @param {Array} path The path to the values.
- * @param {Object} source The source from which the values should be retrieved.
+ * @param {array} path The path to the values.
+ * @param {object} source The source from which the values should be retrieved.
  * @returns {[]} If found, return the values as an array, otherwise return an empty array.
  */
 function getOptions (path, source) {
-    const selectableOptions = idx(path, source);
+    const selectableOptions = idx(source, path);
 
     if (selectableOptions && selectableOptions !== badPathSymbol && typeof selectableOptions[0] === "object") {
         return prepareOptionsWithId(selectableOptions);
@@ -48,11 +48,11 @@ function getOptions (path, source) {
  * Prepares the options to be able to be used with the components.
  * Maps id to fieldValue and adds the key to the displayName of the root element if so configured.
  *
- * @param {Object} elements The options to be adjusted / prepared.
- * @param {Boolean} showKey Whether the key should be part of the displayName or not.
- * @returns {Array} The adjusted array of values.
+ * @param {object} elements The options to be adjusted / prepared.
+ * @param {boolean} [showKey = false] Whether the key should be part of the displayName.
+ * @returns {array} The adjusted array of values.
  */
-function prepareOptionsWithId (elements, showKey) {
+function prepareOptionsWithId (elements, showKey = false) {
     const options = [];
 
     Object.entries(elements).forEach(([key, {id}]) => options.push({fieldValue: id, displayName: showKey ? `${key} (${id})` : id}));
@@ -63,8 +63,8 @@ function prepareOptionsWithId (elements, showKey) {
 /**
  * Removes the path to the element so that just the value itself is left.
  *
- * @param {String} el The element of which the path should be removed.
- * @returns {String} The adjusted element.
+ * @param {string} el The element of which the path should be removed.
+ * @returns {string} The adjusted element.
  */
 function removePath (el) {
     let element = el;

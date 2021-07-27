@@ -5,20 +5,10 @@ let likeFilterProperties = {
 };
 
 /**
- * Sets the likeFilterProperties to the given value
- *
- * @param {Object} properties The properties for the like filter in the way the service needs them.
- * @returns{void}
- */
-export function setLikeFilterProperties (properties) {
-    likeFilterProperties = properties;
-}
-
-/**
  * Builds a XML filter based upon the literal structure defined in the config
  * and the given user inputs.
  *
- * @param {Object} values The literals containing the values to be parsed.
+ * @param {object} values The literals containing the values to be parsed.
  * @returns {XML[]} A filter to constrain returned features from the service.
  */
 function buildFilter (values) {
@@ -48,35 +38,11 @@ function buildFilter (values) {
 }
 
 /**
- * Builds the XML filter for the given fieldName and value.
- *
- * @param {Object} field The field for which the filter is build.
- * @returns {String} XML Filter.
- */
-function buildXmlFilter (field) {
-    const {fieldName, parameterIndex, type, value} = field,
-        isNumber = typeof parameterIndex === "number",
-        fieldType = isNumber ? type[parameterIndex] : type,
-        currentFieldName = isNumber ? fieldName[parameterIndex] : fieldName,
-        likeFilter = fieldType === "like",
-        property = `<PropertyName>${currentFieldName}</PropertyName><Literal>${value}${likeFilter ? likeFilterProperties.wildCard : ""}</Literal>`;
-    let likeFilterValues = "";
-
-    Object.entries(likeFilterProperties).forEach(([key, val]) => {
-        likeFilterValues += `${key}="${encodeURIComponent(val)}" `;
-    });
-
-    return likeFilter
-        ? `<PropertyIsLike ${likeFilterValues.slice(0, -1)}>${property}</PropertyIsLike>`
-        : `<PropertyIsEqualTo>${property}</PropertyIsEqualTo>`;
-}
-
-/**
  * Builds a filter based upon the literal structure defined in the config
  * and the given user inputs.
  *
- * @param {Object} values The literals containing the values to be parsed.
- * @returns {String} A filter to constrain returned features from the service.
+ * @param {object} values The literals containing the values to be parsed.
+ * @returns {string} A filter to constrain returned features from the service.
  */
 function buildStoredFilter (values) {
     let filter = "";
@@ -98,4 +64,40 @@ function buildStoredFilter (values) {
     return filter;
 }
 
-export {buildFilter, buildStoredFilter, buildXmlFilter};
+/**
+ * Builds the XML filter for the given fieldName and value.
+ *
+ * @param {object} field The field for which the filter is build.
+ * @returns {string} XML Filter.
+ */
+function buildXmlFilter (field) {
+    const {fieldName, parameterIndex, type, value} = field,
+        multipleValuesInField = typeof parameterIndex === "number",
+        fieldType = multipleValuesInField ? type[parameterIndex] : type,
+        currentFieldName = multipleValuesInField ? fieldName[parameterIndex] : fieldName,
+        likeFilter = fieldType === "like",
+        property = `<PropertyName>${currentFieldName}</PropertyName><Literal>${value}${likeFilter ? likeFilterProperties.wildCard : ""}</Literal>`;
+    let likeFilterValues = "";
+
+    if (likeFilter) {
+        Object.entries(likeFilterProperties).forEach(([key, val]) => {
+            likeFilterValues += `${key}="${encodeURIComponent(val)}" `;
+        });
+    }
+
+    return likeFilter
+        ? `<PropertyIsLike ${likeFilterValues.slice(0, -1)}>${property}</PropertyIsLike>`
+        : `<PropertyIsEqualTo>${property}</PropertyIsEqualTo>`;
+}
+
+/**
+ * Sets the likeFilterProperties to the given value
+ *
+ * @param {object} properties The properties for the like filter in the way the service needs them.
+ * @returns {void}
+ */
+function setLikeFilterProperties (properties) {
+    likeFilterProperties = properties;
+}
+
+export {buildFilter, buildStoredFilter, buildXmlFilter, setLikeFilterProperties};

@@ -5,11 +5,11 @@ export const badPathSymbol = Symbol("Path could not be resolved.");
  * to retrieve data.
  * Inspired by https://medium.com/javascript-inside/safely-accessing-deeply-nested-values-in-javascript-99bf72a0855a.
  *
- * @param {String[]} path The path of keys / indices to traverse through the object.
- * @param {Object} object The object to traverse.
+ * @param {object} object The object to traverse.
+ * @param {string[]} path The path of keys / indices to traverse through the object.
  * @returns {?*} The value(s) to be retrieved from the given object.
  */
-export default (path, object) => path.reduce(
+export default (object, path) => path.reduce(
     (acc, currentVal) => acc && Object.prototype.hasOwnProperty.call(acc, currentVal) ? acc[currentVal] : badPathSymbol,
     object
 );

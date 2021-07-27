@@ -578,7 +578,7 @@
                 "label": "Scala"
             },
             "wfsSearch": {
-                "noResults": "Non sono stati trovati risultati per i tuoi criteri di ricerca",
+                "noResults": "Non sono stati trovati risultati per i tuoi criteri di ricerca. Si prega di riprovare.",
                 "optionsPlaceholder": "Per favore, scegli un'opzione!",
                 "resetButton": "Azzerare",
                 "searchButton": "Cerca",
