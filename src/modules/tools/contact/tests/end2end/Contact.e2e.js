@@ -92,9 +92,7 @@ async function ContactTests ({builder, url, resolution, capability}) {
                 expect(await textInput.getAttribute("value")).to.equal("Test crashed? A happy little mistake.");
             });
 
-            it("making the view smaller keeps form in window", async function () {
-                const windowWidth = 500,
-                windowHeight = 420;
+            (isSafari(browsername) ? it.skip : it)("making the view smaller keeps form in window", async function () {
                 await driver.manage().window().setRect({width: windowWidth, height: windowHeight});
 
 
