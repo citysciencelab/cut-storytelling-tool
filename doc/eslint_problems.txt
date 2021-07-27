@@ -1,14 +1,7 @@
 
-/home/klaas/Projects/masterportal/src/modules/language/components/Language.vue
-  53:17  error  Anchors must have content and the content must be accessible by a screen reader  vuejs-accessibility/anchor-has-content
-
 /home/klaas/Projects/masterportal/src/modules/tools/fileImport/components/FileImport.vue
   149:21  error  @mouseover, @mouseenter, or @hover must be accompanied by @focusin or @focus for accessibility  vuejs-accessibility/mouse-events-have-key-events
   149:21  error  @mouseout or @mouseleave must be accompanied by @focusout or @blur for accessibility            vuejs-accessibility/mouse-events-have-key-events
-  173:25  error  Form label must have an associated control                                                      vuejs-accessibility/label-has-for
-
-/home/klaas/Projects/masterportal/src/modules/tools/gfi/components/themes/default/components/Default.vue
-  195:9  error  <iframe> elements must have a unique title property  vuejs-accessibility/iframe-has-title
 
 /home/klaas/Projects/masterportal/src/modules/tools/measure/components/Measure.vue
   122:29  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
@@ -18,8 +11,7 @@
   78:21  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
 
 /home/klaas/Projects/masterportal/src/modules/tools/searchByCoord/components/SearchByCoord.vue
-   98:25  error  Form label must have an associated control                                                                                                          vuejs-accessibility/label-has-for
-  102:29  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
+  103:29  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
 
 /home/klaas/Projects/masterportal/src/modules/tools/styleVT/components/StyleVT.vue
    86:25  error  @blur must be used instead of @change, unless absolutely necessary and it causes no negative consequences for keyboard only or screen reader users  vuejs-accessibility/no-onchange
@@ -31,14 +23,5 @@
 /home/klaas/Projects/masterportal/src/share-components/BasicResizeHandle.vue
   402:5  error  @mouseover, @mouseenter, or @hover must be accompanied by @focusin or @focus for accessibility  vuejs-accessibility/mouse-events-have-key-events
 
-/home/klaas/Projects/masterportal/src/share-components/Loader.vue
-  62:9   error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
-  82:13  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
-
-/home/klaas/Projects/masterportal/src/share-components/ToggleCheckbox.vue
-  75:9   error  Each form element must have a programmatically associated label element  vuejs-accessibility/form-control-has-label
-  85:13  error  Form label must have an associated control                               vuejs-accessibility/label-has-for
-  93:13  error  Form label must have an associated control                               vuejs-accessibility/label-has-for
-
-✖ 19 problems (19 errors, 0 warnings)
+✖ 10 problems (10 errors, 0 warnings)
 
