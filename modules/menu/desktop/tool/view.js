@@ -142,32 +142,27 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
      */
     checkItem: function () {
         Radio.trigger("ClickCounter", "toolChanged");
-        if (this.model.get("id") === "legend") {
+
+        if (!this.model.collection) {
+            // addons are initialized with 'new Tool(attrs, options);' Then the model is replaced after importing the addon.
+            // In that case 'this.model' of this class has not full content, e.g. collection is undefined --> replace it by the new model in the list
+            this.model = Radio.request("ModelList", "getModelByAttributes", {id: this.model.id});
+            // for the highlighting in the menu -> view-model-binding is lost by addons
+            this.listenTo(this.model, {
+                "change:isActive": this.toggleIsActiveClass
+            });
+        }
+        if (!this.model.get("isActive")) {
+            // active the tool if it is not active
+            // deactivate all other modules as long as the tool is not set to "keepOpen"
+            this.model.collection.setActiveToolsToFalse(this.model);
             this.model.setIsActive(true);
             store.dispatch("Tools/setToolActive", {id: this.model.id, active: true});
         }
         else {
-            if (!this.model.collection) {
-                // addons are initialized with 'new Tool(attrs, options);' Then the model is replaced after importing the addon.
-                // In that case 'this.model' of this class has not full content, e.g. collection is undefined --> replace it by the new model in the list
-                this.model = Radio.request("ModelList", "getModelByAttributes", {id: this.model.id});
-                // for the highlighting in the menu -> view-model-binding is lost by addons
-                this.listenTo(this.model, {
-                    "change:isActive": this.toggleIsActiveClass
-                });
-            }
-            if (!this.model.get("isActive")) {
-                // active the tool if it is not active
-                // deactivate all other modules as long as the tool is not set to "keepOpen"
-                this.model.collection.setActiveToolsToFalse(this.model);
-                this.model.setIsActive(true);
-                store.dispatch("Tools/setToolActive", {id: this.model.id, active: true});
-            }
-            else {
-                // deactivate tool if it is already active
-                this.model.setIsActive(false);
-                store.dispatch("Tools/setToolActive", {id: this.model.id, active: false});
-            }
+            // deactivate tool if it is already active
+            this.model.setIsActive(false);
+            store.dispatch("Tools/setToolActive", {id: this.model.id, active: false});
         }
 
         // Navigation is closed
