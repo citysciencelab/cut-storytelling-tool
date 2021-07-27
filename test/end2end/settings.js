@@ -172,18 +172,19 @@ function getCapabilities (testService) {
                 "accessKey": process.env.SAUCE_ACCESS_KEY,
                 "extendedDebugging": true
             }
-        },
-        baseSaucelabsMacOS = {
-            "host": "saucelabs",
-            "sauce:options": {
-                "screenResolution": "1920x1440",
-                /* eslint-disable-next-line no-process-env */
-                "username": process.env.SAUCE_USERNAME,
-                /* eslint-disable-next-line no-process-env */
-                "accessKey": process.env.SAUCE_ACCESS_KEY,
-                "extendedDebugging": true
-            }
         };
+    /*
+    baseSaucelabsMacOS = {
+    "host": "saucelabs",
+    "sauce:options": {
+    "screenResolution": "1920x1440", */
+    /* eslint-disable-next-line no-process-env */
+    //  "username": process.env.SAUCE_USERNAME,
+    /* eslint-disable-next-line no-process-env */
+    /*  "accessKey": process.env.SAUCE_ACCESS_KEY,
+    "extendedDebugging": true
+    }
+    }; */
 
     if (testService === "browserstack") {
         return [
@@ -201,7 +202,7 @@ function getCapabilities (testService) {
         {
             ...baseSaucelabs,
             "browserName": "chrome",
-            "browserVersion": "91",
+            "browserVersion": "latest",
             "platformName": "Windows 10"
         },
         {
@@ -215,13 +216,13 @@ function getCapabilities (testService) {
             "browserName": "MicrosoftEdge",
             "browserVersion": "latest",
             "platformName": "Windows 10"
-        },
+        } /* ,
         {
             ...baseSaucelabsMacOS,
             "browserName": "safari",
             "browserVersion": "latest",
             "platformName": "macOS 10.15"
-        }
+        } */
     ];
 
 }
