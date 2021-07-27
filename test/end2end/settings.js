@@ -201,7 +201,7 @@ function getCapabilities (testService) {
         {
             ...baseSaucelabs,
             "browserName": "chrome",
-            "browserVersion": "latest",
+            "browserVersion": "91",
             "platformName": "Windows 10"
         },
         {
