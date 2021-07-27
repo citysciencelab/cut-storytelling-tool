@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
-    {isMaster} = require("../../../../../../test/end2end/settings"),
+    {isMaster, isSafari} = require("../../../../../../test/end2end/settings"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {By, until} = webdriver;
 
@@ -13,7 +13,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ContactTests ({builder, url, resolution, capability}) {
+async function ContactTests ({builder, url, browsername, resolution, capability}) {
     // for a start, testing from 2D desktop mode
     const testIsApplicable = isMaster(url);
 
