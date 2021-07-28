@@ -14,6 +14,7 @@
 
 ### Changed
 - The GFI in attached mode now dynamically adjusts its size to the content.
+- Migrated the CompareFeatures Tool from Backbone.js to Vue.js.
 
 ### Deprecated
 
@@ -37,10 +38,6 @@
 - The package eslint-plugin-chai-friendly was updated to version 0.7.1.
 - The package eslint-plugin-vue was updated to version 7.11.1.
 - The package eslint-plugin-you-dont-need-lodash-underscore was updated to version 6.12.0.
-
-### Deprecated
-
-### Removed
 
 ### Fixed
 - Styled Vector Layers with multiple conditions can now be printed.
@@ -68,10 +65,6 @@
 - The translation for the url in the staticlink in config.json has been removed.
 - Issue #617: Update description of the attribute '"extent"' for layer configurations in config.json.md.
 
-### Deprecated
-
-### Removed
-
 ### Fixed
 - Now Sensor Layer will show 0 if the dataValue is 0 and not "no data".
 - In GFI the layerTitle was shortened in case it contains a colon.
@@ -97,7 +90,6 @@
 ### Changed
 - Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.
 - Tool addons are now also written in config.json in camelCase.
-- Migrated the CompareFeatures Tool from Backbone.js to Vue.js.
 - colorTools are renamed into convertColor (src/utils/convertColor)
 - Updates the core-js and babel dependencies in the package.json
 - Update the dependency caniuse-lite.
