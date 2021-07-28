@@ -73,7 +73,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 require("../../src/modules/controls/zoom/test/end2end/Zoom.e2e.js"),
 
                 // modules/menu
-                require("./tests/modules/menu/Layers.js"),
+                // require("./tests/modules/menu/Layers.js"),
 
                 // modules/searchbar
                 require("./tests/modules/searchbar/SearchCategories.js"),
