@@ -7,6 +7,8 @@ import differenceJS from "../../../../utils/differenceJS";
 import sortBy from "../../../../utils/sortBy";
 import LoaderOverlay from "../../../../utils/loaderOverlay";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
+import {getRecordById} from "../../../../api/csw/getRecordById";
+import {omit} from "../../../../utils/objectHelpers";
 
 export default {
     /**
@@ -25,7 +27,8 @@ export default {
             serviceUrl = serviceUrl + state.printAppId + "/capabilities.json";
             const serviceRequest = {
                 "serviceUrl": serviceUrl,
-                "requestType": "GET"
+                "requestType": "GET",
+                "onSuccess": "parseMapfishCapabilities"
             };
 
             dispatch("sendRequest", serviceRequest);
@@ -38,6 +41,7 @@ export default {
      * @returns responsedata
      */
     sendRequest: function ({state, dispatch}, serviceRequest) {
+        debugger;
         /**
          * @deprecated in the next major-release!
          * useProxy
@@ -47,10 +51,9 @@ export default {
 
         axios({
             url: url,
-            type: serviceRequest.requestType,
-            context: this
+            type: serviceRequest.requestType
         }).then(response => {
-            dispatch("parseMapfishCapabilities", response.data);
+            dispatch(String(serviceRequest.onSuccess), response.data);
         });
     },
     /**
@@ -68,9 +71,10 @@ export default {
         dispatch("getAttributeInLayoutByName", "scale");
         commit("setFormatList", response.formats);
         commit("setCurrentScale", Radio.request("MapView", "getOptions").scale);
-        dispatch("togglePostrenderListener", true);
+        dispatch("togglePostrenderListener");
         if (state.isGfiAvailable) {
-            //buildSpec.buildGfi(state.isGfiSelected, Radio.request("GFI", "getGfiForPrint"));
+            dispatch("getGfiForPrint");
+            SpecModel.buildGfi(state.isGfiSelected, state.gfiForPrint);
         }
     },
 
@@ -83,6 +87,15 @@ export default {
         const currentLayout = layouts.filter(layout => layout.name === state.currentLayoutName);
 
         commit("setCurrentLayout", currentLayout.length === 1 ? currentLayout[0] : layouts[0]);
+    },
+
+    getGfiForPrint: function ({rootGetters, commit}) {
+        if (rootGetters["Tools/Gfi/currentFeature"] !== null) {
+            commit("setGfiForPrint", [rootGetters["Tools/Gfi/currentFeature"].getMappedProperties(), rootGetters["Tools/Gfi/currentFeature"].getTitle(), rootGetters["Tools/Map/clickCoord"]]);
+        }
+        else {
+            commit("setGfiForPrint", []);
+        }
     },
 
     /**
@@ -404,7 +417,8 @@ export default {
         commit("setScaleList", layoutMapInfo.scales.sort((a, b) => a - b));
     },
 
-    print: function ({state, dispatch}) {
+    startPrint: function ({state, dispatch}) {
+        debugger;
         dispatch("getVisibleLayer");
         const visibleLayerList = state.visibleLayerList,
             attr = {
@@ -424,7 +438,7 @@ export default {
 
         let spec = SpecModel;
 
-        spec.set(attr);
+        spec.setAttributes(attr);
 
         if (state.isMetaDataAvailable) {
             spec.setMetadata(true);
@@ -446,9 +460,73 @@ export default {
             spec.setLegend({});
             spec.setShowLegend(false);
             spec = spec.toJSON();
-            spec = Radio.request("Util", "omit", spec, ["uniqueIdList"]);
-            dispatch("createPrintJob", (encodeURIComponent(JSON.stringify(spec)), state.printAppId, state.currentFormat));
+            spec = omit(spec, ["uniqueIdList"]);
+            const printJob = {
+                "payload": encodeURIComponent(JSON.stringify(spec)),
+                "printAppId": state.printAppId,
+                "currentFormat": state.currentFormat
+            };
+
+            dispatch("createPrintJob", printJob);
         }
+    },
+
+    getMetaDataForPrint: async function ({rootGetters, dispatch}, cswObj, layer) {
+        let metadata;
+
+        if (layer.get("datasets") && Array.isArray(layer.get("datasets")) && layer.get("datasets")[0] !== null && typeof layer.get("datasets")[0] === "object") {
+            cswObj.cswUrl = Object.prototype.hasOwnProperty.call(layer.get("datasets")[0], "csw_url") ? layer.get("datasets")[0].csw_url : null;
+        }
+
+        cswObj.parsedData = {};
+
+        if (cswObj.cswUrl === null || typeof cswObj.cswUrl === "undefined") {
+            const cswId = Config.cswId || "3",
+                cswService = Radio.request("RestReader", "getServiceById", cswId);
+
+            cswObj.cswUrl = cswService.get("url");
+        }
+
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        if (rootGetters.metadata.useProxy.includes(cswObj.cswUrl)) {
+            metadata = await getRecordById(getProxyUrl(cswObj.cswUrl), cswObj.metaId);
+        }
+        else {
+            metadata = await getRecordById(cswObj.cswUrl, cswObj.metaId);
+        }
+
+        if (typeof metadata === "undefined") {
+            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.layerInformation.errorMessage", {cswObjCswUrl: cswObj.cswUrl}));
+        }
+        else {
+            cswObj.parsedData = {};
+            cswObj.parsedData.orgaOwner = metadata.getOwner().name || "n.N.";
+            cswObj.parsedData.address = {
+                street: metadata.getOwner().street || "",
+                housenr: "",
+                postalCode: metadata.getOwner().postalCode || "",
+                city: metadata.getOwner().city || ""
+            };
+            cswObj.parsedData.email = metadata.getOwner().email || "n.N.";
+            cswObj.parsedData.tel = metadata.getOwner().phone || "n.N.";
+            cswObj.parsedData.url = metadata.getOwner().link || "n.N.";
+
+            if (typeof metadata.getRevisionDate() !== "undefined") {
+                cswObj.parsedData.date = metadata.getRevisionDate();
+            }
+            else if (typeof metadata.getPublicationDate() !== "undefined") {
+                cswObj.parsedData.date = metadata.getPublicationDate();
+            }
+            else if (typeof metadata.getCreationDate() !== "undefined") {
+                cswObj.parsedData.date = metadata.getCreationDate();
+            }
+        }
+
+        SpecModel.fetchedMetaData();
     },
 
     /**
@@ -458,13 +536,78 @@ export default {
      * @param {String} format - print job output format
      * @returns {void}
      */
-    createPrintJob: function (payload, printAppId, format) {
-        const printId = printAppId || this.get("printAppId"),
-            printFormat = format || this.get("currentFormat"),
-            url = this.get("mapfishServiceUrl") + printId + "/report." + printFormat;
+    createPrintJob: async function ({state, dispatch}, printJob) {
+        debugger;
+        const printId = printJob.printAppId || state.printAppId,
+            printFormat = printJob.format || state.currentFormat,
+            url = state.mapfishServiceUrl + printId + "/report." + printFormat,
+            serviceRequest = {
+                "serviceUrl": url,
+                "requestType": "POST",
+                "onSuccess": "waitForPrintJob",
+                "payload": printJob.payload
+            };
+        let response = "";
 
         LoaderOverlay.show();
-        this.sendRequest(url, "POST", this.waitForPrintJob, payload);
+        response = await axios.post(url, printJob.payload);
+
+        dispatch("waitForPrintJob", response.data);
     },
 
+    /**
+     * Sends a request to get the status for a print job until it is finished.
+     * @param {JSON} response - Response of print job.
+     * @returns {void}
+     */
+    waitForPrintJob: function ({state, dispatch}, response) {
+        const printAppId = state.printAppId,
+            url = state.mapfishServiceUrl + printAppId + "/status/" + response.ref + ".json",
+            serviceRequest = {
+                "serviceUrl": url,
+                "requestType": "GET",
+                "onSuccess": "waitForPrintJobSuccess"
+            };
+
+        debugger;
+        dispatch("sendRequest", serviceRequest);
+    },
+
+    waitForPrintJobSuccess: function ({state, dispatch}, response) {
+        debugger;
+        // Error processing...
+        if (response.status === "error") {
+            console.log("Error: " + response.error);
+        }
+        else {
+            LoaderOverlay.hide();
+            debugger;
+            const subUrl = response.downloadURL.replace("/mapfish_print_internet/print/report/", ""),
+                fileSpecs = {
+                    "fileUrl": state.mapfishServiceUrl + state.printAppId + "/report/" + subUrl,
+                    "filename": state.filename
+                };
+
+            dispatch("downloadFile", fileSpecs);
+        }
+    },
+    /**
+     * Starts the download from printfile,
+     * @param {String} fileUrl The url to dwonloadfile.
+     * @param {String} filename The name of the donwloadfile.
+     * @returns {void}
+     */
+    downloadFile: function ({state}, fileSpecs) {
+        debugger;
+        const link = document.createElement("a");
+
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        link.href = state.useProxy ? getProxyUrl(fileSpecs.fileUrl) : fileSpecs.fileUrl;
+        link.download = fileSpecs.filename;
+        link.click();
+    }
 };
