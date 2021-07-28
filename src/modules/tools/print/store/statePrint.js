@@ -41,6 +41,7 @@ const state = {
     isGfiSelected: false,
     // true if gfi is active
     isGfiActive: false,
+    gfiForPrint: null,
     // true if the current layout supports legend
     isLegendAvailable: false,
     legendAttribute: null,
@@ -68,7 +69,8 @@ const state = {
     visibleLayerList: [],
     zoomLevel: null,
     hintInfo: "",
-    // spec: new BuildSpecModel(),
+    mapfishServiceUrl: "",
+    showHintInfoScale: false,
     /**
      * @deprecated in the next major-release!
      * useProxy

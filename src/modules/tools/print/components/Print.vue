@@ -1,6 +1,5 @@
 <script>
 import {mapGetters, mapMutations, mapActions} from "vuex";
-import getComponent from "../../../../utils/getComponent";
 import Tool from "../../Tool.vue";
 import getters from "../store/gettersPrint";
 import mutations from "../store/mutationsPrint";
@@ -16,7 +15,6 @@ export default {
     computed: {
         ...mapGetters("Tools/Print", Object.keys(getters)),
         ...mapGetters(["printSettings"]),
-        ...mapActions("Tools/Print", Object.keys(actions)),
         ...mapGetters("Map", ["scales, clickCoord"]),
         ...mapGetters("Tools/Gfi", ["currentFeature"]),
         currentMapScale: {
@@ -25,6 +23,14 @@ export default {
             },
             set (value) {
                 this.$store.commit("Map/setScale", value);
+            }
+        },
+        documentTitle: {
+            get () {
+                return this.title;
+            },
+            set (value) {
+                this.setTitle(value);
             }
         }
     },
@@ -55,46 +61,28 @@ export default {
         ...mapActions("Tools/Print", [
             "retrieveCapabilites",
             "togglePostrenderListener",
-            "getVisibleLayer"
+            "createMapFishServiceUrl",
+            "getVisibleLayer",
+            "startPrint"
         ]),
 
         returnScale (scale) {
             return scale < 10000 ? scale : scale.toString().substring(0, scale.toString().length - 3) + " " + scale.toString().substring(scale.toString().length - 3);
         },
-        /**
-         * Showing the hint information if the current print scale and the current map scale are not the same
-         * @param {Event} evt - event that triggered from the mouseenter or mouseleave action
-         * @returns {void}
-         */
-        showHintInfoScale (evt) {
-            if (!evt?.type) {
-                return;
-            }
 
-            if (evt.type === "mouseenter") {
-                document.querySelector(".hint-info").style.display = "block";
-            }
-            else {
-                document.querySelector(".hint-info").style.display = "none";
-            }
-        },
-
-        isGfiAvailable () {
+        showGfiAvailable () {
             return this.isGfiAvailable;
         },
 
-        isGfiActive () {
+        showGfiActive () {
             if (this.currentFeature !== null) {
                 return true;
             }
             return false;
         },
 
-        getGfiForPrint () {
-            if (this.currentFeature !== null) {
-                return [this.currentFeature.getMappedProperties(), this.currentFeature.getTitle(), this.clickCoord];
-            }
-            return [];
+        showHintInfoScale () {
+            return this.showHintInfoScale; 
         },
 
         /**
@@ -102,21 +90,11 @@ export default {
          * @returns {void}
          */
         print () {
-            // set the Title to the input shit
-            // dispatch them print
-        },
-
-        updateScale (scale) {
-            debugger;
-            this.setCurrentScale = scale;
+            this.startPrint();
         },
 
         selectGfi (evt) {
             this.setIsGfiSelected = evt.target.checked;
-        },
-
-        isGfiSelected () {
-            return this.isGfiSelected;
         },
 
         /**
@@ -149,10 +127,10 @@ export default {
                     <label class="col-sm-5 control-label">{{ $t("common:modules.tools.print.titleLabel") }}</label>
                     <div class="col-sm-7">
                         <input
+                            v-model="documentTitle"
                             type="text"
                             class="form-control"
                             maxLength="45"
-                            :value="title"
                         >
                     </div>
                 </div>
@@ -200,13 +178,13 @@ export default {
                         <select
                             id="printScale"
                             class="form-control input-sm"
+                            @change="setCurrentScale($event.target.value)"
                         >
                             <option
                                 v-for="(scale, i) in scaleList"
                                 :key="i"
                                 :value="scale"
                                 :selected="scale === currentScale"
-                                @click="updateScale(scale)"
                             >
                                 1 : {{ returnScale(scale) }}
                             </option>
@@ -215,10 +193,15 @@ export default {
                     <div
                         v-if="currentScale !== currentMapScale"
                         class="hint"
+                        @mouseover="showHintInfoScale = true"
+                        @mouseleave="showHintInfoScale = false"
                     >
                         <span class="glyphicon glyphicon-info-sign" />
                     </div>
-                    <div class="hint-info">
+                    <div
+                        v-show="showHintInfoScale"
+                        class="hint-info"
+                    >
                         {{ $t("common:modules.tools.print.hintInfoScale") }}
                     </div>
                 </div>
@@ -239,7 +222,7 @@ export default {
                     </div>
                 </div>
                 <div
-                    v-if="isGfiAvailable && isGfiActive"
+                    v-if="showGfiAvailable && showGfiActive"
                     class="form-group form-group-sm"
                 >
                     <label class="col-sm-5 control-label">
@@ -250,7 +233,6 @@ export default {
                             <input
                                 id="printGfi"
                                 type="checkbox"
-                                :value="isGfiSelected"
                                 :checked="isGfiSelected"
                                 @click="selectGfi"
                             >
@@ -262,6 +244,7 @@ export default {
                         <button
                             type="button"
                             class="btn btn-lgv-grey btn-block"
+                            @click="print"
                         >
                             {{ $t("common:modules.tools.print.printLabel") }}
                         </button>

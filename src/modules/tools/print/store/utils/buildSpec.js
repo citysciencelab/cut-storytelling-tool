@@ -3,25 +3,25 @@ import {Point} from "ol/geom.js";
 import {fromCircle} from "ol/geom/Polygon.js";
 import Feature from "ol/Feature.js";
 import {GeoJSON} from "ol/format.js";
-import {Image, Tile, Vector, Group} from "ol/layer.js";
+import {Group, Image, Tile, Vector} from "ol/layer.js";
+import store from "../../../../../app-store/index";
 import isObject from "../../../../../utils/isObject";
+import differenceJS from "../../../../../utils/differenceJS";
 import Geometry from "ol/geom/Geometry";
 
 const BuildSpecModel = {
-    uniqueIdList: [],
-    /**
-     * Model to generate the buildSpec JSON that is send to the mapfish-print-3 service.
-     * @class BuildSpecModel.
-     * @memberof Tools.Print
-     * @extends Backbone.Model
-     * @constructs
-     * @fires CswParser#RadioTriggerCswParserGetMetaData
-     * @listens CswParser#RadioTriggerCswParserFetchedMetaData
-     */
-    initialize: function () {
-        this.listenTo(Radio.channel("CswParser"), {
-            "fetchedMetaDataForPrint": this.fetchedMetaData
-        });
+    defaults: {
+        uniqueIdList: [],
+        visibleLayerIds: null,
+        attributes: {
+            map: null,
+            title: "",
+            showLegend: false,
+            legend: "",
+            showGfi: false,
+            gfi: null,
+            scale: null
+        }
     },
 
     /**
@@ -31,13 +31,22 @@ const BuildSpecModel = {
      * @returns {void}
      */
     fetchedMetaData: function (cswObj) {
+        debugger;
         if (this.isOwnMetaRequest(this.uniqueIdList, cswObj.uniqueId)) {
-            this.removeUniqueIdFromList(this.get("uniqueIdList"), cswObj.uniqueId);
+            this.removeUniqueIdFromList(this.uniqueIdList, cswObj.uniqueId);
             this.updateMetaData(cswObj.layerName, cswObj.parsedData);
-            if (this.get("uniqueIdList").length === 0) {
-                Radio.trigger("Print", "createPrintJob", encodeURIComponent(JSON.stringify(this.toJSON())));
+            if (this.uniqueIdList.length === 0) {
+                store.dispatch("Print/createPrintJob", encodeURIComponent(JSON.stringify(this.defaults.toJSON())));
             }
         }
+    },
+
+    setAttributes: function (attr) {
+        this.defaults.attributes.map = attr.attributes.map;
+        this.defaults.attributes.title = attr.attributes.title;
+        this.defaults.layout = attr.layout;
+        this.defaults.outputFilename = attr.outputFilename;
+        this.defaults.outputFormat = attr.outputFormat;
     },
 
     /**
@@ -57,7 +66,7 @@ const BuildSpecModel = {
      * @returns {void}
      */
     removeUniqueIdFromList: function (uniqueIdList, uniqueId) {
-        this.setUniqueIdList(Radio.request("Util", "differenceJs", uniqueIdList, [uniqueId]));
+        this.setUniqueIdList(differenceJS(uniqueIdList, [uniqueId]));
     },
 
     /**
@@ -67,7 +76,7 @@ const BuildSpecModel = {
      * @returns {void}
      */
     updateMetaData: function (layerName, parsedData) {
-        const layers = Object.prototype.hasOwnProperty.call(this.get("attributes"), "legend") && this.get("attributes").legend?.layers ? this.get("attributes").legend.layers : undefined,
+        const layers = Object.prototype.hasOwnProperty.call(this.defaults.attributes, "legend") && this.defaults.attributes.legend?.layers ? this.attributes.defaults.legend.layers : undefined,
             layer = Radio.request("Util", "findWhereJs", layers, {layerName: layerName});
 
         if (layer !== undefined) {
@@ -152,7 +161,7 @@ const BuildSpecModel = {
      */
     buildLayers: function (layerList) {
         const layers = [],
-            attributes = this.get("attributes"),
+            attributes = this.defaults.attributes,
             currentResolution = Radio.request("MapView", "getOptions")?.resolution,
             visibleLayerIds = [];
 
@@ -383,21 +392,23 @@ const BuildSpecModel = {
             "version": "2"
         };
 
-        features.forEach(function (feature) {
+        features.forEach(feature => {
             const styles = this.getFeatureStyle(feature, layer),
-                styleAttribute = this.getStyleAttribute(layer, feature);
+                styleAttributes = this.getStyleAttributes(layer, feature);
 
             let clonedFeature,
-                stylingRule,
-                stylingRuleSplit,
+                stylingRules,
+                stylingRulesSplit,
                 styleObject,
                 geometryType,
                 styleGeometryFunction;
 
-            styles.forEach(function (style, index) {
+            styles.forEach((style, index) => {
                 if (style !== null) {
                     clonedFeature = feature.clone();
-                    clonedFeature.set(styleAttribute, clonedFeature.get(styleAttribute) + "_" + String(index));
+                    styleAttributes.forEach(attribute => {
+                        clonedFeature.set(attribute, (clonedFeature.get("features") ? clonedFeature.get("features")[0] : clonedFeature).get(attribute) + "_" + String(index));
+                    });
                     geometryType = feature.getGeometry().getType();
 
                     // if style has geometryFunction, take geometry from style Function
@@ -406,16 +417,27 @@ const BuildSpecModel = {
                         clonedFeature.setGeometry(styleGeometryFunction(clonedFeature));
                         geometryType = styleGeometryFunction(clonedFeature).getType();
                     }
-                    stylingRule = this.getStylingRule(layer, clonedFeature, styleAttribute, style);
-                    stylingRuleSplit = stylingRule.split("=");
+                    stylingRules = this.getStylingRules(layer, clonedFeature, styleAttributes, style);
+                    stylingRulesSplit = stylingRules
+                        .replaceAll("[", "")
+                        .replaceAll("]", "")
+                        .replaceAll("*", "")
+                        .split(",")
+                        .map(rule => rule.split("="));
 
-                    if (stylingRuleSplit.length > 0) {
-                        this.unsetStringPropertiesOfFeature(clonedFeature, stylingRuleSplit[0].substring(1));
+                    stylingRules = stylingRules.replaceAll(",", " AND ");
+
+                    if (Array.isArray(stylingRulesSplit) && stylingRulesSplit.length) {
+                        stylingRulesSplit.forEach(rule => {
+                            if (Array.isArray(rule) && rule.length) {
+                                this.unsetStringPropertiesOfFeature(clonedFeature, rule[0]);
+                            }
+                        });
                     }
                     this.addFeatureToGeoJsonList(clonedFeature, geojsonList);
 
                     // do nothing if we already have a style object for this CQL rule
-                    if (Object.prototype.hasOwnProperty.call(mapfishStyleObject, stylingRule)) {
+                    if (Object.prototype.hasOwnProperty.call(mapfishStyleObject, stylingRules)) {
                         return;
                     }
 
@@ -440,10 +462,11 @@ const BuildSpecModel = {
                     if (style.getText() !== null && style.getText() !== undefined) {
                         styleObject.symbolizers.push(this.buildTextStyle(style.getText()));
                     }
-                    mapfishStyleObject[stylingRule] = styleObject;
+
+                    mapfishStyleObject[stylingRules] = styleObject;
                 }
-            }.bind(this));
-        }.bind(this));
+            });
+        });
         return mapfishStyleObject;
     },
 
@@ -536,7 +559,7 @@ const BuildSpecModel = {
         }
         else if (origin.indexOf("localhost") === -1) {
             // backwards-compatibility:
-            url = origin + "/lgv-config/img" + this.getImageName(src);
+            url = origin + "/lgv-config/img/" + this.getImageName(src);
         }
         else if (src.indexOf("data:image/svg+xml;charset=utf-8") === 0) {
             url = src;
@@ -770,13 +793,13 @@ const BuildSpecModel = {
         let convertedFeature;
 
         if (feature.get("features") && feature.get("features").length === 1) {
-            feature.get("features").forEach(function (clusteredFeature) {
+            feature.get("features").forEach((clusteredFeature) => {
                 convertedFeature = this.convertFeatureToGeoJson(clusteredFeature);
 
                 if (convertedFeature) {
                     geojsonList.push(convertedFeature);
                 }
-            }.bind(this));
+            });
         }
         else {
             convertedFeature = this.convertFeatureToGeoJson(feature);
@@ -818,7 +841,7 @@ const BuildSpecModel = {
             convertedFeature = undefined;
         }
         // if its a cluster remove property features
-        if (Object.prototype.hasOwnProperty.call(convertedFeature.properties, "features")) {
+        if (convertedFeature.properties && Object.prototype.hasOwnProperty.call(convertedFeature.properties, "features")) {
             delete convertedFeature.properties.features;
         }
         return convertedFeature;
@@ -848,102 +871,110 @@ const BuildSpecModel = {
     },
 
     /**
-     * returns the rule for styling a feature
+     * Returns the rules for styling of a feature
+     *
      * @param {ol.Feature} layer -
      * @param {ol.Feature} feature -
-     * @param {string} styleAttribute - the attribute by whose value the feature is styled
-     * @param {ol.style} style style
+     * @param {String[]} styleAttributes The attribute by whose value the feature is styled.
+     * @param {ol.style.Style} style style
      * @returns {string} an ECQL Expression
      */
-    getStylingRule: function (layer, feature, styleAttribute, style) {
+    getStylingRules: function (layer, feature, styleAttributes, style) {
         const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
-            styleAttr = feature.get("styleId") ? "styleId" : styleAttribute;
+            styleAttr = feature.get("styleId") ? "styleId" : styleAttributes;
         let styleModel,
             labelField,
             labelValue;
 
-        if (styleAttr === "" && feature.get("features") && feature.get("features").length === 1) {
-            const singleFeature = new Feature({
-                properties: feature.get("features")[0].getProperties(),
-                geometry: feature.get("features")[0].getGeometry()
-            });
+        if (styleAttr.length === 1 && styleAttr[0] === "") {
+            if (feature.get("features") && feature.get("features").length === 1) {
+                const singleFeature = new Feature({
+                    properties: feature.get("features")[0].getProperties(),
+                    geometry: feature.get("features")[0].getGeometry()
+                });
 
-            feature.get("features")[0] = singleFeature;
-            if (style.getImage().getSrc().indexOf("data:image/svg+xml;charset=utf-8") === 0) {
-                singleFeature.setId("first_svg_" + singleFeature.ol_uid);
-            }
-            else {
-                singleFeature.setId("second_png_" + singleFeature.ol_uid);
-            }
-            singleFeature.set(singleFeature.getId(), String(feature.get("features").length));
-            return "[" + singleFeature.getId() + "='" + String(feature.get("features").length) + "']";
+                feature.get("features")[0] = singleFeature;
+                if (style.getImage().getSrc().indexOf("data:image/svg+xml;charset=utf-8") === 0) {
+                    singleFeature.setId("first_svg_" + singleFeature.ol_uid);
+                }
+                else {
+                    singleFeature.setId("second_png_" + singleFeature.ol_uid);
+                }
+                singleFeature.set(singleFeature.getId(), String(feature.get("features").length));
+                return "[" + singleFeature.getId() + "='" + String(feature.get("features").length) + "']";
 
-        }
-        else if (styleAttr === "" && feature.get("features") !== undefined) {
-            if (style !== undefined && style.getText().getText() !== undefined) {
-                feature.set("sensorClusterStyle", feature.get("features")[0].ol_uid + "_" + String(style.getText().getText()));
-                return "[sensorClusterStyle='" + feature.get("features")[0].ol_uid + "_" + String(style.getText().getText()) + "']";
             }
-        }
-        else if (styleAttr === "") {
+            if (feature.get("features") !== undefined) {
+                if (style !== undefined && style.getText().getText() !== undefined) {
+                    feature.set("sensorClusterStyle", feature.get("features")[0].ol_uid + "_" + String(style.getText().getText()));
+                    return "[sensorClusterStyle='" + feature.get("features")[0].ol_uid + "_" + String(style.getText().getText()) + "']";
+                }
+            }
+
             return "*";
         }
         // cluster feature with geometry style
-        else if (feature.get("features") !== undefined) {
-            if (style !== undefined && style.getText().getText() !== undefined) {
-                feature.set(styleAttr, feature.get("features")[0].get(styleAttr) + "_" + String(style.getText().getText()));
-                return "[" + styleAttr + "='" + feature.get("features")[0].get(styleAttr) + "_" + String(style.getText().getText()) + "']";
+        if (feature.get("features") !== undefined) {
+            if ((style !== undefined && style.getText().getText() !== undefined) || feature.get("features").length > 1) {
+                const value = feature.get("features")[0].get(styleAttr[0])
+                    + "_"
+                    + style !== undefined && style.getText().getText() !== undefined ? style.getText().getText() : "cluster";
+
+                feature.set(styleAttr[0], value);
+                return `[${styleAttr[0]}='${value}']`;
+
             }
-            else if (feature.get("features").length > 1) {
-                feature.set(styleAttr, feature.get("features")[0].get(styleAttr) + "_cluster");
-                return "[" + styleAttr + "='" + feature.get("features")[0].get(styleAttr) + "_cluster']";
-            }
-            return "[" + styleAttr + "='" + feature.get("features")[0].get(styleAttr) + "']";
+
+            // Current feature is not clustered but a single feature in a clustered layer
+            return styleAttr.reduce((acc, curr) => {
+                const value = feature.get("features")[0].get(curr);
+
+                feature.set(curr, value);
+                return acc + `${curr}='${value}',`;
+            }, "[").slice(0, -1) + "]";
         }
         // feature with geometry style and label style
-        else if (layerModel !== undefined && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
+        if (layerModel !== undefined && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
             styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+
             if (styleModel !== undefined && styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
                 labelField = styleModel.get("labelField");
                 labelValue = feature.get(labelField);
-                return "[" + styleAttr + "='" + feature.get(styleAttr) + "' AND " + labelField + "='" + labelValue + "']";
+                return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}' AND ${labelField}='${labelValue}',`, "[").slice(0, -1)
+                    + "]";
             }
-            // feature with geometry style
-            return "[" + styleAttr + "='" + feature.get(styleAttr) + "']";
         }
         // feature with geometry style
-        return "[" + styleAttr + "='" + feature.get(styleAttr) + "']";
+        return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}',`, "[").slice(0, -1)
+            + "]";
     },
 
     /**
      * @param {ol.Layer} layer -
      * @param {ol.feature} feature - the feature of current layer
-     * @returns {String} the attribute by whose value the feature is styled
+     * @returns {String[]} the attributes by whose value the feature is styled
      */
-    getStyleAttribute: function (layer, feature) {
+    getStyleAttributes: function (layer, feature) {
         const layerId = layer.get("id");
-
         let layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
-            styleField = "styleId",
-            styleList,
-            ruleFeature;
-
+            styleFields = ["styleId"];
 
         if (layerModel !== undefined) {
+            const styleList = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+
             layerModel = this.getChildModelIfGroupLayer(layerModel, layerId);
-            styleList = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+
             if (layerModel.get("styleId")) {
-                if (styleList !== undefined) {
-                    ruleFeature = styleList.getRulesForFeature(feature);
-                    styleField = ruleFeature.length && ruleFeature[0] && Object.prototype.hasOwnProperty.call(ruleFeature[0], "conditions") ? Object.keys(ruleFeature[0].conditions.properties)[0] : "";
-                }
-                else {
-                    styleField = styleList.get("styleField");
-                }
+                const featureRules = styleList.getRulesForFeature(feature);
+
+                styleFields = featureRules?.[0]?.conditions ? Object.keys(featureRules[0].conditions.properties) : [""];
+            }
+            else {
+                styleFields = [styleList.get("styleField")];
             }
         }
 
-        return styleField;
+        return styleFields;
     },
 
     /**
@@ -1007,7 +1038,7 @@ const BuildSpecModel = {
     buildLegend: function (isLegendSelected, isMetaDataAvailable) {
         const legendObject = {},
             metaDataLayerList = [],
-            legends = state.Legend.legends;
+            legends = store.state.Legend.legends;
 
         if (isLegendSelected && legends.length > 0) {
             legendObject.layers = [];
@@ -1022,9 +1053,9 @@ const BuildSpecModel = {
                     if (legendContainsPdf) {
                         Radio.trigger("Alert", "alert", {
                             kategorie: "alert-info",
-                            text: "<b>Der Layer \"" + legendObj.name + "\" enthält eine als PDF vordefinierte Legende. " +
-                                "Diese kann nicht in den Ausdruck mit aufgenommen werden.</b><br>" +
-                                "Sie können sich die vordefinierte Legende aus der Legende im Menü separat herunterladen."
+                            text: "<b>The layer \"" + legendObj.name + "\" contains a pre-defined Legend. " +
+                                "This legens cannot be added to the print.</b><br>" +
+                                "You can download the pre-defined legend from the download menu seperately."
                         });
                     }
                     else {
@@ -1037,16 +1068,20 @@ const BuildSpecModel = {
 
             });
         }
-
+        debugger;
         this.setShowLegend(isLegendSelected);
         this.setLegend(legendObject);
         if (isMetaDataAvailable && metaDataLayerList.length > 0) {
-            metaDataLayerList.forEach(function (layerName) {
+            metaDataLayerList.forEach((layerName) => {
                 this.getMetaData(layerName);
-            }.bind(this));
+            });
         }
         else {
-            Radio.trigger("Print", "createPrintJob", encodeURIComponent(JSON.stringify(this.toJSON())));
+            const printJob = {
+                "payload": encodeURIComponent(JSON.stringify(this.defaults))
+            };
+
+            store.dispatch("Tools/Print/createPrintJob", printJob);
         }
     },
 
@@ -1180,7 +1215,7 @@ const BuildSpecModel = {
                 });
 
             }
-            this.addGfiFeature(this.get("attributes").map.layers, gfiArray[2]);
+            this.addGfiFeature(this.defaults.attributes.map.layers, gfiArray[2]);
         }
         this.setShowGfi(isGfiSelected);
         this.setGfi(gfiObject);
@@ -1258,7 +1293,7 @@ const BuildSpecModel = {
      * @returns {void}
      */
     setMetadata: function (value) {
-        this.get("attributes").metadata = value;
+        this.defaults.attributes.metadata = value;
     },
 
     /**
@@ -1267,7 +1302,7 @@ const BuildSpecModel = {
      * @returns {void}
      */
     setShowLegend: function (value) {
-        this.get("attributes").showLegend = value;
+        this.defaults.attributes.showLegend = value;
     },
 
     /**
@@ -1276,7 +1311,7 @@ const BuildSpecModel = {
      * @returns {void}
      */
     setLegend: function (value) {
-        this.get("attributes").legend = value;
+        this.defaults.attributes.legend = value;
     },
 
     /**
@@ -1285,7 +1320,7 @@ const BuildSpecModel = {
      * @returns {void}
      */
     setShowGfi: function (value) {
-        this.get("attributes").showGfi = value;
+        this.defaults.attributes.showGfi = value;
     },
 
     /**
@@ -1294,7 +1329,7 @@ const BuildSpecModel = {
      * @returns {void}
      */
     setGfi: function (value) {
-        this.get("attributes").gfi = value;
+        this.defaults.attributes.gfi = value;
     },
 
     /**
@@ -1303,7 +1338,7 @@ const BuildSpecModel = {
      * @returns {void}
      */
     setScale: function (value) {
-        this.get("attributes").scale = value;
+        this.defaults.attributes.scale = value;
     },
 
     /**
@@ -1312,7 +1347,7 @@ const BuildSpecModel = {
      * @returns {void}
      */
     setUniqueIdList: function (value) {
-        this.set("uniqueIdList", value);
+        this.defaults.uniqueIdList = value;
     },
 
     /**
@@ -1321,7 +1356,7 @@ const BuildSpecModel = {
      * @returns {void}
      */
     setVisibleLayerIds: function (value) {
-        this.set("visibleLayerIds", value);
+        this.defaults.visibleLayerIds = value;
     }
 };
 

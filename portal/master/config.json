@@ -457,7 +457,7 @@
             "printAppId": "master",
             "filename": "Ausdruck",
             "title": "Mein Titel",
-            "currentLayoutName": "A3 Hochformat",
+            "currentLayoutName": "A4 Hochformat",
             "dpiForPdf": 120
           },
           "scaleSwitcher":
