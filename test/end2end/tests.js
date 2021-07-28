@@ -59,50 +59,50 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
 
         const suites = [
                 // src/modules/controls
-                require("../../src/modules/controls/attributions/tests/end2end/Attributions.e2e.js"),
-                require("../../src/modules/controls/backForward/tests/end2end/BackForward.e2e.js"),
+                /* require("../../src/modules/controls/attributions/tests/end2end/Attributions.e2e.js"),
+                require("../../src/modules/controls/backForward/tests/end2end/BackForward.e2e.js"), */
                 // TODO - uncommented Button3D because the pipeline takes too long
                 // require("./tests/modules/controls/Button3D.js"),
                 // TODO pull OB to different suites array - maybe depending on environment variable? up for discussion
                 // require("./tests/modules/controls/ButtonOblique.js"),
-                require("../../src/modules/controls/freeze/tests/end2end/Freeze.e2e.js"),
+                /*    require("../../src/modules/controls/freeze/tests/end2end/Freeze.e2e.js"),
                 require("../../src/modules/controls/fullScreen/tests/end2end/FullScreen.e2e.js"),
                 require("../../src/modules/controls/orientation/tests/end2end/Orientation.e2e.js"),
                 require("../../src/modules/controls/overviewMap/tests/end2end/OverviewMap.e2e.js"),
                 require("../../src/modules/controls/totalView/tests/end2end/TotalView.e2e.js"),
-                require("../../src/modules/controls/zoom/test/end2end/Zoom.e2e.js"),
+                require("../../src/modules/controls/zoom/test/end2end/Zoom.e2e.js"), */
 
                 // modules/menu
-                // require("./tests/modules/menu/Layers.js"),
+                require("./tests/modules/menu/Layers.js")
 
                 // modules/searchbar
-                require("./tests/modules/searchbar/SearchCategories.js"),
-                require("./tests/modules/searchbar/ElasticSearch.js"),
+                /*   require("./tests/modules/searchbar/SearchCategories.js"),
+                require("./tests/modules/searchbar/ElasticSearch.js"), */
 
                 // modules/tools
-                require("../../src/modules/tools/contact/tests/end2end/Contact.e2e.js"),
+                /* require("../../src/modules/tools/contact/tests/end2end/Contact.e2e.js"), */
                 // require("./tests/modules/tools/PopulationRequest_HH.js"),
-                require("./tests/modules/tools/ExtendedFilter.js"),
+                /*    require("./tests/modules/tools/ExtendedFilter.js"),
                 require("./tests/modules/tools/List.js"),
                 require("../../src/modules/tools/supplyCoord/tests/end2end/SupplyCoord.e2e.js"),
                 require("../../src/modules/tools/measure/tests/end2end/Measure.e2e.js"),
                 require("../../src/modules/tools/scaleSwitcher/tests/end2end/ScaleSwitcher.e2e.js"),
                 require("./tests/modules/tools/ParcelSearch.js"),
-                require("../../src/modules/tools/searchByCoord/tests/end2end/SearchByCoord.e2e.js"),
+                require("../../src/modules/tools/searchByCoord/tests/end2end/SearchByCoord.e2e.js"), */
 
                 // src/modules/tools/gfi
-                require("../../src/modules/tools/gfi/tests/end2end/Gfi.e2e.js"),
+                /*  require("../../src/modules/tools/gfi/tests/end2end/Gfi.e2e.js"), */
                 // require("./tests/modules/tools/Gfi.js"),old GFI-Test do not delete!
 
                 // src/modules/legend
-                require("../../src/modules/legend/tests/end2end/Legend.e2e.js"),
+                /*  require("../../src/modules/legend/tests/end2end/Legend.e2e.js"), */
 
                 // non-module tests
-                require("../../src/tests/end2end/Pan.e2e.js"),
-                require("../../src/tests/end2end/Zoom.e2e.js"),
+                /*  require("../../src/tests/end2end/Pan.e2e.js"),
+                require("../../src/tests/end2end/Zoom.e2e.js"), */
 
                 // modules/core
-                require("./tests/modules/core/ParametricUrl.js")
+                /*  require("./tests/modules/core/ParametricUrl.js") */
             ],
             e2eTestParams = {builder, url, resolution, config, mode, browsername, capability};
 

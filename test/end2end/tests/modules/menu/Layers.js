@@ -56,7 +56,20 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
             driver = await getDriver();
 
             configGivenIdOrder = getOrderedIdsFromConfig(masterConfigJson);
+
+
+            const treeButton = driver.findElement(By.css("ul#tree"));
+            // check visibility with isDisplayed()
+
+            if (!treeButton.isDisplayed()) {
+                await (await driver.wait(
+                    until.elementLocated(By.css("ul#root li:first-child")),
+                    12000,
+                    "navigation bar did not appear"
+                )).click();
+            }
         });
+
 
         after(async function () {
             if (capability) {
@@ -80,11 +93,6 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
          */
         if (isMaster(url)) {
             it("shows layers in order of config.json in LT", async function () {
-                await (await driver.wait(
-                    until.elementLocated(By.css("ul#root li:first-child")),
-                    12000,
-                    "navigation bar did not appear"
-                )).click();
 
                 const tree = await driver.wait(
                     until.elementLocated(By.css("ul#tree")),
