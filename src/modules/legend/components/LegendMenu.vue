@@ -25,26 +25,37 @@ export default {
         if (this.uiStyle === "TABLE") {
             document.getElementById("table-tools-menu").append(this.$el);
         }
+        else {
+            this.replaceMenuChild();
+        }
     },
     updated () {
-        const root = document.getElementById("root");
-
-        if (root && this.uiStyle !== "TABLE") {
-            const span = root.querySelector("[name=legend]");
-
-            // replace legend in menu to provide order of menu in config.json
-            // root.replaceChild must be removed on refactoring menu to vue, then only use the else case
-            if (this.mobile && span?.parentNode) {
-                root.replaceChild(this.element, span.parentNode);
-            }
-            else if (span?.parentNode?.parentNode) {
-                root.replaceChild(this.childNode, span.parentNode.parentNode);
-            }
-        }
+        this.replaceMenuChild();
     },
     methods: {
         ...mapActions("Legend", Object.keys(actions)),
         ...mapMutations("Legend", Object.keys(mutations)),
+
+        /**
+         * Replace legend in menu to provide order of menu in config.json.
+         * root.replaceChild must be removed on refactoring menu to vue, then only use the else case.
+         * @returns {void}
+         */
+        replaceMenuChild () {
+            const root = document.getElementById("root");
+
+            if (root && this.uiStyle !== "TABLE") {
+                const span = root.querySelector("[name=legend]");
+
+                if (this.mobile && span?.parentNode) {
+                    root.replaceChild(this.element, span.parentNode);
+                }
+                else if (span?.parentNode?.parentNode) {
+                    root.replaceChild(this.childNode, span.parentNode.parentNode);
+                }
+            }
+        },
+
         /**
          * Toggles the visibility of the legend
          * @returns {void}
