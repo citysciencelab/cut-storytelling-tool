@@ -164,7 +164,7 @@ Sets the title of the test, if the tests are executed via a pipeline on Saucelab
 ```js
  before(async function () {
     if (capability) {
-        // Title for the tests on browserstack
+        // Title for the tests on saucelabs
         capability.name = this.currentTest.fullTitle();
         // Title for the tests on saucelabs
         capability["sauce:options"].name = this.currentTest.fullTitle();

@@ -11,7 +11,7 @@ const {isBasic, is2D} = require("./settings"),
  * @property {String} config key that defines which config the Masterportal should run on
  * @property {String} mode key that defines which steps should be taken before testing (e.g. activating 3D)
  * @property {String} browsername string indicating which browser is in use
- * @property {Object} capability containes browserstack capability
+ * @property {Object} capability containes saucelabs capability
  */
 
 /**
@@ -26,7 +26,7 @@ const {isBasic, is2D} = require("./settings"),
  * @param {String} resolution in format AxB with A, B being integers
  * @param {String} config key that defines which config the Masterportal should run on
  * @param {String} mode key that defines which steps should be taken before testing (e.g. activating 3D)
- * @param {Object} capability containes browserstack capability
+ * @param {Object} capability containes saucelabs capability
  * @returns {void}
  */
 function tests (builder, url, browsername, resolution, config, mode, capability) {
