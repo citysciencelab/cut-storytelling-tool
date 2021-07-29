@@ -103,34 +103,23 @@
     "mapView": {
       "backgroundImage": "https://geodienste.hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
       "startCenter": [
-        565874,
-        5934140
-      ]
+        263000,
+        5947000
+      ],
+      "extent": [
+        0,
+        5350000,
+        500000,
+        6106230
+      ],
+      "startZoomLevel": 7,
+      "epsg": "EPSG:25833"
     },
     "menu": {
       "tree": {
         "name": "translate#common:menu.topics",
         "glyphicon": "glyphicon-list",
         "isInitOpen": false
-      },
-      "ansichten": {
-        "name": "translate#common:menu.views.name",
-        "glyphicon": "glyphicon-list",
-        "children": {
-          "view1": {
-            "name": "translate#common:menu.views.view01",
-            "type": "viewpoint",
-            "glyphicon": "glyphicon-screenshot",
-            "heading": -0.30858728378862876,
-            "tilt": 0.9321791580603296,
-            "altitude": 272.3469798217454,
-            "center": [
-              564028.7954571751,
-              5934555.967867207
-            ],
-            "zoomLevel": 7.456437968949651
-          }
-        }
       },
       "filter": {
         "name": "translate#common:menu.filter",
@@ -504,6 +493,52 @@
     "Fachdaten": {
       "Layer": [
         {
+          "id": "1711",
+          "visibility": true,
+          "name": "Stadtrundgang",
+          "url": "https://geoportal.kreis-lup.de/ows/masterportal/stadtrundgang-sn",
+          "typ": "WMS",
+          "layers": "Stadtrundgang",
+          "format": "image/png",
+          "version": "1.1.1",
+          "singleTile": true,
+          "transparent": true,
+          "tilesize": "256",
+          "gutter": "20",
+          "minScale": "1",
+          "maxScale": "250000",
+          "isbaselayer": false,
+          "gfiAttributes": {
+            "Station": "Station",
+            "Info": "Info",
+            "Bild": "Bild"
+          },
+          "gfiTheme": {
+            "name": "default",
+            "params": {
+              "imageLinks": ["Bild"]
+            }
+          },
+          "featureCount": "1",
+          "layerAttribution": "&copy; Landeshauptstadt Schwerin",
+          "cache": false,
+          "legendURL": "",
+          "datasets": [
+          {
+          "md_id": "f2f0673e-1361-4451-8452-613ed8007d73",
+          "md_name": "Stadtrundgang Schwerin",
+          "kategorie_opendata": [
+          "keine Angabe"
+          ],
+          "kategorie_inspire": "keine Angabe",
+          "filter": [
+          "inspireidentifiziert"
+          ]
+          }
+          ],
+          "infoFormat": "application/vnd.ogc.gml"
+          },
+        {
           "id": "1132",
           "styleId": "1132",
           "name": "100 Jahre Stadtgruen POIs",
@@ -648,20 +683,8 @@
           }
         },
         {
-          "id": "1711",
-          "styleId": "1711",
-          "visibility": true,
-          "layerAttribution": "<span>Attributierung für Fachlayer</span>",
-          "mouseHoverField": [
-            "name",
-            "strasse"
-          ],
-          "searchField": "name",
-          "extendedFilter": true
-        },
-        {
           "id": "8712",
-          "visibility": true,
+          "visibility": false,
           "name": "Schulinfosystem",
           "styleId": "8712",
           "searchField": "schulname",
