@@ -82,7 +82,7 @@ export default {
         .mouse-position-span {
             padding: 0 8px;
             border-right: 1px solid @primary_contrast;
-
+            color: #FFFFFF;
         }
     }
 </style>

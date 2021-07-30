@@ -44,12 +44,12 @@ export default {
             border-right: 1px solid;
             display: inline-block;
             width: 2cm;
-            color: #6E6E6E;
+            color: #333333;
         }
 
         .scale-as-a-ratio {
             padding: 0 16px;
-            color: #6E6E6E;
+            color: #333333;
         }
     }
 </style>
