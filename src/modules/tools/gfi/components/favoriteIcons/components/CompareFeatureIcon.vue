@@ -119,6 +119,7 @@ export default {
         v-if="olFeature && componentExists('compareFeatures')"
         :class="['glyphicon', featureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty']"
         :title="titleCompareList"
+        tabindex="0"
         @click="toogleFeatureToCompareList"
         @keydown.enter="toogleFeatureToCompareList"
     />

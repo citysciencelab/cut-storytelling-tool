@@ -291,6 +291,8 @@ export default {
     <div
         id="surrounding_vectorfeatures"
         class="modal fade in poi"
+        @keydown.esc="hidePoi"
+
     >
         <div class="modal-dialog">
             <div class="modal-content">
@@ -354,7 +356,7 @@ export default {
                                             <td v-else-if="feat.imgPath.length > 0">
                                                 <img
                                                     :src="feat.imgPath"
-                                                    alt=""
+                                                    :alt="$t('common:modules.controls.orientation.imgAlt')"
                                                 >
                                             </td>
                                             <td>
@@ -378,7 +380,6 @@ export default {
         <div
             class="modal-backdrop fade in"
             @click="hidePoi"
-            @keydown.enter="hidePoi"
         />
     </div>
 </template>

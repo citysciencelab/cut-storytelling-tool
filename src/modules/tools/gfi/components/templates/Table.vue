@@ -104,6 +104,7 @@ export default {
         <template #rightOfTitle>
             <span
                 class="icon-turnarticle glyphicon"
+                tabindex="0"
                 @click="rotate"
                 @keydown.enter="rotate"
             />

@@ -648,7 +648,8 @@
                 "poiChoiceConfirmation": "OK",
                 "poiChoiceStop": "Beenden",
                 "trackingDeniedText": "'In der Nähe' nicht verfügbar.",
-                "distanceUnit": "Meter"
+                "distanceUnit": "Meter",
+                "imgAlt": "Bild für Point of Interest"
             },
             "orientation3d": {
                 "compass": {

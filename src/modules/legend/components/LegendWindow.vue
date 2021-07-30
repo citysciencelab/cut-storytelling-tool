@@ -731,6 +731,7 @@ export default {
                 <span>{{ $t(name) }}</span>
                 <span
                     class="glyphicon glyphicon-remove close-legend float-right"
+                    tabindex="0"
                     @click="closeLegend"
                     @keydown.enter="closeLegend"
                 />
@@ -738,6 +739,7 @@ export default {
                     v-if="showCollapseAllButton"
                     class="glyphicon glyphicon-arrow-up toggle-collapse-all legend float-right"
                     :title="$t('common:modules.legend.toggleCollapseAll')"
+                    tabindex="0"
                     @click="toggleCollapseAll"
                     @keydown.enter="toggleCollapseAll"
                 />

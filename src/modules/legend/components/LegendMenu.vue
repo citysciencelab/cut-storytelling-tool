@@ -61,6 +61,7 @@ export default {
                 v-if="showLegendInMenu"
                 :class="{ 'open': showLegend }"
                 class="dropdown dropdown-folder"
+                tabindex="0"
                 @click="toggleLegend"
                 @keydown.enter="toggleLegend"
             >

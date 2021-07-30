@@ -648,7 +648,8 @@
                 "poiChoiceConfirmation": "OK",
                 "poiChoiceStop": "Quit",
                 "trackingDeniedText": "'Close to here' is not available.",
-                "distanceUnit": "meters"
+                "distanceUnit": "meters",
+                "imgAlt": "picture for point of interest"
             },
             "orientation3d": {
                 "compass": {

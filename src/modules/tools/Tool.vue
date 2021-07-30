@@ -205,6 +205,7 @@ export default {
                     v-if="!isMinified"
                     class="glyphicon glyphicon-minus"
                     title="Minimieren"
+                    tabindex="0"
                     @click="minifyTool"
                     @keydown.enter="minifyTool"
                 />
@@ -212,6 +213,7 @@ export default {
                     v-else
                     class="glyphicon glyphicon-plus"
                     title="Maximieren"
+                    tabindex="0"
                     @click="maximizeTool"
                     @keydown.enter="maximizeTool"
                 />
@@ -219,6 +221,7 @@ export default {
             <div class="heading-element">
                 <span
                     class="glyphicon glyphicon-remove"
+                    tabindex="0"
                     @click="close($event)"
                     @keydown.enter="close($event)"
                 />
