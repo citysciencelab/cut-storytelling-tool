@@ -809,8 +809,8 @@ export default {
                 cursor: pointer;
             };
             .toggle-collapse-all {
-                padding-right: 10px;
                 cursor: pointer;
+                margin-right: 5px;
             }
         }
         .legend-content {
