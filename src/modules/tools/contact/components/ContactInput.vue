@@ -40,7 +40,7 @@ export default {
             type: Boolean,
             required: true
         },
-        autocompl: {
+        autocomplete: {
             type: String,
             default: "off"
         }
@@ -73,7 +73,7 @@ export default {
                 :is="htmlElement"
                 :id="`tool-contact-${inputName}-input`"
                 :value="inputValue"
-                :autocomplete="autocompl"
+                :autocomplete="autocomplete"
                 :type="htmlElement === 'input' ? inputType : ''"
                 class="form-control"
                 :aria-describedby="`tool-contact-${inputName}-help`"
