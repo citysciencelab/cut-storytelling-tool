@@ -121,6 +121,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
         if (this.model.get("parentId") === "root") {
             this.$el.addClass("menu-style");
             this.$el.find("span").addClass("hidden-sm");
+            this.$el.attr("title", this.model.get("name"));
         }
         else {
             this.$el.addClass("submenu-style");

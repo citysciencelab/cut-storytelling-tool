@@ -308,7 +308,7 @@ export default {
          * @returns {*} - Value from key.
          */
         prepareGfiValue: function (gfi, key) {
-            const isPath = key.startsWith("@");
+            const isPath = key.startsWith("@") && key.length > 1;
             let value = gfi[Object.keys(gfi).find(gfiKey => gfiKey.toLowerCase() === key.toLowerCase())];
 
             if (isPath) {

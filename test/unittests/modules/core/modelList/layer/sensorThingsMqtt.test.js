@@ -24,49 +24,47 @@ describe("core/modelList/layer/sensorThingsMqtt", function () {
             connect: () => {
                 return false;
             }
-        });
+        }, true);
         lastError = false;
     });
 
     describe("constructor", () => {
-        it("should connect to mqtt with the given url", () => {
+        it("should connect to mqtt with the given options", () => {
             let lastHost = false,
+                lastPort = false,
                 lastPath = false,
-                lastProtocol = false;
+                lastProtocol = false,
+                lastMqttVersion = false,
+                lastRhPath = false,
+                lastContext = false;
 
             new SensorThingsMqtt({
-                host: "url",
-                path: "/mqtt",
-                protocol: "wss"
+                host: "host",
+                port: "port",
+                path: "path",
+                protocol: "protocol",
+                mqttVersion: "mqttVersion",
+                rhPath: "rhPath",
+                context: "context"
             }, {
-                connect: ({host, path, protocol}) => {
+                connect: ({host, port, path, protocol, mqttVersion, rhPath, context}) => {
                     lastHost = host;
+                    lastPort = port;
                     lastPath = path;
                     lastProtocol = protocol;
+                    lastMqttVersion = mqttVersion;
+                    lastRhPath = rhPath;
+                    lastContext = context;
                 }
-            });
+            }, true);
 
-            expect(lastHost).to.equal("url");
-            expect(lastPath).to.equal("/mqtt");
-            expect(lastProtocol).to.equal("wss");
-        });
-
-        it("should connect to mqtt with the given options", () => {
-            let lastOptions = false;
-            const expectedOptions = {
-                host: "url",
-                mqttVersion: "3.1.1",
-                rhPath: "rhPath",
-                context: "this"
-            };
-
-            new SensorThingsMqtt(expectedOptions, {
-                connect: (options) => {
-                    lastOptions = options;
-                }
-            });
-
-            expect(lastOptions).to.deep.equal(expectedOptions);
+            expect(lastHost).to.equal("host");
+            expect(lastPort).to.equal("port");
+            expect(lastPath).to.equal("path");
+            expect(lastProtocol).to.equal("protocol");
+            expect(lastMqttVersion).to.equal("mqttVersion");
+            expect(lastRhPath).to.equal("rhPath");
+            expect(lastContext).to.equal("context");
         });
 
         it("should expand the options for mqtt v3.1 by a different protocolId and protocolVersion", () => {
@@ -80,6 +78,9 @@ describe("core/modelList/layer/sensorThingsMqtt", function () {
                 expectedOptions = {
                     host: "url",
                     mqttVersion: "3.1",
+                    path: "/mqtt",
+                    port: "",
+                    protocol: "wss",
                     rhPath: "rhPath",
                     context: "this",
                     protocolId: "MQIsdp",
@@ -90,7 +91,7 @@ describe("core/modelList/layer/sensorThingsMqtt", function () {
                 connect: (options) => {
                     lastOptions = options;
                 }
-            });
+            }, true);
 
             expect(lastOptions).to.deep.equal(expectedOptions);
         });
@@ -100,13 +101,9 @@ describe("core/modelList/layer/sensorThingsMqtt", function () {
                 connect: () => {
                     return "mqttClient";
                 }
-            });
+            }, true);
 
             expect(mqtt.getMqttClient()).to.equal("mqttClient");
-        });
-
-        it("should set the internal messageHandler to null", () => {
-            expect(mqtt.getMessageHandler()).to.be.null;
         });
 
         it("should set the default httpClient as instance of SensorThingsHttp", () => {
@@ -141,8 +138,13 @@ describe("core/modelList/layer/sensorThingsMqtt", function () {
 
         it("should register any event (other than message) at the given mqttClient", () => {
             let lastEventName = false;
+            const mqttClient = new SensorThingsMqtt({}, {
+                connect: () => {
+                    return false;
+                }
+            }, true);
 
-            mqtt.on("eventName", () => {
+            mqttClient.on("eventName", () => {
                 // handler
                 return false;
             }, onerror, {
@@ -154,36 +156,6 @@ describe("core/modelList/layer/sensorThingsMqtt", function () {
 
             expect(lastError).to.be.false;
             expect(lastEventName).to.equal("eventName");
-        });
-        it("should set the internal messageHandler for on(message) with mqtt 3.1", () => {
-            mqtt.setMqttVersion("3.1");
-            mqtt.on("message", () => {
-                // handler
-                return "messageHandler";
-            }, onerror, {
-                // fake mqttClient
-                on: () => {
-                    return false;
-                }
-            });
-
-            expect(mqtt.getMessageHandler()).to.be.a("function");
-            expect(mqtt.getMessageHandler()()).to.equal("messageHandler");
-        });
-        it("should set the internal messageHandler for on(message) with mqtt 3.1.1", () => {
-            mqtt.setMqttVersion("3.1.1");
-            mqtt.on("message", () => {
-                // handler
-                return "messageHandler";
-            }, onerror, {
-                // fake mqttClient
-                on: () => {
-                    return false;
-                }
-            });
-
-            expect(mqtt.getMessageHandler()).to.be.a("function");
-            expect(mqtt.getMessageHandler()()).to.equal("messageHandler");
         });
     });
 
@@ -282,12 +254,16 @@ describe("core/modelList/layer/sensorThingsMqtt", function () {
         it("should call simulateRetainedHandling if options.rh !== 2 and mqtt v3.1 or mqtt v3.1.1 and options.rhPath is set", () => {
             let lastRhPath = false,
                 lastTopic = false,
-                lastHttpClient = false,
-                lastMessageHandler = false;
+                lastHttpClient = false;
+            const mqttClient = new SensorThingsMqtt({}, {
+                connect: () => {
+                    return false;
+                }
+            }, true);
 
-            mqtt.setMqttVersion("3.1");
-            mqtt.setRhPath("rhPath");
-            mqtt.on("message", () => {
+            mqttClient.setMqttVersion("3.1");
+            mqttClient.setRhPath("rhPath");
+            mqttClient.on("message", () => {
                 // handler
                 return "messageHandler";
             }, onerror, {
@@ -296,35 +272,36 @@ describe("core/modelList/layer/sensorThingsMqtt", function () {
                     return false;
                 }
             });
-            mqtt.subscribe("topic", {
+            mqttClient.subscribe("topic", {
                 rh: 0
             }, null, onerror, {
                 // fake mqttClient
                 subscribe: (topic, options, callback) => {
                     callback(null, [{topic: topic, qos: options.qos}]);
                 }
-            }, (rhPath, topic, httpClient, messageHandler) => {
+            }, (rhPath, topic, httpClient) => {
                 lastRhPath = rhPath;
                 lastTopic = topic;
                 lastHttpClient = httpClient;
-                lastMessageHandler = messageHandler;
             });
 
             expect(lastRhPath).to.equal("rhPath");
             expect(lastTopic).to.equal("topic");
             expect(lastHttpClient).to.be.an.instanceof(SensorThingsHttp);
-            expect(lastMessageHandler).to.be.a("function");
-            expect(lastMessageHandler()).to.equal("messageHandler");
         });
         it("should call simulateRetainedHandling if options.rh !== 2 and mqtt v3.1 or mqtt v3.1.1 and options.rhPath is set", () => {
             let lastRhPath = false,
                 lastTopic = false,
-                lastHttpClient = false,
-                lastMessageHandler = false;
+                lastHttpClient = false;
+            const mqttClient = new SensorThingsMqtt({}, {
+                connect: () => {
+                    return false;
+                }
+            }, true);
 
-            mqtt.setMqttVersion("3.1.1");
-            mqtt.setRhPath("rhPath");
-            mqtt.on("message", () => {
+            mqttClient.setMqttVersion("3.1.1");
+            mqttClient.setRhPath("rhPath");
+            mqttClient.on("message", () => {
                 // handler
                 return "messageHandler";
             }, onerror, {
@@ -333,25 +310,22 @@ describe("core/modelList/layer/sensorThingsMqtt", function () {
                     return false;
                 }
             });
-            mqtt.subscribe("topic", {
+            mqttClient.subscribe("topic", {
                 rh: 0
             }, null, onerror, {
                 // fake mqttClient
                 subscribe: (topic, options, callback) => {
-                    callback(null, [{topic: topic, qos: options.qos}]);
+                    callback(null, [{topic, qos: options.qos}]);
                 }
-            }, (rhPath, topic, httpClient, messageHandler) => {
+            }, (rhPath, topic, httpClient) => {
                 lastRhPath = rhPath;
                 lastTopic = topic;
                 lastHttpClient = httpClient;
-                lastMessageHandler = messageHandler;
             });
 
             expect(lastRhPath).to.equal("rhPath");
             expect(lastTopic).to.equal("topic");
             expect(lastHttpClient).to.be.an.instanceof(SensorThingsHttp);
-            expect(lastMessageHandler).to.be.a("function");
-            expect(lastMessageHandler()).to.equal("messageHandler");
         });
     });
 
@@ -432,7 +406,7 @@ describe("core/modelList/layer/sensorThingsMqtt", function () {
 
     describe("simulateRetainedHandling", () => {
         it("should call onerror if an unexpected httpClient is given", () => {
-            mqtt.simulateRetainedHandling("rhPath", "topic", "httpClient", "messageHandler", onerror);
+            mqtt.simulateRetainedHandling("rhPath", "topic", "httpClient", onerror);
 
             expect(lastError).to.be.a("string");
         });
@@ -445,7 +419,7 @@ describe("core/modelList/layer/sensorThingsMqtt", function () {
                 get: url => {
                     lastUrl = url;
                 }
-            }, "messageHandler", onerror);
+            }, onerror);
 
             expect(lastUrl).to.equal(expectedUrl);
         });
@@ -458,7 +432,7 @@ describe("core/modelList/layer/sensorThingsMqtt", function () {
                 get: url => {
                     lastUrl = url;
                 }
-            }, "messageHandler", onerror);
+            }, onerror);
 
             expect(lastUrl).to.equal(expectedUrl);
         });
@@ -471,37 +445,115 @@ describe("core/modelList/layer/sensorThingsMqtt", function () {
                 get: url => {
                     lastUrl = url;
                 }
-            }, "messageHandler", onerror);
+            }, onerror);
 
             expect(lastUrl).to.equal(expectedUrl);
         });
 
-        it("should call the messageHandler with topic, response and packet", () => {
+        it("should call the message handler with topic, response and packet", () => {
             let lastTopic = false,
                 lastMessage = false,
-                lastPacket = false;
-            const expectedPacket = {
-                cmd: "simulate",
-                dup: false,
-                payload: "message",
-                qos: 0,
-                retain: true,
-                topic: "topic"
-            };
+                lastPacket = false,
+                lastEventName = false;
+            const mqttClient = new SensorThingsMqtt({}, {
+                    connect: () => {
+                        return false;
+                    }
+                }, true),
+                expectedPacket = {
+                    cmd: "simulate",
+                    dup: false,
+                    payload: "message",
+                    qos: 0,
+                    retain: true,
+                    topic: "topic"
+                };
 
-            mqtt.simulateRetainedHandling("rhPath", "topic", {
-                get: (url, onsuccess) => {
-                    onsuccess(["message"]);
-                }
-            }, (topic, message, packet) => {
+            mqttClient.on("message", (topic, message, packet) => {
                 lastTopic = topic;
                 lastMessage = message;
                 lastPacket = packet;
+            }, onerror, {
+                // fake mqttClient
+                on: (eventName) => {
+                    lastEventName = eventName;
+                }
+            });
+
+            mqttClient.simulateRetainedHandling("rhPath", "topic", {
+                get: (url, onsuccess) => {
+                    onsuccess(["message"]);
+                }
             });
 
             expect(lastTopic).to.equal("topic");
             expect(lastMessage).to.equal("message");
             expect(lastPacket).to.deep.equal(expectedPacket);
+            expect(lastEventName).to.equal("message");
+        });
+    });
+
+    describe("multiton pattern", () => {
+        it("should reuse a mqtt connection based on the given options", () => {
+            let lastHost = false,
+                lastPort = false,
+                lastPath = false,
+                lastProtocol = false,
+                lastMqttVersion = false,
+                lastRhPath = false,
+                lastContext = false,
+                usedConnect = 0;
+
+            new SensorThingsMqtt({
+                host: "host",
+                port: "port",
+                path: "path",
+                protocol: "protocol",
+                mqttVersion: "mqttVersion",
+                rhPath: "rhPath",
+                context: "contextA"
+            }, {
+                connect: ({host, port, path, protocol, mqttVersion, rhPath, context}) => {
+                    lastHost = host;
+                    lastPort = port;
+                    lastPath = path;
+                    lastProtocol = protocol;
+                    lastMqttVersion = mqttVersion;
+                    lastRhPath = rhPath;
+                    lastContext = context;
+                    usedConnect = 1;
+                }
+            });
+
+            new SensorThingsMqtt({
+                host: "host",
+                port: "port",
+                path: "path",
+                protocol: "protocol",
+                mqttVersion: "mqttVersion",
+                rhPath: "rhPath",
+                context: "contextB"
+            }, {
+                connect: ({host, port, path, protocol, mqttVersion, rhPath, context}) => {
+                    lastHost = host;
+                    lastPort = port;
+                    lastPath = path;
+                    lastProtocol = protocol;
+                    lastMqttVersion = mqttVersion;
+                    lastRhPath = rhPath;
+                    lastContext = context;
+                    usedConnect = 2;
+                }
+            });
+
+            expect(lastHost).to.equal("host");
+            expect(lastPort).to.equal("port");
+            expect(lastPath).to.equal("path");
+            expect(lastProtocol).to.equal("protocol");
+            expect(lastMqttVersion).to.equal("mqttVersion");
+            expect(lastRhPath).to.equal("rhPath");
+            expect(lastContext).to.equal("contextA");
+            expect(usedConnect).to.equal(1);
         });
     });
 });

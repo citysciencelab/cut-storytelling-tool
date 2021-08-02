@@ -416,6 +416,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                     stylingRulesSplit = stylingRules
                         .replaceAll("[", "")
                         .replaceAll("]", "")
+                        .replaceAll("*", "")
                         .split(",")
                         .map(rule => rule.split("="));
 
@@ -424,7 +425,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                     if (Array.isArray(stylingRulesSplit) && stylingRulesSplit.length) {
                         stylingRulesSplit.forEach(rule => {
                             if (Array.isArray(rule) && rule.length) {
-                                this.unsetStringPropertiesOfFeature(clonedFeature, rule[0].substring(1));
+                                this.unsetStringPropertiesOfFeature(clonedFeature, rule[0]);
                             }
                         });
                     }

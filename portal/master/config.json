@@ -260,7 +260,9 @@
           },
           "compareFeatures": {
             "name": "translate#common:menu.tools.compareFeatures",
-            "glyphicon": "glyphicon-th-list"
+            "glyphicon": "glyphicon-th-list",
+            "numberOfFeaturesToShow": 3,
+            "numberOfAttributesToShow": 12
           },
           "parcelSearch": {
             "name": "translate#common:menu.tools.parcelSearch",

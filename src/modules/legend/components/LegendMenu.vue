@@ -68,6 +68,7 @@ export default {
                 <a
                     href="#"
                     class="dropdown-toggle tabable"
+                    :title="$t(name)"
                 >
                     <span
                         :class="glyphicon"

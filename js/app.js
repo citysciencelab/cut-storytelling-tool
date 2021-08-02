@@ -30,7 +30,6 @@ import ParcelSearchView from "../modules/tools/parcelSearch/view";
 import FilterView from "../modules/tools/filter/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
-import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
 import {initiateVueI18Next} from "./vueI18Next";
 
@@ -166,8 +165,12 @@ async function loadApp () {
 
     Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}).forEach(tool => {
         switch (tool.id) {
-            case "compareFeatures": {
-                new CompareFeaturesView({model: tool});
+            case "lines": {
+                new LineView({model: tool});
+                break;
+            }
+            case "animation": {
+                new AnimationView({model: tool});
                 break;
             }
             case "filter": {

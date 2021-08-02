@@ -359,17 +359,20 @@
                 "moreInfo": "Ulteriori informazioni",
                 "lessInfo": "Meno informazioni",
                 "exportAsPdf": "Esporta come PDF",
+                "removeFromList": "Rimuovere dalla lista",
                 "noFeatures": {
-                    "nothingSelected": "Non ci sono {{oggetti}} selezionati per la lista di confronto.",
+                    "nothingSelected": "Non ci sono {{objects}} selezionati per la lista di confronto.",
                     "objectName": "Oggetti",
-                    "info": "Cliccare su un oggetto nella mappa. Si apre una finestra con le rispettive informazioni. Nell'angolo in alto a destra c'è il simbolo di una stella {{iconEmptyStar}}. Cliccare su questa icona per aggiungere l'oggetto alla lista di confronto. L'icona della stella diventerà gialla {{iconYellowStar}}}. Cliccando nuovamente sull'icona a forma di stella, la voce viene rimossa dalla lista di confronto."
+                    "info": "Cliccare su un oggetto nella mappa. Si apre una finestra con le rispettive informazioni. Nell'angolo in alto a destra c'è il simbolo di una stella {{iconEmptyStar}}. Cliccare su questa icona per aggiungere l'oggetto alla lista di confronto. L'icona della stella diventerà gialla {{iconYellowStar}}. Cliccando nuovamente sull'icona a forma di stella, la voce viene rimossa dalla lista di confronto."
                 },
                 "feedback": {
-                    "added": "{{object}} è stato aggiunto alla lista di confronto",
-                    "notAdded": "{{object}} non è stato aggiunto alla lista di confronto",
+                    "added": "La funzione è stata aggiunta all'elenco di confronto",
+                    "addedWithName": "{{currentFeatureName}} è stata aggiunta all'elenco di confronto",
+                    "notAdded": "Non è stato possibile aggiungere la funzione all'elenco di confronto",
+                    "notAddedWithName": "Non è stato possibile aggiungere {{currentFeatureName}} all'elenco di confronto",
                     "limitReached": "Raggiunto il numero massimo di oggetti nella lista di confronto.",
                     "removeObjects": "Rimuovere almeno un oggetto prima di procedere.",
-                    "gotoComparisonlist": "Vai alla lista di confronto"
+                    "goToComparisonlist": "Vai alla lista di confronto"
                 }
             },
             "saveSelection": {

@@ -271,6 +271,7 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
      */
     moveModelDown: function () {
         this.model.moveDown();
+        $(".arrows > .glyphicon-arrow-down").trigger("focus");
     },
 
     /**
@@ -279,6 +280,7 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
      */
     moveModelUp: function () {
         this.model.moveUp();
+        $(".arrows > .glyphicon-arrow-up").trigger("focus");
     },
 
     /**

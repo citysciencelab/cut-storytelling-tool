@@ -1,6 +1,7 @@
 import AddWMS from "./addWMS/components/AddWMS.vue";
 import Contact from "./contact/components/Contact.vue";
 import Draw from "./draw/components/Draw.vue";
+import CompareFeatures from "./compareFeatures/components/CompareFeatures.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
 import Gfi from "./gfi/components/Gfi.vue";
 import SearchByCoord from "./searchByCoord/components/SearchByCoord.vue";
@@ -23,6 +24,7 @@ const state = {
         addWMS: AddWMS,
         contact: Contact,
         draw: Draw,
+        compareFeatures: CompareFeatures,
         fileImport: FileImport,
         gfi: Gfi,
         searchByCoord: SearchByCoord,
