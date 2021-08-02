@@ -515,11 +515,11 @@ describe("tools/print/buildSpec", function () {
             });
         });
     });
-    describe("getStyleAttribute", function () {
+    describe("getStyleAttributes", function () {
         const vectorLayer = new Vector();
 
         it("should return \"styleId\" if styleList is not available", function () {
-            expect(buildSpecModel.getStyleAttribute(vectorLayer, pointFeatures[0], false)).to.equal("styleId");
+            expect(buildSpecModel.getStyleAttributes(vectorLayer, pointFeatures[0], false)).to.eql(["styleId"]);
         });
     });
     describe("getFeatureStyle", function () {
@@ -946,17 +946,17 @@ describe("tools/print/buildSpec", function () {
             });
         });
     });
-    describe("getStylingRule", function () {
+    describe("getStylingRules", function () {
         const vectorLayer = new Vector();
 
         it("should return \"*\" if styleAttribute is empty string", function () {
-            expect(buildSpecModel.getStylingRule(vectorLayer, pointFeatures[0], "")).to.equal("*");
+            expect(buildSpecModel.getStylingRules(vectorLayer, pointFeatures[0], [""])).to.equal("*");
         });
         it("should return \"[styleId='undefined']\" if styleAttribute is \"styleId\"", function () {
-            expect(buildSpecModel.getStylingRule(vectorLayer, pointFeatures[0], "styleId")).to.equal("[styleId='undefined']");
+            expect(buildSpecModel.getStylingRules(vectorLayer, pointFeatures[0], ["styleId"])).to.equal("[styleId='undefined']");
         });
         it("should return \"[kh_nummer='20']\" if styleAttribute is \"kh_nummer\"", function () {
-            expect(buildSpecModel.getStylingRule(vectorLayer, pointFeatures[0], "kh_nummer")).to.equal("[kh_nummer='20']");
+            expect(buildSpecModel.getStylingRules(vectorLayer, pointFeatures[0], ["kh_nummer"])).to.equal("[kh_nummer='20']");
         });
     });
     describe("rgbStringToRgbArray", function () {

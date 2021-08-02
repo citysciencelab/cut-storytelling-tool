@@ -3,7 +3,7 @@ import {Point} from "ol/geom.js";
 import {fromCircle} from "ol/geom/Polygon.js";
 import Feature from "ol/Feature.js";
 import {GeoJSON} from "ol/format.js";
-import {Image, Tile, Vector, Group} from "ol/layer.js";
+import {Group, Image, Tile, Vector} from "ol/layer.js";
 import store from "../../../src/app-store/index";
 import "./RadioBridge.js";
 import isObject from "../../../src/utils/isObject";
@@ -387,21 +387,23 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             "version": "2"
         };
 
-        features.forEach(function (feature) {
+        features.forEach(feature => {
             const styles = this.getFeatureStyle(feature, layer),
-                styleAttribute = this.getStyleAttribute(layer, feature);
+                styleAttributes = this.getStyleAttributes(layer, feature);
 
             let clonedFeature,
-                stylingRule,
-                stylingRuleSplit,
+                stylingRules,
+                stylingRulesSplit,
                 styleObject,
                 geometryType,
                 styleGeometryFunction;
 
-            styles.forEach(function (style, index) {
+            styles.forEach((style, index) => {
                 if (style !== null) {
                     clonedFeature = feature.clone();
-                    clonedFeature.set(styleAttribute, clonedFeature.get(styleAttribute) + "_" + String(index));
+                    styleAttributes.forEach(attribute => {
+                        clonedFeature.set(attribute, (clonedFeature.get("features") ? clonedFeature.get("features")[0] : clonedFeature).get(attribute) + "_" + String(index));
+                    });
                     geometryType = feature.getGeometry().getType();
 
                     // if style has geometryFunction, take geometry from style Function
@@ -410,16 +412,27 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                         clonedFeature.setGeometry(styleGeometryFunction(clonedFeature));
                         geometryType = styleGeometryFunction(clonedFeature).getType();
                     }
-                    stylingRule = this.getStylingRule(layer, clonedFeature, styleAttribute, style);
-                    stylingRuleSplit = stylingRule.split("=");
+                    stylingRules = this.getStylingRules(layer, clonedFeature, styleAttributes, style);
+                    stylingRulesSplit = stylingRules
+                        .replaceAll("[", "")
+                        .replaceAll("]", "")
+                        .replaceAll("*", "")
+                        .split(",")
+                        .map(rule => rule.split("="));
 
-                    if (stylingRuleSplit.length > 0) {
-                        this.unsetStringPropertiesOfFeature(clonedFeature, stylingRuleSplit[0].substring(1));
+                    stylingRules = stylingRules.replaceAll(",", " AND ");
+
+                    if (Array.isArray(stylingRulesSplit) && stylingRulesSplit.length) {
+                        stylingRulesSplit.forEach(rule => {
+                            if (Array.isArray(rule) && rule.length) {
+                                this.unsetStringPropertiesOfFeature(clonedFeature, rule[0]);
+                            }
+                        });
                     }
                     this.addFeatureToGeoJsonList(clonedFeature, geojsonList);
 
                     // do nothing if we already have a style object for this CQL rule
-                    if (Object.prototype.hasOwnProperty.call(mapfishStyleObject, stylingRule)) {
+                    if (Object.prototype.hasOwnProperty.call(mapfishStyleObject, stylingRules)) {
                         return;
                     }
 
@@ -444,10 +457,11 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                     if (style.getText() !== null && style.getText() !== undefined) {
                         styleObject.symbolizers.push(this.buildTextStyle(style.getText()));
                     }
-                    mapfishStyleObject[stylingRule] = styleObject;
+
+                    mapfishStyleObject[stylingRules] = styleObject;
                 }
-            }.bind(this));
-        }.bind(this));
+            });
+        });
         return mapfishStyleObject;
     },
 
@@ -852,102 +866,110 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     },
 
     /**
-     * returns the rule for styling a feature
+     * Returns the rules for styling of a feature
+     *
      * @param {ol.Feature} layer -
      * @param {ol.Feature} feature -
-     * @param {string} styleAttribute - the attribute by whose value the feature is styled
-     * @param {ol.style} style style
+     * @param {String[]} styleAttributes The attribute by whose value the feature is styled.
+     * @param {ol.style.Style} style style
      * @returns {string} an ECQL Expression
      */
-    getStylingRule: function (layer, feature, styleAttribute, style) {
+    getStylingRules: function (layer, feature, styleAttributes, style) {
         const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
-            styleAttr = feature.get("styleId") ? "styleId" : styleAttribute;
+            styleAttr = feature.get("styleId") ? "styleId" : styleAttributes;
         let styleModel,
             labelField,
             labelValue;
 
-        if (styleAttr === "" && feature.get("features") && feature.get("features").length === 1) {
-            const singleFeature = new Feature({
-                properties: feature.get("features")[0].getProperties(),
-                geometry: feature.get("features")[0].getGeometry()
-            });
+        if (styleAttr.length === 1 && styleAttr[0] === "") {
+            if (feature.get("features") && feature.get("features").length === 1) {
+                const singleFeature = new Feature({
+                    properties: feature.get("features")[0].getProperties(),
+                    geometry: feature.get("features")[0].getGeometry()
+                });
 
-            feature.get("features")[0] = singleFeature;
-            if (style.getImage().getSrc().indexOf("data:image/svg+xml;charset=utf-8") === 0) {
-                singleFeature.setId("first_svg_" + singleFeature.ol_uid);
-            }
-            else {
-                singleFeature.setId("second_png_" + singleFeature.ol_uid);
-            }
-            singleFeature.set(singleFeature.getId(), String(feature.get("features").length));
-            return "[" + singleFeature.getId() + "='" + String(feature.get("features").length) + "']";
+                feature.get("features")[0] = singleFeature;
+                if (style.getImage().getSrc().indexOf("data:image/svg+xml;charset=utf-8") === 0) {
+                    singleFeature.setId("first_svg_" + singleFeature.ol_uid);
+                }
+                else {
+                    singleFeature.setId("second_png_" + singleFeature.ol_uid);
+                }
+                singleFeature.set(singleFeature.getId(), String(feature.get("features").length));
+                return "[" + singleFeature.getId() + "='" + String(feature.get("features").length) + "']";
 
-        }
-        else if (styleAttr === "" && feature.get("features") !== undefined) {
-            if (style !== undefined && style.getText().getText() !== undefined) {
-                feature.set("sensorClusterStyle", feature.get("features")[0].ol_uid + "_" + String(style.getText().getText()));
-                return "[sensorClusterStyle='" + feature.get("features")[0].ol_uid + "_" + String(style.getText().getText()) + "']";
             }
-        }
-        else if (styleAttr === "") {
+            if (feature.get("features") !== undefined) {
+                if (style !== undefined && style.getText().getText() !== undefined) {
+                    feature.set("sensorClusterStyle", feature.get("features")[0].ol_uid + "_" + String(style.getText().getText()));
+                    return "[sensorClusterStyle='" + feature.get("features")[0].ol_uid + "_" + String(style.getText().getText()) + "']";
+                }
+            }
+
             return "*";
         }
         // cluster feature with geometry style
-        else if (feature.get("features") !== undefined) {
-            if (style !== undefined && style.getText().getText() !== undefined) {
-                feature.set(styleAttr, feature.get("features")[0].get(styleAttr) + "_" + String(style.getText().getText()));
-                return "[" + styleAttr + "='" + feature.get("features")[0].get(styleAttr) + "_" + String(style.getText().getText()) + "']";
+        if (feature.get("features") !== undefined) {
+            if ((style !== undefined && style.getText().getText() !== undefined) || feature.get("features").length > 1) {
+                const value = feature.get("features")[0].get(styleAttr[0])
+                    + "_"
+                    + style !== undefined && style.getText().getText() !== undefined ? style.getText().getText() : "cluster";
+
+                feature.set(styleAttr[0], value);
+                return `[${styleAttr[0]}='${value}']`;
+
             }
-            else if (feature.get("features").length > 1) {
-                feature.set(styleAttr, feature.get("features")[0].get(styleAttr) + "_cluster");
-                return "[" + styleAttr + "='" + feature.get("features")[0].get(styleAttr) + "_cluster']";
-            }
-            return "[" + styleAttr + "='" + feature.get("features")[0].get(styleAttr) + "']";
+
+            // Current feature is not clustered but a single feature in a clustered layer
+            return styleAttr.reduce((acc, curr) => {
+                const value = feature.get("features")[0].get(curr);
+
+                feature.set(curr, value);
+                return acc + `${curr}='${value}',`;
+            }, "[").slice(0, -1) + "]";
         }
         // feature with geometry style and label style
-        else if (layerModel !== undefined && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
+        if (layerModel !== undefined && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
             styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+
             if (styleModel !== undefined && styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
                 labelField = styleModel.get("labelField");
                 labelValue = feature.get(labelField);
-                return "[" + styleAttr + "='" + feature.get(styleAttr) + "' AND " + labelField + "='" + labelValue + "']";
+                return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}' AND ${labelField}='${labelValue}',`, "[").slice(0, -1)
+                    + "]";
             }
-            // feature with geometry style
-            return "[" + styleAttr + "='" + feature.get(styleAttr) + "']";
         }
         // feature with geometry style
-        return "[" + styleAttr + "='" + feature.get(styleAttr) + "']";
+        return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}',`, "[").slice(0, -1)
+            + "]";
     },
 
     /**
      * @param {ol.Layer} layer -
      * @param {ol.feature} feature - the feature of current layer
-     * @returns {String} the attribute by whose value the feature is styled
+     * @returns {String[]} the attributes by whose value the feature is styled
      */
-    getStyleAttribute: function (layer, feature) {
+    getStyleAttributes: function (layer, feature) {
         const layerId = layer.get("id");
-
         let layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
-            styleField = "styleId",
-            styleList,
-            ruleFeature;
-
+            styleFields = ["styleId"];
 
         if (layerModel !== undefined) {
+            const styleList = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+
             layerModel = this.getChildModelIfGroupLayer(layerModel, layerId);
-            styleList = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+
             if (layerModel.get("styleId")) {
-                if (styleList !== undefined) {
-                    ruleFeature = styleList.getRulesForFeature(feature);
-                    styleField = ruleFeature.length && ruleFeature[0] && Object.prototype.hasOwnProperty.call(ruleFeature[0], "conditions") ? Object.keys(ruleFeature[0].conditions.properties)[0] : "";
-                }
-                else {
-                    styleField = styleList.get("styleField");
-                }
+                const featureRules = styleList.getRulesForFeature(feature);
+
+                styleFields = featureRules?.[0]?.conditions ? Object.keys(featureRules[0].conditions.properties) : [""];
+            }
+            else {
+                styleFields = [styleList.get("styleField")];
             }
         }
 
-        return styleField;
+        return styleFields;
     },
 
     /**

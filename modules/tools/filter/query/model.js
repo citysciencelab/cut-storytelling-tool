@@ -57,6 +57,18 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         this.checkLayerVisibility();
         this.listenTo(Radio.channel("Layer"), {
             "layerVisibleChanged": function (layerId, visible) {
+                const layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+
+                if (
+                    typeof layer === "object" && layer !== null && typeof layer.get === "function"
+                    && Array.isArray(layer.get("children")) && layer.get("children").length
+                ) {
+                    layer.get("children").forEach(child => {
+                        if (typeof child === "object" && child !== null && child.id === this.get("layerId")) {
+                            this.setIsLayerVisible(visible);
+                        }
+                    });
+                }
                 if (layerId === this.get("layerId")) {
                     this.setIsLayerVisible(visible);
                 }

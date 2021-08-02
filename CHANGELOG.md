@@ -10,8 +10,25 @@
 
 ##  Unreleased - in development
 ### Added
+- Start of a calendar library "src/utils/calendar.js" with the first function "getPublicHolidays" to get a list of german public holidays using gaussian easter algorithm and advent algorithm.
+
+### Changed
+- The GFI in attached mode now dynamically adjusts its size to the content.
+- Migrated the CompareFeatures Tool from Backbone.js to Vue.js.
+
+### Deprecated
+
+### Removed
+
+### Fixed
+- Issue #626: The Legend menu item is placed according to the order of the menu items in config.json.
+
+---
+
+## v2.11.0 - 2021-07-07
+### Added
 - Add possibility to test end2end-tests with `MicrosoftEdge` driver.
-- VTC-Layer supports Sprites and Fonts in Styledefinitions.
+- VTC-Layer supports Sprites and Fonts in Style definitions.
 
 ### Changed
 - The version of the package selenium-webdriver was updated to version 4.0.0-beta.4.
@@ -22,11 +39,8 @@
 - The package eslint-plugin-vue was updated to version 7.11.1.
 - The package eslint-plugin-you-dont-need-lodash-underscore was updated to version 6.12.0.
 
-### Deprecated
-
-### Removed
-
 ### Fixed
+- Styled Vector Layers with multiple conditions can now be printed.
 - BG-1541 further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2
 - Labels of VTC-Layer-Objects aren't cut off anymore.
 - Issue #602: further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2.
@@ -50,10 +64,6 @@
 - The documentation for WMTS layers, legend field has been adapted. Only one specification in a string[] is possible.
 - The translation for the url in the staticlink in config.json has been removed.
 - Issue #617: Update description of the attribute '"extent"' for layer configurations in config.json.md.
-
-### Deprecated
-
-### Removed
 
 ### Fixed
 - Now Sensor Layer will show 0 if the dataValue is 0 and not "no data".

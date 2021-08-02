@@ -1,7 +1,7 @@
 <script>
 
 import Modal from "../../../share-components/modals/Modal.vue";
-import {mapGetters, mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "ConfirmAction",

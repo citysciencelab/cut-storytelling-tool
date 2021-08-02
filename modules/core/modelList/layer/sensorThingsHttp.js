@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import UrlParser from "url-parse";
 import {transform as transformProjectionToProjection} from "masterportalAPI/src/crs";

@@ -2,7 +2,7 @@
 import Default from "../themes/default/components/Default.vue";
 import Sensor from "../themes/sensor/components/Sensor.vue";
 import getTheme from "../../utils/getTheme";
-import {mapGetters, mapMutations, mapActions} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import ToolWindow from "../../../../../share-components/ToolWindow.vue";
 
 export default {
