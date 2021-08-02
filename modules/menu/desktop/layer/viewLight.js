@@ -24,15 +24,11 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
         },
         "click .arrows > .glyphicon-arrow-up": "moveModelUp",
         "keydown .arrows > .glyphicon-arrow-up": function (event) {
-            if (this.handleKeyboardTriggeredAction(event, "moveModelUp")) {
-                this.setFocus(".arrows > .glyphicon-arrow-up");
-            }
+            this.handleKeyboardTriggeredAction(event, "moveModelUp");
         },
         "click .arrows > .glyphicon-arrow-down": "moveModelDown",
         "keydown .arrows > .glyphicon-arrow-down": function (event) {
-            if (this.handleKeyboardTriggeredAction(event, "moveModelDown")) {
-                this.setFocus(".arrows > .glyphicon-arrow-down");
-            }
+            this.handleKeyboardTriggeredAction(event, "moveModelDown");
         },
         "click .glyphicon-plus-sign": "incTransparency",
         "keydown .glyphicon-plus-sign": function (event) {
