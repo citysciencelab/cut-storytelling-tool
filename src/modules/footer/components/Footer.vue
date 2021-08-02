@@ -81,7 +81,7 @@ export default {
 </script>
 
 <template>
-    <div
+    <footer
         id="footer"
         :class="!showFooter && 'hide-footer'"
     >
@@ -120,7 +120,7 @@ export default {
             v-else
             class="footer-scaleLine"
         />
-    </div>
+    </footer>
 </template>
 
 <style lang="less" scoped>

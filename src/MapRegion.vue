@@ -34,7 +34,7 @@ export default {
 </script>
 
 <template>
-    <div class="anchor">
+    <main class="anchor">
         <!-- OpenLayers node; control map itself via vuex map module -->
 
         <div id="sidebar">
@@ -77,7 +77,7 @@ export default {
                 :key="addonKey"
             />
         </template>
-    </div>
+    </main>
 </template>
 
 <style lang="less" scoped>
