@@ -1,8 +1,5 @@
 # Vue tutorial: Creating a new *ScaleSwitcher* tool
 
-
-
-
 This is a step-by-step instruction for creating a new tool based on [Vue](https://vuejs.org/) and [Vuex](https://vuex.vuejs.org/).
 
 ## Example requirement
