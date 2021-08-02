@@ -16,10 +16,25 @@ export default {
     },
     mounted () {
         this.show();
+        this.$nextTick(() => {
+            if (this.$refs["close-icon"]) {
+                this.$refs["close-icon"].focus();
+            }
+        });
     },
     methods: {
         ...mapMutations("controls/orientation", Object.keys(mutations)),
 
+        /**
+         * Callback when close icon has been clicked.
+         * @param {Event} event the dom event
+         * @returns {void}
+         */
+        closeIconTriggered (event) {
+            if (event.type === "click" || event.which === 32 || event.which === 13) {
+                this.hidePoiChoice();
+            }
+        },
         /**
          * Hides the modal.
          * @returns {void}
@@ -77,11 +92,14 @@ export default {
             <div class="modal-content">
                 <div class="modal-header">
                     <span
+                        ref="close-icon"
                         class="glyphicon glyphicon-remove"
+                        tabindex="0"
                         aria-hidden="true"
                         data-dismiss="modal"
                         :title="$t('button.close')"
-                        @click="hidePoiChoice"
+                        @click="closeIconTriggered($event)"
+                        @keydown="closeIconTriggered($event)"
                     />
                     <h4 class="modal-title">
                         <span class="control-icon glyphicon glyphicon-record standalone" />
@@ -108,6 +126,7 @@ export default {
                     </label>
                     <button
                         class="confirm"
+                        tabindex="0"
                         @click="triggerTrack"
                     >
                         {{ $t("common:modules.controls.orientation.poiChoiceConfirmation") }}
@@ -129,6 +148,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
+    @import "~variables";
     .poi-choice {
         color: rgb(85, 85, 85);
         font-size: 14px;
@@ -148,8 +168,13 @@ export default {
         .glyphicon-remove {
             font-size: 16px;
             float: right;
-            padding: 12px;
+            margin: 12px;
             cursor: pointer;
+            &:focus {
+                outline: 3px solid @accent_focus;
+                outline: 3px auto  Highlight;
+                outline: 3px auto -webkit-focus-ring-color;
+            }
         }
         .modal-dialog {
             z-index: 1041;

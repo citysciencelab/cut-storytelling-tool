@@ -44,13 +44,30 @@ export default {
             };
         }
     },
+    mounted () {
+        this.$nextTick(() => {
+            if (this.$refs.unfreeze) {
+                this.$refs.unfreeze.focus();
+            }
+        });
+    },
     methods: {
         /**
          * emitting the function in parent Freeze Component to hide the freezed window
+         * @param {Event} event the dom event
          * @returns {void}
          */
-        hideFreezeWin () {
-            this.$emit("hideFreezeWin");
+        hideFreezeWin (event) {
+            if (event.type === "click" || event.which === 32 || event.which === 13) {
+                this.$emit("hideFreezeWin");
+            }
+        },
+        /**
+         * Does nothing to avoid that user tabs through the menu.
+         * @returns {void}
+         */
+        suppressKeyEvent () {
+            // do nothing, event has already been prevented/stopped.
         }
     }
 };
@@ -60,12 +77,16 @@ export default {
     <div
         id="freeze-view"
         class="freeze-view freeze-activated"
+        @keydown.prevent.stop="suppressKeyEvent()"
     >
         <p
+            ref="unfreeze"
             :class="isTable ? 'table freeze-view-close' : 'freeze-view-close'"
             :title="$t(`common:modules.controls.freeze.unfreeze`)"
             :style="isTable ? cssVars : ''"
-            @click="hideFreezeWin"
+            tabindex="0"
+            @click="hideFreezeWin($event)"
+            @keydown="hideFreezeWin($event)"
         >
             {{ $t(`common:modules.controls.freeze.unfreeze`) }}
         </p>
@@ -109,6 +130,11 @@ export default {
             -webkit-transform-origin: var(--xOrigin) var(--yOrigin);
             -ms-transform-origin: var(--xOrigin) var(--yOrigin);
             -moz-transform-origin: var(--xOrigin) var(--yOrigin);
+        }
+        &:focus {
+            outline: 3px solid @accent_focus;
+            outline: 3px auto  Highlight;
+            outline: 3px auto -webkit-focus-ring-color;
         }
     }
 
