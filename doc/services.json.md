@@ -543,12 +543,32 @@ Metadata specification. All metadata of the layer data is referenced here. By cl
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
 |md_id|no|String||Metadata record identifier|
-|rs_id|no|String||Resource identifier of the metadata record|
-|md_name|no|String||Record name|
-|bbox|no|String||Record extension|
-|kategorie_opendata|no|String||Opendata category from the govdata.de code list|
-|kategorie_inspire|no|String||Inspire category from the Inspire code list, if available; if not, set to `"nicht Inspire-identifiziert"`|
-|kategorie_organisation|no|String||Organization name of the data holding body|
+|csw_url|no|String||Link to the CSW service. From this, the data that is displayed in the layer information is retrieved.|
+|show_doc_url|no|String||Link to the entry in the metadata catalog. The link to the metadata entry of the layer is created from this URL and the `"md_id"`.|
+|rs_id|no|String||Resource identifier of the metadata record.|
+|md_name|no|String||Record name.|
+|bbox|no|String||Record extension.|
+|kategorie_opendata|no|String||Opendata category from the govdata.de code list.|
+|kategorie_inspire|no|String||Inspire category from the Inspire code list, if available; if not, set to `"nicht Inspire-identifiziert"`.|
+|kategorie_organisation|no|String||Organization name of the data holding body.|
+
+**datasets example:**
+
+```json
+"datasets" : [
+    {
+        "md_id" : "9329C2CB-4552-4780-B343-0CC847538896",
+        "csw_url" : "https://metaver.de/csw",
+        "show_doc_url" : "https://metaver.de/trefferanzeige?cmd=doShowDocument&docuuid=",
+        "rs_id" : "https://registry.gdi-de.org/id/de.hh/010d7370-5306-4b63-983b-59cdd6e94c3c",
+        "md_name" : "Krankenhäuser Hamburg",
+        "bbox" : "461468.968928975,5916367.22980651,587010.909598947,5980347.75579767",
+        "kategorie_opendata" : [ "Gesundheit" ],
+        "kategorie_inspire" : [ "Versorgungswirtschaft und staatliche Dienste" ],
+        "kategorie_organisation" : "Behörde für Arbeit, Gesundheit, Soziales, Familie und Integration"
+    }
+]
+```
 
 ***
 

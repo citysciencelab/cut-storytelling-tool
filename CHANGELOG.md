@@ -11,6 +11,7 @@
 ##  Unreleased - in development
 ### Added
 - Start of a calendar library "src/utils/calendar.js" with the first function "getPublicHolidays" to get a list of german public holidays using gaussian easter algorithm and advent algorithm.
+- Adds the documentation for the datasets attributes `csw_url` and `show_doc_url` in the services.json.md.
 
 ### Changed
 - The GFI in attached mode now dynamically adjusts its size to the content.
