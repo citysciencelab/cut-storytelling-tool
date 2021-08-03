@@ -611,7 +611,7 @@ Definition of parameters for GFI template `"default"`.
 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
-|imageLinks|no|String/String[]|`["imgLink", "link_image", "Bild"]`|Defines in which attribute an image reference is given. Attributes will be searched in given order, and the first hit will be used.|
+|imageLinks|no|String/String[]|`["bildlink", "link_bild", "Bild"]`|Defines in which attribute an image reference is given. Attributes will be searched in given order, and the first hit will be used.|
 |showFavoriteIcons|no|Boolean|`true`|Specifies whether an icon bar allowing tool access is to be displayed. The icons are only displayed if the corresponding tools are configured. Usable tools: `compareFeatures` (not yet implemented for WMS).
 
 
@@ -623,9 +623,10 @@ Definition of parameters for GFI template `"default"`.
         "name": "default",
         "params": {
             "imageLinks": [
-                "imageLink",
-                "linkImage",
-                "abc"
+                "bildlink",
+                "link_bild",
+                "Bild",
+                "My_image_tag"
             ],
             "showFavoriteIcons": true
         }
