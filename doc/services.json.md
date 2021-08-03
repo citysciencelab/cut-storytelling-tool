@@ -875,7 +875,7 @@ If the gfiAttributes are given as an object, a key's value may also be an object
 |----|--------|----|-------|-----------|-------|
 |name|yes|String||Name to be shown on an exact match.|`"Test"`|
 |condition|yes|enum["contains", "startsWith", "endsWith"]||Condition checked on each feature attribute.|`"startsWith"`|
-|type|no|enum["string","date"]|`"string"`|If `"date"`, the portal will attempt to parse the attribute value to a date.|`"date"`|
+|type|no|enum["string", "date", "number"]|`"string"`|If `"date"`, the portal will attempt to parse the attribute value to a date; If `"Number"`, the portal will attempt to parse the attribute value to with thousand seperator;|`"date"`|
 |format|no|String|`"DD.MM.YYYY HH:mm:ss"`|Data format.|`"DD.MM.YYY"`|
 |prefix|no|String||Attribute value prefix.|Add string to value without whitespace `"https://"`|
 |suffix|no|String||Attribute value suffix.|`"°C"`|
@@ -912,6 +912,24 @@ If the gfiAttributes are given as an object, a key's value may also be an object
       }
    }
 }
+
+```
+
+**gfiAttributes example object using `number`:**
+
+```json
+{
+   "gfiAttributes": {
+      "key1": "key shown in the portal 1",
+      "key2": "key shown in the portal 2",
+      "key3": {
+         "name": "key shown in the portal 3",
+         "condition": "contains",
+         "type": "number"
+      }
+   }
+}
+
 ```
 
 **gfiAttributes example object with [Objektpfadverweis](style.json.md#markdown-header-objektpfadverweise) (object path reference) key and object value:**
