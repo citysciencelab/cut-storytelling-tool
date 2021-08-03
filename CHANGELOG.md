@@ -23,7 +23,7 @@
 
 ### Fixed
 - Issue #626: The Legend menu item is placed according to the order of the menu items in config.json.
-- Issue #628: The legend is now translated correctly again and works as usual after a translation.
+- Issue #628: The Legend menu item is now translated correctly again and works as usual after a translation.
 
 ---
 
