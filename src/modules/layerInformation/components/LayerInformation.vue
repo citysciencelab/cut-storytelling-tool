@@ -61,6 +61,14 @@ export default {
         if (this.metaDataCatalogueId) {
             this.setMetaDataCatalogueId(this.metaDataCatalogueId);
         }
+        Backbone.Events.listenTo(Radio.channel("Layer"), {
+            "setLayerInfoChecked": (value) => {
+                if (!value) {
+                    this.setActive(false);
+                    this.$emit("close");
+                }
+            }
+        });
     },
 
     methods: {
@@ -141,7 +149,6 @@ export default {
     <ToolWindow
         v-if="showInformation"
         id="layerInformation"
-        :focus-to-close-icon="true"
         class="layerInformation"
         @close="close"
     >

@@ -13,9 +13,9 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
                 this.setFocus();
             }
         },
-        "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
+        "click .layer-info-item > .glyphicon-info-sign": "toggleLayerInformation",
         "keydown .layer-info-item": function (event) {
-            this.handleKeyboardTriggeredAction(event, "showLayerInformation");
+            this.handleKeyboardTriggeredAction(event, "toggleLayerInformation");
         },
         "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
         "keydown .layer-info-item > .glyphicon-cog": function (event) {
@@ -47,9 +47,6 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
             "change:isSelected": this.rerender,
             "change:isVisibleInTree": this.removeIfNotVisible,
             "change:isOutOfRange": this.toggleColor
-        });
-        this.listenTo(Radio.channel("LayerInformation"), {
-            "unhighlightLayerInformationIcon": this.unhighlightLayerInformationIcon
         });
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
