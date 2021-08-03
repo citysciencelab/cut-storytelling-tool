@@ -185,7 +185,7 @@
             }
         },
         "quickHelp": {
-            "titleTag": "Hilfe öffnen",
+            "titleTag": "Hilfe öffnen/schließen",
             "search": {
                 "title": "Hilfe - Suchfunktion",
                 "generalInfo": "Allgemeines",

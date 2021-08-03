@@ -175,7 +175,7 @@
             }
         },
         "quickHelp": {
-            "titleTag": "Apri guida",
+            "titleTag": "Apri/chiudi guida",
             "search": {
                 "title": "Guida - Cerca",
                 "generalInfo": "Generale",
