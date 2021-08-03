@@ -1950,7 +1950,7 @@ The layer slider tool allows showing multiple layers in a row. This may e.g. be 
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|title|yes|String|"common:modules.tools.layerSlider.title"|Name displayed in the tool.|false|
+|title|no|String|"common:modules.tools.layerSlider.title"|Name displayed in the tool.|false|
 |timeInterval|no|Integer|2000|Time in ms until the next layer is shown.|false|
 |layerIds|yes|**[layerId](#markdown-header-portalconfigmenutoollayersliderlayerid)**[]|[]|Array of layer information objects.|false|
 |sliderType|no|enum["player","handle"]|"player"|Layer slider type. `""player"` shows start, pause, and stop buttons, while `"handle"` uses a switch. In the latter case, layer transparency is adjusted additionally.|false|
