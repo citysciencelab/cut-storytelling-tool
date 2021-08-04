@@ -86,11 +86,11 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 require("./tests/modules/tools/ExtendedFilter.js"),
                 require("./tests/modules/tools/List.js"),
                 require("../../src/modules/tools/supplyCoord/tests/end2end/SupplyCoord.e2e.js"),
-                require("../../src/modules/tools/coordToolkit/tests/end2end/CoordToolkit.e2e.js"),
+                // require("../../src/modules/tools/coordToolkit/tests/end2end/CoordToolkit.e2e.js"),
                 require("../../src/modules/tools/measure/tests/end2end/Measure.e2e.js"),
                 require("../../src/modules/tools/scaleSwitcher/tests/end2end/ScaleSwitcher.e2e.js"),
                 require("./tests/modules/tools/ParcelSearch.js"),
-                // require("../../src/modules/tools/searchByCoord/tests/end2end/SearchByCoord.e2e.js"),
+                require("../../src/modules/tools/searchByCoord/tests/end2end/SearchByCoord.e2e.js"),
 
                 // src/modules/tools/gfi
                 require("../../src/modules/tools/gfi/tests/end2end/Gfi.e2e.js"),
