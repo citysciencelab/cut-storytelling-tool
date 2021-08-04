@@ -79,10 +79,13 @@ export default {
                 :class="{ 'open': showLegend }"
                 class="dropdown dropdown-folder"
                 @click="toggleLegend"
+                @keydown.enter.stop.prevent="toggleLegend"
+                @keydown.space.stop.prevent="toggleLegend"
             >
                 <a
                     href="#"
-                    class="dropdown-toggle"
+                    class="dropdown-toggle tabable"
+                    :title="$t(name)"
                 >
                     <span
                         :class="glyphicon"

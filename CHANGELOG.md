@@ -17,6 +17,14 @@
 - The GFI in attached mode now dynamically adjusts its size to the content.
 - Migrated the CompareFeatures Tool from Backbone.js to Vue.js.
 
+- Accessibility: Implemented keyboard navigation in menu (top-level and themes).
+  - implemented keyboard navigation with arrows and tab
+  - make all action widgets (checkboxes, icon-buttons, etc) tabable
+  - make action execution possible on focused element with space and enter key
+  - introduced :hover-color on all focusable elements
+  - highlight current focused widget
+  - preserve current focus after action execution
+
 ### Deprecated
 
 ### Removed

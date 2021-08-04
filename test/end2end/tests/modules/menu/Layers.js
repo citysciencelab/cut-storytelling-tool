@@ -9,7 +9,7 @@ const webdriver = require("selenium-webdriver"),
     {initDriver, getDriver, quitDriver} = require("../../../library/driver"),
     {getOrderedTitleTexts, getOrderedTitlesFromConfig, getOrderedIdsFromConfig, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {isMaster} = require("../../../settings"),
-    {By, until} = webdriver;
+    {By, until, Key} = webdriver;
 
 /**
  * @param {Array.<(string|string[])>} arrayWithOptions array to compare, but each index may also hold an array of
@@ -136,12 +136,24 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
                 // The first layer in tree "100 jahre Stadtgruen POIS" has a transparency of "0.25"
                 const checkLayerId = configGivenIdOrder[0];
 
-                await (await (await driver.findElements(By.css("ul#root li.layer")))[0].findElement(By.css("span.layer-item.pull-left span.pull-left"))).click();
+                await (await (await driver.findElements(By.css("ul#root li.layer a.layer-item")))[0].findElement(By.css("span.title"))).click();
                 expect(await driver.executeScript(isLayerVisible, checkLayerId, "0.25")).to.be.true;
-                await (await (await driver.findElements(By.css("ul#root li.layer")))[0].findElement(By.css("span.layer-item.pull-left span.pull-left"))).click();
+                await (await (await driver.findElements(By.css("ul#root li.layer a.layer-item")))[0].findElement(By.css("span.title"))).click();
                 expect(await driver.executeScript(isLayerVisible, checkLayerId, "0.25")).to.be.false;
-                await (await (await driver.findElements(By.css("ul#root li.layer")))[0].findElement(By.css("span.layer-item.pull-left span.pull-left"))).click();
+                await (await (await driver.findElements(By.css("ul#root li.layer a.layer-item")))[0].findElement(By.css("span.title"))).click();
                 expect(await driver.executeScript(isLayerVisible, checkLayerId, "0.25")).to.be.true;
+            });
+
+            it("allows activating and deactivating layers in LT via space key", async function () {
+                // The second layer in tree "Verkehrskameras" has a transparency of "1.00"
+                const checkLayerId = configGivenIdOrder[1];
+
+                await (await (await driver.findElements(By.css("ul#root li.layer a.layer-item")))[1]).sendKeys(Key.SPACE);
+                expect(await driver.executeScript(isLayerVisible, checkLayerId, "1.00")).to.be.true;
+                await (await (await driver.findElements(By.css("ul#root li.layer a.layer-item")))[1]).sendKeys(Key.SPACE);
+                expect(await driver.executeScript(isLayerVisible, checkLayerId, "1.00")).to.be.false;
+                await (await (await driver.findElements(By.css("ul#root li.layer a.layer-item")))[1]).sendKeys(Key.SPACE);
+                expect(await driver.executeScript(isLayerVisible, checkLayerId, "1.00")).to.be.true;
             });
 
             it("opens an information window with the info button", async function () {
@@ -152,6 +164,41 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
                     12000,
                     "Info window did not appear"
                 );
+            });
+
+            it("allows using the tab key for navigation", async function () {
+
+                const checkLayerId = configGivenIdOrder[1];
+
+                await (await (await driver.findElements(By.css("ul#root li.layer a.layer-item")))[1]).sendKeys(Key.ENTER);
+                expect(await driver.executeScript(isLayerVisible, checkLayerId, "1.00")).to.be.false;
+
+                await (await (await driver.findElements(By.css("ul#root li.layer a.layer-item")))[0]).sendKeys(Key.ENTER);
+
+                await driver.switchTo().activeElement().sendKeys(Key.TAB);
+                await driver.switchTo().activeElement().sendKeys(Key.TAB);
+                await driver.switchTo().activeElement().sendKeys(Key.TAB);
+                await driver.switchTo().activeElement().sendKeys(Key.SPACE);
+
+                expect(await driver.executeScript(isLayerVisible, checkLayerId, "1.00")).to.be.true;
+            });
+
+            it("allows navigation with the arrow keys", async function () {
+                const checkLayerId = configGivenIdOrder[0];
+
+                await (await (await driver.findElements(By.css("ul#root li.layer a.layer-item")))[0]).sendKeys(Key.ENTER);
+                expect(await driver.executeScript(isLayerVisible, checkLayerId, "0.25")).to.be.true;
+
+                await driver.switchTo().activeElement().sendKeys(Key.ARROW_DOWN);
+                await driver.switchTo().activeElement().sendKeys(Key.ARROW_DOWN);
+                await driver.switchTo().activeElement().sendKeys(Key.ARROW_DOWN);
+
+                await driver.switchTo().activeElement().sendKeys(Key.ARROW_UP);
+                await driver.switchTo().activeElement().sendKeys(Key.ARROW_UP);
+                await driver.switchTo().activeElement().sendKeys(Key.ARROW_UP);
+
+                await driver.switchTo().activeElement().sendKeys(Key.SPACE);
+                expect(await driver.executeScript(isLayerVisible, checkLayerId, "0.25")).to.be.false;
             });
 
             it("displays an option row", async function () {
@@ -180,6 +227,7 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
 
                 const id = mapOrderedLayerIds[0];
 
+                await (await (await driver.findElements(By.css("ul#root li.layer a.layer-item")))[0]).sendKeys(Key.ENTER);
                 expect(await driver.executeScript(isLayerVisible, id, "0.25")).to.be.true;
 
                 // buttons have to be re-fetched each click since they tend to go stale
@@ -189,9 +237,9 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
 
                 expect(await driver.executeScript(isLayerVisible, id, "0.55")).to.be.true;
 
-                await (await getButton("plus")).click();
-                await (await getButton("plus")).click();
-                await (await getButton("plus")).click();
+                await (await getButton("plus")).sendKeys(Key.ENTER);
+                await (await getButton("plus")).sendKeys(Key.ENTER);
+                await (await getButton("plus")).sendKeys(Key.ENTER);
 
                 expect(await driver.executeScript(isLayerVisible, id, "0.25")).to.be.true;
             });
