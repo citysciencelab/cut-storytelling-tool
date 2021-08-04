@@ -196,12 +196,13 @@ export default {
             else if (this.showSuggestions) {
                 // TODO: Functionality like lodash.throttle would be nice to have here
                 this.showLoader = true;
-                const xmlFilter = buildXmlFilter({fieldName: this.fieldName, type: "like", value}),
+                const fieldName = Array.isArray(this.fieldName) ? this.fieldName[this.parameterIndex] : this.fieldName,
+                    xmlFilter = buildXmlFilter({fieldName, type: "like", value}),
                     suggestions = await searchFeatures(this.$store, this.currentInstance, this.service, xmlFilter, this?.suggestionsConfig?.featureType);
 
                 this.showLoader = false;
                 // Retrieve the values for the fieldName and make sure they are unique.
-                this.suggestions = [...new Set(suggestions.map(v => v.values_[this.fieldName]))];
+                this.suggestions = [...new Set(suggestions.map(v => v.values_[fieldName]))];
             }
         },
         isObject

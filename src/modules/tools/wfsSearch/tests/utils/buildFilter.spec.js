@@ -58,7 +58,7 @@ describe("src/modules/tools/wfsSearch/utils/buildFilter.js", () => {
     describe("buildFilter", () => {
         it("should build a XML filter based upon the literal structure defined in the config and given user inputs", () => {
             expect(buildFilter(values)).to.eql([
-                "<And><PropertyIsEqualTo><PropertyName>gemname</PropertyName><Literal>Waldesch</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>flur</PropertyName><Literal>1</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>zaehler</PropertyName><Literal>741</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>nenner</PropertyName><Literal>0</Literal></PropertyIsEqualTo></And>"
+                "<And><PropertyIsEqualTo matchCase=\"false\"><PropertyName>gemname</PropertyName><Literal>Waldesch</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase=\"false\"><PropertyName>flur</PropertyName><Literal>1</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase=\"false\"><PropertyName>zaehler</PropertyName><Literal>741</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase=\"false\"><PropertyName>nenner</PropertyName><Literal>0</Literal></PropertyIsEqualTo></And>"
             ]);
         });
     });
@@ -81,7 +81,7 @@ describe("src/modules/tools/wfsSearch/utils/buildFilter.js", () => {
                 "value": "Waldesch"
             };
 
-            expect(buildXmlFilter(field)).to.equal("<PropertyIsEqualTo><PropertyName>gemname</PropertyName><Literal>Waldesch</Literal></PropertyIsEqualTo>");
+            expect(buildXmlFilter(field)).to.equal("<PropertyIsEqualTo matchCase=\"false\"><PropertyName>gemname</PropertyName><Literal>Waldesch</Literal></PropertyIsEqualTo>");
         });
     });
 });

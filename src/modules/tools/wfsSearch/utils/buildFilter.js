@@ -86,8 +86,8 @@ function buildXmlFilter (field) {
     }
 
     return likeFilter
-        ? `<PropertyIsLike ${likeFilterValues.slice(0, -1)}>${property}</PropertyIsLike>`
-        : `<PropertyIsEqualTo>${property}</PropertyIsEqualTo>`;
+        ? `<PropertyIsLike matchCase="false" ${likeFilterValues.slice(0, -1)}>${property}</PropertyIsLike>`
+        : `<PropertyIsEqualTo matchCase="false">${property}</PropertyIsEqualTo>`;
 }
 
 /**
