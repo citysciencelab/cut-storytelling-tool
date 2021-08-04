@@ -16,6 +16,7 @@
 ### Changed
 - The GFI in attached mode now dynamically adjusts its size to the content.
 - Migrated the CompareFeatures Tool from Backbone.js to Vue.js.
+- Support of End2End tests for `Browserstack` has been removed.Instead `saucelabs` is used.
 
 ### Deprecated
 
