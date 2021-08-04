@@ -906,9 +906,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {void}
      */
     positionOfCursorToEnd: function () {
-        const selectedElement = this.$(".list-group-item").find(function (element) {
-                return this.$(element).hasClass("selected");
-            }, this),
+        const selectedElement = this.$(".list-group-item.selected"),
             lastSelectedItem = this.model.get("searchFieldisSelected");
 
         if (lastSelectedItem !== undefined || (lastSelectedItem !== undefined && this.$(".list-group-item").length !== 0)) {
