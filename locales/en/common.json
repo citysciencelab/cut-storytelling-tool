@@ -184,7 +184,7 @@
             }
         },
         "quickHelp": {
-            "titleTag": "Open help",
+            "titleTag": "Open/close help",
             "search": {
                 "title": "Help - Search function",
                 "generalInfo": "General Information",
