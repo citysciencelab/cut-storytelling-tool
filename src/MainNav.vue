@@ -20,7 +20,7 @@ export default {
 </script>
 
 <template>
-    <div
+    <header
         id="main-nav"
         class="navbar navbar-default"
         role="navigation"
@@ -50,7 +50,7 @@ export default {
                 <Title />
             </div>
         </div>
-    </div>
+    </header>
 </template>
 
 <style lang="less" scoped>
