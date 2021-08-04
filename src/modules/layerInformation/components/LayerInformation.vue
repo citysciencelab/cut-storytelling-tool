@@ -25,10 +25,10 @@ export default {
             return this.layerInfo.metaURL !== null && typeof this.abstractText !== "undefined" && this.abstractText !== this.noMetaDataMessage && this.abstractText !== this.noMetadataLoaded;
         },
         showPublication () {
-            return typeof this.datePublication !== "undefined" && this.datePublication !== null;
+            return typeof this.datePublication !== "undefined" && this.datePublication !== null && this.datePublication !== "";
         },
         showRevision () {
-            return typeof this.dateRevision !== "undefined" && this.dateRevision !== null;
+            return typeof this.dateRevision !== "undefined" && this.dateRevision !== null && this.dateRevision !== "";
         },
         showPeriodicity () {
             return this.periodicityKey !== "" && this.periodicityKey !== null && this.periodicityKey !== undefined;
@@ -47,7 +47,7 @@ export default {
         },
         showMoreLayers () {
             if (this.layerInfo.metaIdArray) {
-                return this.layerInfo.metaIdArray.length > 1;
+                return this.layerInfo.metaIdArray.length > 1 && !this.layerInfo.metaIdArray.every(item => item === null);
             }
             return false;
         },
