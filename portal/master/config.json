@@ -359,7 +359,6 @@
           "layerSlider": {
             "name": "translate#common:menu.tools.layerSlider",
             "glyphicon": "glyphicon-film",
-            "title": "translate#common:modules.tools.layerSlider.title",
             "timeInterval": 2000,
             "layerIds": [
               {

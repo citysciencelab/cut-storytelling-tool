@@ -18,7 +18,7 @@ export default {
     },
     data: () => {
         return {
-            imageLinks: ["bildlink", "link_bild"],
+            imageLinks: ["bildlink", "link_bild", "Bild"],
             importedComponents: [],
             showFavoriteIcons: true
         };
@@ -93,7 +93,7 @@ export default {
          * @returns {void}
          */
         replacesConfiguredImageLinks: function () {
-            const imageLinksAttribute = this.feature.getTheme()?.params?.imageLink;
+            const imageLinksAttribute = this.feature.getTheme()?.params?.imageLinks;
 
             if (Array.isArray(imageLinksAttribute)) {
                 this.imageLinks = imageLinksAttribute;

@@ -831,6 +831,66 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
 
             expect(wrapper.vm.prepareGfiValueFromObject(key, obj, gfi)).to.equal("14.04.2020");
         });
+        it("Should return value of attribute that contains 'o__b' and convert it to number with thousand seperator", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null,
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
+                        }],
+                        mapSize: () => [],
+                        getProperties: () => sinon.stub()
+                    },
+                    store: getGfiStore,
+                    localVue
+                }),
+                key = "o_b",
+                obj = {
+                    condition: "contains",
+                    type: "number"
+                },
+                gfi = {
+                    foo: "foo",
+                    bar: "bar",
+                    foo_bar: "2000",
+                    bar_foo: "bar_foo"
+                };
+
+            expect(wrapper.vm.prepareGfiValueFromObject(key, obj, gfi)).to.equal("2.000");
+        });
+        it("Should return value of attribute that contains 'o__b' and convert it to number with thousand seperator", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null,
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
+                        }],
+                        mapSize: () => [],
+                        getProperties: () => sinon.stub()
+                    },
+                    store: getGfiStore,
+                    localVue
+                }),
+                key = "o_b",
+                obj = {
+                    condition: "contains",
+                    type: "number"
+                },
+                gfi = {
+                    foo: "foo",
+                    bar: "bar",
+                    foo_bar: "no number",
+                    bar_foo: "bar_foo"
+                };
+
+            expect(wrapper.vm.prepareGfiValueFromObject(key, obj, gfi)).to.equal("no number");
+        });
     });
     describe("getValueFromCondition", function () {
         it("Should return first key matching the contains condition", function () {

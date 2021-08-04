@@ -1864,7 +1864,7 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|title|ja|String||Titel der im Werkzeug vorkommt.|false|
+|title|nein|String|"common:modules.tools.layerSlider.title"|Titel der im Werkzeug vorkommt.|false|
 |timeInterval|nein|Integer|2000|Zeitintervall in ms bis der nächste Layer angeschaltet wird.|false|
 |layerIds|ja|**[layerId](#markdown-header-portalconfigmenutoollayersliderlayerid)**[]|[]|Array von Objekten aus denen die Layerinformationen herangezogen werden.|false|
 |sliderType|nein|enum["player","handle"]|"player"|Typ des Layer sliders. Entweder als "player" mit Start/Pause/Stop-Buttons oder als "handle" mit einem Hebel. Bei "handle" wird die Transparenz der Layer zusätzlich mit angepasst.|false|
