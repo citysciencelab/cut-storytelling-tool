@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import getters from "../../store/gettersCompareFeatures";
+import getters from "../../../store/gettersCompareFeatures";
 
 const {selectableLayers, isFeatureSelected} = getters;
 

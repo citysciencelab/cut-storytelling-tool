@@ -18,6 +18,4 @@ The Masterportal is a project by [Geowerkstatt Hamburg](https://www.hamburg.de/g
 * [Tutorial 01: Creating a new module (Scale switcher)](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/vueTutorial.md)
 * [Community board (Developer forum and issue tracker)](https://trello.com/c/qajdXkMa/110-willkommen)
 
-[![BrowserStack Status](https://automate.browserstack.com/badge.svg?badge_key=aDNJT1VSRDlMVXNpRzJzYXQ4bHN0RERXbGpETmdQeDBMUlp0cEJkOWNPRT0tLVFJcndaSi9KWFBTM0FVWEZkYnhlS2c9PQ==--0ef330a6aef7023b1f50659a6d57f9369f988f53)](https://automate.browserstack.com/public-build/aDNJT1VSRDlMVXNpRzJzYXQ4bHN0RERXbGpETmdQeDBMUlp0cEJkOWNPRT0tLVFJcndaSi9KWFBTM0FVWEZkYnhlS2c9PQ==--0ef330a6aef7023b1f50659a6d57f9369f988f53)
-
 [![Sauce Test Status](https://app.eu-central-1.saucelabs.com/buildstatus/geodatenanwendungen_gv.hamburg.de)](https://app.eu-central-1.saucelabs.com/builds/dfd7abc54af1493091fbeef1b6b48ca6)

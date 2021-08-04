@@ -155,6 +155,45 @@ const publicHolidayMatrix = {
 };
 
 /**
+ * returns false if this is not a holiday or an object CalendarMoment for the holiday if it is a holiday
+ * @param {Date|String} date the date as JavaScript Date or a string (if string, use format parameter)
+ * @param {String[]|Boolean} [holidayKeys=false] an array of names of holidays to receive (use keys of holidayMatrix above) or false for all
+ * @param {String} [format=false] the format for moment if date is a string (e.g. "YYYY-MM-DD")
+ * @returns {CalendarMoment|Boolean} a CalendarMoment or false if the given date is not a holiday
+ */
+function getPublicHoliday (date, holidayKeys = false, format = false) {
+    const givenMoment = moment(date, format),
+        year = givenMoment.format("YYYY"),
+        easterMoment = getGaussianEasterMoment(year),
+        adventMoment = getFirstAdventMoment(year),
+        keys = Array.isArray(holidayKeys) ? holidayKeys : Object.keys(publicHolidayMatrix),
+        len = keys.length;
+    let i = 0,
+        holidayKey = "",
+        holidayMoment = null;
+
+    for (i = 0; i < len; i++) {
+        holidayKey = keys[i];
+        if (!isCalendarMoment(publicHolidayMatrix[holidayKey])) {
+            continue;
+        }
+
+        holidayMoment = publicHolidayMatrix[holidayKey].getMoment(year, easterMoment, adventMoment);
+        if (givenMoment.format("YYYY-MM-DD") !== holidayMoment.format("YYYY-MM-DD")) {
+            continue;
+        }
+
+        return {
+            moment: holidayMoment,
+            holidayKey,
+            translationKey: publicHolidayMatrix[holidayKey].translationKey
+        };
+    }
+
+    return false;
+}
+
+/**
  * returns an array of CalendarMoment for public holidays based on the given holidayKeys (all if empty)
  * @param {Number} year the year to receive public holidays for in format YYYY
  * @param {String[]|Boolean} [holidayKeys=false] an array of names of holidays to receive (use keys of holidayMatrix above) or false for all
@@ -167,10 +206,7 @@ function getPublicHolidays (year, holidayKeys = false) {
         result = [];
 
     keys.forEach(holidayKey => {
-        if (
-            Object.prototype.hasOwnProperty.call(publicHolidayMatrix, holidayKey) && typeof publicHolidayMatrix[holidayKey] === "object" && publicHolidayMatrix[holidayKey] !== null
-            && typeof publicHolidayMatrix[holidayKey].getMoment === "function" && typeof publicHolidayMatrix[holidayKey].translationKey === "string"
-        ) {
+        if (isCalendarMoment(publicHolidayMatrix[holidayKey])) {
             result.push({
                 moment: publicHolidayMatrix[holidayKey].getMoment(year, easterMoment, adventMoment),
                 holidayKey,
@@ -182,6 +218,15 @@ function getPublicHolidays (year, holidayKeys = false) {
     return result;
 }
 
+/**
+ * checks if the given var is of type CalendarMoment
+ * @param {*} calendarMoment the var to check
+ * @returns {Boolean} true if this is save a CalendarMoment, false if not
+ */
+function isCalendarMoment (calendarMoment) {
+    return typeof calendarMoment === "object" && calendarMoment !== null
+        && typeof calendarMoment.getMoment === "function" && typeof calendarMoment.translationKey === "string";
+}
 
 /**
  * calculates the easter date as day of march using Gaußsche Osterformel (be aware: 32 means first of april)
@@ -231,7 +276,9 @@ function getFirstAdventMoment (year) {
 
 export {
     publicHolidayMatrix,
+    getPublicHoliday,
     getPublicHolidays,
+    isCalendarMoment,
     getGaussianEasterMoment,
     getFirstAdventMoment
 };

@@ -1,8 +1,8 @@
 import Vuex from "vuex";
 import {expect} from "chai";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
-import CompareFeaturesComponent from "../../components/CompareFeatures.vue";
-import CompareFeatures from "../../store/indexCompareFeatures";
+import CompareFeaturesComponent from "../../../components/CompareFeatures.vue";
+import CompareFeatures from "../../../store/indexCompareFeatures";
 
 const localVue = createLocalVue();
 

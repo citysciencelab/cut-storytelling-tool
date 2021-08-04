@@ -4,7 +4,7 @@ import state from "../store/stateCompareFeatures";
  * Helper Function to prepare the Pdf file from currently selected layer and its features on the comparison list.
  * @returns {void}
  */
-async function preparePrint () {
+export async function preparePrint () {
     const tableBody = await prepareTableBody(),
         pdfDef = {
             layout: "A4 Hochformat",
@@ -39,7 +39,7 @@ function prepareTableBody () {
     if (!state.hasMultipleLayers) {
         Object.values(features).forEach(feature => {
             Object.entries(feature).forEach(key => {
-                tableBody.push(Object.values(key[1]).map(value => value === undefined ? "-" : value));
+                tableBody.push(Object.values(key[1]).map(value => prettyValue(value)));
             });
         });
     }
@@ -51,7 +51,23 @@ function prepareTableBody () {
     if (!state.showMoreInfo) {
         return tableBody.slice(0, rowsToShow);
     }
+
     return tableBody;
 }
 
-export default preparePrint;
+/**
+ * Prepare the value for pretty printing.
+ * @param {String} value The value to print.
+ * @returns {String} The pretty value.
+ */
+export function prettyValue (value) {
+    if (value === undefined) {
+        return "-";
+    }
+    else if (value.includes("|")) {
+        return value.split("|").join("\n");
+    }
+    return value;
+}
+
+export default {preparePrint, prettyValue};

@@ -140,8 +140,8 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
         }
     },
     /**
-     * @todo Write the documentation.
-     * @param {Event} event - the key event id triggered by keyboard
+     * @todo Opens the selected tool.
+     * @param {Event} event - the dom event
      * @returns {void}
      */
     checkItem: function (event) {
@@ -150,7 +150,6 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
 
             event.preventDefault();
             event.stopPropagation();
-
 
             Radio.trigger("ClickCounter", "toolChanged");
             if (this.model.get("id") === "legend") {
