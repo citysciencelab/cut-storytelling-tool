@@ -277,8 +277,16 @@
             "glyphicon": "glyphicon-resize-full"
           },
           "supplyCoord": {
-            "name": "translate#common:menu.tools.coord",
+            "name": "translate#common:menu.tools.supplyCoord",
             "glyphicon": "glyphicon-screenshot"
+          },
+          "coordToolkit": {
+            "name": "translate#common:menu.tools.coordToolkit",
+            "glyphicon": "glyphicon-globe",
+            "heightLayerId" : "19173",
+            "heightElementName": "value_0",
+            "heightValueWater": "-20",
+            "heightValueBuilding": "200"
           },
           "shadow": {
             "name": "translate#common:menu.tools.shadow",
@@ -503,6 +511,9 @@
     },
     "Fachdaten": {
       "Layer": [
+        {
+          "id" : "19173"
+        },
         {
           "id": "1132",
           "styleId": "1132",

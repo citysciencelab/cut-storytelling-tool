@@ -9,7 +9,7 @@ Alle Tools sind in der config.json unter “Portalconfig.menu.tools.children” 
 
 * parcelSearch (Flurstückssuche)
 * gfi (GetFeatureInfo)
-* supplyCoord (Koordinaten Abfrage)
+* coordToolkit (Koordinaten Abfrage und Koordinatesuche)
 * print (Drucken)
 * measure (Messen)
 * draw (Zeichnen)
@@ -29,7 +29,7 @@ Alle Tools sind in der config.json unter “Portalconfig.menu.tools.children” 
             "glyphicon": "glyphicon-info-sign",
             "active": true
         },
-        "supplyCoord": {},
+        "coordToolkit": {},
         // ...
     }
 }

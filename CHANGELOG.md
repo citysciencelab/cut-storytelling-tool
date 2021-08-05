@@ -10,12 +10,33 @@
 
 ##  Unreleased - in development
 ### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+---
+
+## v2.12.0 - 2021-08-04
+### Added
 - Start of a calendar library "src/utils/calendar.js" with the first function "getPublicHolidays" to get a list of german public holidays using gaussian easter algorithm and advent algorithm.
 - Adds the documentation for the datasets attributes `csw_url` and `show_doc_url` in the services.json.md.
 
 ### Changed
 - The GFI in attached mode now dynamically adjusts its size to the content.
 - Migrated the CompareFeatures Tool from Backbone.js to Vue.js.
+
+- Accessibility: Implemented keyboard navigation in menu (top-level and themes).
+  - implemented keyboard navigation with arrows and tab
+  - make all action widgets (checkboxes, icon-buttons, etc) tabable
+  - make action execution possible on focused element with space and enter key
+  - introduced :hover-color on all focusable elements
+  - highlight current focused widget
+  - preserve current focus after action execution
 
 ### Deprecated
 
@@ -34,6 +55,7 @@
 ### Added
 - Add possibility to test end2end-tests with `MicrosoftEdge` driver.
 - VTC-Layer supports Sprites and Fonts in Style definitions.
+- A new Tool named coordToolkit is available. It contains the functionality of the tools supplyCord and searchByCoord. Both provide the same projections configured under the key "namedProjections" in config.js.
 
 ### Changed
 - The version of the package selenium-webdriver was updated to version 4.0.0-beta.4.
