@@ -141,6 +141,10 @@ export default {
             margin-bottom: 15px;
         }
 
+        a[target=_blank]{
+            color: #1F4B70;
+        }
+
         .footer-scaleLine {
             position: absolute;
             right: 0;
