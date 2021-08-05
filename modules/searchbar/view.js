@@ -11,6 +11,7 @@ import OSMModel from "./osm/model";
 import LocationFinderModel from "./locationFinder/model";
 import GdiModel from "./gdi/model";
 import ElasticSearchModel from "./elasticSearch/model";
+import KomootModel from "./komoot/model";
 import Searchbar from "./model";
 import "./RadioBridge.js";
 import store from "../../src/app-store/index";
@@ -152,6 +153,9 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         }
         if (Object.prototype.hasOwnProperty.call(config, "elasticSearch")) {
             new ElasticSearchModel(config.elasticSearch);
+        }
+        if (Object.prototype.hasOwnProperty.call(config, "komoot")) {
+            new KomootModel(config.komoot);
         }
 
         this.model.setHitIsClick(false);
