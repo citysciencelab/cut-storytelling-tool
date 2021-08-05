@@ -35,7 +35,7 @@ export default {
         }),
         ...mapGetters("Tools/Gfi", Object.keys(getters)),
         ...mapGetters("Map", {
-            gfiFeatures: "gfiFeatures",
+            gfiFeatures: "gfiFeaturesReverse",
             mapSize: "size"
         }),
         /**
@@ -183,7 +183,7 @@ export default {
         mapProperties: function (properties, mappingObject = {}) {
             const mappedProperties = {};
 
-            Object.keys(mappingObject).forEach(key => {
+            Object.keys(mappingObject).reverse().forEach(key => {
                 let newKey = mappingObject[key],
                     value = this.prepareGfiValue(properties, key);
 

@@ -190,7 +190,17 @@ const gettersMap = {
     prettyMouseCoord: (_, {mouseCoord}) => mouseCoord ? `${mouseCoord[0].toString().substr(0, 9)}, ${mouseCoord[1].toString().substr(0, 10)}` : "",
     projectionCode: (_, g) => g.projection?.getCode(),
     projectionMetersPerUnit: (_, g) => g.projection?.getMetersPerUnit(),
-    projectionUnits: (_, g) => g.projection?.getUnits()
+    projectionUnits: (_, g) => g.projection?.getUnits(),
+    /**
+     * @returns {Array} reversed gfiFeatures Array from state
+     */
+    gfiFeaturesReverse: () => {
+        if (stateMap.gfiFeatures !== null && Array.isArray(stateMap.gfiFeatures)) {
+            return stateMap.gfiFeatures.reverse();
+        }
+
+        return stateMap.gfiFeatures;
+    }
 };
 
 export default gettersMap;
