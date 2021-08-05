@@ -418,7 +418,7 @@ module.exports = {
 };
 ```
 
-## The complete test file: `masterportal/src/modules/tools/scaleSwitcher/tests/end2end/ScaleSwitcher.e2e.js`
+## The complete test file: masterportal/src/modules/tools/scaleSwitcher/tests/end2end/ScaleSwitcher.e2e.js
 
 Remove the `only` from the `describe`. After that the file looks like this.
 
