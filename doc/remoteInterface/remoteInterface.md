@@ -1,3 +1,7 @@
+>Use the remote interface.
+
+[TOC]
+
 # Remote interface
 
 The remote interface allows programmatic interaction with the Masterportal. It gives access to all registered VueX actions and a set of dedicated additional functions.
