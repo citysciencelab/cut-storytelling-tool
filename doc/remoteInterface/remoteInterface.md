@@ -265,3 +265,112 @@ Radio.trigger(
     }
 );
 ```
+
+## Tutorial: Integration of the master portal into an iframe
+The following tutorial shows how to use the masterportal remote interface within an iFrame.
+
+### The first step
+Configure the remoteInterface in the config.js of a portal. This entry is necessary to open the interface to the outside of the portal.
+
+```js
+const Config = {
+...
+    remoteInterface: {
+        postMessageUrl: "https://localhost:9001"
+    },
+...
+}
+```
+
+### The second step
+Configure the input map and in it the target projection in the config.js of the same portals as the first step. Coordinates will be translated to it before being communicated via remoteInterface.
+
+```js
+const Config = {
+...
+    inputMap: {
+        targetProjection: "EPSG:4326"
+    },
+...
+}
+```
+
+### The third step
+Create an html-file and add the follow content. In it, an iframe is created in which the portal `https://localhost:9001/portal/master` is loaded. Then 3 buttons are created and a click event is assigned to each.
+
+The example can also be called directly here with a running server:  **[iframe Example](https://localhost:9001/doc/remoteInterface/iframeExample.html)**
+
+Example of an iframe:
+```html
+<!DOCTYPE html>
+<html style="height:100%">
+<body style="height:100%">
+
+<style>
+    html, body { height:100%; }
+    button { width: 50px; }
+</style>
+
+<!-- Create a iframe with the portal master as source. -->
+<iframe
+    id="iframe"
+    src="https://localhost:9001/portal/master"
+    width="100%"
+    height="85%"
+    name="SELFHTML_in_a_box"
+></iframe>
+
+<!-- Createthree buttons. -->
+<button id="b1">1</button>
+<button id="b2">2</button>
+<button id="b3">3</button>
+
+</body>
+
+<script>
+    // Gets the elements from dom.
+    const iframe1 = document.getElementById("iframe"),
+        b1 = document.getElementById("b1"),
+        b2 = document.getElementById("b2"),
+        b3 = document.getElementById("b3");
+
+    // Sets the screen back to the start scale
+    b1.addEventListener("click", event => {
+        iframe1.contentWindow.postMessage({
+            radio_channel: "RemoteInterface",
+            radio_function: "resetView",
+            radio_para_object: {}
+        });
+    });
+
+    // Outputs a message with the message "foo".
+    b2.addEventListener("click", event => {
+        iframe1.contentWindow.postMessage({
+            namespace: "Alerting",
+            action: "addSingleAlert",
+            args: {content: "foo"}
+        });
+    });
+
+    // Starts a draw event. A polygon can be drawn on the map with the mouse.
+    b3.addEventListener("click", event => {
+        iframe1.contentWindow.postMessage({
+            namespace: "Tools/Draw",
+            action: "initializeWithoutGUI",
+            args: {"drawType": "Polygon", "color": [127,255,0,0.5], "opacity": 0.5, "maxFeatures": null, "initialJSON": null}
+        });
+    });
+
+    // Logs the message event.
+    window.addEventListener("message", function (messageEvent) {
+        console.log(messageEvent);
+        if (messageEvent.data === "portalReady") {
+            Radio.request("RemoteInterface", "getZoomLevel");
+        }
+    }, false);
+
+</script>
+
+</html>
+
+```
