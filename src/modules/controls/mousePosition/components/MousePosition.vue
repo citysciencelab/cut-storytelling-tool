@@ -84,5 +84,9 @@ export default {
             border-right: 1px solid @primary_contrast;
             color: #FFFFFF;
         }
+
+        .control-icon[data-v-88407a44]{
+            color: #FFFFFF;
+        }
     }
 </style>
