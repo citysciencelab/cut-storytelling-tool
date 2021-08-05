@@ -72,7 +72,6 @@ export default {
 <template>
     <div
         class="modal fade in poi-choice"
-        @keydown.esc="hidePoiChoice"
     >
         <div class="modal-dialog">
             <div class="modal-content">

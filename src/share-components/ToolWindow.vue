@@ -65,10 +65,8 @@ export default {
 
             <div class="heading-element">
                 <span
-                    tabindex="0"
                     class="glyphicon glyphicon-remove"
                     @click="close($event)"
-                    @keydown.enter="close($event)"
                 />
             </div>
         </div>
