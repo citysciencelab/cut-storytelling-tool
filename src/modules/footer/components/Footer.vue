@@ -61,12 +61,6 @@ export default {
                     }
                     model.setIsActive(!model.attributes.isActive);
                 }
-                else if (store.state.Tools[toolModelId]) {
-                    store.commit(`Tools/${toolModelId}/setActive`, !store.state.Tools[toolModelId].active);
-                    if (store.state.Tools.Gfi.active) {
-                        store.commit("Tools/Gfi/setActive", false);
-                    }
-                }
             }
         }
     }
