@@ -65,7 +65,10 @@ export default {
             :class="isTable ? 'table freeze-view-close' : 'freeze-view-close'"
             :title="$t(`common:modules.controls.freeze.unfreeze`)"
             :style="isTable ? cssVars : ''"
+            role="button"
+            tabindex="0"
             @click="hideFreezeWin"
+            @keydown.enter="hideFreezeWin"
         >
             {{ $t(`common:modules.controls.freeze.unfreeze`) }}
         </p>

@@ -292,7 +292,6 @@ export default {
         id="surrounding_vectorfeatures"
         class="modal fade in poi"
         @keydown.esc="hidePoi"
-
     >
         <div class="modal-dialog">
             <div class="modal-content">
