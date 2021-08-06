@@ -14,6 +14,7 @@
 
 ### Changed
 - The GFI in attached mode now dynamically adjusts its size to the content.
+- Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.
 
 ### Deprecated
 
