@@ -6,6 +6,7 @@ import ScaleLine from "../../scaleLine/components/ScaleLine.vue";
 import Language from "../../language/components/Language.vue";
 import MousePosition from "../../controls/mousePosition/components/MousePosition.vue";
 import store from "../../../app-store/index";
+import getComponent from "../../../utils/getComponent";
 
 /**
  * Footer that is displayed below the map. The version of the masterportal and links can be displayed here.
@@ -44,21 +45,21 @@ export default {
          * @returns {void}
          */
         toggleTool (toolModelId, event) {
-            if (toolModelId) {
-                const model = Radio.request("ModelList", "getModelByAttributes", {id: toolModelId});
+            let model;
 
-                if (model && model.setIsActive() !== undefined) {
+            if (toolModelId) {
+                if (store.state.Tools[toolModelId]) {
+                    model = getComponent(store.state.Tools[toolModelId].id);
+                    store.dispatch("Tools/setToolActive", {id: toolModelId, active: !model.attributes.isActive});
+                }
+                else {
+                    model = Radio.request("ModelList", "getModelByAttributes", {id: toolModelId});
+                }
+                if (model) {
                     if (event) {
                         event.preventDefault();
                     }
-
-                    model.setIsActive(!model.isActive);
-                }
-                else if (store.state.Tools[toolModelId]) {
-                    store.commit(`Tools/${toolModelId}/setActive`, !store.state.Tools[toolModelId].active);
-                    if (store.state.Tools.Gfi.active) {
-                        store.commit("Tools/Gfi/setActive", false);
-                    }
+                    model.setIsActive(!model.attributes.isActive);
                 }
             }
         }
