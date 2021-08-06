@@ -131,10 +131,23 @@ export default {
             const iframe = document.getElementsByClassName("gfi-iFrame")[0];
 
             if (this.mimeType === "text/html" && iframe) {
+                this.setIframeSize(iframe, this.feature.getTheme()?.params);
                 iframe.contentWindow.document.open();
                 iframe.contentWindow.document.write(this.feature.getDocument());
                 iframe.contentWindow.document.close();
             }
+        },
+
+        /**
+         * Sets the size of the given iframe.
+         * The iframe size can be overwritten in the config.json at the layer.
+         * @param {Object} iframe The iframe.
+         * @param {Object} params The gfi parameters.
+         * @returns {void}
+         */
+        setIframeSize: function (iframe, params) {
+            iframe.style.width = params?.iframe?.width;
+            iframe.style.height = params?.iframe?.height;
         }
     }
 };
