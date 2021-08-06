@@ -388,9 +388,6 @@ export default {
 
 .gfi {
     color: @secondary_contrast;
-    .tool-window-vue {
-        max-width: 600px;
-    }
 }
 .bold{
     font-weight: bold;

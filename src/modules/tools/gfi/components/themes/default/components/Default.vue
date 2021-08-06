@@ -264,6 +264,7 @@ export default {
     line-height: 1px;
 }
 .gfi-theme-images {
+    max-width: 600px;
     height: 100%;
 }
 .gfi-theme-images-image {

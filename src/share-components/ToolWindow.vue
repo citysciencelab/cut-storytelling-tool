@@ -150,7 +150,6 @@ export default {
     }
 
     .vue-tool-content-body {
-        max-height:72vh;
         position: relative;
         height: calc(100% - 58px);
         width: 100%;
