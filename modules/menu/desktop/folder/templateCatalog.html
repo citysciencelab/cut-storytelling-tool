@@ -1,43 +1,49 @@
 <!DOCTYPE html>
  <% if (isExpanded === true) { %>
-    <div class="header <%= id %>">
+<div class="menu-row header <%= id %>" >
+    <a class="<%= id %> dropdown-item tabable" tabindex="0">
         <span class="glyphicon glyphicon-minus-sign"></span>
  <% } else {%>
-    <div class="header <%= id %> closed">
+<div class="menu-row header <%= id %> closed" >
+    <a class="<%= id %> dropdown-item tabable" tabindex="0">
         <span class="glyphicon glyphicon-plus-sign"></span>
 <% } %>
         <span class="control-label"><%= name %></span>
-<% if (id === "Baselayer") { %>
-    <span class="catalog_buttons pull-right">
-        <% if (this.model.get("quickHelp") === true) { %>
-            <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="bottom" title="<%= topicsHelpText%>"></span>
-        <% } %>
-        <% if (backgroundImage) { %>
-            <span class="glyphicon glyphicon-adjust rotate-adjust-back" data-toggle="tooltip" data-placement="bottom" title="<%= mapBackgroundText%>"></span>
-        <% } %>
-        <span class="glyphicon glyphicon-pushpin rotate-pin-back" data-toggle="tooltip" data-placement="bottom" title="<%= pinTopicsTreeText%>"></span>
-    <span>
-<% } %>
-<% if (id === "Overlayer" && treeType === "default") { %>
-        <form class="form-inline pull-right">
-            <div class="form-group catalog-selection">
-                <span class="control-label"><%= categoryText %></span>
-                <select class="form-control">
-                    <% categories.forEach(function (cat) { %>
-                        <% if (cat === category) { %>
-                            <option <% print ("SELECTED") %>><%= cat %></option>
-                        <% } else { %>
-                            <option><%= cat %></option>
-                    <% }}); %>
-                </select>
-            </div>
-        </form>
-<% } %>
-<% if (id === "SelectedLayer" && this.model.collection.has("saveSelection")) { %>
-    <div class="layer-selection-save pull-right">
-        <span><%= saveSelectionText %></span>
-        <span class="glyphicon glyphicon-share"></span>
+    </a>
+
+    <div class="last-item">
+    <% if (id === "Baselayer") { %>
+        <span class="catalog_buttons">
+            <% if (this.model.get("quickHelp") === true) { %>
+                <span class="glyphicon glyphicon-question-sign tabable" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="<%= topicsHelpText%>"></span>
+            <% } %>
+            <% if (backgroundImage) { %>
+                <span class="glyphicon glyphicon-adjust rotate-adjust-back tabable" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="<%= mapBackgroundText%>"></span>
+            <% } %>
+            <span class="glyphicon glyphicon-pushpin rotate-pin-back tabable" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="<%= pinTopicsTreeText%>"></span>
+        <span>
+    <% } %>
+    <% if (id === "Overlayer" && treeType === "default") { %>
+            <form class="form-inline">
+                <div class="form-group catalog-selection">
+                    <span class="control-label"><%= categoryText %></span>
+                    <select class="form-control tabable" tabindex="0">
+                        <% categories.forEach(function (cat) { %>
+                            <% if (cat === category) { %>
+                                <option <% print ("SELECTED") %>><%= cat %></option>
+                            <% } else { %>
+                                <option><%= cat %></option>
+                        <% }}); %>
+                    </select>
+                </div>
+            </form>
+    <% } %>
+    <% if (id === "SelectedLayer" && this.model.collection.has("saveSelection")) { %>
+        <div class="layer-selection-save tabable" tabindex="0">
+            <span><%= saveSelectionText %></span>
+            <span class="glyphicon glyphicon-share"></span>
+        </div>
+    <% } %>
     </div>
-<% } %>
-    </div>
-    <ul id="<%= id %>"></ul>
+</div>
+<ul id="<%= id %>"></ul>

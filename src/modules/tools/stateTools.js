@@ -13,6 +13,7 @@ import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 import SelectFeatures from "./selectFeatures/components/SelectFeatures.vue";
 import BufferAnalysis from "./bufferAnalysis/components/BufferAnalysis.vue";
 
+import CoordToolkit from "./coordToolkit/components/CoordToolkit.vue";
 /**
  * User type definition
  * @typedef {Object} ToolsState
@@ -34,7 +35,8 @@ const state = {
         styleVT: StyleVT,
         supplyCoord: SupplyCoord,
         selectFeatures: SelectFeatures,
-        bufferAnalysis: BufferAnalysis
+        bufferAnalysis: BufferAnalysis,
+        coordToolkit: CoordToolkit
     },
     configuredTools: []
 };
