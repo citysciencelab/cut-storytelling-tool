@@ -13,6 +13,7 @@
 - Autocomplete functionality for the contact tool.
 ### Changed
 - Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.
+- LayerInformation now shows Message in case the MetaData couldn't be loaded
 
 ### Deprecated
 
