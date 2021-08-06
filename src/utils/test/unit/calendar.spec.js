@@ -39,6 +39,13 @@ describe("src/utils/calendar.js", () => {
             expect(calendarMoment.format("YYYY-MM-DD")).to.equal("2021-04-04");
         });
     });
+    it("should return easter sunday of a given year if a string year is given", () => {
+        const calendarMoment = getGaussianEasterMoment("2021");
+
+        expect(calendarMoment).to.be.an("object");
+        expect(calendarMoment.format).to.be.a("function");
+        expect(calendarMoment.format("YYYY-MM-DD")).to.equal("2021-04-04");
+    });
     describe("isCalendarMoment", () => {
         it("should return false if the given param is not a CalendarMoment", () => {
             expect(isCalendarMoment(undefined)).to.be.false;

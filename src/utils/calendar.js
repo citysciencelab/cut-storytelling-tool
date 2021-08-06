@@ -174,6 +174,7 @@ function getPublicHoliday (date, holidayKeys = false, format = false) {
 
     for (i = 0; i < len; i++) {
         holidayKey = keys[i];
+
         if (!isCalendarMoment(publicHolidayMatrix[holidayKey])) {
             continue;
         }
@@ -231,32 +232,32 @@ function isCalendarMoment (calendarMoment) {
 /**
  * calculates the easter date as day of march using Gaußsche Osterformel (be aware: 32 means first of april)
  * @link https://de.wikipedia.org/wiki/Gau%C3%9Fsche_Osterformel
- * @param {Number} year the year to get the easter date for
+ * @param {String|Number} year the year to get the easter date for
  * @returns {Object} the day of easter for the given year as moment representation
  */
 function getGaussianEasterMoment (year) {
-    const x = year,
-        // 1.    "die Säkularzahl    K(X) = X div 100"
+    const x = parseInt(year, 10),
+        // 1.    "secular number     K(X) = X div 100"
         k = Math.floor(x / 100),
-        // 2.    "die säkulare Mondschaltung    M(K) = 15 + (3K + 3) div 4 − (8K + 13) div 25"
+        // 2.    "secular lunar leap    M(K) = 15 + (3K + 3) div 4 − (8K + 13) div 25"
         m = 15 + Math.floor((3 * k + 3) / 4) - Math.floor((8 * k + 13) / 25),
-        // 3.    "die säkulare Sonnenschaltung    S(K) = 2 − (3K + 3) div 4"
+        // 3.    "secular solar leap    S(K) = 2 − (3K + 3) div 4"
         s = 2 - Math.floor((3 * k + 3) / 4),
-        // 4.    "den Mondparameter    A(X) = X mod 19"
+        // 4.    "lunar parameter    A(X) = X mod 19"
         a = x % 19,
-        // 5.    "den Keim für den ersten Vollmond im Frühling    D(A,M) = (19A + M) mod 30"
+        // 5.    "seed for first full moon in spring    D(A,M) = (19A + M) mod 30"
         d = (19 * a + m) % 30,
-        // 6.    "die kalendarische Korrekturgröße    R(D,A) = (D + A div 11) div 29" (Kinkelin)
+        // 6.    "calendaric correcting quantity    R(D,A) = (D + A div 11) div 29"
         r = Math.floor(Math.floor(d + a / 11) / 29),
-        // 7.    "die Ostergrenze    OG(D,R) = 21 + D − R"
+        // 7.    "Easter barrier    OG(D,R) = 21 + D − R"
         og = 21 + d - r,
-        // 8.    "den ersten Sonntag im März    SZ(X,S) = 7 − (X + X div 4 + S) mod 7"
+        // 8.    "first sunday in March    SZ(X,S) = 7 − (X + X div 4 + S) mod 7"
         sz = 7 - Math.floor(x + x / 4 + s) % 7,
-        // 9.    "die Entfernung des Ostersonntags von der Ostergrenze
-        //      (Osterentfernung in Tagen)    OE(OG,SZ) = 7 − (OG − SZ) mod 7"
+        // 9.    "distance in days between Easter Sunday and Easter barrier
+        //      (distance in days)    OE(OG,SZ) = 7 − (OG − SZ) mod 7"
         oe = 7 - (og - sz) % 7,
-        // 10.    "das Datum des Ostersonntags als Märzdatum
-        //      (32. März = 1. April usw.)    OS = OG + OE"
+        // 10.    "date of Easter Sunday as if it was in March
+        //      (32. March = 1. April usw.)    OS = OG + OE"
         os = Math.floor(og + oe);
 
     if (os > 31) {

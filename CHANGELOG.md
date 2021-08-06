@@ -12,6 +12,7 @@
 ### Added
 - Autocomplete functionality for the contact tool.
 ### Changed
+- Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.
 
 ### Deprecated
 
@@ -25,11 +26,11 @@
 ### Added
 - Start of a calendar library "src/utils/calendar.js" with the first function "getPublicHolidays" to get a list of german public holidays using gaussian easter algorithm and advent algorithm.
 - Adds the documentation for the datasets attributes `csw_url` and `show_doc_url` in the services.json.md.
+- A new Tool named coordToolkit is available. It contains the functionality of the tools supplyCord and searchByCoord. Both provide the same projections configured under the key "namedProjections" in config.js.
 
 ### Changed
 - The GFI in attached mode now dynamically adjusts its size to the content.
 - Migrated the CompareFeatures Tool from Backbone.js to Vue.js.
-
 - Accessibility: Implemented keyboard navigation in menu (top-level and themes).
   - implemented keyboard navigation with arrows and tab
   - make all action widgets (checkboxes, icon-buttons, etc) tabable
@@ -39,6 +40,8 @@
   - preserve current focus after action execution
 
 ### Deprecated
+- Tool searchByCoord is deprecated in 3.0.0. Please use "coordToolkit" instead.
+- Tool supplyCoord is deprecated in 3.0.0. Please use "coordToolkit" instead.
 
 ### Removed
 - Support of End2End tests for `Browserstack` has been removed.Instead `saucelabs` is used.
@@ -55,7 +58,6 @@
 ### Added
 - Add possibility to test end2end-tests with `MicrosoftEdge` driver.
 - VTC-Layer supports Sprites and Fonts in Style definitions.
-- A new Tool named coordToolkit is available. It contains the functionality of the tools supplyCord and searchByCoord. Both provide the same projections configured under the key "namedProjections" in config.js.
 
 ### Changed
 - The version of the package selenium-webdriver was updated to version 4.0.0-beta.4.

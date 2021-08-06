@@ -71,6 +71,7 @@ export default {
     <div
         id="modal-1-container"
         :class="[showingClass]"
+        role="alert"
     >
         <div id="modal-1-overlay" />
         <div
@@ -84,6 +85,8 @@ export default {
                 <span
                     class="glyphicon glyphicon-remove"
                     title="Discard"
+                    tabindex="0"
+                    @keydown.enter="discardByClickX"
                     @click="discardByClickX"
                 />
                 <div
