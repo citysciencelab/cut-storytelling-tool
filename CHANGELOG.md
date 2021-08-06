@@ -10,7 +10,7 @@
 
 ##  Unreleased - in development
 ### Added
-
+- Autocomplete functionality for the contact tool.
 ### Changed
 
 ### Deprecated
@@ -24,7 +24,6 @@
 ## v2.12.0 - 2021-08-04
 ### Added
 - Start of a calendar library "src/utils/calendar.js" with the first function "getPublicHolidays" to get a list of german public holidays using gaussian easter algorithm and advent algorithm.
-- Autocomplete functionality for the contact tool.
 - Adds the documentation for the datasets attributes `csw_url` and `show_doc_url` in the services.json.md.
 
 ### Changed
