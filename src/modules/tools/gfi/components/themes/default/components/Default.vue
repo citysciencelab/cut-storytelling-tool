@@ -22,7 +22,8 @@ export default {
         return {
             imageLinks: ["bildlink", "link_bild", "Bild"],
             importedComponents: [],
-            showFavoriteIcons: true
+            showFavoriteIcons: true,
+            maxWidth: "600px"
         };
     },
     computed: {
@@ -56,6 +57,7 @@ export default {
         feature () {
             this.$nextTick(() => {
                 this.addTextHtmlContentToIframe();
+                this.setMaxWidth(this.feature.getTheme()?.params);
             });
         }
     },
@@ -69,6 +71,7 @@ export default {
     mounted () {
         this.$nextTick(() => {
             this.addTextHtmlContentToIframe();
+            this.setMaxWidth(this.feature.getTheme()?.params);
         });
     },
     methods: {
@@ -146,8 +149,27 @@ export default {
          * @returns {void}
          */
         setIframeSize: function (iframe, params) {
+            document.getElementsByClassName("gfi-theme-iframe")[0].style.maxWidth = "";
             iframe.style.width = params?.iframe?.width;
             iframe.style.height = params?.iframe?.height;
+        },
+
+        /**
+         * Sets the max-width of the default gfiTheme content.
+         * @param {Object} params The gfi parameters.
+         * @returns {void}
+         */
+        setMaxWidth: function (params) {
+            if (this.mimeType !== "text/html") {
+                const gfiThemeContainer = document.getElementsByClassName("gfi-theme-images")[0];
+
+                if (params?.maxWidth) {
+                    gfiThemeContainer.style.maxWidth = params?.maxWidth;
+                }
+                else {
+                    gfiThemeContainer.style.maxWidth = this.maxWidth;
+                }
+            }
         }
     }
 };
