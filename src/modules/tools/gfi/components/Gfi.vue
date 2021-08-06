@@ -7,6 +7,7 @@ import Table from "./templates/Table.vue";
 import Attached from "./templates/Attached.vue";
 import {omit} from "../../../../utils/objectHelpers";
 import moment from "moment";
+import thousandsSeparator from "../../../../utils/thousandsSeparator";
 
 export default {
     name: "Gfi",
@@ -220,6 +221,11 @@ export default {
                     if (date.isValid()) {
                         preparedValue = moment(String(preparedValue)).format(format);
                     }
+                    break;
+                }
+                case "number": {
+                    preparedValue = thousandsSeparator(preparedValue);
+
                     break;
                 }
                 // default equals to obj.type === "string"

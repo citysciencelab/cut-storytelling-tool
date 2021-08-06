@@ -12,11 +12,13 @@ export default {
     },
     data: function () {
         return {
-            gfiFeature: {featureId: this.feature.getId(),
+            gfiFeature: {
+                featureId: this.feature.getId(),
                 layerId: this.feature.getLayerId(),
                 layerName: this.feature.getTitle(),
                 attributesToShow: this.feature.getAttributesToShow(),
-                properties: this.feature.getMappedProperties()}
+                properties: this.feature.getMappedProperties()
+            }
         };
     },
     computed: {
@@ -35,6 +37,22 @@ export default {
          */
         titleCompareList: function () {
             return this.featureIsOnCompareList ? this.$t("modules.tools.gfi.favoriteIcons.compareFeatureIcon.fromCompareList") : this.$t("modules.tools.gfi.favoriteIcons.compareFeatureIcon.toCompareList");
+        }
+    },
+    watch: {
+        /**
+         * If the feature is changed with GFI open, the gfiFeature must be changed here.
+         * @param {Object} value An object with gfi properties.
+         * @returns {void}
+         */
+        feature (value) {
+            this.gfiFeature = {
+                featureId: value.getId(),
+                layerId: value.getLayerId(),
+                layerName: value.getTitle(),
+                attributesToShow: value.getAttributesToShow(),
+                properties: value.getMappedProperties()
+            };
         }
     },
     methods: {

@@ -1,6 +1,8 @@
-# Browser testing with Selenium WebDriver
+>Browser testing with Selenium WebDriver
 
-## Install browser test drivers (WebDrivers)
+[TOC]
+
+# Install browser test drivers (WebDrivers)
 
    To locally run the browser tests, drivers have to be installed on your system. At least *chromedriver* should be installed, but you may also install further drivers for test automation. (Hint: For Firefox, the name of the WebDriver is *geckodriver*.)
 
@@ -14,7 +16,7 @@
 
    To test your setup, open a new `cmd` terminal (no administrative rights required) and run e.g. `chromedriver`. This should print *"ChromeDriver was started successfully."*, or any other confirmation, depending on the driver you're testing.
 
-## Locally run tests
+# Locally run tests
 
 To locally run the tests, a Masterportal dev server has to be started. Run `npm start` to do so. Then, run `npm run browsertest` to execute the tests.
 
@@ -27,7 +29,7 @@ $ browser=firefox url=[url] proxy=[proxyurl] ./node_modules/.bin/mocha ./test/en
 
 You may also define the variables for your test environment by creating a file `.env` in the Masterportal root, containing your variables. The file will be read on each test run.
 
-## Run tests on SauceLabs.com
+# Run tests on SauceLabs.com
 
 To run the local systems tests on Sauce Labs, you need to open a [sauce trusted connection](https://docs.saucelabs.com/secure-connections):
 
@@ -45,9 +47,9 @@ $ bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -x $SAUCE_DC -i TUNNEL_ID'
 $ npm run browsertestOnSauceLabs
 ```
 
-## How to write tests
+# How to write tests
 
-### Test file location
+## Test file location
 
 Test files have to be saved with the file extension `.e2e.js`. All test files have to be placed next to the component and store being tested in a separate `tests/end2end` folder. For illustration, the following example was constructed using the `ScaleSwitcher` component.
 
@@ -164,7 +166,7 @@ Sets the title of the test, if the tests are executed via a pipeline on Saucelab
 ```js
  before(async function () {
     if (capability) {
-        // Title for the tests on browserstack
+        // Title for the tests on saucelabs
         capability.name = this.currentTest.fullTitle();
         // Title for the tests on saucelabs
         capability["sauce:options"].name = this.currentTest.fullTitle();
@@ -210,7 +212,8 @@ afterEach(async function () {
 ```
 
 
-All hooks together:
+### All hooks together:
+
 ```js
 const webdriver = require("selenium-webdriver"),
     {isMaster} = require("../../../../../../test/end2end/settings"),
@@ -415,7 +418,7 @@ module.exports = {
 };
 ```
 
-## The complete test file: `masterportal/src/modules/tools/scaleSwitcher/tests/end2end/ScaleSwitcher.e2e.js`
+## The complete test file: masterportal/src/modules/tools/scaleSwitcher/tests/end2end/ScaleSwitcher.e2e.js
 
 Remove the `only` from the `describe`. After that the file looks like this.
 

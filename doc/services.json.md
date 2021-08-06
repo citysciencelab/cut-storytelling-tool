@@ -543,12 +543,32 @@ Metadata specification. All metadata of the layer data is referenced here. By cl
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
 |md_id|no|String||Metadata record identifier|
-|rs_id|no|String||Resource identifier of the metadata record|
-|md_name|no|String||Record name|
-|bbox|no|String||Record extension|
-|kategorie_opendata|no|String||Opendata category from the govdata.de code list|
-|kategorie_inspire|no|String||Inspire category from the Inspire code list, if available; if not, set to `"nicht Inspire-identifiziert"`|
-|kategorie_organisation|no|String||Organization name of the data holding body|
+|csw_url|no|String||Link to the CSW service. From this, the data that is displayed in the layer information is retrieved.|
+|show_doc_url|no|String||Link to the entry in the metadata catalog. The link to the metadata entry of the layer is created from this URL and the `"md_id"`.|
+|rs_id|no|String||Resource identifier of the metadata record.|
+|md_name|no|String||Record name.|
+|bbox|no|String||Record extension.|
+|kategorie_opendata|no|String||Opendata category from the govdata.de code list.|
+|kategorie_inspire|no|String||Inspire category from the Inspire code list, if available; if not, set to `"nicht Inspire-identifiziert"`.|
+|kategorie_organisation|no|String||Organization name of the data holding body.|
+
+**datasets example:**
+
+```json
+"datasets" : [
+    {
+        "md_id" : "9329C2CB-4552-4780-B343-0CC847538896",
+        "csw_url" : "https://metaver.de/csw",
+        "show_doc_url" : "https://metaver.de/trefferanzeige?cmd=doShowDocument&docuuid=",
+        "rs_id" : "https://registry.gdi-de.org/id/de.hh/010d7370-5306-4b63-983b-59cdd6e94c3c",
+        "md_name" : "Krankenhäuser Hamburg",
+        "bbox" : "461468.968928975,5916367.22980651,587010.909598947,5980347.75579767",
+        "kategorie_opendata" : [ "Gesundheit" ],
+        "kategorie_inspire" : [ "Versorgungswirtschaft und staatliche Dienste" ],
+        "kategorie_organisation" : "Behörde für Arbeit, Gesundheit, Soziales, Familie und Integration"
+    }
+]
+```
 
 ***
 
@@ -591,7 +611,7 @@ Definition of parameters for GFI template `"default"`.
 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
-|imageLinks|no|String/String[]|`["imgLink", "link_image"]`|Defines in which attribute an image reference is given. Attributes will be searched in given order, and the first hit will be used.|
+|imageLinks|no|String/String[]|`["bildlink", "link_bild", "Bild"]`|Defines in which attribute an image reference is given. Attributes will be searched in given order, and the first hit will be used.|
 |showFavoriteIcons|no|Boolean|`true`|Specifies whether an icon bar allowing tool access is to be displayed. The icons are only displayed if the corresponding tools are configured. Usable tools: `compareFeatures` (not yet implemented for WMS).
 
 
@@ -603,9 +623,10 @@ Definition of parameters for GFI template `"default"`.
         "name": "default",
         "params": {
             "imageLinks": [
-                "imageLink",
-                "linkImage",
-                "abc"
+                "bildlink",
+                "link_bild",
+                "Bild",
+                "My_image_tag"
             ],
             "showFavoriteIcons": true
         }
@@ -855,7 +876,7 @@ If the gfiAttributes are given as an object, a key's value may also be an object
 |----|--------|----|-------|-----------|-------|
 |name|yes|String||Name to be shown on an exact match.|`"Test"`|
 |condition|yes|enum["contains", "startsWith", "endsWith"]||Condition checked on each feature attribute.|`"startsWith"`|
-|type|no|enum["string","date"]|`"string"`|If `"date"`, the portal will attempt to parse the attribute value to a date.|`"date"`|
+|type|no|enum["string", "date", "number"]|`"string"`|If `"date"`, the portal will attempt to parse the attribute value to a date; If `"Number"`, the portal will attempt to parse the attribute value to with thousand seperator;|`"date"`|
 |format|no|String|`"DD.MM.YYYY HH:mm:ss"`|Data format.|`"DD.MM.YYY"`|
 |prefix|no|String||Attribute value prefix.|Add string to value without whitespace `"https://"`|
 |suffix|no|String||Attribute value suffix.|`"°C"`|
@@ -892,6 +913,24 @@ If the gfiAttributes are given as an object, a key's value may also be an object
       }
    }
 }
+
+```
+
+**gfiAttributes example object using `number`:**
+
+```json
+{
+   "gfiAttributes": {
+      "key1": "key shown in the portal 1",
+      "key2": "key shown in the portal 2",
+      "key3": {
+         "name": "key shown in the portal 3",
+         "condition": "contains",
+         "type": "number"
+      }
+   }
+}
+
 ```
 
 **gfiAttributes example object with [Objektpfadverweis](style.json.md#markdown-header-objektpfadverweise) (object path reference) key and object value:**

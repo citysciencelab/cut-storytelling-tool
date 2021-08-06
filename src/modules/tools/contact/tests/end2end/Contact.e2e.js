@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
-    {isMaster} = require("../../../../../../test/end2end/settings"),
+    {isMaster, isSafari} = require("../../../../../../test/end2end/settings"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {By, until} = webdriver;
 
@@ -13,7 +13,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ContactTests ({builder, url, resolution, capability}) {
+async function ContactTests ({builder, url, browsername, resolution, capability}) {
     // for a start, testing from 2D desktop mode
     const testIsApplicable = isMaster(url);
 
@@ -92,8 +92,9 @@ async function ContactTests ({builder, url, resolution, capability}) {
                 expect(await textInput.getAttribute("value")).to.equal("Test crashed? A happy little mistake.");
             });
 
-            it("making the view smaller keeps form in window", async function () {
+            (isSafari(browsername) ? it.skip : it)("making the view smaller keeps form in window", async function () {
                 await driver.manage().window().setRect({width: windowWidth, height: windowHeight});
+
 
                 const {height, width, x, y} = await toolWindow.getRect();
 
