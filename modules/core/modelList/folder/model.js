@@ -190,6 +190,10 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
         else {
             this.setIsExpanded(true);
         }
+        this.toggleCatalogs();
+    },
+
+    toggleCatalogs: function () {
         if (this.get("parentId") === "tree" && !this.get("isAlwaysExpanded")) {
             this.collection.toggleCatalogs(this.get("id"));
         }

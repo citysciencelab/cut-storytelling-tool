@@ -17,8 +17,10 @@ import SearchByCoord from "./searchByCoord/store/indexSearchByCoord";
 import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
 import StyleVT from "./styleVT/store/indexStyleVT";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
+import CompareFeatures from "./compareFeatures/store/indexCompareFeatures";
 import SelectFeatures from "./selectFeatures/store/indexSelectFeatures";
 import BufferAnalysis from "./bufferAnalysis/store/indexBufferAnalysis";
+import CoordToolkit from "./coordToolkit/store/indexCoordToolkit";
 
 /**
  * This is here to test app-store/utils/composeModules.
@@ -34,12 +36,14 @@ export default {
         Gfi,
         Measure,
         SaveSelection,
-        SearchByCoord,
         ScaleSwitcher,
-        StyleVT,
         SupplyCoord,
+        CompareFeatures,
+        SearchByCoord,
+        StyleVT,
         SelectFeatures,
-        BufferAnalysis
+        BufferAnalysis,
+        CoordToolkit
     },
     state,
     getters,

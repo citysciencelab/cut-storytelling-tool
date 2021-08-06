@@ -10,7 +10,6 @@
 
 ##  Unreleased - in development
 ### Added
-- ...
 
 ### Changed
 
@@ -19,7 +18,38 @@
 ### Removed
 
 ### Fixed
+
+---
+
+## v2.12.0 - 2021-08-04
+### Added
+- Start of a calendar library "src/utils/calendar.js" with the first function "getPublicHolidays" to get a list of german public holidays using gaussian easter algorithm and advent algorithm.
+- Adds the documentation for the datasets attributes `csw_url` and `show_doc_url` in the services.json.md.
+- A new Tool named coordToolkit is available. It contains the functionality of the tools supplyCord and searchByCoord. Both provide the same projections configured under the key "namedProjections" in config.js.
+
+### Changed
+- The GFI in attached mode now dynamically adjusts its size to the content.
+- Migrated the CompareFeatures Tool from Backbone.js to Vue.js.
+- Accessibility: Implemented keyboard navigation in menu (top-level and themes).
+  - implemented keyboard navigation with arrows and tab
+  - make all action widgets (checkboxes, icon-buttons, etc) tabable
+  - make action execution possible on focused element with space and enter key
+  - introduced :hover-color on all focusable elements
+  - highlight current focused widget
+  - preserve current focus after action execution
+
+### Deprecated
+- Tool searchByCoord is deprecated in 3.0.0. Please use "coordToolkit" instead.
+- Tool supplyCoord is deprecated in 3.0.0. Please use "coordToolkit" instead.
+
+### Removed
+- Support of End2End tests for `Browserstack` has been removed.Instead `saucelabs` is used.
+
+### Fixed
 - Issue #626: The Legend menu item is placed according to the order of the menu items in config.json.
+- Issue #628: The Legend menu item is now translated correctly again and works as usual after a translation.
+- In the layerslider tool, the attribute title can now be overwritten again in config.json.
+- Issue #629: In the GFI theme default, the tag name for URLs to images can now be overridden again. In addition, "image" has been added to the defaults.
 
 ---
 
@@ -37,13 +67,9 @@
 - The package eslint-plugin-vue was updated to version 7.11.1.
 - The package eslint-plugin-you-dont-need-lodash-underscore was updated to version 6.12.0.
 
-### Deprecated
-
-### Removed
-
 ### Fixed
 - Styled Vector Layers with multiple conditions can now be printed.
-- BG-1541 further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2
+- Further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2
 - Labels of VTC-Layer-Objects aren't cut off anymore.
 - Issue #602: further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2.
 - Issue #615: parsing of the DescribeFeatureType of a WFS has been extended so that it also satisfies a different interpretation of the schema description. As a result, elements in the legend are displayed in the order specified in the style.json.
@@ -66,10 +92,6 @@
 - The documentation for WMTS layers, legend field has been adapted. Only one specification in a string[] is possible.
 - The translation for the url in the staticlink in config.json has been removed.
 - Issue #617: Update description of the attribute '"extent"' for layer configurations in config.json.md.
-
-### Deprecated
-
-### Removed
 
 ### Fixed
 - Now Sensor Layer will show 0 if the dataValue is 0 and not "no data".

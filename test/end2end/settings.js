@@ -137,65 +137,33 @@ function isSafari (browsername) {
 }
 
 /**
- * Produces browserstack or saucelabs configurations.
- * @param {String} testService "browserstack" or "saucelabs"
- * @returns {Array} array of bs configuration objects
+ * Produces saucelabs configurations.
+ * @returns {Object[]} array of bs configuration objects
  */
-function getCapabilities (testService) {
-    const baseBrowserstack = {
-        // do not set selenium version here, then selenium uses the detected_language, see "Input Capabilities" of each test in browserstack
-            "acceptSslCerts": true,
-            "project": "MasterPortal",
-            "browserstack.local": true,
+function getCapabilities () {
+    const baseSaucelabs = {
+        "host": "saucelabs",
+        "sauce:options": {
+            "screenResolution": "1920x1080",
             /* eslint-disable-next-line no-process-env */
-            "browserstack.user": process.env.bs_user,
+            "username": process.env.SAUCE_USERNAME,
             /* eslint-disable-next-line no-process-env */
-            "browserstack.key": process.env.bs_key,
-            // resolution of device, not resolution of browser window
-            "resolution": "1920x1080",
-            "browserstack.debug": false,
-            "browserstack.networkLogs": true,
-            "browserstack.console": "verbose",
-            "browserstack.idleTimeout": 300,
-            // Use this capability to specify a custom delay between the execution of Selenium commands
-            "browserstack.autoWait": 50,
-            // is used for autologin to a webpage with a predefined username and password (login to geoportal test)
-            "unhandledPromptBehavior": "ignore"
-        },
-        baseSaucelabs = {
-            "host": "saucelabs",
-            "sauce:options": {
-                "screenResolution": "1920x1080",
-                /* eslint-disable-next-line no-process-env */
-                "username": process.env.SAUCE_USERNAME,
-                /* eslint-disable-next-line no-process-env */
-                "accessKey": process.env.SAUCE_ACCESS_KEY,
-                "extendedDebugging": true
-            }
-        },
-        baseSaucelabsMacOS = {
-            "host": "saucelabs",
-            "sauce:options": {
-                "screenResolution": "1920x1440",
-                /* eslint-disable-next-line no-process-env */
-                "username": process.env.SAUCE_USERNAME,
-                /* eslint-disable-next-line no-process-env */
-                "accessKey": process.env.SAUCE_ACCESS_KEY,
-                "extendedDebugging": true
-            }
-        };
-
-    if (testService === "browserstack") {
-        return [
-            {
-                ...baseBrowserstack,
-                "browserName": "Chrome",
-                "browser_version": "89.0",
-                "os": "Windows",
-                "os_version": "10"
-            }
-        ];
+            "accessKey": process.env.SAUCE_ACCESS_KEY,
+            "extendedDebugging": true
+        }
+    };
+    /*
+    baseSaucelabsMacOS = {
+    "host": "saucelabs",
+    "sauce:options": {
+    "screenResolution": "1920x1440", */
+    /* eslint-disable-next-line no-process-env */
+    //  "username": process.env.SAUCE_USERNAME,
+    /* eslint-disable-next-line no-process-env */
+    /*  "accessKey": process.env.SAUCE_ACCESS_KEY,
+    "extendedDebugging": true
     }
+    }; */
 
     return [
         {
@@ -215,13 +183,13 @@ function getCapabilities (testService) {
             "browserName": "MicrosoftEdge",
             "browserVersion": "latest",
             "platformName": "Windows 10"
-        },
+        } /* ,
         {
             ...baseSaucelabsMacOS,
             "browserName": "safari",
             "browserVersion": "latest",
             "platformName": "macOS 10.15"
-        }
+        } */
     ];
 
 }

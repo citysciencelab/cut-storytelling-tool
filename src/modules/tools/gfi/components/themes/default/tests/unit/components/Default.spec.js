@@ -134,7 +134,7 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
                         return {
                             name: "images",
                             params: {
-                                imageLink: "abc"
+                                imageLinks: "abc"
                             }
                         };
                     },
@@ -151,7 +151,7 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
         expect(wrapper1.find(".gfi-theme-images > div:nth-child(2) > a > img").attributes().src).equals("https://abc.jpeg");
     });
 
-    it("should the img have the source of first found element gfiTheme params as array, the order is specified by imageLink", () => {
+    it("should the img have the source of first found element gfiTheme params as array, the order is specified by imageLinks", () => {
         const wrapper2 = shallowMount(DefaultTheme, {
             propsData: {
                 feature: {
@@ -165,7 +165,7 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
                         return {
                             name: "images",
                             params: {
-                                imageLink: ["abc", "xyz"]
+                                imageLinks: ["abc", "xyz"]
                             }
                         };
                     },
@@ -196,7 +196,7 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
                         return {
                             name: "images",
                             params: {
-                                imageLink: "abc"
+                                imageLinks: "abc"
                             }
                         };
                     },

@@ -9,9 +9,7 @@ import {createGfiFeature} from "../../src/api/gfi/getWmsFeaturesByMimeType";
 Radio.channel("VisibleVector").on({
     "gfiOnClick": function (hit) {
         const layerList = store.getters["Map/layerList"],
-            foundLayer = layerList.find(function (layer) {
-                return layer.get("id") === hit.layer_id;
-            }),
+            foundLayer = layerList.find(layer => layer.get("id") === hit.layer_id),
             layer = {
                 get: (key) => {
                     if (key === "name") {
@@ -22,6 +20,9 @@ Radio.channel("VisibleVector").on({
                     }
                     else if (key === "gfiAttributes") {
                         return hit.gfiAttributes;
+                    }
+                    else if (key === "id") {
+                        return hit.layer_id;
                     }
                     return null;
                 }

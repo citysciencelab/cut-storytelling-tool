@@ -209,7 +209,7 @@
                  "glyphicon":"glyphicon-resize-full"
               },
               "supplyCoord":{
-                 "name":"translate#common:menu.tools.coord",
+                 "name":"translate#common:menu.tools.supplyCoord",
                  "glyphicon":"glyphicon-screenshot"
               },
               "gfi":{
@@ -230,6 +230,10 @@
                "name": "translate#common:menu.tools.searchByCoord",
                  "glyphicon":"glyphicon-record"
               },
+              "coordToolkit": {
+               "name": "translate#common:menu.tools.coordToolkit",
+               "glyphicon": "glyphicon-globe"
+             },
               "fileImport":{
                "name": "translate#common:menu.tools.fileImport",
                  "glyphicon":"glyphicon-import"

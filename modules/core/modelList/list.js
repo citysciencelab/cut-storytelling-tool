@@ -32,7 +32,6 @@ import TreeFilter from "../../treeFilter/model";
 import ExtendedFilter from "../../tools/extendedFilter/model";
 import FeatureLister from "../../tools/featureLister/model";
 import Shadow from "../../tools/shadow/model";
-import CompareFeatures from "../../tools/compareFeatures/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
 import LayerSliderModel from "../../tools/layerSlider/model";
@@ -237,9 +236,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "styleWMS") {
                 return new StyleWMS(attrs, options);
-            }
-            else if (attrs.id === "compareFeatures") {
-                return new CompareFeatures(attrs, options);
             }
             else if (attrs.id === "filter") {
                 return new Filter(attrs, options);

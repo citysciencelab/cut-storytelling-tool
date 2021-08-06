@@ -18,6 +18,9 @@ import {SensorThingsHttp} from "./sensorThingsHttp";
  * To import SensorThingsMqtt:  import {SensorThingsMqtt} from "./sensorThingsMqtt";
  * create a new object:         const mqtt = new SensorThingsMqtt(opts);
  * subscribe to a topic:        mqtt.subscribe(topic, {rh: 2}, onsuccess, onerror);
+ *
+ * multiton pattern
+ * SensorThingsMqtt behaves as singleton for each unique combination of host, port, path, protocol, mqttVersion and rhPath (singleton).
  * </pre>
  * @memberof Core.ModelList.Layer.SensorThingsMqtt
  * @export
@@ -28,20 +31,50 @@ export class SensorThingsMqtt {
      * @post connects via mqtt with the given host
      * @param {Object} optionsOpt the mqtt options
      * @param {String} optionsOpt.mqttUrl the url to connect via mqtt (e.g. wss://example.com/mqtt)
+     * @param {String} [optionsOpt.host="https://localhost"] the server to connect to
+     * @param {String} [optionsOpt.port=""] the port to connect to
+     * @param {String} [optionsOpt.path="/mqtt"] the path on the server to connect to
+     * @param {String} [optionsOpt.protocol="wss"] the websocket protocol to use
      * @param {String} [optionsOpt.mqttVersion="3.1.1"] the mqtt version to use (3.1, 3.1.1 or 5.0) if any other is given, latest is used
      * @param {String} [optionsOpt.rhPath=""] for mqttVersion 3.1 and 3.1.1 to simulate retained handling based on SensorThingsApi (e.g. https://example.com/), hint: the path given via topic will be put onto this url to call the SensorThingsApi via http
      * @param {Object} [optionsOpt.context=this] the scope to call everything in
-     * @param {mqtt} [mqttClientOpt] the mqtt object to be used instead of the default (default is MQTT.js, https://www.npmjs.com/package/mqtt)
+     * @param {mqtt} [mqttClientOpt=null] the mqtt object to be used instead of the default (default is MQTT.js, https://www.npmjs.com/package/mqtt)
+     * @param {Boolean} [noSingletonOpt=false] to disable multiton pattern (e.g. for testing)
      * @constructor
-     * @returns {void}
+     * @returns {SensorThingsMqtt}  the instance of SensorThingsMqtt (singleton)
      */
-    constructor (optionsOpt, mqttClientOpt) {
-        /** private */
+    constructor (optionsOpt, mqttClientOpt = null, noSingletonOpt = false) {
         this.options = Object.assign({
+            host: "https://localhost",
+            port: "",
+            path: "/mqtt",
+            protocol: "wss",
             mqttVersion: "3.1.1",
             rhPath: "",
             context: this
         }, optionsOpt);
+
+        if (!noSingletonOpt) {
+            const optionsKey = JSON.stringify({
+                host: this.options.host,
+                port: this.options.port,
+                path: this.options.path,
+                protocol: this.options.protocol,
+                mqttVersion: this.options.mqttVersion,
+                rhPath: this.options.rhPath
+            });
+
+            // make this instance a multiton based on options (one singleton for each unique set of options)
+            if (typeof SensorThingsMqtt.instance !== "object" || SensorThingsMqtt.instance === null) {
+                SensorThingsMqtt.instance = {};
+            }
+
+            if (Object.prototype.hasOwnProperty.call(SensorThingsMqtt.instance, optionsKey)) {
+                return SensorThingsMqtt.instance[optionsKey];
+            }
+
+            SensorThingsMqtt.instance[optionsKey] = this;
+        }
 
         if (this.isV31()) {
             // "If you are connecting to a broker that supports only MQTT 3.1 (not 3.1.1 compliant), you should pass these additional options:"
@@ -51,17 +84,23 @@ export class SensorThingsMqtt {
             // see https://www.npmjs.com/package/mqtt
         }
 
-        /** private */
-        this.mqttClient = (typeof mqttClientOpt === "object" && typeof mqttClientOpt.connect === "function" ? mqttClientOpt : mqttClientDefault).connect(this.options);
-        /** private */
-        this.messageHandler = null;
-        /** private */
+        this.mqttClient = null;
+        if (typeof mqttClientOpt !== "object" || mqttClientOpt === null || typeof mqttClientOpt.connect !== "function") {
+            // real mqtt client
+            this.mqttClient = mqttClientDefault.connect(this.options);
+        }
+        else {
+            // in case of testing
+            this.mqttClient = mqttClientOpt.connect(this.options);
+        }
+
+        this.events = {};
         this.httpClientDefault = new SensorThingsHttp();
     }
 
     /**
      * setter for events
-     * @post for mqtt v3.1 and v3.1.1 only if eventName equals 'message' the internal this.messageHandler is set to handler to simulate retained handling on subscriptions
+     * @post for mqtt v3.1 and v3.1.1 only if eventName equals 'message' the internal this.events is called to simulate retained handling on subscriptions
      * @param {String} eventName the name of the mqtt event (see https://www.npmjs.com/package/mqtt for more details)
      * @param {Function} handler the event handler as function(*)
      * @param {Function} [onerror] the error handler to use
@@ -83,41 +122,68 @@ export class SensorThingsMqtt {
             return;
         }
 
-        if (eventName === "message") {
-            if (this.isV31() || this.isV311()) {
-                // on subscription this.messageHandler is used to later simulate retained handling for mqtt 3.1 and mqtt 3.1.1
-                this.messageHandler = handler;
+        if (!Object.prototype.hasOwnProperty.call(this.events, eventName)) {
+            this.events[eventName] = [];
+
+            if (eventName === "message") {
+                this.setMessageEvent(mqttClientOpt);
+            }
+            else {
+                this.setEvent(eventName, mqttClientOpt);
+            }
+        }
+
+        this.events[eventName].push(handler);
+    }
+
+    /**
+     * passes through any event
+     * @param {String} eventName the name of the mqtt event (see https://www.npmjs.com/package/mqtt for more details)
+     * @param {Object} [mqttClientOpt] (for testing only) the mqtt client to use instead of the internal this.mqttClient
+     * @returns {Void}  -
+     */
+    setEvent (eventName, mqttClientOpt) {
+        (typeof mqttClientOpt === "object" && typeof mqttClientOpt.on === "function" ? mqttClientOpt : this.mqttClient).on(eventName, (...args) => {
+            if (Object.prototype.hasOwnProperty.call(this.events, eventName) && Array.isArray(this.events[eventName])) {
+                this.events[eventName].forEach(handler => {
+                    handler.apply(this.options.context, args);
+                });
+            }
+        });
+    }
+
+    /**
+     * sets the message even
+     * @param {Object} [mqttClientOpt] (for testing only) the mqtt client to use instead of the internal this.mqttClient
+     * @returns {Void}  -
+     */
+    setMessageEvent (mqttClientOpt) {
+        (typeof mqttClientOpt === "object" && typeof mqttClientOpt.on === "function" ? mqttClientOpt : this.mqttClient).on("message", (topic, message, packet) => {
+            let jsonMessage = "",
+                jsonPacket = "";
+
+            try {
+                jsonMessage = JSON.parse(message);
+            }
+            catch (e) {
+                // fallback
+                jsonMessage = message;
             }
 
-            (typeof mqttClientOpt === "object" && typeof mqttClientOpt.on === "function" ? mqttClientOpt : this.mqttClient).on("message", (topic, message, packet) => {
-                let jsonMessage = "",
-                    jsonPacket = "";
+            try {
+                jsonPacket = JSON.parse(packet);
+            }
+            catch (e) {
+                // fallback
+                jsonPacket = packet;
+            }
 
-                try {
-                    jsonMessage = JSON.parse(message);
-                }
-                catch (e) {
-                    // fallback
-                    jsonMessage = message;
-                }
-
-                try {
-                    jsonPacket = JSON.parse(packet);
-                }
-                catch (e) {
-                    // fallback
-                    jsonPacket = packet;
-                }
-
-                return handler.call(this.options.context, topic, jsonMessage, jsonPacket);
-            });
-        }
-        else {
-            // pass through
-            (typeof mqttClientOpt === "object" && typeof mqttClientOpt.on === "function" ? mqttClientOpt : this.mqttClient).on(eventName, (...args) => {
-                return handler.apply(this.options.context, args);
-            });
-        }
+            if (Object.prototype.hasOwnProperty.call(this.events, "message") && Array.isArray(this.events.message)) {
+                this.events.message.forEach(handler => {
+                    handler.call(this.options.context, topic, jsonMessage, jsonPacket);
+                });
+            }
+        });
     }
 
     /**
@@ -152,7 +218,7 @@ export class SensorThingsMqtt {
 
             if (options.rh !== 2 && (this.isV31() || this.isV311()) && this.options.rhPath) {
                 // simulate retained handling
-                (typeof simulateRetainedHandlingOpt === "function" ? simulateRetainedHandlingOpt : this.simulateRetainedHandling).bind(this)(this.options.rhPath, topic, this.httpClientDefault, this.messageHandler, onerror);
+                (typeof simulateRetainedHandlingOpt === "function" ? simulateRetainedHandlingOpt : this.simulateRetainedHandling).bind(this)(this.options.rhPath, topic, this.httpClientDefault, onerror);
             }
         });
     }
@@ -202,11 +268,10 @@ export class SensorThingsMqtt {
      * @param {String} rhPath the root path to use calling SensorThingsApi via http (e.g. https://example.com)
      * @param {String} topic the topic to simulate (e.g. v1.0/Things(614))
      * @param {Object} httpClient a httpClient with httpClient.get(url, onsuccess, onstart, oncomplete, onerror, onprogress) to call the SensorThingsApi with
-     * @param {Function} messageHandler the handler as function(topic, message, packet) to receive the (simulated) retained message with
      * @param {Function} [onerror] as function(error) - "a subscription error or an error that occurs when client is disconnecting" (see: https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169)
      * @returns {Void}  -
      */
-    simulateRetainedHandling (rhPath, topic, httpClient, messageHandler, onerror) {
+    simulateRetainedHandling (rhPath, topic, httpClient, onerror) {
         if (typeof httpClient !== "object" || typeof httpClient.get !== "function") {
             if (typeof onerror === "function") {
                 onerror("sensorThingsMqtt.js, simulateRetainedHandling: the given httpClient should be an object with a function \"get\"");
@@ -226,14 +291,20 @@ export class SensorThingsMqtt {
 
         httpClient.get(url, response => {
             // onsuccess
-            if (typeof messageHandler === "function" && Array.isArray(response) && response.length >= 1) {
-                messageHandler(topic, response[0], {
-                    cmd: "simulate",
-                    dup: false,
-                    qos: 0,
-                    retain: true,
-                    topic: topic,
-                    payload: response[0]
+            if (
+                (this.isV31() || this.isV311())
+                && Object.prototype.hasOwnProperty.call(this.events, "message") && Array.isArray(this.events.message)
+                && Array.isArray(response) && response.length >= 1
+            ) {
+                this.events.message.forEach(handler => {
+                    handler(topic, response[0], {
+                        cmd: "simulate",
+                        dup: false,
+                        qos: 0,
+                        retain: true,
+                        topic: topic,
+                        payload: response[0]
+                    });
                 });
             }
         }, null, null, onerror);
@@ -284,13 +355,6 @@ export class SensorThingsMqtt {
      */
     getMqttClient () {
         return this.mqttClient;
-    }
-    /**
-     * gets the used messageHandler to simulate retained handling for mqtt v3.1 and mqtt v3.1.1 (for testing only)
-     * @returns {Function}  the used message handler
-     */
-    getMessageHandler () {
-        return this.messageHandler;
     }
     /**
      * gets the default httpClient (for testing only)

@@ -1,6 +1,7 @@
 import AddWMS from "./addWMS/components/AddWMS.vue";
 import Contact from "./contact/components/Contact.vue";
 import Draw from "./draw/components/Draw.vue";
+import CompareFeatures from "./compareFeatures/components/CompareFeatures.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
 import Gfi from "./gfi/components/Gfi.vue";
 import SearchByCoord from "./searchByCoord/components/SearchByCoord.vue";
@@ -12,6 +13,7 @@ import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 import SelectFeatures from "./selectFeatures/components/SelectFeatures.vue";
 import BufferAnalysis from "./bufferAnalysis/components/BufferAnalysis.vue";
 
+import CoordToolkit from "./coordToolkit/components/CoordToolkit.vue";
 /**
  * User type definition
  * @typedef {Object} ToolsState
@@ -23,6 +25,7 @@ const state = {
         addWMS: AddWMS,
         contact: Contact,
         draw: Draw,
+        compareFeatures: CompareFeatures,
         fileImport: FileImport,
         gfi: Gfi,
         searchByCoord: SearchByCoord,
@@ -32,7 +35,8 @@ const state = {
         styleVT: StyleVT,
         supplyCoord: SupplyCoord,
         selectFeatures: SelectFeatures,
-        bufferAnalysis: BufferAnalysis
+        bufferAnalysis: BufferAnalysis,
+        coordToolkit: CoordToolkit
     },
     configuredTools: []
 };

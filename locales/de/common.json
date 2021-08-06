@@ -36,6 +36,7 @@
             "parcelSearch": "Flurstückssuche",
             "print": "Karte Drucken",
             "measure": "Strecke / Fläche messen",
+            "coordToolkit": "Koordinaten",
             "coord": "Koordinaten abfragen",
             "supplyCoord": "Koordinaten abfragen",
             "searchByCoord": "Koordinatensuche",
@@ -216,7 +217,9 @@
         },
         "footer": {
             "designation": "Kartographie und Gestaltung:",
-            "mapDiscrepancy": "Kartenunstimmigkeit"
+            "mapDiscrepancy": "Kartenunstimmigkeit",
+            "scale": "Skalierung der Karte",
+            "mouse": "Position der Maus"
         },
         "tools": {
             "info": {
@@ -379,17 +382,20 @@
                 "moreInfo": "Mehr Infos",
                 "lessInfo": "Weniger Infos",
                 "exportAsPdf": "Export als PDF",
+                "removeFromList": "Von Liste entfernen",
                 "noFeatures": {
                     "nothingSelected": "Es sind keine {{objects}} für die Vergleichsliste ausgewählt.",
                     "objectName": "Objekte",
                     "info": "Klicken Sie auf ein Objekt in der Karte. Es öffnet sich ein Fenster mit den jeweiligen Sachinformationen. In der rechten oberen Ecke befindet sich ein Sternsymbol {{iconEmptyStar}}. Klicken Sie auf dieses Symbol, um das Objekt zur Vergleichsliste hinzuzufügen. Das Sternsymbol wird gelb eingefärbt {{iconYellowStar}}. Ein erneuter Klick auf das Sternsymbol entfernt das Objekt wieder von der Vergleichsliste."
                 },
                 "feedback": {
-                    "added": "{{object}} wurde zur Vergleichsliste hinzugefügt",
-                    "notAdded": "{{object}} konnte nicht zur Vergleichsliste hinzugefügt werden",
+                    "added": "Das Feature wurde zur Vergleichsliste hinzugefügt",
+                    "addedWithName": "{{currentFeatureName}} wurde zur Vergleichsliste hinzugefügt",
+                    "notAdded": "Das Feature konnte nicht zur Vergleichsliste hinzugefügt werden",
+                    "notAddedWithName": "{{currentFeatureName}} konnte nicht zur Vergleichsliste hinzugefügt werden",
                     "limitReached": "Die maximale Anzahl an Objekten in der Vergleichsliste wurde erreicht.",
                     "removeObjects": "Bitte entfernen Sie zuerst mindestens ein Objekt bevor Sie fortfahren.",
-                    "gotoComparisonlist": "Zur Vergleichsliste"
+                    "goToComparisonlist": "Zur Vergleichsliste"
                 }
             },
             "saveSelection": {
@@ -451,6 +457,36 @@
                     "eastingLabel": "Rechtswert",
                     "northingLabel": "Hochwert"
                 }
+            },
+            "coordToolkit": {
+                "title": "Koordinaten abfragen",
+                "supply":"Koordinaten abfragen",
+                "search":"Koordinaten suchen",
+                "searchBtn": "Suche",
+                "coordSystemField": "Koordinatensystem",
+                "heightLabel": "Höhe",
+                "noHeightWater": "Gewässerfläche, keine Höhen vorhanden",
+                "noHeightBuilding": "Gebäudefläche, keine Höhen vorhanden",
+                "heightLayerInfo": "Grundlage der Höheninformation ist das \"{{layer}}\" mit Höhenangaben in Metern über Normalhöhennull (NHN).",
+                "hdms": {
+                    "eastingLabel": "Länge",
+                    "northingLabel": "Breite"
+                },
+                "cartesian": {
+                    "eastingLabel": "Rechtswert",
+                    "northingLabel": "Hochwert"
+                },
+                "exampleAcronym": "Bsp. ",
+                "errorMsg": {
+                    "noCoord": "Bitte geben Sie Ihren {{valueKey}} vollständig ein.",
+                    "noMatch": "Die Eingabe für den {{valueKey}} ist nicht korrekt! ",
+                    "hdmsNoCoord": "Bitte geben Sie Ihren Wert der {{valueKey}} vollständig ein.",
+                    "hdmsNoMatch": "Die Eingabe für den Wert der {{valueKey}} ist nicht korrekt!",
+                    "example": "Beispiel: "
+                },
+                "hintSupply": "Klicken Sie in die Karte um Koordinaten abzufragen",
+                "hintSearch": "Geben Sie die zu suchenden Koordinaten ein",
+                "disabledTooltip": "Diese Funktion steht nicht in der 3D Ansicht zur Verfügung"
             },
             "gfi": {
                 "errorMessage": "Bei der Informationsabfrage (GetFeatureInfo) ist ein Fehler aufgetreten.<br>Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes.",
@@ -602,7 +638,7 @@
                 "deleteMeasurements": "Messungen löschen",
                 "stretch": "Strecke",
                 "area": "Fläche",
-                "influenceFactors": "Die angezeigten Werte unterliegen Ungenauigkeiten, die u.a. durch folgende Faktoren beeinflusst werden:",
+                "influenceFactors": "Die angezeigten Werte unterliegen Ungenauigkeiten, die u.a. durch folgende Faktoren beeinflusst werden, z.B. Maßstab, Auflösung der Karte und des Bildschirmes.",
                 "scale": "Maßstab",
                 "resolution": "Auflösung der Karte",
                 "screenResolution": "Auflösung des Bildschirmes",
@@ -778,6 +814,32 @@
                 "contentSaved": "Inhalt wurde in die Zwischenablage kopiert.",
                 "contentNotSaved": "Inhalt konnte nicht in die Zwischenablage kopiert werden."
             }
+        }
+    },
+    "utils": {
+        "calendar": {
+            "newYearsDay": "Neujahrstag",
+            "epiphany": "Heiligedreikönigstag",
+            "goodFriday": "Karfreitag",
+            "easterSunday": "Ostersonntag",
+            "easterMonday": "Ostermontag",
+            "laborDay": "Tag der Arbeit",
+            "ascensionDay": "Christi Himmelfahrt",
+            "pentecostSunday": "Pfingstsonntag",
+            "pentecostMonday": "Pfingstmontag",
+            "corpusChristi": "Fronleichnam",
+            "peaceFestival": "Friedensfest",
+            "assumptionDay": "Mariä Himmelfahrt",
+            "germanUnityDay": "Tag der Deutschen Einheit",
+            "reformationDay": "Reformationstag",
+            "allSaintsDay": "Allerheiligen",
+            "penanceDay": "Buß- und Bettag",
+            "firstAdvent": "1. Advent",
+            "secondAdvent": "2. Advent",
+            "thirdAdvent": "3. Advent",
+            "fourthAdvent": "4. Advent",
+            "christmasDay": "1. Weihnachtstag",
+            "secondDayOfChristmas": "2. Weihnachtstag"
         }
     },
     "snippets": {

@@ -36,6 +36,7 @@
             "parcelSearch": "Parcel search",
             "print": "Print map",
             "measure": "Measure distance / area",
+            "coordToolkit": "Coordinates",
             "coord": "Query coordinates",
             "supplyCoord": "Query coordinates",
             "searchByCoord": "Coordinate search",
@@ -215,7 +216,9 @@
         },
         "footer": {
             "designation": "Cartography and design:",
-            "mapDiscrepancy": "Map discrepancy"
+            "mapDiscrepancy": "Map discrepancy",
+            "scale": "scale of map",
+            "mouse": "position of mouse"
         },
         "tools": {
             "info": {
@@ -379,17 +382,20 @@
                 "moreInfo": "More info",
                 "lessInfo": "Less info",
                 "exportAsPdf": "Export as PDF",
+                "removeFromList": "Remove from list",
                 "noFeatures": {
                     "nothingSelected": "There are no {{objects}} selected for the comparison list.",
                     "objectName": "objects",
                     "info": "Click on an object on the map. A window opens with the respective factual information. In the upper right corner there is a star symbol {{iconEmptyStar}}. Click on this icon to add the object to the comparison list. The star icon will be colored yellow {{iconYellowStar}}. Click the star icon again to remove the object from the comparison list."
                 },
                 "feedback": {
-                    "added": "{{object}} was added to the comparison list",
-                    "notAdded": "{{object}} could not be added to the comparison list",
+                    "added": "The feature was added to the comparison list",
+                    "addedWithName": "{{currentFeatureName}} was added to the comparison list",
+                    "notAdded": "The feature could not be added to the comparison list",
+                    "notAddedWithName": "{{currentFeatureName}} could not be added to the comparison list",
                     "limitReached": "The maximum number of objects in the comparison list has been reached.",
                     "removeObjects": "Please remove at least one object before proceeding.",
-                    "gotoComparisonlist": "To the comparison list"
+                    "goToComparisonlist": "To the comparison list"
                 }
             },
             "saveSelection": {
@@ -451,6 +457,36 @@
                     "eastingLabel": "Easting",
                     "northingLabel": "Northing"
                 }
+            },
+            "coordToolkit": {
+                "title": "Coordinates",
+                "supply":"Query Coordinates",
+                "search":"Search Coordinates",
+                "searchBtn": "Search",
+                "coordSystemField": "Coordinate system",
+                "heightLabel": "Height",
+                "noHeightWater": "Water surface, no heights available",
+                "noHeightBuilding": "Building area, no heights available",
+                "heightLayerInfo": "The basis of the elevation information is \"{{layer}}\" with elevations in meters above sea level (NHN).",
+                "hdms": {
+                    "eastingLabel": "Longitude",
+                    "northingLabel": "Latitude"
+                },
+                "cartesian": {
+                    "eastingLabel": "Easting",
+                    "northingLabel": "Northing"
+                },
+                "exampleAcronym": "e.g. ",
+                "errorMsg": {
+                    "noCoord": "Please enter your {{valueKey}}.",
+                    "noMatch": "Your chosen {{valueKey}} is not correct!",
+                    "hdmsNoCoord": "Please enter your value for the {{valueKey}}.",
+                    "hdmsNoMatch": "Your chosen value for the {{valueKey}} is not correct!",
+                    "example": "Example: "
+                },
+                "hintSupply": "Click in the map to request coordinates",
+                "hintSearch": "Enter the coordinates to search for",
+                "disabledTooltip": "This function is not available in the 3D view."
             },
             "gfi": {
                 "errorMessage": "An error has occurred  during the information request (GetFeatureInfo).<br>Please try again later. If the problem persists, please contact the operator of the service.",
@@ -602,7 +638,7 @@
                 "deleteMeasurements": "Delete measurements",
                 "stretch": "Distance",
                 "area": "Area",
-                "influenceFactors": "The displayed values are subject to inaccuracies that are influenced by factors such as the following:",
+                "influenceFactors": "The displayed values are subject to inaccuracies that are influenced by the following factors, among others, e.g. scale, resolution of the map and the screen.",
                 "scale": "Scale",
                 "resolution": "Resolution of the map",
                 "screenResolution": "Screen resolution",
@@ -778,6 +814,32 @@
                 "contentSaved": "Content was copied to the clipboard.",
                 "contentNotSaved": "Content could not be copied to the clipboard."
             }
+        }
+    },
+    "utils": {
+        "calendar": {
+            "newYearsDay": "New Year's Day",
+            "epiphany": "Epiphany",
+            "goodFriday": "Good Friday",
+            "easterSunday": "Easter Sunday",
+            "easterMonday": "Easter Monday",
+            "laborDay": "Labor Day",
+            "ascensionDay": "Ascension Day",
+            "pentecostSunday": "Pentecost Sunday",
+            "pentecostMonday": "Pentecost Monday",
+            "corpusChristi": "Corpus Christi",
+            "peaceFestival": "Peace Festival",
+            "assumptionDay": "Assumption Day",
+            "germanUnityDay": "German Unity Day",
+            "reformationDay": "Reformation Day",
+            "allSaintsDay": "All Saints Day",
+            "penanceDay": "Penance Day",
+            "firstAdvent": "First Advent",
+            "secondAdvent": "Second Advent",
+            "thirdAdvent": "Third Advent",
+            "fourthAdvent": "Fourth Of Advent",
+            "christmasDay": "Christmas Day",
+            "secondDayOfChristmas": "Second Day Of Christmas"
         }
     },
     "snippets": {
