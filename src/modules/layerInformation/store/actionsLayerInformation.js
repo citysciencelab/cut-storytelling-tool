@@ -113,8 +113,6 @@ const actions = {
         }
 
         if (typeof metadata === "undefined") {
-            // seems unnecessary if we already have the NoMetadataLoaded message in the window
-            // dispatch("Alerting/addSingleAlert", i18next.t("common:modules.layerInformation.errorMessage"), {root: true});
             commit("setTitle", "");
             commit("setPeriodicityKey", "");
             commit("setDateRevision", "");
