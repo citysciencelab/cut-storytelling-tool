@@ -12,10 +12,12 @@
 ### Added
 - Add possibility to test end2end-tests with `MicrosoftEdge` driver.
 - VTC-Layer supports Sprites and Fonts in Styledefinitions.
+- embedded nav into header tag
 
 ### Changed
 - The version of the package selenium-webdriver was updated to version 4.0.0-beta.3.
 - changed LayerInformation from backbone to vue
+- changed anchor from div to main class and footer from div to footer class
 
 ### Deprecated
 
@@ -23,7 +25,7 @@
 
 ### Fixed
 - BG-1541 further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2
-- Labels of VTC-Layer-Objects aren't cut off anymore. 
+- Labels of VTC-Layer-Objects aren't cut off anymore.
 ---
 
 ## v2.10.0 - 2021-06-02
