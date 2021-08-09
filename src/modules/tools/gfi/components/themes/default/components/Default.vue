@@ -4,11 +4,13 @@ import {isWebLink} from "../../../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
 import CompareFeatureIcon from "../../../favoriteIcons/components/CompareFeatureIcon.vue";
+import DefaultSensorChart from "./DefaultSensorChart.vue";
 
 export default {
     name: "Default",
     components: {
-        CompareFeatureIcon
+        CompareFeatureIcon,
+        DefaultSensorChart
     },
     props: {
         feature: {
@@ -75,6 +77,23 @@ export default {
         isPhoneNumber,
         getPhoneNumberAsWebLink,
         isEmailAddress,
+
+        /**
+         * checks if the given value is an object for rendering a linechart diagram
+         * @param {*} value anything to check
+         * @returns {Boolean} true if this can be converted to a linechart, false if not
+         */
+        isSensorChart (value) {
+            return typeof value === "object" && value !== null
+                && (
+                    value.type === "linechart"
+                    || value.type === "barchart"
+                    || value.type === "cakechart"
+                )
+                && typeof value.query === "string"
+                && typeof value.staObject === "object" && value.staObject !== null
+                && typeof value.staObject["@iot.selfLink"] === "string";
+        },
 
         /**
          * Sets the imported components to importedComponents.
@@ -163,7 +182,10 @@ export default {
                     v-else
                     :key="key"
                 >
-                    <td class="bold">
+                    <td
+                        v-if="!isSensorChart(value)"
+                        class="bold"
+                    >
                         {{ beautifyKey($t(key)) }}
                     </td>
                     <td v-if="isWebLink(value)">
@@ -186,6 +208,20 @@ export default {
                         v-else-if="typeof value === 'string' && value.includes('<br>')"
                         v-html="value"
                     />
+                    <td
+                        v-else-if="isSensorChart(value)"
+                        colspan="2"
+                    >
+                        <DefaultSensorChart
+                            :type="value.type"
+                            :label="value.label"
+                            :query="value.query"
+                            :format="value.format"
+                            :sta-object="value.staObject"
+                            :options="value.options"
+                            :chart-options="value.chartOptions"
+                        />
+                    </td>
                     <td v-else>
                         {{ value }}
                     </td>

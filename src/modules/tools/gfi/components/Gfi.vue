@@ -225,7 +225,13 @@ export default {
                 }
                 case "number": {
                     preparedValue = thousandsSeparator(preparedValue);
-
+                    break;
+                }
+                case "linechart": {
+                    preparedValue = Object.assign({
+                        name: key,
+                        staObject: preparedValue
+                    }, obj);
                     break;
                 }
                 // default equals to obj.type === "string"
