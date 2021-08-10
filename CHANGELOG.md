@@ -47,6 +47,8 @@
 
 ### Fixed
 - Drawn content can be printed again.
+-	Footer allows additionally to open vue tools besides backbone tools
+-	Fixed active graphicalSelect during tool change in addon sdpDownload.
 
 ---
 
