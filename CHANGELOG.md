@@ -19,6 +19,7 @@
 ### Changed
 - Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.
 - LayerInformation now shows message in case the MetaData couldn't be loaded
+- Footer allows additionally to open vue tools besides backbone tools.
 
 ### Deprecated
 
