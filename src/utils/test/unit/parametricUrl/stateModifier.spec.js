@@ -306,14 +306,14 @@ describe("src/utils/stateModifier.js", () => {
         });
         describe("UrlParam zoomLevel", () => {
             it("test param zoomLevel", async () => {
-                let key = "zoomLevel",
-                    valueAsString = "5";
-                const state = {
-                    urlParams: {},
-                    Map: {
-                        zoomLevel: 2
-                    }
-                };
+                let key = "zoomLevel";
+                const valueAsString = "5",
+                    state = {
+                        urlParams: {},
+                        Map: {
+                            zoomLevel: 2
+                        }
+                    };
 
                 await setValueToState(state, key, valueAsString);
                 expect(state.Map.zoomLevel).to.be.equals(5);

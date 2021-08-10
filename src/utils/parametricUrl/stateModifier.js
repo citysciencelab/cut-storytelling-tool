@@ -118,6 +118,12 @@ export default async function setValuesToState (state, params) {
         setValueToState(state, key, value);
     });
     triggerParametricURLReady();
+    Object.keys(state.urlParams).forEach(key => {
+        const value = state.urlParams[key];
+
+        doSpecialBackboneHandling(key, value);
+    });
+
     callMutations(state);
     callActions(state);
 }
@@ -146,8 +152,6 @@ export async function setValueToState (state, key, value) {
             console.log("state:", state);
             console.log("found:", found);
 
-            doSpecialBackboneHandling(entry.key, entry.value);
-
             if (!found) {
                 const oldParam = translateToBackbone(entry.key, entry.value);
 
@@ -160,6 +164,7 @@ export async function setValueToState (state, key, value) {
                 state.urlParams[entry.key] = value;
             }
             console.log("state.urlParams=", state.urlParams);
+            return entry;
         }).catch(error => {
             console.warn("Error occured during applying url param to state ", error);
         });

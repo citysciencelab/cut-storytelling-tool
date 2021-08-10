@@ -158,7 +158,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      */
     possibleUrlParameters: function () {
         return {
-            "ALTITUDE": this.evaluateCameraParameters.bind(this),
+            // "ALTITUDE": this.evaluateCameraParameters.bind(this),
             "BEZIRK": this.parseZoomToGeometry.bind(this), // @deprecated in version 3.0.0
             "BRWID": this.setBrwId.bind(this),
             "BRWLAYERNAME": this.setBrwLayerName.bind(this),
@@ -167,7 +167,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "FEATUREID": this.setZoomToFeatureIds.bind(this),
             "FEATUREVIAURL": this.setFeatureViaURL.bind(this),
             "FILTER": this.setFilter.bind(this),
-            "HEADING": this.evaluateCameraParameters.bind(this),
+            // "HEADING": this.evaluateCameraParameters.bind(this),
             "HIGHLIGHTFEATURE": this.setHighlightfeature.bind(this),
             // "ISINITOPEN": this.parseIsInitOpen.bind(this),
             "LAYERIDS": this.createLayerParams.bind(this),
@@ -177,7 +177,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "QUERY": this.parseQuery.bind(this),
             "STARTUPMODUL": this.parseIsInitOpen.bind(this), // @deprecated in version 3.0.0
             "STYLE": this.parseStyle.bind(this),
-            "TILT": this.evaluateCameraParameters.bind(this),
+            // "TILT": this.evaluateCameraParameters.bind(this),
             // "ZOOMLEVEL": this.setZoomLevel.bind(this),
             "ZOOMTOEXTENT": this.parseZOOMTOEXTENT.bind(this),
             "ZOOMTOGEOMETRY": this.parseZoomToGeometry.bind(this)
@@ -506,13 +506,13 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @param {string} property - represents the camera element
      * @returns {void}
      */
-    evaluateCameraParameters: function (result, property) {
-        if (!Object.prototype.hasOwnProperty.call(Config, "cameraParameter")) {
-            Config.cameraParameter = {};
-        }
+    // evaluateCameraParameters: function (result, property) {
+    //     if (!Object.prototype.hasOwnProperty.call(Config, "cameraParameter")) {
+    //         Config.cameraParameter = {};
+    //     }
 
-        Config.cameraParameter[property.toLowerCase()] = result;
-    },
+    //     Config.cameraParameter[property.toLowerCase()] = result;
+    // },
 
     /**
      * Sets the clickCounter staticLink to the Config.

@@ -1,4 +1,3 @@
-import {MapMode} from "../../modules/map/store/enums";
 
 const toolsNotInState = ["compareFeatures", "parcelSearch", "print", "featureLister", "layerSlider", "filter", "shadow", "virtualcity", "wfst", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
 
@@ -39,11 +38,6 @@ export function translateToBackbone (urlParamsKey, urlParamsValue) {
  */
 export function doSpecialBackboneHandling (key, value) {
     if (key === "Map/mapMode") {
-        if (value === MapMode.MODE_3D) {
-            Radio.trigger("Map", "activateMap3d");
-        }
-        else if (value === MapMode.MODE_2D) {
-            Radio.trigger("Map", "deactivateMap3d");
-        }
+        Radio.trigger("Map", "mapChangeTo3d");
     }
 }
