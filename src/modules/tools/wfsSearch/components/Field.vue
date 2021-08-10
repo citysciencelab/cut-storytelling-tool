@@ -194,7 +194,7 @@ export default {
                 this.setSelectedOptions({options: this.selectableParameters.options, value, index});
             }
             else if (this.showSuggestions) {
-                // TODO: Functionality like lodash.throttle would be nice to have here
+                // NOTE: Functionality like lodash.throttle would be nice to have here
                 this.showLoader = true;
                 const fieldName = Array.isArray(this.fieldName) ? this.fieldName[this.parameterIndex] : this.fieldName,
                     xmlFilter = buildXmlFilter({fieldName, type: "like", value}),
@@ -272,7 +272,6 @@ export default {
                     </option>
                 </template>
             </component>
-            <!-- TODO: Can this be made barrierefrei or is it already? -->
             <i
                 v-if="htmlElement === 'input' && showLoader"
                 class="loader"

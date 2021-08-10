@@ -32,7 +32,7 @@ export default {
         :suggestions-config="suggestions"
         v-bind="literal.field"
     />
-    <!-- NOTE: This div can be styled for visual highlighting -> TODO: Also, weird UI behaviour when a field is "dangling" between clauses cause of this -->
+    <!-- NOTE: This div can be styled for visual highlighting -->
     <div v-else-if="literal.clause">
         <template
             v-for="(lit, i) of literal.clause.literals"
