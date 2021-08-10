@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {buildPath, prepareOptionsWithId, removePath} from "../../utils/pathFunctions";
+import {buildPath, prepareOptionsWithId, removePath} from "../../../utils/pathFunctions";
 
 describe("src/modules/tools/wfsSearch/utils/pathFunctions.js", () => {
     describe("buildPath", () => {

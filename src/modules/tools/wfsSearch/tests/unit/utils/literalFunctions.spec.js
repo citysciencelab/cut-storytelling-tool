@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {fieldValueChanged, prepareLiterals} from "../../utils/literalFunctions";
+import {fieldValueChanged, prepareLiterals} from "../../../utils/literalFunctions";
 
 describe("src/modules/tools/wfsSearch/utils/literalFunctions.js", () => {
     const id = "wfsSearch-clause-0+field-0",
