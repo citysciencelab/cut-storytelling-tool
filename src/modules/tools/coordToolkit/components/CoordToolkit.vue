@@ -62,6 +62,7 @@ export default {
                 else {
                     this.setMode("search");
                 }
+                this.setFocusToFirstControl();
             }
             else {
                 this.resetErrorMessages("all");
@@ -109,6 +110,17 @@ export default {
             addInteractionToMap: "addInteraction",
             removeInteractionFromMap: "removeInteraction"
         }),
+        /**
+         * Sets the focus to the first control
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
+            this.$nextTick(() => {
+                if (this.$refs.coordSystemField) {
+                    this.$refs.coordSystemField.focus();
+                }
+            });
+        },
         /**
          * Initializes the projections to select. If projection EPSG:4326 is available same is added in decimal-degree.
          * @returns {void}
@@ -417,6 +429,7 @@ export default {
                         <div class="col-md-7 col-sm-7">
                             <select
                                 id="coordSystemField"
+                                ref="coordSystemField"
                                 class="font-arial form-control input-sm pull-left"
                                 @change="selectionChanged($event)"
                             >
