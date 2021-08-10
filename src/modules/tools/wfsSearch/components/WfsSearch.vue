@@ -1,6 +1,7 @@
 <script>
 import Modal from "../../../../share-components/modals/Modal.vue";
 import List from "../../../../share-components/list/List.vue";
+import LoaderOverlay from "../../../../utils/loaderOverlay";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import Tool from "../../Tool.vue";
 import getComponent from "../../../../utils/getComponent";
@@ -69,6 +70,12 @@ export default {
         ...mapMutations("Tools/WfsSearch", Object.keys(mutations)),
         ...mapActions("Tools/WfsSearch", Object.keys(actions)),
         searchFeatures,
+        /**
+         * Function called when the window of the tool is closed.
+         * Resets the whole component and sets it inactive.
+         *
+         * @returns {void}
+         */
         close () {
             this.setActive(false);
             this.resetModule(true);
@@ -78,12 +85,17 @@ export default {
                 model.set("isActive", false);
             }
         },
+        /**
+         * Searches the configured service and shows adds the results to the List in the Modal.
+         *
+         * @returns {Promise<void>} The returned promise isn't used any further as it resolves to nothing.
+         */
         async search () {
             this.setSearched(true);
-            Radio.trigger("Util", "showLoader");
+            LoaderOverlay.show();
             const features = await searchFeatures(this.$store, this.currentInstance, this.service);
 
-            Radio.trigger("Util", "hideLoader");
+            LoaderOverlay.hide();
 
             document.getElementById("tool-wfsSearch-showResults-button").focus();
             this.setResults([]);
