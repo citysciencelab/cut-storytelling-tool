@@ -16,17 +16,13 @@ describe("src/utils/converter.js", () => {
             expect(convert("FAlse")).to.be.equals(false);
             expect(convert("false   ")).to.be.equals(false);
             expect(convert("  false")).to.be.equals(false);
-            expect(convert("0")).to.be.equals(false);
-            expect(convert(0)).to.be.equals(false);
             expect(convert(false)).to.be.equals(false);
 
             expect(convert("true")).to.be.equals(true);
             expect(convert("True")).to.be.equals(true);
             expect(convert("true   ")).to.be.equals(true);
             expect(convert("  true")).to.be.equals(true);
-            expect(convert("1")).to.be.equals(true);
             expect(convert("")).to.be.equals(true);
-            expect(convert(1)).to.be.equals(true);
             expect(convert(true)).to.be.equals(true);
 
             expect(convert(null)).to.be.equals(false);

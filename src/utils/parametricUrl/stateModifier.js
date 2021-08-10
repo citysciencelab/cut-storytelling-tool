@@ -1,6 +1,6 @@
 import {translate} from "./translator";
 import {deepAssignIgnoreCase} from "../deepAssign";
-import {triggerParametricURLReady, translateToBackbone} from "./ParametricUrlBrige";
+import {doSpecialBackboneHandling, triggerParametricURLReady, translateToBackbone} from "./ParametricUrlBrige";
 import store from "../../app-store";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
 
@@ -95,12 +95,15 @@ function callActions (state) {
 
         if (state.urlParams.projection !== undefined) {
             coordinates = transformToMapProjection(state.Map.map, state.urlParams.projection, coordinates);
+            console.log("after transformToMapProjection:", coordinates);
         }
         setTimeout(() => {
+            console.log("action placingPointMarker");
             store.dispatch("MapMarker/placingPointMarker", coordinates);
         }, 500);
-    } 
+    }
     if (state.urlParams["Map/zoomLevel"]) {
+        console.log("action setZoomLevel");
         store.dispatch("Map/setZoomLevel", state.Map.zoomLevel);
     }
 }
@@ -127,21 +130,23 @@ export default async function setValuesToState (state, params) {
  * @returns {void}
  */
 export async function setValueToState (state, key, value) {
-    // console.log("---- key=", key);
-    // console.log("value=", value);
+    console.log("---- key=", key);
+    console.log("value=", value);
 
     if (typeof key === "string") {
         translate(key.trim(), value).then(entry => {
             let setToState = false;
 
-            // console.log("translated key=", entry.key);
-            // console.log("translated value=", entry.value);
+            console.log("translated key=", entry.key);
+            console.log("translated value=", entry.value);
 
 
             const found = searchAndSetValue(state, entry.key.split("/"), entry.value);
 
-            // console.log("state:", state);
-            // console.log("found:", found);
+            console.log("state:", state);
+            console.log("found:", found);
+
+            doSpecialBackboneHandling(entry.key, entry.value);
 
             if (!found) {
                 const oldParam = translateToBackbone(entry.key, entry.value);
@@ -154,7 +159,7 @@ export async function setValueToState (state, key, value) {
             if (!setToState) {
                 state.urlParams[entry.key] = value;
             }
-            // console.log("state.urlParams=", state.urlParams);
+            console.log("state.urlParams=", state.urlParams);
         }).catch(error => {
             console.warn("Error occured during applying url param to state ", error);
         });

@@ -1,3 +1,5 @@
+import {MapMode} from "../../modules/map/store/enums";
+
 const toolsNotInState = ["compareFeatures", "parcelSearch", "print", "featureLister", "layerSlider", "filter", "shadow", "virtualcity", "wfst", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
 
 /**
@@ -27,4 +29,21 @@ export function translateToBackbone (urlParamsKey, urlParamsValue) {
         return {key: "isinitopen", value: paramsKey};
     }
     return {key: urlParamsKey, value: urlParamsValue};
+}
+
+/**
+ * Depending on given key and value special handling in backbone world is triggered.
+ * @param {String} key key of url params
+ * @param {String} value  value of url params
+ * @returns {void}
+ */
+export function doSpecialBackboneHandling (key, value) {
+    if (key === "Map/mapMode") {
+        if (value === MapMode.MODE_3D) {
+            Radio.trigger("Map", "activateMap3d");
+        }
+        else if (value === MapMode.MODE_2D) {
+            Radio.trigger("Map", "deactivateMap3d");
+        }
+    }
 }

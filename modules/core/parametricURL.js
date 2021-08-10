@@ -171,14 +171,14 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "HIGHLIGHTFEATURE": this.setHighlightfeature.bind(this),
             // "ISINITOPEN": this.parseIsInitOpen.bind(this),
             "LAYERIDS": this.createLayerParams.bind(this),
-            "MAP": this.adjustStartingMap3DParameter.bind(this),
+            // "MAP": this.adjustStartingMap3DParameter.bind(this),
             "MDID": this.parseMDID.bind(this),
             "PROJECTION": this.parseProjection.bind(this),
             "QUERY": this.parseQuery.bind(this),
             "STARTUPMODUL": this.parseIsInitOpen.bind(this), // @deprecated in version 3.0.0
             "STYLE": this.parseStyle.bind(this),
             "TILT": this.evaluateCameraParameters.bind(this),
-            "ZOOMLEVEL": this.setZoomLevel.bind(this),
+            // "ZOOMLEVEL": this.setZoomLevel.bind(this),
             "ZOOMTOEXTENT": this.parseZOOMTOEXTENT.bind(this),
             "ZOOMTOGEOMETRY": this.parseZoomToGeometry.bind(this)
             // "LNG": this.checkIfLanguageEnabled.bind(this)

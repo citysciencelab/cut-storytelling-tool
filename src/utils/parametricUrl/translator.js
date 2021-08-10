@@ -1,5 +1,6 @@
 import convert from "./converter";
 import requestConfig from "../configLoader";
+import {toMapMode} from "../../modules/map/store/enums";
 
 /**
  * Translates key and value to vuex state readable kind. Converts the value from string to type.
@@ -29,10 +30,18 @@ export async function translate (urlParamsKey, urlParamsValue) {
                 value = convert(urlParamsValue);
 
             return {key: key, value: value};
-        } 
+        }
         case "zoomlevel": {
             const key = "Map/zoomLevel",
                 value = parseInt(urlParamsValue, 10);
+
+            return {key: key, value: value};
+        }
+        case "map":
+        case "mapmode":
+        case "map/mapmode": {
+            const key = "Map/mapMode",
+                value = toMapMode(urlParamsValue);
 
             return {key: key, value: value};
         }
