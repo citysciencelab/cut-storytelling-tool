@@ -1,1 +1,13 @@
-Test Test
+Kontrastanpassungen ToDo:
+
+// = abgeschlossen
+
+
+---Header/Navbar---
+
+Themen:
+-> Inaktive Elemente z.B. HVV, Eignungsflächen, Bohrdaten
+-> Err. Arbeitsplätze deegree Tropfenicon -> Text im Fenster
+-> Einstellungen/Zahnrad der Komponenten: % Anzeige und "Layer entfernen"
+-> Infobutton -> Metadaten "Publikationen / Erstellung:, Letzte Änderung"
+-> Infobutton -> "Legende"
