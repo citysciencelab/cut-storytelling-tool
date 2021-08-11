@@ -302,6 +302,8 @@ const Config = {
 ### The third step
 Create an html-file and add the follow content. In it, an iframe is created in which the portal `https://localhost:9001/portal/master` is loaded. Then 3 buttons are created and a click event is assigned to each.
 
+Note: The html-file must be stored in a path that is accessible via the localhost.
+
 The example can also be called directly here with a running server:  **[iframe Example](https://localhost:9001/doc/remoteInterface/iframeExample.html)**
 
 Example of an iframe:
