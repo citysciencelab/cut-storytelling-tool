@@ -135,7 +135,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                     parameterValue = decodeURIComponent(parameterFromUrlAsArray[1]);
 
                 result[parameterNameUpperCase] = parameterValue;
-                if (!possibleUrlParameters.hasOwnProperty(parameterNameUpperCase)
+                if (!Object.prototype.hasOwnProperty.call(possibleUrlParameters, parameterNameUpperCase)
                     && parameterNameUpperCase !== "VISIBILITY"
                     && parameterNameUpperCase !== "TRANSPARENCY"
                     && parameterNameUpperCase !== "CONFIG") {
@@ -145,7 +145,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
 
             this.setResult(result);
             Object.keys(result).forEach(param => {
-                if (possibleUrlParameters.hasOwnProperty(param)) {
+                if (Object.prototype.hasOwnProperty.call(possibleUrlParameters, param)) {
                     possibleUrlParameters[param](result[param], param);
                 }
             });
@@ -234,8 +234,8 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      */
     createLayerParams: function (layerIdString) {
         const result = this.get("result"),
-            visibilityListString = result.hasOwnProperty("VISIBILITY") ? result.VISIBILITY : "",
-            transparencyListString = result.hasOwnProperty("TRANSPARENCY") ? result.TRANSPARENCY : "",
+            visibilityListString = result?.VISIBILITY ? result.VISIBILITY : "",
+            transparencyListString = result?.TRANSPARENCY ? result.TRANSPARENCY : "",
             layerIdList = layerIdString.indexOf(",") !== -1 ? layerIdString.split(",") : new Array(layerIdString),
             layerParams = [],
             wrongIdsPositions = [];
@@ -265,7 +265,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             });
         }
         else {
-            transparencyList = [parseInt(transparencyListString, 0)];
+            transparencyList = [parseInt(transparencyListString, 10)];
         }
 
         if (layerIdList.length !== visibilityList.length || visibilityList.length !== transparencyList.length) {
@@ -419,7 +419,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             console.warn("Parameter 'BEZIRK' is deprecated. Please use 'ZOOMTOGEOMETRY' instead.");
         }
 
-        if (Config.hasOwnProperty("zoomToGeometry") && Config.zoomToGeometry.hasOwnProperty("geometries")) {
+        if (Object.prototype.hasOwnProperty.call(Config, "zoomToGeometry") && Object.prototype.hasOwnProperty.call(Config.zoomToGeometry, "geometries")) {
             geometries = Config.zoomToGeometry.geometries;
 
             if (geometries.includes(gemometryFromUrl.toUpperCase())) {
@@ -510,7 +510,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     evaluateCameraParameters: function (result, property) {
-        if (!Config.hasOwnProperty("cameraParameter")) {
+        if (!Object.prototype.hasOwnProperty.call(Config, "cameraParameter")) {
             Config.cameraParameter = {};
         }
 

@@ -61,17 +61,6 @@ pipelines:
                         curl -X POST --user "$bbapi_name:$bbapi_key" "https://api.bitbucket.org/2.0/repositories/geowerkstatt-hamburg/masterportal/downloads" --form files=@"$zipFilePath" --verbose;
                       done
     custom: # Pipelines that are triggered manually
-        End2End-Tests on browserstack:
-            - step: *install-e2e-tests-server-on-test-geoportal
-            - step:
-                name: run e2e tests on browserstack url=test.geoportal
-                caches:
-                    - node
-                script:
-                    # run e2e tests
-                    - ./devtools/scripts/run_browserstack_local.bash
-                    - export url=https://test.geoportal-hamburg.de
-                    - npm run browsertestOnExternalServer --testservice=browserstack
         End2End-Tests on saucelabs:
             - step: *install-e2e-tests-server-on-test-geoportal
             - step:
@@ -82,15 +71,6 @@ pipelines:
                     # run e2e tests
                     - export url=https://test.geoportal-hamburg.de
                     - npm run browsertestOnExternalServer --testservice=saucelabs
-        End2End-Tests on browserstack/ use existing server:
-            - step:
-                name: run e2e tests on browserstack url=test.geoportal_buildname
-                caches:
-                    - node
-                script:
-                    - ./devtools/scripts/run_browserstack_local.bash
-                    - export url=https://test.geoportal-hamburg.de
-                    - npm run browsertestOnExternalServer --testservice=browserstack
         End2End-Tests on saucelabs/ use existing server:
             - step:
                 name: run e2e tests on saucelabs url=test.geoportal_buildname

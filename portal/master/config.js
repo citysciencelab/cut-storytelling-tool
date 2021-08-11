@@ -59,7 +59,7 @@ const Config = {
     scaleLine: true,
     mouseHover: {
         numFeaturesToShow: 2,
-        infoText: "(weitere Objekte. Bitte zoomen.)"
+        infoText: "common:mouseHover.infoText"
     },
     clickCounter: {},
     startingMap3D: false,

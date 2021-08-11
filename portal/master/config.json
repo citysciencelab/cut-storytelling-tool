@@ -55,15 +55,6 @@
         "timeout": 10000,
         "definitions": [
           {
-            "url": "/geodienste.hamburg.de/MRH_WFS_Rotenburg",
-            "typeName": "app:mrh_row_bplan",
-            "propertyNames": [
-              "app:name"
-            ],
-            "name": "translate#common:modules.searchbar.specialWFS.bplan",
-            "namespaces": "xmlns:app='http://www.deegree.org/app'"
-          },
-          {
             "url": "/geodienste.hamburg.de/HH_WFS_Bebauungsplaene",
             "typeName": "app:hh_hh_festgestellt",
             "propertyNames": [
@@ -269,7 +260,9 @@
           },
           "compareFeatures": {
             "name": "translate#common:menu.tools.compareFeatures",
-            "glyphicon": "glyphicon-th-list"
+            "glyphicon": "glyphicon-th-list",
+            "numberOfFeaturesToShow": 3,
+            "numberOfAttributesToShow": 12
           },
           "parcelSearch": {
             "name": "translate#common:menu.tools.parcelSearch",
@@ -284,8 +277,16 @@
             "glyphicon": "glyphicon-resize-full"
           },
           "supplyCoord": {
-            "name": "translate#common:menu.tools.coord",
+            "name": "translate#common:menu.tools.supplyCoord",
             "glyphicon": "glyphicon-screenshot"
+          },
+          "coordToolkit": {
+            "name": "translate#common:menu.tools.coordToolkit",
+            "glyphicon": "glyphicon-globe",
+            "heightLayerId" : "19173",
+            "heightElementName": "value_0",
+            "heightValueWater": "-20",
+            "heightValueBuilding": "200"
           },
           "shadow": {
             "name": "translate#common:menu.tools.shadow",
@@ -359,35 +360,6 @@
             "glyphicon": "glyphicon-menu-hamburger",
             "lister": 10
           },
-          "lines": {
-            "name": "translate#common:menu.tools.commuterLines",
-            "glyphicon": "glyphicon-play-circle"
-          },
-          "animation": {
-            "name": "translate#common:menu.tools.commuterAnimation",
-            "glyphicon": "glyphicon-play-circle",
-            "steps": 30,
-            "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
-            "params": {
-              "REQUEST": "GetFeature",
-              "SERVICE": "WFS",
-              "TYPENAME": "app:mrh_kreise",
-              "VERSION": "1.1.0",
-              "maxFeatures": "10000"
-            },
-            "featureType": "mrh_einpendler_gemeinde",
-            "attrAnzahl": "anzahl_einpendler",
-            "attrGemeinde": "wohnort",
-            "minPx": 5,
-            "maxPx": 30,
-            "zoomlevel": 1,
-            "colors": [
-              "rgba(255,0,0,0.5)",
-              "rgba(0,255,0,0.5)",
-              "rgba(0,0,255,0.5)",
-              "rgba(0,255,255,0.5)"
-            ]
-          },
           "saveSelection": {
             "name": "translate#common:menu.tools.saveSelection",
             "glyphicon": "glyphicon-share"
@@ -395,7 +367,6 @@
           "layerSlider": {
             "name": "translate#common:menu.tools.layerSlider",
             "glyphicon": "glyphicon-film",
-            "title": "translate#common:modules.tools.layerSlider.title",
             "timeInterval": 2000,
             "layerIds": [
               {
@@ -782,9 +753,9 @@
                     "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextCharging"
                   },
                   "outoforder": {
-                      "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
-                      "color": "rgba(175, 175, 175, 1)",
-                      "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextOutoforder"
+                    "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
+                    "color": "rgba(175, 175, 175, 1)",
+                    "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextOutoforder"
                   }
                 }
               }
@@ -801,6 +772,9 @@
         },
         {
           "id": "13023"
+        },
+        {
+          "id" : "19173"
         }
       ]
     }

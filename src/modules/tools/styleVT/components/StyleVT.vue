@@ -59,10 +59,10 @@ export default {
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
-        :initialWidth="initialWidth"
+        :deactivate-gfi="deactivateGFI"
+        :initial-width="initialWidth"
     >
-        <template v-slot:toolBody>
+        <template #toolBody>
             <p
                 v-if="vectorTileLayerList.length === 0"
                 id="tool-styleVT-noStyleableLayers"

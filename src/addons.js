@@ -17,7 +17,7 @@ export default async function (config) {
             try {
                 const addonConf = allAddons[addonKey];
 
-                if (addonConf && addonConf.hasOwnProperty("type")) {
+                if (Object.prototype.hasOwnProperty.call(addonConf, "type")) {
                     if (addonConf.type === "tool") {
                         await loadToolAddons(addonKey);
                     }

@@ -61,7 +61,14 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     createClusterLayerSource: function () {
         this.setClusterLayerSource(new Cluster({
             source: this.get("layerSource"),
-            distance: this.get("clusterDistance")
+            distance: this.get("clusterDistance"),
+            geometryFunction: function (feature) {
+                // do not cluster invisible features; can't rely on style since it will be null initially
+                if (feature.get("hideInClustering") === true) {
+                    return null;
+                }
+                return feature.getGeometry();
+            }
         }));
     },
 
@@ -177,8 +184,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     handleData: function (data) {
         const mapCrs = Radio.request("MapView", "getProjection"),
             jsonCrs = this.getJsonProjection(data),
-            newFeatures = [],
-            isClustered = this.has("clusterDistance");
+            newFeatures = [];
 
         let features = this.parseDataToFeatures(data, mapCrs, jsonCrs);
 
@@ -207,25 +213,34 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         this.prepareFeaturesFor3D(features);
         this.featuresLoaded(features);
         if (features) {
-            this.styling(isClustered);
+            this.styling();
             this.get("layer").setStyle(this.get("style"));
         }
     },
 
     /**
-     * create style, function triggers to style_v2.json
-     * @param  {boolean} isClustered - should
-     * @fires VectorStyle#RadioRequestStyleListReturnModelById
+     * Sets Style for layer.
      * @returns {void}
      */
-    styling: function (isClustered) {
-        const stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+    styling: function () {
+        const styleId = this.get("styleId"),
+            styleModel = Radio.request("StyleList", "returnModelById", styleId);
+        let isClusterFeature = false;
 
-        if (stylelistmodel) {
+        if (styleModel !== undefined) {
             this.setStyle(function (feature) {
-                return stylelistmodel.createStyle(feature, isClustered);
+                const feat = feature !== undefined ? feature : this;
+
+                isClusterFeature = typeof feat.get("features") === "function" || typeof feat.get("features") === "object" && Boolean(feat.get("features"));
+
+                return styleModel.createStyle(feat, isClusterFeature);
             });
         }
+        else {
+            console.error(i18next.t("common:modules.core.modelList.layer.wrongStyleId", {styleId}));
+        }
+
+        this.get("layer").setStyle(this.get("style"));
     },
 
     /**
@@ -292,6 +307,11 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
 
         try {
             jsonObjects = geojsonReader.readFeatures(data);
+
+            // Use only Features that have a geometry.
+            jsonObjects = jsonObjects.filter(function (feature) {
+                return feature.getGeometry() !== undefined;
+            });
         }
         catch (err) {
             console.error("GeoJSON cannot be parsed.");
@@ -431,32 +451,61 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @return {void}
      */
     showFeaturesByIds: function (featureIdList) {
-        const features = [];
+        const layerSource = this.get("layerSource"),
+            // featuresToShow is a subset of allLayerFeatures
+            allLayerFeatures = layerSource.getFeatures(),
+            featuresToShow = featureIdList.map(id => layerSource.getFeatureById(id));
 
         this.hideAllFeatures();
-        featureIdList.forEach(id => {
-            const feature = this.get("layerSource").getFeatureById(id);
 
-            if (feature !== null) {
-                feature.setStyle(undefined);
-                features.push(feature);
-            }
-        });
-        Radio.trigger("VectorLayer", "resetFeatures", this.get("id"), features);
+        // optimization - clear and re-add to prevent cluster updates on each change
+        layerSource.clear();
+
+        featuresToShow.forEach(feature => {
+            const style = this.getStyleAsFunction(this.get("style"));
+
+            feature.set("hideInClustering", false);
+            feature.setStyle(style(feature));
+        }, this);
+
+        layerSource.addFeatures(allLayerFeatures);
+        Radio.trigger("VectorLayer", "resetFeatures", this.get("id"), allLayerFeatures);
     },
 
     /**
-     * sets null style (=no style) for all features
-     * @return {void}
+     * Returns the style as a function.
+     * @param {Function|Object} style ol style object or style function.
+     * @returns {function} - style as function.
+     */
+    getStyleAsFunction: function (style) {
+        if (typeof style === "function") {
+            return style;
+        }
+
+        return function () {
+            return style;
+        };
+    },
+
+    /**
+     * Hides all features by setting style= null for all features.
+     * @returns {void}
      */
     hideAllFeatures: function () {
-        const collection = this.get("layerSource").getFeatures();
+        const layerSource = this.get("layerSource"),
+            features = layerSource.getFeatures();
 
-        collection.forEach(function (feature) {
+        // optimization - clear and re-add to prevent cluster updates on each change
+        layerSource.clear();
+
+        features.forEach(function (feature) {
+            feature.set("hideInClustering", true);
             feature.setStyle(function () {
                 return null;
             });
         }, this);
+
+        layerSource.addFeatures(features);
     },
 
     /**
@@ -482,7 +531,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     },
 
     isUseProxy: function () {
-        return this.hasOwnProperty("isUseProxy") && this.get("isUseProxy") === true;
+        return Object.prototype.hasOwnProperty.call(this, "isUseProxy") && this.get("isUseProxy") === true;
     }
 });
 

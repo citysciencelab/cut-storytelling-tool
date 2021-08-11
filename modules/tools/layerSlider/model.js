@@ -5,7 +5,7 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
         layerIds: [],
         timeInterval: 2000,
-        title: null,
+        title: "common:modules.tools.layerSlider.title",
         progressBarWidth: 10,
         activeLayer: {layerId: ""},
         windowsInterval: null,
@@ -78,8 +78,7 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
      */
     changeLang: function (lng) {
         this.set({
-            "displayLayers": i18next.t("common:modules.tools.layerSlider.displayLayers"),
-            "title": i18next.t("common:modules.tools.layerSlider.title"),
+            "translatedTitle": i18next.t(this.get("title")),
             "titleNotConfigured": i18next.t("common:modules.tools.layerSlider.titleNotConfigured"),
             "serviceOne": i18next.t("common:modules.tools.layerSlider.serviceOne"),
             "serviceTwo": i18next.t("common:modules.tools.layerSlider.serviceTwo"),
@@ -413,12 +412,12 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
     },
 
     /**
-    * Setter for title.
-    * @param {string} value - title
+    * Setter for translatedTitle.
+    * @param {string} value - translatedTitle
     * @returns {void}
     */
-    setTitle: function (value) {
-        this.set("title", value);
+    setTranslatedTitle: function (value) {
+        this.set("translatedTitle", value);
     },
 
     /**

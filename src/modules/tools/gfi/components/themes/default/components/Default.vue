@@ -4,11 +4,13 @@ import {isWebLink} from "../../../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
 import CompareFeatureIcon from "../../../favoriteIcons/components/CompareFeatureIcon.vue";
+import DefaultSensorChart from "./DefaultSensorChart.vue";
 
 export default {
     name: "Default",
     components: {
-        CompareFeatureIcon
+        CompareFeatureIcon,
+        DefaultSensorChart
     },
     props: {
         feature: {
@@ -18,7 +20,7 @@ export default {
     },
     data: () => {
         return {
-            imageLinks: ["bildlink", "link_bild"],
+            imageLinks: ["bildlink", "link_bild", "Bild"],
             importedComponents: [],
             showFavoriteIcons: true
         };
@@ -35,7 +37,7 @@ export default {
                 return undefined;
             }
             for (const key of this.imageLinks) {
-                if (properties.hasOwnProperty(key)) {
+                if (Object.prototype.hasOwnProperty.call(properties, key)) {
                     return properties[key];
                 }
             }
@@ -58,7 +60,7 @@ export default {
         }
     },
     created () {
-        this.showFavoriteIcons = this.feature.getTheme()?.params?.hasOwnProperty("showFavoriteIcons") ?
+        this.showFavoriteIcons = this.feature.getTheme()?.params?.showFavoriteIcons ?
             this.feature.getTheme().params.showFavoriteIcons : this.showFavoriteIcons;
 
         this.replacesConfiguredImageLinks();
@@ -77,6 +79,23 @@ export default {
         isEmailAddress,
 
         /**
+         * checks if the given value is an object for rendering a linechart diagram
+         * @param {*} value anything to check
+         * @returns {Boolean} true if this can be converted to a linechart, false if not
+         */
+        isSensorChart (value) {
+            return typeof value === "object" && value !== null
+                && (
+                    value.type === "linechart"
+                    || value.type === "barchart"
+                    || value.type === "cakechart"
+                )
+                && typeof value.query === "string"
+                && typeof value.staObject === "object" && value.staObject !== null
+                && typeof value.staObject["@iot.selfLink"] === "string";
+        },
+
+        /**
          * Sets the imported components to importedComponents.
          * @returns {void}
          */
@@ -93,7 +112,7 @@ export default {
          * @returns {void}
          */
         replacesConfiguredImageLinks: function () {
-            const imageLinksAttribute = this.feature.getTheme()?.params?.imageLink;
+            const imageLinksAttribute = this.feature.getTheme()?.params?.imageLinks;
 
             if (Array.isArray(imageLinksAttribute)) {
                 this.imageLinks = imageLinksAttribute;
@@ -163,7 +182,10 @@ export default {
                     v-else
                     :key="key"
                 >
-                    <td class="bold">
+                    <td
+                        v-if="!isSensorChart(value)"
+                        class="bold"
+                    >
                         {{ beautifyKey($t(key)) }}
                     </td>
                     <td v-if="isWebLink(value)">
@@ -179,9 +201,26 @@ export default {
                         <a :href="`mailto:${value}`">{{ value }}</a>
                     </td>
                     <td
+                        v-else-if="Array.isArray(value)"
+                        v-html="value.join('<br>')"
+                    />
+                    <td
                         v-else-if="typeof value === 'string' && value.includes('<br>')"
                         v-html="value"
+                    />
+                    <td
+                        v-else-if="isSensorChart(value)"
+                        colspan="2"
                     >
+                        <DefaultSensorChart
+                            :type="value.type"
+                            :label="value.label"
+                            :query="value.query"
+                            :format="value.format"
+                            :sta-object="value.staObject"
+                            :options="value.options"
+                            :chart-options="value.chartOptions"
+                        />
                     </td>
                     <td v-else>
                         {{ value }}
@@ -192,8 +231,7 @@ export default {
         <iframe
             v-if="mimeType === 'text/html'"
             class="gfi-iFrame"
-        >
-        </iframe>
+        />
     </div>
 </template>
 

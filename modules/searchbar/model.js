@@ -170,7 +170,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         // Prüfe für jeden bekannten Suchalgorithmus ob er aktiviert ist. Wenn ja markiere ihn als
         // "Ergebnis ausstehend" und füge ihn der Liste aktiver Suchalgorithmen hinzu.
         searchTasks.forEach(taskName => {
-            if (config.hasOwnProperty(taskName)) {
+            if (Object.prototype.hasOwnProperty.call(config, taskName)) {
                 if (taskName === "gazetteer") {
                     // Der Suchalgorithmus "gazetteer" ist ein Sonderfall, da er mehrere Suchen durchführen kann
                     this.set("initialSearch_gazetteer_streetsOrHouseNumbers", false);

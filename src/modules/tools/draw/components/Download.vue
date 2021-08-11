@@ -22,7 +22,7 @@ export default {
 
 <template>
     <div>
-        <hr />
+        <hr>
         <p class="bold">
             {{ $t("common:button.download") }}
         </p>

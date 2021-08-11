@@ -57,7 +57,7 @@ export default {
             };
 
             // "useConfigName" is set in the preparser, should be removed, with the refactoring of the core
-            if (header.hasOwnProperty("useConfigName")) {
+            if (header?.useConfigName) {
                 delete this.header.useConfigName;
             }
 
@@ -156,7 +156,7 @@ export default {
                 .then(response => {
                     response.data.value.forEach((result, index) => {
                         historicalObservations.push(result);
-                        if (result.hasOwnProperty("Observations@iot.nextLink")) {
+                        if (Object.prototype.hasOwnProperty.call(result, "Observations@iot.nextLink")) {
                             this.fetchNextLinks(result["Observations@iot.nextLink"], index, historicalObservations, loadedDataStreamIndices, response.data.value.length);
                         }
                     });
@@ -176,11 +176,10 @@ export default {
         fetchNextLinks: function (requestQuery, index, historicalObservations, loadedDataStreamIndices, numberOfDataStreams) {
             axios.get(requestQuery)
                 .then(response => {
-                    if (response?.data.hasOwnProperty("value")) {
+                    if (response?.data?.value) {
                         historicalObservations[index].Observations = historicalObservations[index].Observations.concat(response.data.value);
                     }
-
-                    if (response?.data.hasOwnProperty("@iot.nextLink")) {
+                    if (Object.prototype.hasOwnProperty.call(response?.data, "@iot.nextLink")) {
                         this.fetchNextLinks(response.data["@iot.nextLink"], index, historicalObservations, loadedDataStreamIndices, numberOfDataStreams);
                     }
                     else {
@@ -296,12 +295,12 @@ export default {
                 :key="`sensorCharts-barChartComponent-${key}`"
                 :class="getTabPaneClasses(key)"
                 :show="isActiveTab(key)"
-                :chartValue="typeof value === 'object' ? value : {title: value}"
-                :targetValue="typeof key === 'number' ? value : key"
-                :chartsParams="gfiParams.charts"
-                :periodLength="periodLength"
-                :periodUnit="periodUnit"
-                :processedHistoricalDataByWeekday="processedHistoricalDataByWeekday"
+                :chart-value="typeof value === 'object' ? value : {title: value}"
+                :target-value="typeof key === 'number' ? value : key"
+                :charts-params="gfiParams.charts"
+                :period-length="periodLength"
+                :period-unit="periodUnit"
+                :processed-historical-data-by-weekday="processedHistoricalDataByWeekday"
             />
         </div>
     </div>

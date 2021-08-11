@@ -71,6 +71,7 @@ export default {
     <div
         id="modal-1-container"
         :class="[showingClass]"
+        role="alert"
     >
         <div id="modal-1-overlay" />
         <div
@@ -84,12 +85,24 @@ export default {
                 <span
                     class="glyphicon glyphicon-remove"
                     title="Discard"
+                    tabindex="0"
+                    @keydown.enter="discardByClickX"
                     @click="discardByClickX"
                 />
+                <div
+                    id="modal-1-header-container"
+                >
+                    <slot name="header" />
+                </div>
                 <div
                     id="modal-1-content-container"
                 >
                     <slot />
+                </div>
+                <div
+                    id="modal-1-footer-container"
+                >
+                    <slot name="footer" />
                 </div>
             </div>
         </div>
@@ -140,8 +153,8 @@ export default {
 
         .glyphicon.glyphicon-remove {
             position:absolute;
-            right:8px;
-            top:12px;
+            right:2px;
+            top:4px;
             color:#555555;
             z-index:4;
 

@@ -6,7 +6,6 @@ const webdriver = require("selenium-webdriver"),
     webdriverChrome = require("selenium-webdriver/chrome"),
     webdriverEdge = require("selenium-webdriver/edge"),
     path = require("path"),
-    http = require("http"),
     tests = require(path.resolve(__dirname, "./tests.js")),
     {
         getCapabilities,
@@ -17,13 +16,11 @@ const webdriver = require("selenium-webdriver"),
         modes
     } = require("./settings"),
     /* eslint-disable no-process-env */
-    // contains "browserstack" or "saucelabs"
+    // contains saucelabs"
     testService = process.env.npm_config_testservice,
     browser = process.env.browser || "firefox,chrome,edge",
     url = process.env.url || "https://localhost:9001/",
     urlPart = process.env.urlPart.replace(/\\/g, "") || "portal/",
-    // proxy for browserstack
-    proxy = process.env.proxy || "",
     // proxy for local testing
     localHttpProxy = process.env.http_proxy,
     localHttpsProxy = process.env.https_proxy,
@@ -168,8 +165,8 @@ function runTests (browsers) {
 
 /**
  * Creates a webdriver.Builder for the given testService.
- * @param {String} testServiceName "browserstack" or "saucelabs"
- * @param {Object} capability browserstack or saucelabs configurations.
+ * @param {String} testServiceName "saucelabs"
+ * @param {Object} capability saucelabs configurations.
  * @param {String} buildName name of the build
  * @returns {Object} the webdriver.Builder
  */
@@ -177,13 +174,7 @@ function createBuilder (testServiceName, capability, buildName) {
 
     const builder = new webdriver.Builder();
 
-    if (testServiceName === "browserstack") {
-        builder.usingHttpAgent(new http.Agent({keepAlive: true}));
-        builder.usingServer("http://hub-cloud.browserstack.com/wd/hub").
-            usingWebDriverProxy(proxy);
-        capability.build = buildName;
-    }
-    else {
+    if (testServiceName === "saucelabs") {
         builder.usingServer("https://ondemand.eu-central-1.saucelabs.com/wd/hub");
         capability["sauce:options"].build = buildName;
     }

@@ -121,8 +121,7 @@ export default {
     <div
         v-else
         :class="{hideButton: 'overviewmap-button'}"
-    >
-    </div>
+    />
 </template>
 
 <style lang="less" scoped>

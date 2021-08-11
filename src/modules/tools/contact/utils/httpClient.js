@@ -36,7 +36,7 @@ function httpClient (url, data, onSuccess, onError) {
 
     axios.post(url, convertJsonToPost(data))
         .then(response => {
-            if (response.status !== 200 || response.data.hasOwnProperty("success") && response.data.success === false) {
+            if (response.status !== 200 || Object.prototype.hasOwnProperty.call(response.data, "success") && response.data.success === false) {
                 console.error(`An error occurred sending an email. Server response: ${response.data.message}`);
                 console.error(response);
                 onError();

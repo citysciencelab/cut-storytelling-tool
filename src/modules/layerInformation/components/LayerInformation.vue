@@ -2,7 +2,7 @@
 import getters from "../store/gettersLayerInformation";
 import mutations from "../store/mutationsLayerInformation";
 import ToolWindow from "../../../share-components/ToolWindow.vue";
-import {mapGetters, mapActions, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 
 /**
  * The Layer Information that gives the user information, links and the legend for a layer
@@ -25,10 +25,10 @@ export default {
             return this.layerInfo.metaURL !== null && typeof this.abstractText !== "undefined" && this.abstractText !== this.noMetaDataMessage && this.abstractText !== this.noMetadataLoaded;
         },
         showPublication () {
-            return typeof this.datePublication !== "undefined" && this.datePublication !== null;
+            return typeof this.datePublication !== "undefined" && this.datePublication !== null && this.datePublication !== "";
         },
         showRevision () {
-            return typeof this.dateRevision !== "undefined" && this.dateRevision !== null;
+            return typeof this.dateRevision !== "undefined" && this.dateRevision !== null && this.dateRevision !== "";
         },
         showPeriodicity () {
             return this.periodicityKey !== "" && this.periodicityKey !== null && this.periodicityKey !== undefined;
@@ -47,7 +47,7 @@ export default {
         },
         showMoreLayers () {
             if (this.layerInfo.metaIdArray) {
-                return this.layerInfo.metaIdArray.length > 1;
+                return this.layerInfo.metaIdArray.length > 1 && !this.layerInfo.metaIdArray.every(item => item === null);
             }
             return false;
         },
@@ -144,10 +144,10 @@ export default {
         class="layerInformation"
         @close="close"
     >
-        <template v-slot:title>
+        <template #title>
             <span>{{ $t("common:modules.layerInformation.informationAndLegend") }}</span>
         </template>
-        <template v-slot:body>
+        <template #body>
             <div class="body">
                 <h4
                     class="subtitle"
@@ -168,7 +168,7 @@ export default {
                         @click="onClickDropdown"
                     >
                         {{ $t("common:modules.layerInformation.changeLayerInfo") }}
-                        <span class="caret"></span>
+                        <span class="caret" />
                     </button>
                     <ul
                         class="dropdown-menu"
@@ -189,7 +189,7 @@ export default {
                 <div
                     class="mb-2 abstract"
                     v-html="abstractText"
-                ></div>
+                />
                 <div v-if="showAdditionalMetaData">
                     <p
                         v-for="url in metaURLs"
@@ -258,8 +258,7 @@ export default {
                         :class="getTabPaneClasses('layerinfo-legend')"
                         :show="isActiveTab('layerinfo-legend')"
                         :type="String('layerinfo-legend')"
-                    >
-                    </div>
+                    />
                     <div
                         id="LayerInfoDataDownload"
                         class="row"

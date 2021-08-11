@@ -183,7 +183,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     createPeakValues: function (data, attrToShowArray, axisTicks) {
         const peakValues = {};
 
-        if (typeof axisTicks === "object" && axisTicks.hasOwnProperty("start") && axisTicks.hasOwnProperty("end")) {
+        if (typeof axisTicks === "object" && axisTicks?.start && axisTicks?.end) {
             peakValues.min = axisTicks.start;
             peakValues.max = axisTicks.end;
         }
@@ -274,7 +274,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
         if (Array.isArray(data) && Array.isArray(attrArray)) {
             data.forEach(function (atom) {
                 attrArray.forEach(function (attr) {
-                    if (!atom || !atom.hasOwnProperty(attr) || known.hasOwnProperty(atom[attr])) {
+                    if (!atom || !Object.prototype.hasOwnProperty.call(atom, attr) || Object.prototype.hasOwnProperty.call(known, atom[attr])) {
                         return;
                     }
                     values.push(atom[attr]);
@@ -317,20 +317,20 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @returns {Object}  - axisBottom
      */
     createAxisBottom: function (scale, xAxisTicks) {
-        const unit = xAxisTicks && xAxisTicks.hasOwnProperty("unit") ? " " + xAxisTicks.unit : "";
+        const unit = xAxisTicks?.unit ? " " + xAxisTicks.unit : "";
         let d3Object;
 
         if (xAxisTicks === undefined) {
             d3Object = d3.axisBottom(scale);
         }
-        else if (xAxisTicks.hasOwnProperty("values") && !xAxisTicks.hasOwnProperty("factor")) {
+        else if (xAxisTicks?.values && !xAxisTicks?.factor) {
             d3Object = d3.axisBottom(scale)
                 .tickValues(xAxisTicks.values)
                 .tickFormat(function (d) {
                     return d + unit;
                 });
         }
-        else if (xAxisTicks.hasOwnProperty("values") && xAxisTicks.hasOwnProperty("factor")) {
+        else if (xAxisTicks?.values && xAxisTicks?.factor) {
             d3Object = d3.axisBottom(scale)
                 .ticks(xAxisTicks.values, xAxisTicks.factor)
                 .tickFormat(function (d) {
@@ -350,7 +350,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     createAxisLeft: function (scale, yAxisTicks) {
         let d3Object;
 
-        if (yAxisTicks && yAxisTicks.hasOwnProperty("ticks") && yAxisTicks.hasOwnProperty("factor")) {
+        if (yAxisTicks && yAxisTicks?.ticks && yAxisTicks?.factor) {
             d3Object = d3.axisLeft(scale)
                 .tickFormat(function (d) {
                     if (d % 1 === 0) {
@@ -765,7 +765,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             setTooltipValue = graphConfig.setTooltipValue;
         let valueLine;
 
-        if (graphConfig.hasOwnProperty("legendData")) {
+        if (graphConfig?.legendData) {
             this.appendLegend(svg, graphConfig.legendData);
         }
 
@@ -884,7 +884,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             yAxis = this.createAxisLeft(scaleY, yAxisTicks),
             svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass);
 
-        if (graphConfig.hasOwnProperty("legendData")) {
+        if (graphConfig?.legendData) {
             this.appendLegend(svg, graphConfig.legendData);
         }
 

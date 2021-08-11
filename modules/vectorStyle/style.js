@@ -54,7 +54,7 @@ const StyleModel = Backbone.Model.extend(/** @lends StyleModel.prototype */{
             value = this.getValueFromPath(featureProperties, value);
         }
         else {
-            value = featureProperties && featureProperties.hasOwnProperty(field) ? featureProperties[field] : "undefined";
+            value = Object.prototype.hasOwnProperty.call(featureProperties, field) ? featureProperties[field] : "undefined";
         }
         return value;
     },
