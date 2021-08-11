@@ -7,6 +7,7 @@ import Template from "text-loader!./templateMenu.html";
  */
 
 const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype */{
+
     /**
      * @class FolderViewMenu
      * @extends Backbone.View

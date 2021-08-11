@@ -68,6 +68,50 @@ async function LegendTests ({builder, config, url, resolution, capability}) {
                     expect(text).to.include(entry);
                 }
             });
+            it("should respect order of menu entries in portal/master/config.json", async function () {
+                const allEntries = await driver.findElements(By.css("#root li a span.menuitem")),
+                    // check only the entries with className 'menuitem', visible entries are more
+                    expectedEntryNames = ["Themen", "Ansichten", "Werkzeuge", "Legende", "Informationen"];
+
+
+                for (const [index, entry] of allEntries.entries()) {
+                    entry.getText().then(function (text) {
+                        const existingIndex = expectedEntryNames.indexOf(text);
+
+                        expect(index).to.be.equals(existingIndex);
+                    });
+                }
+            });
+            it("should the menu item of the legend is to be translated", async function () {
+                const legendLocator = By.css("ul#root ul#legend-menu li.dropdown a.dropdown-toggle span.menuitem");
+
+                await (await driver.wait(
+                    until.elementLocated(By.css("a.current-language")), 9000)
+                ).click();
+
+                await driver.wait(until.elementLocated(By.css("div#language-bar div.popup-language")), 9000);
+
+                await (await driver.wait(
+                    until.elementLocated(By.xpath("//div[contains(@class,'popup-language')]/div/div/button[contains(.,'English')]")), 9000)
+                ).click();
+
+                // wait the language was switched
+                await driver.wait(new Promise(r => setTimeout(r, 500)));
+                expect(await (await driver.findElement(legendLocator)).getText()).to.equals("Legend");
+
+                await (await driver.wait(
+                    until.elementLocated(By.xpath("//div[contains(@class,'popup-language')]/div/div/button[contains(.,'Deutsch')]")), 9000)
+                ).click();
+
+                // wait the language was switched
+                await driver.wait(new Promise(r => setTimeout(r, 500)));
+                expect(await (await driver.findElement(legendLocator)).getText()).to.equals("Legende");
+
+                await (await driver.wait(
+                    until.elementLocated(By.css("a.current-language")), 9000)
+                ).click();
+                await driver.wait(new Promise(r => setTimeout(r, 5000)));
+            });
         });
     }
 }

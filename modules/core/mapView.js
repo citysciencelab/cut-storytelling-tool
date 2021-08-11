@@ -170,10 +170,10 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      */
     resetView: function () {
         const paramUrlCenter = Radio.request("ParametricURL", "getCenter"),
-            settingsCenter = this.get("settings") !== undefined && this.get("settings").hasOwnProperty("startCenter") ? this.get("settings").startCenter : undefined,
+            settingsCenter = this.get("settings") !== undefined && this.get("settings")?.startCenter ? this.get("settings").startCenter : undefined,
             defaultCenter = defaults.startCenter,
             center = paramUrlCenter || settingsCenter || defaultCenter,
-            settingsResolution = this.get("settings") !== undefined && this.get("settings").hasOwnProperty("resolution") ? this.get("settings").resolution : undefined,
+            settingsResolution = this.get("settings") !== undefined && this.get("settings")?.resolution ? this.get("settings").resolution : undefined,
             defaultResolution = defaults.startResolution,
             resolution = settingsResolution || defaultResolution;
 

@@ -32,7 +32,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
         const isBaseLayer = Boolean(parentId === "Baselayer" || parentId === "tree"),
             treeType = Radio.request("Parser", "getTreeType");
 
-        if (object.hasOwnProperty("Layer")) {
+        if (object?.Layer) {
             object.Layer.forEach(layer => {
                 let objFromRawList,
                     objsFromRawList,
@@ -59,7 +59,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                     // DIPAS -> if the layer type "StaticImage" is transferred, the system does not break off but continues to work with the new ImageURL.
                     // Is required for the use of an individually oiled picture.
                     if (objFromRawList === null) {
-                        if (layerExtended.hasOwnProperty("url")) { // Wenn LayerID nicht definiert, dann Abbruch
+                        if (layerExtended?.url) { // Wenn LayerID nicht definiert, dann Abbruch
                             objFromRawList = layerExtended;
                         }
                         else {
@@ -71,14 +71,14 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
 
                 // For Single-Layer (ol.layer.Layer)
                 // For example: {id: "5181", visible: false}
-                else if (!layerExtended.hasOwnProperty("children") && typeof layerExtended.id === "string") {
+                else if (!layerExtended?.children && typeof layerExtended.id === "string") {
                     objFromRawList = getLayerWhere({id: layerExtended.id});
 
                     // DIPAS -> There is an object not in the ServicesJSON, but it has a url, the layer is still transferred without a services entry
                     // DIPAS -> if the layer type "StaticImage" is transferred, the system does not break off but continues to work with the new ImageURL.
                     // Is required for the use of an individually oiled picture.
                     if (objFromRawList === null) {
-                        if (layerExtended.hasOwnProperty("url")) { // Wenn LayerID nicht definiert, dann Abbruch
+                        if (layerExtended?.url) { // Wenn LayerID nicht definiert, dann Abbruch
                             objFromRawList = layerExtended;
                         }
                         else {
@@ -100,7 +100,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                 }
                 // For Group-Layer (ol.layer.Group)
                 // For Example: {id: "xxx", children: [{ id: "1364" }, { id: "1365" }], visible: false}
-                else if (layerExtended.hasOwnProperty("children") && typeof layerExtended.id === "string") {
+                else if (layerExtended?.children && typeof layerExtended.id === "string") {
                     layerExtended.children = layerExtended.children.map(childLayer => {
                         objFromRawList = null;
                         if (childLayer.styles && childLayer.styles[0]) {
@@ -127,7 +127,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
 
                 // HVV :(
 
-                if (layerExtended.hasOwnProperty("styles") && layerExtended.styles.length >= 1) {
+                if (layerExtended?.styles && layerExtended.styles.length >= 1) {
                     layerExtended.styles.forEach((style, index) => {
                         let subItem = Object.assign({
                             id: layerExtended.id + style,
@@ -161,9 +161,9 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                 }
             });
         }
-        if (object.hasOwnProperty("Ordner")) {
+        if (object?.Ordner) {
             object.Ordner.forEach(folder => {
-                const isLeafFolder = !folder.hasOwnProperty("Ordner");
+                const isLeafFolder = !folder?.Ordner;
                 let isFolderSelectable;
 
                 // Visiblity of SelectAll-Box. Use item property first, if not defined use global setting.

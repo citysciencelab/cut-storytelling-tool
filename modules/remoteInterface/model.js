@@ -40,8 +40,8 @@ const RemoteInterface = Backbone.Model.extend({
             Falls Parameter übergeben werden sollen, muss die Radio-Funktion diese als Objekt erwarten.
             Das Parameter-Objekt muss der Postmessage als radio_para_object übergeben werden.
         */
-        if (event.data.hasOwnProperty("radio_channel") && event.data.hasOwnProperty("radio_function")) {
-            if (event.data.hasOwnProperty("radio_para_object")) {
+        if (event.data?.radio_channel && event.data?.radio_function) {
+            if (event.data?.radio_para_object) {
                 Radio.trigger(event.data.radio_channel, event.data.radio_function, event.data.radio_para_object);
             }
             else {
@@ -49,19 +49,19 @@ const RemoteInterface = Backbone.Model.extend({
             }
             return;
         }
-        if (event.data.hasOwnProperty("showPositionByExtent")) {
+        if (event.data?.showPositionByExtent) {
             this.showPositionByExtent(event.data.showPositionByExtent);
         }
-        else if (event.data.hasOwnProperty("showPositionByExtentNoScroll")) {
+        else if (event.data?.showPositionByExtentNoScroll) {
             this.showPositionByExtentNoScroll(event.data.showPositionByExtentNoScroll);
         }
-        else if (event.data.hasOwnProperty("transactFeatureById")) {
+        else if (event.data?.transactFeatureById) {
             Radio.trigger("wfsTransaction", "transact", event.data.layerId, event.data.transactFeatureById, event.data.mode, event.data.attributes);
         }
-        else if (event.data.hasOwnProperty("zoomToExtent")) {
+        else if (event.data?.zoomToExtent) {
             Radio.trigger("Map", "zoomToExtent", event.data.zoomToExtent);
         }
-        else if (event.data.hasOwnProperty("highlightfeature")) {
+        else if (event.data?.highlightfeature) {
             store.commit("Map/setVectorFeaturesLoaded", {type: "viaLayerAndLayerId", layerAndLayerId: event.data.highlightfeature});
         }
         else if (event.data === "hidePosition") {

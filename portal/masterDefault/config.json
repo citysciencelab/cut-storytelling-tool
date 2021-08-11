@@ -67,12 +67,20 @@
                         "title": "Mein Titel"
                     },
                     "supplyCoord": {
-                        "name": "translate#common:menu.tools.coord",
+                        "name": "translate#common:menu.tools.supplyCoord",
                         "glyphicon": "glyphicon-screenshot"
                     },
                     "searchByCoord": {
                         "name": "translate#common:menu.tools.searchByCoord",
                         "glyphicon": "glyphicon-record"
+                    },
+                    "coordToolkit": {
+                        "name": "translate#common:menu.tools.coordToolkit",
+                        "glyphicon": "glyphicon-globe",
+                        "heightLayerId" : "19173",
+                        "heightElementName": "value_0",
+                        "heightValueWater": "-20",
+                        "heightValueBuilding": "200"
                     },
                     "fileImport": {
                         "name": "translate#common:menu.tools.fileImport",

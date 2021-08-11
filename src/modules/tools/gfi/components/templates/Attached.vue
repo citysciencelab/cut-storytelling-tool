@@ -43,6 +43,20 @@ export default {
             return getTheme(this.feature.getTheme(), this.$options.components, this.$gfiThemeAddons);
         }
     },
+    watch: {
+        /**
+         * When the feature changes, the popover is redrawn to keep the position of the click coordinate.
+         * Note: Starting from Bootstrap version 4 an update function for the popover is available.
+         *       Should be adapted when updating Bootstrap.
+         * @returns {void}
+         */
+        feature () {
+            this.$nextTick(() => {
+                this.overlay.setPosition(this.clickCoord);
+                $(this.overlay.getElement()).popover("show");
+            });
+        }
+    },
     mounted () {
         this.$nextTick(() => {
             this.createOverlay();
@@ -122,8 +136,7 @@ export default {
             >
                 <span
                     class="glyphicon glyphicon-remove"
-                >
-                </span>
+                />
             </button>
             <h5>
                 {{ translate(title) }}
@@ -166,8 +179,8 @@ export default {
     }
    @media (min-width: 768px) {
     .gfi-content {
+        max-height: 40vh;
         width: 100%;
-        height: 40vh;
     }
    }
 
@@ -177,7 +190,8 @@ export default {
     .ol-viewport {
         .popover {
             padding: 0;
-            min-width: 40vw;
+            width: max-content;
+            max-width: 40vw;
             border: 0;
             z-index: 1;
         }

@@ -172,26 +172,26 @@ const StyleWmsView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
      */
     showErrorMessages: function () {
         this.model.get("errors").forEach(error => {
-            if (error.hasOwnProperty("colorText")) {
+            if (error?.colorText) {
                 this.$el.find(".selected-color" + error.colorIndex).parent().addClass("has-error");
                 this.$el.find(".selected-color" + error.colorIndex).parent().after("<span class='error'>" + error.colorText + "</span>");
             }
-            if (error.hasOwnProperty("rangeText")) {
+            if (error?.rangeText) {
                 this.$el.find(".start-range" + error.rangeIndex).parent().addClass("has-error");
                 this.$el.find(".stop-range" + error.rangeIndex).parent().addClass("has-error");
                 this.$el.find(".start-range" + error.rangeIndex).after("<span class='error'>" + error.rangeText + "</span>");
             }
-            if (error.hasOwnProperty("intersectText")) {
+            if (error?.intersectText) {
                 this.$el.find(".start-range" + error.intersectIndex).parent().addClass("has-error");
                 this.$el.find(".stop-range" + error.prevIndex).parent().addClass("has-error");
                 this.$el.find(".start-range" + error.intersectIndex).after("<span class='error'>" + error.intersectText + "</span>");
                 this.$el.find(".stop-range" + error.prevIndex).after("<span class='error'>" + error.intersectText + "</span>");
             }
-            if (error.hasOwnProperty("minText")) {
+            if (error?.minText) {
                 this.$el.find(".start-range" + error.minIndex).parent().addClass("has-error");
                 this.$el.find(".start-range" + error.minIndex).after("<span class='error'>" + error.minText + "</span>");
             }
-            if (error.hasOwnProperty("maxText")) {
+            if (error?.maxText) {
                 this.$el.find(".stop-range" + error.maxIndex).parent().addClass("has-error");
                 this.$el.find(".stop-range" + error.maxIndex).after("<span class='error'>" + error.maxText + "</span>");
             }

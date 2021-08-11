@@ -39,6 +39,10 @@ export default {
         validInput: {
             type: Boolean,
             required: true
+        },
+        autocomplete: {
+            type: String,
+            default: "off"
         }
     },
     data: function () {
@@ -69,6 +73,7 @@ export default {
                 :is="htmlElement"
                 :id="`tool-contact-${inputName}-input`"
                 :value="inputValue"
+                :autocomplete="autocomplete"
                 :type="htmlElement === 'input' ? inputType : ''"
                 class="form-control"
                 :aria-describedby="`tool-contact-${inputName}-help`"

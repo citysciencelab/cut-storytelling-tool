@@ -1,3 +1,5 @@
+@import "../../css/variables.less";
+
 @color_1: rgb(255, 255, 255);
 @color_2: rgb(53, 53, 53);
 @font_family_1: "MasterPortalFont","Arial Narrow",Arial,sans-serif;
@@ -9,13 +11,19 @@
     overflow: auto;
     >li {
         >a {
-            &:hover {
-                background-color: @background_color_1;
-                color: @color_1;
-            }
             font-family: @font_family_1;
             font-size: 12px;
             color: @color_2;
+            &:focus {
+                opacity: 1.0;
+                outline: 3px solid @accent_focus;
+                outline: 3px auto  Highlight;
+                outline: 3px auto -webkit-focus-ring-color;
+            }
+            &:hover {
+                background-color: @accent_hover;
+                color: @color_1;
+            }
             >span {
                 padding-right: 8px;
             }
@@ -23,8 +31,12 @@
     }
     >.active {
         >a {
-            background-color: @background_color_1;
+            background-color: @accent_active;
             color: @color_1;
+            &:hover {
+                background-color: @accent_active;
+                color: @color_1;
+            }
         }
     }
     >.divider {

@@ -1,6 +1,6 @@
 <script>
 import Feature from "ol/Feature.js";
-import {mapGetters, mapActions, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersLegend";
 import mutations from "../store/mutationsLegend";
 import actions from "../store/actionsLegend";
@@ -307,7 +307,7 @@ export default {
                         }
                     }
                     /** Style WMS */
-                    else if (legendInfo.hasOwnProperty("name") && legendInfo.hasOwnProperty("graphic")) {
+                    else if (legendInfo?.name && legendInfo?.graphic) {
                         legendObj = legendInfo;
                     }
                     if (Array.isArray(legendObj)) {
@@ -732,13 +732,13 @@ export default {
                 <span
                     class="glyphicon glyphicon-remove close-legend float-right"
                     @click="closeLegend"
-                ></span>
+                />
                 <span
                     v-if="showCollapseAllButton"
                     class="glyphicon glyphicon-arrow-up toggle-collapse-all legend float-right"
                     :title="$t('common:modules.legend.toggleCollapseAll')"
                     @click="toggleCollapseAll"
-                ></span>
+                />
             </div>
             <div class="legend-content">
                 <div
@@ -755,15 +755,15 @@ export default {
                     </div>
                     <LegendSingleLayer
                         :id="generateId(legendObj.name)"
-                        :legendObj="legendObj"
-                        :renderToId="''"
+                        :legend-obj="legendObj"
+                        :render-to-id="''"
                     />
                 </div>
             </div>
         </div>
         <LegendSingleLayer
-            :legendObj="layerInfoLegend"
-            :renderToId="'layerinfo-legend'"
+            :legend-obj="layerInfoLegend"
+            :render-to-id="'layerinfo-legend'"
         />
     </div>
 </template>

@@ -57,6 +57,18 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         this.checkLayerVisibility();
         this.listenTo(Radio.channel("Layer"), {
             "layerVisibleChanged": function (layerId, visible) {
+                const layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+
+                if (
+                    typeof layer === "object" && layer !== null && typeof layer.get === "function"
+                    && Array.isArray(layer.get("children")) && layer.get("children").length
+                ) {
+                    layer.get("children").forEach(child => {
+                        if (typeof child === "object" && child !== null && child.id === this.get("layerId")) {
+                            this.setIsLayerVisible(visible);
+                        }
+                    });
+                }
                 if (layerId === this.get("layerId")) {
                     this.setIsLayerVisible(visible);
                 }
@@ -150,7 +162,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
             this.get("snippetCollection").add(new SnippetDropdownModel(snippetAttribute));
         }
         else if (snippetAttribute.type === "boolean") {
-            if (snippetAttribute.hasOwnProperty("preselectedValues")) {
+            if (snippetAttribute?.preselectedValues) {
                 isSelected = snippetAttribute.preselectedValues[0];
             }
             snippetAttribute = Object.assign(snippetAttribute, {"snippetType": "checkbox", "label": snippetAttribute.displayName, "isSelected": isSelected});
@@ -234,7 +246,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
             attrObj.name = attr;
             attrObj.matchingMode = "OR";
         }
-        else if (attr.hasOwnProperty("name") && attr.hasOwnProperty("matchingMode")) {
+        else if (attr?.name && attr?.matchingMode) {
             attrObj = attr;
         }
         return attrObj;
@@ -250,7 +262,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
             displayNames = Array.isArray(whiteList) ? attributeNames : whiteList;
 
         featureAttributesMap.forEach(featureAttribute => {
-            if (displayNames instanceof Object && displayNames.hasOwnProperty(featureAttribute.name) === true) {
+            if (displayNames instanceof Object && Object.prototype.hasOwnProperty.call(displayNames, featureAttribute.name) === true) {
                 featureAttribute.displayName = displayNames[featureAttribute.name];
             }
             else {

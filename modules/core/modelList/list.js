@@ -32,12 +32,10 @@ import TreeFilter from "../../treeFilter/model";
 import ExtendedFilter from "../../tools/extendedFilter/model";
 import FeatureLister from "../../tools/featureLister/model";
 import Shadow from "../../tools/shadow/model";
-import CompareFeatures from "../../tools/compareFeatures/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
 import LayerSliderModel from "../../tools/layerSlider/model";
 import Viewpoint from "./viewPoint/model";
-import ColorScale from "../../tools/colorScale/model";
 import VirtualCityModel from "../../tools/virtualCity/model";
 import store from "../../../src/app-store/index";
 import WfstModel from "../../tools/wfst/model";
@@ -171,7 +169,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 }
             }
         });
-        this.defaultToolId = Config.hasOwnProperty("defaultToolId") ? Config.defaultToolId : "gfi";
+        this.defaultToolId = Object.prototype.hasOwnProperty.call(Config, "defaultToolId") ? Config.defaultToolId : "gfi";
     },
     defaultToolId: "",
     alwaysActiveTools: [],
@@ -239,9 +237,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "styleWMS") {
                 return new StyleWMS(attrs, options);
             }
-            else if (attrs.id === "compareFeatures") {
-                return new CompareFeatures(attrs, options);
-            }
             else if (attrs.id === "filter") {
                 return new Filter(attrs, options);
             }
@@ -249,7 +244,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 return new Shadow(attrs, options);
             }
             else if (attrs.id === "treeFilter") {
-                return new TreeFilter(Object.assign(attrs, Config.hasOwnProperty("treeConf") ? {treeConf: Config.treeConf} : {}), options);
+                return new TreeFilter(Object.assign(attrs, Object.prototype.hasOwnProperty.call(Config, "treeConf") ? {treeConf: Config.treeConf} : {}), options);
             }
             /**
              * wfsFeatureFilter
@@ -265,13 +260,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
              */
             else if (attrs.id === "extendedFilter") {
                 console.warn("Tool: 'extendedFilter' is deprecated. Please use 'filter' instead.");
-                return new ExtendedFilter(Object.assign(attrs, Config.hasOwnProperty("ignoredKeys") ? {ignoredKeys: Config.ignoredKeys} : {}), options);
+                return new ExtendedFilter(Object.assign(attrs, Object.prototype.hasOwnProperty.call(Config, "ignoredKeys") ? {ignoredKeys: Config.ignoredKeys} : {}), options);
             }
             else if (attrs.id === "featureLister") {
                 return new FeatureLister(attrs, options);
-            }
-            else if (attrs.id === "colorScale") {
-                return new ColorScale(attrs, options);
             }
             else if (attrs.id === "wfst") {
                 return new WfstModel(attrs, options);
@@ -724,7 +716,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         // lighttree: Alle models gleich hinzufügen, weil es nicht viele sind und sie direkt einen Selection index
         // benötigen, der ihre Reihenfolge in der Config Json entspricht und nicht der Reihenfolge
         // wie sie hinzugefügt werden
-        const paramLayers = Radio.request("ParametricURL", "getLayerParams"),
+        const paramLayers = Radio.request("ParametricURL", "getLayerParams") ? Radio.request("ParametricURL", "getLayerParams") : [],
             treeType = Radio.request("Parser", "getTreeType");
 
         let lightModels,
@@ -736,7 +728,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             lightModels = this.mergeParamsToLightModels(lightModels, paramLayers);
 
             lightModels.forEach(model => {
-                if (model.hasOwnProperty("children")) {
+                if (Object.prototype.hasOwnProperty.call(model, "children")) {
                     if (model.children.length > 0) {
                         this.add(model);
                     }

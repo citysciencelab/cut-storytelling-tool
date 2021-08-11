@@ -47,10 +47,14 @@ async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
             });
 
             it("Open the tool scaleSwitcher and check if all elements are visible", async function () {
-                if ((await driver.findElements(By.id("scale-switcher"))).length === 0) {
+                let counter = 0;
+
+                do {
+                    expect(counter++).to.be.below(10);
                     await (await driver.findElement(By.xpath("//ul[@id='tools']//.."))).click();
                     await (await driver.findElement(By.css("#tools .glyphicon-resize-small"))).click();
-                }
+                    await driver.wait(new Promise(r => setTimeout(r, 100)));
+                } while ((await driver.findElements(By.id("scale-switcher"))).length === 0);
 
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.id("scale-switcher"))));
 

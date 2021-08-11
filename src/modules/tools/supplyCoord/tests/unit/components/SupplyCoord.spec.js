@@ -41,7 +41,7 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
                         children: {
                             coord:
                             {
-                                "name": "translate#common:menu.tools.coord",
+                                "name": "translate#common:menu.tools.supplyCoord",
                                 "glyphicon": "glyphicon-screenshot"
                             }
                         }
