@@ -11,7 +11,7 @@ The *config.json* file contains all configuration of the portal interface. It co
 The configuration is separated into two sections, **[Portalconfig](#markdown-header-Portalconfig)** and **[Themenconfig](#markdown-header-Themenconfig)**
 
 ```json
-{
+{l
    "Portalconfig": {},
    "Themenconfig": {}
 }
@@ -2322,13 +2322,13 @@ A configuration like
 {
     "field": {
         "type": ["equal", "like"],
-        "fieldName": ["objects", "arrays"],
-        "inputLabel": ["Objects", "Arrays"]
+        "fieldName": ["flst", "gmkr"],
+        "inputLabel": ["Parcel", "Communal district number"]
     }
 }
 ```
 
-would create a single `field` with which the user can decide whether he wants to use the input field to search for `Objects` or `Arrays` by selecting the value through a dropdown.
+would create a single `field` with which the user can decide whether he wants to use the input field to search for a `Parcel` or a `Communal district number` by selecting the value through a dropdown.
 If the values are not an array, a label for the `field` will be shown instead of the dropdown.
 
 If the parameter `options` is set, a select field is used, otherwise a simple text input.

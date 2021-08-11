@@ -2240,13 +2240,13 @@ Eine Konfiguration wie
 {
     "field": {
         "type": ["equal", "like"],
-        "fieldName": ["objects", "arrays"],
-        "inputLabel": ["Objects", "Arrays"]
+        "fieldName": ["flst", "gmkr"],
+        "inputLabel": ["Flurstück", "Gemarkungsnummer"]
     }
 }
 ```
 
-würde ein einzelnes `field` erstellen, in welchen der Nutzer sich entscheiden kann, ob er das Eingabefeld nutzen möchte, um nach `Objects` oder nach `Arrays` zu suchen, indem er den Wert in einem Dropdown Menü auswählt.
+würde ein einzelnes `field` erstellen, in welchen der Nutzer sich entscheiden kann, ob er das Eingabefeld nutzen möchte, um nach einem `Flurstück` oder nach einer `Gemarkungsnummer` zu suchen, indem er den Wert in einem Dropdown Menü auswählt.
 
 Falls der Parameter `options` gesetzt wurde, wird ein `select`-Feld, andernfalls ein normaler Text Input verwendet.
 Falls `options` ein String ist, ist es wichtig, dass die Reihenfolge der Felder mit der Ordnung der Objekte der externen Quelle übereinstimmt.
