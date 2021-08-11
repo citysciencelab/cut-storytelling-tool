@@ -94,6 +94,14 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     initialize: function () {
         const portalConfig = Radio.request("Parser", "getPortalConfig");
 
+        this.get("channel").on({
+            "prepareLayerObject": function (layer) {
+                if (layer) {
+                    layer.prepareLayerObject();
+                }
+            }
+        });
+
         // prevents the use of the isSecured parameter for layers other than WMS and WFS
         if (this.get("typ") !== "WMS" && this.get("typ") !== "WFS" && this.get("isSecured") === true) {
             this.setIsSecured(false);

@@ -55,10 +55,10 @@ export default {
                 :show-in-sidebar="false"
             />
             <div class="elements-positioned-over-map">
+                <LayerInformation />
                 <ControlBar class="controls" />
                 <Footer />
                 <MapMarker />
-                <LayerInformation />
             </div>
         </div>
 

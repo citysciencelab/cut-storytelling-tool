@@ -11,7 +11,7 @@ const {isBasic, is2D} = require("./settings"),
  * @property {String} config key that defines which config the Masterportal should run on
  * @property {String} mode key that defines which steps should be taken before testing (e.g. activating 3D)
  * @property {String} browsername string indicating which browser is in use
- * @property {Object} capability containes browserstack capability
+ * @property {Object} capability containes saucelabs capability
  */
 
 /**
@@ -26,7 +26,7 @@ const {isBasic, is2D} = require("./settings"),
  * @param {String} resolution in format AxB with A, B being integers
  * @param {String} config key that defines which config the Masterportal should run on
  * @param {String} mode key that defines which steps should be taken before testing (e.g. activating 3D)
- * @param {Object} capability containes browserstack capability
+ * @param {Object} capability containes saucelabs capability
  * @returns {void}
  */
 function tests (builder, url, browsername, resolution, config, mode, capability) {
@@ -86,6 +86,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 require("./tests/modules/tools/ExtendedFilter.js"),
                 require("./tests/modules/tools/List.js"),
                 require("../../src/modules/tools/supplyCoord/tests/end2end/SupplyCoord.e2e.js"),
+                // require("../../src/modules/tools/coordToolkit/tests/end2end/CoordToolkit.e2e.js"),
                 require("../../src/modules/tools/measure/tests/end2end/Measure.e2e.js"),
                 require("../../src/modules/tools/scaleSwitcher/tests/end2end/ScaleSwitcher.e2e.js"),
                 require("./tests/modules/tools/ParcelSearch.js"),

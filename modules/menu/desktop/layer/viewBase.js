@@ -75,11 +75,17 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
      * Init the LayerInformation window and inits the highlighting of the informationIcon.
      * @returns {void}
      */
-    showLayerInformation: function () {
-        this.model.showLayerInformation();
-        this.highlightLayerInformationIcon();
-        // close navigation
-        this.$("div.collapse.navbar-collapse").removeClass("in");
+    toggleLayerInformation: function () {
+        if (this.model.get("layerInfoChecked")) {
+            Radio.trigger("Layer", "setLayerInfoChecked", false);
+            this.unhighlightLayerInformationIcon();
+        }
+        else {
+            this.model.showLayerInformation();
+            this.highlightLayerInformationIcon();
+            // close navigation
+            this.$("div.collapse.navbar-collapse").removeClass("in");
+        }
     },
 
     /**

@@ -61,7 +61,7 @@ async function ListTests ({builder, url, resolution, browsername, capability, mo
                 hospitalLayerEntry = await driver.findElement(By.css("#featurelist-layer-1711"));
             });
 
-            it("tool lists visible features", async function () {
+            (isSafari(browsername) ? it.skip : it)("tool lists visible features", async function () {
                 await driver.wait(
                     until.elementIsVisible(hospitalLayerEntry),
                     5000,
@@ -118,7 +118,7 @@ async function ListTests ({builder, url, resolution, browsername, capability, mo
                 expect(enlargedScale).to.be.greaterThan(1);
             });
 
-            it("clicking a feature zooms and centers on it", async function () {
+            (isSafari(browsername) ? it.skip : it)("clicking a feature zooms and centers on it", async function () {
                 /* clicking featureListEntries[0] - chromedriver can, geckodriver can't manage to
                  * vertically scroll the tr center into view; workaround: click first cell of first row */
                 await (await driver.findElement(By.css("#featurelist-list-table tbody tr td"))).click();

@@ -102,6 +102,11 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             "ready": this.menuLoaderReady
         });
 
+        this.listenTo(Radio.channel("QuickHelp"), {
+            "showWindowHelp": this.toggleBtnQuestionColor,
+            "closeWindowHelp": this.toggleBtnQuestionColor
+        });
+
         this.model.setQuickHelp(Radio.request("QuickHelp", "isSet"));
 
         this.initialRender();
@@ -241,11 +246,29 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     },
 
     /**
-     * Handling of click event on button quickHelp
+     * Handling of click event on button quickHelp. Toggles the QuickHelpWindow
      * @returns {void}
      */
     clickBtnQuestion: function () {
-        Radio.trigger("QuickHelp", "showWindowHelp", "search");
+        if (!store.getters["QuickHelp/active"]) {
+            Radio.trigger("QuickHelp", "showWindowHelp", "search");
+        }
+        else {
+            Radio.trigger("QuickHelp", "closeWindowHelp");
+        }
+    },
+
+    /**
+     * Toggles the color of the question/help button, dependent on an open/closed QuickHelp window.
+     * @returns {void}
+     */
+    toggleBtnQuestionColor: function () {
+        if (store.getters["QuickHelp/active"]) {
+            this.$("span.glyphicon-question-sign").addClass("quickhelp-is-shown");
+        }
+        else {
+            this.$("span.glyphicon-question-sign").removeClass("quickhelp-is-shown");
+        }
     },
 
     /**
@@ -254,7 +277,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      */
     clickHandler: function () {
         this.clearSelection();
-        $("#searchInput").focus();
+        $("#searchInput").trigger("focus");
     },
 
     /**
@@ -906,9 +929,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {void}
      */
     positionOfCursorToEnd: function () {
-        const selectedElement = this.$(".list-group-item").find(function (element) {
-                return this.$(element).hasClass("selected");
-            }, this),
+        const selectedElement = this.$(".list-group-item.selected"),
             lastSelectedItem = this.model.get("searchFieldisSelected");
 
         if (lastSelectedItem !== undefined || (lastSelectedItem !== undefined && this.$(".list-group-item").length !== 0)) {
