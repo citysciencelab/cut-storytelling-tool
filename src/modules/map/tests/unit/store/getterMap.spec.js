@@ -87,9 +87,6 @@ describe("src/modules/map/store/gettersMap.js", () => {
                     gfiFeatures: [feature1, feature2, feature3]
                 };
 
-            // console.log(getters.gfiFeaturesReverse(state));
-            // console.log([feature3, feature2, feature1]);
-
             expect(getters.gfiFeaturesReverse(state)).to.eql([feature3, feature2, feature1]);
         });
     });
