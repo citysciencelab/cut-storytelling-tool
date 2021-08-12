@@ -45,6 +45,13 @@ export async function translate (urlParamsKey, urlParamsValue) {
 
             return {key: key, value: value};
         }
+        case "layerids":
+        case "map/layerids": {
+            const key = "Map/layerIds",
+                value = convert(urlParamsValue);
+
+            return {key: key, value: value};
+        }
         case "projection":
         case "map/projection": {
             // do not set projection to state, is only used for transforming coordinates

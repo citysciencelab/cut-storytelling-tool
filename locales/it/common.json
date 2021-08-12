@@ -96,7 +96,7 @@
           },
           "parametricURL": {
             "alertZoomToGeometry": "La chiamata parametrizzata del portale è andata male!<br>Si prega di assicurarsi che tutti i parametri siano stati inseriti correttamente.",
-            "alertWrongLayerIds": "<strong>La chiamata parametrizzata è errata!</strong> I LAYERID nelle posizioni: <b>{{wrongIdsPositionsConcat}}</b> non essistono e vengono ignorate!"
+            "alertWrongLayerIds": "<strong>La chiamata parametrizzata è errata!</strong> </br>I <b>layerIds</b> nelle posizioni: {{wrongIdsPositionsConcat}} non essistono e vengono ignorate!"
           }
         },
         "alerting": {

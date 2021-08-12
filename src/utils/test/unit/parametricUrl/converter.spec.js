@@ -35,8 +35,8 @@ describe("src/utils/converter.js", () => {
         expect(convert("[]")).to.be.deep.equals([]);
         expect(convert("[553925,5931898]")).to.be.deep.equals([553925, 5931898]);
         expect(convert("553925,5931898")).to.be.deep.equals([553925, 5931898]);
-        expect(convert(",5931898")).to.be.equals(",5931898");
-        expect(convert(",")).to.be.equals(",");
+        expect(convert(",5931898")).to.be.deep.equals(["", 5931898]);
+        expect(convert(",")).to.be.deep.equals(["", ""]);
     });
     it("convert an EPSG code to a projection", () => {
         crs.registerProjections(namedProjections);

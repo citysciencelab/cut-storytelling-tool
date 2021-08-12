@@ -109,8 +109,9 @@
           },
           "parametricURL": {
             "alertZoomToGeometry": "Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!<br>Bitte stellen Sie sicher das alle Parameter richtig angegeben wurden.",
-            "alertWrongLayerIds": "<strong>Der parametrisierte Aufruf ist fehlerhaft!</strong> Die LAYERIDS am den Positionen: <b>{{wrongIdsPositionsConcat}}</b> existieren nicht und werden ignoriert!",
-            "alertWrongInitValues": "<strong>Der parametrisierte Aufruf ist fehlerhaft!</strong> Die gespeicherten Parameter wurden verändert oder sind unvollständig!",
+            "alertWrongLayerIds": "<strong>Der parametrisierte Aufruf ist fehlerhaft!</strong> </br>Die <b>layerIds</b> an den Positionen: {{wrongIdsPositionsConcat}} existieren nicht und werden ignoriert!",
+            "alertWrongAmountVisibility": "<strong>Parametrisierter Aufruf fehlerhaft!</strong></br>Die Angaben zu <b>layerIds</b> passen nicht zu <b>visibility</b> bzw. <b>transparency</b>. Sie müssen jeweils in der gleichen Anzahl angegeben werden.",
+            "alertWrongInitValues": "<strong>Der parametrisierte Aufruf ist fehlerhaft!</strong></br>Die gespeicherten Parameter wurden verändert oder sind unvollständig!",
             "errorLoadConfig": "Die gewünschte Konfigurationsdatei konnte unter folgendem Pfad nicht geladen werden: {{url}}"
           }
         },

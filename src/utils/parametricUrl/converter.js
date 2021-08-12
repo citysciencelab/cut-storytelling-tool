@@ -31,14 +31,18 @@ function convertStringToArray (string) {
         const index = string.indexOf(",");
 
         if (index > -1) {
-            let firstPart = string.slice(0, index),
-                secondPart = string.slice(index + 1, string.length);
+            return string.split(",").map(val => {
+                const parsed = parseInt(val, 10),
+                    isEmptyString = typeof val === "string" && val.trim() === "";
 
-            firstPart = Number.parseInt(firstPart, 10);
-            secondPart = Number.parseInt(secondPart, 10);
-            if (!isNaN(firstPart) && !isNaN(secondPart)) {
-                return [firstPart, secondPart];
-            }
+                if (isNaN(parsed) && !isEmptyString) {
+                    return convertStringToBoolean(val);
+                }
+                else if (isNaN(parsed)) {
+                    return val;
+                }
+                return parsed;
+            });
         }
     }
     return string;

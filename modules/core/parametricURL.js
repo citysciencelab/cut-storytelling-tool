@@ -170,7 +170,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             // "HEADING": this.evaluateCameraParameters.bind(this),
             "HIGHLIGHTFEATURE": this.setHighlightfeature.bind(this),
             // "ISINITOPEN": this.parseIsInitOpen.bind(this),
-            "LAYERIDS": this.createLayerParams.bind(this),
+            // "LAYERIDS": this.createLayerParams.bind(this),
             // "MAP": this.adjustStartingMap3DParameter.bind(this),
             "MDID": this.parseMDID.bind(this),
             "PROJECTION": this.parseProjection.bind(this),

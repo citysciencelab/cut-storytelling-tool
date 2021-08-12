@@ -121,7 +121,7 @@ export default async function setValuesToState (state, params) {
     Object.keys(state.urlParams).forEach(key => {
         const value = state.urlParams[key];
 
-        doSpecialBackboneHandling(key, value);
+        doSpecialBackboneHandling(state, key, value);
     });
 
     callMutations(state);

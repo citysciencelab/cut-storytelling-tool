@@ -351,5 +351,29 @@ describe("src/utils/stateModifier.js", () => {
 
             });
         });
+        describe("UrlParam layerIds", () => {
+            it("test param layerIds", async () => {
+                let key = "Map/layerIds";
+                const state = {
+                        urlParams: {},
+                        Map: {
+                            layerIds: null
+                        }
+                    },
+                    valueAsString = "1711,20622";
+
+                await setValueToState(state, key, valueAsString);
+                expect(state.Map.layerIds).to.be.deep.equals([1711, 20622]);
+
+                key = "layerIds";
+                await setValueToState(state, key, valueAsString);
+                expect(state.Map.layerIds).to.be.deep.equals([1711, 20622]);
+
+                key = "layerids";
+                await setValueToState(state, key, valueAsString);
+                expect(state.Map.layerIds).to.be.deep.equals([1711, 20622]);
+
+            });
+        });
     });
 });
