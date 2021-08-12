@@ -881,9 +881,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             labelField,
             labelValue;
 
-        if(!Array.isArray(styleAttr)){
+        if (!Array.isArray(styleAttr)) {
             styleAttr = [styleAttr];
-        }        
+        }
 
         if (styleAttr.length === 1 && styleAttr[0] === "") {
             if (feature.get("features") && feature.get("features").length === 1) {
