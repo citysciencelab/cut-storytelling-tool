@@ -1,0 +1,55 @@
+Kontrastanpassungen ToDo:
+
+// = abgeschlossen
+
+******* Backbone-Tools (diverse):
+
+-> Header/Navbar
+
+  Themen:
+  -> Inaktive Elemente z.B. HVV, Eignungsflächen, Bohrdaten
+  -> Err. Arbeitsplätze deegree Tropfenicon -> Text im Fenster
+  -> Einstellungen/Zahnrad der Komponenten: % Anzeige und "Layer entfernen"
+  -> Infobutton -> Metadaten "Publikationen / Erstellung:, Letzte Änderung"
+  -> Infobutton -> "Legende"
+
+******* Backbone-Tools (modules/tools):
+
+-> parcelSearch
+-> styeWMS
+-> compareFeatures           
+-> featureLister             
+-> extendedFilter
+-> filter                    
+-> layerSlider              
+-> print
+-> shadow			  
+-> wfst      
+
+
+******* Vue-Tools (src/tools):
+
+-> MapRegion.vue
+-> gfi, diverse, Wie kann man das Table-layout testen
+-> SearchByCoord.vue      
+-> ScaleSwitcher.vue      
+-> AddWMS.vue             
+-> Draw.vue             
+-> FileImport.vue             
+-> SelectFeature.vue
+-> Contact.vue
+-> BufferAnalysis.vue
+-> styleVT.vue
+-> SupplyCoord.vue
+
+******* Vue, diverse
+
+-> Legend.vue
+-> LayerInformation.vue
+
+***** AddOnTools
+
+-> tacticalMark
+-> commuterFlows
+-> schoolrouteplanning
+-> populationrequest
