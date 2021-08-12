@@ -57,9 +57,9 @@ export function doSpecialBackboneHandling (state, key, value) {
      */
 function createLayerParams (state, layerIdString) {
     const wrongIdsPositions = [],
-    visibilityListBooleans = state.urlParams?.visibility ? state.urlParams.visibility : null,
+        visibilityListBooleans = state.urlParams?.visibility ? state.urlParams.visibility : null,
         transparencyListNumbers = state.urlParams?.transparency ? state.urlParams.transparency : null;
-    let  layerIdList = convert(layerIdString),
+    let layerIdList = convert(layerIdString),
         visibilityList = visibilityListBooleans,
         transparencyList = transparencyListNumbers;
 

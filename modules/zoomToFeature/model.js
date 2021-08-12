@@ -6,6 +6,7 @@ import {Vector as VectorLayer} from "ol/layer.js";
 import VectorSource from "ol/source/Vector.js";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 import getProxyUrl from "../../src/utils/getProxyUrl";
+import store from "../../src/app-store";
 
 const ZoomToFeature = Backbone.Model.extend({
     defaults: {
@@ -26,17 +27,27 @@ const ZoomToFeature = Backbone.Model.extend({
         useProxy: false
     },
     initialize: function () {
-        this.setStyleListModel(Radio.request("StyleList", "returnModelById", this.get("styleId")));
-        this.setIds(Radio.request("ParametricURL", "getZoomToFeatureIds"));
-        this.getFeaturesFromWFS();
-        this.createFeatureCenterList();
-        this.putIconsForFeatureIds(this.get("featureCenterList"),
-            this.get("imgLink"), // @deprecated in version 3.0.0
-            this.get("anchor"), // @deprecated in version 3.0.0
-            this.get("imageScale"), // @deprecated in version 3.0.0
-            this.get("styleListModel"));
-        this.zoomToFeatures();
+        Radio.once("ParametricURL", "ready", this.init, this);
     },
+
+    init: function () {
+        let ids = "";
+
+        this.setStyleListModel(Radio.request("StyleList", "returnModelById", this.get("styleId")));
+        if (store.state.urlParams && store.state.urlParams["Map/zoomToFeatureId"]) {
+            ids = store.state.urlParams["Map/zoomToFeatureId"].split(",");
+            this.setIds(ids);
+            this.getFeaturesFromWFS();
+            this.createFeatureCenterList();
+            this.putIconsForFeatureIds(this.get("featureCenterList"),
+                this.get("imgLink"), // @deprecated in version 3.0.0
+                this.get("anchor"), // @deprecated in version 3.0.0
+                this.get("imageScale"), // @deprecated in version 3.0.0
+                this.get("styleListModel"));
+            this.zoomToFeatures();
+        }
+    },
+
 
     /**
      * sets icons for the passed feature list

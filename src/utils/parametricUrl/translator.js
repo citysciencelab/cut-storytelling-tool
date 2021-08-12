@@ -52,6 +52,14 @@ export async function translate (urlParamsKey, urlParamsValue) {
 
             return {key: key, value: value};
         }
+        case "featureid":
+        case "zoomtofeatureid":
+        case "map/zoomtofeatureid": {
+            const key = "Map/zoomToFeatureId",
+                value = convert(urlParamsValue);
+
+            return {key: key, value: value};
+        }
         case "projection":
         case "map/projection": {
             // do not set projection to state, is only used for transforming coordinates

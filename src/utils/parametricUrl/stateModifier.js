@@ -141,7 +141,7 @@ export async function setValueToState (state, key, value) {
 
     if (typeof key === "string") {
         translate(key.trim(), value).then(entry => {
-            let setToState = false;
+            const setToState = false;
 
             console.log("translated key=", entry.key);
             console.log("translated value=", entry.value);
@@ -157,7 +157,6 @@ export async function setValueToState (state, key, value) {
 
                 if (oldParam) {
                     state.urlParams[oldParam.key] = oldParam.value;
-                    setToState = true;
                 }
             }
             if (!setToState) {

@@ -375,5 +375,26 @@ describe("src/utils/stateModifier.js", () => {
 
             });
         });
+        describe("UrlParam featureid", () => {
+            it("test param featureid", async () => {
+                let key = "featureid";
+                const state = {
+                        urlParams: {}
+                    },
+                    valueAsString = "1,2";
+
+                await setValueToState(state, key, valueAsString);
+                expect(state.urlParams["Map/zoomToFeatureId"]).to.be.equals(valueAsString);
+
+                key = "zoomToFeatureId";
+                await setValueToState(state, key, valueAsString);
+                expect(state.urlParams["Map/zoomToFeatureId"]).to.be.equals(valueAsString);
+
+                key = "Map/zoomTofeatureId";
+                await setValueToState(state, key, valueAsString);
+                expect(state.urlParams["Map/zoomToFeatureId"]).to.be.equals(valueAsString);
+
+            });
+        });
     });
 });
