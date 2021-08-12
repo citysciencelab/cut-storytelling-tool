@@ -875,11 +875,15 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {string} an ECQL Expression
      */
     getStylingRules: function (layer, feature, styleAttributes, style) {
-        const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
-            styleAttr = feature.get("styleId") ? "styleId" : styleAttributes;
-        let styleModel,
+        const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")});
+        let styleAttr = feature.get("styleId") ? "styleId" : styleAttributes,
+            styleModel,
             labelField,
             labelValue;
+
+        if(!Array.isArray(styleAttr)){
+            styleAttr = [styleAttr];
+        }        
 
         if (styleAttr.length === 1 && styleAttr[0] === "") {
             if (feature.get("features") && feature.get("features").length === 1) {
@@ -943,7 +947,6 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}',`, "[").slice(0, -1)
             + "]";
     },
-
     /**
      * @param {ol.Layer} layer -
      * @param {ol.feature} feature - the feature of current layer

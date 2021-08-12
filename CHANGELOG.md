@@ -36,6 +36,19 @@
 ### Fixed
 
 ---
+## v2.12.1 - 2021-08-12
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+- Drawn content can be printed again.
+
+---
 
 ## v2.12.0 - 2021-08-04
 ### Added
