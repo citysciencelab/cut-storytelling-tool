@@ -12,8 +12,6 @@ const KomootModel = Backbone.Model.extend(/** @lends KomootModel.prototype */{
         lon: undefined,
         lat: undefined,
         searchOnEnter: false,
-        searchParams: [],
-        classes: [],
         ajaxRequest: null,
         serviceId: 11
     },
@@ -24,14 +22,14 @@ const KomootModel = Backbone.Model.extend(/** @lends KomootModel.prototype */{
      * @extends Backbone.Model
      * @memberOf Searchbar.Komoot
      * @constructs
-     * @property {number} minChars=3 - todo
-     * @property {string} komootServiceUrl="" - todo
-     * @property {number} limit=50 - todo
-     * @property {string} street="" - todo
-     * @property {string} states="" - todo
-     * @property {Array} searchParams=[] - todo
-     * @property {Array} classes=[] - todo
-     * @property {*} ajaxRequest=null - todo
+     * @property {number} minChars=3 - Minimum length of search string to start.
+     * @property {string} komootServiceUrl="" - Id of restService to derive url from.
+     * @property {number} limit=10 - Number of requested Result
+     * @property {string} lang="de" - Requested Language
+     * @property {string} osm_tag=undefined - Filter for OSM Tags
+     * @property {string} bbox=undefined - Extent to limit the search area.
+     * @property {number} lon=undefined - longitude of the search center.
+     * @property {number} lat=undefined - latitude of the search center.
      * @listens Searchbar#RadioTriggerSearchbarSearchAll
      * @fires RestReader#RadioRequestRestReaderGetServiceById
      * @fires Core#RadioRequestParametricURLGetInitString
@@ -67,7 +65,7 @@ const KomootModel = Backbone.Model.extend(/** @lends KomootModel.prototype */{
     /**
      * Access for the search...
      * Is triggered by the search bar.
-     * @param {string} searchString - todo
+     * @param {string} searchString - The search string.
      * @fires Searchbar#RadioTriggerSearchbarRemoveHits
      * @fires Searchbar#RadioTriggerSearchbarAbortSearch
      * @returns {void}
@@ -82,12 +80,7 @@ const KomootModel = Backbone.Model.extend(/** @lends KomootModel.prototype */{
         }
     },
 
-    /**
-     * Search string (street HsNr) constructed by user...
-     * @param {string} searchString - todo
-     * @returns {void}
-     */
-    suggestByKomoot: function (searchString) {
+    getRequestParameter: function (searchString) {
         const searchStrings = [],
             tmp = searchString.split(",");
         let request;
@@ -105,8 +98,6 @@ const KomootModel = Backbone.Model.extend(/** @lends KomootModel.prototype */{
             }
         });
 
-        this.setSearchParams(searchStrings);
-
         request = "lang=" + this.get("lang");
         request = request + "&lon=" + this.get("lon") + "&lat=" + this.get("lat");
         if (this.get("bbox") !== undefined) {
@@ -115,63 +106,101 @@ const KomootModel = Backbone.Model.extend(/** @lends KomootModel.prototype */{
         if (this.get("osm_tag") !== undefined) {
             request += "&osm_tag=" + this.get("osm_tag");
         }
-        request = request + "&q=" + encodeURIComponent(searchString);
+        return request + "&q=" + encodeURIComponent(searchString);
+    },
+
+    /**
+     * Search string (street HsNr) constructed by user...
+     * @param {string} searchString - The search string.
+     * @returns {void}
+     */
+    suggestByKomoot: function (searchString) {
+        const request = this.getRequestParameter(searchString);
 
         this.sendRequest(this.get("komootServiceUrl"), request, this.pushSuggestions);
     },
 
     /**
+     * Generates the Display-Name for a Response Entry
+     * @param  {*} hit - Response entry
+     * @returns {String} The Name to show in the Search-result-list
+     */
+    getDisplayString: function (hit) {
+        let display, city_display;
+
+        display = hit.properties.name;
+
+        const street = hit.properties.street,
+            county = hit.properties.county;
+
+        if (street !== undefined) {
+            if (display !== undefined) {
+                display = display + ", ";
+            }
+            else {
+                display = "";
+            }
+            display = display + street;
+            if (hit.properties.housenumber !== undefined) {
+                display = display + " " + hit.properties.housenumber;
+            }
+        }
+
+        city_display = hit.properties.city;
+        if (county !== undefined && city_display === undefined) {
+            city_display = county;
+        }
+        else if (hit.properties.postcode !== undefined) {
+            city_display = hit.properties.postcode + " " + city_display;
+        }
+        if (hit.properties.district !== undefined) {
+            city_display += " - " + hit.properties.district;
+        }
+        if (city_display !== undefined) {
+            display += ", " + city_display;
+        }
+        return display;
+    },
+
+    /**
+     * Generates the Tooltip for a Response Entry based on the Display-Name
+     * @param  {*} hit - Response entry
+     * @param  {String} display - DisplayName for the Search-result-list
+     * @returns {String} Tooltip for Search-result-list
+     */
+    getMetadataString: function (hit, display) {
+        let metaName;
+
+        metaName = display;
+        if (hit.properties.state !== undefined || hit.properties.country !== undefined) {
+            metaName = metaName + ", " + hit.properties.state + " " + hit.properties.country;
+            if (hit.properties.suburb !== undefined) {
+                metaName = metaName + " (" + hit.properties.suburb + ")";
+            }
+        }
+        return metaName;
+    },
+
+    /**
      * Evaluate hits of the first search; create offer list.
-     * @param  {Array} data - todo
+     * @param  {Array} data - Response data
      * @fires Searchbar#RadioTriggerSearchbarPushHits
      * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
      * @returns {void}
      */
     pushSuggestions: function (data) {
         let display,
-            city_display,
             metaName,
             center,
-            weg,
-            county;
+            coordinates;
 
         data.features.forEach(hit => {
-            display = hit.properties.name;
-
-            weg = hit.properties.street;
-            if (weg !== undefined) {
-                display = display + ", " + weg;
-                if (hit.properties.housenumber !== undefined) {
-                    display = display + " " + hit.properties.housenumber;
-                }
-            }
-
-            county = hit.properties.county;
-            city_display = hit.properties.city;
-            if (county !== undefined && city_display === undefined) {
-                city_display = county;
-            }
-            else if (hit.properties.postcode !== undefined) {
-                city_display = hit.properties.postcode + " " + city_display;
-            }
-            if (hit.properties.district !== undefined) {
-                city_display += " - " + hit.properties.district;
-            }
-            if (city_display !== undefined) {
-                display += ", " + city_display;
-            }
+            display = this.getDisplayString(hit);
 
             // Tooltip
-            metaName = display;
-            if (hit.properties.state !== undefined || hit.properties.country !== undefined) {
-                metaName = metaName + ", " + hit.properties.state + " " + hit.properties.country;
-                if (hit.properties.suburb !== undefined) {
-                    metaName = metaName + " (" + hit.properties.suburb + ")";
-                }
-            }
+            metaName = this.getMetadataString(hit, display);
 
-            const coordinates = hit.geometry.coordinates;
-
+            coordinates = hit.geometry.coordinates;
             center = transformToMapProjection(Radio.request("Map", "getMap"), "WGS84", [parseFloat(coordinates[0]), parseFloat(coordinates[1])]);
 
             Radio.trigger("Searchbar", "pushHits", "hitList", {
@@ -207,9 +236,9 @@ const KomootModel = Backbone.Model.extend(/** @lends KomootModel.prototype */{
 
     /**
      * Fires an HTTP GET request and saves its id.
-     * @param  {String} url - todo
-     * @param  {JSON} data - todo
-     * @param  {function} successFunction - todo
+     * @param  {String} url - URL of the Service
+     * @param  {JSON} data - Data to be sent to the server
+     * @param  {function} successFunction - A function to be called if the request succeeds
      * @return {void}
      */
     ajaxSend: function (url, data, successFunction) {
@@ -245,7 +274,7 @@ const KomootModel = Backbone.Model.extend(/** @lends KomootModel.prototype */{
     },
 
     /**
-     * todo
+     * Setter for polishAjax
      * @returns {void}
      */
     polishAjax: function () {
@@ -253,17 +282,8 @@ const KomootModel = Backbone.Model.extend(/** @lends KomootModel.prototype */{
     },
 
     /**
-     * Setter for inUse.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setInUse: function (value) {
-        this.set("inUse", value);
-    },
-
-    /**
      * Setter for komootServiceUrl.
-     * @param {*} value - todo
+     * @param {*} value - The service url
      * @returns {void}
      */
     setKomootServiceUrl: function (value) {
@@ -271,17 +291,8 @@ const KomootModel = Backbone.Model.extend(/** @lends KomootModel.prototype */{
     },
 
     /**
-     * Setter for searchParams.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setSearchParams: function (value) {
-        this.set("searchParams", value);
-    },
-
-    /**
      * Setter for ajaxRequest.
-     * @param {*} value - todo
+     * @param {*} value - The Ajax-Request
      * @returns {void}
      */
     setAjaxRequest: function (value) {
