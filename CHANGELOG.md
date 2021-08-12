@@ -17,6 +17,12 @@
 ### Changed
 - Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.
 - LayerInformation now shows message in case the MetaData couldn't be loaded
+- Accessibility: Keyboard navigation for tools
+  - You can reach every opened tool via keyboard (TAB-key) direct after the top menu row
+  - After opening a tool the focus is set to the first control (if any available)
+  - LayerInfo and Quickhelp are toggleable (on/off)
+    - LayerInfo via the info menu icon (theme menu)
+    - Quickhelp via the question icon in the searchbar (top menu)
 
 ### Deprecated
 
