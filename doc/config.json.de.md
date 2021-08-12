@@ -178,7 +178,7 @@ Suche bei **[Komoot Photon](https://photon.komoot.io/)**.
     "minChars": 3,
     "serviceId": "10",
     "limit": 20,
-    "lang": "de
+    "lang": "de",
     "lat": 52.5,
     "lon": 13.4,
     "bbox": "12.5,52.05,14.05,52.75",
