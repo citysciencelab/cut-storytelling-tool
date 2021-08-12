@@ -183,7 +183,7 @@ export default {
         mapProperties: function (properties, mappingObject = {}) {
             const mappedProperties = {};
 
-            Object.keys(mappingObject).reverse().forEach(key => {
+            Object.keys(mappingObject).forEach(key => {
                 let newKey = mappingObject[key],
                     value = this.prepareGfiValue(properties, key);
 

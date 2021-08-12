@@ -192,14 +192,15 @@ const gettersMap = {
     projectionMetersPerUnit: (_, g) => g.projection?.getMetersPerUnit(),
     projectionUnits: (_, g) => g.projection?.getUnits(),
     /**
+     * @param {object} state - the map state
      * @returns {Array} reversed gfiFeatures Array from state
      */
-    gfiFeaturesReverse: () => {
-        if (stateMap.gfiFeatures !== null && Array.isArray(stateMap.gfiFeatures)) {
-            return stateMap.gfiFeatures.reverse();
+    gfiFeaturesReverse: (state) => {
+        if (state.gfiFeatures !== null && Array.isArray(state.gfiFeatures)) {
+            return state.gfiFeatures.slice().reverse();
         }
 
-        return stateMap.gfiFeatures;
+        return state.gfiFeatures;
     }
 };
 
