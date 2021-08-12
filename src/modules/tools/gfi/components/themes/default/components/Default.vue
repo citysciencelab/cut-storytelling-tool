@@ -22,7 +22,8 @@ export default {
         return {
             imageLinks: ["bildlink", "link_bild", "Bild"],
             importedComponents: [],
-            showFavoriteIcons: true
+            showFavoriteIcons: true,
+            maxWidth: "600px"
         };
     },
     computed: {
@@ -56,6 +57,7 @@ export default {
         feature () {
             this.$nextTick(() => {
                 this.addTextHtmlContentToIframe();
+                this.setMaxWidth(this.feature.getTheme()?.params);
             });
         }
     },
@@ -69,6 +71,7 @@ export default {
     mounted () {
         this.$nextTick(() => {
             this.addTextHtmlContentToIframe();
+            this.setMaxWidth(this.feature.getTheme()?.params);
         });
     },
     methods: {
@@ -131,9 +134,41 @@ export default {
             const iframe = document.getElementsByClassName("gfi-iFrame")[0];
 
             if (this.mimeType === "text/html" && iframe) {
+                this.setIframeSize(iframe, this.feature.getTheme()?.params);
                 iframe.contentWindow.document.open();
                 iframe.contentWindow.document.write(this.feature.getDocument());
                 iframe.contentWindow.document.close();
+            }
+        },
+
+        /**
+         * Sets the size of the given iframe.
+         * The iframe size can be overwritten in the config.json at the layer.
+         * @param {Object} iframe The iframe.
+         * @param {Object} params The gfi parameters.
+         * @returns {void}
+         */
+        setIframeSize: function (iframe, params) {
+            document.getElementsByClassName("gfi-theme-iframe")[0].style.maxWidth = "";
+            iframe.style.width = params?.iframe?.width;
+            iframe.style.height = params?.iframe?.height;
+        },
+
+        /**
+         * Sets the max-width of the default gfiTheme content.
+         * @param {Object} params The gfi parameters.
+         * @returns {void}
+         */
+        setMaxWidth: function (params) {
+            if (this.mimeType !== "text/html") {
+                const gfiThemeContainer = document.getElementsByClassName("gfi-theme-images")[0];
+
+                if (params?.maxWidth) {
+                    gfiThemeContainer.style.maxWidth = params?.maxWidth;
+                }
+                else {
+                    gfiThemeContainer.style.maxWidth = this.maxWidth;
+                }
             }
         }
     }
@@ -264,6 +299,7 @@ export default {
     line-height: 1px;
 }
 .gfi-theme-images {
+    max-width: 600px;
     height: 100%;
 }
 .gfi-theme-images-image {
