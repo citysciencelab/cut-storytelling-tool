@@ -60,6 +60,12 @@ export async function translate (urlParamsKey, urlParamsValue) {
 
             return {key: key, value: value};
         }
+        case "featureviaurl": {
+            const key = "featureViaURL",
+                value = urlParamsValue;
+
+            return {key: key, value: value};
+        }
         case "projection":
         case "map/projection": {
             // do not set projection to state, is only used for transforming coordinates

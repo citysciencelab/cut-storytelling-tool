@@ -301,7 +301,7 @@ describe("src/utils/stateModifier.js", () => {
                 await setValueToState(state, key, valueAsString);
                 await setValueToState(state, "Map/projection", "EPSG:8395");
                 expect(state.MapMarker.coordinates).to.be.deep.equals(value);
-                expect(state.urlParams.projection.name).to.be.deep.equals("EPSG:8395");
+                expect(state.urlParams.projection).to.be.deep.equals("EPSG:8395");
             });
         });
         describe("UrlParam zoomLevel", () => {
@@ -394,6 +394,22 @@ describe("src/utils/stateModifier.js", () => {
                 await setValueToState(state, key, valueAsString);
                 expect(state.urlParams["Map/zoomToFeatureId"]).to.be.equals(valueAsString);
 
+            });
+        });
+        describe("UrlParam featureViaUrl", () => {
+            it("test param featureViaUrl", async () => {
+                let key = "featureViaURL";
+                const state = {
+                        urlParams: {}
+                    },
+                    valueAsString = "[{\"layerId\":\"4020\",\"features\":[{\"coordinates\":[[[10.05,53.5],[10,53.5],[9.80,53.55],[10,53.55]],[[10.072,53.492],[9.92,53.492],[9.736,53.558],[10.008,53.558]]],\"label\":\"TestMultiPolygon\"}]}]";
+
+                await setValueToState(state, key, valueAsString);
+                expect(state.urlParams.featureViaURL).to.be.equals(valueAsString);
+
+                key = "featureViaUrl";
+                await setValueToState(state, key, valueAsString);
+                expect(state.urlParams.featureViaURL).to.be.equals(valueAsString);
             });
         });
     });
