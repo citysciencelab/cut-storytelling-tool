@@ -38,6 +38,13 @@ export default {
             if (!newShowing) {
                 this.$emit("modalHid");
             }
+            else {
+                this.$nextTick(() => {
+                    if (this.$refs.discard) {
+                        this.$refs.discard.focus();
+                    }
+                });
+            }
         }
     },
 
@@ -83,6 +90,7 @@ export default {
                 id="modal-1-inner-wrapper"
             >
                 <span
+                    ref="discard"
                     class="glyphicon glyphicon-remove"
                     title="Discard"
                     tabindex="0"
@@ -110,11 +118,20 @@ export default {
 </template>
 
 <style lang="less" scoped>
+    @import "~variables";
+
     #modal-1-container{
         display:none;
 
         &.showing{
             display:block;
+        }
+        .glyphicon {
+            &:focus {
+                outline: 3px solid @accent_focus;
+                outline: 3px auto  Highlight;
+                outline: 3px auto -webkit-focus-ring-color;
+            }
         }
     }
     #modal-1-overlay{
@@ -150,6 +167,7 @@ export default {
         vertical-align:middle;
         max-width:90%;
         position:relative;
+        padding: 5px;
 
         .glyphicon.glyphicon-remove {
             position:absolute;
@@ -162,9 +180,8 @@ export default {
                 cursor:pointer;
             }
         }
-
-        #modal-1-content-container {
-            padding:12px 24px 12px 24px;
-        }
+    }
+    #modal-1-container #modal-1-inner-wrapper #modal-1-content-container {
+        padding:12px 24px 12px 24px;
     }
 </style>
