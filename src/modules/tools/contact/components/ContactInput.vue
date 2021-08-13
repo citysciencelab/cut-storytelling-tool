@@ -44,6 +44,10 @@ export default {
             type: Boolean,
             default: false,
             required: false
+        },
+        autocomplete: {
+            type: String,
+            default: "off"
         }
     },
     data: function () {
@@ -84,6 +88,7 @@ export default {
                 :id="`tool-contact-${inputName}-input`"
                 :ref="`tool-contact-${inputName}-input`"
                 :value="inputValue"
+                :autocomplete="autocomplete"
                 :type="htmlElement === 'input' ? inputType : ''"
                 class="form-control"
                 :aria-describedby="`tool-contact-${inputName}-help`"

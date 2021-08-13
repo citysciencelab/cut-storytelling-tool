@@ -830,7 +830,6 @@ export default {
                 }
             };
             .toggle-collapse-all {
-                // margin-right: 10px;
                 cursor: pointer;
                 &:focus {
                     outline: 3px solid @accent_focus;
@@ -883,7 +882,6 @@ export default {
                 }
             };
             .toggle-collapse-all {
-                // margin-right: 10px;
                 cursor: pointer;
                 &:focus {
                     outline: 3px solid @accent_focus;

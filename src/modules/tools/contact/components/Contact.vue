@@ -66,6 +66,7 @@ export default {
                     label-text="Name"
                     :valid-input="validUsername"
                     :focus-on-creation="true"
+                    autocomplete="name"
                 />
                 <ContactInput
                     :change-function="setMail"
@@ -74,6 +75,7 @@ export default {
                     :input-value="mail"
                     label-text="E-Mail"
                     :valid-input="validMail"
+                    autocomplete="email"
                 />
                 <ContactInput
                     :change-function="setPhone"
@@ -82,6 +84,7 @@ export default {
                     :input-value="phone"
                     label-text="Tel."
                     :valid-input="validPhone"
+                    autocomplete="tel"
                 />
                 <ContactInput
                     :change-function="setMessage"
