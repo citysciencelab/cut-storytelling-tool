@@ -27,6 +27,7 @@
   - LayerInfo and Quickhelp are toggleable (on/off)
     - LayerInfo via the info menu icon (theme menu)
     - Quickhelp via the question icon in the searchbar (top menu)
+- GFI: order of Gfis is reversed now, so that the top layer ones come first
 
 ### Deprecated
 
