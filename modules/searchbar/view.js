@@ -11,6 +11,7 @@ import OSMModel from "./osm/model";
 import LocationFinderModel from "./locationFinder/model";
 import GdiModel from "./gdi/model";
 import ElasticSearchModel from "./elasticSearch/model";
+import KomootModel from "./komoot/model";
 import Searchbar from "./model";
 import "./RadioBridge.js";
 import store from "../../src/app-store/index";
@@ -102,6 +103,11 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             "ready": this.menuLoaderReady
         });
 
+        this.listenTo(Radio.channel("QuickHelp"), {
+            "showWindowHelp": this.toggleBtnQuestionColor,
+            "closeWindowHelp": this.toggleBtnQuestionColor
+        });
+
         this.model.setQuickHelp(Radio.request("QuickHelp", "isSet"));
 
         this.initialRender();
@@ -152,6 +158,9 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         }
         if (Object.prototype.hasOwnProperty.call(config, "elasticSearch")) {
             new ElasticSearchModel(config.elasticSearch);
+        }
+        if (Object.prototype.hasOwnProperty.call(config, "komoot")) {
+            new KomootModel(config.komoot);
         }
 
         this.model.setHitIsClick(false);
@@ -241,11 +250,29 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     },
 
     /**
-     * Handling of click event on button quickHelp
+     * Handling of click event on button quickHelp. Toggles the QuickHelpWindow
      * @returns {void}
      */
     clickBtnQuestion: function () {
-        Radio.trigger("QuickHelp", "showWindowHelp", "search");
+        if (!store.getters["QuickHelp/active"]) {
+            Radio.trigger("QuickHelp", "showWindowHelp", "search");
+        }
+        else {
+            Radio.trigger("QuickHelp", "closeWindowHelp");
+        }
+    },
+
+    /**
+     * Toggles the color of the question/help button, dependent on an open/closed QuickHelp window.
+     * @returns {void}
+     */
+    toggleBtnQuestionColor: function () {
+        if (store.getters["QuickHelp/active"]) {
+            this.$("span.glyphicon-question-sign").addClass("quickhelp-is-shown");
+        }
+        else {
+            this.$("span.glyphicon-question-sign").removeClass("quickhelp-is-shown");
+        }
     },
 
     /**
@@ -254,7 +281,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      */
     clickHandler: function () {
         this.clearSelection();
-        $("#searchInput").focus();
+        $("#searchInput").trigger("focus");
     },
 
     /**

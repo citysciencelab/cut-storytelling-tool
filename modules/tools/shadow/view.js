@@ -69,7 +69,7 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
         else {
             this.undelegateEvents();
         }
-
+        $("#window .win-heading span.glyphicon-remove").trigger("focus");
         return this;
     },
 
@@ -88,6 +88,7 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
             document.getElementsByClassName("title-values")[0].children[0].children[0].innerText = String(this.model.get("time"));
             document.getElementsByClassName("title-values")[1].children[0].children[0].innerText = String(this.model.get("date"));
             this.delegateEvents();
+            $("#window .win-heading span.glyphicon-remove").trigger("focus");
         }
         return this;
     },

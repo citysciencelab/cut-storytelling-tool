@@ -40,9 +40,25 @@ export default {
         this.show();
         this.getFeatures();
         this.initActiveCategory();
+        this.$nextTick(() => {
+            if (this.$refs["close-icon"]) {
+                this.$refs["close-icon"].focus();
+            }
+        });
     },
     methods: {
         ...mapMutations("controls/orientation", Object.keys(mutations)),
+
+        /**
+         * Callback when close icon has been clicked.
+         * @param {Event} event the dom event
+         * @returns {void}
+         */
+        closeIconTriggered (event) {
+            if (event.type === "click" || event.which === 32 || event.which === 13) {
+                this.hidePoi();
+            }
+        },
 
         /**
          * Show the modal.
@@ -296,11 +312,14 @@ export default {
             <div class="modal-content">
                 <div class="modal-header">
                     <span
+                        ref="close-icon"
                         class="glyphicon glyphicon-remove"
+                        tabindex="0"
                         aria-hidden="true"
                         data-dismiss="modal"
                         :title="$t('button.close')"
-                        @click="hidePoi"
+                        @click="closeIconTriggered($event)"
+                        @keydown="closeIconTriggered($event)"
                     />
                     <h4 class="modal-title">
                         {{ $t("common:modules.controls.orientation.titleGeolocatePOI") }}
@@ -379,6 +398,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
+    @import "~variables";
     .poi {
         color: rgb(85, 85, 85);
         font-size: 14px;
@@ -395,8 +415,13 @@ export default {
         .glyphicon-remove {
             font-size: 16px;
             float: right;
-            padding: 12px;
+            margin: 12px;
             cursor: pointer;
+            &:focus {
+                outline: 3px solid @accent_focus;
+                outline: 3px auto  Highlight;
+                outline: 3px auto -webkit-focus-ring-color;
+            }
         }
         .modal-dialog {
             z-index: 1041;

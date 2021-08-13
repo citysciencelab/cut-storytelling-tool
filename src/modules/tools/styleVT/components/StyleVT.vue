@@ -23,6 +23,9 @@ export default {
          */
         active (active) {
             this.setActive({active});
+            if (active) {
+                this.setFocusToFirstControl();
+            }
         }
     },
     created () {
@@ -38,6 +41,18 @@ export default {
     methods: {
         ...mapMutations("Tools/StyleVT", Object.keys(mutations)),
         ...mapActions("Tools/StyleVT", Object.keys(actions)),
+
+        /**
+         * Sets the focus to the first control
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
+            this.$nextTick(() => {
+                if (this.$refs["tool-styleVT-selectedLayerField"]) {
+                    this.$refs["tool-styleVT-selectedLayerField"].focus();
+                }
+            });
+        },
         close () {
             this.setActive({active: false});
 
@@ -85,6 +100,7 @@ export default {
                         </label>
                         <select
                             id="tool-styleVT-selectedLayerField"
+                            ref="tool-styleVT-selectedLayerField"
                             class="form-control input-sm"
                             @change="setLayerModelById($event.target.value)"
                         >

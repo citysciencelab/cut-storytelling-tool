@@ -61,6 +61,14 @@ export default {
         if (this.metaDataCatalogueId) {
             this.setMetaDataCatalogueId(this.metaDataCatalogueId);
         }
+        // might be caught from self when triggerClose() is called
+        Backbone.Events.listenTo(Radio.channel("Layer"), {
+            "setLayerInfoChecked": (value) => {
+                if (!value) {
+                    this.close();
+                }
+            }
+        });
     },
 
     methods: {
@@ -76,6 +84,12 @@ export default {
         close () {
             this.setActive(false);
             this.$emit("close");
+        },
+        /**
+         * Trigger (Radio) close related events
+         * @returns {void}
+         */
+        triggerClose () {
             Radio.trigger("Layer", "setLayerInfoChecked", false);
             Radio.trigger("LayerInformation", "unhighlightLayerInformationIcon");
         },
@@ -142,7 +156,7 @@ export default {
         v-if="showInformation"
         id="layerInformation"
         class="layerInformation"
-        @close="close"
+        @close="triggerClose"
     >
         <template #title>
             <span>{{ $t("common:modules.layerInformation.informationAndLegend") }}</span>

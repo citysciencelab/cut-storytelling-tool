@@ -14,12 +14,15 @@ export default {
     },
     watch: {
         /**
-         * Prepares the Url that can be copied.
-         *
+         * Prepares the Url that can be copied and sets focus.
+         * @param {Boolean} isActive - if active or not
          * @returns {void}
          */
-        active () {
+        active (isActive) {
             this.filterExternalLayer(Radio.request("ModelList", "getModelsByAttributes", {isSelected: true, type: "layer"}));
+            if (isActive) {
+                this.setFocusToFirstControl();
+            }
         }
     },
     created () {
@@ -37,6 +40,18 @@ export default {
     methods: {
         ...mapMutations("Tools/SaveSelection", constants.mutations),
         ...mapActions("Tools/SaveSelection", constants.actions),
+
+        /**
+         * Sets the focus to the first control
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
+            this.$nextTick(() => {
+                if (this.$refs["tool-saveSelection-input-url"]) {
+                    this.$refs["tool-saveSelection-input-url"].focus();
+                }
+            });
+        },
         close () {
             this.setActive(false);
 
@@ -66,6 +81,7 @@ export default {
                     <label for="tool-saveSelection-input-url">{{ simpleMap ? "Geoportal" : "" }} URL</label>
                     <input
                         id="tool-saveSelection-input-url"
+                        ref="tool-saveSelection-input-url"
                         type="text"
                         class="form-control input-sm"
                         :value="url"

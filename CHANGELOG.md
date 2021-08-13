@@ -12,11 +12,21 @@
 ### Added
 - Autocomplete functionality for the contact tool.
 - A library for standard colors and barrier free colors "src/utils/colors.js" to use within javascript, with initial colors/colorsets: MP standard blue; MP standard red; Color Universal Design by "J*Fly data depository for Drosophila reserchers" (https://jfly.uni-koeln.de/color/ - 7 colors); three additional color sets "Hamburg blue scheme" (10 colors), "blue scheme plus" (10 colors) and "traffic light scheme" (7 colors) contributed by the IfBQ of Hamburg Town.
+- Issue #631: Adds a tutorial to use the remote interface in an iFrame.
+- Added the possibility to configure the size of the iframe in GFI when using the gfiTheme `default` on a layer in config.json. Works only in conjunction with the `infoFormat: "text/html"`.
+- Added possibility in GFI theme Default to configure `max-width` in config.json.
+- New Searchbar-Module for Komoot Photon.
 
 ### Changed
 - Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.
 - LayerInformation now shows message in case the MetaData couldn't be loaded
-- changed contrasts of elements in footer, filter and the mouse position widget for better accessability
+- Footer allows additionally to open vue tools besides backbone tools.
+- Accessibility: Keyboard navigation for tools
+  - You can reach every opened tool via keyboard (TAB-key) direct after the top menu row
+  - After opening a tool the focus is set to the first control (if any available)
+  - LayerInfo and Quickhelp are toggleable (on/off)
+    - LayerInfo via the info menu icon (theme menu)
+    - Quickhelp via the question icon in the searchbar (top menu)
 
 ### Deprecated
 
