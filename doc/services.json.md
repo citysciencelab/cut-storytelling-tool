@@ -614,7 +614,9 @@ Definition of parameters for GFI template `"default"`.
 |iframe|no|**[iframe](#markdown-header-gfi_theme_default_params_iframe)**||Defines the size of the iframe. Only works if the infoFormat="text/html" is configured for the layer.|
 |imageLinks|no|String/String[]|`["bildlink", "link_bild", "Bild", "bild"]`|Defines in which attribute an image reference is given. Attributes will be searched in given order, and the first hit will be used.|
 |maxWidth|no|String|`"600px"`|Defines the max width of the gfi content. The max width must be at least 280px.|
-|showFavoriteIcons|no|Boolean|`true`|Specifies whether an icon bar allowing tool access is to be displayed. The icons are only displayed if the corresponding tools are configured. Usable tools: `compareFeatures` (not yet implemented for WMS).
+|showFavoriteIcons|no|Boolean|`true`|Specifies whether an icon bar allowing tool access is to be displayed. The icons are only displayed if the corresponding tools are configured. Usable tools: `compareFeatures` (not yet implemented for WMS).|
+|beautifyKeys|no|Boolean|true|Defines if the attribute keys are beautified (true) or not (false).|
+|showObjectKeys|no|Boolean|false|Displays attribute keys and values of objects in the data if set to true.|
 
 
 **gfiTheme example for template "Default":**
@@ -633,7 +635,9 @@ Example for show images in the gfi:
                 "My_image_tag"
             ],
             "maxWidth": "500px",
-            "showFavoriteIcons": true
+            "showFavoriteIcons": true,
+            "beautifyKeys": true,
+            "showObjectKeys": false
         }
     }
 }
@@ -690,6 +694,8 @@ This theme allows the visualization of historical data regarding a SensorThings-
 |data|no|**[data](#markdown-header-gfi_theme_sensor_params_data)**||Data column names.|
 |header|no|Object|`{"name": "Name", "description": "Beschreibung", "ownerThing": "Eigentümer"}`|Specifies which attributes are to be used for the headers. The display name of each attribute can be specified here, e.g. `"description"` may be displayed `"Arbitrary String"`.|
 |historicalData|no|**[historicalData](#markdown-header-gfi_theme_sensor_params_historicalData)**||Indicates for which period the historical Observations should be requested.|
+|beautifyKeys|no|Boolean|true|Defines if the attribute keys are beautified (true) or not (false).|
+|showObjectKeys|no|Boolean|false|Displays attribute keys and values of objects in the data if set to true.|
 
 **gfiTheme example for template "Sensor":**
 
@@ -729,7 +735,9 @@ This theme allows the visualization of historical data regarding a SensorThings-
             "historicalData": {
                 "periodLength": 3,
                 "periodUnit": "month"
-            }
+            },
+            "beautifyKeys": true,
+            "showObjectKeys": false
         }
     }
 }
