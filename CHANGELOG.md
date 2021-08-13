@@ -21,6 +21,7 @@
 - Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.
 - LayerInformation now shows message in case the MetaData couldn't be loaded
 - Footer allows additionally to open vue tools besides backbone tools.
+- changed contrasts of elements in footer, filter and the mouse position widget for better accessability
 - Accessibility: Keyboard navigation for tools
   - You can reach every opened tool via keyboard (TAB-key) direct after the top menu row
   - After opening a tool the focus is set to the first control (if any available)
