@@ -15,6 +15,7 @@
 - Issue #631: Adds a tutorial to use the remote interface in an iFrame.
 - Added the possibility to configure the size of the iframe in GFI when using the gfiTheme `default` on a layer in config.json. Works only in conjunction with the `infoFormat: "text/html"`.
 - Added possibility in GFI theme Default to configure `max-width` in config.json.
+- New Searchbar-Module for Komoot Photon.
 
 ### Changed
 - Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.

@@ -788,6 +788,9 @@
               "chooseObliqueLayer": "Die Auswahl des Layers \"{{hitName}}\" bewirkt einen Wechsel in den <b>Kartenmodus: Schrägluftbilder!</b><br>Der Wechsel kann einige Zeit in Anspruch nehmen.<br><br>Möchten Sie in den <b>Kartenmodus: Schrägluftbilder</b> wechseln?<br>",
               "choose3dLayer": "Die Auswahl des Layers \"{{hitName}}\" bewirkt einen Wechsel in den <b>Kartenmodus: 3D!</b><br>Der Wechsel kann einige Zeit in Anspruch nehmen.<br><br>Möchten Sie in den <b>Kartenmodus: 3D</b> wechseln?<br>"
             },
+            "komoot": {
+              "errorMsg": "Komoot-Photon-Suche nicht erreichbar."
+            },
             "noInitialResults": "Die initiale Suche ergab keine Treffer."
         },
         "vectorStyle": {

@@ -8,7 +8,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         hitList: [],
         isInitialSearch: true,
         isInitialRecommendedListCreated: false,
-        knownInitialSearchTasks: ["gazetteer", "specialWFS", "bkg", "tree", "osm", "locationFinder", "elasticSearch"],
+        knownInitialSearchTasks: ["gazetteer", "specialWFS", "bkg", "tree", "osm", "locationFinder", "elasticSearch", "komoot"],
         activeInitialSearchTasks: [],
         // translations
         i18nextTranslate: null,
@@ -32,10 +32,10 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @property {Number} recommendedListLength=5 todo
      * @property {Boolean} quickHelp=false todo
      * @property {String} searchString="" the current string in the search mask
-     * @property {Object[]} hitList=[] an array of object{id, name, type} with optional values: coordinate, glyphicon, geom, adress, locationFinder, metaName, osm, marker, geometryType, interiorGeometry
+     * @property {Object[]} hitList=[] an array of object{id, name, type} with optional values: coordinate, glyphicon, geom, adress, locationFinder, metaName, osm, marker, geometryType, interiorGeometry, komoot
      * @property {Boolean} isInitialSearch=true Flag that is set to false at the end of the initial search (ParametricURL).
      * @property {Boolean} isInitialRecommendedListCreated=false Has the recommended list already been generated after the initial search?
-     * @property {String[]} knownInitialSearchTasks=["gazetteer", "specialWFS", "bkg", "tree", "osm", "locationFinder"] Search algorithms for which an initial search is possible
+     * @property {String[]} knownInitialSearchTasks=["gazetteer", "specialWFS", "bkg", "tree", "osm", "locationFinder", "komoot"] Search algorithms for which an initial search is possible
      * @property {Array} activeInitialSearchTasks=[] Search algorithms for which an initial search is activated
      * @property {function} i18nextTranslate=null translation function named i18nextTranslate := function(setter), set during parsing the file "config.json"
      * @property {String} buttonSearchTitle="", filled with "Suchen"- translated

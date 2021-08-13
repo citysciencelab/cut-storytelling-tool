@@ -289,6 +289,12 @@
  */
 
 /**
+ * @namespace Komoot
+ * @memberof Searchbar
+ * @description Configures Komoot Photon search
+ */
+
+/**
  * @namespace LocationFinder
  * @memberof Searchbar
  * @description Configures LocationFinder search
