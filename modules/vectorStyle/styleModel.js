@@ -509,7 +509,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         const featureValue = this.getFeatureValue(featureProperty, key),
             referenceValue = this.getReferenceValue(featureProperty, value);
 
-        if ((typeof featureValue === "string" || typeof featureValue === "number") && (typeof referenceValue === "string" || typeof referenceValue === "number" ||
+        if ((typeof featureValue === "boolean" || typeof featureValue === "string" || typeof featureValue === "number") && (typeof referenceValue === "boolean" || typeof referenceValue === "string" || typeof referenceValue === "number" ||
             (Array.isArray(referenceValue) && referenceValue.every(element => typeof element === "number") &&
                 (referenceValue.length === 2 || referenceValue.length === 4)))) {
             return this.compareValues(featureValue, referenceValue);
@@ -602,6 +602,14 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
                 return true;
             }
         }
+
+        // plain value compare for boolean
+        if (typeof featureValue === "boolean" && typeof referenceValue === "boolean") {
+            if (featureValue === referenceValue) {
+                return true;
+            }
+        }
+
         // plain value compare trying to parse featureValue to float
         else if (typeof referenceValue === "number") {
             value = parseFloat(value);

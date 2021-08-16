@@ -160,6 +160,7 @@ A *value* is the reference value which is compared to the feature's property wit
 
 |Type|Description|
 |----|-----------|
+|Boolean|Direct equality comparison between feature attribute and reference value.|
 |String|Direct equality comparison between feature attribute and reference value.|
 |Number|Direct equality comparison of the numerical feature attribute and reference value. Should the attribute value be of type *String*, casting it to a numerical value for comparison is attempted.|
 |[Number, Number]|An array with two numerical values defines a range interpreted as [minValue, maxValue]. It is checked whether the feature attribute is within that range. Should the attribute value be of type *String*, casting it to a numerical value for comparison is attempted.|
@@ -601,6 +602,16 @@ A SensorLayer example configuration.
                     "type": "circle",
                     "circleFillColor": [200, 200, 1, 1],
                     "clusterType": "circle"
+                }
+            },
+            {
+                "conditions": { 
+                    "properties":{
+                        "@Datastreams.0.Observations.0.result":true
+                    }
+                },
+                "style": { 
+                    "lineStrokeColor": [44,127,184, 0.7]
                 }
             },
             {
