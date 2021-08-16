@@ -1,3 +1,5 @@
+@import "../../../css/variables.less";
+
 @color_1: #000;
 @color_2: #F2F2F2;
 @color_3: #808080;
@@ -5,7 +7,7 @@
 @color_5: #f2f2f2;
 @font_family_1: "MasterPortalFont",sans-serif;
 @font_family_2: "MasterPortalFont", sans-serif;
-@background_color_1: #F2F2F2;
+@background_color_1: #F5F5F5;
 @background_color_2: #fff;
 @background_color_3: #808080;
 @background_color_4: #ffffff;
@@ -371,15 +373,17 @@ a {
         font-size: 14px;
         .glyphicon {
             font-size: x-large;
-            color: @color_3;
+            color: @secondary_icon_button;
             top: 8px;
         }
         .badge {
             font-size: 14px;
             padding-top: 6px;
+            background-color: #686868;
         }
         .remove-layer {
             color: #F2F2F2;
+            font-weight: bold;
             background-color: #808080;
             border-radius: 10px;
             padding: 6px 4px 4px 4px;
@@ -387,13 +391,16 @@ a {
             cursor: pointer;
         }
     }
-    .icon-info {
+    .glyphicon-info-sign {
         position: absolute;
+        font-size: 18px;
+        color: @secondary_icon_button;
+        top: 14px;
         right: 50px;
     }
     .glyphicon-cog {
-        font-size: 14px;
-        color: @color_3;
+        font-size: 18px;
+        color: @secondary_icon_button;
         top: 4px;
     }
     .layer-settings-activated {

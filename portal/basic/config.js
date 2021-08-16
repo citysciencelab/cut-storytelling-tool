@@ -1,5 +1,6 @@
 const Config = {
     wfsImgPath: "./resources/img/",
+    uiStyle: "table",
     metadata: {
         useProxy: [
             "https://metaver.de/csw"

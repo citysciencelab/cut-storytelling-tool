@@ -8,11 +8,24 @@ Kontrastanpassungen ToDo:
 
 -----Themen-----
 
--> Inaktive Elemente z.B. HVV, Eignungsflächen, Bohrdaten
--> Err. Arbeitsplätze deegree Tropfenicon -> Text im Fenster
--> Einstellungen/Zahnrad der Komponenten: % Anzeige und "Layer entfernen"
--> Infobutton -> Metadaten "Publikationen / Erstellung:, Letzte Änderung"
--> Infobutton -> "Legende"
+// -> Inaktive Elemente z.B. HVV, Eignungsflächen, Bohrdaten 
+(-> Err. Arbeitsplätze deegree Tropfenicon -> Text im Fenster) -> Tool: styleWMS
+// -> Einstellungen/Zahnrad der Komponenten: % Anzeige und "Layer entfernen"
+-> Infobutton -> Metadaten "Publikationen / Erstellung:, Letzte Änderung" ????
+(-> Infobutton -> "Legende") -> siehe Tool Legende
+
+Treemenu:
+// -> Ausgewählte Layer
+// -> Hover Blau auf Schwarz 
+
+LayerStyle:
+    add to config.js: 
+      uiStyle: "table",
+
+// icons info and settings
+// settings action icons
+
+TODO: Bug: BurgerMenu
 
 
 -----Filter-----
@@ -25,14 +38,14 @@ Kontrastanpassungen ToDo:
 
 -----Werkzeuge-----
 
--> Flurstücksuche "Nummer eingeben"
+(-> Flurstücksuche "Nummer eingeben"
 -> Karte Drucken Check-/Textboxinhalte
 -> Koordinatensuche Textboxinhalte
 -> Datei-Import Text & "Datei hier ablegen"
 -> Zeichnen / Schreiben Textboxinhalte & Blauer Button
 -> Liste Liste & Details (zuerst deaktivert, so lassen?)
 -> Auswahl speichern URL in Box
--> Zeitreihe Titel nicht konfiguriert
+-> Zeitreihe Titel nicht konfiguriert) -> siehe einzelne Tools
 
 
 -----Kontakt-----
@@ -74,10 +87,20 @@ Kontrastanpassungen ToDo:
 
 -> Legend.vue
 -> LayerInformation.vue
+   - Blaue Textfarbe ausreichend?
+
 
 ***** AddOnTools
+
+**** Vue-addons
 
 -> tacticalMark
 -> commuterFlows
 -> schoolrouteplanning
 -> populationrequest
+-> geoAnalyze
+-> fileImportAddon
+-> sdpDownload
+
+**** Backbone AddOns
+
