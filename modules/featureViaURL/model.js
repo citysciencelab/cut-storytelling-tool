@@ -115,7 +115,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
                 coordLabel: this.get("coordLabel"),
                 typeLabel: this.get("typeLabel")
             },
-            urlLayers = store.state.urlParams?.featureViaURL ? JSON.parse(store.state.urlParams?.featureViaURL) : [], // Radio.request("ParametricURL", "getFeatureViaURL"),
+            urlLayers = store.state.urlParams?.featureViaURL ? JSON.parse(store.state.urlParams?.featureViaURL) : [],
             treeType = Radio.request("Parser", "getTreeType");
         let features,
             geoJSON,

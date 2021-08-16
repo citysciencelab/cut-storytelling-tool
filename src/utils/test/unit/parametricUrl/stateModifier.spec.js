@@ -412,5 +412,21 @@ describe("src/utils/stateModifier.js", () => {
                 expect(state.urlParams.featureViaURL).to.be.equals(valueAsString);
             });
         });
+        describe("UrlParam highlightfeature", () => {
+            it("test param highlightfeature", async () => {
+                let key = "highlightfeature";
+                const state = {
+                        urlParams: {}
+                    },
+                    valueAsString = "8712,APP_STAATLICHE_SCHULEN_452280";
+
+                await setValueToState(state, key, valueAsString);
+                expect(state.urlParams["Map/highlightFeature"]).to.be.equals(valueAsString);
+
+                key = "Map/highlightFeature";
+                await setValueToState(state, key, valueAsString);
+                expect(state.urlParams["Map/highlightFeature"]).to.be.equals(valueAsString);
+            });
+        });
     });
 });

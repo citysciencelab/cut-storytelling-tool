@@ -95,15 +95,12 @@ function callActions (state) {
 
         if (state.urlParams.projection !== undefined) {
             coordinates = transformToMapProjection(state.Map.map, state.urlParams.projection, coordinates);
-            console.log("after transformToMapProjection:", coordinates);
         }
         setTimeout(() => {
-            console.log("action placingPointMarker");
             store.dispatch("MapMarker/placingPointMarker", coordinates);
         }, 500);
     }
     if (state.urlParams["Map/zoomLevel"]) {
-        console.log("action setZoomLevel");
         store.dispatch("Map/setZoomLevel", state.Map.zoomLevel);
     }
 }

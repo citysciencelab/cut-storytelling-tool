@@ -39,7 +39,7 @@ const actions = {
      * @param {module:ol/Map} map map object
      * @returns {void}
      */
-    setMap ({commit, dispatch}, {map}) {
+    setMap ({commit, dispatch, rootState}, {map}) {
         // discard old listeners
         if (unsubscribes.length) {
             unsubscribes.forEach(unsubscribe => unsubscribe());
@@ -52,6 +52,9 @@ const actions = {
         // listen to featuresLoaded event to be able to determine if all features of a layer are completely loaded
         channel.on({"featuresLoaded": id => {
             commit("addLoadedLayerId", id);
+            if (rootState.urlParams["Map/highlightFeature"]) {
+                dispatch("highlightFeature", {type: "viaLayerIdAndFeatureId", layerIdAndFeatureId: rootState.urlParams["Map/highlightFeature"]});
+            }
         }});
         // set map to store
         commit("setMap", map);

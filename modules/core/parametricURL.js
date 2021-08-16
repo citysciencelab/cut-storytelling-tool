@@ -77,12 +77,12 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "getFilter": function () {
                 return this.get("filter");
             },
-            "getFeatureViaURL": function () {
-                return this.get("featureViaURL");
-            },
-            "getHighlightFeature": function () {
-                return this.get("highlightfeature");
-            },
+            // "getFeatureViaURL": function () {
+            //     return this.get("featureViaURL");
+            // },
+            // "getHighlightFeature": function () {
+            //     return this.get("highlightfeature");
+            // },
             // "getZoomToFeatureIds": function () {
             //     return this.get("zoomToFeatureIds");
             // },
