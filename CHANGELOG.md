@@ -28,6 +28,62 @@
     - LayerInfo via the info menu icon (theme menu)
     - Quickhelp via the question icon in the searchbar (top menu)
 - GFI: order of Gfis is reversed now, so that the top layer ones come first
+- NPM packages https-proxy-agent, vue-loader, vue-template-compiler are moved from dependencies to devDependencies in package.json.
+- The following NPM packages are updated:
+  - dependencies:
+    axios: 0.19.0 to version 0.21.1
+    backbone.radio: 1.x to version 2.x
+    bootstrap-datepicker: 1.8.x to version 1.9.x
+    core-js: 3.10.1 to version 3.15.2
+    dom-parser: 0.1.5 to version 0.1.6
+    html2canvas: 1.0.0-rc.5 to version 1.1.3
+    i18next: 19.0.1 to version 20.3.3
+    i18next-browser-languagedetec to versionr: 4.0.1 to version 6.1.2
+    i18next-http-backend: 1.0.8 to version 1.2.6
+    imports-loader: 0.8.0 to version 1.0.0
+    moment-timezone: 0.5.28 to version 0.5.33
+    mqtt: 4.x to version 4.2.8
+    object-hash: 2.0.3 to version 2.2.0
+    ol-mapbox-style: 6.3.2 to version 6.4.1
+    olcs: 2.12.0 to version 2.13.0
+    vue: 2.6.11 to version 2.6.14
+    vuex: 3.1.2 to version 3.6.2
+
+  - devDependencies:
+    @babel/core: 7.13.15 to version 7.14.6
+    @babel/eslint-parser: 7.14.3 to version 7.14.7
+    @babel/preset-env: 7.13.15 to version 7.14.7
+    @intlify/vue-i18n-loader: 0.6.1 to version 2.1.2
+    @masterportal/mpconfigparser: 1.1.1 to version 1.1.2
+    @vue/test-utils: 1.0.2 to version 1.2.1
+    canvas: 2.6.1 to version 2.8.0
+    chai: 4.1.1 to version 4.3.4
+    css-loader: 1.0.0 to version 4.3.0
+    dotenv: 8.2.0 to version 10.0.0
+    eslint: 7.28.0 to version 7.31.0
+    eslint-plugin-vue: 7.11.1 to version 7.14.0
+    file-loader: 2.0.0 to version 6.2.0
+    fs-extra: 9.0.0 to version 10.0.0
+    husky: 4.3.8 to version 7.0.1
+    https-proxy-agent: 3.0.0 to version 5.0.0
+    inquirer: 6.2.0 to version 8.1.2
+    jaguarjs-jsdoc: 0.0.1 to version 1.1.0
+    jsdoc: 3.6.3 to version 3.6.7
+    jsdom-global: 3.0.2 to version 14.0.0
+    less: 3.9.0 to version 4.1.1
+    less-loader: 4.1.0 to version 7.3.0
+    mocha: 6.2.0 to version 9.0.2
+    mocha-loader: 2.0.0 to version 3.0.0
+    mock-local-storage: 1.1.15 to version 1.1.17
+    null-loader: 4.0.0 to version 4.0.1
+    regenerator-runtime: 0.11.0 to version 0.13.7
+    replace-in-file: 6.0.0 to version 6.2.0
+    sinon: 7.3.2 to version 11.1.1
+    sinon-chai: 3.3.0 to version 3.7.0
+    vue-template-compiler: 2.6.10 to version 2.6.14
+    whatwg-fetch: 3.0.0 to version 3.6.2
+    xmlserializer: 0.6.1 to version 0.6.1
+    zip-a-folder: 0.0.12 to version 1.1.0
 
 ### Deprecated
 
