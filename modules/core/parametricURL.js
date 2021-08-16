@@ -176,7 +176,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "PROJECTION": this.parseProjection.bind(this),
             "QUERY": this.parseQuery.bind(this),
             "STARTUPMODUL": this.parseIsInitOpen.bind(this), // @deprecated in version 3.0.0
-            "STYLE": this.parseStyle.bind(this),
+            // "STYLE": this.parseStyle.bind(this),
             // "TILT": this.evaluateCameraParameters.bind(this),
             // "ZOOMLEVEL": this.setZoomLevel.bind(this),
             "ZOOMTOEXTENT": this.parseZOOMTOEXTENT.bind(this),

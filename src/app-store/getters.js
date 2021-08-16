@@ -1,5 +1,3 @@
-import getQueryParams from "../utils/getQueryParams";
-
 export default {
     masterPortalVersionNumber: state => state?.masterPortalVersionNumber,
     mobile: state => state.mobile,
@@ -9,7 +7,7 @@ export default {
     footerConfig: state => state?.configJs?.footer || null,
     loaderText: state => state?.configJs?.loaderText || "",
     scaleLineConfig: state => state?.configJs?.scaleLine || null,
-    uiStyle: state => (getQueryParams()?.uiStyle || state?.configJs?.uiStyle)?.toUpperCase(),
+    uiStyle: state => (state?.urlParams?.uiStyle || state?.configJs?.uiStyle)?.toUpperCase(),
     // gfiWindow is deprecated in the next major-release
     gfiWindow: state => state?.configJs.gfiWindow,
     ignoredKeys: state => state?.configJs.ignoredKeys || [],

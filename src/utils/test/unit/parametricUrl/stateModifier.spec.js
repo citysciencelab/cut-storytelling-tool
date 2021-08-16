@@ -428,5 +428,21 @@ describe("src/utils/stateModifier.js", () => {
                 expect(state.urlParams["Map/highlightFeature"]).to.be.equals(valueAsString);
             });
         });
+        describe("UrlParam uiStyle", () => {
+            it("test param uiStyle", async () => {
+                let key = "uiStyle";
+                const state = {
+                        urlParams: {}
+                    },
+                    valueAsString = "SIMPLE";
+
+                await setValueToState(state, key, valueAsString);
+                expect(state.urlParams.uiStyle).to.be.equals(valueAsString);
+
+                key = "style";
+                await setValueToState(state, key, valueAsString);
+                expect(state.urlParams.uiStyle).to.be.equals(valueAsString);
+            });
+        });
     });
 });

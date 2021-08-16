@@ -138,14 +138,10 @@ export async function setValueToState (state, key, value) {
 
     if (typeof key === "string") {
         translate(key.trim(), value).then(entry => {
-            const setToState = false;
+            const found = searchAndSetValue(state, entry.key.split("/"), entry.value);
 
             console.log("translated key=", entry.key);
             console.log("translated value=", entry.value);
-
-
-            const found = searchAndSetValue(state, entry.key.split("/"), entry.value);
-
             console.log("state:", state);
             console.log("found:", found);
 
@@ -156,9 +152,7 @@ export async function setValueToState (state, key, value) {
                     state.urlParams[oldParam.key] = oldParam.value;
                 }
             }
-            if (!setToState) {
-                state.urlParams[entry.key] = value;
-            }
+            state.urlParams[entry.key] = value;
             console.log("state.urlParams=", state.urlParams);
             return entry;
         }).catch(error => {

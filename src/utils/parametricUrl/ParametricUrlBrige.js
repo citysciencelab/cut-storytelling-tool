@@ -5,6 +5,24 @@ import store from "../../app-store";
 const toolsNotInState = ["compareFeatures", "parcelSearch", "print", "featureLister", "layerSlider", "filter", "shadow", "virtualcity", "wfst", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
 
 /**
+ * Sets url params to state, which are used before mount of vue-app.
+ * @returns {void}
+ */
+export function handleUrlParamsBeforeVueMount () {
+    const params = new URLSearchParams(window.location.search);
+
+    params.forEach(function (value, key) {
+        if (key.toLowerCase() === "style" || key.toLowerCase() === "uistyle") {
+            const valueUpperCase = value.toUpperCase();
+
+            if (valueUpperCase === "TABLE" || valueUpperCase === "SIMPLE") {
+                store.state.urlParams.uiStyle = valueUpperCase;
+            }
+        }
+    });
+}
+
+/**
  * Triggers at backbone Radio channel "ParametricURL": "ready".
  * @returns {void}
  */
@@ -46,6 +64,13 @@ export function doSpecialBackboneHandling (state, key, value) {
     }
     else if (key === "Map/layerIds") {
         createLayerParams(state, value);
+    }
+    else if (key === "style") {
+        const resultUpperCase = value.toUpperCase();
+
+        if (resultUpperCase === "TABLE" || resultUpperCase === "SIMPLE") {
+            Radio.trigger("Util", "setUiStyle", resultUpperCase);
+        }
     }
 }
 

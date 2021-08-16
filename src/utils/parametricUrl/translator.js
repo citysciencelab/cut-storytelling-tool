@@ -23,15 +23,20 @@ export async function translate (urlParamsKey, urlParamsValue) {
         }
         case "lng": {
             checkIfLanguageEnabled();
-            return {key: checkedKey, value: convert(checkedValue)};
+            return {key: checkedKey.toLowerCase(), value: convert(checkedValue)};
         }
-        case "center": {
-            const key = "Map/" + checkedKey,
+        case "style": {
+            return {key: "uiStyle", value: convert(checkedValue)};
+        }
+        case "center":
+        case "map/center": {
+            const key = "Map/center",
                 value = convert(urlParamsValue);
 
             return {key: key, value: value};
         }
-        case "zoomlevel": {
+        case "zoomlevel":
+        case "map/zoomlevel": {
             const key = "Map/zoomLevel",
                 value = parseInt(urlParamsValue, 10);
 
