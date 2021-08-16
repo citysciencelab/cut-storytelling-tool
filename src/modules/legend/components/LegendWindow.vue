@@ -7,6 +7,7 @@ import actions from "../store/actionsLegend";
 import LegendSingleLayer from "./LegendSingleLayer.vue";
 import {isArrayOfStrings} from "../../../utils/objectHelpers";
 import {convertColor} from "../../../utils/convertColor";
+import getComponent from "../../../utils/getComponent";
 
 export default {
     name: "LegendWindow",
@@ -169,7 +170,13 @@ export default {
          */
         closeLegend (event) {
             if (event.type === "click" || event.which === 32 || event.which === 13) {
+                const model = getComponent(this.id);
+
                 this.setShowLegend(!this.showLegend);
+
+                if (model) {
+                    model.set("isActive", false);
+                }
             }
         },
 

@@ -145,7 +145,6 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
      * @returns {void}
      */
     checkItem: function (event) {
-
         if (event.type === "click" || event.which === 32 || event.which === 13) {
 
             event.preventDefault();
@@ -153,8 +152,10 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
 
             Radio.trigger("ClickCounter", "toolChanged");
             if (this.model.get("id") === "legend") {
-                this.model.setIsActive(true);
-                store.dispatch("Legend/setShowLegend", true);
+                const isActive = this.model.get("isActive");
+
+                this.model.setIsActive(!isActive);
+                store.dispatch("Legend/setShowLegend", !isActive);
             }
             else {
                 if (!this.model.collection) {
