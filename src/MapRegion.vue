@@ -34,9 +34,6 @@ export default {
 <template>
     <div class="anchor">
         <!-- OpenLayers node; control map itself via vuex map module -->
-        <div class="menu">
-            <LegendWindow />
-        </div>
 
         <div id="sidebar">
             <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
@@ -54,6 +51,9 @@ export default {
                 v-if="configJson"
                 :show-in-sidebar="false"
             />
+            <div class="menu">
+                <LegendWindow />
+            </div>
             <div class="elements-positioned-over-map">
                 <LayerInformation />
                 <ControlBar class="controls" />

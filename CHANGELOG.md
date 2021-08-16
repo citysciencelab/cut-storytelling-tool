@@ -90,6 +90,7 @@
 ### Removed
 
 ### Fixed
+- The legend now always renders in the map region even when the sidebar is open. Also, the small optical offset in the menu bar at the legend entry has been removed.
 
 ---
 ## v2.12.1 - 2021-08-12
