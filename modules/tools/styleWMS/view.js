@@ -95,12 +95,31 @@ const StyleWmsView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
                     this.$el.find("[class*=selected-color]").parent().colorpicker({format: "hex"});
                 }
             }
-
             // Listen to event, neccessary if window was closed inbetween
             this.delegateEvents();
+            this.setFocus(attr);
         }
-
         return this;
+    },
+
+    /**
+     * Sets the focus to the last visible element
+     * @param {*} attr model as json
+     * @returns {void}
+     */
+    setFocus: function (attr) {
+        if (attr.numberOfClasses !== "default") {
+            this.$el.find("input.form-control").first().trigger("focus");
+        }
+        else if (attr.attributeName !== "default") {
+            this.$el.find("#numberField").trigger("focus");
+        }
+        else if (attr.model !== null && attr.model !== undefined) {
+            this.$el.find("#attributField").trigger("focus");
+        }
+        else {
+            this.$el.find("#layerField").trigger("focus");
+        }
     },
 
     /**

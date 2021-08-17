@@ -72,6 +72,7 @@ const PrintView = Backbone.View.extend(/** @lends PrintView.prototype */{
         else {
             this.$el.empty();
         }
+        this.$el.find("#title-input").trigger("focus");
 
         return this;
     },

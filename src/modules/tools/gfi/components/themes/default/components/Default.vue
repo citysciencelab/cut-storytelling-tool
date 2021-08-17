@@ -4,11 +4,13 @@ import {isWebLink} from "../../../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
 import CompareFeatureIcon from "../../../favoriteIcons/components/CompareFeatureIcon.vue";
+import DefaultSensorChart from "./DefaultSensorChart.vue";
 
 export default {
     name: "Default",
     components: {
-        CompareFeatureIcon
+        CompareFeatureIcon,
+        DefaultSensorChart
     },
     props: {
         feature: {
@@ -20,7 +22,8 @@ export default {
         return {
             imageLinks: ["bildlink", "link_bild", "Bild"],
             importedComponents: [],
-            showFavoriteIcons: true
+            showFavoriteIcons: true,
+            maxWidth: "600px"
         };
     },
     computed: {
@@ -54,6 +57,7 @@ export default {
         feature () {
             this.$nextTick(() => {
                 this.addTextHtmlContentToIframe();
+                this.setMaxWidth(this.feature.getTheme()?.params);
             });
         }
     },
@@ -67,6 +71,7 @@ export default {
     mounted () {
         this.$nextTick(() => {
             this.addTextHtmlContentToIframe();
+            this.setMaxWidth(this.feature.getTheme()?.params);
         });
     },
     methods: {
@@ -75,6 +80,23 @@ export default {
         isPhoneNumber,
         getPhoneNumberAsWebLink,
         isEmailAddress,
+
+        /**
+         * checks if the given value is an object for rendering a linechart diagram
+         * @param {*} value anything to check
+         * @returns {Boolean} true if this can be converted to a linechart, false if not
+         */
+        isSensorChart (value) {
+            return typeof value === "object" && value !== null
+                && (
+                    value.type === "linechart"
+                    || value.type === "barchart"
+                    || value.type === "cakechart"
+                )
+                && typeof value.query === "string"
+                && typeof value.staObject === "object" && value.staObject !== null
+                && typeof value.staObject["@iot.selfLink"] === "string";
+        },
 
         /**
          * Sets the imported components to importedComponents.
@@ -112,9 +134,41 @@ export default {
             const iframe = document.getElementsByClassName("gfi-iFrame")[0];
 
             if (this.mimeType === "text/html" && iframe) {
+                this.setIframeSize(iframe, this.feature.getTheme()?.params);
                 iframe.contentWindow.document.open();
                 iframe.contentWindow.document.write(this.feature.getDocument());
                 iframe.contentWindow.document.close();
+            }
+        },
+
+        /**
+         * Sets the size of the given iframe.
+         * The iframe size can be overwritten in the config.json at the layer.
+         * @param {Object} iframe The iframe.
+         * @param {Object} params The gfi parameters.
+         * @returns {void}
+         */
+        setIframeSize: function (iframe, params) {
+            document.getElementsByClassName("gfi-theme-iframe")[0].style.maxWidth = "";
+            iframe.style.width = params?.iframe?.width;
+            iframe.style.height = params?.iframe?.height;
+        },
+
+        /**
+         * Sets the max-width of the default gfiTheme content.
+         * @param {Object} params The gfi parameters.
+         * @returns {void}
+         */
+        setMaxWidth: function (params) {
+            if (this.mimeType !== "text/html") {
+                const gfiThemeContainer = document.getElementsByClassName("gfi-theme-images")[0];
+
+                if (params?.maxWidth) {
+                    gfiThemeContainer.style.maxWidth = params?.maxWidth;
+                }
+                else {
+                    gfiThemeContainer.style.maxWidth = this.maxWidth;
+                }
             }
         }
     }
@@ -163,7 +217,10 @@ export default {
                     v-else
                     :key="key"
                 >
-                    <td class="bold">
+                    <td
+                        v-if="!isSensorChart(value)"
+                        class="bold"
+                    >
                         {{ beautifyKey($t(key)) }}
                     </td>
                     <td v-if="isWebLink(value)">
@@ -186,6 +243,20 @@ export default {
                         v-else-if="typeof value === 'string' && value.includes('<br>')"
                         v-html="value"
                     />
+                    <td
+                        v-else-if="isSensorChart(value)"
+                        colspan="2"
+                    >
+                        <DefaultSensorChart
+                            :type="value.type"
+                            :label="value.label"
+                            :query="value.query"
+                            :format="value.format"
+                            :sta-object="value.staObject"
+                            :options="value.options"
+                            :chart-options="value.chartOptions"
+                        />
+                    </td>
                     <td v-else>
                         {{ value }}
                     </td>
@@ -229,6 +300,7 @@ export default {
     line-height: 1px;
 }
 .gfi-theme-images {
+    max-width: 600px;
     height: 100%;
 }
 .gfi-theme-images-image {

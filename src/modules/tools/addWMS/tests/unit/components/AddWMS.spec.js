@@ -54,8 +54,21 @@ describe("src/modules/tools/addWMS/components/AddWMS.vue", () => {
         };
 
         store.commit("Tools/AddWMS/setActive", true);
-        wrapper = shallowMount(AddWMSComponent, {store, localVue, data: componentData});
+
+        const elem = document.createElement("div");
+
+        if (document.body) {
+            document.body.appendChild(elem);
+        }
+        wrapper = shallowMount(AddWMSComponent, {store, localVue, data: componentData, attachTo: elem});
     });
+
+    afterEach(() => {
+        if (wrapper) {
+            wrapper.destroy();
+        }
+    });
+
 
     it("renders the AddWMS Module", () => {
         expect(wrapper.find("#add-wms").exists()).to.be.true;
@@ -77,6 +90,12 @@ describe("src/modules/tools/addWMS/components/AddWMS.vue", () => {
 
     it("renders the AddWMS button", () => {
         expect(wrapper.find("#addWMSButton").exists()).to.be.true;
+    });
+
+    it("sets focus to first input control", async () => {
+        wrapper.vm.setFocusToFirstControl();
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find("#wmsUrl").element).to.equal(document.activeElement);
     });
 
     it("getParsedTitle", () => {

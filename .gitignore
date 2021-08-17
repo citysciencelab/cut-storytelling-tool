@@ -12,6 +12,7 @@
 /jsdoc
 /nbproject/private/
 styleguide
+.history
 
 addons/*
 !portal/analysetool/readme.txt

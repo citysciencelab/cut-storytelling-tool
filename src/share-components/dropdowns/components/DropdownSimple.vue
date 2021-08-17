@@ -12,6 +12,12 @@ export default {
         options: {
             type: Object,
             required: true
+        },
+        // if focus should be set to this component when it is created
+        focusOnCreation: {
+            type: Boolean,
+            default: false,
+            required: false
         }
     },
     data () {
@@ -27,6 +33,15 @@ export default {
     mounted () {
         this.selectedOption = this.value;
     },
+    created () {
+        if (this.focusOnCreation) {
+            this.$nextTick(() => {
+                if (this.$refs["select-option"]) {
+                    this.$refs["select-option"].focus();
+                }
+            });
+        }
+    },
     methods: {
         changedValue (event) {
             this.$emit("input", event.target.value);
@@ -37,6 +52,7 @@ export default {
 
 <template>
     <select
+        ref="select-option"
         v-model="selectedOption"
         class="form-control"
         @input="changedValue"

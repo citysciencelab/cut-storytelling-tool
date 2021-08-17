@@ -33,6 +33,18 @@ export default {
 
         console: () => console
     },
+    watch: {
+        /**
+         * Listens to the active property change.
+         * @param {Boolean} isActive Value deciding whether the tool gets activated or deactivated.
+         * @returns {void}
+         */
+        active (isActive) {
+            if (isActive) {
+                this.setFocusToFirstControl();
+            }
+        }
+    },
     created () {
         this.$on("close", this.close);
     },
@@ -42,6 +54,18 @@ export default {
             "setSelectedFiletype"
         ]),
         ...mapMutations("Tools/FileImport", Object.keys(mutations)),
+
+        /**
+         * Sets the focus to the first control
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
+            this.$nextTick(() => {
+                if (this.$refs["upload-label"]) {
+                    this.$refs["upload-label"].focus();
+                }
+            });
+        },
         onDZDragenter () {
             this.dzIsDropHovering = true;
         },
@@ -77,6 +101,11 @@ export default {
 
                 reader.readAsText(file);
             });
+        },
+        triggerClickOnFileInput (event) {
+            if (event.which === 32 || event.which === 13) {
+                this.$refs["upload-input-file"].click();
+            }
         },
         close () {
             this.setActive(false);
@@ -158,8 +187,14 @@ export default {
                 </div>
 
                 <div>
-                    <label class="upload-button-wrapper">
+                    <label
+                        ref="upload-label"
+                        class="upload-button-wrapper"
+                        tabindex="0"
+                        @keydown="triggerClickOnFileInput"
+                    >
                         <input
+                            ref="upload-input-file"
                             type="file"
                             @change="onInputChange"
                         >
@@ -230,7 +265,11 @@ export default {
         margin:12px 0 0 0;
         font-size: @font_size_big;
         transition: background 0.25s;
-
+        &:focus {
+            outline: 3px solid @accent_focus;
+            outline: 3px auto  Highlight;
+            outline: 3px auto -webkit-focus-ring-color;
+        }
         &:hover {
             background-color:#EEEEEE;
         }

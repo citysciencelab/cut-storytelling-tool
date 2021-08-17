@@ -512,9 +512,6 @@
     "Fachdaten": {
       "Layer": [
         {
-          "id" : "19173"
-        },
-        {
           "id": "1132",
           "styleId": "1132",
           "name": "100 Jahre Stadtgruen POIs",
@@ -775,6 +772,9 @@
         },
         {
           "id": "13023"
+        },
+        {
+          "id" : "19173"
         }
       ]
     }

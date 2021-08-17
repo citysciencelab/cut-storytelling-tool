@@ -98,6 +98,7 @@ export default {
 <template>
     <ToolWindow
         class="gfi-detached-table rotate0"
+        :focus-to-close-icon="true"
         :initial-width="360"
         @close="close"
     >

@@ -50,6 +50,9 @@ export default {
                 this.resetErrorMessages();
                 this.resetValues();
             }
+            else {
+                this.setFocusToFirstControl();
+            }
         }
     },
     created () {
@@ -72,6 +75,17 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
+        },
+        /**
+         * Sets the focus to the first control
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
+            this.$nextTick(() => {
+                if (this.$refs.coordSystemField) {
+                    this.$refs.coordSystemField.focus();
+                }
+            });
         }
     }
 };
@@ -103,6 +117,7 @@ export default {
                         <div class="col-md-7 col-sm-7">
                             <select
                                 id="coordSystemField"
+                                ref="coordSystemField"
                                 class="font-arial form-control input-sm pull-left"
                                 :value="currentSelection"
                                 @change="selectionChanged"

@@ -30,7 +30,7 @@ function fillFields ({nameInput, mailInput, phoneInput, messageInput}) {
 }
 
 describe("src/modules/tools/contact/components/Contact.vue", () => {
-    let store;
+    let store, wrapper;
 
     beforeEach(() => {
         ContactModule.actions.send = sinon.spy();
@@ -53,17 +53,25 @@ describe("src/modules/tools/contact/components/Contact.vue", () => {
         store.commit("Tools/Contact/setActive", true);
     });
 
+    afterEach(() => {
+        if (wrapper) {
+            wrapper.destroy();
+        }
+    });
+
     it("has a disabled save button if the form is not completed", () => {
-        const wrapper = mount(ContactComponent, {store, localVue}),
-            sendButton = wrapper.find("#tool-contact-send-message");
+        wrapper = mount(ContactComponent, {store, localVue});
+
+        const sendButton = wrapper.find("#tool-contact-send-message");
 
         expect(sendButton.exists()).to.be.true;
         expect(sendButton.attributes("disabled")).to.equal("disabled");
     });
 
     it("has an enabled & working save button if the form is completed", async () => {
-        const wrapper = mount(ContactComponent, {store, localVue}),
-            sendButton = wrapper.find("#tool-contact-send-message"),
+        wrapper = mount(ContactComponent, {store, localVue});
+
+        const sendButton = wrapper.find("#tool-contact-send-message"),
             nameInput = wrapper.find("#tool-contact-username-input"),
             mailInput = wrapper.find("#tool-contact-mail-input"),
             phoneInput = wrapper.find("#tool-contact-phone-input"),
@@ -80,8 +88,10 @@ describe("src/modules/tools/contact/components/Contact.vue", () => {
     });
 
     it("keeps the send button disabled if any field is missing", async () => {
-        const wrapper = mount(ContactComponent, {store, localVue}),
-            sendButton = wrapper.find("#tool-contact-send-message"),
+
+        wrapper = mount(ContactComponent, {store, localVue});
+
+        const sendButton = wrapper.find("#tool-contact-send-message"),
             nameInput = wrapper.find("#tool-contact-username-input"),
             mailInput = wrapper.find("#tool-contact-mail-input"),
             phoneInput = wrapper.find("#tool-contact-phone-input"),
@@ -104,8 +114,9 @@ describe("src/modules/tools/contact/components/Contact.vue", () => {
         ContactModule.state.contactInfo = "If you live nearby, why not shout the message out from your window at 3AM?";
         ContactModule.state.showPrivacyPolicy = true;
 
-        const wrapper = mount(ContactComponent, {store, localVue}),
-            sendButton = wrapper.find("#tool-contact-send-message"),
+        wrapper = mount(ContactComponent, {store, localVue});
+
+        const sendButton = wrapper.find("#tool-contact-send-message"),
             nameInput = wrapper.find("#tool-contact-username-input"),
             mailInput = wrapper.find("#tool-contact-mail-input"),
             phoneInput = wrapper.find("#tool-contact-phone-input"),
@@ -124,5 +135,17 @@ describe("src/modules/tools/contact/components/Contact.vue", () => {
         await wrapper.vm.$nextTick();
 
         expect(sendButton.attributes().disabled).not.to.equal("disabled");
+    });
+
+    it("sets focus to first input control", async () => {
+        const elem = document.createElement("div");
+
+        if (document.body) {
+            document.body.appendChild(elem);
+        }
+        wrapper = mount(ContactComponent, {store, localVue, attachTo: elem});
+
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find("#tool-contact-username-input").element).to.equal(document.activeElement);
     });
 });

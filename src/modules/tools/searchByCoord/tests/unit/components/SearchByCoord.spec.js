@@ -59,6 +59,12 @@ describe("src/modules/tools/searchByCoord/components/SearchByCoord.vue", () => {
         store.commit("Tools/SearchByCoord/setActive", true);
     });
 
+    afterEach(() => {
+        if (wrapper) {
+            wrapper.destroy();
+        }
+    });
+
     it("renders SearchByCoord", () => {
         store.commit("Tools/SearchByCoord/setActive", true);
         wrapper = shallowMount(SearchByCoordComponent, {store, localVue});
@@ -72,6 +78,21 @@ describe("src/modules/tools/searchByCoord/components/SearchByCoord.vue", () => {
 
         expect(wrapper.find("#search-by-coord").exists()).to.be.false;
     });
+
+    it("sets focus to first input control", async () => {
+        const elem = document.createElement("div");
+
+        if (document.body) {
+            document.body.appendChild(elem);
+        }
+        wrapper = shallowMount(SearchByCoordComponent, {store, localVue, attachTo: elem});
+
+        wrapper.vm.setFocusToFirstControl();
+
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find("#coordSystemField").element).to.equal(document.activeElement);
+    });
+
     describe("SearchByCoord.vue methods", () => {
         it("close sets active to false", async () => {
             wrapper = shallowMount(SearchByCoordComponent, {store, localVue});
@@ -90,4 +111,5 @@ describe("src/modules/tools/searchByCoord/components/SearchByCoord.vue", () => {
             expect(store.state.Tools.SearchByCoord.coordinatesNorthing.value).to.be.a("string").to.have.a.lengthOf(0);
         });
     });
+
 });

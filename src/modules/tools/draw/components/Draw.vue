@@ -254,6 +254,7 @@ export default {
             if (value) {
                 this.setActive(value);
                 this.setCanvasCursorByInteraction(this.currentInteraction);
+                this.setFocusToFirstControl();
             }
             else {
                 this.resetModule();
@@ -290,6 +291,18 @@ export default {
         ...mapMutations("Tools/Draw", constants.keyStore.mutations),
         ...mapActions("Tools/Draw", constants.keyStore.actions),
         ...mapActions("Alerting", ["addSingleAlert"]),
+
+        /**
+         * Sets the focus to the first control
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
+            this.$nextTick(() => {
+                if (this.$refs["tool-draw-drawType"]) {
+                    this.$refs["tool-draw-drawType"].focus();
+                }
+            });
+        },
         /**
          * checks if both given arrays have the same number at their first 3 positions
          * note: the opacity (4th number) will be ignored - this is only about color
@@ -374,6 +387,7 @@ export default {
         <template #toolBody>
             <select
                 id="tool-draw-drawType"
+                ref="tool-draw-drawType"
                 class="form-control input-sm"
                 :disabled="drawHTMLElements"
                 @change="setDrawType"

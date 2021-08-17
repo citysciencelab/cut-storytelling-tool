@@ -71,6 +71,7 @@ export default {
     <div
         id="modal-1-container"
         :class="[showingClass]"
+        role="alert"
     >
         <div id="modal-1-overlay" />
         <div

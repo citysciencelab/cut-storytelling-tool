@@ -147,6 +147,7 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
                 this.hideFeatures(false);
             }
         }
+        this.$el.find("#wfstSelectLayer").trigger("focus");
         return this;
     },
 

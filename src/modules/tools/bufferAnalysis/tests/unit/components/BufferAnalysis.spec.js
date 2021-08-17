@@ -31,7 +31,7 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
                 }
             }
         };
-    let store, originalCheckIntersection, originalShowBuffer;
+    let store, originalCheckIntersection, originalShowBuffer, wrapper;
 
     beforeEach(() => {
         originalCheckIntersection = BufferAnalysis.actions.checkIntersection;
@@ -66,24 +66,27 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
         store.commit("Tools/BufferAnalysis/setActive", false);
         store.commit("Tools/BufferAnalysis/setSelectOptions", []);
         store.dispatch("Tools/BufferAnalysis/resetModule");
+        if (wrapper) {
+            wrapper.destroy();
+        }
     });
 
     it("renders the bufferAnalysis", () => {
-        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
+        wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
 
         expect(wrapper.find("#tool-bufferAnalysis").exists()).to.be.true;
     });
 
     it("do not render the bufferAnalysiss select if not active", () => {
         store.commit("Tools/BufferAnalysis/setActive", false);
-        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
+        wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
 
         expect(wrapper.find("#tool-bufferAnalysis").exists()).to.be.false;
     });
 
     it("has initially set nothing to layer-analysis-select-source and layer-analysis-select-target", () => {
-        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
-            selectSource = wrapper.find("#tool-bufferAnalysis-selectSourceInput"),
+        wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
+        const selectSource = wrapper.find("#tool-bufferAnalysis-selectSourceInput"),
             selectTarget = wrapper.find("#tool-bufferAnalysis-selectTargetInput");
 
         expect(selectSource.element.value).to.equals("");
@@ -91,8 +94,8 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
     });
 
     it("has initially set eight available options to select", async () => {
-        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
-            layers = createLayersArray(3);
+        wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
+        const layers = createLayersArray(3);
         let options = [];
 
         await store.commit("Tools/BufferAnalysis/setSelectOptions", layers);
@@ -103,8 +106,8 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
     });
 
     it("triggers showBuffer action when source layer and buffer radius are set", async () => {
-        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
-            selectSource = wrapper.find("#tool-bufferAnalysis-selectSourceInput"),
+        wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
+        const selectSource = wrapper.find("#tool-bufferAnalysis-selectSourceInput"),
             range = wrapper.find("#tool-bufferAnalysis-radiusTextInput"),
             layers = createLayersArray(3),
             clock = FakeTimers.install();
@@ -125,5 +128,19 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
         clock.tick(1000);
         expect(BufferAnalysis.actions.showBuffer.calledOnce).to.equal(true);
         clock.uninstall();
+    });
+
+    it("sets focus to first input control", async () => {
+        const elem = document.createElement("div");
+
+        if (document.body) {
+            document.body.appendChild(elem);
+        }
+        // eslint-disable-next-line one-var
+        wrapper = shallowMount(BufferAnalysisComponent, {store, localVue, attachTo: elem});
+
+        wrapper.vm.setFocusToFirstControl();
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find("#tool-bufferAnalysis-selectSourceInput").element).to.equal(document.activeElement);
     });
 });

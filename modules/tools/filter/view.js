@@ -69,8 +69,22 @@ const FilterView = Backbone.View.extend({
         }
         this.renderSimpleViews();
         this.delegateEvents();
-
+        this.setFocus();
         return this;
+    },
+
+    /**
+     * Sets the focus to the first simple-view button or - if none available -
+     * to the close-button.
+     * @returns {void}
+     */
+    setFocus: function () {
+        if (this.$el.find("div.simple-view > button").length > 0) {
+            this.$el.find("div.simple-view > button").first().trigger("focus");
+        }
+        else {
+            this.$("button.close").trigger("focus");
+        }
     },
 
     renderDetailView: function () {

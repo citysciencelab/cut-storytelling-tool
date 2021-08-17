@@ -155,6 +155,31 @@ const publicHolidayMatrix = {
 };
 
 /**
+ * checks if there are holidays in the current week of the given date
+ * @param {Date|String} date the date as JavaScript Date or a string (if string, use format parameter)
+ * @param {String[]|Boolean} [holidayKeys=false] an array of names of holidays to receive (use keys of holidayMatrix above) or false for all
+ * @param {String} [format=false] the format for moment if date is a string (e.g. "YYYY-MM-DD")
+ * @returns {Boolean} true if the week of the given date has holiday, false if not
+ */
+export function hasHolidayInWeek (date, holidayKeys = false, format = false) {
+    if (!(date instanceof Date) && typeof date !== "string") {
+        return false;
+    }
+    const givenMoment = moment(date, format).startOf("isoWeek");
+
+    if (!givenMoment.isValid()) {
+        return false;
+    }
+    for (let i = 0; i <= 6; i++) {
+        givenMoment.add(1, "days");
+        if (getPublicHoliday(givenMoment, holidayKeys)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
  * returns false if this is not a holiday or an object CalendarMoment for the holiday if it is a holiday
  * @param {Date|String} date the date as JavaScript Date or a string (if string, use format parameter)
  * @param {String[]|Boolean} [holidayKeys=false] an array of names of holidays to receive (use keys of holidayMatrix above) or false for all

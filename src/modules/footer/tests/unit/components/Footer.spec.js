@@ -6,7 +6,6 @@ import sinon from "sinon";
 
 const localVue = createLocalVue();
 
-localVue.use(Vuex);
 config.mocks.$t = key => key;
 config.mocks.$i18n = {
     i18next: {
@@ -16,6 +15,8 @@ config.mocks.$i18n = {
         }
     }
 };
+
+localVue.use(Vuex);
 
 describe("src/modules/footer/components/Footer.vue", () => {
     const mockConfigJs = {

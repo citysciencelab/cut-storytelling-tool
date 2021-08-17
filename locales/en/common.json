@@ -186,7 +186,7 @@
             }
         },
         "quickHelp": {
-            "titleTag": "Open help",
+            "titleTag": "Open/close help",
             "search": {
                 "title": "Help - Search function",
                 "generalInfo": "General Information",
@@ -789,6 +789,9 @@
             "tree": {
                 "chooseObliqueLayer": "Selecting the layer \"{{hitName}}\" causes a switch to the <b>map mode: oblique!</b><br>The switch may take some time.<br><br>Do you want to switch to the <b>map mode: oblique?</b><br>",
                 "choose3dLayer": "Selecting the layer \"{{hitName}}\" causes a switch to the <b>map mode: 3D!</b><br>The switch may take some time.<br><br>Do you want to switch to the <b>map mode: 3D?</b><br>"
+            },
+            "komoot": {
+              "errorMsg": "Searching with Komoot Photon is currently not available."
             },
             "noInitialResults": "Initial search found no hits."
         },

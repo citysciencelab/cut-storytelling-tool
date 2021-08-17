@@ -611,12 +611,15 @@ Definition of parameters for GFI template `"default"`.
 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
+|iframe|no|**[iframe](#markdown-header-gfi_theme_default_params_iframe)**||Defines the size of the iframe. Only works if the infoFormat="text/html" is configured for the layer.|
 |imageLinks|no|String/String[]|`["bildlink", "link_bild", "Bild"]`|Defines in which attribute an image reference is given. Attributes will be searched in given order, and the first hit will be used.|
+|maxWidth|no|String|`"600px"`|Defines the max width of the gfi content. The max width must be at least 280px.|
 |showFavoriteIcons|no|Boolean|`true`|Specifies whether an icon bar allowing tool access is to be displayed. The icons are only displayed if the corresponding tools are configured. Usable tools: `compareFeatures` (not yet implemented for WMS).
 
 
 **gfiTheme example for template "Default":**
 
+Example for show images in the gfi:
 ```json
 {
     "gfiTheme": {
@@ -628,11 +631,51 @@ Definition of parameters for GFI template `"default"`.
                 "Bild",
                 "My_image_tag"
             ],
+            "maxWidth": "500px",
             "showFavoriteIcons": true
         }
     }
 }
 ```
+
+Example for set size of an iframe:
+```json
+{
+    "gfiTheme": {
+        "name": "default",
+        "params": {
+            "iframe": {
+                "width": "800px",
+                "height": "20vh"
+            }
+        }
+    }
+}
+```
+
+***
+
+## gfi_theme_default_params_iframe
+
+The GFI can be displayed as an iframe. Here you can define the size of the iframe.
+
+Note: Only works if the infoFormat="text/html" is configured for the layer.
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|height|no|String|"450px"|Width of the iframe.|
+|width|no|String|"450px"|Height of the iframe.|
+
+**Example for the size of an iframe:**
+```json
+{
+    "iframe": {
+        "width": "200px",
+        "height": "200px"
+    }
+}
+```
+
 
 ***
 

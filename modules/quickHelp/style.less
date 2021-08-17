@@ -1,3 +1,5 @@
+@import "../../css/variables.less";
+
 @color_1: rgb(153, 153, 153);
 @color_2: #777;
 @background_color_1: rgb(255, 255, 255);
@@ -35,9 +37,18 @@
             cursor: pointer;
             font-size: 16px;
         }
-        >.glyphicon {
+        > div > .glyphicon {
+            padding: 4px;
+            color: @secondary_icon_button;
             &:hover {
-                opacity: 0.6;
+                opacity: 1;
+                background-color: @accent_hover;
+                color: @primary_contrast;
+            }
+            &:focus {
+                outline: 3px solid @accent_focus;
+                outline: 3px auto  Highlight;
+                outline: 3px auto -webkit-focus-ring-color;
             }
         }
     }

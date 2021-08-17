@@ -35,7 +35,7 @@ export default {
         }),
         ...mapGetters("Tools/Gfi", Object.keys(getters)),
         ...mapGetters("Map", {
-            gfiFeatures: "gfiFeatures",
+            gfiFeatures: "gfiFeaturesReverse",
             mapSize: "size"
         }),
         /**
@@ -225,7 +225,13 @@ export default {
                 }
                 case "number": {
                     preparedValue = thousandsSeparator(preparedValue);
-
+                    break;
+                }
+                case "linechart": {
+                    preparedValue = Object.assign({
+                        name: key,
+                        staObject: preparedValue
+                    }, obj);
                     break;
                 }
                 // default equals to obj.type === "string"
@@ -386,9 +392,6 @@ export default {
 
 .gfi {
     color: @secondary_contrast;
-    .tool-window-vue {
-        max-width: 600px;
-    }
 }
 .bold{
     font-weight: bold;

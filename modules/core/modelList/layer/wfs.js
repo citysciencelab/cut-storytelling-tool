@@ -270,11 +270,13 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         let features = this.getFeaturesFromData(data);
 
         features = this.getFeaturesIntersectsGeometry(this.get("bboxGeometry"), features);
-        this.get("layerSource").clear(true);
-        this.get("layerSource").addFeatures(features);
-        this.styling();
-        this.prepareFeaturesFor3D(features);
-        this.featuresLoaded(features);
+        if (this.get("isSelected")) {
+            this.get("layerSource").clear(true);
+            this.get("layerSource").addFeatures(features);
+            this.styling();
+            this.prepareFeaturesFor3D(features);
+            this.featuresLoaded(features);
+        }
     },
 
     /**
