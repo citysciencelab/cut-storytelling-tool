@@ -19,6 +19,10 @@ export async function translate (urlParamsKey, urlParamsValue) {
             const key = "Tools/" + checkedValue + "/active",
                 value = true;
 
+            if (checkedKey.toLowerCase() === "startupmodul") {
+                console.warn("Url Parameter 'STARTUPMODUL' is deprecated in version 3.0.0. Please use '" + key + "=true' instead.");
+            }
+
             return {key: key, value: value};
         }
         case "lng": {
@@ -47,6 +51,17 @@ export async function translate (urlParamsKey, urlParamsValue) {
             const key = "Map/zoomToExtent",
                 value = convert(urlParamsValue);
 
+            return {key: key, value: value};
+        }
+        case "zoomtogeometry":
+        case "bezirk":
+        case "map/zoomtogeometry": {
+            const key = "Map/zoomToGeometry",
+                value = urlParamsValue;
+
+            if (checkedKey.toLowerCase() === "bezirk") {
+                console.warn("Url Parameter 'BEZIRK' is deprecated in version 3.0.0. Please use 'Map/zoomToGeometry' instead.");
+            }
             return {key: key, value: value};
         }
         case "map":

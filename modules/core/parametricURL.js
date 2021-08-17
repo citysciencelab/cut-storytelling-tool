@@ -67,9 +67,9 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             // "getZoomLevel": function () {
             //     return this.get("zoomLevel");
             // },
-            "getZoomToGeometry": function () {
-                return this.get("zoomToGeometry");
-            },
+            // "getZoomToGeometry": function () {
+            //     return this.get("zoomToGeometry");
+            // },
             // "getZoomToExtent": function () {
             //     return this.get("zoomToExtent");
             // },
@@ -159,28 +159,28 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
     possibleUrlParameters: function () {
         return {
             // "ALTITUDE": this.evaluateCameraParameters.bind(this),
-            "BEZIRK": this.parseZoomToGeometry.bind(this), // @deprecated in version 3.0.0
+            // "BEZIRK": this.parseZoomToGeometry.bind(this), // @deprecated in version 3.0.0
             "BRWID": this.setBrwId.bind(this),
             "BRWLAYERNAME": this.setBrwLayerName.bind(this),
             // "CENTER": this.setCenter.bind(this),
             "CLICKCOUNTER": this.setClickCounter.bind(this),
-            "FEATUREID": this.setZoomToFeatureIds.bind(this),
-            "FEATUREVIAURL": this.setFeatureViaURL.bind(this),
+            // "FEATUREID": this.setZoomToFeatureIds.bind(this),
+            // "FEATUREVIAURL": this.setFeatureViaURL.bind(this),
             "FILTER": this.setFilter.bind(this),
             // "HEADING": this.evaluateCameraParameters.bind(this),
-            "HIGHLIGHTFEATURE": this.setHighlightfeature.bind(this),
+            // "HIGHLIGHTFEATURE": this.setHighlightfeature.bind(this),
             // "ISINITOPEN": this.parseIsInitOpen.bind(this),
             // "LAYERIDS": this.createLayerParams.bind(this),
             // "MAP": this.adjustStartingMap3DParameter.bind(this),
             "MDID": this.parseMDID.bind(this),
-            "PROJECTION": this.parseProjection.bind(this),
-            "QUERY": this.parseQuery.bind(this),
-            "STARTUPMODUL": this.parseIsInitOpen.bind(this), // @deprecated in version 3.0.0
+            // "PROJECTION": this.parseProjection.bind(this),
+            "QUERY": this.parseQuery.bind(this)
+            // "STARTUPMODUL": this.parseIsInitOpen.bind(this), // @deprecated in version 3.0.0
             // "STYLE": this.parseStyle.bind(this),
             // "TILT": this.evaluateCameraParameters.bind(this),
             // "ZOOMLEVEL": this.setZoomLevel.bind(this),
-            "ZOOMTOEXTENT": this.parseZOOMTOEXTENT.bind(this),
-            "ZOOMTOGEOMETRY": this.parseZoomToGeometry.bind(this)
+            // "ZOOMTOEXTENT": this.parseZOOMTOEXTENT.bind(this),
+            // "ZOOMTOGEOMETRY": this.parseZoomToGeometry.bind(this)
             // "LNG": this.checkIfLanguageEnabled.bind(this)
         };
     },
