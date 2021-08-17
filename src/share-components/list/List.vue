@@ -142,12 +142,12 @@ table {
         border: @table-borders;
         padding: 12px @table-padding;
         text-align: left;
-        background-color: #fb001c;
-        color: white;
+        background-color: @primary;
+        color: @accent_contrast;
     }
 
     tr:nth-child(even) {
-        background-color: #f2f2f2;
+        background-color: @secondary;
     }
 }
 </style>
