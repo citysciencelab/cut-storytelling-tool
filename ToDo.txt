@@ -24,8 +24,7 @@ LayerStyle:
 
 // icons info and settings
 // settings action icons
-
-TODO: Bug: BurgerMenu
+// Bug: BurgerMenu selected
 
 
 -----Filter-----
@@ -45,7 +44,9 @@ TODO: Bug: BurgerMenu
 -> Zeichnen / Schreiben Textboxinhalte & Blauer Button
 -> Liste Liste & Details (zuerst deaktivert, so lassen?)
 -> Auswahl speichern URL in Box
--> Zeitreihe Titel nicht konfiguriert) -> siehe einzelne Tools
+-> Zeitreihe Titel nicht konfiguriert) 
+
+         -> siehe einzelne Tools unten
 
 
 -----Kontakt-----
@@ -56,14 +57,14 @@ TODO: Bug: BurgerMenu
 
 ******* Backbone-Tools (modules/tools):
 
--> parcelSearch
+// -> parcelSearch / Flurstücksuche
 -> styeWMS
 -> compareFeatures
 -> featureLister
 -> extendedFilter
 -> filter
 -> layerSlider
--> print
+// -> print / Drucken
 -> shadow
 -> wfst
 
@@ -74,14 +75,15 @@ TODO: Bug: BurgerMenu
 -> gfi, diverse, Wie kann man das Table-layout testen
 -> SearchByCoord.vue
 -> ScaleSwitcher.vue
--> AddWMS.vue
+// -> AddWMS.vue / WMS hinzufügen
 -> Draw.vue
 -> FileImport.vue
 -> SelectFeature.vue
--> Contact.vue
+// -> Contact.vue / Kontakt
 -> BufferAnalysis.vue
 -> styleVT.vue
--> SupplyCoord.vue
+// -> SupplyCoord.vue / Koordinaten abfragen
+// -> Measure.vue / Strecke/Fläche messen
 
 ******* Vue, diverse
 
