@@ -444,5 +444,21 @@ describe("src/utils/stateModifier.js", () => {
                 expect(state.urlParams.uiStyle).to.be.equals(valueAsString);
             });
         });
+        describe("UrlParam Map/zoomToExtent", () => {
+            it("test param Map/zoomToExtent", async () => {
+                let key = "Map/zoomToExtent";
+                const state = {
+                        urlParams: {}
+                    },
+                    valueAsString = "510000,5850000,625000,6000000";
+
+                await setValueToState(state, key, valueAsString);
+                expect(state.urlParams["Map/zoomToExtent"]).to.be.equals(valueAsString);
+
+                key = "zoomToExtent";
+                await setValueToState(state, key, valueAsString);
+                expect(state.urlParams["Map/zoomToExtent"]).to.be.equals(valueAsString);
+            });
+        });
     });
 });

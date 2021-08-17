@@ -42,6 +42,13 @@ export async function translate (urlParamsKey, urlParamsValue) {
 
             return {key: key, value: value};
         }
+        case "zoomtoextent":
+        case "map/zoomtoextent": {
+            const key = "Map/zoomToExtent",
+                value = convert(urlParamsValue);
+
+            return {key: key, value: value};
+        }
         case "map":
         case "mapmode":
         case "map/mapmode": {

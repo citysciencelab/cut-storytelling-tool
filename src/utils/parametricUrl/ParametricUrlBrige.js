@@ -65,6 +65,9 @@ export function doSpecialBackboneHandling (state, key, value) {
     else if (key === "Map/layerIds") {
         createLayerParams(state, value);
     }
+    else if (key === "Map/zoomToExtent") {
+        Radio.trigger("Map", "zoomToExtent", convert(store.state.urlParams?.["Map/zoomToExtent"]), {duration: 0}, store.state.urlParams?.projection);
+    }
     else if (key === "style") {
         const resultUpperCase = value.toUpperCase();
 

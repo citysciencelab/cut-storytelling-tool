@@ -32,7 +32,7 @@ function convertStringToArray (string) {
 
         if (index > -1) {
             return string.split(",").map(val => {
-                const parsed = parseInt(val, 10),
+                const parsed = parseFloat(val, 10),
                     isEmptyString = typeof val === "string" && val.trim() === "";
 
                 if (isNaN(parsed) && !isEmptyString) {
