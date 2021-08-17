@@ -79,6 +79,13 @@ export async function translate (urlParamsKey, urlParamsValue) {
 
             return {key: key, value: value};
         }
+        case "mdid":
+        case "map/mdid": {
+            const key = "Map/mdId",
+                value = convert(urlParamsValue);
+
+            return {key: key, value: value};
+        }
         case "featureid":
         case "zoomtofeatureid":
         case "map/zoomtofeatureid": {

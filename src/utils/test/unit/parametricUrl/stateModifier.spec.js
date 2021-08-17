@@ -480,5 +480,21 @@ describe("src/utils/stateModifier.js", () => {
                 expect(state.urlParams["Map/zoomToGeometry"]).to.be.equals(valueAsString);
             });
         });
+        describe("UrlParam Map/mdid", () => {
+            it("test param Map/mdid", async () => {
+                let key = "Map/mdid";
+                const state = {
+                        urlParams: {}
+                    },
+                    valueAsString = "F35EAC11-C236-429F-B1BF-751C0C18E8B7";
+
+                await setValueToState(state, key, valueAsString);
+                expect(state.urlParams["Map/mdId"]).to.be.equals(valueAsString);
+
+                key = "mdId";
+                await setValueToState(state, key, valueAsString);
+                expect(state.urlParams["Map/mdId"]).to.be.equals(valueAsString);
+            });
+        });
     });
 });

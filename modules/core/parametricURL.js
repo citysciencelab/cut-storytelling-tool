@@ -52,9 +52,9 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "getResult": function () {
                 return this.get("result");
             },
-            "getLayerParams": function () {
-                return this.get("layerParams");
-            },
+            // "getLayerParams": function () {
+            //     return this.get("layerParams");
+            // },
             "getInitString": function () {
                 return this.get("initString");
             },
@@ -73,7 +73,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             // "getZoomToExtent": function () {
             //     return this.get("zoomToExtent");
             // },
-            "getStyle": this.getStyle,
+            // "getStyle": this.getStyle,
             "getFilter": function () {
                 return this.get("filter");
             },
@@ -172,7 +172,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             // "ISINITOPEN": this.parseIsInitOpen.bind(this),
             // "LAYERIDS": this.createLayerParams.bind(this),
             // "MAP": this.adjustStartingMap3DParameter.bind(this),
-            "MDID": this.parseMDID.bind(this),
+            // "MDID": this.parseMDID.bind(this),
             // "PROJECTION": this.parseProjection.bind(this),
             "QUERY": this.parseQuery.bind(this)
             // "STARTUPMODUL": this.parseIsInitOpen.bind(this), // @deprecated in version 3.0.0
@@ -340,10 +340,14 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @fires Core.ConfigLoader#RadioRequestParserGetItemsByMetaID
      * @returns {void}
      */
-    createLayerParamsUsingMetaId: function (metaIds) {
-        const layers = [],
+    createLayerParamsUsingMetaId: function (result) {
+        const metaIds = result.split(","),
+            layers = [],
             layerParams = [],
             baseMaps = Radio.request("Parser", "getItemsByAttributes", {isBaseLayer: true});
+
+        Config.tree.metaIdsToSelected = values;
+        Config.view.zoomLevel = 0;
 
         layers.push(baseMaps[baseMaps.length - 1]);
 

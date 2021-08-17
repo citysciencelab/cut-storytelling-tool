@@ -21,7 +21,6 @@ export function handleUrlParamsBeforeVueMount () {
         }
     });
 }
-
 /**
  * Triggers at backbone Radio channel "ParametricURL": "ready".
  * @returns {void}
@@ -29,7 +28,6 @@ export function handleUrlParamsBeforeVueMount () {
 export function triggerParametricURLReady () {
     Radio.channel("ParametricURL").trigger("ready");
 }
-
 /**
  * Returns key and value containing previous content to handle in backbone model.
  * @param {String} urlParamsKey key of url params
@@ -50,7 +48,6 @@ export function translateToBackbone (urlParamsKey, urlParamsValue) {
     }
     return {key: urlParamsKey, value: urlParamsValue};
 }
-
 /**
  * Depending on given key and value special handling in backbone world is triggered.
  * @param {String} state vuex state
@@ -63,7 +60,14 @@ export function doSpecialBackboneHandling (state, key, value) {
         Radio.trigger("Map", "mapChangeTo3d");
     }
     else if (key === "Map/layerIds") {
-        createLayerParams(state, value);
+        const layerParams = parseLayerParams(state, value);
+
+        setLayersVisible(layerParams);
+    }
+    else if (key === "Map/mdId") {
+        const layers = getLayersUsingMetaId(value);
+
+        setLayersVisible(layers);
     }
     else if (key === "Map/zoomToExtent") {
         Radio.trigger("Map", "zoomToExtent", convert(store.state.urlParams?.["Map/zoomToExtent"]), {duration: 0}, store.state.urlParams?.projection);
@@ -83,7 +87,6 @@ export function doSpecialBackboneHandling (state, key, value) {
         }
     }
 }
-
 /**
      * Parses a Gemometry to be zoomed on.
      * Only configured geometries are zoomed in.
@@ -111,17 +114,41 @@ function parseZoomToGeometry (urlParamValue) {
     return gemometryToZoom;
 }
 
-
 /**
-     * Creates or adds the models of the layerIds and sets them visible in map depending on url param visibility and transpyrency.
-     * @param {Object} state vuex state
-     * @param {string} layerIdString the layerIds.
-     * @returns {void}
+     * Returns the ids of the layer with the given metadataid and the last configured basemap.
+     * @param {String} values comma separated list of meta-ids
+     * @returns {Object} containing layerIdList, visibilityList and transparencyList
      */
-function createLayerParams (state, layerIdString) {
-    const wrongIdsPositions = [],
-        visibilityListBooleans = state.urlParams?.visibility ? state.urlParams.visibility : null,
-        transparencyListNumbers = state.urlParams?.transparency ? state.urlParams.transparency : null;
+function getLayersUsingMetaId (values) {
+    const metaIds = values.split(","),
+        layersIds = [],
+        baseMaps = Radio.request("Parser", "getItemsByAttributes", {isBaseLayer: true});
+
+    if (Config.tree) {
+        Config.tree.metaIdsToSelected = values;
+    }
+    if (Config.view) {
+        Config.view.zoomLevel = 0;
+    }
+    layersIds.push(baseMaps[baseMaps.length - 1].id);
+    metaIds.forEach(metaId => {
+        const metaIDlayers = Radio.request("Parser", "getItemsByMetaID", metaId);
+
+        metaIDlayers.forEach(layer => {
+            layersIds.push(layer.id);
+        });
+    });
+    return {layerIdList: layersIds, visibilityList: layersIds.map(() => true), transparencyList: layersIds.map(() => 0)};
+}
+/**
+     * Parses the string with layer ids, parses visibility and transparency if available in state.urlParams.
+     * @param {Object} state vuex state
+     * @param {String} layerIdString comma separated ids
+     * @returns {Object} containing layerIdList, visibilityList and transparencyList
+     */
+function parseLayerParams (state, layerIdString) {
+    const visibilityListBooleans = state.urlParams?.visibility ? convert(state.urlParams.visibility) : [],
+        transparencyListNumbers = state.urlParams?.transparency ? convert(state.urlParams.transparency) : [];
     let layerIdList = convert(layerIdString),
         visibilityList = visibilityListBooleans,
         transparencyList = transparencyListNumbers;
@@ -132,42 +159,47 @@ function createLayerParams (state, layerIdString) {
     if (typeof visibilityListBooleans === "boolean") {
         visibilityList = [visibilityListBooleans];
     }
+    else if (visibilityListBooleans === null) {
+        visibilityList = layerIdList.map(() => true);
+    }
     if (typeof transparencyListNumbers === "string") {
         transparencyList = [transparencyListNumbers];
     }
-
-    // Read out visibility. If missing true
-    if (visibilityListBooleans === null) {
-        visibilityList = layerIdList.map(() => true);
-    }
-
-    // Read out transparency value. If missing null.
-    if (transparencyListNumbers === null) {
+    else if (transparencyListNumbers === null) {
         transparencyList = layerIdList.map(() => 0);
     }
-
     if (layerIdList.length !== visibilityList.length || visibilityList.length !== transparencyList.length) {
-        store.dispatch("Alerting/addSingleAlert", i18next.t("modules.core.parametricURL.alertWrongAmountVisibility"), {root: true, category: "Warning"});
-        return;
+        // timeout may be removed, if everything is migrated to vue. Now it is needed for portal/basic.
+        setTimeout(() => {
+            store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.core.parametricURL.alertWrongAmountVisibility"), {root: true, category: "Warning"});
+        }, 500);
+        return null;
     }
+    return {layerIdList: layerIdList, visibilityList: visibilityList, transparencyList: transparencyList};
+}
+/**
+     * Creates or adds the models of the layerIds and sets them visible in map depending on url param visibility and transparency.
+     * @param {string} layerParams the layerIdList, visibilityList and transparencyList
+     * @returns {void}
+     */
+function setLayersVisible (layerParams) {
+    const wrongIdsPositions = [];
 
-    layerIdList.forEach((val, index) => {
-        const id = String(val),
-            rawLayer = getLayerWhere({id: id}),
-            treeType = Radio.request("Parser", "getTreeType"),
-            optionsOfLayer = {
-                id: id,
-                visibility: visibilityList[index]
-            },
-            layerFromParser = Radio.request("Parser", "getItemByAttributes", {id: id});
-        let layerToPush,
-            layer = Radio.request("ModelList", "getModelByAttributes", {id: id});
+    if (layerParams) {
+        layerParams.layerIdList.forEach((val, index) => {
+            const id = String(val),
+                rawLayer = getLayerWhere({id: id}),
+                optionsOfLayer = {
+                    id: id,
+                    visibility: layerParams.visibilityList[index]
+                },
+                layerFromParser = Radio.request("Parser", "getItemByAttributes", {id: id});
+            let layerToPush,
+                layer = Radio.request("ModelList", "getModelByAttributes", {id: id});
 
-        if (transparencyList[index] !== null) {
-            optionsOfLayer.transparency = transparencyList[index];
-        }
-
-        if (treeType === "light") {
+            if (layerParams.transparencyList[index] !== null) {
+                optionsOfLayer.transparency = layerParams.transparencyList[index];
+            }
             if (layerFromParser === undefined && rawLayer !== null) {
                 layerToPush = Object.assign({
                     isBaseLayer: false,
@@ -183,23 +215,28 @@ function createLayerParams (state, layerIdString) {
                 Radio.trigger("ModelList", "setModelAttributesById", id, optionsOfLayer);
                 layer = Radio.request("ModelList", "getModelByAttributes", {id: id});
                 layer.setIsSelected(optionsOfLayer.visibility);
-                Radio.trigger("ModelList", "refreshLightTree");
+                Radio.trigger("Util", "refreshTree");
             }
             else if (layer) {
                 Radio.trigger("ModelList", "setModelAttributesById", id, optionsOfLayer);
                 layer.setIsSelected(optionsOfLayer.visibility);
-                Radio.trigger("ModelList", "refreshLightTree");
+                Radio.trigger("Util", "refreshTree");
 
+            }
+            else if (layerFromParser) {
+                Radio.trigger("ModelList", "addModelsByAttributes", {id: optionsOfLayer.id});
+                layer = Radio.request("ModelList", "getModelByAttributes", {id: optionsOfLayer.id});
+                layer.setIsSelected(optionsOfLayer.visibility);
+                layer.setVisible(optionsOfLayer.visibility);
+                Radio.trigger("Util", "refreshTree");
             }
             else if (layerFromParser === undefined) {
                 wrongIdsPositions.push(index + 1);
             }
-        }
-    });
-
+        });
+    }
     alertWrongLayerIds(wrongIdsPositions);
 }
-
 /**
      * Build alert for wrong layerids
      * @param {string[]} wrongIdsPositions - The positions from wrong layerids.
@@ -212,6 +249,9 @@ function alertWrongLayerIds (wrongIdsPositions) {
         wrongIdsPositions.forEach(position => {
             wrongIdsPositionsConcat = wrongIdsPositionsConcat + ", " + String(position);
         });
-        store.dispatch("Alerting/addSingleAlert", i18next.t("modules.core.parametricURL.alertWrongLayerIds", {wrongIdsPositionsConcat: wrongIdsPositionsConcat}), {root: true});
+        // timeout may be removed, if everything is migrated to vue. Now it is needed for portal/basic.
+        setTimeout(() => {
+            store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.core.parametricURL.alertWrongLayerIds", {wrongIdsPositionsConcat: wrongIdsPositionsConcat}), {root: true});
+        }, 500);
     }
 }
