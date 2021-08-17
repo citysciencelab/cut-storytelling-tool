@@ -276,7 +276,6 @@ export default {
     @font_family: "MasterPortalFont", sans-serif;
     @background_color_1: rgb(255, 255, 255);
     @background_color_2: #e10019;
-    @background_color_3: #f2f2f2;
     @background_color_4: #646262;
 
     #vue-tool-content-body { display:block; }
@@ -400,7 +399,7 @@ export default {
         .win-body-vue {
             border-bottom-left-radius: 12px;
             border-bottom-right-radius: 12px;
-            background-color: @background_color_3;
+            background-color: @secondary_table_style;
             * { border-radius: 12px; }
         }
     }
