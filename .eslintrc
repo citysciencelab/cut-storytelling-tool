@@ -43,8 +43,18 @@
                 }
             }
         ],
+        /*
+         * rule turned off since it's e.g. deprecated here:
+         * https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/398
+         * It does not work too well for the Masterportal where changes in
+         * e.g. select elements are supposed to immediately trigger changes
+         * in the map interactions
+         */
+        "vuejs-accessibility/no-onchange": "off",
         // vue plugin Base Rules
-        "vue/comment-directive": ["off"],
+        "vue/comment-directive": ["error", {
+            "reportUnusedDisableDirectives": false
+        }],
         "vue/jsx-uses-vars": ["off"],
         // vue plugin Strongly Recommended Rules
         "vue/attribute-hyphenation": ["error"],

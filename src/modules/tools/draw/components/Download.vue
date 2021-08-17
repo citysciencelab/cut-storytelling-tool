@@ -42,7 +42,7 @@ export default {
                     <select
                         id="tool-draw-download-format"
                         class="form-control"
-                        @blur="setDownloadSelectedFormat($event.target.value)"
+                        @change="setDownloadSelectedFormat($event.target.value)"
                     >
                         <option value="none">
                             {{ $t("common:modules.tools.draw.download.pleaseChoose") }}
