@@ -175,6 +175,7 @@ export default {
                         </p>
                     </div>
 
+                    <!-- eslint-disable-next-line vuejs-accessibility/mouse-events-have-key-events -->
                     <div
                         class="drop-area"
                         @drop.prevent="onDrop"
@@ -184,6 +185,12 @@ export default {
                         @mouseenter="onDZMouseenter"
                         @mouseleave="onDZMouseleave"
                     />
+                    <!--
+                        The previous element does not provide a @focusin or @focus reaction as would
+                        be considered correct by the linting rule set. Since it's a drop-area for file
+                        dropping by mouse, the concept does not apply. Keyboard users may use the
+                        matching input fields.
+                    -->
                 </div>
 
                 <div>
