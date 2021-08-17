@@ -1,5 +1,5 @@
 <script>
-import Modal from "../../../../share-components/modals/Modal.vue";
+import Modal from "../../../../share-components/modals/components/Modal.vue";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import * as constants from "../store/constantsCompareFeatures";
 import ComparisonList from "./ComparisonList.vue";
