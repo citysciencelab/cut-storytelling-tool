@@ -794,6 +794,8 @@ export default {
 
 <style lang="less" scoped>
     @import "~variables";
+    @import "~/css/mixins.less";
+
     @color_1: #000000;
     @color_2: rgb(255, 255, 255);
     @font_family_2: "MasterPortalFont", sans-serif;
@@ -828,17 +830,13 @@ export default {
             .close-legend {
                 cursor: pointer;
                 &:focus {
-                    outline: 3px solid @accent_focus;
-                    outline: 3px auto  Highlight;
-                    outline: 3px auto -webkit-focus-ring-color;
+                    .primary_action_focus();
                 }
             };
             .toggle-collapse-all {
                 cursor: pointer;
                 &:focus {
-                    outline: 3px solid @accent_focus;
-                    outline: 3px auto  Highlight;
-                    outline: 3px auto -webkit-focus-ring-color;
+                    .primary_action_focus();
                 }
             }
         }
@@ -880,18 +878,15 @@ export default {
             .close-legend {
                 cursor: pointer;
                 &:focus {
-                    outline: 3px solid @accent_focus;
-                    outline: 3px auto  Highlight;
-                    outline: 3px auto -webkit-focus-ring-color;
+                    .primary_action_focus();
                 }
             };
             .toggle-collapse-all {
                 cursor: pointer;
                 &:focus {
-                    outline: 3px solid @accent_focus;
-                    outline: 3px auto  Highlight;
-                    outline: 3px auto -webkit-focus-ring-color;
-                }            }
+                    .primary_action_focus();
+                }
+            }
         }
         .legend-content {
             border-bottom-left-radius: 12px;

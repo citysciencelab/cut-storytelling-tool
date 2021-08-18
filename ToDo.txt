@@ -4,102 +4,96 @@ Kontrastanpassungen ToDo:
 
 ******* Backbone-Tools (diverse):
 
--> Header/Navbar
-
------Themen-----
-
+**** Menu
 // -> Inaktive Elemente z.B. HVV, Eignungsflächen, Bohrdaten 
-(-> Err. Arbeitsplätze deegree Tropfenicon -> Text im Fenster) -> Tool: styleWMS
 // -> Einstellungen/Zahnrad der Komponenten: % Anzeige und "Layer entfernen"
--> Infobutton -> Metadaten "Publikationen / Erstellung:, Letzte Änderung" ????
-(-> Infobutton -> "Legende") -> siehe Tool Legende
+-> Infobutton -> Metadaten "Publikationen / Erstellung:, Letzte Änderung" ????  TODO
 
-Treemenu:
 // -> Ausgewählte Layer
 // -> Hover Blau auf Schwarz 
+Table Style:
+    add to config.js: uiStyle: "table",
+   // -> icons info and settings
+   // -> settings action icons
+   // -> Bug: BurgerMenu selected
 
-LayerStyle:
-    add to config.js: 
-      uiStyle: "table",
-
-// icons info and settings
-// settings action icons
-// Bug: BurgerMenu selected
-
-
------Filter-----
+-----Filter----- TODO -> ist wahrscheinlich nun schon erledigt?
 
 -> Hintergrundfarbe bei ausgewählter Schulart (In MPREFACTOR-386 angegangen, warte auf Merge)
 -> Filteroptionen (Bezirk, Stadtteil, etc) (In MPREFACTOR-386 angegangen, warte auf Merge)
 -> "Anzahl Schüler" Pfeile
 -> Schwerpunktschule Aus
 
-
------Werkzeuge-----
-
-(-> Flurstücksuche "Nummer eingeben"
--> Karte Drucken Check-/Textboxinhalte
--> Koordinatensuche Textboxinhalte
--> Datei-Import Text & "Datei hier ablegen"
--> Zeichnen / Schreiben Textboxinhalte & Blauer Button
--> Liste Liste & Details (zuerst deaktivert, so lassen?)
--> Auswahl speichern URL in Box
--> Zeitreihe Titel nicht konfiguriert) 
-
-         -> siehe einzelne Tools unten
-
-
------Kontakt-----
-
-->Textbox Placeholder
-
-
-
-******* Backbone-Tools (modules/tools):
+************************* Backbone-Tools
 
 // -> parcelSearch / Flurstücksuche
--> styeWMS
--> compareFeatures
--> featureLister
--> extendedFilter
--> filter
--> layerSlider
-// -> print / Drucken
+// -> styeWMS
+// -> featureLister / Features auswählen
+// -> filter                     #### selected elements button
+// -> extendedFilter / Erweiterter Filter
+// -> layerSlider / Zeitreihe
+// -> print / Drucken            #### primary butten
 -> shadow
 -> wfst
 
+**** sonstiges Backbone
 
-******* Vue-Tools (src/tools):
+-> searchBar
+-> weitere?
 
--> MapRegion.vue
--> gfi, diverse, Wie kann man das Table-layout testen
--> SearchByCoord.vue
--> ScaleSwitcher.vue
+
+**** Vue-Tools (src/tools):
+
 // -> AddWMS.vue / WMS hinzufügen
--> Draw.vue
--> FileImport.vue
+-> bufferAnalysis
+// -> compareFeatures / Vergleichsliste
+// -> Contact.vue / Kontakt      #### primary butten
+-> coordToolklit
+// -> Draw.vue
+// -> FileImport.vue
+-> gfi, diverse, 
+   -> Attached
+   -> Detached
+   -> Table
+   -> Mobile
+// -> Measure.vue / Strecke/Fläche messen
+-> saveSelection
+-> ScaleSwitcher.vue
+-> SearchByCoord.vue
 -> SelectFeature.vue
-// -> Contact.vue / Kontakt
--> BufferAnalysis.vue
 -> styleVT.vue
 // -> SupplyCoord.vue / Koordinaten abfragen
-// -> Measure.vue / Strecke/Fläche messen
 
-******* Vue, diverse
+**** Vue, diverse
 
 -> Legend.vue
 -> LayerInformation.vue
    - Blaue Textfarbe ausreichend?
+-> weitere?
 
+***************************** AddOns
 
-***** AddOnTools
+**** gfiThemes
+  
+  -> activeCityMaps
+  -> bildungsatlas
+  -> continuousCountingBike
+  -> dataTable
+  -> dipas
+  -> flaecheninfo
+  -> reisezeiten
+  // -> schulinfo
+  -> solaratlas
+  -> trafficCount
+  -> trinkwasser
+  -> verkehrsstaerken
 
 **** Vue-addons
 
 -> tacticalMark
 -> commuterFlows
 -> schoolrouteplanning
--> populationrequest
+// -> PopulationRequest.vue / Einwohneranzahl abfragen  #### toggle-button tastaturbedienbar gestaltet
 -> geoAnalyze
 -> fileImportAddon
 -> sdpDownload
