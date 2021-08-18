@@ -19,7 +19,7 @@ export default {
     },
     mounted () {
         this.element = this.$el;
-        this.childNode = this.$el.childNodes[0];
+        this.childNode = this.$el.childNodes[0].childNodes[0];
         this.getLegendConfig();
 
         if (this.uiStyle === "TABLE") {
