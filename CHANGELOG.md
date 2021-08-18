@@ -18,6 +18,7 @@
 - New Searchbar-Module for Komoot Photon.
 - A flag "beautifyKeys" for gfi params to enable/disable the beautifyKeys function in default gfi theme.
 - A flag "showObjectKeys" for gfi params to display attribute keys and values of objects in default gfi theme.
+- Added a new type for filter attributeWhitelist "date", which uses a slider for a date range. Use "format" to specify date format and "attrNameUntil" for a different attribute to be the end date of your range.
 
 ### Changed
 - Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.

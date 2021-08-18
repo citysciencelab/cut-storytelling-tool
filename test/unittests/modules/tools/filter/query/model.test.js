@@ -63,4 +63,35 @@ describe("modules/tools/filter/query/model", function () {
         });
     });
 
+    describe("getTimestampValues", () => {
+        it("should return an empty array if anything but an array is given", function () {
+            expect(model.getTimestampValues(undefined)).to.be.an("array").and.to.be.empty;
+            expect(model.getTimestampValues(null)).to.be.an("array").and.to.be.empty;
+            expect(model.getTimestampValues("string")).to.be.an("array").and.to.be.empty;
+            expect(model.getTimestampValues(1234)).to.be.an("array").and.to.be.empty;
+            expect(model.getTimestampValues(true)).to.be.an("array").and.to.be.empty;
+            expect(model.getTimestampValues(false)).to.be.an("array").and.to.be.empty;
+            expect(model.getTimestampValues({})).to.be.an("array").and.to.be.empty;
+        });
+        it("should return an empty array if anything but a string is given as format", function () {
+            expect(model.getTimestampValues([], undefined)).to.be.an("array").and.to.be.empty;
+            expect(model.getTimestampValues([], null)).to.be.an("array").and.to.be.empty;
+            expect(model.getTimestampValues([], 1234)).to.be.an("array").and.to.be.empty;
+            expect(model.getTimestampValues([], true)).to.be.an("array").and.to.be.empty;
+            expect(model.getTimestampValues([], false)).to.be.an("array").and.to.be.empty;
+            expect(model.getTimestampValues([], {})).to.be.an("array").and.to.be.empty;
+            expect(model.getTimestampValues([], [])).to.be.an("array").and.to.be.empty;
+        });
+        it("should return a sorted array of milliseconds", function () {
+            expect(model.getTimestampValues([
+                "01.06.2021",
+                "01.04.2021",
+                "01.05.2021"
+            ], "DD.MM.YYYY")).to.deep.equal([
+                new Date("2021-04-01T00:00:00").getTime(),
+                new Date("2021-05-01T00:00:00").getTime(),
+                new Date("2021-06-01T00:00:00").getTime()
+            ]);
+        });
+    });
 });

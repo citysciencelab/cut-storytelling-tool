@@ -22,16 +22,19 @@ const ValueModel = BaseModel.extend(/** @lends ValueModel.prototype */{
 
     /**
      * Returns DisplayName
-     * @returns {string} displayName displayName with value
+     * @returns {String} displayName displayName with value
      */
     getDisplayString: function () {
+        if (this.get("displayValue")) {
+            return this.get("displayName") + " " + this.get("displayValue");
+        }
         return this.get("displayName") + " " + this.get("value");
     },
 
     /**
      * Setter function for isSelected. Called by filter module when filter is removed.
-     * @param {integer} value  isSelected
-     * @param {boolean} silent isSilent
+     * @param {Integer} value  isSelected
+     * @param {Boolean} silent isSilent
      * @returns {void}
      */
     setIsSelected: function (value, silent) {
@@ -44,8 +47,8 @@ const ValueModel = BaseModel.extend(/** @lends ValueModel.prototype */{
 
     /**
      * Setter function for value. Sets also always isSelected.
-     * @param {integer} value  initialValue
-     * @param {boolean} silent isSilent
+     * @param {Integer} value  initialValue
+     * @param {Boolean} silent isSilent
      * @returns {void}
      */
     setValue: function (value, silent) {
@@ -61,7 +64,7 @@ const ValueModel = BaseModel.extend(/** @lends ValueModel.prototype */{
 
     /**
      * Setter function for initialValue
-     * @param {integer} value initialValue
+     * @param {Integer} value initialValue
      * @returns {void}
      */
     setInitValue: function (value) {
