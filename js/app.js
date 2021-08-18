@@ -32,7 +32,7 @@ import StyleWMSView from "../modules/tools/styleWMS/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
 import {initiateVueI18Next} from "./vueI18Next";
-import {handleUrlParamsBeforeVueMount} from "../src/utils/parametricUrl/ParametricUrlBrige";
+import {handleUrlParamsBeforeVueMount, readUrlParamStyle} from "../src/utils/parametricUrl/ParametricUrlBrige";
 
 /**
  * WFSFeatureFilterView
@@ -107,7 +107,6 @@ async function loadApp () {
     Vue.config.productionTip = false;
 
     store.commit("setConfigJs", Config);
-    handleUrlParamsBeforeVueMount();
 
     app = new Vue({
         el: "#masterportal-root",
@@ -122,6 +121,7 @@ async function loadApp () {
     new Autostarter();
     new Util(utilConfig);
     // must be done here, else it is done too late
+    readUrlParamStyle();
     if (store.state.urlParams?.uiStyle) {
         Radio.trigger("Util", "setUiStyle", store.state.urlParams?.uiStyle);
     }
@@ -129,7 +129,7 @@ async function loadApp () {
     // Pass null to create an empty Collection with options
     new RestReaderList(null, {url: Config.restConf});
     new Preparser(null, {url: Config.portalConf});
-
+    handleUrlParamsBeforeVueMount();
 
     new StyleList();
     if (!Object.prototype.hasOwnProperty.call(Config, "allowParametricURL") || Config.allowParametricURL === true) {

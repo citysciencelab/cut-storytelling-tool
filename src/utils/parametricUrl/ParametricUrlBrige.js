@@ -1,5 +1,5 @@
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
-import convert from "./converter";
+import {convert, parseQuery} from "./converter";
 import store from "../../app-store";
 
 const toolsNotInState = ["compareFeatures", "parcelSearch", "print", "featureLister", "layerSlider", "filter", "shadow", "virtualcity", "wfst", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
@@ -8,7 +8,7 @@ const toolsNotInState = ["compareFeatures", "parcelSearch", "print", "featureLis
  * Sets url params to state, which are used before mount of vue-app.
  * @returns {void}
  */
-export function handleUrlParamsBeforeVueMount () {
+export function readUrlParamStyle () {
     const params = new URLSearchParams(window.location.search);
 
     params.forEach(function (value, key) {
@@ -22,11 +22,41 @@ export function handleUrlParamsBeforeVueMount () {
     });
 }
 /**
+ * Sets url params to state, which are used before mount of vue-app.
+ * @returns {void}
+ */
+export function handleUrlParamsBeforeVueMount () {
+    const params = new URLSearchParams(window.location.search);
+
+    params.forEach(function (value, key) {
+        if (key.toLowerCase() === "query" || key.toLowerCase() === "search/query") {
+            store.state.urlParams["Search/query"] = parseQuery(value);
+        }
+        else if (key.toLocaleLowerCase() === "map/layerids" || key.toLocaleLowerCase() === "layerids") {
+            const visibility = params.has("visibility") ? params.get("visibility") : "",
+                transparency = params.has("transparency") ? params.get("transparency") : "";
+
+            store.state.urlParams["Map/layerIds"] = parseLayerParams(value, visibility, transparency);
+        }
+    });
+}
+/**
  * Triggers at backbone Radio channel "ParametricURL": "ready".
  * @returns {void}
  */
 export function triggerParametricURLReady () {
-    Radio.channel("ParametricURL").trigger("ready");
+    const channel = Radio.channel("ParametricURL");
+
+    /**
+     * This is only for addon cosi, if the request there is adapted, this may be deleted (18.08.2021)
+     */
+    channel.reply({
+        "getFilter": function () {
+            return store.state.urlParam?.filter;
+        }
+    }, this);
+
+    channel.trigger("ready");
 }
 /**
  * Returns key and value containing previous content to handle in backbone model.
@@ -35,7 +65,6 @@ export function triggerParametricURLReady () {
  * @returns {Object} containg key and value containing previous content to handle in backbone model
  */
 export function translateToBackbone (urlParamsKey, urlParamsValue) {
-    // console.log("translateToBackbone urlParamsKey:", urlParamsKey);
     const paramsKey = urlParamsKey.toLowerCase().trim();
 
     if (paramsKey.startsWith("tools") || paramsKey.indexOf("/active") > -1) {
@@ -50,19 +79,13 @@ export function translateToBackbone (urlParamsKey, urlParamsValue) {
 }
 /**
  * Depending on given key and value special handling in backbone world is triggered.
- * @param {String} state vuex state
  * @param {String} key key of url params
  * @param {String} value  value of url params
  * @returns {void}
  */
-export function doSpecialBackboneHandling (state, key, value) {
+export function doSpecialBackboneHandling (key, value) {
     if (key === "Map/mapMode") {
         Radio.trigger("Map", "mapChangeTo3d");
-    }
-    else if (key === "Map/layerIds") {
-        const layerParams = parseLayerParams(state, value);
-
-        setLayersVisible(layerParams);
     }
     else if (key === "Map/mdId") {
         const layers = getLayersUsingMetaId(value);
@@ -142,13 +165,19 @@ function getLayersUsingMetaId (values) {
 }
 /**
      * Parses the string with layer ids, parses visibility and transparency if available in state.urlParams.
-     * @param {Object} state vuex state
+     * Amount of layer ids and visibilities and transparencies must be the same.
      * @param {String} layerIdString comma separated ids
+     * @param {String} visibilityString comma separated booleans for visibility
+     * @param {String} transparencyString comma separated numbers for transparency
      * @returns {Object} containing layerIdList, visibilityList and transparencyList
      */
-function parseLayerParams (state, layerIdString) {
-    const visibilityListBooleans = state.urlParams?.visibility ? convert(state.urlParams.visibility) : [],
-        transparencyListNumbers = state.urlParams?.transparency ? convert(state.urlParams.transparency) : [];
+function parseLayerParams (layerIdString, visibilityString = "", transparencyString = "") {
+    const visibilityListBooleans = store.state.urlParams?.visibility ? convert(store.state.urlParams.visibility) : convert(visibilityString),
+        transparencyListNumbers = store.state.urlParams?.transparency ? convert(store.state.urlParams.transparency) : convert(transparencyString),
+        layerParams = [],
+        wrongIdsPositions = [],
+        treeType = Radio.request("Parser", "getTreeType");
+
     let layerIdList = convert(layerIdString),
         visibilityList = visibilityListBooleans,
         transparencyList = transparencyListNumbers;
@@ -159,13 +188,13 @@ function parseLayerParams (state, layerIdString) {
     if (typeof visibilityListBooleans === "boolean") {
         visibilityList = [visibilityListBooleans];
     }
-    else if (visibilityListBooleans === null) {
+    else if (visibilityListBooleans === "") {
         visibilityList = layerIdList.map(() => true);
     }
-    if (typeof transparencyListNumbers === "string") {
+    if (typeof transparencyListNumbers === "string" && transparencyListNumbers !== "") {
         transparencyList = [transparencyListNumbers];
     }
-    else if (transparencyListNumbers === null) {
+    else if (transparencyListNumbers === "") {
         transparencyList = layerIdList.map(() => 0);
     }
     if (layerIdList.length !== visibilityList.length || visibilityList.length !== transparencyList.length) {
@@ -175,7 +204,36 @@ function parseLayerParams (state, layerIdString) {
         }, 500);
         return null;
     }
-    return {layerIdList: layerIdList, visibilityList: visibilityList, transparencyList: transparencyList};
+    layerIdList.forEach((val, index) => {
+        const layerConfigured = Radio.request("Parser", "getItemByAttributes", {id: String(val)}),
+            layerExisting = getLayerWhere({id: String(val)}),
+            optionsOfLayer = {
+                id: String(val),
+                visibility: visibilityList[index]
+            };
+
+        let layerToPush;
+
+        if (transparencyList[index] !== null) {
+            optionsOfLayer.transparency = transparencyList[index];
+        }
+        layerParams.push(optionsOfLayer);
+
+        if (layerConfigured === undefined && layerExisting !== null && treeType === "light") {
+            layerToPush = Object.assign({
+                isBaseLayer: false,
+                isVisibleInTree: "true",
+                parentId: "tree",
+                type: "layer"
+            }, layerExisting);
+            Radio.trigger("Parser", "addItemAtTop", layerToPush);
+        }
+        else if (layerConfigured === undefined) {
+            wrongIdsPositions.push(index + 1);
+        }
+    });
+    alertWrongLayerIds(wrongIdsPositions);
+    return layerParams;
 }
 /**
      * Creates or adds the models of the layerIds and sets them visible in map depending on url param visibility and transparency.
@@ -233,6 +291,7 @@ function setLayersVisible (layerParams) {
             else if (layerFromParser === undefined) {
                 wrongIdsPositions.push(index + 1);
             }
+            Radio.request("ModelList", "initLayerIndeces");
         });
     }
     alertWrongLayerIds(wrongIdsPositions);

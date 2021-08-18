@@ -96,7 +96,6 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
         if (document.getElementById("map") !== null) {
             this.setBackgroundImage(document.getElementById("map").style.backgroundImage);
         }
-        this.setStartZoomLevel(Radio.request("ParametricURL", "getZoomLevel"));
 
         // Listener für ol.View
         this.get("view").on("change:resolution", this.changedResolutionCallback.bind(this), this);

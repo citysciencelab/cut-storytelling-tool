@@ -49,18 +49,18 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             query = "";// location.search.substr(1);
 
         channel.reply({
-            "getResult": function () {
-                return this.get("result");
-            },
+            // "getResult": function () {
+            //     return this.get("result");
+            // },
             // "getLayerParams": function () {
             //     return this.get("layerParams");
             // },
-            "getInitString": function () {
-                return this.get("initString");
-            },
-            "getProjectionFromUrl": function () {
-                return this.get("projectionFromUrl");
-            },
+            // "getInitString": function () {
+            //     return this.get("initString");
+            // },
+            // "getProjectionFromUrl": function () {
+            //     return this.get("projectionFromUrl");
+            // },
             // "getCenter": function () {
             //     return this.get("center");
             // },
@@ -74,9 +74,9 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             //     return this.get("zoomToExtent");
             // },
             // "getStyle": this.getStyle,
-            "getFilter": function () {
-                return this.get("filter");
-            },
+            // "getFilter": function () {
+            //     return this.get("filter");
+            // },
             // "getFeatureViaURL": function () {
             //     return this.get("featureViaURL");
             // },
@@ -86,12 +86,12 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             // "getZoomToFeatureIds": function () {
             //     return this.get("zoomToFeatureIds");
             // },
-            "getBrwId": function () {
-                return this.get("brwId");
-            },
-            "getBrwLayerName": function () {
-                return this.get("brwLayerName");
-            }
+            // "getBrwId": function () {
+            //     return this.get("brwId");
+            // },
+            // "getBrwLayerName": function () {
+            //     return this.get("brwLayerName");
+            // }
         }, this);
 
         channel.on({

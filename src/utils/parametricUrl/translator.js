@@ -1,4 +1,4 @@
-import convert from "./converter";
+import {convert, parseQuery} from "./converter";
 import requestConfig from "../configLoader";
 import {toMapMode} from "../../modules/map/store/enums";
 
@@ -31,6 +31,13 @@ export async function translate (urlParamsKey, urlParamsValue) {
         }
         case "style": {
             return {key: "uiStyle", value: convert(checkedValue)};
+        }
+        case "filter": {
+            return {key: "filter", value: checkedValue};
+        }
+        case "query":
+        case "search/query": {
+            return {key: "Search/query", value: parseQuery(checkedValue)};
         }
         case "center":
         case "map/center": {
@@ -130,6 +137,18 @@ export async function translate (urlParamsKey, urlParamsValue) {
 
             return {key: key, value: value};
         }
+        case "brwid": {
+            const key = "brwId",
+                value = urlParamsValue;
+
+            return {key: key, value: value};
+        }
+        case "brwlayername": {
+            const key = "brwLayerName",
+                value = urlParamsValue;
+
+            return {key: key, value: value};
+        }
         default: {
             return {key: checkedKey, value: convert(checkedValue)};
         }
@@ -143,9 +162,10 @@ export async function translate (urlParamsKey, urlParamsValue) {
  * @returns {Object} containes checked and modified key and value
  */
 function check (key, value) {
-    let checkedKey = checkForTools(key);
-    const checkedValue = checkForKmlImport(value);
+    let checkedKey = checkKeyForTools(key),
+        checkedValue = checkValueForTools(checkedKey, value);
 
+    checkedValue = checkForKmlImport(checkedValue);
     checkedKey = checkForKmlImport(checkedKey);
     return {key: checkedKey, value: checkedValue};
 
@@ -155,11 +175,23 @@ function check (key, value) {
  * @param {String} string a string
  * @returns {String} modified string
  */
-function checkForTools (string) {
+function checkKeyForTools (string) {
     if (typeof string === "string" && string.match(/tools/gi) !== null) {
         return string.replace(/tools/i, "Tools");
     }
     return string;
+}
+/**
+ * Checks value to start with 'Tools' and checks key if empty, set to true.
+ * @param {String} key key of url params
+ * @param {String} value value of url params
+ * @returns {String} modified value
+ */
+function checkValueForTools (key, value) {
+    if (key.indexOf("Tools") === 0 && value === "") {
+        return "true";
+    }
+    return value;
 }
 /**
  * Checks string matching 'kmlimport' and replaces it with 'FileImport'.

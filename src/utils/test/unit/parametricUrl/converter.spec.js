@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import convert from "../../../parametricUrl/converter";
+import {convert} from "../../../parametricUrl/converter";
 import * as crs from "masterportalAPI/src/crs";
 
 const namedProjections = [
@@ -22,11 +22,8 @@ describe("src/utils/converter.js", () => {
             expect(convert("True")).to.be.equals(true);
             expect(convert("true   ")).to.be.equals(true);
             expect(convert("  true")).to.be.equals(true);
-            expect(convert("")).to.be.equals(true);
             expect(convert(true)).to.be.equals(true);
 
-            expect(convert(null)).to.be.equals(false);
-            expect(convert(undefined)).to.be.equals(false);
             expect(convert("nix")).to.be.equals("nix");
         });
 

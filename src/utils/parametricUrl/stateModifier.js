@@ -51,7 +51,7 @@ function inspectStateForTools (vuexState, keySplitted, value) {
         if (!keySplitted.find(key=>key.toLowerCase() === "active")) {
             keySplitted.push("active");
         }
-        deepAssignIgnoreCase(vuexState, makeObject(keySplitted, value));
+        deepAssignIgnoreCase(vuexState, makeObject(keySplitted, value === "" ? true : value));
         foundInState = true;
     }
     return foundInState;
@@ -118,7 +118,7 @@ export default async function setValuesToState (state, params) {
     Object.keys(state.urlParams).forEach(key => {
         const value = state.urlParams[key];
 
-        doSpecialBackboneHandling(state, key, value);
+        doSpecialBackboneHandling(key, value);
     });
 
     callMutations(state);
@@ -152,7 +152,7 @@ export async function setValueToState (state, key, value) {
                     state.urlParams[oldParam.key] = oldParam.value;
                 }
             }
-            state.urlParams[entry.key] = value;
+            state.urlParams[entry.key] = entry.value;
             console.log("state.urlParams=", state.urlParams);
             return entry;
         }).catch(error => {

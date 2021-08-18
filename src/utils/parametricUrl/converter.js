@@ -12,8 +12,8 @@ function convertStringToBoolean (string) {
         toCheck = toCheck.toLowerCase().trim();
     }
     switch (toCheck) {
-        case "yes": case "true": case "": return true;
-        case "no": case "false": case null: case undefined: return false;
+        case "yes": case "true": return true;
+        case "no": case "false": return false;
         default: return string;
     }
 }
@@ -67,13 +67,47 @@ function findProjection (string) {
     }
     return projection;
 }
+/**
+     * Parse parameter to search in searchbar.
+     * @param {string} query - The Searchquery.
+     * @returns {void}
+     */
+export function parseQuery (query) {
+    let initString = "";
+
+    if (query.indexOf(" ") >= 0 || query.indexOf("-") >= 0) {
+        initString = convertInitialLettersToUppercase(query, " ");
+        initString = convertInitialLettersToUppercase(initString, "-");
+    }
+    else {
+        initString = query.substring(0, 1).toUpperCase() + query.substring(1);
+    }
+    return initString;
+}
+
+/**
+     * convert all initial letters to uppercase letters
+     * @param {string} [words=""] - Words with lettes.
+     * @param {string} [separator=" "] - Separator for split words.
+     * @returns {string} convertet Letters.
+     */
+function convertInitialLettersToUppercase (words = "", separator = " ") {
+    const split = words.split(separator);
+    let initString = "";
+
+    split.forEach(splitpart => {
+        initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + separator;
+    });
+
+    return initString.substring(0, initString.length - 1);
+}
 
 /**
  * Converts a string to boolean or array.
  * @param {String} string to convert to boolean or array
  * @returns {*} the converted string
  */
-export default function convert (string) {
+export function convert (string) {
     let ret = string;
 
     if (typeof string === "string" && string.startsWith("EPSG")) {

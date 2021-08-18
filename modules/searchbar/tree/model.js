@@ -36,9 +36,9 @@ const TreeModel = Backbone.Model.extend(/** @lends TreeModel.prototype */{
             "isActivated": this.controlListeningToSearchbar
         });
 
-        if (Radio.request("ParametricURL", "getInitString") !== undefined) {
+        if (store.state.urlParams && store.state.urlParams["Search/query"]) {
             // Carry out the initial search because a search parameter has been passed.
-            this.search(Radio.request("ParametricURL", "getInitString"));
+            this.search(store.state.urlParams && store.state.urlParams["Search/query"]);
         }
 
     },

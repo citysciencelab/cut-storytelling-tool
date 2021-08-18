@@ -111,8 +111,8 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
 
         if (!cameraParameter) {
             cameraParameter = Store.state.urlParams?.altitude ? {altitude: Store.state.urlParams?.altitude} : null;
-            cameraParameter = Store.state.urlParams?.heading ? Object.assign(cameraParameter || {}, {heading: Store.state.urlParams?.heading}) : null;
-            cameraParameter = Store.state.urlParams?.tilt ? Object.assign(cameraParameter || {}, {tilt: Store.state.urlParams?.tilt}) : null;
+            cameraParameter = Store.state.urlParams?.heading ? Object.assign(cameraParameter || {}, {heading: Store.state.urlParams?.heading}) : cameraParameter;
+            cameraParameter = Store.state.urlParams?.tilt ? Object.assign(cameraParameter || {}, {tilt: Store.state.urlParams?.tilt}) : cameraParameter;
         }
 
         if (cameraParameter) {

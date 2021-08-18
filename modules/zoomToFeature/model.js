@@ -35,7 +35,7 @@ const ZoomToFeature = Backbone.Model.extend({
 
         this.setStyleListModel(Radio.request("StyleList", "returnModelById", this.get("styleId")));
         if (store.state.urlParams && store.state.urlParams["Map/zoomToFeatureId"]) {
-            ids = store.state.urlParams["Map/zoomToFeatureId"].split(",");
+            ids = store.state.urlParams["Map/zoomToFeatureId"];
             this.setIds(ids);
             this.getFeaturesFromWFS();
             this.createFeatureCenterList();
@@ -159,7 +159,7 @@ const ZoomToFeature = Backbone.Model.extend({
         if (ids !== null) {
             ids.forEach(function (id) {
                 const feature = features.filter(function (feat) {
-                        if (feat.get(attribute) === id) {
+                        if (feat.get(attribute) === String(id)) {
                             return 1;
                         }
                         return 0;
@@ -228,7 +228,7 @@ const ZoomToFeature = Backbone.Model.extend({
         if (ids && ids.length > 0) {
             ids.forEach(function (id, index) {
                 const feature = features.filter(function (feat) {
-                        return feat.get(attribute) === id ? 1 : 0;
+                        return feat.get(attribute) === String(id) ? 1 : 0;
                     }),
                     extent = feature.length === 0 ? [] : feature[0].getGeometry().getExtent();
 
