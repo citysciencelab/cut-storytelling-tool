@@ -149,6 +149,8 @@ export default {
 
 <style lang="less" scoped>
     @import "~variables";
+    @import "~/css/mixins.less";
+
     .poi-choice {
         color: rgb(85, 85, 85);
         font-size: 14px;
@@ -171,9 +173,7 @@ export default {
             margin: 12px;
             cursor: pointer;
             &:focus {
-                outline: 3px solid @accent_focus;
-                outline: 3px auto  Highlight;
-                outline: 3px auto -webkit-focus-ring-color;
+                .primary_action_focus();
             }
         }
         .modal-dialog {

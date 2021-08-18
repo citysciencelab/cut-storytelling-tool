@@ -272,6 +272,8 @@ export default {
 
 <style lang="less" scoped>
     @import "~variables";
+    @import "~/css/mixins.less";
+
     @color_2: rgb(255, 255, 255);
     @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
     @font_family_2: "MasterPortalFont", sans-serif;
@@ -309,9 +311,7 @@ export default {
             > .glyphicon {
                 margin: 10px 8px 10px 0px;
                 &:focus {
-                    outline: 3px solid @accent_focus;
-                    outline: 3px auto  Highlight;
-                    outline: 3px auto -webkit-focus-ring-color;
+                    .primary_action_focus();
                 }
             }
 

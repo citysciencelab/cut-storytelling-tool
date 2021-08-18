@@ -1,4 +1,5 @@
 @import "../../css/variables.less";
+@import "../../css/mixins.less";
 
 @color_1: rgb(85, 85, 85);
 @color_2: rgb(255, 255, 255);
@@ -60,9 +61,7 @@
                     }
                 }
                 &:focus {
-                    outline: 3px solid @accent_focus;
-                    outline: 3px auto  Highlight;
-                    outline: 3px auto -webkit-focus-ring-color;
+                    .primary_action_focus();
                 }
             }
         }

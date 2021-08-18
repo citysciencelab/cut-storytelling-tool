@@ -881,4 +881,11 @@ export default {
     .cursor-crosshair {
         cursor: crosshair;
     }
+
+    button {
+        &:disabled {
+            background-color: @accent_active;
+            opacity: 1;
+        }
+    }
 </style>

@@ -178,12 +178,11 @@ export default {
 
 <style lang="less" scoped>
     @import "~variables";
+    @import "~/css/mixins.less";
 
     button.close {
         &:focus {
-            outline: 3px solid @accent_focus;
-            outline: 3px auto  Highlight;
-            outline: 3px auto -webkit-focus-ring-color;
+            .primary_action_focus();
         }
     }
     .gfi-attached {
