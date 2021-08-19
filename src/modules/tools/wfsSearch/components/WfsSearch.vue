@@ -212,6 +212,8 @@ export default {
             :title="$t(name)"
             :icon="glyphicon"
             :show-modal="showResults"
+            modal-inner-wrapper-style="padding: 10px;min-width: 70vw;"
+            modal-content-container-style="padding: 0;overflow: auto;max-height: 70vh;"
             @modalHid="setShowResultList(false)"
         >
             <template v-if="showResults && results.length">
@@ -245,21 +247,5 @@ export default {
 }
 .form-group > span {
     display: inline-block;
-}
-
-</style>
-
-<style lang="less">
-    #modal-1-container {
-        #modal-1-inner-wrapper {
-            padding: 10px;
-            min-width: 70vw;
-
-            #modal-1-content-container {
-                padding: 0;
-                overflow: auto;
-                max-height: 70vh;
-            }
-        }
 }
 </style>

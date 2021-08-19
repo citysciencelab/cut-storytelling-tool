@@ -10,6 +10,14 @@ export default {
         forceClickToClose: {
             type: Boolean,
             default: false
+        },
+        modalInnerWrapperStyle: {
+            type: String,
+            default: ""
+        },
+        modalContentContainerStyle: {
+            type: String,
+            default: ""
         }
     },
 
@@ -80,6 +88,7 @@ export default {
         >
             <div
                 id="modal-1-inner-wrapper"
+                :style="modalInnerWrapperStyle"
             >
                 <span
                     class="glyphicon glyphicon-remove"
@@ -93,6 +102,7 @@ export default {
                 </div>
                 <div
                     id="modal-1-content-container"
+                    :style="modalContentContainerStyle"
                 >
                     <slot />
                 </div>
