@@ -129,48 +129,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @listens Print#CreatePrintJob
      */
     initialize: function () {
-        const channel = Radio.channel("Print");
-
-        this.superInitialize();
-
-        this.listenTo(this, {
-            "change:isActive": function (model, value) {
-                if (model.get("layoutList").length === 0) {
-                    this.getCapabilites(model, value);
-                }
-                this.togglePostrenderListener(model, value);
-                if (value) {
-                    this.setCurrentMapScale(store.state.Map.scale);
-                }
-            }
-        });
-
-        this.listenTo(Radio.channel("MapView"), {
-            "changedOptions": function () {
-                this.setIsScaleSelectedManually(false);
-                if (typeof this.get("eventListener") !== "undefined") {
-                    this.updateCanvasLayer();
-                }
-            }
-        });
-
-        this.listenTo(Radio.channel("ModelList"), {
-            "updatedSelectedLayerList": function () {
-                if (typeof this.get("eventListener") !== "undefined") {
-                    this.setVisibleLayer(this.getVisibleLayer().concat(this.get("invisibleLayer")));
-                    this.updateCanvasLayer();
-                }
-            }
-        });
-
-        this.listenTo(Radio.channel("GFI"), {
-            "isVisible": function (isGfiActive) {
-                if (!isGfiActive) {
-                    this.setIsGfiSelected(false);
-                }
-                this.setIsGfiActive(isGfiActive);
-            }
-        });
+        const channel = Radio.channel("Printer");
 
         channel.on({
             "createPrintJob": this.createPrintJob

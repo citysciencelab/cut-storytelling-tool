@@ -233,7 +233,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 if (attrs.version === "HighResolutionPlotService") {
                     return new HighResolutionPrint(Object.assign(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                 }
-                return new Print(attrs, options);
+                // return new Print(attrs, options);
             }
             else if (attrs.id === "parcelSearch") {
                 return new ParcelSearch(attrs, options);

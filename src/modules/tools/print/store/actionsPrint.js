@@ -1,11 +1,10 @@
 import axios from "axios";
 import getProxyUrl from "../../../../utils/getProxyUrl";
 import thousandsSeparator from "../../../../utils/thousandsSeparator.js";
-import CanvasModel from "./../store/utils/buildCanvas";
+import Canvas from "./../store/utils/buildCanvas";
 import SpecModel from "./../store/utils/buildSpec";
 import differenceJS from "../../../../utils/differenceJS";
 import sortBy from "../../../../utils/sortBy";
-import LoaderOverlay from "../../../../utils/loaderOverlay";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 import {getRecordById} from "../../../../api/csw/getRecordById";
 import {omit} from "../../../../utils/objectHelpers";
@@ -13,9 +12,9 @@ import {omit} from "../../../../utils/objectHelpers";
 export default {
     /**
      * Gets the capabilities for a specific print configuration
+     * @param {Object} param.state the state
      * @param {Object} param.dispatch the dispatch
-     * @param {Boolean} value - is this tool activated or not
-     * @param {Backbone.Model} model - the Backbone Model
+     * @param {Object} param.commit the commit
      * @returns {void}
      */
     retrieveCapabilites: function ({state, dispatch, commit}) {
@@ -38,10 +37,12 @@ export default {
 
     /**
      * Performs an asynchronous HTTP request
-     * @returns responsedata
+     * @param {Object} param.state the state
+     * @param {Object} param.dispatch the dispatch
+     * @param {Object} serviceRequest the request content
+     * @returns {void}
      */
-    sendRequest: function ({state, dispatch}, serviceRequest) {
-        debugger;
+    sendRequest: async function ({state, dispatch}, serviceRequest) {
         /**
          * @deprecated in the next major-release!
          * useProxy
@@ -51,18 +52,21 @@ export default {
 
         axios({
             url: url,
-            type: serviceRequest.requestType
+            type: serviceRequest.requestType,
+            timeout: serviceRequest.timeout
         }).then(response => {
             dispatch(String(serviceRequest.onSuccess), response.data);
         });
     },
     /**
      * Sets the capabilities from mapfish resonse.
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
      * @param {Object[]} response - config.yaml from mapfish.
-     * @fires Core#RadioRequestMapViewGetOptions
      * @returns {void}
      */
-    parseMapfishCapabilities: function ({commit, dispatch, state}, response) {
+    parseMapfishCapabilities: function ({state, commit, dispatch}, response) {
         commit("setLayoutList", response.layouts);
         dispatch("chooseCurrentLayout", response.layouts);
         dispatch("getAttributeInLayoutByName", "metadata");
@@ -80,8 +84,10 @@ export default {
 
     /**
      * Choose the layout which is configured as currentlayout
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
      * @param {Object[]} [layouts=[]] - All Layouts
-     * @returns {void} The choosen current layout
+     * @returns {void}
      */
     chooseCurrentLayout: function ({state, commit}, layouts) {
         const currentLayout = layouts.filter(layout => layout.name === state.currentLayoutName);
@@ -99,7 +105,9 @@ export default {
     },
 
     /**
-     * returns a capabilities attribute object of the current layout, corresponding to the given name
+     * sets a capabilities attribute object of the current layout, corresponding to the given name
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
      * @param {String} name - name of the attribute to get
      * @returns {Object|undefined} corresponding attribute or null
      */
@@ -121,8 +129,9 @@ export default {
     /**
      * if the tool is activated and there is a layout,
      * a callback function is registered to the postrender event of the map
-     * @param {Backbone.Model} model - this
-     * @param {Boolean} value - is this tool activated or not
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
      * @returns {void}
      */
     togglePostrenderListener: function ({state, dispatch, commit}) {
@@ -141,8 +150,8 @@ export default {
 
         commit("setVisibleLayer", state.visibleLayerList);
 
-        if (state.active && state.layoutList.length !== 0 && state.visibleLayerList.length >= 1) {
-            const canvasLayer = CanvasModel.getCanvasLayer(state.visibleLayerList);
+        if (state.active && state.layoutList.length !== 0 && state.visibleLayerList.length >= 1 && state.eventListener === undefined) {
+            const canvasLayer = Canvas.getCanvasLayer(state.visibleLayerList);
 
             commit("setEventListener", canvasLayer.on("postrender", evt => dispatch("createPrintMask", evt)));
         }
@@ -159,6 +168,7 @@ export default {
 
     /**
      * Getting und showing the layer which is visible in map scale
+     * @param {Object} param.state the state
      * @returns {void} -
      */
     setOriginalPrintLayer: function ({state}) {
@@ -183,6 +193,9 @@ export default {
 
     /**
      * Getting und showing the layer which is visible in print scale
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
      * @param {String} scale - the current print scale
      * @returns {void} -
      */
@@ -231,6 +244,9 @@ export default {
 
     /**
      * update to draw the print page rectangle onto the canvas when the map changes
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
      * @returns {void}
      */
     updateCanvasLayer: function ({state, commit, dispatch}) {
@@ -238,16 +254,20 @@ export default {
         let canvasLayer = {};
 
         Radio.trigger("Map", "unregisterListener", state.eventListener);
-        canvasLayer = CanvasModel.getCanvasLayer(visibleLayerList);
+        canvasLayer = Canvas.getCanvasLayer(visibleLayerList);
         // commit("setCurrentMapScale", state.Map.scale);
         if (Object.keys(canvasLayer).length) {
-            commit("setEventListener", canvasLayer.on("postrender", evt => dispatch("createPrintMask", evt)));
+            commit("setEventListener", canvasLayer.on("postrender", (evt) => {
+                console.log("postrender");
+                dispatch("createPrintMask", evt);
+            }));
         }
     },
 
     /**
-     * returns the visible layers and set into variable
-     * @returns {Number[]} scale list
+     * sets the visible layers and set into variable
+     * @param {Object} param.dispatch the dispatch
+     * @returns {void}
      */
     getVisibleLayer: function ({dispatch}) {
         const visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(layer => {
@@ -260,6 +280,7 @@ export default {
      * sorts the visible layer list by zIndex from layer
      * layers with undefined zIndex come to the beginning of array
      * @param {array} visibleLayerList with visble layer
+     * @param {Object} param.commit the commit
      * @returns {array} sorted visibleLayerList
      */
     sortVisibleLayerListByZindex: function ({commit}, visibleLayerList) {
@@ -274,6 +295,8 @@ export default {
     },
     /**
      * draws the print page rectangle onto the canvas
+     * @param {Object} param.state the state
+     * @param {Object} param.dispatch the dispatch
      * @param {ol.render.Event} evt - postrender
      * @returns {void}
      */
@@ -297,6 +320,7 @@ export default {
         let scale;
 
         // scale was selected by the user over the view
+        // don't think we need this
         if (state.isScaleSelectedManually) {
             scale = state.currentScale;
         }
@@ -322,11 +346,10 @@ export default {
     },
     /**
      * gets the optimal print scale for a map
-     * @param {ol.Size} mapSize - size of the map in px
-     * @param {Number} resolution - resolution of the map in m/px
-     * @param {ol.Size} printMapSize - size of the map on the report in dots
-     * @param {Object[]} scaleList - supported print scales, sorted in ascending order
-     * @returns {Number} the optimal scale
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} canvasOptions the canvas measurements
+     * @returns {void}
      */
     getOptimalScale: function ({commit, state}, canvasOptions) {
         const mapWidth = canvasOptions.mapSize[0] * canvasOptions.resolution,
@@ -347,8 +370,8 @@ export default {
 
     /**
      * draws a mask on the whole map
-     * @param {ol.Size} mapSize - size of the map in px
-     * @param {CanvasRenderingContext2D} context - context of the postrender event
+     * @param {Object} param.state the state
+     * @param {Object} drawMaskOpt - context of the postrender event
      * @returns {void}
      */
     drawMask: function ({state}, drawMaskOpt) {
@@ -369,11 +392,8 @@ export default {
     },
     /**
      * draws the print page
-     * @param {ol.Size} mapSize - size of the map in px
-     * @param {Number} resolution - resolution of the map in m/px
-     * @param {Number} printMapSize - size of the map on the report in dots
-     * @param {Number} scale - the optimal print scale
-     * @param {CanvasRenderingContext2D} context - context of the postrender event
+     * @param {Object} param.state the state
+     * @param {Object} canvasPrintOptions - mapsize, resolution, printmapsize and scale
      * @returns {void}
      */
     drawPrintPage: function ({state}, canvasPrintOptions) {
@@ -396,8 +416,26 @@ export default {
     },
 
     /**
-     * returns the size of the map on the report
-     * @returns {Number[]} width and height
+     * gets the optimal map resolution for a print scale and a map size
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} resolution - scale, mapSize and printMapSize
+     * @returns {void}
+     */
+    getOptimalResolution: function ({commit, state}, resolution) {
+        const dotsPerMeter = state.INCHES_PER_METER * state.DOTS_PER_INCH,
+            resolutionX = resolution.printMapSize[0] * resolution.scale / (dotsPerMeter * resolution.mapSize[0]),
+            resolutiony = resolution.printMapSize[1] * resolution.scale / (dotsPerMeter * resolution.mapSize[1]);
+
+        commit("setOptimalResolution", Math.max(resolutionX, resolutiony));
+    },
+
+    /**
+     * sets the size of the map on the report
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
+     * @returns {void}
      */
     getPrintMapSize: function ({state, commit, dispatch}) {
         dispatch("getAttributeInLayoutByName", "map");
@@ -407,8 +445,11 @@ export default {
     },
 
     /**
-     * returns the supported scales of the map in the report
-     * @returns {Number[]} scale list
+     * sets the supported scales of the map in the report
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
+     * @returns {void}
      */
     getPrintMapScales: function ({state, dispatch, commit}) {
         dispatch("getAttributeInLayoutByName", "map");
@@ -417,12 +458,30 @@ export default {
         commit("setScaleList", layoutMapInfo.scales.sort((a, b) => a - b));
     },
 
-    startPrint: function ({state, dispatch}) {
-        debugger;
+    /**
+     * sets the printStarted to activie for the Add Ons
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
+     * @returns {void}
+     */
+    activatePrintStarted: function ({commit}) {
+        commit("setPrintStarted", true);
+    },
+
+    /**
+     * starts the printing process
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
+     * @returns {void}
+     */
+    startPrint: function ({state, dispatch, commit}) {
+        commit("setProgressWidth", "width: 25%");
         dispatch("getVisibleLayer");
         const visibleLayerList = state.visibleLayerList,
             attr = {
-                "layout": state.currentLayout.name,
+                "layout": state.currentLayoutName,
                 "outputFilename": state.filename,
                 "outputFormat": state.currentFormat,
                 "attributes": {
@@ -459,10 +518,9 @@ export default {
         else {
             spec.setLegend({});
             spec.setShowLegend(false);
-            spec = spec.toJSON();
             spec = omit(spec, ["uniqueIdList"]);
             const printJob = {
-                "payload": encodeURIComponent(JSON.stringify(spec)),
+                "payload": encodeURIComponent(JSON.stringify(spec.defaults)),
                 "printAppId": state.printAppId,
                 "currentFormat": state.currentFormat
             };
@@ -471,11 +529,18 @@ export default {
         }
     },
 
-    getMetaDataForPrint: async function ({rootGetters, dispatch}, cswObj, layer) {
+    /**
+     * sets the metadata for print NOTE: wurde noch nicht getestet
+     * @param {Object} param.rootGetters the rootGetters
+     * @param {Object} param.dispatch the dispatch
+     * @param {Object} cswObj the object with all the info
+     * @returns {void}
+     */
+    getMetaDataForPrint: async function ({rootGetters, dispatch}, cswObj) {
         let metadata;
 
-        if (layer.get("datasets") && Array.isArray(layer.get("datasets")) && layer.get("datasets")[0] !== null && typeof layer.get("datasets")[0] === "object") {
-            cswObj.cswUrl = Object.prototype.hasOwnProperty.call(layer.get("datasets")[0], "csw_url") ? layer.get("datasets")[0].csw_url : null;
+        if (cswObj.layer.get("datasets") && Array.isArray(cswObj.layer.get("datasets")) && cswObj.layer.get("datasets")[0] !== null && typeof cswObj.layer.get("datasets")[0] === "object") {
+            cswObj.cswUrl = Object.prototype.hasOwnProperty.call(cswObj.layer.get("datasets")[0], "csw_url") ? cswObj.layer.get("datasets")[0].csw_url : null;
         }
 
         cswObj.parsedData = {};
@@ -530,26 +595,32 @@ export default {
     },
 
     /**
-     * sends a request to create a print job
-     * @param {String} payload - POST body
-     * @param {String} printAppId - id of the print configuration
-     * @param {String} format - print job output format
+     * sends an async request to create a print job
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
+     * @param {Object} printJob the content for the printRequest
      * @returns {void}
      */
-    createPrintJob: async function ({state, dispatch}, printJob) {
-        debugger;
+    createPrintJob: async function ({state, dispatch, commit}, printJob) {
+        if (state.mapfishServiceUrl === "") {
+            let serviceUrl;
+
+            if (state.printSettings) {
+                serviceUrl = Radio.request("RestReader", "getServiceById", state.printSettings.mapfishServiceId).get("url");
+            }
+            else {
+                serviceUrl = Radio.request("RestReader", "getServiceById", "mapfish").get("url");
+            }
+
+            commit("setMapfishServiceUrl", serviceUrl);
+        }
         const printId = printJob.printAppId || state.printAppId,
             printFormat = printJob.format || state.currentFormat,
-            url = state.mapfishServiceUrl + printId + "/report." + printFormat,
-            serviceRequest = {
-                "serviceUrl": url,
-                "requestType": "POST",
-                "onSuccess": "waitForPrintJob",
-                "payload": printJob.payload
-            };
+            url = state.mapfishServiceUrl + printId + "/report." + printFormat;
         let response = "";
 
-        LoaderOverlay.show();
+        commit("setProgressWidth", "width: 50%");
         response = await axios.post(url, printJob.payload);
 
         dispatch("waitForPrintJob", response.data);
@@ -557,10 +628,13 @@ export default {
 
     /**
      * Sends a request to get the status for a print job until it is finished.
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
      * @param {JSON} response - Response of print job.
      * @returns {void}
      */
-    waitForPrintJob: function ({state, dispatch}, response) {
+    waitForPrintJob: async function ({state, dispatch, commit}, response) {
         const printAppId = state.printAppId,
             url = state.mapfishServiceUrl + printAppId + "/status/" + response.ref + ".json",
             serviceRequest = {
@@ -569,19 +643,17 @@ export default {
                 "onSuccess": "waitForPrintJobSuccess"
             };
 
-        debugger;
+        commit("setProgressWidth", "width: 75%");
         dispatch("sendRequest", serviceRequest);
     },
 
-    waitForPrintJobSuccess: function ({state, dispatch}, response) {
-        debugger;
+    waitForPrintJobSuccess: async function ({state, dispatch, commit}, response) {
         // Error processing...
         if (response.status === "error") {
             console.log("Error: " + response.error);
         }
-        else {
-            LoaderOverlay.hide();
-            debugger;
+        else if (response.done) {
+            commit("setProgressWidth", "width: 100%");
             const subUrl = response.downloadURL.replace("/mapfish_print_internet/print/report/", ""),
                 fileSpecs = {
                     "fileUrl": state.mapfishServiceUrl + state.printAppId + "/report/" + subUrl,
@@ -590,24 +662,38 @@ export default {
 
             dispatch("downloadFile", fileSpecs);
         }
+        else {
+            commit("setProgressWidth", "width: 80%");
+            // The report is not ready yet. Check again in 1s.
+            setTimeout(function () {
+                const subUrl = response.downloadURL.replace("/mapfish_print_internet/print/report/", ""),
+                    url = state.mapfishServiceUrl + state.printAppId + "/status/" + subUrl + ".json",
+                    serviceRequest = {
+                        "serviceUrl": url,
+                        "requestType": "GET",
+                        "onSuccess": "waitForPrintJobSuccess"
+                    };
+
+                dispatch("sendRequest", serviceRequest);
+            }, 2000);
+        }
     },
     /**
      * Starts the download from printfile,
-     * @param {String} fileUrl The url to dwonloadfile.
-     * @param {String} filename The name of the donwloadfile.
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} fileSpecs The url to dwonloadfile and name
      * @returns {void}
      */
-    downloadFile: function ({state}, fileSpecs) {
-        debugger;
-        const link = document.createElement("a");
-
+    downloadFile: function ({state, commit}, fileSpecs) {
+        commit("setPrintStarted", false);
+        commit("setPrintFileReady", true);
         /**
          * @deprecated in the next major-release!
          * useProxy
          * getProxyUrl()
          */
-        link.href = state.useProxy ? getProxyUrl(fileSpecs.fileUrl) : fileSpecs.fileUrl;
-        link.download = fileSpecs.filename;
-        link.click();
+        commit("setFileDownloadUrl", state.useProxy ? getProxyUrl(fileSpecs.fileUrl) : fileSpecs.fileUrl);
+        commit("setFilename", fileSpecs.filename);
     }
 };

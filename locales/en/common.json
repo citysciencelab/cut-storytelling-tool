@@ -274,7 +274,8 @@
                 "formatLabel": "Format",
                 "scaleLabel": "Printing scale",
                 "withLegendLabel": "With legend",
-                "printLabel": "Print",
+                "printLabel": "Create file",
+                "downloadFile": "Download file",
                 "withInfoLabel": "With information",
                 "vtlWarning": "Since MapFish 3 does not support Vector Tile Layers, the following active layers will not appear in the print view:",
                 "layoutNameList": {
