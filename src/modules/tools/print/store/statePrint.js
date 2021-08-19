@@ -10,7 +10,7 @@ const state = {
     printSettings: "",
     renderToWindow: false,
     resizableWindow: true,
-    deactivateGFI: true,
+    deactivateGFI: false,
     // output filename
     filename: "report",
     // the id from the rest services json for the mapfish app
@@ -63,6 +63,7 @@ const state = {
     dpiForPdf: 300,
     layoutNameList: [],
     currentMapScale: "",
+    optimalResolution: "",
     hintInfoScale: "",
     visibleLayer: [],
     invisibleLayer: [],
@@ -70,7 +71,10 @@ const state = {
     zoomLevel: null,
     hintInfo: "",
     mapfishServiceUrl: "",
-    showHintInfoScale: false,
+    printFileReady: false,
+    printStarted: false,
+    progressWidth: "width: 0%",
+    fileDownloadUrl: "",
     /**
      * @deprecated in the next major-release!
      * useProxy

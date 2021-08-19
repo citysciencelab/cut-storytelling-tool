@@ -4,6 +4,7 @@ import Tool from "../../Tool.vue";
 import getters from "../store/gettersPrint";
 import mutations from "../store/mutationsPrint";
 import actions from "../store/actionsPrint";
+import getComponent from "../../../../utils/getComponent";
 /**
  * Tool to print a part of the map
  */
@@ -12,10 +13,15 @@ export default {
     components: {
         Tool
     },
+    data () {
+        return {
+            showHintInfoScale: false
+        };
+    },
     computed: {
         ...mapGetters("Tools/Print", Object.keys(getters)),
         ...mapGetters(["printSettings"]),
-        ...mapGetters("Map", ["scales, clickCoord"]),
+        ...mapGetters("Map", ["scales, size"]),
         ...mapGetters("Tools/Gfi", ["currentFeature"]),
         currentMapScale: {
             get () {
@@ -38,8 +44,12 @@ export default {
         active: function () {
             if (this.active) {
                 this.setCurrentMapScale(this.$store.state.Map.scale);
-                this.togglePostrenderListener();
             }
+            this.togglePostrenderListener();
+            this.showGfiActive();
+        },
+        currentMapScale: function () {
+            this.setCurrentScale(this.currentMapScale);
         }
     },
 
@@ -49,12 +59,29 @@ export default {
      */
     created () {
         this.$on("close", this.close);
-        this.setPrintSettings(this.printSettings);
-        this.setCurrentLayoutName(this.printSettings.currentLayoutName);
-
+        if (this.printSettings) {
+            this.setPrintSettings(this.printSettings);
+            this.setCurrentLayoutName(this.printSettings.currentLayoutName);
+        }
         if (this.layoutList.length === 0) {
             this.retrieveCapabilites();
         }
+        Backbone.Events.listenTo(Radio.channel("ModelList"), {
+            "updatedSelectedLayerList": function () {
+                if (typeof this.get("eventListener") !== "undefined") {
+                    this.setVisibleLayer(this.getVisibleLayer().concat(this.invisibleLayer));
+                    this.updateCanvasLayer();
+                }
+            }
+        });
+        Backbone.Events.listenTo(Radio.channel("ModelList"), {
+            "updatedSelectedLayerList": function () {
+                if (typeof this.get("eventListener") !== "undefined") {
+                    this.setVisibleLayer(this.getVisibleLayer().concat(this.invisibleLayer));
+                    this.updateCanvasLayer();
+                }
+            }
+        });
     },
     methods: {
         ...mapMutations("Tools/Print", Object.keys(mutations)),
@@ -63,11 +90,33 @@ export default {
             "togglePostrenderListener",
             "createMapFishServiceUrl",
             "getVisibleLayer",
-            "startPrint"
+            "startPrint",
+            "getOptimalResolution",
+            "updateCanvasLayer"
         ]),
 
         returnScale (scale) {
             return scale < 10000 ? scale : scale.toString().substring(0, scale.toString().length - 3) + " " + scale.toString().substring(scale.toString().length - 3);
+        },
+        scaleChanged (event) {
+            this.setCurrentScale(event.value);
+            this.setCurrentMapScale(event.value);
+
+            const scale = parseInt(event.value, 10),
+                resolution = {
+                    "scale": scale,
+                    "mapSize": Radio.request("Map", "getSize"),
+                    "printMapSize": this.layoutMapInfo
+                };
+
+            this.getOptimalResolution(resolution);
+
+
+            Radio.trigger("MapView", "setConstrainedResolution", this.optimalResolution, 1);
+        },
+        layoutChanged (value) {
+            this.setCurrentLayoutName(value);
+            this.updateCanvasLayer();
         },
 
         showGfiAvailable () {
@@ -76,13 +125,11 @@ export default {
 
         showGfiActive () {
             if (this.currentFeature !== null) {
+                Radio.trigger("GFI", "isVisible", true);
                 return true;
             }
+            Radio.trigger("GFI", "isVisible", false);
             return false;
-        },
-
-        showHintInfoScale () {
-            return this.showHintInfoScale; 
         },
 
         /**
@@ -91,18 +138,45 @@ export default {
          */
         print () {
             this.startPrint();
+            this.setPrintStarted(true);
         },
 
         selectGfi (evt) {
             this.setIsGfiSelected = evt.target.checked;
         },
+        /**
+         * Downloads the pdf for print
+         * @param {Event} event the click event
+         * @returns {void}
+         */
+        downloadFile (event) {
+            event.preventDefault();
+            const a = document.createElement("A");
+
+            a.href = this.fileDownloadUrl;
+            a.download = this.fileDownloadUrl.substr(this.fileDownloadUrl.lastIndexOf("/") + 1);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        },
 
         /**
          * Sets active to false.
+         * @param {event} event the click event
          * @returns {void}
          */
-        close () {
+        close (event) {
+            event.stopPropagation();
             this.setActive(false);
+
+            // TODO replace trigger when ModelList is migrated
+            // set the backbone model to active false in modellist for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
+            const model = getComponent(this.$store.state.Tools.Print.id);
+
+            if (model) {
+                model.set("isActive", false);
+            }
+
         }
     }
 };
@@ -116,7 +190,7 @@ export default {
         :show-in-sidebar="true"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivate-g-f-i="deactivateGFI"
+        :deactivate-gfi="deactivateGFI"
     >
         <template #toolBody>
             <form
@@ -140,6 +214,7 @@ export default {
                         <select
                             id="printLayout"
                             class="form-control input-sm"
+                            @change="layoutChanged($event.target.value)"
                         >
                             <option
                                 v-for="(layout, i) in layoutList"
@@ -160,6 +235,7 @@ export default {
                         <select
                             id="printFormat"
                             class="form-control input-sm"
+                            @change="setCurrentFormat($event.target.value)"
                         >
                             <option
                                 v-for="(format, i) in formatList"
@@ -177,8 +253,9 @@ export default {
                     <div class="col-sm-7">
                         <select
                             id="printScale"
+                            v-model="currentMapScale"
                             class="form-control input-sm"
-                            @change="setCurrentScale($event.target.value)"
+                            @change="scaleChanged($event.target)"
                         >
                             <option
                                 v-for="(scale, i) in scaleList"
@@ -217,6 +294,7 @@ export default {
                                 id="printLegend"
                                 type="checkbox"
                                 :checked="isLegendSelected"
+                                @change="setIsLegendSelected($event.target.checked)"
                             >
                         </div>
                     </div>
@@ -234,7 +312,7 @@ export default {
                                 id="printGfi"
                                 type="checkbox"
                                 :checked="isGfiSelected"
-                                @click="selectGfi"
+                                @change="setIsGfiSelected($event.target.checked)"
                             >
                         </div>
                     </div>
@@ -247,6 +325,35 @@ export default {
                             @click="print"
                         >
                             {{ $t("common:modules.tools.print.printLabel") }}
+                        </button>
+                    </div>
+                </div>
+                <div
+                    v-if="printStarted"
+                    class="form-group form-group-sm"
+                >
+                    <div class="col-sm-12">
+                        <div class="progress">
+                            <div
+                                class="progress-bar"
+                                role="progressbar"
+                                :style="progressWidth"
+                            >
+                                <span class="sr-only">30% Complete</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="form-group form-group-sm"
+                >
+                    <div class="col-sm-12">
+                        <button
+                            class="btn btn-lgv-grey btn-block"
+                            :disabled="!printFileReady"
+                            @click="downloadFile"
+                        >
+                            {{ $t("common:modules.tools.print.downloadFile") }}
                         </button>
                     </div>
                 </div>
@@ -274,7 +381,6 @@ export default {
                 text-align: center;
             }
             .hint-info {
-                display: none;
                 position: absolute;
                 left: 0;
                 top: 25px;

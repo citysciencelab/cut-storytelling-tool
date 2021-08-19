@@ -27,6 +27,7 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/CompareFeatures", Object.keys(getters)),
+        ...mapGetters("Tools/Print", ["printFileReady", "fileDownloadUrl", "filename", "printStarted", "progressWidth"]),
         selected: {
             get () {
                 return state.selectedLayer;
@@ -61,6 +62,21 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
+        },
+        /**
+         * Downloads the pdf for print
+         * @param {Event} event the click event
+         * @returns {void}
+         */
+        downloadFile (event) {
+            event.preventDefault();
+            const a = document.createElement("A");
+
+            a.href = this.$store.state.Tools.Print.fileDownloadUrl;
+            a.download = this.$store.state.Tools.Print.fileDownloadUrl.substr(this.$store.state.Tools.Print.fileDownloadUrl.lastIndexOf("/") + 1);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
     }
 };
@@ -208,6 +224,27 @@ export default {
                 >
                     {{ $t("common:modules.tools.compareFeatures.exportAsPdf") }}
                 </button>
+                <button
+                    class="btn btn-primary btn-infos"
+                    :disabled="!printFileReady"
+                    @click="downloadFile"
+                >
+                    {{ $t("common:modules.tools.print.downloadFile") }}
+                </button>
+                <div
+                    v-if="printStarted"
+                    class="form-group col-md-12 col-xs-12 pt-20"
+                >
+                    <div class="progress">
+                        <div
+                            class="progress-bar"
+                            role="progressbar"
+                            :style="progressWidth"
+                        >
+                            <span class="sr-only">30% Complete</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </template>
     </Modal>
@@ -248,7 +285,6 @@ export default {
         margin-right: 20px;
         white-space: nowrap;
     }
-
     #tool-compareFeatures-buttons {
         text-align: center;
         margin: 10px;

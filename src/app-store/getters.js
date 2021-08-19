@@ -24,7 +24,7 @@ export default {
     portalConfig: state => state?.configJson?.Portalconfig || null,
     imagePath: state => state?.configJs.wfsImgPath || null,
     // print settings
-    printSettings: state => state?.configJson.Portalconfig.menu.tools.children.print || null,
+    printSettings: state => state?.configJson.Portalconfig.menu.tools?.children.print || null,
 
     /**
      * recursively read out the menu config for tools

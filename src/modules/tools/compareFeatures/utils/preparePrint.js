@@ -1,4 +1,6 @@
 import state from "../store/stateCompareFeatures";
+import store from "../../../../app-store/index";
+import SpecModel from "./../../print/store/utils/buildSpec";
 
 /**
  * Helper Function to prepare the Pdf file from currently selected layer and its features on the comparison list.
@@ -20,9 +22,19 @@ export async function preparePrint () {
                     }
                 ]
             }
-        };
+        },
+        spec = SpecModel;
 
-    Radio.trigger("Print", "createPrintJob", encodeURIComponent(JSON.stringify(pdfDef)), "compareFeatures", "pdf");
+    store.dispatch("Tools/Print/activatePrintStarted", true, {root: true});
+    spec.setAttributes(pdfDef);
+
+    const printJob = {
+        "payload": encodeURIComponent(JSON.stringify(spec.defaults)),
+        "printAppId": "compareFeatures",
+        "currentFormat": "pdf"
+    };
+
+    store.dispatch("Tools/Print/createPrintJob", printJob, {root: true});
 }
 
 /**

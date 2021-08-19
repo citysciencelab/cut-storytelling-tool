@@ -7,6 +7,9 @@ import {Group, Image, Tile, Vector} from "ol/layer.js";
 import store from "../../../../../app-store/index";
 import isObject from "../../../../../utils/isObject";
 import differenceJS from "../../../../../utils/differenceJS";
+import sortBy from "../../../../../utils/sortBy";
+import uniqueId from "../../../../../utils/uniqueId";
+import findWhereJs from "../../../../../utils/findWhereJs";
 import Geometry from "ol/geom/Geometry";
 
 const BuildSpecModel = {
@@ -31,7 +34,6 @@ const BuildSpecModel = {
      * @returns {void}
      */
     fetchedMetaData: function (cswObj) {
-        debugger;
         if (this.isOwnMetaRequest(this.uniqueIdList, cswObj.uniqueId)) {
             this.removeUniqueIdFromList(this.uniqueIdList, cswObj.uniqueId);
             this.updateMetaData(cswObj.layerName, cswObj.parsedData);
@@ -42,8 +44,7 @@ const BuildSpecModel = {
     },
 
     setAttributes: function (attr) {
-        this.defaults.attributes.map = attr.attributes.map;
-        this.defaults.attributes.title = attr.attributes.title;
+        this.defaults.attributes = attr.attributes;
         this.defaults.layout = attr.layout;
         this.defaults.outputFilename = attr.outputFilename;
         this.defaults.outputFormat = attr.outputFormat;
@@ -77,7 +78,7 @@ const BuildSpecModel = {
      */
     updateMetaData: function (layerName, parsedData) {
         const layers = Object.prototype.hasOwnProperty.call(this.defaults.attributes, "legend") && this.defaults.attributes.legend?.layers ? this.attributes.defaults.legend.layers : undefined,
-            layer = Radio.request("Util", "findWhereJs", layers, {layerName: layerName});
+            layer = findWhereJs(layers, {layerName: layerName});
 
         if (layer !== undefined) {
             layer.metaDate = parsedData?.date ? parsedData.date : "n.N.";
@@ -196,7 +197,7 @@ const BuildSpecModel = {
      */
     getDrawLayerInfo: function (layer, extent) {
         const featuresInExtent = layer.getSource().getFeaturesInExtent(extent),
-            features = Radio.request("Util", "sortBy", featuresInExtent, function (feature) {
+            features = sortBy(featuresInExtent, function (feature) {
                 if (feature.getStyle() && typeof feature.getStyle === "function" && typeof feature.getStyle().getZIndex === "function") {
                     return feature.getStyle().getZIndex();
                 }
@@ -945,8 +946,13 @@ const BuildSpecModel = {
             }
         }
         // feature with geometry style
-        return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}',`, "[").slice(0, -1)
+        if (styleAttr instanceof Array) {
+            return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}',`, "[").slice(0, -1)
             + "]";
+        }
+        else {
+            return "[" + styleAttr + "='" + feature.get(styleAttr) + "']";
+        }
     },
 
     /**
@@ -1043,7 +1049,7 @@ const BuildSpecModel = {
         if (isLegendSelected && legends.length > 0) {
             legendObject.layers = [];
             legends.forEach(legendObj => {
-                if (this.get("visibleLayerIds").includes(legendObj.id)) {
+                if (this.defaults.visibleLayerIds.includes(legendObj.id)) {
                     const legendContainsPdf = this.legendContainsPdf(legendObj.legend);
 
                     if (isMetaDataAvailable) {
@@ -1068,10 +1074,11 @@ const BuildSpecModel = {
 
             });
         }
-        debugger;
         this.setShowLegend(isLegendSelected);
         this.setLegend(legendObject);
+        debugger;
         if (isMetaDataAvailable && metaDataLayerList.length > 0) {
+            debugger;
             metaDataLayerList.forEach((layerName) => {
                 this.getMetaData(layerName);
             });
@@ -1103,7 +1110,7 @@ const BuildSpecModel = {
     },
 
     /**
-     * Requests the metadata for given layer name
+     * Requests the metadata for given layer name: noch nicht getestet
      * @param {String} layerName name of current layer
      * @fires CswParser#RadioTriggerCswParserGetMetaData
      * @returns {void}
@@ -1111,17 +1118,18 @@ const BuildSpecModel = {
     getMetaData: function (layerName) {
         const layer = Radio.request("ModelList", "getModelByAttributes", {name: layerName}),
             metaId = layer.get("datasets") && layer.get("datasets")[0] ? layer.get("datasets")[0].md_id : null,
-            uniqueId = Radio.request("Util", "uniqueId"),
+            uniqueIdRes = uniqueId(),
             cswObj = {};
 
         if (metaId !== null) {
-            this.get("uniqueIdList").push(uniqueId);
+            this.uniqueIdList.push(uniqueIdRes);
             cswObj.layerName = layerName;
             cswObj.metaId = metaId;
             cswObj.keyList = ["date", "orgaOwner", "address", "email", "tel", "url"];
-            cswObj.uniqueId = uniqueId;
+            cswObj.uniqueId = uniqueIdRes;
+            cswObj.layer = layer;
 
-            Radio.trigger("CswParser", "getMetaDataForPrint", cswObj, layer);
+            store.dispatch("Print/getMetaDataForPrint", cswObj);
         }
     },
 

@@ -273,7 +273,8 @@
                 "formatLabel": "Format",
                 "scaleLabel": "Druckmaßstab",
                 "withLegendLabel": "Mit Legende",
-                "printLabel": "Drucken",
+                "printLabel": "Datei erstellen",
+                "downloadFile": "Datei herunterladen",
                 "withInfoLabel": "Mit Informationen",
                 "vtlWarning": "Da MapFish 3 keine Vector Tile Layer unterstützt, werden die folgenden aktiven Layer nicht in der Printansicht erscheinen:",
                 "layoutNameList": {
