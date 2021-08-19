@@ -151,7 +151,7 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
          *
          * @param {Object} payload payload object.
          * @param {Boolean} payload.active Decides whether the draw interactions are active or not.
-         * @param {Integer} [payload.maxFeatures] Max amount of features to be added to the map.
+         * @param {Number} [payload.maxFeatures] Max amount of features to be added to the map.
          * @returns {void}
          */
         createDrawInteractionAndAddToMap ({state, commit, dispatch, getters}, {active, maxFeatures}) {
@@ -179,7 +179,7 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
          * @param {Object} payload payload object.
          * @param {Boolean} payload.isOuterCircle Determines if the outer circle of a doubleCircle is supposed to be drawn.
          * @param {String} payload.drawInteraction Either an empty String or "Two" to identify for which drawInteraction this is used.
-         * @param {Integer} [payload.maxFeatures] Max amount of features to be added to the map.
+         * @param {Number} [payload.maxFeatures] Max amount of features to be added to the map.
          * @returns {void}
          */
         createDrawInteractionListener ({rootState, state, dispatch, getters, commit}, {isOuterCircle, drawInteraction, maxFeatures}) {
