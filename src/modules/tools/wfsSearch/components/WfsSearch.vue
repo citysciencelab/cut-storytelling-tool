@@ -85,6 +85,15 @@ export default {
                 model.set("isActive", false);
             }
         },
+        resetUI () {
+            // Reset input fields
+            const inputFields = document.getElementsByClassName("tool-wfsSearch-field-input");
+
+            for (const input of inputFields) {
+                input.value = "";
+            }
+            this.resetResult();
+        },
         /**
          * Searches the configured service and shows adds the results to the List in the Modal.
          *
@@ -176,7 +185,7 @@ export default {
                             <button
                                 type="button"
                                 class="btn btn-lgv-grey col-md-12 col-sm-12"
-                                @click="resetResult"
+                                @click="resetUI"
                             >
                                 {{ $t("common:modules.tools.wfsSearch.resetButton") }}
                             </button>

@@ -103,12 +103,6 @@ const actions = {
                 state.requiredValues[val] = "";
             });
         }
-        // Reset input fields
-        const inputFields = document.getElementsByClassName("tool-wfsSearch-field-input");
-
-        for (const input of inputFields) {
-            input.value = "";
-        }
     }
 };
 
