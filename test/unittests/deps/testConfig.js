@@ -98,5 +98,18 @@ module.exports = {
     remoteInterface: {
         postMessageUrl: "http://localhost:8080"
     },
-    browserPrint: {}
+    browserPrint: {},
+    zoomToGeometry: {
+        layerId: "1692",
+        attribute: "bezirk_name",
+        geometries: [
+            "ALTONA",
+            "HARBURG",
+            "HAMBURG-NORD",
+            "BERGEDORF",
+            "EIMSBÜTTEL",
+            "HAMBURG-MITTE",
+            "WANDSBEK"
+        ]
+    }
 };

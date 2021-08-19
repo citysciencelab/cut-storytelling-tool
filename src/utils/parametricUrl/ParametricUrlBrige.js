@@ -1,5 +1,6 @@
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 import {convert, parseQuery} from "./converter";
+import {setValueToState} from "./stateModifier";
 import store from "../../app-store";
 
 const toolsNotInState = ["compareFeatures", "parcelSearch", "print", "featureLister", "layerSlider", "filter", "shadow", "virtualcity", "wfst", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
@@ -23,10 +24,11 @@ export function readUrlParamStyle () {
 }
 /**
  * Sets url params to state, which are used before mount of vue-app.
+ * @param {String} query content of window.location.search
  * @returns {void}
  */
-export function handleUrlParamsBeforeVueMount () {
-    const params = new URLSearchParams(window.location.search);
+export function handleUrlParamsBeforeVueMount (query) {
+    const params = new URLSearchParams(query);
 
     params.forEach(function (value, key) {
         if (key.toLowerCase() === "query" || key.toLowerCase() === "search/query") {
@@ -55,6 +57,9 @@ export function triggerParametricURLReady () {
             return store.state.urlParam?.filter;
         }
     }, this);
+    channel.on({
+        "updateQueryStringParam": updateQueryStringParam
+    }, this);
 
     channel.trigger("ready");
 }
@@ -68,9 +73,13 @@ export function translateToBackbone (urlParamsKey, urlParamsValue) {
     const paramsKey = urlParamsKey.toLowerCase().trim();
 
     if (paramsKey.startsWith("tools") || paramsKey.indexOf("/active") > -1) {
-        const toolSplitted = urlParamsKey.trim().split("/");
+        let key = urlParamsKey;
 
-        return {key: "isinitopen", value: toolSplitted[toolSplitted.length - 2]};
+        key = key.replace(/tools/i, "");
+        key = key.replace(/active/i, "");
+        key = key.replace(/\//g, "");
+
+        return {key: "isinitopen", value: key};
     }
     else if (toolsNotInState.find(toolName=>toolName.toLowerCase() === paramsKey.toLocaleLowerCase())) {
         return {key: "isinitopen", value: paramsKey};
@@ -93,7 +102,7 @@ export function doSpecialBackboneHandling (key, value) {
         setLayersVisible(layers);
     }
     else if (key === "Map/zoomToExtent") {
-        Radio.trigger("Map", "zoomToExtent", convert(store.state.urlParams?.["Map/zoomToExtent"]), {duration: 0}, store.state.urlParams?.projection);
+        Radio.trigger("Map", "zoomToExtent", convert(value), {duration: 0}, store.state.urlParams?.projection);
     }
     else if (key === "Map/zoomToGeometry") {
         const gemometryToZoom = parseZoomToGeometry(value);
@@ -153,7 +162,10 @@ function getLayersUsingMetaId (values) {
     if (Config.view) {
         Config.view.zoomLevel = 0;
     }
-    layersIds.push(baseMaps[baseMaps.length - 1].id);
+    if (baseMaps) {
+        layersIds.push(baseMaps[baseMaps.length - 1].id);
+    }
+
     metaIds.forEach(metaId => {
         const metaIDlayers = Radio.request("Parser", "getItemsByMetaID", metaId);
 
@@ -314,3 +326,61 @@ function alertWrongLayerIds (wrongIdsPositions) {
         }, 500);
     }
 }
+
+/**
+     * Updates the loaction.search content with given key and value.
+     * Sets the key and value to vuex state urlParams or to state entry, if exists.
+     * If an iframe is active, the remoteInterface is used.
+     * https://gist.github.com/excalq/2961415: Set or Update a URL/QueryString Parameter, and update URL using HTML history.replaceState().
+     * @param  {string} key - url param key
+     * @param  {string} value - url param value
+     * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
+     * @returns {void}
+     */
+export async function updateQueryStringParam (key, value) {
+    const baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
+        urlQueryString = document.location.search,
+        newParam = key + "=" + value;
+
+    let keyRegex,
+        params = "?" + newParam;
+
+    // If the "search" string exists, then build params from it
+    if (urlQueryString) {
+        keyRegex = new RegExp("([?,&])" + key + "[^&]*");
+
+        // If param exists already, update it
+        if (urlQueryString.match(keyRegex) !== null) {
+            params = urlQueryString.replace(keyRegex, "$1" + newParam);
+        }
+        // Otherwise, add it to end of query string
+        else {
+            params = urlQueryString + "&" + newParam;
+        }
+    }
+    // iframe
+    if (window !== window.top) {
+        Radio.trigger("RemoteInterface", "postMessage", {"urlParams": params});
+    }
+    else {
+        window.history.replaceState({}, "", baseUrl + params);
+    }
+    await parseURL(location.search.substr(1));
+}
+
+/**
+     * Parse the URL parameters.
+     * @param {string} query - URL --> everything after ? if available.
+     * @returns {void}
+     */
+async function parseURL (query) {
+    if (query.length > 0) {
+        query.split("&").forEach(parameterFromUrl => {
+            const parameterFromUrlAsArray = parameterFromUrl.split("="),
+                parameterValue = decodeURIComponent(parameterFromUrlAsArray[1]);
+
+            setValueToState(store.state, parameterFromUrlAsArray[0], parameterValue);
+        });
+    }
+}
+

@@ -81,6 +81,7 @@ export default {
      * @returns {Boolean} true if simple style is set otherwise false
      */
     isSimpleStyle: (state) => {
+        // todo ind
         if (state?.queryParams?.style) {
             return state.queryParams.style === "simple";
         }
@@ -96,6 +97,7 @@ export default {
      * @returns {Boolean} true if table style is set otherwise false
      */
     isTableStyle: (state) => {
+        // todo ind
         if (state?.queryParams?.style) {
             return state.queryParams.style === "table";
         }

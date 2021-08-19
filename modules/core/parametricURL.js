@@ -94,9 +94,9 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             // }
         }, this);
 
-        channel.on({
-            "updateQueryStringParam": this.updateQueryStringParam
-        }, this);
+        // channel.on({
+        //     "updateQueryStringParam": this.updateQueryStringParam
+        // }, this);
 
         if (this.checkisURLQueryValid(query)) {
             this.parseURL(query, this.possibleUrlParameters());
@@ -550,35 +550,35 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     updateQueryStringParam: function (key, value) {
-        // const baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
-        //     urlQueryString = document.location.search,
-        //     newParam = key + "=" + value;
+        const baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
+            urlQueryString = document.location.search,
+            newParam = key + "=" + value;
 
-        // let keyRegex,
-        //     params = "?" + newParam;
+        let keyRegex,
+            params = "?" + newParam;
 
-        // // If the "search" string exists, then build params from it
-        // if (urlQueryString) {
-        //     keyRegex = new RegExp("([?,&])" + key + "[^&]*");
+        // If the "search" string exists, then build params from it
+        if (urlQueryString) {
+            keyRegex = new RegExp("([?,&])" + key + "[^&]*");
 
-        //     // If param exists already, update it
-        //     if (urlQueryString.match(keyRegex) !== null) {
-        //         params = urlQueryString.replace(keyRegex, "$1" + newParam);
-        //     }
-        //     // Otherwise, add it to end of query string
-        //     else {
-        //         params = urlQueryString + "&" + newParam;
-        //     }
-        // }
-        // // iframe
-        // if (window !== window.top) {
-        //     Radio.trigger("RemoteInterface", "postMessage", {"urlParams": params});
-        // }
-        // else {
-        //     window.history.replaceState({}, "", baseUrl + params);
-        // }
+            // If param exists already, update it
+            if (urlQueryString.match(keyRegex) !== null) {
+                params = urlQueryString.replace(keyRegex, "$1" + newParam);
+            }
+            // Otherwise, add it to end of query string
+            else {
+                params = urlQueryString + "&" + newParam;
+            }
+        }
+        // iframe
+        if (window !== window.top) {
+            Radio.trigger("RemoteInterface", "postMessage", {"urlParams": params});
+        }
+        else {
+            window.history.replaceState({}, "", baseUrl + params);
+        }
 
-        // this.parseURL(location.search.substr(1), this.possibleUrlParameters());
+        this.parseURL(location.search.substr(1), this.possibleUrlParameters());
     },
 
     // /**

@@ -142,7 +142,7 @@ export async function setValueToState (state, key, value) {
 
             console.log("translated key=", entry.key);
             console.log("translated value=", entry.value);
-            console.log("state:", state);
+            // console.log("state:", state);
             console.log("found:", found);
 
             if (!found) {

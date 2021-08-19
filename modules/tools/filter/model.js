@@ -261,7 +261,8 @@ const FilterModel = Tool.extend({
      * @returns {void}
      */
     createQueries: function (queries) {
-        const queryObjects = store.state.urlParam?.filter;
+        const urlParams = store.state.urlParams && store.state.urlParams.filter ? store.state.urlParams.filter : "[]",
+            queryObjects = JSON.parse(urlParams);
         let queryObject,
             oneQuery;
 

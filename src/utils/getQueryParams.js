@@ -1,4 +1,4 @@
-const locationSearch = location.search.substr(1);
+// const locationSearch = location.search.substr(1);
 
 /**
  * Checks if the query contains html content, if so it is not valid.
@@ -14,7 +14,7 @@ function checkisURLQueryValid (query) {
  * @param {String} [query=locationSearch] The url-parameter
  * @returns {Object} url parameters as object.<string, string>
  */
-function getQueryParams (query = locationSearch) {
+function getQueryParams (query) {
     const queryParams = {};
 
     try {

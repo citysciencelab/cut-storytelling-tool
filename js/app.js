@@ -129,7 +129,7 @@ async function loadApp () {
     // Pass null to create an empty Collection with options
     new RestReaderList(null, {url: Config.restConf});
     new Preparser(null, {url: Config.portalConf});
-    handleUrlParamsBeforeVueMount();
+    handleUrlParamsBeforeVueMount(window.location.search);
 
     new StyleList();
     if (!Object.prototype.hasOwnProperty.call(Config, "allowParametricURL") || Config.allowParametricURL === true) {
