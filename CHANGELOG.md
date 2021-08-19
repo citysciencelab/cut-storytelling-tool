@@ -29,6 +29,7 @@
     - Quickhelp via the question icon in the searchbar (top menu)
 - GFI: order of Gfis is reversed now, so that the top layer ones come first
 - NPM packages https-proxy-agent, vue-loader, vue-template-compiler are moved from dependencies to devDependencies in package.json.
+- The MasterportalAPI version is updated to v1.5.0. This also raised ol to version 6.6.1
 - The following NPM packages are updated:
   - dependencies:
     axios: 0.19.0 to version 0.21.1
