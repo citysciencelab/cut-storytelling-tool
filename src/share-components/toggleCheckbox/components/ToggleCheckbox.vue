@@ -116,9 +116,7 @@ export default {
         width:63px;
 
         &:hover {
-            opacity: 1;
-            background-color: @accent_hover;
-            color: @primary_contrast;
+            .primary_action_hover();
         }
         &:focus {
             .primary_action_focus();

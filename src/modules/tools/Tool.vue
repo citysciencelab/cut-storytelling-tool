@@ -309,16 +309,21 @@ export default {
             }
 
             > .glyphicon {
-                margin: 10px 8px 10px 0px;
+                padding: 8px 8px 8px 8px;
                 &:focus {
                     .primary_action_focus();
+                }
+                &:hover {
+                    .primary_action_hover();
                 }
             }
 
             > span {
                 &.glyphicon-minus { top: 3px; }
                 &:hover {
-                    &:not(.win-icon) { opacity: 0.7; cursor: pointer;}
+                    &:not(.win-icon) {
+                        .primary_action_hover();
+                    }
                 }
             }
         }

@@ -42,9 +42,7 @@
             padding: 4px;
             color: @secondary_icon_button;
             &:hover {
-                opacity: 1;
-                background-color: @accent_hover;
-                color: @primary_contrast;
+                .primary_action_hover();
             }
             &:focus {
                 .primary_action_focus();
@@ -60,6 +58,9 @@
         h3 {
             margin-top: 0;
         }
+        &:focus {
+            .primary_action_focus();
+        }
     }
 }
 .inhalt {
@@ -68,12 +69,14 @@
         margin: 5px;
         border: 1px solid silver;
         float: left;
-        background: #e7e7e7;
+        background: #ffffff;
         text-decoration: none;
-        color: @color_2;
+        color: #333333;
         &:hover {
-            background: rgb(200, 200, 200);
-            cursor: pointer;
+            .primary_action_hover();
+        }
+        &:focus {
+            .primary_action_focus();
         }
     }
 }

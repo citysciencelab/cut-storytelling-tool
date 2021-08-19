@@ -35,7 +35,6 @@ const SnippetValueView = Backbone.View.extend({
         return this;
     },
     deselect: function (event) {
-        console.log(event)
         if (event.type === "click" || event.which === 32 || event.which === 13) {
             this.model.setIsSelected(false);
         }

@@ -184,6 +184,9 @@ export default {
         &:focus {
             .primary_action_focus();
         }
+        &:hover {
+            .primary_action_hover();
+        }
     }
     .gfi-attached {
         background-color: #ffffff;

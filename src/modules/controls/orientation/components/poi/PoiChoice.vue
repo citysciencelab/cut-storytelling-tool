@@ -170,10 +170,13 @@ export default {
         .glyphicon-remove {
             font-size: 16px;
             float: right;
-            margin: 12px;
+            padding: 12px;
             cursor: pointer;
             &:focus {
                 .primary_action_focus();
+            }
+            &:hover {
+                .primary_action_hover();
             }
         }
         .modal-dialog {

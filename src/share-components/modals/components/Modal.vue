@@ -129,8 +129,13 @@ export default {
         }
         .glyphicon {
             font-size: 14px;
+            padding: 5px;
+            color:#555555;
             &:focus {
                 .primary_action_focus();
+            }
+            &:hover {
+                .primary_action_hover();
             }
         }
     }
@@ -173,7 +178,6 @@ export default {
             position:absolute;
             right:2px;
             top:4px;
-            color:#555555;
             z-index:4;
 
             &:hover {

@@ -24,25 +24,41 @@ Table Style:
 -> "Anzahl Schüler" Pfeile
 -> Schwerpunktschule Aus
 
-************************* Backbone-Tools
+************************* Backbone
+
+**** Backbone tools
 
 // -> parcelSearch / Flurstücksuche
 // -> styeWMS
-// -> featureLister / Features auswählen
+-> featureLister / Liste
+   -> Keine Tastaturbedienung der Tabs möglich -> TODO-Tastatur
+   -> keine Tastaturbedierung der Selektion in der Liste -> TODO-Tastatur
 // -> filter                     #### selected elements button
+      // -> Filteroptionen: Texte als placeholder problematisch < 3:1 
+      -> keine oder nur eingeschränkze Tastatutbedienung der verwendeten Snippets -> TODO-Tastatur
 // -> extendedFilter / Erweiterter Filter
 // -> layerSlider / Zeitreihe
 // -> print / Drucken            #### primary butten
--> shadow
--> wfst
+// -> shadow
+-> wfst -> ??? nicht testbar, layer liefert kein Ergebnis TODO
 
 **** sonstiges Backbone
 
--> searchBar
--> weitere?
+// -> searchBar
 
+-> weitere?  TODO
 
-**** Vue-Tools (src/tools):
+*** anmerkungen zu snippets:
+- checkbox -> nicht tastaturbedienbar -> TODO-Tastatur
+- slider -> nicht tastaturbedienbar -> TODO-Tastatur
+- datepicker -> nicht tastaturbedienbar -> TODO-Tastatur
+- multicheckbox -> nicht tastaturbedienbar -> TODO-Tastatur
+- checkbox -> nicht tastaturbedienbar -> TODO-Tastatur
+- graphicalSelect -> nicht tastaturbedienbar -> TODO-Tastatur
+- value -> tastaturbedienbar ok!
+- exportButton -> ?
+
+************************* Vue
 
 // -> AddWMS.vue / WMS hinzufügen
 -> bufferAnalysis
@@ -60,7 +76,7 @@ Table Style:
 -> saveSelection
 -> ScaleSwitcher.vue
 -> SearchByCoord.vue
--> SelectFeature.vue
+// -> SelectFeature.vue / Features auswählen
 -> styleVT.vue
 // -> SupplyCoord.vue / Koordinaten abfragen
 
@@ -94,6 +110,7 @@ Table Style:
 -> commuterFlows
 -> schoolrouteplanning
 // -> PopulationRequest.vue / Einwohneranzahl abfragen  #### toggle-button tastaturbedienbar gestaltet
+   //  -> kein label für Dropdwon.
 -> geoAnalyze
 -> fileImportAddon
 -> sdpDownload

@@ -39,7 +39,10 @@
         }
     }
     .toggleIsActive {
-        .glyphicon-remove {
+        .glyphicon-remove {                
+            &:focus {
+                .primary_action_focus();
+            }  
             color: @color_3;
         }
     }
@@ -60,9 +63,6 @@
             margin: 2px;
             padding: 3px 6px;
             font-size: 12px;
-            &:focus {
-                .primary_action_focus();
-            }        
         }
         .glyphicon-remove {
             font-size: 9px;
@@ -72,9 +72,8 @@
             color: @color_2;
             background-color: @background_color_2;
             &:hover {
-                background-color: @background_color_3;
-                cursor: pointer;
-            }
+                .primary_action_hover();
+            } 
         }
         .strikethrough {
             position: relative;
@@ -96,8 +95,7 @@
         color: @color_2;
         background-color: @background_color_2;
         &:hover {
-            background-color: @background_color_3;
-            cursor: pointer;
+            .primary_action_hover();
         }
         .line-through {
             .value-text {
