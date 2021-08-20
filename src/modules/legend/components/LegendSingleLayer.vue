@@ -17,6 +17,12 @@ export default {
             required: true
         }
     },
+    computed: {
+        uniqueLegends () {
+            console.log(JSON.stringify(this.legendObj.legend));
+            return [...new Set(this.legendObj.legend.map(({name}) => name))];
+        }
+    },
     watch: {
         legendObj () {
             this.$nextTick(() => {
@@ -47,7 +53,7 @@ export default {
             v-if="legendObj !== undefined"
         >
             <div
-                v-for="legendPart in legendObj.legend"
+                v-for="legendPart in _.uniqBy(legendObj.legend, 'name')"
                 :key="JSON.stringify(legendPart)"
                 class="layer-legend-container"
             >
