@@ -238,7 +238,6 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "~variables";
     @import "~/css/mixins.less";
 
     .h-seperator {
@@ -255,7 +254,7 @@ export default {
 
     .upload-button-wrapper {
         color: #FFFFFF;
-        background-color:#337ab7;
+        background-color: @secondary_focus;
         display: block;
         text-align:center;
         padding: 8px 12px;

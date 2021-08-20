@@ -87,14 +87,16 @@ export default {
 </template>
 
 <style lang="less" scoped>
-@import "~variables";
-    @import "~/css/mixins.less";
+@import "~/css/mixins.less";
 
 @color: #fec44f;
 
 span.glyphicon {
     &:focus {
         .primary_action_focus();
+    }
+    &:hover {
+        .primary_action_hover();
     }
 }
 

@@ -557,7 +557,7 @@ export default {
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <button
                                 id="searchByCoordBtn"
-                                class="btn btn-block"
+                                class="btn btn-primary btn-block"
                                 :disabled="getEastingError || getNorthingError || !coordinatesEasting.value || !coordinatesNorthing.value"
                                 type="button"
                                 @click="searchCoordinate(coordinatesEasting, coordinatesNorthing)"
@@ -573,6 +573,9 @@ export default {
 </template>
 
 <style lang="less" scoped>
+@import "~variables";
+
+
     @media (max-width: 767px) {
         .checkbox-container .form-inline {
             font-size: 12px;
@@ -598,7 +601,7 @@ export default {
     .hint{
         margin: 5px 0px 25px;
         text-align:center;
-        color: #7aa9d0;
+        color: @secondary_focus;
         transition: color 0.35s;
     }
     .info{

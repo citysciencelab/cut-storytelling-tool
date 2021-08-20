@@ -29,7 +29,7 @@ Table Style:
 **** Backbone tools
 
 // -> parcelSearch / Flurstücksuche
-// -> styeWMS
+// -> styeWMS / Style WMS
 -> featureLister / Liste
    -> Keine Tastaturbedienung der Tabs möglich -> TODO-Tastatur
    -> keine Tastaturbedierung der Selektion in der Liste -> TODO-Tastatur
@@ -39,16 +39,15 @@ Table Style:
 // -> extendedFilter / Erweiterter Filter
 // -> layerSlider / Zeitreihe
 // -> print / Drucken            #### primary butten
-// -> shadow
+// -> shadow / Schatten
 -> wfst -> ??? nicht testbar, layer liefert kein Ergebnis TODO
 
 **** sonstiges Backbone
 
 // -> searchBar
-
 -> weitere?  TODO
 
-*** anmerkungen zu snippets:
+**** Anmerkungen zu backbone snippets:
 - checkbox -> nicht tastaturbedienbar -> TODO-Tastatur
 - slider -> nicht tastaturbedienbar -> TODO-Tastatur
 - datepicker -> nicht tastaturbedienbar -> TODO-Tastatur
@@ -60,32 +59,53 @@ Table Style:
 
 ************************* Vue
 
+// -> Tool -> minimized 
+
 // -> AddWMS.vue / WMS hinzufügen
--> bufferAnalysis
+// -> bufferAnalysis / Buffer Analyse
 // -> compareFeatures / Vergleichsliste
 // -> Contact.vue / Kontakt      #### primary butten
--> coordToolklit
-// -> Draw.vue
-// -> FileImport.vue
+// -> coordToolkit / Koordinaten
+// -> Draw.vue /  Zeichnen / Schreiben
+// -> FileImport.vue / Datei Import
 -> gfi, diverse, 
-   -> Attached
-   -> Detached
-   -> Table
-   -> Mobile
+     themes/default
+       // -> gfi-iframe (mimeType = text/html, Thema: hamburgEventlotse)
+       // -> gfi-theme-images (mimeType = other, z.B. Thema: Krankenhäuser)
+     -> themes/sensor  -> TODO how to test -> portal config
+     // -> Attached
+     // -> Detached
+     // -> Table
+     // -> Mobile
 // -> Measure.vue / Strecke/Fläche messen
--> saveSelection
--> ScaleSwitcher.vue
--> SearchByCoord.vue
+// -> saveSelection / Auswahl speichern
+// -> ScaleSwitcher.vue / Maßstab umschalten
+// -> SearchByCoord.vue / Koordinatensuche
 // -> SelectFeature.vue / Features auswählen
--> styleVT.vue
+// -> styleVT.vue / Style VT (portal wien)
 // -> SupplyCoord.vue / Koordinaten abfragen
 
 **** Vue, diverse
 
--> Legend.vue
--> LayerInformation.vue
-   - Blaue Textfarbe ausreichend?
+// -> Legend.vue
+// -> LayerInformation.vue
+
 -> weitere?
+
+
+
+***** src/modules/controls (rote controls über der map)
+
+// -> attributions  (Attributierung (info))
+// -> backForward
+// -> freeze
+// -> fullscreen
+// -> mousePosition (no control at all?)
+// -> orientation (POI) / In der Nähe
+// -> overviewmap
+// -> totalView
+// -> zoom
+
 
 ***************************** AddOns
 
@@ -101,8 +121,8 @@ Table Style:
   // -> schulinfo
   -> solaratlas
   -> trafficCount
-  -> trinkwasser
-  -> verkehrsstaerken
+  // -> trinkwasser
+  // -> verkehrsstaerken
 
 **** Vue-addons
 

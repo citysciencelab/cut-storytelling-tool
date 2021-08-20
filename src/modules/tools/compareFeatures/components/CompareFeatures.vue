@@ -212,7 +212,6 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "~variables";
     @import "~/css/mixins.less";
 
     @background_color_2: #eee;

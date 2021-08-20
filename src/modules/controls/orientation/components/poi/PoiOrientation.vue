@@ -398,7 +398,6 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "~variables";
     @import "~/css/mixins.less";
 
     .poi {
@@ -429,6 +428,9 @@ export default {
         .tab-content{
             max-height: 78vH;
             overflow: auto;
+            &:focus {
+                .primary_action_focus();
+            }
             tbody {
                 >tr {
                     >td {

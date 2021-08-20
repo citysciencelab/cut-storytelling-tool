@@ -94,7 +94,6 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "~variables";
     @import "~/css/mixins.less";
 
     .freeze-view.freeze-activated {

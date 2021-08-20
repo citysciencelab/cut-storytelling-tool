@@ -306,7 +306,6 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "~variables";
     @import "~/css/mixins.less";
 
     @background_color_1: rgb(0, 92, 169);
