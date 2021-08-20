@@ -1076,9 +1076,7 @@ const BuildSpecModel = {
         }
         this.setShowLegend(isLegendSelected);
         this.setLegend(legendObject);
-        debugger;
         if (isMetaDataAvailable && metaDataLayerList.length > 0) {
-            debugger;
             metaDataLayerList.forEach((layerName) => {
                 this.getMetaData(layerName);
             });
