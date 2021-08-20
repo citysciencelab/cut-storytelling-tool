@@ -258,7 +258,6 @@ export default {
         // commit("setCurrentMapScale", state.Map.scale);
         if (Object.keys(canvasLayer).length) {
             commit("setEventListener", canvasLayer.on("postrender", (evt) => {
-                console.log("postrender");
                 dispatch("createPrintMask", evt);
             }));
         }

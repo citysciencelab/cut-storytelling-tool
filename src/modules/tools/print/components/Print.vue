@@ -46,7 +46,6 @@ export default {
                 this.setCurrentMapScale(this.$store.state.Map.scale);
             }
             this.togglePostrenderListener();
-            this.showGfiActive();
         },
         currentMapScale: function () {
             this.setCurrentScale(this.currentMapScale);
@@ -68,7 +67,7 @@ export default {
         }
         Backbone.Events.listenTo(Radio.channel("ModelList"), {
             "updatedSelectedLayerList": function () {
-                if (typeof this.get("eventListener") !== "undefined") {
+                if (typeof this.eventListener !== "undefined") {
                     this.setVisibleLayer(this.getVisibleLayer().concat(this.invisibleLayer));
                     this.updateCanvasLayer();
                 }
@@ -76,7 +75,7 @@ export default {
         });
         Backbone.Events.listenTo(Radio.channel("ModelList"), {
             "updatedSelectedLayerList": function () {
-                if (typeof this.get("eventListener") !== "undefined") {
+                if (typeof this.eventListener !== "undefined") {
                     this.setVisibleLayer(this.getVisibleLayer().concat(this.invisibleLayer));
                     this.updateCanvasLayer();
                 }
@@ -121,15 +120,6 @@ export default {
 
         showGfiAvailable () {
             return this.isGfiAvailable;
-        },
-
-        showGfiActive () {
-            if (this.currentFeature !== null) {
-                Radio.trigger("GFI", "isVisible", true);
-                return true;
-            }
-            Radio.trigger("GFI", "isVisible", false);
-            return false;
         },
 
         /**
@@ -188,6 +178,7 @@ export default {
         :icon="glyphicon"
         :active="active"
         :show-in-sidebar="true"
+        :initial-width="350"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
         :deactivate-gfi="deactivateGFI"
@@ -300,7 +291,6 @@ export default {
                     </div>
                 </div>
                 <div
-                    v-if="showGfiAvailable && showGfiActive"
                     class="form-group form-group-sm"
                 >
                     <label class="col-sm-5 control-label">
@@ -311,6 +301,7 @@ export default {
                             <input
                                 id="printGfi"
                                 type="checkbox"
+                                :disabled="currentFeature === null"
                                 :checked="isGfiSelected"
                                 @change="setIsGfiSelected($event.target.checked)"
                             >
