@@ -612,7 +612,7 @@ Definition of parameters for GFI template `"default"`.
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
 |iframe|no|**[iframe](#markdown-header-gfi_theme_default_params_iframe)**||Defines the size of the iframe. Only works if the infoFormat="text/html" is configured for the layer.|
-|imageLinks|no|String/String[]|`["bildlink", "link_bild", "Bild"]`|Defines in which attribute an image reference is given. Attributes will be searched in given order, and the first hit will be used.|
+|imageLinks|no|String/String[]|`["bildlink", "link_bild", "Bild", "bild"]`|Defines in which attribute an image reference is given. Attributes will be searched in given order, and the first hit will be used.|
 |maxWidth|no|String|`"600px"`|Defines the max width of the gfi content. The max width must be at least 280px.|
 |showFavoriteIcons|no|Boolean|`true`|Specifies whether an icon bar allowing tool access is to be displayed. The icons are only displayed if the corresponding tools are configured. Usable tools: `compareFeatures` (not yet implemented for WMS).
 
@@ -629,6 +629,7 @@ Example for show images in the gfi:
                 "bildlink",
                 "link_bild",
                 "Bild",
+                "bild",
                 "My_image_tag"
             ],
             "maxWidth": "500px",
