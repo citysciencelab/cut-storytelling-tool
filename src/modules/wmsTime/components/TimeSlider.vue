@@ -93,6 +93,7 @@ export default {
         <div class="timeSlider-innerWrapper-interactions">
             <fieldset>
                 <button
+                    :id="'timeSlider-button-backward-' + layerId"
                     class="btn btn-sm btn-lgv-grey"
                     :aria-label="$t('common:modules.wmsTime.timeSlider.buttons.backward')"
                     :disabled="nextIndex(false) === -1"
@@ -101,6 +102,7 @@ export default {
                     <i class="glyphicon glyphicon-backward" />
                 </button>
                 <button
+                    :id="'timeSlider-button-play-' + layerId"
                     class="btn btn-sm btn-lgv-grey"
                     :aria-label="$t('common:modules.wmsTime.timeSlider.buttons.play')"
                     @click="play"
@@ -110,6 +112,7 @@ export default {
                     />
                 </button>
                 <button
+                    :id="'timeSlider-button-forward-' + layerId"
                     class="btn btn-sm btn-lgv-grey"
                     :aria-label="$t('common:modules.wmsTime.timeSlider.buttons.forward')"
                     :disabled="nextIndex() === timeRange.length"
@@ -119,7 +122,10 @@ export default {
                 </button>
             </fieldset>
             <fieldset>
-                <label :for="'timeSlider-input-range-' + layerId">{{ sliderValue }}</label>
+                <label
+                    :id="`timeSlider-input-range-${layerId}-label`"
+                    :for="'timeSlider-input-range-' + layerId"
+                >{{ sliderValue }}</label>
             </fieldset>
             <fieldset>
                 <input
