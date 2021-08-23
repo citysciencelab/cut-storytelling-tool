@@ -34,6 +34,7 @@
 - GFI: order of Gfis is reversed now, so that the top layer ones come first
 - NPM packages https-proxy-agent, vue-loader, vue-template-compiler are moved from dependencies to devDependencies in package.json.
 - In the default GFI theme, images that are in the tag `"Bild"` or `"bild"` of a WMS GetFeatureInfo are now rendered as images by default.
+- Images from google-maps or -earth (gstatic.com) from KML files are now requested via a reverse proxy, since no CORS is set up there.
 - The MasterportalAPI version is updated to v1.5.0. This also raised ol to version 6.6.1
 - The following NPM packages are updated:
   - dependencies:
