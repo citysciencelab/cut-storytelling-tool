@@ -11,6 +11,7 @@ import getters from "../store/gettersWfsSearch";
 import mutations from "../store/mutationsWfsSearch";
 import {createUserHelp} from "../utils/literalFunctions";
 import {searchFeatures} from "../utils/requests";
+import isObject from "../../../../utils/isObject";
 
 export default {
     name: "WfsSearch",
@@ -28,10 +29,9 @@ export default {
                 return null;
             }
 
-            const {resultList} = this.currentInstance,
-                isObject = typeof resultList === "object";
+            const {resultList} = this.currentInstance;
 
-            if (isObject) {
+            if (isObject(resultList)) {
                 return Object.assign({}, resultList);
             }
             if (resultList === "showAll") {
@@ -106,7 +106,7 @@ export default {
 
             LoaderOverlay.hide();
 
-            document.getElementById("tool-wfsSearch-showResults-button").focus();
+            document.getElementById("tool-wfsSearch-button-showResults").focus();
             this.setResults([]);
             features.forEach(feature => {
                 this.results.push(feature);
@@ -138,6 +138,7 @@ export default {
                         class="form-group form-group-sm"
                     >
                         <label
+                            id="tool-wfsSearch-instances-select-label"
                             class="col-md-5 col-sm-5 control-label"
                             for="tool-wfsSearch-instances-select"
                         >
@@ -163,10 +164,15 @@ export default {
                     </template>
                     <div
                         v-if="userHelp !== 'hide'"
+                        id="tool-wfsSearch-userHelp"
                         class="form-group form-group-sm"
                     >
-                        <i class="col-md-1 col-sm-1 glyphicon glyphicon-info-sign" />
+                        <i
+                            id="tool-wfsSearch-userHelp-icon"
+                            class="col-md-1 col-sm-1 glyphicon glyphicon-info-sign"
+                        />
                         <span
+                            id="tool-wfsSearch-userHelp-text"
                             class="col-md-11 col-sm-11"
                             :aria-label="$t('common:modules.tools.wfsSearch.userHelp.label')"
                             v-html="$t('common:modules.tools.wfsSearch.userHelp.text', {userHelp})"
@@ -183,6 +189,7 @@ export default {
                     <div class="form-group form-group-sm">
                         <div class="col-md-6 col-sm-6">
                             <button
+                                id="tool-wfsSearch-button-resetUI"
                                 type="button"
                                 class="btn btn-lgv-grey col-md-12 col-sm-12"
                                 @click="resetUI"
@@ -192,6 +199,7 @@ export default {
                         </div>
                         <div class="col-md-6 col-sm-6">
                             <button
+                                id="tool-wfsSearch-button-search"
                                 type="button"
                                 class="btn btn-lgv-grey col-md-12 col-sm-12"
                                 :disabled="requiredFields"
@@ -205,7 +213,7 @@ export default {
                             class="col-md-12 col-sm-12"
                         >
                             <button
-                                id="tool-wfsSearch-showResults-button"
+                                id="tool-wfsSearch-button-showResults"
                                 class="btn btn-lgv-grey col-md-12 col-sm-12"
                                 :disabled="results.length === 0 || !headers"
                                 @click="setShowResultList(true)"
