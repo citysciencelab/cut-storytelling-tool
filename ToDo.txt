@@ -40,6 +40,7 @@ Table Style:
 // -> layerSlider / Zeitreihe
 // -> print / Drucken            #### primary butten
 // -> shadow / Schatten
+-> virtualCity -> ???
 -> wfst -> ??? nicht testbar, layer liefert kein Ergebnis TODO
 
 **** sonstiges Backbone
@@ -126,9 +127,9 @@ Table Style:
 
 **** Vue-addons
 
--> tacticalMark
+// -> tacticalMark
 -> commuterFlows
--> schoolrouteplanning
+// -> schoolrouteplanning
 // -> PopulationRequest.vue / Einwohneranzahl abfragen  #### toggle-button tastaturbedienbar gestaltet
    //  -> kein label für Dropdwon.
 -> geoAnalyze
@@ -136,4 +137,14 @@ Table Style:
 -> sdpDownload
 
 **** Backbone AddOns
+
+-> boris
+-> bauforum
+-> cosi?
+-> oktagonKartenportal
+-> qr
+-> showParcelGFI
+
+
+
 
