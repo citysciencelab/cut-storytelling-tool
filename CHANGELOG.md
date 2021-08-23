@@ -29,6 +29,7 @@
     - Quickhelp via the question icon in the searchbar (top menu)
 - GFI: order of Gfis is reversed now, so that the top layer ones come first
 - NPM packages https-proxy-agent, vue-loader, vue-template-compiler are moved from dependencies to devDependencies in package.json.
+- In the default GFI theme, images that are in the tag `"Bild"` or `"bild"` of a WMS GetFeatureInfo are now rendered as images by default.
 - The MasterportalAPI version is updated to v1.5.0. This also raised ol to version 6.6.1
 - The following NPM packages are updated:
   - dependencies:
@@ -92,6 +93,7 @@
 
 ### Fixed
 - The legend now always renders in the map region even when the sidebar is open. Also, the small optical offset in the menu bar at the legend entry has been removed.
+- Layers in the default tree that are grouped by metadata and start with numbers (e.g. 100 Jahre Stadtgrün) can now be opened again.
 
 ---
 ## v2.12.1 - 2021-08-12
