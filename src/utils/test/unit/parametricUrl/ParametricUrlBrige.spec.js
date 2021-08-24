@@ -8,10 +8,18 @@ describe("src/utils/parametricUrl/ParametricUrlBrige.js", () => {
     const originLocation = location,
         originWindow = window;
 
+    /**
+     * Resets global.window and global.location to inital content.
+     * @returns {void}
+     */
     function afterUpdateQueryStringParam () {
         global.window = originWindow;
         global.location = originLocation;
     }
+    /**
+     * Sets blobal variables for test.
+     * @returns {void}
+     */
     async function beforeUpdateQueryStringParam () {
         let state = {query: "foo"};
 
@@ -73,43 +81,43 @@ describe("src/utils/parametricUrl/ParametricUrlBrige.js", () => {
 
     describe("handleUrlParamsBeforeVueMount", function () {
         it("test url param key query", () => {
-            let query = "?query=Neuenfelder%20Stra%C3%9Fe,19",
-                value = "Neuenfelder Straße,19";
+            const value = "Neuenfelder Straße,19";
+            let query = "?query=Neuenfelder%20Stra%C3%9Fe,19";
 
             handleUrlParamsBeforeVueMount(query);
             expect(store.state.urlParams["Search/query"]).to.be.equals(value);
 
             store.state.urlParams["Search/query"] = null;
-            query = "?Search/query=Neuenfelder%20Stra%C3%9Fe,19",
+            query = "?Search/query=Neuenfelder%20Stra%C3%9Fe,19";
             handleUrlParamsBeforeVueMount(query);
             expect(store.state.urlParams["Search/query"]).to.be.equals(value);
         });
         it("test url param key map/layerids", () => {
-            let query = "?layerids=123,456",
-                value = [{
-                    "id": "123",
-                    "transparency": 0,
-                    "visibility": true
-                },
-                {
-                    "id": "456",
-                    "transparency": 0,
-                    "visibility": true
-                }];
+            let query = "?layerids=123,456";
+            const value = [{
+                "id": "123",
+                "transparency": 0,
+                "visibility": true
+            },
+            {
+                "id": "456",
+                "transparency": 0,
+                "visibility": true
+            }];
 
             handleUrlParamsBeforeVueMount(query);
             expect(store.state.urlParams["Map/layerIds"]).to.be.deep.equals(value);
 
             store.state.urlParams["Map/layerIds"] = null;
-            query = "?layerids=123,456",
+            query = "?layerids=123,456";
             handleUrlParamsBeforeVueMount(query);
             expect(store.state.urlParams["Map/layerIds"]).to.be.deep.equals(value);
         });
     });
     describe("translateToBackbone", function () {
         it("test url param key containing tools", () => {
+            const value = "true";
             let key = "tools/draw/active",
-                value = "true",
                 result = translateToBackbone(key, value);
 
             expect(result).to.be.deep.equals({key: "isinitopen", value: "draw"});
@@ -132,7 +140,7 @@ describe("src/utils/parametricUrl/ParametricUrlBrige.js", () => {
             expect(radioTrigger.calledOnceWithExactly("Map", "mapChangeTo3d")).to.be.true;
         });
         it("test url param key 'Map/mdId'", () => {
-            const radioTrigger = sinon.stub(Radio, "trigger").callsFake(() => {}),
+            const radioTrigger = sinon.stub(Radio, "trigger").callsFake(),
                 baseLayer = {
                     id: "idBaseLayer",
                     setIsSelected: sinon.stub()

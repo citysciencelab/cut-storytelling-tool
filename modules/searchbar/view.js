@@ -228,7 +228,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         if (this.model.get("initSearchString") !== undefined) {
             this.renderRecommendedList();
             this.$("#searchInput").val(this.model.get("initSearchString"));
-            this.model.unset("initSearchString", true);
         }
         this.setSearchInputWidth();
     },
@@ -306,7 +305,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             if (this.model.get("isInitialRecommendedListCreated") === true) {
                 this.renderRecommendedList();
                 this.$("#searchInput").val(this.model.get("initSearchString"));
-                this.model.unset("initSearchString", true);
             }
         }
         this.setSearchInputWidth();

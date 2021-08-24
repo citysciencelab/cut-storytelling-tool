@@ -49,18 +49,6 @@ export function handleUrlParamsBeforeVueMount (query) {
 export function triggerParametricURLReady () {
     const channel = Radio.channel("ParametricURL");
 
-    /**
-     * This is only for addon cosi, if the request there is adapted, this may be deleted (18.08.2021)
-     */
-    channel.reply({
-        "getFilter": function () {
-            return store.state.urlParam?.filter;
-        }
-    }, this);
-    channel.on({
-        "updateQueryStringParam": updateQueryStringParam
-    }, this);
-
     channel.trigger("ready");
 }
 /**
