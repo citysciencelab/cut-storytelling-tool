@@ -9,7 +9,7 @@ const namedProjections = [
     ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
 ];
 
-describe("src/utils/converter.js", () => {
+describe("src/utils/parametricUrl/converter.js", () => {
     describe("convert", () => {
         it("convert String  to boolean", () => {
             expect(convert("false")).to.be.equals(false);

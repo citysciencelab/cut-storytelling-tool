@@ -99,7 +99,7 @@ function callActions (state) {
             store.dispatch("MapMarker/placingPointMarker", coordinates);
         }, 500);
     }
-    if (state.urlParams["Map/zoomLevel"]) {
+    if (typeof state.urlParams["Map/zoomLevel"] === "number") {
         store.dispatch("Map/setZoomLevel", state.Map.zoomLevel);
     }
 }
