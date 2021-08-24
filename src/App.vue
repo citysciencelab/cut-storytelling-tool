@@ -3,6 +3,7 @@ import {mapMutations} from "vuex";
 import MainNav from "./MainNav.vue";
 import MapRegion from "./MapRegion.vue";
 import isDevMode from "./utils/isDevMode";
+import {checkIsURLQueryValid} from "./utils/parametricUrl/stateModifier";
 
 export default {
     name: "App",
@@ -13,21 +14,13 @@ export default {
     data: () => ({isDevMode}),
     created () {
         this.$nextTick(() => {
-            if (this.readFromUrlParams() && this.checkisURLQueryValid(window.location.search)) {
+            if (this.readFromUrlParams() && checkIsURLQueryValid(window.location.search)) {
                 this.setUrlParams(new URLSearchParams(window.location.search));
             }
         });
     },
     methods: {
         ...mapMutations(["setUrlParams"]),
-        /**
-        * Checks if the query contains html content, if so it is not valid.
-        * @param {string} query - The URL-Parameters
-        * @return {boolean} Is the query valid.
-        */
-        checkisURLQueryValid: function (query) {
-            return !(/(<([^>]+)>)/g).test(decodeURIComponent(query));
-        },
         /**
         * Checks the Config for 'allowParametricURL'.
         * @return {boolean} true, if allowParametricURL is true or if it is missing

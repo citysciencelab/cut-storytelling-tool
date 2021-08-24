@@ -569,8 +569,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     },
 
     /**
-     * NOTICE: dies kann bei Portierung nach Vue über die src/utils/ParametricUrl/* gemacht werden.
-     * Dort wird dieser UrlParam bereits verarbeitet und das Ergebnis in den store geschrieben.
+     * NOTICE: this can be done when porting to Vue via the src/utils/ParametricUrl/*.
+     * There this UrlParam is already processed and the result is written into the store.
      * @fires Alerting#RadioTriggerAlertAlert
      * @returns {void}
      */

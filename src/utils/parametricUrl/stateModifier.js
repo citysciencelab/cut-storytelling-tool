@@ -109,7 +109,7 @@ function callActions (state) {
  * @param {URLSearchParams} params an instance of URLSearchParams
  *  @returns {void}
  */
-export default async function setValuesToState (state, params) {
+export async function setValuesToState (state, params) {
     await params.forEach(function (value, key) {
         setValueToState(state, key, value);
     });
@@ -150,3 +150,13 @@ export async function setValueToState (state, key, value) {
         });
     }
 }
+
+/**
+  * Checks if the query contains html content, if so it is not valid.
+  * @param {string} query The URL-Parameters
+  * @return {boolean} triue, if the query is valid
+  */
+export function checkIsURLQueryValid (query) {
+    return !(/(<([^>]+)>)/g).test(decodeURIComponent(query));
+}
+

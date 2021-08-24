@@ -88,30 +88,7 @@ const Config = {
         },
         fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"]
-    },
-    "featureViaURL": {
-        "zoomTo": "42",
-        "epsg": 4326,
-        "layers": [
-            {
-                "id": "42",
-                "geometryType": "Point",
-                "name": "Punkt Feature",
-                "styleId": "funky"
-            },
-            {
-                "id": "4200",
-                "geometryType": "LineString",
-                "name": "Übergebene Linien Feature"
-            },
-            {
-                "id": "4020",
-                "geometryType": "Polygon",
-                "name": "Übergebene Polygon Feature"
-            }
-        ]
     }
-
 };
 
 // conditional export to make config readable by e2e tests

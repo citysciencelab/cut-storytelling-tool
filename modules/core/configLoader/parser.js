@@ -861,7 +861,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     getItemsByMetaID: function (metaID) {
         const layers = this.get("itemList").filter(function (item) {
             if (item.type === "layer") {
-                if (item.datasets && item.datasets.length > 0) {
+                if (item.datasets.length > 0) {
                     return item.datasets[0].md_id === metaID;
                 }
             }
