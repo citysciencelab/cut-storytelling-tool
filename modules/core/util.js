@@ -91,7 +91,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "differenceJs": this.differenceJs,
             "toObject": this.toObject,
             "isEmpty": this.isEmpty,
-            "setUrlQueryParams": this.setUrlQueryParams,
             "searchNestedObject": this.searchNestedObject
         }, this);
 

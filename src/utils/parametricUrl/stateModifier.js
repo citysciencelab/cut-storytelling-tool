@@ -1,6 +1,6 @@
 import {translate} from "./translator";
 import {deepAssignIgnoreCase} from "../deepAssign";
-import {doSpecialBackboneHandling, triggerParametricURLReady, translateToBackbone} from "./ParametricUrlBrige";
+import {doSpecialBackboneHandling, triggerParametricURLReady, translateToBackbone} from "./ParametricUrlBridge";
 import store from "../../app-store";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
 
@@ -20,7 +20,6 @@ function searchAndSetValue (state, keySplitted, value, found = false) {
         if (vuexState[keySplitted[0]]) {
             const source = makeObject(keySplitted, value),
                 newState = deepAssignIgnoreCase(state, source);
-                // console.log(newState);
 
             if (newState) {
                 foundInState = true;
@@ -133,17 +132,9 @@ export default async function setValuesToState (state, params) {
  * @returns {void}
  */
 export async function setValueToState (state, key, value) {
-    console.log("---- key=", key);
-    console.log("value=", value);
-
     if (typeof key === "string") {
         translate(key.trim(), value).then(entry => {
             const found = searchAndSetValue(state, entry.key.split("/"), entry.value);
-
-            console.log("translated key=", entry.key);
-            console.log("translated value=", entry.value);
-            // console.log("state:", state);
-            console.log("found:", found);
 
             if (!found) {
                 const oldParam = translateToBackbone(entry.key, entry.value);
@@ -153,7 +144,6 @@ export async function setValueToState (state, key, value) {
                 }
             }
             state.urlParams[entry.key] = entry.value;
-            console.log("state.urlParams=", state.urlParams);
             return entry;
         }).catch(error => {
             console.warn("Error occured during applying url param to state ", error);

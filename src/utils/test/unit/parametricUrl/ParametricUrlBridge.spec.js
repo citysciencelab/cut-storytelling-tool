@@ -1,10 +1,10 @@
 import {expect} from "chai";
 import sinon from "sinon";
-import {doSpecialBackboneHandling, handleUrlParamsBeforeVueMount, translateToBackbone, updateQueryStringParam} from "../../../parametricUrl/ParametricUrlBrige";
+import {doSpecialBackboneHandling, handleUrlParamsBeforeVueMount, translateToBackbone, updateQueryStringParam} from "../../../parametricUrl/ParametricUrlBridge";
 import store from "../../../../app-store";
 
 
-describe("src/utils/parametricUrl/ParametricUrlBrige.js", () => {
+describe("src/utils/parametricUrl/ParametricUrlBridge.js", () => {
     const originLocation = location,
         originWindow = window;
 

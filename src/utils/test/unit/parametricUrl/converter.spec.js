@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {convert} from "../../../parametricUrl/converter";
+import {convert, convertTransparency, parseQuery} from "../../../parametricUrl/converter";
 import * as crs from "masterportalAPI/src/crs";
 
 const namedProjections = [
@@ -34,6 +34,16 @@ describe("src/utils/converter.js", () => {
         expect(convert("553925,5931898")).to.be.deep.equals([553925, 5931898]);
         expect(convert(",5931898")).to.be.deep.equals(["", 5931898]);
         expect(convert(",")).to.be.deep.equals(["", ""]);
+    });
+    it("convert transparency to a number array", () => {
+        expect(convertTransparency("10,20")).to.be.deep.equals([10, 20]);
+        expect(convertTransparency("10.123,20")).to.be.deep.equals([10, 20]);
+        expect(convertTransparency("")).to.be.equals("");
+    });
+    it("test parseQuery", () => {
+        expect(parseQuery("Neuenfelder Straße,19")).to.be.equals("Neuenfelder Straße,19");
+        expect(parseQuery("Neuenfelder straße,19")).to.be.equals("Neuenfelder Straße,19");
+
     });
     it("convert an EPSG code to a projection", () => {
         crs.registerProjections(namedProjections);

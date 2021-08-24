@@ -1,6 +1,5 @@
 import {fetchFirstModuleConfig} from "../../utils/fetchFirstModuleConfig";
 import getComponent from "../../utils/getComponent";
-import ValidationError from "../../utils/customErrors/validationError";
 
 
 const actions = {
@@ -79,41 +78,6 @@ const actions = {
         if (getters.getConfiguredToolNames.includes(activeToolName)) {
             commit(activeToolName + "/setActive", true);
             dispatch("activateToolInModelList", activeToolName);
-        }
-    },
-
-    /**
-     * Checks if a tool should initialized with certain values controlled by the url param "initvalues".
-     * @param {Object} context - context object for actions
-     * @param {String} toolName - Name from the toolComponent
-     * @returns {void}
-     */
-    setToolInitValues: ({rootState, commit, dispatch}, toolName) => {
-        // todo ind
-        if (rootState?.queryParams?.initvalues) {
-            const toolState = JSON.parse(rootState?.queryParams?.initvalues);
-            let index = 1;
-
-            for (const state in toolState) {
-                setTimeout(() => {
-                    try {
-                        if (rootState._store._actions["Tools/" + toolName + "/" + state]) {
-                            dispatch(toolName + "/" + state, toolState[state]);
-                        }
-                        else if (rootState._store._mutations[toolName + "/" + state]) {
-                            commit(toolName + "/" + state, toolState[state]);
-                        }
-                    }
-                    catch (e) {
-                        const alertingMessage = {
-                            category: i18next.t("common:modules.alerting.categories.error"),
-                            content: e instanceof ValidationError ? e.message : i18next.t("common:modules.core.parametricURL.alertWrongInitValues")};
-
-                        dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
-                    }
-                }, index * 500);
-                index++;
-            }
         }
     },
 

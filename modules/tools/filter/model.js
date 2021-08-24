@@ -2,7 +2,7 @@ import WfsQueryModel from "./query/source/wfs";
 import GeoJsonQueryModel from "./query/source/geojson";
 import Tool from "../../core/modelList/tool/model";
 import "./RadioBridge.js";
-import {updateQueryStringParam} from "../../../src/utils/parametricUrl/ParametricUrlBrige";
+import {updateQueryStringParam} from "../../../src/utils/parametricUrl/ParametricUrlBridge";
 import store from "../../../src/app-store";
 
 const FilterModel = Tool.extend({
@@ -202,7 +202,6 @@ const FilterModel = Tool.extend({
         });
         if (this.get("saveToUrl")) {
             updateQueryStringParam("filter", JSON.stringify(filterObjects));
-            // Radio.trigger("ParametricURL", "updateQueryStringParam", "filter", JSON.stringify(filterObjects));
         }
     },
 

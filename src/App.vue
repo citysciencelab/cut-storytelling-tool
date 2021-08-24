@@ -13,11 +13,28 @@ export default {
     data: () => ({isDevMode}),
     created () {
         this.$nextTick(() => {
-            this.setUrlParams(new URLSearchParams(window.location.search));
+            if (this.readFromUrlParams() && this.checkisURLQueryValid(window.location.search)) {
+                this.setUrlParams(new URLSearchParams(window.location.search));
+            }
         });
     },
     methods: {
-        ...mapMutations(["setUrlParams"])
+        ...mapMutations(["setUrlParams"]),
+        /**
+        * Checks if the query contains html content, if so it is not valid.
+        * @param {string} query - The URL-Parameters
+        * @return {boolean} Is the query valid.
+        */
+        checkisURLQueryValid: function (query) {
+            return !(/(<([^>]+)>)/g).test(decodeURIComponent(query));
+        },
+        /**
+        * Checks the Config for 'allowParametricURL'.
+        * @return {boolean} true, if allowParametricURL is true or if it is missing
+        */
+        readFromUrlParams: function () {
+            return !Object.prototype.hasOwnProperty.call(Config, "allowParametricURL") || Config.allowParametricURL === true;
+        }
     }
 };
 </script>

@@ -3,30 +3,30 @@ import getters from "../getters.js";
 
 describe("src/app-store/getters.js", () => {
     describe("isSimpleStyle: checks if the simple style is set or not", () => {
-        it("should return false if table style is set in the queryParams", () => {
+        it("should return false if table style is set in the urlParams", () => {
             const state = {
-                queryParams: {
-                    style: "table"
+                urlParams: {
+                    uiStyle: "table"
                 }
             };
 
             expect(getters.isSimpleStyle(state)).to.be.false;
         });
 
-        it("should return true if simple style is set in queryParams", () => {
+        it("should return true if simple style is set in urlParams", () => {
             const state = {
-                queryParams: {
-                    style: "simple"
+                urlParams: {
+                    uiStyle: "simple"
                 }
             };
 
             expect(getters.isSimpleStyle(state)).to.be.true;
         });
 
-        it("should return false if simple style is set in config and table style in queryParams", () => {
+        it("should return false if simple style is set in config and table style in urlParams", () => {
             const state = {
-                queryParams: {
-                    style: "table"
+                urlParams: {
+                    uiStyle: "table"
                 },
                 configJs: {
                     uiStyle: "simple"
@@ -36,9 +36,9 @@ describe("src/app-store/getters.js", () => {
             expect(getters.isSimpleStyle(state)).to.be.false;
         });
 
-        it("should return false if style is not set in queryParams and table style is set in the config", () => {
+        it("should return false if style is not set in urlParams and table style is set in the config", () => {
             const state = {
-                queryParams: {
+                urlParams: {
                 },
                 configJs: {
                     uiStyle: "table"
@@ -48,9 +48,9 @@ describe("src/app-store/getters.js", () => {
             expect(getters.isSimpleStyle(state)).to.be.false;
         });
 
-        it("should return true if style is undefined in queryParams and simple style is set in the config", () => {
+        it("should return true if style is undefined in urlParams and simple style is set in the config", () => {
             const state = {
-                queryParams: {
+                urlParams: {
                 },
                 configJs: {
                     uiStyle: "simple"
@@ -60,9 +60,9 @@ describe("src/app-store/getters.js", () => {
             expect(getters.isSimpleStyle(state)).to.be.true;
         });
 
-        it("should return false if style neither set in queryParams nor in the config", () => {
+        it("should return false if style neither set in urlParams nor in the config", () => {
             const state = {
-                queryParams: {
+                urlParams: {
                 },
                 configJs: {
                 }
@@ -73,30 +73,30 @@ describe("src/app-store/getters.js", () => {
     });
 
     describe("isTableStyle: checks if the table style is set or not", () => {
-        it("should return false if simple style is set in the queryParams", () => {
+        it("should return false if simple style is set in the urlParams", () => {
             const state = {
-                queryParams: {
-                    style: "simple"
+                urlParams: {
+                    uiStyle: "simple"
                 }
             };
 
             expect(getters.isTableStyle(state)).to.be.false;
         });
 
-        it("should return true if table style is set in queryParams", () => {
+        it("should return true if table style is set in urlParams", () => {
             const state = {
-                queryParams: {
-                    style: "table"
+                urlParams: {
+                    uiStyle: "table"
                 }
             };
 
             expect(getters.isTableStyle(state)).to.be.true;
         });
 
-        it("should return false if table style is set in config and simple style in queryParams", () => {
+        it("should return false if table style is set in config and simple style in urlParams", () => {
             const state = {
-                queryParams: {
-                    style: "simple"
+                urlParams: {
+                    uiStyle: "simple"
                 },
                 configJs: {
                     uiStyle: "table"
@@ -106,9 +106,9 @@ describe("src/app-store/getters.js", () => {
             expect(getters.isTableStyle(state)).to.be.false;
         });
 
-        it("should return false if style is undefined in queryParams and simple style is set in the config", () => {
+        it("should return false if style is undefined in urlParams and simple style is set in the config", () => {
             const state = {
-                queryParams: {
+                urlParams: {
                 },
                 configJs: {
                     uiStyle: "simple"
@@ -118,9 +118,9 @@ describe("src/app-store/getters.js", () => {
             expect(getters.isTableStyle(state)).to.be.false;
         });
 
-        it("should return true if style is undefined in queryParams and table style is set in the config", () => {
+        it("should return true if style is undefined in urlParams and table style is set in the config", () => {
             const state = {
-                queryParams: {
+                urlParams: {
                 },
                 configJs: {
                     uiStyle: "table"
@@ -130,9 +130,9 @@ describe("src/app-store/getters.js", () => {
             expect(getters.isTableStyle(state)).to.be.true;
         });
 
-        it("should return false if style neither set in queryParams nor in the config", () => {
+        it("should return false if style neither set in urlParams nor in the config", () => {
             const state = {
-                queryParams: {
+                urlParams: {
                 },
                 configJs: {
                 }

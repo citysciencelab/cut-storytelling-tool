@@ -11,7 +11,7 @@ export default function requestConfig (url) {
         .then(response => response)
         .catch(error => {
             console.error("Error occured during loading ", url, " to set config by url param.", error);
-            store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.core.parametricURL.errorLoadConfig", {url: url}), {root: true});
+            store.dispatch("Alerting/addSingleAlert", i18next.t("common:utils.parametricURL.errorLoadConfig", {url: url}), {root: true});
             throw error;
         });
 }

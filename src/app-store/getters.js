@@ -76,14 +76,13 @@ export default {
     },
 
     /**
-     * checks if the simple style is set in the query params or in the config.js
+     * checks if the simple style is set in the url params or in the config.js
      * @param {Object} state - the store state
      * @returns {Boolean} true if simple style is set otherwise false
      */
     isSimpleStyle: (state) => {
-        // todo ind
-        if (state?.queryParams?.style) {
-            return state.queryParams.style === "simple";
+        if (state?.urlParams?.uiStyle) {
+            return state.urlParams.uiStyle === "simple";
         }
         else if (state?.configJs?.uiStyle === "simple") {
             return true;
@@ -92,14 +91,13 @@ export default {
     },
 
     /**
-     * checks if the table style is set in the query params or in the config.js
+     * checks if the table style is set in the url params or in the config.js
      * @param {Object} state - the store state
      * @returns {Boolean} true if table style is set otherwise false
      */
     isTableStyle: (state) => {
-        // todo ind
-        if (state?.queryParams?.style) {
-            return state.queryParams.style === "table";
+        if (state?.urlParams?.uiStyle) {
+            return state.urlParams.uiStyle === "table";
         }
         else if (state?.configJs?.uiStyle === "table") {
             return true;

@@ -7,7 +7,6 @@ import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
 import StyleList from "../modules/vectorStyle/list";
 import Preparser from "../modules/core/configLoader/preparser";
-import ParametricURL from "../modules/core/parametricURL";
 import Map from "../modules/core/map";
 import RemoteInterface from "../modules/remoteInterface/model";
 import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
@@ -32,7 +31,7 @@ import StyleWMSView from "../modules/tools/styleWMS/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
 import {initiateVueI18Next} from "./vueI18Next";
-import {handleUrlParamsBeforeVueMount, readUrlParamStyle} from "../src/utils/parametricUrl/ParametricUrlBrige";
+import {handleUrlParamsBeforeVueMount, readUrlParamStyle} from "../src/utils/parametricUrl/ParametricUrlBridge";
 
 /**
  * WFSFeatureFilterView
@@ -132,9 +131,6 @@ async function loadApp () {
     handleUrlParamsBeforeVueMount(window.location.search);
 
     new StyleList();
-    if (!Object.prototype.hasOwnProperty.call(Config, "allowParametricURL") || Config.allowParametricURL === true) {
-        new ParametricURL();
-    }
     new Map(Radio.request("Parser", "getPortalConfig").mapView);
     new WindowView();
 

@@ -1,5 +1,5 @@
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
-import {convert, parseQuery} from "./converter";
+import {convert, convertTransparency, parseQuery} from "./converter";
 import {setValueToState} from "./stateModifier";
 import store from "../../app-store";
 
@@ -127,7 +127,7 @@ function parseZoomToGeometry (urlParamValue) {
             gemometryToZoom = geometries[parseInt(urlParamValue, 10) - 1];
         }
         else {
-            store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.core.parametricURL.alertZoomToGeometry"));
+            store.dispatch("Alerting/addSingleAlert", i18next.t("common:utils.parametricURL.alertZoomToGeometry"));
         }
     }
 
@@ -173,7 +173,7 @@ function getLayersUsingMetaId (values) {
      */
 function parseLayerParams (layerIdString, visibilityString = "", transparencyString = "") {
     const visibilityListBooleans = store.state.urlParams?.visibility ? convert(store.state.urlParams.visibility) : convert(visibilityString),
-        transparencyListNumbers = store.state.urlParams?.transparency ? convert(store.state.urlParams.transparency) : convert(transparencyString),
+        transparencyListNumbers = store.state.urlParams?.transparency ? convertTransparency(store.state.urlParams.transparency) : convertTransparency(transparencyString),
         layerParams = [],
         wrongIdsPositions = [],
         treeType = Radio.request("Parser", "getTreeType");
@@ -200,7 +200,7 @@ function parseLayerParams (layerIdString, visibilityString = "", transparencyStr
     if (layerIdList.length !== visibilityList.length || visibilityList.length !== transparencyList.length) {
         // timeout may be removed, if everything is migrated to vue. Now it is needed for portal/basic.
         setTimeout(() => {
-            store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.core.parametricURL.alertWrongAmountVisibility"), {root: true, category: "Warning"});
+            store.dispatch("Alerting/addSingleAlert", i18next.t("common:utils.parametricURL.alertWrongAmountVisibility"), {root: true, category: "Warning"});
         }, 500);
         return null;
     }
@@ -310,7 +310,7 @@ function alertWrongLayerIds (wrongIdsPositions) {
         });
         // timeout may be removed, if everything is migrated to vue. Now it is needed for portal/basic.
         setTimeout(() => {
-            store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.core.parametricURL.alertWrongLayerIds", {wrongIdsPositionsConcat: wrongIdsPositionsConcat}), {root: true});
+            store.dispatch("Alerting/addSingleAlert", i18next.t("common:utils.parametricURL.alertWrongLayerIds", {wrongIdsPositionsConcat: wrongIdsPositionsConcat}), {root: true});
         }, 500);
     }
 }
