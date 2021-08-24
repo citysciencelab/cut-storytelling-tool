@@ -86,7 +86,6 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             url += key + "=" + params[key] + "&";
         });
         url = url.slice(0, -1);
-console.log(url);
         fetchPolyfill(url)
             .then(response => response.text())
             .then(responseAsString => new window.DOMParser().parseFromString(responseAsString, "text/xml"))
