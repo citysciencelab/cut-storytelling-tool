@@ -11,7 +11,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 config.mocks.$t = key => key;
 
-describe.only("src/modules/wmsTime/components/WmsTime.vue", () => {
+describe("src/modules/wmsTime/components/TimeSlider.vue", () => {
     let store;
 
     beforeEach(() => {
