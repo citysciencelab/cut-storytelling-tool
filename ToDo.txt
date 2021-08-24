@@ -30,9 +30,9 @@ Table Style:
 
 // -> parcelSearch / Flurstücksuche
 // -> styeWMS / Style WMS
--> featureLister / Liste
-   -> Keine Tastaturbedienung der Tabs möglich -> TODO-Tastatur
-   -> keine Tastaturbedierung der Selektion in der Liste -> TODO-Tastatur
+// -> featureLister / Liste
+     -> Keine Tastaturbedienung der Tabs möglich -> TODO-Tastatur
+     -> keine Tastaturbedierung der Selektion in der Liste -> TODO-Tastatur
 // -> filter                     #### selected elements button
       // -> Filteroptionen: Texte als placeholder problematisch < 3:1 
       -> keine oder nur eingeschränkze Tastatutbedienung der verwendeten Snippets -> TODO-Tastatur
@@ -69,11 +69,11 @@ Table Style:
 // -> coordToolkit / Koordinaten
 // -> Draw.vue /  Zeichnen / Schreiben
 // -> FileImport.vue / Datei Import
--> gfi, diverse, 
-     themes/default
-       // -> gfi-iframe (mimeType = text/html, Thema: hamburgEventlotse)
-       // -> gfi-theme-images (mimeType = other, z.B. Thema: Krankenhäuser)
-     -> themes/sensor  -> TODO how to test -> portal config
+// -> gfi 
+       //-> themes/default
+         // -> gfi-iframe (mimeType = text/html, Thema: hamburgEventlotse)
+         // -> gfi-theme-images (mimeType = other, z.B. Thema: Krankenhäuser)
+       // -> themes/sensor  (Status E-Ladepunkte der E-Ladestationen)
      // -> Attached
      // -> Detached
      // -> Table
@@ -112,15 +112,15 @@ Table Style:
 
 **** gfiThemes
   
-  -> activeCityMaps
-  -> bildungsatlas
+  // -> activeCityMaps
+  // -> bildungsatlas
   -> continuousCountingBike
   -> dataTable
-  -> dipas
+  // -> dipas
   -> flaecheninfo
   -> reisezeiten
   // -> schulinfo
-  -> solaratlas
+  // -> solaratlas
   -> trafficCount
   // -> trinkwasser
   // -> verkehrsstaerken
@@ -133,14 +133,20 @@ Table Style:
 // -> PopulationRequest.vue / Einwohneranzahl abfragen  #### toggle-button tastaturbedienbar gestaltet
    //  -> kein label für Dropdwon.
 -> geoAnalyze
--> fileImportAddon
+// -> fileImportAddon  -> ist bereits im MP repo vorhanden
 -> sdpDownload
 
 **** Backbone AddOns
 
--> boris
+// -> boris
 -> bauforum
--> cosi?
+// -> cosi (testbar über cosi-portalconfig)
+      // -> Gebiet auswählen
+      // -> Dashboard
+      -> Simulation?
+      // -> Erreichbarkeitsanalyse
+      // -> Vergleichbare Gebiete ermitteln
+      // -> Versorgungsanalyse
 -> oktagonKartenportal
 -> qr
 -> showParcelGFI
