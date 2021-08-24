@@ -126,14 +126,14 @@ export default {
                     </label>
                     <hr>
                     <button
-                        class="btn btn-primary"
+                        class="confirm btn btn-primary"
                         tabindex="0"
                         @click="triggerTrack"
                     >
                         {{ $t("common:modules.controls.orientation.poiChoiceConfirmation") }}
                     </button>
                     <button
-                        class="btn btn-default"
+                        class="stop btn btn-default"
                         @click="stopPoi"
                     >
                         {{ $t("common:modules.controls.orientation.poiChoiceStop") }}
