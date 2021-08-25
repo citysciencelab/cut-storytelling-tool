@@ -1,4 +1,4 @@
-@import "../../../css/variables.less";
+@import "../../../css/mixins.less";
 
 @darkblueColor: rgba(8, 88, 158, 1);
 @darkgreyColor: rgba(85, 85, 85, 1);
@@ -107,10 +107,15 @@
     }
 
     .glyphicon-info-sign.info-sign {
-        opacity: 0.4;
+        opacity: 0.8;
+        font-size: 16px;
+        padding: 5px;
+        color: @secondary_contrast;
+        &:focus {
+            .primary_action_focus();
+        }
         &:hover {
-            cursor: pointer;
-            opacity: 1;
+            .primary_action_hover();
         }
     }
 

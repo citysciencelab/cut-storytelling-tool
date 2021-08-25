@@ -35,13 +35,12 @@ Table Style:
      -> keine Tastaturbedierung der Selektion in der Liste -> TODO-Tastatur
 // -> filter                     #### selected elements button
       // -> Filteroptionen: Texte als placeholder problematisch < 3:1 
-      -> keine oder nur eingeschränkze Tastatutbedienung der verwendeten Snippets -> TODO-Tastatur
+      -> keine oder nur eingeschränkte Tastaturbedienung der verwendeten Snippets -> TODO-Tastatur
 // -> extendedFilter / Erweiterter Filter
 // -> layerSlider / Zeitreihe
 // -> print / Drucken            #### primary butten
 // -> shadow / Schatten
--> virtualCity -> ???
--> wfst -> ??? nicht testbar, layer liefert kein Ergebnis TODO
+// -> wfst / WFS-T Tool
 
 **** sonstiges Backbone
 
@@ -91,10 +90,6 @@ Table Style:
 // -> Legend.vue
 // -> LayerInformation.vue
 
--> weitere?
-
-
-
 ***** src/modules/controls (rote controls über der map)
 
 // -> attributions  (Attributierung (info))
@@ -114,32 +109,32 @@ Table Style:
   
   // -> activeCityMaps
   // -> bildungsatlas
-  -> continuousCountingBike
-  -> dataTable
+  // -> continuousCountingBike -> portalconfig: Verkehrsportal. Layer: Planung, Verkehrsdaten (infrarot...), Rad
+  // -> dataTable -> verwendet keine Farben -> also auch keine Kontrastprobleme
   // -> dipas
-  -> flaecheninfo
-  -> reisezeiten
+  // -> flaecheninfo
+  // -> reisezeiten -> fallen weg
   // -> schulinfo
   // -> solaratlas
-  -> trafficCount
+  // -> trafficCount
   // -> trinkwasser
   // -> verkehrsstaerken
 
 **** Vue-addons
 
 // -> tacticalMark
--> commuterFlows
+// -> commuterFlows
 // -> schoolrouteplanning
 // -> PopulationRequest.vue / Einwohneranzahl abfragen  #### toggle-button tastaturbedienbar gestaltet
    //  -> kein label für Dropdwon.
--> geoAnalyze
+-> geoAnalyze (portalconfig=AtlasInnereSicherheit) -> aber wir nutzt man das Tool?
 // -> fileImportAddon  -> ist bereits im MP repo vorhanden
--> sdpDownload
+// -> sdpDownload (portalConfig:fhh-atlas, test-plotfunktion -> startet aber nicht: Reference-Error: Cesium not defined)
 
 **** Backbone AddOns
 
 // -> boris
--> bauforum
+// -> bauforum (portalConfig: bauforum: startet nicht: Missing or invalid parameter: MAGISTRALE) -> kann laut Sven weggelassen werden
 // -> cosi (testbar über cosi-portalconfig)
       // -> Gebiet auswählen
       // -> Dashboard
@@ -147,9 +142,9 @@ Table Style:
       // -> Erreichbarkeitsanalyse
       // -> Vergleichbare Gebiete ermitteln
       // -> Versorgungsanalyse
--> oktagonKartenportal
--> qr
--> showParcelGFI
+// -> oktagonKartenportal (portalconfig: oktagonKartenportal: Click in Karte)
+// -> qr (portalconfig: dipas: Error: Cannot find module './qr/locales/es/additional.json')
+-> showParcelGFI (keine portalconfig gefunden) -> was macht tool?
 
 
 
