@@ -228,7 +228,7 @@ WMTS layers can be added by
 |altitudeOffset|no|Number||Height offset for display in 3D mode in meters. If given, any existing z coordinates will be increased by this value. If no z coordinate exists, this value is used as z coordinate.|`10`|
 |gfiTheme|yes|String/Object||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
-|wfsFilter|no|String||The path of filter file|`"ressources/xmlFilter/filterSchulenStadtteilschulen"`|
+|wfsFilter|no|String||Set to use xml ressource as wfs filter, the content of the filter file will be sent to the wfs server as POST request (**[see below](#markdown-header-wfsfilter)**).|`"ressources/xmlFilter/filterSchulenStadtteilschulen"`|
 |isSecured|nein|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
 |authenticationUrl|nein|String||Additional url called to trigger basic authentication in the browser..|"https://geodienste.hamburg.de/HH_WMS_DOP10?SERVICE=WFS&VERSION=1.1.0&REQUEST=DescribeFeatureType"|
 |propertyNames|no|Array||The attributes as PROPERTYNAME parameter to receive response from wfs layer |`["properties"]`|
@@ -302,6 +302,55 @@ WMTS layers can be added by
     ]
   }
 ```
+
+### wfsFilter
+
+You can create an xml ressource using wfs standard to request your server with complex filters.
+To learn more about wfs filter encoding see https://mapserver.org/de/ogc/filter_encoding.html .
+
+Remember to use the correct feature namespace (see prop featureNS) for xmlns:app.
+
+
+
+**Example**
+
+A filter for primary schools with more than 2 parallel first classes in a file named "primary_schools_with_more_than_two_first_classes.xml".
+Remember to add/remove namespaces (e.g. xmlns:wfs and xmlns:ogc) for your purpose.
+If it doesn't work with the first try, go through your file - line for line - most of the time some prefix doesn't match a namespace or vice versa.
+
+Config:
+
+```json
+{
+    wfsFilter: "primary_schools_with_more_than_two_first_classes.xml"
+}
+```
+
+Content of primary_schools_with_more_than_two_first_classes.xml:
+
+```json
+<?xml version="1.0" encoding="UTF-8"?>
+<wfs:GetFeature service="WFS" version="1.1.0" xmlns:app="http://www.deegree.org/app" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc">
+    <wfs:Query typeName="app:schools">
+        <ogc:Filter>
+            <ogc:And>
+                <ogc:PropertyIsEqualTo>
+                    <ogc:PropertyName>app:schoolname</ogc:PropertyName>
+                    <ogc:Literal>Primaryschool</ogc:Literal>
+                </ogc:PropertyIsEqualTo>
+                <ogc:PropertyIsGreaterThan>
+                    <ogc:PropertyName>app:parallel_first_classes</ogc:PropertyName>
+                    <ogc:Literal>2</ogc:Literal>
+                </ogc:PropertyIsGreaterThan>
+            </ogc:And>
+        </ogc:Filter>
+    </wfs:Query>
+</wfs:GetFeature>
+```
+
+
+
+
 ***
 ## wfs_id
 If the layer id is in an object format, the content in the object should be in the format:
