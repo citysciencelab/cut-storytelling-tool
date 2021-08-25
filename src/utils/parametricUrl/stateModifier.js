@@ -140,7 +140,15 @@ export async function setValueToState (state, key, value) {
                 const oldParam = translateToBackbone(entry.key, entry.value);
 
                 if (oldParam) {
-                    state.urlParams[oldParam.key] = oldParam.value;
+                    if (!state.urlParams[oldParam.key] || state.urlParams[oldParam.key] && state.urlParams[oldParam.key].indexOf(oldParam.value) === -1) {
+                        if (state.urlParams[oldParam.key]) {
+                            // e.g. isinitopen shall contain comma-separated ids of tools
+                            state.urlParams[oldParam.key] = oldParam.value + "," + state.urlParams[oldParam.key];
+                        }
+                        else {
+                            state.urlParams[oldParam.key] = oldParam.value;
+                        }
+                    }
                 }
             }
             state.urlParams[entry.key] = entry.value;

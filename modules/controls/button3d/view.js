@@ -248,7 +248,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      */
     controlsMapChangeClose2D: function (activeTools, activeVueToolNames, supportedIn3d) {
         activeTools.forEach(tool => {
-            if (!supportedIn3d.includes(tool.get("id"))) {
+            if (!supportedIn3d.includes(tool.get("id")) && !supportedOnlyIn3d.includes(tool.get("id"))) {
                 tool.setIsActive(false);
             }
         });
