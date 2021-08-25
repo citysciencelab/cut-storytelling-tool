@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import sinon from "sinon";
-import {doSpecialBackboneHandling, handleUrlParamsBeforeVueMount, translateToBackbone, updateQueryStringParam} from "../../../parametricUrl/ParametricUrlBridge";
-import store from "../../../../app-store";
+import {doSpecialBackboneHandling, handleUrlParamsBeforeVueMount, translateToBackbone, updateQueryStringParam} from "../../../../parametricUrl/ParametricUrlBridge";
+import store from "../../../../../app-store";
 
 
 describe("src/utils/parametricUrl/ParametricUrlBridge.js", () => {

@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {getStateAsUrlParams} from "../../../parametricUrl/stateToUrlWriter";
+import {getStateAsUrlParams} from "../../../../parametricUrl/stateToUrlWriter";
 
 
 describe("src/utils/parametricUrl/stateToUrlWriter.js", () => {

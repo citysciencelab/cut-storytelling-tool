@@ -2,6 +2,7 @@ import {convert, parseQuery} from "./converter";
 import requestConfig from "../configLoader";
 import {toMapMode} from "../../modules/map/store/enums";
 
+
 /**
  * Translates key and value to vuex state readable kind. Converts the value from string to type.
  * @param {String} urlParamsKey key of url params

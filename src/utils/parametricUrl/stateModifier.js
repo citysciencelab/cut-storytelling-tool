@@ -4,6 +4,9 @@ import {doSpecialBackboneHandling, triggerParametricURLReady, translateToBackbon
 import store from "../../app-store";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
 
+const deprecated = ["isinitopen", "startupmodul", "style", "query", "center", "zoomlevel", "zoomtoextent", "zoomtogeometry", "bezirk",
+    "map", "layerids", "mdid", "featureid", "highlightfeature", "projection", "config", "marker"];
+
 /**
  * Searches for the keys in state and if found, sets the value at it.
  * @param {Object} state vuex state
@@ -124,6 +127,19 @@ export async function setValuesToState (state, params) {
     callActions(state);
 }
 
+
+/**
+ * Checks the key for deprecated url param keys and logs a warning then.
+ * @param {String} key to check
+ * @param {String} translatedKey replacement for the key
+ * @returns {void}
+ */
+function checkDeprecated (key, translatedKey) {
+    if (deprecated.find(toolId => toolId.toLowerCase() === key.toLowerCase())) {
+        console.warn("Url Parameter '" + key.toUpperCase() + "' is deprecated in version 3.0.0. Please use '" + translatedKey + "' instead.");
+    }
+}
+
 /**
  * Sets the given key and value to state.
  * @param {Object} state vuex state
@@ -134,14 +150,17 @@ export async function setValuesToState (state, params) {
 export async function setValueToState (state, key, value) {
     if (typeof key === "string") {
         translate(key.trim(), value).then(entry => {
+            checkDeprecated(key, entry.key);
             const found = searchAndSetValue(state, entry.key.split("/"), entry.value);
 
             if (!found) {
                 const oldParam = translateToBackbone(entry.key, entry.value);
 
                 if (oldParam) {
-                    if (!state.urlParams[oldParam.key] || state.urlParams[oldParam.key] && state.urlParams[oldParam.key].indexOf(oldParam.value) === -1) {
-                        if (state.urlParams[oldParam.key]) {
+                    const stateEntry = state.urlParams[oldParam.key];
+
+                    if (!stateEntry || typeof stateEntry === "string" && stateEntry.toLowerCase().indexOf(oldParam.value.toLowerCase()) === -1) {
+                        if (stateEntry) {
                             // e.g. isinitopen shall contain comma-separated ids of tools
                             state.urlParams[oldParam.key] = oldParam.value + "," + state.urlParams[oldParam.key];
                         }
