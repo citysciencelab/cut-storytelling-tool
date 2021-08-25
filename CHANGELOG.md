@@ -18,6 +18,7 @@
 - The version of the package selenium-webdriver was updated to version 4.0.0-beta.3.
 - changed LayerInformation from backbone to vue
 - changed anchor from div to main class and footer from div to footer class
+- pulled footer out of elements on map and made it part of App.vue
 
 ### Deprecated
 

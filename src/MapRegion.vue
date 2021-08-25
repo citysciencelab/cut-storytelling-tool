@@ -2,7 +2,6 @@
 import Alerting from "./modules/alerting/components/Alerting.vue";
 import ConfirmAction from "./modules/confirmAction/components/ConfirmAction.vue";
 import ControlBar from "./modules/controls/ControlBar.vue";
-import Footer from "./modules/footer/components/Footer.vue";
 import LegendWindow from "./modules/legend/components/LegendWindow.vue";
 import MapMarker from "./modules/mapMarker/components/MapMarker.vue";
 import ToolManager from "./modules/tools/ToolManager.vue";
@@ -18,7 +17,6 @@ export default {
         Alerting,
         LegendWindow,
         MapMarker,
-        Footer,
         LayerInformation
     },
     computed: {
@@ -43,7 +41,6 @@ export default {
             />
             <div class="elements-positioned-over-map">
                 <ControlBar class="controls" />
-                <Footer />
                 <MapMarker />
                 <LayerInformation />
             </div>
