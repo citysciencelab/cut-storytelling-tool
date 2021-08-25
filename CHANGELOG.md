@@ -93,6 +93,7 @@
 ### Deprecated
 
 ### Removed
+- Remove the module cookie, because this is only used in an addon.
 
 ### Fixed
 - The legend now always renders in the map region even when the sidebar is open. Also, the small optical offset in the menu bar at the legend entry has been removed.
