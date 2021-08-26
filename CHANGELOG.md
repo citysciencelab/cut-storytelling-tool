@@ -102,6 +102,8 @@
 - The alerting modal now has a padding again.
 - Fixed a warning in the console when loading addons.
 - When closing the "Draw/Write" tool via the cross, an error no longer occurs.
+- Coordinates tool: after switching to 3D mode and back to 2D mode, errors no longer occur.
+- Coordinates tool: WGS 84(long/lat) coordinate system: there is no "E" at the end of the Latitude field.
 
 ---
 ## v2.12.1 - 2021-08-12

@@ -1,7 +1,7 @@
 import {toStringHDMS, toStringXY} from "ol/coordinate.js";
 import proj4 from "proj4";
 import isMobile from "../../../../utils/isMobile";
-import convertSexagesimalToDecimal from "../../../../utils/convertSexagesimalToDecimal";
+import {convertSexagesimalFromString, convertSexagesimalToDecimal} from "../../../../utils/convertSexagesimalCoordinates";
 import getProxyUrl from "../../../../utils/getProxyUrl";
 import {requestGfi} from "../../../../api/wmsGetFeatureInfo";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
@@ -158,27 +158,23 @@ export default {
         if (targetProjection && Array.isArray(position) && position.length === 2) {
             // geographical coordinates
             if (targetProjection.projName === "longlat") {
+                let converted;
+
                 coord = toStringHDMS(position);
                 if (targetProjection.id === "EPSG:4326-DG") {
-                    const converted = convertSexagesimalToDecimal(coord);
-
-                    easting = converted.easting;
-                    northing = converted.northing;
+                    converted = convertSexagesimalToDecimal(coord);
                 }
                 else {
-                    const index = coord.indexOf("″");
-
-                    if (index > -1) {
-                        easting = coord.substr(0, index + 1).trim();
-                        northing = coord.substr(index + 3).trim();
-                    }
+                    converted = convertSexagesimalFromString(coord);
                 }
+                easting = converted.easting;
+                northing = converted.northing;
             }
             // cartesian coordinates
             else {
                 coord = toStringXY(position, 2);
-                easting = coord.split(",")[0].trim();
-                northing = coord.split(",")[1].trim();
+                easting = Number.parseFloat(coord.split(",")[0].trim());
+                northing = Number.parseFloat(coord.split(",")[1].trim());
             }
             commit("setCoordinatesEasting", {id: "easting", value: easting});
             commit("setCoordinatesNorthing", {id: "northing", value: northing});

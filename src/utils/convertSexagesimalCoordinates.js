@@ -3,7 +3,7 @@
  * @param {string} coord geographic (geocentric) lat/long coordinates like 53° 32′ 24″ N 9° 54′ 56″ E
  * @returns {object} containing easting and northing as decimal value
  */
-export default function convertSexagesimalToDecimal (coord) {
+export function convertSexagesimalToDecimal (coord) {
     if (typeof coord === "string") {
         const index = coord.indexOf("″");
 
@@ -29,4 +29,26 @@ export default function convertSexagesimalToDecimal (coord) {
         }
     }
     return {easting: "No value", northing: "No value"};
+}
+
+/**
+ * Converts geographic coordinates as string to easting and northing coordinates.
+ * @param {string} coord geographic (geocentric) lat/long coordinates like 0° 00′ 00″ 0° 00′ 00″ or 53° 33′ 04″ N 9° 56′ 29″ E
+ * @returns {object} containing easting and northing
+ */
+export function convertSexagesimalFromString (coord) {
+    let coordinates = coord.replace(/E/i, ""),
+        index = -1,
+        secondIndex = -1,
+        easting = "No value",
+        northing = "No value";
+
+    coordinates = coord.replace(/N/i, "");
+    index = coordinates.indexOf("″");
+    secondIndex = coordinates.indexOf("″", index + 1);
+    if (index > -1) {
+        easting = coordinates.substring(0, index + 1).trim();
+        northing = coordinates.substring(index + 2, secondIndex + 1).trim();
+    }
+    return {easting: easting, northing: northing};
 }

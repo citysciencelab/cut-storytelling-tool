@@ -252,12 +252,13 @@ export default {
          * @returns {void}
          */
         changeMode (newMode) {
-            this.setMode(newMode);
             if (newMode === "search") {
+                this.setMode(newMode);
                 this.removeMarker();
                 this.setSupplyCoordInactive();
             }
-            else {
+            else if (this.mapMode !== MapMode.MODE_3D) {
+                this.setMode(newMode);
                 this.resetErrorMessages("all");
                 this.setSupplyCoordActive();
             }
