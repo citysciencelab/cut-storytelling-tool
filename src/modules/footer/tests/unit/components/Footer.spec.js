@@ -133,9 +133,10 @@ describe("src/modules/footer/components/Footer.vue", () => {
             },
             localVue
         });
+        let aTags = null;
 
         await wrapper.vm.$nextTick();
-        const aTags = wrapper.findAll("a");
+        aTags = wrapper.findAll("a");
 
         expect(aTags.at(1).exists()).to.be.true;
         expect(aTags.at(1).text()).to.equals("SDP Download");
@@ -171,9 +172,10 @@ describe("src/modules/footer/components/Footer.vue", () => {
             },
             localVue
         });
+        let aTags = null;
 
         await wrapper.vm.$nextTick();
-        const aTags = wrapper.findAll("a");
+        aTags = wrapper.findAll("a");
 
         expect(aTags.length).to.be.equals(1);
         expect(aTags.at(0).exists()).to.be.true;
@@ -194,9 +196,10 @@ describe("src/modules/footer/components/Footer.vue", () => {
             },
             localVue
         });
+        let aTags = null;
 
         await wrapper.vm.$nextTick();
-        const aTags = wrapper.findAll("a");
+        aTags = wrapper.findAll("a");
 
         expect(aTags.length).to.be.equals(2);
         expect(aTags.at(0).exists()).to.be.true;
