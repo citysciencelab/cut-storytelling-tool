@@ -1,6 +1,5 @@
 <script>
-import {mapGetters} from "vuex";
-import uniqueId from "../../../../../../utils/uniqueId.js";
+import {mapGetters, mapActions} from "vuex";
 import componentExists from "../../../../../../utils/componentExists.js";
 
 export default {
@@ -11,14 +10,26 @@ export default {
             required: true
         }
     },
-    data: () => {
+    data: function () {
         return {
-            featureIsOnCompareList: true,
-            olFeature: null
+            gfiFeature: {
+                featureId: this.feature.getId(),
+                layerId: this.feature.getLayerId(),
+                layerName: this.feature.getTitle(),
+                attributesToShow: this.feature.getAttributesToShow(),
+                properties: this.feature.getMappedProperties()
+            }
         };
     },
     computed: {
-        ...mapGetters("Map", ["visibleLayerListWithChildrenFromGroupLayers"]),
+        ...mapGetters("Tools/CompareFeatures", ["isFeatureSelected"]),
+        /**
+         * Returns Boolean after checking if feature is on comparison list.
+         * @returns {String} Title for the comparelist.
+         */
+        featureIsOnCompareList () {
+            return this.isFeatureSelected(this.gfiFeature);
+        },
 
         /**
          * Returns the correct title, depending on whether the feature is on the comparelist or not.
@@ -29,85 +40,36 @@ export default {
         }
     },
     watch: {
-        feature () {
-            this.initialize();
+        /**
+         * If the feature is changed with GFI open, the gfiFeature must be changed here.
+         * @param {Object} value An object with gfi properties.
+         * @returns {void}
+         */
+        feature (value) {
+            this.gfiFeature = {
+                featureId: value.getId(),
+                layerId: value.getLayerId(),
+                layerName: value.getTitle(),
+                attributesToShow: value.getAttributesToShow(),
+                properties: value.getMappedProperties()
+            };
         }
     },
-    created () {
-        this.initialize();
-    },
     methods: {
+        ...mapActions("Tools/CompareFeatures", ["isFeatureOnCompareList", "removeFeature"]),
         componentExists,
 
         /**
-         * Checks if the feature is on the comparelist.
-         * Starts to prepare the data and sets up the listener.
-         * @param {Object} feature The feature from property
-         * @returns {void}
-         */
-        initialize: function () {
-            this.fetchOlFeature();
-
-            if (this.olFeature) {
-                this.featureIsOnCompareList = this.olFeature.get("isOnCompareList");
-                this.olFeature.on("propertychange", this.toggleFeatureIsOnCompareList.bind(this));
-            }
-        },
-
-        /**
-         * Returns the olFeature from layer in the layerList associated with the feature.
-         * It also searches in clustered features.
-         * @returns {ol/Feature} The olFeature
-         */
-        fetchOlFeature: function () {
-            if (this.visibleLayerListWithChildrenFromGroupLayers?.length > 0) {
-                const foundLayer = this.visibleLayerListWithChildrenFromGroupLayers.find(layer => layer.get("id") === this.feature.getLayerId());
-
-                if (foundLayer && typeof foundLayer.get("source").getFeatures === "function") {
-                    const foundFeatures = foundLayer.get("source").getFeatures();
-
-                    foundFeatures.forEach(feature => {
-                        if (feature.get("features")) {
-                            feature.get("features").forEach(feat => {
-                                if (feat?.getId() === this.feature.getId()) {
-                                    this.olFeature = feat;
-                                }
-                            });
-                        }
-                        else if (feature?.getId() === this.feature.getId()) {
-                            this.olFeature = feature;
-                        }
-                    });
-                }
-            }
-        },
-
-        /**
-         * Indicates whether the feature is on the comparelist.
-         * @param {Event} event The given event.
-         * @returns {void}
-         */
-        toggleFeatureIsOnCompareList: function (event) {
-            if (event.key === "isOnCompareList") {
-                this.featureIsOnCompareList = event.target.get("isOnCompareList");
-            }
-        },
-
-        /**
-         * Triggers the event "addFeatureToList" to the CompareFeatures module to add the feature.
+         * Triggers the event "addFeatureToList" of the CompareFeatures module to add the feature.
          * @param {Event} event The click event.
          * @returns {void}
          */
         toogleFeatureToCompareList: function (event) {
             if (event?.target?.classList?.contains("glyphicon-star-empty")) {
-                const uniqueLayerId = this.feature.getLayerId() + uniqueId("_");
-
-                this.olFeature.set("layerId", uniqueLayerId);
-                this.olFeature.set("layerName", this.feature.getTitle());
-                Radio.trigger("CompareFeatures", "addFeatureToList", this.olFeature);
+                this.isFeatureOnCompareList(this.gfiFeature);
             }
             else {
-                Radio.trigger("CompareFeatures", "removeFeatureFromList", this.olFeature);
+                this.removeFeature(this.gfiFeature);
             }
         }
     }
@@ -116,11 +78,11 @@ export default {
 
 <template>
     <span
-        v-if="olFeature && componentExists('compareFeatures')"
+        v-if="componentExists('compareFeatures')"
         :class="['glyphicon', featureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty']"
         :title="titleCompareList"
         @click="toogleFeatureToCompareList"
-    ></span>
+    />
 </template>
 
 <style lang="less" scoped>

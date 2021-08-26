@@ -1,7 +1,10 @@
+@import "../../css/variables.less";
+
 @color_1: rgb(51, 51, 51);
 @color_2: rgb( 119, 119, 119);
 @color_3: rgb(82, 82, 82);
 @color_4: #fff;
+
 @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
 @font_family_2: "MasterPortalFont","Arial Narrow",Arial,sans-serif;
 @font_family_3: "MasterPortalFont", sans-serif;
@@ -107,7 +110,11 @@
     li {
         &:hover {
             cursor: pointer;
-            background-color: @background_color_3;
+            opacity: 1;
+            background-color: @accent_hover;
+            span, small {
+                color: white;
+            }
         }
     }
 }
@@ -116,8 +123,8 @@
         font-size: 12px;
     }
     &:hover {
-        background: rgb(255, 255, 255);
-        border-color: @border_color_1;
+        background-color: @accent_hover;
+        color: white;
     }
 }
 .btn-search-question {
@@ -127,10 +134,12 @@
     margin-top: 3px;
     opacity: 1;
     >span {
-        font-size: 14px;
+        padding: 4px;
+        font-size: 18px;
         color: @color_3;
-        opacity: 0.6;
         &:hover {
+            background-color: @accent_hover;
+            color: white;
             opacity: 1;
         }
     }

@@ -2,7 +2,7 @@
 import Default from "../themes/default/components/Default.vue";
 import Sensor from "../themes/sensor/components/Sensor.vue";
 import getTheme from "../../utils/getTheme";
-import {mapGetters, mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import ToolWindow from "../../../../../share-components/ToolWindow.vue";
 
 export default {
@@ -98,20 +98,19 @@ export default {
 <template>
     <ToolWindow
         class="gfi-detached-table rotate0"
-        :initialWidth="360"
+        :initial-width="360"
         @close="close"
     >
-        <template v-slot:rightOfTitle>
+        <template #rightOfTitle>
             <span
                 class="icon-turnarticle glyphicon"
                 @click="rotate"
-            >
-            </span>
+            />
         </template>
-        <template v-slot:title>
+        <template #title>
             <span>{{ translate(title) }}</span>
         </template>
-        <template v-slot:body>
+        <template #body>
             <div class="body">
                 <component
                     :is="theme"

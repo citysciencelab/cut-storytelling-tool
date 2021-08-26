@@ -1,16 +1,13 @@
 <script>
 import {mapGetters} from "vuex";
-import ControlBarBackwardsCompatibility from "./ControlBarBackwardsCompatibility.vue";
 
 const fallbackTopRight = {
-        component: ControlBarBackwardsCompatibility,
-        props: {id: "top-right-fallback"},
-        key: "top-right-fallback"
+        key: "top-right-fallback",
+        fallback: true
     },
     fallbackBottomRight = {
-        component: ControlBarBackwardsCompatibility,
-        props: {id: "bottom-right-fallback"},
-        key: "bottom-right-fallback"
+        key: "bottom-right-fallback",
+        fallback: true
     };
 
 /* TODO
@@ -35,6 +32,7 @@ export default {
         return {
             categories: [
                 {categoryName: "top", className: "top-controls"},
+                {categoryName: "separator", className: "control-separator"},
                 {categoryName: "bottom", className: "bottom-controls"}
             ]
         };
@@ -99,52 +97,120 @@ export default {
 </script>
 
 <template>
-    <div class="right-bar">
-        <template v-if="!isSimpleStyle">
-            <div
-                v-for="{categoryName, className} in categories"
-                :key="className"
+    <ul
+        v-if="!isSimpleStyle"
+        class="right-bar"
+    >
+        <template v-for="({categoryName, className}, categoryIndex) in categories">
+            <li
+                v-if="categoryName === 'separator'"
+                :key="categoryIndex"
                 :class="className"
+                aria-hidden="true"
+            />
+            <template
+                v-for="(control, index) in categorizedControls[categoryName]"
+                v-else
             >
-                <template v-for="(control, index) in categorizedControls[categoryName]">
+                <!--
+                NOTE This li is a temporary implementation. As soon as "old-style" controls
+                are no longer supported, this li and related contents may be deleted.
+                -->
+                <li
+                    v-if="control.fallback"
+                    :id="control.key"
+                    :key="control.key"
+                    :class="[
+                        'backwards-compatibility-controls',
+                        className
+                    ]"
+                />
+                <li
+                    v-else
+                    :key="`${categoryIndex}-${index}`"
+                >
                     <component
                         :is="control.component"
-                        :key="'control-' + control.key"
+                        :key="control.key"
                         :class="[
                             index !== categorizedControls[categoryName].length - 1 ? 'spaced' : '',
-                            mobile && hiddenMobile(control.key) ? 'hidden' : ''
+                            mobile && hiddenMobile(control.key) ? 'hidden' : '',
+                            className
                         ]"
                         v-bind="control.props"
                     />
-                </template>
-            </div>
+                </li>
+            </template>
         </template>
-    </div>
+    </ul>
 </template>
 
 <style lang="less" scoped>
     @import "~variables";
 
-    .hidden {
-        display: none;
-    }
-
-    .spaced {
-        margin-bottom: 1em;
-    }
-
     .right-bar {
         pointer-events: none;
-
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
 
         padding: 5px;
         margin: 5px 5px 12px 5px;
 
+        display: flex;
+        flex-direction: column;
+
+        list-style-type: none;
+
+        .control-separator {
+            flex-grow: 1;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .spaced {
+            margin-bottom: 0.5em;
+        }
+
         .top-controls, .bottom-controls {
             pointer-events: all;
+        }
+    }
+</style>
+
+<style lang="less">
+    /* using this classname to scope css effects; can not use scoped less here since controls are not within scope, but added by jQuery */
+    .backwards-compatibility-controls {
+        @color_1: #f3f3f3;
+        @background_color_1: #E10019;
+        @background_color_2: rgb(8,88,158);
+        /* use old styling way for glyphicons for old controls */
+        .glyphicon {
+            color: @color_1;
+            background-color: @background_color_1;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+            &:hover {
+                cursor: pointer;
+                opacity: 0.7;
+            }
+        }
+        > .toggleButtonPressed {
+            background-color: @background_color_2;
+        }
+        /* forcing compatibility by overriding old-style layouting */
+        .controls-row-right {
+            position: relative;
+            margin-right: 0px;
+            min-height: 0px;
+        }
+        .row {
+            margin-right: 0px;
+            margin-left: 0px;
+        }
+        > div {
+            padding: 5px;
+            > div {
+                margin-top: 0px;
+            }
         }
     }
 </style>

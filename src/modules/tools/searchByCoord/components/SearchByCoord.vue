@@ -1,6 +1,6 @@
 <script>
 import Tool from "../../Tool.vue";
-import {mapGetters, mapActions, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersSearchByCoord";
 import actions from "../store/actionsSearchByCoord";
 import mutations from "../store/mutationsSearchByCoord";
@@ -53,6 +53,7 @@ export default {
         }
     },
     created () {
+        console.warn("The tool 'supplyCoord' is deprecated in 3.0.0. Please use 'coordToolkit' instead.");
         this.$on("close", this.close);
         this.setExample();
     },
@@ -83,9 +84,9 @@ export default {
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
+        :deactivate-gfi="deactivateGFI"
     >
-        <template v-slot:toolBody>
+        <template #toolBody>
             <div
                 v-if="active"
                 id="search-by-coord"

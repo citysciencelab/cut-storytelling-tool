@@ -18,7 +18,7 @@ All the following rules must hold.
 
 #### A.1 Linter and functionality
 
-* A.1.1 The code works on Internet Explorer 11+, Chrome, and Firefox.
+* A.1.1 The code works on Edge, Chrome, and Firefox.
 * A.1.2 The code works on the mobile view of the browsers mentioned in A.1.1.
 * A.1.3 The linter is active.
 * A.1.4 The linter detects no errors.

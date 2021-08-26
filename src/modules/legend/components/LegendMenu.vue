@@ -1,5 +1,5 @@
 <script>
-import {mapGetters, mapActions, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersLegend";
 import mutations from "../store/mutationsLegend";
 import actions from "../store/actionsLegend";
@@ -7,26 +7,55 @@ import actions from "../store/actionsLegend";
 export default {
     name: "LegendMenu",
     components: {},
+    data () {
+        return {
+            element: null,
+            childNode: null
+        };
+    },
     computed: {
         ...mapGetters("Legend", Object.keys(getters)),
         ...mapGetters(["mobile", "uiStyle"])
     },
     mounted () {
-        const root = this.uiStyle === "TABLE" ? document.getElementById("table-tools-menu") : document.getElementById("root");
-
+        this.element = this.$el;
+        this.childNode = this.$el.childNodes[0];
         this.getLegendConfig();
-        if (root) {
-            if (this.uiStyle === "TABLE") {
-                root.append(this.$el);
-            }
-            else {
-                root.parentNode.insertBefore(this.$el, root.nextSibling);
-            }
+
+        if (this.uiStyle === "TABLE") {
+            document.getElementById("table-tools-menu").append(this.$el);
         }
+        else {
+            this.replaceMenuChild();
+        }
+    },
+    updated () {
+        this.replaceMenuChild();
     },
     methods: {
         ...mapActions("Legend", Object.keys(actions)),
         ...mapMutations("Legend", Object.keys(mutations)),
+
+        /**
+         * Replace legend in menu to provide order of menu in config.json.
+         * root.replaceChild must be removed on refactoring menu to vue, then only use the else case.
+         * @returns {void}
+         */
+        replaceMenuChild () {
+            const root = document.getElementById("root");
+
+            if (root && this.uiStyle !== "TABLE") {
+                const span = root.querySelector("[name=legend]");
+
+                if (this.mobile && span?.parentNode) {
+                    root.replaceChild(this.element, span.parentNode);
+                }
+                else if (span?.parentNode?.parentNode) {
+                    root.replaceChild(this.childNode, span.parentNode.parentNode);
+                }
+            }
+        },
+
         /**
          * Toggles the visibility of the legend
          * @returns {void}
@@ -50,15 +79,18 @@ export default {
                 :class="{ 'open': showLegend }"
                 class="dropdown dropdown-folder"
                 @click="toggleLegend"
+                @keydown.enter.stop.prevent="toggleLegend"
+                @keydown.space.stop.prevent="toggleLegend"
             >
                 <a
                     href="#"
-                    class="dropdown-toggle"
+                    class="dropdown-toggle tabable"
+                    :title="$t(name)"
                 >
                     <span
                         :class="glyphicon"
                         class="glyphicon hidden-sm"
-                    ></span>
+                    />
                     <span class="menuitem">{{ $t(name) }}</span>
                 </a>
             </li>
@@ -78,7 +110,7 @@ export default {
                     <span
                         :class="glyphicon"
                         class="glyphicon hidden-sm"
-                    ></span>
+                    />
                     <span class="title">{{ $t(name) }}</span>
                 </div>
             </li>
@@ -92,7 +124,7 @@ export default {
             <span
                 :class="glyphicon"
                 class="glyphicon hidden-sm"
-            ></span>
+            />
             <span class="menuitem">{{ $t(name) }}</span>
         </a>
     </div>

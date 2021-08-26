@@ -66,7 +66,7 @@ export default {
                 const localName = child?.localName || child.innerHTML;
                 let old;
 
-                if (!obj.hasOwnProperty(localName) && localName !== undefined) {
+                if (!Object.prototype.hasOwnProperty.call(obj, localName) && localName !== undefined) {
                     obj[localName] = this.parseXmlToObject(child);
                 }
                 else {
@@ -95,8 +95,8 @@ export default {
         Object.entries(data).forEach(dat => {
             const obj = dat[1],
                 key = dat[0],
-                dataType = obj.hasOwnProperty("dataType") ? obj.dataType : undefined,
-                value = obj.hasOwnProperty("value") ? obj.value : obj;
+                dataType = obj?.dataType ? obj.dataType : undefined,
+                value = obj?.value ? obj.value : obj;
             let attributeString = "";
 
             attributeString = this.setXMLElement(dataInputXmlTemplate, "</ows:Identifier>", key);

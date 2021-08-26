@@ -32,20 +32,20 @@ function modifyLayerList (layerList) {
     // Es gibt Layer in einem Dienst, die für unterschiedliche Portale unterschiedliche Daten/GFIs liefern --> z.B. Hochwasserrisikomanagement
     // Da alle Layer demselben Metadatensatz zugordnet sind, werden sie über die Id gelöscht
     if (Config.tree !== undefined) {
-        if (Config.tree.hasOwnProperty("layerIDsToIgnore")) {
+        if (Object.prototype.hasOwnProperty.call(Config.tree, "layerIDsToIgnore")) {
             rawLayerArray = deleteLayersByIds(rawLayerArray, Config.tree.layerIDsToIgnore);
         }
         // Alle Layer eines Metadatensatzes die nicht dargestellt werden sollen --> z.B. MRH Fachdaten im FHH-Atlas
-        if (Config.tree.hasOwnProperty("metaIDsToIgnore")) {
+        if (Object.prototype.hasOwnProperty.call(Config.tree, "metaIDsToIgnore")) {
             rawLayerArray = deleteLayersByMetaIds(rawLayerArray, Config.tree.metaIDsToIgnore);
         }
         // Alle Layer eines Metadatensatzes die gruppiert dargestellt werden sollen --> z.B. Bauschutzbereich § 12 LuftVG Hamburg im FHH-Atlas
-        if (Config.tree.hasOwnProperty("metaIDsToMerge")) {
+        if (Object.prototype.hasOwnProperty.call(Config.tree, "metaIDsToMerge")) {
             rawLayerArray = mergeLayersByMetaIds(rawLayerArray, Config.tree.metaIDsToMerge);
         }
         // Die HVV Layer bekommen Ihre Styles zugeordnet
         // Pro Style wird eine neuer Layer erzeugt
-        if (Config.tree.hasOwnProperty("layerIDsToStyle")) {
+        if (Object.prototype.hasOwnProperty.call(Config.tree, "layerIDsToStyle")) {
             setStyleForHVVLayer(rawLayerArray);
             rawLayerArray = cloneByStyle(rawLayerArray);
         }

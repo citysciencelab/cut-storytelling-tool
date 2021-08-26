@@ -1,7 +1,7 @@
 <script>
 import Tool from "../../Tool.vue";
 import getComponent from "../../../../utils/getComponent";
-import {mapGetters, mapActions, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersBufferAnalysis";
 import mutations from "../store/mutationsBufferAnalysis";
 import actions from "../store/actionsBufferAnalysis";
@@ -160,10 +160,10 @@ export default {
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
-        :initialWidth="initialWidth"
+        :deactivate-gfi="deactivateGFI"
+        :initial-width="initialWidth"
     >
-        <template v-slot:toolBody>
+        <template #toolBody>
             <div
                 v-if="active"
                 id="tool-bufferAnalysis"
