@@ -50,7 +50,7 @@ async function LegendTests ({builder, config, url, resolution, capability}) {
                 // retry until functionality is active - may get stuck else
                 do {
                     await (await driver.wait(
-                        until.elementLocated(By.id("legend-menu")), 2000)
+                        until.elementLocated(By.css(".legend-menu-item")), 2000)
                     ).click();
                     await driver.wait(new Promise(r => setTimeout(r, 50)));
                 } while (
@@ -83,7 +83,7 @@ async function LegendTests ({builder, config, url, resolution, capability}) {
                 }
             });
             it("should the menu item of the legend is to be translated", async function () {
-                const legendLocator = By.css("ul#root ul#legend-menu li.dropdown a.dropdown-toggle span.menuitem");
+                const legendLocator = By.css("li.legend-menu-item a.dropdown-toggle span.menuitem");
 
                 await (await driver.wait(
                     until.elementLocated(By.css("a.current-language")), 9000)

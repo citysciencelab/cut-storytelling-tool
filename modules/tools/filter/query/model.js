@@ -3,6 +3,7 @@ import SnippetSliderModel from "../../../snippets/slider/model";
 import SnippetCheckboxModel from "../../../snippets/checkbox/model";
 import SnippetMultiCheckboxModel from "../../../snippets/multiCheckbox/model";
 import {getDisplayNamesOfFeatureAttributes} from "masterportalAPI/src/rawLayerList";
+import moment from "moment";
 
 const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
 
@@ -142,7 +143,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
     },
 
     /**
-     * [description]
+     * adds the snipptes
      * @param  {Object[]} featureAttributesMap Mapping array for feature attributes
      * @return {void}
      */
@@ -152,11 +153,17 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         });
     },
 
+    /**
+     * adds a snippet based on featureAttribute
+     * @param {Object} featureAttribute attributes to config the snippet
+     * @returns {void}
+     */
     addSnippet: function (featureAttribute) {
         let snippetAttribute = featureAttribute,
             isSelected = false;
 
         snippetAttribute.values = Radio.request("Util", "sort", "", snippetAttribute.values);
+
         if (snippetAttribute.type === "string" || snippetAttribute.type === "text") {
             snippetAttribute = Object.assign(snippetAttribute, {"snippetType": "dropdown"});
             this.get("snippetCollection").add(new SnippetDropdownModel(snippetAttribute));
@@ -179,7 +186,45 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
             snippetAttribute.isInitialLoad = this.get("isInitialLoad");
             this.get("snippetCollection").add(new SnippetMultiCheckboxModel(snippetAttribute));
         }
+        else if (snippetAttribute.type === "date") {
+            snippetAttribute = Object.assign(snippetAttribute, {
+                snippetType: snippetAttribute.type,
+                displayName: snippetAttribute.displayName
+            });
+
+            snippetAttribute.editableValueBox = false;
+            snippetAttribute.precision = 1;
+            snippetAttribute.step = 86400000;
+            snippetAttribute.selection = "none";
+
+            snippetAttribute.values = this.getTimestampValues(snippetAttribute.values, snippetAttribute.format);
+            if (Array.isArray(snippetAttribute.values) && snippetAttribute.values.length > 0) {
+                snippetAttribute.preselectedValues = [snippetAttribute.values[0], snippetAttribute.values[snippetAttribute.values.length - 1]];
+            }
+
+            this.get("snippetCollection").add(new SnippetSliderModel(snippetAttribute));
+        }
     },
+
+    /**
+     * returns given values of sorted values as timestamp
+     * @param {String[]} values the array of the dates as string
+     * @param {String} format the format to use for moment
+     * @return {Number[]} sorted array of timestamps
+     */
+    getTimestampValues: function (values, format) {
+        if (!Array.isArray(values) || typeof format !== "string") {
+            return [];
+        }
+        const result = [];
+
+        values.forEach(value => {
+            result.push(moment(value, format).toDate().valueOf());
+        });
+
+        return result.sort();
+    },
+
     /**
      * adds a snippet for the map extent search
      * @return {void}
@@ -194,7 +239,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
 
     /**
      * Creates one or more Snippets, where Snippets like DropDowns or Sliders
-     * @param  {object[]} featureAttributes feature attributes
+     * @param  {Object[]} featureAttributes feature attributes
      * @return {void}
      */
     createSnippets: function (featureAttributes) {
@@ -205,6 +250,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         featureAttributesMap = this.mapRules(featureAttributesMap, this.get("rules"));
 
         this.setFeatureAttributesMap(featureAttributesMap);
+
         this.addSnippets(featureAttributesMap);
         if (this.get("isSelected") === true) {
             this.runFilter();
@@ -216,9 +262,9 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
     },
 
     /**
-     * Entfernt alle Attribute die nicht in der Whitelist stehen
-     * @param  {object} featureAttributesMap - Mapobject
-     * @return {object} featureAttributesMap - gefiltertes Mapobject
+     * Removes all attributes that are not in the whitelist
+     * @param  {Object} featureAttributesMap - Mapobject
+     * @return {Object} featureAttributesMap - filtered and adapted Mapobject
      */
     trimAttributes: function (featureAttributesMap) {
         const trimmedFeatureAttributesMap = [],
@@ -232,6 +278,20 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
             featureAttribute = Radio.request("Util", "findWhereJs", featureAttributesMap, {name: attrObj.name});
             if (featureAttribute !== undefined) {
                 featureAttribute.matchingMode = attrObj.matchingMode;
+
+                if (attrObj.format) {
+                    featureAttribute.format = attrObj.format;
+                }
+                if (attrObj.type) {
+                    featureAttribute.type = attrObj.type;
+                }
+                if (attrObj.attrNameUntil) {
+                    featureAttribute.attrNameUntil = attrObj.attrNameUntil;
+                }
+                if (attrObj.displayName) {
+                    featureAttribute.displayName = attrObj.displayName;
+                }
+
                 trimmedFeatureAttributesMap.push(featureAttribute);
             }
         });
@@ -239,6 +299,11 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         return trimmedFeatureAttributesMap;
     },
 
+    /**
+     * creates an object of the given attributes, checks for name and matchingMode, creates object with name and matchingMode if a string is given
+     * @param {Object|String} attr the attribute as string of object
+     * @returns {Object} an object with name and matchingMode or an empty object if something went wrong
+     */
     createAttrObject: function (attr) {
         let attrObj = {};
 
@@ -251,10 +316,11 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         }
         return attrObj;
     },
+
     /**
-     * Konfigurierter Labeltext wird den Features zugeordnet
-     * @param  {object} featureAttributesMap - Mapobject
-     * @return {object} featureAttributesMap - gefiltertes Mapobject
+     * maps the label text as attribute displayName to the feature attributes of the given feature attribute map
+     * @param  {Object} featureAttributesMap the map object to parse
+     * @return {Object} changed map object
      */
     mapDisplayNames: function (featureAttributesMap) {
         const attributeNames = getDisplayNamesOfFeatureAttributes(this.get("layerId")),
@@ -262,6 +328,9 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
             displayNames = Array.isArray(whiteList) ? attributeNames : whiteList;
 
         featureAttributesMap.forEach(featureAttribute => {
+            if (featureAttribute.displayName) {
+                return;
+            }
             if (displayNames instanceof Object && Object.prototype.hasOwnProperty.call(displayNames, featureAttribute.name) === true) {
                 featureAttribute.displayName = displayNames[featureAttribute.name];
             }
@@ -275,9 +344,9 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
 
     /**
      * adds values that should be initially selected (rules) to the map object
-     * @param  {object[]} [featureAttributesMap={}] - Mapobject
-     * @param  {object[]} [rules=[]] - contains values to be added
-     * @return {object} featureAttributesMap
+     * @param  {Object[]} [featureAttributesMap={}] - Mapobject
+     * @param  {Object[]} [rules=[]] - contains values to be added
+     * @return {Object} featureAttributesMap
      */
     mapRules: function (featureAttributesMap = [], rules = []) {
         let attrMap;

@@ -283,8 +283,7 @@ export default {
     }
 </style>
 
-<style lang="less">
-
+<style lang="less" scoped>
     #modal-1-container #modal-1-overlay {
         z-index: 1000;
     }

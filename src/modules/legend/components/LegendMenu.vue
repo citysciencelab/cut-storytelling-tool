@@ -77,7 +77,7 @@ export default {
             <li
                 v-if="showLegendInMenu"
                 :class="{ 'open': showLegend }"
-                class="dropdown dropdown-folder"
+                class="dropdown dropdown-folder legend-menu-item"
                 @click="toggleLegend"
                 @keydown.enter.stop.prevent="toggleLegend"
                 @keydown.space.stop.prevent="toggleLegend"
@@ -85,6 +85,7 @@ export default {
                 <a
                     href="#"
                     class="dropdown-toggle tabable"
+                    tabindex="0"
                     :title="$t(name)"
                 >
                     <span
@@ -103,8 +104,9 @@ export default {
             <li
                 v-if="showLegendInMenu"
                 :class="{ open: showLegend }"
-                class="list-group-item"
+                class="list-group-item legend-menu-item"
                 @click="toggleLegend"
+                @keydown.enter="toggleLegend"
             >
                 <div>
                     <span

@@ -459,7 +459,6 @@ export default {
                                 v-model="coordinatesEasting.value"
                                 type="text"
                                 :readonly="isEnabled('supply')"
-                                :contenteditable="isEnabled( 'search')"
                                 :class="{ inputError: getEastingError, 'form-control': true}"
                                 :placeholder="isEnabled( 'search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesEastingExample : ''"
                                 @click="onInputClicked($event)"
@@ -496,7 +495,6 @@ export default {
                                 type="text"
                                 :class="{ inputError: getNorthingError , 'form-control': true}"
                                 :readonly="isEnabled( 'supply')"
-                                :contenteditable="isEnabled( 'search')"
                                 :placeholder="isEnabled( 'search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesNorthingExample : ''"
                                 @click="onInputClicked($event)"
                                 @input="onInputEvent(coordinatesNorthing)"
@@ -532,7 +530,6 @@ export default {
                                 type="text"
                                 class="form-control"
                                 :readonly="true"
-                                :contenteditable="false"
                                 @click="onInputClicked($event)"
                             >
                         </div>

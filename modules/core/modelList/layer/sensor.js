@@ -227,9 +227,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
          */
         const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
             version = this.get("version"),
-            urlParams = this.get("urlParameter");
+            urlParams = this.get("urlParameter"),
+            intersect = typeof this.get("intersect") === "boolean" ? this.get("intersect") : true;
 
-        this.loadSensorThings(url, version, urlParams, function (sensorData) {
+        this.loadSensorThings(url, version, urlParams, intersect, function (sensorData) {
             const epsg = this.get("epsg"),
                 features = this.createFeatures(sensorData, epsg),
                 isClustered = this.has("clusterDistance");
@@ -388,10 +389,11 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @param  {String} url - url to service
      * @param  {String} version - version from service
      * @param  {String} urlParams - url parameters
+     * @param  {Boolean} intersect - if it is intersect or not
      * @return {array} all things with attributes and location
      * @param  {Function} onsuccess a callback function (result) with the result to call on success and result: all things with attributes and location
      */
-    loadSensorThings: function (url, version, urlParams, onsuccess) {
+    loadSensorThings: function (url, version, urlParams, intersect, onsuccess) {
         const requestUrl = this.buildSensorThingsUrl(url, version, urlParams),
             http = new SensorThingsHttp(),
             currentExtent = {
@@ -436,7 +438,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             http.get(requestUrl, httpOnSucess, null, null, httpOnError);
         }
         else {
-            http.getInExtent(requestUrl, currentExtent, httpOnSucess, null, null, httpOnError);
+            http.getInExtent(requestUrl, currentExtent, intersect, httpOnSucess, null, null, httpOnError);
         }
     },
 
