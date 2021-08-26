@@ -299,7 +299,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
                 testAction(actions.adjustPosition, payload, {}, rootState, [
                     {type: "setCoordinatesEasting", payload: {id: "easting", value: "160° 00′ 00″"}},
-                    {type: "setCoordinatesNorthing", payload: {id: "northing", value: "100° 00′ 00″ E"}}
+                    {type: "setCoordinatesNorthing", payload: {id: "northing", value: "100° 00′ 00″"}}
                 ], {}, done);
             });
             it("adjustPosition sets coordinate fields - longlat - decimal degree", done => {
@@ -320,8 +320,8 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 };
 
                 testAction(actions.adjustPosition, payload, {}, rootState, [
-                    {type: "setCoordinatesEasting", payload: {id: "easting", value: "100.00"}},
-                    {type: "setCoordinatesNorthing", payload: {id: "northing", value: "200.00"}}
+                    {type: "setCoordinatesEasting", payload: {id: "easting", value: 100}},
+                    {type: "setCoordinatesNorthing", payload: {id: "northing", value: 200}}
                 ], {}, done);
             });
             it("adjustPosition sets coordinate fields - no projection and position does nothing", done => {

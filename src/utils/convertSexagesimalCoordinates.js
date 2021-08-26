@@ -4,6 +4,7 @@
  * @returns {object} containing easting and northing as decimal value
  */
 export function convertSexagesimalToDecimal (coord) {
+    console.log("convertSexagesimalToDecimal");
     if (typeof coord === "string") {
         const index = coord.indexOf("″");
 
@@ -37,13 +38,15 @@ export function convertSexagesimalToDecimal (coord) {
  * @returns {object} containing easting and northing
  */
 export function convertSexagesimalFromString (coord) {
-    let coordinates = coord.replace(/E/i, ""),
+    console.log("convertSexagesimalFromString");
+    let coordinates = coord.replace(/E/ig, ""),
         index = -1,
         secondIndex = -1,
         easting = "No value",
         northing = "No value";
 
-    coordinates = coord.replace(/N/i, "");
+    coordinates = coordinates.replace(/N/ig, "");
+    coordinates = coordinates.replace(/S/ig, "");
     index = coordinates.indexOf("″");
     secondIndex = coordinates.indexOf("″", index + 1);
     if (index > -1) {
