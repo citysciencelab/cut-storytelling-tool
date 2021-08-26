@@ -105,7 +105,8 @@
 - When closing the "Draw/Write" tool via the cross, an error no longer occurs.
 - Coordinates tool: after switching to 3D mode and back to 2D mode, errors no longer occur.
 - Coordinates tool: WGS 84(long/lat) coordinate system: there is no "E" at the end of the Latitude field.
-
+- When starting the 3D map, all tools that do not support 3D mode are closed.
+- 3D map: Tools that do not support 3D mode are no longer displayed in the footer.
 ---
 ## v2.12.1 - 2021-08-12
 ### Added
