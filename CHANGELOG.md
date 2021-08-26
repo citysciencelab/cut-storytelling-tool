@@ -99,6 +99,7 @@
 - Layers in the default tree that are grouped by metadata and start with numbers (e.g. 100 Jahre Stadtgrün) can now be opened again.
 - The alerting modal now has a padding again.
 - Fixed a warning in the console when loading addons.
+- When closing the "Draw/Write" tool via the cross, an error no longer occurs.
 
 ---
 ## v2.12.1 - 2021-08-12
