@@ -98,6 +98,7 @@
 - The legend now always renders in the map region even when the sidebar is open. Also, the small optical offset in the menu bar at the legend entry has been removed.
 - Layers in the default tree that are grouped by metadata and start with numbers (e.g. 100 Jahre Stadtgrün) can now be opened again.
 - The alerting modal now has a padding again.
+- Fixed a warning in the console when loading addons.
 
 ---
 ## v2.12.1 - 2021-08-12
