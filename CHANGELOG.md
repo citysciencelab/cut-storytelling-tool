@@ -21,6 +21,7 @@
 - Added a new type for filter attributeWhitelist "date", which uses a slider for a date range. Use "format" to specify date format and "attrNameUntil" for a different attribute to be the end date of your range.
 
 ### Changed
+- Accessibility: Changed contrast ratio > 3:1 in all tools, themes, etc.
 - Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.
 - LayerInformation now shows message in case the MetaData couldn't be loaded
 - Footer allows additionally to open vue tools besides backbone tools.
