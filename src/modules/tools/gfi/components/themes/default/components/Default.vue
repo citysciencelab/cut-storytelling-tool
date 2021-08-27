@@ -5,6 +5,7 @@ import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
 import CompareFeatureIcon from "../../../favoriteIcons/components/CompareFeatureIcon.vue";
 import DefaultSensorChart from "./DefaultSensorChart.vue";
+import getPropertiesWithFullKeys from "../../../../utils/getPropertiesWithFullKeys.js";
 
 export default {
     name: "Default",
@@ -23,7 +24,9 @@ export default {
             imageLinks: ["bildlink", "link_bild", "Bild", "bild"],
             importedComponents: [],
             showFavoriteIcons: true,
-            maxWidth: "600px"
+            maxWidth: "600px",
+            beautifyKeysParam: true,
+            showObjectKeysParam: false
         };
     },
     computed: {
@@ -58,6 +61,7 @@ export default {
             this.$nextTick(() => {
                 this.addTextHtmlContentToIframe();
                 this.setMaxWidth(this.feature.getTheme()?.params);
+                this.initParams(this.feature.getTheme()?.params);
             });
         }
     },
@@ -72,6 +76,7 @@ export default {
         this.$nextTick(() => {
             this.addTextHtmlContentToIframe();
             this.setMaxWidth(this.feature.getTheme()?.params);
+            this.initParams(this.feature.getTheme()?.params);
         });
     },
     methods: {
@@ -80,6 +85,52 @@ export default {
         isPhoneNumber,
         getPhoneNumberAsWebLink,
         isEmailAddress,
+
+        /**
+         * checks if given feature has a function getMappedProperties
+         * @param {Object} feature the current feature to check
+         * @return {Boolean} returns true if given feature has a function getMappedProperties
+         */
+        mappedPropertiesExists (feature) {
+            return typeof feature === "object" && feature !== null && typeof feature.getMappedProperties === "function";
+        },
+
+        /**
+         * checks if the given feature has one or more mapped properties
+         * @param {Object} feature the current feature to check
+         * @returns {Boolean} returns true if feature has mapped properties
+         */
+        hasMappedProperties (feature) {
+            return Object.keys(feature.getMappedProperties()).length !== 0;
+        },
+
+        /**
+         * returns the mapped properties of the given feature or parses the properites through getPropertiesWithFullKeys if the component flag showObjectKeysParam is set
+         * @param {Object} feature the current feature
+         * @param {Boolean} [showObjectKeysParam=false] the switch to activate getPropertiesWithFullKeys
+         * @returns {Object} returns mapped properties
+         */
+        getMappedPropertiesOfFeature (feature, showObjectKeysParam = false) {
+            if (showObjectKeysParam === true) {
+                const properties = getPropertiesWithFullKeys(feature.getMappedProperties());
+
+                return properties !== false ? properties : {};
+            }
+            return feature.getMappedProperties();
+        },
+
+        /**
+         * sets params from gfiTheme params
+         * @param {Object} params the params to set
+         * @returns {void}
+         */
+        initParams (params) {
+            if (typeof params !== "object" || params === null) {
+                return;
+            }
+            this.beautifyKeysParam = params?.beautifyKeys;
+            this.showObjectKeysParam = params?.showObjectKeys;
+        },
 
         /**
          * checks if the given value is an object for rendering a linechart diagram
@@ -163,6 +214,10 @@ export default {
             if (this.mimeType !== "text/html") {
                 const gfiThemeContainer = document.getElementsByClassName("gfi-theme-images")[0];
 
+                if (typeof gfiThemeContainer?.style !== "object" || gfiThemeContainer?.style === null) {
+                    return;
+                }
+
                 if (params?.maxWidth) {
                     gfiThemeContainer.style.maxWidth = params?.maxWidth;
                 }
@@ -206,22 +261,27 @@ export default {
             v-if="mimeType !== 'text/html'"
             class="table table-hover"
         >
-            <tbody v-if="typeof feature.getMappedProperties === 'function'">
-                <tr v-if="Object.entries(feature.getMappedProperties()).length === 0">
+            <tbody v-if="mappedPropertiesExists(feature)">
+                <tr v-if="!hasMappedProperties(feature)">
                     <td class="bold">
                         {{ $t("modules.tools.gfi.themes.default.noAttributeAvailable") }}
                     </td>
                 </tr>
                 <tr
-                    v-for="(value, key) in feature.getMappedProperties()"
+                    v-for="(value, key) in getMappedPropertiesOfFeature(feature, showObjectKeysParam)"
                     v-else
                     :key="key"
                 >
                     <td
                         v-if="!isSensorChart(value)"
-                        class="bold"
+                        class="bold firstCol"
                     >
-                        {{ beautifyKey($t(key)) }}
+                        <span v-if="beautifyKeysParam">
+                            {{ beautifyKey($t(key)) }}
+                        </span>
+                        <span v-else>
+                            {{ key }}
+                        </span>
                     </td>
                     <td v-if="isWebLink(value)">
                         <a

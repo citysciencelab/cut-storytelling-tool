@@ -16,6 +16,9 @@
 - Added the possibility to configure the size of the iframe in GFI when using the gfiTheme `default` on a layer in config.json. Works only in conjunction with the `infoFormat: "text/html"`.
 - Added possibility in GFI theme Default to configure `max-width` in config.json.
 - New Searchbar-Module for Komoot Photon.
+- A flag "beautifyKeys" for gfi params to enable/disable the beautifyKeys function in default gfi theme.
+- A flag "showObjectKeys" for gfi params to display attribute keys and values of objects in default gfi theme.
+- Added a new type for filter attributeWhitelist "date", which uses a slider for a date range. Use "format" to specify date format and "attrNameUntil" for a different attribute to be the end date of your range.
 
 ### Changed
 - Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.
@@ -90,10 +93,14 @@
 ### Deprecated
 
 ### Removed
+- Remove the module cookie, because this is only used in an addon.
 
 ### Fixed
 - The legend now always renders in the map region even when the sidebar is open. Also, the small optical offset in the menu bar at the legend entry has been removed.
 - Layers in the default tree that are grouped by metadata and start with numbers (e.g. 100 Jahre Stadtgrün) can now be opened again.
+- The alerting modal now has a padding again.
+- Fixed a warning in the console when loading addons.
+- When closing the "Draw/Write" tool via the cross, an error no longer occurs.
 
 ---
 ## v2.12.1 - 2021-08-12

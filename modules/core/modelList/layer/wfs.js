@@ -375,7 +375,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         }
         else if (styleModel && legend === true) {
             if (!isSecured) {
-                styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
+                styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"), this.get("useProxy"));
             }
             else if (isSecured) {
                 styleModel.getGeometryTypeFromSecuredWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
