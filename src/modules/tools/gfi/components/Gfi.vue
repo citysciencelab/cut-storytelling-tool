@@ -35,7 +35,7 @@ export default {
         }),
         ...mapGetters("Tools/Gfi", Object.keys(getters)),
         ...mapGetters("Map", {
-            gfiFeatures: "gfiFeatures",
+            gfiFeatures: "gfiFeaturesReverse",
             mapSize: "size"
         }),
         /**

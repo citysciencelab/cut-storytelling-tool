@@ -1,13 +1,13 @@
 import Vuex from "vuex";
 import {shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
-import Dropdown from "../../DropdownSimple.vue";
+import Dropdown from "../../../components/DropdownSimple.vue";
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
 
-describe("src/share-components/dropdowns/DropdownSimple.vue", () => {
+describe("src/share-components/dropdowns/components/DropdownSimple.vue", () => {
     const props = {
         value: "mon",
         options: {

@@ -125,7 +125,7 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
      * @returns {void}
      */
     setFocus: function () {
-        const htmlAElement = document.querySelector("#" + this.model.get("id") + "> div>a");
+        const htmlAElement = document.querySelector("#\\" + this.model.get("id") + "> div>a");
 
         if (htmlAElement) {
             htmlAElement.focus();

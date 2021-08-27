@@ -218,6 +218,7 @@ Definition of classes to be taken into account for results.
 |name|yes|String||Class name|false|
 |icon|no|String|"glyphicon-road"|Class visualization by a glyphicon|false|
 |zoom|no|String|"center"|Defines how to zoom to a hit on selection. If `center` is chosen, the center coordinate (`cx`, `cy`) is zoomed to and a marker is placed. If `bbox` is chosen, the LocationFinder's given BoundingBox (`xmin`, `ymin`, `xmax`, `ymax`) is zoomed to, and no marker is shown.|false|
+|zoomLevel|no|Integer|undefined|Zoom level which is applied to the result view|false|
 
 **Example**
 
@@ -232,7 +233,8 @@ Definition of classes to be taken into account for results.
             },
             {
                 "name": "address",
-                "icon": "glyphicon-home"
+                "icon": "glyphicon-home",
+                ""zoomLevel": 5
             },
             {
                 "name": "streetname",
