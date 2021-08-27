@@ -261,7 +261,7 @@ export default {
             if (coord.value === "") {
                 commit("setEastingNoCoord", true);
             }
-            else if (!coord.value.match(validators[currentProjection.id])) {
+            else if (!String(coord.value).match(validators[currentProjection.id])) {
                 commit("setEastingNoMatch", true);
             }
         }
@@ -270,7 +270,7 @@ export default {
             if (coord.value === "") {
                 commit("setNorthingNoCoord", true);
             }
-            else if (!coord.value.match(validators[currentProjection.id])) {
+            else if (!String(coord.value).match(validators[currentProjection.id])) {
                 commit("setNorthingNoMatch", true);
             }
         }
