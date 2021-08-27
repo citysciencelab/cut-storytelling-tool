@@ -20,6 +20,7 @@ Vue.config.devtools = false;
 module.exports = {
     mode: "development",
     target: "node",
+    //use when debugging:
     // devtool: "cheap-module-eval-source-map",
     // output: {
     //     devtoolModuleFilenameTemplate: "[absolute-resource-path]"
