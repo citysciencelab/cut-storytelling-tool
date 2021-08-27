@@ -20,10 +20,18 @@ Vue.config.devtools = false;
 module.exports = {
     mode: "development",
     target: "node",
-    devtool: "cheap-module-eval-source-map",
+    // devtool: "cheap-module-eval-source-map",
+    // output: {
+    //     devtoolModuleFilenameTemplate: "[absolute-resource-path]"
+    // },
+
+    devtool: "inline-cheap-module-source-map",
     output: {
-        devtoolModuleFilenameTemplate: "[absolute-resource-path]"
+        // use absolute paths in sourcemaps (important for debugging via IDE)
+        devtoolModuleFilenameTemplate: "[absolute-resource-path]",
+        devtoolFallbackModuleFilenameTemplate: "[absolute-resource-path]?[hash]"
     },
+
     resolve: {
         alias: {
             vue: "vue/dist/vue.js"
