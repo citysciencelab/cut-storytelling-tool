@@ -11,7 +11,7 @@ export default {
             default: ""
         }
     },
-    data: () => ({playing: false, sliderValue: 0}),
+    data: () => ({playing: false, playbackHandle: null, sliderValue: 0}),
     computed: {
         ...mapGetters("WmsTime", Object.keys(getters)),
         ...mapGetters("Map", ["map"])
@@ -57,19 +57,17 @@ export default {
             this.sliderValue = this.timeRange[this.nextIndex(forward)];
         },
         play () {
-            let handle;
-
             this.playing = !this.playing;
 
             // This is true whenever any of the two players is being used.
             this.setTimeSliderPlaying(this.playing);
 
             if (this.playing) {
-                handle = setInterval(this.animate, this.timeSlider.playbackDelay * 1000);
+                this.playbackHandle = setInterval(this.animate, this.timeSlider.playbackDelay * 1000);
             }
             else {
-                clearInterval(handle);
-                handle = undefined;
+                clearInterval(this.playbackHandle);
+                this.playbackHandle = null;
             }
         }
     }
