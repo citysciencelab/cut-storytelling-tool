@@ -739,9 +739,9 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      */
     addOrRemoveFolder: function (id, defaultTranslationKey, overLayer) {
         // The folder for the 3D data is disabled on mobile whereas the other folders (e.g. TimeLayers) are enabled
-        const enabled = id === "3d_daten" ? Radio.request("Util", "isViewMobile") : true;
+        const enabled = id === "3d_daten" ? !Radio.request("Util", "isViewMobile") : true;
 
-        if (enabled && (this.get("treeType") === "default" || overLayer !== undefined)) {
+        if (enabled && overLayer !== undefined) {
             const name = overLayer?.name ? overLayer.name : i18next.t(defaultTranslationKey),
                 // If no name and no translation-function was found, the translation of the default value is used
                 i18nextTranslate = overLayer?.name && overLayer?.i18nextTranslate
