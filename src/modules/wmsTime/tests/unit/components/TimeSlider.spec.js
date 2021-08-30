@@ -21,6 +21,14 @@ describe("src/modules/wmsTime/components/TimeSlider.vue", () => {
         });
     });
 
+    afterEach(() => {
+        window.innerWidth = 1024;
+        store.commit("WmsTime/setWindowWidth");
+        store.commit("WmsTime/setTimeSliderActive", {active: false});
+        store.commit("WmsTime/setLayerSwiperActive", false);
+        sinon.restore();
+    });
+
     it("renders the TimeSlider component without the possibility to activate the the LayerSwiper component if window.innerWidth is below 800", () => {
         window.innerWidth = 799;
         store.commit("WmsTime/setWindowWidth");

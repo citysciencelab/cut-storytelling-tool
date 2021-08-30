@@ -20,17 +20,23 @@ describe("src/modules/wmsTime/components/WmsTime.vue", () => {
             namespaces: true,
             modules: {WmsTime: WmsTimeModule}
         });
+        store.commit("WmsTime/setTimeSliderActive", {active: true});
+    });
+
+    afterEach(() => {
+        window.innerWidth = 1024;
+        store.commit("WmsTime/setWindowWidth");
+        store.commit("WmsTime/setTimeSliderActive", {active: false});
+        store.commit("WmsTime/setLayerSwiperActive", false);
     });
 
     it("render one TimeSlider component if it is active and the layerSwiper is inactive", () => {
-        store.commit("WmsTime/setTimeSliderActive", {active: true});
         const wrapper = shallowMount(WmsTime, {localVue, store});
 
         expect(wrapper.findAllComponents(TimeSlider).length).to.equal(1);
         expect(wrapper.findComponent(LayerSwiper).exists()).to.be.false;
     });
     it("render two TimeSlider component and a LayerSwiper component if the timeSlider is active, the layerSwiper is active and the window has a minWidth of 800px", () => {
-        store.commit("WmsTime/setTimeSliderActive", {active: true});
         store.commit("WmsTime/setLayerSwiperActive", true);
         const wrapper = shallowMount(WmsTime, {localVue, store}),
             timeSliderComponents = wrapper.findAllComponents(TimeSlider);
@@ -41,7 +47,6 @@ describe("src/modules/wmsTime/components/WmsTime.vue", () => {
         expect(wrapper.findComponent(LayerSwiper).exists()).to.be.true;
     });
     it("should only render one TimeSlider component and no LayerSwiper component if the window size is smaller than the minWidth of 800px", () => {
-        store.commit("WmsTime/setTimeSliderActive", {active: true});
         store.commit("WmsTime/setLayerSwiperActive", true);
         window.innerWidth = 799;
         store.commit("WmsTime/setWindowWidth");
