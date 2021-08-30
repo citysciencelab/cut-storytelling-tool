@@ -1,5 +1,7 @@
 import axios from "axios";
-import {WFS} from "ol/format";
+import Feature from "ol/Feature";
+import Point from "ol/geom/Point";
+import WFS from "ol/format/WFS";
 import handleAxiosResponse from "../../../../utils/handleAxiosResponse";
 import {buildFilter, buildStoredFilter} from "./buildFilter";
 
@@ -20,6 +22,48 @@ function adjustFilter (filter) {
     }
 
     return filter;
+}
+
+/**
+ * Parses the response from a WFS-G as the features can not be parsed by OL (yet).
+ *
+ * @param {string} responseData The response data returned by the WFS-G; GML string.
+ * @param {String[]} nameSpaces The namespaces of the service.
+ * @param {String} memberSuffix The suffix of the feature in the FeatureCollection.
+ * @returns {module:ol/Feature[]} Array of Features returned from the service.
+ */
+function parseGazetteerResponse (responseData, nameSpaces, memberSuffix) {
+    const attributes = {},
+        features = [],
+        gmlFeatures = new DOMParser().parseFromString(responseData, "application/xml").getElementsByTagName(`wfs:${memberSuffix}`);
+
+    if (gmlFeatures.length === 0) {
+        return features;
+    }
+
+    gmlFeatures.forEach(feature => {
+        // NOTE: The nested element holds the location. However, the specification always calls for the tag 'iso19112:position', thus, this is checked.
+        if (feature.getElementsByTagName("iso19112:position").length > 0) {
+            attributes.geometry = new Point(
+                feature.getElementsByTagName("iso19112:position")[0].children[0].children[0]
+                    .textContent.split(" ")
+                    .map(coordinate => parseFloat(coordinate))
+            );
+        }
+
+        if (feature.getElementsByTagName("iso19112:geographicExtent").length > 0) {
+            attributes.geographicExtent = feature.getElementsByTagName("iso19112:geographicExtent")[0];
+        }
+
+        features.push(
+            new Feature({
+                ...attributes,
+                ...Object.values(...nameSpaces.map(nameSpace => feature.getElementsByTagNameNS(nameSpace, "*")))
+                    .reduce((acc, curr) => ({...acc, [curr.localName]: curr.textContent}), {})
+            })
+        );
+    });
+    return features;
 }
 
 /**
@@ -51,15 +95,18 @@ let currentRequest = null;
  * @param {Object} store Vuex store.
  * @param {Object} currentInstance The currently selected searchInstance.
  * @param {Object[]} currentInstance.literals Array of literals.
+ * @param {Boolean} [currentInstance.requestConfig.gazetteer = false] Declares whether the used WFS service is a WFS-G, which needs to be parsed differently.
  * @param {String} currentInstance.requestConfig.layerId Id of the layer defined in the services.json. Here it is used to check if that is the case or if the layer was defined in the rest-service.json.
  * @param {Number} currentInstance.requestConfig.maxFeatures The maximum amount of features allowed.
+ * @param {String[]} [currentInstance.requestConfig.nameSpaces] The namespaces of the service.
+ * @param {String} [currentInstance.requestConfig.memberSuffix = "member"] The suffix of the feature in the FeatureCollection.
  * @param {String} currentInstance.requestConfig.storedQueryId Id of the stored Query. If given, a WFS@2.0.0 is queried.
  * @param {Object} service The service to send the request to.
  * @param {?String} [singleValueFilter = null] If given, this filter should be used.
  * @param {?String} [featureType = null] FeatureType of the features which should be requested. Only given for queries for suggestions.
  * @returns {Promise} If the send request was successful, the found features are converted from XML to OL Features and returned.
  */
-export function searchFeatures (store, {literals, requestConfig: {layerId, maxFeatures, storedQueryId}}, service, singleValueFilter = null, featureType = null) {
+export function searchFeatures (store, {literals, requestConfig: {gazetteer = false, layerId, maxFeatures, nameSpaces, memberSuffix = "member", storedQueryId}}, service, singleValueFilter = null, featureType = null) {
     const fromServicesJson = Boolean(layerId);
     let filter;
 
@@ -71,7 +118,13 @@ export function searchFeatures (store, {literals, requestConfig: {layerId, maxFe
     }
 
     return sendRequest(store, service, filter, fromServicesJson, storedQueryId, maxFeatures, featureType)
-        .then(data => new WFS({version: storedQueryId ? "2.0.0" : "1.1.0"}).readFeatures(data));
+        .then(data => {
+            // NOTE: This extra case can be removed when OL can parse WFS-G services with the WFS.readFeatures function.
+            if (gazetteer) {
+                return parseGazetteerResponse(data, nameSpaces, memberSuffix);
+            }
+            return new WFS({version: storedQueryId ? "2.0.0" : "1.1.0"}).readFeatures(data);
+        });
 }
 
 /**

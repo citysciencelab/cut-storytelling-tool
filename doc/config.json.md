@@ -11,13 +11,13 @@ The *config.json* file contains all configuration of the portal interface. It co
 The configuration is separated into two sections, **[Portalconfig](#markdown-header-Portalconfig)** and **[Themenconfig](#markdown-header-Themenconfig)**
 
 ```json
-{l
+{
    "Portalconfig": {},
    "Themenconfig": {}
 }
 ```
 
->💡 Since the portal's original language was German, some on the technical keys are still in German.
+>💡 Since the portals original language was German, some technical keys are still in German.
 
 ***
 
@@ -2484,6 +2484,9 @@ If both are defined `restLayerId` is used.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
+|gazetteer|no|Boolean|false|Declares whether the used WFS service is a WFS-G, which needs to be parsed differently.|false|
+|nameSpaces|no|String[]||If a WFS-G is used, the namespaces need to be provided.|false|
+|memberSuffix|no|enum["member","featureMember"]|"member"|If a WFS-G is used, the suffix of the featureType needs to be specified.|false|
 |layerId|no|String||Id of the WFS service that should be queried. Information is fetched from **[services.json](services.json.md)**.|false|
 |likeFilter|no|**[likeFilter](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfiglikefilter)**|{"wildCard": "*", "singleChar": "#", "escape": "!"}|The configuration of the service for the like filter.|true|
 |maxFeatures|no|Number/String|8|Maximum amount of features that are supposed to be returned from the service. Alternatively, the String `showAll` can be assigned to `maxFeatures` to load all features.|false|

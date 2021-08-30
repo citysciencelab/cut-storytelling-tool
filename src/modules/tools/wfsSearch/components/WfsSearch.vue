@@ -148,7 +148,6 @@ export default {
                             <select
                                 id="tool-wfsSearch-instances-select"
                                 class="form-control input-sm"
-                                required
                                 @change="instanceChanged($event.currentTarget.value)"
                             >
                                 <option
