@@ -91,6 +91,7 @@
     whatwg-fetch: 3.0.0 to version 3.6.2
     xmlserializer: 0.6.1 to version 0.6.1
     zip-a-folder: 0.0.12 to version 1.1.0
+- changed class for several title elements on page from span to h1 and h2
 
 ### Deprecated
 
