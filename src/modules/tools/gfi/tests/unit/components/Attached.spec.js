@@ -9,9 +9,40 @@ config.mocks.$t = key => key;
 localVue.use(Vuex);
 
 describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
+    const mountOptions = {
+        propsData: {
+            feature: {
+                getTheme: () => "Default",
+                getMimeType: () => "text/xml",
+                getTitle: () => "Hallo"
+            }
+        },
+        components: {
+            Default: {
+                name: "Default",
+                template: "<span />"
+            }
+        },
+        computed: {
+            clickCoord: () => [],
+            styleContent: () => [{
+                "max-width": "",
+                "max-height": ""
+            }]
+        },
+        localVue
+    };
+
+    let wrapper;
+
+    afterEach(() => {
+        if (wrapper) {
+            wrapper.destroy();
+        }
+    });
 
     it("should have a title", () => {
-        const wrapper = shallowMount(Attached, {
+        wrapper = shallowMount(Attached, {
             propsData: {
                 feature: {
                     getTheme: () => "Default",
@@ -38,85 +69,21 @@ describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
     });
 
     it("should have the child component Default (-Theme)", () => {
-        const wrapper = shallowMount(Attached, {
-            propsData: {
-                feature: {
-                    getTheme: () => "Default",
-                    getMimeType: () => "text/xml",
-                    getTitle: () => "Hallo"
-                }
-            },
-            components: {
-                Default: {
-                    name: "Default",
-                    template: "<span />"
-                }
-            },
-            computed: {
-                clickCoord: () => [],
-                styleContent: () => [{
-                    "max-width": "",
-                    "max-height": ""
-                }]
-            },
-            localVue
-        });
+        wrapper = shallowMount(Attached, mountOptions);
 
         expect(wrapper.findComponent({name: "Default"}).exists()).to.be.true;
     });
 
     it("should have a close button", async () => {
-        const wrapper = shallowMount(Attached, {
-            propsData: {
-                feature: {
-                    getTheme: () => "Default",
-                    getMimeType: () => "text/xml",
-                    getTitle: () => "Hallo"
-                }
-            },
-            components: {
-                Default: {
-                    template: "<span />"
-                }
-            },
-            computed: {
-                clickCoord: () => [],
-                styleContent: () => [{
-                    "max-width": "",
-                    "max-height": ""
-                }]
-            },
-            localVue
-        });
+        wrapper = shallowMount(Attached, mountOptions);
 
         expect(wrapper.find("button.close").exists()).to.be.true;
     });
 
 
     it("should emitted close event if button is clicked", async () => {
-        const wrapper = shallowMount(Attached, {
-                propsData: {
-                    feature: {
-                        getTheme: () => "Default",
-                        getMimeType: () => "text/xml",
-                        getTitle: () => "Hallo"
-                    }
-                },
-                components: {
-                    Default: {
-                        template: "<span />"
-                    }
-                },
-                computed: {
-                    clickCoord: () => [],
-                    styleContent: () => [{
-                        "max-width": "",
-                        "max-height": ""
-                    }]
-                },
-                localVue
-            }),
-            button = wrapper.find(".close");
+        wrapper = shallowMount(Attached, mountOptions);
+        const button = wrapper.find(".close");
 
         await button.trigger("click");
         expect(wrapper.emitted()).to.have.property("close");
@@ -124,29 +91,8 @@ describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
     });
 
     it("should not emitted close event if clicked inside the content", async () => {
-        const wrapper = shallowMount(Attached, {
-                propsData: {
-                    feature: {
-                        getTheme: () => "Default",
-                        getMimeType: () => "text/xml",
-                        getTitle: () => "Hallo"
-                    }
-                },
-                components: {
-                    Default: {
-                        template: "<span />"
-                    }
-                },
-                computed: {
-                    clickCoord: () => [],
-                    styleContent: () => [{
-                        "max-width": "",
-                        "max-height": ""
-                    }]
-                },
-                localVue
-            }),
-            modal = wrapper.find(".gfi-content");
+        wrapper = shallowMount(Attached, mountOptions);
+        const modal = wrapper.find(".gfi-content");
 
         await modal.trigger("click");
         expect(wrapper.emitted()).to.not.have.property("close");
@@ -154,34 +100,33 @@ describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
     });
 
     it("should render the footer slot within .gfi-footer", () => {
-        const wrapper = shallowMount(Attached, {
-                propsData: {
-                    feature: {
-                        getTheme: () => "Default",
-                        getMimeType: () => "text/xml",
-                        getTitle: () => "Hallo"
-                    }
-                },
-                components: {
-                    Default: {
-                        template: "<span />"
-                    }
-                },
-                computed: {
-                    clickCoord: () => [],
-                    styleContent: () => [{
-                        "max-width": "",
-                        "max-height": ""
-                    }]
-                },
-                slots: {
-                    footer: "<div class=\"gfi-footer\">Footer</div>"
-                },
-                localVue
-            }),
-            footer = wrapper.find(".gfi-footer");
+        wrapper = shallowMount(Attached, {
+            propsData: {
+                feature: {
+                    getTheme: () => "Default",
+                    getMimeType: () => "text/xml",
+                    getTitle: () => "Hallo"
+                }
+            },
+            components: {
+                Default: {
+                    template: "<span />"
+                }
+            },
+            computed: {
+                clickCoord: () => [],
+                styleContent: () => [{
+                    "max-width": "",
+                    "max-height": ""
+                }]
+            },
+            slots: {
+                footer: "<div class=\"gfi-footer\">Footer</div>"
+            },
+            localVue
+        });
+        const footer = wrapper.find(".gfi-footer");
 
         expect(footer.text()).to.be.equal("Footer");
     });
-
 });

@@ -11,9 +11,9 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
                 this.setFocus();
             }
         },
-        "click .glyphicon-info-sign": "showLayerInformation",
+        "click .glyphicon-info-sign": "toggleLayerInformation",
         "keydown .glyphicon-info-sign": function (event) {
-            this.handleKeyboardTriggeredAction(event, "showLayerInformation");
+            this.handleKeyboardTriggeredAction(event, "toggleLayerInformation");
         },
         "click .glyphicon-remove-circle": "removeFromSelection",
         "keydown .glyphicon-remove-circle": function (event) {

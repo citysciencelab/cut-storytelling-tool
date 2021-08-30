@@ -41,6 +41,7 @@ const ExtendedFilterView = Backbone.View.extend({
         else {
             this.undelegateEvents();
         }
+        this.$el.find("#dropdown").trigger("focus");
         return this;
     }
 });

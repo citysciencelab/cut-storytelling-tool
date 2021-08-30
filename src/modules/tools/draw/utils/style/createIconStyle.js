@@ -14,7 +14,7 @@ import {Icon, Style} from "ol/style.js";
 export function createIconStyle (color, imgPath, pointSize, symbol, zIndex) {
     let style;
 
-    if (symbol.type === "image") {
+    if (symbol?.type === "image") {
         style = new Style({
             image: new Icon({
                 src: symbol.value.indexOf("/") === -1 && imgPath ? imgPath + symbol.value : symbol.value,

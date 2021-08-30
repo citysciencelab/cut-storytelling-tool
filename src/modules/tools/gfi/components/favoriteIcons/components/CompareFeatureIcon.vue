@@ -81,12 +81,23 @@ export default {
         v-if="componentExists('compareFeatures')"
         :class="['glyphicon', featureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty']"
         :title="titleCompareList"
+        tabindex="0"
         @click="toogleFeatureToCompareList"
     />
 </template>
 
 <style lang="less" scoped>
+@import "~variables";
+
 @color: #fec44f;
+
+span.glyphicon {
+    &:focus {
+        outline: 3px solid @accent_focus;
+        outline: 3px auto  Highlight;
+        outline: 3px auto -webkit-focus-ring-color;
+    }
+}
 
 .glyphicon-star {
     color: @color;

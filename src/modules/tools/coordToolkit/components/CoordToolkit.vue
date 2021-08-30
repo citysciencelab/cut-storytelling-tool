@@ -62,6 +62,7 @@ export default {
                 else {
                     this.setMode("search");
                 }
+                this.setFocusToFirstControl();
             }
             else {
                 this.resetErrorMessages("all");
@@ -109,6 +110,17 @@ export default {
             addInteractionToMap: "addInteraction",
             removeInteractionFromMap: "removeInteraction"
         }),
+        /**
+         * Sets the focus to the first control
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
+            this.$nextTick(() => {
+                if (this.$refs.coordSystemField) {
+                    this.$refs.coordSystemField.focus();
+                }
+            });
+        },
         /**
          * Initializes the projections to select. If projection EPSG:4326 is available same is added in decimal-degree.
          * @returns {void}
@@ -240,12 +252,13 @@ export default {
          * @returns {void}
          */
         changeMode (newMode) {
-            this.setMode(newMode);
             if (newMode === "search") {
+                this.setMode(newMode);
                 this.removeMarker();
                 this.setSupplyCoordInactive();
             }
-            else {
+            else if (this.mapMode !== MapMode.MODE_3D) {
+                this.setMode(newMode);
                 this.resetErrorMessages("all");
                 this.setSupplyCoordActive();
             }
@@ -417,6 +430,7 @@ export default {
                         <div class="col-md-7 col-sm-7">
                             <select
                                 id="coordSystemField"
+                                ref="coordSystemField"
                                 class="font-arial form-control input-sm pull-left"
                                 @change="selectionChanged($event)"
                             >
@@ -446,7 +460,6 @@ export default {
                                 v-model="coordinatesEasting.value"
                                 type="text"
                                 :readonly="isEnabled('supply')"
-                                :contenteditable="isEnabled( 'search')"
                                 :class="{ inputError: getEastingError, 'form-control': true}"
                                 :placeholder="isEnabled( 'search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesEastingExample : ''"
                                 @click="onInputClicked($event)"
@@ -483,7 +496,6 @@ export default {
                                 type="text"
                                 :class="{ inputError: getNorthingError , 'form-control': true}"
                                 :readonly="isEnabled( 'supply')"
-                                :contenteditable="isEnabled( 'search')"
                                 :placeholder="isEnabled( 'search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesNorthingExample : ''"
                                 @click="onInputClicked($event)"
                                 @input="onInputEvent(coordinatesNorthing)"
@@ -519,7 +531,6 @@ export default {
                                 type="text"
                                 class="form-control"
                                 :readonly="true"
-                                :contenteditable="false"
                                 @click="onInputClicked($event)"
                             >
                         </div>

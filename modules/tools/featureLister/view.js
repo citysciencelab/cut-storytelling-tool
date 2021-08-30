@@ -82,6 +82,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
             this.model.set("layerid", {});
             this.undelegateEvents();
         }
+        $("#window .win-heading span.glyphicon-remove").trigger("focus");
         return this;
     },
 

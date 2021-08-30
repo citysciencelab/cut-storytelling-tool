@@ -3,6 +3,7 @@ import TemplateTree from "text-loader!./templateTree.html";
 import TemplateMeasureTool from "text-loader!./templateMeasureTool.html";
 import QuickHelpModel from "./model";
 import "jquery-ui/ui/widgets/draggable";
+import store from "../../src/app-store";
 
 /**
  * @member TemplateSearch
@@ -23,7 +24,7 @@ import "jquery-ui/ui/widgets/draggable";
  */
 const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */{
     events: {
-        "click .glyphicon-remove": "removeWindow",
+        "click .glyphicon-remove": "removeWindowClicked",
         "click .glyphicon-print": "printHelp"
     },
 
@@ -48,6 +49,10 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
 
             channel.on({
                 "showWindowHelp": this.showWindow
+            }, this);
+
+            channel.on({
+                "closeWindowHelp": this.removeWindow
             }, this);
 
             channel.reply({
@@ -114,6 +119,16 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
      */
     removeWindow: function () {
         this.$el.hide("slow");
+        store.commit("QuickHelp/setActive", false);
+    },
+
+    /**
+     * Handler for remove window click.
+     * @return {void}
+     */
+    removeWindowClicked: function () {
+        this.removeWindow();
+        Radio.trigger("QuickHelp", "closeWindowHelp");
     },
 
     /**
@@ -143,6 +158,7 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
         }
         this.model.setCurrentHelpTopic(value);
         this.$el.show("slow");
+        store.commit("QuickHelp/setActive", true);
     },
 
     /**

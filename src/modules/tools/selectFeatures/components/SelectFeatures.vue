@@ -319,6 +319,7 @@ export default {
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
         :deactivate-gfi="deactivateGFI"
+        :focus-to-close-icon="true"
         class="selectFeatures"
     >
         <template #toolBody>
@@ -334,6 +335,7 @@ export default {
                 </div>
                 <div
                     v-else
+                    ref="select-features-tables"
                     class="select-features-tables"
                 >
                     <template

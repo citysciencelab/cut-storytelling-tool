@@ -2,13 +2,15 @@
 	"Portalconfig": {
     "treeType": "light",
 		"searchBar": {
-			"osm": {
-				"minChars": 3,
-				"serviceId": "10",
-				"limit": 60,
-				"states": "Hamburg",
-				"classes": "place,highway,building,shop,historic,leisure,city,county"
-			},
+			"komoot": {
+        "minChars": 3,
+        "serviceId": "11",
+        "limit": 20,
+        "lang": "de",
+        "lat": 53.6,
+        "lon": 10.0,
+        "bbox": "9.6,53.3,10.4,53.8"
+    },
       "visibleVector": {},
       "tree": {},
 			"startZoomLevel": 9,
@@ -31,26 +33,14 @@
             "name": "Informationen abfragen",
 						"active": true
 					},
-					"searchByCoord": {
-						"name": "Koordinatensuche"
-					},
-					"supplyCoord": {
-						"name": "Koordinaten abfragen"
-					},
 					"coordToolkit": {
-						"name": "translate#common:menu.tools.coordToolkit",
-						"glyphicon": "glyphicon-globe",
-						"heightLayerId" : "19173",
-						"heightElementName": "value_0",
-						"heightValueWater": "-20",
-						"heightValueBuilding": "200"
+						"name": "Koordinaten"
 					},
 					"measure": {
 						"name": "Strecke / Fläche messen"
 					},
 					"draw": {
-						"name": "Zeichnen / Schreiben",
-            "renderToWindow": false
+						"name": "Zeichnen / Schreiben"
 					},
 					"fileImport": {
             "name": "Datei Import"

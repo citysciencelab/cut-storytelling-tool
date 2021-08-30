@@ -35,7 +35,7 @@ export default {
         }),
         ...mapGetters("Tools/Gfi", Object.keys(getters)),
         ...mapGetters("Map", {
-            gfiFeatures: "gfiFeatures",
+            gfiFeatures: "gfiFeaturesReverse",
             mapSize: "size"
         }),
         /**
@@ -388,9 +388,6 @@ export default {
 
 .gfi {
     color: @secondary_contrast;
-    .tool-window-vue {
-        max-width: 600px;
-    }
 }
 .bold{
     font-weight: bold;

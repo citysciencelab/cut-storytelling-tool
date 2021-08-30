@@ -85,6 +85,7 @@ export default {
         .current-language {
             display: block;
             position: relative;
+            color: #1F4B70;
 
             cursor: pointer;
 

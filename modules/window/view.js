@@ -17,8 +17,11 @@ import "jquery-ui/ui/widgets/draggable";
 const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
     events: {
         "click .glyphicon-minus": "minimize",
+        "keydown .glyphicon-minus": "minimize",
         "click .header-min": "maximize",
+        "keydown .header-min": "maximize",
         "click .glyphicon-remove": "hide",
+        "keydown .glyphicon-remove": "hide",
         "touchend .glyphicon-remove": "hide",
         "touchend .header-min": "maximize",
         "touchmove .title": "touchMoveWindow",
@@ -151,7 +154,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
             }
             else {
                 this.$el.html(this.templateMax(attr));
-                document.body.appendChild(this.el);
+                document.getElementById("map").after(this.el);
             }
             this.$el.show("slow");
         }
@@ -172,34 +175,40 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
 
     /**
      * Minimizes the Window.
+     * @param {Event} event the dom event, may be undefined
      * @returns {void}
      */
-    minimize: function () {
-        if (!this.model.get("isCollapsed")) {
-            this.model.setCollapse(true);
-            this.model.set("maxPosTop", this.$el.css("top"));
-            this.model.set("maxPosLeft", this.$el.css("left"));
+    minimize: function (event) {
+        if (!event || event.type === "click" || event.which === 32 || event.which === 13) {
+            if (!this.model.get("isCollapsed")) {
+                this.model.setCollapse(true);
+                this.model.set("maxPosTop", this.$el.css("top"));
+                this.model.set("maxPosLeft", this.$el.css("left"));
+            }
+            this.$(".win-body").hide();
+            this.$(".glyphicon-minus").hide();
+            this.$el.css({"top": "auto", "bottom": "0", "left": "0", "margin-bottom": "75px"});
+            this.$(".header").addClass("header-min");
+            this.$el.draggable("disable");
+            this.resetSize();
         }
-        this.$(".win-body").hide();
-        this.$(".glyphicon-minus").hide();
-        this.$el.css({"top": "auto", "bottom": "0", "left": "0", "margin-bottom": "75px"});
-        this.$(".header").addClass("header-min");
-        this.$el.draggable("disable");
-        this.resetSize();
     },
 
     /**
      * Maximizes the Window.
+     * @param {Event} event the dom event, may be undefined
      * @returns {void}
      */
-    maximize: function () {
-        if (this.$(".win-body").css("display") === "none") {
-            this.model.setCollapse(false);
-            this.$(".win-body").show();
-            this.$(".glyphicon-minus").show();
-            this.$el.css({"top": this.model.get("maxPosTop"), "bottom": "", "left": this.model.get("maxPosLeft"), "margin-bottom": "30px"});
-            this.$(".header").removeClass("header-min");
-            this.$el.draggable("enable");
+    maximize: function (event) {
+        if (!event || event.type === "click" || event.which === 32 || event.which === 13) {
+            if (this.$(".win-body").css("display") === "none") {
+                this.model.setCollapse(false);
+                this.$(".win-body").show();
+                this.$(".glyphicon-minus").show();
+                this.$el.css({"top": this.model.get("maxPosTop"), "bottom": "", "left": this.model.get("maxPosLeft"), "margin-bottom": "30px"});
+                this.$(".header").removeClass("header-min");
+                this.$el.draggable("enable");
+            }
         }
     },
 
@@ -207,20 +216,22 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
      * Hides the Window.
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @fires Core.ModelList#RadioTriggerModelListToggleDefaultTool
-     * @param {event} event - Event
+     * @param {event} event - the dom event, may be undefined
      * @return {void}
      */
     hide: function (event) {
-        const toolModel = Radio.request("ModelList", "getModelByAttributes", {id: this.model.get("winType")});
+        if (!event || event.type === "click" || event.which === 32 || event.which === 13) {
+            const toolModel = Radio.request("ModelList", "getModelByAttributes", {id: this.model.get("winType")});
 
-        // Dont let event bubble to .header element which would trigger maximize again!
-        if (event !== undefined) {
-            event.stopPropagation();
-        }
+            // Dont let event bubble to .header element which would trigger maximize again!
+            if (event !== undefined) {
+                event.stopPropagation();
+            }
 
-        if (toolModel) {
-            toolModel.setIsActive(false);
-            Radio.trigger("ModelList", "toggleDefaultTool");
+            if (toolModel) {
+                toolModel.setIsActive(false);
+                Radio.trigger("ModelList", "toggleDefaultTool");
+            }
         }
     },
 

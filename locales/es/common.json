@@ -178,7 +178,7 @@
             }
         },
         "quickHelp": {
-            "titleTag": "Abrir la ayuda",
+            "titleTag": "Abrir/cerrar la ayuda",
             "search": {
                 "title": "Ayuda - Búsqueda",
                 "generalInfo": "General",

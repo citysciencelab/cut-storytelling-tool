@@ -11,6 +11,7 @@ import Map from "../modules/map/store/indexMap";
 import MapMarker from "../modules/mapMarker/store/indexMapMarker";
 import Legend from "../modules/legend/store/indexLegend";
 import LayerInformation from "../modules/layerInformation/store/indexLayerInformation";
+import QuickHelp from "../modules/quickHelp/store/indexQuickHelp";
 
 import getters from "./getters";
 import mutations from "./mutations";
@@ -36,6 +37,7 @@ const store = new Vuex.Store({
         MapMarker,
         Title,
         LayerInformation,
+        QuickHelp,
         controls: {
             ...controlsModule
         },
