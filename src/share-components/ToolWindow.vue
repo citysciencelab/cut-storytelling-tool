@@ -72,9 +72,9 @@ export default {
                 target-sel=".tool-window-vue"
                 class="heading-element flex-grow"
             >
-                <p class="tool-window-heading-title">
+                <h2 class="tool-window-heading-title">
                     <slot name="title" />
-                </p>
+                </h2>
             </BasicDragHandle>
 
             <slot name="rightOfTitle" />

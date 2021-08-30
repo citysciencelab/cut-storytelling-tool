@@ -121,7 +121,7 @@ export default {
                 :src="logo"
                 :alt="title"
             >
-            <span
+            <h1
                 id="title-text"
                 v-html="title"
             />
