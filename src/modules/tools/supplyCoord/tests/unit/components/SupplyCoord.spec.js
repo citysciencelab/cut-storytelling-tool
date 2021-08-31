@@ -41,7 +41,7 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
                         children: {
                             coord:
                             {
-                                "name": "translate#common:menu.tools.coord",
+                                "name": "translate#common:menu.tools.supplyCoord",
                                 "glyphicon": "glyphicon-screenshot"
                             }
                         }
@@ -169,6 +169,21 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
             expect(ret).to.be.equals("modules.tools.supplyCoord.cartesian.key");
         });
     });
+
+    it("sets focus to first input control", async () => {
+        const elem = document.createElement("div");
+
+        if (document.body) {
+            document.body.appendChild(elem);
+        }
+        wrapper = shallowMount(SupplyCoordComponent, {store, localVue, attachTo: elem});
+
+        wrapper.vm.setFocusToFirstControl();
+
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find("#coordSystemField").element).to.equal(document.activeElement);
+    });
+
     describe("SupplyCoord.vue watcher", () => {
         it("watch to active shall create/remove PointerMove interaction", async () => {
             wrapper = shallowMount(SupplyCoordComponent, {store, localVue});

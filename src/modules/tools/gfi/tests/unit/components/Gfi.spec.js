@@ -39,7 +39,7 @@ function getGfiStore () {
             Map: {
                 namespaced: true,
                 getters: {
-                    gfiFeatures: () => [{
+                    gfiFeaturesReverse: () => [{
                         getTheme: () => "default",
                         getTitle: () => "Feature 1",
                         getMimeType: () => "text/html",
@@ -89,6 +89,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     },
                     getFeatures: () => sinon.stub()
                 }],
+                gfiFeaturesReverse: () => sinon.stub(),
                 mapSize: () => []
             },
             store: getGfiStore,
@@ -112,6 +113,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         return {};
                     }
                 }],
+                gfiFeaturesReverse: () => sinon.stub(),
                 mapSize: () => []
             },
             store: getGfiStore,
@@ -135,6 +137,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         return {};
                     }
                 }],
+                gfiFeaturesReverse: () => sinon.stub(),
                 mapSize: () => []
             },
             store: getGfiStore,
@@ -149,6 +152,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
             computed: {
                 active: () => false,
                 gfiFeatures: () => null,
+                gfiFeaturesReverse: () => sinon.stub(),
                 mapSize: () => []
             },
             store: getGfiStore,
@@ -165,6 +169,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 isMobile: () => true,
                 active: () => true,
                 gfiFeatures: () => [],
+                gfiFeaturesReverse: () => sinon.stub(),
                 mapSize: () => []
             },
             store: getGfiStore,
@@ -192,7 +197,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     getProperties: () => {
                         return {};
                     }
-                }]
+                }],
+                gfiFeaturesReverse: () => sinon.stub()
             },
             store: getGfiStore,
             localVue
@@ -221,6 +227,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         getFeatures: () => []
                     },
                     {}],
+                    gfiFeaturesReverse: () => sinon.stub(),
                     mapSize: () => []
                 },
                 store,
@@ -263,6 +270,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         getlayerId: () => null,
                         getFeatures: () => []
                     }],
+                    gfiFeaturesReverse: () => sinon.stub(),
                     mapSize: () => []
                 },
                 store,
@@ -304,6 +312,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         },
                         getFeatures: () => []
                     }],
+                    gfiFeaturesReverse: () => sinon.stub(),
                     mapSize: () => []
                 },
                 store,
@@ -334,6 +343,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     "attributesToShow": sinon.stub()
                 },
                 {}],
+                gfiFeaturesReverse: () => sinon.stub(),
                 mapSize: () => []
             },
             store: getGfiStore(),
@@ -362,6 +372,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         getFeatures: () => []
                     },
                     {}],
+                    gfiFeaturesReverse: () => sinon.stub(),
                     mapSize: () => []
                 },
                 store,
@@ -393,6 +404,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     },
                     getFeatures: () => []
                 }],
+                gfiFeaturesReverse: () => sinon.stub(),
                 mapSize: () => []
             },
             store: getGfiStore(),
@@ -424,6 +436,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     },
                     getFeatures: () => []
                 }],
+                gfiFeaturesReverse: () => sinon.stub(),
                 mapSize: () => []
             },
             store: getGfiStore,
@@ -454,6 +467,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     getProperties: () => sinon.stub(),
                     getFeatures: () => sinon.stub()
                 }, {}],
+                gfiFeaturesReverse: () => sinon.stub(),
                 mapSize: () => []
             },
             store: getGfiStore,
@@ -476,6 +490,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     getFeatures: () => sinon.stub(),
                     getProperties: () => sinon.stub()
                 }],
+                gfiFeaturesReverse: () => sinon.stub(),
                 mapSize: () => []
             },
             store: getGfiStore,
@@ -503,6 +518,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             getFeatures: () => sinon.stub(),
                             getProperties: () => sinon.stub()
                         }],
+                        gfiFeaturesReverse: () => sinon.stub(),
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
@@ -530,6 +546,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             getFeatures: () => sinon.stub(),
                             getProperties: () => sinon.stub()
                         }],
+                        gfiFeaturesReverse: () => sinon.stub(),
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
@@ -557,6 +574,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             getFeatures: () => sinon.stub(),
                             getProperties: () => sinon.stub()
                         }],
+                        gfiFeaturesReverse: () => sinon.stub(),
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
@@ -600,6 +618,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             getFeatures: () => sinon.stub(),
                             getProperties: () => sinon.stub()
                         }],
+                        gfiFeaturesReverse: () => sinon.stub(),
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
@@ -627,6 +646,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             getFeatures: () => sinon.stub(),
                             getProperties: () => sinon.stub()
                         }],
+                        gfiFeaturesReverse: () => sinon.stub(),
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
@@ -656,6 +676,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             getFeatures: () => sinon.stub(),
                             getProperties: () => sinon.stub()
                         }],
+                        gfiFeaturesReverse: () => sinon.stub(),
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
@@ -685,6 +706,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             getFeatures: () => sinon.stub(),
                             getProperties: () => sinon.stub()
                         }],
+                        gfiFeaturesReverse: () => sinon.stub(),
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
@@ -714,6 +736,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             getFeatures: () => sinon.stub(),
                             getProperties: () => sinon.stub()
                         }],
+                        gfiFeaturesReverse: () => sinon.stub(),
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
@@ -749,6 +772,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             getFeatures: () => sinon.stub(),
                             getProperties: () => sinon.stub()
                         }],
+                        gfiFeaturesReverse: () => sinon.stub(),
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
@@ -779,6 +803,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             getFeatures: () => sinon.stub(),
                             getProperties: () => sinon.stub()
                         }],
+                        gfiFeaturesReverse: () => sinon.stub(),
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
@@ -810,6 +835,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             getFeatures: () => sinon.stub(),
                             getProperties: () => sinon.stub()
                         }],
+                        gfiFeaturesReverse: () => sinon.stub(),
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
@@ -831,6 +857,68 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
 
             expect(wrapper.vm.prepareGfiValueFromObject(key, obj, gfi)).to.equal("14.04.2020");
         });
+        it("Should return value of attribute that contains 'o__b' and convert it to number with thousand seperator", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null,
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
+                        }],
+                        gfiFeaturesReverse: () => sinon.stub(),
+                        mapSize: () => [],
+                        getProperties: () => sinon.stub()
+                    },
+                    store: getGfiStore,
+                    localVue
+                }),
+                key = "o_b",
+                obj = {
+                    condition: "contains",
+                    type: "number"
+                },
+                gfi = {
+                    foo: "foo",
+                    bar: "bar",
+                    foo_bar: "2000",
+                    bar_foo: "bar_foo"
+                };
+
+            expect(wrapper.vm.prepareGfiValueFromObject(key, obj, gfi)).to.equal("2.000");
+        });
+        it("Should return value of attribute that contains 'o__b' and convert it to number with thousand seperator", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null,
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
+                        }],
+                        gfiFeaturesReverse: () => sinon.stub(),
+                        mapSize: () => [],
+                        getProperties: () => sinon.stub()
+                    },
+                    store: getGfiStore,
+                    localVue
+                }),
+                key = "o_b",
+                obj = {
+                    condition: "contains",
+                    type: "number"
+                },
+                gfi = {
+                    foo: "foo",
+                    bar: "bar",
+                    foo_bar: "no number",
+                    bar_foo: "bar_foo"
+                };
+
+            expect(wrapper.vm.prepareGfiValueFromObject(key, obj, gfi)).to.equal("no number");
+        });
     });
     describe("getValueFromCondition", function () {
         it("Should return first key matching the contains condition", function () {
@@ -843,6 +931,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             getFeatures: () => sinon.stub(),
                             getProperties: () => sinon.stub()
                         }],
+                        gfiFeaturesReverse: () => sinon.stub(),
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
@@ -870,6 +959,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             getFeatures: () => sinon.stub(),
                             getProperties: () => sinon.stub()
                         }],
+                        gfiFeaturesReverse: () => sinon.stub(),
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
@@ -897,6 +987,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             getFeatures: () => sinon.stub(),
                             getProperties: () => sinon.stub()
                         }],
+                        gfiFeaturesReverse: () => sinon.stub(),
                         mapSize: () => []
                     },
                     store: getGfiStore,
@@ -923,6 +1014,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             getFeatures: () => sinon.stub(),
                             getProperties: () => sinon.stub()
                         }],
+                        gfiFeaturesReverse: () => sinon.stub(),
                         mapSize: () => []
                     },
                     store: getGfiStore,
@@ -949,6 +1041,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             getFeatures: () => sinon.stub(),
                             getProperties: () => sinon.stub()
                         }],
+                        gfiFeaturesReverse: () => sinon.stub(),
                         mapSize: () => []
                     },
                     store: getGfiStore,
@@ -975,6 +1068,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     getGfiUrl: () => null,
                     getFeatures: () => []
                 }],
+                gfiFeaturesReverse: () => sinon.stub(),
                 mapSize: () => []
             },
             store: getGfiStore,
@@ -1016,6 +1110,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     getGfiUrl: () => null,
                     getFeatures: () => []
                 }],
+                gfiFeaturesReverse: () => sinon.stub(),
                 mapSize: () => []
             },
             store: getGfiStore,

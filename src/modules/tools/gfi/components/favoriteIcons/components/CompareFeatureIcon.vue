@@ -12,11 +12,13 @@ export default {
     },
     data: function () {
         return {
-            gfiFeature: {featureId: this.feature.getId(),
+            gfiFeature: {
+                featureId: this.feature.getId(),
                 layerId: this.feature.getLayerId(),
                 layerName: this.feature.getTitle(),
                 attributesToShow: this.feature.getAttributesToShow(),
-                properties: this.feature.getMappedProperties()}
+                properties: this.feature.getMappedProperties()
+            }
         };
     },
     computed: {
@@ -35,6 +37,22 @@ export default {
          */
         titleCompareList: function () {
             return this.featureIsOnCompareList ? this.$t("modules.tools.gfi.favoriteIcons.compareFeatureIcon.fromCompareList") : this.$t("modules.tools.gfi.favoriteIcons.compareFeatureIcon.toCompareList");
+        }
+    },
+    watch: {
+        /**
+         * If the feature is changed with GFI open, the gfiFeature must be changed here.
+         * @param {Object} value An object with gfi properties.
+         * @returns {void}
+         */
+        feature (value) {
+            this.gfiFeature = {
+                featureId: value.getId(),
+                layerId: value.getLayerId(),
+                layerName: value.getTitle(),
+                attributesToShow: value.getAttributesToShow(),
+                properties: value.getMappedProperties()
+            };
         }
     },
     methods: {
@@ -63,12 +81,23 @@ export default {
         v-if="componentExists('compareFeatures')"
         :class="['glyphicon', featureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty']"
         :title="titleCompareList"
+        tabindex="0"
         @click="toogleFeatureToCompareList"
     />
 </template>
 
 <style lang="less" scoped>
+@import "~variables";
+
 @color: #fec44f;
+
+span.glyphicon {
+    &:focus {
+        outline: 3px solid @accent_focus;
+        outline: 3px auto  Highlight;
+        outline: 3px auto -webkit-focus-ring-color;
+    }
+}
 
 .glyphicon-star {
     color: @color;

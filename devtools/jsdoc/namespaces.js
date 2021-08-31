@@ -94,11 +94,6 @@
  */
 
 /**
- * @namespace Cookie
- * @description Popup to inform user about cookies.
- */
-
-/**
  * @namespace MapMarker
  * @memberof Core
  * @description MapMarker
@@ -286,6 +281,12 @@
  * @namespace Osm
  * @memberof Searchbar
  * @description Configures OpenStreetMap search
+ */
+
+/**
+ * @namespace Komoot
+ * @memberof Searchbar
+ * @description Configures Komoot Photon search
  */
 
 /**

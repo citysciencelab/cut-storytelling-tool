@@ -10,6 +10,7 @@ import LayerInformation from "../modules/layerInformation/store/indexLayerInform
 import Legend from "../modules/legend/store/indexLegend";
 import Map from "../modules/map/store/indexMap";
 import MapMarker from "../modules/mapMarker/store/indexMapMarker";
+import QuickHelp from "../modules/quickHelp/store/indexQuickHelp";
 import Title from "../modules/title/store/indexTitle";
 import WmsTime from "../modules/wmsTime/store/indexWmsTime";
 
@@ -36,6 +37,7 @@ const store = new Vuex.Store({
         Legend,
         Map,
         MapMarker,
+        QuickHelp,
         Title,
         WmsTime,
         controls: {
@@ -59,7 +61,7 @@ export default store;
  * Debounce function
  * @param {Function} callback - The callback form debounce function.
  * @param {Number} wait - Wait before the callback function is called.
- * @returns {void}
+ * @returns {Function} Calls the given callback after the given time.
  */
 function debounce (callback, wait) {
     let timeout;

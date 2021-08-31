@@ -23,6 +23,7 @@ export default {
 </template>
 
 <style lang="less">
+    @import "~variables";
     @color_1: #f3f3f3;
     @background_color_1: #E10019;
     @background_color_2: rgb(8,88,158);
@@ -36,7 +37,14 @@ export default {
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
             &:hover {
                 cursor: pointer;
-                opacity: 0.7;
+                background-color: @primary_hover;
+            }
+            &:focus {
+                background-color: @primary_focus;
+                outline: 1px solid @primary_outline;
+            }
+            &:active {
+                background-color: @primary_active;
             }
         }
         > .toggleButtonPressed {
@@ -45,17 +53,17 @@ export default {
         /* forcing compatibility by overriding old-style layouting */
         .controls-row-right {
             position: relative;
-            margin-right: 0px;
-            min-height: 0px;
+            margin-right: 0;
+            min-height: 0;
         }
         .row {
-            margin-right: 0px;
-            margin-left: 0px;
+            margin-right: 0;
+            margin-left: 0;
         }
         > div {
             padding: 5px;
             > div {
-                margin-top: 0px;
+                margin-top: 0;
             }
         }
     }

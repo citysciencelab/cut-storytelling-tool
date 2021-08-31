@@ -43,18 +43,37 @@ export default {
             return getTheme(this.feature.getTheme(), this.$options.components, this.$gfiThemeAddons);
         }
     },
+    watch: {
+        /**
+         * When the feature changes, the popover is redrawn to keep the position of the click coordinate.
+         * Note: Starting from Bootstrap version 4 an update function for the popover is available.
+         *       Should be adapted when updating Bootstrap.
+         * @returns {void}
+         */
+        feature () {
+            this.$nextTick(() => {
+                this.overlay.setPosition(this.clickCoord);
+                $(this.overlay.getElement()).popover("show");
+            });
+        }
+    },
     mounted () {
         this.$nextTick(() => {
             this.createOverlay();
             this.createPopover();
         });
     },
+    created () {
+        this.setFocusToFirstControl();
+    },
     beforeDestroy () {
         Radio.trigger("Map", "removeOverlay", this.overlay);
     },
     methods: {
-        close () {
-            this.$emit("close");
+        close (event) {
+            if (event.type === "click" || event.which === 32 || event.which === 13) {
+                this.$emit("close");
+            }
         },
 
         /**
@@ -89,7 +108,6 @@ export default {
 
                 }
             });
-
             $(this.overlay.getElement()).popover("show");
         },
 
@@ -105,6 +123,20 @@ export default {
             }
 
             return key;
+        },
+        /**
+         * Sets the focus to the first control (close-button)
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
+            this.$nextTick(() => {
+                // otherwise setting the focus was not possible in modal dialog
+                setTimeout(() => {
+                    if (this.$refs["gfi-close-button"]) {
+                        this.$refs["gfi-close-button"].focus();
+                    }
+                }, 100);
+            });
         }
     }
 };
@@ -115,10 +147,13 @@ export default {
         <!-- header -->
         <div class="gfi-header">
             <button
+                ref="gfi-close-button"
                 type="button"
                 class="close"
                 aria-label="Close"
+                tabindex="0"
                 @click="close"
+                @keydown="close"
             >
                 <span
                     class="glyphicon glyphicon-remove"
@@ -142,6 +177,15 @@ export default {
 </template>
 
 <style lang="less" scoped>
+    @import "~variables";
+
+    button.close {
+        &:focus {
+            outline: 3px solid @accent_focus;
+            outline: 3px auto  Highlight;
+            outline: 3px auto -webkit-focus-ring-color;
+        }
+    }
     .gfi-attached {
         background-color: #ffffff;
     }
@@ -150,7 +194,7 @@ export default {
         font-weight: normal;
         line-height: 17px;
         color: #646262;
-        padding: 0px 15px;
+        padding: 0 15px;
         border-bottom: 1px solid #e5e5e5;
         button {
             font-size: 16px;
@@ -165,8 +209,8 @@ export default {
     }
    @media (min-width: 768px) {
     .gfi-content {
+        max-height: 40vh;
         width: 100%;
-        height: 40vh;
     }
    }
 
@@ -176,7 +220,8 @@ export default {
     .ol-viewport {
         .popover {
             padding: 0;
-            min-width: 40vw;
+            width: max-content;
+            max-width: 40vw;
             border: 0;
             z-index: 1;
         }

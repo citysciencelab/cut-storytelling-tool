@@ -4,7 +4,7 @@ import Sensor from "../../../components/themes/sensor/components/Sensor.vue";
 
 import {expect} from "chai";
 
-describe("getTheme", () => {
+describe("src/modules/tools/gfi/utils/getTheme.js", () => {
     const components = {Default, Sensor};
 
     describe("getTheme", () => {

@@ -7,10 +7,12 @@
 .env
 .idea
 .vscode
+.history
 /img/*.db
 /jsdoc
 /nbproject/private/
 styleguide
+.history
 
 addons/*
 !portal/analysetool/readme.txt

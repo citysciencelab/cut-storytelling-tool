@@ -216,14 +216,14 @@ async function ParameterTests ({builder, url, resolution, browsername, mode, cap
                         await loadUrl(driver, paramUrl, mode);
                     }
 
-                    await (await driver.findElement(By.id("legend-menu"))).click();
+                    await (await driver.findElement(By.css(".legend-menu-item"))).click();
                     await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.legend-window"))));
 
                     // wait until content of legend window is loaded
                     await driver.wait(new Promise(r => setTimeout(r, 500)));
                     expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-window')]//img[contains(@src,'https://geodienste.hamburg.de/HH_WMS_KitaEinrichtung?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=KitaEinrichtungen')]"))).to.exist;
                     expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-window')]//img[contains(@src,'https://geodienste.hamburg.de/HH_WMS_Krankenhaeuser?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=krankenhaeuser')]"))).to.exist;
-                    await (await driver.findElement(By.id("legend-menu"))).click();
+                    await (await driver.findElement(By.css(".legend-menu-item"))).click();
                     expect((await driver.findElements(By.css("div.legend-window"))).length).to.equal(0);
                 });
 
@@ -231,7 +231,7 @@ async function ParameterTests ({builder, url, resolution, browsername, mode, cap
                     await loadUrl(driver, `${url}?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`, mode);
                     await (await driver.findElement(By.css("div#navbarRow li:first-child"))).click();
                     await driver.wait(until.elementIsVisible(await driver.findElement(By.id("tree"))));
-                    await (await driver.findElement(By.css(".layer:nth-child(4) .glyphicon-info-sign"))).click();
+                    await (await driver.findElement(By.css("li.layer span.glyphicon-info-sign"))).click();
                     await driver.wait(until.elementIsVisible(await driver.findElement(By.id("layerInformation"))));
 
                     expect(await driver.findElements(By.xpath("//*[contains(text(),'Fehler beim Laden der Vorschau der Metadaten.')]"))).to.be.empty;
@@ -260,7 +260,7 @@ async function ParameterTests ({builder, url, resolution, browsername, mode, cap
                     expect((await driver.findElements(By.css("div.gfi"))).length).to.equal(0);
 
                     // check whether layer has its legend loaded
-                    await (await driver.findElement(By.id("legend-menu"))).click();
+                    await (await driver.findElement(By.css(".legend-menu-item"))).click();
                     await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.legend-window"))), 12000);
                     expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-window')]//img[contains(@src,'https://geoportal-hamburg.de/legende/legende_solar.png')]"))).to.exist;
                     await (await driver.findElement(By.xpath("//div[contains(@class,'legend-window')]//span[contains(@class, 'glyphicon-remove')]"))).click();

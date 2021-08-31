@@ -21,28 +21,41 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
     });
 
     describe("getPolygonQueryWithPoints", () => {
-        it("should return a url query with the given points in a correct format", () => {
+        it("should return a url query with the given points in a correct format with a intersect range", () => {
             const points = [
-                {x: "foo", y: "bar"},
-                {x: "baz", y: "qux"}
-            ];
+                    {x: "foo", y: "bar"},
+                    {x: "baz", y: "qux"}
+                ],
+                intersect = true;
 
-            expect(http.getPolygonQueryWithPoints(points)).to.equal("st_within(Thing/Locations/location,geography'POLYGON ((foo bar,baz qux))')");
-            expect(http.getPolygonQueryWithPoints([{}, {}])).to.equal("st_within(Thing/Locations/location,geography'POLYGON (())')");
-            expect(http.getPolygonQueryWithPoints([])).to.equal("st_within(Thing/Locations/location,geography'POLYGON (())')");
+            expect(http.getPolygonQueryWithPoints(points, intersect)).to.equal("st_intersects(Thing/Locations/location,geography'POLYGON ((foo bar,baz qux))')");
+            expect(http.getPolygonQueryWithPoints([{}, {}], intersect)).to.equal("st_intersects(Thing/Locations/location,geography'POLYGON (())')");
+            expect(http.getPolygonQueryWithPoints([], intersect)).to.equal("st_intersects(Thing/Locations/location,geography'POLYGON (())')");
+        });
+        it("should return a url query with the given points in a correct format with a within range", () => {
+            const points = [
+                    {x: "foo", y: "bar"},
+                    {x: "baz", y: "qux"}
+                ],
+                intersect = false;
+
+            expect(http.getPolygonQueryWithPoints(points, intersect)).to.equal("st_within(Thing/Locations/location,geography'POLYGON ((foo bar,baz qux))')");
+            expect(http.getPolygonQueryWithPoints([{}, {}], intersect)).to.equal("st_within(Thing/Locations/location,geography'POLYGON (())')");
+            expect(http.getPolygonQueryWithPoints([], intersect)).to.equal("st_within(Thing/Locations/location,geography'POLYGON (())')");
         });
         it("should return false if some damaged points are given", () => {
             const points = [
-                {x: "foo", y: "bar"},
-                {x: "baz", foobar: "qux"}
-            ];
+                    {x: "foo", y: "bar"},
+                    {x: "baz", foobar: "qux"}
+                ],
+                intersect = true;
 
-            expect(http.getPolygonQueryWithPoints(points)).to.equal("st_within(Thing/Locations/location,geography'POLYGON ((foo bar))')");
-            expect(http.getPolygonQueryWithPoints(undefined)).to.be.false;
-            expect(http.getPolygonQueryWithPoints(null)).to.be.false;
-            expect(http.getPolygonQueryWithPoints(1)).to.be.false;
-            expect(http.getPolygonQueryWithPoints("foo")).to.be.false;
-            expect(http.getPolygonQueryWithPoints({})).to.be.false;
+            expect(http.getPolygonQueryWithPoints(points, intersect)).to.equal("st_intersects(Thing/Locations/location,geography'POLYGON ((foo bar))')");
+            expect(http.getPolygonQueryWithPoints(undefined, intersect)).to.be.false;
+            expect(http.getPolygonQueryWithPoints(null, intersect)).to.be.false;
+            expect(http.getPolygonQueryWithPoints(1, intersect)).to.be.false;
+            expect(http.getPolygonQueryWithPoints("foo", intersect)).to.be.false;
+            expect(http.getPolygonQueryWithPoints({}, intersect)).to.be.false;
         });
     });
 
@@ -103,37 +116,38 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
                 {x: 9.872388814958066, y: 53.623426671455626},
                 {x: 9.869432803790303, y: 53.47946522163486}
             ],
+            intersect = false,
             expectedOutcome = "https://iot.hamburg.de/v1.1/Things?%24filter=st_within(Thing%2FLocations%2Flocation%2Cgeography'POLYGON%20((9.869432803790303%2053.47946522163486%2C10.102382514144907%2053.47754336682167%2C10.10613018673993%2053.62149474831524%2C9.872388814958066%2053.623426671455626%2C9.869432803790303%2053.47946522163486))')";
 
         it("should return the expected url with a well formed input", () => {
-            expect(http.addPointsToUrl("https://iot.hamburg.de/v1.1/Things", polygon)).to.equal(expectedOutcome);
+            expect(http.addPointsToUrl("https://iot.hamburg.de/v1.1/Things", polygon, intersect)).to.equal(expectedOutcome);
         });
 
         it("should return false and call an error if a funny url is given", () => {
-            expect(http.addPointsToUrl(false, polygon, onerror)).to.be.false;
+            expect(http.addPointsToUrl(false, polygon, intersect, onerror)).to.be.false;
             expect(lastError).to.be.a("string");
-            expect(http.addPointsToUrl(undefined, polygon, onerror)).to.be.false;
-            expect(http.addPointsToUrl(null, polygon, onerror)).to.be.false;
-            expect(http.addPointsToUrl("foo", polygon, onerror)).to.be.false;
-            expect(http.addPointsToUrl(123456, polygon, onerror)).to.be.false;
-            expect(http.addPointsToUrl([], polygon, onerror)).to.be.false;
-            expect(http.addPointsToUrl({}, polygon, onerror)).to.be.false;
+            expect(http.addPointsToUrl(undefined, polygon, intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl(null, polygon, intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl("foo", polygon, intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl(123456, polygon, intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl([], polygon, intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl({}, polygon, intersect, onerror)).to.be.false;
         });
 
         it("should return false and call an error if a broken polygon is given", () => {
             const url = "https://iot.hamburg.de/v1.0/Things";
 
-            expect(http.addPointsToUrl(url, false, onerror)).to.be.false;
+            expect(http.addPointsToUrl(url, false, intersect, onerror)).to.be.false;
             expect(lastError).to.be.a("string");
-            expect(http.addPointsToUrl(url, undefined, onerror)).to.be.false;
-            expect(http.addPointsToUrl(url, null, onerror)).to.be.false;
-            expect(http.addPointsToUrl(url, "foo", onerror)).to.be.false;
-            expect(http.addPointsToUrl(url, 123456, onerror)).to.be.false;
-            expect(http.addPointsToUrl(url, {}, onerror)).to.be.false;
+            expect(http.addPointsToUrl(url, undefined, intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl(url, null, intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl(url, "foo", intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl(url, 123456, intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl(url, {}, intersect, onerror)).to.be.false;
         });
 
         it("should not call the error callback function on error if anything but a function is given", () => {
-            expect(http.addPointsToUrl("foo", "bar", undefined)).to.be.false;
+            expect(http.addPointsToUrl("foo", "bar", intersect, undefined)).to.be.false;
             expect(lastError).to.be.false;
         });
     });
@@ -963,7 +977,7 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
                 lastUrlExpected = "https://iot.hamburg.de/v1.0/Things?%24filter=st_within(Thing%2FLocations%2Flocation%2Cgeography'POLYGON%20((9.869432803790303%2053.47946522163486%2C10.102382514144907%2053.47754336682167%2C10.10613018673993%2053.62149474831524%2C9.872388814958066%2053.623426671455626%2C9.869432803790303%2053.47946522163486))')";
             let lastUrl = null;
 
-            http.getInExtent(url, extentObj, "onsuccess", "onstart", "oncomplete", "onerror", "onprogress", urlShadow => {
+            http.getInExtent(url, extentObj, false, "onsuccess", "onstart", "oncomplete", "onerror", "onprogress", urlShadow => {
                 lastUrl = urlShadow;
             });
 

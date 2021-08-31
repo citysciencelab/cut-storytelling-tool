@@ -1,5 +1,5 @@
 const {until, By} = require("selenium-webdriver"),
-    {basicAuth, getResolution, isInitalLoadingFinished} = require("./scripts");
+    {getResolution, isInitalLoadingFinished} = require("./scripts");
 let lastDriver;
 
 /**
@@ -74,10 +74,7 @@ async function doLoadUrl (driver, url) {
 
     if (url.indexOf("localhost") === -1) {
 
-        if (testService === "browserstack") {
-            driver.executeScript(basicAuth("lgv", "test"));
-        }
-        else {
+        if (testService === "saucelabs") {
             const firstPart = url.substring(0, 8),
                 secondPart = url.substring(8),
                 urlWithBasicAuth = firstPart + "lgv:test@" + secondPart;

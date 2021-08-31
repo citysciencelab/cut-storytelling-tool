@@ -169,7 +169,7 @@
             }
         },
         "quickHelp": {
-            "titleTag": "Abrir ajuda",
+            "titleTag": "Abrir/fechar ajuda",
             "search": {
                 "title": "Ajuda - Pesquisa",
                 "generalInfo": "Geral",

@@ -82,7 +82,8 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
             orientation: model.orientation ? model.orientation : "bottom",
             type: this.get("type"),
             todayHighlight: model.todayHighlight ? model.todayHighlight : false,
-            language: this.currentLng ? this.currentLng : i18next.language
+            language: this.currentLng ? this.currentLng : i18next.language,
+            beforeShowDay: model.beforeShowDay ? model.beforeShowDay : undefined
         }));
     },
 

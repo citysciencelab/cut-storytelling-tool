@@ -115,6 +115,11 @@ export default {
                             >
                                 <span v-html="removeVerticalBar(value)" />
                             </p>
+                            <p
+                                v-else-if="typeof value === 'string' && value.includes('<br>')"
+                            >
+                                <span v-html="value" />
+                            </p>
                             <p v-else>
                                 {{ value }}
                             </p>
@@ -162,6 +167,11 @@ export default {
                                 v-else-if="typeof value === 'string' && value.includes('|')"
                             >
                                 <span v-html="removeVerticalBar(value)" />
+                            </p>
+                            <p
+                                v-else-if="typeof value === 'string' && value.includes('<br>')"
+                            >
+                                <span v-html="value" />
                             </p>
                             <p v-else>
                                 {{ value }}
@@ -222,6 +232,11 @@ export default {
                             >
                                 <span v-html="removeVerticalBar(value)" />
                             </p>
+                            <p
+                                v-else-if="typeof value === 'string' && value.includes('<br>')"
+                            >
+                                <span v-html="value" />
+                            </p>
                             <p v-else>
                                 {{ value }}
                             </p>
@@ -271,6 +286,11 @@ export default {
                                 v-else-if="typeof value === 'string' && value.includes('|')"
                             >
                                 <span v-html="removeVerticalBar(value)" />
+                            </p>
+                            <p
+                                v-else-if="typeof value === 'string' && value.includes('<br>')"
+                            >
+                                <span v-html="value" />
                             </p>
                             <p v-else>
                                 {{ value }}

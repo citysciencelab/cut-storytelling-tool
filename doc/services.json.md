@@ -245,7 +245,7 @@ WMTS layers can be added by
 |altitudeOffset|no|Number||Height offset for display in 3D mode in meters. If given, any existing z coordinates will be increased by this value. If no z coordinate exists, this value is used as z coordinate.|`10`|
 |gfiTheme|yes|String/Object||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
-|wfsFilter|no|String||The path of filter file|`"ressources/xmlFilter/filterSchulenStadtteilschulen"`|
+|wfsFilter|no|String||Set to use xml ressource as wfs filter, the content of the filter file will be sent to the wfs server as POST request (**[see below](#markdown-header-wfsfilter)**).|`"ressources/xmlFilter/filterSchulenStadtteilschulen"`|
 |isSecured|no|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
 |authenticationUrl|no|String||Additional url called to trigger basic authentication in the browser.|"https://geodienste.hamburg.de/HH_WMS_DOP10?SERVICE=WFS&VERSION=1.1.0&REQUEST=DescribeFeatureType"|
 |propertyNames|no|Array||The attributes as PROPERTYNAME parameter to receive response from wfs layer |`["properties"]`|
@@ -319,6 +319,54 @@ WMTS layers can be added by
     ]
   }
 ```
+
+### wfsFilter
+
+You can create an xml ressource using wfs standard to request your server with complex filters.
+To learn more about wfs filter encoding see https://mapserver.org/de/ogc/filter_encoding.html .
+
+Remember to use the correct feature namespace (see prop featureNS) for xmlns:app.
+
+
+
+**Example**
+
+A filter for primary schools with more than 2 parallel first classes in a file named "primary_schools_with_more_than_two_first_classes.xml".
+Remember to add/remove namespaces (e.g. xmlns:wfs and xmlns:ogc) for your purpose.
+If it doesn't work with the first try, go through your file - line for line - most of the time some prefix doesn't match a namespace or vice versa.
+
+Config:
+
+```json
+{
+    wfsFilter: "primary_schools_with_more_than_two_first_classes.xml"
+}
+```
+
+Content of primary_schools_with_more_than_two_first_classes.xml:
+
+```json
+<?xml version="1.0" encoding="UTF-8"?>
+<wfs:GetFeature service="WFS" version="1.1.0" xmlns:app="http://www.deegree.org/app" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc">
+    <wfs:Query typeName="app:schools">
+        <ogc:Filter>
+            <ogc:And>
+                <ogc:PropertyIsEqualTo>
+                    <ogc:PropertyName>app:schoolname</ogc:PropertyName>
+                    <ogc:Literal>Primaryschool</ogc:Literal>
+                </ogc:PropertyIsEqualTo>
+                <ogc:PropertyIsGreaterThan>
+                    <ogc:PropertyName>app:parallel_first_classes</ogc:PropertyName>
+                    <ogc:Literal>2</ogc:Literal>
+                </ogc:PropertyIsGreaterThan>
+            </ogc:And>
+        </ogc:Filter>
+    </wfs:Query>
+</wfs:GetFeature>
+```
+
+
+
 
 ***
 
@@ -459,6 +507,7 @@ For more details, consider reading the [extensive SensorThings-API documentation
 |urlParameter|no|**[urlParameter](#markdown-header-sensorlayerurlparameter)**||Query options specification. These modify the request to sensor data, e.g. with `"filter"` or `"expand"`.||
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 |version|no|String|"1.1"|Service version used to request data.|`"1.0"`|
+|intersect|no|Boolean|true|Setting if the sensor data is in intersect range or within range |`true`|
 
 **Sensor example:**
 
@@ -470,6 +519,7 @@ For more details, consider reading the [extensive SensorThings-API documentation
       "typ" : "SensorThings",
       "version" : "1.0",
       "url" : "https://51.5.242.162/itsLGVhackathon",
+      "intersect": true,
       "urlParameter" : {
          "root" : "Things",
          "filter" : "startswith(Things/name,'Charging')",
@@ -564,12 +614,32 @@ Metadata specification. All metadata of the layer data is referenced here. By cl
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
 |md_id|no|String||Metadata record identifier|
-|rs_id|no|String||Resource identifier of the metadata record|
-|md_name|no|String||Record name|
-|bbox|no|String||Record extension|
-|kategorie_opendata|no|String||Opendata category from the govdata.de code list|
-|kategorie_inspire|no|String||Inspire category from the Inspire code list, if available; if not, set to `"nicht Inspire-identifiziert"`|
-|kategorie_organisation|no|String||Organization name of the data holding body|
+|csw_url|no|String||Link to the CSW service. From this, the data that is displayed in the layer information is retrieved.|
+|show_doc_url|no|String||Link to the entry in the metadata catalog. The link to the metadata entry of the layer is created from this URL and the `"md_id"`.|
+|rs_id|no|String||Resource identifier of the metadata record.|
+|md_name|no|String||Record name.|
+|bbox|no|String||Record extension.|
+|kategorie_opendata|no|String||Opendata category from the govdata.de code list.|
+|kategorie_inspire|no|String||Inspire category from the Inspire code list, if available; if not, set to `"nicht Inspire-identifiziert"`.|
+|kategorie_organisation|no|String||Organization name of the data holding body.|
+
+**datasets example:**
+
+```json
+"datasets" : [
+    {
+        "md_id" : "9329C2CB-4552-4780-B343-0CC847538896",
+        "csw_url" : "https://metaver.de/csw",
+        "show_doc_url" : "https://metaver.de/trefferanzeige?cmd=doShowDocument&docuuid=",
+        "rs_id" : "https://registry.gdi-de.org/id/de.hh/010d7370-5306-4b63-983b-59cdd6e94c3c",
+        "md_name" : "Krankenhäuser Hamburg",
+        "bbox" : "461468.968928975,5916367.22980651,587010.909598947,5980347.75579767",
+        "kategorie_opendata" : [ "Gesundheit" ],
+        "kategorie_inspire" : [ "Versorgungswirtschaft und staatliche Dienste" ],
+        "kategorie_organisation" : "Behörde für Arbeit, Gesundheit, Soziales, Familie und Integration"
+    }
+]
+```
 
 ***
 
@@ -612,27 +682,76 @@ Definition of parameters for GFI template `"default"`.
 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
-|imageLinks|no|String/String[]|`["imgLink", "link_image"]`|Defines in which attribute an image reference is given. Attributes will be searched in given order, and the first hit will be used.|
-|showFavoriteIcons|no|Boolean|`true`|Specifies whether an icon bar allowing tool access is to be displayed. The icons are only displayed if the corresponding tools are configured. Usable tools: `compareFeatures` (not yet implemented for WMS).
+|iframe|no|**[iframe](#markdown-header-gfi_theme_default_params_iframe)**||Defines the size of the iframe. Only works if the infoFormat="text/html" is configured for the layer.|
+|imageLinks|no|String/String[]|`["bildlink", "link_bild", "Bild", "bild"]`|Defines in which attribute an image reference is given. Attributes will be searched in given order, and the first hit will be used.|
+|maxWidth|no|String|`"600px"`|Defines the max width of the gfi content. The max width must be at least 280px.|
+|showFavoriteIcons|no|Boolean|`true`|Specifies whether an icon bar allowing tool access is to be displayed. The icons are only displayed if the corresponding tools are configured. Usable tools: `compareFeatures` (not yet implemented for WMS).|
+|beautifyKeys|no|Boolean|true|Defines if the attribute keys are beautified (true) or not (false).|
+|showObjectKeys|no|Boolean|false|Displays attribute keys and values of objects in the data if set to true.|
 
 
 **gfiTheme example for template "Default":**
 
+Example for show images in the gfi:
 ```json
 {
     "gfiTheme": {
         "name": "default",
         "params": {
             "imageLinks": [
-                "imageLink",
-                "linkImage",
-                "abc"
+                "bildlink",
+                "link_bild",
+                "Bild",
+                "bild",
+                "My_image_tag"
             ],
-            "showFavoriteIcons": true
+            "maxWidth": "500px",
+            "showFavoriteIcons": true,
+            "beautifyKeys": true,
+            "showObjectKeys": false
         }
     }
 }
 ```
+
+Example for set size of an iframe:
+```json
+{
+    "gfiTheme": {
+        "name": "default",
+        "params": {
+            "iframe": {
+                "width": "800px",
+                "height": "20vh"
+            }
+        }
+    }
+}
+```
+
+***
+
+## gfi_theme_default_params_iframe
+
+The GFI can be displayed as an iframe. Here you can define the size of the iframe.
+
+Note: Only works if the infoFormat="text/html" is configured for the layer.
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|height|no|String|"450px"|Width of the iframe.|
+|width|no|String|"450px"|Height of the iframe.|
+
+**Example for the size of an iframe:**
+```json
+{
+    "iframe": {
+        "width": "200px",
+        "height": "200px"
+    }
+}
+```
+
 
 ***
 
@@ -646,6 +765,8 @@ This theme allows the visualization of historical data regarding a SensorThings-
 |data|no|**[data](#markdown-header-gfi_theme_sensor_params_data)**||Data column names.|
 |header|no|Object|`{"name": "Name", "description": "Beschreibung", "ownerThing": "Eigentümer"}`|Specifies which attributes are to be used for the headers. The display name of each attribute can be specified here, e.g. `"description"` may be displayed `"Arbitrary String"`.|
 |historicalData|no|**[historicalData](#markdown-header-gfi_theme_sensor_params_historicalData)**||Indicates for which period the historical Observations should be requested.|
+|beautifyKeys|no|Boolean|true|Defines if the attribute keys are beautified (true) or not (false).|
+|showObjectKeys|no|Boolean|false|Displays attribute keys and values of objects in the data if set to true.|
 
 **gfiTheme example for template "Sensor":**
 
@@ -685,7 +806,9 @@ This theme allows the visualization of historical data regarding a SensorThings-
             "historicalData": {
                 "periodLength": 3,
                 "periodUnit": "month"
-            }
+            },
+            "beautifyKeys": true,
+            "showObjectKeys": false
         }
     }
 }
@@ -876,7 +999,7 @@ If the gfiAttributes are given as an object, a key's value may also be an object
 |----|--------|----|-------|-----------|-------|
 |name|yes|String||Name to be shown on an exact match.|`"Test"`|
 |condition|yes|enum["contains", "startsWith", "endsWith"]||Condition checked on each feature attribute.|`"startsWith"`|
-|type|no|enum["string","date"]|`"string"`|If `"date"`, the portal will attempt to parse the attribute value to a date.|`"date"`|
+|type|no|enum["string", "date", "number"]|`"string"`|If `"date"`, the portal will attempt to parse the attribute value to a date; If `"Number"`, the portal will attempt to parse the attribute value to with thousand seperator;|`"date"`|
 |format|no|String|`"DD.MM.YYYY HH:mm:ss"`|Data format.|`"DD.MM.YYY"`|
 |prefix|no|String||Attribute value prefix.|Add string to value without whitespace `"https://"`|
 |suffix|no|String||Attribute value suffix.|`"°C"`|
@@ -913,6 +1036,24 @@ If the gfiAttributes are given as an object, a key's value may also be an object
       }
    }
 }
+
+```
+
+**gfiAttributes example object using `number`:**
+
+```json
+{
+   "gfiAttributes": {
+      "key1": "key shown in the portal 1",
+      "key2": "key shown in the portal 2",
+      "key3": {
+         "name": "key shown in the portal 3",
+         "condition": "contains",
+         "type": "number"
+      }
+   }
+}
+
 ```
 
 **gfiAttributes example object with [Objektpfadverweis](style.json.md#markdown-header-objektpfadverweise) (object path reference) key and object value:**

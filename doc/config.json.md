@@ -60,6 +60,7 @@ Search bar configuration.
 |gdi|no|**[gdi](#markdown-header-portalconfigsearchbargdi)**||GDI (elastic) search service configuration. _Deprecated in 3.0.0. Please use **[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)** instead.|false|
 |elasticSearch|no|**[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)**||Elastic search service configuration.|false|
 |osm|no|**[osm](#markdown-header-portalconfigsearchbarosm)**||OpenStreetMap (OSM) search service configuration.|false|
+|komoot|no|**[komoot](#markdown-header-portalconfigsearchbarkomoot)**||Komoot Photon search service configuration.|false|
 |locationFinder|no|**[locationFinder](#markdown-header-portalconfigsearchbarlocationfinder)**||LocationFinder search service configuration.|false|
 |placeholder|no|String|"Suche"|Input text field placeholder shown when no input has been given yet.|false|
 |recommendedListLength|no|Integer|5|Maximum amount of entries in the suggestion list.|false|
@@ -163,6 +164,39 @@ OpenStreetMap search for city, street, and house number. Only executed on clicki
 
 ***
 
+#### Portalconfig.searchBar.komoot
+Search with **[Komoot Photon](https://photon.komoot.io/)**.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|minChars|no|Number|3|Minimum amount of characters required to start a search.|false|
+|serviceId|yes|String||Komoot search service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
+|limit|no|Number|10|Maximum amount of requested unfiltered results.|false|
+|lang|no|string|"de"|Language of the Komoot Search. Effects language specific locationnames (e.g. Countrynames) aus.|false|
+|lat|no|Number||Latitude of the center for the search.|false|
+|lon|no|Number||Longtitude of the center for the search.|false|
+|bbox|no|string||Boundingbox of the search.|false|
+|osm_tag|no|string||Filtering of OSM Tags (see https://github.com/komoot/photon#filter-results-by-tags-and-values).|false|
+|searchOnEnter|no|Boolean|false|If `searchOnEnter` is set to `true`, searches will only start on clicking the search icon or pressing enter.|false|
+
+**Beispiel**
+
+```
+#!json
+
+"komoot": {
+    "minChars": 3,
+    "serviceId": "10",
+    "limit": 20,
+    "lang": "de",
+    "lat": 52.5,
+    "lon": 13.4,
+    "bbox": "12.5,52.05,14.05,52.75",
+}
+```
+
+***
+
 #### Portalconfig.searchBar.locationFinder
 
 Search configuration to use a *ESRI CH LocationFinder*.
@@ -184,6 +218,7 @@ Definition of classes to be taken into account for results.
 |name|yes|String||Class name|false|
 |icon|no|String|"glyphicon-road"|Class visualization by a glyphicon|false|
 |zoom|no|String|"center"|Defines how to zoom to a hit on selection. If `center` is chosen, the center coordinate (`cx`, `cy`) is zoomed to and a marker is placed. If `bbox` is chosen, the LocationFinder's given BoundingBox (`xmin`, `ymin`, `xmax`, `ymax`) is zoomed to, and no marker is shown.|false|
+|zoomLevel|no|Integer||Zoom level which is applied to the result view|false|
 
 **Example**
 
@@ -198,7 +233,8 @@ Definition of classes to be taken into account for results.
             },
             {
                 "name": "address",
-                "icon": "glyphicon-home"
+                "icon": "glyphicon-home",
+                ""zoomLevel": 5
             },
             {
                 "name": "streetname",
@@ -968,6 +1004,8 @@ A folder object defined by a name, glyphicon, and its children.
 [type:legend]: # (Portalconfig.menu.legend)
 [type:saveSelection]: # (Portalconfig.menu.tool.saveSelection)
 [type:searchByCoord]: # (Portalconfig.menu.tool.searchByCoord)
+[type:supplyCoord]: # (Portalconfig.menu.tool.supplyCoord)
+[type:coordToolkit]: # (Portalconfig.menu.tool.coordToolkit)
 
 List of all configurable tools. Each tool inherits the properties of **[tool](#markdown-header-portalconfigmenutool)** and can (or must, respectively) provide the defined attributes as mentioned in that definition.
 
@@ -977,6 +1015,7 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |compareFeatures|no|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**||Offers a comparison option for vector features. The getFeatureInfo (GFI) window will offer a clickable star symbol to put elements on the comparison list. Works when used together with the GFI theme **Default**.|false|
 |contact|no|**[contact](#markdown-header-portalconfigmenutoolcontact)**||The contact form allows users to send messages to a configured mail address. For example, this may be used to allow users to submit errors and suggestions.|false|
 |coord|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use `supplyCoord` instead._ Tool to read coordinates on mouse click. When clicking once, the coordinates in the view are frozen and can be copied on clicking the displaying input elements to the clipboard, i.e. you can use them in another document/chat/mail/... with `Strg+V`.|false|
+|coordToolkit|no|**[tool](#markdown-header-portalconfigmenutool)**||Coordinate query: Tool to read coordinates on mouse click. When clicking once, the coordinates in the view are frozen and can be copied on clicking the displaying input elements to the clipboard, i.e. you can use them in another document/chat/mail/... with `Strg+V`. Coordinate search:search for coordinates with switchable coordinate reference system. The tool will zoom to any given coordinate and set a marker on it. The coordinate systems are obtained from config.js.|false|
 |draw|no|**[draw](#markdown-header-portalconfigmenutooldraw)**||The draw tool allows painting points, lines, polygons, circles, double circles, and texts to the map. You may download these drawing as KML, GeoJSON, or GPX.|false|
 |extendedFilter|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use "filter" instead._ Dynamic filtering of WFS features. This requires an `extendedFilter` configuration on the WFS layer object.|false|
 |featureLister|no|**[featureLister](#markdown-header-portalconfigmenutoolfeaturelister)**||Lists all features of a vector layer.|false|
@@ -991,12 +1030,12 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |parcelSearch|no|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||The parcel search tool allows searching for parcels by district and parcel number. Many German administrative units feature a tripartite order, hence the tool offers searching by "Gemarkung" (district), "Flur" (parcel) (not used in Hamburg), and "Flurstück" (literally "parcel piece").|false|
 |print|no|**[print](#markdown-header-portalconfigmenutoolprint)**||Printing module that can be used to export the map's current view as PDF.|false|
 |saveSelection|no|**[saveSelection](#markdown-header-portalconfigmenutoolsaveselection)**||Tool that allows saving the map's current state as sharable URL. This will list all currently visible layers in order, transparency, and visibility, as well as saving the center coordinate.|false|
-|searchByCoord|no|**[searchByCoord](#markdown-header-portalconfigmenutoolsearchbycoord)**||Coordinate search with switchable coordinate reference system. The tool will zoom to any given coordinate and set a marker on it.|false|
+|searchByCoord|no|**[searchByCoord](#markdown-header-portalconfigmenutoolsearchbycoord)**||_Deprecated in 3.0.0. Please use "coordToolkit" instead._ Coordinate search with switchable coordinate reference system. The tool will zoom to any given coordinate and set a marker on it.|false|
 |selectFeatures|no|**[tool](#markdown-header-portalconfigmenutool)**||Allows selecting a set of vector features by letting the user draw a box on the map. Features in that box will be displayed with GFI information.|false|
 |shadow|no|**[shadow](#markdown-header-portalconfigmenutoolshadow)**||Configuration object for the 3D mode shadow time.|false|
 |styleWMS|no|**[styleWMS](#markdown-header-portalconfigmenutoolstylewms)**||Classification of WMS services. This tool is used in the commute portal of MRH (Metropolregion Hamburg, en.: Metropolitan area Hamburg). With a mask, classifications can be defined. The GetMap request will have an SLD body as payload, used by the server to render. The WMS service now delivers its tiles in the defined classifications and colors.|true|
 |styleVT|no|**[tool](#markdown-header-portalconfigmenutool)**||Style selection for VT services. Allows switching between styles of a Vector Tile Layer that provides multiple stylings via the `services.json` file.|false|
-|supplyCoord|no|**[tool](#markdown-header-portalconfigmenutool)**||Tool to read coordinates on mouse click. When clicking once, the coordinates in the view are frozen and can be copied on clicking the displaying input elements to the clipboard, i.e. you can use them in another document/chat/mail/... with `Strg+V`.|false|
+|supplyCoord|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use "coordToolkit" instead._ Tool to read coordinates on mouse click. When clicking once, the coordinates in the view are frozen and can be copied on clicking the displaying input elements to the clipboard, i.e. you can use them in another document/chat/mail/... with `Strg+V`.|false|
 |virtualcity|no|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||*virtualcityPLANNER* planning viewer|false|
 |wfsFeatureFilter|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use `filter` instead._ Filters WFS features. This required configuring `"filterOptions"` on the WFS layer object.|false|
 |wfst|no|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||WFS-T module to visualize, create, update, and delete features.|false|
@@ -1950,7 +1989,7 @@ The layer slider tool allows showing multiple layers in a row. This may e.g. be 
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|title|yes|String||Name displayed in the tool.|false|
+|title|no|String|"common:modules.tools.layerSlider.title"|Name displayed in the tool.|false|
 |timeInterval|no|Integer|2000|Time in ms until the next layer is shown.|false|
 |layerIds|yes|**[layerId](#markdown-header-portalconfigmenutoollayersliderlayerid)**[]|[]|Array of layer information objects.|false|
 |sliderType|no|enum["player","handle"]|"player"|Layer slider type. `""player"` shows start, pause, and stop buttons, while `"handle"` uses a switch. In the latter case, layer transparency is adjusted additionally.|false|
@@ -2209,6 +2248,36 @@ The attributes `edit` and `delete` may be of type boolean or string. If of type 
 {
     "edit": "Editieren"
 }
+```
+
+***
+
+#### Portalconfig.menu.tool.coordToolkit
+
+[inherits]: # (Portalconfig.menu.tool)
+Coordinates tool. To display the height above sea level in addition to the 2 dimensional coordinates, a 'heightLayerId' of a WMS service that provides the height must be specified. The format XML is expected and the attribute for the heights is expected under the value of the parameter 'heightElementName'.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|heightLayerId|no|String||Coordinate query: Id of the WMS layer that provides the height in XML format. If not defined, then no height is displayed.|false|
+|heightElementName|no|String||Coordinate query: The element name under which the height in the XML is searched.|false|
+|heightValueWater|no|String||Coordinate query: the value in the element defined under "heightElementName" supplied by the WMS for an unmeasured height in the water area, it will display the internationalized text "Water surface, no heights available" under the key "common:modules.tools.coordToolkit.noHeightWater" in the interface. If this attribute is not specified, then the text provided by the WMS will be displayed.|false|
+|heightValueBuilding|no|String||Coordinate query: the value in the element defined under "heightElementName" supplied by the WMS for a non-measured height in the building area, it will display the internationalized text "Building area, no heights available" under the key "common:modules.tools.coordToolkit.noHeightBuilding" in the interface. If this attribute is not specified, then the text provided by the WMS will be displayed.|false|
+|zoomLevel|no|Number|7|Coordinate search: Specifies the zoom level to which you want to zoom.|false|
+
+
+**Beispiel**
+```
+#!json
+ "coordToolkit": {
+            "name": "translate#common:menu.tools.coordToolkit",
+            "glyphicon": "glyphicon-globe",
+            "zoomLevel": 5,
+            "heightLayerId" : "19173",
+            "heightElementName": "value_0",
+            "heightValueWater": "-20",
+            "heightValueBuilding": "200",
+          }
 ```
 
 ***

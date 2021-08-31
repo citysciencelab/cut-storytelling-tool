@@ -3,7 +3,7 @@ import {config, shallowMount, mount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import GraphicalSelectComponent from "../../../components/GraphicalSelect.vue";
 import GraphicalSelectModule from "../../../store/indexGraphicalSelect.js";
-import Dropdown from "../../../../dropdowns/DropdownSimple.vue";
+import Dropdown from "../../../../dropdowns/components/DropdownSimple.vue";
 import sinon from "sinon";
 
 

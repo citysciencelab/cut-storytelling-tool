@@ -1,5 +1,5 @@
 <script>
-import Modal from "../../../../share-components/modals/Modal.vue";
+import Modal from "../../../../share-components/modals/components/Modal.vue";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import * as constants from "../store/constantsCompareFeatures";
 import ComparisonList from "./ComparisonList.vue";
@@ -7,7 +7,7 @@ import getters from "../store/gettersCompareFeatures";
 import state from "../store/stateCompareFeatures";
 import actions from "../store/actionsCompareFeatures";
 import mutations from "../store/mutationsCompareFeatures";
-import preparePrint from "../utils/preparePrint.js";
+import {preparePrint} from "../utils/preparePrint.js";
 import beautifyKey from "../../../../utils/beautifyKey.js";
 import {isWebLink} from "../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../utils/isPhoneNumber.js";
@@ -279,8 +279,7 @@ export default {
     }
 </style>
 
-<style lang="less">
-
+<style lang="less" scoped>
     #modal-1-container #modal-1-overlay {
         z-index: 1000;
     }

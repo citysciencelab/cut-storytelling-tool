@@ -47,6 +47,11 @@ export default {
             type: Boolean,
             default: true,
             required: false
+        },
+        focusToCloseIcon: {
+            type: Boolean,
+            default: false,
+            required: false
         }
     },
     data () {
@@ -86,6 +91,14 @@ export default {
             }
 
             this.updateMap();
+
+            if (newValue && this.focusToCloseIcon) {
+                this.$nextTick(() => {
+                    if (this.$refs["close-icon"]) {
+                        this.$refs["close-icon"].focus();
+                    }
+                });
+            }
         }
     },
     methods: {
@@ -109,19 +122,25 @@ export default {
         },
         /**
          * Minifies tool and emits evnt.
-         *  @return {void}
+         * @param {Event} event - the dom event
+         * @return {void}
          */
-        minifyTool: function () {
-            this.isMinified = true;
-            this.$emit("toolMinified");
+        minifyTool: function (event) {
+            if (event.type === "click" || event.which === 32 || event.which === 13) {
+                this.isMinified = true;
+                this.$emit("toolMinified");
+            }
         },
         /**
          * Maximizes tool and emits evnt.
-         *  @return {void}
+         * @param {Event} event - the dom event
+         * @return {void}
          */
-        maximizeTool: function () {
-            this.isMinified = false;
-            this.$emit("toolMaximized");
+        maximizeTool: function (event) {
+            if (event.type === "click" || event.which === 32 || event.which === 13) {
+                this.isMinified = false;
+                this.$emit("toolMaximized");
+            }
         },
         /**
          * Updates the size of the map depending on sidebars visibility
@@ -135,13 +154,15 @@ export default {
         },
         /**
          * Updates size of map and emits event to parent.
-         * @param {Event} event the click event
+         * @param {Event} event the dom event
          * @return {void}
          */
         close (event) {
-            this.updateMap();
-            // emit event to parent e.g. SupplyCoord (which uses the tool as component and is therefor the parent)
-            this.$parent.$emit("close", event);
+            if (event.type === "click" || event.which === 32 || event.which === 13) {
+                this.updateMap();
+                // emit event to parent e.g. SupplyCoord (which uses the tool as component and is therefor the parent)
+                this.$parent.$emit("close", event);
+            }
         }
     }
 };
@@ -204,20 +225,27 @@ export default {
                 <span
                     v-if="!isMinified"
                     class="glyphicon glyphicon-minus"
+                    tabindex="0"
                     title="Minimieren"
-                    @click="minifyTool"
+                    @click="minifyTool($event)"
+                    @keydown="minifyTool($event)"
                 />
                 <span
                     v-else
                     class="glyphicon glyphicon-plus"
+                    tabindex="0"
                     title="Maximieren"
-                    @click="maximizeTool"
+                    @click="maximizeTool($event)"
+                    @keydown="maximizeTool($event)"
                 />
             </div>
             <div class="heading-element">
                 <span
+                    ref="close-icon"
                     class="glyphicon glyphicon-remove"
+                    tabindex="0"
                     @click="close($event)"
+                    @keydown="close($event)"
                 />
             </div>
         </div>
@@ -279,7 +307,12 @@ export default {
             }
 
             > .glyphicon {
-                padding: 10px 8px 10px 0;
+                margin: 10px 8px 10px 0;
+                &:focus {
+                    outline: 3px solid @accent_focus;
+                    outline: 3px auto  Highlight;
+                    outline: 3px auto -webkit-focus-ring-color;
+                }
             }
 
             > span {

@@ -7,38 +7,55 @@ import actions from "../store/actionsLegend";
 export default {
     name: "LegendMenu",
     components: {},
+    data () {
+        return {
+            element: null,
+            childNode: null
+        };
+    },
     computed: {
         ...mapGetters("Legend", Object.keys(getters)),
         ...mapGetters(["mobile", "uiStyle"])
     },
     mounted () {
-        const root = this.uiStyle === "TABLE" ? document.getElementById("table-tools-menu") : document.getElementById("root");
-
+        this.element = this.$el;
+        this.childNode = this.$el.childNodes[0].childNodes[0];
         this.getLegendConfig();
-        if (root) {
-            if (this.uiStyle === "TABLE") {
-                root.append(this.$el);
-            }
-            else {
-                const span = root.querySelector("[name=legend]");
 
-                // replace legend in menu to provide order of menu in config.json
-                // root.replaceChild must be removed on refactoring menu to vue, then only use the else case
-                if (this.mobile && span.parentNode) {
-                    root.replaceChild(this.$el, span.parentNode);
-                }
-                else if (span && span.parentNode && span.parentNode.parentNode) {
-                    root.replaceChild(this.$el.childNodes[0], span.parentNode.parentNode);
-                }
-                else {
-                    root.parentNode.insertBefore(this.$el, root.nextSibling);
-                }
-            }
+        if (this.uiStyle === "TABLE") {
+            document.getElementById("table-tools-menu").append(this.$el);
         }
+        else {
+            this.replaceMenuChild();
+        }
+    },
+    updated () {
+        this.replaceMenuChild();
     },
     methods: {
         ...mapActions("Legend", Object.keys(actions)),
         ...mapMutations("Legend", Object.keys(mutations)),
+
+        /**
+         * Replace legend in menu to provide order of menu in config.json.
+         * root.replaceChild must be removed on refactoring menu to vue, then only use the else case.
+         * @returns {void}
+         */
+        replaceMenuChild () {
+            const root = document.getElementById("root");
+
+            if (root && this.uiStyle !== "TABLE") {
+                const span = root.querySelector("[name=legend]");
+
+                if (this.mobile && span?.parentNode) {
+                    root.replaceChild(this.element, span.parentNode);
+                }
+                else if (span?.parentNode?.parentNode) {
+                    root.replaceChild(this.childNode, span.parentNode.parentNode);
+                }
+            }
+        },
+
         /**
          * Toggles the visibility of the legend
          * @returns {void}
@@ -60,12 +77,16 @@ export default {
             <li
                 v-if="showLegendInMenu"
                 :class="{ 'open': showLegend }"
-                class="dropdown dropdown-folder"
+                class="dropdown dropdown-folder legend-menu-item"
                 @click="toggleLegend"
+                @keydown.enter.stop.prevent="toggleLegend"
+                @keydown.space.stop.prevent="toggleLegend"
             >
                 <a
                     href="#"
-                    class="dropdown-toggle"
+                    class="dropdown-toggle tabable"
+                    tabindex="0"
+                    :title="$t(name)"
                 >
                     <span
                         :class="glyphicon"
@@ -83,8 +104,9 @@ export default {
             <li
                 v-if="showLegendInMenu"
                 :class="{ open: showLegend }"
-                class="list-group-item"
+                class="list-group-item legend-menu-item"
                 @click="toggleLegend"
+                @keydown.enter="toggleLegend"
             >
                 <div>
                     <span

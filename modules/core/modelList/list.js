@@ -720,7 +720,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         // lighttree: Alle models gleich hinzufügen, weil es nicht viele sind und sie direkt einen Selection index
         // benötigen, der ihre Reihenfolge in der Config Json entspricht und nicht der Reihenfolge
         // wie sie hinzugefügt werden
-        const paramLayers = Radio.request("ParametricURL", "getLayerParams"),
+        const paramLayers = Radio.request("ParametricURL", "getLayerParams") ? Radio.request("ParametricURL", "getLayerParams") : [],
             treeType = Radio.request("Parser", "getTreeType");
 
         let lightModels,
