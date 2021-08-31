@@ -175,8 +175,8 @@ export default {
             // cartesian coordinates
             else {
                 coord = toStringXY(position, 2);
-                easting = Number.parseFloat(coord.split(",")[0].trim());
-                northing = Number.parseFloat(coord.split(",")[1].trim());
+                easting = Number.parseFloat(coord.split(",")[0].trim()).toFixed(2);
+                northing = Number.parseFloat(coord.split(",")[1].trim()).toFixed(2);
             }
             commit("setCoordinatesEasting", {id: "easting", value: String(easting)});
             commit("setCoordinatesNorthing", {id: "northing", value: String(northing)});
@@ -246,12 +246,14 @@ export default {
      * @returns {void}
      */
     validateInput ({state, commit}, coord) {
-        const validETRS89 = /^[0-9]{7}[.,]{0,1}[0-9]{0,3}\s*$/,
+        const validETRS89UTM = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
+            validETRS89 = /^[0-9]{7}[.,]{0,1}[0-9]{0,3}\s*$/,
             validWGS84 = /^\d[0-9]{0,2}[°]{1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["″]{0,2}[\sNS]*\s*$/,
             validWGS84_dez = /[0-9]{1,3}[.,][0-9]{0,20}[\s]{0,10}°?\s*$/,
             {currentProjection} = state,
             validators = {
-                "http://www.opengis.net/gml/srs/epsg.xml#25832": validETRS89,
+                "http://www.opengis.net/gml/srs/epsg.xml#25832": validETRS89UTM,
+                "http://www.opengis.net/gml/srs/epsg.xml#25833": validETRS89UTM,
                 "EPSG:31467": validETRS89,
                 "EPSG:8395": validETRS89,
                 "EPSG:4326": validWGS84,
@@ -286,9 +288,6 @@ export default {
     formatInput ({state, commit, getters}, coords) {
         const {currentProjection} = state,
             formatters = {
-                "http://www.opengis.net/gml/srs/epsg.xml#25832": coord=>coord.value,
-                "EPSG:31467": coord=>coord.value,
-                "EPSG:8395": coord=>coord.value,
                 "EPSG:4326": coord=>coord.value.split(/[\s°′″'"´`]+/),
                 "EPSG:4326-DG": coord=>coord.value.split(/[\s°]+/)
             };
@@ -296,8 +295,14 @@ export default {
         commit("setSelectedCoordinates", []);
         for (const coord of coords) {
             if (!getters.getEastingError && !getters.getNorthingError) {
+                let formatter = formatters[currentProjection.id];
+
+                if (!formatter) {
+                    formatter = coordinate=>coordinate.value;
+                }
+
                 commit("resetErrorMessages", "all");
-                commit("pushCoordinates", formatters[currentProjection.id](coord));
+                commit("pushCoordinates", formatter(coord));
             }
         }
     },

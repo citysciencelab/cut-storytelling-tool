@@ -136,8 +136,10 @@ export default {
                 if (proj.name === "EPSG:4326") {
                     wgs84Proj.push(proj);
                 }
-                if (proj.name === "http://www.opengis.net/gml/srs/epsg.xml#25832") {
-                    proj.title = proj.title + " (EPSG:25832)";
+                if (proj.name.indexOf("#") > -1) { // e.g. "http://www.opengis.net/gml/srs/epsg.xml#25832"
+                    const code = proj.name.substring(proj.name.indexOf("#") + 1, proj.name.length);
+
+                    proj.title = proj.title + " (EPSG:" + code + ")";
                 }
                 else {
                     proj.title = proj.title + " (" + proj.name + ")";
