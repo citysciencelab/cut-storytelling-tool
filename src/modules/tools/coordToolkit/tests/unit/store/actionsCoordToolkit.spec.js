@@ -325,8 +325,8 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 };
 
                 testAction(actions.adjustPosition, payload, {}, rootState, [
-                    {type: "setCoordinatesEasting", payload: {id: "easting", value: "100"}},
-                    {type: "setCoordinatesNorthing", payload: {id: "northing", value: "200"}}
+                    {type: "setCoordinatesEasting", payload: {id: "easting", value: "100.00"}},
+                    {type: "setCoordinatesNorthing", payload: {id: "northing", value: "200.00"}}
                 ], {}, done);
             });
             it("adjustPosition sets coordinate fields - no projection and position does nothing", done => {
