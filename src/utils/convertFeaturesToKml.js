@@ -191,7 +191,7 @@ export default async function convertFeaturesToKml (features) {
             style,
             styles;
 
-        if (type === "Point" && feature.values_.drawState.text !== undefined) {
+        if (type === "Point" && feature.values_.drawState && feature.values_.drawState.text !== undefined) {
             // Imported KML with text, can be used as it is
             skip[i] = true;
             textFontSize[i] = feature.values_.drawState.fontSize;
