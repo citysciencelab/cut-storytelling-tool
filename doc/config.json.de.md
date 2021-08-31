@@ -2319,6 +2319,7 @@ Hier werden die Hintergrundkarten definiert
 |----|-------------|---|-------|------------|------|
 |name|nein|String|"Hintergrundkarten"| Name der Schaltfläche für Hintergrundkarten im custom tree und default tree.|false|
 |Layer|ja|**[Layer](#markdown-header-themenconfiglayer)**/**[GroupLayer](#markdown-header-themenconfiggrouplayer)**[]||Definition der Layer.|false|
+|Ordner|nein|**[Ordner](#markdown-header-themenconfigordner)**[]||Definition der Ordner.|false|
 
 **Beispiel**
 ```
@@ -2426,7 +2427,7 @@ Definition für WMS-T Layer für den `treeType` `custom` und `default`. Die Laye
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
 [type:Ordner]: # (Themenconfig.Ordner)
 
-Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert werden.
+Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert werden. Ordner können unterhalb der Fachdaten und der Hintergrundkarten konfiguriert werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -2436,7 +2437,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 |isFolderSelectable|nein|Boolean|true|Legt fest, ob alle Layer eines Ordners auf einmal über einen Haken aktiviert bzw. deaktiviert werden dürfen.|false|
 |invertLayerOrder|nein|Boolean|false|Legt fest, ob bei Klick auf den Ordner die Reihenfolge, in der die Layer der Map hinzugefügt werden, umgekehrt werden soll.|false|
 
-**Beispiel Ordner mit einem Layer**
+**Beispiel Fachdaten-Ordner mit einem Layer**
 ```
 #!json
 "Fachdaten": {
@@ -2452,8 +2453,56 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
     ]
 }
 ```
+**Beispiel Hintergrundkarten-Ordner mit 2 Layern**
+```
+#!json
+"Hintergrundkarten":{
+      "Ordner": [{
+         "Titel": "Karten",
+         "isFolderSelectable": false,
+         "Layer": [{
+               "name": "Luftbild",
+               "id": "123",
+               "visibility": true
+            },
+         
+            {
+               "name": "Stadtplan",
+               "id": "456"
+            }
+         ]
+      }]
+     },
+```
+**Beispiel Hintergrundkarten-Ordner, daneben sind Layer konfiguriert**
+```
+#!json
+"Hintergrundkarten":{
+      "Ordner": [{
+         "Titel": "Karten",
+         "isFolderSelectable": false,
+         "Layer": [{
+               "name": "Luftbild",
+               "id": "123",
+               "visibility": true
+            },
+         
+            {
+               "name": "Stadtplan",
+               "id": "456"
+            }
+         ]
+      }],
+      "Layer": [{
+               "name": "alte Karte",
+               "id": "789"
+            }
+            ...
+         ]
+     },
+```
 
-**Beispiel Ordner mit einem Unterordner in dem ein Layer konfiguriert ist**
+**Beispiel Fachdaten-Ordner mit einem Unterordner in dem ein Layer konfiguriert ist**
 ```
 #!json
 "Fachdaten": {
@@ -2476,7 +2525,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 }
 ```
 
-**Beispiel Ordner mit einem Unterordner. Auf der Ebene des Unterordners ist auch nochmal ein Layer definiert**
+**Beispiel Fachdaten-Ordner mit einem Unterordner. Auf der Ebene des Unterordners ist auch nochmal ein Layer definiert**
 ```
 #!json
 "Fachdaten": {
@@ -2503,7 +2552,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 }
 ```
 
-**Beispiel Ordner mit invertierter Layer-Reihenfolge**
+**Beispiel Fachdaten-Ordner mit invertierter Layer-Reihenfolge**
 
 In diesem Beispiel wird der Layer mit der Id 123 vor dem Layer 456 der Map hinzugefügt. Das führt dazu, dass Layer 123 unter Layer 456 dargestellt wird.
 
