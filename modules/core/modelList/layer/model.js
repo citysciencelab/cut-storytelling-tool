@@ -489,7 +489,8 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             // This only works for treeType 'custom', otherwise the parentId is not set on the layer
             if (singleBaselayer) {
                 layerGroup.forEach(layer => {
-                    if (layer.get("id") !== id) {
+                    // folders parentId is baselayer too, but they have not a function checkForScale
+                    if (layer.get("id") !== id && typeof layer.checkForScale === "function") {
                         layer.setIsSelected(false);
                         // This makes sure that the Oblique Layer, if present in the layerList, is not selectable if switching between baseLayers
                         layer.checkForScale(Radio.request("MapView", "getOptions"));

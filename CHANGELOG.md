@@ -108,6 +108,7 @@
 - Coordinates tool: WGS 84(long/lat) coordinate system: there is no "E" at the end of the Latitude field.
 - When starting the 3D map, all tools that do not support 3D mode are closed.
 - 3D map: Tools that do not support 3D mode are no longer displayed in the footer.
+- Issue #637: Background maps in folder structure no longer overlay subject topics when background map is activated later. Occurred only with treetype custom.
 ---
 ## v2.12.1 - 2021-08-12
 ### Added
