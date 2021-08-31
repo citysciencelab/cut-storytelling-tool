@@ -1,6 +1,6 @@
 import axios from "axios";
 import Feature from "ol/Feature";
-import Point from "ol/geom/Point";
+import {Point, Polygon} from "ol/geom";
 import WFS from "ol/format/WFS";
 import handleAxiosResponse from "../../../../utils/handleAxiosResponse";
 import {buildFilter, buildStoredFilter} from "./buildFilter";
@@ -42,17 +42,26 @@ function parseGazetteerResponse (responseData, nameSpaces, memberSuffix) {
     }
 
     gmlFeatures.forEach(feature => {
-        // NOTE: The nested element holds the location. However, the specification always calls for the tag 'iso19112:position', thus, this is checked.
         if (feature.getElementsByTagName("iso19112:position").length > 0) {
             attributes.geometry = new Point(
-                feature.getElementsByTagName("iso19112:position")[0].children[0].children[0]
+                feature.getElementsByTagName("iso19112:position")[0].getElementsByTagName("gml:pos")[0]
                     .textContent.split(" ")
                     .map(coordinate => parseFloat(coordinate))
             );
         }
 
         if (feature.getElementsByTagName("iso19112:geographicExtent").length > 0) {
-            attributes.geographicExtent = feature.getElementsByTagName("iso19112:geographicExtent")[0];
+            // Reads the coordinates from the response and prepares them to a readable format for the OL Polygon.
+            attributes.geographicExtent = new Polygon([
+                feature
+                    .getElementsByTagName("iso19112:geographicExtent")[0]
+                    .getElementsByTagName("gml:posList")[0]
+                    .textContent.split(" ")
+                    .map(coordinate => parseFloat(coordinate))
+                    .reduce((accumulator, _, index, array) => index % 2 === 0
+                        ? [...accumulator, [array[index], array[index + 1]]]
+                        : accumulator, [])
+            ]);
         }
 
         features.push(
