@@ -111,7 +111,7 @@
 - Issue #637: Background maps in folder structure no longer overlay subject topics when background map is activated later. Occurred only with treetype custom.
 - Coordinates tool: Validation was corrected
 - Coordinates tool: EPSG code for coordinate system ETRS89/UTM 32N is shown correct in selectbox
-
+- Opening a tool by footer-link will close a visible tool in sidebar.
 ---
 ## v2.12.1 - 2021-08-12
 ### Added

@@ -51,6 +51,7 @@ export default {
             if (toolModelId) {
                 if (store.state.Tools[toolModelId]) {
                     model = getComponent(store.state.Tools[toolModelId].id);
+                    Radio.trigger("ModelList", "setActiveToolsToFalse", store.getters["Tools/getActiveToolNames"]);
                     store.dispatch("Tools/setToolActive", {id: toolModelId, active: !model.attributes.isActive});
                 }
                 else {
