@@ -2402,6 +2402,7 @@ The `Themenconfig` entry defines the contents and their order in the topic selec
 
 [type:Layer]: # (Themenconfig.Layer)
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
+[type:Ordner]: # (Themenconfig.Ordner)
 
 Background map definition.
 

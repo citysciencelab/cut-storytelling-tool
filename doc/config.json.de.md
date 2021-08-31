@@ -2312,6 +2312,7 @@ Die Themenconfig definiert, welche Inhalte an welcher Stelle im Themenbaum vorko
 
 [type:Layer]: # (Themenconfig.Layer)
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
+[type:Ordner]: # (Themenconfig.Ordner)
 
 Hier werden die Hintergrundkarten definiert
 
