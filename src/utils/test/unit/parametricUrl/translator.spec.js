@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {translate} from "../../../../parametricUrl/translator";
+import {translate} from "../../../parametricUrl/translator";
 
 describe("src/utils/urlParamsTranslator.js", () => {
     describe("translate", () => {

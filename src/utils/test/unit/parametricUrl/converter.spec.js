@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {convert, convertTransparency, parseQuery} from "../../../../parametricUrl/converter";
+import {convert, convertTransparency, parseQuery} from "../../../parametricUrl/converter";
 import * as crs from "masterportalAPI/src/crs";
 
 const namedProjections = [

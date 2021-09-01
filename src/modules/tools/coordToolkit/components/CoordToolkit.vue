@@ -16,7 +16,7 @@ export default {
     computed: {
         ...mapGetters("Tools/CoordToolkit", Object.keys(getters)),
         ...mapGetters("Map", ["projection", "mouseCoord", "mapMode"]),
-        ...mapGetters(["isDefaultStyle"]),
+        ...mapGetters(["uiStyle"]),
         eastingNoCoordMessage: function () {
             if (this.currentProjection.projName !== "longlat") {
                 return this.$t("common:modules.tools.coordToolkit.errorMsg.noCoord", {valueKey: this.$t(this.getLabel("eastingLabel"))});
@@ -361,6 +361,9 @@ export default {
                 return false;
             }
             return this.mode === "supply";
+        },
+        isDefaultStyle () {
+            return this.uiStyle !== "SIMPLE" && this.uiStyle !== "TABLE";
         }
     }
 };
@@ -542,7 +545,7 @@ export default {
                         </div>
                     </div>
                     <div
-                        v-if="isDefaultStyle"
+                        v-if="isDefaultStyle()"
                         class="form-group form-group-sm"
                     >
                         <div class="col-md-12 col-sm-12 info">

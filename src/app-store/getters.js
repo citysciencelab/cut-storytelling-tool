@@ -73,48 +73,6 @@ export default {
             }
         }
         return tool;
-    },
-
-    /**
-     * checks if the simple style is set in the url params or in the config.js
-     * @param {Object} state - the store state
-     * @returns {Boolean} true if simple style is set otherwise false
-     */
-    isSimpleStyle: (state) => {
-        if (state?.urlParams?.uiStyle) {
-            return state.urlParams.uiStyle === "simple";
-        }
-        else if (state?.configJs?.uiStyle === "simple") {
-            return true;
-        }
-        return false;
-    },
-
-    /**
-     * checks if the table style is set in the url params or in the config.js
-     * @param {Object} state - the store state
-     * @returns {Boolean} true if table style is set otherwise false
-     */
-    isTableStyle: (state) => {
-        if (state?.urlParams?.uiStyle) {
-            return state.urlParams.uiStyle === "table";
-        }
-        else if (state?.configJs?.uiStyle === "table") {
-            return true;
-        }
-        return false;
-    },
-
-    /**
-     * checks if the default style is set
-     * @param {Object} state - the store state
-     * @param {Object} getters - the store getters
-     * @param {Boolean} getters.isSimpleStyle -
-     * @param {Boolean} getters.isTableStyle -
-     * @returns {Boolean} false if simple style or table style is set otherwise true
-     */
-    isDefaultStyle: (state, {isSimpleStyle, isTableStyle}) => {
-        return !isSimpleStyle && !isTableStyle;
     }
 };
 

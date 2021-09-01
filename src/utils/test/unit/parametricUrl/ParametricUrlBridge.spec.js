@@ -1,13 +1,19 @@
 import {expect} from "chai";
 import sinon from "sinon";
-import {doSpecialBackboneHandling, handleUrlParamsBeforeVueMount, translateToBackbone, updateQueryStringParam} from "../../../../parametricUrl/ParametricUrlBridge";
-import store from "../../../../../app-store";
+import {doSpecialBackboneHandling, handleUrlParamsBeforeVueMount, translateToBackbone, updateQueryStringParam} from "../../../parametricUrl/ParametricUrlBridge";
+import store from "../../../../app-store";
 
 
 describe("src/utils/parametricUrl/ParametricUrlBridge.js", () => {
     const originLocation = location,
         originWindow = window;
 
+    before(() => {
+        i18next.init({
+            lng: "cimode",
+            debug: false
+        });
+    });
     /**
      * Resets global.window and global.location to inital content.
      * @returns {void}
@@ -17,7 +23,7 @@ describe("src/utils/parametricUrl/ParametricUrlBridge.js", () => {
         global.location = originLocation;
     }
     /**
-     * Sets blobal variables for test.
+     * Sets global variables for test.
      * @returns {void}
      */
     async function beforeUpdateQueryStringParam () {

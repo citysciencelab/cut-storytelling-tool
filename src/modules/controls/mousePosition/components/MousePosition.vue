@@ -19,11 +19,11 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(["controlsConfig", "mobile", "isSimpleStyle"]),
+        ...mapGetters(["controlsConfig", "mobile", "uiStyle"]),
         ...mapGetters("Map", ["prettyMouseCoord"]),
         // MousePosition is the only control that needs to do this itself since it's not a ControlBar child
         show () {
-            return !this.mobile && this.controlsConfig?.mousePosition && !this.isSimpleStyle;
+            return !this.mobile && this.controlsConfig?.mousePosition && this.uiStyle !== "SIMPLE";
         }
     },
     methods: {

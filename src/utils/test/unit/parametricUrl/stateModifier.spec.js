@@ -1,7 +1,7 @@
 import {expect} from "chai";
-import {checkIsURLQueryValid, setValueToState} from "../../../../parametricUrl/stateModifier";
+import {checkIsURLQueryValid, setValueToState} from "../../../parametricUrl/stateModifier";
 import * as crs from "masterportalAPI/src/crs";
-import {MapMode} from "../../../../../modules/map/store/enums";
+import {MapMode} from "../../../../modules/map/store/enums";
 
 const namedProjections = [
     ["EPSG:31467", "+title=Bessel/Gauß-Krüger 3 +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],

@@ -107,6 +107,9 @@ async function loadApp () {
 
     store.commit("setConfigJs", Config);
 
+    // must be done here, else it is done too late
+    readUrlParamStyle();
+
     app = new Vue({
         el: "#masterportal-root",
         name: "VueApp",
@@ -119,8 +122,6 @@ async function loadApp () {
     // Core laden
     new Autostarter();
     new Util(utilConfig);
-    // must be done here, else it is done too late
-    readUrlParamStyle();
     if (store.state.urlParams?.uiStyle) {
         Radio.trigger("Util", "setUiStyle", store.state.urlParams?.uiStyle);
     }
