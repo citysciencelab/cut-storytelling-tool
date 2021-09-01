@@ -7,16 +7,6 @@
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 
 ---
-## Unreleased - in development
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
 
 ##  v2.13.0 - 2021-09-01
 ### Added
