@@ -24,11 +24,12 @@ export async function preparePrint () {
             }
         },
         spec = SpecModel;
+    let printJob = {};
 
     store.dispatch("Tools/Print/activatePrintStarted", true, {root: true});
     spec.setAttributes(pdfDef);
 
-    const printJob = {
+    printJob = {
         "payload": encodeURIComponent(JSON.stringify(spec.defaults)),
         "printAppId": "compareFeatures",
         "currentFormat": "pdf"

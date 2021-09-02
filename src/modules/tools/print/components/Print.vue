@@ -3,7 +3,6 @@ import {mapGetters, mapMutations, mapActions} from "vuex";
 import Tool from "../../Tool.vue";
 import getters from "../store/gettersPrint";
 import mutations from "../store/mutationsPrint";
-import actions from "../store/actionsPrint";
 import getComponent from "../../../../utils/getComponent";
 /**
  * Tool to print a part of the map

@@ -53,21 +53,21 @@ const BuildSpecModel = {
     /**
      * Checks if csw request belongs to this model.
      * @param {String[]} uniqueIdList List of all metaRequest-ids belonging to this model.
-     * @param {String} uniqueId Response unique-id from Cswparser.
+     * @param {String} uniqId Response unique-id from Cswparser.
      * @returns {Boolean} - Flag if csw response is from own metaRequest.
      */
-    isOwnMetaRequest: function (uniqueIdList, uniqueId) {
-        return Array.isArray(uniqueIdList) && uniqueIdList.indexOf(uniqueId) !== -1;
+    isOwnMetaRequest: function (uniqueIdList, uniqId) {
+        return Array.isArray(uniqueIdList) && uniqueIdList.indexOf(uniqId) !== -1;
     },
 
     /**
      * Removes the uniqueId from the uniqueIdList, because the request returned something.
      * @param {String[]} uniqueIdList List of all metaRequest-ids belonging to this model.
-     * @param {String} uniqueId Response unique-id from Cswparser.
+     * @param {String} uniqId Response unique-id from Cswparser.
      * @returns {void}
      */
-    removeUniqueIdFromList: function (uniqueIdList, uniqueId) {
-        this.setUniqueIdList(differenceJS(uniqueIdList, [uniqueId]));
+    removeUniqueIdFromList: function (uniqueIdList, uniqId) {
+        this.setUniqueIdList(differenceJS(uniqueIdList, [uniqId]));
     },
 
     /**
@@ -950,9 +950,8 @@ const BuildSpecModel = {
             return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}',`, "[").slice(0, -1)
             + "]";
         }
-        else {
-            return "[" + styleAttr + "='" + feature.get(styleAttr) + "']";
-        }
+
+        return "[" + styleAttr + "='" + feature.get(styleAttr) + "']";
     },
 
     /**
