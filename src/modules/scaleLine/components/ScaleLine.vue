@@ -50,6 +50,7 @@ export default {
 
         .scale-as-a-ratio {
             padding: 0 16px;
+            color: #333333;
         }
     }
 </style>

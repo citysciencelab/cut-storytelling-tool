@@ -169,10 +169,10 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
         });
 
         if (countSelectedValues === 0) {
-            this.$el.find(".text:last-child").show();
+            this.$el.find(".value-views-container .text:last-child").show();
         }
         else {
-            this.$el.find(".text:last-child").hide();
+            this.$el.find(".value-views-container .text:last-child").hide();
         }
 
         if (countSelectedValues > 1) {

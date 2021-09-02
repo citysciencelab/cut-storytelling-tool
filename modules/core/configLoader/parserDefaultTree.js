@@ -15,12 +15,13 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
     }),
 
     /**
-     * Parses the layer form services.json.
-     * @param {Object[]} layerList - The layers from services.json.
-     * @param {Object[]|null} Layer3dList - The 3d layer list.
+     * Parses the layer from services.json.
+     * @param {Object[]} layerList The layers from services.json.
+     * @param {?Object} [layer3dList = null] If given, the list of 3D Layers.
+     * @param {?Object} [timeLayerList = null] If given, the list of ids of WMS-T layers.
      * @returns {void}
      */
-    parseTree: function (layerList, Layer3dList) {
+    parseTree: function (layerList, layer3dList = null, timeLayerList = null) {
         let newLayerList = this.filterValidLayer(layerList, this.get("validLayerTypes"));
 
         newLayerList = this.removeWmsBySensorThings(newLayerList);
@@ -30,13 +31,14 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
         // For layers with more than 1 dataset, 1 additional layer is created per dataset
         newLayerList = this.createLayerPerDataset(newLayerList);
 
-        this.parseLayerList(newLayerList, Layer3dList);
+        this.parseLayerList(newLayerList, layer3dList, timeLayerList);
     },
 
     /**
      * Filters all objects from the layerList, which are not contained in the validLayerTypes list and are assigned to at least one dataset.
-     * @param  {Object[]} [layerList=[]] - The layers from services.json
-     * @param {String[]} validLayerTypes - The valid layertypes.
+     *
+     * @param  {Object[]} [layerList = []] The layers from services.json.
+     * @param {String[]} validLayerTypes The valid layerTypes.
      * @return {Object[]} Valid layers from services.json
      */
     filterValidLayer: function (layerList = [], validLayerTypes) {
@@ -127,11 +129,12 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
 
     /**
      * Creates the layertree from the Services.json parsed by Rawlayerlist.
-     * @param {object[]} layerList -
-     * @param {Object} Layer3dList - the 3d layer list or null
+     * @param {Object[]} layerList -
+     * @param {?Object} layer3dList If not null, the list of 3D Layers.
+     * @param {?Object} timeLayerList If not null, the list of ids of WMS-T layers.
      * @returns {void}
      */
-    parseLayerList: function (layerList, Layer3dList) {
+    parseLayerList: function (layerList, layer3dList, timeLayerList) {
         const baseLayerIdsPluck = this.get("baselayer").Layer !== undefined ? this.get("baselayer").Layer.map(value => value.id) : [],
             baseLayerIds = Array.isArray(baseLayerIdsPluck) ? baseLayerIdsPluck.reduce((acc, val) => acc.concat(val), []) : baseLayerIdsPluck,
             // Unterscheidung nach Overlay und Baselayer
@@ -139,8 +142,11 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                 if (layer.typ === "Terrain3D" || layer.typ === "TileSet3D" || layer.typ === "Entities3D") {
                     return "layer3d";
                 }
-                else if (layer.typ === "Oblique") {
+                if (layer.typ === "Oblique") {
                     return "oblique";
+                }
+                if (layer.typ === "WMS" && layer.time) {
+                    return "timeLayer";
                 }
                 return baseLayerIds.includes(layer.id) ? "baselayers" : "overlays";
             });
@@ -150,7 +156,8 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
         // Models für die Fachdaten erzeugen
         this.groupDefaultTreeOverlays(typeGroup.overlays);
         // Models für 3D Daten erzeugen
-        this.create3dLayer(typeGroup.layer3d, Layer3dList);
+        this.create3dLayer(typeGroup.layer3d, layer3dList);
+        this.createTimeLayer(typeGroup.timeLayer, timeLayerList);
         // Models für Oblique Daten erzeugen
         this.createObliqueLayer(typeGroup.oblique);
     },
@@ -169,11 +176,11 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
     /**
      * todo
      * @param {*} layerList - todo
+     * @param {?Object} layer3dList If not null, the list of 3D Layers.
      * @fires Core#RadioRequestUtilIsViewMobile
-     * @param {Object} Layer3dList - the 3d layer list or null
      * @returns {void}
      */
-    create3dLayer: function (layerList, Layer3dList) {
+    create3dLayer: function (layerList, layer3dList) {
         const isMobile = Radio.request("Util", "isViewMobile"),
             isVisibleInTree = isMobile ? "false" : "true";
 
@@ -182,9 +189,9 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
 
         if (layerList && Array.isArray(layerList)) {
             layerList.forEach(layer => {
-                if (Layer3dList && typeof Layer3dList === "object" && Layer3dList.Layer && Layer3dList.Layer.length > 0) {
+                if (layer3dList && typeof layer3dList === "object" && layer3dList.Layer && layer3dList.Layer.length > 0) {
 
-                    layer3DVisibility = Layer3dList.Layer.filter(layer3D => {
+                    layer3DVisibility = layer3dList.Layer.filter(layer3D => {
                         return layer3D.id === layer.id;
                     });
                     if (layer3DVisibility[0] !== undefined) {
@@ -198,6 +205,30 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                     level: 0,
                     isVisibleInTree: isVisibleInTree,
                     isSelected: layer3DVisible ? layer3DVisible : false
+                }, layer));
+            });
+        }
+    },
+    /**
+     * Creates list entries for each time layer.
+     *
+     * @param {Object} layerList List of WMS-T layers defined in the config.json.
+     * @param {?Object} timeLayerList If not null, the list of ids of WMS-T layers.
+     * @returns {void}
+     */
+    createTimeLayer (layerList, timeLayerList) {
+        if (Array.isArray(layerList)) {
+            layerList.forEach(layer => {
+                const isSelected = timeLayerList?.Layer?.length > 0
+                    ? timeLayerList.Layer.find(timeLayer => timeLayer.id === layer.id)?.visibility
+                    : false;
+
+                this.addItem(Object.assign({
+                    type: "layer",
+                    parentId: "TimeLayer",
+                    level: 0,
+                    isVisibleInTree: true,
+                    isSelected
                 }, layer));
             });
         }

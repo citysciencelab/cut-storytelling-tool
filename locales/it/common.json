@@ -720,6 +720,11 @@
                 "getGeometryTypeFromWFSFetchfailedMessage": "Dettagli: Un servizio richiesto non risponde."
             }
         },
+        "wmsTime": {
+            "layerSwiper": {
+              "title": "Stratificatore"
+            }
+        },
         "legend": {
             "name": "Legenda",
             "linkToPdf": "Vai all legenda esterna (PDF)",

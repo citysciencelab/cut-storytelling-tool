@@ -92,6 +92,7 @@ export default {
         .current-language {
             display: block;
             position: relative;
+            color: #1F4B70;
 
             cursor: pointer;
 
@@ -115,7 +116,7 @@ export default {
                 float: right;
                 width: 100%;
                 border-bottom: 1px solid #e5e5e5;
-                padding: 0px 0px 3px 10px;
+                padding: 0 0 3px 10px;
                 span {
                     width: 30px;
                     cursor: pointer;

@@ -32,13 +32,14 @@ All layer information the portal needs to use the services is stored here. Confi
 |name|yes|String||Arbitrary display name used in the layer tree.|`"Aerial View DOP 10"`|
 |singleTile|no|Boolean||`true`: Request map as a single tile of the current view. `false`: Build map from multiple smaller tiles.|`false`|
 |tilesize|yes|String||Tile height and width in pixels. Used if `singleTile` is `false`.|`"512"`|
+|time|no|Boolean/**[time](#markdown-header-wms-layertime)**|false|If set to `true` or an object (**[time](#markdown-header-wms-layertime)**), the configured Layer is expected to be a WMS-T.|`false`|
 |transparent|yes|Boolean||Whether the tile background should be transparent. Corresponds to the *GetMap* parameter *TRANSPARENT*.|`true`|
 |typ|yes|String||Service type; in this case, "WMS". (**[WMTS docs](#markdown-header-wmts-layer)**, **[WFS docs](#markdown-header-wfs-layer)**, **[SensorThings-API docs](#markdown-header-sensor-layer)**)|`"WMS"`|
 |url|yes|String||Service URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 |version|yes|String||Service version used for *GetMap* requests.|`"1.3.0"`|
-|isSecured|nein|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
-|authenticationUrl|nein|String||Additional url called to trigger basic authentication in the browser..|"https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities"|
+|isSecured|no|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
+|authenticationUrl|no|String||Additional url called to trigger basic authentication in the browser.|"https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities"|
 
 **WMS example:**
 
@@ -83,8 +84,11 @@ All layer information the portal needs to use the services is stored here. Confi
       ]
    }
 ```
+
 ***
+
 ## WMS-Layer.isSecured ##
+
 WMS layer belonging to a secured WMS service.
 
 **CAUTION: If the layer belongs to a secured service, the following changes must be made to the service!**
@@ -96,6 +100,19 @@ WMS layer belonging to a secured WMS service.
 `Access-Control-Allow-Origin: *` <br>
 to <br>
 `Access-Control-Allow-Origin: URL of the accessing portal`.
+
+***
+
+## WMS-Layer.time ##
+
+Possible configuration for the time related parameters of a WMS-T.
+If a parameter is also present in the service, the definition in this config is used.
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|default|no|Number||Initial moment to be displayed for the WMS-T. **Beware**: If the configured value is not part of the time range of possible values, the default of the service is used instead.|`1970`|
+|keyboardMovement|no|Number|`5`| Value in pixels that the swiper should be moved when using the arrow keys.|`5`|
+|playbackDelay|no|Number|`1`|When using the playback function, this is the time in seconds which a moment should be shown before the rendering of the next moment is initiated.|`42`|
 
 ***
 
@@ -229,8 +246,8 @@ WMTS layers can be added by
 |gfiTheme|yes|String/Object||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 |wfsFilter|no|String||Set to use xml ressource as wfs filter, the content of the filter file will be sent to the wfs server as POST request (**[see below](#markdown-header-wfsfilter)**).|`"ressources/xmlFilter/filterSchulenStadtteilschulen"`|
-|isSecured|nein|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
-|authenticationUrl|nein|String||Additional url called to trigger basic authentication in the browser..|"https://geodienste.hamburg.de/HH_WMS_DOP10?SERVICE=WFS&VERSION=1.1.0&REQUEST=DescribeFeatureType"|
+|isSecured|no|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
+|authenticationUrl|no|String||Additional url called to trigger basic authentication in the browser.|"https://geodienste.hamburg.de/HH_WMS_DOP10?SERVICE=WFS&VERSION=1.1.0&REQUEST=DescribeFeatureType"|
 |propertyNames|no|Array||The attributes as PROPERTYNAME parameter to receive response from wfs layer |`["properties"]`|
 
 **WFS example:**
@@ -352,6 +369,7 @@ Content of primary_schools_with_more_than_two_first_classes.xml:
 
 
 ***
+
 ## wfs_id
 If the layer id is in an object format, the content in the object should be in the format:
 
@@ -371,7 +389,9 @@ If the layer id is in an object format, the content in the object should be in t
    }
 }
 ```
+
 ***
+
 ## WFS-Layer.isSecured ##
 WFS layer belonging to a secured WFS service.
 

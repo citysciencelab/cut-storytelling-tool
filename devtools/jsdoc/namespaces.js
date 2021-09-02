@@ -94,11 +94,6 @@
  */
 
 /**
- * @namespace Cookie
- * @description Popup to inform user about cookies.
- */
-
-/**
  * @namespace MapMarker
  * @memberof Core
  * @description MapMarker

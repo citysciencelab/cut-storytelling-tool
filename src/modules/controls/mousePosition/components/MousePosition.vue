@@ -55,6 +55,7 @@ export default {
             {{ prettyMouseCoord || $t(`common:modules.controls.mousePosition.hint`) }}
         </span>
         <ControlIcon
+            id="hide-mouse-position"
             :icon-name="`chevron-${open ? 'left' : 'right'}`"
             :title="$t(`common:modules.controls.mousePosition.${open ? 'hide' : 'show'}MousePosition`)"
             :on-click="toggleOpen"
@@ -88,6 +89,11 @@ export default {
         .mouse-position-span {
             padding: 0 8px;
             border-right: 1px solid @primary_contrast;
+            color: #FFFFFF;
+        }
+
+        #hide-mouse-position{
+            color: #FFFFFF;
         }
     }
 </style>

@@ -419,10 +419,9 @@ export default {
          */
         getDistance (feat, centerPosition) {
             const closestPoint = feat.getGeometry().getClosestPoint(centerPosition),
-                line = new LineString([closestPoint, centerPosition]),
-                dist = Math.round(line.getLength());
+                line = new LineString([closestPoint, centerPosition]);
 
-            return dist;
+            return Math.round(line.getLength());
         },
 
         /**

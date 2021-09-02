@@ -3,23 +3,25 @@ import Alerting from "./modules/alerting/components/Alerting.vue";
 import ConfirmAction from "./modules/confirmAction/components/ConfirmAction.vue";
 import ControlBar from "./modules/controls/ControlBar.vue";
 import Footer from "./modules/footer/components/Footer.vue";
+import LayerInformation from "./modules/layerInformation/components/LayerInformation.vue";
 import LegendWindow from "./modules/legend/components/LegendWindow.vue";
 import MapMarker from "./modules/mapMarker/components/MapMarker.vue";
+import WmsTime from "./modules/wmsTime/components/WmsTime.vue";
 import ToolManager from "./modules/tools/ToolManager.vue";
-import LayerInformation from "./modules/layerInformation/components/LayerInformation.vue";
 import {mapState} from "vuex";
 
 export default {
     name: "MapRegion",
     components: {
+        Alerting,
         ConfirmAction,
         ControlBar,
-        ToolManager,
-        Alerting,
+        Footer,
+        LayerInformation,
         LegendWindow,
         MapMarker,
-        Footer,
-        LayerInformation
+        WmsTime,
+        ToolManager
     },
     computed: {
         ...mapState([
@@ -57,6 +59,7 @@ export default {
             <div class="elements-positioned-over-map">
                 <LayerInformation />
                 <ControlBar class="controls" />
+                <WmsTime />
                 <Footer />
                 <MapMarker />
             </div>
@@ -90,6 +93,7 @@ export default {
 
         #map-wrapper {
             position:relative;
+            overflow: hidden;
             flex-grow:1;
             order:1;
         }

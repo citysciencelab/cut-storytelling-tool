@@ -6,6 +6,7 @@ import LinestringStyle from "./linestringStyle";
 import CesiumStyle from "./cesiumStyle";
 import {fetch as fetchPolyfill} from "whatwg-fetch";
 import axios from "axios";
+import getProxyUrl from "../../src/utils/getProxyUrl";
 
 const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.prototype */{
     defaults: {
@@ -65,21 +66,26 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @param   {string} version wfs version from layer
      * @param   {string} featureType wfs feature type from layer
      * @param   {string[] | string} styleGeometryType The configured geometry type of the layer
+     * @param   {Boolean} useProxy Attribute to request the URL via a reverse proxy
      * @returns {void}
      */
-    getGeometryTypeFromWFS: function (wfsURL, version, featureType, styleGeometryType) {
+    getGeometryTypeFromWFS: function (wfsURL, version, featureType, styleGeometryType, useProxy) {
         const params = {
             "SERVICE": "WFS",
             "VERSION": version,
             "REQUEST": "DescribeFeatureType"
         };
-        let url = wfsURL + "?";
+        /**
+        * @deprecated in the next major-release!
+        * useProxy
+        * getProxyUrl()
+        */
+        let url = useProxy ? getProxyUrl(wfsURL) + "?" : wfsURL + "?";
 
         Object.keys(params).forEach(key => {
             url += key + "=" + params[key] + "&";
         });
         url = url.slice(0, -1);
-
         fetchPolyfill(url)
             .then(response => response.text())
             .then(responseAsString => new window.DOMParser().parseFromString(responseAsString, "text/xml"))

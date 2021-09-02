@@ -207,6 +207,7 @@ Definition von Klassen, welche als Ergebnis berücksichtigt werden sollen.
 |name|ja|String||Name der Klasse|false|
 |icon|nein|String|"glyphicon-road"|Visualisierung der Klasse durch ein Glyphicon|false|
 |zoom|nein|String|"center"|Legt fest wie auf einen ausgewählten Treffer gezoomt werden soll. Wenn `center` ausgewählt ist, so wird auf die Zentrumskoordinate (`cx` und `cy`) gezoomt und ein Marker angezeigt. Im Falle von `bbox` wird auf die durch den LocationFinder angegebene BoundingBox (`xmin`, `ymin`, `xmax` und `ymax`) gezoomt. Ein Marker wird in dem Fall nicht angezeigt.|false|
+|zoomLevel|nein|Integer||Bei der Ausgabe der Suchergebnisse (dieses Typs) zu verwendende Zoomstufe|false|
 
 **Beispiel**
 
@@ -222,7 +223,8 @@ Definition von Klassen, welche als Ergebnis berücksichtigt werden sollen.
 		},
 		{
 			"name": "Adresse",
-			"icon": "glyphicon-home"
+			"icon": "glyphicon-home",
+			"zoomLevel": 5
 		},
 		{
 			"name": "Straßenname",
@@ -2289,14 +2291,18 @@ Die Themenconfig definiert, welche Inhalte an welcher Stelle im Themenbaum vorko
 |Hintergrundkarten|ja|**[Hintergrundkarten](#markdown-header-themenconfighintergrundkarten)**||Definition der Hintergrundkarten.|false|
 |Fachdaten|nein|**[Fachdaten](#markdown-header-themenconfigfachdaten)**||Definition der Fachdaten.|false|
 |Fachdaten_3D|nein|**[Fachdaten_3D](#markdown-header-themenconfigfachdaten_3d)**||Definition der Fachdaten für den 3D-Modus.|false|
+|Fachdaten_Zeit|nein|**[Fachdaten_Zeit](#markdown-header-themenconfigfachdaten_zeit)**||Definition der WMS-T Layer in einem eigenen Ordner.|false|
 
 **Beispiel**
-```
-#!json
-"Themenconfig": {
-    "Hintergrundkarten": {},
-    "Fachdaten": {},
-    "Fachdaten_3D": {}
+
+```json
+{
+    "Themenconfig": {
+        "Hintergrundkarten": {},
+        "Fachdaten": {},
+        "Fachdaten_3D": {},
+        "Fachdaten_Zeit": {}
+    }
 }
 ```
 
@@ -2306,6 +2312,7 @@ Die Themenconfig definiert, welche Inhalte an welcher Stelle im Themenbaum vorko
 
 [type:Layer]: # (Themenconfig.Layer)
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
+[type:Ordner]: # (Themenconfig.Ordner)
 
 Hier werden die Hintergrundkarten definiert
 
@@ -2313,6 +2320,7 @@ Hier werden die Hintergrundkarten definiert
 |----|-------------|---|-------|------------|------|
 |name|nein|String|"Hintergrundkarten"| Name der Schaltfläche für Hintergrundkarten im custom tree und default tree.|false|
 |Layer|ja|**[Layer](#markdown-header-themenconfiglayer)**/**[GroupLayer](#markdown-header-themenconfiggrouplayer)**[]||Definition der Layer.|false|
+|Ordner|nein|**[Ordner](#markdown-header-themenconfigordner)**[]||Definition der Ordner.|false|
 
 **Beispiel**
 ```
@@ -2386,13 +2394,41 @@ Hier werden die 3D-Daten für die 3D-Ansicht definiert. Im custom tree und defau
 
 ***
 
+### Themenconfig.Fachdaten_Zeit
+
+[type:Layer]: # (Themenconfig.Layer)
+
+Definition für WMS-T Layer für den `treeType` `custom` und `default`. Die Layer können auch unter **[Fachdaten](#markdown-header-themenconfigfachdaten)** definiert werden.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|nein|String|"common:tree.subjectDataTime"|Name der Schaltfläche für WMS-T Layer.|false|
+|Layer|ja|**[Layer](#markdown-header-themenconfiglayer)**[]||WMS-T layer Definition.|false|
+
+**Beispiel**
+
+```json
+{
+    "Fachdaten_Zeit": {
+        "name": "Meine Zeitreihen",
+        "Layer": [
+            {
+              "id": "my_wms_time"
+            }
+        ]
+    }
+}
+```
+
+***
+
 ### Themenconfig.Ordner
 
 [type:Layer]: # (Themenconfig.Layer)
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
 [type:Ordner]: # (Themenconfig.Ordner)
 
-Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert werden.
+Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert werden. Ordner können unterhalb der Fachdaten und der Hintergrundkarten konfiguriert werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -2402,7 +2438,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 |isFolderSelectable|nein|Boolean|true|Legt fest, ob alle Layer eines Ordners auf einmal über einen Haken aktiviert bzw. deaktiviert werden dürfen.|false|
 |invertLayerOrder|nein|Boolean|false|Legt fest, ob bei Klick auf den Ordner die Reihenfolge, in der die Layer der Map hinzugefügt werden, umgekehrt werden soll.|false|
 
-**Beispiel Ordner mit einem Layer**
+**Beispiel Fachdaten-Ordner mit einem Layer**
 ```
 #!json
 "Fachdaten": {
@@ -2418,8 +2454,56 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
     ]
 }
 ```
+**Beispiel Hintergrundkarten-Ordner mit 2 Layern**
+```
+#!json
+"Hintergrundkarten":{
+      "Ordner": [{
+         "Titel": "Karten",
+         "isFolderSelectable": false,
+         "Layer": [{
+               "name": "Luftbild",
+               "id": "123",
+               "visibility": true
+            },
+         
+            {
+               "name": "Stadtplan",
+               "id": "456"
+            }
+         ]
+      }]
+     },
+```
+**Beispiel Hintergrundkarten-Ordner, daneben sind Layer konfiguriert**
+```
+#!json
+"Hintergrundkarten":{
+      "Ordner": [{
+         "Titel": "Karten",
+         "isFolderSelectable": false,
+         "Layer": [{
+               "name": "Luftbild",
+               "id": "123",
+               "visibility": true
+            },
+         
+            {
+               "name": "Stadtplan",
+               "id": "456"
+            }
+         ]
+      }],
+      "Layer": [{
+               "name": "alte Karte",
+               "id": "789"
+            }
+            ...
+         ]
+     },
+```
 
-**Beispiel Ordner mit einem Unterordner in dem ein Layer konfiguriert ist**
+**Beispiel Fachdaten-Ordner mit einem Unterordner in dem ein Layer konfiguriert ist**
 ```
 #!json
 "Fachdaten": {
@@ -2442,7 +2526,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 }
 ```
 
-**Beispiel Ordner mit einem Unterordner. Auf der Ebene des Unterordners ist auch nochmal ein Layer definiert**
+**Beispiel Fachdaten-Ordner mit einem Unterordner. Auf der Ebene des Unterordners ist auch nochmal ein Layer definiert**
 ```
 #!json
 "Fachdaten": {
@@ -2469,7 +2553,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 }
 ```
 
-**Beispiel Ordner mit invertierter Layer-Reihenfolge**
+**Beispiel Fachdaten-Ordner mit invertierter Layer-Reihenfolge**
 
 In diesem Beispiel wird der Layer mit der Id 123 vor dem Layer 456 der Map hinzugefügt. Das führt dazu, dass Layer 123 unter Layer 456 dargestellt wird.
 

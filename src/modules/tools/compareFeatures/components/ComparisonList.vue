@@ -44,9 +44,7 @@ export default {
         getPhoneNumberAsWebLink,
         isEmailAddress,
         removeVerticalBar (value) {
-            const newValue = value.replaceAll("|", "<br>");
-
-            return newValue;
+            return value.replaceAll("|", "<br>");
         },
         makeOberstufenprofileBold (value) {
             const oldProfiles = value;

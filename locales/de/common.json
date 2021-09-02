@@ -73,6 +73,7 @@
         "backgroundMaps": "Hintergrundkarten",
         "subjectData": "Fachdaten",
         "subjectData3D": "3D Daten",
+        "subjectDataTime": "Zeitreihen",
         "selectedTopics": "Ausgewählte Themen",
         "removeSelection": "Auswahl entfernen",
         "infosAndLegend": "Informationen und Legende",
@@ -98,6 +99,10 @@
               "wrongStyleId": "Unter der angegeben StyleId: {{styleId}} konnte kein Styleobjekt gefunden werden. Bitte stellen Sie sicher, dass in der verwendeten Style.json ein Style mit der StyleId: {{styleId}} konfiguriert ist.",
               "sensor": {
                 "httpOnError": "<strong>Unerwarteter Fehler beim Laden der Sensordaten des Layers {{name}} aufgetreten</strong>"
+              },
+              "wms": {
+                "errorTimeLayer": "Es ist ein Fehler bei der Vorbereitung des Layer mit der id {{id}} aufgetreten: {{error}}",
+                "invalidTimeLayer": "Der konfigurierte Layer mit der Id {{id}} enthält nicht alle notwendigen Parameter für einen WMS-T."
               }
             }
           },
@@ -797,6 +802,22 @@
             "styleModel": {
                 "getGeometryTypeFromWFSFetchfailed": "Die Legende konnte in der Layerinformation nicht erstellt werden!",
                 "getGeometryTypeFromWFSFetchfailedMessage": "Details: Ein benötigter Dienst antwortet nicht."
+            }
+        },
+        "wmsTime": {
+            "layerSwiper": {
+                "description": "Der Swiper kann mithilfe der Maus oder den Pfeiltasten der Tastatur bewegt werden. Bei der Nutzung der Pfeiltasten wird der Swiper {{amount}}px in die entsprechende Richtung bewegt.",
+                "title": "Layer vergleichen"
+            },
+            "timeSlider": {
+                "buttons": {
+                    "backward": "Einen Zeitpunkt zurück",
+                    "deactivateLayerSwiper": "Layer entfernen",
+                    "forward": "Einen Zeitpunkt voran",
+                    "layerSwiper": "Zeitpunkte vergleichen",
+                    "play": "Ein automatisches Abspielen aller Zeitpunkte, ausgehend vom aktuell ausgewählten Zeitpunkt"
+                },
+                "inputRangeLabel": "Einen Zeitpunkt auswählen"
             }
         },
         "legend": {

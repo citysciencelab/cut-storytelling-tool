@@ -129,10 +129,10 @@ export default {
             width:6px;
             height:6px;
         }
-        #basic-resize-handle-tl { top:0px; left:0px; }
-        #basic-resize-handle-tr { top:0px; right:0px;}
-        #basic-resize-handle-br { bottom:0px; right:0px;}
-        #basic-resize-handle-bl { bottom:0px; left:0px;}
+        #basic-resize-handle-tl { top: 0; left: 0; }
+        #basic-resize-handle-tr { top: 0; right: 0;}
+        #basic-resize-handle-br { bottom: 0; right: 0;}
+        #basic-resize-handle-bl { bottom: 0; left: 0;}
     }
 
     .tool-window-heading{

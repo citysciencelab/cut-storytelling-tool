@@ -349,7 +349,7 @@ export default {
         margin-bottom: 9px;
     }
     hr {
-        margin: 15px 0px 10px 0px;
+        margin: 15px 0 10px 0;
     }
 
     #layerInformation .abstract /deep/ p {
@@ -378,8 +378,9 @@ export default {
         background-color: @background_color_2;
         box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.176);
         border: 1px solid rgb(229, 229, 229);
+
         @media (max-width: 768px) {
-            inset: 12px auto auto 0px;
+            inset: 12px auto auto 0;
             max-width:750px;
             width: 95vw;
             max-height: 80vh;

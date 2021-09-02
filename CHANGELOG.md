@@ -8,7 +8,20 @@
 
 ---
 
-##  Unreleased - in development
+## Unreleased - in development
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+---
+
+##  v2.13.0 - 2021-09-01
 ### Added
 - Autocomplete functionality for the contact tool.
 - A library for standard colors and barrier free colors "src/utils/colors.js" to use within javascript, with initial colors/colorsets: MP standard blue; MP standard red; Color Universal Design by "J*Fly data depository for Drosophila reserchers" (https://jfly.uni-koeln.de/color/ - 7 colors); three additional color sets "Hamburg blue scheme" (10 colors), "blue scheme plus" (10 colors) and "traffic light scheme" (7 colors) contributed by the IfBQ of Hamburg Town.
@@ -19,12 +32,14 @@
 - A flag "beautifyKeys" for gfi params to enable/disable the beautifyKeys function in default gfi theme.
 - A flag "showObjectKeys" for gfi params to display attribute keys and values of objects in default gfi theme.
 - Added a new type for filter attributeWhitelist "date", which uses a slider for a date range. Use "format" to specify date format and "attrNameUntil" for a different attribute to be the end date of your range.
+- Added the new layer type 'WMS-T' along with its manipulation functionalities 'TimeSlider' and 'LayerSwiper'.
 
 ### Changed
 - Accessibility: Changed contrast ratio > 3:1 in all tools, themes, etc.
 - Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.
 - LayerInformation now shows message in case the MetaData couldn't be loaded
 - Footer allows additionally to open vue tools besides backbone tools.
+- changed contrasts of elements in footer, filter and the mouse position widget for better accessability
 - Accessibility: Keyboard navigation for tools
   - You can reach every opened tool via keyboard (TAB-key) direct after the top menu row
   - After opening a tool the focus is set to the first control (if any available)
@@ -34,6 +49,7 @@
 - GFI: order of Gfis is reversed now, so that the top layer ones come first
 - NPM packages https-proxy-agent, vue-loader, vue-template-compiler are moved from dependencies to devDependencies in package.json.
 - In the default GFI theme, images that are in the tag `"Bild"` or `"bild"` of a WMS GetFeatureInfo are now rendered as images by default.
+- Images from google-maps or -earth (gstatic.com) from KML files are now requested via a reverse proxy, since no CORS is set up there.
 - The MasterportalAPI version is updated to v1.5.0. This also raised ol to version 6.6.1
 - The following NPM packages are updated:
   - dependencies:
@@ -91,25 +107,27 @@
     xmlserializer: 0.6.1 to version 0.6.1
     zip-a-folder: 0.0.12 to version 1.1.0
 
-### Deprecated
-
 ### Removed
+- Remove the module cookie, because this is only used in an addon.
 
 ### Fixed
 - The legend now always renders in the map region even when the sidebar is open. Also, the small optical offset in the menu bar at the legend entry has been removed.
 - Layers in the default tree that are grouped by metadata and start with numbers (e.g. 100 Jahre Stadtgrün) can now be opened again.
 - The alerting modal now has a padding again.
+- Fixed a warning in the console when loading addons.
+- When closing the "Draw/Write" tool via the cross, an error no longer occurs.
+- Coordinates tool: after switching to 3D mode and back to 2D mode, errors no longer occur.
+- Coordinates tool: WGS 84(long/lat) coordinate system: there is no "E" at the end of the Latitude field.
+- When starting the 3D map, all tools that do not support 3D mode are closed.
+- 3D map: Tools that do not support 3D mode are no longer displayed in the footer.
+- Issue #637: Background maps in folder structure no longer overlay subject topics when background map is activated later. Occurred only with treetype custom.
+- Coordinates tool: Validation was corrected
+- Coordinates tool: EPSG code for coordinate system ETRS89/UTM 32N is shown correct in selectbox
+- Opening a tool by footer-link will close a visible tool in sidebar.
 
 ---
+
 ## v2.12.1 - 2021-08-12
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
 ### Fixed
 - Drawn content can be printed again.
 -	Footer allows additionally to open vue tools besides backbone tools

@@ -1,7 +1,7 @@
 import {toStringHDMS, toStringXY} from "ol/coordinate.js";
 import proj4 from "proj4";
 import isMobile from "../../../../utils/isMobile";
-import convertSexagesimalToDecimal from "../../../../utils/convertSexagesimalToDecimal";
+import {convertSexagesimalFromString, convertSexagesimalToDecimal, convertSexagesimalFromDecimal} from "../../../../utils/convertSexagesimalCoordinates";
 import getProxyUrl from "../../../../utils/getProxyUrl";
 import {requestGfi} from "../../../../api/wmsGetFeatureInfo";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
@@ -121,14 +121,16 @@ export default {
     },
     /**
      * Reacts on new selected projection. Sets the current projection and its name to state,
-     * changes position and sets examples.
+     * changes position if mode is 'supply' and sets transformed coordinates to input fields.
      * @param {String} value id of the new selected projection
      * @returns {void}
      */
-    newProjectionSelected ({dispatch, commit, getters}, value) {
+    newProjectionSelected ({dispatch, commit, state, getters}, value) {
         const targetProjection = getters.getProjectionById(value);
 
+        dispatch("transformCoordinatesFromTo", targetProjection);
         commit("setCurrentProjection", targetProjection);
+        dispatch("formatInput", [state.coordinatesEasting, state.coordinatesNorthing]);
         dispatch("changedPosition");
         commit("setExample");
     },
@@ -158,30 +160,26 @@ export default {
         if (targetProjection && Array.isArray(position) && position.length === 2) {
             // geographical coordinates
             if (targetProjection.projName === "longlat") {
+                let converted;
+
                 coord = toStringHDMS(position);
                 if (targetProjection.id === "EPSG:4326-DG") {
-                    const converted = convertSexagesimalToDecimal(coord);
-
-                    easting = converted.easting;
-                    northing = converted.northing;
+                    converted = convertSexagesimalToDecimal(coord);
                 }
                 else {
-                    const index = coord.indexOf("″");
-
-                    if (index > -1) {
-                        easting = coord.substr(0, index + 1).trim();
-                        northing = coord.substr(index + 3).trim();
-                    }
+                    converted = convertSexagesimalFromString(coord);
                 }
+                easting = converted.easting;
+                northing = converted.northing;
             }
             // cartesian coordinates
             else {
                 coord = toStringXY(position, 2);
-                easting = coord.split(",")[0].trim();
-                northing = coord.split(",")[1].trim();
+                easting = Number.parseFloat(coord.split(",")[0].trim()).toFixed(2);
+                northing = Number.parseFloat(coord.split(",")[1].trim()).toFixed(2);
             }
-            commit("setCoordinatesEasting", {id: "easting", value: easting});
-            commit("setCoordinatesNorthing", {id: "northing", value: northing});
+            commit("setCoordinatesEasting", {id: "easting", value: String(easting)});
+            commit("setCoordinatesNorthing", {id: "northing", value: String(northing)});
         }
     },
     /**
@@ -248,12 +246,14 @@ export default {
      * @returns {void}
      */
     validateInput ({state, commit}, coord) {
-        const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
+        const validETRS89UTM = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
+            validETRS89 = /^[0-9]{7}[.,]{0,1}[0-9]{0,3}\s*$/,
             validWGS84 = /^\d[0-9]{0,2}[°]{1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["″]{0,2}[\sNS]*\s*$/,
-            validWGS84_dez = /[0-9]{1,3}[.,][0-9]{0,5}[\s]{0,1}[°]\s*$/,
+            validWGS84_dez = /[0-9]{1,3}[.,][0-9]{0,20}[\s]{0,10}°?\s*$/,
             {currentProjection} = state,
             validators = {
-                "http://www.opengis.net/gml/srs/epsg.xml#25832": validETRS89,
+                "http://www.opengis.net/gml/srs/epsg.xml#25832": validETRS89UTM,
+                "http://www.opengis.net/gml/srs/epsg.xml#25833": validETRS89UTM,
                 "EPSG:31467": validETRS89,
                 "EPSG:8395": validETRS89,
                 "EPSG:4326": validWGS84,
@@ -265,7 +265,7 @@ export default {
             if (coord.value === "") {
                 commit("setEastingNoCoord", true);
             }
-            else if (!coord.value.match(validators[currentProjection.id])) {
+            else if (!String(coord.value).match(validators[currentProjection.id])) {
                 commit("setEastingNoMatch", true);
             }
         }
@@ -274,7 +274,7 @@ export default {
             if (coord.value === "") {
                 commit("setNorthingNoCoord", true);
             }
-            else if (!coord.value.match(validators[currentProjection.id])) {
+            else if (!String(coord.value).match(validators[currentProjection.id])) {
                 commit("setNorthingNoMatch", true);
             }
         }
@@ -288,9 +288,6 @@ export default {
     formatInput ({state, commit, getters}, coords) {
         const {currentProjection} = state,
             formatters = {
-                "http://www.opengis.net/gml/srs/epsg.xml#25832": coord=>coord.value,
-                "EPSG:31467": coord=>coord.value,
-                "EPSG:8395": coord=>coord.value,
                 "EPSG:4326": coord=>coord.value.split(/[\s°′″'"´`]+/),
                 "EPSG:4326-DG": coord=>coord.value.split(/[\s°]+/)
             };
@@ -298,11 +295,48 @@ export default {
         commit("setSelectedCoordinates", []);
         for (const coord of coords) {
             if (!getters.getEastingError && !getters.getNorthingError) {
+                let formatter = formatters[currentProjection.id];
+
+                if (!formatter) {
+                    formatter = coordinate=>coordinate.value;
+                }
+
                 commit("resetErrorMessages", "all");
-                commit("pushCoordinates", formatters[currentProjection.id](coord));
+                commit("pushCoordinates", formatter(coord));
             }
         }
     },
+    /**
+     * Transforms the selected coordinates from the current projection to the target projection and sets them to state.
+     * @param {Object} context actions context object.
+     * @param {*} targetProjection the target projection
+     * @returns {void}
+     */
+    transformCoordinatesFromTo ({state, commit}, targetProjection) {
+        let transformedCoordinates, coordinates;
+
+        if (state.selectedCoordinates.length === 2) {
+            if (state.currentProjection.id.indexOf("EPSG:4326") > -1) {
+                coordinates = convertSexagesimalToDecimal(state.selectedCoordinates);
+            }
+            else {
+                coordinates = [Math.round(state.selectedCoordinates[0]), Math.round(state.selectedCoordinates[1])];
+            }
+            transformedCoordinates = proj4(state.currentProjection, proj4(targetProjection.name), coordinates);
+            if (targetProjection.id === "EPSG:4326") {
+                transformedCoordinates = [convertSexagesimalFromDecimal(transformedCoordinates[1]), convertSexagesimalFromDecimal(transformedCoordinates[0])];
+            }
+            else if (targetProjection.id === "EPSG:4326-DG") {
+                transformedCoordinates = [transformedCoordinates[1].toFixed(4) + "°", transformedCoordinates[0].toFixed(4) + "°"];
+            }
+            else {
+                transformedCoordinates = [transformedCoordinates[0].toFixed(2), transformedCoordinates[1].toFixed(2)];
+            }
+            commit("setCoordinatesEasting", {id: "easting", value: transformedCoordinates[0]});
+            commit("setCoordinatesNorthing", {id: "northing", value: transformedCoordinates[1]});
+        }
+    },
+
     /**
      * Transforms the selected and validated coordinates to their given coordinate system and calls the moveToCoordinates function.
      * @param {Object} context actions context object.
@@ -313,17 +347,9 @@ export default {
             dispatch("setZoom", state.zoomLevel);
 
             if (state.currentProjection.id === "EPSG:4326" || state.currentProjection.id === "EPSG:4326-DG") {
-                const latitude = state.selectedCoordinates[0],
-                    newLatitude = Number(latitude[0]) +
-            (Number(latitude[1] ? latitude[1] : 0) / 60) +
-            (Number(latitude[2] ? latitude[2] : 0) / 60 / 60),
+                const coordinates = convertSexagesimalToDecimal(state.selectedCoordinates);
 
-                    longitude = state.selectedCoordinates[1],
-                    newLongitude = Number(longitude[0]) +
-            (Number(longitude[1] ? longitude[1] : 0) / 60) +
-            (Number(longitude[2] ? longitude[2] : 0) / 60 / 60);
-
-                state.transformedCoordinates = proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [newLongitude, newLatitude]); // turning the coordinates around to make it work for WGS84
+                state.transformedCoordinates = proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), coordinates);
                 dispatch("moveToCoordinates", state.transformedCoordinates);
             }
             else if (state.currentProjection.id === "EPSG:31467") {

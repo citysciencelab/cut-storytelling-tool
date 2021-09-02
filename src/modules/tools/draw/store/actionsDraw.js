@@ -481,7 +481,9 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
             commit("setDownloadFileName", initialState.download.fileName);
             commit("setDownloadSelectedFormat", initialState.download.selectedFormat);
 
-            state.layer.getSource().un("addFeature", state.addFeatureListener.listener);
+            if (state.addFeatureListener.listener) {
+                state.layer.getSource().un("addFeature", state.addFeatureListener.listener);
+            }
         },
 
         /**
