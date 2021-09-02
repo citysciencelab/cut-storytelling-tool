@@ -214,9 +214,6 @@ export default {
 <style lang="less" scoped>
     @import "~/css/mixins.less";
 
-    @background_color_2: #eee;
-    @background_color_3: #ddd;
-    @background_color_4: #ccc;
     @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
 
     .tool-compareFeatures-modal-title {

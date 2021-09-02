@@ -110,12 +110,12 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "~variables";
+    @import "~/css/mixins.less";
 
     #footer {
         width: 100%;
 
-        background: fade(@secondary, 70%);
+        background: fade(@secondary, 90%);
 
         font-family: @font_family_narrow;
         color: @secondary_contrast;
@@ -128,6 +128,13 @@ export default {
 
         display: flex;
         position: relative;
+        
+        a {
+            color: darken(@secondary_focus, 10%);
+            &:hover{
+                .primary_action_hover();
+            }
+        }
 
         &.hide-footer {
             padding: 0;

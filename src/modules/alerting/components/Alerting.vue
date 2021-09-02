@@ -255,7 +255,7 @@ export default {
 
         div.singleAlertContainer {
             border-bottom:1px dotted #CCCCCC;
-            color:#777777;
+            color:@secondary_contrast;
             font-size:12px;
             margin-bottom:12px;
             padding-bottom:12px;
@@ -264,7 +264,7 @@ export default {
                 color:#EE7777;
 
                 &.confirm a {
-                    color:#777777;
+                    color:@secondary_contrast;
                     cursor:pointer;
                     text-decoration:underline;
 
