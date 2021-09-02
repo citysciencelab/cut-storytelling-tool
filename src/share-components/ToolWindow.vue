@@ -161,11 +161,18 @@ export default {
                 }
             }
 
-            > span {
+            > h2 {
                 &.glyphicon-minus { top: 3px; }
                 &:hover {
                     &:not(.win-icon) { opacity: 0.7; cursor: pointer;}
                 }
+                font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
+                color: #555555;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: normal;
+                text-align: left;
+                white-space: nowrap;
             }
         }
     }
