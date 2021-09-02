@@ -7,6 +7,7 @@
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 
 ---
+
 ## Unreleased - in development
 ### Added
 
@@ -17,6 +18,8 @@
 ### Removed
 
 ### Fixed
+
+---
 
 ##  v2.13.0 - 2021-09-01
 ### Added
@@ -103,8 +106,6 @@
     xmlserializer: 0.6.1 to version 0.6.1
     zip-a-folder: 0.0.12 to version 1.1.0
 
-### Deprecated
-
 ### Removed
 - Remove the module cookie, because this is only used in an addon.
 
@@ -122,16 +123,10 @@
 - Coordinates tool: Validation was corrected
 - Coordinates tool: EPSG code for coordinate system ETRS89/UTM 32N is shown correct in selectbox
 - Opening a tool by footer-link will close a visible tool in sidebar.
+
 ---
+
 ## v2.12.1 - 2021-08-12
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
 ### Fixed
 - Drawn content can be printed again.
 -	Footer allows additionally to open vue tools besides backbone tools
