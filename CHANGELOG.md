@@ -18,6 +18,7 @@
 ### Removed
 
 ### Fixed
+- Draw tool: fixed an issue (Bitbucket: #638) with resaving draw files
 
 ---
 
@@ -123,6 +124,13 @@
 - Coordinates tool: Validation was corrected
 - Coordinates tool: EPSG code for coordinate system ETRS89/UTM 32N is shown correct in selectbox
 - Opening a tool by footer-link will close a visible tool in sidebar.
+---
+## v2.12.1 - 2021-08-12
+### Added
+
+### Changed
+
+### Deprecated
 
 ---
 
