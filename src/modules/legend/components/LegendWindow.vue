@@ -747,7 +747,9 @@ export default {
                     :class="glyphicon"
                     class="glyphicon hidden-sm"
                 />
-                <span>{{ $t(name) }}</span>
+                <span class="title">
+                    {{ $t(name) }}
+                </span>
                 <div class="float-right">
                     <span
                         v-if="showCollapseAllButton"
@@ -828,6 +830,9 @@ export default {
             padding: 10px;
             border-bottom: 2px solid #e7e7e7;
             cursor: move;
+            .title{
+
+            }
             .close-legend {
                 cursor: pointer;
                 &:focus {

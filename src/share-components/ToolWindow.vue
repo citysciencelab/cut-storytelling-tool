@@ -173,6 +173,7 @@ export default {
                 font-weight: normal;
                 text-align: left;
                 white-space: nowrap;
+                cursor: move;
             }
         }
     }
