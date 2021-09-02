@@ -125,14 +125,6 @@
 - Coordinates tool: EPSG code for coordinate system ETRS89/UTM 32N is shown correct in selectbox
 - Opening a tool by footer-link will close a visible tool in sidebar.
 ---
-## v2.12.1 - 2021-08-12
-### Added
-
-### Changed
-
-### Deprecated
-
----
 
 ## v2.12.1 - 2021-08-12
 ### Fixed
