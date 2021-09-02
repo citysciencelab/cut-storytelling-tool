@@ -36,6 +36,7 @@
             "parcelSearch": "Flurstückssuche",
             "print": "Karte Drucken",
             "measure": "Strecke / Fläche messen",
+            "coordToolkit": "Koordinaten",
             "coord": "Koordinaten abfragen",
             "supplyCoord": "Koordinaten abfragen",
             "searchByCoord": "Koordinatensuche",
@@ -73,6 +74,7 @@
         "backgroundMaps": "Hintergrundkarten",
         "subjectData": "Fachdaten",
         "subjectData3D": "3D Daten",
+        "subjectDataTime": "Zeitreihen",
         "selectedTopics": "Ausgewählte Themen",
         "removeSelection": "Auswahl entfernen",
         "infosAndLegend": "Informationen und Legende",
@@ -98,6 +100,10 @@
               "wrongStyleId": "Unter der angegeben StyleId: {{styleId}} konnte kein Styleobjekt gefunden werden. Bitte stellen Sie sicher, dass in der verwendeten Style.json ein Style mit der StyleId: {{styleId}} konfiguriert ist.",
               "sensor": {
                 "httpOnError": "<strong>Unerwarteter Fehler beim Laden der Sensordaten des Layers {{name}} aufgetreten</strong>"
+              },
+              "wms": {
+                "errorTimeLayer": "Es ist ein Fehler bei der Vorbereitung des Layer mit der id {{id}} aufgetreten: {{error}}",
+                "invalidTimeLayer": "Der konfigurierte Layer mit der Id {{id}} enthält nicht alle notwendigen Parameter für einen WMS-T."
               }
             }
           },
@@ -186,7 +192,7 @@
             }
         },
         "quickHelp": {
-            "titleTag": "Hilfe öffnen",
+            "titleTag": "Hilfe öffnen/schließen",
             "search": {
                 "title": "Hilfe - Suchfunktion",
                 "generalInfo": "Allgemeines",
@@ -216,7 +222,9 @@
         },
         "footer": {
             "designation": "Kartographie und Gestaltung:",
-            "mapDiscrepancy": "Kartenunstimmigkeit"
+            "mapDiscrepancy": "Kartenunstimmigkeit",
+            "scale": "Skalierung der Karte",
+            "mouse": "Position der Maus"
         },
         "tools": {
             "info": {
@@ -455,6 +463,36 @@
                     "northingLabel": "Hochwert"
                 }
             },
+            "coordToolkit": {
+                "title": "Koordinaten abfragen",
+                "supply":"Koordinaten abfragen",
+                "search":"Koordinaten suchen",
+                "searchBtn": "Suche",
+                "coordSystemField": "Koordinatensystem",
+                "heightLabel": "Höhe",
+                "noHeightWater": "Gewässerfläche, keine Höhen vorhanden",
+                "noHeightBuilding": "Gebäudefläche, keine Höhen vorhanden",
+                "heightLayerInfo": "Grundlage der Höheninformation ist das \"{{layer}}\" mit Höhenangaben in Metern über Normalhöhennull (NHN).",
+                "hdms": {
+                    "eastingLabel": "Länge",
+                    "northingLabel": "Breite"
+                },
+                "cartesian": {
+                    "eastingLabel": "Rechtswert",
+                    "northingLabel": "Hochwert"
+                },
+                "exampleAcronym": "Bsp. ",
+                "errorMsg": {
+                    "noCoord": "Bitte geben Sie Ihren {{valueKey}} vollständig ein.",
+                    "noMatch": "Die Eingabe für den {{valueKey}} ist nicht korrekt! ",
+                    "hdmsNoCoord": "Bitte geben Sie Ihren Wert der {{valueKey}} vollständig ein.",
+                    "hdmsNoMatch": "Die Eingabe für den Wert der {{valueKey}} ist nicht korrekt!",
+                    "example": "Beispiel: "
+                },
+                "hintSupply": "Klicken Sie in die Karte um Koordinaten abzufragen",
+                "hintSearch": "Geben Sie die zu suchenden Koordinaten ein",
+                "disabledTooltip": "Diese Funktion steht nicht in der 3D Ansicht zur Verfügung"
+            },
             "gfi": {
                 "errorMessage": "Bei der Informationsabfrage (GetFeatureInfo) ist ein Fehler aufgetreten.<br>Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes.",
                 "favoriteIcons": {
@@ -605,7 +643,7 @@
                 "deleteMeasurements": "Messungen löschen",
                 "stretch": "Strecke",
                 "area": "Fläche",
-                "influenceFactors": "Die angezeigten Werte unterliegen Ungenauigkeiten, die u.a. durch folgende Faktoren beeinflusst werden:",
+                "influenceFactors": "Die angezeigten Werte unterliegen Ungenauigkeiten, die u.a. durch folgende Faktoren beeinflusst werden, z.B. Maßstab, Auflösung der Karte und des Bildschirmes.",
                 "scale": "Maßstab",
                 "resolution": "Auflösung der Karte",
                 "screenResolution": "Auflösung des Bildschirmes",
@@ -772,12 +810,31 @@
               "chooseObliqueLayer": "Die Auswahl des Layers \"{{hitName}}\" bewirkt einen Wechsel in den <b>Kartenmodus: Schrägluftbilder!</b><br>Der Wechsel kann einige Zeit in Anspruch nehmen.<br><br>Möchten Sie in den <b>Kartenmodus: Schrägluftbilder</b> wechseln?<br>",
               "choose3dLayer": "Die Auswahl des Layers \"{{hitName}}\" bewirkt einen Wechsel in den <b>Kartenmodus: 3D!</b><br>Der Wechsel kann einige Zeit in Anspruch nehmen.<br><br>Möchten Sie in den <b>Kartenmodus: 3D</b> wechseln?<br>"
             },
+            "komoot": {
+              "errorMsg": "Komoot-Photon-Suche nicht erreichbar."
+            },
             "noInitialResults": "Die initiale Suche ergab keine Treffer."
         },
         "vectorStyle": {
             "styleModel": {
                 "getGeometryTypeFromWFSFetchfailed": "Die Legende konnte in der Layerinformation nicht erstellt werden!",
                 "getGeometryTypeFromWFSFetchfailedMessage": "Details: Ein benötigter Dienst antwortet nicht."
+            }
+        },
+        "wmsTime": {
+            "layerSwiper": {
+                "description": "Der Swiper kann mithilfe der Maus oder den Pfeiltasten der Tastatur bewegt werden. Bei der Nutzung der Pfeiltasten wird der Swiper {{amount}}px in die entsprechende Richtung bewegt.",
+                "title": "Layer vergleichen"
+            },
+            "timeSlider": {
+                "buttons": {
+                    "backward": "Einen Zeitpunkt zurück",
+                    "deactivateLayerSwiper": "Layer entfernen",
+                    "forward": "Einen Zeitpunkt voran",
+                    "layerSwiper": "Zeitpunkte vergleichen",
+                    "play": "Ein automatisches Abspielen aller Zeitpunkte, ausgehend vom aktuell ausgewählten Zeitpunkt"
+                },
+                "inputRangeLabel": "Einen Zeitpunkt auswählen"
             }
         },
         "legend": {

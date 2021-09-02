@@ -11,6 +11,7 @@ import OSMModel from "./osm/model";
 import LocationFinderModel from "./locationFinder/model";
 import GdiModel from "./gdi/model";
 import ElasticSearchModel from "./elasticSearch/model";
+import KomootModel from "./komoot/model";
 import Searchbar from "./model";
 import "./RadioBridge.js";
 import store from "../../src/app-store/index";
@@ -102,6 +103,11 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             "ready": this.menuLoaderReady
         });
 
+        this.listenTo(Radio.channel("QuickHelp"), {
+            "showWindowHelp": this.toggleBtnQuestionColor,
+            "closeWindowHelp": this.toggleBtnQuestionColor
+        });
+
         this.model.setQuickHelp(Radio.request("QuickHelp", "isSet"));
 
         this.initialRender();
@@ -152,6 +158,9 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         }
         if (Object.prototype.hasOwnProperty.call(config, "elasticSearch")) {
             new ElasticSearchModel(config.elasticSearch);
+        }
+        if (Object.prototype.hasOwnProperty.call(config, "komoot")) {
+            new KomootModel(config.komoot);
         }
 
         this.model.setHitIsClick(false);
@@ -241,11 +250,29 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     },
 
     /**
-     * Handling of click event on button quickHelp
+     * Handling of click event on button quickHelp. Toggles the QuickHelpWindow
      * @returns {void}
      */
     clickBtnQuestion: function () {
-        Radio.trigger("QuickHelp", "showWindowHelp", "search");
+        if (!store.getters["QuickHelp/active"]) {
+            Radio.trigger("QuickHelp", "showWindowHelp", "search");
+        }
+        else {
+            Radio.trigger("QuickHelp", "closeWindowHelp");
+        }
+    },
+
+    /**
+     * Toggles the color of the question/help button, dependent on an open/closed QuickHelp window.
+     * @returns {void}
+     */
+    toggleBtnQuestionColor: function () {
+        if (store.getters["QuickHelp/active"]) {
+            this.$("span.glyphicon-question-sign").addClass("quickhelp-is-shown");
+        }
+        else {
+            this.$("span.glyphicon-question-sign").removeClass("quickhelp-is-shown");
+        }
     },
 
     /**
@@ -254,7 +281,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      */
     clickHandler: function () {
         this.clearSelection();
-        $("#searchInput").focus();
+        $("#searchInput").trigger("focus");
     },
 
     /**
@@ -445,6 +472,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         // 3. Hide the GFI
         Radio.trigger("GFI", "setIsVisible", false);
         // 4. Zoom if necessary on the result otherwise special handling
+
         if (hit?.triggerEvent) {
             this.model.setHitIsClick(true);
             Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true, evt.handleObj.type);
@@ -560,10 +588,20 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {void}
      */
     setMarkerZoom: function (hit) {
-        const resolutions = Radio.request("MapView", "getResolutions"),
-            index = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105),
-            zoomLevel = this.model.get("zoomLevel") !== undefined ? this.model.get("zoomLevel") : index;
-        let extent = [];
+        let extent = [],
+            zoomLevel;
+
+        if (hit.zoomLevel) {
+            zoomLevel = hit.zoomLevel;
+        }
+        else if (this.model.get("zoomLevel")) {
+            zoomLevel = this.model.get("zoomLevel");
+        }
+        else {
+            const resolutions = Radio.request("MapView", "getResolutions");
+
+            zoomLevel = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105);
+        }
 
         if (hit.coordinate.length === 2) {
             store.dispatch("MapMarker/removePolygonMarker");
@@ -576,7 +614,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             store.dispatch("MapMarker/removePointMarker");
             store.dispatch("MapMarker/placingPolygonMarker", getWKTGeom(hit));
             extent = store.getters["MapMarker/markerPolygon"].getSource().getExtent();
-            Radio.trigger("Map", "zoomToExtent", extent, {maxZoom: index});
+            Radio.trigger("Map", "zoomToExtent", extent, {maxZoom: zoomLevel});
         }
     },
     /**
@@ -906,9 +944,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {void}
      */
     positionOfCursorToEnd: function () {
-        const selectedElement = this.$(".list-group-item").find(function (element) {
-                return this.$(element).hasClass("selected");
-            }, this),
+        const selectedElement = this.$(".list-group-item.selected"),
             lastSelectedItem = this.model.get("searchFieldisSelected");
 
         if (lastSelectedItem !== undefined || (lastSelectedItem !== undefined && this.$(".list-group-item").length !== 0)) {

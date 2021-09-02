@@ -451,6 +451,12 @@ describe("vectorStyleModel", function () {
         it("should return true if values are the same", function () {
             expect(styleModel.compareValues("test", "test")).to.be.true;
         });
+        it("should return true if boolean values are same", function () {
+            expect(styleModel.compareValues(true, true)).to.be.true;
+        });
+        it("should return false if boolean values are different", function () {
+            expect(styleModel.compareValues(true, false)).to.be.false;
+        });
         it("should return true if values are the same but of different type", function () {
             expect(styleModel.compareValues("20", 20)).to.be.true;
             expect(styleModel.compareValues("20.0", 20)).to.be.true;

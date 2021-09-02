@@ -1,9 +1,18 @@
+@import "../../../css/variables.less";
+
 @color_1: #fff;
 @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
 @background_color_1: rgba(0, 0, 0,.5);
 
 /*SimpleView*/
 .filter {
+    button.close {
+        &:focus {
+            outline: 3px solid @accent_focus;
+            outline: 3px auto  Highlight;
+            outline: 3px auto -webkit-focus-ring-color;
+        }
+    }
     .header {
         width: 100%;
         border-bottom: 1px solid rgb(229,229,229);
@@ -31,7 +40,7 @@
     }
     .btn-select {
         color: @color_1;
-        background-color: @background_color_1;
+        background-color: rgba(0, 0, 0, 0.54);
         .name {
             &:hover {
                 font-weight: normal;

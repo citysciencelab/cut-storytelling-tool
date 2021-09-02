@@ -1,7 +1,9 @@
+@import "../../css/variables.less";
+
 @color_1: rgb(51, 51, 51);
 @color_2: rgb( 119, 119, 119);
-@color_3: rgb(82, 82, 82);
 @color_4: #fff;
+
 @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
 @font_family_2: "MasterPortalFont","Arial Narrow",Arial,sans-serif;
 @font_family_3: "MasterPortalFont", sans-serif;
@@ -107,34 +109,47 @@
     li {
         &:hover {
             cursor: pointer;
-            background-color: @background_color_3;
+            opacity: 1;
+            background-color: @accent_hover;
+            span, small {
+                color: white;
+            }
         }
     }
 }
 .btn-search {
     >.glyphicon-search {
-        font-size: 12px;
+        font-size: 13px;
     }
     &:hover {
-        background: rgb(255, 255, 255);
-        border-color: @border_color_1;
+        background-color: @accent_hover;
+        color: @primary_contrast;
     }
 }
+
 .btn-search-question {
     border: 0;
     background: 0;
     padding: 0;
-    margin-top: 3px;
-    opacity: 1;
-    >span {
-        font-size: 14px;
-        color: @color_3;
-        opacity: 0.6;
+    margin: 0;
+    >.glyphicon {
+        color: @secondary_icon_button;
+        padding: 5px;
+        font-size: 20px;
         &:hover {
-            opacity: 1;
+            background-color: @accent_hover;
+            color: @accent_contrast;
+        }
+    }
+    >.glyphicon.quickhelp-is-shown {
+        color: @secondary_hover;
+        &:hover {
+            background-color: @accent_hover;
+            color: @accent_contrast;
         }
     }
 }
+
 .results {
     background-color: @background_color_4;
     font-size: 12px;
@@ -162,7 +177,7 @@ li.results {
         border-radius: 0px;
     }
     .selected {
-        background: rgb(8, 88, 158);
+        background: @secondary_hover;
         color: @color_4;
         #searchInputLi {
             color: @color_4;

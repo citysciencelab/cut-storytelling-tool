@@ -116,7 +116,7 @@ In the following, all configuration options are described. For all configuration
 |alias_mobil|no|String|`"LGV"`|Link text for mobile applications|
 |bezeichnung|no|String|`"Kartographie und Gestaltung: "`|Link prefix|
 |url|no|String||the URL the `alias` (or `alias_mobile`) text links to, e.g. `"https://example.com/"`. You may also link to mail creation with e.g. `"mailto:my_mail@example.com"`|
-|toolModelId|no|String|`"sdpdownload"`|The id of a module to be opened on clicking the link. Do not include a URL for such cases.|
+|toolModelId|no|String|`"SdpDownload"`|The id of a module to be opened on clicking the link. Do not include a URL for such cases.|
 
 **Example:**
 

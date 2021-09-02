@@ -44,9 +44,7 @@ export default {
         getPhoneNumberAsWebLink,
         isEmailAddress,
         removeVerticalBar (value) {
-            const newValue = value.replaceAll("|", "<br>");
-
-            return newValue;
+            return value.replaceAll("|", "<br>");
         },
         makeOberstufenprofileBold (value) {
             const oldProfiles = value;
@@ -117,6 +115,11 @@ export default {
                             >
                                 <span v-html="removeVerticalBar(value)" />
                             </p>
+                            <p
+                                v-else-if="typeof value === 'string' && value.includes('<br>')"
+                            >
+                                <span v-html="value" />
+                            </p>
                             <p v-else>
                                 {{ value }}
                             </p>
@@ -164,6 +167,11 @@ export default {
                                 v-else-if="typeof value === 'string' && value.includes('|')"
                             >
                                 <span v-html="removeVerticalBar(value)" />
+                            </p>
+                            <p
+                                v-else-if="typeof value === 'string' && value.includes('<br>')"
+                            >
+                                <span v-html="value" />
                             </p>
                             <p v-else>
                                 {{ value }}
@@ -224,6 +232,11 @@ export default {
                             >
                                 <span v-html="removeVerticalBar(value)" />
                             </p>
+                            <p
+                                v-else-if="typeof value === 'string' && value.includes('<br>')"
+                            >
+                                <span v-html="value" />
+                            </p>
                             <p v-else>
                                 {{ value }}
                             </p>
@@ -274,6 +287,11 @@ export default {
                             >
                                 <span v-html="removeVerticalBar(value)" />
                             </p>
+                            <p
+                                v-else-if="typeof value === 'string' && value.includes('<br>')"
+                            >
+                                <span v-html="value" />
+                            </p>
                             <p v-else>
                                 {{ value }}
                             </p>
@@ -299,8 +317,8 @@ export default {
         width: 100%;
     }
     .remove-feature {
-        top: 0px !important;
-        left: 0px;
+        top: 0 !important;
+        left: 0;
     }
     table {
         font-family: @font_family_default;

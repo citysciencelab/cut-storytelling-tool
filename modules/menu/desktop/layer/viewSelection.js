@@ -1,20 +1,66 @@
 import Template from "text-loader!./templateSelection.html";
 import TemplateSettings from "text-loader!./templateSettings.html";
 import checkChildrenDatasets from "../../checkChildrenDatasets.js";
+import LayerBaseView from "./viewBase.js";
 
-const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
+const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
     events: {
-        "click .glyphicon-check, .title": "toggleIsVisibleInMap",
-        "click .glyphicon-unchecked": "toggleIsVisibleInMap",
-        "click .glyphicon-info-sign": "showLayerInformation",
+        "click a.layer-item": "toggleIsVisibleInMap",
+        "keydown a.layer-item": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "toggleIsVisibleInMap")) {
+                this.setFocus();
+            }
+        },
+        "click .glyphicon-info-sign": "toggleLayerInformation",
+        "keydown .glyphicon-info-sign": function (event) {
+            this.handleKeyboardTriggeredAction(event, "toggleLayerInformation");
+        },
         "click .glyphicon-remove-circle": "removeFromSelection",
+        "keydown .glyphicon-remove-circle": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "removeFromSelection")) {
+                this.setFocus(".glyphicon-remove-circle");
+            }
+        },
         "click .glyphicon-cog": "toggleIsSettingVisible",
+        "keydown .glyphicon-cog": function (event) {
+            this.handleKeyboardTriggeredAction(event, "toggleIsSettingVisible");
+        },
         "click .arrows > .glyphicon-arrow-up": "moveModelUp",
+        "keydown .arrows > .glyphicon-arrow-up": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "moveModelUp")) {
+                this.setFocus(".arrows > .glyphicon-arrow-up");
+            }
+        },
         "click .arrows > .glyphicon-arrow-down": "moveModelDown",
+        "keydown .arrows > .glyphicon-arrow-down": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "moveModelDown")) {
+                this.setFocus(".arrows > .glyphicon-arrow-down");
+            }
+        },
         "click .glyphicon-plus-sign": "incTransparency",
+        "keydown .glyphicon-plus-sign": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "incTransparency")) {
+                this.setFocus(".transparency .glyphicon-plus-sign");
+            }
+        },
         "click .glyphicon-minus-sign": "decTransparency",
+        "keydown .glyphicon-minus-sign": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "decTransparency")) {
+                this.setFocus(".transparency .glyphicon-minus-sign");
+            }
+        },
         "click .glyphicon-tint": "openStyleWMS",
-        "click .remove-layer": "removeLayer"
+        "keydown .glyphicon-tint": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "openStyleWMS")) {
+                this.setFocus(".styleWMS");
+            }
+        },
+        "click .remove-layer": "removeLayer",
+        "keydown .remove-layer": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "removeLayer")) {
+                this.setFocus();
+            }
+        }
     },
 
     /**
@@ -25,6 +71,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     initialize: function () {
         checkChildrenDatasets(this.model);
+        this.initializeDomId();
         this.listenTo(this.model, {
             "change:isVisibleInMap": this.rerender,
             "change:isSettingVisible": this.renderSetting,
@@ -79,46 +126,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * Draws the settings like transparence, metainfos etc.
-     * @returns {void}
-     */
-    renderSetting: function () {
-        const attr = this.model.toJSON();
-
-        // Slide-Animation templateSetting
-        if (this.model.get("isSettingVisible") === false) {
-            // Animation Zahnrad
-            this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
-            this.$el.find(".layer-settings").slideUp("slow", function () {
-                $(this).remove();
-            });
-        }
-        else {
-            this.$(".glyphicon-cog").toggleClass("rotate-back rotate");
-            this.$el.append(this.templateSettings(attr));
-            this.$el.find(".layer-settings").hide();
-            this.$el.find(".layer-settings").slideDown();
-        }
-    },
-
-    /**
-     * Executes toggleIsSelected in the model
-     * @returns {void}
-     */
-    toggleIsSelected: function () {
-        this.model.toggleIsSelected();
-    },
-
-    /**
-     * Init the LayerInformation window and inits the highlighting of the informationIcon.
-     * @returns {void}
-     */
-    showLayerInformation: function () {
-        this.model.showLayerInformation();
-        this.highlightLayerInformationIcon();
-    },
-
-    /**
      * Executes setIsSettingVisible and setIsSelected in the model
      * removes the element
      * @returns {void}
@@ -127,6 +134,10 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.model.setIsSettingVisible(false);
         this.model.setIsSelected(false);
         this.$el.remove();
+
+        if (this.model.get("typ") === "WMS" && this.model.get("time")) {
+            this.model.removeTimeLayer(this.model.get("id"));
+        }
     },
 
     /**
@@ -136,116 +147,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     toggleIsVisibleInMap: function () {
         this.model.toggleIsVisibleInMap();
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
-    },
-
-    /**
-     * Executes toggleIsSettingVisible in the model
-     * @returns {void}
-     */
-    toggleIsSettingVisible: function () {
-        this.model.toggleIsSettingVisible();
-    },
-
-    /**
-     * Executes moveDown in the model
-     * @returns {void}
-     */
-    moveModelDown: function () {
-        this.model.moveDown();
-    },
-
-    /**
-     * Executes moveUp in the model
-     * @returns {void}
-     */
-    moveModelUp: function () {
-        this.model.moveUp();
-    },
-
-    /**
-     * Executes incTransparency in the model
-     * @returns {void}
-     */
-    incTransparency: function () {
-        this.model.incTransparency(10);
-    },
-
-    /**
-     * Executes decTransparency in the model
-     * @returns {void}
-     */
-    decTransparency: function () {
-        this.model.decTransparency(10);
-    },
-
-    /**
-     * Triggers the styleWMS tool to open
-     * Removes the class "open" from ".nav li:first-child"
-     * @returns {void}
-     */
-    openStyleWMS: function () {
-        Radio.trigger("StyleWMS", "openStyleWMS", this.model);
-        $(".nav li:first-child").removeClass("open");
-    },
-
-    /**
-     * Triggers the parser to remove the item/layer
-     * Executes removeLayer in the model
-     * Removes the element
-     * @returns {void}
-     */
-    removeLayer: function () {
-        Radio.trigger("Parser", "removeItem", this.model.get("id"));
-        this.model.removeLayer();
-        this.$el.remove();
-    },
-
-    /**
-     * Enables and disables the layer depending upon the sclae of the map
-     * @param {Backbone.Model} model layer model
-     * @param {boolean} value Flag for isOutOfRange
-     * @returns {void}
-     */
-    toggleColor: function (model, value) {
-        if (model.has("minScale") === true) {
-            let statusCheckbox = 0;
-
-            if (value === true) {
-                statusCheckbox = this.$el.find("span.glyphicon.glyphicon-unchecked").length;
-                this.$el.addClass("disabled");
-                this.$el.find("*").css("cursor", "not-allowed");
-                this.$el.find("*").css("pointer-events", "none");
-                if (statusCheckbox === 0) {
-                    this.$el.find("span.pull-left").css({"pointer-events": "auto", "cursor": "pointer"});
-                }
-                this.$el.attr("title", "Layer wird in dieser Zoomstufe nicht angezeigt");
-            }
-            else {
-                this.$el.removeClass("disabled");
-                this.$el.find("*").css("pointer-events", "auto");
-                this.$el.find("*").css("cursor", "pointer");
-                this.$el.attr("title", "");
-            }
-        }
-    },
-
-    /**
-     * Highlights the Layer Information Icon in the layertree
-     * @returns {void}
-     */
-    highlightLayerInformationIcon: function () {
-        if (this.model.get("layerInfoChecked")) {
-            this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerInformationIcon");
-        }
-    },
-
-    /**
-     * Unhighlights the Layer Information Icon in the layertree
-     * @returns {void}
-     */
-    unhighlightLayerInformationIcon: function () {
-        this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
-        this.model.setLayerInfoChecked(false);
     }
 });
 

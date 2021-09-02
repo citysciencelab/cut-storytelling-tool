@@ -30,6 +30,20 @@ class FixedOverlaySynchronizer extends OverlaySynchronizer {
             this.addOverlay(overlay);
         });
     }
+
+    /** Only adds overlay if map3d is enabeld.
+     * @param {ol.Collection.Event} event the event containing the overlay
+     * @returns {void}
+     */
+    addOverlayFromEvent_ (event) {
+        const map3d = Radio.request("Map", "getMap3d");
+
+        if (map3d && map3d.getEnabled()) {
+            const overlay = /** @type {ol.Overlay} */ event.element;
+
+            this.addOverlay(overlay);
+        }
+    }
 }
 
 export default FixedOverlaySynchronizer;

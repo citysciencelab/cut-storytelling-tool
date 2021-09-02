@@ -270,11 +270,13 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         let features = this.getFeaturesFromData(data);
 
         features = this.getFeaturesIntersectsGeometry(this.get("bboxGeometry"), features);
-        this.get("layerSource").clear(true);
-        this.get("layerSource").addFeatures(features);
-        this.styling();
-        this.prepareFeaturesFor3D(features);
-        this.featuresLoaded(features);
+        if (this.get("isSelected")) {
+            this.get("layerSource").clear(true);
+            this.get("layerSource").addFeatures(features);
+            this.styling();
+            this.prepareFeaturesFor3D(features);
+            this.featuresLoaded(features);
+        }
     },
 
     /**
@@ -373,7 +375,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         }
         else if (styleModel && legend === true) {
             if (!isSecured) {
-                styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
+                styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"), this.get("useProxy"));
             }
             else if (isSecured) {
                 styleModel.getGeometryTypeFromSecuredWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));

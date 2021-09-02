@@ -53,6 +53,7 @@ Konfiguration der Searchbar
 |gdi|nein|**[gdi](#markdown-header-portalconfigsearchbargdi)**||Konfiguration des GDI (elastic) Suchdienstes. Deprecated in 3.0.0. Bitte **[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)** verwenden.|false|
 |elasticSearch|nein|**[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)**||Konfiguration des ElasticSearch Suchdienstes.|false|
 |osm|nein|**[osm](#markdown-header-portalconfigsearchbarosm)**||Konfiguration des OpenStreetMap (OSM) Suchdienstes.|false|
+|komoot|nein|**[komoot](#markdown-header-portalconfigsearchbarkomoot)**||Konfiguration des Komoot Photon Suchdienstes.|false|
 |locationFinder|nein|**[locationFinder](#markdown-header-portalconfigsearchbarlocationfinder)**||Konfiguration des LocationFinder-Suchdienstes.|false|
 |placeholder|nein|String|"Suche"|Placeholder für das Freitextfeld.|false|
 |recommendedListLength|nein|Integer|5|Anzahl der Einträge in der Vorschlagsliste.|false|
@@ -153,6 +154,39 @@ Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer. Wird nur durch Klic
 
 ***
 
+#### Portalconfig.searchBar.komoot ####
+Suche bei **[Komoot Photon](https://photon.komoot.io/)**.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|false|
+|serviceId|ja|String||Gibt die ID für die URL in der **[rest-services.json](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/0d136a44a59dd3b64ec986c258763ac08603bf15/doc/rest-services.json.md)** vor.|false|
+|limit|nein|Number|10|Gibt die maximale Zahl der gewünschten, ungefilterten Ergebnisse an.|false|
+|lang|nein|string|"de"|Sprache für die Komoot Suche. Wirkt sich auf Sprachspezifische Ortsangaben (Zum Beispiel Ländernamen) aus.|false|
+|lat|nein|Number||Breitengrad für den Suchmittelpunkt.|false|
+|lon|nein|Number||Längengrad für den Suchmittelpunkt.|false|
+|bbox|nein|string||Begrenzungsrechteck für die Suche.|false|
+|osm_tag|nein|string||Filterung für OSM Tags (siehe https://github.com/komoot/photon#filter-results-by-tags-and-values).|false|
+|searchOnEnter|nein|Boolean|false|Wenn `searchOnEnter` auf `true` gesetzt wird, so wird eine Surche nur durch einen Klick auf die Lupe bzw. durch Enter gestartet.|false|
+
+**Beispiel**
+
+```
+#!json
+
+"komoot": {
+    "minChars": 3,
+    "serviceId": "10",
+    "limit": 20,
+    "lang": "de",
+    "lat": 52.5,
+    "lon": 13.4,
+    "bbox": "12.5,52.05,14.05,52.75",
+}
+```
+
+***
+
 #### Portalconfig.searchBar.locationFinder ####
 Konfiguration zur Suche unter Verwendung eines ESRI CH LocationFinders.
 
@@ -173,6 +207,7 @@ Definition von Klassen, welche als Ergebnis berücksichtigt werden sollen.
 |name|ja|String||Name der Klasse|false|
 |icon|nein|String|"glyphicon-road"|Visualisierung der Klasse durch ein Glyphicon|false|
 |zoom|nein|String|"center"|Legt fest wie auf einen ausgewählten Treffer gezoomt werden soll. Wenn `center` ausgewählt ist, so wird auf die Zentrumskoordinate (`cx` und `cy`) gezoomt und ein Marker angezeigt. Im Falle von `bbox` wird auf die durch den LocationFinder angegebene BoundingBox (`xmin`, `ymin`, `xmax` und `ymax`) gezoomt. Ein Marker wird in dem Fall nicht angezeigt.|false|
+|zoomLevel|nein|Integer||Bei der Ausgabe der Suchergebnisse (dieses Typs) zu verwendende Zoomstufe|false|
 
 **Beispiel**
 
@@ -188,7 +223,8 @@ Definition von Klassen, welche als Ergebnis berücksichtigt werden sollen.
 		},
 		{
 			"name": "Adresse",
-			"icon": "glyphicon-home"
+			"icon": "glyphicon-home",
+			"zoomLevel": 5
 		},
 		{
 			"name": "Straßenname",
@@ -894,23 +930,25 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 [type:tool]: # (Portalconfig.menu.tool)
 [type:compareFeatures]: # (Portalconfig.menu.tool.compareFeatures)
-[type:parcelSearch]: # (Portalconfig.menu.tool.parcelSearch)
-[type:print]: # (Portalconfig.menu.tool.print)
+[type:contact]: # (Portalconfig.menu.tool.contact)
+[type:coordToolkit]: # (Portalconfig.menu.tool.coordToolkit)
 [type:draw]: # (Portalconfig.menu.tool.draw)
 [type:featureLister]: # (Portalconfig.menu.tool.featureLister)
-[type:layerSlider]: # (Portalconfig.menu.tool.layerSlider)
-[type:contact]: # (Portalconfig.menu.tool.contact)
 [type:filter]: # (Portalconfig.menu.tool.filter)
-[type:shadow]: # (Portalconfig.menu.tool.shadow)
-[type:virtualcity]: # (Portalconfig.menu.tool.virtualcity)
 [type:gfi]: # (Portalconfig.menu.tool.gfi)
-[type:wfst]: # (Portalconfig.menu.tool.wfst)
-[type:measure]: # (Portalconfig.menu.tool.measure)
-[type:styleWMS]: # (Portalconfig.menu.tool.styleWMS)
+[type:layerSlider]: # (Portalconfig.menu.tool.layerSlider)
 [type:legend]: # (Portalconfig.menu.legend)
+[type:measure]: # (Portalconfig.menu.tool.measure)
+[type:parcelSearch]: # (Portalconfig.menu.tool.parcelSearch)
+[type:print]: # (Portalconfig.menu.tool.print)
 [type:saveSelection]: # (Portalconfig.menu.tool.saveSelection)
 [type:searchByCoord]: # (Portalconfig.menu.tool.searchByCoord)
+[type:shadow]: # (Portalconfig.menu.tool.shadow)
+[type:styleWMS]: # (Portalconfig.menu.tool.styleWMS)
+[type:supplyCoord]: # (Portalconfig.menu.tool.supplyCoord)
+[type:virtualcity]: # (Portalconfig.menu.tool.virtualcity)
 [type:wfsSearch]: # (Portalconfig.menu.tool.wfsSearch)
+[type:wfst]: # (Portalconfig.menu.tool.wfst)
 
 Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdown-header-portalconfigmenutool)** und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
 
@@ -920,6 +958,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |compareFeatures|nein|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**|| Bietet eine Vergleichsmöglichkeit von Vektor-Features. In der getFeatureInfo lassen sich Features über das Stern-Symbol auf die Vergleichliste setzen. Funktioniert in Verbindung mit dem GFI-Theme **Default**!|false|
 |contact|nein|**[contact](#markdown-header-portalconfigmenutoolcontact)**||Das Kontaktformular bietet dem User eine Möglichkeit an das konfigurierte Postfach eine Nachricht zu senden. Es können beispielsweise Fehler oder Wünsche und Anregungen gemeldet werden.|false|
 |coord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "supplyCoord" verwenden. Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
+|coordToolkit|nein|**[tool](#markdown-header-portalconfigmenutool)**||Koordinatenabfrage: Werkzeug um Koordinaten per Maus(-Klick) abzufragen: Per Klick in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Klick auf die Anzeige direkt in die Zwischenablage kopiert werden. Koordinatensuche: Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf. Die Koordinatensysteme werden aus der config.js bezogen.|false|
 |draw|nein|**[draw](#markdown-header-portalconfigmenutooldraw)**||Mithilfe des Zeichnen-Werkzeuges können Punkte, Linien, Polygone, Kreise, Doppelkreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Die Zeichnungen können in den Formaten: KML, GeoJSON oder GPX heruntergeladen werden.|false|
 |extendedFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "filter" verwenden. Dynamisches Filtern von WFS Features. Über dieses Werkzeug können WFS features dynamisch gefiltert werden. Dies setzt jedoch eine Konfiguration der "extendedFilter" am WFS-Layer-Objekt voraus.|false|
 |featureLister|nein|**[featureLister](#markdown-header-portalconfigmenutoolfeaturelister)**||Listet alle Features eines Vektorlayers auf.|false|
@@ -934,12 +973,12 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||_Deprecated im nächsten Major-Release. Bitte nutzen Sie stattdessen `wfsSearch`._ Mit dieser Flurstückssuche lassen sich Flurstücke über Gemarkung, Flur (in Hamburg ohne Flur) und Flurstück suchen.|false|
 |print|nein|**[print](#markdown-header-portalconfigmenutoolprint)**||Druckmodul mit dem die Karte als PDF exportiert werden kann.|false|
 |saveSelection|nein|**[saveSelection](#markdown-header-portalconfigmenutoolsaveselection)**||Werkzeug mit dem sich die aktuellen Karteninhalte speichern lassen. Der Zustand der Karte wird als URL zum Abspeichern erzeugt. Dabei werden die Layer in deren Reihenfolge, Transparenz und Sichtbarkeit dargestellt. Zusätzlich wird die Zentrumskoordinate mit abgespeichert.|false|
-|searchByCoord|nein|**[searchByCoord](#markdown-header-portalconfigmenutoolsearchbycoord)**||Koordinatensuche. Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf.|false|
+|searchByCoord|nein|**[searchByCoord](#markdown-header-portalconfigmenutoolsearchbycoord)**||Deprecated in 3.0.0 Bitte "coordToolkit" verwenden. Koordinatensuche. Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf.|false|
 |selectFeatures|nein|**[tool](#markdown-header-portalconfigmenutool)**||Ermöglicht Auswahl von Features durch Ziehen einer Box und Einsehen derer GFI-Attribute.|false|
 |shadow|nein|**[shadow](#markdown-header-portalconfigmenutoolshadow)**||Konfigurationsobjekt für die Schattenzeit im 3D-Modus.|false|
 |styleWMS|nein|**[styleWMS](#markdown-header-portalconfigmenutoolstylewms)**||Klassifizierung von WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal der MRH(Metropolregion Hamburg). Über eine Maske können Klassifizierungen definiert werden. An den GetMap-Request wird nun ein SLD-Body angehängt, der dem Server einen neuen Style zum Rendern definiert. Der WMS-Dienst liefert nun die Daten in den definierten Klassifizierungen und Farben.|true|
 |styleVT|nein|**[tool](#markdown-header-portalconfigmenutool)**||Style-Auswahl zu VT-Diensten. Ermöglicht das Umschalten des Stylings eines Vector Tile Layers, wenn in der services.json mehrere Styles für ihn eingetragen sind.|false|
-|supplyCoord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "supplyCoord" verwenden. Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
+|supplyCoord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "coordToolkit" verwenden. Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Klick in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Klick auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
 |virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|false|
 |wfsFeatureFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "filter" verwenden. Filtern von WFS Features. Über dieses Werkzeug können WFS features gefiltert werden. Dies setzt jedoch eine Konfiguration der "filterOptions" am WFS-Layer-Objekt voraus.|false|
 |wfsSearch|nein|**[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)**||Ermöglicht es ein Formular zu erstellen, um einen WFS Layer abgekoppelt von der Suchleiste mittels Filter anzufragen. Es ist möglich entweder eine gespeicherte Anfrage (Stored Query, WFS@2.0.0) zu nutzen oder eine Anfrage mithilfe der konfigurierten Parameter zu definieren (WFS@1.1.0).|false|
@@ -1869,7 +1908,7 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|title|ja|String||Titel der im Werkzeug vorkommt.|false|
+|title|nein|String|"common:modules.tools.layerSlider.title"|Titel der im Werkzeug vorkommt.|false|
 |timeInterval|nein|Integer|2000|Zeitintervall in ms bis der nächste Layer angeschaltet wird.|false|
 |layerIds|ja|**[layerId](#markdown-header-portalconfigmenutoollayersliderlayerid)**[]|[]|Array von Objekten aus denen die Layerinformationen herangezogen werden.|false|
 |sliderType|nein|enum["player","handle"]|"player"|Typ des Layer sliders. Entweder als "player" mit Start/Pause/Stop-Buttons oder als "handle" mit einem Hebel. Bei "handle" wird die Transparenz der Layer zusätzlich mit angepasst.|false|
@@ -2570,6 +2609,36 @@ Das Attribut edit / delete kann vom Typ Boolean oder String sein. Wenn es vom Ty
 
 ***
 
+#### Portalconfig.menu.tool.coordToolkit
+
+[inherits]: # (Portalconfig.menu.tool)
+Koordinaten-Werkzeug. Um zusätzlich zu den 2 dimensionalen Koordinaten die Höhe über NHN anzuzeigen muß eine 'heightLayerId' eines WMS-Dienstes angegeben werden, der die Höhe liefert. Es wird das Format XML erwartet und das Attribut für die Höhen wird unter dem Wert des Parameters 'heightElementName' erwartet.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|heightLayerId|nein|String||Koordinatenabfrage: Id des WMS-Layers der die Höhe im XML-Format liefert. Wenn nicht definiert, dann wird keine Höhe angezeigt.|false|
+|heightElementName|nein|String||Koordinatenabfrage: Der Element-Name unter dem die Höhe in dem XML gesucht wird|false|
+|heightValueWater|nein|String||Koordinatenabfrage: Der Wert im unter "heightElementName" definierten Element, der für eine nicht gemessene Höhe im Wasser-Bereich vom WMS geliefert wird, es wird der internationalisierte Text "Gewässerfläche, keine Höhen vorhanden" unter dem Schlüssel "common:modules.tools.coordToolkit.noHeightWater" in der Oberfläche angezeigt. Wenn dieses Attribut nicht angegeben wird, dann wird der Text, den das WMS liefert angezeigt.|false|
+|heightValueBuilding|nein|String||Koordinatenabfrage: Der Wert im unter "heightElementName" definierten Element, der für eine nicht gemessene Höhe im Gebäude-Bereich vom WMS geliefert wird, es wird der internationalisierte Text "Gebäudefläche, keine Höhen vorhanden" unter dem Schlüssel "common:modules.tools.coordToolkit.noHeightBuilding" in der Oberfläche angezeigt. Wenn dieses Attribut nicht angegeben wird, dann wird der Text, den das WMS liefert angezeigt.|false|
+|zoomLevel|nein|Number|7|Koordinatensuche: Gibt an, auf welches ZoomLevel gezoomt werden soll.|false|
+
+
+**Beispiel**
+```
+#!json
+ "coordToolkit": {
+            "name": "translate#common:menu.tools.coordToolkit",
+            "glyphicon": "glyphicon-globe",
+            "zoomLevel": 5,
+            "heightLayerId" : "19173",
+            "heightElementName": "value_0",
+            "heightValueWater": "-20",
+            "heightValueBuilding": "200",
+          }
+```
+
+***
+
 ### Portalconfig.menu.staticlinks
 Das Array staticlink beinhaltet Objekte die entweder als Link zu einer anderen Webresource dienen oder als Trigger eines zu definierenden Events.
 
@@ -2665,14 +2734,18 @@ Die Themenconfig definiert, welche Inhalte an welcher Stelle im Themenbaum vorko
 |Hintergrundkarten|ja|**[Hintergrundkarten](#markdown-header-themenconfighintergrundkarten)**||Definition der Hintergrundkarten.|false|
 |Fachdaten|nein|**[Fachdaten](#markdown-header-themenconfigfachdaten)**||Definition der Fachdaten.|false|
 |Fachdaten_3D|nein|**[Fachdaten_3D](#markdown-header-themenconfigfachdaten_3d)**||Definition der Fachdaten für den 3D-Modus.|false|
+|Fachdaten_Zeit|nein|**[Fachdaten_Zeit](#markdown-header-themenconfigfachdaten_zeit)**||Definition der WMS-T Layer in einem eigenen Ordner.|false|
 
 **Beispiel**
-```
-#!json
-"Themenconfig": {
-    "Hintergrundkarten": {},
-    "Fachdaten": {},
-    "Fachdaten_3D": {}
+
+```json
+{
+    "Themenconfig": {
+        "Hintergrundkarten": {},
+        "Fachdaten": {},
+        "Fachdaten_3D": {},
+        "Fachdaten_Zeit": {}
+    }
 }
 ```
 
@@ -2682,6 +2755,7 @@ Die Themenconfig definiert, welche Inhalte an welcher Stelle im Themenbaum vorko
 
 [type:Layer]: # (Themenconfig.Layer)
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
+[type:Ordner]: # (Themenconfig.Ordner)
 
 Hier werden die Hintergrundkarten definiert
 
@@ -2689,6 +2763,7 @@ Hier werden die Hintergrundkarten definiert
 |----|-------------|---|-------|------------|------|
 |name|nein|String|"Hintergrundkarten"| Name der Schaltfläche für Hintergrundkarten im custom tree und default tree.|false|
 |Layer|ja|**[Layer](#markdown-header-themenconfiglayer)**/**[GroupLayer](#markdown-header-themenconfiggrouplayer)**[]||Definition der Layer.|false|
+|Ordner|nein|**[Ordner](#markdown-header-themenconfigordner)**[]||Definition der Ordner.|false|
 
 **Beispiel**
 ```
@@ -2762,13 +2837,41 @@ Hier werden die 3D-Daten für die 3D-Ansicht definiert. Im custom tree und defau
 
 ***
 
+### Themenconfig.Fachdaten_Zeit
+
+[type:Layer]: # (Themenconfig.Layer)
+
+Definition für WMS-T Layer für den `treeType` `custom` und `default`. Die Layer können auch unter **[Fachdaten](#markdown-header-themenconfigfachdaten)** definiert werden.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|nein|String|"common:tree.subjectDataTime"|Name der Schaltfläche für WMS-T Layer.|false|
+|Layer|ja|**[Layer](#markdown-header-themenconfiglayer)**[]||WMS-T layer Definition.|false|
+
+**Beispiel**
+
+```json
+{
+    "Fachdaten_Zeit": {
+        "name": "Meine Zeitreihen",
+        "Layer": [
+            {
+              "id": "my_wms_time"
+            }
+        ]
+    }
+}
+```
+
+***
+
 ### Themenconfig.Ordner
 
 [type:Layer]: # (Themenconfig.Layer)
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
 [type:Ordner]: # (Themenconfig.Ordner)
 
-Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert werden.
+Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert werden. Ordner können unterhalb der Fachdaten und der Hintergrundkarten konfiguriert werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -2778,7 +2881,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 |isFolderSelectable|nein|Boolean|true|Legt fest, ob alle Layer eines Ordners auf einmal über einen Haken aktiviert bzw. deaktiviert werden dürfen.|false|
 |invertLayerOrder|nein|Boolean|false|Legt fest, ob bei Klick auf den Ordner die Reihenfolge, in der die Layer der Map hinzugefügt werden, umgekehrt werden soll.|false|
 
-**Beispiel Ordner mit einem Layer**
+**Beispiel Fachdaten-Ordner mit einem Layer**
 ```
 #!json
 "Fachdaten": {
@@ -2794,8 +2897,61 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
     ]
 }
 ```
+**Beispiel Hintergrundkarten-Ordner mit 2 Layern**
 
-**Beispiel Ordner mit einem Unterordner in dem ein Layer konfiguriert ist**
+```json
+{
+    "Hintergrundkarten": {
+        "Ordner": [{
+            "Titel": "Karten",
+            "isFolderSelectable": false,
+            "Layer": [
+                {
+                    "name": "Luftbild",
+                    "id": "123",
+                    "visibility": true
+                },
+                {
+                    "name": "Stadtplan",
+                    "id": "456"
+                }
+            ]
+        }]
+    }
+}
+```
+**Beispiel Hintergrundkarten-Ordner, daneben sind Layer konfiguriert**
+
+```json
+{
+    "Hintergrundkarten":{
+        "Ordner": [{
+            "Titel": "Karten",
+            "isFolderSelectable": false,
+            "Layer": [
+                {
+                    "name": "Luftbild",
+                    "id": "123",
+                    "visibility": true
+                },
+                {
+                    "name": "Stadtplan",
+                    "id": "456"
+                }
+            ]
+        }],
+        "Layer": [{
+            "name": "alte Karte",
+            "id": "789"
+        },
+            ...
+        ]
+    }
+}
+```
+
+**Beispiel Fachdaten-Ordner mit einem Unterordner in dem ein Layer konfiguriert ist**
+
 ```
 #!json
 "Fachdaten": {
@@ -2818,7 +2974,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 }
 ```
 
-**Beispiel Ordner mit einem Unterordner. Auf der Ebene des Unterordners ist auch nochmal ein Layer definiert**
+**Beispiel Fachdaten-Ordner mit einem Unterordner. Auf der Ebene des Unterordners ist auch nochmal ein Layer definiert**
 ```
 #!json
 "Fachdaten": {
@@ -2845,7 +3001,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 }
 ```
 
-**Beispiel Ordner mit invertierter Layer-Reihenfolge**
+**Beispiel Fachdaten-Ordner mit invertierter Layer-Reihenfolge**
 
 In diesem Beispiel wird der Layer mit der Id 123 vor dem Layer 456 der Map hinzugefügt. Das führt dazu, dass Layer 123 unter Layer 456 dargestellt wird.
 

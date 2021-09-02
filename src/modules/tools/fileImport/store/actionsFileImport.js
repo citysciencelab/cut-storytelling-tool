@@ -1,10 +1,31 @@
+import getProxyUrl from "../../../../utils/getProxyUrl";
 import {GeoJSON, GPX, KML} from "ol/format.js";
 
 const supportedFormats = {
-    kml: new KML({extractStyles: true}),
+    kml: new KML({extractStyles: true, iconUrlFunction: (url) => proxyGstaticUrl(url)}),
     gpx: new GPX(),
     geojson: new GeoJSON()
 };
+
+/**
+ * Change the URL for gstatic.com so that it request through a reverse proxy.
+ *
+ * Note: When exporting a kml from google-maps or -earth, references to the images are specified.
+ * These currently do not allow CORS.
+ * @param {String} url The image url.
+ * @returns {String} The proxy image url.
+ */
+function proxyGstaticUrl (url) {
+    if (url.includes("gstatic.com")) {
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        return getProxyUrl(url);
+    }
+    return url;
+}
 
 /**
  * Checks given file suffix for any defined Format. Default mappings are defined in state and may be
@@ -93,10 +114,11 @@ export default {
 
     },
 
-    importKML: ({state, dispatch}, datasrc) => {
+    importKML: ({state, dispatch, rootGetters}, datasrc) => {
         const
             vectorLayer = datasrc.layer,
             format = getFormat(datasrc.filename, state.selectedFiletype, state.supportedFiletypes, supportedFormats);
+
         let
             featureError = false,
             alertingMessage,
@@ -122,7 +144,6 @@ export default {
         try {
             features = format.readFeatures(datasrc.raw);
 
-
             if (format instanceof KML) {
                 const indices = [];
 
@@ -136,7 +157,11 @@ export default {
                 });
                 if (indices.length > 0) {
                     // type Point with no names (=Icons) have to be imported with special options, else if downloaded over draw tool again there will be an error
-                    const specialFormat = new KML({extractStyles: true, showPointNames: false}),
+                    const specialFormat = new KML({
+                            extractStyles: true,
+                            showPointNames: false,
+                            crossOrigin: null
+                        }),
                         featuresNoPointNames = specialFormat.readFeatures(datasrc.raw);
 
                     indices.forEach((index) => {
@@ -187,7 +212,7 @@ export default {
                 }
 
                 geometries.forEach(geometry => {
-                    geometry.transform("EPSG:4326", "EPSG:25832");
+                    geometry.transform("EPSG:4326", rootGetters["Map/projectionCode"]);
                 });
             }
         });

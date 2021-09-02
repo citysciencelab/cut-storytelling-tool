@@ -7,6 +7,7 @@ import Table from "./templates/Table.vue";
 import Attached from "./templates/Attached.vue";
 import {omit} from "../../../../utils/objectHelpers";
 import moment from "moment";
+import thousandsSeparator from "../../../../utils/thousandsSeparator";
 
 export default {
     name: "Gfi",
@@ -34,7 +35,7 @@ export default {
         }),
         ...mapGetters("Tools/Gfi", Object.keys(getters)),
         ...mapGetters("Map", {
-            gfiFeatures: "gfiFeatures",
+            gfiFeatures: "gfiFeaturesReverse",
             mapSize: "size"
         }),
         /**
@@ -222,6 +223,17 @@ export default {
                     }
                     break;
                 }
+                case "number": {
+                    preparedValue = thousandsSeparator(preparedValue);
+                    break;
+                }
+                case "linechart": {
+                    preparedValue = Object.assign({
+                        name: key,
+                        staObject: preparedValue
+                    }, obj);
+                    break;
+                }
                 // default equals to obj.type === "string"
                 default: {
                     preparedValue = String(preparedValue);
@@ -376,9 +388,6 @@ export default {
 
 .gfi {
     color: @secondary_contrast;
-    .tool-window-vue {
-        max-width: 600px;
-    }
 }
 .bold{
     font-weight: bold;

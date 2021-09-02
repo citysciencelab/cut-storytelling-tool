@@ -147,7 +147,10 @@ export default {
 </script>
 
 <template>
-    <ToolWindow @close="close">
+    <ToolWindow
+        :focus-to-close-icon="true"
+        @close="close"
+    >
         <template #title>
             <span>{{ translate(title) }}</span>
         </template>

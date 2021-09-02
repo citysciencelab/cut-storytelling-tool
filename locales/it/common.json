@@ -33,6 +33,7 @@
             "parcelSearch": "Ricerca parcella catastale",
             "print": "Stampa mappa",
             "measure": "Misura distanza / area",
+            "coordToolkit": "Coordinate",
             "coord": "Richiedi coordinate",
             "supplyCoord": "Richiedi coordinate",
             "searchByCoord": "Ricerca di coordinate",
@@ -176,7 +177,7 @@
             }
         },
         "quickHelp": {
-            "titleTag": "Apri guida",
+            "titleTag": "Apri/chiudi guida",
             "search": {
                 "title": "Guida - Cerca",
                 "generalInfo": "Generale",
@@ -434,6 +435,26 @@
                 "cartesian": {
                     "eastingLabel": "Longitudine",
                     "northingLabel": "Latitudine"
+                }
+            }, 
+            "coordToolkit": {
+                "title": "Richiedi coordinate",
+                "supply": "Richiedi coordinate",
+                "search": "Ricerca di coordinate",
+                "searchBtn": "Cerca",
+                "coordSystemField": "Sistema di riferimento",
+                "hdms": {
+                    "eastingLabel": "Longitudine",
+                    "northingLabel": "Latitudine"
+                },
+                "cartesian": {
+                    "eastingLabel": "Longitudine",
+                    "northingLabel": "Latitudine"
+                },
+                "exampleAcronym": "Es.",
+                "errorMsg": {
+                    "noCoord": "Si prega di inserire {{valueKey}} completo.",
+                    "noMatch": "L'input per {{valueKey}} non è corretto! Esempio: "
                 }
             },
             "gfi": {
@@ -714,6 +735,11 @@
             "styleModel": {
                 "getGeometryTypeFromWFSFetchfailed": "La legenda non poteva essere creata!",
                 "getGeometryTypeFromWFSFetchfailedMessage": "Dettagli: Un servizio richiesto non risponde."
+            }
+        },
+        "wmsTime": {
+            "layerSwiper": {
+              "title": "Stratificatore"
             }
         },
         "legend": {

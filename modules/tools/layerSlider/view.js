@@ -63,6 +63,7 @@ const LayerSliderView = Backbone.View.extend(/** @lends LayerSliderView.prototyp
             this.$el.empty();
             this.undelegateEvents();
         }
+        this.$el.find("#play").trigger("focus");
         return this;
     },
 

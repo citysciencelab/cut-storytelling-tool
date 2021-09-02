@@ -5,6 +5,8 @@ import mutations from "../store/mutationsFooter";
 import ScaleLine from "../../scaleLine/components/ScaleLine.vue";
 import Language from "../../language/components/Language.vue";
 import MousePosition from "../../controls/mousePosition/components/MousePosition.vue";
+import store from "../../../app-store/index";
+import getComponent from "../../../utils/getComponent";
 
 /**
  * Footer that is displayed below the map. The version of the masterportal and links can be displayed here.
@@ -18,6 +20,7 @@ export default {
     },
     computed: {
         ...mapGetters(["footerConfig", "mobile", "masterPortalVersionNumber"]),
+        ...mapGetters("Map", ["is3d"]),
         ...mapGetters("Footer", Object.keys(getters)),
         showLanguageSwitcher () {
             return this.$i18n.i18next.options.isEnabled() && Object.keys(this.$i18n.i18next.options.getLanguages()).length > 1;
@@ -43,17 +46,35 @@ export default {
          * @returns {void}
          */
         toggleTool (toolModelId, event) {
-            if (toolModelId) {
-                const model = Radio.request("ModelList", "getModelByAttributes", {id: toolModelId});
+            let model;
 
+            if (toolModelId) {
+                if (store.state.Tools[toolModelId]) {
+                    model = getComponent(store.state.Tools[toolModelId].id);
+                    Radio.trigger("ModelList", "setActiveToolsToFalse", store.getters["Tools/getActiveToolNames"]);
+                    store.dispatch("Tools/setToolActive", {id: toolModelId, active: !model.attributes.isActive});
+                }
+                else {
+                    model = Radio.request("ModelList", "getModelByAttributes", {id: toolModelId});
+                }
                 if (model) {
                     if (event) {
                         event.preventDefault();
                     }
-
-                    model.setIsActive(!model.isActive);
+                    model.setIsActive(!model.attributes.isActive);
                 }
             }
+        },
+        supportedIn3D (toolModelId) {
+            if (!toolModelId) {
+                return true;
+            }
+            if (this.is3d) {
+                const toolsSupportedIn3d = Radio.request("Tool", "getSupportedIn3d");
+
+                return toolsSupportedIn3d.find(name => name.toLowerCase() === toolModelId.toLowerCase());
+            }
+            return true;
         }
     }
 };
@@ -69,6 +90,7 @@ export default {
         <template v-if="showFooter">
             <template v-for="(url, index) in urls">
                 <span
+                    v-if="supportedIn3D(url.toolModelId)"
                     :key="`footer-url-${index}`"
                 >
                     {{ $t(url.bezeichnung) }}
@@ -139,6 +161,10 @@ export default {
             bottom: 100%;
             /* should share bottom-line last control element */
             margin-bottom: 15px;
+        }
+
+        a[target=_blank]{
+            color: #1F4B70;
         }
 
         .footer-scaleLine {

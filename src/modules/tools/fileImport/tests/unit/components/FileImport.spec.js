@@ -29,7 +29,7 @@ describe("src/modules/tools/fileImport/components/FileImport.vue", () => {
             }
         };
 
-    let store;
+    let store, wrapper;
 
     beforeEach(() => {
         store = new Vuex.Store({
@@ -49,22 +49,40 @@ describe("src/modules/tools/fileImport/components/FileImport.vue", () => {
         store.commit("Tools/FileImport/setActive", true);
     });
 
+    afterEach(() => {
+        if (wrapper) {
+            wrapper.destroy();
+        }
+    });
+
     it("renders the fileImport", () => {
-        const wrapper = shallowMount(FileImportComponent, {store, localVue});
+        wrapper = shallowMount(FileImportComponent, {store, localVue});
 
         expect(wrapper.find("#tool-file-import").exists()).to.be.true;
     });
 
     it("do not render the fileImport tool if not active", () => {
         store.commit("Tools/FileImport/setActive", false);
-        const wrapper = shallowMount(FileImportComponent, {store, localVue});
+        wrapper = shallowMount(FileImportComponent, {store, localVue});
 
         expect(wrapper.find("#tool-file-import").exists()).to.be.false;
     });
 
     it("import method is initially set to \"auto\"", () => {
-        const wrapper = shallowMount(FileImportComponent, {store, localVue});
+        wrapper = shallowMount(FileImportComponent, {store, localVue});
 
         expect(wrapper.vm.selectedFiletype).to.equal("auto");
+    });
+    it("sets focus to first input control", async () => {
+        const elem = document.createElement("div");
+
+        if (document.body) {
+            document.body.appendChild(elem);
+        }
+
+        wrapper = shallowMount(FileImportComponent, {store, localVue, attachTo: elem});
+        wrapper.vm.setFocusToFirstControl();
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find(".upload-button-wrapper").element).to.equal(document.activeElement);
     });
 });

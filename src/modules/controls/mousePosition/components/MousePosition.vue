@@ -42,13 +42,20 @@ export default {
     <div
         v-if="show"
         :class="['mouse-position', open ? 'open' : 'closed']"
+        tabindex="0"
+        :title="$t('modules.footer.mouse')"
+        :aria-label="$t('modules.footer.mouse')"
     >
         <span
+            tabindex="0"
+            :title="$t('modules.footer.mouse')"
+            :aria-label="$t('modules.footer.mouse')"
             :class="['mouse-position-span', open ? 'open' : 'closed']"
         >
             {{ prettyMouseCoord || $t(`common:modules.controls.mousePosition.hint`) }}
         </span>
         <ControlIcon
+            id="hide-mouse-position"
             :icon-name="`chevron-${open ? 'left' : 'right'}`"
             :title="$t(`common:modules.controls.mousePosition.${open ? 'hide' : 'show'}MousePosition`)"
             :on-click="toggleOpen"
@@ -82,6 +89,11 @@ export default {
         .mouse-position-span {
             padding: 0 8px;
             border-right: 1px solid @primary_contrast;
+            color: #FFFFFF;
+        }
+
+        #hide-mouse-position{
+            color: #FFFFFF;
         }
     }
 </style>

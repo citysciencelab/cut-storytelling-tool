@@ -10,6 +10,7 @@ import AddWMS from "./addWMS/store/indexAddWMS";
 import BufferAnalysis from "./bufferAnalysis/store/indexBufferAnalysis";
 import CompareFeatures from "./compareFeatures/store/indexCompareFeatures";
 import Contact from "./contact/store/indexContact";
+import CoordToolkit from "./coordToolkit/store/indexCoordToolkit";
 import Draw from "./draw/store/indexDraw";
 import FileImport from "./fileImport/store/indexFileImport";
 import Gfi from "./gfi/store/indexGfi";
@@ -33,6 +34,7 @@ export default {
         BufferAnalysis,
         CompareFeatures,
         Contact,
+        CoordToolkit,
         Draw,
         FileImport,
         Gfi,

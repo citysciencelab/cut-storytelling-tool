@@ -90,6 +90,7 @@ export class SensorThingsHttp {
      * calls the given url to a SensorThings server, uses a call in extent, follows skip urls, response is given as callback onsuccess
      * @param {String} url the url to call
      * @param {Object} extentObj data for the extent
+     * @param  {Boolean} intersect - if it is intersect or not
      * @param {Number[]} extentObj.extent the extent based on OpenLayers (e.g. [556925.7670922858, 5925584.829527992, 573934.2329077142, 5942355.170472008])
      * @param {String} extentObj.sourceProjection the projection of the extent
      * @param {String} extentObj.targetProjection the projection the broker expects
@@ -101,7 +102,7 @@ export class SensorThingsHttp {
      * @param {Function} [getOpt] see this.get - a function for testing only
      * @returns {Void}  -
      */
-    getInExtent (url, extentObj, onsuccess, onstart, oncomplete, onerror, onprogress, getOpt) {
+    getInExtent (url, extentObj, intersect, onsuccess, onstart, oncomplete, onerror, onprogress, getOpt) {
         const extent = extentObj && extentObj.extent ? extentObj.extent : false,
             sourceProjection = extentObj && extentObj.sourceProjection ? extentObj.sourceProjection : false,
             targetProjection = extentObj && extentObj.targetProjection ? extentObj.targetProjection : false,
@@ -116,7 +117,7 @@ export class SensorThingsHttp {
                     oncomplete();
                 }
             }),
-            requestUrl = this.addPointsToUrl(url, points, error => {
+            requestUrl = this.addPointsToUrl(url, points, intersect, error => {
                 if (typeof onstart === "function") {
                     onstart();
                 }
@@ -140,10 +141,12 @@ export class SensorThingsHttp {
     /**
      * creates a query to put into $filter of the SensorThingsAPI to select only Things within the given points
      * @param {Object[]} points the points as array with objects(x, y) to use as Polygon in SensorThingsAPI call
+     * @param  {Boolean} intersect - if it is intersect or not
      * @param {SensorThingsErrorCallback} onerror a function (error) to call on error
      * @returns {String|Boolean}  the query to add to $filter= (excluding $filter=) or false on error
      */
-    getPolygonQueryWithPoints (points, onerror) {
+    getPolygonQueryWithPoints (points, intersect, onerror) {
+        const loadRange = intersect ? "st_intersects" : "st_within";
         let query = "";
 
         if (!Array.isArray(points)) {
@@ -164,7 +167,7 @@ export class SensorThingsHttp {
             query += coord.x + " " + coord.y;
         });
 
-        return "st_within(Thing/Locations/location,geography'POLYGON ((" + query + "))')";
+        return loadRange + "(Thing/Locations/location,geography'POLYGON ((" + query + "))')";
     }
 
     /**
@@ -226,12 +229,13 @@ export class SensorThingsHttp {
      * adds the given points into the query of the url
      * @param {String} url the url to extent - if POLYGON of SensorThingsAPI is already in use, nothing will change
      * @param {Object[]} points the points as array with objects(x, y) to use as Polygon in SensorThingsAPI call
+     * @param  {Boolean} intersect - if it is intersect or not
      * @param {SensorThingsErrorCallback} onerror a function (error) to call on error
      * @returns {String|Boolean}  the url with an extent to call the SensorThingsAPI with or false on error
      */
-    addPointsToUrl (url, points, onerror) {
+    addPointsToUrl (url, points, intersect, onerror) {
         const parsedUrl = new UrlParser(url),
-            polygonQuery = this.getPolygonQueryWithPoints(points, onerror);
+            polygonQuery = this.getPolygonQueryWithPoints(points, intersect, onerror);
 
         if (!polygonQuery) {
             return false;

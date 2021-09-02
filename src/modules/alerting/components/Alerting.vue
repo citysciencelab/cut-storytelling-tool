@@ -1,6 +1,6 @@
 <script>
 
-import Modal from "../../../share-components/modals/Modal.vue";
+import Modal from "../../../share-components/modals/components/Modal.vue";
 import axios from "axios";
 import {mapActions, mapGetters} from "vuex";
 
@@ -30,7 +30,7 @@ export default {
 
         /**
          * Console mapping to be able to debug in template.
-         * @returns {Void} With capital V
+         * @returns {void}
          */
         console: () => console
     },
@@ -276,7 +276,7 @@ export default {
 
             &.last {
                 border-bottom:none;
-                padding-bottom:0px;
+                padding-bottom:0;
             }
         }
     }

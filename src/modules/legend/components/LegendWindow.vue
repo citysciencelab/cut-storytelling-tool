@@ -7,6 +7,7 @@ import actions from "../store/actionsLegend";
 import LegendSingleLayer from "./LegendSingleLayer.vue";
 import {isArrayOfStrings} from "../../../utils/objectHelpers";
 import {convertColor} from "../../../utils/convertColor";
+import getComponent from "../../../utils/getComponent";
 
 export default {
     name: "LegendWindow",
@@ -27,6 +28,12 @@ export default {
             if (showLegend) {
                 document.getElementsByClassName("navbar-collapse")[0].classList.remove("in");
                 this.createLegend();
+                // focus to first element
+                this.$nextTick(() => {
+                    if (this.$refs["close-icon"]) {
+                        this.$refs["close-icon"].focus();
+                    }
+                });
             }
         },
         layerCounterIdForLayerInfo (layerCounterIdForLayerInfo) {
@@ -158,10 +165,19 @@ export default {
         },
         /**
          * Closes the legend.
+         * @param {Event} event - the DOM event
          * @returns {void}
          */
-        closeLegend () {
-            this.setShowLegend(!this.showLegend);
+        closeLegend (event) {
+            if (event.type === "click" || event.which === 32 || event.which === 13) {
+                const model = getComponent(this.id);
+
+                this.setShowLegend(!this.showLegend);
+
+                if (model) {
+                    model.set("isActive", false);
+                }
+            }
         },
 
         /**
@@ -227,7 +243,7 @@ export default {
 
         /**
          * Prepares the legend array for a grouplayer by iterating over its layers and generating the legend of each child.
-         * @param {ol/Layer/Soure} layerSource Layer sources of group layer.
+         * @param {ol/Layer/Source} layerSource Layer sources of group layer.
          * @returns {Object[]} - merged Legends.
          */
         prepareLegendForGroupLayer (layerSource) {
@@ -442,15 +458,12 @@ export default {
             const olFeature = new Feature(),
                 circleBarScalingFactor = style.get("circleBarScalingFactor"),
                 barHeight = String(20 / circleBarScalingFactor),
-                clonedStyle = style.clone();
-            let olStyle = null,
-                intervalCircleBar = null;
+                clonedStyle = style.clone(),
+                intervalCircleBar = clonedStyle.getStyle().getImage().getSrc();
 
             olFeature.set(scalingAttribute, barHeight);
             clonedStyle.setFeature(olFeature);
             clonedStyle.setIsClustered(false);
-            olStyle = clonedStyle.getStyle();
-            intervalCircleBar = olStyle.getImage().getSrc();
 
             return intervalCircleBar;
         },
@@ -665,18 +678,21 @@ export default {
          * @returns {void}
          */
         toggleCollapseAll (evt) {
-            const element = evt.target,
-                hasArrowUp = element.className.includes("glyphicon-arrow-up");
+            if (evt.type === "click" || evt.which === 32 || evt.which === 13) {
 
-            if (hasArrowUp) {
-                this.collapseAllLegends();
-                element.classList.remove("glyphicon-arrow-up");
-                element.classList.add("glyphicon-arrow-down");
-            }
-            else {
-                this.expandAllLegends();
-                element.classList.remove("glyphicon-arrow-down");
-                element.classList.add("glyphicon-arrow-up");
+                const element = evt.target,
+                    hasArrowUp = element.className.includes("glyphicon-arrow-up");
+
+                if (hasArrowUp) {
+                    this.collapseAllLegends();
+                    element.classList.remove("glyphicon-arrow-up");
+                    element.classList.add("glyphicon-arrow-down");
+                }
+                else {
+                    this.expandAllLegends();
+                    element.classList.remove("glyphicon-arrow-down");
+                    element.classList.add("glyphicon-arrow-up");
+                }
             }
         },
 
@@ -729,16 +745,24 @@ export default {
                     class="glyphicon hidden-sm"
                 />
                 <span>{{ $t(name) }}</span>
-                <span
-                    class="glyphicon glyphicon-remove close-legend float-right"
-                    @click="closeLegend"
-                />
-                <span
-                    v-if="showCollapseAllButton"
-                    class="glyphicon glyphicon-arrow-up toggle-collapse-all legend float-right"
-                    :title="$t('common:modules.legend.toggleCollapseAll')"
-                    @click="toggleCollapseAll"
-                />
+                <div class="float-right">
+                    <span
+                        v-if="showCollapseAllButton"
+                        ref="collapse-all-icon"
+                        tabindex="0"
+                        class="glyphicon glyphicon-arrow-up toggle-collapse-all legend"
+                        :title="$t('common:modules.legend.toggleCollapseAll')"
+                        @click="toggleCollapseAll($event)"
+                        @keydown="toggleCollapseAll($event)"
+                    />
+                    <span
+                        ref="close-icon"
+                        class="glyphicon glyphicon-remove close-legend"
+                        tabindex="0"
+                        @click="closeLegend($event)"
+                        @keydown="closeLegend($event)"
+                    />
+                </div>
             </div>
             <div class="legend-content">
                 <div
@@ -784,7 +808,7 @@ export default {
             position: absolute;
             min-width:200px;
             max-width:600px;
-            right: 0px;
+            right: 0;
             margin: 10px 10px 30px 10px;
             background-color: #ffffff;
             z-index: 9999;
@@ -803,10 +827,19 @@ export default {
             cursor: move;
             .close-legend {
                 cursor: pointer;
+                &:focus {
+                    outline: 3px solid @accent_focus;
+                    outline: 3px auto  Highlight;
+                    outline: 3px auto -webkit-focus-ring-color;
+                }
             };
             .toggle-collapse-all {
-                padding-right: 10px;
                 cursor: pointer;
+                &:focus {
+                    outline: 3px solid @accent_focus;
+                    outline: 3px auto  Highlight;
+                    outline: 3px auto -webkit-focus-ring-color;
+                }
             }
         }
         .legend-content {
@@ -831,7 +864,7 @@ export default {
 
     .legend-window-table {
         position: absolute;
-        right: 0px;
+        right: 0;
         font-family: @font_family_2;
         border-radius: 12px;
         background-color: @background_color_4;
@@ -846,11 +879,19 @@ export default {
             cursor: move;
             .close-legend {
                 cursor: pointer;
+                &:focus {
+                    outline: 3px solid @accent_focus;
+                    outline: 3px auto  Highlight;
+                    outline: 3px auto -webkit-focus-ring-color;
+                }
             };
             .toggle-collapse-all {
-                padding-right: 10px;
                 cursor: pointer;
-            }
+                &:focus {
+                    outline: 3px solid @accent_focus;
+                    outline: 3px auto  Highlight;
+                    outline: 3px auto -webkit-focus-ring-color;
+                }            }
         }
         .legend-content {
             border-bottom-left-radius: 12px;

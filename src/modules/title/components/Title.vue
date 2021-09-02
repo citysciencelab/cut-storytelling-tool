@@ -44,10 +44,7 @@ export default {
          * @returns {boolean} true, if the title should be shown
          */
         showTitle () {
-            if (this.uiStyle === "TABLE" || this.mobile) {
-                return false;
-            }
-            return true;
+            return !(this.uiStyle === "TABLE" || this.mobile);
         },
         /**
         * Depending on the available space, the titletext and titlelogo is rendered.
@@ -113,6 +110,7 @@ export default {
             :data-toggle="title"
             data-placement="bottom"
             :title="toolTip"
+            class="tabable"
         >
 
             <img

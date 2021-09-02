@@ -169,7 +169,8 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
             supportedIn3d = Radio.request("Tool", "getSupportedIn3d"),
             supportedOnlyInOblique = Radio.request("Tool", "getSupportedOnlyInOblique"),
             modelCollection = Radio.request("Tool", "getCollection"),
-            activeTools = modelCollection !== undefined ? modelCollection.where({"type": "tool", "isActive": true}) : [];
+            activeTools = modelCollection !== undefined ? modelCollection.where({"type": "tool", "isActive": true}) : [],
+            activeVueToolNames = store.getters["Tools/getActiveToolNames"];
 
         if (Radio.request("Map", "isMap3d")) {
             this.controlsMapChangeClose3D(activeTools, supportedOnlyIn3d);
@@ -178,7 +179,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
             this.controlsMapChangeCloseOblique(activeTools, supportedOnlyInOblique);
         }
         else {
-            this.controlsMapChangeClose2D(activeTools, supportedIn3d);
+            this.controlsMapChangeClose2D(activeTools, activeVueToolNames, supportedIn3d);
         }
     },
 
@@ -237,6 +238,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
     /**
      * Controls the surface of the portal when leaving the 2D mode.
      * @param {Backbone.Collection} activeTools contains all activated tools
+     * @param {String[]} activeVueToolNames contains names of active vue tools
      * @param {String[]} supportedIn3d contains all tools that are supported in 3D-Modues
      * @fires Tools.Filter#RadioTriggerFilterDisable
      * @fires Core.ModelList#RadioTriggerModelListToggleWfsCluster
@@ -244,20 +246,28 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * @fires Alerting#RadioTriggerAlertAlert
      * @returns {void}
      */
-    controlsMapChangeClose2D: function (activeTools, supportedIn3d) {
-        this.$("#3d-titel-open").hide();
-        this.$("#3d-titel-close").show();
-        Radio.trigger("Filter", "disable");
-        Radio.trigger("ModelList", "toggleWfsCluster", false);
-        Radio.trigger("Map", "activateMap3d");
-        this.model.setButtonTitle("2D");
-
+    controlsMapChangeClose2D: function (activeTools, activeVueToolNames, supportedIn3d) {
         activeTools.forEach(tool => {
             if (!supportedIn3d.includes(tool.get("id"))) {
                 tool.setIsActive(false);
             }
         });
-        this.open3dCatalog();
+        activeVueToolNames.forEach(toolName => {
+            if (!supportedIn3d.find(name => name.toLowerCase() === toolName.toLowerCase())) {
+                store.dispatch("Tools/setToolActive", {id: toolName, active: false});
+            }
+        });
+        // wait until vue tool is closed
+        setTimeout(() => {
+            this.$("#3d-titel-open").hide();
+            this.$("#3d-titel-close").show();
+            Radio.trigger("Filter", "disable");
+            Radio.trigger("ModelList", "toggleWfsCluster", false);
+            Radio.trigger("Map", "activateMap3d");
+            this.model.setButtonTitle("2D");
+
+            this.open3dCatalog();
+        }, 200);
     },
 
     /**

@@ -8,9 +8,8 @@
 
 ---
 
-##  Unreleased - in development
+## Unreleased - in development
 ### Added
-- Start of a calendar library "src/utils/calendar.js" with the first function "getPublicHolidays" to get a list of german public holidays using gaussian easter algorithm and advent algorithm.
 - Added the new Tool `WfsSearch`.
 
 ### Changed
@@ -20,7 +19,151 @@
 ### Removed
 
 ### Fixed
+
+---
+
+##  v2.13.0 - 2021-09-01
+### Added
+- Autocomplete functionality for the contact tool.
+- A library for standard colors and barrier free colors "src/utils/colors.js" to use within javascript, with initial colors/colorsets: MP standard blue; MP standard red; Color Universal Design by "J*Fly data depository for Drosophila reserchers" (https://jfly.uni-koeln.de/color/ - 7 colors); three additional color sets "Hamburg blue scheme" (10 colors), "blue scheme plus" (10 colors) and "traffic light scheme" (7 colors) contributed by the IfBQ of Hamburg Town.
+- Issue #631: Adds a tutorial to use the remote interface in an iFrame.
+- Added the possibility to configure the size of the iframe in GFI when using the gfiTheme `default` on a layer in config.json. Works only in conjunction with the `infoFormat: "text/html"`.
+- Added possibility in GFI theme Default to configure `max-width` in config.json.
+- New Searchbar-Module for Komoot Photon.
+- A flag "beautifyKeys" for gfi params to enable/disable the beautifyKeys function in default gfi theme.
+- A flag "showObjectKeys" for gfi params to display attribute keys and values of objects in default gfi theme.
+- Added a new type for filter attributeWhitelist "date", which uses a slider for a date range. Use "format" to specify date format and "attrNameUntil" for a different attribute to be the end date of your range.
+- Added the new layer type 'WMS-T' along with its manipulation functionalities 'TimeSlider' and 'LayerSwiper'.
+
+### Changed
+- Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.
+- LayerInformation now shows message in case the MetaData couldn't be loaded
+- Footer allows additionally to open vue tools besides backbone tools.
+- changed contrasts of elements in footer, filter and the mouse position widget for better accessability
+- Accessibility: Keyboard navigation for tools
+  - You can reach every opened tool via keyboard (TAB-key) direct after the top menu row
+  - After opening a tool the focus is set to the first control (if any available)
+  - LayerInfo and Quickhelp are toggleable (on/off)
+    - LayerInfo via the info menu icon (theme menu)
+    - Quickhelp via the question icon in the searchbar (top menu)
+- GFI: order of Gfis is reversed now, so that the top layer ones come first
+- NPM packages https-proxy-agent, vue-loader, vue-template-compiler are moved from dependencies to devDependencies in package.json.
+- In the default GFI theme, images that are in the tag `"Bild"` or `"bild"` of a WMS GetFeatureInfo are now rendered as images by default.
+- Images from google-maps or -earth (gstatic.com) from KML files are now requested via a reverse proxy, since no CORS is set up there.
+- The MasterportalAPI version is updated to v1.5.0. This also raised ol to version 6.6.1
+- The following NPM packages are updated:
+  - dependencies:
+    axios: 0.19.0 to version 0.21.1
+    backbone.radio: 1.x to version 2.x
+    bootstrap-datepicker: 1.8.x to version 1.9.x
+    core-js: 3.10.1 to version 3.15.2
+    dom-parser: 0.1.5 to version 0.1.6
+    html2canvas: 1.0.0-rc.5 to version 1.1.3
+    i18next: 19.0.1 to version 20.3.3
+    i18next-browser-languagedetec to versionr: 4.0.1 to version 6.1.2
+    i18next-http-backend: 1.0.8 to version 1.2.6
+    imports-loader: 0.8.0 to version 1.0.0
+    moment-timezone: 0.5.28 to version 0.5.33
+    mqtt: 4.x to version 4.2.8
+    object-hash: 2.0.3 to version 2.2.0
+    ol-mapbox-style: 6.3.2 to version 6.4.1
+    olcs: 2.12.0 to version 2.13.0
+    vue: 2.6.11 to version 2.6.14
+    vuex: 3.1.2 to version 3.6.2
+
+  - devDependencies:
+    @babel/core: 7.13.15 to version 7.14.6
+    @babel/eslint-parser: 7.14.3 to version 7.14.7
+    @babel/preset-env: 7.13.15 to version 7.14.7
+    @intlify/vue-i18n-loader: 0.6.1 to version 2.1.2
+    @masterportal/mpconfigparser: 1.1.1 to version 1.1.2
+    @vue/test-utils: 1.0.2 to version 1.2.1
+    canvas: 2.6.1 to version 2.8.0
+    chai: 4.1.1 to version 4.3.4
+    css-loader: 1.0.0 to version 4.3.0
+    dotenv: 8.2.0 to version 10.0.0
+    eslint: 7.28.0 to version 7.31.0
+    eslint-plugin-vue: 7.11.1 to version 7.14.0
+    file-loader: 2.0.0 to version 6.2.0
+    fs-extra: 9.0.0 to version 10.0.0
+    husky: 4.3.8 to version 7.0.1
+    https-proxy-agent: 3.0.0 to version 5.0.0
+    inquirer: 6.2.0 to version 8.1.2
+    jaguarjs-jsdoc: 0.0.1 to version 1.1.0
+    jsdoc: 3.6.3 to version 3.6.7
+    jsdom-global: 3.0.2 to version 14.0.0
+    less: 3.9.0 to version 4.1.1
+    less-loader: 4.1.0 to version 7.3.0
+    mocha: 6.2.0 to version 9.0.2
+    mocha-loader: 2.0.0 to version 3.0.0
+    mock-local-storage: 1.1.15 to version 1.1.17
+    null-loader: 4.0.0 to version 4.0.1
+    regenerator-runtime: 0.11.0 to version 0.13.7
+    replace-in-file: 6.0.0 to version 6.2.0
+    sinon: 7.3.2 to version 11.1.1
+    sinon-chai: 3.3.0 to version 3.7.0
+    vue-template-compiler: 2.6.10 to version 2.6.14
+    whatwg-fetch: 3.0.0 to version 3.6.2
+    xmlserializer: 0.6.1 to version 0.6.1
+    zip-a-folder: 0.0.12 to version 1.1.0
+
+### Removed
+- Remove the module cookie, because this is only used in an addon.
+
+### Fixed
+- The legend now always renders in the map region even when the sidebar is open. Also, the small optical offset in the menu bar at the legend entry has been removed.
+- Layers in the default tree that are grouped by metadata and start with numbers (e.g. 100 Jahre Stadtgrün) can now be opened again.
+- The alerting modal now has a padding again.
+- Fixed a warning in the console when loading addons.
+- When closing the "Draw/Write" tool via the cross, an error no longer occurs.
+- Coordinates tool: after switching to 3D mode and back to 2D mode, errors no longer occur.
+- Coordinates tool: WGS 84(long/lat) coordinate system: there is no "E" at the end of the Latitude field.
+- When starting the 3D map, all tools that do not support 3D mode are closed.
+- 3D map: Tools that do not support 3D mode are no longer displayed in the footer.
+- Issue #637: Background maps in folder structure no longer overlay subject topics when background map is activated later. Occurred only with treetype custom.
+- Coordinates tool: Validation was corrected
+- Coordinates tool: EPSG code for coordinate system ETRS89/UTM 32N is shown correct in selectbox
+- Opening a tool by footer-link will close a visible tool in sidebar.
+
+---
+
+## v2.12.1 - 2021-08-12
+### Fixed
+- Drawn content can be printed again.
+-	Footer allows additionally to open vue tools besides backbone tools
+-	Fixed active graphicalSelect during tool change in addon sdpDownload.
+
+---
+
+## v2.12.0 - 2021-08-04
+### Added
+- Start of a calendar library "src/utils/calendar.js" with the first function "getPublicHolidays" to get a list of german public holidays using gaussian easter algorithm and advent algorithm.
+- Adds the documentation for the datasets attributes `csw_url` and `show_doc_url` in the services.json.md.
+- A new Tool named coordToolkit is available. It contains the functionality of the tools supplyCord and searchByCoord. Both provide the same projections configured under the key "namedProjections" in config.js.
+
+### Changed
+- The GFI in attached mode now dynamically adjusts its size to the content.
+- Migrated the CompareFeatures Tool from Backbone.js to Vue.js.
+- Accessibility: Implemented keyboard navigation in menu (top-level and themes).
+  - implemented keyboard navigation with arrows and tab
+  - make all action widgets (checkboxes, icon-buttons, etc) tabable
+  - make action execution possible on focused element with space and enter key
+  - introduced :hover-color on all focusable elements
+  - highlight current focused widget
+  - preserve current focus after action execution
+
+### Deprecated
+- Tool searchByCoord is deprecated in 3.0.0. Please use "coordToolkit" instead.
+- Tool supplyCoord is deprecated in 3.0.0. Please use "coordToolkit" instead.
+
+### Removed
+- Support of End2End tests for `Browserstack` has been removed.Instead `saucelabs` is used.
+
+### Fixed
 - Issue #626: The Legend menu item is placed according to the order of the menu items in config.json.
+- Issue #628: The Legend menu item is now translated correctly again and works as usual after a translation.
+- In the layerslider tool, the attribute title can now be overwritten again in config.json.
+- Issue #629: In the GFI theme default, the tag name for URLs to images can now be overridden again. In addition, "image" has been added to the defaults.
 
 ---
 
@@ -38,14 +181,11 @@
 - The package eslint-plugin-vue was updated to version 7.11.1.
 - The package eslint-plugin-you-dont-need-lodash-underscore was updated to version 6.12.0.
 
-### Deprecated
-
-### Removed
-
 ### Fixed
 - Styled Vector Layers with multiple conditions can now be printed.
+- Further metadata link is set on MetaDataCatalogueID from rootGetters now, default is 2.
 - Labels of VTC-Layer-Objects aren't cut off anymore.
-- BG-1541 & Issue #602: further metadata link is set on MetaDataCatalogueID from rootGetters now, default is 2.
+- Issue #602: further metadata link is set on MetaDataCatalogueID from rootGetters now, default is 2.
 - Issue #615: parsing of the DescribeFeatureType of a WFS has been extended so that it also satisfies a different interpretation of the schema description. As a result, elements in the legend are displayed in the order specified in the style.json.
 - Issue #623: filter error in connection with provided vectorStyles is fixed.
 - Style configuration is provided for dataStreams with result 0.
@@ -66,10 +206,6 @@
 - The documentation for WMTS layers, legend field has been adapted. Only one specification in a string[] is possible.
 - The translation for the url in the staticlink in config.json has been removed.
 - Issue #617: Update description of the attribute '"extent"' for layer configurations in config.json.md.
-
-### Deprecated
-
-### Removed
 
 ### Fixed
 - Now Sensor Layer will show 0 if the dataValue is 0 and not "no data".
@@ -96,7 +232,6 @@
 ### Changed
 - Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.
 - Tool addons are now also written in config.json in camelCase.
-- Migrated the CompareFeatures Tool from Backbone.js to Vue.js.
 - colorTools are renamed into convertColor (src/utils/convertColor).
 - Updates the core-js and babel dependencies in the package.json.
 - Update the dependency caniuse-lite.

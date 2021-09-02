@@ -68,7 +68,6 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
                 activators.search = this.search;
             }
             this.listenTo(Radio.channel("Searchbar"), activators);
-
         }
         else {
             this.showError({
@@ -187,6 +186,10 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
                     }
                     else {
                         hit.glyphicon = "glyphicon-road";
+                    }
+
+                    if (classDefinition.zoomLevel) {
+                        hit.zoomLevel = classDefinition.zoomLevel;
                     }
 
                     if (classDefinition.zoom === "bbox") {

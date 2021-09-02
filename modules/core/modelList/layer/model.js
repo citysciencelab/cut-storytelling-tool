@@ -94,6 +94,14 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     initialize: function () {
         const portalConfig = Radio.request("Parser", "getPortalConfig");
 
+        this.get("channel").on({
+            "prepareLayerObject": function (layer) {
+                if (layer) {
+                    layer.prepareLayerObject();
+                }
+            }
+        });
+
         // prevents the use of the isSecured parameter for layers other than WMS and WFS
         if (this.get("typ") !== "WMS" && this.get("typ") !== "WFS" && this.get("isSecured") === true) {
             this.setIsSecured(false);
@@ -465,30 +473,58 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
 
     /**
      * Toggles the attribute isSelected.
-     * If the layer is a baselayer, the other selected baselayers are deselected.
+     * If configured and the layer is a baseLayer, the other selected baseLayers are deselected.
      *
-     * @return {void}
+     * @returns {void}
      */
     toggleIsSelected: function () {
-        const layerGroup = Radio.request("ModelList", "getModelsByAttributes", {parentId: this.get("parentId")}),
-            singleBaselayer = this.get("singleBaselayer") && this.get("parentId") === "Baselayer";
+        const id = this.get("id"),
+            layerGroup = Radio.request("ModelList", "getModelsByAttributes", {parentId: this.get("parentId")}),
+            singleBaselayer = this.get("singleBaselayer") && this.get("parentId") === "Baselayer",
+            timeLayer = this.get("typ") === "WMS" && this.get("time");
 
-        if (this.get("isSelected") === true) {
-            this.setIsSelected(false);
-        }
-        else {
-            // This only works for treeType Custom, otherwise the parentId is not set on the layer
+        this.setIsSelected(!this.get("isSelected"));
+
+        if (this.get("isSelected")) {
+            // This only works for treeType 'custom', otherwise the parentId is not set on the layer
             if (singleBaselayer) {
                 layerGroup.forEach(layer => {
-                    layer.setIsSelected(false);
-                    // This makes sure that the Oblique Layer, if present in the layerlist, is not selectable if switching between baselayers
-                    layer.checkForScale(Radio.request("MapView", "getOptions"));
+                    // folders parentId is baselayer too, but they have not a function checkForScale
+                    if (layer.get("id") !== id && typeof layer.checkForScale === "function") {
+                        layer.setIsSelected(false);
+                        // This makes sure that the Oblique Layer, if present in the layerList, is not selectable if switching between baseLayers
+                        layer.checkForScale(Radio.request("MapView", "getOptions"));
+                    }
                 });
             }
-            this.setIsSelected(true);
+            if (timeLayer) {
+                store.commit("WmsTime/setTimeSliderActive", {active: true, currentLayerId: id});
+            }
+        }
+        else if (timeLayer) {
+            this.removeTimeLayer();
         }
     },
+    /**
+     * If a single WMS-T is shown: Remove the TimeSlider.
+     * If two WMS-T are shown: Remove the LayerSwiper; depending if the original layer was closed, update the layer with a new time value.
+     *
+     * @returns {void}
+     */
+    removeTimeLayer: function () {
+        const id = this.get("id");
 
+        // If the swiper is active, two WMS-T are currently active
+        if (store.getters["WmsTime/layerSwiper"].active) {
+            if (!id.endsWith(store.getters["WmsTime/layerAppendix"])) {
+                this.setIsSelected(true);
+            }
+            store.dispatch("WmsTime/toggleSwiper", id);
+        }
+        else {
+            store.commit("WmsTime/setTimeSliderActive", {active: false, currentLayerId: ""});
+        }
+    },
     /**
      * Toggles the attribute isVisibleInMap
      * @return {void}

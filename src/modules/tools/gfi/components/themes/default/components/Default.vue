@@ -4,11 +4,14 @@ import {isWebLink} from "../../../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
 import CompareFeatureIcon from "../../../favoriteIcons/components/CompareFeatureIcon.vue";
+import DefaultSensorChart from "./DefaultSensorChart.vue";
+import getPropertiesWithFullKeys from "../../../../utils/getPropertiesWithFullKeys.js";
 
 export default {
     name: "Default",
     components: {
-        CompareFeatureIcon
+        CompareFeatureIcon,
+        DefaultSensorChart
     },
     props: {
         feature: {
@@ -18,9 +21,12 @@ export default {
     },
     data: () => {
         return {
-            imageLinks: ["bildlink", "link_bild"],
+            imageLinks: ["bildlink", "link_bild", "Bild", "bild"],
             importedComponents: [],
-            showFavoriteIcons: true
+            showFavoriteIcons: true,
+            maxWidth: "600px",
+            beautifyKeysParam: true,
+            showObjectKeysParam: false
         };
     },
     computed: {
@@ -54,6 +60,8 @@ export default {
         feature () {
             this.$nextTick(() => {
                 this.addTextHtmlContentToIframe();
+                this.setMaxWidth(this.feature.getTheme()?.params);
+                this.initParams(this.feature.getTheme()?.params);
             });
         }
     },
@@ -67,6 +75,8 @@ export default {
     mounted () {
         this.$nextTick(() => {
             this.addTextHtmlContentToIframe();
+            this.setMaxWidth(this.feature.getTheme()?.params);
+            this.initParams(this.feature.getTheme()?.params);
         });
     },
     methods: {
@@ -75,6 +85,69 @@ export default {
         isPhoneNumber,
         getPhoneNumberAsWebLink,
         isEmailAddress,
+
+        /**
+         * checks if given feature has a function getMappedProperties
+         * @param {Object} feature the current feature to check
+         * @return {Boolean} returns true if given feature has a function getMappedProperties
+         */
+        mappedPropertiesExists (feature) {
+            return typeof feature === "object" && feature !== null && typeof feature.getMappedProperties === "function";
+        },
+
+        /**
+         * checks if the given feature has one or more mapped properties
+         * @param {Object} feature the current feature to check
+         * @returns {Boolean} returns true if feature has mapped properties
+         */
+        hasMappedProperties (feature) {
+            return Object.keys(feature.getMappedProperties()).length !== 0;
+        },
+
+        /**
+         * returns the mapped properties of the given feature or parses the properites through getPropertiesWithFullKeys if the component flag showObjectKeysParam is set
+         * @param {Object} feature the current feature
+         * @param {Boolean} [showObjectKeysParam=false] the switch to activate getPropertiesWithFullKeys
+         * @returns {Object} returns mapped properties
+         */
+        getMappedPropertiesOfFeature (feature, showObjectKeysParam = false) {
+            if (showObjectKeysParam === true) {
+                const properties = getPropertiesWithFullKeys(feature.getMappedProperties());
+
+                return properties !== false ? properties : {};
+            }
+            return feature.getMappedProperties();
+        },
+
+        /**
+         * sets params from gfiTheme params
+         * @param {Object} params the params to set
+         * @returns {void}
+         */
+        initParams (params) {
+            if (typeof params !== "object" || params === null) {
+                return;
+            }
+            this.beautifyKeysParam = params?.beautifyKeys;
+            this.showObjectKeysParam = params?.showObjectKeys;
+        },
+
+        /**
+         * checks if the given value is an object for rendering a linechart diagram
+         * @param {*} value anything to check
+         * @returns {Boolean} true if this can be converted to a linechart, false if not
+         */
+        isSensorChart (value) {
+            return typeof value === "object" && value !== null
+                && (
+                    value.type === "linechart"
+                    || value.type === "barchart"
+                    || value.type === "cakechart"
+                )
+                && typeof value.query === "string"
+                && typeof value.staObject === "object" && value.staObject !== null
+                && typeof value.staObject["@iot.selfLink"] === "string";
+        },
 
         /**
          * Sets the imported components to importedComponents.
@@ -93,7 +166,7 @@ export default {
          * @returns {void}
          */
         replacesConfiguredImageLinks: function () {
-            const imageLinksAttribute = this.feature.getTheme()?.params?.imageLink;
+            const imageLinksAttribute = this.feature.getTheme()?.params?.imageLinks;
 
             if (Array.isArray(imageLinksAttribute)) {
                 this.imageLinks = imageLinksAttribute;
@@ -112,9 +185,45 @@ export default {
             const iframe = document.getElementsByClassName("gfi-iFrame")[0];
 
             if (this.mimeType === "text/html" && iframe) {
+                this.setIframeSize(iframe, this.feature.getTheme()?.params);
                 iframe.contentWindow.document.open();
                 iframe.contentWindow.document.write(this.feature.getDocument());
                 iframe.contentWindow.document.close();
+            }
+        },
+
+        /**
+         * Sets the size of the given iframe.
+         * The iframe size can be overwritten in the config.json at the layer.
+         * @param {Object} iframe The iframe.
+         * @param {Object} params The gfi parameters.
+         * @returns {void}
+         */
+        setIframeSize: function (iframe, params) {
+            document.getElementsByClassName("gfi-theme-iframe")[0].style.maxWidth = "";
+            iframe.style.width = params?.iframe?.width;
+            iframe.style.height = params?.iframe?.height;
+        },
+
+        /**
+         * Sets the max-width of the default gfiTheme content.
+         * @param {Object} params The gfi parameters.
+         * @returns {void}
+         */
+        setMaxWidth: function (params) {
+            if (this.mimeType !== "text/html") {
+                const gfiThemeContainer = document.getElementsByClassName("gfi-theme-images")[0];
+
+                if (typeof gfiThemeContainer?.style !== "object" || gfiThemeContainer?.style === null) {
+                    return;
+                }
+
+                if (params?.maxWidth) {
+                    gfiThemeContainer.style.maxWidth = params?.maxWidth;
+                }
+                else {
+                    gfiThemeContainer.style.maxWidth = this.maxWidth;
+                }
             }
         }
     }
@@ -152,19 +261,27 @@ export default {
             v-if="mimeType !== 'text/html'"
             class="table table-hover"
         >
-            <tbody v-if="typeof feature.getMappedProperties === 'function'">
-                <tr v-if="Object.entries(feature.getMappedProperties()).length === 0">
+            <tbody v-if="mappedPropertiesExists(feature)">
+                <tr v-if="!hasMappedProperties(feature)">
                     <td class="bold">
                         {{ $t("modules.tools.gfi.themes.default.noAttributeAvailable") }}
                     </td>
                 </tr>
                 <tr
-                    v-for="(value, key) in feature.getMappedProperties()"
+                    v-for="(value, key) in getMappedPropertiesOfFeature(feature, showObjectKeysParam)"
                     v-else
                     :key="key"
                 >
-                    <td class="bold">
-                        {{ beautifyKey($t(key)) }}
+                    <td
+                        v-if="!isSensorChart(value)"
+                        class="bold firstCol"
+                    >
+                        <span v-if="beautifyKeysParam">
+                            {{ beautifyKey($t(key)) }}
+                        </span>
+                        <span v-else>
+                            {{ key }}
+                        </span>
                     </td>
                     <td v-if="isWebLink(value)">
                         <a
@@ -186,6 +303,20 @@ export default {
                         v-else-if="typeof value === 'string' && value.includes('<br>')"
                         v-html="value"
                     />
+                    <td
+                        v-else-if="isSensorChart(value)"
+                        colspan="2"
+                    >
+                        <DefaultSensorChart
+                            :type="value.type"
+                            :label="value.label"
+                            :query="value.query"
+                            :format="value.format"
+                            :sta-object="value.staObject"
+                            :options="value.options"
+                            :chart-options="value.chartOptions"
+                        />
+                    </td>
                     <td v-else>
                         {{ value }}
                     </td>
@@ -228,6 +359,7 @@ export default {
     line-height: 1px;
 }
 .gfi-theme-images {
+    max-width: 600px;
     height: 100%;
 }
 .gfi-theme-images-image {
@@ -249,6 +381,6 @@ export default {
     }
 }
 .table {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 </style>

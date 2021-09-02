@@ -1,5 +1,5 @@
 <script>
-import Dropdown from "../../dropdowns/DropdownSimple.vue";
+import Dropdown from "../../dropdowns/components/DropdownSimple.vue";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersGraphicalSelect";
 import mutations from "../store/mutationsGraphicalSelect";
@@ -35,6 +35,12 @@ export default {
             type: Object,
             required: false,
             default: undefined
+        },
+        // if focus should be set to this component when it is created
+        focusOnCreation: {
+            type: Boolean,
+            default: false,
+            required: false
         }
     },
     data () {
@@ -263,6 +269,7 @@ export default {
             v-if="selectElement === 'Dropdown'"
             v-model="selectedOptionData"
             :options="optionsValue"
+            :focus-on-creation="focusOnCreation"
         />
     </form>
 </template>

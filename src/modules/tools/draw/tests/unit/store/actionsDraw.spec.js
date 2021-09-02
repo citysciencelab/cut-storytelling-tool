@@ -2,7 +2,7 @@ import sinon from "sinon";
 import {expect} from "chai";
 import actions from "../../../store/actionsDraw";
 import stateDraw from "../../../store/stateDraw";
-import {Draw} from "ol/interaction.js";
+import Draw from "ol/interaction/Draw";
 import Feature from "ol/Feature";
 import Polygon from "ol/geom/Polygon";
 import LineString from "ol/geom/LineString";
@@ -100,9 +100,10 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
                 },
                 drawType: {
                     id,
-                    geometry: ""
+                    geometry: "Point"
                 },
-                symbol: {}
+                symbol: {},
+                freehand: false
             };
 
             result[id + "Options"] = {};
@@ -112,11 +113,20 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         const activeSymbol = Symbol(),
             maxFeaturesSymbol = Symbol(),
             getters = {
-                styleSettings: Symbol()
+                styleSettings: sinon.stub()
             };
 
         it("commits and dispatches as expected", () => {
-            actions.createDrawInteractionAndAddToMap({state: getState("drawCircle"), commit, dispatch, getters}, {active: activeSymbol, maxFeatures: maxFeaturesSymbol});
+            actions.createDrawInteractionAndAddToMap({
+                state: getState("drawCircle"),
+                commit,
+                dispatch,
+                getters
+            },
+            {
+                active: activeSymbol,
+                maxFeatures: maxFeaturesSymbol
+            });
 
             // commits setDrawInteraction
             expect(commit.calledOnce).to.be.true;
@@ -443,8 +453,13 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         });
     });
     describe("deactivateDrawInteractions", () => {
-        const drawOne = new Draw({}),
-            drawTwo = new Draw({}),
+        const settings = {
+                source: () => ({}),
+                type: "Point",
+                freehand: false
+            },
+            drawOne = new Draw(settings),
+            drawTwo = new Draw(settings),
             noDraw = Symbol();
         let rootState;
 

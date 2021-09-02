@@ -1,6 +1,7 @@
 import AddWMS from "./addWMS/components/AddWMS.vue";
 import BufferAnalysis from "./bufferAnalysis/components/BufferAnalysis.vue";
 import Contact from "./contact/components/Contact.vue";
+import CoordToolkit from "./coordToolkit/components/CoordToolkit.vue";
 import Draw from "./draw/components/Draw.vue";
 import CompareFeatures from "./compareFeatures/components/CompareFeatures.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
@@ -13,6 +14,7 @@ import SelectFeatures from "./selectFeatures/components/SelectFeatures.vue";
 import StyleVT from "./styleVT/components/StyleVT.vue";
 import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 import WfsSearch from "./wfsSearch/components/WfsSearch.vue";
+
 /**
  * User type definition
  * @typedef {Object} ToolsState
@@ -24,6 +26,7 @@ const state = {
         addWMS: AddWMS,
         bufferAnalysis: BufferAnalysis,
         contact: Contact,
+        coordToolkit: CoordToolkit,
         draw: Draw,
         compareFeatures: CompareFeatures,
         fileImport: FileImport,

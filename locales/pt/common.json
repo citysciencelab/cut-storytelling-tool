@@ -169,7 +169,7 @@
             }
         },
         "quickHelp": {
-            "titleTag": "Abrir ajuda",
+            "titleTag": "Abrir/fechar ajuda",
             "search": {
                 "title": "Ajuda - Pesquisa",
                 "generalInfo": "Geral",
@@ -734,6 +734,11 @@
             "styleModel": {
                 "getGeometryTypeFromWFSFetchfailed": "A legenda não podia ser criada na camada de informação!",
                 "getGeometryTypeFromWFSFetchfailedMessage": "Detalhes: Um serviço necessário não responde."
+            }
+        },
+        "wmsTime": {
+            "layerSwiper": {
+              "title": "Confrontare gli strati"
             }
         },
         "legend": {

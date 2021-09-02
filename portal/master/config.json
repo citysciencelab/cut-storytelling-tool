@@ -277,8 +277,16 @@
             "glyphicon": "glyphicon-resize-full"
           },
           "supplyCoord": {
-            "name": "translate#common:menu.tools.coord",
+            "name": "translate#common:menu.tools.supplyCoord",
             "glyphicon": "glyphicon-screenshot"
+          },
+          "coordToolkit": {
+            "name": "translate#common:menu.tools.coordToolkit",
+            "glyphicon": "glyphicon-globe",
+            "heightLayerId" : "19173",
+            "heightElementName": "value_0",
+            "heightValueWater": "-20",
+            "heightValueBuilding": "200"
           },
           "shadow": {
             "name": "translate#common:menu.tools.shadow",
@@ -307,8 +315,7 @@
             "name": "translate#common:menu.tools.searchByCoord",
             "glyphicon": "glyphicon-record"
           },
-          "selectFeatures":
-          {
+          "selectFeatures": {
             "name": "translate#common:menu.tools.selectFeatures"
           },
           "fileImport": {
@@ -359,7 +366,6 @@
           "layerSlider": {
             "name": "translate#common:menu.tools.layerSlider",
             "glyphicon": "glyphicon-film",
-            "title": "translate#common:modules.tools.layerSlider.title",
             "timeInterval": 2000,
             "layerIds": [
               {
@@ -765,6 +771,9 @@
         },
         {
           "id": "13023"
+        },
+        {
+          "id" : "19173"
         }
       ]
     }
