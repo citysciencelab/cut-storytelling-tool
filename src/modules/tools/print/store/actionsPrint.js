@@ -369,11 +369,11 @@ export default {
 
     /**
      * draws a mask on the whole map
-     * @param {Object} param.state the state
+     * @param {Object} _ state
      * @param {Object} drawMaskOpt - context of the postrender event
      * @returns {void}
      */
-    drawMask: function ({state}, drawMaskOpt) {
+    drawMask: function (_, drawMaskOpt) {
         const mapSize = drawMaskOpt.frameState.size,
             context = drawMaskOpt.context,
             ration = drawMaskOpt.context.canvas.width > mapSize[0] ? DEVICE_PIXEL_RATIO : 1,
@@ -649,7 +649,7 @@ export default {
     waitForPrintJobSuccess: async function ({state, dispatch, commit}, response) {
         // Error processing...
         if (response.status === "error") {
-            console.log("Error: " + response.error);
+            console.error("Error: " + response.error);
         }
         else if (response.done) {
             commit("setProgressWidth", "width: 100%");
