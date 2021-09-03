@@ -19,6 +19,9 @@
 
 ### Fixed
 - Draw tool: fixed an issue (Bitbucket: #638) with resaving draw files
+- Downgrade the follow npm packages to fix the compass in 3D mode:
+ - css-loader from 4.3.0 to 1.0.0
+ - file-loader from 6.2.0 to 2.0.0
 
 ---
 
