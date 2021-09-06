@@ -15,8 +15,8 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
     describe.skip("Elastic Search", function () {
         const searchInputSelector = By.css("#searchInput"),
             searchString = "xys",
-            layerName = "project area",
-            layerId = "1750";
+            layerName = "high performance area",
+            layerId = "7134";
         let driver, searchInput;
 
         before(async function () {
@@ -47,7 +47,7 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
             }
         });
 
-        if (isMaster(url)) {
+        if (isMaster(url) || isCustom(url)) {
             it(`search for '${searchString}' shows 'Fachthema'-suffixed result in a dropdown that can be clicked`, async function () {
                 const topicSelector = By.xpath("//small[@class='list-group-item-theme'][text()='Fachthema']");
 
@@ -86,7 +86,7 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
                 selectedLayerFirstEntrySelector = By.css("#SelectedLayer .layer-item:nth-child(1) .layer-item .title");
 
             it("renders the chosen layer", async function () {
-                const treeButton = await driver.findElement(By.css("ul#root li:first-child")),
+                const treeButton = await driver.findElement(By.xpath("//span[contains(.,'Themen')]")),
                     tree = await driver.findElement(treeSelector);
 
                 if (await tree.isDisplayed()) {
