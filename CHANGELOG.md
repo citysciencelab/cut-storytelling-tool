@@ -12,7 +12,7 @@
 ### Added
 
 ### Changed
-
+- Changed class for several title elements on page from span to h1 or h2 and standardized their styling
 ### Deprecated
 
 ### Removed
@@ -121,7 +121,6 @@
     whatwg-fetch: 3.0.0 to version 3.6.2
     xmlserializer: 0.6.1 to version 0.6.1
     zip-a-folder: 0.0.12 to version 1.1.0
-- changed class for several title elements on page from span to h1 and h2
 
 ### Removed
 - Remove the module cookie, because this is only used in an addon.
