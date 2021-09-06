@@ -46,6 +46,53 @@ describe("core/configLoader/parserCustomTree", function () {
         return model;
     }
 
+    /**
+     *
+     * get the custome model
+     * @param {array} options - the model options
+     * @returns {object} the model
+     */
+    function getCustomBackgroundMapModel (options) {
+        const model = new CustomTreeParser(options),
+            testConfig = {};
+
+        model.getRawLayerList = function () {
+            return [
+                {
+                    "name": "Luftbild",
+                    "id": "452"
+                },
+                {
+                    "name": "Stadtplan",
+                    "id": "453"
+                }
+            ];
+
+        };
+
+        testConfig.Hintergrundkarten = {
+            "Ordner": [{
+                "Titel": "Karten",
+                "isFolderSelectable": false,
+                "Layer": [{
+                    "name": "Luftbild",
+                    "id": ["452"],
+                    "visibility": true
+                },
+
+                {
+                    "name": "Stadtplan",
+                    "id": ["453"]
+                }
+                ]
+            }]
+        };
+
+        model.setItemList([]);
+        model.parseTree(testConfig.Hintergrundkarten, "Baselayer", 0);
+        return model;
+    }
+
     describe("the \"select all\" checkbox", function () {
         it("should be visible if item-isFolderSelectable is true and global-isFolderSelectable is true", function () {
             expect(Radio.request("Util", "findWhereJs", getCustomModel({isFolderSelectable: true}).get("itemList"), {"name": "Denkmalschutz"}).isFolderSelectable).to.be.equal(true);
@@ -79,6 +126,17 @@ describe("core/configLoader/parserCustomTree", function () {
         });
         it("should be set to \"false\", if the folder has no child-folders", function () {
             expect(Radio.request("Util", "findWhereJs", getCustomModel({isFolderSelectable: true}).get("itemList"), {"name": "Eisenbahnwesen / Personenbeförderung"}).isLeafFolder).to.be.equal(false);
+        });
+    });
+
+    describe("background maps in folder structure shall always be in background", function () {
+        it("should be three with parentId baselayer", function () {
+            const itemList = getCustomBackgroundMapModel().get("itemList");
+
+            expect(itemList.length).to.be.equal(3);
+            itemList.forEach(item => {
+                expect(item.parentId).to.be.equals("Baselayer");
+            });
         });
     });
 });

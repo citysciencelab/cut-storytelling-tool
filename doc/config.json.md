@@ -2381,6 +2381,7 @@ The `Themenconfig` entry defines the contents and their order in the topic selec
 |Hintergrundkarten|yes|**[Hintergrundkarten](#markdown-header-themenconfighintergrundkarten)**||Background map definition.|false|
 |Fachdaten|no|**[Fachdaten](#markdown-header-themenconfigfachdaten)**||Technical data definition.|false|
 |Fachdaten_3D|no|**[Fachdaten_3D](#markdown-header-themenconfigfachdaten_3d)**||Technical data definition used in 3D mode.|false|
+|Fachdaten_Zeit|no|**[Fachdaten_Zeit](#markdown-header-themenconfigfachdaten_zeit)**||Definition of WMS-T layers in their own folder.|false|
 
 **Example**
 
@@ -2389,7 +2390,8 @@ The `Themenconfig` entry defines the contents and their order in the topic selec
     "Themenconfig": {
         "Hintergrundkarten": {},
         "Fachdaten": {},
-        "Fachdaten_3D": {}
+        "Fachdaten_3D": {},
+        "Fachdaten_Zeit": {}
     }
 }
 ```
@@ -2400,6 +2402,7 @@ The `Themenconfig` entry defines the contents and their order in the topic selec
 
 [type:Layer]: # (Themenconfig.Layer)
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
+[type:Ordner]: # (Themenconfig.Ordner)
 
 Background map definition.
 
@@ -2407,6 +2410,7 @@ Background map definition.
 |----|--------|----|-------|-----------|------|
 |name|no|String|"Hintergrundkarten"|For `treeType` `default` and `custom`, name of the background map button area.|false|
 |Layer|yes|**[Layer](#markdown-header-themenconfiglayer)**/**[GroupLayer](#markdown-header-themenconfiggrouplayer)**[]||Layer definition.|false|
+|Ordner|no|**[Ordner](#markdown-header-themenconfigordner)**[]||Folder definition.|false|
 
 **Example**
 
@@ -2484,13 +2488,41 @@ Technical data definition.
 
 ***
 
+### Themenconfig.Fachdaten_Zeit
+
+[type:Layer]: # (Themenconfig.Layer)
+
+Definition for WMS-T layers `treeType` `custom` and `default`. The layers can also be defined under **[Fachdaten](#markdown-header-themenconfigfachdaten)**.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|name|no|String|"common:tree.subjectDataTime"|Name of the WMS-T layer button area.|false|
+|Layer|yes|**[Layer](#markdown-header-themenconfiglayer)**[]||WMS-T layer definition.|false|
+
+**Example**
+
+```json
+{
+    "Fachdaten_Zeit": {
+        "name": "My Time Series",
+        "Layer": [
+            {
+              "id": "my_wms_time"
+            }
+        ]
+    }
+}
+```
+
+***
+
 ### Themenconfig.Ordner
 
 [type:Layer]: # (Themenconfig.Layer)
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
 [type:Ordner]: # (Themenconfig.Ordner)
 
-Folder definition. Folders may also be nested.
+Folder definition. Folders may also be nested. Folders can be configured below the "Fachdaten" and "Hintergrundkarten".
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
@@ -2500,7 +2532,7 @@ Folder definition. Folders may also be nested.
 |isFolderSelectable|no|Boolean|true|Defines whether all layers of a folder can be de-/activated at once by using a checkbox.|false|
 |invertLayerOrder|nein|Boolean|false|Defines wheather the order of layers added to the map should be invert when clicking the folder.|false|
 
-**Example folder with one layer**
+**Example Fachdaten-folder with one layer**
 
 ```json
 {
@@ -2518,8 +2550,56 @@ Folder definition. Folders may also be nested.
     }
 }
 ```
+**Example Hintergrundkarten-folder with 2 layers**
+```
+#!json
+"Hintergrundkarten":{
+      "Ordner": [{
+         "Titel": "Maps",
+         "isFolderSelectable": false,
+         "Layer": [{
+               "name": "Aerial view",
+               "id": "123",
+               "visibility": true
+            },
+         
+            {
+               "name": "City map",
+               "id": "456"
+            }
+         ]
+      }]
+     },
+```
+**Example Hintergrundkarten-folder, next to it are configured layers**
+```
+#!json
+"Hintergrundkarten":{
+      "Ordner": [{
+         "Titel": "Maps",
+         "isFolderSelectable": false,
+         "Layer": [{
+               "name": "Aerial view",
+               "id": "123",
+               "visibility": true
+            },
+         
+            {
+               "name": "City map",
+               "id": "456"
+            }
+         ]
+      }],
+      "Layer": [{
+               "name": "Old map",
+               "id": "789"
+            }
+            ...
+         ]
+     },
+```
 
-**Example folder with a sub-folder that contains a layer**
+**Example Fachdaten-folder with a sub-folder that contains a layer**
 
 ```json
 {
@@ -2544,7 +2624,7 @@ Folder definition. Folders may also be nested.
 }
 ```
 
-**Example folder with a sub-folder holding a layer, where the first folder also has a layer defined**
+**Example Fachdaten-folder with a sub-folder holding a layer, where the first folder also has a layer defined**
 
 ```json
 {
@@ -2573,7 +2653,7 @@ Folder definition. Folders may also be nested.
 }
 ```
 
-**Example folder with an inverted order of layers**
+**Example Fachdaten-folder with an inverted order of layers**
 
 In this example layer 123 will be added to the map first. This leads to 456 being above 123.
 

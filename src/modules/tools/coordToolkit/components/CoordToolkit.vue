@@ -136,6 +136,14 @@ export default {
                 if (proj.name === "EPSG:4326") {
                     wgs84Proj.push(proj);
                 }
+                if (proj.name.indexOf("#") > -1) { // e.g. "http://www.opengis.net/gml/srs/epsg.xml#25832"
+                    const code = proj.name.substring(proj.name.indexOf("#") + 1, proj.name.length);
+
+                    proj.title = proj.title + " (EPSG:" + code + ")";
+                }
+                else {
+                    proj.title = proj.title + " (" + proj.name + ")";
+                }
             });
             if (wgs84Proj.length > 0) {
                 this.addWGS84Decimal(pr, wgs84Proj);
@@ -158,7 +166,7 @@ export default {
 
             wgs84ProjDez.name = "EPSG:4326";
             wgs84ProjDez.id = "EPSG:4326-DG";
-            wgs84ProjDez.title = "WGS 84(Dezimalgrad)";
+            wgs84ProjDez.title = "WGS 84(Dezimalgrad) (EPSG:4326)";
             projections.splice(index + 1, 0, wgs84ProjDez);
         },
         /**
@@ -193,8 +201,6 @@ export default {
          */
         selectionChanged (event) {
             if (event.target.value) {
-                this.onInputEvent(this.coordinatesEasting);
-                this.onInputEvent(this.coordinatesNorthing);
                 this.newProjectionSelected(event.target.value);
                 if (this.mode === "search") {
                     this.validateInput(this.coordinatesEasting);
@@ -440,7 +446,7 @@ export default {
                                     :value="projection.id"
                                     :SELECTED="projection.id === currentProjection.id"
                                 >
-                                    {{ projection.title ? projection.title + " ("+projection.name+")" : projection.name }}
+                                    {{ projection.title ? projection.title : projection.name }}
                                 </option>
                             </select>
                         </div>

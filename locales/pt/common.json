@@ -736,6 +736,11 @@
                 "getGeometryTypeFromWFSFetchfailedMessage": "Detalhes: Um serviço necessário não responde."
             }
         },
+        "wmsTime": {
+            "layerSwiper": {
+              "title": "Confrontare gli strati"
+            }
+        },
         "legend": {
             "name": "Legenda",
             "linkToPdf": "Para a lenda externa (PDF)",

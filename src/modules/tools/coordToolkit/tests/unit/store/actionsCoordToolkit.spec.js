@@ -222,17 +222,22 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
         });
         it("newProjectionSelected", done => {
             const
+                pos = [123, 456],
                 proj1 = {id: "projection 1", name: "projection 1", projName: "longlat"},
                 proj2 = {id: "projection 2", name: "projection 2", projName: "longlat"},
                 state = {
                     projections: [
                         proj1,
                         proj2
-                    ]
+                    ],
+                    coordinatesEasting: pos[0],
+                    coordinatesNorthing: pos[1]
                 };
 
             testAction(actions.newProjectionSelected, proj2.id, state, {}, [
+                {type: "transformCoordinatesFromTo", payload: proj2, dispatch: true},
                 {type: "setCurrentProjection", payload: proj2},
+                {type: "formatInput", payload: pos, dispatch: true},
                 {type: "changedPosition", payload: undefined, dispatch: true},
                 {type: "setExample"}
             ], {getProjectionById: () => {
@@ -320,8 +325,8 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 };
 
                 testAction(actions.adjustPosition, payload, {}, rootState, [
-                    {type: "setCoordinatesEasting", payload: {id: "easting", value: 100}},
-                    {type: "setCoordinatesNorthing", payload: {id: "northing", value: 200}}
+                    {type: "setCoordinatesEasting", payload: {id: "easting", value: "100.00"}},
+                    {type: "setCoordinatesNorthing", payload: {id: "northing", value: "200.00"}}
                 ], {}, done);
             });
             it("adjustPosition sets coordinate fields - no projection and position does nothing", done => {
@@ -477,6 +482,16 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 const state = {
                     currentProjection: {id: "EPSG:4326-DG"},
                     coordinatesEasting: {id: "easting", name: "", value: "53.55555°", errorMessage: ""}
+                };
+
+                actions.validateInput({state, commit, dispatch, getters}, state.coordinatesEasting);
+
+                expect(commit.firstCall.args[0]).to.equal("resetErrorMessages");
+            });
+            it("Validates the coordinates without degree symbol according to the WGS84(Dezimalgrad) coordinate system", () => {
+                const state = {
+                    currentProjection: {id: "EPSG:4326-DG"},
+                    coordinatesEasting: {id: "easting", name: "", value: "9.983193111035327", errorMessage: ""}
                 };
 
                 actions.validateInput({state, commit, dispatch, getters}, state.coordinatesEasting);

@@ -155,7 +155,7 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             expect(wrapper.find("#supply-coord").exists()).to.be.false;
         });
         it("method selectionChanged sets currentProjection", () => {
-            const value = "EPSG:25832",
+            const value = "EPSG:31467",
                 event = {
                     target: {
                         value: value
@@ -165,9 +165,9 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
             wrapper.vm.selectionChanged(event);
             expect(store.state.Tools.CoordToolkit.currentProjection.name).to.be.equals(value);
-            expect(store.state.Tools.CoordToolkit.currentProjection.projName).to.be.equals("utm");
-            expect(store.state.Tools.CoordToolkit.coordinatesEasting.value).to.be.equals(0);
-            expect(store.state.Tools.CoordToolkit.coordinatesNorthing.value).to.be.equals(0);
+            expect(store.state.Tools.CoordToolkit.currentProjection.projName).to.be.equals("tmerc");
+            expect(store.state.Tools.CoordToolkit.coordinatesEasting.value).to.be.equals("0.00");
+            expect(store.state.Tools.CoordToolkit.coordinatesNorthing.value).to.be.equals("0.00");
         });
         it("createInteraction sets projections and adds interaction", () => {
             wrapper = shallowMount(CoordToolkitComponent, {store, localVue});

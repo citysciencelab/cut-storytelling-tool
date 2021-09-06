@@ -72,6 +72,7 @@
         "backgroundMaps": "Background maps",
         "subjectData": "Subject data",
         "subjectData3D": "3D data",
+        "subjectDataTime": "Time Series",
         "selectedTopics": "Selected topics",
         "removeSelection": "Remove selection",
         "infosAndLegend": "Information und explanations",
@@ -105,6 +106,10 @@
               "wrongStyleId": "No style object could be found with the specified StyleId: {{styleId}}. Please make sure that a style with the StyleId: {{styleId}} is configured in the Style.json used.",
               "sensor": {
                 "httpOnError": "<strong>Unexpected error occurred while loading sensor data of layer {{name}}</strong>"
+              },
+              "wms": {
+                "errorTimeLayer": "Error while retrieving information for the layer with the id {{id}}: {{error}}",
+                "invalidTimeLayer": "The configured layer with the id {{id}} does not contain the necessary values for a WMS-T."
               }
             }
           },
@@ -797,6 +802,22 @@
             "styleModel": {
                 "getGeometryTypeFromWFSFetchfailed": "The legend could not be created in the layer information!",
                 "getGeometryTypeFromWFSFetchfailedMessage": "Details: A required service is not responding."
+            }
+        },
+        "wmsTime": {
+            "layerSwiper": {
+                "description": "To move the swiper one can use the mouse or the arrow keys. When using the left and right arrow keys the layer is moved {{amount}}px to the respective side.",
+                "title": "Compare layers"
+            },
+            "timeSlider": {
+                "buttons": {
+                    "backward": "Move one step back",
+                    "deactivateLayerSwiper": "Remove layer",
+                    "forward": "Move one step forward",
+                    "layerSwiper": "Compare two points in time",
+                    "play": "Playback of all points in time of the layer, starting from the currently selected point in time."
+                },
+                "inputRangeLabel": "Choose a point in time"
             }
         },
         "legend": {

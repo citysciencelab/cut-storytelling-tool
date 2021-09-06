@@ -90,7 +90,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                 // For Single-Layer (ol.layer.Layer) with more layers (FNP, LAPRO, Geobasisdaten (farbig), etc.)
                 // For Example: {id: ["550","551","552",...,"559"], visible: false}
                 else if (Array.isArray(layerExtended.id) && typeof layerExtended.id[0] === "string") {
-                    objsFromRawList = getLayerList();
+                    objsFromRawList = this.getRawLayerList();
                     mergedObjsFromRawList = this.mergeObjectsByIds(layerExtended.id, objsFromRawList);
 
                     if (mergedObjsFromRawList === null) { // Wenn Layer nicht definiert, dann Abbruch
@@ -193,9 +193,13 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                     invertLayerOrder: folder.invertLayerOrder
                 });
                 // rekursiver Aufruf
-                this.parseTree(folder, folder.id, level + 1);
+                this.parseTree(folder, isBaseLayer ? parentId : folder.id, level + 1);
             });
         }
+    },
+
+    getRawLayerList: function () {
+        return getLayerList();
     },
 
     /**

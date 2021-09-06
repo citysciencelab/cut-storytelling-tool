@@ -235,10 +235,7 @@ async function CoordToolkitTests ({builder, url, resolution, config, capability}
                 codesLenth = extraOptionAdded ? epsgCodes.length + 1 : epsgCodes.length;
 
             // all configured systems exist
-            for (let epsgCode of epsgCodes) {
-                if (epsgCode === "EPSG:25832") {
-                    epsgCode = "http://www.opengis.net/gml/srs/epsg.xml#25832";
-                }
+            for (const epsgCode of epsgCodes) {
                 expect(await driver.findElement(By.xpath(`//select[@id='coordSystemField']//option[contains(.,'${epsgCode}')]`))).to.exist;
             }
             expect(await driver.findElements(By.xpath("//select[@id='coordSystemField']//option"))).to.have.length(codesLenth);
