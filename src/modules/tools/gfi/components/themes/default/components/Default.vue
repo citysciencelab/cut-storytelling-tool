@@ -315,6 +315,7 @@ export default {
                             :sta-object="value.staObject"
                             :options="value.options"
                             :chart-options="value.chartOptions"
+                            :download="value.download"
                         />
                     </td>
                     <td v-else>
