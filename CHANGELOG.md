@@ -24,8 +24,8 @@
 ### Changed
 - Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.
 - LayerInformation now shows message in case the MetaData couldn't be loaded
-- changed anchor from div to main class and footer from div to footer class
-- pulled footer out of elements on map and made it part of App.vue
+- Changed anchor div to main section and footer div to footer section
+- Pulled footer out of MapRegion and add it as seperate part to App.vue
 - Footer allows additionally to open vue tools besides backbone tools.
 - changed contrasts of elements in footer, filter and the mouse position widget for better accessability
 - Accessibility: Keyboard navigation for tools
