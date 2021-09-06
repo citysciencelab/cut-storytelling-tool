@@ -29,7 +29,7 @@ const state = {
     // defaults for config.json tool parameters
     name: "common:menu.tools.wfsSearch",
     glyphicon: "glyphicon-search",
-    renderToWindow: true,
+    renderToWindow: false,
     resizableWindow: true,
     isVisibleInMenu: true,
     deactivateGFI: true,
