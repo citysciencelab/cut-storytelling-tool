@@ -16,6 +16,7 @@
 ### Deprecated
 
 ### Removed
+- SensorThingsHttp: The option to use onprogress event when calling get or getInExtent is removed. The onprogress technic uses the addition "&$count=true" at the STA url to calculate the progress. This addition to the url slowes down the FROST server significantly and is therefore not longer supported.
 
 ### Fixed
 - Draw tool: fixed an issue (Bitbucket: #638) with resaving draw files

@@ -267,7 +267,7 @@ export class SensorThingsMqtt {
      * simulation of retained messages via http (no version checks here)
      * @param {String} rhPath the root path to use calling SensorThingsApi via http (e.g. https://example.com)
      * @param {String} topic the topic to simulate (e.g. v1.0/Things(614))
-     * @param {Object} httpClient a httpClient with httpClient.get(url, onsuccess, onstart, oncomplete, onerror, onprogress) to call the SensorThingsApi with
+     * @param {Object} httpClient a httpClient with httpClient.get(url, onsuccess, onstart, oncomplete, onerror) to call the SensorThingsApi with
      * @param {Function} [onerror] as function(error) - "a subscription error or an error that occurs when client is disconnecting" (see: https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169)
      * @returns {Void}  -
      */
