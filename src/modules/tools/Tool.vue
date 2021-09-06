@@ -272,9 +272,8 @@ export default {
 
 <style lang="less" scoped>
     @import "~variables";
-    @color_2: rgb(255, 255, 255);
-    @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
-    @font_family_2: "MasterPortalFont", sans-serif;
+    @color: rgb(255, 255, 255);
+    @font_family: "MasterPortalFont", sans-serif;
     @background_color_1: rgb(255, 255, 255);
     @background_color_2: #e10019;
     @background_color_3: #f2f2f2;
@@ -284,7 +283,7 @@ export default {
 
     .win-heading{
         border-bottom: 1px solid rgb(229, 229, 229);
-        font-family: @font_family_1;
+        font-family: @font_family_accent;
         display:flex;
         flex-direction:row;
         width:100%;
@@ -333,7 +332,7 @@ export default {
         padding:0;
         top: 20px;
         left: 20px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+        box-shadow: @tool_box_shadow;
         z-index: 999;
         min-width: 280px;
         width: var(--initialToolWidth);
@@ -355,10 +354,10 @@ export default {
             width:6px;
             height:6px;
         }
-        #basic-resize-handle-tl { top:0px; left:0px; }
-        #basic-resize-handle-tr { top:0px; right:0px;}
-        #basic-resize-handle-br { bottom:0px; right:0px;}
-        #basic-resize-handle-bl { bottom:0px; left:0px;}
+        #basic-resize-handle-tl { top: 0; left: 0; }
+        #basic-resize-handle-tr { top: 0; right: 0;}
+        #basic-resize-handle-br { bottom: 0; right: 0;}
+        #basic-resize-handle-bl { bottom: 0; left: 0;}
 
         &.is-minified {
             width:auto !important;
@@ -383,20 +382,20 @@ export default {
     }
 
     .table-tool-win-all-vue {
-        font-family: @font_family_2;
+        font-family: @font_family;
         border-radius: 12px;
         margin-bottom: 30px;
         .win-heading {
-            font-family: @font_family_2;
+            font-family: @font_family;
             font-size: 14px;
             background-color: @background_color_4;
             .heading-element {
                 > .title {
-                    color: @color_2;
+                    color: @color;
                     font-size: 14px;
                 }
-                > .buttons { color: @color_2; }
-                > .glyphicon { color: @color_2; }
+                > .buttons { color: @color; }
+                > .glyphicon { color: @color; }
             }
         }
         .win-body-vue {
@@ -450,7 +449,7 @@ export default {
             z-index: 1050;
             overflow-x: hidden;
             overflow-y: auto;
-            margin: 0%;
+            margin: 0;
         }
     }
 </style>

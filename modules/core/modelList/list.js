@@ -1,4 +1,5 @@
 import WMSLayer from "./layer/wms";
+import WmsTimeLayer from "./layer/wmsTime";
 import WMTSLayer from "./layer/wmts";
 import WFSLayer from "./layer/wfs";
 import StaticImageLayer from "./layer/staticImage";
@@ -176,6 +177,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     model: function (attrs, options) {
         if (attrs.type === "layer") {
             if (attrs.typ === "WMS") {
+                if (attrs.time) {
+                    return new WmsTimeLayer(attrs, options);
+                }
                 return new WMSLayer(attrs, options);
             }
             else if (attrs.typ === "WMTS") {

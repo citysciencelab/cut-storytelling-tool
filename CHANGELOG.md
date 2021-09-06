@@ -8,7 +8,36 @@
 
 ---
 
-##  Unreleased - in development
+## Unreleased - in development
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+- Draw tool: fixed an issue (Bitbucket: #638) with resaving draw files
+
+---
+##  v2.13.1 - 2021-09-03
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+- Downgrade the follow npm packages to fix the compass in 3D mode:
+ - css-loader from 4.3.0 to 1.0.0
+ - file-loader from 6.2.0 to 2.0.0
+
+---
+
+##  v2.13.0 - 2021-09-01
 ### Added
 - Autocomplete functionality for the contact tool.
 - A library for standard colors and barrier free colors "src/utils/colors.js" to use within javascript, with initial colors/colorsets: MP standard blue; MP standard red; Color Universal Design by "J*Fly data depository for Drosophila reserchers" (https://jfly.uni-koeln.de/color/ - 7 colors); three additional color sets "Hamburg blue scheme" (10 colors), "blue scheme plus" (10 colors) and "traffic light scheme" (7 colors) contributed by the IfBQ of Hamburg Town.
@@ -19,6 +48,7 @@
 - A flag "beautifyKeys" for gfi params to enable/disable the beautifyKeys function in default gfi theme.
 - A flag "showObjectKeys" for gfi params to display attribute keys and values of objects in default gfi theme.
 - Added a new type for filter attributeWhitelist "date", which uses a slider for a date range. Use "format" to specify date format and "attrNameUntil" for a different attribute to be the end date of your range.
+- Added the new layer type 'WMS-T' along with its manipulation functionalities 'TimeSlider' and 'LayerSwiper'.
 
 ### Changed
 - Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.
@@ -93,8 +123,6 @@
     zip-a-folder: 0.0.12 to version 1.1.0
 - changed class for several title elements on page from span to h1 and h2
 
-### Deprecated
-
 ### Removed
 - Remove the module cookie, because this is only used in an addon.
 
@@ -108,16 +136,13 @@
 - Coordinates tool: WGS 84(long/lat) coordinate system: there is no "E" at the end of the Latitude field.
 - When starting the 3D map, all tools that do not support 3D mode are closed.
 - 3D map: Tools that do not support 3D mode are no longer displayed in the footer.
+- Issue #637: Background maps in folder structure no longer overlay subject topics when background map is activated later. Occurred only with treetype custom.
+- Coordinates tool: Validation was corrected
+- Coordinates tool: EPSG code for coordinate system ETRS89/UTM 32N is shown correct in selectbox
+- Opening a tool by footer-link will close a visible tool in sidebar.
 ---
+
 ## v2.12.1 - 2021-08-12
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
 ### Fixed
 - Drawn content can be printed again.
 -	Footer allows additionally to open vue tools besides backbone tools

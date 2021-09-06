@@ -41,10 +41,9 @@ export default {
      * @returns {object} xml parsed as object
      */
     parseDataString: function (dataString) {
-        const xml = parse(dataString),
-            obj = this.parseXmlToObject(xml);
+        const xml = parse(dataString);
 
-        return obj;
+        return this.parseXmlToObject(xml);
     },
     /**
      * @desc parses an xml document to js
@@ -97,7 +96,7 @@ export default {
                 key = dat[0],
                 dataType = obj?.dataType ? obj.dataType : undefined,
                 value = obj?.value ? obj.value : obj;
-            let attributeString = "";
+            let attributeString;
 
             attributeString = this.setXMLElement(dataInputXmlTemplate, "</ows:Identifier>", key);
             attributeString = this.setXMLElement(attributeString, "</wps:LiteralData>", value, dataType);

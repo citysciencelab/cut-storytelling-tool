@@ -22,7 +22,6 @@ const WMSLayer = Layer.extend({
     },
 
     initialize: function () {
-
         this.checkForScale(Radio.request("MapView", "getOptions"));
 
         if (!this.get("isChildLayer")) {
@@ -40,14 +39,12 @@ const WMSLayer = Layer.extend({
     },
 
     /**
-     * [createLayerSource description]
-     * @return {void}
+     * Prepares the parameters for the layer source.
+     *
+     * @returns {object} An object containing the layer source parameters.
      */
-    createLayerSource: function () {
-        let params,
-            source;
-
-        params = {
+    prepareLayerSourceParams () {
+        const params = {
             CACHEID: this.get("cacheId"),
             LAYERS: this.get("layers"),
             FORMAT: this.get("format") === "nicht vorhanden" ? "image/png" : this.get("format"),
@@ -56,10 +53,21 @@ const WMSLayer = Layer.extend({
         };
 
         if (this.get("styles") && this.get("styles") !== "" && this.get("styles") !== "nicht vorhanden") {
-            params = Object.assign(params, {
-                STYLES: this.get("styles")
-            });
+            params.STYLES = this.get("styles");
         }
+        return params;
+    },
+
+    /**
+     * Creates the layer source for the WMS layer.
+     *
+     * @param {object} [prms] Parameter object for the layer source.
+     * @return {void}
+     */
+    createLayerSource: function (prms) {
+        const params = prms ? prms : this.prepareLayerSourceParams();
+        let source;
+
         this.set("tileloaderror", false);
 
         if (this.get("singleTile") !== true) {
@@ -70,7 +78,7 @@ const WMSLayer = Layer.extend({
                 url: this.get("url"),
                 attributions: this.get("olAttribution"),
                 gutter: this.get("gutter"),
-                params: params,
+                params,
                 tileGrid: new TileGrid({
                     resolutions: Radio.request("MapView", "getResolutions"),
                     origin: [
@@ -100,7 +108,7 @@ const WMSLayer = Layer.extend({
             this.setLayerSource(new ImageWMS({
                 url: this.get("url"),
                 attributions: this.get("olAttribution"),
-                params: params
+                params
             }));
         }
     },
@@ -314,7 +322,7 @@ const WMSLayer = Layer.extend({
      * @param {Object} value see doc/config.json.md for more information
      * @param {String} [value.name="_blank"] the browsing context or the target attribute to open the window (see https://developer.mozilla.org/en-US/docs/Web/API/Window/open)
      * @param {String} [value.specs=""] a comma-separated list of items - the setup to open the window with (see https://developer.mozilla.org/en-US/docs/Web/API/Window/open)
-     * @returns {Void}  -
+     * @returns {void}  -
      */
     setGfiAsNewWindow: function (value) {
         this.set("gfiAsNewWindow", value);
@@ -327,7 +335,6 @@ const WMSLayer = Layer.extend({
     getGfiAsNewWindow: function () {
         return this.get("gfiAsNewWindow");
     }
-
 });
 
 export default WMSLayer;

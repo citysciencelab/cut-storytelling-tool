@@ -315,8 +315,7 @@
             "name": "translate#common:menu.tools.searchByCoord",
             "glyphicon": "glyphicon-record"
           },
-          "selectFeatures":
-          {
+          "selectFeatures": {
             "name": "translate#common:menu.tools.selectFeatures"
           },
           "fileImport": {

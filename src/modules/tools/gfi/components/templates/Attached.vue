@@ -194,7 +194,7 @@ export default {
         font-weight: normal;
         line-height: 17px;
         color: #646262;
-        padding: 0px 15px;
+        padding: 0 15px;
         border-bottom: 1px solid #e5e5e5;
         button {
             font-size: 16px;
