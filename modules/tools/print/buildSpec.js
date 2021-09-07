@@ -543,7 +543,6 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @return {String} path or url to image directory
      */
     buildGraphicPath: function (src) {
-        debugger;
         const origin = window.location.origin;
         let url = Config.wfsImgPath + this.getImageName(src);
 
@@ -554,7 +553,6 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             url = origin + src;
         }
         else if (origin.indexOf("localhost") === -1) {
-            debugger;
             // backwards-compatibility:
             url = origin + "/lgv-config/img/" + this.getImageName(src);
         }
