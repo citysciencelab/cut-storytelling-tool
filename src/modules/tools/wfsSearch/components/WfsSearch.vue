@@ -132,6 +132,7 @@ export default {
                 <form
                     class="form-horizontal"
                     role="form"
+                    @submit.prevent="search"
                 >
                     <template
                         v-if="instances.length > 1"
@@ -197,15 +198,13 @@ export default {
                             </button>
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            <button
+                            <input
                                 id="tool-wfsSearch-button-search"
-                                type="button"
+                                type="submit"
                                 class="btn btn-lgv-grey col-md-12 col-sm-12"
                                 :disabled="requiredFields"
-                                @click="search"
+                                :value="$t('common:modules.tools.wfsSearch.searchButton')"
                             >
-                                {{ $t("common:modules.tools.wfsSearch.searchButton") }}
-                            </button>
                         </div>
                         <div
                             v-if="searched"

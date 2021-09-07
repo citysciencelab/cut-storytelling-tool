@@ -93,16 +93,17 @@ describe("src/modules/tools/wfsSearch/components/WfsSearch.vue", () => {
         expect(resetButton.exists()).to.be.true;
         expect(resetButton.text()).to.equal("common:modules.tools.wfsSearch.resetButton");
     });
-    it("renders a button to search", () => {
+    it("renders an input element of type submit to search", () => {
         store.commit("Tools/WfsSearch/setInstances", instances);
         const wrapper = mount(WfsSearch, {
                 localVue,
                 store
             }),
-            searchButton = wrapper.find("#tool-wfsSearch-button-search");
+            searchInput = wrapper.find("#tool-wfsSearch-button-search");
 
-        expect(searchButton.exists()).to.be.true;
-        expect(searchButton.text()).to.equal("common:modules.tools.wfsSearch.searchButton");
+        expect(searchInput.exists()).to.be.true;
+        expect(searchInput.element.value).to.equal("common:modules.tools.wfsSearch.searchButton");
+        expect(searchInput.element.type).to.equal("submit");
     });
     it("renders a clickable button to show the search results if the user searched and results were found", () => {
         store.commit("Tools/WfsSearch/setSearched", true);
