@@ -99,7 +99,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "hideLoadingModule": this.hideLoadingModule,
             "refreshTree": this.refreshTree,
             "showLoader": this.showLoader,
-            "refreshTree": this.refreshTree,
             "setUiStyle": this.setUiStyle
         }, this);
 

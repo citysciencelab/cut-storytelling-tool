@@ -101,25 +101,31 @@ function convertInitialLettersToUppercase (words = "", separator = " ") {
 
     return initString.substring(0, initString.length - 1);
 }
-
-
 /**
  * Special converting for urlParam 'transparency'. Parses strings to numbers.
  * @param  {Array} transparency containing strings to parse
- * @param  {Number[]} precision the decimal places.
  * @returns {Array} the parsed strings in an array
  */
-export function convertTransparency (transparency, precision) {
+export function convertTransparency (transparency) {
     if (transparency === null || transparency === "") {
         return "";
     }
     return transparency.split(",").map(val => {
-        const factor = Math.pow(10, isFinite(precision) ? precision : 0);
+        const factor = Math.pow(10, 0);
 
         return Math.round(val * factor) / factor;
     });
-
-
+}
+/**
+ * Special converting for a comma separated string.
+ * @param  {String} string containing comma separated values
+ * @returns {Array} the trimmed strings in an array
+ */
+export function convertToStringArray (string) {
+    if (string === null || string === "") {
+        return "";
+    }
+    return string.split(",").map(val =>val.trim());
 }
 /**
  * Converts a string to boolean or array.

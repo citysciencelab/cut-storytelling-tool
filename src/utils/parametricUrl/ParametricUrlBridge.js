@@ -1,7 +1,8 @@
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
-import {convert, convertTransparency, parseQuery} from "./converter";
+import {convert, convertToStringArray, convertTransparency, parseQuery} from "./converter";
 import {setValueToState} from "./stateModifier";
 import store from "../../app-store";
+import {MapMode} from "../../modules/map/store/enums";
 
 const toolsNotInState = ["compareFeatures", "parcelSearch", "print", "featureLister", "layerSlider", "filter", "shadow", "virtualcity", "wfst", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
 
@@ -82,7 +83,9 @@ export function translateToBackbone (urlParamsKey, urlParamsValue) {
  */
 export function doSpecialBackboneHandling (key, value) {
     if (key === "Map/mapMode") {
-        Radio.trigger("Map", "mapChangeTo3d");
+        if (value === MapMode.MODE_3D || String(value).toLowerCase() === "3d") {
+            Radio.trigger("Map", "mapChangeTo3d");
+        }
     }
     else if (key === "Map/mdId") {
         const layers = getLayersUsingMetaId(value);
@@ -178,7 +181,7 @@ function parseLayerParams (layerIdString, visibilityString = "", transparencyStr
         wrongIdsPositions = [],
         treeType = Radio.request("Parser", "getTreeType");
 
-    let layerIdList = convert(layerIdString),
+    let layerIdList = convertToStringArray(layerIdString),
         visibilityList = visibilityListBooleans,
         transparencyList = transparencyListNumbers;
 
@@ -204,11 +207,11 @@ function parseLayerParams (layerIdString, visibilityString = "", transparencyStr
         }, 500);
         return null;
     }
-    layerIdList.forEach((val, index) => {
-        const layerConfigured = Radio.request("Parser", "getItemByAttributes", {id: String(val)}),
-            layerExisting = getLayerWhere({id: String(val)}),
+    layerIdList.forEach((id, index) => {
+        const layerConfigured = Radio.request("Parser", "getItemByAttributes", {id: id}),
+            layerExisting = getLayerWhere({id: id}),
             optionsOfLayer = {
-                id: String(val),
+                id: id,
                 visibility: visibilityList[index]
             };
 
