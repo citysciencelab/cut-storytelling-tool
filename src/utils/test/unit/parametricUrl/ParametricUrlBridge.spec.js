@@ -2,6 +2,7 @@ import {expect} from "chai";
 import sinon from "sinon";
 import {doSpecialBackboneHandling, handleUrlParamsBeforeVueMount, translateToBackbone, updateQueryStringParam} from "../../../parametricUrl/ParametricUrlBridge";
 import store from "../../../../app-store";
+import {MapMode} from "../../../../modules/map/store/enums";
 
 
 describe("src/utils/parametricUrl/ParametricUrlBridge.js", () => {
@@ -142,7 +143,7 @@ describe("src/utils/parametricUrl/ParametricUrlBridge.js", () => {
             const radioTrigger = sinon.spy(Radio, "trigger"),
                 key = "Map/mapMode";
 
-            doSpecialBackboneHandling(key, "");
+            doSpecialBackboneHandling(key, MapMode.MODE_3D);
             expect(radioTrigger.calledOnceWithExactly("Map", "mapChangeTo3d")).to.be.true;
         });
         it("test url param key 'Map/mdId'", () => {
