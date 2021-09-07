@@ -74,9 +74,9 @@ export default {
                     v-for="([key, title], i) of Object.entries(tableHeads)"
                     :key="key + title + i"
                 >
-                    <p>
+                    <span>
                         {{ title }}
-                    </p>
+                    </span>
                 </th>
             </tr>
             <tr
