@@ -1313,12 +1313,6 @@
  */
 
 /**
- * @event Core#RadioRequestGetConfig
- * @example Radio.request("Util", "getConfig")
- * @description Request config path
- */
-
-/**
  * @event Core#RadioRequestUtilGetUiStyle
  * @description returns the ignoredKeys
  * @returns {string} - Style of the ui. Possible values are "DEFAULT" or "TABLE"
@@ -1399,12 +1393,6 @@
  * @example Radio.request("Util", "sort", type, values, first, second);
  */
 
-/**
- * @event Core#RadioRequestUtilGetConfig
- * @description Retrives the config data
- * @returns {Object} - config data
- * @example Radio.request("Util", "getConfig");
- */
 
 /**
  * @event Core#RadioRequestUtilConvertArrayOfObjectsToCsv

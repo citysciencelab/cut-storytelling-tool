@@ -10,7 +10,7 @@ const toolsNotInState = ["compareFeatures", "parcelSearch", "print", "featureLis
  * Sets url params to state, which are used before mount of vue-app.
  * @returns {void}
  */
-export function readUrlParamStyle () {
+export function readUrlParamEarly () {
     const params = new URLSearchParams(window.location.search);
 
     params.forEach(function (value, key) {
@@ -19,6 +19,11 @@ export function readUrlParamStyle () {
 
             if (valueUpperCase === "TABLE" || valueUpperCase === "SIMPLE") {
                 store.state.urlParams.uiStyle = valueUpperCase;
+            }
+        }
+        else if (key.toLowerCase() === "config" || key.toLowerCase() === "configjson") {
+            if (value.slice(-5) === ".json") {
+                store.state.urlParams.configJson = value;
             }
         }
     });

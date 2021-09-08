@@ -31,7 +31,7 @@ import StyleWMSView from "../modules/tools/styleWMS/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
 import {initiateVueI18Next} from "./vueI18Next";
-import {handleUrlParamsBeforeVueMount, readUrlParamStyle} from "../src/utils/parametricUrl/ParametricUrlBridge";
+import {handleUrlParamsBeforeVueMount, readUrlParamEarly} from "../src/utils/parametricUrl/ParametricUrlBridge";
 
 /**
  * WFSFeatureFilterView
@@ -108,7 +108,7 @@ async function loadApp () {
     store.commit("setConfigJs", Config);
 
     // must be done here, else it is done too late
-    readUrlParamStyle();
+    readUrlParamEarly();
 
     app = new Vue({
         el: "#masterportal-root",

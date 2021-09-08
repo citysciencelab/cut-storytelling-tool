@@ -880,7 +880,7 @@
           "alertZoomToGeometry": "The parameterized call of the portal has unfortunately gone wrong!<br>Please make sure that all parameters were entered correctly.",
           "alertWrongLayerIds": "<strong>The parameterized call is faulty!</strong>  </br>The <b>layerIds</b> at positions: {{wrongIdsPositionsConcat}} do not exist and are ignored!",
           "alertWrongAmountVisibility": "<strong>Parameterized call incorrect!</strong></br>The specifications for <b>layerIds</b> do not match <b>visibility</b> or <b>transparency</b>. They must be specified in the same number in each case.",
-          "errorLoadConfig": "The configuration file in the url could not be loaded under the following path: {{url}}"
+          "errorLoadConfig": "The requested configuration file could not be loaded under the following path: {{url}}<br>The URL paramater <strong>configJson</strong> requests a file with the extension \".json\".<br>An attempt is made to load the config.json under the default path."
         }
     },
     "snippets": {

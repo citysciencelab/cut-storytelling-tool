@@ -12,7 +12,6 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
      * @extends Backbone.Model
      * @memberof Core.ConfigLoader
      * @constructs
-     * @fires Core#RadioRequestUtilGetConfig
      * @fires Alerting#RadioTriggerAlertAlert
      * @description Loading and preperation for parsing (calls parser for default or custom tree) of the configuration file (config.json).
      * @param {*} attributes todo
@@ -21,7 +20,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     initialize: function (attributes, options) {
         const defaultConfigPath = this.get("defaultConfigPath");
 
-        this.url = this.getUrlPath(options.url, this.requestConfigFromUtil(), defaultConfigPath);
+        this.url = this.getUrlPath(options.url, store.state.urlParams.configJson, defaultConfigPath);
         this.fetchData();
     },
 
@@ -48,16 +47,6 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                 }
             }
         });
-    },
-
-    /**
-    * Request config path from util.
-    * This seperate helper method enables unit tests of the getUrlPath-method.
-    * @fires Util#RadioRequestGetConfig
-    * @return {string} relative path or absolute url to config file
-    */
-    requestConfigFromUtil: function () {
-        return Radio.request("Util", "getConfig");
     },
 
     /**

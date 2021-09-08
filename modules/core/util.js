@@ -30,7 +30,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @listens Core#RadioRequestUtilIsChrome
      * @listens Core#RadioRequestUtilIsInternetExplorer
      * @listens Core#RadioRequestUtilIsAny
-     * @listens Core#RadioRequestUtilGetConfig
      * @listens Core#RadioRequestUtilGetUiStyle
      * @listens Core#RadioRequestUtilGetIgnoredKeys
      * @listens Core#RadioRequestUtilSort
@@ -65,9 +64,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "isChrome": this.isChrome,
             "isInternetExplorer": this.isInternetExplorer,
             "isAny": this.isAny,
-            "getConfig": function () {
-                return this.get("config");
-            },
             "getUiStyle": function () {
                 return this.get("uiStyle");
             },
@@ -112,7 +108,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         });
 
         $(window).on("resize", this.toggleIsViewMobile.bind(this));
-        this.parseConfigFromURL();
     },
 
     /**
@@ -568,41 +563,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     },
 
     /**
-     * NOTICE: this can be done when porting to Vue via the src/utils/ParametricUrl/*.
-     * There this UrlParam is already processed and the result is written into the store.
-     * @fires Alerting#RadioTriggerAlertAlert
-     * @returns {void}
-     */
-    parseConfigFromURL: function () {
-        const query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
-            result = {};
-
-        let config;
-
-        query.split("&").forEach(function (keyValue) {
-            const item = keyValue.split("=");
-
-            result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
-        });
-
-        if (Object.prototype.hasOwnProperty.call(result, "CONFIG") || Object.prototype.hasOwnProperty.call(result, "CONFIGJSON")) {
-            config = result.CONFIG || result.CONFIGJSON;
-
-            if (config.slice(-5) === ".json") {
-                this.setConfig(config);
-            }
-            else {
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong>"
-                        + "<br> Der URL-Paramater <strong>Config</strong> verlangt eine Datei mit der Endung \".json\"."
-                        + "<br> Es wird versucht die config.json unter dem Standardpfad zu laden",
-                    kategorie: "alert-warning"
-                });
-            }
-        }
-    },
-
-    /**
      * converts an array of objects to csv
      * @param {object[]} data - array of object (no nested objects)
      * @param {string} colDeli - column delimiter
@@ -713,15 +673,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     uniqueId: function (prefix) {
         return uniqueId(prefix);
-    },
-
-    /**
-     * Setter for config
-     * @param {*} value todo
-     * @returns {void}
-     */
-    setConfig: function (value) {
-        this.set("config", value);
     },
 
     /**

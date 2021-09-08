@@ -10,8 +10,12 @@ export default function requestConfig (url) {
     return axios.get(decodeURIComponent(url))
         .then(response => response)
         .catch(error => {
-            console.error("Error occured during loading ", url, " to set config by url param.", error);
-            store.dispatch("Alerting/addSingleAlert", i18next.t("common:utils.parametricURL.errorLoadConfig", {url: url}), {root: true});
-            throw error;
+            const alertingMessage = {
+                category: i18next.t("common:modules.alerting.categories.warning"),
+                content: i18next.t("common:utils.parametricURL.errorLoadConfig", {url: url})
+            };
+
+            console.warn("Error occured during loading ", url, " to set config by url param.", error);
+            store.dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
         });
 }
