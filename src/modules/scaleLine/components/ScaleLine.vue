@@ -46,7 +46,6 @@ export default {
             border-right: 1px solid;
             display: inline-block;
             width: 2cm;
-            color: #333333;
         }
 
         .scale-as-a-ratio {

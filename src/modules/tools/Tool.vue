@@ -274,7 +274,6 @@ export default {
     @import "~/css/mixins.less";
     @color: rgb(255, 255, 255);
     @font_family: "MasterPortalFont", sans-serif;
-
     @background_color_1: rgb(255, 255, 255);
     @background_color_2: #e10019;
     @background_color_4: #646262;
