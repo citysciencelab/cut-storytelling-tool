@@ -17,8 +17,25 @@
 ### Deprecated
 
 ### Removed
+- SensorThingsHttp: The option to use onprogress event when calling get or getInExtent is removed. The onprogress technic uses the addition "&$count=true" at the STA url to calculate the progress. This addition to the url slowes down the FROST server significantly and is therefore not longer supported.
 
 ### Fixed
+- Draw tool: fixed an issue (Bitbucket: #638) with resaving draw files
+
+---
+##  v2.13.1 - 2021-09-03
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+- Downgrade the follow npm packages to fix the compass in 3D mode:
+ - css-loader from 4.3.0 to 1.0.0
+ - file-loader from 6.2.0 to 2.0.0
 
 ---
 
@@ -124,7 +141,6 @@
 - Coordinates tool: Validation was corrected
 - Coordinates tool: EPSG code for coordinate system ETRS89/UTM 32N is shown correct in selectbox
 - Opening a tool by footer-link will close a visible tool in sidebar.
-
 ---
 
 ## v2.12.1 - 2021-08-12

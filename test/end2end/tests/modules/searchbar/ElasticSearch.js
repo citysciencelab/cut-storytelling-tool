@@ -12,7 +12,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function ElasticSearch ({builder, url, resolution, capability}) {
-    describe("Elastic Search", function () {
+    describe.skip("Elastic Search", function () {
         const searchInputSelector = By.css("#searchInput"),
             searchString = "xys",
             layerName = "high performance area",

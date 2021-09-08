@@ -532,7 +532,17 @@ For more details, consider reading the [extensive SensorThings-API documentation
          "state" : "Zustand",
          "plug" : "Stecker",
          "type" : "Typ",
-         "dataStreamId" : "DataStreamID"
+         "dataStreamId" : "DataStreamID",
+         "@Datastreams.0": {
+            "name": "Datastreams.0",
+            "type": "linechart",
+            "query": "Observations?$filter=(resultTime gt now() sub duration'PT24H')&$orderby=phenomenonTime asc",
+            "format": "HH:mm",
+            "download": true,
+            "options": {
+             "pointRadius": 3
+            }
+         }
       },
       "mqttOptions" : {
           "host" : "https://localhost",
