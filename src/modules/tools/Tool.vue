@@ -279,7 +279,13 @@ export default {
     @background_color_2: #e10019;
     @background_color_4: #646262;
 
-    #vue-tool-content-body { display:block; }
+    #vue-tool-content-body {
+        display:block;
+
+        &:focus {
+            .primary_action_focus();
+        }
+    }
 
     .win-heading{
         border-bottom: 1px solid rgb(229, 229, 229);
@@ -287,6 +293,7 @@ export default {
         display:flex;
         flex-direction:row;
         width:100%;
+        height: 35px;
         padding-left: 10px;
 
         .heading-element {
@@ -310,9 +317,6 @@ export default {
                 padding: 8px 8px 8px 8px;
                 &:focus {
                     .primary_action_focus();
-                }
-                &:hover {
-                    .primary_action_hover();
                 }
             }
 
@@ -368,6 +372,9 @@ export default {
             #vue-tool-content-body { display:none; }
             .win-heading{
                 background-color:@background_color_2;
+                .glyphicon, .title {
+                    color: @color;
+                }
                 border-bottom:none;
                 overflow: hidden;
             }

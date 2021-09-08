@@ -124,15 +124,16 @@ export default {
                         >
                         {{ val }}
                     </label>
+                    <hr>
                     <button
-                        class="confirm"
+                        class="btn btn-primary"
                         tabindex="0"
                         @click="triggerTrack"
                     >
                         {{ $t("common:modules.controls.orientation.poiChoiceConfirmation") }}
                     </button>
                     <button
-                        class="stop"
+                        class="btn btn-default"
                         @click="stopPoi"
                     >
                         {{ $t("common:modules.controls.orientation.poiChoiceStop") }}
@@ -148,7 +149,6 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "~variables";
     @import "~/css/mixins.less";
 
     .poi-choice {

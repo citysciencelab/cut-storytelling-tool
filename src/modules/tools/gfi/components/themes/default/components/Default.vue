@@ -343,8 +343,8 @@ export default {
     }
 }
 .gfi-iFrame {
-        height: 450px;
-        resize: both;
+    height: 450px;
+    resize: both;
 }
 @media (min-width: 768px) {
     .gfi-iFrame {
@@ -375,10 +375,6 @@ export default {
     .glyphicon {
         font-size: 28px;
         padding: 0 2px;
-        &:hover {
-            cursor: pointer;
-            opacity: 0.5;
-        }
     }
 }
 .table {
