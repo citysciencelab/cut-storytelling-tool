@@ -305,6 +305,8 @@ export default {
 
 <style lang="less" scoped>
     @import "~variables";
+    @import "~/css/mixins.less";
+
     @background_color_1: rgb(0, 92, 169);
     @background_color_2: #f5f5f5;
     @background_color_3: #e6e6e6;
@@ -317,8 +319,14 @@ export default {
         width: 100%;
     }
     .remove-feature {
-        top: 0 !important;
-        left: 0;
+        top: 0px !important;
+        left: 0px;
+        &:focus {
+            .primary_action_focus();
+        }
+        &:hover {
+            .primary_action_hover();
+        }
     }
     table {
         font-family: @font_family_default;

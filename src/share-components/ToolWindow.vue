@@ -137,13 +137,12 @@ export default {
     }
 
     .tool-window-heading{
-        padding: 12px 10px 12px 10px;
+        padding: 5px 5px 5px 5px;
         border-bottom: 1px solid rgb(229, 229, 229);
         font-family: @font_family_1;
         display:flex;
         flex-direction:row;
         width:100%;
-
         .heading-element {
             white-space: nowrap;
             color: @color_1;
@@ -155,21 +154,28 @@ export default {
                 overflow: hidden;
             }
             .glyphicon {
+                padding: 5px;
                 &:focus {
                     .primary_action_focus();
+                }
+                &:hover {
+                    .primary_action_hover();
                 }
             }
 
             > span {
                 &.glyphicon-minus { top: 3px; }
                 &:hover {
-                    &:not(.win-icon) { opacity: 0.7; cursor: pointer;}
+                    &:not(.win-icon) {
+                        .primary_action_hover();
+                    }
                 }
             }
         }
     }
 
     .tool-window-heading-title {
+        padding-top: 7px;
         margin:0;
         overflow:hidden;
         white-space: nowrap;

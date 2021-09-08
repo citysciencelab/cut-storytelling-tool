@@ -7,8 +7,12 @@
 /*SimpleView*/
 .filter {
     .glyphicon-remove {
+        padding: 5px;
         &:focus {
             .primary_action_focus();
+        }
+        &:hover {
+            .primary_action_hover();
         }
     }
     .header {
@@ -34,6 +38,12 @@
     .simple-view {
         .btn-default {
             margin: 4px;
+            &:focus {
+                .primary_action_focus();
+            }  
+            &:hover {
+                .primary_action_hover();
+            }
         }
     }
     .btn-select {

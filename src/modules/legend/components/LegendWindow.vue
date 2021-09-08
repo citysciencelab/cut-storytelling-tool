@@ -828,15 +828,23 @@ export default {
             border-bottom: 2px solid #e7e7e7;
             cursor: move;
             .close-legend {
+                padding: 5px;
                 cursor: pointer;
                 &:focus {
                     .primary_action_focus();
                 }
-            };
+                &:hover {
+                    .primary_action_hover();
+                }
+            }
             .toggle-collapse-all {
+                padding: 5px;
                 cursor: pointer;
                 &:focus {
                     .primary_action_focus();
+                }
+                &:hover {
+                    .primary_action_hover();
                 }
             }
         }
@@ -880,11 +888,17 @@ export default {
                 &:focus {
                     .primary_action_focus();
                 }
-            };
+                &:hover {
+                    .primary_action_hover();
+                }
+            }
             .toggle-collapse-all {
                 cursor: pointer;
                 &:focus {
                     .primary_action_focus();
+                }
+                &:hover {
+                    .primary_action_hover();
                 }
             }
         }

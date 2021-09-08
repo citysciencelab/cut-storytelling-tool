@@ -135,8 +135,10 @@ export default {
         &:focus {
             .primary_action_focus();
         }
+        &:hover {
+            .primary_action_hover();
+        }
     }
-
  #table-navigation {
         &.table-nav-0deg, &.table-nav-0deg.ui-draggable {
             .freeze-view-close {

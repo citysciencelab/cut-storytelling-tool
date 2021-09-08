@@ -266,7 +266,7 @@ export default {
             .primary_action_focus();
         }
         &:hover {
-            background-color: #265d8a;
+            .primary_action_hover();
         }
     }
 

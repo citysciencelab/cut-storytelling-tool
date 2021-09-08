@@ -21,13 +21,18 @@
 		&:focus {
 			.primary_action_focus();
 		}
+		&:hover {
+			.primary_action_hover();
+		}
 	}
 	.btn-default {
 		background-color: @background_color_2;
 		transition: all .2s ease-in-out;
+		&:focus {
+			.primary_action_focus();
+		}
 		&:hover {
-			background-color: @background_color_1;
-			color: @color_1;
+			.primary_action_hover();
 		}
 	}
 	input[readonly] {
