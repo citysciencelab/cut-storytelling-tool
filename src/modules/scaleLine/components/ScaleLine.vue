@@ -31,16 +31,16 @@ export default {
 
 <style lang="less">
     @import "~variables";
-    @color_1: #777;
 
     #scales {
-        background: fade(@secondary, 70%);
+        background: fade(@secondary, 90%);
         display: inline-block;
         color: @secondary_contrast;
         text-align: center;
         font-size: 10px;
 
         .scale-line {
+            color: lighten(@secondary_contrast, 10%);
             border-bottom: 1px solid;
             border-left: 1px solid;
             border-right: 1px solid;

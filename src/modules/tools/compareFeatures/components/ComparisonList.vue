@@ -306,10 +306,8 @@ export default {
 <style lang="less" scoped>
     @import "~/css/mixins.less";
 
-    @background_color_1: rgb(0, 92, 169);
     @background_color_2: #f5f5f5;
     @background_color_3: #e6e6e6;
-    @background_color_4: #dfdfdf;
     @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
 
     #tool-compareFeatures {
@@ -332,6 +330,13 @@ export default {
         border-collapse: collapse;
         table-layout: fixed;
         width: 100%;
+        a {
+            color: darken(@secondary_focus, 10%);
+            padding: 2px;
+            &:hover{
+                .primary_action_hover();
+            }
+        }
         tr {
             &:first-child {
                 max-width: 25px !important;

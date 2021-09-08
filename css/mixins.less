@@ -1,4 +1,11 @@
-@import "./variables.less";
+/*
+ * This file contains less mixins.
+ *
+ * ⚠️ This file must not contain any css rules. It is imported in many places,
+ * and css rules in this file would result in a copy of all of the rules per import.
+ */
+
+ @import "./variables.less";
 
 /* focus styling for actions like menu-entries, buttons, icons, etc */
 .primary_action_focus {
