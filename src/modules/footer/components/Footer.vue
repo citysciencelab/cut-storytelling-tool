@@ -142,7 +142,7 @@ export default {
 
         display: flex;
         position: relative;
-        
+
         a {
             color: darken(@secondary_focus, 10%);
             &:hover{
