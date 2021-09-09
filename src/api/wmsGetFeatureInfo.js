@@ -1,6 +1,7 @@
 import WMSGetFeatureInfo from "ol/format/WMSGetFeatureInfo.js";
 import Feature from "ol/Feature";
 import axios from "axios";
+import handleAxiosResponse from "../utils/handleAxiosResponse.js";
 
 /**
  * handles the GetFeatureInfo request
@@ -10,7 +11,7 @@ import axios from "axios";
  */
 export function requestGfi (mimeType, url) {
     return axios.get(url)
-        .then(response => handleResponseAxios(response))
+        .then(response => handleAxiosResponse(response, "requestGfi"))
         .then(docString => {
             const parsedDocument = parseDocumentString(docString, mimeType);
 
@@ -32,31 +33,6 @@ export function requestGfi (mimeType, url) {
         .catch(error => {
             throw error;
         });
-}
-
-/**
- * returns the data from the axios response
- * @throws will throw an error if the response is not valid
- * @param {Object} response the response gotten by axios
- * @returns {Object} the received data or undefined if an error occured
- */
-export function handleResponseAxios (response) {
-    if (
-        response === null
-        || typeof response !== "object"
-        || !Object.prototype.hasOwnProperty.call(response, "status")
-        || !Object.prototype.hasOwnProperty.call(response, "statusText")
-        || !Object.prototype.hasOwnProperty.call(response, "data")
-    ) {
-        console.warn("requestGfi, handleResponseAxios: response", response);
-        throw Error("requestGfi, handleResponseAxios: the received response is not valid");
-    }
-    else if (response.status !== 200) {
-        console.warn("requestGfi, handleResponseAxios: response", response);
-        throw Error("requestGfi, handleResponseAxios: the received status code indicates an error");
-    }
-
-    return response.data;
 }
 
 /**
@@ -142,5 +118,3 @@ function parseEsriFeatures (doc) {
 
     return features;
 }
-
-export default {requestGfi, handleResponseAxios, parseDocumentString, parseFeatures};

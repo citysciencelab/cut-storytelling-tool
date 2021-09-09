@@ -10,6 +10,14 @@ export default {
         forceClickToClose: {
             type: Boolean,
             default: false
+        },
+        modalInnerWrapperStyle: {
+            type: String,
+            default: ""
+        },
+        modalContentContainerStyle: {
+            type: String,
+            default: ""
         }
     },
 
@@ -88,6 +96,7 @@ export default {
         >
             <div
                 id="modal-1-inner-wrapper"
+                :style="modalInnerWrapperStyle"
             >
                 <span
                     ref="discard"
@@ -104,6 +113,7 @@ export default {
                 </div>
                 <div
                     id="modal-1-content-container"
+                    :style="modalContentContainerStyle"
                 >
                     <slot />
                 </div>
@@ -145,7 +155,7 @@ export default {
         left:0;
         right:0;
         bottom:0;
-        z-index:1;
+        z-index:1000;
     }
     #modal-1-outer-wrapper {
         position:absolute;

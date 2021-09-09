@@ -15,7 +15,7 @@ styleguide
 .history
 
 addons/*
-!portal/analysetool/readme.txt
+!addons/readme.txt
 
 bowerupdate.log
 build

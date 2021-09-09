@@ -33,7 +33,6 @@
         "tools": {
             "name": "More tools",
             "compareFeatures": "Compare features",
-            "parcelSearch": "Parcel search",
             "print": "Print map",
             "measure": "Measure distance / area",
             "coordToolkit": "Coordinates",
@@ -41,6 +40,7 @@
             "supplyCoord": "Query coordinates",
             "searchByCoord": "Coordinate search",
             "fileImport": "Import file",
+            "routing": "Route planner",
             "draw": "Drawing / writing",
             "shadow": "Shadows",
             "styleWMS": "Style WMS",
@@ -55,7 +55,9 @@
             "selectFeatures": "Select features",
             "legend":"Legend",
             "styleVt": "Style VT",
-            "bufferAnalysis": "Buffer Analysis"
+            "bufferAnalysis": "Buffer Analysis",
+            "parcelSearch": "Parcel search",
+            "wfsSearch": "WFS search"
         },
         "contact": "Mail",
         "info": "Information"
@@ -655,18 +657,34 @@
             "scaleSwitcher": {
                 "label": "Scale"
             },
-          "bufferAnalysis": {
-            "sourceSelectLabel": "source layer",
-            "targetSelectLabel": "target layer",
-            "resultTypeLabel": "result type",
-            "overlapping": "inside radius",
-            "notOverlapping": "outside radius",
-            "rangeLabel": "radius (m)",
-            "clearButton": "Reset",
-            "saveButton": "Save",
-            "sourceLayerNotFound": "Der gespeicherte Quell-Layer mit der ID {{layerId}} wurde nicht gefunden.",
-            "targetLayerNotFound": "Der gespeicherte Ziel-Layer mit der ID {{layerId}} wurde nicht gefunden."
-          }
+            "bufferAnalysis": {
+              "sourceSelectLabel": "source layer",
+              "targetSelectLabel": "target layer",
+              "resultTypeLabel": "result type",
+              "overlapping": "inside radius",
+              "notOverlapping": "outside radius",
+              "rangeLabel": "radius (m)",
+              "clearButton": "Reset",
+              "saveButton": "Save",
+              "sourceLayerNotFound": "Der gespeicherte Quell-Layer mit der ID {{layerId}} wurde nicht gefunden.",
+              "targetLayerNotFound": "Der gespeicherte Ziel-Layer mit der ID {{layerId}} wurde nicht gefunden."
+            },
+            "wfsSearch": {
+                "noResults": "No results were found for your search criteria. Please try again.",
+                "optionsPlaceholder": "Please choose an option!",
+                "resetButton": "Reset",
+                "searchButton": "Search",
+                "resultListTitle": "Search results:",
+                "instancesSelectLabel": "Instance selection",
+                "showResults": "Show results",
+                "searchError": "Error while searching for the features: {{error}}.",
+                "userHelp": {
+                    "and": "and",
+                    "or": "or",
+                    "label": "Information regarding the results of the search",
+                    "text": "The results of the search will fulfill the conditions / clauses {{userHelp}}. <br /> *Mandatory field"
+                }
+            }
         },
         "controls": {
             "fullScreen": {
@@ -892,6 +910,15 @@
             "to":" to",
             "incorrectEntry": "Incorrect entry, please enter a whole number!",
             "outOfRangeErrorMessage": "The input value must be within the validity range {{minValueSlider}} and {{{maxValueSlider}}!"
+        }
+    },
+    "share-components": {
+        "list": {
+            "replace": {
+              "true": "yes",
+              "No": "no"
+            },
+            "zoomToResult": "Zoom to result"
         }
     }
 }

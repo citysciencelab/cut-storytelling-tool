@@ -56,7 +56,8 @@
             "selectFeatures": "Features auswählen",
             "legend":"Legende",
             "styleVt": "Style VT",
-            "bufferAnalysis": "Buffer Analyse"
+            "bufferAnalysis": "Buffer Analyse",
+            "wfsSearch": "WFS Suche"
         },
         "contact": "Kontakt",
         "info": "Informationen"
@@ -666,6 +667,22 @@
                 "saveButton": "Speichern",
                 "sourceLayerNotFound": "Der gespeicherte Quell-Layer mit der ID {{layerId}} wurde nicht gefunden.",
                 "targetLayerNotFound": "Der gespeicherte Ziel-Layer mit der ID {{layerId}} wurde nicht gefunden."
+            },
+            "wfsSearch": {
+                "noResults": "Es wurden keine Ergebnisse für Ihre Suchkriterien gefunden. Bitte versuchen Sie es erneut.",
+                "optionsPlaceholder": "Bitte wählen Sie eine Option aus!",
+                "resetButton": "Zurücksetzen",
+                "searchButton": "Suchen",
+                "resultListTitle": "Suchergebnisse:",
+                "instancesSelectLabel": "Instanzenauswahl",
+                "showResults": "Zeige Ergebnisse",
+                "searchError": "Fehler bei der Suche von Feature: {{error}}.",
+                "userHelp": {
+                    "and": "und",
+                    "or": "oder",
+                    "label": "Informationen bezüglich der Suchergebnisse",
+                    "text": "Die Ergebnisse der Suche werden die Bedingungen / Klauseln {{userHelp}} erfüllen. <br /> *Pflichtfeld"
+                }
             }
         },
         "controls": {
@@ -892,6 +909,15 @@
             "to":" bis",
             "incorrectEntry": "Fehlerhafte Eingabe, bitte eine ganze Zahl eingeben!",
             "outOfRangeErrorMessage": "Der Eingabewert muss innerhalb des Gültigkeitsbereiches {{minValueSlider}} und {{maxValueSlider}} liegen!"
+        }
+    },
+    "share-components": {
+        "list": {
+            "replace": {
+                "true": "ja",
+                "No": "nein"
+            },
+            "zoomToResult": "Zum Ergebnis zoomen"
         }
     }
 }
