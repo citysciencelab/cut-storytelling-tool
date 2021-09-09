@@ -793,7 +793,8 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "~variables";
+    @import "~/css/mixins.less";
+
     @color_1: #000000;
     @color_2: rgb(255, 255, 255);
     @font_family_2: "MasterPortalFont", sans-serif;
@@ -826,19 +827,23 @@ export default {
             border-bottom: 2px solid #e7e7e7;
             cursor: move;
             .close-legend {
+                padding: 5px;
                 cursor: pointer;
                 &:focus {
-                    outline: 3px solid @accent_focus;
-                    outline: 3px auto  Highlight;
-                    outline: 3px auto -webkit-focus-ring-color;
+                    .primary_action_focus();
                 }
-            };
+                &:hover {
+                    .primary_action_hover();
+                }
+            }
             .toggle-collapse-all {
+                padding: 5px;
                 cursor: pointer;
                 &:focus {
-                    outline: 3px solid @accent_focus;
-                    outline: 3px auto  Highlight;
-                    outline: 3px auto -webkit-focus-ring-color;
+                    .primary_action_focus();
+                }
+                &:hover {
+                    .primary_action_hover();
                 }
             }
         }
@@ -880,18 +885,21 @@ export default {
             .close-legend {
                 cursor: pointer;
                 &:focus {
-                    outline: 3px solid @accent_focus;
-                    outline: 3px auto  Highlight;
-                    outline: 3px auto -webkit-focus-ring-color;
+                    .primary_action_focus();
                 }
-            };
+                &:hover {
+                    .primary_action_hover();
+                }
+            }
             .toggle-collapse-all {
                 cursor: pointer;
                 &:focus {
-                    outline: 3px solid @accent_focus;
-                    outline: 3px auto  Highlight;
-                    outline: 3px auto -webkit-focus-ring-color;
-                }            }
+                    .primary_action_focus();
+                }
+                &:hover {
+                    .primary_action_hover();
+                }
+            }
         }
         .legend-content {
             border-bottom-left-radius: 12px;

@@ -124,15 +124,16 @@ export default {
                         >
                         {{ val }}
                     </label>
+                    <hr>
                     <button
-                        class="confirm"
+                        class="confirm btn btn-primary"
                         tabindex="0"
                         @click="triggerTrack"
                     >
                         {{ $t("common:modules.controls.orientation.poiChoiceConfirmation") }}
                     </button>
                     <button
-                        class="stop"
+                        class="stop btn btn-default"
                         @click="stopPoi"
                     >
                         {{ $t("common:modules.controls.orientation.poiChoiceStop") }}
@@ -148,7 +149,8 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "~variables";
+    @import "~/css/mixins.less";
+
     .poi-choice {
         color: rgb(85, 85, 85);
         font-size: 14px;
@@ -168,12 +170,13 @@ export default {
         .glyphicon-remove {
             font-size: 16px;
             float: right;
-            margin: 12px;
+            padding: 12px;
             cursor: pointer;
             &:focus {
-                outline: 3px solid @accent_focus;
-                outline: 3px auto  Highlight;
-                outline: 3px auto -webkit-focus-ring-color;
+                .primary_action_focus();
+            }
+            &:hover {
+                .primary_action_hover();
             }
         }
         .modal-dialog {

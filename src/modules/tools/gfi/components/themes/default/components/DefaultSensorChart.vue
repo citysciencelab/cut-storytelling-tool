@@ -46,12 +46,18 @@ export default {
             type: Object,
             required: false,
             default: null
+        },
+        download: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     data: () => {
         return {
             linechartData: null,
-            linechartDataOptions: {}
+            linechartDataOptions: {},
+            downloadUrl: false
         };
     },
     watch: {
@@ -59,6 +65,7 @@ export default {
             if (newVal) {
                 this.linechartData = null;
                 this.initChart();
+                this.initDownloadUrl();
             }
         }
     },
@@ -66,6 +73,7 @@ export default {
         if (this.staObject) {
             this.linechartData = null;
             this.initChart();
+            this.initDownloadUrl();
         }
     },
     methods: {
@@ -91,6 +99,12 @@ export default {
                 // onerror
                 console.error(error);
             });
+        },
+
+        initDownloadUrl () {
+            if (typeof this.download === "boolean" && this.download) {
+                this.downloadUrl = getQueryLink(this.staObject["@iot.selfLink"], this.query) + "&$resultFormat=CSV";
+            }
         }
     }
 };
@@ -98,14 +112,30 @@ export default {
 
 <template>
     <div>
-        <Linechart
-            v-if="linechartData"
-            :given-options="linechartDataOptions"
-            :data="linechartData"
-        />
+        <div>
+            <Linechart
+                v-if="linechartData"
+                :given-options="linechartDataOptions"
+                :data="linechartData"
+            />
+        </div>
+        <div
+            v-if="typeof downloadUrl === 'string'"
+            class="link"
+        >
+            <a
+                :href="downloadUrl"
+                class="btn btn-primary"
+            >
+                Download
+            </a>
+        </div>
     </div>
 </template>
 
-
 <style lang="less" scoped>
+    .link {
+        margin-top: 5px;
+        text-align: right;
+    }
 </style>

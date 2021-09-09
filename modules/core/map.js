@@ -172,11 +172,6 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             this.set("obliqueMap", new ObliqueMap({}));
         }
         Radio.trigger("ModelList", "addInitiallyNeededModels");
-
-        if (Radio.request("ParametricURL", "getZoomToExtent") !== undefined) {
-            this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"), {duration: 0}, Radio.request("ParametricURL", "getProjectionFromUrl"));
-        }
-
         Radio.trigger("Map", "isReady", "gfi", false);
 
         // potentially deprecated, replaced by drawend

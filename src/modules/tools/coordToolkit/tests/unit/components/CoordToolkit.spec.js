@@ -83,7 +83,7 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
                 copyToClipboard: sinon.spy()
             },
             getters: {
-                isDefaultStyle: () => true
+                uiStyle: () => ""
             },
             state: {
                 configJson: mockConfigJson

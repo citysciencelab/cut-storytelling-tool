@@ -75,6 +75,28 @@ const Config = {
         maximumScreenSpaceError: 2,
         fxaa: true
     },
+    featureViaURL: {
+        zoomTo: "42",
+        epsg: 25832,
+        layers: [
+            {
+                id: "42",
+                geometryType: "Point",
+                name: "Punkt Feature",
+                styleId: "location_eventlotse"
+            },
+            {
+                id: "4200",
+                geometryType: "LineString",
+                name: "Übergebene Linien Feature"
+            },
+            {
+                id: "4020",
+                geometryType: "Polygon",
+                name: "Übergebene Polygon Feature"
+            }
+        ]
+    },
     defaultToolId: "gfi",
     portalLanguage: {
         enabled: true,

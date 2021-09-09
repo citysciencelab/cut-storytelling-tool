@@ -33,7 +33,6 @@
         "tools": {
             "name": "More tools",
             "compareFeatures": "Compare features",
-            "parcelSearch": "Parcel search",
             "print": "Print map",
             "measure": "Measure distance / area",
             "coordToolkit": "Coordinates",
@@ -41,6 +40,7 @@
             "supplyCoord": "Query coordinates",
             "searchByCoord": "Coordinate search",
             "fileImport": "Import file",
+            "routing": "Route planner",
             "draw": "Drawing / writing",
             "shadow": "Shadows",
             "styleWMS": "Style WMS",
@@ -55,7 +55,9 @@
             "selectFeatures": "Select features",
             "legend":"Legend",
             "styleVt": "Style VT",
-            "bufferAnalysis": "Buffer Analysis"
+            "bufferAnalysis": "Buffer Analysis",
+            "parcelSearch": "Parcel search",
+            "wfsSearch": "WFS search"
         },
         "contact": "Mail",
         "info": "Information"
@@ -112,11 +114,6 @@
                 "invalidTimeLayer": "The configured layer with the id {{id}} does not contain the necessary values for a WMS-T."
               }
             }
-          },
-          "parametricURL": {
-            "alertZoomToGeometry": "The parameterized call of the portal has unfortunately gone wrong!<br>Please make sure that all parameters were entered correctly.",
-            "alertWrongLayerIds": "<strong>The parameterized call is faulty!</strong>  The LAYERIDS at positions: <b>{{wrongIdsPositionsConcat}}</b> do not exist and are ignored!",
-            "alertWrongInitValues": "<strong>Der parametrisierte Aufruf ist fehlerhaft!</strong> Die gespeicherten Parameter wurden verändert oder sind unvollständig!"
           }
         },
         "alerting": {
@@ -655,18 +652,34 @@
             "scaleSwitcher": {
                 "label": "Scale"
             },
-          "bufferAnalysis": {
-            "sourceSelectLabel": "source layer",
-            "targetSelectLabel": "target layer",
-            "resultTypeLabel": "result type",
-            "overlapping": "inside radius",
-            "notOverlapping": "outside radius",
-            "rangeLabel": "radius (m)",
-            "clearButton": "Reset",
-            "saveButton": "Save",
-            "sourceLayerNotFound": "Der gespeicherte Quell-Layer mit der ID {{layerId}} wurde nicht gefunden.",
-            "targetLayerNotFound": "Der gespeicherte Ziel-Layer mit der ID {{layerId}} wurde nicht gefunden."
-          }
+            "bufferAnalysis": {
+              "sourceSelectLabel": "source layer",
+              "targetSelectLabel": "target layer",
+              "resultTypeLabel": "result type",
+              "overlapping": "inside radius",
+              "notOverlapping": "outside radius",
+              "rangeLabel": "radius (m)",
+              "clearButton": "Reset",
+              "saveButton": "Save",
+              "sourceLayerNotFound": "Der gespeicherte Quell-Layer mit der ID {{layerId}} wurde nicht gefunden.",
+              "targetLayerNotFound": "Der gespeicherte Ziel-Layer mit der ID {{layerId}} wurde nicht gefunden."
+            },
+            "wfsSearch": {
+                "noResults": "No results were found for your search criteria. Please try again.",
+                "optionsPlaceholder": "Please choose an option!",
+                "resetButton": "Reset",
+                "searchButton": "Search",
+                "resultListTitle": "Search results:",
+                "instancesSelectLabel": "Instance selection",
+                "showResults": "Show results",
+                "searchError": "Error while searching for the features: {{error}}.",
+                "userHelp": {
+                    "and": "and",
+                    "or": "or",
+                    "label": "Information regarding the results of the search",
+                    "text": "The results of the search will fulfill the conditions / clauses {{userHelp}}. <br /> *Mandatory field"
+                }
+            }
         },
         "controls": {
             "fullScreen": {
@@ -862,6 +875,12 @@
             "fourthAdvent": "Fourth Of Advent",
             "christmasDay": "Christmas Day",
             "secondDayOfChristmas": "Second Day Of Christmas"
+        },
+        "parametricURL": {
+          "alertZoomToGeometry": "The parameterized call of the portal has unfortunately gone wrong!<br>Please make sure that all parameters were entered correctly.",
+          "alertWrongLayerIds": "<strong>The parameterized call is faulty!</strong>  </br>The <b>layerIds</b> at positions: {{wrongIdsPositionsConcat}} do not exist and are ignored!",
+          "alertWrongAmountVisibility": "<strong>Parameterized call incorrect!</strong></br>The specifications for <b>layerIds</b> do not match <b>visibility</b> or <b>transparency</b>. They must be specified in the same number in each case.",
+          "errorLoadConfig": "The requested configuration file could not be loaded under the following path: {{url}}<br>The URL paramater <strong>configJson</strong> requests a file with the extension \".json\".<br>An attempt is made to load the config.json under the default path."
         }
     },
     "snippets": {
@@ -892,6 +911,15 @@
             "to":" to",
             "incorrectEntry": "Incorrect entry, please enter a whole number!",
             "outOfRangeErrorMessage": "The input value must be within the validity range {{minValueSlider}} and {{{maxValueSlider}}!"
+        }
+    },
+    "share-components": {
+        "list": {
+            "replace": {
+              "true": "yes",
+              "No": "no"
+            },
+            "zoomToResult": "Zoom to result"
         }
     }
 }

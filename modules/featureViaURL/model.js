@@ -1,4 +1,6 @@
 import addGeoJSON from "../../src/utils/addGeoJSON.js";
+import store from "../../src/app-store";
+
 const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/{
     defaults: {
         layerIds: [],
@@ -36,7 +38,15 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
             "languageChanged": this.translate
         });
 
-        this.createLayers(config);
+        /**
+         * Calls the function createLayers.
+         * @returns {void}
+         */
+        const callback = () => {
+            this.createLayers(config);
+        };
+
+        Radio.once("ParametricURL", "ready", callback, this);
     },
     /**
      * Creates a basic GeoJSON structure and adds the features given by the user from the URL to it.
@@ -105,7 +115,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
                 coordLabel: this.get("coordLabel"),
                 typeLabel: this.get("typeLabel")
             },
-            urlLayers = Radio.request("ParametricURL", "getFeatureViaURL"),
+            urlLayers = store.state.urlParams?.featureViaURL ? JSON.parse(store.state.urlParams?.featureViaURL) : [],
             treeType = Radio.request("Parser", "getTreeType");
         let features,
             geoJSON,
