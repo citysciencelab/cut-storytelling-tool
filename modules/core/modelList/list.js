@@ -787,7 +787,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
                 if (hit) {
                     Object.assign(lightModel, hit);
-                    lightModel.isSelected = true;
+                    lightModel.isSelected = hit.visibility;
                 }
                 else {
                     lightModel.isSelected = false;

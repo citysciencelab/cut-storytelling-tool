@@ -7,26 +7,35 @@ import {MapMode} from "../../modules/map/store/enums";
 const toolsNotInState = ["compareFeatures", "parcelSearch", "print", "featureLister", "layerSlider", "filter", "shadow", "virtualcity", "wfst", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
 
 /**
+ * Checks the Config for 'allowParametricURL'.
+ * @return {boolean} true, if allowParametricURL is true or if it is missing
+ */
+function readFromUrlParams () {
+    return !Object.prototype.hasOwnProperty.call(Config, "allowParametricURL") || Config.allowParametricURL === true;
+}
+/**
  * Sets url params to state, which are used before mount of vue-app.
  * @returns {void}
  */
 export function readUrlParamEarly () {
-    const params = new URLSearchParams(window.location.search);
+    if (readFromUrlParams()) {
+        const params = new URLSearchParams(window.location.search);
 
-    params.forEach(function (value, key) {
-        if (key.toLowerCase() === "style" || key.toLowerCase() === "uistyle") {
-            const valueUpperCase = value.toUpperCase();
+        params.forEach(function (value, key) {
+            if (key.toLowerCase() === "style" || key.toLowerCase() === "uistyle") {
+                const valueUpperCase = value.toUpperCase();
 
-            if (valueUpperCase === "TABLE" || valueUpperCase === "SIMPLE") {
-                store.state.urlParams.uiStyle = valueUpperCase;
+                if (valueUpperCase === "TABLE" || valueUpperCase === "SIMPLE") {
+                    store.state.urlParams.uiStyle = valueUpperCase;
+                }
             }
-        }
-        else if (key.toLowerCase() === "config" || key.toLowerCase() === "configjson") {
-            if (value.slice(-5) === ".json") {
-                store.state.urlParams.configJson = value;
+            else if (key.toLowerCase() === "config" || key.toLowerCase() === "configjson") {
+                if (value.slice(-5) === ".json") {
+                    store.state.urlParams.configJson = value;
+                }
             }
-        }
-    });
+        });
+    }
 }
 /**
  * Sets url params to state, which are used before mount of vue-app.
@@ -34,28 +43,32 @@ export function readUrlParamEarly () {
  * @returns {void}
  */
 export function handleUrlParamsBeforeVueMount (query) {
-    const params = new URLSearchParams(query);
+    if (readFromUrlParams()) {
+        const params = new URLSearchParams(query);
 
-    params.forEach(function (value, key) {
-        if (key.toLowerCase() === "query" || key.toLowerCase() === "search/query") {
-            store.state.urlParams["Search/query"] = parseQuery(value);
-        }
-        else if (key.toLocaleLowerCase() === "map/layerids" || key.toLocaleLowerCase() === "layerids") {
-            const visibility = params.has("visibility") ? params.get("visibility") : "",
-                transparency = params.has("transparency") ? params.get("transparency") : "";
+        params.forEach(function (value, key) {
+            if (key.toLowerCase() === "query" || key.toLowerCase() === "search/query") {
+                store.state.urlParams["Search/query"] = parseQuery(value);
+            }
+            else if (key.toLocaleLowerCase() === "map/layerids" || key.toLocaleLowerCase() === "layerids") {
+                const visibility = params.has("visibility") ? params.get("visibility") : "",
+                    transparency = params.has("transparency") ? params.get("transparency") : "";
 
-            store.state.urlParams["Map/layerIds"] = parseLayerParams(value, visibility, transparency);
-        }
-    });
+                store.state.urlParams["Map/layerIds"] = parseLayerParams(value, visibility, transparency);
+            }
+        });
+    }
 }
 /**
  * Triggers at backbone Radio channel "ParametricURL": "ready".
  * @returns {void}
  */
 export function triggerParametricURLReady () {
-    const channel = Radio.channel("ParametricURL");
+    if (readFromUrlParams()) {
+        const channel = Radio.channel("ParametricURL");
 
-    channel.trigger("ready");
+        channel.trigger("ready");
+    }
 }
 /**
  * Returns key and value containing previous content to handle in backbone model.

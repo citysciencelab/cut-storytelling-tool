@@ -4,8 +4,6 @@
 
 Special URL parameters exist to change configuration details or execute initial actions on opening the Masterportal. The URL parameter list begins with a `"?"`, and individual parameters are separated with `"&"` characters. The Parameters are not case sensitive.
 
-?Map/layerIds=12883,12884,16101,453,20262&visibility=true,true,true,true,true&transparency=0,0,0,0,0&Map/center=[565453.3127271719,5928574.523833402]&Map/zoomLevel=0
-
 **Example: [https://geoportal-hamburg.de/Geoportal/geo-online/?Map/layerIds=453,1731,2426&visibility=true,true,false&transparency=0,40,0&Map/center=[565874,5934140]&Map/zoomlevel=2](https://geoportal-hamburg.de/Geoportal/geo-online/?Map/layerIds=453,1731,2426&visibility=true,true,false&transparency=0,40,0&Map/center=[565874,5934140]&Map/zoomlevel=2 "Example URL with parameters set")**
 
 ## Parameter list
@@ -36,7 +34,7 @@ MAPMARKER|Sets a marker to the given coordinate and zooms to it. If `PROJECTION`
 |MDID|_Deprecated in 3.0.0. Please use `"MAP/MDID"` instead._|`&mdid=6520CBEF-D2A6-11D5-88C8-000102DCCF41`|
 |MAP/MDID|Activates the layer with the given metadata id. Only usable in tree mode `"default"`.|`?Map/mdId=6E28E698-F4FA-4231-A8C5-CC44441FF2A7`|
 |PROJECTION|_Deprecated in 3.0.0. Please use `"MAP/PROJECTION"` instead._|`&projection=EPSG:4326`|
-|MAP/PROJECTION|Coordinate reference system EPSG code. `MAP/PROJECTION` affects other parameters, see `ZOOMTOEXTENT` and `MAPMARKER`.|`?Map/projection=EPSG:4326`|
+|MAP/PROJECTION|Coordinate reference system EPSG code. Only works when used in combination with `MAP/ZOOMTOEXTENT`, `MAP/CENTER` and `MAPMARKER`, the coordinates of the Parameters are transformed to the projection. If not set, projection of the map is used. Does not set the projection of the map. |`?Map/projection=EPSG:4326`|
 |QUERY|_Deprecated in 3.0.0. Please use `"SEARCH/QUERY"` instead._|`&query=Neuenfelder Straße,19`|
 |SEARCH/QUERY|Starts an address search via the search slot with any string given. House numbers must be given separated with a comma.|`?Search/query=Neuenfelder Straße,19`|
 |STARTUPMODUL|_Deprecated in major release 3.0.0. Please use the parameter `"TOOLS/[tool-id]/ACTIVE=TRUE"` instead_. |`?startupmodul=Draw`||
