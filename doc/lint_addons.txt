@@ -1,0 +1,254 @@
+
+/home/klaas/Projects/masterportal/addons/commuterFlows/components/CommuterFlows.vue
+  666:29  error  @mouseover, @mouseenter, or @hover must be accompanied by @focusin or @focus for accessibility  vuejs-accessibility/mouse-events-have-key-events
+  666:29  error  @mouseout or @mouseleave must be accompanied by @focusout or @blur for accessibility            vuejs-accessibility/mouse-events-have-key-events
+  694:29  error  @mouseover, @mouseenter, or @hover must be accompanied by @focusin or @focus for accessibility  vuejs-accessibility/mouse-events-have-key-events
+  694:29  error  @mouseout or @mouseleave must be accompanied by @focusout or @blur for accessibility            vuejs-accessibility/mouse-events-have-key-events
+
+/home/klaas/Projects/masterportal/addons/fileImportAddon/components/FileImportAddon.vue
+  143:21  error  @mouseover, @mouseenter, or @hover must be accompanied by @focusin or @focus for accessibility  vuejs-accessibility/mouse-events-have-key-events
+  143:21  error  @mouseout or @mouseleave must be accompanied by @focusout or @blur for accessibility            vuejs-accessibility/mouse-events-have-key-events
+  167:25  error  Form label must have an associated control                                                      vuejs-accessibility/label-has-for
+
+/home/klaas/Projects/masterportal/addons/gfiThemes/activeCityMaps/components/ActiveCityMaps.vue
+  60:21  error  <iframe> elements must have a unique title property  vuejs-accessibility/iframe-has-title
+
+/home/klaas/Projects/masterportal/addons/gfiThemes/dipas/components/Dipas.vue
+  95:13  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+
+/home/klaas/Projects/masterportal/addons/gfiThemes/reisezeiten/components/Reisezeiten.vue
+  185:13  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/addons/gfiThemes/schulinfo/components/favoriteIcons/TargetSchoolIcon.vue
+  39:5  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/addons/gfiThemes/trafficCount/components/TrafficCount.vue
+  433:13  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/addons/gfiThemes/trafficCount/components/TrafficCountDay.vue
+  257:17  error  Each form element must have a programmatically associated label element  vuejs-accessibility/form-control-has-label
+
+/home/klaas/Projects/masterportal/addons/gfiThemes/trafficCount/components/TrafficCountFooter.vue
+  406:9  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/addons/gfiThemes/trafficCount/components/TrafficCountWeek.vue
+  269:17  error  Each form element must have a programmatically associated label element  vuejs-accessibility/form-control-has-label
+
+/home/klaas/Projects/masterportal/addons/gfiThemes/trafficCount/components/TrafficCountYear.vue
+  270:17  error  Each form element must have a programmatically associated label element  vuejs-accessibility/form-control-has-label
+
+/home/klaas/Projects/masterportal/addons/populationRequest/components/PopulationRequest.vue
+  510:33  error  Form label must have an associated control                                                      vuejs-accessibility/label-has-for
+  510:33  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+  525:33  error  Form label must have an associated control                                                      vuejs-accessibility/label-has-for
+  525:33  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/addons/schoolRoutePlanning/components/SchoolRoutePlanning.vue
+  211:25  error  Each form element must have a programmatically associated label element  vuejs-accessibility/form-control-has-label
+  226:21  error  Form label must have an associated control                               vuejs-accessibility/label-has-for
+
+/home/klaas/Projects/masterportal/addons/schoolRoutePlanning/components/SchoolRoutePlanningAddressList.vue
+  33:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+  43:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/addons/schoolRoutePlanning/components/SchoolRoutePlanningSchools.vue
+  104:17  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  vuejs-accessibility/click-events-have-key-events
+
+/home/klaas/Projects/masterportal/addons/tacticalMark/components/TacticalMark.vue
+   610:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   616:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   627:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   633:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   644:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   650:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   661:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   667:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   678:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   684:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   695:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   701:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   712:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   718:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   729:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   735:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   746:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   752:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   763:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   769:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   780:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   786:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   797:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   803:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   814:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   820:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   831:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   837:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   848:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   854:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   865:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   871:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   882:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   888:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   899:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   905:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   916:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   922:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   933:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   939:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   950:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   956:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   967:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   973:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+   984:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+   990:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1001:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1007:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1018:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1024:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1035:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1041:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1052:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1058:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1069:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1075:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1086:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1092:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1103:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1109:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1120:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1126:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1137:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1143:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1154:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1160:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1171:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1177:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1188:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1194:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1205:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1211:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1222:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1228:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1239:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1245:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1256:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1262:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1273:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1279:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1290:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1296:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1307:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1313:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1328:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1334:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1345:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1351:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1362:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1368:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1379:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1385:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1396:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1402:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1413:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1419:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1430:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1436:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1447:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1453:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1464:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1470:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1481:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1487:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1498:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1504:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1515:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1521:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1532:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1538:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1549:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1555:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1566:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1572:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1583:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1589:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1600:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1606:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1617:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1623:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1634:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1640:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1651:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1657:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1668:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1674:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1685:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1691:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1702:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1708:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1719:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1725:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1736:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1742:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1753:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1759:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1770:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1776:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1787:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1793:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1804:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1810:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1821:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1827:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1838:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1844:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1855:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1861:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1872:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1878:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1889:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1895:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1906:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1912:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1923:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1929:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1940:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1946:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1957:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1963:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1974:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1980:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  1991:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  1997:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  2008:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  2014:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  2025:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  2031:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  2042:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  2048:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  2059:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  2065:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  2076:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  2082:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  2093:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  2099:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  2110:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  2116:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  2127:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  2133:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  2144:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  2150:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  2161:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  2167:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  2178:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  2184:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  2195:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  2201:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  2224:29  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  2230:37  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
+  2243:25  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  2256:25  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  2269:25  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener             vuejs-accessibility/click-events-have-key-events
+  2312:29  error  Form label must have an associated control                                                                 vuejs-accessibility/label-has-for
+
+✖ 219 problems (219 errors, 0 warnings)
+
