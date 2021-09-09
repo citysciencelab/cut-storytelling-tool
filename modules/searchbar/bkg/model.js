@@ -66,8 +66,8 @@ const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype
         if (config.score) {
             this.set("score", config.score);
         }
-        if (Radio.request("ParametricURL", "getInitString") !== undefined) {
-            this.directSearch(Radio.request("ParametricURL", "getInitString"));
+        if (store.state.urlParams && store.state.urlParams["Search/query"]) {
+            this.directSearch(store.state.urlParams["Search/query"]);
         }
 
         this.listenTo(Radio.channel("Searchbar"), {

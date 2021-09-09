@@ -1,5 +1,6 @@
 import "../model";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
+import store from "../../../src/app-store";
 
 const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
     defaults: {
@@ -44,8 +45,8 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
             this.setOsmServiceUrl(service.get("url"));
         }
 
-        if (Radio.request("ParametricURL", "getInitString") !== undefined) {
-            this.search(Radio.request("ParametricURL", "getInitString"));
+        if (store.state.urlParams && store.state.urlParams["Search/query"]) {
+            this.search(store.state.urlParams && store.state.urlParams["Search/query"]);
         }
         this.listenTo(Radio.channel("Searchbar"), {
             "searchAll": this.search

@@ -1313,12 +1313,6 @@
  */
 
 /**
- * @event Core#RadioRequestGetConfig
- * @example Radio.request("Util", "getConfig")
- * @description Request config path
- */
-
-/**
  * @event Core#RadioRequestUtilGetUiStyle
  * @description returns the ignoredKeys
  * @returns {string} - Style of the ui. Possible values are "DEFAULT" or "TABLE"
@@ -1399,12 +1393,6 @@
  * @example Radio.request("Util", "sort", type, values, first, second);
  */
 
-/**
- * @event Core#RadioRequestUtilGetConfig
- * @description Retrives the config data
- * @returns {Object} - config data
- * @example Radio.request("Util", "getConfig");
- */
 
 /**
  * @event Core#RadioRequestUtilConvertArrayOfObjectsToCsv
@@ -1866,98 +1854,6 @@
  * @description Hightlights a specific polygon
  */
 
-
-/** -------------------- ParametricURL -------------------- */
-
-/**
- * @event Core#RadioRequestParametricURLGetHighlightFeature
- * @returns {Object} featureToHighlight Feature to highlight
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetCenter
- * @description todo
- */
-
- /**
-  * @event Core#RadioRequestParametricURLGetFeatureViaURL
-  * @returns {Object[]} Returns the features given by the user via the URL.
-  */
-
-/**
- * @event Core#RadioRequestParametricURLGetProjectionFromUrl
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetZoomLevel
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetZoomToExtent
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetResult
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetLayerParams
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetIsInitOpen
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetInitString
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetZoomToGeometry
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetStyle
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetFilter
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetZoomToFeatureIds
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetBrwId
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetBrwLayerName
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetMarkerFromUrl
- * @description todo
- */
-
-/**
- * @event Core#RadioTriggerParametricURLUpdateQueryStringParam
- * @description todo
- */
 
 /**
  * @event Core#RadioTriggerParametricURLReady

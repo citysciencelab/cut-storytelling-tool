@@ -1,6 +1,5 @@
 import {Projection} from "ol/proj.js";
 import defaults from "masterportalAPI/src/defaults";
-import {transformToMapProjection} from "masterportalAPI/src/crs";
 import store from "../../src/app-store";
 
 const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
@@ -97,9 +96,6 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
         if (document.getElementById("map") !== null) {
             this.setBackgroundImage(document.getElementById("map").style.backgroundImage);
         }
-        this.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));
-        this.prepareStartCenter(Radio.request("ParametricURL", "getCenter"));
-        this.setStartZoomLevel(Radio.request("ParametricURL", "getZoomLevel"));
 
         // Listener für ol.View
         this.get("view").on("change:resolution", this.changedResolutionCallback.bind(this), this);
@@ -169,7 +165,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @returns {void}
      */
     resetView: function () {
-        const paramUrlCenter = Radio.request("ParametricURL", "getCenter"),
+        const paramUrlCenter = store.state.urlParams["Map/center"] ? store.state.urlParams["Map/center"] : null,
             settingsCenter = this.get("settings") !== undefined && this.get("settings")?.startCenter ? this.get("settings").startCenter : undefined,
             defaultCenter = defaults.startCenter,
             center = paramUrlCenter || settingsCenter || defaultCenter,
@@ -200,22 +196,6 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
         this.set("backgroundImage", value);
     },
 
-    /**
-     * @description todo
-     * @param {int} value todo
-     * @fires Core#RadioRequestMapGetMap
-     * @returns {void}
-     */
-    prepareStartCenter: function (value) {
-        let startCenter = value;
-
-        if (startCenter !== undefined) {
-            if (this.get("projectionFromParamUrl") !== undefined) {
-                startCenter = transformToMapProjection(Radio.request("Map", "getMap"), this.get("projectionFromParamUrl"), startCenter);
-            }
-            this.get("view").setCenter(startCenter);
-        }
-    },
 
     /**
      * @description todo
@@ -361,14 +341,6 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
         return this.get("view").calculateExtent(mapSize);
     },
 
-    /**
-     * @description Sets projection from param url
-     * @param {string} projection todo
-     * @returns {void}
-     */
-    setProjectionFromParamUrl: function (projection) {
-        this.set("projectionFromParamUrl", projection);
-    },
 
     /**
      * @description Sets projection from param url

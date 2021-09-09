@@ -7,7 +7,6 @@ import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
 import StyleList from "../modules/vectorStyle/list";
 import Preparser from "../modules/core/configLoader/preparser";
-import ParametricURL from "../modules/core/parametricURL";
 import Map from "../modules/core/map";
 import RemoteInterface from "../modules/remoteInterface/model";
 import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
@@ -32,6 +31,7 @@ import StyleWMSView from "../modules/tools/styleWMS/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
 import {initiateVueI18Next} from "./vueI18Next";
+import {handleUrlParamsBeforeVueMount, readUrlParamEarly} from "../src/utils/parametricUrl/ParametricUrlBridge";
 
 /**
  * WFSFeatureFilterView
@@ -107,6 +107,9 @@ async function loadApp () {
 
     store.commit("setConfigJs", Config);
 
+    // must be done here, else it is done too late
+    readUrlParamEarly();
+
     app = new Vue({
         el: "#masterportal-root",
         name: "VueApp",
@@ -119,15 +122,16 @@ async function loadApp () {
     // Core laden
     new Autostarter();
     new Util(utilConfig);
+    if (store.state.urlParams?.uiStyle) {
+        Radio.trigger("Util", "setUiStyle", store.state.urlParams?.uiStyle);
+    }
+
     // Pass null to create an empty Collection with options
     new RestReaderList(null, {url: Config.restConf});
     new Preparser(null, {url: Config.portalConf});
-
+    handleUrlParamsBeforeVueMount(window.location.search);
 
     new StyleList();
-    if (!Object.prototype.hasOwnProperty.call(Config, "allowParametricURL") || Config.allowParametricURL === true) {
-        new ParametricURL();
-    }
     new Map(Radio.request("Parser", "getPortalConfig").mapView);
     new WindowView();
 

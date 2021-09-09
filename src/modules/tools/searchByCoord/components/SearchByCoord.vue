@@ -56,7 +56,7 @@ export default {
         }
     },
     created () {
-        console.warn("The tool 'supplyCoord' is deprecated in 3.0.0. Please use 'coordToolkit' instead.");
+        console.warn("The tool 'searchByCoord' is deprecated in 3.0.0. Please use 'coordToolkit' instead.");
         this.$on("close", this.close);
         this.setExample();
     },
@@ -192,7 +192,7 @@ export default {
                     <div class="form-group form-group-sm">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <button
-                                class="btn btn-block"
+                                class="btn btn-primary btn-block"
                                 :disabled="getEastingError || getNorthingError || !coordinatesEasting.value || !coordinatesNorthing.value"
                                 type="button"
                                 @click="searchCoordinate(coordinatesEasting, coordinatesNorthing)"
@@ -215,7 +215,7 @@ export default {
     }
 }
 .error-text {
-    font-size: 85%;
+    font-size: 100%;
     color: #a94442;
 }
 .inputError {

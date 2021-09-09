@@ -2,6 +2,7 @@
  * See https://www.digitalocean.com/community/tutorials/vuejs-demistifying-vue-webpack
  */
 const webpack = require("webpack"),
+    path = require("path"),
     Vue = require("vue"),
     VueLoaderPlugin = require("vue-loader/lib/plugin");
 
@@ -25,7 +26,6 @@ module.exports = {
     // output: {
     //     devtoolModuleFilenameTemplate: "[absolute-resource-path]"
     // },
-
     devtool: "inline-cheap-module-source-map",
     output: {
         // use absolute paths in sourcemaps (important for debugging via IDE)
@@ -71,8 +71,8 @@ module.exports = {
             Backbone: "backbone",
             Radio: "backbone.radio",
             _: "underscore",
-            i18next: ["i18next/dist/cjs/i18next.js"]
-            // Config: path.resolve(__dirname, "../test/unittests/deps/testConfig"),
+            i18next: ["i18next/dist/cjs/i18next.js"],
+            Config: path.resolve(__dirname, "../test/unittests/deps/testConfig")
             // XMLSerializer: path.resolve(__dirname, "../test/unittests/deps/testXmlSerializer"),
             // fs: "fs",
             // requestAnimationFrame: "raf"

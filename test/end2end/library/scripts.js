@@ -274,7 +274,7 @@ function doesLayerWithFeaturesExist () {
             }
 
             // if no feature at coordinate or feature does not have matching set image, it's not the right feature
-            if (!feature || (image && feature.getStyle().getImage().iconImage_.src_ !== image)) {
+            if (!feature || (image && feature.getStyle() && feature.getStyle().getImage().iconImage_.src_ !== image)) {
                 return;
             }
         }
@@ -422,6 +422,30 @@ function isFullscreen () {
 function getCenter () {
     return Backbone.Radio.request("MapView", "getCenter");
 }
+/**
+ * @returns {ol/coordinate~Coordinate} the extent
+ */
+function getExtent () {
+    return Backbone.Radio.request("MapView", "getCurrentExtent");
+}
+/**
+ * @returns {Number} heading in 3D mode
+ */
+function get3DHeading () {
+    return Backbone.Radio.request("Map", "getMap3d").getCamera().getHeading();
+}
+/**
+ * @returns {Number} tilt in 3D mode
+ */
+function get3DTilt () {
+    return Backbone.Radio.request("Map", "getMap3d").getCamera().getTilt();
+}
+/**
+ * @returns {Number} altitude in 3D mode
+ */
+function get3DAltitude () {
+    return Backbone.Radio.request("Map", "getMap3d").getCamera().getAltitude();
+}
 
 /**
  * @returns {String} The scale of the map.
@@ -545,6 +569,9 @@ module.exports = {
     areAllLayersHidden,
     areRegExpsInMeasureLayer,
     areAllFeaturesOfLayerVisible,
+    get3DHeading,
+    get3DTilt,
+    get3DAltitude,
     getMarkerPointCoord,
     getMeasureLayersTexts,
     isFullscreen,
@@ -561,6 +588,7 @@ module.exports = {
     areLayersOrdered,
     doesLayerWithFeaturesExist,
     getCenter,
+    getExtent,
     getResolution,
     getScale,
     getTilt,
