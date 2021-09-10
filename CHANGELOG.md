@@ -21,6 +21,7 @@
 
 ### Fixed
 - Draw tool: fixed an issue (Bitbucket: #638) with resaving draw files
+- Print tool: Fixed an issue when printing a styled WFS layer with a `labelField` in its style. Before. this lead to the same label being printed for every feature.
 
 ---
 ##  v2.13.1 - 2021-09-03
