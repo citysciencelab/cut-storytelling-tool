@@ -2,7 +2,6 @@
 import Alerting from "./modules/alerting/components/Alerting.vue";
 import ConfirmAction from "./modules/confirmAction/components/ConfirmAction.vue";
 import ControlBar from "./modules/controls/ControlBar.vue";
-import Footer from "./modules/footer/components/Footer.vue";
 import LayerInformation from "./modules/layerInformation/components/LayerInformation.vue";
 import LegendWindow from "./modules/legend/components/LegendWindow.vue";
 import MapMarker from "./modules/mapMarker/components/MapMarker.vue";
@@ -16,7 +15,6 @@ export default {
         Alerting,
         ConfirmAction,
         ControlBar,
-        Footer,
         LayerInformation,
         LegendWindow,
         MapMarker,
@@ -60,7 +58,6 @@ export default {
                 <LayerInformation />
                 <ControlBar class="controls" />
                 <WmsTime />
-                <Footer />
                 <MapMarker />
             </div>
         </div>

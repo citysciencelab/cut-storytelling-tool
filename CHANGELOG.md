@@ -10,9 +10,11 @@
 
 ## Unreleased - in development
 ### Added
+- Embedded nav into header tag
 
 ### Changed
-
+- Changed anchor div to main section and footer div to footer section
+- Pulled footer out of MapRegion and add it as seperate part to App.vue
 ### Deprecated
 
 ### Removed
@@ -41,7 +43,6 @@
 ### Added
 - Autocomplete functionality for the contact tool.
 - A library for standard colors and barrier free colors "src/utils/colors.js" to use within javascript, with initial colors/colorsets: MP standard blue; MP standard red; Color Universal Design by "J*Fly data depository for Drosophila reserchers" (https://jfly.uni-koeln.de/color/ - 7 colors); three additional color sets "Hamburg blue scheme" (10 colors), "blue scheme plus" (10 colors) and "traffic light scheme" (7 colors) contributed by the IfBQ of Hamburg Town.
-- Embedded nav into header tag
 - Issue #631: Adds a tutorial to use the remote interface in an iFrame.
 - Added the possibility to configure the size of the iframe in GFI when using the gfiTheme `default` on a layer in config.json. Works only in conjunction with the `infoFormat: "text/html"`.
 - Added possibility in GFI theme Default to configure `max-width` in config.json.
@@ -54,8 +55,6 @@
 ### Changed
 - Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.
 - LayerInformation now shows message in case the MetaData couldn't be loaded
-- Changed anchor div to main section and footer div to footer section
-- Pulled footer out of MapRegion and add it as seperate part to App.vue
 - Footer allows additionally to open vue tools besides backbone tools.
 - changed contrasts of elements in footer, filter and the mouse position widget for better accessability
 - Accessibility: Keyboard navigation for tools
