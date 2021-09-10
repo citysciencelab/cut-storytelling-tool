@@ -412,22 +412,22 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                         clonedFeature.setGeometry(styleGeometryFunction(clonedFeature));
                         geometryType = styleGeometryFunction(clonedFeature).getType();
                     }
-                    stylingRules = this.getStylingRules(layer, clonedFeature, styleAttributes, style);
+                    stylingRules = this.getStylingRules(layer, clonedFeature, styleAttributes, style)
+                        .replaceAll(",", " AND ");
                     stylingRulesSplit = stylingRules
                         .replaceAll("[", "")
                         .replaceAll("]", "")
                         .replaceAll("*", "")
-                        .split(",")
+                        .split(" AND ")
                         .map(rule => rule.split("="));
 
-                    stylingRules = stylingRules.replaceAll(",", " AND ");
-
                     if (Array.isArray(stylingRulesSplit) && stylingRulesSplit.length) {
-                        stylingRulesSplit.forEach(rule => {
-                            if (Array.isArray(rule) && rule.length) {
-                                this.unsetStringPropertiesOfFeature(clonedFeature, rule[0]);
-                            }
-                        });
+                        this.unsetStringPropertiesOfFeature(clonedFeature,
+                            stylingRulesSplit.reduce((accumulator, current) => Array.isArray(current) && current.length
+                                ? [...accumulator, current[0]]
+                                : accumulator,
+                            [])
+                        );
                     }
                     this.addFeatureToGeoJsonList(clonedFeature, geojsonList);
 
@@ -468,14 +468,14 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     /**
      * Unsets all properties of type string of the given feature.
      * @param {ol.Feature} feature to unset properties of type string at
-     * @param {string} notToUnset key not to unset
+     * @param {string[]} notToUnset keys not to unset
      * @returns {void}
      */
     unsetStringPropertiesOfFeature: function (feature, notToUnset) {
         Object.keys(feature.getProperties()).forEach(key => {
             const prop = feature.getProperties()[key];
 
-            if (key !== notToUnset && typeof prop === "string") {
+            if (!notToUnset.includes(key) && typeof prop === "string") {
                 feature.unset(key, {silent: true});
             }
         });
@@ -664,7 +664,6 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
         if (fillStyle !== null) {
             this.buildFillStyle(fillStyle, obj);
-            this.buildStrokeStyle(fillStyle, obj);
         }
         if (strokeStyle !== null) {
             this.buildStrokeStyle(strokeStyle, obj);
@@ -817,7 +816,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
         // remove all object properties except geometry. Otherwise mapfish runs into an error
         Object.keys(clonedFeature.getProperties()).forEach(property => {
-            if (isObject(clonedFeature.get(property)) && clonedFeature.get(property) instanceof Geometry === false) {
+            if (isObject(clonedFeature.get(property)) && !(clonedFeature.get(property) instanceof Geometry)) {
                 clonedFeature.unset(property);
             }
         });
@@ -877,9 +876,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     getStylingRules: function (layer, feature, styleAttributes, style) {
         const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")});
         let styleAttr = feature.get("styleId") ? "styleId" : styleAttributes,
-            styleModel,
-            labelField,
-            labelValue;
+            styleModel;
 
         if (!Array.isArray(styleAttr)) {
             styleAttr = [styleAttr];
@@ -936,10 +933,10 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         if (layerModel !== undefined && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
             styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
 
-            if (styleModel !== undefined && styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
-                labelField = styleModel.get("labelField");
-                labelValue = feature.get(labelField);
-                return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}' AND ${labelField}='${labelValue}',`, "[").slice(0, -1)
+            if (styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
+                const labelField = styleModel.get("labelField");
+
+                return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}' AND ${labelField}='${feature.get(labelField)}',`, "[").slice(0, -1)
                     + "]";
             }
         }
