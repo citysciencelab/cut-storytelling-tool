@@ -1,6 +1,6 @@
 import {convertColor} from "../../../../utils/convertColor";
 import {getPrimaryColor, getColorUniversalDesign} from "../../../../utils/colors";
-import {SensorThingsHttp} from "../../../../../modules/core/modelList/layer/sensorThingsHttp.js";
+import {SensorThingsHttp} from "../../../../utils/sensorThingsHttp.js";
 import moment from "moment";
 
 /**

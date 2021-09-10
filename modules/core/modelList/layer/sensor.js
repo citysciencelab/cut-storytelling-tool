@@ -1,6 +1,6 @@
 import Layer from "./model";
-import {SensorThingsMqtt} from "./sensorThingsMqtt";
-import {SensorThingsHttp} from "./sensorThingsHttp";
+import {SensorThingsMqtt} from "../../../../src/utils/sensorThingsMqtt.js";
+import {SensorThingsHttp} from "../../../../src/utils/sensorThingsHttp.js";
 import moment from "moment";
 import "moment-timezone";
 import {Cluster, Vector as VectorSource} from "ol/source.js";
@@ -303,7 +303,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     aggregateDataStreamValue: function (feature) {
         const modifiedFeature = feature,
             dataStreamValues = [];
-
 
         if (feature && feature.get("dataStreamId")) {
             feature.get("dataStreamId").split(" | ").forEach((id, i) => {
@@ -979,7 +978,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     updateFromMqtt: function (thing) {
         const thingToUpdate = thing !== undefined ? thing : {},
             dataStreamId = String(thingToUpdate.dataStreamId),
-            features = this.get("layerSource").getFeatures(),
+            layerSource = this.get("layerSource"),
+            features = layerSource ? layerSource.getFeatures() : [],
             feature = this.getFeatureByDataStreamId(features, dataStreamId),
             result = thingToUpdate.result,
             timezone = this.get("timezone"),
@@ -997,7 +997,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {Void}  -
      */
     updateObservationForDatastreams: function (feature, dataStreamId, observation) {
-        if (!Array.isArray(feature.get("Datastreams"))) {
+        if (typeof feature?.get !== "function" || !Array.isArray(feature.get("Datastreams"))) {
             return;
         }
 
@@ -1018,6 +1018,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     liveUpdate: function (feature, dataStreamId, result, phenomenonTime) {
+        if (typeof feature?.get !== "function") {
+            return;
+        }
         const dataStreamIdIdx = feature.get("dataStreamId").split(" | ").indexOf(String(dataStreamId)),
             dataStreamNameArray = feature.get("dataStreamName").split(" | "),
             dataStreamName = Object.prototype.hasOwnProperty.call(dataStreamNameArray, dataStreamIdIdx) ? dataStreamNameArray[dataStreamIdIdx] : "",
