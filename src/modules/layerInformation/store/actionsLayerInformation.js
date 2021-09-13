@@ -105,7 +105,7 @@ const actions = {
          * useProxy
          * getProxyUrl()
          */
-        if (rootGetters.metadata.useProxy.includes(metaInfo.cswUrl)) {
+        if (rootGetters.metadata?.useProxy?.includes(metaInfo.cswUrl)) {
             metadata = await getRecordById(getProxyUrl(metaInfo.cswUrl), metaInfo.metaId);
         }
         else if (metaInfo.cswUrl !== null && typeof metaInfo.metaId !== "undefined") {
