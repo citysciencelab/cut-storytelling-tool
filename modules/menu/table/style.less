@@ -1,11 +1,11 @@
+@import "../../../css/variables.less";
+
 @color_1: #000;
 @color_2: #F2F2F2;
 @color_3: #808080;
 @color_4: #003063;
-@color_5: #f2f2f2;
 @font_family_1: "MasterPortalFont",sans-serif;
 @font_family_2: "MasterPortalFont", sans-serif;
-@background_color_1: #F2F2F2;
 @background_color_2: #fff;
 @background_color_3: #808080;
 @background_color_4: #ffffff;
@@ -45,7 +45,7 @@
     margin: 5px;
 }
 .table-nav-main {
-    background-color: @background_color_1;
+    background-color: @secondary_table_style;
     margin: 0px 5px;
     width: 480px;
     height: 50px;
@@ -74,7 +74,7 @@
         color: @color_1;
     }
     width: 40px;
-    background-color: @background_color_1;
+    background-color: @secondary_table_style;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
 }
 #table-category-list.table-category-active {
@@ -107,7 +107,7 @@ a {
     }
 }
 .table-tools {
-    background-color: @background_color_1;
+    background-color: @secondary_table_style;
     width: 40px;
     height: 40px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
@@ -122,14 +122,14 @@ a {
 }
 
 .table-categories {
-    background-color: @background_color_1;
+    background-color: @secondary_table_style;
     width: 40px;
     height: 40px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
     cursor: pointer;
 }
 .table-tools-menu {
-    background-color: @background_color_1;
+    background-color: @secondary_table_style;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
     width: 268px;
     display: none;
@@ -195,7 +195,7 @@ a {
 .table-nav-layers-panel {
     border-width: 0px;
     -webkit-box-shadow: none;
-    background-color: @background_color_1;
+    background-color: @secondary_table_style;
     border-radius: 12px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
     margin-bottom: 75px;
@@ -210,7 +210,7 @@ a {
     font-size: 17px;
     border-width: 0px;
     -webkit-box-shadow: none;
-    background-color: @background_color_1;
+    background-color: @secondary_table_style;
     border-radius: 12px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
     padding-left: 6px;
@@ -283,33 +283,27 @@ a {
     #table-nav-layers-panel-toggler {
         background-color: @background_color_3;
         border-radius: 12px;
-    }
-    .icon-cross1 {
-        &:before {
+        .icon-cross1:before {
             display: block;
             color: @color_2;
             top: 11px;
             left: 11px;
             font-size: 18px;
-            }
-        }
-}
-.table-layer-list>.icon-burgermenu_alt::before{
-    display: none;
+         }
+    }
 }
 .icon-burgermenu_alt.collapsed {
     #table-nav-layers-panel-toggler {
         background-color: @background_color_4;
+        .icon-cross1:before {
+                display: none;
+        }
     }
     &:before {
         color: @color_4;
         display: block;
     }
-    .icon-cross1 {
-        &:before {
-            display: none;
-        }
-    }
+
 }
 .burgermenu-layer-list {
     background-color: @background_color_5;
@@ -371,15 +365,17 @@ a {
         font-size: 14px;
         .glyphicon {
             font-size: x-large;
-            color: @color_3;
+            color: @secondary_icon_button;
             top: 8px;
         }
         .badge {
             font-size: 14px;
             padding-top: 6px;
+            background-color: #686868;
         }
         .remove-layer {
             color: #F2F2F2;
+            font-weight: bold;
             background-color: #808080;
             border-radius: 10px;
             padding: 6px 4px 4px 4px;
@@ -387,13 +383,16 @@ a {
             cursor: pointer;
         }
     }
-    .icon-info {
+    .glyphicon-info-sign {
         position: absolute;
+        font-size: 18px;
+        color: @secondary_icon_button;
+        top: 14px;
         right: 50px;
     }
     .glyphicon-cog {
-        font-size: 14px;
-        color: @color_3;
+        font-size: 18px;
+        color: @secondary_icon_button;
         top: 4px;
     }
     .layer-settings-activated {
@@ -419,7 +418,7 @@ a {
     display: block;
     width: 28px;
     height: 10px;
-    background-color: @background_color_1;
+    background-color: @secondary_table_style;
 }
 #right-funnel-corner {
     width: 10px;

@@ -219,12 +219,10 @@ export default {
         if (this.isActive) {
             this.setActive(true);
         }
-        this.activateByUrlParam();
         this.applyTranslationKey(this.name);
     },
     methods: {
         ...mapActions("Tools/VueAddon", [
-            "activateByUrlParam",
             "initialize"
         ]),
         ...mapMutations("Tools/VueAddon", Object.keys(mutations)),

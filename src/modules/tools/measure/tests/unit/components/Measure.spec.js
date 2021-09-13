@@ -47,8 +47,7 @@ describe("src/modules/tools/measure/components/Measure.vue", () => {
                 }
             },
             getters: {
-                isTableStyle: () => false,
-                isDefaultStyle: () => true
+                uiStyle: () => ""
             }
         });
 

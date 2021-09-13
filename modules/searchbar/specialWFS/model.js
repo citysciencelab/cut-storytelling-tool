@@ -1,4 +1,5 @@
 import "../model";
+import store from "../../../src/app-store";
 
 const SpecialWFSModel = Backbone.Model.extend({
     defaults: {
@@ -49,8 +50,8 @@ const SpecialWFSModel = Backbone.Model.extend({
         });
 
         // initiale Suche
-        if (Radio.request("ParametricURL", "getInitString") !== undefined) {
-            this.search(Radio.request("ParametricURL", "getInitString"));
+        if (store.state.urlParams && store.state.urlParams["Search/query"]) {
+            this.search(store.state.urlParams && store.state.urlParams["Search/query"]);
         }
     },
 

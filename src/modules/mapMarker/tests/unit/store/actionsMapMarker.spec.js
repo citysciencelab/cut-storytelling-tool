@@ -11,8 +11,7 @@ const {
     placingPointMarker,
     removePointMarker,
     placingPolygonMarker,
-    removePolygonMarker,
-    activateByUrlParam
+    removePolygonMarker
 } = actions;
 
 describe("src/modules/mapMarker/store/actionsMapMarker.js", () => {
@@ -96,25 +95,4 @@ describe("src/modules/mapMarker/store/actionsMapMarker.js", () => {
         });
     });
 
-    describe("activateByUrlParam", () => {
-        it("activateByUrlParam marker=565874,5934140", done => {
-            const rootState = {
-                queryParams: {
-                    "marker": "565874,5934140"
-                }
-            };
-
-            testAction(activateByUrlParam, null, {}, rootState, [
-                {type: "placingPointMarker", payload: [565874, 5934140], dispatch: true}
-            ], {}, done);
-        });
-        it("activateByUrlParam no marker", done => {
-            const rootState = {
-                queryParams: {
-                }
-            };
-
-            testAction(activateByUrlParam, null, {}, rootState, [], {}, done);
-        });
-    });
 });

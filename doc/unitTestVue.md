@@ -207,7 +207,7 @@ Note the use of the `testAction` function imported from `test/unittests/VueTestU
 import testAction from "../../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../store/actionsScaleSwitcher";
 
-const {setActive, activateByUrlParam} = actions;
+const {setActive} = actions;
 
 describe("src/modules/tools/scaleSwitcher/store/actionsScaleSwitcher.js", () => {
     describe("setActive", () => {

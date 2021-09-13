@@ -66,10 +66,9 @@ export default {
         this.removePointMarker();
     },
     methods: {
-        ...mapMutations("Map", ["setCenter"]),
         ...mapMutations("Tools/Gfi", ["setShowMarker"]),
         ...mapActions("MapMarker", ["removePointMarker", "placingPointMarker"]),
-        ...mapActions("Map", ["highlightFeature", "removeHighlightFeature"]),
+        ...mapActions("Map", ["highlightFeature", "removeHighlightFeature", "setCenter"]),
         close () {
             this.$emit("close");
         },

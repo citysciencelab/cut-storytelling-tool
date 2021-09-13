@@ -4,7 +4,7 @@ import Template from "text-loader!./templates/templateSingleLayer.html";
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {
         "click .icon-checkbox, .icon-checkbox2, .title": "toggleIsSelected",
-        "click .icon-info": "showLayerInformation",
+        "click .glyphicon-info-sign": "showLayerInformation",
         "click .glyphicon-cog": "toggleIsSettingVisible",
         "click .arrows > .glyphicon-arrow-up": "moveModelUp",
         "click .arrows > .glyphicon-arrow-down": "moveModelDown",
