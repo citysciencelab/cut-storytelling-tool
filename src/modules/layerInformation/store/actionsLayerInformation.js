@@ -113,7 +113,7 @@ const actions = {
         }
         // use default csw_url from rest-services.json if csw_url not stated in the specific service
         else if (Config.cswId !== null && typeof Config.cswId !== "undefined") {
-            let service = Radio.request("RestReader", "getServiceById", Config.cswId);
+            const service = Radio.request("RestReader", "getServiceById", Config.cswId);
             let metaURL = "";
             if (service === undefined) {
                 console.warn("Rest Service with the ID " + Config.cswId + " is not configured in rest-services.json!");
@@ -122,7 +122,7 @@ const actions = {
                 metaURL = service.get("url");
             }
 
-            if (metaURL !== "" &&typeof metaInfo.metaId !== "undefined") {
+            if (metaURL !== "" && typeof metaInfo.metaId !== "undefined") {
                 metadata = await getRecordById(metaURL, metaInfo.metaId);
             }
         }
