@@ -44,7 +44,7 @@
           "id": "_source.id",
           "source": "_source"
         },
-        "hitType": "Fachthema",
+        "hitType": "common:modules.searchbar.type.subject",
         "hitGlyphicon": "glyphicon-list"
       },
       "visibleVector": {
