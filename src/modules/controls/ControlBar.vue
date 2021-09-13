@@ -38,7 +38,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(["controlsConfig", "mobile", "isSimpleStyle"]),
+        ...mapGetters(["controlsConfig", "mobile", "uiStyle"]),
         ...mapGetters("controls", ["componentMap", "mobileHiddenControls", "bottomControls"]),
         /** @returns {Object} contains controls to-be-rendered sorted by placement */
         categorizedControls () {
@@ -91,6 +91,9 @@ export default {
          */
         hiddenMobile (componentName) {
             return this.mobileHiddenControls.includes(componentName);
+        },
+        isSimpleStyle () {
+            return this.uiStyle === "SIMPLE";
         }
     }
 };
@@ -98,7 +101,7 @@ export default {
 
 <template>
     <ul
-        v-if="!isSimpleStyle"
+        v-if="!isSimpleStyle()"
         class="right-bar"
     >
         <template v-for="({categoryName, className}, categoryIndex) in categories">

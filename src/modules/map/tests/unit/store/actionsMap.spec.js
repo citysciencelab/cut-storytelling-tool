@@ -125,4 +125,74 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
             expect(commit.args[1]).to.include.members(["setClickPixel"]);
         });
     });
+
+    describe("setCenter", () => {
+        let commit,
+            setCenter,
+            state,
+            warn;
+
+        beforeEach(() => {
+            commit = sinon.spy();
+            setCenter = sinon.spy();
+            state = {
+                map: {
+                    getView: () => ({setCenter})
+                }
+            };
+            warn = sinon.spy();
+            sinon.stub(console, "warn").callsFake(warn);
+        });
+        afterEach(sinon.restore);
+
+        /**
+         * This helper function is called for the test cases in which
+         * the given input for setCenter ist no valid.
+         *
+         * @returns {void}
+         */
+        function expectMutationNotCalled () {
+            expect(commit.notCalled).to.be.true;
+            expect(setCenter.notCalled).to.be.true;
+            expect(warn.calledOnce).to.be.true;
+            expect(warn.firstCall.args).to.eql(["Center was not set. Probably there is a data type error. The format of the coordinate must be an array with two numbers."]);
+        }
+
+        it("should set the center if the coordinates are given as an array of length two with two numbers", () => {
+            const coords = [3, 5];
+
+            actions.setCenter({state, commit}, coords);
+
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setCenter", coords]);
+            expect(setCenter.calledOnce).to.be.true;
+            expect(setCenter.firstCall.args).to.eql([coords]);
+            expect(warn.notCalled).to.be.true;
+        });
+        it("should not set the center, if the coordinate (['3', 5]) has the wrong data type", () => {
+            actions.setCenter(state, ["3", 5]);
+
+            expectMutationNotCalled();
+        });
+        it("should not set the center, if the coordinate ([3, '5']) has the wrong data type", () => {
+            actions.setCenter(state, [3, "5"]);
+
+            expectMutationNotCalled();
+        });
+        it("should not set the center, if the coordinate is not an array", () => {
+            actions.setCenter(state, {3: "5"});
+
+            expectMutationNotCalled();
+        });
+        it("should not set the center, if the length of the coordinate is greater than two", () => {
+            actions.setCenter(state, [0, 3, 3]);
+
+            expectMutationNotCalled();
+        });
+        it("should not set the center, if the length of the coordinate is lower than two", () => {
+            actions.setCenter(state, [8]);
+
+            expectMutationNotCalled();
+        });
+    });
 });

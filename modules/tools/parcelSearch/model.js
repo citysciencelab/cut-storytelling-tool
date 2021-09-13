@@ -85,6 +85,7 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
      * @fires Core#RadioTriggerMapRegisterListener
      */
     initialize: function () {
+        console.warn("The tool 'parcelSearch' is deprecated in 3.0.0. Please use 'wfsSearch' instead.");
         this.superInitialize();
         this.changeLang(i18next.language);
 

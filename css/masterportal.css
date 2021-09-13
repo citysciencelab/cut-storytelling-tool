@@ -252,6 +252,26 @@ label {
     margin-top: 5%;
 }
 
+/* we need to increase the color of placeholder because of accessibilty reasons (contrast) */
+::placeholder {
+    color:#767676 !important;
+    opacity: 1 !important;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #767676 !important;
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #767676 !important;
+}
+.bs-placeholder, 
+.bs-placeholder:hover, 
+.bs-placeholder:focus, 
+.bs-placeholder:active {
+    color: #767676 !important;
+    opacity: 1 !important;
+}
+
+
 /* only for firefox */
 @-moz-document url-prefix() { 
     .form-group-sm .form-control{

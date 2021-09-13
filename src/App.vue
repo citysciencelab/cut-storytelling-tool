@@ -1,9 +1,10 @@
 <script>
+import {mapMutations} from "vuex";
 import MainNav from "./MainNav.vue";
 import MapRegion from "./MapRegion.vue";
-// import MapModuleDebug from "./modules/map/components/MapModuleDebug.vue";
 import isDevMode from "./utils/isDevMode";
 import Footer from "./modules/footer/components/Footer.vue";
+import {checkIsURLQueryValid} from "./utils/parametricUrl/stateModifier";
 
 export default {
     name: "App",
@@ -13,7 +14,24 @@ export default {
         Footer
         // ,MapModuleDebug
     },
-    data: () => ({isDevMode})
+    data: () => ({isDevMode}),
+    created () {
+        this.$nextTick(() => {
+            if (this.readFromUrlParams() && checkIsURLQueryValid(window.location.search)) {
+                this.setUrlParams(new URLSearchParams(window.location.search));
+            }
+        });
+    },
+    methods: {
+        ...mapMutations(["setUrlParams"]),
+        /**
+        * Checks the Config for 'allowParametricURL'.
+        * @return {boolean} true, if allowParametricURL is true or if it is missing
+        */
+        readFromUrlParams: function () {
+            return !Object.prototype.hasOwnProperty.call(Config, "allowParametricURL") || Config.allowParametricURL === true;
+        }
+    }
 };
 </script>
 
@@ -22,14 +40,12 @@ export default {
         id="masterportal-container"
         class="masterportal-container"
     >
-        <!-- layout at its heart is two elements - navigation bar and map with elements on it -->
         <MainNav />
         <MapRegion class="map-region" />
         <Footer />
         <!-- <MapModuleDebug v-if="isDevMode" /> -->
+        <!-- keep loader last so it's above it all
 
-        <!-- keep loader last so it's above it all -->
-        <!--
             NOTE currently doesn't work in all browser since vue renders too late;
             after everything goes through vue, this should be usable again
             <Loader />

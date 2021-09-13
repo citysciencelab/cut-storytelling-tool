@@ -288,8 +288,7 @@ export default {
                 <div class="col-md-12 col-sm-12 form-group form-group-sm">
                     <button
                         id="tool-bufferAnalysis-resetButton"
-                        class="pull-right btn btn-block"
-                        :class="!selectedSourceLayer ? 'btn-lgv-grey' : 'btn-primary'"
+                        class="pull-right btn btn-block btn-lgv-grey"
                         :disabled="!selectedSourceLayer"
                         @click="resetModule"
                     >
@@ -300,8 +299,7 @@ export default {
                 <div class="col-md-12 col-sm-12 form-group form-group-sm">
                     <button
                         id="tool-bufferAnalysis-saveButton"
-                        class="pull-right btn btn-block"
-                        :class="!selectedSourceLayer || !selectedTargetLayer || !bufferRadius ? 'btn-lgv-grey' : 'btn-primary'"
+                        class="pull-right btn btn-block btn-primary"
                         :disabled="!selectedSourceLayer || !selectedTargetLayer || !bufferRadius"
                         @click="buildUrlFromToolState"
                     >

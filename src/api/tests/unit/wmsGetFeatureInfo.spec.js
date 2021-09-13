@@ -1,12 +1,13 @@
 import {expect} from "chai";
-import {handleResponseAxios, parseDocumentString, parseFeatures} from "../../wmsGetFeatureInfo.js";
+import {parseDocumentString, parseFeatures} from "../../wmsGetFeatureInfo.js";
+import handleAxiosResponse from "../../../utils/handleAxiosResponse.js";
 
 describe("src/api/wmsGetFeatureInfo.js", () => {
-    describe("handleResponseAxios", () => {
+    describe("handleAxiosResponse", () => {
         const testFunctions = {
             getResponse: response => {
                 try {
-                    return handleResponseAxios(response);
+                    return handleAxiosResponse(response);
                 }
                 catch (err) {
                     return err;

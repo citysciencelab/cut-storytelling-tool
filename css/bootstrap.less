@@ -6,7 +6,7 @@
  */
 
 // Variable file; see details there
-@import "./variables.less";
+@import "./mixins.less";
 
 // Reset and dependencies
 @import "../node_modules/bootstrap/less/normalize.less";
@@ -54,3 +54,23 @@
 // Utility classes
 @import "../node_modules/bootstrap/less/utilities.less";
 @import "../node_modules/bootstrap/less/responsive-utilities.less";
+
+
+// we need to overwrite the bootstrap nav styles to be conform with accessibility (contrast ratio)
+.navtabs > li > a {
+    color: darken(@secondary_focus, 10%) !important;
+    &:hover{
+        .primary_action_hover();
+    }
+}
+.nav > li.active > a {
+    color: black !important;
+    font-weight: bolder !important;
+}
+.nav > li.disabled > a {
+    color: @secondary_contrast !important;
+}
+.nav-pills > li.active > a {
+    color: white !important;
+    font-weight: normal !important;
+}

@@ -3,7 +3,9 @@
     <span class="glyphicon <%=glyphicon%>"></span>
     <span class="tool-name"><%= name %></span>
     <% if (isVisibleInMenu === true) { %>
-        <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <div class="float-right">
+            <span tabindex="0" class='closeView glyphicon glyphicon-remove' aria-label="Close"></span>
+        </div>
     <% } %>
 </div>
 <div class="simple-views-container"></div>
