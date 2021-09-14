@@ -115,6 +115,7 @@ const actions = {
         else if (Config.cswId !== null && typeof Config.cswId !== "undefined") {
             const service = Radio.request("RestReader", "getServiceById", Config.cswId);
             let metaURL = "";
+
             if (service === undefined) {
                 console.warn("Rest Service with the ID " + Config.cswId + " is not configured in rest-services.json!");
             }
