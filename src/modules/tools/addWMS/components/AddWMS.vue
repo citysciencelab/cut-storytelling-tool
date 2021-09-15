@@ -232,7 +232,7 @@ export default {
                 Radio.trigger("Parser", "addFolder", object.Title, this.getParsedTitle(object.Title), parentId, level, false, false, object.invertLayerOrder);
             }
             else {
-                Radio.trigger("Parser", "addLayer", object.Title, this.getParsedTitle(object.Title), parentId, level, object.Name, this.wmsUrl, this.version);
+                Radio.trigger("Parser", "addLayer", object.Title, this.getParsedTitle(object.Title), parentId, level, object.Name, this.wmsUrl, this.version, true, false, false);
             }
         },
 
