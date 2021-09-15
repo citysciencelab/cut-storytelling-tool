@@ -1,8 +1,7 @@
 import {expect} from "chai";
-import {SensorThingsHttp} from "@modules/core/modelList/layer/sensorThingsHttp";
+import {SensorThingsHttp} from "../../sensorThingsHttp.js";
 
-
-describe("core/modelList/layer/SensorThingsHttp", () => {
+describe("src/utils/sensorThingsHttp", () => {
     let http = null,
         lastError = false;
 

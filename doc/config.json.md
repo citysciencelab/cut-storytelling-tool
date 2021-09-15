@@ -347,7 +347,7 @@ Elasticsearch service configuration.
 |responseEntryPath|no|String|""|Response JSON attribute path to found features.|false|
 |triggerEvent|no|**[triggerEvent](#markdown-header-portalconfigsearchbarelasticsearchtriggerevent)**|{}|Radio event triggered on mouse hover and click.|false|
 |hitMap|no|**[hitMap](#markdown-header-portalconfigsearchbarelasticsearchhitmap)**||Object mapping result object attributes to keys.|true|
-|hitType|no|String|"Elastic"|Search result type shown in the result list after the result name.|false|
+|hitType|no|String|"common:modules.searchbar.type.subject"|Search result type shown in the result list after the result name. Set to the translation key.|false|
 |hitGlyphicon|no|String|"glyphicon-road"|CSS glyphicon class of search results, shown before the result name.|false|
 |useProxy|no|Boolean|false|Defines whether the URL should be proxied.|false|
 
@@ -378,7 +378,7 @@ As an additional property, you may add `payload`. It is not required, and matche
             "id": "_source.id",
             "source": "_source"
         },
-        "hitType": "Fachthema",
+        "hitType": "common:modules.searchbar.type.subject",
         "hitGlyphicon": "glyphicon-list"
     }
 }
