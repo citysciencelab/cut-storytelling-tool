@@ -1398,13 +1398,6 @@
 
 
 /**
- * @event Core#RadioRequestUtilConvertArrayOfObjectsToCsv
- * @description todo
- * @returns {*} - todod
- * @example Radio.request("Util", "convertArrayOfObjectsToCsv");
- */
-
-/**
  * @event Core#RadioRequestUtilGetMasterPortalVersionNumber
  * @description returns the masterportal version number
  * @returns {String} - masterportal version number
