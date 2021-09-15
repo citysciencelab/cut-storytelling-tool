@@ -1,6 +1,6 @@
 import * as mqtt from "mqtt";
 import {SensorThingsHttp} from "./sensorThingsHttp";
-import {SensorThingsMqttConnector} from "./SensorThingsMqttConnector";
+import {SensorThingsMqttConnector} from "./sensorThingsMqttConnector";
 
 /**
  * Multiton of SensorThingsMqttConnector to reuse connections with the same options. SensorThingsMqtt morphes into the reused SensorThingsMqttConnector on construction.
