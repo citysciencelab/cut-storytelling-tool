@@ -91,7 +91,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
                 id: "_source.id",
                 source: "_source"
             },
-            hitType = "Fachthema",
+            hitType = i18next.t("common:modules.searchbar.type.subject"),
             hitGlyphicon = "glyphicon-list";
 
         if (responseData.length > 0) {
@@ -102,7 +102,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
             });
         }
         else {
-            Radio.trigger("Searchbar", "removeHits", "hitList", {type: "Fachthema"});
+            Radio.trigger("Searchbar", "removeHits", "hitList", {type: hitType});
         }
         Radio.trigger("Searchbar", "createRecommendedList", "gdi");
     },

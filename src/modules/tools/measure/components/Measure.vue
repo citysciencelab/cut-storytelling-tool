@@ -18,7 +18,7 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/Measure", Object.keys(getters)),
-        ...mapGetters(["isTableStyle", "isDefaultStyle"]),
+        ...mapGetters(["uiStyle"]),
         ...mapGetters("Map", ["layerById", "map", "is3d"])
     },
     watch: {
@@ -103,6 +103,9 @@ export default {
                     layerSource.removeFeature(actualFeature);
                 }
             }
+        },
+        isDefaultStyle () {
+            return this.uiStyle !== "SIMPLE" && this.uiStyle !== "TABLE";
         }
     }
 };
@@ -183,7 +186,7 @@ export default {
                         </div>
                     </div>
                     <div
-                        v-if="isDefaultStyle"
+                        v-if="isDefaultStyle()"
                         class="form-group form-group-sm"
                     >
                         <div class="col-md-12 col-sm-12 inaccuracy-list">

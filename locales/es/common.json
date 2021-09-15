@@ -97,7 +97,7 @@
           },
           "parametricURL": {
             "alertZoomToGeometry": "¡La llamada parametrizada del portal lamentablemente salió mal!<br>Asegúrese de que todos los parámetros se han introducido correctamente.",
-            "alertWrongLayerIds": "<strong>¡La llamada parametrizada es defectuosa!</strong> ¡El ID LAYER en esa porición: <b>{{wrongIdsPositionsConcat}}</b> no existe y se ignorara!"
+            "alertWrongLayerIds": "<strong>¡La llamada parametrizada es defectuosa!</strong></br>¡El <b>id layer</b> en esa porición: {{wrongIdsPositionsConcat}} no existe y se ignorara!"
           }
         },
         "alerting": {

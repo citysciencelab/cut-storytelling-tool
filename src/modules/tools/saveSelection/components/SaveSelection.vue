@@ -98,7 +98,7 @@ export default {
                         id="tool-saveSelection-input-simpleMapUrl"
                         type="text"
                         class="form-control input-sm"
-                        :value="url + '&style=simple'"
+                        :value="url + '&uiStyle=simple'"
                         @click="copyToClipboard($event.currentTarget)"
                     >
                 </div>

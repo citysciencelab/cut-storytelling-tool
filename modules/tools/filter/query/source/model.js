@@ -2,6 +2,7 @@ import QueryModel from "../model";
 import {intersects} from "ol/extent.js";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 import moment from "moment";
+import store from "../../../../../src/app-store";
 
 const SourceModel = QueryModel.extend({
     defaults: {
@@ -77,7 +78,7 @@ const SourceModel = QueryModel.extend({
     listenToFeaturesLoaded: function () {
         this.listenTo(Radio.channel("VectorLayer"), {
             "featuresLoaded": function (layerId, features) {
-                const filters = Radio.request("ParametricURL", "getFilter");
+                const filters = store.state.urlParam?.filter;
                 let urlFilterRules = [];
 
                 if (layerId === this.get("layerId")) {

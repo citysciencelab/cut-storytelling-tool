@@ -15,6 +15,7 @@ let unsubscribes = [],
  * When map module is done, the normalized layers should be constructed on the fly when adding layers.
  * For now, these processes happen independently of each other, so we need a hack to get the data.
  * TODO remove this once all layers are added/removed with an action (~= replace map.js with this module)
+ *
  * @param {Function} commit commit function
  * @param {module:ol/Map} map ol map
  * @returns {void}
@@ -34,11 +35,11 @@ const actions = {
      * Sets the map to the store. As a side-effect, map-related functions are registered
      * to fire changes when required. Each time a new map is registered, all old listeners
      * are discarded and new ones are registered.
-     * @param {Object} state state object
+     *
      * @param {module:ol/Map} map map object
      * @returns {void}
      */
-    setMap ({commit, dispatch}, {map}) {
+    setMap ({commit, dispatch, rootState}, {map}) {
         // discard old listeners
         if (unsubscribes.length) {
             unsubscribes.forEach(unsubscribe => unsubscribe());
@@ -51,6 +52,9 @@ const actions = {
         // listen to featuresLoaded event to be able to determine if all features of a layer are completely loaded
         channel.on({"featuresLoaded": id => {
             commit("addLoadedLayerId", id);
+            if (rootState.urlParams["Map/highlightFeature"]) {
+                dispatch("highlightFeature", {type: "viaLayerIdAndFeatureId", layerIdAndFeatureId: rootState.urlParams["Map/highlightFeature"]});
+            }
         }});
         // set map to store
         commit("setMap", map);
@@ -80,11 +84,10 @@ const actions = {
     },
 
     /**
-     * @param {Function} commit commit function
      * @param {MapBrowserEvent} evt - Moveend event
      * @returns {Function} update function for state parts to update onmoveend
      */
-    updateViewState ({commit, getters}, evt) {
+    updateViewState ({commit, dispatch, getters}, evt) {
         let map;
 
         if (evt) {
@@ -104,10 +107,9 @@ const actions = {
         commit("setMinResolution", mapView.getMinResolution());
         commit("setBbox", mapView.calculateExtent(map.getSize()));
         commit("setRotation", mapView.getRotation());
-        commit("setCenter", mapView.getCenter());
+        dispatch("setCenter", mapView.getCenter());
     },
     /**
-     * @param {Function} commit commit function
      * @param {Object} evt update event
      * @returns {Function} update function for mouse coordinate
      */
@@ -121,10 +123,7 @@ const actions = {
     /**
      * Updates the click coordinate and the related pixel depending on the map mode.
      * If Gfi Tool is active, the features of this coordinate/pixel are set.
-     * @param {Object} store.getters - the map getters
-     * @param {Function} store.commit - function to commit a mutation
-     * @param {Function} store.dispatch - function to dipatch a action
-     * @param {Object} store.rootGetters - the store getters
+     *
      * @param {MapBrowserEvent} evt - Click event in 2D, fake click event in 3D
      * @returns {void}
      */
@@ -156,9 +155,7 @@ const actions = {
 
     /**
      * collects features for the gfi.
-     * @param {Object} store context
-     * @param {Object} store.getters - the map getters
-     * @param {Function} store.commit - function to commit a mutation
+     *
      * @returns {void}
      */
     collectGfiFeatures ({getters, commit, dispatch}) {
@@ -197,8 +194,8 @@ const actions = {
 
     /**
      * Sets a new zoom level to map and store. All other fields will be updated onmoveend.
-     * @param {Object} state state object
-     * @param {Number} zoomLevel zoom level
+     *
+     * @param {number} zoomLevel The zoomLevel to zoom to.
      * @returns {void}
      */
     setZoomLevel ({getters, commit}, zoomLevel) {
@@ -217,7 +214,7 @@ const actions = {
     },
     /**
      * Turns a visible layer invisible and the other way around.
-     * @param {Object} state state object
+     *
      * @param {String} layerId id of the layer to toggle visibility of
      * @returns {void}
      */
@@ -236,7 +233,7 @@ const actions = {
     },
     /**
      * Sets the opacity of a layer.
-     * @param {Object} actionParams first action parameter
+     *
      * @param {Object} payload parameter object
      * @param {String} payload.layerId id of layer to change opacity of
      * @param {Number} payload.value opacity value in range (0, 1)
@@ -255,7 +252,7 @@ const actions = {
     },
     /**
      * Sets center and resolution to initial values.
-     * @param {Object} actionParams first action parameter
+     *
      * @returns {void}
      */
     resetView ({state, dispatch}) {
@@ -270,6 +267,7 @@ const actions = {
     /**
      * Sets the resolution by the given index of available resolutions.
      * NOTE: is used by scaleSwitcher tutorial.
+     *
      * @param {Number} index of the resolution
      * @returns {void}
      */
@@ -281,7 +279,7 @@ const actions = {
     },
     /**
      * Adds a listener to maps pointermove and calls callback-funktion
-     * @param {Object} state state object
+     *
      * @param {Function} callback  to be called on pointermove
      * @returns {void}
      */
@@ -295,7 +293,7 @@ const actions = {
     },
     /**
      * Removes a listener from maps pointermove
-     * @param {Object} state state object
+     *
      * @param {Function} callback  to be called on pointermove
      * @returns {void}
      */
@@ -306,6 +304,7 @@ const actions = {
     },
     /**
      * Adds an interaction to the map.
+     *
      * @param {module:ol/interaction/Interaction} interaction - Interaction to be added to map.
      * @returns {void}
      */
@@ -316,6 +315,7 @@ const actions = {
     },
     /**
      * Removes an interaction from the map.
+     *
      * @param {module:ol/interaction/Interaction} interaction - Interaction to be removed from map.
      * @returns {void}
      */
@@ -326,23 +326,27 @@ const actions = {
     },
     /**
      * Zoom to the given geometry or extent based on the current map size.
-     * @param {Object} getters - the map getters
-     * @param {module:ol/geom/SimpleGeometry | module:ol/extent} geometryOrExtent - The geometry or extent to zoom to.
-     * @param {Object} options - @see {@link https://openlayers.org/en/latest/apidoc/module-ol_View-View.html#fit|Openlayers}
+     * @see {@link https://openlayers.org/en/latest/apidoc/module-ol_View-View.html#fit|ol.view.fit}
+     *
+     * @param {object} payload Payload containing the geometryOrExtent and options for the view function 'fit'.
+     * @param {module:ol/geom/Geometry | module:ol/extent} payload.geometryOrExtent The geometry or extent to zoom to.
+     * @param {Object} payload.options Documentation linked.
      * @returns {void}
      */
-    zoomTo ({getters}, geometryOrExtent, options) {
-        const {map} = getters;
+    zoomTo ({state, commit}, {geometryOrExtent, options}) {
+        const mapView = state.map.getView();
 
-        map.getView().fit(geometryOrExtent, {
+        mapView.fit(geometryOrExtent, {
             duration: options?.duration ? options.duration : 800,
             ...options
         });
+        commit("setCenter", mapView.getCenter());
     },
     /**
      * Creates a new vector layer and adds it to the map.
      * If it already exists, this layer is returned.
-     * @param {String} name - The name and the id for the layer.
+     *
+     * @param {String} name The name and the id for the layer.
      * @returns {module:ol/layer} The created or the already existing layer.
      */
     createLayer ({state}, name) {
@@ -365,6 +369,21 @@ const actions = {
 
         state.map.addLayer(resultLayer);
         return resultLayer;
+    },
+    /**
+     * Sets the center of the current view.
+     *
+     * @param {number[]} coords An array of numbers representing a xy-coordinate.
+     * @returns {void}
+     */
+    setCenter ({state, commit}, coords) {
+        if (Array.isArray(coords) && coords.length === 2 && typeof coords[0] === "number" && typeof coords[1] === "number") {
+            commit("setCenter", coords);
+            state.map.getView().setCenter(coords);
+        }
+        else {
+            console.warn("Center was not set. Probably there is a data type error. The format of the coordinate must be an array with two numbers.");
+        }
     },
     ...highlightFeature,
     ...removeHighlightFeature

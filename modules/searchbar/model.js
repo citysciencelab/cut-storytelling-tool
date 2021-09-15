@@ -1,3 +1,5 @@
+import store from "../../src/app-store";
+
 const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype */{
     defaults: {
         placeholder: "Suche",
@@ -66,9 +68,9 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             "languageChanged": this.changeLang
         });
 
-        if (typeof Radio.request("ParametricURL", "getInitString") !== "undefined") {
+        if (store.state.urlParams && store.state.urlParams["Search/query"]) {
             // Speichere den Such-Parameter für die initiale Suche zur späteren Verwendung in der View
-            this.setInitSearchString(Radio.request("ParametricURL", "getInitString"));
+            this.setInitSearchString(store.state.urlParams["Search/query"]);
         }
         else {
             // Es wird keine initiale Suche durchgeführt

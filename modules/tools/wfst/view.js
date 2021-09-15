@@ -17,7 +17,8 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
         "keyup .input-sm": "validate",
         "change .input-sm": "validate",
         "click .form-check-input": "validate",
-        "click .glyphicon-info-sign": "toggleInfoText"
+        "click .glyphicon-info-sign": "toggleInfoText",
+        "keydown .glyphicon-info-sign": "toggleInfoText"
     },
 
     /**
@@ -847,20 +848,23 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
 
     /**
      * toggles the info text under the layer select
+     * @param {Event} event - the dom event
      * @returns {void}
      */
-    toggleInfoText: function () {
-        const infoButton = this.model.get("showInfoText");
+    toggleInfoText: function (event) {
+        if (event.type === "click" || event.which === 32 || event.which === 13) {
+            const infoButton = this.model.get("showInfoText");
 
-        if (!infoButton) {
-            this.model.setShowInfoText(true);
-            this.$el.find(".info-sign").css("opacity", "1");
-            this.$el.find("#wfst-module-infoText").show();
-        }
-        else {
-            this.model.setShowInfoText(false);
-            this.$el.find(".info-sign").css("opacity", "0.4");
-            this.$el.find("#wfst-module-infoText").hide();
+            if (!infoButton) {
+                this.model.setShowInfoText(true);
+                this.$el.find(".info-sign").css("opacity", "1");
+                this.$el.find("#wfst-module-infoText").show();
+            }
+            else {
+                this.model.setShowInfoText(false);
+                this.$el.find(".info-sign").css("opacity", "0.8");
+                this.$el.find("#wfst-module-infoText").hide();
+            }
         }
     },
 

@@ -1,4 +1,5 @@
 import "../model";
+import store from "../../../src/app-store";
 
 const GazetteerModel = Backbone.Model.extend({
     defaults: {
@@ -65,8 +66,8 @@ const GazetteerModel = Backbone.Model.extend({
         if (config.minChars) {
             this.set("minChars", config.minChars);
         }
-        if (Radio.request("ParametricURL", "getInitString") !== undefined) {
-            this.directSearch(Radio.request("ParametricURL", "getInitString"));
+        if (store.state.urlParams && store.state.urlParams["Search/query"]) {
+            this.directSearch(store.state.urlParams && store.state.urlParams["Search/query"]);
         }
     },
 

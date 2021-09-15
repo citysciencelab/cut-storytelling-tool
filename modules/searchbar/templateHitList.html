@@ -10,7 +10,7 @@
                         <img src="<%= hit.imageSrc %>">
                     <% } %>
                     <span class="list-group-item-name"><%= !hit.hasOwnProperty("shortName") ? hit.name : hit.shortName %></span>
-                    <small class="list-group-item-theme"><%= !hit.hasOwnProperty("additionalInfo") ? hit.type : hit.additionalInfo %></small>
+                    <span class="list-group-item-theme"><%= !hit.hasOwnProperty("additionalInfo") ? hit.type : hit.additionalInfo %></span>
                 </p>
             </li>
         <% }); %>

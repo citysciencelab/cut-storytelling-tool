@@ -211,8 +211,8 @@ export default {
      * Resets the error messages, calls the validation function with the entered coordinates
      * and calls the transformCoordinates function.
      * @param {Object} context actions context object.
-     * @param {String} coordinatesEasting the coordinates user entered
-     * @param {String} coordinatesNorthing the coordinates user entered
+     * @param {String} context.state.coordinatesEasting the coordinates user entered
+     * @param {String} context.state.coordinatesNorthing the coordinates user entered
      * @returns {void}
      */
     searchCoordinate ({dispatch, commit, state}) {
@@ -394,10 +394,10 @@ export default {
      * @param {String[]} coordinates - coordinates for new center position
      * @returns {void}
      */
-    setCenter: function ({commit}, coordinates) {
+    setCenter: function ({dispatch}, coordinates) {
         // coordinates come as string and have to be changed to numbers for setCenter from mutations to work.
         const newCoords = [parseFloat(coordinates[0]), parseFloat(coordinates[1])];
 
-        commit("Map/setCenter", newCoords, {root: true});
+        dispatch("Map/setCenter", newCoords, {root: true});
     }
 };

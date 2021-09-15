@@ -1,4 +1,5 @@
 @import "../../css/variables.less";
+@import "../../css/mixins.less";
 
 @color_1: rgb(153, 153, 153);
 @color_2: #777;
@@ -18,16 +19,15 @@
     z-index: 2000;
     >.header {
         cursor: move;
-        background: #e7e7e7;
-        background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-        background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-        background: linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-        background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-        background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-        color: @color_2;
+        background: @background_color_1;
+        color: #555555;
         padding: 10px 6px;
-        font-size: 16px;
         border-bottom: 1px solid rgb(215, 215, 215);
+        font-size: 14px;
+        span.title {
+            font-family: 'MasterPortalFont Bold';
+            padding-left: 10px;
+        }
         >.glyphicon-remove {
             cursor: pointer;
             font-size: 16px;
@@ -41,14 +41,10 @@
             padding: 4px;
             color: @secondary_icon_button;
             &:hover {
-                opacity: 1;
-                background-color: @accent_hover;
-                color: @primary_contrast;
+                .primary_action_hover();
             }
             &:focus {
-                outline: 3px solid @accent_focus;
-                outline: 3px auto  Highlight;
-                outline: 3px auto -webkit-focus-ring-color;
+                .primary_action_focus();
             }
         }
     }
@@ -61,6 +57,9 @@
         h3 {
             margin-top: 0;
         }
+        &:focus {
+            .primary_action_focus();
+        }
     }
 }
 .inhalt {
@@ -69,12 +68,14 @@
         margin: 5px;
         border: 1px solid silver;
         float: left;
-        background: #e7e7e7;
+        background: #ffffff;
         text-decoration: none;
-        color: @color_2;
+        color: #333333;
         &:hover {
-            background: rgb(200, 200, 200);
-            cursor: pointer;
+            .primary_action_hover();
+        }
+        &:focus {
+            .primary_action_focus();
         }
     }
 }
