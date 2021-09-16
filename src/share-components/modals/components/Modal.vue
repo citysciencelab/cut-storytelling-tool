@@ -10,6 +10,14 @@ export default {
         forceClickToClose: {
             type: Boolean,
             default: false
+        },
+        modalInnerWrapperStyle: {
+            type: String,
+            default: ""
+        },
+        modalContentContainerStyle: {
+            type: String,
+            default: ""
         }
     },
 
@@ -37,6 +45,13 @@ export default {
         showing: function (newShowing) {
             if (!newShowing) {
                 this.$emit("modalHid");
+            }
+            else {
+                this.$nextTick(() => {
+                    if (this.$refs.discard) {
+                        this.$refs.discard.focus();
+                    }
+                });
             }
         }
     },
@@ -81,8 +96,10 @@ export default {
         >
             <div
                 id="modal-1-inner-wrapper"
+                :style="modalInnerWrapperStyle"
             >
                 <span
+                    ref="discard"
                     class="glyphicon glyphicon-remove"
                     title="Discard"
                     tabindex="0"
@@ -96,6 +113,7 @@ export default {
                 </div>
                 <div
                     id="modal-1-content-container"
+                    :style="modalContentContainerStyle"
                 >
                     <slot />
                 </div>
@@ -110,11 +128,24 @@ export default {
 </template>
 
 <style lang="less" scoped>
+    @import "~/css/mixins.less";
+
     #modal-1-container{
         display:none;
 
         &.showing{
             display:block;
+        }
+        .glyphicon {
+            font-size: 14px;
+            padding: 5px;
+            color:#555555;
+            &:focus {
+                .primary_action_focus();
+            }
+            &:hover {
+                .primary_action_hover();
+            }
         }
     }
     #modal-1-overlay{
@@ -124,7 +155,7 @@ export default {
         left:0;
         right:0;
         bottom:0;
-        z-index:1;
+        z-index:1000;
     }
     #modal-1-outer-wrapper {
         position:absolute;
@@ -150,21 +181,20 @@ export default {
         vertical-align:middle;
         max-width:90%;
         position:relative;
+        padding: 5px;
 
         .glyphicon.glyphicon-remove {
             position:absolute;
             right:2px;
             top:4px;
-            color:#555555;
             z-index:4;
 
             &:hover {
                 cursor:pointer;
             }
         }
-
-        #modal-1-content-container {
-            padding:12px 24px 12px 24px;
-        }
+    }
+    #modal-1-container #modal-1-inner-wrapper #modal-1-content-container {
+        padding:12px 24px 12px 24px;
     }
 </style>

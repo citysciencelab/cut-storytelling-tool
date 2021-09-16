@@ -47,7 +47,7 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
 
     /**
      * render the query detail view
-     * @returns {*} todo
+     * @returns {Object} the this context of QueryDetailView
      */
     render: function () {
         const attr = this.model.toJSON();
@@ -60,12 +60,13 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
         this.renderSnippets();
         this.renderValueViews();
         this.renderSnippetCheckBoxView();
+        this.renderSnippetSliderView();
         return this;
     },
 
     /**
-     * todo
-     * @param {*} changedValue todo
+     * rerenders the snippets
+     * @param {Object} changedValue the changed value
      * @returns {void}
      */
     rerenderSnippets: function (changedValue) {
@@ -79,7 +80,7 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
     /**
      * updates the display of the feature hits
      * @param  {Backbone.Model} model - QueryModel
-     * @param  {string[]} value - featureIds
+     * @param  {String[]} value - featureIds
      * @returns {void}
      */
     updateFeatureCount: function (model, value) {
@@ -95,7 +96,7 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
     },
 
     /**
-     * todo
+     * zooms to selected features
      * @fires Core#RadioRequestUtilIsViewMobile
      * @returns {void}
      */
@@ -107,7 +108,7 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
     },
 
     /**
-     * reder the configured snippets
+     * reders the configured snippets
      * @returns {void}
      */
     renderSnippets: function () {
@@ -130,11 +131,14 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
                 else if (snippet.get("snippetType") === "slider") {
                     view = new SnippetSliderView({model: snippet});
                 }
+                else if (snippet.get("snippetType") === "date") {
+                    view = new SnippetSliderView({model: snippet});
+                }
                 else {
                     view = new SnippetCheckBoxView({model: snippet});
                 }
 
-                this.$el.append(view.render().$el);
+                this.$el.append(view.render().el);
             });
         }
         else {
@@ -165,10 +169,10 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
         });
 
         if (countSelectedValues === 0) {
-            this.$el.find(".text:last-child").show();
+            this.$el.find(".value-views-container .text:last-child").show();
         }
         else {
-            this.$el.find(".text:last-child").hide();
+            this.$el.find(".value-views-container .text:last-child").hide();
         }
 
         if (countSelectedValues > 1) {
@@ -180,23 +184,36 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
     },
 
     /**
-     * todo
+     * renders the snippet slider view
+     * @returns {void}
+     */
+    renderSnippetSliderView: function () {
+        if (!this.model.get("activateOnSelection")) {
+            this.model.get("snippetCollection").models.forEach(snippet => {
+                if (snippet.get("snippetType") === "date") {
+                    const view = new SnippetSliderView({model: snippet});
+
+                    this.$el.find(".detailview-head").after(view.render());
+                }
+            });
+        }
+    },
+
+    /**
+     * renders the snippet checkbox view
      * @returns {void}
      */
     renderSnippetCheckBoxView: function () {
-        // this.$el.find(".detailview-head button").before("<label>" + this.model.get("name") + "-Filter</label>");
-        let view;
-
         if (!this.model.get("activateOnSelection")) {
-            view = new SnippetCheckBoxView({model: this.model.get("btnIsActive")});
+            const view = new SnippetCheckBoxView({model: this.model.get("btnIsActive")});
 
             this.$el.find(".detailview-head").after(view.render());
         }
     },
 
     /**
-     * todo
-     * @param {*} evt todo
+     * sets/unsets checked prop
+     * @param {Event} evt the mouse event with target param
      * @returns {void}
      */
     toggleIsActive: function (evt) {
@@ -205,9 +222,9 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
     },
 
     /**
-     * todo
-     * @param {*} model todo
-     * @param {*} value todo
+     * removes the view
+     * @param  {Backbone.Model} model - QueryModel
+     * @param  {Boolean} value false removes the view
      * @returns {void}
      */
     removeView: function (model, value) {

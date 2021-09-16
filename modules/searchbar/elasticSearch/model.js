@@ -1,5 +1,6 @@
 
 import ElasticModel from "../../core/elasticsearch";
+import store from "../../../src/app-store";
 
 const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.prototype */{
     defaults: {
@@ -50,7 +51,7 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
      * @listens Searchbar#RadioTriggerSearchbarSearch
      */
     initialize: function () {
-        const initSearchString = Radio.request("ParametricURL", "getInitString");
+        const initSearchString = store.state.urlParams && store.state.urlParams["Search/query"];
 
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.search

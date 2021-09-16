@@ -1,5 +1,3 @@
-import getQueryParams from "../utils/getQueryParams";
-
 export default {
     masterPortalVersionNumber: state => state?.masterPortalVersionNumber,
     mobile: state => state.mobile,
@@ -9,7 +7,7 @@ export default {
     footerConfig: state => state?.configJs?.footer || null,
     loaderText: state => state?.configJs?.loaderText || "",
     scaleLineConfig: state => state?.configJs?.scaleLine || null,
-    uiStyle: state => (getQueryParams()?.uiStyle || state?.configJs?.uiStyle)?.toUpperCase(),
+    uiStyle: state => (state?.urlParams?.uiStyle || state?.configJs?.uiStyle)?.toUpperCase(),
     // gfiWindow is deprecated in the next major-release
     gfiWindow: state => state?.configJs.gfiWindow,
     ignoredKeys: state => state?.configJs.ignoredKeys || [],
@@ -75,48 +73,6 @@ export default {
             }
         }
         return tool;
-    },
-
-    /**
-     * checks if the simple style is set in the query params or in the config.js
-     * @param {Object} state - the store state
-     * @returns {Boolean} true if simple style is set otherwise false
-     */
-    isSimpleStyle: (state) => {
-        if (state?.queryParams?.style) {
-            return state.queryParams.style === "simple";
-        }
-        else if (state?.configJs?.uiStyle === "simple") {
-            return true;
-        }
-        return false;
-    },
-
-    /**
-     * checks if the table style is set in the query params or in the config.js
-     * @param {Object} state - the store state
-     * @returns {Boolean} true if table style is set otherwise false
-     */
-    isTableStyle: (state) => {
-        if (state?.queryParams?.style) {
-            return state.queryParams.style === "table";
-        }
-        else if (state?.configJs?.uiStyle === "table") {
-            return true;
-        }
-        return false;
-    },
-
-    /**
-     * checks if the default style is set
-     * @param {Object} state - the store state
-     * @param {Object} getters - the store getters
-     * @param {Boolean} getters.isSimpleStyle -
-     * @param {Boolean} getters.isTableStyle -
-     * @returns {Boolean} false if simple style or table style is set otherwise true
-     */
-    isDefaultStyle: (state, {isSimpleStyle, isTableStyle}) => {
-        return !isSimpleStyle && !isTableStyle;
     }
 };
 

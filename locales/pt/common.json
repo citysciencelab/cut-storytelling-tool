@@ -93,7 +93,7 @@
           },
           "parametricURL": {
             "alertZoomToGeometry": "A chamada parametrizada do portal infelizmente correu mal!<br>Por favor, certifique-se de que todos os parâmetros foram introduzidos correctamente.",
-            "alertWrongLayerIds": "<strong>A chamada parametrizada está avariada!</strong> O LAYERIDS nas posições: <b>{{wrongIdsPositionsConcat}}</b> não existem e são ignorados!"
+            "alertWrongLayerIds": "<strong>A chamada parametrizada está avariada!</strong></br>O <b>layerIds</b> nas posições: {{wrongIdsPositionsConcat}} não existem e são ignorados!"
           }
         },
         "alerting": {
@@ -734,6 +734,11 @@
             "styleModel": {
                 "getGeometryTypeFromWFSFetchfailed": "A legenda não podia ser criada na camada de informação!",
                 "getGeometryTypeFromWFSFetchfailedMessage": "Detalhes: Um serviço necessário não responde."
+            }
+        },
+        "wmsTime": {
+            "layerSwiper": {
+              "title": "Confrontare gli strati"
             }
         },
         "legend": {

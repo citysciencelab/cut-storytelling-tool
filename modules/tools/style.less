@@ -1,4 +1,4 @@
-@import "../../css/variables.less";
+@import "../../css/mixins.less";
 
 @color_1: rgb(255, 255, 255);
 @color_2: rgb(53, 53, 53);
@@ -16,13 +16,10 @@
             color: @color_2;
             &:focus {
                 opacity: 1.0;
-                outline: 3px solid @accent_focus;
-                outline: 3px auto  Highlight;
-                outline: 3px auto -webkit-focus-ring-color;
+                .primary_action_focus();
             }
             &:hover {
-                background-color: @accent_hover;
-                color: @color_1;
+                .primary_action_hover();
             }
             >span {
                 padding-right: 8px;
@@ -34,8 +31,7 @@
             background-color: @accent_active;
             color: @color_1;
             &:hover {
-                background-color: @accent_active;
-                color: @color_1;
+                .primary_action_hover();
             }
         }
     }

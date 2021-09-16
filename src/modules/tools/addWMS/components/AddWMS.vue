@@ -332,9 +332,7 @@ export default {
          * @returns {String} parsedTitle - The parsed title
          */
         getParsedTitle: function (title) {
-            const finalTitle = String(title).replace(/\s+/g, "-").replace(/\//g, "-");
-
-            return finalTitle;
+            return String(title).replace(/\s+/g, "-").replace(/\//g, "-");
         }
     }
 };

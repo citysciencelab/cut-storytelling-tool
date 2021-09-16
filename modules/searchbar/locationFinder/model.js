@@ -1,6 +1,7 @@
 import "../model";
 import {transformFromMapProjection as mpapiTransformToMapProjection, getProjection as mpapiGetProjection} from "masterportalAPI/src/crs";
 import getProxyUrl from "../../../src/utils/getProxyUrl";
+import store from "../../../src/app-store";
 
 const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel.prototype */{
     defaults: {
@@ -60,15 +61,14 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
                 this.setServiceUrl(service.get("url"));
             }
 
-            if (Radio.request("ParametricURL", "getInitString")) {
-                this.search(Radio.request("ParametricURL", "getInitString"));
+            if (store.state.urlParams && store.state.urlParams["Search/query"]) {
+                this.search(store.state.urlParams && store.state.urlParams["Search/query"]);
             }
 
             if (this.get("incrementalSearch")) {
                 activators.search = this.search;
             }
             this.listenTo(Radio.channel("Searchbar"), activators);
-
         }
         else {
             this.showError({
@@ -187,6 +187,10 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
                     }
                     else {
                         hit.glyphicon = "glyphicon-road";
+                    }
+
+                    if (classDefinition.zoomLevel) {
+                        hit.zoomLevel = classDefinition.zoomLevel;
                     }
 
                     if (classDefinition.zoom === "bbox") {

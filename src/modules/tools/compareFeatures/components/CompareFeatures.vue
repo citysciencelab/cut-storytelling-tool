@@ -108,7 +108,7 @@ export default {
                 </div>
                 <div id="tool-compareFeatures-buttons">
                     <button
-                        class="btn btn-primary btn-infos"
+                        class="btn btn-default btn-infos"
                         :title="$t('common:button.back')"
                         @click="setShowAlert(false)"
                     >
@@ -193,7 +193,7 @@ export default {
                 <hr>
 
                 <button
-                    class="btn btn-primary btn-infos"
+                    class="btn btn-default btn-infos"
                     :title="!showMoreInfo ? $t('common:modules.tools.compareFeatures.moreInfo') : $t('common:modules.tools.compareFeatures.lessInfo')"
                     :disabled="!showMoreInfoButton"
                     @click="moreInfo()"
@@ -213,11 +213,8 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "~variables";
-    @background_color_1: rgb(0, 92, 169);
-    @background_color_2: #eee;
-    @background_color_3: #ddd;
-    @background_color_4: #ccc;
+    @import "~/css/mixins.less";
+
     @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
 
     .tool-compareFeatures-modal-title {
@@ -247,19 +244,23 @@ export default {
         margin-right: 20px;
         white-space: nowrap;
     }
-    .btn {
-        background-color: @background_color_1;
-        margin-right: 20px;
-        margin-left: 20px;
-        &:hover {
-            opacity: 0.9;
-        }
-        padding-right: 10px;
-    }
+
     #tool-compareFeatures-buttons {
         text-align: center;
         margin: 10px;
         padding-right: 10px;
+
+        .btn, .btn-default, .btn-primary {
+            margin-right: 20px;
+            margin-left: 20px;
+            &:focus {
+                .primary_action_focus();
+            }
+            &:hover {
+                .primary_action_hover();
+            }
+            padding-right: 10px;
+        }
     }
     #tool-compareFeatures-no-features {
         padding: 15px;
@@ -280,8 +281,7 @@ export default {
     }
 </style>
 
-<style lang="less">
-
+<style lang="less" scoped>
     #modal-1-container #modal-1-overlay {
         z-index: 1000;
     }

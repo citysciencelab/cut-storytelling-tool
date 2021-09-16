@@ -1,12 +1,19 @@
 import QueryModel from "../model";
 import {intersects} from "ol/extent.js";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
+import moment from "moment";
+import store from "../../../../../src/app-store";
 
 const SourceModel = QueryModel.extend({
     defaults: {
         isAutoRefreshing: false,
         isInitialLoad: true
     },
+
+    /**
+     * the function to initialize the SourceModel
+     * @returns {void}
+     */
     initializeFunction: function () {
         const modelList = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
 
@@ -23,7 +30,7 @@ const SourceModel = QueryModel.extend({
 
     /**
      * gathers Information for this Query including the features and metadata
-     * @return {ol.Feature[]} openlayers Features
+     * @returns {ol.Feature[]} openlayers Features
      */
     prepareQuery: function () {
         const layerId = this.get("layerId"),
@@ -38,11 +45,23 @@ const SourceModel = QueryModel.extend({
         }
         return features;
     },
+
+    /**
+     * build the query data structure from the given features
+     * @param {ol.Feature[]} features the given features
+     * @returns {void}
+     */
     processFeatures: function (features) {
         this.setFeatures(features);
         this.setFeatureIds(this.collectAllFeatureIds(features));
         this.buildQueryDatastructure();
     },
+
+    /**
+     * returns the ids from the given features
+     * @param {ol.Feature[]} features the given features
+     * @returns {Number[]} the array of feature ids
+     */
     collectAllFeatureIds: function (features) {
         const featureIds = [];
 
@@ -51,14 +70,15 @@ const SourceModel = QueryModel.extend({
         });
         return featureIds;
     },
+
     /**
      * Waits for the Layer to load its features and proceeds requests the metadata
-     * @return {void}
+     * @returns {void}
      */
     listenToFeaturesLoaded: function () {
         this.listenTo(Radio.channel("VectorLayer"), {
             "featuresLoaded": function (layerId, features) {
-                const filters = Radio.request("ParametricURL", "getFilter");
+                const filters = store.state.urlParam?.filter;
                 let urlFilterRules = [];
 
                 if (layerId === this.get("layerId")) {
@@ -88,7 +108,7 @@ const SourceModel = QueryModel.extend({
     /**
      * request the features for layer with its ID
      * @param {String} layerId ID of Layer
-     * @return {Object} - olFeatures
+     * @returns {Object} - olFeatures
      */
     getFeaturesByLayerId: function (layerId) {
         const model = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
@@ -106,9 +126,9 @@ const SourceModel = QueryModel.extend({
     /**
      * delivers the layerSource from an layer,
      * by grouplayer delivers the layerSource from child by layerid
-     * @param {object} layerSource from layer
-     * @param {number} layerId id from layer
-     * @returns {object} layerSource
+     * @param {Object} layerSource from layer
+     * @param {Number} layerId id from layer
+     * @returns {Object} layerSource
      */
     retrieveLayerSource: function (layerSource, layerId) {
         let layer,
@@ -122,6 +142,10 @@ const SourceModel = QueryModel.extend({
         return groupLayerSource;
     },
 
+    /**
+     * adapt the query data structure
+     * @returns {void}
+     */
     buildQueryDatastructure: function () {
         const layerObject = getLayerWhere({id: this.get("layerId")});
 
@@ -136,7 +160,7 @@ const SourceModel = QueryModel.extend({
     /**
      * Extract Attribute names and types from DescribeFeatureType-Response
      * @param  {XML} response response xml from ajax call
-     * @return {object} - Mapobject containing names and types
+     * @returns {object} - Mapobject containing names and types
      */
     parseResponse: function (response) {
         const elements = $("element", response),
@@ -152,7 +176,7 @@ const SourceModel = QueryModel.extend({
      * [getValuesFromFeature description]
      * @param  {ol.feature} feature olfeature
      * @param  {string} attrName [description]
-     * @return {string[]} [description]
+     * @returns {string[]} [description]
      */
     getValuesFromFeature: function (feature, attrName) {
         const values = this.parseValuesFromString(feature, attrName);
@@ -164,7 +188,7 @@ const SourceModel = QueryModel.extend({
      * parses attribute values with pipe-sign ("|") and returnes array with single values
      * @param  {ol.feature} feature olfeature
      * @param  {string} attributeName - key name of a feature attribute
-     * @return {string[]} array of string[] || number[]
+     * @returns {string[]} array of string[] || number[]
      */
     parseValuesFromString: function (feature, attributeName) {
         const values = [],
@@ -194,17 +218,25 @@ const SourceModel = QueryModel.extend({
         }
         return [...new Set(values)];
     },
+
+    /**
+     * checks if the given value is not null and not undefined
+     * @param {*} value the value to check
+     * @returns {Boolean} false if value is invalid
+     */
     isValid: function (value) {
         return value !== null && value !== undefined;
     },
-    trimValue: function (value) {
-        let trimmedValue = value;
 
-        if (typeof value === "string") {
-            trimmedValue = value.trim();
-        }
-        return trimmedValue;
+    /**
+     * trims the given value if it is a string, checks for string (save call)
+     * @param {*} value the value to trim
+     * @returns {*} the given value as trimmed string or the given value if value is not a string
+     */
+    trimValue: function (value) {
+        return typeof value === "string" ? value.trim() : value;
     },
+
     /**
      * Collect the feature Ids that match the predefined rules
      * and trigger them to the ModelList
@@ -229,11 +261,12 @@ const SourceModel = QueryModel.extend({
 
         return newFeatures;
     },
+
     /**
      * runs predefined rules,
      * determines selected values from snippets,
      * derives featureIds from matching Features and triggers "featureIdsChanged" to filterModel
-     * @return {void}
+     * @returns {void}
      */
     runFilter: function () {
         const features = this.runPredefinedRules(),
@@ -282,16 +315,24 @@ const SourceModel = QueryModel.extend({
     /**
      * determines the attributes and their values that are still selectable
      * @param  {ol.Feature[]} features olfeatures
-     * @param  {object[]} selectedAttributes attribute object
-     * @param  {object[]} [allAttributes=[]]      array of all attributes and their values
-     * @return {object[]}                    array of attributes and their values that are still selectable
+     * @param  {Object[]} selectedAttributes attribute object
+     * @param  {Object[]} [allAttributes=[]]      array of all attributes and their values
+     * @return {Object[]}                    array of attributes and their values that are still selectable
      */
     collectSelectableOptions: function (features, selectedAttributes, allAttributes = []) {
         const selectableOptions = [];
         let selectableValues = [];
 
         allAttributes.forEach(attribute => {
-            selectableValues = {name: attribute.name, displayName: attribute.displayName, type: attribute.type, values: [], matchingMode: attribute.matchingMode};
+            selectableValues = {
+                name: attribute.name,
+                displayName: attribute.displayName,
+                type: attribute.type,
+                values: [],
+                matchingMode: attribute.matchingMode,
+                format: attribute.format,
+                attrNameUntil: attribute.attrNameUntil
+            };
 
             features.forEach(feature => {
                 const isMatch = this.isFilterMatch(feature, selectedAttributes.filter(function (attr) {
@@ -300,18 +341,25 @@ const SourceModel = QueryModel.extend({
 
                 if (isMatch) {
                     selectableValues.values.push(this.parseValuesFromString(feature, attribute.name));
+                    if (selectableValues.attrNameUntil) {
+                        selectableValues.values.push(this.parseValuesFromString(feature, attribute.attrNameUntil));
+                    }
                 }
             });
+
+            // the values are an array of small arrays (because of piped strings in feature attributes, see parseValuesFromString)
+            // therefore we must go through the array and concat every subarray to one big flat array, using concat on subarrays
             selectableValues.values = [...new Set(Array.isArray(selectableValues.values) ? selectableValues.values.reduce((acc, val) => acc.concat(val), []) : selectableValues.values)];
             selectableOptions.push(selectableValues);
         });
 
         return selectableOptions;
     },
+
     /**
      * after every filtering the snippets get updated with selectable values
      * @param  {ol.Feature[]} features features
-     * @param  {object[]}     selectedAttributes [description]
+     * @param  {Object[]}     selectedAttributes [description]
      * @returns {void}
      */
     updateSnippets: function (features, selectedAttributes) {
@@ -327,11 +375,12 @@ const SourceModel = QueryModel.extend({
             snippet.updateSelectableValues(attribute.values);
         });
     },
+
     /**
      * checks if feature hat attribute that contains value
      * @param  {ol.Feature}  feature olfeature
-     * @param  {object}      attribute attributeObject
-     * @return {Boolean}               true if feature has attribute that contains value
+     * @param  {Object}      attribute attributeObject
+     * @returns {Boolean}               true if feature has attribute that contains value
      */
     isValueMatch: function (feature, attribute) {
         const featureMap = this.get("featureAttributesMap").find(featureAttribute => featureAttribute.name === attribute.attrName);
@@ -339,43 +388,96 @@ const SourceModel = QueryModel.extend({
         attribute.matchingMode = featureMap.matchingMode;
         return attribute.matchingMode === "OR" ? this.isORMatch(feature, attribute) : this.isANDMatch(feature, attribute);
     },
-    isORMatch: function (feature, attribute) {
-        let isMatch = false;
 
-        isMatch = attribute.values.find(value => {
-            return this.containsValue(feature, attribute, value);
+    /**
+     * checks if one of the values of the given attribute can be found in the attribute name of the given feature
+     * @param {ol.Feature} feature the feature to check
+     * @param {String[]} attribute the attributes to search for as array of strings
+     * @returns {Boolean} true if it is an OR match, false if not
+     */
+    isORMatch: function (feature, attribute) {
+        const isMatch = attribute.values.find(value => {
+            return this.containsValue(feature, attribute?.attrName, value);
         });
+
         return isMatch !== undefined;
     },
+
+    /**
+     * checks if every value of the given attribute can be found in any attribute name of the given feature
+     * @param {ol.Feature} feature the feature to check
+     * @param {String[]} attribute the attributes to search for as array of strings
+     * @returns {Boolean} true if it is an AND match, false if not
+     */
     isANDMatch: function (feature, attribute) {
-        return attribute.values.every(value => this.containsValue(feature, attribute, value));
+        return attribute.values.every(value => this.containsValue(feature, attribute?.attrName, value));
     },
-    containsValue: function (feature, attribute, value) {
-        if (feature.get(attribute.attrName) !== undefined) {
-            return feature.get(attribute.attrName).indexOf(value) !== -1;
+
+    /**
+     * checks if the attribute of the feature contains the given value (no exact match)
+     * @param {ol.Feature} feature the feature to check
+     * @param {String} attrName the attribute name as string
+     * @param {String} value the value to search for
+     * @returns {Boolean} true if value is part of attrName of the given feature, false if not
+     */
+    containsValue: function (feature, attrName, value) {
+        if (feature.get(attrName) !== undefined) {
+            return feature.get(attrName).indexOf(value) !== -1;
         }
         return false;
     },
+
     /**
      * checks if a value is within a range of values
      * @param  {ol.Feature} feature olfeature
-     * @param  {string} attributeName name of attribute
-     * @param  {number[]} values arra of values
-     * @return {boolean} flag if value is in range
+     * @param  {String} attributeName name of attribute
+     * @param  {Number[]} values array of values
+     * @returns {Boolean} flag if value is in range
      */
     isNumberInRange: function (feature, attributeName, values) {
         const featureValue = feature.get(attributeName),
             valueList = Object.assign([], values);
-        let isNumberInRange = false;
 
         valueList.push(featureValue);
         valueList.sort((valueA, valueB) => valueA - valueB);
 
-        isNumberInRange = valueList[1] === featureValue;
-
-        return isNumberInRange;
+        return valueList[1] === featureValue;
     },
 
+    /**
+     * checks if the date is in range, uses attr Name and attrNameUntil from feature to compare with the give values
+     * @param {ol.Feature} feature the given feature
+     * @param {String} attrName the given attr Name
+     * @param {String} attrNameUntil the given attr name until
+     * @param {Number[]} values the given array of timestamps
+     * @param {String} format the given format for moment
+     * @return {Boolean} if date is in range
+     */
+    isDateInRange (feature, attrName, attrNameUntil, values, format) {
+        if (
+            typeof feature !== "object" || feature === null || typeof feature.get !== "function"
+            || typeof attrName !== "string"
+            || !Array.isArray(values) || values.length !== 2
+            || typeof format !== "string"
+        ) {
+            return false;
+        }
+        const featureUnixFrom = moment(feature.get(attrName), format).valueOf(),
+            featureUnixUntil = attrNameUntil ? moment(feature.get(attrNameUntil), format).valueOf() : false,
+            sliderUnixFrom = values[0],
+            sliderUnixUntil = values[1];
+
+        if (featureUnixUntil) {
+            return featureUnixFrom <= sliderUnixUntil && featureUnixUntil >= sliderUnixFrom;
+        }
+        return featureUnixFrom <= sliderUnixUntil && featureUnixFrom >= sliderUnixFrom;
+    },
+
+    /**
+     * checks if the given feature intersects with the current browser extent
+     * @param {ol.Feature} feature the feature to check
+     * @returns {Boolean} true if the feature intersects with the current browser extent
+     */
     isFeatureInExtent: function (feature) {
         const mapExtent = Radio.request("MapView", "getCurrentExtent");
 
@@ -384,9 +486,9 @@ const SourceModel = QueryModel.extend({
 
     /**
      * checks if feature matches the filter
-     * @param  {ol.Feature}  feature    [description]
-     * @param  {object[]}    filterAttr array of attributes and their values to filter
-     * @return {Boolean}            [description]
+     * @param  {ol.Feature} feature to check
+     * @param  {Object[]} filterAttr array of attributes and their values to filter
+     * @return {Boolean} true if it is a match
      */
     isFilterMatch: function (feature, filterAttr) {
         let isMatch = false;
@@ -401,6 +503,9 @@ const SourceModel = QueryModel.extend({
             else if (attribute.type === "searchInMapExtent") {
                 return this.isFeatureInExtent(feature);
             }
+            else if (attribute.type === "date") {
+                return this.isDateInRange(feature, attribute.attrName, attribute.attrNameUntil, attribute.values, attribute.format);
+            }
 
             return this.isValueMatch(feature, attribute);
         });
@@ -408,14 +513,19 @@ const SourceModel = QueryModel.extend({
         return isMatch;
     },
 
+    /**
+     * sets the feature
+     * @param {ol.Feature} value the feature to set
+     * @returns {void}
+     */
     setFeatures: function (value) {
         this.set("features", value);
     },
 
     /**
      * creates Query from Url-Filterobject
-     * @param  {object[]} obj array of attributes and their values to filter
-     * @return {void}
+     * @param  {Object[]} obj array of attributes and their values to filter
+     * @returns {void}
      */
     createQueryFromUrlFilterRules: function (obj) {
         Object.keys(obj).forEach(function (key) {

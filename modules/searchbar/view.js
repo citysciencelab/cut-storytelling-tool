@@ -228,7 +228,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         if (this.model.get("initSearchString") !== undefined) {
             this.renderRecommendedList();
             this.$("#searchInput").val(this.model.get("initSearchString"));
-            this.model.unset("initSearchString", true);
         }
         this.setSearchInputWidth();
     },
@@ -306,7 +305,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             if (this.model.get("isInitialRecommendedListCreated") === true) {
                 this.renderRecommendedList();
                 this.$("#searchInput").val(this.model.get("initSearchString"));
-                this.model.unset("initSearchString", true);
             }
         }
         this.setSearchInputWidth();
@@ -472,6 +470,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         // 3. Hide the GFI
         Radio.trigger("GFI", "setIsVisible", false);
         // 4. Zoom if necessary on the result otherwise special handling
+
         if (hit?.triggerEvent) {
             this.model.setHitIsClick(true);
             Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true, evt.handleObj.type);
@@ -587,10 +586,20 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {void}
      */
     setMarkerZoom: function (hit) {
-        const resolutions = Radio.request("MapView", "getResolutions"),
-            index = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105),
-            zoomLevel = this.model.get("zoomLevel") !== undefined ? this.model.get("zoomLevel") : index;
-        let extent = [];
+        let extent = [],
+            zoomLevel;
+
+        if (hit.zoomLevel) {
+            zoomLevel = hit.zoomLevel;
+        }
+        else if (this.model.get("zoomLevel")) {
+            zoomLevel = this.model.get("zoomLevel");
+        }
+        else {
+            const resolutions = Radio.request("MapView", "getResolutions");
+
+            zoomLevel = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105);
+        }
 
         if (hit.coordinate.length === 2) {
             store.dispatch("MapMarker/removePolygonMarker");
@@ -603,7 +612,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             store.dispatch("MapMarker/removePointMarker");
             store.dispatch("MapMarker/placingPolygonMarker", getWKTGeom(hit));
             extent = store.getters["MapMarker/markerPolygon"].getSource().getExtent();
-            Radio.trigger("Map", "zoomToExtent", extent, {maxZoom: index});
+            Radio.trigger("Map", "zoomToExtent", extent, {maxZoom: zoomLevel});
         }
     },
     /**

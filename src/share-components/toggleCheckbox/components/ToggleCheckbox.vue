@@ -48,12 +48,15 @@ export default {
     methods: {
         /**
          * Toggles the state
+         * @param {Event} event - dom event
          * @returns {void} emits change with currentState as payload
          */
-        toggle: function () {
-            this.currentState = !this.currentState;
+        toggle: function (event) {
+            if (event.type === "click" || event.which === 32 || event.which === 13) {
+                this.currentState = !this.currentState;
 
-            this.$emit("change", this.currentState);
+                this.$emit("change", this.currentState);
+            }
         },
         /**
          * Sets the current State. Required to Undo a change if e.g. a Layer couldn't be loaded.
@@ -71,45 +74,56 @@ export default {
     <div
         class="toggleCheckboxComponent toggle btn btn-default btn-sm"
         :class="{'off': !isActive}"
+        tabindex="0"
+        @keydown="toggle($event)"
     >
+        <input
+            v-model="checkedValue"
+            aria-label="checkbox"
+            type="checkbox"
+            :title="title"
+            data-toggle="toggle"
+            :checked="isActive"
+            @click="toggle($event)"
+            @keydown="toggle($event)"
+        >
         <div class="toggle-group">
-            <label
+            <div
                 class="btn btn-primary btn-sm toggle-on"
                 :class="{'active': isActive}"
-                @click="toggle"
-                @keydown.enter="toggle"
+                @click="toggle($event)"
+                @keydown="toggle($event)"
             >
-                <label
-                    class="btn btn-default btn-sm toggle-off"
-                    :class="{'active': !isActive}"
-                    @click="toggle"
-                    @keydown.enter="toggle"
-                >
-                    <input
-                        v-model="checkedValue"
-                        type="checkbox"
-                        :title="title"
-                        data-toggle="toggle"
-                        :checked="isActive"
-                        @click="toggle"
-                        @keydown.enter="toggle"
-                    >
-                    {{ textOff }}
-                </label>
                 {{ textOn }}
-            </label>
-
+            </div>
+            <div
+                class="btn btn-default btn-sm toggle-off"
+                :class="{'active': !isActive}"
+                @click="toggle($event)"
+                @keydown="toggle($event)"
+            >
+                {{ textOff }}
+            </div>
             <span
                 class="toggle-handle btn btn-default btn-sm"
-                @click="toggle"
-                @keydown.enter="toggle"
+                @click="toggle($event)"
+                @keydown="toggle($event)"
             />
         </div>
     </div>
 </template>
 
 <style lang="less" scoped>
+    @import "~/css/mixins.less";
+
     div.toggleCheckboxComponent {
         width:63px;
+
+        &:hover {
+            .primary_action_hover();
+        }
+        &:focus {
+            .primary_action_focus();
+        }
     }
 </style>

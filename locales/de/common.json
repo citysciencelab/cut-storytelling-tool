@@ -56,7 +56,8 @@
             "selectFeatures": "Features auswählen",
             "legend":"Legende",
             "styleVt": "Style VT",
-            "bufferAnalysis": "Buffer Analyse"
+            "bufferAnalysis": "Buffer Analyse",
+            "wfsSearch": "WFS Suche"
         },
         "contact": "Kontakt",
         "info": "Informationen"
@@ -73,6 +74,7 @@
         "backgroundMaps": "Hintergrundkarten",
         "subjectData": "Fachdaten",
         "subjectData3D": "3D Daten",
+        "subjectDataTime": "Zeitreihen",
         "selectedTopics": "Ausgewählte Themen",
         "removeSelection": "Auswahl entfernen",
         "infosAndLegend": "Informationen und Legende",
@@ -98,13 +100,12 @@
               "wrongStyleId": "Unter der angegeben StyleId: {{styleId}} konnte kein Styleobjekt gefunden werden. Bitte stellen Sie sicher, dass in der verwendeten Style.json ein Style mit der StyleId: {{styleId}} konfiguriert ist.",
               "sensor": {
                 "httpOnError": "<strong>Unerwarteter Fehler beim Laden der Sensordaten des Layers {{name}} aufgetreten</strong>"
+              },
+              "wms": {
+                "errorTimeLayer": "Es ist ein Fehler bei der Vorbereitung des Layer mit der id {{id}} aufgetreten: {{error}}",
+                "invalidTimeLayer": "Der konfigurierte Layer mit der Id {{id}} enthält nicht alle notwendigen Parameter für einen WMS-T."
               }
             }
-          },
-          "parametricURL": {
-            "alertZoomToGeometry": "Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!<br>Bitte stellen Sie sicher das alle Parameter richtig angegeben wurden.",
-            "alertWrongLayerIds": "<strong>Der parametrisierte Aufruf ist fehlerhaft!</strong> Die LAYERIDS am den Positionen: <b>{{wrongIdsPositionsConcat}}</b> existieren nicht und werden ignoriert!",
-            "alertWrongInitValues": "<strong>Der parametrisierte Aufruf ist fehlerhaft!</strong> Die gespeicherten Parameter wurden verändert oder sind unvollständig!"
           }
         },
         "alerting": {
@@ -662,6 +663,22 @@
                 "saveButton": "Speichern",
                 "sourceLayerNotFound": "Der gespeicherte Quell-Layer mit der ID {{layerId}} wurde nicht gefunden.",
                 "targetLayerNotFound": "Der gespeicherte Ziel-Layer mit der ID {{layerId}} wurde nicht gefunden."
+            },
+            "wfsSearch": {
+                "noResults": "Es wurden keine Ergebnisse für Ihre Suchkriterien gefunden. Bitte versuchen Sie es erneut.",
+                "optionsPlaceholder": "Bitte wählen Sie eine Option aus!",
+                "resetButton": "Zurücksetzen",
+                "searchButton": "Suchen",
+                "resultListTitle": "Suchergebnisse:",
+                "instancesSelectLabel": "Instanzenauswahl",
+                "showResults": "Zeige Ergebnisse",
+                "searchError": "Fehler bei der Suche von Feature: {{error}}.",
+                "userHelp": {
+                    "and": "und",
+                    "or": "oder",
+                    "label": "Informationen bezüglich der Suchergebnisse",
+                    "text": "Die Ergebnisse der Suche werden die Bedingungen / Klauseln {{userHelp}} erfüllen. <br /> *Pflichtfeld"
+                }
             }
         },
         "controls": {
@@ -801,6 +818,22 @@
                 "getGeometryTypeFromWFSFetchfailedMessage": "Details: Ein benötigter Dienst antwortet nicht."
             }
         },
+        "wmsTime": {
+            "layerSwiper": {
+                "description": "Der Swiper kann mithilfe der Maus oder den Pfeiltasten der Tastatur bewegt werden. Bei der Nutzung der Pfeiltasten wird der Swiper {{amount}}px in die entsprechende Richtung bewegt.",
+                "title": "Layer vergleichen"
+            },
+            "timeSlider": {
+                "buttons": {
+                    "backward": "Einen Zeitpunkt zurück",
+                    "deactivateLayerSwiper": "Layer entfernen",
+                    "forward": "Einen Zeitpunkt voran",
+                    "layerSwiper": "Zeitpunkte vergleichen",
+                    "play": "Ein automatisches Abspielen aller Zeitpunkte, ausgehend vom aktuell ausgewählten Zeitpunkt"
+                },
+                "inputRangeLabel": "Einen Zeitpunkt auswählen"
+            }
+        },
         "legend": {
             "name": "Legende",
             "linkToPdf": "Zur externen Legende (PDF)",
@@ -843,7 +876,13 @@
             "fourthAdvent": "4. Advent",
             "christmasDay": "1. Weihnachtstag",
             "secondDayOfChristmas": "2. Weihnachtstag"
-        }
+        },
+        "parametricURL": {
+            "alertZoomToGeometry": "Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!<br>Bitte stellen Sie sicher das alle Parameter richtig angegeben wurden.",
+            "alertWrongLayerIds": "<strong>Der parametrisierte Aufruf ist fehlerhaft!</strong> </br>Die <b>layerIds</b> an den Positionen: {{wrongIdsPositionsConcat}} existieren nicht und werden ignoriert!",
+            "alertWrongAmountVisibility": "<strong>Parametrisierter Aufruf fehlerhaft!</strong></br>Die Angaben zu <b>layerIds</b> passen nicht zu <b>visibility</b> bzw. <b>transparency</b>. Sie müssen jeweils in der gleichen Anzahl angegeben werden.",
+            "errorLoadConfig": "Die gewünschte Konfigurationsdatei konnte unter folgendem Pfad nicht geladen werden: {{url}}<br>Der URL-Paramater <strong>configJson</strong> verlangt eine Datei mit der Endung \".json\".<br>Es wird versucht die config.json unter dem Standardpfad zu laden."
+          }
     },
     "snippets": {
         "checkbox": {
@@ -873,6 +912,15 @@
             "to":" bis",
             "incorrectEntry": "Fehlerhafte Eingabe, bitte eine ganze Zahl eingeben!",
             "outOfRangeErrorMessage": "Der Eingabewert muss innerhalb des Gültigkeitsbereiches {{minValueSlider}} und {{maxValueSlider}} liegen!"
+        }
+    },
+    "share-components": {
+        "list": {
+            "replace": {
+                "true": "ja",
+                "No": "nein"
+            },
+            "zoomToResult": "Zum Ergebnis zoomen"
         }
     }
 }

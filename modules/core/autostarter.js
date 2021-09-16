@@ -1,3 +1,5 @@
+import store from "../../src/app-store";
+
 const Autostarter = Backbone.Model.extend({
     defaults: {
         autostartModules: [], // array of all modules to open on startup
@@ -54,7 +56,7 @@ const Autostarter = Backbone.Model.extend({
      * @returns {Void}  -
      */
     parametersAnalysed: function () {
-        const isInitOpen = Radio.request("ParametricURL", "getIsInitOpen"),
+        const isInitOpen = store.state.urlParams?.isinitopen,
             parametricAutostart = isInitOpen !== undefined ? isInitOpen.toString() : undefined,
             autostartParameter = parametricAutostart ? parametricAutostart : null,
             autostartModules = this.get("autostartModules");

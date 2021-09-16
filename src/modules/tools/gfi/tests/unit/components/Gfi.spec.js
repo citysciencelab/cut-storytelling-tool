@@ -60,7 +60,7 @@ function getGfiStore () {
         getters: {
             mobile: () => sinon.stub(),
             gfiWindow: () => "",
-            isTableStyle: () => sinon.stub(),
+            uiStyle: () => sinon.stub(),
             ignoredKeys: () => sinon.stub()
         }
     });
@@ -79,7 +79,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
         const wrapper = shallowMount(GfiComponent, {
             computed: {
                 isMobile: () => false,
-                isTable: () => false,
+                uiStyle: () => "",
                 desktopType: () => "attached",
                 active: () => true,
                 gfiFeatures: () => [{
@@ -105,7 +105,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 isMobile: () => false,
                 desktopType: () => "",
                 active: () => true,
-                isTable: () => false,
+                uiStyle: () => "",
                 gfiFeatures: () => [{
                     getGfiUrl: () => null,
                     getFeatures: () => sinon.stub(),
@@ -129,7 +129,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 isMobile: () => false,
                 desktopType: () => "",
                 active: () => true,
-                isTable: () => true,
+                uiStyle: () => "TABLE",
                 gfiFeatures: () => [{
                     getGfiUrl: () => null,
                     getFeatures: () => sinon.stub(),
@@ -484,7 +484,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 isMobile: () => false,
                 desktopType: () => "",
                 active: () => true,
-                isTable: () => false,
+                uiStyle: () => "",
                 gfiFeatures: () => [{
                     getGfiUrl: () => null,
                     getFeatures: () => sinon.stub(),

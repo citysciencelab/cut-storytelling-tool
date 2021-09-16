@@ -1,4 +1,4 @@
-@import "../../../css/variables.less";
+@import "../../../css/mixins.less";
 
 @color_1: #fff;
 @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
@@ -6,11 +6,13 @@
 
 /*SimpleView*/
 .filter {
-    button.close {
+    .glyphicon-remove {
+        padding: 5px;
         &:focus {
-            outline: 3px solid @accent_focus;
-            outline: 3px auto  Highlight;
-            outline: 3px auto -webkit-focus-ring-color;
+            .primary_action_focus();
+        }
+        &:hover {
+            .primary_action_hover();
         }
     }
     .header {
@@ -36,11 +38,17 @@
     .simple-view {
         .btn-default {
             margin: 4px;
+            &:focus {
+                .primary_action_focus();
+            }  
+            &:hover {
+                .primary_action_hover();
+            }
         }
     }
     .btn-select {
         color: @color_1;
-        background-color: @background_color_1;
+        background-color: rgba(0, 0, 0, 0.54);
         .name {
             &:hover {
                 font-weight: normal;

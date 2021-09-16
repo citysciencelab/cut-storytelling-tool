@@ -409,7 +409,8 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "~variables";
+    @import "~/css/mixins.less";
+
     .poi {
         color: rgb(85, 85, 85);
         font-size: 14px;
@@ -426,12 +427,10 @@ export default {
         .glyphicon-remove {
             font-size: 16px;
             float: right;
-            margin: 12px;
+            padding: 12px;
             cursor: pointer;
             &:focus {
-                outline: 3px solid @accent_focus;
-                outline: 3px auto  Highlight;
-                outline: 3px auto -webkit-focus-ring-color;
+                .primary_action_focus();
             }
         }
         .modal-dialog {
@@ -440,6 +439,9 @@ export default {
         .tab-content{
             max-height: 78vH;
             overflow: auto;
+            &:focus {
+                .primary_action_focus();
+            }
             tbody {
                 >tr {
                     >td {

@@ -12,7 +12,6 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
      * @extends Backbone.Model
      * @memberof Core.ConfigLoader
      * @constructs
-     * @fires Core#RadioRequestUtilGetConfig
      * @fires Alerting#RadioTriggerAlertAlert
      * @description Loading and preperation for parsing (calls parser for default or custom tree) of the configuration file (config.json).
      * @param {*} attributes todo
@@ -21,7 +20,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     initialize: function (attributes, options) {
         const defaultConfigPath = this.get("defaultConfigPath");
 
-        this.url = this.getUrlPath(options.url, this.requestConfigFromUtil(), defaultConfigPath);
+        this.url = this.getUrlPath(options.url, store.state.urlParams.configJson, defaultConfigPath);
         this.fetchData();
     },
 
@@ -32,7 +31,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     fetchData: function () {
         this.fetch({async: false,
             error: (model, xhr, error) => {
-                Radio.trigger("Alert", "alert", {text: "Die gewünschte Konfigurationsdatei konnte unter folgendem Pfad nicht geladen werden:<br>" + this.url});
+                store.dispatch("Alerting/addSingleAlert", i18next.t("common:utils.parametricURL.errorLoadConfig", {url: this.url}), {root: true});
 
                 if (error.textStatus === "parsererror") {
                     // reload page once
@@ -48,16 +47,6 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                 }
             }
         });
-    },
-
-    /**
-    * Request config path from util.
-    * This seperate helper method enables unit tests of the getUrlPath-method.
-    * @fires Util#RadioRequestGetConfig
-    * @return {string} relative path or absolute url to config file
-    */
-    requestConfigFromUtil: function () {
-        return Radio.request("Util", "getConfig");
     },
 
     /**
@@ -102,6 +91,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
             baselayer: response.Themenconfig.Hintergrundkarten,
             overlayer: response.Themenconfig.Fachdaten,
             overlayer_3d: response.Themenconfig.Fachdaten_3D,
+            overlayer_time: response.Themenconfig.Fachdaten_Zeit,
             treeType: response.Portalconfig?.treeType ? response.Portalconfig.treeType : "light",
             isFolderSelectable: this.parseIsFolderSelectable(Config?.tree?.isFolderSelectable),
             snippetInfos: this.requestSnippetInfos()

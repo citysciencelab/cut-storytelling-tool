@@ -16,7 +16,7 @@ export default {
     computed: {
         ...mapGetters("Tools/CoordToolkit", Object.keys(getters)),
         ...mapGetters("Map", ["projection", "mouseCoord", "mapMode"]),
-        ...mapGetters(["isDefaultStyle"]),
+        ...mapGetters(["uiStyle"]),
         eastingNoCoordMessage: function () {
             if (this.currentProjection.projName !== "longlat") {
                 return this.$t("common:modules.tools.coordToolkit.errorMsg.noCoord", {valueKey: this.$t(this.getLabel("eastingLabel"))});
@@ -136,6 +136,14 @@ export default {
                 if (proj.name === "EPSG:4326") {
                     wgs84Proj.push(proj);
                 }
+                if (proj.name.indexOf("#") > -1) { // e.g. "http://www.opengis.net/gml/srs/epsg.xml#25832"
+                    const code = proj.name.substring(proj.name.indexOf("#") + 1, proj.name.length);
+
+                    proj.title = proj.title + " (EPSG:" + code + ")";
+                }
+                else {
+                    proj.title = proj.title + " (" + proj.name + ")";
+                }
             });
             if (wgs84Proj.length > 0) {
                 this.addWGS84Decimal(pr, wgs84Proj);
@@ -158,7 +166,7 @@ export default {
 
             wgs84ProjDez.name = "EPSG:4326";
             wgs84ProjDez.id = "EPSG:4326-DG";
-            wgs84ProjDez.title = "WGS 84(Dezimalgrad)";
+            wgs84ProjDez.title = "WGS 84(Dezimalgrad) (EPSG:4326)";
             projections.splice(index + 1, 0, wgs84ProjDez);
         },
         /**
@@ -193,8 +201,6 @@ export default {
          */
         selectionChanged (event) {
             if (event.target.value) {
-                this.onInputEvent(this.coordinatesEasting);
-                this.onInputEvent(this.coordinatesNorthing);
                 this.newProjectionSelected(event.target.value);
                 if (this.mode === "search") {
                     this.validateInput(this.coordinatesEasting);
@@ -252,12 +258,13 @@ export default {
          * @returns {void}
          */
         changeMode (newMode) {
-            this.setMode(newMode);
             if (newMode === "search") {
+                this.setMode(newMode);
                 this.removeMarker();
                 this.setSupplyCoordInactive();
             }
-            else {
+            else if (this.mapMode !== MapMode.MODE_3D) {
+                this.setMode(newMode);
                 this.resetErrorMessages("all");
                 this.setSupplyCoordActive();
             }
@@ -354,6 +361,9 @@ export default {
                 return false;
             }
             return this.mode === "supply";
+        },
+        isDefaultStyle () {
+            return this.uiStyle !== "SIMPLE" && this.uiStyle !== "TABLE";
         }
     }
 };
@@ -441,7 +451,7 @@ export default {
                                     :value="projection.id"
                                     :SELECTED="projection.id === currentProjection.id"
                                 >
-                                    {{ projection.title ? projection.title + " ("+projection.name+")" : projection.name }}
+                                    {{ projection.title ? projection.title : projection.name }}
                                 </option>
                             </select>
                         </div>
@@ -461,7 +471,6 @@ export default {
                                 v-model="coordinatesEasting.value"
                                 type="text"
                                 :readonly="isEnabled('supply')"
-                                :contenteditable="isEnabled( 'search')"
                                 :class="{ inputError: getEastingError, 'form-control': true}"
                                 :placeholder="isEnabled( 'search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesEastingExample : ''"
                                 @click="onInputClicked($event)"
@@ -498,7 +507,6 @@ export default {
                                 type="text"
                                 :class="{ inputError: getNorthingError , 'form-control': true}"
                                 :readonly="isEnabled( 'supply')"
-                                :contenteditable="isEnabled( 'search')"
                                 :placeholder="isEnabled( 'search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesNorthingExample : ''"
                                 @click="onInputClicked($event)"
                                 @input="onInputEvent(coordinatesNorthing)"
@@ -534,13 +542,12 @@ export default {
                                 type="text"
                                 class="form-control"
                                 :readonly="true"
-                                :contenteditable="false"
                                 @click="onInputClicked($event)"
                             >
                         </div>
                     </div>
                     <div
-                        v-if="isDefaultStyle"
+                        v-if="isDefaultStyle()"
                         class="form-group form-group-sm"
                     >
                         <div class="col-md-12 col-sm-12 info">
@@ -559,7 +566,7 @@ export default {
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <button
                                 id="searchByCoordBtn"
-                                class="btn btn-block"
+                                class="btn btn-primary btn-block"
                                 :disabled="getEastingError || getNorthingError || !coordinatesEasting.value || !coordinatesNorthing.value"
                                 type="button"
                                 @click="searchCoordinate(coordinatesEasting, coordinatesNorthing)"
@@ -575,6 +582,9 @@ export default {
 </template>
 
 <style lang="less" scoped>
+@import "~variables";
+
+
     @media (max-width: 767px) {
         .checkbox-container .form-inline {
             font-size: 12px;
@@ -600,7 +610,7 @@ export default {
     .hint{
         margin: 5px 0px 25px;
         text-align:center;
-        color: #7aa9d0;
+        color: @secondary_focus;
         transition: color 0.35s;
     }
     .info{

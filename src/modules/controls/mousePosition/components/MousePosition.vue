@@ -19,11 +19,11 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(["controlsConfig", "mobile", "isSimpleStyle"]),
+        ...mapGetters(["controlsConfig", "mobile", "uiStyle"]),
         ...mapGetters("Map", ["prettyMouseCoord"]),
         // MousePosition is the only control that needs to do this itself since it's not a ControlBar child
         show () {
-            return !this.mobile && this.controlsConfig?.mousePosition && !this.isSimpleStyle;
+            return !this.mobile && this.controlsConfig?.mousePosition && this.uiStyle !== "SIMPLE";
         }
     },
     methods: {
@@ -55,6 +55,7 @@ export default {
             {{ prettyMouseCoord || $t(`common:modules.controls.mousePosition.hint`) }}
         </span>
         <ControlIcon
+            id="hide-mouse-position"
             :icon-name="`chevron-${open ? 'left' : 'right'}`"
             :title="$t(`common:modules.controls.mousePosition.${open ? 'hide' : 'show'}MousePosition`)"
             :on-click="toggleOpen"
@@ -88,6 +89,11 @@ export default {
         .mouse-position-span {
             padding: 0 8px;
             border-right: 1px solid @primary_contrast;
+            color: #FFFFFF;
+        }
+
+        #hide-mouse-position{
+            color: #FFFFFF;
         }
     }
 </style>

@@ -104,8 +104,8 @@ export default {
     >
         <template #rightOfTitle>
             <span
-                class="icon-turnarticle glyphicon"
                 tabindex="0"
+                class="icon-turnarticle glyphicon"
                 @click="rotate"
                 @keydown.enter="rotate"
             />
@@ -128,6 +128,8 @@ export default {
 </template>
 
 <style lang="less">
+@import "~/css/mixins.less";
+
 @color_1: #808080;
 @font_family_1: "MasterPortalFont";
 @background_color_1: #F2F2F2;
@@ -181,9 +183,15 @@ export default {
         display: inline-block;
         bottom: 20px;
         right: 25px;
-          margin: 0 0 0 10px;
-            cursor: pointer;
-            font-size: 16px;
+        margin: 6px 0 0 10px;
+        cursor: pointer;
+        font-size: 16px;
+        &:focus {
+            .primary_action_focus();
+        }
+        &:hover {
+            .primary_action_hover();
+        }
     }
     .icon-turnarticle::before {
         color: @background_color_1;

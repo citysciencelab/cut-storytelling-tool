@@ -32,13 +32,14 @@ All layer information the portal needs to use the services is stored here. Confi
 |name|yes|String||Arbitrary display name used in the layer tree.|`"Aerial View DOP 10"`|
 |singleTile|no|Boolean||`true`: Request map as a single tile of the current view. `false`: Build map from multiple smaller tiles.|`false`|
 |tilesize|yes|String||Tile height and width in pixels. Used if `singleTile` is `false`.|`"512"`|
+|time|no|Boolean/**[time](#markdown-header-wms-layertime)**|false|If set to `true` or an object (**[time](#markdown-header-wms-layertime)**), the configured Layer is expected to be a WMS-T.|`false`|
 |transparent|yes|Boolean||Whether the tile background should be transparent. Corresponds to the *GetMap* parameter *TRANSPARENT*.|`true`|
 |typ|yes|String||Service type; in this case, "WMS". (**[WMTS docs](#markdown-header-wmts-layer)**, **[WFS docs](#markdown-header-wfs-layer)**, **[SensorThings-API docs](#markdown-header-sensor-layer)**)|`"WMS"`|
 |url|yes|String||Service URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 |version|yes|String||Service version used for *GetMap* requests.|`"1.3.0"`|
-|isSecured|nein|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
-|authenticationUrl|nein|String||Additional url called to trigger basic authentication in the browser..|"https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities"|
+|isSecured|no|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
+|authenticationUrl|no|String||Additional url called to trigger basic authentication in the browser.|"https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities"|
 
 **WMS example:**
 
@@ -83,8 +84,11 @@ All layer information the portal needs to use the services is stored here. Confi
       ]
    }
 ```
+
 ***
+
 ## WMS-Layer.isSecured ##
+
 WMS layer belonging to a secured WMS service.
 
 **CAUTION: If the layer belongs to a secured service, the following changes must be made to the service!**
@@ -96,6 +100,19 @@ WMS layer belonging to a secured WMS service.
 `Access-Control-Allow-Origin: *` <br>
 to <br>
 `Access-Control-Allow-Origin: URL of the accessing portal`.
+
+***
+
+## WMS-Layer.time ##
+
+Possible configuration for the time related parameters of a WMS-T.
+If a parameter is also present in the service, the definition in this config is used.
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|default|no|Number||Initial moment to be displayed for the WMS-T. **Beware**: If the configured value is not part of the time range of possible values, the default of the service is used instead.|`1970`|
+|keyboardMovement|no|Number|`5`| Value in pixels that the swiper should be moved when using the arrow keys.|`5`|
+|playbackDelay|no|Number|`1`|When using the playback function, this is the time in seconds which a moment should be shown before the rendering of the next moment is initiated.|`42`|
 
 ***
 
@@ -228,9 +245,9 @@ WMTS layers can be added by
 |altitudeOffset|no|Number||Height offset for display in 3D mode in meters. If given, any existing z coordinates will be increased by this value. If no z coordinate exists, this value is used as z coordinate.|`10`|
 |gfiTheme|yes|String/Object||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
-|wfsFilter|no|String||The path of filter file|`"ressources/xmlFilter/filterSchulenStadtteilschulen"`|
-|isSecured|nein|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
-|authenticationUrl|nein|String||Additional url called to trigger basic authentication in the browser..|"https://geodienste.hamburg.de/HH_WMS_DOP10?SERVICE=WFS&VERSION=1.1.0&REQUEST=DescribeFeatureType"|
+|wfsFilter|no|String||Set to use xml ressource as wfs filter, the content of the filter file will be sent to the wfs server as POST request (**[see below](#markdown-header-wfsfilter)**).|`"ressources/xmlFilter/filterSchulenStadtteilschulen"`|
+|isSecured|no|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
+|authenticationUrl|no|String||Additional url called to trigger basic authentication in the browser.|"https://geodienste.hamburg.de/HH_WMS_DOP10?SERVICE=WFS&VERSION=1.1.0&REQUEST=DescribeFeatureType"|
 |propertyNames|no|Array||The attributes as PROPERTYNAME parameter to receive response from wfs layer |`["properties"]`|
 
 **WFS example:**
@@ -302,7 +319,57 @@ WMTS layers can be added by
     ]
   }
 ```
+
+### wfsFilter
+
+You can create an xml ressource using wfs standard to request your server with complex filters.
+To learn more about wfs filter encoding see https://mapserver.org/de/ogc/filter_encoding.html .
+
+Remember to use the correct feature namespace (see prop featureNS) for xmlns:app.
+
+
+
+**Example**
+
+A filter for primary schools with more than 2 parallel first classes in a file named "primary_schools_with_more_than_two_first_classes.xml".
+Remember to add/remove namespaces (e.g. xmlns:wfs and xmlns:ogc) for your purpose.
+If it doesn't work with the first try, go through your file - line for line - most of the time some prefix doesn't match a namespace or vice versa.
+
+Config:
+
+```json
+{
+    wfsFilter: "primary_schools_with_more_than_two_first_classes.xml"
+}
+```
+
+Content of primary_schools_with_more_than_two_first_classes.xml:
+
+```json
+<?xml version="1.0" encoding="UTF-8"?>
+<wfs:GetFeature service="WFS" version="1.1.0" xmlns:app="http://www.deegree.org/app" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc">
+    <wfs:Query typeName="app:schools">
+        <ogc:Filter>
+            <ogc:And>
+                <ogc:PropertyIsEqualTo>
+                    <ogc:PropertyName>app:schoolname</ogc:PropertyName>
+                    <ogc:Literal>Primaryschool</ogc:Literal>
+                </ogc:PropertyIsEqualTo>
+                <ogc:PropertyIsGreaterThan>
+                    <ogc:PropertyName>app:parallel_first_classes</ogc:PropertyName>
+                    <ogc:Literal>2</ogc:Literal>
+                </ogc:PropertyIsGreaterThan>
+            </ogc:And>
+        </ogc:Filter>
+    </wfs:Query>
+</wfs:GetFeature>
+```
+
+
+
+
 ***
+
 ## wfs_id
 If the layer id is in an object format, the content in the object should be in the format:
 
@@ -322,7 +389,9 @@ If the layer id is in an object format, the content in the object should be in t
    }
 }
 ```
+
 ***
+
 ## WFS-Layer.isSecured ##
 WFS layer belonging to a secured WFS service.
 
@@ -438,6 +507,7 @@ For more details, consider reading the [extensive SensorThings-API documentation
 |urlParameter|no|**[urlParameter](#markdown-header-sensorlayerurlparameter)**||Query options specification. These modify the request to sensor data, e.g. with `"filter"` or `"expand"`.||
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 |version|no|String|"1.1"|Service version used to request data.|`"1.0"`|
+|intersect|no|Boolean|true|Setting if the sensor data is in intersect range or within range |`true`|
 
 **Sensor example:**
 
@@ -449,6 +519,7 @@ For more details, consider reading the [extensive SensorThings-API documentation
       "typ" : "SensorThings",
       "version" : "1.0",
       "url" : "https://51.5.242.162/itsLGVhackathon",
+      "intersect": true,
       "urlParameter" : {
          "root" : "Things",
          "filter" : "startswith(Things/name,'Charging')",
@@ -461,7 +532,17 @@ For more details, consider reading the [extensive SensorThings-API documentation
          "state" : "Zustand",
          "plug" : "Stecker",
          "type" : "Typ",
-         "dataStreamId" : "DataStreamID"
+         "dataStreamId" : "DataStreamID",
+         "@Datastreams.0": {
+            "name": "Datastreams.0",
+            "type": "linechart",
+            "query": "Observations?$filter=(resultTime gt now() sub duration'PT24H')&$orderby=phenomenonTime asc",
+            "format": "HH:mm",
+            "download": true,
+            "options": {
+             "pointRadius": 3
+            }
+         }
       },
       "mqttOptions" : {
           "host" : "https://localhost",
@@ -612,9 +693,11 @@ Definition of parameters for GFI template `"default"`.
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
 |iframe|no|**[iframe](#markdown-header-gfi_theme_default_params_iframe)**||Defines the size of the iframe. Only works if the infoFormat="text/html" is configured for the layer.|
-|imageLinks|no|String/String[]|`["bildlink", "link_bild", "Bild"]`|Defines in which attribute an image reference is given. Attributes will be searched in given order, and the first hit will be used.|
+|imageLinks|no|String/String[]|`["bildlink", "link_bild", "Bild", "bild"]`|Defines in which attribute an image reference is given. Attributes will be searched in given order, and the first hit will be used.|
 |maxWidth|no|String|`"600px"`|Defines the max width of the gfi content. The max width must be at least 280px.|
-|showFavoriteIcons|no|Boolean|`true`|Specifies whether an icon bar allowing tool access is to be displayed. The icons are only displayed if the corresponding tools are configured. Usable tools: `compareFeatures` (not yet implemented for WMS).
+|showFavoriteIcons|no|Boolean|`true`|Specifies whether an icon bar allowing tool access is to be displayed. The icons are only displayed if the corresponding tools are configured. Usable tools: `compareFeatures` (not yet implemented for WMS).|
+|beautifyKeys|no|Boolean|true|Defines if the attribute keys are beautified (true) or not (false).|
+|showObjectKeys|no|Boolean|false|Displays attribute keys and values of objects in the data if set to true.|
 
 
 **gfiTheme example for template "Default":**
@@ -629,10 +712,13 @@ Example for show images in the gfi:
                 "bildlink",
                 "link_bild",
                 "Bild",
+                "bild",
                 "My_image_tag"
             ],
             "maxWidth": "500px",
-            "showFavoriteIcons": true
+            "showFavoriteIcons": true,
+            "beautifyKeys": true,
+            "showObjectKeys": false
         }
     }
 }
@@ -689,6 +775,8 @@ This theme allows the visualization of historical data regarding a SensorThings-
 |data|no|**[data](#markdown-header-gfi_theme_sensor_params_data)**||Data column names.|
 |header|no|Object|`{"name": "Name", "description": "Beschreibung", "ownerThing": "Eigentümer"}`|Specifies which attributes are to be used for the headers. The display name of each attribute can be specified here, e.g. `"description"` may be displayed `"Arbitrary String"`.|
 |historicalData|no|**[historicalData](#markdown-header-gfi_theme_sensor_params_historicalData)**||Indicates for which period the historical Observations should be requested.|
+|beautifyKeys|no|Boolean|true|Defines if the attribute keys are beautified (true) or not (false).|
+|showObjectKeys|no|Boolean|false|Displays attribute keys and values of objects in the data if set to true.|
 
 **gfiTheme example for template "Sensor":**
 
@@ -728,7 +816,9 @@ This theme allows the visualization of historical data regarding a SensorThings-
             "historicalData": {
                 "periodLength": 3,
                 "periodUnit": "month"
-            }
+            },
+            "beautifyKeys": true,
+            "showObjectKeys": false
         }
     }
 }

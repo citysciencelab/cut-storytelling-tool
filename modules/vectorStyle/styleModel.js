@@ -6,12 +6,14 @@ import LinestringStyle from "./linestringStyle";
 import CesiumStyle from "./cesiumStyle";
 import {fetch as fetchPolyfill} from "whatwg-fetch";
 import axios from "axios";
+import getProxyUrl from "../../src/utils/getProxyUrl";
 
 const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.prototype */{
     defaults: {
-        "styleId": null,
-        "rules": null,
-        "legendInfos": []
+        labelField: null,
+        legendInfos: [],
+        rules: null,
+        styleId: null
     },
 
     /**
@@ -20,16 +22,17 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @extends Backbone.Model
      * @memberof VectorStyle
      * @constructs
-     * @param {String} styleId styleId is set in style.json
+     * @param {String} labelField Value used if the feature has a label.
+     * @param {Object[]} legendInfos list of used styling rules for legend graphic
      * @param {Object[]} rules Array with styling rules and its conditions.
-     * @param {Object[]} legendInfos list of used styling rules for legend grafic
+     * @param {String} styleId styleId is set in style.json
      * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function () {
         this.listenTo(Radio.channel("i18next"), {
             "languageChanged": this.changeLang
         });
-        // legendInfos must be set on initialize. Otherwhile legendInfos are mixed up with other VectorStyleModels
+        // legendInfos have to be set during initialize. Otherwise they'd be mixed up with other VectorStyleModels
         this.set("legendInfos", []);
     },
 
@@ -65,21 +68,26 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @param   {string} version wfs version from layer
      * @param   {string} featureType wfs feature type from layer
      * @param   {string[] | string} styleGeometryType The configured geometry type of the layer
+     * @param   {Boolean} useProxy Attribute to request the URL via a reverse proxy
      * @returns {void}
      */
-    getGeometryTypeFromWFS: function (wfsURL, version, featureType, styleGeometryType) {
+    getGeometryTypeFromWFS: function (wfsURL, version, featureType, styleGeometryType, useProxy) {
         const params = {
             "SERVICE": "WFS",
             "VERSION": version,
             "REQUEST": "DescribeFeatureType"
         };
-        let url = wfsURL + "?";
+        /**
+        * @deprecated in the next major-release!
+        * useProxy
+        * getProxyUrl()
+        */
+        let url = useProxy ? getProxyUrl(wfsURL) + "?" : wfsURL + "?";
 
         Object.keys(params).forEach(key => {
             url += key + "=" + params[key] + "&";
         });
         url = url.slice(0, -1);
-
         fetchPolyfill(url)
             .then(response => response.text())
             .then(responseAsString => new window.DOMParser().parseFromString(responseAsString, "text/xml"))
@@ -287,7 +295,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * Returns the style for simple (non-multi) geometry types
      * @param   {string}  geometryType GeometryType
      * @param   {ol/feature}  feature     the ol/feature to style
-     * @param   {object[]}  rule       styling rules to check.
+     * @param   {object}  rule       styling rules to check.
      * @param   {Boolean} isClustered  Flag to show if feature is clustered.
      * @returns {ol/style/Style}    style is always returned
      */
@@ -295,6 +303,9 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         const style = rule.style;
         let styleObject;
 
+        if (Object.prototype.hasOwnProperty.call(style, "labelField")) {
+            this.set("labelField", style.labelField);
+        }
         if (geometryType === "Point") {
             styleObject = new PointStyle(feature, style, isClustered);
             this.addLegendInfo("Point", styleObject, rule);

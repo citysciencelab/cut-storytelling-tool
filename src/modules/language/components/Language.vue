@@ -83,13 +83,21 @@ export default {
 </template>
 
 <style lang="less">
-    @import "~variables";
+    @import "~/css/mixins.less";
 
     #language-bar {
+        a {
+            color: darken(@secondary_focus, 10%);
+            &:hover{
+                .primary_action_hover();
+            }
+        }
+
         margin-left: 10px;
         .current-language {
             display: block;
             position: relative;
+            color: #1F4B70;
 
             cursor: pointer;
 
@@ -117,7 +125,7 @@ export default {
                 float: right;
                 width: 100%;
                 border-bottom: 1px solid #e5e5e5;
-                padding: 0px 0px 3px 10px;
+                padding: 0 0 3px 10px;
                 span {
                     width: 30px;
                     cursor: pointer;
@@ -131,8 +139,9 @@ export default {
                 a {
                     font-size: 12px;
                     &:hover{
-                        background-color: #08589e;
-                        color: #ffffff;
+                        // .primary_action_hover();
+                        // background-color: #08589e;
+                        // color: #ffffff;
                     }
                     &.disabled {
                         background-color: #e7e7e7;

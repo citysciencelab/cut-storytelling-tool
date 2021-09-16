@@ -1,4 +1,5 @@
 import WMSLayer from "./layer/wms";
+import WmsTimeLayer from "./layer/wmsTime";
 import WMTSLayer from "./layer/wmts";
 import WFSLayer from "./layer/wfs";
 import StaticImageLayer from "./layer/staticImage";
@@ -176,6 +177,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     model: function (attrs, options) {
         if (attrs.type === "layer") {
             if (attrs.typ === "WMS") {
+                if (attrs.time) {
+                    return new WmsTimeLayer(attrs, options);
+                }
                 return new WMSLayer(attrs, options);
             }
             else if (attrs.typ === "WMTS") {
@@ -716,7 +720,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         // lighttree: Alle models gleich hinzufügen, weil es nicht viele sind und sie direkt einen Selection index
         // benötigen, der ihre Reihenfolge in der Config Json entspricht und nicht der Reihenfolge
         // wie sie hinzugefügt werden
-        const paramLayers = Radio.request("ParametricURL", "getLayerParams") ? Radio.request("ParametricURL", "getLayerParams") : [],
+        const paramLayers = store.state.urlParams && store.state.urlParams["Map/layerIds"] ? store.state.urlParams["Map/layerIds"] : [],
             treeType = Radio.request("Parser", "getTreeType");
 
         let lightModels,
@@ -783,7 +787,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
                 if (hit) {
                     Object.assign(lightModel, hit);
-                    lightModel.isSelected = true;
+                    lightModel.isSelected = hit.visibility;
                 }
                 else {
                     lightModel.isSelected = false;

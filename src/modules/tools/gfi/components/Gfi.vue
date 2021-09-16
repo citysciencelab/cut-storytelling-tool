@@ -30,7 +30,7 @@ export default {
         ...mapGetters({
             isMobile: "mobile",
             gfiWindow: "gfiWindow",
-            isTable: "isTableStyle",
+            uiStyle: "uiStyle",
             ignoredKeys: "ignoredKeys"
         }),
         ...mapGetters("Tools/Gfi", Object.keys(getters)),
@@ -56,7 +56,7 @@ export default {
             else if ((this.desktopType || this.gfiWindow)?.toLowerCase() === "attached") {
                 return "Attached";
             }
-            else if (this.isTable) {
+            else if (this.uiStyle === "TABLE") {
                 return "Table";
             }
             return "Detached";

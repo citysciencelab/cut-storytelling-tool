@@ -12,7 +12,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function ElasticSearch ({builder, url, resolution, capability}) {
-    describe("Elastic Search", function () {
+    describe.skip("Elastic Search", function () {
         const searchInputSelector = By.css("#searchInput"),
             searchString = "xys",
             layerName = "high performance area",
@@ -49,7 +49,7 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
 
         if (isMaster(url) || isCustom(url)) {
             it(`search for '${searchString}' shows 'Fachthema'-suffixed result in a dropdown that can be clicked`, async function () {
-                const topicSelector = By.xpath("//small[@class='list-group-item-theme'][text()='Fachthema']");
+                const topicSelector = By.xpath("//span[@class='list-group-item-theme'][text()='Fachthema']");
 
                 await searchInput.sendKeys(searchString);
 

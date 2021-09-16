@@ -3,16 +3,17 @@ import {expect} from "chai";
 /**
  * Helper for testing action with expected mutations.
  * Mocks the commit and calls the action and checks the expexted mutations.
- * @param {function} action will be called the action with mocked store and arguments
- * @param {object} payload the action is called with
- * @param {object} state the action is called with
- * @param {object} rootState app's root state
- * @param {array.<object>} expectedMutationsAndActions mutations expected to call and actions expected to dispatch
- * @param {object} getters mocks for the expected getters to be called
- * @param {function} done will be called if finished or fails
+ * @param {Function} action will be called the action with mocked store and arguments
+ * @param {Object} payload the action is called with
+ * @param {Object} state the action is called with
+ * @param {Object} rootState app's root state
+ * @param {Object[]} expectedMutationsAndActions mutations expected to call and actions expected to dispatch
+ * @param {Object} getters mocks for the expected getters to be called
+ * @param {Function} done will be called if finished or fails
+ * @param {Object} rootGetters app's root getters
  * @returns {void}
  */
-export default function testAction (action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done) {
+export default function testAction (action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters) {
     let commit = null,
         dispatch = null,
         count = 0;
@@ -58,7 +59,7 @@ export default function testAction (action, payload, state, rootState, expectedM
     };
 
     // call the action with mocked store and arguments
-    action({commit, dispatch, state, rootState, getters}, payload);
+    action({commit, dispatch, state, rootState, getters, rootGetters}, payload);
 
     // check if no mutations should have been dispatched
     if (expectedMutationsAndActions.length === 0) {

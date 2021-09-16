@@ -243,7 +243,7 @@ export default {
 
         /**
          * Prepares the legend array for a grouplayer by iterating over its layers and generating the legend of each child.
-         * @param {ol/Layer/Soure} layerSource Layer sources of group layer.
+         * @param {ol/Layer/Source} layerSource Layer sources of group layer.
          * @returns {Object[]} - merged Legends.
          */
         prepareLegendForGroupLayer (layerSource) {
@@ -458,15 +458,12 @@ export default {
             const olFeature = new Feature(),
                 circleBarScalingFactor = style.get("circleBarScalingFactor"),
                 barHeight = String(20 / circleBarScalingFactor),
-                clonedStyle = style.clone();
-            let olStyle = null,
-                intervalCircleBar = null;
+                clonedStyle = style.clone(),
+                intervalCircleBar = clonedStyle.getStyle().getImage().getSrc();
 
             olFeature.set(scalingAttribute, barHeight);
             clonedStyle.setFeature(olFeature);
             clonedStyle.setIsClustered(false);
-            olStyle = clonedStyle.getStyle();
-            intervalCircleBar = olStyle.getImage().getSrc();
 
             return intervalCircleBar;
         },
@@ -796,7 +793,8 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "~variables";
+    @import "~/css/mixins.less";
+
     @color_1: #000000;
     @color_2: rgb(255, 255, 255);
     @font_family_2: "MasterPortalFont", sans-serif;
@@ -811,7 +809,7 @@ export default {
             position: absolute;
             min-width:200px;
             max-width:600px;
-            right: 0px;
+            right: 0;
             margin: 10px 10px 30px 10px;
             background-color: #ffffff;
             z-index: 9999;
@@ -829,19 +827,23 @@ export default {
             border-bottom: 2px solid #e7e7e7;
             cursor: move;
             .close-legend {
+                padding: 5px;
                 cursor: pointer;
                 &:focus {
-                    outline: 3px solid @accent_focus;
-                    outline: 3px auto  Highlight;
-                    outline: 3px auto -webkit-focus-ring-color;
+                    .primary_action_focus();
                 }
-            };
+                &:hover {
+                    .primary_action_hover();
+                }
+            }
             .toggle-collapse-all {
+                padding: 5px;
                 cursor: pointer;
                 &:focus {
-                    outline: 3px solid @accent_focus;
-                    outline: 3px auto  Highlight;
-                    outline: 3px auto -webkit-focus-ring-color;
+                    .primary_action_focus();
+                }
+                &:hover {
+                    .primary_action_hover();
                 }
             }
         }
@@ -867,7 +869,7 @@ export default {
 
     .legend-window-table {
         position: absolute;
-        right: 0px;
+        right: 0;
         font-family: @font_family_2;
         border-radius: 12px;
         background-color: @background_color_4;
@@ -883,18 +885,21 @@ export default {
             .close-legend {
                 cursor: pointer;
                 &:focus {
-                    outline: 3px solid @accent_focus;
-                    outline: 3px auto  Highlight;
-                    outline: 3px auto -webkit-focus-ring-color;
+                    .primary_action_focus();
                 }
-            };
+                &:hover {
+                    .primary_action_hover();
+                }
+            }
             .toggle-collapse-all {
                 cursor: pointer;
                 &:focus {
-                    outline: 3px solid @accent_focus;
-                    outline: 3px auto  Highlight;
-                    outline: 3px auto -webkit-focus-ring-color;
-                }            }
+                    .primary_action_focus();
+                }
+                &:hover {
+                    .primary_action_hover();
+                }
+            }
         }
         .legend-content {
             border-bottom-left-radius: 12px;

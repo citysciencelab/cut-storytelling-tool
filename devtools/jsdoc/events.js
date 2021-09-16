@@ -1313,12 +1313,6 @@
  */
 
 /**
- * @event Core#RadioRequestGetConfig
- * @example Radio.request("Util", "getConfig")
- * @description Request config path
- */
-
-/**
  * @event Core#RadioRequestUtilGetUiStyle
  * @description returns the ignoredKeys
  * @returns {string} - Style of the ui. Possible values are "DEFAULT" or "TABLE"
@@ -1399,12 +1393,6 @@
  * @example Radio.request("Util", "sort", type, values, first, second);
  */
 
-/**
- * @event Core#RadioRequestUtilGetConfig
- * @description Retrives the config data
- * @returns {Object} - config data
- * @example Radio.request("Util", "getConfig");
- */
 
 /**
  * @event Core#RadioRequestUtilConvertArrayOfObjectsToCsv
@@ -1448,23 +1436,28 @@
  */
 
 /**
- * @event Core#RadioTriggerUtilSetUiStyle
+ * @event Core#RadioRequestUtilSetUiStyle
  * @description sets the ui style
  * @example Radio.request("Util", "setUiStyle");
  */
 
 /**
- * @event Core#RadioTriggerUtilPick
+ * @event Core#RadioRequestUtilPick
  * @description Return a copy of the object, filtered to only have values for the whitelisted keys (or array of valid keys).
  * @example Radio.request("Util", "pick");
  */
 
 /**
- * @event Core#RadioTriggerUtilOmit
+ * @event Core#RadioRequestUtilOmit
  * @description Returns a copy of the object, filtered to omit the keys specified (or array of blacklisted keys).
  * @example Radio.request("Util", "omit");
  */
 
+/**
+ * @event Core#RadioTriggerUtilRefreshTree
+ * @description Calls the treeType specific function to rerender the tree.
+ * @example Radio.trigger("Util", "refreshTree")
+ */
 
 /**
  * @event Core#changeIsViewMobile
@@ -1861,98 +1854,6 @@
  * @description Hightlights a specific polygon
  */
 
-
-/** -------------------- ParametricURL -------------------- */
-
-/**
- * @event Core#RadioRequestParametricURLGetHighlightFeature
- * @returns {Object} featureToHighlight Feature to highlight
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetCenter
- * @description todo
- */
-
- /**
-  * @event Core#RadioRequestParametricURLGetFeatureViaURL
-  * @returns {Object[]} Returns the features given by the user via the URL.
-  */
-
-/**
- * @event Core#RadioRequestParametricURLGetProjectionFromUrl
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetZoomLevel
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetZoomToExtent
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetResult
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetLayerParams
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetIsInitOpen
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetInitString
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetZoomToGeometry
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetStyle
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetFilter
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetZoomToFeatureIds
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetBrwId
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetBrwLayerName
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetMarkerFromUrl
- * @description todo
- */
-
-/**
- * @event Core#RadioTriggerParametricURLUpdateQueryStringParam
- * @description todo
- */
 
 /**
  * @event Core#RadioTriggerParametricURLReady
@@ -2404,3 +2305,12 @@
  * @description Trigger hide POI modal.
  * @example Radio.trigger("POI", "hidePOIModal");
  */
+
+/** -------------------- WmsTime -------------------- */
+
+/**
+ * @event WmsTime#RadioTriggerWmsTimeUpdateTime
+ * @description Updates the 'TIME' parameter of the layer with the given Id.
+ * @example Radio.trigger("WmsTime", "updateTime", "myTimeLayer", 4020);
+ */
+

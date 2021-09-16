@@ -8,19 +8,58 @@
 
 ---
 
-##  Unreleased - in development
+## Unreleased - in development
 ### Added
+- Added the new Tool `WfsSearch`.
+
+### Changed
+
+### Deprecated
+
+### Removed
+- SensorThingsHttp: The option to use onprogress event when calling get or getInExtent is removed. The onprogress technic uses the addition "&$count=true" at the STA url to calculate the progress. This addition to the url slowes down the FROST server significantly and is therefore not longer supported.
+
+### Fixed
+- Draw tool: fixed an issue (Bitbucket: #638) with resaving draw files
+- Print tool: Fixed an issue when printing a styled WFS layer with a `labelField` in its style. Before. this lead to the same label being printed for every feature.
+
+---
+##  v2.13.1 - 2021-09-03
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+- Downgrade the follow npm packages to fix the compass in 3D mode:
+ - css-loader from 4.3.0 to 1.0.0
+ - file-loader from 6.2.0 to 2.0.0
+
+---
+
+##  v2.13.0 - 2021-09-01
+### Added
+- Migrated the Parametric Url from Backbone.js to Vue.js. Previous parameters are supported up to version 3.0.0, see also doc/urlParameter.md. 
 - Autocomplete functionality for the contact tool.
 - A library for standard colors and barrier free colors "src/utils/colors.js" to use within javascript, with initial colors/colorsets: MP standard blue; MP standard red; Color Universal Design by "J*Fly data depository for Drosophila reserchers" (https://jfly.uni-koeln.de/color/ - 7 colors); three additional color sets "Hamburg blue scheme" (10 colors), "blue scheme plus" (10 colors) and "traffic light scheme" (7 colors) contributed by the IfBQ of Hamburg Town.
 - Issue #631: Adds a tutorial to use the remote interface in an iFrame.
 - Added the possibility to configure the size of the iframe in GFI when using the gfiTheme `default` on a layer in config.json. Works only in conjunction with the `infoFormat: "text/html"`.
 - Added possibility in GFI theme Default to configure `max-width` in config.json.
 - New Searchbar-Module for Komoot Photon.
+- A flag "beautifyKeys" for gfi params to enable/disable the beautifyKeys function in default gfi theme.
+- A flag "showObjectKeys" for gfi params to display attribute keys and values of objects in default gfi theme.
+- Added a new type for filter attributeWhitelist "date", which uses a slider for a date range. Use "format" to specify date format and "attrNameUntil" for a different attribute to be the end date of your range.
+- Added the new layer type 'WMS-T' along with its manipulation functionalities 'TimeSlider' and 'LayerSwiper'.
 
 ### Changed
+- Accessibility: Changed contrast ratio > 3:1 in all tools, themes, etc.
 - Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.
 - LayerInformation now shows message in case the MetaData couldn't be loaded
 - Footer allows additionally to open vue tools besides backbone tools.
+- changed contrasts of elements in footer, filter and the mouse position widget for better accessability
 - Accessibility: Keyboard navigation for tools
   - You can reach every opened tool via keyboard (TAB-key) direct after the top menu row
   - After opening a tool the focus is set to the first control (if any available)
@@ -29,6 +68,9 @@
     - Quickhelp via the question icon in the searchbar (top menu)
 - GFI: order of Gfis is reversed now, so that the top layer ones come first
 - NPM packages https-proxy-agent, vue-loader, vue-template-compiler are moved from dependencies to devDependencies in package.json.
+- In the default GFI theme, images that are in the tag `"Bild"` or `"bild"` of a WMS GetFeatureInfo are now rendered as images by default.
+- Images from google-maps or -earth (gstatic.com) from KML files are now requested via a reverse proxy, since no CORS is set up there.
+- The MasterportalAPI version is updated to v1.5.0. This also raised ol to version 6.6.1
 - The following NPM packages are updated:
   - dependencies:
     axios: 0.19.0 to version 0.21.1
@@ -85,23 +127,27 @@
     xmlserializer: 0.6.1 to version 0.6.1
     zip-a-folder: 0.0.12 to version 1.1.0
 
-### Deprecated
-
 ### Removed
+- Remove the module cookie, because this is only used in an addon.
+- The url parameter CLICKCOUNTER was removed.
 
 ### Fixed
 - The legend now always renders in the map region even when the sidebar is open. Also, the small optical offset in the menu bar at the legend entry has been removed.
-
+- Layers in the default tree that are grouped by metadata and start with numbers (e.g. 100 Jahre Stadtgrün) can now be opened again.
+- The alerting modal now has a padding again.
+- Fixed a warning in the console when loading addons.
+- When closing the "Draw/Write" tool via the cross, an error no longer occurs.
+- Coordinates tool: after switching to 3D mode and back to 2D mode, errors no longer occur.
+- Coordinates tool: WGS 84(long/lat) coordinate system: there is no "E" at the end of the Latitude field.
+- When starting the 3D map, all tools that do not support 3D mode are closed.
+- 3D map: Tools that do not support 3D mode are no longer displayed in the footer.
+- Issue #637: Background maps in folder structure no longer overlay subject topics when background map is activated later. Occurred only with treetype custom.
+- Coordinates tool: Validation was corrected
+- Coordinates tool: EPSG code for coordinate system ETRS89/UTM 32N is shown correct in selectbox
+- Opening a tool by footer-link will close a visible tool in sidebar.
 ---
+
 ## v2.12.1 - 2021-08-12
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
 ### Fixed
 - Drawn content can be printed again.
 -	Footer allows additionally to open vue tools besides backbone tools
@@ -148,7 +194,7 @@
 
 ### Changed
 - The version of the package selenium-webdriver was updated to version 4.0.0-beta.4.
-- Changed LayerInformation from backbone to vue.
+- Changed LayerInformation from backbone to Vue.
 - MasterportalAPI is updated to v1.4.0. The new version brings OpenLayers v6.5.0 with WFS 2.0.0 support to the Masterportal.
 - The package eslint was updated to version 7.28.0.
 - The package eslint-plugin-chai-friendly was updated to version 0.7.1.
@@ -157,12 +203,12 @@
 
 ### Fixed
 - Styled Vector Layers with multiple conditions can now be printed.
-- Further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2
+- Further metadata link is set on MetaDataCatalogueID from rootGetters now, default is 2.
 - Labels of VTC-Layer-Objects aren't cut off anymore.
-- Issue #602: further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2.
+- Issue #602: further metadata link is set on MetaDataCatalogueID from rootGetters now, default is 2.
 - Issue #615: parsing of the DescribeFeatureType of a WFS has been extended so that it also satisfies a different interpretation of the schema description. As a result, elements in the legend are displayed in the order specified in the style.json.
-- Issue #623: filter error in connection with provided vectorstyles is fixed.
-- Style configuration is provided for datastreams with result 0.
+- Issue #623: filter error in connection with provided vectorStyles is fixed.
+- Style configuration is provided for dataStreams with result 0.
 - Seamless map panning in the oblique aerial views is possible in all directions again.
 ---
 
@@ -187,27 +233,27 @@
 - The GFI is now active if this is configured and no other active tool explicitly prevents this.
 - Issue #616: Fixed a bug where the live zoom in the tool filter did not take into account the configured minScale.
 - Fixed an error that caused the historical data in the gfiTheme sensor to not be formatted correctly at times.
-- Issue #618: now the line breaks for long search results
+- Issue #618: now the line breaks for long search results.
 
 ---
 
 ## v2.9.1 - 2021-05-25
 ### Fixed
-- Fixed no data in gfi theme of verkehrs layers in geo-online
+- Fixed no data in gfi theme of verkehrs layers in geo-online.
 
 ---
 
 ## v2.9.0 - 2021-05-05
 ### Added
-- New attribute 'nearbyTitle' implemented in config.json for the title in the list of nearby search results.
-- Add @babel/eslint-parser to the package.json
-- Added the new tool "bufferAnalysis"
+- New attribute `nearbyTitle` implemented in config.json for the title in the list of nearby search results.
+- Add @babel/eslint-parser to the package.json.
+- Added the new tool `BufferAnalysis`.
 
 ### Changed
 - Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.
 - Tool addons are now also written in config.json in camelCase.
-- colorTools are renamed into convertColor (src/utils/convertColor)
-- Updates the core-js and babel dependencies in the package.json
+- colorTools are renamed into convertColor (src/utils/convertColor).
+- Updates the core-js and babel dependencies in the package.json.
 - Update the dependency caniuse-lite.
 - The module addGeoJSON switched from backbone to vue and is provided as a util now.
 - The loading image is now displayed longer when switching to map mode: Oblique (max. 80000ms).

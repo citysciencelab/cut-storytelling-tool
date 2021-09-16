@@ -1,13 +1,5 @@
 @import "~variables";
 
-@color_1: #f3f3f3;
-@color_2: #E10019;
-@color_3: #F3F3F3;
-@font_family_1: "MasterPortalFont","Arial Narrow",Arial,sans-serif;
-@background_color_1: #E10019;
-@background_color_2: rgb(8,88,158);
-@background_color_3: #f3f3f3;
-
 /***** ToggleButton *****/
 /***** ZoomButtons *****/
 /***** Attributions *****/
@@ -17,29 +9,28 @@
 .controls-row-right {
     position: relative;
     margin-right: 12px;
-    min-height:40px;
+    min-height: 40px;
 }
 .controls-row-left {
     position: relative;
-    margin-left: 0px;
+    margin-left: 0;
 }
 
 .controls-view {
     display: none; /* better prototype visibility */
     top: 0;
     .glyphicon {
-        color: @color_1;
-        background-color: @background_color_1;
+        color: @secondary;
+        background-color: @primary;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
 
-    
         &:hover {
             cursor: pointer;
             opacity: 0.7;
         }
     }
     >.toggleButtonPressed {
-        background-color: @background_color_2;
+        background-color: @secondary_hover;
     }
 }
 .toggleButton {
@@ -80,7 +71,7 @@
     }
 }
 .geolocation_marker {
-    color: @color_3;
+    color: @secondary;
     padding: 2px 3px 2px 2px;
     background: none repeat scroll #D42132;
     border-radius: 50px;
@@ -240,7 +231,7 @@
     width: 20px;
     height: 20px;
     font-size: 14px;
-    color: white;
+    color: @accent_contrast;
     text-align: center;
     vertical-align: bottom;
     cursor: pointer;

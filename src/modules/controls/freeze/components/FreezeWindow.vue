@@ -95,13 +95,13 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "~variables";
+    @import "~/css/mixins.less";
 
     .freeze-view.freeze-activated {
         z-index: 10000;
         position: fixed;
-        top: 0px;
-        left: 0px;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
     }
@@ -133,12 +133,12 @@ export default {
             -moz-transform-origin: var(--xOrigin) var(--yOrigin);
         }
         &:focus {
-            outline: 3px solid @accent_focus;
-            outline: 3px auto  Highlight;
-            outline: 3px auto -webkit-focus-ring-color;
+            .primary_action_focus();
+        }
+        &:hover {
+            .primary_action_hover();
         }
     }
-
  #table-navigation {
         &.table-nav-0deg, &.table-nav-0deg.ui-draggable {
             .freeze-view-close {

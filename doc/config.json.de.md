@@ -207,6 +207,7 @@ Definition von Klassen, welche als Ergebnis berücksichtigt werden sollen.
 |name|ja|String||Name der Klasse|false|
 |icon|nein|String|"glyphicon-road"|Visualisierung der Klasse durch ein Glyphicon|false|
 |zoom|nein|String|"center"|Legt fest wie auf einen ausgewählten Treffer gezoomt werden soll. Wenn `center` ausgewählt ist, so wird auf die Zentrumskoordinate (`cx` und `cy`) gezoomt und ein Marker angezeigt. Im Falle von `bbox` wird auf die durch den LocationFinder angegebene BoundingBox (`xmin`, `ymin`, `xmax` und `ymax`) gezoomt. Ein Marker wird in dem Fall nicht angezeigt.|false|
+|zoomLevel|nein|Integer||Bei der Ausgabe der Suchergebnisse (dieses Typs) zu verwendende Zoomstufe|false|
 
 **Beispiel**
 
@@ -222,7 +223,8 @@ Definition von Klassen, welche als Ergebnis berücksichtigt werden sollen.
 		},
 		{
 			"name": "Adresse",
-			"icon": "glyphicon-home"
+			"icon": "glyphicon-home",
+			"zoomLevel": 5
 		},
 		{
 			"name": "Straßenname",
@@ -928,24 +930,25 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 [type:tool]: # (Portalconfig.menu.tool)
 [type:compareFeatures]: # (Portalconfig.menu.tool.compareFeatures)
-[type:parcelSearch]: # (Portalconfig.menu.tool.parcelSearch)
-[type:print]: # (Portalconfig.menu.tool.print)
+[type:contact]: # (Portalconfig.menu.tool.contact)
+[type:coordToolkit]: # (Portalconfig.menu.tool.coordToolkit)
 [type:draw]: # (Portalconfig.menu.tool.draw)
 [type:featureLister]: # (Portalconfig.menu.tool.featureLister)
-[type:layerSlider]: # (Portalconfig.menu.tool.layerSlider)
-[type:contact]: # (Portalconfig.menu.tool.contact)
 [type:filter]: # (Portalconfig.menu.tool.filter)
-[type:shadow]: # (Portalconfig.menu.tool.shadow)
-[type:virtualcity]: # (Portalconfig.menu.tool.virtualcity)
 [type:gfi]: # (Portalconfig.menu.tool.gfi)
-[type:wfst]: # (Portalconfig.menu.tool.wfst)
-[type:measure]: # (Portalconfig.menu.tool.measure)
-[type:styleWMS]: # (Portalconfig.menu.tool.styleWMS)
+[type:layerSlider]: # (Portalconfig.menu.tool.layerSlider)
 [type:legend]: # (Portalconfig.menu.legend)
+[type:measure]: # (Portalconfig.menu.tool.measure)
+[type:parcelSearch]: # (Portalconfig.menu.tool.parcelSearch)
+[type:print]: # (Portalconfig.menu.tool.print)
 [type:saveSelection]: # (Portalconfig.menu.tool.saveSelection)
 [type:searchByCoord]: # (Portalconfig.menu.tool.searchByCoord)
+[type:shadow]: # (Portalconfig.menu.tool.shadow)
+[type:styleWMS]: # (Portalconfig.menu.tool.styleWMS)
 [type:supplyCoord]: # (Portalconfig.menu.tool.supplyCoord)
-[type:coordToolkit]: # (Portalconfig.menu.tool.coordToolkit)
+[type:virtualcity]: # (Portalconfig.menu.tool.virtualcity)
+[type:wfsSearch]: # (Portalconfig.menu.tool.wfsSearch)
+[type:wfst]: # (Portalconfig.menu.tool.wfst)
 
 Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdown-header-portalconfigmenutool)** und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
 
@@ -967,7 +970,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |layerslider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Deprecated in 3.0.0 Bitte "layerSlider" verwenden.|false|
 |legend|nein|**[legend](#markdown-header-portalconfigmenulegend)**||In der Legende werden alle sichtbaren Layer dargestellt.|false|
 |measure|nein|**[measure](#markdown-header-portalconfigmenutoolmeasure)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
-|parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||Mit dieser Flurstückssuche lassen sich Flurstücke über Gemarkung, Flur (in Hamburg ohne Flur) und Flurstück suchen.|false|
+|parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||_Deprecated im nächsten Major-Release. Bitte nutzen Sie stattdessen `wfsSearch`._ Mit dieser Flurstückssuche lassen sich Flurstücke über Gemarkung, Flur (in Hamburg ohne Flur) und Flurstück suchen.|false|
 |print|nein|**[print](#markdown-header-portalconfigmenutoolprint)**||Druckmodul mit dem die Karte als PDF exportiert werden kann.|false|
 |saveSelection|nein|**[saveSelection](#markdown-header-portalconfigmenutoolsaveselection)**||Werkzeug mit dem sich die aktuellen Karteninhalte speichern lassen. Der Zustand der Karte wird als URL zum Abspeichern erzeugt. Dabei werden die Layer in deren Reihenfolge, Transparenz und Sichtbarkeit dargestellt. Zusätzlich wird die Zentrumskoordinate mit abgespeichert.|false|
 |searchByCoord|nein|**[searchByCoord](#markdown-header-portalconfigmenutoolsearchbycoord)**||Deprecated in 3.0.0 Bitte "coordToolkit" verwenden. Koordinatensuche. Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf.|false|
@@ -978,8 +981,10 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |supplyCoord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "coordToolkit" verwenden. Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Klick in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Klick auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
 |virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|false|
 |wfsFeatureFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "filter" verwenden. Filtern von WFS Features. Über dieses Werkzeug können WFS features gefiltert werden. Dies setzt jedoch eine Konfiguration der "filterOptions" am WFS-Layer-Objekt voraus.|false|
+|wfsSearch|nein|**[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)**||Ermöglicht es ein Formular zu erstellen, um einen WFS Layer abgekoppelt von der Suchleiste mittels Filter anzufragen. Es ist möglich entweder eine gespeicherte Anfrage (Stored Query, WFS@2.0.0) zu nutzen oder eine Anfrage mithilfe der konfigurierten Parameter zu definieren (WFS@1.1.0).|false|
 |wfst|nein|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||WFS-T Modul mit dem Features visualisiert, erstellt, aktualisiert und gelöscht werden können.|false|
 |bufferAnalysis|nein|**[tool](#markdown-header-portalconfigmenutool)**||In der Buffer-Analyse muss ein Quell-Layer, ein Buffer-Radius und ein Ziel-Layer ausgewählt werden. Buffer-Radien werden um die Features des Quell-Layers dargestellt. Sobald ein Ziel-Layer gewählt wurde, werden nur die Features dieses Layers hervorgehoben, welche sich außerhalb der Buffer-Radien befinden. Auch eine invertierte Anzeige ist möglich. Bei dieser werden nur die Features des Ziel-Layers innerhalb der Radien hervorgehoben werden.|false|
+
 ***
 
 #### Portalconfig.menu.tool
@@ -1331,6 +1336,8 @@ Flurstückssuche.
 **Je nach Konfiguration werden spezielle Stored Queries eines WFS mit vorgegebenen Parametern abgefragt.**
 
 Beispiel: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0&&StoredQuery_ID=Flurstueck&gemarkung=0601&flurstuecksnummer=00011**
+
+>⚠️ Deprecated im nächsten Major-Release. Bitte verwenden Sie stattdessen **[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)**.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -2042,6 +2049,444 @@ Klassifizierung von WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal
 
 ***
 
+#### Portalconfig.menu.tool.wfsSearch
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Ermöglicht es ein Formular zu erstellen, um einen WFS Layer abgekoppelt von der Suchleiste mittels Filter anzufragen.
+Wenn ein WFS@2.0.0 verwendet werden soll, wird erwartet, dass eine gespeicherte Anfrage (Stored Query) verwendet wird. Wenn ein WFS@1.1.0 verwendet werden soll, wird erwartet, dass der Aufbau der Anfrage mittels der Konfiguration dieses Werkzeugs grundlegend vorgegeben wird.
+
+Es können mehrere Formulare (**[SearchInstances](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)**) definiert werden, welche durch ein Dropdown Menü im Werkzeug ausgewählt werden können.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|instances|ja|**[searchInstance](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)**[]||Array an `searchInstances`, welche jeweils ein Formular darstellen.|false|
+
+**Beispiel**
+
+```json
+{
+    "wfsSearch": {
+        "instances": [
+            {
+                "requestConfig": {
+                    "layerId": "1234"
+                },
+                "selectSource": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
+                "literals": [
+                    {
+                        "clause": {
+                            "type": "and",
+                            "literals": [
+                                {
+                                    "field": {
+                                        "type": "equal",
+                                        "fieldName": "gemarkung",
+                                        "inputLabel": "Gemarkung",
+                                        "options": ""
+                                    }
+                                },
+                                {
+                                    "field": {
+                                        "type": "equal",
+                                        "fieldName": "flur",
+                                        "inputLabel": "Flur",
+                                        "options": "flur"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance
+
+Eine Instanz der WFS Suche, welche durch ein Dropdown Menü im Werkzeug ausgewählt werden kann.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|literals|ja|**[literal](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral)**[]||Array an `literals`.|true|
+|requestConfig|ja|**[requestConfig](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfig)**||Ein Objekt, welches hauptsächlich die Id des WFS-Dienstes (`layerId` oder `restLayerId`), welcher angefragt werden soll, beinhaltet. Wenn ein WFS@2.0.0 verwendet werden soll, muss die id der gespeicherten Anfrage (Stored Query, `storedQueryId`) angegeben werden.|false|
+|selectSource|nein|String||Optionale Url, unter welcher eine JSON-Datei mit den verschiedenen Optionen für den Input gespeichert ist. Für eine Beispiel siehe **[https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json]**.|false|
+|suggestions|nein|**[suggestions](#markdown-header-portalconfigmenutoolwfssearchsearchinstancesuggestions)**||Wenn gegeben, dann wird der Service angefragt, wenn ein Nutzer etwas in ein Eingabefeld eingibt, um einen Vorschlag für die weitere Eingabe zu geben.|false|
+|title|ja|String||Der Titel der Suche, welcher in einem Dropdown im Werkzeug dargestellt wird. Kann ein Übersetzungsschlüssel sein.|false|
+|userHelp|nein|String||Informationstext hinsichtlich des Suchformulars, welches oberhalb des Formulars für den Nutzer angezeigt werden soll. Wenn der Parameter nicht gegeben ist, dann wird die Struktur aus der Konfiguration abgeleitet. Kann ein Übersetzungsschlüssel sein. Falls der Wert explizit auf `hide` gesetzt wurde, dann wird keine Beschreibung der Struktur des Formulars angezeigt.|false|
+|resultDialogTitle|ja|String||Überschrift der Ergebnisliste. Wenn dies nicht konfiguriert ist, wird der Name `WFS Suche` angezeigt. Kann ein Übersetzungsschlüssel sein.|false|
+|resultList|ja|**[resultList](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceresultlist)**||Einstellungen für die Ausgabe der gefundenen Feature in der Ergebnisliste.|true|
+
+**Beispiel**
+
+```json
+{
+    "requestConfig": {
+        "layerId": "1234"
+    },
+    "resultList": {
+        "schulname": "Schulname",
+        "abschluss": "Abschluss"
+    },
+    "selectSource": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
+    "title": "Flurstücksuche",
+    "literals": [
+        {
+            "clause": {
+                "type": "and",
+                "literals": [
+                    {
+                        "field": {
+                            "type": "equal",
+                            "fieldName": "gemarkung",
+                            "inputLabel": "Gemarkung",
+                            "options": ""
+                        }
+                    },
+                    {
+                        "field": {
+                            "type": "equal",
+                            "fieldName": "flur",
+                            "inputLabel": "Flur",
+                            "options": "flur"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.literal
+
+Ein Literal (`literal`) kann entweder eine Klausel (`clause`) als Parameter besitzen oder ein Feld (`field`). Falls beide gesetzt sind, dann wird der `clause`-Teil ignoriert.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|clause|nein|**[clause](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralclause)**||Definiert die Art und Weise wie mehrere `literals` miteinander angefragt werden sollen. Kann als Gruppe von `literals` angesehen werden.|true|
+|field|nein|**[field](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfield)**||Repräsentation eines Auswahlfeldes für einen Servicewert für den Nutzer.|true|
+
+**Beispiele**
+
+```json
+{
+    "clause": {
+        "type": "and",
+        "literals": [
+            {
+                "field": {
+                    "type": "equal",
+                    "fieldName": "gemarkung",
+                    "inputLabel": "Gemarkung",
+                    "options": ""
+                }
+            },
+            {
+                "field": {
+                    "type": "equal",
+                    "fieldName": "flur",
+                    "inputLabel": "Flur",
+                    "options": "flur"
+                }
+            }
+        ]
+    }
+}
+```
+
+```json
+{
+    "field": {
+        "type": "equal",
+        "fieldName": "rivers",
+        "inputLabel": "Flüsse",
+        "options": [
+            {
+                "id": "0",
+                "displayName": "Elbe"
+            },
+            {
+                "id": "1",
+                "displayName": "Moselle"
+            },
+            {
+                "id": "2",
+                "displayName": "Rhine"
+            }
+        ]
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.literal.clause
+
+[type:literal]: # (Portalconfig.menu.tool.wfsSearch.searchInstance.literal)
+
+Eine Klausel (`clause`) definiert die Art und Weise wie verschiedene `literals` miteinander anzufragen sind.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|literals|ja|**[literal](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral)**[]||Array an `literals`.|true|
+|type|ja|enum["and", "or"]||Die Art und Weise wie die `literals` dieser `clause` angefragt werden sollen.|false|
+
+**Beispiel**
+
+```json
+{
+    "clause": {
+        "type": "and",
+        "literals": [
+            {
+                "field": {
+                    "type": "equal",
+                    "fieldName": "gemarkung",
+                    "inputLabel": "Gemarkung",
+                    "options": ""
+                }
+            },
+            {
+                "field": {
+                    "type": "equal",
+                    "fieldName": "flur",
+                    "inputLabel": "Flur",
+                    "options": "flur"
+                }
+            }
+        ]
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.literal.field
+
+Ein `field` repräsentiert ein Auswahlfeld für einen Wert des Services.
+
+Es ist möglich ein Feld für mehrere Suchparameter des Dienstes zu verwenden. Um dies zu ermöglichen, muss für jeden Parameter ein Array verwendet werden, wobei jedes Element zu einem einzelnen Wert des Dienstes gehört.
+Eine Konfiguration wie
+
+```json
+{
+    "field": {
+        "type": ["equal", "like"],
+        "fieldName": ["flst", "gmkr"],
+        "inputLabel": ["Flurstück", "Gemarkungsnummer"]
+    }
+}
+```
+
+würde ein einzelnes `field` erstellen, in welchen der Nutzer sich entscheiden kann, ob er das Eingabefeld nutzen möchte, um nach einem `Flurstück` oder nach einer `Gemarkungsnummer` zu suchen, indem er den Wert in einem Dropdown Menü auswählt.
+
+Falls der Parameter `options` gesetzt wurde, wird ein `select`-Feld, andernfalls ein normaler Text Input verwendet.
+Falls `options` ein String ist, ist es wichtig, dass die Reihenfolge der Felder mit der Ordnung der Objekte der externen Quelle übereinstimmt.
+Man nehme an, dass die Quelle wie folgt aussieht:
+
+```json
+{
+    "one": {
+        "foo": {
+            "id": "foo_one",
+            "bar": ["f1_bar_one", "f1_bar_two"]
+        }
+    },
+    "two": {
+        "foo": {
+            "id": "foo_two",
+            "bar": ["f2_bar_one", "f2_bar_two"]
+        }
+    }
+}
+```
+
+In diesem Fall sollte die Reihenfolge in der Konfiguration wie folgt aussehen:
+
+```json
+{
+    "clause": {
+        "type": "and",
+        "literals": [
+            {
+                "field": {
+                    "type": "equal",
+                    "fieldName": "objects",
+                    "inputLabel": "Objekte",
+                    "options": ""
+                }
+            },
+            {
+                "field": {
+                    "type": "equal",
+                    "fieldName": "foo",
+                    "inputLabel": "Foo",
+                    "options": "foo"
+                }
+            },
+            {
+                "field": {
+                    "type": "equal",
+                    "fieldName": "bar",
+                    "inputLabel": "Bar",
+                    "options": "foo.bar"
+                }
+            }
+        ]
+    }
+}
+```
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|defaultValue|nein|String/String[]||Wenn das Feld nicht `required` ist wird dieser Wert beim Senden verwendet.|false|
+|fieldName|ja|String/String[]||Die Id des WFS Service Parameters für den Vergleich.|false|
+|inputLabel|ja|String/String[]||Label des UI Elementes. Kann ein Übersetzungsschlüssel sein.|false|
+|inputPlaceholder|nein|String/String[]||Platzhalter für das UI Element. Sollte Beispieldaten enthalten. Kann ein Übersetzungsschlüssel sein.|false|
+|inputTitle|nein|String/String[]||Wert, welcher beim Hovern über das UI Element angezeigt wird. Kann ein Übersetzungsschlüssel sein.|false|
+|required|nein|Boolean/Boolean[]|false|Legt fest, ob das Feld ausgefüllt werden muss.|false|
+|options|nein|String/**[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)**[]/String[]||Falls `options` ein Array ist werden die gegeben Werte für die Auswahl verwendet. Falls `options` ein String ist, existieren verschiedene Möglichkeiten. Falls der String leer ist, werden die Schlüssel der **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** verwendet. Falls der String nicht leer ist, wird angenommen, dass ein anderes Feld mit `options=""` existiert; andernfalls wird das Feld deaktiviert. Es wird zudem angenommen, dass der String ein Array in **[selectSource](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** mit weiteren Optionen repräsentiert. Diese Optionen können entweder eine **[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)** oder einfache Werte (`String` / `Number`) sein. Im zweiten Fall werden die einfachen Werte sowohl für die Id als auch den `displayName` verwendet. **Zu beachten**: Der Parameter `options` kann auch als multidimensionales Array **[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)**[][] angegeben werden, welches allerdings nicht für Masterportal Admin parametrisiert werden kann. Dies findet Anwendung, wenn ein **[option](#markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption)**[] verwendet werden soll, jedoch mehrere Parameter in einem `field` hinterlegt werden sollen.|true|
+|type|nein|enum["equal", "like"]/enum["equal", "like"][]||Wird für die Verwendung mit einem WFS@1.1.0 vorausgesetzt. Der `type` legt fest, wie das Feld mit dem Wert des Dienstes verglichen werden soll.|false|
+|usesId|nein|Boolean/Boolean[]|false|Nur relevant, wenn der Parameter `options` gesetzt und ein leerer String (Rootelement) ist. Legt fest, ob der Schlüssel des Objektes aus der externen Quelle als Wert für die Query verwendet werden soll oder ob das Objekt eine Id gesetzt hat, welche stattdessen Anwendung finden soll.|false|
+
+**Beispiel**
+
+```json
+{
+    "field": {
+        "type": "equal",
+        "fieldName": "rivers",
+        "inputLabel": "Flüsse",
+        "options": [
+            {
+                "displayName": "Elbe",
+                "fieldValue": "0"
+            },
+            {
+                "displayName": "Mosel",
+                "fieldValue": "1"
+            },
+            {
+                "displayName": "Rhein",
+                "fieldValue": "2"
+            }
+        ]
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.literal.field.option
+
+Eine auswählbare Option für einen anzufragenden Parameter.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|displayName|nein|String||Anzuzeigender Wert für die Option. Kann ein Übersetzungsschlüssel sein. Wenn der Wert wird nicht gesetzt ist, wird die `id` angezeigt.|false|
+|fieldValue|ja|String||Wert, welcher an den Dienst gesendet werden soll.|false|
+
+**Beispiel**
+
+```json
+{
+    "fieldValue": "elbe",
+    "displayName": "Elbe"
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.resultList
+
+Einstellungen für die Ausgabe der gefundenen Feature in der Ergebnisliste.
+
+Mit der Angabe von `showAll` werden alle Attribute der gefundenen Feature in ihrer Ursprungsform dargestellt.
+
+Bei Verwendung eines Objektes können die darzustellenden Attribute festgelegt werden.
+Ein Schlüssel des Objektes muss eines der Attribute des Features wiedergeben, während durch den entsprechenden Wert die textliche Ausgabe dieses Attributes festgelegt wird.
+
+**Beispiele**:
+
+```json
+{
+    "resultList": "showAll"
+}
+```
+
+```json
+{
+    "resultList": {
+        "schulname": "Schulname",
+        "abschluss": "Abschluss"
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.requestConfig
+
+Informationen über den WFS-Dienst, welcher angefragt werden soll.
+Es muss entweder `layerId` oder `restLayerId` definiert sein. Wenn `layerId` verwendet wird, dann muss zusätzlich der Layer in der **[config.json](config.json.de.md)** konfiguriert werden.
+Falls beide Parameter gesetzt wurden, dann wird `restLayerId` verwendet.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|gazetteer|nein|Boolean|false|Legt fest, ob der verwendete WFS-Dienst ein WFS-G ist, welcher anders geparsed werden muss.|false|
+|nameSpaces|nein|String[]||Es müssen die Namespaces des Dienstes angegeben werden, falls ein WFS-G verwendet wird.|false|
+|memberSuffix|nein|enum["member","featureMember"]|"member"|Der Suffix des Featuretypen muss angegeben werden, falls ein WFS-G verwendet wird.|false|
+|layerId|nein|String||Id des WFS Dienstes, welcher angefragt werden soll. Informationen werden aus der **[services.json](services.json.de.md)** bezogen.|false|
+|likeFilter|nein|**[likeFilter](#markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfiglikefilter)**|{"wildCard": "*", "singleChar": "#", "escape": "!"}|Die Konfiguration des Services hinsichtlich des like Filters.|true|
+|maxFeatures|nein|Number/String|8|Maximale Anzahl an Features, welche der Dienst zurückgeben soll. Alternativ kann auch der String `showAll` übergeben werden, um alle Ergebnisse anzuzeigen.|false|
+|restLayerId|nein|String||Id des WFS Dienstes, welcher angefragt werden soll. Informationen werden aus der **[rest-services.json](rest-services.json.de.md)** bezogen.|false|
+|storedQueryId|nein|String||Die Id der gespeichersten Anfrage (Stored Query) des WFS Dienstes, welche für die Anfrage an verwendet werden soll. Es wird angenommen, dass ein WFS@2.0.0 verwendet wird, falls dieses Feld gesetzt wurde.|false|
+
+**Beispiel**
+
+```json
+{
+    "requestConfig": {
+        "restLayerId": "1234",
+        "storedQueryId": "Flurstuecke"
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.requestConfig.likeFilter
+
+Innerhalb eines Filters für einen WFS-Dienst können Werte mit einem `equal` oder einem `like` verglichen werden.
+Wenn der Vergleich mit einem `like` durchgeführt werden soll, dann werden weitere Eigenschaften benötigt. Diese können sowohl im Werte, als auch in der Eigenschaftsdefintion variieren.
+Es wird für die Dokumentation angenommen, dass die Eigenschaften `wildCard`, `singleChar` und `escape` heißen; Variationen wie `wildCard`, `single` und `escape` sind jedoch auch möglich.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|wildCard|ja|String|"*"|Der Wildcardwert für den like Filter.|true|
+|singleChar|ja|String|"#"|Der Wert für einen einzelnen Charakter für den like Filter.|true|
+|escape|ja|String|"!"|Der Escape-Wert für den like Filter.|true|
+
+***
+
+#### Portalconfig.menu.tool.wfsSearch.searchInstance.suggestions
+
+Konfiguration für die Vorschläge von Nutzereingaben.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|featureType|nein|String||Wenn gegeben wird die Anfrage mit diesem featureType statt dem aus der Definition des Services. Nur verwendbar, wenn der Dienst in der **[services.json](services.json.de.md)** definiert wurde.|false|
+|length|nein|Number|3|Die Anfrage wird dann getriggered, wenn die Inputlänge mindestens so lang ist wie der Wert dieses Parameters.|false|
+
+***
+
 #### Portalconfig.menu.tool.wfst
 
 [inherits]: # (Portalconfig.menu.tool)
@@ -2289,14 +2734,18 @@ Die Themenconfig definiert, welche Inhalte an welcher Stelle im Themenbaum vorko
 |Hintergrundkarten|ja|**[Hintergrundkarten](#markdown-header-themenconfighintergrundkarten)**||Definition der Hintergrundkarten.|false|
 |Fachdaten|nein|**[Fachdaten](#markdown-header-themenconfigfachdaten)**||Definition der Fachdaten.|false|
 |Fachdaten_3D|nein|**[Fachdaten_3D](#markdown-header-themenconfigfachdaten_3d)**||Definition der Fachdaten für den 3D-Modus.|false|
+|Fachdaten_Zeit|nein|**[Fachdaten_Zeit](#markdown-header-themenconfigfachdaten_zeit)**||Definition der WMS-T Layer in einem eigenen Ordner.|false|
 
 **Beispiel**
-```
-#!json
-"Themenconfig": {
-    "Hintergrundkarten": {},
-    "Fachdaten": {},
-    "Fachdaten_3D": {}
+
+```json
+{
+    "Themenconfig": {
+        "Hintergrundkarten": {},
+        "Fachdaten": {},
+        "Fachdaten_3D": {},
+        "Fachdaten_Zeit": {}
+    }
 }
 ```
 
@@ -2306,6 +2755,7 @@ Die Themenconfig definiert, welche Inhalte an welcher Stelle im Themenbaum vorko
 
 [type:Layer]: # (Themenconfig.Layer)
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
+[type:Ordner]: # (Themenconfig.Ordner)
 
 Hier werden die Hintergrundkarten definiert
 
@@ -2313,6 +2763,7 @@ Hier werden die Hintergrundkarten definiert
 |----|-------------|---|-------|------------|------|
 |name|nein|String|"Hintergrundkarten"| Name der Schaltfläche für Hintergrundkarten im custom tree und default tree.|false|
 |Layer|ja|**[Layer](#markdown-header-themenconfiglayer)**/**[GroupLayer](#markdown-header-themenconfiggrouplayer)**[]||Definition der Layer.|false|
+|Ordner|nein|**[Ordner](#markdown-header-themenconfigordner)**[]||Definition der Ordner.|false|
 
 **Beispiel**
 ```
@@ -2386,13 +2837,41 @@ Hier werden die 3D-Daten für die 3D-Ansicht definiert. Im custom tree und defau
 
 ***
 
+### Themenconfig.Fachdaten_Zeit
+
+[type:Layer]: # (Themenconfig.Layer)
+
+Definition für WMS-T Layer für den `treeType` `custom` und `default`. Die Layer können auch unter **[Fachdaten](#markdown-header-themenconfigfachdaten)** definiert werden.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|nein|String|"common:tree.subjectDataTime"|Name der Schaltfläche für WMS-T Layer.|false|
+|Layer|ja|**[Layer](#markdown-header-themenconfiglayer)**[]||WMS-T layer Definition.|false|
+
+**Beispiel**
+
+```json
+{
+    "Fachdaten_Zeit": {
+        "name": "Meine Zeitreihen",
+        "Layer": [
+            {
+              "id": "my_wms_time"
+            }
+        ]
+    }
+}
+```
+
+***
+
 ### Themenconfig.Ordner
 
 [type:Layer]: # (Themenconfig.Layer)
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
 [type:Ordner]: # (Themenconfig.Ordner)
 
-Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert werden.
+Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert werden. Ordner können unterhalb der Fachdaten und der Hintergrundkarten konfiguriert werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -2402,7 +2881,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 |isFolderSelectable|nein|Boolean|true|Legt fest, ob alle Layer eines Ordners auf einmal über einen Haken aktiviert bzw. deaktiviert werden dürfen.|false|
 |invertLayerOrder|nein|Boolean|false|Legt fest, ob bei Klick auf den Ordner die Reihenfolge, in der die Layer der Map hinzugefügt werden, umgekehrt werden soll.|false|
 
-**Beispiel Ordner mit einem Layer**
+**Beispiel Fachdaten-Ordner mit einem Layer**
 ```
 #!json
 "Fachdaten": {
@@ -2418,8 +2897,61 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
     ]
 }
 ```
+**Beispiel Hintergrundkarten-Ordner mit 2 Layern**
 
-**Beispiel Ordner mit einem Unterordner in dem ein Layer konfiguriert ist**
+```json
+{
+    "Hintergrundkarten": {
+        "Ordner": [{
+            "Titel": "Karten",
+            "isFolderSelectable": false,
+            "Layer": [
+                {
+                    "name": "Luftbild",
+                    "id": "123",
+                    "visibility": true
+                },
+                {
+                    "name": "Stadtplan",
+                    "id": "456"
+                }
+            ]
+        }]
+    }
+}
+```
+**Beispiel Hintergrundkarten-Ordner, daneben sind Layer konfiguriert**
+
+```json
+{
+    "Hintergrundkarten":{
+        "Ordner": [{
+            "Titel": "Karten",
+            "isFolderSelectable": false,
+            "Layer": [
+                {
+                    "name": "Luftbild",
+                    "id": "123",
+                    "visibility": true
+                },
+                {
+                    "name": "Stadtplan",
+                    "id": "456"
+                }
+            ]
+        }],
+        "Layer": [{
+            "name": "alte Karte",
+            "id": "789"
+        },
+            ...
+        ]
+    }
+}
+```
+
+**Beispiel Fachdaten-Ordner mit einem Unterordner in dem ein Layer konfiguriert ist**
+
 ```
 #!json
 "Fachdaten": {
@@ -2442,7 +2974,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 }
 ```
 
-**Beispiel Ordner mit einem Unterordner. Auf der Ebene des Unterordners ist auch nochmal ein Layer definiert**
+**Beispiel Fachdaten-Ordner mit einem Unterordner. Auf der Ebene des Unterordners ist auch nochmal ein Layer definiert**
 ```
 #!json
 "Fachdaten": {
@@ -2469,7 +3001,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 }
 ```
 
-**Beispiel Ordner mit invertierter Layer-Reihenfolge**
+**Beispiel Fachdaten-Ordner mit invertierter Layer-Reihenfolge**
 
 In diesem Beispiel wird der Layer mit der Id 123 vor dem Layer 456 der Map hinzugefügt. Das führt dazu, dass Layer 123 unter Layer 456 dargestellt wird.
 

@@ -9,7 +9,7 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
     /**
      * a function to change lastError when an error occurs
      * @param {String} error the error
-     * @returns {Void}  -
+     * @returns {void}
      */
     function onerror (error) {
         lastError = error;
@@ -21,28 +21,41 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
     });
 
     describe("getPolygonQueryWithPoints", () => {
-        it("should return a url query with the given points in a correct format", () => {
+        it("should return a url query with the given points in a correct format with a intersect range", () => {
             const points = [
-                {x: "foo", y: "bar"},
-                {x: "baz", y: "qux"}
-            ];
+                    {x: "foo", y: "bar"},
+                    {x: "baz", y: "qux"}
+                ],
+                intersect = true;
 
-            expect(http.getPolygonQueryWithPoints(points)).to.equal("st_within(Thing/Locations/location,geography'POLYGON ((foo bar,baz qux))')");
-            expect(http.getPolygonQueryWithPoints([{}, {}])).to.equal("st_within(Thing/Locations/location,geography'POLYGON (())')");
-            expect(http.getPolygonQueryWithPoints([])).to.equal("st_within(Thing/Locations/location,geography'POLYGON (())')");
+            expect(http.getPolygonQueryWithPoints(points, intersect)).to.equal("st_intersects(Thing/Locations/location,geography'POLYGON ((foo bar,baz qux))')");
+            expect(http.getPolygonQueryWithPoints([{}, {}], intersect)).to.equal("st_intersects(Thing/Locations/location,geography'POLYGON (())')");
+            expect(http.getPolygonQueryWithPoints([], intersect)).to.equal("st_intersects(Thing/Locations/location,geography'POLYGON (())')");
+        });
+        it("should return a url query with the given points in a correct format with a within range", () => {
+            const points = [
+                    {x: "foo", y: "bar"},
+                    {x: "baz", y: "qux"}
+                ],
+                intersect = false;
+
+            expect(http.getPolygonQueryWithPoints(points, intersect)).to.equal("st_within(Thing/Locations/location,geography'POLYGON ((foo bar,baz qux))')");
+            expect(http.getPolygonQueryWithPoints([{}, {}], intersect)).to.equal("st_within(Thing/Locations/location,geography'POLYGON (())')");
+            expect(http.getPolygonQueryWithPoints([], intersect)).to.equal("st_within(Thing/Locations/location,geography'POLYGON (())')");
         });
         it("should return false if some damaged points are given", () => {
             const points = [
-                {x: "foo", y: "bar"},
-                {x: "baz", foobar: "qux"}
-            ];
+                    {x: "foo", y: "bar"},
+                    {x: "baz", foobar: "qux"}
+                ],
+                intersect = true;
 
-            expect(http.getPolygonQueryWithPoints(points)).to.equal("st_within(Thing/Locations/location,geography'POLYGON ((foo bar))')");
-            expect(http.getPolygonQueryWithPoints(undefined)).to.be.false;
-            expect(http.getPolygonQueryWithPoints(null)).to.be.false;
-            expect(http.getPolygonQueryWithPoints(1)).to.be.false;
-            expect(http.getPolygonQueryWithPoints("foo")).to.be.false;
-            expect(http.getPolygonQueryWithPoints({})).to.be.false;
+            expect(http.getPolygonQueryWithPoints(points, intersect)).to.equal("st_intersects(Thing/Locations/location,geography'POLYGON ((foo bar))')");
+            expect(http.getPolygonQueryWithPoints(undefined, intersect)).to.be.false;
+            expect(http.getPolygonQueryWithPoints(null, intersect)).to.be.false;
+            expect(http.getPolygonQueryWithPoints(1, intersect)).to.be.false;
+            expect(http.getPolygonQueryWithPoints("foo", intersect)).to.be.false;
+            expect(http.getPolygonQueryWithPoints({}, intersect)).to.be.false;
         });
     });
 
@@ -103,51 +116,39 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
                 {x: 9.872388814958066, y: 53.623426671455626},
                 {x: 9.869432803790303, y: 53.47946522163486}
             ],
+            intersect = false,
             expectedOutcome = "https://iot.hamburg.de/v1.1/Things?%24filter=st_within(Thing%2FLocations%2Flocation%2Cgeography'POLYGON%20((9.869432803790303%2053.47946522163486%2C10.102382514144907%2053.47754336682167%2C10.10613018673993%2053.62149474831524%2C9.872388814958066%2053.623426671455626%2C9.869432803790303%2053.47946522163486))')";
 
         it("should return the expected url with a well formed input", () => {
-            expect(http.addPointsToUrl("https://iot.hamburg.de/v1.1/Things", polygon)).to.equal(expectedOutcome);
+            expect(http.addPointsToUrl("https://iot.hamburg.de/v1.1/Things", polygon, intersect)).to.equal(expectedOutcome);
         });
 
         it("should return false and call an error if a funny url is given", () => {
-            expect(http.addPointsToUrl(false, polygon, onerror)).to.be.false;
+            expect(http.addPointsToUrl(false, polygon, intersect, onerror)).to.be.false;
             expect(lastError).to.be.a("string");
-            expect(http.addPointsToUrl(undefined, polygon, onerror)).to.be.false;
-            expect(http.addPointsToUrl(null, polygon, onerror)).to.be.false;
-            expect(http.addPointsToUrl("foo", polygon, onerror)).to.be.false;
-            expect(http.addPointsToUrl(123456, polygon, onerror)).to.be.false;
-            expect(http.addPointsToUrl([], polygon, onerror)).to.be.false;
-            expect(http.addPointsToUrl({}, polygon, onerror)).to.be.false;
+            expect(http.addPointsToUrl(undefined, polygon, intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl(null, polygon, intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl("foo", polygon, intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl(123456, polygon, intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl([], polygon, intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl({}, polygon, intersect, onerror)).to.be.false;
         });
 
         it("should return false and call an error if a broken polygon is given", () => {
             const url = "https://iot.hamburg.de/v1.0/Things";
 
-            expect(http.addPointsToUrl(url, false, onerror)).to.be.false;
+            expect(http.addPointsToUrl(url, false, intersect, onerror)).to.be.false;
             expect(lastError).to.be.a("string");
-            expect(http.addPointsToUrl(url, undefined, onerror)).to.be.false;
-            expect(http.addPointsToUrl(url, null, onerror)).to.be.false;
-            expect(http.addPointsToUrl(url, "foo", onerror)).to.be.false;
-            expect(http.addPointsToUrl(url, 123456, onerror)).to.be.false;
-            expect(http.addPointsToUrl(url, {}, onerror)).to.be.false;
+            expect(http.addPointsToUrl(url, undefined, intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl(url, null, intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl(url, "foo", intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl(url, 123456, intersect, onerror)).to.be.false;
+            expect(http.addPointsToUrl(url, {}, intersect, onerror)).to.be.false;
         });
 
         it("should not call the error callback function on error if anything but a function is given", () => {
-            expect(http.addPointsToUrl("foo", "bar", undefined)).to.be.false;
+            expect(http.addPointsToUrl("foo", "bar", intersect, undefined)).to.be.false;
             expect(lastError).to.be.false;
-        });
-    });
-
-    describe("addCountToUrl", () => {
-        it("should add $count=true to and conform a given url - no matter what", () => {
-            expect(http.addCountToUrl("https://iot.hamburg.de/v1.0/Things")).to.equal("https://iot.hamburg.de/v1.0/Things?%24count=true");
-            expect(http.addCountToUrl("https://iot.hamburg.de/v1.0/Things?$filter=foo")).to.equal("https://iot.hamburg.de/v1.0/Things?%24filter=foo&%24count=true");
-            expect(http.addCountToUrl("https://iot.hamburg.de/v1.0/Things?$count=false")).to.equal("https://iot.hamburg.de/v1.0/Things?%24count=true");
-            expect(http.addCountToUrl(false)).to.include("%24count=true");
-            expect(http.addCountToUrl(undefined)).to.include("%24count=true");
-            expect(http.addCountToUrl(null)).to.include("%24count=true");
-            expect(http.addCountToUrl(123456)).to.include("%24count=true");
-            expect(http.addCountToUrl("foo")).to.include("%24count=true");
         });
     });
 
@@ -160,19 +161,19 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
             expect(http.fetchTopX({})).to.equal(0);
         });
         it("should not find $top=X in url notation %24top%3DX", () => {
-            const url = "https://iot.hamburg.de/v1.0/Things?%24top%3D1&$count=true",
+            const url = "https://iot.hamburg.de/v1.0/Things?%24top%3D1",
                 expected = 0;
 
             expect(http.fetchTopX(url)).to.equal(expected);
         });
         it("should find out the number X in $top=X", () => {
-            const url = "https://iot.hamburg.de/v1.0/Things?$top=1&$count=true",
+            const url = "https://iot.hamburg.de/v1.0/Things?$top=1",
                 expected = 1;
 
             expect(http.fetchTopX(url)).to.equal(expected);
         });
         it("should find out the number X in %24top=X", () => {
-            const url = "https://iot.hamburg.de/v1.0/Things?%24top=1&%24count=true",
+            const url = "https://iot.hamburg.de/v1.0/Things?%24top=1",
                 expected = 1;
 
             expect(http.fetchTopX(url)).to.equal(expected);
@@ -188,54 +189,22 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
             expect(http.fetchSkipX({})).to.equal(0);
         });
         it("should not find $skip=X in url notation %24skip%3DX", () => {
-            const url = "https://iot.hamburg.de/v1.0/Things?%24skip%3D1&$count=true",
+            const url = "https://iot.hamburg.de/v1.0/Things?%24skip%3D1",
                 expected = 0;
 
             expect(http.fetchSkipX(url)).to.equal(expected);
         });
         it("should find out the number X in $skip=X", () => {
-            const url = "https://iot.hamburg.de/v1.0/Things?$skip=1&$count=true",
+            const url = "https://iot.hamburg.de/v1.0/Things?$skip=1",
                 expected = 1;
 
             expect(http.fetchSkipX(url)).to.equal(expected);
         });
         it("should find out the number X in %24skip=X", () => {
-            const url = "https://iot.hamburg.de/v1.0/Things?%24skip=1&%24count=true",
+            const url = "https://iot.hamburg.de/v1.0/Things?%24skip=1",
                 expected = 1;
 
             expect(http.fetchSkipX(url)).to.equal(expected);
-        });
-    });
-
-    describe("getProgress", () => {
-        it("should return 0 if the total count of progress is 0 (test: prohibit devision by zero)", () => {
-            const progressList = [
-                {
-                    count: 0,
-                    progress: 1
-                },
-                {
-                    count: 0,
-                    progress: 2
-                }
-            ];
-
-            expect(http.getProgress(progressList)).to.equal(0);
-        });
-        it("should calculate the progress from a given progress list down to 2 decimal numbers", () => {
-            const progressList = [
-                {
-                    count: 50,
-                    progress: 1
-                },
-                {
-                    count: 50,
-                    progress: 2
-                }
-            ];
-
-            // 1 / (50+50) * (1+2) = 0.030000000001 (with floating point error) should be rounded to 0.03
-            expect(http.getProgress(progressList)).to.equal(0.03);
         });
     });
 
@@ -313,40 +282,35 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
 
     describe("collectNextLinks", () => {
         it("should refuse to walk through anything but an object, but should call onfinish to move on", () => {
-            const nextLinkFiFo = [],
-                progressList = [];
+            const nextLinkFiFo = [];
             let hasFinished = false;
 
-            http.collectNextLinks(undefined, nextLinkFiFo, progressList, () => {
+            http.collectNextLinks(undefined, nextLinkFiFo, () => {
                 hasFinished = true;
             });
             expect(hasFinished).to.be.true;
             expect(nextLinkFiFo).to.be.empty;
-            expect(progressList).to.be.empty;
 
             hasFinished = false;
-            http.collectNextLinks(null, nextLinkFiFo, progressList, () => {
+            http.collectNextLinks(null, nextLinkFiFo, () => {
                 hasFinished = true;
             });
             expect(hasFinished).to.be.true;
             expect(nextLinkFiFo).to.be.empty;
-            expect(progressList).to.be.empty;
 
             hasFinished = false;
-            http.collectNextLinks(1234, nextLinkFiFo, progressList, () => {
+            http.collectNextLinks(1234, nextLinkFiFo, () => {
                 hasFinished = true;
             });
             expect(hasFinished).to.be.true;
             expect(nextLinkFiFo).to.be.empty;
-            expect(progressList).to.be.empty;
 
             hasFinished = false;
-            http.collectNextLinks("string", nextLinkFiFo, progressList, () => {
+            http.collectNextLinks("string", nextLinkFiFo, () => {
                 hasFinished = true;
             });
             expect(hasFinished).to.be.true;
             expect(nextLinkFiFo).to.be.empty;
-            expect(progressList).to.be.empty;
         });
 
         it("should walk through any given object and remove IotLinks if flag removeIotLinks is set via constructor", () => {
@@ -382,7 +346,7 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
             expect(resultRef).to.deep.equal(expected);
         });
 
-        it("should push any key bound with a @iot.nextLink onto the fifo list, should push a new object to the progress list", () => {
+        it("should push any key bound with a @iot.nextLink onto the fifo list", () => {
             const resultRef = {
                     test: {
                         key: "value"
@@ -392,24 +356,17 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
                 expected = {
                     test: resultRef.test
                 },
-                progressList = [],
-                progressListExpected = [{
-                    count: 1,
-                    progress: 0
-                }],
                 nextLinkFiFo = [],
                 nextLinkFiFoExpected = [{
                     nextLink: "nextLink",
-                    resultRef: expected.test,
-                    progressRef: progressListExpected[0]
+                    resultRef: expected.test
                 }];
 
             http.setRemoveIotLinks(true);
-            http.collectNextLinks(resultRef, nextLinkFiFo, progressList);
+            http.collectNextLinks(resultRef, nextLinkFiFo);
 
             expect(resultRef).to.deep.equal(expected);
             expect(nextLinkFiFo).to.deep.equal(nextLinkFiFoExpected);
-            expect(progressList).to.deep.equal(progressListExpected);
         });
     });
 
@@ -419,57 +376,28 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
 
             it("should not process anything if the given resultRef is anything but an array", () => {
                 resultRef = null;
-                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, "onprogress", resultRef, "progressList", "progressRef");
+                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, resultRef);
                 expect(lastError).to.be.a("string");
 
                 lastError = false;
                 resultRef = undefined;
-                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, "onprogress", resultRef, "progressList", "progressRef");
+                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, resultRef);
                 expect(lastError).to.be.a("string");
 
                 lastError = false;
                 resultRef = 1234;
-                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, "onprogress", resultRef, "progressList", "progressRef");
+                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, resultRef);
                 expect(lastError).to.be.a("string");
 
                 lastError = false;
                 resultRef = "string";
-                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, "onprogress", resultRef, "progressList", "progressRef");
+                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, resultRef);
                 expect(lastError).to.be.a("string");
 
                 lastError = false;
                 resultRef = {};
-                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, "onprogress", resultRef, "progressList", "progressRef");
+                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, resultRef);
                 expect(lastError).to.be.a("string");
-            });
-        });
-
-        describe("handling of $count=true", () => {
-            it("should add $count=true to the given nextLink and call the link via httpClient", () => {
-                const resultRef = [],
-                    nextLink = "https://iot.hamburg.de/v1.0/Things",
-                    nextLinkExpected = "https://iot.hamburg.de/v1.0/Things?%24count=true";
-                let lastUrl = "";
-
-                http.setHttpClient(url => {
-                    lastUrl = url;
-                });
-                http.callNextLink(nextLink, "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", "progressRef");
-
-                expect(lastUrl).to.equal(nextLinkExpected);
-            });
-            it("should not add another $count=true if the given nextLink has $count=true already", () => {
-                const resultRef = [],
-                    nextLink = "https://iot.hamburg.de/v1.0/Things?$count=true",
-                    nextLinkExpected = "https://iot.hamburg.de/v1.0/Things?%24count=true";
-                let lastUrl = "";
-
-                http.setHttpClient(url => {
-                    lastUrl = url;
-                });
-                http.callNextLink(nextLink, "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", "progressRef");
-
-                expect(lastUrl).to.equal(nextLinkExpected);
             });
         });
 
@@ -480,195 +408,37 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
                 http.setHttpClient((url, onsuccess) => {
                     onsuccess(null);
                 });
-                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, "onprogress", resultRef, "progressList", "progressRef");
+                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, resultRef);
                 expect(lastError).to.be.a("string");
 
                 lastError = false;
                 http.setHttpClient((url, onsuccess) => {
                     onsuccess(undefined);
                 });
-                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, "onprogress", resultRef, "progressList", "progressRef");
+                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, resultRef);
                 expect(lastError).to.be.a("string");
 
                 lastError = false;
                 http.setHttpClient((url, onsuccess) => {
                     onsuccess("string");
                 });
-                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, "onprogress", resultRef, "progressList", "progressRef");
+                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, resultRef);
                 expect(lastError).to.be.a("string");
 
                 lastError = false;
                 http.setHttpClient((url, onsuccess) => {
                     onsuccess(1234);
                 });
-                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, "onprogress", resultRef, "progressList", "progressRef");
+                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, resultRef);
                 expect(lastError).to.be.a("string");
 
                 lastError = false;
                 http.setHttpClient((url, onsuccess) => {
                     onsuccess([]);
                 });
-                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, "onprogress", resultRef, "progressList", "progressRef");
+                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", onerror, resultRef);
                 expect(lastError).to.be.a("string");
             });
-        });
-
-        describe("handling of progressRef", () => {
-            it("should not set count nor progress on progressRef object if response has no iot.count", () => {
-                const progressRef = {},
-                    progressRefExpected = progressRef,
-                    resultRef = [];
-
-                http.setHttpClient((url, onsuccess) => {
-                    onsuccess({
-                        "test": true
-                    });
-                });
-                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", progressRef);
-                expect(progressRef).to.deep.equal(progressRefExpected);
-            });
-            it("should not set count nor progress on progressRef if progressRef is anything but an object (no null, no array)", () => {
-                const resultRef = [];
-                let progressRef;
-
-                http.setHttpClient((url, onsuccess) => {
-                    onsuccess({
-                        "@iot.count": 1
-                    });
-                });
-
-                progressRef = null;
-                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", progressRef);
-                expect(progressRef).to.equal(null);
-
-                progressRef = undefined;
-                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", progressRef);
-                expect(progressRef).to.equal(undefined);
-
-                progressRef = 1234;
-                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", progressRef);
-                expect(progressRef).to.equal(1234);
-
-                progressRef = "string";
-                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", progressRef);
-                expect(progressRef).to.equal("string");
-
-                progressRef = [];
-                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", progressRef);
-                expect(progressRef).to.be.an("array").and.to.be.empty;
-            });
-            it("should set count and progress on progressRef object if response has iot.count and progressRef is an object and not null", () => {
-                const progressRef = {},
-                    progressRefExpected = {
-                        count: 1,
-                        progress: 0
-                    },
-                    resultRef = [];
-
-                http.setHttpClient((url, onsuccess) => {
-                    onsuccess({
-                        "@iot.count": 1
-                    });
-                });
-                http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", progressRef);
-                expect(progressRef).to.deep.equal(progressRefExpected);
-            });
-        });
-
-        describe("handling of $top=X within progressRef", () => {
-            it("should set $top=X as progressRef.count if $top=X is greater than 0 and less than the value of @iot.count", () => {
-                const progressRef = {},
-                    progressRefExpected = {
-                        count: 1,
-                        progress: 0
-                    },
-                    resultRef = [],
-                    nextLink = "https://iot.hamburg.de/v1.0/Things?$top=1";
-
-                http.setHttpClient((url, onsuccess) => {
-                    onsuccess({
-                        "@iot.count": 2
-                    });
-                });
-                http.callNextLink(nextLink, "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", progressRef);
-
-                expect(progressRef).to.deep.equal(progressRefExpected);
-            });
-            it("should set @iot.count as progressRef.count if $top=X is zero", () => {
-                const progressRef = {},
-                    progressRefExpected = {
-                        count: 2,
-                        progress: 0
-                    },
-                    resultRef = [],
-                    nextLink = "https://iot.hamburg.de/v1.0/Things";
-
-                http.setHttpClient((url, onsuccess) => {
-                    onsuccess({
-                        "@iot.count": 2
-                    });
-                });
-                http.callNextLink(nextLink, "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", progressRef);
-
-                expect(progressRef).to.deep.equal(progressRefExpected);
-            });
-            it("should set @iot.count as progressRef.count if $top=X is greater than @iot.count", () => {
-                const progressRef = {},
-                    progressRefExpected = {
-                        count: 1,
-                        progress: 0
-                    },
-                    resultRef = [],
-                    nextLink = "https://iot.hamburg.de/v1.0/Things?$top=2";
-
-                http.setHttpClient((url, onsuccess) => {
-                    onsuccess({
-                        "@iot.count": 1
-                    });
-                });
-                http.callNextLink(nextLink, "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", progressRef);
-
-                expect(progressRef).to.deep.equal(progressRefExpected);
-            });
-        });
-    });
-
-    describe("handling of $skip=X within progressRef", () => {
-        it("should set $skip=X as progressRef.progress if $skip=X is given via nextLink", () => {
-            const progressRef = {},
-                progressRefExpected = {
-                    count: 1,
-                    progress: 1
-                },
-                resultRef = [],
-                nextLink = "https://iot.hamburg.de/v1.0/Things?$skip=1";
-
-            http.setHttpClient((url, onsuccess) => {
-                onsuccess({
-                    "@iot.count": 1
-                });
-            });
-            http.callNextLink(nextLink, "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", progressRef);
-
-            expect(progressRef).to.deep.equal(progressRefExpected);
-        });
-        it("should set $skip=X as progressRef.progress=0 if $skip=X is not given via nextLink", () => {
-            const progressRef = {},
-                progressRefExpected = {
-                    count: 1,
-                    progress: 0
-                },
-                resultRef = [],
-                nextLink = "https://iot.hamburg.de/v1.0/Things";
-
-            http.setHttpClient((url, onsuccess) => {
-                onsuccess({
-                    "@iot.count": 1
-                });
-            });
-            http.callNextLink(nextLink, "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", progressRef);
-
-            expect(progressRef).to.deep.equal(progressRefExpected);
         });
     });
 
@@ -683,7 +453,7 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
             http.setHttpClient((url, onsuccess) => {
                 onsuccess(response);
             });
-            http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", "progressRef");
+            http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", "onerror", resultRef);
 
             expect(resultRef).to.deep.equal(resultRefExpected);
         });
@@ -697,7 +467,7 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
             http.setHttpClient((url, onsuccess) => {
                 onsuccess(response);
             });
-            http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", "progressRef");
+            http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", "onerror", resultRef);
 
             expect(resultRef).to.deep.equal(resultRefExpected);
         });
@@ -711,7 +481,7 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
             http.setHttpClient((url, onsuccess) => {
                 onsuccess(response);
             });
-            http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", "progressRef");
+            http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", "onerror", resultRef);
 
             expect(resultRef).to.deep.equal(resultRefExpected);
         });
@@ -725,14 +495,13 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
                 },
                 nextLinkFiFoExpected = [{
                     nextLink: "nextLink2",
-                    resultRef: [1, 2, 3, 4],
-                    progressRef: "progressRef"
+                    resultRef: [1, 2, 3, 4]
                 }];
 
             http.setHttpClient((url, onsuccess) => {
                 onsuccess(response);
             });
-            http.callNextLink("nextLink", nextLinkFiFo, "onfinish", "onerror", "onprogress", resultRef, "progressList", "progressRef", () => {
+            http.callNextLink("nextLink", nextLinkFiFo, "onfinish", "onerror", resultRef, () => {
                 // stop recursion: do nothing
             });
 
@@ -750,70 +519,34 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
             http.setHttpClient((url, onsuccess) => {
                 onsuccess(response);
             });
-            http.callNextLink("nextLink", nextLinkFiFo, "onfinish", "onerror", "onprogress", resultRef, "progressList", "progressRef", () => {
+            http.callNextLink("nextLink", nextLinkFiFo, "onfinish", "onerror", resultRef, () => {
                 // stop recursion: do nothing
             });
 
             expect(nextLinkFiFo).to.deep.equal(nextLinkFiFoExpected);
         });
 
-        it("should set progressRef.progress to maximum if no further @iot.nextLink is received", () => {
-            const resultRef = [],
-                progressRef = {
-                    count: 2,
-                    progress: 1
-                },
-                progressRefExpected = {
-                    count: 2,
-                    progress: 2
-                },
-                response = {
-                    value: [1, 2, 3, 4]
-                };
-
-            http.setHttpClient((url, onsuccess) => {
-                onsuccess(response);
-            });
-            http.callNextLink("nextLink", "nextLinkFiFo", "onfinish", "onerror", "onprogress", resultRef, "progressList", progressRef, () => {
-                // stop recursion: do nothing
-            });
-
-            expect(progressRef).to.deep.equal(progressRefExpected);
-        });
-
-        it("should call collectNextLinks with resultRef, nextLinkFiFo and progressList", () => {
+        it("should call collectNextLinks with resultRef and nextLinkFiFo", () => {
             const resultRef = [],
                 nextLinkFiFo = [],
-                progressList = [{
-                    count: 2,
-                    progress: 1
-                }],
-                progressRef = progressList[0],
                 response = {
                     value: [1, 2, 3, 4]
                 },
                 resultRefExpected = [1, 2, 3, 4],
-                nextLinkFiFoExpected = [],
-                progressListExpected = [{
-                    count: 2,
-                    progress: 2
-                }];
+                nextLinkFiFoExpected = [];
             let lastResultRef = null,
-                lastNextLinkFiFo = null,
-                lastProgressList = null;
+                lastNextLinkFiFo = null;
 
             http.setHttpClient((url, onsuccess) => {
                 onsuccess(response);
             });
-            http.callNextLink("nextLink", nextLinkFiFo, "onfinish", "onerror", "onprogress", resultRef, progressList, progressRef, (resultRefShadow, nextLinkFiFoShadow, progressListShadow) => {
+            http.callNextLink("nextLink", nextLinkFiFo, "onfinish", "onerror", resultRef, (resultRefShadow, nextLinkFiFoShadow) => {
                 lastResultRef = resultRefShadow;
                 lastNextLinkFiFo = nextLinkFiFoShadow;
-                lastProgressList = progressListShadow;
             });
 
             expect(lastResultRef).to.deep.equal(resultRefExpected);
             expect(lastNextLinkFiFo).to.deep.equal(nextLinkFiFoExpected);
-            expect(lastProgressList).to.deep.equal(progressListExpected);
         });
         it("should reduce nextLinkFiFo and start a recursion, following @iot.nextLink, adding result onto resultRef, should call onfinish if depth barrier is reached", () => {
             const resultRef = [],
@@ -829,63 +562,21 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
             let hasFinished = false;
 
             http.setHttpClient((url, onsuccess) => {
-                if (url === "https://iot.hamburg.de/v1.0/Things?%24count=true") {
+                if (url === "https://iot.hamburg.de/v1.0/Things") {
                     onsuccess(responseA);
                 }
-                else if (url === "https://iot.hamburg.de/v1.0/Things2?%24count=true") {
+                else if (url === "https://iot.hamburg.de/v1.0/Things2") {
                     onsuccess(responseB);
                 }
             });
+
             http.callNextLink("https://iot.hamburg.de/v1.0/Things", nextLinkFiFo, () => {
                 // onfinish
                 hasFinished = true;
-            }, "onerror", "onprogress", resultRef, "progressList", "progressRef");
+            }, "onerror", resultRef);
 
             expect(hasFinished).to.be.true;
             expect(resultRef).to.deep.equal(resultRefExpected);
-        });
-        it("should calc the progressList and call onprogress with the current overall value of progress", () => {
-            const resultRef = [],
-                nextLinkFiFo = [],
-                progressList = [{
-                    count: 1,
-                    progress: 0
-                }],
-                progressRef = progressList[0],
-                responseA = {
-                    "@iot.count": 9,
-                    "@iot.nextLink": "https://iot.hamburg.de/v1.0/Things2?$skip=4",
-                    value: [1, 2, 3, 4]
-                },
-                responseB = {
-                    "@iot.count": 9,
-                    "@iot.nextLink": "https://iot.hamburg.de/v1.0/Things3?$skip=8",
-                    value: [5, 6, 7, 8]
-                },
-                responseC = {
-                    "@iot.count": 9,
-                    value: [9]
-                },
-                receivedProgress = [],
-                receivedProgressExpected = [0, 0.44, 1];
-
-            http.setHttpClient((url, onsuccess) => {
-                if (url === "https://iot.hamburg.de/v1.0/Things?%24count=true") {
-                    onsuccess(responseA);
-                }
-                else if (url === "https://iot.hamburg.de/v1.0/Things2?%24skip=4&%24count=true") {
-                    onsuccess(responseB);
-                }
-                else if (url === "https://iot.hamburg.de/v1.0/Things3?%24skip=8&%24count=true") {
-                    onsuccess(responseC);
-                }
-            });
-            http.callNextLink("https://iot.hamburg.de/v1.0/Things", nextLinkFiFo, "onfinish", "onerror", progress => {
-                // onprogress
-                receivedProgress.push(progress);
-            }, resultRef, progressList, progressRef);
-
-            expect(receivedProgress).to.deep.equal(receivedProgressExpected);
         });
     });
 
@@ -893,23 +584,13 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
         it("should call this.callNextLink with specific parameters", () => {
             const lastNextLinkExpected = "url",
                 lastResultRefExpected = [],
-                lastNextLinkFiFoExpected = [],
-                lastProgressListExpected = [{
-                    count: 1,
-                    progress: 0
-                }],
-                lastProgressRefExpected = {
-                    count: 1,
-                    progress: 0
-                };
+                lastNextLinkFiFoExpected = [];
             let lastNextLink = null,
                 onstartCalled = false,
                 onsuccessCalled = false,
                 oncompleteCalled = false,
                 lastResultRef = null,
-                lastNextLinkFiFo = null,
-                lastProgressList = null,
-                lastProgressRef = null;
+                lastNextLinkFiFo = null;
 
             http.get("url", () => {
                 // onsuccess
@@ -920,20 +601,16 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
             }, () => {
                 // oncomplete
                 oncompleteCalled = true;
-            }, "onerror", "onprogress", (nextLink, nextLinkFiFo, onfinish, onerrorShadow, onprogress, resultRef, progressList, progressRef) => {
+            }, "onerror", (nextLink, nextLinkFiFo, onfinish, onerrorShadow, resultRef) => {
                 lastNextLink = nextLink;
                 lastNextLinkFiFo = nextLinkFiFo;
                 lastResultRef = resultRef;
-                lastProgressList = progressList;
-                lastProgressRef = progressRef;
                 onfinish();
             });
 
             expect(lastNextLink).to.equal(lastNextLinkExpected);
             expect(lastNextLinkFiFo).to.deep.equal(lastNextLinkFiFoExpected);
             expect(lastResultRef).to.deep.equal(lastResultRefExpected);
-            expect(lastProgressList).to.deep.equal(lastProgressListExpected);
-            expect(lastProgressRef).to.deep.equal(lastProgressRefExpected);
             expect(onstartCalled).to.be.true;
             expect(onsuccessCalled).to.be.true;
             expect(oncompleteCalled).to.be.true;
@@ -944,7 +621,7 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
             http.get("url", "onsuccess", "onstart", () => {
                 // oncomplete
                 oncompleteCalled = true;
-            }, "onerror", "onprogress", (nextLink, nextLinkFiFo, onfinish, onerrorShadow) => {
+            }, "onerror", (nextLink, nextLinkFiFo, onfinish, onerrorShadow) => {
                 onerrorShadow();
             });
 
@@ -963,7 +640,7 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
                 lastUrlExpected = "https://iot.hamburg.de/v1.0/Things?%24filter=st_within(Thing%2FLocations%2Flocation%2Cgeography'POLYGON%20((9.869432803790303%2053.47946522163486%2C10.102382514144907%2053.47754336682167%2C10.10613018673993%2053.62149474831524%2C9.872388814958066%2053.623426671455626%2C9.869432803790303%2053.47946522163486))')";
             let lastUrl = null;
 
-            http.getInExtent(url, extentObj, "onsuccess", "onstart", "oncomplete", "onerror", "onprogress", urlShadow => {
+            http.getInExtent(url, extentObj, false, "onsuccess", "onstart", "oncomplete", "onerror", urlShadow => {
                 lastUrl = urlShadow;
             });
 
