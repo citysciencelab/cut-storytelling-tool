@@ -170,11 +170,12 @@ export function hasHolidayInWeek (date, holidayKeys = false, format = false) {
     if (!givenMoment.isValid()) {
         return false;
     }
+
     for (let i = 0; i <= 6; i++) {
-        givenMoment.add(1, "days");
         if (getPublicHoliday(givenMoment, holidayKeys)) {
             return true;
         }
+        givenMoment.add(1, "days");
     }
     return false;
 }

@@ -355,10 +355,9 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {*} layers - todo
      * @param {*} url - todo
      * @param {*} version - todo
-     * @param {object} [optionalParameters] Object of optional parameters to be set for the layer.
-     * @param {boolean} [optionalParameters.transparent = true] Whether the given layer is transparent.
-     * @param {boolean} [optionalParameters.isSelected = false] Whether the given layer is selected .
-     * @param {(boolean/object)} [optionalParameters.time = false] If set to `true` or and Object, the configured Layer is expected to be a WMS-T.
+     * @param {boolean} [transparent = true] Whether the given layer is transparent.
+     * @param {boolean} [isSelected = false] Whether the given layer is selected .
+     * @param {(boolean/object)} [time = false] If set to `true` or and Object, the configured Layer is expected to be a WMS-T.
      * @returns {void}
      */
     addLayer: function (name, id, parentId, level, layers, url, version, {transparent = true, isSelected = false, time = false}) {

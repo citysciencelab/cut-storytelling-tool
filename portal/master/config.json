@@ -44,7 +44,7 @@
           "id": "_source.id",
           "source": "_source"
         },
-        "hitType": "Fachthema",
+        "hitType": "common:modules.searchbar.type.subject",
         "hitGlyphicon": "glyphicon-list"
       },
       "visibleVector": {
@@ -253,6 +253,69 @@
         "name": "translate#common:menu.tools.name",
         "glyphicon": "glyphicon-wrench",
         "children": {
+          "wfsSearch": {
+            "name": "WFS Suche",
+            "instances": [
+              {
+                "title": "Hamburger Flurstücksuche",
+                "resultDialogTitle": "Trefferliste",
+                "requestConfig": {
+                  "gazetteer": true,
+                  "nameSpaces": [
+                    "http://www.adv-online.de/namespaces/adv/dog",
+                    "http://geodienste.hamburg.de/dog_gages/services/wfs_dog?SERVICE=WFS&VERSION=2.0.0&REQUEST=DescribeFeatureType&OUTPUTFORMAT=application/gml+xml;+version=3.2&TYPENAME=dog:Flurstueckskoordinaten&NAMESPACES=xmlns(dog,http://www.adv-online.de/namespaces/adv/dog)"
+                  ],
+                  "memberSuffix": "member",
+                  "restLayerId": "6",
+                  "storedQueryId": "Flurstueck"
+                },
+                "resultList": {
+                  "gemarkungsname": "Gemarkungsname",
+                  "gemarkung": "Gemarkung",
+                  "flurstuecksnummer": "Flurstücknummer",
+                  "flurstueck_lang": "Flurstücknummer - lang",
+                  "flurstuecksflaeche": "Flurstückfläche",
+                  "verwaltungsart": "Verwaltungsart",
+                  "gemeindename": "Gemeindename",
+                  "gemeinde": "Gemeinde",
+                  "kreisname": "Kreisname",
+                  "kreis": "Kreis",
+                  "land": "Land",
+                  "regierungsbezirk": "Regierungsbezirk",
+                  "status": "Status",
+                  "geometry": "Geometrie"
+                },
+                "selectSource": "https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json",
+                "literals": [
+                  {
+                    "clause": {
+                      "type": "and",
+                      "literals": [
+                        {
+                          "field": {
+                            "type": "equal",
+                            "inputLabel": "Gemarkung",
+                            "fieldName": "gemarkung",
+                            "usesId": true,
+                            "options": "",
+                            "required": true
+                          }
+                        },
+                        {
+                          "field": {
+                            "type": "equal",
+                            "inputLabel": "Flurstücksnummer",
+                            "fieldName": "flurstuecksnummer",
+                            "required": true
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
           "populationRequest": {
             "name": "translate#additional:modules.tools.populationRequest.title",
             "glyphicon": "glyphicon-wrench",

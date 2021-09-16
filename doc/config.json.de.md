@@ -328,7 +328,7 @@ Konfiguration des Elastic Search Suchdienstes
 |responseEntryPath|nein|String|""|Der Pfad in der response (JSON) zum Attribut, das die gefundenen Features enthält.|false|
 |triggerEvent|nein|**[triggerEvent](#markdown-header-portalconfigsearchbarelasticsearchtriggerevent)**|{}|Radio event das ausgelöst werden soll durch Mouseover und Click.|false|
 |hitMap|nein|**[hitMap](#markdown-header-portalconfigsearchbarelasticsearchhitmap)**||Mapping Objekt. Mappt die Attribute des Ergebnis Objektes auf den entsprechenden Key.|true|
-|hitType|nein|String|"Elastic"|Typ des Suchergebnisses, wird in der Auswahlliste hinter dem Namen angezeigt.|false|
+|hitType|nein|String|"common:modules.searchbar.type.subject"|Typ des Suchergebnisses, wird in der Auswahlliste hinter dem Namen angezeigt. Nutzen Sie den Übersetzungskey aus der Übersetzungsdatei|false|
 |hitGlyphicon|nein|String|"glyphicon-road"|CSS Glyphicon Klasse des Suchergebnisses. Wird vor dem Namen angezeigt.|false|
 |useProxy|nein|Boolean|false|Flag die angibt ob die URL geproxied werden soll oder nicht.|false|
 
@@ -358,7 +358,7 @@ Als zusätzliches property kann `payload` hinzugefügt werden. Es muss nicht zwi
         "id": "_source.id",
         "source": "_source"
     },
-    "hitType": "Fachthema",
+    "hitType": "common:modules.searchbar.type.subject",
     "hitGlyphicon": "glyphicon-list"
 }
 ```

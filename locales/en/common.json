@@ -783,7 +783,7 @@
                 "parcel": "parcel",
                 "address": "address",
                 "location": "location",
-                "subject": "subject",
+                "subject": "subject (external topics)",
                 "topic": "issues & topics"
             },
             "specialWFS": {
