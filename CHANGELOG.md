@@ -12,6 +12,7 @@
 ### Added
 - Added the new Tool `WfsSearch`.
 - New parameter "searchResultOrder" for ranking category of searching result
+- New csv specialized export button "ExportButtonCSV" integreted in Vue.js
 
 ### Changed
 - Moved SensorThingsMqtt and SensorThingsHttp to /src/utils, complete refactoring of SensorThingsMqtt, there are no changes in handling SensorThingsMqtt.

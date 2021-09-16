@@ -848,6 +848,11 @@
                 "contentSaved": "Inhalt wurde in die Zwischenablage kopiert.",
                 "contentNotSaved": "Inhalt konnte nicht in die Zwischenablage kopiert werden."
             }
+        },
+        "exportButton": {
+            "error": {
+                "download": "Beim Herunterladen der gewünschten Daten ist ein Fehler aufgetreten."
+            }
         }
     },
     "utils": {
