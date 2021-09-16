@@ -784,8 +784,8 @@
                 "parcel": "Flurstück",
                 "address": "Adresse",
                 "location": "Ort",
-                "subject": "Fachthema",
-                "topic": "Thema"
+                "subject": "Thema (externe Fachdaten)",
+                "topic": "Thema (Fachdaten)"
             },
             "specialWFS": {
                 "ongoing": "im Verfahren",

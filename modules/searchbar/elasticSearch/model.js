@@ -17,7 +17,7 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
             id: "id",
             coordinate: "coordinate"
         },
-        hitType: "Elastic",
+        hitType: "common:modules.searchbar.type.subject",
         hitGlyphicon: "glyphicon-road",
         async: false,
         useProxy: false,
@@ -121,7 +121,7 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
     createRecommendedList: function (responseData) {
         const triggerEvent = this.get("triggerEvent"),
             hitMap = this.get("hitMap"),
-            hitType = this.get("hitType"),
+            hitType = i18next.t(this.get("hitType")),
             hitGlyphicon = this.get("hitGlyphicon");
 
         if (responseData.length > 0) {
