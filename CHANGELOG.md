@@ -10,10 +10,14 @@
 
 ## Unreleased - in development
 ### Added
+- Add possibility to test end2end-tests with `MicrosoftEdge` driver.
+- VTC-Layer supports Sprites and Fonts in Styledefinitions.
+- Embedded nav into header tag
 - Added the new Tool `WfsSearch`.
 
 ### Changed
 - Moved SensorThingsMqtt and SensorThingsHttp to /src/utils, complete refactoring of SensorThingsMqtt, there are no changes in handling SensorThingsMqtt.
+- Changed anchor from div to main class and footer from div to footer class
 
 ### Deprecated
 
@@ -44,7 +48,7 @@
 
 ##  v2.13.0 - 2021-09-01
 ### Added
-- Migrated the Parametric Url from Backbone.js to Vue.js. Previous parameters are supported up to version 3.0.0, see also doc/urlParameter.md. 
+- Migrated the Parametric Url from Backbone.js to Vue.js. Previous parameters are supported up to version 3.0.0, see also doc/urlParameter.md.
 - Autocomplete functionality for the contact tool.
 - A library for standard colors and barrier free colors "src/utils/colors.js" to use within javascript, with initial colors/colorsets: MP standard blue; MP standard red; Color Universal Design by "J*Fly data depository for Drosophila reserchers" (https://jfly.uni-koeln.de/color/ - 7 colors); three additional color sets "Hamburg blue scheme" (10 colors), "blue scheme plus" (10 colors) and "traffic light scheme" (7 colors) contributed by the IfBQ of Hamburg Town.
 - Issue #631: Adds a tutorial to use the remote interface in an iFrame.
@@ -164,6 +168,9 @@
 - A new Tool named coordToolkit is available. It contains the functionality of the tools supplyCord and searchByCoord. Both provide the same projections configured under the key "namedProjections" in config.js.
 
 ### Changed
+- The version of the package selenium-webdriver was updated to version 4.0.0-beta.3.
+- changed LayerInformation from backbone to vue
+- Changed anchor from div to main class and footer from div to footer class
 - The GFI in attached mode now dynamically adjusts its size to the content.
 - Migrated the CompareFeatures Tool from Backbone.js to Vue.js.
 - Accessibility: Implemented keyboard navigation in menu (top-level and themes).
@@ -182,6 +189,8 @@
 - Support of End2End tests for `Browserstack` has been removed.Instead `saucelabs` is used.
 
 ### Fixed
+- BG-1541 further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2
+- Labels of VTC-Layer-Objects aren't cut off anymore.
 - Issue #626: The Legend menu item is placed according to the order of the menu items in config.json.
 - Issue #628: The Legend menu item is now translated correctly again and works as usual after a translation.
 - In the layerslider tool, the attribute title can now be overwritten again in config.json.
