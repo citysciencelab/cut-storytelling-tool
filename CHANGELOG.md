@@ -18,6 +18,7 @@
 ### Changed
 - Moved SensorThingsMqtt and SensorThingsHttp to /src/utils, complete refactoring of SensorThingsMqtt, there are no changes in handling SensorThingsMqtt.
 - Changed anchor from div to main class and footer from div to footer class
+- Pulled footer out of elements on map and made it part of App.vue
 
 ### Deprecated
 

@@ -3,13 +3,16 @@ import {mapMutations} from "vuex";
 import MainNav from "./MainNav.vue";
 import MapRegion from "./MapRegion.vue";
 import isDevMode from "./utils/isDevMode";
+import Footer from "./modules/footer/components/Footer.vue";
 import {checkIsURLQueryValid} from "./utils/parametricUrl/stateModifier";
 
 export default {
     name: "App",
     components: {
         MainNav,
-        MapRegion
+        MapRegion,
+        Footer
+        // ,MapModuleDebug
     },
     data: () => ({isDevMode}),
     created () {
@@ -39,6 +42,8 @@ export default {
     >
         <MainNav />
         <MapRegion class="map-region" />
+        <Footer />
+        <!-- <MapModuleDebug v-if="isDevMode" /> -->
         <!-- keep loader last so it's above it all
 
             NOTE currently doesn't work in all browser since vue renders too late;
