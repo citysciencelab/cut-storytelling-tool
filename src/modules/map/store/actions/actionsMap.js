@@ -2,9 +2,9 @@ import normalizeLayers from "./normalizeLayers";
 import * as highlightFeature from "./highlightFeature";
 import * as removeHighlightFeature from "./removeHighlighting";
 import {getWmsFeaturesByMimeType} from "../../../../api/gfi/getWmsFeaturesByMimeType";
-import {MapMode} from "../enums";
+import {MapMode, toMapMode} from "../enums";
 import getProxyUrl from "../../../../utils/getProxyUrl";
-
+import mapCollection from "../../../../dataStorage/mapCollection.js";
 import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";
 
@@ -39,7 +39,7 @@ const actions = {
      * @param {module:ol/Map} map map object
      * @returns {void}
      */
-    setMap ({commit, dispatch, rootState}, {map}) {
+    setMapAttributes ({commit, dispatch, rootState}, {map}) {
         // discard old listeners
         if (unsubscribes.length) {
             unsubscribes.forEach(unsubscribe => unsubscribe());
@@ -57,15 +57,15 @@ const actions = {
             }
         }});
         // set map to store
-        commit("setMap", map);
+        // commit("setMap", map);
+        commit("setMapId", map.id);
+        commit("setMapMode", map.mode);
         commit("setLayerList", map.getLayers().getArray());
-
         // update state once initially to get initial settings
-        dispatch("updateViewState");
-
+        // Todo
+        // dispatch("updateViewState");
         // hack: see comment on function
         loopLayerLoader(commit, map);
-
         // currently has no change mechanism
         commit("setProjection", mapView.getProjection());
 
@@ -128,7 +128,7 @@ const actions = {
      * @returns {void}
      */
     updateClick ({getters, commit, dispatch, rootGetters}, evt) {
-        const {mapMode} = getters;
+        const mapMode = toMapMode(getters.mapMode);
 
         if (mapMode === MapMode.MODE_2D || mapMode === MapMode.MODE_OB) {
             commit("setClickCoord", evt.coordinate);
@@ -252,15 +252,16 @@ const actions = {
     },
     /**
      * Sets center and resolution to initial values.
-     *
+     * @param {Object} payload parameter object
+     * @param {String} mapId The id of the map.
+     * @param {String} mapMode The mode of the map.
      * @returns {void}
      */
-    resetView ({state, dispatch}) {
-        const {initialCenter, initialResolution, map} = state,
-            view = map.getView();
+    resetView ({state, dispatch}, mapId, mapMode) {
+        const {initialCenter, initialResolution} = state;
 
-        view.setCenter(initialCenter);
-        view.setResolution(initialResolution);
+        mapCollection.getMap(mapId, mapMode).getView().setCenter(initialCenter);
+        mapCollection.getMap(mapId, mapMode).getView().setResolution(initialResolution);
 
         dispatch("MapMarker/removePointMarker", null, {root: true});
     },
@@ -345,11 +346,13 @@ const actions = {
     /**
      * Creates a new vector layer and adds it to the map.
      * If it already exists, this layer is returned.
-     *
+     * @param {Object} payload parameter object
      * @param {String} name The name and the id for the layer.
+     * @param {String} mapId The id of the map.
+     * @param {String} mapMode The mode of the map.
      * @returns {module:ol/layer} The created or the already existing layer.
      */
-    createLayer ({state}, name) {
+    createLayer ({state}, name, mapId, mapMode) {
         const layerList = state.layerList;
 
         let resultLayer = layerList.find(layer => {
@@ -367,19 +370,21 @@ const actions = {
             zIndex: 999
         });
 
-        state.map.addLayer(resultLayer);
+        mapCollection.getMap(mapId, mapMode).addLayer(resultLayer);
         return resultLayer;
     },
     /**
      * Sets the center of the current view.
-     *
+     * @param {Object} payload parameter object
      * @param {number[]} coords An array of numbers representing a xy-coordinate.
+     * @param {String} mapId The id of the map.
+     * @param {String} mapMode The mode of the map.
      * @returns {void}
      */
-    setCenter ({state, commit}, coords) {
+    setCenter ({commit}, coords, mapId, mapMode) {
         if (Array.isArray(coords) && coords.length === 2 && typeof coords[0] === "number" && typeof coords[1] === "number") {
             commit("setCenter", coords);
-            state.map.getView().setCenter(coords);
+            mapCollection.getMap(mapId, mapMode).getView().setCenter(coords);
         }
         else {
             console.warn("Center was not set. Probably there is a data type error. The format of the coordinate must be an array with two numbers.");

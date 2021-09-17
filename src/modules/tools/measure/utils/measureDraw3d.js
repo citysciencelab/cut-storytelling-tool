@@ -125,6 +125,7 @@ function generateTextPoint (distance, heightDiff, coords, addUnlistener) {
  * @param {string} projectionCode EPSG code
  * @returns {object} holds "coords" and "cartesian"
  */
+/* eslint-disable*/
 function getClickCoords (map, obj, projectionCode) {
     const scene = map.getCesiumScene(),
         object = scene.pick(obj.position);
@@ -154,6 +155,7 @@ function getClickCoords (map, obj, projectionCode) {
 
     return {coords, cartesian};
 }
+/* eslint-enable*/
 
 /**
  * Creates a line feature from a start and end coordinate.
@@ -229,31 +231,26 @@ function handleSecondPoint (coords, cartesian, addUnlistener) {
 
 /**
  * Handler for 3D clicks.
- * @param {module:ol/Map} map ol 3d map
- * @param {string} projectionCode current map projection code
  * @param {function} addUnlistener function to register unlisteners
- * @param {object} obj point with coordinates
+ * @param {object} event event with coordinates and cartesian
  * @returns {void}
  */
-function handle3DClicked (map, projectionCode, addUnlistener, obj) {
-    const {coords, cartesian} = getClickCoords(map, obj, projectionCode);
-
+function handle3DClicked (addUnlistener, event) {
     if (!firstPoint) {
-        handleFirstPoint(coords, cartesian);
+        handleFirstPoint(event.coordinate, event.cartesian);
     }
     else {
-        handleSecondPoint(coords, cartesian, addUnlistener);
+        handleSecondPoint(event.coordinate, event.cartesian, addUnlistener);
     }
 }
 
 /**
- * @param {module:ol/Map} map ol/Map
- * @param {string} projectionCode current map projection
+ * Creates the draw interaction used in olcs.
  * @param {function} addUnlistener function to register unlisteners
  * @param {object} _store vuex store
  * @returns {MeasureDraw3d} measurement-interaction representing object (no real module:ol/interaction)
  */
-function makeDraw (map, projectionCode, addUnlistener, _store) {
+function makeDraw (addUnlistener, _store) {
     store = _store;
 
     /* TODO
@@ -261,12 +258,10 @@ function makeDraw (map, projectionCode, addUnlistener, _store) {
      * to listen to the new click mechanism; 3d measure may also be fully integrated
      * into vuex then
      */
-    const mapChannel = Radio.channel("Map"),
-        handle = handle3DClicked.bind(null, map, projectionCode, addUnlistener);
-
-    mapChannel.on("clickedWindowPosition", handle);
+    const handle = handle3DClicked.bind(null, addUnlistener);
 
     return {
+        handler: handle,
         abortDrawing: () => {
             if (firstPointFeature) {
                 source.removeFeature(firstPointFeature);
@@ -275,9 +270,8 @@ function makeDraw (map, projectionCode, addUnlistener, _store) {
             }
         },
         stopInteraction: () => {
-            mapChannel.off("clickedWindowPosition", handle);
-        },
-        interaction3d: true
+            // does nothing
+        }
     };
 }
 

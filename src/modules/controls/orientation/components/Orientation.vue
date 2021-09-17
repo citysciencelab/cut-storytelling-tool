@@ -10,6 +10,7 @@ import Overlay from "ol/Overlay.js";
 import proj4 from "proj4";
 import * as Proj from "ol/proj.js";
 import {Circle, LineString} from "ol/geom.js";
+import mapCollection from "../../../../dataStorage/mapCollection.js";
 
 export default {
     name: "Orientation",
@@ -43,12 +44,14 @@ export default {
             isGeolocationDenied: false,
             isGeoLocationPossible: false,
             modelListChannel: Radio.channel("ModelList"),
-            storePath: this.$store.state.controls.orientation
+            storePath: this.$store.state.controls.orientation,
+            currentMapId: "",
+            currentMapMode: ""
         };
     },
     computed: {
         ...mapGetters("controls/orientation", Object.keys(getters)),
-        ...mapGetters("Map", ["map"])
+        ...mapGetters("Map", ["mapId", "mapMode"])
     },
     watch: {
         tracking () {
@@ -68,6 +71,8 @@ export default {
     created () {
         this.setIsGeoLocationPossible();
         this.modelListChannel.on("updateVisibleInMapList", this.checkWFS);
+        this.currentMapId = this.mapId;
+        this.currentMapMode = this.mapMode;
     },
     mounted () {
         this.addElement();
@@ -96,7 +101,7 @@ export default {
             let geolocation = null;
 
             if (this.isGeolocationDenied === false) {
-                this.map.addOverlay(this.marker);
+                mapCollection.getMap(this.currentMapId, this.currentMapMode).addOverlay(this.marker);
                 if (this.geolocation === null) {
                     geolocation = new Geolocation({tracking: true, projection: Proj.get("EPSG:4326")});
                     this.setGeolocation(geolocation);
@@ -149,7 +154,7 @@ export default {
          * @returns {void}
          */
         removeOverlay () {
-            this.map.removeOverlay(this.marker);
+            mapCollection.getMap(this.currentMapId, this.currentMapMode).removeOverlay(this.marker);
         },
 
         /**
@@ -291,7 +296,7 @@ export default {
 
             if (this.poiModeCurrentPositionEnabled) {
                 this.$store.dispatch("MapMarker/removePointMarker");
-                this.map.addOverlay(this.marker);
+                mapCollection.getMap(this.currentMapId, this.currentMapMode).addOverlay(this.marker);
                 if (this.geolocation === null) {
                     geolocation = new Geolocation({tracking: true, projection: Proj.get("EPSG:4326")});
                     this.setGeolocation(geolocation);

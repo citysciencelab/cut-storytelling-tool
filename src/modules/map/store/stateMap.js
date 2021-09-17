@@ -4,7 +4,6 @@ import {MapMode} from "./enums";
 /**
  * User type definition
  * @typedef {Object} MapState
- * @property {?module:ol/Map} map currently active map instance
  * @property {?[Number, Number]} size - The size in pixels of the map in the DOM
  * @property {?OLCesium} map3d - the OLCesium 3d map
  * @property {?module:ol/layer[]} layerList - all layers of the map
@@ -32,9 +31,9 @@ import {MapMode} from "./enums";
  * @property {?Object.<String, LayerData>} overlays list of existing overlays
  * @property {String[]} loadedLayers list of ready loaded layers IDs
  * @property {?MapMode} mapMode
+ * @property {?MapId} mapId
  */
 const state = {
-    map: null,
     size: null,
     map3d: null,
     layerList: null,
@@ -62,6 +61,7 @@ const state = {
     overlayIds: null,
     overlays: null,
     mapMode: MapMode.MODE_2D,
+    mapId: null,
     highlightedFeature: null,
     highlightedFeatureStyle: null,
     vectorFeaturesLoaded: false,

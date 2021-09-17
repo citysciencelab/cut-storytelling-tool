@@ -675,7 +675,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
      * Forces rerendering of all layers. Layers are sorted before rerender.
      * @fires Map#RadioTriggerMapAddLayerToIndex
-     * @return {array} Sorted selected Layers
+     * @return {void}
      */
     updateLayerView: function () {
         const sortedLayers = this.getSortedTreeLayers();
@@ -683,8 +683,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         sortedLayers.forEach(layer => {
             Radio.trigger("Map", "addLayerToIndex", [layer.get("layer"), layer.get("selectionIDX")]);
         });
-
-        return sortedLayers;
     },
 
     /**

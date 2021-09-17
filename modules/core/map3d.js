@@ -1,10 +1,7 @@
 import moment from "moment";
-import OLCesium from "olcs/OLCesium.js";
-import VectorSynchronizer from "olcs/VectorSynchronizer.js";
-import FixedOverlaySynchronizer from "./3dUtils/fixedOverlaySynchronizer.js";
-import WMSRasterSynchronizer from "./3dUtils/wmsRasterSynchronizer.js";
 import {transform, get} from "ol/proj.js";
-import Store from "../../src/app-store";
+import store from "../../src/app-store";
+import api from "masterportalAPI/abstraction/api";
 
 const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
     defaults: {
@@ -87,7 +84,9 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
         }
         map3d.setEnabled(true);
         Radio.trigger("Map", "change", "3D");
-        Store.commit("Map/setMapMode", 1);
+        store.commit("setMapId", map3d.id);
+        store.commit("setMapMode", "3D");
+        store.commit("Map/setMapMode", 1);
     },
 
     /**
@@ -109,9 +108,9 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
         const camera = scene.camera;
         let cameraParameter = Object.prototype.hasOwnProperty.call(Config, "cameraParameter") ? Config.cameraParameter : {};
 
-        cameraParameter = Store.state.urlParams?.altitude ? Object.assign(cameraParameter || {}, {altitude: Store.state.urlParams?.altitude}) : cameraParameter;
-        cameraParameter = Store.state.urlParams?.heading ? Object.assign(cameraParameter || {}, {heading: Store.state.urlParams?.heading}) : cameraParameter;
-        cameraParameter = Store.state.urlParams?.tilt ? Object.assign(cameraParameter || {}, {tilt: Store.state.urlParams?.tilt}) : cameraParameter;
+        cameraParameter = store.state.urlParams?.altitude ? Object.assign(cameraParameter || {}, {altitude: store.state.urlParams?.altitude}) : cameraParameter;
+        cameraParameter = store.state.urlParams?.heading ? Object.assign(cameraParameter || {}, {heading: store.state.urlParams?.heading}) : cameraParameter;
+        cameraParameter = store.state.urlParams?.tilt ? Object.assign(cameraParameter || {}, {tilt: store.state.urlParams?.tilt}) : cameraParameter;
 
         if (Object.keys(cameraParameter).length > 0) {
             this.setCameraParameter(cameraParameter);
@@ -183,7 +182,7 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
                 }
             }
 
-            Store.dispatch("Map/updateClick", {map3d, position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event, map: Radio.request("Map", "getMap")});
+            store.dispatch("Map/updateClick", {map3d, position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event, map: Radio.request("Map", "getMap")});
             Radio.trigger("Map", "clickedWindowPosition", {position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event, map: Radio.request("Map", "getMap")});
         }
     },
@@ -218,7 +217,9 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
                 }
                 Radio.trigger("Alert", "alert:remove");
                 Radio.trigger("Map", "change", "2D");
-                Store.commit("Map/setMapMode", 0);
+                store.commit("Map/setMapMode", 0);
+                store.commit("setMapId", map.get("id"));
+                store.commit("setMapMode", map.get("mode"));
             });
         }
     },
@@ -342,19 +343,10 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
      * @returns {OLCesium} - ol cesium map.
      */
     createMap3d: function () {
-        const map3d = new OLCesium({
-            map: Radio.request("Map", "getMap"),
-            time: this.getShadowTime.bind(this),
-            sceneOptions: {
-                shadows: false
-            },
-            stopOpenLayersEventsPropagation: true,
-            createSynchronizers: function (olMap, scene) {
-                return [new WMSRasterSynchronizer(olMap, scene), new VectorSynchronizer(olMap, scene), new FixedOverlaySynchronizer(olMap, scene)];
-            }
-        });
-
-        return map3d;
+        return api.map.createMap({
+            map2D: api.mapCollection.getCurrentMap(),
+            shadowTime: this.getShadowTime.bind(this)
+        }, "3D");
     },
 
     /**
@@ -389,7 +381,7 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
      */
     setMap3d: function (map3d) {
         this.set("map3d", map3d);
-        Store.commit("Map/setMap3d", map3d);
+        store.commit("Map/setMap3d", map3d);
     }
 
 });

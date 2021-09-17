@@ -144,7 +144,7 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
      * Executes toggleIsVisibleInMap in the model
      * @returns {void}
      */
-    toggleIsVisibleInMap: function () {
+    toggleIsVisibleInMap: function () {console.log(1);
         this.model.toggleIsVisibleInMap();
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
     }

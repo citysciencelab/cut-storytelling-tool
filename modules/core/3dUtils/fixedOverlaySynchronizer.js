@@ -41,7 +41,9 @@ class FixedOverlaySynchronizer extends OverlaySynchronizer {
         if (map3d && map3d.getEnabled()) {
             const overlay = /** @type {ol.Overlay} */ event.element;
 
-            this.addOverlay(overlay);
+            if (overlay.getId() !== undefined) {
+                this.addOverlay(overlay);
+            }
         }
     }
 }
