@@ -157,4 +157,29 @@ describe("modules/searchbar", function () {
             expect(triggered).to.be.true;
         });
     });
+
+    describe("sortUniqueTypes", function () {
+        let uniqueTypes = ["Straße", "Ort", "Stadtteil", "Thema", "Fachthema"],
+            searchResultOrder = ["Straße", "Ort", "Stadtteil", "Thema", "Fachthema"];
+
+        it("should return the same result as the two parameters", function () {
+            expect(model.sortUniqueTypes(uniqueTypes, searchResultOrder)).to.deep.equal(uniqueTypes);
+        });
+        it("should return the same result as uniqueTypes", function () {
+            uniqueTypes = ["Straße", "Ort", "Stadtteil", "Thema"];
+            expect(model.sortUniqueTypes(uniqueTypes, searchResultOrder)).to.deep.equal(uniqueTypes);
+        });
+        it("should return the same result as uniqueTypes", function () {
+            searchResultOrder = ["Straße", "Ort", "Stadtteil", "Thema"];
+            uniqueTypes = ["Straße", "Ort", "Stadtteil", "Thema", "Fachthema"];
+            expect(model.sortUniqueTypes(uniqueTypes, searchResultOrder)).to.deep.equal(uniqueTypes);
+        });
+        it("should return the same result as the given parameter result", function () {
+            const result = ["Ort", "Stadtteil", "Thema", "Straße"];
+
+            uniqueTypes = ["Straße", "Ort", "Stadtteil", "Thema"];
+            searchResultOrder = ["Ort", "Stadtteil", "Thema", "Fachthema"];
+            expect(model.sortUniqueTypes(uniqueTypes, searchResultOrder)).to.deep.equal(result);
+        });
+    });
 });

@@ -11,6 +11,7 @@
 ## Unreleased - in development
 ### Added
 - Added the new Tool `WfsSearch`.
+- New parameter "searchResultOrder" for ranking category of searching result
 
 ### Changed
 - Moved SensorThingsMqtt and SensorThingsHttp to /src/utils, complete refactoring of SensorThingsMqtt, there are no changes in handling SensorThingsMqtt.
