@@ -1,9 +1,0 @@
-
-/home/klaas/Projects/masterportal/addons/gfiThemes/dipas/components/Dipas.vue
-  95:13  error  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  vuejs-accessibility/alt-text
-
-/home/klaas/Projects/masterportal/portal/dipas/config.js
-  1:7  error  'Config' is assigned a value but never used  no-unused-vars
-
-✖ 2 problems (2 errors, 0 warnings)
-

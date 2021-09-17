@@ -15,12 +15,12 @@ describe("src/share-components/toggleCheckbox/componentsToggleCheckbox.vue", () 
                 },
                 localVue
             }),
-            labelTags = wrapper.findAll("label");
+            btns = wrapper.findAll("div.btn");
 
-        expect(labelTags.at(0).text()).to.be.equal("on");
-        expect(labelTags.at(1).text()).to.be.equal("off");
-        expect(labelTags.at(0).classes().indexOf("active")).not.to.equal(-1);
-        expect(labelTags.at(1).classes().indexOf("active")).to.equal(-1);
+        expect(btns.at(0).text()).to.be.equal("on");
+        expect(btns.at(1).text()).to.be.equal("off");
+        expect(btns.at(0).classes().indexOf("active")).not.to.equal(-1);
+        expect(btns.at(1).classes().indexOf("active")).to.equal(-1);
     });
 
     it("should have the correct classes for inactive state", async () => {
@@ -30,10 +30,10 @@ describe("src/share-components/toggleCheckbox/componentsToggleCheckbox.vue", () 
                 },
                 localVue
             }),
-            labelTags = wrapper.findAll("label");
+            btns = wrapper.findAll("div.btn");
 
-        expect(labelTags.at(0).classes().indexOf("active")).to.equal(-1);
-        expect(labelTags.at(1).classes().indexOf("active")).not.to.equal(-1);
+        expect(btns.at(0).classes().indexOf("active")).to.equal(-1);
+        expect(btns.at(1).classes().indexOf("active")).not.to.equal(-1);
     });
 
     it("should call toggle if label is clicked", async () => {
@@ -44,11 +44,11 @@ describe("src/share-components/toggleCheckbox/componentsToggleCheckbox.vue", () 
                 },
                 localVue
             }),
-            labelTags = wrapper.findAll("label");
+            btns = wrapper.findAll("div.btn");
 
-        await labelTags.at(0).trigger("click");
+        await btns.at(0).trigger("click");
         expect(spyToggle.calledOnce).to.be.true;
-        await labelTags.at(1).trigger("click");
+        await btns.at(1).trigger("click");
         expect(spyToggle.calledTwice).to.be.true;
 
         spyToggle.restore();
