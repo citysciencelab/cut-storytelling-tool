@@ -560,18 +560,15 @@
         },
         {
           "id": "12883",
-          "name": "Gelände",
-          "visibility": true
+          "name": "Gelände"
         },
         {
           "id": "12884",
-          "name": "Gebäude LoD2",
-          "visibility": true
+          "name": "Gebäude LoD2"
         },
         {
           "id": "13032",
-          "name": "Oblique",
-          "visibility": true
+          "name": "Oblique"
         }
       ]
     },
@@ -586,7 +583,6 @@
         {
           "id": "16100",
           "name": "Hauptkirchen",
-          "visibility": true,
           "isVisibleInTree": false,
           "hiddenFeatures": [
             "DEHH_8aeaf0d5-9f1a-4331-80fd-93b5dd5d8893",
@@ -634,7 +630,6 @@
         {
           "id": "4561",
           "infoFormat": "text/html",
-          "visibility": false,
           "urlIsVisible": false
         },
         {
@@ -724,7 +719,6 @@
         {
           "id": "1711",
           "styleId": "1711",
-          "visibility": true,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": [
             "name",
@@ -735,7 +729,6 @@
         },
         {
           "id": "8712",
-          "visibility": true,
           "name": "Schulinfosystem",
           "styleId": "8712",
           "searchField": "schulname",
@@ -749,13 +742,11 @@
         {
           "id": "753",
           "styleId": "753",
-          "visibility": false,
           "mouseHoverField": "Name",
           "extendedFilter": true
         },
         {
           "id": "8145",
-          "visibility": false,
           "gfiTheme": {
             "name": "default",
             "params": {
