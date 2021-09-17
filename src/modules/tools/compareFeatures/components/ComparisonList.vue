@@ -304,11 +304,10 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "~variables";
-    @background_color_1: rgb(0, 92, 169);
-    @background_color_2: #eee;
-    @background_color_3: #ddd;
-    @background_color_4: #ccc;
+    @import "~/css/mixins.less";
+
+    @background_color_2: #f5f5f5;
+    @background_color_3: #e6e6e6;
     @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
 
     #tool-compareFeatures {
@@ -317,26 +316,29 @@ export default {
         width: 100%;
     }
     .remove-feature {
-        top: 0 !important;
-        left: 0;
+        top: 0px !important;
+        left: 0px;
+        &:focus {
+            .primary_action_focus();
+        }
+        &:hover {
+            .primary_action_hover();
+        }
     }
     table {
         font-family: @font_family_default;
         border-collapse: collapse;
         table-layout: fixed;
         width: 100%;
-        th {
-            border-top: 1px solid #ccc;
-            padding: 8px;
-            padding-top: 12px;
-            padding-bottom: 12px;
-            text-align: left;
-            background-color: #4CAF50;
-            color: white;
+        a {
+            color: darken(@secondary_focus, 10%);
+            padding: 2px;
+            &:hover{
+                .primary_action_hover();
+            }
         }
         tr {
             &:first-child {
-                border-top: 1px solid #ccc;
                 max-width: 25px !important;
             }
             &:nth-child(odd) {
@@ -344,12 +346,6 @@ export default {
             }
             &:nth-child(even) {
                 background-color: @background_color_3;
-            }
-            &:hover {
-                background-color: @background_color_4;
-                td {
-                    border-left: 1px solid #bbb;
-                }
             }
         }
         td {
@@ -359,6 +355,7 @@ export default {
             vertical-align: top;
             &:nth-child(1) {
                 width: 20%;
+                border-style: none;
             }
         }
         p {

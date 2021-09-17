@@ -271,15 +271,20 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "~variables";
+    @import "~/css/mixins.less";
     @color: rgb(255, 255, 255);
     @font_family: "MasterPortalFont", sans-serif;
     @background_color_1: rgb(255, 255, 255);
     @background_color_2: #e10019;
-    @background_color_3: #f2f2f2;
     @background_color_4: #646262;
 
-    #vue-tool-content-body { display:block; }
+    #vue-tool-content-body {
+        display:block;
+
+        &:focus {
+            .primary_action_focus();
+        }
+    }
 
     .win-heading{
         border-bottom: 1px solid rgb(229, 229, 229);
@@ -287,6 +292,7 @@ export default {
         display:flex;
         flex-direction:row;
         width:100%;
+        height: 35px;
         padding-left: 10px;
 
         .heading-element {
@@ -309,17 +315,18 @@ export default {
             > .glyphicon {
                 margin-top: 10px;
                 margin-bottom: 10px;
+                padding: 8px 8px 8px 8px;
                 &:focus {
-                    outline: 3px solid @accent_focus;
-                    outline: 3px auto  Highlight;
-                    outline: 3px auto -webkit-focus-ring-color;
+                    .primary_action_focus();
                 }
             }
 
             > span {
                 &.glyphicon-minus { top: 3px; }
                 &:hover {
-                    &:not(.win-icon) { opacity: 0.7; cursor: pointer;}
+                    &:not(.win-icon) {
+                        .primary_action_hover();
+                    }
                 }
             }
         }
@@ -366,6 +373,9 @@ export default {
             #vue-tool-content-body { display:none; }
             .win-heading{
                 background-color:@background_color_2;
+                .glyphicon, .title {
+                    color: @color;
+                }
                 border-bottom:none;
                 overflow: hidden;
             }
@@ -401,7 +411,7 @@ export default {
         .win-body-vue {
             border-bottom-left-radius: 12px;
             border-bottom-right-radius: 12px;
-            background-color: @background_color_3;
+            background-color: @secondary_table_style;
             * { border-radius: 12px; }
         }
     }

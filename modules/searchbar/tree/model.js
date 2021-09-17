@@ -32,15 +32,29 @@ const TreeModel = Backbone.Model.extend(/** @lends TreeModel.prototype */{
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.search
         });
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.resetLayers
+        });
+
         this.listenTo(Radio.channel("ObliqueMap"), {
             "isActivated": this.controlListeningToSearchbar
         });
 
-        if (Radio.request("ParametricURL", "getInitString") !== undefined) {
+        if (store.state.urlParams && store.state.urlParams["Search/query"]) {
             // Carry out the initial search because a search parameter has been passed.
-            this.search(Radio.request("ParametricURL", "getInitString"));
+            this.search(store.state.urlParams && store.state.urlParams["Search/query"]);
         }
 
+        this.resetLayers();
+    },
+
+    /**
+     * reset layers - reset the layer to empty arry
+     * @returns {void} -
+     */
+    resetLayers: function () {
+        this.setLayers([]);
     },
 
     /**

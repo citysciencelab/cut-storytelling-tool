@@ -228,7 +228,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         if (this.model.get("initSearchString") !== undefined) {
             this.renderRecommendedList();
             this.$("#searchInput").val(this.model.get("initSearchString"));
-            this.model.unset("initSearchString", true);
         }
         this.setSearchInputWidth();
     },
@@ -306,7 +305,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             if (this.model.get("isInitialRecommendedListCreated") === true) {
                 this.renderRecommendedList();
                 this.$("#searchInput").val(this.model.get("initSearchString"));
-                this.model.unset("initSearchString", true);
             }
         }
         this.setSearchInputWidth();
@@ -1061,7 +1059,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         }
 
         if (hit && Object.prototype.hasOwnProperty.call(hit, "triggerEvent")) {
-            if (hit.type !== "Fachthema" && hit.triggerEvent.event !== "gfiOnClick" && !this.model.get("hitIsClick")) {
+            if (hit.type !== i18next.t("common:modules.searchbar.type.subject") && hit.triggerEvent.event !== "gfiOnClick" && !this.model.get("hitIsClick")) {
                 Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, false);
             }
         }

@@ -1,5 +1,5 @@
 const Config = {
-    addons: ["populationRequest", "vueAddon", "tacticalMark", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable", "reisezeiten"],
+    addons: ["populationRequest", "vueAddon", "tacticalMark", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable"],
     alerting: {
         fetchBroadcastUrl: "https://geodienste.hamburg.de/lgv-config/newsFeedPortalAlerts.json"
     },
@@ -74,6 +74,28 @@ const Config = {
         },
         maximumScreenSpaceError: 2,
         fxaa: true
+    },
+    featureViaURL: {
+        zoomTo: "42",
+        epsg: 25832,
+        layers: [
+            {
+                id: "42",
+                geometryType: "Point",
+                name: "Punkt Feature",
+                styleId: "location_eventlotse"
+            },
+            {
+                id: "4200",
+                geometryType: "LineString",
+                name: "Übergebene Linien Feature"
+            },
+            {
+                id: "4020",
+                geometryType: "Polygon",
+                name: "Übergebene Polygon Feature"
+            }
+        ]
     },
     defaultToolId: "gfi",
     portalLanguage: {

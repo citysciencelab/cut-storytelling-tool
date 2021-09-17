@@ -4,7 +4,8 @@ import Template from "text-loader!./template.html";
 
 const FilterView = Backbone.View.extend({
     events: {
-        "click .close": "closeFilter"
+        "click .closeView": "closeFilter",
+        "keydown .closeView": "closeFilter"
     },
     initialize: function () {
         this.listenTo(this.model, {
@@ -135,10 +136,12 @@ const FilterView = Backbone.View.extend({
             this.renderDetailView();
         }
     },
-    closeFilter: function () {
-        this.model.setIsActive(false);
-        this.model.collapseOpenSnippet();
-        Radio.trigger("ModelList", "toggleDefaultTool");
+    closeFilter: function (event) {
+        if (event.type === "click" || event.which === 32 || event.which === 13) {
+            this.model.setIsActive(false);
+            this.model.collapseOpenSnippet();
+            Radio.trigger("ModelList", "toggleDefaultTool");
+        }
     }
 });
 

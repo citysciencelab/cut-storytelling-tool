@@ -30,11 +30,9 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @listens Core#RadioRequestUtilIsChrome
      * @listens Core#RadioRequestUtilIsInternetExplorer
      * @listens Core#RadioRequestUtilIsAny
-     * @listens Core#RadioRequestUtilGetConfig
      * @listens Core#RadioRequestUtilGetUiStyle
      * @listens Core#RadioRequestUtilGetIgnoredKeys
      * @listens Core#RadioRequestUtilSort
-     * @listens Core#RadioRequestUtilConvertArrayOfObjectsToCsv
      * @listens Core#RadioRequestUtilGetMasterPortalVersionNumber
      * @listens Core#RadioRequestUtilRenameKeys
      * @listens Core#RadioRequestUtilRenameValues
@@ -65,9 +63,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "isChrome": this.isChrome,
             "isInternetExplorer": this.isInternetExplorer,
             "isAny": this.isAny,
-            "getConfig": function () {
-                return this.get("config");
-            },
             "getUiStyle": function () {
                 return this.get("uiStyle");
             },
@@ -75,7 +70,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
                 return this.get("ignoredKeys");
             },
             "sort": this.sort,
-            "convertArrayOfObjectsToCsv": this.convertArrayOfObjectsToCsv,
             "convertArrayElementsToString": this.convertArrayElementsToString,
             "renameKeys": this.renameKeys,
             "renameValues": this.renameValues,
@@ -91,7 +85,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "differenceJs": this.differenceJs,
             "toObject": this.toObject,
             "isEmpty": this.isEmpty,
-            "setUrlQueryParams": this.setUrlQueryParams,
             "searchNestedObject": this.searchNestedObject
         }, this);
 
@@ -113,7 +106,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         });
 
         $(window).on("resize", this.toggleIsViewMobile.bind(this));
-        this.parseConfigFromURL();
     },
 
     /**
@@ -569,71 +561,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     },
 
     /**
-     * todo
-     * @fires Alerting#RadioTriggerAlertAlert
-     * @returns {void}
-     */
-    parseConfigFromURL: function () {
-        const query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
-            result = {};
-
-        let config;
-
-        query.split("&").forEach(function (keyValue) {
-            const item = keyValue.split("=");
-
-            result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
-        });
-
-        if (Object.prototype.hasOwnProperty.call(result, "CONFIG")) {
-            config = result.CONFIG;
-
-            if (config.slice(-5) === ".json") {
-                this.setConfig(config);
-            }
-            else {
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong>"
-                        + "<br> Der URL-Paramater <strong>Config</strong> verlangt eine Datei mit der Endung \".json\"."
-                        + "<br> Es wird versucht die config.json unter dem Standardpfad zu laden",
-                    kategorie: "alert-warning"
-                });
-            }
-        }
-    },
-
-    /**
-     * converts an array of objects to csv
-     * @param {object[]} data - array of object (no nested objects)
-     * @param {string} colDeli - column delimiter
-     * @param {string} lineDeli - line delimiter
-     * @returns {string} csv
-     */
-    convertArrayOfObjectsToCsv: function (data, colDeli, lineDeli) {
-        const keys = Object.keys(data[0]),
-            columnDelimiter = colDeli || ";",
-            lineDelimiter = lineDeli || "\n";
-
-        // header line
-        let result = keys.join(columnDelimiter) + lineDelimiter;
-
-        data.forEach(function (item) {
-            let colCounter = 0;
-
-            keys.forEach(function (key) {
-                if (colCounter > 0) {
-                    result += columnDelimiter;
-                }
-                result += item[key];
-                colCounter++;
-            }, this);
-            result += lineDelimiter;
-        }, this);
-
-        return result;
-    },
-
-    /**
      * replaces the names of object keys with the values provided.
      * @param {object} keysMap - keys mapping object
      * @param {object} obj - the original object
@@ -713,15 +640,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     uniqueId: function (prefix) {
         return uniqueId(prefix);
-    },
-
-    /**
-     * Setter for config
-     * @param {*} value todo
-     * @returns {void}
-     */
-    setConfig: function (value) {
-        this.set("config", value);
     },
 
     /**

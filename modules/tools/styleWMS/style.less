@@ -1,3 +1,5 @@
+@import "../../../css/mixins.less";
+
 @color_1: rgb(85, 85, 85);
 @color_2: rgba(169, 68, 66, 1);
 @color_3: #E10019;
@@ -52,6 +54,12 @@
     font-family: @font_family_1;
 }
 #style-wms-colorpicker {
+    &:focus {
+        .primary_action_focus();
+    }
+    &:hover {
+        .primary_action_hover();
+    }
     >input {
         display: none;
     }

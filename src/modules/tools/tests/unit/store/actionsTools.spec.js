@@ -7,7 +7,6 @@ const {
     setToolActive,
     languageChanged,
     addTool,
-    activateByUrlParam,
     setToolActiveByConfig
 } = actions;
 
@@ -129,30 +128,6 @@ describe("src/modules/tools/actionsTools.js", () => {
                 getConfiguredToolNames: ["Draw", "ScaleSwitcher", "SupplyCoord"],
                 getActiveToolNames: ["Draw", "ScaleSwitcher"]
             }, done);
-        });
-    });
-
-    describe("activateByUrlParam", () => {
-        it("activateByUrlParam  isinitopen=scaleSwitcher", done => {
-            const rootState = {
-                    queryParams: {
-                        "isinitopen": "scaleSwitcher"
-                    }
-                },
-                toolName = "ScaleSwitcher";
-
-            testAction(activateByUrlParam, toolName, {}, rootState, [
-                {type: "controlActivationOfTools", payload: toolName, dispatch: true}
-            ], {}, done);
-        });
-        it("activateByUrlParam no isinitopen", done => {
-            const rootState = {
-                    queryParams: {
-                    }
-                },
-                toolName = "ScaleSwitcher";
-
-            testAction(activateByUrlParam, toolName, {}, rootState, [], {}, done);
         });
     });
 

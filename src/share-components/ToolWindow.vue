@@ -107,7 +107,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "~variables";
+    @import "~/css/mixins.less";
 
     @color_1: rgb(85, 85, 85);
     @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
@@ -136,13 +136,12 @@ export default {
     }
 
     .tool-window-heading{
-        padding: 12px 10px 12px 10px;
+        padding: 5px 5px 5px 5px;
         border-bottom: 1px solid rgb(229, 229, 229);
         font-family: @font_family_1;
         display:flex;
         flex-direction:row;
         width:100%;
-
         .heading-element {
             white-space: nowrap;
             color: @color_1;
@@ -154,17 +153,21 @@ export default {
                 overflow: hidden;
             }
             .glyphicon {
+                padding: 5px;
                 &:focus {
-                    outline: 3px solid @accent_focus;
-                    outline: 3px auto  Highlight;
-                    outline: 3px auto -webkit-focus-ring-color;
+                    .primary_action_focus();
+                }
+                &:hover {
+                    .primary_action_hover();
                 }
             }
 
             > h2 {
                 &.glyphicon-minus { top: 3px; }
                 &:hover {
-                    &:not(.win-icon) { opacity: 0.7; cursor: pointer;}
+                    &:not(.win-icon) {
+                        .primary_action_hover();
+                    }
                 }
                 font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
                 color: #555555;
@@ -179,6 +182,7 @@ export default {
     }
 
     .tool-window-heading-title {
+        padding-top: 7px;
         margin:0;
         overflow:hidden;
         white-space: nowrap;

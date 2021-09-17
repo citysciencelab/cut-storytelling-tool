@@ -1,5 +1,6 @@
 import "../model";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
+import store from "../../../src/app-store";
 
 const KomootModel = Backbone.Model.extend(/** @lends KomootModel.prototype */{
     defaults: {
@@ -46,8 +47,8 @@ const KomootModel = Backbone.Model.extend(/** @lends KomootModel.prototype */{
             this.setKomootServiceUrl(service.get("url"));
         }
 
-        if (Radio.request("ParametricURL", "getInitString") !== undefined) {
-            this.search(Radio.request("ParametricURL", "getInitString"));
+        if (store.state.urlParams && store.state.urlParams["Search/query"]) {
+            this.search(store.state.urlParams && store.state.urlParams["Search/query"]);
         }
         if (this.get("searchOnEnter")) {
             this.listenTo(Radio.channel("Searchbar"), {

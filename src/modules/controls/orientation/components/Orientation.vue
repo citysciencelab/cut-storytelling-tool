@@ -415,7 +415,7 @@ export default {
          * Getting the distance from center position
          * @param  {ol/feature} feat Feature
          * @param {Number[]} centerPosition the center position
-         * @return {float} dist the distance
+         * @return {number} dist the distance
          */
         getDistance (feat, centerPosition) {
             const closestPoint = feat.getGeometry().getClosestPoint(centerPosition),

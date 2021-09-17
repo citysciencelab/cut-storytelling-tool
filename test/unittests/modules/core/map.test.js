@@ -1,11 +1,16 @@
 import Model from "@modules/core/map.js";
 import Util from "@testUtil";
 import Preparser from "@modules/core/configLoader/preparser";
-import ParametricURL from "@modules/core/parametricURL";
 import ImageWMS from "ol/source/ImageWMS.js";
 import {Image} from "ol/layer.js";
 import {expect} from "chai";
 import {registerProjections} from "masterportalAPI/src/crs";
+
+i18next.init({
+    lng: "cimode",
+    debug: false
+
+});
 
 describe("core/map", function () {
     let model,
@@ -14,7 +19,6 @@ describe("core/map", function () {
 
     before(function () {
         new Preparser(null, {url: Config.portalConf});
-        new ParametricURL();
         registerProjections();
 
         model = new Model();

@@ -124,7 +124,4 @@ export default {
     label {
         margin-top: 7px;
     }
-    #scale-switcher-select {
-        border: 2px solid @secondary;
-    }
 </style>

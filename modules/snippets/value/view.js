@@ -2,7 +2,8 @@ import Template from "text-loader!./template.html";
 
 const SnippetValueView = Backbone.View.extend({
     events: {
-        "click": "deselect"
+        "click": "deselect",
+        "keydown": "deselect"
     },
     initialize: function () {
         this.listenTo(this.model, {
@@ -23,7 +24,8 @@ const SnippetValueView = Backbone.View.extend({
     className: "valueView value-text",
     template: _.template(Template),
     attributes: {
-        title: ""
+        title: "",
+        tabindex: "0"
     },
     render: function () {
         const attr = this.model.toJSON();
@@ -32,8 +34,10 @@ const SnippetValueView = Backbone.View.extend({
         this.$el.html(this.template(attr));
         return this;
     },
-    deselect: function () {
-        this.model.setIsSelected(false);
+    deselect: function (event) {
+        if (event.type === "click" || event.which === 32 || event.which === 13) {
+            this.model.setIsSelected(false);
+        }
     }
 });
 
