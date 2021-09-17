@@ -6,6 +6,7 @@ import getters from "../store/gettersMeasure";
 import mutations from "../store/mutationsMeasure";
 import actions from "../store/actionsMeasure";
 import MeasureTooltip from "./MeasureTooltip.vue";
+import mapCollection from "../../../../dataStorage/mapCollection.js";
 
 /**
  * Measurement tool to measure lines and areas in the map.
@@ -16,10 +17,16 @@ export default {
         Tool,
         MeasureTooltip
     },
+    data () {
+        return {
+            currentMapId: "",
+            currentMapMode: ""
+        };
+    },
     computed: {
         ...mapGetters("Tools/Measure", Object.keys(getters)),
         ...mapGetters(["uiStyle"]),
-        ...mapGetters("Map", ["layerById", "map", "is3d"])
+        ...mapGetters("Map", ["layerById", "is3d", "mapId", "mapMode"])
     },
     watch: {
         /**
@@ -48,8 +55,10 @@ export default {
         }
     },
     created () {
+        this.currentMapId = this.mapId;
+        this.currentMapId = this.mapMode;
         this.$on("close", this.close);
-        this.addLayerToMap(this.layer);
+        mapCollection.getMap(this.currentMapId, this.currentMapMode).addLayer(this.layer);
     },
     mounted () {
         if (this.active) {
@@ -59,7 +68,6 @@ export default {
     methods: {
         ...mapMutations("Tools/Measure", Object.keys(mutations)),
         ...mapActions("Tools/Measure", Object.keys(actions)),
-        ...mapMutations("Map", ["addLayerToMap"]),
 
         /**
          * Sets the focus to the first control

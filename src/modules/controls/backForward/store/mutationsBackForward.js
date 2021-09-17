@@ -30,16 +30,15 @@ export default {
      * At most 10 ViewMemory objects are kept, discarding oldest.
      * When memorizing while not on last position, following memories are discarded.
      * @param {Object} state module state
-     * @param {module:ol/Map} map ol map object
+     * @param {module:ol/MapView} mapView ol map object
      * @returns {void}
      */
-    memorize (state, map) {
-        const view = map.getView(),
-            current = state.position === null ? null : state.memory[state.position],
+    memorize (state, mapView) {
+        const current = state.position === null ? null : state.memory[state.position],
             upToNext = state.position === null ? [] : state.memory.slice(0, state.position + 1),
             next = {
-                center: view.getCenter(),
-                zoom: view.getZoom()
+                center: mapView.getCenter(),
+                zoom: mapView.getZoom()
             };
 
         // do not memorize the same information twice (may happen onmoveend when going back/forth)

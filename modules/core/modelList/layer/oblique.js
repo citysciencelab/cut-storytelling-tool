@@ -1,5 +1,5 @@
 import Layer from "./model";
-import Collection from "vcs-oblique/src/vcs/oblique/collection";
+import api from "masterportalAPI/abstraction/api";
 import {get} from "ol/proj.js";
 import getProxyUrl from "../../../../src/utils/getProxyUrl";
 
@@ -74,12 +74,7 @@ const ObliqueLayer = Layer.extend(/** @lends  ObliqueLayer.prototype*/{
         minZoom = this.get("minZoom") || 0;
         projection = Radio.request("MapView", "getProjection");
         proj = get(projection);
-        obliqueCollection = new Collection({
-            terrainProvider: null,
-            projection: proj,
-            hideLevels: hideLevels,
-            minZoom: minZoom
-        });
+        obliqueCollection = api.oblique.collection.createObliqueCollection(null, proj, hideLevels, minZoom);
         return obliqueCollection.loadData(url).then(function () {
             this.setObliqueCollection(obliqueCollection);
             return obliqueCollection;

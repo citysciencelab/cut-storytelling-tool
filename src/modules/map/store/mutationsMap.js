@@ -2,6 +2,7 @@ import {generateSimpleMutations} from "../../../app-store/utils/generators";
 import initialState from "./stateMap";
 import getters from "./gettersMap";
 import BaseLayer from "ol/layer/Base";
+import mapCollection from "../../../dataStorage/mapCollection.js";
 
 const mutations = {
     ...generateSimpleMutations(initialState),
@@ -61,7 +62,7 @@ const mutations = {
      */
     addLayerToMap (state, layer) {
         if (layer instanceof BaseLayer) {
-            state.map.addLayer(layer);
+            mapCollection.getMap("ol", "2D").addLayer(layer);
         }
     },
 
@@ -72,8 +73,8 @@ const mutations = {
      * @returns {void}
      */
     removeLayerFromMap (state, layer) {
-        if (state.map && layer instanceof BaseLayer) {
-            state.map.removeLayer(layer);
+        if (mapCollection.getMap("ol", "2D") && layer instanceof BaseLayer) {
+            mapCollection.getMap("ol", "2D").removeLayer(layer);
         }
     },
     /**
