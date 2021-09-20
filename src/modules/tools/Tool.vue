@@ -313,8 +313,8 @@ export default {
             }
 
             > .glyphicon {
-                margin-top: 10px;
-                margin-bottom: 10px;
+                //margin-top: 10px;
+                //margin-bottom: 10px;
                 padding: 8px 8px 8px 8px;
                 &:focus {
                     .primary_action_focus();
