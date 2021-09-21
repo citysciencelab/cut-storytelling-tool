@@ -48,6 +48,7 @@ Konfiguration der Searchbar
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
+|searchResultOrder|nein|String[]|["common:modules.searchbar.type.address", "common:modules.searchbar.type.street", "common:modules.searchbar.type.parcel", "common:modules.searchbar.type.location", "common:modules.searchbar.type.district", "common:modules.searchbar.type.topic", "common:modules.searchbar.type.subject"]|Konfiguration von Reihenfolge der Kategorien der angezeigten Suchergebnisse. Keys sollen aus der Übersetzungsdatei verwendet werden.|false|
 |bkg|nein|**[bkg](#markdown-header-portalconfigsearchbarbkg)**||Konfiguration des BKG Suchdienstes.|false|
 |gazetteer|nein|**[gazetteer](#markdown-header-portalconfigsearchbargazetteer)**||Konfiguration des Gazetteer Suchdienstes.|false|
 |gdi|nein|**[gdi](#markdown-header-portalconfigsearchbargdi)**||Konfiguration des GDI (elastic) Suchdienstes. Deprecated in 3.0.0. Bitte **[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)** verwenden.|false|

@@ -33,7 +33,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @listens Core#RadioRequestUtilGetUiStyle
      * @listens Core#RadioRequestUtilGetIgnoredKeys
      * @listens Core#RadioRequestUtilSort
-     * @listens Core#RadioRequestUtilConvertArrayOfObjectsToCsv
      * @listens Core#RadioRequestUtilGetMasterPortalVersionNumber
      * @listens Core#RadioRequestUtilRenameKeys
      * @listens Core#RadioRequestUtilRenameValues
@@ -71,7 +70,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
                 return this.get("ignoredKeys");
             },
             "sort": this.sort,
-            "convertArrayOfObjectsToCsv": this.convertArrayOfObjectsToCsv,
             "convertArrayElementsToString": this.convertArrayElementsToString,
             "renameKeys": this.renameKeys,
             "renameValues": this.renameValues,
@@ -560,37 +558,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         else {
             this.setIsViewMobile(true);
         }
-    },
-
-    /**
-     * converts an array of objects to csv
-     * @param {object[]} data - array of object (no nested objects)
-     * @param {string} colDeli - column delimiter
-     * @param {string} lineDeli - line delimiter
-     * @returns {string} csv
-     */
-    convertArrayOfObjectsToCsv: function (data, colDeli, lineDeli) {
-        const keys = Object.keys(data[0]),
-            columnDelimiter = colDeli || ";",
-            lineDelimiter = lineDeli || "\n";
-
-        // header line
-        let result = keys.join(columnDelimiter) + lineDelimiter;
-
-        data.forEach(function (item) {
-            let colCounter = 0;
-
-            keys.forEach(function (key) {
-                if (colCounter > 0) {
-                    result += columnDelimiter;
-                }
-                result += item[key];
-                colCounter++;
-            }, this);
-            result += lineDelimiter;
-        }, this);
-
-        return result;
     },
 
     /**

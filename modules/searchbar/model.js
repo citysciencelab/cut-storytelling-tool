@@ -20,7 +20,16 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         sortByName: true,
         selectRandomHits: true,
         timeoutReference: null,
-        showAllResultsText: ""
+        showAllResultsText: "",
+        searchResultOrder: [
+            "common:modules.searchbar.type.address",
+            "common:modules.searchbar.type.street",
+            "common:modules.searchbar.type.parcel",
+            "common:modules.searchbar.type.location",
+            "common:modules.searchbar.type.district",
+            "common:modules.searchbar.type.topic",
+            "common:modules.searchbar.type.subject"
+        ]
     },
 
     /**
@@ -187,6 +196,9 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             }
         });
 
+        if (Array.isArray(config.searchResultOrder)) {
+            this.set("searchResultOrder", config.searchResultOrder);
+        }
         this.set("activeInitialSearchTasks", activeSearchTasks);
     },
 
@@ -429,9 +441,19 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             types = hitList.map(hit => hit.type),
             uniqueTypes = types.reduce((unique, item) => {
                 return unique.includes(item) ? unique : [...unique, item];
-            }, []);
+            }, []),
+            searchResultOrder = [];
 
-        uniqueTypes.forEach(type => {
+        let sortedUniqueTypes = uniqueTypes;
+
+        if (sortedUniqueTypes.length && Array.isArray(this.get("searchResultOrder")) && this.get("searchResultOrder").length) {
+            this.get("searchResultOrder").forEach(type => {
+                searchResultOrder.push(i18next.t(type));
+            });
+            sortedUniqueTypes = this.sortUniqueTypes(uniqueTypes, searchResultOrder);
+        }
+
+        sortedUniqueTypes.forEach(type => {
             const typeListPart = hitList.filter(hit => {
                     return hit.type === type;
                 }),
@@ -443,6 +465,30 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             typeList.push(typeListObj);
         });
         return typeList;
+    },
+
+    /**
+     * Sorts the uniqueTypes by searchResultOrder
+     * @param {String[]} uniqueTypes unique types from searching results
+     * @param {String[]} searchResultOrder the predefined order
+     * @return {String[]} - sorted array of unique types as result order
+     */
+    sortUniqueTypes: function (uniqueTypes, searchResultOrder) {
+        const sortedUniqueTypes = [];
+
+        searchResultOrder.forEach(type => {
+            if (uniqueTypes.includes(type)) {
+                sortedUniqueTypes.push(type);
+            }
+        });
+
+        uniqueTypes.forEach(type => {
+            if (!searchResultOrder.includes(type)) {
+                sortedUniqueTypes.push(type);
+            }
+        });
+
+        return sortedUniqueTypes;
     },
 
     /**
