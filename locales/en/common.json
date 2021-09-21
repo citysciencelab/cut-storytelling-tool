@@ -851,6 +851,11 @@
                 "contentSaved": "Content was copied to the clipboard.",
                 "contentNotSaved": "Content could not be copied to the clipboard."
             }
+        },
+        "exportButton": {
+            "error": {
+                "download": "An error occured on trying to download the data."
+            }
         }
     },
     "utils": {

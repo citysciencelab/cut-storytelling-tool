@@ -1,5 +1,6 @@
 import SnippetModel from "../model";
 import html2canvas from "html2canvas";
+import {convertJsonToCsv} from "../../../src/utils/convertJsonToCsv.js";
 
 const ExportButtonModel = SnippetModel.extend(/** @lends ExportButtonModel.prototype */{
     defaults: {
@@ -71,7 +72,7 @@ const ExportButtonModel = SnippetModel.extend(/** @lends ExportButtonModel.proto
         }
 
         try {
-            const csv = Radio.request("Util", "convertArrayOfObjectsToCsv", dataAsObjArr);
+            const csv = convertJsonToCsv(dataAsObjArr);
 
             this.setData(csv, "text/csv;charset=utf-8,%EF%BB%BF");
         }
