@@ -26,6 +26,7 @@
 - Draw tool: fixed an issue (Bitbucket: #638) with resaving draw files
 - Print tool: Fixed an issue when printing a styled WFS layer with a `labelField` in its style. Before. this lead to the same label being printed for every feature.
 - STA Mqtt: "WebSocket connection to 'wss://localhost/mqtt' failed" is fixed with refactoring of SensorThingsMqtt.
+- AddWMS tool: WMS services can be added again. Tool adapted to modified parser method.
 
 ---
 ##  v2.13.1 - 2021-09-03
