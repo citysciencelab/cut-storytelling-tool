@@ -169,14 +169,15 @@ export default {
                         .primary_action_hover();
                     }
                 }
-                font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
+                /*font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
                 color: #555555;
                 font-size: 14px;
                 font-style: normal;
                 font-weight: normal;
                 text-align: left;
                 white-space: nowrap;
-                cursor: move;
+                cursor: move;*/
+                .tool-headings-h2();
             }
         }
     }

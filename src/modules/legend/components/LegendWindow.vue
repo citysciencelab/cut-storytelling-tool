@@ -744,9 +744,9 @@ export default {
                     :class="glyphicon"
                     class="glyphicon hidden-sm"
                 />
-                <span class="title">
+                <h2 class="title">
                     {{ $t(name) }}
-                </span>
+                </h2>
                 <div class="float-right">
                     <span
                         v-if="showCollapseAllButton"
@@ -829,7 +829,7 @@ export default {
             border-bottom: 2px solid #e7e7e7;
             cursor: move;
             .title{
-
+                .tool-headings-h2();
             }
             .close-legend {
                 padding: 5px;
