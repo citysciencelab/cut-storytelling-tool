@@ -50,8 +50,9 @@ export default {
 <template>
     <div class="position-left contrast">
         <u>DEBUG</u>
-        <label>
+        <label for="openCheckBox">
             <input
+                id="openCheckBox"
                 v-model="open"
                 type="checkbox"
             >
@@ -95,7 +96,7 @@ export default {
                                 :value="value[layerId].opacity"
                                 @input="setLayerOpacity({ layerId, value: $event.target.value })"
                             >
-                            <label for="opacity">Sichtbarkeit {{ value[layerId].opacity }} / 1.0</label>
+                            <label :for="`opacity-range-${layerId}`">Sichtbarkeit {{ value[layerId].opacity }} / 1.0</label>
                         </li>
                     </ul>
                 </template>

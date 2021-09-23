@@ -327,6 +327,7 @@ export default {
         <iframe
             v-if="mimeType === 'text/html'"
             class="gfi-iFrame"
+            title="gfi-iFrame"
         />
     </div>
 </template>

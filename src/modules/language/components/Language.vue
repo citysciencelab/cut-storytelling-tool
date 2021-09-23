@@ -35,8 +35,10 @@ export default {
     >
         <a
             class="current-language"
-            aria-role="button"
+            role="button"
+            tabindex="0"
             @click="toggleLanguageWindow"
+            @keydown.enter="toggleLanguageWindow"
         >
             {{ $i18n.i18next.language }}
         </a>
@@ -45,17 +47,20 @@ export default {
             class="popup-language"
         >
             <div class="language-header">
-                <label
-                    for="language-header"
-                >{{ $t("modules.language.languageTitle") }}</label>
+                <div>
+                    {{ $t("modules.language.languageTitle") }}
+                </div>
                 <a
+                    role="button"
                     class="buttons pull-right"
+                    tabindex="0"
                     @click="toggleLanguageWindow"
+                    @keydown.enter="toggleLanguageWindow"
                 >
                     <span
                         class="glyphicon glyphicon-remove"
-                        :title="$t('button.close')"
                     />
+                    <span class="screenreader">$t("modules.language.toggleWindow"</span>
                 </a>
             </div>
             <div class="form-group form-group-sm">
@@ -98,6 +103,10 @@ export default {
 
             text-transform: uppercase;
             font-weight: bold;
+        }
+        .screenreader {
+            position: absolute;
+            left:-9999px;
         }
         .popup-language {
             position: absolute;

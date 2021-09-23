@@ -11,7 +11,9 @@
 ## Unreleased - in development
 ### Added
 - Added the new Tool `WfsSearch`.
+- EsLint Plugin for a11y in Vue files.
 - New parameter "searchResultOrder" for ranking category of searching result
+- New csv specialized export button "ExportButtonCSV" integreted in Vue.js
 
 ### Changed
 - Moved SensorThingsMqtt and SensorThingsHttp to /src/utils, complete refactoring of SensorThingsMqtt, there are no changes in handling SensorThingsMqtt.
@@ -27,6 +29,8 @@
 - Print tool: Fixed an issue when printing a styled WFS layer with a `labelField` in its style. Before. this lead to the same label being printed for every feature.
 - STA Mqtt: "WebSocket connection to 'wss://localhost/mqtt' failed" is fixed with refactoring of SensorThingsMqtt.
 - AddWMS tool: WMS services can be added again. Tool adapted to modified parser method.
+- Minor fixes in all Vue files for a11y errors from new EsLint plugin
+
 
 ---
 ##  v2.13.1 - 2021-09-03

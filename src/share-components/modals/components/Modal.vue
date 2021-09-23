@@ -103,8 +103,8 @@ export default {
                     class="glyphicon glyphicon-remove"
                     title="Discard"
                     tabindex="0"
-                    @keydown.enter="discardByClickX"
                     @click="discardByClickX"
+                    @keydown.enter="discardByClickX"
                 />
                 <div
                     id="modal-1-header-container"

@@ -96,6 +96,7 @@
     "modules": {
         "language": {
             "languageTitle": "Please choose a language",
+            "toggleWindow": "Toggle Window",
             "de": "Deutsch",
             "en": "English",
             "it": "Italiano",
@@ -701,7 +702,8 @@
                 "poiChoiceConfirmation": "OK",
                 "poiChoiceStop": "Quit",
                 "trackingDeniedText": "'Close to here' is not available.",
-                "distanceUnit": "meters"
+                "distanceUnit": "meters",
+                "imgAlt": "picture for point of interest"
             },
             "orientation3d": {
                 "compass": {
@@ -848,6 +850,11 @@
             "copyToClipboard": {
                 "contentSaved": "Content was copied to the clipboard.",
                 "contentNotSaved": "Content could not be copied to the clipboard."
+            }
+        },
+        "exportButton": {
+            "error": {
+                "download": "An error occured on trying to download the data."
             }
         }
     },

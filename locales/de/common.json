@@ -125,6 +125,7 @@
         },
         "language": {
             "languageTitle": "Bitte wählen Sie eine Sprache aus",
+            "toggleWindow": "Fenster öffnen oder schließen",
             "de": "Deutsch",
             "en": "English",
             "it": "Italiano",
@@ -700,7 +701,8 @@
                 "poiChoiceConfirmation": "OK",
                 "poiChoiceStop": "Beenden",
                 "trackingDeniedText": "'In der Nähe' nicht verfügbar.",
-                "distanceUnit": "Meter"
+                "distanceUnit": "Meter",
+                "imgAlt": "Bild für Point of Interest"
             },
             "orientation3d": {
                 "compass": {
@@ -847,6 +849,11 @@
             "copyToClipboard": {
                 "contentSaved": "Inhalt wurde in die Zwischenablage kopiert.",
                 "contentNotSaved": "Inhalt konnte nicht in die Zwischenablage kopiert werden."
+            }
+        },
+        "exportButton": {
+            "error": {
+                "download": "Beim Herunterladen der gewünschten Daten ist ein Fehler aufgetreten."
             }
         }
     },

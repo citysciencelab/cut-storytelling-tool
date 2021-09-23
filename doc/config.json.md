@@ -1354,24 +1354,51 @@ Filter rule always applied to pre-filter data.
 
 This key may have as value either a string representing the attribute name or an object. When given as an object, the attributes to be filtered can be renamed in the process. In that case, the key is the original attribute name, and the value the new name.
 
+An AttributeWhiteList as an object allows a slider to be used as a filter for selecting a start and end time.
+The prerequisite for this is that a start and end time exist in a certain format as an attribute.
+Furthermore the start time should be defined in the object with the key "name", the end time with the key "attrNameUntil" and the format of the attributes with the key "format".
+The last step to use the slider as a date filter is to define the key "type" as "date".
+
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |name|yes|String||Attribute name.|false|
 |matchingMode|no|enum["AND", "OR"]|"OR"|Logical connection of multiple attribute values (on multiple choices) within an attribute.|false|
+|displayName|nein|String||Name of the filter.|true|
+|attrNameUntil|nein|String||Names of the attribute that will be used as the end time for the slider filter.|true|
+|format|nein|String||Format of date.|true|
+|type|nein|enum["integer", "searchInMapExtent", "date"]||Type of attribute.|true|
 
 **String example**
-
-```json
+```
+#!json
 "Grundschulen"
 ```
 
 **Object example**
-
-```json
+```
+#!json
 {
     "name": "Grundschulen",
     "matchingMode": "AND"
 }
+```
+
+***
+
+**Object example for Date-Slider as filter**
+
+```
+#!json
+
+"attributeWhiteList": [
+  {
+    "name": "baubeginn",
+    "displayName": "Baustelle",
+    "attrNameUntil": "bauende",
+    "matchingMode": "OR",
+    "format": "DD.MM.YYYY",
+    "type": "date"
+  }
 ```
 
 ***

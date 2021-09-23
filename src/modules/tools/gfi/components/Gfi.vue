@@ -366,13 +366,17 @@ export default {
                 <div class="gfi-footer">
                     <div
                         :class="[pagerIndex < 1 ? 'disabled' : '', 'pager-left', 'pager']"
+                        tabindex="0"
                         @click="decreasePagerIndex"
+                        @keydown.enter="decreasePagerIndex"
                     >
                         <span class="glyphicon glyphicon-chevron-left" />
                     </div>
                     <div
+                        tabindex="0"
                         :class="[pagerIndex === gfiFeatures.length - 1 ? 'disabled' : '', 'pager-right', 'pager']"
                         @click="increasePagerIndex"
+                        @keydown.enter="increasePagerIndex"
                     >
                         <span class="glyphicon glyphicon-chevron-right" />
                     </div>
