@@ -1,4 +1,4 @@
->Zurück zur **[Dokumentation Masterportal](doc.de.md)**.
+>**[Zurück zur Dokumentation Masterportal](doc.de.md)**.
 
 [TOC]
 
