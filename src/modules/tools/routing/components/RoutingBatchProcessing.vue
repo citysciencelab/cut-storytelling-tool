@@ -1,0 +1,239 @@
+<script>
+export default {
+    name: "RoutingBatchProcessing",
+    props: {
+        settings: {
+            type: Object,
+            required: true
+        },
+        progress: {
+            type: Number,
+            required: true
+        },
+        isProcessing: {
+            type: Boolean,
+            required: true
+        },
+        strukturText: {
+            type: String,
+            required: true
+        },
+        beispielText: {
+            type: String,
+            required: true
+        }
+    },
+    data: function () {
+        return {
+            dzIsDropHovering: false
+        };
+    },
+    computed: {
+        dropZoneAdditionalClass: function () {
+            return this.dzIsDropHovering ? "dzReady" : "";
+        }
+    },
+    watch: {
+        isProcessing: function (newVal) {
+            if (newVal) {
+                this.$refs.fileInput.value = "";
+            }
+        }
+    },
+    methods: {
+        onInputChange (e) {
+            if (e.target.files !== undefined) {
+                this.addFiles(e.target.files);
+            }
+        },
+        addFiles (files) {
+            this.$emit("filesadded", files);
+        },
+        startFileInput () {
+            this.$refs.fileInputLabel.click();
+        },
+        onDZDragenter () {
+            this.dzIsDropHovering = true;
+        },
+        onDZDragend () {
+            this.dzIsDropHovering = false;
+        },
+        onDrop (e) {
+            this.dzIsDropHovering = false;
+            if (e.dataTransfer.files !== undefined) {
+                this.addFiles(e.dataTransfer.files);
+            }
+        }
+    }
+};
+</script>
+
+<template>
+    <div>
+        <div
+            v-if="isProcessing"
+            class="d-flex flex-column"
+        >
+            <span>{{ $t('common:modules.tools.routing.batchProcessing.isProcessing') }}</span>
+            <div class="d-flex">
+                <progress
+                    class="col-xs-8"
+                    max="100"
+                    :value="progress"
+                >
+                </progress>
+                <span class="col-xs-3">{{ progress }} %</span>
+                <span
+                    class="col-xs-1 glyphicon glyphicon-remove pointer"
+                    :title="$t('common:modules.tools.routing.batchProcessing.cancel')"
+                    @click="$emit('cancelProcess')"
+                />
+            </div>
+        </div>
+
+
+        <div
+            v-else
+            class="d-flex flex-column"
+        >
+            <div class="strukturtext d-flex flex-column bg-light-pink mb-2">
+                <div class="d-flex flex-column">
+                    <span>{{ $t('common:modules.tools.routing.batchProcessing.structure') }}:</span>
+                    <b>{{ strukturText }}</b>
+                </div>
+                <div class="d-flex mb-2">
+                    <span>{{ $t('common:modules.tools.routing.batchProcessing.example') }}:</span>
+                    <span>{{ beispielText }}</span>
+                </div>
+            </div>
+
+            <div
+                class="vh-center-outer-wrapper drop-area-fake mb-2"
+                :class="dropZoneAdditionalClass"
+            >
+                <div
+                    class="vh-center-inner-wrapper"
+                >
+                    <p
+                        class="caption"
+                    >
+                        {{ $t('common:modules.tools.routing.batchProcessing.placeFile') }}
+                    </p>
+                </div>
+
+                <div
+                    class="drop-area"
+                    @drop.prevent="onDrop($event)"
+                    @dragover.prevent
+                    @dragenter.prevent="onDZDragenter()"
+                    @dragleave="onDZDragend()"
+                />
+            </div>
+
+            <button
+                class="btn btn-block"
+                type="button"
+                @click="startFileInput()"
+            >
+                {{ $t('common:modules.tools.routing.batchProcessing.uploadFile') }}
+            </button>
+        </div>
+
+
+        <label
+            ref="fileInputLabel"
+            class="d-none"
+        >
+            <input
+                ref="fileInput"
+                type="file"
+                accept=".csv"
+                @change="onInputChange($event)"
+            >
+
+        </label>
+    </div>
+</template>
+
+<style lang="less" scoped>
+@import "~variables";
+
+.d-flex {
+    display: flex;
+}
+.d-none {
+    display: none;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.bg-light-pink {
+    background: #e8c9c9;
+}
+
+.drop-area-fake {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    border: 2px dashed @accent_disabled;
+    padding:24px;
+    transition: background 0.25s, border-color 0.25s;
+    &.dzReady {
+        background-color:@accent_hover;
+        border-color:transparent;
+        p.caption {
+            color:#FFFFFF;
+        }
+    }
+    p.caption {
+        margin:0;
+        text-align:center;
+        transition: color 0.35s;
+        font-family: @font_family_accent;
+        font-size: @font_size_huge;
+        color: @accent_disabled;
+    }
+}
+.drop-area {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index:10;
+}
+.vh-center-outer-wrapper {
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    text-align:center;
+    position:relative;
+    &:before {
+        content:'';
+        display:inline-block;
+        height:100%;
+        vertical-align:middle;
+        margin-right:-0.25em;
+    }
+}
+.vh-center-inner-wrapper {
+    text-align:left;
+    display:inline-block;
+    vertical-align:middle;
+    position:relative;
+}
+
+.strukturtext {
+    max-width: 350px;
+}
+</style>

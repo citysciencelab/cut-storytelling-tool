@@ -1,0 +1,269 @@
+<script>
+import {mapGetters, mapActions, mapMutations} from "vuex";
+import getters from "../../store/isochrones/gettersIsochrones";
+import actions from "../../store/isochrones/actionsIsochrones";
+import mutations from "../../store/isochrones/mutationsIsochrones";
+import * as constants from "../../store/isochrones/constantsIsochrones";
+import * as constantsRouting from "../../store/constantsRouting";
+import RoutingCoordinateInput from "../RoutingCoordinateInput.vue";
+import RoutingSliderInput from "../RoutingSliderInput.vue";
+import RoutingDownload from "../RoutingDownload.vue";
+import IsochronesBatchProcessing from "./IsochronesBatchProcessing.vue";
+import RoutingBatchProcessingCheckbox from "../RoutingBatchProcessingCheckbox.vue";
+import RoutingAvoidFeatures from "../RoutingAvoidFeatures.vue";
+import RoutingSpeedProfileIcon from "../RoutingSpeedProfileIcon.vue";
+
+export default {
+    name: "Isochrones",
+    components: {
+        RoutingCoordinateInput,
+        RoutingSliderInput,
+        RoutingDownload,
+        IsochronesBatchProcessing,
+        RoutingBatchProcessingCheckbox,
+        RoutingAvoidFeatures,
+        RoutingSpeedProfileIcon
+    },
+    data () {
+        return {
+            constants,
+            constantsRouting
+        };
+    },
+    computed: {
+        ...mapGetters("Tools/Routing/Isochrones", Object.keys(getters)),
+        currentValue () {
+            return this.settings.isochronesMethodOption === "DISTANCE" ? this.settings.distanceValue : this.settings.timeValue;
+        },
+        maxIntervalValue () {
+            return this.currentValue < this.settings.maxInterval ? this.currentValue : this.settings.maxInterval;
+        }
+    },
+    async created () {
+        this.initIsochrones();
+    },
+
+    beforeDestroy () {
+        this.closeIsochrones();
+    },
+
+    methods: {
+        ...mapMutations("Tools/Routing/Isochrones", Object.keys(mutations)),
+        ...mapActions("Tools/Routing/Isochrones", Object.keys(actions)),
+        changeSpeedProfile (speedProfileId) {
+            this.settings.speedProfile = speedProfileId;
+        },
+        changeMethodOption (methodOptionId) {
+            this.settings.isochronesMethodOption = methodOptionId;
+            if (this.currentValue < this.settings.intervalValue) {
+                this.setIntervalValue(this.currentValue);
+            }
+        },
+        setDistanceValue (distanceValue) {
+            this.settings.distanceValue = distanceValue;
+            if (distanceValue < this.settings.intervalValue) {
+                this.setIntervalValue(distanceValue);
+            }
+        },
+        setTimeValue (timeValue) {
+            this.settings.timeValue = timeValue;
+            if (timeValue < this.settings.intervalValue) {
+                this.setIntervalValue(timeValue);
+            }
+        },
+        setIntervalValue (intervalValue) {
+            this.settings.intervalValue = intervalValue;
+        },
+        onRemoveWaypoint () {
+            this.waypoint.reset();
+            this.createIsochronesPointDrawInteraction();
+            this.resetIsochronesResult();
+        }
+    }
+};
+</script>
+
+<template>
+    <div id="routing-isochrones">
+        <RoutingSpeedProfileIcon
+            v-for="option in constantsRouting.speedProfileOptions"
+            :key="option"
+            class="pointer mr-4"
+            :speedProfileId="option"
+            :fillColor="option === settings.speedProfile ? '#ec0d0d' : '#000000'"
+            :tooltip="$t('common:modules.tools.routing.speedprofiles.' + option)"
+            @click.native="changeSpeedProfile(option)"
+        ></RoutingSpeedProfileIcon>
+
+        <hr />
+
+        <template v-if="settings.batchProcessing.enabled">
+            <RoutingBatchProcessingCheckbox :batchProcessing="settings.batchProcessing"></RoutingBatchProcessingCheckbox>
+
+            <hr />
+        </template>
+
+        <template v-if="settings.batchProcessing.enabled && settings.batchProcessing.active">
+            <IsochronesBatchProcessing :settings="settings"></IsochronesBatchProcessing>
+        </template>
+        <template v-else>
+            <h6>{{ $t('common:modules.tools.routing.isochrones.startpoint') }}</h6>
+
+            <form
+                class="form-horizontal"
+                role="form"
+            >
+                <RoutingCoordinateInput
+                    :countWaypoints="1"
+                    :waypoint="waypoint"
+                    @removeWaypoint="onRemoveWaypoint()"
+                ></RoutingCoordinateInput>
+            </form>
+        </template>
+
+        <hr>
+
+        <h6>{{ $t('common:modules.tools.routing.isochrones.optimizeHeader') }}</h6>
+
+        <select
+            id="routing-isochrones-methodoption"
+            class="form-control input-sm"
+            @change="changeMethodOption($event.target.value)"
+        >
+            <option
+                v-for="option in constants.isochronesMethodeOptions"
+                :id="option"
+                :key="'routing-isochrones-methodoption-' + option"
+                :value="option"
+                :selected="option === settings.isochronesMethodOption"
+                :disabled="isInputDisabled"
+            >
+                {{ $t('common:modules.tools.routing.isochrones.optimization.' + option) }}
+            </option>
+        </select>
+
+
+        <template v-if="settings.isochronesMethodOption === 'DISTANCE'">
+            <h6>{{ $t('common:modules.tools.routing.isochrones.maxDistance') }}</h6>
+            <RoutingSliderInput
+                :value="settings.distanceValue"
+                :min="settings.minDistance"
+                :max="settings.maxDistance"
+                :disabled="isInputDisabled"
+                unit="km"
+                @input="setDistanceValue($event)"
+            ></RoutingSliderInput>
+        </template>
+
+        <template v-else-if="settings.isochronesMethodOption === 'TIME'">
+            <h6>{{ $t('common:modules.tools.routing.isochrones.maxTraveltime') }}</h6>
+            <RoutingSliderInput
+                :value="settings.timeValue"
+                :min="settings.minTime"
+                :max="settings.maxTime"
+                :disabled="isInputDisabled"
+                unit="min"
+                @input="setTimeValue($event)"
+            ></RoutingSliderInput>
+        </template>
+
+        <h6>{{ $t('common:modules.tools.routing.isochrones.interval') }}</h6>
+
+        <RoutingSliderInput
+            :value="settings.intervalValue"
+            :min="settings.minInterval"
+            :max="maxIntervalValue"
+            :unit="settings.isochronesMethodOption ==='DISTANCE' ? 'km' : 'min'"
+            :disabled="isInputDisabled"
+            @input="setIntervalValue($event)"
+        ></RoutingSliderInput>
+
+        <hr>
+
+        <RoutingAvoidFeatures
+            :settings="settings"
+            :activeAvoidFeaturesOptions="routingAvoidFeaturesOptions"
+            :disabled="isInputDisabled"
+        ></RoutingAvoidFeatures>
+
+        <template v-if="!(settings.batchProcessing.enabled && settings.batchProcessing.active)">
+            <hr>
+
+            <div class="d-flex flex-column">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <button
+                        class="btn btn-block"
+                        type="button"
+                        :disabled="waypoint.getCoordinates().length === 0 || isInputDisabled"
+                        @click="findIsochrones()"
+                    >
+                        {{ $t('common:modules.tools.routing.isochrones.calculate') }}
+                    </button>
+                </div>
+
+                <div v-if="routingIsochrones">
+                    <hr class="w-100">
+
+                    <span class="mb-2">{{ $t('common:modules.tools.routing.isochrones.legend') }}</span>
+                    <div
+                        v-for="(area, index) of routingIsochrones.getAreas()"
+                        :key="'result-area-' + index"
+                        class="d-flex mb-2 ml-2"
+                    >
+                        <div
+                            class="legendecontainer px-2"
+                            :style="{backgroundColor: area.getColorRgbString()}"
+                        >
+                            <span>{{ area.getDisplayValue() }}</span>
+                            <span>{{ area.getOptimization() === 'DISTANCE' ? 'km' : 'min' }}</span>
+                        </div>
+                    </div>
+
+                    <hr class="w-100">
+
+                    <RoutingDownload hideGpx></RoutingDownload>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>
+
+<style lang="less" scoped>
+@import "~variables";
+#routing-isochrones {
+  min-width: 350px;
+}
+.d-flex {
+  display: flex;
+}
+.flex-column {
+  flex-direction: column;
+}
+.ml-2 {
+  margin-left: 0.5rem;
+}
+.ml-4 {
+  margin-left: 1rem;
+}
+.mr-4 {
+    margin-right: 1rem;
+}
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+.px-2 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+.pointer {
+  cursor: pointer;
+}
+.w-100 {
+    width: 100%;
+}
+
+.legendecontainer {
+    width: 56px;
+    text-align: center;
+}
+</style>
