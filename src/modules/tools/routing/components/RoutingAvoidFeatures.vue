@@ -35,16 +35,11 @@ export default {
 
         setRoutingAvoidFeaturesOptions (option, checked) {
             if (checked) {
-                this.activeAvoidFeaturesOptions.push(option.id);
+                this.$emit("addAvoidOption", option.id);
             }
             else {
-                const index = this.activeAvoidFeaturesOptions.findIndex(
-                    (opt) => opt === option.id
-                );
-
-                this.activeAvoidFeaturesOptions.splice(index, 1);
+                this.$emit("removeAvoidOption", option.id);
             }
-            this.$emit("input");
         }
     }
 
@@ -56,15 +51,16 @@ export default {
         <b
             class="pointer"
             @click="showAvoidFeatures = !showAvoidFeatures"
+            @keydown.enter="showAvoidFeatures = !showAvoidFeatures"
         >
             <span
                 v-if="showAvoidFeatures"
                 class="pointer glyphicon glyphicon-chevron-down"
-            ></span>
+            />
             <span
                 v-else
                 class="pointer glyphicon glyphicon-chevron-right"
-            ></span>
+            />
             {{ $t('common:modules.tools.routing.avoidOptions.header') }}
         </b>
         <div
@@ -84,7 +80,7 @@ export default {
                     @change="
                         setRoutingAvoidFeaturesOptions(option, $event.target.checked)
                     "
-                />
+                >
                 <span class="ml-2">{{ $t('common:modules.tools.routing.avoidOptions.' + option.id) }}</span>
             </label>
         </div>

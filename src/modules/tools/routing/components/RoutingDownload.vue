@@ -124,7 +124,10 @@ export default {
         <h6>{{ $t('common:modules.tools.routing.download.header') }}</h6>
 
         <div class="d-flex mb-2">
-            <label class="col-md-4 col-sm-4 control-label d-flex align-self-center">{{ $t('common:modules.tools.routing.download.format') }}</label>
+            <label
+                for="routing-DownloadFormatOptions"
+                class="col-md-4 col-sm-4 control-label d-flex align-self-center"
+            >{{ $t('common:modules.tools.routing.download.format') }}</label>
 
             <div class="col-md-8 col-sm-8">
                 <select
@@ -146,10 +149,14 @@ export default {
         </div>
 
         <div class="d-flex mb-2">
-            <label class="col-md-4 col-sm-4 control-label d-flex align-self-center">{{ $t('common:modules.tools.routing.download.filename') }}</label>
+            <label
+                for="routing-download-filename"
+                class="col-md-4 col-sm-4 control-label d-flex align-self-center"
+            >{{ $t('common:modules.tools.routing.download.filename') }}</label>
 
             <div class="col-md-8 col-sm-8">
                 <input
+                    id="routing-download-filename"
                     v-model="download.fileName"
                     type="text"
                     class="form-control"

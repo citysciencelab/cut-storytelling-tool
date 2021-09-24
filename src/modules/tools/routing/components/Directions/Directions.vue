@@ -88,6 +88,22 @@ export default {
             this.directionsRouteSource.getFeatures().forEach(feature => feature.getGeometry().setCoordinates([]));
             this.setRoutingDirections(null);
             this.directionsAvoidSource.clear();
+        },
+
+        onAddAvoidOption (optionId) {
+            this.routingAvoidFeaturesOptions.push(optionId);
+            this.findDirections();
+        },
+        onRemoveAvoidOption (optionId) {
+            const index = this.activeAvoidFeaturesOptions.findIndex(
+                (opt) => opt === optionId
+            );
+
+            this.routingAvoidFeaturesOptions.splice(index, 1);
+            this.findDirections();
+        },
+        onBatchProcessingCheckboxInput (input) {
+            this.settings.batchProcessing.active = input;
         }
     }
 };
@@ -99,22 +115,25 @@ export default {
             v-for="option in constantsRouting.speedProfileOptions"
             :key="option"
             class="pointer mr-4"
-            :speedProfileId="option"
-            :fillColor="option === settings.speedProfile ? '#ec0d0d' : '#000000'"
+            :speed-profile-id="option"
+            :fill-color="option === settings.speedProfile ? '#ec0d0d' : '#000000'"
             :tooltip="$t('common:modules.tools.routing.speedprofiles.' + option)"
             @click.native="changeSpeedProfile(option)"
-        ></RoutingSpeedProfileIcon>
+        />
 
-        <hr />
+        <hr>
 
         <template v-if="settings.batchProcessing.enabled">
-            <RoutingBatchProcessingCheckbox :batchProcessing="settings.batchProcessing"></RoutingBatchProcessingCheckbox>
+            <RoutingBatchProcessingCheckbox
+                :batch-processing="settings.batchProcessing"
+                @input="onBatchProcessingCheckboxInput($event)"
+            />
 
-            <hr />
+            <hr>
         </template>
 
         <template v-if="settings.batchProcessing.enabled && settings.batchProcessing.active">
-            <DirectionsBatchProcessing :settings="settings"></DirectionsBatchProcessing>
+            <DirectionsBatchProcessing :settings="settings" />
         </template>
         <template v-else>
             <form
@@ -124,13 +143,13 @@ export default {
                 <RoutingCoordinateInput
                     v-for="(waypoint, index) of waypoints"
                     :key="index"
-                    :countWaypoints="waypoints.length"
+                    :count-waypoints="waypoints.length"
                     :waypoint="waypoint"
                     @moveWaypointUp="moveWaypointUp(waypoint.index)"
                     @moveWaypointDown="moveWaypointDown(waypoint.index)"
                     @removeWaypoint="removeWaypoint({index: waypoint.index, reload: true})"
                     @searchResultSelected="findDirections()"
-                ></RoutingCoordinateInput>
+                />
             </form>
 
             <div class="d-flex justify-content-between mt-4">
@@ -149,6 +168,7 @@ export default {
                         xmlns:serif="http://www.serif.com/"
                         fill-rule="evenodd"
                         @click="changeSperrflaecheBearbeitenKartenmodus()"
+                        @keydown.enter="changeSperrflaecheBearbeitenKartenmodus()"
                     >
                         <title>{{ $t('common:modules.tools.routing.directions.editRestrictedAreas') }}</title>
                         <path
@@ -202,6 +222,7 @@ export default {
                         xmlns:serif="http://www.serif.com/"
                         fill-rule="evenodd"
                         @click="changeSperrflaecheLoeschenKartenmodus()"
+                        @keydown.enter="changeSperrflaecheLoeschenKartenmodus()"
                     >
                         <title>{{ $t('common:modules.tools.routing.directions.editRestrictedAreas') }}</title>
                         <path
@@ -254,17 +275,19 @@ export default {
                         class="glyphicon glyphicon-trash pointer ml-4"
                         :title="$t('common:modules.tools.routing.resetSettings')"
                         @click="reset()"
+                        @keydown.enter="reset()"
                     />
                     <span
                         class="glyphicon glyphicon-plus pointer ml-4"
                         :title="$t('common:modules.tools.routing.addWaypoint')"
                         @click="addWaypoint({index: waypoints.length -1})"
+                        @keydown.enter="addWaypoint({index: waypoints.length -1})"
                     />
                 </div>
             </div>
         </template>
 
-        <hr />
+        <hr>
 
         <select
             id="routing-directions-preference"
@@ -283,43 +306,47 @@ export default {
             </option>
         </select>
 
-        <hr />
+        <hr>
 
         <RoutingAvoidFeatures
             :settings="settings"
-            :activeAvoidFeaturesOptions="routingAvoidFeaturesOptions"
+            :active-avoid-features-options="routingAvoidFeaturesOptions"
             :disabled="isInputDisabled"
-            @input="findDirections()"
-        ></RoutingAvoidFeatures>
+            @addAvoidOption="onAddAvoidOption($event)"
+            @removeAvoidOption="onRemoveAvoidOption($event)"
+        />
 
         <template v-if="!(settings.batchProcessing.enabled && settings.batchProcessing.active)">
-            <hr />
+            <hr>
 
             <div v-if="routingDirections">
                 <div
                     class="d-flex justify-content-between"
                 >
                     <RoutingSpeedProfileIcon
-                        :speedProfileId="settings.speedProfile"
-                        fillColor="#000000"
+                        :speed-profile-id="settings.speedProfile"
+                        fill-color="#000000"
                         :tooltip="$t('common:modules.tools.routing.speedprofiles.' + settings.speedProfile)"
-                    ></RoutingSpeedProfileIcon>
-                    <RoutingDurationDisplay :duration="routingDirections.duration"></RoutingDurationDisplay>
-                    <RoutingDistanceDisplay :distance="routingDirections.distance"></RoutingDistanceDisplay>
+                    />
+                    <RoutingDurationDisplay :duration="routingDirections.duration" />
+                    <RoutingDistanceDisplay :distance="routingDirections.distance" />
                 </div>
 
-                <hr class="mb-0" />
+                <hr class="mb-0">
 
                 <template v-for="(segment, segmentIndex) of routingDirections.segments">
                     <div
                         :key="'segment_header_' + segmentIndex"
                         class="d-flex pointer step pl-2 py-4"
                         @mouseover="highlightRoute({vonWaypointIndex: segmentIndex, bisWaypointIndex: segmentIndex + 1})"
+                        @focus="highlightRoute({vonWaypointIndex: segmentIndex, bisWaypointIndex: segmentIndex + 1})"
                         @mouseout="unHighlightRoute()"
+                        @blur="unHighlightRoute()"
                     >
                         <div
                             class="d-flex"
                             @click="segment.displayDetails = !segment.displayDetails"
+                            @keydown.enter="segment.displayDetails = !segment.displayDetails"
                         >
                             <span>{{ segmentIndex === 0 ? 'A' : segmentIndex }}</span>
 
@@ -327,24 +354,25 @@ export default {
                                 <span
                                     v-if="segment.displayDetails"
                                     class="pointer glyphicon glyphicon-chevron-down"
-                                ></span>
+                                />
                                 <span
                                     v-else
                                     class="pointer glyphicon glyphicon-chevron-right"
-                                ></span>
+                                />
                             </b>
                         </div>
 
                         <div
                             class="d-flex flex-column ml-2 w-100"
                             @click="zoomToRoute({vonWaypointIndex: segmentIndex, bisWaypointIndex: segmentIndex + 1})"
+                            @keydown.enter="zoomToRoute({vonWaypointIndex: segmentIndex, bisWaypointIndex: segmentIndex + 1})"
                         >
                             <b>{{ waypoints[segmentIndex].getDisplayName() }}</b>
                             <div
                                 class="d-flex justify-content-between"
                             >
-                                <RoutingDurationDisplay :duration="segment.duration"></RoutingDurationDisplay>
-                                <RoutingDistanceDisplay :distance="segment.distance"></RoutingDistanceDisplay>
+                                <RoutingDurationDisplay :duration="segment.duration" />
+                                <RoutingDistanceDisplay :distance="segment.distance" />
                             </div>
                         </div>
                     </div>
@@ -352,7 +380,7 @@ export default {
                     <hr
                         :key="'segment_divider_' + segmentIndex"
                         class="m-0"
-                    />
+                    >
 
                     <div
                         v-if="segment.displayDetails"
@@ -366,19 +394,22 @@ export default {
                                 :key="'segment_' + segmentIndex + '_step_' + stepIndex"
                                 class="ml-4 d-flex flex-column"
                                 @mouseover="highlightRoute({coordsIndex: step.getWaypoints()})"
+                                @focus="highlightRoute({coordsIndex: step.getWaypoints()})"
                                 @mouseout="unHighlightRoute()"
+                                @blur="unHighlightRoute()"
                                 @click="zoomToRoute({coordsIndex: step.getWaypoints()})"
+                                @keydown.enter="zoomToRoute({coordsIndex: step.getWaypoints()})"
                             >
                                 <div class="d-flex flex-column pointer step pl-2 py-4">
                                     <span>{{ step.instruction }}</span>
                                     <div
                                         class="d-flex justify-content-between"
                                     >
-                                        <RoutingDurationDisplay :duration="step.duration"></RoutingDurationDisplay>
-                                        <RoutingDistanceDisplay :distance="step.distance"></RoutingDistanceDisplay>
+                                        <RoutingDurationDisplay :duration="step.duration" />
+                                        <RoutingDistanceDisplay :distance="step.distance" />
                                     </div>
                                 </div>
-                                <hr class="w-100 m-0" />
+                                <hr class="w-100 m-0">
                             </div>
                         </template>
                     </div>
@@ -392,8 +423,21 @@ export default {
                             waypoints[waypoints.length - 1].getIndexDirectionsLineString() + 1
                         ]
                     })"
+                    @focus="highlightRoute({
+                        coordsIndex: [
+                            waypoints[waypoints.length - 1].getIndexDirectionsLineString() - 1,
+                            waypoints[waypoints.length - 1].getIndexDirectionsLineString() + 1
+                        ]
+                    })"
                     @mouseout="unHighlightRoute()"
+                    @blur="unHighlightRoute()"
                     @click="zoomToRoute({
+                        coordsIndex: [
+                            waypoints[waypoints.length - 1].getIndexDirectionsLineString() - 1,
+                            waypoints[waypoints.length - 1].getIndexDirectionsLineString() + 1
+                        ]
+                    })"
+                    @keydown.enter="zoomToRoute({
                         coordsIndex: [
                             waypoints[waypoints.length - 1].getIndexDirectionsLineString() - 1,
                             waypoints[waypoints.length - 1].getIndexDirectionsLineString() + 1
@@ -406,7 +450,7 @@ export default {
 
                 <hr class="mt-0">
 
-                <RoutingDownload></RoutingDownload>
+                <RoutingDownload />
             </div>
         </template>
     </div>

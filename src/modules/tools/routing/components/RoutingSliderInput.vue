@@ -2,6 +2,10 @@
 export default {
     name: "RoutingSliderInput",
     props: {
+        label: {
+            type: String,
+            required: true
+        },
         value: {
             type: Number,
             required: true
@@ -33,6 +37,9 @@ export default {
 
 <template>
     <div class="d-flex flex-column">
+        <label :for="'routing-slider-input-' + label">
+            <h6>{{ label }}</h6>
+        </label>
         <div class="d-flex justify-content-between">
             <span>{{ min }} {{ unit }}</span>
             <span>
@@ -41,6 +48,7 @@ export default {
             <span>{{ max }} {{ unit }}</span>
         </div>
         <input
+            :id="'routing-slider-input-' + label"
             :value="value"
             type="range"
             :min="min"

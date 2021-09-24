@@ -80,13 +80,13 @@ export default {
                     class="col-xs-8"
                     max="100"
                     :value="progress"
-                >
-                </progress>
+                />
                 <span class="col-xs-3">{{ progress }} %</span>
                 <span
                     class="col-xs-1 glyphicon glyphicon-remove pointer"
                     :title="$t('common:modules.tools.routing.batchProcessing.cancel')"
                     @click="$emit('cancelProcess')"
+                    @keydown.enter="$emit('cancelProcess')"
                 />
             </div>
         </div>

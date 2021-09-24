@@ -13,10 +13,11 @@ export default {
 <template>
     <label class="pointer mb-0 d-flex">
         <input
-            v-model="batchProcessing.active"
+            :checked="batchProcessing.active"
             class="mt-0 d-flex flex-column align-self-center"
             type="checkbox"
-        />
+            @input="$emit('input', $event.target.checked)"
+        >
         <span class="ml-2">
             {{ $t('common:modules.tools.routing.batchProcessing.header') }}
         </span>

@@ -95,7 +95,7 @@ export default {
             return partsOhneExtension.join(".") + ".csv";
         },
         parseCsv (filecontent) {
-            return new Promise(async (resolve, reject) => {
+            return new Promise((resolve, reject) => {
 
                 const content = filecontent.replace(/[\r]/g, "").trim(),
                     lines = content.split("\n"),
@@ -180,10 +180,10 @@ export default {
     <RoutingBatchProcessing
         :settings="settings"
         :progress="taskHandler ? taskHandler.progress : 0"
-        :isProcessing="isProcessing"
-        :strukturText="$t('common:modules.tools.routing.directions.batchProcessing.structure')"
-        beispielText="1;8.12;50.67;9.12;51.67"
+        :is-processing="isProcessing"
+        :struktur-text="$t('common:modules.tools.routing.directions.batchProcessing.structure')"
+        beispiel-text="1;8.12;50.67;9.12;51.67"
         @filesadded="addFiles($event)"
         @cancelProcess="taskHandler.cancelRun()"
-    ></RoutingBatchProcessing>
+    />
 </template>

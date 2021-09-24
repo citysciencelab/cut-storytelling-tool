@@ -123,12 +123,13 @@ export default {
                     autocomplete="off"
                     @focus="isFocused = true"
                     @blur="isFocused = false"
-                />
+                >
                 <span
                     v-if="search.length > 0 && search !== waypointDisplayName"
                     class="glyphicon glyphicon-remove form-control-feedback pointer"
                     @click="resetInput()"
-                ></span>
+                    @keydown.enter="resetInput()"
+                />
             </label>
             <div class="d-flex">
                 <div class="d-flex flex-column justify-content-between">
@@ -138,22 +139,24 @@ export default {
                             class="pointer glyphicon glyphicon-chevron-up"
                             :title="$t('common:modules.tools.routing.moveWaypointUp')"
                             @click="$emit('moveWaypointUp')"
-                        ></span>
+                            @keydown.enter="$emit('moveWaypointUp')"
+                        />
                     </div>
                     <div class="h-50">
                         <span
                             v-show="waypoint.index !== countWaypoints - 1"
                             class="pointer glyphicon glyphicon-chevron-down"
                             :title="$t('common:modules.tools.routing.moveWaypointDown')"
-                            @click="$emit('moveWaypointDown')"
-                        ></span>
+                            @keydown.enter="$emit('moveWaypointDown')"
+                        />
                     </div>
                 </div>
                 <span
                     class="selfAlignCenter pointer glyphicon glyphicon-remove ml-4"
                     :title="$t('common:modules.tools.routing.deleteWaypoint')"
                     @click="$emit('removeWaypoint')"
-                ></span>
+                    @keydown.enter="$emit('removeWaypoint')"
+                />
             </div>
         </div>
 

@@ -78,9 +78,9 @@ export default {
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
+        :deactivate-gfi="deactivateGFI"
     >
-        <template v-slot:toolBody>
+        <template #toolBody>
             <div
                 v-if="active"
                 id="routing"
@@ -99,27 +99,29 @@ export default {
                             activeRoutingToolOption === routingToolOption.id ? 'active' : '',
                         ]"
                         @click="changeActiveRoutingToolOption(routingToolOption.id)"
+                        @keydown.enter="changeActiveRoutingToolOption(routingToolOption.id)"
                     >
-                        <span class="glyphicon glyphicon-option-vertical"></span>
+                        <span class="glyphicon glyphicon-option-vertical" />
                         <span>{{ $t("common:modules.tools.routing.tabs." + routingToolOption.id) }}</span>
                         <RoutingLoadingSpinner
                             v-if="(routingToolOption.id === 'DIRECTIONS' && isLoadingDirections) || (routingToolOption.id === 'ISOCHRONES' && isLoadingIsochrones)"
                             class="ml-2"
-                        ></RoutingLoadingSpinner>
+                        />
                     </div>
 
                     <div
                         class="d-flex flex-column justify-content-center ml-2"
                         @click="showHelp()"
+                        @keydown.enter="showHelp()"
                     >
-                        <span class="glyphicon glyphicon-question-sign"></span>
+                        <span class="glyphicon glyphicon-question-sign" />
                     </div>
                 </div>
 
 
-                <hr />
+                <hr>
 
-                <component :is="activeRoutingToolOptionComponent"></component>
+                <component :is="activeRoutingToolOptionComponent" />
             </div>
         </template>
     </Tool>

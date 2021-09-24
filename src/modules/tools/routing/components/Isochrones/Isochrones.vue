@@ -78,6 +78,20 @@ export default {
             this.waypoint.reset();
             this.createIsochronesPointDrawInteraction();
             this.resetIsochronesResult();
+        },
+
+        onAddAvoidOption (optionId) {
+            this.routingAvoidFeaturesOptions.push(optionId);
+        },
+        onRemoveAvoidOption (optionId) {
+            const index = this.activeAvoidFeaturesOptions.findIndex(
+                (opt) => opt === optionId
+            );
+
+            this.routingAvoidFeaturesOptions.splice(index, 1);
+        },
+        onBatchProcessingCheckboxInput (input) {
+            this.settings.batchProcessing.active = input;
         }
     }
 };
@@ -89,22 +103,25 @@ export default {
             v-for="option in constantsRouting.speedProfileOptions"
             :key="option"
             class="pointer mr-4"
-            :speedProfileId="option"
-            :fillColor="option === settings.speedProfile ? '#ec0d0d' : '#000000'"
+            :speed-profile-id="option"
+            :fill-color="option === settings.speedProfile ? '#ec0d0d' : '#000000'"
             :tooltip="$t('common:modules.tools.routing.speedprofiles.' + option)"
             @click.native="changeSpeedProfile(option)"
-        ></RoutingSpeedProfileIcon>
+        />
 
-        <hr />
+        <hr>
 
         <template v-if="settings.batchProcessing.enabled">
-            <RoutingBatchProcessingCheckbox :batchProcessing="settings.batchProcessing"></RoutingBatchProcessingCheckbox>
+            <RoutingBatchProcessingCheckbox
+                :batch-processing="settings.batchProcessing"
+                @input="onBatchProcessingCheckboxInput($event)"
+            />
 
-            <hr />
+            <hr>
         </template>
 
         <template v-if="settings.batchProcessing.enabled && settings.batchProcessing.active">
-            <IsochronesBatchProcessing :settings="settings"></IsochronesBatchProcessing>
+            <IsochronesBatchProcessing :settings="settings" />
         </template>
         <template v-else>
             <h6>{{ $t('common:modules.tools.routing.isochrones.startpoint') }}</h6>
@@ -114,10 +131,10 @@ export default {
                 role="form"
             >
                 <RoutingCoordinateInput
-                    :countWaypoints="1"
+                    :count-waypoints="1"
                     :waypoint="waypoint"
                     @removeWaypoint="onRemoveWaypoint()"
-                ></RoutingCoordinateInput>
+                />
             </form>
         </template>
 
@@ -144,47 +161,52 @@ export default {
 
 
         <template v-if="settings.isochronesMethodOption === 'DISTANCE'">
-            <h6>{{ $t('common:modules.tools.routing.isochrones.maxDistance') }}</h6>
+            <!-- <h6>{{  }}</h6> -->
             <RoutingSliderInput
+                :label="$t('common:modules.tools.routing.isochrones.maxDistance')"
                 :value="settings.distanceValue"
                 :min="settings.minDistance"
                 :max="settings.maxDistance"
                 :disabled="isInputDisabled"
                 unit="km"
                 @input="setDistanceValue($event)"
-            ></RoutingSliderInput>
+            />
         </template>
 
         <template v-else-if="settings.isochronesMethodOption === 'TIME'">
-            <h6>{{ $t('common:modules.tools.routing.isochrones.maxTraveltime') }}</h6>
+            <!-- <h6>{{ $t('common:modules.tools.routing.isochrones.maxTraveltime') }}</h6> -->
             <RoutingSliderInput
+                :label="$t('common:modules.tools.routing.isochrones.maxTraveltime')"
                 :value="settings.timeValue"
                 :min="settings.minTime"
                 :max="settings.maxTime"
                 :disabled="isInputDisabled"
                 unit="min"
                 @input="setTimeValue($event)"
-            ></RoutingSliderInput>
+            />
         </template>
 
-        <h6>{{ $t('common:modules.tools.routing.isochrones.interval') }}</h6>
+        <!-- <h6>{{ $t('common:modules.tools.routing.isochrones.interval') }}</h6> -->
 
         <RoutingSliderInput
+            :label="$t('common:modules.tools.routing.isochrones.interval')"
             :value="settings.intervalValue"
             :min="settings.minInterval"
             :max="maxIntervalValue"
             :unit="settings.isochronesMethodOption ==='DISTANCE' ? 'km' : 'min'"
             :disabled="isInputDisabled"
             @input="setIntervalValue($event)"
-        ></RoutingSliderInput>
+        />
 
         <hr>
 
         <RoutingAvoidFeatures
             :settings="settings"
-            :activeAvoidFeaturesOptions="routingAvoidFeaturesOptions"
+            :active-avoid-features-options="routingAvoidFeaturesOptions"
             :disabled="isInputDisabled"
-        ></RoutingAvoidFeatures>
+            @addAvoidOption="onAddAvoidOption($event)"
+            @removeAvoidOption="onRemoveAvoidOption($event)"
+        />
 
         <template v-if="!(settings.batchProcessing.enabled && settings.batchProcessing.active)">
             <hr>
@@ -221,7 +243,7 @@ export default {
 
                     <hr class="w-100">
 
-                    <RoutingDownload hideGpx></RoutingDownload>
+                    <RoutingDownload hide-gpx />
                 </div>
             </div>
         </template>

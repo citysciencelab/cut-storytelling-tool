@@ -95,7 +95,7 @@ export default {
             return partsOhneExtension.join(".") + ".geojson";
         },
         parseCsv (filecontent) {
-            return new Promise(async (resolve, reject) => {
+            return new Promise((resolve, reject) => {
                 const content = filecontent.replace(/[\r]/g, "").trim(),
                     lines = content.split("\n"),
                     anzahl = lines.length,
@@ -186,10 +186,10 @@ export default {
     <RoutingBatchProcessing
         :settings="settings"
         :progress="taskHandler ? taskHandler.progress : 0"
-        :isProcessing="isProcessing"
-        :strukturText="$t('common:modules.tools.routing.isochrones.batchProcessing.structure')"
-        beispielText="1;8.12;50.67"
+        :is-processing="isProcessing"
+        :struktur-text="$t('common:modules.tools.routing.isochrones.batchProcessing.structure')"
+        beispiel-text="1;8.12;50.67"
         @filesadded="addFiles($event)"
         @cancelProcess="taskHandler.cancelRun()"
-    ></RoutingBatchProcessing>
+    />
 </template>
