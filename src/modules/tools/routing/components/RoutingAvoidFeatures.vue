@@ -22,6 +22,10 @@ export default {
         };
     },
     computed: {
+        /**
+         * Computed value for the options to display with the current active speed profile
+         * @returns {Object[]} options to display
+         */
         avoidSpeedProfileOptions ({settings}) {
             return constantsRouting.avoidSpeedProfileOptions.filter(
                 (option) => option.availableProfiles.includes(settings.speedProfile)
@@ -29,10 +33,20 @@ export default {
         }
     },
     methods: {
+        /**
+         * Checks if the option is checked
+         * @param {String} option to check
+         * @returns {Boolean} true if option is checked
+         */
         getIsRoutingAvoidFeaturesOptionsChecked (option) {
             return this.activeAvoidFeaturesOptions.includes(option.id);
         },
-
+        /**
+         * Emits an event on user input
+         * @param {String} option to change
+         * @param {Boolean} checked to set
+         * @returns {void}
+         */
         setRoutingAvoidFeaturesOptions (option, checked) {
             if (checked) {
                 this.$emit("addAvoidOption", option.id);

@@ -13,6 +13,11 @@ const getters = {
      * @returns {object.<string, function>} object of getters
      */
     ...generateSimpleGetters(routingState),
+    /**
+     * Returns the configured tabs to be displayed.
+     * @param {Object} params with routingToolOptions(String[])
+     * @returns {String[]} routing tool options
+     */
     filteredRoutingToolOptions ({routingToolOptions}) {
         let options = routingToolOptions;
 

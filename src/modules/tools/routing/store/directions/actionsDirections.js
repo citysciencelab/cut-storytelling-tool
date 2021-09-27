@@ -48,6 +48,11 @@ export default {
         commit("setIsLoadingDirections", false);
     },
 
+    /**
+     * Resets the routing direction results
+     * @param {Object} context actions context object.
+     * @returns {void}
+     */
     async resetRoutingDirectionsResults ({dispatch, commit}) {
         const lineStringFeature = await dispatch("getRouteFeature");
 
@@ -57,6 +62,13 @@ export default {
             .setCoordinates([]);
     },
 
+    /**
+     * Fetches the directions with the configured external service.
+     * Needs to be extended if new services should be configurable.
+     * @param {Object} context actions context object.
+     * @param {Object} parameter with wgs84Coords as input and instructions for the external service
+     * @returns {RoutingDirections} routingDirections
+     */
     async fetchDirections ({state, getters, dispatch}, {wgs84Coords, instructions}) {
         const {settings} = state,
             {selectedAvoidSpeedProfileOptions} = getters,
@@ -81,24 +93,45 @@ export default {
         throw new Error("fetchDirections Type ist nicht korrekt konfiguriert");
     },
 
+    /**
+     * Returns the feature to display the route on
+     * @param {Object} context actions context object.
+     * @returns {module:ol/Feature} routing Feature
+     */
     getRouteFeature ({state}) {
         const {directionsRouteSource} = state;
 
         return directionsRouteSource.getFeatures().find(feature => !feature.get("isHighlight"));
     },
 
+    /**
+     * Returns the feature to display the highlight on
+     * @param {Object} context actions context object.
+     * @returns {module:ol/Feature} highlight Feature
+     */
     getHighlightFeature ({state}) {
         const {directionsRouteSource} = state;
 
         return directionsRouteSource.getFeatures().find(feature => feature.get("isHighlight"));
     },
 
+    /**
+     * Resets the highlighting
+     * @param {Object} context actions context object.
+     * @returns {void}
+     */
     async unHighlightRoute ({dispatch}) {
         const highlightFeature = await dispatch("getHighlightFeature");
 
         highlightFeature.getGeometry().setCoordinates([]);
     },
 
+    /**
+     * Highlights part of the route.
+     * @param {Object} context actions context object.
+     * @param {Object} params with the starting and ending index
+     * @returns {void}
+     */
     async highlightRoute ({dispatch, state}, {vonWaypointIndex, bisWaypointIndex, coordsIndex}) {
         const {waypoints} = state,
             routeFeature = await dispatch("getRouteFeature"),
@@ -113,6 +146,12 @@ export default {
         );
     },
 
+    /**
+     * Zooms to part of the route
+     * @param {Object} context actions context object.
+     * @param {Object} params with the starting and ending index
+     * @returns {void}
+     */
     async zoomToRoute ({dispatch, state, rootGetters}, {vonWaypointIndex, bisWaypointIndex, coordsIndex}) {
         const {waypoints} = state,
             map = rootGetters["Map/map"],
@@ -128,6 +167,11 @@ export default {
         map.getView().fit(linestringFeature.getGeometry().getExtent());
     },
 
+    /**
+     * Retrieves the waypoint coordinates in wgs84 projection
+     * @param {Object} context actions context object.
+     * @returns {[Number, Number][]} wgs84 coordinates
+     */
     async getDirectionsCoordinatesWgs84 ({getters, dispatch}) {
         const coordinates = [];
 
@@ -143,6 +187,11 @@ export default {
         return coordinates;
     },
 
+    /**
+     * Retrieves the polygons to avoid in the wgs84 projection as a MultiPolygon
+     * @param {Object} context actions context object.
+     * @returns {Object} MultiPolygon in wgs84
+     */
     async getAvoidPolygonsWgs84 ({state, dispatch}) {
         const {directionsAvoidSource} = state,
             sourceFeatures = directionsAvoidSource.getFeatures(),
@@ -171,6 +220,11 @@ export default {
         return polygonFeature;
     },
 
+    /**
+     * Called when Routing.vue is created to initialize the map layers, map interactions and waypoints.
+     * @param {Object} context actions context object.
+     * @returns {void}
+     */
     initDirections ({rootGetters, state, dispatch, commit}) {
         const {
                 directionsWaypointsLayer,
@@ -204,6 +258,11 @@ export default {
         dispatch("createInteractionFromKartenmodus");
     },
 
+    /**
+     * Creates the currently needed map interaction based on the user input
+     * @param {Object} context actions context object.
+     * @returns {void}
+     */
     createInteractionFromKartenmodus ({state, dispatch}) {
         const {kartenmodus} = state;
 
@@ -218,6 +277,11 @@ export default {
         }
     },
 
+    /**
+     * Called when the directions tab is being closed to reset the map layer and interaction
+     * @param {Object} context actions context object.
+     * @returns {void}
+     */
     closeDirections ({rootGetters, state, dispatch}) {
         const {directionsWaypointsLayer, directionsRouteLayer, directionsAvoidLayer} = state,
 
@@ -230,6 +294,11 @@ export default {
         dispatch("removeMapInteractions");
     },
 
+    /**
+     * Creates event listener to be called when the waypoints are dragged/modified
+     * @param {Object} context actions context object.
+     * @returns {void}
+     */
     createDirectionsWaypointsModifyInteractionListener ({state, dispatch}) {
         const {directionsWaypointsModifyInteraction} = state;
 
@@ -266,6 +335,11 @@ export default {
         });
     },
 
+    /**
+     * Creates event listener to be called when the avoid polygons are modified
+     * @param {Object} context actions context object.
+     * @returns {void}
+     */
     createDirectionsAvoidModifyInteractionListener ({state, dispatch}) {
         const {directionsAvoidModifyInteraction} = state;
 
@@ -275,7 +349,13 @@ export default {
         });
     },
 
-    // returns number or undefined
+    /**
+     * Tries to find the waypoint index between the given lineStringIndex.
+     * Used to determine where to insert the new waypoint when the route is dragged in the map.
+     * @param {Object} context actions context object.
+     * @param {Object} params with lineStringIndex as number to search
+     * @returns {Number | null} the waypoint index or null if nothing was found
+     */
     findWaypointBetweenLineStringIndex ({state}, {lineStringIndex}) {
         const {waypoints} = state;
 
@@ -300,6 +380,12 @@ export default {
         return null;
     },
 
+    /**
+     * Creates event listener to be called when the user drags the route feature to create a new waypoint.
+     * Requests new Directions afterwards.
+     * @param {Object} context actions context object.
+     * @returns {void}
+     */
     createDirectionsRouteModifyInteractionListener ({
         state,
         dispatch
@@ -354,7 +440,7 @@ export default {
 
     /**
      * Adds a new Waypoint to the Array.
-     * @param {Object} state the state of searchByCoord-module
+     * @param {Object} context actions context object.
      * @param {Object} payload payload object.
      * @returns {RoutingWaypoint} added waypoint
      */
@@ -400,6 +486,12 @@ export default {
         }
         return waypoint;
     },
+    /**
+     * Removes a waypoint at the given index and reloads the directions if reload = true
+     * @param {Object} context actions context object.
+     * @param {Object} params with a waypoint index and reload to control if the directions should be requested.
+     * @returns {void}
+     */
     removeWaypoint ({state, dispatch, commit}, {index, reload = false}) {
         const {waypoints, directionsWaypointsSource, directionsRouteSource} = state;
 
@@ -420,6 +512,12 @@ export default {
             dispatch("findDirections");
         }
     },
+    /**
+     * Moves the waypoint at the given index down
+     * @param {Object} context actions context object.
+     * @param {number} index for the waypoint to be moved down
+     * @returns {void}
+     */
     moveWaypointDown ({state, dispatch}, index) {
         const {waypoints} = state,
             newIndex = index + 1,
@@ -435,6 +533,12 @@ export default {
         waypointUnder.setIndex(index);
         dispatch("findDirections");
     },
+    /**
+     * Moves the waypoint at the given index up
+     * @param {Object} context actions context object.
+     * @param {number} index for the waypoint to be moved up
+     * @returns {void}
+     */
     moveWaypointUp ({state, dispatch}, index) {
         const {waypoints} = state,
             newIndex = index - 1,
@@ -452,7 +556,7 @@ export default {
     },
 
     /**
-     * Initializes the Waypoint Array with the minimum Waypoints.
+     * Initializes the waypoint array with the minimum waypoints (2) for start and end.
      * @param {Object} context actions context object.
      * @returns {void}
      */
@@ -520,6 +624,7 @@ export default {
      * Creates a new draw interaction depending on state to either draw
      * lines or polygons. The method will first remove any prior draw
      * interaction created by this tool.
+     * @param {Object} context actions context object.
      * @returns {void}
      */
     createDirectionsWaypointsDrawInteraction ({state, dispatch, rootGetters}) {
@@ -545,6 +650,7 @@ export default {
      * Removes the draw interaction. This includes aborting any current
      * unfinished drawing, removing the interaction from the map, and
      * removing the interaction from the store.
+     * @param {Object} context actions context object.
      * @returns {void}
      */
     removeDirectionsWaypointsDrawInteraction ({state, rootGetters}) {
@@ -570,6 +676,7 @@ export default {
 
     /**
      * Creates a new draw interaction for polygons to avoid.
+     * @param {Object} context actions context object.
      * @returns {void}
      */
     createDirectionsAvoidDrawInteraction ({state, dispatch, rootGetters}) {
@@ -588,6 +695,7 @@ export default {
     },
     /**
      * Removes the draw interaction for polygons to avoid.
+     * @param {Object} context actions context object.
      * @returns {void}
      */
     removeDirectionsAvoidDrawInteraction ({state, rootGetters}) {
@@ -608,6 +716,7 @@ export default {
 
     /**
      * Creates a new select interaction to delete avoid areas.
+     * @param {Object} context actions context object.
      * @returns {void}
      */
     createDirectionsAvoidSelectInteraction ({state, dispatch, rootGetters}) {
@@ -620,6 +729,7 @@ export default {
     },
     /**
      * Removes the select interaction for deletion of avoid areas.
+     * @param {Object} context actions context object.
      * @returns {void}
      */
     removeDirectionsAvoidSelectInteraction ({state, rootGetters}) {
@@ -631,6 +741,7 @@ export default {
     },
     /**
      * Removes the directions interactions.
+     * @param {Object} context actions context object.
      * @returns {void}
      */
     removeMapInteractions ({dispatch}) {

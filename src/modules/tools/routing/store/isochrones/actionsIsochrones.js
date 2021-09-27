@@ -50,11 +50,22 @@ export default {
         commit("setIsLoadingIsochrones", false);
     },
 
+    /**
+     * Resets the isochrones results from the map and state
+     * @param {Object} context actions context object.
+     * @returns {void}
+     */
     resetIsochronesResult ({state, commit}) {
         state.isochronesAreaSource.clear();
         commit("setRoutingIsochrones", null);
     },
 
+    /**
+     * Fetches the isochrones from the configured external service with the needed parameters.
+     * @param {Object} context actions context object.
+     * @param {Object} params with wgs84Coords([Number, Number][]) and transformCoordinates(Function)
+     * @returns {RoutingIsochrones} routingIsochrones
+     */
     async fetchIsochrones ({state, dispatch, getters}, {wgs84Coords, transformCoordinates}) {
         const {settings} = state,
             {selectedAvoidSpeedProfileOptions} = getters;
@@ -77,6 +88,11 @@ export default {
         throw new Error("Erreichbarkeit ist nicht korrekt konfiguriert");
     },
 
+    /**
+     * Called when isochrones tab is created and initializes the map layer and map interactions
+     * @param {Object} context actions context object.
+     * @returns {void}
+     */
     initIsochrones ({rootGetters, state, commit, dispatch}) {
         const {isochronesPointLayer, isochronesAreaLayer, isochronesPointDrawInteraction, mapListenerAdded} = state,
             map = rootGetters["Map/map"];
@@ -94,6 +110,11 @@ export default {
         dispatch("createIsochronesPointDrawInteraction");
     },
 
+    /**
+     * Called when isochrones tab is closed and removes the map layer and map interactions
+     * @param {Object} context actions context object.
+     * @returns {void}
+     */
     closeIsochrones ({rootGetters, state, dispatch}) {
         const {isochronesPointLayer, isochronesAreaLayer} = state,
 
@@ -133,6 +154,11 @@ export default {
         map.removeInteraction(isochronesPointDrawInteraction);
     },
 
+    /**
+     * Creates event listener called when the user drags/modifies the center point.
+     * @param {Object} context actions context object.
+     * @returns {void}
+     */
     createIsochronePointModifyInteractionListener ({state, dispatch}) {
         const {isochronesPointModifyInteraction, waypoint} = state;
 
@@ -158,6 +184,7 @@ export default {
      * Creates a new draw interaction depending on state to either draw
      * lines or polygons. The method will first remove any prior draw
      * interaction created by this tool.
+     * @param {Object} context actions context object.
      * @returns {void}
      */
     createIsochronesPointDrawInteraction ({state, dispatch, rootGetters}) {
@@ -181,6 +208,7 @@ export default {
      * Removes the draw interaction. This includes aborting any current
      * unfinished drawing, removing the interaction from the map, and
      * removing the interaction from the store.
+     * @param {Object} context actions context object.
      * @returns {void}
      */
     removeIsochronesPointDrawInteraction ({state, rootGetters}) {

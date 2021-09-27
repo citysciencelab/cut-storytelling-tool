@@ -34,9 +34,17 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/Routing/Directions", Object.keys(getters)),
+        /**
+         * Checks if current map mode is "AVOID_AREAS"
+         * @returns {Boolean} true if mode is "AVOID_AREAS"
+         */
         isKartenmodusSperrflaecheBearbeiten () {
             return this.kartenmodus === "AVOID_AREAS";
         },
+        /**
+         * Checks if current map mode is "DELETE_AVOID_AREAS"
+         * @returns {Boolean} true if mode is "DELETE_AVOID_AREAS"
+         */
         isKartenmodusSperrflaecheLoeschen () {
             return this.kartenmodus === "DELETE_AVOID_AREAS";
         }
@@ -51,16 +59,28 @@ export default {
         ...mapMutations("Tools/Routing/Directions", Object.keys(mutations)),
         ...mapActions("Tools/Routing/Directions", Object.keys(actions)),
 
+        /**
+         * Changes the current speed profile and requests directions after
+         * @param {String} speedProfileId from constantsRouting
+         * @returns {void}
+         */
         changeSpeedProfile (speedProfileId) {
             this.settings.speedProfile = speedProfileId;
             this.findDirections();
         },
-
+        /**
+         * Changes the current preference and requests directions after
+         * @param {String} preferenceId from constantsDirections
+         * @returns {void}
+         */
         changePreference (preferenceId) {
             this.settings.preference = preferenceId;
             this.findDirections();
         },
-
+        /**
+         * Toggles the current map mode between "AVOID_AREAS" and "WAYPOINTS"
+         * @returns {void}
+         */
         changeSperrflaecheBearbeitenKartenmodus () {
             if (this.kartenmodus === "AVOID_AREAS") {
                 this.setKartenmodus("WAYPOINTS");
@@ -70,7 +90,10 @@ export default {
             }
             this.createInteractionFromKartenmodus();
         },
-
+        /**
+         * Toggles the current map mode between "DELETE_AVOID_AREAS" and "WAYPOINTS"
+         * @returns {void}
+         */
         changeSperrflaecheLoeschenKartenmodus () {
             if (this.kartenmodus === "DELETE_AVOID_AREAS") {
                 this.setKartenmodus("WAYPOINTS");
@@ -80,7 +103,10 @@ export default {
             }
             this.createInteractionFromKartenmodus();
         },
-
+        /**
+         * Resets the current settings, including waypoints and avoid areas.
+         * @returns {void}
+         */
         reset () {
             for (let i = this.waypoints.length - 1; i >= 0; i--) {
                 this.removeWaypoint({index: this.waypoints[i].index});
@@ -89,11 +115,20 @@ export default {
             this.setRoutingDirections(null);
             this.directionsAvoidSource.clear();
         },
-
+        /**
+         * Adds a new option to avoid when requesting directions afterwards
+         * @param {String} optionId from constantsRouting
+         * @returns {void}
+         */
         onAddAvoidOption (optionId) {
             this.routingAvoidFeaturesOptions.push(optionId);
             this.findDirections();
         },
+        /**
+         * Removes an option to avoid when requesting directions afterwards
+         * @param {String} optionId from constantsRouting
+         * @returns {void}
+         */
         onRemoveAvoidOption (optionId) {
             const index = this.activeAvoidFeaturesOptions.findIndex(
                 (opt) => opt === optionId
@@ -102,6 +137,11 @@ export default {
             this.routingAvoidFeaturesOptions.splice(index, 1);
             this.findDirections();
         },
+        /**
+         * Changes the setting to display batch processing
+         * @param {Boolean} input new value
+         * @returns {void}
+         */
         onBatchProcessingCheckboxInput (input) {
             this.settings.batchProcessing.active = input;
         }

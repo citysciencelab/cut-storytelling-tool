@@ -26,9 +26,17 @@ export default {
         };
     },
     computed: {
+        /**
+         * Computed value for the waypoint display name to watch for changes
+         * @returns {String} the display name for the waypoint
+         */
         waypointDisplayName () {
             return this.waypoint.getDisplayName();
         },
+        /**
+         * Checks if the current input text string is in the lat, lng format
+         * @returns {Boolean} true if is in the lat, lng format in the wgs84 range
+         */
         isInputtextWgs84Coordinate () {
             const [latString, lngString] = this.search.split(", "),
                 lat = Number(latString),
@@ -45,10 +53,19 @@ export default {
         }
     },
     watch: {
+        /**
+         * Resets the input text string and makes sure that no additional request is made if the waypoint display name changes
+         * @param {String} val new display name
+         * @return {void}
+         */
         waypointDisplayName: function (val) {
             this.ignoreNextSearchChange = true;
             this.search = !val ? "" : val;
         },
+        /**
+         * Starts a request if no new input comes after a short delay.
+         * @returns {void}
+         */
         search: function () {
             if (this.ignoreNextSearchChange) {
                 this.ignoreNextSearchChange = false;
@@ -72,6 +89,11 @@ export default {
     },
     methods: {
         ...mapActions("Tools/Routing", ["fetchCoordinatesByText", "transformCoordinatesWgs84ToLocalProjection"]),
+        /**
+         * Selects a result from the external service provider.
+         * @param {RoutingGeosearchResult} searchResult which was selected by the user
+         * @returns {void}
+         */
         selectSearchResult (searchResult) {
             this.waypoint.setFromGeosearchResult(searchResult);
             this.ignoreNextSearchChange = true;
@@ -79,12 +101,21 @@ export default {
             this.searchResults = [];
             this.$emit("searchResultSelected");
         },
+        /**
+         * Passes the input wgs84 coordinate to the waypoint
+         * @param {[number, number]} wgs84Coordinate which was entered in the input text
+         * @returns {void}
+         */
         async selectWgs84Coordinate (wgs84Coordinate) {
             this.waypoint.setCoordinates(await this.transformCoordinatesWgs84ToLocalProjection(wgs84Coordinate));
             this.waypoint.setDisplayName(this.search);
             this.searchResults = [];
             this.$emit("searchResultSelected");
         },
+        /**
+         * Resets all input by the user and clears the search results.
+         * @returns {void}
+         */
         resetInput () {
             this.ignoreNextSearchChange = true;
             this.searchResults = [];

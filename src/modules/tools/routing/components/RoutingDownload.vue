@@ -21,9 +21,17 @@ export default {
         ...mapGetters("Tools/Routing", ["download", "activeRoutingToolOption"]),
         ...mapGetters("Tools/Routing/Directions", ["directionsRouteSource"]),
         ...mapGetters("Tools/Routing/Isochrones", ["isochronesAreaSource"]),
+        /**
+         * Checks if the download button should be disabled.
+         * @returns {Boolean} true if no file name was entered.
+         */
         isDisabled () {
             return this.download.fileName.length === 0;
         },
+        /**
+         * Computed value for the format options to hide the GPX format
+         * @returns {String[]} download format options
+         */
         downloadFormatOptions () {
             let downloadFormatOptions = constants.downloadFormatOptions;
 
@@ -36,6 +44,10 @@ export default {
     },
     methods: {
         ...mapActions("Tools/Routing", ["transformCoordinatesLocalToWgs84Projection"]),
+        /**
+         * Retrieves the features from openlayers source to be downloaded
+         * @returns {module:ol/Feature[]} openlayers features
+         */
         getDownloadFeatures () {
             if (this.activeRoutingToolOption === "DIRECTIONS") {
                 return [this.directionsRouteSource.getFeatures().find(feature => !feature.get("isHighlight"))];
@@ -78,6 +90,11 @@ export default {
             }
             return format.writeFeatures(convertedFeatures);
         },
+        /**
+         * Converts the features to be downloaded into the desired download format
+         * @param {module:ol/Feature[]} features to be converted
+         * @returns {String} string to be downloaded
+         */
         async getDownloadStringInFormat (features) {
             switch (this.download.format) {
                 case "GEOJSON":
@@ -90,9 +107,18 @@ export default {
                     return undefined;
             }
         },
+        /**
+         * Creates the filename with the extension if not provided in the uploaded file
+         * @returns {String} the filename to be used when downloading
+         */
         getFileName () {
             return this.download.fileName.includes(".") ? this.download.fileName : `${this.download.fileName}.${this.download.format}`;
         },
+        /**
+         * Executed by the user when clicking the download button.
+         * Retrieves the features, converts them and provides them to the browser to download.
+         * @returns {void}
+         */
         async downloadResult () {
             if (this.isDisabled) {
                 return;

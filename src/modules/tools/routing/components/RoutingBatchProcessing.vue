@@ -29,11 +29,20 @@ export default {
         };
     },
     computed: {
+        /**
+         * Gets the class for the file drop element
+         * @returns {String} class to display
+         */
         dropZoneAdditionalClass: function () {
             return this.dzIsDropHovering ? "dzReady" : "";
         }
     },
     watch: {
+        /**
+         * Resets the HTML File input after it has been read
+         * @param {Boolean} newVal isProcessing
+         * @returns {void}
+         */
         isProcessing: function (newVal) {
             if (newVal) {
                 this.$refs.fileInput.value = "";
@@ -41,6 +50,11 @@ export default {
         }
     },
     methods: {
+        /**
+         * Called when user uploads a file to process
+         * @param {HTMLInputEvent} e event with the files
+         * @returns {void}
+         */
         onInputChange (e) {
             if (e.target.files !== undefined) {
                 this.addFiles(e.target.files);

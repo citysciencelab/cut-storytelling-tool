@@ -22,6 +22,10 @@ export default {
         ...mapGetters("Tools/Routing", Object.keys(getters)),
         ...mapGetters("Tools/Routing/Directions", ["isLoadingDirections"]),
         ...mapGetters("Tools/Routing/Isochrones", ["isLoadingIsochrones"]),
+        /**
+         * Computed value to get the current component for the active tab
+         * @returns {Object} vue component to render
+         */
         activeRoutingToolOptionComponent () {
             return this.filteredRoutingToolOptions.find(option => option.id === this.activeRoutingToolOption)?.component;
         }
@@ -44,9 +48,9 @@ export default {
         ...mapActions("Tools/Routing", Object.keys(actions)),
         ...mapActions("Alerting", ["addSingleAlert"]),
         /**
-     * Closes this tool window by setting active to false and removes the marker if it was placed.
-     * @returns {void}
-     */
+         * Closes this tool window by setting active to false and removes the marker if it was placed.
+         * @returns {void}
+         */
         close () {
             this.setActive(false);
             // set the backbone model to active false in modellist for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
@@ -58,12 +62,22 @@ export default {
                 model.set("isActive", false);
             }
         },
+        /**
+         * Changes the active tab
+         * Will not change the tab if a batch process is running
+         * @param {String} option to change to
+         * @returns {void}
+         */
         changeActiveRoutingToolOption (option) {
             if (this.taskHandler) {
                 return;
             }
             this.setActiveRoutingToolOption(option);
         },
+        /**
+         * Displays the quickHelp module with the routing option
+         * @returns {void}
+         */
         showHelp () {
             Radio.trigger("QuickHelp", "showWindowHelp", "routing");
         }

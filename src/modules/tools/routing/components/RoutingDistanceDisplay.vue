@@ -8,9 +8,17 @@ export default {
         }
     },
     computed: {
+        /**
+         * Computed value for the rounded distance
+         * @returns {Number} rounded distance
+         */
         roundedDistance () {
             return Math.floor(this.distance);
         },
+        /**
+         * Computed value to return the distance in kilometer
+         * @returns {Number} kilometer distance
+         */
         kmDistance () {
             return (Math.floor((this.roundedDistance / 1000) * 10) / 10).toLocaleString();
         }

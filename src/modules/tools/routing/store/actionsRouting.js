@@ -7,10 +7,20 @@ import {fetchRoutingBkgGeosearch, fetchRoutingBkgGeosearchReverse} from "../util
 import * as constantsRouting from "./constantsRouting";
 
 export default {
+    /**
+     * Called when the routing tool is created.
+     * @param {Object} context actions context object.
+     * @returns {void}
+     */
     async initRouting ({dispatch}) {
         await dispatch("checkNonOptionalConfigFields");
     },
 
+    /**
+     * Checks all non optional config fileds in the config.json.
+     * @param {Object} context actions context object.
+     * @returns {void}
+     */
     checkNonOptionalConfigFields ({rootState}) {
         // Needs to use rootState because state does not contain values from config.json on the initial load
         const state = rootState.configJson.Portalconfig.menu.tools.children.routing,
@@ -110,6 +120,12 @@ export default {
         return geosearchResult;
     },
 
+    /**
+     * Transforms the given coordinates from the local projection to the wgs84 projections
+     * @param {Object} context actions context object.
+     * @param {[Number, Number]} coordinates to project
+     * @returns {[Number, Number]} projected wgs84 coordinates
+     */
     transformCoordinatesLocalToWgs84Projection ({rootGetters}, coordinates) {
         return transform(
             getMapProjection(rootGetters["Map/map"]),
@@ -117,6 +133,12 @@ export default {
             coordinates
         );
     },
+    /**
+     * Transforms the given coordinates from the wgs84 projection to the local projections
+     * @param {Object} context actions context object.
+     * @param {[Number, Number]} coordinates to project
+     * @returns {[Number, Number]} projected local coordinates
+     */
     transformCoordinatesWgs84ToLocalProjection ({rootGetters}, coordinates) {
         return transform(
             "EPSG:4326",

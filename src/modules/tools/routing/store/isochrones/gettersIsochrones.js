@@ -13,10 +13,20 @@ const getters = {
      * @returns {object.<string, function>} object of getters
      */
     ...generateSimpleGetters(stateIsochrones),
+    /**
+     * Gets the avoid speed profile options for the currently selected speed profile.
+     * @param {Object} params with the configured settings and routingAvoidFeaturesOptions (String[])
+     * @returns {String[]} avoid speed profile options
+     */
     selectedAvoidSpeedProfileOptions ({settings, routingAvoidFeaturesOptions}) {
         return constantsRouting.avoidSpeedProfileOptions.filter((option) => option.availableProfiles.includes(settings.speedProfile) && routingAvoidFeaturesOptions.includes(option.id)
         );
     },
+    /**
+     * Checks if input is disabled.
+     * @param {Object} params with isLoadingDirections (Boolean)
+     * @returns {Boolean} true is input is disabled
+     */
     isInputDisabled ({isLoadingIsochrones}) {
         return isLoadingIsochrones;
     }

@@ -32,9 +32,17 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/Routing/Isochrones", Object.keys(getters)),
+        /**
+         * Computed value for the current active slider
+         * @returns {Number} value for the current active slider
+         */
         currentValue () {
             return this.settings.isochronesMethodOption === "DISTANCE" ? this.settings.distanceValue : this.settings.timeValue;
         },
+        /**
+         * Computed maximum value for the sliders
+         * @returns {Number} maximum value for the sliders
+         */
         maxIntervalValue () {
             return this.currentValue < this.settings.maxInterval ? this.currentValue : this.settings.maxInterval;
         }
@@ -50,39 +58,77 @@ export default {
     methods: {
         ...mapMutations("Tools/Routing/Isochrones", Object.keys(mutations)),
         ...mapActions("Tools/Routing/Isochrones", Object.keys(actions)),
+        /**
+         * Changes the speed profile
+         * @param {String} speedProfileId to change
+         * @returns {void}
+         */
         changeSpeedProfile (speedProfileId) {
             this.settings.speedProfile = speedProfileId;
         },
+        /**
+         * Changes the isochrones method and checks the interval value
+         * @param {String} methodOptionId to change
+         * @returns {void}
+         */
         changeMethodOption (methodOptionId) {
             this.settings.isochronesMethodOption = methodOptionId;
             if (this.currentValue < this.settings.intervalValue) {
                 this.setIntervalValue(this.currentValue);
             }
         },
+        /**
+         * Sets the distance value and checks the interval value
+         * @param {Number} distanceValue to set
+         * @returns {void}
+         */
         setDistanceValue (distanceValue) {
             this.settings.distanceValue = distanceValue;
             if (distanceValue < this.settings.intervalValue) {
                 this.setIntervalValue(distanceValue);
             }
         },
+        /**
+         * Sets the time value and checks the interval value
+         * @param {number} timeValue to set
+         * @returns {void}
+         */
         setTimeValue (timeValue) {
             this.settings.timeValue = timeValue;
             if (timeValue < this.settings.intervalValue) {
                 this.setIntervalValue(timeValue);
             }
         },
+        /**
+         * Sets the interval value
+         * @param {Number} intervalValue to set
+         * @returns {void}
+         */
         setIntervalValue (intervalValue) {
             this.settings.intervalValue = intervalValue;
         },
+        /**
+         * Resets the input waypoint and the displayed map features
+         * @returns {void}
+         */
         onRemoveWaypoint () {
             this.waypoint.reset();
             this.createIsochronesPointDrawInteraction();
             this.resetIsochronesResult();
         },
-
+        /**
+         * Adds an option to avoid when requesting isochrones afterwards
+         * @param {String} optionId from constantsRouting
+         * @returns {void}
+         */
         onAddAvoidOption (optionId) {
             this.routingAvoidFeaturesOptions.push(optionId);
         },
+        /**
+         * Removes an option to avoid when requesting isochrones afterwards
+         * @param {String} optionId from constantsRouting
+         * @returns {void}
+         */
         onRemoveAvoidOption (optionId) {
             const index = this.activeAvoidFeaturesOptions.findIndex(
                 (opt) => opt === optionId
@@ -90,6 +136,11 @@ export default {
 
             this.routingAvoidFeaturesOptions.splice(index, 1);
         },
+        /**
+         * Changes the setting to display batch processing
+         * @param {Boolean} input new value
+         * @returns {void}
+         */
         onBatchProcessingCheckboxInput (input) {
             this.settings.batchProcessing.active = input;
         }
@@ -161,7 +212,6 @@ export default {
 
 
         <template v-if="settings.isochronesMethodOption === 'DISTANCE'">
-            <!-- <h6>{{  }}</h6> -->
             <RoutingSliderInput
                 :label="$t('common:modules.tools.routing.isochrones.maxDistance')"
                 :value="settings.distanceValue"
@@ -174,7 +224,6 @@ export default {
         </template>
 
         <template v-else-if="settings.isochronesMethodOption === 'TIME'">
-            <!-- <h6>{{ $t('common:modules.tools.routing.isochrones.maxTraveltime') }}</h6> -->
             <RoutingSliderInput
                 :label="$t('common:modules.tools.routing.isochrones.maxTraveltime')"
                 :value="settings.timeValue"
@@ -185,8 +234,6 @@ export default {
                 @input="setTimeValue($event)"
             />
         </template>
-
-        <!-- <h6>{{ $t('common:modules.tools.routing.isochrones.interval') }}</h6> -->
 
         <RoutingSliderInput
             :label="$t('common:modules.tools.routing.isochrones.interval')"

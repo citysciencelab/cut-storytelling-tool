@@ -13,15 +13,30 @@ const getters = {
      * @returns {object.<string, function>} object of getters
      */
     ...generateSimpleGetters(directionsState),
+    /**
+     * Gets all valid coordinates from the given waypoints.
+     * @param {Object} params with waypoints
+     * @returns {[Number, Number][]} coordinate array
+     */
     directionsCoordinates ({waypoints}) {
         return waypoints
             .map(waypoint => waypoint.getCoordinates())
             .filter(coords => coords.length === 2);
     },
+    /**
+     * Gets the avoid speed profile options for the currently selected speed profile.
+     * @param {Object} params with settings (String[]) and routingAvoidFeaturesOptions (String[])
+     * @returns {String[]} avoid speed profile options
+     */
     selectedAvoidSpeedProfileOptions ({settings, routingAvoidFeaturesOptions}) {
         return constantsRouting.avoidSpeedProfileOptions.filter((option) => option.availableProfiles.includes(settings.speedProfile) && routingAvoidFeaturesOptions.includes(option.id)
         );
     },
+    /**
+     * Checks if input is disabled.
+     * @param {Object} params with isLoadingDirections (Boolean)
+     * @returns {Boolean} true is input is disabled
+     */
     isInputDisabled ({isLoadingDirections}) {
         return isLoadingDirections;
     }

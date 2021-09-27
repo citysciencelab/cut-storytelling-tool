@@ -8,12 +8,24 @@ export default {
         }
     },
     computed: {
+        /**
+         * Computed value from the duration as minutes
+         * @returns {Number} minutes
+         */
         minutes () {
             return Math.floor(this.duration / 60);
         },
+        /**
+         * Computed value from the duration as hours
+         * @returns {Number} hours
+         */
         hours () {
             return Math.floor(this.duration / 3600);
         },
+        /**
+         * Computed value from the duration to get the remaining minutes in the hour
+         * @returns {void} remaining minutes in the hour
+         */
         minutesMinusHours () {
             return Math.floor((this.duration / 60) % 60);
         }

@@ -29,6 +29,12 @@ export default {
         ...mapMutations("Tools/Routing", ["setTaskHandler"]),
         ...mapActions("Tools/Routing/Isochrones", ["fetchIsochrones", "resetIsochronesResult"]),
         ...mapActions("Alerting", ["addSingleAlert"]),
+        /**
+         * Called when files are added by the user to process
+         * loading animation is show while processing and an error is shown to the user if something happens while processing
+         * @param {File} files to process
+         * @returns {void}
+         */
         addFiles (files) {
             files.forEach(file => {
                 const reader = new FileReader();
@@ -70,6 +76,12 @@ export default {
                 reader.readAsText(file);
             });
         },
+        /**
+         * Starts a download for the user to get the result from the process
+         * @param {String} filename for the resulting file
+         * @param {Object[]} downloadObjects resulting objects from the processing per row
+         * @returns {void}
+         */
         async downloadResults (filename, downloadObjects) {
             const downloadString = JSON.stringify(downloadObjects),
                 downloadFilename = this.createDownloadFilename(filename);
@@ -88,12 +100,22 @@ export default {
                 document.body.removeChild(a);
             }
         },
+        /**
+         * Converts the input filename to a csv filename
+         * @param {String} filename for the resulting file
+         * @returns {String} new csv filename
+         */
         createDownloadFilename (filename) {
             const parts = filename.split("."),
                 partsOhneExtension = parts.slice(0, parts.length - 1);
 
             return partsOhneExtension.join(".") + ".geojson";
         },
+        /**
+         * Parses the csv content to tasks and checks for input errors
+         * @param {String} filecontent to parse
+         * @returns {Promise<Object[]>} the results from the tasks per row
+         */
         parseCsv (filecontent) {
             return new Promise((resolve, reject) => {
                 const content = filecontent.replace(/[\r]/g, "").trim(),
@@ -137,6 +159,11 @@ export default {
                 ));
             });
         },
+        /**
+         * Parses one csv row and requests the directions to get the time and distance
+         * @param {String[]} lineParts to parse
+         * @returns {Promise<Object>} the result from the task
+         */
         async parseLineParts (lineParts) {
             const id = lineParts[0],
                 startLon = Number(lineParts[1]),
@@ -175,6 +202,11 @@ export default {
                 }
             ];
         },
+        /**
+         * Checks if input is a number
+         * @param {String | Number} num to check
+         * @returns {Boolean} true if number
+         */
         isNumber (num) {
             return !isNaN(num) && typeof num === "number";
         }
