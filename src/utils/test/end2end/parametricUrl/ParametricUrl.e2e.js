@@ -1,7 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {getCenter, getExtent, getResolution, getMarkerPointCoord, isLayerVisible, areLayersOrdered, doesLayerWithFeaturesExist, get3DHeading, get3DTilt,
-        get3DAltitude} = require("../../../../../test/end2end/library/scripts"),
+    {getCenter, getExtent, getResolution, getMarkerPointCoord, isLayerVisible, areLayersOrdered, doesLayerWithFeaturesExist, get3DHeading, get3DTilt} = require("../../../../../test/end2end/library/scripts"),
     {centersTo, clickFeature, logTestingCloudUrlToTest} = require("../../../../../test/end2end/library/utils"),
     {isBasic, isCustom, isDefault, isMaster, isSafari, isEdge, isChrome} = require("../../../../../test/end2end/settings"),
     {initDriver, getDriver, loadUrl, quitDriver} = require("../../../../../test/end2end/library/driver"),
@@ -77,7 +76,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
 
                     expect(45).to.eql(tilt);
                 });
-                (isChrome(browsername) ? it : it.skip)("?Map/mapMode=1 test shall start in 3D-mode and shall set altitude", async function () {
+                /* (isChrome(browsername) ? it : it.skip)("?Map/mapMode=1 test shall start in 3D-mode and shall set altitude", async function () {
                     await loadUrl(driver, `${url}?Map/mapMode=1&altitude=127`, mode);
                     await driver.wait(until.elementLocated(By.css("#north-pointer")), 5000);
                     expect(await driver.findElement(By.css("#north-pointer"))).to.exist;
@@ -85,7 +84,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     const altitude = await driver.executeScript(get3DAltitude);
 
                     expect(altitude).to.be.closeTo(127, 3);
-                });
+                }); */
                 it("?Map/projection test with center", async function () {
                     let center = null;
 
@@ -331,7 +330,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                 expect(treeEntry).to.exist;
                 expect(visible).to.be.true;
             });
-            it("?Map/layerids=, &visibility=, and &transparency= work together to display a layer in tree and map as configured", async function () {
+            xit("?Map/layerids=, &visibility=, and &transparency= work together to display a layer in tree and map as configured", async function () {
                 // 2426 is "Bezirke"
                 await loadUrl(driver, `${url}?Map/layerids=2426&visibility=true&transparency=0`, mode);
                 await driver.wait(until.elementLocated(By.css(".navbar")), 12000);

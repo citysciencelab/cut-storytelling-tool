@@ -4,6 +4,7 @@ const webdriver = require("selenium-webdriver"),
     {isLayerVisible} = require("../../../library/scripts"),
     {reclickUntilNotStale, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {isCustom, isMaster} = require("../../../settings"),
+    i18next = require("i18next"),
     {By, until} = webdriver;
 
 /**
@@ -12,12 +13,13 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function ElasticSearch ({builder, url, resolution, capability}) {
-    describe.skip("Elastic Search", function () {
+    describe.only("Elastic Search", function () {
         const searchInputSelector = By.css("#searchInput"),
-            searchString = "xys",
-            layerName = "high performance area",
-            layerId = "7134",
+            searchString = "xxx",
+            layerName = "Positivnetz Feldversuch LangLKW",
+            layerId = "676",
             subjectFolderForAllResults = i18next.t("common:modules.searchbar.type.subject");
+
         let driver, searchInput;
 
         before(async function () {
@@ -49,6 +51,8 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
         });
 
         if (isMaster(url) || isCustom(url)) {
+            /* it(`search for '${searchString}' shows 'Fachthema'-suffixed result in a dropdown that can be clicked`, async function () {
+                const topicSelector = By.xpath("//span[@class='list-group-item-theme'][text()='Thema (externe Fachdaten)']"); */
             it(`search for '${searchString}' shows '${subjectFolderForAllResults}'-suffixed result in a dropdown that can be clicked`, async function () {
                 const topicSelector = By.xpath(`//span[@class='list-group-item-theme'][text()='${subjectFolderForAllResults}']`);
 
