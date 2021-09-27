@@ -22,6 +22,7 @@ export default {
         ...mapGetters("Tools/Routing", Object.keys(getters)),
         ...mapGetters("Tools/Routing/Directions", ["isLoadingDirections"]),
         ...mapGetters("Tools/Routing/Isochrones", ["isLoadingIsochrones"]),
+        ...mapGetters("QuickHelp", {quickHelpActive: "active"}),
         /**
          * Computed value to get the current component for the active tab
          * @returns {Object} vue component to render
@@ -75,11 +76,16 @@ export default {
             this.setActiveRoutingToolOption(option);
         },
         /**
-         * Displays the quickHelp module with the routing option
+         * Toggles the quickHelp module with the routing option
          * @returns {void}
          */
         showHelp () {
-            Radio.trigger("QuickHelp", "showWindowHelp", "routing");
+            if (this.quickHelpActive) {
+                Radio.trigger("QuickHelp", "closeWindowHelp");
+            }
+            else {
+                Radio.trigger("QuickHelp", "showWindowHelp", "routing");
+            }
         }
     }
 };
@@ -125,6 +131,7 @@ export default {
 
                     <div
                         class="d-flex flex-column justify-content-center ml-2"
+                        :title="$t('common:modules.tools.routing.helpTooltip')"
                         @click="showHelp()"
                         @keydown.enter="showHelp()"
                     >
@@ -164,5 +171,8 @@ export default {
 }
 .routingtooltab.active {
   background: #dbdbdb;
+}
+.glyphicon-question-sign {
+    font-size: 20px;
 }
 </style>
