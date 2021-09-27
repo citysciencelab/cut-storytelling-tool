@@ -782,7 +782,7 @@
                 },
                 "directions": {
                     "restrictedAreas": "Sperrflächen",
-                    "editRestrictedAreas": "Sperrflächen bearbeiten",
+                    "editRestrictedAreas": "Sperrflächen zeichnen/bearbeiten",
                     "deleteRestrictedAreas": "Sperrflächen löschen",
                     "batchProcessing": {
                         "structure": "ID;lon(Startpunkt);lat(Startpunkt);lon(Endpunkt);lat(Endpunkt)",

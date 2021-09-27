@@ -264,7 +264,7 @@ export default {
                         @click="changeSperrflaecheLoeschenKartenmodus()"
                         @keydown.enter="changeSperrflaecheLoeschenKartenmodus()"
                     >
-                        <title>{{ $t('common:modules.tools.routing.directions.editRestrictedAreas') }}</title>
+                        <title>{{ $t('common:modules.tools.routing.directions.deleteRestrictedAreas') }}</title>
                         <path
                             :fill="isKartenmodusSperrflaecheLoeschen ? '#f00' : '#000'"
                             d="M3,0c1.656,0 3,1.344 3,3c0,1.656 -1.344,3 -3,3c-1.656,0 -3,-1.344 -3,-3c0,-1.656 1.344,-3 3,-3Zm0,1.5c0.828,0 1.5,0.672 1.5,1.5c0,0.828 -0.672,1.5 -1.5,1.5c-0.828,0 -1.5,-0.672 -1.5,-1.5c0,-0.828 0.672,-1.5 1.5,-1.5Z"
