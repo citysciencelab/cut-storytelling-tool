@@ -13,7 +13,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function ElasticSearch ({builder, url, resolution, capability}) {
-    describe.only("Elastic Search", function () {
+    describe("Elastic Search", function () {
         const searchInputSelector = By.css("#searchInput"),
             searchString = "xxx",
             layerName = "Positivnetz Feldversuch LangLKW",
