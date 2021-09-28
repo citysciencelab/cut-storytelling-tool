@@ -898,7 +898,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     // no alert present
                     expect(await driver.findElements(By.css("#messages .alert"))).to.be.empty;
                 });
-                it("?Map/layerids=, &visibility=, and &transparency= work together to display a layer in tree and map as configured - testing string in id", async function () {
+                xit("?Map/layerids=, &visibility=, and &transparency= work together to display a layer in tree and map as configured - testing string in id", async function () {
                     // 1935geofox-bahn = Bahnlinien
                     await loadUrl(driver, `${url}?Map/layerids=1935geofox-bahn&visibility=true&transparency=0`, mode);
                     await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
