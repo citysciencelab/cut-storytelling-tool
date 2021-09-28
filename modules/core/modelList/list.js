@@ -1,4 +1,4 @@
-import WMSLayer from "./layer/wms";
+import WMSLayer from "../../../src/core/layers/wms";
 import WmsTimeLayer from "./layer/wmsTime";
 import WMTSLayer from "./layer/wmts";
 import WFSLayer from "./layer/wfs";
@@ -118,7 +118,13 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "toggleDefaultTool": this.toggleDefaultTool,
             "refreshLightTree": this.refreshLightTree,
             "addAlwaysActiveTool": this.addAlwaysActiveTool,
-            "setActiveToolsToFalse": this.setActiveToolsToFalse
+            "setActiveToolsToFalse": this.setActiveToolsToFalse,
+            "updateLayerView": this.updateLayerView,
+            "removeLayerById": this.removeLayerById,
+            "moveModelInTree": this.moveModelInTree,
+            "updateSelection": function (model) {
+                this.trigger("updateSelection", model);
+            }
         }, this);
 
         this.listenTo(this, {
@@ -178,7 +184,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 if (attrs.time) {
                     return new WmsTimeLayer(attrs, options);
                 }
-                return new WMSLayer(attrs, options);
+                return new WMSLayer(attrs);
             }
             else if (attrs.typ === "WMTS") {
                 return new WMTSLayer(attrs, options);
@@ -730,7 +736,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 else {
                     this.add(model);
                 }
-            });
+            }, this);
         }
         else if (paramLayers.length > 0) {
             itemIsVisibleInMap = Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true});

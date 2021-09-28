@@ -113,6 +113,7 @@
                 "httpOnError": "<strong>Unexpected error occurred while loading sensor data of layer {{name}}</strong>"
               },
               "wms": {
+                "allowCookies":"<strong>Please allow cookies to load this background map.</strong>",
                 "errorTimeLayer": "Error while retrieving information for the layer with the id {{id}}: {{error}}",
                 "invalidTimeLayer": "The configured layer with the id {{id}} does not contain the necessary values for a WMS-T."
               }
