@@ -55,7 +55,7 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
                 await searchInput.sendKeys(searchString);
 
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#searchInputUL"))));
-                await driver.wait(until.elementLocated(topicSelector), 800);
+                await driver.wait(until.elementLocated(topicSelector), 7000);
             });
         }
 
