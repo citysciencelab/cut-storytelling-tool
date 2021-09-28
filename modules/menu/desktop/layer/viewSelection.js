@@ -70,8 +70,15 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
      * @constructs
      */
     initialize: function () {
+        const channel = Radio.channel("MenuSelection");
+
         checkChildrenDatasets(this.model);
         this.initializeDomId();
+        channel.on({
+            "rerender": this.rerender,
+            "renderSetting": this.renderSetting,
+            "change:isOutOfRange": this.toggleColor
+        }, this);
         this.listenTo(this.model, {
             "change:isVisibleInMap": this.rerender,
             "change:isSettingVisible": this.renderSetting,
@@ -144,7 +151,8 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
      * Executes toggleIsVisibleInMap in the model
      * @returns {void}
      */
-    toggleIsVisibleInMap: function () {console.log(1);
+    toggleIsVisibleInMap: function () {
+        console.log(1);
         this.model.toggleIsVisibleInMap();
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
     }

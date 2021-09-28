@@ -1,6 +1,6 @@
 import {Group as LayerGroup} from "ol/layer.js";
 import Layer from "./model";
-import WMSLayer from "./wms";
+import WMSLayer from "../../../../src/core/layers/wms";
 import WMTSLayer from "./wmts";
 import WFSLayer from "./wfs";
 import GeoJSONLayer from "./geojson";

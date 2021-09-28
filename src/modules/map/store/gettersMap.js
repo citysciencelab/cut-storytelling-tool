@@ -38,7 +38,7 @@ const gettersMap = {
 
         visibleLayerList.forEach(layer => {
 
-            if (layer.get("layers")) {
+            if (layer.get("layers") && typeof layer.get("layers").getArray === "function") {
                 layer.get("layers").getArray().forEach(childLayer => {
                     list.push(childLayer);
                 });
