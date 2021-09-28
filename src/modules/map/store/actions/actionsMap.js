@@ -62,8 +62,7 @@ const actions = {
         commit("setMapMode", map.mode);
         commit("setLayerList", map.getLayers().getArray());
         // update state once initially to get initial settings
-        // Todo
-        // dispatch("updateViewState");
+        dispatch("updateViewState", {map:map});
         // hack: see comment on function
         loopLayerLoader(commit, map);
         // currently has no change mechanism
