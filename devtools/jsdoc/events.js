@@ -293,9 +293,10 @@
  * @param {*} layers - todo
  * @param {*} url - todo
  * @param {*} version - todo
- * @param {boolean} [transparent = true] Whether the given layer is transparent.
- * @param {boolean} [isSelected = false] Whether the given layer is selected .
- * @param {(boolean/object)} [time = false] If set to `true` or and Object, the configured Layer is expected to be a WMS-T.
+ * @param {object} [optionalParameters] Object of optional parameters to be set for the Layer. Empty object required if no opional parameters set.
+ * @param {boolean} [optionalParameters.transparent = true] Whether the given layer is transparent.
+ * @param {boolean} [optionalParameters.isSelected = false] Whether the given layer is selected .
+ * @param {(boolean/object)} [optionalParameters.time = false] If set to `true` or and Object, the configured Layer is expected to be a WMS-T.
  * @returns {void}
  * @example Radio.trigger("Parser", "addLayer", name, id, parentId, level, layers, url, version, transparent, isSelected, time)
  */
@@ -1396,13 +1397,6 @@
  * @example Radio.request("Util", "sort", type, values, first, second);
  */
 
-
-/**
- * @event Core#RadioRequestUtilConvertArrayOfObjectsToCsv
- * @description todo
- * @returns {*} - todod
- * @example Radio.request("Util", "convertArrayOfObjectsToCsv");
- */
 
 /**
  * @event Core#RadioRequestUtilGetMasterPortalVersionNumber

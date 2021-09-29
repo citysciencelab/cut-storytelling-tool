@@ -43,7 +43,7 @@ export default {
         id="wmsTime-layerSwiper-button"
         class="btn"
         :title="$t('common:modules.wmsTime.layerSwiper.title')"
-        :aria-description="$t('common:modules.wmsTime.layerSwiper.description', {amount: currentTimeSliderObject.keyboardMovement})"
+        :aria-describedby="$t('common:modules.wmsTime.layerSwiper.description', {amount: currentTimeSliderObject.keyboardMovement})"
         @keydown.left="moveSwiper"
         @keydown.right="moveSwiper"
         @mousedown="mouseMovement"

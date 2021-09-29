@@ -141,10 +141,16 @@ export default {
                 </div>
             </div>
         </div>
+        <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events -->
         <div
             class="modal-backdrop fade in"
             @click="hidePoiChoice"
         />
+        <!--
+            The previous element does not require a key interaction. It is not focusable,
+            has no semantic meaning, and other methods exist for keyboard users to leave
+            the backdropped modal dialog.
+        -->
     </div>
 </template>
 

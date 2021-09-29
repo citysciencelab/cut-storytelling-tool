@@ -107,6 +107,7 @@ export default {
                 tabindex="0"
                 class="icon-turnarticle glyphicon"
                 @click="rotate"
+                @keydown.enter="rotate"
             />
         </template>
         <template #title>

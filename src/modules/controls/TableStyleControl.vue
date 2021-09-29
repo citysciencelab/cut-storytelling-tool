@@ -64,7 +64,7 @@ export default {
         @keyup.space.stop.prevent="onClick"
     >
         <a
-            aria-role="button"
+            role="button"
             href="#"
             :tabindex="disabled ? '-1' : '0'"
         >

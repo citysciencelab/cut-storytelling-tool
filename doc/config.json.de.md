@@ -1,10 +1,11 @@
->Zurück zur **[Dokumentation Masterportal](doc.de.md)**.
+>**[Zurück zur Dokumentation Masterportal](doc.md)**.
 
 [TOC]
 
 ***
 
 # config.json
+
 Die *config.json* enthält die gesamte Konfiguration der Portal-Oberfläche. In ihr wird geregelt welche Elemente sich wo in der Menüleiste befinden, worauf die Karte zentriert werden soll und welche Layer geladen werden sollen. Hier geht es zu einem **[Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/portal/basic/config.json)**.
 Die config.json besteht aus der **[Portalconfig](#markdown-header-Portalconfig)** und der **[Themenconfig](#markdown-header-Themenconfig)**
 
@@ -48,6 +49,7 @@ Konfiguration der Searchbar
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
+|searchResultOrder|nein|String[]|["common:modules.searchbar.type.address", "common:modules.searchbar.type.street", "common:modules.searchbar.type.parcel", "common:modules.searchbar.type.location", "common:modules.searchbar.type.district", "common:modules.searchbar.type.topic", "common:modules.searchbar.type.subject"]|Konfiguration von Reihenfolge der Kategorien der angezeigten Suchergebnisse. Keys sollen aus der Übersetzungsdatei verwendet werden.|false|
 |bkg|nein|**[bkg](#markdown-header-portalconfigsearchbarbkg)**||Konfiguration des BKG Suchdienstes.|false|
 |gazetteer|nein|**[gazetteer](#markdown-header-portalconfigsearchbargazetteer)**||Konfiguration des Gazetteer Suchdienstes.|false|
 |gdi|nein|**[gdi](#markdown-header-portalconfigsearchbargdi)**||Konfiguration des GDI (elastic) Suchdienstes. Deprecated in 3.0.0. Bitte **[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)** verwenden.|false|
@@ -1266,24 +1268,31 @@ Filterregel die die Daten immer vorfiltert.
 |values|ja|String[]||Attributwerte für das Vorfiltern.|false|
 
 **Beispiel**
-```
-#!json
+```json
 {
     "attrName": "kapitelbezeichnung",
     "values": ["Grundschulen", "Langformschulen"]
 }
 ```
-
 ***
 
 #### Portalconfig.menu.tool.filter.predefinedQuery.attributeWhiteListObject
 Ein AttributeWhiteList Objekt kann entweder ein String sein, welcher den Attributnamen repräsentiert.
 Er kann aber auch ein Objekt sein. Erfolgt der Eintrag als Objekt, so kann eine Umbennung der zu filternden Attribute vorgenommen werden. Der Schlüssel muss dabei der originale Attributname sein. Der zugehörige Wert ist der alternative Name.
 
+Durch die Verwendung von AttributeWhiteList als Objekt ist es auch möglich, dass ein Slider für die Auswahl eines Start- und End-Zeitpunktes als Filter verwendet wird.
+Vorraussetzung dafür ist, dass ein Start- und End-Zeit in einem bestimmten Format als Attribut existieren.
+Des weiteren sollten in dem Object mit dem key "name" der Anfangszeitpunkt, mit dem key "attrNameUntil" der Entzeitpunkt und mit dem key "format" das Format der Attribute definiert werden.
+Der letzte Schritt damit der Slider als Datumsfilter verwendet werden kann, ist der, dass man den key "type" als "date" definiert.
+
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |name|ja|String||Attributname.|false|
 |matchingMode|nein|enum["AND", "OR"]|"OR"|Logische Verknüpfung mehrerer Attributwerte (bei Mehrfachauswahl) innerhalb eines Attributes.|false|
+|displayName|nein|String||Names des Filters.|true|
+|attrNameUntil|nein|String||Names des Attributs, das als Endzeitpunkt für den Sliderfilter verwendet wird.|true|
+|format|nein|String||Format des Datums.|true|
+|type|nein|enum["integer", "searchInMapExtent", "date"]||Typ des Attributs.|true|
 
 **Beispiel als String**
 ```
@@ -1298,6 +1307,24 @@ Er kann aber auch ein Objekt sein. Erfolgt der Eintrag als Objekt, so kann eine 
     "name": "Grundschulen",
     "matchingMode": "AND"
 }
+```
+
+***
+
+**Beispiel als Objekt für Filter mit Date-Slider**
+
+```
+#!json
+
+"attributeWhiteList": [
+  {
+    "name": "baubeginn",
+    "displayName": "Baustelle",
+    "attrNameUntil": "bauende",
+    "matchingMode": "OR",
+    "format": "DD.MM.YYYY",
+    "type": "date"
+  }
 ```
 
 ***

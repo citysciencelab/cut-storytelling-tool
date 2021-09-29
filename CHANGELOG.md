@@ -14,11 +14,15 @@
 - VTC-Layer supports Sprites and Fonts in Styledefinitions.
 - Embedded nav into header tag
 - Added the new Tool `WfsSearch`.
+- EsLint Plugin for a11y in Vue files.
+- New parameter "searchResultOrder" for ranking category of searching result
+- New csv specialized export button "ExportButtonCSV" integreted in Vue.js
 
 ### Changed
 - Moved SensorThingsMqtt and SensorThingsHttp to /src/utils, complete refactoring of SensorThingsMqtt, there are no changes in handling SensorThingsMqtt.
 - Changed anchor from div to main class and footer from div to footer class
 - Pulled footer out of elements on map and made it part of App.vue
+- Moved convertArrayOfObjectsToCsv to /src/utils/convertJsonToCsv.js with refactoring, removed convertArrayOfObjectsToCsv Event from Radio.
 
 ### Deprecated
 
@@ -29,6 +33,9 @@
 - Draw tool: fixed an issue (Bitbucket: #638) with resaving draw files
 - Print tool: Fixed an issue when printing a styled WFS layer with a `labelField` in its style. Before. this lead to the same label being printed for every feature.
 - STA Mqtt: "WebSocket connection to 'wss://localhost/mqtt' failed" is fixed with refactoring of SensorThingsMqtt.
+- AddWMS tool: WMS services can be added again. Tool adapted to modified parser method.
+- Minor fixes in all Vue files for a11y errors from new EsLint plugin
+
 
 ---
 ##  v2.13.1 - 2021-09-03

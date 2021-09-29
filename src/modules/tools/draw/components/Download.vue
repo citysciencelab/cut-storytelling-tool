@@ -32,7 +32,10 @@ export default {
             role="form"
         >
             <div class="form-group form-group-sm">
-                <label class="col-md-5 col-sm-5 control-label">
+                <label
+                    class="col-md-5 col-sm-5 control-label"
+                    for="tool-draw-download-format"
+                >
                     {{ $t("common:modules.tools.draw.download.format") }}
                 </label>
                 <div class="col-md-7 col-sm-7">
@@ -56,7 +59,10 @@ export default {
                 </div>
             </div>
             <div class="form-group form-group-sm">
-                <label class="col-md-5 col-sm-5 control-label">
+                <label
+                    class="col-md-5 col-sm-5 control-label"
+                    for="tool-draw-download-filename"
+                >
                     {{ $t("common:modules.tools.draw.download.filename") }}
                 </label>
                 <div class="col-md-7 col-sm-7">

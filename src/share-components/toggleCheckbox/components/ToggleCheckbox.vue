@@ -79,30 +79,35 @@ export default {
     >
         <input
             v-model="checkedValue"
+            aria-label="checkbox"
             type="checkbox"
             :title="title"
             data-toggle="toggle"
             :checked="isActive"
             @click="toggle($event)"
+            @keydown="toggle($event)"
         >
         <div class="toggle-group">
-            <label
+            <div
                 class="btn btn-primary btn-sm toggle-on"
                 :class="{'active': isActive}"
                 @click="toggle($event)"
+                @keydown="toggle($event)"
             >
                 {{ textOn }}
-            </label>
-            <label
+            </div>
+            <div
                 class="btn btn-default btn-sm toggle-off"
                 :class="{'active': !isActive}"
                 @click="toggle($event)"
+                @keydown="toggle($event)"
             >
                 {{ textOff }}
-            </label>
+            </div>
             <span
                 class="toggle-handle btn btn-default btn-sm"
                 @click="toggle($event)"
+                @keydown="toggle($event)"
             />
         </div>
     </div>

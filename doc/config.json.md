@@ -17,7 +17,7 @@ The configuration is separated into two sections, **[Portalconfig](#markdown-hea
 }
 ```
 
->💡 Since the portals original language was German, some technical keys are still in German.
+>Since the portals original language was German, some technical keys are still in German. 
 
 ***
 
@@ -55,6 +55,7 @@ Search bar configuration.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
+|searchResultOrder|no|String[]|["common:modules.searchbar.type.address", "common:modules.searchbar.type.street", "common:modules.searchbar.type.parcel", "common:modules.searchbar.type.location", "common:modules.searchbar.type.district", "common:modules.searchbar.type.topic", "common:modules.searchbar.type.subject"]|Configuration of order of categories of displayed search results. The keys should be used from translation data.|false|
 |bkg|no|**[bkg](#markdown-header-portalconfigsearchbarbkg)**||BKG search service configuration.|false|
 |gazetteer|no|**[gazetteer](#markdown-header-portalconfigsearchbargazetteer)**||Gazetteer search service configuration.|false|
 |gdi|no|**[gdi](#markdown-header-portalconfigsearchbargdi)**||GDI (elastic) search service configuration. _Deprecated in 3.0.0. Please use **[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)** instead.|false|
@@ -81,7 +82,7 @@ Search bar configuration.
 
 BKG search service configuration.
 
->**⚠️ This requires a backend!**
+>**This requires a backend!**
 >
 >**To avoid openly using your BKG UUID, URLs ("bkg_geosearch" and "bkg_suggest" in this case) of the restServices should be caught and redirected in a proxy.**
 
@@ -251,7 +252,7 @@ Definition of classes to be taken into account for results.
 
 Gazetteer search service configuration.
 
->**⚠️ This requires a backend!**
+>**This requires a backend!**
 >
 >**A WFS's Stored Query is requested with predefined parameters.**
 
@@ -287,7 +288,7 @@ Gazetteer search service configuration.
 
 GFI search service configuration.
 
->⚠️ Deprecated in 3.0.0. Please use **[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)** instead.
+>Deprecated in 3.0.0. Please use **[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)** instead.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
@@ -1353,24 +1354,51 @@ Filter rule always applied to pre-filter data.
 
 This key may have as value either a string representing the attribute name or an object. When given as an object, the attributes to be filtered can be renamed in the process. In that case, the key is the original attribute name, and the value the new name.
 
+An AttributeWhiteList as an object allows a slider to be used as a filter for selecting a start and end time.
+The prerequisite for this is that a start and end time exist in a certain format as an attribute.
+Furthermore the start time should be defined in the object with the key "name", the end time with the key "attrNameUntil" and the format of the attributes with the key "format".
+The last step to use the slider as a date filter is to define the key "type" as "date".
+
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |name|yes|String||Attribute name.|false|
 |matchingMode|no|enum["AND", "OR"]|"OR"|Logical connection of multiple attribute values (on multiple choices) within an attribute.|false|
+|displayName|nein|String||Name of the filter.|true|
+|attrNameUntil|nein|String||Names of the attribute that will be used as the end time for the slider filter.|true|
+|format|nein|String||Format of date.|true|
+|type|nein|enum["integer", "searchInMapExtent", "date"]||Type of attribute.|true|
 
 **String example**
-
-```json
+```
+#!json
 "Grundschulen"
 ```
 
 **Object example**
-
-```json
+```
+#!json
 {
     "name": "Grundschulen",
     "matchingMode": "AND"
 }
+```
+
+***
+
+**Object example for Date-Slider as filter**
+
+```
+#!json
+
+"attributeWhiteList": [
+  {
+    "name": "baubeginn",
+    "displayName": "Baustelle",
+    "attrNameUntil": "bauende",
+    "matchingMode": "OR",
+    "format": "DD.MM.YYYY",
+    "type": "date"
+  }
 ```
 
 ***
@@ -1407,13 +1435,13 @@ This tool allows comparing vector features.
 
 Parcel search.
 
->**⚠️ This requires a backend!**
+>**This requires a backend!**
 >
 >**Depending on your configuration, special stored queries of a WFS are requested with given parameters.**
 
 Example request: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0&&StoredQuery_ID=Flurstueck&gemarkung=0601&flurstuecksnummer=00011**
 
->⚠️ Deprecated in the next major release. Please use **[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)** instead.
+>Deprecated in the next major release. Please use **[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)** instead.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
@@ -1484,7 +1512,7 @@ Coordinate search.
 
 Print module, configurable for 2 print services: *High Resolution PlotService* and *MapfishPrint 3*. Printing vector tile layers is not supported, since the print services themselves do not support it. Should users try to print such layers, a warning will be shown.
 
->**⚠️ This requires a backend!**
+>**This requires a backend!**
 >
 >**A [Mapfish-Print3](https://mapfish.github.io/mapfish-print-doc), or *HighResolutionPlotService* is required as backend.**
 
@@ -1895,7 +1923,7 @@ The measure tool allows measuring distances and areas. This includes the specifi
 
 The contact form allows users to send messages to a configured mail address.
 
->**⚠️ This requires a backend!**
+>**This requires a backend!**
 >
 >**Contact uses an SMTP server and calls its sendmail.php.**
 

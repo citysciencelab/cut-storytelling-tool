@@ -420,7 +420,10 @@ export default {
                     v-if="drawType.id === 'drawCircle' && currentInteraction !== 'modify'"
                     class="form-group form-group-sm"
                 >
-                    <label class="col-md-5 col-sm-5 control-label">
+                    <label
+                        class="col-md-5 col-sm-5 control-label"
+                        for="tool-draw-circleMethod"
+                    >
                         {{ $t("common:modules.tools.draw.method") }}
                     </label>
                     <div class="col-md-7 col-sm-7">
@@ -449,7 +452,10 @@ export default {
                     v-if="drawType.id === 'drawCircle' || drawType.id === 'drawDoubleCircle'"
                     class="form-group form-group-sm"
                 >
-                    <label class="col-md-5 col-sm-5 control-label">
+                    <label
+                        class="col-md-5 col-sm-5 control-label"
+                        for="tool-draw-circleRadius"
+                    >
                         {{ innerRadiusLabelComputed }}
                     </label>
                     <div class="col-md-7 col-sm-7">
@@ -470,7 +476,10 @@ export default {
                     v-if="drawType.id === 'drawDoubleCircle'"
                     class="form-group form-group-sm"
                 >
-                    <label class="col-md-5 col-sm-5 control-label">
+                    <label
+                        class="col-md-5 col-sm-5 control-label"
+                        for="tool-draw-circleOuterRadius"
+                    >
                         {{ $t("common:modules.tools.draw.outerRadius") }}
                     </label>
                     <div class="col-md-7 col-sm-7">
@@ -490,7 +499,10 @@ export default {
                     v-if="drawType.id === 'drawCircle' || drawType.id === 'drawDoubleCircle'"
                     class="form-group form-group-sm"
                 >
-                    <label class="col-md-5 col-sm-5 control-label">
+                    <label
+                        class="col-md-5 col-sm-5 control-label"
+                        for="tool-draw-circleUnit"
+                    >
                         {{ $t("common:modules.tools.draw.unit") }}
                     </label>
                     <div class="col-md-7 col-sm-7">
@@ -515,7 +527,10 @@ export default {
                     v-if="drawType.id === 'writeText'"
                     class="form-group form-group-sm"
                 >
-                    <label class="col-md-5 col-sm-5 control-label">
+                    <label
+                        class="col-md-5 col-sm-5 control-label"
+                        for="tool-draw-text"
+                    >
                         {{ $t("common:modules.tools.draw.text") }}
                     </label>
                     <div class="col-md-7 col-sm-7">
@@ -534,7 +549,10 @@ export default {
                     v-if="drawType.id === 'writeText'"
                     class="form-group form-group-sm"
                 >
-                    <label class="col-md-5 col-sm-5 control-label">
+                    <label
+                        class="col-md-5 col-sm-5 control-label"
+                        for="tool-draw-fontSize"
+                    >
                         {{ $t("common:modules.tools.draw.fontSize") }}
                     </label>
                     <div class="col-md-7 col-sm-7">
@@ -559,7 +577,10 @@ export default {
                     v-if="drawType.id === 'writeText'"
                     class="form-group form-group-sm"
                 >
-                    <label class="col-md-5 col-sm-5 control-label">
+                    <label
+                        class="col-md-5 col-sm-5 control-label"
+                        for="tool-draw-font"
+                    >
                         {{ $t("common:modules.tools.draw.fontName") }}
                     </label>
                     <div class="col-md-7 col-sm-7">
@@ -584,7 +605,10 @@ export default {
                     v-if="drawType.id === 'drawSymbol'"
                     class="form-group form-group-sm"
                 >
-                    <label class="col-md-5 col-sm-5 control-label">
+                    <label
+                        class="col-md-5 col-sm-5 control-label"
+                        for="tool-draw-symbol"
+                    >
                         {{ $t("common:modules.tools.draw.symbol") }}
                     </label>
                     <div class="col-md-7 col-sm-7">
@@ -610,7 +634,10 @@ export default {
                     v-if="drawType.id !== 'drawSymbol' && drawType.id !== 'writeText'"
                     class="form-group form-group-sm"
                 >
-                    <label class="col-md-5 col-sm-5 control-label">
+                    <label
+                        class="col-md-5 col-sm-5 control-label"
+                        for="tool-draw-strokeWidth"
+                    >
                         {{ $t("common:modules.tools.draw.lineWidth") }}
                     </label>
                     <div class="col-md-7 col-sm-7">
@@ -635,7 +662,10 @@ export default {
                     v-if="drawType.id !== 'drawLine' && drawType.id !== 'drawCurve'&& drawType.id !== 'drawSymbol'"
                     class="form-group form-group-sm"
                 >
-                    <label class="col-md-5 col-sm-5 control-label">
+                    <label
+                        class="col-md-5 col-sm-5 control-label"
+                        for="tool-draw-opacity"
+                    >
                         {{ $t("common:modules.tools.draw.transparency") }}
                     </label>
                     <div class="col-md-7 col-sm-7">
@@ -661,7 +691,10 @@ export default {
                     v-if="drawType.id === 'drawLine' || drawType.id === 'drawCurve'"
                     class="form-group form-group-sm"
                 >
-                    <label class="col-md-5 col-sm-5 control-label">
+                    <label
+                        class="col-md-5 col-sm-5 control-label"
+                        for="tool-draw-opacityContour"
+                    >
                         {{ $t("common:modules.tools.draw.transparencyOutline") }}
                     </label>
                     <div class="col-md-7 col-sm-7">
@@ -687,7 +720,10 @@ export default {
                     v-if="drawType.id !== 'drawSymbol' && drawType.id !== 'writeText'"
                     class="form-group form-group-sm"
                 >
-                    <label class="col-md-5 col-sm-5 control-label">
+                    <label
+                        class="col-md-5 col-sm-5 control-label"
+                        for="tool-draw-colorContour"
+                    >
                         {{ colorContourLabelComputed }}
                     </label>
                     <div class="col-md-7 col-sm-7">
@@ -712,7 +748,10 @@ export default {
                     v-if="drawType.id === 'drawDoubleCircle'"
                     class="form-group form-group-sm"
                 >
-                    <label class="col-md-5 col-sm-5 control-label">
+                    <label
+                        class="col-md-5 col-sm-5 control-label"
+                        for="tool-draw-outerColorContour"
+                    >
                         {{ $t("common:modules.tools.draw.outerColorContour") }}
                     </label>
                     <div class="col-md-7 col-sm-7">
@@ -737,7 +776,10 @@ export default {
                     v-if="drawType.id === 'drawSymbol' && symbol.id === 'iconPoint'"
                     class="form-group form-group-sm"
                 >
-                    <label class="col-md-5 col-sm-5 control-label">
+                    <label
+                        class="col-md-5 col-sm-5 control-label"
+                        for="tool-draw-pointColor"
+                    >
                         {{ $t("common:modules.tools.draw.color") }}
                     </label>
                     <div class="col-md-7 col-sm-7">
@@ -762,12 +804,15 @@ export default {
                     v-if="drawType.id !== 'drawLine' && drawType.id !== 'drawCurve' && drawType.id !== 'drawSymbol'"
                     class="form-group form-group-sm"
                 >
-                    <label class="col-md-5 col-sm-5 control-label">
+                    <label
+                        class="col-md-5 col-sm-5 control-label"
+                        for="tool-draw-pointColor"
+                    >
                         {{ $t("common:modules.tools.draw.color") }}
                     </label>
                     <div class="col-md-7 col-sm-7">
                         <select
-                            id="tool-draw-color"
+                            id="tool-draw-pointColor"
                             class="form-control input-sm"
                             :disabled="drawHTMLElementsModifyFeature"
                             @change="setColor"

@@ -83,6 +83,7 @@ export default {
         :title="titleCompareList"
         tabindex="0"
         @click="toogleFeatureToCompareList"
+        @keydown.enter="toogleFeatureToCompareList"
     />
 </template>
 

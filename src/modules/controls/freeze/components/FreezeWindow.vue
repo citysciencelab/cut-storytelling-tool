@@ -85,6 +85,7 @@ export default {
             :title="$t(`common:modules.controls.freeze.unfreeze`)"
             :style="isTable ? cssVars : ''"
             tabindex="0"
+            role="button"
             @click="hideFreezeWin($event)"
             @keydown="hideFreezeWin($event)"
         >

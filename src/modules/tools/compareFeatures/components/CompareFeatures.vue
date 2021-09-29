@@ -136,6 +136,7 @@ export default {
                 <label
                     id="tool-compareFeatures-select-label"
                     class="col-xs-3"
+                    for="tool-compareFeatures-select"
                 >{{ $t("common:modules.tools.compareFeatures.topicsSelection") }}</label>
                 <div class="col-xs-3">
                     <select
