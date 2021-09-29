@@ -1,4 +1,5 @@
 import store from "../../app-store";
+import mapCollection from "../../dataStorage/mapCollection.js";
 
 /**
  * Creates a layer object to extend from.
@@ -59,15 +60,15 @@ export default function Layer (attrs, layer, initialize = true) {
  * @returns {void}
  */
 Layer.prototype.initialize = function (attrs) {
-    if (store.state.configJson.Portalconfig.singleBaselayer !== undefined) {
-        this.set("singleBaselayer", store.state.configJson.Portalconfig.singleBaselayer);
+    if (store.state.configJson?.Portalconfig.singleBaselayer !== undefined) {
+        this.set("singleBaselayer", store.state.configJson?.Portalconfig.singleBaselayer);
     }
 
     if (attrs.isSelected === true || Radio.request("Parser", "getTreeType") === "light") {
         this.updateLayerTransparency();
         this.setIsVisibleInMap(typeof attrs.isSelected !== "boolean" ? false : attrs.isSelected);
-        this.set("isRemovable", Radio.request("Parser", "getPortalConfig").layersRemovable);
-        Radio.request("Map", "getMap").addLayer(this.layer);
+        this.set("isRemovable", store.state.configJson?.Portalconfig.layersRemovable);
+        mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode).addLayer(this.layer);
     }
     else {
         this.layer.setVisible(false);
@@ -122,10 +123,10 @@ Layer.prototype.setMinResolution = function (value) {
  * @returns {void}
  */
 Layer.prototype.removeLayer = function () {
-    const map = Radio.request("Map", "getMap");
+    const map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode);
 
     this.setIsVisibleInMap(false);
-    Radio.trigger("ModelList", "removeLayerById", this.layer.get("id"));
+    Radio.trigger("ModelList", "removeLayerById", this.get("id"));
     map.removeLayer(this.layer);
 };
 /**
@@ -142,7 +143,7 @@ Layer.prototype.toggleIsSelected = function () {
  * @returns {void}
  **/
 Layer.prototype.checkForScale = function (options) {
-    const lastValue = this.set("isOutOfRange");
+    const lastValue = this.get("isOutOfRange");
 
     if (options && parseFloat(options.scale, 10) <= parseInt(this.get("maxScale"), 10) && parseFloat(options.scale, 10) >= parseInt(this.get("minScale"), 10)) {
         this.set("isOutOfRange", false);
@@ -191,9 +192,10 @@ Layer.prototype.setIsVisibleInMap = function (newValue) {
  * @returns {void}
  */
 Layer.prototype.setTransparency = function (newValue) {
-    const opacity = (100 - newValue) / 100;
+    const transparency = parseInt(newValue, 10),
+        opacity = (100 - transparency) / 100;
 
-    this.set("transparency", newValue);
+    this.set("transparency", transparency);
     this.layer.setOpacity(opacity);
 };
 /**
@@ -227,7 +229,7 @@ Layer.prototype.incTransparency = function () {
  * @return {void}
  */
 Layer.prototype.updateLayerTransparency = function () {
-    const opacity = (100 - this.get("transparency")) / 100;
+    const opacity = (100 - parseInt(this.get("transparency"), 10)) / 100;
 
     this.layer.setOpacity(opacity);
 };
@@ -254,7 +256,7 @@ Layer.prototype.resetSelectionIDX = function () {
  * @returns {void}
  */
 Layer.prototype.setSelectionIDX = function (newValue) {
-    this.set("selectionIDX", newValue);
+    this.set("selectionIDX", parseInt(newValue, 10));
 };
 /**
  * Setter for isSettingVisible
@@ -292,7 +294,7 @@ Layer.prototype.toggleIsSettingVisible = function () {
  * @returns {void}
  */
 Layer.prototype.setIsSelected = function (newValue) {
-    const map = Radio.request("Map", "getMap"),
+    const map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode),
         treeType = Radio.request("Parser", "getTreeType");
 
     this.set("isSelected", newValue);
@@ -337,7 +339,7 @@ Layer.prototype.toggleIsVisibleInMap = function () {
 Layer.prototype.updateLayerSource = function () {
     const layer = Radio.request("Map", "getLayerByName", this.get("name"));
 
-    if (this.get("layerSource") !== null) {
+    if (layer && this.get("layerSource") !== null) {
         layer.setSource(this.get("layerSource"));
         layer.getSource().refresh();
     }
@@ -394,8 +396,8 @@ function handleSingleBaseLayer (isSelected, layer, map) {
             layerGroup.forEach(aLayer => {
                 // folders parentId is baselayer too, but they have not a function checkForScale
                 if (aLayer.get("id") !== id && typeof aLayer.checkForScale === "function") {
-                    aLayer.set({"isSelected": false});
-                    aLayer.set({"isVisibleInMap": false});
+                    aLayer.set("isSelected", false);
+                    aLayer.set("isVisibleInMap", false);
                     if (aLayer.get("layer") !== undefined) {
                         aLayer.get("layer").setVisible(false);
                     }

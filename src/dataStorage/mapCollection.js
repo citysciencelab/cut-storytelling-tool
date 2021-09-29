@@ -61,5 +61,12 @@ export default {
      */
     removeMapById: function (id) {
         mapCollection.filter(map => (map?.id || map.get("id")) !== id);
+    },
+    /**
+ * Removes all entries from the collection.
+ * @returns {void}
+ */
+    clear: function () {
+        mapCollection.length = 0;
     }
 };

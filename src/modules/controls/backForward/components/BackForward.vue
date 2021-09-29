@@ -31,15 +31,16 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("controls/backForward", ["forthAvailable", "backAvailable"])
+        ...mapGetters("controls/backForward", ["forthAvailable", "backAvailable"]),
+        ...mapGetters("Map", ["mapId", "mapMode"])
     },
     mounted () {
         this.currentMapId = this.mapId;
         this.currentMapMode = this.mapMode;
-        mapCollection.getCurrentMap().on("moveend", this.memorizeMap);
+        mapCollection.getMap(this.currentMapId, this.currentMapMode).on("moveend", this.memorizeMap);
     },
     beforeDestroy () {
-        mapCollection.getCurrentMap().un("moveend", this.memorizeMap);
+        mapCollection.getMap(this.currentMapId, this.currentMapMode).un("moveend", this.memorizeMap);
     },
     methods: {
         ...mapMutations(
