@@ -3,7 +3,7 @@ const webdriver = require("selenium-webdriver"),
     {initDriver, getDriver, quitDriver} = require("../../../library/driver"),
     {reclickUntilNotStale, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {getCenter, setCenter, getResolution, setResolution, hasVectorLayerLength, hasVectorLayerStyle} = require("../../../library/scripts"),
-    {isMaster} = require("../../../settings"),
+    {isMaster, isChrome} = require("../../../settings"),
     {By, until} = webdriver;
 
 /**
@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function SearchCategories ({builder, url, resolution, capability}) {
+async function SearchCategories ({builder, browsername, url, resolution, capability}) {
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
@@ -146,7 +146,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 expect(await driver.findElements(By.css("#searchInputUL > li.results"))).to.have.length(1);
             });
 
-            it.skip("provides all results aggregated by categories, including sum of hits per category", async function () {
+            (isChrome(browsername) ? it : it.skip)("provides all results aggregated by categories, including sum of hits per category", async function () {
                 if (await (await driver.findElement(By.id("searchInput"))).getAttribute("value") === "") {
                     await searchInput.sendKeys(searchString);
                 }

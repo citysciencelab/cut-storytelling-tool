@@ -53,7 +53,7 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
             it(`search for '${searchString}' shows 'Fachthema'-suffixed result in a dropdown that can be clicked`, async function () {
                 const topicSelector = By.xpath("//span[@class='list-group-item-theme'][contains(text(),'Fach')]");
                 /* it(`search for '${searchString}' shows '${subjectFolderForAllResults}'-suffixed result in a dropdown that can be clicked`, async function () {
-                    const topicSelector = By.xpath(`//span[@class='list-group-item-theme'][text()='${subjectFolderForAllResults}']`); */
+                const topicSelector = By.xpath(`//span[@class='list-group-item-theme'][text()='${subjectFolderForAllResults}']`); */
 
                 await searchInput.sendKeys(searchString);
 
