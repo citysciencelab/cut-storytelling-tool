@@ -36,7 +36,7 @@ export default function WMSLayer (attrs) {
     }
 
     this.set("tileloaderror", false);
-    if (attrs.url.indexOf("wms_webatlasde") !== -1) {
+    if (attrs.url?.indexOf("wms_webatlasde") !== -1) {
         if (this.get("tileloaderror") === false) {
             this.set("tileloaderror", true);
             this.layer.getSource().on("tileloaderror", function () {
