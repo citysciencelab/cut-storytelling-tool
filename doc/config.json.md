@@ -17,7 +17,7 @@ The configuration is separated into two sections, **[Portalconfig](#markdown-hea
 }
 ```
 
->Since the portals original language was German, some technical keys are still in German.
+>Since the portals original language was German, some technical keys are still in German. 
 
 ***
 
