@@ -17,6 +17,7 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
             searchString = "xxx",
             layerName = "Positivnetz Feldversuch LangLKW",
             layerId = "676";
+            // subjectFolderForAllResults = i18next.t("common:modules.searchbar.type.subject");
 
         let driver, searchInput;
 
@@ -50,7 +51,9 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
 
         if (isMaster(url) || isCustom(url)) {
             it(`search for '${searchString}' shows 'Fachthema'-suffixed result in a dropdown that can be clicked`, async function () {
-                const topicSelector = By.xpath("//span[@class='list-group-item-theme'][contains(text(),'Fachdaten')]");
+                const topicSelector = By.xpath("//span[@class='list-group-item-theme'][contains(text(),'Fach')]");
+                /* it(`search for '${searchString}' shows '${subjectFolderForAllResults}'-suffixed result in a dropdown that can be clicked`, async function () {
+                    const topicSelector = By.xpath(`//span[@class='list-group-item-theme'][text()='${subjectFolderForAllResults}']`); */
 
                 await searchInput.sendKeys(searchString);
 
