@@ -130,7 +130,7 @@ export default {
          * @returns {void}
          */
         onRemoveAvoidOption (optionId) {
-            const index = this.activeAvoidFeaturesOptions.findIndex(
+            const index = this.routingAvoidFeaturesOptions.findIndex(
                 (opt) => opt === optionId
             );
 
