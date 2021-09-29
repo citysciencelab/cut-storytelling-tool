@@ -45,15 +45,14 @@ export default {
                     this.countFailed = 0;
 
                     this.resetRoutingDirectionsResults();
+                    this.setIsLoadingDirections(true);
 
                     try {
-                        this.setIsLoadingDirections(true);
                         const result = await this.parseCsv(f.target.result);
 
                         if (result) {
                             this.downloadResults(file.name, result);
                         }
-                        this.setIsLoadingDirections(false);
                         if (this.countFailed !== 0) {
                             this.addSingleAlert({
                                 category: i18next.t("common:modules.alerting.categories.error"),
@@ -68,6 +67,7 @@ export default {
                         });
                     }
 
+                    this.setIsLoadingDirections(false);
                     this.countFailed = 0;
                     this.isProcessing = false;
                     this.setTaskHandler(null);
@@ -125,10 +125,12 @@ export default {
                     tasks = [];
 
                 if (content.length === 0 || anzahl === 0) {
-                    reject(i18next.t("common:modules.tools.routing.directions.batchProcessing.errorNoEntries"));
+                    reject(new Error(i18next.t("common:modules.tools.routing.directions.batchProcessing.errorNoEntries")));
+                    return;
                 }
                 if (anzahl > this.settings.batchProcessing.limit) {
-                    reject(i18next.t("common:modules.tools.routing.directions.batchProcessing.errorToManyEntriesInFile", {limit: this.settings.batchProcessing.limit}));
+                    reject(new Error(i18next.t("common:modules.tools.routing.directions.batchProcessing.errorToManyEntriesInFile", {limit: this.settings.batchProcessing.limit})));
+                    return;
                 }
 
                 for (let i = 0; i < anzahl; i++) {
@@ -140,11 +142,13 @@ export default {
                     }
 
                     if (lineParts.length !== 5) {
-                        reject(i18next.t("common:modules.tools.routing.directions.batchProcessing.errorToManyEntriesInRow", {row: i}));
+                        reject(new Error(i18next.t("common:modules.tools.routing.directions.batchProcessing.errorToManyEntriesInRow", {row: i})));
+                        return;
                     }
 
                     if (!this.isNumber(Number(lineParts[1])) || !this.isNumber(Number(lineParts[2])) || !this.isNumber(Number(lineParts[3])) || !this.isNumber(Number(lineParts[4]))) {
-                        reject(i18next.t("common:modules.tools.routing.directions.batchProcessing.errorRowContainsEntriesNoNumber", {row: i}));
+                        reject(new Error(i18next.t("common:modules.tools.routing.directions.batchProcessing.errorRowContainsEntriesNoNumber", {row: i})));
+                        return;
                     }
 
                     tasks.push(() => this.parseLineParts(lineParts));

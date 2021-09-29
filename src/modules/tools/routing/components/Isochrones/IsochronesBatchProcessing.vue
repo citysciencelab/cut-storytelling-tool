@@ -45,15 +45,14 @@ export default {
                     this.countFailed = 0;
 
                     this.resetIsochronesResult();
+                    this.setIsLoadingIsochrones(true);
 
                     try {
-                        this.setIsLoadingIsochrones(true);
                         const result = await this.parseCsv(f.target.result);
 
                         if (result) {
                             this.downloadResults(file.name, result);
                         }
-                        this.setIsLoadingIsochrones(false);
                         if (this.countFailed !== 0) {
                             this.addSingleAlert({
                                 category: i18next.t("common:modules.alerting.categories.error"),
@@ -67,6 +66,7 @@ export default {
                             content: e.message
                         });
                     }
+                    this.setIsLoadingIsochrones(false);
 
                     this.countFailed = 0;
                     this.isProcessing = false;
@@ -124,10 +124,12 @@ export default {
                     tasks = [];
 
                 if (content.length === 0 || anzahl === 0) {
-                    reject(i18next.t("common:modules.tools.routing.isochrones.batchProcessing.errorNoEntries"));
+                    reject(new Error(i18next.t("common:modules.tools.routing.isochrones.batchProcessing.errorNoEntries")));
+                    return;
                 }
                 if (anzahl > this.settings.batchProcessing.limit) {
-                    reject(i18next.t("common:modules.tools.routing.isochrones.batchProcessing.errorToManyEntriesInFile", {limit: this.settings.batchProcessing.limit}));
+                    reject(new Error(i18next.t("common:modules.tools.routing.isochrones.batchProcessing.errorToManyEntriesInFile", {limit: this.settings.batchProcessing.limit})));
+                    return;
                 }
 
                 for (let i = 0; i < anzahl; i++) {
@@ -139,11 +141,13 @@ export default {
                     }
 
                     if (lineParts.length !== 3) {
-                        reject(i18next.t("common:modules.tools.routing.isochrones.batchProcessing.errorToManyEntriesInRow", {row: i}));
+                        reject(new Error(i18next.t("common:modules.tools.routing.isochrones.batchProcessing.errorToManyEntriesInRow", {row: i})));
+                        return;
                     }
 
                     if (!this.isNumber(Number(lineParts[1])) || !this.isNumber(Number(lineParts[2]))) {
-                        reject(i18next.t("common:modules.tools.routing.isochrones.batchProcessing.errorRowContainsEntriesNoNumber", {row: i}));
+                        reject(new Error(i18next.t("common:modules.tools.routing.isochrones.batchProcessing.errorRowContainsEntriesNoNumber", {row: i})));
+                        return;
                     }
 
                     tasks.push(() => this.parseLineParts(lineParts));
