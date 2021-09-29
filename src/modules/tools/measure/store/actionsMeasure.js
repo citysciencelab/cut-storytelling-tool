@@ -1,7 +1,7 @@
 import source from "../utils/measureSource";
 import makeDraw2d from "../utils/measureDraw";
 import makeDraw3d from "../utils/measureDraw3d";
-import api from "masterportalAPI/abstraction/api";
+import mapCollection from "../../../../dataStorage/mapCollection.js";
 
 export default {
     /**
@@ -55,7 +55,7 @@ export default {
                 tooltipCoord => commit("setTooltipCoord", tooltipCoord)
             );
         }
-        api.map.addInteraction(interaction);
+        mapCollection.getMap(getters.mapId, this.mapMode).addInteraction(interaction);
 
         commit("setInteraction", interaction);
     },
@@ -65,12 +65,12 @@ export default {
      * removing the interaction from the store.
      * @returns {void}
      */
-    removeDrawInteraction ({state, commit}) {
+    removeDrawInteraction ({state, commit, getters}) {
         const {interaction} = state;
 
         if (interaction) {
             interaction.abortDrawing();
-            api.map.removeInteraction(interaction);
+            mapCollection.getMap(getters.mapId, this.mapMode).removeInteraction(interaction);
             commit("setInteraction", null);
         }
     }
