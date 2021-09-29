@@ -1,6 +1,5 @@
 import Vuex from "vuex";
 import {expect} from "chai";
-import sinon from "sinon";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import RoutingComponent from "../../../components/Routing.vue";
 import Routing from "../../../store/indexRouting";
@@ -39,15 +38,6 @@ describe("src/modules/tools/routing/components/Routing.vue", () => {
                     modules: {
                         Routing
                     }
-                },
-                Map: {
-                    namespaced: true
-                },
-                MapMarker: {
-                    namespaced: true,
-                    actions: {
-                        removePointMarker: sinon.stub()
-                    }
                 }
             },
             state: {
@@ -57,10 +47,15 @@ describe("src/modules/tools/routing/components/Routing.vue", () => {
         store.commit("Tools/Routing/setActive", true);
     });
 
+    afterEach(() => {
+        if (wrapper) {
+            wrapper.destroy();
+        }
+    });
+
     it("renders Routing", () => {
         store.commit("Tools/Routing/setActive", true);
         wrapper = shallowMount(RoutingComponent, {store, localVue});
-
         expect(wrapper.find("#routing").exists()).to.be.true;
     });
 
@@ -70,6 +65,7 @@ describe("src/modules/tools/routing/components/Routing.vue", () => {
 
         expect(wrapper.find("#routing").exists()).to.be.false;
     });
+
     describe("Routing.vue methods", () => {
         it("close sets active to false", async () => {
             wrapper = shallowMount(RoutingComponent, {store, localVue});

@@ -61,7 +61,10 @@ export default {
 </script>
 
 <template>
-    <div class="d-flex flex-column">
+    <div
+        id="routing-avoid-features"
+        class="d-flex flex-column"
+    >
         <b
             class="pointer"
             @click="showAvoidFeatures = !showAvoidFeatures"
@@ -79,6 +82,7 @@ export default {
         </b>
         <div
             v-if="showAvoidFeatures"
+            id="routing-avoid-features-options"
             class="d-flex flex-column ml-4"
         >
             <label
@@ -87,6 +91,7 @@ export default {
                 class="pointer"
             >
                 <input
+                    :id="'routing-avoid-features-option-input-' + option.id"
                     type="checkbox"
                     :value="option.id"
                     :checked="getIsRoutingAvoidFeaturesOptionsChecked(option)"
