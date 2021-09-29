@@ -180,7 +180,7 @@ Search with **[Komoot Photon](https://photon.komoot.io/)**.
 |osm_tag|no|string||Filtering of OSM Tags (see https://github.com/komoot/photon#filter-results-by-tags-and-values).|false|
 |searchOnEnter|no|Boolean|false|If `searchOnEnter` is set to `true`, searches will only start on clicking the search icon or pressing enter.|false|
 
-**Beispiel**
+**Example**
 
 ```
 #!json
@@ -2738,7 +2738,7 @@ Coordinates tool. To display the height above sea level in addition to the 2 dim
 |zoomLevel|no|Number|7|Coordinate search: Specifies the zoom level to which you want to zoom.|false|
 
 
-**Beispiel**
+**Example**
 ```
 #!json
  "coordToolkit": {
