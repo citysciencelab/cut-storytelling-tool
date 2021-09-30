@@ -35,6 +35,8 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @fires Alerting#RadioTriggerAlertAlert
      */
     initialize: function () {
+        const channel = Radio.channel("Menu");
+
         checkChildrenDatasets(this.model);
         this.listenTo(this.model, {
             "change:isSelected change:isVisibleInMap": this.render,
@@ -42,6 +44,12 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             "change:isVisibleInTree": this.removeIfNotVisible,
             "change:isOutOfRange": this.toggleColor
         });
+        channel.on({
+            "renderSetting": this.renderSetting,
+            "rerender": this.render,
+            "change:isOutOfRange": this.toggleColor,
+            "change:isVisibleInTree": this.removeIfNotVisible
+        }, this);
         this.listenTo(Radio.channel("Map"), {
             "change": this.toggleByMapMode
         });
@@ -65,6 +73,10 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     toggleColor: function (model, value) {
+        // adaption to not backbone layers
+        if (this.model.get("id") !== model.get("id")) {
+            return;
+        }
         if (model.has("minScale") === true) {
             if (value === true) {
                 const statusCheckbox = this.$el.find(".glyphicon.glyphicon-unchecked").length;

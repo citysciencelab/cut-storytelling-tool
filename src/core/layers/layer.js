@@ -317,7 +317,7 @@ Layer.prototype.setIsSelected = function (newValue) {
     else {
         map.removeLayer(this.layer);
     }
-    if (treeType !== "light") {
+    if (treeType !== "light" || store.state.mobile) {
         Radio.trigger("ModelList", "updateLayerView");
         Radio.trigger("ModelList", "updateSelection", this);
         Radio.trigger("Menu", "rerender");
@@ -334,7 +334,7 @@ Layer.prototype.toggleIsVisibleInMap = function () {
     else {
         this.setIsSelected(true);
     }
-    if (Radio.request("Parser", "getTreeType") !== "light") {
+    if (Radio.request("Parser", "getTreeType") !== "light" || store.state.mobile) {
         Radio.trigger("MenuSelection", "rerender");
     }
 };
