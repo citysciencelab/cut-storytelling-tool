@@ -49,6 +49,8 @@ export default {
     },
     computed: {
         ...mapGetters(["uiStyle"]),
+        ...mapGetters("Map", ["mapMode", "mapId"]),
+
         component () {
             return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
         },
@@ -66,7 +68,7 @@ export default {
     mounted () {
         const id = this.layerId || this.baselayer,
             layer = getOverviewMapLayer(id),
-            map = mapCollection.getCurrentMap(),
+            map = mapCollection.getCurrentMap(this.mapId, this.mapMode),
             view = getOverviewMapView(map, this.resolution);
 
         if (layer) {
