@@ -83,9 +83,10 @@ export default {
 </script>
 
 <template>
-    <div>
+    <div id="routing-batch-processing">
         <div
             v-if="isProcessing"
+            id="routing-batch-processing-isprocessing"
             class="d-flex flex-column"
         >
             <span>{{ $t('common:modules.tools.routing.batchProcessing.isProcessing') }}</span>
@@ -95,7 +96,10 @@ export default {
                     max="100"
                     :value="progress"
                 />
-                <span class="col-xs-3">{{ progress }} %</span>
+                <span
+                    id="routing-batch-processing-isprocessing-progresstext"
+                    class="col-xs-3"
+                >{{ progress }} %</span>
                 <span
                     class="col-xs-1 glyphicon glyphicon-remove pointer"
                     :title="$t('common:modules.tools.routing.batchProcessing.cancel')"
