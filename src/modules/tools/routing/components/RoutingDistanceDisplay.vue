@@ -7,6 +7,12 @@ export default {
             required: true
         }
     },
+    data: function () {
+        return {
+            mText: " m",
+            kmText: " km"
+        };
+    },
     computed: {
         /**
          * Computed value for the rounded distance
@@ -27,6 +33,6 @@ export default {
 </script>
 
 <template>
-    <span v-if="roundedDistance < 1000"><b>{{ roundedDistance }}</b>&nbsp;m</span>
-    <span v-else><b>{{ kmDistance }}</b>&nbsp;km</span>
+    <span v-if="roundedDistance < 1000"><b>{{ roundedDistance }}</b>{{ mText }}</span>
+    <span v-else><b>{{ kmDistance }}</b>{{ kmText }}</span>
 </template>
