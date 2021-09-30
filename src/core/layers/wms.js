@@ -149,7 +149,7 @@ WMSLayer.prototype.createLegend = function () {
     }
 
     if (Array.isArray(legend)) {
-        store.dispatch("Legend/setLegendOnChanged", legend);
+        this.setLegend(legend);
     }
     else if (legend === true) {
         const layerNames = this.get("layers").split(","),
@@ -163,10 +163,10 @@ WMSLayer.prototype.createLegend = function () {
                 legends.push(encodeURI(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName));
             });
         }
-        store.dispatch("Legend/setLegendOnChanged", legends);
+        this.setLegend(legends);
     }
     else if (typeof legend === "string") {
-        store.dispatch("Legend/setLegendOnChanged", [legend]);
+        this.setLegend([legend]);
     }
 };
 /**
