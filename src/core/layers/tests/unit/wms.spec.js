@@ -117,7 +117,7 @@ describe("src/core/layers/wms.js", () => {
 
     });
 
-    it("ATTENTION: LEGEND DOES NOT WORK - TEST IS NOT GOOD!!!! createLegend shall dispatch an array of legends", function () {
+    it("createLegend shall dispatch an array of legends", function () {
         const dispatchCalls = {};
         let wmsLayer = null;
 

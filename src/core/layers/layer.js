@@ -183,8 +183,15 @@ Layer.prototype.removeTimeLayer = function () {
  * @returns {void}
  */
 Layer.prototype.setIsVisibleInMap = function (newValue) {
+    const lastValue = this.get("isVisibleInMap");
+
     this.set("isVisibleInMap", newValue);
     this.layer.setVisible(newValue);
+    if (lastValue !== newValue) {
+        // here it is possible to chanhe the layer visibility-info in state and listen to it e.g. in LegendWindow
+        // e.g. store.dispatch("Map/toggleLayerVisibility", {layerId: this.get("id")});
+        Radio.trigger("Layer", "layerVisibleChanged", this.get("id"), this.get("isVisibleInMap"), this);
+    }
 };
 /**
  * Setter for transparency and setter for opacitiy of the layer.
@@ -453,10 +460,21 @@ Layer.prototype.showLayerInformation = function () {
     store.dispatch("LayerInformation/setMetadataURL", layerMetaId);
     store.dispatch("Legend/setLayerIdForLayerInfo", this.get("id"));
     store.dispatch("Legend/setLayerCounterIdForLayerInfo", Date.now());
-    this.createLegend();
-
+    if (typeof this.createLegend === "function") {
+        this.createLegend();
+    }
     this.setLayerInfoChecked(true);
 };
+/**
+ * Setter for legend, commits the legend to vue store using "Legend/setLegendOnChanged"
+ * @param {String} value legend
+ * @returns {void}
+ */
+Layer.prototype.setLegend = function (value) {
+    this.set("legend", value);
+    store.dispatch("Legend/setLegendOnChanged", value);
+};
+
 // backbone-relevant functions (may be removed if all layers are no longer backbone models):
 Layer.prototype.set = function (arg1, arg2) {
     if (typeof arg1 === "object") {
