@@ -741,6 +741,9 @@
             },
             "routing": {
                 "coordinateInputHelp": "Suchen Sie einen Ort oder fügen Sie einen Punkt durch Klick in die Karte hinzu",
+                "startpoint": "Startpunkt",
+                "endpoint": "Zielpunkt",
+                "waypoint": "Wegpunkt",
                 "addWaypoint": "Wegpunkt hinzufügen",
                 "moveWaypointUp": "Wegpunkt nach oben verschieben",
                 "moveWaypointDown": "Wegpunkt nach unten verschieben",

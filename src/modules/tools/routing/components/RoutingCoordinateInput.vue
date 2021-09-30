@@ -150,7 +150,7 @@ export default {
                     v-model="search"
                     type="text"
                     class="col-md-11 col-sm-11 form-control"
-                    :placeholder="waypoint.index === 0 ? 'Startpunkt' : waypoint.index === countWaypoints - 1 ? 'Ziel' : 'Wegpunkt'"
+                    :placeholder="waypoint.index === 0 ? $t('common:modules.tools.routing.startpoint') : waypoint.index === countWaypoints - 1 ? $t('common:modules.tools.routing.endpoint') : $t('common:modules.tools.routing.waypoint')"
                     autocomplete="off"
                     @focus="isFocused = true"
                     @blur="isFocused = false"
@@ -178,6 +178,7 @@ export default {
                             v-show="waypoint.index !== countWaypoints - 1"
                             class="pointer glyphicon glyphicon-chevron-down"
                             :title="$t('common:modules.tools.routing.moveWaypointDown')"
+                            @click="$emit('moveWaypointDown')"
                             @keydown.enter="$emit('moveWaypointDown')"
                         />
                     </div>
