@@ -1,6 +1,7 @@
 import Vuex from "vuex";
 import {expect} from "chai";
-import {config, shallowMount, createLocalVue} from "@vue/test-utils";
+import sinon from "sinon";
+import {config, shallowMount, createLocalVue, mount} from "@vue/test-utils";
 import RoutingComponent from "../../../components/Routing.vue";
 import Routing from "../../../store/indexRouting";
 
@@ -38,6 +39,17 @@ describe("src/modules/tools/routing/components/Routing.vue", () => {
                     modules: {
                         Routing
                     }
+                },
+                Map: {
+                    namespaced: true,
+                    getters: {
+                        map: () => ({
+                            addLayer: sinon.spy(),
+                            removeLayer: sinon.spy(),
+                            addInteraction: sinon.spy(),
+                            removeInteraction: sinon.spy()
+                        })
+                    }
                 }
             },
             state: {
@@ -59,21 +71,32 @@ describe("src/modules/tools/routing/components/Routing.vue", () => {
         expect(wrapper.find("#routing").exists()).to.be.true;
     });
 
-    it("not renders Routing", () => {
+    it("not renders routing", () => {
         store.commit("Tools/Routing/setActive", false);
         wrapper = shallowMount(RoutingComponent, {store, localVue});
 
         expect(wrapper.find("#routing").exists()).to.be.false;
     });
 
-    describe("Routing.vue methods", () => {
-        it("close sets active to false", async () => {
-            wrapper = shallowMount(RoutingComponent, {store, localVue});
-            wrapper.vm.close();
-            await wrapper.vm.$nextTick();
+    it("renders directions", () => {
+        store.commit("Tools/Routing/setActive", true);
+        store.commit("Tools/Routing/setActiveRoutingToolOption", "DIRECTIONS");
+        wrapper = mount(RoutingComponent, {store, localVue});
+        expect(wrapper.find("#routing-directions").exists()).to.be.true;
+    });
 
-            expect(store.state.Tools.Routing.active).to.be.false;
-            expect(wrapper.find("#routing").exists()).to.be.false;
-        });
+    it("renders isochrones", () => {
+        store.commit("Tools/Routing/setActive", true);
+        store.commit("Tools/Routing/setActiveRoutingToolOption", "ISOCHRONES");
+        wrapper = mount(RoutingComponent, {store, localVue});
+        expect(wrapper.find("#routing-isochrones").exists()).to.be.true;
+    });
+
+    it("closes routing tool on close", async () => {
+        wrapper = shallowMount(RoutingComponent, {store, localVue});
+        wrapper.vm.close();
+        await wrapper.vm.$nextTick();
+        expect(store.state.Tools.Routing.active).to.be.false;
+        expect(wrapper.find("#routing").exists()).to.be.false;
     });
 });
