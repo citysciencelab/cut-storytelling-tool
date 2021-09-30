@@ -197,11 +197,11 @@ const actions = {
      * @param {number} zoomLevel The zoomLevel to zoom to.
      * @returns {void}
      */
-    setZoomLevel ({getters, commit}, zoomLevel) {
+    setZoomLevel ({state, getters, commit}, zoomLevel) {
         const {maxZoomLevel, minZoomLevel} = getters;
 
         if (zoomLevel <= maxZoomLevel && zoomLevel >= minZoomLevel) {
-            getters.map.getView().setZoom(zoomLevel);
+            mapCollection.getMap(state.mapId, state.mapMode).getView().setZoom(zoomLevel);
             commit("setZoomLevel", zoomLevel);
         }
     },
@@ -252,15 +252,14 @@ const actions = {
     /**
      * Sets center and resolution to initial values.
      * @param {Object} payload parameter object
-     * @param {String} mapId The id of the map.
-     * @param {String} mapMode The mode of the map.
      * @returns {void}
      */
-    resetView ({state, dispatch}, mapId, mapMode) {
-        const {initialCenter, initialResolution} = state;
+    resetView ({state, dispatch}) {
+        const {initialCenter, initialResolution} = state,
+            mapView = mapCollection.getMap(state.mapId, state.mapMode).getView();
 
-        mapCollection.getMap(mapId, mapMode).getView().setCenter(initialCenter);
-        mapCollection.getMap(mapId, mapMode).getView().setResolution(initialResolution);
+        mapView.setCenter(initialCenter);
+        mapView.setResolution(initialResolution);
 
         dispatch("MapMarker/removePointMarker", null, {root: true});
     },
@@ -272,7 +271,7 @@ const actions = {
      * @returns {void}
      */
     setResolutionByIndex ({state}, index) {
-        const {map} = state,
+        const map = mapCollection.getMap(state.mapId, state.mapMode),
             view = map.getView();
 
         view.setResolution(view.getResolutions()[index]);
@@ -284,10 +283,8 @@ const actions = {
      * @returns {void}
      */
     addPointerMoveHandler ({state}, callback) {
-        const {map} = state;
-
         if (callback) {
-            map.on("pointermove", e => callback(e));
+            mapCollection.getMap(state.mapId, state.mapMode).on("pointermove", e => callback(e));
         }
 
     },
@@ -298,7 +295,7 @@ const actions = {
      * @returns {void}
      */
     removePointerMoveHandler ({state}, callback) {
-        const {map} = state;
+        const map = mapCollection.getMap(state.mapId, state.mapMode);
 
         map.un("pointermove", e => callback(e));
     },
@@ -309,7 +306,7 @@ const actions = {
      * @returns {void}
      */
     addInteraction ({state}, interaction) {
-        const {map} = state;
+        const map = mapCollection.getMap(state.mapId, state.mapMode);
 
         map.addInteraction(interaction);
     },
@@ -320,21 +317,19 @@ const actions = {
      * @returns {void}
      */
     removeInteraction ({state}, interaction) {
-        const {map} = state;
+        const map = mapCollection.getMap(state.mapId, state.mapMode);
 
         map.removeInteraction(interaction);
     },
     /**
      * Zoom to the given geometry or extent based on the current map size.
-     * @see {@link https://openlayers.org/en/latest/apidoc/module-ol_View-View.html#fit|ol.view.fit}
-     *
-     * @param {object} payload Payload containing the geometryOrExtent and options for the view function 'fit'.
+     * @see {@link https://openlayers.org/en/latest/apidoc/module-ol_View-View.html#fit|ol.view.fit}     *
      * @param {module:ol/geom/Geometry | module:ol/extent} payload.geometryOrExtent The geometry or extent to zoom to.
      * @param {Object} payload.options Documentation linked.
      * @returns {void}
      */
     zoomTo ({state, commit}, {geometryOrExtent, options}) {
-        const mapView = state.map.getView();
+        const mapView = mapCollection.getMap(state.mapId, state.mapMode).getView();
 
         mapView.fit(geometryOrExtent, {
             duration: options?.duration ? options.duration : 800,

@@ -5,6 +5,7 @@ import {convertSexagesimalFromString, convertSexagesimalToDecimal, convertSexage
 import getProxyUrl from "../../../../utils/getProxyUrl";
 import {requestGfi} from "../../../../api/wmsGetFeatureInfo";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
+import mapCollection from "../../../../dataStorage/mapCollection";
 
 export default {
     /**
@@ -141,7 +142,7 @@ export default {
     changedPosition ({dispatch, state, rootState, getters}) {
         if (state.mode === "supply") {
             const targetProjectionName = state.currentProjection?.name,
-                position = getters.getTransformedPosition(rootState.Map.map, targetProjectionName);
+                position = getters.getTransformedPosition(mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode), targetProjectionName);
 
             if (position) {
                 dispatch("adjustPosition", {position: position, targetProjection: state.currentProjection});

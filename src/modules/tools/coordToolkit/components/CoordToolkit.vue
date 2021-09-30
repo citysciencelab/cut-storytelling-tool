@@ -6,7 +6,7 @@ import {getProjections} from "masterportalAPI/src/crs";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersCoordToolkit";
 import mutations from "../store/mutationsCoordToolkit";
-import {MapMode} from "../../../map/store/enums";
+import {MapMode, toMapMode} from "../../../map/store/enums";
 
 export default {
     name: "CoordToolkit",
@@ -15,7 +15,7 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/CoordToolkit", Object.keys(getters)),
-        ...mapGetters("Map", ["projection", "mouseCoord", "mapMode"]),
+        ...mapGetters("Map", ["projection", "mouseCoord", "mapMode", "mapId"]),
         ...mapGetters(["uiStyle"]),
         eastingNoCoordMessage: function () {
             if (this.currentProjection.projName !== "longlat") {
@@ -55,7 +55,7 @@ export default {
             if (value) {
                 this.initProjections();
                 this.setExample();
-                if (this.mapMode === MapMode.MODE_2D) {
+                if (toMapMode(this.mapMode) === MapMode.MODE_2D) {
                     this.setMode("supply");
                     this.setSupplyCoordActive();
                 }

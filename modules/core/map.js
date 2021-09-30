@@ -154,7 +154,10 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             mapViewSettings.startZoomLevel = mapViewSettings.zoomLevel;
         }
 
-        this.setMap(api.map.createMap({mapViewSettings: Radio.request("Parser", "getPortalConfig").mapView}, "2D"));
+        this.setMap(api.map.createMap({
+            config: Config,
+            mapParams: mapViewSettings
+        }, "2D"));
 
         this.set("view", mapCollection.getMap("ol", "2D").getView());
         new MapView({view: mapCollection.getMap("ol", "2D").getView(), settings: mapViewSettings});
@@ -702,7 +705,6 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     setMap: function (value) {
-        console.log("created Map:", value);
         mapCollection.addMap(value, "ol", "2D");
         store.dispatch("Map/setMapAttributes", {map: value});
     }

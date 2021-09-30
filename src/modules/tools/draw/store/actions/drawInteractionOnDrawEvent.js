@@ -1,5 +1,6 @@
 import {createStyle} from "../../utils/style/createStyle";
 import {calculateCircle} from "../../utils/circleCalculations";
+import mapCollection from "../../../../../dataStorage/mapCollection";
 
 const errorBorder = "#E10019";
 
@@ -57,11 +58,11 @@ export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState}
                         state.outerBorderColor = errorBorder;
                     }
                     else {
-                        calculateCircle(event, circleCenter, circleRadius, rootState.Map.map);
+                        calculateCircle(event, circleCenter, circleRadius, mapCollection.getMap(rootState.mapId, rootState.mapMode));
                     }
                 }
                 else {
-                    calculateCircle(event, circleCenter, circleRadius, rootState.Map.map);
+                    calculateCircle(event, circleCenter, circleRadius, mapCollection.getMap(rootState.mapId, rootState.mapMode));
                     state.outerBorderColor = "";
                 }
                 state.innerBorderColor = "";
