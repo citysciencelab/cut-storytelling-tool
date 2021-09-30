@@ -11,7 +11,10 @@ export default {
 </script>
 
 <template>
-    <label class="pointer mb-0 d-flex">
+    <label
+        id="routing-batch-processing-checkbox"
+        class="pointer mb-0 d-flex"
+    >
         <input
             :checked="batchProcessing.active"
             class="mt-0 d-flex flex-column align-self-center"
