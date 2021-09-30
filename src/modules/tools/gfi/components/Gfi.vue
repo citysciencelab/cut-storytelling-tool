@@ -9,6 +9,7 @@ import omit from "../../../../utils/omit";
 import moment from "moment";
 import thousandsSeparator from "../../../../utils/thousandsSeparator";
 import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
+import {getValueFromObjectByPath} from "../../../../utils/getValueFromObjectByPath.js";
 
 export default {
     name: "Gfi",
@@ -353,23 +354,8 @@ export default {
             let value = gfi[Object.keys(gfi).find(gfiKey => gfiKey.toLowerCase() === key.toLowerCase())];
 
             if (isPath) {
-                value = this.getValueFromPath(gfi, key);
+                value = getValueFromObjectByPath(gfi, key);
             }
-            return value;
-        },
-        /**
-         * Parses the path and returns the value at the position of the path.
-         * @param {Object} properties - the feature properties
-         * @param {String} key - key that is an object path.
-         * @returns {Object|String} value of the path.
-         */
-        getValueFromPath: function (properties, key) {
-            const pathParts = key.substring(1).split(".");
-            let value = properties;
-
-            pathParts.forEach(part => {
-                value = value ? value[part] : undefined;
-            });
             return value;
         }
     }

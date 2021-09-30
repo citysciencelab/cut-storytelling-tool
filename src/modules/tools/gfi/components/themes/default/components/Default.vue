@@ -6,7 +6,7 @@ import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
 import CompareFeatureIcon from "../../../favoriteIcons/components/CompareFeatureIcon.vue";
 import DefaultSensorChart from "./DefaultSensorChart.vue";
-import getPropertiesWithFullKeys from "../../../../utils/getPropertiesWithFullKeys.js";
+import {getPropertiesWithFullKeys} from "../../../../utils/getPropertiesWithFullKeys.js";
 
 export default {
     name: "Default",
