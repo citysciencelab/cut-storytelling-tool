@@ -177,6 +177,7 @@ export default {
         </template>
         <template v-else>
             <form
+                id="routing-directions-coordinate-input-form"
                 class="form-horizontal"
                 role="form"
             >
@@ -359,7 +360,10 @@ export default {
         <template v-if="!(settings.batchProcessing.enabled && settings.batchProcessing.active)">
             <hr>
 
-            <div v-if="routingDirections">
+            <div
+                v-if="routingDirections"
+                id="routing-directions-result-directions"
+            >
                 <div
                     class="d-flex justify-content-between"
                 >
