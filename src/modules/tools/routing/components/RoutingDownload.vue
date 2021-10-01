@@ -146,7 +146,7 @@ export default {
 </script>
 
 <template>
-    <div>
+    <div id="routing-download">
         <h6>{{ $t('common:modules.tools.routing.download.header') }}</h6>
 
         <div class="d-flex mb-2">
