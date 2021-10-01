@@ -8,15 +8,6 @@ import LayerGroup from "ol/layer/Group";
 describe("src/modules/map/store/gettersMap.js", () => {
 
     describe("Map simple getters", () => {
-        it("returns the map from state", () => {
-            const mapStub = sinon.stub(),
-                state = {
-                    map: mapStub
-                };
-
-            expect(getters.map(stateMap)).to.equals(null);
-            expect(getters.map(state)).to.equals(mapStub);
-        });
         it("returns the layerList from state", () => {
             const mapStub = sinon.stub(),
                 state = {
