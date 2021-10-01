@@ -602,14 +602,13 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         let interactionSymbol, removeInteraction, rootState;
 
         beforeEach(() => {
-            interactionSymbol = Symbol(),
-            removeInteraction = sinon.spy(),
+            interactionSymbol = Symbol();
+            removeInteraction = sinon.spy();
             rootState = {};
             mapCollection.clear();
             const map = {
                 id: "ol",
                 mode: "2D",
-                // addInteraction: sinon.spy(),
                 removeInteraction: removeInteraction
             };
 

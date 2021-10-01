@@ -1,5 +1,4 @@
 import {expect} from "chai";
-import sinon from "sinon";
 import mutations from "../../../store/mutationsMap";
 import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";
@@ -87,8 +86,8 @@ describe("src/modules/map/store/mutationsMap.js", () => {
                     getLayers: () => {
                         return layers;
                     },
-                    removeLayer: (layer) => {
-                        layers.splice(layers.indexOf(layer), 1);
+                    removeLayer: (l) => {
+                        l.splice(layers.indexOf(layers), 1);
                     }
                 };
 
