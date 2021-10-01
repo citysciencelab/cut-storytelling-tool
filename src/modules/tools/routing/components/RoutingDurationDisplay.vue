@@ -36,8 +36,11 @@ export default {
 <template>
     <span>
         <b v-if="duration < 60">&lt; 1 min</b>
-        <b v-else-if="duration > 3600">{{ hours }} h
-            <span v-if="minutesMinusHours > 0">&nbsp;{{ minutesMinusHours }} min</span>
+        <b v-else-if="duration >= 3600">{{ hours }} h
+            <span
+                v-if="minutesMinusHours > 0"
+                class="minutesminushours"
+            >&nbsp;{{ minutesMinusHours }} min</span>
         </b>
         <b v-else>{{ minutes }} min</b>
     </span>
