@@ -5,6 +5,7 @@ import {
 import {getMapProjection, transform} from "masterportalAPI/src/crs";
 import {fetchRoutingBkgGeosearch, fetchRoutingBkgGeosearchReverse} from "../utils/geosearch/routing-bkg-geosearch";
 import * as constantsRouting from "./constantsRouting";
+import i18next from "i18next";
 
 export default {
     /**
@@ -26,9 +27,11 @@ export default {
         const state = rootState.configJson.Portalconfig.menu.tools.children.routing,
             checkPaths = constantsRouting.nonOptionalConfigFields.map(field => field.split(".")),
             missing = checkPaths.filter(path => {
-                return path.reduce((partObj, partPath) => {
+                const val = path.reduce((partObj, partPath) => {
                     return partObj[partPath];
-                }, state) === undefined;
+                }, state);
+
+                return val === undefined || val === null;
             });
 
         if (missing.length > 0) {
@@ -73,7 +76,7 @@ export default {
         catch (err) {
             dispatch("Alerting/addSingleAlert", {
                 category: this.$t("common:modules.alerting.categories.error"),
-                content: "Fehler bei Abfrage der Koordinaten"
+                content: i18next.$t("common:modules.tools.routing.errors.header")
             }, {root: true});
         }
         return geosearchResults;

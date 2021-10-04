@@ -750,6 +750,9 @@
                 "deleteWaypoint": "Wegpunkt löschen",
                 "resetSettings": "Einstellungen zurücksetzen",
                 "helpTooltip": "Hilfe öffnen/schließen",
+                "errors": {
+                    "fetchingCoordinates": "Fehler bei Abfrage der Koordinaten"
+                },
                 "download": {
                     "header": "Herunterladen",
                     "format": "Format",

@@ -1,5 +1,5 @@
 describe("src/modules/tools/routing/store/mutationsRouting.js", () => {
 
-    // TODO
+    // No mutations except generated ones
 
 });
