@@ -178,6 +178,7 @@ export default {
             <h6>{{ $t('common:modules.tools.routing.isochrones.startpoint') }}</h6>
 
             <form
+                id="routing-isochrones-coordinate-input-form"
                 class="form-horizontal"
                 role="form"
             >
@@ -270,7 +271,10 @@ export default {
                     </button>
                 </div>
 
-                <div v-if="routingIsochrones">
+                <div
+                    v-if="routingIsochrones"
+                    id="routing-isochrones-result-isochrones"
+                >
                     <hr class="w-100">
 
                     <span class="mb-2">{{ $t('common:modules.tools.routing.isochrones.legend') }}</span>
