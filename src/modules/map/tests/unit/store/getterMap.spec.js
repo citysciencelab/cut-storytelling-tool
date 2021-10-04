@@ -91,4 +91,37 @@ describe("src/modules/map/store/gettersMap.js", () => {
         });
     });
 
+    describe("scaleToOne", () => {
+        it("should return \"1 : scale must be a positive number\" if anything but a number is given", () => {
+            expect(getters.scaleToOne(false, {scale: undefined})).to.equal("1 : scale must be a positive number");
+            expect(getters.scaleToOne(false, {scale: null})).to.equal("1 : scale must be a positive number");
+            expect(getters.scaleToOne(false, {scale: "string"})).to.equal("1 : scale must be a positive number");
+            expect(getters.scaleToOne(false, {scale: true})).to.equal("1 : scale must be a positive number");
+            expect(getters.scaleToOne(false, {scale: false})).to.equal("1 : scale must be a positive number");
+            expect(getters.scaleToOne(false, {scale: {}})).to.equal("1 : scale must be a positive number");
+            expect(getters.scaleToOne(false, {scale: []})).to.equal("1 : scale must be a positive number");
+        });
+        it("should return \"1 : scale must be a positive number\" if zero is given", () => {
+            expect(getters.scaleToOne(false, {scale: 0})).to.equal("1 : scale must be a positive number");
+        });
+        it("should return \"1 : scale must be a positive number\" if a negative scale is given", () => {
+            expect(getters.scaleToOne(false, {scale: -1})).to.equal("1 : scale must be a positive number");
+        });
+        it("should keep the given scale as scaleToOne untouched if scale is 1.000 or less", () => {
+            expect(getters.scaleToOne(false, {scale: 1})).to.equal("1 : 1");
+            expect(getters.scaleToOne(false, {scale: 123})).to.equal("1 : 123");
+            expect(getters.scaleToOne(false, {scale: 999})).to.equal("1 : 999");
+            expect(getters.scaleToOne(false, {scale: 1000})).to.equal("1 : 1.000");
+        });
+        it("should return the given scale as scaleToOne down to the fifties if scale is 10.000 or less", () => {
+            expect(getters.scaleToOne(false, {scale: 1001})).to.equal("1 : 1.000");
+            expect(getters.scaleToOne(false, {scale: 1024})).to.equal("1 : 1.000");
+            expect(getters.scaleToOne(false, {scale: 1025})).to.equal("1 : 1.050");
+            expect(getters.scaleToOne(false, {scale: 10000})).to.equal("1 : 10.000");
+        });
+        it("should return the given scale as scaleToOne down to five hundreds if scale is greater than 10.000", () => {
+            expect(getters.scaleToOne(false, {scale: 10249})).to.equal("1 : 10.000");
+            expect(getters.scaleToOne(false, {scale: 10250})).to.equal("1 : 10.500");
+        });
+    });
 });

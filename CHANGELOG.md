@@ -17,13 +17,14 @@
 - EsLint Plugin for a11y in Vue files.
 - New parameter "searchResultOrder" for ranking category of searching result
 - New csv specialized export button "ExportButtonCSV" integreted in Vue.js
-- Function translateKeyWithPlausibilityCheck to prevent the text with ":" to be recognized as translation key
+- Function in src/utils/translateKeyWithPlausibilityCheck.js to prevent a text with ":" in it to be recognized as translation key
 
 ### Changed
 - Moved SensorThingsMqtt and SensorThingsHttp to /src/utils, complete refactoring of SensorThingsMqtt, there are no changes in handling SensorThingsMqtt.
 - Changed anchor from div to main class and footer from div to footer class
 - Pulled footer out of elements on map and made it part of App.vue
 - Moved convertArrayOfObjectsToCsv to /src/utils/convertJsonToCsv.js with refactoring, removed convertArrayOfObjectsToCsv Event from Radio.
+- The scale display of the map has now new scale steps: Above 10.000 it is rounded to five hundreds (e.g. 10250 -> "1 : 10.500"), scale of 1.000 up to 10.000 is rounded to its fifties (e.g. 1025 -> "1 : 1.050").
 
 ### Deprecated
 
