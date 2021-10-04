@@ -36,7 +36,9 @@
 - STA Mqtt: "WebSocket connection to 'wss://localhost/mqtt' failed" is fixed with refactoring of SensorThingsMqtt.
 - AddWMS tool: WMS services can be added again. Tool adapted to modified parser method.
 - Minor fixes in all Vue files for a11y errors from new EsLint plugin
-- LayerInformation: Setting the title directly from Meta data without translation 
+- LayerInformation: Setting the title directly from Meta data without translation
+- CoordToolkit: projection name is shown correctly if no title is defined.
+
 
 ---
 ##  v2.13.1 - 2021-09-03
