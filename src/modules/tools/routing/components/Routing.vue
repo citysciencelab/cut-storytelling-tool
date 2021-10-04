@@ -38,7 +38,7 @@ export default {
         }
         catch (e) {
             this.addSingleAlert({
-                category: i18next.t("common:modules.alerting.categories.error"),
+                category: this.$t("common:modules.alerting.categories.error"),
                 content: e.message
             });
             this.$emit("close");

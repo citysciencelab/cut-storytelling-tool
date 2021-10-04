@@ -55,14 +55,14 @@ export default {
                         }
                         if (this.countFailed !== 0) {
                             this.addSingleAlert({
-                                category: i18next.t("common:modules.alerting.categories.error"),
-                                content: i18next.t("common:modules.tools.routing.directions.batchProcessing.errorSomeFailed", {countFailed: this.coundFailed})
+                                category: this.$t("common:modules.alerting.categories.error"),
+                                content: this.$t("common:modules.tools.routing.directions.batchProcessing.errorSomeFailed", {countFailed: this.coundFailed})
                             });
                         }
                     }
                     catch (e) {
                         this.addSingleAlert({
-                            category: i18next.t("common:modules.alerting.categories.error"),
+                            category: this.$t("common:modules.alerting.categories.error"),
                             content: e.message
                         });
                     }
@@ -125,11 +125,11 @@ export default {
                     tasks = [];
 
                 if (content.length === 0 || anzahl === 0) {
-                    reject(new Error(i18next.t("common:modules.tools.routing.directions.batchProcessing.errorNoEntries")));
+                    reject(new Error(this.$t("common:modules.tools.routing.directions.batchProcessing.errorNoEntries")));
                     return;
                 }
                 if (anzahl > this.settings.batchProcessing.limit) {
-                    reject(new Error(i18next.t("common:modules.tools.routing.directions.batchProcessing.errorToManyEntriesInFile", {limit: this.settings.batchProcessing.limit})));
+                    reject(new Error(this.$t("common:modules.tools.routing.directions.batchProcessing.errorToManyEntriesInFile", {limit: this.settings.batchProcessing.limit})));
                     return;
                 }
 
@@ -142,12 +142,12 @@ export default {
                     }
 
                     if (lineParts.length !== 5) {
-                        reject(new Error(i18next.t("common:modules.tools.routing.directions.batchProcessing.errorToManyEntriesInRow", {row: i})));
+                        reject(new Error(this.$t("common:modules.tools.routing.directions.batchProcessing.errorToManyEntriesInRow", {row: i})));
                         return;
                     }
 
                     if (!this.isNumber(Number(lineParts[1])) || !this.isNumber(Number(lineParts[2])) || !this.isNumber(Number(lineParts[3])) || !this.isNumber(Number(lineParts[4]))) {
-                        reject(new Error(i18next.t("common:modules.tools.routing.directions.batchProcessing.errorRowContainsEntriesNoNumber", {row: i})));
+                        reject(new Error(this.$t("common:modules.tools.routing.directions.batchProcessing.errorRowContainsEntriesNoNumber", {row: i})));
                         return;
                     }
 

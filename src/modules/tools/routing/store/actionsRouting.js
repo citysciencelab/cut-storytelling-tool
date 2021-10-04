@@ -72,7 +72,7 @@ export default {
         }
         catch (err) {
             dispatch("Alerting/addSingleAlert", {
-                category: i18next.t("common:modules.alerting.categories.error"),
+                category: this.$t("common:modules.alerting.categories.error"),
                 content: "Fehler bei Abfrage der Koordinaten"
             }, {root: true});
         }
