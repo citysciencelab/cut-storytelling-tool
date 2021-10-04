@@ -141,8 +141,11 @@ export default {
 
                     proj.title = proj.title + " (EPSG:" + code + ")";
                 }
-                else {
+                else if (typeof proj.title !== "undefined") {
                     proj.title = proj.title + " (" + proj.name + ")";
+                }
+                else {
+                    proj.title = proj.name;
                 }
             });
             if (wgs84Proj.length > 0) {
