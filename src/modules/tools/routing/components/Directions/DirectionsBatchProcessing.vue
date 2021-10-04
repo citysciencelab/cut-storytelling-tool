@@ -77,13 +77,21 @@ export default {
             });
         },
         /**
+         * Creates a csv from the objects
+         * @param {Object[]} downloadObjects resulting objects from the processing per row
+         * @returns {String} csv string
+         */
+        createCsvToDownload (downloadObjects) {
+            return Object.keys(downloadObjects[0]).join(";") + "\n" + downloadObjects.map(obj => Object.values(obj).join(";")).join("\n");
+        },
+        /**
          * Starts a download for the user to get the result from the process
          * @param {String} filename for the resulting file
          * @param {Object[]} downloadObjects resulting objects from the processing per row
          * @returns {void}
          */
         async downloadResults (filename, downloadObjects) {
-            const csv = Object.keys(downloadObjects[0]).join(";") + "\n" + downloadObjects.map(obj => Object.values(obj).join(";")).join("\n"),
+            const csv = this.createCsv(downloadObjects),
                 downloadFilename = this.createDownloadFilename(filename);
 
             if (Radio.request("Util", "isInternetExplorer")) {

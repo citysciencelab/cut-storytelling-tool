@@ -88,6 +88,53 @@ describe("src/modules/tools/routing/components/Directions/DirectionsBatchProcess
         );
     });
 
+    it("should create csv string", () => {
+        wrapper = shallowMount(DirectionsBatchProcessingComponent, {
+            store,
+            localVue,
+            propsData: props
+        });
+        const downloadObjects = [
+                {
+                    ID: "DEBBAL540001ChiF",
+                    "X-Wert_Start": 13.05518,
+                    "Y-Wert_Start": 52.39465,
+                    "X-Wert_End": 9.37832,
+                    "Y-Wert_End": 49.40167,
+                    "Zeit(min)": "1020.57",
+                    "Entfernung(m)": "12.34",
+                    Profil: "CAR"
+                },
+                {
+                    ID: "DEBBAL660000sAIN",
+                    "X-Wert_Start": 13.95471,
+                    "Y-Wert_Start": 51.74632,
+                    "X-Wert_End": 9.21956,
+                    "Y-Wert_End": 49.07882,
+                    "Zeit(min)": "1020.57",
+                    "Entfernung(m)": "12.34",
+                    Profil: "CAR"
+                },
+                {
+                    ID: "DEGAC00000007133",
+                    "X-Wert_Start": 13.0285,
+                    "Y-Wert_Start": 52.30963,
+                    "X-Wert_End": 8.8615,
+                    "Y-Wert_End": 48.82629,
+                    "Zeit(min)": "1020.57",
+                    "Entfernung(m)": "12.34",
+                    Profil: "CAR"
+                }
+            ],
+            csv = wrapper.vm.createCsvToDownload(downloadObjects),
+            expectedResult = `ID;X-Wert_Start;Y-Wert_Start;X-Wert_End;Y-Wert_End;Zeit(min);Entfernung(m);Profil
+DEBBAL540001ChiF;13.05518;52.39465;9.37832;49.40167;1020.57;12.34;CAR
+DEBBAL660000sAIN;13.95471;51.74632;9.21956;49.07882;1020.57;12.34;CAR
+DEGAC00000007133;13.0285;52.30963;8.8615;48.82629;1020.57;12.34;CAR`;
+
+        expect(csv).equal(expectedResult);
+    });
+
     describe("test csv parsing", () => {
         it("should process csv without errors", async () => {
             wrapper = shallowMount(DirectionsBatchProcessingComponent, {
