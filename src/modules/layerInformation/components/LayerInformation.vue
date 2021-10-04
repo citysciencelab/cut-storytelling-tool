@@ -167,7 +167,7 @@ export default {
                     class="subtitle"
                     :title="title"
                 >
-                    {{ $t(title) }}
+                    {{ title }}
                 </h4>
 
                 <div

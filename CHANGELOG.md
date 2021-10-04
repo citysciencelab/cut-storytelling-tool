@@ -17,6 +17,7 @@
 - EsLint Plugin for a11y in Vue files.
 - New parameter "searchResultOrder" for ranking category of searching result
 - New csv specialized export button "ExportButtonCSV" integreted in Vue.js
+- Function translateKeyWithPlausibilityCheck to prevent the text with ":" to be recognized as translation key
 
 ### Changed
 - Moved SensorThingsMqtt and SensorThingsHttp to /src/utils, complete refactoring of SensorThingsMqtt, there are no changes in handling SensorThingsMqtt.
@@ -35,7 +36,7 @@
 - STA Mqtt: "WebSocket connection to 'wss://localhost/mqtt' failed" is fixed with refactoring of SensorThingsMqtt.
 - AddWMS tool: WMS services can be added again. Tool adapted to modified parser method.
 - Minor fixes in all Vue files for a11y errors from new EsLint plugin
-
+- LayerInformation: Setting the title directly from Meta data without translation 
 
 ---
 ##  v2.13.1 - 2021-09-03

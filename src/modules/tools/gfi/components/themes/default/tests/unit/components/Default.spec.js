@@ -458,48 +458,4 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
             }, true)).to.be.an("object").and.not.to.be.empty;
         });
     });
-
-    describe("translateKeyWithPlausibilityCheck", () => {
-        it("should return an empty string if the given value is not a string", () => {
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck(undefined)).to.be.a("string").and.to.be.empty;
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck(null)).to.be.a("string").and.to.be.empty;
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck(1234)).to.be.a("string").and.to.be.empty;
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck(true)).to.be.a("string").and.to.be.empty;
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck(false)).to.be.a("string").and.to.be.empty;
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck([])).to.be.a("string").and.to.be.empty;
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck({})).to.be.a("string").and.to.be.empty;
-        });
-        it("should return an empty string if the given translation function is not a function", () => {
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck("", undefined)).to.be.a("string").and.to.be.empty;
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck("", null)).to.be.a("string").and.to.be.empty;
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck("", "string")).to.be.a("string").and.to.be.empty;
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck("", 1234)).to.be.a("string").and.to.be.empty;
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck("", true)).to.be.a("string").and.to.be.empty;
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck("", false)).to.be.a("string").and.to.be.empty;
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck("", [])).to.be.a("string").and.to.be.empty;
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck("", {})).to.be.a("string").and.to.be.empty;
-        });
-        it("should return the given key if the key includes more than one \":\"", () => {
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck("foo:bar:baz", () => {
-                // mocking i18next behavior $t("common:unvalid:key") => "unvalid.key"
-                return "bar.baz";
-            })).to.equal("foo:bar:baz");
-        });
-        it("should return the given key if only one \":\" is found and the translation equals the value from the \":\" onwards", () => {
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck("foo:bar", () => {
-                // mocking i18next behavior $t("common:unvalid.key") => "unvalid.key"
-                return "bar";
-            })).to.equal("foo:bar");
-        });
-        it("should return the given key if translation returns a value identical to the key", () => {
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck("foo bar baz", () => {
-                return "foo bar baz";
-            })).to.equal("foo bar baz");
-        });
-        it("should return the translation of the key", () => {
-            expect(wrapper.vm.translateKeyWithPlausibilityCheck("foo:bar.baz", () => {
-                return "this is the translation of foo:bar.baz";
-            })).to.equal("this is the translation of foo:bar.baz");
-        });
-    });
 });
