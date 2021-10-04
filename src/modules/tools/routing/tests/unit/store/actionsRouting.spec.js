@@ -2,7 +2,7 @@ import sinon from "sinon";
 import actionsRouting from "../../../store/actionsRouting";
 import {expect} from "chai";
 
-describe("src/modules/tools/routing/store/directions/actionsDirections.js", () => {
+describe("src/modules/tools/routing/store/actionsRouting.js", () => {
     let state, rootState;
 
     beforeEach(() => {
