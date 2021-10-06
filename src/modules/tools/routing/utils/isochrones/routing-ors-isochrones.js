@@ -75,7 +75,7 @@ async function fetchRoutingOrsIsochrones ({
         });
     }
     catch (e) {
-        throw new Error("Fehler bei Abfrage der Erreichbarkeit");
+        throw new Error(i18next.t("common:modules.tools.routing.errors.errorIsochronesFetch"));
     }
 
 

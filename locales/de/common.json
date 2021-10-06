@@ -754,7 +754,8 @@
                     "fetchingCoordinates": "Fehler bei Abfrage der Koordinaten",
                     "noRouteFound": "Keine Route gefunden",
                     "avoidAreaBig": "Die angegebenen Sperrflächen sind zu groß. Bitte korrigieren Sie Ihre Eingabe.",
-                    "errorRouteFetch": "Fehler bei Abfrage der Route"
+                    "errorRouteFetch": "Fehler bei Abfrage der Route",
+                    "errorIsochronesFetch": "Fehler bei Abfrage der Erreichbarkeit"
                 },
                 "download": {
                     "header": "Herunterladen",
