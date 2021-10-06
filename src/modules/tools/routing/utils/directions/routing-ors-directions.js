@@ -62,14 +62,14 @@ async function fetchRoutingOrsDirections ({
     }
     catch (e) {
         if (e.response.status === 404) {
-            throw new Error("Keine Route gefunden");
+            throw new Error(i18next.t("common:modules.tools.routing.errors.noRouteFound"));
         }
         if (e.response && e.response.data && e.response.data.error) {
             if (e.response.data.error.code === 2003) {
-                throw new Error("Die angegebenen Sperrflächen sind zu groß. Bitte korrigieren Sie Ihre Eingabe.");
+                throw new Error(i18next.t("common:modules.tools.routing.errors.avoidAreaBig"));
             }
         }
-        throw new Error("Fehler bei Abfrage der Route");
+        throw new Error(i18next.t("common:modules.tools.routing.errors.errorRouteFetch"));
     }
 
     result = response.data;

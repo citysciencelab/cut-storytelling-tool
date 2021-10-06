@@ -751,7 +751,10 @@
                 "resetSettings": "Einstellungen zurücksetzen",
                 "helpTooltip": "Hilfe öffnen/schließen",
                 "errors": {
-                    "fetchingCoordinates": "Fehler bei Abfrage der Koordinaten"
+                    "fetchingCoordinates": "Fehler bei Abfrage der Koordinaten",
+                    "noRouteFound": "Keine Route gefunden",
+                    "avoidAreaBig": "Die angegebenen Sperrflächen sind zu groß. Bitte korrigieren Sie Ihre Eingabe.",
+                    "errorRouteFetch": "Fehler bei Abfrage der Route"
                 },
                 "download": {
                     "header": "Herunterladen",
