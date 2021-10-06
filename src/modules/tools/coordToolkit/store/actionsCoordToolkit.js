@@ -128,9 +128,9 @@ export default {
     newProjectionSelected ({dispatch, commit, state, getters}, value) {
         const targetProjection = getters.getProjectionById(value);
 
+        dispatch("formatInput", [state.coordinatesEasting, state.coordinatesNorthing]);
         dispatch("transformCoordinatesFromTo", targetProjection);
         commit("setCurrentProjection", targetProjection);
-        dispatch("formatInput", [state.coordinatesEasting, state.coordinatesNorthing]);
         dispatch("changedPosition");
         commit("setExample");
     },

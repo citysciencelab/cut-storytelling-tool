@@ -235,9 +235,9 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 };
 
             testAction(actions.newProjectionSelected, proj2.id, state, {}, [
+                {type: "formatInput", payload: pos, dispatch: true},
                 {type: "transformCoordinatesFromTo", payload: proj2, dispatch: true},
                 {type: "setCurrentProjection", payload: proj2},
-                {type: "formatInput", payload: pos, dispatch: true},
                 {type: "changedPosition", payload: undefined, dispatch: true},
                 {type: "setExample"}
             ], {getProjectionById: () => {
