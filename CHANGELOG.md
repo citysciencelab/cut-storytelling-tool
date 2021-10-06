@@ -8,36 +8,40 @@
 
 ---
 
-## Unreleased - in development
+## v2.14.0 - 2021-10-06
 ### Added
 - Add possibility to test end2end-tests with `MicrosoftEdge` driver.
 - VTC-Layer supports Sprites and Fonts in Styledefinitions.
-- Embedded nav into header tag
+- Embedded nav into header tag.
 - Added the new Tool `WfsSearch`.
 - EsLint Plugin for a11y in Vue files.
-- New parameter "searchResultOrder" for ranking category of searching result
-- New csv specialized export button "ExportButtonCSV" integreted in Vue.js
-- Function in src/utils/translateKeyWithPlausibilityCheck.js to prevent a text with ":" in it to be recognized as translation key
+- New parameter "searchResultOrder" for ranking category of searching result.
+- New csv specialized export button "ExportButtonCSV" is now integrated in Vue.js.
+- Function in src/utils/translateKeyWithPlausibilityCheck.js to prevent a text with ":" in it to be recognized as translation key.
+- Migrated the Parametric Url from Backbone.js to Vue.js. Previous parameters are supported up to version 3.0.0, see also doc/urlParameter.md.
 
 ### Changed
+- Accessibility: Changed contrast ratio > 3:1 in all tools, themes, etc.
 - Moved SensorThingsMqtt and SensorThingsHttp to /src/utils, complete refactoring of SensorThingsMqtt, there are no changes in handling SensorThingsMqtt.
-- Changed anchor from div to main class and footer from div to footer class
-- Pulled footer out of elements on map and made it part of App.vue
+- Changed anchor from div to main class and footer from div to footer class.
+- Pulled footer out of elements on map and made it part of App.vue.
 - Moved convertArrayOfObjectsToCsv to /src/utils/convertJsonToCsv.js with refactoring, removed convertArrayOfObjectsToCsv Event from Radio.
-- The scale display of the map has now new scale steps: Above 10.000 it is rounded to five hundreds (e.g. 10250 -> "1 : 10.500"), scale of 1.000 up to 10.000 is rounded to its fifties (e.g. 1025 -> "1 : 1.050").
+- The scale display of the map has now new scale steps: above 10.000 it is rounded to five hundreds (e.g. 10250 -> "1 : 10.500"), scale of 1.000 up to 10.000 is rounded to its fifties (e.g. 1025 -> "1 : 1.050").
+- Searchbar topics are now configurable with i18next.
 
 ### Deprecated
 
 ### Removed
-- SensorThingsHttp: The option to use onprogress event when calling get or getInExtent is removed. The onprogress technic uses the addition "&$count=true" at the STA url to calculate the progress. This addition to the url slowes down the FROST server significantly and is therefore not longer supported.
+- SensorThingsHttp: the option to use onprogress event when calling get or getInExtent is removed. The onprogress technic uses the addition "&$count=true" at the STA url to calculate the progress. This addition to the url slowes down the FROST server significantly and is therefore not longer supported.
+- The url parameter CLICKCOUNTER was removed.
 
 ### Fixed
-- Draw tool: fixed an issue (Bitbucket: #638) with resaving draw files
-- Print tool: Fixed an issue when printing a styled WFS layer with a `labelField` in its style. Before. this lead to the same label being printed for every feature.
+- Draw tool: fixed an issue (Bitbucket: #638) with resaving draw files.
+- Print tool: fixed an issue when printing a styled WFS layer with a `labelField` in its style. Before, this lead to the same label being printed for every feature.
 - STA Mqtt: "WebSocket connection to 'wss://localhost/mqtt' failed" is fixed with refactoring of SensorThingsMqtt.
 - AddWMS tool: WMS services can be added again. Tool adapted to modified parser method.
-- Minor fixes in all Vue files for a11y errors from new EsLint plugin
-- LayerInformation: Setting the title directly from Meta data without translation
+- Minor fixes in all Vue files for a11y errors from new EsLint plugin.
+- LayerInformation: setting the title directly from Metadata without translation.
 - CoordToolkit: projection name is shown correctly if no title is defined.
 
 
@@ -73,7 +77,6 @@
 - Added the new layer type 'WMS-T' along with its manipulation functionalities 'TimeSlider' and 'LayerSwiper'.
 
 ### Changed
-- Accessibility: Changed contrast ratio > 3:1 in all tools, themes, etc.
 - Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.
 - LayerInformation now shows message in case the MetaData couldn't be loaded
 - Footer allows additionally to open vue tools besides backbone tools.
@@ -147,7 +150,6 @@
 
 ### Removed
 - Remove the module cookie, because this is only used in an addon.
-- The url parameter CLICKCOUNTER was removed.
 
 ### Fixed
 - The legend now always renders in the map region even when the sidebar is open. Also, the small optical offset in the menu bar at the legend entry has been removed.
