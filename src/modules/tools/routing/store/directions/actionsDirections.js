@@ -431,7 +431,7 @@ export default {
                     );
 
                 waypoint.setCoordinates(newCoordinate);
-                waypoint.setDisplayName(geoSearchResult.getDisplayName());
+                waypoint.setDisplayName(geoSearchResult ? geoSearchResult.getDisplayName() : null);
                 break;
             }
             dispatch("findDirections");
