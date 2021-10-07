@@ -65,7 +65,7 @@
     "tree": {
         "trafficCameras": "Verkehrskameras",
         "topicsHelp": "Themenbaum Hilfe",
-        "mapBackground": "Kartenhintergrund grau/weiß",
+        "mapBackground": "Grauer Hintergrund unter der Karte ein- / ausblenden",
         "pinTopicsTree": "Themenbaum fixieren/lösen",
         "hideAllTopics": "Alle Themen entfernen",
         "showAllTopics": "Alle Themen darstellen",

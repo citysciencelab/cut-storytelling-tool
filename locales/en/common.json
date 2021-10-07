@@ -65,7 +65,7 @@
     "tree": {
         "trafficCameras": "survey cameras (traffic)",
         "topicsHelp": "Topics help",
-        "mapBackground": "Map background grey/white",
+        "mapBackground": "Show / hide gray background under the map",
         "pinTopicsTree": "Fix/remove topic tree",
         "hideAllTopics": "Hide all topics",
         "showAllTopics": "Show all topics",
