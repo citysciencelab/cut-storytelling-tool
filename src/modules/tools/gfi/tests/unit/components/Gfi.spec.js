@@ -888,7 +888,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
 
             expect(wrapper.vm.prepareGfiValueFromObject(key, obj, gfi)).to.equal("2.000");
         });
-        it("Should return value of attribute that contains 'o__b' and convert it to number with thousand seperator", function () {
+        it("Should return value of attribute that contains 'o__b' and return the original value without translation", function () {
             const wrapper = shallowMount(GfiComponent, {
                     computed: {
                         isMobile: () => true,
@@ -908,16 +908,52 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 key = "o_b",
                 obj = {
                     condition: "contains",
-                    type: "number"
+                    type: "boolean"
                 },
                 gfi = {
                     foo: "foo",
                     bar: "bar",
-                    foo_bar: "no number",
+                    foo_bar: "no translation",
                     bar_foo: "bar_foo"
                 };
 
-            expect(wrapper.vm.prepareGfiValueFromObject(key, obj, gfi)).to.equal("no number");
+            expect(wrapper.vm.prepareGfiValueFromObject(key, obj, gfi)).to.equal("no translation");
+        });
+    });
+    describe("getBooleanValue", function () {
+        it("Should return the original value without translation if there is no translation function", function () {
+            const wrapper = shallowMount(GfiComponent, {store: getGfiStore, localVue}),
+                value = true,
+                format = {
+                    "true": "translate#common:modules.tools.gfi.boolean.true",
+                    "false": "translate#common:modules.tools.gfi.boolean.false"
+                };
+
+            expect(wrapper.vm.getBooleanValue(value, format, false)).to.equal("true");
+            expect(wrapper.vm.getBooleanValue(value, format, undefined)).to.equal("true");
+            expect(wrapper.vm.getBooleanValue(value, format, null)).to.equal("true");
+        });
+        it("Should return the original value without translation if the format is not right", function () {
+            const wrapper = shallowMount(GfiComponent, {store: getGfiStore, localVue}),
+                value = true;
+
+            expect(wrapper.vm.getBooleanValue(value, null, v => v)).to.equal("true");
+            expect(wrapper.vm.getBooleanValue(value, {}, v => v)).to.equal("true");
+            expect(wrapper.vm.getBooleanValue(value, "DD.MM.YYYY HH:mm:ss", v => v)).to.equal("true");
+            expect(wrapper.vm.getBooleanValue(value, undefined, v => v)).to.equal("true");
+            expect(wrapper.vm.getBooleanValue(value, 0, v => v)).to.equal("true");
+            expect(wrapper.vm.getBooleanValue(value, "test", v => v)).to.equal("true");
+            expect(wrapper.vm.getBooleanValue(value, [], v => v)).to.equal("true");
+        });
+        it("Should return the value with the right format", function () {
+            const wrapper = shallowMount(GfiComponent, {store: getGfiStore, localVue}),
+                value = "foo",
+                format = {
+                    "foo": "bar",
+                    "foobar": "baz"
+                };
+
+            expect(wrapper.vm.getBooleanValue(value, format, v => v)).to.equal("bar");
         });
     });
     describe("getValueFromCondition", function () {

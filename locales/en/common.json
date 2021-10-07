@@ -534,6 +534,14 @@
                         "outoforder": "Out of order"
                       }
                     }
+                },
+                "boolean": {
+                    "true": "Yes",
+                    "yes": "Yes",
+                    "1": "Yes",
+                    "false": "No",
+                    "no": "No",
+                    "0": "No"
                 }
             },
             "graph": {

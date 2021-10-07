@@ -8,6 +8,7 @@ import Attached from "./templates/Attached.vue";
 import omit from "../../../../utils/omit";
 import moment from "moment";
 import thousandsSeparator from "../../../../utils/thousandsSeparator";
+import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
 
 export default {
     name: "Gfi",
@@ -234,6 +235,10 @@ export default {
                     }, obj);
                     break;
                 }
+                case "boolean": {
+                    preparedValue = this.getBooleanValue(preparedValue, format, v => this.$t(v));
+                    break;
+                }
                 // default equals to obj.type === "string"
                 default: {
                     preparedValue = String(preparedValue);
@@ -247,6 +252,30 @@ export default {
             }
             return preparedValue;
         },
+
+        /**
+         * Parsing the boolean value
+         * @param {String} value default value
+         * @param {String|Object} format the format of boolean value
+         * @param {Function} translateFunction the function to use for translation
+         * @returns {String} - original value or parsed value
+         */
+        getBooleanValue: function (value, format, translateFunction) {
+            let parsedValue = String(value);
+
+            if (typeof translateFunction !== "function") {
+                return parsedValue;
+            }
+            if (typeof format === "object" && format !== null && Object.prototype.hasOwnProperty.call(format, value)) {
+                parsedValue = translateKeyWithPlausibilityCheck(format[value], translateFunction);
+            }
+            else {
+                parsedValue = this.$t("common:modules.tools.gfi.boolean." + value);
+            }
+
+            return !parsedValue.includes("modules.tools.gfi.boolean.") ? parsedValue : String(value);
+        },
+
         /**
          * Derives the value from the given condition.
          * @param {String} key Key.

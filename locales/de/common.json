@@ -533,6 +533,14 @@
                         "outoforder": "Außer Betrieb"
                       }
                     }
+                },
+                "boolean": {
+                    "true": "Ja",
+                    "yes": "Ja",
+                    "1": "Ja",
+                    "false": "Nein",
+                    "no": "Nein",
+                    "0": "Nein"
                 }
             },
             "graph": {
