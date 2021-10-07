@@ -5,7 +5,7 @@ import Mobile from "./templates/Mobile.vue";
 import Detached from "./templates/Detached.vue";
 import Table from "./templates/Table.vue";
 import Attached from "./templates/Attached.vue";
-import {omit} from "../../../../utils/objectHelpers";
+import omit from "../../../../utils/omit";
 import moment from "moment";
 import thousandsSeparator from "../../../../utils/thousandsSeparator";
 

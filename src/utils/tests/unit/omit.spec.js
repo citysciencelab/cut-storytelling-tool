@@ -1,8 +1,7 @@
 import {expect} from "chai";
-import {omit, isArrayOfStrings} from "../../objectHelpers";
+import omit from "../../omit";
 
-describe("src/utils/objectHelpers.js", () => {
-
+describe("src/utils/omit.js", () => {
     describe("omit", () => {
         const obj = {a: "foo", b: "bar", c: "baz"},
             objectBoolean = {true: {x: "foo", y: "bar"}},
@@ -37,26 +36,6 @@ describe("src/utils/objectHelpers.js", () => {
         });
         it("should return the 3. entry, because ignoreCase is true", function () {
             expect(omit(obj, ["A", "B"], true)).to.deep.equal({c: "baz"});
-        });
-    });
-    describe("isArrayOfStrings", () => {
-        it("returns true if input is an array of strings", () => {
-            const input = ["a", "", "abc"];
-
-            expect(isArrayOfStrings(input)).to.be.equals(true);
-        });
-        it("returns false if input is an empty array or undefined", () => {
-            const input = [];
-
-            expect(isArrayOfStrings(input)).to.be.equals(false);
-            expect(isArrayOfStrings(undefined)).to.be.equals(false);
-        });
-        it("returns false if input is not an array of strings", () => {
-            expect(isArrayOfStrings(["", "", "", {}])).to.be.equals(false);
-            expect(isArrayOfStrings(["", "", "", 1])).to.be.equals(false);
-            expect(isArrayOfStrings(["", "", "", false])).to.be.equals(false);
-            expect(isArrayOfStrings(["", "", "", null])).to.be.equals(false);
-            expect(isArrayOfStrings(["", "", "", undefined])).to.be.equals(false);
         });
     });
 });
