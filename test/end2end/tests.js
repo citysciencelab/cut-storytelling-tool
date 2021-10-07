@@ -69,7 +69,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 require("../../src/modules/controls/orientation/tests/end2end/Orientation.e2e.js"),
                 require("../../src/modules/controls/overviewMap/tests/end2end/OverviewMap.e2e.js"),
                 require("../../src/modules/controls/totalView/tests/end2end/TotalView.e2e.js"),
-                require("../../src/modules/controls/zoom/test/end2end/Zoom.e2e.js"),
+                require("../../src/modules/controls/zoom/tests/end2end/Zoom.e2e.js"),
 
                 // modules/menu
                 require("./tests/modules/menu/MainNav.js"),
@@ -99,7 +99,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 require("../../src/modules/legend/tests/end2end/Legend.e2e.js"),
 
                 // src\utils
-                // require("../../src/utils/test/end2end/parametricUrl/ParametricUrl.e2e.js"),
+                // require("../../src/utils/tests/end2end/parametricUrl/ParametricUrl.e2e.js"),
 
                 // non-module tests
                 require("../../src/tests/end2end/Pan.e2e.js"),

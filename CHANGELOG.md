@@ -12,6 +12,7 @@
 ### Added
 
 ### Changed
+- Coding-Conventions: For unittests in Vue (/src/...) the vast majority of test-folders are called "tests", going back to a mutual understanding of folder naming. Please use "tests" for your unit or e2e tests in Vue in the future.
 
 ### Deprecated
 
