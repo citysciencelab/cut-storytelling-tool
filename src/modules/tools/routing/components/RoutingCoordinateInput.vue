@@ -131,7 +131,7 @@ export default {
 </script>
 
 <template>
-    <div class="form-group form-group-sm mx-0">
+    <div class="form-group-sm mx-0 mb-4">
         <div
             v-if="isFocused"
             class="mx-6 hilfetext"
@@ -256,8 +256,11 @@ label {
     margin-right: 1.5rem;
 }
 .mx-0 {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+    margin-left: 0;
+    margin-right: 0;
+}
+.mb-4 {
+    margin-bottom: 1rem;
 }
 .glyphicon-remove.form-control-feedback {
     color: #777;
