@@ -72,7 +72,7 @@ describe("src/modules/tools/routing/components/RoutingCoordinateInput.vue", () =
             localVue,
             propsData: props
         });
-        expect(wrapper.find(".form-group.form-group-sm").exists()).to.be.true;
+        expect(wrapper.find(".form-group-sm.mb-4.mx-0").exists()).to.be.true;
     });
 
     it("renders info text on focus", async () => {
