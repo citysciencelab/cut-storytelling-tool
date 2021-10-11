@@ -141,7 +141,7 @@ export default {
     changedPosition ({dispatch, state, rootState, getters}) {
         if (state.mode === "supply") {
             const targetProjectionName = state.currentProjection?.name,
-                position = getters.getTransformedPosition(rootState.Map.map, targetProjectionName);
+                position = getters.getTransformedPosition(rootState.Map.map, targetProjectionName, rootState.Map.center);
 
             if (position) {
                 dispatch("adjustPosition", {position: position, targetProjection: state.currentProjection});
@@ -315,7 +315,7 @@ export default {
     transformCoordinatesFromTo ({state, commit}, targetProjection) {
         let transformedCoordinates, coordinates;
 
-        if (state.selectedCoordinates.length === 2) {
+        if (state.selectedCoordinates.length === 2 && state.selectedCoordinates[0] !== "") {
             if (state.currentProjection.id.indexOf("EPSG:4326") > -1) {
                 coordinates = convertSexagesimalToDecimal(state.selectedCoordinates);
             }

@@ -11,11 +11,13 @@ const getters = {
     /**
      * Transforms the projection.
      * @param {Object} state state of this tool
+     * @param {Object} map the map
      * @param {Object} targetProjection the target projection
+     * @param {array} center center coordinates
      * @returns {Object} the transformed projection
      */
-    getTransformedPosition: state => (map, targetProjection) => {
-        let positionTargetProjection = [0, 0];
+    getTransformedPosition: state => (map, targetProjection, center) => {
+        let positionTargetProjection = center;
 
         if (state.positionMapProjection !== null && state.positionMapProjection.length > 0) {
             positionTargetProjection = transformFromMapProjection(
