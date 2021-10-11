@@ -23,6 +23,7 @@
 ### Fixed
 - The portalTitle in the config.json without a logo is rendered correctly.
 - Loading layerIds in combination with a config via the url now also works with the treetype 'custom' in the config.
+- When changing the coordinate system in the Coordinates tool, the incorrect recalculation of the coordinates was corrected. An error in the display of the coordinate system was also fixed.
 
 
 
