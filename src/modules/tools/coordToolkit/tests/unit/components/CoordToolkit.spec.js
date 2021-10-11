@@ -166,8 +166,8 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             wrapper.vm.selectionChanged(event);
             expect(store.state.Tools.CoordToolkit.currentProjection.name).to.be.equals(value);
             expect(store.state.Tools.CoordToolkit.currentProjection.projName).to.be.equals("tmerc");
-            expect(store.state.Tools.CoordToolkit.coordinatesEasting.value).to.be.equals("0.00");
-            expect(store.state.Tools.CoordToolkit.coordinatesNorthing.value).to.be.equals("0.00");
+            expect(store.state.Tools.CoordToolkit.coordinatesEasting.value).to.be.equals("");
+            expect(store.state.Tools.CoordToolkit.coordinatesNorthing.value).to.be.equals("");
         });
         it("createInteraction sets projections and adds interaction", () => {
             wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
