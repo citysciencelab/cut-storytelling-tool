@@ -888,8 +888,10 @@
             "secondAdvent": "Second Advent",
             "thirdAdvent": "Third Advent",
             "fourthAdvent": "Fourth Of Advent",
+            "christmasEve": "Chrismas Eve",
             "christmasDay": "Christmas Day",
-            "secondDayOfChristmas": "Second Day Of Christmas"
+            "secondDayOfChristmas": "Second Day Of Christmas",
+            "newYearsEve": "New Year's Eve"
         },
         "parametricURL": {
           "alertZoomToGeometry": "The parameterized call of the portal has unfortunately gone wrong!<br>Please make sure that all parameters were entered correctly.",

@@ -887,8 +887,10 @@
             "secondAdvent": "2. Advent",
             "thirdAdvent": "3. Advent",
             "fourthAdvent": "4. Advent",
+            "christmasEve": "Heiligabend",
             "christmasDay": "1. Weihnachtstag",
-            "secondDayOfChristmas": "2. Weihnachtstag"
+            "secondDayOfChristmas": "2. Weihnachtstag",
+            "newYearsEve": "Silvester"
         },
         "parametricURL": {
             "alertZoomToGeometry": "Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!<br>Bitte stellen Sie sicher das alle Parameter richtig angegeben wurden.",
