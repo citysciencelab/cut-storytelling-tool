@@ -3,6 +3,7 @@ import {convert, convertToStringArray, convertTransparency, parseQuery} from "./
 import {setValueToState} from "./stateModifier";
 import store from "../../app-store";
 import {MapMode} from "../../modules/map/store/enums";
+import {Radio} from "backbone";
 
 const toolsNotInState = ["compareFeatures", "parcelSearch", "print", "featureLister", "layerSlider", "filter", "shadow", "virtualcity", "wfst", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
 
@@ -240,14 +241,24 @@ function parseLayerParams (layerIdString, visibilityString = "", transparencyStr
         }
         layerParams.push(optionsOfLayer);
 
-        if (layerConfigured === undefined && layerExisting !== null && treeType === "light") {
+        if (layerConfigured === undefined && layerExisting !== null && treeType !== "custom") {
             layerToPush = Object.assign({
                 isBaseLayer: false,
                 isVisibleInTree: "true",
                 parentId: "tree",
                 type: "layer"
             }, layerExisting);
-            Radio.trigger("Parser", "addItemAtTop", layerToPush);
+            if (treeType === "light") {
+                Radio.trigger("Parser", "addItemAtTop", layerToPush);
+            }
+            else {
+                // treetype default
+                const folderName = layerExisting.datasets[0]?.kategorie_opendata[0],
+                    folder = folderName ? Radio.request("Parser", "getItemByAttributes", {name: folderName}) : null,
+                    parentId = folder ? folder.id : layerToPush.parentId;
+
+                Radio.trigger("Parser", "addLayer", layerToPush.name, id, parentId, 1, layerToPush.layers, layerToPush.url, layerToPush.version, transparencyList[index], visibilityList[index]);
+            }
         }
         else if (layerConfigured === undefined) {
             wrongIdsPositions.push(index + 1);
@@ -257,7 +268,7 @@ function parseLayerParams (layerIdString, visibilityString = "", transparencyStr
     return layerParams;
 }
 /**
-     * Creates or adds the models of the layerIds and sets them visible in map depending on url param visibility and transparency.
+     * Creates or adds the models of the layerIds and sets them visible in map depending on url param visibility and transparency, besides treetype 'custom'.
      * @param {string} layerParams the layerIdList, visibilityList and transparencyList
      * @returns {void}
      */

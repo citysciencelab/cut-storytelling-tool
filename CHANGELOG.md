@@ -22,6 +22,7 @@
 
 ### Fixed
 - The portalTitle in the config.json without a logo is rendered correctly.
+- Loading layerIds in combination with a config via the url now also works with the treetype 'custom' in the config.
 
 
 
