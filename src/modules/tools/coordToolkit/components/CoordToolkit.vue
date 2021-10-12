@@ -94,6 +94,7 @@ export default {
         ...mapActions("Tools/CoordToolkit", [
             "checkPosition",
             "changedPosition",
+            "setFirstSearchPosition",
             "copyToClipboard",
             "positionClicked",
             "setCoordinates",
@@ -271,6 +272,7 @@ export default {
                 this.setMode(newMode);
                 this.removeMarker();
                 this.setSupplyCoordInactive();
+                this.setFirstSearchPosition();
             }
             else if (this.mapMode !== MapMode.MODE_3D) {
                 this.setMode(newMode);

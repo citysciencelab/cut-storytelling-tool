@@ -286,6 +286,53 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                     }}, done);
             });
         });
+        describe("setFirstSearchPosition", () => {
+            const center = [1000, 2000],
+                rootState = {
+                    Map: {
+
+                        center: center
+
+                    }
+                },
+                proj1 = {id: "projection 1", name: "projection 1", projName: "longlat"},
+                proj2 = {id: "projection 2", name: "projection 2", projName: "longlat"},
+                state = {
+                    mode: "search",
+                    projections: [proj1, proj2],
+                    currentProjection: proj2,
+                    positionMapProjection: [300, 400]
+                };
+
+            it("setFirstSearchPosition will call setCoordinatesEasting and others if position is not set", done => {
+                const payloadEasting = {id: "easting", value: String(center[0])},
+                    payloadNorthing = {id: "northing", value: String(center[1])};
+
+                testAction(actions.setFirstSearchPosition, null, state, rootState, [
+                    {type: "setCoordinatesEasting", payload: payloadEasting},
+                    {type: "setCoordinatesNorthing", payload: payloadNorthing},
+                    {type: "moveToCoordinates", payload: center, dispatch: true}
+                ], {getTransformedPosition: () => {
+                    return [0, 0];
+                }}, done);
+            });
+            it("setFirstSearchPosition will do nothing if position is set", done => {
+                state.mode = "search";
+
+                testAction(actions.setFirstSearchPosition, null, state, rootState, [
+                ], {getTransformedPosition: () => {
+                    return [100, 200];
+                }}, done);
+            });
+            it("setFirstSearchPosition will do nothing if mode is not 'search'", done => {
+                state.mode = "supply";
+
+                testAction(actions.setFirstSearchPosition, null, state, rootState, [],
+                    {getTransformedPosition: () => {
+                        return [0, 0];
+                    }}, done);
+            });
+        });
         describe("adjustPosition", () => {
             const rootState = {
                     Map: {

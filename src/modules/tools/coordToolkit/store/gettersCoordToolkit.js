@@ -16,8 +16,8 @@ const getters = {
      * @param {array} center center coordinates
      * @returns {Object} the transformed projection
      */
-    getTransformedPosition: state => (map, targetProjection, center) => {
-        let positionTargetProjection = center;
+    getTransformedPosition: state => (map, targetProjection) => {
+        let positionTargetProjection = [0, 0];
 
         if (state.positionMapProjection !== null && state.positionMapProjection.length > 0) {
             positionTargetProjection = transformFromMapProjection(
