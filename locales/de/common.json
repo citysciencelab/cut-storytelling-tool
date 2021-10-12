@@ -710,7 +710,7 @@
                 "titleGeolocate": "Standpunkt",
                 "titleGeolocatePOI": "In der Nähe",
                 "geolocationDeniedText": "Lokalisierung nicht verfügbar",
-                "poiChoiceTitle": "Ausgangspunkt für Umkeissuche wählen:",
+                "poiChoiceTitle": "Ausgangspunkt für Umkreissuche wählen:",
                 "poiChoiceCurrentPostion": "Standort",
                 "poiChoiceCustomPostion": "Adresssuche oder Punkt in Karte setzen",
                 "poiChoiceConfirmation": "OK",
