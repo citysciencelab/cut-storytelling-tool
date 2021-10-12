@@ -131,7 +131,8 @@
             "en": "English",
             "it": "Italiano",
             "pt": "Português",
-            "es": "Español"
+            "es": "Español",
+            "tr": "Türkisch"
         },
         "cswParser": {
             "noMetadataMessage": "Keine Metadaten vorhanden.",
