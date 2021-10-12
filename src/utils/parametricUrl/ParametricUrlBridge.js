@@ -3,7 +3,6 @@ import {convert, convertToStringArray, convertTransparency, parseQuery} from "./
 import {setValueToState} from "./stateModifier";
 import store from "../../app-store";
 import {MapMode} from "../../modules/map/store/enums";
-import {Radio} from "backbone";
 
 const toolsNotInState = ["compareFeatures", "parcelSearch", "print", "featureLister", "layerSlider", "filter", "shadow", "virtualcity", "wfst", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
 
