@@ -21,6 +21,7 @@
 - src/utils function isArrayOfStrings is removed, use one liner .every(v => typeof v === "string") instead in the future.
 
 ### Fixed
+- The portalTitle in the config.json without a logo is rendered correctly.
 
 
 
