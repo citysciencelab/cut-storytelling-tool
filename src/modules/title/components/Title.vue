@@ -113,7 +113,8 @@ export default {
             class="tabable"
         >
 
-            <img v-if="logo !== ''"
+            <img
+                v-if="logo !== ''"
                 id="logo"
                 :src="logo"
                 :alt="title"
