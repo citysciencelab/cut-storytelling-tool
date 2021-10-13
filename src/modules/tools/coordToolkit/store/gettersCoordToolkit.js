@@ -13,7 +13,6 @@ const getters = {
      * @param {Object} state state of this tool
      * @param {Object} map the map
      * @param {Object} targetProjection the target projection
-     * @param {array} center center coordinates
      * @returns {Object} the transformed projection
      */
     getTransformedPosition: state => (map, targetProjection) => {
