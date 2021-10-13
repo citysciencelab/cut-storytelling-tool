@@ -268,9 +268,9 @@ export default {
          * @returns {void}
          */
         changeMode (newMode) {
+            this.removeMarker();
             if (newMode === "search") {
                 this.setMode(newMode);
-                this.removeMarker();
                 this.setSupplyCoordInactive();
                 this.setFirstSearchPosition();
             }
