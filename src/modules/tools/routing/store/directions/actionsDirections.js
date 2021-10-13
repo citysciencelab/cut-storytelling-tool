@@ -67,6 +67,8 @@ export default {
      * Needs to be extended if new services should be configurable.
      * @param {Object} context actions context object.
      * @param {Object} parameter with wgs84Coords as input and instructions for the external service
+     * @param {[number, number]} [parameter.wgs84Coords] coordinates in wgs84 projection
+     * @param {Boolean} [parameter.instructions] should request with instructions
      * @returns {RoutingDirections} routingDirections
      */
     async fetchDirections ({state, getters, dispatch}, {wgs84Coords, instructions}) {
@@ -130,6 +132,9 @@ export default {
      * Highlights part of the route.
      * @param {Object} context actions context object.
      * @param {Object} params with the starting and ending index
+     * @param {Number} [params.vonWaypointIndex] at which waypoint to start the highlight
+     * @param {Number} [params.bisWaypointIndex] at which waypoint to end the highlight
+     * @param {[number, number]} [params.coordsIndex] alternative to select the coordinate index directly
      * @returns {void}
      */
     async highlightRoute ({dispatch, state}, {vonWaypointIndex, bisWaypointIndex, coordsIndex}) {
@@ -150,6 +155,9 @@ export default {
      * Zooms to part of the route
      * @param {Object} context actions context object.
      * @param {Object} params with the starting and ending index
+     * @param {Number} [params.vonWaypointIndex] at which waypoint to start the zoom
+     * @param {Number} [params.bisWaypointIndex] at which waypoint to end the zoom
+     * @param {[number, number]} [params.coordsIndex] alternative to select the coordinate index directly
      * @returns {void}
      */
     async zoomToRoute ({dispatch, state, rootGetters}, {vonWaypointIndex, bisWaypointIndex, coordsIndex}) {
@@ -354,6 +362,7 @@ export default {
      * Used to determine where to insert the new waypoint when the route is dragged in the map.
      * @param {Object} context actions context object.
      * @param {Object} params with lineStringIndex as number to search
+     * @param {Number} [params.lineStringIndex] at which index in the linestring to search for waypoints
      * @returns {Number | null} the waypoint index or null if nothing was found
      */
     findWaypointBetweenLineStringIndex ({state}, {lineStringIndex}) {
@@ -442,6 +451,9 @@ export default {
      * Adds a new Waypoint to the Array.
      * @param {Object} context actions context object.
      * @param {Object} payload payload object.
+     * @param {Number} [payload.index] index for the waypoint to insert at
+     * @param {ol.Feature} [payload.feature] optional feature to use in the waypoint or to extract coordinates from
+     * @param {String} [payload.displayName] optional displayName for the waypoint
      * @returns {RoutingWaypoint} added waypoint
      */
     addWaypoint ({state}, {index, feature, displayName}) {
@@ -490,6 +502,8 @@ export default {
      * Removes a waypoint at the given index and reloads the directions if reload = true
      * @param {Object} context actions context object.
      * @param {Object} params with a waypoint index and reload to control if the directions should be requested.
+     * @param {Number} [params.index] index to remove the waypoint at
+     * @param {Boolean} [params.reload = false] if the route should be reloaded
      * @returns {void}
      */
     removeWaypoint ({state, dispatch, commit}, {index, reload = false}) {

@@ -15,7 +15,8 @@ const getters = {
     ...generateSimpleGetters(routingState),
     /**
      * Returns the configured tabs to be displayed.
-     * @param {Object} params with routingToolOptions(String[])
+     * @param {Object} state routing
+     * @param {String[]} [state.routingToolOptions] routingToolOptions in state
      * @returns {String[]} routing tool options
      */
     filteredRoutingToolOptions ({routingToolOptions}) {

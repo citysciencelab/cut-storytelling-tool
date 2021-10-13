@@ -63,7 +63,9 @@ export default {
     /**
      * Fetches the isochrones from the configured external service with the needed parameters.
      * @param {Object} context actions context object.
-     * @param {Object} params with wgs84Coords([Number, Number][]) and transformCoordinates(Function)
+     * @param {Object} params with wgs84Coords([Number, Number][]) and transformCoordinates(Boolean)
+     * @param {[number, number]} [params.wgs84Coords] coordinates in wgs84 projection
+     * @param {Boolean} [params.transformCoordinates] the coordinates should be projected to local projection
      * @returns {RoutingIsochrones} routingIsochrones
      */
     async fetchIsochrones ({state, dispatch, getters}, {wgs84Coords, transformCoordinates}) {

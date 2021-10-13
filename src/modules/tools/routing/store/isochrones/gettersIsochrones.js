@@ -16,6 +16,9 @@ const getters = {
     /**
      * Gets the avoid speed profile options for the currently selected speed profile.
      * @param {Object} params with the configured settings and routingAvoidFeaturesOptions (String[])
+     * @param {Object} [params.settings] settings from stateIsochrones
+     * @param {String} [params.settings.speedProfile] selected speedProfile
+     * @param {String[]} [params.routingAvoidFeaturesOptions] selected avoid options
      * @returns {String[]} avoid speed profile options
      */
     selectedAvoidSpeedProfileOptions ({settings, routingAvoidFeaturesOptions}) {
@@ -24,7 +27,8 @@ const getters = {
     },
     /**
      * Checks if input is disabled.
-     * @param {Object} params with isLoadingDirections (Boolean)
+     * @param {Object} params from stateIsochrones
+     * @param {Boolean} [params.isLoadingDirections] if the directions are currently loaded
      * @returns {Boolean} true is input is disabled
      */
     isInputDisabled ({isLoadingIsochrones}) {

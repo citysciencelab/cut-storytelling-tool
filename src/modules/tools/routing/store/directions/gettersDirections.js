@@ -16,6 +16,7 @@ const getters = {
     /**
      * Gets all valid coordinates from the given waypoints.
      * @param {Object} params with waypoints
+     * @param {RoutingWaypoint[]} [params.waypoints] waypoints from directionsState
      * @returns {[Number, Number][]} coordinate array
      */
     directionsCoordinates ({waypoints}) {
@@ -25,7 +26,10 @@ const getters = {
     },
     /**
      * Gets the avoid speed profile options for the currently selected speed profile.
-     * @param {Object} params with settings (String[]) and routingAvoidFeaturesOptions (String[])
+     * @param {Object} params from stateDirections
+     * @param {Object} [params.settings] settings from stateDirections
+     * @param {String} [params.settings.speedProfile] selected SpeedProfile
+     * @param {String[]} [params.routingAvoidFeaturesOptions] selected avoid options
      * @returns {String[]} avoid speed profile options
      */
     selectedAvoidSpeedProfileOptions ({settings, routingAvoidFeaturesOptions}) {
@@ -34,7 +38,8 @@ const getters = {
     },
     /**
      * Checks if input is disabled.
-     * @param {Object} params with isLoadingDirections (Boolean)
+     * @param {Object} params from stateDirections
+     * @param {Boolean} [params.isLoadingDirections] if the directions are currently loaded
      * @returns {Boolean} true is input is disabled
      */
     isInputDisabled ({isLoadingDirections}) {
