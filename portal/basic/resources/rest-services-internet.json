@@ -34,5 +34,11 @@
     "name": "Print Service Prod",
     "url": "https://geodienste.hamburg.de/mapfish_print/print/",
     "typ": "Print"
+  },
+  {
+    "id": "mapfish_test",
+    "name": "Print Service Test",
+    "url": "https://test-geodienste.hamburg.de/mapfish_print/print/",
+    "typ": "Print"
   }
 ]

@@ -43,10 +43,21 @@
 						"name": "Zeichnen / Schreiben"
 					},
 					"fileImport": {
-            "name": "Datei Import"
+            			"name": "Datei Import"
 					},
 					"saveSelection": {
 						"name": "Auswahl speichern"
+					},
+					"print":
+					{
+						"name": "translate#common:menu.tools.print",
+						"glyphicon": "glyphicon-print",
+						"mapfishServiceId": "mapfish",
+						"printAppId": "master",
+						"filename": "Ausdruck",
+						"title": "Mein Titel",
+						"currentLayoutName": "A4 Hochformat",
+						"dpiForPdf": 120
 					}
 				}
 			},

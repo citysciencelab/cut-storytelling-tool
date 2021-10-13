@@ -30,7 +30,7 @@ const CanvasModel = {
                     canvasLayer = layer;
                 }
             }
-            else if (layer !== undefined) {
+            else if (typeof layer !== "undefined") {
                 canvasLayer = layer;
             }
             return canvasLayer;
@@ -46,8 +46,8 @@ const CanvasModel = {
      */
     buildCanvasLayerType: function (layer, currentResolution) {
         const extent = Radio.request("MapView", "getCurrentExtent"),
-            layerMinRes = layer.get("minResolution"),
-            layerMaxRes = layer.get("maxResolution"),
+            layerMinRes = layer.getMinResolution(),
+            layerMaxRes = layer.getMaxResolution(),
             isInScaleRange = this.isInScaleRange(layerMinRes, layerMaxRes, currentResolution);
         let features = [],
             returnLayer;
