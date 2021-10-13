@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getCenter, getExtent, getResolution, getMarkerPointCoord, isLayerVisible, areLayersOrdered, doesLayerWithFeaturesExist, get3DHeading, get3DTilt, get3DAltitude} = require("../../../../../test/end2end/library/scripts"),
     {centersTo, clickFeature, logTestingCloudUrlToTest} = require("../../../../../test/end2end/library/utils"),
-    {isBasic, isCustom, isDefault, isMaster, isSafari, isEdge, isChrome} = require("../../../../../test/end2end/settings"),
+    {isBasic, isDefault, isMaster, isChrome} = require("../../../../../test/end2end/settings"),
     {initDriver, getDriver, loadUrl, quitDriver} = require("../../../../../test/end2end/library/driver"),
     {By, until} = webdriver;
 
@@ -13,7 +13,7 @@ const webdriver = require("selenium-webdriver"),
  */
 async function ParametricUrlTests ({builder, url, resolution, browsername, mode, capability}) {
     // Run only in Edge Browser on BB Pipeline to improve perfomance of tests
-    if (!capability || isEdge(browsername)) {
+    if (!capability || isChrome(browsername)) {
         describe("URL Query Parameters", function () {
             let driver;
 
@@ -48,17 +48,17 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.wait(until.elementLocated(By.css("#button3D")), 5000);
                     expect(await (await driver.findElement(By.css("#button3D"))).getText()).to.equals("3D");
                 });
-                (isChrome(browsername) ? it : it.skip)("?Map/mapMode=3D test shall start in 3D-mode", async function () {
+                it("?Map/mapMode=3D test shall start in 3D-mode", async function () {
                     await loadUrl(driver, `${url}?Map/mapMode=3D`, mode);
                     await driver.wait(until.elementLocated(By.css("#north-pointer")), 5000);
                     expect(await driver.findElement(By.css("#north-pointer"))).to.exist;
                 });
-                (isChrome(browsername) ? it : it.skip)("?Map/mapMode=1 test shall start in 3D-mode", async function () {
+                it("?Map/mapMode=1 test shall start in 3D-mode", async function () {
                     await loadUrl(driver, `${url}?Map/mapMode=1`, mode);
                     await driver.wait(until.elementLocated(By.css("#north-pointer")), 5000);
                     expect(await driver.findElement(By.css("#north-pointer"))).to.exist;
                 });
-                (isChrome(browsername) ? it : it.skip)("?Map/mapMode=1 test shall start in 3D-mode and shall set heading", async function () {
+                it("?Map/mapMode=1 test shall start in 3D-mode and shall set heading", async function () {
                     await loadUrl(driver, `${url}?Map/mapMode=1&heading=-1.2502079000000208`, mode);
                     await driver.wait(until.elementLocated(By.css("#north-pointer")), 5000);
                     expect(await driver.findElement(By.css("#north-pointer"))).to.exist;
@@ -67,7 +67,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
 
                     expect(-1.2502079000000208).to.eql(heading);
                 });
-                (isChrome(browsername) ? it : it.skip)("?Map/mapMode=1 test shall start in 3D-mode and shall set tilt", async function () {
+                it("?Map/mapMode=1 test shall start in 3D-mode and shall set tilt", async function () {
                     await loadUrl(driver, `${url}?Map/mapMode=1&tilt=45`, mode);
                     await driver.wait(until.elementLocated(By.css("#north-pointer")), 5000);
                     expect(await driver.findElement(By.css("#north-pointer"))).to.exist;
@@ -76,7 +76,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
 
                     expect(45).to.eql(tilt);
                 });
-                (isChrome(browsername) ? it : it.skip)("?Map/mapMode=1 test shall start in 3D-mode and shall set altitude", async function () {
+                it("?Map/mapMode=1 test shall start in 3D-mode and shall set altitude", async function () {
                     await loadUrl(driver, `${url}?Map/mapMode=1&altitude=127`, mode);
                     await driver.wait(until.elementLocated(By.css("#north-pointer")), 5000);
                     expect(await driver.findElement(By.css("#north-pointer"))).to.exist;
@@ -119,7 +119,10 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                         return Math.round(d);
                     });
 
-                    expect(extentData).to.eql(extent);
+                    expect(extentData[0]).to.be.at.least(extent[0]);
+                    expect(extentData[1]).to.be.at.least(extent[1]);
+                    expect(extentData[2]).to.be.at.most(extent[2]);
+                    expect(extentData[3]).to.be.at.most(extent[3]);
 
                 });
                 it("?lng=en starts masterportal in english", async function () {
@@ -190,6 +193,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
                     expect(await centersTo(driver, expectedCoordinate)).to.be.true;
                 });
+
                 it("?Map/zoomToGeometry=[number] zooms to a district", async function () {
                     const expectedCoordinate = [556535.269, 5937846.413000001];
 
@@ -204,6 +208,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
 
                     expect(0.2645831904584105).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:1.000
                 });
+
                 it("?Map/zoomLevel= sets the chosen zoom level", async function () {
                     await loadUrl(driver, `${url}?Map/zoomLevel=8`, mode);
 
@@ -226,6 +231,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.wait(until.elementLocated(toolwindow), 5000);
                     expect(await driver.findElement(toolwindow)).to.exist;
                 });
+
                 it("deprecated - ?startupmodul= allows opening tools initially in window", async function () {
                     const toolName = "fileimport",
                         toolwindow = By.css(".tool-window-vue");
@@ -234,6 +240,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.wait(until.elementLocated(toolwindow), 5000);
                     expect(await driver.findElement(toolwindow)).to.exist;
                 });
+
                 it("?Tools/Measure/active=true allows opening tools initially in window", async function () {
                     const toolwindow = By.css(".tool-window-vue");
 
@@ -241,6 +248,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.wait(until.elementLocated(toolwindow), 5000);
                     expect(await driver.findElement(toolwindow)).to.exist;
                 });
+
                 it("?tools/coordToolkit/active=true allows opening tools initially in window", async function () {
                     const toolwindow = By.css(".tool-window-vue");
 
@@ -248,6 +256,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.wait(until.elementLocated(toolwindow), 5000);
                     expect(await driver.findElement(toolwindow)).to.exist;
                 });
+
                 it("?tools/measure/active=true allows opening tools initially in window", async function () {
                     const toolwindow = By.css(".tool-window-vue");
 
@@ -255,6 +264,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.wait(until.elementLocated(toolwindow), 5000);
                     expect(await driver.findElement(toolwindow)).to.exist;
                 });
+
                 it("?Measure/active=true allows opening tools initially in window", async function () {
                     const toolwindow = By.css(".tool-window-vue");
 
@@ -262,6 +272,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.wait(until.elementLocated(toolwindow), 5000);
                     expect(await driver.findElement(toolwindow)).to.exist;
                 });
+
                 it("?coordtoolkit/active=true allows opening tools initially in window", async function () {
                     const toolwindow = By.css(".tool-window-vue");
 
@@ -269,6 +280,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.wait(until.elementLocated(toolwindow), 5000);
                     expect(await driver.findElement(toolwindow)).to.exist;
                 });
+
                 it("?Measure/active allows opening tools initially in window", async function () {
                     const toolwindow = By.css(".tool-window-vue");
 
@@ -276,6 +288,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.wait(until.elementLocated(toolwindow), 5000);
                     expect(await driver.findElement(toolwindow)).to.exist;
                 });
+
                 it("?measure/active allows opening tools initially in window", async function () {
                     const toolwindow = By.css(".tool-window-vue");
 
@@ -283,6 +296,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.wait(until.elementLocated(toolwindow), 5000);
                     expect(await driver.findElement(toolwindow)).to.exist;
                 });
+
                 it("?Measure=true allows opening tools initially in window", async function () {
                     const toolwindow = By.css(".tool-window-vue");
 
@@ -290,6 +304,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.wait(until.elementLocated(toolwindow), 5000);
                     expect(await driver.findElement(toolwindow)).to.exist;
                 });
+
                 it("?measure=true allows opening tools initially in window", async function () {
                     const toolwindow = By.css(".tool-window-vue");
 
@@ -313,110 +328,111 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.wait(until.elementLocated(toolSidebar), 5000);
                     expect(await driver.findElement(toolSidebar)).to.exist;
                 });
-            }
 
-            it("deprecated - ?layerids=, &visibility=, and &transparency= work together to display a layer in tree and map as configured", async function () {
-                // 2426 is "Bezirke"
-                await loadUrl(driver, `${url}?layerids=2426&visibility=true&transparency=0`, mode);
-                await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
+                it("deprecated - ?layerids=, &visibility=, and &transparency= work together to display a layer in tree and map as configured", async function () {
+                    // 2426 is "Bezirke"
+                    await loadUrl(driver, `${url}?layerids=2426&visibility=true&transparency=0`, mode);
+                    await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
 
-                const treeEntry = await driver.findElement(
-                        isBasic(url) || isMaster(url)
-                            ? By.xpath("//ul[@id='tree']/li[.//span[@title='Bezirke'] and .//span[contains(@class,'glyphicon-check')]]")
-                            : By.css("#SelectedLayer .layer-item [title=\"Bezirke\"]")
-                    ),
-                    visible = await driver.executeScript(isLayerVisible, "2426", "1");
+                    const treeEntry = await driver.findElement(
+                            isBasic(url) || isMaster(url)
+                                ? By.xpath("//ul[@id='tree']/li[.//span[@title='Bezirke'] and .//span[contains(@class,'glyphicon-check')]]")
+                                : By.css("#SelectedLayer .layer-item [title=\"Bezirke\"]")
+                        ),
+                        visible = await driver.executeScript(isLayerVisible, "2426", "1");
 
-                expect(treeEntry).to.exist;
-                expect(visible).to.be.true;
-            });
-            xit("?Map/layerids=, &visibility=, and &transparency= work together to display a layer in tree and map as configured", async function () {
-                // 2426 is "Bezirke"
-                await loadUrl(driver, `${url}?Map/layerids=2426&visibility=true&transparency=0`, mode);
-                await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
+                    expect(treeEntry).to.exist;
+                    expect(visible).to.be.true;
+                });
 
-                const treeEntry = await driver.findElement(
-                        isBasic(url) || isMaster(url)
-                            ? By.xpath("//ul[@id='tree']/li[.//span[@title='Bezirke'] and .//span[contains(@class,'glyphicon-check')]]")
-                            : By.css("#SelectedLayer .layer-item [title=\"Bezirke\"]")
-                    ),
-                    visible = await driver.executeScript(isLayerVisible, "2426", "1");
+                it("?Map/layerids=, &visibility=, and &transparency= work together to display a layer in tree and map as configured", async function () {
+                    // 2426 is "Bezirke"
+                    await loadUrl(driver, `${url}?Map/layerids=2426&visibility=true&transparency=0`, mode);
+                    await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
 
-                expect(treeEntry).to.exist;
-                expect(visible).to.be.true;
-            });
+                    const treeEntry = await driver.findElement(
+                            isBasic(url) || isMaster(url)
+                                ? By.xpath("//ul[@id='tree']/li[.//span[@title='Bezirke'] and .//span[contains(@class,'glyphicon-check')]]")
+                                : By.css("#SelectedLayer .layer-item [title=\"Bezirke\"]")
+                        ),
+                        visible = await driver.executeScript(isLayerVisible, "2426", "1");
 
-            it("deprecated - ?layerIDs=, &visibility=, and &transparency= allow configuring multiple layers and work with &center= and &zoomlevel=", async function () {
-                let ortho = "";
+                    expect(treeEntry).to.exist;
+                    expect(visible).to.be.true;
+                });
 
-                // 2426 is "Bezirke"
-                // 452 is "Digitale Orthophotos (belaubt) Hamburg || Luftbilder DOP 20 (DOP 40 mit Umland)"
-                await loadUrl(driver, `${url}?layerIDs=452,2426&visibility=true,true&transparency=40,20&center=560478.8,5937293.5&zoomlevel=3`, mode);
-                await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
+                it("deprecated - ?layerIDs=, &visibility=, and &transparency= allow configuring multiple layers and work with &center= and &zoomlevel=", async function () {
+                    let ortho = "";
 
-                if (isBasic(url) || isMaster(url)) {
-                    ortho = "ul#tree li [title^=\"Digitale Orthophotos (belaubt) Hamburg\"]";
-                }
-                else if (isDefault(url)) {
-                    ortho = "#SelectedLayer .layer-item [title^=\"Luftbilder DOP 20 (DOP 40 mit Umland)\"]";
-                }
-                else {
-                    ortho = "#SelectedLayer .layer-item [title^=\"Digitale Orthophotos (belaubt) Hamburg\"]";
-                }
+                    // 2426 is "Bezirke"
+                    // 452 is "Digitale Orthophotos (belaubt) Hamburg || Luftbilder DOP 20 (DOP 40 mit Umland)"
+                    await loadUrl(driver, `${url}?layerIDs=452,2426&visibility=true,true&transparency=40,20&center=560478.8,5937293.5&zoomlevel=3`, mode);
+                    await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
 
-                const treeEntryLuftbilder = await driver.findElement(By.css(ortho)),
-                    treeEntryBezirke = await driver.findElement(By.css(
-                        isBasic(url) || isMaster(url)
-                            ? "ul#tree li [title=\"Bezirke\"]"
-                            : "#SelectedLayer .layer-item [title=\"Bezirke\"]"
-                    )),
-                    luftbilderVisible = await driver.executeScript(isLayerVisible, "452", "0.6"),
-                    bezirkeVisible = await driver.executeScript(isLayerVisible, "2426", "0.8");
+                    if (isBasic(url) || isMaster(url)) {
+                        ortho = "ul#tree li [title^=\"Digitale Orthophotos (belaubt) Hamburg\"]";
+                    }
+                    else if (isDefault(url)) {
+                        ortho = "#SelectedLayer .layer-item [title^=\"Luftbilder DOP 20 (DOP 40 mit Umland)\"]";
+                    }
+                    else {
+                        ortho = "#SelectedLayer .layer-item [title^=\"Digitale Orthophotos (belaubt) Hamburg\"]";
+                    }
 
-                expect(treeEntryLuftbilder).to.exist;
-                expect(treeEntryBezirke).to.exist;
-                expect(luftbilderVisible).to.equal(true);
-                expect(bezirkeVisible).to.equal(true);
-                expect(await driver.executeScript(areLayersOrdered, ["452", "2426"])).to.be.true;
-                expect([560478.8, 5937293.5]).to.eql(await driver.executeScript(getCenter));
-                expect(10.58332761833642).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:40.000
-            });
-            it("?Map/layerIDs=, &visibility=, and &transparency= allow configuring multiple layers and work with &center= and &zoomlevel=", async function () {
-                let ortho = "";
+                    const treeEntryLuftbilder = await driver.findElement(By.css(ortho)),
+                        treeEntryBezirke = await driver.findElement(By.css(
+                            isBasic(url) || isMaster(url)
+                                ? "ul#tree li [title=\"Bezirke\"]"
+                                : "#SelectedLayer .layer-item [title=\"Bezirke\"]"
+                        )),
+                        luftbilderVisible = await driver.executeScript(isLayerVisible, "452", "0.6"),
+                        bezirkeVisible = await driver.executeScript(isLayerVisible, "2426", "0.8");
 
-                // 2426 is "Bezirke"
-                // 452 is "Digitale Orthophotos (belaubt) Hamburg || Luftbilder DOP 20 (DOP 40 mit Umland)"
-                await loadUrl(driver, `${url}?Map/layerIDs=452,2426&visibility=true,true&transparency=40,20&center=560478.8,5937293.5&zoomlevel=3`, mode);
-                await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
+                    expect(treeEntryLuftbilder).to.exist;
+                    expect(treeEntryBezirke).to.exist;
+                    expect(luftbilderVisible).to.equal(true);
+                    expect(bezirkeVisible).to.equal(true);
+                    expect(await driver.executeScript(areLayersOrdered, ["452", "2426"])).to.be.true;
+                    expect([560478.8, 5937293.5]).to.eql(await driver.executeScript(getCenter));
+                    expect(10.58332761833642).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:40.000
+                });
 
-                if (isBasic(url) || isMaster(url)) {
-                    ortho = "ul#tree li [title^=\"Digitale Orthophotos (belaubt) Hamburg\"]";
-                }
-                else if (isDefault(url)) {
-                    ortho = "#SelectedLayer .layer-item [title^=\"Luftbilder DOP 20 (DOP 40 mit Umland)\"]";
-                }
-                else {
-                    ortho = "#SelectedLayer .layer-item [title^=\"Digitale Orthophotos (belaubt) Hamburg\"]";
-                }
+                it("?Map/layerIDs=, &visibility=, and &transparency= allow configuring multiple layers and work with &center= and &zoomlevel=", async function () {
+                    let ortho = "";
 
-                const treeEntryLuftbilder = await driver.findElement(By.css(ortho)),
-                    treeEntryBezirke = await driver.findElement(By.css(
-                        isBasic(url) || isMaster(url)
-                            ? "ul#tree li [title=\"Bezirke\"]"
-                            : "#SelectedLayer .layer-item [title=\"Bezirke\"]"
-                    )),
-                    luftbilderVisible = await driver.executeScript(isLayerVisible, "452", "0.6"),
-                    bezirkeVisible = await driver.executeScript(isLayerVisible, "2426", "0.8");
+                    // 2426 is "Bezirke"
+                    // 452 is "Digitale Orthophotos (belaubt) Hamburg || Luftbilder DOP 20 (DOP 40 mit Umland)"
+                    await loadUrl(driver, `${url}?Map/layerIDs=452,2426&visibility=true,true&transparency=40,20&center=560478.8,5937293.5&zoomlevel=3`, mode);
+                    await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
 
-                expect(treeEntryLuftbilder).to.exist;
-                expect(treeEntryBezirke).to.exist;
-                expect(luftbilderVisible).to.equal(true);
-                expect(bezirkeVisible).to.equal(true);
-                expect(await driver.executeScript(areLayersOrdered, ["452", "2426"])).to.be.true;
-                expect([560478.8, 5937293.5]).to.eql(await driver.executeScript(getCenter));
-                expect(10.58332761833642).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:40.000
-            });
-            if (isMaster(url)) {
+                    if (isBasic(url) || isMaster(url)) {
+                        ortho = "ul#tree li [title^=\"Digitale Orthophotos (belaubt) Hamburg\"]";
+                    }
+                    else if (isDefault(url)) {
+                        ortho = "#SelectedLayer .layer-item [title^=\"Luftbilder DOP 20 (DOP 40 mit Umland)\"]";
+                    }
+                    else {
+                        ortho = "#SelectedLayer .layer-item [title^=\"Digitale Orthophotos (belaubt) Hamburg\"]";
+                    }
+
+                    const treeEntryLuftbilder = await driver.findElement(By.css(ortho)),
+                        treeEntryBezirke = await driver.findElement(By.css(
+                            isBasic(url) || isMaster(url)
+                                ? "ul#tree li [title=\"Bezirke\"]"
+                                : "#SelectedLayer .layer-item [title=\"Bezirke\"]"
+                        )),
+                        luftbilderVisible = await driver.executeScript(isLayerVisible, "452", "0.6"),
+                        bezirkeVisible = await driver.executeScript(isLayerVisible, "2426", "0.8");
+
+                    expect(treeEntryLuftbilder).to.exist;
+                    expect(treeEntryBezirke).to.exist;
+                    expect(luftbilderVisible).to.equal(true);
+                    expect(bezirkeVisible).to.equal(true);
+                    expect(await driver.executeScript(areLayersOrdered, ["452", "2426"])).to.be.true;
+                    expect([560478.8, 5937293.5]).to.eql(await driver.executeScript(getCenter));
+                    expect(10.58332761833642).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:40.000
+                });
+
                 it("deprecated - ?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - KiTa layer GFI with example 'KiTa Im Volkspark' shows gfi", async function () {
                     const paramUrl = `${url}/?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`;
                     let counter = 0;
@@ -491,6 +507,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await (await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[contains(@class, 'glyphicon-remove')]"))).click();
                     expect((await driver.findElements(By.css("div.gfi"))).length).to.equal(0);
                 });
+
                 it("?Map/layerids=, &visibility=, and &transparency= have working gfi/legend/info - hospital layer GFI with example 'Israelitisches Krankenhaus shows gfi", async function () {
                     const paramUrl = `${url}/?Map/layerids=4736,myId2&visibility=true,true&transparency=0,0`;
                     let counter = 0;
@@ -529,6 +546,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await (await driver.findElement(By.css(".legend-menu-item"))).click();
                     expect((await driver.findElements(By.css("div.legend-window"))).length).to.equal(0);
                 });
+
                 it("?Map/layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - both layers have their respective legend loaded", async function () {
                     const paramUrl = `${url}/?Map/layerIDs=4736,myId2&visibility=true,true&transparency=0,0`;
 
@@ -556,6 +574,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
 
                     expect(await driver.findElements(By.xpath("//*[contains(text(),'Fehler beim Laden der Vorschau der Metadaten.')]"))).to.be.empty;
                 });
+
                 it("?Map/layerids=, &visibility=, and &transparency= have working gfi/legend/info - layers are shown in the topic tree and present layer information", async function () {
                     await loadUrl(driver, `${url}?Map/layerids=4736,myId2&visibility=true,true&transparency=0,0`, mode);
                     await (await driver.findElement(By.css("div#navbarRow li:first-child"))).click();
@@ -603,6 +622,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
 
                     expect(await driver.findElements(By.xpath("//*[contains(text(),'Fehler beim Laden der Vorschau der Metadaten.')]"))).to.be.empty;
                 });
+
                 it("?Map/layerids=, &visibility=, and &transparency= with set zoom level have working gfi/legend/info", async function () {
                     await loadUrl(driver, `${url}?Map/layerids=4736,4537&visibility=true,true&transparency=0,0&zoomLevel=6`, mode);
                     const coords = [566688.25, 5934320.50];
@@ -641,8 +661,6 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     expect(await driver.findElements(By.xpath("//*[contains(text(),'Fehler beim Laden der Vorschau der Metadaten.')]"))).to.be.empty;
                 });
 
-            }
-            if (isMaster(url) || isCustom(url)) {
                 it("deprecated - ?featureid= displays markers for features", async function () {
                     await loadUrl(driver, `${url}?featureid=18,26`, mode);
                     await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
@@ -651,6 +669,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                         {coordinate: [567043.565, 5934455.808], image: "https://geodienste.hamburg.de/lgv-config/img/location_eventlotse.svg"}
                     ]), 20000);
                 });
+
                 it("?zoomToFeatureId= displays markers for features", async function () {
                     await loadUrl(driver, `${url}?zoomToFeatureId=18,26`, mode);
                     await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
@@ -659,6 +678,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                         {coordinate: [567043.565, 5934455.808], image: "https://geodienste.hamburg.de/lgv-config/img/location_eventlotse.svg"}
                     ]), 20000);
                 });
+
                 it("?Map/zoomToFeatureId= displays markers for features", async function () {
                     await loadUrl(driver, `${url}?Map/zoomToFeatureId=18,26`, mode);
                     await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
@@ -667,6 +687,67 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                         {coordinate: [567043.565, 5934455.808], image: "https://geodienste.hamburg.de/lgv-config/img/location_eventlotse.svg"}
                     ]), 20000);
                 });
+
+                it("?featureViaURL test point", async function () {
+                    await loadUrl(driver, `${url}?featureViaURL=[{"layerId":"42","features":[{"coordinates":[566331.53,5928359.43],"label":"TestPunkt"}]}]`, mode);
+
+                    await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
+                    await driver.wait(async () => driver.executeScript(doesLayerWithFeaturesExist, [
+                        {coordinate: [566331.53, 5928359.43], image: "https://geodienste.hamburg.de/lgv-config/img/location_eventlotse.svg"}
+                    ]), 20000);
+                });
+
+                it("?featureViaURL test point", async function () {
+                    await loadUrl(driver, `${url}?featureViaURL=[{"layerId":"4200","features":[{"coordinates":[[10.15,53.5],[10.05,53.5],[10.05,53.55]],"label":"TestLinie"}]}]`, mode);
+                    await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
+                    await driver.executeScript(isLayerVisible, "4200");
+                });
+
+                it("deprecated - ?config= allows selecting a config", async function () {
+                    const splitUrl = url.split("_");
+                    let urlAffix = "";
+
+                    if (splitUrl.length > 1) {
+                        splitUrl.shift();
+                        urlAffix = `_${splitUrl.join("_")}`;
+                    }
+
+                    // test by redirecting master to default
+                    await loadUrl(driver, `${url}?config=../masterDefault${urlAffix}/config.json`, mode);
+
+                    expect(await driver.findElement(By.css("ul#tree .layer-catalog .header .form-inline .catalog-selection .form-control"))).to.exist;
+
+                    // test by redirecting master to default with layers
+                    await loadUrl(driver, `${url}?layerIDs=19969,4915&visibility=true,true&transparency=0,0&config=../masterDefault${urlAffix}/config.json`, mode);
+
+                    // no alert present
+                    expect(await driver.findElements(By.css(".singleAlertMessage"))).to.be.empty;
+
+                    // test by redirecting master to custom
+                    await loadUrl(driver, `${url}?config=../masterCustom${urlAffix}/config.json`, mode);
+
+                    expect(await driver.findElement(By.css("ul#tree .layer-catalog .header .control-label"))).to.exist;
+                });
+
+                it("?configJson= allows selecting a config", async function () {
+                    const splitUrl = url.split("_");
+                    let urlAffix = "";
+
+                    if (splitUrl.length > 1) {
+                        splitUrl.shift();
+                        urlAffix = `_${splitUrl.join("_")}`;
+                    }
+
+                    // test by redirecting master to default
+                    await loadUrl(driver, `${url}?configJson=../masterDefault${urlAffix}/config.json`, mode);
+
+                    expect(await driver.findElement(By.css("ul#tree .layer-catalog .header .form-inline .catalog-selection .form-control"))).to.exist;
+
+                    // test by redirecting master to custom
+                    await loadUrl(driver, `${url}?configJson=../masterCustom${urlAffix}/config.json`, mode);
+
+                    expect(await driver.findElement(By.css("ul#tree .layer-catalog .header .control-label"))).to.exist;
+                });
             }
 
             /**
@@ -674,7 +755,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
               * With the BKG address service can not be tested, because this is only available in the fhhnet and therefore does not work on the Internet.
               */
             if (isDefault(url)) {
-                (isSafari(browsername) ? it.skip : it)("deprecated - ?query= fills and executes query field", async function () {
+                it("deprecated - ?query= fills and executes query field", async function () {
                     await loadUrl(driver, `${url}?query=Neuenfeld`, mode);
 
                     await driver.wait(until.elementLocated(By.css("#searchInput")), 12000);
@@ -686,7 +767,8 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     // result list has entries, implying a search happened
                     await driver.wait(until.elementLocated(By.css("#searchInputUL li")));
                 });
-                (isSafari(browsername) ? it.skip : it)("?Search/query= fills and executes query field", async function () {
+
+                it("?Search/query= fills and executes query field", async function () {
                     await loadUrl(driver, `${url}?Search/query=Neuenfeld`, mode);
 
                     await driver.wait(until.elementLocated(By.css("#searchInput")), 12000);
@@ -704,7 +786,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
               * With the BKG address service can not be tested, because this is only available in the fhhnet and therefore does not work on the Internet.
               */
 
-                (isSafari(browsername) ? it.skip : it)("deprecated - ?query= fills and executes search and zooms to result if unique address", async function () {
+                it("deprecated - ?query= fills and executes search and zooms to result if unique address", async function () {
                     await loadUrl(driver, `${url}?query=Neuenfelder Straße,19`, mode);
 
                     await driver.wait(until.elementLocated(By.css("#searchInput")), 12000);
@@ -727,7 +809,8 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                         );
                     }, 10000, `Expected coordinates ${expected}, but received ${center}. Did not receive matching coordinates within 10 seconds.`);
                 });
-                (isSafari(browsername) ? it.skip : it)("?Search/query= fills and executes search and zooms to result if unique address", async function () {
+
+                it("?Search/query= fills and executes search and zooms to result if unique address", async function () {
                     await loadUrl(driver, `${url}?Search/query=Neuenfelder Straße,19`, mode);
 
                     await driver.wait(until.elementLocated(By.css("#searchInput")), 12000);
@@ -750,64 +833,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                         );
                     }, 10000, `Expected coordinates ${expected}, but received ${center}. Did not receive matching coordinates within 10 seconds.`);
                 });
-            }
 
-            if (isMaster(url)) {
-                it("?featureViaURL test point", async function () {
-                    await loadUrl(driver, `${url}?featureViaURL=[{"layerId":"42","features":[{"coordinates":[566331.53,5928359.43],"label":"TestPunkt"}]}]`, mode);
-
-                    await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
-                    await driver.wait(async () => driver.executeScript(doesLayerWithFeaturesExist, [
-                        {coordinate: [566331.53, 5928359.43], image: "https://geodienste.hamburg.de/lgv-config/img/location_eventlotse.svg"}
-                    ]), 20000);
-                });
-                it("?featureViaURL test point", async function () {
-                    await loadUrl(driver, `${url}?featureViaURL=[{"layerId":"4200","features":[{"coordinates":[[10.15,53.5],[10.05,53.5],[10.05,53.55]],"label":"TestLinie"}]}]`, mode);
-                    await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
-                    await driver.executeScript(isLayerVisible, "4200");
-                });
-
-                it("deprecated - ?config= allows selecting a config", async function () {
-                    const splitUrl = url.split("_");
-                    let urlAffix = "";
-
-                    if (splitUrl.length > 1) {
-                        splitUrl.shift();
-                        urlAffix = `_${splitUrl.join("_")}`;
-                    }
-
-                    // test by redirecting master to default
-                    await loadUrl(driver, `${url}?config=../masterDefault${urlAffix}/config.json`, mode);
-
-                    expect(await driver.findElement(By.css("ul#tree .layer-catalog .header .form-inline .catalog-selection .form-control"))).to.exist;
-
-                    // test by redirecting master to custom
-                    await loadUrl(driver, `${url}?config=../masterCustom${urlAffix}/config.json`, mode);
-
-                    expect(await driver.findElement(By.css("ul#tree .layer-catalog .header .control-label"))).to.exist;
-                });
-                it("?configJson= allows selecting a config", async function () {
-                    const splitUrl = url.split("_");
-                    let urlAffix = "";
-
-                    if (splitUrl.length > 1) {
-                        splitUrl.shift();
-                        urlAffix = `_${splitUrl.join("_")}`;
-                    }
-
-                    // test by redirecting master to default
-                    await loadUrl(driver, `${url}?configJson=../masterDefault${urlAffix}/config.json`, mode);
-
-                    expect(await driver.findElement(By.css("ul#tree .layer-catalog .header .form-inline .catalog-selection .form-control"))).to.exist;
-
-                    // test by redirecting master to custom
-                    await loadUrl(driver, `${url}?configJson=../masterCustom${urlAffix}/config.json`, mode);
-
-                    expect(await driver.findElement(By.css("ul#tree .layer-catalog .header .control-label"))).to.exist;
-                });
-            }
-
-            if (isDefault(url)) {
                 it("deprecated - ?mdid= opens and displays a layer", async function () {
                     const topicSelector = By.css("div#navbarRow li:first-child");
 
@@ -822,6 +848,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     // check if visible in map
                     await driver.executeScript(isLayerVisible, "1562_4");
                 });
+
                 it("?Map/mdId= opens and displays a layer", async function () {
                     const topicSelector = By.css("div#navbarRow li:first-child");
 
@@ -836,6 +863,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     // check if visible in map
                     await driver.executeScript(isLayerVisible, "1562_4");
                 });
+
                 it("deprecated - opening and configuring lots of layers works", async function () {
                     //  ?layerIDs=368,717,2423,1562_0,2432,1935geofox-bahn,2444,1561_6,2941,2452&visibility=true,false,false,false,false,false,false,false,false,false&transparency=0,0,0,0,0,0,0,0,0,0&center=572765.7219565103,5940389.380731404&zoomlevel=5
                     let layers = "368,717,2423,1562_0,2432,1935geofox-bahn,2444,1561_6,2941,2452",
@@ -867,6 +895,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     // no alert present
                     expect(await driver.findElements(By.css("#messages .alert"))).to.be.empty;
                 });
+
                 it("opening and configuring lots of layers works", async function () {
                     //  ?layerIDs=368,717,2423,1562_0,2432,1935geofox-bahn,2444,1561_6,2941,2452&visibility=true,false,false,false,false,false,false,false,false,false&transparency=0,0,0,0,0,0,0,0,0,0&center=572765.7219565103,5940389.380731404&zoomlevel=5
                     let layers = "368,717,2423,1562_0,2432,1935geofox-bahn,2444,1561_6,2941,2452",
@@ -898,7 +927,8 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     // no alert present
                     expect(await driver.findElements(By.css("#messages .alert"))).to.be.empty;
                 });
-                xit("?Map/layerids=, &visibility=, and &transparency= work together to display a layer in tree and map as configured - testing string in id", async function () {
+
+                it("?Map/layerids=, &visibility=, and &transparency= work together to display a layer in tree and map as configured - testing string in id", async function () {
                     // 1935geofox-bahn = Bahnlinien
                     await loadUrl(driver, `${url}?Map/layerids=1935geofox-bahn&visibility=true&transparency=0`, mode);
                     await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
