@@ -83,6 +83,8 @@ describe("src/modules/tools/routing/components/RoutingDistanceDisplay.vue", () =
             localVue,
             propsData: props
         });
-        expect(wrapper.find("span").text()).equal("1.2 km");
+        const expectedResult = Number(1.2).toLocaleString();
+
+        expect(wrapper.find("span").text()).equal(`${expectedResult} km`);
     });
 });
