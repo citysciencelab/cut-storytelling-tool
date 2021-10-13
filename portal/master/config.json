@@ -365,17 +365,6 @@
           "bufferAnalysis": {
             "name": "bufferAnalysis"
         },
-          "print": {
-            "name": "translate#common:menu.tools.print",
-            "glyphicon": "glyphicon-print",
-            "mapfishServiceId": "mapfish",
-            "printAppId": "master",
-            "filename": "Ausdruck",
-            "title": "Mein Titel",
-            "legendText": "Mit Legende",
-            "currentLayoutName": "A3 Hochformat",
-            "dpiForPdf": 120
-          },
           "searchByCoord":
           {
             "name": "translate#common:menu.tools.searchByCoord",
