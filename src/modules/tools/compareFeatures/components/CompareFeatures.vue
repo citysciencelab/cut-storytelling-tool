@@ -53,6 +53,7 @@ export default {
         isEmailAddress,
 
         close () {
+            this.setShowMoreInfo(false);
             this.setActive(false);
             // set the backbone model to active false in modellist for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
             const model = Radio.request("ModelList", "getModelByAttributes", {id: this.$store.state.Tools.CompareFeatures.id});
@@ -155,7 +156,7 @@ export default {
                 </div>
             </div>
         </template>
-        <div>
+        <div class="scrollable">
             <div
                 v-if="!hasFeatures"
                 id="tool-compareFeatures-no-features"
@@ -216,7 +217,10 @@ export default {
     @import "~/css/mixins.less";
 
     @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
-
+    .scrollable{
+        overflow: auto;
+        max-height: calc(100vh - 200px);
+    }
     .tool-compareFeatures-modal-title {
         font-family: @font_family_1;
     }
