@@ -2,7 +2,6 @@ import testAction from "../../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../store/actionsPrint";
 import VectorLayer from "ol/layer/Vector.js";
 import sinon from "sinon";
-import {expect} from "chai";
 
 const {sendRequest, activatePrintStarted, startPrint, getMetaDataForPrint, createPrintJob, waitForPrintJob, waitForPrintJobSuccess} = actions;
 
