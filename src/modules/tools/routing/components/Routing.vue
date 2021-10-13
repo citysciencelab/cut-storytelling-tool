@@ -97,7 +97,7 @@ export default {
 
 <template>
     <Tool
-        :title="name"
+        :title="$t(name)"
         :icon="glyphicon"
         :active="active"
         :render-to-window="renderToWindow"

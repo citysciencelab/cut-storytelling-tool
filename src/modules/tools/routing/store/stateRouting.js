@@ -3,7 +3,7 @@ const state = {
     active: false,
     id: "routing",
     // mandatory defaults for config.json parameters
-    name: "Koordinatensuche",
+    name: "common:menu.tools.routing",
     glyphicon: "glyphicon-road",
     renderToWindow: true,
     resizableWindow: true,

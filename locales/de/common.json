@@ -57,7 +57,8 @@
             "legend":"Legende",
             "styleVt": "Style VT",
             "bufferAnalysis": "Buffer Analyse",
-            "wfsSearch": "WFS Suche"
+            "wfsSearch": "WFS Suche",
+            "routing": "Routing"
         },
         "contact": "Kontakt",
         "info": "Informationen"
