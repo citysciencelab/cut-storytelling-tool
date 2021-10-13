@@ -188,9 +188,13 @@ export default {
                 class="form-horizontal"
             >
                 <div class="form-group form-group-sm">
-                    <label class="col-sm-5 control-label">{{ $t("common:modules.tools.print.titleLabel") }}</label>
+                    <label
+                        class="col-sm-5 control-label"
+                        for="docTitle"
+                    >{{ $t("common:modules.tools.print.titleLabel") }}</label>
                     <div class="col-sm-7">
                         <input
+                            id="docTitle"
                             v-model="documentTitle"
                             type="text"
                             class="form-control"
@@ -199,7 +203,10 @@ export default {
                     </div>
                 </div>
                 <div class="form-group form-group-sm">
-                    <label class="col-sm-5 control-label">{{ $t("common:modules.tools.print.layoutLabel") }}</label>
+                    <label
+                        class="col-sm-5 control-label"
+                        for="printLayout"
+                    >{{ $t("common:modules.tools.print.layoutLabel") }}</label>
                     <div class="col-sm-7">
                         <select
                             id="printLayout"
@@ -218,7 +225,10 @@ export default {
                     </div>
                 </div>
                 <div class="form-group form-group-sm">
-                    <label class="col-sm-5 control-label">
+                    <label
+                        class="col-sm-5 control-label"
+                        for="printFormat"
+                    >
                         {{ $t("common:modules.tools.print.formatLabel") }}
                     </label>
                     <div class="col-sm-7">
@@ -239,7 +249,10 @@ export default {
                     </div>
                 </div>
                 <div class="form-group form-group-sm scale">
-                    <label class="col-sm-5 control-label">{{ $t("common:modules.tools.print.scaleLabel") }}</label>
+                    <label
+                        class="col-sm-5 control-label"
+                        for="printScale"
+                    >{{ $t("common:modules.tools.print.scaleLabel") }}ggg</label>
                     <div class="col-sm-7">
                         <select
                             id="printScale"
@@ -262,7 +275,9 @@ export default {
                         v-if="currentScale !== currentMapScale"
                         class="hint"
                         @mouseover="showHintInfoScale = true"
+                        @focusin="showHintInfoScale = true"
                         @mouseleave="showHintInfoScale = false"
+                        @focusout="showHintInfoScale = false"
                     >
                         <span class="glyphicon glyphicon-info-sign" />
                     </div>
@@ -276,7 +291,10 @@ export default {
                 <div
                     class="form-group form-group-sm"
                 >
-                    <label class="col-sm-5 control-label">
+                    <label
+                        class="col-sm-5 control-label"
+                        for="printLegend"
+                    >
                         {{ $t("common:modules.tools.print.withLegendLabel") }}
                     </label>
                     <div class="col-sm-7">
@@ -293,7 +311,10 @@ export default {
                 <div
                     class="form-group form-group-sm"
                 >
-                    <label class="col-sm-5 control-label">
+                    <label
+                        class="col-sm-5 control-label"
+                        for="printGfi"
+                    >
                         {{ $t("common:modules.tools.print.withInfoLabel") }}
                     </label>
                     <div class="col-sm-7">
