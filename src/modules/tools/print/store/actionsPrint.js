@@ -126,7 +126,6 @@ export default {
      * @returns {void}
      */
     getMetaDataForPrint: async function ({rootGetters, dispatch}, cswObj) {
-        debugger;
         let metadata;
 
         if (cswObj.layer.get("datasets") && Array.isArray(cswObj.layer.get("datasets")) && cswObj.layer.get("datasets")[0] !== null && typeof cswObj.layer.get("datasets")[0] === "object") {

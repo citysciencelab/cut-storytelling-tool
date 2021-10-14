@@ -77,7 +77,6 @@ const BuildSpecModel = {
      * @returns {void}
      */
     updateMetaData: function (layerName, parsedData) {
-        debugger;
         const layers = this.defaults.attributes.legend && this.defaults.attributes.legend?.layers ? this.attributes.defaults.legend.layers : undefined,
             layer = findWhereJs(layers, {layerName: layerName});
 
