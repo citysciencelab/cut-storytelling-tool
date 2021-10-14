@@ -252,7 +252,7 @@ export default {
                     <label
                         class="col-sm-5 control-label"
                         for="printScale"
-                    >{{ $t("common:modules.tools.print.scaleLabel") }}ggg</label>
+                    >{{ $t("common:modules.tools.print.scaleLabel") }}</label>
                     <div class="col-sm-7">
                         <select
                             id="printScale"

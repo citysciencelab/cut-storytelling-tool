@@ -2,37 +2,10 @@ import testAction from "../../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../store/actionsPrint";
 import VectorLayer from "ol/layer/Vector.js";
 import sinon from "sinon";
-import axios from "axios";
-import {expect} from "chai";
 
 const {activatePrintStarted, startPrint, getMetaDataForPrint, createPrintJob, waitForPrintJob, waitForPrintJobSuccess} = actions;
 
 describe("tools/print/actionsPrint", function () {
-    describe("sendRequest", function () {
-        it("should send an axios request", () => {
-            // how to handle axios and the parameters?
-            const axiosStub = sinon.stub(axios, "get").returns(Promise.resolve({status: 200, data: {}})),
-                state = {
-                    useProxy: false
-                },
-                dispatch = sinon.spy(),
-                serviceRequest = {
-                    "serviceUrl": "https://geodienste.hamburg.de/mapfish_print_internet/print/master/status/b9feec2f-b012-4e76-9b05-2499a0ae59ee@89c12004-d327-4fb1-88a3-2a3332fa36a0.json",
-                    "requestType": "GET",
-                    "onSuccess": "waitForPrintJobSuccess"
-                },
-                serviceUrl = "https://geodienste.hamburg.de/mapfish_print_internet/print/master/status/b9feec2f-b012-4e76-9b05-2499a0ae59ee@89c12004-d327-4fb1-88a3-2a3332fa36a0.json";
-
-            actions.sendRequest({state, dispatch}, serviceRequest);
-
-            expect(
-                axiosStub.calledWith(serviceUrl, "GET")
-            ).to.be.true;
-
-            axiosStub.restore();
-        });
-    });
-
     describe("activatePrintStarted", function () {
         it("should set activatePrintStarted to true", done => {
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
