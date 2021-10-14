@@ -25,8 +25,7 @@ export default {
 
         axios({
             url: url,
-            type: serviceRequest.requestType,
-            timeout: serviceRequest.timeout
+            type: serviceRequest.requestType
         }).then(response => {
             dispatch(String(serviceRequest.onSuccess), response.data);
         });
@@ -127,6 +126,7 @@ export default {
      * @returns {void}
      */
     getMetaDataForPrint: async function ({rootGetters, dispatch}, cswObj) {
+        debugger;
         let metadata;
 
         if (cswObj.layer.get("datasets") && Array.isArray(cswObj.layer.get("datasets")) && cswObj.layer.get("datasets")[0] !== null && typeof cswObj.layer.get("datasets")[0] === "object") {

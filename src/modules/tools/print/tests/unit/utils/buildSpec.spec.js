@@ -6,7 +6,6 @@ import {Tile, Vector} from "ol/layer.js";
 import {expect} from "chai";
 import {EOL} from "os";
 import createTestFeatures from "./testHelper";
-import sinon from "sinon";
 
 describe("tools/print/buildSpec", function () {
     let buildSpec,
