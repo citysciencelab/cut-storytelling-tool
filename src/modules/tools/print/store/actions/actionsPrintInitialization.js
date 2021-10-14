@@ -271,9 +271,10 @@ export default {
      * @returns {void}
      */
     getVisibleLayer: function ({dispatch}) {
-        const visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(layer => {
-            return layer.getVisible() === true && layer.get("name") !== "markerPoint";
-        });
+        const layers = Radio.request("Map", "getLayers"),
+            visibleLayerList = typeof layers?.getArray !== "function" ? [] : layers.getArray().filter(layer => {
+                return layer.getVisible() === true && layer.get("name") !== "markerPoint";
+            });
 
         dispatch("sortVisibleLayerListByZindex", visibleLayerList);
     },

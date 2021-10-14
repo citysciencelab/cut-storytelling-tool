@@ -2,10 +2,11 @@ import testAction from "../../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../store/actionsPrint";
 import VectorLayer from "ol/layer/Vector.js";
 import sinon from "sinon";
+import {expect} from "chai";
 
 const {activatePrintStarted, startPrint, getMetaDataForPrint, createPrintJob, waitForPrintJob, waitForPrintJobSuccess} = actions;
 
-describe("tools/print/actionsPrint", function () {
+describe.only("tools/print/actionsPrint", function () {
     describe("activatePrintStarted", function () {
         it("should set activatePrintStarted to true", done => {
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
@@ -21,10 +22,10 @@ describe("tools/print/actionsPrint", function () {
                 state = {
                     visibleLayerList: [
                         TileLayer,
-                        VectorLayer,
-                        VectorLayer,
-                        VectorLayer,
-                        VectorLayer
+                        new VectorLayer(),
+                        new VectorLayer(),
+                        new VectorLayer(),
+                        new VectorLayer()
                     ],
                     currentLayoutName: "A4 Hochformat",
                     filename: "Hamburger Menu",
@@ -39,7 +40,7 @@ describe("tools/print/actionsPrint", function () {
                 };
 
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
-            testAction(startPrint, state, {}, {}, [
+            testAction(startPrint, {}, state, {}, [
                 {type: "setProgressWidth", payload: "width: 25%", commit: true},
                 {type: "getVisibleLayer", payload: undefined, dispatch: true}
             ], {}, done);
@@ -47,10 +48,10 @@ describe("tools/print/actionsPrint", function () {
         it("should start the print but with no legend", done => {
             const state = {
                     visibleLayerList: [
-                        VectorLayer,
-                        VectorLayer,
-                        VectorLayer,
-                        VectorLayer
+                        new VectorLayer(),
+                        new VectorLayer(),
+                        new VectorLayer(),
+                        new VectorLayer()
                     ],
                     currentLayoutName: "A4 Hochformat",
                     filename: "Hamburger Menu",
@@ -65,17 +66,28 @@ describe("tools/print/actionsPrint", function () {
                     printAppId: "master"
                 },
                 defaults = {
-                    attributes: {title: "Mein Titel", scale: "1:60000", showGfi: false},
-                    layout: "A3 Hochformat",
-                    outputFilename: "Ausdruck",
+                    attributes: {
+                        title: "Cheeseburger Menu",
+                        scale: "1:60000",
+                        map: {
+                            projection: "EPSG:25832",
+                            center: {},
+                            scale: 60000,
+                            layers: []
+                        },
+                        legend: {},
+                        showLegend: false
+                    },
+                    layout: "A4 Hochformat",
+                    outputFilename: "Hamburger Menu",
                     outputFormat: "pdf",
                     uniqueIdList: [],
-                    visibleLayerIds: ["453", "8712", "1711"]
+                    visibleLayerIds: []
                 },
                 printJob = {
                     "payload": encodeURIComponent(JSON.stringify(defaults)),
-                    "printAppId": state.printAppId,
-                    "currentFormat": state.currentFormat
+                    "printAppId": "master",
+                    "currentFormat": "pdf"
                 },
                 request = sinon.spy(() => ({
                     getCode: () => "EPSG:25832"
@@ -84,7 +96,7 @@ describe("tools/print/actionsPrint", function () {
             sinon.stub(Radio, "request").callsFake(request);
 
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
-            testAction(startPrint, state, {}, {}, [
+            testAction(startPrint, {}, state, {}, [
                 {type: "setProgressWidth", payload: "width: 25%", commit: true},
                 {type: "getVisibleLayer", payload: undefined, dispatch: true},
                 {type: "createPrintJob", payload: printJob, dispatch: true}

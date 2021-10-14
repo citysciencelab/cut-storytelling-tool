@@ -4,6 +4,8 @@ import Tool from "../../Tool.vue";
 import getters from "../store/gettersPrint";
 import mutations from "../store/mutationsPrint";
 import getComponent from "../../../../utils/getComponent";
+import thousandsSeparator from "../../../../utils/thousandsSeparator.js";
+
 /**
  * Tool to print a part of the map
  */
@@ -93,8 +95,19 @@ export default {
             "updateCanvasLayer"
         ]),
 
+        /**
+         * returns the "beautified" scale to be shown in the dropdown box
+         * @param {Number} scale the scale to beautify
+         * @returns {String} the beautified scale
+         */
         returnScale (scale) {
-            return scale < 10000 ? scale : scale.toString().substring(0, scale.toString().length - 3) + " " + scale.toString().substring(scale.toString().length - 3);
+            if (typeof scale !== "number") {
+                return "";
+            }
+            else if (scale < 10000) {
+                return String(scale);
+            }
+            return thousandsSeparator(scale, " ");
         },
         scaleChanged (event) {
             this.setCurrentScale(event.value);

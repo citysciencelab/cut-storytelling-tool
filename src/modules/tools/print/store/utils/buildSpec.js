@@ -166,24 +166,26 @@ const BuildSpecModel = {
             currentResolution = Radio.request("MapView", "getOptions")?.resolution,
             visibleLayerIds = [];
 
-        layerList.forEach(layer => {
-            const printLayers = [];
+        if (Array.isArray(layerList)) {
+            layerList.forEach(layer => {
+                const printLayers = [];
 
-            if (layer instanceof Group) {
-                layer.getLayers().getArray().forEach(childLayer => {
-                    printLayers.push(this.buildLayerType(childLayer, currentResolution));
-                });
-            }
-            else {
-                printLayers.push(this.buildLayerType(layer, currentResolution));
-            }
-            printLayers.forEach(printLayer => {
-                if (printLayer !== undefined) {
-                    visibleLayerIds.push(layer.get("id"));
-                    layers.push(printLayer);
+                if (layer instanceof Group) {
+                    layer.getLayers().getArray().forEach(childLayer => {
+                        printLayers.push(this.buildLayerType(childLayer, currentResolution));
+                    });
                 }
+                else {
+                    printLayers.push(this.buildLayerType(layer, currentResolution));
+                }
+                printLayers.forEach(printLayer => {
+                    if (typeof printLayer !== "undefined") {
+                        visibleLayerIds.push(layer?.get("id"));
+                        layers.push(printLayer);
+                    }
+                });
             });
-        });
+        }
 
         this.setVisibleLayerIds(visibleLayerIds);
         attributes.map.layers = layers.reverse();
@@ -242,7 +244,7 @@ const BuildSpecModel = {
                     returnLayer = this.buildWmts(layer, source);
                 }
             }
-            else if (layer.get("name") === "import_draw_layer") {
+            else if (layer?.get("name") === "import_draw_layer") {
                 returnLayer = this.getDrawLayerInfo(layer, extent);
             }
             else if (layer instanceof Vector) {
