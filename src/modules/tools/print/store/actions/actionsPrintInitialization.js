@@ -117,7 +117,6 @@ export default {
      * @returns {Object|undefined} corresponding attribute or null
      */
     getAttributeInLayoutByName: function ({state, commit}, name) {
-        debugger;
         state.currentLayout.attributes.forEach(attribute => {
             if (attribute.name === name) {
                 const capName = name.charAt(0).toUpperCase() + name.slice(1);

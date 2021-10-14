@@ -34,7 +34,6 @@ const BuildSpecModel = {
      * @returns {void}
      */
     fetchedMetaData: function (cswObj) {
-        debugger;
         if (this.isOwnMetaRequest(this.uniqueIdList, cswObj.uniqueId)) {
             this.removeUniqueIdFromList(this.uniqueIdList, cswObj.uniqueId);
             this.updateMetaData(cswObj.layerName, cswObj.parsedData);
@@ -78,6 +77,7 @@ const BuildSpecModel = {
      * @returns {void}
      */
     updateMetaData: function (layerName, parsedData) {
+        debugger;
         const layers = this.defaults.attributes.legend && this.defaults.attributes.legend?.layers ? this.attributes.defaults.legend.layers : undefined,
             layer = findWhereJs(layers, {layerName: layerName});
 
@@ -1078,7 +1078,6 @@ const BuildSpecModel = {
         this.setLegend(legendObject);
         if (isMetaDataAvailable && metaDataLayerList.length > 0) {
             metaDataLayerList.forEach((layerName) => {
-                debugger;
                 this.getMetaData(layerName);
             });
         }
@@ -1115,7 +1114,6 @@ const BuildSpecModel = {
      * @returns {void}
      */
     getMetaData: function (layerName) {
-        debugger;
         const layer = Radio.request("ModelList", "getModelByAttributes", {name: layerName}),
             metaId = layer.get("datasets") && layer.get("datasets")[0] ? layer.get("datasets")[0].md_id : null,
             uniqueIdRes = uniqueId(),
