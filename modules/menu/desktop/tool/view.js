@@ -184,6 +184,9 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
             // menu navigation is closed
             $("div.collapse.navbar-collapse").removeClass("in");
             $("li.dropdown-folder.open").removeClass("open");
+            $(".dropdown-menu.fixed").removeClass("fixed");
+            $(".glyphicon-pushpin").removeClass("rotate-pin");
+            $(".glyphicon-pushpin").addClass("rotate-pin-back");
         }
     }
 });
