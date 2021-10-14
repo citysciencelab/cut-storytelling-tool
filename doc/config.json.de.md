@@ -950,6 +950,7 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 [type:virtualcity]: # (Portalconfig.menu.tool.virtualcity)
 [type:wfsSearch]: # (Portalconfig.menu.tool.wfsSearch)
 [type:wfst]: # (Portalconfig.menu.tool.wfst)
+[type:routing]: # (Portalconfig.menu.tool.routing)
 
 Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdown-header-portalconfigmenutool)** und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
 
@@ -985,6 +986,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |wfsSearch|nein|**[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)**||Ermöglicht es ein Formular zu erstellen, um einen WFS Layer abgekoppelt von der Suchleiste mittels Filter anzufragen. Es ist möglich entweder eine gespeicherte Anfrage (Stored Query, WFS@2.0.0) zu nutzen oder eine Anfrage mithilfe der konfigurierten Parameter zu definieren (WFS@1.1.0).|false|
 |wfst|nein|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||WFS-T Modul mit dem Features visualisiert, erstellt, aktualisiert und gelöscht werden können.|false|
 |bufferAnalysis|nein|**[tool](#markdown-header-portalconfigmenutool)**||In der Buffer-Analyse muss ein Quell-Layer, ein Buffer-Radius und ein Ziel-Layer ausgewählt werden. Buffer-Radien werden um die Features des Quell-Layers dargestellt. Sobald ein Ziel-Layer gewählt wurde, werden nur die Features dieses Layers hervorgehoben, welche sich außerhalb der Buffer-Radien befinden. Auch eine invertierte Anzeige ist möglich. Bei dieser werden nur die Features des Ziel-Layers innerhalb der Radien hervorgehoben werden.|false|
+|routing|nein|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Routing Modul zur Erstellung von Routenplanungen und Erreichbarkeitsanalysen.|false|
 
 ***
 
@@ -2668,17 +2670,18 @@ Koordinaten-Werkzeug. Um zusätzlich zu den 2 dimensionalen Koordinaten die Höh
 #### Portalconfig.menu.tool.routing
 
 [inherits]: # (Portalconfig.menu.tool)
+
 Routing-Werkzeug. Ermöglicht Nutzern das Planen von Routen zwischen mehreren Punkten mit verschiedenen Optionen. Zusätzlich gibt es noch die Funktion zur Erstellung einer Erreichbarkeitsanalyse. Beide Funktionen sind mit einer Stapelverarbeitung verfügbar, zur Abfrage mehrere Routen und Analysen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |activeRoutingToolOption|nein|String|"DIRECTONS"|Gibt an welches Tool geöffnet werden soll.|false|
 |routingToolOptions|nein|String[]|[ ]|Gibt an welche Tools bereitgestellt werden soll. Möglich sind aktuell "DIRECTIONS" und "ISOCHRONES"|false|
-|download|nein|**[Download](#markdown-header-portalconfigmenutoolroutingdownload)**||Downloadoptionen|false|
-|geosearch|nein|**[Geosearch](#markdown-header-portalconfigmenutoolroutinggeosearch)**||Geosucheoptionen|false|
-|geosearchReverse|nein|**[GeosearchReverse](#markdown-header-portalconfigmenutoolroutinggeosearchreverse)**||Geosuchereverseoptionen|false|
-|directionsSettings|nein|**[DirectionsSettings](#markdown-header-portalconfigmenutoolroutingdirectionssettings)**||Routenplanungoptionen|false|
-|isochronesSettings|nein|**[IsochronesSettings](#markdown-header-portalconfigmenutoolroutingisochronessettings)**||Erreichbarkeitsanalysenoptionen|false|
+|download|nein|**[download](#markdown-header-portalconfigmenutoolroutingdownload)**||Downloadoptionen|false|
+|geosearch|nein|**[geosearch](#markdown-header-portalconfigmenutoolroutinggeosearch)**||Geosucheoptionen|false|
+|geosearchReverse|nein|**[geosearchReverse](#markdown-header-portalconfigmenutoolroutinggeosearchreverse)**||Geosuchereverseoptionen|false|
+|directionsSettings|nein|**[directionsSettings](#markdown-header-portalconfigmenutoolroutingdirectionssettings)**||Routenplanungoptionen|false|
+|isochronesSettings|nein|**[isochronesSettings](#markdown-header-portalconfigmenutoolroutingisochronessettings)**||Erreichbarkeitsanalysenoptionen|false|
 
 
 **Beispiel**
@@ -2780,7 +2783,6 @@ Routing-Werkzeug. Ermöglicht Nutzern das Planen von Routen zwischen mehreren Pu
           }
 ```
 
-<!-- TODO Beispieljson erweitern -->
 ***
 
 #### Portalconfig.menu.tool.routing.download
@@ -2859,10 +2861,10 @@ Routing-Werkzeug Routenplanung Optionen.
 |serviceId|ja|String||Welcher Service für die Abfrage verwendet werden soll.|false|
 |speedProfile|nein|String|"CAR"|Welches Geschwindigkeitsprofile verwendet werden soll.|false|
 |preference|nein|String|"RECOMMENDED"|Welches Art der Routenplanung verwendet werden soll.|false|
-|styleRoute|nein|**[StyleRoute](#markdown-header-portalconfigmenutoolroutingdirectionssettingsstyleroute)**||Stylerouteoptionen|false|
-|styleWaypoint|nein|**[StyleWaypoint](#markdown-header-portalconfigmenutoolroutingdirectionssettingsstylewaypoint)**||Stylewaypointoptionen|false|
-|styleAvoidAreas|nein|**[StyleAvoidAreas](#markdown-header-portalconfigmenutoolroutingdirectionssettingsstyleavoidareas)**||Styleavoidareasoptionen|false|
-|batchProcessing|nein|**[BatchProcessing](#markdown-header-portalconfigmenutoolroutingdirectionssettingsbatchprocessing)**||Batchprocessingoptionen|false|
+|styleRoute|nein|**[styleRoute](#markdown-header-portalconfigmenutoolroutingdirectionssettingsstyleroute)**||Stylerouteoptionen|false|
+|styleWaypoint|nein|**[styleWaypoint](#markdown-header-portalconfigmenutoolroutingdirectionssettingsstylewaypoint)**||Stylewaypointoptionen|false|
+|styleAvoidAreas|nein|**[styleAvoidAreas](#markdown-header-portalconfigmenutoolroutingdirectionssettingsstyleavoidareas)**||Styleavoidareasoptionen|false|
+|batchProcessing|nein|**[batchProcessing](#markdown-header-portalconfigmenutoolroutingdirectionssettingsbatchprocessing)**||Batchprocessingoptionen|false|
 
 **Beispiel**
 ```
@@ -2915,11 +2917,11 @@ Routing-Werkzeug Routenplanung Routen Style Optionen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|fillColor|nein|[Number, Number, Number]|[255, 44, 0]|Welche Farbe zum füllen verwendet werden soll.|false|
+|fillColor|nein|Number[]|[255, 44, 0]|Welche Farbe zum füllen verwendet werden soll.|false|
 |width|nein|Number|6|Wie breit die Route dargestellt werden soll.|false|
-|highlightColor|nein|[Number, Number, Number]|[255, 255, 255]|Welche Farbe zum highlighten verwendet werden soll.|false|
+|highlightColor|nein|Number[]|[255, 255, 255]|Welche Farbe zum highlighten verwendet werden soll.|false|
 |highlightWidth|nein|Number|9|Wie breit das Highlighting dargestellt werden soll.|false|
-|partHighlightColor|nein|[Number, Number, Number]|[255, 255, 255]|Welche Farbe zum highlighten verwendet werden soll, wenn nur ein Teil der Route gehighlightet wird.|false|
+|partHighlightColor|nein|Number[]|[255, 255, 255]|Welche Farbe zum highlighten verwendet werden soll, wenn nur ein Teil der Route gehighlightet wird.|false|
 |highlightWidth|nein|Number|9|Wie breit das Highlighting dargestellt werden soll, wenn nur ein Teil der Route gehighlightet wird.|false|
 
 **Beispiel**
@@ -2943,11 +2945,11 @@ Routing-Werkzeug Routenplanung Wegpunkt Style Optionen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|lineColor|nein|[Number, Number, Number]|[255, 127, 0]|Welche Farbe zum umranden verwendet werden soll.|false|
+|lineColor|nein|Number[]|[255, 127, 0]|Welche Farbe zum umranden verwendet werden soll.|false|
 |lineWidth|nein|Number|4|Wie breit die Umrandung dargestellt werden soll.|false|
-|fillColor|nein|[Number, Number, Number]|[255, 127, 0]|Welche Farbe zum füllen verwendet werden soll.|false|
-|textFillColor|nein|String|#000|Welche Farbe für den Text verwendet werden soll.|false|
-|textLineColor|nein|String|#fff|Welche Farbe für das Highlighten des Textes verwendet werden soll.|false|
+|fillColor|nein|Number[]|[255, 127, 0]|Welche Farbe zum füllen verwendet werden soll.|false|
+|textFillColor|nein|String|"#000"|Welche Farbe für den Text verwendet werden soll.|false|
+|textLineColor|nein|String|"#fff"|Welche Farbe für das Highlighten des Textes verwendet werden soll.|false|
 |textLineWidth|nein|Number|3|Wie groß der Text dargestellt werden soll.|false|
 |opacity|nein|Number|0.3|Wie stark die Füllfarbe dargestellt werden soll.|false|
 |radius|nein|Number|8|Wie groß der Wegpunkt dargestellt werden soll.|false|
@@ -2975,9 +2977,9 @@ Routing-Werkzeug Routenplanung Sperrflächen Style Optionen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|lineColor|nein|[Number, Number, Number]|[0, 127, 255]|Welche Farbe zum umranden verwendet werden soll.|false|
+|lineColor|nein|Number[]|[0, 127, 255]|Welche Farbe zum umranden verwendet werden soll.|false|
 |lineWidth|nein|Number|2|Wie breit die Umrandung dargestellt werden soll.|false|
-|fillColor|nein|[Number, Number, Number]|[0, 127, 255]|Welche Farbe zum füllen verwendet werden soll.|false|
+|fillColor|nein|Number[]|[0, 127, 255]|Welche Farbe zum füllen verwendet werden soll.|false|
 |opacity|nein|Number|0.3|Wie stark die Füllfarbe dargestellt werden soll.|false|
 |pointRadius|nein|Number|8|Wie groß die Eckpunkte dargestellt werden soll.|false|
 |pointLineWidth|nein|Number|4|Wie groß die Umrandung der Eckpunkte dargestellt werden soll.|false|
@@ -3040,8 +3042,9 @@ Routing-Werkzeug Erreichbarkeitsanalysen Optionen.
 |intervalValue|nein|Number|15|Welcher Intervalwert in km/min für den Slider verwendet werden soll.|false|
 |minInterval|nein|Number|1|Welcher minimale Interval in km/min für den Slider verwendet werden soll.|false|
 |maxInterval|nein|Number|30|Welcher maximale Interval in km/min für den Slider verwendet werden soll.|false|
-|styleCenter|nein|**[StyleCenter](#markdown-header-portalconfigmenutoolroutingisochronessettingsstylecenter)**||Stylecenteroptionen|false|
-|styleIsochrones|nein|**[StyleIsochrones](#markdown-header-portalconfigmenutoolroutingisochronessettingsstyleisochrones)**||Styleisochronesoptionen|false|
+|styleCenter|nein|**[styleCenter](#markdown-header-portalconfigmenutoolroutingisochronessettingsstylecenter)**||Stylecenteroptionen|false|
+|styleIsochrones|nein|**[styleIsochrones](#markdown-header-portalconfigmenutoolroutingisochronessettingsstyleisochrones)**||Styleisochronesoptionen|false|
+|batchProcessing|nein|**[batchProcessing](#markdown-header-portalconfigmenutoolroutingisochronessettingsbatchprocessing)**||Batchprocessingoptionen|false|
 
 
 **Beispiel**
@@ -3091,9 +3094,9 @@ Routing-Werkzeug Erreichbarkeitsanalysen Center Style Optionen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|lineColor|nein|[Number, Number, Number]|[255, 127, 0]|Welche Farbe für die Umrandung verwendet werden soll.|false|
+|lineColor|nein|Number[]|[255, 127, 0]|Welche Farbe für die Umrandung verwendet werden soll.|false|
 |lineWidth|nein|Number|4|Wie breit die Umrandung des Punktes dargestellt werden soll.|false|
-|fillColor|nein|[Number, Number, Number]|[255, 127, 0]|Welche Farbe zum füllen verwendet werden soll.|false|
+|fillColor|nein|Number[]|[255, 127, 0]|Welche Farbe zum füllen verwendet werden soll.|false|
 |opacity|nein|Number|0.3|Wie stark die Füllfarbe dargestellt werden soll.|false|
 |radius|nein|Number|8|Wie groß der Wegpunkt dargestellt werden soll.|false|
 
@@ -3119,8 +3122,8 @@ Routing-Werkzeug Erreichbarkeitsanalysen Isochrone Style Optionen.
 |----|-------------|---|-------|------------|------|
 |lineWidth|nein|Number|2|Wie breit die Umrandung der Polygone dargestellt werden soll.|false|
 |opacity|nein|Number|0.65|Wie stark die Füllfarbe dargestellt werden soll.|false|
-|startColor|nein|[Number, Number, Number]|[66, 245, 78]|Ab welcher Farbe zum füllen interpoliert verwendet werden soll.|false|
-|endColor|nein|[Number, Number, Number]|[245, 66, 66]|Bis welcher Farbe zum füllen interpoliert verwendet werden soll.|false|
+|startColor|nein|Number[]|[66, 245, 78]|Ab welcher Farbe zum füllen interpoliert verwendet werden soll.|false|
+|endColor|nein|Number[]|[245, 66, 66]|Bis welcher Farbe zum füllen interpoliert verwendet werden soll.|false|
 
 **Beispiel**
 ```
