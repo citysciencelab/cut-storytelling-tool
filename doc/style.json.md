@@ -331,6 +331,7 @@ Please see the [OpenLayers Icon documentation](https://openlayers.org/en/latest/
 |imageOffsetY||Float|`0.5`|Image y offset|
 |imageOffsetXUnit||String|`"fraction"`|Units in which the anchor x value is specified.|
 |imageOffsetYUnit||String|`"fraction"`|Units in which the anchor y value is specified.|
+|rotation||String|`0`|Rotation in degrees (positive rotation clockwise).|
 
 #### Point.Circle
 

@@ -10,6 +10,7 @@
 
 ## Unreleased - in development
 ### Added
+- added parameter "rotation" to wfs features with iconPointStyle, if the parameter is not given it will fallback to standard alignment.
 - gfiAttributes: Adding Boolean type in gfi Attributes so that the original text can be parsed to be more understandable.
 
 ### Changed

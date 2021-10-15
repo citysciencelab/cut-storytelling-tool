@@ -179,7 +179,8 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
             scale = parseFloat(this.get("imageScale")),
             offset = [parseFloat(this.get("imageOffsetX")), parseFloat(this.get("imageOffsetY"))],
             offsetXUnit = this.get("imageOffsetXUnit"),
-            offsetYUnit = this.get("imageOffsetYUnit");
+            offsetYUnit = this.get("imageOffsetYUnit"),
+            rotation = this.get("rotation") * Math.PI / 180;
 
         return new Style({
             image: new Icon({
@@ -190,7 +191,8 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
                 anchor: offset,
                 anchorXUnits: offsetXUnit,
                 anchorYUnits: offsetYUnit,
-                imgSize: isSVG ? [width, height] : ""
+                imgSize: isSVG ? [width, height] : "",
+                rotation: rotation ? rotation : 0
             })
         });
     },
