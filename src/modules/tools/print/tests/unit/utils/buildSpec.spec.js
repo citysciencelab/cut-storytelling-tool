@@ -353,31 +353,6 @@ describe("tools/print/buildSpec", function () {
         });
 
     });
-    describe("addZero", function () {
-        it("should create hex string part with leading 0 if input length === 1", function () {
-            expect(buildSpec.addZero("A")).to.deep.include("0A");
-        });
-        it("should create hex string part without leading 0 if input length >1", function () {
-            expect(buildSpec.addZero("ff")).to.deep.include("ff");
-        });
-    });
-    describe("rgbArrayToHex", function () {
-        it("should create hex string from rgbArray", function () {
-            expect(buildSpec.rgbArrayToHex([255, 255, 255])).to.deep.include("#ffffff");
-        });
-        it("should create hex string from short hexcode string", function () {
-            expect(buildSpec.rgbArrayToHex("#333")).to.deep.include("#333");
-        });
-        it("should create default hex string from empty rgbArray", function () {
-            expect(buildSpec.rgbArrayToHex([])).to.deep.include("#3399CC");
-        });
-        it("should create default hex string from undefined rgbArray", function () {
-            expect(buildSpec.rgbArrayToHex(undefined)).to.deep.include("#3399CC");
-        });
-        it("should create hex string from rgbArray with transparency", function () {
-            expect(buildSpec.rgbArrayToHex([255, 0, 0, 1])).to.deep.include("#ff0000");
-        });
-    });
     describe("buildWmts", () => {
         const matrixIds = [0, 1, 2],
             matrixSizes = [[1, 1], [2, 2], [4, 4]],

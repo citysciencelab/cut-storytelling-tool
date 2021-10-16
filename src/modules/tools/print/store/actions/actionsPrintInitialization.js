@@ -1,12 +1,11 @@
 
-import differenceJS from "../../../../../utils/differenceJS";
-import sortBy from "../../../../../utils/sortBy";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 import thousandsSeparator from "../../../../../utils/thousandsSeparator.js";
 import Canvas from "./../utils/buildCanvas";
 import getProxyUrl from "../../../../../utils/getProxyUrl";
 import axios from "axios";
 import BuildSpec from "./../utils/buildSpec";
+import getVisibleLayer from "./../utils/getVisibleLayer";
 
 export default {
     /**
@@ -139,7 +138,7 @@ export default {
     togglePostrenderListener: function ({state, dispatch, commit}) {
         const foundVectorTileLayers = [];
 
-        dispatch("getVisibleLayer");
+        getVisibleLayer();
 
         /*
         * Since MapFish 3 does not yet support VTL (see https://github.com/mapfish/mapfish-print/issues/659),
@@ -265,36 +264,6 @@ export default {
         }
     },
 
-    /**
-     * sets the visible layers and set into variable
-     * @param {Object} param.dispatch the dispatch
-     * @returns {void}
-     */
-    getVisibleLayer: function ({dispatch}) {
-        const layers = Radio.request("Map", "getLayers"),
-            visibleLayerList = typeof layers?.getArray !== "function" ? [] : layers.getArray().filter(layer => {
-                return layer.getVisible() === true && layer.get("name") !== "markerPoint";
-            });
-
-        dispatch("sortVisibleLayerListByZindex", visibleLayerList);
-    },
-    /**
-     * sorts the visible layer list by zIndex from layer
-     * layers with undefined zIndex come to the beginning of array
-     * @param {array} visibleLayerList with visble layer
-     * @param {Object} param.commit the commit
-     * @returns {array} sorted visibleLayerList
-     */
-    sortVisibleLayerListByZindex: function ({commit}, visibleLayerList) {
-        const visibleLayerListWithZIndex = visibleLayerList.filter(layer => {
-                return layer.getZIndex() !== undefined;
-            }),
-            visibleLayerListWithoutZIndex = differenceJS(visibleLayerList, visibleLayerListWithZIndex);
-
-        visibleLayerListWithoutZIndex.push(sortBy(visibleLayerListWithZIndex, (layer) => layer.getZIndex()));
-
-        commit("setVisibleLayerList", [].concat(...visibleLayerListWithoutZIndex));
-    },
     /**
      * draws the print page rectangle onto the canvas
      * @param {Object} param.state the state

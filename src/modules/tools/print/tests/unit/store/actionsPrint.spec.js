@@ -6,7 +6,7 @@ import {expect} from "chai";
 
 const {activatePrintStarted, startPrint, getMetaDataForPrint, createPrintJob, waitForPrintJob, waitForPrintJobSuccess} = actions;
 
-describe.only("tools/print/actionsPrint", function () {
+describe("tools/print/actionsPrint", function () {
     describe("activatePrintStarted", function () {
         it("should set activatePrintStarted to true", done => {
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
@@ -66,28 +66,39 @@ describe.only("tools/print/actionsPrint", function () {
                     printAppId: "master"
                 },
                 defaults = {
+                    uniqueIdList: [],
+                    visibleLayerIds: [],
                     attributes: {
                         title: "Cheeseburger Menu",
-                        scale: "1:60000",
                         map: {
                             projection: "EPSG:25832",
                             center: {},
                             scale: 60000,
                             layers: []
                         },
+                        scale: "1:60000",
                         legend: {},
                         showLegend: false
                     },
                     layout: "A4 Hochformat",
                     outputFilename: "Hamburger Menu",
-                    outputFormat: "pdf",
-                    uniqueIdList: [],
-                    visibleLayerIds: []
+                    outputFormat: "pdf"
+                },
+                data = {
+                    ownloadURL: "/mapfish_print_internet/print/report/2ca7f8ab-24f0-48e1-9fd7-a6fe3349ccd0@89c12004-d327-4fb1-88a3-2a3332fa36a0",
+                    ref: "2ca7f8ab-24f0-48e1-9fd7-a6fe3349ccd0@89c12004-d327-4fb1-88a3-2a3332fa36a0",
+                    statusURL: "/mapfish_print_internet/print/status/2ca7f8ab-24f0-48e1-9fd7-a6fe3349ccd0@89c12004-d327-4fb1-88a3-2a3332fa36a0.json"
+                },
+                payload = {
+                    getResponse: () => {
+                        return {data};
+                    }
                 },
                 printJob = {
-                    "payload": encodeURIComponent(JSON.stringify(defaults)),
-                    "printAppId": "master",
-                    "currentFormat": "pdf"
+                    payload: encodeURIComponent(JSON.stringify(defaults)),
+                    printAppId: "master",
+                    currentFormat: "pdf",
+                    getResponse: payload.getResponse
                 },
                 request = sinon.spy(() => ({
                     getCode: () => "EPSG:25832"
@@ -96,7 +107,7 @@ describe.only("tools/print/actionsPrint", function () {
             sinon.stub(Radio, "request").callsFake(request);
 
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
-            testAction(startPrint, {}, state, {}, [
+            testAction(startPrint, payload.getResponse, state, {}, [
                 {type: "setProgressWidth", payload: "width: 25%", commit: true},
                 {type: "getVisibleLayer", payload: undefined, dispatch: true},
                 {type: "createPrintJob", payload: printJob, dispatch: true}
@@ -123,16 +134,21 @@ describe.only("tools/print/actionsPrint", function () {
                     uniqueIdList: [],
                     visibleLayerIds: ["453", "8712", "1711"]
                 },
-                payload = {"payload": encodeURIComponent(JSON.stringify(defaults))},
-                state = {
-                    mapfishServiceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
-                    printAppId: "master",
-                    currentFormat: "A4 Hochformat"
-                },
                 data = {
                     ownloadURL: "/mapfish_print_internet/print/report/2ca7f8ab-24f0-48e1-9fd7-a6fe3349ccd0@89c12004-d327-4fb1-88a3-2a3332fa36a0",
                     ref: "2ca7f8ab-24f0-48e1-9fd7-a6fe3349ccd0@89c12004-d327-4fb1-88a3-2a3332fa36a0",
                     statusURL: "/mapfish_print_internet/print/status/2ca7f8ab-24f0-48e1-9fd7-a6fe3349ccd0@89c12004-d327-4fb1-88a3-2a3332fa36a0.json"
+                },
+                payload = {
+                    payload: encodeURIComponent(JSON.stringify(defaults)),
+                    getResponse: () => {
+                        return {data};
+                    }
+                },
+                state = {
+                    mapfishServiceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
+                    printAppId: "master",
+                    currentFormat: "A4 Hochformat"
                 };
 
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters

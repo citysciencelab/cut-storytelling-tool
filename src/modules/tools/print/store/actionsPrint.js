@@ -4,6 +4,7 @@ import BuildSpec from "./../store/utils/buildSpec";
 import {getRecordById} from "../../../../api/csw/getRecordById";
 import omit from "../../../../utils/omit";
 import actionsPrintInitialization from "./actions/actionsPrintInitialization";
+import getVisibleLayer from "./../store/utils/getVisibleLayer";
 
 export default {
 
@@ -33,9 +34,7 @@ export default {
 
     /**
      * sets the printStarted to activie for the Add Ons
-     * @param {Object} param.state the state
      * @param {Object} param.commit the commit
-     * @param {Object} param.dispatch the dispatch
      * @returns {void}
      */
     activatePrintStarted: function ({commit}) {
@@ -43,15 +42,26 @@ export default {
     },
 
     /**
+     * sets the visibleLayerList
+     * @param {Object} param.commit the commit
+     * @param {Array} visibleLayerList the list
+     * @returns {void}
+     */
+    setVisibleLayerList: function ({commit}, visibleLayerList) {
+        commit("setVisibleLayerList", visibleLayerList);
+    },
+
+    /**
      * starts the printing process
      * @param {Object} param.state the state
      * @param {Object} param.commit the commit
      * @param {Object} param.dispatch the dispatch
+     * @param {Function} getResponse the function that calls the axios request
      * @returns {void}
      */
-    startPrint: function ({state, dispatch, commit}) {
+    startPrint: function ({state, dispatch, commit}, getResponse) {
         commit("setProgressWidth", "width: 25%");
-        dispatch("getVisibleLayer");
+        getVisibleLayer();
         const visibleLayerList = state.visibleLayerList,
             attr = {
                 "layout": state.currentLayoutName,
@@ -87,7 +97,7 @@ export default {
         }
 
         if (state.isLegendAvailable) {
-            spec.buildLegend(state.isLegendSelected, state.isMetaDataAvailable);
+            spec.buildLegend(state.isLegendSelected, state.isMetaDataAvailable, getResponse);
         }
         else {
             spec.setLegend({});
@@ -96,7 +106,8 @@ export default {
             const printJob = {
                 "payload": encodeURIComponent(JSON.stringify(spec.defaults)),
                 "printAppId": state.printAppId,
-                "currentFormat": state.currentFormat
+                "currentFormat": state.currentFormat,
+                "getResponse": getResponse
             };
 
             dispatch("createPrintJob", printJob);
@@ -210,7 +221,9 @@ export default {
         let response = "";
 
         commit("setProgressWidth", "width: 50%");
-        response = await axios.post(url, printJob.payload);
+        if (typeof printJob.getResponse === "function") {
+            response = await printJob.getResponse(url, printJob.payload);
+        }
 
         dispatch("waitForPrintJob", response.data);
     },
