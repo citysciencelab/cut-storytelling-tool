@@ -11,6 +11,7 @@ import sortBy from "../../../../../utils/sortBy";
 import uniqueId from "../../../../../utils/uniqueId";
 import findWhereJs from "../../../../../utils/findWhereJs";
 import Geometry from "ol/geom/Geometry";
+import {convertColor} from "../../../../../utils/convertColor";
 
 const BuildSpecModel = {
     defaults: {
@@ -77,7 +78,7 @@ const BuildSpecModel = {
      * @returns {void}
      */
     updateMetaData: function (layerName, parsedData) {
-        const layers = this.defaults.attributes.legend && this.defaults.attributes.legend?.layers ? this.attributes.defaults.legend.layers : undefined,
+        const layers = this.defaults.attributes.legend && this.defaults.attributes.legend.layers ? this.attributes.defaults.legend.layers : undefined,
             layer = findWhereJs(layers, {layerName: layerName});
 
         if (layer !== undefined) {
@@ -590,9 +591,9 @@ const BuildSpecModel = {
         return {
             type: "text",
             label: style.getText() !== undefined ? style.getText() : "",
-            fontColor: this.rgbArrayToHex(fontColor),
+            fontColor: convertColor(fontColor, "hex"),
             fontOpacity: fontColor[0] !== "#" ? fontColor[3] : 1,
-            labelOutlineColor: stroke ? this.rgbArrayToHex(stroke.getColor()) : undefined,
+            labelOutlineColor: stroke ? convertColor(stroke.getColor(), "hex") : undefined,
             labelOutlineWidth: stroke ? stroke.getWidth() : undefined,
             labelXOffset: style.getOffsetX(),
             labelYOffset: -style.getOffsetY(),
@@ -714,7 +715,7 @@ const BuildSpecModel = {
             fillColor = this.colorStringToRgbArray(fillColor);
         }
 
-        obj.fillColor = this.rgbArrayToHex(fillColor);
+        obj.fillColor = convertColor(fillColor, "hex");
         obj.fillOpacity = fillColor[3];
 
         return obj;
@@ -765,7 +766,7 @@ const BuildSpecModel = {
     buildStrokeStyle: function (style, obj) {
         const strokeColor = style.getColor();
 
-        obj.strokeColor = this.rgbArrayToHex(strokeColor);
+        obj.strokeColor = convertColor(strokeColor, "hex");
         if (Array.isArray(strokeColor) && strokeColor[3] !== undefined) {
             obj.strokeOpacity = strokeColor[3];
         }
@@ -1002,47 +1003,16 @@ const BuildSpecModel = {
         }
         return layerModel;
     },
-
-    /**
-     * Converts an rgb array to hexcode. Default is the open layers default color.
-     * It also checks if rgb is an hexcode, if true it will be returned.
-     * @param {number[]} rgb - a rgb color represented as an array
-     * @returns {string} - hex color
-     */
-    rgbArrayToHex: function (rgb) {
-        let hexR,
-            hexG,
-            hexB,
-            hexString = "#3399CC";
-
-        if (Array.isArray(rgb) && rgb.length >= 3) {
-            hexR = this.addZero(rgb[0].toString(16));
-            hexG = this.addZero(rgb[1].toString(16));
-            hexB = this.addZero(rgb[2].toString(16));
-            hexString = "#" + hexR + hexG + hexB;
-        }
-        else if (typeof rgb === "string" && rgb.includes("#") && rgb.length >= 4) {
-            hexString = rgb;
-        }
-        return hexString;
-    },
-
-    /**
-     * add zero to hex if required
-     * @param {string} hex - hexadecimal value
-     * @returns {string} hexadecimal value
-     */
-    addZero: function (hex) {
-        return hex.length === 1 ? "0" + hex : hex;
-    },
     /**
      * Gets legend from legend vue store and builds legend object for mapfish print
      * The legend is only print if the related layer is visible.
-     * @param  {Boolean} isLegendSelected flag if legend has to be printed
+     * @param {Boolean} isLegendSelected flag if legend has to be printed
      * @param {Boolean} isMetaDataAvailable flag to print metadata
+     * @param {Function} getResponse the function that calls the axios request
+     * @param {Object} legends the available legends
      * @return {void}
      */
-    buildLegend: function (isLegendSelected, isMetaDataAvailable) {
+    buildLegend: function (isLegendSelected, isMetaDataAvailable, getResponse) {
         const legendObject = {},
             metaDataLayerList = [],
             legends = store.state.Legend.legends;
@@ -1084,7 +1054,8 @@ const BuildSpecModel = {
         }
         else {
             const printJob = {
-                "payload": encodeURIComponent(JSON.stringify(this.defaults))
+                payload: encodeURIComponent(JSON.stringify(this.defaults)),
+                getResponse: getResponse
             };
 
             store.dispatch("Tools/Print/createPrintJob", printJob);

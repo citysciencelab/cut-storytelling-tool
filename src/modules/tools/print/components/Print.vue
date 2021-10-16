@@ -5,6 +5,7 @@ import getters from "../store/gettersPrint";
 import mutations from "../store/mutationsPrint";
 import getComponent from "../../../../utils/getComponent";
 import thousandsSeparator from "../../../../utils/thousandsSeparator.js";
+import axios from "axios";
 
 /**
  * Tool to print a part of the map
@@ -69,15 +70,7 @@ export default {
         Backbone.Events.listenTo(Radio.channel("ModelList"), {
             "updatedSelectedLayerList": function () {
                 if (typeof this.eventListener !== "undefined") {
-                    this.setVisibleLayer(this.getVisibleLayer().concat(this.invisibleLayer));
-                    this.updateCanvasLayer();
-                }
-            }
-        });
-        Backbone.Events.listenTo(Radio.channel("ModelList"), {
-            "updatedSelectedLayerList": function () {
-                if (typeof this.eventListener !== "undefined") {
-                    this.setVisibleLayer(this.getVisibleLayer().concat(this.invisibleLayer));
+                    this.setVisibleLayer(this.visibleLayerList.concat(this.invisibleLayer));
                     this.updateCanvasLayer();
                 }
             }
@@ -89,7 +82,6 @@ export default {
             "retrieveCapabilites",
             "togglePostrenderListener",
             "createMapFishServiceUrl",
-            "getVisibleLayer",
             "startPrint",
             "getOptimalResolution",
             "updateCanvasLayer"
@@ -139,7 +131,9 @@ export default {
          * @returns {void}
          */
         print () {
-            this.startPrint();
+            this.startPrint(async (url, payload) => {
+                return axios.post(url, payload);
+            });
             this.setPrintStarted(true);
         },
 
