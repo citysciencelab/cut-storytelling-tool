@@ -1,7 +1,6 @@
 import testAction from "../../../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../../store/actions/actionsPrintInitialization";
 import VectorLayer from "ol/layer/Vector.js";
-import VectorSource from "ol/source/Vector.js";
 import sinon from "sinon";
 
 const {

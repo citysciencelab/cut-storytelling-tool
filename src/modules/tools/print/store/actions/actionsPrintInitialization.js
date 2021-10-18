@@ -2,8 +2,6 @@
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 import thousandsSeparator from "../../../../../utils/thousandsSeparator.js";
 import Canvas from "./../utils/buildCanvas";
-import getProxyUrl from "../../../../../utils/getProxyUrl";
-import axios from "axios";
 import BuildSpec from "./../utils/buildSpec";
 import getVisibleLayer from "./../utils/getVisibleLayer";
 
@@ -18,8 +16,8 @@ export default {
     retrieveCapabilites: function ({state, dispatch, commit}) {
         let serviceUrl;
 
-        if (state.printSettings.mapfishServiceId !== undefined) {
-            serviceUrl = Radio.request("RestReader", "getServiceById", state.printSettings.mapfishServiceId).get("url");
+        if (state.mapfishServiceId !== undefined) {
+            serviceUrl = Radio.request("RestReader", "getServiceById", state.mapfishServiceId).get("url");
             commit("setMapfishServiceUrl", serviceUrl);
             serviceUrl = serviceUrl + state.printAppId + "/capabilities.json";
             const serviceRequest = {
@@ -31,30 +29,6 @@ export default {
             dispatch("sendRequest", serviceRequest);
 
         }
-    },
-
-    /**
-     * Performs an asynchronous HTTP request
-     * @param {Object} param.state the state
-     * @param {Object} param.dispatch the dispatch
-     * @param {Object} serviceRequest the request content
-     * @returns {void}
-     */
-    sendRequest: async function ({state, dispatch}, serviceRequest) {
-        /**
-         * @deprecated in the next major-release!
-         * useProxy
-         * getProxyUrl()
-         */
-        const url = state.useProxy ? getProxyUrl(serviceRequest.serviceUrl) : serviceRequest.serviceUrl;
-
-        axios({
-            url: url,
-            type: serviceRequest.requestType,
-            timeout: serviceRequest.timeout
-        }).then(response => {
-            dispatch(String(serviceRequest.onSuccess), response.data);
-        });
     },
     /**
      * Sets the capabilities from mapfish resonse.
