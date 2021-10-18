@@ -1905,6 +1905,7 @@ The measure tool allows measuring distances and areas. This includes the specifi
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |earthRadius|no|Number|6378137|Earth radius in meters. Please mind that the earth radius should be chosen in accordance with the reference ellipsoid. E.g., GRS80 should be used for ETRS89 (EPSG:25832).|false|
+|measurementAccuracy|no|String|"meter"|Indicates how accurately the measurement result is displayed for m and m². Options are "decimeter" for one decimal place. "meter" for no decimal place. And "dynamic" for one decimal place for results smaller 10m / 10m² and no decimal place for results greater or equal 10m / 10m².|false|
 
 **Example**
 
@@ -1912,7 +1913,8 @@ The measure tool allows measuring distances and areas. This includes the specifi
 {
     "measure": {
         "name": "translate#common:menu.tools.measure",
-        "earthRadius": 6378137
+        "earthRadius": 6378137,
+        "measurementAccuracy": "dynamic"
     }
 }
 ```

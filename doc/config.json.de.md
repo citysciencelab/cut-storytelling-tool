@@ -1818,6 +1818,7 @@ Mit dem Messwerkzeug können Strecken und Flächen gemessen werden. Dabei werden
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |earthRadius|nein|Number|6378137|Erdradius in Metern. Bitte beachten Sie, dass der Erdradius in Abhängigkeit zum Bezugsellipsoiden gewählt werden sollte. Für ETRS89 (EPSG:25832) ist dies beispielsweise GRS80.|false|
+|measurementAccuracy|nein|String|"meter"|Gibt an, wie genau das Messergebnis für m und m² angezeigt wird. Die möglichen Optionen sind "decimeter" für eine Nachkommastelle. "meter" für keine Nachkommastelle. Und "dynamic" für eine Nachkommastelle bei Ergebnissen kleiner als 10m / 10m² und keine Nachkommastelle für Ergebnisse größer oder gleich 10m / 10m².|false|
 
 **Beispiel**
 
@@ -1825,7 +1826,8 @@ Mit dem Messwerkzeug können Strecken und Flächen gemessen werden. Dabei werden
 #!json
 "measure": {
     "name": "translate#common:menu.tools.measure",
-    "earthRadius": 6378137
+    "earthRadius": 6378137,
+    "measurementAccuracy": "dynamic"
 },
 ```
 
