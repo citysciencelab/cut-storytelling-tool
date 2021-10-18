@@ -4,9 +4,10 @@ import SpecModel from "./../../print/store/utils/buildSpec";
 
 /**
  * Helper Function to prepare the Pdf file from currently selected layer and its features on the comparison list.
+ * @param {function} getResponse function that will get axios response
  * @returns {void}
  */
-export async function preparePrint () {
+export async function preparePrint (getResponse) {
     const tableBody = await prepareTableBody(),
         pdfDef = {
             layout: "A4 Hochformat",
@@ -30,9 +31,10 @@ export async function preparePrint () {
     spec.setAttributes(pdfDef);
 
     printJob = {
-        "payload": encodeURIComponent(JSON.stringify(spec.defaults)),
-        "printAppId": "compareFeatures",
-        "currentFormat": "pdf"
+        payload: encodeURIComponent(JSON.stringify(spec.defaults)),
+        printAppId: "compareFeatures",
+        currentFormat: "pdf",
+        getResponse: getResponse
     };
 
     store.dispatch("Tools/Print/createPrintJob", printJob, {root: true});
