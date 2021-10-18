@@ -12,6 +12,7 @@ import beautifyKey from "../../../../utils/beautifyKey.js";
 import {isWebLink} from "../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../utils/isEmailAddress.js";
+import axios from "axios";
 
 export default {
     name: "CompareFeatures",
@@ -77,6 +78,16 @@ export default {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+        },
+        /**
+         * start print process
+         * @param {Event} event the click event
+         * @returns {void}
+         */
+        startPrint () {
+            preparePrint(async (url, payload) => {
+                return axios.post(url, payload);
+            });
         }
     }
 };
@@ -220,7 +231,7 @@ export default {
                 <button
                     class="btn btn-primary btn-infos"
                     :title="$t('common:modules.tools.compareFeatures.exportAsPdf')"
-                    @click="preparePrint();"
+                    @click="startPrint"
                 >
                     {{ $t("common:modules.tools.compareFeatures.exportAsPdf") }}
                 </button>

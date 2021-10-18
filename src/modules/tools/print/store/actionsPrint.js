@@ -130,7 +130,7 @@ export default {
     },
 
     /**
-     * sets the metadata for print NOTE: wurde noch nicht getestet
+     * sets the metadata for print
      * @param {Object} param.rootGetters the rootGetters
      * @param {Object} param.dispatch the dispatch
      * @param {Object} cswObj the object with all the info
