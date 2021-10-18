@@ -6,7 +6,6 @@ import sinon from "sinon";
 
 const {
     chooseCurrentLayout,
-    sortVisibleLayerListByZindex,
     retrieveCapabilites,
     parseMapfishCapabilities,
     getGfiForPrint,
@@ -14,7 +13,6 @@ const {
     togglePostrenderListener,
     setPrintLayers,
     updateCanvasLayer,
-    getVisibleLayer,
     createPrintMask,
     getOptimalScale,
     getOptimalResolution,
@@ -49,65 +47,6 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
             testAction(chooseCurrentLayout, payload, state, {}, [
                 {type: "setCurrentLayout", payload: state.currentLayout}
-            ], {}, done);
-        });
-    });
-    describe("sortVisibleLayerListByZindex", function () {
-        it("should return an sorted array by input with zIndeces", done => {
-            const array = [],
-                layer1 = new VectorLayer({
-                    source: new VectorSource()
-                }),
-                layer2 = new VectorLayer({
-                    source: new VectorSource()
-                }),
-                layer3 = new VectorLayer({
-                    source: new VectorSource()
-                });
-
-            layer1.setZIndex(10);
-            layer2.setZIndex(9);
-            layer3.setZIndex(11);
-
-            array.push(layer1);
-            array.push(layer2);
-            array.push(layer3);
-
-            // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
-            testAction(sortVisibleLayerListByZindex, array, {}, {}, [
-                {type: "setVisibleLayerList", payload: [layer2, layer1, layer3]}
-            ], {}, done);
-        });
-
-        it("should return an sorted array by input with zIndeces und without indeces", done => {
-            const array = [],
-                layer1 = new VectorLayer({
-                    source: new VectorSource()
-                }),
-                layer2 = new VectorLayer({
-                    source: new VectorSource()
-                }),
-                layer3 = new VectorLayer({
-                    source: new VectorSource()
-                });
-
-            layer1.setZIndex(10);
-            layer3.setZIndex(9);
-
-            array.push(layer1);
-            array.push(layer2);
-            array.push(layer3);
-
-            // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
-            testAction(sortVisibleLayerListByZindex, array, {}, {}, [
-                {type: "setVisibleLayerList", payload: [layer2, layer3, layer1]}
-            ], {}, done);
-        });
-
-        it("should return an empty array by empty array input", done => {
-            // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
-            testAction(sortVisibleLayerListByZindex, [], {}, {}, [
-                {type: "setVisibleLayerList", payload: []}
             ], {}, done);
         });
     });
@@ -230,7 +169,6 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
 
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
             testAction(togglePostrenderListener, undefined, state, {}, [
-                {type: "getVisibleLayer", undefined, dispatch: true},
                 {type: "setVisibleLayer", payload: state.visibleLayerList, commit: true},
                 {type: "setEventListener", payload: undefined, commit: true}
             ], {}, done);
@@ -301,30 +239,6 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
         });
         after(function () {
             sinon.restore();
-        });
-
-    });
-
-    describe("getVisibleLayer", function () {
-        it("returns the visible Layers", done => {
-            const TileLayer = {
-                    getVisible: () => true,
-                    get: () => "name"
-                },
-                visibleLayerList = [
-                    TileLayer
-                ],
-                request = sinon.spy(() => ({
-                    getArray: () => [TileLayer],
-                    getVisible: () => true
-                }));
-
-            sinon.stub(Radio, "request").callsFake(request);
-
-            // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
-            testAction(getVisibleLayer, undefined, null, {}, [
-                {type: "sortVisibleLayerListByZindex", payload: visibleLayerList, dispatch: true}
-            ], {}, done);
         });
     });
 
