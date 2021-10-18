@@ -48,6 +48,7 @@ In the following, all configuration options are described. For all configuration
 |wfsImgPath|no|String||Path to the folder holding images for the WFS styles. The path is relative to *js/main.js*.|`https://geodienste.hamburg.de/lgv-config/img/"`|
 |wpsID|no|String|`""`|Reference to a WPS interface used in various modules. The ID is resolved to a service defined in the **[rest-services.json](rest-services.json.md)** file.|`""`|
 |zoomToFeature|no|**[zoomToFeature](#markdown-header-zoomtofeature)**||Optional configuration of the URL query parameter `featureid`. For details, see **[urlParameter](urlParameter.md)**.||
+|layerInformation|no|**[layerInformation](#markdown-header-layerinformation)**||Configuration for the layerInformation window.||
 
 ***
 
@@ -442,6 +443,27 @@ The parameters described apply for each entry of the **[layers](#markdown-header
         "name": "URL Polygon Features",
         "styleId": "url_polygons"
     }]
+}
+```
+
+***
+
+## layerInformation
+
+Configuration for the layerInformation window.
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|showUrlGlobal|no|Boolean||parameter to globally toggle the dispaly of the service url for all layers. Referring to the "urlIsVisible" Parameter (see **[config.json](config.json.md#markdown-header-themenconfiglayer)** )|
+
+
+**Example:**
+
+```json
+{
+    "layerInformation": {
+        "showUrlGlobal": true
+    },
 }
 ```
 
