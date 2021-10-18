@@ -2,7 +2,6 @@ import testAction from "../../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../store/actionsPrint";
 import VectorLayer from "ol/layer/Vector.js";
 import sinon from "sinon";
-import {expect} from "chai";
 
 const {activatePrintStarted, startPrint, getMetaDataForPrint, createPrintJob, waitForPrintJob, waitForPrintJobSuccess} = actions;
 
@@ -37,12 +36,17 @@ describe("tools/print/actionsPrint", function () {
                     isGfiAvailable: false,
                     isLegendAvailable: true,
                     isLegendSelected: false
-                };
+                },
+                request = sinon.spy(() => ({
+                    getCode: () => "EPSG:25832"
+                }));
+
+            sinon.stub(Radio, "request").callsFake(request);
 
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
             testAction(startPrint, {}, state, {}, [
-                {type: "setProgressWidth", payload: "width: 25%", commit: true},
-                {type: "getVisibleLayer", payload: undefined, dispatch: true}
+                {type: "setProgressWidth", payload: "width: 25%", commit: true}
+
             ], {}, done);
         });
         it("should start the print but with no legend", done => {
@@ -99,17 +103,11 @@ describe("tools/print/actionsPrint", function () {
                     printAppId: "master",
                     currentFormat: "pdf",
                     getResponse: payload.getResponse
-                },
-                request = sinon.spy(() => ({
-                    getCode: () => "EPSG:25832"
-                }));
-
-            sinon.stub(Radio, "request").callsFake(request);
+                };
 
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
             testAction(startPrint, payload.getResponse, state, {}, [
                 {type: "setProgressWidth", payload: "width: 25%", commit: true},
-                {type: "getVisibleLayer", payload: undefined, dispatch: true},
                 {type: "createPrintJob", payload: printJob, dispatch: true}
             ], {}, done);
         });

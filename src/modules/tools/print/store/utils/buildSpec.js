@@ -224,8 +224,8 @@ const BuildSpecModel = {
      */
     buildLayerType: function (layer, currentResolution) {
         const extent = Radio.request("MapView", "getCurrentExtent"),
-            layerMinRes = layer?.get("minResolution"),
-            layerMaxRes = layer?.get("maxResolution"),
+            layerMinRes = typeof layer?.get === "function" ? layer.get("minResolution") : false,
+            layerMaxRes = typeof layer?.get === "function" ? layer.get("maxResolution") : false,
             isInScaleRange = this.isInScaleRange(layerMinRes, layerMaxRes, currentResolution);
         let features = [],
             returnLayer;
@@ -245,7 +245,7 @@ const BuildSpecModel = {
                     returnLayer = this.buildWmts(layer, source);
                 }
             }
-            else if (layer?.get("name") === "import_draw_layer") {
+            else if (typeof layer?.get === "function" && layer.get("name") === "import_draw_layer") {
                 returnLayer = this.getDrawLayerInfo(layer, extent);
             }
             else if (layer instanceof Vector) {
