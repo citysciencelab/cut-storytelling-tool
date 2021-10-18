@@ -173,9 +173,6 @@ async function GfiTests ({builder, url, resolution, capability}) {
 
                 await clickFeature(driver, [566800.6939276252, 5934968.732616884]);
 
-                // theme continuousCountingBike is active
-                await driver.wait(until.elementLocated(By.css("div.continuousCountingBike")));
-                expect(await driver.findElement(By.css("div.continuousCountingBike"))).to.exist;
                 // pill "Info" is initially opened
                 expect(await driver.findElement(By.css("ul.nav.nav-pills li:first-child.tab-toggle.active"))).to.exist;
 
