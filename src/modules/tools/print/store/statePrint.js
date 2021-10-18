@@ -32,8 +32,8 @@ const state = {
     // is scale selected by the user over the view
     isScaleSelectedManually: false,
     // true if the current layout supports meta data
-    isMetaDataAvailable: false,
-    metaDataAttribute: null,
+    isMetadataAvailable: false,
+    metadataAttribute: null,
     // true if the current layout supports gfi
     isGfiAvailable: false,
     gfiAttribute: null,

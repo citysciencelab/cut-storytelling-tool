@@ -62,6 +62,9 @@ export default {
         this.$on("close", this.close);
         if (this.printSettings) {
             this.setPrintSettings(this.printSettings);
+            this.setFilename(this.printSettings.filename);
+            this.setMapfishServiceId(this.printSettings.mapfishServiceId);
+            this.setPrintAppId(this.printSettings.printAppId);
             this.setCurrentLayoutName(this.printSettings.currentLayoutName);
         }
         if (this.layoutList.length === 0) {

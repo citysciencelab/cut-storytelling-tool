@@ -82,7 +82,7 @@ export default {
 
         spec.setAttributes(attr);
 
-        if (state.isMetaDataAvailable) {
+        if (state.isMetadataAvailable) {
             spec.setMetadata(true);
         }
 
@@ -97,17 +97,17 @@ export default {
         }
 
         if (state.isLegendAvailable) {
-            spec.buildLegend(state.isLegendSelected, state.isMetaDataAvailable, getResponse);
+            spec.buildLegend(state.isLegendSelected, state.isMetadataAvailable, getResponse);
         }
         else {
             spec.setLegend({});
             spec.setShowLegend(false);
             spec = omit(spec, ["uniqueIdList"]);
             const printJob = {
-                "payload": encodeURIComponent(JSON.stringify(spec.defaults)),
-                "printAppId": state.printAppId,
-                "currentFormat": state.currentFormat,
-                "getResponse": getResponse
+                payload: encodeURIComponent(JSON.stringify(spec.defaults)),
+                printAppId: state.printAppId,
+                currentFormat: state.currentFormat,
+                getResponse: getResponse
             };
 
             dispatch("createPrintJob", printJob);
