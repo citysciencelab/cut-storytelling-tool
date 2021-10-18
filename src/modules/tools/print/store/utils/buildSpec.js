@@ -78,7 +78,7 @@ const BuildSpecModel = {
      * @returns {void}
      */
     updateMetaData: function (layerName, parsedData) {
-        const layers = this.defaults.attributes.legend && this.defaults.attributes.legend.layers ? this.attributes.defaults.legend.layers : undefined,
+        const layers = this.defaults.attributes.legend && this.defaults.attributes.legend.layers ? this.defaults.attributes.legend.layers : undefined,
             layer = findWhereJs(layers, {layerName: layerName});
 
         if (layer !== undefined) {
@@ -938,7 +938,7 @@ const BuildSpecModel = {
             }, "[").slice(0, -1) + "]";
         }
         // feature with geometry style and label style
-        if (layerModel !== undefined && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
+        if (typeof layerModel?.get === "function" && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
             styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
 
             if (styleModel !== undefined && styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
@@ -967,7 +967,7 @@ const BuildSpecModel = {
         let layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
             styleFields = ["styleId"];
 
-        if (layerModel !== undefined) {
+        if (typeof layerModel?.get === "function") {
             const styleList = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
 
             layerModel = this.getChildModelIfGroupLayer(layerModel, layerId);
