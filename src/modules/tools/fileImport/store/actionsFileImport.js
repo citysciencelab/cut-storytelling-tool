@@ -96,8 +96,13 @@ function removeBadTags (rawSource) {
 function getCrsPropertyName (rawSource) {
     let result = "EPSG:4326";
 
-    let jsonDoc = JSON.parse(rawSource);
-    if (jsonDoc && jsonDoc.hasOwnProperty('crs') && jsonDoc.crs.hasOwnProperty('properties') && jsonDoc.crs.properties.hasOwnProperty('name')) {
+    const jsonDoc = JSON.parse(rawSource);
+
+    if (jsonDoc &&
+        Object.prototype.hasOwnProperty.call(jsonDoc, "crs") &&
+        Object.prototype.hasOwnProperty.call(jsonDoc.crs, "properties") &&
+        Object.prototype.hasOwnProperty.call(jsonDoc.crs.properties, "name")) {
+
         if (jsonDoc.crs.properties.name.indexOf("EPSG:") >= 0) {
             result = jsonDoc.crs.properties.name;
         }
