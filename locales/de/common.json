@@ -894,7 +894,7 @@
         },
         "parametricURL": {
             "alertZoomToGeometry": "Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!<br>Bitte stellen Sie sicher das alle Parameter richtig angegeben wurden.",
-            "alertWrongLayerIds": "<strong>Der parametrisierte Aufruf ist fehlerhaft!</strong> </br>Die <b>layerIds</b> an den Positionen: {{wrongIdsPositionsConcat}} existieren nicht und werden ignoriert!",
+            "alertWrongLayerIds": "Im aufgerufenen Link sind Themen enthalten, die nicht mehr gefunden werden können.</br> Um diese Fehlermeldung zukünftig nicht mehr zu erhalten unternehmen Sie bitte folgende Schritte:<ul> <li> Prüfen Sie Ihren gewünschten Kartenausschnitt auf fehlende Inhalte.</li> <li>Speichern Sie Ihre Auswahl erneut mit dem Werkzeug \"Auswahl Speichern\" ab.</li></ul>",
             "alertWrongAmountVisibility": "<strong>Parametrisierter Aufruf fehlerhaft!</strong></br>Die Angaben zu <b>layerIds</b> passen nicht zu <b>visibility</b> bzw. <b>transparency</b>. Sie müssen jeweils in der gleichen Anzahl angegeben werden.",
             "errorLoadConfig": "Die gewünschte Konfigurationsdatei konnte unter folgendem Pfad nicht geladen werden: {{url}}<br>Der URL-Paramater <strong>configJson</strong> verlangt eine Datei mit der Endung \".json\".<br>Es wird versucht die config.json unter dem Standardpfad zu laden."
           }
