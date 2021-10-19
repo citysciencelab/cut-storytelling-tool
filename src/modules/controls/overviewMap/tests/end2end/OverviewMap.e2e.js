@@ -18,7 +18,7 @@ function OverviewMap ({builder, url, resolution, capability}) {
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
-        describe.only("Modules Controls OverviewMap", async function () {
+        describe("Modules Controls OverviewMap", async function () {
             let driver, overviewMapButton, overviewMap, overviewMapViewport, overviewMapBox;
 
             before(async function () {
