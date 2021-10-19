@@ -231,6 +231,7 @@ export default {
         Radio.trigger("Map", "unregisterListener", state.eventListener);
         canvasLayer = Canvas.getCanvasLayer(visibleLayerList);
         // commit("setCurrentMapScale", state.Map.scale);
+        dispatch("chooseCurrentLayout", state.layoutList);
         if (Object.keys(canvasLayer).length) {
             commit("setEventListener", canvasLayer.on("postrender", (evt) => {
                 dispatch("createPrintMask", evt);
