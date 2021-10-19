@@ -27,6 +27,7 @@
 - Loading layerIds in combination with a config via the url now also works with the treetype 'custom' in the config.
 - When changing the coordinate system in the Coordinates tool, the incorrect recalculation of the coordinates was corrected: Default values of the coordinate search are now the values of the map center. An error in the display of the coordinate systems (EPSG-code was shown twice) was also fixed.
 - The search in the coordinates tool now also works with different map projections of the masterportal view.
+-	Fixed missing highlighting in years 2010-2014 and remove of highlighting when selecting another year in addon boris.
 
 ---
 ## v2.14.0 - 2021-10-06
