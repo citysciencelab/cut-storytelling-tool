@@ -18,7 +18,7 @@ function OverviewMap ({builder, url, resolution, capability}) {
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
-        describe("Modules Controls OverviewMap", async function () {
+        describe.only("Modules Controls OverviewMap", async function () {
             let driver, overviewMapButton, overviewMap, overviewMapViewport, overviewMapBox;
 
             before(async function () {
@@ -53,7 +53,7 @@ function OverviewMap ({builder, url, resolution, capability}) {
                 expect(overviewMapButton).to.exist;
             });
 
-            xit("closes/opens overview map on clicking overview map button", async function () {
+            it("closes/opens overview map on clicking overview map button", async function () {
                 // open - is closed initially in master, is open initially in custom
                 if (isMaster(url)) {
                     // NOTE: next line is a crutch until control layout issues are resolved; WD won't scroll by itself
@@ -94,7 +94,7 @@ function OverviewMap ({builder, url, resolution, capability}) {
                 expect(overviewMapViewport).to.exist;
             });
 
-            xit("allows panning the map from the overview map", async function () {
+            it("allows panning the map from the overview map", async function () {
                 const center = await driver.executeScript(getCenter);
 
                 overviewMapBox = await driver.findElement(By.css(".ol-overviewmap-box"));
