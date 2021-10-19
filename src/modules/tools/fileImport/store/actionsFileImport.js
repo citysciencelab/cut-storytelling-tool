@@ -89,6 +89,23 @@ function removeBadTags (rawSource) {
 }
 
 /**
+ * Reads the JSON and extracts the coordinate system.
+ * @param {String} rawSource - KML source as string.
+ * @returns {String} Returns CRS.Properties.Name - if not found it defaults to EPSG:4326
+ */
+function getCrsPropertyName (rawSource) {
+    let result = "EPSG:4326";
+
+    let jsonDoc = JSON.parse(rawSource);
+    if (jsonDoc && jsonDoc.hasOwnProperty('crs') && jsonDoc.crs.hasOwnProperty('properties') && jsonDoc.crs.properties.hasOwnProperty('name')) {
+        if (jsonDoc.crs.properties.name.indexOf("EPSG:") >= 0) {
+            result = jsonDoc.crs.properties.name;
+        }
+    }
+
+    return result;
+}
+/**
  * Checks for isVisible setting and in case it's not there adds it.
  * @param {Array} features The Features to be inspected.
  * @returns {Array} Returns Features with isVisible set.
@@ -117,7 +134,8 @@ export default {
     importKML: ({state, dispatch, rootGetters}, datasrc) => {
         const
             vectorLayer = datasrc.layer,
-            format = getFormat(datasrc.filename, state.selectedFiletype, state.supportedFiletypes, supportedFormats);
+            format = getFormat(datasrc.filename, state.selectedFiletype, state.supportedFiletypes, supportedFormats),
+            crsPropName = getCrsPropertyName(datasrc.raw);
 
         let
             featureError = false,
@@ -212,7 +230,7 @@ export default {
                 }
 
                 geometries.forEach(geometry => {
-                    geometry.transform("EPSG:4326", rootGetters["Map/projectionCode"]);
+                    geometry.transform(crsPropName, rootGetters["Map/projectionCode"]);
                 });
             }
         });
