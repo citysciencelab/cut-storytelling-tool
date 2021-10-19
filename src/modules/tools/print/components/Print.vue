@@ -123,6 +123,7 @@ export default {
         layoutChanged (value) {
             this.setCurrentLayoutName(value);
             this.updateCanvasLayer();
+            Radio.trigger("Map", "render");
         },
 
         showGfiAvailable () {
