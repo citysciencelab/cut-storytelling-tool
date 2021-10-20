@@ -16,6 +16,7 @@
 ### Deprecated
 
 ### Removed
+- The module CLICKCOUNTER is removed.
 
 ### Fixed
 - Print tool: fixed wrong order of features in created print-map.

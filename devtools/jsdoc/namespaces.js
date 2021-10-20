@@ -557,12 +557,6 @@
  */
 
 /**
- * @namespace ClickCounter
- * @description This functionality registers user click behaviour and updates the url of an created iframe
- * used for Verkehrsportal.
- */
-
-/**
  * @namespace Core
  * @description Loads core and instances all modules that have to be loaded, due to portal config
  */

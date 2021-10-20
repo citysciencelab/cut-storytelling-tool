@@ -23,7 +23,6 @@ const ObliqueLayer = Layer.extend(/** @lends  ObliqueLayer.prototype*/{
      * @fires ObliqueMap#RadioTriggerObliqueMapRegisterLayer
      * @fires ObliqueMap#RadioRequestObliqueMapIsActive
      * @fires ObliqueMap#RadioTriggerObliqueMapActivateLayer
-     * @fires ClickCounter#RadioTriggerClickCounterLayerVisibleChanged
      * @listens Layer#RadioTriggerLayerUpdateLayerInfo
      * @listens Layer#RadioTriggerLayerSetLayerInfoChecked
      * @listens Layer#changeIsVisibleInMap
@@ -43,8 +42,6 @@ const ObliqueLayer = Layer.extend(/** @lends  ObliqueLayer.prototype*/{
 
         this.listenTo(this, {
             "change:isVisibleInMap": function () {
-                // triggert das Ein- und Ausschalten von Layern
-                Radio.trigger("ClickCounter", "layerVisibleChanged");
                 this.toggleAttributionsInterval();
             }
         });
