@@ -46,7 +46,6 @@ export default function WMSLayer (attrs) {
             });
         }
     }
-
 }
 // Link prototypes and add prototype methods, means WMSLayer uses all methods and properties of Layer
 WMSLayer.prototype = Object.create(Layer.prototype);
@@ -104,8 +103,7 @@ WMSLayer.prototype.updateSourceSLDBody = function () {
  * @returns {void}
  */
 WMSLayer.prototype.updateSource = function () {
-    this.set("cacheId", parseInt(Math.random() * 10000000, 10));
-    this.layer.getSource().updateParams({CACHEID: this.get("cacheId")});
+    wms.updateSource(this.layer);
 };
 /**
  * Returns the layers of the WMS layer.

@@ -1,5 +1,6 @@
 import store from "../../app-store";
 import mapCollection from "../../dataStorage/mapCollection.js";
+import deepCopy from "../../utils/deepCopy.js";
 
 /**
  * Creates a layer object to extend from.
@@ -187,8 +188,13 @@ Layer.prototype.setIsVisibleInMap = function (newValue) {
 
     this.set("isVisibleInMap", newValue);
     this.layer.setVisible(newValue);
+    if (this.get("typ") === "GROUP" && this.get("layers")) {
+        this.get("layers").forEach(layer => {
+            layer.setVisible(newValue);
+        });
+    }
     if (lastValue !== newValue) {
-        // here it is possible to chanhe the layer visibility-info in state and listen to it e.g. in LegendWindow
+        // here it is possible to change the layer visibility-info in state and listen to it e.g. in LegendWindow
         // e.g. store.dispatch("Map/toggleLayerVisibility", {layerId: this.get("id")});
         Radio.trigger("Layer", "layerVisibleChanged", this.get("id"), this.get("isVisibleInMap"), this);
     }
@@ -425,6 +431,16 @@ function handleSingleBaseLayer (isSelected, layer, map) {
 }
 
 /**
+ * Setter for isJustAdded (currently only used in uiStyle = table)
+ * @param {Boolean} value Flag if layer has just been added to the tree
+ * @returns {void}
+ */
+Layer.prototype.setIsJustAdded = function (value) {
+    this.set("isJustAdded", value);
+};
+
+
+/**
  * Initiates the presentation of layer information.
  * @returns {void}
  */
@@ -491,6 +507,9 @@ Layer.prototype.get = function (key) {
         return this.layer;
     }
     else if (key === "layerSource") {
+        if (this.attributes.typ === "GROUP") {
+            return this.attributes.layerSource;
+        }
         return this.layer.getSource();
     }
     return this.attributes[key];
@@ -500,6 +519,9 @@ Layer.prototype.has = function (key) {
         return this.layer !== undefined;
     }
     else if (key === "layerSource") {
+        if (this.attributes.typ === "GROUP") {
+            return this.attributes.layerSource !== undefined;
+        }
         return this.layer.getSource() !== undefined;
     }
     return this.attributes[key] !== undefined;
@@ -508,7 +530,11 @@ Layer.prototype.getLayerStatesArray = function () {
     return this.layer.getLayerStatesArray();
 };
 Layer.prototype.toJSON = function () {
-    return JSON.parse(JSON.stringify(this.attributes));
+    const atts = {...this.attributes};
+
+    delete atts.layerSource;
+    delete atts.layers;
+    return deepCopy(atts);
 };
 Layer.prototype.on = function () {
     // do nothing

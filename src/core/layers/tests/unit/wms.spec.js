@@ -101,20 +101,13 @@ describe("src/core/layers/wms.js", () => {
         expect(paramsInCall.STYLES).to.be.equals("paramStyle");
 
     });
-    it("updateSource shall change cacheId and update params of layer source", function () {
+    it("updateSource shall change sessionId and update params of layer source", function () {
         const wmsLayer = new WMSLayer(attributes),
-            cacheId = wmsLayer.get("cacheId"),
-            layer = wmsLayer.get("layer");
-        let paramsInCall = null;
+            layer = wmsLayer.get("layer"),
+            sessionId = layer.getSource().getParams().SESSIONID;
 
-        layer.getSource().updateParams = (params) => {
-            paramsInCall = params;
-        };
         wmsLayer.updateSource();
-        expect(wmsLayer.get("cacheId")).not.to.be.equals(cacheId);
-        expect(paramsInCall).not.to.be.null;
-        expect(paramsInCall.CACHEID).to.be.equals(wmsLayer.get("cacheId"));
-
+        expect(wmsLayer.get("layer").getSource().getParams().SESSIONID).not.to.be.equals(sessionId);
     });
 
     it("createLegend shall dispatch an array of legends", function () {

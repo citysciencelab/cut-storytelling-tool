@@ -86,14 +86,19 @@ describe("src/modules/map/store/mutationsMap.js", () => {
                     getLayers: () => {
                         return layers;
                     },
+                    addLayer: (aLayer) => {
+                        layers.push(aLayer);
+                    },
                     removeLayer: (l) => {
-                        l.splice(layers.indexOf(layers), 1);
+                        layers.splice(layers.indexOf(l), 1);
                     }
                 };
 
             mapCollection.clear();
             mapCollection.addMap(map, "ol", "2D");
 
+            addLayerToMap(state, layer);
+            expect(map.getLayers().length).to.equals(1);
             removeLayerFromMap(state, layer);
             expect(map.getLayers().length).to.equals(0);
         });
@@ -114,8 +119,8 @@ describe("src/modules/map/store/mutationsMap.js", () => {
                     getLayers: () => {
                         return layers;
                     },
-                    removeLayer: (layer) => {
-                        layers.splice(layers.indexOf(layer), 1);
+                    removeLayer: (aLayer) => {
+                        layers.splice(layers.indexOf(aLayer), 1);
                     }
                 };
 
