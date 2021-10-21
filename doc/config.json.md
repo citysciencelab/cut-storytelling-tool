@@ -995,6 +995,7 @@ A folder object defined by a name, glyphicon, and its children.
 [type:featureLister]: # (Portalconfig.menu.tool.featureLister)
 [type:filter]: # (Portalconfig.menu.tool.filter)
 [type:gfi]: # (Portalconfig.menu.tool.gfi)
+[type:layerClusterToggler]: # (Portalconfig.menu.tool.layerClusterToggler)
 [type:layerSlider]: # (Portalconfig.menu.tool.layerSlider)
 [type:legend]: # (Portalconfig.menu.legend)
 [type:measure]: # (Portalconfig.menu.tool.measure)
@@ -1027,6 +1028,7 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |filter|no|**[filter](#markdown-header-portalconfigmenutoolfilter)**||Allows filtering WFS vector data.|false|
 |gfi|no|**[gfi](#markdown-header-portalconfigmenutoolgfi)**||Via  getFeatureInfo (GFI) information to arbitrary layers can be requested. For WMS, the data is fetched with a GetFeatureInfo request. Vector data (WFS, Sensor, GeoJSON, etc.) is already present in the client and will be shown from the already fetched information.|false|
 |kmlimport|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use `fileImport` instead._|false|
+|layerClusterToggler|no|**[tool](#markdown-header-portalconfigtoollayerClusterToggler)**||_This tool allows a cluster layers to be active and deactive together._|false|
 |layerSlider|no|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||The layerSlider tool allows showing arbitrary services in order. This can e.g. be used to show aerial footage from multiple years in succession.|false|
 |layerslider|no|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||_Deprecated in 3.0.0. Please use `layerSlider` instead._|false|
 |legend|no|**[legend](#markdown-header-portalconfigmenulegend)**||The legend for all visible layers is displayed here.|false|
@@ -2025,6 +2027,76 @@ E-Mail object containing a mail address, and a display name.
 {
     "email": "lgvgeoportal-hilfe@gv.hamburg.de",
     "name":"LGVGeoportalHilfe"
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.layerClusterToggler
+
+[inherits]: # (Portalconfig.menu.tool)
+
+The layer cluster toggler tool allows to activate and deactivate cluster layers together
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|name|yes|String|"additional:addons.menu.tools.layerClusterToggler.name"|Name displayed in the tool.|false|
+|glyphicon|yes|String|"glyphicon-education"|glyphicon displayed in the tool menu|false|
+|clusterList|yes|**[clusterList](#markdown-header-portalconfigmenutoollayerClusterTogglerclusterList)**[]|[]|Array of layer id objects or layer id string.|false|
+
+**Example**
+
+```json
+{
+    "layerClusterToggler": {
+        "name": "translate#additional:addons.menu.tools.layerClusterToggler.name",
+        "glyphicon": "glyphicon-education",
+        "clusterList": ["8712", "21067"]
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.layerClusterToggler.clusterList
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Defines a cluster of layer
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|layerId|yes|String||ID of the service to be shown in the portal. This layer ID *MUST* be configured as part of the *Themenconfig*!|false|
+|suffix|yes|String||Suffix of layer. This Suffix *MUST* be configured as part of the *Themenconfig*|false|
+
+**Example**
+
+```json
+{
+    "layerClusterToggler": {
+        "name": "translate#additional:addons.menu.tools.layerClusterToggler.name",
+        "glyphicon": "glyphicon-education",
+        "clusterList": [
+            "8712",
+            "8713",
+            {
+                "layerId": "21067",
+                "suffix": "90012"
+            },
+            {
+                "layerId": "21067",
+                "suffix": "90013"
+            },
+            {
+                "layerId": "21067",
+                "suffix": "90014"
+            },
+            {
+                "layerId": "21067",
+                "suffix": "90015"
+            }
+        ]
+    }
 }
 ```
 

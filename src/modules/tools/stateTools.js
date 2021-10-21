@@ -6,6 +6,7 @@ import Draw from "./draw/components/Draw.vue";
 import CompareFeatures from "./compareFeatures/components/CompareFeatures.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
 import Gfi from "./gfi/components/Gfi.vue";
+import LayerClusterToggler from "./layerClusterToggler/components/LayerClusterToggler.vue";
 import Measure from "./measure/components/Measure.vue";
 import SaveSelection from "./saveSelection/components/SaveSelection.vue";
 import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
@@ -31,6 +32,7 @@ const state = {
         compareFeatures: CompareFeatures,
         fileImport: FileImport,
         gfi: Gfi,
+        layerClusterToggler: LayerClusterToggler,
         measure: Measure,
         saveSelection: SaveSelection,
         scaleSwitcher: ScaleSwitcher,
