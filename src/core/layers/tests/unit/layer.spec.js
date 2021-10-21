@@ -1,6 +1,7 @@
 import {expect} from "chai";
 import sinon from "sinon";
 import Layer from "../../layer";
+import Group from "../../group";
 import store from "../../../../app-store";
 import mapCollection from "../../../../dataStorage/mapCollection.js";
 
@@ -173,6 +174,24 @@ describe("src/core/layers/layer.js", () => {
         expect(layerWrapper.attributes.isVisibleInMap).to.be.false;
         layerWrapper.setIsVisibleInMap(true);
         expect(layerWrapper.attributes.isVisibleInMap).to.be.true;
+        expect(layerVisible).to.be.true;
+    });
+    it("setIsVisibleInMap shall change group layer visibility", function () {
+        const groupAtts = {...attributes};
+        let groupLayer = null,
+            childLayer = null;
+
+        groupAtts.typ = "GROUP";
+        groupAtts.children = [attributes];
+        groupAtts.layers = [olLayer];
+        groupLayer = new Group(groupAtts);
+        childLayer = groupLayer.get("layerSource");
+
+
+        expect(groupLayer.attributes.isVisibleInMap).to.be.false;
+        expect(childLayer).to.be.an("array").with.lengthOf(1);
+        groupLayer.setIsVisibleInMap(true);
+        expect(groupLayer.attributes.isVisibleInMap).to.be.true;
         expect(layerVisible).to.be.true;
     });
     it("setTransparency shall change layer opacity", function () {
@@ -512,6 +531,20 @@ describe("src/core/layers/layer.js", () => {
         expect(layerWrapper.get("id")).to.be.equals("id");
 
     });
+    it("get('layerSource') on groupLayer shall return childLayers", function () {
+        const groupAtts = {...attributes};
+        let groupLayer = null,
+            childLayer = null;
+
+        groupAtts.typ = "GROUP";
+        groupAtts.children = [attributes];
+        groupAtts.layers = [olLayer];
+        groupLayer = new Group(groupAtts);
+        childLayer = groupLayer.get("layerSource");
+
+        expect(childLayer).to.be.an("array").with.lengthOf(1);
+        expect(childLayer[0].attributes.id).to.be.equals(attributes.id);
+    });
     it("has shall handle layer and layerSource", function () {
         const layerWrapper = new Layer(attributes, olLayer);
 
@@ -520,6 +553,14 @@ describe("src/core/layers/layer.js", () => {
         expect(layerWrapper.has("id")).to.be.true;
         expect(layerWrapper.has("idnotthere")).to.be.false;
 
+    });
+    it("setIsJustAdded shall set isJustAdded", function () {
+        const layerWrapper = new Layer(attributes, olLayer);
+
+        expect(layerWrapper.has("isJustAdded")).to.be.false;
+        layerWrapper.setIsJustAdded(true);
+        expect(layerWrapper.has("isJustAdded")).to.be.true;
+        expect(layerWrapper.get("isJustAdded")).to.be.true;
     });
     /**
      * testSetIsSelected

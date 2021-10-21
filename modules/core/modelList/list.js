@@ -1,10 +1,10 @@
 import WMSLayer from "../../../src/core/layers/wms";
+import Group from "../../../src/core/layers/group";
 import WmsTimeLayer from "./layer/wmsTime";
 import WMTSLayer from "./layer/wmts";
 import WFSLayer from "./layer/wfs";
 import StaticImageLayer from "./layer/staticImage";
 import GeoJSONLayer from "./layer/geojson";
-import GROUPLayer from "./layer/group";
 import SensorLayer from "./layer/sensor";
 import HeatmapLayer from "./layer/heatmap";
 import TerrainLayer from "./layer/terrain";
@@ -202,7 +202,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 return new GeoJSONLayer(attrs, options);
             }
             else if (attrs.typ === "GROUP") {
-                return new GROUPLayer(attrs, options);
+                return new Group(attrs, options);
             }
             else if (attrs.typ === "SensorThings") {
                 return new SensorLayer(attrs, options);
