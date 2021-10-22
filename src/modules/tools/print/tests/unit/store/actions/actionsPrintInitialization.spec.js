@@ -5,7 +5,6 @@ import sinon from "sinon";
 
 const {
     chooseCurrentLayout,
-    retrieveCapabilites,
     parseMapfishCapabilities,
     getGfiForPrint,
     getAttributeInLayoutByName,
@@ -47,36 +46,6 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
             testAction(chooseCurrentLayout, payload, state, {}, [
                 {type: "setCurrentLayout", payload: state.currentLayout}
             ], {}, done);
-        });
-    });
-
-    describe("retrieveCapabilites", function () {
-        it("should return the capabilities", done => {
-            const serviceRequest = {
-                    "serviceUrl": "https://geodienste.hamburg.de/mapfish_print_internet/print/master/capabilities.json",
-                    "requestType": "GET",
-                    "onSuccess": "parseMapfishCapabilities"
-                },
-                state = {
-                    printSettings: {
-                        mapfishServiceId: "mapfish"
-                    },
-                    printAppId: "master"
-                },
-                url = "https://geodienste.hamburg.de/mapfish_print_internet/print/",
-                request = sinon.spy(() => ({
-                    get: () => "https://geodienste.hamburg.de/mapfish_print_internet/print/"
-                }));
-
-            sinon.stub(Radio, "request").callsFake(request);
-            // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
-            testAction(retrieveCapabilites, null, state, {}, [
-                {type: "setMapfishServiceUrl", payload: url, commit: true},
-                {type: "sendRequest", payload: serviceRequest, dispatch: true}
-            ], {}, done);
-        });
-        after(function () {
-            sinon.restore();
         });
     });
 
@@ -226,7 +195,21 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                     visibleLayerList: [
                         TileLayer
                     ],
-                    eventListener: undefined
+                    eventListener: undefined,
+                    layoutList: [
+                        {
+                            name: "A4 Hochformat"
+                        },
+                        {
+                            name: "A4 Querformat"
+                        },
+                        {
+                            name: "A3 Hochformat"
+                        },
+                        {
+                            name: "A3 Querformat"
+                        }
+                    ]
                 },
                 request = sinon.spy(() => ({
                     getOptions: () => options
@@ -234,7 +217,9 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
 
             sinon.stub(Radio, "request").callsFake(request);
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
-            testAction(updateCanvasLayer, scale, state, {}, [], {}, done);
+            testAction(updateCanvasLayer, scale, state, {}, [
+                {type: "chooseCurrentLayout", payload: state.layoutList, dispatch: true}
+            ], {}, done);
         });
         after(function () {
             sinon.restore();

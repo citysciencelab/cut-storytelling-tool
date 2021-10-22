@@ -75,6 +75,7 @@ describe("tools/print/actionsPrint", function () {
                 defaults = {
                     uniqueIdList: [],
                     visibleLayerIds: [],
+                    layout: "A4 Hochformat",
                     attributes: {
                         title: "Cheeseburger Menu",
                         map: {
@@ -87,7 +88,6 @@ describe("tools/print/actionsPrint", function () {
                         legend: {},
                         showLegend: false
                     },
-                    layout: "A4 Hochformat",
                     outputFilename: "Hamburger Menu",
                     outputFormat: "pdf"
                 },
@@ -117,14 +117,30 @@ describe("tools/print/actionsPrint", function () {
 
     });
 
-    // describe("getMetaDataForPrint", function () {
-    //     it("should get metadata", done => {
-    //         // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
-    //         testAction(getMetaDataForPrint, undefined, {}, {}, [
-    //             {type: "setPrintStarted", payload: true, commit: true}
-    //         ], {}, done);
-    //     });
-    // });
+    describe("getMetaDataForPrint", function () {
+        it("should get metadata", done => {
+            const payload = {
+                    getResponse: () => {
+                        return true;
+                    },
+                    keyList: ["date", "orgaOwner", "address", "email", "tel", "url"],
+                    layer: new VectorLayer(),
+                    layerName: "Grenze der Metropolregion Hamburg",
+                    metaId: "76E7AE5D-9C06-48A5-BC7F-94DDBF62745C",
+                    uniqueId: "89"
+                },
+                useProxy = [
+                    "http://www.sh-mis.schleswig-holstein.de/soapServices/CSWStartup",
+                    "http://zebis.landsh.de/metadaten/servants/de/disy/preludio2/service/cat/csw/v_2_0_2/GetRecordByIdServant$Get",
+                    "https://mis.bkg.bund.de/csw",
+                    "https://www.geodaten-mv.de/soapServices/CSWStartup",
+                    "https://metaver.de/csw"
+                ];
+
+            // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
+            testAction(getMetaDataForPrint, payload, {}, {}, [], {}, done, {"metadata.useProxy": useProxy});
+        });
+    });
     describe("createPrintJob", function () {
         it("should create a printJob", done => {
             const defaults = {

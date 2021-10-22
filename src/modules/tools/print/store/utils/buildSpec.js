@@ -1086,7 +1086,7 @@ const BuildSpecModel = {
     },
 
     /**
-     * Requests the metadata for given layer name: noch nicht getestet
+     * Requests the metadata for given layer name
      * @param {String} layerName name of current layer
      * @param {Function} getResponse the function to start axios request
      * @fires CswParser#RadioTriggerCswParserGetMetaData
