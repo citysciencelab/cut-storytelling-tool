@@ -29,7 +29,12 @@ describe("src/core/layers/group.js", () => {
             mode: "2D",
             addInteraction: sinon.spy(),
             removeInteraction: sinon.spy(),
-            addLayer: sinon.spy()
+            addLayer: sinon.spy(),
+            getView: () => {
+                return {
+                    getResolutions: () => [2000, 1000]
+                };
+            }
         };
 
         mapCollection.addMap(map, "ol", "2D");
@@ -44,7 +49,8 @@ describe("src/core/layers/group.js", () => {
             minScale: "0",
             maxScale: "10000",
             isChildLayer: true,
-            layers: "layer1,layer2"
+            layers: "layer1,layer2",
+            transparent: false
         };
         groupAttributes = {
             name: "groupTestLayer",
@@ -56,6 +62,9 @@ describe("src/core/layers/group.js", () => {
             maxScale: "20000",
             children: [layerAttributes],
             layers: [olLayer]
+        };
+        store.getters = {
+            treeType: "custom"
         };
     });
 
