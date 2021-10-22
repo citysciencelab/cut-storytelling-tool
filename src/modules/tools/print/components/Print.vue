@@ -65,7 +65,12 @@ export default {
             this.setFilename(this.printSettings.filename);
             this.setMapfishServiceId(this.printSettings.mapfishServiceId);
             this.setPrintAppId(this.printSettings.printAppId);
-            this.setCurrentLayoutName(this.printSettings.currentLayoutName);
+            if (this.printSettings.currentLayoutName) {
+                this.setCurrentLayoutName(this.printSettings.currentLayoutName);
+            }
+            else {
+                this.setCurrentLayoutName("A4 Hochformat");
+            }
         }
         if (this.layoutList.length === 0) {
             this.retrieveCapabilites();

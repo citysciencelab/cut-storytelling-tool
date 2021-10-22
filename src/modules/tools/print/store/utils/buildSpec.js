@@ -17,6 +17,7 @@ const BuildSpecModel = {
     defaults: {
         uniqueIdList: [],
         visibleLayerIds: null,
+        layout: null,
         attributes: {
             map: null,
             title: "",
@@ -35,11 +36,16 @@ const BuildSpecModel = {
      * @returns {void}
      */
     fetchedMetaData: function (cswObj) {
-        if (this.isOwnMetaRequest(this.uniqueIdList, cswObj.uniqueId)) {
-            this.removeUniqueIdFromList(this.uniqueIdList, cswObj.uniqueId);
+        if (this.isOwnMetaRequest(this.defaults.uniqueIdList, cswObj.uniqueId)) {
+            this.removeUniqueIdFromList(this.defaults.uniqueIdList, cswObj.uniqueId);
             this.updateMetaData(cswObj.layerName, cswObj.parsedData);
-            if (this.uniqueIdList.length === 0) {
-                store.dispatch("Print/createPrintJob", encodeURIComponent(JSON.stringify(this.defaults.toJSON())));
+            if (this.defaults.uniqueIdList.length === 0) {
+                const printJob = {
+                    payload: encodeURIComponent(JSON.stringify(this.defaults)),
+                    getResponse: cswObj.getResponse
+                };
+
+                store.dispatch("Tools/Print/createPrintJob", printJob);
             }
         }
     },
@@ -1049,7 +1055,7 @@ const BuildSpecModel = {
         this.setLegend(legendObject);
         if (isMetaDataAvailable && metaDataLayerList.length > 0) {
             metaDataLayerList.forEach((layerName) => {
-                this.getMetaData(layerName);
+                this.getMetaData(layerName, getResponse);
             });
         }
         else {
@@ -1082,24 +1088,26 @@ const BuildSpecModel = {
     /**
      * Requests the metadata for given layer name: noch nicht getestet
      * @param {String} layerName name of current layer
+     * @param {Function} getResponse the function to start axios request
      * @fires CswParser#RadioTriggerCswParserGetMetaData
      * @returns {void}
      */
-    getMetaData: function (layerName) {
+    getMetaData: function (layerName, getResponse) {
         const layer = Radio.request("ModelList", "getModelByAttributes", {name: layerName}),
             metaId = layer.get("datasets") && layer.get("datasets")[0] ? layer.get("datasets")[0].md_id : null,
             uniqueIdRes = uniqueId(),
             cswObj = {};
 
         if (metaId !== null) {
-            this.uniqueIdList.push(uniqueIdRes);
+            this.defaults.uniqueIdList.push(uniqueIdRes);
             cswObj.layerName = layerName;
             cswObj.metaId = metaId;
             cswObj.keyList = ["date", "orgaOwner", "address", "email", "tel", "url"];
             cswObj.uniqueId = uniqueIdRes;
             cswObj.layer = layer;
+            cswObj.getResponse = getResponse;
 
-            store.dispatch("Print/getMetaDataForPrint", cswObj);
+            store.dispatch("Tools/Print/getMetaDataForPrint", cswObj);
         }
     },
 
