@@ -45,6 +45,11 @@ describe("src/core/layers/layer.js", () => {
             },
             removeLayer: () => {
                 layerRemoved = true;
+            },
+            getView: () => {
+                return {
+                    getResolutions: () => [2000, 1000]
+                };
             }
         };
 
@@ -60,7 +65,11 @@ describe("src/core/layers/layer.js", () => {
             minScale: "0",
             maxScale: "2500000",
             isChildLayer: true,
-            layers: "layer1,layer2"
+            layers: "layer1,layer2",
+            transparent: false
+        };
+        store.getters = {
+            treeType: "custom"
         };
     });
     afterEach(() => {
@@ -323,8 +332,6 @@ describe("src/core/layers/layer.js", () => {
     it("setIsSelected test false with treetype not light", function () {
         testSetIsSelected("custom", 0, 3, false);
     });
-
-
     it("toggleIsVisibleInMap is true and treeType light", function () {
         testIsVisibleInMap("light", true, 0);
     });
@@ -339,18 +346,18 @@ describe("src/core/layers/layer.js", () => {
     });
 
     it("updateLayerSource test", function () {
+        const layerWrapper = new Layer(attributes, olLayer);
+
         sinon.stub(Radio, "request").callsFake((...args) => {
             let ret = null;
 
             args.forEach(arg => {
-                if (arg === "getLayerByName") {
-                    ret = olLayer;
+                if (arg === "getModelsByAttributes") {
+                    ret = [olLayer];
                 }
             });
             return ret;
         });
-        const layerWrapper = new Layer(attributes, olLayer);
-
         layerWrapper.updateLayerSource();
         expect(newLayerSource).to.be.true;
     });
@@ -575,16 +582,9 @@ describe("src/core/layers/layer.js", () => {
             addLayerToIndex = false,
             counter = 0;
 
-        sinon.stub(Radio, "request").callsFake((...args) => {
-            let ret = null;
-
-            args.forEach(arg => {
-                if (arg === "getTreeType") {
-                    ret = treetype;
-                }
-            });
-            return ret;
-        });
+        store.getters = {
+            treeType: treetype
+        };
         sinon.stub(Radio, "trigger").callsFake((...args) => {
             args.forEach(arg => {
                 if (arg === "rerender" || arg === "updateSelection" || arg === "updateLayerView") {
@@ -623,16 +623,9 @@ describe("src/core/layers/layer.js", () => {
         let layerWrapper = null,
             counter = 0;
 
-        sinon.stub(Radio, "request").callsFake((...args) => {
-            let ret = null;
-
-            args.forEach(arg => {
-                if (arg === "getTreeType") {
-                    ret = treeType;
-                }
-            });
-            return ret;
-        });
+        store.getters = {
+            treeType: treeType
+        };
         sinon.stub(Radio, "trigger").callsFake((...args) => {
             args.forEach(arg => {
                 if (arg === "rerender" || arg === "updateSelection" || arg === "updateLayerView") {

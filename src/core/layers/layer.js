@@ -1,6 +1,7 @@
 import store from "../../app-store";
 import mapCollection from "../../dataStorage/mapCollection.js";
 import deepCopy from "../../utils/deepCopy.js";
+import * as bridge from "./RadioBridge.js";
 
 /**
  * Creates a layer object to extend from.
@@ -49,10 +50,10 @@ export default function Layer (attrs, layer, initialize = true) {
     if (initialize) {
         this.initialize(attrs);
     }
-    else if (attrs.isSelected === true || Radio.request("Parser", "getTreeType") === "light") {
+    else if (attrs.isSelected === true || store.getters.treeType === "light") {
         this.setIsVisibleInMap(typeof attrs.isSelected !== "boolean" ? false : attrs.isSelected);
     }
-    this.checkForScale(Radio.request("MapView", "getOptions"));
+    this.checkForScale({scale: store.getters["Map/scale"]});
     this.registerInteractionMapViewListeners();
 }
 /**
@@ -65,7 +66,7 @@ Layer.prototype.initialize = function (attrs) {
         this.set("singleBaselayer", store.state.configJson?.Portalconfig.singleBaselayer);
     }
 
-    if (attrs.isSelected === true || Radio.request("Parser", "getTreeType") === "light") {
+    if (attrs.isSelected === true || store.getters.treeType === "light") {
         this.updateLayerTransparency();
         this.setIsVisibleInMap(typeof attrs.isSelected !== "boolean" ? false : attrs.isSelected);
         this.set("isRemovable", store.state.configJson?.Portalconfig.layersRemovable);
@@ -92,16 +93,13 @@ Layer.prototype.createLegend = function () {
     console.warn("function Layer.createLegend must be overwritten in extended layers!");
 };
 /**
-* Register interaction with map view. Listens to change of cale.
-* @listens Core#RadioTriggerMapViewChangedOptions
+* Register interaction with map view. Listens to change of scale.
 * @returns {void}
 */
 Layer.prototype.registerInteractionMapViewListeners = function () {
-    Radio.channel("MapView").on({
-        "changedOptions": function (options) {
-            this.checkForScale(options);
-        }
-    }, this);
+    store.watch((state, getters) => getters["Map/scale"], scale => {
+        this.checkForScale({scale: scale});
+    });
 };
 /**
  * Setter for ol/layer.setMaxResolution
@@ -127,7 +125,7 @@ Layer.prototype.removeLayer = function () {
     const map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode);
 
     this.setIsVisibleInMap(false);
-    Radio.trigger("ModelList", "removeLayerById", this.get("id"));
+    bridge.removeLayerByIdFromModelList(this.get("id"));
     map.removeLayer(this.layer);
 };
 /**
@@ -149,13 +147,13 @@ Layer.prototype.checkForScale = function (options) {
     if (options && parseFloat(options.scale, 10) <= parseInt(this.get("maxScale"), 10) && parseFloat(options.scale, 10) >= parseInt(this.get("minScale"), 10)) {
         this.set("isOutOfRange", false);
         if (lastValue !== false) {
-            Radio.trigger("Menu", "change:isOutOfRange", this, false);
+            bridge.outOfRangeChanged(this, false);
         }
     }
     else {
         this.set("isOutOfRange", true);
         if (lastValue !== true) {
-            Radio.trigger("Menu", "change:isOutOfRange", this, true);
+            bridge.outOfRangeChanged(this, true);
         }
     }
 };
@@ -196,7 +194,7 @@ Layer.prototype.setIsVisibleInMap = function (newValue) {
     if (lastValue !== newValue) {
         // here it is possible to change the layer visibility-info in state and listen to it e.g. in LegendWindow
         // e.g. store.dispatch("Map/toggleLayerVisibility", {layerId: this.get("id")});
-        Radio.trigger("Layer", "layerVisibleChanged", this.get("id"), this.get("isVisibleInMap"), this);
+        bridge.layerVisibilityChanged(this, this.get("isVisibleInMap"));
     }
 };
 /**
@@ -220,8 +218,8 @@ Layer.prototype.decTransparency = function () {
 
     if (transparency <= 100 && transparency > 0) {
         this.setTransparency(transparency - 10);
-        Radio.trigger("Menu", "rerender");
-        Radio.trigger("MenuSelection", "rerender");
+        bridge.renderMenu();
+        bridge.renderMenuSelection();
     }
 };
 /**
@@ -233,8 +231,8 @@ Layer.prototype.incTransparency = function () {
 
     if (transparency <= 90) {
         this.setTransparency(transparency + 10);
-        Radio.trigger("Menu", "rerender");
-        Radio.trigger("MenuSelection", "rerender");
+        bridge.renderMenu();
+        bridge.renderMenuSelection();
     }
 };
 /**
@@ -253,7 +251,7 @@ Layer.prototype.updateLayerTransparency = function () {
  */
 Layer.prototype.setIsVisibleInTree = function (newValue) {
     this.set("isVisibleInTree", newValue);
-    Radio.trigger("Menu", "change:isVisibleInTree", this);
+    bridge.isVisibleInTreeChanged();
 };
 /**
  * Resets selectionIDX property; 0 is defined as initial value and the layer will be acknowledged as
@@ -292,13 +290,12 @@ Layer.prototype.setLayerInfoChecked = function (newValue) {
  * @return {void}
  */
 Layer.prototype.toggleIsSettingVisible = function () {
-    const layers = Radio.request("ModelList", "getCollection"),
+    const layers = bridge.getAllLayers(),
         oldValue = this.attributes.isSettingVisible;
 
     layers.setIsSettingVisible(false);
     this.setIsSettingVisible(!oldValue);
-    Radio.trigger("Menu", "renderSetting");
-    Radio.trigger("MenuSelection", "renderSetting");
+    bridge.renderMenuSettings();
 };
 /**
  * Sets the attribute isSelected and sets the layers visibility. If newValue is false, the layer is removed from map.
@@ -308,7 +305,7 @@ Layer.prototype.toggleIsSettingVisible = function () {
  */
 Layer.prototype.setIsSelected = function (newValue) {
     const map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode),
-        treeType = Radio.request("Parser", "getTreeType");
+        treeType = store.getters.treeType;
 
     this.set("isSelected", newValue);
     handleSingleBaseLayer(newValue, this, map);
@@ -318,15 +315,14 @@ Layer.prototype.setIsSelected = function (newValue) {
     }
 
     if (newValue) {
-        Radio.trigger("Map", "addLayerToIndex", [this.layer, this.get("selectionIDX")]);
+        bridge.addLayerToIndex(this.layer, this.get("selectionIDX"));
     }
     else {
         map.removeLayer(this.layer);
     }
     if (treeType !== "light" || store.state.mobile) {
-        Radio.trigger("ModelList", "updateLayerView");
-        Radio.trigger("ModelList", "updateSelection", this);
-        Radio.trigger("Menu", "rerender");
+        bridge.updateLayerView(this);
+        bridge.renderMenu();
     }
 };
 /**
@@ -340,8 +336,8 @@ Layer.prototype.toggleIsVisibleInMap = function () {
     else {
         this.setIsSelected(true);
     }
-    if (Radio.request("Parser", "getTreeType") !== "light" || store.state.mobile) {
-        Radio.trigger("MenuSelection", "rerender");
+    if (store.getters.treeType !== "light" || store.state.mobile) {
+        bridge.renderMenuSelection();
     }
 };
 /**
@@ -350,11 +346,11 @@ Layer.prototype.toggleIsVisibleInMap = function () {
  * @returns {void}
  */
 Layer.prototype.updateLayerSource = function () {
-    const layer = Radio.request("Map", "getLayerByName", this.get("name"));
+    const layers = bridge.getLayerModelsByAttributes({name: this.get("name")});
 
-    if (layer && this.get("layerSource") !== null) {
-        layer.setSource(this.get("layerSource"));
-        layer.getSource().refresh();
+    if (layers && layers[0] && this.get("layerSource") !== null) {
+        layers[0].setSource(this.get("layerSource"));
+        layers[0].getSource().refresh();
     }
 };
 /**
@@ -381,14 +377,14 @@ Layer.prototype.changeLang = function () {
  * @return {void}
  */
 Layer.prototype.moveDown = function () {
-    Radio.trigger("ModelList", "moveModelInTree", this, -1);
+    bridge.moveModelInTree(this, -1);
 };
 /**
  * Calls Collection function moveModelUp
  * @return {void}
  */
 Layer.prototype.moveUp = function () {
-    Radio.trigger("ModelList", "moveModelInTree", this, 1);
+    bridge.moveModelInTree(this, 1);
 };
 /**
  * Called from setSelected, handles singleBaseLayer and timelayers.
@@ -399,7 +395,7 @@ Layer.prototype.moveUp = function () {
  */
 function handleSingleBaseLayer (isSelected, layer, map) {
     const id = layer.get("id"),
-        layerGroup = Radio.request("ModelList", "getModelsByAttributes", {parentId: layer.get("parentId")}),
+        layerGroup = bridge.getLayerModelsByAttributes({parentId: layer.get("parentId")}),
         singleBaselayer = layer.get("singleBaselayer") && layer.get("parentId") === "Baselayer",
         timeLayer = layer.get("typ") === "WMS" && layer.get("time");
 
@@ -416,10 +412,10 @@ function handleSingleBaseLayer (isSelected, layer, map) {
                     }
                     map.removeLayer(aLayer.get("layer"));
                     // This makes sure that the Oblique Layer, if present in the layerList, is not selectable if switching between baseLayers
-                    aLayer.checkForScale(Radio.request("MapView", "getOptions"));
+                    aLayer.checkForScale({scale: store.getters["Map/scale"]});
                 }
             });
-            Radio.trigger("Menu", "rerender");
+            bridge.renderMenu();
         }
         if (timeLayer) {
             store.commit("WmsTime/setTimeSliderActive", {active: true, currentLayerId: id});
@@ -495,8 +491,13 @@ Layer.prototype.setLegend = function (value) {
 Layer.prototype.set = function (arg1, arg2) {
     if (typeof arg1 === "object") {
         Object.keys(arg1).forEach(key => {
-            this.attributes[key] = arg1[key];
-        });
+            if (key === "isSelected") {
+                this.setIsSelected(arg1[key]);
+            }
+            else {
+                this.attributes[key] = arg1[key];
+            }
+        }, this);
     }
     else if (typeof arg1 === "string") {
         this.attributes[arg1] = arg2;

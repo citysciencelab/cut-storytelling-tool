@@ -13,10 +13,15 @@ describe("src/core/layers/wms.js", () => {
         const map = {
             id: "ol",
             mode: "2D",
-            addInteraction: sinon.spy(),
-            removeInteraction: sinon.spy(),
+            addInteraction: sinon.stub(),
+            removeInteraction: sinon.stub(),
             addLayer: () => {
                 layerAdded = true;
+            },
+            getView: () => {
+                return {
+                    getResolutions: () => [2000, 1000]
+                };
             }
         };
 
@@ -32,7 +37,11 @@ describe("src/core/layers/wms.js", () => {
             minScale: "0",
             maxScale: "2500000",
             isChildLayer: true,
-            layers: "layer1,layer2"
+            layers: "layer1,layer2",
+            transparent: false
+        };
+        store.getters = {
+            treeType: "custom"
         };
     });
 
@@ -49,17 +58,6 @@ describe("src/core/layers/wms.js", () => {
         expect(layer.getSource()).not.to.be.undefined;
     });
     it("createLayer with isSelected=true shall add layer to map", function () {
-        sinon.stub(Radio, "request").callsFake((...args) => {
-            let ret = null;
-
-            args.forEach(arg => {
-                if (arg === "getResolutions") {
-                    ret = [60, 20];
-                }
-            });
-            return ret;
-        });
-
         attributes.isSelected = true;
         const wmsLayer = new WMSLayer(attributes);
 
@@ -68,17 +66,6 @@ describe("src/core/layers/wms.js", () => {
 
     });
     it("createLayer with isSelected=false shall not add layer to map", function () {
-        sinon.stub(Radio, "request").callsFake((...args) => {
-            let ret = null;
-
-            args.forEach(arg => {
-                if (arg === "getResolutions") {
-                    ret = [60, 20];
-                }
-            });
-            return ret;
-        });
-
         const wmsLayer = new WMSLayer(attributes);
 
         expect(wmsLayer.get("layer")).not.to.be.undefined;

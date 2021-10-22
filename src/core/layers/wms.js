@@ -1,6 +1,8 @@
 import {wms} from "masterportalAPI/src";
 import store from "../../app-store";
 import Layer from "./layer";
+import mapCollection from "../../dataStorage/mapCollection.js";
+import * as bridge from "./RadioBridge.js";
 /**
  * Creates a layer of type WMS.
  * @param {Object} attrs  attributes of the layer
@@ -25,10 +27,7 @@ export default function WMSLayer (attrs) {
     // call the super-layer
     Layer.call(this, Object.assign(defaults, attrs), this.layer, attrs.isChildLayer);
     this.createLegend();
-
-    Radio.channel("Layer").on({
-        "change:SLDBody": this.updateSourceSLDBody
-    });
+    bridge.listenToChangeSLDBody(this);
 
     // Hack for services that do not support EPSG:4326
     if (this.get("notSupportedFor3D").includes(this.get("id"))) {
@@ -57,7 +56,7 @@ WMSLayer.prototype = Object.create(Layer.prototype);
  * @returns {void}
  */
 WMSLayer.prototype.createLayer = function (attrs) {
-    const options = {resolutions: Radio.request("MapView", "getResolutions"), origin: [442800, 5809000]},
+    const options = {resolutions: mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode).getView().getResolutions(), origin: [442800, 5809000]},
         layerAttributes = {
             id: attrs.id,
             cacheId: attrs.cacheId,
@@ -66,8 +65,7 @@ WMSLayer.prototype.createLayer = function (attrs) {
             tilesize: attrs.tilesize,
             layers: attrs.layers,
             version: attrs.version,
-            // todo ind ist das so richtig?
-            transparent: true,
+            transparent: attrs.transparent.toString(),
             singleTile: attrs.singleTile,
             minScale: attrs.minScale,
             maxScale: attrs.maxScale
@@ -117,9 +115,10 @@ WMSLayer.prototype.getLayers = function () {
  * @returns {String} - The created getFeature info url.
  */
 WMSLayer.prototype.getGfiUrl = function () {
-    const resolution = Radio.request("MapView", "getOptions").resolution,
-        projection = Radio.request("MapView", "getProjection"),
-        coordinate = Radio.request("GFI", "getCoordinate");
+    const mapView = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode).getView(),
+        resolution = store.getters["Map/resolution"],
+        projection = mapView.getProjection(),
+        coordinate = store.getters["Map/clickCoord"];
 
     return this.get("layerSource").getFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.get("infoFormat"), FEATURE_COUNT: this.get("featureCount"), STYLES: "", SLD_BODY: undefined});
 };
@@ -175,5 +174,5 @@ WMSLayer.prototype.getExtent = function () {
     if (this.has("extent")) {
         return this.get("extent");
     }
-    return Radio.request("MapView", "getExtent");
+    return store.getters["Map/bbox"];
 };

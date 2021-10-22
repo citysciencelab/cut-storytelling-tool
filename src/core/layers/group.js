@@ -106,11 +106,9 @@ Group.prototype.updateSource = function () {
 };
 /**
  * This function start the presentation of the layerinformation and legend.
- * @fires Legend#RadioRequestLegendGetLegend
  * @returns {void}
  */
 Group.prototype.showLayerInformation = function () {
-    let legend = "";
     const metaID = [],
         cswUrls = [],
         showDocUrls = [],
@@ -122,8 +120,6 @@ Group.prototype.showLayerInformation = function () {
         // NOTICE can be removed, if all layers are refactored
         this.prepareLayerObject();
     }
-    legend = Radio.request("Legend", "getLegend", this);
-
     this.get("children").forEach(layer => {
         let cswUrl = null,
             showDocUrl = null,
@@ -153,7 +149,6 @@ Group.prototype.showLayerInformation = function () {
 
     store.dispatch("LayerInformation/layerInfo", {
         "id": this.get("id"),
-        "legend": legend,
         "metaID": metaID[0],
         "metaIdArray": metaID,
         "layername": name,
@@ -187,7 +182,7 @@ Group.prototype.showLayerInformation = function () {
 * @returns {void}
 **/
 Group.prototype.checkForScale = function (options) {
-    if (!options) {
+    if (!options || !options.scale) {
         return;
     }
     const currentScale = parseFloat(options.scale, 10);
