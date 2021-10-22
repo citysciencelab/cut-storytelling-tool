@@ -129,16 +129,57 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @listens Print#CreatePrintJob
      */
     initialize: function () {
-        const channel = Radio.channel("Printer");
+        // const channel = Radio.channel("Print");
 
-        channel.on({
-            "createPrintJob": this.createPrintJob
-        }, this);
-        this.createMapFishServiceUrl(this.get("mapfishServiceId"));
+        // this.superInitialize();
 
-        this.listenTo(Radio.channel("i18next"), {
-            "languageChanged": this.changeLang
-        });
+        // this.listenTo(this, {
+        //     "change:isActive": function (model, value) {
+        //         if (model.get("layoutList").length === 0) {
+        //             this.getCapabilites(model, value);
+        //         }
+        //         this.togglePostrenderListener(model, value);
+        //         if (value) {
+        //             this.setCurrentMapScale(store.state.Map.scale);
+        //         }
+        //     }
+        // });
+
+        // this.listenTo(Radio.channel("MapView"), {
+        //     "changedOptions": function () {
+        //         this.setIsScaleSelectedManually(false);
+        //         if (typeof this.get("eventListener") !== "undefined") {
+        //             this.updateCanvasLayer();
+        //         }
+        //     }
+        // });
+
+        // this.listenTo(Radio.channel("ModelList"), {
+        //     "updatedSelectedLayerList": function () {
+        //         if (typeof this.get("eventListener") !== "undefined") {
+        //             this.setVisibleLayer(this.getVisibleLayer().concat(this.get("invisibleLayer")));
+        //             this.updateCanvasLayer();
+        //         }
+        //     }
+        // });
+
+        // this.listenTo(Radio.channel("GFI"), {
+        //     "isVisible": function (isGfiActive) {
+        //         if (!isGfiActive) {
+        //             this.setIsGfiSelected(false);
+        //         }
+        //         this.setIsGfiActive(isGfiActive);
+        //     }
+        // });
+
+        // channel.on({
+        //     "createPrintJob": this.createPrintJob
+        // }, this);
+        // this.createMapFishServiceUrl(this.get("mapfishServiceId"));
+
+        // this.listenTo(Radio.channel("i18next"), {
+        //     "languageChanged": this.changeLang
+        // });
 
         this.changeLang(i18next.language);
     },
@@ -371,7 +412,8 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         this.setVisibleLayer(visibleLayerList);
 
         if (value && model.get("layoutList").length !== 0 && visibleLayerList.length >= 1) {
-            const canvasLayer = canvasModel.getCanvasLayer(visibleLayerList);
+            canvasModel.getCanvasLayer(visibleLayerList);
+            // const canvasLayer = muss vor das den Ausdruck in Zeile 415
 
             // this.setEventListener(canvasLayer.on("postrender", this.createPrintMask.bind(this)));
         }
