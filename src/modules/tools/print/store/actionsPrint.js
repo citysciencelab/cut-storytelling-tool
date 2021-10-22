@@ -165,7 +165,7 @@ export default {
         }
 
         if (typeof metadata === "undefined") {
-            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.layerInformation.errorMessage", {cswObjCswUrl: cswObj.cswUrl}));
+            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.layerInformation.errorMessage", {cswObjCswUrl: cswObj.cswUrl}), {root: true});
         }
         else {
             cswObj.parsedData = {};
@@ -191,7 +191,7 @@ export default {
             }
         }
 
-        BuildSpec.fetchedMetaData();
+        BuildSpec.fetchedMetaData(cswObj);
     },
 
     /**
