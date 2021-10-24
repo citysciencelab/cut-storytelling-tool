@@ -142,6 +142,7 @@ export default {
         display:flex;
         flex-direction:row;
         width:100%;
+
         .heading-element {
             white-space: nowrap;
             color: @color_1;
@@ -152,6 +153,7 @@ export default {
                 flex-grow:99;
                 overflow: hidden;
             }
+
             .glyphicon {
                 padding: 5px;
                 &:focus {
@@ -163,21 +165,15 @@ export default {
             }
 
             > h2 {
+                .tool-headings-h2();
+
                 &.glyphicon-minus { top: 3px; }
+
                 &:hover {
                     &:not(.win-icon) {
                         .primary_action_hover();
                     }
                 }
-                /*font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
-                color: #555555;
-                font-size: 14px;
-                font-style: normal;
-                font-weight: normal;
-                text-align: left;
-                white-space: nowrap;
-                cursor: move;*/
-                .tool-headings-h2();
             }
         }
     }
