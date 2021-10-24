@@ -460,7 +460,7 @@ export default {
                                     v-for="(projection, i) in projections"
                                     :key="i"
                                     :value="projection.id"
-                                    :selected="projection.id === currentProjection.id"
+                                    :SELECTED="projection.id === currentProjection.id"
                                 >
                                     {{ projection.title ? projection.title : projection.name }}
                                 </option>
