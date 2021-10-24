@@ -118,7 +118,6 @@ function isObservation (observation) {
     return typeof observation === "object" && observation !== null
         && typeof observation["@iot.id"] === "number"
         && typeof observation.phenomenonTime === "string"
-        && typeof observation.resultTime === "string"
         && Object.prototype.hasOwnProperty.call(observation, "result");
 }
 

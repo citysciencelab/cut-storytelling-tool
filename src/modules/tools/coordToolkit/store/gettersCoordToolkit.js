@@ -11,6 +11,7 @@ const getters = {
     /**
      * Transforms the projection.
      * @param {Object} state state of this tool
+     * @param {Object} map the map
      * @param {Object} targetProjection the target projection
      * @returns {Object} the transformed projection
      */

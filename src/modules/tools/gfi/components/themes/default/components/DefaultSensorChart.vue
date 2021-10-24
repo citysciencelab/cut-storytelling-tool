@@ -5,11 +5,13 @@ import {
     convertObservationsToLinechart
 } from "../../../../utils/staTools.js";
 import Linechart from "../../../../../../../share-components/charts/components/Linechart.vue";
+import ExportButtonCSV from "../../../../../../../share-components/exportButton/components/ExportButtonCSV.vue";
 
 export default {
     name: "DefaultSensorChart",
     components: {
-        Linechart
+        Linechart,
+        ExportButtonCSV
     },
     props: {
         type: {
@@ -57,7 +59,8 @@ export default {
         return {
             linechartData: null,
             linechartDataOptions: {},
-            downloadUrl: false
+            downloadUrl: false,
+            downloadFilename: false
         };
     },
     watch: {
@@ -90,6 +93,7 @@ export default {
                 // onsuccess
                 const label = this.label ? this.label : this.staObject.name;
 
+                this.downloadFilename = label;
                 this.linechartData = convertObservationsToLinechart(observations, label, this.format, this.options);
             }, () => {
                 // onstart
@@ -123,12 +127,10 @@ export default {
             v-if="typeof downloadUrl === 'string'"
             class="link"
         >
-            <a
-                :href="downloadUrl"
-                class="btn btn-primary"
-            >
-                Download
-            </a>
+            <ExportButtonCSV
+                :url="downloadUrl"
+                :filename="downloadFilename"
+            />
         </div>
     </div>
 </template>

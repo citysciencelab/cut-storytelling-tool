@@ -7,7 +7,6 @@ import Template from "text-loader!./templateMenu.html";
  */
 
 const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype */{
-
     /**
      * @class FolderViewMenu
      * @extends Backbone.View
@@ -48,8 +47,12 @@ const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype 
         }
         else {
             this.$el.removeClass("open");
+            $(".dropdown-menu.fixed").removeClass("fixed");
+            $(".glyphicon-pushpin").removeClass("rotate-pin");
+            $(".glyphicon-pushpin").addClass("rotate-pin-back");
         }
 
+        this.clearFixedTree();
         return this;
     },
 
@@ -69,6 +72,23 @@ const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype 
         else {
             this.$el.show();
         }
+    },
+
+    /**
+     * Removing fixed tree if clicking on the menu point Themen
+     * @returns {void}
+     */
+    clearFixedTree: function () {
+        this.$el.click(function () {
+            if ($(this).find("ul#tree.fixed").length) {
+                if (!$(this).hasClass("open")) {
+                    $(this).addClass("open");
+                }
+                $(this).find("ul#tree").removeClass("fixed");
+                $(".glyphicon-pushpin").removeClass("rotate-pin");
+                $(".glyphicon-pushpin").addClass("rotate-pin-back");
+            }
+        });
     }
 });
 

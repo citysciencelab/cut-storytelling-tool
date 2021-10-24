@@ -1,11 +1,12 @@
 <script>
 import beautifyKey from "../../../../../../../utils/beautifyKey.js";
 import {isWebLink} from "../../../../../../../utils/urlHelper.js";
+import {translateKeyWithPlausibilityCheck} from "../../../../../../../utils/translateKeyWithPlausibilityCheck.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
 import CompareFeatureIcon from "../../../favoriteIcons/components/CompareFeatureIcon.vue";
 import DefaultSensorChart from "./DefaultSensorChart.vue";
-import getPropertiesWithFullKeys from "../../../../utils/getPropertiesWithFullKeys.js";
+import {getPropertiesWithFullKeys} from "../../../../utils/getPropertiesWithFullKeys.js";
 
 export default {
     name: "Default",
@@ -85,6 +86,7 @@ export default {
         isPhoneNumber,
         getPhoneNumberAsWebLink,
         isEmailAddress,
+        translateKeyWithPlausibilityCheck,
 
         /**
          * checks if given feature has a function getMappedProperties
@@ -277,7 +279,7 @@ export default {
                         class="bold firstCol"
                     >
                         <span v-if="beautifyKeysParam">
-                            {{ beautifyKey($t(key)) }}
+                            {{ beautifyKey(translateKeyWithPlausibilityCheck(key, v => $t(v))) }}
                         </span>
                         <span v-else>
                             {{ key }}
@@ -327,6 +329,7 @@ export default {
         <iframe
             v-if="mimeType === 'text/html'"
             class="gfi-iFrame"
+            title="gfi-iFrame"
         />
     </div>
 </template>

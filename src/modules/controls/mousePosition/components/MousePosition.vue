@@ -90,6 +90,7 @@ export default {
             padding: 0 8px;
             border-right: 1px solid @primary_contrast;
             color: #FFFFFF;
+            min-width: 150px;
         }
 
         #hide-mouse-position{

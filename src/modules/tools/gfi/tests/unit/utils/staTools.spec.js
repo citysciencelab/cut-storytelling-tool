@@ -49,8 +49,7 @@ describe("src/modules/tools/gfi/utils/staTools.js", () => {
             const observation = {
                 "@iot.id": 214030301,
                 "phenomenonTime": "2021-08-05T04:15:00.000Z/2021-08-05T04:29:59.000Z",
-                "result": 127.0,
-                "resultTime": "2021-08-05T04:43:17.582Z"
+                "result": 127.0
             };
 
             expect(isObservation(observation)).to.be.true;

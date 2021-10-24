@@ -128,9 +128,9 @@ export default {
     newProjectionSelected ({dispatch, commit, state, getters}, value) {
         const targetProjection = getters.getProjectionById(value);
 
+        dispatch("formatInput", [state.coordinatesEasting, state.coordinatesNorthing]);
         dispatch("transformCoordinatesFromTo", targetProjection);
         commit("setCurrentProjection", targetProjection);
-        dispatch("formatInput", [state.coordinatesEasting, state.coordinatesNorthing]);
         dispatch("changedPosition");
         commit("setExample");
     },
@@ -148,6 +148,23 @@ export default {
             }
         }
     },
+    /**
+     * Sets the position to map's center, if coordinates are  not set.
+     * @returns {void}
+     */
+    setFirstSearchPosition ({dispatch, commit, state, rootState, getters}) {
+        if (state.mode === "search") {
+            const targetProjectionName = state.currentProjection?.name,
+                position = getters.getTransformedPosition(rootState.Map.map, targetProjectionName);
+
+            if (position && position[0] === 0 && position[1] === 0 && rootState.Map.center) {
+                commit("setCoordinatesEasting", {id: "easting", value: String(rootState.Map.center[0])});
+                commit("setCoordinatesNorthing", {id: "northing", value: String(rootState.Map.center[1])});
+                dispatch("moveToCoordinates", rootState.Map.center);
+            }
+        }
+    },
+
     /**
      * Calculates the clicked position and writes the coordinate-values into the textfields.
      * @param {Number[]} position transformed coordinates
@@ -286,18 +303,20 @@ export default {
      * @returns {void}
      */
     formatInput ({state, commit, getters}, coords) {
-        const {currentProjection} = state,
-            formatters = {
-                "EPSG:4326": coord=>coord.value.split(/[\s°′″'"´`]+/),
-                "EPSG:4326-DG": coord=>coord.value.split(/[\s°]+/)
-            };
+        const {currentProjection} = state;
 
         commit("setSelectedCoordinates", []);
         for (const coord of coords) {
             if (!getters.getEastingError && !getters.getNorthingError) {
-                let formatter = formatters[currentProjection.id];
+                let formatter;
 
-                if (!formatter) {
+                if (currentProjection.id === "EPSG:4326-DG") {
+                    formatter = coordinate=>coordinate.value.split(/[\s°]+/);
+                }
+                else if (currentProjection.projName === "longlat") {
+                    formatter = coordinate=>coordinate.value.split(/[\s°′″'"´`]+/);
+                }
+                else {
                     formatter = coordinate=>coordinate.value;
                 }
 
@@ -316,14 +335,14 @@ export default {
         let transformedCoordinates, coordinates;
 
         if (state.selectedCoordinates.length === 2) {
-            if (state.currentProjection.id.indexOf("EPSG:4326") > -1) {
+            if (state.currentProjection.projName === "longlat") {
                 coordinates = convertSexagesimalToDecimal(state.selectedCoordinates);
             }
             else {
                 coordinates = [Math.round(state.selectedCoordinates[0]), Math.round(state.selectedCoordinates[1])];
             }
-            transformedCoordinates = proj4(state.currentProjection, proj4(targetProjection.name), coordinates);
-            if (targetProjection.id === "EPSG:4326") {
+            transformedCoordinates = proj4(state.currentProjection, targetProjection, coordinates);
+            if (targetProjection.projName === "longlat" && targetProjection.id !== "EPSG:4326-DG") {
                 transformedCoordinates = [convertSexagesimalFromDecimal(transformedCoordinates[1]), convertSexagesimalFromDecimal(transformedCoordinates[0])];
             }
             else if (targetProjection.id === "EPSG:4326-DG") {
@@ -343,25 +362,40 @@ export default {
      * @returns {void}
      */
     transformCoordinates ({state, dispatch}) {
+        const mapProjection = Radio.request("MapView", "getProjection").getCode();
+
         if (state.selectedCoordinates.length === 2) {
             dispatch("setZoom", state.zoomLevel);
 
             if (state.currentProjection.id === "EPSG:4326" || state.currentProjection.id === "EPSG:4326-DG") {
                 const coordinates = convertSexagesimalToDecimal(state.selectedCoordinates);
 
-                state.transformedCoordinates = proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), coordinates);
+                state.transformedCoordinates = proj4(proj4("EPSG:4326"), proj4(mapProjection), coordinates);
                 dispatch("moveToCoordinates", state.transformedCoordinates);
             }
             else if (state.currentProjection.id === "EPSG:31467") {
                 const coordinates = [Math.round(state.selectedCoordinates[0]), Math.round(state.selectedCoordinates[1])];
 
-                state.transformedCoordinates = proj4(proj4("EPSG:31467"), proj4("EPSG:25832"), coordinates);
+                state.transformedCoordinates = proj4(proj4("EPSG:31467"), proj4(mapProjection), coordinates);
                 dispatch("moveToCoordinates", state.transformedCoordinates);
             }
             else if (state.currentProjection.id === "EPSG:8395") {
                 const coordinates = [Math.round(state.selectedCoordinates[0]), Math.round(state.selectedCoordinates[1])];
 
-                state.transformedCoordinates = proj4(proj4("EPSG:8395"), proj4("EPSG:25832"), coordinates);
+                state.transformedCoordinates = proj4(proj4("EPSG:8395"), proj4(mapProjection), coordinates);
+                dispatch("moveToCoordinates", state.transformedCoordinates);
+            }
+            else if (state.currentProjection.id !== mapProjection) {
+                let coordinates;
+
+                if (state.currentProjection.projName === "longlat") {
+                    coordinates = convertSexagesimalToDecimal(state.selectedCoordinates);
+                }
+                else {
+                    coordinates = [Math.round(state.selectedCoordinates[0]), Math.round(state.selectedCoordinates[1])];
+                }
+
+                state.transformedCoordinates = proj4(proj4(state.currentProjection.id), proj4(mapProjection), coordinates);
                 dispatch("moveToCoordinates", state.transformedCoordinates);
             }
             else {

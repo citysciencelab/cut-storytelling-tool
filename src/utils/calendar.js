@@ -140,6 +140,12 @@ const publicHolidayMatrix = {
             return moment(firstAdvent).add(21, "days");
         }
     },
+    christmasEve: {
+        translationKey: "common:utils.calendar.christmasEve",
+        getMoment: (year) => {
+            return moment(year + "-12-24", "YYYY-MM-DD");
+        }
+    },
     christmasDay: {
         translationKey: "common:utils.calendar.christmasDay",
         getMoment: (year) => {
@@ -150,6 +156,12 @@ const publicHolidayMatrix = {
         translationKey: "common:utils.calendar.secondDayOfChristmas",
         getMoment: (year) => {
             return moment(year + "-12-26", "YYYY-MM-DD");
+        }
+    },
+    newYearsEve: {
+        translationKey: "common:utils.calendar.newYearsEve",
+        getMoment: (year) => {
+            return moment(year + "-12-31", "YYYY-MM-DD");
         }
     }
 };
@@ -194,11 +206,10 @@ function getPublicHoliday (date, holidayKeys = false, format = false) {
         adventMoment = getFirstAdventMoment(year),
         keys = Array.isArray(holidayKeys) ? holidayKeys : Object.keys(publicHolidayMatrix),
         len = keys.length;
-    let i = 0,
-        holidayKey = "",
+    let holidayKey = "",
         holidayMoment = null;
 
-    for (i = 0; i < len; i++) {
+    for (let i = 0; i < len; i++) {
         holidayKey = keys[i];
 
         if (!isCalendarMoment(publicHolidayMatrix[holidayKey])) {

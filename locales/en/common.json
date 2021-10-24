@@ -65,7 +65,7 @@
     "tree": {
         "trafficCameras": "survey cameras (traffic)",
         "topicsHelp": "Topics help",
-        "mapBackground": "Map background grey/white",
+        "mapBackground": "Show / hide gray background under the map",
         "pinTopicsTree": "Fix/remove topic tree",
         "hideAllTopics": "Hide all topics",
         "showAllTopics": "Show all topics",
@@ -96,6 +96,7 @@
     "modules": {
         "language": {
             "languageTitle": "Please choose a language",
+            "toggleWindow": "Toggle Window",
             "de": "Deutsch",
             "en": "English",
             "it": "Italiano",
@@ -533,6 +534,14 @@
                         "outoforder": "Out of order"
                       }
                     }
+                },
+                "boolean": {
+                    "true": "Yes",
+                    "yes": "Yes",
+                    "1": "Yes",
+                    "false": "No",
+                    "no": "No",
+                    "0": "No"
                 }
             },
             "graph": {
@@ -701,7 +710,8 @@
                 "poiChoiceConfirmation": "OK",
                 "poiChoiceStop": "Quit",
                 "trackingDeniedText": "'Close to here' is not available.",
-                "distanceUnit": "meters"
+                "distanceUnit": "meters",
+                "imgAlt": "picture for point of interest"
             },
             "orientation3d": {
                 "compass": {
@@ -849,6 +859,11 @@
                 "contentSaved": "Content was copied to the clipboard.",
                 "contentNotSaved": "Content could not be copied to the clipboard."
             }
+        },
+        "exportButton": {
+            "error": {
+                "download": "An error occured on trying to download the data."
+            }
         }
     },
     "utils": {
@@ -873,12 +888,14 @@
             "secondAdvent": "Second Advent",
             "thirdAdvent": "Third Advent",
             "fourthAdvent": "Fourth Of Advent",
+            "christmasEve": "Chrismas Eve",
             "christmasDay": "Christmas Day",
-            "secondDayOfChristmas": "Second Day Of Christmas"
+            "secondDayOfChristmas": "Second Day Of Christmas",
+            "newYearsEve": "New Year's Eve"
         },
         "parametricURL": {
           "alertZoomToGeometry": "The parameterized call of the portal has unfortunately gone wrong!<br>Please make sure that all parameters were entered correctly.",
-          "alertWrongLayerIds": "<strong>The parameterized call is faulty!</strong>  </br>The <b>layerIds</b> at positions: {{wrongIdsPositionsConcat}} do not exist and are ignored!",
+          "alertWrongLayerIds": "The called link contains topics that can no longer be found.</br> To avoid receiving this error message in the future, please take the following steps:<ul> <li>Check your desired map section for missing content.</li> <li>Save your selection again with the tool \"Save selection\".</li></ul>",
           "alertWrongAmountVisibility": "<strong>Parameterized call incorrect!</strong></br>The specifications for <b>layerIds</b> do not match <b>visibility</b> or <b>transparency</b>. They must be specified in the same number in each case.",
           "errorLoadConfig": "The requested configuration file could not be loaded under the following path: {{url}}<br>The URL paramater <strong>configJson</strong> requests a file with the extension \".json\".<br>An attempt is made to load the config.json under the default path."
         }

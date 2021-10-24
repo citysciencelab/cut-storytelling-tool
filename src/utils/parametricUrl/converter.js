@@ -70,7 +70,7 @@ function findProjection (string) {
 /**
      * Parse parameter to search in searchbar.
      * @param {string} query - The Searchquery.
-     * @returns {void}
+     * @returns {string} The parsed search query.
      */
 export function parseQuery (query) {
     let initString = "";

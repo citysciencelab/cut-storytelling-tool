@@ -1009,8 +1009,8 @@ If the gfiAttributes are given as an object, a key's value may also be an object
 |----|--------|----|-------|-----------|-------|
 |name|yes|String||Name to be shown on an exact match.|`"Test"`|
 |condition|yes|enum["contains", "startsWith", "endsWith"]||Condition checked on each feature attribute.|`"startsWith"`|
-|type|no|enum["string", "date", "number"]|`"string"`|If `"date"`, the portal will attempt to parse the attribute value to a date; If `"Number"`, the portal will attempt to parse the attribute value to with thousand seperator;|`"date"`|
-|format|no|String|`"DD.MM.YYYY HH:mm:ss"`|Data format.|`"DD.MM.YYY"`|
+|type|no|enum["string", "date", "number", "boolean"]|`"string"`|If `"date"`, the portal will attempt to parse the attribute value to a date; If `"Number"`, the portal will attempt to parse the attribute value to with thousand seperator; If “boolean”, the portal will attempt to parse the attribute value to boolean value.|`"date"`|
+|format|no|String/Object|`"DD.MM.YYYY HH:mm:ss"/{"key": "value"}`|Data format.|`"DD.MM.YYY"`|
 |prefix|no|String||Attribute value prefix.|Add string to value without whitespace `"https://"`|
 |suffix|no|String||Attribute value suffix.|`"°C"`|
 
@@ -1060,6 +1060,65 @@ If the gfiAttributes are given as an object, a key's value may also be an object
          "name": "key shown in the portal 3",
          "condition": "contains",
          "type": "number"
+      }
+   }
+}
+
+```
+
+**gfiAttributes example object using `boolean` without `format`:**
+
+```json
+{
+   "gfiAttributes": {
+      "key1": "key shown in the portal 1",
+      "key2": "key shown in the portal 2",
+      "key3": {
+         "name": "key shown in the portal 3",
+         "condition": "contains",
+         "type": "boolean"
+      }
+   }
+}
+
+```
+
+**gfiAttributes example object using `boolean` with `format` in translation key:**
+
+```json
+{
+   "gfiAttributes": {
+      "key1": "key shown in the portal 1",
+      "key2": "key shown in the portal 2",
+      "key3": {
+         "name": "key shown in the portal 3",
+         "condition": "contains",
+         "type": "boolean",
+         "format": {
+            "true": "common:modules.tools.gfi.boolean.yes",
+            "false": "common:modules.tools.gfi.boolean.no"
+         }
+      }
+   }
+}
+
+```
+
+**gfiAttributes example object using `boolean` with `format` in normal text:**
+
+```json
+{
+   "gfiAttributes": {
+      "key1": "key shown in the portal 1",
+      "key2": "key shown in the portal 2",
+      "key3": {
+         "name": "key shown in the portal 3",
+         "condition": "contains",
+         "type": "boolean",
+         "format": {
+            "true": "it is right",
+            "false": "it is wrong"
+         }
       }
    }
 }

@@ -69,7 +69,9 @@ export default {
                 searchbarWidth = document.getElementById("searchbar").offsetWidth;
                 navBarWidth = document.getElementById("main-nav").offsetWidth;
                 titleTextWidth = document.getElementById("title-text").offsetWidth;
-                logo = document.getElementById("logo").offsetWidth;
+                if (document.getElementById("logo")) {
+                    logo = document.getElementById("logo").offsetWidth;
+                }
                 titleWidth = titleEl ? titleEl[0].offsetWidth : 0;
 
                 if (!this.$store.state.Title.titleWidth) {
@@ -114,6 +116,7 @@ export default {
         >
 
             <img
+                v-if="logo !== ''"
                 id="logo"
                 :src="logo"
                 :alt="title"

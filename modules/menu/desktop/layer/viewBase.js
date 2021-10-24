@@ -314,6 +314,9 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
     openStyleWMS: function () {
         Radio.trigger("StyleWMS", "openStyleWMS", this.model);
         $(".nav li:first-child").removeClass("open");
+        $(".dropdown-menu.fixed").removeClass("fixed");
+        $(".glyphicon-pushpin").removeClass("rotate-pin");
+        $(".glyphicon-pushpin").addClass("rotate-pin-back");
     },
 
     /**

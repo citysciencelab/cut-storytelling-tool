@@ -10,22 +10,65 @@
 
 ## Unreleased - in development
 ### Added
-- Added the new Tool `WfsSearch`.
-- New parameter "searchResultOrder" for ranking category of searching result
+- gfiAttributes: Adding Boolean type in gfi Attributes so that the original text can be parsed to be more understandable.
+- layerInformation: Adding a parameter to globally toggle the dispaly of the service url for all layers at the same time.
+- measure: Adding a parameter to to define with which decimal accuracy the measurement result is displayed.
 
 ### Changed
-- Moved SensorThingsMqtt and SensorThingsHttp to /src/utils, complete refactoring of SensorThingsMqtt, there are no changes in handling SensorThingsMqtt.
-- Moved convertArrayOfObjectsToCsv to /src/utils/convertJsonToCsv.js with refactoring, removed convertArrayOfObjectsToCsv Event from Radio.
+- Coding-Conventions: For unittests in Vue (/src/...) the vast majority of test-folders are called "tests", going back to a mutual understanding of folder naming. Please use "tests" for your unit or e2e tests in Vue in the future.
 - Changed class for several title elements on page from span to h1 or h2 and standardized their styling
+
 ### Deprecated
 
 ### Removed
-- SensorThingsHttp: The option to use onprogress event when calling get or getInExtent is removed. The onprogress technic uses the addition "&$count=true" at the STA url to calculate the progress. This addition to the url slowes down the FROST server significantly and is therefore not longer supported.
+- src/utils function isArrayOfStrings is removed, use one liner .every(v => typeof v === "string") instead in the future.
 
 ### Fixed
-- Draw tool: fixed an issue (Bitbucket: #638) with resaving draw files
-- Print tool: Fixed an issue when printing a styled WFS layer with a `labelField` in its style. Before. this lead to the same label being printed for every feature.
+- The portalTitle in the config.json without a logo is rendered correctly.
+- Loading layerIds in combination with a config via the url now also works with the treetype 'custom' in the config.
+- When changing the coordinate system in the Coordinates tool, the incorrect recalculation of the coordinates was corrected: Default values of the coordinate search are now the values of the map center. An error in the display of the coordinate systems (EPSG-code was shown twice) was also fixed.
+- The search in the coordinates tool now also works with different map projections of the masterportal view.
+-	Fixed missing highlighting in years 2010-2014 and remove of highlighting when selecting another year in addon boris.
+- The compare features window now has a scollbar, if necessary.
+- For long lists the compare-feature-window provides now a scrollbar.
+
+---
+## v2.14.0 - 2021-10-06
+### Added
+- Add possibility to test end2end-tests with `MicrosoftEdge` driver.
+- VTC-Layer supports Sprites and Fonts in Styledefinitions.
+- Embedded nav into header tag.
+- Added the new Tool `WfsSearch`.
+- EsLint Plugin for a11y in Vue files.
+- New parameter "searchResultOrder" for ranking category of searching result.
+- New csv specialized export button "ExportButtonCSV" is now integrated in Vue.js.
+- Function in src/utils/translateKeyWithPlausibilityCheck.js to prevent a text with ":" in it to be recognized as translation key.
+- Migrated the Parametric Url from Backbone.js to Vue.js. Previous parameters are supported up to version 3.0.0, see also doc/urlParameter.md.
+
+### Changed
+- Accessibility: Changed contrast ratio > 3:1 in all tools, themes, etc.
+- Moved SensorThingsMqtt and SensorThingsHttp to /src/utils, complete refactoring of SensorThingsMqtt, there are no changes in handling SensorThingsMqtt.
+- Changed anchor from div to main class and footer from div to footer class.
+- Pulled footer out of elements on map and made it part of App.vue.
+- Moved convertArrayOfObjectsToCsv to /src/utils/convertJsonToCsv.js with refactoring, removed convertArrayOfObjectsToCsv Event from Radio.
+- The scale display of the map has now new scale steps: above 10.000 it is rounded to five hundreds (e.g. 10250 -> "1 : 10.500"), scale of 1.000 up to 10.000 is rounded to its fifties (e.g. 1025 -> "1 : 1.050").
+- Searchbar topics are now configurable with i18next.
+
+### Deprecated
+
+### Removed
+- SensorThingsHttp: the option to use onprogress event when calling get or getInExtent is removed. The onprogress technic uses the addition "&$count=true" at the STA url to calculate the progress. This addition to the url slowes down the FROST server significantly and is therefore not longer supported.
+- The url parameter CLICKCOUNTER was removed.
+
+### Fixed
+- Draw tool: fixed an issue (Bitbucket: #638) with resaving draw files.
+- Print tool: fixed an issue when printing a styled WFS layer with a `labelField` in its style. Before, this lead to the same label being printed for every feature.
 - STA Mqtt: "WebSocket connection to 'wss://localhost/mqtt' failed" is fixed with refactoring of SensorThingsMqtt.
+- AddWMS tool: WMS services can be added again. Tool adapted to modified parser method.
+- Minor fixes in all Vue files for a11y errors from new EsLint plugin.
+- LayerInformation: setting the title directly from Metadata without translation.
+- CoordToolkit: projection name is shown correctly if no title is defined.
+
 
 ---
 ##  v2.13.1 - 2021-09-03
@@ -59,7 +102,6 @@
 - Added the new layer type 'WMS-T' along with its manipulation functionalities 'TimeSlider' and 'LayerSwiper'.
 
 ### Changed
-- Accessibility: Changed contrast ratio > 3:1 in all tools, themes, etc.
 - Modal dialogues are now marked as alerts so that screenreaders pick them up on appearing.
 - LayerInformation now shows message in case the MetaData couldn't be loaded
 - Footer allows additionally to open vue tools besides backbone tools.
@@ -133,7 +175,6 @@
 
 ### Removed
 - Remove the module cookie, because this is only used in an addon.
-- The url parameter CLICKCOUNTER was removed.
 
 ### Fixed
 - The legend now always renders in the map region even when the sidebar is open. Also, the small optical offset in the menu bar at the legend entry has been removed.
@@ -166,6 +207,9 @@
 - A new Tool named coordToolkit is available. It contains the functionality of the tools supplyCord and searchByCoord. Both provide the same projections configured under the key "namedProjections" in config.js.
 
 ### Changed
+- The version of the package selenium-webdriver was updated to version 4.0.0-beta.3.
+- changed LayerInformation from backbone to vue
+- Changed anchor from div to main class and footer from div to footer class
 - The GFI in attached mode now dynamically adjusts its size to the content.
 - Migrated the CompareFeatures Tool from Backbone.js to Vue.js.
 - Accessibility: Implemented keyboard navigation in menu (top-level and themes).
@@ -184,6 +228,8 @@
 - Support of End2End tests for `Browserstack` has been removed.Instead `saucelabs` is used.
 
 ### Fixed
+- BG-1541 further metadata link is set on MetaDataCatalogueID from rootgetters now, default is 2
+- Labels of VTC-Layer-Objects aren't cut off anymore.
 - Issue #626: The Legend menu item is placed according to the order of the menu items in config.json.
 - Issue #628: The Legend menu item is now translated correctly again and works as usual after a translation.
 - In the layerslider tool, the attribute title can now be overwritten again in config.json.

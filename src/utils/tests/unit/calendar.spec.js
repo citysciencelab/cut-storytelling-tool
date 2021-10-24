@@ -88,9 +88,9 @@ describe("src/utils/calendar.js", () => {
     });
     describe("getPublicHolidays", () => {
         it("should return a list of CalendarMoment for the given year and holiday keys", () => {
-            const publicHolidays = getPublicHolidays(2021, ["epiphany", "ascensionDay", "penanceDay"]);
+            const publicHolidays = getPublicHolidays(2021, ["epiphany", "ascensionDay", "penanceDay", "newYearsEve"]);
 
-            expect(publicHolidays).to.be.an("array").and.to.have.lengthOf(3);
+            expect(publicHolidays).to.be.an("array").and.to.have.lengthOf(4);
 
             expect(publicHolidays[0]).to.be.an("object");
             expect(publicHolidays[0].moment).to.be.an("object");
@@ -112,6 +112,13 @@ describe("src/utils/calendar.js", () => {
             expect(publicHolidays[2].moment.format("YYYY-MM-DD")).to.equal("2021-11-17");
             expect(publicHolidays[2].holidayKey).to.equal("penanceDay");
             expect(publicHolidays[2].translationKey).to.equal("common:utils.calendar.penanceDay");
+
+            expect(publicHolidays[3]).to.be.an("object");
+            expect(publicHolidays[3].moment).to.be.an("object");
+            expect(publicHolidays[3].moment.format).to.be.a("function");
+            expect(publicHolidays[3].moment.format("YYYY-MM-DD")).to.equal("2021-12-31");
+            expect(publicHolidays[3].holidayKey).to.equal("newYearsEve");
+            expect(publicHolidays[3].translationKey).to.equal("common:utils.calendar.newYearsEve");
         });
     });
     describe("hasHolidayInWeek", () => {

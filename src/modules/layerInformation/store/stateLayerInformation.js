@@ -14,6 +14,7 @@
  * @property {string} noMetadataLoaded no metadata Loaded Text
  * @property {array} metaURLs the metadata URLs
  * @property {string} currentLayerName the current Layer Name in case of group layers
+ * @property {boolean} showUrlGlobal parameter to globally toggle the dispaly of the service url for all layers
  */
 export default {
     active: false,
@@ -29,5 +30,6 @@ export default {
     title: "",
     noMetadataLoaded: "",
     metaURLs: [],
-    currentLayerName: ""
+    currentLayerName: "",
+    showUrlGlobal: null
 };

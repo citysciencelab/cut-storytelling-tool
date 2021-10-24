@@ -5,9 +5,11 @@ import Mobile from "./templates/Mobile.vue";
 import Detached from "./templates/Detached.vue";
 import Table from "./templates/Table.vue";
 import Attached from "./templates/Attached.vue";
-import {omit} from "../../../../utils/objectHelpers";
+import omit from "../../../../utils/omit";
 import moment from "moment";
 import thousandsSeparator from "../../../../utils/thousandsSeparator";
+import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
+import {getValueFromObjectByPath} from "../../../../utils/getValueFromObjectByPath.js";
 
 export default {
     name: "Gfi",
@@ -234,6 +236,10 @@ export default {
                     }, obj);
                     break;
                 }
+                case "boolean": {
+                    preparedValue = this.getBooleanValue(preparedValue, format, v => this.$t(v));
+                    break;
+                }
                 // default equals to obj.type === "string"
                 default: {
                     preparedValue = String(preparedValue);
@@ -247,6 +253,30 @@ export default {
             }
             return preparedValue;
         },
+
+        /**
+         * Parsing the boolean value
+         * @param {String} value default value
+         * @param {String|Object} format the format of boolean value
+         * @param {Function} translateFunction the function to use for translation
+         * @returns {String} - original value or parsed value
+         */
+        getBooleanValue: function (value, format, translateFunction) {
+            let parsedValue = String(value);
+
+            if (typeof translateFunction !== "function") {
+                return parsedValue;
+            }
+            if (typeof format === "object" && format !== null && Object.prototype.hasOwnProperty.call(format, value)) {
+                parsedValue = translateKeyWithPlausibilityCheck(format[value], translateFunction);
+            }
+            else {
+                parsedValue = this.$t("common:modules.tools.gfi.boolean." + value);
+            }
+
+            return !parsedValue.includes("modules.tools.gfi.boolean.") ? parsedValue : String(value);
+        },
+
         /**
          * Derives the value from the given condition.
          * @param {String} key Key.
@@ -324,23 +354,8 @@ export default {
             let value = gfi[Object.keys(gfi).find(gfiKey => gfiKey.toLowerCase() === key.toLowerCase())];
 
             if (isPath) {
-                value = this.getValueFromPath(gfi, key);
+                value = getValueFromObjectByPath(gfi, key);
             }
-            return value;
-        },
-        /**
-         * Parses the path and returns the value at the position of the path.
-         * @param {Object} properties - the feature properties
-         * @param {String} key - key that is an object path.
-         * @returns {Object|String} value of the path.
-         */
-        getValueFromPath: function (properties, key) {
-            const pathParts = key.substring(1).split(".");
-            let value = properties;
-
-            pathParts.forEach(part => {
-                value = value ? value[part] : undefined;
-            });
             return value;
         }
     }
@@ -366,13 +381,17 @@ export default {
                 <div class="gfi-footer">
                     <div
                         :class="[pagerIndex < 1 ? 'disabled' : '', 'pager-left', 'pager']"
+                        tabindex="0"
                         @click="decreasePagerIndex"
+                        @keydown.enter="decreasePagerIndex"
                     >
                         <span class="glyphicon glyphicon-chevron-left" />
                     </div>
                     <div
+                        tabindex="0"
                         :class="[pagerIndex === gfiFeatures.length - 1 ? 'disabled' : '', 'pager-right', 'pager']"
                         @click="increasePagerIndex"
+                        @keydown.enter="increasePagerIndex"
                     >
                         <span class="glyphicon glyphicon-chevron-right" />
                     </div>

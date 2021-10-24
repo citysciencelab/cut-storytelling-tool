@@ -232,7 +232,7 @@ export default {
                 Radio.trigger("Parser", "addFolder", object.Title, this.getParsedTitle(object.Title), parentId, level, false, false, object.invertLayerOrder);
             }
             else {
-                Radio.trigger("Parser", "addLayer", object.Title, this.getParsedTitle(object.Title), parentId, level, object.Name, this.wmsUrl, this.version);
+                Radio.trigger("Parser", "addLayer", object.Title, this.getParsedTitle(object.Title), parentId, level, object.Name, this.wmsUrl, this.version, {});
             }
         },
 
@@ -362,10 +362,11 @@ export default {
                 <input
                     id="wmsUrl"
                     ref="wmsUrl"
+                    aria-label="WMS-Url"
                     type="text"
                     class="form-control wmsUrlsChanged"
                     :placeholder="placeholder"
-                    @keydown="inputUrl"
+                    @keydown.enter="inputUrl"
                 >
                 <div class="WMS_example_text">
                     {{ textExample }}

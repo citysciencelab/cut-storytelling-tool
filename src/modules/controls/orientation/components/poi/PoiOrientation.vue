@@ -2,7 +2,7 @@
 import {mapGetters, mapMutations} from "vuex";
 import getters from "../../store/gettersOrientation";
 import mutations from "../../store/mutationsOrientation";
-import {extractEventCoordinates} from "../../../../../../src/utils/extractEventCoordinates";
+import {extractEventCoordinates} from "../../../../../utils/extractEventCoordinates";
 
 export default {
     name: "PoiOrientation",
@@ -307,6 +307,7 @@ export default {
     <div
         id="surrounding_vectorfeatures"
         class="modal fade in poi"
+        @keydown.esc="hidePoi"
     >
         <div class="modal-dialog">
             <div class="modal-content">
@@ -335,11 +336,12 @@ export default {
                             :key="index"
                             :class="feature.category === activeCategory ? 'active' : ''"
                             @click="changedCategory"
+                            @keydown.enter="changedCategory"
                         >
                             <a
                                 :href="'#' + feature.category"
                                 :aria-controls="feature.category"
-                                role="pill"
+                                role="button"
                                 data-toggle="pill"
                             >{{ feature.category + 'm' }}
                                 <span
@@ -370,7 +372,10 @@ export default {
                                                 <span v-html="feat.imgPath" />
                                             </td>
                                             <td v-else-if="feat.imgPath.length > 0">
-                                                <img :src="feat.imgPath">
+                                                <img
+                                                    :src="feat.imgPath"
+                                                    :alt="$t('common:modules.controls.orientation.imgAlt')"
+                                                >
                                             </td>
                                             <td>
                                                 <p
@@ -390,10 +395,16 @@ export default {
                 </div>
             </div>
         </div>
+        <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events -->
         <div
             class="modal-backdrop fade in"
             @click="hidePoi"
         />
+        <!--
+            The previous element does not require a key interaction. It is not focusable,
+            has no semantic meaning, and other methods exist for keyboard users to leave
+            the backdropped modal dialog.
+        -->
     </div>
 </template>
 

@@ -5,6 +5,8 @@ import {expect} from "chai";
 import * as proj4 from "proj4";
 
 describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
+    afterEach(sinon.restore);
+
     describe("supplyCoord actions", () => {
         it("positionClicked without height", done => {
             const payload = {
@@ -235,9 +237,9 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 };
 
             testAction(actions.newProjectionSelected, proj2.id, state, {}, [
+                {type: "formatInput", payload: pos, dispatch: true},
                 {type: "transformCoordinatesFromTo", payload: proj2, dispatch: true},
                 {type: "setCurrentProjection", payload: proj2},
-                {type: "formatInput", payload: pos, dispatch: true},
                 {type: "changedPosition", payload: undefined, dispatch: true},
                 {type: "setExample"}
             ], {getProjectionById: () => {
@@ -283,6 +285,53 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 testAction(actions.changedPosition, null, state, rootState, [],
                     {getTransformedPosition: () => {
                         return null;
+                    }}, done);
+            });
+        });
+        describe("setFirstSearchPosition", () => {
+            const center = [1000, 2000],
+                rootState = {
+                    Map: {
+
+                        center: center
+
+                    }
+                },
+                proj1 = {id: "projection 1", name: "projection 1", projName: "longlat"},
+                proj2 = {id: "projection 2", name: "projection 2", projName: "longlat"},
+                state = {
+                    mode: "search",
+                    projections: [proj1, proj2],
+                    currentProjection: proj2,
+                    positionMapProjection: [300, 400]
+                };
+
+            it("setFirstSearchPosition will call setCoordinatesEasting and others if position is not set", done => {
+                const payloadEasting = {id: "easting", value: String(center[0])},
+                    payloadNorthing = {id: "northing", value: String(center[1])};
+
+                testAction(actions.setFirstSearchPosition, null, state, rootState, [
+                    {type: "setCoordinatesEasting", payload: payloadEasting},
+                    {type: "setCoordinatesNorthing", payload: payloadNorthing},
+                    {type: "moveToCoordinates", payload: center, dispatch: true}
+                ], {getTransformedPosition: () => {
+                    return [0, 0];
+                }}, done);
+            });
+            it("setFirstSearchPosition will do nothing if position is set", done => {
+                state.mode = "search";
+
+                testAction(actions.setFirstSearchPosition, null, state, rootState, [
+                ], {getTransformedPosition: () => {
+                    return [100, 200];
+                }}, done);
+            });
+            it("setFirstSearchPosition will do nothing if mode is not 'search'", done => {
+                state.mode = "supply";
+
+                testAction(actions.setFirstSearchPosition, null, state, rootState, [],
+                    {getTransformedPosition: () => {
+                        return [0, 0];
                     }}, done);
             });
         });
@@ -544,6 +593,20 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                     selectedCoordinates: ["564459.13", "5935103.67"]
                 };
 
+                sinon.stub(Radio, "request").callsFake((...args) => {
+                    let ret = null;
+
+                    args.forEach(arg => {
+                        if (arg === "getProjection") {
+                            ret = {
+                                getCode: () => "http://www.opengis.net/gml/srs/epsg.xml#25832"
+                            };
+                        }
+                    });
+                    return ret;
+                });
+
+
                 actions.transformCoordinates({state, dispatch});
 
                 expect(dispatch.firstCall.args[0]).to.equal("setZoom");
@@ -559,6 +622,20 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                     proj4Spy = sinon.spy(() => {
                         return proj4Result;
                     });
+
+                sinon.stub(Radio, "request").callsFake((...args) => {
+                    let ret = null;
+
+                    args.forEach(arg => {
+                        if (arg === "getProjection") {
+                            ret = {
+                                getCode: () => "EPSG:25832"
+                            };
+                        }
+                    });
+                    return ret;
+                });
+
 
                 sinon.stub(proj4, "default").callsFake(proj4Spy);
                 actions.transformCoordinates({state, dispatch});
@@ -579,6 +656,20 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                         return proj4Result;
                     });
 
+                sinon.stub(Radio, "request").callsFake((...args) => {
+                    let ret = null;
+
+                    args.forEach(arg => {
+                        if (arg === "getProjection") {
+                            ret = {
+                                getCode: () => "EPSG:25832"
+                            };
+                        }
+                    });
+                    return ret;
+                });
+
+
                 sinon.stub(proj4, "default").callsFake(proj4Spy);
                 actions.transformCoordinates({state, dispatch});
 
@@ -597,6 +688,20 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                     proj4Spy = sinon.spy(() => {
                         return proj4Result;
                     });
+
+                sinon.stub(Radio, "request").callsFake((...args) => {
+                    let ret = null;
+
+                    args.forEach(arg => {
+                        if (arg === "getProjection") {
+                            ret = {
+                                getCode: () => "EPSG:25832"
+                            };
+                        }
+                    });
+                    return ret;
+                });
+
 
                 sinon.stub(proj4, "default").callsFake(proj4Spy);
                 actions.transformCoordinates({state, dispatch});
@@ -617,6 +722,20 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                         return proj4Result;
                     });
 
+                sinon.stub(Radio, "request").callsFake((...args) => {
+                    let ret = null;
+
+                    args.forEach(arg => {
+                        if (arg === "getProjection") {
+                            ret = {
+                                getCode: () => "EPSG:25832"
+                            };
+                        }
+                    });
+                    return ret;
+                });
+
+
                 sinon.stub(proj4, "default").callsFake(proj4Spy);
                 actions.transformCoordinates({state, dispatch});
 
@@ -632,12 +751,58 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                     selectedCoordinates: [["53.55555", ""], ["10.01234", ""]]
                 };
 
+                sinon.stub(Radio, "request").callsFake((...args) => {
+                    let ret = null;
+
+                    args.forEach(arg => {
+                        if (arg === "getProjection") {
+                            ret = {
+                                getCode: () => "http://www.opengis.net/gml/srs/epsg.xml#25832"
+                            };
+                        }
+                    });
+                    return ret;
+                });
+
                 actions.transformCoordinates({state, dispatch});
 
                 expect(dispatch.firstCall.args[0]).to.equal("setZoom");
                 expect(dispatch.secondCall.args[0]).to.equal("moveToCoordinates");
             });
+            it("Respect mapViews projection is not 'EPSG:25832' - Transforms coordinates of the EPSG:8395 format and moves to coordinates", () => {
+                const state = {
+                        currentProjection: {id: "EPSG:8395"},
+                        selectedCoordinates: [["53.55555", ""], ["10.01234", ""]]
+                    },
+                    proj4Result = Symbol(),
+                    proj4Spy = sinon.spy(() => {
+                        return proj4Result;
+                    });
+
+                sinon.stub(Radio, "request").callsFake((...args) => {
+                    let ret = null;
+
+                    args.forEach(arg => {
+                        if (arg === "getProjection") {
+                            ret = {
+                                getCode: () => "EPSG:25833"
+                            };
+                        }
+                    });
+                    return ret;
+                });
+
+                sinon.stub(proj4, "default").callsFake(proj4Spy);
+                actions.transformCoordinates({state, dispatch});
+
+                expect(proj4Spy.firstCall.args[0]).to.equal("EPSG:8395");
+                expect(proj4Spy.secondCall.args[0]).to.equal("EPSG:25833");
+                expect(dispatch.firstCall.args[0]).to.equal("setZoom");
+                expect(dispatch.secondCall.args[0]).to.equal("moveToCoordinates");
+                expect(dispatch.secondCall.args[1]).to.eql(proj4Result);
+            });
         });
 
     });
 });
+

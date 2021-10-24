@@ -74,7 +74,9 @@ export default {
 <template>
     <div
         class="modal-mask"
+        tabindex="0"
         @click="closeByClickOutside"
+        @keydown.enter="closeByClickOutside"
     >
         <div class="modal-dialog">
             <div class="modal-content">

@@ -1,7 +1,24 @@
-import getPropertiesWithFullKeys from "../../../utils/getPropertiesWithFullKeys";
+import {getPropertiesWithFullKeys, escapeTerm} from "../../../utils/getPropertiesWithFullKeys";
 import {expect} from "chai";
 
 describe("src/modules/tools/gfi/utils/getPropertiesWithFullKeys.js", () => {
+    describe("escapeTerm", () => {
+        it("should return the given word if the word is not a string", () => {
+            expect(escapeTerm(undefined)).to.be.undefined;
+            expect(escapeTerm(null)).to.be.null;
+            expect(escapeTerm(1234)).to.equal(1234);
+            expect(escapeTerm(true)).to.be.true;
+            expect(escapeTerm(false)).to.be.false;
+            expect(escapeTerm([])).to.be.an("array").and.to.be.empty;
+            expect(escapeTerm({})).to.be.an("object").and.to.be.empty;
+        });
+        it("should return the given string if no term was found", () => {
+            expect(escapeTerm("test", ".")).to.equal("test");
+        });
+        it("should return the given string with escaped terms", () => {
+            expect(escapeTerm("te.st.te.st")).to.equal("te\\.st\\.te\\.st");
+        });
+    });
     describe("getPropertiesWithFullKeys", () => {
         it("should return false if anything but an object or array is given", () => {
             expect(getPropertiesWithFullKeys(undefined)).to.be.false;
@@ -92,6 +109,18 @@ describe("src/modules/tools/gfi/utils/getPropertiesWithFullKeys.js", () => {
 
             expect(getPropertiesWithFullKeys(properties, "@", ".", 1)).to.deep.equal(expected1);
             expect(getPropertiesWithFullKeys(properties, "@", ".", 3)).to.deep.equal(expected2);
+        });
+        it("should escape the dots in the resulting path", () => {
+            const properties = {
+                    test: {
+                        "foo.bar": 1
+                    }
+                },
+                expected = {
+                    "@test.foo\\.bar": 1
+                };
+
+            expect(getPropertiesWithFullKeys(properties)).to.deep.equal(expected);
         });
     });
 });

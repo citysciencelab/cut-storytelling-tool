@@ -94,6 +94,7 @@ export default {
         ...mapActions("Tools/CoordToolkit", [
             "checkPosition",
             "changedPosition",
+            "setFirstSearchPosition",
             "copyToClipboard",
             "positionClicked",
             "setCoordinates",
@@ -129,6 +130,10 @@ export default {
             const pr = getProjections(),
                 wgs84Proj = [];
 
+            if (this.projections.length) {
+                return;
+            }
+
             // id is set to the name and in case of decimal "-DG" is appended to name later on
             // for use in select-box
             pr.forEach(proj => {
@@ -136,18 +141,23 @@ export default {
                 if (proj.name === "EPSG:4326") {
                     wgs84Proj.push(proj);
                 }
+
                 if (proj.name.indexOf("#") > -1) { // e.g. "http://www.opengis.net/gml/srs/epsg.xml#25832"
                     const code = proj.name.substring(proj.name.indexOf("#") + 1, proj.name.length);
 
                     proj.title = proj.title + " (EPSG:" + code + ")";
                 }
-                else {
+                else if (typeof proj.title !== "undefined") {
                     proj.title = proj.title + " (" + proj.name + ")";
+                }
+                else {
+                    proj.title = proj.name;
                 }
             });
             if (wgs84Proj.length > 0) {
                 this.addWGS84Decimal(pr, wgs84Proj);
             }
+
             this.setProjections(pr);
         },
         /**
@@ -258,10 +268,11 @@ export default {
          * @returns {void}
          */
         changeMode (newMode) {
+            this.removeMarker();
             if (newMode === "search") {
                 this.setMode(newMode);
-                this.removeMarker();
                 this.setSupplyCoordInactive();
+                this.setFirstSearchPosition();
             }
             else if (this.mapMode !== MapMode.MODE_3D) {
                 this.setMode(newMode);
@@ -402,6 +413,7 @@ export default {
                                 :title="isSupplyCoordDisabled()? $t('modules.tools.coordToolkit.disabledTooltip'): ''"
                                 :class="{ 'control-label': true, 'enabled': isEnabled('supply') }"
                                 @click="changeMode('supply')"
+                                @keydown.enter="changeMode('supply')"
                             >{{ $t("modules.tools.coordToolkit.supply") }}</label>
                         </div>
                         <div class="form-check">
@@ -416,6 +428,7 @@ export default {
                                 for="searchByCoordRadio"
                                 :class="{'control-label': true, 'enabled': isEnabled('search') }"
                                 @click="changeMode('search')"
+                                @keydown.enter="changeMode('search')"
                             >{{ $t("modules.tools.coordToolkit.search") }}</label>
                         </div>
                     </div>
@@ -447,7 +460,7 @@ export default {
                                     v-for="(projection, i) in projections"
                                     :key="i"
                                     :value="projection.id"
-                                    :SELECTED="projection.id === currentProjection.id"
+                                    :selected="projection.id === currentProjection.id"
                                 >
                                     {{ projection.title ? projection.title : projection.name }}
                                 </option>
@@ -606,7 +619,7 @@ export default {
         color: #a94442;
     }
     .hint{
-        margin: 5px 0px 25px;
+        margin: 5px 0 25px;
         text-align:center;
         color: @secondary_focus;
         transition: color 0.35s;

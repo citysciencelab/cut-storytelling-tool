@@ -107,6 +107,7 @@ export default {
                 tabindex="0"
                 class="icon-turnarticle glyphicon"
                 @click="rotate"
+                @keydown.enter="rotate"
             />
         </template>
         <template #title>
@@ -144,7 +145,7 @@ export default {
     .tool-window-heading{
         padding: 0;
         border-bottom: 1px solid @color_1;
-        border-radius: 11px 11px 0px 0px;
+        border-radius: 11px 11px 0 0;
         background-color: @background_color_2;
         color:@background_color_1;
         padding-top: 8px;

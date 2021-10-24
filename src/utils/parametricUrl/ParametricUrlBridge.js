@@ -196,7 +196,7 @@ function parseLayerParams (layerIdString, visibilityString = "", transparencyStr
     const visibilityListBooleans = store.state.urlParams?.visibility ? convert(store.state.urlParams.visibility) : convert(visibilityString),
         transparencyListNumbers = store.state.urlParams?.transparency ? convertTransparency(store.state.urlParams.transparency) : convertTransparency(transparencyString),
         layerParams = [],
-        wrongIdsPositions = [],
+        layerIdsNotFound = [],
         treeType = Radio.request("Parser", "getTreeType");
 
     let layerIdList = convertToStringArray(layerIdString),
@@ -240,29 +240,39 @@ function parseLayerParams (layerIdString, visibilityString = "", transparencyStr
         }
         layerParams.push(optionsOfLayer);
 
-        if (layerConfigured === undefined && layerExisting !== null && treeType === "light") {
+        if (layerConfigured === undefined && layerExisting !== null && treeType !== "custom") {
             layerToPush = Object.assign({
                 isBaseLayer: false,
                 isVisibleInTree: "true",
                 parentId: "tree",
                 type: "layer"
             }, layerExisting);
-            Radio.trigger("Parser", "addItemAtTop", layerToPush);
+            if (treeType === "light") {
+                Radio.trigger("Parser", "addItemAtTop", layerToPush);
+            }
+            else {
+                // treetype default
+                const folderName = layerExisting.datasets[0]?.kategorie_opendata[0],
+                    folder = folderName ? Radio.request("Parser", "getItemByAttributes", {name: folderName}) : null,
+                    parentId = folder ? folder.id : layerToPush.parentId;
+
+                Radio.trigger("Parser", "addLayer", layerToPush.name, id, parentId, 1, layerToPush.layers, layerToPush.url, layerToPush.version, transparencyList[index], visibilityList[index]);
+            }
         }
         else if (layerConfigured === undefined) {
-            wrongIdsPositions.push(index + 1);
+            layerIdsNotFound.push(id);
         }
     });
-    alertWrongLayerIds(wrongIdsPositions);
+    alertWrongLayerIds(layerIdsNotFound);
     return layerParams;
 }
 /**
-     * Creates or adds the models of the layerIds and sets them visible in map depending on url param visibility and transparency.
+     * Creates or adds the models of the layerIds and sets them visible in map depending on url param visibility and transparency, besides treetype 'custom'.
      * @param {string} layerParams the layerIdList, visibilityList and transparencyList
      * @returns {void}
      */
 function setLayersVisible (layerParams) {
-    const wrongIdsPositions = [];
+    const layerIdsNotFound = [];
 
     if (layerParams) {
         layerParams.layerIdList.forEach((val, index) => {
@@ -310,28 +320,30 @@ function setLayersVisible (layerParams) {
                 Radio.trigger("Util", "refreshTree");
             }
             else if (layerFromParser === undefined) {
-                wrongIdsPositions.push(index + 1);
+                layerIdsNotFound.push(id);
             }
             Radio.request("ModelList", "initLayerIndeces");
         });
     }
-    alertWrongLayerIds(wrongIdsPositions);
+    alertWrongLayerIds(layerIdsNotFound);
 }
 /**
      * Build alert for wrong layerids
-     * @param {string[]} wrongIdsPositions - The positions from wrong layerids.
+     * @param {string[]} layerIdsNotFound - The not found layerids.
      * @returns {void}
      */
-function alertWrongLayerIds (wrongIdsPositions) {
-    if (wrongIdsPositions.length > 0) {
-        let wrongIdsPositionsConcat = wrongIdsPositions.shift();
+function alertWrongLayerIds (layerIdsNotFound) {
+    if (layerIdsNotFound.length > 0) {
+        let layerIdsNotFoundConcat = layerIdsNotFound.shift();
 
-        wrongIdsPositions.forEach(position => {
-            wrongIdsPositionsConcat = wrongIdsPositionsConcat + ", " + String(position);
+        layerIdsNotFound.forEach(position => {
+            layerIdsNotFoundConcat = layerIdsNotFoundConcat + ", " + String(position);
         });
+
+        console.warn("The following Url-Param-LayerIds could not be found " + layerIdsNotFoundConcat);
         // timeout may be removed, if everything is migrated to vue. Now it is needed for portal/basic.
         setTimeout(() => {
-            store.dispatch("Alerting/addSingleAlert", i18next.t("common:utils.parametricURL.alertWrongLayerIds", {wrongIdsPositionsConcat: wrongIdsPositionsConcat}), {root: true});
+            store.dispatch("Alerting/addSingleAlert", i18next.t("common:utils.parametricURL.alertWrongLayerIds"), {root: true});
         }, 500);
     }
 }
