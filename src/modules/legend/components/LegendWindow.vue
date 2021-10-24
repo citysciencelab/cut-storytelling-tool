@@ -829,6 +829,7 @@ export default {
             cursor: move;
             .title{
                 .tool-headings-h2();
+                display: inline-block;
             }
             .close-legend {
                 padding: 5px;
