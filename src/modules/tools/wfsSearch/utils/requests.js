@@ -93,7 +93,7 @@ function storedFilter (filter, storedQueryId) {
  * @returns {String} The added parts for the request Url.
  */
 function xmlFilter (filter) {
-    return `&version=1.1.0${filter.length > 0 ? "&filter=" + adjustFilter(filter) : ""}`;
+    return `&version=1.1.0${filter.length > 0 ? `&filter=<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc">${adjustFilter(filter)}</ogc:Filter>` : ""}`;
 }
 
 let currentRequest = null;
@@ -143,7 +143,7 @@ export function searchFeatures (store, {literals, requestConfig: {gazetteer = fa
  * @param {Object} service The service to send the request to.
  * @param {String} service.url The base Url as defined in the services.json or rest-services.json.
  * @param {String} service.typeName If the Url was defined in the services.json, the typeName is set to be added to the Url.
- * @param {(XML | String)} filter The filter to constrain the returned features.
+ * @param {(XML | XML[] | String)} filter The filter to constrain the returned features.
  * @param {Boolean} fromServicesJson Whether the service was defined in the services.json or the rest-service.json.
  * @param {String} storedQueryId The Id of the Stored Query. Present when using a WFS@2.0.0.
  * @param {(Number | String)} [maxFeatures = 8] Maximum amount of features to be returned by the service. If it is the String 'showAll' there are no restrictions.
