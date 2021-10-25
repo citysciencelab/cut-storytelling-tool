@@ -684,7 +684,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             });
 
             resultLayer = layer;
-            // Radio.trigger("Map", "addLayerToIndex", [layer, layers.getArray().length]);
+            Radio.trigger("Map", "addLayerToIndex", [layer, layers.getArray().length]);
         }
 
         return resultLayer;
