@@ -169,10 +169,11 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
     describe("resetResult", () => {
         it("should reset the results in the state", () => {
             const state = {
-                requiredValues: {Gemarkung: "Waldesch", Flur: 5}
-            };
+                    requiredValues: {Gemarkung: "Waldesch", Flur: 5}
+                },
+                getters = {currentInstance: {literals: []}};
 
-            actions.resetResult({state, commit, dispatch});
+            actions.resetResult({state, getters, commit, dispatch});
 
             expect(commit.callCount).to.equal(4);
             expect(commit.firstCall.args).to.eql(["setValuesReset", true]);
