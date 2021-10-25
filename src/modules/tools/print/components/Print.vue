@@ -56,6 +56,9 @@ export default {
 
     /**
      * Lifecycle hook: adds a "close"-Listener to close the tool.
+     * Sets print settings that are in the config.json
+     * starts the process to retrieve other settings/capabilities from mapfish
+     * sets listener to laylerlist
      * @returns {void}
      */
     created () {
@@ -109,6 +112,11 @@ export default {
             }
             return thousandsSeparator(scale, " ");
         },
+        /**
+         * if Scale is changed
+         * @param {event} event the click event
+         * @returns {void}
+         */
         scaleChanged (event) {
             this.setCurrentScale(event.value);
             this.setCurrentMapScale(event.value);
@@ -125,18 +133,28 @@ export default {
 
             Radio.trigger("MapView", "setConstrainedResolution", this.optimalResolution, 1);
         },
+
+        /**
+         * if Layout is changed
+         * @param {String} value the chosen layout
+         * @returns {void}
+         */
         layoutChanged (value) {
             this.setCurrentLayoutName(value);
             this.updateCanvasLayer();
             Radio.trigger("Map", "render");
         },
 
+        /**
+         * returns if gfi is available
+         * @returns {boolean} if gfi is available
+         */
         showGfiAvailable () {
             return this.isGfiAvailable;
         },
 
         /**
-         * todo
+         * starts the print
          * @returns {void}
          */
         print () {
@@ -146,6 +164,11 @@ export default {
             this.setPrintStarted(true);
         },
 
+        /**
+         * Selcts the gfi
+         * @param {event} evt the click event
+         * @returns {void}
+         */
         selectGfi (evt) {
             this.setIsGfiSelected = evt.target.checked;
         },
