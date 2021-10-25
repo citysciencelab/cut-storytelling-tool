@@ -13,6 +13,7 @@
 - gfiAttributes: Adding Boolean type in gfi Attributes so that the original text can be parsed to be more understandable.
 - layerInformation: Adding a parameter to globally toggle the dispaly of the service url for all layers at the same time.
 - measure: Adding a parameter to to define with which decimal accuracy the measurement result is displayed.
+- Tools: Adding a new tool `resetTree` in addons.
 
 ### Changed
 - Coding-Conventions: For unittests in Vue (/src/...) the vast majority of test-folders are called "tests", going back to a mutual understanding of folder naming. Please use "tests" for your unit or e2e tests in Vue in the future.
