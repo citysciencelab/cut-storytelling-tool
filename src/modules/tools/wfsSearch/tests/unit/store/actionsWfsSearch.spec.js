@@ -87,7 +87,7 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
             expect(dispatch.firstCall.args).to.eql(["resetModule", false]);
             expect(dispatch.secondCall.args).to.eql(["resetModule", true]);
             expect(dispatch.thirdCall.args[0]).to.eql("Alerting/addSingleAlert");
-            expect(dispatch.thirdCall.args[1]).to.eql(i18next.t("common:modules.tools.wfsSearch.wrongConfig", {name: "wfsName"}));
+            expect(dispatch.thirdCall.args[1]).to.eql(i18next.t("common:modules.tools.wfsSearch.wrongConfig", {id: "wfsId"}));
             expect(dispatch.thirdCall.args[2]).to.eql({root: true});
         });
         it("should prepare the module if the WFS is given", () => {

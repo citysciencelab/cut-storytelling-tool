@@ -24,7 +24,7 @@ const actions = {
         dispatch("resetModule", false);
 
         const {currentInstance} = getters,
-            {requestConfig: {layerId, likeFilter, restLayerId, storedQueryId}} = currentInstance,
+            {requestConfig: {layerId, likeFilter, restLayerId, storedQueryId}, title} = currentInstance,
             wfs = restLayerId
                 ? Radio.request("RestReader", "getServiceById", restLayerId)
                 : Radio.request("ModelList", "getModelByAttributes", {id: layerId});
@@ -50,7 +50,7 @@ const actions = {
         }
         else {
             dispatch("resetModule", true);
-            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.wfsSearch.wrongConfig", {name: this.name}), {root: true});
+            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.wfsSearch.wrongConfig", {id: restLayerId ? restLayerId : layerId, title}), {root: true});
         }
     },
     /**
