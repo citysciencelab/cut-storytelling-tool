@@ -1,7 +1,7 @@
 import axios from "axios";
 import handleAxiosResponse from "../../../../utils/handleAxiosResponse";
 import {setLikeFilterProperties} from "../utils/buildFilter";
-import {createUserHelp, prepareLiterals} from "../utils/literalFunctions";
+import {createUserHelp, prepareLiterals, resetFieldValues} from "../utils/literalFunctions";
 
 const actions = {
     /**
@@ -90,12 +90,13 @@ const actions = {
      * Also removes the map marker.
      * @returns {void}
      */
-    resetResult ({commit, dispatch, state}) {
+    resetResult ({commit, dispatch, getters, state}) {
         commit("setValuesReset", true);
         commit("setSearched", false);
         commit("setResults", []);
         commit("setSelectedOptions", {});
         dispatch("MapMarker/removePointMarker", null, {root: true});
+        resetFieldValues(getters.currentInstance.literals);
 
         // Reset dropdowns
         if (state.requiredValues !== null) {
