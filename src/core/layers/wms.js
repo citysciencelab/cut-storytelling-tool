@@ -67,8 +67,8 @@ WMSLayer.prototype.createLayer = function (attrs) {
             version: attrs.version,
             transparent: attrs.transparent.toString(),
             singleTile: attrs.singleTile,
-            minScale: attrs.minScale,
-            maxScale: attrs.maxScale
+            minScale: parseInt(attrs.minScale, 10),
+            maxScale: parseInt(attrs.maxScale, 10)
         };
 
     if (attrs.styles !== "nicht vorhanden") {
