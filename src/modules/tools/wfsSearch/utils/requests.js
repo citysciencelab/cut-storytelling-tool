@@ -93,7 +93,7 @@ function storedFilter (filter, storedQueryId) {
  * @returns {String} The added parts for the request Url.
  */
 function xmlFilter (filter) {
-    return `&version=1.1.0${filter.length > 0 ? `&filter=<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc">${adjustFilter(filter)}</ogc:Filter>` : ""}`;
+    return `&version=1.1.0${filter.length > 0 ? `&filter=<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">${adjustFilter(filter)}</ogc:Filter>` : ""}`;
 }
 
 let currentRequest = null;
