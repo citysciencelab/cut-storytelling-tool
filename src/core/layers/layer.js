@@ -145,17 +145,25 @@ Layer.prototype.checkForScale = function (options) {
     const lastValue = this.get("isOutOfRange");
 
     if (options && parseFloat(options.scale, 10) <= parseInt(this.get("maxScale"), 10) && parseFloat(options.scale, 10) >= parseInt(this.get("minScale"), 10)) {
-        this.set("isOutOfRange", false);
+        this.setIsOutOfRange(false);
         if (lastValue !== false) {
             bridge.outOfRangeChanged(this, false);
         }
     }
     else {
-        this.set("isOutOfRange", true);
+        this.setIsOutOfRange(true);
         if (lastValue !== true) {
             bridge.outOfRangeChanged(this, true);
         }
     }
+};
+/**
+ * Sets the property 'isOutOfRange'.
+ * @param {boolean} value to set
+ * @returns {void}
+ */
+Layer.prototype.setIsOutOfRange = function (value) {
+    this.set("isOutOfRange", value);
 };
 /**
  * If a single WMS-T is shown: Remove the TimeSlider.
