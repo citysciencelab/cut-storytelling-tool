@@ -46,6 +46,7 @@ The configuration options listed in the following table exist:
 |menu|no|**[menu](#markdown-header-portalconfigmenu)**||Menu entries and their order are configured in this entry. The order of tools corresponds to the order in the object specifying them; see **[Tools](#markdown-header-portalconfigmenutools)**.|false|
 |searchBar|no|**[searchBar](#markdown-header-portalconfigsearchbar)**||The search bar allows requesting information from various search services at once.|false|
 |layersRemovable|no|Boolean|false|Defines whether layers may be removed from a portal during its run-time.|false|
+|quickHelp|no|**[quickHelp](#markdown-header-portalconfigquickHelp)**||Configuration of new and manipulation of existing QuickHelp windows.|false|
 
 ***
 
@@ -879,6 +880,293 @@ An option defines a zoom level. Each zoom level is defined by resolution, scale 
     "resolution": 611.4974492763076,
     "scale": 2311167,
     "zoomLevel": 0
+}
+```
+
+***
+
+### Portalconfig.quickHelp
+
+For a detailed documentation of the QuickHelp window see **[the QuickHelp documentation](quickHelp.md)** .
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|configs|yes|**[configs](#markdown-header-portalconfigquickhelpconfigs)**|{"search": true, "tree": true}|The configuration for existing as well as new QuickHelp windows.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {}
+        }
+    }
+}
+```
+
+#### Portalconfig.quickHelp.configs
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|search|no|**[search](#markdown-header-portalconfigquickhelpconfigssearch)**|true|Configuration of the QuickHelp window of the SearchBar.|false|
+|tree|no|**[tree](#markdown-header-portalconfigquickhelpconfigstree)**|true|Configuration of the QuickHelp window of the topic tree.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "search": true,
+                "tree": true
+            }
+        }
+    }
+}
+```
+
+##### Portalconfig.quickHelp.configs.search
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|title|no|String|""|The title/heading of the QuickHelp window.|false|
+|content|no|**[section](#markdown-header-portalconfigquickhelpconfigssearchsection)**[]|[]|The collection of contents or manipulations as an array.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "search": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": []
+                }
+            }
+        }
+    }
+}
+```
+
+##### Portalconfig.quickHelp.configs.search.section
+
+A section is an object with a title and a list of paragraphs.
+A section can be manipulated using "before", "after" and "hide" keywords.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|title|no|String|""|The title/heading of the section.|false|
+|list|no|**[paragraph](#markdown-header-portalconfigquickhelpconfigssearchsectionparagraph)**[]|[]|An array of paragraphs or images of the QuickHelp section.|false|
+|before|no|String||A Section Key before which this new section should be hooked.|false|
+|after|no|String||A Section Key behind which this new section should be hooked.|false|
+|hide|no|String||A Section Key that leads to the hiding/removal of an existing section addressed with the Section Key.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "search": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": [
+                        {
+                            "title": "Title of the new section",
+                            "list": []
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+##### Portalconfig.quickHelp.configs.search.section.paragraph
+
+A paragraph in the sense of the QuickHelp configuration is an object or string that exactly describes the content at that point.
+There are two types of paragraph elements.
+
+
+**The paragraph text element**
+
+Can also be created as a pure translation key (string) and will then be converted to a paragraph element of type "text/plain".
+Pure text can also be specified, but then it is mandatory under the text key of the object (pure text is not possible as a pure string).
+
+
+**The paragraph image element**
+
+Can also be specified as a plain image name (string), in which case the imgPath configured in config.js would be automatically added as its base path.
+Configure as an object to specify external images with imgPath as url and imgName as name of the image.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|text|no|String|""|The text as Translation Key or pure text.|false|
+|type|no|String|"text/plain"|The text type. If "text/html" is specified, the given text will be rendered as html code.|false|
+|imgName|no|String|""|The name of the image to display.|false|
+|imgPath|no|String|""|The path to the image if omitted is taken imgPath from config.js.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "search": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": [
+                        {
+                            "title": "Title of the new section",
+                            "list": [
+                                {
+                                    "text": "This is the first paragraph.",
+                                    "type": "text/plain"
+                                },
+                                {
+                                    "imgName": "allgemein.png",
+                                    "imgPath": "https://geodienste.hamburg.de/lgv-config/img/"
+                                },
+                                {
+                                    "text": "This is the second <i>paragraph</i> with html content.",
+                                    "type": "text/html"
+                                }
+                            ]
+                        },
+                        {
+                            "after": "generalInfo",
+                            "title": "Title of a new section after generalInfo",
+                            "list": [
+                                {
+                                    "text": "This is a paragraph.",
+                                    "type": "text/plain"
+                                }
+                            ]
+                        },
+                        {"hide": "generalInfo"}
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+#### Portalconfig.quickHelp.configs.tree
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|title|no|String|""|The title/heading of the QuickHelp window.|false|
+|content|no|**[section](#markdown-header-portalconfigquickhelpconfigstreesection)**[]|[]|The collection of contents or manipulations as an array.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "tree": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": []
+                }
+            }
+        }
+    }
+}
+```
+
+##### Portalconfig.quickHelp.configs.tree.section
+
+A section is an object with a title and a list of paragraphs.
+A section can be manipulated using "before", "after" and "hide" keywords.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|title|no|String|""|The title/heading of the section.|false|
+|list|no|**[paragraph](#markdown-header-portalconfigquickhelpconfigstreesectionparagraph)**[]|[]|An array of paragraphs or images of the QuickHelp section.|false|
+|before|no|String||A Section Key before which this new section should be hooked.|false|
+|after|no|String||A Section Key behind which this new section should be hooked.|false|
+|hide|no|String||A Section Key that leads to the hiding/removal of an existing section addressed with the Section Key.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "tree": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": [
+                        {
+                            "title": "Title of the new section",
+                            "list": []
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+##### Portalconfig.quickHelp.configs.tree.section.paragraph
+
+A paragraph in the sense of the QuickHelp configuration is an object or string that exactly describes the content at that point.
+There are two types of paragraph elements.
+
+
+**The paragraph text element**
+
+Can also be created as a pure translation key (string) and will then be converted to a paragraph element of type "text/plain".
+Pure text can also be specified, but then it is mandatory under the text key of the object (pure text is not possible as a pure string).
+
+
+**The paragraph image element**
+
+Can also be specified as a plain image name (string), in which case the imgPath configured in config.js would be automatically added as its base path.
+Configure as an object to specify external images with imgPath as url and imgName as name of the image.
+
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|text|no|String|""|The text as Translation Key or pure text.|false|
+|type|no|String|"text/plain"|The text type. If "text/html" is specified, the given text will be rendered as html code.|false|
+|imgName|no|String|""|The name of the image to display.|false|
+|imgPath|no|String|""|The path to the image if omitted is taken imgPath from config.js.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "tree": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": [
+                        {
+                            "title": "Title of the new section",
+                            "list": [
+                                {
+                                    "text": "This is the first paragraph.",
+                                    "type": "text/plain"
+                                },
+                                {
+                                    "imgName": "allgemein.png",
+                                    "imgPath": "https://geodienste.hamburg.de/lgv-config/img/"
+                                },
+                                {
+                                    "text": "This is the second <i>paragraph</i> with html content.",
+                                    "type": "text/html"
+                                }
+                            ]
+                        },
+                        {
+                            "before": "generalInfo",
+                            "title": "Title of a new section before generalInfo",
+                            "list": [
+                                {
+                                    "text": "This is a paragraph.",
+                                    "type": "text/plain"
+                                }
+                            ]
+                        },
+                        {"hide": "generalInfo"}
+                    ]
+                }
+            }
+        }
+    }
 }
 ```
 

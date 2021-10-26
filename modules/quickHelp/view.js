@@ -174,7 +174,6 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
         }
         this.model.setCurrentHelpTopic(value);
         this.$el.show("slow");
-        store.commit("QuickHelp/setActive", true);
     },
 
     /**

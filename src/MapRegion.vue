@@ -2,11 +2,12 @@
 import Alerting from "./modules/alerting/components/Alerting.vue";
 import ConfirmAction from "./modules/confirmAction/components/ConfirmAction.vue";
 import ControlBar from "./modules/controls/ControlBar.vue";
+import LayerInformation from "./modules/layerInformation/components/LayerInformation.vue";
 import LegendWindow from "./modules/legend/components/LegendWindow.vue";
 import MapMarker from "./modules/mapMarker/components/MapMarker.vue";
-import WmsTime from "./modules/wmsTime/components/WmsTime.vue";
+import QuickHelp from "./modules/quickHelp/components/QuickHelp.vue";
 import ToolManager from "./modules/tools/ToolManager.vue";
-import LayerInformation from "./modules/layerInformation/components/LayerInformation.vue";
+import WmsTime from "./modules/wmsTime/components/WmsTime.vue";
 import {mapState} from "vuex";
 
 export default {
@@ -15,10 +16,11 @@ export default {
         Alerting,
         ConfirmAction,
         ControlBar,
-        ToolManager,
+        LayerInformation,
         LegendWindow,
         MapMarker,
-        LayerInformation,
+        QuickHelp,
+        ToolManager,
         WmsTime
     },
     computed: {
@@ -57,6 +59,7 @@ export default {
             <div class="elements-positioned-over-map">
                 <LayerInformation />
                 <ControlBar class="controls" />
+                <QuickHelp />
                 <WmsTime />
                 <MapMarker />
             </div>

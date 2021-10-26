@@ -254,10 +254,11 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      */
     clickBtnQuestion: function () {
         if (!store.getters["QuickHelp/active"]) {
-            Radio.trigger("QuickHelp", "showWindowHelp", "search");
+            store.commit("QuickHelp/setQuickHelpKey", "search");
+            store.commit("QuickHelp/setActive", true);
         }
         else {
-            Radio.trigger("QuickHelp", "closeWindowHelp");
+            store.commit("QuickHelp/setActive", false);
         }
     },
 

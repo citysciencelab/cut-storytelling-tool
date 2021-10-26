@@ -58,6 +58,8 @@
 ### Changed
 - Coding-Conventions: For unittests in Vue (/src/...) the vast majority of test-folders are called "tests", going back to a mutual understanding of folder naming. Please use "tests" for your unit or e2e tests in Vue in the future.
 - Migrated the print Tool from Backbone.js to Vue.js. It is now also possible to create multiple prints in parallel.
+- QuickHelp is changed (running under Vue) and can now be manipulated for search and tree, new QuickHelp windows can be configured. See new quickHelp.md documentation for more details.
+
 
 ### Deprecated
 
