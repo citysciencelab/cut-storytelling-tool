@@ -28,13 +28,14 @@ export function isVisibleInTreeChanged (layerModel) {
 }
 /**
  * Fires if property isVisibleInMap changes.
- * Can be done directly or is no longer needed, if all layers are handeled by store.
+ * Can be done directly or is no longer needed, if all layers are handeled by store and modellList is refactored.
  * @param {Object} layerModel the layer
  * @param {boolean} value value of isVisibleInMap
  * @returns {void}
  */
 export function layerVisibilityChanged (layerModel, value) {
     Radio.trigger("Layer", "layerVisibleChanged", layerModel.get("id"), value, layerModel);
+    Radio.trigger("ModelList", "updatedSelectedLayerList", getLayerModelsByAttributes({isSelected: true, type: "layer"}));
 }
 /**
  * Triggers adding layer at given index in modelList.
