@@ -273,7 +273,7 @@ export default {
             <div class="d-flex flex-column">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <button
-                        class="btn btn-block"
+                        class="btn btn-primary btn-block"
                         type="button"
                         :disabled="waypoint.getCoordinates().length === 0 || isInputDisabled"
                         @click="findIsochrones()"
