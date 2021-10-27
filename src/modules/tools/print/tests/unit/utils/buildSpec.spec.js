@@ -30,7 +30,7 @@ describe("tools/print/buildSpec", function () {
         }
     };
 
-    beforeEach(function () {
+    before(() => {
         buildSpec = BuildSpec;
         buildSpec.setAttributes(attr);
         pointFeatures = createTestFeatures("resources/testFeatures.xml");

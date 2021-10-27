@@ -16,7 +16,7 @@ export default {
     retrieveCapabilites: function ({state, dispatch, commit}) {
         let serviceUrl;
 
-        if (state.mapfishServiceId !== undefined) {
+        if (state.mapfishServiceId !== "") {
             serviceUrl = Radio.request("RestReader", "getServiceById", state.mapfishServiceId).get("url");
             commit("setMapfishServiceUrl", serviceUrl);
             serviceUrl = serviceUrl + state.printAppId + "/capabilities.json";

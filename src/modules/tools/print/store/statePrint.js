@@ -8,13 +8,14 @@ const state = {
     name: "common:menu.tools.print",
     id: "print",
     printSettings: "",
+    isVisibleInMenu: true,
     renderToWindow: false,
     resizableWindow: true,
     deactivateGFI: false,
     // output filename
     filename: "report",
     // the id from the rest services json for the mapfish app
-    mapfishServiceId: undefined,
+    mapfishServiceId: "",
     // the identifier of one of the available mapfish print configurations
     printAppId: "master",
     // available layouts of the specified print configuration
