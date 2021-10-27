@@ -65,6 +65,9 @@ export default {
          * @returns {void}
          */
         changeSpeedProfile (speedProfileId) {
+            if (this.isInputDisabled) {
+                return;
+            }
             this.settings.speedProfile = speedProfileId;
             this.findDirections();
         },
@@ -154,7 +157,7 @@ export default {
         <RoutingSpeedProfileIcon
             v-for="option in constantsRouting.speedProfileOptions"
             :key="option"
-            class="pointer mr-4"
+            :class="['pointer mr-4 ', isInputDisabled ? 'opacity-05' : '']"
             :speed-profile-id="option"
             :fill-color="option === settings.speedProfile ? '#ec0d0d' : '#000000'"
             :tooltip="$t('common:modules.tools.routing.speedprofiles.' + option)"
@@ -583,5 +586,10 @@ export default {
 }
 .step:hover {
     border-left: 2px solid rgb(255, 44, 0);
+}
+
+
+.opacity-05 {
+    opacity: 0.5;
 }
 </style>
