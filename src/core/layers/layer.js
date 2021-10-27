@@ -46,6 +46,7 @@ export default function Layer (attrs, layer, initialize = true) {
 
     this.layer = layer;
     this.attributes = {...Object.assign({}, this.layer.values_, defaults, attrs)};
+    this.id = attrs.id;
     delete this.attributes.source;
     if (initialize) {
         this.initialize(attrs);
