@@ -51,6 +51,17 @@ export default {
     },
 
     /**
+     * Zooms to the selected geosearchresult
+     * @param {Object} context actions context object.
+     * @returns {void}
+     */
+    zoomOnWaypoint ({state, rootGetters}) {
+        const map = rootGetters["Map/map"];
+
+        map.getView().fit(state.waypoint.getFeature().getGeometry(), {maxZoom: 7});
+    },
+
+    /**
      * Resets the isochrones results from the map and state
      * @param {Object} context actions context object.
      * @returns {void}

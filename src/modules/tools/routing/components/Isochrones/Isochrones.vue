@@ -197,6 +197,7 @@ export default {
                     :count-waypoints="1"
                     :waypoint="waypoint"
                     @removeWaypoint="onRemoveWaypoint()"
+                    @searchResultSelected="zoomOnWaypoint()"
                 />
             </form>
         </template>
