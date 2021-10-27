@@ -13,7 +13,7 @@ export default {
         if (getters.directionsCoordinates.length < 2) {
             return;
         }
-        const {waypoints, directionsRouteSource} = state,
+        const {waypoints, directionsRouteSource, routingAvoidFeaturesOptions, settings, directionsAvoidSource} = state,
             map = rootGetters["Map/map"],
             wgs84Coords = await dispatch("getDirectionsCoordinatesWgs84"),
             lineStringFeature = await dispatch("getRouteFeature");
@@ -31,6 +31,12 @@ export default {
             lineStringFeature
                 .getGeometry()
                 .setCoordinates(result.getLineString());
+
+            lineStringFeature.set("avoidFeaturesOptions", JSON.parse(JSON.stringify(routingAvoidFeaturesOptions)));
+            lineStringFeature.set("speedProfile", JSON.parse(JSON.stringify(settings.speedProfile)));
+            lineStringFeature.set("preference", JSON.parse(JSON.stringify(settings.preference)));
+            lineStringFeature.set("hasAvoidPolygons", directionsAvoidSource.getFeatures().length > 0);
+
             waypoints.forEach((waypoint, index) => {
                 waypoint.setIndexDirectionsLineString(
                     result.getLineStringWaypointIndex()[index]
