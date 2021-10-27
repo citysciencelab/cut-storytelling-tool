@@ -12,7 +12,7 @@ describe("src/modules/scaleLine/components/ScaleLine.vue", () => {
     let wrapper;
 
     it("check mapMode normal -> do render", () => {
-        wrapper = createWrapper(false, 0, "1 : 60.000", "1.2 km", true);
+        wrapper = createWrapper(false, "2D", "1 : 60.000", "1.2 km", true);
 
         expect(wrapper.find("#scales").exists()).to.equal(true);
         expect(wrapper.find(".scale-line").text()).to.equals("1.2 km");
@@ -26,19 +26,19 @@ describe("src/modules/scaleLine/components/ScaleLine.vue", () => {
     });
 
     it("check mobile=true -> do not render", () => {
-        wrapper = createWrapper(true, 0, "1 : 60.000", "1.2 km", true);
+        wrapper = createWrapper(true, "2D", "1 : 60.000", "1.2 km", true);
 
         expect(wrapper.find("#scales").exists()).to.equal(false);
     });
 
     it("check scaleLine=false -> do not render", () => {
-        wrapper = createWrapper(false, 0, "1 : 60.000", "1.2 km", false);
+        wrapper = createWrapper(false, "2D", "1 : 60.000", "1.2 km", false);
 
         expect(wrapper.find("#scales").exists()).to.equal(false);
     });
 
     it("check scaleLine is not configured in configJs -> do not render", () => {
-        wrapper = createWrapper(false, 0, "1 : 60.000", "1.2 km", null);
+        wrapper = createWrapper(false, "2D", "1 : 60.000", "1.2 km", null);
 
         expect(wrapper.find("#scales").exists()).to.equal(false);
     });
@@ -61,6 +61,11 @@ describe("src/modules/scaleLine/components/ScaleLine.vue", () => {
      */
     function createWrapper (mobile, mapMode, scaleToOne, scaleWithUnit, scaleLineConfig) {
         return shallowMount(ScaleLine, {
+            mocks: {
+                $t: () => {
+                    "scale of map";
+                }
+            },
             computed: {
                 mobile: () => mobile,
                 mapMode: () => mapMode,
