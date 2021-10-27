@@ -94,14 +94,15 @@ export default {
         Object.entries(data).forEach(dat => {
             const obj = dat[1],
                 key = dat[0],
-                dataType = obj?.dataType ? obj.dataType : undefined,
-                value = obj?.value ? obj.value : obj;
+                dataType = Object.prototype.hasOwnProperty.call(obj, "dataType") ? obj.dataType : undefined,
+                value = Object.prototype.hasOwnProperty.call(obj, "value") ? obj.value : obj;
             let attributeString;
 
             attributeString = this.setXMLElement(dataInputXmlTemplate, "</ows:Identifier>", key);
             attributeString = this.setXMLElement(attributeString, "</wps:LiteralData>", value, dataType);
             dataString = this.setXMLElement(dataString, "</wps:DataInputs>", attributeString);
         });
+
         return dataString;
     },
     /**

@@ -323,7 +323,8 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
 
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
             testAction(getOptimalScale, canvasOptions, state, {}, [
-                {type: "setOptimalScale", payload: 20000, commit: true}
+                {type: "setOptimalScale", payload: 20000, commit: true},
+                {type: "setCurrentScale", payload: 20000, commit: true}
             ], {}, done);
         });
     });

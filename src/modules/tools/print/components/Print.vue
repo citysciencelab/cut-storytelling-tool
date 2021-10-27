@@ -23,14 +23,14 @@ export default {
     computed: {
         ...mapGetters("Tools/Print", Object.keys(getters)),
         ...mapGetters(["printSettings"]),
-        ...mapGetters("Map", ["scales, size"]),
+        ...mapGetters("Map", ["scales, size", "scale"]),
         ...mapGetters("Tools/Gfi", ["currentFeature"]),
-        currentMapScale: {
+        currentScale: {
             get () {
-                return this.$store.state.Map.scale;
+                return this.$store.state.Tools.Print.currentScale;
             },
             set (value) {
-                this.$store.commit("Map/setScale", value);
+                this.setCurrentScale(value);
             }
         },
         documentTitle: {
@@ -45,12 +45,12 @@ export default {
     watch: {
         active: function () {
             if (this.active) {
-                this.setCurrentMapScale(this.$store.state.Map.scale);
+                this.setCurrentMapScale(this.scale);
             }
             this.togglePostrenderListener();
         },
-        currentMapScale: function () {
-            this.setCurrentScale(this.currentMapScale);
+        scale: function (value) {
+            this.setCurrentMapScale(value);
         }
     },
 
@@ -86,6 +86,8 @@ export default {
                 }
             }
         });
+
+        this.setCurrentMapScale(this.scale);
     },
     methods: {
         ...mapMutations("Tools/Print", Object.keys(mutations)),
@@ -118,20 +120,17 @@ export default {
          * @returns {void}
          */
         scaleChanged (event) {
-            this.setCurrentScale(event.value);
-            this.setCurrentMapScale(event.value);
-
-            const scale = parseInt(event.value, 10),
+            const scale = parseInt(event.target.value, 10),
                 resolution = {
                     "scale": scale,
                     "mapSize": Radio.request("Map", "getSize"),
                     "printMapSize": this.layoutMapInfo
                 };
 
+            this.setIsScaleSelectedManually(true);
             this.getOptimalResolution(resolution);
-
-
-            Radio.trigger("MapView", "setConstrainedResolution", this.optimalResolution, 1);
+            this.updateCanvasLayer();
+            Radio.trigger("Map", "render");
         },
 
         /**
@@ -295,9 +294,9 @@ export default {
                     <div class="col-sm-7">
                         <select
                             id="printScale"
-                            v-model="currentMapScale"
+                            v-model="currentScale"
                             class="form-control input-sm"
-                            @change="scaleChanged($event.target)"
+                            @change="scaleChanged($event)"
                         >
                             <option
                                 v-for="(scale, i) in scaleList"
@@ -311,8 +310,10 @@ export default {
                         </select>
                     </div>
                     <div
-                        v-if="currentScale !== currentMapScale"
-                        class="hint"
+                        :class="{
+                            'hint': true,
+                            'grey-icon': currentScale === currentMapScale
+                        }"
                         @mouseover="showHintInfoScale = true"
                         @focusin="showHintInfoScale = true"
                         @mouseleave="showHintInfoScale = false"
@@ -321,6 +322,7 @@ export default {
                         <span class="glyphicon glyphicon-info-sign" />
                     </div>
                     <div
+                        v-if="currentScale !== currentMapScale"
                         v-show="showHintInfoScale"
                         class="hint-info"
                     >
@@ -440,6 +442,11 @@ export default {
                 background: #fff;
                 border: 1px solid #555;
                 padding: 5px;
+            }
+            .grey-icon {
+                span {
+                    color: #a5a5a5;
+                }
             }
         }
     }
