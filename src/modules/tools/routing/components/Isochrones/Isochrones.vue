@@ -40,11 +40,19 @@ export default {
             return this.settings.isochronesMethodOption === "DISTANCE" ? this.settings.distanceValue : this.settings.timeValue;
         },
         /**
-         * Computed maximum value for the sliders
-         * @returns {Number} maximum value for the sliders
+         * Computed maximum value for the interval slider
+         * @returns {Number} maximum value for the interval slider
          */
         maxIntervalValue () {
             return this.currentValue < this.settings.maxInterval ? this.currentValue : this.settings.maxInterval;
+        },
+
+        /**
+         * Computed minimum value for the interval slider
+         * @returns {Number} maximum value for the interval slider
+         */
+        minIntervalValue () {
+            return this.currentValue < this.settings.minInterval ? this.currentValue : this.settings.minInterval;
         }
     },
     async created () {
@@ -242,7 +250,7 @@ export default {
         <RoutingSliderInput
             :label="$t('common:modules.tools.routing.isochrones.interval')"
             :value="settings.intervalValue"
-            :min="settings.minInterval"
+            :min="minIntervalValue"
             :max="maxIntervalValue"
             :unit="settings.isochronesMethodOption ==='DISTANCE' ? 'km' : 'min'"
             :disabled="isInputDisabled"
