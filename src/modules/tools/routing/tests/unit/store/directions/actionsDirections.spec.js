@@ -89,7 +89,11 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
         };
 
         state = {
-            settings: {},
+            settings: {
+                speedProfile: "HGV",
+                preference: "SHORTEST"
+            },
+            routingAvoidFeaturesOptions: [],
             waypoints: waypoints,
             directionsRouteSource: new VectorSource({
                 features: [
