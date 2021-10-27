@@ -66,6 +66,15 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
     });
 
     afterEach(() => {
+        const map = {
+            id: "ol",
+            mode: "2D",
+            addLayer: sinon.spy(),
+            removeLayer: sinon.spy()
+        };
+
+        mapCollection.clear();
+        mapCollection.addMap(map, "ol", "2D");
         BufferAnalysis.actions.checkIntersection = originalCheckIntersection;
         BufferAnalysis.actions.showBuffer = originalShowBuffer;
         store.commit("Tools/BufferAnalysis/setActive", false);

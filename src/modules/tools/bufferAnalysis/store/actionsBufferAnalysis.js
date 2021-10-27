@@ -64,7 +64,6 @@ const actions = {
             vectorSource.addFeature(newFeature);
         });
         mapCollection.getMap(rootGetters["Map/mapId"], rootGetters["Map/mapMode"]).addLayer(bufferLayer);
-
     },
     /**
      * Removes generated result layer and buffer layer
