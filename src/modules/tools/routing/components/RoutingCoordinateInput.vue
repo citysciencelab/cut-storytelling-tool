@@ -273,5 +273,7 @@ label {
 
 .dropdown-menu-search {
     width: 300px;
+    top: unset;
+    left: unset;
 }
 </style>
