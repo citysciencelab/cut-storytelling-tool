@@ -3,25 +3,26 @@ import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersWmsTime";
 import mutations from "../store/mutationsWmsTime";
 import actions from "../store/actionsWmsTime";
+import mapCollection from "../../../dataStorage/mapCollection.js";
 
 export default {
     name: "LayerSwiper",
     computed: {
-        ...mapGetters("Map", ["visibleLayerList", "map"]),
+        ...mapGetters("Map", ["visibleLayerList", "mapMode", "mapId"]),
         ...mapGetters("WmsTime", Object.keys(getters))
     },
     mounted () {
         const target = document.getElementById("wmsTime-layerSwiper-button");
 
         this.setLayerSwiperTargetLayer(this.visibleLayerList.find(element => element.values_.id === this.currentTimeSliderObject.layerId + this.layerAppendix));
-        this.setLayerSwiperValueX(this.map.getSize()[0] / 2);
-        this.map.on("postcompose", this.updateMap);
+        this.setLayerSwiperValueX(mapCollection.getMap(this.mapId, this.mapMode).getSize()[0] / 2);
+        mapCollection.getMap(this.mapId, this.mapMode).on("postcompose", this.updateMap);
 
         target.focus();
         this.setLayerSwiperDomSwiper(target);
     },
     beforeDestroy: function () {
-        this.map.un("postcompose", this.updateMap);
+        mapCollection.getMap(this.mapId, this.mapMode).un("postcompose", this.updateMap);
     },
     methods: {
         ...mapMutations("WmsTime", Object.keys(mutations)),
