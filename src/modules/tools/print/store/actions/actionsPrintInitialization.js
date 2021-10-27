@@ -230,6 +230,7 @@ export default {
 
         Radio.trigger("Map", "unregisterListener", state.eventListener);
         canvasLayer = Canvas.getCanvasLayer(visibleLayerList);
+
         dispatch("chooseCurrentLayout", state.layoutList);
         if (Object.keys(canvasLayer).length) {
             commit("setEventListener", canvasLayer.on("postrender", (evt) => {
@@ -245,9 +246,10 @@ export default {
      * @param {ol.render.Event} evt - postrender
      * @returns {void}
      */
-    createPrintMask: function ({dispatch, state}, evt) {
+    createPrintMask: function ({dispatch, commit, state}, evt) {
         dispatch("getPrintMapSize");
         dispatch("getPrintMapScales");
+
         const frameState = evt.frameState,
             context = evt.context,
             drawMaskOpt = {
@@ -268,9 +270,16 @@ export default {
                 "scaleList": state.scaleList
             };
 
-        dispatch("getOptimalScale", canvasOptions);
+        if (state.isScaleSelectedManually) {
+            canvasPrintOptions.scale = state.currentScale;
+            commit("setIsScaleSelectedManually", false);
+        }
+        else {
+            dispatch("getOptimalScale", canvasOptions);
+            canvasPrintOptions.scale = state.optimalScale;
+        }
 
-        canvasPrintOptions.scale = state.optimalScale;
+
         dispatch("drawMask", drawMaskOpt);
         dispatch("drawPrintPage", canvasPrintOptions);
         context.fillStyle = "rgba(0, 5, 25, 0.55)";
@@ -291,15 +300,16 @@ export default {
             scaleWidth = mapWidth * state.INCHES_PER_METER * state.DOTS_PER_INCH / canvasOptions.printMapSize[0],
             scaleHeight = mapHeight * state.INCHES_PER_METER * state.DOTS_PER_INCH / canvasOptions.printMapSize[1],
             scale = Math.min(scaleWidth, scaleHeight);
-
         let optimalScale = canvasOptions.scaleList[0];
 
-        canvasOptions.scaleList.forEach(function (printMapScale) {
+        canvasOptions.scaleList.forEach(printMapScale => {
             if (scale > printMapScale) {
                 optimalScale = printMapScale;
             }
         });
+
         commit("setOptimalScale", optimalScale);
+        commit("setCurrentScale", optimalScale);
     },
 
     /**
