@@ -134,7 +134,7 @@ Layer.prototype.removeLayer = function () {
  */
 Layer.prototype.toggleIsSelected = function () {
     const newValue = this.attributes.isSelected === undefined ? true : !this.attributes.isSelected,
-       map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode);
+        map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode);
 
     this.setIsSelected(newValue);
     handleSingleBaseLayer(newValue, this, map);
