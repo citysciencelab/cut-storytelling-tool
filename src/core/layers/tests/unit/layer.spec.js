@@ -103,7 +103,7 @@ describe("src/core/layers/layer.js", () => {
         const layerWrapper = new Layer(attributes, olLayer);
 
         expect(layerWrapper.get("layer")).not.to.be.undefined;
-        expect(layerAdded).to.be.true;
+        expect(layerWrapper.get("layer").isVisible()).to.be.true;
         expect(layerWrapper.attributes.isVisibleInMap).to.be.true;
 
     });
