@@ -1,10 +1,10 @@
 import axios from "axios";
 import getProxyUrl from "../../../../utils/getProxyUrl";
-import BuildSpec from "./../store/utils/buildSpec";
+import BuildSpec from "./../utils/buildSpec";
 import {getRecordById} from "../../../../api/csw/getRecordById";
 import omit from "../../../../utils/omit";
 import actionsPrintInitialization from "./actions/actionsPrintInitialization";
-import getVisibleLayer from "./../store/utils/getVisibleLayer";
+import getVisibleLayer from "./../utils/getVisibleLayer";
 
 export default {
 
@@ -16,7 +16,7 @@ export default {
      * @param {Object} serviceRequest the request content
      * @returns {void}
      */
-    sendRequest: async function ({state, dispatch}, serviceRequest) {
+    sendRequest: function ({state, dispatch}, serviceRequest) {
         /**
          * @deprecated in the next major-release!
          * useProxy
@@ -274,7 +274,7 @@ export default {
         else {
             commit("setProgressWidth", "width: 80%");
             // The report is not ready yet. Check again in 2s.
-            setTimeout(function () {
+            setTimeout(() => {
                 let subUrl = "";
 
                 if (response.downloadURL.includes("mapfish_print_internet")) {

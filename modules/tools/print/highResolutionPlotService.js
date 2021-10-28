@@ -127,7 +127,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
         this.superInitialize();
 
         this.listenTo(this, {
-            "change:isActiveee": function (model, value) {
+            "change:isActive": function (model, value) {
                 if (model.get("layoutList").length === 0) {
                     this.getCapabilities(model, value);
                 }

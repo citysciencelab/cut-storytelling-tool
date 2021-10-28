@@ -4,7 +4,7 @@ import {setValueToState} from "./stateModifier";
 import store from "../../app-store";
 import {MapMode} from "../../modules/map/store/enums";
 
-const toolsNotInState = ["compareFeatures", "parcelSearch", "print", "featureLister", "layerSlider", "filter", "shadow", "virtualcity", "wfst", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
+const toolsNotInState = ["compareFeatures", "parcelSearch", "featureLister", "layerSlider", "filter", "shadow", "virtualcity", "wfst", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
 
 /**
  * Checks the Config for 'allowParametricURL'.

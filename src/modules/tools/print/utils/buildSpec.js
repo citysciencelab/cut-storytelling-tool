@@ -4,14 +4,14 @@ import {fromCircle} from "ol/geom/Polygon.js";
 import Feature from "ol/Feature.js";
 import {GeoJSON} from "ol/format.js";
 import {Group, Image, Tile, Vector} from "ol/layer.js";
-import store from "../../../../../app-store/index";
-import isObject from "../../../../../utils/isObject";
-import differenceJS from "../../../../../utils/differenceJS";
-import sortBy from "../../../../../utils/sortBy";
-import uniqueId from "../../../../../utils/uniqueId";
-import findWhereJs from "../../../../../utils/findWhereJs";
+import store from "../../../../app-store/index";
+import isObject from "../../../../utils/isObject";
+import differenceJS from "../../../../utils/differenceJS";
+import sortBy from "../../../../utils/sortBy";
+import uniqueId from "../../../../utils/uniqueId";
+import findWhereJs from "../../../../utils/findWhereJs";
 import Geometry from "ol/geom/Geometry";
-import {convertColor} from "../../../../../utils/convertColor";
+import {convertColor} from "../../../../utils/convertColor";
 
 const BuildSpecModel = {
     defaults: {

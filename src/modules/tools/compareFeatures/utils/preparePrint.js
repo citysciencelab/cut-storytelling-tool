@@ -1,6 +1,6 @@
 import state from "../store/stateCompareFeatures";
 import store from "../../../../app-store/index";
-import SpecModel from "./../../print/store/utils/buildSpec";
+import SpecModel from "./../../print/utils/buildSpec";
 
 /**
  * Helper Function to prepare the Pdf file from currently selected layer and its features on the comparison list.

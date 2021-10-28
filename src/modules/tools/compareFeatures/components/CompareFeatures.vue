@@ -73,8 +73,8 @@ export default {
             event.preventDefault();
             const a = document.createElement("A");
 
-            a.href = this.$store.state.Tools.Print.fileDownloadUrl;
-            a.download = this.$store.state.Tools.Print.fileDownloadUrl.substr(this.$store.state.Tools.Print.fileDownloadUrl.lastIndexOf("/") + 1);
+            a.href = this.fileDownloadUrl;
+            a.download = this.fileDownloadUrl.substr(this.fileDownloadUrl.lastIndexOf("/") + 1);
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
