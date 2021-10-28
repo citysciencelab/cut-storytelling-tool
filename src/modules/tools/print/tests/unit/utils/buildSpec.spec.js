@@ -1,4 +1,4 @@
-import BuildSpec from "./../../../store/utils/buildSpec";
+import BuildSpec from "./../../../utils/buildSpec";
 import {Style as OlStyle} from "ol/style.js";
 import WMTSTileGrid from "ol/tilegrid/WMTS";
 import {TileWMS, ImageWMS, WMTS} from "ol/source.js";

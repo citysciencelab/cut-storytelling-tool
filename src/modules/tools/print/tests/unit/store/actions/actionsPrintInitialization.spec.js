@@ -168,8 +168,7 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
             testAction(setPrintLayers, scale, state, {}, [
                 {type: "setHintInfo", payload: "", commit: true},
-                {type: "setInvisibleLayer", payload: [], commit: true},
-                {type: "updateCanvasLayer", payload: undefined, dispatch: true}
+                {type: "setInvisibleLayer", payload: [], commit: true}
             ], {}, done);
         });
         after(function () {

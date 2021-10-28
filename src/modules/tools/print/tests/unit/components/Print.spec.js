@@ -20,9 +20,6 @@ describe("tools/Print/components/Print.vue", () => {
         mockMapActions = {
             setResolutionByIndex: sinon.stub()
         },
-        mockMapMutations = {
-            setScale: sinon.stub()
-        },
         mockGfiGetters = {
             currentFeature: () => sinon.stub()
         };
@@ -45,7 +42,6 @@ describe("tools/Print/components/Print.vue", () => {
                 },
                 Map: {
                     namespaced: true,
-                    mutations: mockMapMutations,
                     getters: mockMapGetters,
                     actions: mockMapActions
                 }
