@@ -76,7 +76,9 @@ export default {
             this.$nextTick(() => {
                 if (this.active) {
                     this.retrieveCapabilites();
+                    this.setCurrentMapScale(this.scale);
                 }
+                this.togglePostrenderListener();
             });
         }
 
