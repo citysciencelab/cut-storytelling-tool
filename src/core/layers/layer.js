@@ -133,7 +133,11 @@ Layer.prototype.removeLayer = function () {
  * @returns {void}
  */
 Layer.prototype.toggleIsSelected = function () {
-    this.setIsSelected(this.attributes.isSelected === undefined ? true : !this.attributes.isSelected);
+    const newValue = this.attributes.isSelected === undefined ? true : !this.attributes.isSelected,
+       map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode);
+
+    this.setIsSelected(newValue);
+    handleSingleBaseLayer(newValue, this, map);
 };
 
 /**
@@ -316,7 +320,6 @@ Layer.prototype.setIsSelected = function (newValue) {
         treeType = store.getters.treeType;
 
     this.set("isSelected", newValue);
-    handleSingleBaseLayer(newValue, this, map);
     this.setIsVisibleInMap(newValue);
     if (treeType !== "light") {
         this.resetSelectionIDX();
