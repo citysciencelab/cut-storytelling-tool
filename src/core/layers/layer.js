@@ -71,7 +71,6 @@ Layer.prototype.initialize = function (attrs) {
         this.updateLayerTransparency();
         this.setIsVisibleInMap(typeof attrs.isSelected !== "boolean" ? false : attrs.isSelected);
         this.set("isRemovable", store.state.configJson?.Portalconfig.layersRemovable);
-        mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode).addLayer(this.layer);
     }
     else {
         this.layer.setVisible(false);
