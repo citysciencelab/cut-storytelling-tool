@@ -319,7 +319,8 @@ Layer.prototype.setIsSelected = function (newValue) {
     const map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode),
         treeType = store.getters.treeType;
 
-    this.set("isSelected", newValue);
+    // do not use this.set("isSelected", value), because of neverending recursion
+    this.attributes.isSelected = newValue;
     this.setIsVisibleInMap(newValue);
     if (treeType !== "light") {
         this.resetSelectionIDX();
@@ -348,6 +349,7 @@ Layer.prototype.toggleIsVisibleInMap = function () {
         this.setIsSelected(true);
     }
     if (store.getters.treeType !== "light" || store.state.mobile) {
+        bridge.renderMenu();
         bridge.renderMenuSelection();
     }
 };
@@ -505,13 +507,21 @@ Layer.prototype.set = function (arg1, arg2) {
             if (key === "isSelected") {
                 this.setIsSelected(arg1[key]);
             }
+            else if (key === "transparency") {
+                this.setTransparency(arg1[key]);
+            }
             else {
                 this.attributes[key] = arg1[key];
             }
         }, this);
     }
     else if (typeof arg1 === "string") {
-        this.attributes[arg1] = arg2;
+        if (arg1 === "isSelected") {
+            this.setIsSelected(arg2);
+        }
+        else {
+            this.attributes[arg1] = arg2;
+        }
     }
 };
 Layer.prototype.get = function (key) {

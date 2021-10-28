@@ -156,7 +156,7 @@ export default {
     setFirstSearchPosition ({dispatch, commit, state, rootState, getters}) {
         if (state.mode === "search") {
             const targetProjectionName = state.currentProjection?.name,
-                position = getters.getTransformedPosition(rootState.Map.map, targetProjectionName);
+                position = getters.getTransformedPosition(mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode), targetProjectionName);
 
             if (position && position[0] === 0 && position[1] === 0 && rootState.Map.center) {
                 commit("setCoordinatesEasting", {id: "easting", value: String(rootState.Map.center[0])});
