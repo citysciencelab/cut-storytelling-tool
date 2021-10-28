@@ -7,7 +7,6 @@ import mapCollection from "../../../../dataStorage/mapCollection.js";
 
 describe("src/core/layers/layer.js", () => {
     let attributes,
-        layerAdded = false,
         layerRemoved = false,
         layerVisible = false,
         newLayerSource = false,
@@ -30,6 +29,9 @@ describe("src/core/layers/layer.js", () => {
         },
         setVisible: (value) => {
             layerVisible = value;
+        },
+        getVisible: () => {
+            return layerVisible;
         }
     };
 
@@ -40,9 +42,7 @@ describe("src/core/layers/layer.js", () => {
             mode: "2D",
             addInteraction: sinon.spy(),
             removeInteraction: sinon.spy(),
-            addLayer: () => {
-                layerAdded = true;
-            },
+            addLayer: () => sinon.spy(),
             removeLayer: () => {
                 layerRemoved = true;
             },
@@ -74,7 +74,6 @@ describe("src/core/layers/layer.js", () => {
     });
     afterEach(() => {
         sinon.restore();
-        layerAdded = false;
         layerRemoved = false;
         layerVisible = false;
         newLayerSource = false;
@@ -103,7 +102,7 @@ describe("src/core/layers/layer.js", () => {
         const layerWrapper = new Layer(attributes, olLayer);
 
         expect(layerWrapper.get("layer")).not.to.be.undefined;
-        expect(layerWrapper.get("layer").isVisible()).to.be.true;
+        expect(layerWrapper.get("layer").getVisible()).to.be.true;
         expect(layerWrapper.attributes.isVisibleInMap).to.be.true;
 
     });
@@ -123,8 +122,7 @@ describe("src/core/layers/layer.js", () => {
         const layerWrapper = new Layer(attributes, olLayer);
 
         expect(layerWrapper.get("layer")).not.to.be.undefined;
-        expect(layerAdded).to.be.false;
-
+        expect(layerWrapper.get("layer").getVisible()).to.be.false;
     });
     it("removeLayer shall remove Layer from map", function () {
         sinon.stub(Radio, "request").callsFake((...args) => {
@@ -142,7 +140,7 @@ describe("src/core/layers/layer.js", () => {
         const layerWrapper = new Layer(attributes, olLayer);
 
         expect(layerWrapper.get("layer")).not.to.be.undefined;
-        expect(layerAdded).to.be.true;
+        expect(layerWrapper.get("layer").getVisible()).to.be.true;
         expect(layerWrapper.attributes.isVisibleInMap).to.be.true;
 
         layerWrapper.removeLayer();
@@ -339,10 +337,10 @@ describe("src/core/layers/layer.js", () => {
         testIsVisibleInMap("light", false, 0);
     });
     it("toggleIsVisibleInMap is true and treeType not light", function () {
-        testIsVisibleInMap("custom", true, 4);
+        testIsVisibleInMap("custom", true, 5);
     });
     it("toggleIsVisibleInMap is false and treeType not light", function () {
-        testIsVisibleInMap("custom", false, 1);
+        testIsVisibleInMap("custom", false, 2);
     });
 
     it("updateLayerSource test", function () {
@@ -401,7 +399,7 @@ describe("src/core/layers/layer.js", () => {
         expect(moveModelInTree).to.be.true;
         expect(upDown).to.be.equals(1);
     });
-    it("handleSingleBaseLayer test by calling setIsSelected with true", function () {
+    it("handleSingleBaseLayer test by calling toggleIsSelected", function () {
         const attCopy = {...attributes};
         let layerWrapper = null,
             layerWrapper2 = null,
@@ -438,14 +436,14 @@ describe("src/core/layers/layer.js", () => {
         expect(layerWrapper.attributes.isSelected).to.be.false;
         expect(layerWrapper2.attributes.isSelected).to.be.true;
         expect(layerWrapper3.attributes.isSelected).to.be.true;
-        layerWrapper.setIsSelected(true);
+        layerWrapper.toggleIsSelected();
         expect(layerWrapper.attributes.isSelected).to.be.true;
         expect(layerWrapper2.attributes.isSelected).to.be.false;
         expect(layerWrapper3.attributes.isSelected).to.be.false;
         expect(rerender).to.be.true;
         expect(layerRemoved).to.be.true;
     });
-    it("handleSingleBaseLayer test by calling setIsSelected with no singleBaselayer", function () {
+    it("handleSingleBaseLayer test by calling toggleIsSelected with no singleBaselayer", function () {
         const attCopy = {...attributes};
         let layerWrapper = null,
             layerWrapper2 = null,
@@ -482,7 +480,7 @@ describe("src/core/layers/layer.js", () => {
         expect(layerWrapper.attributes.isSelected).to.be.false;
         expect(layerWrapper2.attributes.isSelected).to.be.true;
         expect(layerWrapper3.attributes.isSelected).to.be.true;
-        layerWrapper.setIsSelected(true);
+        layerWrapper.toggleIsSelected();
         expect(layerWrapper.attributes.isSelected).to.be.true;
         expect(layerWrapper2.attributes.isSelected).to.be.true;
         expect(layerWrapper3.attributes.isSelected).to.be.true;
