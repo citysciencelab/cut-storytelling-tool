@@ -23,7 +23,6 @@ export default {
     menuConfig: state => state?.configJson?.Portalconfig?.menu || null,
     portalConfig: state => state?.configJson?.Portalconfig || null,
     imagePath: state => state?.configJs.wfsImgPath || null,
-    printSettings: state => state?.configJson.Portalconfig.menu.tools?.children.print || null,
 
     /**
      * recursively read out the menu config for tools

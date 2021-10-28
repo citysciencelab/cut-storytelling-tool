@@ -49,9 +49,6 @@ describe("tools/Print/components/Print.vue", () => {
                     getters: mockMapGetters,
                     actions: mockMapActions
                 }
-            },
-            getters: {
-                printSettings: () => ""
             }
         });
 

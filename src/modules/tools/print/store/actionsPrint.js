@@ -206,8 +206,8 @@ export default {
         if (state.mapfishServiceUrl === "") {
             let serviceUrl;
 
-            if (state.printSettings) {
-                serviceUrl = Radio.request("RestReader", "getServiceById", state.printSettings.mapfishServiceId).get("url");
+            if (state.mapfishServiceId !== "") {
+                serviceUrl = Radio.request("RestReader", "getServiceById", state.mapfishServiceId).get("url");
             }
             else {
                 serviceUrl = Radio.request("RestReader", "getServiceById", "mapfish").get("url");
