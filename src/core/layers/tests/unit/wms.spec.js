@@ -5,8 +5,7 @@ import mapCollection from "../../../../dataStorage/mapCollection.js";
 import store from "../../../../app-store";
 
 describe("src/core/layers/wms.js", () => {
-    let layerAdded = false,
-        attributes;
+    let attributes;
 
     before(() => {
         mapCollection.clear();
@@ -15,9 +14,7 @@ describe("src/core/layers/wms.js", () => {
             mode: "2D",
             addInteraction: sinon.stub(),
             removeInteraction: sinon.stub(),
-            addLayer: () => {
-                layerAdded = true;
-            },
+            addLayer: () => sinon.stub(),
             getView: () => {
                 return {
                     getResolutions: () => [2000, 1000]
@@ -36,9 +33,10 @@ describe("src/core/layers/wms.js", () => {
             singleTile: false,
             minScale: "0",
             maxScale: "2500000",
-            isChildLayer: true,
+            isChildLayer: false,
             layers: "layer1,layer2",
-            transparent: false
+            transparent: false,
+            isSelected: false
         };
         store.getters = {
             treeType: "custom"
@@ -47,7 +45,6 @@ describe("src/core/layers/wms.js", () => {
 
     afterEach(() => {
         sinon.restore();
-        layerAdded = false;
     });
 
     it("createLayer shall create an ol.Layer with source", function () {
@@ -62,15 +59,15 @@ describe("src/core/layers/wms.js", () => {
         const wmsLayer = new WMSLayer(attributes);
 
         expect(wmsLayer.get("layer")).not.to.be.undefined;
-        expect(layerAdded).to.be.true;
-
+        expect(wmsLayer.get("isVisibleInMap")).to.be.true;
+        expect(wmsLayer.get("layer").getVisible()).to.be.true;
     });
     it("createLayer with isSelected=false shall not add layer to map", function () {
         const wmsLayer = new WMSLayer(attributes);
 
         expect(wmsLayer.get("layer")).not.to.be.undefined;
-        expect(layerAdded).to.be.false;
-
+        expect(wmsLayer.get("isVisibleInMap")).to.be.false;
+        expect(wmsLayer.get("layer").getVisible()).to.be.false;
     });
     it("updateSourceSLDBody shall call updateParams at layers source", function () {
         attributes.SLDBody = "SLD_BODY";
