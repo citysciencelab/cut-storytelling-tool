@@ -22,7 +22,6 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/Print", Object.keys(getters)),
-        ...mapGetters(["printSettings"]),
         ...mapGetters("Map", ["scales, size", "scale"]),
         ...mapGetters("Tools/Gfi", ["currentFeature"]),
         currentScale: {
@@ -45,6 +44,7 @@ export default {
     watch: {
         active: function () {
             if (this.active) {
+                this.retrieveCapabilites();
                 this.setCurrentMapScale(this.scale);
             }
             this.togglePostrenderListener();
@@ -56,28 +56,12 @@ export default {
 
     /**
      * Lifecycle hook: adds a "close"-Listener to close the tool.
-     * Sets print settings that are in the config.json
-     * starts the process to retrieve other settings/capabilities from mapfish
-     * sets listener to laylerlist
+     * sets listener to laylerlist.
      * @returns {void}
      */
     created () {
         this.$on("close", this.close);
-        if (this.printSettings) {
-            this.setPrintSettings(this.printSettings);
-            this.setFilename(this.printSettings.filename);
-            this.setMapfishServiceId(this.printSettings.mapfishServiceId);
-            this.setPrintAppId(this.printSettings.printAppId);
-            if (this.printSettings.currentLayoutName) {
-                this.setCurrentLayoutName(this.printSettings.currentLayoutName);
-            }
-            else {
-                this.setCurrentLayoutName("A4 Hochformat");
-            }
-        }
-        if (this.layoutList.length === 0) {
-            this.retrieveCapabilites();
-        }
+
         Backbone.Events.listenTo(Radio.channel("ModelList"), {
             "updatedSelectedLayerList": function () {
                 if (typeof this.eventListener !== "undefined") {
@@ -86,6 +70,15 @@ export default {
                 }
             }
         });
+    },
+    mounted () {
+        if (this.layoutList.length === 0) {
+            this.$nextTick(() => {
+                if (this.active) {
+                    this.retrieveCapabilites();
+                }
+            });
+        }
 
         this.setCurrentMapScale(this.scale);
     },

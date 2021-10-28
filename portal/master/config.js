@@ -12,8 +12,7 @@ const Config = {
     },
     metadata: {
         useProxy: [
-            "https://metaver.de/csw",
-            "http://hmdk.fhhnet.stadt.hamburg.de/csw"
+            "https://metaver.de/csw"
         ]
     },
     zoomToGeometry: {
@@ -54,8 +53,8 @@ const Config = {
     cswId: "3",
     metaDataCatalogueId: "2",
     portalConf: "./",
-    layerConf: "https://geodienste.hamburg.de/services-fhhnet.json",
-    restConf: "https://geodienste.hamburg.de/lgv-config/rest-services-fhhnet.json",
+    layerConf: "https://geodienste.hamburg.de/services-internet.json",
+    restConf: "https://geodienste.hamburg.de/lgv-config/rest-services-internet.json",
     styleConf: "https://geodienste.hamburg.de/lgv-config/style_v3.json",
     scaleLine: true,
     mouseHover: {

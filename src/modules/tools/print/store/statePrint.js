@@ -7,7 +7,6 @@ const state = {
     active: false,
     name: "common:menu.tools.print",
     id: "print",
-    printSettings: "",
     isVisibleInMenu: true,
     renderToWindow: false,
     resizableWindow: true,
@@ -21,7 +20,7 @@ const state = {
     // available layouts of the specified print configuration
     layoutList: [],
     currentLayout: undefined,
-    currentLayoutName: "",
+    currentLayoutName: "A4 Hochformat",
     // available formats of the specified print configuration
     formatList: [],
     currentFormat: "pdf",

@@ -7,6 +7,7 @@ import CompareFeatures from "./compareFeatures/components/CompareFeatures.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
 import Gfi from "./gfi/components/Gfi.vue";
 import Measure from "./measure/components/Measure.vue";
+import Print from "./print/components/Print.vue";
 import SaveSelection from "./saveSelection/components/SaveSelection.vue";
 import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
 import SearchByCoord from "./searchByCoord/components/SearchByCoord.vue";
@@ -14,7 +15,6 @@ import SelectFeatures from "./selectFeatures/components/SelectFeatures.vue";
 import StyleVT from "./styleVT/components/StyleVT.vue";
 import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 import WfsSearch from "./wfsSearch/components/WfsSearch.vue";
-import Print from "./print/components/Print.vue";
 /**
  * User type definition
  * @typedef {Object} ToolsState
@@ -32,14 +32,14 @@ const state = {
         fileImport: FileImport,
         gfi: Gfi,
         measure: Measure,
+        print: Print,
         saveSelection: SaveSelection,
         scaleSwitcher: ScaleSwitcher,
         searchByCoord: SearchByCoord,
         selectFeatures: SelectFeatures,
         styleVT: StyleVT,
         supplyCoord: SupplyCoord,
-        wfsSearch: WfsSearch,
-        print: Print
+        wfsSearch: WfsSearch
     },
     configuredTools: []
 };
