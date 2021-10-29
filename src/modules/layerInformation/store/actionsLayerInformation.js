@@ -183,6 +183,21 @@ const actions = {
             metaURLs.push(metaURL);
         }
         commit("setMetaURLs", metaURLs);
+    },
+
+    /**
+     * set Parameters from configuration
+     * @param {Object} param.commit - the commit
+     * @param {Object} config - Configuration
+     * @returns {void}
+     */
+    setConfigParams: function ({commit}, config) {
+        if (config.layerInformation !== undefined && config.layerInformation.showUrlGlobal !== null) {
+            commit("setShowUrlGlobal", config.layerInformation.showUrlGlobal);
+        }
+        else if (config.layerInformation === undefined) {
+            commit("setShowUrlGlobal", undefined);
+        }
     }
 
 };

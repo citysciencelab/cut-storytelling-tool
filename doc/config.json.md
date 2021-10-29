@@ -1005,6 +1005,7 @@ A folder object defined by a name, glyphicon, and its children.
 [type:shadow]: # (Portalconfig.menu.tool.shadow)
 [type:styleWMS]: # (Portalconfig.menu.tool.styleWMS)
 [type:supplyCoord]: # (Portalconfig.menu.tool.supplyCoord)
+[type:resetTree]: # (Portalconfig.menu.tool.resetTree)
 [type:virtualcity]: # (Portalconfig.menu.tool.virtualcity)
 [type:wfsSearch]: # (Portalconfig.menu.tool.wfsSearch)
 [type:wfst]: # (Portalconfig.menu.tool.wfst)
@@ -1039,6 +1040,7 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |styleWMS|no|**[styleWMS](#markdown-header-portalconfigmenutoolstylewms)**||Classification of WMS services. This tool is used in the commute portal of MRH (Metropolregion Hamburg, en.: Metropolitan area Hamburg). With a mask, classifications can be defined. The GetMap request will have an SLD body as payload, used by the server to render. The WMS service now delivers its tiles in the defined classifications and colors.|true|
 |styleVT|no|**[tool](#markdown-header-portalconfigmenutool)**||Style selection for VT services. Allows switching between styles of a Vector Tile Layer that provides multiple stylings via the `services.json` file.|false|
 |supplyCoord|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use "coordToolkit" instead._ Tool to read coordinates on mouse click. When clicking once, the coordinates in the view are frozen and can be copied on clicking the displaying input elements to the clipboard, i.e. you can use them in another document/chat/mail/... with `Strg+V`.|false|
+|resetTree|nein|**[tool](#markdown-header-portalconfigmenutool)**||Tool to reset tree. Clicking on Tool name in the menu under Tools resets the tree.|false|
 |virtualcity|no|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||*virtualcityPLANNER* planning viewer|false|
 |wfsFeatureFilter|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use `filter` instead._ Filters WFS features. This required configuring `"filterOptions"` on the WFS layer object.|false|
 |wfsSearch|no|**[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)**||Makes it possible to create a form to query WFS layers using filters. It is possible to either use a stored query (WFS@2.0.0) or define the query using the defined parameters (WFS@1.1.0).|false|
@@ -1482,6 +1484,18 @@ Tool to save the current map content as a url.
 
 ***
 
+#### Portalconfig.menu.tool.resetTree
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Reset the theme tree.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|-------------|---|-------|------------|------|
+|resetTree|nein|Boolean|false|Tool to reset tree. Click on the tool name in the menu under Tools to reset the tree.|false|
+
+***
+
 #### Portalconfig.menu.tool.searchByCoord
 
 [inherits]: # (Portalconfig.menu.tool)
@@ -1905,6 +1919,7 @@ The measure tool allows measuring distances and areas. This includes the specifi
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |earthRadius|no|Number|6378137|Earth radius in meters. Please mind that the earth radius should be chosen in accordance with the reference ellipsoid. E.g., GRS80 should be used for ETRS89 (EPSG:25832).|false|
+|measurementAccuracy|no|String|"meter"|Indicates how accurately the measurement result is displayed for m and m². Options are "decimeter" for one decimal place. "meter" for no decimal place. And "dynamic" for one decimal place for results smaller 10m / 10m² and no decimal place for results greater or equal 10m / 10m².|false|
 
 **Example**
 
@@ -1912,7 +1927,8 @@ The measure tool allows measuring distances and areas. This includes the specifi
 {
     "measure": {
         "name": "translate#common:menu.tools.measure",
-        "earthRadius": 6378137
+        "earthRadius": 6378137,
+        "measurementAccuracy": "dynamic"
     }
 }
 ```

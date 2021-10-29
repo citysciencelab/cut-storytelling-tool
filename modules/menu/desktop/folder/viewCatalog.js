@@ -13,7 +13,6 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         "keydown .form-control": function (event) {
             event.stopPropagation();
         },
-
         "click .header > a > .glyphicon, .header > a > .control-label": "toggleIsExpanded",
         "keydown .header > a": "keyAction",
 
@@ -176,6 +175,9 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         store.dispatch("Tools/setToolActive", {id: "saveSelection", active: true});
         // closes the menu tree
         $(".nav li:first-child").removeClass("open");
+        $(".dropdown-menu.fixed").removeClass("fixed");
+        $(".glyphicon-pushpin").removeClass("rotate-pin");
+        $(".glyphicon-pushpin").addClass("rotate-pin-back");
         // closes the mobile menu
         $(".navbar-collapse").removeClass("in");
         // selects the url
@@ -245,6 +247,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
     fixTree: function () {
         $("body").on("click", "#map", this.helpForFixing);
         $("body").on("click", "#searchbar", this.helpForFixing);
+        this.$el.parent().addClass("fixed");
         $(".glyphicon-pushpin").addClass("rotate-pin");
         $(".glyphicon-pushpin").removeClass("rotate-pin-back");
         this.model.setIsPinned(true);
@@ -257,6 +260,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
     unfixTree: function () {
         $("body").off("click", "#map", this.helpForFixing);
         $("body").off("click", "#searchbar", this.helpForFixing);
+        this.$el.parent().removeClass("fixed");
         $(".glyphicon-pushpin").removeClass("rotate-pin");
         $(".glyphicon-pushpin").addClass("rotate-pin-back");
         this.model.setIsPinned(false);
