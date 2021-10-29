@@ -5,6 +5,7 @@ import {getRecordById} from "../../../../api/csw/getRecordById";
 import omit from "../../../../utils/omit";
 import actionsPrintInitialization from "./actions/actionsPrintInitialization";
 import getVisibleLayer from "./../utils/getVisibleLayer";
+import {Radio} from "backbone";
 
 export default {
 
@@ -304,6 +305,8 @@ export default {
     downloadFile: function ({state, commit}, fileSpecs) {
         commit("setPrintStarted", false);
         commit("setPrintFileReady", true);
+        // Radio trigger for Boris
+        Radio.trigger("Print", "printFileReady", fileSpecs.fileUrl);
         /**
          * @deprecated in the next major-release!
          * useProxy
