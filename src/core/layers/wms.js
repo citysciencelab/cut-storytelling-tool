@@ -57,37 +57,39 @@ WMSLayer.prototype = Object.create(Layer.prototype);
  */
 WMSLayer.prototype.createLayer = function (attrs) {
     const options = {resolutions: mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode).getView().getResolutions(), origin: [442800, 5809000]},
-        layerAttributes = {
+        rawLayerAttributes = {
             id: attrs.id,
             cacheId: attrs.cacheId,
-            name: attrs.name,
+            gutter: attrs.gutter,
+            format: attrs.format,
             url: attrs.url,
             tilesize: attrs.tilesize,
             layers: attrs.layers,
             version: attrs.version,
+            olAttribution: attrs.olAttribution,
             transparent: attrs.transparent.toString(),
             singleTile: attrs.singleTile,
             minScale: parseInt(attrs.minScale, 10),
             maxScale: parseInt(attrs.maxScale, 10)
+        },
+        layerParams = {
+            layers: attrs.layers,
+            name: attrs.name,
+            legendURL: attrs.legendURL,
+            gfiTheme: attrs.gfiTheme,
+            gfiAttributes: attrs.gfiAttributes,
+            infoFormat: attrs.infoFormat,
+            gfiAsNewWindow: attrs.gfiAsNewWindow,
+            featureCount: attrs.featureCount,
+            format: attrs.format,
+            useProxy: attrs.useProxy,
+            typ: attrs.typ
         };
 
     if (attrs.styles !== "nicht vorhanden") {
-        layerAttributes.STYLES = attrs.styles;
+        rawLayerAttributes.STYLES = attrs.styles;
     }
-
-    this.layer = wms.createLayer(layerAttributes, options);
-    this.layer.set("layers", attrs.layers);
-    this.layer.set("name", attrs.name);
-    this.layer.set("legendURL", attrs.legendURL);
-    this.layer.set("gfiTheme", attrs.gfiTheme);
-    this.layer.set("gfiAttributes", attrs.gfiAttributes);
-    this.layer.set("infoFormat", attrs.infoFormat);
-    this.layer.set("gfiAsNewWindow", attrs.gfiAsNewWindow);
-    this.layer.set("featureCount", attrs.featureCount);
-    this.layer.set("format", attrs.format);
-    this.layer.set("layers", attrs.layers);
-    this.layer.set("useProxy", attrs.useProxy);
-    this.layer.set("typ", attrs.typ);
+    this.layer = wms.createLayer(rawLayerAttributes, layerParams, options);
 };
 /**
  * Updates the SLDBody of the layer source.
