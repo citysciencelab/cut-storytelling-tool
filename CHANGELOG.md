@@ -10,7 +10,7 @@
 
 ## Unreleased - in development
 ### Added
-- added parameter "rotation" to wfs features with iconPointStyle, if the parameter is not given it will fallback to standard alignment.
+- added parameter "rotation" to wfs features with iconPointStyle, if the parameter is not given it will fall back to standard alignment.
 - gfiAttributes: Adding Boolean type in gfi Attributes so that the original text can be parsed to be more understandable.
 - layerInformation: Adding a parameter to globally toggle the dispaly of the service url for all layers at the same time.
 - measure: Adding a parameter to to define with which decimal accuracy the measurement result is displayed.
