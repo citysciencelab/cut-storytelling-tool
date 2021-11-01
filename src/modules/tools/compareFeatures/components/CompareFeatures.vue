@@ -38,6 +38,16 @@ export default {
             }
         }
     },
+    watch: {
+        printFileReady: function () {
+            if (this.printFileReady && this.fileDownloadUrl) {
+                const link = document.createElement("a");
+
+                link.href = this.fileDownloadUrl;
+                link.click();
+            }
+        }
+    },
     created () {
         this.$on("close", this.close);
     },
@@ -63,21 +73,6 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
-        },
-        /**
-         * Downloads the pdf for print
-         * @param {Event} event the click event
-         * @returns {void}
-         */
-        downloadFile (event) {
-            event.preventDefault();
-            const a = document.createElement("A");
-
-            a.href = this.fileDownloadUrl;
-            a.download = this.fileDownloadUrl.substr(this.fileDownloadUrl.lastIndexOf("/") + 1);
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
         },
         /**
          * start print process
@@ -235,13 +230,6 @@ export default {
                 >
                     {{ $t("common:modules.tools.compareFeatures.exportAsPdf") }}
                 </button>
-                <button
-                    class="btn btn-primary btn-infos"
-                    :disabled="!printFileReady"
-                    @click="downloadFile"
-                >
-                    {{ $t("common:modules.tools.print.downloadFile") }}
-                </button>
                 <div
                     v-if="printStarted"
                     class="form-group col-md-12 col-xs-12 pt-20"
@@ -329,6 +317,9 @@ export default {
     }
     #test {
         width: 20px;
+    }
+    .pt-20 {
+        padding-top: 20px;
     }
 </style>
 
