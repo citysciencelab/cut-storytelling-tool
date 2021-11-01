@@ -87,6 +87,7 @@ export default {
 
     .anchor {
         position: relative;
+        overflow: hidden;
 
         #map-wrapper {
             position:relative;

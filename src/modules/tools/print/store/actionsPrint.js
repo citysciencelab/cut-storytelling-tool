@@ -204,6 +204,7 @@ export default {
      * @returns {void}
      */
     createPrintJob: async function ({state, dispatch, commit}, printJob) {
+        commit("setPrintFileReady", false);
         if (state.mapfishServiceUrl === "") {
             let serviceUrl;
 

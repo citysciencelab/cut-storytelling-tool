@@ -42,7 +42,7 @@ const state = {
     resizableWindow: true,
     deactivateGFI: false,
     filename: "report",
-    mapfishServiceId: undefined,
+    mapfishServiceId: "",
     printAppId: "master",
     layoutList: [],
     currentLayout: undefined,

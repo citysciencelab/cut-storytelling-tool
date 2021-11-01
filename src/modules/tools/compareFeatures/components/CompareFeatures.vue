@@ -40,7 +40,7 @@ export default {
     },
     watch: {
         printFileReady: function () {
-            if (this.printFileReady && this.fileDownloadUrl) {
+            if (this.active && this.printFileReady && this.fileDownloadUrl) {
                 const link = document.createElement("a");
 
                 link.href = this.fileDownloadUrl;

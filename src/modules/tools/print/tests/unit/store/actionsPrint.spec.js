@@ -170,6 +170,7 @@ describe("tools/print/actionsPrint", function () {
 
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
             testAction(createPrintJob, payload, state, {}, [
+                {type: "setPrintFileReady", payload: false, commit: true},
                 {type: "setProgressWidth", payload: "width: 50%", commit: true},
                 {type: "waitForPrintJob", payload: data, dispatch: true}
             ], {}, done);
