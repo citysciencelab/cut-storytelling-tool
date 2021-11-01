@@ -45,7 +45,6 @@ import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import TreeFilterView from "../modules/treeFilter/view";
 import FeatureLister from "../modules/tools/featureLister/view";
-import PrintView from "../modules/tools/print/view";
 import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
@@ -183,10 +182,6 @@ async function loadApp () {
             }
             case "shadow": {
                 new ShadowView({model: tool});
-                break;
-            }
-            case "print": {
-                new PrintView({model: tool});
                 break;
             }
             case "parcelSearch": {
