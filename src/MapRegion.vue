@@ -116,7 +116,6 @@ export default {
             flex-direction: column;
             align-items: flex-end;
 
-            height:100%;
             width: 100%;
 
             .controls {

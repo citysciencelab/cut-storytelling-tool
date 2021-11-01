@@ -51,7 +51,7 @@ export default {
             this.contentConfig = this.applyQuickHelpConfigsToDefaultContents(
                 this.contentConfig,
                 this.configs,
-                this.getImageBasePath(),
+                Config?.quickHelp,
                 () => {
                     return uniqueId("info-");
                 }
@@ -187,7 +187,7 @@ export default {
                         />
                         <p
                             v-else-if="subSection.imgName"
-                            class="col-md-12"
+                            class="col-md-12 quick-help-img"
                         >
                             <img
                                 class="img-responsive img-thumbnail"
@@ -237,5 +237,9 @@ export default {
 .content.container-fluid h3:first-child{
     clear: both;
     padding-top: 15px;
+}
+.quick-help-img {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 </style>

@@ -4,11 +4,11 @@ import isObject from "../../../utils/isObject";
  * Resets the content to the given defaultConfig and config.
  * @param {Object} defaultContents the default to use for the content
  * @param {Object} extConfigs the configs as key object pair to manipulate the default content
- * @param {String} imgPath the default path for images
+ * @param {Object} quickHelpConfigJsObject the default config from config.js for quickHelp
  * @param {Function} getUniqueId a function to create a new unique id (with every call) to be used as name tag and object key
  * @returns {Object} the resulting new content config
  */
-function applyQuickHelpConfigsToDefaultContents (defaultContents, extConfigs, imgPath, getUniqueId) {
+function applyQuickHelpConfigsToDefaultContents (defaultContents, extConfigs, quickHelpConfigJsObject, getUniqueId) {
     const clonedContents = cloneObject(defaultContents);
 
     if (clonedContents === false) {
@@ -17,10 +17,10 @@ function applyQuickHelpConfigsToDefaultContents (defaultContents, extConfigs, im
     if (isObject(extConfigs)) {
         Object.entries(extConfigs).forEach(([key, value]) => {
             if (!Object.prototype.hasOwnProperty.call(clonedContents, key)) {
-                clonedContents[key] = createContent(value, imgPath, getUniqueId);
+                clonedContents[key] = createContent(value, quickHelpConfigJsObject, getUniqueId);
             }
             else {
-                clonedContents[key] = applyConfig(clonedContents[key], value, imgPath, getUniqueId);
+                clonedContents[key] = applyConfig(clonedContents[key], value, quickHelpConfigJsObject, getUniqueId);
             }
         });
     }
@@ -31,11 +31,11 @@ function applyQuickHelpConfigsToDefaultContents (defaultContents, extConfigs, im
  * Applies the given config to the default content.
  * @param {Object} defaultContent an object with keys title and content
  * @param {Object} config an object with keys title and content, with content as object or array
- * @param {String} imgPath the default path for images
+ * @param {Object} quickHelpConfigJsObject the default config from config.js for quickHelp
  * @param {Function} getUniqueId a function to create a new unique id (with every call) to be used as name tag and object key
  * @returns {Object} the content with applied rules
  */
-function applyConfig (defaultContent, config, imgPath, getUniqueId) {
+function applyConfig (defaultContent, config, quickHelpConfigJsObject, getUniqueId) {
     const result = {
         title: "",
         content: Object.assign({}, defaultContent?.content)
@@ -52,11 +52,11 @@ function applyConfig (defaultContent, config, imgPath, getUniqueId) {
         result.content = config.content;
     }
     else if (Array.isArray(config?.content)) {
-        result.content = getContentByConfigRules(result.content, config.content, imgPath, getUniqueId);
+        result.content = getContentByConfigRules(result.content, config.content, quickHelpConfigJsObject, getUniqueId);
     }
 
     Object.entries(result.content).forEach(([key, section]) => {
-        result.content[key] = getNormalizeSection(section, imgPath);
+        result.content[key] = getNormalizeSection(section, quickHelpConfigJsObject);
     });
     return result;
 }
@@ -64,11 +64,11 @@ function applyConfig (defaultContent, config, imgPath, getUniqueId) {
 /**
  * Creates a new content entry to be added to the content list of QuickHelp.vue
  * @param {Object} config an object with keys title and content from the config.json to be used as blueprint for the new content
- * @param {String} imgPath the default path for images
+ * @param {Object} quickHelpConfigJsObject the default config from config.js for quickHelp
  * @param {Function} getUniqueId a function to create a new unique id (with every call) to be used as name tag and object key
  * @returns {Object} an object with keys title and content to be applyable by QuickHelp.vue
  */
-function createContent (config, imgPath, getUniqueId) {
+function createContent (config, quickHelpConfigJsObject, getUniqueId) {
     if (!isObject(config)) {
         return {};
     }
@@ -88,7 +88,7 @@ function createContent (config, imgPath, getUniqueId) {
     }
 
     Object.entries(result.content).forEach(([key, section]) => {
-        result.content[key] = getNormalizeSection(section, imgPath);
+        result.content[key] = getNormalizeSection(section, quickHelpConfigJsObject);
     });
 
     return result;
@@ -98,11 +98,11 @@ function createContent (config, imgPath, getUniqueId) {
  * Analyses the given config and applies its commands to the given content.
  * @param {Object} content the content to apply the given config to
  * @param {Object[]} config an array of rules as object
- * @param {String} imgPath the default path for images
+ * @param {Object} quickHelpConfigJsObject the default config from config.js for quickHelp
  * @param {Function} getUniqueId a function to create a new unique id (with every call) to be used as name tag and object key
  * @returns {Object} the resulting content as object
  */
-function getContentByConfigRules (content, config, imgPath, getUniqueId) {
+function getContentByConfigRules (content, config, quickHelpConfigJsObject, getUniqueId) {
     if (!isObject(content) || typeof getUniqueId !== "function") {
         return {};
     }
@@ -115,30 +115,31 @@ function getContentByConfigRules (content, config, imgPath, getUniqueId) {
         result = {};
 
     config.forEach(rule => {
-        if (!isObject(rule)) {
-            return;
+        if (isObject(rule)) {
+            if (typeof rule.hide === "string") {
+                delete unsortedContent[rule.hide];
+                sortedKeys = sortedKeys.filter(sortedKey => sortedKey !== rule.hide);
+            }
+            else if (typeof rule.before === "string") {
+                key = getUniqueId();
+                sortedKeys.splice(sortedKeys.indexOf(rule.before), 0, key);
+                unsortedContent[key] = rule;
+            }
+            else if (typeof rule.after === "string") {
+                key = getUniqueId();
+                sortedKeys.splice(sortedKeys.indexOf(rule.after) + 1, 0, key);
+                unsortedContent[key] = rule;
+            }
+            else {
+                key = getUniqueId();
+                sortedKeys.push(key);
+                unsortedContent[key] = rule;
+            }
         }
-        else if (typeof rule.hide === "string") {
-            delete unsortedContent[rule.hide];
-            sortedKeys = sortedKeys.filter(sortedKey => sortedKey !== rule.hide);
-        }
-        else if (typeof rule.before === "string") {
-            key = getUniqueId();
-            sortedKeys.splice(sortedKeys.indexOf(rule.before), 0, key);
-            unsortedContent[key] = rule;
-        }
-        else if (typeof rule.after === "string") {
-            key = getUniqueId();
-            sortedKeys.splice(sortedKeys.indexOf(rule.after) + 1, 0, key);
-            unsortedContent[key] = rule;
-        }
-        key = getUniqueId();
-        sortedKeys.push(key);
-        unsortedContent[key] = rule;
     });
 
     sortedKeys.forEach(sortedKey => {
-        result[sortedKey] = getNormalizeSection(unsortedContent[sortedKey], imgPath);
+        result[sortedKey] = getNormalizeSection(unsortedContent[sortedKey], quickHelpConfigJsObject);
     });
     return result;
 }
@@ -146,26 +147,26 @@ function getContentByConfigRules (content, config, imgPath, getUniqueId) {
 /**
  * Alters the given section to be normalized for the quick help.
  * @param {Object} section an object with keys title and list to be normalized
- * @param {String} imgPath the base path to images if an image is recognized, to complete the image name
+ * @param {Object} quickHelpConfigJsObject the default config from config.js for quickHelp
  * @returns {Object} the resulting section with normalized entries for title and list
  */
-function getNormalizeSection (section, imgPath) {
+function getNormalizeSection (section, quickHelpConfigJsObject) {
     const result = {
         title: section?.title ? section.title : "",
         list: []
     };
 
-    result.list = getNormalizedSectionList(section?.list, imgPath);
+    result.list = getNormalizedSectionList(section?.list, quickHelpConfigJsObject);
     return result;
 }
 
 /**
  * Alters the given section list using normalizations.
  * @param {String[]|Object[]} list the list to walk through
- * @param {String} imgPath the base path to images if an image is recognized, to complete the image name
+ * @param {Object} quickHelpConfigJsObject the default config from config.js for quickHelp
  * @returns {Object} the resulting list with normalized entries
  */
-function getNormalizedSectionList (list, imgPath) {
+function getNormalizedSectionList (list, quickHelpConfigJsObject) {
     if (!Array.isArray(list)) {
         return [];
     }
@@ -173,10 +174,10 @@ function getNormalizedSectionList (list, imgPath) {
 
     list.forEach(entry => {
         if (typeof entry === "string") {
-            result.push(getNormalizedStringEntry(entry, imgPath));
+            result.push(getNormalizedStringEntry(entry, quickHelpConfigJsObject));
         }
         else if (isObject(entry)) {
-            result.push(getNormalizedObjectEntry(entry, imgPath));
+            result.push(getNormalizedObjectEntry(entry, quickHelpConfigJsObject));
         }
     });
     return result;
@@ -185,15 +186,15 @@ function getNormalizedSectionList (list, imgPath) {
 /**
  * Alters the given object to be a noralized object for quick help.
  * @param {Object} entry the object to analyse
- * @param {String} imgPath the base path to images if an image is recognized, to complete the image name
+ * @param {Object} quickHelpConfigJsObject the default config from config.js for quickHelp
  * @returns {Object} the normalized object
  */
-function getNormalizedObjectEntry (entry, imgPath) {
+function getNormalizedObjectEntry (entry, quickHelpConfigJsObject) {
     if (entry?.imgName) {
-        return Object.assign({
-            imgName: "",
-            imgPath
-        }, entry);
+        return {
+            imgName: quickHelpConfigJsObject[entry.imgKey] ? quickHelpConfigJsObject[entry.imgKey] : entry.imgName,
+            imgPath: entry.imgPath ? entry.imgPath : quickHelpConfigJsObject.imgPath
+        };
     }
     return Object.assign({
         text: "",
@@ -204,10 +205,10 @@ function getNormalizedObjectEntry (entry, imgPath) {
 /**
  * Alters the given string to be a normalized object for quick help.
  * @param {String} entry the string to analyse
- * @param {String} imgPath the base path to images if an image is recognized, to complete the image name
+ * @param {Object} quickHelpConfigJsObject the default config from config.js for quickHelp
  * @returns {Object} the normalized object
  */
-function getNormalizedStringEntry (entry, imgPath) {
+function getNormalizedStringEntry (entry, quickHelpConfigJsObject) {
     if (entry.includes(":")) {
         return {
             text: entry,
@@ -216,7 +217,7 @@ function getNormalizedStringEntry (entry, imgPath) {
     }
     return {
         imgName: entry,
-        imgPath
+        imgPath: quickHelpConfigJsObject.imgPath
     };
 }
 

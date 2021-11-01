@@ -10,17 +10,20 @@ const configQuickHelp = {
                         type: "text/html"
                     },
                     {
-                        imgName: "allgemein.png"
+                        imgName: "allgemein.png",
+                        imgKey: "searchbarAllgemeines1"
                     },
                     {
                         text: "common:modules.quickHelp.search.generalInfoHelp2",
                         type: "text/html"
                     },
                     {
-                        imgName: "allgemein_2.png"
+                        imgName: "allgemein_2.png",
+                        imgKey: "searchbarAllgemeines2"
                     },
                     {
-                        imgName: "allgemein_3.png"
+                        imgName: "allgemein_3.png",
+                        imgKey: "searchbarAllgemeines3"
                     }
                 ]
             },
@@ -59,7 +62,8 @@ const configQuickHelp = {
                         type: "text/html"
                     },
                     {
-                        imgName: "allgemein_4.png"
+                        imgName: "allgemein_4.png",
+                        imgKey: "searchbarFlurstueckssuche"
                     }
                 ]
             }
