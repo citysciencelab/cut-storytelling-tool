@@ -57,7 +57,8 @@
             "legend":"Legende",
             "styleVt": "Style VT",
             "bufferAnalysis": "Buffer Analyse",
-            "wfsSearch": "WFS Suche"
+            "wfsSearch": "WFS Suche",
+            "layerClusterToggler": "Layer-Gruppe öffnen"
         },
         "contact": "Kontakt",
         "info": "Informationen"
@@ -401,6 +402,10 @@
             },
             "saveSelection": {
                 "infoText": "Speichern Sie diese URL als Lesezeichen ab,"
+            },
+            "layerClusterToggler": {
+                "idFormatError": "Prüfen Sie die LayerId. Das Format muss ein Array oder ein Objekt sein.",
+                "idError": "Der Layer mit der ID {{ layerId }} ist nicht geladen, prüfen Sie die Layer-ID auf Richtigkeit."
             },
             "fileImport": {
                 "captions": {
