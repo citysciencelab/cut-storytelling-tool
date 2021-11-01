@@ -115,9 +115,10 @@
             "languageTitle": "Por favor selecione um idioma",
             "de": "Deutsch",
             "en": "English",
+            "es": "Español",
             "it": "Italiano",
             "pt": "Português",
-            "es": "Español"
+            "tr": "Türkçe"
         },
         "cswParser": {
             "noMetadataMessage": "Metadados não estão disponíveis.",

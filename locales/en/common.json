@@ -100,9 +100,10 @@
             "toggleWindow": "Toggle Window",
             "de": "Deutsch",
             "en": "English",
+            "es": "Español",
             "it": "Italiano",
             "pt": "Português",
-            "es": "Español"
+            "tr": "Türkçe"
         },
         "core": {
           "modelList": {

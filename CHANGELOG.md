@@ -16,6 +16,7 @@
 - Tools: Adding a new tool `resetTree` in addons.
 - Tools: Adding a new tool `layerClusterToggler` to enable the cluster layers to be active and deactive together.
 - Menu: Adding transparency bar for all the layes in menu tree.
+- A locale file for the Turkish language was added.
 
 ### Changed
 - Coding-Conventions: For unittests in Vue (/src/...) the vast majority of test-folders are called "tests", going back to a mutual understanding of folder naming. Please use "tests" for your unit or e2e tests in Vue in the future.

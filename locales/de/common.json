@@ -129,10 +129,10 @@
             "toggleWindow": "Fenster öffnen oder schließen",
             "de": "Deutsch",
             "en": "English",
+            "es": "Español",
             "it": "Italiano",
             "pt": "Português",
-            "es": "Español",
-            "tr": "Türkisch"
+            "tr": "Türkçe"
         },
         "cswParser": {
             "noMetadataMessage": "Keine Metadaten vorhanden.",
