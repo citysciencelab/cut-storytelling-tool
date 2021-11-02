@@ -106,9 +106,7 @@ function getCrsPropertyName (rawSource) {
             Object.prototype.hasOwnProperty.call(jsonDoc.crs, "properties") &&
             Object.prototype.hasOwnProperty.call(jsonDoc.crs.properties, "name")) {
 
-            // if (jsonDoc.crs.properties.name.indexOf("EPSG:") >= 0) {
             result = jsonDoc.crs.properties.name;
-            // }
         }
     }
     catch (e) {
@@ -242,16 +240,22 @@ export default {
                 }
 
                 geometries.forEach(geometry => {
-                    proj4.defs("urn:ogc:def:crs:EPSG:6.6:4326", proj4.defs("EPSG:4326"));
-                    proj4.defs("urn:ogc:def:crs:OGC:1.3:CRS:84", proj4.defs("EPSG:4326"));
-                    proj4.defs("urn:ogc:def:crs:OGC:2:84", proj4.defs("EPSG:4326"));
-                    proj4.defs("urn:x-ogc:def:crs:EPSG:4326", proj4.defs("EPSG:4326"));
-                    proj4.defs("EPSG:102100", proj4.defs("EPSG:3857"));
-                    proj4.defs("EPSG:102113", proj4.defs("EPSG:3857"));
-                    proj4.defs("EPSG:900913", proj4.defs("EPSG:3857"));
-                    proj4.defs("urn:ogc:def:crs:EPSG:6.18:3:3857", proj4.defs("EPSG:3857"));
+                    let mappedCrsPropName = crsPropName;
+                    if ((crsPropName === "urn:ogc:def:crs:EPSG:6.6:4326") ||
+                       (crsPropName === "urn:ogc:def:crs:OGC:1.3:CRS84") ||
+                       (crsPropName === "urn:ogc:def:crs:OGC:1.3:CRS:84") || 
+                       (crsPropName === "urn:ogc:def:crs:OGC:2:84") ||
+                       (crsPropName === "urn:x-ogc:def:crs:EPSG:4326")) {
+                        mappedCrsPropName = "EPSG:4326";
+                    }
+                    else if ((crsPropName === "EPSG:102100") ||
+                        (crsPropName === "EPSG:102113") ||
+                        (crsPropName === "EPSG:900913") ||
+                        (crsPropName === "urn:ogc:def:crs:EPSG:6.18:3:3857")) {
+                        mappedCrsPropName = "EPSG:3857";
+                    }
 
-                    geometry.transform(crsPropName, rootGetters["Map/projectionCode"]);
+                    geometry.transform(mappedCrsPropName, rootGetters["Map/projectionCode"]);
                 });
             }
         });
