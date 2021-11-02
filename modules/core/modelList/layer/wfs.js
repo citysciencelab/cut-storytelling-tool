@@ -127,12 +127,12 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * Creates new WFS-Format.
      * @returns {ol.format.wfs} - WFS format.
      */
-    getWfsFormat: function () {
-        return new WFS({
-            featureNS: this.get("featureNS"),
-            featureType: this.get("featureType")
-        });
-    },
+    // getWfsFormat: function () {
+    //     return new WFS({
+    //         featureNS: this.get("featureNS"),
+    //         featureType: this.get("featureType")
+    //     });
+    // },
 
     /**
      * Returns the params and options to request an update of the layer source.

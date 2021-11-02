@@ -1,8 +1,10 @@
+import WMSLayer from "../../../src/core/layers/wms";
+import WFSLayer from "../../../src/core/layers/wfs";
 import GroupedLayers from "../../../src/core/layers/group";
 import WMSLayer from "../../../src/core/layers/wms";
 import WMSTimeLayer from "../../../src/core/layers/wmsTime";
 import WMTSLayer from "./layer/wmts";
-import WFSLayer from "./layer/wfs";
+// import WFSLayer from "./layer/wfs";
 import StaticImageLayer from "./layer/staticImage";
 import GeoJSONLayer from "./layer/geojson";
 import SensorLayer from "./layer/sensor";
