@@ -87,6 +87,7 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
         Radio.trigger("Map", "change", "3D");
         store.commit("Map/setMapId", map3d.id);
         store.commit("Map/setMapMode", "3D");
+        store.dispatch("MapMarker/removePointMarker");
     },
 
     /**
@@ -217,9 +218,8 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
                 }
                 Radio.trigger("Alert", "alert:remove");
                 Radio.trigger("Map", "change", "2D");
-                store.commit("Map/setMapMode", 0);
-                store.commit("setMapId", map.get("id"));
-                store.commit("setMapMode", map.get("mode"));
+                store.commit("Map/setMapId", map.get("id"));
+                store.commit("Map/setMapMode", "2D");
             });
         }
     },

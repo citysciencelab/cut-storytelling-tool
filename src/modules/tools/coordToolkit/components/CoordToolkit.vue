@@ -6,7 +6,6 @@ import {getProjections} from "masterportalAPI/src/crs";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersCoordToolkit";
 import mutations from "../store/mutationsCoordToolkit";
-import {MapMode, toMapMode} from "../../../map/store/enums";
 
 export default {
     name: "CoordToolkit",
@@ -55,7 +54,7 @@ export default {
             if (value) {
                 this.initProjections();
                 this.setExample();
-                if (toMapMode(this.mapMode) === MapMode.MODE_2D) {
+                if (this.mapMode === "2D") {
                     this.setMode("supply");
                     this.setSupplyCoordActive();
                 }
@@ -71,7 +70,7 @@ export default {
             }
         },
         mapMode (value) {
-            if (MapMode.MODE_3D === value) {
+            if (value === "3D") {
                 this.changeMode("search");
             }
         }
@@ -274,7 +273,7 @@ export default {
                 this.setSupplyCoordInactive();
                 this.setFirstSearchPosition();
             }
-            else if (this.mapMode !== MapMode.MODE_3D) {
+            else if (this.mapMode !== "3D") {
                 this.setMode(newMode);
                 this.resetErrorMessages("all");
                 this.setSupplyCoordActive();
@@ -361,14 +360,14 @@ export default {
          * @returns {boolean} true, if mapMode is 2D.
          */
         isSupplyCoordDisabled () {
-            return MapMode.MODE_3D === this.mapMode;
+            return this.mapMode === "3D";
         },
         /**
          * Returns true, if supplyCoord is active.
          * @returns {boolean} true, true, if supplyCoord is active
          */
         isSupplyCoordChecked () {
-            if (this.mapMode === MapMode.MODE_3D) {
+            if (this.mapMode === "3D") {
                 return false;
             }
             return this.mode === "supply";

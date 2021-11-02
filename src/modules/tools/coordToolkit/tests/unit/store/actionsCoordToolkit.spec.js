@@ -300,6 +300,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 proj1 = {id: "projection 1", name: "projection 1", projName: "longlat"},
                 proj2 = {id: "projection 2", name: "projection 2", projName: "longlat"},
                 state = {
+                    active: true,
                     mode: "search",
                     projections: [proj1, proj2],
                     currentProjection: proj2,
@@ -328,6 +329,15 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
             });
             it("setFirstSearchPosition will do nothing if mode is not 'search'", done => {
                 state.mode = "supply";
+
+                testAction(actions.setFirstSearchPosition, null, state, rootState, [],
+                    {getTransformedPosition: () => {
+                        return [0, 0];
+                    }}, done);
+            });
+            it("setFirstSearchPosition will do nothing if not active", done => {
+                state.mode = "search";
+                state.active = false;
 
                 testAction(actions.setFirstSearchPosition, null, state, rootState, [],
                     {getTransformedPosition: () => {

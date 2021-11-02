@@ -1,7 +1,6 @@
 import {fetchFirstModuleConfig} from "../../../utils/fetchFirstModuleConfig";
 import Point from "ol/geom/Point.js";
 import Feature from "ol/Feature.js";
-import {MapMode, toMapMode} from "../../map/store/enums";
 import mapCollection from "../../../dataStorage/mapCollection.js";
 
 /**
@@ -34,7 +33,7 @@ export default {
         dispatch("removePointMarker");
 
         if (styleListModel) {
-            if (toMapMode(rootState.Map.mapMode) === MapMode.MODE_3D) {
+            if (rootState.Map.mapMode === "3D") {
                 // else an error is thrown in proj4/lib/checkSanity: coordinates must be finite numbers
                 value.forEach(val => {
                     coordValues.push(Math.round(val));
