@@ -2,7 +2,6 @@ import normalizeLayers from "./normalizeLayers";
 import * as highlightFeature from "./highlightFeature";
 import * as removeHighlightFeature from "./removeHighlighting";
 import {getWmsFeaturesByMimeType} from "../../../../api/gfi/getWmsFeaturesByMimeType";
-import {MapMode, toMapMode} from "../enums";
 import getProxyUrl from "../../../../utils/getProxyUrl";
 import mapCollection from "../../../../dataStorage/mapCollection.js";
 import VectorLayer from "ol/layer/Vector.js";
@@ -127,9 +126,8 @@ const actions = {
      * @returns {void}
      */
     updateClick ({getters, commit, dispatch, rootGetters}, evt) {
-        const mapMode = toMapMode(getters.mapMode);
 
-        if (mapMode === MapMode.MODE_2D || mapMode === MapMode.MODE_OB) {
+        if (getters.mapMode === "2D" || getters.mapMode === "Oblique") {
             commit("setClickCoord", evt.coordinate);
             commit("setClickPixel", evt.pixel);
         }

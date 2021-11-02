@@ -579,3 +579,6 @@ Layer.prototype.prepareLayerObject = function () {
 Layer.prototype.updateSource = function () {
     // do nothing
 };
+Layer.prototype.setIsActive = function () {
+    // do nothing
+};

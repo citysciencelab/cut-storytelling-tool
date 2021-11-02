@@ -36,6 +36,8 @@ export default {
         if (rootGetters["Map/is3d"]) {
             dispatch("deleteFeatures");
             interaction = makeDraw3d(
+                rootGetters["Map/map3d"],
+                rootGetters["Map/projectionCode"],
                 unlistener => commit("addUnlistener", unlistener),
                 rootState._store
             );
@@ -54,8 +56,8 @@ export default {
                 featureId => commit("setFeatureId", featureId),
                 tooltipCoord => commit("setTooltipCoord", tooltipCoord)
             );
+            mapCollection.getMap(getters.mapId, this.mapMode).addInteraction(interaction);
         }
-        mapCollection.getMap(getters.mapId, this.mapMode).addInteraction(interaction);
 
         commit("setInteraction", interaction);
     },
@@ -70,7 +72,15 @@ export default {
 
         if (interaction) {
             interaction.abortDrawing();
-            mapCollection.getMap(getters.mapId, this.mapMode).removeInteraction(interaction);
+
+            if (interaction.interaction3d) {
+                // 3d interaction is not directly added to map, but provides it's own method
+                interaction.stopInteraction();
+            }
+            else {
+                mapCollection.getMap(getters.mapId, this.mapMode).removeInteraction(interaction);
+            }
+
             commit("setInteraction", null);
         }
     }

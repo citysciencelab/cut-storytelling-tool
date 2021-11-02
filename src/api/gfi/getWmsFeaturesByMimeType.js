@@ -174,7 +174,7 @@ export function createGfiFeature (layer, url = "", feature, features = null, doc
         getProperties: () => feature ? feature.getProperties() : {},
         getFeatures: () => features,
         getOlFeature: () => feature,
-        getId: () => feature ? feature.getId() : "",
+        getId: () => feature && typeof feature.getId === "function" ? feature.getId() : "",
         getGfiUrl: () => url,
         getMimeType: () => layer.get("infoFormat"),
         getLayerId: () => layer.get("id") ? layer.get("id") : "",

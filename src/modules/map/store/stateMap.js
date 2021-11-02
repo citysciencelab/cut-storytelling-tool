@@ -1,4 +1,3 @@
-import {MapMode} from "./enums";
 // TODO add 3d mode values (or model them as a separate module for composition)
 
 /**
@@ -60,7 +59,7 @@ const state = {
     layers: null,
     overlayIds: null,
     overlays: null,
-    mapMode: MapMode.MODE_2D,
+    mapMode: "2D",
     mapId: null,
     highlightedFeature: null,
     highlightedFeatureStyle: null,
