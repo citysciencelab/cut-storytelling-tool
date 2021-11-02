@@ -25,8 +25,8 @@
 
 ### Removed
 - src/utils function isArrayOfStrings is removed, use one liner .every(v => typeof v === "string") instead in the future.
-- The library d3.js was removed from the package.json.
-- The module `graph` which is based on d3.js has been removed. Now `charts.js` is used.
+- The libraries `d3.js` and `d3-scale-chromatic` was removed from the package.json.
+- The module `graph` which is based on d3.js has been removed. Now the library`charts.js` is used.
 
 ### Fixed
 - The portalTitle in the config.json without a logo is rendered correctly.
