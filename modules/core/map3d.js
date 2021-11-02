@@ -85,9 +85,8 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
         }
         map3d.setEnabled(true);
         Radio.trigger("Map", "change", "3D");
-        store.commit("setMapId", map3d.id);
-        store.commit("setMapMode", "3D");
-        store.commit("Map/setMapMode", 1);
+        store.commit("Map/setMapId", map3d.id);
+        store.commit("Map/setMapMode", "3D");
     },
 
     /**
