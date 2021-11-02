@@ -193,11 +193,8 @@ export default {
                     layerModel.setIsOutOfRange(true);
                 }
             }
-            else {
-                layer.setVisible(true);
-                if (layerModel !== undefined) {
-                    layerModel.setIsOutOfRange(false);
-                }
+            else if (layerModel !== undefined) {
+                layerModel.setIsOutOfRange(false);
             }
         });
 
