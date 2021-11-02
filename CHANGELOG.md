@@ -25,7 +25,7 @@
 
 ### Removed
 - src/utils function isArrayOfStrings is removed, use one liner .every(v => typeof v === "string") instead in the future.
-- The libraries `d3.js` and `d3-scale-chromatic` was removed from the package.json.
+- The libraries `d3.js` and `d3-scale-chromatic` were removed from the package.json.
 - The module `graph` which is based on d3.js has been removed. Now the library`charts.js` is used.
 
 ### Fixed
