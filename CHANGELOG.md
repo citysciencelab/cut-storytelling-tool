@@ -12,6 +12,15 @@
 ### Added
 
 ### Changed
+- The following NPM packages are updated:
+    @babel/core": 7.14.6 to 7.16.0
+    @babel/eslint-parser: 7.14.7 to 7.16.0
+    @babel/preset-env: 7.14.7 to 7.16.0
+    @vue/test-utils: 1.2.1 to 1.2.2
+    babel-loader: 8.2.2 to 8.2.3
+    eslint-plugin-vuejs-accessibility: 0.7.1 to 1.1.0
+    mocha: 9.0.2 to 9.1.3
+    selenium-webdriver: 4.0.0-beta.4 to version 4.0.0
 
 ### Deprecated
 
