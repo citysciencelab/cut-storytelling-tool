@@ -403,7 +403,7 @@ const BuildSpecModel = {
             "version": "2"
         };
 
-        features.forEach(feature => {
+        features.reverse().forEach(feature => {
             const styles = this.getFeatureStyle(feature, layer),
                 styleAttributes = this.getStyleAttributes(layer, feature);
 
