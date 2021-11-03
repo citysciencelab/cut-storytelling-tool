@@ -239,9 +239,10 @@ export default {
 
                 geometries.forEach(geometry => {
                     let mappedCrsPropName = crsPropName;
+
                     if ((crsPropName === "urn:ogc:def:crs:EPSG:6.6:4326") ||
                        (crsPropName === "urn:ogc:def:crs:OGC:1.3:CRS84") ||
-                       (crsPropName === "urn:ogc:def:crs:OGC:1.3:CRS:84") || 
+                       (crsPropName === "urn:ogc:def:crs:OGC:1.3:CRS:84") ||
                        (crsPropName === "urn:ogc:def:crs:OGC:2:84") ||
                        (crsPropName === "urn:x-ogc:def:crs:EPSG:4326")) {
                         mappedCrsPropName = "EPSG:4326";
