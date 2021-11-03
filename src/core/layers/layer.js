@@ -430,6 +430,68 @@ function handleSingleBaseLayer (isSelected, layer, map) {
 Layer.prototype.setIsJustAdded = function (value) {
     this.set("isJustAdded", value);
 };
+Layer.prototype.prepareFeaturesFor3D = function (features) {
+    const altitude = this.get("altitude"),
+    altitudeOffset = this.get("altitudeOffset");
+
+    features.forEach(feature => {
+        let geometry = feature.getGeometry();
+
+        if (altitude || altitudeOffset) {
+            geometry = this.setAltitudeOnGeometry(geometry, altitude, altitudeOffset);
+        }
+        feature.setGeometry(geometry);
+    });
+};
+Layer.prototype.setAltitudeOnGeometry = function (geometry, altitude, altitudeOffset) {
+    const type = geometry.getType(),
+        coords = geometry.getCoordinates();
+    let overwrittenCoords = [];
+
+    if (type === "Point") {
+        overwrittenCoords = this.setAltitudeOnPoint(coords, altitude, altitudeOffset);
+    }
+    else if (type === "MultiPoint") {
+        overwrittenCoords = this.setAltitudeOnMultiPoint(coords, altitude, altitudeOffset);
+    }
+    else {
+        console.error("Type: " + type + " is not supported yet for function \"setAltitudeOnGeometry\"!");
+    }
+    geometry.setCoordinates(overwrittenCoords);
+    return geometry;
+};
+Layer.prototype.setAltitudeOnMultiPoint = function (coords, altitude, altitudeOffset) {
+    const overwrittenCoords = [];
+
+    coords.forEach(coord => {
+        overwrittenCoords.push(this.setAltitudeOnPoint(coord, altitude, altitudeOffset));
+    });
+
+    return overwrittenCoords;
+};
+Layer.prototype.setAltitudeOnPoint = function (coords, altitude, altitudeOffset) {
+    const overwrittenCoords = coords,
+            altitudeAsFloat = parseFloat(altitude),
+            altitudeOffsetAsFloat = parseFloat(altitudeOffset);
+
+        if (!isNaN(altitudeAsFloat)) {
+            if (overwrittenCoords.length === 2) {
+                overwrittenCoords.push(altitudeAsFloat);
+            }
+            else if (overwrittenCoords.length === 3) {
+                overwrittenCoords[2] = altitudeAsFloat;
+            }
+        }
+        if (!isNaN(altitudeOffsetAsFloat)) {
+            if (overwrittenCoords.length === 2) {
+                overwrittenCoords.push(altitudeOffsetAsFloat);
+            }
+            else if (overwrittenCoords.length === 3) {
+                overwrittenCoords[2] = overwrittenCoords[2] + altitudeOffsetAsFloat;
+            }
+        }
+        return overwrittenCoords;
+};
 
 /**
  * Initiates the presentation of layer information.
