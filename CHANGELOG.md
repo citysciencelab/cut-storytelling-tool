@@ -8,11 +8,11 @@
 
 ---
 
-## Unreleased - in development
+## v2.15.0 - 2021-11-03
 ### Added
 - gfiAttributes: Adding Boolean type in gfi Attributes so that the original text can be parsed to be more understandable.
-- layerInformation: Adding a parameter to globally toggle the dispaly of the service url for all layers at the same time.
-- measure: Adding a parameter to to define with which decimal accuracy the measurement result is displayed.
+- layerInformation: Adding a parameter to globally toggle the display of the service url for all layers at the same time.
+- measure: Adding a parameter to define with which decimal accuracy the measurement result is displayed.
 - Tools: Adding a new tool `resetTree` in addons.
 - Tools: Adding a new tool `layerClusterToggler` to enable the cluster layers to be active and deactive together.
 - Menu: Adding transparency bar for all the layes in menu tree.
@@ -34,10 +34,8 @@
 - Loading layerIds in combination with a config via the url now also works with the treetype 'custom' in the config.
 - When changing the coordinate system in the Coordinates tool, the incorrect recalculation of the coordinates was corrected: Default values of the coordinate search are now the values of the map center. An error in the display of the coordinate systems (EPSG-code was shown twice) was also fixed.
 - The search in the coordinates tool now also works with different map projections of the masterportal view.
--	Fixed missing highlighting in years 2010-2014 and remove of highlighting when selecting another year in addon boris.
-- The compare features window now has a scollbar, if necessary.
+- Fixed missing highlighting in years 2010-2014 and remove of highlighting when selecting another year in addon boris.
 - For long lists the compare-feature-window provides now a scrollbar.
-
 
 
 ---
