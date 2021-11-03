@@ -21,9 +21,10 @@ const mutations = {
     },
 
     /**
-     * Join a download file with a exist download file by index..
+     * Join a download file with an existing download file by index..
      * @param {Object} state Context object.
      * @param {Object} fileDownload The download file.
+     * @param {Number} fileDownload.index The print index.
      * @returns {void}
      */
     updateFileDownload: (state, fileDownload) => {

@@ -61,7 +61,7 @@ export default {
      * @param {Object} param.commit the commit
      * @param {Object} print the print parameters.
      * @param {Function} print.getResponse The function that calls the axios request.
-     * @param {Function} print.index @param {Number} index The print index.
+     * @param {Number} print.index The print index.
      * @returns {void}
      */
     startPrint: function ({state, dispatch, commit}, print) {
@@ -242,7 +242,8 @@ export default {
      * @param {Object} param.state the state
      * @param {Object} param.dispatch the dispatch
      * @param {Object} param.commit the commit
-     * @param {Object} response - Response of print job.
+     * @param {Object} response Response of print job.
+     * @param {Number} response.index The print index.
      * @returns {void}
      */
     waitForPrintJob: async function ({state, dispatch, commit}, response) {
@@ -262,6 +263,7 @@ export default {
     waitForPrintJobSuccess: async function ({state, dispatch, commit}, response) {
         // Error processing...
         if (response.status === "error") {
+            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.print.waitForPrintErrorMessage"), {root: true});
             console.error("Error: " + response.error);
         }
         else if (response.done) {
