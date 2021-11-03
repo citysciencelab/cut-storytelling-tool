@@ -49,8 +49,8 @@ export default {
             }
             else {
                 this.setFileDownloads([]);
+                this.togglePostrenderListener();
             }
-            this.togglePostrenderListener();
         },
         scale: function (value) {
             this.setCurrentMapScale(value);
