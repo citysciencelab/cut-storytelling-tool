@@ -81,6 +81,54 @@ describe("tools/Print/components/Print.vue", () => {
         it("should have a dropdown for scales", () => {
             expect(wrapper.find("#printScale").exists()).to.be.true;
         });
+
+        it("should have a downloads container", () => {
+            expect(wrapper.find("#tool-print-downloads-container").exists()).to.be.true;
+        });
+
+        it("should show finish download file", () => {
+            store.commit("Tools/Print/setFileDownloads", [{
+                index: 0,
+                title: "Micky",
+                finishState: true,
+                downloadUrl: "https://example.test",
+                filename: "Maus"
+            }]);
+
+            wrapper = mount(PrintComponent, {store, localVue});
+
+            expect(wrapper.find("#tool-print-downloads-container").exists()).to.be.true;
+            expect(wrapper.find(".tool-print-download-title-container").exists()).to.be.true;
+            expect(wrapper.find("#tool-print-download-title").exists()).to.be.true;
+            expect(wrapper.find(".tool-print-download-icon-container").exists()).to.be.true;
+            expect(wrapper.find("#tool-print-download-loader").exists()).to.be.false;
+            expect(wrapper.find("#tool-print-download-glyphicon").exists()).to.be.true;
+            expect(wrapper.find(".tool-print-download-button-container").exists()).to.be.true;
+            expect(wrapper.find("#tool-print-download-button-active").exists()).to.be.true;
+            expect(wrapper.find("#tool-print-download-button-disabled").exists()).to.be.false;
+        });
+
+        it("should show loader download file", () => {
+            store.commit("Tools/Print/setFileDownloads", [{
+                index: 1,
+                title: "Donald",
+                finishState: false,
+                downloadUrl: "https://example.test",
+                filename: "Duck"
+            }]);
+
+            wrapper = mount(PrintComponent, {store, localVue});
+
+            expect(wrapper.find("#tool-print-downloads-container").exists()).to.be.true;
+            expect(wrapper.find(".tool-print-download-title-container").exists()).to.be.true;
+            expect(wrapper.find("#tool-print-download-title").exists()).to.be.true;
+            expect(wrapper.find(".tool-print-download-icon-container").exists()).to.be.true;
+            expect(wrapper.find("#tool-print-download-loader").exists()).to.be.true;
+            expect(wrapper.find("#tool-print-download-glyphicon").exists()).to.be.false;
+            expect(wrapper.find(".tool-print-download-button-container").exists()).to.be.true;
+            expect(wrapper.find("#tool-print-download-button-active").exists()).to.be.false;
+            expect(wrapper.find("#tool-print-download-button-disabled").exists()).to.be.true;
+        });
     });
 
     describe("returnScale", () => {

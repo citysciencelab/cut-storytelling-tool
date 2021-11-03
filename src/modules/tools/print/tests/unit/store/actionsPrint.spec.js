@@ -3,7 +3,7 @@ import actions from "../../../store/actionsPrint";
 import VectorLayer from "ol/layer/Vector.js";
 import sinon from "sinon";
 
-const {activatePrintStarted, startPrint, getMetaDataForPrint, createPrintJob, waitForPrintJob, waitForPrintJobSuccess} = actions;
+const {activatePrintStarted, startPrint, getMetaDataForPrint, createPrintJob, waitForPrintJob, waitForPrintJobSuccess, downloadFile} = actions;
 
 describe("tools/print/actionsPrint", function () {
     describe("activatePrintStarted", function () {
@@ -97,6 +97,7 @@ describe("tools/print/actionsPrint", function () {
                     statusURL: "/mapfish_print_internet/print/status/2ca7f8ab-24f0-48e1-9fd7-a6fe3349ccd0@89c12004-d327-4fb1-88a3-2a3332fa36a0.json"
                 },
                 payload = {
+                    index: 0,
                     getResponse: () => {
                         return {data};
                     }
@@ -105,11 +106,12 @@ describe("tools/print/actionsPrint", function () {
                     payload: encodeURIComponent(JSON.stringify(defaults)),
                     printAppId: "master",
                     currentFormat: "pdf",
-                    getResponse: payload.getResponse
+                    getResponse: payload.getResponse,
+                    index: 0
                 };
 
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
-            testAction(startPrint, payload.getResponse, state, {}, [
+            testAction(startPrint, payload, state, {}, [
                 {type: "setProgressWidth", payload: "width: 25%", commit: true},
                 {type: "createPrintJob", payload: printJob, dispatch: true}
             ], {}, done);
@@ -183,9 +185,11 @@ describe("tools/print/actionsPrint", function () {
                     printAppId: "master"
                 },
                 response = {
-                    ref: "d023a604-99b0-4a4d-aa40-a1d3b5a0fd5d@5f00580a-5fd4-4579-8d21-1ad07051d09a"
+                    ref: "d023a604-99b0-4a4d-aa40-a1d3b5a0fd5d@5f00580a-5fd4-4579-8d21-1ad07051d09a",
+                    index: 0
                 },
                 serviceRequest = {
+                    "index": 0,
                     "serviceUrl": "https://geodienste.hamburg.de/mapfish_print_internet/print/master/status/d023a604-99b0-4a4d-aa40-a1d3b5a0fd5d@5f00580a-5fd4-4579-8d21-1ad07051d09a.json",
                     "requestType": "GET",
                     "onSuccess": "waitForPrintJobSuccess"
@@ -206,6 +210,7 @@ describe("tools/print/actionsPrint", function () {
                     printAppId: "master"
                 },
                 response = {
+                    index: 0,
                     done: false,
                     downloadURL: "/mapfish_print_internet/print/report/5dbc66f1-0ff5-4ba6-8257-640c600150d0@a8cb3d11-7c03-48d3-995e-b7734c564164",
                     elapsedTime: 4278,
@@ -213,6 +218,7 @@ describe("tools/print/actionsPrint", function () {
                     waitingTime: 0
                 },
                 serviceRequest = {
+                    "index": 0,
                     "serviceUrl": "https://geodienste.hamburg.de/mapfish_print_internet/print/master/status/5dbc66f1-0ff5-4ba6-8257-640c600150d0@a8cb3d11-7c03-48d3-995e-b7734c564164.json",
                     "requestType": "GET",
                     "onSuccess": "waitForPrintJobSuccess"
@@ -231,6 +237,7 @@ describe("tools/print/actionsPrint", function () {
                     filename: "Meine Datey"
                 },
                 response = {
+                    index: 0,
                     done: true,
                     downloadURL: "/mapfish_print_internet/print/report/d75d96af-63b1-41b0-860c-96333e05e876@a8cb3d11-7c03-48d3-995e-b7734c564164",
                     elapsedTime: 6145,
@@ -238,6 +245,7 @@ describe("tools/print/actionsPrint", function () {
                     waitingTime: 0
                 },
                 fileSpecs = {
+                    index: 0,
                     fileUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/master/report/d75d96af-63b1-41b0-860c-96333e05e876@a8cb3d11-7c03-48d3-995e-b7734c564164",
                     filename: "Meine Datey"
                 };
@@ -248,6 +256,51 @@ describe("tools/print/actionsPrint", function () {
                 {type: "downloadFile", payload: fileSpecs, dispatch: true}
             ], {}, done);
         });
-    });
 
+        describe("downloadFile", function () {
+            it("should set parameters for one download file", done => {
+                const state = {
+                        mapfishServiceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
+                        printAppId: "master",
+                        filename: "Pikachu"
+                    },
+                    fileSpecs = {
+                        fileUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/master/report/d75d96af-63b1-41b0-860c-96333e05e876@a8cb3d11-7c03-48d3-995e-b7734c564164",
+                        filename: "Raichu"
+                    };
+
+                testAction(downloadFile, fileSpecs, state, {}, [
+                    {type: "setPrintStarted", payload: false, commit: true},
+                    {type: "setPrintFileReady", payload: true, commit: true},
+                    {type: "setFileDownloadUrl", payload: fileSpecs.fileUrl, commit: true},
+                    {type: "setFilename", payload: fileSpecs.filename, commit: true}
+                ], {}, done);
+            });
+
+            it("should set parameters for more than one download file", done => {
+                const state = {
+                        mapfishServiceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
+                        printAppId: "master",
+                        filename: "Pikachu"
+                    },
+                    fileSpecs = {
+                        index: 0,
+                        fileUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/master/report/d75d96af-63b1-41b0-860c-96333e05e876@a8cb3d11-7c03-48d3-995e-b7734c564164",
+                        filename: "Raichu"
+                    };
+
+                testAction(downloadFile, fileSpecs, state, {}, [
+                    {type: "setPrintStarted", payload: false, commit: true},
+                    {type: "setPrintFileReady", payload: true, commit: true},
+                    {type: "setFileDownloadUrl", payload: fileSpecs.fileUrl, commit: true},
+                    {type: "setFilename", payload: fileSpecs.filename, commit: true},
+                    {type: "updateFileDownload", payload: {
+                        index: fileSpecs.index,
+                        finishState: true,
+                        downloadUrl: fileSpecs.fileUrl
+                    }, commit: true}
+                ], {}, done);
+            });
+        });
+    });
 });

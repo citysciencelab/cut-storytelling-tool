@@ -35,6 +35,7 @@ const CanvasModel = {
             }
             return canvasLayer;
         });
+
         return canvasLayer;
     },
 

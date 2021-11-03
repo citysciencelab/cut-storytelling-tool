@@ -41,6 +41,7 @@ const BuildSpecModel = {
             this.updateMetaData(cswObj.layerName, cswObj.parsedData);
             if (this.defaults.uniqueIdList.length === 0) {
                 const printJob = {
+                    index: cswObj.index,
                     payload: encodeURIComponent(JSON.stringify(this.defaults)),
                     getResponse: cswObj.getResponse
                 };
@@ -1012,10 +1013,11 @@ const BuildSpecModel = {
      * @param {Boolean} isLegendSelected flag if legend has to be printed
      * @param {Boolean} isMetaDataAvailable flag to print metadata
      * @param {Function} getResponse the function that calls the axios request
+     * @param {Number} index The print index.
      * @param {Object} legends the available legends
      * @return {void}
      */
-    buildLegend: function (isLegendSelected, isMetaDataAvailable, getResponse) {
+    buildLegend: function (isLegendSelected, isMetaDataAvailable, getResponse, index) {
         const legendObject = {},
             metaDataLayerList = [],
             legends = store.state.Legend.legends;
@@ -1052,11 +1054,12 @@ const BuildSpecModel = {
         this.setLegend(legendObject);
         if (isMetaDataAvailable && metaDataLayerList.length > 0) {
             metaDataLayerList.forEach((layerName) => {
-                this.getMetaData(layerName, getResponse);
+                this.getMetaData(layerName, getResponse, index);
             });
         }
         else {
             const printJob = {
+                index,
                 payload: encodeURIComponent(JSON.stringify(this.defaults)),
                 getResponse: getResponse
             };
@@ -1086,10 +1089,11 @@ const BuildSpecModel = {
      * Requests the metadata for given layer name
      * @param {String} layerName name of current layer
      * @param {Function} getResponse the function to start axios request
+     * @param {Number} index The print index.
      * @fires CswParser#RadioTriggerCswParserGetMetaData
      * @returns {void}
      */
-    getMetaData: function (layerName, getResponse) {
+    getMetaData: function (layerName, getResponse, index) {
         const layer = Radio.request("ModelList", "getModelByAttributes", {name: layerName}),
             metaId = layer.get("datasets") && layer.get("datasets")[0] ? layer.get("datasets")[0].md_id : null,
             uniqueIdRes = uniqueId(),
@@ -1103,6 +1107,7 @@ const BuildSpecModel = {
             cswObj.uniqueId = uniqueIdRes;
             cswObj.layer = layer;
             cswObj.getResponse = getResponse;
+            cswObj.index = index;
 
             store.dispatch("Tools/Print/getMetaDataForPrint", cswObj);
         }

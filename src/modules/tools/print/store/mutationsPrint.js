@@ -1,5 +1,5 @@
 import {generateSimpleMutations} from "../../../../app-store/utils/generators";
-import state from "./statePrint";
+import statePrint from "./statePrint";
 
 const mutations = {
     /**
@@ -8,7 +8,29 @@ const mutations = {
      * {setKey:   (state, payload) => *   state[key] = payload * }
      * will be returned.
      */
-    ...generateSimpleMutations(state)
+    ...generateSimpleMutations(statePrint),
+
+    /**
+     * Adds a download file to the fileDownloads collection.
+     * @param {Object} state Context object.
+     * @param {Object} fileDownload The download file.
+     * @returns {void}
+     */
+    addFileDownload: (state, fileDownload) => {
+        state.fileDownloads.push(fileDownload);
+    },
+
+    /**
+     * Join a download file with a exist download file by index..
+     * @param {Object} state Context object.
+     * @param {Object} fileDownload The download file.
+     * @returns {void}
+     */
+    updateFileDownload: (state, fileDownload) => {
+        const index = fileDownload.index;
+
+        state.fileDownloads[index] = Object.assign(state.fileDownloads[index], fileDownload);
+    }
 };
 
 export default mutations;

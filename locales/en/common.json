@@ -278,6 +278,8 @@
                 "withLegendLabel": "With legend",
                 "printLabel": "Create file",
                 "downloadFile": "Download file",
+                "createDownloadFile": "Will be created...",
+                "alertMessage": "The maximum number of parallel printouts has been exceeded.<br>Please try again once the creation of other printouts is complete.",
                 "withInfoLabel": "With information",
                 "vtlWarning": "Since MapFish 3 does not support Vector Tile Layers, the following active layers will not appear in the print view:",
                 "layoutNameList": {

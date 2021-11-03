@@ -5,7 +5,6 @@ import {getRecordById} from "../../../../api/csw/getRecordById";
 import omit from "../../../../utils/omit";
 import actionsPrintInitialization from "./actions/actionsPrintInitialization";
 import getVisibleLayer from "./../utils/getVisibleLayer";
-import {Radio} from "backbone";
 
 export default {
 
@@ -29,6 +28,9 @@ export default {
             url: url,
             type: serviceRequest.requestType
         }).then(response => {
+            if (Object.prototype.hasOwnProperty.call(serviceRequest, "index")) {
+                response.data.index = serviceRequest.index;
+            }
             dispatch(String(serviceRequest.onSuccess), response.data);
         });
     },
@@ -55,14 +57,17 @@ export default {
     /**
      * starts the printing process
      * @param {Object} param.state the state
-     * @param {Object} param.commit the commit
      * @param {Object} param.dispatch the dispatch
-     * @param {Function} getResponse the function that calls the axios request
+     * @param {Object} param.commit the commit
+     * @param {Object} print the print parameters.
+     * @param {Function} print.getResponse The function that calls the axios request.
+     * @param {Function} print.index @param {Number} index The print index.
      * @returns {void}
      */
-    startPrint: function ({state, dispatch, commit}, getResponse) {
+    startPrint: function ({state, dispatch, commit}, print) {
         commit("setProgressWidth", "width: 25%");
         getVisibleLayer();
+
         const visibleLayerList = state.visibleLayerList,
             attr = {
                 "layout": state.currentLayoutName,
@@ -98,17 +103,18 @@ export default {
         }
 
         if (state.isLegendAvailable) {
-            spec.buildLegend(state.isLegendSelected, state.isMetadataAvailable, getResponse);
+            spec.buildLegend(state.isLegendSelected, state.isMetadataAvailable, print.getResponse, print.index);
         }
         else {
             spec.setLegend({});
             spec.setShowLegend(false);
             spec = omit(spec, ["uniqueIdList"]);
             const printJob = {
+                index: print.index,
                 payload: encodeURIComponent(JSON.stringify(spec.defaults)),
                 printAppId: state.printAppId,
                 currentFormat: state.currentFormat,
-                getResponse: getResponse
+                getResponse: print.getResponse
             };
 
             dispatch("createPrintJob", printJob);
@@ -227,21 +233,23 @@ export default {
             response = await printJob.getResponse(url, printJob.payload);
         }
 
+        response.data.index = printJob.index;
         dispatch("waitForPrintJob", response.data);
     },
 
     /**
      * Sends a request to get the status for a print job until it is finished.
      * @param {Object} param.state the state
-     * @param {Object} param.commit the commit
      * @param {Object} param.dispatch the dispatch
-     * @param {JSON} response - Response of print job.
+     * @param {Object} param.commit the commit
+     * @param {Object} response - Response of print job.
      * @returns {void}
      */
     waitForPrintJob: async function ({state, dispatch, commit}, response) {
         const printAppId = state.printAppId,
             url = state.mapfishServiceUrl + printAppId + "/status/" + response.ref + ".json",
             serviceRequest = {
+                "index": response.index,
                 "serviceUrl": url,
                 "requestType": "GET",
                 "onSuccess": "waitForPrintJobSuccess"
@@ -267,6 +275,7 @@ export default {
                 subUrl = response.downloadURL.replace("/mapfish_print/print/report/", "");
             }
             const fileSpecs = {
+                "index": response?.index,
                 "fileUrl": state.mapfishServiceUrl + state.printAppId + "/report/" + subUrl,
                 "filename": state.filename
             };
@@ -287,6 +296,7 @@ export default {
                 }
                 const url = state.mapfishServiceUrl + state.printAppId + "/status/" + subUrl + ".json",
                     serviceRequest = {
+                        "index": response.index,
                         "serviceUrl": url,
                         "requestType": "GET",
                         "onSuccess": "waitForPrintJobSuccess"
@@ -296,6 +306,7 @@ export default {
             }, 2000);
         }
     },
+
     /**
      * Starts the download from printfile,
      * @param {Object} param.state the state
@@ -304,16 +315,28 @@ export default {
      * @returns {void}
      */
     downloadFile: function ({state, commit}, fileSpecs) {
-        commit("setPrintStarted", false);
-        commit("setPrintFileReady", true);
-        // Radio trigger for Boris
-        Radio.trigger("Print", "printFileReady", fileSpecs.fileUrl);
         /**
          * @deprecated in the next major-release!
          * useProxy
          * getProxyUrl()
          */
-        commit("setFileDownloadUrl", state.useProxy ? getProxyUrl(fileSpecs.fileUrl) : fileSpecs.fileUrl);
+        const fileUrl = state.useProxy ? getProxyUrl(fileSpecs.fileUrl) : fileSpecs.fileUrl;
+
+        commit("setPrintStarted", false);
+        commit("setPrintFileReady", true);
+
+        // Radio trigger for external backbone modules.
+        Radio.trigger("Print", "printFileReady", fileUrl);
+
+        commit("setFileDownloadUrl", fileUrl);
         commit("setFilename", fileSpecs.filename);
+
+        if (fileSpecs.index !== undefined) {
+            commit("updateFileDownload", {
+                index: fileSpecs.index,
+                finishState: true,
+                downloadUrl: fileUrl
+            });
+        }
     }
 };

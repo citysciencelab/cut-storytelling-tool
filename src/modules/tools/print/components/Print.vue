@@ -47,6 +47,9 @@ export default {
                 this.retrieveCapabilites();
                 this.setCurrentMapScale(this.scale);
             }
+            else {
+                this.setFileDownloads([]);
+            }
             this.togglePostrenderListener();
         },
         scale: function (value) {
@@ -94,6 +97,7 @@ export default {
             "getOptimalResolution",
             "updateCanvasLayer"
         ]),
+        ...mapActions("Alerting", ["addSingleAlert"]),
 
         /**
          * returns the "beautified" scale to be shown in the dropdown box
@@ -148,14 +152,34 @@ export default {
         },
 
         /**
-         * starts the print
+         * Starts the print
          * @returns {void}
          */
         print () {
-            this.startPrint(async (url, payload) => {
-                return axios.post(url, payload);
-            });
-            this.setPrintStarted(true);
+            const currentPrintLength = this.fileDownloads.filter(file => file.finishState === false).length;
+
+            if (currentPrintLength <= 10) {
+                const index = this.fileDownloads.length;
+
+                this.addFileDownload({
+                    index: index,
+                    title: this.title,
+                    finishState: false,
+                    downloadUrl: null,
+                    filename: this.filename
+                });
+
+                this.startPrint({
+                    index,
+                    getResponse: async (url, payload) => {
+                        return axios.post(url, payload);
+                    }
+                });
+                this.setPrintStarted(true);
+            }
+            else {
+                this.addSingleAlert(this.$t("common:modules.tools.print.alertMessage"));
+            }
         },
 
         /**
@@ -166,20 +190,21 @@ export default {
         selectGfi (evt) {
             this.setIsGfiSelected = evt.target.checked;
         },
+
         /**
-         * Downloads the pdf for print
-         * @param {Event} event the click event
+         * Downloads the pdf for print.
+         * @param {String} downloadUrl The url to the file.
+         * @param {String} filename The file name.
          * @returns {void}
          */
-        downloadFile (event) {
-            event.preventDefault();
-            const a = document.createElement("A");
+        download (downloadUrl, filename) {
+            const link = document.createElement("a");
 
-            a.href = this.fileDownloadUrl;
-            a.download = this.fileDownloadUrl.substr(this.fileDownloadUrl.lastIndexOf("/") + 1);
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            link.href = downloadUrl;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         },
 
         /**
@@ -191,8 +216,6 @@ export default {
             event.stopPropagation();
             this.setActive(false);
 
-            // TODO replace trigger when ModelList is migrated
-            // set the backbone model to active false in modellist for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
             const model = getComponent(this.$store.state.Tools.Print.id);
 
             if (model) {
@@ -369,43 +392,59 @@ export default {
                     <div class="col-sm-12">
                         <button
                             type="button"
-                            class="btn btn-lgv-grey btn-block"
+                            class="btn btn-primary btn-block"
                             @click="print"
                         >
                             {{ $t("common:modules.tools.print.printLabel") }}
                         </button>
                     </div>
                 </div>
+            </form>
+            <div id="tool-print-downloads-container">
                 <div
-                    v-if="printStarted"
-                    class="form-group form-group-sm"
+                    v-for="file in fileDownloads"
+                    id="tool-print-download-container"
+                    :key="file.index"
+                    class="row"
                 >
-                    <div class="col-sm-12">
-                        <div class="progress">
-                            <div
-                                class="progress-bar"
-                                role="progressbar"
-                                :style="progressWidth"
-                            >
-                                <span class="sr-only">30% Complete</span>
-                            </div>
-                        </div>
+                    <div class="col-sm-4 tool-print-download-title-container">
+                        <span
+                            id="tool-print-download-title"
+                        >
+                            {{ file.title }}
+                        </span>
                     </div>
-                </div>
-                <div
-                    class="form-group form-group-sm"
-                >
-                    <div class="col-sm-12">
+                    <div class="col-sm-2 tool-print-download-icon-container">
+                        <div
+                            v-if="!file.finishState"
+                            id="tool-print-download-loader"
+                        />
+                        <div
+                            v-else
+                            id="tool-print-download-glyphicon"
+                            class="glyphicon glyphicon-ok"
+                        />
+                    </div>
+                    <div class="col-sm-6 tool-print-download-button-container">
                         <button
-                            class="btn btn-lgv-grey btn-block"
-                            :disabled="!printFileReady"
-                            @click="downloadFile"
+                            v-if="file.finishState"
+                            id="tool-print-download-button-active"
+                            class="btn btn-primary btn-sm btn-block"
+                            @click="download(file.downloadUrl, file.filename)"
                         >
                             {{ $t("common:modules.tools.print.downloadFile") }}
                         </button>
+                        <button
+                            v-else
+                            id="tool-print-download-button-disabled"
+                            class="btn btn-default btn-sm btn-block"
+                            disabled
+                        >
+                            {{ $t("common:modules.tools.print.createDownloadFile") }}
+                        </button>
                     </div>
                 </div>
-            </form>
+            </div>
         </template>
     </Tool>
 </template>
@@ -442,6 +481,53 @@ export default {
                 span {
                     color: #a5a5a5;
                 }
+            }
+        }
+    }
+
+    #tool-print-downloads-container {
+        margin-top: 30px;
+
+        #tool-print-download-container {
+            padding-left: 15px;
+            margin-top: 10px;
+
+            .tool-print-download-title-container {
+                padding: 8px 0 0 0;
+            }
+
+            .tool-print-download-icon-container {
+                margin: 5px 0 0 0;
+            }
+
+            #tool-print-download-glyphicon {
+                font-size: 18px;
+                color:#286090;
+            }
+
+            #tool-print-download-button-disabled {
+                border-color: #FFFFFF;
+            }
+
+            #tool-print-download-loader {
+                border: 4px solid #f3f3f3;
+                border-radius: 50%;
+                border-top: 4px solid #286090;
+                width: 25px;
+                height: 25px;
+                -webkit-animation: spin 1s linear infinite; /* Safari */
+                animation: spin 1s linear infinite;
+
+            }
+            /* Safari */
+            @-webkit-keyframes spin {
+                0% { -webkit-transform: rotate(0deg); }
+                100% { -webkit-transform: rotate(360deg); }
+            }
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
             }
         }
     }

@@ -89,6 +89,7 @@ const state = {
     printStarted: false,
     progressWidth: "width: 0%",
     fileDownloadUrl: "",
+    fileDownloads: [],
     /**
      * @deprecated in the next major-release!
      * useProxy
