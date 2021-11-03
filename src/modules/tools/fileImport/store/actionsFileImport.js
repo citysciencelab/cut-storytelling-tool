@@ -1,7 +1,5 @@
 import getProxyUrl from "../../../../utils/getProxyUrl";
 import {GeoJSON, GPX, KML} from "ol/format.js";
-import proj4 from "proj4";
-
 
 const supportedFormats = {
     kml: new KML({extractStyles: true, iconUrlFunction: (url) => proxyGstaticUrl(url)}),
