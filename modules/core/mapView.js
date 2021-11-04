@@ -36,7 +36,6 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @fires Core#RadioRequestParametricURLGetCenter
      * @fires Core#RadioRequestParametricURLGetProjectionFromUrl
      * @fires Core#RadioRequestParametricURLGetZoomLevel
-     * @fires ClickCounter#RadioTriggerClickCounterZoomChanged
      * @fires Core#RadioTriggerMapViewChangedCenter
      * @fires Core#RadioTriggerMapViewChangedOptions
      * @fires Core#RadioTriggerMapViewChangedZoomLevel
@@ -121,7 +120,6 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @param {ol.View} evt.target - this.get("view")
      * @fires Core#RadioTriggerMapViewChangedOptions
      * @fires Core#RadioTriggerMapViewChangedZoomLevel
-     * @fires ClickCounter#RadioTriggerClickCounterZoomChanged
      * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
      * @returns {void}
      */
@@ -133,7 +131,6 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
         Radio.trigger("MapView", "changedOptions", params);
         store.commit("Map/setScale", params?.scale);
         Radio.trigger("MapView", "changedZoomLevel", this.getZoom());
-        Radio.trigger("ClickCounter", "zoomChanged");
         Radio.trigger("RemoteInterface", "postMessage", {"zoomLevel": this.getZoom()});
     },
 

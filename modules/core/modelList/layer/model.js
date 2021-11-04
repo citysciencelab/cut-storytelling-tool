@@ -381,7 +381,6 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         this.listenTo(this, {
             "change:isVisibleInMap": function () {
                 // triggert das Ein- und Ausschalten von Layern
-                Radio.trigger("ClickCounter", "layerVisibleChanged");
                 Radio.trigger("Layer", "layerVisibleChanged", this.get("id"), this.get("isVisibleInMap"), this);
                 this.toggleWindowsInterval();
                 this.toggleAttributionsInterval();
