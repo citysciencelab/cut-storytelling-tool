@@ -1,14 +1,6 @@
 import {Image, Tile, Vector, Group} from "ol/layer.js";
 
-const BuildCanvasModel = Backbone.Model.extend(/** @lends BuildCanvasModel.prototype */{
-    defaults: {},
-    /**
-     * Model to generate the canvas layer for the print mask
-     * @class BuildCanvasModel.
-     * @memberof Tools.Print
-     * @extends Backbone.Model
-     * @constructs
-     */
+const CanvasModel = {
     /**
      * Getting the canvas layer for the print mask
      * @param {ol.layer.Layer[]} layerList All visible layers on the map.
@@ -19,16 +11,16 @@ const BuildCanvasModel = Backbone.Model.extend(/** @lends BuildCanvasModel.proto
             canvasLayerList = [];
         let canvasLayer = {};
 
-        layerList.forEach(function (layer) {
+        layerList.forEach(layer => {
             if (layer instanceof Group) {
-                layer.getLayers().getArray().forEach(function (childLayer) {
+                layer.getLayers().getArray().forEach(childLayer => {
                     canvasLayerList.push(this.buildCanvasLayerType(childLayer, currentResolution));
-                }.bind(this));
+                });
             }
             else {
                 canvasLayerList.push(this.buildCanvasLayerType(layer, currentResolution));
             }
-        }.bind(this));
+        });
 
         canvasLayerList.forEach(layer => {
             if (layer instanceof Vector) {
@@ -38,11 +30,12 @@ const BuildCanvasModel = Backbone.Model.extend(/** @lends BuildCanvasModel.proto
                     canvasLayer = layer;
                 }
             }
-            else if (layer !== undefined) {
+            else if (typeof layer !== "undefined") {
                 canvasLayer = layer;
             }
             return canvasLayer;
         });
+
         return canvasLayer;
     },
 
@@ -54,8 +47,8 @@ const BuildCanvasModel = Backbone.Model.extend(/** @lends BuildCanvasModel.proto
      */
     buildCanvasLayerType: function (layer, currentResolution) {
         const extent = Radio.request("MapView", "getCurrentExtent"),
-            layerMinRes = layer.get("minResolution"),
-            layerMaxRes = layer.get("maxResolution"),
+            layerMinRes = layer.getMinResolution(),
+            layerMaxRes = layer.getMaxResolution(),
             isInScaleRange = this.isInScaleRange(layerMinRes, layerMaxRes, currentResolution);
         let features = [],
             returnLayer;
@@ -94,6 +87,6 @@ const BuildCanvasModel = Backbone.Model.extend(/** @lends BuildCanvasModel.proto
 
         return isInScale;
     }
-});
+};
 
-export default BuildCanvasModel;
+export default CanvasModel;

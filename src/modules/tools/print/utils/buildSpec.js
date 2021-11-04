@@ -4,28 +4,29 @@ import {fromCircle} from "ol/geom/Polygon.js";
 import Feature from "ol/Feature.js";
 import {GeoJSON} from "ol/format.js";
 import {Group, Image, Tile, Vector} from "ol/layer.js";
-import store from "../../../src/app-store/index";
-import "./RadioBridge.js";
-import isObject from "../../../src/utils/isObject";
+import store from "../../../../app-store/index";
+import isObject from "../../../../utils/isObject";
+import differenceJS from "../../../../utils/differenceJS";
+import sortBy from "../../../../utils/sortBy";
+import uniqueId from "../../../../utils/uniqueId";
+import findWhereJs from "../../../../utils/findWhereJs";
 import Geometry from "ol/geom/Geometry";
+import {convertColor} from "../../../../utils/convertColor";
 
-const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype */{
+const BuildSpecModel = {
     defaults: {
-        uniqueIdList: []
-    },
-    /**
-     * Model to generate the buildSpec JSON that is send to the mapfish-print-3 service.
-     * @class BuildSpecModel.
-     * @memberof Tools.Print
-     * @extends Backbone.Model
-     * @constructs
-     * @fires CswParser#RadioTriggerCswParserGetMetaData
-     * @listens CswParser#RadioTriggerCswParserFetchedMetaData
-     */
-    initialize: function () {
-        this.listenTo(Radio.channel("CswParser"), {
-            "fetchedMetaDataForPrint": this.fetchedMetaData
-        });
+        uniqueIdList: [],
+        visibleLayerIds: null,
+        layout: null,
+        attributes: {
+            map: null,
+            title: "",
+            showLegend: false,
+            legend: "",
+            showGfi: false,
+            gfi: null,
+            scale: null
+        }
     },
 
     /**
@@ -35,33 +36,46 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {void}
      */
     fetchedMetaData: function (cswObj) {
-        if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj.uniqueId)) {
-            this.removeUniqueIdFromList(this.get("uniqueIdList"), cswObj.uniqueId);
+        if (this.isOwnMetaRequest(this.defaults.uniqueIdList, cswObj.uniqueId)) {
+            this.removeUniqueIdFromList(this.defaults.uniqueIdList, cswObj.uniqueId);
             this.updateMetaData(cswObj.layerName, cswObj.parsedData);
-            if (this.get("uniqueIdList").length === 0) {
-                Radio.trigger("Print", "createPrintJob", encodeURIComponent(JSON.stringify(this.toJSON())));
+            if (this.defaults.uniqueIdList.length === 0) {
+                const printJob = {
+                    index: cswObj.index,
+                    payload: encodeURIComponent(JSON.stringify(this.defaults)),
+                    getResponse: cswObj.getResponse
+                };
+
+                store.dispatch("Tools/Print/createPrintJob", printJob);
             }
         }
+    },
+
+    setAttributes: function (attr) {
+        this.defaults.attributes = attr.attributes;
+        this.defaults.layout = attr.layout;
+        this.defaults.outputFilename = attr.outputFilename;
+        this.defaults.outputFormat = attr.outputFormat;
     },
 
     /**
      * Checks if csw request belongs to this model.
      * @param {String[]} uniqueIdList List of all metaRequest-ids belonging to this model.
-     * @param {String} uniqueId Response unique-id from Cswparser.
+     * @param {String} uniqId Response unique-id from Cswparser.
      * @returns {Boolean} - Flag if csw response is from own metaRequest.
      */
-    isOwnMetaRequest: function (uniqueIdList, uniqueId) {
-        return Array.isArray(uniqueIdList) && uniqueIdList.indexOf(uniqueId) !== -1;
+    isOwnMetaRequest: function (uniqueIdList, uniqId) {
+        return Array.isArray(uniqueIdList) && uniqueIdList.indexOf(uniqId) !== -1;
     },
 
     /**
      * Removes the uniqueId from the uniqueIdList, because the request returned something.
      * @param {String[]} uniqueIdList List of all metaRequest-ids belonging to this model.
-     * @param {String} uniqueId Response unique-id from Cswparser.
+     * @param {String} uniqId Response unique-id from Cswparser.
      * @returns {void}
      */
-    removeUniqueIdFromList: function (uniqueIdList, uniqueId) {
-        this.setUniqueIdList(Radio.request("Util", "differenceJs", uniqueIdList, [uniqueId]));
+    removeUniqueIdFromList: function (uniqueIdList, uniqId) {
+        this.setUniqueIdList(differenceJS(uniqueIdList, [uniqId]));
     },
 
     /**
@@ -71,8 +85,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {void}
      */
     updateMetaData: function (layerName, parsedData) {
-        const layers = Object.prototype.hasOwnProperty.call(this.get("attributes"), "legend") && this.get("attributes").legend?.layers ? this.get("attributes").legend.layers : undefined,
-            layer = Radio.request("Util", "findWhereJs", layers, {layerName: layerName});
+        const layers = this.defaults.attributes.legend && this.defaults.attributes.legend.layers ? this.defaults.attributes.legend.layers : undefined,
+            layer = findWhereJs(layers, {layerName: layerName});
 
         if (layer !== undefined) {
             layer.metaDate = parsedData?.date ? parsedData.date : "n.N.";
@@ -156,28 +170,30 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      */
     buildLayers: function (layerList) {
         const layers = [],
-            attributes = this.get("attributes"),
+            attributes = this.defaults.attributes,
             currentResolution = Radio.request("MapView", "getOptions")?.resolution,
             visibleLayerIds = [];
 
-        layerList.forEach(layer => {
-            const printLayers = [];
+        if (Array.isArray(layerList)) {
+            layerList.forEach(layer => {
+                const printLayers = [];
 
-            if (layer instanceof Group) {
-                layer.getLayers().getArray().forEach(childLayer => {
-                    printLayers.push(this.buildLayerType(childLayer, currentResolution));
-                });
-            }
-            else {
-                printLayers.push(this.buildLayerType(layer, currentResolution));
-            }
-            printLayers.forEach(printLayer => {
-                if (printLayer !== undefined) {
-                    visibleLayerIds.push(layer.get("id"));
-                    layers.push(printLayer);
+                if (layer instanceof Group) {
+                    layer.getLayers().getArray().forEach(childLayer => {
+                        printLayers.push(this.buildLayerType(childLayer, currentResolution));
+                    });
                 }
+                else {
+                    printLayers.push(this.buildLayerType(layer, currentResolution));
+                }
+                printLayers.forEach(printLayer => {
+                    if (typeof printLayer !== "undefined") {
+                        visibleLayerIds.push(layer?.get("id"));
+                        layers.push(printLayer);
+                    }
+                });
             });
-        });
+        }
 
         this.setVisibleLayerIds(visibleLayerIds);
         attributes.map.layers = layers.reverse();
@@ -191,7 +207,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      */
     getDrawLayerInfo: function (layer, extent) {
         const featuresInExtent = layer.getSource().getFeaturesInExtent(extent),
-            features = Radio.request("Util", "sortBy", featuresInExtent, function (feature) {
+            features = sortBy(featuresInExtent, function (feature) {
                 if (feature.getStyle() && typeof feature.getStyle === "function" && typeof feature.getStyle().getZIndex === "function") {
                     return feature.getStyle().getZIndex();
                 }
@@ -215,8 +231,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      */
     buildLayerType: function (layer, currentResolution) {
         const extent = Radio.request("MapView", "getCurrentExtent"),
-            layerMinRes = layer?.get("minResolution"),
-            layerMaxRes = layer?.get("maxResolution"),
+            layerMinRes = typeof layer?.get === "function" ? layer.get("minResolution") : false,
+            layerMaxRes = typeof layer?.get === "function" ? layer.get("maxResolution") : false,
             isInScaleRange = this.isInScaleRange(layerMinRes, layerMaxRes, currentResolution);
         let features = [],
             returnLayer;
@@ -236,7 +252,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                     returnLayer = this.buildWmts(layer, source);
                 }
             }
-            else if (layer.get("name") === "import_draw_layer") {
+            else if (typeof layer?.get === "function" && layer.get("name") === "import_draw_layer") {
                 returnLayer = this.getDrawLayerInfo(layer, extent);
             }
             else if (layer instanceof Vector) {
@@ -468,7 +484,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     /**
      * Unsets all properties of type string of the given feature.
      * @param {ol.Feature} feature to unset properties of type string at
-     * @param {string[]} notToUnset keys not to unset
+     * @param {string} notToUnset key not to unset
      * @returns {void}
      */
     unsetStringPropertiesOfFeature: function (feature, notToUnset) {
@@ -582,9 +598,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         return {
             type: "text",
             label: style.getText() !== undefined ? style.getText() : "",
-            fontColor: this.rgbArrayToHex(fontColor),
+            fontColor: convertColor(fontColor, "hex"),
             fontOpacity: fontColor[0] !== "#" ? fontColor[3] : 1,
-            labelOutlineColor: stroke ? this.rgbArrayToHex(stroke.getColor()) : undefined,
+            labelOutlineColor: stroke ? convertColor(stroke.getColor(), "hex") : undefined,
             labelOutlineWidth: stroke ? stroke.getWidth() : undefined,
             labelXOffset: style.getOffsetX(),
             labelYOffset: -style.getOffsetY(),
@@ -705,7 +721,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             fillColor = this.colorStringToRgbArray(fillColor);
         }
 
-        obj.fillColor = this.rgbArrayToHex(fillColor);
+        obj.fillColor = convertColor(fillColor, "hex");
         obj.fillOpacity = fillColor[3];
 
         return obj;
@@ -756,7 +772,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     buildStrokeStyle: function (style, obj) {
         const strokeColor = style.getColor();
 
-        obj.strokeColor = this.rgbArrayToHex(strokeColor);
+        obj.strokeColor = convertColor(strokeColor, "hex");
         if (Array.isArray(strokeColor) && strokeColor[3] !== undefined) {
             obj.strokeOpacity = strokeColor[3];
         }
@@ -787,13 +803,13 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         let convertedFeature;
 
         if (feature.get("features") && feature.get("features").length === 1) {
-            feature.get("features").forEach(function (clusteredFeature) {
+            feature.get("features").forEach((clusteredFeature) => {
                 convertedFeature = this.convertFeatureToGeoJson(clusteredFeature);
 
                 if (convertedFeature) {
                     geojsonList.push(convertedFeature);
                 }
-            }.bind(this));
+            });
         }
         else {
             convertedFeature = this.convertFeatureToGeoJson(feature);
@@ -835,7 +851,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             convertedFeature = undefined;
         }
         // if its a cluster remove property features
-        if (Object.prototype.hasOwnProperty.call(convertedFeature.properties, "features")) {
+        if (convertedFeature.properties && Object.prototype.hasOwnProperty.call(convertedFeature.properties, "features")) {
             delete convertedFeature.properties.features;
         }
         return convertedFeature;
@@ -874,13 +890,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {string} an ECQL Expression
      */
     getStylingRules: function (layer, feature, styleAttributes, style) {
-        const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")});
-        let styleAttr = feature.get("styleId") ? "styleId" : styleAttributes,
-            styleModel;
-
-        if (!Array.isArray(styleAttr)) {
-            styleAttr = [styleAttr];
-        }
+        const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
+            styleAttr = feature.get("styleId") ? "styleId" : styleAttributes;
+        let styleModel;
 
         if (styleAttr.length === 1 && styleAttr[0] === "") {
             if (feature.get("features") && feature.get("features").length === 1) {
@@ -930,7 +942,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             }, "[").slice(0, -1) + "]";
         }
         // feature with geometry style and label style
-        if (layerModel !== undefined && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
+        if (typeof layerModel?.get === "function" && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
             styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
 
             if (styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
@@ -941,9 +953,14 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             }
         }
         // feature with geometry style
-        return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}',`, "[").slice(0, -1)
+        if (styleAttr instanceof Array) {
+            return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}',`, "[").slice(0, -1)
             + "]";
+        }
+
+        return "[" + styleAttr + "='" + feature.get(styleAttr) + "']";
     },
+
     /**
      * @param {ol.Layer} layer -
      * @param {ol.feature} feature - the feature of current layer
@@ -954,7 +971,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         let layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
             styleFields = ["styleId"];
 
-        if (layerModel !== undefined) {
+        if (typeof layerModel?.get === "function") {
             const styleList = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
 
             layerModel = this.getChildModelIfGroupLayer(layerModel, layerId);
@@ -990,47 +1007,17 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         }
         return layerModel;
     },
-
-    /**
-     * Converts an rgb array to hexcode. Default is the open layers default color.
-     * It also checks if rgb is an hexcode, if true it will be returned.
-     * @param {number[]} rgb - a rgb color represented as an array
-     * @returns {string} - hex color
-     */
-    rgbArrayToHex: function (rgb) {
-        let hexR,
-            hexG,
-            hexB,
-            hexString = "#3399CC";
-
-        if (Array.isArray(rgb) && rgb.length >= 3) {
-            hexR = this.addZero(rgb[0].toString(16));
-            hexG = this.addZero(rgb[1].toString(16));
-            hexB = this.addZero(rgb[2].toString(16));
-            hexString = "#" + hexR + hexG + hexB;
-        }
-        else if (typeof rgb === "string" && rgb.includes("#") && rgb.length >= 4) {
-            hexString = rgb;
-        }
-        return hexString;
-    },
-
-    /**
-     * add zero to hex if required
-     * @param {string} hex - hexadecimal value
-     * @returns {string} hexadecimal value
-     */
-    addZero: function (hex) {
-        return hex.length === 1 ? "0" + hex : hex;
-    },
     /**
      * Gets legend from legend vue store and builds legend object for mapfish print
      * The legend is only print if the related layer is visible.
-     * @param  {Boolean} isLegendSelected flag if legend has to be printed
+     * @param {Boolean} isLegendSelected flag if legend has to be printed
      * @param {Boolean} isMetaDataAvailable flag to print metadata
+     * @param {Function} getResponse the function that calls the axios request
+     * @param {Number} index The print index.
+     * @param {Object} legends the available legends
      * @return {void}
      */
-    buildLegend: function (isLegendSelected, isMetaDataAvailable) {
+    buildLegend: function (isLegendSelected, isMetaDataAvailable, getResponse, index) {
         const legendObject = {},
             metaDataLayerList = [],
             legends = store.state.Legend.legends;
@@ -1038,7 +1025,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         if (isLegendSelected && legends.length > 0) {
             legendObject.layers = [];
             legends.forEach(legendObj => {
-                if (this.get("visibleLayerIds").includes(legendObj.id)) {
+                if (this.defaults.visibleLayerIds.includes(legendObj.id)) {
                     const legendContainsPdf = this.legendContainsPdf(legendObj.legend);
 
                     if (isMetaDataAvailable) {
@@ -1048,9 +1035,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                     if (legendContainsPdf) {
                         Radio.trigger("Alert", "alert", {
                             kategorie: "alert-info",
-                            text: "<b>Der Layer \"" + legendObj.name + "\" enthält eine als PDF vordefinierte Legende. " +
-                                "Diese kann nicht in den Ausdruck mit aufgenommen werden.</b><br>" +
-                                "Sie können sich die vordefinierte Legende aus der Legende im Menü separat herunterladen."
+                            text: "<b>The layer \"" + legendObj.name + "\" contains a pre-defined Legend. " +
+                                "This legens cannot be added to the print.</b><br>" +
+                                "You can download the pre-defined legend from the download menu seperately."
                         });
                     }
                     else {
@@ -1063,16 +1050,21 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
             });
         }
-
         this.setShowLegend(isLegendSelected);
         this.setLegend(legendObject);
         if (isMetaDataAvailable && metaDataLayerList.length > 0) {
-            metaDataLayerList.forEach(function (layerName) {
-                this.getMetaData(layerName);
-            }.bind(this));
+            metaDataLayerList.forEach((layerName) => {
+                this.getMetaData(layerName, getResponse, index);
+            });
         }
         else {
-            Radio.trigger("Print", "createPrintJob", encodeURIComponent(JSON.stringify(this.toJSON())));
+            const printJob = {
+                index,
+                payload: encodeURIComponent(JSON.stringify(this.defaults)),
+                getResponse: getResponse
+            };
+
+            store.dispatch("Tools/Print/createPrintJob", printJob);
         }
     },
 
@@ -1096,23 +1088,28 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     /**
      * Requests the metadata for given layer name
      * @param {String} layerName name of current layer
+     * @param {Function} getResponse the function to start axios request
+     * @param {Number} index The print index
      * @fires CswParser#RadioTriggerCswParserGetMetaData
      * @returns {void}
      */
-    getMetaData: function (layerName) {
+    getMetaData: function (layerName, getResponse, index) {
         const layer = Radio.request("ModelList", "getModelByAttributes", {name: layerName}),
             metaId = layer.get("datasets") && layer.get("datasets")[0] ? layer.get("datasets")[0].md_id : null,
-            uniqueId = Radio.request("Util", "uniqueId"),
+            uniqueIdRes = uniqueId(),
             cswObj = {};
 
         if (metaId !== null) {
-            this.get("uniqueIdList").push(uniqueId);
+            this.defaults.uniqueIdList.push(uniqueIdRes);
             cswObj.layerName = layerName;
             cswObj.metaId = metaId;
             cswObj.keyList = ["date", "orgaOwner", "address", "email", "tel", "url"];
-            cswObj.uniqueId = uniqueId;
+            cswObj.uniqueId = uniqueIdRes;
+            cswObj.layer = layer;
+            cswObj.getResponse = getResponse;
+            cswObj.index = index;
 
-            Radio.trigger("CswParser", "getMetaDataForPrint", cswObj, layer);
+            store.dispatch("Tools/Print/getMetaDataForPrint", cswObj);
         }
     },
 
@@ -1206,7 +1203,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 });
 
             }
-            this.addGfiFeature(this.get("attributes").map.layers, gfiArray[2]);
+            this.addGfiFeature(this.defaults.attributes.map.layers, gfiArray[2]);
         }
         this.setShowGfi(isGfiSelected);
         this.setGfi(gfiObject);
@@ -1284,7 +1281,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {void}
      */
     setMetadata: function (value) {
-        this.get("attributes").metadata = value;
+        this.defaults.attributes.metadata = value;
     },
 
     /**
@@ -1293,7 +1290,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {void}
      */
     setShowLegend: function (value) {
-        this.get("attributes").showLegend = value;
+        this.defaults.attributes.showLegend = value;
     },
 
     /**
@@ -1302,7 +1299,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {void}
      */
     setLegend: function (value) {
-        this.get("attributes").legend = value;
+        this.defaults.attributes.legend = value;
     },
 
     /**
@@ -1311,7 +1308,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {void}
      */
     setShowGfi: function (value) {
-        this.get("attributes").showGfi = value;
+        this.defaults.attributes.showGfi = value;
     },
 
     /**
@@ -1320,7 +1317,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {void}
      */
     setGfi: function (value) {
-        this.get("attributes").gfi = value;
+        this.defaults.attributes.gfi = value;
     },
 
     /**
@@ -1329,7 +1326,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {void}
      */
     setScale: function (value) {
-        this.get("attributes").scale = value;
+        this.defaults.attributes.scale = value;
     },
 
     /**
@@ -1338,7 +1335,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {void}
      */
     setUniqueIdList: function (value) {
-        this.set("uniqueIdList", value);
+        this.defaults.uniqueIdList = value;
     },
 
     /**
@@ -1347,8 +1344,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {void}
      */
     setVisibleLayerIds: function (value) {
-        this.set("visibleLayerIds", value);
+        this.defaults.visibleLayerIds = value;
     }
-});
+};
 
 export default BuildSpecModel;

@@ -938,6 +938,7 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 [type:featureLister]: # (Portalconfig.menu.tool.featureLister)
 [type:filter]: # (Portalconfig.menu.tool.filter)
 [type:gfi]: # (Portalconfig.menu.tool.gfi)
+[type:layerClusterToggler]: # (Portalconfig.menu.tool.layerClusterToggler)
 [type:layerSlider]: # (Portalconfig.menu.tool.layerSlider)
 [type:legend]: # (Portalconfig.menu.legend)
 [type:measure]: # (Portalconfig.menu.tool.measure)
@@ -969,6 +970,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |filter|nein|**[filter](#markdown-header-portalconfigmenutoolfilter)**||Filtermodul mit dem sich Vektordaten aus WFS filtern lassen.|false|
 |gfi|nein|**[gfi](#markdown-header-portalconfigmenutoolgfi)**||Mit der GetFeatureInfo(gfi) lassen sich Informationen zu beliebigen Layern anzeigen. Dabei werden bei einem WMS die Daten über die GetFeatureInfo geladen. Bei Vektordaten (WFS, Sensor, GeoJSON usw.) werden die angezeigten Attribute aus den Daten selbst verwendet.|false|
 |kmlimport|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "fileImport" verwenden.|false|
+|layerClusterToggler|nein|**[tool](#markdown-header-portalconfigtoollayerClusterToggler)**||_Mit diesem Werkzeug lassen sich Layer in Clustern gleichzeitig aktivieren/laden und deaktivieren_|false|
 |layerSlider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Mit dem Layerslider lassen sich beliebige Dienste in einer Reihenfolge abspielen. Zum Beispiel geeignet für Luftbilder aus verschiedenen Jahrgängen.|false|
 |layerslider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Deprecated in 3.0.0 Bitte "layerSlider" verwenden.|false|
 |legend|nein|**[legend](#markdown-header-portalconfigmenulegend)**||In der Legende werden alle sichtbaren Layer dargestellt.|false|
@@ -1948,6 +1950,77 @@ E-Mail Objekt bestehend aus der E-Mail und dem Anzeigenamen.
 {
     "email": "lgvgeoportal-hilfe@gv.hamburg.de",
     "name":"LGVGeoportalHilfe"
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.layerClusterToggler
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Werkzeug zum gleichzeitigen Aktivieren/Deaktivieren von Layer Clustern.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|--------|----|-------|-----------|------|
+|name|ja|String|"additional:addons.menu.tools.layerClusterToggler.name"|Der Name des Tools.|false|
+|glyphicon|ja|String|"glyphicon-education"|Verwendetes Glyphicon im Werkzeug-Menü.|false|
+|clusterList|ja|**[clusterList](#markdown-header-portalconfigmenutoollayerClusterTogglerclusterList)**[]|[]|Array der Layer-IDs (als Strings oder als Objekte).|false|
+
+**Beispiel**
+
+```json
+{
+    "layerClusterToggler": {
+        "name": "translate#additional:addons.menu.tools.layerClusterToggler.name",
+        "glyphicon": "glyphicon-education",
+        "clusterList": ["8712", "21067"]
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.layerClusterToggler.clusterList
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Die Liste der Layer-IDs die im Cluster aktiviert/deaktiviert werden sollen.
+Dies können die Layer-IDs als Strings sein, oder als Objekt wenn die Suffix-Technik für ein Layer verwendet wird.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|--------|----|-------|-----------|------|
+|layerId|ja|String||Id des Dienstes, der im Portal angezeigt werden soll. ACHTUNG: Diese LayerId muss auch in der Themenconfig konfiguriert sein.|false|
+|suffix|ja|String||Suffix des Layers. Dieser Suffix muss auch in der Themenconfig konfiguriert sein.|false|
+
+**Example**
+
+```json
+{
+    "layerClusterToggler": {
+        "name": "translate#additional:addons.menu.tools.layerClusterToggler.name",
+        "glyphicon": "glyphicon-education",
+        "clusterList": [
+            "8712",
+            "8713",
+            {
+                "layerId": "21067",
+                "suffix": "90012"
+            },
+            {
+                "layerId": "21067",
+                "suffix": "90013"
+            },
+            {
+                "layerId": "21067",
+                "suffix": "90014"
+            },
+            {
+                "layerId": "21067",
+                "suffix": "90015"
+            }
+        ]
+    }
 }
 ```
 

@@ -57,7 +57,8 @@
             "styleVt": "Style VT",
             "bufferAnalysis": "Buffer Analysis",
             "parcelSearch": "Parcel search",
-            "wfsSearch": "WFS search"
+            "wfsSearch": "WFS search",
+            "layerClusterToggler": "Open Layer Cluster"
         },
         "contact": "Mail",
         "info": "Information"
@@ -99,9 +100,10 @@
             "toggleWindow": "Toggle Window",
             "de": "Deutsch",
             "en": "English",
+            "es": "Español",
             "it": "Italiano",
             "pt": "Português",
-            "es": "Español"
+            "tr": "Türkçe"
         },
         "core": {
           "modelList": {
@@ -274,7 +276,11 @@
                 "formatLabel": "Format",
                 "scaleLabel": "Printing scale",
                 "withLegendLabel": "With legend",
-                "printLabel": "Print",
+                "printLabel": "Create file",
+                "downloadFile": "Download file",
+                "createDownloadFile": "Will be created...",
+                "alertMessage": "The maximum number of parallel printouts has been exceeded.<br>Please try again once the creation of other printouts is complete.",
+                "waitForPrintErrorMessage": "Printout creation has failed.<br>Please try again at a later time or contact the portal operator.",
                 "withInfoLabel": "With information",
                 "vtlWarning": "Since MapFish 3 does not support Vector Tile Layers, the following active layers will not appear in the print view:",
                 "layoutNameList": {
@@ -402,6 +408,10 @@
             },
             "saveSelection": {
                 "infoText": "Save this URL as a bookmark."
+            },
+            "layerClusterToggler": {
+                "idFormatError": "Please check your layerId format, it should be in array or object.",
+                "idError": "The layer with ID {{ layerId }} is not found, please check your configuration."
             },
             "fileImport": {
                 "captions": {
@@ -543,22 +553,6 @@
                     "no": "No",
                     "0": "No"
                 }
-            },
-            "graph": {
-              "localeFormat": {
-                "decimal": "\".\"",
-                "thousands": "\",\"",
-                "grouping": ["3"],
-                "currency": ["$", ""],
-                "dateTime": "\"%a %b %e %X %Y\"",
-                "date": "\"%m/%d/%Y\"",
-                "time": "\"%H:%M:%S\"",
-                "periods": ["AM", "PM"],
-                "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-                "shortDays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-                "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-                "shortMonths": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-              }
             },
             "searchByCoord": {
                 "coordinateSystem": "Coordinate system",

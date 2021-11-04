@@ -11,7 +11,6 @@ import Map from "../modules/core/map";
 import RemoteInterface from "../modules/remoteInterface/model";
 import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
-import GraphModel from "../modules/tools/graph/model";
 import MenuLoader from "../modules/menu/menuLoader";
 import ZoomToGeometry from "../modules/zoomToGeometry/model";
 import ZoomToFeature from "../modules/zoomToFeature/model";
@@ -45,7 +44,6 @@ import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import TreeFilterView from "../modules/treeFilter/view";
 import FeatureLister from "../modules/tools/featureLister/view";
-import PrintView from "../modules/tools/print/view";
 import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
@@ -137,7 +135,6 @@ async function loadApp () {
 
     app.$mount();
 
-    new GraphModel();
     new WFSTransactionModel();
     new MenuLoader();
 
@@ -169,24 +166,12 @@ async function loadApp () {
 
     Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}).forEach(tool => {
         switch (tool.id) {
-            case "lines": {
-                new LineView({model: tool});
-                break;
-            }
-            case "animation": {
-                new AnimationView({model: tool});
-                break;
-            }
             case "filter": {
                 new FilterView({model: tool});
                 break;
             }
             case "shadow": {
                 new ShadowView({model: tool});
-                break;
-            }
-            case "print": {
-                new PrintView({model: tool});
                 break;
             }
             case "parcelSearch": {

@@ -17,8 +17,6 @@ import Folder from "./folder/model";
 import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
 import Filter from "../../tools/filter/model";
-import Print from "../../tools/print/mapfish3PlotService";
-import HighResolutionPrint from "../../tools/print/highResolutionPlotService";
 
 /**
  * WfsFeatureFilter
@@ -229,13 +227,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             return new Folder(attrs, options);
         }
         else if (attrs.type === "tool") {
-            if (attrs.id === "print") {
-                if (attrs.version === "HighResolutionPlotService") {
-                    return new HighResolutionPrint(Object.assign(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
-                }
-                return new Print(attrs, options);
-            }
-            else if (attrs.id === "parcelSearch") {
+            if (attrs.id === "parcelSearch") {
                 return new ParcelSearch(attrs, options);
             }
             else if (attrs.id === "styleWMS") {

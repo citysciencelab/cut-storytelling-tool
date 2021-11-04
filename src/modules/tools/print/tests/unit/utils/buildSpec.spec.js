@@ -1,16 +1,14 @@
-import BuildSpecModel from "@modules/tools/print/buildSpec.js";
-import Util from "@testUtil";
+import BuildSpec from "./../../../utils/buildSpec";
 import {Style as OlStyle} from "ol/style.js";
 import WMTSTileGrid from "ol/tilegrid/WMTS";
 import {TileWMS, ImageWMS, WMTS} from "ol/source.js";
 import {Tile, Vector} from "ol/layer.js";
 import {expect} from "chai";
 import {EOL} from "os";
-import Feature from "ol/Feature.js";
+import createTestFeatures from "./testHelper";
 
 describe("tools/print/buildSpec", function () {
-    let buildSpecModel,
-        utilModel,
+    let buildSpec,
         pointFeatures,
         multiPointFeatures,
         lineStringFeatures,
@@ -32,45 +30,15 @@ describe("tools/print/buildSpec", function () {
         }
     };
 
-    before(function () {
-        buildSpecModel = new BuildSpecModel(attr);
-        utilModel = new Util();
-        pointFeatures = utilModel.createTestFeatures("resources/testFeatures.xml");
-        multiPointFeatures = utilModel.createTestFeatures("resources/testFeaturesSpassAmWasserMultiPoint.xml");
-        polygonFeatures = utilModel.createTestFeatures("resources/testFeaturesNaturschutzPolygon.xml");
-        multiPolygonFeatures = utilModel.createTestFeatures("resources/testFeaturesBplanMultiPolygon.xml");
-        lineStringFeatures = utilModel.createTestFeatures("resources/testFeaturesVerkehrsnetzLineString.xml");
-        multiLineStringFeatures = utilModel.createTestFeatures("resources/testFeaturesVeloroutenMultiLineString.xml");
-    });
-    describe("unsetStringPropertiesOfFeature", function () {
-        it("unsetStringPropertiesOfFeature - remove one prop other one should stay", function () {
-            const props = {"a": "a", "b": "b"},
-                feature = new Feature({
-                    name: "feature123"
-                });
-
-            feature.setProperties(props);
-
-            buildSpecModel.unsetStringPropertiesOfFeature(feature, "a");
-            expect(feature.getProperties()).to.have.property("a");
-            expect(feature.getProperties()).not.to.have.property("b");
-        });
-
-        it("unsetStringPropertiesOfFeature - remove not existing prop should remove all", function () {
-            const props = {"a": "a", "b": "b"},
-                feature = new Feature({
-                    name: "feature123"
-                });
-
-            feature.setProperties(props);
-
-            buildSpecModel.unsetStringPropertiesOfFeature(feature, "c");
-            expect(feature.getProperties()).not.to.have.property("a");
-            expect(feature.getProperties()).not.to.have.property("b");
-            expect(feature.getProperties()).not.to.have.property("c");
-        });
-
-
+    before(() => {
+        buildSpec = BuildSpec;
+        buildSpec.setAttributes(attr);
+        pointFeatures = createTestFeatures("resources/testFeatures.xml");
+        multiPointFeatures = createTestFeatures("resources/testFeaturesSpassAmWasserMultiPoint.xml");
+        polygonFeatures = createTestFeatures("resources/testFeaturesNaturschutzPolygon.xml");
+        multiPolygonFeatures = createTestFeatures("resources/testFeaturesBplanMultiPolygon.xml");
+        lineStringFeatures = createTestFeatures("resources/testFeaturesVerkehrsnetzLineString.xml");
+        multiLineStringFeatures = createTestFeatures("resources/testFeaturesVeloroutenMultiLineString.xml");
     });
 
     describe("parseAddressToString", function () {
@@ -82,77 +50,77 @@ describe("tools/print/buildSpec", function () {
                 city: ""
             };
 
-            expect(buildSpecModel.parseAddressToString(addressEmpty)).to.equal("n.N.");
+            expect(buildSpec.parseAddressToString(addressEmpty)).to.equal("n.N.");
         });
         it("should return empty address object is empty", function () {
-            expect(buildSpecModel.parseAddressToString({})).to.equal("n.N.");
+            expect(buildSpec.parseAddressToString({})).to.equal("n.N.");
         });
         it("should return empty address object is undefined", function () {
-            expect(buildSpecModel.parseAddressToString(undefined)).to.equal("n.N.");
+            expect(buildSpec.parseAddressToString(undefined)).to.equal("n.N.");
         });
         it("should return parsed complete address", function () {
             const address = {street: "Hufnerstraße", housenr: "7", postalCode: "22305", city: "Hamburg"};
 
-            expect(buildSpecModel.parseAddressToString(address)).to.equal("Hufnerstraße 7\n 22305 Hamburg");
+            expect(buildSpec.parseAddressToString(address)).to.equal("Hufnerstraße 7\n 22305 Hamburg");
         });
         it("should return parsed address - no housenr", function () {
             const address = {street: "Hufnerstraße", housenr: "", postalCode: "22305", city: "Hamburg"};
 
-            expect(buildSpecModel.parseAddressToString(address)).to.equal("Hufnerstraße\n 22305 Hamburg");
+            expect(buildSpec.parseAddressToString(address)).to.equal("Hufnerstraße\n 22305 Hamburg");
         });
         it("should return parsed address - no street", function () {
             const address = {street: "", housenr: "7", postalCode: "22305", city: "Hamburg"};
 
-            expect(buildSpecModel.parseAddressToString(address)).to.equal("7\n 22305 Hamburg");
+            expect(buildSpec.parseAddressToString(address)).to.equal("7\n 22305 Hamburg");
         });
         it("should return parsed address - no housenr, street", function () {
             const address = {street: "", housenr: "", postalCode: "22305", city: "Hamburg"};
 
-            expect(buildSpecModel.parseAddressToString(address)).to.equal("22305 Hamburg");
+            expect(buildSpec.parseAddressToString(address)).to.equal("22305 Hamburg");
         });
         it("should return parsed address - no housenr, street, postalCode", function () {
             const address = {street: "", housenr: "", postalCode: "", city: "Hamburg"};
 
-            expect(buildSpecModel.parseAddressToString(address)).to.equal("Hamburg");
+            expect(buildSpec.parseAddressToString(address)).to.equal("Hamburg");
         });
     });
     describe("isOwnMetaRequest", function () {
         it("should return true if uniqueId is in uniqueIdList", function () {
-            expect(buildSpecModel.isOwnMetaRequest(["1234", "5678"], "1234")).to.be.true;
+            expect(buildSpec.isOwnMetaRequest(["1234", "5678"], "1234")).to.be.true;
         });
         it("should return false if uniqueId is NOT in uniqueIdList", function () {
-            expect(buildSpecModel.isOwnMetaRequest(["1234", "5678"], "91011")).to.be.false;
+            expect(buildSpec.isOwnMetaRequest(["1234", "5678"], "91011")).to.be.false;
         });
         it("should return false if uniqueId is undefined", function () {
-            expect(buildSpecModel.isOwnMetaRequest(["1234", "5678"], undefined)).to.be.false;
+            expect(buildSpec.isOwnMetaRequest(["1234", "5678"], undefined)).to.be.false;
         });
         it("should return false if uniqueIdList is undefined", function () {
-            expect(buildSpecModel.isOwnMetaRequest(undefined, "91011")).to.be.false;
+            expect(buildSpec.isOwnMetaRequest(undefined, "91011")).to.be.false;
         });
         it("should return false if uniqueIdList and uniqueId is undefined", function () {
-            expect(buildSpecModel.isOwnMetaRequest(undefined, undefined)).to.be.false;
+            expect(buildSpec.isOwnMetaRequest(undefined, undefined)).to.be.false;
         });
     });
     describe("removeUniqueIdFromList", function () {
         it("should remove uniqueId from uniqueIdList if uniqueId in uniqueIdList", function () {
-            buildSpecModel.removeUniqueIdFromList(["1234", "5678"], "1234");
-            expect(buildSpecModel.get("uniqueIdList")).to.deep.equal(["5678"]);
+            buildSpec.removeUniqueIdFromList(["1234", "5678"], "1234");
+            expect(buildSpec.defaults.uniqueIdList).to.deep.equal(["5678"]);
         });
         it("should leave uniqueIdList if uniqueId not in uniqueIdList", function () {
-            buildSpecModel.removeUniqueIdFromList(["1234", "5678"], "123456789");
-            expect(buildSpecModel.get("uniqueIdList")).to.deep.equal(["1234", "5678"]);
+            buildSpec.removeUniqueIdFromList(["1234", "5678"], "123456789");
+            expect(buildSpec.defaults.uniqueIdList).to.deep.equal(["1234", "5678"]);
         });
         it("should leave uniqueIdList if uniqueId is undefined", function () {
-            buildSpecModel.removeUniqueIdFromList(["1234", "5678"], undefined);
-            expect(buildSpecModel.get("uniqueIdList")).to.deep.equal(["1234", "5678"]);
+            buildSpec.removeUniqueIdFromList(["1234", "5678"], undefined);
+            expect(buildSpec.defaults.uniqueIdList).to.deep.equal(["1234", "5678"]);
         });
         it("should leave uniqueIdList if uniqueIdList is undefined", function () {
-            buildSpecModel.removeUniqueIdFromList(undefined, "5678");
-            expect(buildSpecModel.get("uniqueIdList")).to.be.an("array").that.is.empty;
+            buildSpec.removeUniqueIdFromList(undefined, "5678");
+            expect(buildSpec.defaults.uniqueIdList).to.be.an("array").that.is.empty;
         });
         it("should leave uniqueIdList if uniqueIdList and uniqueId is undefined", function () {
-            buildSpecModel.removeUniqueIdFromList(undefined, undefined);
-            expect(buildSpecModel.get("uniqueIdList")).to.be.an("array").that.is.empty;
+            buildSpec.removeUniqueIdFromList(undefined, undefined);
+            expect(buildSpec.defaults.uniqueIdList).to.be.an("array").that.is.empty;
         });
     });
     describe("updateMetaData", function () {
@@ -166,8 +134,8 @@ describe("tools/print/buildSpec", function () {
                 url: ""
             };
 
-            buildSpecModel.updateMetaData("testLayerName", parsedData);
-            expect(buildSpecModel.get("attributes").legend).to.be.undefined;
+            buildSpec.updateMetaData("testLayerName", parsedData);
+            expect(buildSpec.defaults.attributes.legend).to.be.undefined;
         });
         it("should write parsedData to layer", function () {
             const parsedData = {
@@ -187,10 +155,9 @@ describe("tools/print/buildSpec", function () {
                     ]
                 };
 
-            buildSpecModel.get("attributes").legend = legend;
-            buildSpecModel.updateMetaData("testLayerName", parsedData);
-
-            expect(buildSpecModel.get("attributes").legend.layers[0]).to.own.include({
+            buildSpec.defaults.attributes.legend = legend;
+            buildSpec.updateMetaData("testLayerName", parsedData);
+            expect(buildSpec.defaults.attributes.legend.layers[0]).to.own.include({
                 metaDate: "1.1.2019",
                 metaOwner: "LGV",
                 metaAddress: "n.N.",
@@ -204,12 +171,12 @@ describe("tools/print/buildSpec", function () {
         it("should return false if legend array of strings does not contain PDF", function () {
             const legend = ["foobar", "barfoo"];
 
-            expect(buildSpecModel.legendContainsPdf(legend)).to.be.false;
+            expect(buildSpec.legendContainsPdf(legend)).to.be.false;
         });
         it("should return true if legend array of strings contains PDF", function () {
             const legend = ["foobar", "some.pdf", "barfoo"];
 
-            expect(buildSpecModel.legendContainsPdf(legend)).to.be.true;
+            expect(buildSpec.legendContainsPdf(legend)).to.be.true;
         });
         it("should return false if legend array of objects does not contain PDF", function () {
             const legend = [
@@ -222,7 +189,7 @@ describe("tools/print/buildSpec", function () {
                     name: "name_barfoo"
                 }];
 
-            expect(buildSpecModel.legendContainsPdf(legend)).to.be.false;
+            expect(buildSpec.legendContainsPdf(legend)).to.be.false;
         });
         it("should return true if legend array of objects contains PDF", function () {
             const legend = [
@@ -239,7 +206,7 @@ describe("tools/print/buildSpec", function () {
                     name: "name_barfoo"
                 }];
 
-            expect(buildSpecModel.legendContainsPdf(legend)).to.be.true;
+            expect(buildSpec.legendContainsPdf(legend)).to.be.true;
         });
     });
     describe("prepareLegendAttributes", function () {
@@ -250,7 +217,7 @@ describe("tools/print/buildSpec", function () {
                 "barfoo.png"
             ];
 
-            expect(buildSpecModel.prepareLegendAttributes(legend)).to.deep.equal([
+            expect(buildSpec.prepareLegendAttributes(legend)).to.deep.equal([
                 {
                     legendType: "wmsGetLegendGraphic",
                     geometryType: "",
@@ -289,7 +256,7 @@ describe("tools/print/buildSpec", function () {
                     name: "name_WFS_Image"
                 }];
 
-            expect(buildSpecModel.prepareLegendAttributes(legend)).to.deep.equal([
+            expect(buildSpec.prepareLegendAttributes(legend)).to.deep.equal([
                 {
                     legendType: "wmsGetLegendGraphic",
                     geometryType: "",
@@ -318,12 +285,12 @@ describe("tools/print/buildSpec", function () {
         it("should return fillcolor from svg string in rgb", function () {
             const svg_string = "<svg foobar fill:rgb(255,0,0);/>";
 
-            expect(buildSpecModel.getFillColorFromSVG(svg_string)).to.equal("rgb(255,0,0)");
+            expect(buildSpec.getFillColorFromSVG(svg_string)).to.equal("rgb(255,0,0)");
         });
         it("should return fillcolor from svg string in hex", function () {
             const svg_string = "<svg foobar fill:#ff0000;/>";
 
-            expect(buildSpecModel.getFillColorFromSVG(svg_string)).to.equal("#ff0000");
+            expect(buildSpec.getFillColorFromSVG(svg_string)).to.equal("#ff0000");
         });
     });
     describe("prepareGfiAttributes", function () {
@@ -334,82 +301,57 @@ describe("tools/print/buildSpec", function () {
                 attr3: "value3"
             };
 
-            expect(buildSpecModel.prepareGfiAttributes(gfiAttributes)[0]).to.deep.own.include({
+            expect(buildSpec.prepareGfiAttributes(gfiAttributes)[0]).to.deep.own.include({
                 key: "attr1",
                 value: "value1"
             });
-            expect(buildSpecModel.prepareGfiAttributes(gfiAttributes)[1]).to.deep.own.include({
+            expect(buildSpec.prepareGfiAttributes(gfiAttributes)[1]).to.deep.own.include({
                 key: "attr2",
                 value: "value2"
             });
-            expect(buildSpecModel.prepareGfiAttributes(gfiAttributes)[2]).to.deep.own.include({
+            expect(buildSpec.prepareGfiAttributes(gfiAttributes)[2]).to.deep.own.include({
                 key: "attr3",
                 value: "value3"
             });
         });
         it("should create empty gfi attributes array for empty attributes", function () {
-            expect(buildSpecModel.prepareGfiAttributes({})).to.be.an("array").that.is.empty;
+            expect(buildSpec.prepareGfiAttributes({})).to.be.an("array").that.is.empty;
         });
         it("should create empty gfi attributes array for undefined attributes", function () {
-            expect(buildSpecModel.prepareGfiAttributes({})).to.be.an("array").that.is.empty;
+            expect(buildSpec.prepareGfiAttributes({})).to.be.an("array").that.is.empty;
         });
     });
     describe("buildScale", function () {
         it("should create scale that is \"1:20000\" for number input", function () {
-            buildSpecModel.buildScale(20000);
-            expect(buildSpecModel.get("attributes").scale).to.deep.include("1:20000");
+            buildSpec.buildScale(20000);
+            expect(buildSpec.defaults.attributes.scale).to.deep.include("1:20000");
         });
         it("should create scale that is \"1:undefined\" for undefined input", function () {
-            buildSpecModel.buildScale(undefined);
-            expect(buildSpecModel.get("attributes").scale).to.deep.include("1:undefined");
+            buildSpec.buildScale(undefined);
+            expect(buildSpec.defaults.attributes.scale).to.deep.include("1:undefined");
         });
 
     });
     describe("inInScaleRange", function () {
         it("Should return false if current resolution is higher than layer max resolution", function () {
-            expect(buildSpecModel.isInScaleRange(1000, 5000, 10000)).to.be.false;
+            expect(buildSpec.isInScaleRange(1000, 5000, 10000)).to.be.false;
         });
         it("Should return false if current resolution is lower than layer min resolution", function () {
-            expect(buildSpecModel.isInScaleRange(2500, 5000, 1000)).to.be.false;
+            expect(buildSpec.isInScaleRange(2500, 5000, 1000)).to.be.false;
         });
         it("Should return true if current resolution is lower than layer max resolution and higher than layer min resolution", function () {
-            expect(buildSpecModel.isInScaleRange(0, Infinity, 10000)).to.be.true;
+            expect(buildSpec.isInScaleRange(0, Infinity, 10000)).to.be.true;
         });
         it("Should return true if current resolution is lower than layer max resolution and higher than layer min resolution", function () {
-            expect(buildSpecModel.isInScaleRange(0, 10000, 5000)).to.be.true;
+            expect(buildSpec.isInScaleRange(0, 10000, 5000)).to.be.true;
         });
         it("Should return true if current resolution the layer max resolution", function () {
-            expect(buildSpecModel.isInScaleRange(0, 5000, 5000)).to.be.true;
+            expect(buildSpec.isInScaleRange(0, 5000, 5000)).to.be.true;
         });
         it("Should return true if current resolution the layer min resolution", function () {
-            expect(buildSpecModel.isInScaleRange(1000, 5000, 1000)).to.be.true;
+            expect(buildSpec.isInScaleRange(1000, 5000, 1000)).to.be.true;
         });
 
-    });
-    describe("addZero", function () {
-        it("should create hex string part with leading 0 if input length === 1", function () {
-            expect(buildSpecModel.addZero("A")).to.deep.include("0A");
-        });
-        it("should create hex string part without leading 0 if input length >1", function () {
-            expect(buildSpecModel.addZero("ff")).to.deep.include("ff");
-        });
-    });
-    describe("rgbArrayToHex", function () {
-        it("should create hex string from rgbArray", function () {
-            expect(buildSpecModel.rgbArrayToHex([255, 255, 255])).to.deep.include("#ffffff");
-        });
-        it("should create hex string from short hexcode string", function () {
-            expect(buildSpecModel.rgbArrayToHex("#333")).to.deep.include("#333");
-        });
-        it("should create default hex string from empty rgbArray", function () {
-            expect(buildSpecModel.rgbArrayToHex([])).to.deep.include("#3399CC");
-        });
-        it("should create default hex string from undefined rgbArray", function () {
-            expect(buildSpecModel.rgbArrayToHex(undefined)).to.deep.include("#3399CC");
-        });
-        it("should create hex string from rgbArray with transparency", function () {
-            expect(buildSpecModel.rgbArrayToHex([255, 0, 0, 1])).to.deep.include("#ff0000");
-        });
     });
     describe("buildWmts", () => {
         const matrixIds = [0, 1, 2],
@@ -450,7 +392,7 @@ describe("tools/print/buildSpec", function () {
                 });
             }
 
-            expect(buildSpecModel.buildWmts(wmtsLayer, wmtsLayer.getSource())).to.deep.own.include({
+            expect(buildSpec.buildWmts(wmtsLayer, wmtsLayer.getSource())).to.deep.own.include({
                 baseURL: "url",
                 opacity: 1,
                 type: "WMTS",
@@ -477,7 +419,7 @@ describe("tools/print/buildSpec", function () {
         });
 
         it("should buildTileWms", function () {
-            expect(buildSpecModel.buildTileWms(tileWmsLayer)).to.deep.own.include({
+            expect(buildSpec.buildTileWms(tileWmsLayer)).to.deep.own.include({
                 baseURL: "url",
                 opacity: 1,
                 type: "WMS",
@@ -503,7 +445,7 @@ describe("tools/print/buildSpec", function () {
         });
 
         it("should buildImageWms", function () {
-            expect(buildSpecModel.buildImageWms(imageWmsLayer)).to.deep.own.include({
+            expect(buildSpec.buildImageWms(imageWmsLayer)).to.deep.own.include({
                 baseURL: "url",
                 opacity: 1,
                 type: "WMS",
@@ -519,22 +461,22 @@ describe("tools/print/buildSpec", function () {
         const vectorLayer = new Vector();
 
         it("should return \"styleId\" if styleList is not available", function () {
-            expect(buildSpecModel.getStyleAttributes(vectorLayer, pointFeatures[0], false)).to.eql(["styleId"]);
+            expect(buildSpec.getStyleAttributes(vectorLayer, pointFeatures[0], false)).to.eql(["styleId"]);
         });
     });
     describe("getFeatureStyle", function () {
         const vectorLayer = new Vector();
 
         it("should return array with an ol-style", function () {
-            expect(buildSpecModel.getFeatureStyle(pointFeatures[0], vectorLayer)).to.be.an("array");
-            expect(buildSpecModel.getFeatureStyle(pointFeatures[0], vectorLayer)[0]).to.be.an.instanceof(OlStyle);
+            expect(buildSpec.getFeatureStyle(pointFeatures[0], vectorLayer)).to.be.an("array");
+            expect(buildSpec.getFeatureStyle(pointFeatures[0], vectorLayer)[0]).to.be.an.instanceof(OlStyle);
         });
     });
     describe("addFeatureToGeoJsonList", function () {
         let list = [];
 
         it("should return array with point JSON", function () {
-            buildSpecModel.addFeatureToGeoJsonList(pointFeatures[0], list);
+            buildSpec.addFeatureToGeoJsonList(pointFeatures[0], list);
             expect(list).to.be.an("array");
             expect(list[0]).to.deep.own.include({
                 type: "Feature",
@@ -562,7 +504,7 @@ describe("tools/print/buildSpec", function () {
         it("should return array with multiPoint JSON", function () {
             list = [];
 
-            buildSpecModel.addFeatureToGeoJsonList(multiPointFeatures[0], list);
+            buildSpec.addFeatureToGeoJsonList(multiPointFeatures[0], list);
             expect(list).to.be.an("array");
             expect(list[0]).to.deep.own.include({
                 type: "Feature",
@@ -586,7 +528,7 @@ describe("tools/print/buildSpec", function () {
         it("should return array with lineString JSON", function () {
             list = [];
 
-            buildSpecModel.addFeatureToGeoJsonList(lineStringFeatures[0], list);
+            buildSpec.addFeatureToGeoJsonList(lineStringFeatures[0], list);
             expect(list).to.be.an("array");
             expect(list[0]).to.deep.own.include({
                 type: "Feature",
@@ -623,7 +565,7 @@ describe("tools/print/buildSpec", function () {
         it("should return array with multiLineString JSON", function () {
             list = [];
 
-            buildSpecModel.addFeatureToGeoJsonList(multiLineStringFeatures[0], list);
+            buildSpec.addFeatureToGeoJsonList(multiLineStringFeatures[0], list);
             expect(list).to.be.an("array");
             expect(list[0]).to.deep.own.include({
                 type: "Feature",
@@ -655,7 +597,7 @@ describe("tools/print/buildSpec", function () {
         it("should return array with polygon JSON", function () {
             list = [];
 
-            buildSpecModel.addFeatureToGeoJsonList(polygonFeatures[0], list);
+            buildSpec.addFeatureToGeoJsonList(polygonFeatures[0], list);
             expect(list).to.be.an("array");
             expect(list[0]).to.deep.own.include({
                 type: "Feature",
@@ -693,7 +635,7 @@ describe("tools/print/buildSpec", function () {
         it("should return array with multiPolygon JSON", function () {
             list = [];
 
-            buildSpecModel.addFeatureToGeoJsonList(multiPolygonFeatures[0], list);
+            buildSpec.addFeatureToGeoJsonList(multiPolygonFeatures[0], list);
             expect(list).to.be.an("array");
             expect(list[0]).to.deep.own.include({
                 type: "Feature",
@@ -752,7 +694,7 @@ describe("tools/print/buildSpec", function () {
     });
     describe("convertFeatureToGeoJson", function () {
         it("should convert point feature to JSON", function () {
-            expect(buildSpecModel.convertFeatureToGeoJson(pointFeatures[0])).to.deep.own.include({
+            expect(buildSpec.convertFeatureToGeoJson(pointFeatures[0])).to.deep.own.include({
                 type: "Feature",
                 properties: {
                     anzahl_plaetze_teilstationaer: "43",
@@ -776,7 +718,7 @@ describe("tools/print/buildSpec", function () {
             });
         });
         it("should convert multiPoint feature to JSON", function () {
-            expect(buildSpecModel.convertFeatureToGeoJson(multiPointFeatures[0])).to.deep.own.include({
+            expect(buildSpec.convertFeatureToGeoJson(multiPointFeatures[0])).to.deep.own.include({
                 type: "Feature",
                 id: "APP_SPASS_IM_UND_AM_WASSER_1",
                 properties: {
@@ -796,7 +738,7 @@ describe("tools/print/buildSpec", function () {
             });
         });
         it("should convert lineString feature to JSON", function () {
-            expect(buildSpecModel.convertFeatureToGeoJson(lineStringFeatures[0])).to.deep.own.include({
+            expect(buildSpec.convertFeatureToGeoJson(lineStringFeatures[0])).to.deep.own.include({
                 type: "Feature",
                 id: "APP_STRASSENNETZ_INSPIRE_BAB_6351",
                 properties: {
@@ -829,7 +771,7 @@ describe("tools/print/buildSpec", function () {
             });
         });
         it("should convert multiLineString feature to JSON", function () {
-            expect(buildSpecModel.convertFeatureToGeoJson(multiLineStringFeatures[0])).to.deep.own.include({
+            expect(buildSpec.convertFeatureToGeoJson(multiLineStringFeatures[0])).to.deep.own.include({
                 type: "Feature",
                 id: "Erster_Gruener_Ring.1",
                 properties: {
@@ -857,7 +799,7 @@ describe("tools/print/buildSpec", function () {
             });
         });
         it("should convert polygon feature to JSON", function () {
-            expect(buildSpecModel.convertFeatureToGeoJson(polygonFeatures[0])).to.deep.own.include({
+            expect(buildSpec.convertFeatureToGeoJson(polygonFeatures[0])).to.deep.own.include({
                 type: "Feature",
                 id: "APP_AUSGLEICHSFLAECHEN_333876",
                 properties: {
@@ -891,7 +833,7 @@ describe("tools/print/buildSpec", function () {
             });
         });
         it("should convert multiPolygon feature to JSON", function () {
-            expect(buildSpecModel.convertFeatureToGeoJson(multiPolygonFeatures[0])).to.deep.own.include({
+            expect(buildSpec.convertFeatureToGeoJson(multiPolygonFeatures[0])).to.deep.own.include({
                 type: "Feature",
                 id: "APP_PROSIN_FESTGESTELLT_1",
                 properties: {
@@ -950,70 +892,70 @@ describe("tools/print/buildSpec", function () {
         const vectorLayer = new Vector();
 
         it("should return \"*\" if styleAttribute is empty string", function () {
-            expect(buildSpecModel.getStylingRules(vectorLayer, pointFeatures[0], [""])).to.equal("*");
+            expect(buildSpec.getStylingRules(vectorLayer, pointFeatures[0], [""])).to.equal("*");
         });
         it("should return \"[styleId='undefined']\" if styleAttribute is \"styleId\"", function () {
-            expect(buildSpecModel.getStylingRules(vectorLayer, pointFeatures[0], ["styleId"])).to.equal("[styleId='undefined']");
+            expect(buildSpec.getStylingRules(vectorLayer, pointFeatures[0], ["styleId"])).to.equal("[styleId='undefined']");
         });
         it("should return \"[kh_nummer='20']\" if styleAttribute is \"kh_nummer\"", function () {
-            expect(buildSpecModel.getStylingRules(vectorLayer, pointFeatures[0], ["kh_nummer"])).to.equal("[kh_nummer='20']");
+            expect(buildSpec.getStylingRules(vectorLayer, pointFeatures[0], ["kh_nummer"])).to.equal("[kh_nummer='20']");
         });
     });
     describe("rgbStringToRgbArray", function () {
         it("should turn \"rgb(0,12,345)\" into [0,12,345]", function () {
-            expect(buildSpecModel.rgbStringToRgbArray("rgb(0,12,345)")).to.deep.equal([0, 12, 345]);
+            expect(buildSpec.rgbStringToRgbArray("rgb(0,12,345)")).to.deep.equal([0, 12, 345]);
         });
         it("should turn \"rgba(0,12,345,1)\" into [0,12,345,1]", function () {
-            expect(buildSpecModel.rgbStringToRgbArray("rgb(0,12,345,1)")).to.deep.equal([0, 12, 345, 1]);
+            expect(buildSpec.rgbStringToRgbArray("rgb(0,12,345,1)")).to.deep.equal([0, 12, 345, 1]);
         });
         it("should turn \"rgba(0,12,345,.1)\" into [0,12,345,.1]", function () {
-            expect(buildSpecModel.rgbStringToRgbArray("rgb(0,12,345,.1)")).to.deep.equal([0, 12, 345, 0.1]);
+            expect(buildSpec.rgbStringToRgbArray("rgb(0,12,345,.1)")).to.deep.equal([0, 12, 345, 0.1]);
         });
         it("should turn \"rgba(0,12,345,0.1)\" into [0,12,345,01]", function () {
-            expect(buildSpecModel.rgbStringToRgbArray("rgb(0,12,345,0.1)")).to.deep.equal([0, 12, 345, 0.1]);
+            expect(buildSpec.rgbStringToRgbArray("rgb(0,12,345,0.1)")).to.deep.equal([0, 12, 345, 0.1]);
         });
     });
     describe("getFontSize", function () {
         it("should return \"16\" as size", function () {
-            expect(buildSpecModel.getFontSize("bold 16px Helvetica")).to.equals("16");
+            expect(buildSpec.getFontSize("bold 16px Helvetica")).to.equals("16");
         });
         it("should return \"16\" as size", function () {
-            expect(buildSpecModel.getFontSize("16px Helvetica")).to.equals("16");
+            expect(buildSpec.getFontSize("16px Helvetica")).to.equals("16");
         });
         it("should return \"16\" as size", function () {
-            expect(buildSpecModel.getFontSize("bold 16em Helvetica")).to.equals("16");
+            expect(buildSpec.getFontSize("bold 16em Helvetica")).to.equals("16");
         });
         it("should return null as size if called with undefined", function () {
-            expect(buildSpecModel.getFontSize(undefined)).to.equals(null);
+            expect(buildSpec.getFontSize(undefined)).to.equals(null);
         });
         it("should return null as size if called with null", function () {
-            expect(buildSpecModel.getFontSize(null)).to.equals(null);
+            expect(buildSpec.getFontSize(null)).to.equals(null);
         });
         it("should return null as size if called with empty string", function () {
-            expect(buildSpecModel.getFontSize("")).to.equals(null);
+            expect(buildSpec.getFontSize("")).to.equals(null);
         });
 
     });
     describe("getFontFamily", function () {
         it("should return the font family", function () {
-            expect(buildSpecModel.getFontFamily("bold 16px Helvetica", "16")).to.equals("Helvetica");
-            expect(buildSpecModel.getFontFamily("bold 20px Sans Serif", "20")).to.equals("Sans Serif");
-            expect(buildSpecModel.getFontFamily("20px Sans Serif", "20")).to.equals("Sans Serif");
+            expect(buildSpec.getFontFamily("bold 16px Helvetica", "16")).to.equals("Helvetica");
+            expect(buildSpec.getFontFamily("bold 20px Sans Serif", "20")).to.equals("Sans Serif");
+            expect(buildSpec.getFontFamily("20px Sans Serif", "20")).to.equals("Sans Serif");
         });
         it("should return \"\" if called with undefined", function () {
-            expect(buildSpecModel.getFontFamily(undefined, undefined)).to.equals("");
-            expect(buildSpecModel.getFontFamily("", undefined)).to.equals("");
-            expect(buildSpecModel.getFontFamily(undefined, "")).to.equals("");
+            expect(buildSpec.getFontFamily(undefined, undefined)).to.equals("");
+            expect(buildSpec.getFontFamily("", undefined)).to.equals("");
+            expect(buildSpec.getFontFamily(undefined, "")).to.equals("");
         });
         it("should return \"\" if called with null", function () {
-            expect(buildSpecModel.getFontFamily(null, null)).to.equals("");
-            expect(buildSpecModel.getFontFamily("", null)).to.equals("");
-            expect(buildSpecModel.getFontFamily(null, "")).to.equals("");
+            expect(buildSpec.getFontFamily(null, null)).to.equals("");
+            expect(buildSpec.getFontFamily("", null)).to.equals("");
+            expect(buildSpec.getFontFamily(null, "")).to.equals("");
         });
         it("should return \"\" if called with nonsense", function () {
-            expect(buildSpecModel.getFontFamily("asdfghjklhghggh", "16")).to.equals("");
-            expect(buildSpecModel.getFontFamily("", "pzuouk")).to.equals("");
-            expect(buildSpecModel.getFontFamily("16", "")).to.equals("");
+            expect(buildSpec.getFontFamily("asdfghjklhghggh", "16")).to.equals("");
+            expect(buildSpec.getFontFamily("", "pzuouk")).to.equals("");
+            expect(buildSpec.getFontFamily("16", "")).to.equals("");
         });
 
 

@@ -12,28 +12,31 @@
 ### Added
 - added parameter "rotation" to wfs features with iconPointStyle, if the parameter is not given it will fall back to standard alignment.
 - gfiAttributes: Adding Boolean type in gfi Attributes so that the original text can be parsed to be more understandable.
-- layerInformation: Adding a parameter to globally toggle the dispaly of the service url for all layers at the same time.
-- measure: Adding a parameter to to define with which decimal accuracy the measurement result is displayed.
+- layerInformation: Adding a parameter to globally toggle the display of the service url for all layers at the same time.
+- measure: Adding a parameter to define with which decimal accuracy the measurement result is displayed.
 - Tools: Adding a new tool `resetTree` in addons.
+- Tools: Adding a new tool `layerClusterToggler` to enable the cluster layers to be active and deactive together.
 - Menu: Adding transparency bar for all the layes in menu tree.
+- A locale file for the Turkish language was added.
 
 ### Changed
 - Coding-Conventions: For unittests in Vue (/src/...) the vast majority of test-folders are called "tests", going back to a mutual understanding of folder naming. Please use "tests" for your unit or e2e tests in Vue in the future.
+- Migrated the print Tool from Backbone.js to Vue.js. It is now also possible to create multiple prints in parallel.
 
 ### Deprecated
 
 ### Removed
 - src/utils function isArrayOfStrings is removed, use one liner .every(v => typeof v === "string") instead in the future.
+- The libraries `d3.js` and `d3-scale-chromatic` were removed from the package.json.
+- The module `graph` which is based on d3.js has been removed. Now the library`charts.js` is used.
 
 ### Fixed
 - The portalTitle in the config.json without a logo is rendered correctly.
 - Loading layerIds in combination with a config via the url now also works with the treetype 'custom' in the config.
 - When changing the coordinate system in the Coordinates tool, the incorrect recalculation of the coordinates was corrected: Default values of the coordinate search are now the values of the map center. An error in the display of the coordinate systems (EPSG-code was shown twice) was also fixed.
 - The search in the coordinates tool now also works with different map projections of the masterportal view.
--	Fixed missing highlighting in years 2010-2014 and remove of highlighting when selecting another year in addon boris.
-- The compare features window now has a scollbar, if necessary.
+- Fixed missing highlighting in years 2010-2014 and remove of highlighting when selecting another year in addon boris.
 - For long lists the compare-feature-window provides now a scrollbar.
-
 
 
 ---

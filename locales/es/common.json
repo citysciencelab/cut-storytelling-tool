@@ -119,9 +119,10 @@
             "languageTitle": "Por favor, elija un idioma",
             "de": "Deutsch",
             "en": "English",
+            "es": "Español",
             "it": "Italiano",
             "pt": "Português",
-            "es": "Español"
+            "tr": "Türkçe"
         },
         "cswParser": {
             "noMetadataMessage": "Metadatos no disponibles.",
@@ -487,22 +488,6 @@
                       }
                     }
                 }
-            },
-            "graph": {
-              "localeFormat": {
-                "decimal": "\",\"",
-                "thousands": "\".\"",
-                "grouping": ["3"],
-                "currency": ["€", ""],
-                "dateTime": "\"%a %b %e %X %Y\"",
-                "date": "\"%d.%m.%Y\"",
-                "time": "\"%H:%M:%S\"",
-                "periods": ["AM", "PM"],
-                "days": ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
-                "shortDays": ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
-                "months": ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-                "shortMonths": ["En", "Feb", "Ma", "Abr", "May", "Jun", "Jul", "Ag", "Sep", "Oct", "Nov", "Dic"]
-              }
             },
             "searchByCoord": {
                 "coordinateSystem": "Systema de coordenandas",

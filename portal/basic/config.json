@@ -43,7 +43,7 @@
 						"name": "Zeichnen / Schreiben"
 					},
 					"fileImport": {
-            "name": "Datei Import"
+            			"name": "Datei Import"
 					},
 					"saveSelection": {
 						"name": "Auswahl speichern"
