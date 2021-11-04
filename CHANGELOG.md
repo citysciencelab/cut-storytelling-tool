@@ -18,6 +18,7 @@
 ### Removed
 
 ### Fixed
+- Print tool: fixed wrong order of features in created print-map.
 
 
 
