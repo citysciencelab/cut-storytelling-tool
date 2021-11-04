@@ -6,6 +6,7 @@ import mutations from "../store/mutationsPrint";
 import getComponent from "../../../../utils/getComponent";
 import thousandsSeparator from "../../../../utils/thousandsSeparator.js";
 import axios from "axios";
+import getVisibleLayer from "../utils/getVisibleLayer";
 
 /**
  * Tool to print a part of the map
@@ -68,10 +69,10 @@ export default {
         Backbone.Events.listenTo(Radio.channel("ModelList"), {
             "updatedSelectedLayerList": function () {
                 if (typeof this.eventListener !== "undefined") {
-                    this.setVisibleLayer(this.visibleLayerList.concat(this.invisibleLayer));
+                    getVisibleLayer();
                     this.updateCanvasLayer();
                 }
-            }
+            }.bind(this)
         });
     },
     mounted () {
