@@ -15,10 +15,11 @@ const actions = {
      * @param {String} payload.active Value for (de-)activation
      * @returns {void}
      */
-    setToolActive ({state, commit}, {id, active}) {
+    setToolActive ({state, commit, dispatch}, {id, active}) {
         const toolId = Object.keys(state).find(tool => state[tool]?.id?.toLowerCase() === id?.toLowerCase());
 
         if (toolId !== undefined) {
+            dispatch("controlActivationOfTools", state[toolId].name);
             commit(toolId + "/setActive", active);
             if (toolId !== "Gfi") {
                 commit("Gfi/setActive", !state[toolId].deactivateGFI);

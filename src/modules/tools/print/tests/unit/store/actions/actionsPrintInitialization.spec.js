@@ -1,6 +1,7 @@
 import testAction from "../../../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../../store/actions/actionsPrintInitialization";
 import VectorLayer from "ol/layer/Vector.js";
+import Canvas from "../../../../utils/buildCanvas";
 import sinon from "sinon";
 
 const {
@@ -120,7 +121,7 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
     });
 
     describe("togglePostrenderListener", function () {
-        it("should toggle the post render listener", done => {
+        it("should toggle the post render listener should register listener", done => {
             const TileLayer = {},
                 state = {
                     active: true,
@@ -132,10 +133,39 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                         VectorLayer
                     ],
                     eventListener: undefined,
-                    layoutList: []
+                    layoutList: [{
+                        name: "A4 Hochformat"
+                    }]
                 };
 
+            Canvas.getCanvasLayer = sinon.spy(() => ({
+                on: () => "postrender"
+            }));
+
+
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
+            testAction(togglePostrenderListener, undefined, state, {}, [
+                {type: "setVisibleLayer", payload: state.visibleLayerList, commit: true},
+                {type: "setEventListener", payload: "postrender", commit: true}
+            ], {}, done);
+        });
+        it("toggle the post render listener with active false should unregister listener", done => {
+            const TileLayer = {},
+                state = {
+                    active: false,
+                    visibleLayerList: [
+                        TileLayer,
+                        VectorLayer,
+                        VectorLayer,
+                        VectorLayer,
+                        VectorLayer
+                    ],
+                    eventListener: undefined,
+                    layoutList: [{
+                        name: "A4 Hochformat"
+                    }]
+                };
+
             testAction(togglePostrenderListener, undefined, state, {}, [
                 {type: "setVisibleLayer", payload: state.visibleLayerList, commit: true},
                 {type: "setEventListener", payload: undefined, commit: true}
@@ -214,10 +244,15 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                     getOptions: () => options
                 }));
 
+            Canvas.getCanvasLayer = sinon.spy(() => ({
+                on: () => "postrender"
+            }));
+
             sinon.stub(Radio, "request").callsFake(request);
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
             testAction(updateCanvasLayer, scale, state, {}, [
-                {type: "chooseCurrentLayout", payload: state.layoutList, dispatch: true}
+                {type: "chooseCurrentLayout", payload: state.layoutList, dispatch: true},
+                {type: "setEventListener", payload: "postrender", commit: true}
             ], {}, done);
         });
         after(function () {
