@@ -130,7 +130,7 @@ export default {
 
             commit("setEventListener", canvasLayer.on("postrender", evt => dispatch("createPrintMask", evt)));
         }
-        else if(!state.active){
+        else if (!state.active) {
             Radio.trigger("Map", "unregisterListener", state.eventListener);
             commit("setEventListener", undefined);
             if (state.invisibleLayer) {
