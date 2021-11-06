@@ -28,13 +28,14 @@ function adjustFilter (filter) {
  * Parses the response from a WFS-G as the features can not be parsed by OL (yet).
  *
  * @param {string} responseData The response data returned by the WFS-G; GML string.
- * @param {String[]} namespaces The namespaces of the service.
+ * @param {String|String[]} namespaces The namespaces of the service.
  * @param {String} memberSuffix The suffix of the feature in the FeatureCollection.
  * @returns {module:ol/Feature[]} Array of Features returned from the service.
  */
 function parseGazetteerResponse (responseData, namespaces, memberSuffix) {
     const attributes = {},
         features = [],
+        ns = Array.isArray(namespaces) ? namespaces : [namespaces],
         gmlFeatures = new DOMParser().parseFromString(responseData, "application/xml").getElementsByTagName(`wfs:${memberSuffix}`);
 
     if (gmlFeatures.length === 0) {
@@ -67,7 +68,7 @@ function parseGazetteerResponse (responseData, namespaces, memberSuffix) {
         features.push(
             new Feature({
                 ...attributes,
-                ...Object.values(...namespaces.map(nameSpace => feature.getElementsByTagNameNS(nameSpace, "*")))
+                ...Object.values(...ns.map(namespace => feature.getElementsByTagNameNS(namespace, "*")))
                     .reduce((acc, curr) => ({...acc, [curr.localName]: curr.textContent}), {})
             })
         );
