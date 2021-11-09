@@ -7,7 +7,7 @@ import stylefunction from "ol-mapbox-style/dist/stylefunction";
 import store from "../../../../src/app-store/index";
 import getProxyUrl from "../../../../src/utils/getProxyUrl";
 import axios from "axios";
-import mapCollection from "../../../../src/dataStorage/mapCollection.js";
+import mapCollection from "../../../../src/core/dataStorage/mapCollection.js";
 
 import Layer from "./model";
 

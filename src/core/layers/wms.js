@@ -1,7 +1,7 @@
 import {wms} from "masterportalAPI/src";
 import store from "../../app-store";
 import Layer from "./layer";
-import mapCollection from "../../dataStorage/mapCollection.js";
+import mapCollection from "../../core/dataStorage/mapCollection.js";
 import * as bridge from "./RadioBridge.js";
 /**
  * Creates a layer of type WMS.

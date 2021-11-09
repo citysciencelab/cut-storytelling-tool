@@ -1,7 +1,7 @@
 import source from "../utils/measureSource";
 import makeDraw2d from "../utils/measureDraw";
 import makeDraw3d from "../utils/measureDraw3d";
-import mapCollection from "../../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 
 export default {
     /**

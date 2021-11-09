@@ -1,7 +1,7 @@
 import {Projection} from "ol/proj.js";
 import defaults from "masterportalAPI/src/defaults";
 import store from "../../src/app-store";
-import mapCollection from "../../src/dataStorage/mapCollection.js";
+import mapCollection from "../../src/core/dataStorage/mapCollection.js";
 
 const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     defaults: {

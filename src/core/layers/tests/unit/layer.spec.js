@@ -3,7 +3,7 @@ import sinon from "sinon";
 import Layer from "../../layer";
 import Group from "../../group";
 import store from "../../../../app-store";
-import mapCollection from "../../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 
 describe("src/core/layers/layer.js", () => {
     let attributes,

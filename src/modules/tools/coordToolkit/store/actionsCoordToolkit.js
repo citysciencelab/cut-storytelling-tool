@@ -5,7 +5,7 @@ import {convertSexagesimalFromString, convertSexagesimalToDecimal, convertSexage
 import getProxyUrl from "../../../../utils/getProxyUrl";
 import {requestGfi} from "../../../../api/wmsGetFeatureInfo";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
-import mapCollection from "../../../../dataStorage/mapCollection";
+import mapCollection from "../../../../core/dataStorage/mapCollection";
 
 export default {
     /**

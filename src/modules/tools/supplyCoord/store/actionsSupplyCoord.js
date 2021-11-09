@@ -1,6 +1,6 @@
 import {toStringHDMS, toStringXY} from "ol/coordinate.js";
 import isMobile from "../../../../utils/isMobile";
-import mapCollection from "../../../../dataStorage/mapCollection";
+import mapCollection from "../../../../core/dataStorage/mapCollection";
 
 export default {
     /**

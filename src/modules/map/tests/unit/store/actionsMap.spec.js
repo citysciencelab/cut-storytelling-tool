@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import sinon from "sinon";
 import actions from "../../../store/actions/actionsMap.js";
-import mapCollection from "../../../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../../../core/dataStorage/mapCollection.js";
 
 describe("src/modules/map/store/actions/actionsMap.js", () => {
     describe("updateClick: Listener for click on the map", () => {

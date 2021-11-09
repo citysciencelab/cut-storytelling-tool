@@ -2,7 +2,7 @@ import moment from "moment";
 import {transform, get} from "ol/proj.js";
 import store from "../../src/app-store";
 import api from "masterportalAPI/abstraction/api";
-import mapCollection from "../../src/dataStorage/mapCollection";
+import mapCollection from "../../src/core/dataStorage/mapCollection";
 
 const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
     defaults: {

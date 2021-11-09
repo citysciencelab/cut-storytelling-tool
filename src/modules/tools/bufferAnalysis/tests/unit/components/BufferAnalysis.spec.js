@@ -6,7 +6,7 @@ import {expect} from "chai";
 import sinon from "sinon";
 import {createLayersArray} from "../utils/functions";
 import FakeTimers from "@sinonjs/fake-timers";
-import mapCollection from "../../../../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../../../../core/dataStorage/mapCollection.js";
 
 const localVue = createLocalVue();
 

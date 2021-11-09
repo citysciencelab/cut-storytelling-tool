@@ -3,7 +3,7 @@ import {expect} from "chai";
 
 import actions from "../../../store/actionsWmsTime";
 import initialState from "../../../store/stateWmsTime";
-import mapCollection from "../../../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../../../core/dataStorage/mapCollection.js";
 
 const layerString = "When I grow up I will be a real layer!";
 

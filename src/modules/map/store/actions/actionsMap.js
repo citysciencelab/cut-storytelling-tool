@@ -3,7 +3,7 @@ import * as highlightFeature from "./highlightFeature";
 import * as removeHighlightFeature from "./removeHighlighting";
 import {getWmsFeaturesByMimeType} from "../../../../api/gfi/getWmsFeaturesByMimeType";
 import getProxyUrl from "../../../../utils/getProxyUrl";
-import mapCollection from "../../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";
 

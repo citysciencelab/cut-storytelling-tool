@@ -3,7 +3,7 @@ import {expect} from "chai";
 import {createLayersArray} from "../utils/functions";
 import actions from "../../../store/actionsBufferAnalysis";
 import stateBufferAnalysis from "../../../store/stateBufferAnalysis";
-import mapCollection from "../../../../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../../../../core/dataStorage/mapCollection.js";
 import {
     LineString,
     MultiLineString,
