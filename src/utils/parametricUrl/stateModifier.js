@@ -3,7 +3,7 @@ import {deepAssignIgnoreCase} from "../deepAssign";
 import {doSpecialBackboneHandling, triggerParametricURLReady, translateToBackbone} from "./ParametricUrlBridge";
 import store from "../../app-store";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
-import mapCollection from "../../dataStorage/mapCollection";
+import mapCollection from "../../core/dataStorage/mapCollection";
 
 const deprecated = ["isinitopen", "startupmodul", "style", "query", "center", "zoomlevel", "zoomtoextent", "zoomtogeometry", "bezirk",
     "map", "layerids", "mdid", "featureid", "highlightfeature", "projection", "config", "marker"];

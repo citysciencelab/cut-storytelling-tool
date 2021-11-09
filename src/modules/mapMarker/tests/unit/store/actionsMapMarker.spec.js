@@ -1,6 +1,6 @@
 import testAction from "../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../store/actionsMapMarker";
-import mapCollection from "../../../../../dataStorage/mapCollection";
+import mapCollection from "../../../../../core/dataStorage/mapCollection";
 import sinon from "sinon";
 
 import Feature from "ol/Feature";

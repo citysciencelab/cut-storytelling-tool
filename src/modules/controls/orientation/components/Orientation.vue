@@ -10,7 +10,7 @@ import Overlay from "ol/Overlay.js";
 import proj4 from "proj4";
 import * as Proj from "ol/proj.js";
 import {Circle, LineString} from "ol/geom.js";
-import mapCollection from "../../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 
 export default {
     name: "Orientation",

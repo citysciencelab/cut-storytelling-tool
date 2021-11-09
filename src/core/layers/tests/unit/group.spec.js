@@ -2,7 +2,7 @@ import {expect} from "chai";
 import sinon from "sinon";
 import WMSLayer from "../../wms";
 import GroupedLayers from "../../group";
-import mapCollection from "../../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 import store from "../../../../app-store";
 
 describe("src/core/layers/group.js", () => {

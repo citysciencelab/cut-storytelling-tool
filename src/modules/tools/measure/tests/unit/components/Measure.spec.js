@@ -3,7 +3,7 @@ import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import sinon from "sinon";
 
-import mapCollection from "../../../../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../../../../core/dataStorage/mapCollection.js";
 import MeasureComponent from "../../../components/Measure.vue";
 import MeasureModule from "../../../store/indexMeasure";
 

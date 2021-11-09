@@ -3,7 +3,7 @@ import {generateSimpleGetters} from "../../../app-store/utils/generators";
 import {createGfiFeature} from "../../../api/gfi/getWmsFeaturesByMimeType";
 import {getGfiFeaturesByTileFeature} from "../../../api/gfi/getGfiFeaturesByTileFeature";
 import thousandsSeparator from "../../../utils/thousandsSeparator.js";
-import mapCollection from "../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../core/dataStorage/mapCollection.js";
 
 const gettersMap = {
     ...generateSimpleGetters(stateMap),

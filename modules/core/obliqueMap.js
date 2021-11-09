@@ -1,6 +1,9 @@
+import Map from "ol/Map.js";
 import {unByKey as unlistenByKey} from "ol/Observable.js";
+import {defaults as olDefaultInteractions} from "ol/interaction.js";
+import {ViewDirection, viewDirectionNames} from "vcs-oblique/src/vcs/oblique/viewDirection";
+import {transformFromImage} from "vcs-oblique/src/vcs/oblique/helpers";
 import LoaderOverlay from "../../src/utils/loaderOverlay";
-import api from "masterportalAPI/abstraction/api";
 
 /**
  * Creates an oblique map on activate and handles deactivation. Handles interactions, click-events and the activation of oblique layer.
@@ -152,7 +155,7 @@ const ObliqueMap = Backbone.Model.extend({
         // is a vcs-oblique\src\vcs\oblique\collection.js that contains projection, directions and image meta data
         // The collection loads oblique image meta data (json-file with image descriptions) from the layers url
         return layer.getObliqueCollection().then(function (collection) {
-            let direction = collection.directions[api.oblique.viewDirection.direction.NORTH];
+            let direction = collection.directions[ViewDirection.oblique.viewDirection.direction.NORTH];
 
             this.currentCollection = collection;
             if (!direction) {
@@ -221,7 +224,7 @@ const ObliqueMap = Backbone.Model.extend({
      * @returns {void}
      */
     changeDirection: function (directionName) {
-        const direction = api.oblique.viewDirection.names[directionName];
+        const direction = viewDirectionNames[directionName];
         let newDirection = {};
 
         if (!direction || direction === this.currentDirection.direction) {
@@ -275,7 +278,7 @@ const ObliqueMap = Backbone.Model.extend({
 
         if (this.currentCollection && this.currentDirection && this.currentDirection.currentImage) {
             center = this.get("map").getView().getCenter();
-            return api.oblique.helpers.transformFromImage(this.currentDirection.currentImage, center, {
+            return transformFromImage(this.currentDirection.currentImage, center, {
                 dataProjection: this.get("projection")
             });
         }
@@ -401,7 +404,12 @@ const ObliqueMap = Backbone.Model.extend({
             if (!this.container) {
                 this.container = this.createAndInsertTargetContainer(map2D);
 
-                this.set("map", api.map.createMap({container: this.container}, "oblique"));
+                this.set("map", new Map({
+                    logo: null,
+                    target: this.container,
+                    controls: [],
+                    interactions: olDefaultInteractions({altShiftDragRotate: false, pinchRotate: false})
+                }));
                 this.get("map").on("postrender", this.postRenderHandler.bind(this), this);
                 this.get("map").on("click", this.reactToClickEvent.bind(this), this);
             }
@@ -461,7 +469,7 @@ const ObliqueMap = Backbone.Model.extend({
      */
     reactToClickEvent: function (event) {
         if (this.currentDirection && this.currentDirection.currentImage) {
-            api.oblique.helpers.transformFromImage(this.currentDirection.currentImage, event.coordinate, {
+            transformFromImage(this.currentDirection.currentImage, event.coordinate, {
                 dataProjection: this.get("projection")
             }).then(function (coords) {
                 Radio.trigger("ObliqueMap", "clicked", coords.coords);

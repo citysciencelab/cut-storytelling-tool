@@ -2,7 +2,7 @@ import Vuex from "vuex";
 import {config, mount, createLocalVue} from "@vue/test-utils";
 import BackForward from "../../../components/BackForward.vue";
 import BackForwardModule from "../../../store/indexBackForward";
-import mapCollection from "../../../../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../../../../core/dataStorage/mapCollection.js";
 import {expect} from "chai";
 
 const localVue = createLocalVue();

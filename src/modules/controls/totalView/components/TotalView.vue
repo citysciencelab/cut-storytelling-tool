@@ -2,7 +2,7 @@
 import {mapGetters, mapActions} from "vuex";
 import ControlIcon from "../../ControlIcon.vue";
 import TableStyleControl from "../../TableStyleControl.vue";
-import mapCollection from "../../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 
 /**
  * TotalView adds a control that lets the user reset the
