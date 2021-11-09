@@ -231,25 +231,16 @@ export default {
                                     aria-hidden="true"
                                 />
                             </button>
-                            <button
-                                id="title"
-                                type="button"
-                                class="btn btn-default disabled"
-                            >
-                                <span
-                                    v-if="activeLayer.title"
-                                    aria-hidden="true"
-                                >
-                                    {{ $t(activeLayer.title) }}
-                                </span>
-                                <span
-                                    v-else
-                                    aria-hidden="true"
-                                >
-                                    {{ $t("common:modules.tools.layerSlider.titleNotConfigured") }}
-                                </span>
-                            </button>
                         </span>
+                        <label for="title" />
+                        <input
+                            id="title"
+                            type="text"
+                            class="form-control"
+                            :placeholder="$t('common:modules.tools.layerSlider.titleNotConfigured')"
+                            :value="$t(activeLayer.title)"
+                            readonly="true"
+                        >
                     </div>
                 </div>
             </div>
@@ -267,7 +258,9 @@ export default {
 @background_color_2: #eee;
 
 #layer-slider {
-    width: 350px;
+    @media (min-width: 768px) {
+        width: 350px;
+    }
     .progress-bar {
         background-color: @secondary_focus;
         transition: all .6s;
@@ -286,13 +279,13 @@ export default {
             .primary_action_hover();
         }
     }
-    .btn.disabled {
-        background-color: @background_color_2;
-        opacity: 1;
-        padding: 7px 12px 6px 12px;
-        > span {
-            font-family: @font_family_default;
-        }
+    input[readonly] {
+        color: @color_2;
+        cursor: not-allowed;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 16px 12px 17px 12px;
     }
 }
 
