@@ -14,17 +14,6 @@ export default {
 
         mapCollection.push(map);
     },
-
-    /**
-     * Gets the current map.
-     * @param {String} mapId of the map.
-     * @param {String} mapMode of the map.
-     * @returns {module:ol/PluggableMap~PluggableMap} The current map.
-     */
-    getCurrentMap: function (mapId, mapMode) {
-        return this.getMap(mapId, mapMode);
-    },
-
     /**
      * Gets a map by the given id and mode.
      * @param {String} id The map id.
