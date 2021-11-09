@@ -1,5 +1,5 @@
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapMutations, mapActions} from "vuex";
 import Tool from "../../Tool.vue";
 import getComponent from "../../../../utils/getComponent";
 import getters from "../store/gettersLayerSlider";
@@ -15,18 +15,26 @@ export default {
     },
     watch: {
         active (isActive) {
-            console.log("active");
+            if (!isActive) {
+                this.reset();
+            }
         }
     },
     created () {
-        console.log("created");
         this.$on("close", this.close);
     },
     mounted () {
-        // this.checkIfLayermodelExist(this.layerIds);
+        this.removeNotExistingLayermodels(this.layerIds);
+        this.addIndexToLayerIds(this.layerIds);
+        this.setProgressBarWidth(this.layerIds);
     },
     methods: {
         ...mapMutations("Tools/LayerSlider", Object.keys(mutations)),
+        ...mapActions("Tools/LayerSlider", [
+            "addIndexToLayerIds",
+            "removeNotExistingLayermodels",
+            "sendModification"
+        ]),
 
         /**
          * Sets active to false.
@@ -58,7 +66,7 @@ export default {
          * @returns {void}
          */
         forwardLayer: function () {
-            const index = this.getActiveIndex(),
+            const index = this.activeLayer.index,
                 max = this.layerIds.length - 1;
 
             if (index > -1 && index < max) {
@@ -74,7 +82,7 @@ export default {
          * @returns {void}
          */
         backwardLayer: function () {
-            const index = this.getActiveIndex(),
+            const index = this.activeLayer.index,
                 max = this.layerIds.length - 1;
 
             if (index > 0) {
@@ -83,14 +91,6 @@ export default {
             else {
                 this.setActiveIndex(max);
             }
-        },
-
-        /**
-         * Finds the index in the layerIds array to the activeLayerId or returns -1.
-         * @returns {Number} Index im Array mit activeLayerId.
-         */
-        getActiveIndex: function () {
-            return this.layerIds.findIndex(layer => layer.layerId === this.activeLayer.layerId);
         },
 
         /**
@@ -110,24 +110,10 @@ export default {
          */
         toggleLayerVisibility: function (activeLayerId) {
             this.layerIds.forEach(layer => {
-                const status = layer.layerId === activeLayerId;
-
-                this.sendModification(layer.layerId, status);
-            });
-        },
-
-        /**
-         * Triggers the new visibility over the radio
-         * @param {String} layerId The layerId
-         * @param {Boolean} status Visibility true / false
-         * @param {Number} [transparency=0] Transparency of layer.
-         * @returns {void}
-         */
-        sendModification: function (layerId, status, transparency = 0) {
-            Radio.trigger("ModelList", "setModelAttributesById", layerId, {
-                isSelected: status,
-                isVisibleInMap: status,
-                transparency: transparency
+                this.sendModification({
+                    layerId: layer.layerId,
+                    status: layer.layerId === activeLayerId
+                });
             });
         },
 
@@ -137,7 +123,7 @@ export default {
          */
         reset: function () {
             this.stopInterval();
-            this.setActiveLayer({layerId: ""});
+            this.resetActiveLayer();
         },
 
         /**
@@ -145,54 +131,10 @@ export default {
          * @returns {void}
          */
         stopInterval: function () {
-            const windowsInterval = this.windowsInterval;
-
-            if (typeof windowsInterval !== "undefined") {
-                clearInterval(windowsInterval);
+            if (typeof this.windowsInterval !== "undefined") {
                 this.setWindowsInterval(null);
             }
         }
-
-        // /**
-        //  * Checks if the layer model already exists.
-        //  * @param {object[]} layerIds - Configuration of the layers from config.json
-        //  * @returns {void}
-        //  */
-        // checkIfLayermodelExist: function (layerIds) {
-        //     layerIds.forEach(layer => {
-        //         if (Radio.request("ModelList", "getModelsByAttributes", {id: layer.layerId}).length === 0) {
-        //             this.addLayerModel(layer.layerId);
-        //         }
-        //     });
-        // },
-
-        // /**
-        //  * Adds the layer model briefly to the model to run prepareLayerObject and then removes the model again.
-        //  * @param {string} layerId - Id of the layer
-        //  * @returns {void}
-        //  */
-        // addLayerModel: function (layerId) {
-        //     Radio.trigger("ModelList", "addModelsByAttributes", {id: layerId});
-        //     this.sendModification(layerId, true);
-        //     this.sendModification(layerId, false);
-        // },
-
-        // /**
-        //  * Triggers the new visibility over the radio
-        //  * @param {string} layerId - layerId
-        //  * @param {boolean} status - Visibility true / false
-        //  * @param {Number} transparency Transparency of layer.
-        //  * @returns {void}
-        //  */
-        // sendModification: function (layerId, status, transparency) {
-        //     const transp = transparency || 0;
-
-        //     Radio.trigger("ModelList", "setModelAttributesById", layerId, {
-        //         isSelected: status,
-        //         isVisibleInMap: status,
-        //         transparency: transp
-        //     });
-        // }
     }
 };
 </script>
@@ -225,7 +167,10 @@ export default {
                             aria-valuenow="0"
                             aria-valuemin="0"
                             :aria-valuemax="layerIds.length"
-                        />
+                            :style="currentProgressBarWidth"
+                        >
+                            <span class="sr-only">{{ $t("modules.tools.layerSlider.displayLayers") }}</span>
+                        </div>
                     </div>
                     <div class="input-group">
                         <span class="input-group-btn">
@@ -268,6 +213,7 @@ export default {
                                 id="backward"
                                 type="button"
                                 class="btn btn-default active-button"
+                                @click="backwardLayer"
                             >
                                 <span
                                     class="glyphicon glyphicon-backward"
@@ -278,6 +224,7 @@ export default {
                                 id="forward"
                                 type="button"
                                 class="btn btn-default active-button"
+                                @click="forwardLayer"
                             >
                                 <span
                                     class="glyphicon glyphicon-forward"
@@ -290,6 +237,13 @@ export default {
                                 class="btn btn-default disabled"
                             >
                                 <span
+                                    v-if="activeLayer.title"
+                                    aria-hidden="true"
+                                >
+                                    {{ $t(activeLayer.title) }}
+                                </span>
+                                <span
+                                    v-else
                                     aria-hidden="true"
                                 >
                                     {{ $t("common:modules.tools.layerSlider.titleNotConfigured") }}
@@ -312,31 +266,34 @@ export default {
 @background_color_1: rgb(85, 85, 85);
 @background_color_2: #eee;
 
-.progress-bar {
-    background-color: @secondary_focus;
-    transition: all .6s;
-}
-.progress {
-    height: 25px;
-    background-color: @background_color_2;
-}
-.active-button {
-    background-color: @background_color_2;
-    transition: all .2s ease-in-out;
-    &:focus {
-        .primary_action_focus();
+#layer-slider {
+    width: 350px;
+    .progress-bar {
+        background-color: @secondary_focus;
+        transition: all .6s;
     }
-    &:hover {
-        .primary_action_hover();
+    .progress {
+        height: 25px;
+        background-color: @background_color_2;
+    }
+    .active-button {
+        background-color: @background_color_2;
+        transition: all .2s ease-in-out;
+        &:focus {
+            .primary_action_focus();
+        }
+        &:hover {
+            .primary_action_hover();
+        }
+    }
+    .btn.disabled {
+        background-color: @background_color_2;
+        opacity: 1;
+        padding: 7px 12px 6px 12px;
+        > span {
+            font-family: @font_family_default;
+        }
     }
 }
 
-.btn.disabled {
-    background-color: @background_color_2;
-    opacity: 1;
-    padding: 7px 12px 6px 12px;
-    > span {
-        font-family: @font_family_default;
-    }
-}
 </style>

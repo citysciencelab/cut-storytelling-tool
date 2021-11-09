@@ -811,7 +811,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     addModelsByAttributes: function (attrs) {
         const lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
-console.log(lightModels);
+
         lightModels.forEach(model => this.add(model));
         this.updateLayerView();
     },

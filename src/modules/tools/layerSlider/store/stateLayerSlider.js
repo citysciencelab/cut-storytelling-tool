@@ -10,9 +10,14 @@ const state = {
 
     timeInterval: 2000,
     windowsInterval: null,
+    progressBarWidth: 0,
+    currentProgressBarWidth: "width: 0%; margin-left: 0%",
     sliderType: "player",
     layerIds: [],
-    activeLayer: {layerId: ""},
+    activeLayer: {
+        layerId: "",
+        index: -1
+    },
     title: "common:modules.tools.layerSlider.title"
 };
 

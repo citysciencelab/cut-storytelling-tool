@@ -11,13 +11,63 @@ const mutations = {
     ...generateSimpleMutations(coordState),
 
     /**
+     * Setter for the activeLayer.
+     * The current progressbar is also set by the layerId index.
+     * @param {Object} state Context state object.
+     * @param {Object} layerId The layer id.
+     * @returns {void}
+     */
+    setActiveLayer (state, layerId) {
+        state.currentProgressBarWidth = `
+            width: ${state.progressBarWidth}%;
+            margin-left: ${state.progressBarWidth * layerId.index}%
+        `;
+        state.activeLayer = layerId;
+    },
+
+    /**
+     * Setter for the progressbar width.
+     * Note: Minimum width of the ProgressBar is 10%.
+     * @param {Object} state Context state object.
+     * @param {Object[]} layerIds The configuration of the layers from config.json.
+     * @returns {void}
+     */
+    setProgressBarWidth (state, layerIds) {
+        state.progressBarWidth = layerIds.length <= 10 ? Math.round(100 / layerIds.length) : 10;
+    },
+
+    /**
      * Setter of the windows interval.
      * @param {Object} state Context state object.
      * @param {Function} func Function to be executed in this.
      * @returns {void}
      */
     setWindowsInterval (state, func) {
-        state.windowsInterval = func === null ? null : setInterval(func, state.timeInterval);
+        if (func === null) {
+            clearInterval(state.windowsInterval);
+            state.windowsInterval = null;
+        }
+        else {
+            state.windowsInterval = setInterval(func, state.timeInterval);
+        }
+    },
+
+    /**
+     * Resets the active layer to default value.
+     * The current progressbar is also set to the default value.
+     * @param {Object} state Context state object.
+     * @returns {void}
+     */
+    resetActiveLayer (state) {
+        state.currentProgressBarWidth = `
+            width: 0%;
+            margin-left: 0%
+        `;
+
+        state.activeLayer = {
+            layerId: "",
+            index: -1
+        };
     }
 };
 
