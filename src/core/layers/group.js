@@ -12,7 +12,7 @@ import HeatmapLayer from "../../../modules/core/modelList/layer/heatmap";
  * @param {Object} attrs attributes of the layer
  * @returns {void}
  */
-export default function Group (attrs) {
+export default function GroupedLayers (attrs) {
     const defaults = {
             supported: ["2D", "3D"],
             showSettings: true
@@ -29,14 +29,14 @@ export default function Group (attrs) {
         this.updateSource();
     }
 }
-// Link prototypes and add prototype methods, means WMSLayer uses all methods and properties of Layer
-Group.prototype = Object.create(Layer.prototype);
+// Link prototypes and add prototype methods, means GroupedLayers uses all methods and properties of Layer
+GroupedLayers.prototype = Object.create(Layer.prototype);
 /**
  * Creates the grouplayer with its layersources
  * @param {Object} attrs attributes of the layer
  * @return {void}
  */
-Group.prototype.createLayer = function (attrs) {
+GroupedLayers.prototype.createLayer = function (attrs) {
     const layers = attrs.layerSource.map(layer => {
             return layer.get("layer");
         }),
@@ -54,7 +54,7 @@ Group.prototype.createLayer = function (attrs) {
  * @param {Object} attrs attributes of the layer
  * @return {void}
  */
-Group.prototype.createLayerSource = function (attrs) {
+GroupedLayers.prototype.createLayerSource = function (attrs) {
     const layerSource = [];
 
     attrs.children.forEach(childLayerDefinition => {
@@ -87,7 +87,7 @@ Group.prototype.createLayerSource = function (attrs) {
  * Creates the legend of each child layer
  * @return {void}
  */
-Group.prototype.createLegend = function () {
+GroupedLayers.prototype.createLegend = function () {
     this.get("layerSource").forEach(layerSource => {
         layerSource.createLegend();
     });
@@ -97,7 +97,7 @@ Group.prototype.createLegend = function () {
  * Not all layer types support the function updateSource().
  * @returns {void}
  */
-Group.prototype.updateSource = function () {
+GroupedLayers.prototype.updateSource = function () {
     this.get("layerSource").forEach(layerSource => {
         if (typeof layerSource.updateSource !== "undefined") {
             layerSource.updateSource();
@@ -108,7 +108,7 @@ Group.prototype.updateSource = function () {
  * This function start the presentation of the layerinformation and legend.
  * @returns {void}
  */
-Group.prototype.showLayerInformation = function () {
+GroupedLayers.prototype.showLayerInformation = function () {
     const metaID = [],
         cswUrls = [],
         showDocUrls = [],
@@ -181,7 +181,7 @@ Group.prototype.showLayerInformation = function () {
 * @param {object} options containing the scale to check
 * @returns {void}
 **/
-Group.prototype.checkForScale = function (options) {
+GroupedLayers.prototype.checkForScale = function (options) {
     if (!options || !options.scale) {
         return;
     }
