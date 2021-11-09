@@ -865,8 +865,8 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                 });
 
                 it("deprecated - opening and configuring lots of layers works", async function () {
-                    //  ?layerIDs=368,717,2423,1562_0,2432,1935geofox-bahn,2444,1561_6,2941,2452&visibility=true,false,false,false,false,false,false,false,false,false&transparency=0,0,0,0,0,0,0,0,0,0&center=572765.7219565103,5940389.380731404&zoomlevel=5
-                    let layers = "368,717,2423,1562_0,2432,1935geofox-bahn,2444,1561_6,2941,2452",
+                    //  ?layerIDs=368,717,2423,1562,2432,1935geofox-bahn,2444,1561,2941,2452&visibility=true,false,false,false,false,false,false,false,false,false&transparency=0,0,0,0,0,0,0,0,0,0&center=572765.7219565103,5940389.380731404&zoomlevel=5
+                    let layers = "368,717,2423,1562,2432,1935geofox-bahn,2444,1561,2941,2452",
                         visibility = "true,false,false,false,false,false,false,false,false,false",
                         transparency = "0,0,0,0,0,0,0,0,0,0",
                         center = "572765.7219565103,5940389.380731404";
@@ -897,8 +897,8 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                 });
 
                 it("opening and configuring lots of layers works", async function () {
-                    //  ?layerIDs=368,717,2423,1562_0,2432,1935geofox-bahn,2444,1561_6,2941,2452&visibility=true,false,false,false,false,false,false,false,false,false&transparency=0,0,0,0,0,0,0,0,0,0&center=572765.7219565103,5940389.380731404&zoomlevel=5
-                    let layers = "368,717,2423,1562_0,2432,1935geofox-bahn,2444,1561_6,2941,2452",
+                    //  ?layerIDs=368,717,2423,1562,2432,1935geofox-bahn,2444,1561,2941,2452&visibility=true,false,false,false,false,false,false,false,false,false&transparency=0,0,0,0,0,0,0,0,0,0&center=572765.7219565103,5940389.380731404&zoomlevel=5
+                    let layers = "368,717,2423,1562,2432,1935geofox-bahn,2444,1561,2941,2452",
                         visibility = "true,false,false,false,false,false,false,false,false,false",
                         transparency = "0,0,0,0,0,0,0,0,0,0",
                         center = "572765.7219565103,5940389.380731404";
