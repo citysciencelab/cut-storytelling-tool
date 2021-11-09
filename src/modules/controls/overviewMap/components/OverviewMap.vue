@@ -68,7 +68,7 @@ export default {
     mounted () {
         const id = this.layerId || this.baselayer,
             layer = getOverviewMapLayer(id),
-            map = mapCollection.getCurrentMap(this.mapId, this.mapMode),
+            map = mapCollection.getMap(this.mapId, this.mapMode),
             view = getOverviewMapView(map, this.resolution);
 
         if (layer) {
@@ -94,7 +94,7 @@ export default {
         toggleOverviewMapFlyout () {
             this.open = !this.open;
             if (this.overviewMap !== null) {
-                mapCollection.getCurrentMap()[`${this.open ? "add" : "remove"}Control`](this.overviewMap);
+                mapCollection.getMap(this.mapId, this.mapMode)[`${this.open ? "add" : "remove"}Control`](this.overviewMap);
             }
         },
         /**
