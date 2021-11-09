@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import sinon from "sinon";
 import WMSLayer from "../../wms";
-import Group from "../../group";
+import GroupedLayers from "../../group";
 import mapCollection from "../../../../dataStorage/mapCollection.js";
 import store from "../../../../app-store";
 
@@ -73,9 +73,9 @@ describe("src/core/layers/group.js", () => {
     });
 
     it("createLayer shall create an ol.Group with olLayer in layerSource", function () {
-        const groupUpdateSourceTrigger = sinon.spy(Group.prototype, "updateSource"),
-            groupCreateLegendTrigger = sinon.spy(Group.prototype, "createLegend"),
-            groupLayer = new Group(groupAttributes),
+        const groupUpdateSourceTrigger = sinon.spy(GroupedLayers.prototype, "updateSource"),
+            groupCreateLegendTrigger = sinon.spy(GroupedLayers.prototype, "createLegend"),
+            groupLayer = new GroupedLayers(groupAttributes),
             childLayer = groupLayer.get("layerSource");
 
         expect(groupLayer).not.to.be.undefined;
@@ -90,10 +90,10 @@ describe("src/core/layers/group.js", () => {
         expect(groupCreateLegendTrigger.calledOnce).to.be.true;
     });
     it("createLayer with isVisibleInMap=true shall call update source", function () {
-        const groupUpdateSourceTrigger = sinon.spy(Group.prototype, "updateSource");
+        const groupUpdateSourceTrigger = sinon.spy(GroupedLayers.prototype, "updateSource");
 
         groupAttributes.isVisibleInMap = true;
-        new Group(groupAttributes);
+        new GroupedLayers(groupAttributes);
 
         expect(groupUpdateSourceTrigger.calledOnce).to.be.true;
     });
@@ -103,8 +103,8 @@ describe("src/core/layers/group.js", () => {
             csw_url: "cswUrl"
         }];
         const dispatchCalls = {},
-            groupCreateLegendTrigger = sinon.spy(Group.prototype, "createLegend"),
-            groupLayer = new Group(groupAttributes),
+            groupCreateLegendTrigger = sinon.spy(GroupedLayers.prototype, "createLegend"),
+            groupLayer = new GroupedLayers(groupAttributes),
             layerInfo = {
                 "metaID": "md_id",
                 "layerName": layerAttributes.name,
@@ -132,7 +132,7 @@ describe("src/core/layers/group.js", () => {
         expect(groupLayer.get("layerInfoChecked")).to.be.true;
     });
     it("checkForScale shall do nothing if options are not defined", function () {
-        const groupLayer = new Group(groupAttributes);
+        const groupLayer = new GroupedLayers(groupAttributes);
 
         expect(groupLayer.has("isOutOfRange")).to.be.false;
         groupLayer.checkForScale();
@@ -140,7 +140,7 @@ describe("src/core/layers/group.js", () => {
         expect(groupLayer.has("isOutOfRange")).to.be.false;
     });
     it("checkForScale shall set 'isOutOfRange'", function () {
-        const groupLayer = new Group(groupAttributes),
+        const groupLayer = new GroupedLayers(groupAttributes),
             options = {
                 scale: "15000"
             };
