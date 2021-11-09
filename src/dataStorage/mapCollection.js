@@ -35,37 +35,9 @@ export default {
         return mapCollection.find(map => map?.id || map.get("id") === id && map?.mode || map.get("mode") === mode);
     },
     /**
-     * Gets a map by the given id.
-     * @param {String} id The map id.
-     * @returns {module:ol/PluggableMap~PluggableMap} The map.
-     */
-    getMapById: function (id) {
-        return mapCollection.find(map => (map?.id || map.get("id")) === id);
-    },
-    getMapByMode: function (mapMode) {
-        return mapCollection.find(map => (map?.mapMode || map.get("mapMode")) === mapMode);
-    },
-
-    /**
-     * Gets the map collection.
-     * @returns {module:ol/PluggableMap~PluggableMap[]} The map collection.
-     */
-    getMaps: function () {
-        return mapCollection;
-    },
-
-    /**
-     * Removes a map from the map collection.
-     * @param {String} id The map id.
+     * Removes all entries from the collection.
      * @returns {void}
      */
-    removeMapById: function (id) {
-        mapCollection.filter(map => (map?.id || map.get("id")) !== id);
-    },
-    /**
- * Removes all entries from the collection.
- * @returns {void}
- */
     clear: function () {
         mapCollection.length = 0;
     }

@@ -102,7 +102,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
 
         channel.on({
             "addLayer": function (layer) {
-                mapCollection.getMap("ol", "2D").addLayer(layer);
+                this.getMap().addLayer(layer);
             },
             "addLayerToIndex": this.addLayerToIndex,
             "setLayerToIndex": this.setLayerToIndex,

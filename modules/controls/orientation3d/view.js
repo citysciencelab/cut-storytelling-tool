@@ -1,6 +1,6 @@
 import Orientation3DTemplate from "text-loader!./template.html";
+import {ViewDirection} from "vcs-oblique/src/vcs/oblique/viewDirection";
 import Orientation3DModel from "./model";
-import api from "masterportalAPI/abstraction/api";
 
 const Orientation3DView = Backbone.View.extend({
     events: {
@@ -141,16 +141,16 @@ const Orientation3DView = Backbone.View.extend({
 
         if (image) {
             switch (image.viewDirection) {
-                case api.oblique.viewDirection.direction.NORTH:
+                case ViewDirection.NORTH:
                     rotation = 0;
                     break;
-                case api.oblique.viewDirection.direction.SOUTH:
+                case ViewDirection.SOUTH:
                     rotation = 180;
                     break;
-                case api.oblique.viewDirection.direction.EAST:
+                case ViewDirection.EAST:
                     rotation = 270;
                     break;
-                case api.oblique.viewDirection.direction.WEST:
+                case ViewDirection.WEST:
                     rotation = 90;
                     break;
                 default:
