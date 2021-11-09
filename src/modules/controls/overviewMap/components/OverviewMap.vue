@@ -4,7 +4,7 @@ import {mapGetters} from "vuex";
 import {getOverviewMapLayer, getOverviewMapView} from "./utils";
 import ControlIcon from "../../ControlIcon.vue";
 import TableStyleControl from "../../TableStyleControl.vue";
-import mapCollection from "../../../../dataStorage/mapCollection";
+import mapCollection from "../../../../core/dataStorage/mapCollection";
 
 /**
  * Overview control that shows a mini-map to support a user's

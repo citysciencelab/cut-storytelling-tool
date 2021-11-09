@@ -2,7 +2,7 @@ import {expect} from "chai";
 import mutations from "../../../store/mutationsMap";
 import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";
-import mapCollection from "../../../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../../../core/dataStorage/mapCollection.js";
 
 const {addLayerToMap, removeLayerFromMap} = mutations;
 

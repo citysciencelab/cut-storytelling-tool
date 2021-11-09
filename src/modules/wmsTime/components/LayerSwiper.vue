@@ -3,7 +3,7 @@ import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersWmsTime";
 import mutations from "../store/mutationsWmsTime";
 import actions from "../store/actionsWmsTime";
-import mapCollection from "../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../core/dataStorage/mapCollection.js";
 
 export default {
     name: "LayerSwiper",

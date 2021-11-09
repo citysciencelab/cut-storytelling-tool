@@ -12,7 +12,7 @@ import api from "masterportalAPI/abstraction/api";
 import {transform as transformCoord, transformFromMapProjection, transformToMapProjection, getMapProjection} from "masterportalAPI/src/crs";
 import store from "../../src/app-store";
 import WMTSLayer from "./modelList/layer/wmts";
-import mapCollection from "../../src/dataStorage/mapCollection.js";
+import mapCollection from "../../src/core/dataStorage/mapCollection.js";
 import {getLayerList} from "masterportalAPI/src/rawLayerList";
 
 const map = Backbone.Model.extend(/** @lends map.prototype */{

@@ -2,7 +2,7 @@ import {generateSimpleMutations} from "../../../app-store/utils/generators";
 import initialState from "./stateMap";
 import getters from "./gettersMap";
 import BaseLayer from "ol/layer/Base";
-import mapCollection from "../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../core/dataStorage/mapCollection.js";
 
 const mutations = {
     ...generateSimpleMutations(initialState),

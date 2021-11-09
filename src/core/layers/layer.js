@@ -1,5 +1,5 @@
 import store from "../../app-store";
-import mapCollection from "../../dataStorage/mapCollection.js";
+import mapCollection from "../../core/dataStorage/mapCollection.js";
 import deepCopy from "../../utils/deepCopy.js";
 import * as bridge from "./RadioBridge.js";
 

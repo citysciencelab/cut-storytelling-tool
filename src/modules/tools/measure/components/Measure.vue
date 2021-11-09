@@ -6,7 +6,7 @@ import getters from "../store/gettersMeasure";
 import mutations from "../store/mutationsMeasure";
 import actions from "../store/actionsMeasure";
 import MeasureTooltip from "./MeasureTooltip.vue";
-import mapCollection from "../../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 
 /**
  * Measurement tool to measure lines and areas in the map.
