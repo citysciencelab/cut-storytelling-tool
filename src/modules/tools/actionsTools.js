@@ -6,10 +6,6 @@ const actions = {
     /**
      * Sets the parameter "active" to the given parameter for the tool with the given id.
      * Note: The toolId specified in the global state is not the same as tool.id.
-     *
-     * @param {Object} context context object
-     * @param {Object} state state object; in this case rootState = state
-     * @param {Function} commit store commit function
      * @param {Object} payload The given parameters
      * @param {String} payload.id The id of the Tool to be (de-)activated
      * @param {String} payload.active Value for (de-)activation
@@ -29,9 +25,6 @@ const actions = {
 
     /**
      * Sets the translated name of the tool to the given parameter for the tool with the given id.
-     *
-     * @param {Object} state state object; in this case rootState = state
-     * @param {Function} commit store commit function
      * @param {Object} payload The given parameters
      * @param {String} payload.id The id of the Tool
      * @param {String} payload.name The translated name of the Tool
@@ -57,7 +50,6 @@ const actions = {
 
     /**
      * Adds a tool dynamically to componentMap.
-     * @param {Object} state state object; in this case rootState = state
      * @param {Object} tool tool to be added dynamically
      * @returns {void}
      */
@@ -126,7 +118,6 @@ const actions = {
 
     /**
      * Activates a tool in the ModelList.
-     * @param {Object} state state object; in this case rootState = state
      * @param {String} activeTool The tool to activate.
      * @returns {void}
      */
@@ -140,7 +131,6 @@ const actions = {
 
     /**
      * Adds the name and glyphicon of a tool to the ModelList, because they are used by the menu.
-     * @param {Object} state state object; in this case rootState = state
      * @param {String} activeTool The tool to set name.
      * @returns {void}
      */

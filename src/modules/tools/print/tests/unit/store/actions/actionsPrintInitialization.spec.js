@@ -121,7 +121,7 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
     });
 
     describe("togglePostrenderListener", function () {
-        it("should toggle the post render listener should register listener", done => {
+        it("should toggle the post render listener and should register listener", done => {
             const TileLayer = {},
                 state = {
                     active: true,
@@ -149,7 +149,7 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                 {type: "setEventListener", payload: "postrender", commit: true}
             ], {}, done);
         });
-        it("toggle the post render listener with active false should unregister listener", done => {
+        it("toggle the post render listener with active false and should unregister listener", done => {
             const TileLayer = {},
                 state = {
                     active: false,
