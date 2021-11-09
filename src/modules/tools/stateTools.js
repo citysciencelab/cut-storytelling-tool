@@ -1,13 +1,14 @@
 import AddWMS from "./addWMS/components/AddWMS.vue";
 import BufferAnalysis from "./bufferAnalysis/components/BufferAnalysis.vue";
+import CompareFeatures from "./compareFeatures/components/CompareFeatures.vue";
 import Contact from "./contact/components/Contact.vue";
 import CoordToolkit from "./coordToolkit/components/CoordToolkit.vue";
 import Draw from "./draw/components/Draw.vue";
-import CompareFeatures from "./compareFeatures/components/CompareFeatures.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
 import GeneralFilter from "./generalFilter/components/GeneralFilter.vue";
 import Gfi from "./gfi/components/Gfi.vue";
 import LayerClusterToggler from "./layerClusterToggler/components/LayerClusterToggler.vue";
+import LayerSlider from "./layerSlider/components/LayerSlider.vue";
 import Measure from "./measure/components/Measure.vue";
 import Print from "./print/components/Print.vue";
 import SaveSelection from "./saveSelection/components/SaveSelection.vue";
@@ -29,14 +30,15 @@ const state = {
     componentMap: {
         addWMS: AddWMS,
         bufferAnalysis: BufferAnalysis,
+        compareFeatures: CompareFeatures,
         contact: Contact,
         coordToolkit: CoordToolkit,
         draw: Draw,
-        compareFeatures: CompareFeatures,
         fileImport: FileImport,
         gfi: Gfi,
         generalFilter: GeneralFilter,
         layerClusterToggler: LayerClusterToggler,
+        layerSlider: LayerSlider,
         measure: Measure,
         print: Print,
         saveSelection: SaveSelection,

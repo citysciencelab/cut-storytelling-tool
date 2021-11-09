@@ -16,6 +16,7 @@ import FileImport from "./fileImport/store/indexFileImport";
 import GeneralFilter from "./generalFilter/store/indexGeneralFilter";
 import Gfi from "./gfi/store/indexGfi";
 import LayerClusterToggler from "./layerClusterToggler/store/indexLayerClusterToggler";
+import LayerSlider from "./layerSlider/store/indexLayerSlider";
 import Measure from "./measure/store/indexMeasure";
 import Print from "./print/store/indexPrint";
 import SaveSelection from "./saveSelection/store/indexSaveSelection";
@@ -43,6 +44,7 @@ export default {
         FileImport,
         GeneralFilter,
         Gfi,
+        LayerSlider,
         Measure,
         Print,
         SaveSelection,

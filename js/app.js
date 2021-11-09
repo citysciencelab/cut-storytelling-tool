@@ -25,7 +25,6 @@ import ShadowView from "../modules/tools/shadow/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
 import FilterView from "../modules/tools/filter/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
-import LayerSliderView from "../modules/tools/layerSlider/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
 import {initiateVueI18Next} from "./vueI18Next";
 import {handleUrlParamsBeforeVueMount, readUrlParamEarly} from "../src/utils/parametricUrl/ParametricUrlBridge";
@@ -198,18 +197,6 @@ async function loadApp () {
             }
             case "wfst": {
                 new WfstView({model: tool});
-                break;
-            }
-            /**
-             * layerslider
-             * @deprecated in 3.0.0
-             */
-            case "layerslider": {
-                new LayerSliderView({model: tool});
-                break;
-            }
-            case "layerSlider": {
-                new LayerSliderView({model: tool});
                 break;
             }
             case "virtualCity": {
