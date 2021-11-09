@@ -67,7 +67,6 @@
     "mqtt": "^4.2.8",
     "object-hash": "^2.2.0",
     "ol-mapbox-style": "^6.4.1",
-    "olcs": "^2.13.0",
     "polyfill-object.fromentries": "^1.0.1",
     "rbush": "^2.0.2",
     "rbush-knn": "^2.1.0",
