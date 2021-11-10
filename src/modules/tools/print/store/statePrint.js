@@ -74,7 +74,7 @@ const state = {
     INCHES_PER_METER: 39.37,
     glyphicon: "glyphicon-print",
     eventListener: undefined,
-    dpiForPdf: 300,
+    dpiForPdf: 200,
     layoutNameList: [],
     currentMapScale: "",
     optimalResolution: "",
