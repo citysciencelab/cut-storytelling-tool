@@ -194,11 +194,12 @@ export default {
 
         /**
          * Downloads the pdf for print.
+         * @param {Object} button the clicked button
          * @param {String} downloadUrl The url to the file.
          * @param {String} filename The file name.
          * @returns {void}
          */
-        download (downloadUrl, filename) {
+        download (button, downloadUrl, filename) {
             const link = document.createElement("a");
 
             link.href = downloadUrl;
@@ -206,6 +207,9 @@ export default {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+            if (button.classList.contains("btn-primary")) {
+                button.classList.remove("btn-primary");
+            }
         },
 
         /**
@@ -431,7 +435,7 @@ export default {
                             v-if="file.finishState"
                             id="tool-print-download-button-active"
                             class="btn btn-primary btn-sm btn-block"
-                            @click="download(file.downloadUrl, file.filename)"
+                            @click="download($event.target, file.downloadUrl, file.filename)"
                         >
                             {{ $t("common:modules.tools.print.downloadFile") }}
                         </button>
