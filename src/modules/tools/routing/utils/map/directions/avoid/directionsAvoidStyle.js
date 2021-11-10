@@ -3,7 +3,7 @@ import stateRouting from "../../../../store/stateRouting";
 
 /**
  * Creates Direction Avoid Areas Style
- * @returns {ol/style} style
+ * @returns {ol/Style} style
  */
 export default function createDirectionsAvoidAreasStyle () {
     const styleSetting = stateRouting.directionsSettings.styleAvoidAreas;

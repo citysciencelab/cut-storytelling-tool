@@ -2,8 +2,8 @@ import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
 import stateRouting from "../../../../store/stateRouting";
 /**
  * Creates Direction Waypoint Style
- * @param {ol/feature} feature for the current style
- * @returns {ol/style} style
+ * @param {ol/Feature} feature for the current style
+ * @returns {ol/Style} style
  */
 export default function createDirectionsWaypointStyle (feature) {
     const styleSetting = stateRouting.directionsSettings.styleWaypoint,

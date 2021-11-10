@@ -38,15 +38,15 @@ export default {
          * Checks if current map mode is "AVOID_AREAS"
          * @returns {Boolean} true if mode is "AVOID_AREAS"
          */
-        isKartenmodusSperrflaecheBearbeiten () {
-            return this.kartenmodus === "AVOID_AREAS";
+        isMapModeAvoidAreasEdit () {
+            return this.mapMode === "AVOID_AREAS";
         },
         /**
          * Checks if current map mode is "DELETE_AVOID_AREAS"
          * @returns {Boolean} true if mode is "DELETE_AVOID_AREAS"
          */
-        isKartenmodusSperrflaecheLoeschen () {
-            return this.kartenmodus === "DELETE_AVOID_AREAS";
+        isMapModeAvoidAreasDelete () {
+            return this.mapMode === "DELETE_AVOID_AREAS";
         }
     },
     async created () {
@@ -84,27 +84,27 @@ export default {
          * Toggles the current map mode between "AVOID_AREAS" and "WAYPOINTS"
          * @returns {void}
          */
-        changeSperrflaecheBearbeitenKartenmodus () {
-            if (this.kartenmodus === "AVOID_AREAS") {
-                this.setKartenmodus("WAYPOINTS");
+        changeMapModeAvoidAreasEdit () {
+            if (this.mapMode === "AVOID_AREAS") {
+                this.setMapMode("WAYPOINTS");
             }
             else {
-                this.setKartenmodus("AVOID_AREAS");
+                this.setMapMode("AVOID_AREAS");
             }
-            this.createInteractionFromKartenmodus();
+            this.createInteractionFromMapMode();
         },
         /**
          * Toggles the current map mode between "DELETE_AVOID_AREAS" and "WAYPOINTS"
          * @returns {void}
          */
-        changeSperrflaecheLoeschenKartenmodus () {
-            if (this.kartenmodus === "DELETE_AVOID_AREAS") {
-                this.setKartenmodus("WAYPOINTS");
+        changeMapModeAvoidAreasDelete () {
+            if (this.mapMode === "DELETE_AVOID_AREAS") {
+                this.setMapMode("WAYPOINTS");
             }
             else {
-                this.setKartenmodus("DELETE_AVOID_AREAS");
+                this.setMapMode("DELETE_AVOID_AREAS");
             }
-            this.createInteractionFromKartenmodus();
+            this.createInteractionFromMapMode();
         },
         /**
          * Resets the current settings, including waypoints and avoid areas.
@@ -211,45 +211,45 @@ export default {
                         xml:space="preserve"
                         xmlns:serif="http://www.serif.com/"
                         fill-rule="evenodd"
-                        @click="changeSperrflaecheBearbeitenKartenmodus()"
-                        @keydown.enter="changeSperrflaecheBearbeitenKartenmodus()"
+                        @click="changeMapModeAvoidAreasEdit()"
+                        @keydown.enter="changeMapModeAvoidAreasEdit()"
                     >
                         <title>{{ $t('common:modules.tools.routing.directions.editRestrictedAreas') }}</title>
                         <path
-                            :fill="isKartenmodusSperrflaecheBearbeiten ? '#f00' : '#000'"
+                            :fill="isMapModeAvoidAreasEdit ? '#f00' : '#000'"
                             d="M3,0c1.656,0 3,1.344 3,3c0,1.656 -1.344,3 -3,3c-1.656,0 -3,-1.344 -3,-3c0,-1.656 1.344,-3 3,-3Zm0,1.5c0.828,0 1.5,0.672 1.5,1.5c0,0.828 -0.672,1.5 -1.5,1.5c-0.828,0 -1.5,-0.672 -1.5,-1.5c0,-0.828 0.672,-1.5 1.5,-1.5Z"
                         />
                         <path
-                            :fill="isKartenmodusSperrflaecheBearbeiten ? '#f00' : '#000'"
+                            :fill="isMapModeAvoidAreasEdit ? '#f00' : '#000'"
                             d="M27,4c1.656,0 3,1.344 3,3c0,1.656 -1.344,3 -3,3c-1.656,0 -3,-1.344 -3,-3c0,-1.656 1.344,-3 3,-3Zm0,1.5c0.828,0 1.5,0.672 1.5,1.5c0,0.828 -0.672,1.5 -1.5,1.5c-0.828,0 -1.5,-0.672 -1.5,-1.5c0,-0.828 0.672,-1.5 1.5,-1.5Z"
                         />
                         <path
-                            :fill="isKartenmodusSperrflaecheBearbeiten ? '#f00' : '#000'"
+                            :fill="isMapModeAvoidAreasEdit ? '#f00' : '#000'"
                             d="M27,20c1.656,0 3,1.344 3,3c0,1.656 -1.344,3 -3,3c-1.656,0 -3,-1.344 -3,-3c0,-1.656 1.344,-3 3,-3Zm0,1.5c0.828,0 1.5,0.672 1.5,1.5c0,0.828 -0.672,1.5 -1.5,1.5c-0.828,0 -1.5,-0.672 -1.5,-1.5c0,-0.828 0.672,-1.5 1.5,-1.5Z"
                         />
                         <path
-                            :fill="isKartenmodusSperrflaecheBearbeiten ? '#f00' : '#000'"
+                            :fill="isMapModeAvoidAreasEdit ? '#f00' : '#000'"
                             d="M3,24c1.656,0 3,1.344 3,3c0,1.656 -1.344,3 -3,3c-1.656,0 -3,-1.344 -3,-3c0,-1.656 1.344,-3 3,-3Zm0,1.5c0.828,0 1.5,0.672 1.5,1.5c0,0.828 -0.672,1.5 -1.5,1.5c-0.828,0 -1.5,-0.672 -1.5,-1.5c0,-0.828 0.672,-1.5 1.5,-1.5Z"
                         />
                         <path
                             d="M3,6l0,18"
                             fill="none"
-                            :stroke="isKartenmodusSperrflaecheBearbeiten ? '#f00' : '#000'"
+                            :stroke="isMapModeAvoidAreasEdit ? '#f00' : '#000'"
                             stroke-width="1px"
                         /><path
                             d="M27,10l0,10"
                             fill="none"
-                            :stroke="isKartenmodusSperrflaecheBearbeiten ? '#f00' : '#000'"
+                            :stroke="isMapModeAvoidAreasEdit ? '#f00' : '#000'"
                             stroke-width="1px"
                         /><path
                             d="M24,23l-18,4"
                             fill="none"
-                            :stroke="isKartenmodusSperrflaecheBearbeiten ? '#f00' : '#000'"
+                            :stroke="isMapModeAvoidAreasEdit ? '#f00' : '#000'"
                             stroke-width="1px"
                         /><path
                             d="M24,7l-18,-4"
                             fill="none"
-                            :stroke="isKartenmodusSperrflaecheBearbeiten ? '#f00' : '#000'"
+                            :stroke="isMapModeAvoidAreasEdit ? '#f00' : '#000'"
                             stroke-width="1px"
                         /></svg>
 
@@ -265,45 +265,45 @@ export default {
                         xml:space="preserve"
                         xmlns:serif="http://www.serif.com/"
                         fill-rule="evenodd"
-                        @click="changeSperrflaecheLoeschenKartenmodus()"
-                        @keydown.enter="changeSperrflaecheLoeschenKartenmodus()"
+                        @click="changeMapModeAvoidAreasDelete()"
+                        @keydown.enter="changeMapModeAvoidAreasDelete()"
                     >
                         <title>{{ $t('common:modules.tools.routing.directions.deleteRestrictedAreas') }}</title>
                         <path
-                            :fill="isKartenmodusSperrflaecheLoeschen ? '#f00' : '#000'"
+                            :fill="isMapModeAvoidAreasDelete ? '#f00' : '#000'"
                             d="M3,0c1.656,0 3,1.344 3,3c0,1.656 -1.344,3 -3,3c-1.656,0 -3,-1.344 -3,-3c0,-1.656 1.344,-3 3,-3Zm0,1.5c0.828,0 1.5,0.672 1.5,1.5c0,0.828 -0.672,1.5 -1.5,1.5c-0.828,0 -1.5,-0.672 -1.5,-1.5c0,-0.828 0.672,-1.5 1.5,-1.5Z"
                         />
                         <path
-                            :fill="isKartenmodusSperrflaecheLoeschen ? '#f00' : '#000'"
+                            :fill="isMapModeAvoidAreasDelete ? '#f00' : '#000'"
                             d="M27,4c1.656,0 3,1.344 3,3c0,1.656 -1.344,3 -3,3c-1.656,0 -3,-1.344 -3,-3c0,-1.656 1.344,-3 3,-3Zm0,1.5c0.828,0 1.5,0.672 1.5,1.5c0,0.828 -0.672,1.5 -1.5,1.5c-0.828,0 -1.5,-0.672 -1.5,-1.5c0,-0.828 0.672,-1.5 1.5,-1.5Z"
                         />
                         <path
-                            :fill="isKartenmodusSperrflaecheLoeschen ? '#f00' : '#000'"
+                            :fill="isMapModeAvoidAreasDelete ? '#f00' : '#000'"
                             d="M27,20c1.656,0 3,1.344 3,3c0,1.656 -1.344,3 -3,3c-1.656,0 -3,-1.344 -3,-3c0,-1.656 1.344,-3 3,-3Zm0,1.5c0.828,0 1.5,0.672 1.5,1.5c0,0.828 -0.672,1.5 -1.5,1.5c-0.828,0 -1.5,-0.672 -1.5,-1.5c0,-0.828 0.672,-1.5 1.5,-1.5Z"
                         />
                         <path
-                            :fill="isKartenmodusSperrflaecheLoeschen ? '#f00' : '#000'"
+                            :fill="isMapModeAvoidAreasDelete ? '#f00' : '#000'"
                             d="M3,24c1.656,0 3,1.344 3,3c0,1.656 -1.344,3 -3,3c-1.656,0 -3,-1.344 -3,-3c0,-1.656 1.344,-3 3,-3Zm0,1.5c0.828,0 1.5,0.672 1.5,1.5c0,0.828 -0.672,1.5 -1.5,1.5c-0.828,0 -1.5,-0.672 -1.5,-1.5c0,-0.828 0.672,-1.5 1.5,-1.5Z"
                         />
                         <path
                             d="M3,6l0,18"
                             fill="none"
-                            :stroke="isKartenmodusSperrflaecheLoeschen ? '#f00' : '#000'"
+                            :stroke="isMapModeAvoidAreasDelete ? '#f00' : '#000'"
                             stroke-width="1px"
                         /><path
                             d="M27,10l0,10"
                             fill="none"
-                            :stroke="isKartenmodusSperrflaecheLoeschen ? '#f00' : '#000'"
+                            :stroke="isMapModeAvoidAreasDelete ? '#f00' : '#000'"
                             stroke-width="1px"
                         /><path
                             d="M24,23l-18,4"
                             fill="none"
-                            :stroke="isKartenmodusSperrflaecheLoeschen ? '#f00' : '#000'"
+                            :stroke="isMapModeAvoidAreasDelete ? '#f00' : '#000'"
                             stroke-width="1px"
                         /><path
                             d="M24,7l-18,-4"
                             fill="none"
-                            :stroke="isKartenmodusSperrflaecheLoeschen ? '#f00' : '#000'"
+                            :stroke="isMapModeAvoidAreasDelete ? '#f00' : '#000'"
                             stroke-width="1px"
                         /><path
                             d="M23.044,19.067l-15.588,-9l-0.5,0.866l15.588,9l0.5,-0.866Z"
@@ -385,8 +385,8 @@ export default {
                     <div
                         :key="'segment_header_' + segmentIndex"
                         class="d-flex pointer step pl-2 py-4"
-                        @mouseover="highlightRoute({vonWaypointIndex: segmentIndex, bisWaypointIndex: segmentIndex + 1})"
-                        @focus="highlightRoute({vonWaypointIndex: segmentIndex, bisWaypointIndex: segmentIndex + 1})"
+                        @mouseover="highlightRoute({fromWaypointIndex: segmentIndex, toWaypointIndex: segmentIndex + 1})"
+                        @focus="highlightRoute({fromWaypointIndex: segmentIndex, toWaypointIndex: segmentIndex + 1})"
                         @mouseout="unHighlightRoute()"
                         @blur="unHighlightRoute()"
                     >
@@ -411,8 +411,8 @@ export default {
 
                         <div
                             class="d-flex flex-column ml-2 w-100"
-                            @click="zoomToRoute({vonWaypointIndex: segmentIndex, bisWaypointIndex: segmentIndex + 1})"
-                            @keydown.enter="zoomToRoute({vonWaypointIndex: segmentIndex, bisWaypointIndex: segmentIndex + 1})"
+                            @click="zoomToRoute({fromWaypointIndex: segmentIndex, toWaypointIndex: segmentIndex + 1})"
+                            @keydown.enter="zoomToRoute({fromWaypointIndex: segmentIndex, toWaypointIndex: segmentIndex + 1})"
                         >
                             <b>{{ waypoints[segmentIndex].getDisplayName() }}</b>
                             <div

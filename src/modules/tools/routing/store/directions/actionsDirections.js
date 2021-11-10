@@ -73,7 +73,7 @@ export default {
      * Needs to be extended if new services should be configurable.
      * @param {Object} context actions context object.
      * @param {Object} parameter with wgs84Coords as input and instructions for the external service
-     * @param {[number, number]} [parameter.wgs84Coords] coordinates in wgs84 projection
+     * @param {[Number, Number]} [parameter.wgs84Coords] coordinates in wgs84 projection
      * @param {Boolean} [parameter.instructions] should request with instructions
      * @returns {RoutingDirections} routingDirections
      */
@@ -98,7 +98,7 @@ export default {
                 instructions: instructions
             });
         }
-        throw new Error("fetchDirections Type ist nicht korrekt konfiguriert");
+        throw new Error("fetchDirections Type is not configured correctly.");
     },
 
     /**
@@ -138,18 +138,18 @@ export default {
      * Highlights part of the route.
      * @param {Object} context actions context object.
      * @param {Object} params with the starting and ending index
-     * @param {Number} [params.vonWaypointIndex] at which waypoint to start the highlight
-     * @param {Number} [params.bisWaypointIndex] at which waypoint to end the highlight
-     * @param {[number, number]} [params.coordsIndex] alternative to select the coordinate index directly
+     * @param {Number} [params.fromWaypointIndex] at which waypoint to start the highlight
+     * @param {Number} [params.toWaypointIndex] at which waypoint to end the highlight
+     * @param {[Number, Number]} [params.coordsIndex] alternative to select the coordinate index directly
      * @returns {void}
      */
-    async highlightRoute ({dispatch, state}, {vonWaypointIndex, bisWaypointIndex, coordsIndex}) {
+    async highlightRoute ({dispatch, state}, {fromWaypointIndex, toWaypointIndex, coordsIndex}) {
         const {waypoints} = state,
             routeFeature = await dispatch("getRouteFeature"),
             highlightFeature = await dispatch("getHighlightFeature"),
             lineIndex = coordsIndex ? coordsIndex.slice(0) : [
-                waypoints[vonWaypointIndex].getIndexDirectionsLineString(),
-                waypoints[bisWaypointIndex].getIndexDirectionsLineString()
+                waypoints[fromWaypointIndex].getIndexDirectionsLineString(),
+                waypoints[toWaypointIndex].getIndexDirectionsLineString()
             ];
 
         highlightFeature.getGeometry().setCoordinates(
@@ -161,18 +161,18 @@ export default {
      * Zooms to part of the route
      * @param {Object} context actions context object.
      * @param {Object} params with the starting and ending index
-     * @param {Number} [params.vonWaypointIndex] at which waypoint to start the zoom
-     * @param {Number} [params.bisWaypointIndex] at which waypoint to end the zoom
-     * @param {[number, number]} [params.coordsIndex] alternative to select the coordinate index directly
+     * @param {Number} [params.fromWaypointIndex] at which waypoint to start the zoom
+     * @param {Number} [params.toWaypointIndex] at which waypoint to end the zoom
+     * @param {[Number, Number]} [params.coordsIndex] alternative to select the coordinate index directly
      * @returns {void}
      */
-    async zoomToRoute ({dispatch, state, rootGetters}, {vonWaypointIndex, bisWaypointIndex, coordsIndex}) {
+    async zoomToRoute ({dispatch, state, rootGetters}, {fromWaypointIndex, toWaypointIndex, coordsIndex}) {
         const {waypoints} = state,
             map = rootGetters["Map/map"],
             routeFeature = await dispatch("getRouteFeature"),
             lineIndex = coordsIndex ? coordsIndex.slice(0) : [
-                waypoints[vonWaypointIndex].getIndexDirectionsLineString(),
-                waypoints[bisWaypointIndex].getIndexDirectionsLineString()
+                waypoints[fromWaypointIndex].getIndexDirectionsLineString(),
+                waypoints[toWaypointIndex].getIndexDirectionsLineString()
             ],
             linestringFeature = new Feature({
                 geometry: new LineString(routeFeature.getGeometry().getCoordinates().slice(...lineIndex))
@@ -254,10 +254,8 @@ export default {
         dispatch("initWaypoints");
 
         if (!mapListenerAdded) {
-            directionsWaypointsDrawInteraction.on("drawend", event => dispatch("onDirectionsWaypointsDrawEnd", event)
-            );
-            directionsAvoidDrawInteraction.on("drawend", event => dispatch("onDirectionsAvoidDrawEnd", event)
-            );
+            directionsWaypointsDrawInteraction.on("drawend", event => dispatch("onDirectionsWaypointsDrawEnd", event));
+            directionsAvoidDrawInteraction.on("drawend", event => dispatch("onDirectionsAvoidDrawEnd", event));
             directionsAvoidSelectInteraction.on("select", event => dispatch("onDirectionsAvoidSelect", event));
             dispatch("createDirectionsWaypointsModifyInteractionListener");
             dispatch("createDirectionsAvoidModifyInteractionListener");
@@ -269,7 +267,7 @@ export default {
         map.addLayer(directionsWaypointsLayer);
         map.addLayer(directionsAvoidLayer);
 
-        dispatch("createInteractionFromKartenmodus");
+        dispatch("createInteractionFromMapMode");
     },
 
     /**
@@ -277,16 +275,16 @@ export default {
      * @param {Object} context actions context object.
      * @returns {void}
      */
-    createInteractionFromKartenmodus ({state, dispatch}) {
-        const {kartenmodus} = state;
+    createInteractionFromMapMode ({state, dispatch}) {
+        const {mapMode} = state;
 
-        if (kartenmodus === "WAYPOINTS") {
+        if (mapMode === "WAYPOINTS") {
             dispatch("createDirectionsWaypointsDrawInteraction");
         }
-        else if (kartenmodus === "AVOID_AREAS") {
+        else if (mapMode === "AVOID_AREAS") {
             dispatch("createDirectionsAvoidDrawInteraction");
         }
-        else if (kartenmodus === "DELETE_AVOID_AREAS") {
+        else if (mapMode === "DELETE_AVOID_AREAS") {
             dispatch("createDirectionsAvoidSelectInteraction");
         }
     },
@@ -298,7 +296,6 @@ export default {
      */
     closeDirections ({rootGetters, state, dispatch}) {
         const {directionsWaypointsLayer, directionsRouteLayer, directionsAvoidLayer} = state,
-
             map = rootGetters["Map/map"];
 
         map.removeLayer(directionsRouteLayer);
@@ -465,7 +462,7 @@ export default {
     addWaypoint ({state}, {index, feature, displayName}) {
         let waypointIndex = index;
 
-        if (!index && index !== 0) {
+        if (typeof index !== "number") {
             waypointIndex = state.waypoints.length;
         }
         if (feature) {
@@ -535,7 +532,7 @@ export default {
     /**
      * Moves the waypoint at the given index down
      * @param {Object} context actions context object.
-     * @param {number} index for the waypoint to be moved down
+     * @param {Number} index for the waypoint to be moved down
      * @returns {void}
      */
     moveWaypointDown ({state, dispatch}, index) {
@@ -556,7 +553,7 @@ export default {
     /**
      * Moves the waypoint at the given index up
      * @param {Object} context actions context object.
-     * @param {number} index for the waypoint to be moved up
+     * @param {Number} index for the waypoint to be moved up
      * @returns {void}
      */
     moveWaypointUp ({state, dispatch}, index) {
@@ -622,7 +619,7 @@ export default {
      * @returns {void}
      */
     async onDirectionsAvoidDrawEnd ({dispatch}) {
-        // OpenLayers calls drawend before the feature is added to the source so we wait one interation
+        // OpenLayers calls drawend before the feature is added to the source so we wait one iteration
         setTimeout(() => dispatch("findDirections"), 0);
     },
     /**
@@ -754,7 +751,6 @@ export default {
      */
     removeDirectionsAvoidSelectInteraction ({state, rootGetters}) {
         const {directionsAvoidSelectInteraction} = state,
-
             map = rootGetters["Map/map"];
 
         map.removeInteraction(directionsAvoidSelectInteraction);

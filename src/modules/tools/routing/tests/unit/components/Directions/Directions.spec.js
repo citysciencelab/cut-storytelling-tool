@@ -178,33 +178,33 @@ describe("src/modules/tools/routing/components/Directions/Directions.vue", () =>
         });
     });
 
-    it("should toggle kartenmodus AVOID_AREAS => WAYPOINTS", async () => {
-        store.commit("Tools/Routing/Directions/setKartenmodus", "AVOID_AREAS");
+    it("should toggle mapMode AVOID_AREAS => WAYPOINTS", async () => {
+        store.commit("Tools/Routing/Directions/setMapMode", "AVOID_AREAS");
         wrapper = shallowMount(DirectionsComponent, {store, localVue});
-        wrapper.vm.changeSperrflaecheBearbeitenKartenmodus();
-        expect(wrapper.vm.kartenmodus).equal("WAYPOINTS");
+        wrapper.vm.changeMapModeAvoidAreasEdit();
+        expect(wrapper.vm.mapMode).equal("WAYPOINTS");
     });
 
-    it("should toggle kartenmodus WAYPOINTS => AVOID_AREAS", async () => {
-        store.commit("Tools/Routing/Directions/setKartenmodus", "WAYPOINTS");
+    it("should toggle mapMode WAYPOINTS => AVOID_AREAS", async () => {
+        store.commit("Tools/Routing/Directions/setMapMode", "WAYPOINTS");
         wrapper = shallowMount(DirectionsComponent, {store, localVue});
-        wrapper.vm.changeSperrflaecheBearbeitenKartenmodus();
-        expect(wrapper.vm.kartenmodus).equal("AVOID_AREAS");
+        wrapper.vm.changeMapModeAvoidAreasEdit();
+        expect(wrapper.vm.mapMode).equal("AVOID_AREAS");
     });
 
 
-    it("should toggle kartenmodus DELETE_AVOID_AREAS => WAYPOINTS", async () => {
-        store.commit("Tools/Routing/Directions/setKartenmodus", "DELETE_AVOID_AREAS");
+    it("should toggle mapMode DELETE_AVOID_AREAS => WAYPOINTS", async () => {
+        store.commit("Tools/Routing/Directions/setMapMode", "DELETE_AVOID_AREAS");
         wrapper = shallowMount(DirectionsComponent, {store, localVue});
-        wrapper.vm.changeSperrflaecheLoeschenKartenmodus();
-        expect(wrapper.vm.kartenmodus).equal("WAYPOINTS");
+        wrapper.vm.changeMapModeAvoidAreasDelete();
+        expect(wrapper.vm.mapMode).equal("WAYPOINTS");
     });
 
-    it("should toggle kartenmodus WAYPOINTS => DELETE_AVOID_AREAS", () => {
-        store.commit("Tools/Routing/Directions/setKartenmodus", "WAYPOINTS");
+    it("should toggle mapMode WAYPOINTS => DELETE_AVOID_AREAS", () => {
+        store.commit("Tools/Routing/Directions/setMapMode", "WAYPOINTS");
         wrapper = shallowMount(DirectionsComponent, {store, localVue});
-        wrapper.vm.changeSperrflaecheLoeschenKartenmodus();
-        expect(wrapper.vm.kartenmodus).equal("DELETE_AVOID_AREAS");
+        wrapper.vm.changeMapModeAvoidAreasDelete();
+        expect(wrapper.vm.mapMode).equal("DELETE_AVOID_AREAS");
     });
 
     it("should reset all user settings", async () => {

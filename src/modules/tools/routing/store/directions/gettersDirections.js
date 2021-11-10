@@ -33,14 +33,13 @@ const getters = {
      * @returns {String[]} avoid speed profile options
      */
     selectedAvoidSpeedProfileOptions ({settings, routingAvoidFeaturesOptions}) {
-        return constantsRouting.avoidSpeedProfileOptions.filter((option) => option.availableProfiles.includes(settings.speedProfile) && routingAvoidFeaturesOptions.includes(option.id)
-        );
+        return constantsRouting.avoidSpeedProfileOptions.filter((option) => option.availableProfiles.includes(settings.speedProfile) && routingAvoidFeaturesOptions.includes(option.id));
     },
     /**
      * Checks if input is disabled.
      * @param {Object} params from stateDirections
      * @param {Boolean} [params.isLoadingDirections] if the directions are currently loaded
-     * @returns {Boolean} true is input is disabled
+     * @returns {Boolean} true if input is disabled
      */
     isInputDisabled ({isLoadingDirections}) {
         return isLoadingDirections;

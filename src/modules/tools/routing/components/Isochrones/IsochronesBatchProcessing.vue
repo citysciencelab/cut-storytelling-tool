@@ -31,8 +31,8 @@ export default {
         ...mapActions("Alerting", ["addSingleAlert"]),
         /**
          * Called when files are added by the user to process
-         * loading animation is show while processing and an error is shown to the user if something happens while processing
-         * @param {File} files to process
+         * loading animation is shown while processing and an error is shown to the user if something happens while processing
+         * @param {File[]} files to process
          * @returns {void}
          */
         addFiles (files) {
@@ -86,8 +86,11 @@ export default {
             const downloadString = JSON.stringify(downloadObjects),
                 downloadFilename = this.createDownloadFilename(filename);
 
-            if (Radio.request("Util", "isInternetExplorer")) {
-                window.navigator.msSaveOrOpenBlob(new Blob([downloadString]), downloadFilename);
+            if (typeof navigator.msSaveOrOpenBlob === "function") {
+                // TODO übersetzung des Downloadtypes  GEOJSON nach json/geojson?
+                window.navigator.msSaveOrOpenBlob(new Blob([downloadString], {
+                    type: "application/geo+json;charset=utf-8"
+                }), downloadFilename);
             }
             else {
                 const url = `data:text/plain;charset=utf-8,${encodeURIComponent(downloadString)}`,
@@ -95,6 +98,7 @@ export default {
 
                 a.href = url;
                 a.download = downloadFilename;
+                a.style.visibility = "hidden";
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -106,6 +110,9 @@ export default {
          * @returns {String} new csv filename
          */
         createDownloadFilename (filename) {
+            if (typeof filename !== "string") {
+                return ".csv";
+            }
             const parts = filename.split("."),
                 partsOhneExtension = parts.slice(0, parts.length - 1);
 
@@ -118,21 +125,25 @@ export default {
          */
         parseCsv (filecontent) {
             return new Promise((resolve, reject) => {
-                const content = filecontent.replace(/[\r]/g, "").trim(),
-                    lines = content.split("\n"),
-                    anzahl = lines.length,
-                    tasks = [];
-
-                if (content.length === 0 || anzahl === 0) {
+                if (typeof filecontent !== "string") {
                     reject(new Error(this.$t("common:modules.tools.routing.isochrones.batchProcessing.errorNoEntries")));
                     return;
                 }
-                if (anzahl > this.settings.batchProcessing.limit) {
+                const content = filecontent.replace(/[\r]/g, "").trim(),
+                    lines = content.split("\n"),
+                    count = lines.length,
+                    tasks = [];
+
+                if (content.length === 0 || count === 0) {
+                    reject(new Error(this.$t("common:modules.tools.routing.isochrones.batchProcessing.errorNoEntries")));
+                    return;
+                }
+                if (count > this.settings.batchProcessing.limit) {
                     reject(new Error(this.$t("common:modules.tools.routing.isochrones.batchProcessing.errorToManyEntriesInFile", {limit: this.settings.batchProcessing.limit})));
                     return;
                 }
 
-                for (let i = 0; i < anzahl; i++) {
+                for (let i = 0; i < count; i++) {
                     const line = lines[i],
                         lineParts = line.split(";");
 
@@ -208,7 +219,7 @@ export default {
         },
         /**
          * Checks if input is a number
-         * @param {String | Number} num to check
+         * @param {*} num to check
          * @returns {Boolean} true if number
          */
         isNumber (num) {
@@ -223,8 +234,8 @@ export default {
         :settings="settings"
         :progress="taskHandler ? taskHandler.progress : 0"
         :is-processing="isProcessing"
-        :struktur-text="$t('common:modules.tools.routing.isochrones.batchProcessing.structure')"
-        beispiel-text="1;8.12;50.67"
+        :structure-text="$t('common:modules.tools.routing.isochrones.batchProcessing.structure')"
+        example-text="1;8.12;50.67"
         @filesadded="addFiles($event)"
         @cancelProcess="taskHandler.cancelRun()"
     />

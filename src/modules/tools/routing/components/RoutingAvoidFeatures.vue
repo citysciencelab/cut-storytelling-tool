@@ -96,9 +96,7 @@ export default {
                     :value="option.id"
                     :checked="getIsRoutingAvoidFeaturesOptionsChecked(option)"
                     :disabled="disabled"
-                    @change="
-                        setRoutingAvoidFeaturesOptions(option, $event.target.checked)
-                    "
+                    @change="setRoutingAvoidFeaturesOptions(option, $event.target.checked)"
                 >
                 <span class="ml-2">{{ $t('common:modules.tools.routing.avoidOptions.' + option.id) }}</span>
             </label>

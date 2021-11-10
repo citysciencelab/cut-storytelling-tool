@@ -171,10 +171,10 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
         expect(highlightFeature.getGeometry().getCoordinates()).to.deep.equal([]);
     });
 
-    it("should highlightRoute with 'vonWaypointIndex' and 'bisWaypointIndex'", async () => {
+    it("should highlightRoute with 'fromWaypointIndex' and 'toWaypointIndex'", async () => {
         await actionsDirections.highlightRoute({state, getters, commit, dispatch, rootGetters}, {
-            vonWaypointIndex: 0,
-            bisWaypointIndex: 1
+            fromWaypointIndex: 0,
+            toWaypointIndex: 1
         });
 
         expect(dispatchSpy.args).to.deep.equal([
@@ -228,7 +228,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
             ["createDirectionsWaypointsModifyInteractionListener"],
             ["createDirectionsAvoidModifyInteractionListener"],
             ["createDirectionsRouteModifyInteractionListener"],
-            ["createInteractionFromKartenmodus"]
+            ["createInteractionFromMapMode"]
         ]);
 
         expect(commitSpy.args).to.deep.equal([
@@ -242,31 +242,31 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
 
         expect(dispatchSpy.args).to.deep.equal([
             ["initWaypoints"],
-            ["createInteractionFromKartenmodus"]
+            ["createInteractionFromMapMode"]
         ]);
     });
 
-    it("should createInteractionFromKartenmodus with kartenmodus 'WAYPOINTS'", async () => {
-        state.kartenmodus = "WAYPOINTS";
-        await actionsDirections.createInteractionFromKartenmodus({state, getters, commit, dispatch, rootGetters});
+    it("should createInteractionFromMapMode with mapMode 'WAYPOINTS'", async () => {
+        state.mapMode = "WAYPOINTS";
+        await actionsDirections.createInteractionFromMapMode({state, getters, commit, dispatch, rootGetters});
 
         expect(dispatchSpy.args).to.deep.equal([
             ["createDirectionsWaypointsDrawInteraction"]
         ]);
     });
 
-    it("should createInteractionFromKartenmodus with kartenmodus 'AVOID_AREAS'", async () => {
-        state.kartenmodus = "AVOID_AREAS";
-        await actionsDirections.createInteractionFromKartenmodus({state, getters, commit, dispatch, rootGetters});
+    it("should createInteractionFromMapMode with mapMode 'AVOID_AREAS'", async () => {
+        state.mapMode = "AVOID_AREAS";
+        await actionsDirections.createInteractionFromMapMode({state, getters, commit, dispatch, rootGetters});
 
         expect(dispatchSpy.args).to.deep.equal([
             ["createDirectionsAvoidDrawInteraction"]
         ]);
     });
 
-    it("should createInteractionFromKartenmodus with kartenmodus 'DELETE_AVOID_AREAS'", async () => {
-        state.kartenmodus = "DELETE_AVOID_AREAS";
-        await actionsDirections.createInteractionFromKartenmodus({state, getters, commit, dispatch, rootGetters});
+    it("should createInteractionFromMapMode with mapMode 'DELETE_AVOID_AREAS'", async () => {
+        state.mapMode = "DELETE_AVOID_AREAS";
+        await actionsDirections.createInteractionFromMapMode({state, getters, commit, dispatch, rootGetters});
 
         expect(dispatchSpy.args).to.deep.equal([
             ["createDirectionsAvoidSelectInteraction"]

@@ -5,7 +5,6 @@ import {
 import {getMapProjection, transform} from "masterportalAPI/src/crs";
 import {fetchRoutingBkgGeosearch, fetchRoutingBkgGeosearchReverse} from "../utils/geosearch/routing-bkg-geosearch";
 import * as constantsRouting from "./constantsRouting";
-import i18next from "i18next";
 
 export default {
     /**
@@ -35,7 +34,7 @@ export default {
             });
 
         if (missing.length > 0) {
-            throw new Error("Routing ist nicht korrekt konfiguriert. Folgende Felder fehlen: " + missing.map(m => m.join(".")).join(", "));
+            throw new Error("Routing tool is not configured correctly. The following required fields are missing: " + missing.map(m => m.join(".")).join(", "));
         }
     },
     /**
@@ -59,7 +58,7 @@ export default {
                 geosearchResults = await fetchRoutingBkgGeosearch(search);
             }
             else {
-                throw new Error("Geosearch ist nicht korrekt konfiguriert");
+                throw new Error("Geosearch is not configured correctly.");
             }
 
             // Transform WGS84 Coordinates to Local Projection
@@ -102,7 +101,7 @@ export default {
                 geosearchResult = await fetchRoutingBkgGeosearchReverse(coordinates);
             }
             else {
-                throw new Error("Geosearch ist nicht korrekt konfiguriert");
+                throw new Error("Geosearch is not configured correctly.");
             }
 
             // Transform WGS84 Coordinates to Local Projection
@@ -115,10 +114,7 @@ export default {
             geosearchResult.setCoordinates(coordinatesLocal);
         }
         catch (err) {
-            // dispatch("Alerting/addSingleAlert", {
-            //     category: i18next.t("common:modules.alerting.categories.error"),
-            //     content: "Fehler bei Abfrage der Adresse"
-            // }, {root: true});
+            // fail silently, comment needed for linter
         }
         return geosearchResult;
     },

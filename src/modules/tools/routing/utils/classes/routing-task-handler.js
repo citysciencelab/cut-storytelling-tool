@@ -1,12 +1,12 @@
 /**
-     * @description Handles the batch processing in parallel tasks and returns the results.
-     * @class RoutingTaskHandler
-     */
+ * @description Handles the batch processing in parallel tasks and returns the results.
+ * @class RoutingTaskHandler
+ */
 export class RoutingTaskHandler {
     /**
      * creates new RoutingTaskHandler
-     * @param {Array} tasks array of functions which returns a new promise with a task as body.
-     * @param {number} concurrentCount of tasks which are allowed to run in parallel.
+     * @param {Function[]} tasks array of functions which returns a new promise with a task as body.
+     * @param {Number} concurrentCount of tasks which are allowed to run in parallel.
      * @param {Function} addNewResult function to execute after completion of one task to save the result.
      * @param {Function} executeAfterCompletion function to execute after completion of all tasks.
      */
@@ -27,7 +27,7 @@ export class RoutingTaskHandler {
 
     /**
      * Checks if all tasks are complete.
-     * @returns {boolean} .
+     * @returns {Boolean} true if all tasks are complete.
      */
     isDone () {
         return this.total === this.complete.length;
@@ -43,7 +43,7 @@ export class RoutingTaskHandler {
 
     /**
      * Checks if tasks are remaining.
-     * @returns {boolean} .
+     * @returns {Boolean} true if tasks are remaining.
      */
     runNext () {
         return (this.running.length < this.count) && this.todo.length;
@@ -51,7 +51,7 @@ export class RoutingTaskHandler {
 
     /**
      * Starts tasks for the remaining open parallel spots.
-     * @returns {void | object} Tasks Results
+     * @returns {Object|void} Tasks Results
      */
     run () {
         if (this.canceled) {

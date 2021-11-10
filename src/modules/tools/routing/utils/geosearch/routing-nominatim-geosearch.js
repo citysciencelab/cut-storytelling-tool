@@ -4,7 +4,7 @@ import state from "./../../store/stateRouting";
 
 /**
  * Requests POIs from text from Nominatim
- * @param {string} search text to search with
+ * @param {String} search text to search with
  * @returns {RoutingGeosearchResult[]} routingGeosearchResults
  */
 async function fetchRoutingNominatimGeosearch (search) {
@@ -24,7 +24,7 @@ async function fetchRoutingNominatimGeosearch (search) {
 
 /**
  * Requests POI at coordinate from Nominatim
- * @param {[number, number]} coordinates to search at
+ * @param {[Number, Number]} coordinates to search at
  * @returns {RoutingGeosearchResult} routingGeosearchResult
  */
 async function fetchRoutingNominatimGeosearchReverse (coordinates) {

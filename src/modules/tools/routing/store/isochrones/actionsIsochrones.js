@@ -9,7 +9,7 @@ export default {
      * @returns {void}
      */
     async findIsochrones ({rootGetters, state, dispatch, commit}) {
-        if (state.waypoint.getCoordinates().length < 2) {
+        if (state?.waypoint?.getCoordinates().length < 2) {
             return;
         }
         const {waypoint, isochronesAreaSource} = state,
@@ -26,17 +26,20 @@ export default {
         try {
             const result = await dispatch("fetchIsochrones", {wgs84Coords: wgs84Coords, transformCoordinates: true});
 
-            isochronesAreaSource.addFeatures(result.getAreas().map(area => new Feature({
-                geometry: new Polygon(area.getCoordinates()),
-                value: area.getValue(),
-                maximum: area.getMaximum(),
-                interval: area.getInterval(),
-                speedProfile: area.getSpeedProfile(),
-                optimization: area.getOptimization(),
-                color: area.getColor(),
-                avoidSpeedProfileOptions: area.getAvoidSpeedProfileOptions()
-            })
-            ));
+            isochronesAreaSource.addFeatures(
+                result.getAreas().map(
+                    area => new Feature({
+                        geometry: new Polygon(area.getCoordinates()),
+                        value: area.getValue(),
+                        maximum: area.getMaximum(),
+                        interval: area.getInterval(),
+                        speedProfile: area.getSpeedProfile(),
+                        optimization: area.getOptimization(),
+                        color: area.getColor(),
+                        avoidSpeedProfileOptions: area.getAvoidSpeedProfileOptions()
+                    })
+                )
+            );
             map.getView().fit(isochronesAreaSource.getExtent());
 
             commit("setRoutingIsochrones", result);
@@ -75,7 +78,7 @@ export default {
      * Fetches the isochrones from the configured external service with the needed parameters.
      * @param {Object} context actions context object.
      * @param {Object} params with wgs84Coords([Number, Number][]) and transformCoordinates(Boolean)
-     * @param {[number, number]} [params.wgs84Coords] coordinates in wgs84 projection
+     * @param {[Number, Number]} [params.wgs84Coords] coordinates in wgs84 projection
      * @param {Boolean} [params.transformCoordinates] the coordinates should be projected to local projection
      * @returns {RoutingIsochrones} routingIsochrones
      */
@@ -98,7 +101,7 @@ export default {
             });
         }
 
-        throw new Error("Erreichbarkeit ist nicht korrekt konfiguriert");
+        throw new Error("Isochrones is not configured correctly.");
     },
 
     /**
@@ -111,8 +114,7 @@ export default {
             map = rootGetters["Map/map"];
 
         if (!mapListenerAdded) {
-            isochronesPointDrawInteraction.on("drawend", event => dispatch("onIsochronesPointDrawEnd", event)
-            );
+            isochronesPointDrawInteraction.on("drawend", event => dispatch("onIsochronesPointDrawEnd", event));
             dispatch("createIsochronePointModifyInteractionListener");
             commit("setMapListenerAdded", true);
         }
@@ -130,7 +132,6 @@ export default {
      */
     closeIsochrones ({rootGetters, state, dispatch}) {
         const {isochronesPointLayer, isochronesAreaLayer} = state,
-
             map = rootGetters["Map/map"];
 
         map.removeLayer(isochronesPointLayer);

@@ -48,6 +48,6 @@ export default {
     routingDirections: null,
     mapListenerAdded: false,
     isLoadingDirections: false,
-    kartenmodus: "WAYPOINTS",
+    mapMode: "WAYPOINTS",
     settings: stateRouting.directionsSettings
 };

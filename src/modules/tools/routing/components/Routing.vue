@@ -33,7 +33,7 @@ export default {
     },
     async created () {
         this.$on("close", this.close);
-        // updateMap is called to late in Tool.vue when routing tool is set to active:true in config.json
+        // updateMap is called too late in Tool.vue when routing tool is set to active:true in config.json
         if (!this.renderToWindow) {
             Radio.trigger("Map", "updateSize");
         }

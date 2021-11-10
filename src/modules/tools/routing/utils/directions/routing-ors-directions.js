@@ -8,8 +8,8 @@ import routingOrsAvoidOption from "../avoidoptions/routing-ors-avoidoptions";
 
 /**
  * Translates the Preference in the corresponding value for the service
- * @param {string} preference set by the user
- * @returns {string} translated service value
+ * @param {String} preference set by the user
+ * @returns {String} translated service value
  */
 function routingOrsPreference (preference) {
     switch (preference) {
@@ -22,9 +22,9 @@ function routingOrsPreference (preference) {
 /**
  * Requests directions from ors service.
  * @param {Object} params parameter
- * @param {[number, number]} [params.coordinates] in wgs84 projection
+ * @param {[Number, Number]} [params.coordinates] in wgs84 projection
  * @param {String} [params.language] to request the instructions in local language.
- * @param {function} [params.transformCoordinatesToLocal] function to transform result coordinates to local projection.
+ * @param {Function} [params.transformCoordinatesToLocal] function to transform result coordinates to local projection.
  * @param {String} [params.speedProfile] to request the directions with
  * @param {{id: String}[]} [params.avoidSpeedProfileOptions] options to avoid
  * @param {String} [params.preference] to request the directions with

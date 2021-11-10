@@ -46,7 +46,7 @@ describe("src/modules/tools/routing/store/actionsRouting.js", () => {
             actionsRouting.checkNonOptionalConfigFields({rootState});
         }
         catch (e) {
-            expect(e.message).equal("Routing ist nicht korrekt konfiguriert. Folgende Felder fehlen: geosearch.type, geosearch.serviceId, geosearchReverse.type, geosearchReverse.serviceId, directionsSettings.type, directionsSettings.serviceId, isochronesSettings.type, isochronesSettings.serviceId");
+            expect(e.message).equal("Routing tool is not configured correctly. The following required fields are missing: geosearch.type, geosearch.serviceId, geosearchReverse.type, geosearchReverse.serviceId, directionsSettings.type, directionsSettings.serviceId, isochronesSettings.type, isochronesSettings.serviceId");
         }
     });
 

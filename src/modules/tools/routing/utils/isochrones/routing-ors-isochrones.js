@@ -6,36 +6,36 @@ import routingOrsSpeedProfile from "../speedprofiles/routing-ors-speedprofiles";
 import state from "./../../store/stateRouting";
 
 /**
- * Translates the Optimization in the corresponding value for the service
- * @param {string} optimization set by the user
- * @returns {string} translated service value
+ * Translates the optimization in the corresponding value for the service
+ * @param {String} optimization set by the user
+ * @returns {String} translated service value
  */
 function routingOrsOptimization (optimization) {
     switch (optimization) {
         case "TIME": return "time";
         case "DISTANCE": return "distance";
-        default: throw new Error("Fehlende rangeType Übersetzung");
+        default: throw new Error("Missing rangeType translation");
     }
 }
 
 /**
- * Translates the Optimization in the corresponding multiplicator value for the service
- * @param {string} optimization set by the user
- * @returns {number} multiplicator for the specified optimization
+ * Translates the optimization in the corresponding multiplicator value for the service
+ * @param {String} optimization set by the user
+ * @returns {Number} multiplicator for the specified optimization
  */
 function routingOrsOptimizationMultiplicator (optimization) {
     switch (optimization) {
         case "TIME": return 60;
         case "DISTANCE": return 1000;
-        default: throw new Error("Fehlende optimization - multiplicator Übersetzung");
+        default: throw new Error("Missing optimization to multiplicator translation");
     }
 }
 
 /**
  * Requests isochrones from ors service.
  * @param {Object} params for the function
- * @param {[number, number]} [params.coordinates] coordinates in wgs84 projection
- * @param {function} [params.transformCoordinatesToLocal] function to transform result coordinates to local projection.
+ * @param {[Number, Number]} [params.coordinates] coordinates in wgs84 projection
+ * @param {Function} [params.transformCoordinatesToLocal] function to transform result coordinates to local projection.
  * @param {String} [params.speedProfile] which is used to request the isochrones for.
  * @param {String} [params.optimization] which optimization to request
  * @param {{id: String}[]} [params.avoidSpeedProfileOptions] which options to avoid
@@ -65,11 +65,14 @@ async function fetchRoutingOrsIsochrones ({
 
     try {
         response = await axios.post(url, {
-            interval: interval, // 15 Min * 60 Sek || 15km * 1000m // Zwischenintervalle
+            // 15 Min * 60 Sek || 15km * 1000m // interval steps
+            interval,
             locations: [coordinates],
-            location_type: "start", // start || destination
+            // start || destination
+            location_type: "start",
             range_type: routingOrsOptimization(optimization),
-            range: [range], // 30Min * 60 Sek || 30km * 1000m // maximale reichweite
+            // 30Min * 60 Sek || 30km * 1000m // maximum distance
+            range: [range],
             options: {
                 ...avoidSpeedProfileOptions.length > 0 && {avoid_features: avoidSpeedProfileOptions.map(o => routingOrsAvoidOption(o.id))}
             },

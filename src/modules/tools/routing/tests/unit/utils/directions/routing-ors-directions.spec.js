@@ -42,7 +42,7 @@ describe("src/modules/tools/routing/utils/directions/routing-ors-directions.js",
                                                     duration: 10.5,
                                                     type: 11,
                                                     instruction:
-                                                        "Weiter östlich auf L 3080",
+                                                        "Further east on L 3080",
                                                     name: "L 3080",
                                                     way_points: [0, 5]
                                                 },
@@ -51,7 +51,7 @@ describe("src/modules/tools/routing/utils/directions/routing-ors-directions.js",
                                                     duration: 0.0,
                                                     type: 10,
                                                     instruction:
-                                                        "Sie erreichen L 3080 (rechts)",
+                                                        "You will reach L 3080 (right)",
                                                     name: "-",
                                                     way_points: [5, 5]
                                                 }
@@ -148,7 +148,7 @@ describe("src/modules/tools/routing/utils/directions/routing-ors-directions.js",
                         new RoutingDirectionsStep({
                             distance: 262.4,
                             duration: 10.5,
-                            instruction: "Weiter östlich auf L 3080",
+                            instruction: "Further east on L 3080",
                             name: "L 3080",
                             type: 11,
                             waypoints: [0, 5]
@@ -156,7 +156,7 @@ describe("src/modules/tools/routing/utils/directions/routing-ors-directions.js",
                         new RoutingDirectionsStep({
                             distance: 0,
                             duration: 0,
-                            instruction: "Sie erreichen L 3080 (rechts)",
+                            instruction: "You will reach L 3080 (right)",
                             name: "-",
                             type: 10,
                             waypoints: [5, 5]

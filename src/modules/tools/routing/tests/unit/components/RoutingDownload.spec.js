@@ -5,7 +5,6 @@ import RoutingDownloadComponent from "../../../components/RoutingDownload.vue";
 import Routing from "../../../store/indexRouting";
 import Feature from "ol/Feature";
 import LineString from "ol/geom/LineString";
-import {KML} from "ol/format";
 
 const localVue = createLocalVue();
 
@@ -153,30 +152,6 @@ describe("src/modules/tools/routing/components/RoutingDownload.vue", () => {
         expect(downloadString).equal("<gpx xmlns=\"http://www.topografix.com/GPX/1/1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\" version=\"1.1\" creator=\"OpenLayers\"><rte><rtept lat=\"52\" lon=\"8\"/><rtept lat=\"53\" lon=\"9\"/></rte></gpx>");
     });
 
-    it("converts feature to 'KML'", async () => {
-        wrapper = shallowMount(RoutingDownloadComponent, {
-            store,
-            localVue,
-            propsData: props
-        });
-        wrapper.vm.download.format = "KML";
-        wrapper.vm.transformCoordinatesLocalToWgs84Projection = (coordinates) => coordinates;
-        // can't use getDownloadStringInFormat because extractStyles is needed in the config for unittests.
-        const downloadString = await wrapper.vm.convertFeatures(
-            [
-                new Feature({
-                    geometry: new LineString([[8, 52], [9, 53]]),
-                    properties: {
-                        test: "test"
-                    }
-                })
-            ],
-            new KML({extractStyles: true})
-        );
-
-        expect(downloadString).equal("<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.opengis.net/kml/2.2 https://developers.google.com/kml/schema/kml22gx.xsd\"><Placemark><ExtendedData><Data name=\"properties\"/></ExtendedData><LineString><coordinates>8,52 9,53</coordinates></LineString></Placemark></kml>");
-    });
-
     it("should add file type to file name", async () => {
         wrapper = shallowMount(RoutingDownloadComponent, {
             store,
@@ -186,6 +161,6 @@ describe("src/modules/tools/routing/components/RoutingDownload.vue", () => {
         wrapper.vm.download.format = "GEOJSON";
         wrapper.vm.download.fileName = "test";
 
-        expect(wrapper.vm.getFileName()).equal("test.GEOJSON");
+        expect(wrapper.vm.getFileName()).equal("test.geojson");
     });
 });

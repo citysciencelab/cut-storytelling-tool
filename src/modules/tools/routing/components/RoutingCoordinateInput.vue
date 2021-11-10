@@ -1,5 +1,6 @@
 <script>
 import {mapActions} from "vuex";
+import {RoutingGeosearchResult} from "../utils/classes/routing-geosearch-result";
 
 export default {
     name: "RoutingCoordinateInput",
@@ -32,24 +33,6 @@ export default {
          */
         waypointDisplayName () {
             return this.waypoint.getDisplayName();
-        },
-        /**
-         * Checks if the current input text string is in the lat, lng format
-         * @returns {Boolean} true if is in the lat, lng format in the wgs84 range
-         */
-        isInputtextWgs84Coordinate () {
-            const [latString, lngString] = this.search.split(", "),
-                lat = Number(latString),
-                lng = Number(lngString);
-
-            if (!latString || !lngString) {
-                return false;
-            }
-            if (!isFinite(lat) || Math.abs(lat) > 90 || !isFinite(lng) || Math.abs(lng) > 180) {
-                return false;
-            }
-
-            return [lat, lng];
         }
     },
     watch: {
@@ -74,8 +57,10 @@ export default {
             if (!this.awaitingSearch) {
                 setTimeout(async () => {
                     this.awaitingSearch = false;
-                    if (this.isInputtextWgs84Coordinate) {
-                        await this.selectWgs84Coordinate(this.isInputtextWgs84Coordinate);
+                    const isWgs84Coordinate = this.isInputtextWgs84Coordinate(this.search);
+
+                    if (isWgs84Coordinate) {
+                        await this.selectWgs84Coordinate(isWgs84Coordinate);
                     }
                     else {
                         this.searchResults = await this.fetchCoordinatesByText({
@@ -95,6 +80,9 @@ export default {
          * @returns {void}
          */
         selectSearchResult (searchResult) {
+            if (!(searchResult instanceof RoutingGeosearchResult)) {
+                return;
+            }
             this.waypoint.setFromGeosearchResult(searchResult);
             this.ignoreNextSearchChange = true;
             this.search = searchResult.getDisplayName();
@@ -103,7 +91,7 @@ export default {
         },
         /**
          * Passes the input wgs84 coordinate to the waypoint
-         * @param {[number, number]} wgs84Coordinate which was entered in the input text
+         * @param {[Number, Number]} wgs84Coordinate which was entered in the input text
          * @returns {void}
          */
         async selectWgs84Coordinate (wgs84Coordinate) {
@@ -125,6 +113,40 @@ export default {
             else {
                 this.search = "";
             }
+        },
+        /**
+         * Checks if the current input text string is in the lat, lng format
+         * @returns {Boolean} true if current input text is in the lat, lng format in the wgs84 range
+         */
+        isInputtextWgs84Coordinate () {
+            if (typeof this.search !== "string") {
+                return false;
+            }
+            const [latString, lngString] = this.search.split(", "),
+                lat = Number(latString),
+                lng = Number(lngString);
+
+            if (!latString || !lngString) {
+                return false;
+            }
+            if (!isFinite(lat) || Math.abs(lat) > 90 || !isFinite(lng) || Math.abs(lng) > 180) {
+                return false;
+            }
+
+            return [lat, lng];
+        },
+        /**
+         * Creates placeholder text for the input field
+         * @returns {String} placeholder text
+         */
+        getPlaceholder () {
+            if (this.waypoint.index === 0) {
+                return i18next.t("common:modules.tools.routing.startpoint");
+            }
+            else if (this.waypoint.index === this.countWaypoints - 1) {
+                return i18next.t("common:modules.tools.routing.endpoint");
+            }
+            return i18next.t("common:modules.tools.routing.waypoint");
         }
     }
 };
@@ -134,7 +156,7 @@ export default {
     <div class="form-group-sm mx-0 mb-4">
         <div
             v-if="isFocused"
-            class="mx-6 hilfetext"
+            class="mx-6 helptext"
         >
             <span>{{ $t('common:modules.tools.routing.coordinateInputHelp') }}</span>
         </div>
@@ -150,7 +172,7 @@ export default {
                     v-model="search"
                     type="text"
                     class="col-md-11 col-sm-11 form-control"
-                    :placeholder="waypoint.index === 0 ? $t('common:modules.tools.routing.startpoint') : waypoint.index === countWaypoints - 1 ? $t('common:modules.tools.routing.endpoint') : $t('common:modules.tools.routing.waypoint')"
+                    :placeholder="getPlaceholder()"
                     autocomplete="off"
                     @focus="isFocused = true"
                     @blur="isFocused = false"
@@ -267,7 +289,7 @@ label {
     pointer-events: all;
 }
 
-.hilfetext {
+.helptext {
     max-width: 350px;
 }
 

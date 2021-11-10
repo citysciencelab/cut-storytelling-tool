@@ -1,4 +1,5 @@
 <script>
+import thousandsSeparator from "../../../../utils/thousandsSeparator";
 export default {
     name: "RoutingDistanceDisplay",
     props: {
@@ -26,7 +27,7 @@ export default {
          * @returns {Number} kilometer distance
          */
         kmDistance () {
-            return (Math.floor((this.roundedDistance / 1000) * 10) / 10).toLocaleString();
+            return thousandsSeparator(Math.floor((this.roundedDistance / 1000) * 10) / 10);
         }
     }
 };

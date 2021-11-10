@@ -1,7 +1,7 @@
 /**
  * Translates the SpeedProfile in the corresponding value for the service
- * @param {string} speedProfile set by the user
- * @returns {string} translated service value
+ * @param {String} speedProfile set by the user
+ * @returns {String} translated service value
  */
 export default function routingOrsSpeedProfile (speedProfile) {
     switch (speedProfile) {
@@ -10,6 +10,6 @@ export default function routingOrsSpeedProfile (speedProfile) {
         case "CYCLING": return "cycling-regular";
         case "FOOT": return "foot-walking";
         case "WHEELCHAIR": return "wheelchair";
-        default: throw new Error("Fehlende SpeedProfil Übersetzung");
+        default: throw new Error("Missing speedProfil translation");
     }
 }

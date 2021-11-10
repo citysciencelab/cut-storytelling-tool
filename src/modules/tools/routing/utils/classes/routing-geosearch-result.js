@@ -1,13 +1,13 @@
 /**
-     * @description Abstracts the search results of coordinates by text and text by coordinates.
-     * @class RoutingGeosearchResult
-     */
+ * @description Abstracts the search results of coordinates by text and text by coordinates.
+ * @class RoutingGeosearchResult
+ */
 class RoutingGeosearchResult {
     /**
      * creates new RoutingGeosearchResult
-     * @param {number} lat coordinate.
-     * @param {number} lng coordinate.
-     * @param {string} displayName of coordinate.
+     * @param {Number} lat coordinate.
+     * @param {Number} lng coordinate.
+     * @param {String} displayName of coordinate.
      */
     constructor (lat, lng, displayName) {
         this.lat = lat;
@@ -18,14 +18,14 @@ class RoutingGeosearchResult {
 
     /**
      * Lat coordinate.
-     * @returns {number} lat coordinate.
+     * @returns {Number} lat coordinate.
      */
     getLat () {
         return this.lat;
     }
     /**
      * Lat coordinate.
-     * @param {number} lat coordinate.
+     * @param {Number} lat coordinate.
      * @returns {void}
      */
     setLat (lat) {
@@ -34,14 +34,14 @@ class RoutingGeosearchResult {
 
     /**
      * Lng coordinate.
-     * @returns {number} lng coordinate.
+     * @returns {Number} lng coordinate.
      */
     getLng () {
         return this.lng;
     }
     /**
      * Lng coordinate.
-     * @param {number} lng coordinate.
+     * @param {Number} lng coordinate.
      * @returns {void}
      */
     setLng (lng) {
@@ -50,14 +50,14 @@ class RoutingGeosearchResult {
 
     /**
      * DisplayName of coordinate.
-     * @returns {string} displayName of coordinate.
+     * @returns {Number} displayName of coordinate.
      */
     getDisplayName () {
         return this.displayName;
     }
     /**
      * DisplayName coordinate.
-     * @param {string} displayName coordinate.
+     * @param {Number} displayName coordinate.
      * @returns {void}
      */
     setDisplayName (displayName) {
@@ -66,14 +66,14 @@ class RoutingGeosearchResult {
 
     /**
      * Coordinates in local projection.
-     * @returns {[number, number]} coordinates in local projection.
+     * @returns {[Number, Number]} coordinates in local projection.
      */
     getCoordinates () {
         return this.coordinates;
     }
     /**
      * Coordinates in local projection.
-     * @param {[number, number]} coordinates in local projection.
+     * @param {[Number, Number]} coordinates in local projection.
      * @returns {void}
      */
     setCoordinates (coordinates) {

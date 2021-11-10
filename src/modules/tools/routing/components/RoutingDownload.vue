@@ -3,6 +3,7 @@ import {mapGetters, mapActions} from "vuex";
 import * as constants from "./../store/constantsRouting";
 import {GeoJSON, GPX} from "ol/format.js";
 import convertFeaturesToKml from "../../../../utils/convertFeaturesToKml";
+import Feature from "ol/Feature";
 
 export default {
     name: "RoutingDownload",
@@ -26,7 +27,7 @@ export default {
          * @returns {Boolean} true if no file name was entered.
          */
         isDisabled () {
-            return this.download.fileName.length === 0;
+            return !this.download?.fileName?.length;
         },
         /**
          * Computed value for the format options to hide the GPX format
@@ -60,13 +61,18 @@ export default {
          *
          * @param {module:ol/Feature[]} features which are to be converted.
          * @param {module:ol/format} format Format in which the features should be saved.
-         * @returns {string} The features written in the chosen format as a String.
+         * @returns {String} The features written in the chosen format as a String.
          */
         async convertFeatures (features, format) {
+            if (!(format instanceof GeoJSON) && !(format instanceof GPX) || !Array.isArray(features)) {
+                return "";
+            }
             const convertedFeatures = [];
 
             for (const feature of features) {
-
+                if (!(feature instanceof Feature)) {
+                    continue;
+                }
                 const clone = feature.clone(),
                     geometry = clone.getGeometry(),
                     type = geometry.getType(),
@@ -96,7 +102,7 @@ export default {
          * @returns {String} string to be downloaded
          */
         async getDownloadStringInFormat (features) {
-            switch (this.download.format) {
+            switch (this.download?.format) {
                 case "GEOJSON":
                     return this.convertFeatures(features, new GeoJSON());
                 case "GPX":
@@ -112,7 +118,10 @@ export default {
          * @returns {String} the filename to be used when downloading
          */
         getFileName () {
-            return this.download.fileName.includes(".") ? this.download.fileName : `${this.download.fileName}.${this.download.format}`;
+            if (typeof this.download?.fileName !== "string" || typeof this.download?.format !== "string") {
+                return "unknown";
+            }
+            return this.download.fileName.includes(".") ? this.download.fileName : `${this.download.fileName}.${this.download.format.toLowerCase()}`;
         },
         /**
          * Executed by the user when clicking the download button.
@@ -123,12 +132,13 @@ export default {
             if (this.isDisabled) {
                 return;
             }
-            const isIE = Radio.request("Util", "isInternetExplorer"),
-                downloadString = await this.getDownloadStringInFormat(this.getDownloadFeatures()),
+            const downloadString = await this.getDownloadStringInFormat(this.getDownloadFeatures()),
                 fileName = this.getFileName();
 
-            if (isIE) {
-                window.navigator.msSaveOrOpenBlob(new Blob([downloadString]), fileName);
+            if (typeof navigator.msSaveOrOpenBlob === "function") {
+                window.navigator.msSaveOrOpenBlob(new Blob([downloadString], {
+                    type: "text/plain;charset=utf-8"
+                }), fileName);
             }
             else {
                 const url = `data:text/plain;charset=utf-8,${encodeURIComponent(downloadString)}`,
@@ -136,6 +146,7 @@ export default {
 
                 a.href = url;
                 a.download = fileName;
+                a.style.visibility = "hidden";
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);

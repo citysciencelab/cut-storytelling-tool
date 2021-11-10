@@ -1,11 +1,11 @@
 /**
-     * @description Abstracts the search results of isochrones.
-     * @class RoutingIsochrones
-     */
+ * @description Abstracts the search results of isochrones.
+ * @class RoutingIsochrones
+ */
 class RoutingIsochrones {
     /**
      * creates new RoutingIsochrones
-     * @param {[number, number, number, number]} bbox of isochrones.
+     * @param {[Number, Number, Number, Number]} bbox of isochrones.
      */
     constructor (bbox) {
         this.bbox = bbox;
@@ -14,7 +14,7 @@ class RoutingIsochrones {
 
     /**
      * BBOX of all areas.
-     * @returns {[number, number, number, number]} bbox of all areas.
+     * @returns {[Number, Number, Number, Number]} bbox of all areas.
      */
     getBbox () {
         return this.bbox;

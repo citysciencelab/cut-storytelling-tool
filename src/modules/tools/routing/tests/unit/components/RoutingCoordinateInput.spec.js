@@ -83,7 +83,7 @@ describe("src/modules/tools/routing/components/RoutingCoordinateInput.vue", () =
         });
         wrapper.find("input").element.focus();
         await wrapper.vm.$nextTick();
-        expect(wrapper.find(".hilfetext").exists()).to.be.true;
+        expect(wrapper.find(".helptext").exists()).to.be.true;
     });
 
     it("hides info text on blur", async () => {
@@ -94,11 +94,11 @@ describe("src/modules/tools/routing/components/RoutingCoordinateInput.vue", () =
         });
         wrapper.find("input").element.focus();
         await wrapper.vm.$nextTick();
-        expect(wrapper.find(".hilfetext").exists()).to.be.true;
+        expect(wrapper.find(".helptext").exists()).to.be.true;
 
         wrapper.find("input").element.blur();
         await wrapper.vm.$nextTick();
-        expect(wrapper.find(".hilfetext").exists()).to.be.false;
+        expect(wrapper.find(".helptext").exists()).to.be.false;
     });
 
     it("emits moveWaypointUp", async () => {
@@ -171,48 +171,44 @@ describe("src/modules/tools/routing/components/RoutingCoordinateInput.vue", () =
     });
 
     describe("tests isInputtextWgs84Coordinate", () => {
-        it("should return [8, 52] for '8, 52'", async () => {
+        it("should return [8, 52] for '8, 52'", () => {
             wrapper = shallowMount(RoutingCoordinateInputComponent, {
                 store,
                 localVue,
                 propsData: props
             });
             wrapper.setData({search: "8, 52"});
-            await wrapper.vm.$nextTick();
-            expect(wrapper.vm.isInputtextWgs84Coordinate).deep.to.equal([8, 52]);
+            expect(wrapper.vm.isInputtextWgs84Coordinate()).deep.to.equal([8, 52]);
         });
 
-        it("should return [8.12, 52.34] for '8.12, 52.34'", async () => {
+        it("should return [8.12, 52.34] for '8.12, 52.34'", () => {
             wrapper = shallowMount(RoutingCoordinateInputComponent, {
                 store,
                 localVue,
                 propsData: props
             });
             wrapper.setData({search: "8.12, 52.34"});
-            await wrapper.vm.$nextTick();
-            expect(wrapper.vm.isInputtextWgs84Coordinate).deep.to.equal([8.12, 52.34]);
+            expect(wrapper.vm.isInputtextWgs84Coordinate()).deep.to.equal([8.12, 52.34]);
         });
 
-        it("should return false for '8,12 52,34'", async () => {
+        it("should return false for '8,12 52,34'", () => {
             wrapper = shallowMount(RoutingCoordinateInputComponent, {
                 store,
                 localVue,
                 propsData: props
             });
             wrapper.setData({search: "8,12 52,34"});
-            await wrapper.vm.$nextTick();
-            expect(wrapper.vm.isInputtextWgs84Coordinate).to.be.false;
+            expect(wrapper.vm.isInputtextWgs84Coordinate()).to.be.false;
         });
 
-        it("should return false for 'test'", async () => {
+        it("should return false for 'test'", () => {
             wrapper = shallowMount(RoutingCoordinateInputComponent, {
                 store,
                 localVue,
                 propsData: props
             });
             wrapper.setData({search: "test"});
-            await wrapper.vm.$nextTick();
-            expect(wrapper.vm.isInputtextWgs84Coordinate).to.be.false;
+            expect(wrapper.vm.isInputtextWgs84Coordinate()).to.be.false;
         });
     });
 

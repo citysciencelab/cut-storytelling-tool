@@ -14,16 +14,16 @@ export default {
             type: Boolean,
             required: true
         },
-        strukturText: {
+        structureText: {
             type: String,
             required: true
         },
-        beispielText: {
+        exampleText: {
             type: String,
             required: true
         }
     },
-    data: function () {
+    data () {
         return {
             dzIsDropHovering: false
         };
@@ -60,18 +60,40 @@ export default {
                 this.addFiles(e.target.files);
             }
         },
+        /**
+         * Called internally to emit the files to process
+         * @param {File[]} files to emit
+         * @returns {void}
+         */
         addFiles (files) {
             this.$emit("filesadded", files);
         },
+        /**
+         * Called to open the file select dialog in the browser
+         * @returns {void}
+         */
         startFileInput () {
             this.$refs.fileInputLabel.click();
         },
+        /**
+         * Called when user starts dragging a file over the upload container
+         * @returns {void}
+         */
         onDZDragenter () {
             this.dzIsDropHovering = true;
         },
+        /**
+         * Called when user stops dragging a file over the upload container
+         * @returns {void}
+         */
         onDZDragend () {
             this.dzIsDropHovering = false;
         },
+        /**
+         * Called when user drops a file in the upload container
+         * @param {HTMLInputEvent} e event with the files
+         * @returns {void}
+         */
         onDrop (e) {
             this.dzIsDropHovering = false;
             if (e.dataTransfer.files !== undefined) {
@@ -117,11 +139,11 @@ export default {
             <div class="strukturtext d-flex flex-column bg-light-pink mb-2">
                 <div class="d-flex flex-column">
                     <span>{{ $t('common:modules.tools.routing.batchProcessing.structure') }}:</span>
-                    <b>{{ strukturText }}</b>
+                    <b>{{ structureText }}</b>
                 </div>
                 <div class="d-flex mb-2">
                     <span>{{ $t('common:modules.tools.routing.batchProcessing.example') }}:</span>
-                    <span>{{ beispielText }}</span>
+                    <span>{{ exampleText }}</span>
                 </div>
             </div>
 

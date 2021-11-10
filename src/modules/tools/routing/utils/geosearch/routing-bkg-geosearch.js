@@ -4,7 +4,7 @@ import state from "./../../store/stateRouting";
 
 /**
  * Requests POIs from text from BKG
- * @param {string} search text to search with
+ * @param {String} search text to search with
  * @returns {RoutingGeosearchResult[]} routingGeosearchResults
  */
 async function fetchRoutingBkgGeosearch (search) {
@@ -24,7 +24,7 @@ async function fetchRoutingBkgGeosearch (search) {
 
 /**
  * Requests POI at coordinate from BKG
- * @param {[number, number]} coordinates to search at
+ * @param {[Number, Number]} coordinates to search at
  * @returns {RoutingGeosearchResult} routingGeosearchResult
  */
 async function fetchRoutingBkgGeosearchReverse (coordinates) {

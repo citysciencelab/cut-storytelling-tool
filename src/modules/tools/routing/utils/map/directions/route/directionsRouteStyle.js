@@ -3,8 +3,8 @@ import stateRouting from "../../../../store/stateRouting";
 
 /**
  * Creates Direction Route Style Function
- * @param {ol/feature} feature for the current style
- * @returns {ol/style} style function
+ * @param {ol/Feature} feature for the current style
+ * @returns {ol/Style} style function
  */
 export default function createDirectionsRouteStyle (feature) {
     const styleSetting = stateRouting.directionsSettings.styleRoute,

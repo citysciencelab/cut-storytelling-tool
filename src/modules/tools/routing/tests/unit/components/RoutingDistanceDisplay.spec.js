@@ -3,6 +3,7 @@ import {expect} from "chai";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import RoutingDistanceDisplayComponent from "../../../components/RoutingDistanceDisplay.vue";
 import Routing from "../../../store/indexRouting";
+import thousandsSeparator from "../../../../../../utils/thousandsSeparator";
 
 const localVue = createLocalVue();
 
@@ -83,7 +84,7 @@ describe("src/modules/tools/routing/components/RoutingDistanceDisplay.vue", () =
             localVue,
             propsData: props
         });
-        const expectedResult = Number(1.2).toLocaleString();
+        const expectedResult = thousandsSeparator(1.2);
 
         expect(wrapper.find("span").text()).equal(`${expectedResult} km`);
     });

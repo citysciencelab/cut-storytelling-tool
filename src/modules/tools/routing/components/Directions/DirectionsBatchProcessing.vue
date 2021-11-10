@@ -31,8 +31,8 @@ export default {
         ...mapActions("Alerting", ["addSingleAlert"]),
         /**
          * Called when files are added by the user to process
-         * loading animation is show while processing and an error is shown to the user if something happens while processing
-         * @param {File} files to process
+         * loading animation is shown while processing and an error is shown to the user if something happens while processing
+         * @param {File[]} files to process
          * @returns {void}
          */
         addFiles (files) {
@@ -82,6 +82,9 @@ export default {
          * @returns {String} csv string
          */
         createCsvToDownload (downloadObjects) {
+            if (!Array.isArray(downloadObjects) || typeof downloadObjects[0] !== "object" || downloadObjects[0] === null) {
+                return "";
+            }
             return Object.keys(downloadObjects[0]).join(";") + "\n" + downloadObjects.map(obj => Object.values(obj).join(";")).join("\n");
         },
         /**
@@ -91,11 +94,13 @@ export default {
          * @returns {void}
          */
         async downloadResults (filename, downloadObjects) {
-            const csv = this.createCsv(downloadObjects),
+            const csv = this.createCsvToDownload(downloadObjects),
                 downloadFilename = this.createDownloadFilename(filename);
 
-            if (Radio.request("Util", "isInternetExplorer")) {
-                window.navigator.msSaveOrOpenBlob(new Blob([csv]), downloadFilename);
+            if (typeof navigator.msSaveOrOpenBlob === "function") {
+                window.navigator.msSaveOrOpenBlob(new Blob(["\ufeff", csv], {
+                    type: "text/csv;charset=utf-8,%EF%BB%BF"
+                }), downloadFilename);
             }
             else {
                 const url = `data:text/plain;charset=utf-8,${encodeURIComponent(csv)}`,
@@ -103,6 +108,7 @@ export default {
 
                 a.href = url;
                 a.download = downloadFilename;
+                a.style.visibility = "hidden";
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -114,10 +120,13 @@ export default {
          * @returns {String} new csv filename
          */
         createDownloadFilename (filename) {
+            if (typeof filename !== "string") {
+                return ".csv";
+            }
             const parts = filename.split("."),
-                partsOhneExtension = parts.slice(0, parts.length - 1);
+                partsWithoutExtension = parts.slice(0, parts.length - 1);
 
-            return partsOhneExtension.join(".") + ".csv";
+            return partsWithoutExtension.join(".") + ".csv";
         },
         /**
          * Parses the csv content to tasks and checks for input errors
@@ -126,22 +135,25 @@ export default {
          */
         parseCsv (filecontent) {
             return new Promise((resolve, reject) => {
-
-                const content = filecontent.replace(/[\r]/g, "").trim(),
-                    lines = content.split("\n"),
-                    anzahl = lines.length,
-                    tasks = [];
-
-                if (content.length === 0 || anzahl === 0) {
+                if (typeof filecontent !== "string") {
                     reject(new Error(this.$t("common:modules.tools.routing.directions.batchProcessing.errorNoEntries")));
                     return;
                 }
-                if (anzahl > this.settings.batchProcessing.limit) {
+                const content = filecontent.replace(/[\r]/g, "").trim(),
+                    lines = content.split("\n"),
+                    count = lines.length,
+                    tasks = [];
+
+                if (content.length === 0 || count === 0) {
+                    reject(new Error(this.$t("common:modules.tools.routing.directions.batchProcessing.errorNoEntries")));
+                    return;
+                }
+                if (count > this.settings.batchProcessing.limit) {
                     reject(new Error(this.$t("common:modules.tools.routing.directions.batchProcessing.errorToManyEntriesInFile", {limit: this.settings.batchProcessing.limit})));
                     return;
                 }
 
-                for (let i = 0; i < anzahl; i++) {
+                for (let i = 0; i < count; i++) {
                     const line = lines[i],
                         lineParts = line.split(";");
 
@@ -210,7 +222,7 @@ export default {
         },
         /**
          * Checks if input is a number
-         * @param {String | Number} num to check
+         * @param {*} num to check
          * @returns {Boolean} true if number
          */
         isNumber (num) {
@@ -225,8 +237,8 @@ export default {
         :settings="settings"
         :progress="taskHandler ? taskHandler.progress : 0"
         :is-processing="isProcessing"
-        :struktur-text="$t('common:modules.tools.routing.directions.batchProcessing.structure')"
-        beispiel-text="1;8.12;50.67;9.12;51.67"
+        :structure-text="$t('common:modules.tools.routing.directions.batchProcessing.structure')"
+        example-text="1;8.12;50.67;9.12;51.67"
         @filesadded="addFiles($event)"
         @cancelProcess="taskHandler.cancelRun()"
     />

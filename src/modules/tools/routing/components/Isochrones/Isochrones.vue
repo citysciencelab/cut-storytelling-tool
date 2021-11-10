@@ -101,7 +101,7 @@ export default {
         },
         /**
          * Sets the time value and checks the interval value
-         * @param {number} timeValue to set
+         * @param {Number} timeValue to set
          * @returns {void}
          */
         setTimeValue (timeValue) {

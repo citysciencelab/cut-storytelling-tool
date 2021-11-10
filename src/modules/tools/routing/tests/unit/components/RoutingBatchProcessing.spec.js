@@ -50,8 +50,8 @@ describe("src/modules/tools/routing/components/RoutingBatchProcessing.vue", () =
             settings: {},
             progress: 0,
             isProcessing: false,
-            strukturText: "",
-            beispielText: ""
+            structureText: "",
+            exampleText: ""
         };
     });
 

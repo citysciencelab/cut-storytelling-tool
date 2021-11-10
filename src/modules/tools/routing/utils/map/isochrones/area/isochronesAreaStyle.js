@@ -3,8 +3,8 @@ import stateRouting from "../../../../store/stateRouting";
 
 /**
  * Creates Direction Waypoint Style
- * @param {ol/feature} feature for the current style
- * @returns {ol/style} style
+ * @param {ol/Feature} feature for the current style
+ * @returns {ol/Style} style
  */
 export default function createIsochronesAreaStyle (feature) {
     const styleSetting = stateRouting.isochronesSettings.styleIsochrones,
