@@ -1,7 +1,7 @@
 import {wfs} from "masterportalAPI/src";
 import store from "../../app-store";
 import Layer from "./layer";
-import mapCollection from "../../dataStorage/mapCollection.js";
+import mapCollection from "../../core/dataStorage/mapCollection.js";
 import * as bridge from "./RadioBridge.js";
 /**
  * Creates a layer of type WMS.
@@ -158,4 +158,7 @@ WFSLayer.prototype.getStyleFunction = function (attrs) {
         }
 
         return style;
+};
+WFSLayer.prototype.updateSource = function () {
+    wfs.updateSource(this.layer);
 };

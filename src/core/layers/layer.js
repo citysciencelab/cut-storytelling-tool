@@ -319,6 +319,10 @@ Layer.prototype.setIsSelected = function (newValue) {
         bridge.updateLayerView(this);
         bridge.renderMenu();
     }
+    if(this.get("typ") === "WFS"){
+        console.log("layer.js will updateSource");
+        this.updateSource(true);
+    }
 };
 /**
 * Toggles the attribute isVisibleInMap. If is true, the layer is set visible.
