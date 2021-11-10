@@ -42,11 +42,35 @@ export default {
      * @param {Number} [transparency=0] Transparency of layer.
      * @returns {void}
      */
-    sendModification: (_, {layerId, status, transparency = 0}) => {
+    sendModification: (_, {layerId, status, transparency}) => {
         Radio.trigger("ModelList", "setModelAttributesById", layerId, {
             isSelected: status,
             isVisibleInMap: status,
             transparency: transparency
+        });
+    },
+
+    /**
+     * Finds the activeLayerId based on the index and initiates storage.
+     * @param {Number} index Index in layerIds.
+     * @returns {void}
+     */
+    setActiveIndex: ({commit, dispatch, state}, index) => {
+        commit("setActiveLayer", state.layerIds[index]);
+        dispatch("toggleLayerVisibility", state.activeLayer.layerId);
+    },
+
+    /**
+     * Determines the visibility of the layerIds
+     * @param {String} activeLayerId Id des activeLayer.
+     * @returns {void}
+     */
+    toggleLayerVisibility: ({dispatch, state}, activeLayerId) => {
+        state.layerIds.forEach(layer => {
+            dispatch("sendModification", {
+                layerId: layer.layerId,
+                status: layer.layerId === activeLayerId
+            });
         });
     }
 };

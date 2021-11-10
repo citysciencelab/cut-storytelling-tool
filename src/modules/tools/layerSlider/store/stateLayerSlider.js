@@ -18,7 +18,11 @@ const state = {
         layerId: "",
         index: -1
     },
-    title: "common:modules.tools.layerSlider.title"
+    title: "common:modules.tools.layerSlider.title",
+
+    dataSliderMin: "0",
+    dataSliderMax: "",
+    dataSliderTicks: ""
 };
 
 export default state;

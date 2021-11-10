@@ -420,6 +420,7 @@
           },
           "layerSlider": {
             "name": "translate#common:menu.tools.layerSlider",
+            "sliderType": "handle",
             "glyphicon": "glyphicon-film",
             "timeInterval": 2000,
             "layerIds": [
@@ -608,6 +609,9 @@
           "styleId": "2128",
           "styleGeometryType": ["Point"],
           "name": "translate#common:tree.trafficCameras"
+        },
+        {
+          "id": "8730"
         },
         {
           "id": "10220"
