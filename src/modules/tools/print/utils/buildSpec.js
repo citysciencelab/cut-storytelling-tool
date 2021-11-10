@@ -342,7 +342,8 @@ const BuildSpecModel = {
                 styles: source.getParams().STYLES ? source.getParams().STYLES.split(",") : undefined,
                 imageFormat: source.getParams().FORMAT,
                 customParams: {
-                    "TRANSPARENT": source.getParams().TRANSPARENT
+                    "TRANSPARENT": source.getParams().TRANSPARENT,
+                    "DPI": store.state.Tools.Print.dpiForPdf
                 }
             };
 
@@ -368,7 +369,8 @@ const BuildSpecModel = {
                 styles: source.getParams().STYLES ? source.getParams().STYLES.split(",") : undefined,
                 imageFormat: source.getParams().FORMAT,
                 customParams: {
-                    "TRANSPARENT": source.getParams().TRANSPARENT
+                    "TRANSPARENT": source.getParams().TRANSPARENT,
+                    "DPI": store.state.Tools.Print.dpiForPdf
                 }
             };
 
@@ -933,7 +935,6 @@ const BuildSpecModel = {
                 });
                 feature.set(feature.getId(), String(styleIndex));
                 return "[" + feature.getId() + "='" + String(styleIndex) + "']";
-
             }
             return "*";
         }
