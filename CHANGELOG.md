@@ -36,6 +36,7 @@
 - Print tool: fixed wrong order of features in created print-map.
 - adding a File with other coordinate system may work now if the coordinate system in the JSON is EPSG 25832/4326 or can successfully be mapped to EPSG
 - Issue #654: WFS Layers didn't get displayed as group layers
+- Light-tree: Layers that are only selectable in certain zoom levels are now also grayed out directly after startup.
 
 
 ---
