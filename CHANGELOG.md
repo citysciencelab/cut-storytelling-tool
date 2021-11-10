@@ -10,6 +10,7 @@
 
 ## Unreleased - in development
 ### Added
+- The library "svg-url-loader" was added to package.json devDependencies.
 
 ### Changed
 - The following NPM packages are updated:
@@ -21,11 +22,15 @@
     eslint-plugin-vuejs-accessibility: 0.7.1 to 1.1.0
     mocha: 9.0.2 to 9.1.3
     selenium-webdriver: 4.0.0-beta.4 to version 4.0.0
+- The MasterportalAPI version is updated to v1.6.0. This also raised ol to version 6.9.0.
+- WMSLayer and GroupLayer are refactored. They are no longer Backbone-models. WMSLayer uses the masterportalAPI's wms layer on creation.
+- 2D-map is removed from vuex store. Maps are now stored in a collection. Creation of 2D-map and 3D-map use masterportalAPI's abstraction layer.
 
 ### Deprecated
 
 ### Removed
 - The module CLICKCOUNTER is removed.
+- The library "olcs" was removed from the package.json.
 
 ### Fixed
 - Print tool: fixed wrong order of features in created print-map.
@@ -47,7 +52,6 @@
 ### Changed
 - Coding-Conventions: For unittests in Vue (/src/...) the vast majority of test-folders are called "tests", going back to a mutual understanding of folder naming. Please use "tests" for your unit or e2e tests in Vue in the future.
 - Migrated the print Tool from Backbone.js to Vue.js. It is now also possible to create multiple prints in parallel.
-- WMSLayer and GroupLayer are refactored. They are no longer Backbone-models. WMSLayer uses the masterportalAPI's mws layer on creation.
 
 ### Deprecated
 
