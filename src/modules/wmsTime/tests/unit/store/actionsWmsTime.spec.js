@@ -3,11 +3,23 @@ import {expect} from "chai";
 
 import actions from "../../../store/actionsWmsTime";
 import initialState from "../../../store/stateWmsTime";
+import mapCollection from "../../../../../core/dataStorage/mapCollection.js";
 
 const layerString = "When I grow up I will be a real layer!";
 
 describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
     let commit, dispatch, getters, rootGetters, state, trigger;
+
+    before(() => {
+        mapCollection.clear();
+        const map = {
+            id: "ol",
+            mode: "2D",
+            removeLayer: sinon.spy()
+        };
+
+        mapCollection.addMap(map, "ol", "2D");
+    });
 
     beforeEach(() => {
         commit = sinon.spy();
@@ -23,7 +35,6 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             transparency = 0;
         let id,
             commitSpy,
-            removeLayer,
             requestSpy;
 
         /**
@@ -79,13 +90,12 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             commit = commitWithReturn;
             commitSpy = sinon.spy();
             id = "someId";
-            removeLayer = sinon.spy();
             requestSpy = sinon.spy();
             rootGetters = {
-                "Map/map": {
-                    removeLayer
-                }
+                "Map/mapId": "ol",
+                "Map/mapMode": "2D"
             };
+            mapCollection.getMap("ol", "2D").removeLayer = sinon.spy();
             state = Object.assign({}, initialState);
             sinon.stub(Radio, "request").callsFake(request);
             sinon.stub(Radio, "trigger").callsFake(trigger);
@@ -115,8 +125,8 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             expect(commitSpy.firstCall.args).to.eql(["setLayerSwiperActive", false]);
             expect(requestSpy.calledOnce).to.be.true;
             expect(requestSpy.firstCall.args).to.eql(["ModelList", "getModelByAttributes", {id}]);
-            expect(removeLayer.calledOnce).to.be.true;
-            expect(removeLayer.firstCall.args).to.eql([layerString]);
+            expect(mapCollection.getMap("ol", "2D").removeLayer.calledOnce).to.be.true;
+            expect(mapCollection.getMap("ol", "2D").removeLayer.firstCall.args).to.eql([layerString]);
             expect(trigger.calledThrice).to.be.true;
             expect(trigger.firstCall.args).to.eql(["ModelList", "removeModelsById", id]);
             expect(trigger.secondCall.args).to.eql(["Parser", "removeItem", id]);
@@ -139,8 +149,8 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             expect(trigger.thirdCall.args).to.eql(["ModelList", "removeModelsById", secondId]);
             expect(trigger.getCall(3).args).to.eql(["Parser", "removeItem", secondId]);
             expect(trigger.lastCall.args).to.eql(["Util", "refreshTree"]);
-            expect(removeLayer.calledOnce).to.be.true;
-            expect(removeLayer.firstCall.args).to.eql([layerString]);
+            expect(mapCollection.getMap("ol", "2D").removeLayer.calledOnce).to.be.true;
+            expect(mapCollection.getMap("ol", "2D").removeLayer.firstCall.args).to.eql([layerString]);
         });
     });
 

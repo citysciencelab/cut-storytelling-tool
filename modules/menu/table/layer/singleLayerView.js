@@ -24,6 +24,8 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @listens Layer#changeTransparency
      */
     initialize: function () {
+        const channel = Radio.channel("Menu");
+
         this.listenTo(this.model, {
             "change:isSettingVisible": this.renderSetting,
             "change:transparency": this.render
@@ -33,6 +35,10 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
                 e.stopPropagation();
             }
         });
+        channel.on({
+            "renderSetting": this.renderSetting,
+            "rerender": this.render
+        }, this);
     },
     tagName: "li",
     className: "burgermenu-layer-list list-group-item",

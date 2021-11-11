@@ -1,6 +1,7 @@
 import Template from "text-loader!./template.html";
 import checkChildrenDatasets from "../../checkChildrenDatasets.js";
 import LayerBaseView from "./viewBase.js";
+import templateSettingsTransparency from "text-loader!./templateSettingsTransparency.html";
 
 const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
     events: {
@@ -24,6 +25,18 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
         "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
         "keydown .layer-sort-item > .glyphicon-triangle-top": function (event) {
             this.handleKeyboardTriggeredAction(event, "moveModelUp");
+        },
+        "click .glyphicon-plus-sign": "incTransparency",
+        "keydown .glyphicon-plus-sign": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "incTransparency")) {
+                this.setFocus(".glyphicon-plus-sign");
+            }
+        },
+        "click .glyphicon-minus-sign": "decTransparency",
+        "keydown .glyphicon-minus-sign": function (event) {
+            if (this.handleKeyboardTriggeredAction(event, "decTransparency")) {
+                this.setFocus(".glyphicon-minus-sign");
+            }
         }
     },
 
@@ -41,11 +54,21 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
      * @fires Alerting#RadioTriggerAlertAlert
      */
     initialize: function () {
+        const channel = Radio.channel("Menu");
+
         checkChildrenDatasets(this.model);
         this.initializeDomId();
+        channel.on({
+            "rerender": this.rerender,
+            "change:isOutOfRange": this.toggleColor,
+            "change:isVisibleInTree": this.removeIfNotVisible
+        }, this);
+
         this.listenTo(this.model, {
             "change:isSelected": this.rerender,
             "change:isVisibleInTree": this.removeIfNotVisible,
+            "change:isSettingVisible": this.renderSetting,
+            "change:transparency": this.rerender,
             "change:isOutOfRange": this.toggleColor
         });
         this.listenTo(Radio.channel("Map"), {
@@ -72,6 +95,7 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
     tagName: "li",
     className: "layer list-group-item",
     template: _.template(Template),
+    templateSettings: _.template(templateSettingsTransparency),
 
     /**
      * Renders the selection view.
@@ -90,6 +114,9 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
                 selector.after(this.$el.html(this.template(attr)));
             }
             this.$el.css("padding-left", ((this.model.get("level") * 15) + 5) + "px");
+        }
+        if (this.model.get("isSettingVisible") === true) {
+            this.$el.append(this.templateSettings(attr));
         }
         return this;
     },
@@ -111,6 +138,9 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
         // If the the model should not be selectable make sure that is not selectable!
         if (!this.model.get("isSelected") && (this.model.get("maxScale") < scale || this.model.get("minScale") > scale)) {
             this.disableComponent();
+        }
+        if (this.model.get("isSettingVisible")) {
+            this.$el.append(this.templateSettings(attr));
         }
     },
 

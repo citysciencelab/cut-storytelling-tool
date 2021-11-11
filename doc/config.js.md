@@ -18,7 +18,6 @@ In the following, all configuration options are described. For all configuration
 |alerting|no|**[alerting](#markdown-header-alerting)**|`{"category": "alert-info", "isDismissable": true, "isConfirmable": false, "position": "top-center", "fadeOut": null}`|Overrides the alert module's default values.|{fadeOut: 6000}|
 |cameraParameter|no|**[cameraParameter](#markdown-header-cameraparameter)**||Initial camera parameter||
 |cesiumParameter|no|**[cesiumParameter](#markdown-header-cesiumparameter)**||Cesium flags||
-|clickCounter|no|**[clickCounter](#markdown-header-clickcounter)**||Configuration of the clickCounter module that loads an iFrame per click.||
 |cswId|no|String|`"3"`|Reference to a CSW interface used to retrieve layer information. The ID will be resolved to a service defined in the **[rest-services.json](rest-services.json.md)** file.|`"my CSW-ID"`|
 |defaultToolId|no|String|`"gfi"`|The tool with the given ID will be active when no other tool is active.|"filter"|
 |featureViaURL|no|**[featureViaURL](#markdown-header-featureviaurl)**||Optional configuration for the URL parameter `featureViaURL`. See **[urlParameter](urlParameter.md)** for details. Implemented for treeTypes *light* and *custom*.||
@@ -79,25 +78,6 @@ In the following, all configuration options are described. For all configuration
 |maximumScreenSpaceError|no|Number|`2.0`|Detail level in which terrain/raster tiles are fetched. 4/3 is the highest quality level.|
 |fxaa|no|Boolean|`true`|activates *fast approximate anti-aliasing*|
 |tileCacheSize|no|Number|`100`|terrain/raster tile cache size|
-
-***
-
-## clickCounter
-|Name|Required|Type|Default|Description|
-|----|--------|----|-------|-----------|
-|desktop|no|String||iFrame URL for desktop applications|
-|mobile|no|String||iFrame URL for mobile applications|
-
-**Example:**
-
-```json
-{
-    "clickCounter": {
-        "desktop": "http://static.hamburg.de/countframes/verkehrskarte_count.html",
-        "mobile": "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
-    }
-}
-```
 
 ***
 

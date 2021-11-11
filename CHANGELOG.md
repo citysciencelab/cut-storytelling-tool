@@ -10,27 +10,66 @@
 
 ## Unreleased - in development
 ### Added
+- The library "svg-url-loader" was added to package.json devDependencies.
+
+### Changed
+- The following NPM packages are updated:
+    @babel/core": 7.14.6 to 7.16.0
+    @babel/eslint-parser: 7.14.7 to 7.16.0
+    @babel/preset-env: 7.14.7 to 7.16.0
+    @vue/test-utils: 1.2.1 to 1.2.2
+    babel-loader: 8.2.2 to 8.2.3
+    eslint-plugin-vuejs-accessibility: 0.7.1 to 1.1.0
+    mocha: 9.0.2 to 9.1.3
+    selenium-webdriver: 4.0.0-beta.4 to version 4.0.0
+- The MasterportalAPI version is updated to v1.6.0. This also raised ol to version 6.9.0.
+- WMSLayer and GroupLayer are refactored. They are no longer Backbone-models. WMSLayer uses the masterportalAPI's wms layer on creation.
+- 2D-map is removed from vuex store. Maps are now stored in a collection. Creation of 2D-map and 3D-map use masterportalAPI's abstraction layer.
+
+### Deprecated
+
+### Removed
+- The module CLICKCOUNTER is removed.
+- The library "olcs" was removed from the package.json.
+
+### Fixed
+- Print tool: fixed wrong order of features in created print-map.
+- adding a File with other coordinate system may work now if the coordinate system in the JSON is EPSG 25832/4326 or can successfully be mapped to EPSG
+- Issue #654: WFS Layers didn't get displayed as group layers
+- Light-tree: Layers that are only selectable in certain zoom levels are now also grayed out directly after startup.
+- Print tool: if tool was activated by url parameter, print-mask is now visible and scales are selectable
+- Sidebar: if a tool was activated by url parameter and user opens second tool, the first tool is closed now
+
+
+---
+## v2.15.0 - 2021-11-03
+### Added
 - gfiAttributes: Adding Boolean type in gfi Attributes so that the original text can be parsed to be more understandable.
-- layerInformation: Adding a parameter to globally toggle the dispaly of the service url for all layers at the same time.
-- measure: Adding a parameter to to define with which decimal accuracy the measurement result is displayed.
+- layerInformation: Adding a parameter to globally toggle the display of the service url for all layers at the same time.
+- measure: Adding a parameter to define with which decimal accuracy the measurement result is displayed.
+- Tools: Adding a new tool `resetTree` in addons.
+- Tools: Adding a new tool `layerClusterToggler` to enable the cluster layers to be active and deactive together.
+- Menu: Adding transparency bar for all the layes in menu tree.
+- A locale file for the Turkish language was added.
 
 ### Changed
 - Coding-Conventions: For unittests in Vue (/src/...) the vast majority of test-folders are called "tests", going back to a mutual understanding of folder naming. Please use "tests" for your unit or e2e tests in Vue in the future.
+- Migrated the print Tool from Backbone.js to Vue.js. It is now also possible to create multiple prints in parallel.
 
 ### Deprecated
 
 ### Removed
 - src/utils function isArrayOfStrings is removed, use one liner .every(v => typeof v === "string") instead in the future.
+- The libraries `d3.js` and `d3-scale-chromatic` were removed from the package.json.
+- The module `graph` which is based on d3.js has been removed. Now the library`charts.js` is used.
 
 ### Fixed
 - The portalTitle in the config.json without a logo is rendered correctly.
 - Loading layerIds in combination with a config via the url now also works with the treetype 'custom' in the config.
 - When changing the coordinate system in the Coordinates tool, the incorrect recalculation of the coordinates was corrected: Default values of the coordinate search are now the values of the map center. An error in the display of the coordinate systems (EPSG-code was shown twice) was also fixed.
 - The search in the coordinates tool now also works with different map projections of the masterportal view.
--	Fixed missing highlighting in years 2010-2014 and remove of highlighting when selecting another year in addon boris.
-- The compare features window now has a scollbar, if necessary.
+- Fixed missing highlighting in years 2010-2014 and remove of highlighting when selecting another year in addon boris.
 - For long lists the compare-feature-window provides now a scrollbar.
-
 
 
 ---

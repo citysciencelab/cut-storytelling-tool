@@ -61,7 +61,6 @@ const Config = {
         numFeaturesToShow: 2,
         infoText: "common:mouseHover.infoText"
     },
-    clickCounter: {},
     startingMap3D: false,
     obliqueMap: true,
     cesiumParameter: {
@@ -102,11 +101,12 @@ const Config = {
         enabled: true,
         debug: false,
         languages: {
-            de: "deutsch",
-            en: "englisch",
-            it: "italienisch",
-            pt: "portugiesisch",
-            es: "spanisch"
+            de: "Deutsch",
+            en: "English",
+            es: "Español",
+            it: "Italiano",
+            pt: "Português",
+            tr: "Türkçe"
         },
         fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"]

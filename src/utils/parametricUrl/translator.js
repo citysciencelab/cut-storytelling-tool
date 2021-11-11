@@ -1,6 +1,5 @@
 import {convert, parseQuery} from "./converter";
 import requestConfig from "../configLoader";
-import {toMapMode} from "../../modules/map/store/enums";
 
 
 /**
@@ -76,7 +75,7 @@ export async function translate (urlParamsKey, urlParamsValue) {
         case "mapmode":
         case "map/mapmode": {
             const key = "Map/mapMode",
-                value = toMapMode(urlParamsValue);
+                value = urlParamsValue;
 
             return {key: key, value: value};
         }

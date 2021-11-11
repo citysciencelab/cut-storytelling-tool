@@ -4,6 +4,7 @@ import {mapGetters} from "vuex";
 import {getOverviewMapLayer, getOverviewMapView} from "./utils";
 import ControlIcon from "../../ControlIcon.vue";
 import TableStyleControl from "../../TableStyleControl.vue";
+import mapCollection from "../../../../core/dataStorage/mapCollection";
 
 /**
  * Overview control that shows a mini-map to support a user's
@@ -47,8 +48,9 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("Map", ["map"]),
         ...mapGetters(["uiStyle"]),
+        ...mapGetters("Map", ["mapMode", "mapId"]),
+
         component () {
             return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
         },
@@ -66,7 +68,8 @@ export default {
     mounted () {
         const id = this.layerId || this.baselayer,
             layer = getOverviewMapLayer(id),
-            view = getOverviewMapView(this.map, this.resolution);
+            map = mapCollection.getMap(this.mapId, this.mapMode),
+            view = getOverviewMapView(map, this.resolution);
 
         if (layer) {
             this.overviewMap = new OverviewMap({
@@ -80,7 +83,7 @@ export default {
 
         // if initially open, add control now that available
         if (this.open && this.overviewMap !== null) {
-            this.map.addControl(this.overviewMap);
+            map.addControl(this.overviewMap);
         }
     },
     methods: {
@@ -91,7 +94,7 @@ export default {
         toggleOverviewMapFlyout () {
             this.open = !this.open;
             if (this.overviewMap !== null) {
-                this.map[`${this.open ? "add" : "remove"}Control`](this.overviewMap);
+                mapCollection.getMap(this.mapId, this.mapMode)[`${this.open ? "add" : "remove"}Control`](this.overviewMap);
             }
         },
         /**

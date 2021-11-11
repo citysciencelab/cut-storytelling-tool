@@ -140,6 +140,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
             // Send sld to modellist as soon as it is generated
             "change:setSLD": function () {
                 Radio.trigger("ModelList", "setModelAttributesById", this.get("model").get("id"), {"SLDBody": this.get("setSLD"), paramStyle: "style"});
+                Radio.trigger("Layer", "change:SLDBody", this.get("model"));
             }
         });
         this.listenTo(Radio.channel("ModelList"), {

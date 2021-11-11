@@ -55,11 +55,16 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
     toggleColor: function (model, value) {
         const mode = Radio.request("Map", "getMapMode");
 
+        // adaption to not backbone layers
+        if (this.model.get("id") !== model.get("id")) {
+            return;
+        }
+
         if (model.has("minScale")) {
             if (value === true) {
                 this.disableComponent("Layer wird in dieser Zoomstufe nicht angezeigt");
             }
-            else if (this.model.get("supported").indexOf(mode) >= 0) {
+            else if (model.get("supported").indexOf(mode) >= 0) {
                 this.enableComponent();
             }
             else if (mode === "2D") {

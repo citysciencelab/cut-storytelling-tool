@@ -2,6 +2,7 @@
 import {mapGetters, mapActions} from "vuex";
 import ControlIcon from "../../ControlIcon.vue";
 import TableStyleControl from "../../TableStyleControl.vue";
+import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 
 /**
  * TotalView adds a control that lets the user reset the
@@ -21,17 +22,45 @@ export default {
             default: "home"
         }
     },
+    data () {
+        return {
+            currentMapId: "",
+            currentMapMode: ""
+        };
+    },
     computed: {
-        ...mapGetters("Map", ["hasMoved"]),
+        ...mapGetters("Map", ["initialCenter", "initialZoomLevel", "mapId", "mapMode"]),
+
         component () {
             return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
         },
         glyphiconToUse () {
             return Radio.request("Util", "getUiStyle") === "TABLE" ? this.tableGlyphicon : this.glyphicon;
+        },
+
+        /**
+         * Map was moved.
+         * @returns {Boolean} true if map is not in initial zoom/center.
+         */
+        mapMoved: function () {
+            const view = mapCollection.getMap(this.currentMapId, this.currentMapMode).getView(),
+                center = view.getCenter();
+
+            return this.initialCenter[0] !== center[0] ||
+                this.initialCenter[1] !== center[1] ||
+                this.initialZoomLevel !== view.getZoom();
         }
     },
+    created () {
+        this.currentMapId = this.mapId;
+        this.currentMapMode = this.mapMode;
+    },
     methods: {
-        ...mapActions("Map", ["resetView"])
+        ...mapActions("Map", ["resetView"]),
+
+        startResetView: function () {
+            this.resetView(this.currentMapId, this.currentMapMode);
+        }
     }
 };
 </script>
@@ -43,9 +72,9 @@ export default {
             id="start-totalview"
             class="total-view-button"
             :title="$t('common:modules.controls.totalView.titleButton')"
-            :disabled="!hasMoved"
+            :disabled="!mapMoved"
             :icon-name="glyphiconToUse"
-            :on-click="resetView"
+            :on-click="startResetView"
         />
     </div>
 </template>

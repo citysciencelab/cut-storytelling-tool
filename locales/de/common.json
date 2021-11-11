@@ -57,7 +57,8 @@
             "legend":"Legende",
             "styleVt": "Style VT",
             "bufferAnalysis": "Buffer Analyse",
-            "wfsSearch": "WFS Suche"
+            "wfsSearch": "WFS Suche",
+            "layerClusterToggler": "Layer-Gruppe öffnen"
         },
         "contact": "Kontakt",
         "info": "Informationen"
@@ -102,6 +103,7 @@
                 "httpOnError": "<strong>Unerwarteter Fehler beim Laden der Sensordaten des Layers {{name}} aufgetreten</strong>"
               },
               "wms": {
+                "allowCookies":"<strong>Bitte erlauben sie Cookies, damit diese Hintergrundkarte geladen werden kann.</strong>",
                 "errorTimeLayer": "Es ist ein Fehler bei der Vorbereitung des Layer mit der id {{id}} aufgetreten: {{error}}",
                 "invalidTimeLayer": "Der konfigurierte Layer mit der Id {{id}} enthält nicht alle notwendigen Parameter für einen WMS-T."
               }
@@ -128,9 +130,10 @@
             "toggleWindow": "Fenster öffnen oder schließen",
             "de": "Deutsch",
             "en": "English",
+            "es": "Español",
             "it": "Italiano",
             "pt": "Português",
-            "es": "Español"
+            "tr": "Türkçe"
         },
         "cswParser": {
             "noMetadataMessage": "Keine Metadaten vorhanden.",
@@ -273,7 +276,11 @@
                 "formatLabel": "Format",
                 "scaleLabel": "Druckmaßstab",
                 "withLegendLabel": "Mit Legende",
-                "printLabel": "Drucken",
+                "printLabel": "Datei erstellen",
+                "downloadFile": "Herunterladen",
+                "createDownloadFile": "Wird erstellt...",
+                "alertMessage": "Die maximale Anzahl an parallel ausgeführten Ausdrucken ist überschritten.<br>Bitte versuchen Sie es erneut sobald die Erstellung anderer Ausdrucke abgeschlossen ist.",
+                "waitForPrintErrorMessage": "Die Erstellung des Ausdrucks ist fehlgeschlagen.<br>Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut oder wenden Sie sich an den Betreiber des Portal.",
                 "withInfoLabel": "Mit Informationen",
                 "vtlWarning": "Da MapFish 3 keine Vector Tile Layer unterstützt, werden die folgenden aktiven Layer nicht in der Printansicht erscheinen:",
                 "layoutNameList": {
@@ -401,6 +408,10 @@
             },
             "saveSelection": {
                 "infoText": "Speichern Sie diese URL als Lesezeichen ab,"
+            },
+            "layerClusterToggler": {
+                "idFormatError": "Prüfen Sie die LayerId. Das Format muss ein Array oder ein Objekt sein.",
+                "idError": "Der Layer mit der ID {{ layerId }} ist nicht geladen, prüfen Sie die Layer-ID auf Richtigkeit."
             },
             "fileImport": {
                 "captions": {
@@ -542,22 +553,6 @@
                     "no": "Nein",
                     "0": "Nein"
                 }
-            },
-            "graph": {
-              "localeFormat": {
-                "decimal": "\",\"",
-                "thousands": "\".\"",
-                "grouping": ["3"],
-                "currency": ["€", ""],
-                "dateTime": "\"%a %b %e %X %Y\"",
-                "date": "\"%d.%m.%Y\"",
-                "time": "\"%H:%M:%S\"",
-                "periods": ["AM", "PM"],
-                "days": ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
-                "shortDays": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
-                "months": ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
-                "shortMonths": ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"]
-              }
             },
             "searchByCoord": {
                 "coordinateSystem": "Koordinatensystem",
@@ -704,7 +699,7 @@
                 "titleGeolocate": "Standpunkt",
                 "titleGeolocatePOI": "In der Nähe",
                 "geolocationDeniedText": "Lokalisierung nicht verfügbar",
-                "poiChoiceTitle": "Ausgangspunkt für Umkeissuche wählen:",
+                "poiChoiceTitle": "Ausgangspunkt für Umkreissuche wählen:",
                 "poiChoiceCurrentPostion": "Standort",
                 "poiChoiceCustomPostion": "Adresssuche oder Punkt in Karte setzen",
                 "poiChoiceConfirmation": "OK",

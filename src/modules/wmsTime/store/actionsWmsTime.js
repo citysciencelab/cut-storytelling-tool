@@ -1,5 +1,6 @@
 import drawLayer from "../utils/drawLayer";
 import getPosition from "../utils/getPosition";
+import mapCollection from "../../../core/dataStorage/mapCollection.js";
 
 const actions = {
     windowWidthChanged ({commit, dispatch, state, getters}) {
@@ -49,7 +50,7 @@ const actions = {
                 Radio.trigger("ModelList", "setModelAttributesById", id, {transparency});
                 commit("setTimeSliderDefaultValue", TIME);
             }
-            rootGetters["Map/map"].removeLayer(layerModel.get("layer"));
+            mapCollection.getMap(rootGetters["Map/mapId"], rootGetters["Map/mapMode"]).removeLayer(layerModel.get("layer"));
             Radio.trigger("ModelList", "removeModelsById", secondId);
             Radio.trigger("Parser", "removeItem", secondId);
         }
@@ -76,9 +77,9 @@ const actions = {
      */
     updateMap ({state, rootGetters}) {
         if (!state.timeSlider.playing) {
-            rootGetters["Map/map"].render();
+            mapCollection.getMap(rootGetters["Map/mapId"], rootGetters["Map/mapMode"]).render();
         }
-        state.layerSwiper.targetLayer.once("prerender", renderEvent => drawLayer(rootGetters["Map/map"].getSize(), renderEvent, state.layerSwiper.valueX));
+        state.layerSwiper.targetLayer.once("prerender", renderEvent => drawLayer(mapCollection.getMap(rootGetters["Map/mapId"], rootGetters["Map/mapMode"]).getSize(), renderEvent, state.layerSwiper.valueX));
         state.layerSwiper.targetLayer.once("postrender", ({context}) => {
             context.restore();
         });
