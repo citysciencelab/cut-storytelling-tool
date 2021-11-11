@@ -16,13 +16,12 @@ export default {
 
     /**
      * Adds the layer model briefly to the model to run prepareLayerObject and then removes the model again.
+     * @param {Object} _ the vuex state.
      * @param {String} layerId Id of the layer
      * @returns {void}
      */
-    addLayerModel: ({dispatch}, layerId) => {
+    addLayerModel: (_, layerId) => {
         Radio.trigger("ModelList", "addModelsByAttributes", {id: layerId});
-        dispatch("sendModification", layerId, true);
-        dispatch("sendModification", layerId, false);
     },
 
     /**

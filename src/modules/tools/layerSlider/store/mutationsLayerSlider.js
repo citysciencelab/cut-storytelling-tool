@@ -18,10 +18,7 @@ const mutations = {
      * @returns {void}
      */
     setActiveLayer (state, layerId) {
-        state.currentProgressBarWidth = `
-            width: ${state.progressBarWidth}%;
-            margin-left: ${state.progressBarWidth * layerId.index}%
-        `;
+        state.currentProgressBarWidth = `width: ${state.progressBarWidth}%; margin-left: ${state.progressBarWidth * layerId.index}%`;
         state.activeLayer = layerId;
     },
 
@@ -39,16 +36,16 @@ const mutations = {
     /**
      * Setter of the windows interval.
      * @param {Object} state Context state object.
-     * @param {Function} func Function to be executed in this.
+     * @param {Function} intervalFunction Function to be executed in this.
      * @returns {void}
      */
-    setWindowsInterval (state, func) {
-        if (func === null) {
+    setWindowsInterval (state, intervalFunction) {
+        if (intervalFunction === null) {
             clearInterval(state.windowsInterval);
             state.windowsInterval = null;
         }
         else {
-            state.windowsInterval = setInterval(func, state.timeInterval);
+            state.windowsInterval = setInterval(intervalFunction, state.timeInterval);
         }
     },
 
