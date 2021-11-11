@@ -14,6 +14,7 @@
 - EsLint Plugin for a11y in Vue files.
 - New parameter "searchResultOrder" for ranking category of searching result
 - New csv specialized export button "ExportButtonCSV" integreted in Vue.js
+- Added the new Tool `Routing`.
 
 ### Changed
 - Moved SensorThingsMqtt and SensorThingsHttp to /src/utils, complete refactoring of SensorThingsMqtt, there are no changes in handling SensorThingsMqtt.
