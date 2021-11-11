@@ -5,7 +5,7 @@ const state = {
     // mandatory defaults for config.json parameters
     name: "common:menu.tools.routing",
     glyphicon: "glyphicon-road",
-    renderToWindow: true,
+    renderToWindow: false,
     resizableWindow: true,
     isVisibleInMenu: true,
     deactivateGFI: false,
