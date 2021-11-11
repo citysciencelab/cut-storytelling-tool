@@ -5,7 +5,7 @@ import LineString from "ol/geom/LineString";
 
 export default {
     /**
-     * Finds the Route for the current waypoints.
+     * Finds the route for the current waypoints.
      * @param {Object} context actions context object.
      * @returns {void}
      */
@@ -451,7 +451,7 @@ export default {
     },
 
     /**
-     * Adds a new Waypoint to the Array.
+     * Adds a new waypoint to the array.
      * @param {Object} context actions context object.
      * @param {Object} payload payload object.
      * @param {Number} [payload.index] index for the waypoint to insert at
@@ -584,7 +584,7 @@ export default {
     },
 
     /**
-     * Executed when User clicks on the Map to add a Waypoint
+     * Executed when user clicks on the map to add a waypoint
      * @param {Object} context actions context object.
      * @param {Object} event OL OnDrawEvent.
      * @returns {void}

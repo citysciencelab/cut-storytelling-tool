@@ -13,7 +13,7 @@ export default {
         Tool,
         RoutingLoadingSpinner
     },
-    data: function () {
+    data () {
         return {
             constantsRouting
         };

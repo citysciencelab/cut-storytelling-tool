@@ -163,12 +163,12 @@ export default {
 
         <div class="d-flex justify-content-between">
             <label
-                :id="'routingKoordinateInput_' + waypoint.index"
-                :for="'routingKoordinateInput_' + waypoint.index"
+                :id="'routingCoordinateInput_' + waypoint.index"
+                :for="'routingCoordinateInput_' + waypoint.index"
                 class="col-md-11 col-sm-11 d-flex pr-0 pl-0"
             >
                 <input
-                    :id="'routingKoordinateInput_' + waypoint.index"
+                    :id="'routingCoordinateInput_' + waypoint.index"
                     v-model="search"
                     type="text"
                     class="col-md-11 col-sm-11 form-control"

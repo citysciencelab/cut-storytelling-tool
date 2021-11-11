@@ -33,7 +33,7 @@ export default {
     computed: {
         ...mapGetters("Tools/Routing/Isochrones", Object.keys(getters)),
         /**
-         * Computed value for the current active slider
+         * Computed distance/time value for the current active slider
          * @returns {Number} value for the current active slider
          */
         currentValue () {

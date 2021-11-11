@@ -8,7 +8,7 @@ export default {
             required: true
         }
     },
-    data: function () {
+    data () {
         return {
             mText: " m",
             kmText: " km"

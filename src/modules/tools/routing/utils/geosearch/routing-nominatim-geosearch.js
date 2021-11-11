@@ -44,6 +44,9 @@ async function fetchRoutingNominatimGeosearchReverse (coordinates) {
 /**
  * Parses Response from Nominatim to RoutingGeosearchResult
  * @param {Object} geosearchResult from Nominatim
+ * @param {Number} [geosearchResult.lat] geosearchResult latitude
+ * @param {Number} [geosearchResult.lon] geosearchResult longitude
+ * @param {String} [geosearchResult.properties.display_name] geosearchResult display_name
  * @returns {RoutingGeosearchResult} routingGeosearchResult
  */
 function parseRoutingNominatimGeosearchResult (geosearchResult) {

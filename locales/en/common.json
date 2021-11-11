@@ -773,11 +773,11 @@
                     "CAR": "Car",
                     "HGV": "Heavy vehicle",
                     "CYCLING": "Bike",
-                    "FOOT": "foot walking",
+                    "FOOT": "Foot walking",
                     "WHEELCHAIR": "Wheelchair"
                 },
                 "avoidOptions": {
-                    "header": "Avoid features",
+                    "header": "Avoid traffic routes",
                     "HIGHWAYS": "Highways",
                     "TOLLWAYS": "Tollways",
                     "FERRIES": "Ferries",

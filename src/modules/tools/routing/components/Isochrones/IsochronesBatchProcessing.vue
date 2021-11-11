@@ -15,7 +15,7 @@ export default {
             required: true
         }
     },
-    data: function () {
+    data () {
         return {
             isProcessing: false,
             countFailed: 0

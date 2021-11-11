@@ -24,7 +24,7 @@ export default {
     computed: {
         /**
          * Computed value for the options to display with the current active speed profile
-         * @returns {Object[]} options to display
+         * @returns {Object[]} settings
          */
         avoidSpeedProfileOptions ({settings}) {
             return constantsRouting.avoidSpeedProfileOptions.filter(

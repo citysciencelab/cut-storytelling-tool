@@ -234,7 +234,7 @@
                     "textAvoidTrafficRoutes": "Unter (1) kann ausgewählt werden, ob die schnellste oder kürzeste Route berechnet werden soll. Des Weiteren können unter (2) bestimmte Verkehrswege von der Routenberechnung ausgeschlossen werden. ",
                     "headerRouteDescription": "Wegbeschreibung",
                     "textRouteDescription": "Nach der Erzeugung der Route wird eine textuelle Wegbeschreibung (1) (inkl. Entfernung und Fahrzeit) angezeigt. Beim Klick auf einzelne Beschreibungen (2) wird in der Kartenansicht automatisch auf das dazugehörige Routensegment (3) gezoomt.",
-                    "headerExport": "Routen Export",
+                    "headerExport": "Routen - Export",
                     "textExport": "Es ist auch möglich erzeugte Routen für weitere Bearbeitungen (z.B. im GIS oder in Navigationsgeräten) zu exportieren. Hierzu stehen die Formate GEOJSON, KML und GPX zur Verfügung."
                 },
                 "routingBatchProcessing": {
