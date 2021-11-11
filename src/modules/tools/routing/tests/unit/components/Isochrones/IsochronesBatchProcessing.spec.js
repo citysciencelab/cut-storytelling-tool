@@ -1,5 +1,6 @@
 import Vuex from "vuex";
 import {expect} from "chai";
+import sinon from "sinon";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import IsochronesBatchProcessingComponent from "../../../../components/Isochrones/IsochronesBatchProcessing.vue";
 import Routing from "../../../../store/indexRouting";
@@ -53,12 +54,14 @@ describe("src/modules/tools/routing/components/Isochrones/IsochronesBatchProcess
                 }
             }
         };
+        sinon.stub(i18next, "t").callsFake((...args) => args);
     });
 
     afterEach(() => {
         if (wrapper) {
             wrapper.destroy();
         }
+        sinon.restore();
     });
 
     it("renders IsochronesBatchProcessingComponent", () => {
@@ -178,8 +181,8 @@ DEGAC00000007133;13.0285;52.30963`,
                                 speedProfile: "CAR",
                                 avoidSpeedProfileOptions: [],
                                 ID: "DEBBAL540001ChiF",
-                                "X-Wert_Start": 13.05518,
-                                "Y-Wert_Start": 52.39465
+                                [i18next.t("common:modules.tools.routing.directions.batchProcessing.downloadHeader.xStart")]: 13.05518,
+                                [i18next.t("common:modules.tools.routing.directions.batchProcessing.downloadHeader.yStart")]: 52.39465
                             }
                         },
                         {
@@ -205,8 +208,8 @@ DEGAC00000007133;13.0285;52.30963`,
                                 speedProfile: "CAR",
                                 avoidSpeedProfileOptions: [],
                                 ID: "DEBBAL540001ChiF",
-                                "X-Wert_Start": 13.05518,
-                                "Y-Wert_Start": 52.39465
+                                [i18next.t("common:modules.tools.routing.directions.batchProcessing.downloadHeader.xStart")]: 13.05518,
+                                [i18next.t("common:modules.tools.routing.directions.batchProcessing.downloadHeader.yStart")]: 52.39465
                             }
                         },
                         {
@@ -232,8 +235,8 @@ DEGAC00000007133;13.0285;52.30963`,
                                 speedProfile: "CAR",
                                 avoidSpeedProfileOptions: [],
                                 ID: "DEBBAL660000sAIN",
-                                "X-Wert_Start": 13.95471,
-                                "Y-Wert_Start": 51.74632
+                                [i18next.t("common:modules.tools.routing.directions.batchProcessing.downloadHeader.xStart")]: 13.95471,
+                                [i18next.t("common:modules.tools.routing.directions.batchProcessing.downloadHeader.yStart")]: 51.74632
                             }
                         },
                         {
@@ -259,8 +262,8 @@ DEGAC00000007133;13.0285;52.30963`,
                                 speedProfile: "CAR",
                                 avoidSpeedProfileOptions: [],
                                 ID: "DEBBAL660000sAIN",
-                                "X-Wert_Start": 13.95471,
-                                "Y-Wert_Start": 51.74632
+                                [i18next.t("common:modules.tools.routing.directions.batchProcessing.downloadHeader.xStart")]: 13.95471,
+                                [i18next.t("common:modules.tools.routing.directions.batchProcessing.downloadHeader.yStart")]: 51.74632
                             }
                         },
                         {
@@ -286,8 +289,8 @@ DEGAC00000007133;13.0285;52.30963`,
                                 speedProfile: "CAR",
                                 avoidSpeedProfileOptions: [],
                                 ID: "DEGAC00000007133",
-                                "X-Wert_Start": 13.0285,
-                                "Y-Wert_Start": 52.30963
+                                [i18next.t("common:modules.tools.routing.directions.batchProcessing.downloadHeader.xStart")]: 13.0285,
+                                [i18next.t("common:modules.tools.routing.directions.batchProcessing.downloadHeader.yStart")]: 52.30963
                             }
                         },
                         {
@@ -313,8 +316,8 @@ DEGAC00000007133;13.0285;52.30963`,
                                 speedProfile: "CAR",
                                 avoidSpeedProfileOptions: [],
                                 ID: "DEGAC00000007133",
-                                "X-Wert_Start": 13.0285,
-                                "Y-Wert_Start": 52.30963
+                                [i18next.t("common:modules.tools.routing.directions.batchProcessing.downloadHeader.xStart")]: 13.0285,
+                                [i18next.t("common:modules.tools.routing.directions.batchProcessing.downloadHeader.yStart")]: 52.30963
                             }
                         }
                     ]
