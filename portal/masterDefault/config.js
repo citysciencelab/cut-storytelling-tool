@@ -1,5 +1,5 @@
 const Config = {
-    addons: ["populationRequest", "trinkwasser", "verkehrsstaerken", "continuousCountingBike", "dataTable", "trafficCount", "solaratlas"],
+    addons: ["populationRequest", "trinkwasser", "verkehrsstaerken", "dataTable", "trafficCount", "solaratlas"],
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
     metadata: {
@@ -114,11 +114,12 @@ const Config = {
         enabled: true,
         debug: false,
         languages: {
-            de: "deutsch",
-            en: "englisch",
-            it: "italienisch",
-            pt: "portugiesisch",
-            es: "spanisch"
+            de: "Deutsch",
+            en: "English",
+            es: "Español",
+            it: "Italiano",
+            pt: "Português",
+            tr: "Türkçe"
         },
         fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"],

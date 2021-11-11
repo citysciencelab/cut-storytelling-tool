@@ -16,7 +16,6 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
     * @extends Backbone.View
     * @memberof Menu.Desktop.Tool
     * @constructs
-    * @fires ClickCounter#RadioTriggerClickCounterToolChanged
     * @fires Map#RadioRequestMapGetMapMode
     * @listens Map#RadioTriggerMapChange
     */
@@ -150,7 +149,6 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
             event.preventDefault();
             event.stopPropagation();
 
-            Radio.trigger("ClickCounter", "toolChanged");
             if (this.model.get("id") === "legend") {
                 const isActive = this.model.get("isActive");
 
@@ -184,6 +182,9 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
             // menu navigation is closed
             $("div.collapse.navbar-collapse").removeClass("in");
             $("li.dropdown-folder.open").removeClass("open");
+            $(".dropdown-menu.fixed").removeClass("fixed");
+            $(".glyphicon-pushpin").removeClass("rotate-pin");
+            $(".glyphicon-pushpin").addClass("rotate-pin-back");
         }
     }
 });

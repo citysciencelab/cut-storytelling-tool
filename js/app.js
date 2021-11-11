@@ -11,7 +11,6 @@ import Map from "../modules/core/map";
 import RemoteInterface from "../modules/remoteInterface/model";
 import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
-import GraphModel from "../modules/tools/graph/model";
 import MenuLoader from "../modules/menu/menuLoader";
 import ZoomToGeometry from "../modules/zoomToGeometry/model";
 import ZoomToFeature from "../modules/zoomToFeature/model";
@@ -19,7 +18,6 @@ import FeatureViaURL from "../modules/featureViaURL/model";
 import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
-import ClickCounterModel from "../modules/clickCounter/model";
 import MouseHoverPopupView from "../modules/mouseHover/view";
 import QuickHelpView from "../modules/quickHelp/view";
 import WindowView from "../modules/window/view";
@@ -45,7 +43,6 @@ import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import TreeFilterView from "../modules/treeFilter/view";
 import FeatureLister from "../modules/tools/featureLister/view";
-import PrintView from "../modules/tools/print/view";
 import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
@@ -137,7 +134,6 @@ async function loadApp () {
 
     app.$mount();
 
-    new GraphModel();
     new WFSTransactionModel();
     new MenuLoader();
 
@@ -155,10 +151,6 @@ async function loadApp () {
     new SliderRangeView();
     new DropdownView();
 
-    if (Object.prototype.hasOwnProperty.call(Config, "clickCounter") && Object.prototype.hasOwnProperty.call(Config, "desktop") && Config.clickCounter.desktop !== "" && Object.prototype.hasOwnProperty.call(Config, "mobile") && Config.clickCounter.mobile !== "") {
-        new ClickCounterModel(Config.clickCounter.desktop, Config.clickCounter.mobile, Config.clickCounter.staticLink);
-    }
-
     if (Object.prototype.hasOwnProperty.call(Config, "mouseHover")) {
         new MouseHoverPopupView(Config.mouseHover);
     }
@@ -169,24 +161,12 @@ async function loadApp () {
 
     Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}).forEach(tool => {
         switch (tool.id) {
-            case "lines": {
-                new LineView({model: tool});
-                break;
-            }
-            case "animation": {
-                new AnimationView({model: tool});
-                break;
-            }
             case "filter": {
                 new FilterView({model: tool});
                 break;
             }
             case "shadow": {
                 new ShadowView({model: tool});
-                break;
-            }
-            case "print": {
-                new PrintView({model: tool});
                 break;
             }
             case "parcelSearch": {

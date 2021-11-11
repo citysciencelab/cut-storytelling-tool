@@ -17,7 +17,7 @@ The configuration is separated into two sections, **[Portalconfig](#markdown-hea
 }
 ```
 
->💡 Since the portals original language was German, some technical keys are still in German.
+>Since the portals original language was German, some technical keys are still in German. 
 
 ***
 
@@ -82,7 +82,7 @@ Search bar configuration.
 
 BKG search service configuration.
 
->**⚠️ This requires a backend!**
+>**This requires a backend!**
 >
 >**To avoid openly using your BKG UUID, URLs ("bkg_geosearch" and "bkg_suggest" in this case) of the restServices should be caught and redirected in a proxy.**
 
@@ -180,7 +180,7 @@ Search with **[Komoot Photon](https://photon.komoot.io/)**.
 |osm_tag|no|string||Filtering of OSM Tags (see https://github.com/komoot/photon#filter-results-by-tags-and-values).|false|
 |searchOnEnter|no|Boolean|false|If `searchOnEnter` is set to `true`, searches will only start on clicking the search icon or pressing enter.|false|
 
-**Beispiel**
+**Example**
 
 ```
 #!json
@@ -252,7 +252,7 @@ Definition of classes to be taken into account for results.
 
 Gazetteer search service configuration.
 
->**⚠️ This requires a backend!**
+>**This requires a backend!**
 >
 >**A WFS's Stored Query is requested with predefined parameters.**
 
@@ -288,7 +288,7 @@ Gazetteer search service configuration.
 
 GFI search service configuration.
 
->⚠️ Deprecated in 3.0.0. Please use **[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)** instead.
+>Deprecated in 3.0.0. Please use **[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)** instead.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
@@ -995,6 +995,7 @@ A folder object defined by a name, glyphicon, and its children.
 [type:featureLister]: # (Portalconfig.menu.tool.featureLister)
 [type:filter]: # (Portalconfig.menu.tool.filter)
 [type:gfi]: # (Portalconfig.menu.tool.gfi)
+[type:layerClusterToggler]: # (Portalconfig.menu.tool.layerClusterToggler)
 [type:layerSlider]: # (Portalconfig.menu.tool.layerSlider)
 [type:legend]: # (Portalconfig.menu.legend)
 [type:measure]: # (Portalconfig.menu.tool.measure)
@@ -1006,6 +1007,7 @@ A folder object defined by a name, glyphicon, and its children.
 [type:shadow]: # (Portalconfig.menu.tool.shadow)
 [type:styleWMS]: # (Portalconfig.menu.tool.styleWMS)
 [type:supplyCoord]: # (Portalconfig.menu.tool.supplyCoord)
+[type:resetTree]: # (Portalconfig.menu.tool.resetTree)
 [type:virtualcity]: # (Portalconfig.menu.tool.virtualcity)
 [type:wfsSearch]: # (Portalconfig.menu.tool.wfsSearch)
 [type:wfst]: # (Portalconfig.menu.tool.wfst)
@@ -1027,6 +1029,7 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |filter|no|**[filter](#markdown-header-portalconfigmenutoolfilter)**||Allows filtering WFS vector data.|false|
 |gfi|no|**[gfi](#markdown-header-portalconfigmenutoolgfi)**||Via  getFeatureInfo (GFI) information to arbitrary layers can be requested. For WMS, the data is fetched with a GetFeatureInfo request. Vector data (WFS, Sensor, GeoJSON, etc.) is already present in the client and will be shown from the already fetched information.|false|
 |kmlimport|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use `fileImport` instead._|false|
+|layerClusterToggler|no|**[tool](#markdown-header-portalconfigtoollayerClusterToggler)**||_This tool allows a cluster layers to be active and deactive together._|false|
 |layerSlider|no|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||The layerSlider tool allows showing arbitrary services in order. This can e.g. be used to show aerial footage from multiple years in succession.|false|
 |layerslider|no|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||_Deprecated in 3.0.0. Please use `layerSlider` instead._|false|
 |legend|no|**[legend](#markdown-header-portalconfigmenulegend)**||The legend for all visible layers is displayed here.|false|
@@ -1041,6 +1044,7 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |styleWMS|no|**[styleWMS](#markdown-header-portalconfigmenutoolstylewms)**||Classification of WMS services. This tool is used in the commute portal of MRH (Metropolregion Hamburg, en.: Metropolitan area Hamburg). With a mask, classifications can be defined. The GetMap request will have an SLD body as payload, used by the server to render. The WMS service now delivers its tiles in the defined classifications and colors.|true|
 |styleVT|no|**[tool](#markdown-header-portalconfigmenutool)**||Style selection for VT services. Allows switching between styles of a Vector Tile Layer that provides multiple stylings via the `services.json` file.|false|
 |supplyCoord|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use "coordToolkit" instead._ Tool to read coordinates on mouse click. When clicking once, the coordinates in the view are frozen and can be copied on clicking the displaying input elements to the clipboard, i.e. you can use them in another document/chat/mail/... with `Strg+V`.|false|
+|resetTree|nein|**[tool](#markdown-header-portalconfigmenutool)**||Tool to reset tree. Clicking on Tool name in the menu under Tools resets the tree.|false|
 |virtualcity|no|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||*virtualcityPLANNER* planning viewer|false|
 |wfsFeatureFilter|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use `filter` instead._ Filters WFS features. This required configuring `"filterOptions"` on the WFS layer object.|false|
 |wfsSearch|no|**[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)**||Makes it possible to create a form to query WFS layers using filters. It is possible to either use a stored query (WFS@2.0.0) or define the query using the defined parameters (WFS@1.1.0).|false|
@@ -1437,13 +1441,13 @@ This tool allows comparing vector features.
 
 Parcel search.
 
->**⚠️ This requires a backend!**
+>**This requires a backend!**
 >
 >**Depending on your configuration, special stored queries of a WFS are requested with given parameters.**
 
 Example request: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0&&StoredQuery_ID=Flurstueck&gemarkung=0601&flurstuecksnummer=00011**
 
->⚠️ Deprecated in the next major release. Please use **[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)** instead.
+>Deprecated in the next major release. Please use **[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)** instead.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
@@ -1484,6 +1488,18 @@ Tool to save the current map content as a url.
 
 ***
 
+#### Portalconfig.menu.tool.resetTree
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Reset the theme tree.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|-------------|---|-------|------------|------|
+|resetTree|nein|Boolean|false|Tool to reset tree. Click on the tool name in the menu under Tools to reset the tree.|false|
+
+***
+
 #### Portalconfig.menu.tool.searchByCoord
 
 [inherits]: # (Portalconfig.menu.tool)
@@ -1514,7 +1530,7 @@ Coordinate search.
 
 Print module, configurable for 2 print services: *High Resolution PlotService* and *MapfishPrint 3*. Printing vector tile layers is not supported, since the print services themselves do not support it. Should users try to print such layers, a warning will be shown.
 
->**⚠️ This requires a backend!**
+>**This requires a backend!**
 >
 >**A [Mapfish-Print3](https://mapfish.github.io/mapfish-print-doc), or *HighResolutionPlotService* is required as backend.**
 
@@ -1907,6 +1923,7 @@ The measure tool allows measuring distances and areas. This includes the specifi
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |earthRadius|no|Number|6378137|Earth radius in meters. Please mind that the earth radius should be chosen in accordance with the reference ellipsoid. E.g., GRS80 should be used for ETRS89 (EPSG:25832).|false|
+|measurementAccuracy|no|String|"meter"|Indicates how accurately the measurement result is displayed for m and m². Options are "decimeter" for one decimal place. "meter" for no decimal place. And "dynamic" for one decimal place for results smaller 10m / 10m² and no decimal place for results greater or equal 10m / 10m².|false|
 
 **Example**
 
@@ -1914,7 +1931,8 @@ The measure tool allows measuring distances and areas. This includes the specifi
 {
     "measure": {
         "name": "translate#common:menu.tools.measure",
-        "earthRadius": 6378137
+        "earthRadius": 6378137,
+        "measurementAccuracy": "dynamic"
     }
 }
 ```
@@ -1925,7 +1943,7 @@ The measure tool allows measuring distances and areas. This includes the specifi
 
 The contact form allows users to send messages to a configured mail address.
 
->**⚠️ This requires a backend!**
+>**This requires a backend!**
 >
 >**Contact uses an SMTP server and calls its sendmail.php.**
 
@@ -2011,6 +2029,76 @@ E-Mail object containing a mail address, and a display name.
 {
     "email": "lgvgeoportal-hilfe@gv.hamburg.de",
     "name":"LGVGeoportalHilfe"
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.layerClusterToggler
+
+[inherits]: # (Portalconfig.menu.tool)
+
+The layer cluster toggler tool allows to activate and deactivate cluster layers together
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|name|yes|String|"additional:addons.menu.tools.layerClusterToggler.name"|Name displayed in the tool.|false|
+|glyphicon|yes|String|"glyphicon-education"|glyphicon displayed in the tool menu|false|
+|clusterList|yes|**[clusterList](#markdown-header-portalconfigmenutoollayerClusterTogglerclusterList)**[]|[]|Array of layer id objects or layer id string.|false|
+
+**Example**
+
+```json
+{
+    "layerClusterToggler": {
+        "name": "translate#additional:addons.menu.tools.layerClusterToggler.name",
+        "glyphicon": "glyphicon-education",
+        "clusterList": ["8712", "21067"]
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.layerClusterToggler.clusterList
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Defines a cluster of layer
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|layerId|yes|String||ID of the service to be shown in the portal. This layer ID *MUST* be configured as part of the *Themenconfig*!|false|
+|suffix|yes|String||Suffix of layer. This Suffix *MUST* be configured as part of the *Themenconfig*|false|
+
+**Example**
+
+```json
+{
+    "layerClusterToggler": {
+        "name": "translate#additional:addons.menu.tools.layerClusterToggler.name",
+        "glyphicon": "glyphicon-education",
+        "clusterList": [
+            "8712",
+            "8713",
+            {
+                "layerId": "21067",
+                "suffix": "90012"
+            },
+            {
+                "layerId": "21067",
+                "suffix": "90013"
+            },
+            {
+                "layerId": "21067",
+                "suffix": "90014"
+            },
+            {
+                "layerId": "21067",
+                "suffix": "90015"
+            }
+        ]
+    }
 }
 ```
 
@@ -2740,7 +2828,7 @@ Coordinates tool. To display the height above sea level in addition to the 2 dim
 |zoomLevel|no|Number|7|Coordinate search: Specifies the zoom level to which you want to zoom.|false|
 
 
-**Beispiel**
+**Example**
 ```
 #!json
  "coordToolkit": {

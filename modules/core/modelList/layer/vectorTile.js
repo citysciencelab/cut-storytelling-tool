@@ -7,6 +7,7 @@ import stylefunction from "ol-mapbox-style/dist/stylefunction";
 import store from "../../../../src/app-store/index";
 import getProxyUrl from "../../../../src/utils/getProxyUrl";
 import axios from "axios";
+import mapCollection from "../../../../src/core/dataStorage/mapCollection.js";
 
 import Layer from "./model";
 
@@ -81,7 +82,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
     createTileGrid: function (dataEpsg) {
         const extent = this.get("extent") || extentFromProjection(dataEpsg),
             origin = this.get("origin") || [extent[0], extent[3]], // upper left corner = [minX, maxY]
-            resolutions = this.get("resolutions") || store.getters["Map/map"].getView().getResolutions(),
+            resolutions = this.get("resolutions") || mapCollection.getMap(store.getters["Map/mapId"], store.getters["Map/mapMode"]).getView().getResolutions(),
             tileSize = this.get("tileSize") || 512,
             origins = this.get("origins"),
             tileGridParams = {

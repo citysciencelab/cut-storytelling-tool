@@ -5,7 +5,6 @@ import getters from "../store/gettersLegend";
 import mutations from "../store/mutationsLegend";
 import actions from "../store/actionsLegend";
 import LegendSingleLayer from "./LegendSingleLayer.vue";
-import {isArrayOfStrings} from "../../../utils/objectHelpers";
 import {convertColor} from "../../../utils/convertColor";
 import getComponent from "../../../utils/getComponent";
 
@@ -294,7 +293,7 @@ export default {
         prepareLegend (legendInfos) {
             let preparedLegend = [];
 
-            if (isArrayOfStrings(legendInfos)) {
+            if (Array.isArray(legendInfos) && legendInfos.every(value => typeof value === "string")) {
                 preparedLegend = legendInfos;
             }
             else if (Array.isArray(legendInfos)) {

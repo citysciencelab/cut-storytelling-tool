@@ -6,7 +6,6 @@ import {getProjections} from "masterportalAPI/src/crs";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersCoordToolkit";
 import mutations from "../store/mutationsCoordToolkit";
-import {MapMode} from "../../../map/store/enums";
 
 export default {
     name: "CoordToolkit",
@@ -15,7 +14,7 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/CoordToolkit", Object.keys(getters)),
-        ...mapGetters("Map", ["projection", "mouseCoord", "mapMode"]),
+        ...mapGetters("Map", ["projection", "mouseCoord", "mapMode", "mapId"]),
         ...mapGetters(["uiStyle"]),
         eastingNoCoordMessage: function () {
             if (this.currentProjection.projName !== "longlat") {
@@ -55,7 +54,7 @@ export default {
             if (value) {
                 this.initProjections();
                 this.setExample();
-                if (this.mapMode === MapMode.MODE_2D) {
+                if (this.mapMode === "2D") {
                     this.setMode("supply");
                     this.setSupplyCoordActive();
                 }
@@ -71,7 +70,7 @@ export default {
             }
         },
         mapMode (value) {
-            if (MapMode.MODE_3D === value) {
+            if (value === "3D") {
                 this.changeMode("search");
             }
         }
@@ -94,6 +93,7 @@ export default {
         ...mapActions("Tools/CoordToolkit", [
             "checkPosition",
             "changedPosition",
+            "setFirstSearchPosition",
             "copyToClipboard",
             "positionClicked",
             "setCoordinates",
@@ -129,6 +129,10 @@ export default {
             const pr = getProjections(),
                 wgs84Proj = [];
 
+            if (this.projections.length) {
+                return;
+            }
+
             // id is set to the name and in case of decimal "-DG" is appended to name later on
             // for use in select-box
             pr.forEach(proj => {
@@ -136,18 +140,23 @@ export default {
                 if (proj.name === "EPSG:4326") {
                     wgs84Proj.push(proj);
                 }
+
                 if (proj.name.indexOf("#") > -1) { // e.g. "http://www.opengis.net/gml/srs/epsg.xml#25832"
                     const code = proj.name.substring(proj.name.indexOf("#") + 1, proj.name.length);
 
                     proj.title = proj.title + " (EPSG:" + code + ")";
                 }
-                else {
+                else if (typeof proj.title !== "undefined") {
                     proj.title = proj.title + " (" + proj.name + ")";
+                }
+                else {
+                    proj.title = proj.name;
                 }
             });
             if (wgs84Proj.length > 0) {
                 this.addWGS84Decimal(pr, wgs84Proj);
             }
+
             this.setProjections(pr);
         },
         /**
@@ -258,12 +267,13 @@ export default {
          * @returns {void}
          */
         changeMode (newMode) {
+            this.removeMarker();
             if (newMode === "search") {
                 this.setMode(newMode);
-                this.removeMarker();
                 this.setSupplyCoordInactive();
+                this.setFirstSearchPosition();
             }
-            else if (this.mapMode !== MapMode.MODE_3D) {
+            else if (this.mapMode !== "3D") {
                 this.setMode(newMode);
                 this.resetErrorMessages("all");
                 this.setSupplyCoordActive();
@@ -350,14 +360,14 @@ export default {
          * @returns {boolean} true, if mapMode is 2D.
          */
         isSupplyCoordDisabled () {
-            return MapMode.MODE_3D === this.mapMode;
+            return this.mapMode === "3D";
         },
         /**
          * Returns true, if supplyCoord is active.
          * @returns {boolean} true, true, if supplyCoord is active
          */
         isSupplyCoordChecked () {
-            if (this.mapMode === MapMode.MODE_3D) {
+            if (this.mapMode === "3D") {
                 return false;
             }
             return this.mode === "supply";

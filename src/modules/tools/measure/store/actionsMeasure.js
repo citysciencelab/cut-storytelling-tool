@@ -1,6 +1,7 @@
 import source from "../utils/measureSource";
 import makeDraw2d from "../utils/measureDraw";
 import makeDraw3d from "../utils/measureDraw3d";
+import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 
 export default {
     /**
@@ -46,8 +47,7 @@ export default {
                 // if unlisteners are registered, this indicates 3D mode was active immediately before
                 dispatch("deleteFeatures");
             }
-            const map = rootGetters["Map/map"],
-                {selectedGeometry} = state;
+            const {selectedGeometry} = state;
 
             interaction = makeDraw2d(
                 selectedGeometry,
@@ -56,7 +56,7 @@ export default {
                 featureId => commit("setFeatureId", featureId),
                 tooltipCoord => commit("setTooltipCoord", tooltipCoord)
             );
-            map.addInteraction(interaction);
+            mapCollection.getMap(getters.mapId, this.mapMode).addInteraction(interaction);
         }
 
         commit("setInteraction", interaction);
@@ -67,12 +67,10 @@ export default {
      * removing the interaction from the store.
      * @returns {void}
      */
-    removeDrawInteraction ({state, commit, rootGetters}) {
+    removeDrawInteraction ({state, commit, getters}) {
         const {interaction} = state;
 
         if (interaction) {
-            const map = rootGetters["Map/map"];
-
             interaction.abortDrawing();
 
             if (interaction.interaction3d) {
@@ -80,7 +78,7 @@ export default {
                 interaction.stopInteraction();
             }
             else {
-                map.removeInteraction(interaction);
+                mapCollection.getMap(getters.mapId, this.mapMode).removeInteraction(interaction);
             }
 
             commit("setInteraction", null);

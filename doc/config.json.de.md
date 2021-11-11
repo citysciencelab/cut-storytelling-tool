@@ -1,10 +1,11 @@
->**[Zurück zur Dokumentation Masterportal](doc.de.md)**.
+>**[Zurück zur Dokumentation Masterportal](doc.md)**.
 
 [TOC]
 
 ***
 
 # config.json
+
 Die *config.json* enthält die gesamte Konfiguration der Portal-Oberfläche. In ihr wird geregelt welche Elemente sich wo in der Menüleiste befinden, worauf die Karte zentriert werden soll und welche Layer geladen werden sollen. Hier geht es zu einem **[Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/portal/basic/config.json)**.
 Die config.json besteht aus der **[Portalconfig](#markdown-header-Portalconfig)** und der **[Themenconfig](#markdown-header-Themenconfig)**
 
@@ -937,6 +938,7 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 [type:featureLister]: # (Portalconfig.menu.tool.featureLister)
 [type:filter]: # (Portalconfig.menu.tool.filter)
 [type:gfi]: # (Portalconfig.menu.tool.gfi)
+[type:layerClusterToggler]: # (Portalconfig.menu.tool.layerClusterToggler)
 [type:layerSlider]: # (Portalconfig.menu.tool.layerSlider)
 [type:legend]: # (Portalconfig.menu.legend)
 [type:measure]: # (Portalconfig.menu.tool.measure)
@@ -948,6 +950,7 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 [type:shadow]: # (Portalconfig.menu.tool.shadow)
 [type:styleWMS]: # (Portalconfig.menu.tool.styleWMS)
 [type:supplyCoord]: # (Portalconfig.menu.tool.supplyCoord)
+[type:resetTree]: # (Portalconfig.menu.tool.resetTree)
 [type:virtualcity]: # (Portalconfig.menu.tool.virtualcity)
 [type:wfsSearch]: # (Portalconfig.menu.tool.wfsSearch)
 [type:wfst]: # (Portalconfig.menu.tool.wfst)
@@ -968,6 +971,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |filter|nein|**[filter](#markdown-header-portalconfigmenutoolfilter)**||Filtermodul mit dem sich Vektordaten aus WFS filtern lassen.|false|
 |gfi|nein|**[gfi](#markdown-header-portalconfigmenutoolgfi)**||Mit der GetFeatureInfo(gfi) lassen sich Informationen zu beliebigen Layern anzeigen. Dabei werden bei einem WMS die Daten über die GetFeatureInfo geladen. Bei Vektordaten (WFS, Sensor, GeoJSON usw.) werden die angezeigten Attribute aus den Daten selbst verwendet.|false|
 |kmlimport|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "fileImport" verwenden.|false|
+|layerClusterToggler|nein|**[tool](#markdown-header-portalconfigtoollayerClusterToggler)**||_Mit diesem Werkzeug lassen sich Layer in Clustern gleichzeitig aktivieren/laden und deaktivieren_|false|
 |layerSlider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Mit dem Layerslider lassen sich beliebige Dienste in einer Reihenfolge abspielen. Zum Beispiel geeignet für Luftbilder aus verschiedenen Jahrgängen.|false|
 |layerslider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Deprecated in 3.0.0 Bitte "layerSlider" verwenden.|false|
 |legend|nein|**[legend](#markdown-header-portalconfigmenulegend)**||In der Legende werden alle sichtbaren Layer dargestellt.|false|
@@ -982,6 +986,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |styleWMS|nein|**[styleWMS](#markdown-header-portalconfigmenutoolstylewms)**||Klassifizierung von WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal der MRH(Metropolregion Hamburg). Über eine Maske können Klassifizierungen definiert werden. An den GetMap-Request wird nun ein SLD-Body angehängt, der dem Server einen neuen Style zum Rendern definiert. Der WMS-Dienst liefert nun die Daten in den definierten Klassifizierungen und Farben.|true|
 |styleVT|nein|**[tool](#markdown-header-portalconfigmenutool)**||Style-Auswahl zu VT-Diensten. Ermöglicht das Umschalten des Stylings eines Vector Tile Layers, wenn in der services.json mehrere Styles für ihn eingetragen sind.|false|
 |supplyCoord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "coordToolkit" verwenden. Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Klick in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Klick auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
+|resetTree|nein|**[tool](#markdown-header-portalconfigmenutool)**||Werkzeug um Themenbaum zurückzusetzen. Per Klick auf Werkzeugname im Menü unter Werkzeuge wird der Themenbaum zurückgesetzt.|false|
 |virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|false|
 |wfsFeatureFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "filter" verwenden. Filtern von WFS Features. Über dieses Werkzeug können WFS features gefiltert werden. Dies setzt jedoch eine Konfiguration der "filterOptions" am WFS-Layer-Objekt voraus.|false|
 |wfsSearch|nein|**[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)**||Ermöglicht es ein Formular zu erstellen, um einen WFS Layer abgekoppelt von der Suchleiste mittels Filter anzufragen. Es ist möglich entweder eine gespeicherte Anfrage (Stored Query, WFS@2.0.0) zu nutzen oder eine Anfrage mithilfe der konfigurierten Parameter zu definieren (WFS@1.1.0).|false|
@@ -1404,6 +1409,28 @@ Abspeicherung des aktuellen Karteninhalts.
 
 ***
 
+#### Portalconfig.menu.tool.resetTree
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Zurücksetzen des Themenbaums.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|resetTree|nein|Boolean|false|Werkzeug um Themenbaum zurückzusetzen. Per Klick auf Werkzeugname im Menü unter Werkzeuge wird der Themenbaum zurückgesetzt.|false|
+
+**Beispiel**
+
+```
+#!json
+"resetTree": {
+    "name": "translate#additional:modules.tools.resetTree.title",
+    "glyphicon": "glyphicon-repeat"
+}
+```
+
+***
+
 #### Portalconfig.menu.tool.searchByCoord
 
 [inherits]: # (Portalconfig.menu.tool)
@@ -1819,6 +1846,7 @@ Mit dem Messwerkzeug können Strecken und Flächen gemessen werden. Dabei werden
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |earthRadius|nein|Number|6378137|Erdradius in Metern. Bitte beachten Sie, dass der Erdradius in Abhängigkeit zum Bezugsellipsoiden gewählt werden sollte. Für ETRS89 (EPSG:25832) ist dies beispielsweise GRS80.|false|
+|measurementAccuracy|nein|String|"meter"|Gibt an, wie genau das Messergebnis für m und m² angezeigt wird. Die möglichen Optionen sind "decimeter" für eine Nachkommastelle. "meter" für keine Nachkommastelle. Und "dynamic" für eine Nachkommastelle bei Ergebnissen kleiner als 10m / 10m² und keine Nachkommastelle für Ergebnisse größer oder gleich 10m / 10m².|false|
 
 **Beispiel**
 
@@ -1826,7 +1854,8 @@ Mit dem Messwerkzeug können Strecken und Flächen gemessen werden. Dabei werden
 #!json
 "measure": {
     "name": "translate#common:menu.tools.measure",
-    "earthRadius": 6378137
+    "earthRadius": 6378137,
+    "measurementAccuracy": "dynamic"
 },
 ```
 
@@ -1923,6 +1952,77 @@ E-Mail Objekt bestehend aus der E-Mail und dem Anzeigenamen.
 {
     "email": "lgvgeoportal-hilfe@gv.hamburg.de",
     "name":"LGVGeoportalHilfe"
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.layerClusterToggler
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Werkzeug zum gleichzeitigen Aktivieren/Deaktivieren von Layer Clustern.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|--------|----|-------|-----------|------|
+|name|ja|String|"additional:addons.menu.tools.layerClusterToggler.name"|Der Name des Tools.|false|
+|glyphicon|ja|String|"glyphicon-education"|Verwendetes Glyphicon im Werkzeug-Menü.|false|
+|clusterList|ja|**[clusterList](#markdown-header-portalconfigmenutoollayerClusterTogglerclusterList)**[]|[]|Array der Layer-IDs (als Strings oder als Objekte).|false|
+
+**Beispiel**
+
+```json
+{
+    "layerClusterToggler": {
+        "name": "translate#additional:addons.menu.tools.layerClusterToggler.name",
+        "glyphicon": "glyphicon-education",
+        "clusterList": ["8712", "21067"]
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.layerClusterToggler.clusterList
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Die Liste der Layer-IDs die im Cluster aktiviert/deaktiviert werden sollen.
+Dies können die Layer-IDs als Strings sein, oder als Objekt wenn die Suffix-Technik für ein Layer verwendet wird.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|--------|----|-------|-----------|------|
+|layerId|ja|String||Id des Dienstes, der im Portal angezeigt werden soll. ACHTUNG: Diese LayerId muss auch in der Themenconfig konfiguriert sein.|false|
+|suffix|ja|String||Suffix des Layers. Dieser Suffix muss auch in der Themenconfig konfiguriert sein.|false|
+
+**Example**
+
+```json
+{
+    "layerClusterToggler": {
+        "name": "translate#additional:addons.menu.tools.layerClusterToggler.name",
+        "glyphicon": "glyphicon-education",
+        "clusterList": [
+            "8712",
+            "8713",
+            {
+                "layerId": "21067",
+                "suffix": "90012"
+            },
+            {
+                "layerId": "21067",
+                "suffix": "90013"
+            },
+            {
+                "layerId": "21067",
+                "suffix": "90014"
+            },
+            {
+                "layerId": "21067",
+                "suffix": "90015"
+            }
+        ]
+    }
 }
 ```
 

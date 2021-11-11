@@ -1,8 +1,9 @@
 import stateMap from "./stateMap";
-import {MapMode} from "./enums";
 import {generateSimpleGetters} from "../../../app-store/utils/generators";
 import {createGfiFeature} from "../../../api/gfi/getWmsFeaturesByMimeType";
 import {getGfiFeaturesByTileFeature} from "../../../api/gfi/getGfiFeaturesByTileFeature";
+import thousandsSeparator from "../../../utils/thousandsSeparator.js";
+import mapCollection from "../../../core/dataStorage/mapCollection.js";
 
 const gettersMap = {
     ...generateSimpleGetters(stateMap),
@@ -12,7 +13,7 @@ const gettersMap = {
      * @return {boolean} whether the portal is currently in 3D mode
      */
     is3d ({mapMode}) {
-        return mapMode === MapMode.MODE_3D;
+        return mapMode === "3D";
     },
 
     /**
@@ -36,7 +37,7 @@ const gettersMap = {
 
         visibleLayerList.forEach(layer => {
 
-            if (layer.get("layers")) {
+            if (layer.get("layers") && typeof layer.get("layers").getArray === "function") {
                 layer.get("layers").getArray().forEach(childLayer => {
                     list.push(childLayer);
                 });
@@ -82,10 +83,10 @@ const gettersMap = {
      * @param {number[]} state.clickPixel - the pixel coordinate of the click event
      * @returns {object[]} gfi features
      */
-    gfiFeaturesAtPixel: (state, {map, map3d, clickPixel}) => {
+    gfiFeaturesAtPixel: (state, {mapId, mapMode, map3d, clickPixel}) => {
         const featuresAtPixel = [];
 
-        map.forEachFeatureAtPixel(clickPixel, function (feature, layer) {
+        mapCollection.getMap(mapId, mapMode).forEachFeatureAtPixel(clickPixel, function (feature, layer) {
             if (layer?.getVisible() && layer?.get("gfiAttributes") && layer?.get("gfiAttributes") !== "ignore") {
                 if (feature.getProperties().features) {
                     feature.get("features").forEach(function (clusteredFeature) {
@@ -126,18 +127,6 @@ const gettersMap = {
     },
 
     /**
-     * @param {Object} s state
-     * @returns {Boolean} true if map is not in initial zoom/center
-     */
-    hasMoved: ({map, initialZoomLevel, initialCenter}) => {
-        const view = map.getView(),
-            center = view.getCenter();
-
-        return initialCenter[0] !== center[0] ||
-            initialCenter[1] !== center[1] ||
-            initialZoomLevel !== view.getZoom();
-    },
-    /**
      * @param {Object} _ state
      * @param {Object} g getters
      * @returns {Function} layer getter by id
@@ -158,7 +147,7 @@ const gettersMap = {
     /**
      * @param {Object} _ state
      * @param {Object} params getter parameters
-     * @param {Object} params.scale x from computed scale value 1:x
+     * @param {Number} params.scale x from computed scale value 1:x
      * @returns {String} pretty-printed scale to 2cms
      */
     scaleWithUnit: (_, {scale}) => {
@@ -167,25 +156,32 @@ const gettersMap = {
         return scaleNumber >= 1000 ? `${Math.round(scaleNumber / 100) / 10} km` : `${scaleNumber} m`;
     },
     /**
+     * returns a beautified state in format "1 : scale" where scale is rounded based on its value
      * @param {Object} _ state
      * @param {Object} params getter parameters
-     * @param {Object} params.scale x from computed scale value 1:x
-     * @returns {String} pretty-printed scale to 2cms
+     * @param {Number} params.scale a value (number) from computed scale 1:x
+     * @returns {String} pretty-printed scale as "1 : scale"
      */
     scaleToOne: (_, {scale}) => {
-        if (scale > 10000) {
-            return `1 : ${(Math.round(scale / 1000) * 1000).toLocaleString()}`;
+        if (typeof scale !== "number" || scale <= 0) {
+            return "1 : scale must be a positive number";
         }
-        else if (scale > 100) {
-            return `1 : ${(Math.round(scale / 100) * 100).toLocaleString()}`;
+        let result = Math.round(scale);
+
+        if (result > 10000) {
+            result = Math.round(result / 500) * 500;
         }
-        return `1 : ${Math.round(scale).toLocaleString()}`;
+        else if (result > 1000) {
+            result = Math.round(result / 50) * 50;
+        }
+
+        return "1 : " + thousandsSeparator(result);
     },
     /**
      * @param {Object} _ state
      * @param {Object} params getter parameters
-     * @param {Object} params.scale x from computed scale value 1:x
-     * @returns {String} pretty-printed scale to 2cms
+     * @param {Number[]} params.mouseCoord the mouse coord as array
+     * @returns {String} pretty-printed mouse coordinate
      */
     prettyMouseCoord: (_, {mouseCoord}) => mouseCoord ? `${mouseCoord[0].toString().substr(0, 9)}, ${mouseCoord[1].toString().substr(0, 10)}` : "",
     projectionCode: (_, g) => g.projection?.getCode(),

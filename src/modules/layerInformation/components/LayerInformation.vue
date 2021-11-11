@@ -37,7 +37,7 @@ export default {
             return this.downloadLinks !== null;
         },
         showUrl () {
-            return this.layerInfo.url !== null && this.layerInfo.urlIsVisible !== false && this.layerInfo.typ !== "SensorThings";
+            return (this.layerInfo.url !== null && this.layerInfo.typ !== "SensorThings" && this.showUrlGlobal === true) || (this.layerInfo.url !== null && this.layerInfo.typ !== "SensorThings" && this.showUrlGlobal === undefined && this.layerInfo.urlIsVisible !== false);
         },
         showAttachFile () {
             return this.downloadLinks && this.downloadLinks.length > 1;
@@ -57,6 +57,10 @@ export default {
 
     },
 
+    created () {
+        this.setConfigs();
+    },
+
     mounted () {
         if (this.metaDataCatalogueId) {
             this.setMetaDataCatalogueId(this.metaDataCatalogueId);
@@ -74,7 +78,8 @@ export default {
     methods: {
         ...mapActions("LayerInformation", [
             "changeLayerInfo",
-            "activate"
+            "activate",
+            "setConfigParams"
         ]),
         ...mapMutations("LayerInformation", Object.keys(mutations)),
         /**
@@ -146,6 +151,9 @@ export default {
         onClickDropdown (evt) {
             evt.stopPropagation();
             this.openDropdown = true;
+        },
+        setConfigs () {
+            this.setConfigParams(Config);
         }
     }
 };
@@ -167,7 +175,7 @@ export default {
                     class="subtitle"
                     :title="title"
                 >
-                    {{ $t(title) }}
+                    {{ title }}
                 </h4>
 
                 <div

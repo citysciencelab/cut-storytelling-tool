@@ -1,10 +1,10 @@
-import WMSLayer from "./layer/wms";
+import WMSLayer from "../../../src/core/layers/wms";
+import GroupedLayers from "../../../src/core/layers/group";
 import WmsTimeLayer from "./layer/wmsTime";
 import WMTSLayer from "./layer/wmts";
 import WFSLayer from "./layer/wfs";
 import StaticImageLayer from "./layer/staticImage";
 import GeoJSONLayer from "./layer/geojson";
-import GROUPLayer from "./layer/group";
 import SensorLayer from "./layer/sensor";
 import HeatmapLayer from "./layer/heatmap";
 import TerrainLayer from "./layer/terrain";
@@ -17,8 +17,6 @@ import Folder from "./folder/model";
 import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
 import Filter from "../../tools/filter/model";
-import Print from "../../tools/print/mapfish3PlotService";
-import HighResolutionPrint from "../../tools/print/highResolutionPlotService";
 
 /**
  * WfsFeatureFilter
@@ -120,7 +118,13 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "toggleDefaultTool": this.toggleDefaultTool,
             "refreshLightTree": this.refreshLightTree,
             "addAlwaysActiveTool": this.addAlwaysActiveTool,
-            "setActiveToolsToFalse": this.setActiveToolsToFalse
+            "setActiveToolsToFalse": this.setActiveToolsToFalse,
+            "updateLayerView": this.updateLayerView,
+            "removeLayerById": this.removeLayerById,
+            "moveModelInTree": this.moveModelInTree,
+            "updateSelection": function (model) {
+                this.trigger("updateSelection", model);
+            }
         }, this);
 
         this.listenTo(this, {
@@ -180,7 +184,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 if (attrs.time) {
                     return new WmsTimeLayer(attrs, options);
                 }
-                return new WMSLayer(attrs, options);
+                return new WMSLayer(attrs);
             }
             else if (attrs.typ === "WMTS") {
                 return new WMTSLayer(attrs, options);
@@ -198,7 +202,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 return new GeoJSONLayer(attrs, options);
             }
             else if (attrs.typ === "GROUP") {
-                return new GROUPLayer(attrs, options);
+                return new GroupedLayers(attrs, options);
             }
             else if (attrs.typ === "SensorThings") {
                 return new SensorLayer(attrs, options);
@@ -229,13 +233,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             return new Folder(attrs, options);
         }
         else if (attrs.type === "tool") {
-            if (attrs.id === "print") {
-                if (attrs.version === "HighResolutionPlotService") {
-                    return new HighResolutionPrint(Object.assign(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
-                }
-                return new Print(attrs, options);
-            }
-            else if (attrs.id === "parcelSearch") {
+            if (attrs.id === "parcelSearch") {
                 return new ParcelSearch(attrs, options);
             }
             else if (attrs.id === "styleWMS") {
@@ -683,7 +681,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
      * Forces rerendering of all layers. Layers are sorted before rerender.
      * @fires Map#RadioTriggerMapAddLayerToIndex
-     * @return {array} Sorted selected Layers
+     * @return {void}
      */
     updateLayerView: function () {
         const sortedLayers = this.getSortedTreeLayers();
@@ -691,8 +689,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         sortedLayers.forEach(layer => {
             Radio.trigger("Map", "addLayerToIndex", [layer.get("layer"), layer.get("selectionIDX")]);
         });
-
-        return sortedLayers;
     },
 
     /**
@@ -740,7 +736,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 else {
                     this.add(model);
                 }
-            });
+            }, this);
         }
         else if (paramLayers.length > 0) {
             itemIsVisibleInMap = Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true});

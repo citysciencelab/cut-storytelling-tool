@@ -89,6 +89,31 @@ function removeBadTags (rawSource) {
 }
 
 /**
+ * Reads the JSON and extracts the coordinate system.
+ * @param {String} rawSource - KML source as string.
+ * @returns {String} Returns CRS.Properties.Name - if not found it defaults to EPSG:4326
+ */
+function getCrsPropertyName (rawSource) {
+    let result = "EPSG:4326";
+
+    try {
+        const jsonDoc = JSON.parse(rawSource);
+
+        if (jsonDoc &&
+            Object.prototype.hasOwnProperty.call(jsonDoc, "crs") &&
+            Object.prototype.hasOwnProperty.call(jsonDoc.crs, "properties") &&
+            Object.prototype.hasOwnProperty.call(jsonDoc.crs.properties, "name")) {
+
+            result = jsonDoc.crs.properties.name;
+        }
+    }
+    catch (e) {
+        // no JSON input
+    }
+
+    return result;
+}
+/**
  * Checks for isVisible setting and in case it's not there adds it.
  * @param {Array} features The Features to be inspected.
  * @returns {Array} Returns Features with isVisible set.
@@ -117,7 +142,8 @@ export default {
     importKML: ({state, dispatch, rootGetters}, datasrc) => {
         const
             vectorLayer = datasrc.layer,
-            format = getFormat(datasrc.filename, state.selectedFiletype, state.supportedFiletypes, supportedFormats);
+            format = getFormat(datasrc.filename, state.selectedFiletype, state.supportedFiletypes, supportedFormats),
+            crsPropName = getCrsPropertyName(datasrc.raw);
 
         let
             featureError = false,
@@ -212,7 +238,23 @@ export default {
                 }
 
                 geometries.forEach(geometry => {
-                    geometry.transform("EPSG:4326", rootGetters["Map/projectionCode"]);
+                    let mappedCrsPropName = crsPropName;
+
+                    if ((crsPropName === "urn:ogc:def:crs:EPSG:6.6:4326") ||
+                       (crsPropName === "urn:ogc:def:crs:OGC:1.3:CRS84") ||
+                       (crsPropName === "urn:ogc:def:crs:OGC:1.3:CRS:84") ||
+                       (crsPropName === "urn:ogc:def:crs:OGC:2:84") ||
+                       (crsPropName === "urn:x-ogc:def:crs:EPSG:4326")) {
+                        mappedCrsPropName = "EPSG:4326";
+                    }
+                    else if ((crsPropName === "EPSG:102100") ||
+                        (crsPropName === "EPSG:102113") ||
+                        (crsPropName === "EPSG:900913") ||
+                        (crsPropName === "urn:ogc:def:crs:EPSG:6.18:3:3857")) {
+                        mappedCrsPropName = "EPSG:3857";
+                    }
+
+                    geometry.transform(mappedCrsPropName, rootGetters["Map/projectionCode"]);
                 });
             }
         });

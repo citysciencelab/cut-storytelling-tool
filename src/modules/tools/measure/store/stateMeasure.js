@@ -15,6 +15,10 @@ import source from "../utils/measureSource";
  * @property {boolean} isVisibleInMenu if true, tool is selectable in menu (config-param)
  * @property {boolean} deactivateGFI flag if tool should deactivate gfi (config-param)
  * @property {number} earthRadius earth radius to assume for length/area calculations (config-param)
+ * @property {string} measurementAccuracy indicates how accurately the measurement result is displayed for m and m².
+ *                                        Options are "decimeter" for one decimal place. "meter" for no decimal place.
+ *                                        And "dynamic" for one decimal place for results smaller 10m / 10m² and
+ *                                        no decimal place for results greater or equal 10m / 10m²
  * @property {object<String, module:ol/Feature>} lines line features by ol_uid
  * @property {object<String, module:ol/Feature>} polygons polygon features by ol_uid
  * @property {string[]} geometryValues Available geometry values for measurement selection
@@ -46,6 +50,7 @@ const state = {
 
     // tool-specific config.json parameters
     earthRadius: 6378137,
+    measurementAccuracy: "meter",
 
     // measure form state and UI
     lines: {},

@@ -12,6 +12,7 @@ import beautifyKey from "../../../../utils/beautifyKey.js";
 import {isWebLink} from "../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../utils/isEmailAddress.js";
+import axios from "axios";
 
 export default {
     name: "CompareFeatures",
@@ -27,12 +28,23 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/CompareFeatures", Object.keys(getters)),
+        ...mapGetters("Tools/Print", ["printFileReady", "fileDownloadUrl", "filename", "printStarted", "progressWidth"]),
         selected: {
             get () {
                 return state.selectedLayer;
             },
             set (newValue) {
                 this.selectLayerWithFeatures(newValue);
+            }
+        }
+    },
+    watch: {
+        printFileReady: function () {
+            if (this.active && this.printFileReady && this.fileDownloadUrl) {
+                const link = document.createElement("a");
+
+                link.href = this.fileDownloadUrl;
+                link.click();
             }
         }
     },
@@ -53,6 +65,7 @@ export default {
         isEmailAddress,
 
         close () {
+            this.setShowMoreInfo(false);
             this.setActive(false);
             // set the backbone model to active false in modellist for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
             const model = Radio.request("ModelList", "getModelByAttributes", {id: this.$store.state.Tools.CompareFeatures.id});
@@ -60,6 +73,16 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
+        },
+        /**
+         * start print process
+         * @param {Event} event the click event
+         * @returns {void}
+         */
+        startPrint () {
+            preparePrint(async (url, payload) => {
+                return axios.post(url, payload);
+            });
         }
     }
 };
@@ -155,7 +178,7 @@ export default {
                 </div>
             </div>
         </template>
-        <div>
+        <div class="scrollable">
             <div
                 v-if="!hasFeatures"
                 id="tool-compareFeatures-no-features"
@@ -203,10 +226,24 @@ export default {
                 <button
                     class="btn btn-primary btn-infos"
                     :title="$t('common:modules.tools.compareFeatures.exportAsPdf')"
-                    @click="preparePrint();"
+                    @click="startPrint"
                 >
                     {{ $t("common:modules.tools.compareFeatures.exportAsPdf") }}
                 </button>
+                <div
+                    v-if="printStarted"
+                    class="form-group col-md-12 col-xs-12 pt-20"
+                >
+                    <div class="progress">
+                        <div
+                            class="progress-bar"
+                            role="progressbar"
+                            :style="progressWidth"
+                        >
+                            <span class="sr-only">30% Complete</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </template>
     </Modal>
@@ -216,7 +253,10 @@ export default {
     @import "~/css/mixins.less";
 
     @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
-
+    .scrollable{
+        overflow: auto;
+        max-height: calc(100vh - 200px);
+    }
     .tool-compareFeatures-modal-title {
         font-family: @font_family_1;
     }
@@ -244,7 +284,6 @@ export default {
         margin-right: 20px;
         white-space: nowrap;
     }
-
     #tool-compareFeatures-buttons {
         text-align: center;
         margin: 10px;
@@ -278,6 +317,9 @@ export default {
     }
     #test {
         width: 20px;
+    }
+    .pt-20 {
+        padding-top: 20px;
     }
 </style>
 

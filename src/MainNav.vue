@@ -20,37 +20,39 @@ export default {
 </script>
 
 <template>
-    <div
-        id="main-nav"
-        class="navbar navbar-default"
-        role="navigation"
-    >
-        <div class="container-fluid">
-            <div id="navbarRow">
-                <div class="navbar-header">
-                    <button
-                        type="button"
-                        class="navbar-toggle"
-                        data-toggle="collapse"
-                        data-target=".navbar-collapse"
-                    >
-                        <span class="sr-only">Navigation ein-/ausblenden</span>
-                        <span class="icon-bar" />
-                        <span class="icon-bar" />
-                        <span class="icon-bar" />
-                    </button>
+    <header>
+        <nav
+            id="main-nav"
+            class="navbar navbar-default"
+            role="navigation"
+        >
+            <div class="container-fluid">
+                <div id="navbarRow">
+                    <div class="navbar-header">
+                        <button
+                            type="button"
+                            class="navbar-toggle"
+                            data-toggle="collapse"
+                            data-target=".navbar-collapse"
+                        >
+                            <span class="sr-only">Navigation ein-/ausblenden</span>
+                            <span class="icon-bar" />
+                            <span class="icon-bar" />
+                            <span class="icon-bar" />
+                        </button>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul
+                            id="root"
+                            class="nav-menu"
+                        />
+                    </div>
+                    <LegendMenu v-if="legendConfig" />
+                    <Title />
                 </div>
-                <div class="collapse navbar-collapse">
-                    <ul
-                        id="root"
-                        class="nav-menu"
-                    />
-                </div>
-                <LegendMenu v-if="legendConfig" />
-                <Title />
             </div>
-        </div>
-    </div>
+        </nav>
+    </header>
 </template>
 
 <style lang="less" scoped>

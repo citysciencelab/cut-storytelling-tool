@@ -37,40 +37,4 @@ describe("vectorStyleModel", function () {
             expect(styleModel.prepareField(featureProperties, field)).to.equal(15);
         });
     });
-    describe("getValueFromPath", function () {
-        it("Should return value from object path", function () {
-            const field = "@Datastreams.0.Observations.0.value",
-                featureProperties = {
-                    key1: 1,
-                    Datastreams: [
-                        {
-                            Observations: [
-                                {
-                                    value: 15
-                                }
-                            ]
-                        }
-                    ]
-                };
-
-            expect(styleModel.prepareField(featureProperties, field)).to.equal(15);
-        });
-        it("Should return 'undefineed' from object path if path does not completely exist", function () {
-            const field = "@Datastreams.0.Observations.1.value",
-                featureProperties = {
-                    key1: 1,
-                    Datastreams: [
-                        {
-                            Observations: [
-                                {
-                                    value: 15
-                                }
-                            ]
-                        }
-                    ]
-                };
-
-            expect(styleModel.prepareField(featureProperties, field)).to.equal("undefined");
-        });
-    });
 });

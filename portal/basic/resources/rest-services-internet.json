@@ -28,11 +28,5 @@
     "name" : "Email Service by PHP",
     "url" : "https://geoportal-hamburg.de/smtp/sendmail.php",
     "typ" : "EmailService"
-  },
-  {
-    "id": "mapfish",
-    "name": "Print Service Prod",
-    "url": "https://geodienste.hamburg.de/mapfish_print/print/",
-    "typ": "Print"
   }
 ]

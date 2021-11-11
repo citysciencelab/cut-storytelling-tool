@@ -14,7 +14,9 @@ import CoordToolkit from "./coordToolkit/store/indexCoordToolkit";
 import Draw from "./draw/store/indexDraw";
 import FileImport from "./fileImport/store/indexFileImport";
 import Gfi from "./gfi/store/indexGfi";
+import LayerClusterToggler from "./layerClusterToggler/store/indexLayerClusterToggler";
 import Measure from "./measure/store/indexMeasure";
+import Print from "./print/store/indexPrint";
 import SaveSelection from "./saveSelection/store/indexSaveSelection";
 import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
 import SearchByCoord from "./searchByCoord/store/indexSearchByCoord";
@@ -40,6 +42,7 @@ export default {
         FileImport,
         Gfi,
         Measure,
+        Print,
         SaveSelection,
         ScaleSwitcher,
         SearchByCoord,
@@ -47,7 +50,8 @@ export default {
         StyleVT,
         SupplyCoord,
         WfsSearch,
-        Routing
+        Routing,
+        LayerClusterToggler
     },
     state,
     getters,

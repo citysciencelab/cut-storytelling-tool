@@ -112,7 +112,7 @@ src
 |   |-- index.js
 |   |-- mutations.js
 |   |-- state.js
-|   |-- test
+|   |-- tests
 |
 |-- modules
 |   |-- exampleModule
@@ -148,7 +148,7 @@ src
 |   |   |-- exampleControl
 |   |   |   |-- components
 |   |   |   |-- store
-|   |   |   |-- test
+|   |   |   |-- tests
 |   |
 |   |-- tools
 |   |   |-- actionsTool.js
@@ -157,12 +157,12 @@ src
 |   |   |-- exampleTool
 |   |   |   |-- components
 |   |   |   |-- store
-|   |   |   |-- test
+|   |   |   |-- tests
 |   |
 |-- share-components
 |   |-- exampleShareComponent.vue
 |
-|-- test
+|-- tests
 |   |--end2end
 |   |   |--exampleGlobalTest.e2e.js
 |

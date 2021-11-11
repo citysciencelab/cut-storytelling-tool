@@ -80,8 +80,16 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
      * @fires Alerting#RadioTriggerAlertAlert
      */
     initialize: function () {
+        const channel = Radio.channel("Menu");
+
         checkChildrenDatasets(this.model);
         this.initializeDomId();
+
+        channel.on({
+            "renderSetting": this.renderSetting,
+            "rerender": this.rerender,
+            "change:isOutOfRange": this.toggleColor
+        }, this);
         this.listenTo(this.model, {
             "change:isSelected": this.rerender,
             "change:isSettingVisible": this.renderSetting,
@@ -152,6 +160,12 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
     toggleByMapMode: function (mapMode) {
         if (this.model.get("supported").indexOf(mapMode) >= 0) {
             this.$el.show();
+            if (this.model.get("isOutOfRange") !== true) {
+                this.enableComponent();
+            }
+            else {
+                this.disableComponent();
+            }
         }
         else {
             this.$el.hide();
