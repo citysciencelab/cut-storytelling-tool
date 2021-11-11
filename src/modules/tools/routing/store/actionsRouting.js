@@ -5,6 +5,7 @@ import {
 import {getMapProjection, transform} from "masterportalAPI/src/crs";
 import {fetchRoutingBkgGeosearch, fetchRoutingBkgGeosearchReverse} from "../utils/geosearch/routing-bkg-geosearch";
 import * as constantsRouting from "./constantsRouting";
+import mapCollection from "../../../../core/dataStorage/mapCollection";
 
 export default {
     /**
@@ -125,9 +126,9 @@ export default {
      * @param {[Number, Number]} coordinates to project
      * @returns {[Number, Number]} projected wgs84 coordinates
      */
-    transformCoordinatesLocalToWgs84Projection ({rootGetters}, coordinates) {
+    transformCoordinatesLocalToWgs84Projection ({rootState}, coordinates) {
         return transform(
-            getMapProjection(rootGetters["Map/map"]),
+            getMapProjection(mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode)),
             "EPSG:4326",
             coordinates
         );
@@ -138,10 +139,10 @@ export default {
      * @param {[Number, Number]} coordinates to project
      * @returns {[Number, Number]} projected local coordinates
      */
-    transformCoordinatesWgs84ToLocalProjection ({rootGetters}, coordinates) {
+    transformCoordinatesWgs84ToLocalProjection ({rootState}, coordinates) {
         return transform(
             "EPSG:4326",
-            getMapProjection(rootGetters["Map/map"]),
+            getMapProjection(mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode)),
             coordinates
         );
     }

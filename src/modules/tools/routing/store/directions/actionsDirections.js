@@ -2,6 +2,7 @@ import {RoutingWaypoint} from "../../utils/classes/routing-waypoint";
 import {fetchRoutingOrsDirections} from "../../utils/directions/routing-ors-directions";
 import Feature from "ol/Feature";
 import LineString from "ol/geom/LineString";
+import mapCollection from "../../../../../core/dataStorage/mapCollection";
 
 export default {
     /**
@@ -9,12 +10,12 @@ export default {
      * @param {Object} context actions context object.
      * @returns {void}
      */
-    async findDirections ({state, getters, commit, dispatch, rootGetters}) {
+    async findDirections ({state, getters, commit, dispatch, rootState}) {
         if (getters.directionsCoordinates.length < 2) {
             return;
         }
         const {waypoints, directionsRouteSource, routingAvoidFeaturesOptions, settings, directionsAvoidSource} = state,
-            map = rootGetters["Map/map"],
+            map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode),
             wgs84Coords = await dispatch("getDirectionsCoordinatesWgs84"),
             lineStringFeature = await dispatch("getRouteFeature");
 
@@ -166,9 +167,9 @@ export default {
      * @param {[Number, Number]} [params.coordsIndex] alternative to select the coordinate index directly
      * @returns {void}
      */
-    async zoomToRoute ({dispatch, state, rootGetters}, {fromWaypointIndex, toWaypointIndex, coordsIndex}) {
+    async zoomToRoute ({dispatch, state, rootState}, {fromWaypointIndex, toWaypointIndex, coordsIndex}) {
         const {waypoints} = state,
-            map = rootGetters["Map/map"],
+            map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode),
             routeFeature = await dispatch("getRouteFeature"),
             lineIndex = coordsIndex ? coordsIndex.slice(0) : [
                 waypoints[fromWaypointIndex].getIndexDirectionsLineString(),
@@ -239,7 +240,7 @@ export default {
      * @param {Object} context actions context object.
      * @returns {void}
      */
-    initDirections ({rootGetters, state, dispatch, commit}) {
+    initDirections ({rootState, state, dispatch, commit}) {
         const {
                 directionsWaypointsLayer,
                 directionsRouteLayer,
@@ -249,7 +250,7 @@ export default {
                 directionsAvoidSelectInteraction,
                 mapListenerAdded
             } = state,
-            map = rootGetters["Map/map"];
+            map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode);
 
         dispatch("initWaypoints");
 
@@ -294,9 +295,9 @@ export default {
      * @param {Object} context actions context object.
      * @returns {void}
      */
-    closeDirections ({rootGetters, state, dispatch}) {
+    closeDirections ({rootState, state, dispatch}) {
         const {directionsWaypointsLayer, directionsRouteLayer, directionsAvoidLayer} = state,
-            map = rootGetters["Map/map"];
+            map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode);
 
         map.removeLayer(directionsRouteLayer);
         map.removeLayer(directionsWaypointsLayer);
@@ -644,7 +645,7 @@ export default {
      * @param {Object} context actions context object.
      * @returns {void}
      */
-    createDirectionsWaypointsDrawInteraction ({state, dispatch, rootGetters}) {
+    createDirectionsWaypointsDrawInteraction ({state, dispatch, rootState}) {
         dispatch("removeMapInteractions");
         const {
                 directionsWaypointsModifyInteraction,
@@ -654,7 +655,7 @@ export default {
                 directionsRouteSnapInteraction
             } = state,
 
-            map = rootGetters["Map/map"];
+            map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode);
 
         map.addInteraction(directionsRouteModifyInteraction);
         map.addInteraction(directionsRouteSnapInteraction);
@@ -670,7 +671,7 @@ export default {
      * @param {Object} context actions context object.
      * @returns {void}
      */
-    removeDirectionsWaypointsDrawInteraction ({state, rootGetters}) {
+    removeDirectionsWaypointsDrawInteraction ({state, rootState}) {
         const {
                 directionsWaypointsDrawInteraction,
                 directionsWaypointsModifyInteraction,
@@ -679,7 +680,7 @@ export default {
                 directionsRouteSnapInteraction
             } = state,
 
-            map = rootGetters["Map/map"];
+            map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode);
 
         directionsWaypointsDrawInteraction.abortDrawing();
 
@@ -696,7 +697,7 @@ export default {
      * @param {Object} context actions context object.
      * @returns {void}
      */
-    createDirectionsAvoidDrawInteraction ({state, dispatch, rootGetters}) {
+    createDirectionsAvoidDrawInteraction ({state, dispatch, rootState}) {
         dispatch("removeMapInteractions");
         const {
                 directionsAvoidModifyInteraction,
@@ -704,7 +705,7 @@ export default {
                 directionsAvoidDrawInteraction
             } = state,
 
-            map = rootGetters["Map/map"];
+            map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode);
 
         map.addInteraction(directionsAvoidDrawInteraction);
         map.addInteraction(directionsAvoidModifyInteraction);
@@ -715,14 +716,13 @@ export default {
      * @param {Object} context actions context object.
      * @returns {void}
      */
-    removeDirectionsAvoidDrawInteraction ({state, rootGetters}) {
+    removeDirectionsAvoidDrawInteraction ({state, rootState}) {
         const {
                 directionsAvoidModifyInteraction,
                 directionsAvoidSnapInteraction,
                 directionsAvoidDrawInteraction
             } = state,
-
-            map = rootGetters["Map/map"];
+            map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode);
 
         directionsAvoidDrawInteraction.abortDrawing();
 
@@ -736,11 +736,10 @@ export default {
      * @param {Object} context actions context object.
      * @returns {void}
      */
-    createDirectionsAvoidSelectInteraction ({state, dispatch, rootGetters}) {
+    createDirectionsAvoidSelectInteraction ({state, dispatch, rootState}) {
         dispatch("removeMapInteractions");
         const {directionsAvoidSelectInteraction} = state,
-
-            map = rootGetters["Map/map"];
+            map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode);
 
         map.addInteraction(directionsAvoidSelectInteraction);
     },
@@ -749,9 +748,9 @@ export default {
      * @param {Object} context actions context object.
      * @returns {void}
      */
-    removeDirectionsAvoidSelectInteraction ({state, rootGetters}) {
+    removeDirectionsAvoidSelectInteraction ({state, rootState}) {
         const {directionsAvoidSelectInteraction} = state,
-            map = rootGetters["Map/map"];
+            map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode);
 
         map.removeInteraction(directionsAvoidSelectInteraction);
     },

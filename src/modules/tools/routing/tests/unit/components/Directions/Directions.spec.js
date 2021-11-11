@@ -7,6 +7,7 @@ import DirectionsBatchProcessingComponent from "../../../../components/Direction
 import RoutingBatchProcessingCheckboxComponent from "../../../../components/RoutingBatchProcessingCheckbox.vue";
 import RoutingDownloadComponent from "../../../../components/RoutingDownload.vue";
 import Routing from "../../../../store/indexRouting";
+import mapCollection from "../../../../../../../core/dataStorage/mapCollection";
 
 const localVue = createLocalVue();
 
@@ -34,6 +35,16 @@ describe("src/modules/tools/routing/components/Directions/Directions.vue", () =>
         wrapper;
 
     beforeEach(() => {
+        mapCollection.clear();
+        mapCollection.addMap({
+            id: "ol",
+            mode: "2D",
+            addLayer: sinon.spy(),
+            removeLayer: sinon.spy(),
+            addInteraction: sinon.spy(),
+            removeInteraction: sinon.spy()
+        }, "ol", "2D");
+
         store = new Vuex.Store({
             namespaced: true,
             modules: {
@@ -45,13 +56,9 @@ describe("src/modules/tools/routing/components/Directions/Directions.vue", () =>
                 },
                 Map: {
                     namespaced: true,
-                    getters: {
-                        map: () => ({
-                            addLayer: sinon.spy(),
-                            removeLayer: sinon.spy(),
-                            addInteraction: sinon.spy(),
-                            removeInteraction: sinon.spy()
-                        })
+                    state: {
+                        mapId: "ol",
+                        mapMode: "2D"
                     }
                 }
             },

@@ -11,9 +11,10 @@ import Select from "ol/interaction/Select";
 import {RoutingWaypoint} from "../../../../utils/classes/routing-waypoint";
 import {RoutingDirections} from "../../../../utils/classes/routing-directions";
 import {RoutingGeosearchResult} from "../../../../utils/classes/routing-geosearch-result";
+import mapCollection from "../../../../../../../core/dataStorage/mapCollection";
 
 describe("src/modules/tools/routing/store/directions/actionsDirections.js", () => {
-    let state, commitSpy, commit, dispatchSpy, dispatch, dispatchMocks, getters, rootGetters, waypoints, wgs84Coordinates, routingDirectionsWaypointSource, routingDirectionsAvoidSource, routingDirectionsResult, routeFeature, highlightFeature, startWaypoint, endWaypoint, avoidPolygonCoordinates;
+    let state, commitSpy, commit, dispatchSpy, dispatch, dispatchMocks, getters, rootState, waypoints, wgs84Coordinates, routingDirectionsWaypointSource, routingDirectionsAvoidSource, routingDirectionsResult, routeFeature, highlightFeature, startWaypoint, endWaypoint, avoidPolygonCoordinates;
 
     beforeEach(() => {
         avoidPolygonCoordinates = [[[8.1, 51.1], [8.2, 51.2], [8.3, 51.3], [8.1, 51.1]]];
@@ -78,15 +79,24 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
         getters = {
             directionsCoordinates: wgs84Coordinates
         };
-        rootGetters = {
-            "Map/map": {
-                getView: () => ({
-                    fit: () => sinon.spy()
-                }),
-                addLayer: sinon.spy(),
-                removeLayer: sinon.spy()
+
+        rootState = {
+            Map: {
+                mapId: "ol",
+                mapMode: "2D"
             }
         };
+
+        mapCollection.clear();
+        mapCollection.addMap({
+            id: "ol",
+            mode: "2D",
+            getView: () => ({
+                fit: () => sinon.spy()
+            }),
+            addLayer: sinon.spy(),
+            removeLayer: sinon.spy()
+        }, "ol", "2D");
 
         state = {
             settings: {
@@ -117,10 +127,12 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
         };
     });
 
-    afterEach(sinon.restore);
+    afterEach(() => {
+        sinon.restore();
+    });
 
     it("should findDirections", async () => {
-        await actionsDirections.findDirections({state, getters, commit, dispatch, rootGetters});
+        await actionsDirections.findDirections({state, getters, commit, dispatch, rootState});
 
         expect(commitSpy.args).to.deep.equal([
             ["setIsLoadingDirections", true],
@@ -138,7 +150,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
     });
 
     it("should resetRoutingDirectionsResults", async () => {
-        await actionsDirections.resetRoutingDirectionsResults({state, getters, commit, dispatch, rootGetters});
+        await actionsDirections.resetRoutingDirectionsResults({state, getters, commit, dispatch, rootState});
 
         expect(commitSpy.args).to.deep.equal([
             ["setRoutingDirections", null]
@@ -150,19 +162,19 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
     });
 
     it("should getRouteFeature", async () => {
-        const result = await actionsDirections.getRouteFeature({state, getters, commit, dispatch, rootGetters});
+        const result = await actionsDirections.getRouteFeature({state, getters, commit, dispatch, rootState});
 
         expect(result).equal(routeFeature);
     });
 
     it("should getHighlightFeature", async () => {
-        const result = await actionsDirections.getHighlightFeature({state, getters, commit, dispatch, rootGetters});
+        const result = await actionsDirections.getHighlightFeature({state, getters, commit, dispatch, rootState});
 
         expect(result).equal(highlightFeature);
     });
 
     it("should unHighlightRoute", async () => {
-        await actionsDirections.unHighlightRoute({state, getters, commit, dispatch, rootGetters});
+        await actionsDirections.unHighlightRoute({state, getters, commit, dispatch, rootState});
 
         expect(dispatchSpy.args).to.deep.equal([
             ["getHighlightFeature"]
@@ -172,7 +184,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
     });
 
     it("should highlightRoute with 'fromWaypointIndex' and 'toWaypointIndex'", async () => {
-        await actionsDirections.highlightRoute({state, getters, commit, dispatch, rootGetters}, {
+        await actionsDirections.highlightRoute({state, getters, commit, dispatch, rootState}, {
             fromWaypointIndex: 0,
             toWaypointIndex: 1
         });
@@ -187,7 +199,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
 
     it("should highlightRoute with 'coordsIndex'", async () => {
 
-        await actionsDirections.highlightRoute({state, getters, commit, dispatch, rootGetters}, {
+        await actionsDirections.highlightRoute({state, getters, commit, dispatch, rootState}, {
             coordsIndex: [0, 1]
         });
 
@@ -200,7 +212,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
     });
 
     it("should getDirectionsCoordinatesWgs84", async () => {
-        const directionsCoordinatesWgs84 = await actionsDirections.getDirectionsCoordinatesWgs84({state, getters, commit, dispatch, rootGetters});
+        const directionsCoordinatesWgs84 = await actionsDirections.getDirectionsCoordinatesWgs84({state, getters, commit, dispatch, rootState});
 
         expect(dispatchSpy.args).to.deep.equal(
             getters.directionsCoordinates.map(coords => ["Tools/Routing/transformCoordinatesLocalToWgs84Projection", coords, {root: true}])
@@ -210,7 +222,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
     });
 
     it("should getAvoidPolygonsWgs84", async () => {
-        const avoidPolygonsWgs84 = await actionsDirections.getAvoidPolygonsWgs84({state, getters, commit, dispatch, rootGetters});
+        const avoidPolygonsWgs84 = await actionsDirections.getAvoidPolygonsWgs84({state, getters, commit, dispatch, rootState});
 
         expect(dispatchSpy.args).to.deep.equal(
             avoidPolygonCoordinates[0].map(coords => ["Tools/Routing/transformCoordinatesLocalToWgs84Projection", coords, {root: true}])
@@ -221,7 +233,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
 
     it("should initDirections without mapListenerAdded", async () => {
         state.mapListenerAdded = false;
-        await actionsDirections.initDirections({state, getters, commit, dispatch, rootGetters});
+        await actionsDirections.initDirections({state, getters, commit, dispatch, rootState});
 
         expect(dispatchSpy.args).to.deep.equal([
             ["initWaypoints"],
@@ -238,7 +250,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
 
     it("should initDirections with mapListenerAdded", async () => {
         state.mapListenerAdded = true;
-        await actionsDirections.initDirections({state, getters, commit, dispatch, rootGetters});
+        await actionsDirections.initDirections({state, getters, commit, dispatch, rootState});
 
         expect(dispatchSpy.args).to.deep.equal([
             ["initWaypoints"],
@@ -248,7 +260,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
 
     it("should createInteractionFromMapInteractionMode with mapInteractionMode 'WAYPOINTS'", async () => {
         state.mapInteractionMode = "WAYPOINTS";
-        await actionsDirections.createInteractionFromMapInteractionMode({state, getters, commit, dispatch, rootGetters});
+        await actionsDirections.createInteractionFromMapInteractionMode({state, getters, commit, dispatch, rootState});
 
         expect(dispatchSpy.args).to.deep.equal([
             ["createDirectionsWaypointsDrawInteraction"]
@@ -257,7 +269,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
 
     it("should createInteractionFromMapInteractionMode with mapInteractionMode 'AVOID_AREAS'", async () => {
         state.mapInteractionMode = "AVOID_AREAS";
-        await actionsDirections.createInteractionFromMapInteractionMode({state, getters, commit, dispatch, rootGetters});
+        await actionsDirections.createInteractionFromMapInteractionMode({state, getters, commit, dispatch, rootState});
 
         expect(dispatchSpy.args).to.deep.equal([
             ["createDirectionsAvoidDrawInteraction"]
@@ -266,7 +278,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
 
     it("should createInteractionFromMapInteractionMode with mapInteractionMode 'DELETE_AVOID_AREAS'", async () => {
         state.mapInteractionMode = "DELETE_AVOID_AREAS";
-        await actionsDirections.createInteractionFromMapInteractionMode({state, getters, commit, dispatch, rootGetters});
+        await actionsDirections.createInteractionFromMapInteractionMode({state, getters, commit, dispatch, rootState});
 
         expect(dispatchSpy.args).to.deep.equal([
             ["createDirectionsAvoidSelectInteraction"]
@@ -274,7 +286,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
     });
 
     it("should closeDirections", async () => {
-        await actionsDirections.closeDirections({state, getters, commit, dispatch, rootGetters});
+        await actionsDirections.closeDirections({state, getters, commit, dispatch, rootState});
 
         expect(dispatchSpy.args).to.deep.equal([
             ["removeMapInteractions"]
@@ -282,7 +294,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
     });
 
     it("should findWaypointBetweenLineStringIndex", async () => {
-        const waypointBetweenLineStringIndex = await actionsDirections.findWaypointBetweenLineStringIndex({state, getters, commit, dispatch, rootGetters}, {
+        const waypointBetweenLineStringIndex = await actionsDirections.findWaypointBetweenLineStringIndex({state, getters, commit, dispatch, rootState}, {
             lineStringIndex: 0
         });
 
@@ -290,7 +302,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
     });
 
     it("should not findWaypointBetweenLineStringIndex", async () => {
-        const waypointBetweenLineStringIndex = await actionsDirections.findWaypointBetweenLineStringIndex({state, getters, commit, dispatch, rootGetters}, {
+        const waypointBetweenLineStringIndex = await actionsDirections.findWaypointBetweenLineStringIndex({state, getters, commit, dispatch, rootState}, {
             lineStringIndex: 1
         });
 
@@ -300,14 +312,14 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
 
     describe("should addWaypoint", () => {
         it("without index", async () => {
-            const waypoint = await actionsDirections.addWaypoint({state, getters, commit, dispatch, rootGetters}, {});
+            const waypoint = await actionsDirections.addWaypoint({state, getters, commit, dispatch, rootState}, {});
 
             expect(waypoints.length).equal(3);
             expect(waypoints[2]).equal(waypoint);
         });
 
         it("with index", async () => {
-            const waypoint = await actionsDirections.addWaypoint({state, getters, commit, dispatch, rootGetters}, {
+            const waypoint = await actionsDirections.addWaypoint({state, getters, commit, dispatch, rootState}, {
                 index: 2
             });
 
@@ -316,7 +328,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
         });
 
         it("with index in middle", async () => {
-            const waypoint = await actionsDirections.addWaypoint({state, getters, commit, dispatch, rootGetters}, {
+            const waypoint = await actionsDirections.addWaypoint({state, getters, commit, dispatch, rootState}, {
                 index: 1
             });
 
@@ -328,7 +340,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
             const featurePoint = new Feature({
                     geometry: new Point([10, 10])
                 }),
-                waypoint = await actionsDirections.addWaypoint({state, getters, commit, dispatch, rootGetters}, {
+                waypoint = await actionsDirections.addWaypoint({state, getters, commit, dispatch, rootState}, {
                     feature: featurePoint
                 });
 
@@ -345,7 +357,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
             const featurePoint = new Feature({
                     geometry: new Point([10, 10])
                 }),
-                waypoint = await actionsDirections.addWaypoint({state, getters, commit, dispatch, rootGetters}, {
+                waypoint = await actionsDirections.addWaypoint({state, getters, commit, dispatch, rootState}, {
                     feature: featurePoint
                 });
 
@@ -356,7 +368,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
 
     describe("should removeWaypoint", () => {
         it("with 2 waypoints", async () => {
-            await actionsDirections.removeWaypoint({state, getters, commit, dispatch, rootGetters}, {
+            await actionsDirections.removeWaypoint({state, getters, commit, dispatch, rootState}, {
                 index: 0
             });
 
@@ -375,7 +387,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
                 thirdWaypoint = new RoutingWaypoint({index: 2, source: routingDirectionsWaypointSource});
 
             state.waypoints = [firstWaypoint, secondWaypoint, thirdWaypoint];
-            await actionsDirections.removeWaypoint({state, getters, commit, dispatch, rootGetters}, {
+            await actionsDirections.removeWaypoint({state, getters, commit, dispatch, rootState}, {
                 index: 1
             });
 
@@ -392,7 +404,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
                 thirdWaypoint = new RoutingWaypoint({index: 2, source: routingDirectionsWaypointSource});
 
             state.waypoints = [firstWaypoint, secondWaypoint, thirdWaypoint];
-            await actionsDirections.removeWaypoint({state, getters, commit, dispatch, rootGetters}, {
+            await actionsDirections.removeWaypoint({state, getters, commit, dispatch, rootState}, {
                 index: 1,
                 reload: true
             });
@@ -414,7 +426,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
                 thirdWaypoint = new RoutingWaypoint({index: 2, source: routingDirectionsWaypointSource});
 
             state.waypoints = [firstWaypoint, secondWaypoint, thirdWaypoint];
-            await actionsDirections.moveWaypointDown({state, getters, commit, dispatch, rootGetters}, 1);
+            await actionsDirections.moveWaypointDown({state, getters, commit, dispatch, rootState}, 1);
 
             expect(state.waypoints[1]).equal(thirdWaypoint);
             expect(state.waypoints[1].getIndex()).equal(1);
@@ -432,7 +444,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
                 thirdWaypoint = new RoutingWaypoint({index: 2, source: routingDirectionsWaypointSource});
 
             state.waypoints = [firstWaypoint, secondWaypoint, thirdWaypoint];
-            await actionsDirections.moveWaypointDown({state, getters, commit, dispatch, rootGetters}, 2);
+            await actionsDirections.moveWaypointDown({state, getters, commit, dispatch, rootState}, 2);
 
             expect(state.waypoints[1]).equal(secondWaypoint);
             expect(state.waypoints[1].getIndex()).equal(1);
@@ -448,7 +460,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
                 thirdWaypoint = new RoutingWaypoint({index: 2, source: routingDirectionsWaypointSource});
 
             state.waypoints = [firstWaypoint, secondWaypoint, thirdWaypoint];
-            await actionsDirections.moveWaypointDown({state, getters, commit, dispatch, rootGetters}, -1);
+            await actionsDirections.moveWaypointDown({state, getters, commit, dispatch, rootState}, -1);
 
             expect(state.waypoints[0]).equal(firstWaypoint);
             expect(state.waypoints[0].getIndex()).equal(0);
@@ -469,7 +481,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
                 thirdWaypoint = new RoutingWaypoint({index: 2, source: routingDirectionsWaypointSource});
 
             state.waypoints = [firstWaypoint, secondWaypoint, thirdWaypoint];
-            await actionsDirections.moveWaypointUp({state, getters, commit, dispatch, rootGetters}, 2);
+            await actionsDirections.moveWaypointUp({state, getters, commit, dispatch, rootState}, 2);
 
             expect(state.waypoints[1]).equal(thirdWaypoint);
             expect(state.waypoints[1].getIndex()).equal(1);
@@ -487,7 +499,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
                 thirdWaypoint = new RoutingWaypoint({index: 2, source: routingDirectionsWaypointSource});
 
             state.waypoints = [firstWaypoint, secondWaypoint, thirdWaypoint];
-            await actionsDirections.moveWaypointUp({state, getters, commit, dispatch, rootGetters}, 4);
+            await actionsDirections.moveWaypointUp({state, getters, commit, dispatch, rootState}, 4);
 
             expect(state.waypoints[1]).equal(secondWaypoint);
             expect(state.waypoints[1].getIndex()).equal(1);
@@ -503,7 +515,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
                 thirdWaypoint = new RoutingWaypoint({index: 2, source: routingDirectionsWaypointSource});
 
             state.waypoints = [firstWaypoint, secondWaypoint, thirdWaypoint];
-            await actionsDirections.moveWaypointUp({state, getters, commit, dispatch, rootGetters}, -1);
+            await actionsDirections.moveWaypointUp({state, getters, commit, dispatch, rootState}, -1);
 
             expect(state.waypoints[0]).equal(firstWaypoint);
             expect(state.waypoints[0].getIndex()).equal(0);
@@ -518,7 +530,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
 
     it("should initWaypoints", async () => {
         state.waypoints = [];
-        await actionsDirections.initWaypoints({state, getters, commit, dispatch, rootGetters});
+        await actionsDirections.initWaypoints({state, getters, commit, dispatch, rootState});
 
         expect(dispatchSpy.args).to.deep.equal([
             ["addWaypoint", {index: 0}],
@@ -531,7 +543,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
             geometry: new Point([10, 10])
         });
 
-        await actionsDirections.onDirectionsWaypointsDrawEnd({state, getters, commit, dispatch, rootGetters}, {
+        await actionsDirections.onDirectionsWaypointsDrawEnd({state, getters, commit, dispatch, rootState}, {
             feature: featurePoint
         });
 
@@ -544,7 +556,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
     });
 
     it("should removeMapInteractions", async () => {
-        await actionsDirections.removeMapInteractions({state, getters, commit, dispatch, rootGetters});
+        await actionsDirections.removeMapInteractions({state, getters, commit, dispatch, rootState});
 
         expect(dispatchSpy.args).to.deep.equal([
             ["removeDirectionsWaypointsDrawInteraction"],

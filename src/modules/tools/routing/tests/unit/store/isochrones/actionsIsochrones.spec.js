@@ -9,9 +9,10 @@ import {RoutingWaypoint} from "../../../../utils/classes/routing-waypoint";
 import {RoutingGeosearchResult} from "../../../../utils/classes/routing-geosearch-result";
 import {RoutingIsochrones} from "../../../../utils/classes/routing-isochrones";
 import {RoutingIsochronesArea} from "../../../../utils/classes/routing-isochrones-area";
+import mapCollection from "../../../../../../../core/dataStorage/mapCollection";
 
 describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () => {
-    let state, commitSpy, commit, dispatchSpy, dispatch, dispatchMocks, getters, rootGetters, waypoint, isochronesAreaSource, isochronesResult;
+    let state, commitSpy, commit, dispatchSpy, dispatch, dispatchMocks, getters, rootState, waypoint, isochronesAreaSource, isochronesResult;
 
     beforeEach(() => {
         isochronesAreaSource = new VectorSource();
@@ -66,17 +67,26 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
         getters = {
             selectedAvoidSpeedProfileOptions: []
         };
-        rootGetters = {
-            "Map/map": {
-                getView: () => ({
-                    fit: () => sinon.spy()
-                }),
-                addLayer: sinon.spy(),
-                removeLayer: sinon.spy(),
-                addInteraction: sinon.spy(),
-                removeInteraction: sinon.spy()
+
+        rootState = {
+            Map: {
+                mapId: "ol",
+                mapMode: "2D"
             }
         };
+
+        mapCollection.clear();
+        mapCollection.addMap({
+            id: "ol",
+            mode: "2D",
+            getView: () => ({
+                fit: () => sinon.spy()
+            }),
+            addLayer: sinon.spy(),
+            removeLayer: sinon.spy(),
+            addInteraction: sinon.spy(),
+            removeInteraction: sinon.spy()
+        }, "ol", "2D");
 
         state = {
             settings: {},
@@ -93,7 +103,7 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
     afterEach(sinon.restore);
 
     it("should findIsochrones", async () => {
-        await actionsIsochrones.findIsochrones({state, getters, commit, dispatch, rootGetters});
+        await actionsIsochrones.findIsochrones({state, getters, commit, dispatch, rootState});
 
         expect(commitSpy.args).to.deep.equal([
             ["setIsLoadingIsochrones", true],
@@ -109,7 +119,7 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
     });
 
     it("should resetIsochronesResult", async () => {
-        await actionsIsochrones.resetIsochronesResult({state, getters, commit, dispatch, rootGetters});
+        await actionsIsochrones.resetIsochronesResult({state, getters, commit, dispatch, rootState});
 
         expect(commitSpy.args).to.deep.equal([
             ["setRoutingIsochrones", null]
@@ -120,7 +130,7 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
 
     it("should initIsochrones without mapListenerAdded", async () => {
         state.mapListenerAdded = false;
-        await actionsIsochrones.initIsochrones({state, getters, commit, dispatch, rootGetters});
+        await actionsIsochrones.initIsochrones({state, getters, commit, dispatch, rootState});
 
         expect(commitSpy.args).to.deep.equal([
             ["setMapListenerAdded", true]
@@ -134,7 +144,7 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
 
     it("should initIsochrones with mapListenerAdded", async () => {
         state.mapListenerAdded = true;
-        await actionsIsochrones.initIsochrones({state, getters, commit, dispatch, rootGetters});
+        await actionsIsochrones.initIsochrones({state, getters, commit, dispatch, rootState});
 
         expect(commitSpy.args).to.deep.equal([]);
 
@@ -144,7 +154,7 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
     });
 
     it("should closeIsochrones", async () => {
-        await actionsIsochrones.closeIsochrones({state, getters, commit, dispatch, rootGetters});
+        await actionsIsochrones.closeIsochrones({state, getters, commit, dispatch, rootState});
 
         expect(commitSpy.args).to.deep.equal([]);
 
@@ -162,7 +172,7 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
             removeFeature: sinon.spy()
         };
 
-        await actionsIsochrones.onIsochronesPointDrawEnd({state, getters, commit, dispatch, rootGetters}, {
+        await actionsIsochrones.onIsochronesPointDrawEnd({state, getters, commit, dispatch, rootState}, {
             feature: featurePoint
         });
 
@@ -178,7 +188,7 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
     });
 
     it("should createIsochronesPointDrawInteraction", async () => {
-        await actionsIsochrones.createIsochronesPointDrawInteraction({state, getters, commit, dispatch, rootGetters});
+        await actionsIsochrones.createIsochronesPointDrawInteraction({state, getters, commit, dispatch, rootState});
 
         expect(commitSpy.args).to.deep.equal([]);
 
