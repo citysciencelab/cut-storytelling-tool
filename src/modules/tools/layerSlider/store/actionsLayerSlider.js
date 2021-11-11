@@ -15,16 +15,34 @@ export default {
     },
 
     /**
-     * Checks if the layer model already exists, non-existing layers are removed.
+     * Adds the layer model briefly to the model to run prepareLayerObject and then removes the model again.
+     * @param {String} layerId Id of the layer
+     * @returns {void}
+     */
+    addLayerModel: ({dispatch}, layerId) => {
+        Radio.trigger("ModelList", "addModelsByAttributes", {id: layerId});
+        dispatch("sendModification", layerId, true);
+        dispatch("sendModification", layerId, false);
+    },
+
+    /**
+     * Checks if all layers that the layerSlider should use are also defined.
+     * Non-existing layers are removed.
      * @param {Object[]} layerIds The configuration of the layers from config.json.
      * @returns {void}
      */
-    removeNotExistingLayermodels: ({commit}, layerIds) => {
+    checkIfAllLayersAvailable: ({commit, dispatch}, layerIds) => {
         const validLayerIds = [];
 
         layerIds.forEach((layer) => {
             if (Radio.request("ModelList", "getModelsByAttributes", {id: layer.layerId}).length === 0) {
-                console.error(`The configuration of the LayerSlider tool is invalid. The layer with the id: "${layer.layerId}" must be configured in the "Themenconfig".`);
+                dispatch("addLayerModel", layer.layerId);
+                if (Radio.request("ModelList", "getModelsByAttributes", {id: layer.layerId}).length > 0) {
+                    validLayerIds.push(layer);
+                }
+                else {
+                    console.error(`The configuration of the LayerSlider tool is invalid. The layer with the id: "${layer.layerId}" must be configured in the "Themenconfig".`);
+                }
             }
             else {
                 validLayerIds.push(layer);
@@ -46,7 +64,7 @@ export default {
         Radio.trigger("ModelList", "setModelAttributesById", layerId, {
             isSelected: status,
             isVisibleInMap: status,
-            transparency: transparency
+            transparency: transparency || 0
         });
     },
 

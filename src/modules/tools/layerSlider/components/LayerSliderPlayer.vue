@@ -173,10 +173,8 @@ export default {
 @import "../../../../../css/mixins.less";
 @import "~variables";
 
-@color_1: #eee;
-@color_2: black;
-@background_color_1: rgb(85, 85, 85);
-@background_color_2: #eee;
+@color_1: black;
+@background_color_1: #eee;
 
 #layer-slider-player {
     .progress-bar {
@@ -185,10 +183,10 @@ export default {
     }
     .progress {
         height: 25px;
-        background-color: @background_color_2;
+        background-color: @background_color_1;
     }
     .active-button {
-        background-color: @background_color_2;
+        background-color: @background_color_1;
         transition: all .2s ease-in-out;
         &:focus {
             .primary_action_focus();
@@ -198,7 +196,7 @@ export default {
         }
     }
     input[readonly] {
-        color: @color_2;
+        color: @color_1;
         cursor: not-allowed;
         white-space: nowrap;
         overflow: hidden;

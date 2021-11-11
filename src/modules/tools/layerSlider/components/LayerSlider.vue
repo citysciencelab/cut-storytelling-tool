@@ -29,14 +29,14 @@ export default {
         this.$on("close", this.close);
     },
     mounted () {
-        this.removeNotExistingLayermodels(this.layerIds);
+        this.checkIfAllLayersAvailable(this.layerIds);
         this.addIndexToLayerIds(this.layerIds);
     },
     methods: {
         ...mapMutations("Tools/LayerSlider", Object.keys(mutations)),
         ...mapActions("Tools/LayerSlider", [
             "addIndexToLayerIds",
-            "removeNotExistingLayermodels"
+            "checkIfAllLayersAvailable"
         ]),
 
         /**
@@ -93,7 +93,7 @@ export default {
 <style lang="less" scoped>
 #layer-slider {
     @media (min-width: 768px) {
-        width: 350px;
+        min-width: 350px;
     }
 }
 

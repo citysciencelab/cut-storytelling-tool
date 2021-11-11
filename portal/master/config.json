@@ -364,9 +364,8 @@
           },
           "bufferAnalysis": {
             "name": "bufferAnalysis"
-        },
-          "searchByCoord":
-          {
+          },
+          "searchByCoord": {
             "name": "translate#common:menu.tools.searchByCoord",
             "glyphicon": "glyphicon-record"
           },
@@ -420,7 +419,6 @@
           },
           "layerSlider": {
             "name": "translate#common:menu.tools.layerSlider",
-            "sliderType": "handle",
             "glyphicon": "glyphicon-film",
             "timeInterval": 2000,
             "layerIds": [
@@ -438,9 +436,7 @@
               }
             ]
           },
-
-          "print":
-          {
+          "print": {
             "name": "translate#common:menu.tools.print",
             "glyphicon": "glyphicon-print",
             "mapfishServiceId": "mapfish",
@@ -450,8 +446,7 @@
             "currentLayoutName": "A4 Hochformat",
             "dpiForPdf": 120
           },
-          "scaleSwitcher":
-          {
+          "scaleSwitcher": {
             "name": "translate#common:menu.tools.scaleSwitcher",
             "glyphicon": "glyphicon-resize-small"
           },

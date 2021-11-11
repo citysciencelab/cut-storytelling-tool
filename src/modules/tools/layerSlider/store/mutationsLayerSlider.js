@@ -59,11 +59,7 @@ const mutations = {
      * @returns {void}
      */
     resetActiveLayer (state) {
-        state.currentProgressBarWidth = `
-            width: 0%;
-            margin-left: 0%
-        `;
-
+        state.currentProgressBarWidth = "width: 0%; margin-left: 0%";
         state.activeLayer = {
             layerId: "",
             index: -1

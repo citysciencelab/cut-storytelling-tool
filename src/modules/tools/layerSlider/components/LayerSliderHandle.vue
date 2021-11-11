@@ -10,11 +10,6 @@ export default {
         ...mapGetters("Tools/LayerSlider", Object.keys(getters))
     },
     created () {
-        this.$nextTick(() => {
-            $(".slider").slider().on("slide", event => {
-                this.dragHandle(event.value);
-            });
-        });
         this.setActiveIndex(0);
     },
     mounted () {
@@ -22,6 +17,7 @@ export default {
 
         this.setDataSliderMax(String((this.layerIds.length - 1) * 10));
         this.setDataSliderTicks(dataSliderTicks);
+        this.initializeSlider();
     },
     methods: {
         ...mapMutations("Tools/LayerSlider", Object.keys(mutations)),
@@ -29,6 +25,21 @@ export default {
             "sendModification",
             "setActiveIndex"
         ]),
+
+        /**
+         * Initialize the slider.
+         * Thereby adds the on slide event.
+         * @returns {void}
+         */
+        initializeSlider: function () {
+            this.$nextTick(() => {
+                $(".slider").slider({
+                    "ticks_labels": this.layerIds.map(layerId => layerId.title)
+                }).on("slide", event => {
+                    this.dragHandle(event.value);
+                });
+            });
+        },
 
         /**
          * Prepares the slider ticks based on the layerIds array.
@@ -118,10 +129,13 @@ export default {
 
 <template lang="html">
     <div id="layer-slider-handle">
-        <div class="layer-slider-titles" />
-        <label for="slider" />
+        <label
+            id="slider-label"
+            for="slider"
+        />
         <input
             id="slider"
+            ref="sliderHandle"
             type="range"
             class="slider"
             :data-slider-min="dataSliderMin"
@@ -130,23 +144,27 @@ export default {
             data-slider-value="0"
             :data-slider-ticks="dataSliderTicks"
             data-slider-tooltip="hide"
-            @change="event => dragHandle(event)"
         >
     </div>
 </template>
 
 <style lang="less" scoped>
-@import "../../../../../css/mixins.less";
-@import "~variables";
-
 #layer-slider-handle {
-    .slider {
-        width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    width: 100%;
+
+    #slider-label {
+        flex-basis: 100%;
     }
-    .layer-slider-titles {
-        position: relative;
-        width: 100%;
-        height: 25px;
+}
+</style>
+
+<style lang="less">
+#layer-slider-handle {
+    .slider.slider-horizontal {
+        width: 80%;
     }
 }
 </style>

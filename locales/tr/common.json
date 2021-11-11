@@ -331,7 +331,7 @@
                 "serviceOne": "hizmet 1",
                 "serviceTwo": "hizmet 2",
                 "serviceThree": "hizmet 3",
-                "key": "aletlerin konfigürasyonu <b>{{alertMessage.x}}</b> fehlerhaft: <b>sliderType</b> \"{{alertMessage.y}}\" henüz uygulanmadı!"
+                "serviceFour": "hizmet 4"
             },
             "filter": {
                 "result": "sonuç",
