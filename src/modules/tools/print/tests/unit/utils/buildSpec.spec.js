@@ -426,7 +426,8 @@ describe("tools/print/buildSpec", function () {
                 layers: ["layer1", "layer2"],
                 imageFormat: "image/png",
                 customParams: {
-                    TRANSPARENT: true
+                    TRANSPARENT: true,
+                    DPI: 200
                 }
             });
         });
@@ -452,7 +453,8 @@ describe("tools/print/buildSpec", function () {
                 layers: ["layer1", "layer2"],
                 imageFormat: "image/png",
                 customParams: {
-                    TRANSPARENT: true
+                    TRANSPARENT: true,
+                    DPI: 200
                 }
             });
         });
