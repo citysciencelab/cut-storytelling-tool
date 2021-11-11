@@ -2705,7 +2705,7 @@ Routing-Werkzeug. Ermöglicht Nutzern das Planen von Routen zwischen mehreren Pu
         },
         "geosearchReverse": {
             "distance": 1000,
-            "filter": null,
+            "filter": "",
             "type": "BKG",
             "serviceId": "bkg_suggest"
         },
@@ -2852,7 +2852,7 @@ Routing-Werkzeug Geosuche Reverse Optionen.
 {
     "geosearchReverse": {
         "distance": 1000,
-        "filter": null,
+        "filter": "",
         "type": "BKG",
         "serviceId": "bkg_suggest"
     }

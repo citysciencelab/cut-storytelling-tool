@@ -2794,7 +2794,7 @@ Routing-tool. Enables user to plan routes between multiple points with multiple 
         },
         "geosearchReverse": {
             "distance": 1000,
-            "filter": null,
+            "filter": "",
             "type": "BKG",
             "serviceId": "bkg_suggest"
         },
@@ -2941,7 +2941,7 @@ Routing-tool geosearch reverse options.
 {
     "geosearchReverse": {
         "distance": 1000,
-        "filter": null,
+        "filter": "",
         "type": "BKG",
         "serviceId": "bkg_suggest"
     }
