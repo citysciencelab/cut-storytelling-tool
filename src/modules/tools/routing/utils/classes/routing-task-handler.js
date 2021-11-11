@@ -51,7 +51,7 @@ export class RoutingTaskHandler {
 
     /**
      * Starts tasks for the remaining open parallel spots.
-     * @returns {Object|void} Tasks Results
+     * @returns {void} Tasks Results
      */
     run () {
         if (this.canceled) {
