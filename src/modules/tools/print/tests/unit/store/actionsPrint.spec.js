@@ -204,7 +204,7 @@ describe("tools/print/actionsPrint", function () {
     });
 
     describe("waitForPrintJobSuccess", function () {
-        it("is not done yet so it should start another print request", done => {
+        it.skip("is not done yet so it should start another print request", done => {
             const state = {
                     mapfishServiceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
                     printAppId: "master"

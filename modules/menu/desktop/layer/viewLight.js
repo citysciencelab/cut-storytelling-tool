@@ -160,10 +160,10 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
     toggleByMapMode: function (mapMode) {
         if (this.model.get("supported").indexOf(mapMode) >= 0) {
             this.$el.show();
-            if(this.model.get("isOutOfRange") !== true){
+            if (this.model.get("isOutOfRange") !== true) {
                 this.enableComponent();
             }
-            else{
+            else {
                 this.disableComponent();
             }
         }
