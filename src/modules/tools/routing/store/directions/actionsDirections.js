@@ -267,7 +267,7 @@ export default {
         map.addLayer(directionsWaypointsLayer);
         map.addLayer(directionsAvoidLayer);
 
-        dispatch("createInteractionFromMapMode");
+        dispatch("createInteractionFromMapInteractionMode");
     },
 
     /**
@@ -275,16 +275,16 @@ export default {
      * @param {Object} context actions context object.
      * @returns {void}
      */
-    createInteractionFromMapMode ({state, dispatch}) {
-        const {mapMode} = state;
+    createInteractionFromMapInteractionMode ({state, dispatch}) {
+        const {mapInteractionMode} = state;
 
-        if (mapMode === "WAYPOINTS") {
+        if (mapInteractionMode === "WAYPOINTS") {
             dispatch("createDirectionsWaypointsDrawInteraction");
         }
-        else if (mapMode === "AVOID_AREAS") {
+        else if (mapInteractionMode === "AVOID_AREAS") {
             dispatch("createDirectionsAvoidDrawInteraction");
         }
-        else if (mapMode === "DELETE_AVOID_AREAS") {
+        else if (mapInteractionMode === "DELETE_AVOID_AREAS") {
             dispatch("createDirectionsAvoidSelectInteraction");
         }
     },

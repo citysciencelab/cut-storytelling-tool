@@ -38,15 +38,15 @@ export default {
          * Checks if current map mode is "AVOID_AREAS"
          * @returns {Boolean} true if mode is "AVOID_AREAS"
          */
-        isMapModeAvoidAreasEdit () {
-            return this.mapMode === "AVOID_AREAS";
+        isMapInteractionModeAvoidAreasEdit () {
+            return this.mapInteractionMode === "AVOID_AREAS";
         },
         /**
          * Checks if current map mode is "DELETE_AVOID_AREAS"
          * @returns {Boolean} true if mode is "DELETE_AVOID_AREAS"
          */
-        isMapModeAvoidAreasDelete () {
-            return this.mapMode === "DELETE_AVOID_AREAS";
+        isMapInteractionModeAvoidAreasDelete () {
+            return this.mapInteractionMode === "DELETE_AVOID_AREAS";
         }
     },
     async created () {
@@ -84,27 +84,27 @@ export default {
          * Toggles the current map mode between "AVOID_AREAS" and "WAYPOINTS"
          * @returns {void}
          */
-        changeMapModeAvoidAreasEdit () {
-            if (this.mapMode === "AVOID_AREAS") {
-                this.setMapMode("WAYPOINTS");
+        changeMapInteractionModeAvoidAreasEdit () {
+            if (this.mapInteractionMode === "AVOID_AREAS") {
+                this.setMapInteractionMode("WAYPOINTS");
             }
             else {
-                this.setMapMode("AVOID_AREAS");
+                this.setMapInteractionMode("AVOID_AREAS");
             }
-            this.createInteractionFromMapMode();
+            this.createInteractionFromMapInteractionMode();
         },
         /**
          * Toggles the current map mode between "DELETE_AVOID_AREAS" and "WAYPOINTS"
          * @returns {void}
          */
-        changeMapModeAvoidAreasDelete () {
-            if (this.mapMode === "DELETE_AVOID_AREAS") {
-                this.setMapMode("WAYPOINTS");
+        changeMapInteractionModeAvoidAreasDelete () {
+            if (this.mapInteractionMode === "DELETE_AVOID_AREAS") {
+                this.setMapInteractionMode("WAYPOINTS");
             }
             else {
-                this.setMapMode("DELETE_AVOID_AREAS");
+                this.setMapInteractionMode("DELETE_AVOID_AREAS");
             }
-            this.createInteractionFromMapMode();
+            this.createInteractionFromMapInteractionMode();
         },
         /**
          * Resets the current settings, including waypoints and avoid areas.
@@ -211,45 +211,45 @@ export default {
                         xml:space="preserve"
                         xmlns:serif="http://www.serif.com/"
                         fill-rule="evenodd"
-                        @click="changeMapModeAvoidAreasEdit()"
-                        @keydown.enter="changeMapModeAvoidAreasEdit()"
+                        @click="changeMapInteractionModeAvoidAreasEdit()"
+                        @keydown.enter="changeMapInteractionModeAvoidAreasEdit()"
                     >
                         <title>{{ $t('common:modules.tools.routing.directions.editRestrictedAreas') }}</title>
                         <path
-                            :fill="isMapModeAvoidAreasEdit ? '#f00' : '#000'"
+                            :fill="isMapInteractionModeAvoidAreasEdit ? '#f00' : '#000'"
                             d="M3,0c1.656,0 3,1.344 3,3c0,1.656 -1.344,3 -3,3c-1.656,0 -3,-1.344 -3,-3c0,-1.656 1.344,-3 3,-3Zm0,1.5c0.828,0 1.5,0.672 1.5,1.5c0,0.828 -0.672,1.5 -1.5,1.5c-0.828,0 -1.5,-0.672 -1.5,-1.5c0,-0.828 0.672,-1.5 1.5,-1.5Z"
                         />
                         <path
-                            :fill="isMapModeAvoidAreasEdit ? '#f00' : '#000'"
+                            :fill="isMapInteractionModeAvoidAreasEdit ? '#f00' : '#000'"
                             d="M27,4c1.656,0 3,1.344 3,3c0,1.656 -1.344,3 -3,3c-1.656,0 -3,-1.344 -3,-3c0,-1.656 1.344,-3 3,-3Zm0,1.5c0.828,0 1.5,0.672 1.5,1.5c0,0.828 -0.672,1.5 -1.5,1.5c-0.828,0 -1.5,-0.672 -1.5,-1.5c0,-0.828 0.672,-1.5 1.5,-1.5Z"
                         />
                         <path
-                            :fill="isMapModeAvoidAreasEdit ? '#f00' : '#000'"
+                            :fill="isMapInteractionModeAvoidAreasEdit ? '#f00' : '#000'"
                             d="M27,20c1.656,0 3,1.344 3,3c0,1.656 -1.344,3 -3,3c-1.656,0 -3,-1.344 -3,-3c0,-1.656 1.344,-3 3,-3Zm0,1.5c0.828,0 1.5,0.672 1.5,1.5c0,0.828 -0.672,1.5 -1.5,1.5c-0.828,0 -1.5,-0.672 -1.5,-1.5c0,-0.828 0.672,-1.5 1.5,-1.5Z"
                         />
                         <path
-                            :fill="isMapModeAvoidAreasEdit ? '#f00' : '#000'"
+                            :fill="isMapInteractionModeAvoidAreasEdit ? '#f00' : '#000'"
                             d="M3,24c1.656,0 3,1.344 3,3c0,1.656 -1.344,3 -3,3c-1.656,0 -3,-1.344 -3,-3c0,-1.656 1.344,-3 3,-3Zm0,1.5c0.828,0 1.5,0.672 1.5,1.5c0,0.828 -0.672,1.5 -1.5,1.5c-0.828,0 -1.5,-0.672 -1.5,-1.5c0,-0.828 0.672,-1.5 1.5,-1.5Z"
                         />
                         <path
                             d="M3,6l0,18"
                             fill="none"
-                            :stroke="isMapModeAvoidAreasEdit ? '#f00' : '#000'"
+                            :stroke="isMapInteractionModeAvoidAreasEdit ? '#f00' : '#000'"
                             stroke-width="1px"
                         /><path
                             d="M27,10l0,10"
                             fill="none"
-                            :stroke="isMapModeAvoidAreasEdit ? '#f00' : '#000'"
+                            :stroke="isMapInteractionModeAvoidAreasEdit ? '#f00' : '#000'"
                             stroke-width="1px"
                         /><path
                             d="M24,23l-18,4"
                             fill="none"
-                            :stroke="isMapModeAvoidAreasEdit ? '#f00' : '#000'"
+                            :stroke="isMapInteractionModeAvoidAreasEdit ? '#f00' : '#000'"
                             stroke-width="1px"
                         /><path
                             d="M24,7l-18,-4"
                             fill="none"
-                            :stroke="isMapModeAvoidAreasEdit ? '#f00' : '#000'"
+                            :stroke="isMapInteractionModeAvoidAreasEdit ? '#f00' : '#000'"
                             stroke-width="1px"
                         /></svg>
 
@@ -265,45 +265,45 @@ export default {
                         xml:space="preserve"
                         xmlns:serif="http://www.serif.com/"
                         fill-rule="evenodd"
-                        @click="changeMapModeAvoidAreasDelete()"
-                        @keydown.enter="changeMapModeAvoidAreasDelete()"
+                        @click="changeMapInteractionModeAvoidAreasDelete()"
+                        @keydown.enter="changeMapInteractionModeAvoidAreasDelete()"
                     >
                         <title>{{ $t('common:modules.tools.routing.directions.deleteRestrictedAreas') }}</title>
                         <path
-                            :fill="isMapModeAvoidAreasDelete ? '#f00' : '#000'"
+                            :fill="isMapInteractionModeAvoidAreasDelete ? '#f00' : '#000'"
                             d="M3,0c1.656,0 3,1.344 3,3c0,1.656 -1.344,3 -3,3c-1.656,0 -3,-1.344 -3,-3c0,-1.656 1.344,-3 3,-3Zm0,1.5c0.828,0 1.5,0.672 1.5,1.5c0,0.828 -0.672,1.5 -1.5,1.5c-0.828,0 -1.5,-0.672 -1.5,-1.5c0,-0.828 0.672,-1.5 1.5,-1.5Z"
                         />
                         <path
-                            :fill="isMapModeAvoidAreasDelete ? '#f00' : '#000'"
+                            :fill="isMapInteractionModeAvoidAreasDelete ? '#f00' : '#000'"
                             d="M27,4c1.656,0 3,1.344 3,3c0,1.656 -1.344,3 -3,3c-1.656,0 -3,-1.344 -3,-3c0,-1.656 1.344,-3 3,-3Zm0,1.5c0.828,0 1.5,0.672 1.5,1.5c0,0.828 -0.672,1.5 -1.5,1.5c-0.828,0 -1.5,-0.672 -1.5,-1.5c0,-0.828 0.672,-1.5 1.5,-1.5Z"
                         />
                         <path
-                            :fill="isMapModeAvoidAreasDelete ? '#f00' : '#000'"
+                            :fill="isMapInteractionModeAvoidAreasDelete ? '#f00' : '#000'"
                             d="M27,20c1.656,0 3,1.344 3,3c0,1.656 -1.344,3 -3,3c-1.656,0 -3,-1.344 -3,-3c0,-1.656 1.344,-3 3,-3Zm0,1.5c0.828,0 1.5,0.672 1.5,1.5c0,0.828 -0.672,1.5 -1.5,1.5c-0.828,0 -1.5,-0.672 -1.5,-1.5c0,-0.828 0.672,-1.5 1.5,-1.5Z"
                         />
                         <path
-                            :fill="isMapModeAvoidAreasDelete ? '#f00' : '#000'"
+                            :fill="isMapInteractionModeAvoidAreasDelete ? '#f00' : '#000'"
                             d="M3,24c1.656,0 3,1.344 3,3c0,1.656 -1.344,3 -3,3c-1.656,0 -3,-1.344 -3,-3c0,-1.656 1.344,-3 3,-3Zm0,1.5c0.828,0 1.5,0.672 1.5,1.5c0,0.828 -0.672,1.5 -1.5,1.5c-0.828,0 -1.5,-0.672 -1.5,-1.5c0,-0.828 0.672,-1.5 1.5,-1.5Z"
                         />
                         <path
                             d="M3,6l0,18"
                             fill="none"
-                            :stroke="isMapModeAvoidAreasDelete ? '#f00' : '#000'"
+                            :stroke="isMapInteractionModeAvoidAreasDelete ? '#f00' : '#000'"
                             stroke-width="1px"
                         /><path
                             d="M27,10l0,10"
                             fill="none"
-                            :stroke="isMapModeAvoidAreasDelete ? '#f00' : '#000'"
+                            :stroke="isMapInteractionModeAvoidAreasDelete ? '#f00' : '#000'"
                             stroke-width="1px"
                         /><path
                             d="M24,23l-18,4"
                             fill="none"
-                            :stroke="isMapModeAvoidAreasDelete ? '#f00' : '#000'"
+                            :stroke="isMapInteractionModeAvoidAreasDelete ? '#f00' : '#000'"
                             stroke-width="1px"
                         /><path
                             d="M24,7l-18,-4"
                             fill="none"
-                            :stroke="isMapModeAvoidAreasDelete ? '#f00' : '#000'"
+                            :stroke="isMapInteractionModeAvoidAreasDelete ? '#f00' : '#000'"
                             stroke-width="1px"
                         /><path
                             d="M23.044,19.067l-15.588,-9l-0.5,0.866l15.588,9l0.5,-0.866Z"

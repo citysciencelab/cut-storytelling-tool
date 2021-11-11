@@ -228,7 +228,7 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
             ["createDirectionsWaypointsModifyInteractionListener"],
             ["createDirectionsAvoidModifyInteractionListener"],
             ["createDirectionsRouteModifyInteractionListener"],
-            ["createInteractionFromMapMode"]
+            ["createInteractionFromMapInteractionMode"]
         ]);
 
         expect(commitSpy.args).to.deep.equal([
@@ -242,31 +242,31 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
 
         expect(dispatchSpy.args).to.deep.equal([
             ["initWaypoints"],
-            ["createInteractionFromMapMode"]
+            ["createInteractionFromMapInteractionMode"]
         ]);
     });
 
-    it("should createInteractionFromMapMode with mapMode 'WAYPOINTS'", async () => {
-        state.mapMode = "WAYPOINTS";
-        await actionsDirections.createInteractionFromMapMode({state, getters, commit, dispatch, rootGetters});
+    it("should createInteractionFromMapInteractionMode with mapInteractionMode 'WAYPOINTS'", async () => {
+        state.mapInteractionMode = "WAYPOINTS";
+        await actionsDirections.createInteractionFromMapInteractionMode({state, getters, commit, dispatch, rootGetters});
 
         expect(dispatchSpy.args).to.deep.equal([
             ["createDirectionsWaypointsDrawInteraction"]
         ]);
     });
 
-    it("should createInteractionFromMapMode with mapMode 'AVOID_AREAS'", async () => {
-        state.mapMode = "AVOID_AREAS";
-        await actionsDirections.createInteractionFromMapMode({state, getters, commit, dispatch, rootGetters});
+    it("should createInteractionFromMapInteractionMode with mapInteractionMode 'AVOID_AREAS'", async () => {
+        state.mapInteractionMode = "AVOID_AREAS";
+        await actionsDirections.createInteractionFromMapInteractionMode({state, getters, commit, dispatch, rootGetters});
 
         expect(dispatchSpy.args).to.deep.equal([
             ["createDirectionsAvoidDrawInteraction"]
         ]);
     });
 
-    it("should createInteractionFromMapMode with mapMode 'DELETE_AVOID_AREAS'", async () => {
-        state.mapMode = "DELETE_AVOID_AREAS";
-        await actionsDirections.createInteractionFromMapMode({state, getters, commit, dispatch, rootGetters});
+    it("should createInteractionFromMapInteractionMode with mapInteractionMode 'DELETE_AVOID_AREAS'", async () => {
+        state.mapInteractionMode = "DELETE_AVOID_AREAS";
+        await actionsDirections.createInteractionFromMapInteractionMode({state, getters, commit, dispatch, rootGetters});
 
         expect(dispatchSpy.args).to.deep.equal([
             ["createDirectionsAvoidSelectInteraction"]
