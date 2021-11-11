@@ -128,9 +128,9 @@ export default {
 </script>
 
 <template lang="html">
-    <div id="layer-slider-handle">
+    <div id="tool-layer-slider-handle">
         <label
-            id="slider-label"
+            id="label-slider"
             for="slider"
         />
         <input
@@ -149,20 +149,20 @@ export default {
 </template>
 
 <style lang="less" scoped>
-#layer-slider-handle {
+#tool-layer-slider-handle {
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
     width: 100%;
 
-    #slider-label {
+    #label-slider {
         flex-basis: 100%;
     }
 }
 </style>
 
 <style lang="less">
-#layer-slider-handle {
+#tool-layer-slider-handle {
     .slider.slider-horizontal {
         width: 80%;
     }

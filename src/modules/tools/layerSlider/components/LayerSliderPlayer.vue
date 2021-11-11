@@ -83,7 +83,7 @@ export default {
 </script>
 
 <template lang="html">
-    <div id="layer-slider-player">
+    <div id="tool-layer-slider-player">
         <div class="progress">
             <div
                 class="progress-bar"
@@ -176,7 +176,7 @@ export default {
 @color_1: black;
 @background_color_1: #eee;
 
-#layer-slider-player {
+#tool-layer-slider-player {
     .progress-bar {
         background-color: @secondary_focus;
         transition: all .6s;

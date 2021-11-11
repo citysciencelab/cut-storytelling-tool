@@ -68,30 +68,24 @@ export default {
         <template #toolBody>
             <div
                 v-if="active"
-                id="layer-slider"
+                id="tool-layer-slider"
             >
                 <h5>
                     {{ $t(title) }}
                 </h5>
-                <div
+                <LayerSliderPlayer
                     v-if="sliderType === 'player'"
-                    class="player"
-                >
-                    <LayerSliderPlayer />
-                </div>
-                <div
-                    v-if="sliderType === 'handle'"
-                    class="handle"
-                >
-                    <LayerSliderHandle />
-                </div>
+                />
+                <LayerSliderHandle
+                    v-else-if="sliderType === 'handle'"
+                />
             </div>
         </template>
     </Tool>
 </template>
 
 <style lang="less" scoped>
-#layer-slider {
+#tool-layer-slider {
     @media (min-width: 768px) {
         min-width: 350px;
     }
