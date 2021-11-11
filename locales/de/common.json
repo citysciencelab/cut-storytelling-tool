@@ -802,7 +802,16 @@
                         "errorNoEntries": "Keine Einträge in der CSV",
                         "errorToManyEntriesInFile": "Maximale Anzahl an Zeilen überschritten ({{limit}})",
                         "errorToManyEntriesInRow": "Zeile {{row}} enthält mehr als 5 Einträge, bitte beachten Sie die Struktur (ID;lon(Startpunkt);lat(Startpunkt);lon(Endpunkt);lat(Endpunkt))",
-                        "errorRowContainsEntriesNoNumber": "Koordinaten in Zeile {{row}} enthalten keine Zahlen"
+                        "errorRowContainsEntriesNoNumber": "Koordinaten in Zeile {{row}} enthalten keine Zahlen",
+                        "downloadHeader": {
+                            "xStart": "X-Wert_Start",
+                            "yStart": "Y-Wert_Start",
+                            "xEnd": "X-Wert_Ende",
+                            "yEnd": "Y-Wert_Ende",
+                            "time": "Zeit(min)",
+                            "distance": "Entfernung(m)",
+                            "profile": "Profil"
+                        }
                     },
                     "preference": {
                         "RECOMMENDED": "Schnellste Route",

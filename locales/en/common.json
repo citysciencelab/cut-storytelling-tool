@@ -802,7 +802,16 @@
                         "errorNoEntries": "No entries in the CSV-File",
                         "errorToManyEntriesInFile": "Maximum number of lines exceeded ({{limit}})",
                         "errorToManyEntriesInRow": "Line {{row}} contains more than 5 entries, please note the File-Structure (ID;lon(Startpoint);lat(Startpoint);lon(Endpoint);lat(Endpoint))",
-                        "errorRowContainsEntriesNoNumber": "Coordinates in line {{row}} do not contain numbers"
+                        "errorRowContainsEntriesNoNumber": "Coordinates in line {{row}} do not contain numbers",
+                        "downloadHeader": {
+                            "xStart": "X-Value_Start",
+                            "yStart": "Y-Value_Start",
+                            "xEnd": "X-Value_End",
+                            "yEnd": "Y-Value_End",
+                            "time": "Duration(min)",
+                            "distance": "Distance(m)",
+                            "profile": "Profile"
+                        }
                     },
                     "preference": {
                         "RECOMMENDED": "Recommended",
