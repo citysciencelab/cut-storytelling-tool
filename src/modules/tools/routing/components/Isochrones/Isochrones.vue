@@ -166,7 +166,7 @@ export default {
             :key="option"
             :class="['pointer mr-4 ', isInputDisabled ? 'opacity-05' : '']"
             :speed-profile-id="option"
-            :fill-color="option === settings.speedProfile ? '#ec0d0d' : '#000000'"
+            :fill-color="option === settings.speedProfile ? '#0077ff' : '#000000'"
             :tooltip="$t('common:modules.tools.routing.speedprofiles.' + option)"
             @click.native="changeSpeedProfile(option)"
         />
