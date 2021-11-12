@@ -756,7 +756,7 @@
                 "helpTooltip": "Hilfe öffnen/schließen",
                 "errors": {
                     "fetchingCoordinates": "Fehler bei Abfrage der Koordinaten",
-                    "noRouteFound": "Keine Route gefunden",
+                    "noRouteFound": "Leider konnte keine Route gefunden werden",
                     "avoidAreaBig": "Die angegebenen Sperrflächen sind zu groß. Bitte korrigieren Sie Ihre Eingabe.",
                     "errorRouteFetch": "Fehler bei Abfrage der Route",
                     "errorIsochronesFetch": "Fehler bei Abfrage der Erreichbarkeit"
