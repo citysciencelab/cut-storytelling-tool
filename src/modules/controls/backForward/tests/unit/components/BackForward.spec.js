@@ -2,6 +2,7 @@ import Vuex from "vuex";
 import {config, mount, createLocalVue} from "@vue/test-utils";
 import BackForward from "../../../components/BackForward.vue";
 import BackForwardModule from "../../../store/indexBackForward";
+import mapCollection from "../../../../../../core/dataStorage/mapCollection.js";
 import {expect} from "chai";
 
 const localVue = createLocalVue();
@@ -16,22 +17,29 @@ describe("src/modules/controls/backForward/components/BackForward.vue", () => {
         center,
         counter;
 
-    const mockMap = {
-        on: (signal, mem) => {
-            memorize = mem;
-        },
-        un: () => { /* doesn't matter for test*/ },
-        getView: () => ({
-            getCenter: () => [counter++, counter++],
-            getZoom: () => counter++,
-            setCenter: c => {
-                center = c;
+    before(() => {
+        mapCollection.clear();
+        const map = {
+            id: "ol_bf",
+            mode: "2D",
+            on: (signal, mem) => {
+                memorize = mem;
             },
-            setZoom: z => {
-                zoom = z;
-            }
-        })
-    };
+            un: () => { /* doesn't matter for test*/ },
+            getView: () => ({
+                getCenter: () => [counter++, counter++],
+                getZoom: () => counter++,
+                setCenter: c => {
+                    center = c;
+                },
+                setZoom: z => {
+                    zoom = z;
+                }
+            })
+        };
+
+        mapCollection.addMap(map, "ol_bf", "2D");
+    });
 
     beforeEach(() => {
         memorize = null;
@@ -50,7 +58,8 @@ describe("src/modules/controls/backForward/components/BackForward.vue", () => {
                 Map: {
                     namespaced: true,
                     getters: {
-                        map: () => mockMap
+                        mapId: () => "ol_bf",
+                        mapMode: () => "2D"
                     }
                 }
             }

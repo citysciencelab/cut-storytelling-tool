@@ -1,9 +1,9 @@
 import stateMap from "./stateMap";
-import {MapMode} from "./enums";
 import {generateSimpleGetters} from "../../../app-store/utils/generators";
 import {createGfiFeature} from "../../../api/gfi/getWmsFeaturesByMimeType";
 import {getGfiFeaturesByTileFeature} from "../../../api/gfi/getGfiFeaturesByTileFeature";
 import thousandsSeparator from "../../../utils/thousandsSeparator.js";
+import mapCollection from "../../../core/dataStorage/mapCollection.js";
 
 const gettersMap = {
     ...generateSimpleGetters(stateMap),
@@ -13,7 +13,7 @@ const gettersMap = {
      * @return {boolean} whether the portal is currently in 3D mode
      */
     is3d ({mapMode}) {
-        return mapMode === MapMode.MODE_3D;
+        return mapMode === "3D";
     },
 
     /**
@@ -37,7 +37,7 @@ const gettersMap = {
 
         visibleLayerList.forEach(layer => {
 
-            if (layer.get("layers")) {
+            if (layer.get("layers") && typeof layer.get("layers").getArray === "function") {
                 layer.get("layers").getArray().forEach(childLayer => {
                     list.push(childLayer);
                 });
@@ -83,10 +83,10 @@ const gettersMap = {
      * @param {number[]} state.clickPixel - the pixel coordinate of the click event
      * @returns {object[]} gfi features
      */
-    gfiFeaturesAtPixel: (state, {map, map3d, clickPixel}) => {
+    gfiFeaturesAtPixel: (state, {mapId, mapMode, map3d, clickPixel}) => {
         const featuresAtPixel = [];
 
-        map.forEachFeatureAtPixel(clickPixel, function (feature, layer) {
+        mapCollection.getMap(mapId, mapMode).forEachFeatureAtPixel(clickPixel, function (feature, layer) {
             if (layer?.getVisible() && layer?.get("gfiAttributes") && layer?.get("gfiAttributes") !== "ignore") {
                 if (feature.getProperties().features) {
                     feature.get("features").forEach(function (clusteredFeature) {
@@ -126,18 +126,6 @@ const gettersMap = {
         return featuresAtPixel;
     },
 
-    /**
-     * @param {Object} s state
-     * @returns {Boolean} true if map is not in initial zoom/center
-     */
-    hasMoved: ({map, initialZoomLevel, initialCenter}) => {
-        const view = map.getView(),
-            center = view.getCenter();
-
-        return initialCenter[0] !== center[0] ||
-            initialCenter[1] !== center[1] ||
-            initialZoomLevel !== view.getZoom();
-    },
     /**
      * @param {Object} _ state
      * @param {Object} g getters

@@ -5,6 +5,7 @@ import {convertSexagesimalFromString, convertSexagesimalToDecimal, convertSexage
 import getProxyUrl from "../../../../utils/getProxyUrl";
 import {requestGfi} from "../../../../api/wmsGetFeatureInfo";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
+import mapCollection from "../../../../core/dataStorage/mapCollection";
 
 export default {
     /**
@@ -141,7 +142,7 @@ export default {
     changedPosition ({dispatch, state, rootState, getters}) {
         if (state.mode === "supply") {
             const targetProjectionName = state.currentProjection?.name,
-                position = getters.getTransformedPosition(rootState.Map.map, targetProjectionName);
+                position = getters.getTransformedPosition(mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode), targetProjectionName);
 
             if (position) {
                 dispatch("adjustPosition", {position: position, targetProjection: state.currentProjection});
@@ -153,9 +154,9 @@ export default {
      * @returns {void}
      */
     setFirstSearchPosition ({dispatch, commit, state, rootState, getters}) {
-        if (state.mode === "search") {
+        if (state.mode === "search" && state.active) {
             const targetProjectionName = state.currentProjection?.name,
-                position = getters.getTransformedPosition(rootState.Map.map, targetProjectionName);
+                position = getters.getTransformedPosition(mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode), targetProjectionName);
 
             if (position && position[0] === 0 && position[1] === 0 && rootState.Map.center) {
                 commit("setCoordinatesEasting", {id: "easting", value: String(rootState.Map.center[0])});

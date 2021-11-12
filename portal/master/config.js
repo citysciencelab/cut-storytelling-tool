@@ -61,7 +61,6 @@ const Config = {
         numFeaturesToShow: 2,
         infoText: "common:mouseHover.infoText"
     },
-    clickCounter: {},
     startingMap3D: false,
     obliqueMap: true,
     cesiumParameter: {

@@ -1,6 +1,7 @@
 <script>
 import {mapGetters, mapMutations} from "vuex";
 import ControlIcon from "../../ControlIcon.vue";
+import mapCollection from "../../../../core/dataStorage/mapCollection";
 
 /**
  * The BackForward control element allows stepping back
@@ -23,15 +24,23 @@ export default {
             default: "glyphicon-step-backward"
         }
     },
+    data () {
+        return {
+            currentMapId: "",
+            currentMapMode: ""
+        };
+    },
     computed: {
         ...mapGetters("controls/backForward", ["forthAvailable", "backAvailable"]),
-        ...mapGetters("Map", ["map"])
+        ...mapGetters("Map", ["mapId", "mapMode"])
     },
     mounted () {
-        this.map.on("moveend", this.memorizeMap);
+        this.currentMapId = this.mapId;
+        this.currentMapMode = this.mapMode;
+        mapCollection.getMap(this.currentMapId, this.currentMapMode).on("moveend", this.memorizeMap);
     },
     beforeDestroy () {
-        this.map.un("moveend", this.memorizeMap);
+        mapCollection.getMap(this.currentMapId, this.currentMapMode).un("moveend", this.memorizeMap);
     },
     methods: {
         ...mapMutations(
@@ -39,13 +48,13 @@ export default {
             ["forward", "backward", "memorize"]
         ),
         memorizeMap () {
-            this.memorize(this.map);
+            this.memorize(mapCollection.getMap(this.currentMapId, this.currentMapMode).getView());
         },
         moveForward () {
-            this.forward(this.map);
+            this.forward(mapCollection.getMap(this.currentMapId, this.currentMapMode));
         },
         moveBackward () {
-            this.backward(this.map);
+            this.backward(mapCollection.getMap(this.currentMapId, this.currentMapMode));
         }
     }
 };

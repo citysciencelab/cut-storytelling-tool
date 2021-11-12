@@ -1,7 +1,6 @@
 import {expect} from "chai";
 import {checkIsURLQueryValid, setValueToState} from "../../../parametricUrl/stateModifier";
 import * as crs from "masterportalAPI/src/crs";
-import {MapMode} from "../../../../modules/map/store/enums";
 
 const namedProjections = [
     ["EPSG:31467", "+title=Bessel/Gauß-Krüger 3 +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
@@ -329,22 +328,22 @@ describe("src/utils/stateModifier.js", () => {
             const state = {
                 urlParams: {},
                 Map: {
-                    mapMode: MapMode.MODE_2D
+                    mapMode: "2D"
                 }
             };
 
             await setValueToState(state, key, valueAsString);
-            expect(state.Map.mapMode).to.be.equals(MapMode.MODE_3D);
+            expect(state.Map.mapMode).to.be.equals("3D");
 
             key = "mapmode";
-            valueAsString = "0";
+            valueAsString = "2D";
             await setValueToState(state, key, valueAsString);
-            expect(state.Map.mapMode).to.be.equals(MapMode.MODE_2D);
+            expect(state.Map.mapMode).to.be.equals("2D");
 
             key = "map/mapmode";
-            valueAsString = "1";
+            valueAsString = "3D";
             await setValueToState(state, key, valueAsString);
-            expect(state.Map.mapMode).to.be.equals(MapMode.MODE_3D);
+            expect(state.Map.mapMode).to.be.equals("3D");
 
         });
         it("test param layerIds", async () => {

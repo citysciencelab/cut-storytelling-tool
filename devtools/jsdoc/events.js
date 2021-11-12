@@ -147,34 +147,6 @@
  */
 
 
-/** -------------------- CLICK COUNTER -------------------- */
-
-/**
- * @event ClickCounter#RadioTriggerClickCounterToolChanged
- * @example Radio.trigger("ClickCounter", "toolChanged")
- */
-
-/**
- * @event ClickCounter#RadioTriggerClickCounterCalcRoute
- * @example Radio.trigger("ClickCounter", "calcRoute")
- */
-
-/**
- * @event ClickCounter#RadioTriggerClickCounterZoomChanged
- * @example Radio.trigger("ClickCounter", "zoomChanged")
- */
-
-/**
- * @event ClickCounter#RadioTriggerClickCounterLayerVisibleChanged
- * @example Radio.trigger("ClickCounter", "layerVisibleChanged")
- */
-
-/**
- * @event ClickCounter#RadioTriggerClickCounterGfi
- * @example Radio.trigger("ClickCounter", "gfi")
- */
-
-
 /** -------------------- LEGEND COMPONENT-------------------- */
 
 /**

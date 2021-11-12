@@ -11,6 +11,40 @@
 ## Unreleased - in development
 ### Added
 - added parameter "rotation" to wfs features with iconPointStyle, if the parameter is not given it will fall back to standard alignment.
+- The library "svg-url-loader" was added to package.json devDependencies.
+
+### Changed
+- The following NPM packages are updated:
+    @babel/core": 7.14.6 to 7.16.0
+    @babel/eslint-parser: 7.14.7 to 7.16.0
+    @babel/preset-env: 7.14.7 to 7.16.0
+    @vue/test-utils: 1.2.1 to 1.2.2
+    babel-loader: 8.2.2 to 8.2.3
+    eslint-plugin-vuejs-accessibility: 0.7.1 to 1.1.0
+    mocha: 9.0.2 to 9.1.3
+    selenium-webdriver: 4.0.0-beta.4 to version 4.0.0
+- The MasterportalAPI version is updated to v1.6.0. This also raised ol to version 6.9.0.
+- WMSLayer and GroupLayer are refactored. They are no longer Backbone-models. WMSLayer uses the masterportalAPI's wms layer on creation.
+- 2D-map is removed from vuex store. Maps are now stored in a collection. Creation of 2D-map and 3D-map use masterportalAPI's abstraction layer.
+
+### Deprecated
+
+### Removed
+- The module CLICKCOUNTER is removed.
+- The library "olcs" was removed from the package.json.
+
+### Fixed
+- Print tool: fixed wrong order of features in created print-map.
+- adding a File with other coordinate system may work now if the coordinate system in the JSON is EPSG 25832/4326 or can successfully be mapped to EPSG
+- Issue #654: WFS Layers didn't get displayed as group layers
+- Light-tree: Layers that are only selectable in certain zoom levels are now also grayed out directly after startup.
+- Print tool: if tool was activated by url parameter, print-mask is now visible and scales are selectable
+- Sidebar: if a tool was activated by url parameter and user opens second tool, the first tool is closed now
+
+
+---
+## v2.15.0 - 2021-11-03
+### Added
 - gfiAttributes: Adding Boolean type in gfi Attributes so that the original text can be parsed to be more understandable.
 - layerInformation: Adding a parameter to globally toggle the display of the service url for all layers at the same time.
 - measure: Adding a parameter to define with which decimal accuracy the measurement result is displayed.

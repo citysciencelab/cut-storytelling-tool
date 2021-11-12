@@ -7,9 +7,9 @@ const CanvasModel = {
      * @returns {Object} - LayerObject for print mask.
      */
     getCanvasLayer: function (layerList) {
-        const currentResolution = Radio.request("MapView", "getOptions").resolution,
-            canvasLayerList = [];
-        let canvasLayer = {};
+        const currentResolution = Radio.request("MapView", "getOptions").resolution;
+        let canvasLayerList = [],
+            canvasLayer = {};
 
         layerList.forEach(layer => {
             if (layer instanceof Group) {
@@ -22,19 +22,14 @@ const CanvasModel = {
             }
         });
 
-        canvasLayerList.forEach(layer => {
-            if (layer instanceof Vector) {
-                const visibleFeatures = layer.getSource().getFeatures().filter(feature => feature.get("isVisible"));
+        canvasLayerList = canvasLayerList.reverse();
 
-                if (visibleFeatures.length) {
-                    canvasLayer = layer;
-                }
-            }
-            else if (typeof layer !== "undefined") {
+        for (const layer of canvasLayerList) {
+            if (typeof layer !== "undefined") {
                 canvasLayer = layer;
+                break;
             }
-            return canvasLayer;
-        });
+        }
 
         return canvasLayer;
     },
