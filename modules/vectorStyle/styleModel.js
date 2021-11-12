@@ -7,6 +7,7 @@ import CesiumStyle from "./cesiumStyle";
 import {fetch as fetchPolyfill} from "whatwg-fetch";
 import axios from "axios";
 import getProxyUrl from "../../src/utils/getProxyUrl";
+import {getFeaturePropertyByPath, isObjectPath} from "../../src/utils/getFeaturePropertyPath";
 
 const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.prototype */{
     defaults: {
@@ -536,19 +537,19 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {void} attribute property can be of any type
      */
     getReferenceValue: function (featureProperties, value) {
-        const valueIsObjectPath = this.isObjectPath(value);
+        const valueIsObjectPath = isObjectPath(value);
         let referenceValue = value;
 
         // sets the real feature property value in case referenceValue is an object path
         if (valueIsObjectPath) {
-            referenceValue = this.getFeaturePropertyByPath(featureProperties, referenceValue);
+            referenceValue = getFeaturePropertyByPath(featureProperties, referenceValue);
         }
 
         // sets the real feature property values also for min-max-arrays in case its values are object pathes.
         if (Array.isArray(referenceValue)) {
             referenceValue.forEach((element, index, arr) => {
-                if (this.isObjectPath(element)) {
-                    arr[index] = this.getFeaturePropertyByPath(featureProperties, element);
+                if (isObjectPath(element)) {
+                    arr[index] = getFeaturePropertyByPath(featureProperties, element);
                 }
             }, this);
         }
@@ -563,39 +564,16 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {void} attribute property can be of any type
      */
     getFeatureValue: function (featureProperties, key) {
-        const keyIsObjectPath = this.isObjectPath(key);
+        const keyIsObjectPath = isObjectPath(key);
 
         if (keyIsObjectPath) {
-            return this.getFeaturePropertyByPath(featureProperties, key);
+            return getFeaturePropertyByPath(featureProperties, key);
         }
         else if (Object.prototype.hasOwnProperty.call(featureProperties, key)) {
             return featureProperties[key];
         }
 
         return null;
-    },
-
-    /**
-     * Returns the object path of featureProperties which is defined as path.
-     * Returns null if "path" is not included in featureProperties.
-     * @param   {object} featureProperties properties of the feature
-     * @param   {string} path object path starting with "path://"
-     * @returns {object|null} sub object of featureProperties
-     */
-    getFeaturePropertyByPath: function (featureProperties, path) {
-        let featureProperty = featureProperties;
-        const pathArray = path.substring(1).split(".").filter(element => element !== "");
-
-        for (let i = 0; i < pathArray.length; i++) {
-            const element = pathArray[i];
-
-            if (!Object.prototype.hasOwnProperty.call(featureProperty, element) || typeof featureProperty[element] === "undefined" || featureProperty[element] === null) {
-                return null;
-            }
-            featureProperty = featureProperty[element];
-        }
-
-        return featureProperty;
     },
 
     /**
@@ -675,15 +653,6 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         }
 
         return value;
-    },
-
-    /**
-     * checks if value starts with special prefix to determine if value is a object path
-     * @param   {string} value string to check
-     * @returns {Boolean} true is value is an object path
-     */
-    isObjectPath: function (value) {
-        return typeof value === "string" && value.startsWith("@");
     },
 
     /**

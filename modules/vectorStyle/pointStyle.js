@@ -1,5 +1,6 @@
 import StyleModel from "./style.js";
 import {Circle as CircleStyle, Fill, Stroke, Style, Icon} from "ol/style.js";
+import {getFeaturePropertyByPath} from "../../src/utils/getFeaturePropertyPath";
 
 const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype */{
     /**
@@ -67,7 +68,8 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
         "circleBarCircleStrokeColor": [0, 0, 0, 1],
         "circleBarCircleStrokeWidth": 1,
         "circleBarLineStrokeColor": [0, 0, 0, 1],
-        "scalingAttribute": ""
+        "scalingAttribute": "",
+        "rotation": 0
     },
 
     initialize: function (feature, styles, isClustered) {
@@ -180,7 +182,14 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
             offset = [parseFloat(this.get("imageOffsetX")), parseFloat(this.get("imageOffsetY"))],
             offsetXUnit = this.get("imageOffsetXUnit"),
             offsetYUnit = this.get("imageOffsetYUnit"),
-            rotation = this.get("rotation") * Math.PI / 180;
+            rotation = this.get("rotation");
+        let rotationRad = rotation;
+
+        if (String(rotation).startsWith("@")) {
+            const rotationValueFromService = getFeaturePropertyByPath(this.attributes.values_, rotation);
+
+            rotationRad = parseInt(rotationValueFromService, 10) * Math.PI / 180;
+        }
 
         return new Style({
             image: new Icon({
@@ -192,7 +201,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
                 anchorXUnits: offsetXUnit,
                 anchorYUnits: offsetYUnit,
                 imgSize: isSVG ? [width, height] : "",
-                rotation: rotation ? rotation : 0
+                rotation: rotationRad
             })
         });
     },
