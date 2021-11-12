@@ -11,6 +11,7 @@
 ## Unreleased - in development
 ### Added
 - The library "svg-url-loader" was added to package.json devDependencies.
+- Added the new Tool `Routing`.
 
 ### Changed
 - The following NPM packages are updated:
@@ -78,7 +79,6 @@
 - Embedded nav into header tag.
 - Added the new Tool `WfsSearch`.
 - EsLint Plugin for a11y in Vue files.
-- Added the new Tool `Routing`.
 - New parameter "searchResultOrder" for ranking category of searching result.
 - New csv specialized export button "ExportButtonCSV" is now integrated in Vue.js.
 - Function in src/utils/translateKeyWithPlausibilityCheck.js to prevent a text with ":" in it to be recognized as translation key.
