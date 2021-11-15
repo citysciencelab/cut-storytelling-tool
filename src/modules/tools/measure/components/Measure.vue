@@ -56,7 +56,7 @@ export default {
     },
     created () {
         this.currentMapId = this.mapId;
-        this.currentMapId = this.mapMode;
+        this.currentMapMode = this.mapMode;
         this.$on("close", this.close);
         mapCollection.getMap(this.currentMapId, this.currentMapMode).addLayer(this.layer);
     },
