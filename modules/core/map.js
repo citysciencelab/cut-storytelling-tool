@@ -4,12 +4,8 @@ import Cluster from "ol/source/Cluster.js";
 import {Group as LayerGroup} from "ol/layer.js";
 import VectorSource from "ol/source/Vector.js";
 import MapView from "./mapView";
-import ObliqueMap from "./obliqueMap";
-import Map3dModel from "./map3d";
-import {register} from "ol/proj/proj4.js";
-import proj4 from "proj4";
 import api from "masterportalAPI/abstraction/api";
-import {transform as transformCoord, transformFromMapProjection, transformToMapProjection, getMapProjection} from "masterportalAPI/src/crs";
+import {transform as transformCoord, transformFromMapProjection, transformToMapProjection} from "masterportalAPI/src/crs";
 import store from "../../src/app-store";
 import WMTSLayer from "./modelList/layer/wmts";
 import mapCollection from "../../src/core/dataStorage/mapCollection.js";
@@ -97,7 +93,13 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             },
             "getLayerByName": this.getLayerByName,
             "getOverlayById": this.getOverlayById,
-            "getMapMode": this.getMapMode
+            "getMapMode": this.getMapMode,
+            "setMap3dModel": function (map3dModel) {
+                this.set("map3dModel", map3dModel);
+            },
+            "setObliqueMap": function (obliqueMap) {
+                this.set("obliqueMap", obliqueMap);
+            }
         }, this);
 
         channel.on({
@@ -177,21 +179,6 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         if (typeof Config.inputMap !== "undefined" && Config.inputMap.setMarker) {
             this.registerListener("click", this.addMarker.bind(this));
         }
-    },
-
-    /**
-     * Creates an alias for the srsName.
-     * This is necessary for WFS from geoserver.org.
-     * @param {String} epsgCode used epsg code in the mapView
-     * @returns {void}
-     */
-    addAliasForWFSFromGoeserver: function (epsgCode) {
-        const epsgCodeNumber = epsgCode.split(":")[1];
-
-        proj4.defs("http://www.opengis.net/gml/srs/epsg.xml#" + epsgCodeNumber, proj4.defs(epsgCode));
-        register(proj4);
-        // sign projection for use in masterportal
-        proj4.defs(epsgCode).masterportal = true;
     },
 
     /**

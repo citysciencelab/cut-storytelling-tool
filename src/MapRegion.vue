@@ -26,6 +26,7 @@ export default {
     computed: {
         ...mapState([
             // listen to configJson changes for mounting the tools
+            "configJs",
             "configJson",
             "i18NextInitialized"
         ])
