@@ -73,7 +73,7 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
          * @returns {void}
          */
         addInteraction ({rootState}, interaction) {
-            mapCollection.getMap(rootState.mapId, rootState.mapMode).addInteraction(interaction);
+            mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).addInteraction(interaction);
         },
         /**
          * Removes all features from the layer.

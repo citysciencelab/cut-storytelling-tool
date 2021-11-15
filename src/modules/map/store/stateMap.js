@@ -29,8 +29,8 @@
  * @property {?Number[]} overlayIds list of layer ids
  * @property {?Object.<String, LayerData>} overlays list of existing overlays
  * @property {String[]} loadedLayers list of ready loaded layers IDs
- * @property {?MapMode} mapMode
- * @property {?MapId} mapId
+ * @property {?Number} mapMode
+ * @property {?Number} mapId
  */
 const state = {
     size: null,
@@ -60,7 +60,7 @@ const state = {
     overlayIds: null,
     overlays: null,
     mapMode: "2D",
-    mapId: null,
+    mapId: "ol",
     highlightedFeature: null,
     highlightedFeatureStyle: null,
     vectorFeaturesLoaded: false,

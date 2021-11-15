@@ -158,8 +158,9 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         this.setMap(api.map.createMap(
             {...Config, ...mapViewSettings, layerConf: getLayerList()}, {}, "2D"));
 
-        this.set("view", mapCollection.getMap("ol", "2D").getView());
         new MapView({view: mapCollection.getMap("ol", "2D").getView(), settings: mapViewSettings});
+
+        this.set("view", mapCollection.getMap("ol", "2D").getView());
 
         this.addAliasForWFSFromGoeserver(getMapProjection(mapCollection.getMap("ol", "2D")));
 
@@ -705,7 +706,9 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      */
     setMap: function (value) {
         mapCollection.addMap(value, "ol", "2D");
-        store.dispatch("Map/setMapAttributes", {map: value});
+        this.set("map", value);
+
+        store.dispatch("Map/setMapAttributes", {map: this.get("map")});
     }
 
 });
