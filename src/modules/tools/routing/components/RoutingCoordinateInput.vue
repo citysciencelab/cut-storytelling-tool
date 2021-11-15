@@ -290,7 +290,7 @@ label {
 }
 
 .helptext {
-    max-width: 350px;
+    max-width: calc(350px - 3rem);
 }
 
 .dropdown-menu-search {
