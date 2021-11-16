@@ -320,8 +320,7 @@ Layer.prototype.setIsSelected = function (newValue) {
         bridge.updateLayerView(this);
         bridge.renderMenu();
     }
-    if(this.get("typ") === "WFS"){
-        console.log("layer.js will updateSource");
+    if (this.get("typ") === "WFS") {
         this.updateSource(true);
     }
 };
@@ -435,9 +434,14 @@ function handleSingleBaseLayer (isSelected, layer, map) {
 Layer.prototype.setIsJustAdded = function (value) {
     this.set("isJustAdded", value);
 };
+/**
+ * Prepares the given features and sets or/and overwrites the coordinates based on the configuration of "altitude" and "altitudeOffset".
+ * @param {ol/Feature[]} features The olFeatures.
+ * @returns {void}
+ */
 Layer.prototype.prepareFeaturesFor3D = function (features) {
     const altitude = this.get("altitude"),
-    altitudeOffset = this.get("altitudeOffset");
+        altitudeOffset = this.get("altitudeOffset");
 
     features.forEach(feature => {
         let geometry = feature.getGeometry();
@@ -448,6 +452,13 @@ Layer.prototype.prepareFeaturesFor3D = function (features) {
         feature.setGeometry(geometry);
     });
 };
+/**
+ * Sets the altitude and AltitudeOffset as z coordinate.
+ * @param {ol/geom} geometry Geometry of feature.
+ * @param {Number} altitude Altitude. Overwrites the given z coord if available.
+ * @param {Number} altitudeOffset Altitude offset.
+ * @returns {ol/geom} - The geometry with newly set coordinates.
+ */
 Layer.prototype.setAltitudeOnGeometry = function (geometry, altitude, altitudeOffset) {
     const type = geometry.getType(),
         coords = geometry.getCoordinates();
@@ -465,6 +476,13 @@ Layer.prototype.setAltitudeOnGeometry = function (geometry, altitude, altitudeOf
     geometry.setCoordinates(overwrittenCoords);
     return geometry;
 };
+/**
+ * Sets the altitude on multipoint coordinates.
+ * @param {Number[]} coords Coordinates.
+ * @param {Number} altitude Altitude. Overwrites the given z coord if available.
+ * @param {Number} altitudeOffset Altitude offset.
+ * @returns {Number[]} - newly set cooordinates.
+ */
 Layer.prototype.setAltitudeOnMultiPoint = function (coords, altitude, altitudeOffset) {
     const overwrittenCoords = [];
 
@@ -474,28 +492,35 @@ Layer.prototype.setAltitudeOnMultiPoint = function (coords, altitude, altitudeOf
 
     return overwrittenCoords;
 };
+/**
+ * Sets the altitude on point coordinates.
+ * @param {Number[]} coords Coordinates.
+ * @param {Number} altitude Altitude. Overwrites the given z coord if available.
+ * @param {Number} altitudeOffset Altitude offset.
+ * @returns {Number[]} - newly set cooordinates.
+ */
 Layer.prototype.setAltitudeOnPoint = function (coords, altitude, altitudeOffset) {
     const overwrittenCoords = coords,
-            altitudeAsFloat = parseFloat(altitude),
-            altitudeOffsetAsFloat = parseFloat(altitudeOffset);
+        altitudeAsFloat = parseFloat(altitude),
+        altitudeOffsetAsFloat = parseFloat(altitudeOffset);
 
-        if (!isNaN(altitudeAsFloat)) {
-            if (overwrittenCoords.length === 2) {
-                overwrittenCoords.push(altitudeAsFloat);
-            }
-            else if (overwrittenCoords.length === 3) {
-                overwrittenCoords[2] = altitudeAsFloat;
-            }
+    if (!isNaN(altitudeAsFloat)) {
+        if (overwrittenCoords.length === 2) {
+            overwrittenCoords.push(altitudeAsFloat);
         }
-        if (!isNaN(altitudeOffsetAsFloat)) {
-            if (overwrittenCoords.length === 2) {
-                overwrittenCoords.push(altitudeOffsetAsFloat);
-            }
-            else if (overwrittenCoords.length === 3) {
-                overwrittenCoords[2] = overwrittenCoords[2] + altitudeOffsetAsFloat;
-            }
+        else if (overwrittenCoords.length === 3) {
+            overwrittenCoords[2] = altitudeAsFloat;
         }
-        return overwrittenCoords;
+    }
+    if (!isNaN(altitudeOffsetAsFloat)) {
+        if (overwrittenCoords.length === 2) {
+            overwrittenCoords.push(altitudeOffsetAsFloat);
+        }
+        else if (overwrittenCoords.length === 3) {
+            overwrittenCoords[2] = overwrittenCoords[2] + altitudeOffsetAsFloat;
+        }
+    }
+    return overwrittenCoords;
 };
 
 /**
@@ -561,7 +586,8 @@ Layer.prototype.setMinMaxResolutions = function () {
     this.get("layer").setMinResolution(resoByMinScale);
 };
 
-// backbone-relevant functions (may be removed if all layers are no longer backbone models):
+// NOTICE: backbone-relevant functions, may be removed if all layers are no longer backbone models.
+// But set, get and has may stay, because they are convenient:)
 Layer.prototype.set = function (arg1, arg2) {
     if (typeof arg1 === "object") {
         Object.keys(arg1).forEach(key => {

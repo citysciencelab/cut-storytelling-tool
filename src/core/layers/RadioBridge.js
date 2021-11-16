@@ -130,4 +130,41 @@ export function listenToChangeSLDBody (layerModel) {
         "change:SLDBody": layerModel.updateSourceSLDBody
     });
 }
+/**
+ * Triggers resetFeatures on VectorLayer.
+ * @param {String} layerId id of the layer
+ * @param {Array.<module:ol/Feature~Feature.<Geometry>>} allLayerFeatures all features of the layer
+ * @returns {void}
+ */
+export function resetVectorLayerFeatures (layerId, allLayerFeatures) {
+    Radio.trigger("VectorLayer", "resetFeatures", layerId, allLayerFeatures);
+}
+/**
+ * Returns the style model to the given id.
+ * @param {String} styleId id of the style model
+ * @returns {Object} the style model
+ */
+export function getStyleModelById (styleId) {
+    return Radio.request("StyleList", "returnModelById", styleId);
+}
+/**
+ * Returns the state of the initial loading of layers.
+ * @returns {number} state of loading
+ */
+export function getInitialLoadingState () {
+    return Radio.request("Map", "getInitialLoading");
+}
+/**
+ * Shows or hides the loader depending of param 'show'.
+ * @param {boolean} show if true, loader is shown
+ * @returns {void}
+ */
+export function showHideLoader (show) {
+    if (show) {
+        Radio.trigger("Util", "showLoader");
+    }
+    else {
+        Radio.trigger("Util", "hideLoader");
+    }
+}
 

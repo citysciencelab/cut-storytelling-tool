@@ -1,7 +1,5 @@
-import {wfs} from "masterportalAPI/src";
-import store from "../../app-store";
+import {wfs} from "masterportalAPI";
 import Layer from "./layer";
-import mapCollection from "../../core/dataStorage/mapCollection.js";
 import * as bridge from "./RadioBridge.js";
 /**
  * Creates a layer of type WMS.
@@ -47,7 +45,7 @@ WFSLayer.prototype.createLayer = function (attrs) {
             featureNS: attrs.featureNS,
             featureType: attrs.featureType
         },
-       layerParams = {
+        layerParams = {
             name: attrs.name,
             typ: attrs.typ,
             gfiAttributes: attrs.gfiAttributes,
@@ -57,13 +55,11 @@ WFSLayer.prototype.createLayer = function (attrs) {
             alwaysOnTop: attrs.alwaysOnTop,
             visible: attrs.isSelected
         },
-        loadingOptions ={
+        loadingParams = {
             xhrParameters: attrs.isSecured ? {credentials: "include"} : null,
-            propertyname: this.getPropertyname(attrs),
-            //braucht mnan das?
-            // bbox: attrs.bboxGeometry ? attrs.bboxGeometry.getExtent().toString(): undefined,
+            propertyname: this.getPropertyname(attrs)
         },
-        options ={
+        options = {
             wfsFilter: attrs.wfsFilter,
             clusterGeometryFunction: function (feature) {
                 // do not cluster invisible features; can't rely on style since it will be null initially
@@ -75,56 +71,62 @@ WFSLayer.prototype.createLayer = function (attrs) {
             version: this.getVersion(attrs),
             style: this.getStyleFunction(attrs),
             featuresFilter: this.getFeaturesFilterFunction(attrs),
-            beforeLoading: function(){
-                if (Radio.request("Map", "getInitialLoading") === 0 && (this.layer && this.layer.get("isSelected")) || attrs.isSelected) {
-                    Radio.trigger("Util", "showLoader");
+            beforeLoading: function () {
+                if (bridge.getInitialLoadingState() === 0 && (this.layer && this.layer.get("isSelected")) || attrs.isSelected) {
+                    bridge.showHideLoader(true);
                 }
             },
-            afterLoading: function(){
+            afterLoading: function () {
                 if ((this.layer && this.layer.get("isSelected")) || attrs.isSelected) {
-                    Radio.trigger("Util", "hideLoader");
+                    bridge.showHideLoader(false);
                 }
             },
-            onLoadingError: function(error){
+            onLoadingError: function (error) {
                 console.error("masterportal wfs loading error:", error);
             }
         };
-    this.layer = wfs.createLayer(rawLayerAttributes, layerParams, options, loadingOptions);
+
+    this.layer = wfs.createLayer(rawLayerAttributes, layerParams, options, loadingParams);
 };
 
 /**
- * 
- * @returns {void}
+ * Returns the version found in attrs, if allowed.
+ * @param {Object} attrs  params of the raw layer
+ * @returns {String} the version
  */
 WFSLayer.prototype.getVersion = function (attrs) {
     const allowedVersions = attrs.allowedVersions,
-    isVersionValid = this.checkVersion(attrs.name, attrs.version, allowedVersions);
+        isVersionValid = this.checkVersion(attrs.name, attrs.version, allowedVersions);
 
     if (!isVersionValid) {
-        // this.set("version", allowedVersions[0]);
         return allowedVersions[0];
     }
     return undefined;
 };
+/**
+ * Returns a function to filter features with.
+ * @param {Object} attrs  params of the raw layer
+ * @returns {Function} to filter geatures with
+ */
 WFSLayer.prototype.getFeaturesFilterFunction = function (attrs) {
-  return function(features){
-        //only use features with a geometry
-        let filteredFeatures =  features.filter(function (feature) {
+    return function (features) {
+        // only use features with a geometry
+        let filteredFeatures = features.filter(function (feature) {
             return feature.getGeometry() !== undefined;
         });
-        if(attrs.bboxGeometry){
+
+        if (attrs.bboxGeometry) {
             filteredFeatures = filteredFeatures.filter(function (feature) {
                 // test if the geometry and the passed extent intersect
                 return attrs.bboxGeometry.intersectsExtent(feature.getGeometry().getExtent());
             });
         }
         return filteredFeatures;
-    }
+    };
 };
 /**
  * Checks the version of the wfs against allowed versions.
  * @param {String} name name from layer
- * @param {String} id id from layer
  * @param {String} version version from wfs
  * @param {String[]} allowedVersions contains the allowed versions
  * @return {Boolean} is version valid
@@ -132,14 +134,14 @@ WFSLayer.prototype.getFeaturesFilterFunction = function (attrs) {
 WFSLayer.prototype.checkVersion = function (name, version, allowedVersions) {
     let isVersionValid = true;
 
-        if (!allowedVersions.includes(version)) {
-            isVersionValid = false;
+    if (!allowedVersions.includes(version)) {
+        isVersionValid = false;
 
-            console.warn(`The WFS layer: "${name}" is configured in version: ${version}.`
+        console.warn(`The WFS layer: "${name}" is configured in version: ${version}.`
              + ` OpenLayers accepts WFS only in the versions: ${allowedVersions},`
              + ` It tries to load the layer: "${name}" in version ${allowedVersions[0]}!`);
-        }
-        return isVersionValid;
+    }
+    return isVersionValid;
 };
 /**
  * Returns the propertynames as string.
@@ -149,99 +151,102 @@ WFSLayer.prototype.checkVersion = function (name, version, allowedVersions) {
 WFSLayer.prototype.getPropertyname = function (attrs) {
     let propertyname = "";
 
-        if (Array.isArray(attrs.propertyNames)) {
-            propertyname = attrs.propertyNames.join(",");
-        }
-        return propertyname;
+    if (Array.isArray(attrs.propertyNames)) {
+        propertyname = attrs.propertyNames.join(",");
+    }
+    return propertyname;
 };
 WFSLayer.prototype.getStyleFunction = function (attrs) {
     const styleId = attrs.styleId,
-            styleModel = Radio.request("StyleList", "returnModelById", styleId);
-        let isClusterFeature = false,
+        styleModel = bridge.getStyleModelById(styleId);
+    let isClusterFeature = false,
         style = null;
 
-        if (styleModel !== undefined) {
-            style = function (feature) {
-                const feat = feature !== undefined ? feature : this;
+    if (styleModel !== undefined) {
+        style = function (feature) {
+            const feat = feature !== undefined ? feature : this;
 
-                isClusterFeature = typeof feat.get("features") === "function" || typeof feat.get("features") === "object" && Boolean(feat.get("features"));
-                return styleModel.createStyle(feat, isClusterFeature);
-            };
-        }
-        else {
-            console.error(i18next.t("common:modules.core.modelList.layer.wrongStyleId", {styleId}));
-        }
+            isClusterFeature = typeof feat.get("features") === "function" || typeof feat.get("features") === "object" && Boolean(feat.get("features"));
+            return styleModel.createStyle(feat, isClusterFeature);
+        };
+    }
+    else {
+        console.error(i18next.t("common:modules.core.modelList.layer.wrongStyleId", {styleId}));
+    }
 
-        return style;
+    return style;
 };
+/**
+ * Updates the layers source by calling refresh at source.
+ * @returns {void}
+ */
 WFSLayer.prototype.updateSource = function () {
     wfs.updateSource(this.layer);
 };
 /**
  * Creates the legend
- * @fires VectorStyle#RadioRequestStyleListReturnModelById
  * @returns {void}
  */
 WFSLayer.prototype.createLegend = function () {
-    const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId")),
-            isSecured = this.attributes.isSecured;
-        let legend = this.get("legend");
+    const styleModel = bridge.getStyleModelById(this.get("styleId")),
+        isSecured = this.attributes.isSecured;
+    let legend = this.get("legend");
 
-        /**
+    /**
          * @deprecated in 3.0.0
          */
-        if (this.get("legendURL")) {
-            if (this.get("legendURL") === "") {
-                legend = true;
-            }
-            else if (this.get("legendURL") === "ignore") {
-                legend = false;
-            }
-            else {
-                legend = this.get("legendURL");
-            }
+    if (this.get("legendURL")) {
+        if (this.get("legendURL") === "") {
+            legend = true;
         }
+        else if (this.get("legendURL") === "ignore") {
+            legend = false;
+        }
+        else {
+            legend = this.get("legendURL");
+        }
+    }
 
-        if (Array.isArray(legend)) {
-            this.setLegend(legend);
+    if (Array.isArray(legend)) {
+        this.setLegend(legend);
+    }
+    else if (styleModel && legend === true) {
+        if (!isSecured) {
+            styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"), this.get("useProxy"));
         }
-        else if (styleModel && legend === true) {
-            if (!isSecured) {
-                styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"), this.get("useProxy"));
-            }
-            else if (isSecured) {
-                styleModel.getGeometryTypeFromSecuredWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
-            }
-            this.setLegend(styleModel.getLegendInfos());
+        else if (isSecured) {
+            styleModel.getGeometryTypeFromSecuredWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
         }
-        else if (typeof legend === "string") {
-            this.setLegend([legend]);
-        }
+        this.setLegend(styleModel.getLegendInfos());
+    }
+    else if (typeof legend === "string") {
+        this.setLegend([legend]);
+    }
 };
 /**
-     * Hides all features by setting style= null for all features.
-     * @returns {void}
-     */
+ * Hides all features by setting style= null for all features.
+ * @returns {void}
+ */
 WFSLayer.prototype.hideAllFeatures = function () {
     const layerSource = this.get("layerSource"),
-            features = this.get("layerSource").getFeatures();
+        features = this.get("layerSource").getFeatures();
 
-        // optimization - clear and re-add to prevent cluster updates on each change
-        layerSource.clear();
+    // optimization - clear and re-add to prevent cluster updates on each change
+    layerSource.clear();
 
-        features.forEach(function (feature) {
-            feature.set("hideInClustering", true);
-            feature.setStyle(function () {
-                return null;
-            });
-        }, this);
+    features.forEach(function (feature) {
+        feature.set("hideInClustering", true);
+        feature.setStyle(function () {
+            return null;
+        });
+    }, this);
 
-        layerSource.addFeatures(features);
+    layerSource.addFeatures(features);
 };
 /**
-     * Shows all features by setting their style.
-     * @returns {void}
-     */
+ * Shows all features by setting their style.
+ * @returns {void}
+ */
 WFSLayer.prototype.showAllFeatures = function () {
     const collection = this.get("layerSource").getFeatures();
     let style;
@@ -252,17 +257,16 @@ WFSLayer.prototype.showAllFeatures = function () {
         feature.setStyle(style(feature));
     }, this);
 };
- /**
-     * Only shows features that match the given ids.
-     * @param {String[]} featureIdList List of feature ids.
-     * @fires Layer#RadioTriggerVectorLayerResetFeatures
-     * @returns {void}
-     */
+/**
+ * Only shows features that match the given ids.
+ * @param {String[]} featureIdList List of feature ids.
+ * @returns {void}
+ */
 WFSLayer.prototype.showFeaturesByIds = function (featureIdList) {
     const layerSource = this.get("layerSource"),
-    // featuresToShow is a subset of allLayerFeatures
-    allLayerFeatures = layerSource.getFeatures(),
-    featuresToShow = featureIdList.map(id => layerSource.getFeatureById(id));
+        // featuresToShow is a subset of allLayerFeatures
+        allLayerFeatures = layerSource.getFeatures(),
+        featuresToShow = featureIdList.map(id => layerSource.getFeatureById(id));
 
     this.hideAllFeatures();
 
@@ -277,13 +281,13 @@ WFSLayer.prototype.showFeaturesByIds = function (featureIdList) {
     }, this);
 
     layerSource.addFeatures(allLayerFeatures);
-    Radio.trigger("VectorLayer", "resetFeatures", this.get("id"), allLayerFeatures);
+    bridge.resetVectorLayerFeatures(this.get("id"), allLayerFeatures);
 };
 /**
-     * Returns the style as a function.
-     * @param {Function|Object} style ol style object or style function.
-     * @returns {function} - style as function.
-     */
+ * Returns the style as a function.
+ * @param {Function|Object} style ol style object or style function.
+ * @returns {Function} - style as function.
+ */
 WFSLayer.prototype.getStyleAsFunction = function (style) {
     if (typeof style === "function") {
         return style;
@@ -292,4 +296,11 @@ WFSLayer.prototype.getStyleAsFunction = function (style) {
     return function () {
         return style;
     };
+};
+/**
+ * Sets Style for layer.
+ * @returns {void}
+ */
+WFSLayer.prototype.styling = function () {
+    this.layer.setStyle(this.get("style"));
 };
