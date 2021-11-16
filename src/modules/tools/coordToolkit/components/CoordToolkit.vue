@@ -14,7 +14,7 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/CoordToolkit", Object.keys(getters)),
-        ...mapGetters("Map", ["projection", "mouseCoord", "mapMode", "mapId"]),
+        ...mapGetters("Map", ["projection", "mouseCoord", "mapMode"]),
         ...mapGetters(["uiStyle"]),
         eastingNoCoordMessage: function () {
             if (this.currentProjection.projName !== "longlat") {
