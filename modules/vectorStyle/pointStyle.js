@@ -1,6 +1,6 @@
 import StyleModel from "./style.js";
 import {Circle as CircleStyle, Fill, Stroke, Style, Icon} from "ol/style.js";
-import {getFeaturePropertyByPath} from "../../src/utils/getFeaturePropertyPath";
+import {getFeaturePropertyByPath} from "../../src/utils/getFeaturePropertyByPath";
 
 const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype */{
     /**

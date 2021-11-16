@@ -7,7 +7,7 @@ import CesiumStyle from "./cesiumStyle";
 import {fetch as fetchPolyfill} from "whatwg-fetch";
 import axios from "axios";
 import getProxyUrl from "../../src/utils/getProxyUrl";
-import {getFeaturePropertyByPath, isObjectPath} from "../../src/utils/getFeaturePropertyPath";
+import {getFeaturePropertyByPath, isObjectPath} from "../../src/utils/getFeaturePropertyByPath";
 
 const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.prototype */{
     defaults: {

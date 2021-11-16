@@ -1,9 +1,8 @@
 import {expect} from "chai";
 import {GeoJSON} from "ol/format.js";
-import Model from "../../../../modules/vectorStyle/styleModel";
-import {getFeaturePropertyPath} from "../../getFeaturePropertyPath.js";
+import {getFeaturePropertyByPath, isObjectPath} from "../../getFeaturePropertyByPath.js";
 
-describe("src/utils/getFeaturePropertyPath.js", () => {
+describe("src/utils/getFeaturePropertyByPath.js", () => {
     const geojsonReader = new GeoJSON(),
         jsonFeatures = {
             "type": "FeatureCollection",
@@ -26,47 +25,48 @@ describe("src/utils/getFeaturePropertyPath.js", () => {
                     "type": "Feature",
                     "properties": {
                         "@test": "test",
-                        "id": "test1"
+                        "id": "test1",
+                        "value": 50,
+                        "min": 10,
+                        "max": 100
                     }
                 }
             ]
         };
 
-    let styleModel,
-        jsonObjects;
+    let jsonObjects;
 
 
     before(function () {
-        styleModel = new Model();
         jsonObjects = geojsonReader.readFeatures(jsonFeatures);
     });
 
-    describe("getFeaturePropertyPath", function () {
+    describe("getFeaturePropertyByPath", function () {
         it("should return direct property", function () {
-            expect(getFeaturePropertyPath(jsonObjects[0].getProperties(), "@id")).to.equal("test1");
+            expect(getFeaturePropertyByPath(jsonObjects[0].getProperties(), "@id")).to.equal("test1");
         });
         it("should return object property", function () {
-            expect(getFeaturePropertyPath(jsonObjects[0].getProperties(), "@myObj.myCascade")).to.equal(10);
+            expect(getFeaturePropertyByPath(jsonObjects[0].getProperties(), "@myObj.myCascade")).to.equal(10);
         });
         it("should return object property in array", function () {
-            expect(getFeaturePropertyPath(jsonObjects[0].getProperties(), "@myObj.myArray.0.myValue")).to.equal(20);
+            expect(getFeaturePropertyByPath(jsonObjects[0].getProperties(), "@myObj.myArray.0.myValue")).to.equal(20);
         });
         it("should return null if path is invalid", function () {
-            expect(getFeaturePropertyPath(jsonObjects[0].getProperties(), "@myObj.myArray.1.myValue")).to.be.null;
+            expect(getFeaturePropertyByPath(jsonObjects[0].getProperties(), "@myObj.myArray.1.myValue")).to.be.null;
         });
         it("should return null if path is invalid", function () {
-            expect(getFeaturePropertyPath(jsonObjects[1].getProperties(), "@@test")).to.equal("test");
+            expect(getFeaturePropertyByPath(jsonObjects[1].getProperties(), "@@test")).to.equal("test");
         });
     });
 
     describe("isObjectPath", function () {
         it("should return true if value is an object path", function () {
-            expect(styleModel.isObjectPath("@id")).to.be.true;
+            expect(isObjectPath("@id")).to.be.true;
         });
         it("should return false if value is not an object path", function () {
-            expect(styleModel.isObjectPath(123)).to.be.false;
-            expect(styleModel.isObjectPath("123")).to.be.false;
-            expect(styleModel.isObjectPath("foo@id")).to.be.false;
+            expect(isObjectPath(123)).to.be.false;
+            expect(isObjectPath("123")).to.be.false;
+            expect(isObjectPath("foo@id")).to.be.false;
         });
     });
 });
