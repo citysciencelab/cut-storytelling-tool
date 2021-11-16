@@ -14,6 +14,7 @@
 - Added the new Tool `Routing`.
 - Searchbar: An option "sortByName" in gdi to config if the rearching results from elastic sorted alphanumerically or not.
 - ParametricURL: An alert has been added which displays the new notation of a parameterized call.
+- Handling of polygons with holes to WKT geometry parsing.
 
 ### Changed
 - The following NPM packages are updated:
@@ -47,6 +48,7 @@
 - Tool wfsSearch: Zoom to a hit in the result list works now again
 - Sidebar: If a tool was activated by url parameter and user opens second tool, the first tool is closed now
 - Searchbar: Searches that deliver only a single search result can now be selected with `Enter`.
+- Handling of Multipolygons in WKT geometry parsing
 
 
 ---
