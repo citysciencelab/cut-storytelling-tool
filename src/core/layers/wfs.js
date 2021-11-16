@@ -17,20 +17,18 @@ export default function WFSLayer (attrs) {
         allowedVersions: ["1.1.0", "2.0.0"],
         altitudeMode: "clampToGround",
         useProxy: false
-    },
-    //todo checken:
-    // this.checkForScale(Radio.request("MapView", "getOptions"));
+    };
 
-    options = this.createLayer(Object.assign(defaults, attrs));
+    this.createLayer(Object.assign(defaults, attrs));
+
     // call the super-layer
     Layer.call(this, Object.assign(defaults, attrs), this.layer, !attrs.isChildLayer);
-    this.set("options", options);
-    this.set("style", options.style);
+    this.set("style", this.getStyleFunction(attrs));
     this.prepareFeaturesFor3D(this.layer.getSource().getFeatures());
     if (attrs.clusterDistance) {
         this.set("isClustered", true);
     }
-  
+    this.createLegend();
 }
 // Link prototypes and add prototype methods, means WFSLayer uses all methods and properties of Layer
 WFSLayer.prototype = Object.create(Layer.prototype);
@@ -57,11 +55,16 @@ WFSLayer.prototype.createLayer = function (attrs) {
             hitTolerance: attrs.hitTolerance,
             altitudeMode: attrs.altitudeMode,
             alwaysOnTop: attrs.alwaysOnTop,
-            visibility: attrs.isSelected,
-            wfsFilter: attrs.wfsFilter
+            visible: attrs.isSelected
+        },
+        loadingOptions ={
+            xhrParameters: attrs.isSecured ? {credentials: "include"} : null,
+            propertyname: this.getPropertyname(attrs),
+            //braucht mnan das?
+            // bbox: attrs.bboxGeometry ? attrs.bboxGeometry.getExtent().toString(): undefined,
         },
         options ={
-            xhrParameters: attrs.isSecured ? {withCredentials: true} : null,
+            wfsFilter: attrs.wfsFilter,
             clusterGeometryFunction: function (feature) {
                 // do not cluster invisible features; can't rely on style since it will be null initially
                 if (feature.get("hideInClustering") === true) {
@@ -69,25 +72,24 @@ WFSLayer.prototype.createLayer = function (attrs) {
                 }
                 return feature.getGeometry();
             },
-            projectionCode: Radio.request("MapView", "getProjection")?.getCode(),
             version: this.getVersion(attrs),
-            propertyname: this.getPropertyname(attrs),
-            bbox: attrs.bboxGeometry ? attrs.bboxGeometry.getExtent().toString(): undefined,
             style: this.getStyleFunction(attrs),
             featuresFilter: this.getFeaturesFilterFunction(attrs),
-            beforeLoading: function(visibility){
-                if (Radio.request("Map", "getInitialLoading") === 0 && visibility) {
+            beforeLoading: function(){
+                if (Radio.request("Map", "getInitialLoading") === 0 && (this.layer && this.layer.get("isSelected")) || attrs.isSelected) {
                     Radio.trigger("Util", "showLoader");
                 }
             },
-            afterLoading: function(visibility){
-                if (visibility) {
+            afterLoading: function(){
+                if ((this.layer && this.layer.get("isSelected")) || attrs.isSelected) {
                     Radio.trigger("Util", "hideLoader");
                 }
+            },
+            onLoadingError: function(error){
+                console.error("masterportal wfs loading error:", error);
             }
         };
-    this.layer = wfs.createLayer(rawLayerAttributes, layerParams, options);
-    return options;
+    this.layer = wfs.createLayer(rawLayerAttributes, layerParams, options, loadingOptions);
 };
 
 /**
@@ -119,6 +121,14 @@ WFSLayer.prototype.getFeaturesFilterFunction = function (attrs) {
         return filteredFeatures;
     }
 };
+/**
+ * Checks the version of the wfs against allowed versions.
+ * @param {String} name name from layer
+ * @param {String} id id from layer
+ * @param {String} version version from wfs
+ * @param {String[]} allowedVersions contains the allowed versions
+ * @return {Boolean} is version valid
+ */
 WFSLayer.prototype.checkVersion = function (name, version, allowedVersions) {
     let isVersionValid = true;
 
@@ -131,6 +141,11 @@ WFSLayer.prototype.checkVersion = function (name, version, allowedVersions) {
         }
         return isVersionValid;
 };
+/**
+ * Returns the propertynames as string.
+ * @param {Object} attrs  params of the raw layer
+ * @returns {string} the propertynames as string
+ */
 WFSLayer.prototype.getPropertyname = function (attrs) {
     let propertyname = "";
 
@@ -161,4 +176,120 @@ WFSLayer.prototype.getStyleFunction = function (attrs) {
 };
 WFSLayer.prototype.updateSource = function () {
     wfs.updateSource(this.layer);
+};
+/**
+ * Creates the legend
+ * @fires VectorStyle#RadioRequestStyleListReturnModelById
+ * @returns {void}
+ */
+WFSLayer.prototype.createLegend = function () {
+    const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId")),
+            isSecured = this.attributes.isSecured;
+        let legend = this.get("legend");
+
+        /**
+         * @deprecated in 3.0.0
+         */
+        if (this.get("legendURL")) {
+            if (this.get("legendURL") === "") {
+                legend = true;
+            }
+            else if (this.get("legendURL") === "ignore") {
+                legend = false;
+            }
+            else {
+                legend = this.get("legendURL");
+            }
+        }
+
+        if (Array.isArray(legend)) {
+            this.setLegend(legend);
+        }
+        else if (styleModel && legend === true) {
+            if (!isSecured) {
+                styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"), this.get("useProxy"));
+            }
+            else if (isSecured) {
+                styleModel.getGeometryTypeFromSecuredWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
+            }
+            this.setLegend(styleModel.getLegendInfos());
+        }
+        else if (typeof legend === "string") {
+            this.setLegend([legend]);
+        }
+};
+/**
+     * Hides all features by setting style= null for all features.
+     * @returns {void}
+     */
+WFSLayer.prototype.hideAllFeatures = function () {
+    const layerSource = this.get("layerSource"),
+            features = this.get("layerSource").getFeatures();
+
+        // optimization - clear and re-add to prevent cluster updates on each change
+        layerSource.clear();
+
+        features.forEach(function (feature) {
+            feature.set("hideInClustering", true);
+            feature.setStyle(function () {
+                return null;
+            });
+        }, this);
+
+        layerSource.addFeatures(features);
+};
+/**
+     * Shows all features by setting their style.
+     * @returns {void}
+     */
+WFSLayer.prototype.showAllFeatures = function () {
+    const collection = this.get("layerSource").getFeatures();
+    let style;
+
+    collection.forEach(function (feature) {
+        style = this.getStyleAsFunction(this.get("style"));
+
+        feature.setStyle(style(feature));
+    }, this);
+};
+ /**
+     * Only shows features that match the given ids.
+     * @param {String[]} featureIdList List of feature ids.
+     * @fires Layer#RadioTriggerVectorLayerResetFeatures
+     * @returns {void}
+     */
+WFSLayer.prototype.showFeaturesByIds = function (featureIdList) {
+    const layerSource = this.get("layerSource"),
+    // featuresToShow is a subset of allLayerFeatures
+    allLayerFeatures = layerSource.getFeatures(),
+    featuresToShow = featureIdList.map(id => layerSource.getFeatureById(id));
+
+    this.hideAllFeatures();
+
+    // optimization - clear and re-add to prevent cluster updates on each change
+    layerSource.clear();
+
+    featuresToShow.forEach(feature => {
+        const style = this.getStyleAsFunction(this.get("style"));
+
+        feature.set("hideInClustering", false);
+        feature.setStyle(style(feature));
+    }, this);
+
+    layerSource.addFeatures(allLayerFeatures);
+    Radio.trigger("VectorLayer", "resetFeatures", this.get("id"), allLayerFeatures);
+};
+/**
+     * Returns the style as a function.
+     * @param {Function|Object} style ol style object or style function.
+     * @returns {function} - style as function.
+     */
+WFSLayer.prototype.getStyleAsFunction = function (style) {
+    if (typeof style === "function") {
+        return style;
+    }
+
+    return function () {
+        return style;
+    };
 };

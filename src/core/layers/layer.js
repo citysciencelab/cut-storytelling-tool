@@ -57,6 +57,7 @@ export default function Layer (attrs, layer, initialize = true) {
     this.setMinMaxResolutions();
     this.checkForScale({scale: store.getters["Map/scale"]});
     this.registerInteractionMapViewListeners();
+    this.changeLang();
 }
 /**
  * Initalizes the layer. Sets property singleBaselayer and sets the layer visible, if selected in attributes or treetype light.
