@@ -1,6 +1,6 @@
 import StyleModel from "./style.js";
 import {Circle as CircleStyle, Fill, Stroke, Style, Icon} from "ol/style.js";
-import {getFeaturePropertyByPath} from "../../src/utils/getFeaturePropertyByPath";
+import {getFeaturePropertyByPath, isObjectPath} from "../../src/utils/getFeaturePropertyByPath";
 
 const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype */{
     /**
@@ -169,6 +169,25 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
     },
 
     /**
+    * Returns the rotation value and its corresponding value according to style.json.
+    * @param {Object} rotation - The rotation object from the style.json
+    * @returns {number} - The rotation value in degrees or radiants.
+    */
+    setRotationValue: function (rotation) {
+        const {value, isDegree} = rotation;
+        let rotationInRadiants = parseInt(value, 10),
+            rotationInDegrees = parseInt(value, 10);
+
+        if (isObjectPath(value)) {
+            const rotationValueFromService = getFeaturePropertyByPath(this.attributes.values_, value);
+
+            rotationInRadiants = parseInt(rotationValueFromService, 10);
+            rotationInDegrees = parseInt(rotationValueFromService, 10) * Math.PI / 180;
+        }
+        return isDegree ? rotationInDegrees : rotationInRadiants;
+    },
+
+    /**
     * Creates pointStyle as icon.
     * all features get same image.
     * @returns {ol/style} - The created style.
@@ -182,14 +201,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
             offset = [parseFloat(this.get("imageOffsetX")), parseFloat(this.get("imageOffsetY"))],
             offsetXUnit = this.get("imageOffsetXUnit"),
             offsetYUnit = this.get("imageOffsetYUnit"),
-            rotation = this.get("rotation");
-        let rotationRad = rotation;
-
-        if (String(rotation).startsWith("@")) {
-            const rotationValueFromService = getFeaturePropertyByPath(this.attributes.values_, rotation);
-
-            rotationRad = parseInt(rotationValueFromService, 10) * Math.PI / 180;
-        }
+            rotation = typeof this.get("rotation") === "object" ? this.setRotationValue(this.get("rotation")) : 0;
 
         return new Style({
             image: new Icon({
@@ -201,7 +213,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
                 anchorXUnits: offsetXUnit,
                 anchorYUnits: offsetYUnit,
                 imgSize: isSVG ? [width, height] : "",
-                rotation: rotationRad
+                rotation: rotation
             })
         });
     },
