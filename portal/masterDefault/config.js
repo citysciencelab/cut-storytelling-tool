@@ -2,15 +2,9 @@ const Config = {
     addons: ["populationRequest", "trinkwasser", "verkehrsstaerken", "dataTable", "trafficCount", "solaratlas"],
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
-    metadata: {
-        useProxy: [
-            "https://metaver.de/csw"
-        ]
-    },
     tree: {
         orderBy: "opendata",
         saveSelection: true,
-
         layerIDsToIgnore: [
             "1912", "1913", "1914", "1915", "1916", "1917", // UESG
             "2298", // Straßenbaumkataster cache grau
