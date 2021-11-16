@@ -40,6 +40,10 @@ describe("src/modules/tools/measure/components/Measure.vue", () => {
             modules: {
                 Map: {
                     namespaced: true,
+                    state: {
+                        mapId: "ol",
+                        mapMode: "2D"
+                    },
                     getters: {
                         layerById: () => id => ({})[id],
                         is3d: () => false,
