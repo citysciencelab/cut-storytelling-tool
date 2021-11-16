@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {GeoJSON} from "ol/format.js";
-import Model from "@modules/vectorStyle/styleModel";
-import getFeaturePropertyPath from "../../getFeaturePropertyPath.js";
+import Model from "../../../../modules/vectorStyle/styleModel";
+import {getFeaturePropertyPath} from "../../getFeaturePropertyPath.js";
 
 describe("src/utils/getFeaturePropertyPath.js", () => {
     const geojsonReader = new GeoJSON(),
