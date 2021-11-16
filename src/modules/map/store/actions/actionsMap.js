@@ -55,8 +55,6 @@ const actions = {
                 dispatch("highlightFeature", {type: "viaLayerIdAndFeatureId", layerIdAndFeatureId: rootState.urlParams["Map/highlightFeature"]});
             }
         }});
-        // set map to store
-        // commit("setMap", map);
         commit("setMapId", map.id);
         commit("setMapMode", map.mode);
         commit("setLayerList", map.getLayers().getArray());
@@ -249,7 +247,6 @@ const actions = {
     },
     /**
      * Sets center and resolution to initial values.
-     * @param {Object} payload parameter object
      * @returns {void}
      */
     resetView ({state, dispatch}) {
@@ -321,7 +318,7 @@ const actions = {
     },
     /**
      * Zoom to the given geometry or extent based on the current map size.
-     * @see {@link https://openlayers.org/en/latest/apidoc/module-ol_View-View.html#fit|ol.view.fit}     *
+     * @see {@link https://openlayers.org/en/latest/apidoc/module-ol_View-View.html#fit|ol.view.fit}
      * @param {module:ol/geom/Geometry | module:ol/extent} payload.geometryOrExtent The geometry or extent to zoom to.
      * @param {Object} payload.options Documentation linked.
      * @returns {void}
