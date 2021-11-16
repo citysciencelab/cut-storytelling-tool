@@ -92,6 +92,12 @@ describe("src/modules/mapMarker/store/actionsMapMarker.js", () => {
                         mapMode: () => "2D"
                     }
                 },
+                rootState = {
+                    Map: {
+                        mapId: "ol",
+                        mapMode: "2D"
+                    }
+                },
                 map = {
                     id: "ol",
                     mode: "2D",
@@ -102,7 +108,7 @@ describe("src/modules/mapMarker/store/actionsMapMarker.js", () => {
             mapCollection.clear();
             mapCollection.addMap(map, "ol", "2D");
 
-            testAction(removePolygonMarker, null, state, {}, [
+            testAction(removePolygonMarker, null, state, rootState, [
                 {type: "clearMarker", payload: "markerPolygon"},
                 {type: "setVisibilityMarker", payload: {visbility: false, marker: "markerPolygon"}}
             ], {}, done);

@@ -34,11 +34,16 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
 
     describe("addInteraction", () => {
         it("calls map's addInteraction function with a given interaction", () => {
-            const
+            const rootState = {
+                    Map: {
+                        mapId: "ol",
+                        mapMode: "2D"
+                    }
+                },
                 interactionSymbol = Symbol();
 
             actions.addInteraction({
-                rootState: {}
+                rootState: rootState
             }, interactionSymbol);
 
             expect(addInteraction.calledOnce).to.be.true;
@@ -69,6 +74,10 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
 
         beforeEach(() => {
             rootState = {
+                Map: {
+                    mapId: "ol",
+                    mapMode: "2D"
+                }
             };
         });
 
@@ -478,7 +487,11 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             };
 
             mapCollection.addMap(map, "ol", "2D");
-            rootState = {};
+            rootState = {
+                Map: {
+                    mapId: "ol",
+                    mapMode: "2D"
+                }};
             state = {deactivatedDrawInteractions: []};
         });
 
@@ -604,7 +617,11 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         beforeEach(() => {
             interactionSymbol = Symbol();
             removeInteraction = sinon.spy();
-            rootState = {};
+            rootState = {
+                Map: {
+                    mapId: "ol",
+                    mapMode: "2D"
+                }};
             mapCollection.clear();
             const map = {
                 id: "ol",

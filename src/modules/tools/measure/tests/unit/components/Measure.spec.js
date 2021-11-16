@@ -63,6 +63,16 @@ describe("src/modules/tools/measure/components/Measure.vue", () => {
             }
         });
 
+        mapCollection.clear();
+        map = {
+            id: "ol",
+            mode: "2D",
+            addInteraction: sinon.spy(),
+            removeInteraction: sinon.spy(),
+            addLayer: sinon.spy()
+        };
+        mapCollection.addMap(map, "ol", "2D");
+
         store.commit("Tools/Measure/setActive", true);
     });
 

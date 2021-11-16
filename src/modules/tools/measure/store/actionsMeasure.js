@@ -56,7 +56,7 @@ export default {
                 featureId => commit("setFeatureId", featureId),
                 tooltipCoord => commit("setTooltipCoord", tooltipCoord)
             );
-            mapCollection.getMap(getters.mapId, this.mapMode).addInteraction(interaction);
+            mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).addInteraction(interaction);
         }
 
         commit("setInteraction", interaction);
@@ -67,7 +67,7 @@ export default {
      * removing the interaction from the store.
      * @returns {void}
      */
-    removeDrawInteraction ({state, commit, getters}) {
+    removeDrawInteraction ({state, rootState, commit}) {
         const {interaction} = state;
 
         if (interaction) {
@@ -78,7 +78,7 @@ export default {
                 interaction.stopInteraction();
             }
             else {
-                mapCollection.getMap(getters.mapId, this.mapMode).removeInteraction(interaction);
+                mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).removeInteraction(interaction);
             }
 
             commit("setInteraction", null);
