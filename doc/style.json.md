@@ -200,7 +200,7 @@ Alternatively an arbitrarily nested property within the feature may be addressed
 
 >💡 Hint: Object paths are e.g. used by sensor layers in properties using multiple Datastreams.
 
-A *key* is always of type *String* or an [attributeobject](#markdown-header-attributeObject).
+A *key* is always of type *String* or an [attributeObject](#markdown-header-attributeobject).
 
 #### value
 
