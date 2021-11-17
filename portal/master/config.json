@@ -575,7 +575,8 @@
     "Fachdaten": {
       "Layer": [
         {
-          "id": "2426"
+          "id": "2426",
+          "visibility": true
         },
         {
           "id": "1711",

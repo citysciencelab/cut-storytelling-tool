@@ -7,7 +7,7 @@ export default function calculateExtent (features) {
     const extent = [9999999, 9999999, 0, 0];
 
     features.forEach(feature => {
-        const featureExtent = feature.getGeometry().getExtent();
+        const featureExtent = feature?.getGeometry()?.getExtent() || [];
 
         extent[0] = featureExtent[0] < extent[0] ? featureExtent[0] : extent[0];
         extent[1] = featureExtent[1] < extent[1] ? featureExtent[1] : extent[1];

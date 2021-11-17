@@ -34,14 +34,14 @@ View.prototype.setBBox = function (bbox) {
  * Zoom to a given extent.
  * @param {String[]} extent The extent to zoom.
  * @param {Object} options Options for zoom.
- * @param {string} urlProjection The projection from RUL parameter.
+ * @param {Number} [options.duration=800] The duration of the animation in milliseconds.
+ * @see {@link https://openlayers.org/en/latest/apidoc/module-ol_View-View.html#fit} for more options.
  * @returns {void}
  */
 View.prototype.zoomToExtent = function (extent, options) {
     this.fit(extent, {
         size: mapCollection.getMap("ol", "2D").getSize(),
-        duration: options?.duration ? options.duration : 800,
-        ...options
+        ...Object.assign({duration: 800}, options)
     });
 };
 
