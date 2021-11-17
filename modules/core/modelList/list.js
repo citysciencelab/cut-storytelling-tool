@@ -673,6 +673,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     updateLayerView: function () {
         const sortedLayers = this.getSortedTreeLayers();
 
+        console.log("---------------");
+        console.log("modelList/list.js");
+        console.log(sortedLayers);
         sortedLayers.forEach(layer => {
             Radio.trigger("Map", "addLayerToIndex", [layer.get("layer"), layer.get("selectionIDX")]);
         });
