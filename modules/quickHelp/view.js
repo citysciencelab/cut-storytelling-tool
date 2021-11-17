@@ -1,6 +1,7 @@
 import TemplateSearch from "text-loader!./templateSearch.html";
 import TemplateTree from "text-loader!./templateTree.html";
 import TemplateMeasureTool from "text-loader!./templateMeasureTool.html";
+import TemplateRoutingTool from "text-loader!./templateRoutingTool.html";
 import QuickHelpModel from "./model";
 import "jquery-ui/ui/widgets/draggable";
 import store from "../../src/app-store";
@@ -20,6 +21,12 @@ import store from "../../src/app-store";
 /**
  * @member TemplateMeasureTool
  * @description Template used to create the quickHelp for the measure tool
+ * @memberof QuickHelp
+ */
+
+/**
+ * @member TemplateRoutingTool
+ * @description Template used to create the quickHelp for the routing tool
  * @memberof QuickHelp
  */
 const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */{
@@ -75,6 +82,7 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
     templateSearch: _.template(TemplateSearch),
     templateTree: _.template(TemplateTree),
     templateMeasureTool: _.template(TemplateMeasureTool),
+    templateRoutingTool: _.template(TemplateRoutingTool),
     className: "quick-help-window ui-widget-content",
 
     /**
@@ -107,6 +115,10 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
                 this.$el.html(this.templateMeasureTool(attr));
                 break;
             }
+            case "routing": {
+                this.$el.html(this.templateRoutingTool(attr));
+                break;
+            }
             default: {
                 break;
             }
@@ -133,7 +145,7 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
 
     /**
      * showWindow
-     * @param {String} value Type of window (search | tree | measure)
+     * @param {String} value Type of window (search | tree | measure | routing)
      * @returns {void}
      */
     showWindow: function (value) {
@@ -150,6 +162,10 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
             }
             case "measure": {
                 this.$el.html(this.templateMeasureTool(attr));
+                break;
+            }
+            case "routing": {
+                this.$el.html(this.templateRoutingTool(attr));
                 break;
             }
             default: {
