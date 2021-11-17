@@ -54,6 +54,10 @@ export function getResoByScale (scale, scaleType) {
  * @returns {void}
  */
 export function addLayerToIndex (layer, selectionIDX) {
+    console.log("---------------");
+    console.log("core/layers/RadioBridge.js");
+    console.log(layer);
+    console.log(selectionIDX);
     Radio.trigger("Map", "addLayerToIndex", [layer, selectionIDX]);
 }
 /**

@@ -31,12 +31,13 @@ const ZoomToFeature = Backbone.Model.extend({
     },
 
     init: function () {
+
         let ids = "";
 
         this.setStyleListModel(Radio.request("StyleList", "returnModelById", this.get("styleId")));
         if (store.state.urlParams && store.state.urlParams["Map/zoomToFeatureId"]) {
             ids = store.state.urlParams["Map/zoomToFeatureId"];
-            this.setIds(ids);
+            this.setIds(Array.isArray(ids) ? ids : [ids]);
             this.getFeaturesFromWFS();
             this.createFeatureCenterList();
             this.putIconsForFeatureIds(this.get("featureCenterList"),
@@ -226,8 +227,8 @@ const ZoomToFeature = Backbone.Model.extend({
             features = this.get("features");
 
         if (ids && ids.length > 0) {
-            ids.forEach(function (id, index) {
-                const feature = features.filter(function (feat) {
+            ids.forEach((id, index) => {
+                const feature = features.filter(feat => {
                         return feat.get(attribute) === String(id) ? 1 : 0;
                     }),
                     extent = feature.length === 0 ? [] : feature[0].getGeometry().getExtent();
@@ -247,7 +248,8 @@ const ZoomToFeature = Backbone.Model.extend({
                     bbox[2] = bbox[2] < extent[2] ? extent[2] : bbox[2]; // xMax
                     bbox[3] = bbox[3] < extent[3] ? extent[3] : bbox[3]; // yMax
                 }
-            }, this);
+            });
+            console.log(bbox);
             Radio.trigger("Map", "setBBox", bbox);
         }
     },

@@ -19,8 +19,6 @@ const CheckboxSnippet = SnippetModel.extend(/** @lends CheckboxSnippet.prototype
      * @fires Core#RadioRequestMapGetMap
      * @fires Core#RadioRequestMapViewGetResolutions
      * @fires Core.ConfigLoader#RadioRequestParserGetInitVisibBaselayer
-     * @fires Core#RadioTriggerMapAddControl
-     * @fires Core#RadioTriggerMapRemoveControl
      * @fires Alerting#RadioTriggerAlertAlert
      * @listens i18next#RadioTriggerLanguageChanged
      */

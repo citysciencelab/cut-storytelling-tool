@@ -531,14 +531,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     },
 
     /**
-     * hides the loading module until the timeout has expired
-     * @returns {void}
-     */
-    hideLoadingModule: function () {
-        $(".loading").fadeOut(this.get("fadeOut"));
-    },
-
-    /**
      * Setter for attribute isViewMobile
      * @param {boolean} value visibility
      * @return {void}

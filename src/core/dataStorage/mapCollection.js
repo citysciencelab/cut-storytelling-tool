@@ -23,6 +23,21 @@ export default {
     getMap: function (id, mode) {
         return mapCollection.find(map => map?.id === id && map?.mode === mode);
     },
+
+    /**
+     * Gets a mapview of a map by the given id and mode.
+     * @param {String} id The map id.
+     * @param {String} mode The map mode.
+     * @returns {module:ol/PluggableMap~PluggableMap} The mapview.
+     */
+    getMapView: function (id, mode) {
+        return this.getMap(id, mode).getView();
+    },
+
+    getMapCollection: function () {
+        return mapCollection;
+    },
+
     /**
      * Removes all entries from the collection.
      * @returns {void}

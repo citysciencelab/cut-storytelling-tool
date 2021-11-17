@@ -4,6 +4,7 @@ import thousandsSeparator from "../../../../../utils/thousandsSeparator.js";
 import Canvas from "./../../utils/buildCanvas";
 import BuildSpec from "./../../utils/buildSpec";
 import getVisibleLayer from "./../../utils/getVisibleLayer";
+import mapCollection from "../../../../../core/dataStorage/mapCollection.js";
 
 export default {
     /**
@@ -137,7 +138,7 @@ export default {
                 commit("setHintInfo", "");
             }
         }
-        Radio.trigger("Map", "render");
+        mapCollection.getMap("ol", "2D").render();
     },
 
     /**
