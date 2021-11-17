@@ -157,7 +157,10 @@ export default {
 </script>
 
 <template>
-    <div id="routing-download">
+    <div
+        id="routing-download"
+        class="form-group-sm"
+    >
         <h6>{{ $t('common:modules.tools.routing.download.header') }}</h6>
 
         <div class="d-flex mb-2">
@@ -205,7 +208,7 @@ export default {
         <div class="form-group form-group-sm">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <button
-                    class="btn btn-block"
+                    class="btn btn-sm btn-block"
                     type="button"
                     :disabled="isDisabled"
                     @click="downloadResult()"
