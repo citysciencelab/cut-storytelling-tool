@@ -162,7 +162,7 @@ The attribute *properties* activates a feature property check by comparing the n
 }
 ```
 
-### *attributeObject*
+### attributeObject
 Then it is possible to configure an object instead of an attribute key.
 
 If the *attrName* is given as an object, the following confurations are possible.
@@ -200,7 +200,7 @@ Alternatively an arbitrarily nested property within the feature may be addressed
 
 >💡 Hint: Object paths are e.g. used by sensor layers in properties using multiple Datastreams.
 
-A *key* is always of type *String*.
+A *key* is always of type *String* or an [attributeobject](#markdown-header-attributeObject).
 
 #### value
 
@@ -569,7 +569,7 @@ Use the attribute *labelField* within the *style* to choose one of the *FeatureP
 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
-|labelField|yes|String|`"undefined"`|Feature attribute to be used as label. You may also use an [object path reference](#markdown-header-objectpathreference) or an [attributeObject](#markdown-header-attributeObject).|
+|labelField|yes|String|`"undefined"`|Feature attribute to be used as label. You may also use an [object path reference](#markdown-header-objectpathreference) or an [attributeObject](#markdown-header-attributeobject).|
 |textAlign||String|`"center"`|Text alignment|
 |textFont||String|`"Comic Sans MS"`|Text font|
 |textScale||Integer|`2`|Text scale|
