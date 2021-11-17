@@ -4,22 +4,44 @@ import {Group as LayerGroup} from "ol/layer.js";
 import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";
 
-// import api from "masterportalAPI/abstraction/api";
-// import {getLayerList} from "masterportalAPI/src/rawLayerList";
+/**
+ * Pushes layers with the attribute: "alwaysOnTop" to the top of the layer collection.
+ * @param {module:ol/Collection~Collection} layers Layer Collection.
+ * @returns {void}
+ */
+function setLayersAlwaysOnTop (layers) {
+    layers.forEach(layer => {
+        if (layer.get("alwaysOnTop") === true) {
+            layer.setZIndex(layers.getLength());
+        }
+    });
+}
 
-// import store from "../../app-store";
-// import mapCollection from "../dataStorage/mapCollection";
+/**
+ * Adds a layer with a zIndex to the map.
+ * If the layer already exists, only the zIndex of the layer will be reset.
+ * Layers with the attribute "alwaysOnTop": true are set on top of the map.
+ * @param {module:ol/layer/Base~BaseLayer} layer The layer to add.
+ * @param {Number} zIndex The zIndex of the layer.
+ * @returns {void}
+ */
+PluggableMap.prototype.addLayerToIndex = function (layer, zIndex) {
+    layer.setZIndex(zIndex);
+    if (!this.getLayers().getArray().includes(layer)) {
+        this.addLayer(layer);
+    }
 
-PluggableMap.prototype.abc = function () {
-    return "abc";
+    setLayersAlwaysOnTop(this.getLayers());
 };
 
 /**
- * Checks if the layer with the given name already exists and uses it, creates a new layer and returns it if not.
- * @param {String} layerName The name of the layer to check
- * @returns {ol/layer/Layer}  the found layer or a new layer with the given name
+ * Checks if the layer with the given name already exists and uses it,
+ * creates a new layer and returns it if not.
+ * @param {String} layerName The name of the layer to check.
+ * @param {Boolean} [alwaysOnTop=true] Layers with the attribute "alwaysOnTop": true are set on top of the map.
+ * @returns {module:ol/layer/Base~BaseLaye}  the found layer or a new layer with the given name.
  */
-PluggableMap.prototype.addNewLayerIfNotExists = function (layerName) {
+PluggableMap.prototype.addNewLayerIfNotExists = function (layerName, alwaysOnTop = true) {
     let resultLayer = this.getLayerByName(layerName);
 
     if (!resultLayer) {
@@ -27,10 +49,11 @@ PluggableMap.prototype.addNewLayerIfNotExists = function (layerName) {
             id: layerName,
             name: layerName,
             source: new VectorSource(),
-            alwaysOnTop: true
+            alwaysOnTop: alwaysOnTop
         });
 
         this.addLayer(resultLayer);
+        setLayersAlwaysOnTop(this.getLayers());
     }
 
     return resultLayer;
@@ -57,11 +80,10 @@ PluggableMap.prototype.getLayerById = function (layerId, searchInGroupLayers = t
     return returnLayer;
 };
 
-
 /**
 * Finds a layer by its name and returns it.
 * @param  {String} layerName Name of the Layer.
-* @return {ol/layer/Layer} The layer found by name.
+* @return {module:ol/layer/Base~BaseLayer} The layer found by name.
 */
 PluggableMap.prototype.getLayerByName = function (layerName) {
     return this.getLayers().getArray().find(layer => layer.get("name") === layerName);
@@ -71,14 +93,13 @@ PluggableMap.prototype.getLayerByName = function (layerName) {
 * Registered listener for certain events on the map.
 * @see https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html
 * @param {String} event The Eventtype.
-* @param {Function} callback The Callback function.
+* @param {Function} callback The callback function.
 * @param {Object} context The context.
 * @returns {void}
 */
 PluggableMap.prototype.registerListener = function (event, callback, context) {
     this.on(event, callback, context);
 };
-
 
 /**
 * Unsubscribes listener to certain events.

@@ -1,21 +1,14 @@
-import {Group as LayerGroup} from "ol/layer.js";
 import {transformFromMapProjection} from "masterportalAPI/src/crs";
 import store from "../../src/app-store";
-import WMTSLayer from "./modelList/layer/wmts";
 import mapCollection from "../../src/core/dataStorage/mapCollection";
 import {getMapMode} from "../../src/core/maps/maps.js";
 
 const map = Backbone.Model.extend(/** @lends map.prototype */{
     defaults: {
-        initialLoading: 0,
-        shadowTime: null,
-        timeoutReference: null
     },
 
     initialize: function () {
         const channel = Radio.channel("Map");
-
-        this.listenTo(this, "change:initialLoading", this.initialLoadingChanged);
 
         channel.reply({
             "getLayers": function () {
@@ -33,9 +26,6 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             "getMap": function () {
                 return mapCollection.getMap("ol", "2D");
             },
-            "getInitialLoading": function () {
-                return this.get("initialLoading");
-            },
             "getLayerByName": function (name) {
                 return mapCollection.getMap("ol", "2D").getLayerByName(name);
             },
@@ -46,11 +36,12 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             "addLayer": function (layer) {
                 this.getMap().addLayer(layer);
             },
-            "addLayerToIndex": this.addLayerToIndex,
+            "addLayerToIndex": function (args) {
+                mapCollection.getMap("ol", "2D").addLayerToIndex(args[0], args[1]);
+            },
             "addLayerOnTop": function (layer) {
                 mapCollection.getMap("ol", "2D").addLayer(layer);
             },
-            "addLoadingLayer": this.addLoadingLayer,
             "addOverlay": function (overlay) {
                 mapCollection.getMap("ol", "2D").addOverlay(overlay);
             },
@@ -60,7 +51,6 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             "removeLayer": function (layer) {
                 mapCollection.getMap("ol", "2D").removeLayer(layer);
             },
-            "removeLoadingLayer": this.removeLoadingLayer,
             "removeOverlay": function (overlay) {
                 mapCollection.getMap("ol", "2D").removeOverlay(overlay);
             },
@@ -89,11 +79,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
                 mapCollection.getMap("ol", "2D").unregisterListener(event, callback, context);
             },
             "updateSize": function () {
-                // avoid expensive updateSize() spamming
-                clearTimeout(this.get("timeoutReference"));
-                this.set("timeoutReference", setTimeout(() => {
-                    mapCollection.getMap("ol", "2D").updateSize();
-                }, 100));
+                mapCollection.getMap("ol", "2D").updateSize();
             },
             "setMap3dModel": function (map3dModel) {
                 this.set("map3dModel", map3dModel);
@@ -177,6 +163,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
 
         // Broadcast the coordinates clicked in the desired coordinate system.
         Radio.trigger("RemoteInterface", "postMessage", {"setMarker": coords});
+
     },
 
     /**
@@ -309,67 +296,6 @@ console.log(layersCollection.getArray());
         if (num === 0) {
             this.stopListening(this, "change:initialLoading");
         }
-<<<<<<< HEAD
-    },
-
-    /**
-     * Checks if the layer with the given name already exists and uses it, creates a new layer and returns it if not.
-     * @param {String} name the name of the layer to check
-     * @fires Core#RadioTriggerMapAddLayerToIndex
-     * @returns {ol/layer/Layer}  the found layer or a new layer with the given name
-     */
-    createLayerIfNotExists: function (name) {
-        const layers = mapCollection.getMap("ol", "2D").getLayers();
-
-        let found = false,
-            layer,
-            source,
-            resultLayer = {};
-
-        layers.getArray().forEach(ollayer => {
-            if (ollayer.get("name") === name) {
-                found = true;
-                resultLayer = ollayer;
-            }
-        }, this);
-
-        if (!found) {
-            source = new VectorSource();
-            layer = new VectorLayer({
-                id: name,
-                name: name,
-                source: source,
-                alwaysOnTop: true
-            });
-
-            resultLayer = layer;
-            Radio.trigger("Map", "addLayerToIndex", [layer, layers.getArray().length]);
-        }
-
-        return resultLayer;
-    },
-
-    /**
-     * gets an overlay by its identifier
-     * @param {string|number} id - identifier
-     * @returns {ol.Overlay} the overlay
-     */
-    getOverlayById: function (id) {
-        return mapCollection.getMap("ol", "2D").getOverlayById(id);
-    },
-
-    /**
-     * Setter for the map.
-     * @param {ol/map} value - The map.
-     * @returns {void}
-     */
-    setMap: function (value) {
-        mapCollection.addMap(value, "ol", "2D");
-        this.set("map", value);
-
-        store.dispatch("Map/setMapAttributes", {map: this.get("map")});
-=======
->>>>>>> update migrate backbone map to a map2D module
     }
 });
 

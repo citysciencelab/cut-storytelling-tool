@@ -1,15 +1,15 @@
+import api from "masterportalAPI/abstraction/api";
+import {getLayerList} from "masterportalAPI/src/rawLayerList";
+
 import "./2DMap";
 import "./2DMapView";
+
 import Map from "../../../modules/core/map";
 import MapView from "../../../modules/core/mapView";
 import Map3dModel from "../../../modules/core/map3d";
 import ObliqueMap from "../../../modules/core/obliqueMap";
 import mapCollection from "../dataStorage/mapCollection";
 import store from "../../app-store";
-
-import api from "masterportalAPI/abstraction/api";
-import {getLayerList} from "masterportalAPI/src/rawLayerList";
-
 
 /**
  * Create the 2D map and mapview

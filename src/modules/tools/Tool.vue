@@ -90,15 +90,16 @@ export default {
                 Radio.trigger("ModelList", "toggleDefaultTool");
             }
 
-            this.updateMap();
+            this.$nextTick(() => {
+                this.updateMap();
 
-            if (newValue && this.focusToCloseIcon) {
-                this.$nextTick(() => {
+                if (newValue && this.focusToCloseIcon) {
                     if (this.$refs["close-icon"]) {
                         this.$refs["close-icon"].focus();
                     }
-                });
-            }
+                }
+            });
+
         }
     },
     methods: {
@@ -159,8 +160,7 @@ export default {
          */
         close (event) {
             if (event.type === "click" || event.which === 32 || event.which === 13) {
-                this.updateMap();
-                // emit event to parent e.g. SupplyCoord (which uses the tool as component and is therefor the parent)
+                // emit event to parent e.g. coordToolKit (which uses the tool as component and is therefor the parent)
                 this.$parent.$emit("close", event);
             }
         }

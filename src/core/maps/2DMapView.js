@@ -5,7 +5,6 @@ import {transformToMapProjection, transformFromMapProjection} from "masterportal
 import mapCollection from "../dataStorage/mapCollection";
 import calculateExtent from "../../utils/calculateExtent";
 
-
 /**
  * Returns the bounding box in a given coordinate system (EPSG code).
  * @param {String} [epsgCode="EPSG:4326"] EPSG code into which the bounding box is transformed.
@@ -32,7 +31,7 @@ View.prototype.setBBox = function (bbox) {
 };
 
 /**
- * Zoom to a given extent
+ * Zoom to a given extent.
  * @param {String[]} extent The extent to zoom.
  * @param {Object} options Options for zoom.
  * @param {string} urlProjection The projection from RUL parameter.
@@ -41,7 +40,7 @@ View.prototype.setBBox = function (bbox) {
 View.prototype.zoomToExtent = function (extent, options) {
     this.fit(extent, {
         size: mapCollection.getMap("ol", "2D").getSize(),
-        duration: options && options?.duration ? options.duration : 800,
+        duration: options?.duration ? options.duration : 800,
         ...options
     });
 };
@@ -51,7 +50,6 @@ View.prototype.zoomToExtent = function (extent, options) {
  * @param {String[]} ids The feature ids.
  * @param {String} layerId The layer id.
  * @param {Object} zoomOptions The options for zoom to extent.
- * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
  * @returns {void}
  */
 View.prototype.zoomToFilteredFeatures = function (ids, layerId, zoomOptions) {
@@ -68,10 +66,9 @@ View.prototype.zoomToFilteredFeatures = function (ids, layerId, zoomOptions) {
     }
 };
 
-
 /**
  * Zoom to a given extent, this function allows to give projection of extent
- * Used in remoteInterface.
+ * Note: Used in remoteInterface.
  * @param {Object} data Contains extent, options as Object and projection.
  * @param {String[]} data.extent The extent to zoom.
  * @param {Object} data.options Options for zoom.
@@ -79,7 +76,7 @@ View.prototype.zoomToFilteredFeatures = function (ids, layerId, zoomOptions) {
  * @returns {void}
  */
 View.prototype.zoomToProjExtent = function (data) {
-    if (data.extent !== undefined && data.options !== undefined && data.projection !== undefined) {
+    if (Object.values(data).every(val => val !== undefined)) {
         const leftBottom = data.extent.slice(0, 2),
             topRight = data.extent.slice(2, 4),
             transformedLeftBottom = transformToMapProjection(mapCollection.getMap("ol", "2D"), data.projection, leftBottom),
