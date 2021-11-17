@@ -3,7 +3,7 @@ import store from "../../app-store";
 import Layer from "./layer";
 import WMSLayer from "./wms";
 import WFSLayer from "./wfs";
-import WMTSLayer from "../../../modules/core/modelList/layer/wmts";
+import WMTSLayer from "./wmts";
 import GeoJSONLayer from "../../../modules/core/modelList/layer/geojson";
 import SensorLayer from "../../../modules/core/modelList/layer/sensor";
 import HeatmapLayer from "../../../modules/core/modelList/layer/heatmap";

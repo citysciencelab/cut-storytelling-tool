@@ -2,7 +2,7 @@ import WMSLayer from "../../../src/core/layers/wms";
 import WFSLayer from "../../../src/core/layers/wfs";
 import GroupedLayers from "../../../src/core/layers/group";
 import WMSTimeLayer from "../../../src/core/layers/wmsTime";
-import WMTSLayer from "./layer/wmts";
+import WMTSLayer from "../../../src/core/layers/wmts";
 import StaticImageLayer from "./layer/staticImage";
 import GeoJSONLayer from "./layer/geojson";
 import SensorLayer from "./layer/sensor";
@@ -330,7 +330,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     setVisibleByParentIsExpanded: function (parentId) {
         const parent = this.findWhere({id: parentId});
 
-        if (!parent.get("isExpanded")) {
+        if (!parent?.get("isExpanded")) {
             this.setAllDescendantsInvisible(parentId, Radio.request("Util", "isViewMobile"));
         }
         else {

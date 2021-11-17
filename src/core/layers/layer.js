@@ -639,6 +639,8 @@ Layer.prototype.toJSON = function () {
 
     delete atts.layerSource;
     delete atts.layers;
+    delete atts.collection;
+
     return deepCopy(atts);
 };
 
