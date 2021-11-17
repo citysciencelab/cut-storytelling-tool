@@ -1,63 +1,76 @@
-import {translateKeyWithPlausibilityCheck} from "./translateKeyWithPlausibilityCheck.js";
 import {getValueFromObjectByPath} from "./getValueFromObjectByPath.js";
 import moment from "moment";
 import thousandsSeparator from "./thousandsSeparator";
 /**
  * Maps the feature properties by the given object.
  * @param {Object} properties The feature properties.
- * @param {Object} [mappingObject={}] "gfiAttributes" from the layer.
+ * @param {Object} mappingObject Object to me mapped.
+ * @param {Boolean} [isNested=true] Flag if Object is nested, like "gfiAttributes".
  * @returns {Object} The mapped properties.
  */
-function attributeMapper (properties, mappingObject = {}) {
-    const mappedProperties = {};
+function attributeMapper (properties, mappingObject, isNested = true) {
+    let mappedProperties;
 
-    Object.keys(mappingObject).forEach(key => {
-        let newKey = mappingObject[key],
-            value = prepareGfiValue(properties, key);
-
-        if (typeof newKey === "object") {
-            value = prepareGfiValueFromObject(key, newKey, properties);
-            newKey = newKey.name;
+    if (!mappingObject) {
+        return false;
+    }
+    if (!isNested) {
+        if (typeof mappingObject === "string") {
+            mappedProperties = prepareValue(properties, mappingObject);
         }
-        if (value && value !== "undefined") {
-            mappedProperties[newKey] = value;
+        else {
+            mappedProperties = prepareValueFromObject(mappingObject.name, mappingObject, properties);
         }
-    });
+    }
+    else {
+        mappedProperties = {};
+        Object.keys(mappingObject).forEach(key => {
+            let newKey = mappingObject[key],
+                value = prepareValue(properties, key);
 
+            if (typeof newKey === "object") {
+                value = prepareValueFromObject(key, newKey, properties);
+                newKey = newKey.name;
+            }
+            if (value && value !== "undefined") {
+                mappedProperties[newKey] = value;
+            }
+        });
+    }
     return mappedProperties;
 }
 
 /**
  * Returns the value of the given key. Also considers, that the key may be an object path.
- * @param {Object} gfi Gfi object.
+ * @param {Object} properties properties.
  * @param {String} key Key to derive value from.
  * @returns {*} - Value from key.
  */
-function prepareGfiValue (gfi, key) {
+function prepareValue (properties, key) {
     const isPath = key.startsWith("@") && key.length > 1;
-    let value = gfi[Object.keys(gfi).find(gfiKey => gfiKey.toLowerCase() === key.toLowerCase())];
+    let value = properties[Object.keys(properties).find(propertiesKey => propertiesKey.toLowerCase() === key.toLowerCase())];
 
     if (isPath) {
-        value = getValueFromObjectByPath(gfi, key);
+        value = getValueFromObjectByPath(properties, key);
     }
     return value;
 }
 /**
  * Derives the gfi value if the value is an object.
- * @param {*} key Key of gfi Attribute.
- * @param {Object} obj Value of gfi attribute.
- * @param {Object} gfi Gfi object.
- * @returns {*} - Prepared Value from gfi.
+ * @param {*} key Key of Attribute.
+ * @param {Object} mappingObj Value of attribute.
+ * @param {Object} properties object.
+ * @returns {*} - Prepared Value
  */
-function prepareGfiValueFromObject (key, obj, gfi) {
-    const type = obj?.type ? obj.type : "string",
-        format = obj?.format ? obj.format : "DD.MM.YYYY HH:mm:ss",
-        condition = obj?.condition ? obj.condition : null;
-    let preparedValue = prepareGfiValue(gfi, key),
+function prepareValueFromObject (key, mappingObj, properties) {
+    const type = mappingObj?.type ? mappingObj.type : "string",
+        condition = mappingObj?.condition ? mappingObj.condition : null;
+    let preparedValue = prepareValue(properties, key),
+        format = mappingObj?.format ? mappingObj.format : "DD.MM.YYYY HH:mm:ss",
         date;
 
     if (condition) {
-        preparedValue = getValueFromCondition(key, condition, gfi);
+        preparedValue = getValueFromCondition(key, condition, properties);
     }
     switch (type) {
         case "date": {
@@ -75,23 +88,24 @@ function prepareGfiValueFromObject (key, obj, gfi) {
             preparedValue = Object.assign({
                 name: key,
                 staObject: preparedValue
-            }, obj);
+            }, mappingObj);
             break;
         }
         case "boolean": {
-            preparedValue = getBooleanValue(preparedValue, format, v => this.$t(v));
+            format = format === "DD.MM.YYYY HH:mm:ss" ? {true: true, false: false} : format;
+            preparedValue = getBooleanValue(preparedValue, format);
             break;
         }
-        // default equals to obj.type === "string"
+        // default equals to mappingObj.type === "string"
         default: {
             preparedValue = String(preparedValue);
         }
     }
-    if (preparedValue && obj.suffix && preparedValue !== "undefined") {
-        preparedValue = appendSuffix(preparedValue, obj.suffix);
+    if (preparedValue && mappingObj.suffix && preparedValue !== "undefined") {
+        preparedValue = appendSuffix(preparedValue, mappingObj.suffix);
     }
-    if (preparedValue && obj.prefix && preparedValue !== "undefined") {
-        preparedValue = prependPrefix(preparedValue, obj.prefix);
+    if (preparedValue && mappingObj.prefix && preparedValue !== "undefined") {
+        preparedValue = prependPrefix(preparedValue, mappingObj.prefix);
     }
     return preparedValue;
 }
@@ -100,56 +114,55 @@ function prepareGfiValueFromObject (key, obj, gfi) {
  * Parsing the boolean value
  * @param {String} value default value
  * @param {String|Object} format the format of boolean value
- * @param {Function} translateFunction the function to use for translation
- * @returns {String} - original value or parsed value
+* @returns {String} - original value or parsed value
  */
-function getBooleanValue (value, format, translateFunction) {
+function getBooleanValue (value, format) {
     let parsedValue = String(value);
 
-    if (typeof translateFunction !== "function") {
-        return parsedValue;
+    if (Object.prototype.hasOwnProperty.call(format, value)) {
+        // translation
+        if (String(format[value]).includes("common:")) {
+            parsedValue = i18next.t(format[value]);
+        }
+        // normal mapping
+        else {
+            parsedValue = format[value];
+        }
     }
-    if (typeof format === "object" && format !== null && Object.prototype.hasOwnProperty.call(format, value)) {
-        parsedValue = translateKeyWithPlausibilityCheck(format[value], translateFunction);
-    }
-    else {
-        parsedValue = this.$t("common:modules.tools.gfi.boolean." + value);
-    }
-
-    return !parsedValue.includes("modules.tools.gfi.boolean.") ? parsedValue : String(value);
+    return parsedValue;
 }
 
 /**
  * Derives the value from the given condition.
  * @param {String} key Key.
- * @param {String} condition Condition to filter gfi.
- * @param {Object} gfi Gfi object.
+ * @param {String} condition Condition to filter.
+ * @param {Object} properties Properties.
  * @returns {*} - Value that matches the given condition.
  */
-function getValueFromCondition (key, condition, gfi) {
+function getValueFromCondition (key, condition, properties) {
     let valueFromCondition,
         match;
 
     if (condition === "contains") {
-        match = Object.keys(gfi).filter(key2 => {
+        match = Object.keys(properties).filter(key2 => {
             return key2.includes(key);
         })[0];
-        valueFromCondition = gfi[match];
+        valueFromCondition = properties[match];
     }
     else if (condition === "startsWith") {
-        match = Object.keys(gfi).filter(key2 => {
+        match = Object.keys(properties).filter(key2 => {
             return key2.startsWith(key);
         })[0];
-        valueFromCondition = gfi[match];
+        valueFromCondition = properties[match];
     }
     else if (condition === "endsWith") {
-        match = Object.keys(gfi).filter(key2 => {
+        match = Object.keys(properties).filter(key2 => {
             return key2.endsWith(key);
         })[0];
-        valueFromCondition = gfi[match];
+        valueFromCondition = properties[match];
     }
     else {
-        valueFromCondition = gfi[key];
+        valueFromCondition = properties[key];
     }
 
     return valueFromCondition;

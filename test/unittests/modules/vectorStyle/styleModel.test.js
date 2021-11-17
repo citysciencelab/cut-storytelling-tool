@@ -420,15 +420,6 @@ describe("vectorStyleModel", function () {
         });
     });
 
-    describe("getFeatureValue", function () {
-        it("should return plain feature property", function () {
-            expect(styleModel.getFeatureValue(jsonObjects[0].getProperties(), "id")).to.equal("test1");
-        });
-        it("should return feature property in object path", function () {
-            expect(styleModel.getFeatureValue(jsonObjects[0].getProperties(), "@id")).to.equal("test1");
-        });
-    });
-
     describe("getFeaturePropertyByPath", function () {
         it("should return direct property", function () {
             expect(styleModel.getFeaturePropertyByPath(jsonObjects[0].getProperties(), "@id")).to.equal("test1");
