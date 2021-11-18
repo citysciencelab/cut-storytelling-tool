@@ -202,6 +202,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      */
     featuresLoaded: function (features) {
         Radio.trigger("VectorLayer", "featuresLoaded", this.get("id"), features);
+        store.dispatch("Map/featuresLoaded", {layerId: this.get("id"), features});
     },
 
     /**

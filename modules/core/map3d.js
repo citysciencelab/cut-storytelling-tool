@@ -345,7 +345,7 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
         return api.map.createMap({
             map2D: store.getters["Map/ol2DMap"],
             shadowTime: this.getShadowTime.bind(this)
-        }, {}, "3D");
+        }, "3D");
     },
 
     /**

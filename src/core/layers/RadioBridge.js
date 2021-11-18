@@ -140,6 +140,15 @@ export function resetVectorLayerFeatures (layerId, allLayerFeatures) {
     Radio.trigger("VectorLayer", "resetFeatures", layerId, allLayerFeatures);
 }
 /**
+ * Triggers featuresLoaded on VectorLayer.
+ * @param {String} layerId id of the layer
+ * @param {Array.<module:ol/Feature~Feature.<Geometry>>} features all features of the layer
+ * @returns {void}
+ */
+export function featuresLoaded (layerId, features) {
+    Radio.trigger("VectorLayer", "featuresLoaded", layerId, features);
+}
+/**
  * Returns the style model to the given id.
  * @param {String} styleId id of the style model
  * @returns {Object} the style model

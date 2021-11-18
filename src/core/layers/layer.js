@@ -585,7 +585,16 @@ Layer.prototype.setMinMaxResolutions = function () {
     this.get("layer").setMaxResolution(resoByMaxScale + (resoByMaxScale / 100));
     this.get("layer").setMinResolution(resoByMinScale);
 };
-
+/**
+ * Triggers event if vector features are loaded
+ * @param {String} layerId id of the layer
+ * @param {ol.Feature[]} features Loaded vector features
+ * @fires Layer#RadioTriggerVectorLayerFeaturesLoaded
+ * @return {void}
+ */
+Layer.prototype.featuresLoaded = function (layerId, features) {
+    bridge.featuresLoaded(layerId, features);
+};
 // NOTICE: backbone-relevant functions, may be removed if all layers are no longer backbone models.
 // But set, get and has may stay, because they are convenient:)
 Layer.prototype.set = function (arg1, arg2) {

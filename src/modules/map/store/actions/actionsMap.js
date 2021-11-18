@@ -37,23 +37,15 @@ const actions = {
      * @param {module:ol/Map} map map object
      * @returns {void}
      */
-    setMapAttributes ({commit, dispatch, rootState}, {map}) {
+    setMapAttributes ({commit, dispatch}, {map}) {
         // discard old listeners
         if (unsubscribes.length) {
             unsubscribes.forEach(unsubscribe => unsubscribe());
             unsubscribes = [];
         }
 
-        const mapView = map.getView(),
-            channel = Radio.channel("VectorLayer");
+        const mapView = map.getView();
 
-        // listen to featuresLoaded event to be able to determine if all features of a layer are completely loaded
-        channel.on({"featuresLoaded": id => {
-            commit("addLoadedLayerId", id);
-            if (rootState.urlParams["Map/highlightFeature"]) {
-                dispatch("highlightFeature", {type: "viaLayerIdAndFeatureId", layerIdAndFeatureId: rootState.urlParams["Map/highlightFeature"]});
-            }
-        }});
         commit("setMapId", map.id);
         commit("setMapMode", map.mode);
         commit("setLayerList", map.getLayers().getArray());
@@ -76,6 +68,19 @@ const actions = {
             map.on("click", evt => dispatch("updateClick", evt)),
             map.on("change:size", evt => commit("setSize", evt.target.getSize()))
         ];
+    },
+    /**
+     * Is called if features are loaded.
+     * @param {String} layerId id of the layer
+     * @param {Array} features loaded features
+     * @returns {void}
+     */
+    featuresLoaded ({commit, dispatch, rootState}, {layerId, features}) {
+        commit("addLoadedLayerId", layerId);
+        commit("setFeaturesLoaded", {layerId, features});
+        if (rootState.urlParams["Map/highlightFeature"]) {
+            dispatch("highlightFeature", {type: "viaLayerIdAndFeatureId", layerIdAndFeatureId: rootState.urlParams["Map/highlightFeature"]});
+        }
     },
 
     /**

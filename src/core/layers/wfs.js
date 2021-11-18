@@ -69,18 +69,19 @@ WFSLayer.prototype.createLayer = function (attrs) {
                 return feature.getGeometry();
             },
             version: this.getVersion(attrs),
-            style: this.getStyleFunction(attrs),
-            featuresFilter: this.getFeaturesFilterFunction(attrs),
+            style: this.getStyleFunction(attrs).bind(this),
+            featuresFilter: this.getFeaturesFilterFunction(attrs).bind(this),
             beforeLoading: function () {
                 if (bridge.getInitialLoadingState() === 0 && (this.layer && this.layer.get("isSelected")) || attrs.isSelected) {
                     bridge.showHideLoader(true);
                 }
-            },
-            afterLoading: function () {
+            }.bind(this),
+            afterLoading: function (features) {
+                this.featuresLoaded(attrs.id, features);
                 if ((this.layer && this.layer.get("isSelected")) || attrs.isSelected) {
                     bridge.showHideLoader(false);
                 }
-            },
+            }.bind(this),
             onLoadingError: function (error) {
                 console.error("masterportal wfs loading error:", error);
             }
