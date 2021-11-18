@@ -58,6 +58,7 @@
             "styleVt": "Style VT",
             "bufferAnalysis": "Buffer Analyse",
             "wfsSearch": "WFS Suche",
+            "routing": "Routing",
             "layerClusterToggler": "Layer-Gruppe öffnen"
         },
         "contact": "Kontakt",
@@ -217,6 +218,65 @@
                 "topicsHelp4": "Der Themenbaum wird täglich auf Basis der Informationen im HMDK erzeugt und aktualisiert. Falls ‚Ihr‘ Datensatz also nicht in der richtigen Kategorie auftaucht, können Sie das selbst ändern. Sie passen im zugehörigen HMDK-Eintrag einfach die OpenData-Kategorie an und am nächsten Tag taucht der Datensatz in der richtigen Kategorie im FHH-Atlas auf. Falls die ‚Ihrem‘ Datensatz zugeordneten Kartenebenen nicht korrekt sind, wenden Sie sich bitte an GVGeoportal@gv.hamburg.de.<br/><br/> Wir bitten darum, die Kategorien auf Richtigkeit zu prüfen. Wenn im HMDK einem Datensatz mehrere Kategorien zugeordnet sind, erscheint der der Datensatz im Themenbaum mehrfach. Aus Gründen der Übersichtlichkeit, empfehlen wir pro Datensatz nur eine Kategorie zu vergeben.",
                 "topicsHelp5": "Die Kartenebenen, die im Themenbaum (Fachdaten) ausgewählt wurden, werden in der Auswahl angezeigt. In den Einstellungen (<span class=\"{{iconCls}}\"></span>) jeder Kartenebene kann ihre Darstellungsreihenfolge und die Transparenz eingestellt werden. Natürlich kann der Layer sichtbar und unsichtbar gestellt und aus der Auswahl entfernt werden. In der Auswahl wird außerdem angezeigt, wenn eine Kartenebene im aktuellen Maßstab nicht angezeigt werden kann. Der Eintrag ist dann ausgegraut.",
                 "topicsHelp6": "Über den Button \"Auswahl speichern\" im Reiter Themenauswahl, erscheint ein kleines Popup-Fenster mit einer URL. In dieser URL sind die ausgewählten Themen und der aktuelle Kartenausschnitt gespeichert. Wird der FHH-Atlas über diese URL geöffnet, werden die zuvor ausgewählten Themen automatisch in die Auswahl eingebunden. Zusätzlich zoomt die Karte auf den in der URL gespeicherten Kartenausschnitt. Damit sich der FHH-Atlas immer mit dieser Themenauswahl öffnet, kann diese URL als Lesezeichen ablegt werden."
+            },
+            "routingTool": {
+                "header": "Hilfe – Routing",
+                "headerGeneral": "Allgemeines",
+                "textGeneral": "Mit dem Werkzeug „Routing“ kann die kürzeste oder schnellste Route zwischen beliebig vielen Wegpunkten berechnet werden. Zudem ist die Analyse der Erreichbarkeit von einem bestimmten Startpunkt innerhalb einer vorgegebenen Zeit oder Fahrstrecke möglich. Es können hierbei verschiedene Fortbewegungsmittel wie PKW, LKW, Fußgänger, Fahrrad oder Rollstuhl berücksichtigt werden. Durch Klick auf die Tabulatoren (Tab) Routenplanung (1) und Erreichbarkeit (2) kann in die verschiedenen Bereiche gewechselt werden.",
+                "headerMeansOfTransport": "Auswahl Fortbewegungsmittel",
+                "textMeansOfTransport": "Es kann zwischen verschiedenen Fortbewegungsmitteln (PKW, LKW etc.) gewählt werden. Das aktive Fortbewegungsmittel ist rot markiert.",
+                "routing": {
+                    "header": "Routenplanung",
+                    "text": "In dem Tab „Routenplanung“ können Routen berechnet werden. Zudem ist auch eine massenhafte Berechnung von Routen über eine integrierte Stapelverarbeitung möglich. Zur Routenplanung stehen folgende Eingabemöglichkeiten zur Auswahl:",
+                    "headerAdditionOfWaypoints": "Hinzufügen von Wegpunkten",
+                    "textAdditionOfWaypoints": "Start-, Ziel- und Wegpunkte der Route können über die Eingabe von Orten, Adressen oder Koordinaten in die Suchfelder (1) oder durch Klick in die Karte hinzugefügt werden. Die Erzeugung der Route erfolgt automatisch, sobald mind. zwei Wegpunkte vorhanden sind.",
+                    "textAdditionOfWaypoints2": "Neben der Eingabe von Adressen und Orten (1) ist es auch möglich, direkt geographische Koordinaten (WGS-84) als Wegpunkte in die Suchfelder einzugeben. Hierzu sind die Koordinaten in Dezimalgrad (Länge/Breite) getrennt durch ein Komma und ein Leerzeichen einzugeben. Beispieleingaben:",
+                    "headerRestrictedAreas": "Sperrflächen",
+                    "textRestrictedAreas": "Es besteht die Möglichkeit Sperrflächen (3) zu definieren, welche bei der Routenplanung entsprechend „umfahren“ werden. Unter (2) kann der Modus zum Zeichnen und Löschen von Sperrflächen in der Karte aktiviert werden. Der aktivierte Modus wird jeweils rot markiert.",
+                    "headerAvoidTrafficRoutes": "Routenpräferenz/Verkehrswege vermeiden",
+                    "textAvoidTrafficRoutes": "Unter (1) kann ausgewählt werden, ob die schnellste oder kürzeste Route berechnet werden soll. Des Weiteren können unter (2) bestimmte Verkehrswege von der Routenberechnung ausgeschlossen werden. ",
+                    "headerRouteDescription": "Wegbeschreibung",
+                    "textRouteDescription": "Nach der Erzeugung der Route wird eine textuelle Wegbeschreibung (1) (inkl. Entfernung und Fahrzeit) angezeigt. Beim Klick auf einzelne Beschreibungen (2) wird in der Kartenansicht automatisch auf das dazugehörige Routensegment (3) gezoomt.",
+                    "headerExport": "Routen - Export",
+                    "textExport": "Es ist auch möglich erzeugte Routen für weitere Bearbeitungen (z.B. im GIS oder in Navigationsgeräten) zu exportieren. Hierzu stehen die Formate GEOJSON, KML und GPX zur Verfügung."
+                },
+                "routingBatchProcessing": {
+                    "header": "Stapelverarbeitung Routing",
+                    "text": "Unter dem Tab „Routenplanung“ ist es auch möglich massenhafte Berechnungen von Fahrzeiten und Distanzen zu Routen durchzuführen. Hierzu muss die Checkbox „Stapelverarbeitung“ (1) aktiviert werden. Hiernach kann eine CSV-Datei mit Start- und Endpunkten per Drag and Drop (2) oder über eine Dateiauswahl (3) in die Applikation geladen werden. Die CSV-Datei muss dabei folgende Formatierung und Struktur aufweisen:",
+                    "listFormat": "CSV-Format / UTF8 Encoding",
+                    "listCoordinates": "Koordinaten der Start- und Endpunkte in WGS84 (EPSG:4326)",
+                    "listSeperation": "Separierung der Werte durch Semikolon „;“ und Dezimaltrenner ist der Punkt  „.“ ",
+                    "listStructure": "Struktur: ID;lon(Startpunkt);lat(Startpunkt);lon(Endpunkt);lat(Endpunkt)",
+                    "listExample": "Beispiel: 1;8.12;50.67;9.12;51.67",
+                    "text2": "Nach dem erfolgreichen Upload der Datei beginnt automatisch die Berechnung der Fahrzeiten und Distanzen zu den einzelnen Start- und Endpunkten. Hierbei werden die im Tab „Routenplanung“ ausgewählten Einstellungen (Fortbewegungsmittel, Verkehrswege vermeiden usw.) verwendet. Der Fortschritt der Verarbeitung kann in der Oberfläche (1) eingesehen werden. Nach der erfolgreichen Verarbeitung wird automatisch eine Ergebnisdatei (CSV-Datei) heruntergeladen. Sollten einzelne Routen nicht berechnet werden können, wird eine Leerzeile (ID;;;;;;;) in der Ergebnisdatei (3) ausgegeben und eine entsprechende Fehlermeldung (2) nach der Stapelverarbeitung ausgegeben. ",
+                    "text3": "Die Ergebnisdatei (3) enthält dann Angaben zur benötigten Zeit (in Minuten) und Entfernung (in Meter) zur Route zwischen dem Start- und Endpunkt sowie zum gewählten Fortbewegungsmittel (Profil)."
+                },
+                "isochrones": {
+                    "header": "Erreichbarkeit",
+                    "text": "In dem Tab „Erreichbarkeit“ können Analysen zur Erreichbarkeit von einer geographischen Position (Startpunkt) aus innerhalb von vorgegebenen Zeiten oder Entfernungen durchgeführt werden. Als Ergebnis der Berechnung werden dann Erreichbarkeitszonen (Polygone) ausgeben bzw. in der Kartenansicht dargestellt. Zur Erreichbarkeit stehen folgende Eingabemöglichkeiten zur Auswahl:",
+                    "headerAdditionOfStartpoint": "Hinzufügen des Startpunktes",
+                    "textAdditionOfStartpoint": "Startpunkte können über die Eingabe von Orten, Adressen oder Koordinaten in das Suchfeld (1) oder durch Klick in die Karte hinzugefügt werden. ",
+                    "textAdditionOfStartpoint2": "Neben der Eingabe von Adressen und Orten (1) ist es auch möglich, direkt geographische Koordinaten (WGS-84) als Wegpunkte in die Suchfelder einzugeben. Hierzu sind die Koordinaten in Dezimalgrad (Länge/Breite) getrennt durch ein Komma und ein Leerzeichen einzugeben. Beispieleingaben:",
+                    "headerOptimizationAvoidTrafficRoutes": "Optimierung nach/Verkehrswege vermeiden",
+                    "textOptimizationAvoidTrafficRoutes": "Unter (1) kann ausgewählt werden, ob die Erreichbarkeit anhand vorgegebener Zeiten (in min) oder Entfernungen (in km) berechnet werden soll. Des Weiteren können unter (2) bestimmte Verkehrswege von der Erreichbarkeitsberechnung ausgeschlossen werden. ",
+                    "headerIntervalMaxDistance": "Intervalle und maximale Distanz",
+                    "textIntervalMaxDistance": "Über die Schieberegler Maximale Reisedauer/Entfernung (1) und Intervall (2) kann ausgewählt werden, welche Erreichbarkeiten für den Startpunkt berechnet werden sollen. Die Einstellung Maximale Reisedauer/Entfernung (1) gibt hierbei die maximale Erreichbarkeit an. Über den Schieberregler Intervall (2) kann bestimmt werden, wie viele weitere Erreichbarkeitszonen innerhalb der maximalen Reisedauer/Entfernung bestimmt werden sollen. Z.B. werden bei einer gewählten maximalen Reisedauer von 60 min und einem gewählten Intervall von 15 min vier Erreichbarkeitszonen (15, 30, 45, 60 min) berechnet.",
+                    "headerPerformCalculation": "Berechnung durchführen",
+                    "textPerformCalculation": "Mit Klick auf den Button „Berechnen“ (1) wird die Erreichbarkeitsanalyse durchgeführt. Sobald die Berechnung abgeschlossen ist, werden die berechneten Erreichbarkeitszonen (2) in der Kartenansicht dargestellt. Über die Legende (3) in der Oberfläche können weitere Informationen zu den Erreichbarkeitszonen eingesehen werden.",
+                    "headerExport": "Export von Erreichbarkeitszonen",
+                    "textExport": "Es ist auch möglich die erzeugten Erreichbarkeitszonen für weitere Bearbeitungen (z.B. im GIS) zu exportieren. Hierzu stehen die Formate GEOJSON und KML zur Verfügung."
+                },
+                "isochronesBatchProcessing": {
+                    "header": "Stapelverarbeitung Erreichbarkeit",
+                    "text": "Unter dem Tab „Erreichbarkeit“ ist es auch möglich massenhafte Berechnungen von Erreichbarkeiten durchzuführen. Hierzu muss die Checkbox „Stapelverarbeitung“ (1) aktiviert werden. Hiernach kann eine CSV-Datei mit Startpunkten per Drag and Drop (2) oder über eine Dateiauswahl (3) in die Applikation geladen werden. Die CSV-Datei muss dabei folgende Formatierung und Struktur aufweisen:",
+                    "listFormat": "CSV-Format / UTF8 Encoding",
+                    "listCoordinates": "Koordinaten der Startpunkte in WGS84 (EPSG:4326)",
+                    "listSeperation": "Separierung der Werte durch Semikolon „;“ und Dezimaltrenner ist der Punkt  „.“ ",
+                    "listStructure": "Struktur: ID;lon(Startpunkt);lat(Startpunkt)",
+                    "listExample": "Beispiel: 1;8.12;50.67",
+                    "text2": "Nach dem Upload der Datei beginnt automatisch die Berechnung Erreichbarkeiten zu den einzelnen Startpunkten. Hierfür werden die im Tab „Erreichbarkeit“ ausgewählten Einstellungen (Fortbewegungsmittel, Reisedauer, Intervall usw.) verwendet. Der Fortschritt der Verarbeitung kann in der Oberfläche (1) eingesehen werden. Nach der erfolgreichen Verarbeitung wird automatisch eine Ergebnisdatei mit Polygonen zu den Erreichbarkeitszonen im GEOJSON-Format heruntergeladen. Sollten einzelne Erreichbarkeiten nicht berechnet werden können, wird in der GEOJSON-Datei jeweils ein Punktfeature mit den Koordinaten des Startpunktes und der Fehlermeldung erzeugt und eine entsprechende Fehlermeldung (2) wird nach der Stapelverarbeitung ausgegeben.",
+                    "text3": "Die erzeugte GEOJSON-Datei enthält dann die berechneten Geometrien (Polygone) der einzelnen Erreichbarkeiten sowie dazugehörige Informationen (wie z.B. ID, Distanz oder Zeit, gewähltes Fortbewegungsmittel, Intervall) als Attribute (2). Die heruntergeladene Datei kann direkt zur weiteren Bearbeitung in GIS-Systeme (z.B. QGIS) (1) eingebunden werden."
+                }
             }
         },
         "footer": {
@@ -681,6 +741,106 @@
                     "or": "oder",
                     "label": "Informationen bezüglich der Suchergebnisse",
                     "text": "Die Ergebnisse der Suche werden die Bedingungen / Klauseln {{userHelp}} erfüllen. <br /> *Pflichtfeld"
+                }
+            },
+            "routing": {
+                "coordinateInputHelp": "Suchen Sie einen Ort oder fügen Sie einen Punkt durch Klick in die Karte hinzu",
+                "startpoint": "Startpunkt",
+                "endpoint": "Zielpunkt",
+                "waypoint": "Wegpunkt",
+                "addWaypoint": "Wegpunkt hinzufügen",
+                "moveWaypointUp": "Wegpunkt nach oben verschieben",
+                "moveWaypointDown": "Wegpunkt nach unten verschieben",
+                "deleteWaypoint": "Wegpunkt löschen",
+                "resetSettings": "Einstellungen zurücksetzen",
+                "helpTooltip": "Hilfe öffnen/schließen",
+                "errors": {
+                    "fetchingCoordinates": "Fehler bei Abfrage der Koordinaten",
+                    "noRouteFound": "Leider konnte keine Route gefunden werden",
+                    "avoidAreaBig": "Die angegebenen Sperrflächen sind zu groß. Bitte korrigieren Sie Ihre Eingabe.",
+                    "errorRouteFetch": "Fehler bei Abfrage der Route",
+                    "errorIsochronesFetch": "Fehler bei Abfrage der Erreichbarkeit"
+                },
+                "download": {
+                    "header": "Herunterladen",
+                    "format": "Format",
+                    "filename": "Dateiname",
+                    "filenamePlaceholder": "Bitte Dateinamen angeben",
+                    "saveResult": "Ergebnis speichern"
+                },
+                "tabs": {
+                    "DIRECTIONS": "Routenplanung",
+                    "ISOCHRONES": "Erreichbarkeit"
+                },
+                "speedprofiles": {
+                    "CAR": "PKW",
+                    "HGV": "LKW",
+                    "CYCLING": "Fahrrad",
+                    "FOOT": "Fußgänger",
+                    "WHEELCHAIR": "Rollstuhl"
+                },
+                "avoidOptions": {
+                    "header": "Verkehrswege vermeiden",
+                    "HIGHWAYS": "Autobahn",
+                    "TOLLWAYS": "Mautstraßen",
+                    "FERRIES": "Fähren",
+                    "STEPS": "Treppen"
+                },
+                "batchProcessing": {
+                    "header": "Stapelverarbeitung",
+                    "isProcessing": "Stapelverarbeitung wird durchgeführt",
+                    "cancel": "Stapelverarbeitung abbrechen",
+                    "structure": "Struktur",
+                    "example": "Beispiel",
+                    "placeFile": "Datei hier ablegen",
+                    "uploadFile": "Datei hochladen"
+                },
+                "directions": {
+                    "restrictedAreas": "Sperrflächen",
+                    "editRestrictedAreas": "Sperrflächen zeichnen/bearbeiten",
+                    "deleteRestrictedAreas": "Sperrflächen löschen",
+                    "batchProcessing": {
+                        "structure": "ID;lon(Startpunkt);lat(Startpunkt);lon(Endpunkt);lat(Endpunkt)",
+                        "errorSomeFailed": "Es konnten {{countFailed}} Ergebnisse nicht korrekt errechnet werden. Die Ergebnisdatei enthält an diesen Stellen Leerzellen.",
+                        "errorNoEntries": "Keine Einträge in der CSV",
+                        "errorToManyEntriesInFile": "Maximale Anzahl an Zeilen überschritten ({{limit}})",
+                        "errorToManyEntriesInRow": "Zeile {{row}} enthält mehr als 5 Einträge, bitte beachten Sie die Struktur (ID;lon(Startpunkt);lat(Startpunkt);lon(Endpunkt);lat(Endpunkt))",
+                        "errorRowContainsEntriesNoNumber": "Koordinaten in Zeile {{row}} enthalten keine Zahlen",
+                        "downloadHeader": {
+                            "xStart": "X-Wert_Start",
+                            "yStart": "Y-Wert_Start",
+                            "xEnd": "X-Wert_Ende",
+                            "yEnd": "Y-Wert_Ende",
+                            "time": "Zeit(min)",
+                            "distance": "Entfernung(m)",
+                            "profile": "Profil"
+                        }
+                    },
+                    "preference": {
+                        "RECOMMENDED": "Schnellste Route",
+                        "SHORTEST": "Kürzeste Route"
+                    }
+                },
+                "isochrones": {
+                    "startpoint": "Startpunkt",
+                    "optimizeHeader": "Optimierung nach",
+                    "maxDistance": "Maximale Entfernung",
+                    "maxTraveltime": "Maximale Reisedauer",
+                    "interval": "Intervall",
+                    "calculate": "Berechnen",
+                    "legend": "Legende",
+                    "batchProcessing": {
+                        "structure": "ID;lon(Startpunkt);lat(Startpunkt)",
+                        "errorSomeFailed": "Es konnten {{countFailed}} Ergebnisse nicht korrekt errechnet werden. Die Ergebnisdatei enthält an diesen Stellen Leerzellen.",
+                        "errorNoEntries": "Keine Einträge in der CSV",
+                        "errorToManyEntriesInFile": "Maximale Anzahl an Zeilen überschritten ({{limit}})",
+                        "errorToManyEntriesInRow": "Zeile {{row}} enthält mehr als 3 Einträge, bitte beachten Sie die Struktur (ID;lon(Startpunkt);lat(Startpunkt))",
+                        "errorRowContainsEntriesNoNumber": "Koordinaten in Zeile {{row}} enthalten keine Zahlen"
+                    },
+                    "optimization": {
+                        "TIME": "Erreichbarkeit nach Zeit",
+                        "DISTANCE": "Erreichbarkeit nach Distanz"
+                    }
                 }
             }
         },

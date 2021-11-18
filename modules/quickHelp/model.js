@@ -12,6 +12,22 @@ const QuickHelpModel = Backbone.Model.extend(/** @lends QuickHelpModel.prototype
         utmStreifen: "UTM_Streifen.png",
         utmVerzerrung: "UTM_Verzerrung.png",
         utmFormeln: "UTM_Formeln.png",
+        routingTool1: "routing_1.png",
+        routingTool2: "routing_2.png",
+        routingTool3: "routing_3.png",
+        routingTool4: "routing_4.png",
+        routingTool5: "routing_5.png",
+        routingTool6: "routing_6.png",
+        routingTool7: "routing_7.png",
+        routingTool8: "routing_8.png",
+        routingTool9: "routing_9.png",
+        routingTool10: "routing_10.png",
+        routingTool11: "routing_11.png",
+        routingTool12: "routing_12.png",
+        routingTool13: "routing_13.png",
+        routingTool14: "routing_14.png",
+        routingTool15: "routing_15.png",
+        routingTool16: "routing_16.png",
         currentHelpTopic: "",
         // translations
         currentLng: "",
@@ -60,7 +76,56 @@ const QuickHelpModel = Backbone.Model.extend(/** @lends QuickHelpModel.prototype
         topicsHelp3Text: "",
         topicsHelp4Text: "",
         topicsHelp5Text: "",
-        topicsHelp6Text: ""
+        topicsHelp6Text: "",
+        routingToolHeader: "",
+        routingToolHeaderGeneral: "",
+        routingToolTextGeneral: "",
+        routingToolRoutingHeader: "",
+        routingToolRoutingText: "",
+        routingToolHeaderMeansOfTransport: "",
+        routingToolTextMeansOfTransport: "",
+        routingToolRoutingHeaderAdditionOfWaypoints: "",
+        routingToolRoutingTextAdditionOfWaypoints: "",
+        routingToolRoutingTextAdditionOfWaypoints2: "",
+        routingToolRoutingHeaderRestrictedAreas: "",
+        routingToolRoutingTextRestrictedAreas: "",
+        routingToolRoutingHeaderAvoidTrafficRoutes: "",
+        routingToolRoutingTextAvoidTrafficRoutes: "",
+        routingToolRoutingHeaderRouteDescription: "",
+        routingToolRoutingTextRouteDescription: "",
+        routingToolRoutingHeaderExport: "",
+        routingToolRoutingTextExport: "",
+        routingToolRoutingBatchProcessingHeader: "",
+        routingToolRoutingBatchProcessingText: "",
+        routingToolRoutingBatchProcessingListFormat: "",
+        routingToolRoutingBatchProcessingListCoordinates: "",
+        routingToolRoutingBatchProcessingListSeperation: "",
+        routingToolRoutingBatchProcessingListStructure: "",
+        routingToolRoutingBatchProcessingListExample: "",
+        routingToolRoutingBatchProcessingText2: "",
+        routingToolRoutingBatchProcessingText3: "",
+        routingToolIsochronesHeader: "",
+        routingToolIsochronesText: "",
+        routingToolIsochronesHeaderAdditionOfStartpoint: "",
+        routingToolIsochronesTextAdditionOfStartpoint: "",
+        routingToolIsochronesTextAdditionOfStartpoint2: "",
+        routingToolIsochronesHeaderOptimizationAvoidTrafficRoutes: "",
+        routingToolIsochronesTextOptimizationAvoidTrafficRoutes: "",
+        routingToolIsochronesHeaderIntervalMaxDistance: "",
+        routingToolIsochronesTextIntervalMaxDistance: "",
+        routingToolIsochronesHeaderPerformCalculation: "",
+        routingToolIsochronesTextPerformCalculation: "",
+        routingToolIsochronesHeaderExport: "",
+        routingToolIsochronesTextExport: "",
+        routingToolIsochronesBatchProcessingHeader: "",
+        routingToolIsochronesBatchProcessingText: "",
+        routingToolIsochronesBatchProcessingListFormat: "",
+        routingToolIsochronesBatchProcessingListCoordinates: "",
+        routingToolIsochronesBatchProcessingListSeperation: "",
+        routingToolIsochronesBatchProcessingListStructure: "",
+        routingToolIsochronesBatchProcessingListExample: "",
+        routingToolIsochronesBatchProcessingText2: "",
+        routingToolIsochronesBatchProcessingText3: ""
     },
     /**
      * @class QuickHelpModel
@@ -127,6 +192,55 @@ const QuickHelpModel = Backbone.Model.extend(/** @lends QuickHelpModel.prototype
      * @property {String} topicsHelp4Text="", contains translated text
      * @property {String} topicsHelp5Text="", contains translated text
      * @property {String} topicsHelp6Text="", contains translated text
+     * @property {String} routingToolHeader="", contains translated text
+     * @property {String} routingToolHeaderGeneral="", contains translated text
+     * @property {String} routingToolTextGeneral="", contains translated text
+     * @property {String} routingToolRoutingHeader="", contains translated text
+     * @property {String} routingToolRoutingText="", contains translated text
+     * @property {String} routingToolHeaderMeansOfTransport="", contains translated text
+     * @property {String} routingToolTextMeansOfTransport="", contains translated text
+     * @property {String} routingToolRoutingHeaderAdditionOfWaypoints="", contains translated text
+     * @property {String} routingToolRoutingTextAdditionOfWaypoints="", contains translated text
+     * @property {String} routingToolRoutingTextAdditionOfWaypoints2="", contains translated text
+     * @property {String} routingToolRoutingHeaderRestrictedAreas="", contains translated text
+     * @property {String} routingToolRoutingTextRestrictedAreas="", contains translated text
+     * @property {String} routingToolRoutingHeaderAvoidTrafficRoutes="", contains translated text
+     * @property {String} routingToolRoutingTextAvoidTrafficRoutes="", contains translated text
+     * @property {String} routingToolRoutingHeaderRouteDescription="", contains translated text
+     * @property {String} routingToolRoutingTextRouteDescription="", contains translated text
+     * @property {String} routingToolRoutingHeaderExport="", contains translated text
+     * @property {String} routingToolRoutingTextExport="", contains translated text
+     * @property {String} routingToolRoutingBatchProcessingHeader="", contains translated text
+     * @property {String} routingToolRoutingBatchProcessingText="", contains translated text
+     * @property {String} routingToolRoutingBatchProcessingListFormat="", contains translated text
+     * @property {String} routingToolRoutingBatchProcessingListCoordinates="", contains translated text
+     * @property {String} routingToolRoutingBatchProcessingListSeperation="", contains translated text
+     * @property {String} routingToolRoutingBatchProcessingListStructure="", contains translated text
+     * @property {String} routingToolRoutingBatchProcessingListExample="", contains translated text
+     * @property {String} routingToolRoutingBatchProcessingText2="", contains translated text
+     * @property {String} routingToolRoutingBatchProcessingText3="", contains translated text
+     * @property {String} routingToolIsochronesHeader="", contains translated text
+     * @property {String} routingToolIsochronesText="", contains translated text
+     * @property {String} routingToolIsochronesHeaderAdditionOfStartpoint="", contains translated text
+     * @property {String} routingToolIsochronesTextAdditionOfStartpoint="", contains translated text
+     * @property {String} routingToolIsochronesTextAdditionOfStartpoint2="", contains translated text
+     * @property {String} routingToolIsochronesHeaderOptimizationAvoidTrafficRoutes="", contains translated text
+     * @property {String} routingToolIsochronesTextOptimizationAvoidTrafficRoutes="", contains translated text
+     * @property {String} routingToolIsochronesHeaderIntervalMaxDistance="", contains translated text
+     * @property {String} routingToolIsochronesTextIntervalMaxDistance="", contains translated text
+     * @property {String} routingToolIsochronesHeaderPerformCalculation="", contains translated text
+     * @property {String} routingToolIsochronesTextPerformCalculation="", contains translated text
+     * @property {String} routingToolIsochronesHeaderExport="", contains translated text
+     * @property {String} routingToolIsochronesTextExport="", contains translated text
+     * @property {String} routingToolIsochronesBatchProcessingHeader="", contains translated text
+     * @property {String} routingToolIsochronesBatchProcessingText="", contains translated text
+     * @property {String} routingToolIsochronesBatchProcessingListFormat="", contains translated text
+     * @property {String} routingToolIsochronesBatchProcessingListCoordinates="", contains translated text
+     * @property {String} routingToolIsochronesBatchProcessingListSeperation="", contains translated text
+     * @property {String} routingToolIsochronesBatchProcessingListStructure="", contains translated text
+     * @property {String} routingToolIsochronesBatchProcessingListExample="", contains translated text
+     * @property {String} routingToolIsochronesBatchProcessingText2="", contains translated text
+     * @property {String} routingToolIsochronesBatchProcessingText3="", contains translated text
      * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function () {
@@ -189,7 +303,56 @@ const QuickHelpModel = Backbone.Model.extend(/** @lends QuickHelpModel.prototype
             topicsHelp3Text: i18next.t("common:modules.quickHelp.topicTree.topicsHelp3", {iconCls: "glyphicon glyphicon-info-sign"}),
             topicsHelp4Text: i18next.t("common:modules.quickHelp.topicTree.topicsHelp4"),
             topicsHelp5Text: i18next.t("common:modules.quickHelp.topicTree.topicsHelp5", {iconCls: "glyphicon glyphicon-cog rotate"}),
-            topicsHelp6Text: i18next.t("common:modules.quickHelp.topicTree.topicsHelp6")
+            topicsHelp6Text: i18next.t("common:modules.quickHelp.topicTree.topicsHelp6"),
+            routingToolHeader: i18next.t("common:modules.quickHelp.routingTool.header"),
+            routingToolHeaderGeneral: i18next.t("common:modules.quickHelp.routingTool.headerGeneral"),
+            routingToolTextGeneral: i18next.t("common:modules.quickHelp.routingTool.textGeneral"),
+            routingToolRoutingHeader: i18next.t("common:modules.quickHelp.routingTool.routing.header"),
+            routingToolRoutingText: i18next.t("common:modules.quickHelp.routingTool.routing.text"),
+            routingToolHeaderMeansOfTransport: i18next.t("common:modules.quickHelp.routingTool.headerMeansOfTransport"),
+            routingToolTextMeansOfTransport: i18next.t("common:modules.quickHelp.routingTool.textMeansOfTransport"),
+            routingToolRoutingHeaderAdditionOfWaypoints: i18next.t("common:modules.quickHelp.routingTool.routing.headerAdditionOfWaypoints"),
+            routingToolRoutingTextAdditionOfWaypoints: i18next.t("common:modules.quickHelp.routingTool.routing.textAdditionOfWaypoints"),
+            routingToolRoutingTextAdditionOfWaypoints2: i18next.t("common:modules.quickHelp.routingTool.routing.textAdditionOfWaypoints2"),
+            routingToolRoutingHeaderRestrictedAreas: i18next.t("common:modules.quickHelp.routingTool.routing.headerRestrictedAreas"),
+            routingToolRoutingTextRestrictedAreas: i18next.t("common:modules.quickHelp.routingTool.routing.textRestrictedAreas"),
+            routingToolRoutingHeaderAvoidTrafficRoutes: i18next.t("common:modules.quickHelp.routingTool.routing.headerAvoidTrafficRoutes"),
+            routingToolRoutingTextAvoidTrafficRoutes: i18next.t("common:modules.quickHelp.routingTool.routing.textAvoidTrafficRoutes"),
+            routingToolRoutingHeaderRouteDescription: i18next.t("common:modules.quickHelp.routingTool.routing.headerRouteDescription"),
+            routingToolRoutingTextRouteDescription: i18next.t("common:modules.quickHelp.routingTool.routing.textRouteDescription"),
+            routingToolRoutingHeaderExport: i18next.t("common:modules.quickHelp.routingTool.routing.headerExport"),
+            routingToolRoutingTextExport: i18next.t("common:modules.quickHelp.routingTool.routing.textExport"),
+            routingToolRoutingBatchProcessingHeader: i18next.t("common:modules.quickHelp.routingTool.routingBatchProcessing.header"),
+            routingToolRoutingBatchProcessingText: i18next.t("common:modules.quickHelp.routingTool.routingBatchProcessing.text"),
+            routingToolRoutingBatchProcessingListFormat: i18next.t("common:modules.quickHelp.routingTool.routingBatchProcessing.listFormat"),
+            routingToolRoutingBatchProcessingListCoordinates: i18next.t("common:modules.quickHelp.routingTool.routingBatchProcessing.listCoordinates"),
+            routingToolRoutingBatchProcessingListSeperation: i18next.t("common:modules.quickHelp.routingTool.routingBatchProcessing.listSeperation"),
+            routingToolRoutingBatchProcessingListStructure: i18next.t("common:modules.quickHelp.routingTool.routingBatchProcessing.listStructure"),
+            routingToolRoutingBatchProcessingListExample: i18next.t("common:modules.quickHelp.routingTool.routingBatchProcessing.listExample"),
+            routingToolRoutingBatchProcessingText2: i18next.t("common:modules.quickHelp.routingTool.routingBatchProcessing.text2"),
+            routingToolRoutingBatchProcessingText3: i18next.t("common:modules.quickHelp.routingTool.routingBatchProcessing.text3"),
+            routingToolIsochronesHeader: i18next.t("common:modules.quickHelp.routingTool.isochrones.header"),
+            routingToolIsochronesText: i18next.t("common:modules.quickHelp.routingTool.isochrones.text"),
+            routingToolIsochronesHeaderAdditionOfStartpoint: i18next.t("common:modules.quickHelp.routingTool.isochrones.headerAdditionOfStartpoint"),
+            routingToolIsochronesTextAdditionOfStartpoint: i18next.t("common:modules.quickHelp.routingTool.isochrones.textAdditionOfStartpoint"),
+            routingToolIsochronesTextAdditionOfStartpoint2: i18next.t("common:modules.quickHelp.routingTool.isochrones.textAdditionOfStartpoint2"),
+            routingToolIsochronesHeaderOptimizationAvoidTrafficRoutes: i18next.t("common:modules.quickHelp.routingTool.isochrones.headerOptimizationAvoidTrafficRoutes"),
+            routingToolIsochronesTextOptimizationAvoidTrafficRoutes: i18next.t("common:modules.quickHelp.routingTool.isochrones.textOptimizationAvoidTrafficRoutes"),
+            routingToolIsochronesHeaderIntervalMaxDistance: i18next.t("common:modules.quickHelp.routingTool.isochrones.headerIntervalMaxDistance"),
+            routingToolIsochronesTextIntervalMaxDistance: i18next.t("common:modules.quickHelp.routingTool.isochrones.textIntervalMaxDistance"),
+            routingToolIsochronesHeaderPerformCalculation: i18next.t("common:modules.quickHelp.routingTool.isochrones.headerPerformCalculation"),
+            routingToolIsochronesTextPerformCalculation: i18next.t("common:modules.quickHelp.routingTool.isochrones.textPerformCalculation"),
+            routingToolIsochronesHeaderExport: i18next.t("common:modules.quickHelp.routingTool.isochrones.headerExport"),
+            routingToolIsochronesTextExport: i18next.t("common:modules.quickHelp.routingTool.isochrones.textExport"),
+            routingToolIsochronesBatchProcessingHeader: i18next.t("common:modules.quickHelp.routingTool.isochronesBatchProcessing.header"),
+            routingToolIsochronesBatchProcessingText: i18next.t("common:modules.quickHelp.routingTool.isochronesBatchProcessing.text"),
+            routingToolIsochronesBatchProcessingListFormat: i18next.t("common:modules.quickHelp.routingTool.isochronesBatchProcessing.listFormat"),
+            routingToolIsochronesBatchProcessingListCoordinates: i18next.t("common:modules.quickHelp.routingTool.isochronesBatchProcessing.listCoordinates"),
+            routingToolIsochronesBatchProcessingListSeperation: i18next.t("common:modules.quickHelp.routingTool.isochronesBatchProcessing.listSeperation"),
+            routingToolIsochronesBatchProcessingListStructure: i18next.t("common:modules.quickHelp.routingTool.isochronesBatchProcessing.listStructure"),
+            routingToolIsochronesBatchProcessingListExample: i18next.t("common:modules.quickHelp.routingTool.isochronesBatchProcessing.listExample"),
+            routingToolIsochronesBatchProcessingText2: i18next.t("common:modules.quickHelp.routingTool.isochronesBatchProcessing.text2"),
+            routingToolIsochronesBatchProcessingText3: i18next.t("common:modules.quickHelp.routingTool.isochronesBatchProcessing.text3")
         });
     },
 
@@ -203,7 +366,7 @@ const QuickHelpModel = Backbone.Model.extend(/** @lends QuickHelpModel.prototype
     },
     /**
     * setter for value of the current shown help window
-    * @param {string} value type of window (search | tree | measure)
+    * @param {string} value type of window (search | tree | measure | routing)
     * @returns {void}
     */
     setCurrentHelpTopic: function (value) {

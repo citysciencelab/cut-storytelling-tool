@@ -16,6 +16,8 @@ import SelectFeatures from "./selectFeatures/components/SelectFeatures.vue";
 import StyleVT from "./styleVT/components/StyleVT.vue";
 import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 import WfsSearch from "./wfsSearch/components/WfsSearch.vue";
+import Routing from "./routing/components/Routing.vue";
+
 /**
  * User type definition
  * @typedef {Object} ToolsState
@@ -41,7 +43,8 @@ const state = {
         selectFeatures: SelectFeatures,
         styleVT: StyleVT,
         supplyCoord: SupplyCoord,
-        wfsSearch: WfsSearch
+        wfsSearch: WfsSearch,
+        routing: Routing
     },
     configuredTools: []
 };
