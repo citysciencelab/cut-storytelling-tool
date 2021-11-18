@@ -533,7 +533,6 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             }
         }
 
-        // const featureValue = this.getFeatureValue(featureProperty, key),
         const featureValue = attributeMapper(featureProperties, key, false),
             referenceValue = this.getReferenceValue(featureProperty, value);
 
@@ -572,25 +571,6 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
         return referenceValue;
     },
-
-    /**
-     * Returns feature value identified by key. If necessary it loops through the feature properties object structure.
-     * @param   {object} featureProperties properties of the feature
-     * @param   {string} key attribute name or object path to check
-     * @returns {void} attribute property can be of any type
-     */
-    // getFeatureValue: function (featureProperties, key) {
-    //     const keyIsObjectPath = this.isObjectPath(key);
-
-    //     if (keyIsObjectPath) {
-    //         return this.getFeaturePropertyByPath(featureProperties, key);
-    //     }
-    //     else if (Object.prototype.hasOwnProperty.call(featureProperties, key)) {
-    //         return featureProperties[key];
-    //     }
-
-    //     return null;
-    // },
 
     /**
      * Returns the object path of featureProperties which is defined as path.
