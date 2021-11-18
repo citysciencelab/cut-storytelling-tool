@@ -28,8 +28,8 @@
  * @property {?Object.<String, LayerData>} layers register of existing layers
  * @property {?Number[]} overlayIds list of layer ids
  * @property {?Object.<String, LayerData>} overlays list of existing overlays
- * @property {?String} mapMode current map mode
- * @property {?String} mapId current map id
+ * @property {?String} [mapMode = "2D"] current map mode
+ * @property {String} [mapId = "ol"] current map id
  * @property {String[]} loadedLayers list of ready loaded layers IDs
  */
 const state = {

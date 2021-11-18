@@ -8,6 +8,7 @@ import RoutingBatchProcessingCheckboxComponent from "../../../../components/Rout
 import RoutingSliderInputComponent from "../../../../components/RoutingSliderInput.vue";
 import RoutingDownloadComponent from "../../../../components/RoutingDownload.vue";
 import Routing from "../../../../store/indexRouting";
+import mapCollection from "../../../../../../../core/dataStorage/mapCollection.js";
 
 const localVue = createLocalVue();
 
@@ -34,6 +35,21 @@ describe("src/modules/tools/routing/components/Isochrones/Isochrones.vue", () =>
     let store,
         wrapper;
 
+    before(() => {
+        mapCollection.clear();
+        const map = {
+            id: "ol",
+            mode: "2D",
+            addLayer: sinon.spy(),
+            removeLayer: sinon.spy(),
+            addInteraction: sinon.spy(),
+            removeInteraction: sinon.spy()
+        };
+
+        mapCollection.addMap(map, "ol", "2D");
+    });
+
+
     beforeEach(() => {
         store = new Vuex.Store({
             namespaced: true,
@@ -46,13 +62,9 @@ describe("src/modules/tools/routing/components/Isochrones/Isochrones.vue", () =>
                 },
                 Map: {
                     namespaced: true,
-                    getters: {
-                        map: () => ({
-                            addLayer: sinon.spy(),
-                            removeLayer: sinon.spy(),
-                            addInteraction: sinon.spy(),
-                            removeInteraction: sinon.spy()
-                        })
+                    state: {
+                        mapId: "ol",
+                        mapMode: "2D"
                     }
                 }
             },
