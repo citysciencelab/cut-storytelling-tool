@@ -224,7 +224,7 @@ describe("src/utils/attributeMapper.js", () => {
 
             expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
-                    boolean: true
+                    boolean: "true"
                 });
         });
         it("should map object with mapping object and type:boolean and format", () => {
