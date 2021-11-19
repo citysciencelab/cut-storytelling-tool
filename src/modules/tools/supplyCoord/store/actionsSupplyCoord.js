@@ -42,9 +42,9 @@ export default {
      * Delegates the calculation and transformation of the position according to the projection
      * @returns {void}
      */
-    changedPosition ({dispatch, state, rootState, getters}) {
+    changedPosition ({dispatch, state, getters}) {
         const targetProjectionName = state.currentSelection,
-            position = getters.getTransformedPosition(mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode), targetProjectionName);
+            position = getters.getTransformedPosition(mapCollection.getMap("ol", "2D"), targetProjectionName);
 
         if (position) {
             dispatch("adjustPosition", {position: position, targetProjection: state.currentProjection});

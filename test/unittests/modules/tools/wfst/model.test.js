@@ -2,6 +2,9 @@ import Model from "@modules/tools/wfst/model.js";
 import {expect} from "chai";
 import Util from "@testUtil";
 import {Draw} from "ol/interaction.js";
+import sinon from "sinon";
+import VectorSource from "ol/source/Vector";
+import mapCollection from "../../../../../src/core/dataStorage/mapCollection";
 
 describe("WfstModel", function () {
     let model,
@@ -22,7 +25,17 @@ describe("WfstModel", function () {
         attributeFieldsPointGeom = [],
         wfstFields = [];
 
-    before(function () {
+    before(() => {
+        mapCollection.clear();
+        mapCollection.addMap({
+            id: "ol",
+            mode: "2D",
+            addNewLayerIfNotExists: sinon.spy(),
+            addInteraction: sinon.spy(),
+            registerListener: sinon.spy(),
+            removeInteraction: sinon.spy()
+        }, "ol", "2D");
+
         model = new Model();
         utilModel = new Util();
 
@@ -40,7 +53,6 @@ describe("WfstModel", function () {
             xmlAttrFields2 = utilModel.parseXML(attributeFieldsPointGeomFile),
             wfstFieldsStr = utilModel.getFile("resources/wfstFields.txt").split(/(?<=},)/),
             transactionJqXHRFile = utilModel.getFile("resources/testTransactionJqXHR.xml"),
-            vectorLayer = Radio.request("Map", "createLayerIfNotExists", "wfst_Layer"),
             drawAttr = {
                 "active": true,
                 "name": "Max Mustermann",
@@ -98,7 +110,7 @@ describe("WfstModel", function () {
 
         // Example layer which is created for adding a new geometry in the application
         drawLayer = new Draw({
-            source: vectorLayer.getSource(),
+            source: new VectorSource(),
             type: "Point",
             geometryName: "geom"
         });

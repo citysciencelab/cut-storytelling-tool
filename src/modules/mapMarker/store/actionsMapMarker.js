@@ -61,8 +61,8 @@ export default {
      * This is necessary / triggered if the MapMarker should be removed.
      * @returns {void}
      */
-    removePointMarker ({state, getters, commit}) {
-        mapCollection.getMap(getters.mapId, getters.mapMode).removeLayer(state.markerPoint);
+    removePointMarker ({state, rootGetters, commit}) {
+        rootGetters["Map/ol2DMap"].removeLayer(state.markerPoint);
         commit("clearMarker", "markerPoint");
         commit("setVisibilityMarker", {visbility: false, marker: "markerPoint"});
     },
@@ -72,7 +72,7 @@ export default {
      * @param {ol/Feature} feature The ol feature that is added to the map.
      * @returns {void}
      */
-    placingPolygonMarker ({state, getters, commit, dispatch}, feature) {
+    placingPolygonMarker ({state, rootGetters, commit, dispatch}, feature) {
         const styleListModel = Radio.request("StyleList", "returnModelById", state.polygonStyleId);
 
         dispatch("removePolygonMarker");
@@ -83,7 +83,7 @@ export default {
             feature.setStyle(featureStyle);
             commit("addFeatureToMarker", {feature: feature, marker: "markerPolygon"});
             commit("setVisibilityMarker", {visibility: true, marker: "markerPolygon"});
-            mapCollection.getMap(getters.mapId, getters.mapMode).addLayerOnTop(state.markerPolygon);
+            rootGetters["Map/ol2DMap"].addLayerOnTop(state.markerPolygon);
         }
         else {
             dispatch("Alerting/addSingleAlert", i18next.t("common:modules.mapMarker.noStyleModel", {styleId: state.polygonStyleId}), {root: true});

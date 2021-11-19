@@ -1,15 +1,30 @@
 import {expect} from "chai";
 import Model from "@modules/snippets/graphicalSelect/model.js";
 import sinon from "sinon";
+import mapCollection from "../../../../../src/core/dataStorage/mapCollection";
 
 describe("snippets/graphicalSelect/model", function () {
     let model;
 
-    before(function () {
+    before(() => {
+        const map = {
+            id: "ol",
+            mode: "2D",
+            addInteraction: sinon.spy(),
+            addOverlay: sinon.spy(),
+            removeInteraction: sinon.spy(),
+            removeOverlay: sinon.spy(),
+            registerListener: sinon.spy()
+        };
+
+        mapCollection.clear();
+        mapCollection.addMap(map, "ol", "2D");
+
         model = new Model({
             id: "test_graphicalselection"
         });
     });
+
     afterEach(sinon.restore);
 
     describe("resetGeographicSelection", function () {
@@ -50,23 +65,6 @@ describe("snippets/graphicalSelect/model", function () {
         });
         it("should return 405.4 m for input 500.355", function () {
             expect(model.roundRadius(500.355)).to.equal("0.5 km");
-        });
-    });
-
-    describe("toggleOverlay", function () {
-        it("overlay should be attached to the map", function () {
-            const radioTrigger = sinon.stub(Radio, "trigger").callsFake(),
-                overlay = model.get("circleOverlay");
-
-            model.toggleOverlay("Box", overlay);
-            expect(radioTrigger.calledWithExactly("Map", "removeOverlay", overlay)).to.be.true;
-        });
-        it("overlay should not be attached to the map", function () {
-            const radioTrigger = sinon.stub(Radio, "trigger").callsFake(),
-                overlay = model.get("circleOverlay");
-
-            model.toggleOverlay("Circle", overlay);
-            expect(radioTrigger.calledWithExactly("Map", "addOverlay", overlay)).to.be.true;
         });
     });
 

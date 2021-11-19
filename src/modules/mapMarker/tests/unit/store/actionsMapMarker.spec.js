@@ -15,20 +15,6 @@ const {
 } = actions;
 
 describe("src/modules/mapMarker/store/actionsMapMarker.js", () => {
-    let map = null;
-
-    before(() => {
-        map = {
-            id: "ol",
-            mode: "2D",
-            removeLayer: sinon.spy(),
-            addLayer: sinon.spy()
-        };
-
-        mapCollection.clear();
-        mapCollection.addMap(map, "ol", "2D");
-    });
-
     describe("placingPointMarker", () => {
         it("placingPointMarker if no styleListModel exist", done => {
             const payload = [10, 10],
