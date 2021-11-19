@@ -286,16 +286,16 @@ describe("src/utils/attributeMapper.js", () => {
     });
     describe("isObjectPath", () => {
         it("should return true for \"@foobar\"", () => {
-            expect(isObjectPath(props, "@foobar")).to.be.true;
+            expect(isObjectPath("@foobar")).to.be.true;
         });
         it("should return false for \"foobar\"", () => {
-            expect(isObjectPath(props, "foobar")).to.be.false;
+            expect(isObjectPath("foobar")).to.be.false;
         });
         it("should return false for 1", () => {
-            expect(isObjectPath(props, 1)).to.be.false;
+            expect(isObjectPath(1)).to.be.false;
         });
         it("should return false for true", () => {
-            expect(isObjectPath(props, true)).to.be.false;
+            expect(isObjectPath(true)).to.be.false;
         });
     });
 });
