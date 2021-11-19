@@ -98,6 +98,9 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 // src/modules/legend
                 require("../../src/modules/legend/tests/end2end/Legend.e2e.js"),
 
+                // src/modules/quickHelp
+                require("../../src/modules/quickHelp/tests/end2end/QuickHelp.e2e.js"),
+
                 // src\utils
                 require("../../src/utils/tests/end2end/parametricUrl/ParametricUrl.e2e.js"),
 
