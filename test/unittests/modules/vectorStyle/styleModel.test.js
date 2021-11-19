@@ -492,17 +492,6 @@ describe("vectorStyleModel", function () {
         });
     });
 
-    describe("isObjectPath", function () {
-        it("should return true if value is an object path", function () {
-            expect(styleModel.isObjectPath("@id")).to.be.true;
-        });
-        it("should return false if value is not an object path", function () {
-            expect(styleModel.isObjectPath(123)).to.be.false;
-            expect(styleModel.isObjectPath("123")).to.be.false;
-            expect(styleModel.isObjectPath("foo@id")).to.be.false;
-        });
-    });
-
     describe("createLegendLabel", function () {
         it("should return label with properties and sequence", function () {
             expect(styleModel.createLegendLabel(rules2[0], {})).to.equal("test1 (1-1)");
