@@ -4,6 +4,7 @@ import {expect} from "chai";
 import PrintComponent from "../../../components/Print.vue";
 import Print from "../../../store/indexPrint";
 import sinon from "sinon";
+import mapCollection from "../../../../../../core/dataStorage/mapCollection.js";
 
 const localVue = createLocalVue();
 
@@ -24,7 +25,19 @@ describe("src/modules/tools/Print/components/Print.vue", () => {
             currentFeature: () => sinon.stub()
         };
     let store,
-        wrapper;
+        wrapper,
+        map = null;
+
+    before(() => {
+        map = {
+            id: "ol",
+            mode: "2D",
+            render: sinon.spy()
+        };
+
+        mapCollection.clear();
+        mapCollection.addMap(map, "ol", "2D");
+    });
 
     beforeEach(() => {
         store = new Vuex.Store({

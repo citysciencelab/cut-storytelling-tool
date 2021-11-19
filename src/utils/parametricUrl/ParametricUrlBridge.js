@@ -110,7 +110,7 @@ export function doSpecialBackboneHandling (key, value) {
         setLayersVisible(layers);
     }
     else if (key === "Map/zoomToExtent") {
-        Radio.trigger("Map", "zoomToExtent", convert(value), {duration: 0}, store.state.urlParams?.projection);
+        Radio.trigger("Map", "zoomToProjExtent", convert(value), {duration: 0}, store.state.urlParams?.projection);
     }
     else if (key === "Map/zoomToGeometry") {
         const gemometryToZoom = parseZoomToGeometry(value);

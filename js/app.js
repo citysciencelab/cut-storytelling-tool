@@ -7,7 +7,6 @@ import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
 import StyleList from "../modules/vectorStyle/list";
 import Preparser from "../modules/core/configLoader/preparser";
-// import Map from "../modules/core/map";
 import RemoteInterface from "../modules/remoteInterface/model";
 import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
@@ -125,7 +124,6 @@ async function loadApp () {
 
     new StyleList();
     createMaps(Config, Radio.request("Parser", "getPortalConfig").mapView);
-    // new Map(Radio.request("Parser", "getPortalConfig").mapView);
     new WindowView();
 
     app.$mount();

@@ -35,6 +35,16 @@ PluggableMap.prototype.addLayerToIndex = function (layer, zIndex) {
 };
 
 /**
+ * Adds a layer on top of the map
+ * Layers with the attribute "alwaysOnTop": true are set on top of the map.
+ * @param {module:ol/layer/Base~BaseLayer} layer The layer to add.
+ * @returns {void}
+ */
+PluggableMap.prototype.addLayerOnTop = function (layer) {
+    this.addLayerToIndex(layer, this.getLayers().getLength());
+};
+
+/**
  * Checks if the layer with the given name already exists and uses it,
  * creates a new layer and returns it if not.
  * @param {String} layerName The name of the layer to check.
@@ -63,7 +73,7 @@ PluggableMap.prototype.addNewLayerIfNotExists = function (layerName, alwaysOnTop
 * Returns a layer or a child layer of a layer group by id.
 * @param  {String} layerId Id of the Layer.
 * @param  {Boolean} searchInGroupLayers Specifies whether to search for the id in the childLayers of groupLayers.
-* @return {ol/layer/Layer} The layer found by id.
+* @return {module:ol/layer/Base~BaseLayer} The layer found by id.
 */
 PluggableMap.prototype.getLayerById = function (layerId, searchInGroupLayers = true) {
     let returnLayer = null;
@@ -81,7 +91,7 @@ PluggableMap.prototype.getLayerById = function (layerId, searchInGroupLayers = t
 };
 
 /**
-* Finds a layer by its name and returns it.
+* Returns a layer by a given layer name.
 * @param  {String} layerName Name of the Layer.
 * @return {module:ol/layer/Base~BaseLayer} The layer found by name.
 */

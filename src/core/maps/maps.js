@@ -3,8 +3,8 @@ import {getLayerList} from "masterportalAPI/src/rawLayerList";
 
 import "./2DMap";
 import "./2DMapView";
+import "./2DMapRadioBridge";
 
-import Map from "../../../modules/core/map";
 import MapView from "../../../modules/core/mapView";
 import Map3dModel from "../../../modules/core/map3d";
 import ObliqueMap from "../../../modules/core/obliqueMap";
@@ -17,7 +17,6 @@ import store from "../../app-store";
  * @returns {void}
  */
 function create2DMap (mapViewSettings) {
-    new Map();
     const map = api.map.createMap(
         {
             ...Config,
@@ -67,9 +66,6 @@ export function createMaps (configJs, mapViewSettings) {
     create2DMap(mapViewSettings);
     create3DMap();
     createObliqueMap(configJs);
-
-    console.log(mapCollection.getMapCollection()[0]);
-    console.log(mapCollection.getMapCollection()[0].getView());
 }
 
 

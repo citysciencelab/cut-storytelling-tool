@@ -49,7 +49,7 @@ export default {
             iconfeature.setStyle(featureStyle);
             commit("addFeatureToMarker", {feature: iconfeature, marker: "markerPoint"});
             commit("setVisibilityMarker", {visibility: true, marker: "markerPoint"});
-            rootGetters["Map/ol2DMap"].addLayer(state.markerPoint);
+            rootGetters["Map/ol2DMap"].addLayerOnTop(state.markerPoint);
         }
         else {
             dispatch("Alerting/addSingleAlert", i18next.t("common:modules.mapMarker.noStyleModel", {styleId: state.pointStyleId}), {root: true});
@@ -61,8 +61,8 @@ export default {
      * This is necessary / triggered if the MapMarker should be removed.
      * @returns {void}
      */
-    removePointMarker ({state, commit}) {
-        commit("Map/removeLayerFromMap", state.markerPoint, {root: true});
+    removePointMarker ({state, getters, commit}) {
+        mapCollection.getMap(getters.mapId, getters.mapMode).removeLayer(state.markerPoint);
         commit("clearMarker", "markerPoint");
         commit("setVisibilityMarker", {visbility: false, marker: "markerPoint"});
     },
@@ -72,7 +72,7 @@ export default {
      * @param {ol/Feature} feature The ol feature that is added to the map.
      * @returns {void}
      */
-    placingPolygonMarker ({state, commit, dispatch}, feature) {
+    placingPolygonMarker ({state, getters, commit, dispatch}, feature) {
         const styleListModel = Radio.request("StyleList", "returnModelById", state.polygonStyleId);
 
         dispatch("removePolygonMarker");
@@ -83,7 +83,7 @@ export default {
             feature.setStyle(featureStyle);
             commit("addFeatureToMarker", {feature: feature, marker: "markerPolygon"});
             commit("setVisibilityMarker", {visibility: true, marker: "markerPolygon"});
-            commit("Map/addLayerToMap", state.markerPolygon, {root: true});
+            mapCollection.getMap(getters.mapId, getters.mapMode).addLayerOnTop(state.markerPolygon);
         }
         else {
             dispatch("Alerting/addSingleAlert", i18next.t("common:modules.mapMarker.noStyleModel", {styleId: state.polygonStyleId}), {root: true});
@@ -112,7 +112,7 @@ export default {
             feature.setStyle(featureStyle);
             commit("addFeatureToMarker", {feature: feature, marker: "markerPolygon"});
             commit("setVisibilityMarker", {visibility: true, marker: "markerPolygon"});
-            rootGetters["Map/ol2DMap"].addLayer(state.markerPolygon);
+            rootGetters["Map/ol2DMap"].addLayerOnTop(state.markerPolygon);
         }
         else {
             dispatch("Alerting/addSingleAlert", i18next.t("common:modules.mapMarker.noStyleModel", {styleId: state.polygonStyleId}), {root: true});

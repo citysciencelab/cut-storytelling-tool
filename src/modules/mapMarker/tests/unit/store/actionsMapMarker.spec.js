@@ -15,6 +15,20 @@ const {
 } = actions;
 
 describe("src/modules/mapMarker/store/actionsMapMarker.js", () => {
+    let map = null;
+
+    before(() => {
+        map = {
+            id: "ol",
+            mode: "2D",
+            removeLayer: sinon.spy(),
+            addLayer: sinon.spy()
+        };
+
+        mapCollection.clear();
+        mapCollection.addMap(map, "ol", "2D");
+    });
+
     describe("placingPointMarker", () => {
         it("placingPointMarker if no styleListModel exist", done => {
             const payload = [10, 10],
@@ -47,7 +61,6 @@ describe("src/modules/mapMarker/store/actionsMapMarker.js", () => {
             };
 
             testAction(removePointMarker, null, state, {}, [
-                {type: "Map/removeLayerFromMap", payload: state.markerPoint},
                 {type: "clearMarker", payload: "markerPoint"},
                 {type: "setVisibilityMarker", payload: {visbility: false, marker: "markerPoint"}}
             ], {}, done);

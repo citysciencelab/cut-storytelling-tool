@@ -14,6 +14,15 @@ export default {
 
         mapCollection.push(map);
     },
+
+    /**
+     * Removes all entries from the collection.
+     * @returns {void}
+     */
+    clear: function () {
+        mapCollection.length = 0;
+    },
+
     /**
      * Gets a map by the given id and mode.
      * @param {String} id The map id.
@@ -25,6 +34,14 @@ export default {
     },
 
     /**
+     * Returns the map collection.
+     * @returns {module:ol/PluggableMap~PluggableMap} The mapview.
+     */
+    getMapCollection: function () {
+        return mapCollection;
+    },
+
+    /**
      * Gets a mapview of a map by the given id and mode.
      * @param {String} id The map id.
      * @param {String} mode The map mode.
@@ -32,17 +49,5 @@ export default {
      */
     getMapView: function (id, mode) {
         return this.getMap(id, mode).getView();
-    },
-
-    getMapCollection: function () {
-        return mapCollection;
-    },
-
-    /**
-     * Removes all entries from the collection.
-     * @returns {void}
-     */
-    clear: function () {
-        mapCollection.length = 0;
     }
 };

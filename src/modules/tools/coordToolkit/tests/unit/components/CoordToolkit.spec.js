@@ -141,7 +141,7 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
 
         selected = options.filter(o => o.attributes().selected === "true");
         expect(selected.length).to.equal(1);
-        expect(selected.at(0).attributes().value).to.equal("EPSG:25832");
+        expect(selected.at(0).attributes().value).to.equal("http://www.opengis.net/gml/srs/epsg.xml#25832");
     });
     describe("CoordToolkit.vue methods", () => {
         it("close sets active to false", async () => {
@@ -154,7 +154,7 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             expect(wrapper.find("#supply-coord").exists()).to.be.false;
         });
         it("method selectionChanged sets currentProjection", () => {
-            const value = "EPSG:31467",
+            const value = "http://www.opengis.net/gml/srs/epsg.xml#31467",
                 event = {
                     target: {
                         value: value
@@ -200,7 +200,7 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
         });
         it("label returns correct path", () => {
             const key = "key";
-            let value = "EPSG:4326",
+            let value = "http://www.opengis.net/gml/srs/epsg.xml#4326",
                 event = {
                     target: {
                         value: value
@@ -215,7 +215,7 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             ret = wrapper.vm.getLabel(key);
             expect(ret).to.be.equals("modules.tools.coordToolkit.hdms.key");
 
-            value = "EPSG:31467";
+            value = "http://www.opengis.net/gml/srs/epsg.xml#31467";
             event = {
                 target: {
                     value: value
