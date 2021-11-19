@@ -13,7 +13,8 @@ const state = {
 
     configs: {
         search: true,
-        tree: true
+        tree: true,
+        routing: true
     }
 };
 

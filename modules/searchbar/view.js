@@ -69,7 +69,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @listens Menu#RadioTriggerMenuLoaderReady
      * @listens Core#RadioTriggerUtilIsViewMobileChanged
      * @listens Searchbar#RadioTriggerViewZoomHitSelected
-     * @fires QuickHelp#RadioTriggerQuickHelpShowWindowHelp
      * @fires Title#RadioTriggerTitleSetSize
      * @fires Searchbar#RadioTriggerSearchbarSearchAll
      * @fires GFI#RadioTriggerGFISetIsVisible
@@ -103,12 +102,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             "ready": this.menuLoaderReady
         });
 
-        this.listenTo(Radio.channel("QuickHelp"), {
-            "showWindowHelp": this.toggleBtnQuestionColor,
-            "closeWindowHelp": this.toggleBtnQuestionColor
-        });
-
-        this.model.setQuickHelp(Radio.request("QuickHelp", "isSet"));
+        this.model.setQuickHelp(store.getters["QuickHelp/isSet"]);
 
         this.initialRender();
 

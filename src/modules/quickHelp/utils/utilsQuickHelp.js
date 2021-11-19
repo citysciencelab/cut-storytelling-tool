@@ -190,7 +190,7 @@ function getNormalizedSectionList (list, quickHelpConfigJsObject) {
  * @returns {Object} the normalized object
  */
 function getNormalizedObjectEntry (entry, quickHelpConfigJsObject) {
-    if (entry?.imgName) {
+    if (quickHelpConfigJsObject && entry?.imgName) {
         return {
             imgName: quickHelpConfigJsObject[entry.imgKey] ? quickHelpConfigJsObject[entry.imgKey] : entry.imgName,
             imgPath: entry.imgPath ? entry.imgPath : quickHelpConfigJsObject.imgPath

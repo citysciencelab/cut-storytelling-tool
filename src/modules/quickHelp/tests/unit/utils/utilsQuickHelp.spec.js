@@ -85,13 +85,12 @@ describe("src/modules/quickHelp/utils/utilsQuickHelp.js", () => {
         });
         it("should return a normalized image with the given entry as image name and the given imgPath as image path", () => {
             const entry = "imgName",
-                imgPath = "imgPath",
                 expected = {
                     imgName: "imgName",
                     imgPath: "imgPath"
                 };
 
-            expect(getNormalizedStringEntry(entry, imgPath)).to.deep.equal(expected);
+            expect(getNormalizedStringEntry(entry, {imgPath: "imgPath"})).to.deep.equal(expected);
         });
     });
     describe("getNormalizedObjectEntry", () => {
@@ -105,19 +104,18 @@ describe("src/modules/quickHelp/utils/utilsQuickHelp.js", () => {
                     imgPath: "img"
                 };
 
-            expect(getNormalizedObjectEntry(entry)).to.deep.equal(expected);
+            expect(getNormalizedObjectEntry(entry, {imgPath: "imgPath"})).to.deep.equal(expected);
         });
-        it("should return a normalized object as image object if the given object has a imgName key and use the given imgPath", () => {
+        it("should return a normalized object as image object if the given object has an imgName key and use the given imgPath", () => {
             const entry = {
                     imgName: "foo"
                 },
-                imgPath = "img",
                 expected = {
                     imgName: "foo",
-                    imgPath: "img"
+                    imgPath: "imgPath"
                 };
 
-            expect(getNormalizedObjectEntry(entry, imgPath)).to.deep.equal(expected);
+            expect(getNormalizedObjectEntry(entry, {imgPath: "imgPath"})).to.deep.equal(expected);
         });
         it("should return a normalized object as text object if the given object has no imgName key", () => {
             const entry = {
@@ -177,7 +175,7 @@ describe("src/modules/quickHelp/utils/utilsQuickHelp.js", () => {
                     }
                 ];
 
-            expect(getNormalizedSectionList(list, "imgPath")).to.deep.equal(expected);
+            expect(getNormalizedSectionList(list, {imgPath: "imgPath"})).to.deep.equal(expected);
         });
     });
     describe("getNormalizeSection", () => {
@@ -203,7 +201,7 @@ describe("src/modules/quickHelp/utils/utilsQuickHelp.js", () => {
                     ]
                 };
 
-            expect(getNormalizeSection(section, "imgPath")).to.deep.equal(expected);
+            expect(getNormalizeSection(section, {imgPath: "imgPath"})).to.deep.equal(expected);
         });
         it("should return an normalized object based on given section with an empty title if no title is given", () => {
             const section = {
@@ -347,7 +345,7 @@ describe("src/modules/quickHelp/utils/utilsQuickHelp.js", () => {
                 };
             let id = 0;
 
-            expect(getContentByConfigRules(content, config, "imgPath", () => {
+            expect(getContentByConfigRules(content, config, {imgPath: "imgPath"}, () => {
                 return ++id;
             })).to.deep.equal(expected);
         });
@@ -413,7 +411,7 @@ describe("src/modules/quickHelp/utils/utilsQuickHelp.js", () => {
                     }
                 };
 
-            expect(createContent(config, "imgPath", () => {
+            expect(createContent(config, {imgPath: "imgPath"}, () => {
                 return ++id;
             })).to.deep.equal(expected);
         });
@@ -459,7 +457,7 @@ describe("src/modules/quickHelp/utils/utilsQuickHelp.js", () => {
                     }
                 };
 
-            expect(createContent(config, "imgPath")).to.deep.equal(expected);
+            expect(createContent(config, {imgPath: "imgPath"})).to.deep.equal(expected);
         });
     });
     describe("applyConfig", () => {
@@ -573,7 +571,7 @@ describe("src/modules/quickHelp/utils/utilsQuickHelp.js", () => {
                     }
                 };
 
-            expect(applyConfig(defaultContent, config, "imgPath", () => "uniqueKey")).to.deep.equal(expected);
+            expect(applyConfig(defaultContent, config, {imgPath: "imgPath"}, () => "uniqueKey")).to.deep.equal(expected);
         });
     });
     describe("applyQuickHelpConfigsToDefaultContents", () => {
@@ -678,7 +676,7 @@ describe("src/modules/quickHelp/utils/utilsQuickHelp.js", () => {
                     }
                 };
 
-            expect(applyQuickHelpConfigsToDefaultContents(defaultContents, extConfigs, "imgPath", () => {
+            expect(applyQuickHelpConfigsToDefaultContents(defaultContents, extConfigs, {imgPath: "imgPath"}, () => {
                 return "uniqueKey";
             })).to.deep.equal(expected);
         });

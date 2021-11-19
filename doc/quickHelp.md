@@ -3,12 +3,13 @@
 # QuickHelp Documentation
 
 This documentation describes how the QuickHelp window of the Masterportal can be modified, extended and new QuickHelp windows can be created.
-The QuickHelp window - if activated - is currently integrated in two places in the Masterportal by default.
+The QuickHelp window - if activated - is currently integrated in three places in the Masterportal by default.
 
 1. At the Top on the right side of the search bar as ?-button (hereinafter referred to as "search" QuickHelp).
 2. When using the "custom" topic tree type, when you expand the topic tree, the ?-icon at the very top of the topic tree (hereafter called "tree" QuickHelp).
+3. In the routing tool.
 
-Both default QuickHelp windows are given standard content in all languages available for the Masterportal.
+All default QuickHelp windows are given standard content in all languages available for the Masterportal.
 
 
 ## Structure of this documentation
@@ -20,7 +21,7 @@ Both default QuickHelp windows are given standard content in all languages avail
 
 The default QuickHelp is activated in the config.js file of your portal.
 Here, an additional entry in the config object {quickHelp: true} is needed.
-This activates the standard "search" and "tree" QuickHelp. There may be ways to deactivate either of those (see [config.json.md](./config.json.md#markdown-header-portalconfigsearchbar) for more details).
+This activates the standard "search" and "tree" QuickHelp.
 
 ```json
 const Config = {
@@ -30,10 +31,17 @@ const Config = {
 };
 ```
 
-The QuickHelp will be displayed without screenshots. You can remove the default images ([see third part](#complexadditionofcontent)) or store them for correct display and link them correctly.
+
+### set the image path
+
+With the simple {"quickHelp": true} only, the QuickHelp is displayed without screenshots and looks broken.
+
+- You can remove the broken default images ([see third part](#complexadditionofcontent)).
+- Or you can store them for correct display and link them correctly.
+
 To link the standard images correctly create the images ([see image table](#defaultimages)) and set the basic path to the images by using an object instead of the simple {"quickHelp": true}.
 
-In the following example, the images are loaded from the LGV Hamburg servers and the screenshots are displayed correctly.
+In the following example, the images are loaded from the LGV Hamburg servers and the screenshots are displayed correctly. You can use this setting for your project, but you woun't be able to change our screenshots.
 If you have your own server, create your own screenshots or download the images ([see image table](#defaultimages)), upload them to your server and adjust the imgPath in config.js.
 
 ```json
@@ -46,6 +54,26 @@ const Config = {
 };
 ```
 
+
+### rename the images
+
+The QuickHelp uses standard images. The image names are mostly in German language. If you want to create your own images/screenshots in your own language, change the imgPath to point to one of your servers and create new images as you like.
+
+You can overconfigure any default image name by using the respective image key. A list of usable image keys can be found [here](#defaultimages).
+
+Example:
+
+```json
+const Config = {
+    // (...)
+    "quickHelp": {
+        "imgPath": "https://example.com/myFolder/",
+        "searchbarAllgemeines1": "labusca_común.png",
+        "searchbarAllgemeines2": "labusca_común2.png"
+    },
+    // (...)
+};
+```
 
 
 ## Second part - removing the default content
@@ -124,7 +152,7 @@ Here is the example of a simple add of a new section at the end of the "search" 
 
 ### Complex addition of content
 
-You can insert new sections into the standard QuickHelp at any position if you use the "before" and "after" attributes with the appropriate Section Keys ([see Section Keys](#sectionkeys).
+You can insert new sections into the standard QuickHelp at any position if you use the "before" and "after" attributes with the appropriate Section Keys ([see Section Keys](#sectionkeys)).
  
 Here is the example of adding a new section after the first section with Section Key "generalInfo" into the default "search" QuickHelp.
 
@@ -298,6 +326,21 @@ config.json:
 ```
 
 
+### Request existence of QuickHelp
+
+You may want to show your QuickHelp open button only if QuickHelp is configured to be displayed.
+The QuickHelp can be deactivated by setting it to {"quickHelp": false} in the config.js.
+
+To request the state, use the getter for QuickHelp isSet in the VueX store:
+```javascript
+import store from "./src/app-store/index";
+
+export default function isQuickHelpEnabled () {
+    return store.getters["QuickHelp/isSet"];
+}
+```
+
+
 ## Part Five - Pitfalls, Tips & Tricks
 
 In this part we go into things worth knowing, some of which have been omitted from the rest of this documentation due to their complexity.
@@ -307,7 +350,7 @@ In this part we go into things worth knowing, some of which have been omitted fr
 
 If you want to insert a new section before or after an existing section (with "before" or "after"), but first remove the existing section you are referring to (with "hide"), the new section will not be displayed.
 
-**This is a false example (!).** An empty QuickHelp window will be displayed.
+**This is a false example (!).** The section "generalInfo" is not displayed.
 ```json
 {
     "Portalconfig": {
@@ -541,20 +584,49 @@ Section Keys are Strings used to identify the sections of existing QuickHelp con
 |selection|
 |saveSelection|
 
+|"routing" QuickHelp Section Keys|
+|-----------------------------|
+|generalInfo|
+|routePlanning|
+|routingBatchProcessing|
+|isochrones|
+|isochronesBatchProcessing|
 
 ### Default Images
 
+See **[config.js documentation](config.js.md)** for similar details.
+
 Default images are used for existing content. This is a list of these images.
-For historical reasons the image names are in German language.
+For historical reasons the image keys and names are in German language.
+You may use image names in your own language, but the keys are fix.
 
-|"search" QuickHelp Images|
-|-------------------------|
-|https://geodienste.hamburg.de/lgv-config/img/allgemein.png|
-|https://geodienste.hamburg.de/lgv-config/img/allgemein_2.png|
-|https://geodienste.hamburg.de/lgv-config/img/allgemein_3.png|
-|https://geodienste.hamburg.de/lgv-config/img/allgemein_4.png|
+|Key|"search" QuickHelp Images|
+|---|-------------------------|
+|searchbarAllgemeines1|https://geodienste.hamburg.de/lgv-config/img/allgemein.png|
+|searchbarAllgemeines2|https://geodienste.hamburg.de/lgv-config/img/allgemein_2.png|
+|searchbarAllgemeines3|https://geodienste.hamburg.de/lgv-config/img/allgemein_3.png|
+|searchbarFlurstueckssuche|https://geodienste.hamburg.de/lgv-config/img/allgemein_4.png|
 
-|"tree" QuickHelp Images|
-|-----------------------|
-|https://geodienste.hamburg.de/lgv-config/img/themen.png|
-|https://geodienste.hamburg.de/lgv-config/img/themen_2.png|
+|Key|"tree" QuickHelp Images|
+|---|-----------------------|
+|aufbau1|https://geodienste.hamburg.de/lgv-config/img/themen.png|
+|aufbau2|https://geodienste.hamburg.de/lgv-config/img/themen_2.png|
+
+|Key|"routing" QuickHelp Images|
+|---|--------------------------|
+|routingTool1|https://geodienste.hamburg.de/lgv-config/img/routing_1.png|
+|routingTool2|https://geodienste.hamburg.de/lgv-config/img/routing_2.png|
+|routingTool3|https://geodienste.hamburg.de/lgv-config/img/routing_3.png|
+|routingTool4|https://geodienste.hamburg.de/lgv-config/img/routing_4.png|
+|routingTool5|https://geodienste.hamburg.de/lgv-config/img/routing_5.png|
+|routingTool6|https://geodienste.hamburg.de/lgv-config/img/routing_6.png|
+|routingTool7|https://geodienste.hamburg.de/lgv-config/img/routing_7.png|
+|routingTool8|https://geodienste.hamburg.de/lgv-config/img/routing_8.png|
+|routingTool9|https://geodienste.hamburg.de/lgv-config/img/routing_9.png|
+|routingTool10|https://geodienste.hamburg.de/lgv-config/img/routing_10.png|
+|routingTool11|https://geodienste.hamburg.de/lgv-config/img/routing_11.png|
+|routingTool12|https://geodienste.hamburg.de/lgv-config/img/routing_12.png|
+|routingTool13|https://geodienste.hamburg.de/lgv-config/img/routing_13.png|
+|routingTool14|https://geodienste.hamburg.de/lgv-config/img/routing_14.png|
+|routingTool15|https://geodienste.hamburg.de/lgv-config/img/routing_15.png|
+|routingTool16|https://geodienste.hamburg.de/lgv-config/img/routing_16.png|

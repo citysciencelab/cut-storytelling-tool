@@ -14,6 +14,15 @@ export default {
     components: {
         ToolWindow
     },
+    props: {
+        /**
+         * the quickHelp config object from config.js
+         */
+        quickHelpConfigJsObject: {
+            type: [Object, Boolean],
+            required: true
+        }
+    },
     data () {
         return {
             storePath: this.$store.state.QuickHelp,
@@ -51,7 +60,7 @@ export default {
             this.contentConfig = this.applyQuickHelpConfigsToDefaultContents(
                 this.contentConfig,
                 this.configs,
-                Config?.quickHelp,
+                this.quickHelpConfigJsObject,
                 () => {
                     return uniqueId("info-");
                 }
@@ -65,7 +74,7 @@ export default {
         applyQuickHelpConfigsToDefaultContents,
 
         /**
-         * translates the given translationKey or keeps a given text as it is if no translationKey is detected
+         * Translates the given translationKey or keeps a given text as it is if no translationKey is detected.
          * @param {String} translationKey the value or key to translate, if this is not a translation key, it will return the value as it is
          * @param {Object} [options=null] the options to use for the translation, if given translationKey must be a translation key
          * @returns {String} the translation or the given param as it is
@@ -78,7 +87,7 @@ export default {
         },
 
         /**
-         * adds a slash to the given string if it is missing
+         * Adds a slash to the given string if it is missing.
          * @param {String} imgPath the string to alter
          * @returns {String} the given string with one slash at the end
          */
@@ -87,14 +96,6 @@ export default {
                 return imgPath + "/";
             }
             return imgPath;
-        },
-
-        /**
-         * Returns the standard path to quickHelp images as defined in config.js.
-         * @returns {String} the imgPath as defined in config.js
-         */
-        getImageBasePath () {
-            return Config?.quickHelp?.imgPath ? Config.quickHelp.imgPath : "/";
         },
 
         /**
@@ -109,6 +110,7 @@ export default {
             newWin.document.write(htmlToPrint.outerHTML);
             newWin.print();
         },
+
         /**
          * Closes the window of quickHelp by setting store active to false.
          * @pre window is opened

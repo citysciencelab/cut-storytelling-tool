@@ -28,6 +28,7 @@
 - WMSLayer and GroupLayer are refactored. They are no longer Backbone-models. WMSLayer uses the masterportalAPI's wms layer on creation.
 - 2D-map is removed from vuex store. Maps are now stored in a collection. Creation of 2D-map and 3D-map use masterportalAPI's abstraction layer.
 - Print formats only contain working formats now.
+- QuickHelp: moved to Vue and refactored, can now be manipulated for search, tree and routing, new QuickHelp windows can be configured. See new quickHelp.md documentation for more details.
 
 ### Deprecated
 
@@ -58,8 +59,6 @@
 ### Changed
 - Coding-Conventions: For unittests in Vue (/src/...) the vast majority of test-folders are called "tests", going back to a mutual understanding of folder naming. Please use "tests" for your unit or e2e tests in Vue in the future.
 - Migrated the print Tool from Backbone.js to Vue.js. It is now also possible to create multiple prints in parallel.
-- QuickHelp: moved to Vue and refactored, can now be manipulated for search, tree and routing, new QuickHelp windows can be configured. See new quickHelp.md documentation for more details.
-
 
 ### Deprecated
 

@@ -29,6 +29,18 @@ export default {
             "configJson",
             "i18NextInitialized"
         ])
+    },
+    methods: {
+        /**
+         * returns the config from config.js
+         * @returns {Object|Boolean} the config object or false on error
+         */
+        getConfigObject () {
+            if (typeof Config === "object" && Config !== null) {
+                return Config;
+            }
+            return false;
+        }
     }
 };
 </script>
@@ -59,7 +71,10 @@ export default {
             <div class="elements-positioned-over-map">
                 <LayerInformation />
                 <ControlBar class="controls" />
-                <QuickHelp />
+                <QuickHelp
+                    v-if="getConfigObject()"
+                    :quick-help-config-js-object="getConfigObject().quickHelp"
+                />
                 <WmsTime />
                 <MapMarker />
             </div>

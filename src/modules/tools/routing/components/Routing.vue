@@ -6,6 +6,7 @@ import actions from "../store/actionsRouting";
 import mutations from "../store/mutationsRouting";
 import * as constantsRouting from "../store/constantsRouting";
 import RoutingLoadingSpinner from "./RoutingLoadingSpinner.vue";
+import store from "../../../../app-store/index";
 
 export default {
     name: "Routing",
@@ -22,7 +23,6 @@ export default {
         ...mapGetters("Tools/Routing", Object.keys(getters)),
         ...mapGetters("Tools/Routing/Directions", ["isLoadingDirections"]),
         ...mapGetters("Tools/Routing/Isochrones", ["isLoadingIsochrones"]),
-        ...mapGetters("QuickHelp", {quickHelpActive: "active"}),
         /**
          * Computed value to get the current component for the active tab
          * @returns {Object} vue component to render
@@ -83,12 +83,13 @@ export default {
          * Toggles the quickHelp module with the routing option
          * @returns {void}
          */
-        showHelp () {
-            if (this.quickHelpActive) {
-                Radio.trigger("QuickHelp", "closeWindowHelp");
+        toggleHelp () {
+            if (!store.getters["QuickHelp/active"]) {
+                store.commit("QuickHelp/setQuickHelpKey", "routing");
+                store.commit("QuickHelp/setActive", true);
             }
             else {
-                Radio.trigger("QuickHelp", "showWindowHelp", "routing");
+                store.commit("QuickHelp/setActive", false);
             }
         }
     }
@@ -136,8 +137,8 @@ export default {
                     <div
                         class="d-flex flex-column justify-content-center ml-2"
                         :title="$t('common:modules.tools.routing.helpTooltip')"
-                        @click="showHelp()"
-                        @keydown.enter="showHelp()"
+                        @click="toggleHelp()"
+                        @keydown.enter="toggleHelp()"
                     >
                         <span class="glyphicon glyphicon-question-sign" />
                     </div>

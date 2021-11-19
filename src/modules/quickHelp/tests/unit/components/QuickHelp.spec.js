@@ -34,7 +34,9 @@ describe("src/modules/quickHelp/components/QuickHelp.vue", () => {
             }
         });
 
-        wrapper = shallowMount(QuickHelpComponent, {store, localVue});
+        wrapper = shallowMount(QuickHelpComponent, {store, localVue, propsData: {
+            quickHelpConfigJsObject: true
+        }});
     });
     afterEach(() => {
         if (wrapper) {
@@ -62,7 +64,9 @@ describe("src/modules/quickHelp/components/QuickHelp.vue", () => {
 
     describe("template", () => {
         it("should have a close button", () => {
-            const localWrapper = shallowMount(QuickHelpComponent, {store, localVue}),
+            const localWrapper = shallowMount(QuickHelpComponent, {store, localVue, propsData: {
+                    quickHelpConfigJsObject: true
+                }}),
                 button = localWrapper.find(".glyphicon-remove");
 
             expect(button).to.exist;

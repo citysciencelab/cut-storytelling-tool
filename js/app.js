@@ -19,7 +19,6 @@ import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
 import MouseHoverPopupView from "../modules/mouseHover/view";
-import QuickHelpView from "../modules/quickHelp/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import ShadowView from "../modules/tools/shadow/view";
@@ -91,10 +90,6 @@ async function loadApp () {
         new RemoteInterface(Config.remoteInterface);
         new RadioMasterportalAPI();
         Vue.use(RemoteInterfaceVue, Config.remoteInterface);
-    }
-
-    if (Object.prototype.hasOwnProperty.call(Config, "quickHelp")) {
-        new QuickHelpView(Config.quickHelp);
     }
 
     // import and register Vue addons according the config.js
