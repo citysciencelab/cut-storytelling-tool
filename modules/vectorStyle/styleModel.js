@@ -557,14 +557,14 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
         // sets the real feature property value in case referenceValue is an object path
         if (valueIsObjectPath) {
-            referenceValue = this.getFeaturePropertyByPath(featureProperties, referenceValue);
+            referenceValue = mapAttributes(featureProperties, referenceValue, false);
         }
 
         // sets the real feature property values also for min-max-arrays in case its values are object pathes.
         if (Array.isArray(referenceValue)) {
             referenceValue.forEach((element, index, arr) => {
                 if (isObjectPath(element)) {
-                    arr[index] = this.getFeaturePropertyByPath(featureProperties, element);
+                    arr[index] = mapAttributes(featureProperties, element, false);
                 }
             }, this);
         }
