@@ -6,7 +6,7 @@ import Detached from "./templates/Detached.vue";
 import Table from "./templates/Table.vue";
 import Attached from "./templates/Attached.vue";
 import omit from "../../../../utils/omit";
-import attributeMapper from "../../../../utils/attributeMapper.js";
+import {mapAttributes} from "../../../../utils/attributeMapper.js";
 
 export default {
     name: "Gfi",
@@ -171,7 +171,7 @@ export default {
             if (mappingObject === "showAll" && Array.isArray(ignoredKeys)) {
                 return omit(properties, ignoredKeys, true);
             }
-            return attributeMapper(properties, mappingObject);
+            return mapAttributes(properties, mappingObject);
         }
     }
 };

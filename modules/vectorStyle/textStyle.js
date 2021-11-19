@@ -1,6 +1,6 @@
 import StyleModel from "./style.js";
 import {Text, Fill, Stroke} from "ol/style.js";
-import attributeMapper from "../../src/utils/attributeMapper.js";
+import {mapAttributes} from "../../src/utils/attributeMapper.js";
 
 const TextStyleModel = StyleModel.extend(/** @lends TextStyleModel.prototype */{
     /**
@@ -151,7 +151,7 @@ const TextStyleModel = StyleModel.extend(/** @lends TextStyleModel.prototype */{
         const feature = this.get("feature"),
             featureProperties = feature.getProperties(),
             textSuffix = this.get("textSuffix");
-        let text = attributeMapper(featureProperties, this.get("labelField"), false);
+        let text = mapAttributes(featureProperties, this.get("labelField"), false);
 
         if (textSuffix !== "") {
             text = text + " " + textSuffix;

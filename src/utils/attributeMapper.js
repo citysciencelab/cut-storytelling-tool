@@ -8,7 +8,7 @@ import thousandsSeparator from "./thousandsSeparator";
  * @param {Boolean} [isNested=true] Flag if Object is nested, like "gfiAttributes".
  * @returns {Object} The mapped properties.
  */
-function attributeMapper (properties, mappingObject, isNested = true) {
+function mapAttributes (properties, mappingObject, isNested = true) {
     let mappedProperties;
 
     if (!mappingObject) {
@@ -47,7 +47,7 @@ function attributeMapper (properties, mappingObject, isNested = true) {
  * @returns {*} - Value from key.
  */
 function prepareValue (properties, key) {
-    const isPath = key.startsWith("@") && key.length > 1;
+    const isPath = isObjectPath(key);
     let value = properties[Object.keys(properties).find(propertiesKey => propertiesKey.toLowerCase() === key.toLowerCase())];
 
     if (isPath) {
@@ -55,6 +55,16 @@ function prepareValue (properties, key) {
     }
     return value;
 }
+
+/**
+ * checks if value starts with special prefix to determine if value is a object path
+ * @param   {string} value string to check
+ * @returns {Boolean} true is value is an object path
+ */
+function isObjectPath (value) {
+    return typeof value === "string" && value.startsWith("@");
+}
+
 /**
  * Derives the gfi value if the value is an object.
  * @param {*} key Key of Attribute.
@@ -92,7 +102,7 @@ function prepareValueFromObject (key, mappingObj, properties) {
             break;
         }
         case "boolean": {
-            format = format === "DD.MM.YYYY HH:mm:ss" ? {true: true, false: false} : format;
+            format = format === "DD.MM.YYYY HH:mm:ss" ? {true: "true", false: "false"} : format;
             preparedValue = getBooleanValue(preparedValue, format);
             break;
         }
@@ -121,7 +131,7 @@ function getBooleanValue (value, format) {
 
     if (Object.prototype.hasOwnProperty.call(format, value)) {
         // translation
-        if (String(format[value]).includes("common:")) {
+        if (i18next.exists(format[value])) {
             parsedValue = i18next.t(format[value]);
         }
         // normal mapping
@@ -199,4 +209,7 @@ function prependPrefix (value, prefix) {
     return valueWithPrefix;
 }
 
-export default attributeMapper;
+export {
+    mapAttributes,
+    isObjectPath
+};

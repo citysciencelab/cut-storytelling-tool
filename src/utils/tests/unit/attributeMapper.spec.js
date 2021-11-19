@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import attributeMapper from "../../attributeMapper.js";
+import {mapAttributes} from "../../attributeMapper.js";
 const props = {
     random_text: "foobar",
     random_boolean: true,
@@ -32,13 +32,13 @@ before(() => {
 });
 
 describe("src/utils/attributeMapper.js", () => {
-    describe("attributeMapper", () => {
+    describe("mapAttributes", () => {
         it("should map object with single attribute", () => {
             const mappingObj = {
                 random_text: "text"
             };
 
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     text: "foobar"
                 });
@@ -48,7 +48,7 @@ describe("src/utils/attributeMapper.js", () => {
                 "@random_text": "text"
             };
 
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     text: "foobar"
                 });
@@ -58,7 +58,7 @@ describe("src/utils/attributeMapper.js", () => {
                 "@random_datastreams.0.Observations.0.result": "result"
             };
 
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     result: 123
                 });
@@ -69,7 +69,7 @@ describe("src/utils/attributeMapper.js", () => {
                 random_boolean: "boolean"
             };
 
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     text: "foobar",
                     boolean: true
@@ -82,7 +82,7 @@ describe("src/utils/attributeMapper.js", () => {
                 "@random_datastreams.0.Observations.0.result": "result"
             };
 
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     text: "foobar",
                     boolean: true,
@@ -97,7 +97,7 @@ describe("src/utils/attributeMapper.js", () => {
                 }
             };
 
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     text: "foobar"
                 });
@@ -110,7 +110,7 @@ describe("src/utils/attributeMapper.js", () => {
                 }
             };
 
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     text: "foobar"
                 });
@@ -123,7 +123,7 @@ describe("src/utils/attributeMapper.js", () => {
                 }
             };
 
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     text: "foobar"
                 });
@@ -137,7 +137,7 @@ describe("src/utils/attributeMapper.js", () => {
                 }
             };
 
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     text: "foobar barfoo"
                 });
@@ -151,7 +151,7 @@ describe("src/utils/attributeMapper.js", () => {
                 }
             };
 
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     text: "barfoofoobar"
                 });
@@ -165,7 +165,7 @@ describe("src/utils/attributeMapper.js", () => {
                 }
             };
 
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     date: "17.11.2021 13:02:00"
                 });
@@ -180,7 +180,7 @@ describe("src/utils/attributeMapper.js", () => {
                 }
             };
 
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     date: "2021-11-17"
                 });
@@ -194,7 +194,7 @@ describe("src/utils/attributeMapper.js", () => {
                 }
             };
 
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     integer: "12.345"
                 });
@@ -208,7 +208,7 @@ describe("src/utils/attributeMapper.js", () => {
                 }
             };
 
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     float: "1,23"
                 });
@@ -222,7 +222,7 @@ describe("src/utils/attributeMapper.js", () => {
                 }
             };
 
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     boolean: true
                 });
@@ -240,7 +240,7 @@ describe("src/utils/attributeMapper.js", () => {
                 }
             };
 
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     boolean: "Ja"
                 });
@@ -260,7 +260,7 @@ describe("src/utils/attributeMapper.js", () => {
 
             // i18next only returns the path.
             // Propably mocking of language-file would get the right translated value?
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     boolean: "modules.tools.gfi.boolean.yes"
                 });
@@ -277,7 +277,7 @@ describe("src/utils/attributeMapper.js", () => {
                 }
             };
 
-            expect(attributeMapper(props, mappingObj)).to.deep.equal(
+            expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
                     boolean: "true",
                     int: "12345"

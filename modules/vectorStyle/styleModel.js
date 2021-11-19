@@ -7,7 +7,7 @@ import CesiumStyle from "./cesiumStyle";
 import {fetch as fetchPolyfill} from "whatwg-fetch";
 import axios from "axios";
 import getProxyUrl from "../../src/utils/getProxyUrl";
-import attributeMapper from "../../src/utils/attributeMapper.js";
+import {mapAttributes, isObjectPath} from "../../src/utils/attributeMapper.js";
 
 const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.prototype */{
     defaults: {
@@ -533,7 +533,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             }
         }
 
-        const featureValue = attributeMapper(featureProperties, key, false),
+        const featureValue = mapAttributes(featureProperties, key, false),
             referenceValue = this.getReferenceValue(featureProperty, value);
 
         if ((typeof featureValue === "boolean" || typeof featureValue === "string" || typeof featureValue === "number") && (typeof referenceValue === "boolean" || typeof referenceValue === "string" || typeof referenceValue === "number" ||
@@ -552,7 +552,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {void} attribute property can be of any type
      */
     getReferenceValue: function (featureProperties, value) {
-        const valueIsObjectPath = this.isObjectPath(value);
+        const valueIsObjectPath = isObjectPath(value);
         let referenceValue = value;
 
         // sets the real feature property value in case referenceValue is an object path
@@ -563,7 +563,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         // sets the real feature property values also for min-max-arrays in case its values are object pathes.
         if (Array.isArray(referenceValue)) {
             referenceValue.forEach((element, index, arr) => {
-                if (this.isObjectPath(element)) {
+                if (isObjectPath(element)) {
                     arr[index] = this.getFeaturePropertyByPath(featureProperties, element);
                 }
             }, this);
@@ -672,15 +672,6 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         }
 
         return value;
-    },
-
-    /**
-     * checks if value starts with special prefix to determine if value is a object path
-     * @param   {string} value string to check
-     * @returns {Boolean} true is value is an object path
-     */
-    isObjectPath: function (value) {
-        return typeof value === "string" && value.startsWith("@");
     },
 
     /**
