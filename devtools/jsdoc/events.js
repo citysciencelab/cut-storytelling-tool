@@ -1126,7 +1126,7 @@
  * @event Searchbar#RadioTriggerSearchbarPushHits
  * @description trigger transfer of search hits as a list
  * @param {String} sListname Name of list
- * @param {Object[]} aHitListArray an array of object{id, name, type} with optional values: coordinate, glyphicon, geom, adress, locationFinder, metaName, osm, marker, geometryType, interiorGeometry
+ * @param {Object[]} aHitListArray an array of object{id, name, type} with optional values: coordinate, glyphicon, geom, adress, locationFinder, metaName, osm, marker, geometryType
  * @example Radio.trigger("Searchbar", "pushHits", "hitList", aHitListArray);
  */
 

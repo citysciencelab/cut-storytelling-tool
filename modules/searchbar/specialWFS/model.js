@@ -252,8 +252,7 @@ const SpecialWFSModel = Backbone.Model.extend({
                             elementGeometryFirstChild = elementGeometryName.firstElementChild,
                             firstChildNameUpperCase = elementGeometryFirstChild.localName.toUpperCase(),
                             identifier = element.getElementsByTagName(propertyName)[0].textContent;
-                        let interiorGeometry = [],
-                            geometry;
+                        let geometry;
 
                         if (multiGeometries.includes(firstChildNameUpperCase)) {
                             const memberName = elementGeometryFirstChild.firstElementChild.localName,
@@ -261,14 +260,13 @@ const SpecialWFSModel = Backbone.Model.extend({
                                 coordinates = this.getInteriorAndExteriorPolygonMembers(geometryMembers);
 
                             geometry = coordinates[0];
-                            interiorGeometry = coordinates[1];
                         }
                         else {
                             const geometryString = element.getElementsByTagName(geometryName)[0].textContent;
 
                             geometry = geometryString.trim().split(" ");
                         }
-                        this.pushHitListObjects(type, identifier, firstChildNameUpperCase, geometry, interiorGeometry, glyphicon);
+                        this.pushHitListObjects(type, identifier, firstChildNameUpperCase, geometry, glyphicon);
                     }
                 }
                 else {
@@ -285,50 +283,60 @@ const SpecialWFSModel = Backbone.Model.extend({
     * @param {string} identifier - Name frmom target result.
     * @param {string} firstChildNameUpperCase - Geometrie type.
     * @param {string[]} geometry - The coordinates from exterior geometry.
-    * @param {string[]} interiorGeometry - The coordinates from interior geometry.
     * @param {string} glyphicon - The glyphicon for hit.
     * @returns {void}
     */
-    pushHitListObjects: function (type, identifier, firstChildNameUpperCase, geometry, interiorGeometry, glyphicon) {
+    pushHitListObjects: function (type, identifier, firstChildNameUpperCase, geometry, glyphicon) {
         Radio.trigger("Searchbar", "pushHits", "hitList", {
             id: Radio.request("Util", "uniqueId", type.toString()),
             name: identifier.trim(),
             geometryType: firstChildNameUpperCase,
             type: type,
             coordinate: geometry,
-            interiorGeometry: interiorGeometry,
             glyphicon: glyphicon
         });
     },
 
     /**
-     * Function to extract the coordinates of every polygon and - if available - the index/position of interior polygons in the array of coordinates
+     * Function to extract the coordinates of every polygon and polygons with interior polygons / holes
      * @param   {Object} polygonMembers members of the polygon
-     * @returns {Array[]} returns the coordinates of every polygon and also an array with the postions of interior polygons
+     * @returns {Array[]} returns the coordinates of every polygon
      */
     getInteriorAndExteriorPolygonMembers: function (polygonMembers) {
         const lengthIndex = polygonMembers.length,
-            coordinateArray = [],
-            interiorPositions = [];
+            coordinateArray = [];
 
         for (let i = 0; i < lengthIndex; i++) {
             const coords = [],
-                posListPolygonMembers = polygonMembers[i].getElementsByTagNameNS("*", "posList");
+                polygonsWithInteriors = [],
+                interiorCoords = [];
+            let posListPolygonMembers, exterior, interior, exteriorCoord;
 
-            for (const key in Object.keys(posListPolygonMembers)) {
-                coords.push(posListPolygonMembers[key].textContent);
-            }
-            coords.forEach(coordArray => coordinateArray.push(Object.values(coordArray.replace(/\s\s+/g, " ").split(" "))));
+            posListPolygonMembers = polygonMembers[i].getElementsByTagNameNS("*", "posList");
 
-            if (coords.length > 1) {
-                const interiorPosition = coordinateArray.length - coords.length;
+            // polygon with interior polygons
+            // make sure that the exterior coordinates are always at the first posiion in the array
+            if (posListPolygonMembers.length > 1) {
+                posListPolygonMembers = [];
+                exterior = polygonMembers[i].getElementsByTagNameNS("*", "exterior");
+                exteriorCoord = exterior[0].getElementsByTagNameNS("*", "posList")[0].textContent;
+                polygonsWithInteriors.push(Object.values(exteriorCoord.replace(/\s\s+/g, " ").split(" ")));
 
-                for (let n = 1; n < coords.length; n++) {
-                    interiorPositions.push(interiorPosition + n);
+                interior = polygonMembers[i].getElementsByTagNameNS("*", "interior");
+                for (const key in Object.keys(interior)) {
+                    interiorCoords.push(interior[key].getElementsByTagNameNS("*", "posList")[0].textContent);
                 }
+                interiorCoords.forEach(coord => polygonsWithInteriors.push(Object.values(coord.replace(/\s\s+/g, " ").split(" "))));
+                coordinateArray.push(polygonsWithInteriors);
+            }
+            else {
+                for (const key in Object.keys(posListPolygonMembers)) {
+                    coords.push(posListPolygonMembers[key].textContent);
+                }
+                coords.forEach(coordArray => coordinateArray.push(Object.values(coordArray.replace(/\s\s+/g, " ").split(" "))));
             }
         }
-        return [coordinateArray, interiorPositions];
+        return [coordinateArray];
     },
 
     /**
