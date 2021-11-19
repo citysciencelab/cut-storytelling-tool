@@ -4,6 +4,8 @@ import {Group as LayerGroup} from "ol/layer.js";
 import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";
 
+const originalAddLayer = PluggableMap.prototype.addLayer;
+
 /**
  * Pushes layers with the attribute: "alwaysOnTop" to the top of the layer collection.
  * @param {module:ol/Collection~Collection} layers Layer Collection.
@@ -16,6 +18,20 @@ function setLayersAlwaysOnTop (layers) {
         }
     });
 }
+
+/**
+ * Adds a layer to the map.
+ * Layers with the attribute "alwaysOnTop": true are set on top of the map.
+ * @param {module:ol/layer/Base~BaseLayer} layer The layer to add.
+ * @param {Number} zIndex The zIndex of the layer.
+ * @returns {void}
+ */
+PluggableMap.prototype.addLayer = function (layer) {
+    layer.setZIndex(this.getLayers().getLength());
+    originalAddLayer.call(this, layer);
+
+    setLayersAlwaysOnTop(this.getLayers());
+};
 
 /**
  * Adds a layer with a zIndex to the map.
@@ -62,8 +78,7 @@ PluggableMap.prototype.addNewLayerIfNotExists = function (layerName, alwaysOnTop
             alwaysOnTop: alwaysOnTop
         });
 
-        this.addLayer(resultLayer);
-        setLayersAlwaysOnTop(this.getLayers());
+        this.addLayerOnTop(resultLayer);
     }
 
     return resultLayer;
