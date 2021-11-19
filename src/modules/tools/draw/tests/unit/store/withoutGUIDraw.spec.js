@@ -4,6 +4,7 @@ import actions from "../../../store/actionsDraw";
 import Feature from "ol/Feature";
 import Polygon from "ol/geom/Polygon";
 import MultiPolygon from "ol/geom/MultiPolygon";
+import mapCollection from "../../../../../../core/dataStorage/mapCollection.js";
 
 describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
     let commit, dispatch, state, getters;
@@ -43,16 +44,23 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
             rootState;
 
         beforeEach(() => {
+            mapCollection.clear();
+            const map = {
+                id: "ol",
+                mode: "2D",
+                getView: () => ({
+                    getProjection: () => ({getCode: () => "EPSG:4326"})
+                })
+            };
+
+            mapCollection.addMap(map, "ol", "2D");
             item = new Feature({
                 geometry: new Polygon(coordinates)
             });
             rootState = {
                 Map: {
-                    map: {
-                        getView: () => ({
-                            getProjection: () => ({getCode: () => "EPSG:4326"})
-                        })
-                    }
+                    mapId: "ol",
+                    mapMode: "2D"
                 }
             };
             state = {

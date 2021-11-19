@@ -58,11 +58,11 @@ export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState}
                         state.outerBorderColor = errorBorder;
                     }
                     else {
-                        calculateCircle(event, circleCenter, circleRadius, mapCollection.getMap(rootState.mapId, rootState.mapMode));
+                        calculateCircle(event, circleCenter, circleRadius, mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode));
                     }
                 }
                 else {
-                    calculateCircle(event, circleCenter, circleRadius, mapCollection.getMap(rootState.mapId, rootState.mapMode));
+                    calculateCircle(event, circleCenter, circleRadius, mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode));
                     state.outerBorderColor = "";
                 }
                 state.innerBorderColor = "";

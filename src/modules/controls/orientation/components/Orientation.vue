@@ -44,9 +44,7 @@ export default {
             isGeolocationDenied: false,
             isGeoLocationPossible: false,
             modelListChannel: Radio.channel("ModelList"),
-            storePath: this.$store.state.controls.orientation,
-            currentMapId: "",
-            currentMapMode: ""
+            storePath: this.$store.state.controls.orientation
         };
     },
     computed: {
@@ -71,8 +69,6 @@ export default {
     created () {
         this.setIsGeoLocationPossible();
         this.modelListChannel.on("updateVisibleInMapList", this.checkWFS);
-        this.currentMapId = this.mapId;
-        this.currentMapMode = this.mapMode;
     },
     mounted () {
         this.addElement();
@@ -101,7 +97,7 @@ export default {
             let geolocation = null;
 
             if (this.isGeolocationDenied === false) {
-                mapCollection.getMap(this.currentMapId, this.currentMapMode).addOverlay(this.marker);
+                mapCollection.getMap(this.mapId, this.mapMode).addOverlay(this.marker);
                 if (this.geolocation === null) {
                     geolocation = new Geolocation({tracking: true, projection: Proj.get("EPSG:4326")});
                     this.setGeolocation(geolocation);
@@ -154,7 +150,7 @@ export default {
          * @returns {void}
          */
         removeOverlay () {
-            mapCollection.getMap(this.currentMapId, this.currentMapMode).removeOverlay(this.marker);
+            mapCollection.getMap(this.mapId, this.mapMode).removeOverlay(this.marker);
         },
 
         /**
@@ -296,7 +292,7 @@ export default {
 
             if (this.poiModeCurrentPositionEnabled) {
                 this.$store.dispatch("MapMarker/removePointMarker");
-                mapCollection.getMap(this.currentMapId, this.currentMapMode).addOverlay(this.marker);
+                mapCollection.getMap(this.mapId, this.mapMode).addOverlay(this.marker);
                 if (this.geolocation === null) {
                     geolocation = new Geolocation({tracking: true, projection: Proj.get("EPSG:4326")});
                     this.setGeolocation(geolocation);

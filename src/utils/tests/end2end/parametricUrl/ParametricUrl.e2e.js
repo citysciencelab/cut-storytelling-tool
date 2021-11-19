@@ -53,13 +53,13 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.wait(until.elementLocated(By.css("#north-pointer")), 5000);
                     expect(await driver.findElement(By.css("#north-pointer"))).to.exist;
                 });
-                it("?Map/mapMode=1 test shall start in 3D-mode", async function () {
-                    await loadUrl(driver, `${url}?Map/mapMode=1`, mode);
+                it("?Map/mapMode=3D test shall start in 3D-mode", async function () {
+                    await loadUrl(driver, `${url}?Map/mapMode=3D`, mode);
                     await driver.wait(until.elementLocated(By.css("#north-pointer")), 5000);
                     expect(await driver.findElement(By.css("#north-pointer"))).to.exist;
                 });
-                it("?Map/mapMode=1 test shall start in 3D-mode and shall set heading", async function () {
-                    await loadUrl(driver, `${url}?Map/mapMode=1&heading=-1.2502079000000208`, mode);
+                it("?Map/mapMode=3D test shall start in 3D-mode and shall set heading", async function () {
+                    await loadUrl(driver, `${url}?Map/mapMode=3D&heading=-1.2502079000000208`, mode);
                     await driver.wait(until.elementLocated(By.css("#north-pointer")), 5000);
                     expect(await driver.findElement(By.css("#north-pointer"))).to.exist;
                     // get3DHeading
@@ -67,8 +67,8 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
 
                     expect(-1.2502079000000208).to.eql(heading);
                 });
-                it("?Map/mapMode=1 test shall start in 3D-mode and shall set tilt", async function () {
-                    await loadUrl(driver, `${url}?Map/mapMode=1&tilt=45`, mode);
+                it("?Map/mapMode=3D test shall start in 3D-mode and shall set tilt", async function () {
+                    await loadUrl(driver, `${url}?Map/mapMode=3D&tilt=45`, mode);
                     await driver.wait(until.elementLocated(By.css("#north-pointer")), 5000);
                     expect(await driver.findElement(By.css("#north-pointer"))).to.exist;
                     // get3DHeading
@@ -76,8 +76,8 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
 
                     expect(45).to.eql(tilt);
                 });
-                it("?Map/mapMode=1 test shall start in 3D-mode and shall set altitude", async function () {
-                    await loadUrl(driver, `${url}?Map/mapMode=1&altitude=127`, mode);
+                it("?Map/mapMode=3D test shall start in 3D-mode and shall set altitude", async function () {
+                    await loadUrl(driver, `${url}?Map/mapMode=3D&altitude=127`, mode);
                     await driver.wait(until.elementLocated(By.css("#north-pointer")), 5000);
                     expect(await driver.findElement(By.css("#north-pointer"))).to.exist;
 

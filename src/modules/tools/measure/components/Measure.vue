@@ -17,12 +17,6 @@ export default {
         Tool,
         MeasureTooltip
     },
-    data () {
-        return {
-            currentMapId: "",
-            currentMapMode: ""
-        };
-    },
     computed: {
         ...mapGetters("Tools/Measure", Object.keys(getters)),
         ...mapGetters(["uiStyle"]),
@@ -55,10 +49,8 @@ export default {
         }
     },
     created () {
-        this.currentMapId = this.mapId;
-        this.currentMapId = this.mapMode;
         this.$on("close", this.close);
-        mapCollection.getMap(this.currentMapId, this.currentMapMode).addLayer(this.layer);
+        mapCollection.getMap(this.mapId, this.mapMode).addLayer(this.layer);
     },
     mounted () {
         if (this.active) {

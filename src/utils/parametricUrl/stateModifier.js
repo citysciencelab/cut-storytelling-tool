@@ -82,7 +82,7 @@ function callMutations (state) {
         let centerCoords = state.Map.center;
 
         if (state.urlParams.projection !== undefined) {
-            centerCoords = transformToMapProjection(mapCollection.getMap(state.mapId, state.mapMode), state.urlParams.projection, centerCoords);
+            centerCoords = transformToMapProjection(mapCollection.getMap(state.Map.mapId, state.Map.mapMode), state.urlParams.projection, centerCoords);
         }
         store.commit("Map/setCenter", centerCoords);
     }
@@ -97,7 +97,7 @@ function callActions (state) {
         let coordinates = state.MapMarker.coordinates;
 
         if (state.urlParams.projection !== undefined) {
-            coordinates = transformToMapProjection(mapCollection.getMap(state.mapId, state.mapMode), state.urlParams.projection, coordinates);
+            coordinates = transformToMapProjection(mapCollection.getMap(state.Map.mapId, state.Map.mapMode), state.urlParams.projection, coordinates);
         }
         setTimeout(() => {
             store.dispatch("MapMarker/placingPointMarker", coordinates);

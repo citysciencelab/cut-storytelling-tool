@@ -26,8 +26,8 @@ export default {
      * @param {String[]} value The array with the markable coordinate pair.
      * @returns {void}
      */
-    placingPointMarker ({getters, rootState, commit, dispatch}, value) {
-        const styleListModel = Radio.request("StyleList", "returnModelById", getters.pointStyleId);
+    placingPointMarker ({state, rootState, commit, dispatch}, value) {
+        const styleListModel = Radio.request("StyleList", "returnModelById", state.pointStyleId);
         let coordValues = [];
 
         dispatch("removePointMarker");
@@ -50,10 +50,10 @@ export default {
             iconfeature.setStyle(featureStyle);
             commit("addFeatureToMarker", {feature: iconfeature, marker: "markerPoint"});
             commit("setVisibilityMarker", {visibility: true, marker: "markerPoint"});
-            mapCollection.getMap(getters.mapId, getters.mapMode).addLayer(getters.markerPoint);
+            mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).addLayer(state.markerPoint);
         }
         else {
-            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.mapMarker.noStyleModel", {styleId: getters.pointStyleId}), {root: true});
+            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.mapMarker.noStyleModel", {styleId: state.pointStyleId}), {root: true});
         }
     },
 
@@ -99,8 +99,8 @@ export default {
      * @param {module:ol/geom/SimpleGeometry} geometry - The given geometry.
      * @returns {void}
      */
-    placingPolygonMarkerByGeom ({getters, commit, dispatch}, geometry) {
-        const styleListModel = Radio.request("StyleList", "returnModelById", getters.polygonStyleId);
+    placingPolygonMarkerByGeom ({state, rootState, commit, dispatch}, geometry) {
+        const styleListModel = Radio.request("StyleList", "returnModelById", state.polygonStyleId);
 
         dispatch("removePolygonMarker");
 
@@ -113,10 +113,10 @@ export default {
             feature.setStyle(featureStyle);
             commit("addFeatureToMarker", {feature: feature, marker: "markerPolygon"});
             commit("setVisibilityMarker", {visibility: true, marker: "markerPolygon"});
-            mapCollection.getMap(getters.mapId, getters.mapMode).addLayer(getters.markerPolygon);
+            mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).addLayer(state.markerPolygon);
         }
         else {
-            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.mapMarker.noStyleModel", {styleId: getters.polygonStyleId}), {root: true});
+            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.mapMarker.noStyleModel", {styleId: state.polygonStyleId}), {root: true});
         }
     },
 
@@ -124,8 +124,8 @@ export default {
      * Removes the polygon map marker from the map.
      * @returns {void}
      */
-    removePolygonMarker: function ({getters, commit}) {
-        mapCollection.getMap(getters.mapId, getters.mapMode).removeLayer(getters.markerPolygon);
+    removePolygonMarker: function ({state, rootState, commit}) {
+        mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).removeLayer(state.markerPolygon);
         commit("clearMarker", "markerPolygon");
         commit("setVisibilityMarker", {visbility: false, marker: "markerPolygon"});
     }

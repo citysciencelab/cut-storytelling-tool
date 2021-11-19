@@ -155,7 +155,7 @@ const ObliqueMap = Backbone.Model.extend({
         // is a vcs-oblique\src\vcs\oblique\collection.js that contains projection, directions and image meta data
         // The collection loads oblique image meta data (json-file with image descriptions) from the layers url
         return layer.getObliqueCollection().then(function (collection) {
-            let direction = collection.directions[ViewDirection.oblique.viewDirection.direction.NORTH];
+            let direction = collection.directions[ViewDirection.NORTH];
 
             this.currentCollection = collection;
             if (!direction) {
