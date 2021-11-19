@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {mapAttributes} from "../../attributeMapper.js";
+import {mapAttributes, isObjectPath} from "../../attributeMapper.js";
 const props = {
     random_text: "foobar",
     random_boolean: true,
@@ -282,6 +282,20 @@ describe("src/utils/attributeMapper.js", () => {
                     boolean: "true",
                     int: "12345"
                 });
+        });
+    });
+    describe("isObjectPath", () => {
+        it("should return true for \"@foobar\"", () => {
+            expect(isObjectPath(props, "@foobar")).to.be.true;
+        });
+        it("should return false for \"foobar\"", () => {
+            expect(isObjectPath(props, "foobar")).to.be.false;
+        });
+        it("should return false for 1", () => {
+            expect(isObjectPath(props, 1)).to.be.false;
+        });
+        it("should return false for true", () => {
+            expect(isObjectPath(props, true)).to.be.false;
         });
     });
 });
