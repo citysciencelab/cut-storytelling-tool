@@ -59,7 +59,7 @@ export default {
 <template lang="html">
 </template>
 
-<style lang="less">
+<style lang="scss">
 </style>
 ```
 
@@ -336,12 +336,12 @@ In `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue`, the template is y
 </template>
 ```
 
-## Defining *less* styling rules
+## Defining *scss* styling rules
 
-Within the `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue*`, styles can be added to the `style` tag. Note that the `css/variables.less` offers a set of predefined colors and values for usage in all components.
+Within the `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue*`, styles can be added to the `style` tag. Note that the `css/variables.scss` offers a set of predefined colors and values for usage in all components.
 
-```less
-<style lang="less" scoped>
+```scss
+<style lang="scss" scoped>
     @import "~variables";
 
     label {
@@ -349,7 +349,7 @@ Within the `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue*`, styles c
     }
 
     #scale-switcher-select {
-        border: 2px solid @secondary;
+        border: 2px solid $secondary;
     }
 </style>
 ```
