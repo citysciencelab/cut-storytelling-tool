@@ -106,7 +106,7 @@ module.exports = function () {
         resolve: {
             alias: {
                 text: "text-loader",
-                "variables": path.resolve(__dirname, "..", "css", "variables.less")
+                "variables": path.resolve(__dirname, "..", "css", "variables.scss")
             }
         },
         module: {
