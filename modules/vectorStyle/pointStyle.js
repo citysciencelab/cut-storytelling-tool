@@ -173,7 +173,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
     * @param {Object} rotation - The rotation object from the style.json
     * @returns {number} - The rotation value in degrees or radiants.
     */
-    setRotationValue: function (rotation) {
+    getRotationValue: function (rotation) {
         if (rotation) {
             const {value, isDegree} = rotation;
 
@@ -182,8 +182,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
 
                 return isDegree ? rotationValueFromService * Math.PI / 180 : rotationValueFromService;
             }
-            parseInt(value, 10);
-            return isDegree ? value * Math.PI / 180 : value;
+            return isDegree ? parseInt(value, 10) * Math.PI / 180 : parseInt(value, 10);
         }
         return 0;
     },
@@ -202,7 +201,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
             offset = [parseFloat(this.get("imageOffsetX")), parseFloat(this.get("imageOffsetY"))],
             offsetXUnit = this.get("imageOffsetXUnit"),
             offsetYUnit = this.get("imageOffsetYUnit"),
-            rotation = this.setRotationValue(this.get("rotation"));
+            rotation = this.getRotationValue(this.get("rotation"));
 
         return new Style({
             image: new Icon({
@@ -214,7 +213,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
                 anchorXUnits: offsetXUnit,
                 anchorYUnits: offsetYUnit,
                 imgSize: isSVG ? [width, height] : "",
-                rotation: rotation
+                rotation
             })
         });
     },
