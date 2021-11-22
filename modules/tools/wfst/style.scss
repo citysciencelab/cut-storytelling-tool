@@ -1,14 +1,14 @@
-@import "../../../css/mixins.less";
+@import "../../../css/mixins.scss";
 
-@darkblueColor: rgba(8, 88, 158, 1);
-@darkgreyColor: rgba(85, 85, 85, 1);
-@lightgreyColor: rgba(203, 203, 203, 1);
-@whiteColor: white;
-@hoverOpacity: 0.8;
-@borderRadius0: 0;
-@borderRadius12: 12px;
-@fontSizeBig: 15px;
-@fontSizeSmall: 12px;
+$darkblueColor: rgba(8, 88, 158, 1);
+$darkgreyColor: rgba(85, 85, 85, 1);
+$lightgreyColor: rgba(203, 203, 203, 1);
+$whiteColor: white;
+$hoverOpacity: 0.8;
+$borderRadius0: 0;
+$borderRadius12: 12px;
+$fontSizeBig: 15px;
+$fontSizeSmall: 12px;
 
 .wfst-module {
     .record-button {
@@ -34,7 +34,7 @@
 
     .record-active {
         color: #fff;
-        background-color: @secondary_focus;
+        background-color: $secondary_focus;
         border-color: #2e6da4;
     }
 
@@ -110,12 +110,12 @@
         opacity: 0.8;
         font-size: 16px;
         padding: 5px;
-        color: @secondary_contrast;
+        color: $secondary_contrast;
         &:focus {
-            .primary_action_focus();
+            @include primary_action_focus;
         }
         &:hover {
-            .primary_action_hover();
+            @include primary_action_hover;
         }
     }
 
@@ -137,31 +137,31 @@
 
     .datepicker {
         display: inline-table;
-        background-color: @whiteColor;
-        border-radius: @borderRadius12;
+        background-color: $whiteColor;
+        border-radius: $borderRadius12;
         .datepicker-days {
             .table-condensed {
                 width: 100%;
-                font-size: @fontSizeSmall;
+                font-size: $fontSizeSmall;
                 thead {
                     tr {
-                        border-radius: @borderRadius0;
+                        border-radius: $borderRadius0;
                         background: none;
                         .datepicker-switch {
                             cursor: default;
-                            font-size: @fontSizeBig;
+                            font-size: $fontSizeBig;
                             &:hover {
                                 background: none;							
                             }
                         }
-                        color: @darkblueColor;
+                        color: $darkblueColor;
                         .next, .prev {
-                            color: @darkgreyColor;
+                            color: $darkgreyColor;
                             &:hover {
-                                opacity: @hoverOpacity;
-                                background-color: @darkblueColor;
-                                color: @whiteColor;
-                                border-radius: @borderRadius0;
+                                opacity: $hoverOpacity;
+                                background-color: $darkblueColor;
+                                color: $whiteColor;
+                                border-radius: $borderRadius0;
                             }
                         }
                     }
@@ -169,21 +169,21 @@
                 tbody {
                     tr {
                         td {
-                            border-radius: @borderRadius0;
+                            border-radius: $borderRadius0;
                             background: none;
-                            color: @darkgreyColor;
+                            color: $darkgreyColor;
                             &:hover {
-                                opacity: @hoverOpacity;
-                                background-color: @darkblueColor;
-                                color: @whiteColor;
+                                opacity: $hoverOpacity;
+                                background-color: $darkblueColor;
+                                color: $whiteColor;
                             }
                             &.today {
-                                border: 2px solid @darkblueColor;;
+                                border: 2px solid $darkblueColor;;
                             }
                             &.active {
-                                border-radius: @borderRadius0;
-                                background-color: @darkblueColor;;
-                                color: @whiteColor;
+                                border-radius: $borderRadius0;
+                                background-color: $darkblueColor;;
+                                color: $whiteColor;
                             }
                         }
                     }

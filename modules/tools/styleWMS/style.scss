@@ -1,11 +1,11 @@
-@import "../../../css/mixins.less";
+@import "../../../css/mixins.scss";
 
-@color_1: rgb(85, 85, 85);
-@color_2: rgba(169, 68, 66, 1);
-@color_3: #E10019;
-@font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
-@background_color_1: rgb(255, 255, 255);
-@background_color_2: white;
+$color_1: rgb(85, 85, 85);
+$color_2: rgba(169, 68, 66, 1);
+$color_3: #E10019;
+$font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
+$background_color_1: rgb(255, 255, 255);
+$background_color_2: white;
 
 .style-wms-win {
     position: absolute;
@@ -15,7 +15,7 @@
     margin: 10px 10px 30px 10px;
     display: none;
     z-index: 1010;
-    background-color: @background_color_1;
+    background-color: $background_color_1;
     box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.176);
     border: 1px solid rgb(229, 229, 229);
     >.header {
@@ -25,10 +25,10 @@
             cursor: move;
             font-size: 14px;
             padding: 8px 0;
-            color: @color_1;
+            color: $color_1;
         }
         >.buttons {
-            color: @color_1;
+            color: $color_1;
             font-size: 14px;
             margin: 0;
             >span {
@@ -38,27 +38,27 @@
         }
     }
     >.content {
-        background-color: @background_color_2;
+        background-color: $background_color_2;
         padding: 12px;
     }
     .layer-name {
-        color: @color_3;
+        color: $color_3;
         padding-bottom: 6px;
     }
 }
 .error {
     font-size: 10px;
-    color: @color_2;
+    color: $color_2;
 }
 .range-label {
-    font-family: @font_family_1;
+    font-family: $font_family_1;
 }
 #style-wms-colorpicker {
     &:focus {
-        .primary_action_focus();
+        @include primary_action_focus;
     }
     &:hover {
-        .primary_action_hover();
+        @include primary_action_hover;
     }
     >input {
         display: none;

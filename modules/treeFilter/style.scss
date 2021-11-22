@@ -1,4 +1,4 @@
-@color_1: #a94442;
+$color_1: #a94442;
 
 #autoCompleteTrees {
     max-height: 400px;
@@ -30,7 +30,7 @@
 }
 .treeFilterError {
     font-size: 10px;
-    color: @color_1;
+    color: $color_1;
 }
 .treefilter-label {
     overflow: hidden;

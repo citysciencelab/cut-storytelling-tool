@@ -1,18 +1,18 @@
-@import "../../../css/mixins.less";
+@import "../../../css/mixins.scss";
 
-@color_1: #fff;
-@font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
-@background_color_1: rgba(0, 0, 0,.5);
+$color_1: #fff;
+$font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
+$background_color_1: rgba(0, 0, 0,.5);
 
 /*SimpleView*/
 .filter {
     .glyphicon-remove {
         padding: 5px;
         &:focus {
-            .primary_action_focus();
+            @include primary_action_focus;
         }
         &:hover {
-            .primary_action_hover();
+            @include primary_action_hover;
         }
     }
     .header {
@@ -32,22 +32,22 @@
     }
     .tool-name {
         padding-left: 15px;
-        font-family: @font_family_1;
+        font-family: $font_family_1;
         font-size: 16px;
     }
     .simple-view {
         .btn-default {
             margin: 4px;
             &:focus {
-                .primary_action_focus();
+                @include primary_action_focus;
             }  
             &:hover {
-                .primary_action_hover();
+                @include primary_action_hover;
             }
         }
     }
     .btn-select {
-        color: @color_1;
+        color: $color_1;
         background-color: rgba(0, 0, 0, 0.54);
         .name {
             &:hover {

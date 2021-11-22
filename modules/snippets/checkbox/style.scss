@@ -1,4 +1,4 @@
-@import "../style.less";
+@import "../style.scss";
 
 .checkbox-container {
     .form-inline {        
@@ -9,15 +9,15 @@
             width: 85%;
             .toggle {
                 float: right;
-                background-color: @whiteColor;
+                background-color: $whiteColor;
                 .toggle-group {
                     label {
                         overflow: visible;
                         &.btn-primary {
-                            color: @whiteColor;
-                            background-color: @darkblueColor;
+                            color: $whiteColor;
+                            background-color: $darkblueColor;
                             &:hover {
-                                opacity: @hoverOpacity;
+                                opacity: $hoverOpacity;
                             }
                         }
                     }
@@ -30,7 +30,7 @@
                 white-space: nowrap;
                 max-width: 70%;
                 margin: 0;
-                color: @darkgreyColor;
+                color: $darkgreyColor;
                 float: left;
             }
         }

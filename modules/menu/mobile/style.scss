@@ -1,12 +1,12 @@
-@color_1: black;
-@font_family_1: "MasterPortalFont","Arial Narrow",Arial,sans-serif;
+$color_1: black;
+$font_family_1: "MasterPortalFont","Arial Narrow",Arial,sans-serif;
 
 /*staticlink*/
 .mobile {
     max-height: 66vh;
     overflow-y: auto;
     span.title {
-        font-family: @font_family_1;
+        font-family: $font_family_1;
         font-size: 14px;
         padding-left: 6px;
         vertical-align: text-bottom;
@@ -30,7 +30,7 @@
     margin-top: 34px;
     border-top: 1px solid #ddd;
     padding-top: 8px;
-    font-family: @font_family_1;
+    font-family: $font_family_1;
     >.form-inline {
         >.form-group {
             >label {
@@ -70,6 +70,6 @@
         }
     }
     a {
-        color: @color_1;
+        color: $color_1;
     }
 }

@@ -1,13 +1,13 @@
-@import "../../css/variables.less";
-@import "../../css/mixins.less";
+@import "../../css/variables.scss";
+@import "../../css/mixins.scss";
 
-@color_1: rgb(153, 153, 153);
-@color_2: #777;
-@background_color_1: rgb(255, 255, 255);
+$color_1: rgb(153, 153, 153);
+$color_2: #777;
+$background_color_1: rgb(255, 255, 255);
 
 .quick-help-window {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
-    background-color: @background_color_1;
+    background-color: $background_color_1;
     width: 50%;
     height: 50%;
     position: absolute;
@@ -15,11 +15,11 @@
     right: 0px;
     margin: 60px 10px 30px 10px;
     display: none;
-    color: @color_1;
+    color: $color_1;
     z-index: 2000;
     >.header {
         cursor: move;
-        background: @background_color_1;
+        background: $background_color_1;
         color: #555555;
         padding: 10px 6px;
         border-bottom: 1px solid rgb(215, 215, 215);
@@ -39,12 +39,12 @@
         }
         > div > .glyphicon {
             padding: 4px;
-            color: @secondary_icon_button;
+            color: $secondary_icon_button;
             &:hover {
-                .primary_action_hover();
+                @include primary_action_hover;
             }
             &:focus {
-                .primary_action_focus();
+                @include primary_action_focus;
             }
         }
     }
@@ -58,7 +58,7 @@
             margin-top: 0;
         }
         &:focus {
-            .primary_action_focus();
+            @include primary_action_focus;
         }
     }
 }
@@ -72,10 +72,10 @@
         text-decoration: none;
         color: #333333;
         &:hover {
-            .primary_action_hover();
+            @include primary_action_hover;
         }
         &:focus {
-            .primary_action_focus();
+            @include primary_action_focus;
         }
     }
 }

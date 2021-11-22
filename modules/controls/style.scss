@@ -20,8 +20,8 @@
     display: none; /* better prototype visibility */
     top: 0;
     .glyphicon {
-        color: @secondary;
-        background-color: @primary;
+        color: $secondary;
+        background-color: $primary;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
 
         &:hover {
@@ -30,7 +30,7 @@
         }
     }
     >.toggleButtonPressed {
-        background-color: @secondary_hover;
+        background-color: $secondary_hover;
     }
 }
 .toggleButton {
@@ -71,7 +71,7 @@
     }
 }
 .geolocation_marker {
-    color: @secondary;
+    color: $secondary;
     padding: 2px 3px 2px 2px;
     background: none repeat scroll #D42132;
     border-radius: 50px;
@@ -231,7 +231,7 @@
     width: 20px;
     height: 20px;
     font-size: 14px;
-    color: @accent_contrast;
+    color: $accent_contrast;
     text-align: center;
     vertical-align: bottom;
     cursor: pointer;
@@ -276,8 +276,8 @@
     font-family: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
     border: 0;
     &:focus {
-        background-color: @primary_focus;
-        outline: 1px solid @primary_outline;
+        background-color: $primary_focus;
+        outline: 1px solid $primary_outline;
     }
 
 }
@@ -291,8 +291,8 @@
     padding: 5px 5px 7px 8px;
     border: 0;
     &:focus {
-        background-color: @primary_focus;
-        outline: 1px solid @primary_outline;
+        background-color: $primary_focus;
+        outline: 1px solid $primary_outline;
     }
 
 }

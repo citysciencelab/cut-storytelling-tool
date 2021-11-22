@@ -1,22 +1,22 @@
-@import "../../../css/variables.less";
+@import "../../../css/variables.scss";
 
-@color_1: #000;
-@color_2: #F2F2F2;
-@color_3: #808080;
-@color_4: #003063;
-@font_family_1: "MasterPortalFont",sans-serif;
-@font_family_2: "MasterPortalFont", sans-serif;
-@background_color_2: #fff;
-@background_color_3: #808080;
-@background_color_4: #ffffff;
-@background_color_5: transparent;
-@background_color_6: #D8D8D8;
+$color_1: #000;
+$color_2: #F2F2F2;
+$color_3: #808080;
+$color_4: #003063;
+$font_family_1: "MasterPortalFont",sans-serif;
+$font_family_2: "MasterPortalFont", sans-serif;
+$background_color_2: #fff;
+$background_color_3: #808080;
+$background_color_4: #ffffff;
+$background_color_5: transparent;
+$background_color_6: #D8D8D8;
 
 /**************** Layer Settings ****************/
 #table-navigation {
     z-index: 5;;
     position: absolute;
-    font-family: @font_family_1;
+    font-family: $font_family_1;
     touch-action: pan-x pan-y;
     border-radius: 12px;
 }
@@ -45,7 +45,7 @@
     margin: 5px;
 }
 .table-nav-main {
-    background-color: @secondary_table_style;
+    background-color: $secondary_table_style;
     margin: 0px 5px;
     width: 480px;
     height: 50px;
@@ -64,26 +64,26 @@
 #table-layer-list {
     position: relative;
     width: 40px;
-    background-color: @background_color_2;
+    background-color: $background_color_2;
     left: 20px;
     top: -45px;
 }
 #table-category-list {
     .icon-categories {
         font-size: 27.5px;
-        color: @color_1;
+        color: $color_1;
     }
     width: 40px;
-    background-color: @secondary_table_style;
+    background-color: $secondary_table_style;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
 }
 #table-category-list.table-category-active {
-    background-color: @background_color_3;
+    background-color: $background_color_3;
 }
 .table-category-active {
     .icon-categories {
         &:after {
-            color: @color_2;
+            color: $color_2;
         }
     }
 }
@@ -107,7 +107,7 @@ a {
     }
 }
 .table-tools {
-    background-color: @secondary_table_style;
+    background-color: $secondary_table_style;
     width: 40px;
     height: 40px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
@@ -122,14 +122,14 @@ a {
 }
 
 .table-categories {
-    background-color: @secondary_table_style;
+    background-color: $secondary_table_style;
     width: 40px;
     height: 40px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
     cursor: pointer;
 }
 .table-tools-menu {
-    background-color: @secondary_table_style;
+    background-color: $secondary_table_style;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
     width: 268px;
     display: none;
@@ -168,10 +168,10 @@ a {
     }
 }
 .table-tools-active {
-    background-color: @background_color_3;
+    background-color: $background_color_3;
     .icon-tools {
         &:before {
-            color: @color_2;
+            color: $color_2;
         }
     }
 }
@@ -181,7 +181,7 @@ a {
     font-size: 17px;
     border-top: 1px solid #C0C0C0;
     >a {
-        color: @color_3;
+        color: $color_3;
     }
 }
 #table-nav-layers-panel-toggler {
@@ -195,7 +195,7 @@ a {
 .table-nav-layers-panel {
     border-width: 0px;
     -webkit-box-shadow: none;
-    background-color: @secondary_table_style;
+    background-color: $secondary_table_style;
     border-radius: 12px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
     margin-bottom: 75px;
@@ -210,7 +210,7 @@ a {
     font-size: 17px;
     border-width: 0px;
     -webkit-box-shadow: none;
-    background-color: @secondary_table_style;
+    background-color: $secondary_table_style;
     border-radius: 12px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
     padding-left: 6px;
@@ -259,14 +259,14 @@ a {
 }
 .icon-checkbox2 {
     &:before {
-        color: @color_3;
+        color: $color_3;
         margin-top: 8px;
         padding-left: 8px;
     }
 }
 .icon-checkbox {
     &:before {
-        color: @color_4;
+        color: $color_4;
         margin-top: 8px;
         font-weight: 900;
         padding-left: 8px;
@@ -281,11 +281,11 @@ a {
 }
 .icon-burgermenu_alt {
     #table-nav-layers-panel-toggler {
-        background-color: @background_color_3;
+        background-color: $background_color_3;
         border-radius: 12px;
         .icon-cross1:before {
             display: block;
-            color: @color_2;
+            color: $color_2;
             top: 11px;
             left: 11px;
             font-size: 18px;
@@ -294,19 +294,19 @@ a {
 }
 .icon-burgermenu_alt.collapsed {
     #table-nav-layers-panel-toggler {
-        background-color: @background_color_4;
+        background-color: $background_color_4;
         .icon-cross1:before {
                 display: none;
         }
     }
     &:before {
-        color: @color_4;
+        color: $color_4;
         display: block;
     }
 
 }
 .burgermenu-layer-list {
-    background-color: @background_color_5;
+    background-color: $background_color_5;
     margin-bottom: 13px;
     padding-bottom: 8px;
     border-radius: 5px;
@@ -318,7 +318,7 @@ a {
         overflow-x: auto;
         margin: 4px 4px;
         .layer-item {
-            font-family: @font_family_2;
+            font-family: $font_family_2;
             font-size: 17px;
             .title{
                 display: block;
@@ -365,7 +365,7 @@ a {
         font-size: 14px;
         .glyphicon {
             font-size: x-large;
-            color: @secondary_icon_button;
+            color: $secondary_icon_button;
             top: 8px;
         }
         .badge {
@@ -386,17 +386,17 @@ a {
     .glyphicon-info-sign {
         position: absolute;
         font-size: 18px;
-        color: @secondary_icon_button;
+        color: $secondary_icon_button;
         top: 14px;
         right: 50px;
     }
     .glyphicon-cog {
         font-size: 18px;
-        color: @secondary_icon_button;
+        color: $secondary_icon_button;
         top: 4px;
     }
     .layer-settings-activated {
-        background-color: @background_color_6;
+        background-color: $background_color_6;
     }
 }
 .checkboxicon-left {
@@ -418,7 +418,7 @@ a {
     display: block;
     width: 28px;
     height: 10px;
-    background-color: @secondary_table_style;
+    background-color: $secondary_table_style;
 }
 #right-funnel-corner {
     width: 10px;

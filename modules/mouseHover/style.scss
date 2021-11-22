@@ -1,5 +1,5 @@
-@color_1: #777;
-@background_color_1: rgb(255, 255, 255);
+$color_1: #777;
+$background_color_1: rgb(255, 255, 255);
 
 .tooltip {
     pointer-events: none; 
@@ -9,8 +9,8 @@
     text-align: left;
     max-width: inherit;
     padding: 8px;
-    background-color: @background_color_1;
-    color: @color_1;
+    background-color: $background_color_1;
+    color: $color_1;
     white-space: pre;
     border: 1px solid rgba(0, 0, 0, .2);
     box-shadow: 0 5px 10px rgba(0, 0, 0, .2);

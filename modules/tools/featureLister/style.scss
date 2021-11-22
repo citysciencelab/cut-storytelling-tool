@@ -1,8 +1,8 @@
-@color_1: gray;
-@color_2: black;
-@color_3: #777;
-@color_4: rgb(85, 85, 85);
-@background_color_1: rgb(255, 255, 255);
+$color_1: gray;
+$color_2: black;
+$color_3: #777;
+$color_4: rgb(85, 85, 85);
+$background_color_1: rgb(255, 255, 255);
 
 /***** Destop *****/
 /***** Mobil *****/
@@ -11,10 +11,10 @@
     >span {
         float: left;
         width: 15px;
-        color: @color_1;
+        color: $color_1;
     }
     >.featurelist-list-table-th-sorted {
-        color: @color_2;
+        color: $color_2;
     }
 }
 .featurelist-list-button {
@@ -78,9 +78,9 @@
     min-width: 25%;
     margin: 60px 10px 30px 10px;
     display: none;
-    background-color: @background_color_1;
+    background-color: $background_color_1;
     >.featurelist-win-header {
-        color: @color_3;
+        color: $color_3;
         cursor: move;
     }
     >.featurelist-win-content {
@@ -98,10 +98,10 @@
         font-size: 14px;
         padding-top: 8px;
         padding-bottom: 5px;
-        color: @color_4;
+        color: $color_4;
     }
     >.buttons {
-        color: @color_4;
+        color: $color_4;
         font-size: 14px;
         >span {
             padding: 8px 3px;
@@ -130,8 +130,8 @@
     }
 }
 .featurelistModal {
-    background-color: @background_color_1;
-    color: @color_4;
+    background-color: $background_color_1;
+    color: $color_4;
     border-bottom: 1px solid rgb(229, 229, 229);
     padding: 10px;
     >button {
@@ -145,7 +145,7 @@
 }
 .panel-heading {
     background: #e7e7e7;
-    color: @color_4;
+    color: $color_4;
     cursor: pointer;
 }
 .tdfeaturelist {

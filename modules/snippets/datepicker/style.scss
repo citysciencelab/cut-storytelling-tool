@@ -1,4 +1,4 @@
-@import "../style.less";
+@import "../style.scss";
 
 .datepicker-container {
     input {
@@ -7,8 +7,8 @@
 }
 
 .datepicker-inline, .datepicker-dropdown {
-    background-color: @whiteColor;
-    border-radius: @borderRadius12;
+    background-color: $whiteColor;
+    border-radius: $borderRadius12;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
@@ -16,26 +16,26 @@
         padding: 4px;
         .table-condensed {
             width: 100%;
-            font-size: @fontSizeSmall;
+            font-size: $fontSizeSmall;
             thead {
                 tr {
-                    border-radius: @borderRadius0;
+                    border-radius: $borderRadius0;
                     background: none;
                     .datepicker-switch {
                         cursor: default;
-                        font-size: @fontSizeBig;
+                        font-size: $fontSizeBig;
                         &:hover {
                             background: none;
                         }
                     }
-                    color: @darkblueColor;
+                    color: $darkblueColor;
                     .next, .prev {
-                        color: @darkgreyColor;
+                        color: $darkgreyColor;
                         &:hover {
-                            opacity: @hoverOpacity;
-                            background-color: @darkblueColor;
-                            color: @whiteColor;
-                            border-radius: @borderRadius0;
+                            opacity: $hoverOpacity;
+                            background-color: $darkblueColor;
+                            color: $whiteColor;
+                            border-radius: $borderRadius0;
                         }
                     }
                 }
@@ -50,45 +50,45 @@
                     &:hover {
                         outline: 0px;
                     }
-                    border-radius: @borderRadius0;
-                    background-color: @darkblueColor;
-                    color: @whiteColor;
+                    border-radius: $borderRadius0;
+                    background-color: $darkblueColor;
+                    color: $whiteColor;
                     td {
                         background-image: none;
-                        color: @whiteColor;
+                        color: $whiteColor;
                         &:hover {
                             &:not(.disabled) {
-                                background-color: @whiteColor;
-                                color: @darkblueColor;
+                                background-color: $whiteColor;
+                                color: $darkblueColor;
                             }
                         }
                         &.cw {
-                            color: @whiteColor;
+                            color: $whiteColor;
                         }
                     }
                 }
                 td {
-                    border-radius: @borderRadius0;
+                    border-radius: $borderRadius0;
                     background: none;
-                    color: @darkgreyColor;
+                    color: $darkgreyColor;
                     &:hover {
-                        opacity: @hoverOpacity;
-                        background-color: @darkblueColor;
-                        color: @whiteColor;
+                        opacity: $hoverOpacity;
+                        background-color: $darkblueColor;
+                        color: $whiteColor;
                     }
                     &.today {
-                        border: 2px solid @darkblueColor;
+                        border: 2px solid $darkblueColor;
                     }
                     &.active {
-                        border-radius: @borderRadius0;
-                        background-color: @darkblueColor;
-                        color: @whiteColor;
+                        border-radius: $borderRadius0;
+                        background-color: $darkblueColor;
+                        color: $whiteColor;
                     }
                     &.disabled {
-                        color: @lightgreyColor;
+                        color: $lightgreyColor;
                     }
                     &.cw {
-                        color: @darkblueColor;
+                        color: $darkblueColor;
                     }
                     &.holiday {
                         font-weight: bold;
@@ -103,45 +103,45 @@
     .datepicker-years {
         .table-condensed {
             width: 100%;
-            font-size: @fontSizeSmall;
+            font-size: $fontSizeSmall;
             thead {
                 tr {
-                    border-radius: @borderRadius0;
+                    border-radius: $borderRadius0;
                     background: none;
                     .datepicker-switch {
                         cursor: default;
-                        font-size: @fontSizeBig;
+                        font-size: $fontSizeBig;
                         &:hover {
                             background: none;
                         }
                     }
-                    color: @darkblueColor;
+                    color: $darkblueColor;
                     .next, .prev {
-                        color: @darkgreyColor;
+                        color: $darkgreyColor;
                         &:hover {
-                            opacity: @hoverOpacity;
-                            background-color: @darkblueColor;
-                            color: @whiteColor;
-                            border-radius: @borderRadius0;
+                            opacity: $hoverOpacity;
+                            background-color: $darkblueColor;
+                            color: $whiteColor;
+                            border-radius: $borderRadius0;
                         }
                     }
                 }
             }
             tbody tr td span {
-                border-radius: @borderRadius0;
+                border-radius: $borderRadius0;
                 background: none;
-                color: @darkgreyColor;
+                color: $darkgreyColor;
                 &:hover {
-                    color: @darkblueColor;
+                    color: $darkblueColor;
                     outline: 2px solid #08589e;
                 }
                 &.active {
-                    background: @darkblueColor;
-                    color: @whiteColor;
+                    background: $darkblueColor;
+                    color: $whiteColor;
                     outline: none;
                 }
                 &.disabled {
-                    color: @lightgreyColor;
+                    color: $lightgreyColor;
                     &:hover {
                         background: none;
                         outline: none;

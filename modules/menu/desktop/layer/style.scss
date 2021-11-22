@@ -1,4 +1,4 @@
-@color_4: rgb(82, 82, 82);
+$color_4: rgb(82, 82, 82);
 
 /**************** Layer Settings ****************/
 /**************** Layer Settings Button Animation ****************/
@@ -19,7 +19,7 @@ ul#tree {
         .remove-layer {
             color: #f2f2f2;
             font-weight: bold;
-            background-color :@color_4;
+            background-color :$color_4;
             border-radius: 10px;
             padding: 5px;
             margin-left: 25px;
