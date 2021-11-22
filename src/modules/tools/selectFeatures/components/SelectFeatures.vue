@@ -408,7 +408,7 @@ export default {
     </Tool>
 </template>
 
-<style type="less" scoped>
+<style type="scss" scoped>
 .selectFeatures {
     max-width:600px;
     max-height:745px;

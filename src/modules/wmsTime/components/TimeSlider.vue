@@ -141,12 +141,12 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 @import "~variables";
 
 .timeSlider-wrapper {
-    @base-margin: 0.25em;
-    @bigger-margin: calc(@base-margin * 3);
+    $base-margin: 0.25em;
+    $bigger-margin: calc($base-margin * 3);
 
     position: absolute;
     bottom: 6em;
@@ -156,39 +156,39 @@ export default {
     display: flex;
     flex-direction: column;
     background: white;
-    box-shadow: @tool_box_shadow;
+    box-shadow: $tool_box_shadow;
 
     .timeSlider-innerWrapper {
         display: flex;
         justify-content: flex-start;
         // No margin on bottom
-        margin: @bigger-margin @bigger-margin 0;
+        margin: $bigger-margin $bigger-margin 0;
     }
 
     .timeSlider-innerWrapper-interactions {
-        @border-style: 1px solid black;
+        $border-style: 1px solid black;
 
         display: flex;
         justify-content: space-between;
         align-items: center;
         width: 28em;
-        margin: @bigger-margin;
+        margin: $bigger-margin;
         border: 1px solid black;
 
         > fieldset {
             display: flex;
 
             button {
-                margin: @base-margin;
+                margin: $base-margin;
             }
             input {
-                margin-right: @base-margin;
+                margin-right: $base-margin;
             }
             label {
-                border-left: @border-style;
-                border-right: @border-style;
+                border-left: $border-style;
+                border-right: $border-style;
                 margin: 0;
-                padding: @bigger-margin;
+                padding: $bigger-margin;
             }
         }
     }

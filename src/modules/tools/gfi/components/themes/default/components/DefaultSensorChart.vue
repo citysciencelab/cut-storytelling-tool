@@ -135,7 +135,7 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     .link {
         margin-top: 5px;
         text-align: right;

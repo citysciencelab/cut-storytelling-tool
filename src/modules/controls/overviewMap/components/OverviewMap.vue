@@ -127,7 +127,7 @@ export default {
     />
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     /* .ol-overviewmap has fixed height in openlayers css;
      * measured this value for 12px space between control contents */
     .space-above {
@@ -135,14 +135,14 @@ export default {
     }
 </style>
 
-<style lang="less">
+<style lang="scss">
     /* ⚠️ unscoped css, extend with care;
      * control (.ol-overviewmap) is out of scope;
      * overriding with global rule that avoids leaks
      * by using local id #overviewmap-wrapper */
 
     @import "~variables";
-    @box-shadow: 0 6px 12px @shadow;
+    $box-shadow: 0 6px 12px $shadow;
 
     #overviewmap-wrapper {
         position: relative;
@@ -150,15 +150,15 @@ export default {
         .ol-overviewmap {
             left: auto;
             right: 100%;
-            box-shadow: @box-shadow;
+            box-shadow: $box-shadow;
             border: 0;
 
             .ol-overviewmap-box {
-                border: 2px solid @primary;
+                border: 2px solid $primary;
             }
 
             .ol-overviewmap-map {
-                box-shadow: @box-shadow;
+                box-shadow: $box-shadow;
                 width: 200px;
             }
         }

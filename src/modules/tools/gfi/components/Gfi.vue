@@ -402,11 +402,11 @@ export default {
 </template>
 
 
-<style lang="less">
+<style lang="scss">
 @import "~variables";
 
 .gfi {
-    color: @secondary_contrast;
+    color: $secondary_contrast;
 }
 .bold{
     font-weight: bold;
@@ -415,7 +415,7 @@ export default {
         color: #646262;
         font-size: 22px;
          .pager {
-            background-color: @secondary;
+            background-color: $secondary;
             padding: 6px;
             cursor: pointer;
             width: 50%;
@@ -432,7 +432,7 @@ export default {
         }
         .disabled {
             cursor: not-allowed;
-            background-color: @primary_inactive_contrast;
+            background-color: $primary_inactive_contrast;
             opacity: 0.2;
         }
 

@@ -82,14 +82,14 @@ export default {
     </div>
 </template>
 
-<style lang="less">
-    @import "~/css/mixins.less";
+<style lang="scss">
+    @import "~/css/mixins.scss";
 
     #language-bar {
         a {
-            color: darken(@secondary_focus, 10%);
+            color: darken($secondary_focus, 10%);
             &:hover{
-                .primary_action_hover();
+                @include primary_action_hover;
             }
         }
 
@@ -118,8 +118,8 @@ export default {
 
             min-width: 400px;
 
-            background: @secondary;
-            box-shadow: @shadow;
+            background: $secondary;
+            box-shadow: $shadow;
 
             .language-header {
                 float: right;
@@ -139,7 +139,7 @@ export default {
                 a {
                     font-size: 12px;
                     &:hover{
-                        // .primary_action_hover();
+                        // @include primary_action_hover;
                         // background-color: #08589e;
                         // color: #ffffff;
                     }

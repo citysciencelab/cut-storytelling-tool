@@ -87,21 +87,21 @@ export default {
     />
 </template>
 
-<style lang="less" scoped>
-@import "~/css/mixins.less";
+<style lang="scss" scoped>
+@import "~/css/mixins.scss";
 
-@color: #fec44f;
+$color: #fec44f;
 
 span.glyphicon {
     &:focus {
-        .primary_action_focus();
+        @include primary_action_focus;
     }
     &:hover {
-        .primary_action_hover();
+        @include primary_action_hover;
     }
 }
 
 .glyphicon-star {
-    color: @color;
+    color: $color;
 }
 </style>

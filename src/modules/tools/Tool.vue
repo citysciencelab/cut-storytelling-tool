@@ -270,25 +270,25 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
-    @import "~/css/mixins.less";
-    @color: rgb(255, 255, 255);
-    @font_family: "MasterPortalFont", sans-serif;
-    @background_color_1: rgb(255, 255, 255);
-    @background_color_2: #e10019;
-    @background_color_4: #646262;
+<style lang="scss" scoped>
+    @import "~/css/mixins.scss";
+    $color: rgb(255, 255, 255);
+    $font_family: "MasterPortalFont", sans-serif;
+    $background_color_1: rgb(255, 255, 255);
+    $background_color_2: #e10019;
+    $background_color_4: #646262;
 
     #vue-tool-content-body {
         display:block;
 
         &:focus {
-            .primary_action_focus();
+            @include primary_action_focus;
         }
     }
 
     .win-heading{
         border-bottom: 1px solid rgb(229, 229, 229);
-        font-family: @font_family_accent;
+        font-family: $font_family_accent;
         display:flex;
         flex-direction:row;
         width:100%;
@@ -297,7 +297,7 @@ export default {
 
         .heading-element {
             white-space: nowrap;
-            color: @secondary_contrast;
+            color: $secondary_contrast;
             font-size: 14px;
 
             &.flex-grow {
@@ -306,7 +306,7 @@ export default {
             }
 
             > .title {
-                color: @secondary_contrast;
+                color: $secondary_contrast;
                 white-space: nowrap;
                 font-size: 14px;
                 padding-top: 10px;
@@ -315,7 +315,7 @@ export default {
             > .glyphicon {
                 padding: 8px 8px 8px 8px;
                 &:focus {
-                    .primary_action_focus();
+                    @include primary_action_focus;
                 }
             }
 
@@ -323,7 +323,7 @@ export default {
                 &.glyphicon-minus { top: 3px; }
                 &:hover {
                     &:not(.win-icon) {
-                        .primary_action_hover();
+                        @include primary_action_hover;
                     }
                 }
             }
@@ -331,13 +331,13 @@ export default {
     }
 
     .tool-window-vue {
-        background-color: @background_color_1;
+        background-color: $background_color_1;
         display: block;
         position: absolute;
         padding:0;
         top: 20px;
         left: 20px;
-        box-shadow: @tool_box_shadow;
+        box-shadow: $tool_box_shadow;
         z-index: 999;
         min-width: 280px;
         width: var(--initialToolWidth);
@@ -370,9 +370,9 @@ export default {
 
             #vue-tool-content-body { display:none; }
             .win-heading{
-                background-color:@background_color_2;
+                background-color:$background_color_2;
                 .glyphicon, .title {
-                    color: @color;
+                    color: $color;
                 }
                 border-bottom:none;
                 overflow: hidden;
@@ -382,40 +382,40 @@ export default {
 
     .win-body-vue {
         position: relative;
-        padding: @padding;
+        padding: $padding;
         -webkit-overflow-scrolling: touch;
-        background-color: @background_color_1;
+        background-color: $background_color_1;
         overflow: auto;
         width: 100%;
     }
 
     .table-tool-win-all-vue {
-        font-family: @font_family;
+        font-family: $font_family;
         border-radius: 12px;
         margin-bottom: 30px;
         .win-heading {
-            font-family: @font_family;
+            font-family: $font_family;
             font-size: 14px;
-            background-color: @background_color_4;
+            background-color: $background_color_4;
             .heading-element {
                 > .title {
-                    color: @color;
+                    color: $color;
                     font-size: 14px;
                 }
-                > .buttons { color: @color; }
-                > .glyphicon { color: @color; }
+                > .buttons { color: $color; }
+                > .glyphicon { color: $color; }
             }
         }
         .win-body-vue {
             border-bottom-left-radius: 12px;
             border-bottom-right-radius: 12px;
-            background-color: @secondary_table_style;
+            background-color: $secondary_table_style;
             * { border-radius: 12px; }
         }
     }
 
     #tool-sidebar-vue {
-        background-color: @background_color_1;
+        background-color: $background_color_1;
         padding:0 0 0 12px;
         height:100%;
         width: var(--initialToolWidth);

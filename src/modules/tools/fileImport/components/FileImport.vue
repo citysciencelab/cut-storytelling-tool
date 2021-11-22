@@ -247,8 +247,8 @@ export default {
     </Tool>
 </template>
 
-<style lang="less" scoped>
-    @import "~/css/mixins.less";
+<style lang="scss" scoped>
+    @import "~/css/mixins.scss";
 
     .h-seperator {
         margin:12px 0 12px 0;
@@ -264,18 +264,18 @@ export default {
 
     .upload-button-wrapper {
         color: #FFFFFF;
-        background-color: @secondary_focus;
+        background-color: $secondary_focus;
         display: block;
         text-align:center;
         padding: 8px 12px;
         cursor: pointer;
         margin:12px 0 0 0;
-        font-size: @font_size_big;
+        font-size: $font_size_big;
         &:focus {
-            .primary_action_focus();
+            @include primary_action_focus;
         }
         &:hover {
-            .primary_action_hover();
+            @include primary_action_hover;
         }
     }
 
@@ -285,12 +285,12 @@ export default {
     .drop-area-fake {
         background-color: #FFFFFF;
         border-radius: 12px;
-        border: 2px dashed @accent;
+        border: 2px dashed $accent;
         padding:24px;
         transition: background 0.25s, border-color 0.25s;
 
         &.dzReady {
-            background-color:@accent_hover;
+            background-color:$accent_hover;
             border-color:transparent;
 
             p.caption {
@@ -302,9 +302,9 @@ export default {
             margin:0;
             text-align:center;
             transition: color 0.35s;
-            font-family: @font_family_accent;
-            font-size: @font_size_huge;
-            color: @accent;
+            font-family: $font_family_accent;
+            font-size: $font_size_huge;
+            color: $accent;
         }
     }
     .drop-area {

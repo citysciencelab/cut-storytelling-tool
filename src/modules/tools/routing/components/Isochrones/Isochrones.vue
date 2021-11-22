@@ -313,7 +313,7 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 @import "~variables";
 #routing-isochrones {
   min-width: 350px;
