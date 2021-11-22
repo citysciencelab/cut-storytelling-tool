@@ -1,8 +1,9 @@
 import "../../2DMap";
 import Map from "ol/Map";
 import View from "ol/View";
-import VectorLayer from "ol/layer/Vector.js";
-import VectorSource from "ol/source/Vector.js";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import LayerGroup from "ol/layer/Group";
 import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 import {expect} from "chai";
 
@@ -27,6 +28,26 @@ describe("src/core/maps/2DMap.js", () => {
             id: "Daisy",
             name: "Duck4",
             source: new VectorSource()
+        }),
+        layer5 = new VectorLayer({
+            id: "Tick",
+            name: "Duck5",
+            source: new VectorSource()
+        }),
+        layer6 = new VectorLayer({
+            id: "Trick",
+            name: "Duck6",
+            source: new VectorSource()
+        }),
+        layer7 = new VectorLayer({
+            id: "Track",
+            name: "Duck7",
+            source: new VectorSource()
+        }),
+        layer8 = new LayerGroup({
+            id: "Tick_Trick_Track",
+            name: "Duck_group",
+            layers: [layer5, layer6, layer7]
         });
     let map;
 
@@ -119,6 +140,26 @@ describe("src/core/maps/2DMap.js", () => {
         expect(map.getLayerById("Dagobert")).equals(layer2);
         expect(map.getLayerById("Darkwing")).equals(layer3);
         expect(map.getLayerById("Daisy")).equals(layer4);
+    });
+
+    it("getLayerById - returns the layer from groupLayer with the correct id", function () {
+        map.addLayer(layer1);
+        map.addLayer(layer8);
+
+        expect(map.getLayerById("Donald")).equals(layer1);
+        expect(map.getLayerById("Tick")).equals(layer5);
+        expect(map.getLayerById("Trick")).equals(layer6);
+        expect(map.getLayerById("Track")).equals(layer7);
+    });
+
+    it("getLayerById - returns no groupLayer if searchInGroupLayers= false", function () {
+        map.addLayer(layer1);
+        map.addLayer(layer8);
+
+        expect(map.getLayerById("Donald")).equals(layer1);
+        expect(map.getLayerById("Tick", false)).equals(null);
+        expect(map.getLayerById("Trick", false)).equals(null);
+        expect(map.getLayerById("Track", false)).equals(null);
     });
 
     it("getLayerByName - returns the layer with the correct name", function () {

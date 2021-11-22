@@ -8,13 +8,16 @@ import calculateExtent from "../../utils/calculateExtent";
 /**
  * Returns the bounding box in a given coordinate system (EPSG code).
  * @param {String} [epsgCode="EPSG:4326"] EPSG code into which the bounding box is transformed.
+ * @param {Object} [map] The parameter to get the map from the map collection
+ * @param {String} [map.mapId="ol"] The map id.
+ * @param {String} [map.mapMode="2D"] The map mode.
  * @returns {Number[]} Bounding box in the specified coordinate system.
  */
-View.prototype.getProjectedBBox = function (epsgCode = "EPSG:4326") {
-    const map = mapCollection.getMap("ol", "2D"),
-        bbox = this.calculateExtent(map.getSize()),
-        firstCoordTransform = transformFromMapProjection(map, epsgCode, [bbox[0], bbox[1]]),
-        secondCoordTransform = transformFromMapProjection(map, epsgCode, [bbox[2], bbox[3]]);
+View.prototype.getProjectedBBox = function (epsgCode = "EPSG:4326", map = {mapId: "ol", mapMode: "2D"}) {
+    const olMap = mapCollection.getMap(map.mapId, map.mapMode),
+        bbox = this.calculateExtent(olMap.getSize()),
+        firstCoordTransform = transformFromMapProjection(olMap, epsgCode, [bbox[0], bbox[1]]),
+        secondCoordTransform = transformFromMapProjection(olMap, epsgCode, [bbox[2], bbox[3]]);
 
     return [firstCoordTransform[0], firstCoordTransform[1], secondCoordTransform[0], secondCoordTransform[1]];
 };
@@ -22,11 +25,14 @@ View.prototype.getProjectedBBox = function (epsgCode = "EPSG:4326") {
 /**
  * Sets the bounding box for the map view.
  * @param {Number[]} bbox The Boundingbox to fit the map.
+ * @param {Object} [map] The parameter to get the map from the map collection
+ * @param {String} [map.mapId="ol"] The map id.
+ * @param {String} [map.mapMode="2D"] The map mode.
  * @returns {void}
  */
-View.prototype.setBBox = function (bbox) {
+View.prototype.setBBox = function (bbox, map = {mapId: "ol", mapMode: "2D"}) {
     if (bbox) {
-        this.fit(bbox, mapCollection.getMap("ol", "2D").getSize());
+        this.fit(bbox, {size: mapCollection.getMap(map.mapId, map.mapMode).getSize()});
     }
 };
 
@@ -35,33 +41,39 @@ View.prototype.setBBox = function (bbox) {
  * @param {String[]} extent The extent to zoom.
  * @param {Object} options Options for zoom.
  * @param {Number} [options.duration=800] The duration of the animation in milliseconds.
+ * @param {Object} [map] The parameter to get the map from the map collection
+ * @param {String} [map.mapId="ol"] The map id.
+ * @param {String} [map.mapMode="2D"] The map mode.
  * @see {@link https://openlayers.org/en/latest/apidoc/module-ol_View-View.html#fit} for more options.
  * @returns {void}
  */
-View.prototype.zoomToExtent = function (extent, options) {
+View.prototype.zoomToExtent = function (extent, options, map = {mapId: "ol", mapMode: "2D"}) {
     this.fit(extent, {
-        size: mapCollection.getMap("ol", "2D").getSize(),
+        size: mapCollection.getMap(map.mapId, map.mapMode).getSize(),
         ...Object.assign({duration: 800}, options)
     });
 };
 
 /**
  * Zoom to features that are filtered by the ids.
- * @param {String[]} ids The feature ids.
+ * @param {String[]} featureIds The feature ids.
  * @param {String} layerId The layer id.
  * @param {Object} zoomOptions The options for zoom to extent.
+ * @param {Object} [map] The parameter to get the map from the map collection
+ * @param {String} [map.mapId="ol"] The map id.
+ * @param {String} [map.mapMode="2D"] The map mode.
  * @returns {void}
  */
-View.prototype.zoomToFilteredFeatures = function (ids, layerId, zoomOptions) {
-    const layer = mapCollection.getMap("ol", "2D").getLayerById(layerId);
+View.prototype.zoomToFilteredFeatures = function (featureIds, layerId, zoomOptions, map = {mapId: "ol", mapMode: "2D"}) {
+    const layer = mapCollection.getMap(map.mapId, map.mapMode).getLayerById(layerId);
 
     if (layer?.getSource()) {
         const layerSource = layer.getSource(),
             source = layerSource instanceof Cluster ? layerSource.getSource() : layerSource,
-            filteredFeatures = source.getFeatures().filter(feature => ids.indexOf(feature.getId()) > -1);
+            filteredFeatures = source.getFeatures().filter(feature => featureIds.indexOf(feature.getId()) > -1);
 
         if (filteredFeatures.length > 0) {
-            this.zoomToExtent(calculateExtent(filteredFeatures), zoomOptions);
+            this.zoomToExtent(calculateExtent(filteredFeatures), zoomOptions, {mapId: map.mapId, mapMode: map.mapMode});
         }
     }
 };
@@ -73,16 +85,19 @@ View.prototype.zoomToFilteredFeatures = function (ids, layerId, zoomOptions) {
  * @param {String[]} data.extent The extent to zoom.
  * @param {Object} data.options Options for zoom.
  * @param {string} data.projection The projection from RUL parameter.
+ * @param {Object} [map] The parameter to get the map from the map collection
+ * @param {String} [map.mapId="ol"] The map id.
+ * @param {String} [map.mapMode="2D"] The map mode.
  * @returns {void}
  */
-View.prototype.zoomToProjExtent = function (data) {
+View.prototype.zoomToProjExtent = function (data, map = {mapId: "ol", mapMode: "2D"}) {
     if (Object.values(data).every(val => val !== undefined)) {
         const leftBottom = data.extent.slice(0, 2),
             topRight = data.extent.slice(2, 4),
-            transformedLeftBottom = transformToMapProjection(mapCollection.getMap("ol", "2D"), data.projection, leftBottom),
-            transformedTopRight = transformToMapProjection(mapCollection.getMap("ol", "2D"), data.projection, topRight),
+            transformedLeftBottom = transformToMapProjection(mapCollection.getMap(map.mapId, map.mapMode), data.projection, leftBottom),
+            transformedTopRight = transformToMapProjection(mapCollection.getMap(map.mapId, map.mapMode), data.projection, topRight),
             extentToZoom = transformedLeftBottom.concat(transformedTopRight);
 
-        this.zoomToExtent(extentToZoom, data.options);
+        this.zoomToExtent(extentToZoom, data.options, {mapId: map.mapId, mapMode: map.mapMode});
     }
 };

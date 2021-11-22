@@ -23,7 +23,6 @@ function setLayersAlwaysOnTop (layers) {
  * Adds a layer to the map.
  * Layers with the attribute "alwaysOnTop": true are set on top of the map.
  * @param {module:ol/layer/Base~BaseLayer} layer The layer to add.
- * @param {Number} zIndex The zIndex of the layer.
  * @returns {void}
  */
 PluggableMap.prototype.addLayer = function (layer) {
@@ -78,7 +77,7 @@ PluggableMap.prototype.addNewLayerIfNotExists = function (layerName, alwaysOnTop
             alwaysOnTop: alwaysOnTop
         });
 
-        this.addLayerOnTop(resultLayer);
+        this.addLayer(resultLayer);
     }
 
     return resultLayer;
@@ -95,7 +94,9 @@ PluggableMap.prototype.getLayerById = function (layerId, searchInGroupLayers = t
 
     this.getLayers().getArray().forEach(layer => {
         if (searchInGroupLayers && layer instanceof LayerGroup) {
-            returnLayer = layer.getLayers().getArray().find(childLayer => childLayer.get("id") === layerId);
+            const groupLayer = layer.getLayers().getArray().find(childLayer => childLayer.get("id") === layerId);
+
+            returnLayer = groupLayer || returnLayer;
         }
         else if (layer.get("id") === layerId) {
             returnLayer = layer;
