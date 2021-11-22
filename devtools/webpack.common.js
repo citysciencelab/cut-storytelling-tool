@@ -127,14 +127,14 @@ module.exports = function () {
                     }
                 },
                 {
-                    test: /\.less$/,
+                    test: /\.scss$/,
                     use: [
                         {
                             loader: MiniCssExtractPlugin.loader,
                             options: {}
                         },
                         "css-loader",
-                        "less-loader"
+                        "sass-loader"
                     ]
                 },
                 {

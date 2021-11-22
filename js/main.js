@@ -5,7 +5,7 @@
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import {fetch} from "./layerList";
-import "../css/bootstrap.less";
+import "../css/bootstrap.scss";
 // CSS-Handling: Importieren von Css damit Webpack das verarbeitet.
 import "../css/style.css";
 import HttpApi from "i18next-http-backend";
