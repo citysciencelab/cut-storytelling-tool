@@ -213,8 +213,8 @@ function initLanguage (portalLanguageConfig) {
 }
 
 
-// Less-Handling: Importieren von allen less-Files im modules-Ordner
-context = require.context("../modules/", true, /.+\.less?$/);
+// SCSS-Handling: Importieren von allen scss-Files im modules-Ordner
+context = require.context("../modules/", true, /.+\.scss?$/);
 
 context.keys().forEach(context);
 
