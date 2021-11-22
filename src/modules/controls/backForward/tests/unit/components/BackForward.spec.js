@@ -2,7 +2,6 @@ import Vuex from "vuex";
 import {config, mount, createLocalVue} from "@vue/test-utils";
 import BackForward from "../../../components/BackForward.vue";
 import BackForwardModule from "../../../store/indexBackForward";
-import mapCollection from "../../../../../../core/dataStorage/mapCollection.js";
 import {expect} from "chai";
 
 const localVue = createLocalVue();
@@ -17,8 +16,8 @@ describe("src/modules/controls/backForward/components/BackForward.vue", () => {
         center,
         counter;
 
-    before(() => {
-        mapCollection.clear();
+
+    beforeEach(() => {
         const map = {
             id: "ol_bf",
             mode: "2D",
@@ -38,10 +37,6 @@ describe("src/modules/controls/backForward/components/BackForward.vue", () => {
             })
         };
 
-        mapCollection.addMap(map, "ol_bf", "2D");
-    });
-
-    beforeEach(() => {
         memorize = null;
         zoom = null;
         center = null;
@@ -59,7 +54,10 @@ describe("src/modules/controls/backForward/components/BackForward.vue", () => {
                     namespaced: true,
                     getters: {
                         mapId: () => "ol_bf",
-                        mapMode: () => "2D"
+                        mapMode: () => "2D",
+                        ol2DMap: () => {
+                            return map;
+                        }
                     }
                 }
             }

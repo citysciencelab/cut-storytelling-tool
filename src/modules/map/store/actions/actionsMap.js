@@ -3,7 +3,6 @@ import * as highlightFeature from "./highlightFeature";
 import * as removeHighlightFeature from "./removeHighlighting";
 import {getWmsFeaturesByMimeType} from "../../../../api/gfi/getWmsFeaturesByMimeType";
 import getProxyUrl from "../../../../utils/getProxyUrl";
-import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";
 
@@ -193,11 +192,11 @@ const actions = {
      * @param {number} zoomLevel The zoomLevel to zoom to.
      * @returns {void}
      */
-    setZoomLevel ({state, getters, commit}, zoomLevel) {
+    setZoomLevel ({getters, commit}, zoomLevel) {
         const {maxZoomLevel, minZoomLevel} = getters;
 
         if (zoomLevel <= maxZoomLevel && zoomLevel >= minZoomLevel) {
-            mapCollection.getMap(state.mapId, state.mapMode).getView().setZoom(zoomLevel);
+            getters.ol2DMap.getView().setZoom(zoomLevel);
             commit("setZoomLevel", zoomLevel);
         }
     },
@@ -249,9 +248,9 @@ const actions = {
      * Sets center and resolution to initial values.
      * @returns {void}
      */
-    resetView ({state, dispatch}) {
+    resetView ({state, dispatch, getters}) {
         const {initialCenter, initialResolution} = state,
-            mapView = mapCollection.getMap(state.mapId, state.mapMode).getView();
+            mapView = getters.ol2DMap.getView();
 
         mapView.setCenter(initialCenter);
         mapView.setResolution(initialResolution);
@@ -265,8 +264,8 @@ const actions = {
      * @param {Number} index of the resolution
      * @returns {void}
      */
-    setResolutionByIndex ({state}, index) {
-        const map = mapCollection.getMap(state.mapId, state.mapMode),
+    setResolutionByIndex ({getters}, index) {
+        const map = getters.ol2DMap,
             view = map.getView();
 
         view.setResolution(view.getResolutions()[index]);
@@ -277,9 +276,9 @@ const actions = {
      * @param {Function} callback  to be called on pointermove
      * @returns {void}
      */
-    addPointerMoveHandler ({state}, callback) {
+    addPointerMoveHandler ({getters}, callback) {
         if (callback) {
-            mapCollection.getMap(state.mapId, state.mapMode).on("pointermove", e => callback(e));
+            getters.ol2DMap.on("pointermove", e => callback(e));
         }
 
     },
@@ -289,8 +288,8 @@ const actions = {
      * @param {Function} callback  to be called on pointermove
      * @returns {void}
      */
-    removePointerMoveHandler ({state}, callback) {
-        const map = mapCollection.getMap(state.mapId, state.mapMode);
+    removePointerMoveHandler ({getters}, callback) {
+        const map = getters.ol2DMap;
 
         map.un("pointermove", e => callback(e));
     },
@@ -300,8 +299,8 @@ const actions = {
      * @param {module:ol/interaction/Interaction} interaction - Interaction to be added to map.
      * @returns {void}
      */
-    addInteraction ({state}, interaction) {
-        const map = mapCollection.getMap(state.mapId, state.mapMode);
+    addInteraction ({getters}, interaction) {
+        const map = getters.ol2DMap;
 
         map.addInteraction(interaction);
     },
@@ -311,8 +310,8 @@ const actions = {
      * @param {module:ol/interaction/Interaction} interaction - Interaction to be removed from map.
      * @returns {void}
      */
-    removeInteraction ({state}, interaction) {
-        const map = mapCollection.getMap(state.mapId, state.mapMode);
+    removeInteraction ({getters}, interaction) {
+        const map = getters.ol2DMap;
 
         map.removeInteraction(interaction);
     },
@@ -323,8 +322,8 @@ const actions = {
      * @param {Object} payload.options Documentation linked.
      * @returns {void}
      */
-    zoomTo ({state, commit}, {geometryOrExtent, options}) {
-        const mapView = mapCollection.getMap(state.mapId, state.mapMode).getView();
+    zoomTo ({commit, getters}, {geometryOrExtent, options}) {
+        const mapView = getters.ol2DMap.getView();
 
         mapView.fit(geometryOrExtent, {
             duration: options?.duration ? options.duration : 800,
@@ -339,7 +338,7 @@ const actions = {
      * @param {String} name The name and the id for the layer.
      * @returns {module:ol/layer} The created or the already existing layer.
      */
-    createLayer ({state}, name) {
+    createLayer ({state, getters}, name) {
         const layerList = state.layerList;
 
         let resultLayer = layerList.find(layer => {
@@ -356,8 +355,7 @@ const actions = {
             source: new VectorSource(),
             zIndex: 999
         });
-
-        mapCollection.getMap(state.mapId, state.mapMode).addLayer(resultLayer);
+        getters.ol2DMap.addLayer(resultLayer);
         return resultLayer;
     },
     /**
@@ -366,10 +364,10 @@ const actions = {
      * @param {number[]} coords An array of numbers representing a xy-coordinate.
      * @returns {void}
      */
-    setCenter ({state, commit}, coords) {
+    setCenter ({commit, getters}, coords) {
         if (Array.isArray(coords) && coords.length === 2 && typeof coords[0] === "number" && typeof coords[1] === "number") {
             commit("setCenter", coords);
-            mapCollection.getMap(state.mapId, state.mapMode).getView().setCenter(coords);
+            getters.ol2DMap.getView().setCenter(coords);
         }
         else {
             console.warn("Center was not set. Probably there is a data type error. The format of the coordinate must be an array with two numbers.");

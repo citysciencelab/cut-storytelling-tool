@@ -4,7 +4,6 @@ import {mapGetters} from "vuex";
 import {getOverviewMapLayer, getOverviewMapView} from "./utils";
 import ControlIcon from "../../ControlIcon.vue";
 import TableStyleControl from "../../TableStyleControl.vue";
-import mapCollection from "../../../../core/dataStorage/mapCollection";
 
 /**
  * Overview control that shows a mini-map to support a user's
@@ -49,7 +48,7 @@ export default {
     },
     computed: {
         ...mapGetters(["uiStyle"]),
-        ...mapGetters("Map", ["mapMode", "mapId"]),
+        ...mapGetters("Map", ["ol2DMap"]),
 
         component () {
             return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
@@ -68,7 +67,7 @@ export default {
     mounted () {
         const id = this.layerId || this.baselayer,
             layer = getOverviewMapLayer(id),
-            map = mapCollection.getMap(this.mapId, this.mapMode),
+            map = this.ol2DMap,
             view = getOverviewMapView(map, this.resolution);
 
         if (layer) {
@@ -94,7 +93,7 @@ export default {
         toggleOverviewMapFlyout () {
             this.open = !this.open;
             if (this.overviewMap !== null) {
-                mapCollection.getMap(this.mapId, this.mapMode)[`${this.open ? "add" : "remove"}Control`](this.overviewMap);
+                this.ol2DMap[`${this.open ? "add" : "remove"}Control`](this.overviewMap);
             }
         },
         /**
