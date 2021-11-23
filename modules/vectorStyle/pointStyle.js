@@ -174,7 +174,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
     * @returns {number} - The rotation value in degrees or radiants.
     */
     getRotationValue: function (rotation) {
-        if (rotation) {
+        if (typeof rotation === "object") {
             const {value, isDegree} = rotation;
 
             if (isObjectPath(value)) {
