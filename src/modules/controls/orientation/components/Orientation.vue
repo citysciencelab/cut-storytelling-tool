@@ -47,7 +47,8 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("controls/orientation", Object.keys(getters))
+        ...mapGetters("controls/orientation", Object.keys(getters)),
+        ...mapGetters("Map", ["ol2DMap"])
     },
     watch: {
         tracking () {
@@ -74,7 +75,6 @@ export default {
     },
     methods: {
         ...mapMutations("controls/orientation", Object.keys(mutations)),
-        ...mapGetters("Map", ["ol2DMap"]),
 
         setIsGeoLocationPossible () {
             this.isGeoLocationPossible = window.location.protocol === "https:" || ["localhost", "127.0.0.1"].indexOf(window.location.hostname);
