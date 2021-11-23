@@ -12,6 +12,12 @@
 ### Added
 - The library "svg-url-loader" was added to package.json devDependencies.
 - Added the new Tool `Routing`.
+- The following NPM packages are added:
+  - dependencies:
+    "bootstrap-sass"
+  - devDependencies:
+    "sass", "sass-loader"
+
 
 ### Changed
 - The following NPM packages are updated:
@@ -27,12 +33,16 @@
 - WMSLayer and GroupLayer are refactored. They are no longer Backbone-models. WMSLayer uses the masterportalAPI's wms layer on creation.
 - 2D-map is removed from vuex store. Maps are now stored in a collection. Creation of 2D-map and 3D-map use masterportalAPI's abstraction layer.
 - Print formats only contain working formats now.
+- Switched CSS Preprocessor from LESS to SCSS. Edited Webpack Config, renamed .less files to .scss files including renaming of variables and mixins to match scss syntax. Edited vue components to use scss. Edited backbone modules to use scss files. Edited docs accordingly.
 
 ### Deprecated
 
 ### Removed
 - The module CLICKCOUNTER is removed.
 - The library "olcs" was removed from the package.json.
+- The following NPM packages are removed:
+  - devDependencies:
+    "less", "less-loader"
 
 ### Fixed
 - Print tool: fixed wrong order of features in created print-map.
