@@ -102,7 +102,7 @@ $ npm install
 
 With this, all dependencies are installed.
 
-In case add-ons are to be used, please refer to the **[add-ons documentation](addonsVue.md)** for further assistance.
+In case add-ons are to be used, please refer to the **[add-ons documentation](addOnsVue.md)** for further assistance.
 
 ### `npm start`
 
