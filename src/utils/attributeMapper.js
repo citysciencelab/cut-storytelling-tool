@@ -76,7 +76,7 @@ function prepareValueFromObject (key, mappingObj, properties) {
     const type = mappingObj?.type ? mappingObj.type : "string",
         condition = mappingObj?.condition ? mappingObj.condition : null;
     let preparedValue = prepareValue(properties, key),
-        format = mappingObj?.format ? mappingObj.format : "DD.MM.YYYY HH:mm:ss",
+        format = mappingObj?.format ? mappingObj.format : "YYYY-MM-DDTHH:mm:ss.SSSZ",
         date;
 
     if (condition) {
@@ -86,7 +86,7 @@ function prepareValueFromObject (key, mappingObj, properties) {
         case "date": {
             date = moment(String(preparedValue));
             if (date.isValid()) {
-                preparedValue = moment(String(preparedValue)).format(format);
+                preparedValue = date.format(format);
             }
             break;
         }
