@@ -5,6 +5,7 @@ import CoordToolkit from "./coordToolkit/components/CoordToolkit.vue";
 import Draw from "./draw/components/Draw.vue";
 import CompareFeatures from "./compareFeatures/components/CompareFeatures.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
+import GeneralFilter from "./generalFilter/components/GeneralFilter.vue";
 import Gfi from "./gfi/components/Gfi.vue";
 import LayerClusterToggler from "./layerClusterToggler/components/LayerClusterToggler.vue";
 import Measure from "./measure/components/Measure.vue";
@@ -34,6 +35,7 @@ const state = {
         compareFeatures: CompareFeatures,
         fileImport: FileImport,
         gfi: Gfi,
+        generalFilter: GeneralFilter,
         layerClusterToggler: LayerClusterToggler,
         measure: Measure,
         print: Print,

@@ -13,6 +13,7 @@ import Contact from "./contact/store/indexContact";
 import CoordToolkit from "./coordToolkit/store/indexCoordToolkit";
 import Draw from "./draw/store/indexDraw";
 import FileImport from "./fileImport/store/indexFileImport";
+import GeneralFilter from "./generalFilter/store/indexGeneralFilter";
 import Gfi from "./gfi/store/indexGfi";
 import LayerClusterToggler from "./layerClusterToggler/store/indexLayerClusterToggler";
 import Measure from "./measure/store/indexMeasure";
@@ -40,6 +41,7 @@ export default {
         CoordToolkit,
         Draw,
         FileImport,
+        GeneralFilter,
         Gfi,
         Measure,
         Print,
