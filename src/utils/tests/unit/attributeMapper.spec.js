@@ -167,7 +167,7 @@ describe("src/utils/attributeMapper.js", () => {
 
             expect(mapAttributes(props, mappingObj)).to.deep.equal(
                 {
-                    date: "17.11.2021 13:02:00"
+                    date: "2021-11-17T13:02:00.000+01:00"
                 });
         });
         it("should map object with mapping object and type:date and format:YYYY-MM-DD", () => {
