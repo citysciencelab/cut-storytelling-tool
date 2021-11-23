@@ -480,13 +480,12 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     checkProperties: function (feature, rule) {
         if (rule?.conditions?.properties) {
             const featureProperties = feature.getProperties(),
-                properties = rule.conditions.properties,
-                isArray = Array.isArray(properties);
+                properties = rule.conditions.properties;
 
             let key,
                 i;
 
-            if (isArray) {
+            if (Array.isArray(properties)) {
                 for (i in properties) {
                     const value = properties[i].value;
 
