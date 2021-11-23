@@ -294,6 +294,7 @@ GFI search service configuration.
 |----|--------|----|-------|-----------|------|
 |minChars|no|Integer|3|Minimum amount of characters required to start a search.|false|
 |serviceID|yes|String||Search service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
+|sortByName|no|Boolean|false|Defines whether search results are to be sorted alphanumerically.|false|
 |queryObject|yes|**[queryObject](#markdown-header-portalconfigsearchbargdiqueryobject)**||Query object read by the Elasticsearch model.|false|
 
 **Example**
@@ -303,6 +304,7 @@ GFI search service configuration.
     "gdi": {
         "minChars": 3,
         "serviceId": "elastic",
+        "sortByName": false,
         "queryObject": {
             "id": "query",
             "params": {

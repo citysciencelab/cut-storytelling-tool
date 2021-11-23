@@ -14,13 +14,13 @@
 <% }); %>
 <% if (uiStyle === "TABLE") { %>
 
-    <% if (hitList.length >= recommendedListLength && hitList.length !== 0) { %>
+    <% if (finalHitList.length >= recommendedListLength && finalHitList.length !== 0) { %>
         <li class="list-group-item results"><div><span><%= showAllResultsText %></span><span class="glyphicon glyphicon-play-circle"></span></div></li>
 
         <div class="search-funnel"></div>
 
         <div class="search-right-funnel-corner"></div>
-    <% } else if (hitList.length < recommendedListLength && hitList.length !== 0) { %>
+    <% } else if (finalHitList.length < recommendedListLength && finalHitList.length !== 0) { %>
 
         <li class="list-group-item results"></li>
 
@@ -29,7 +29,7 @@
         <div class="search-right-funnel-corner"></div>
     <% } %>
 <% } else { %>
-    <% if (hitList.length >= recommendedListLength) { %>
+    <% if (finalHitList.length >= recommendedListLength) { %>
 
          <li class="list-group-item results"><div><span><%= showAllResultsText %></span><span class="glyphicon glyphicon-play-circle"></span></div></li>
     <% } %>

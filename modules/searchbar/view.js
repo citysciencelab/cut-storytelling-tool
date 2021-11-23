@@ -34,7 +34,7 @@ import {getWKTGeom} from "../../src/utils/getWKTGeom";
  */
 /**
  * @member SearchbarHitListTemplate
- * @description Template for hitList
+ * @description Template for finalHitList
  * @memberof Searchbar
  */
 const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */{
@@ -365,7 +365,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         // sz, does not want to work in a local environment, so first use the template as variable
         // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
 
-        this.prepareAttrStrings(attr.hitList);
+        this.prepareAttrStrings(attr.finalHitList);
         this.$("ul.dropdown-menu-search").html(this.templateRecommendedList(attr));
         this.$("ul.dropdown-menu-search").css("max-height", height);
         this.$("ul.dropdown-menu-search").css("width", width);
@@ -373,20 +373,20 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
 
         // With only one hit in the recommendedList, the marker is set directly
         // and in case of a Tree-Search the menu folds out.
-        if (this.model.get("initSearchString") !== undefined && this.model.get("hitList").length === 1) {
+        if (this.model.get("initSearchString") !== undefined && this.model.get("finalHitList").length === 1) {
             this.hitSelected();
         }
         this.$("#searchInput + span").show();
     },
 
     /**
-     * todo
-     * @param {*} hitlist todo
-     * @returns {*} todo
+     * Preparing the attributes text
+     * @param {*} finalHitList the final hitList of searching results
+     * @returns {void}
      */
-    prepareAttrStrings: function (hitlist) {
+    prepareAttrStrings: function (finalHitList) {
         // keps hit.names from overflowing
-        hitlist.forEach(function (hit) {
+        finalHitList.forEach(function (hit) {
             if (hit.additionalInfo !== undefined) {
                 if (hit.name.length + hit.additionalInfo.length > 50) {
                     hit.shortName = this.model.shortenString(hit.name, 30);
@@ -412,7 +412,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     renderHitList: function () {
         let attr;
 
-        if (this.model.get("hitList").length === 1) {
+        if (this.model.get("finalHitList").length === 1) {
             this.hitSelected(); // first and only entry in list
         }
         else {
@@ -444,7 +444,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         let hit,
             hitID,
             pick;
-        const modelHitList = this.model.get("hitList");
+        const modelHitList = this.model.get("finalHitList");
 
         // distingiush hit
         if (evt && Object.prototype.hasOwnProperty.call(evt, "cid")) { // in this case, evt = model
@@ -454,7 +454,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         }
         else if (evt && Object.prototype.hasOwnProperty.call(evt, "currentTarget") === true && evt.currentTarget.id) {
             hitID = evt.currentTarget.id;
-            hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), {"id": hitID});
+            hit = Radio.request("Util", "findWhereJs", this.model.get("finalHitList"), {"id": hitID});
 
         }
         else if (modelHitList.length > 1) {
@@ -643,7 +643,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             if (event.keyCode === 40) {
                 this.nextElement(selected);
             }
-            if (event.keyCode === 13 && this.model.get("hitList").length > 1) {
+            if (event.keyCode === 13 && this.model.get("finalHitList").length > 1) {
                 if (this.isFolderElement(selected)) {
                     this.collapseHits(selected);
                 }
@@ -910,7 +910,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             }
             else if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && !(this.getSelectedElement("#searchInputUL").length > 0 && this.getSelectedElement("#searchInputUL").hasClass("type"))) {
                 if (evt.key === "Enter" || evt.keyCode === 13) {
-                    if (this.model.get("hitList").length === 1) {
+                    if (this.model.get("finalHitList").length === 1) {
                         this.hitSelected(); // first and only entry in list
                     }
                     else {
@@ -1016,7 +1016,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     showMarker: function (evt) {
         const isEvent = evt instanceof $.Event,
             hitId = isEvent ? evt.currentTarget.id : null,
-            hit = isEvent ? this.model.get("hitList").find(obj => obj.id === hitId) : null,
+            hit = isEvent ? this.model.get("finalHitList").find(obj => obj.id === hitId) : null,
             hitName = isEvent ? hit.name : "undefined";
 
         // with gdi-search no action on mousehover or on GFI onClick
@@ -1055,7 +1055,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
 
         if (evt !== undefined) {
             hitId = evt.currentTarget.id;
-            hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), {"id": hitId});
+            hit = Radio.request("Util", "findWhereJs", this.model.get("finalHitList"), {"id": hitId});
         }
 
         if (hit && Object.prototype.hasOwnProperty.call(hit, "triggerEvent")) {
