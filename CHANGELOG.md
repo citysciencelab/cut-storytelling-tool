@@ -12,6 +12,7 @@
 ### Added
 - added parameter "rotation" to wfs features with iconPointStyle, if the parameter is not given it will fall back to standard alignment.
 - The library "svg-url-loader" was added to package.json devDependencies.
+- Added the new Tool `Routing`.
 
 ### Changed
 - The following NPM packages are updated:

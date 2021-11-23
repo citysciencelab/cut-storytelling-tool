@@ -207,6 +207,22 @@ In the following, all configuration options are described. For all configuration
 |utmStreifen|no|String|`"UTM_Streifen.png"`|First quick help image regarding the measuring tool (MeasureTool), belonging to the "Equalization in UTM" chapter. The image must exist in the `imgPath` folder.|
 |utmVerzerrung|no|String|`"UTM_Verzerrung.png"`|Second quick help image regarding the measuring tool (MeasureTool), belonging to the "Equalization in UTM" chapter. The image must exist in the `imgPath` folder.|
 |utmFormeln|no|String|`"UTM_Formeln.png"`|Third quick help image regarding the measuring tool (MeasureTool), belonging to the "Equalization in UTM" chapter. The image must exist in the `imgPath` folder.|
+|routingTool1|no|String|`"routing_1.png"`|First quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool2|no|String|`"routing_2.png"`|Second quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool3|no|String|`"routing_3.png"`|Third quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool4|no|String|`"routing_4.png"`|Fourth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool5|no|String|`"routing_5.png"`|Fifth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool6|no|String|`"routing_6.png"`|Sixth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool7|no|String|`"routing_7.png"`|Seventh quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool8|no|String|`"routing_8.png"`|Eighth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool9|no|String|`"routing_9.png"`|Nineth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool10|no|String|`"routing_10.png"`|Tenth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool11|no|String|`"routing_11.png"`|Eleventh quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool12|no|String|`"routing_12.png"`|Twelfth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool13|no|String|`"routing_13.png"`|Thirteenth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool14|no|String|`"routing_14.png"`|Fourteenth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool15|no|String|`"routing_15.png"`|Fifteenth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool16|no|String|`"routing_16.png"`|Sixteenth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
 
 ***
 

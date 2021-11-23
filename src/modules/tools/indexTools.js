@@ -13,6 +13,7 @@ import Contact from "./contact/store/indexContact";
 import CoordToolkit from "./coordToolkit/store/indexCoordToolkit";
 import Draw from "./draw/store/indexDraw";
 import FileImport from "./fileImport/store/indexFileImport";
+import GeneralFilter from "./generalFilter/store/indexGeneralFilter";
 import Gfi from "./gfi/store/indexGfi";
 import LayerClusterToggler from "./layerClusterToggler/store/indexLayerClusterToggler";
 import Measure from "./measure/store/indexMeasure";
@@ -24,6 +25,8 @@ import SelectFeatures from "./selectFeatures/store/indexSelectFeatures";
 import StyleVT from "./styleVT/store/indexStyleVT";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
 import WfsSearch from "./wfsSearch/store/indexWfsSearch";
+import Routing from "./routing/store/indexRouting";
+
 /**
  * This is here to test app-store/utils/composeModules.
  * Also provides actions.
@@ -38,6 +41,7 @@ export default {
         CoordToolkit,
         Draw,
         FileImport,
+        GeneralFilter,
         Gfi,
         Measure,
         Print,
@@ -48,6 +52,7 @@ export default {
         StyleVT,
         SupplyCoord,
         WfsSearch,
+        Routing,
         LayerClusterToggler
     },
     state,

@@ -59,7 +59,11 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
                 }
             },
             state: {
-                configJson: mockConfigJson
+                configJson: mockConfigJson,
+                Map: {
+                    mapId: "ol",
+                    mapMode: "2D"
+                }
             }
         });
         store.commit("Tools/BufferAnalysis/setActive", true);

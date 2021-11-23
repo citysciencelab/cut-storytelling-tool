@@ -1,4 +1,4 @@
-import {wms} from "masterportalAPI/src";
+import {wms} from "masterportalAPI";
 import store from "../../app-store";
 import Layer from "./layer";
 import mapCollection from "../../core/dataStorage/mapCollection.js";
@@ -122,7 +122,7 @@ WMSLayer.prototype.getGfiUrl = function () {
         projection = mapView.getProjection(),
         coordinate = store.getters["Map/clickCoord"];
 
-    return this.get("layerSource").getFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.get("infoFormat"), FEATURE_COUNT: this.get("featureCount"), STYLES: "", SLD_BODY: undefined});
+    return this.get("layerSource").getFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.get("infoFormat"), FEATURE_COUNT: this.get("featureCount")});
 };
 /**
 * If the parameter "legendURL" is empty, it is set to GetLegendGraphic.
