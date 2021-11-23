@@ -52,13 +52,13 @@ WFSLayer.prototype.createLayer = function (attrs) {
             gfiTheme: attrs.gfiTheme,
             hitTolerance: attrs.hitTolerance,
             altitudeMode: attrs.altitudeMode,
-            alwaysOnTop: attrs.alwaysOnTop,
-            visible: attrs.isSelected
+            alwaysOnTop: attrs.alwaysOnTop
         },
         loadingParams = {
             xhrParameters: attrs.isSecured ? {credentials: "include"} : null,
             propertyname: this.getPropertyname(attrs)
         },
+        styleFn = this.getStyleFunction(attrs),
         options = {
             wfsFilter: attrs.wfsFilter,
             clusterGeometryFunction: function (feature) {
@@ -69,7 +69,6 @@ WFSLayer.prototype.createLayer = function (attrs) {
                 return feature.getGeometry();
             },
             version: this.getVersion(attrs),
-            style: this.getStyleFunction(attrs).bind(this),
             featuresFilter: this.getFeaturesFilterFunction(attrs).bind(this),
             beforeLoading: function () {
                 if (bridge.getInitialLoadingState() === 0 && (this.layer && this.layer.get("isSelected")) || attrs.isSelected) {
@@ -87,6 +86,11 @@ WFSLayer.prototype.createLayer = function (attrs) {
             }
         };
 
+    if (styleFn) {
+        styleFn.bind(this);
+    }
+    options.style = styleFn;
+
     this.layer = wfs.createLayer(rawLayerAttributes, layerParams, options, loadingParams);
 };
 
@@ -102,7 +106,7 @@ WFSLayer.prototype.getVersion = function (attrs) {
     if (!isVersionValid) {
         return allowedVersions[0];
     }
-    return undefined;
+    return attrs.version;
 };
 /**
  * Returns a function to filter features with.
@@ -145,7 +149,7 @@ WFSLayer.prototype.checkVersion = function (name, version, allowedVersions) {
     return isVersionValid;
 };
 /**
- * Returns the propertynames as string.
+ * Returns the propertynames as comma separated string.
  * @param {Object} attrs  params of the raw layer
  * @returns {string} the propertynames as string
  */
@@ -157,6 +161,11 @@ WFSLayer.prototype.getPropertyname = function (attrs) {
     }
     return propertyname;
 };
+/**
+ * Sets Style for layer.
+ * @param {Object} attrs  params of the raw layer
+ * @returns {void}
+ */
 WFSLayer.prototype.getStyleFunction = function (attrs) {
     const styleId = attrs.styleId,
         styleModel = bridge.getStyleModelById(styleId);
@@ -230,7 +239,7 @@ WFSLayer.prototype.createLegend = function () {
  */
 WFSLayer.prototype.hideAllFeatures = function () {
     const layerSource = this.get("layerSource"),
-        features = this.get("layerSource").getFeatures();
+        features = layerSource.getFeatures();
 
     // optimization - clear and re-add to prevent cluster updates on each change
     layerSource.clear();
@@ -270,10 +279,6 @@ WFSLayer.prototype.showFeaturesByIds = function (featureIdList) {
         featuresToShow = featureIdList.map(id => layerSource.getFeatureById(id));
 
     this.hideAllFeatures();
-
-    // optimization - clear and re-add to prevent cluster updates on each change
-    layerSource.clear();
-
     featuresToShow.forEach(feature => {
         const style = this.getStyleAsFunction(this.get("style"));
 
@@ -303,5 +308,5 @@ WFSLayer.prototype.getStyleAsFunction = function (style) {
  * @returns {void}
  */
 WFSLayer.prototype.styling = function () {
-    this.layer.setStyle(this.get("style"));
+    this.layer.setStyle(this.getStyleAsFunction(this.get("style")));
 };
