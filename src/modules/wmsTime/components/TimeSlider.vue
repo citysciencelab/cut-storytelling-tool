@@ -28,7 +28,8 @@ export default {
 
                 this.sliderValue = this.timeRange[index];
             }
-            Radio.trigger("WmsTime", "updateTime", this.layerId, this.sliderValue);
+
+            Radio.request("ModelList", "getModelByAttributes", {id: this.layerId}).updateTime(this.layerId, this.sliderValue);
 
             if (this.layerSwiper.active) {
                 this.updateMap();
