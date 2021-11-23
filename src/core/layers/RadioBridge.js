@@ -23,7 +23,7 @@ export function setLegendLayerList () {
 }
 /**
  * Listens to changes of attribute SLDBody.
- * Can be done directly or is no longer needed, if if tool styleWMS  and treefilter are refactored.
+ * Can be done directly or is no longer needed, if tool styleWMS  and treefilter are refactored.
  * @param {Object} layerModel the layer
  * @returns {void}
  */
@@ -85,7 +85,7 @@ export function isVisibleInTreeChanged (layerModel) {
 }
 /**
  * Fires if menu must be rendered.
- * Can be done directly or is no longer needed, if if menu is refactored.
+ * Can be done directly or is no longer needed, if menu is refactored.
  * @returns {void}
  */
 export function renderMenu () {
@@ -93,7 +93,7 @@ export function renderMenu () {
 }
 /**
  * Fires if menu selection must be rendered.
- * Can be done directly or is no longer needed, if if menu is refactored.
+ * Can be done directly or is no longer needed, if menu is refactored.
  * @returns {void}
  */
 export function renderMenuSelection () {
@@ -101,7 +101,7 @@ export function renderMenuSelection () {
 }
 /**
  * Fires if settings in menu must be rendered.
- * Can be done directly or is no longer needed, if if menu is refactored.
+ * Can be done directly or is no longer needed, if menu is refactored.
  * @returns {void}
  */
 export function renderMenuSettings () {
@@ -121,7 +121,7 @@ export function removeLayerByIdFromModelList (id) {
 }
 /**
  * Updates the layer view in tree and updates selection in tree.
- * Can be done directly or is no longer needed, if if menu is refactored.
+ * Can be done directly or is no longer needed, if menu is refactored.
  * @param {Object} layerModel the layer
  * @returns {void}
  */
@@ -131,7 +131,7 @@ export function updateLayerView (layerModel) {
 }
 /**
  * Returns all layers.
- * Can be done directly or is no longer needed, if if modelList is refactored.
+ * Can be done directly or is no longer needed, if modelList is refactored.
  * @returns {void}
  */
 export function getAllLayers () {
@@ -139,7 +139,7 @@ export function getAllLayers () {
 }
 /**
  * Returns the layerModel with the given attributes.
- * Can be done directly or is no longer needed, if if modelList is refactored.
+ * Can be done directly or is no longer needed, if modelList is refactored.
  * @param {Object} attributes of the model to search for
  * @returns {void}
  */
@@ -148,24 +148,31 @@ export function getLayerModelsByAttributes (attributes) {
 }
 /**
  * Moves the layer in tree.
- * Can be done directly or is no longer needed, if if modelList is refactored.
+ * Can be done directly or is no longer needed, if modelList is refactored.
  * @param {Object} layerModel the layer
- * @param {number} value -1 moves down and 1 moves up
+ * @param {Number} value -1 moves down and 1 moves up
  * @returns {void}
  */
 export function moveModelInTree (layerModel, value) {
     Radio.trigger("ModelList", "moveModelInTree", layerModel, value);
     Radio.trigger("Layer", "layerVisibleChanged", layerModel.get("id"), layerModel.get("isVisibleInMap"), layerModel);
 }
-/* ******************* Util ******************* */
 /**
- * Search LegendURL within layer
- * Can be done directly or is no longer needed, if all layers are handeled by store and modellList is refactored.
- * @param {Object} layer the layer to be searched within
+ * Removes layer from project completely.
+ * Can be done directly or is no longer needed, if modelList is refactored.
+ * @param {String} id id of the layer
  * @returns {void}
  */
-export function searchNestedObjectByUtil (layer) {
-    Radio.request("Util", "searchNestedObject", layer, "LegendURL");
+export function removeItem (id) {
+    Radio.trigger("Parser", "removeItem", id);
+}
+/**
+ * Refresh layer tree.
+ * Can be done directly or is no longer needed, if modelList is refactored.
+ * @returns {void}
+ */
+export function refreshLayerTree () {
+    Radio.trigger("Util", "refreshTree");
 }
 /**
  * Triggers resetFeatures on VectorLayer.
@@ -222,5 +229,4 @@ export function onLanguageChanged (layer) {
 }
 
 
-/* ******************* WMTS ******************* */
 

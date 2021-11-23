@@ -10,7 +10,7 @@ import TileLayer from "ol/layer/Tile";
 import * as WMTSResult1 from "../../../../resources/testWMTSResponse1.xml";
 import * as WMTSResult2 from "../../../../resources/testWMTSResponse2.xml";
 
-describe("core/modelList/layer/wmts", function () {
+describe.skip("core/modelList/layer/wmts", function () {
     let wmts;
 
     before(function () {

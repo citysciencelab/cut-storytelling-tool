@@ -7,7 +7,9 @@ import {get as getProjection} from "ol/proj";
 import {getWidth} from "ol/extent";
 import WMTSCapabilities from "ol/format/WMTSCapabilities";
 import * as bridge from "./RadioBridge.js";
-// import {dispatch} from "vuex";
+import axios from "axios";
+import handleAxiosResponse from "../../utils/handleAxiosResponse";
+import getNestedValues from "../../utils/getNestedValues";
 
 /**
  * Creates a layer of type WMTS.
@@ -15,43 +17,29 @@ import * as bridge from "./RadioBridge.js";
  * supported=["2D", "3D"] Supported map modes.
  * @param {Object} attrs  attributes of the layer
  * @param {Object} options  options of the layer
- * showSettings=true Flag if settings selectable.
  * @returns {void}
  */
 export default function WMTSLayer (attrs, options) {
     const defaults = {
-            infoFormat: "text/xml",
-            supported: ["2D", "3D"],
-            showSettings: true
-        },
-        layerSource = this.createLayerSource(Object.assign(defaults, attrs, options));
+        infoFormat: "text/xml",
+        supported: ["2D", "3D"],
+        showSettings: true
+    };
 
-    attrs.layerSource = layerSource;
     this.createLayer(Object.assign(defaults, attrs, options));
+
     // call the super-layer
     Layer.call(this, Object.assign(defaults, attrs, options), this.layer, !attrs.isChildLayer);
     this.createLegend();
 
-    this.checkForScale(bridge.getOptionsFromMapView());
-
-    // ToDo Listener
-    Radio.channel("Layer").on("change:layerSource", () => {
-        const hasOptionsFromCapabilities = Boolean(this.get("optionsFromCapabilities"));
-
-        if (hasOptionsFromCapabilities) {
-            this.updateLayerSource();
-        }
-        if (hasOptionsFromCapabilities && this.get("layerSource").getState() === "ready") {
-            // state of optionsFromCapabilities wmts source is ready, trigger removeloadinglayerFromMap
-            bridge.removeLoadingLayerFromMap();
-        }
-    });
+    if (this.get("isVisibleInMap")) {
+        this.updateSource();
+    }
 
 }
 
 // Link prototypes and add prototype methods, means WMTSLayer uses all methods and properties of Layer
 WMTSLayer.prototype = Object.create(Layer.prototype);
-
 
 /**
 * Creates the LayerSource for this WMTSLayer.
@@ -60,43 +48,42 @@ WMTSLayer.prototype = Object.create(Layer.prototype);
 */
 WMTSLayer.prototype.createLayerSource = function (attrs) {
     if (attrs.optionsFromCapabilities === undefined) {
-        const projection = getProjection(this.get("coordinateSystem")),
+        const projection = getProjection(attrs.coordinateSystem),
             extent = projection.getExtent(),
-            style = this.get("style"),
-            format = this.get("format"),
-            wrapX = this.get("wrapX") ? this.get("wrapX") : false,
-            urls = this.get("urls"),
-            size = getWidth(extent) / parseInt(this.get("tileSize"), 10),
-            resLength = parseInt(this.get("resLength"), 10),
+            style = attrs.style,
+            format = attrs.format,
+            wrapX = attrs.wrapX ? attrs.wrapX : false,
+            urls = attrs.urls,
+            size = getWidth(extent) / parseInt(attrs.tileSize, 10),
+            resLength = parseInt(attrs.resLength, 10),
             resolutions = new Array(resLength),
             matrixIds = new Array(resLength),
             source = new WMTS({
                 projection: projection,
-                attributions: this.get("olAttribution"),
+                attributions: attrs.olAttribution,
                 tileGrid: new WMTSTileGrid({
-                    origin: this.get("origin"),
+                    origin: attrs.origin,
                     resolutions: resolutions,
                     matrixIds: matrixIds,
-                    tileSize: this.get("tileSize")
+                    tileSize: attrs.tileSize
                 }),
                 tilePixelRatio: DEVICE_PIXEL_RATIO,
                 urls: urls,
-                matrixSet: this.get("tileMatrixSet"),
-                matrixSizes: this.get("matrixSizes"),
+                matrixSet: attrs.tileMatrixSet,
+                matrixSizes: attrs.matrixSizes,
                 layer: attrs.layers,
                 format: format,
                 style: style,
-                version: this.get("version"),
-                transparent: this.get("transparent").toString(),
+                version: attrs.version,
+                transparent: attrs.transparent.toString(),
                 wrapX: wrapX,
-                requestEncoding: this.get("requestEncoding"),
-                scales: this.get("scales")
+                requestEncoding: attrs.requestEncoding,
+                scales: attrs.scales
             });
 
         this.generateArrays(resolutions, matrixIds, resLength, size);
-        source.matrixSizes = this.get("matrixSizes");
-        source.scales = this.get("scales");
-        this.setLayerSource(source);
+        source.matrixSizes = attrs.matrixSizes;
+        source.scales = attrs.scales;
     }
     else {
         const layerIdentifier = attrs.layers,
@@ -115,7 +102,7 @@ WMTSLayer.prototype.createLayerSource = function (attrs) {
             capabilitiesOptions.projection = "EPSG:3857";
         }
 
-        this.fetchWMTSCapabilities(url)
+        this.getWMTSCapabilities(url)
             .then((result) => {
                 const options = optionsFromCapabilities(result, capabilitiesOptions),
                     tileMatrixSet = result.Contents.TileMatrixSet.filter(set => set.Identifier === options.matrixSet)[0],
@@ -133,9 +120,9 @@ WMTSLayer.prototype.createLayerSource = function (attrs) {
 
                     source.matrixSizes = matrixSizes;
                     source.scales = scales;
-                    this.set("options", options);
-                    this.setLayerSource(source);
-                    Promise.resolve();
+                    this.layer.set("options", options);
+                    this.layer.setSource(source);
+                    this.layer.getSource().refresh();
                 }
                 else {
                     // reject("Cannot get options from WMTS-Capabilities");
@@ -145,9 +132,9 @@ WMTSLayer.prototype.createLayerSource = function (attrs) {
             .catch((error) => {
                 this.removeLayer();
                 // remove layer from project completely
-                Radio.trigger("Parser", "removeItem", this.get("id"));
+                bridge.removeItem(this.get("id"));
                 // refresh layer tree
-                Radio.trigger("Util", "refreshTree");
+                bridge.refreshLayerTree();
                 if (error === "Fetch error") {
                     // error message has already been printed earlier
                     return;
@@ -174,45 +161,29 @@ WMTSLayer.prototype.generateArrays = function (resolutions, matrixIds, length, s
 };
 
 /**
- * Fetch the WMTS-GetCapabilities document and parse it
- * @param {string} url url to fetch
+ * Gets the WMTS-GetCapabilities document and parse it
+ * @param {string} url url for getting capabilities
  * @returns {promise} promise resolves to parsed WMTS-GetCapabilities object
  */
-WMTSLayer.prototype.fetchWMTSCapabilities = function (url) {
-    return fetch(url)
-        .then((result) => {
-            if (!result.ok) {
-                throw Error(result.statusText);
-            }
-            return result.text();
-        })
+WMTSLayer.prototype.getWMTSCapabilities = function (url) {
+    return axios.get(url)
+        .then(response => handleAxiosResponse(response, "getWMTSCapabilities"))
         .then(result => {
             const parser = new WMTSCapabilities();
 
             return parser.read(result);
-        })
-        .catch(function (error) {
-            const errorMessage = " WMTS-Capabilities fetch Error: " + error;
-
-            this.showErrorMessage(errorMessage, this.get("name"));
-            return Promise.reject("Fetch error");
-        }.bind(this));
+        });
 };
 
 /**
- * Shows error message when WMTS-GetCapabilities cannot be parsed
+ * Shows error message in console when WMTS-GetCapabilities cannot be parsed
  * @param {string} errorMessage error message
  * @param {string} layerName layerName
  * @returns {void}
  */
-/* WMTSLayer.prototype.showErrorMessage = (errorMessage, layerName) => {
-    const alertingMessage = {
-        category: i18next.t("common:modules.alerting.categories.error"),
-        content: "Layer " + layerName + ": " + errorMessage
-    };
-
-    dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
-}; */
+WMTSLayer.prototype.showErrorMessage = (errorMessage, layerName) => {
+    console.warn("content: Layer " + layerName + ": " + errorMessage);
+};
 
 /**
  * Creates the WMTSLayer.
@@ -220,18 +191,20 @@ WMTSLayer.prototype.fetchWMTSCapabilities = function (url) {
  * @returns {void}
  */
 WMTSLayer.prototype.createLayer = function (attrs) {
-    // console.log(attrs);
-    const tileLayer = new TileLayer({
-        id: attrs.id,
-        source: attrs.layerSource,
-        name: attrs.name,
-        supported: ["2D", "3D"],
-        showSettings: true,
-        extent: null,
-        typ: attrs.typ,
-        legendURL: attrs.legendURL,
-        infoFormat: attrs.infoFormat
-    });
+    const layerSource = this.createLayerSource(Object.assign(attrs)),
+        tileLayer = new TileLayer({
+            id: attrs.id,
+            source: layerSource,
+            name: attrs.name,
+            minResolution: attrs.minScale,
+            maxResolution: attrs.maxScale,
+            supported: ["2D", "3D"],
+            showSettings: true,
+            extent: null,
+            typ: attrs.typ,
+            legendURL: attrs.legendURL,
+            infoFormat: attrs.infoFormat
+        });
 
     this.layer = tileLayer;
 };
@@ -260,24 +233,22 @@ WMTSLayer.prototype.createLegend = function () {
         }
         else {
             legend = this.get("legendURL");
+            this.setLegend([legend]);
         }
     }
-
     if ((this.get("optionsFromCapabilities") === undefined) && (legend === true)) {
         console.error("WMTS: No legendURL is specified for the layer!");
     }
-
-    else if (this.get("optionsFromCapabilities") && !legend) {
-        this.fetchWMTSCapabilities(capabilitiesUrl)
+    else if (this.get("optionsFromCapabilities") && !this.get("legendURL")) {
+        this.getWMTSCapabilities(capabilitiesUrl)
             .then(function (result) {
                 result.Contents.Layer.forEach(function (layer) {
                     if (layer.Identifier === this.get("layers")) {
-                        const getLegend = bridge.searchNestedObjectByUtil(layer);
+                        const getLegend = getNestedValues(layer, "LegendURL");
 
                         if (getLegend !== null && getLegend !== undefined) {
-                            legend = getLegend.Legend[0].href;
-
-                            this.setLegend(legend);
+                            legend = getLegend[0][0].href;
+                            this.setLegend([legend]);
 
                             // rebuild Legend
                             bridge.setLegendLayerList();
