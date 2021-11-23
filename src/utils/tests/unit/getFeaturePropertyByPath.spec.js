@@ -54,7 +54,7 @@ describe("src/utils/getFeaturePropertyByPath.js", () => {
         it("should return null if path is invalid", function () {
             expect(getFeaturePropertyByPath(jsonObjects[0].getProperties(), "@myObj.myArray.1.myValue")).to.be.null;
         });
-        it("should return null if path is invalid", function () {
+        it("should return null if the path is ill defined", function () {
             expect(getFeaturePropertyByPath(jsonObjects[1].getProperties(), "@@test")).to.equal("test");
         });
     });
