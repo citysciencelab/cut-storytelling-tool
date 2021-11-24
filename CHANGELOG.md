@@ -9,6 +9,7 @@
 ---
 ## Unreleased - in development
 ### Added
+- The VectorBaseLayer is refactored. It is no longer a Backbone-model. The VectorBaseLayer uses the masterportalAPI's vectorBase layer on creation.
 
 ### Changed
 - The following NPM packages are updated:
