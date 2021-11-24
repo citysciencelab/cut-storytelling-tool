@@ -148,7 +148,7 @@ WMSLayer.prototype.getLayers = function () {
  * @returns {String} - The created getFeature info url.
  */
 WMSLayer.prototype.getGfiUrl = function () {
-    const mapView = mapCollection.getMap("ol", "2D").getView(),
+    const mapView = mapCollection.getMapView("ol", "2D"),
         resolution = store.getters["Map/resolution"],
         projection = mapView.getProjection(),
         coordinate = store.getters["Map/clickCoord"];

@@ -148,9 +148,9 @@ WMSTimeLayer.prototype.retrieveExtentValues = function (extent) {
  *         The step is retrieved from the resolution.
  * - Case 4: List of multiple intervals; ',' and '/' are present. For every interval the process described in CASE 3 will be performed.
  *
- * @param {string} extent Time dimensional extent retrieved from the service.
- * @param {string} extent.values The values of the time dimensional extent.
- * @returns {object} An object containing the range of possible time values as well as the minimum step between these.
+ * @param {String} extent Time dimensional extent retrieved from the service.
+ * @param {String} extent.values The values of the time dimensional extent.
+ * @returns {Object} An object containing the range of possible time values as well as the minimum step between these.
  */
 WMSTimeLayer.prototype.extractExtentValues = function ({values}) {
     const timeRange = [];
