@@ -11,7 +11,7 @@ import TerrainLayer from "./layer/terrain";
 import EntitiesLayer from "./layer/entities";
 import TileSetLayer from "./layer/tileset";
 import VectorTileLayer from "./layer/vectorTile";
-import VectorBaseLayer from "./layer/vectorBase";
+import VectorBaseLayer from "../../../src/core/layers/vectorBase";
 import ObliqueLayer from "./layer/oblique";
 import Folder from "./folder/model";
 import Tool from "./tool/model";
