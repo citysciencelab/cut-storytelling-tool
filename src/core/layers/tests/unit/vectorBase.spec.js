@@ -2,7 +2,6 @@ import {expect} from "chai";
 import sinon from "sinon";
 import VectorBaseLayer from "../../vectorBase";
 import mapCollection from "../../../../core/dataStorage/mapCollection.js";
-import store from "../../../../app-store";
 
 describe("src/core/layers/vectorBase.js", () => {
     let attributes;
