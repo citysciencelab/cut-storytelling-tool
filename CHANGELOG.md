@@ -13,6 +13,7 @@
 
 ### Changed
 - Migrated the map from Backbone.js to Vue.js environment.
+- Migrated the layer wmsTime from Backbone.js to Vue.js environment.
 
 ### Deprecated
 
