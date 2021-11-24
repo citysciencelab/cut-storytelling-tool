@@ -4,11 +4,13 @@ import getComponent from "../../../../utils/getComponent";
 import {mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersGeneralFilter";
 import mutations from "../store/mutationsGeneralFilter";
+import LayerFilterSnippet from "./LayerFilterSnippet.vue";
 
 export default {
     name: "GeneralFilter",
     components: {
-        Tool
+        Tool,
+        LayerFilterSnippet
     },
     data () {
         return {
@@ -52,6 +54,7 @@ export default {
                 v-if="active"
                 id="tool-general-filter"
             />
+            <LayerFilterSnippet />
         </template>
     </Tool>
 </template>
