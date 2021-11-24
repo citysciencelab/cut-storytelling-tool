@@ -55,8 +55,6 @@ const actions = {
                 dispatch("highlightFeature", {type: "viaLayerIdAndFeatureId", layerIdAndFeatureId: rootState.urlParams["Map/highlightFeature"]});
             }
         }});
-        // set map to store
-        // commit("setMap", map);
         commit("setMapId", map.id);
         commit("setMapMode", map.mode);
         commit("setLayerList", map.getLayers().getArray());
@@ -249,7 +247,6 @@ const actions = {
     },
     /**
      * Sets center and resolution to initial values.
-     * @param {Object} payload parameter object
      * @returns {void}
      */
     resetView ({state, dispatch}) {
@@ -321,7 +318,7 @@ const actions = {
     },
     /**
      * Zoom to the given geometry or extent based on the current map size.
-     * @see {@link https://openlayers.org/en/latest/apidoc/module-ol_View-View.html#fit|ol.view.fit}     *
+     * @see {@link https://openlayers.org/en/latest/apidoc/module-ol_View-View.html#fit|ol.view.fit}
      * @param {module:ol/geom/Geometry | module:ol/extent} payload.geometryOrExtent The geometry or extent to zoom to.
      * @param {Object} payload.options Documentation linked.
      * @returns {void}
@@ -340,11 +337,9 @@ const actions = {
      * If it already exists, this layer is returned.
      * @param {Object} payload parameter object
      * @param {String} name The name and the id for the layer.
-     * @param {String} mapId The id of the map.
-     * @param {String} mapMode The mode of the map.
      * @returns {module:ol/layer} The created or the already existing layer.
      */
-    createLayer ({state}, name, mapId, mapMode) {
+    createLayer ({state}, name) {
         const layerList = state.layerList;
 
         let resultLayer = layerList.find(layer => {
@@ -362,21 +357,19 @@ const actions = {
             zIndex: 999
         });
 
-        mapCollection.getMap(mapId, mapMode).addLayer(resultLayer);
+        mapCollection.getMap(state.mapId, state.mapMode).addLayer(resultLayer);
         return resultLayer;
     },
     /**
      * Sets the center of the current view.
      * @param {Object} payload parameter object
      * @param {number[]} coords An array of numbers representing a xy-coordinate.
-     * @param {String} mapId The id of the map.
-     * @param {String} mapMode The mode of the map.
      * @returns {void}
      */
-    setCenter ({commit}, coords, mapId, mapMode) {
+    setCenter ({state, commit}, coords) {
         if (Array.isArray(coords) && coords.length === 2 && typeof coords[0] === "number" && typeof coords[1] === "number") {
             commit("setCenter", coords);
-            mapCollection.getMap(mapId, mapMode).getView().setCenter(coords);
+            mapCollection.getMap(state.mapId, state.mapMode).getView().setCenter(coords);
         }
         else {
             console.warn("Center was not set. Probably there is a data type error. The format of the coordinate must be an array with two numbers.");

@@ -21,7 +21,7 @@ export default {
      * @returns {module:ol/PluggableMap~PluggableMap} The map.
      */
     getMap: function (id, mode) {
-        return mapCollection.find(map => map?.id || map.get("id") === id && map?.mode || map.get("mode") === mode);
+        return mapCollection.find(map => map?.id === id && map?.mode === mode);
     },
     /**
      * Removes all entries from the collection.

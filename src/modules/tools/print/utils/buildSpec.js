@@ -342,7 +342,8 @@ const BuildSpecModel = {
                 styles: source.getParams().STYLES ? source.getParams().STYLES.split(",") : undefined,
                 imageFormat: source.getParams().FORMAT,
                 customParams: {
-                    "TRANSPARENT": source.getParams().TRANSPARENT
+                    "TRANSPARENT": source.getParams().TRANSPARENT,
+                    "DPI": store.state.Tools.Print.dpiForPdf
                 }
             };
 
@@ -368,7 +369,8 @@ const BuildSpecModel = {
                 styles: source.getParams().STYLES ? source.getParams().STYLES.split(",") : undefined,
                 imageFormat: source.getParams().FORMAT,
                 customParams: {
-                    "TRANSPARENT": source.getParams().TRANSPARENT
+                    "TRANSPARENT": source.getParams().TRANSPARENT,
+                    "DPI": store.state.Tools.Print.dpiForPdf
                 }
             };
 
@@ -887,9 +889,10 @@ const BuildSpecModel = {
      * @param {ol.Feature} feature -
      * @param {String[]} styleAttributes The attribute by whose value the feature is styled.
      * @param {ol.style.Style} style style
+     * @param {Number} styleIndex The style index.
      * @returns {string} an ECQL Expression
      */
-    getStylingRules: function (layer, feature, styleAttributes, style) {
+    getStylingRules: function (layer, feature, styleAttributes, style, styleIndex) {
         const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
             styleAttr = feature.get("styleId") ? "styleId" : styleAttributes;
         let styleModel;
@@ -918,7 +921,21 @@ const BuildSpecModel = {
                     return "[sensorClusterStyle='" + feature.get("features")[0].ol_uid + "_" + String(style.getText().getText()) + "']";
                 }
             }
-
+            if (this.getFeatureStyle(feature, layer).length > 1) {
+                if (style.getImage().getSrc().indexOf("data:image/svg+xml;charset=utf-8") === 0) {
+                    feature.setId("first_svg_" + feature.ol_uid);
+                }
+                else {
+                    feature.setId("second_png_" + feature.ol_uid);
+                }
+                Object.keys(feature.getProperties()).forEach(property => {
+                    if (property === "") {
+                        feature.unset(property);
+                    }
+                });
+                feature.set(feature.getId(), String(styleIndex));
+                return "[" + feature.getId() + "='" + String(styleIndex) + "']";
+            }
             return "*";
         }
         // cluster feature with geometry style

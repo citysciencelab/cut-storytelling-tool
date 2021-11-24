@@ -52,7 +52,7 @@ export default function Layer (attrs, layer, initialize = true) {
         this.initialize(attrs);
     }
     else if (attrs.isSelected === true || store.getters.treeType === "light") {
-        this.setIsVisibleInMap(typeof attrs.isSelected !== "boolean" ? false : attrs.isSelected);
+        this.setIsVisibleInMap(attrs.isSelected);
     }
     this.checkForScale({scale: store.getters["Map/scale"]});
     this.registerInteractionMapViewListeners();
@@ -69,7 +69,7 @@ Layer.prototype.initialize = function (attrs) {
 
     if (attrs.isSelected === true || store.getters.treeType === "light") {
         this.updateLayerTransparency();
-        this.setIsVisibleInMap(typeof attrs.isSelected !== "boolean" ? false : attrs.isSelected);
+        this.setIsVisibleInMap(attrs.isSelected);
         this.set("isRemovable", store.state.configJson?.Portalconfig.layersRemovable);
     }
     else {

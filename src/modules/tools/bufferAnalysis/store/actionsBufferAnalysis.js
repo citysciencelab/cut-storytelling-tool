@@ -71,10 +71,10 @@ const actions = {
      *
      * @return {void}
      */
-    removeGeneratedLayers ({commit, rootGetters, getters: {resultLayer, bufferLayer}}) {
-        mapCollection.getMap(rootGetters["Map/mapId"], rootGetters["Map/mapMode"]).removeLayer(resultLayer);
+    removeGeneratedLayers ({commit, rootState, getters: {resultLayer, bufferLayer}}) {
+        mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).removeLayer(resultLayer);
         commit("setResultLayer", {});
-        mapCollection.getMap(rootGetters["Map/mapId"], rootGetters["Map/mapMode"]).removeLayer(bufferLayer);
+        mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).removeLayer(bufferLayer);
         commit("setBufferLayer", {});
         commit("setIntersections", []);
         commit("setResultFeatures", []);

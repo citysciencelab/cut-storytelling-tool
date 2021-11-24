@@ -11,6 +11,8 @@
 ## Unreleased - in development
 ### Added
 - The library "svg-url-loader" was added to package.json devDependencies.
+- Added the new Tool `Routing`.
+- Searchbar: An option "sortByName" in gdi to config if the rearching results from elastic sorted alphanumerically or not.
 
 ### Changed
 - The following NPM packages are updated:
@@ -25,6 +27,8 @@
 - The MasterportalAPI version is updated to v1.6.0. This also raised ol to version 6.9.0.
 - WMSLayer and GroupLayer are refactored. They are no longer Backbone-models. WMSLayer uses the masterportalAPI's wms layer on creation.
 - 2D-map is removed from vuex store. Maps are now stored in a collection. Creation of 2D-map and 3D-map use masterportalAPI's abstraction layer.
+- Print formats only contain working formats now.
+- QuickHelp: moved to Vue and refactored, can now be manipulated for search, tree and routing, new QuickHelp windows can be configured. See new quickHelp.md documentation for more details.
 
 ### Deprecated
 

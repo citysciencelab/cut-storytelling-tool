@@ -52,7 +52,7 @@ function downloadFeaturesWithoutGUI ({state, rootState}, payload) {
         targetProjection = null;
     const featureArray = [],
         format = new GeoJSON(),
-        mapProjection = getMapProjection(mapCollection.getMap(rootState.mapId, rootState.mapMode)),
+        mapProjection = getMapProjection(mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode)),
         multiLine = new MultiLine([]),
         multiPoint = new MultiPoint([]),
         multiPolygon = new MultiPolygon([]);

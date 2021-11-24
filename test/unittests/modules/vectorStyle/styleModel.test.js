@@ -420,15 +420,6 @@ describe("vectorStyleModel", function () {
         });
     });
 
-    describe("getFeatureValue", function () {
-        it("should return plain feature property", function () {
-            expect(styleModel.getFeatureValue(jsonObjects[0].getProperties(), "id")).to.equal("test1");
-        });
-        it("should return feature property in object path", function () {
-            expect(styleModel.getFeatureValue(jsonObjects[0].getProperties(), "@id")).to.equal("test1");
-        });
-    });
-
     describe("getFeaturePropertyByPath", function () {
         it("should return direct property", function () {
             expect(styleModel.getFeaturePropertyByPath(jsonObjects[0].getProperties(), "@id")).to.equal("test1");
@@ -498,17 +489,6 @@ describe("vectorStyleModel", function () {
         it("should return the value without comma", function () {
             expect(styleModel.getValueWithoutComma("22,6")).to.equal(22.6);
             expect(styleModel.getValueWithoutComma("22,667")).to.equal(22.667);
-        });
-    });
-
-    describe("isObjectPath", function () {
-        it("should return true if value is an object path", function () {
-            expect(styleModel.isObjectPath("@id")).to.be.true;
-        });
-        it("should return false if value is not an object path", function () {
-            expect(styleModel.isObjectPath(123)).to.be.false;
-            expect(styleModel.isObjectPath("123")).to.be.false;
-            expect(styleModel.isObjectPath("foo@id")).to.be.false;
         });
     });
 

@@ -24,23 +24,15 @@ export default {
             default: "glyphicon-step-backward"
         }
     },
-    data () {
-        return {
-            currentMapId: "",
-            currentMapMode: ""
-        };
-    },
     computed: {
         ...mapGetters("controls/backForward", ["forthAvailable", "backAvailable"]),
         ...mapGetters("Map", ["mapId", "mapMode"])
     },
     mounted () {
-        this.currentMapId = this.mapId;
-        this.currentMapMode = this.mapMode;
-        mapCollection.getMap(this.currentMapId, this.currentMapMode).on("moveend", this.memorizeMap);
+        mapCollection.getMap(this.mapId, this.mapMode).on("moveend", this.memorizeMap);
     },
     beforeDestroy () {
-        mapCollection.getMap(this.currentMapId, this.currentMapMode).un("moveend", this.memorizeMap);
+        mapCollection.getMap(this.mapId, this.mapMode).un("moveend", this.memorizeMap);
     },
     methods: {
         ...mapMutations(
@@ -48,13 +40,13 @@ export default {
             ["forward", "backward", "memorize"]
         ),
         memorizeMap () {
-            this.memorize(mapCollection.getMap(this.currentMapId, this.currentMapMode).getView());
+            this.memorize(mapCollection.getMap(this.mapId, this.mapMode).getView());
         },
         moveForward () {
-            this.forward(mapCollection.getMap(this.currentMapId, this.currentMapMode));
+            this.forward(mapCollection.getMap(this.mapId, this.mapMode));
         },
         moveBackward () {
-            this.backward(mapCollection.getMap(this.currentMapId, this.currentMapMode));
+            this.backward(mapCollection.getMap(this.mapId, this.mapMode));
         }
     }
 };

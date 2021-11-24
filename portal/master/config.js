@@ -1,19 +1,11 @@
 const Config = {
     addons: ["populationRequest", "vueAddon", "tacticalMark", "trinkwasser", "schulinfo", "trafficCount", "verkehrsstaerken", "solaratlas", "dataTable"],
-    alerting: {
-        fetchBroadcastUrl: "https://geodienste.hamburg.de/lgv-config/newsFeedPortalAlerts.json"
-    },
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
     zoomToFeature: {
         attribute: "flaechenid",
         wfsId: "4560",
         styleId: "location_eventlotse"
-    },
-    metadata: {
-        useProxy: [
-            "https://metaver.de/csw"
-        ]
     },
     zoomToGeometry: {
         layerId: "1692",

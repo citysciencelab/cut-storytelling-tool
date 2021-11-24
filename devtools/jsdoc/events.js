@@ -1441,26 +1441,6 @@
  * @example Radio.trigger("gfiList", "redraw", );
  */
 
-/** -------------------- QUICKHELP -------------------- */
-
-/**
- * @event QuickHelp#RadioTriggerQuickHelpShowWindowHelp
- * @description is triggered by QuickHelp
- * @param {String} topic topic for quickHelp to show
- * @example Radio.trigger("QuickHelp", "showWindowHelp", topic);
- */
-
-/**
- * @event QuickHelp#RadioRequestQuickHelpIsSet
- * @description Returns isSet value
- * @example Radio.request("QuickHelp", "isSet");
- */
-
-/**
- * @event QuickHelp#render
- * @description Triggered when the QuickHelp View has to render.
- * @example this.trigger("render")
- */
 /** -------------------- WINDOW -------------------- */
 
 /**

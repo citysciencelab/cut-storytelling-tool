@@ -15,7 +15,7 @@ import {
 } from "ol/geom";
 
 describe("src/modules/tools/bufferAnalysis/store/actionsBufferAnalysis.js", () => {
-    let commit, dispatch, rootGetters, state, tick;
+    let commit, dispatch, rootGetters, rootState, state, tick;
 
     before(() => {
         mapCollection.clear();
@@ -40,6 +40,12 @@ describe("src/modules/tools/bufferAnalysis/store/actionsBufferAnalysis.js", () =
         rootGetters = {
             "Map/mapId": "ol",
             "Map/mapMode": "2D"
+        };
+        rootState = {
+            Map: {
+                mapId: "ol",
+                mapMode: "2D"
+            }
         };
         state = {...stateBufferAnalysis};
     });
@@ -162,7 +168,7 @@ describe("src/modules/tools/bufferAnalysis/store/actionsBufferAnalysis.js", () =
         it("calls commit four times and removeLayer twice", async () => {
             state.resultLayer = createLayersArray(1)[0];
             state.bufferLayer = createLayersArray(1)[0];
-            actions.removeGeneratedLayers({commit, getters: state, rootGetters});
+            actions.removeGeneratedLayers({commit, rootState, getters: state});
 
             expect(commit.callCount).to.equal(4);
             expect(mapCollection.getMap("ol", "2D").removeLayer.calledTwice).to.be.true;

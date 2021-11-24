@@ -22,12 +22,6 @@ export default {
             default: "home"
         }
     },
-    data () {
-        return {
-            currentMapId: "",
-            currentMapMode: ""
-        };
-    },
     computed: {
         ...mapGetters("Map", ["initialCenter", "initialZoomLevel", "mapId", "mapMode"]),
 
@@ -43,7 +37,7 @@ export default {
          * @returns {Boolean} true if map is not in initial zoom/center.
          */
         mapMoved: function () {
-            const view = mapCollection.getMap(this.currentMapId, this.currentMapMode).getView(),
+            const view = mapCollection.getMap(this.mapId, this.mapMode).getView(),
                 center = view.getCenter();
 
             return this.initialCenter[0] !== center[0] ||
@@ -51,15 +45,11 @@ export default {
                 this.initialZoomLevel !== view.getZoom();
         }
     },
-    created () {
-        this.currentMapId = this.mapId;
-        this.currentMapMode = this.mapMode;
-    },
     methods: {
         ...mapActions("Map", ["resetView"]),
 
         startResetView: function () {
-            this.resetView(this.currentMapId, this.currentMapMode);
+            this.resetView(this.mapId, this.mapMode);
         }
     }
 };

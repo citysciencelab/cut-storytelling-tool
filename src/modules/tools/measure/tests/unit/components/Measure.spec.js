@@ -40,6 +40,10 @@ describe("src/modules/tools/measure/components/Measure.vue", () => {
             modules: {
                 Map: {
                     namespaced: true,
+                    state: {
+                        mapId: "ol",
+                        mapMode: "2D"
+                    },
                     getters: {
                         layerById: () => id => ({})[id],
                         is3d: () => false,
@@ -62,6 +66,16 @@ describe("src/modules/tools/measure/components/Measure.vue", () => {
                 uiStyle: () => ""
             }
         });
+
+        mapCollection.clear();
+        map = {
+            id: "ol",
+            mode: "2D",
+            addInteraction: sinon.spy(),
+            removeInteraction: sinon.spy(),
+            addLayer: sinon.spy()
+        };
+        mapCollection.addMap(map, "ol", "2D");
 
         store.commit("Tools/Measure/setActive", true);
     });
