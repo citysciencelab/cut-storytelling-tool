@@ -111,7 +111,6 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     const extentData = [550761, 5927012, 580987, 5941268];
 
                     await loadUrl(driver, `${url}?Map/zoomToExtent=${extentData.join(",")}`, mode);
-                    await new Promise(resolve => setTimeout(resolve, 1000));
 
                     let extent = await driver.executeScript(getExtent);
 
@@ -489,7 +488,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     expect((await driver.findElements(By.css("div.gfi"))).length).to.equal(0);
                 });
 
-                it("deprecated - ?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - hospital layer GFI with example 'Israelitisches Krankenhaus shows gfi", async function () {
+                it("deprecated - ?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - hospital layer GFI with example 'Agaplesion Diakonieklinikum Hamburg' shows gfi", async function () {
                     const paramUrl = `${url}/?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`;
                     let counter = 0;
 
@@ -501,18 +500,18 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
 
                     do {
                         expect(counter++).to.be.below(25);
-                        await clickFeature(driver, [565596.456, 5940130.858]);
+                        await clickFeature(driver, [564033.59, 5935952.15]);
                         await driver.wait(new Promise(r => setTimeout(r, 100)));
                     } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
 
                     await driver.wait(until.elementLocated(By.css("div.gfi")), 12000);
                     await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))), 12000);
-                    await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'Israelitisches Krankenhaus')]")), 12000);
+                    await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'Agaplesion Diakonieklinikum Hamburg')]")), 12000);
                     await (await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[contains(@class, 'glyphicon-remove')]"))).click();
                     expect((await driver.findElements(By.css("div.gfi"))).length).to.equal(0);
                 });
 
-                it("?Map/layerids=, &visibility=, and &transparency= have working gfi/legend/info - hospital layer GFI with example 'Israelitisches Krankenhaus shows gfi", async function () {
+                it("?Map/layerids=, &visibility=, and &transparency= have working gfi/legend/info - hospital layer GFI with example 'Agaplesion Diakonieklinikum Hamburg' shows gfi", async function () {
                     const paramUrl = `${url}/?Map/layerids=4736,myId2&visibility=true,true&transparency=0,0`;
                     let counter = 0;
 
@@ -522,13 +521,13 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
 
                     do {
                         expect(counter++).to.be.below(25);
-                        await clickFeature(driver, [565596.456, 5940130.858]);
+                        await clickFeature(driver, [564033.59, 5935952.15]);
                         await driver.wait(new Promise(r => setTimeout(r, 100)));
                     } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
 
                     await driver.wait(until.elementLocated(By.css("div.gfi")), 12000);
                     await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))), 12000);
-                    await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'Israelitisches Krankenhaus')]")), 12000);
+                    await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'Agaplesion Diakonieklinikum Hamburg')]")), 12000);
                     await (await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[contains(@class, 'glyphicon-remove')]"))).click();
                     expect((await driver.findElements(By.css("div.gfi"))).length).to.equal(0);
                 });
