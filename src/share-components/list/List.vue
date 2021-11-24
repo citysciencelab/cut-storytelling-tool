@@ -29,7 +29,7 @@ export default {
         ...mapGetters("Map", ["map"])
     },
     methods: {
-        ...mapActions("Map", ["zoomTo"]),
+        ...mapActions("Map", {setMapCenter: "setCenter", setZoomLevel: "setZoomLevel"}),
         ...mapActions("MapMarker", ["placingPointMarker"]),
         /**
          * Takes the selected coordinates and centers the map to the new position.
@@ -40,7 +40,8 @@ export default {
             const geometry = feature.getGeometry();
 
             this.placingPointMarker(getCenterExtent(geometry.getExtent()));
-            this.zoomTo({geometryOrExtent: geometry, options: {maxZoom: 5}});
+            this.setMapCenter(getCenterExtent(geometry.getExtent()));
+            this.setZoomLevel(5);
         },
         isWebLink,
         isPhoneNumber,
