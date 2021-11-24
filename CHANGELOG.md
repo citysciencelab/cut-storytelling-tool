@@ -29,6 +29,11 @@
 - 2D-map is removed from vuex store. Maps are now stored in a collection. Creation of 2D-map and 3D-map use masterportalAPI's abstraction layer.
 - Print formats only contain working formats now.
 - QuickHelp: moved to Vue and refactored, can now be manipulated for search, tree and routing, new QuickHelp windows can be configured. See new quickHelp.md documentation for more details.
+- WfsSearch:
+    - Update documentation.
+        - Change parameter `wfsSearch.searchInstance.requestConfig.gazetteer` from a `Boolean` to an `Object`. Move parameters `namespaces` and `memberSuffix` to that Object.
+        - Change parameter `nameSpaces` to `namespaces` to be inline with the rest of the configuration.
+    - Allow parameter `namespaces` to also be a single String instead of always expecting an array.
 
 ### Deprecated
 
@@ -43,7 +48,10 @@
 - Light-tree: Layers that are only selectable in certain zoom levels are now also grayed out directly after startup.
 - Print tool: if tool was activated by url parameter, print-mask is now visible and scales are selectable
 - Sidebar: if a tool was activated by url parameter and user opens second tool, the first tool is closed now
-
+- WfsSearch:
+    - Add namespace to the filter as otherwise the features are not properly filtered.
+    - Fix reset UI button.
+    - Add missing error translation for wrong config.
 
 ---
 ## v2.15.0 - 2021-11-03
