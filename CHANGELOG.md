@@ -46,6 +46,7 @@
 - Light-tree: Layers that are only selectable in certain zoom levels are now also grayed out directly after startup.
 - Sidebar: if a tool was activated by url parameter and user opens second tool, the first tool is closed now
 - Tool wfsSearch: Zoom to a hit in the result list works now again
+- Searchbar: Fixed a bug that if only one search hit was attracted, the confirmation with `Enter` failed.
 
 
 ---

@@ -438,7 +438,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     hitSelected: function (evt) {
         let hit,
             hitID,
-            pick;
+            pick,
+            isElement = false;
         const modelHitList = this.model.get("finalHitList");
 
         // distingiush hit
@@ -452,6 +453,10 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             hit = Radio.request("Util", "findWhereJs", this.model.get("finalHitList"), {"id": hitID});
 
         }
+        else if (evt?.id) {
+            hit = Radio.request("Util", "findWhereJs", this.model.get("finalHitList"), {"id": evt.id});
+            isElement = true;
+        }
         else if (modelHitList.length > 1) {
             return;
         }
@@ -459,16 +464,15 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             hit = modelHitList[0];
         }
         // 1. Write text in Searchbar
-        this.setSearchbarString(hit.name);
+        this.setSearchbarString(hit?.name);
         // 2. hide searchmenuü
         this.hideMenu();
         // 3. Hide the GFI
         Radio.trigger("GFI", "setIsVisible", false);
         // 4. Zoom if necessary on the result otherwise special handling
-
         if (hit?.triggerEvent) {
             this.model.setHitIsClick(true);
-            Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true, evt.handleObj.type);
+            Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true, evt?.handleObj?.type);
 
             if (hit?.coordinate) {
                 this.setMarkerZoom(hit);
@@ -481,11 +485,11 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             const isMobile = Radio.request("Util", "isViewMobile");
 
             // desktop - topics tree is expanded
-            if (isMobile === false) {
+            if (hit && isMobile === false) {
                 this.zoomToDesktopTopicTree(hit.id, hit.name);
             }
             // mobil
-            else {
+            else if (hit) {
                 // adds the model to list, if not contained
                 Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.id});
                 Radio.trigger("ModelList", "setModelAttributesById", hit.id, {isSelected: true});
@@ -497,7 +501,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         // is needed for IDA and sgv-online, ...
         Radio.trigger("Searchbar", "hit", hit);
         // 6. finishes event
-        if (evt) {
+        if (evt && !isElement) {
             evt.preventDefault();
             evt.stopImmediatePropagation();
         }
@@ -906,7 +910,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             else if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && !(this.getSelectedElement("#searchInputUL").length > 0 && this.getSelectedElement("#searchInputUL").hasClass("type"))) {
                 if (evt.key === "Enter" || evt.keyCode === 13) {
                     if (this.model.get("finalHitList").length === 1) {
-                        this.hitSelected(); // first and only entry in list
+                        this.hitSelected($(".list-group-item.hit")[0]); // first and only entry in list
                     }
                     else {
                         this.renderHitList();
