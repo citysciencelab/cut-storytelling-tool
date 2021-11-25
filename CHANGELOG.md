@@ -13,6 +13,7 @@
 - The library "svg-url-loader" was added to package.json devDependencies.
 - Added the new Tool `Routing`.
 - Searchbar: An option "sortByName" in gdi to config if the rearching results from elastic sorted alphanumerically or not.
+- ParametricURL: An alert has been added which displays the new notation of a parameterized call.
 
 ### Changed
 - The following NPM packages are updated:
