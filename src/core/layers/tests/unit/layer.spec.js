@@ -608,6 +608,34 @@ describe("src/core/layers/layer.js", () => {
         expect(layer.getMaxResolution()).to.be.equals(600 + (600 / 100));
         expect(layer.getMinResolution()).to.be.equals(1);
 
+    it("prepareFeaturesFor3D without altitude", function () {
+        attributes.altitude = undefined;
+        const layerWrapper = new Layer(attributes, olLayer),
+            layer = layerWrapper.get("layer");
+        let alteredFeatures = null;
+
+        layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
+        alteredFeatures = layer.getSource().getFeatures();
+
+        expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(Point);
+        expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(2);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[0]).to.be.equals(1);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[1]).to.be.equals(1);
+    });
+    it("prepareFeaturesFor3D without altitudeOffset", function () {
+        attributes.altitudeOffset = undefined;
+        const layerWrapper = new Layer(attributes, olLayer),
+            layer = layerWrapper.get("layer");
+        let alteredFeatures = null;
+
+        layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
+        alteredFeatures = layer.getSource().getFeatures();
+
+        expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(Point);
+        expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(2);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[0]).to.be.equals(1);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[1]).to.be.equals(1);
+    });
     it("prepareFeaturesFor3D set altitude on 2D-point geometry coordinates", function () {
         attributes.altitude = 127;
         const layerWrapper = new Layer(attributes, olLayer),
