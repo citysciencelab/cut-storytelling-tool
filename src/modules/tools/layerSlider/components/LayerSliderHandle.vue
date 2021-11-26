@@ -80,8 +80,8 @@ export default {
          */
         getLayerIdFromIndex: function (index, mode) {
             const position = this.getPositionFromValue(index, mode),
-                layerIdObj = this.layerIds[position],
-                layerId = layerIdObj ? layerIdObj.layerId : {};
+                layerIds = this.layerIds[position],
+                layerId = layerIds ? layerIds.layerId : {};
 
             return layerId;
         },
@@ -96,7 +96,7 @@ export default {
             let position = Math.floor(Math.round(index) / 10);
 
             if (mode === "next") {
-                position++;
+                ++position;
             }
 
             return position;

@@ -82,9 +82,7 @@ describe("src/modules/tools/layerSlider/components/LayerSliderPlayer.vue", () =>
     });
 
     it("renders the input-group button pause if play is clicked", async () => {
-        wrapper = shallowMount(LayerSliderPlayerComponent, {store, localVue});
-
-        store.commit("Tools/LayerSlider/setLayerIds", [
+        await store.commit("Tools/LayerSlider/setLayerIds", [
             {
                 layerId: 0,
                 index: 0
@@ -95,6 +93,8 @@ describe("src/modules/tools/layerSlider/components/LayerSliderPlayer.vue", () =>
             }
         ]);
 
+        wrapper = shallowMount(LayerSliderPlayerComponent, {store, localVue});
+
         await wrapper.find("#tool-layer-slider-player > div.input-group > span.input-group-btn > button#play").trigger("click");
 
         expect(wrapper.find("#tool-layer-slider-player > div.input-group > span.input-group-btn > button#play").exists()).to.be.false;
@@ -102,9 +102,7 @@ describe("src/modules/tools/layerSlider/components/LayerSliderPlayer.vue", () =>
     });
 
     it("skip to next layer with forward button", async () => {
-        wrapper = shallowMount(LayerSliderPlayerComponent, {store, localVue});
-
-        store.commit("Tools/LayerSlider/setLayerIds", [
+        await store.commit("Tools/LayerSlider/setLayerIds", [
             {
                 layerId: 0,
                 index: 0
@@ -118,6 +116,7 @@ describe("src/modules/tools/layerSlider/components/LayerSliderPlayer.vue", () =>
                 index: 2
             }
         ]);
+        wrapper = shallowMount(LayerSliderPlayerComponent, {store, localVue});
 
         expect(store.getters["Tools/LayerSlider/activeLayer"].index).equals(0);
 
@@ -132,9 +131,7 @@ describe("src/modules/tools/layerSlider/components/LayerSliderPlayer.vue", () =>
     });
 
     it("skip to previous layer with backward button", async () => {
-        wrapper = shallowMount(LayerSliderPlayerComponent, {store, localVue});
-
-        store.commit("Tools/LayerSlider/setLayerIds", [
+        await store.commit("Tools/LayerSlider/setLayerIds", [
             {
                 layerId: 0,
                 index: 0
@@ -148,6 +145,7 @@ describe("src/modules/tools/layerSlider/components/LayerSliderPlayer.vue", () =>
                 index: 2
             }
         ]);
+        wrapper = shallowMount(LayerSliderPlayerComponent, {store, localVue});
 
         expect(store.getters["Tools/LayerSlider/activeLayer"].index).equals(0);
 
