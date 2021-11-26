@@ -48,7 +48,7 @@ async function QuickHelpTests ({builder, url, resolution, capability}) {
                 await driver.wait(until.elementIsVisible(quickHelp), 5000);
             });
 
-            it("clicking the cross sign in the quick help window will close it", async () => {
+            it.skip("clicking the cross sign in the quick help window will close it", async () => {
                 const cross = await driver.findElement(By.css("#quickHelp span.glyphicon-remove"));
 
                 await cross.click();
