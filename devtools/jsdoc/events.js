@@ -2097,18 +2097,6 @@
  */
 
 
-/** -------------------- TOOLS.LAYERSLIDER -------------------- */
-
-/**
- * @event Tools.LayerSlider#changeIsActive
- * @description Event fired when layer slider model changes its attribute "isActive".
- */
-
- /**
- * @event Tools.LayerSlider#changeActiveLayer
- * @description Event fired when layer slider model changes its attribute "activeLayer".
- */
-
 /** -------------------- TOOLS.DRAW -------------------- */
 
 /**
