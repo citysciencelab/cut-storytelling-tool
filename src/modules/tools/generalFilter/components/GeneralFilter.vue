@@ -1,10 +1,11 @@
 <script>
 import Tool from "../../Tool.vue";
 import getComponent from "../../../../utils/getComponent";
-import {mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersGeneralFilter";
 import mutations from "../store/mutationsGeneralFilter";
 import LayerFilterSnippet from "./LayerFilterSnippet.vue";
+import {convertToNewConfig} from "../utils/convertToNewConfig";
 
 export default {
     name: "GeneralFilter",
@@ -24,9 +25,17 @@ export default {
     created () {
         this.$on("close", this.close);
     },
+    mounted () {
+        this.$nextTick(() => {
+            this.initialize();
+            // console.log("Alte Config", this.configs);
+            // console.log("Neue Config", this.convertToNewConfig(this.configs));
+        });
+    },
     methods: {
         ...mapMutations("Tools/GeneralFilter", Object.keys(mutations)),
-
+        ...mapActions("Tools/GeneralFilter", ["initialize"]),
+        convertToNewConfig,
         close () {
             this.setActive(false);
             const model = getComponent(this.storePath.id);
