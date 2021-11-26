@@ -321,7 +321,7 @@ Layer.prototype.setIsSelected = function (newValue) {
         bridge.renderMenu();
     }
     if (this.get("typ") === "WFS") {
-        this.updateSource(true);
+        this.updateSource();
     }
 };
 /**
@@ -440,35 +440,28 @@ Layer.prototype.setIsJustAdded = function (value) {
  * @returns {void}
  */
 Layer.prototype.prepareFeaturesFor3D = function (features) {
-    const altitude = this.get("altitude"),
-        altitudeOffset = this.get("altitudeOffset");
-
     features.forEach(feature => {
         let geometry = feature.getGeometry();
 
-        if (altitude || altitudeOffset) {
-            geometry = this.setAltitudeOnGeometry(geometry, altitude, altitudeOffset);
-        }
+        geometry = this.setAltitudeOnGeometry(geometry);
         feature.setGeometry(geometry);
     });
 };
 /**
  * Sets the altitude and AltitudeOffset as z coordinate.
  * @param {ol/geom} geometry Geometry of feature.
- * @param {Number} altitude Altitude. Overwrites the given z coord if available.
- * @param {Number} altitudeOffset Altitude offset.
  * @returns {ol/geom} - The geometry with newly set coordinates.
  */
-Layer.prototype.setAltitudeOnGeometry = function (geometry, altitude, altitudeOffset) {
+Layer.prototype.setAltitudeOnGeometry = function (geometry) {
     const type = geometry.getType(),
         coords = geometry.getCoordinates();
     let overwrittenCoords = [];
 
     if (type === "Point") {
-        overwrittenCoords = this.setAltitudeOnPoint(coords, altitude, altitudeOffset);
+        overwrittenCoords = this.getPointCoordinatesWithAltitude(coords);
     }
     else if (type === "MultiPoint") {
-        overwrittenCoords = this.setAltitudeOnMultiPoint(coords, altitude, altitudeOffset);
+        overwrittenCoords = this.getMultiPointCoordinatesWithAltitude(coords);
     }
     else {
         console.error("Type: " + type + " is not supported yet for function \"setAltitudeOnGeometry\"!");
@@ -479,48 +472,37 @@ Layer.prototype.setAltitudeOnGeometry = function (geometry, altitude, altitudeOf
 /**
  * Sets the altitude on multipoint coordinates.
  * @param {Number[]} coords Coordinates.
- * @param {Number} altitude Altitude. Overwrites the given z coord if available.
- * @param {Number} altitudeOffset Altitude offset.
  * @returns {Number[]} - newly set cooordinates.
  */
-Layer.prototype.setAltitudeOnMultiPoint = function (coords, altitude, altitudeOffset) {
-    const overwrittenCoords = [];
-
-    coords.forEach(coord => {
-        overwrittenCoords.push(this.setAltitudeOnPoint(coord, altitude, altitudeOffset));
-    });
-
-    return overwrittenCoords;
+Layer.prototype.getMultiPointCoordinatesWithAltitude = function (coords) {
+    return coords.map(coord => this.getPointCoordinatesWithAltitude(coord));
 };
 /**
  * Sets the altitude on point coordinates.
  * @param {Number[]} coords Coordinates.
- * @param {Number} altitude Altitude. Overwrites the given z coord if available.
- * @param {Number} altitudeOffset Altitude offset.
  * @returns {Number[]} - newly set cooordinates.
  */
-Layer.prototype.setAltitudeOnPoint = function (coords, altitude, altitudeOffset) {
-    const overwrittenCoords = coords,
-        altitudeAsFloat = parseFloat(altitude),
-        altitudeOffsetAsFloat = parseFloat(altitudeOffset);
+Layer.prototype.getPointCoordinatesWithAltitude = function (coords) {
+    const altitude = this.get("altitude"),
+        altitudeOffset = this.get("altitudeOffset");
 
-    if (!isNaN(altitudeAsFloat)) {
-        if (overwrittenCoords.length === 2) {
-            overwrittenCoords.push(altitudeAsFloat);
+    if (typeof altitude === "number") {
+        if (coords.length === 2) {
+            coords.push(parseFloat(altitude));
         }
-        else if (overwrittenCoords.length === 3) {
-            overwrittenCoords[2] = altitudeAsFloat;
-        }
-    }
-    if (!isNaN(altitudeOffsetAsFloat)) {
-        if (overwrittenCoords.length === 2) {
-            overwrittenCoords.push(altitudeOffsetAsFloat);
-        }
-        else if (overwrittenCoords.length === 3) {
-            overwrittenCoords[2] = overwrittenCoords[2] + altitudeOffsetAsFloat;
+        else if (coords.length === 3) {
+            coords[2] = parseFloat(altitude);
         }
     }
-    return overwrittenCoords;
+    if (typeof altitudeOffset === "number") {
+        if (coords.length === 2) {
+            coords.push(parseFloat(altitudeOffset));
+        }
+        else if (coords.length === 3) {
+            coords[2] = coords[2] + parseFloat(altitudeOffset);
+        }
+    }
+    return coords;
 };
 
 /**

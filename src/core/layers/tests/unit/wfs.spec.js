@@ -9,6 +9,7 @@ import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 import store from "../../../../app-store";
 
 describe("src/core/layers/wfs.js", () => {
+    const consoleWarn = console.warn;
     let attributes;
 
     before(() => {
@@ -18,7 +19,7 @@ describe("src/core/layers/wfs.js", () => {
             mode: "2D",
             addInteraction: sinon.stub(),
             removeInteraction: sinon.stub(),
-            addLayer: () => sinon.stub(),
+            // addLayer: () => sinon.stub(),
             getView: () => {
                 return {
                     getResolutions: () => [2000, 1000]
@@ -50,10 +51,12 @@ describe("src/core/layers/wfs.js", () => {
         store.getters = {
             treeType: "custom"
         };
+        console.warn = sinon.spy();
     });
 
     afterEach(() => {
         sinon.restore();
+        console.warn = consoleWarn;
     });
 
     it("createLayer shall create an ol.VectorLayer with source and style and WFS-format", function () {
@@ -99,30 +102,41 @@ describe("src/core/layers/wfs.js", () => {
         expect(wfsLayer.get("isVisibleInMap")).to.be.false;
         expect(wfsLayer.get("layer").getVisible()).to.be.false;
     });
-    it("getVersion shall always return a version", function () {
-        const wfsLayer = new WfsLayer(attributes);
-        let version = wfsLayer.getVersion(attributes),
-            changedAttrs = null;
+    it("getVersion shall always return a version, check allowed version", function () {
+        const wfsLayer = new WfsLayer(attributes),
+            notAllowdVersion = "2.1.0",
+            changedAttrs = {
+                allowedVersions: ["1.1.0", "2.0.0"],
+                version: notAllowdVersion
+            };
+        let version = wfsLayer.getVersion(attributes);
 
         expect(version).to.be.equals(attributes.version);
-
-        changedAttrs = {
-            allowedVersions: ["1.1.0", "2.0.0"],
-            version: "2.1.0"
-        };
-
         version = wfsLayer.getVersion(changedAttrs);
+        expect(version).to.be.equal(changedAttrs.allowedVersions[0]);
+    });
+    it("getVersion shall always return a version, check not allowed version", function () {
+        const notAllowdVersion = "2.1.0";
+        let wfsLayer = null,
+            version = null;
 
-        expect(version).to.be.equals(changedAttrs.allowedVersions[0]);
+        attributes.allowedVersions = ["1.1.0", "2.0.0"];
+        attributes.version = notAllowdVersion;
+        wfsLayer = new WfsLayer(attributes);
+        version = wfsLayer.getVersion(attributes);
+
+        expect(version).to.be.equal(attributes.allowedVersions[0]);
     });
     it("checkVersion shall return true, if version is allowed", function () {
-        const wfsLayer = new WfsLayer(attributes);
+        const wfsLayer = new WfsLayer(attributes),
+            notAllowdVersion = "2.1.0";
         let isVersionValid = wfsLayer.checkVersion(attributes.name, attributes.version, attributes.allowedVersions);
 
         expect(isVersionValid).to.be.true;
-        isVersionValid = wfsLayer.checkVersion("", "2.1.0", ["1.1.0", "2.0.0"]);
+        isVersionValid = wfsLayer.checkVersion("", notAllowdVersion, ["1.1.0", "2.0.0"]);
 
         expect(isVersionValid).to.be.false;
+        expect(console.warn.calledOnce).to.be.true;
     });
     it("getFeaturesFilterFunction shall filter getGeometry", function () {
         const wfsLayer = new WfsLayer(attributes),
@@ -135,11 +149,9 @@ describe("src/core/layers/wfs.js", () => {
                 id: "2",
                 getGeometry: () => undefined
             }];
-        let filteredFeatures = null;
 
         expect(typeof featuresFilterFunction).to.be.equals("function");
-        filteredFeatures = featuresFilterFunction(features);
-        expect(filteredFeatures.length).to.be.equals(1);
+        expect(featuresFilterFunction(features).length).to.be.equals(1);
 
     });
     it("getFeaturesFilterFunction shall filter bboxGeometry", function () {
@@ -174,12 +186,10 @@ describe("src/core/layers/wfs.js", () => {
                     };
                 }
             }];
-        let filteredFeatures = null;
 
         expect(typeof featuresFilterFunction).to.be.equals("function");
-        filteredFeatures = featuresFilterFunction(features);
-        expect(filteredFeatures.length).to.be.equals(1);
-        expect(filteredFeatures[0].id).to.be.equals("1");
+        expect(featuresFilterFunction(features).length).to.be.equals(1);
+        expect(featuresFilterFunction(features)[0].id).to.be.equals("1");
     });
     it("getPropertyname shall return joined proertyNames or empty string", function () {
         attributes.propertyNames = ["app:plan", "app:name"];

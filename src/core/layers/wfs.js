@@ -54,10 +54,6 @@ WFSLayer.prototype.createLayer = function (attrs) {
             altitudeMode: attrs.altitudeMode,
             alwaysOnTop: attrs.alwaysOnTop
         },
-        loadingParams = {
-            xhrParameters: attrs.isSecured ? {credentials: "include"} : null,
-            propertyname: this.getPropertyname(attrs)
-        },
         styleFn = this.getStyleFunction(attrs),
         options = {
             wfsFilter: attrs.wfsFilter,
@@ -83,6 +79,10 @@ WFSLayer.prototype.createLayer = function (attrs) {
             }.bind(this),
             onLoadingError: function (error) {
                 console.error("masterportal wfs loading error:", error);
+            },
+            loadingParams: {
+                xhrParameters: attrs.isSecured ? {credentials: "include"} : null,
+                propertyname: this.getPropertyname(attrs)
             }
         };
 
@@ -91,7 +91,7 @@ WFSLayer.prototype.createLayer = function (attrs) {
     }
     options.style = styleFn;
 
-    this.layer = wfs.createLayer(rawLayerAttributes, layerParams, options, loadingParams);
+    this.layer = wfs.createLayer(rawLayerAttributes, {layerParams, options});
 };
 
 /**
@@ -191,7 +191,7 @@ WFSLayer.prototype.getStyleFunction = function (attrs) {
  * @returns {void}
  */
 WFSLayer.prototype.updateSource = function () {
-    wfs.updateSource(this.layer);
+    this.layer.getSource().refresh();
 };
 /**
  * Creates the legend

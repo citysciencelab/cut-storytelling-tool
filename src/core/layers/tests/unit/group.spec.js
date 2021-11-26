@@ -90,28 +90,23 @@ describe("src/core/layers/group.js", () => {
         const groupUpdateSourceTrigger = sinon.spy(GroupedLayers.prototype, "updateSource"),
             groupCreateLegendTrigger = sinon.spy(GroupedLayers.prototype, "createLegend"),
             groupLayer = new GroupedLayers(groupAttributes),
-            childLayer = groupLayer.get("layerSource");
-        let wfsIndex, wmsIndex;
+            childLayer = groupLayer.get("layerSource"),
+            wmsChildLayer = childLayer.find(layer => layer.get("typ") === "WMS"),
+            wfsChildLayer = childLayer.find(layer => layer.get("typ") === "WFS");
 
         expect(groupLayer).not.to.be.undefined;
+        expect(wmsChildLayer).not.to.be.undefined;
+        expect(wfsChildLayer).not.to.be.undefined;
         expect(groupLayer.get("layer").values_.visible).to.be.false;
         expect(groupLayer.get("layer").getLayers().getLength()).to.be.equals(2);
         expect(childLayer).to.be.an("array").with.lengthOf(2);
-        if (childLayer[0].get("typ") === "WMS") {
-            wmsIndex = 0;
-            wfsIndex = 1;
-        }
-        else {
-            wmsIndex = 1;
-            wfsIndex = 0;
-        }
-        expect(childLayer[wmsIndex].get("id")).to.be.equals(wmsLayerAttributes.id);
-        expect(childLayer[wmsIndex].get("layer")).not.to.be.undefined;
-        expect(childLayer[wmsIndex].get("typ")).to.be.equals(wmsLayerAttributes.typ);
-        expect(childLayer[wmsIndex]).to.be.an.instanceof(WMSLayer);
-        expect(childLayer[wfsIndex].get("id")).to.be.equals(wfsLayerAttributes.id);
-        expect(childLayer[wfsIndex].get("typ")).to.be.equals(wfsLayerAttributes.typ);
-        expect(childLayer[wfsIndex]).to.be.an.instanceof(WFSLayer);
+        expect(wmsChildLayer.get("id")).to.be.equals(wmsLayerAttributes.id);
+        expect(wmsChildLayer.get("layer")).not.to.be.undefined;
+        expect(wmsChildLayer.get("typ")).to.be.equals(wmsLayerAttributes.typ);
+        expect(wmsChildLayer).to.be.an.instanceof(WMSLayer);
+        expect(wfsChildLayer.get("id")).to.be.equals(wfsLayerAttributes.id);
+        expect(wfsChildLayer.get("typ")).to.be.equals(wfsLayerAttributes.typ);
+        expect(wfsChildLayer).to.be.an.instanceof(WFSLayer);
         expect(groupUpdateSourceTrigger.calledOnce).to.be.false;
         expect(groupCreateLegendTrigger.calledOnce).to.be.true;
     });
