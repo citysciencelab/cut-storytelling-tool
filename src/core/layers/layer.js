@@ -316,7 +316,7 @@ Layer.prototype.toggleIsSettingVisible = function () {
  * @returns {void}
  */
 Layer.prototype.setIsSelected = function (newValue) {
-    const map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode),
+    const map = mapCollection.getMap("ol", "2D"),
         treeType = store.getters.treeType;
 
     // do not use this.set("isSelected", value), because of neverending recursion
