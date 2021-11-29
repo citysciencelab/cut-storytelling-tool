@@ -132,6 +132,7 @@ export default {
             align-items: flex-end;
 
             width: 100%;
+            height: 100%;
 
             .controls {
                 flex-grow: 1;
