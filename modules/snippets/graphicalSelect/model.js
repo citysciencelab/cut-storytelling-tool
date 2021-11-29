@@ -152,8 +152,6 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
             }
             mapCollection.getMap("ol", "2D").removeOverlay(this.get("circleOverlay"));
             mapCollection.getMap("ol", "2D").removeOverlay(this.get("tooltipOverlay"));
-            // Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
-            // Radio.trigger("Map", "removeOverlay", this.get("tooltipOverlay"));
         }
     },
 
@@ -291,8 +289,6 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
             layer.getSource().clear();
             mapCollection.getMap("ol", "2D").removeOverlay(this.get("circleOverlay"));
             mapCollection.getMap("ol", "2D").removeOverlay(this.get("tooltipOverlay"));
-            // Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
-            // Radio.trigger("Map", "removeOverlay", this.get("tooltipOverlay"));
             Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
         }
     },
@@ -355,7 +351,6 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
             Radio.trigger("Map", "addOverlay", overlay);
         }
         else {
-            // Radio.trigger("Map", "removeOverlay", overlay);
             mapCollection.getMap("ol", "2D").removeOverlay(overlay);
         }
     },

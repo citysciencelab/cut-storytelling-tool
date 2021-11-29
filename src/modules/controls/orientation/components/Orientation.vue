@@ -72,7 +72,6 @@ export default {
     mounted () {
         this.addElement();
         this.checkWFS();
-
     },
     methods: {
         ...mapMutations("controls/orientation", Object.keys(mutations)),

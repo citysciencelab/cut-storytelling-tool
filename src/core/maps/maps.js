@@ -36,7 +36,7 @@ function create2DMap (mapViewSettings) {
 }
 
 /**
- * Create the 3D map
+ * Create the 3D map.
  * @returns {void}
  */
 function create3DMap () {
@@ -46,8 +46,8 @@ function create3DMap () {
 }
 
 /**
- * Create the oblique map
- *  @param {Object} configJs The config.js file.
+ * Create the oblique map.
+ * @param {Object} configJs The config.js file.
  * @returns {void}
  */
 function createObliqueMap (configJs) {
@@ -67,7 +67,6 @@ export function createMaps (configJs, mapViewSettings) {
     create3DMap();
     createObliqueMap(configJs);
 }
-
 
 /**
  * Returns the mapmode. Oblique, 3D and 2D are available for selection.
