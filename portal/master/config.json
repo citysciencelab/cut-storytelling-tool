@@ -420,7 +420,7 @@
           "layerSlider": {
             "name": "translate#common:menu.tools.layerSlider",
             "glyphicon": "glyphicon-film",
-            "timeInterval": 2000,
+            "timeInterval": 1000,
             "layerIds": [
               {
                 "title": "translate#common:modules.tools.layerSlider.serviceOne",
