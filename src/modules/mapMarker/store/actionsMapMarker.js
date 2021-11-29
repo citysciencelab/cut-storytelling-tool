@@ -1,7 +1,6 @@
 import {fetchFirstModuleConfig} from "../../../utils/fetchFirstModuleConfig";
 import Point from "ol/geom/Point.js";
 import Feature from "ol/Feature.js";
-import mapCollection from "../../../core/dataStorage/mapCollection.js";
 
 /**
  * @const {String} configPaths an array of possible config locations. First one found will be used
@@ -26,7 +25,7 @@ export default {
      * @param {String[]} value The array with the markable coordinate pair.
      * @returns {void}
      */
-    placingPointMarker ({state, rootState, commit, dispatch}, value) {
+    placingPointMarker ({state, rootState, rootGetters, commit, dispatch}, value) {
         const styleListModel = Radio.request("StyleList", "returnModelById", state.pointStyleId);
         let coordValues = [];
 
@@ -50,7 +49,7 @@ export default {
             iconfeature.setStyle(featureStyle);
             commit("addFeatureToMarker", {feature: iconfeature, marker: "markerPoint"});
             commit("setVisibilityMarker", {visibility: true, marker: "markerPoint"});
-            mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).addLayer(state.markerPoint);
+            rootGetters["Map/ol2DMap"].addLayer(state.markerPoint);
         }
         else {
             dispatch("Alerting/addSingleAlert", i18next.t("common:modules.mapMarker.noStyleModel", {styleId: state.pointStyleId}), {root: true});
@@ -99,7 +98,7 @@ export default {
      * @param {module:ol/geom/SimpleGeometry} geometry - The given geometry.
      * @returns {void}
      */
-    placingPolygonMarkerByGeom ({state, rootState, commit, dispatch}, geometry) {
+    placingPolygonMarkerByGeom ({state, rootGetters, commit, dispatch}, geometry) {
         const styleListModel = Radio.request("StyleList", "returnModelById", state.polygonStyleId);
 
         dispatch("removePolygonMarker");
@@ -113,7 +112,7 @@ export default {
             feature.setStyle(featureStyle);
             commit("addFeatureToMarker", {feature: feature, marker: "markerPolygon"});
             commit("setVisibilityMarker", {visibility: true, marker: "markerPolygon"});
-            mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).addLayer(state.markerPolygon);
+            rootGetters["Map/ol2DMap"].addLayer(state.markerPolygon);
         }
         else {
             dispatch("Alerting/addSingleAlert", i18next.t("common:modules.mapMarker.noStyleModel", {styleId: state.polygonStyleId}), {root: true});
@@ -124,8 +123,8 @@ export default {
      * Removes the polygon map marker from the map.
      * @returns {void}
      */
-    removePolygonMarker: function ({state, rootState, commit}) {
-        mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).removeLayer(state.markerPolygon);
+    removePolygonMarker: function ({state, rootGetters, commit}) {
+        rootGetters["Map/ol2DMap"].removeLayer(state.markerPolygon);
         commit("clearMarker", "markerPolygon");
         commit("setVisibilityMarker", {visbility: false, marker: "markerPolygon"});
     }

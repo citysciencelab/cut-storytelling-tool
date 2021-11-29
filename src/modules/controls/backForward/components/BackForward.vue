@@ -1,7 +1,6 @@
 <script>
 import {mapGetters, mapMutations} from "vuex";
 import ControlIcon from "../../ControlIcon.vue";
-import mapCollection from "../../../../core/dataStorage/mapCollection";
 
 /**
  * The BackForward control element allows stepping back
@@ -26,13 +25,13 @@ export default {
     },
     computed: {
         ...mapGetters("controls/backForward", ["forthAvailable", "backAvailable"]),
-        ...mapGetters("Map", ["mapId", "mapMode"])
+        ...mapGetters("Map", ["ol2DMap"])
     },
     mounted () {
-        mapCollection.getMap(this.mapId, this.mapMode).on("moveend", this.memorizeMap);
+        this.ol2DMap.on("moveend", this.memorizeMap);
     },
     beforeDestroy () {
-        mapCollection.getMap(this.mapId, this.mapMode).un("moveend", this.memorizeMap);
+        this.ol2DMap.un("moveend", this.memorizeMap);
     },
     methods: {
         ...mapMutations(
@@ -40,13 +39,13 @@ export default {
             ["forward", "backward", "memorize"]
         ),
         memorizeMap () {
-            this.memorize(mapCollection.getMap(this.mapId, this.mapMode).getView());
+            this.memorize(this.ol2DMap.getView());
         },
         moveForward () {
-            this.forward(mapCollection.getMap(this.mapId, this.mapMode));
+            this.forward(this.ol2DMap);
         },
         moveBackward () {
-            this.backward(mapCollection.getMap(this.mapId, this.mapMode));
+            this.backward(this.ol2DMap);
         }
     }
 };

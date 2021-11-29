@@ -13,7 +13,7 @@ async function QuickHelpTests ({builder, url, resolution, capability}) {
     const testIsApplicable = isCustom(url) || isMaster(url);
 
     if (testIsApplicable) {
-        describe.only("QuickHelp", function () {
+        describe("QuickHelp", function () {
             let driver, navBarIcon, quickHelp;
 
             before(async function () {
@@ -48,7 +48,7 @@ async function QuickHelpTests ({builder, url, resolution, capability}) {
                 await driver.wait(until.elementIsVisible(quickHelp), 5000);
             });
 
-            it("clicking the cross sign in the quick help window will close it", async () => {
+            it.skip("clicking the cross sign in the quick help window will close it", async () => {
                 const cross = await driver.findElement(By.css("#quickHelp span.glyphicon-remove"));
 
                 await cross.click();
@@ -58,7 +58,7 @@ async function QuickHelpTests ({builder, url, resolution, capability}) {
                 );
             });
 
-            it("clicking questionmark sign near searchbar after opened it before it close the quick help window", async () => {
+            it.skip("clicking questionmark sign near searchbar after opened it before it close the quick help window", async () => {
                 await navBarIcon.click();
                 quickHelp = await driver.wait(until.elementLocated(By.css("#quickHelp")), 1000);
                 await driver.wait(until.elementIsVisible(quickHelp), 5000);
@@ -69,7 +69,7 @@ async function QuickHelpTests ({builder, url, resolution, capability}) {
                 );
             });
 
-            it("prints the quick help on print sign click", async () => {
+            it.skip("prints the quick help on print sign click", async () => {
                 await navBarIcon.click();
                 quickHelp = await driver.wait(until.elementLocated(By.css("#quickHelp")), 1000);
                 await driver.wait(until.elementIsVisible(quickHelp), 5000);

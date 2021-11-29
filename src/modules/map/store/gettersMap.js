@@ -197,6 +197,13 @@ const gettersMap = {
         }
 
         return state.gfiFeatures;
+    },
+    /**
+     * returns the 2D ol map from the map collection.
+     * @returns {module:ol/PluggableMap~PluggableMap} ol 2D map
+     */
+    ol2DMap: () => {
+        return mapCollection.getMap("ol", "2D");
     }
 };
 

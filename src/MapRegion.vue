@@ -73,7 +73,7 @@ export default {
                 <ControlBar class="controls" />
                 <QuickHelp
                     v-if="getConfigObject()"
-                    :quick-help-config-js-object="getConfigObject().quickHelp"
+                    :quick-help-config-js-object="typeof getConfigObject().quickHelp === 'object' || typeof getConfigObject().quickHelp === 'boolean' ? getConfigObject().quickHelp : false"
                 />
                 <WmsTime />
                 <MapMarker />
