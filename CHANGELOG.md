@@ -39,14 +39,12 @@
 
 ### Fixed
 - Tool Print:
-    - fixed wrong order of features in created print-map.
-    - if tool was activated by url parameter, print-mask is now visible and scales are selectable
-- adding a File with other coordinate system may work now if the coordinate system in the JSON is EPSG 25832/4326 or can successfully be mapped to EPSG
+    - Fixed wrong order of features in created print-map.
+    - If tool was activated by url parameter, print-mask is now visible and scales are selectable
+- Adding a File with other coordinate system may work now if the coordinate system in the JSON is EPSG 25832/4326 or can successfully be mapped to EPSG
 - Issue #654: WFS Layers didn't get displayed as group layers
 - Light-tree: Layers that are only selectable in certain zoom levels are now also grayed out directly after startup.
-- Sidebar: if a tool was activated by url parameter and user opens second tool, the first tool is closed now
 - Tool wfsSearch: Zoom to a hit in the result list works now again
-- Print tool: If tool was activated by url parameter, print-mask is now visible and scales are selectable
 - Sidebar: If a tool was activated by url parameter and user opens second tool, the first tool is closed now
 - Searchbar: Searches that deliver only a single search result can now be selected with `Enter`.
 
