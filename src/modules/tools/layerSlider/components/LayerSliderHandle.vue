@@ -37,6 +37,8 @@ export default {
                     "ticks_labels": this.layerIds.map(layerId => layerId.title)
                 }).on("slide", event => {
                     this.dragHandle(event.value);
+                }).on("slideStop", event => {
+                    this.dragHandle(event.value);
                 });
             });
         },
