@@ -242,6 +242,7 @@ export default {
                     :geometry-name="geometryName"
                     :table-heads="headers"
                     :table-data="results"
+                    :on-row-click-callback="setShowResultList.bind(this, false)"
                 />
             </template>
             <template v-else>

@@ -23,10 +23,27 @@ export default {
         geometryName: {
             type: String,
             default: ""
+        },
+        onRowClickCallback: {
+            type: Function,
+            required: false,
+            default: () => { /* noop */ }
         }
     },
     methods: {
         ...mapActions("MapMarker", ["placingPointMarker"]),
+        /**
+         * Executes row click effects.
+         * @param {String[]} data arbitrary data; may be a feature for setCenter
+         * @returns {void}
+         */
+        onRowClick (data) {
+            // if a geometryName is given, the data resembles a zoomable feature
+            if (this.geometryName) {
+                this.setCenter(data);
+            }
+            this.onRowClickCallback(data);
+        },
         /**
          * Takes the selected coordinates and centers the map to the new position.
          * @param {String[]} feature clicked feature to zoom to
@@ -78,7 +95,7 @@ export default {
             <tr
                 v-for="(data, i) in tableData"
                 :key="data + i"
-                @click="geometryName ? setCenter(data) : ''"
+                @click="onRowClick(data)"
             >
                 <td
                     v-for="([key, title], j) of Object.entries(tableHeads)"
