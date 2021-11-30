@@ -71,28 +71,6 @@ async function LayerSliderTests ({builder, url, resolution, capability}) {
                 expect(forward).to.exist;
                 expect(input).to.exist;
             });
-            it("Click play and check if the layers are switched on and off in the right order", async function () {
-                await (await driver.findElement(By.css("div#tool-layer-slider-player div.input-group span.input-group-btn button#play"), 5000)).click();
-
-                expect(await driver.executeScript(isLayerVisible, "8730")).to.be.true;
-                expect(await driver.executeScript(isLayerVisible, "2426")).to.be.false;
-                expect(await driver.executeScript(isLayerVisible, "4561")).to.be.false;
-                await driver.wait(new Promise(r => setTimeout(r, 1200)));
-                expect(await driver.executeScript(isLayerVisible, "8730")).to.be.false;
-                expect(await driver.executeScript(isLayerVisible, "2426")).to.be.true;
-                expect(await driver.executeScript(isLayerVisible, "4561")).to.be.false;
-                await driver.wait(new Promise(r => setTimeout(r, 1200)));
-                expect(await driver.executeScript(isLayerVisible, "8730")).to.be.false;
-                expect(await driver.executeScript(isLayerVisible, "2426")).to.be.false;
-                expect(await driver.executeScript(isLayerVisible, "4561")).to.be.true;
-                await driver.wait(new Promise(r => setTimeout(r, 1200)));
-                expect(await driver.executeScript(isLayerVisible, "8730")).to.be.true;
-                expect(await driver.executeScript(isLayerVisible, "2426")).to.be.false;
-                expect(await driver.executeScript(isLayerVisible, "4561")).to.be.false;
-
-                await (await driver.findElement(By.css("div#tool-layer-slider-player div.input-group span.input-group-btn button#stop"), 5000)).click();
-                await driver.wait(new Promise(r => setTimeout(r, 500)));
-            });
             it("Click back and check if the last layer is on", async function () {
                 await (await driver.findElement(By.css("div#tool-layer-slider-player div.input-group span.input-group-btn button#backward"), 5000)).click();
 
@@ -103,6 +81,28 @@ async function LayerSliderTests ({builder, url, resolution, capability}) {
             it("Click forward and check if the first layer is on", async function () {
                 await (await driver.findElement(By.css("div#tool-layer-slider-player div.input-group span.input-group-btn button#forward"), 5000)).click();
 
+                expect(await driver.executeScript(isLayerVisible, "8730")).to.be.true;
+                expect(await driver.executeScript(isLayerVisible, "2426")).to.be.false;
+                expect(await driver.executeScript(isLayerVisible, "4561")).to.be.false;
+
+                await (await driver.findElement(By.css("div#tool-layer-slider-player div.input-group span.input-group-btn button#stop"), 5000)).click();
+                await driver.wait(new Promise(r => setTimeout(r, 1000)));
+            });
+            it("Click play and check if the layers are switched on and off in the right order", async function () {
+                await (await driver.findElement(By.css("div#tool-layer-slider-player div.input-group span.input-group-btn button#play"), 5000)).click();
+
+                expect(await driver.executeScript(isLayerVisible, "8730")).to.be.true;
+                expect(await driver.executeScript(isLayerVisible, "2426")).to.be.false;
+                expect(await driver.executeScript(isLayerVisible, "4561")).to.be.false;
+                await driver.wait(new Promise(r => setTimeout(r, 1000)));
+                expect(await driver.executeScript(isLayerVisible, "8730")).to.be.false;
+                expect(await driver.executeScript(isLayerVisible, "2426")).to.be.true;
+                expect(await driver.executeScript(isLayerVisible, "4561")).to.be.false;
+                await driver.wait(new Promise(r => setTimeout(r, 1000)));
+                expect(await driver.executeScript(isLayerVisible, "8730")).to.be.false;
+                expect(await driver.executeScript(isLayerVisible, "2426")).to.be.false;
+                expect(await driver.executeScript(isLayerVisible, "4561")).to.be.true;
+                await driver.wait(new Promise(r => setTimeout(r, 1000)));
                 expect(await driver.executeScript(isLayerVisible, "8730")).to.be.true;
                 expect(await driver.executeScript(isLayerVisible, "2426")).to.be.false;
                 expect(await driver.executeScript(isLayerVisible, "4561")).to.be.false;
