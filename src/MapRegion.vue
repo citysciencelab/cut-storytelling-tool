@@ -108,7 +108,6 @@ export default {
         overflow: hidden;
 
         #map-wrapper {
-            position:relative;
             overflow: hidden;
             flex-grow:1;
             order:1;
