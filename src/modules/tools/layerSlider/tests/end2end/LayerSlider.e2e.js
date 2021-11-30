@@ -77,20 +77,21 @@ async function LayerSliderTests ({builder, url, resolution, capability}) {
                 expect(await driver.executeScript(isLayerVisible, "8730")).to.be.true;
                 expect(await driver.executeScript(isLayerVisible, "2426")).to.be.false;
                 expect(await driver.executeScript(isLayerVisible, "4561")).to.be.false;
-                await driver.wait(new Promise(r => setTimeout(r, 1000)));
+                await driver.wait(new Promise(r => setTimeout(r, 1200)));
                 expect(await driver.executeScript(isLayerVisible, "8730")).to.be.false;
                 expect(await driver.executeScript(isLayerVisible, "2426")).to.be.true;
                 expect(await driver.executeScript(isLayerVisible, "4561")).to.be.false;
-                await driver.wait(new Promise(r => setTimeout(r, 1000)));
+                await driver.wait(new Promise(r => setTimeout(r, 1200)));
                 expect(await driver.executeScript(isLayerVisible, "8730")).to.be.false;
                 expect(await driver.executeScript(isLayerVisible, "2426")).to.be.false;
                 expect(await driver.executeScript(isLayerVisible, "4561")).to.be.true;
-                await driver.wait(new Promise(r => setTimeout(r, 1000)));
+                await driver.wait(new Promise(r => setTimeout(r, 1200)));
                 expect(await driver.executeScript(isLayerVisible, "8730")).to.be.true;
                 expect(await driver.executeScript(isLayerVisible, "2426")).to.be.false;
                 expect(await driver.executeScript(isLayerVisible, "4561")).to.be.false;
 
                 await (await driver.findElement(By.css("div#tool-layer-slider-player div.input-group span.input-group-btn button#stop"), 5000)).click();
+                await driver.wait(new Promise(r => setTimeout(r, 500)));
             });
             it("Click back and check if the last layer is on", async function () {
                 await (await driver.findElement(By.css("div#tool-layer-slider-player div.input-group span.input-group-btn button#backward"), 5000)).click();
