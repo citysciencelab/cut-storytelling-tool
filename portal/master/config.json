@@ -260,12 +260,13 @@
                 "title": "Hamburger Flurstücksuche",
                 "resultDialogTitle": "Trefferliste",
                 "requestConfig": {
-                  "gazetteer": true,
-                  "nameSpaces": [
-                    "http://www.adv-online.de/namespaces/adv/dog",
-                    "http://geodienste.hamburg.de/dog_gages/services/wfs_dog?SERVICE=WFS&VERSION=2.0.0&REQUEST=DescribeFeatureType&OUTPUTFORMAT=application/gml+xml;+version=3.2&TYPENAME=dog:Flurstueckskoordinaten&NAMESPACES=xmlns(dog,http://www.adv-online.de/namespaces/adv/dog)"
-                  ],
-                  "memberSuffix": "member",
+                  "gazetteer": {
+                    "namespaces": [
+                      "http://www.adv-online.de/namespaces/adv/dog",
+                      "http://geodienste.hamburg.de/dog_gages/services/wfs_dog?SERVICE=WFS&VERSION=2.0.0&REQUEST=DescribeFeatureType&OUTPUTFORMAT=application/gml+xml;+version=3.2&TYPENAME=dog:Flurstueckskoordinaten&NAMESPACES=xmlns(dog,http://www.adv-online.de/namespaces/adv/dog)"
+                    ],
+                    "memberSuffix": "member"
+                  },
                   "restLayerId": "6",
                   "storedQueryId": "Flurstueck"
                 },
