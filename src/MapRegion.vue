@@ -109,6 +109,7 @@ export default {
 
         #map-wrapper {
             overflow: hidden;
+            position: relative;
             flex-grow:1;
             order:1;
         }
