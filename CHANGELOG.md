@@ -80,10 +80,6 @@
 - Fixed missing highlighting in years 2010-2014 and remove of highlighting when selecting another year in addon boris.
 - For long lists the compare-feature-window provides now a scrollbar.
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 00513ce6d472107c04fab91d9d33ddb0d40aa7f2
 ---
 ## v2.14.0 - 2021-10-06
 ### Added
