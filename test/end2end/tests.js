@@ -81,6 +81,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
 
                 // modules/tools
                 require("../../src/modules/tools/contact/tests/end2end/Contact.e2e.js"),
+                require("../../src/modules/tools/layerSlider/tests/end2end/LayerSlider.e2e.js"),
                 // require("./tests/modules/tools/PopulationRequest_HH.js"),
                 require("./tests/modules/tools/ExtendedFilter.js"),
                 require("./tests/modules/tools/List.js"),

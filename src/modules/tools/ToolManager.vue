@@ -33,10 +33,9 @@ export default {
     },
     created () {
         this.setConfiguredTools(this.menuConfig);
+        this.pushAttributes();
     },
     mounted () {
-        /** Push the configured attributes to store from all configured tools. */
-        this.configuredTools.forEach(configuredTool => this.pushAttributesToStoreElements(configuredTool));
         this.setToolActiveByConfig();
 
         this.configuredTools.forEach(configuredTool => {
@@ -53,7 +52,17 @@ export default {
         ]),
         ...mapMutations("Tools", [
             "setConfiguredTools"
-        ])
+        ]),
+
+        /**
+         * Push the configured attributes to store from all configured tools.
+         * The configurations are done in the created hook,
+         * because the ToolManager is instantiated 2 x and otherwise changes in the mounted hook are overwritten again at the tools.
+         * @returns {void}
+         */
+        pushAttributes: function () {
+            this.configuredTools.forEach(configuredTool => this.pushAttributesToStoreElements(configuredTool));
+        }
     }
 };
 </script>

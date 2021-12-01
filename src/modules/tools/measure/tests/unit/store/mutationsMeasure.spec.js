@@ -4,7 +4,7 @@ import mutations from "../../../store/mutationsMeasure";
 
 const {addFeature, addUnlistener} = mutations;
 
-describe("tools/measure/store/mutationsMeasure", function () {
+describe("src/modules/tools/measure/store/mutationsMeasure", function () {
     describe("addFeature", function () {
         it("adds LineString measurements to lines object by key", function () {
             const lines = {0: {}, 1: {}, 2: {}},

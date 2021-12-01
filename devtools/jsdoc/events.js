@@ -1126,7 +1126,7 @@
  * @event Searchbar#RadioTriggerSearchbarPushHits
  * @description trigger transfer of search hits as a list
  * @param {String} sListname Name of list
- * @param {Object[]} aHitListArray an array of object{id, name, type} with optional values: coordinate, glyphicon, geom, adress, locationFinder, metaName, osm, marker, geometryType, interiorGeometry
+ * @param {Object[]} aHitListArray an array of object{id, name, type} with optional values: coordinate, glyphicon, geom, adress, locationFinder, metaName, osm, marker, geometryType
  * @example Radio.trigger("Searchbar", "pushHits", "hitList", aHitListArray);
  */
 
@@ -2096,18 +2096,6 @@
  * @description Is fired after addons are inizialized if addons are configured, e.g. the language files are loaded
  */
 
-
-/** -------------------- TOOLS.LAYERSLIDER -------------------- */
-
-/**
- * @event Tools.LayerSlider#changeIsActive
- * @description Event fired when layer slider model changes its attribute "isActive".
- */
-
- /**
- * @event Tools.LayerSlider#changeActiveLayer
- * @description Event fired when layer slider model changes its attribute "activeLayer".
- */
 
 /** -------------------- TOOLS.DRAW -------------------- */
 

@@ -33,7 +33,6 @@ import FeatureLister from "../../tools/featureLister/model";
 import Shadow from "../../tools/shadow/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
-import LayerSliderModel from "../../tools/layerSlider/model";
 import Viewpoint from "./viewPoint/model";
 import VirtualCityModel from "../../tools/virtualCity/model";
 import store from "../../../src/app-store/index";
@@ -269,18 +268,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "wfst") {
                 return new WfstModel(attrs, options);
-            }
-
-            /**
-             * layerslider
-             * @deprecated in 3.0.0
-             */
-            else if (attrs.id === "layerslider") {
-                console.warn("Tool: 'layerslider' is deprecated. Please use 'layerSlider' instead.");
-                return new LayerSliderModel(attrs, options);
-            }
-            else if (attrs.id === "layerSlider") {
-                return new LayerSliderModel(attrs, options);
             }
             else if (attrs.id === "virtualcity") {
                 return new VirtualCityModel(attrs, options);

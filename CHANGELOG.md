@@ -14,6 +14,7 @@
 - Added the new Tool `Routing`.
 - Searchbar: An option "sortByName" in gdi to config if the rearching results from elastic sorted alphanumerically or not.
 - ParametricURL: An alert has been added which displays the new notation of a parameterized call.
+- Handling of polygons with holes to WKT geometry parsing.
 
 ### Changed
 - Changed class for several title elements on page from span to h1 or h2 and standardized their styling
@@ -31,6 +32,7 @@
 - 2D-map is removed from vuex store. Maps are now stored in a collection. Creation of 2D-map and 3D-map use masterportalAPI's abstraction layer.
 - Print formats only contain working formats now.
 - QuickHelp: moved to Vue and refactored, can now be manipulated for search, tree and routing, new QuickHelp windows can be configured. See new quickHelp.md documentation for more details.
+- Migrated the layerSlider tool from Backbone.js to Vue.js.
 
 ### Deprecated
 
@@ -48,6 +50,8 @@
 - Tool wfsSearch: Zoom to a hit in the result list works now again
 - Sidebar: If a tool was activated by url parameter and user opens second tool, the first tool is closed now
 - Searchbar: Searches that deliver only a single search result can now be selected with `Enter`.
+- Handling of Multipolygons in WKT geometry parsing
+- GFI: in the iframe the content is now displayed again when using the `desktopType` `attached`.
 
 
 ---

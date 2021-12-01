@@ -10,7 +10,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 config.mocks.$t = key => key;
 
-describe("tools/Print/components/Print.vue", () => {
+describe("src/modules/tools/Print/components/Print.vue", () => {
     const scales = ["1000", "5000", "10000"],
         mockMapGetters = {
             scales: () => scales,

@@ -5,7 +5,7 @@ import sinon from "sinon";
 
 const {activatePrintStarted, startPrint, getMetaDataForPrint, createPrintJob, waitForPrintJob, waitForPrintJobSuccess, downloadFile} = actions;
 
-describe("tools/print/actionsPrint", function () {
+describe("src/modules/tools/print/store/actionsPrint", function () {
     describe("activatePrintStarted", function () {
         it("should set activatePrintStarted to true", done => {
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
