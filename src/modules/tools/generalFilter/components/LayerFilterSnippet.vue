@@ -5,6 +5,7 @@ import SnippetDate from "./SnippetDate.vue";
 import SnippetDropdown from "./SnippetDropdown.vue";
 import SnippetInput from "./SnippetInput.vue";
 import SnippetSlider from "./SnippetSlider.vue";
+import isObject from "../../../../utils/isObject";
 
 export default {
     name: "LayerFilterSnippet",
@@ -15,34 +16,116 @@ export default {
         SnippetInput,
         SnippetSlider,
         SnippetButton
+    },
+    props: {
+        layersConfig: {
+            type: Array,
+            required: true
+        }
+    },
+    methods: {
+        /**
+         * Checking if the snippet type exists
+         * @param {Object} snippet the snippet configuration
+         * @param {String} type the type
+         * @returns {Boolean} true if the snippet type is the expected type
+         */
+        checkSnippetType (snippet, type) {
+            return isObject(snippet) && Object.prototype.hasOwnProperty.call(snippet, "type") && snippet.type === type;
+        }
     }
 };
 </script>
 
 <template>
     <div>
-        <div class="snippet">
-            <b>Checkbox Snippet</b>
-            <SnippetCheckbox />
-        </div>
-        <div class="snippet">
-            <b>Dropdown Snippet</b>
-            <SnippetDropdown />
-        </div>
-        <div class="snippet">
-            <b>Input Snippet</b>
-            <SnippetInput />
-        </div>
-        <div class="snippet">
-            <b>Datepicker Snippet</b>
-            <SnippetDate />
-        </div>
-        <div class="snippet">
-            <b>Slider Snippet</b>
-            <SnippetSlider />
-        </div>
-        <div class="snippet">
-            <SnippetButton />
+        <div
+            v-for="(layerConfig, index) in layersConfig"
+            :key="index"
+        >
+            <div
+                v-if="Object.prototype.hasOwnProperty.call(layerConfig, 'snippets') && Array.isArray(layerConfig.snippets)"
+            >
+                <div
+                    v-for="(snippet, indexFilter) in layerConfig.snippets"
+                    :key="snippet.attrName + '-' + indexFilter"
+                >
+                    <div
+                        v-if="checkSnippetType(snippet, 'checkbox')"
+                        class="snippet"
+                    >
+                        <SnippetCheckbox
+                            :operator="Object.prototype.hasOwnProperty.call(snippet, 'operator') ? snippet.operator : 'OR'"
+                            :value="Object.prototype.hasOwnProperty.call(snippet, 'value') ? snippet.value : ''"
+                            :label="Object.prototype.hasOwnProperty.call(snippet, 'label') ? snippet.label : ''"
+                        />
+                    </div>
+                    <div
+                        v-else-if="checkSnippetType(snippet, 'dropdown')"
+                        class="snippet"
+                    >
+                        <SnippetDropdown
+                            :multiselect="Object.prototype.hasOwnProperty.call(snippet, 'multiselect') ? snippet.multiselect : 'false'"
+                            :operator="Object.prototype.hasOwnProperty.call(snippet, 'operater') ? snippet.operator : 'EQ'"
+                            :value="Object.prototype.hasOwnProperty.call(snippet, 'value') ? snippet.value : ''"
+                            :label="Object.prototype.hasOwnProperty.call(snippet, 'label') ? snippet.label : ''"
+                        />
+                    </div>
+                    <div
+                        v-else-if="checkSnippetType(snippet, 'text')"
+                        class="snippet"
+                    >
+                        <SnippetInput
+                            :operator="Object.prototype.hasOwnProperty.call(snippet, 'operater') ? snippet.operator : 'IN'"
+                            :value="Object.prototype.hasOwnProperty.call(snippet, 'value') ? snippet.value : ''"
+                            :label="Object.prototype.hasOwnProperty.call(snippet, 'label') ? snippet.label : ''"
+                        />
+                    </div>
+                    <div
+                        v-else-if="checkSnippetType(snippet, 'date')"
+                        class="snippet"
+                    >
+                        <SnippetDate
+                            :operator="Object.prototype.hasOwnProperty.call(snippet, 'operater') ? snippet.operator : 'EQ'"
+                            :value="Object.prototype.hasOwnProperty.call(snippet, 'value') ? snippet.value : ''"
+                            :label="Object.prototype.hasOwnProperty.call(snippet, 'label') ? snippet.label : ''"
+                        />
+                    </div>
+                    <div
+                        v-else-if="checkSnippetType(snippet, 'dateRange')"
+                        class="snippet"
+                    >
+                        <SnippetDate
+                            :operator="Object.prototype.hasOwnProperty.call(snippet, 'operater') ? snippet.operator : 'BETWEEN'"
+                            :value="Object.prototype.hasOwnProperty.call(snippet, 'value') ? snippet.value : ''"
+                            :label="Object.prototype.hasOwnProperty.call(snippet, 'label') ? snippet.label : ''"
+                        />
+                    </div>
+                    <div
+                        v-else-if="checkSnippetType(snippet, 'slider')"
+                        class="snippet"
+                    >
+                        <SnippetSlider
+                            :operater="Object.prototype.hasOwnProperty.call(snippet, 'operater') ? snippet.operator : 'BETWEEN'"
+                            :value="Object.prototype.hasOwnProperty.call(snippet, 'value') ? snippet.value : ''"
+                            :label="Object.prototype.hasOwnProperty.call(snippet, 'label') ? snippet.label : ''"
+                        />
+                    </div>
+                    <div
+                        v-else-if="checkSnippetType(snippet, 'sliderRange')"
+                        class="snippet"
+                    >
+                        <SnippetSlider
+                            :operator="Object.prototype.hasOwnProperty.call(snippet, 'operater') ? snippet.operater : 'BETWEEN'"
+                            :values="Object.prototype.hasOwnProperty.call(snippet, 'value') ? snippet.value : ''"
+                            :label="Object.prototype.hasOwnProperty.call(snippet, 'label') ? snippet.label : ''"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="snippet">
+                <SnippetButton />
+            </div>
         </div>
     </div>
 </template>

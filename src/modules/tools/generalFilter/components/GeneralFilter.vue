@@ -63,7 +63,10 @@ export default {
                 v-if="active"
                 id="tool-general-filter"
             />
-            <LayerFilterSnippet />
+            <LayerFilterSnippet
+                v-if="Array.isArray(layers) && layers.length"
+                :layers-config="layers"
+            />
         </template>
     </Tool>
 </template>
