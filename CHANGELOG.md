@@ -50,6 +50,7 @@
 - Sidebar: If a tool was activated by url parameter and user opens second tool, the first tool is closed now
 - Searchbar: Searches that deliver only a single search result can now be selected with `Enter`.
 - Handling of Multipolygons in WKT geometry parsing
+- GFI: in the iframe the content is now displayed again when using the `desktopType` `attached`.
 
 
 ---
