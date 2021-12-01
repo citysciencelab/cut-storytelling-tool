@@ -94,7 +94,6 @@ module.exports = {
     },
     isMenubarVisible: true,
     geoAPI: false,
-    clickCounter: {},
     remoteInterface: {
         postMessageUrl: "http://localhost:8080"
     },

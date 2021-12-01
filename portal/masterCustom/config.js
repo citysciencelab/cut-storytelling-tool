@@ -1,6 +1,5 @@
 const Config = {
     addons: ["trinkwasser", "schulinfo", "trafficCount", "verkehrsstaerken", "solaratlas", "dataTable"],
-    clickCounter: {},
     footer: {
         urls: [
             {
@@ -15,11 +14,6 @@ const Config = {
     mouseHover: {
         numFeaturesToShow: 2,
         infoText: "common:mouseHover.infoText"
-    },
-    metadata: {
-        useProxy: [
-            "https://metaver.de/csw"
-        ]
     },
     namedProjections: [
         // GK DHDN
@@ -65,11 +59,12 @@ const Config = {
         enabled: true,
         debug: false,
         languages: {
-            de: "deutsch",
-            en: "englisch",
-            it: "italienisch",
-            es: "spanisch",
-            pt: "portugiesisch"
+            de: "Deutsch",
+            en: "English",
+            es: "Español",
+            it: "Italiano",
+            pt: "Português",
+            tr: "Türkçe"
         },
         fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"],

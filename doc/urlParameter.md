@@ -28,7 +28,7 @@ Special URL parameters exist to change configuration details or execute initial 
 |LAYERIDS|_Deprecated in 3.0.0. Please use `"MAP/LAYERIDS"` instead._ |`&layerids=453,2128`|
 |MAP/LAYERIDS|Overrides the initially visible layers. The effect depends on the **[config.Portalconfig.treeType](config.json.md)**. If set to `"light"`, layers are set visible *additionally*. In other trees, the base configuration is overwritten. This can be complemented with the `VISIBILITY` and `TRANSPARENCY` flags.|`&Map/layerids=453,2128`|
 |MAP|_Deprecated in 3.0.0. Please use `"MAP/MAPMODE"` instead._|`?map=3D`||
-|MAP/MAPMODE|Mapmode 0 or 2D shows the 2D map (as usual),mapmode 1 or 3D shows 3D map when starting masterportal.|`?Map/mapMode=1`|`?mapMode=1` or `?mapMode=3D`
+|MAP/MAPMODE|Mapmode 2D shows the 2D map (as usual),mapmode 3D shows 3D map when starting masterportal.|`?Map/mapMode=2D`|`?mapMode=2d` or `?mapMode=3D`
 |MARKER|_Deprecated in 3.0.0. Please use `"MAPMARKER"` instead._|`&marker=565874,5934140`|
 MAPMARKER|Sets a marker to the given coordinate and zooms to it. If `PROJECTION` is given as parameter, the marker coordinates are to be expected in that coordinate reference system and are translated before application. Else, the given coordinates must match the map's coordinate reference system. See **[config.namedProjections.epsg](config.js.md)**.|`?MapMarker=[565874,5934140]`|`?MapMarker=565874,5934140`|
 |MDID|_Deprecated in 3.0.0. Please use `"MAP/MDID"` instead._|`&mdid=6520CBEF-D2A6-11D5-88C8-000102DCCF41`|

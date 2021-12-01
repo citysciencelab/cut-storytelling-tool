@@ -263,15 +263,21 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
             it("changedPosition will call adjustPosition in mode 'supply'", done => {
                 const payload = {
-                    position: [100, 200],
-                    targetProjection: proj2
-                };
+                        position: [100, 200],
+                        targetProjection: proj2
+                    },
+                    rootGetters = {
+                        "Map/ol2DMap": {
+                            removeLayer: sinon.spy(),
+                            addLayer: sinon.spy()
+                        }
+                    };
 
                 testAction(actions.changedPosition, null, state, rootState, [
                     {type: "adjustPosition", payload: payload, dispatch: true}
                 ], {getTransformedPosition: () => {
                     return [100, 200];
-                }}, done);
+                }}, done, rootGetters);
             });
             it("changedPosition will not call adjustPosition in mode 'serach'", done => {
                 state.mode = "search";
@@ -300,6 +306,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 proj1 = {id: "projection 1", name: "projection 1", projName: "longlat"},
                 proj2 = {id: "projection 2", name: "projection 2", projName: "longlat"},
                 state = {
+                    active: true,
                     mode: "search",
                     projections: [proj1, proj2],
                     currentProjection: proj2,
@@ -308,7 +315,13 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
             it("setFirstSearchPosition will call setCoordinatesEasting and others if position is not set", done => {
                 const payloadEasting = {id: "easting", value: String(center[0])},
-                    payloadNorthing = {id: "northing", value: String(center[1])};
+                    payloadNorthing = {id: "northing", value: String(center[1])},
+                    rootGetters = {
+                        "Map/ol2DMap": {
+                            removeLayer: sinon.spy(),
+                            addLayer: sinon.spy()
+                        }
+                    };
 
                 testAction(actions.setFirstSearchPosition, null, state, rootState, [
                     {type: "setCoordinatesEasting", payload: payloadEasting},
@@ -316,18 +329,34 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                     {type: "moveToCoordinates", payload: center, dispatch: true}
                 ], {getTransformedPosition: () => {
                     return [0, 0];
-                }}, done);
+                }}, done, rootGetters);
             });
             it("setFirstSearchPosition will do nothing if position is set", done => {
+                const rootGetters = {
+                    "Map/ol2DMap": {
+                        removeLayer: sinon.spy(),
+                        addLayer: sinon.spy()
+                    }
+                };
+
                 state.mode = "search";
 
                 testAction(actions.setFirstSearchPosition, null, state, rootState, [
                 ], {getTransformedPosition: () => {
                     return [100, 200];
-                }}, done);
+                }}, done, rootGetters);
             });
             it("setFirstSearchPosition will do nothing if mode is not 'search'", done => {
                 state.mode = "supply";
+
+                testAction(actions.setFirstSearchPosition, null, state, rootState, [],
+                    {getTransformedPosition: () => {
+                        return [0, 0];
+                    }}, done);
+            });
+            it("setFirstSearchPosition will do nothing if not active", done => {
+                state.mode = "search";
+                state.active = false;
 
                 testAction(actions.setFirstSearchPosition, null, state, rootState, [],
                     {getTransformedPosition: () => {

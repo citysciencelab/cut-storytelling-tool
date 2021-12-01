@@ -1,10 +1,8 @@
-import {MapMode} from "./enums";
 // TODO add 3d mode values (or model them as a separate module for composition)
 
 /**
  * User type definition
  * @typedef {Object} MapState
- * @property {?module:ol/Map} map currently active map instance
  * @property {?[Number, Number]} size - The size in pixels of the map in the DOM
  * @property {?OLCesium} map3d - the OLCesium 3d map
  * @property {?module:ol/layer[]} layerList - all layers of the map
@@ -30,11 +28,11 @@ import {MapMode} from "./enums";
  * @property {?Object.<String, LayerData>} layers register of existing layers
  * @property {?Number[]} overlayIds list of layer ids
  * @property {?Object.<String, LayerData>} overlays list of existing overlays
+ * @property {?String} [mapMode = "2D"] current map mode
+ * @property {String} [mapId = "ol"] current map id
  * @property {String[]} loadedLayers list of ready loaded layers IDs
- * @property {?MapMode} mapMode
  */
 const state = {
-    map: null,
     size: null,
     map3d: null,
     layerList: null,
@@ -61,7 +59,8 @@ const state = {
     layers: null,
     overlayIds: null,
     overlays: null,
-    mapMode: MapMode.MODE_2D,
+    mapMode: "2D",
+    mapId: "ol",
     highlightedFeature: null,
     highlightedFeatureStyle: null,
     vectorFeaturesLoaded: false,

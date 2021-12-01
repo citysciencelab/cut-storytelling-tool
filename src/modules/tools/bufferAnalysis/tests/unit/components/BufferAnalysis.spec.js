@@ -6,6 +6,7 @@ import {expect} from "chai";
 import sinon from "sinon";
 import {createLayersArray} from "../utils/functions";
 import FakeTimers from "@sinonjs/fake-timers";
+import mapCollection from "../../../../../../core/dataStorage/mapCollection.js";
 
 const localVue = createLocalVue();
 
@@ -13,25 +14,33 @@ localVue.use(Vuex);
 config.mocks.$t = key => key;
 
 describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () => {
-    const mockMapGetters = {
-            map: () => ({removeLayer: sinon.spy()})
-        },
-        mockConfigJson = {
-            Portalconfig: {
-                menu: {
-                    tools: {
-                        children: {
-                            bufferAnalysis:
+    const mockConfigJson = {
+        Portalconfig: {
+            menu: {
+                tools: {
+                    children: {
+                        bufferAnalysis:
                             {
                                 "name": "translate#common:menu.tools.bufferAnalysis",
                                 "glyphicon": "glyphicon-random"
                             }
-                        }
                     }
                 }
             }
-        };
+        }
+    };
     let store, originalCheckIntersection, originalShowBuffer, wrapper;
+
+    before(() => {
+        mapCollection.clear();
+        const map = {
+            id: "ol",
+            mode: "2D",
+            removeLayer: sinon.spy()
+        };
+
+        mapCollection.addMap(map, "ol", "2D");
+    });
 
     beforeEach(() => {
         originalCheckIntersection = BufferAnalysis.actions.checkIntersection;
@@ -47,20 +56,29 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
                     modules: {
                         BufferAnalysis
                     }
-                },
-                Map: {
-                    namespaced: true,
-                    getters: mockMapGetters
                 }
             },
             state: {
-                configJson: mockConfigJson
+                configJson: mockConfigJson,
+                Map: {
+                    mapId: "ol",
+                    mapMode: "2D"
+                }
             }
         });
         store.commit("Tools/BufferAnalysis/setActive", true);
     });
 
     afterEach(() => {
+        const map = {
+            id: "ol",
+            mode: "2D",
+            addLayer: sinon.spy(),
+            removeLayer: sinon.spy()
+        };
+
+        mapCollection.clear();
+        mapCollection.addMap(map, "ol", "2D");
         BufferAnalysis.actions.checkIntersection = originalCheckIntersection;
         BufferAnalysis.actions.showBuffer = originalShowBuffer;
         store.commit("Tools/BufferAnalysis/setActive", false);

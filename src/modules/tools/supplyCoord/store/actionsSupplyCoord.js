@@ -1,5 +1,6 @@
 import {toStringHDMS, toStringXY} from "ol/coordinate.js";
 import isMobile from "../../../../utils/isMobile";
+import mapCollection from "../../../../core/dataStorage/mapCollection";
 
 export default {
     /**
@@ -43,7 +44,7 @@ export default {
      */
     changedPosition ({dispatch, state, rootState, getters}) {
         const targetProjectionName = state.currentSelection,
-            position = getters.getTransformedPosition(rootState.Map.map, targetProjectionName);
+            position = getters.getTransformedPosition(mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode), targetProjectionName);
 
         if (position) {
             dispatch("adjustPosition", {position: position, targetProjection: state.currentProjection});

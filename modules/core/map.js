@@ -8,11 +8,12 @@ import ObliqueMap from "./obliqueMap";
 import Map3dModel from "./map3d";
 import {register} from "ol/proj/proj4.js";
 import proj4 from "proj4";
-import {createMap} from "masterportalAPI";
-import {getLayerList} from "masterportalAPI/src/rawLayerList";
+import api from "masterportalAPI/abstraction/api";
 import {transform as transformCoord, transformFromMapProjection, transformToMapProjection, getMapProjection} from "masterportalAPI/src/crs";
 import store from "../../src/app-store";
 import WMTSLayer from "./modelList/layer/wmts";
+import mapCollection from "../../src/core/dataStorage/mapCollection.js";
+import {getLayerList} from "masterportalAPI/src/rawLayerList";
 
 const map = Backbone.Model.extend(/** @lends map.prototype */{
     defaults: {
@@ -89,7 +90,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             "getFeaturesAtPixel": this.getFeaturesAtPixel,
             "registerListener": this.registerListener,
             "getMap": function () {
-                return this.get("map");
+                return mapCollection.getMap("ol", "2D");
             },
             "getInitialLoading": function () {
                 return this.get("initialLoading");
@@ -101,7 +102,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
 
         channel.on({
             "addLayer": function (layer) {
-                this.get("map").addLayer(layer);
+                this.getMap().addLayer(layer);
             },
             "addLayerToIndex": this.addLayerToIndex,
             "setLayerToIndex": this.setLayerToIndex,
@@ -126,7 +127,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
                 // avoid expensive updateSize() spamming
                 clearTimeout(this.get("timeoutReference"));
                 this.set("timeoutReference", setTimeout(() => {
-                    this.get("map").updateSize();
+                    mapCollection.getMap("ol", "2D").updateSize();
                 }, 100));
             }
         }, this);
@@ -154,16 +155,14 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             mapViewSettings.startZoomLevel = mapViewSettings.zoomLevel;
         }
 
-        this.setMap(createMap({
-            ...Config,
-            ...mapViewSettings,
-            layerConf: getLayerList()
-        }));
+        this.setMap(api.map.createMap(
+            {...Config, ...mapViewSettings, layerConf: getLayerList()}, {}, "2D"));
 
-        new MapView({view: this.get("map").getView(), settings: mapViewSettings});
-        this.set("view", this.get("map").getView());
+        new MapView({view: mapCollection.getMap("ol", "2D").getView(), settings: mapViewSettings});
 
-        this.addAliasForWFSFromGoeserver(getMapProjection(this.get("map")));
+        this.set("view", mapCollection.getMap("ol", "2D").getView());
+
+        this.addAliasForWFSFromGoeserver(getMapProjection(mapCollection.getMap("ol", "2D")));
 
         if (window.Cesium) {
             this.set("map3dModel", new Map3dModel());
@@ -216,7 +215,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
 
         // Should the coordinates get transformed to another coordinate system for broadcast?
         if (Config.inputMap.targetProjection !== undefined) {
-            coords = transformFromMapProjection(this.get("map"), Config.inputMap.targetProjection, coords);
+            coords = transformFromMapProjection(mapCollection.getMap("ol", "2D"), Config.inputMap.targetProjection, coords);
         }
 
         // Broadcast the coordinates clicked in the desired coordinate system.
@@ -229,7 +228,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     * @return {ol.layer} - found layer
     */
     getLayerByName: function (layerName) {
-        const layers = this.get("map").getLayers().getArray();
+        const layers = mapCollection.getMap("ol", "2D").getLayers().getArray();
 
         return layers.find(layer => {
             return layer.get("name") === layerName;
@@ -250,7 +249,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {*} layers from the map
      */
     getLayers: function () {
-        return this.get("map").getLayers();
+        return mapCollection.getMap("ol", "2D").getLayers();
     },
 
     /**
@@ -258,7 +257,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     render: function () {
-        this.get("map").render();
+        mapCollection.getMap("ol", "2D").render();
     },
 
     /**
@@ -278,7 +277,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      */
     bBoxToMap: function (bbox) {
         if (bbox) {
-            this.get("view").fit(bbox, this.get("map").getSize());
+            mapCollection.getMap("ol", "2D").getView().fit(bbox, mapCollection.getMap("ol", "2D").getSize());
         }
     },
 
@@ -287,7 +286,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {*} todo
      */
     getWGS84MapSizeBBOX: function () {
-        const bbox = this.get("view").calculateExtent(this.get("map").getSize()),
+        const bbox = mapCollection.getMap("ol", "2D").getView().calculateExtent(mapCollection.getMap("ol", "2D").getSize()),
             firstCoord = [bbox[0], bbox[1]],
             secondCoord = [bbox[2], bbox[3]],
             firstCoordTransform = transformCoord("EPSG:25832", "EPSG:4326", firstCoord),
@@ -305,7 +304,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     * @returns {*} todo
     */
     registerListener: function (event, callback, context) {
-        return this.get("map").on(event, callback, context);
+        return mapCollection.getMap("ol", "2D").on(event, callback, context);
     },
 
     /**
@@ -317,7 +316,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     */
     unregisterListener: function (event, callback, context) {
         if (typeof event === "string") {
-            this.get("map").un(event, callback, context);
+            mapCollection.getMap("ol", "2D").un(event, callback, context);
         }
         else {
             unlistenByKey(event);
@@ -331,7 +330,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     * @returns {features[]} - Array with features
     */
     getFeaturesAtPixel: function (pixel, options) {
-        return this.get("map").getFeaturesAtPixel(pixel, options);
+        return mapCollection.getMap("ol", "2D").getFeaturesAtPixel(pixel, options);
     },
 
     /**
@@ -356,7 +355,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     addInteraction: function (interaction) {
-        this.get("map").addInteraction(interaction);
+        mapCollection.getMap("ol", "2D").addInteraction(interaction);
     },
 
     /**
@@ -365,7 +364,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     removeInteraction: function (interaction) {
-        this.get("map").removeInteraction(interaction);
+        mapCollection.getMap("ol", "2D").removeInteraction(interaction);
     },
 
     /**
@@ -374,7 +373,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     addOverlay: function (overlay) {
-        this.get("map").addOverlay(overlay);
+        mapCollection.getMap("ol", "2D").addOverlay(overlay);
     },
 
     /**
@@ -383,7 +382,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     removeOverlay: function (overlay) {
-        this.get("map").removeOverlay(overlay);
+        mapCollection.getMap("ol", "2D").removeOverlay(overlay);
     },
 
     /**
@@ -392,7 +391,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     addControl: function (control) {
-        this.get("map").addControl(control);
+        mapCollection.getMap("ol", "2D").addControl(control);
     },
 
     /**
@@ -401,7 +400,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     removeControl: function (control) {
-        this.get("map").removeControl(control);
+        mapCollection.getMap("ol", "2D").removeControl(control);
     },
 
     /**
@@ -410,7 +409,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     addLayerOnTop: function (layer) {
-        this.get("map").getLayers().push(layer);
+        mapCollection.getMap("ol", "2D").getLayers().push(layer);
     },
 
     /**
@@ -419,7 +418,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     removeLayer: function (layer) {
-        this.get("map").removeLayer(layer);
+        mapCollection.getMap("ol", "2D").removeLayer(layer);
     },
 
     /**
@@ -430,21 +429,20 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     addLayerToIndex: function (args) {
         const layer = args[0],
             index = args[1],
-            channel = Radio.channel("Map"),
-            layersCollection = this.get("map").getLayers();
+            layersCollection = mapCollection.getMap("ol", "2D").getLayers();
 
         let layerModel;
 
         if (layer) {
             layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layer.get("id")});
         }
-
         // if the layer is already at the correct position, do nothing
         if (layersCollection.item(index) === layer) {
             return;
         }
         layersCollection.remove(layer);
         layersCollection.insertAt(index, layer);
+
         this.setImportDrawMeasureLayersOnTop(layersCollection);
 
         // Laden des Layers überwachen
@@ -455,8 +453,8 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
                  * However, depending on the config, the loader will not disappear without this toggle.
                  * (e.g. if only one WMTS without optionsFromCapabilities is set)
                  */
-                singleLayer.getSource().on("wmsloadend", channel.trigger("removeLoadingLayer"), this);
-                singleLayer.getSource().on("wmsloadstart", channel.trigger("addLoadingLayer"), this);
+                singleLayer.getSource().on("wmsloadend", Radio.trigger("Map", "removeLoadingLayer"), this);
+                singleLayer.getSource().on("wmsloadstart", Radio.trigger("Map", "addLoadingLayer"), this);
             });
         }
         else if (layerModel instanceof WMTSLayer) {
@@ -467,7 +465,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
                 // wmts source will load asynchonously
                 // -> source=null at this step
                 // listener to remove loading layer is set in WMTS class (on change:layerSource)
-                channel.trigger("addLoadingLayer");
+                Radio.trigger("Map", "addLoadingLayer");
             }
         }
         else {
@@ -476,8 +474,8 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
              * However, depending on the config, the loader will not disappear without this toggle.
              * (e.g. if only one WMTS without optionsFromCapabilities is set)
              */
-            layer.getSource().on("wmsloadend", channel.trigger("removeLoadingLayer"), this);
-            layer.getSource().on("wmsloadstart", channel.trigger("addLoadingLayer"), this);
+            layer.getSource().on("wmsloadend", Radio.trigger("Map", "removeLoadingLayer"), this);
+            layer.getSource().on("wmsloadstart", Radio.trigger("Map", "addLoadingLayer"), this);
         }
     },
 
@@ -527,14 +525,14 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         if (urlProjection !== undefined) {
             const leftBottom = extent.slice(0, 2),
                 topRight = extent.slice(2, 4),
-                transformedLeftBottom = transformToMapProjection(this.get("map"), urlProjection, leftBottom),
-                transformedTopRight = transformToMapProjection(this.get("map"), urlProjection, topRight);
+                transformedLeftBottom = transformToMapProjection(mapCollection.getMap("ol", "2D"), urlProjection, leftBottom),
+                transformedTopRight = transformToMapProjection(mapCollection.getMap("ol", "2D"), urlProjection, topRight);
 
             extentToZoom = transformedLeftBottom.concat(transformedTopRight);
         }
 
-        this.get("view").fit(extentToZoom, {
-            size: this.get("map").getSize(),
+        mapCollection.getMap("ol", "2D").getView().fit(extentToZoom, {
+            size: mapCollection.getMap("ol", "2D").getSize(),
             duration: options && options?.duration ? options.duration : 800,
             ...options
         });
@@ -621,7 +619,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     * @returns {ol.Size} An array of two numbers [width, height].
     */
     getSize: function () {
-        return this.get("map").getSize();
+        return mapCollection.getMap("ol", "2D").getSize();
     },
 
     /**
@@ -662,7 +660,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {ol/layer/Layer}  the found layer or a new layer with the given name
      */
     createLayerIfNotExists: function (name) {
-        const layers = this.getLayers();
+        const layers = mapCollection.getMap("ol", "2D").getLayers();
 
         let found = false,
             layer,
@@ -698,7 +696,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {ol.Overlay} the overlay
      */
     getOverlayById: function (id) {
-        return this.get("map").getOverlayById(id);
+        return mapCollection.getMap("ol", "2D").getOverlayById(id);
     },
 
     /**
@@ -707,8 +705,10 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     setMap: function (value) {
+        mapCollection.addMap(value, "ol", "2D");
         this.set("map", value);
-        store.dispatch("Map/setMap", {map: value});
+
+        store.dispatch("Map/setMapAttributes", {map: this.get("map")});
     }
 
 });

@@ -1,19 +1,11 @@
 const Config = {
     addons: ["populationRequest", "vueAddon", "tacticalMark", "trinkwasser", "schulinfo", "trafficCount", "verkehrsstaerken", "solaratlas", "dataTable"],
-    alerting: {
-        fetchBroadcastUrl: "https://geodienste.hamburg.de/lgv-config/newsFeedPortalAlerts.json"
-    },
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
     zoomToFeature: {
         attribute: "flaechenid",
         wfsId: "4560",
         styleId: "location_eventlotse"
-    },
-    metadata: {
-        useProxy: [
-            "https://metaver.de/csw"
-        ]
     },
     zoomToGeometry: {
         layerId: "1692",
@@ -61,7 +53,6 @@ const Config = {
         numFeaturesToShow: 2,
         infoText: "common:mouseHover.infoText"
     },
-    clickCounter: {},
     startingMap3D: false,
     obliqueMap: true,
     cesiumParameter: {
@@ -102,11 +93,12 @@ const Config = {
         enabled: true,
         debug: false,
         languages: {
-            de: "deutsch",
-            en: "englisch",
-            it: "italienisch",
-            pt: "portugiesisch",
-            es: "spanisch"
+            de: "Deutsch",
+            en: "English",
+            es: "Español",
+            it: "Italiano",
+            pt: "Português",
+            tr: "Türkçe"
         },
         fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"]

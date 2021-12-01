@@ -2,9 +2,8 @@ import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 import {convert, convertToStringArray, convertTransparency, parseQuery} from "./converter";
 import {setValueToState} from "./stateModifier";
 import store from "../../app-store";
-import {MapMode} from "../../modules/map/store/enums";
 
-const toolsNotInState = ["compareFeatures", "parcelSearch", "print", "featureLister", "layerSlider", "filter", "shadow", "virtualcity", "wfst", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
+const toolsNotInState = ["parcelSearch", "featureLister", "layerSlider", "filter", "shadow", "virtualcity", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
 
 /**
  * Checks the Config for 'allowParametricURL'.
@@ -101,7 +100,7 @@ export function translateToBackbone (urlParamsKey, urlParamsValue) {
  */
 export function doSpecialBackboneHandling (key, value) {
     if (key === "Map/mapMode") {
-        if (value === MapMode.MODE_3D || String(value).toLowerCase() === "3d") {
+        if (value === "3D" || String(value).toLowerCase() === "3d") {
             Radio.trigger("Map", "mapChangeTo3d");
         }
     }

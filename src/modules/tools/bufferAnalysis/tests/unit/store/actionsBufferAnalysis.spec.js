@@ -3,6 +3,7 @@ import {expect} from "chai";
 import {createLayersArray} from "../utils/functions";
 import actions from "../../../store/actionsBufferAnalysis";
 import stateBufferAnalysis from "../../../store/stateBufferAnalysis";
+import mapCollection from "../../../../../../core/dataStorage/mapCollection.js";
 import {
     LineString,
     MultiLineString,
@@ -14,7 +15,19 @@ import {
 } from "ol/geom";
 
 describe("src/modules/tools/bufferAnalysis/store/actionsBufferAnalysis.js", () => {
-    let commit, dispatch, rootGetters, state, tick;
+    let commit, dispatch, rootGetters, rootState, state, tick;
+
+    before(() => {
+        mapCollection.clear();
+        const map = {
+            id: "ol",
+            mode: "2D",
+            addLayer: sinon.spy(),
+            removeLayer: sinon.spy()
+        };
+
+        mapCollection.addMap(map, "ol", "2D");
+    });
 
     beforeEach(() => {
         tick = () => {
@@ -24,7 +37,16 @@ describe("src/modules/tools/bufferAnalysis/store/actionsBufferAnalysis.js", () =
         };
         commit = sinon.spy();
         dispatch = sinon.stub().resolves(true);
-        rootGetters = sinon.stub();
+        rootGetters = {
+            "Map/mapId": "ol",
+            "Map/mapMode": "2D"
+        };
+        rootState = {
+            Map: {
+                mapId: "ol",
+                mapMode: "2D"
+            }
+        };
         state = {...stateBufferAnalysis};
     });
 
@@ -135,23 +157,21 @@ describe("src/modules/tools/bufferAnalysis/store/actionsBufferAnalysis.js", () =
     });
     describe("showBuffer", () => {
         it("calls commit and addLayer once each", async () => {
-            rootGetters["Map/map"] = {addLayer: sinon.spy()};
             state.selectedSourceLayer = {...createLayersArray(1)[0], get: ()=> ({getFeatures: ()=>[], setOpacity: () => ({})})};
             actions.showBuffer({commit, getters: state, dispatch, rootGetters});
 
             expect(commit.calledOnce).to.be.true;
-            expect(rootGetters["Map/map"].addLayer.callCount).to.equal(1);
+            expect(mapCollection.getMap("ol", "2D").addLayer.callCount).to.equal(1);
         });
     });
     describe("removeGeneratedLayers", () => {
         it("calls commit four times and removeLayer twice", async () => {
-            rootGetters["Map/map"] = {removeLayer: sinon.spy()};
             state.resultLayer = createLayersArray(1)[0];
             state.bufferLayer = createLayersArray(1)[0];
-            actions.removeGeneratedLayers({commit, getters: state, rootGetters});
+            actions.removeGeneratedLayers({commit, rootState, getters: state});
 
             expect(commit.callCount).to.equal(4);
-            expect(rootGetters["Map/map"].removeLayer.calledTwice).to.be.true;
+            expect(mapCollection.getMap("ol", "2D").removeLayer.calledTwice).to.be.true;
         });
     });
     describe("resetModule", () => {

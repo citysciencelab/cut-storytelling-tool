@@ -46,8 +46,7 @@ export default {
                 // if unlisteners are registered, this indicates 3D mode was active immediately before
                 dispatch("deleteFeatures");
             }
-            const map = rootGetters["Map/map"],
-                {selectedGeometry} = state;
+            const {selectedGeometry} = state;
 
             interaction = makeDraw2d(
                 selectedGeometry,
@@ -56,7 +55,7 @@ export default {
                 featureId => commit("setFeatureId", featureId),
                 tooltipCoord => commit("setTooltipCoord", tooltipCoord)
             );
-            map.addInteraction(interaction);
+            rootGetters["Map/ol2DMap"].addInteraction(interaction);
         }
 
         commit("setInteraction", interaction);
@@ -67,12 +66,10 @@ export default {
      * removing the interaction from the store.
      * @returns {void}
      */
-    removeDrawInteraction ({state, commit, rootGetters}) {
+    removeDrawInteraction ({state, rootGetters, commit}) {
         const {interaction} = state;
 
         if (interaction) {
-            const map = rootGetters["Map/map"];
-
             interaction.abortDrawing();
 
             if (interaction.interaction3d) {
@@ -80,7 +77,7 @@ export default {
                 interaction.stopInteraction();
             }
             else {
-                map.removeInteraction(interaction);
+                rootGetters["Map/ol2DMap"].removeInteraction(interaction);
             }
 
             commit("setInteraction", null);

@@ -5,9 +5,11 @@ import CoordToolkit from "./coordToolkit/components/CoordToolkit.vue";
 import Draw from "./draw/components/Draw.vue";
 import CompareFeatures from "./compareFeatures/components/CompareFeatures.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
+import GeneralFilter from "./generalFilter/components/GeneralFilter.vue";
 import Gfi from "./gfi/components/Gfi.vue";
 import LayerClusterToggler from "./layerClusterToggler/components/LayerClusterToggler.vue";
 import Measure from "./measure/components/Measure.vue";
+import Print from "./print/components/Print.vue";
 import SaveSelection from "./saveSelection/components/SaveSelection.vue";
 import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
 import SearchByCoord from "./searchByCoord/components/SearchByCoord.vue";
@@ -15,6 +17,7 @@ import SelectFeatures from "./selectFeatures/components/SelectFeatures.vue";
 import StyleVT from "./styleVT/components/StyleVT.vue";
 import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 import WfsSearch from "./wfsSearch/components/WfsSearch.vue";
+import Routing from "./routing/components/Routing.vue";
 
 /**
  * User type definition
@@ -32,15 +35,18 @@ const state = {
         compareFeatures: CompareFeatures,
         fileImport: FileImport,
         gfi: Gfi,
+        generalFilter: GeneralFilter,
         layerClusterToggler: LayerClusterToggler,
         measure: Measure,
+        print: Print,
         saveSelection: SaveSelection,
         scaleSwitcher: ScaleSwitcher,
         searchByCoord: SearchByCoord,
         selectFeatures: SelectFeatures,
         styleVT: StyleVT,
         supplyCoord: SupplyCoord,
-        wfsSearch: WfsSearch
+        wfsSearch: WfsSearch,
+        routing: Routing
     },
     configuredTools: []
 };

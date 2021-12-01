@@ -2,7 +2,6 @@ import Vuex from "vuex";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import sinon from "sinon";
-
 import MeasureComponent from "../../../components/Measure.vue";
 import MeasureModule from "../../../store/indexMeasure";
 
@@ -12,7 +11,7 @@ localVue.use(Vuex);
 config.mocks.$t = key => key;
 
 describe("src/modules/tools/measure/components/Measure.vue", () => {
-    let store, wrapper;
+    let store, wrapper, map;
 
     beforeEach(() => {
         MeasureModule.actions.createDrawInteraction = sinon.spy(MeasureModule.actions.createDrawInteraction);
@@ -26,13 +25,18 @@ describe("src/modules/tools/measure/components/Measure.vue", () => {
             modules: {
                 Map: {
                     namespaced: true,
+                    state: {
+                        mapId: "ol",
+                        mapMode: "2D"
+                    },
                     getters: {
                         layerById: () => id => ({})[id],
                         is3d: () => false,
-                        map: () => ({
-                            addInteraction: sinon.spy(),
-                            removeInteraction: sinon.spy()
-                        })
+                        mapId: () => "ol",
+                        mapMode: () => "2D",
+                        ol2DMap: () => {
+                            return map;
+                        }
                     },
                     mutations: {
                         addLayerToMap: sinon.spy(),
@@ -50,6 +54,14 @@ describe("src/modules/tools/measure/components/Measure.vue", () => {
                 uiStyle: () => ""
             }
         });
+
+        map = {
+            id: "ol",
+            mode: "2D",
+            addInteraction: sinon.spy(),
+            removeInteraction: sinon.spy(),
+            addLayer: sinon.spy()
+        };
 
         store.commit("Tools/Measure/setActive", true);
     });

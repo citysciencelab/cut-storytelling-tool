@@ -7,7 +7,7 @@ export default {
         ...mapGetters("Map", ["scaleToOne", "scaleWithUnit", "mapMode"]),
         ...mapGetters(["mobile", "scaleLineConfig"]),
         showScale () {
-            return this.scaleLineConfig && !this.mobile && this.mapMode === 0;
+            return this.scaleLineConfig && !this.mobile && this.mapMode === "2D";
         }
     }
 

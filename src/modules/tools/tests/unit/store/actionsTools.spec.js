@@ -15,6 +15,7 @@ describe("src/modules/tools/actionsTools.js", () => {
         const state = {
             ScaleSwitcher: {
                 id: "scaleSwitcher",
+                name: "ScaleSwitcher",
                 deactivateGFI: false
             },
             Gfi: {
@@ -25,10 +26,12 @@ describe("src/modules/tools/actionsTools.js", () => {
         it("setToolActive set one tool and gfi to active", done => {
             const payload = {
                 id: "scaleSwitcher",
+                name: "ScaleSwitcher",
                 active: true
             };
 
             testAction(setToolActive, payload, state, {}, [
+                {type: "controlActivationOfTools", payload: payload.name, dispatch: true},
                 {type: Object.keys(state)[0] + "/setActive", payload: payload.active, dispatch: true},
                 {type: "Gfi/setActive", payload: payload.active, commit: true}
             ], {}, done);
@@ -36,10 +39,12 @@ describe("src/modules/tools/actionsTools.js", () => {
         it("setToolActive deactivate a tool and activate gfi", done => {
             const payload = {
                 id: "scaleSwitcher",
+                name: "ScaleSwitcher",
                 active: false
             };
 
             testAction(setToolActive, payload, state, {}, [
+                {type: "controlActivationOfTools", payload: payload.name, dispatch: true},
                 {type: Object.keys(state)[0] + "/setActive", payload: payload.active, commit: true},
                 {type: "Gfi/setActive", payload: true, commit: true}
             ], {}, done);

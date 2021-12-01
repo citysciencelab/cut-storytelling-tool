@@ -25,6 +25,18 @@ export default {
     imagePath: state => state?.configJs.wfsImgPath || null,
 
     /**
+     * Returns the treeType from config.json. If not defined treeType 'light' is returned.
+     * @param {Object} state the store state
+     * @returns {String} treeType 'light', 'default' or 'custom'
+     */
+    treeType: (state) => {
+        if (state?.configJson?.Portalconfig?.treeType) {
+            return state.configJson.Portalconfig.treeType;
+        }
+        return "light";
+    },
+
+    /**
      * recursively read out the menu config for tools
      * Is used to determine whether a component should be loaded
      * Does not assign Config Attributes to the module

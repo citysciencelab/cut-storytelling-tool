@@ -147,34 +147,6 @@
  */
 
 
-/** -------------------- CLICK COUNTER -------------------- */
-
-/**
- * @event ClickCounter#RadioTriggerClickCounterToolChanged
- * @example Radio.trigger("ClickCounter", "toolChanged")
- */
-
-/**
- * @event ClickCounter#RadioTriggerClickCounterCalcRoute
- * @example Radio.trigger("ClickCounter", "calcRoute")
- */
-
-/**
- * @event ClickCounter#RadioTriggerClickCounterZoomChanged
- * @example Radio.trigger("ClickCounter", "zoomChanged")
- */
-
-/**
- * @event ClickCounter#RadioTriggerClickCounterLayerVisibleChanged
- * @example Radio.trigger("ClickCounter", "layerVisibleChanged")
- */
-
-/**
- * @event ClickCounter#RadioTriggerClickCounterGfi
- * @example Radio.trigger("ClickCounter", "gfi")
- */
-
-
 /** -------------------- LEGEND COMPONENT-------------------- */
 
 /**
@@ -1461,21 +1433,6 @@
  * @description todo
  */
 
-/** -------------------- GRAPH -------------------- */
-
-/**
- * @event Tools.Graph#RadioTriggerGraphCreateGraph
- * @description starts the generating of a graphic
- * @param {Object} graphConfig contains the options for the graphic
- * @example Radio.trigger("Graph", "createGraph", graphconfig);
- */
-
-/**
- * @event Tools.Graph#RadioRequestGraphGetGraphParams
- * @description Returns the current graph params.
- * @example Radio.request("Graph", "getGraphParams");
- */
-
 /** -------------------- GFILIST -------------------- */
 
 /**
@@ -1484,26 +1441,6 @@
  * @example Radio.trigger("gfiList", "redraw", );
  */
 
-/** -------------------- QUICKHELP -------------------- */
-
-/**
- * @event QuickHelp#RadioTriggerQuickHelpShowWindowHelp
- * @description is triggered by QuickHelp
- * @param {String} topic topic for quickHelp to show
- * @example Radio.trigger("QuickHelp", "showWindowHelp", topic);
- */
-
-/**
- * @event QuickHelp#RadioRequestQuickHelpIsSet
- * @description Returns isSet value
- * @example Radio.request("QuickHelp", "isSet");
- */
-
-/**
- * @event QuickHelp#render
- * @description Triggered when the QuickHelp View has to render.
- * @example this.trigger("render")
- */
 /** -------------------- WINDOW -------------------- */
 
 /**

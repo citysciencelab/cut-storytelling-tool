@@ -1,13 +1,12 @@
 import {expect} from "chai";
 import sinon from "sinon";
-import {MapMode} from "../../../store/enums";
 import actions from "../../../store/actions/actionsMap.js";
 
 describe("src/modules/map/store/actions/actionsMap.js", () => {
     describe("updateClick: Listener for click on the map", () => {
         it("commits setClickCoord and setClickPixel in MODE_2D", () => {
             const getters = {
-                    mapMode: MapMode.MODE_2D
+                    mapMode: "2D"
                 },
                 rootGetters = {
                     "Tools/Gfi/active": false,
@@ -29,7 +28,7 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
 
         it("commits setClickCoord and setClickPixel in MODE_3D", () => {
             const getters = {
-                    mapMode: MapMode.MODE_3D
+                    mapMode: "3D"
                 },
                 rootGetters = {
                     "Tools/Gfi/active": false,
@@ -56,7 +55,7 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
 
         it("commits setClickCoord, setClickPixel and setFeaturesAtCoordinate if gfi tool is active", () => {
             const getters = {
-                    mapMode: MapMode.MODE_2D
+                    mapMode: "2D"
                 },
                 rootGetters = {
                     "Tools/Gfi/active": true,
@@ -81,7 +80,7 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
         it("commits setGfiFeature", async () => {
             const getters = {
                     clickCoord: sinon.spy(),
-                    mapMode: MapMode.MODE_2D,
+                    mapMode: "2D",
                     visibleWmsLayerList: {
                         filter: function () {
                             return [];
@@ -129,15 +128,19 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
     describe("setCenter", () => {
         let commit,
             setCenter,
-            state,
-            warn;
+            warn,
+            getters;
 
         beforeEach(() => {
             commit = sinon.spy();
             setCenter = sinon.spy();
-            state = {
-                map: {
-                    getView: () => ({setCenter})
+            getters = {
+                ol2DMap: {
+                    getView: () => {
+                        return {
+                            setCenter: setCenter
+                        };
+                    }
                 }
             };
             warn = sinon.spy();
@@ -161,7 +164,7 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
         it("should set the center if the coordinates are given as an array of length two with two numbers", () => {
             const coords = [3, 5];
 
-            actions.setCenter({state, commit}, coords);
+            actions.setCenter({commit, getters}, coords);
 
             expect(commit.calledOnce).to.be.true;
             expect(commit.firstCall.args).to.eql(["setCenter", coords]);
@@ -170,27 +173,27 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
             expect(warn.notCalled).to.be.true;
         });
         it("should not set the center, if the coordinate (['3', 5]) has the wrong data type", () => {
-            actions.setCenter(state, ["3", 5]);
+            actions.setCenter({commit, getters}, ["3", 5]);
 
             expectMutationNotCalled();
         });
         it("should not set the center, if the coordinate ([3, '5']) has the wrong data type", () => {
-            actions.setCenter(state, [3, "5"]);
+            actions.setCenter({commit, getters}, [3, "5"]);
 
             expectMutationNotCalled();
         });
         it("should not set the center, if the coordinate is not an array", () => {
-            actions.setCenter(state, {3: "5"});
+            actions.setCenter({commit, getters}, {3: "5"});
 
             expectMutationNotCalled();
         });
         it("should not set the center, if the length of the coordinate is greater than two", () => {
-            actions.setCenter(state, [0, 3, 3]);
+            actions.setCenter({commit, getters}, [0, 3, 3]);
 
             expectMutationNotCalled();
         });
         it("should not set the center, if the length of the coordinate is lower than two", () => {
-            actions.setCenter(state, [8]);
+            actions.setCenter({commit, getters}, [8]);
 
             expectMutationNotCalled();
         });

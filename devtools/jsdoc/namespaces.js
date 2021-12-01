@@ -111,7 +111,7 @@
 
 /**
  * @namespace QuickHelp
- * @description fooBar
+ * @description The QuickHelp module.
  */
 
 /**
@@ -457,30 +457,6 @@
  */
 
 /**
- * @namespace Pendler
- * @memberof Tools
- * @description Animation of commuter movements.
- */
-
-/**
- * @namespace Animation
- * @memberof Tools.Pendler
- * @description Animation of commuter movements.
- */
-
-/**
- * @namespace Core
- * @memberof Tools.Pendler
- * @description Core of commuter movements.
- */
-
-/**
- * @namespace Lines
- * @memberof Tools.Pendler
- * @description foobar
- */
-
-/**
  * @namespace Print
  * @memberof Tools
  * @description Printing module
@@ -578,12 +554,6 @@
 /**
  * @namespace App
  * @description Loads core and instances all modules that have to be loaded, due to portal config
- */
-
-/**
- * @namespace ClickCounter
- * @description This functionality registers user click behaviour and updates the url of an created iframe
- * used for Verkehrsportal.
  */
 
 /**

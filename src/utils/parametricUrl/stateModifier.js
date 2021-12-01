@@ -3,6 +3,7 @@ import {deepAssignIgnoreCase} from "../deepAssign";
 import {doSpecialBackboneHandling, triggerParametricURLReady, translateToBackbone} from "./ParametricUrlBridge";
 import store from "../../app-store";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
+import mapCollection from "../../core/dataStorage/mapCollection";
 
 const deprecated = ["isinitopen", "startupmodul", "style", "query", "center", "zoomlevel", "zoomtoextent", "zoomtogeometry", "bezirk",
     "map", "layerids", "mdid", "featureid", "highlightfeature", "projection", "config", "marker"];
@@ -81,7 +82,7 @@ function callMutations (state) {
         let centerCoords = state.Map.center;
 
         if (state.urlParams.projection !== undefined) {
-            centerCoords = transformToMapProjection(state.Map.map, state.urlParams.projection, centerCoords);
+            centerCoords = transformToMapProjection(mapCollection.getMap(state.Map.mapId, state.Map.mapMode), state.urlParams.projection, centerCoords);
         }
         store.commit("Map/setCenter", centerCoords);
     }
@@ -96,7 +97,7 @@ function callActions (state) {
         let coordinates = state.MapMarker.coordinates;
 
         if (state.urlParams.projection !== undefined) {
-            coordinates = transformToMapProjection(state.Map.map, state.urlParams.projection, coordinates);
+            coordinates = transformToMapProjection(mapCollection.getMap(state.Map.mapId, state.Map.mapMode), state.urlParams.projection, coordinates);
         }
         setTimeout(() => {
             store.dispatch("MapMarker/placingPointMarker", coordinates);
@@ -137,6 +138,10 @@ export async function setValuesToState (state, params) {
 function checkDeprecated (key, translatedKey) {
     if (deprecated.find(toolId => toolId.toLowerCase() === key.toLowerCase())) {
         console.warn("Url Parameter '" + key.toUpperCase() + "' is deprecated in version 3.0.0. Please use '" + translatedKey + "' instead.");
+        store.dispatch("Alerting/addSingleAlert", i18next.t("common:utils.parametricURL.alertDeprecated", {
+            deprecatedKey: key.toUpperCase(),
+            currentUrl: `${window.location.href.split("?")[0]}?${translatedKey}`
+        }));
     }
 }
 

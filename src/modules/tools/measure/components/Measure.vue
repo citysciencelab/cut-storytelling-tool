@@ -19,7 +19,7 @@ export default {
     computed: {
         ...mapGetters("Tools/Measure", Object.keys(getters)),
         ...mapGetters(["uiStyle"]),
-        ...mapGetters("Map", ["layerById", "map", "is3d"])
+        ...mapGetters("Map", ["layerById", "is3d", "ol2DMap"])
     },
     watch: {
         /**
@@ -49,7 +49,7 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-        this.addLayerToMap(this.layer);
+        this.ol2DMap.addLayer(this.layer);
     },
     mounted () {
         if (this.active) {
@@ -59,7 +59,6 @@ export default {
     methods: {
         ...mapMutations("Tools/Measure", Object.keys(mutations)),
         ...mapActions("Tools/Measure", Object.keys(actions)),
-        ...mapMutations("Map", ["addLayerToMap"]),
 
         /**
          * Sets the focus to the first control

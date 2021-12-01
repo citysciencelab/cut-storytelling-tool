@@ -7,6 +7,7 @@ import MultiLine from "ol/geom/MultiLineString.js";
 import MultiPoint from "ol/geom/MultiPoint.js";
 import MultiPolygon from "ol/geom/MultiPolygon.js";
 import * as setters from "./settersDraw";
+import mapCollection from "../../../../../core/dataStorage/mapCollection";
 
 /**
  * Resets and deactivates the Draw Tool.
@@ -51,7 +52,7 @@ function downloadFeaturesWithoutGUI ({state, rootState}, payload) {
         targetProjection = null;
     const featureArray = [],
         format = new GeoJSON(),
-        mapProjection = getMapProjection(rootState.Map.map),
+        mapProjection = getMapProjection(mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode)),
         multiLine = new MultiLine([]),
         multiPoint = new MultiPoint([]),
         multiPolygon = new MultiPolygon([]);

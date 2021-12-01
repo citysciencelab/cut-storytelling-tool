@@ -18,7 +18,6 @@ In the following, all configuration options are described. For all configuration
 |alerting|no|**[alerting](#markdown-header-alerting)**|`{"category": "alert-info", "isDismissable": true, "isConfirmable": false, "position": "top-center", "fadeOut": null}`|Overrides the alert module's default values.|{fadeOut: 6000}|
 |cameraParameter|no|**[cameraParameter](#markdown-header-cameraparameter)**||Initial camera parameter||
 |cesiumParameter|no|**[cesiumParameter](#markdown-header-cesiumparameter)**||Cesium flags||
-|clickCounter|no|**[clickCounter](#markdown-header-clickcounter)**||Configuration of the clickCounter module that loads an iFrame per click.||
 |cswId|no|String|`"3"`|Reference to a CSW interface used to retrieve layer information. The ID will be resolved to a service defined in the **[rest-services.json](rest-services.json.md)** file.|`"my CSW-ID"`|
 |defaultToolId|no|String|`"gfi"`|The tool with the given ID will be active when no other tool is active.|"filter"|
 |featureViaURL|no|**[featureViaURL](#markdown-header-featureviaurl)**||Optional configuration for the URL parameter `featureViaURL`. See **[urlParameter](urlParameter.md)** for details. Implemented for treeTypes *light* and *custom*.||
@@ -38,7 +37,7 @@ In the following, all configuration options are described. For all configuration
 |portalConf|no|String|`"config.json"`|Path to the portal's `config.json` file. You may also enter a node; in that case the taken path is controlled by the urlParameter `config`.|Direct path: "../masterTree/config.json"; Node: "../../portal/master/". In the node scenario, a query parameter like `config=config.json` must exist in the URL.|
 |postMessageUrl|no|String|`"http://localhost:8080"`|URL the portal is supposed to post messages to and receive messages from with the `postMessage` feature.|"http://localhost:8080"|
 |proxyHost|no|String||Host name of a remote proxy with CORS configured to support the portal's domain, among others.|`"https://proxy.example.com"`|
-|quickHelp|no|Object|`{}`|Activates the QuickHelp module. This displays a window containing help text for supported functions of the modules. Available for the layer tree (CustomTree), the search bar (Searchbar), and the measuring tool (MeasureTool).||
+|quickHelp|no|Object|`{}`|Activates the QuickHelp module. This displays a window containing help text for supported functions of the modules. Available for the layer tree (CustomTree), the search bar (Searchbar) and the routing tool (RoutingTool).||
 |remoteInterface|no|**[remoteInterface](#markdown-header-remoteinterface)**||Optional remote interface configuration.||
 |scaleLine|no|Boolean|`false`|Controls whether a scale line is displayed at the bottom right of the map.|`true`|
 |simpleMap|no|Boolean|`false`|_Deprecated in the next major release. Please use the parameter `simpleMap` as part of the configuration of the `saveSelection` tool in the **[config.json](config.json.md)**._ Adds a SimpleMap URL to the `Save selection` dialogue. When calling this URL, the menu bar, layer tree, and map controls are deactivated. Not implemented for tree type *„light“*.|`false`|
@@ -79,25 +78,6 @@ In the following, all configuration options are described. For all configuration
 |maximumScreenSpaceError|no|Number|`2.0`|Detail level in which terrain/raster tiles are fetched. 4/3 is the highest quality level.|
 |fxaa|no|Boolean|`true`|activates *fast approximate anti-aliasing*|
 |tileCacheSize|no|Number|`100`|terrain/raster tile cache size|
-
-***
-
-## clickCounter
-|Name|Required|Type|Default|Description|
-|----|--------|----|-------|-----------|
-|desktop|no|String||iFrame URL for desktop applications|
-|mobile|no|String||iFrame URL for mobile applications|
-
-**Example:**
-
-```json
-{
-    "clickCounter": {
-        "desktop": "http://static.hamburg.de/countframes/verkehrskarte_count.html",
-        "mobile": "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
-    }
-}
-```
 
 ***
 
@@ -222,11 +202,22 @@ In the following, all configuration options are described. For all configuration
 |searchbarFlurstueckssuche|no|String|`"allgemein_4.png"`|Quick help image regarding the Searchbar, belonging to the chapter "Parcel search". The image must exist in the `imgPath` folder.|
 |aufbau1|no|String|`"themen.png"`|First quick help image regarding the layer tree (CustomTree), belonging to the structure chapter. The image must exist in the `imgPath` folder.|
 |aufbau2|no|String|`"themen_2.png"`|Second quick help image regarding the layer tree (CustomTree), belonging to the structure chapter. The image must exist in the `imgPath` folder.|
-|statistikFlaecheNiemeier|no|String|`"Statistik_Flaeche_Niemeier.png"`|First quick help image regarding the measuring tool (MeasureTool), belonging to the "Statistical approximation" chapter. The image must exist in the `imgPath` folder.|
-|statistikStreckeUniErlangen|no|String|`"Statistik_Strecke_UniErlangen.png"`|Second quick help image regarding the measuring tool (MeasureTool), belonging to the "Statistical approximation" chapter. The image must exist in the `imgPath` folder.|
-|utmStreifen|no|String|`"UTM_Streifen.png"`|First quick help image regarding the measuring tool (MeasureTool), belonging to the "Equalization in UTM" chapter. The image must exist in the `imgPath` folder.|
-|utmVerzerrung|no|String|`"UTM_Verzerrung.png"`|Second quick help image regarding the measuring tool (MeasureTool), belonging to the "Equalization in UTM" chapter. The image must exist in the `imgPath` folder.|
-|utmFormeln|no|String|`"UTM_Formeln.png"`|Third quick help image regarding the measuring tool (MeasureTool), belonging to the "Equalization in UTM" chapter. The image must exist in the `imgPath` folder.|
+|routingTool1|no|String|`"routing_1.png"`|First quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool2|no|String|`"routing_2.png"`|Second quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool3|no|String|`"routing_3.png"`|Third quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool4|no|String|`"routing_4.png"`|Fourth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool5|no|String|`"routing_5.png"`|Fifth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool6|no|String|`"routing_6.png"`|Sixth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool7|no|String|`"routing_7.png"`|Seventh quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool8|no|String|`"routing_8.png"`|Eighth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool9|no|String|`"routing_9.png"`|Nineth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool10|no|String|`"routing_10.png"`|Tenth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool11|no|String|`"routing_11.png"`|Eleventh quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool12|no|String|`"routing_12.png"`|Twelfth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool13|no|String|`"routing_13.png"`|Thirteenth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool14|no|String|`"routing_14.png"`|Fourteenth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool15|no|String|`"routing_15.png"`|Fifteenth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
+|routingTool16|no|String|`"routing_16.png"`|Sixteenth quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
 
 ***
 

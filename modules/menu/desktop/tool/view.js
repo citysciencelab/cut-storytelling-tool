@@ -16,7 +16,6 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
     * @extends Backbone.View
     * @memberof Menu.Desktop.Tool
     * @constructs
-    * @fires ClickCounter#RadioTriggerClickCounterToolChanged
     * @fires Map#RadioRequestMapGetMapMode
     * @listens Map#RadioTriggerMapChange
     */
@@ -150,7 +149,6 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
             event.preventDefault();
             event.stopPropagation();
 
-            Radio.trigger("ClickCounter", "toolChanged");
             if (this.model.get("id") === "legend") {
                 const isActive = this.model.get("isActive");
 

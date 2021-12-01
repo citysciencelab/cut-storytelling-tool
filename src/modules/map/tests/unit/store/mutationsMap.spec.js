@@ -1,32 +1,62 @@
 import {expect} from "chai";
 import mutations from "../../../store/mutationsMap";
-import Map from "ol/Map";
 import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";
+import mapCollection from "../../../../../core/dataStorage/mapCollection.js";
 
 const {addLayerToMap, removeLayerFromMap} = mutations;
 
 describe("src/modules/map/store/mutationsMap.js", () => {
     describe("addLayerToMap", () => {
         it("should add a layer to the map", () => {
-            const state = {
-                    map: new Map()
+            const layers = [],
+                state = {
+                    mapId: "ol",
+                    mapMode: "2D"
+                },
+                map = {
+                    id: "ol",
+                    mode: "2D",
+                    addLayer: (layer) => {
+                        layers.push(layer);
+                    },
+                    getLayers: () => {
+                        return layers;
+                    }
                 },
                 layer = new VectorLayer({
                     name: "layer123",
                     source: new VectorSource()
                 });
 
+            mapCollection.clear();
+            mapCollection.addMap(map, "ol", "2D");
+
             addLayerToMap(state, layer);
 
-            expect(state.map.getLayers().getLength()).to.equals(1);
-            expect(state.map.getLayers().getArray()[0].get("name")).to.equals("layer123");
+            expect(map.getLayers().length).to.equals(1);
+            expect(map.getLayers()[0].get("name")).to.equals("layer123");
         });
 
         it("should only be added if given parameter is a instance of BaseLayer", () => {
             const state = {
-                map: new Map()
-            };
+                    mapId: "ol",
+                    mapMode: "2D"
+                },
+                layers = [],
+                map = {
+                    id: "ol",
+                    mode: "2D",
+                    addLayer: (layer) => {
+                        layers.push(layer);
+                    },
+                    getLayers: () => {
+                        return layers;
+                    }
+                };
+
+            mapCollection.clear();
+            mapCollection.addMap(map, "ol", "2D");
 
             addLayerToMap(state, undefined);
             addLayerToMap(state, null);
@@ -35,36 +65,67 @@ describe("src/modules/map/store/mutationsMap.js", () => {
             addLayerToMap(state, false);
             addLayerToMap(state, new VectorSource());
             addLayerToMap(state, "Layer");
-            expect(state.map.getLayers().getArray()).to.have.lengthOf(0);
+            expect(map.getLayers()).to.have.lengthOf(0);
         });
     });
 
     describe("removeLayerFromMap", () => {
         it("should remove a layer from the map", () => {
-            const layer = new VectorLayer({
+            const state = {
+                    mapId: "ol",
+                    mapMode: "2D"
+                },
+                layers = [],
+                layer = new VectorLayer({
+                    name: "layer123",
                     source: new VectorSource()
                 }),
-                state = {
-                    map: new Map({
-                        layers: [
-                            layer
-                        ]
-                    })
+                map = {
+                    id: "ol",
+                    mode: "2D",
+                    getLayers: () => {
+                        return layers;
+                    },
+                    addLayer: (aLayer) => {
+                        layers.push(aLayer);
+                    },
+                    removeLayer: (l) => {
+                        layers.splice(layers.indexOf(l), 1);
+                    }
                 };
 
+            mapCollection.clear();
+            mapCollection.addMap(map, "ol", "2D");
+
+            addLayerToMap(state, layer);
+            expect(map.getLayers().length).to.equals(1);
             removeLayerFromMap(state, layer);
-            expect(state.map.getLayers().getLength()).to.equals(0);
+            expect(map.getLayers().length).to.equals(0);
         });
 
         it("should only be remove if given parameter is a instance of BaseLayer", () => {
-            const layer = new VectorLayer({
+            const state = {
+                    mapId: "ol",
+                    mapMode: "2D"
+                },
+                layer = new VectorLayer({
+                    name: "layer123",
                     source: new VectorSource()
                 }),
-                state = {
-                    map: new Map({
-                        layers: [layer]
-                    })
+                layers = [layer],
+                map = {
+                    id: "ol",
+                    mode: "2D",
+                    getLayers: () => {
+                        return layers;
+                    },
+                    removeLayer: (aLayer) => {
+                        layers.splice(layers.indexOf(aLayer), 1);
+                    }
                 };
+
+            mapCollection.clear();
+            mapCollection.addMap(map, "ol", "2D");
 
             removeLayerFromMap(state, undefined);
             removeLayerFromMap(state, null);
@@ -73,7 +134,7 @@ describe("src/modules/map/store/mutationsMap.js", () => {
             removeLayerFromMap(state, false);
             removeLayerFromMap(state, new VectorSource());
             removeLayerFromMap(state, "Layer");
-            expect(state.map.getLayers().getArray()).to.have.lengthOf(1);
+            expect(map.getLayers()).to.have.lengthOf(1);
         });
     });
 });

@@ -24,6 +24,8 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      * @listens Core.ModelList#RenderTree
      */
     initialize: function (args) {
+        const channel = Radio.channel("Menu");
+
         this.collection = Radio.request("ModelList", "getCollection");
 
         Radio.on("Autostart", "startModul", this.startModul, this);
@@ -40,6 +42,9 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
                 this.render();
             }
         });
+        channel.on({
+            "change:isOutOfRange": this.renderSelectedList
+        }, this);
         this.listenTo(Radio.channel("Map"), {
             "change": function () {
                 this.renderSelectedList();

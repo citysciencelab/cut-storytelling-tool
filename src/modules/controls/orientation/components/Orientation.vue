@@ -48,7 +48,7 @@ export default {
     },
     computed: {
         ...mapGetters("controls/orientation", Object.keys(getters)),
-        ...mapGetters("Map", ["map"])
+        ...mapGetters("Map", ["ol2DMap"])
     },
     watch: {
         tracking () {
@@ -96,7 +96,7 @@ export default {
             let geolocation = null;
 
             if (this.isGeolocationDenied === false) {
-                this.map.addOverlay(this.marker);
+                this.ol2DMap.addOverlay(this.marker);
                 if (this.geolocation === null) {
                     geolocation = new Geolocation({tracking: true, projection: Proj.get("EPSG:4326")});
                     this.setGeolocation(geolocation);
@@ -149,7 +149,7 @@ export default {
          * @returns {void}
          */
         removeOverlay () {
-            this.map.removeOverlay(this.marker);
+            this.ol2DMap.removeOverlay(this.marker);
         },
 
         /**
@@ -291,7 +291,7 @@ export default {
 
             if (this.poiModeCurrentPositionEnabled) {
                 this.$store.dispatch("MapMarker/removePointMarker");
-                this.map.addOverlay(this.marker);
+                this.ol2DMap.addOverlay(this.marker);
                 if (this.geolocation === null) {
                     geolocation = new Geolocation({tracking: true, projection: Proj.get("EPSG:4326")});
                     this.setGeolocation(geolocation);

@@ -46,6 +46,7 @@ The configuration options listed in the following table exist:
 |menu|no|**[menu](#markdown-header-portalconfigmenu)**||Menu entries and their order are configured in this entry. The order of tools corresponds to the order in the object specifying them; see **[Tools](#markdown-header-portalconfigmenutools)**.|false|
 |searchBar|no|**[searchBar](#markdown-header-portalconfigsearchbar)**||The search bar allows requesting information from various search services at once.|false|
 |layersRemovable|no|Boolean|false|Defines whether layers may be removed from a portal during its run-time.|false|
+|quickHelp|no|**[quickHelp](#markdown-header-portalconfigquickHelp)**||Configuration of new and manipulation of existing QuickHelp windows.|false|
 
 ***
 
@@ -294,6 +295,7 @@ GFI search service configuration.
 |----|--------|----|-------|-----------|------|
 |minChars|no|Integer|3|Minimum amount of characters required to start a search.|false|
 |serviceID|yes|String||Search service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
+|sortByName|no|Boolean|false|Defines whether search results are to be sorted alphanumerically.|false|
 |queryObject|yes|**[queryObject](#markdown-header-portalconfigsearchbargdiqueryobject)**||Query object read by the Elasticsearch model.|false|
 
 **Example**
@@ -303,6 +305,7 @@ GFI search service configuration.
     "gdi": {
         "minChars": 3,
         "serviceId": "elastic",
+        "sortByName": false,
         "queryObject": {
             "id": "query",
             "params": {
@@ -882,6 +885,293 @@ An option defines a zoom level. Each zoom level is defined by resolution, scale 
 
 ***
 
+### Portalconfig.quickHelp
+
+For a detailed documentation of the QuickHelp window see **[the QuickHelp documentation](quickHelp.md)** .
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|configs|yes|**[configs](#markdown-header-portalconfigquickhelpconfigs)**|{"search": true, "tree": true}|The configuration for existing as well as new QuickHelp windows.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {}
+        }
+    }
+}
+```
+
+#### Portalconfig.quickHelp.configs
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|search|no|**[search](#markdown-header-portalconfigquickhelpconfigssearch)**|true|Configuration of the QuickHelp window of the SearchBar.|false|
+|tree|no|**[tree](#markdown-header-portalconfigquickhelpconfigstree)**|true|Configuration of the QuickHelp window of the topic tree.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "search": true,
+                "tree": true
+            }
+        }
+    }
+}
+```
+
+##### Portalconfig.quickHelp.configs.search
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|title|no|String|""|The title/heading of the QuickHelp window.|false|
+|content|no|**[section](#markdown-header-portalconfigquickhelpconfigssearchsection)**[]|[]|The collection of contents or manipulations as an array.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "search": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": []
+                }
+            }
+        }
+    }
+}
+```
+
+##### Portalconfig.quickHelp.configs.search.section
+
+A section is an object with a title and a list of paragraphs.
+A section can be manipulated using "before", "after" and "hide" keywords.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|title|no|String|""|The title/heading of the section.|false|
+|list|no|**[paragraph](#markdown-header-portalconfigquickhelpconfigssearchsectionparagraph)**[]|[]|An array of paragraphs or images of the QuickHelp section.|false|
+|before|no|String||A Section Key before which this new section should be hooked.|false|
+|after|no|String||A Section Key behind which this new section should be hooked.|false|
+|hide|no|String||A Section Key that leads to the hiding/removal of an existing section addressed with the Section Key.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "search": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": [
+                        {
+                            "title": "Title of the new section",
+                            "list": []
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+##### Portalconfig.quickHelp.configs.search.section.paragraph
+
+A paragraph in the sense of the QuickHelp configuration is an object or string that exactly describes the content at that point.
+There are two types of paragraph elements.
+
+
+**The paragraph text element**
+
+Can also be created as a pure translation key (string) and will then be converted to a paragraph element of type "text/plain".
+Pure text can also be specified, but then it is mandatory under the text key of the object (pure text is not possible as a pure string).
+
+
+**The paragraph image element**
+
+Can also be specified as a plain image name (string), in which case the imgPath configured in config.js would be automatically added as its base path.
+Configure as an object to specify external images with imgPath as url and imgName as name of the image.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|text|no|String|""|The text as Translation Key or pure text.|false|
+|type|no|String|"text/plain"|The text type. If "text/html" is specified, the given text will be rendered as html code.|false|
+|imgName|no|String|""|The name of the image to display.|false|
+|imgPath|no|String|""|The path to the image if omitted is taken imgPath from config.js.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "search": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": [
+                        {
+                            "title": "Title of the new section",
+                            "list": [
+                                {
+                                    "text": "This is the first paragraph.",
+                                    "type": "text/plain"
+                                },
+                                {
+                                    "imgName": "allgemein.png",
+                                    "imgPath": "https://geodienste.hamburg.de/lgv-config/img/"
+                                },
+                                {
+                                    "text": "This is the second <i>paragraph</i> with html content.",
+                                    "type": "text/html"
+                                }
+                            ]
+                        },
+                        {
+                            "after": "generalInfo",
+                            "title": "Title of a new section after generalInfo",
+                            "list": [
+                                {
+                                    "text": "This is a paragraph.",
+                                    "type": "text/plain"
+                                }
+                            ]
+                        },
+                        {"hide": "generalInfo"}
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+#### Portalconfig.quickHelp.configs.tree
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|title|no|String|""|The title/heading of the QuickHelp window.|false|
+|content|no|**[section](#markdown-header-portalconfigquickhelpconfigstreesection)**[]|[]|The collection of contents or manipulations as an array.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "tree": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": []
+                }
+            }
+        }
+    }
+}
+```
+
+##### Portalconfig.quickHelp.configs.tree.section
+
+A section is an object with a title and a list of paragraphs.
+A section can be manipulated using "before", "after" and "hide" keywords.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|title|no|String|""|The title/heading of the section.|false|
+|list|no|**[paragraph](#markdown-header-portalconfigquickhelpconfigstreesectionparagraph)**[]|[]|An array of paragraphs or images of the QuickHelp section.|false|
+|before|no|String||A Section Key before which this new section should be hooked.|false|
+|after|no|String||A Section Key behind which this new section should be hooked.|false|
+|hide|no|String||A Section Key that leads to the hiding/removal of an existing section addressed with the Section Key.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "tree": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": [
+                        {
+                            "title": "Title of the new section",
+                            "list": []
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+##### Portalconfig.quickHelp.configs.tree.section.paragraph
+
+A paragraph in the sense of the QuickHelp configuration is an object or string that exactly describes the content at that point.
+There are two types of paragraph elements.
+
+
+**The paragraph text element**
+
+Can also be created as a pure translation key (string) and will then be converted to a paragraph element of type "text/plain".
+Pure text can also be specified, but then it is mandatory under the text key of the object (pure text is not possible as a pure string).
+
+
+**The paragraph image element**
+
+Can also be specified as a plain image name (string), in which case the imgPath configured in config.js would be automatically added as its base path.
+Configure as an object to specify external images with imgPath as url and imgName as name of the image.
+
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|text|no|String|""|The text as Translation Key or pure text.|false|
+|type|no|String|"text/plain"|The text type. If "text/html" is specified, the given text will be rendered as html code.|false|
+|imgName|no|String|""|The name of the image to display.|false|
+|imgPath|no|String|""|The path to the image if omitted is taken imgPath from config.js.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "tree": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": [
+                        {
+                            "title": "Title of the new section",
+                            "list": [
+                                {
+                                    "text": "This is the first paragraph.",
+                                    "type": "text/plain"
+                                },
+                                {
+                                    "imgName": "allgemein.png",
+                                    "imgPath": "https://geodienste.hamburg.de/lgv-config/img/"
+                                },
+                                {
+                                    "text": "This is the second <i>paragraph</i> with html content.",
+                                    "type": "text/html"
+                                }
+                            ]
+                        },
+                        {
+                            "before": "generalInfo",
+                            "title": "Title of a new section before generalInfo",
+                            "list": [
+                                {
+                                    "text": "This is a paragraph.",
+                                    "type": "text/plain"
+                                }
+                            ]
+                        },
+                        {"hide": "generalInfo"}
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+***
+
 ### Portalconfig.menu
 
 This field allows creating and ordering menu entries. The order of tools corresponds to the entry order within the *config.json* file.
@@ -1001,6 +1291,7 @@ A folder object defined by a name, glyphicon, and its children.
 [type:measure]: # (Portalconfig.menu.tool.measure)
 [type:parcelSearch]: # (Portalconfig.menu.tool.parcelSearch)
 [type:print]: # (Portalconfig.menu.tool.print)
+[type:routing]: # (Portalconfig.menu.tool.routing)
 [type:saveSelection]: # (Portalconfig.menu.tool.saveSelection)
 [type:searchByCoord]: # (Portalconfig.menu.tool.searchByCoord)
 [type:shadow]: # (Portalconfig.menu.tool.shadow)
@@ -1035,6 +1326,7 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |measure|no|**[measure](#markdown-header-portalconfigmenutoolmeasure)**||Allows measuring areas and distances in the units m/km resp. m²/km².|false|
 |parcelSearch|no|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||_Deprecated in the next major release. Please use `wfsSearch` instead._ The parcel search tool allows searching for parcels by district and parcel number. Many German administrative units feature a tripartite order, hence the tool offers searching by "Gemarkung" (district), "Flur" (parcel) (not used in Hamburg), and "Flurstück" (literally "parcel piece").|false|
 |print|no|**[print](#markdown-header-portalconfigmenutoolprint)**||Printing module that can be used to export the map's current view as PDF.|false|
+|routing|no|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Routing module to create routes and isochrones.|false|
 |saveSelection|no|**[saveSelection](#markdown-header-portalconfigmenutoolsaveselection)**||Tool that allows saving the map's current state as sharable URL. This will list all currently visible layers in order, transparency, and visibility, as well as saving the center coordinate.|false|
 |searchByCoord|no|**[searchByCoord](#markdown-header-portalconfigmenutoolsearchbycoord)**||_Deprecated in 3.0.0. Please use "coordToolkit" instead._ Coordinate search with switchable coordinate reference system. The tool will zoom to any given coordinate and set a marker on it.|false|
 |selectFeatures|no|**[tool](#markdown-header-portalconfigmenutool)**||Allows selecting a set of vector features by letting the user draw a box on the map. Features in that box will be displayed with GFI information.|false|
@@ -2838,6 +3130,529 @@ Coordinates tool. To display the height above sea level in addition to the 2 dim
             "heightValueWater": "-20",
             "heightValueBuilding": "200",
           }
+```
+
+***
+
+#### Portalconfig.menu.tool.routing
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Routing-tool. Enables user to plan routes between multiple points with multiple options to choose from. In addition users can create isochrones. Both functions are available with mass requests for specific use cases.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|activeRoutingToolOption|no|String|"DIRECTONS"|Which routing tool should be open.|false|
+|routingToolOptions|no|String[]|[ ]|Which routing tool should be enabled. ("DIRECTIONS", "ISOCHRONES")|false|
+|download|no|**[download](#markdown-header-portalconfigmenutoolroutingdownload)**||Downloadoptions|false|
+|geosearch|no|**[geosearch](#markdown-header-portalconfigmenutoolroutinggeosearch)**||Geosearchoptions|false|
+|geosearchReverse|no|**[geosearchReverse](#markdown-header-portalconfigmenutoolroutinggeosearchreverse)**||Geosearchreverseoptions|false|
+|directionsSettings|no|**[directionsSettings](#markdown-header-portalconfigmenutoolroutingdirectionssettings)**||Directionsoptions|false|
+|isochronesSettings|no|**[isochronesSettings](#markdown-header-portalconfigmenutoolroutingisochronessettings)**||Isochronesoptions|false|
+
+
+**Example**
+```
+#!json
+{
+    "routing": {
+        "name": "translate#common:menu.tools.routing",
+        "glyphicon": "glyphicon-road",
+        "activeRoutingToolOption": "DIRECTONS",
+        "routingToolOptions": ["DIRECTONS", "ISOCHRONES"],
+        "download": {
+            "filename": "",
+            "format": "GEOJSON"
+        },
+        "geosearch": {
+            "minChars": 3,
+            "limit": 10,
+            "type": "BKG",
+            "serviceId": "bkg_geosearch"
+        },
+        "geosearchReverse": {
+            "distance": 1000,
+            "filter": "",
+            "type": "BKG",
+            "serviceId": "bkg_suggest"
+        },
+        "directionsSettings": {
+            "type": "ORS",
+            "serviceId": "bkg_ors",
+            "speedProfile": "CAR",
+            "preference": "RECOMMENDED",
+            "styleRoute": {
+                "fillColor": [255, 44, 0],
+                "width": 6,
+                "highlightColor": [255, 255, 255],
+                "highlightWidth": 9,
+                "partHighlightColor": [255, 255, 255],
+                "partHighlightWidth": 3
+            },
+            "styleWaypoint": {
+                "lineColor": [255, 127, 0],
+                "lineWidth": 4,
+                "fillColor": [255, 127, 0],
+                "textFillColor": "#000",
+                "textLineColor": "#fff",
+                "textLineWidth": 3,
+                "opacity": 0.3,
+                "radius": 8
+            },
+            "styleAvoidAreas": {
+                "lineColor": [0, 127, 255],
+                "lineWidth": 2,
+                "fillColor": [0, 127, 255],
+                "opacity": 0.3,
+                "pointRadius": 8,
+                "pointLineWidth": 4
+            },
+            "batchProcessing": {
+                "enabled": false,
+                "active": false,
+                "limit": 1000,
+                "maximumConcurrentRequests": 3
+            }
+        },
+        "isochronesSettings": {
+            "type": "ORS",
+            "serviceId": "bkg_ors",
+            "speedProfile": "CAR",
+            "isochronesMethodOption": "TIME",
+            "distanceValue": 30,
+            "minDistance": 1,
+            "maxDistance": 400,
+            "timeValue": 30,
+            "minTime": 1,
+            "maxTime": 180,
+            "intervalValue": 15,
+            "minInterval": 3,
+            "maxInterval": 30,
+            "styleCenter": {
+                "lineColor": [255, 127, 0],
+                "lineWidth": 4,
+                "fillColor": [255, 127, 0],
+                "opacity": 0.3,
+                "radius": 8
+            },
+            "styleIsochrones": {
+                "lineWidth": 2,
+                "opacity": 0.65,
+                "startColor": [66, 245, 78],
+                "endColor": [245, 66, 66]
+            },
+            "batchProcessing": {
+                "enabled": false,
+                "active": false,
+                "limit": 1000,
+                "maximumConcurrentRequests": 3
+            }
+        }
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.routing.download
+
+Routing-tool download options.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|fileName|no|String||Default filename for the download.|false|
+|format|no|String|"GEOJSON"|Which format should be selected by default. ("GEOJSON", "KML", "GPX")|false|
+
+**Example**
+```
+#!json
+{
+    "download": {
+        "filename": "",
+        "format": "GEOJSON"
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.routing.geosearch
+
+Routing-tool geosearch options.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|minChars|no|Number|3|Minimum amount of characters before sending a request to an external service.|false|
+|limit|no|Number|10|Maximale amount of characters for the search.|false|
+|type|yes|String||Which type of the geosearch should be used. ("BKG", "NOMINATIM")|false|
+|serviceId|yes|String||Which service should be used for the geosearch.|false|
+
+**Example**
+```
+#!json
+{
+    "geosearch": {
+        "minChars": 3,
+        "limit": 10,
+        "type": "BKG",
+        "serviceId": "bkg_geosearch"
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.routing.geosearchReverse
+
+Routing-tool geosearch reverse options.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|distance|no|Number|1000|Search radius in meter for the external service.|false|
+|filter|no|String||Additional filter used in the query.|false|
+|type|yes|String||Which type of geosearch reverse should be used. ("BKG", "NOMINATIM")|false|
+|serviceId|yes|String||Which service should be used for the geosearch reverse.|false|
+
+**Example**
+```
+#!json
+{
+    "geosearchReverse": {
+        "distance": 1000,
+        "filter": "",
+        "type": "BKG",
+        "serviceId": "bkg_suggest"
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.routing.directionsSettings
+
+Routing-tool directions options.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|type|yes|String||Which type of service should be used for the request. ("ORS")|false|
+|serviceId|yes|String||Which service should be used for the request.|false|
+|speedProfile|no|String|"CAR"|Which speed profile should be selected by default.|false|
+|preference|no|String|"RECOMMENDED"|Which type of directions should be used by default.|false|
+|styleRoute|no|**[styleRoute](#markdown-header-portalconfigmenutoolroutingdirectionssettingsstyleroute)**||Stylerouteoptions|false|
+|styleWaypoint|no|**[styleWaypoint](#markdown-header-portalconfigmenutoolroutingdirectionssettingsstylewaypoint)**||Stylewaypointoptions|false|
+|styleAvoidAreas|no|**[styleAvoidAreas](#markdown-header-portalconfigmenutoolroutingdirectionssettingsstyleavoidareas)**||Styleavoidareasoptions|false|
+|batchProcessing|no|**[batchProcessing](#markdown-header-portalconfigmenutoolroutingdirectionssettingsbatchprocessing)**||Batchprocessingoptions|false|
+
+**Example**
+```
+#!json
+{
+    "directionsSettings": {
+        "type": "ORS",
+        "serviceId": "bkg_ors",
+        "speedProfile": "CAR",
+        "preference": "RECOMMENDED",
+        "styleRoute": {
+            "fillColor": [255, 44, 0],
+            "width": 6,
+            "highlightColor": [255, 255, 255],
+            "highlightWidth": 9,
+            "partHighlightColor": [255, 255, 255],
+            "partHighlightWidth": 3
+        },
+        "styleWaypoint": {
+            "lineColor": [255, 127, 0],
+            "lineWidth": 4,
+            "fillColor": [255, 127, 0],
+            "textFillColor": "#000",
+            "textLineColor": "#fff",
+            "textLineWidth": 3,
+            "opacity": 0.3,
+            "radius": 8
+        },
+        "styleAvoidAreas": {
+            "lineColor": [0, 127, 255],
+            "lineWidth": 2,
+            "fillColor": [0, 127, 255],
+            "opacity": 0.3,
+            "pointRadius": 8,
+            "pointLineWidth": 4
+        },
+        "batchProcessing": {
+            "enabled": false,
+            "active": false,
+            "limit": 1000,
+            "maximumConcurrentRequests": 3
+        }
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.routing.directionsSettings.styleRoute
+
+Routing-tool directions route style options.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|fillColor|no|Number[]|[255, 44, 0]|Which color should be used to fill.|false|
+|width|no|Number|6|How thick should the line be displayed.|false|
+|highlightColor|no|Number[]|[255, 255, 255]|Which color should be used to highlight the route.|false|
+|highlightWidth|no|Number|9|How thick should the highlighting line be displayed.|false|
+|partHighlightColor|no|Number[]|[255, 255, 255]|Which color should be used when highlighting part of the route.|false|
+|highlightWidth|no|Number|9|How thick should the highlighting part of the route be displayed.|false|
+
+**Example**
+```
+#!json
+{
+    "styleRoute": {
+        "fillColor": [255, 44, 0],
+        "width": 6,
+        "highlightColor": [255, 255, 255],
+        "highlightWidth": 9,
+        "partHighlightColor": [255, 255, 255],
+        "partHighlightWidth": 3
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.routing.directionsSettings.styleWaypoint
+
+Routing-tool directions waypoint style options.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|lineColor|no|Number[]|[255, 127, 0]|Which color should be used for the border.|false|
+|lineWidth|no|Number|4|How thick should the border be.|false|
+|fillColor|no|Number[]|[255, 127, 0]|Which color should be used to fill.|false|
+|textFillColor|no|String|"#000"|Which color should be used for the text.|false|
+|textLineColor|no|String|"#fff"|Which color should be used for the text background.|false|
+|textLineWidth|no|Number|3|How big should the text be displayed.|false|
+|opacity|no|Number|0.3|How transparent should the fill color be displayed.|false|
+|radius|no|Number|8|How big should the waypoint be displayed.|false|
+
+**Example**
+```
+#!json
+{
+    "styleWaypoint": {
+        "lineColor": [255, 127, 0],
+        "lineWidth": 4,
+        "fillColor": [255, 127, 0],
+        "textFillColor": "#000",
+        "textLineColor": "#fff",
+        "textLineWidth": 3,
+        "opacity": 0.3,
+        "radius": 8
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.routing.directionsSettings.styleAvoidAreas
+
+Routing-tool directions avoid areas style options.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|lineColor|no|Number[]|[0, 127, 255]|Which color should be used for the border.|false|
+|lineWidth|no|Number|2|How thick should the border be.|false|
+|fillColor|no|Number[]|[0, 127, 255]|Which color should be used to fill.|false|
+|opacity|no|Number|0.3|How transparent should the fill color be displayed.|false|
+|pointRadius|no|Number|8|How big should the corner points be displayed.|false|
+|pointLineWidth|no|Number|4|How big should the border of the corner points be displayed.|false|
+
+**Example**
+```
+#!json
+{
+    "styleAvoidAreas": {
+        "lineColor": [0, 127, 255],
+        "lineWidth": 2,
+        "fillColor": [0, 127, 255],
+        "opacity": 0.3,
+        "pointRadius": 8,
+        "pointLineWidth": 4
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.routing.directionsSettings.batchProcessing
+
+Routing-tool directions batch processing options.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|enabled|no|Boolean|false|If the batch processing should be enabled for the user.|false|
+|active|no|Boolean|false|If the batch processing is active by default.|false|
+|limit|no|Number|1000|The maximum amount of rows allowed in the csv file.|false|
+|maximumConcurrentRequests|no|Number|3|The maximum concurrent requests allowed to be made by the batch processing task handler.|false|
+
+**Example**
+```
+#!json
+{
+    "batchProcessing": {
+        "enabled": false,
+        "active": false,
+        "limit": 1000,
+        "maximumConcurrentRequests": 3
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.routing.isochronesSettings
+
+Routing-tool isochrones options.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|type|yes|String||Which type of service should be used for the request. ("ORS")|false|
+|serviceId|yes|String||Which service should be used for the request.|false|
+|speedProfile|no|String|"CAR"|Which speed profile should be selected by default.|false|
+|isochronesMethodOption|no|String|"TIME"|Which method should be selected by default.|false|
+|distanceValue|no|Number|30|Which distance value in km should be selected by default.|false|
+|minDistance|no|Number|1|Which minimal distance value in km should be used.|false|
+|maxDistance|no|Number|400|Which maximum distance value in km should be used.|false|
+|timeValue|no|Number|30|Which time value in min should be selected by default.|false|
+|minTime|no|Number|1|Which minimal time value in min should be used.|false|
+|maxTime|no|Number|180|Which maximum time in min should be used.|false|
+|intervalValue|no|Number|15|Which interval value in km/min should be used by default.|false|
+|minInterval|no|Number|1|Which minimal interval value in km/min should be used.|false|
+|maxInterval|no|Number|30|Which maximum interval value in km/min should be used.|false|
+|styleCenter|no|**[styleCenter](#markdown-header-portalconfigmenutoolroutingisochronessettingsstylecenter)**||Stylecenteroptions|false|
+|styleIsochrones|no|**[styleIsochrones](#markdown-header-portalconfigmenutoolroutingisochronessettingsstyleisochrones)**||Styleisochronesoptions|false|
+|batchProcessing|no|**[batchProcessing](#markdown-header-portalconfigmenutoolroutingisochronessettingsbatchprocessing)**||Batchprocessingoptions|false|
+
+
+**Example**
+```
+#!json
+{
+    "isochronesSettings": {
+        "type": "ORS",
+        "serviceId": "bkg_ors",
+        "speedProfile": "CAR",
+        "isochronesMethodOption": "TIME",
+        "distanceValue": 30,
+        "minDistance": 1,
+        "maxDistance": 400,
+        "timeValue": 30,
+        "minTime": 1,
+        "maxTime": 180,
+        "intervalValue": 15,
+        "minInterval": 3,
+        "maxInterval": 30,
+        "styleCenter": {
+            "lineColor": [255, 127, 0],
+            "lineWidth": 4,
+            "fillColor": [255, 127, 0],
+            "opacity": 0.3,
+            "radius": 8
+        },
+        "styleIsochrones": {
+            "lineWidth": 2,
+            "opacity": 0.65,
+            "startColor": [66, 245, 78],
+            "endColor": [245, 66, 66]
+        },
+        "batchProcessing": {
+            "enabled": false,
+            "active": false,
+            "limit": 1000,
+            "maximumConcurrentRequests": 3
+        }
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.routing.isochronesSettings.styleCenter
+
+Routing-tool isochrones centers style options.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|lineColor|no|Number[]|[255, 127, 0]|Which color should be used for the border.|false|
+|lineWidth|no|Number|4|How thick should the border be displayed.|false|
+|fillColor|no|Number[]|[255, 127, 0]|Which color should be used to fill.|false|
+|opacity|no|Number|0.3|How transparent should the fill color be displayed.|false|
+|radius|no|Number|8|How big should the waypoint be displayed.|false|
+
+**Example**
+```
+#!json
+{
+    "styleCenter": {
+        "lineColor": [255, 127, 0],
+        "lineWidth": 4,
+        "fillColor": [255, 127, 0],
+        "opacity": 0.3,
+        "radius": 8
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.routing.isochronesSettings.styleIsochrones
+
+Routing-tool isochrones style options.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|lineWidth|no|Number|2|How thick should the lines be displayed.|false|
+|opacity|no|Number|0.65|How transparent the fill color is displayed.|false|
+|startColor|no|Number[]|[66, 245, 78]|The starting color for the fill color interpolation calculation.|false|
+|endColor|no|Number[]|[245, 66, 66]|The end color for the fill color interpolation calculation.|false|
+
+**Example**
+```
+#!json
+{
+    "styleIsochrones": {
+        "lineWidth": 2,
+        "opacity": 0.65,
+        "startColor": [66, 245, 78],
+        "endColor": [245, 66, 66]
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.routing.isochronesSettings.batchProcessing
+
+Routing-tool isochrones batch processing options.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|enabled|no|Boolean|false|If the batch processing should be enabled for the user.|false|
+|active|no|Boolean|false|If the batch processing is active by default.|false|
+|limit|no|Number|1000|The maximum amount of rows allowed in the csv file.|false|
+|maximumConcurrentRequests|no|Number|3|The maximum concurrent requests allowed to be made by the batch processing task handler.|false|
+
+**Example**
+```
+#!json
+{
+    "batchProcessing": {
+        "enabled": false,
+        "active": false,
+        "limit": 1000,
+        "maximumConcurrentRequests": 3
+    }
+}
 ```
 
 ***

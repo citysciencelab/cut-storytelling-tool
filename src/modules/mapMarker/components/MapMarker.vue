@@ -7,7 +7,7 @@ export default {
         this.initialize();
     },
     methods: {
-        ...mapActions("MapMarker", ["initialize"])
+        ...mapActions("MapMarker", ["initialize", "activateByUrlParam", "placingPointMarker"])
     }
 };
 
