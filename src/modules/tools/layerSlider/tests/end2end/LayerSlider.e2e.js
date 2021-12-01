@@ -89,6 +89,9 @@ async function LayerSliderTests ({builder, url, resolution, capability}) {
                 await driver.wait(new Promise(r => setTimeout(r, 1000)));
             });
             it("Click play and check if the layers are switched on and off in the right order", async function () {
+                await driver.wait(until.elementIsVisible(
+                    await driver.wait(until.elementLocated(By.css("div#tool-layer-slider-player div.input-group span.input-group-btn button#play")), 5000)
+                ));
                 await (await driver.findElement(By.css("div#tool-layer-slider-player div.input-group span.input-group-btn button#play"), 5000)).click();
 
                 expect(await driver.executeScript(isLayerVisible, "8730")).to.be.true;
