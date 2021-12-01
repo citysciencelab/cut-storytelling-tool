@@ -15,8 +15,6 @@
 - The following NPM packages are added:
   - dependencies:
     "bootstrap-sass"
-  - devDependencies:
-    "sass", "sass-loader"
 
 - Searchbar: An option "sortByName" in gdi to config if the rearching results from elastic sorted alphanumerically or not.
 - ParametricURL: An alert has been added which displays the new notation of a parameterized call.
@@ -37,6 +35,9 @@
 - 2D-map is removed from vuex store. Maps are now stored in a collection. Creation of 2D-map and 3D-map use masterportalAPI's abstraction layer.
 - Print formats only contain working formats now.
 - Switched CSS Preprocessor from LESS to SCSS. Edited Webpack Config, renamed .less files to .scss files including renaming of variables and mixins to match scss syntax. Edited vue components to use scss. Edited backbone modules to use scss files. Edited docs accordingly.
+- The following NPM packages are changed:
+  - devDependencies:
+    "less" => "sass", "less-loader => "sass-loader"
 - QuickHelp: moved to Vue and refactored, can now be manipulated for search, tree and routing, new QuickHelp windows can be configured. See new quickHelp.md documentation for more details.
 - Migrated the layerSlider tool from Backbone.js to Vue.js.
 
@@ -45,9 +46,6 @@
 ### Removed
 - The module CLICKCOUNTER is removed.
 - The library "olcs" was removed from the package.json.
-- The following NPM packages are removed:
-  - devDependencies:
-    "less", "less-loader"
 
 ### Fixed
 - Tool Print:
