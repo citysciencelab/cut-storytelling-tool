@@ -1,9 +1,9 @@
 <script>
-import {mapActions, mapGetters} from "vuex";
+import {mapActions} from "vuex";
 import {getCenter as getCenterExtent} from "ol/extent";
-import {isWebLink} from "../../utils/urlHelper.js";
-import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../utils/isPhoneNumber.js";
-import {isEmailAddress} from "../../utils/isEmailAddress.js";
+import {isWebLink} from "../../../utils/urlHelper.js";
+import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../utils/isPhoneNumber.js";
+import {isEmailAddress} from "../../../utils/isEmailAddress.js";
 
 export default {
     name: "List",
@@ -25,11 +25,7 @@ export default {
             default: ""
         }
     },
-    computed: {
-        ...mapGetters("Map", ["map"])
-    },
     methods: {
-        ...mapActions("Map", ["zoomTo"]),
         ...mapActions("MapMarker", ["placingPointMarker"]),
         /**
          * Takes the selected coordinates and centers the map to the new position.
@@ -40,22 +36,22 @@ export default {
             const geometry = feature.getGeometry();
 
             this.placingPointMarker(getCenterExtent(geometry.getExtent()));
-            this.zoomTo({geometryOrExtent: geometry, options: {maxZoom: 5}});
+            Radio.trigger("Map", "zoomToExtent", geometry, {maxZoom: 5});
         },
         isWebLink,
         isPhoneNumber,
         getPhoneNumberAsWebLink,
         isEmailAddress,
         removeVerticalBar (value) {
-            return typeof value === "string" ? value.replaceAll("|", ", ") : "";
+            return typeof value === "string" ? value.replace("|", ", ") : "";
         },
         replaceBoolean (value) {
             if (typeof value === "string") {
                 if (value === "true") {
-                    return value.replaceAll("true", i18next.t("common:share-components.list.replace.true"));
+                    return value.replace("true", i18next.t("common:share-components.list.replace.true"));
                 }
                 if (value === "No") {
-                    return value.replaceAll("No", i18next.t("common:share-components.list.replace.No"));
+                    return value.replace("No", i18next.t("common:share-components.list.replace.No"));
                 }
             }
             return "";

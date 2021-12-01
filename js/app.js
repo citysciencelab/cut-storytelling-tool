@@ -19,14 +19,12 @@ import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
 import MouseHoverPopupView from "../modules/mouseHover/view";
-import QuickHelpView from "../modules/quickHelp/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import ShadowView from "../modules/tools/shadow/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
 import FilterView from "../modules/tools/filter/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
-import LayerSliderView from "../modules/tools/layerSlider/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
 import {initiateVueI18Next} from "./vueI18Next";
 import {handleUrlParamsBeforeVueMount, readUrlParamEarly} from "../src/utils/parametricUrl/ParametricUrlBridge";
@@ -91,10 +89,6 @@ async function loadApp () {
         new RemoteInterface(Config.remoteInterface);
         new RadioMasterportalAPI();
         Vue.use(RemoteInterfaceVue, Config.remoteInterface);
-    }
-
-    if (Object.prototype.hasOwnProperty.call(Config, "quickHelp")) {
-        new QuickHelpView(Config.quickHelp);
     }
 
     // import and register Vue addons according the config.js
@@ -203,18 +197,6 @@ async function loadApp () {
             }
             case "wfst": {
                 new WfstView({model: tool});
-                break;
-            }
-            /**
-             * layerslider
-             * @deprecated in 3.0.0
-             */
-            case "layerslider": {
-                new LayerSliderView({model: tool});
-                break;
-            }
-            case "layerSlider": {
-                new LayerSliderView({model: tool});
                 break;
             }
             case "virtualCity": {

@@ -1,6 +1,6 @@
 <script>
 import Modal from "../../../../share-components/modals/components/Modal.vue";
-import List from "../../../../share-components/list/List.vue";
+import List from "../../../../share-components/list/components/List.vue";
 import LoaderOverlay from "../../../../utils/loaderOverlay";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import Tool from "../../Tool.vue";

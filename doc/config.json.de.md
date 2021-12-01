@@ -41,6 +41,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |menu|nein|**[menu](#markdown-header-portalconfigmenu)**||Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ist identisch mit der Reihenfolge in der config.json (siehe **[Tools](#markdown-header-portalconfigmenutools)**).|false|
 |searchBar|nein|**[searchBar](#markdown-header-portalconfigsearchbar)**||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|false|
 |layersRemovable|nein|Boolean|false|Gibt an, ob der Layer gelöscht werden darf.|false|
+|quickHelp|no|**[quickHelp](#markdown-header-portalconfigquickHelp)**||Konfiguration neuer und Manipulation bestehender QuickHelp-Fenster.|false|
 
 ***
 
@@ -280,6 +281,7 @@ Deprecated in 3.0.0. Bitte **[elasticSearch](#markdown-header-portalconfigsearch
 |----|-------------|---|-------|------------|------|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
 |serviceID|ja|String||Id des Suchdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.de.md)**.|false|
+|sortByName|nein|Boolean|false|Legt fest ob die Ergebnisse einer Suche alphabetisch nach Namen sortiert werden sollen|false|
 |queryObject|ja|**[queryObject](#markdown-header-portalconfigsearchbargdiqueryobject)**||Query Objekt, das vom Elastic Search Model ausgelesen wird.|false|
 
 **Beispiel**
@@ -288,6 +290,7 @@ Deprecated in 3.0.0. Bitte **[elasticSearch](#markdown-header-portalconfigsearch
 "gdi": {
     "minChars": 3,
     "serviceId": "elastic",
+    "sortByName": false,
     "queryObject": {
         "id": "query",
         "params": {
@@ -829,6 +832,294 @@ Eine option definiert eine Zoomstufe. Diese muss definiert werden über die Aufl
 
 ***
 
+### Portalconfig.quickHelp
+
+Eine detailierte Anleitung zur Konfiguration des QuickHelp-Fensters siehe **[the QuickHelp documentation](quickHelp.md)** .
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|configs|yes|**[configs](#markdown-header-portalconfigquickhelpconfigs)**|{"search": true, "tree": true}|Die Konfiguration für bestehende und neue QuickHelp-Fenster.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {}
+        }
+    }
+}
+```
+
+#### Portalconfig.quickHelp.configs
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|search|no|**[search](#markdown-header-portalconfigquickhelpconfigssearch)**|true|Konfiguration des QuickHelp-Fensters der SearchBar.|false|
+|tree|no|**[tree](#markdown-header-portalconfigquickhelpconfigstree)**|true|Konfiguration des QuickHelp-Fensters des Themenbaums.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "search": true,
+                "tree": true
+            }
+        }
+    }
+}
+```
+
+##### Portalconfig.quickHelp.configs.search
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|title|no|String|""|Der Titel/die Überschrift des QuickHelp-Fensters.|false|
+|content|no|**[section](#markdown-header-portalconfigquickhelpconfigssearchsection)**[]|[]|Der Titel/die Überschrift des QuickHelp-Fensters.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "search": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": []
+                }
+            }
+        }
+    }
+}
+```
+
+##### Portalconfig.quickHelp.configs.search.section
+
+Ein Abschnitt ist ein Objekt mit einem Titel und einer Liste von Absätzen.
+Ein Abschnitt kann mit den Schlüsselwörtern "vorher", "nachher" und "ausblenden" manipuliert werden.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|title|no|String|""|Der Titel/die Überschrift des Abschnitts.|false|
+|list|no|**[paragraph](#markdown-header-portalconfigquickhelpconfigssearchsectionparagraph)**[]|[]|Eine Reihe von Absätzen oder Bildern des QuickHelp-Abschnitts.|false|
+|before|no|String||Ein Abschnittsschlüssel, vor dem dieser neue Abschnitt angehängt werden soll.|false|
+|after|no|String||Ein Abschnittsschlüssel, hinter dem dieser neue Abschnitt angehängt werden soll.|false|
+|hide|no|String||Ein Abschnittsschlüssel, der dazu führt, dass ein bestehender Abschnitt, der mit dem Abschnittsschlüssel angesprochen wird, ausgeblendet/entfernt wird.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "search": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": [
+                        {
+                            "title": "Title of the new section",
+                            "list": []
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+##### Portalconfig.quickHelp.configs.search.section.paragraph
+
+Ein Absatz im Sinne der QuickHelp-Konfiguration ist ein Objekt oder eine Zeichenfolge, die den Inhalt an dieser Stelle genau beschreibt.
+Es gibt zwei Arten von Absatzelementen.
+
+
+**Das Element Absatztext**
+
+Kann auch als reiner Übersetzungsschlüssel (String) angelegt werden und wird dann in ein Absatzelement vom Typ "text/plain" umgewandelt.
+Es kann auch reiner Text angegeben werden, der dann aber zwingend unter dem Textschlüssel des Objekts stehen muss (reiner Text ist als reiner String nicht möglich).
+
+
+**Das Element Absatzbild**
+
+Kann auch als einfacher Bildname (String) angegeben werden; in diesem Fall wird der in config.js konfigurierte imgPath automatisch als Basispfad hinzugefügt.
+Configure als Objekt zur Angabe externer Bilder mit imgPath als URL und imgName als Name des Bildes.
+
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|text|no|String|""|Der Text als Übersetzungsschlüssel oder reiner Text.|false|
+|type|no|String|"text/plain"|Der Texttyp. Wenn "text/html" angegeben wird, wird der angegebene Text als HTML-Code wiedergegeben.|false|
+|imgName|no|String|""|Der Name des anzuzeigenden Bildes.|false|
+|imgPath|no|String|""|Der Pfad zum Bild, falls nicht angegeben, wird imgPath aus config.js übernommen.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "search": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": [
+                        {
+                            "title": "Title of the new section",
+                            "list": [
+                                {
+                                    "text": "This is the first paragraph.",
+                                    "type": "text/plain"
+                                },
+                                {
+                                    "imgName": "allgemein.png",
+                                    "imgPath": "https://geodienste.hamburg.de/lgv-config/img/"
+                                },
+                                {
+                                    "text": "This is the second <i>paragraph</i> with html content.",
+                                    "type": "text/html"
+                                }
+                            ]
+                        },
+                        {
+                            "after": "generalInfo",
+                            "title": "Title of a new section after generalInfo",
+                            "list": [
+                                {
+                                    "text": "This is a paragraph.",
+                                    "type": "text/plain"
+                                }
+                            ]
+                        },
+                        {"hide": "generalInfo"}
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+#### Portalconfig.quickHelp.configs.tree
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|title|no|String|""|Der Titel/die Überschrift des QuickHelp-Fensters.|false|
+|content|no|**[section](#markdown-header-portalconfigquickhelpconfigstreesection)**[]|[]|Der Titel/die Überschrift des QuickHelp-Fensters.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "tree": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": []
+                }
+            }
+        }
+    }
+}
+```
+
+##### Portalconfig.quickHelp.configs.tree.section
+
+Ein Abschnitt ist ein Objekt mit einem Titel und einer Liste von Absätzen.
+Ein Abschnitt kann mit den Schlüsselwörtern "vorher", "nachher" und "ausblenden" manipuliert werden.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|title|no|String|""|Der Titel/die Überschrift des Abschnitts.|false|
+|list|no|**[paragraph](#markdown-header-portalconfigquickhelpconfigstreesectionparagraph)**[]|[]|Eine Reihe von Absätzen oder Bildern des QuickHelp-Abschnitts.|false|
+|before|no|String||Ein Abschnittsschlüssel, vor dem dieser neue Abschnitt angehängt werden soll.|false|
+|after|no|String||Ein Abschnittsschlüssel, hinter dem dieser neue Abschnitt angehängt werden soll.|false|
+|hide|no|String||Ein Abschnittsschlüssel, der dazu führt, dass ein bestehender Abschnitt, der mit dem Abschnittsschlüssel angesprochen wird, ausgeblendet/entfernt wird.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "tree": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": [
+                        {
+                            "title": "Title of the new section",
+                            "list": []
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+##### Portalconfig.quickHelp.configs.tree.section.paragraph
+
+Ein Absatz im Sinne der QuickHelp-Konfiguration ist ein Objekt oder eine Zeichenfolge, die den Inhalt an dieser Stelle genau beschreibt.
+Es gibt zwei Arten von Absatzelementen.
+
+
+**Das Element Absatztext**
+
+Kann auch als reiner Übersetzungsschlüssel (String) angelegt werden und wird dann in ein Absatzelement vom Typ "text/plain" umgewandelt.
+Es kann auch reiner Text angegeben werden, der dann aber zwingend unter dem Textschlüssel des Objekts stehen muss (reiner Text ist als reiner String nicht möglich).
+
+
+**Das Element Absatzbild**
+
+Kann auch als einfacher Bildname (String) angegeben werden; in diesem Fall wird der in config.js konfigurierte imgPath automatisch als Basispfad hinzugefügt.
+Configure als Objekt zur Angabe externer Bilder mit imgPath als URL und imgName als Name des Bildes.
+
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|text|no|String|""|Der Text als Übersetzungsschlüssel oder reiner Text.|false|
+|type|no|String|"text/plain"|Der Texttyp. Wenn "text/html" angegeben wird, wird der angegebene Text als HTML-Code wiedergegeben.|false|
+|imgName|no|String|""|Der Name des anzuzeigenden Bildes.|false|
+|imgPath|no|String|""|Der Pfad zum Bild, falls nicht angegeben, wird imgPath aus config.js übernommen.|false|
+
+```json
+{
+    "Portalconfig": {
+        "quickHelp": {
+            "configs": {
+                "tree": {
+                    "title": "A new title for this QuickHelp window",
+                    "content": [
+                        {
+                            "title": "Title of the new section",
+                            "list": [
+                                {
+                                    "text": "This is the first paragraph.",
+                                    "type": "text/plain"
+                                },
+                                {
+                                    "imgName": "allgemein.png",
+                                    "imgPath": "https://geodienste.hamburg.de/lgv-config/img/"
+                                },
+                                {
+                                    "text": "This is the second <i>paragraph</i> with html content.",
+                                    "type": "text/html"
+                                }
+                            ]
+                        },
+                        {
+                            "before": "generalInfo",
+                            "title": "Title of a new section before generalInfo",
+                            "list": [
+                                {
+                                    "text": "This is a paragraph.",
+                                    "type": "text/plain"
+                                }
+                            ]
+                        },
+                        {"hide": "generalInfo"}
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+***
+
 ### Portalconfig.menu
 Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ergibt sich aus der Reihenfolge in der *Config.json*.
 
@@ -973,7 +1264,6 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |kmlimport|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "fileImport" verwenden.|false|
 |layerClusterToggler|nein|**[tool](#markdown-header-portalconfigtoollayerClusterToggler)**||_Mit diesem Werkzeug lassen sich Layer in Clustern gleichzeitig aktivieren/laden und deaktivieren_|false|
 |layerSlider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Mit dem Layerslider lassen sich beliebige Dienste in einer Reihenfolge abspielen. Zum Beispiel geeignet für Luftbilder aus verschiedenen Jahrgängen.|false|
-|layerslider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Deprecated in 3.0.0 Bitte "layerSlider" verwenden.|false|
 |legend|nein|**[legend](#markdown-header-portalconfigmenulegend)**||In der Legende werden alle sichtbaren Layer dargestellt.|false|
 |measure|nein|**[measure](#markdown-header-portalconfigmenutoolmeasure)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
 |parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||_Deprecated im nächsten Major-Release. Bitte nutzen Sie stattdessen `wfsSearch`._ Mit dieser Flurstückssuche lassen sich Flurstücke über Gemarkung, Flur (in Hamburg ohne Flur) und Flurstück suchen.|false|

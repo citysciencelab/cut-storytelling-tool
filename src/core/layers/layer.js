@@ -54,6 +54,7 @@ export default function Layer (attrs, layer, initialize = true) {
     else if (attrs.isSelected === true || store.getters.treeType === "light") {
         this.setIsVisibleInMap(attrs.isSelected);
     }
+    this.setMinMaxResolutions();
     this.checkForScale({scale: store.getters["Map/scale"]});
     this.registerInteractionMapViewListeners();
 }
@@ -316,7 +317,7 @@ Layer.prototype.toggleIsSettingVisible = function () {
  * @returns {void}
  */
 Layer.prototype.setIsSelected = function (newValue) {
-    const map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode),
+    const map = mapCollection.getMap("ol", "2D"),
         treeType = store.getters.treeType;
 
     // do not use this.set("isSelected", value), because of neverending recursion
@@ -498,6 +499,17 @@ Layer.prototype.showLayerInformation = function () {
 Layer.prototype.setLegend = function (value) {
     this.set("legend", value);
     store.dispatch("Legend/setLegendOnChanged", value);
+};
+/**
+ * Sets visible min and max resolution on layer.
+ * @returns {void}
+ */
+Layer.prototype.setMinMaxResolutions = function () {
+    const resoByMaxScale = bridge.getResoByScale(this.get("maxScale"), "max"),
+        resoByMinScale = bridge.getResoByScale(this.get("minScale"), "min");
+
+    this.get("layer").setMaxResolution(resoByMaxScale + (resoByMaxScale / 100));
+    this.get("layer").setMinResolution(resoByMinScale);
 };
 
 // backbone-relevant functions (may be removed if all layers are no longer backbone models):

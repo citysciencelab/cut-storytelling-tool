@@ -1,8 +1,6 @@
 import testAction from "../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../store/actionsMapMarker";
-import mapCollection from "../../../../../core/dataStorage/mapCollection";
 import sinon from "sinon";
-
 import Feature from "ol/Feature";
 import Polygon from "ol/geom/Polygon";
 import VectorLayer from "ol/layer/Vector.js";
@@ -86,32 +84,19 @@ describe("src/modules/mapMarker/store/actionsMapMarker.js", () => {
                         alwaysOnTop: true,
                         visible: false,
                         style: new Style()
-                    }),
-                    Map: {
-                        mapId: () => "ol",
-                        mapMode: () => "2D"
-                    }
+                    })
                 },
-                rootState = {
-                    Map: {
-                        mapId: "ol",
-                        mapMode: "2D"
+                rootGetters = {
+                    "Map/ol2DMap": {
+                        removeLayer: sinon.spy(),
+                        addLayer: sinon.spy()
                     }
-                },
-                map = {
-                    id: "ol",
-                    mode: "2D",
-                    removeLayer: sinon.spy(),
-                    addLayer: sinon.spy()
                 };
 
-            mapCollection.clear();
-            mapCollection.addMap(map, "ol", "2D");
-
-            testAction(removePolygonMarker, null, state, rootState, [
+            testAction(removePolygonMarker, null, state, {}, [
                 {type: "clearMarker", payload: "markerPolygon"},
                 {type: "setVisibilityMarker", payload: {visbility: false, marker: "markerPolygon"}}
-            ], {}, done);
+            ], {}, done, rootGetters);
         });
     });
 

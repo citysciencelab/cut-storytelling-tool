@@ -10,7 +10,9 @@ describe("src/core/layers/layer.js", () => {
         layerRemoved = false,
         layerVisible = false,
         newLayerSource = false,
-        layerOpacity = 1;
+        layerOpacity = 1,
+        layerResoMin = 0,
+        layerResoMax = 1000;
     const olLayer = {
         values_: {opacity: layerOpacity},
         getSource: () => {
@@ -32,6 +34,18 @@ describe("src/core/layers/layer.js", () => {
         },
         getVisible: () => {
             return layerVisible;
+        },
+        setMaxResolution: (value) => {
+            layerResoMax = value;
+        },
+        setMinResolution: (value) => {
+            layerResoMin = value;
+        },
+        getMaxResolution: () => {
+            return layerResoMax;
+        },
+        getMinResolution: () => {
+            return layerResoMin;
         }
     };
 
@@ -566,6 +580,27 @@ describe("src/core/layers/layer.js", () => {
         layerWrapper.setIsJustAdded(true);
         expect(layerWrapper.has("isJustAdded")).to.be.true;
         expect(layerWrapper.get("isJustAdded")).to.be.true;
+    });
+    it("setMinMaxResolutions shall set max and min resolution at layer", function () {
+        sinon.stub(Radio, "request").callsFake((...args) => {
+            let ret = null;
+
+            args.forEach(arg => {
+                if (arg === "max") {
+                    ret = 600;
+                }
+                if (arg === "min") {
+                    ret = 1;
+                }
+            });
+            return ret;
+        });
+        const layerWrapper = new Layer(attributes, olLayer),
+            layer = layerWrapper.get("layer");
+
+        expect(layer.getMaxResolution()).to.be.equals(600 + (600 / 100));
+        expect(layer.getMinResolution()).to.be.equals(1);
+
     });
     /**
      * testSetIsSelected

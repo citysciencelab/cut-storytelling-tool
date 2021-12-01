@@ -7,7 +7,7 @@ import {expect} from "chai";
 import {EOL} from "os";
 import createTestFeatures from "./testHelper";
 
-describe("tools/print/buildSpec", function () {
+describe("src/modules/tools/print/utils/buildSpec", function () {
     let buildSpec,
         pointFeatures,
         multiPointFeatures,

@@ -2,7 +2,6 @@
 import {mapGetters, mapActions} from "vuex";
 import ControlIcon from "../../ControlIcon.vue";
 import TableStyleControl from "../../TableStyleControl.vue";
-import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 
 /**
  * TotalView adds a control that lets the user reset the
@@ -23,7 +22,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters("Map", ["initialCenter", "initialZoomLevel", "mapId", "mapMode"]),
+        ...mapGetters("Map", ["initialCenter", "initialZoomLevel", "ol2DMap"]),
 
         component () {
             return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
@@ -37,7 +36,7 @@ export default {
          * @returns {Boolean} true if map is not in initial zoom/center.
          */
         mapMoved: function () {
-            const view = mapCollection.getMap(this.mapId, this.mapMode).getView(),
+            const view = this.ol2DMap.getView(),
                 center = view.getCenter();
 
             return this.initialCenter[0] !== center[0] ||
@@ -49,7 +48,7 @@ export default {
         ...mapActions("Map", ["resetView"]),
 
         startResetView: function () {
-            this.resetView(this.mapId, this.mapMode);
+            this.resetView();
         }
     }
 };

@@ -10,7 +10,6 @@ import Overlay from "ol/Overlay.js";
 import proj4 from "proj4";
 import * as Proj from "ol/proj.js";
 import {Circle, LineString} from "ol/geom.js";
-import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 
 export default {
     name: "Orientation",
@@ -49,7 +48,7 @@ export default {
     },
     computed: {
         ...mapGetters("controls/orientation", Object.keys(getters)),
-        ...mapGetters("Map", ["mapId", "mapMode"])
+        ...mapGetters("Map", ["ol2DMap"])
     },
     watch: {
         tracking () {
@@ -97,7 +96,7 @@ export default {
             let geolocation = null;
 
             if (this.isGeolocationDenied === false) {
-                mapCollection.getMap(this.mapId, this.mapMode).addOverlay(this.marker);
+                this.ol2DMap.addOverlay(this.marker);
                 if (this.geolocation === null) {
                     geolocation = new Geolocation({tracking: true, projection: Proj.get("EPSG:4326")});
                     this.setGeolocation(geolocation);
@@ -150,7 +149,7 @@ export default {
          * @returns {void}
          */
         removeOverlay () {
-            mapCollection.getMap(this.mapId, this.mapMode).removeOverlay(this.marker);
+            this.ol2DMap.removeOverlay(this.marker);
         },
 
         /**
@@ -292,7 +291,7 @@ export default {
 
             if (this.poiModeCurrentPositionEnabled) {
                 this.$store.dispatch("MapMarker/removePointMarker");
-                mapCollection.getMap(this.mapId, this.mapMode).addOverlay(this.marker);
+                this.ol2DMap.addOverlay(this.marker);
                 if (this.geolocation === null) {
                     geolocation = new Geolocation({tracking: true, projection: Proj.get("EPSG:4326")});
                     this.setGeolocation(geolocation);

@@ -1,4 +1,5 @@
 import Parser from "./parser";
+import store from "../../../src/app-store/index";
 
 const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype */{
     /**
@@ -7,7 +8,6 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @memberof Core.ConfigLoader
      * @property {String[]} validLayerTypes=["WMS", "SENSORTHINGS", "TERRAIN3D", "TILESET3D", "OBLIQUE"] The layertypes to show in the defaultTree.
      * @fires Core#RadioRequestUtilIsViewMobile
-     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @constructs
      */
     defaults: Object.assign({}, Parser.prototype.defaults, {
@@ -343,13 +343,12 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
     /**
      * Creates all models for the DefaultTree
      * @param  {Object} tree tree created from the categories and MetaNames
-     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @returns {void}
      */
     createModelsForDefaultTree: function (tree) {
         const sortedKeys = Object.keys(tree).sort(),
             sortedCategories = [],
-            isQuickHelpSet = Radio.request("QuickHelp", "isSet");
+            isQuickHelpSet = store.getters["QuickHelp/isSet"];
 
         sortedKeys.forEach(key => {
             sortedCategories.push(tree[key]);

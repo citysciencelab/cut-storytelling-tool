@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getCenter, getExtent, getResolution, getMarkerPointCoord, isLayerVisible, areLayersOrdered, doesLayerWithFeaturesExist, get3DHeading, get3DTilt, get3DAltitude} = require("../../../../../test/end2end/library/scripts"),
-    {centersTo, clickFeature, logTestingCloudUrlToTest} = require("../../../../../test/end2end/library/utils"),
+    {centersTo, clickFeature, logTestingCloudUrlToTest, closeSingleAlert} = require("../../../../../test/end2end/library/utils"),
     {isBasic, isDefault, isMaster, isChrome} = require("../../../../../test/end2end/settings"),
     {initDriver, getDriver, loadUrl, quitDriver} = require("../../../../../test/end2end/library/driver"),
     {By, until} = webdriver;
@@ -441,6 +441,8 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                         await loadUrl(driver, paramUrl, mode);
                     }
 
+                    await closeSingleAlert(driver);
+
                     do {
                         expect(counter++).to.be.below(25);
                         await clickFeature(driver, [559308.323, 5937846.748]);
@@ -495,6 +497,8 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                         await loadUrl(driver, paramUrl, mode);
                     }
 
+                    await closeSingleAlert(driver);
+
                     do {
                         expect(counter++).to.be.below(25);
                         await clickFeature(driver, [565596.456, 5940130.858]);
@@ -536,6 +540,8 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                         await loadUrl(driver, paramUrl, mode);
                     }
 
+                    await closeSingleAlert(driver);
+
                     await (await driver.findElement(By.css(".legend-menu-item"))).click();
                     await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.legend-window"))));
 
@@ -567,6 +573,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
 
                 it("deprecated - ?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - layers are shown in the topic tree and present layer information", async function () {
                     await loadUrl(driver, `${url}?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`, mode);
+                    await closeSingleAlert(driver);
                     await (await driver.findElement(By.css("div#navbarRow li:first-child"))).click();
                     await driver.wait(until.elementIsVisible(await driver.findElement(By.id("tree"))));
                     await (await driver.findElement(By.css("li.layer span.glyphicon-info-sign"))).click();
@@ -588,6 +595,8 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                 it("deprecated - ?layerIDs=, &visibility=, and &transparency= with set zoom level have working gfi/legend/info", async function () {
                     await loadUrl(driver, `${url}?layerIDs=4736,4537&visibility=true,true&transparency=0,0&zoomLevel=6`, mode);
                     const coords = [566688.25, 5934320.50];
+
+                    await closeSingleAlert(driver);
 
                     // test hospital layer GFI with example "Hamburg Hauptbahnhof" at coords "566688.25, 5934320.50"
                     do {
@@ -626,6 +635,8 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                 it("?Map/layerids=, &visibility=, and &transparency= with set zoom level have working gfi/legend/info", async function () {
                     await loadUrl(driver, `${url}?Map/layerids=4736,4537&visibility=true,true&transparency=0,0&zoomLevel=6`, mode);
                     const coords = [566688.25, 5934320.50];
+
+                    await closeSingleAlert(driver);
 
                     // test hospital layer GFI with example "Hamburg Hauptbahnhof" at coords "566688.25, 5934320.50"
                     do {
@@ -714,17 +725,20 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
 
                     // test by redirecting master to default
                     await loadUrl(driver, `${url}?config=../masterDefault${urlAffix}/config.json`, mode);
+                    await closeSingleAlert(driver);
 
                     expect(await driver.findElement(By.css("ul#tree .layer-catalog .header .form-inline .catalog-selection .form-control"))).to.exist;
 
                     // test by redirecting master to default with layers
                     await loadUrl(driver, `${url}?layerIDs=19969,4915&visibility=true,true&transparency=0,0&config=../masterDefault${urlAffix}/config.json`, mode);
+                    await closeSingleAlert(driver);
 
                     // no alert present
                     expect(await driver.findElements(By.css(".singleAlertMessage"))).to.be.empty;
 
                     // test by redirecting master to custom
                     await loadUrl(driver, `${url}?config=../masterCustom${urlAffix}/config.json`, mode);
+                    await closeSingleAlert(driver);
 
                     expect(await driver.findElement(By.css("ul#tree .layer-catalog .header .control-label"))).to.exist;
                 });
@@ -838,6 +852,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     const topicSelector = By.css("div#navbarRow li:first-child");
 
                     await loadUrl(driver, `${url}?mdid=EBA4BF12-3ED2-4305-9B67-8E689FE8C445`, mode);
+                    await closeSingleAlert(driver);
 
                     // check if active in tree
                     await driver.wait(until.elementLocated(topicSelector));

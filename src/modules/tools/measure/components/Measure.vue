@@ -6,7 +6,6 @@ import getters from "../store/gettersMeasure";
 import mutations from "../store/mutationsMeasure";
 import actions from "../store/actionsMeasure";
 import MeasureTooltip from "./MeasureTooltip.vue";
-import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 
 /**
  * Measurement tool to measure lines and areas in the map.
@@ -20,7 +19,7 @@ export default {
     computed: {
         ...mapGetters("Tools/Measure", Object.keys(getters)),
         ...mapGetters(["uiStyle"]),
-        ...mapGetters("Map", ["layerById", "is3d", "mapId", "mapMode"])
+        ...mapGetters("Map", ["layerById", "is3d", "ol2DMap"])
     },
     watch: {
         /**
@@ -50,7 +49,7 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-        mapCollection.getMap(this.mapId, this.mapMode).addLayer(this.layer);
+        this.ol2DMap.addLayer(this.layer);
     },
     mounted () {
         if (this.active) {

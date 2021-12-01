@@ -111,7 +111,7 @@
 
 /**
  * @namespace QuickHelp
- * @description fooBar
+ * @description The QuickHelp module.
  */
 
 /**

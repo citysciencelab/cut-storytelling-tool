@@ -142,6 +142,54 @@ The attribute *properties* activates a feature property check by comparing the n
     }
 }
 ```
+
+*properties* can also be configured as an array of objects.
+*properties* as objects are combined with a logical AND, meaning all key-value pairs must hold; in this fashion, all *conditions* are connected.
+
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|attrName|yes|String||Name of attribute.|`"attr1"`|
+|value|yes|String/Number/[String]/[Number]||Value or Array of values to be checked||
+
+```json
+"conditions": {
+    "properties": [
+        {
+            "attrName": "key",
+            "value": [0, 100]
+        }
+    ]
+}
+```
+
+### attributeObject
+Then it is possible to configure an object instead of an attribute key.
+
+If the *attrName* is given as an object, the following confurations are possible.
+
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|name|yes|String||Name to be shown on an exact match.|`"Test"`|
+|condition|yes|enum["contains", "startsWith", "endsWith"]||Condition checked on each feature attribute.|`"startsWith"`|
+|type|no|enum["string", "date", "number", "boolean"]|`"string"`|If `"date"`, the portal will attempt to parse the attribute value to a date; If `"Number"`, the portal will attempt to parse the attribute value to with thousand seperator; If “boolean”, the portal will attempt to parse the attribute value to boolean value.|`"date"`|
+|format|no|String/Object|`"DD.MM.YYYY HH:mm:ss"/{"key": "value"}`|Data format.|`"DD.MM.YYY"`|
+|prefix|no|String||Attribute value prefix.|Add string to value without whitespace `"https://"`|
+|suffix|no|String||Attribute value suffix.|`"°C"`|
+
+```json
+"conditions": {
+    "properties": [
+        {
+        "attrName": {
+            "name": "-fillLevel",
+            "condition": "endsWith"
+        },
+        "value": [0, 100]
+        }
+    ]
+}
+```
+
 #### key
 
 The *key* is a feature attribute's name of a direct feature child element.
@@ -152,7 +200,7 @@ Alternatively an arbitrarily nested property within the feature may be addressed
 
 >💡 Hint: Object paths are e.g. used by sensor layers in properties using multiple Datastreams.
 
-A *key* is always of type *String*.
+A *key* is always of type *String* or an [attributeObject](#markdown-header-attributeobject).
 
 #### value
 
@@ -521,7 +569,7 @@ Use the attribute *labelField* within the *style* to choose one of the *FeatureP
 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
-|labelField|yes|String|`"undefined"`|Feature attribute to be used as label. You may also use an [object path reference](#markdown-header-objectpathreference).|
+|labelField|yes|String|`"undefined"`|Feature attribute to be used as label. You may also use an [object path reference](#markdown-header-objectpathreference) or an [attributeObject](#markdown-header-attributeobject).|
 |textAlign||String|`"center"`|Text alignment|
 |textFont||String|`"Comic Sans MS"`|Text font|
 |textScale||Integer|`2`|Text scale|

@@ -56,7 +56,7 @@ WMSLayer.prototype = Object.create(Layer.prototype);
  * @returns {void}
  */
 WMSLayer.prototype.createLayer = function (attrs) {
-    const options = {resolutions: mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode).getView().getResolutions(), origin: [442800, 5809000]},
+    const options = {resolutions: mapCollection.getMap("ol", "2D").getView().getResolutions(), origin: [442800, 5809000]},
         rawLayerAttributes = {
             id: attrs.id,
             cacheId: attrs.cacheId,
@@ -117,7 +117,7 @@ WMSLayer.prototype.getLayers = function () {
  * @returns {String} - The created getFeature info url.
  */
 WMSLayer.prototype.getGfiUrl = function () {
-    const mapView = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode).getView(),
+    const mapView = mapCollection.getMap("ol", "2D").getView(),
         resolution = store.getters["Map/resolution"],
         projection = mapView.getProjection(),
         coordinate = store.getters["Map/clickCoord"];
