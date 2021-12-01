@@ -38,6 +38,15 @@ export function layerVisibilityChanged (layerModel, value) {
     Radio.trigger("ModelList", "updatedSelectedLayerList", getLayerModelsByAttributes({isSelected: true, type: "layer"}));
 }
 /**
+ * Returns the corresponding resolution for the scale.
+ * @param  {String|number} scale - scale to compare
+ * @param  {String} scaleType - min or max
+ * @return {number} the resolution
+ */
+export function getResoByScale (scale, scaleType) {
+    return Radio.request("MapView", "getResoByScale", scale, scaleType);
+}
+/**
  * Triggers adding layer at given index in modelList.
  * Can be done directly or is no longer needed, if modelList is refactored.
  * @param {ol.Layer} layer the layer of the layerModel
