@@ -288,6 +288,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             return this.getMultiGeometryStyle(geometryType, feature, rules, isClustered);
         }
 
+        // fall back to default styles as configured in geomType specific styles, if no rule is matched
         console.warn("No valid styling rule found. Falling back to defaults");
         return isMultiGeometry
             ? this.getMultiGeometryStyle(geometryType, feature, undefined, isClustered)
