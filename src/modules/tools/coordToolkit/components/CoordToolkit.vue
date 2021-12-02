@@ -137,7 +137,7 @@ export default {
             // for use in select-box
             pr.forEach(proj => {
                 proj.id = proj.name;
-                if (proj.name === "EPSG:4326") {
+                if (proj.name === "EPSG:4326" || proj.name === "http://www.opengis.net/gml/srs/epsg.xml#4326") {
                     wgs84Proj.push(proj);
                 }
 

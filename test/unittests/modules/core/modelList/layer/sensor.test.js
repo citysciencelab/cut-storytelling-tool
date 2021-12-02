@@ -7,11 +7,20 @@ import {expect} from "chai";
 import VectorLayer from "ol/layer/Vector.js";
 import {Vector as VectorSource} from "ol/source.js";
 import sinon from "sinon";
+import mapCollection from "../../../../../../src/core/dataStorage/mapCollection";
 
 describe("core/modelList/layer/sensor", function () {
     let sensorLayer;
 
-    before(function () {
+    before(() => {
+        mapCollection.clear();
+        mapCollection.addMap({
+            id: "ol",
+            mode: "2D",
+            registerListener: sinon.spy(),
+            unregisterListener: sinon.spy()
+        }, "ol", "2D");
+
         sensorLayer = new SensorLayerModel();
         sensorLayer.set("url", "test/test/test", {silent: true});
 

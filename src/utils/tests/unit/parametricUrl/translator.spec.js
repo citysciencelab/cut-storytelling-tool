@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {translate} from "../../../parametricUrl/translator";
 
-describe("src/utils/urlParamsTranslator.js", () => {
+describe("src/utils/parametricUrl/urlParamsTranslator.js", () => {
     describe("translate", () => {
         it("translate kmlimport to Tools/FileImport/active", async () => {
             const key = "isinitopen",

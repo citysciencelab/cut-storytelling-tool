@@ -543,6 +543,18 @@ function getOrderedLayerIds () {
         .request("Map", "getMap")
         .getLayers()
         .getArray()
+        .sort((layer1, layer2) => {
+            const a = layer1.get("zIndex"),
+                b = layer2.get("zIndex");
+
+            if (a < b) {
+                return -1;
+            }
+            if (a > b) {
+                return 1;
+            }
+            return 0;
+        })
         .map(layer => {
             if (layer.get("id")) {
                 // if id available, use it

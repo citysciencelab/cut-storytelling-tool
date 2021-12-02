@@ -7,6 +7,7 @@ import getComponent from "../../../../utils/getComponent";
 import thousandsSeparator from "../../../../utils/thousandsSeparator.js";
 import axios from "axios";
 import getVisibleLayer from "../utils/getVisibleLayer";
+import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 
 /**
  * Tool to print a part of the map
@@ -130,7 +131,7 @@ export default {
             this.setIsScaleSelectedManually(true);
             this.getOptimalResolution(resolution);
             this.updateCanvasLayer();
-            Radio.trigger("Map", "render");
+            mapCollection.getMap("ol", "2D").render();
         },
 
         /**
@@ -141,7 +142,7 @@ export default {
         layoutChanged (value) {
             this.setCurrentLayoutName(value);
             this.updateCanvasLayer();
-            Radio.trigger("Map", "render");
+            mapCollection.getMap("ol", "2D").render();
         },
 
         /**

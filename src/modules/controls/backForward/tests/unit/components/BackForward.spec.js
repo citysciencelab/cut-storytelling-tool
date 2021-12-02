@@ -19,22 +19,24 @@ describe("src/modules/controls/backForward/components/BackForward.vue", () => {
 
     beforeEach(() => {
         const map = {
-            id: "ol_bf",
+            id: "ol",
             mode: "2D",
             on: (signal, mem) => {
                 memorize = mem;
             },
             un: () => { /* doesn't matter for test*/ },
-            getView: () => ({
-                getCenter: () => [counter++, counter++],
-                getZoom: () => counter++,
-                setCenter: c => {
-                    center = c;
-                },
-                setZoom: z => {
-                    zoom = z;
-                }
-            })
+            getView: () => {
+                return {
+                    getCenter: () => [counter++, counter++],
+                    getZoom: () => counter++,
+                    setCenter: c => {
+                        center = c;
+                    },
+                    setZoom: z => {
+                        zoom = z;
+                    }
+                };
+            }
         };
 
         memorize = null;

@@ -3,6 +3,7 @@ import actions from "../../../../store/actions/actionsPrintInitialization";
 import VectorLayer from "ol/layer/Vector.js";
 import Canvas from "../../../../utils/buildCanvas";
 import sinon from "sinon";
+import mapCollection from "../../../../../../../core/dataStorage/mapCollection.js";
 
 const {
     chooseCurrentLayout,
@@ -22,6 +23,18 @@ const {
 } = actions;
 
 describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", () => {
+    let map = null;
+
+    before(() => {
+        map = {
+            id: "ol",
+            mode: "2D",
+            render: sinon.spy()
+        };
+
+        mapCollection.clear();
+        mapCollection.addMap(map, "ol", "2D");
+    });
     describe("chooseCurrentLayout", () => {
         it("should choose the current Layout", done => {
             const payload = [

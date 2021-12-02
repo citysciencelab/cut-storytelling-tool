@@ -7,7 +7,6 @@ import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
 import StyleList from "../modules/vectorStyle/list";
 import Preparser from "../modules/core/configLoader/preparser";
-import Map from "../modules/core/map";
 import RemoteInterface from "../modules/remoteInterface/model";
 import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
@@ -28,6 +27,7 @@ import StyleWMSView from "../modules/tools/styleWMS/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
 import {initiateVueI18Next} from "./vueI18Next";
 import {handleUrlParamsBeforeVueMount, readUrlParamEarly} from "../src/utils/parametricUrl/ParametricUrlBridge";
+import {createMaps} from "../src/core/maps/maps.js";
 
 /**
  * WFSFeatureFilterView
@@ -123,7 +123,7 @@ async function loadApp () {
     handleUrlParamsBeforeVueMount(window.location.search);
 
     new StyleList();
-    new Map(Radio.request("Parser", "getPortalConfig").mapView);
+    createMaps(Config, Radio.request("Parser", "getPortalConfig").mapView);
     new WindowView();
 
     app.$mount();

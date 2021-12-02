@@ -12,6 +12,7 @@
 ### Added
 
 ### Changed
+- Migrated the map from Backbone.js to Vue.js environment.
 
 ### Deprecated
 

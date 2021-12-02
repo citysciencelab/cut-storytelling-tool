@@ -9,7 +9,7 @@ const namedProjections = [
     ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
 ];
 
-describe("src/utils/stateModifier.js", () => {
+describe("src/utils/parametricUrl/stateModifier.js", () => {
     describe("setValueToState", () => {
         it("setValueToState does not react if key is not an array", () => {
             const state = {
@@ -301,7 +301,7 @@ describe("src/utils/stateModifier.js", () => {
             await setValueToState(state, key, valueAsString);
             await setValueToState(state, "Map/projection", "EPSG:8395");
             expect(state.MapMarker.coordinates).to.be.deep.equals(value);
-            expect(state.urlParams.projection.name).to.be.deep.equals("EPSG:8395");
+            expect(state.urlParams.projection.name).to.be.deep.equals("http://www.opengis.net/gml/srs/epsg.xml#8395");
         });
         it("test param zoomLevel", async () => {
             let key = "zoomLevel";
