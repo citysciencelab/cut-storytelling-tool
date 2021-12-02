@@ -4,7 +4,7 @@ import Model from "@modules/vectorStyle/styleModel";
 import {GeoJSON} from "ol/format.js";
 import {Text, Style, Stroke, Fill} from "ol/style.js";
 
-describe.only("vectorStyleModel", function () {
+describe("vectorStyleModel", function () {
     const geojsonReader = new GeoJSON(),
         jsonFeatures = {
             "type": "FeatureCollection",
