@@ -1,4 +1,5 @@
 import {wfs} from "masterportalAPI";
+import LoaderOverlay from "../../utils/loaderOverlay";
 import Layer from "./layer";
 import * as bridge from "./RadioBridge.js";
 /**
@@ -12,9 +13,10 @@ export default function WFSLayer (attrs) {
         showSettings: true,
         isSecured: false,
         isClustered: false,
-        allowedVersions: ["1.1.0", "2.0.0"],
+        allowedVersions: ["1.0.0", "1.1.0", "2.0.0"],
         altitudeMode: "clampToGround",
-        useProxy: false
+        useProxy: false,
+        sourceUpdated: false
     };
 
     this.createLayer(Object.assign(defaults, attrs));
@@ -32,7 +34,7 @@ export default function WFSLayer (attrs) {
 WFSLayer.prototype = Object.create(Layer.prototype);
 
 /**
- * Creates a layer of type WFS by using wms-layer of the masterportalapi.
+ * Creates a layer of type WFS by using wfs-layer of the masterportalapi.
  * Sets all needed attributes at the layer and the layer source.
  * @param {Object} attrs  params of the raw layer
  * @returns {void}
@@ -57,7 +59,7 @@ WFSLayer.prototype.createLayer = function (attrs) {
         styleFn = this.getStyleFunction(attrs),
         options = {
             wfsFilter: attrs.wfsFilter,
-            clusterGeometryFunction: function (feature) {
+            clusterGeometryFunction: (feature) => {
                 // do not cluster invisible features; can't rely on style since it will be null initially
                 if (feature.get("hideInClustering") === true) {
                     return null;
@@ -65,19 +67,23 @@ WFSLayer.prototype.createLayer = function (attrs) {
                 return feature.getGeometry();
             },
             version: this.getVersion(attrs),
-            featuresFilter: this.getFeaturesFilterFunction(attrs).bind(this),
+            featuresFilter: this.getFeaturesFilterFunction(attrs),
+            // If an Object contains a property which holds a Function, the property is called a method.
+            // This method, when called, will always have it's this variable set to the Object it is associated with.
+            // This is true for both strict and non-strict modes.
+            // therefore use [fn].bind(this)
             beforeLoading: function () {
-                if (bridge.getInitialLoadingState() === 0 && (this.layer && this.layer.get("isSelected")) || attrs.isSelected) {
-                    bridge.showHideLoader(true);
+                if (this.get("isSelected") || attrs.isSelected) {
+                    LoaderOverlay.show();
                 }
             }.bind(this),
             afterLoading: function (features) {
                 this.featuresLoaded(attrs.id, features);
-                if ((this.layer && this.layer.get("isSelected")) || attrs.isSelected) {
-                    bridge.showHideLoader(false);
+                if (this.get("isSelected") || attrs.isSelected) {
+                    LoaderOverlay.hide();
                 }
             }.bind(this),
-            onLoadingError: function (error) {
+            onLoadingError: (error) => {
                 console.error("masterportal wfs loading error:", error);
             },
             loadingParams: {
@@ -121,7 +127,7 @@ WFSLayer.prototype.getFeaturesFilterFunction = function (attrs) {
         });
 
         if (attrs.bboxGeometry) {
-            filteredFeatures = filteredFeatures.filter(function (feature) {
+            filteredFeatures = filteredFeatures.filter((feature) => {
                 // test if the geometry and the passed extent intersect
                 return attrs.bboxGeometry.intersectsExtent(feature.getGeometry().getExtent());
             });
@@ -187,11 +193,14 @@ WFSLayer.prototype.getStyleFunction = function (attrs) {
     return style;
 };
 /**
- * Updates the layers source by calling refresh at source.
+ * Updates the layers source by calling refresh at source. Depending on attribute 'sourceUpdated'.
  * @returns {void}
  */
 WFSLayer.prototype.updateSource = function () {
-    this.layer.getSource().refresh();
+    if (this.get("sourceUpdated") === false) {
+        this.layer.getSource().refresh();
+        this.set("sourceUpdated", true);
+    }
 };
 /**
  * Creates the legend
@@ -244,12 +253,10 @@ WFSLayer.prototype.hideAllFeatures = function () {
     // optimization - clear and re-add to prevent cluster updates on each change
     layerSource.clear();
 
-    features.forEach(function (feature) {
+    features.forEach((feature) => {
         feature.set("hideInClustering", true);
-        feature.setStyle(function () {
-            return null;
-        });
-    }, this);
+        feature.setStyle(() => null);
+    });
 
     layerSource.addFeatures(features);
 };
@@ -259,13 +266,12 @@ WFSLayer.prototype.hideAllFeatures = function () {
  */
 WFSLayer.prototype.showAllFeatures = function () {
     const collection = this.get("layerSource").getFeatures();
-    let style;
 
-    collection.forEach(function (feature) {
-        style = this.getStyleAsFunction(this.get("style"));
+    collection.forEach((feature) => {
+        const style = this.getStyleAsFunction(this.get("style"));
 
         feature.setStyle(style(feature));
-    }, this);
+    });
 };
 /**
  * Only shows features that match the given ids.
@@ -274,7 +280,6 @@ WFSLayer.prototype.showAllFeatures = function () {
  */
 WFSLayer.prototype.showFeaturesByIds = function (featureIdList) {
     const layerSource = this.get("layerSource"),
-        // featuresToShow is a subset of allLayerFeatures
         allLayerFeatures = layerSource.getFeatures(),
         featuresToShow = featureIdList.map(id => layerSource.getFeatureById(id));
 
@@ -284,7 +289,7 @@ WFSLayer.prototype.showFeaturesByIds = function (featureIdList) {
 
         feature.set("hideInClustering", false);
         feature.setStyle(style(feature));
-    }, this);
+    });
 
     layerSource.addFeatures(allLayerFeatures);
     bridge.resetVectorLayerFeatures(this.get("id"), allLayerFeatures);

@@ -160,20 +160,28 @@ export function getStyleModelById (styleId) {
  * Returns the state of the initial loading of layers.
  * @returns {number} state of loading
  */
-export function getInitialLoadingState () {
-    return Radio.request("Map", "getInitialLoading");
-}
+// export function getInitialLoadingState () {
+//     return Radio.request("Map", "getInitialLoading");
+// }
 /**
- * Shows or hides the loader depending of param 'show'.
- * @param {boolean} show if true, loader is shown
+ * Listens to channel i18next and changes the translations of the layer, if language changes.
+ * @param {boolean} layer the layer to call the function 'changeLang' at.
  * @returns {void}
  */
-export function showHideLoader (show) {
-    if (show) {
-        Radio.trigger("Util", "showLoader");
-    }
-    else {
-        Radio.trigger("Util", "hideLoader");
-    }
+export function onLanguageChanged (layer) {
+    const channel = Radio.channel("i18next");
+
+    channel.on({
+        "languageChanged": function () {
+            if (typeof layer.changeLang === "function") {
+                layer.changeLang();
+            }
+            else {
+                console.warn("Layer ", layer, "must impelement the function changeLang to translate its textes.");
+            }
+        }
+    }, this);
+
 }
+
 

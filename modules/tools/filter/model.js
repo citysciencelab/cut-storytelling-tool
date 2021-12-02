@@ -68,23 +68,25 @@ const FilterModel = Tool.extend({
             }
         }, this);
 
-        store.watch((state, getters) => getters["Map/featuresLoaded"], ({layerId}) => {
-            const predefinedQueries = this.get("predefinedQueries"),
-                queryCollection = this.get("queryCollection");
-            let filterModels;
+        this.listenTo(Radio.channel("VectorLayer"), {
+            "featuresLoaded": function (layerId) {
+                const predefinedQueries = this.get("predefinedQueries"),
+                    queryCollection = this.get("queryCollection");
+                let filterModels;
 
-            if (!this.isModelInQueryCollection(layerId, queryCollection) && this.get("isActive")) {
-                filterModels = predefinedQueries.filter(function (query) {
-                    return query.layerId === layerId;
-                });
+                if (!this.isModelInQueryCollection(layerId, queryCollection) && this.get("isActive")) {
+                    filterModels = predefinedQueries.filter(function (query) {
+                        return query.layerId === layerId;
+                    });
 
-                filterModels.forEach(filterModel => {
-                    const layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+                    filterModels.forEach(filterModel => {
+                        const layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
 
-                    this.createQuery(filterModel, layer);
-                });
+                        this.createQuery(filterModel, layer);
+                    });
+                }
             }
-        });
+        }, this);
     },
     /**
      * change language - sets default values for the language

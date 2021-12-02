@@ -230,13 +230,26 @@ describe("src/core/layers/wfs.js", () => {
         expect(styleFunction).not.to.be.null;
         expect(typeof styleFunction).to.be.equals("function");
     });
-    it("updateSource shall call masterportalAPIs wfs-layers updateSource", function () {
+    it("updateSource shall refresh source if 'sourceUpdated' is false", function () {
         const wfsLayer = new WfsLayer(attributes),
             layer = wfsLayer.get("layer"),
             spy = sinon.spy(layer.getSource(), "refresh");
 
+        expect(wfsLayer.get("sourceUpdated")).to.be.false;
         wfsLayer.updateSource();
         expect(spy.calledOnce).to.be.true;
+        expect(wfsLayer.get("sourceUpdated")).to.be.true;
+    });
+    it("updateSource shall not refresh source if 'sourceUpdated' is true", function () {
+        attributes.sourceUpdated = true;
+        const wfsLayer = new WfsLayer(attributes),
+            layer = wfsLayer.get("layer"),
+            spy = sinon.spy(layer.getSource(), "refresh");
+
+        expect(wfsLayer.get("sourceUpdated")).to.be.true;
+        wfsLayer.updateSource();
+        expect(spy.notCalled).to.be.true;
+        expect(wfsLayer.get("sourceUpdated")).to.be.true;
     });
 
     it("createLegend shall set legend", function () {

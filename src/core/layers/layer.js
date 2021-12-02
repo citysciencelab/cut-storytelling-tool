@@ -57,6 +57,7 @@ export default function Layer (attrs, layer, initialize = true) {
     this.setMinMaxResolutions();
     this.checkForScale({scale: store.getters["Map/scale"]});
     this.registerInteractionMapViewListeners();
+    bridge.onLanguageChanged(this);
     this.changeLang();
 }
 /**
@@ -321,6 +322,7 @@ Layer.prototype.setIsSelected = function (newValue) {
         bridge.renderMenu();
     }
     if (this.get("typ") === "WFS") {
+        // data will be loaded at first selection
         this.updateSource();
     }
 };
@@ -371,6 +373,7 @@ Layer.prototype.changeLang = function () {
     this.attributes.levelUpText = i18next.t("common:tree.levelUp");
     this.attributes.levelDownText = i18next.t("common:tree.levelDown");
     this.attributes.transparencyText = i18next.t("common:tree.transparency");
+    bridge.renderMenu();
 };
 /**
  * Calls Collection function moveModelDown
@@ -479,30 +482,30 @@ Layer.prototype.getMultiPointCoordinatesWithAltitude = function (coords) {
 };
 /**
  * Sets the altitude on point coordinates.
- * @param {Number[]} coords Coordinates.
+ * @param {Number[]} coord Coordinates.
  * @returns {Number[]} - newly set cooordinates.
  */
-Layer.prototype.getPointCoordinatesWithAltitude = function (coords) {
+Layer.prototype.getPointCoordinatesWithAltitude = function (coord) {
     const altitude = this.get("altitude"),
         altitudeOffset = this.get("altitudeOffset");
 
     if (typeof altitude === "number") {
-        if (coords.length === 2) {
-            coords.push(parseFloat(altitude));
+        if (coord.length === 2) {
+            coord.push(parseFloat(altitude));
         }
-        else if (coords.length === 3) {
-            coords[2] = parseFloat(altitude);
+        else if (coord.length === 3) {
+            coord[2] = parseFloat(altitude);
         }
     }
     if (typeof altitudeOffset === "number") {
-        if (coords.length === 2) {
-            coords.push(parseFloat(altitudeOffset));
+        if (coord.length === 2) {
+            coord.push(parseFloat(altitudeOffset));
         }
-        else if (coords.length === 3) {
-            coords[2] = coords[2] + parseFloat(altitudeOffset);
+        else if (coord.length === 3) {
+            coord[2] = coord[2] + parseFloat(altitudeOffset);
         }
     }
-    return coords;
+    return coord;
 };
 
 /**
