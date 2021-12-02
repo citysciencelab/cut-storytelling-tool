@@ -12,6 +12,7 @@
 ### Added
 
 ### Changed
+- Migrated the map from Backbone.js to Vue.js environment.
 
 ### Deprecated
 
@@ -43,7 +44,6 @@
 - Print formats only contain working formats now.
 - QuickHelp: moved to Vue and refactored, can now be manipulated for search, tree and routing, new QuickHelp windows can be configured. See new quickHelp.md documentation for more details.
 - Migrated the layerSlider tool from Backbone.js to Vue.js.
-- Migrated the map from Backbone.js to Vue.js environment.
 
 ### Deprecated
 
