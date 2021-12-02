@@ -10,6 +10,17 @@
 
 ## Unreleased - in development
 ### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+## v2.16.0 - 2021-12-01
+### Added
 - The library "svg-url-loader" was added to package.json devDependencies.
 - Added the new Tool `Routing`.
 - The following NPM packages are added:

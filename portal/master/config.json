@@ -552,7 +552,8 @@
             "12060",
             "12059"
           ],
-          "name": "Geobasiskarten (schwarz-grau)"
+          "name": "Geobasiskarten (schwarz-grau)",
+          "gfiAttributes": "ignore"
         },
         {
           "id": "12883",

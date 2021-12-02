@@ -1,11 +1,12 @@
 import Vuex from "vuex";
-import {shallowMount, createLocalVue} from "@vue/test-utils";
+import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import ExportButtonCSV from "../../../components/ExportButtonCSV.vue";
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+config.mocks.$t = key => key;
 
 describe("src/share-components/exportButton/components/exportButtonCSV.vue", () => {
     describe("createFilename", () => {
