@@ -288,8 +288,10 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             return this.getMultiGeometryStyle(geometryType, feature, rules, isClustered);
         }
 
-        console.warn("No valid styling rule found.");
-        return new Style();
+        console.warn("No valid styling rule found. Falling back to defaults");
+        return isMultiGeometry
+            ? this.getMultiGeometryStyle(geometryType, feature, undefined, isClustered)
+            : this.getSimpleGeometryStyle(geometryType, feature, undefined, isClustered);
     },
 
     /**
@@ -301,10 +303,10 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {ol/style/Style}    style is always returned
      */
     getSimpleGeometryStyle: function (geometryType, feature, rule, isClustered) {
-        const style = rule.style;
+        const style = rule?.style;
         let styleObject;
 
-        if (Object.prototype.hasOwnProperty.call(style, "labelField")) {
+        if (style && Object.prototype.hasOwnProperty.call(style, "labelField")) {
             this.set("labelField", style.labelField);
         }
         if (geometryType === "Point") {
@@ -368,13 +370,13 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
             geometries.forEach((geometry, index) => {
                 const geometryTypeSimpleGeom = geometry.getType(),
-                    rule = this.getRuleForIndex(rules, index);
+                    rule = rules ? this.getRuleForIndex(rules, index) : undefined;
 
                 // For simplicity reasons we do not support multi encasulated multi geometries but ignore them.
                 if (this.isMultiGeometry(geometryTypeSimpleGeom)) {
                     console.warn("Multi encapsulated multiGeometries are not supported.");
                 }
-                else if (rule) {
+                else {
                     const simpleStyle = this.getSimpleGeometryStyle(geometryTypeSimpleGeom, feature, rule, isClustered);
 
                     simpleStyle.setGeometry(geometry);
@@ -481,7 +483,6 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         if (rule?.conditions?.properties) {
             const featureProperties = feature.getProperties(),
                 properties = rule.conditions.properties;
-
             let key,
                 i;
 
@@ -532,11 +533,11 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             }
         }
 
-        const featureValue = mapAttributes(featureProperties, key, false),
+        const featureValue = mapAttributes(featureProperty, key, false),
             referenceValue = this.getReferenceValue(featureProperty, value);
 
         if ((typeof featureValue === "boolean" || typeof featureValue === "string" || typeof featureValue === "number") && (typeof referenceValue === "boolean" || typeof referenceValue === "string" || typeof referenceValue === "number" ||
-            (Array.isArray(referenceValue) && referenceValue.every(element => typeof element === "number") &&
+            (Array.isArray(referenceValue) && referenceValue.every(element => typeof element === "number" || element === null) &&
                 (referenceValue.length === 2 || referenceValue.length === 4)))) {
             return this.compareValues(featureValue, referenceValue);
         }
@@ -626,9 +627,8 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             }
         }
         // compare value in range
-        else if (Array.isArray(referenceValue) && referenceValue.every(element => typeof element === "number") && (referenceValue.length === 2 || referenceValue.length === 4)) {
+        else if (Array.isArray(referenceValue) && referenceValue.every(element => typeof element === "number" || element === null) && (referenceValue.length === 2 || referenceValue.length === 4)) {
             value = parseFloat(this.getValueWithoutComma(value));
-
             if (!isNaN(this.getValueWithoutComma(featureValue))) {
                 // value in absolute range of numbers [minValue, maxValue]
                 if (referenceValue.length === 2) {
