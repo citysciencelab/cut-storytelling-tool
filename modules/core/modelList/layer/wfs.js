@@ -230,7 +230,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
 
         wfsInterceptor = instance.interceptors.request.use((config) => {
             // Showing loader before the request is sent
-            if (Radio.request("Map", "getInitialLoading") === 0 && showLoader) {
+            if (showLoader) {
                 Radio.trigger("Util", "showLoader");
             }
 
@@ -439,12 +439,14 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
 
         // optimization - clear and re-add to prevent cluster updates on each change
         layerSource.clear();
-
         featuresToShow.forEach(feature => {
             const style = this.getStyleAsFunction(this.get("style"));
 
-            feature.set("hideInClustering", false);
-            feature.setStyle(style(feature));
+            if (feature && feature !== null) {
+                feature.set("hideInClustering", false);
+                feature.setStyle(style(feature));
+            }
+
         }, this);
 
         layerSource.addFeatures(allLayerFeatures);

@@ -1321,7 +1321,6 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |kmlimport|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use `fileImport` instead._|false|
 |layerClusterToggler|no|**[tool](#markdown-header-portalconfigtoollayerClusterToggler)**||_This tool allows a cluster layers to be active and deactive together._|false|
 |layerSlider|no|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||The layerSlider tool allows showing arbitrary services in order. This can e.g. be used to show aerial footage from multiple years in succession.|false|
-|layerslider|no|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||_Deprecated in 3.0.0. Please use `layerSlider` instead._|false|
 |legend|no|**[legend](#markdown-header-portalconfigmenulegend)**||The legend for all visible layers is displayed here.|false|
 |measure|no|**[measure](#markdown-header-portalconfigmenutoolmeasure)**||Allows measuring areas and distances in the units m/km resp. m²/km².|false|
 |parcelSearch|no|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||_Deprecated in the next major release. Please use `wfsSearch` instead._ The parcel search tool allows searching for parcels by district and parcel number. Many German administrative units feature a tripartite order, hence the tool offers searching by "Gemarkung" (district), "Flur" (parcel) (not used in Hamburg), and "Flurstück" (literally "parcel piece").|false|

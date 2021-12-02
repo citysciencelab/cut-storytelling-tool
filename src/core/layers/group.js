@@ -203,3 +203,31 @@ GroupedLayers.prototype.checkForScale = function (options) {
 
     this.set("isOutOfRange", groupLayerIsOutOfRange || childLayersAreOutOfRange);
 };
+/**
+ * Shows all features by setting their style.
+ * @returns {void}
+ */
+GroupedLayers.prototype.showAllFeatures = function () {
+    this.attributes.layerSource.forEach(layer => {
+        layer.showAllFeatures();
+    });
+};
+/**
+ * Only shows features that match the given ids.
+ * @param {String[]} featureIdList List of feature ids.
+ * @returns {void}
+ */
+GroupedLayers.prototype.showFeaturesByIds = function (featureIdList) {
+    this.attributes.layerSource.forEach(layer => {
+        layer.showFeaturesByIds(featureIdList);
+    });
+};
+/**
+ * Hides all features by setting style= null for all features.
+ * @returns {void}
+ */
+GroupedLayers.prototype.hideAllFeatures = function () {
+    this.attributes.layerSource.forEach(layer => {
+        layer.hideAllFeatures();
+    });
+};

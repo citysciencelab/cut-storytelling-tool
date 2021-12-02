@@ -37,20 +37,25 @@ describe("src/modules/mapMarker/store/actionsMapMarker.js", () => {
     describe("removePointMarker", () => {
         it("removePointMarker", done => {
             const state = {
-                markerPoint: new VectorLayer({
-                    name: "markerPoint",
-                    source: new VectorSource(),
-                    alwaysOnTop: true,
-                    visible: false,
-                    style: new Style()
-                })
-            };
+                    markerPoint: new VectorLayer({
+                        name: "markerPoint",
+                        source: new VectorSource(),
+                        alwaysOnTop: true,
+                        visible: false,
+                        style: new Style()
+                    })
+                },
+                rootGetters = {
+                    "Map/ol2DMap": {
+                        removeLayer: sinon.spy(),
+                        addLayer: sinon.spy()
+                    }
+                };
 
             testAction(removePointMarker, null, state, {}, [
-                {type: "Map/removeLayerFromMap", payload: state.markerPoint},
                 {type: "clearMarker", payload: "markerPoint"},
                 {type: "setVisibilityMarker", payload: {visbility: false, marker: "markerPoint"}}
-            ], {}, done);
+            ], {}, done, rootGetters);
         });
     });
 

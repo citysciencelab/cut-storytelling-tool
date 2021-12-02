@@ -10,11 +10,33 @@
 
 ## Unreleased - in development
 ### Added
+- Feature: List component supports onRowClick callback
+
+### Changed
+- Migrated the map from Backbone.js to Vue.js environment.
+- WfsSearch:
+    - Update documentation.
+        - Change parameter `wfsSearch.searchInstance.requestConfig.gazetteer` from a `Boolean` to an `Object`. Move parameters `namespaces` and `memberSuffix` to that Object.
+        - Change parameter `nameSpaces` to `namespaces` to be inline with the rest of the configuration.
+    - Allow parameter `namespaces` to also be a single String instead of always expecting an array.
+
+### Deprecated
+
+### Removed
+
+### Fixed
+- WfsSearch:
+    - Add namespace to the filter as otherwise the features are not properly filtered.
+    - Fix reset UI button.
+    - Add missing error translation for wrong config.
+
+## v2.16.0 - 2021-12-01
+### Added
 - The library "svg-url-loader" was added to package.json devDependencies.
 - Added the new Tool `Routing`.
 - Searchbar: An option "sortByName" in gdi to config if the rearching results from elastic sorted alphanumerically or not.
 - ParametricURL: An alert has been added which displays the new notation of a parameterized call.
-- Feature: List component supports onRowClick callback
+- Handling of polygons with holes to WKT geometry parsing.
 
 ### Changed
 - The following NPM packages are updated:
@@ -31,11 +53,7 @@
 - 2D-map is removed from vuex store. Maps are now stored in a collection. Creation of 2D-map and 3D-map use masterportalAPI's abstraction layer.
 - Print formats only contain working formats now.
 - QuickHelp: moved to Vue and refactored, can now be manipulated for search, tree and routing, new QuickHelp windows can be configured. See new quickHelp.md documentation for more details.
-- WfsSearch:
-    - Update documentation.
-        - Change parameter `wfsSearch.searchInstance.requestConfig.gazetteer` from a `Boolean` to an `Object`. Move parameters `namespaces` and `memberSuffix` to that Object.
-        - Change parameter `nameSpaces` to `namespaces` to be inline with the rest of the configuration.
-    - Allow parameter `namespaces` to also be a single String instead of always expecting an array.
+- Migrated the layerSlider tool from Backbone.js to Vue.js.
 
 ### Deprecated
 
@@ -50,13 +68,12 @@
 - Adding a File with other coordinate system may work now if the coordinate system in the JSON is EPSG 25832/4326 or can successfully be mapped to EPSG
 - Issue #654: WFS Layers didn't get displayed as group layers
 - Light-tree: Layers that are only selectable in certain zoom levels are now also grayed out directly after startup.
+- Tool wfsSearch: Zoom to a hit in the result list works now again
 - Sidebar: If a tool was activated by url parameter and user opens second tool, the first tool is closed now
 - Searchbar: Searches that deliver only a single search result can now be selected with `Enter`.
-- WfsSearch:
-    - Zoom to a hit in the result list now works again.
-    - Add namespace to the filter as otherwise the features are not properly filtered.
-    - Fix reset UI button.
-    - Add missing error translation for wrong config.
+- Handling of Multipolygons in WKT geometry parsing
+- GFI: in the iframe the content is now displayed again when using the `desktopType` `attached`.
+- GFI for theme datatable is displayed. Resolution at wms layer is set correctly.
 
 ---
 ## v2.15.0 - 2021-11-03

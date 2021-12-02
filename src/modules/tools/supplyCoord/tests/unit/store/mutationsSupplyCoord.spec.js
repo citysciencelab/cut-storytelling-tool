@@ -28,8 +28,8 @@ describe("src/modules/tools/supplyCoord/store/mutationsSupplyCoord.js", () => {
             setProjections(state, getProjections());
 
             expect(state.projections.length).to.equals(namedProjections.length);
-            expect(state.currentProjectionName).to.equals("EPSG:25832");
-            expect(state.currentSelection).to.equals("EPSG:25832");
+            expect(state.currentProjectionName).to.equals("http://www.opengis.net/gml/srs/epsg.xml#25832");
+            expect(state.currentSelection).to.equals("http://www.opengis.net/gml/srs/epsg.xml#25832");
         });
         it("initially sets the currentProjectionName to the first one, if no  \"EPSG:25832\" available", () => {
             const state = {
@@ -37,7 +37,7 @@ describe("src/modules/tools/supplyCoord/store/mutationsSupplyCoord.js", () => {
                     currentProjectionName: "",
                     currentSelection: ""
                 },
-                projections = getProjections().filter(proj => proj.name !== "EPSG:25832");
+                projections = getProjections().filter(proj => proj.name !== "http://www.opengis.net/gml/srs/epsg.xml#25832");
 
             setProjections(state, projections);
 

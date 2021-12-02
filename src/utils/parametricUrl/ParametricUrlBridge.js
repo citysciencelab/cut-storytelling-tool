@@ -3,7 +3,7 @@ import {convert, convertToStringArray, convertTransparency, parseQuery} from "./
 import {setValueToState} from "./stateModifier";
 import store from "../../app-store";
 
-const toolsNotInState = ["parcelSearch", "featureLister", "layerSlider", "filter", "shadow", "virtualcity", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
+const toolsNotInState = ["parcelSearch", "featureLister", "filter", "shadow", "virtualcity", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
 
 /**
  * Checks the Config for 'allowParametricURL'.
@@ -110,7 +110,11 @@ export function doSpecialBackboneHandling (key, value) {
         setLayersVisible(layers);
     }
     else if (key === "Map/zoomToExtent") {
-        Radio.trigger("Map", "zoomToExtent", convert(value), {duration: 0}, store.state.urlParams?.projection);
+        Radio.trigger("Map", "zoomToProjExtent", {
+            extent: convert(value),
+            options: {duration: 0},
+            projection: store.state.urlParams?.projection || store.state.Map?.projection?.getCode()
+        });
     }
     else if (key === "Map/zoomToGeometry") {
         const gemometryToZoom = parseZoomToGeometry(value);

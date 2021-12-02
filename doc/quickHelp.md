@@ -36,13 +36,13 @@ const Config = {
 
 With the simple {"quickHelp": true} only, the QuickHelp is displayed without screenshots and looks broken.
 
-- You can remove the broken default images ([see third part](#complexadditionofcontent)).
+- You can remove the broken default images ([see third part](#markdown-header-complex-addition-of-content)).
 - Or you can store them for correct display and link them correctly.
 
-To link the standard images correctly create the images ([see image table](#defaultimages)) and set the basic path to the images by using an object instead of the simple {"quickHelp": true}.
+To link the standard images correctly create the images ([see image table](#markdown-header-default-images)) and set the basic path to the images by using an object instead of the simple {"quickHelp": true}.
 
 In the following example, the images are loaded from the LGV Hamburg servers and the screenshots are displayed correctly. You can use this setting for your project, but you woun't be able to change our screenshots.
-If you have your own server, create your own screenshots or download the images ([see image table](#defaultimages)), upload them to your server and adjust the imgPath in config.js.
+If you have your own server, create your own screenshots or download the images ([see image table](#markdown-header-default-images)), upload them to your server and adjust the imgPath in config.js.
 
 ```json
 const Config = {
@@ -59,7 +59,7 @@ const Config = {
 
 The QuickHelp uses standard images. The image names are mostly in German language. If you want to create your own images/screenshots in your own language, change the imgPath to point to one of your servers and create new images as you like.
 
-You can overconfigure any default image name by using the respective image key. A list of usable image keys can be found [here](#defaultimages).
+You can overconfigure any default image name by using the respective image key. A list of usable image keys can be found [here](#markdown-header-default-images).
 
 Example:
 
@@ -79,7 +79,7 @@ const Config = {
 ## Second part - removing the default content
 
 Each section in the prepared standard contents of the QuickHelp windows can be removed using its Section Key.
-A list of all available Section Keys are listed [here](#sectionkeys).
+A list of all available Section Keys are listed [here](#markdown-header-section-keys).
 
 For example, if you want to remove the first section of the "search" QuickHelp, use the Section Key "generalInfo".
 To do this, open your config.json and use the "quickHelp" element at the highest structure level to manipulate the QuickHelp window.
@@ -152,7 +152,7 @@ Here is the example of a simple add of a new section at the end of the "search" 
 
 ### Complex addition of content
 
-You can insert new sections into the standard QuickHelp at any position if you use the "before" and "after" attributes with the appropriate Section Keys ([see Section Keys](#sectionkeys)).
+You can insert new sections into the standard QuickHelp at any position if you use the "before" and "after" attributes with the appropriate Section Keys ([see Section Keys](#markdown-header-section-keys)).
  
 Here is the example of adding a new section after the first section with Section Key "generalInfo" into the default "search" QuickHelp.
 
@@ -557,6 +557,27 @@ You can change the title of an existing QuickHelp with a new title using the "ti
         }
     }
 }
+```
+
+
+### Tips & Tricks: Open the QuickHelp via url
+
+You can conveniently open the QuickHelp by url by using the standard functions of the Masterportal to set the VueX store by url.
+
+Example:
+```
+https://www.geoportal-hamburg.de/bildungsatlas/?QuickHelp/active=true
+
+```
+
+If you have built your own QuickHelp or you want to open a specific QuickHelp, set the "quickHelpKey" the same way.
+
+Examples:
+```
+https://www.geoportal-hamburg.de/bildungsatlas/?QuickHelp/quickHelpKey=tree&QuickHelp/active=true
+https://www.geoportal-hamburg.de/bildungsatlas/?QuickHelp/quickHelpKey=routing&QuickHelp/active=true
+
+https://www.geoportal-hamburg.de/bildungsatlas/?QuickHelp/quickHelpKey=myOwnQuickHelp&QuickHelp/active=true
 ```
 
 

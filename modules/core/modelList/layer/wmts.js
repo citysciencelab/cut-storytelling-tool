@@ -32,10 +32,6 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
             if (hasOptionsFromCapabilities) {
                 this.updateLayerSource();
             }
-            if (hasOptionsFromCapabilities && this.get("layerSource").getState() === "ready") {
-                // state of optionsFromCapabilities wmts source is ready, trigger removeloadinglayer
-                Radio.trigger("Map", "removeLoadingLayer");
-            }
         });
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);

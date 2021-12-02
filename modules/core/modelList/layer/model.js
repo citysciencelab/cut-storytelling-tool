@@ -119,7 +119,6 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
 
             this.prepareLayerObject();
 
-            // Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
             this.setIsVisibleInMap(this.get("isSelected"));
             this.setIsRemovable(Radio.request("Parser", "getPortalConfig").layersRemovable);
             this.toggleWindowsInterval();

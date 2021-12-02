@@ -108,8 +108,8 @@ export default {
         overflow: hidden;
 
         #map-wrapper {
-            position:relative;
             overflow: hidden;
+            position: relative;
             flex-grow:1;
             order:1;
         }
@@ -132,6 +132,7 @@ export default {
             align-items: flex-end;
 
             width: 100%;
+            height: 100%;
 
             .controls {
                 flex-grow: 1;

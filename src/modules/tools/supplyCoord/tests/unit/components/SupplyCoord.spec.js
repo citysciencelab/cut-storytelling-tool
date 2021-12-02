@@ -108,7 +108,7 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
 
         selected = options.filter(o => o.attributes().selected === "true");
         expect(selected.length).to.equal(1);
-        expect(selected.at(0).attributes().value).to.equal("EPSG:25832");
+        expect(selected.at(0).attributes().value).to.equal("http://www.opengis.net/gml/srs/epsg.xml#25832");
     });
     describe("SupplyCoord.vue methods", () => {
         it("close sets active to false", async () => {
@@ -121,7 +121,7 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
             expect(wrapper.find("#supply-coord").exists()).to.be.false;
         });
         it("method selectionChanged sets currentSelection", () => {
-            const value = "EPSG:25832",
+            const value = "http://www.opengis.net/gml/srs/epsg.xml#25832",
                 event = {
                     target: {
                         value: value

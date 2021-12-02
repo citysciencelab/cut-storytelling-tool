@@ -397,7 +397,7 @@
                 "serviceOne": "Dienst 1",
                 "serviceTwo": "Dienst 2",
                 "serviceThree": "Dienst 3",
-                "key": "Konfiguration von Werkzeug <b>{{alertMessage.x}}</b> fehlerhaft: <b>sliderType</b> \"{{alertMessage.y}}\" ist noch nicht implementiert!"
+                "serviceFour": "Dienst 4"
             },
             "filter": {
                 "result": "Treffer",

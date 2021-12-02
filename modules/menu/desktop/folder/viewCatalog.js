@@ -17,8 +17,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         "keydown .header > a": "keyAction",
 
         "click .Baselayer .catalog_buttons .glyphicon-question-sign": function () {
-            store.commit("QuickHelp/setQuickHelpKey", "tree");
-            store.commit("QuickHelp/setActive", true);
+            this.openHelp();
         },
         "keydown .Baselayer .catalog_buttons .glyphicon-question-sign": function (event) {
             this.handleKeyboardTriggeredAction(event, "openHelp");
@@ -162,8 +161,13 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
      * @returns {void}
      */
     openHelp: function () {
-        store.commit("QuickHelp/setQuickHelpKey", "tree");
-        store.commit("QuickHelp/setActive", true);
+        if (!store.getters["QuickHelp/active"]) {
+            store.commit("QuickHelp/setQuickHelpKey", "tree");
+            store.commit("QuickHelp/setActive", true);
+        }
+        else {
+            store.commit("QuickHelp/setActive", false);
+        }
     },
 
     /**
