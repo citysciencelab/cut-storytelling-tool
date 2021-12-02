@@ -118,6 +118,7 @@ export function getLayerModelsByAttributes (attributes) {
  */
 export function moveModelInTree (layerModel, value) {
     Radio.trigger("ModelList", "moveModelInTree", layerModel, value);
+    Radio.trigger("Layer", "layerVisibleChanged", layerModel.get("id"), layerModel.get("isVisibleInMap"), layerModel);
 }
 /**
  * Listens to changes of attribute SLDBody.
