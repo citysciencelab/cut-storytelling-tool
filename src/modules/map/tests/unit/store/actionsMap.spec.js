@@ -1,7 +1,6 @@
 import {expect} from "chai";
 import sinon from "sinon";
 import actions from "../../../store/actions/actionsMap.js";
-import mapCollection from "../../../../../core/dataStorage/mapCollection.js";
 
 describe("src/modules/map/store/actions/actionsMap.js", () => {
     describe("updateClick: Listener for click on the map", () => {
@@ -129,29 +128,22 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
     describe("setCenter", () => {
         let commit,
             setCenter,
-            state,
             warn,
-            map;
+            getters;
 
         beforeEach(() => {
             commit = sinon.spy();
             setCenter = sinon.spy();
-            state = {
-                mapId: "ol",
-                mapMode: "2D"
-            };
-            warn = sinon.spy();
-            mapCollection.clear();
-            map = {
-                id: "ol",
-                mode: "2D",
-                getView: () => {
-                    return {
-                        setCenter: setCenter
-                    };
+            getters = {
+                ol2DMap: {
+                    getView: () => {
+                        return {
+                            setCenter: setCenter
+                        };
+                    }
                 }
             };
-            mapCollection.addMap(map, "ol", "2D");
+            warn = sinon.spy();
             sinon.stub(console, "warn").callsFake(warn);
         });
         afterEach(sinon.restore);
@@ -172,7 +164,7 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
         it("should set the center if the coordinates are given as an array of length two with two numbers", () => {
             const coords = [3, 5];
 
-            actions.setCenter({state, commit}, coords, map.id, map.mode);
+            actions.setCenter({commit, getters}, coords);
 
             expect(commit.calledOnce).to.be.true;
             expect(commit.firstCall.args).to.eql(["setCenter", coords]);
@@ -181,27 +173,27 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
             expect(warn.notCalled).to.be.true;
         });
         it("should not set the center, if the coordinate (['3', 5]) has the wrong data type", () => {
-            actions.setCenter(state, ["3", 5], map.id, map.mode);
+            actions.setCenter({commit, getters}, ["3", 5]);
 
             expectMutationNotCalled();
         });
         it("should not set the center, if the coordinate ([3, '5']) has the wrong data type", () => {
-            actions.setCenter(state, [3, "5"], map.id, map.mode);
+            actions.setCenter({commit, getters}, [3, "5"]);
 
             expectMutationNotCalled();
         });
         it("should not set the center, if the coordinate is not an array", () => {
-            actions.setCenter(state, {3: "5"}, map.id, map.mode);
+            actions.setCenter({commit, getters}, {3: "5"});
 
             expectMutationNotCalled();
         });
         it("should not set the center, if the length of the coordinate is greater than two", () => {
-            actions.setCenter(state, [0, 3, 3], map.id, map.mode);
+            actions.setCenter({commit, getters}, [0, 3, 3]);
 
             expectMutationNotCalled();
         });
         it("should not set the center, if the length of the coordinate is lower than two", () => {
-            actions.setCenter(state, [8], map.id, map.mode);
+            actions.setCenter({commit, getters}, [8]);
 
             expectMutationNotCalled();
         });

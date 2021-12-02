@@ -57,14 +57,12 @@ export default {
             });
         }
     },
-    mounted () {
-        this.$nextTick(() => {
-            this.createOverlay();
-            this.createPopover();
-        });
-    },
     created () {
         this.setFocusToFirstControl();
+    },
+    mounted () {
+        this.createOverlay();
+        this.createPopover();
     },
     beforeDestroy () {
         Radio.trigger("Map", "removeOverlay", this.overlay);

@@ -6,6 +6,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
         minChars: 3,
         serviceId: "",
         queryObject: {},
+        sortByName: false,
         elasticSearch: new ElasticModel()
     },
     /**
@@ -16,6 +17,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
      * @property {Number} minChars=3 Minimum length of search string to start.
      * @property {String} serviceId="" Id of restService to derive url from.
      * @property {Object} queryObject={} Payload used to append to url.
+     * @property {Boolean} sortByName=false Parameter to config if the searching result alphanumerically
      * @property {ElasticModel} elasticSearch = new ElasticSearch() ElasticModel.
      * @fires Core#RadioRequestParametricURLGetInitString
      * @fires Searchbar#RadioTriggerSearchbarPushHits
@@ -92,17 +94,18 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
                 source: "_source"
             },
             hitType = i18next.t("common:modules.searchbar.type.subject"),
-            hitGlyphicon = "glyphicon-list";
+            hitGlyphicon = "glyphicon-list",
+            hitList = this.get("sortByName") ? "hitList" : "originalOrderHitList";
 
         if (responseData.length > 0) {
             responseData.forEach(result => {
                 const hit = this.createHit(result, hitMap, hitType, hitGlyphicon, triggerEvent);
 
-                Radio.trigger("Searchbar", "pushHits", "hitList", hit);
+                Radio.trigger("Searchbar", "pushHits", hitList, hit);
             });
         }
         else {
-            Radio.trigger("Searchbar", "removeHits", "hitList", {type: hitType});
+            Radio.trigger("Searchbar", "removeHits", hitList, {type: hitType});
         }
         Radio.trigger("Searchbar", "createRecommendedList", "gdi");
     },

@@ -2,7 +2,6 @@ import moment from "moment";
 import {transform, get} from "ol/proj.js";
 import store from "../../src/app-store";
 import api from "masterportalAPI/abstraction/api";
-import mapCollection from "../../src/core/dataStorage/mapCollection";
 
 const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
     defaults: {
@@ -344,7 +343,7 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
      */
     createMap3d: function () {
         return api.map.createMap({
-            map2D: mapCollection.getMap(store.state.mapId, store.state.mapMode),
+            map2D: store.getters["Map/ol2DMap"],
             shadowTime: this.getShadowTime.bind(this)
         }, {}, "3D");
     },

@@ -1,8 +1,5 @@
 const Config = {
     addons: ["populationRequest", "vueAddon", "tacticalMark", "trinkwasser", "schulinfo", "trafficCount", "verkehrsstaerken", "solaratlas", "dataTable"],
-    alerting: {
-        fetchBroadcastUrl: "https://geodienste.hamburg.de/lgv-config/newsFeedPortalAlerts.json"
-    },
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
     zoomToFeature: {

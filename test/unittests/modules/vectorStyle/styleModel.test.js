@@ -420,12 +420,21 @@ describe("vectorStyleModel", function () {
         });
     });
 
-    describe("getFeatureValue", function () {
-        it("should return plain feature property", function () {
-            expect(styleModel.getFeatureValue(jsonObjects[0].getProperties(), "id")).to.equal("test1");
+    describe("getFeaturePropertyByPath", function () {
+        it("should return direct property", function () {
+            expect(styleModel.getFeaturePropertyByPath(jsonObjects[0].getProperties(), "@id")).to.equal("test1");
         });
-        it("should return feature property in object path", function () {
-            expect(styleModel.getFeatureValue(jsonObjects[0].getProperties(), "@id")).to.equal("test1");
+        it("should return object property", function () {
+            expect(styleModel.getFeaturePropertyByPath(jsonObjects[0].getProperties(), "@myObj.myCascade")).to.equal(10);
+        });
+        it("should return object property in array", function () {
+            expect(styleModel.getFeaturePropertyByPath(jsonObjects[0].getProperties(), "@myObj.myArray.0.myValue")).to.equal(20);
+        });
+        it("should return null if path is invalid", function () {
+            expect(styleModel.getFeaturePropertyByPath(jsonObjects[0].getProperties(), "@myObj.myArray.1.myValue")).to.be.null;
+        });
+        it("should return null if path is invalid", function () {
+            expect(styleModel.getFeaturePropertyByPath(jsonObjects[6].getProperties(), "@@test")).to.equal("test");
         });
     });
 

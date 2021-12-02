@@ -1010,7 +1010,7 @@ If the gfiAttributes are given as an object, a key's value may also be an object
 |name|yes|String||Name to be shown on an exact match.|`"Test"`|
 |condition|yes|enum["contains", "startsWith", "endsWith"]||Condition checked on each feature attribute.|`"startsWith"`|
 |type|no|enum["string", "date", "number", "boolean"]|`"string"`|If `"date"`, the portal will attempt to parse the attribute value to a date; If `"Number"`, the portal will attempt to parse the attribute value to with thousand seperator; If “boolean”, the portal will attempt to parse the attribute value to boolean value.|`"date"`|
-|format|no|String/Object|`"DD.MM.YYYY HH:mm:ss"/{"key": "value"}`|Data format.|`"DD.MM.YYY"`|
+|format|no|String/Object|`"YYYY-MM-DDTHH:mm:ss.SSSZ"/{"key": "value"}`|Data format.|`"DD.MM.YYY"`|
 |prefix|no|String||Attribute value prefix.|Add string to value without whitespace `"https://"`|
 |suffix|no|String||Attribute value suffix.|`"°C"`|
 

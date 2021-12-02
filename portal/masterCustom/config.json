@@ -218,6 +218,30 @@
                  "desktopType": "attached",
                  "active":true
               },
+              "layerSlider": {
+                "name": "translate#common:menu.tools.layerSlider",
+                "sliderType": "handle",
+                "glyphicon": "glyphicon-film",
+                "timeInterval": 2000,
+                "layerIds": [
+                  {
+                    "title": "translate#common:modules.tools.layerSlider.serviceOne",
+                    "layerId": "1561"
+                  },
+                  {
+                    "title": "translate#common:modules.tools.layerSlider.serviceTwo",
+                    "layerId": "2426"
+                  },
+                  {
+                    "title": "translate#common:modules.tools.layerSlider.serviceThree",
+                    "layerId": "2432"
+                  },
+                  {
+                    "title": "translate#common:modules.tools.layerSlider.serviceFour",
+                    "layerId": "1103"
+                  }
+                ]
+              },
               "print":{
                "name": "translate#common:menu.tools.print",
                  "glyphicon":"glyphicon-print",
@@ -512,9 +536,6 @@
                           "Layer":[
                              {
                                 "id":"1103"
-                             },
-                             {
-                                "id":"1104"
                              }
                           ]
                        }

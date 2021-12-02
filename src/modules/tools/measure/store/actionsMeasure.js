@@ -1,7 +1,6 @@
 import source from "../utils/measureSource";
 import makeDraw2d from "../utils/measureDraw";
 import makeDraw3d from "../utils/measureDraw3d";
-import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 
 export default {
     /**
@@ -56,7 +55,7 @@ export default {
                 featureId => commit("setFeatureId", featureId),
                 tooltipCoord => commit("setTooltipCoord", tooltipCoord)
             );
-            mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).addInteraction(interaction);
+            rootGetters["Map/ol2DMap"].addInteraction(interaction);
         }
 
         commit("setInteraction", interaction);
@@ -67,7 +66,7 @@ export default {
      * removing the interaction from the store.
      * @returns {void}
      */
-    removeDrawInteraction ({state, rootState, commit}) {
+    removeDrawInteraction ({state, rootGetters, commit}) {
         const {interaction} = state;
 
         if (interaction) {
@@ -78,7 +77,7 @@ export default {
                 interaction.stopInteraction();
             }
             else {
-                mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).removeInteraction(interaction);
+                rootGetters["Map/ol2DMap"].removeInteraction(interaction);
             }
 
             commit("setInteraction", null);

@@ -37,7 +37,7 @@ In the following, all configuration options are described. For all configuration
 |portalConf|no|String|`"config.json"`|Path to the portal's `config.json` file. You may also enter a node; in that case the taken path is controlled by the urlParameter `config`.|Direct path: "../masterTree/config.json"; Node: "../../portal/master/". In the node scenario, a query parameter like `config=config.json` must exist in the URL.|
 |postMessageUrl|no|String|`"http://localhost:8080"`|URL the portal is supposed to post messages to and receive messages from with the `postMessage` feature.|"http://localhost:8080"|
 |proxyHost|no|String||Host name of a remote proxy with CORS configured to support the portal's domain, among others.|`"https://proxy.example.com"`|
-|quickHelp|no|Object|`{}`|Activates the QuickHelp module. This displays a window containing help text for supported functions of the modules. Available for the layer tree (CustomTree), the search bar (Searchbar), and the measuring tool (MeasureTool).||
+|quickHelp|no|Object|`{}`|Activates the QuickHelp module. This displays a window containing help text for supported functions of the modules. Available for the layer tree (CustomTree), the search bar (Searchbar) and the routing tool (RoutingTool).||
 |remoteInterface|no|**[remoteInterface](#markdown-header-remoteinterface)**||Optional remote interface configuration.||
 |scaleLine|no|Boolean|`false`|Controls whether a scale line is displayed at the bottom right of the map.|`true`|
 |simpleMap|no|Boolean|`false`|_Deprecated in the next major release. Please use the parameter `simpleMap` as part of the configuration of the `saveSelection` tool in the **[config.json](config.json.md)**._ Adds a SimpleMap URL to the `Save selection` dialogue. When calling this URL, the menu bar, layer tree, and map controls are deactivated. Not implemented for tree type *„light“*.|`false`|
@@ -202,11 +202,6 @@ In the following, all configuration options are described. For all configuration
 |searchbarFlurstueckssuche|no|String|`"allgemein_4.png"`|Quick help image regarding the Searchbar, belonging to the chapter "Parcel search". The image must exist in the `imgPath` folder.|
 |aufbau1|no|String|`"themen.png"`|First quick help image regarding the layer tree (CustomTree), belonging to the structure chapter. The image must exist in the `imgPath` folder.|
 |aufbau2|no|String|`"themen_2.png"`|Second quick help image regarding the layer tree (CustomTree), belonging to the structure chapter. The image must exist in the `imgPath` folder.|
-|statistikFlaecheNiemeier|no|String|`"Statistik_Flaeche_Niemeier.png"`|First quick help image regarding the measuring tool (MeasureTool), belonging to the "Statistical approximation" chapter. The image must exist in the `imgPath` folder.|
-|statistikStreckeUniErlangen|no|String|`"Statistik_Strecke_UniErlangen.png"`|Second quick help image regarding the measuring tool (MeasureTool), belonging to the "Statistical approximation" chapter. The image must exist in the `imgPath` folder.|
-|utmStreifen|no|String|`"UTM_Streifen.png"`|First quick help image regarding the measuring tool (MeasureTool), belonging to the "Equalization in UTM" chapter. The image must exist in the `imgPath` folder.|
-|utmVerzerrung|no|String|`"UTM_Verzerrung.png"`|Second quick help image regarding the measuring tool (MeasureTool), belonging to the "Equalization in UTM" chapter. The image must exist in the `imgPath` folder.|
-|utmFormeln|no|String|`"UTM_Formeln.png"`|Third quick help image regarding the measuring tool (MeasureTool), belonging to the "Equalization in UTM" chapter. The image must exist in the `imgPath` folder.|
 |routingTool1|no|String|`"routing_1.png"`|First quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
 |routingTool2|no|String|`"routing_2.png"`|Second quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|
 |routingTool3|no|String|`"routing_3.png"`|Third quick help image regarding the routing tool (RoutingTool). The image must exist in the `imgPath` folder.|

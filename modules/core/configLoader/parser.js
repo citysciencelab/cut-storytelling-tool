@@ -1,6 +1,7 @@
 import Backbone from "backbone";
 import ModelList from "../modelList/list";
 import {getLayerList} from "masterportalAPI/src/rawLayerList";
+import store from "../../../src/app-store/index";
 
 const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     defaults: {
@@ -68,7 +69,6 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
      * @fires Core.ModelList#RadioTriggerModelListShowModelInTree
      * @fires Core.ModelList#RadioTriggerModelListRefreshLightTree
-     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      */
     initialize: function () {
         const channel = Radio.channel("Parser");
@@ -174,7 +174,6 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * Parsed the menu entries (everything except the contents of the tree)
      * @param {Object} [items={}] Single levels of the menu bar, e.g. contact, legend, tools and tree
      * @param {String} parentId indicates to whom the items will be added
-     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @return {void}
      */
     parseMenu: function (items = {}, parentId) {
@@ -192,7 +191,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                     parentId: parentId,
                     id: key,
                     treeType: this.get("treeType"),
-                    quickHelp: Radio.request("QuickHelp", "isSet")
+                    quickHelp: store.getters["QuickHelp/isSet"]
                 };
 
                 // Attribute aus der config.json werden von item geerbt
@@ -322,7 +321,6 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {Boolean} isExpanded - if true, folder will be expanded
      * @param {String} i18nKey - key for the name to translate
      * @param {Boolean} [invertLayerOrder=false] inverts the order the layers when added to the map on folder click
-     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @returns {void}
      */
     addFolder: function (name, id, parentId, level, isExpanded, i18nKey, invertLayerOrder = false) {
@@ -339,7 +337,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             parentId: parentId,
             isExpanded: isExpanded ? isExpanded : false,
             level: level,
-            quickHelp: Radio.request("QuickHelp", "isSet"),
+            quickHelp: store.getters["QuickHelp/isSet"],
             invertLayerOrder
         };
 
@@ -641,7 +639,6 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
     /**
      * regulates the folder structure of the theme tree taking into account the map mode
-     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @returns {void}
      */
     addTreeMenuItems: function () {
@@ -652,7 +649,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             overLayers = this.get("overlayer"),
             baseLayersName = baseLayers?.name ? baseLayers.name : null,
             overLayersName = overLayers?.name ? overLayers.name : null,
-            isQuickHelpSet = Radio.request("QuickHelp", "isSet"),
+            isQuickHelpSet = store.getters["QuickHelp/isSet"],
             baseLayersDefaultKey = "common:tree.backgroundMaps",
             overLayersDefaultKey = "common:tree.subjectData";
         let baseLayerI18nextTranslate = null,
@@ -733,7 +730,6 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {Object} overLayer Contains the layers for either the 3D Mode or WMS-T.
      * @fires Core.ModelList#RadioTriggerModelListRemoveModelsById
      * @fires Core#RadioRequestUtilIsViewMobile
-     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @returns {void}
      */
     addOrRemoveFolder: function (id, defaultTranslationKey, overLayer) {
@@ -760,7 +756,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 isInThemen: true,
                 isInitiallyExpanded: false,
                 level: 0,
-                quickHelp: Radio.request("QuickHelp", "isSet")
+                quickHelp: store.getters["QuickHelp/isSet"]
             }, this.postionForFolder(this.getPreviousFolderName(id)));
         }
         else {

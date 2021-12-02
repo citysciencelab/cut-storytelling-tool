@@ -222,59 +222,59 @@
             "routingTool": {
                 "header": "Hilfe – Routing",
                 "headerGeneral": "Allgemeines",
-                "textGeneral": "Mit dem Werkzeug „Routing“ kann die kürzeste oder schnellste Route zwischen beliebig vielen Wegpunkten berechnet werden. Zudem ist die Analyse der Erreichbarkeit von einem bestimmten Startpunkt innerhalb einer vorgegebenen Zeit oder Fahrstrecke möglich. Es können hierbei verschiedene Fortbewegungsmittel wie PKW, LKW, Fußgänger, Fahrrad oder Rollstuhl berücksichtigt werden. Durch Klick auf die Tabulatoren (Tab) Routenplanung (1) und Erreichbarkeit (2) kann in die verschiedenen Bereiche gewechselt werden.",
-                "headerMeansOfTransport": "Auswahl Fortbewegungsmittel",
+                "textGeneral": "Mit dem Werkzeug \"Routing\" kann die kürzeste oder schnellste Route zwischen beliebig vielen Wegpunkten berechnet werden. Zudem ist die Analyse der Erreichbarkeit von einem bestimmten Startpunkt innerhalb einer vorgegebenen Zeit oder Fahrstrecke möglich. Es können hierbei verschiedene Fortbewegungsmittel wie PKW, LKW, Fußgänger, Fahrrad oder Rollstuhl berücksichtigt werden. Durch Klick auf die Tabulatoren (Tab) Routenplanung (1) und Erreichbarkeit (2) kann in die verschiedenen Bereiche gewechselt werden.",
+                "headerMeansOfTransport": "<h4>Auswahl Fortbewegungsmittel</h4>",
                 "textMeansOfTransport": "Es kann zwischen verschiedenen Fortbewegungsmitteln (PKW, LKW etc.) gewählt werden. Das aktive Fortbewegungsmittel ist rot markiert.",
                 "routing": {
                     "header": "Routenplanung",
-                    "text": "In dem Tab „Routenplanung“ können Routen berechnet werden. Zudem ist auch eine massenhafte Berechnung von Routen über eine integrierte Stapelverarbeitung möglich. Zur Routenplanung stehen folgende Eingabemöglichkeiten zur Auswahl:",
-                    "headerAdditionOfWaypoints": "Hinzufügen von Wegpunkten",
+                    "text": "In dem Tab \"Routenplanung\" können Routen berechnet werden. Zudem ist auch eine massenhafte Berechnung von Routen über eine integrierte Stapelverarbeitung möglich. Zur Routenplanung stehen folgende Eingabemöglichkeiten zur Auswahl:",
+                    "headerAdditionOfWaypoints": "<h4>Hinzufügen von Wegpunkten</h4>",
                     "textAdditionOfWaypoints": "Start-, Ziel- und Wegpunkte der Route können über die Eingabe von Orten, Adressen oder Koordinaten in die Suchfelder (1) oder durch Klick in die Karte hinzugefügt werden. Die Erzeugung der Route erfolgt automatisch, sobald mind. zwei Wegpunkte vorhanden sind.",
                     "textAdditionOfWaypoints2": "Neben der Eingabe von Adressen und Orten (1) ist es auch möglich, direkt geographische Koordinaten (WGS-84) als Wegpunkte in die Suchfelder einzugeben. Hierzu sind die Koordinaten in Dezimalgrad (Länge/Breite) getrennt durch ein Komma und ein Leerzeichen einzugeben. Beispieleingaben:",
-                    "headerRestrictedAreas": "Sperrflächen",
-                    "textRestrictedAreas": "Es besteht die Möglichkeit Sperrflächen (3) zu definieren, welche bei der Routenplanung entsprechend „umfahren“ werden. Unter (2) kann der Modus zum Zeichnen und Löschen von Sperrflächen in der Karte aktiviert werden. Der aktivierte Modus wird jeweils rot markiert.",
-                    "headerAvoidTrafficRoutes": "Routenpräferenz/Verkehrswege vermeiden",
+                    "headerRestrictedAreas": "<h4>Sperrflächen</h4>",
+                    "textRestrictedAreas": "Es besteht die Möglichkeit Sperrflächen (3) zu definieren, welche bei der Routenplanung entsprechend \"umfahren\" werden. Unter (2) kann der Modus zum Zeichnen und Löschen von Sperrflächen in der Karte aktiviert werden. Der aktivierte Modus wird jeweils rot markiert.",
+                    "headerAvoidTrafficRoutes": "<h4>Routenpräferenz/Verkehrswege vermeiden</h4>",
                     "textAvoidTrafficRoutes": "Unter (1) kann ausgewählt werden, ob die schnellste oder kürzeste Route berechnet werden soll. Des Weiteren können unter (2) bestimmte Verkehrswege von der Routenberechnung ausgeschlossen werden. ",
-                    "headerRouteDescription": "Wegbeschreibung",
+                    "headerRouteDescription": "<h4>Wegbeschreibung</h4>",
                     "textRouteDescription": "Nach der Erzeugung der Route wird eine textuelle Wegbeschreibung (1) (inkl. Entfernung und Fahrzeit) angezeigt. Beim Klick auf einzelne Beschreibungen (2) wird in der Kartenansicht automatisch auf das dazugehörige Routensegment (3) gezoomt.",
-                    "headerExport": "Routen - Export",
+                    "headerExport": "<h4>Routen - Export</h4>",
                     "textExport": "Es ist auch möglich erzeugte Routen für weitere Bearbeitungen (z.B. im GIS oder in Navigationsgeräten) zu exportieren. Hierzu stehen die Formate GEOJSON, KML und GPX zur Verfügung."
                 },
                 "routingBatchProcessing": {
                     "header": "Stapelverarbeitung Routing",
-                    "text": "Unter dem Tab „Routenplanung“ ist es auch möglich massenhafte Berechnungen von Fahrzeiten und Distanzen zu Routen durchzuführen. Hierzu muss die Checkbox „Stapelverarbeitung“ (1) aktiviert werden. Hiernach kann eine CSV-Datei mit Start- und Endpunkten per Drag and Drop (2) oder über eine Dateiauswahl (3) in die Applikation geladen werden. Die CSV-Datei muss dabei folgende Formatierung und Struktur aufweisen:",
-                    "listFormat": "CSV-Format / UTF8 Encoding",
-                    "listCoordinates": "Koordinaten der Start- und Endpunkte in WGS84 (EPSG:4326)",
-                    "listSeperation": "Separierung der Werte durch Semikolon „;“ und Dezimaltrenner ist der Punkt  „.“ ",
-                    "listStructure": "Struktur: ID;lon(Startpunkt);lat(Startpunkt);lon(Endpunkt);lat(Endpunkt)",
-                    "listExample": "Beispiel: 1;8.12;50.67;9.12;51.67",
-                    "text2": "Nach dem erfolgreichen Upload der Datei beginnt automatisch die Berechnung der Fahrzeiten und Distanzen zu den einzelnen Start- und Endpunkten. Hierbei werden die im Tab „Routenplanung“ ausgewählten Einstellungen (Fortbewegungsmittel, Verkehrswege vermeiden usw.) verwendet. Der Fortschritt der Verarbeitung kann in der Oberfläche (1) eingesehen werden. Nach der erfolgreichen Verarbeitung wird automatisch eine Ergebnisdatei (CSV-Datei) heruntergeladen. Sollten einzelne Routen nicht berechnet werden können, wird eine Leerzeile (ID;;;;;;;) in der Ergebnisdatei (3) ausgegeben und eine entsprechende Fehlermeldung (2) nach der Stapelverarbeitung ausgegeben. ",
+                    "text": "Unter dem Tab \"Routenplanung\" ist es auch möglich massenhafte Berechnungen von Fahrzeiten und Distanzen zu Routen durchzuführen. Hierzu muss die Checkbox \"Stapelverarbeitung\" (1) aktiviert werden. Hiernach kann eine CSV-Datei mit Start- und Endpunkten per Drag and Drop (2) oder über eine Dateiauswahl (3) in die Applikation geladen werden. Die CSV-Datei muss dabei folgende Formatierung und Struktur aufweisen:",
+                    "listFormat": "- CSV-Format / UTF8 Encoding",
+                    "listCoordinates": "- Koordinaten der Start- und Endpunkte in WGS84 (EPSG:4326)",
+                    "listSeperation": "- Separierung der Werte durch Semikolon \";\" und Dezimaltrenner ist der Punkt  \".\" ",
+                    "listStructure": "- Struktur: ID;lon(Startpunkt);lat(Startpunkt);lon(Endpunkt);lat(Endpunkt)",
+                    "listExample": "- Beispiel: 1;8.12;50.67;9.12;51.67",
+                    "text2": "Nach dem erfolgreichen Upload der Datei beginnt automatisch die Berechnung der Fahrzeiten und Distanzen zu den einzelnen Start- und Endpunkten. Hierbei werden die im Tab \"Routenplanung\" ausgewählten Einstellungen (Fortbewegungsmittel, Verkehrswege vermeiden usw.) verwendet. Der Fortschritt der Verarbeitung kann in der Oberfläche (1) eingesehen werden. Nach der erfolgreichen Verarbeitung wird automatisch eine Ergebnisdatei (CSV-Datei) heruntergeladen. Sollten einzelne Routen nicht berechnet werden können, wird eine Leerzeile (ID;;;;;;;) in der Ergebnisdatei (3) ausgegeben und eine entsprechende Fehlermeldung (2) nach der Stapelverarbeitung ausgegeben. ",
                     "text3": "Die Ergebnisdatei (3) enthält dann Angaben zur benötigten Zeit (in Minuten) und Entfernung (in Meter) zur Route zwischen dem Start- und Endpunkt sowie zum gewählten Fortbewegungsmittel (Profil)."
                 },
                 "isochrones": {
                     "header": "Erreichbarkeit",
-                    "text": "In dem Tab „Erreichbarkeit“ können Analysen zur Erreichbarkeit von einer geographischen Position (Startpunkt) aus innerhalb von vorgegebenen Zeiten oder Entfernungen durchgeführt werden. Als Ergebnis der Berechnung werden dann Erreichbarkeitszonen (Polygone) ausgeben bzw. in der Kartenansicht dargestellt. Zur Erreichbarkeit stehen folgende Eingabemöglichkeiten zur Auswahl:",
-                    "headerAdditionOfStartpoint": "Hinzufügen des Startpunktes",
+                    "text": "In dem Tab \"Erreichbarkeit\" können Analysen zur Erreichbarkeit von einer geographischen Position (Startpunkt) aus innerhalb von vorgegebenen Zeiten oder Entfernungen durchgeführt werden. Als Ergebnis der Berechnung werden dann Erreichbarkeitszonen (Polygone) ausgeben bzw. in der Kartenansicht dargestellt. Zur Erreichbarkeit stehen folgende Eingabemöglichkeiten zur Auswahl:",
+                    "headerAdditionOfStartpoint": "<h4>Hinzufügen des Startpunktes</h4>",
                     "textAdditionOfStartpoint": "Startpunkte können über die Eingabe von Orten, Adressen oder Koordinaten in das Suchfeld (1) oder durch Klick in die Karte hinzugefügt werden. ",
                     "textAdditionOfStartpoint2": "Neben der Eingabe von Adressen und Orten (1) ist es auch möglich, direkt geographische Koordinaten (WGS-84) als Wegpunkte in die Suchfelder einzugeben. Hierzu sind die Koordinaten in Dezimalgrad (Länge/Breite) getrennt durch ein Komma und ein Leerzeichen einzugeben. Beispieleingaben:",
-                    "headerOptimizationAvoidTrafficRoutes": "Optimierung nach/Verkehrswege vermeiden",
+                    "headerOptimizationAvoidTrafficRoutes": "<h4>Optimierung nach/Verkehrswege vermeiden</h4>",
                     "textOptimizationAvoidTrafficRoutes": "Unter (1) kann ausgewählt werden, ob die Erreichbarkeit anhand vorgegebener Zeiten (in min) oder Entfernungen (in km) berechnet werden soll. Des Weiteren können unter (2) bestimmte Verkehrswege von der Erreichbarkeitsberechnung ausgeschlossen werden. ",
-                    "headerIntervalMaxDistance": "Intervalle und maximale Distanz",
+                    "headerIntervalMaxDistance": "<h4>Intervalle und maximale Distanz</h4>",
                     "textIntervalMaxDistance": "Über die Schieberegler Maximale Reisedauer/Entfernung (1) und Intervall (2) kann ausgewählt werden, welche Erreichbarkeiten für den Startpunkt berechnet werden sollen. Die Einstellung Maximale Reisedauer/Entfernung (1) gibt hierbei die maximale Erreichbarkeit an. Über den Schieberregler Intervall (2) kann bestimmt werden, wie viele weitere Erreichbarkeitszonen innerhalb der maximalen Reisedauer/Entfernung bestimmt werden sollen. Z.B. werden bei einer gewählten maximalen Reisedauer von 60 min und einem gewählten Intervall von 15 min vier Erreichbarkeitszonen (15, 30, 45, 60 min) berechnet.",
-                    "headerPerformCalculation": "Berechnung durchführen",
-                    "textPerformCalculation": "Mit Klick auf den Button „Berechnen“ (1) wird die Erreichbarkeitsanalyse durchgeführt. Sobald die Berechnung abgeschlossen ist, werden die berechneten Erreichbarkeitszonen (2) in der Kartenansicht dargestellt. Über die Legende (3) in der Oberfläche können weitere Informationen zu den Erreichbarkeitszonen eingesehen werden.",
-                    "headerExport": "Export von Erreichbarkeitszonen",
+                    "headerPerformCalculation": "<h4>Berechnung durchführen</h4>",
+                    "textPerformCalculation": "Mit Klick auf den Button \"Berechnen\" (1) wird die Erreichbarkeitsanalyse durchgeführt. Sobald die Berechnung abgeschlossen ist, werden die berechneten Erreichbarkeitszonen (2) in der Kartenansicht dargestellt. Über die Legende (3) in der Oberfläche können weitere Informationen zu den Erreichbarkeitszonen eingesehen werden.",
+                    "headerExport": "<h4>Export von Erreichbarkeitszonen</h4>",
                     "textExport": "Es ist auch möglich die erzeugten Erreichbarkeitszonen für weitere Bearbeitungen (z.B. im GIS) zu exportieren. Hierzu stehen die Formate GEOJSON und KML zur Verfügung."
                 },
                 "isochronesBatchProcessing": {
                     "header": "Stapelverarbeitung Erreichbarkeit",
-                    "text": "Unter dem Tab „Erreichbarkeit“ ist es auch möglich massenhafte Berechnungen von Erreichbarkeiten durchzuführen. Hierzu muss die Checkbox „Stapelverarbeitung“ (1) aktiviert werden. Hiernach kann eine CSV-Datei mit Startpunkten per Drag and Drop (2) oder über eine Dateiauswahl (3) in die Applikation geladen werden. Die CSV-Datei muss dabei folgende Formatierung und Struktur aufweisen:",
-                    "listFormat": "CSV-Format / UTF8 Encoding",
-                    "listCoordinates": "Koordinaten der Startpunkte in WGS84 (EPSG:4326)",
-                    "listSeperation": "Separierung der Werte durch Semikolon „;“ und Dezimaltrenner ist der Punkt  „.“ ",
-                    "listStructure": "Struktur: ID;lon(Startpunkt);lat(Startpunkt)",
-                    "listExample": "Beispiel: 1;8.12;50.67",
-                    "text2": "Nach dem Upload der Datei beginnt automatisch die Berechnung Erreichbarkeiten zu den einzelnen Startpunkten. Hierfür werden die im Tab „Erreichbarkeit“ ausgewählten Einstellungen (Fortbewegungsmittel, Reisedauer, Intervall usw.) verwendet. Der Fortschritt der Verarbeitung kann in der Oberfläche (1) eingesehen werden. Nach der erfolgreichen Verarbeitung wird automatisch eine Ergebnisdatei mit Polygonen zu den Erreichbarkeitszonen im GEOJSON-Format heruntergeladen. Sollten einzelne Erreichbarkeiten nicht berechnet werden können, wird in der GEOJSON-Datei jeweils ein Punktfeature mit den Koordinaten des Startpunktes und der Fehlermeldung erzeugt und eine entsprechende Fehlermeldung (2) wird nach der Stapelverarbeitung ausgegeben.",
+                    "text": "Unter dem Tab \"Erreichbarkeit\" ist es auch möglich massenhafte Berechnungen von Erreichbarkeiten durchzuführen. Hierzu muss die Checkbox \"Stapelverarbeitung\" (1) aktiviert werden. Hiernach kann eine CSV-Datei mit Startpunkten per Drag and Drop (2) oder über eine Dateiauswahl (3) in die Applikation geladen werden. Die CSV-Datei muss dabei folgende Formatierung und Struktur aufweisen:",
+                    "listFormat": "- CSV-Format / UTF8 Encoding",
+                    "listCoordinates": "- Koordinaten der Startpunkte in WGS84 (EPSG:4326)",
+                    "listSeperation": "- Separierung der Werte durch Semikolon \";\" und Dezimaltrenner ist der Punkt  \".\" ",
+                    "listStructure": "- Struktur: ID;lon(Startpunkt);lat(Startpunkt)",
+                    "listExample": "- Beispiel: 1;8.12;50.67",
+                    "text2": "Nach dem Upload der Datei beginnt automatisch die Berechnung Erreichbarkeiten zu den einzelnen Startpunkten. Hierfür werden die im Tab \"Erreichbarkeit\" ausgewählten Einstellungen (Fortbewegungsmittel, Reisedauer, Intervall usw.) verwendet. Der Fortschritt der Verarbeitung kann in der Oberfläche (1) eingesehen werden. Nach der erfolgreichen Verarbeitung wird automatisch eine Ergebnisdatei mit Polygonen zu den Erreichbarkeitszonen im GEOJSON-Format heruntergeladen. Sollten einzelne Erreichbarkeiten nicht berechnet werden können, wird in der GEOJSON-Datei jeweils ein Punktfeature mit den Koordinaten des Startpunktes und der Fehlermeldung erzeugt und eine entsprechende Fehlermeldung (2) wird nach der Stapelverarbeitung ausgegeben.",
                     "text3": "Die erzeugte GEOJSON-Datei enthält dann die berechneten Geometrien (Polygone) der einzelnen Erreichbarkeiten sowie dazugehörige Informationen (wie z.B. ID, Distanz oder Zeit, gewähltes Fortbewegungsmittel, Intervall) als Attribute (2). Die heruntergeladene Datei kann direkt zur weiteren Bearbeitung in GIS-Systeme (z.B. QGIS) (1) eingebunden werden."
                 }
             }
@@ -397,7 +397,7 @@
                 "serviceOne": "Dienst 1",
                 "serviceTwo": "Dienst 2",
                 "serviceThree": "Dienst 3",
-                "key": "Konfiguration von Werkzeug <b>{{alertMessage.x}}</b> fehlerhaft: <b>sliderType</b> \"{{alertMessage.y}}\" ist noch nicht implementiert!"
+                "serviceFour": "Dienst 4"
             },
             "filter": {
                 "result": "Treffer",
@@ -1051,7 +1051,8 @@
             "alertZoomToGeometry": "Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!<br>Bitte stellen Sie sicher das alle Parameter richtig angegeben wurden.",
             "alertWrongLayerIds": "Im aufgerufenen Link sind Themen enthalten, die nicht mehr gefunden werden können.</br> Um diese Fehlermeldung zukünftig nicht mehr zu erhalten unternehmen Sie bitte folgende Schritte:<ul> <li> Prüfen Sie Ihren gewünschten Kartenausschnitt auf fehlende Inhalte.</li> <li>Speichern Sie Ihre Auswahl erneut mit dem Werkzeug \"Auswahl Speichern\" ab.</li></ul>",
             "alertWrongAmountVisibility": "<strong>Parametrisierter Aufruf fehlerhaft!</strong></br>Die Angaben zu <b>layerIds</b> passen nicht zu <b>visibility</b> bzw. <b>transparency</b>. Sie müssen jeweils in der gleichen Anzahl angegeben werden.",
-            "errorLoadConfig": "Die gewünschte Konfigurationsdatei konnte unter folgendem Pfad nicht geladen werden: {{url}}<br>Der URL-Paramater <strong>configJson</strong> verlangt eine Datei mit der Endung \".json\".<br>Es wird versucht die config.json unter dem Standardpfad zu laden."
+            "errorLoadConfig": "Die gewünschte Konfigurationsdatei konnte unter folgendem Pfad nicht geladen werden: {{url}}<br>Der URL-Paramater <strong>configJson</strong> verlangt eine Datei mit der Endung \".json\".<br>Es wird versucht die config.json unter dem Standardpfad zu laden.",
+            "alertDeprecated": "Der URL-Parameter <b>?{{deprecatedKey}}</b> ist veraltet und wird mit der Masterportal Version 3.0.0 entfernt.<br>Bitte verwenden Sie stattdessen <b><a href='{{currentUrl}}'>{{currentUrl}}</a></b>."
           }
     },
     "snippets": {

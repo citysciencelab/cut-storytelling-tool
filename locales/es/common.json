@@ -320,7 +320,7 @@
                 "serviceOne": "Servicio 1",
                 "serviceTwo": "Servicio 2",
                 "serviceThree": "Servicio 3",
-                "key": "¡Configuración de la herramienta <b>{alertMessage.x}</b> incorrecta: <b>sliderType</b> {{alertMessage.y}} aún no está implementado!"
+                "serviceFour": "Servicio 4"
             },
             "filter": {
                 "result": "Acierto",

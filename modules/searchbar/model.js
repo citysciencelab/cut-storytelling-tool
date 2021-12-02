@@ -8,6 +8,8 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         quickHelp: false,
         searchString: "",
         hitList: [],
+        originalOrderHitList: [],
+        finalHitList: [],
         isInitialSearch: true,
         isInitialRecommendedListCreated: false,
         knownInitialSearchTasks: ["gazetteer", "specialWFS", "bkg", "tree", "osm", "locationFinder", "elasticSearch", "komoot"],
@@ -44,6 +46,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @property {Boolean} quickHelp=false todo
      * @property {String} searchString="" the current string in the search mask
      * @property {Object[]} hitList=[] an array of object{id, name, type} with optional values: coordinate, glyphicon, geom, adress, locationFinder, metaName, osm, marker, geometryType, interiorGeometry, komoot
+     * @property {Object[]} finalHitList=[] an array of object{id, name, type} with optional values: coordinate, glyphicon, geom, adress, locationFinder, metaName, osm, marker, geometryType, interiorGeometry, komoot
      * @property {Boolean} isInitialSearch=true Flag that is set to false at the end of the initial search (ParametricURL).
      * @property {Boolean} isInitialRecommendedListCreated=false Has the recommended list already been generated after the initial search?
      * @property {String[]} knownInitialSearchTasks=["gazetteer", "specialWFS", "bkg", "tree", "osm", "locationFinder", "komoot"] Search algorithms for which an initial search is possible
@@ -237,6 +240,8 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             this.set("searchString", value);
         }
         this.set("hitList", []);
+        this.set("originalOrderHitList", []);
+        this.set("finalHitList", []);
         Radio.trigger("Searchbar", "search", this.get("searchString"));
         $(".dropdown-menu-search").show();
     },
@@ -339,14 +344,20 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @returns {void}
      */
     createRecommendedList: function (triggeredBy) {
-        const max = this.get("recommendedListLength");
+        const max = this.get("recommendedListLength"),
+            originalOrderHitList = this.get("originalOrderHitList");
         let recommendedList = [],
-            hitList = this.get("hitList");
+            hitList = this.get("hitList"),
+            finalHitList = [];
 
         if (this.get("sortByName")) {
             hitList = Radio.request("Util", "sort", "address", hitList, "name");
         }
+
+        finalHitList = hitList.concat(originalOrderHitList);
+
         this.setHitList(hitList);
+        this.setFinalHitList(finalHitList);
 
         // Die Funktion "createRecommendedList" wird vielfach (von jedem Suchalgorithmus) aufgerufen.
         // Im Rahmen der initialen Suche muss sichergestellt werden, dass die Ergebnisse der einzelnen
@@ -360,18 +371,18 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             return;
         }
 
-        if (hitList.length > max) {
+        if (finalHitList.length > max) {
 
             if (this.get("selectRandomHits")) {
-                recommendedList = this.getRandomEntriesOfEachType(hitList, max);
+                recommendedList = this.getRandomEntriesOfEachType(finalHitList, max);
             }
             else {
-                recommendedList = hitList.slice(0, max);
+                recommendedList = finalHitList.slice(0, max);
             }
 
         }
         else {
-            recommendedList = hitList;
+            recommendedList = finalHitList;
         }
 
         if (this.get("sortByName")) {
@@ -379,10 +390,10 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         }
 
         this.setRecommendedList(recommendedList);
-        this.setTypeList(this.prepareTypeList(hitList));
+        this.setTypeList(this.prepareTypeList(finalHitList));
         this.trigger("renderRecommendedList");
 
-        if (triggeredBy === "initialSearchFinished" && hitList.length === 1) {
+        if (triggeredBy === "initialSearchFinished" && finalHitList.length === 1) {
             Radio.trigger("ViewZoom", "hitSelected");
         }
     },
@@ -464,6 +475,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
 
             typeList.push(typeListObj);
         });
+
         return typeList;
     },
 
@@ -507,6 +519,15 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      */
     setHitList: function (value) {
         this.set("hitList", value);
+    },
+
+    /**
+     * Setter for attribute "finalHitList".
+     * @param {Object[]} value finalHitList.
+     * @returns {void}
+     */
+    setFinalHitList: function (value) {
+        this.set("finalHitList", value);
     },
 
     /**

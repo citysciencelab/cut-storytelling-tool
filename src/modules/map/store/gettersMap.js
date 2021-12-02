@@ -78,15 +78,14 @@ const gettersMap = {
     /**
      * gets the features at the given pixel for the gfi
      * @param {object} state - the map state
-     * @param {object} state.map - the openlayers map
      * @param {object} state.map3d - the OLCesium  3d map
      * @param {number[]} state.clickPixel - the pixel coordinate of the click event
      * @returns {object[]} gfi features
      */
-    gfiFeaturesAtPixel: (state, {mapId, mapMode, map3d, clickPixel}) => {
+    gfiFeaturesAtPixel: (state, {map3d, clickPixel}) => {
         const featuresAtPixel = [];
 
-        mapCollection.getMap(mapId, mapMode).forEachFeatureAtPixel(clickPixel, function (feature, layer) {
+        mapCollection.getMap("ol", "2D").forEachFeatureAtPixel(clickPixel, (feature, layer) => {
             if (layer?.getVisible() && layer?.get("gfiAttributes") && layer?.get("gfiAttributes") !== "ignore") {
                 if (feature.getProperties().features) {
                     feature.get("features").forEach(function (clusteredFeature) {
@@ -197,6 +196,13 @@ const gettersMap = {
         }
 
         return state.gfiFeatures;
+    },
+    /**
+     * returns the 2D ol map from the map collection.
+     * @returns {module:ol/PluggableMap~PluggableMap} ol 2D map
+     */
+    ol2DMap: () => {
+        return mapCollection.getMap("ol", "2D");
     }
 };
 

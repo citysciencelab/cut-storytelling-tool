@@ -3,7 +3,7 @@ import {convert, convertToStringArray, convertTransparency, parseQuery} from "./
 import {setValueToState} from "./stateModifier";
 import store from "../../app-store";
 
-const toolsNotInState = ["parcelSearch", "featureLister", "layerSlider", "filter", "shadow", "virtualcity", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
+const toolsNotInState = ["parcelSearch", "featureLister", "filter", "shadow", "virtualcity", "styleWMS", "extendedFilter", "wfsFeatureFilter", "wfst"];
 
 /**
  * Checks the Config for 'allowParametricURL'.
