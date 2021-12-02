@@ -47,8 +47,8 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
-    @import "~/css/mixins.less";
+<style lang="scss" scoped>
+    @import "~/css/mixins.scss";
     .snippet {
         display: block;
         margin-bottom: 20px;
