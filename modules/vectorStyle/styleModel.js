@@ -275,7 +275,6 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {ol/style/Style}    style is always returned
      */
     getGeometryStyle: function (feature, rules, isClustered) {
-
         const geometryType = feature ? feature.getGeometry().getType() : "Cesium",
             isMultiGeometry = this.isMultiGeometry(geometryType);
 

@@ -1,6 +1,6 @@
 import StyleModel from "./style.js";
 import {Circle as CircleStyle, Fill, Stroke, Style, Icon} from "ol/style.js";
-import {getFeaturePropertyByPath, isObjectPath} from "../../src/utils/getFeaturePropertyByPath";
+import {prepareValue, isObjectPath} from "../../src/utils/attributeMapper.js";
 
 const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype */{
     /**
@@ -178,7 +178,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
             const {value, isDegree} = rotation;
 
             if (isObjectPath(value)) {
-                const rotationValueFromService = parseInt(getFeaturePropertyByPath(this.attributes.values_, value), 10);
+                const rotationValueFromService = parseInt(prepareValue(this.attributes.values_, value), 10);
 
                 return isDegree ? rotationValueFromService * Math.PI / 180 : rotationValueFromService;
             }
