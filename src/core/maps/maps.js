@@ -22,7 +22,7 @@ function create2DMap (mapViewSettings) {
             ...Config,
             ...mapViewSettings,
             layerConf: getLayerList()
-        }, {}, "2D");
+        }, "2D", {});
 
     mapCollection.addMap(map, "ol", "2D");
 
