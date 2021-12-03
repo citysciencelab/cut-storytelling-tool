@@ -53,7 +53,7 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
 
     #masterportal-container {
@@ -66,8 +66,8 @@ export default {
         height: 100%;
         width: 100%;
 
-        font-family: @font_family_default;
-        font-size: @font_size_default;
+        font-family: $font_family_default;
+        font-size: $font_size_default;
 
         .map-region {
             display: flex;

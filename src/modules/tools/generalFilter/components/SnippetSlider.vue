@@ -16,8 +16,8 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
-    @import "~/css/mixins.less";
+<style lang="scss" scoped>
+    @import "~/css/mixins.scss";
     input[type='range'] {
         -webkit-appearance: none;
         background-color: #ddd;

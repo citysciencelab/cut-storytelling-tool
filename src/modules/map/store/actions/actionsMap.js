@@ -261,6 +261,7 @@ const actions = {
      * Sets the resolution by the given index of available resolutions.
      * NOTE: is used by scaleSwitcher tutorial.
      *
+     * @param {*} _ empty store
      * @param {Number} index of the resolution
      * @returns {void}
      */
@@ -273,6 +274,7 @@ const actions = {
     /**
      * Adds a listener to maps pointermove and calls callback-funktion
      *
+     * @param {*} _ empty store
      * @param {Function} callback  to be called on pointermove
      * @returns {void}
      */
@@ -285,6 +287,7 @@ const actions = {
     /**
      * Removes a listener from maps pointermove
      *
+     * @param {*} _ empty store
      * @param {Function} callback  to be called on pointermove
      * @returns {void}
      */
@@ -296,6 +299,7 @@ const actions = {
     /**
      * Adds an interaction to the map.
      *
+     * @param {*} _ empty store
      * @param {module:ol/interaction/Interaction} interaction - Interaction to be added to map.
      * @returns {void}
      */
@@ -307,6 +311,7 @@ const actions = {
     /**
      * Removes an interaction from the map.
      *
+     * @param {*} _ empty store
      * @param {module:ol/interaction/Interaction} interaction - Interaction to be removed from map.
      * @returns {void}
      */

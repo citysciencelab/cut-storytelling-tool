@@ -192,7 +192,11 @@ describe("src/utils/parametricUrl/ParametricUrlBridge.js", () => {
                 valueAsString = value.join(",");
 
             doSpecialBackboneHandling(key, valueAsString);
-            expect(radioTrigger.calledOnceWithExactly("Map", "zoomToExtent", value, {duration: 0}, undefined)).to.be.true;
+            expect(radioTrigger.calledOnceWithExactly("Map", "zoomToProjExtent", {
+                extent: value,
+                options: {duration: 0},
+                projection: undefined
+            })).to.be.true;
         });
         it("test url param key 'Map/zoomToGeometry'", () => {
             const radioTrigger = sinon.spy(Radio, "trigger"),

@@ -1,6 +1,7 @@
 import {expect} from "chai";
 import {convert, convertToStringArray, convertTransparency, parseQuery} from "../../../parametricUrl/converter";
 import * as crs from "masterportalAPI/src/crs";
+import mapCollection from "../../../../core/dataStorage/mapCollection";
 
 const namedProjections = [
     ["EPSG:31467", "+title=Bessel/Gauß-Krüger 3 +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
@@ -10,6 +11,17 @@ const namedProjections = [
 ];
 
 describe("src/utils/parametricUrl/converter.js", () => {
+    let map = null;
+
+    before(() => {
+        map = {
+            id: "ol",
+            mode: "2D"
+        };
+
+        mapCollection.clear();
+        mapCollection.addMap(map, "ol", "2D");
+    });
     describe("convert", () => {
         it("convert String  to boolean", () => {
             expect(convert("false")).to.be.equals(false);
@@ -36,8 +48,8 @@ describe("src/utils/parametricUrl/converter.js", () => {
         it("convert an EPSG code to a projection", () => {
             crs.registerProjections(namedProjections);
 
-            expect(convert("EPSG:4326").name).to.be.equals("EPSG:4326");
-            expect(convert("EPSG:25832").name).to.be.equals("EPSG:25832");
+            expect(convert("EPSG:4326").name).to.be.equals("http://www.opengis.net/gml/srs/epsg.xml#4326");
+            expect(convert("EPSG:25832").name).to.be.equals("http://www.opengis.net/gml/srs/epsg.xml#25832");
         });
     });
     describe("convertToStringArray", () => {

@@ -106,7 +106,7 @@ module.exports = function () {
         resolve: {
             alias: {
                 text: "text-loader",
-                "variables": path.resolve(__dirname, "..", "css", "variables.less")
+                "variables": path.resolve(__dirname, "..", "css", "variables.scss")
             }
         },
         module: {
@@ -127,14 +127,14 @@ module.exports = function () {
                     }
                 },
                 {
-                    test: /\.less$/,
+                    test: /\.scss$/,
                     use: [
                         {
                             loader: MiniCssExtractPlugin.loader,
                             options: {}
                         },
                         "css-loader",
-                        "less-loader"
+                        "sass-loader"
                     ]
                 },
                 {

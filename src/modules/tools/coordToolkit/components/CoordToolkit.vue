@@ -137,7 +137,7 @@ export default {
             // for use in select-box
             pr.forEach(proj => {
                 proj.id = proj.name;
-                if (proj.name === "EPSG:4326") {
+                if (proj.name === "EPSG:4326" || proj.name === "http://www.opengis.net/gml/srs/epsg.xml#4326") {
                     wgs84Proj.push(proj);
                 }
 
@@ -591,7 +591,7 @@ export default {
     </Tool>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 @import "~variables";
 
 
@@ -620,7 +620,7 @@ export default {
     .hint{
         margin: 5px 0px 25px;
         text-align:center;
-        color: @secondary_focus;
+        color: $secondary_focus;
         transition: color 0.35s;
     }
     .info{

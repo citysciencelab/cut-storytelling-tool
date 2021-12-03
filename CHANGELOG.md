@@ -11,8 +11,24 @@
 ## Unreleased - in development
 ### Added
 - added parameter "rotation" to wfs features with iconPointStyle, if the parameter is not given it will fall back to standard alignment.
+
+### Changed
+- Migrated the map from Backbone.js to Vue.js environment.
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+## v2.16.0 - 2021-12-01
+### Added
 - The library "svg-url-loader" was added to package.json devDependencies.
 - Added the new Tool `Routing`.
+- The following NPM packages are added:
+  - dependencies:
+    "bootstrap-sass"
+
 - Searchbar: An option "sortByName" in gdi to config if the rearching results from elastic sorted alphanumerically or not.
 - ParametricURL: An alert has been added which displays the new notation of a parameterized call.
 - Handling of polygons with holes to WKT geometry parsing.
@@ -31,6 +47,10 @@
 - WMSLayer and GroupLayer are refactored. They are no longer Backbone-models. WMSLayer uses the masterportalAPI's wms layer on creation.
 - 2D-map is removed from vuex store. Maps are now stored in a collection. Creation of 2D-map and 3D-map use masterportalAPI's abstraction layer.
 - Print formats only contain working formats now.
+- Switched CSS Preprocessor from LESS to SCSS. Edited Webpack Config, renamed .less files to .scss files including renaming of variables and mixins to match scss syntax. Edited vue components to use scss. Edited backbone modules to use scss files. Edited docs accordingly.
+- The following NPM packages are changed:
+  - devDependencies:
+    "less" => "sass", "less-loader => "sass-loader"
 - QuickHelp: moved to Vue and refactored, can now be manipulated for search, tree and routing, new QuickHelp windows can be configured. See new quickHelp.md documentation for more details.
 - Migrated the layerSlider tool from Backbone.js to Vue.js.
 

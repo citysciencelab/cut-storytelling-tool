@@ -1,5 +1,6 @@
 import {getCenter} from "ol/extent.js";
 import store from "../../src/app-store";
+import mapCollection from "../../src/core/dataStorage/mapCollection";
 
 const RemoteInterface = Backbone.Model.extend({
     defaults: {
@@ -125,7 +126,7 @@ const RemoteInterface = Backbone.Model.extend({
         return store.getters["Tools/SaveSelection/url"];
     },
     getWGS84MapSizeBBOX: function () {
-        return Radio.request("Map", "getWGS84MapSizeBBOX");
+        mapCollection.getMapView("ol", "2D").getProjectedBBox("EPSG:4326");
     },
     setPostMessageUrl: function (value) {
         this.set("postMessageUrl", value);

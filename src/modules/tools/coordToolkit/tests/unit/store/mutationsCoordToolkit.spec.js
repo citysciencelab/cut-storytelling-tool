@@ -32,14 +32,14 @@ describe("src/modules/tools/coordToolkit/store/mutationsCoordToolkit.js", () => 
             setProjections(state, pr);
 
             expect(state.projections.length).to.equals(namedProjections.length);
-            expect(state.currentProjection.id).to.equals("EPSG:25832");
+            expect(state.currentProjection.id).to.equals("http://www.opengis.net/gml/srs/epsg.xml#25832");
         });
         it("initially sets the currentSelection to the first one, if no  \"EPSG:25832\" available", () => {
             const state = {
                     projections: [],
                     currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#25832", name: "EPSG:25832", projName: "utm"}
                 },
-                projections = getProjections().filter(proj => proj.name !== "EPSG:25832");
+                projections = getProjections().filter(proj => proj.name !== "http://www.opengis.net/gml/srs/epsg.xml#25832");
 
             projections.forEach(proj => {
                 proj.id = proj.name;

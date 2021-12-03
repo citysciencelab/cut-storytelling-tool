@@ -1026,7 +1026,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     getModelById: function (id) {
         let model = this.get(id);
 
-        if (model === undefined) {
+        if (model === undefined || model instanceof GroupedLayers) {
             model = this.retrieveGroupModel(id).get("layerSource").find(child => child.get("id") === id);
         }
         return model;

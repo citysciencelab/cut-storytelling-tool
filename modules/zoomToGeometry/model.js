@@ -3,6 +3,8 @@ import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 import {fetch as fetchPolyfill} from "whatwg-fetch";
 import store from "../../src/app-store/index";
+import calculateExtent from "../../src/utils/calculateExtent";
+import mapCollection from "../../src/core/dataStorage/mapCollection";
 
 const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype */{
     defaults: {
@@ -94,14 +96,12 @@ const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype
      **/
     zoomToFeature: function (data, name, attribute) {
         const foundFeature = this.parseFeatures(data, name, attribute);
-        let extent;
 
         if (foundFeature === undefined) {
             store.dispatch("Alerting/addSingleAlert", i18next.t("modules.zoomToGeometry.alertNoFoundFeature"));
         }
         else {
-            extent = this.calcExtent(foundFeature);
-            Radio.trigger("Map", "zoomToExtent", extent);
+            mapCollection.getMapView("ol", "2D").zoomToExtent(calculateExtent([foundFeature]));
         }
 
         this.setFeatureGeometry(foundFeature.getGeometry());
@@ -127,26 +127,6 @@ const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype
             });
 
         return foundFeature[0];
-    },
-
-    /**
-     * Calculates the extent on the basis of a transferred feature.
-     * With a multipolygon, the largest extent is taken.
-     * @param {ol/feature} feature - Feature with one extension.
-     * @returns {number[]} The extent to be zoom.
-     */
-    calcExtent: function (feature) {
-        let coordLength = 0,
-            polygonIndex = 0;
-
-        feature.getGeometry().getPolygons().forEach(function (polygon, index) {
-            if (polygon.getCoordinates()[0].length > coordLength) {
-                coordLength = polygon.getCoordinates()[0].length;
-                polygonIndex = index;
-            }
-        });
-
-        return feature.getGeometry().getPolygon(polygonIndex).getExtent();
     },
 
     /**

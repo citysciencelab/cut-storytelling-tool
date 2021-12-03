@@ -5,7 +5,7 @@
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import {fetch} from "./layerList";
-import "../css/bootstrap.less";
+import "../css/bootstrap.scss";
 // CSS-Handling: Importieren von Css damit Webpack das verarbeitet.
 import "../css/style.css";
 import HttpApi from "i18next-http-backend";
@@ -213,8 +213,8 @@ function initLanguage (portalLanguageConfig) {
 }
 
 
-// Less-Handling: Importieren von allen less-Files im modules-Ordner
-context = require.context("../modules/", true, /.+\.less?$/);
+// SCSS-Handling: Importieren von allen scss-Files im modules-Ordner
+context = require.context("../modules/", true, /.+\.scss?$/);
 
 context.keys().forEach(context);
 

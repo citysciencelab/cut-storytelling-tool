@@ -17,5 +17,6 @@ export default {
     name: "common:menu.tools.filter",
     renderToWindow: false,
     resizableWindow: true,
-    deactivateGFI: false
+    deactivateGFI: false,
+    configs: true
 };

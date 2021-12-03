@@ -1,4 +1,5 @@
 import Overlay from "ol/Overlay.js";
+import mapCollection from "../../src/core/dataStorage/mapCollection.js";
 
 const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupModel.prototype */{
     defaults: {
@@ -79,7 +80,7 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
      * @returns {void}
      */
     toggle: function (id) {
-        if (Radio.request("Map", "getOverlayById", id)) {
+        if (mapCollection.getMap("ol", "2D").getOverlayById(id)) {
             Radio.trigger("Map", "removeOverlay", this.get("overlay"));
             Radio.trigger("Map", "unregisterListener", this.get("pointerMoveListener"));
         }

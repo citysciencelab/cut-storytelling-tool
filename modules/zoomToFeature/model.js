@@ -7,6 +7,8 @@ import VectorSource from "ol/source/Vector.js";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 import getProxyUrl from "../../src/utils/getProxyUrl";
 import store from "../../src/app-store";
+import mapCollection from "../../src/core/dataStorage/mapCollection";
+import calculateExtent from "../../src/utils/calculateExtent";
 
 const ZoomToFeature = Backbone.Model.extend({
     defaults: {
@@ -31,12 +33,13 @@ const ZoomToFeature = Backbone.Model.extend({
     },
 
     init: function () {
+
         let ids = "";
 
         this.setStyleListModel(Radio.request("StyleList", "returnModelById", this.get("styleId")));
         if (store.state.urlParams && store.state.urlParams["Map/zoomToFeatureId"]) {
             ids = store.state.urlParams["Map/zoomToFeatureId"];
-            this.setIds(ids);
+            this.setIds(Array.isArray(ids) ? ids : [ids]);
             this.getFeaturesFromWFS();
             this.createFeatureCenterList();
             this.putIconsForFeatureIds(this.get("featureCenterList"),
@@ -140,7 +143,8 @@ const ZoomToFeature = Backbone.Model.extend({
             id: "zoom_to_feature_layer",
             source: new VectorSource({
                 features: iconFeatures
-            })
+            }),
+            alwaysOnTop: true
         });
     },
 
@@ -220,35 +224,19 @@ const ZoomToFeature = Backbone.Model.extend({
 
     // holt sich das "bboxes"-array, berechnet aus allen bboxes die finale bbox und sendet diese an die map
     zoomToFeatures: function () {
-        const bbox = [],
-            ids = this.get("ids"),
+        const ids = this.get("ids"),
             attribute = this.get("attribute") || null,
             features = this.get("features");
+        let filteredFeatures = [];
 
         if (ids && ids.length > 0) {
-            ids.forEach(function (id, index) {
-                const feature = features.filter(function (feat) {
-                        return feat.get(attribute) === String(id) ? 1 : 0;
-                    }),
-                    extent = feature.length === 0 ? [] : feature[0].getGeometry().getExtent();
+            ids.forEach(id => {
+                const feature = features.filter(feat => feat.get(attribute) === String(id));
 
-                // erste bbox direkt füllen
-                if (index === 0) {
-                    bbox.push(extent[0]);
-                    bbox.push(extent[1]);
-                    bbox.push(extent[2]);
-                    bbox.push(extent[3]);
-                }
-                else {
-                // kleinste xMin- & yMin-Werte
-                    bbox[0] = bbox[0] > extent[0] ? extent[0] : bbox[0]; // xMin
-                    bbox[1] = bbox[1] > extent[1] ? extent[1] : bbox[1]; // yMin
-                    // größte xMax- & yMax-Werte
-                    bbox[2] = bbox[2] < extent[2] ? extent[2] : bbox[2]; // xMax
-                    bbox[3] = bbox[3] < extent[3] ? extent[3] : bbox[3]; // yMax
-                }
-            }, this);
-            Radio.trigger("Map", "setBBox", bbox);
+                filteredFeatures = filteredFeatures.concat(feature);
+            });
+
+            mapCollection.getMapView("ol", "2D").setBBox(calculateExtent(filteredFeatures));
         }
     },
 

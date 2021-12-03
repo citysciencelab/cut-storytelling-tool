@@ -292,17 +292,17 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 /* Loader CSS based on https://codepen.io/lopis/pen/zwprzP  */
 
-@length: 1.5em;
+$length: 1.5em;
 
 .loader {
     position: relative;
     bottom: 2em;
     left: 87.5%;
-    height: @length;
-    width: @length;
+    height: $length;
+    width: $length;
     display: inline-block;
     animation: around 5.4s infinite;
 
