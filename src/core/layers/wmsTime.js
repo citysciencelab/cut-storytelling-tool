@@ -36,12 +36,12 @@ WMSTimeLayer.prototype.updateTime = function (id, newValue) {
 };
 
 /**
- * Creates raw level attributes from parent extended by an attribute TIME.
+ * Gets raw level attributes from parent extended by an attribute TIME.
  * @param {Object} attrs Params of the raw layer.
  * @returns {Object} The raw layer attributes with TIME.
  */
-WMSTimeLayer.prototype.createRawLayerAttributes = function (attrs) {
-    return Object.assign({TIME: this.prepareTime(attrs)}, WMSLayer.prototype.createRawLayerAttributes.call(this, attrs));
+WMSTimeLayer.prototype.getRawLayerAttributes = function (attrs) {
+    return Object.assign({TIME: this.prepareTime(attrs)}, WMSLayer.prototype.getRawLayerAttributes.call(this, attrs));
 };
 
 /**
@@ -54,7 +54,7 @@ WMSTimeLayer.prototype.createRawLayerAttributes = function (attrs) {
 WMSTimeLayer.prototype.prepareTime = function (attrs) {
     const time = attrs.time;
 
-    return this.requestCapabilities(attrs)
+    return this.requestCapabilities(attrs.url, attrs.version, attrs.layers)
         .then(result => {
             const {Dimension, Extent} = result.Capability.Layer.Layer[0];
 
@@ -88,11 +88,13 @@ WMSTimeLayer.prototype.prepareTime = function (attrs) {
 
 /**
  * Requests the GetCapabilities document and parses the result.
- * @param {Object} attrs Attributes of the layer.
+ * @param {String} url The url of wms time.
+ * @param {String} version The version of wms time.
+ * @param {String} layers The layers of wms time.
  * @returns {Promise} A promise which will resolve the parsed GetCapabilities object.
  */
-WMSTimeLayer.prototype.requestCapabilities = function (attrs) {
-    return axios.get(encodeURI(`${attrs.url}?service=WMS&version=${attrs.version}&layers=${attrs.layers}&request=GetCapabilities`))
+WMSTimeLayer.prototype.requestCapabilities = function (url, version, layers) {
+    return axios.get(encodeURI(`${url}?service=WMS&version=${version}&layers=${layers}&request=GetCapabilities`))
         .then(response => handleAxiosResponse(response, "WMS, createLayerSource, requestCapabilities"))
         .then(result => {
             const capabilities = new WMSCapabilities().read(result);
@@ -104,8 +106,8 @@ WMSTimeLayer.prototype.requestCapabilities = function (attrs) {
 
 /**
  * Search for the time dimensional Extent in the given HTMLCollection returned from a request to a WMS-T.
- * @param {HTMLCollection} element The root HTMLCollection returned from a GetCapabilities request to a WMS-T.
- * @returns {?Object} An object containing the needed Values from the time dimensional Extent for further usage.
+ * @param {HTMLCollection} element The root HTMLCollection returned from a getCapabilities request to a WMS-T.
+ * @returns {?Object} An object containing the needed Values from the time dimensional extent for further usage.
  */
 WMSTimeLayer.prototype.findTimeDimensionalExtent = function (element) {
     const capability = this.findNode(element, "Capability"),
@@ -127,7 +129,7 @@ WMSTimeLayer.prototype.findNode = function (element, nodeName) {
 };
 
 /**
- * Retrieves the attributes from the given HTMLCollection and adds the key value pairs to an Object.
+ * Retrieves the attributes from the given HTMLCollection and adds the key value pairs to an object.
  * Also retrieves its value.
  * @param {HTMLCollection} extent The Collection of values for the time dimensional Extent.
  * @returns {Object} An Object containing the attributes of the time dimensional Extent as well as its value.
@@ -143,7 +145,7 @@ WMSTimeLayer.prototype.retrieveExtentValues = function (extent) {
  * They can be determined based on the characters "," and '/'.
  *
  * - CASE 1: Single Value; neither ',' nor '/' are present. The returned Array will have only this value, the step will be 1.
- * - CASE 2: List of multiple values; ',' is present, '/' isn't. The returned Array will have exactly these values. The step is dependent on the minimal distances found inside this Array.
+ * - CASE 2: List of multiple values; ',' is present, '/' isn't. The returned array will have exactly these values. The step is dependent on the minimal distances found inside this array.
  * - CASE 3: Interval defined by its lower and upper bounds and its resolution; '/' is present, ',' isn't. The returned Array will cover all values between the lower and upper bounds with a distance of the resolution.
  *         The step is retrieved from the resolution.
  * - Case 4: List of multiple intervals; ',' and '/' are present. For every interval the process described in CASE 3 will be performed.
@@ -198,8 +200,7 @@ WMSTimeLayer.prototype.createTimeRange = function (min, max, step) {
 };
 
 /**
- * If a single WMS-T is shown: Remove the TimeSlider.
- * If two WMS-T are shown: Remove the LayerSwiper; depending if the original layer was closed, update the layer with a new time value.
+ * If two WMS-T are shown: Remove the layerSwiper; depending if the original layer was closed, update the layer with a new time value.
  * @param {String} layerId The layer id.
  * @returns {void}
  */

@@ -56,28 +56,28 @@ WMSLayer.prototype = Object.create(Layer.prototype);
  * @returns {void}
  */
 WMSLayer.prototype.createLayer = function (attrs) {
-    const options = this.createOptions(),
-        rawLayerAttributes = this.createRawLayerAttributes(attrs),
-        layerParams = this.createLayerParams(attrs);
+    const options = this.getOptions(),
+        rawLayerAttributes = this.getRawLayerAttributes(attrs),
+        layerParams = this.getLayerParams(attrs);
 
     this.layer = wms.createLayer(rawLayerAttributes, layerParams, options);
 };
 
 /**
- * Creates options that contains resolutions and origin to create the TileGrid.
+ * Gets options that contains resolutions and origin to create the TileGrid.
  * @param {Object} attrs Params of the raw layer.
  * @returns {Object} The options.
  */
-WMSLayer.prototype.createOptions = function () {
+WMSLayer.prototype.getOptions = function () {
     return {resolutions: mapCollection.getMapView("ol", "2D").getResolutions(), origin: [442800, 5809000]};
 };
 
 /**
- * Creates raw layer attributes from services.json attributes.
+ * Gets raw layer attributes from services.json attributes.
  * @param {Object} attrs Params of the raw layer.
  * @returns {Object} The raw layer attributes.
  */
-WMSLayer.prototype.createRawLayerAttributes = function (attrs) {
+WMSLayer.prototype.getRawLayerAttributes = function (attrs) {
     const rawLayerAttributes = {
         id: attrs.id,
         cacheId: attrs.cacheId,
@@ -102,11 +102,11 @@ WMSLayer.prototype.createRawLayerAttributes = function (attrs) {
 };
 
 /**
- * Creates additional layer params.
+ * Gets additional layer params.
  * @param {Object} attrs Params of the raw layer.
  * @returns {Obeject} The layer params.
  */
-WMSLayer.prototype.createLayerParams = function (attrs) {
+WMSLayer.prototype.getLayerParams = function (attrs) {
     return {
         layers: attrs.layers,
         name: attrs.name,
