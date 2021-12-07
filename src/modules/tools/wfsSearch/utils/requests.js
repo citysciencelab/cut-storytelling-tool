@@ -42,7 +42,7 @@ function parseGazetteerResponse (responseData, namespaces, memberSuffix) {
         return features;
     }
 
-    gmlFeatures.forEach(feature => {
+    Array.from(gmlFeatures).forEach(feature => {
         if (feature.getElementsByTagName("iso19112:position").length > 0) {
             attributes.geometry = new Point(
                 feature.getElementsByTagName("iso19112:position")[0].getElementsByTagName("gml:pos")[0]
