@@ -12,8 +12,6 @@ export default function WMSLayer (attrs) {
     const defaults = {
         infoFormat: "text/xml",
         gfiAsNewWindow: null,
-        // A change of the CACHEID initiates a reload of the service by openlayers and bypasses the browser cache.
-        cacheId: parseInt(Math.random() * 10000000, 10),
         supported: ["2D", "3D"],
         showSettings: true,
         extent: null,
