@@ -1,5 +1,5 @@
-import {parse} from "ol/xml";
 import axios from "axios";
+import xml2json from "./xml2json";
 
 export default {
     /**
@@ -21,6 +21,7 @@ export default {
             return this.handleResponse(response, responseFunction);
         });
     },
+
     /**
      * @desc handles wps response
      * @param {string} response XML to be sent as String
@@ -35,51 +36,19 @@ export default {
         }
         responseFunction(obj, response.status);
     },
+
     /**
      * Parse xml from string and turn xml into object
      * @param {string} dataString the xml to be parsed as String
      * @returns {object} xml parsed as object
      */
     parseDataString: function (dataString) {
-        const xml = parse(dataString);
+        const xml = new DOMParser().parseFromString(dataString, "text/xml"),
+            jsonResult = xml2json(xml, false);
 
-        return this.parseXmlToObject(xml);
+        return jsonResult;
     },
-    /**
-     * @desc parses an xml document to js
-     * @param  {xml} xml the response xml from the WPS
-     * @returns {object} parsed xml as js object
-     */
-    parseXmlToObject: function (xml) {
-        let children = xml?.children,
-            obj = {};
 
-        if (children && typeof children.forEach !== "function") {
-            children = xml?.documentElement?.childNodes;
-        }
-        if (children?.length === 0 || !children) {
-            obj = xml?.textContent ? xml?.textContent : xml?.innerHTML;
-        }
-        else if (children) {
-            children.forEach(child => {
-                const localName = child?.localName || child.innerHTML;
-                let old;
-
-                if (!Object.prototype.hasOwnProperty.call(obj, localName) && localName !== undefined) {
-                    obj[localName] = this.parseXmlToObject(child);
-                }
-                else {
-                    if (!Array.isArray(obj[localName])) {
-                        old = obj[localName];
-                        obj[localName] = [];
-                        obj[localName].push(old);
-                    }
-                    obj[localName].push(this.parseXmlToObject(child));
-                }
-            });
-        }
-        return obj;
-    },
     /**
      * @desc build xml for WPS request
      * @param {string} identifier String The functionality to be invoked by the wps
@@ -105,6 +74,7 @@ export default {
 
         return dataString;
     },
+
     /**
      * @desc insert Value into tag
      * @param {string} dataString dataString which gets enriched with data
@@ -125,6 +95,7 @@ export default {
         }
         return newDataString;
     },
+
     /**
      * @desc creates URL using model from rest-service
      * @param {object} restModel Model retrieved from rest-services.json
@@ -138,6 +109,7 @@ export default {
         }
         return url;
     },
+
     /**
      * @desc request to be built and sent to WPS
      * @param {string} wpsID The service id, defined in rest-services.json
