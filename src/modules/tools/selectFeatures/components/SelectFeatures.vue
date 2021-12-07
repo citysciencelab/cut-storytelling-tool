@@ -369,7 +369,7 @@ export default {
                                         <a :href="getPhoneNumberAsWebLink(property[1])">{{ property[1] }}</a>
                                     </td>
                                     <td
-                                        v-else-if="property[1].includes('<br') || property[1].includes('<a')"
+                                        v-else-if="property[1] && (property[1].includes('<br') || property[1].includes('<a'))"
                                         class="featureValue"
                                         v-html="property[1]"
                                     />
