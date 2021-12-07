@@ -120,7 +120,7 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .input-group-addon:first-child.force-border {
     border-right: 1px solid #ccc;
 }

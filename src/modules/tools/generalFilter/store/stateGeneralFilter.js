@@ -8,6 +8,7 @@
  * @property {String}   name - Module name
  * @property {Boolean}  renderToWindow - if true, component is rendered in a window pane instead of sidebar
  * @property {Boolean}  resizableWindow - if true and if rendered to window pane, the pane is resizable
+ * @property {Array}  layers - the layer configuration for filter
  */
 
 export default {
@@ -17,5 +18,7 @@ export default {
     name: "common:menu.tools.filter",
     renderToWindow: false,
     resizableWindow: true,
-    deactivateGFI: false
+    deactivateGFI: false,
+    configs: true,
+    layers: []
 };

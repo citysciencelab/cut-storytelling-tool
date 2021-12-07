@@ -89,7 +89,7 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
 
     #loader {
@@ -106,11 +106,11 @@ export default {
          * since only then loader will (probably?) be the last item on the stack */
         z-index: 2147483647;
 
-        background-color: @secondary;
-        color: @secondary_contrast;
+        background-color: $secondary;
+        color: $secondary_contrast;
 
         &.simple {
-            background-color: @shadow_overlay;
+            background-color: $shadow_overlay;
         }
 
         .simple-loader {
@@ -137,7 +137,7 @@ export default {
             }
 
             .loader-text {
-                font-family: @font_family_accent;
+                font-family: $font_family_accent;
                 font-size: 5vmin;
                 line-height: 130%;
                 margin: 5% 0;

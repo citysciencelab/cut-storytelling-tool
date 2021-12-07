@@ -110,7 +110,7 @@ export default {
 </template>
 
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 @import "~variables";
 
 .modal-mask {
@@ -120,7 +120,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: @shadow_overlay;
+    background-color: $shadow_overlay;
 }
 
 .modal-header {
@@ -150,7 +150,7 @@ export default {
     font-size: 22px;
 
     .pager {
-        background-color: @secondary;
+        background-color: $secondary;
         padding: 6px;
         cursor: pointer;
         width: 50%;
@@ -168,7 +168,7 @@ export default {
 
     .disabled {
         cursor: not-allowed;
-        background-color: @primary_inactive_contrast;
+        background-color: $primary_inactive_contrast;
         opacity: 0.2;
     }
 }

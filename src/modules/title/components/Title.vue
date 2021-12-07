@@ -129,7 +129,7 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 @import "~variables";
 
 .portal-title {
@@ -147,10 +147,10 @@ export default {
             vertical-align: middle;
         }
         span {
-            color: @secondary_contrast;
+            color: $secondary_contrast;
             margin-left: 5px;
             font-size: 26px;
-            font-family: @font_family_narrow;
+            font-family: $font_family_narrow;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;

@@ -217,7 +217,7 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
     div.alertCategoryContainer {
         margin-bottom:24px;
@@ -228,7 +228,7 @@ export default {
 
         h3 {
             border:none;
-            color: @secondary_contrast;
+            color: $secondary_contrast;
             font-size:14px;
             font-weight:bold;
             letter-spacing:initial;
@@ -256,7 +256,7 @@ export default {
 
         div.singleAlertContainer {
             border-bottom:1px dotted #CCCCCC;
-            color:@secondary_contrast;
+            color:$secondary_contrast;
             font-size:12px;
             margin-bottom:12px;
             padding-bottom:12px;
@@ -265,7 +265,7 @@ export default {
                 color:#EE7777;
 
                 &.confirm a {
-                    color:@secondary_contrast;
+                    color:$secondary_contrast;
                     cursor:pointer;
                     text-decoration:underline;
 

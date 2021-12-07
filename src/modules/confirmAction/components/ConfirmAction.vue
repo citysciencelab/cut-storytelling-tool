@@ -77,12 +77,12 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
 
     h3 {
         border:none;
-        color: @secondary_contrast;
+        color: $secondary_contrast;
         font-size:14px;
         font-weight:bold;
         letter-spacing:initial;
