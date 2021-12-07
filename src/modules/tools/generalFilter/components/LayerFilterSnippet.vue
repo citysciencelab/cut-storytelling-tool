@@ -77,9 +77,11 @@ export default {
                         class="snippet"
                     >
                         <SnippetInput
-                            :operator="Object.prototype.hasOwnProperty.call(snippet, 'operater') ? snippet.operator : 'IN'"
-                            :value="Object.prototype.hasOwnProperty.call(snippet, 'value') ? snippet.value : ''"
-                            :label="Object.prototype.hasOwnProperty.call(snippet, 'label') ? snippet.label : ''"
+                            :label="snippet.label"
+                            :operator="snippet.operator"
+                            :placeholder="snippet.placeholder"
+                            :prechecked="snippet.prechecked"
+                            :visible="snippet.visible"
                         />
                     </div>
                     <div
