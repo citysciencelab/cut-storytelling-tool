@@ -10,6 +10,7 @@
 
 ## Unreleased - in development
 ### Added
+- Added the possibility to configure a predefined order of selected layers.
 
 ### Changed
 - Migrated the map from Backbone.js to Vue.js environment.

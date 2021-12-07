@@ -115,7 +115,8 @@ WMSLayer.prototype.getLayerParams = function (attrs) {
         featureCount: attrs.featureCount,
         format: attrs.format,
         useProxy: attrs.useProxy,
-        typ: attrs.typ
+        typ: attrs.typ,
+        layerSequence: attrs.layerSequence
     };
 };
 

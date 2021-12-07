@@ -570,11 +570,50 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 }) !== undefined;
             });
 
-        let initialLayers = [];
+        let initialLayers = [],
+            baseLayerSequence = 1000;
 
-        initialLayers = baseLayerModels.concat(layerModels);
+        baseLayerModels.forEach(function (blayer) {
+            // add a default layerSequence value to all baselayers
+            if (blayer.get("layerSequence") === undefined) {
+                baseLayerSequence += 1;
+                blayer.set("layerSource", baseLayerSequence);
+            }
+            initialLayers = this.sortLayerSequence(initialLayers, blayer);
+        }, this);
+
+        layerModels.forEach(function (lModel) {
+            // add a default layerSequence value to all normal layers
+            if (lModel.get("layerSequence") === undefined) {
+                lModel.set("layerSequence", 1000);
+            }
+
+            initialLayers = this.sortLayerSequence(initialLayers, lModel);
+        }, this);
 
         this.resetLayerIndeces(initialLayers);
+    },
+
+    /**
+     * inserts a new layer at the correct position in an array
+     * @param {Object[]} layers - sorted array with layers
+     * @param {Object} newLayer - layer to insert in array
+     * @return {Object[]} layers - sorted array with the new layer
+     */
+    sortLayerSequence: function (layers, newLayer) {
+        let layerIndex;
+
+        // newLayer must be inserted before first layer in sorted array that has a smaller layerSequence value
+        if (layers.find(layer => layer.get("layerSequence") < newLayer.get("layerSequence")) !== undefined) {
+            layerIndex = layers.findIndex(layer => layer.get("layerSequence") < newLayer.get("layerSequence"));
+            layers.splice(layerIndex, 0, newLayer);
+        }
+        // if there is no scmaller layerSequence value, insert newLayer at the end of the array
+        else {
+            layers.push(newLayer);
+        }
+
+        return layers;
     },
 
     /**
@@ -627,37 +666,31 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         const combinedLayers = this.getTreeLayers(),
             newLayers = combinedLayers.filter(layer => layer.get("selectionIDX") === 0);
 
-        let firstBaseLayerIndex,
-            // we need to devide current layers from newly added ones to be able to put the latter ones in
-            // at a nice position
-            currentLayers = combinedLayers.filter(layer => layer.get("selectionIDX") !== 0);
+        // we need to devide current layers from newly added ones to be able to put the latter ones in
+        // at a nice position
+        let currentLayers = combinedLayers.filter(layer => layer.get("selectionIDX") !== 0),
+            baseLayerSequence = 1000;
 
         // first just sort all current layers
         currentLayers.sort(function (layer1, layer2) {
             return layer1.get("selectionIDX") > layer2.get("selectionIDX") ? 1 : -1;
         });
 
-        // following 3 steps must be done seperately because during this process, number of array entries
-        // and therefore its indeces will be changing
-        // ---
-        // 1: push all new normal layers, so they will be displayed on top
-        newLayers.forEach(newLayer => {
-            if (!newLayer.get("isBaseLayer")) {
-                currentLayers.push(newLayer);
-            }
-        });
-        // 2: now find the index, at which background layers should be inserted
-        currentLayers.forEach((currentLayer, currentIndex) => {
-            if (currentLayer.get("isBaseLayer")) {
-                firstBaseLayerIndex = currentIndex;
-            }
-        });
-        // 3: push all new background layers
-        newLayers.forEach(newLayer => {
-            if (newLayer.get("isBaseLayer")) {
-                currentLayers.splice(firstBaseLayerIndex + 1, 0, newLayer);
-            }
-        });
+        // add new layers to corresponding position,
+        // if a layerSequence is set for the new layers they will be displayed at the position depending on their layerSequence value
+        if (newLayers.length > 0) {
+            newLayers.forEach(newLayer => {
+                // if necessarry add a default layerSequence value to the new layer
+                if (!newLayer.get("isBaseLayer") && newLayer.get("layerSequence") === undefined) {
+                    newLayer.set("layerSequence", 1000);
+                }
+                else if (newLayer.get("isBaseLayer") && newLayer.get("layerSequence") === undefined) {
+                    baseLayerSequence += 1;
+                    newLayer.set("layerSequence", baseLayerSequence);
+                }
+                currentLayers = this.sortLayerSequence(currentLayers, newLayer);
+            });
+        }
 
         // finally, reset all layer indeces, so that the new layers also become part of this nice layer stack
         currentLayers = this.resetLayerIndeces(currentLayers);
@@ -674,7 +707,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         const sortedLayers = this.getSortedTreeLayers();
 
         sortedLayers.forEach(layer => {
-            Radio.trigger("Map", "addLayerToIndex", [layer.get("layer"), layer.get("selectionIDX")]);
+            Radio.trigger("Map", "addLayerToIndex", [layer.get("layer"), layer.get("selectionIDX"), layer.get("layerSequence")]);
         });
     },
 
