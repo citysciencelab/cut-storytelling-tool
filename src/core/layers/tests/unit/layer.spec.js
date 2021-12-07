@@ -615,191 +615,191 @@ describe("src/core/layers/layer.js", () => {
         expect(layer.getMaxResolution()).to.be.equals(600 + (600 / 100));
         expect(layer.getMinResolution()).to.be.equals(1);
     });
-        it("prepareFeaturesFor3D without altitude", function () {
-            attributes.altitude = undefined;
-            const layerWrapper = new Layer(attributes, olLayer),
-                layer = layerWrapper.get("layer");
-            let alteredFeatures = null;
+    it("prepareFeaturesFor3D without altitude", function () {
+        attributes.altitude = undefined;
+        const layerWrapper = new Layer(attributes, olLayer),
+            layer = layerWrapper.get("layer");
+        let alteredFeatures = null;
 
-            layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
-            alteredFeatures = layer.getSource().getFeatures();
+        layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
+        alteredFeatures = layer.getSource().getFeatures();
 
-            expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(Point);
-            expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(2);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[0]).to.be.equals(1);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[1]).to.be.equals(1);
-        });
-        it("prepareFeaturesFor3D without altitudeOffset", function () {
-            attributes.altitudeOffset = undefined;
-            const layerWrapper = new Layer(attributes, olLayer),
-                layer = layerWrapper.get("layer");
-            let alteredFeatures = null;
+        expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(Point);
+        expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(2);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[0]).to.be.equals(1);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[1]).to.be.equals(1);
+    });
+    it("prepareFeaturesFor3D without altitudeOffset", function () {
+        attributes.altitudeOffset = undefined;
+        const layerWrapper = new Layer(attributes, olLayer),
+            layer = layerWrapper.get("layer");
+        let alteredFeatures = null;
 
-            layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
-            alteredFeatures = layer.getSource().getFeatures();
+        layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
+        alteredFeatures = layer.getSource().getFeatures();
 
-            expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(Point);
-            expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(2);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[0]).to.be.equals(1);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[1]).to.be.equals(1);
-        });
-        it("prepareFeaturesFor3D set altitude on 2D-point geometry coordinates", function () {
-            attributes.altitude = 127;
-            const layerWrapper = new Layer(attributes, olLayer),
-                layer = layerWrapper.get("layer");
-            let alteredFeatures = null;
+        expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(Point);
+        expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(2);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[0]).to.be.equals(1);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[1]).to.be.equals(1);
+    });
+    it("prepareFeaturesFor3D set altitude on 2D-point geometry coordinates", function () {
+        attributes.altitude = 127;
+        const layerWrapper = new Layer(attributes, olLayer),
+            layer = layerWrapper.get("layer");
+        let alteredFeatures = null;
 
-            layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
-            alteredFeatures = layer.getSource().getFeatures();
+        layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
+        alteredFeatures = layer.getSource().getFeatures();
 
-            expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(Point);
-            expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(3);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[0]).to.be.equals(1);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[1]).to.be.equals(1);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[2]).to.be.equals(attributes.altitude);
+        expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(Point);
+        expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(3);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[0]).to.be.equals(1);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[1]).to.be.equals(1);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[2]).to.be.equals(attributes.altitude);
 
-        });
-        it("prepareFeaturesFor3D set altitude on 3D-point geometry coordinates", function () {
-            attributes.altitude = 127;
-            featureList = [];
-            featureList.push(new Feature(new Point([1, 1, 1])));
+    });
+    it("prepareFeaturesFor3D set altitude on 3D-point geometry coordinates", function () {
+        attributes.altitude = 127;
+        featureList = [];
+        featureList.push(new Feature(new Point([1, 1, 1])));
 
-            const layerWrapper = new Layer(attributes, olLayer),
-                layer = layerWrapper.get("layer");
-            let alteredFeatures = null;
+        const layerWrapper = new Layer(attributes, olLayer),
+            layer = layerWrapper.get("layer");
+        let alteredFeatures = null;
 
-            layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
-            alteredFeatures = layer.getSource().getFeatures();
+        layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
+        alteredFeatures = layer.getSource().getFeatures();
 
-            expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(Point);
-            expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(3);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[0]).to.be.equals(1);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[1]).to.be.equals(1);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[2]).to.be.equals(attributes.altitude);
+        expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(Point);
+        expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(3);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[0]).to.be.equals(1);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[1]).to.be.equals(1);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[2]).to.be.equals(attributes.altitude);
 
-        });
-        it("prepareFeaturesFor3D set altitudeOffset on 2D-point geometry coordinates", function () {
-            attributes.altitudeOffset = 10;
-            const layerWrapper = new Layer(attributes, olLayer),
-                layer = layerWrapper.get("layer");
-            let alteredFeatures = null;
+    });
+    it("prepareFeaturesFor3D set altitudeOffset on 2D-point geometry coordinates", function () {
+        attributes.altitudeOffset = 10;
+        const layerWrapper = new Layer(attributes, olLayer),
+            layer = layerWrapper.get("layer");
+        let alteredFeatures = null;
 
-            layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
-            alteredFeatures = layer.getSource().getFeatures();
+        layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
+        alteredFeatures = layer.getSource().getFeatures();
 
-            expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(Point);
-            expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(3);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[0]).to.be.equals(1);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[1]).to.be.equals(1);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[2]).to.be.equals(attributes.altitudeOffset);
+        expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(Point);
+        expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(3);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[0]).to.be.equals(1);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[1]).to.be.equals(1);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[2]).to.be.equals(attributes.altitudeOffset);
 
-        });
-        it("prepareFeaturesFor3D set altitudeOffset on 3D-point geometry coordinates", function () {
-            attributes.altitudeOffset = 10;
-            featureList = [];
-            featureList.push(new Feature(new Point([1, 1, 1])));
+    });
+    it("prepareFeaturesFor3D set altitudeOffset on 3D-point geometry coordinates", function () {
+        attributes.altitudeOffset = 10;
+        featureList = [];
+        featureList.push(new Feature(new Point([1, 1, 1])));
 
-            const layerWrapper = new Layer(attributes, olLayer),
-                layer = layerWrapper.get("layer");
-            let alteredFeatures = null;
+        const layerWrapper = new Layer(attributes, olLayer),
+            layer = layerWrapper.get("layer");
+        let alteredFeatures = null;
 
-            layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
-            alteredFeatures = layer.getSource().getFeatures();
+        layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
+        alteredFeatures = layer.getSource().getFeatures();
 
-            expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(Point);
-            expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(3);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[0]).to.be.equals(1);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[1]).to.be.equals(1);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[2]).to.be.equals(attributes.altitudeOffset + 1);
+        expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(Point);
+        expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(3);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[0]).to.be.equals(1);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[1]).to.be.equals(1);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[2]).to.be.equals(attributes.altitudeOffset + 1);
 
-        });
-        it("prepareFeaturesFor3D set altitude on 2D-multipoint geometry coordinates", function () {
-            attributes.altitude = 127;
-            const layerWrapper = new Layer(attributes, olLayer),
-                layer = layerWrapper.get("layer");
-            let alteredFeatures = null;
+    });
+    it("prepareFeaturesFor3D set altitude on 2D-multipoint geometry coordinates", function () {
+        attributes.altitude = 127;
+        const layerWrapper = new Layer(attributes, olLayer),
+            layer = layerWrapper.get("layer");
+        let alteredFeatures = null;
 
-            layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
-            alteredFeatures = layer.getSource().getFeatures();
+        layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
+        alteredFeatures = layer.getSource().getFeatures();
 
-            expect(alteredFeatures[1].getGeometry()).to.be.an.instanceof(MultiPoint);
-            expect(alteredFeatures[1].getGeometry().getCoordinates().length).to.be.equals(2);
-            expect(alteredFeatures[1].getGeometry().getCoordinates()[0].length).to.be.equals(3);
-            expect(alteredFeatures[1].getGeometry().getCoordinates()[1].length).to.be.equals(3);
-            expect(alteredFeatures[1].getGeometry().getCoordinates()[0][0]).to.be.equals(1);
-            expect(alteredFeatures[1].getGeometry().getCoordinates()[0][1]).to.be.equals(1);
-            expect(alteredFeatures[1].getGeometry().getCoordinates()[0][2]).to.be.equals(attributes.altitude);
-            expect(alteredFeatures[1].getGeometry().getCoordinates()[1][0]).to.be.equals(2);
-            expect(alteredFeatures[1].getGeometry().getCoordinates()[1][1]).to.be.equals(2);
-            expect(alteredFeatures[1].getGeometry().getCoordinates()[1][2]).to.be.equals(attributes.altitude);
-        });
-        it("prepareFeaturesFor3D set altitude on 2D-multipoint geometry coordinates", function () {
-            attributes.altitude = 127;
-            featureList = [];
-            featureList.push(new Feature(new MultiPoint([[1, 1, 1], [2, 2, 2]])));
+        expect(alteredFeatures[1].getGeometry()).to.be.an.instanceof(MultiPoint);
+        expect(alteredFeatures[1].getGeometry().getCoordinates().length).to.be.equals(2);
+        expect(alteredFeatures[1].getGeometry().getCoordinates()[0].length).to.be.equals(3);
+        expect(alteredFeatures[1].getGeometry().getCoordinates()[1].length).to.be.equals(3);
+        expect(alteredFeatures[1].getGeometry().getCoordinates()[0][0]).to.be.equals(1);
+        expect(alteredFeatures[1].getGeometry().getCoordinates()[0][1]).to.be.equals(1);
+        expect(alteredFeatures[1].getGeometry().getCoordinates()[0][2]).to.be.equals(attributes.altitude);
+        expect(alteredFeatures[1].getGeometry().getCoordinates()[1][0]).to.be.equals(2);
+        expect(alteredFeatures[1].getGeometry().getCoordinates()[1][1]).to.be.equals(2);
+        expect(alteredFeatures[1].getGeometry().getCoordinates()[1][2]).to.be.equals(attributes.altitude);
+    });
+    it("prepareFeaturesFor3D set altitude on 2D-multipoint geometry coordinates", function () {
+        attributes.altitude = 127;
+        featureList = [];
+        featureList.push(new Feature(new MultiPoint([[1, 1, 1], [2, 2, 2]])));
 
-            const layerWrapper = new Layer(attributes, olLayer),
-                layer = layerWrapper.get("layer");
-            let alteredFeatures = null;
+        const layerWrapper = new Layer(attributes, olLayer),
+            layer = layerWrapper.get("layer");
+        let alteredFeatures = null;
 
-            layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
-            alteredFeatures = layer.getSource().getFeatures();
+        layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
+        alteredFeatures = layer.getSource().getFeatures();
 
-            expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(MultiPoint);
-            expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(2);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[0].length).to.be.equals(3);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[1].length).to.be.equals(3);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[0][0]).to.be.equals(1);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[0][1]).to.be.equals(1);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[0][2]).to.be.equals(attributes.altitude);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[1][0]).to.be.equals(2);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[1][1]).to.be.equals(2);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[1][2]).to.be.equals(attributes.altitude);
-        });
-        it("prepareFeaturesFor3D set altitudeOffset on 2D-multipoint geometry coordinates", function () {
-            attributes.altitudeOffset = 10;
-            const layerWrapper = new Layer(attributes, olLayer),
-                layer = layerWrapper.get("layer");
-            let alteredFeatures = null;
+        expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(MultiPoint);
+        expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(2);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[0].length).to.be.equals(3);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[1].length).to.be.equals(3);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[0][0]).to.be.equals(1);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[0][1]).to.be.equals(1);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[0][2]).to.be.equals(attributes.altitude);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[1][0]).to.be.equals(2);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[1][1]).to.be.equals(2);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[1][2]).to.be.equals(attributes.altitude);
+    });
+    it("prepareFeaturesFor3D set altitudeOffset on 2D-multipoint geometry coordinates", function () {
+        attributes.altitudeOffset = 10;
+        const layerWrapper = new Layer(attributes, olLayer),
+            layer = layerWrapper.get("layer");
+        let alteredFeatures = null;
 
-            layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
-            alteredFeatures = layer.getSource().getFeatures();
+        layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
+        alteredFeatures = layer.getSource().getFeatures();
 
-            expect(alteredFeatures[1].getGeometry()).to.be.an.instanceof(MultiPoint);
-            expect(alteredFeatures[1].getGeometry().getCoordinates().length).to.be.equals(2);
-            expect(alteredFeatures[1].getGeometry().getCoordinates()[0].length).to.be.equals(3);
-            expect(alteredFeatures[1].getGeometry().getCoordinates()[1].length).to.be.equals(3);
-            expect(alteredFeatures[1].getGeometry().getCoordinates()[0][0]).to.be.equals(1);
-            expect(alteredFeatures[1].getGeometry().getCoordinates()[0][1]).to.be.equals(1);
-            expect(alteredFeatures[1].getGeometry().getCoordinates()[0][2]).to.be.equals(attributes.altitudeOffset);
-            expect(alteredFeatures[1].getGeometry().getCoordinates()[1][0]).to.be.equals(2);
-            expect(alteredFeatures[1].getGeometry().getCoordinates()[1][1]).to.be.equals(2);
-            expect(alteredFeatures[1].getGeometry().getCoordinates()[1][2]).to.be.equals(attributes.altitudeOffset);
-        });
-        it("prepareFeaturesFor3D set altitudeOffset on 2D-multipoint geometry coordinates", function () {
-            attributes.altitudeOffset = 10;
-            featureList = [];
-            featureList.push(new Feature(new MultiPoint([[1, 1, 1], [2, 2, 2]])));
+        expect(alteredFeatures[1].getGeometry()).to.be.an.instanceof(MultiPoint);
+        expect(alteredFeatures[1].getGeometry().getCoordinates().length).to.be.equals(2);
+        expect(alteredFeatures[1].getGeometry().getCoordinates()[0].length).to.be.equals(3);
+        expect(alteredFeatures[1].getGeometry().getCoordinates()[1].length).to.be.equals(3);
+        expect(alteredFeatures[1].getGeometry().getCoordinates()[0][0]).to.be.equals(1);
+        expect(alteredFeatures[1].getGeometry().getCoordinates()[0][1]).to.be.equals(1);
+        expect(alteredFeatures[1].getGeometry().getCoordinates()[0][2]).to.be.equals(attributes.altitudeOffset);
+        expect(alteredFeatures[1].getGeometry().getCoordinates()[1][0]).to.be.equals(2);
+        expect(alteredFeatures[1].getGeometry().getCoordinates()[1][1]).to.be.equals(2);
+        expect(alteredFeatures[1].getGeometry().getCoordinates()[1][2]).to.be.equals(attributes.altitudeOffset);
+    });
+    it("prepareFeaturesFor3D set altitudeOffset on 2D-multipoint geometry coordinates", function () {
+        attributes.altitudeOffset = 10;
+        featureList = [];
+        featureList.push(new Feature(new MultiPoint([[1, 1, 1], [2, 2, 2]])));
 
-            const layerWrapper = new Layer(attributes, olLayer),
-                layer = layerWrapper.get("layer");
-            let alteredFeatures = null;
+        const layerWrapper = new Layer(attributes, olLayer),
+            layer = layerWrapper.get("layer");
+        let alteredFeatures = null;
 
-            layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
-            alteredFeatures = layer.getSource().getFeatures();
+        layerWrapper.prepareFeaturesFor3D(layer.getSource().getFeatures());
+        alteredFeatures = layer.getSource().getFeatures();
 
-            expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(MultiPoint);
-            expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(2);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[0].length).to.be.equals(3);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[1].length).to.be.equals(3);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[0][0]).to.be.equals(1);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[0][1]).to.be.equals(1);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[0][2]).to.be.equals(attributes.altitudeOffset + 1);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[1][0]).to.be.equals(2);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[1][1]).to.be.equals(2);
-            expect(alteredFeatures[0].getGeometry().getCoordinates()[1][2]).to.be.equals(attributes.altitudeOffset + 2);
-        });
-    
+        expect(alteredFeatures[0].getGeometry()).to.be.an.instanceof(MultiPoint);
+        expect(alteredFeatures[0].getGeometry().getCoordinates().length).to.be.equals(2);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[0].length).to.be.equals(3);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[1].length).to.be.equals(3);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[0][0]).to.be.equals(1);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[0][1]).to.be.equals(1);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[0][2]).to.be.equals(attributes.altitudeOffset + 1);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[1][0]).to.be.equals(2);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[1][1]).to.be.equals(2);
+        expect(alteredFeatures[0].getGeometry().getCoordinates()[1][2]).to.be.equals(attributes.altitudeOffset + 2);
+    });
+
     /**
      * testSetIsSelected
      * @param {String} treetype the treetype
