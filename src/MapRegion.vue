@@ -95,7 +95,7 @@ export default {
     </main>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     #sidebar, .sidebar{
         position: relative;
     }

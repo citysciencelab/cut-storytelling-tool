@@ -94,8 +94,8 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
-    @import "~/css/mixins.less";
+<style lang="scss" scoped>
+    @import "~/css/mixins.scss";
 
     .freeze-view.freeze-activated {
         z-index: 10000;
@@ -133,10 +133,10 @@ export default {
             -moz-transform-origin: var(--xOrigin) var(--yOrigin);
         }
         &:focus {
-            .primary_action_focus();
+            @include primary_action_focus;
         }
         &:hover {
-            .primary_action_hover();
+            @include primary_action_hover;
         }
     }
  #table-navigation {

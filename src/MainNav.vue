@@ -55,7 +55,7 @@ export default {
     </header>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     #main-nav{
         flex-grow:0;
     }

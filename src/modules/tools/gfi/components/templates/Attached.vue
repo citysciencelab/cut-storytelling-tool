@@ -174,15 +174,15 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
-    @import "~/css/mixins.less";
+<style lang="scss" scoped>
+    @import "~/css/mixins.scss";
 
     button.close {
         &:focus {
-            .primary_action_focus();
+            @include primary_action_focus;
         }
         &:hover {
-            .primary_action_hover();
+            @include primary_action_hover;
         }
     }
     .gfi-attached {
@@ -215,7 +215,7 @@ export default {
 
 </style>
 
-<style lang="less">
+<style lang="scss">
     .ol-viewport {
         .popover {
             padding: 0;

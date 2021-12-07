@@ -127,31 +127,31 @@ export default {
     </ToolWindow>
 </template>
 
-<style lang="less">
-@import "~/css/mixins.less";
+<style lang="scss">
+@import "~/css/mixins.scss";
 
-@color_1: #808080;
-@font_family_1: "MasterPortalFont";
-@background_color_1: #F2F2F2;
-@background_color_2: #646262;
+$color_1: #808080;
+$font_family_1: "MasterPortalFont";
+$background_color_1: #F2F2F2;
+$background_color_2: #646262;
 
 .gfi-detached-table {
     box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.3);
     border-radius: 12px;
-    background-color:  @background_color_2;
-    font-family: @font_family_1;
-    color: @color_1;
+    background-color:  $background_color_2;
+    font-family: $font_family_1;
+    color: $color_1;
     touch-action: pan-x pan-y;
     .tool-window-heading{
         padding: 0;
-        border-bottom: 1px solid @color_1;
+        border-bottom: 1px solid $color_1;
         border-radius: 11px 11px 0px 0px;
-        background-color: @background_color_2;
-        color:@background_color_1;
+        background-color: $background_color_2;
+        color:$background_color_1;
         padding-top: 8px;
         padding-left: 8px;
         .tool-window-heading-title {
-            color: @background_color_1;
+            color: $background_color_1;
             margin-right: 50px;
             text-overflow: ellipsis;
         }
@@ -178,7 +178,7 @@ export default {
         background-clip: content-box;
     }
     .icon-turnarticle {
-        color: @background_color_1;
+        color: $background_color_1;
         position: relative;
         display: inline-block;
         bottom: 20px;
@@ -187,17 +187,17 @@ export default {
         cursor: pointer;
         font-size: 16px;
         &:focus {
-            .primary_action_focus();
+            @include primary_action_focus;
         }
         &:hover {
-            .primary_action_hover();
+            @include primary_action_hover;
         }
     }
     .icon-turnarticle::before {
-        color: @background_color_1;
+        color: $background_color_1;
     }
     span.glyphicon.glyphicon-remove::before {
-        color: @background_color_1;
+        color: $background_color_1;
     }
 }
 .rotate0{

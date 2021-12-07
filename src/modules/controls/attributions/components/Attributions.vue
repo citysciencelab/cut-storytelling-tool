@@ -99,22 +99,22 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
 
     .attributions-wrapper {
         position: relative;
 
         .attributions-view {
-            color: @secondary_contrast;
-            background-color: @secondary;
+            color: $secondary_contrast;
+            background-color: $secondary;
 
             max-width: 40vw;
             width: max-content;
             min-width: min-content;
 
-            border: 1px solid @secondary_border;
-            box-shadow: 0 6px 12px @shadow;
+            border: 1px solid $secondary_border;
+            box-shadow: 0 6px 12px $shadow;
 
             cursor: initial;
             text-align: initial;
@@ -128,9 +128,9 @@ export default {
                 margin-bottom: 0;
             }
             dt {
-                color: @primary;
-                font-size: @font_size_big;
-                font-family: @font_family_narrow;
+                color: $primary;
+                font-size: $font_size_big;
+                font-family: $font_family_narrow;
                 font-weight: 400;
                 /* required for ie11, else text will break asap */
                 display: flex;

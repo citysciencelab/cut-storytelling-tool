@@ -127,8 +127,8 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
-    @import "~/css/mixins.less";
+<style lang="scss" scoped>
+    @import "~/css/mixins.scss";
 
     #modal-1-container{
         display:none;
@@ -141,10 +141,10 @@ export default {
             padding: 5px;
             color:#555555;
             &:focus {
-                .primary_action_focus();
+                @include primary_action_focus;
             }
             &:hover {
-                .primary_action_hover();
+                @include primary_action_hover;
             }
         }
     }

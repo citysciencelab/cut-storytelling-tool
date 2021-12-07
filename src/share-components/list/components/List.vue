@@ -133,10 +133,10 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 @import "~variables";
-@table-borders: 1px solid #ddd;
-@table-padding: 8px;
+$table-borders: 1px solid #ddd;
+$table-padding: 8px;
 
 table {
     font-family: Arial, Helvetica, sans-serif;
@@ -145,22 +145,22 @@ table {
     table-layout: auto;
 
     td {
-        border: @table-borders;
-        padding: @table-padding;
+        border: $table-borders;
+        padding: $table-padding;
         cursor: pointer;
         vertical-align: top;
     }
 
     th {
-        border: @table-borders;
-        padding: 12px @table-padding;
+        border: $table-borders;
+        padding: 12px $table-padding;
         text-align: left;
-        background-color: @primary;
-        color: @accent_contrast;
+        background-color: $primary;
+        color: $accent_contrast;
     }
 
     tr:nth-child(even) {
-        background-color: @secondary;
+        background-color: $secondary;
     }
 }
 </style>

@@ -918,7 +918,7 @@ export default {
     </Tool>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
     .no-cursor {
         cursor: none;
@@ -929,7 +929,7 @@ export default {
 
     button {
         &:disabled {
-            background-color: @accent_active;
+            background-color: $accent_active;
             opacity: 1;
         }
     }

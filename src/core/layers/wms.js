@@ -5,7 +5,7 @@ import mapCollection from "../../core/dataStorage/mapCollection.js";
 import * as bridge from "./RadioBridge.js";
 /**
  * Creates a layer of type WMS.
- * @param {Object} attrs  attributes of the layer
+ * @param {Object} attrs Params of the raw layer.
  * @returns {void}
  */
 export default function WMSLayer (attrs) {
@@ -52,45 +52,76 @@ WMSLayer.prototype = Object.create(Layer.prototype);
 /**
  * Creates a layer of type WMS by using wms-layer of the masterportalapi.
  * Sets all needed attributes at the layer and the layer source.
- * @param {Object} attrs  params of the raw layer
+ * @param {Object} attrs Params of the raw layer.
  * @returns {void}
  */
 WMSLayer.prototype.createLayer = function (attrs) {
-    const options = {resolutions: mapCollection.getMap("ol", "2D").getView().getResolutions(), origin: [442800, 5809000]},
-        rawLayerAttributes = {
-            id: attrs.id,
-            cacheId: attrs.cacheId,
-            gutter: attrs.gutter,
-            format: attrs.format,
-            url: attrs.url,
-            tilesize: attrs.tilesize,
-            layers: attrs.layers,
-            version: attrs.version,
-            olAttribution: attrs.olAttribution,
-            transparent: attrs.transparent.toString(),
-            singleTile: attrs.singleTile,
-            minScale: parseInt(attrs.minScale, 10),
-            maxScale: parseInt(attrs.maxScale, 10)
-        },
-        layerParams = {
-            layers: attrs.layers,
-            name: attrs.name,
-            legendURL: attrs.legendURL,
-            gfiTheme: attrs.gfiTheme,
-            gfiAttributes: attrs.gfiAttributes,
-            infoFormat: attrs.infoFormat,
-            gfiAsNewWindow: attrs.gfiAsNewWindow,
-            featureCount: attrs.featureCount,
-            format: attrs.format,
-            useProxy: attrs.useProxy,
-            typ: attrs.typ
-        };
+    const options = this.getOptions(),
+        rawLayerAttributes = this.getRawLayerAttributes(attrs),
+        layerParams = this.getLayerParams(attrs);
+
+    this.layer = wms.createLayer(rawLayerAttributes, layerParams, options);
+};
+
+/**
+ * Gets options that contains resolutions and origin to create the TileGrid.
+ * @param {Object} attrs Params of the raw layer.
+ * @returns {Object} The options.
+ */
+WMSLayer.prototype.getOptions = function () {
+    return {resolutions: mapCollection.getMapView("ol", "2D").getResolutions(), origin: [442800, 5809000]};
+};
+
+/**
+ * Gets raw layer attributes from services.json attributes.
+ * @param {Object} attrs Params of the raw layer.
+ * @returns {Object} The raw layer attributes.
+ */
+WMSLayer.prototype.getRawLayerAttributes = function (attrs) {
+    const rawLayerAttributes = {
+        id: attrs.id,
+        cacheId: attrs.cacheId,
+        gutter: attrs.gutter,
+        format: attrs.format,
+        url: attrs.url,
+        tilesize: attrs.tilesize,
+        layers: attrs.layers,
+        version: attrs.version,
+        olAttribution: attrs.olAttribution,
+        transparent: attrs.transparent.toString(),
+        singleTile: attrs.singleTile,
+        minScale: parseInt(attrs.minScale, 10),
+        maxScale: parseInt(attrs.maxScale, 10)
+    };
 
     if (attrs.styles !== "nicht vorhanden") {
         rawLayerAttributes.STYLES = attrs.styles;
     }
-    this.layer = wms.createLayer(rawLayerAttributes, layerParams, options);
+
+    return rawLayerAttributes;
 };
+
+/**
+ * Gets additional layer params.
+ * @param {Object} attrs Params of the raw layer.
+ * @returns {Obeject} The layer params.
+ */
+WMSLayer.prototype.getLayerParams = function (attrs) {
+    return {
+        layers: attrs.layers,
+        name: attrs.name,
+        legendURL: attrs.legendURL,
+        gfiTheme: attrs.gfiTheme,
+        gfiAttributes: attrs.gfiAttributes,
+        infoFormat: attrs.infoFormat,
+        gfiAsNewWindow: attrs.gfiAsNewWindow,
+        featureCount: attrs.featureCount,
+        format: attrs.format,
+        useProxy: attrs.useProxy,
+        typ: attrs.typ
+    };
+};
+
 /**
  * Updates the SLDBody of the layer source.
  * @returns {void}
@@ -117,7 +148,7 @@ WMSLayer.prototype.getLayers = function () {
  * @returns {String} - The created getFeature info url.
  */
 WMSLayer.prototype.getGfiUrl = function () {
-    const mapView = mapCollection.getMap("ol", "2D").getView(),
+    const mapView = mapCollection.getMapView("ol", "2D"),
         resolution = store.getters["Map/resolution"],
         projection = mapView.getProjection(),
         coordinate = store.getters["Map/clickCoord"];

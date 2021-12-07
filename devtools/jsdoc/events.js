@@ -1953,12 +1953,3 @@
  * @description Trigger hide POI modal.
  * @example Radio.trigger("POI", "hidePOIModal");
  */
-
-/** -------------------- WmsTime -------------------- */
-
-/**
- * @event WmsTime#RadioTriggerWmsTimeUpdateTime
- * @description Updates the 'TIME' parameter of the layer with the given Id.
- * @example Radio.trigger("WmsTime", "updateTime", "myTimeLayer", 4020);
- */
-

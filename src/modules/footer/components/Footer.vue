@@ -123,19 +123,19 @@ export default {
     </footer>
 </template>
 
-<style lang="less" scoped>
-    @import "~/css/mixins.less";
+<style lang="scss" scoped>
+    @import "~/css/mixins.scss";
 
     #footer {
         width: 100%;
 
-        background: fade(@secondary, 90%);
+        background: fade($secondary, 90%);
 
-        font-family: @font_family_narrow;
-        color: @secondary_contrast;
-        font-size: @font_size_tiny;
+        font-family: $font_family_narrow;
+        color: $secondary_contrast;
+        font-size: $font_size_tiny;
 
-        box-shadow: 0px -6px 12px @shadow;
+        box-shadow: 0px -6px 12px $shadow;
         padding: 4px 10px;
 
         z-index: 2;
@@ -144,9 +144,9 @@ export default {
         position: relative;
 
         a {
-            color: darken(@secondary_focus, 10%);
+            color: darken($secondary_focus, 10%);
             &:hover{
-                .primary_action_hover();
+                @include primary_action_hover;
             }
         }
 
