@@ -55,9 +55,10 @@ export default {
                         class="snippet"
                     >
                         <SnippetCheckbox
-                            :operator="Object.prototype.hasOwnProperty.call(snippet, 'operator') ? snippet.operator : 'OR'"
-                            :value="Object.prototype.hasOwnProperty.call(snippet, 'value') ? snippet.value : ''"
-                            :label="Object.prototype.hasOwnProperty.call(snippet, 'label') ? snippet.label : ''"
+                            :label="snippet.label"
+                            :operator="snippet.operator"
+                            :prechecked="snippet.prechecked"
+                            :visible="snippet.visible"
                         />
                     </div>
                     <div

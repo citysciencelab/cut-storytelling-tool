@@ -1,17 +1,49 @@
 <script>
 export default {
-    name: "SnippetCheckbox"
+    name: "SnippetCheckbox",
+    props: {
+        label: {
+            type: String,
+            required: false,
+            default: ""
+        },
+        operator: {
+            type: String,
+            required: false,
+            default: "EQ"
+        },
+        prechecked: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        visible: {
+            type: Boolean,
+            required: false,
+            default: true
+        }
+    },
+    data () {
+        return {
+            checked: this.prechecked
+        };
+    }
 };
 </script>
 
 <template>
-    <div>
+    <div
+        v-show="visible"
+        class="snippetCheckboxContainer"
+    >
         <input
             id="checkbox"
+            v-model="checked"
+            class="snippetCheckbox"
             type="checkbox"
             name="checkbox"
         >
-        <label for="checkbox">checkbox</label>
+        <label for="checkbox">{{ label }}</label>
     </div>
 </template>
 
