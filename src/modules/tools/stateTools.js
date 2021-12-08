@@ -5,7 +5,7 @@ import Contact from "./contact/components/Contact.vue";
 import CoordToolkit from "./coordToolkit/components/CoordToolkit.vue";
 import Draw from "./draw/components/Draw.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
-import GeneralFilter from "./generalFilter/components/GeneralFilter.vue";
+import FilterGeneral from "./filterGeneral/components/FilterGeneral.vue";
 import Gfi from "./gfi/components/Gfi.vue";
 import LayerClusterToggler from "./layerClusterToggler/components/LayerClusterToggler.vue";
 import LayerSlider from "./layerSlider/components/LayerSlider.vue";
@@ -36,7 +36,7 @@ const state = {
         draw: Draw,
         fileImport: FileImport,
         gfi: Gfi,
-        generalFilter: GeneralFilter,
+        filterGeneral: FilterGeneral,
         layerClusterToggler: LayerClusterToggler,
         layerSlider: LayerSlider,
         measure: Measure,

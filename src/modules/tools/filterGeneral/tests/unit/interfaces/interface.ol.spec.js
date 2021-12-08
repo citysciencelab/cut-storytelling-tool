@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import InterfaceOL from "../../../interfaces/interface.ol.js";
 
-describe("src/modules/tools/generalFilter/interfaces/utils/interface.ol.js", () => {
+describe("src/modules/tools/filterGeneral/interfaces/utils/interface.ol.js", () => {
     let interfaceOL = null;
 
     beforeEach(() => {

@@ -7,7 +7,7 @@ import {
     convertWhiteListAttributeToSnippet
 } from "../../../utils/convertToNewConfig";
 
-describe("src/module/tools/generalFilter/utils/converToNewConfig.js", () => {
+describe("src/module/tools/filterGeneral/utils/converToNewConfig.js", () => {
     describe("convertToNewConfig", () => {
         it("should return an empty object if anything but an object is given", () => {
             expect(convertToNewConfig(null)).to.deep.equal({});
@@ -50,7 +50,7 @@ describe("src/module/tools/generalFilter/utils/converToNewConfig.js", () => {
                     }
                 },
                 expected = {
-                    generalFilter: {
+                    filterGeneral: {
                         name: "Filter",
                         glyphicon: "glyphicon-filter",
                         deactivateGFI: false,

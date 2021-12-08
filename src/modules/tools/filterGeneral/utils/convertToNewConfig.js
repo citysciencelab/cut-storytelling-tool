@@ -11,27 +11,27 @@ function convertToNewConfig (oldConfig) {
 
     const clonedConfig = cloneObject(oldConfig?.filter),
         newConfig = {
-            generalFilter: clonedConfig
+            filterGeneral: clonedConfig
         },
-        clonedPredefinedQueries = cloneObject(newConfig.generalFilter?.predefinedQueries);
+        clonedPredefinedQueries = cloneObject(newConfig.filterGeneral?.predefinedQueries);
 
-    if (!newConfig.generalFilter) {
+    if (!newConfig.filterGeneral) {
         return {};
     }
 
-    delete newConfig.generalFilter.predefinedQueries;
-    delete newConfig.generalFilter.isGeneric;
+    delete newConfig.filterGeneral.predefinedQueries;
+    delete newConfig.filterGeneral.isGeneric;
     if (oldConfig?.saveToUrl) {
-        newConfig.generalFilter.saveTo = oldConfig.saveToUrl ? "url" : "void";
+        newConfig.filterGeneral.saveTo = oldConfig.saveToUrl ? "url" : "void";
     }
-    delete newConfig.generalFilter.saveToUrl;
-    delete newConfig.generalFilter.allowMultipleQueriesPerLayer;
+    delete newConfig.filterGeneral.saveToUrl;
+    delete newConfig.filterGeneral.allowMultipleQueriesPerLayer;
 
     if (clonedPredefinedQueries.filter(query => query?.snippetType === "checkbox-classic").length > 0) {
-        newConfig.generalFilter.layerSelectorVisible = false;
-        newConfig.generalFilter.renderFilterInto = "tableMenu";
+        newConfig.filterGeneral.layerSelectorVisible = false;
+        newConfig.filterGeneral.renderFilterInto = "tableMenu";
     }
-    newConfig.generalFilter.layers = convertPredefinedQueryToLayer(clonedPredefinedQueries, oldConfig.deactivateGfi);
+    newConfig.filterGeneral.layers = convertPredefinedQueryToLayer(clonedPredefinedQueries, oldConfig.deactivateGfi);
     return newConfig;
 }
 

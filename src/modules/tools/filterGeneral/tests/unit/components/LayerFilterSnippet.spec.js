@@ -9,7 +9,7 @@ localVue.use(Vuex);
 
 config.mocks.$t = key => key;
 
-describe("src/modules/tools/generalFilter/components/LayerFilterSnippet.vue", () => {
+describe("src/modules/tools/filterGeneral/components/LayerFilterSnippet.vue", () => {
     let wrapper, snippet, type;
 
     beforeEach(() => {

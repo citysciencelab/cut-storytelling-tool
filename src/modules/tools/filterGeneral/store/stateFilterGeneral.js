@@ -1,6 +1,6 @@
 /**
  * User type definition
- * @typedef {Object} generalFilter
+ * @typedef {Object} filterGeneral
  * @property {Boolean}  active - if true, component is rendered
  * @property {Boolean}  deactivateGFI - if true, component activation deactivates gfi component
  * @property {String}   glyphicon - icon next to title
@@ -14,7 +14,7 @@
 export default {
     active: false,
     glyphicon: "glyphicon-filter",
-    id: "generalFilter",
+    id: "filterGeneral",
     name: "common:menu.tools.filter",
     renderToWindow: false,
     resizableWindow: true,

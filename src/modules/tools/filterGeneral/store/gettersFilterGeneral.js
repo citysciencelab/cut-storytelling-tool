@@ -1,9 +1,9 @@
 
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
-import generalFilterState from "./stateGeneralFilter";
+import filterGeneralState from "./stateFilterGeneral";
 
 const getters = {
-    ...generateSimpleGetters(generalFilterState)
+    ...generateSimpleGetters(filterGeneralState)
 
     // NOTE overwrite getters here if you need a special behaviour in a getter
 };

@@ -9,7 +9,7 @@ localVue.use(Vuex);
 
 config.mocks.$t = key => key;
 
-describe("src/modules/tools/generalFilter/components/SnippetCheckbox.vue", () => {
+describe("src/modules/tools/filterGeneral/components/SnippetCheckbox.vue", () => {
     let wrapper;
 
     beforeEach(() => {
