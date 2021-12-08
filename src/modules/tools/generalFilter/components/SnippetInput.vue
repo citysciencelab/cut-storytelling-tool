@@ -1,16 +1,51 @@
 <script>
 export default {
-    name: "SnippetInput"
+    name: "SnippetInput",
+    props: {
+        label: {
+            type: String,
+            required: false,
+            default: ""
+        },
+        operator: {
+            type: String,
+            required: false,
+            default: "IN"
+        },
+        placeholder: {
+            type: String,
+            required: false,
+            default: ""
+        },
+        prechecked: {
+            type: String,
+            required: false,
+            default: ""
+        },
+        visible: {
+            type: Boolean,
+            required: false,
+            default: true
+        }
+    }
 };
 </script>
 
 <template>
-    <div>
-        <label for="input">Input: </label>
+    <div
+        v-show="visible"
+        class="snippetInputContainer"
+    >
+        <label
+            for="input"
+            class="snippetInputLabel"
+        >{{ label }}</label>
         <input
-            id="input"
+            class="snippetInput"
             type="text"
             name="input"
+            :placeholder="placeholder"
+            :value="prechecked"
         >
     </div>
 </template>
