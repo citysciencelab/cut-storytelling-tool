@@ -52,6 +52,19 @@
 
 ---
 
+---
+
+## v2.16.1 - 2021-12-08
+### Removed
+- Remove the unnecessary alert for the parametricUrl.
+
+### Fixed
+- Set the library core-js to the version 3.15.2 to fix iterations of DOM elements.
+- Fixed the parser function which convert xml to json.
+- Fix WMS requests from degree services by renaming parameter `SESSIONID` to `CACHEID`.
+
+---
+
 ## v2.16.0 - 2021-12-01
 ### Added
 - The library "svg-url-loader" was added to package.json devDependencies.
