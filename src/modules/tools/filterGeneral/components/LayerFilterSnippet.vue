@@ -2,6 +2,7 @@
 import SnippetButton from "./SnippetButton.vue";
 import SnippetCheckbox from "./SnippetCheckbox.vue";
 import SnippetDate from "./SnippetDate.vue";
+import SnippetDateRange from "./SnippetDateRange.vue";
 import SnippetDropdown from "./SnippetDropdown.vue";
 import SnippetInput from "./SnippetInput.vue";
 import SnippetSlider from "./SnippetSlider.vue";
@@ -13,6 +14,7 @@ export default {
     components: {
         SnippetCheckbox,
         SnippetDate,
+        SnippetDateRange,
         SnippetDropdown,
         SnippetInput,
         SnippetSlider,
@@ -100,10 +102,15 @@ export default {
                         v-else-if="checkSnippetType(snippet, 'dateRange')"
                         class="snippet"
                     >
-                        <SnippetDate
-                            :operator="Object.prototype.hasOwnProperty.call(snippet, 'operater') ? snippet.operator : 'BETWEEN'"
-                            :value="Object.prototype.hasOwnProperty.call(snippet, 'value') ? snippet.value : ''"
-                            :label="Object.prototype.hasOwnProperty.call(snippet, 'label') ? snippet.label : ''"
+                        <SnippetDateRange
+                            :attr-name="snippet.attrName"
+                            :format="snippet.format"
+                            :label="snippet.label"
+                            :max-value="snippet.maxValue"
+                            :min-value="snippet.minValue"
+                            :operator="snippet.operator"
+                            :prechecked="snippet.prechecked"
+                            :visible="snippet.visible"
                         />
                     </div>
                     <div
