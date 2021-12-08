@@ -78,7 +78,6 @@ WMSLayer.prototype.getOptions = function () {
 WMSLayer.prototype.getRawLayerAttributes = function (attrs) {
     const rawLayerAttributes = {
         id: attrs.id,
-        cacheId: attrs.cacheId,
         gutter: attrs.gutter,
         format: attrs.format,
         url: attrs.url,
