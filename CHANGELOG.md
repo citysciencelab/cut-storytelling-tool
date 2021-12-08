@@ -32,6 +32,19 @@
     - Fix reset UI button.
     - Add missing error translation for wrong config.
 
+---
+
+## v2.16.1 - 2021-12-08
+### Removed
+- Remove the unnecessary alert for the parametricUrl.
+
+### Fixed
+- Set the library core-js to the version 3.15.2 to fix iterations of DOM elements.
+- Fixed the parser function which convert xml to json.
+- Fix WMS requests from degree services by renaming parameter `SESSIONID` to `CACHEID`.
+
+---
+
 ## v2.16.0 - 2021-12-01
 ### Added
 - The library "svg-url-loader" was added to package.json devDependencies.
@@ -64,8 +77,6 @@
 - QuickHelp: moved to Vue and refactored, can now be manipulated for search, tree and routing, new QuickHelp windows can be configured. See new quickHelp.md documentation for more details.
 - Migrated the layerSlider tool from Backbone.js to Vue.js.
 
-### Deprecated
-
 ### Removed
 - The module CLICKCOUNTER is removed.
 - The library "olcs" was removed from the package.json.
@@ -85,6 +96,7 @@
 - GFI for theme datatable is displayed. Resolution at wms layer is set correctly.
 
 ---
+
 ## v2.15.0 - 2021-11-03
 ### Added
 - gfiAttributes: Adding Boolean type in gfi Attributes so that the original text can be parsed to be more understandable.
@@ -114,8 +126,8 @@
 - Fixed missing highlighting in years 2010-2014 and remove of highlighting when selecting another year in addon boris.
 - For long lists the compare-feature-window provides now a scrollbar.
 
-
 ---
+
 ## v2.14.0 - 2021-10-06
 ### Added
 - Add possibility to test end2end-tests with `MicrosoftEdge` driver.
@@ -137,8 +149,6 @@
 - The scale display of the map has now new scale steps: above 10.000 it is rounded to five hundreds (e.g. 10250 -> "1 : 10.500"), scale of 1.000 up to 10.000 is rounded to its fifties (e.g. 1025 -> "1 : 1.050").
 - Searchbar topics are now configurable with i18next.
 
-### Deprecated
-
 ### Removed
 - SensorThingsHttp: the option to use onprogress event when calling get or getInExtent is removed. The onprogress technic uses the addition "&$count=true" at the STA url to calculate the progress. This addition to the url slowes down the FROST server significantly and is therefore not longer supported.
 - The url parameter CLICKCOUNTER was removed.
@@ -152,17 +162,9 @@
 - LayerInformation: setting the title directly from Metadata without translation.
 - CoordToolkit: projection name is shown correctly if no title is defined.
 
-
 ---
+
 ##  v2.13.1 - 2021-09-03
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
 ### Fixed
 - Downgrade the follow npm packages to fix the compass in 3D mode:
  - css-loader from 4.3.0 to 1.0.0
@@ -273,6 +275,7 @@
 - Coordinates tool: Validation was corrected
 - Coordinates tool: EPSG code for coordinate system ETRS89/UTM 32N is shown correct in selectbox
 - Opening a tool by footer-link will close a visible tool in sidebar.
+
 ---
 
 ## v2.12.1 - 2021-08-12
@@ -343,6 +346,7 @@
 - Issue #623: filter error in connection with provided vectorStyles is fixed.
 - Style configuration is provided for dataStreams with result 0.
 - Seamless map panning in the oblique aerial views is possible in all directions again.
+
 ---
 
 ## v2.10.0 - 2021-06-02
