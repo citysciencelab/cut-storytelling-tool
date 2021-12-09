@@ -12,6 +12,9 @@
 ### Added
 - Added the possibility to configure a predefined order of selected layers.
 - Feature: List component supports onRowClick callback
+- The following NPM packages are added:
+  - dependencies:
+    "bootstrap-sass"
 
 ### Changed
 - Migrated the map from Backbone.js to Vue.js environment.
@@ -21,6 +24,10 @@
         - Change parameter `wfsSearch.searchInstance.requestConfig.gazetteer` from a `Boolean` to an `Object`. Move parameters `namespaces` and `memberSuffix` to that Object.
         - Change parameter `nameSpaces` to `namespaces` to be inline with the rest of the configuration.
     - Allow parameter `namespaces` to also be a single String instead of always expecting an array.
+- Switched CSS Preprocessor from LESS to SCSS. Edited Webpack Config, renamed .less files to .scss files including renaming of variables and mixins to match scss syntax. Edited vue components to use scss. Edited backbone modules to use scss files. Edited docs accordingly.
+- The following NPM packages are changed:
+  - devDependencies:
+    "less" => "sass", "less-loader => "sass-loader"
 
 ### Deprecated
 
@@ -49,31 +56,24 @@
 ### Added
 - The library "svg-url-loader" was added to package.json devDependencies.
 - Added the new Tool `Routing`.
-- The following NPM packages are added:
-  - dependencies:
-    "bootstrap-sass"
 - Searchbar: An option "sortByName" in gdi to config if the rearching results from elastic sorted alphanumerically or not.
 - ParametricURL: An alert has been added which displays the new notation of a parameterized call.
 - Handling of polygons with holes to WKT geometry parsing.
 
 ### Changed
 - The following NPM packages are updated:
-    @babel/core": 7.14.6 to 7.16.0
-    @babel/eslint-parser: 7.14.7 to 7.16.0
-    @babel/preset-env: 7.14.7 to 7.16.0
-    @vue/test-utils: 1.2.1 to 1.2.2
-    babel-loader: 8.2.2 to 8.2.3
-    eslint-plugin-vuejs-accessibility: 0.7.1 to 1.1.0
-    mocha: 9.0.2 to 9.1.3
-    selenium-webdriver: 4.0.0-beta.4 to version 4.0.0
+    - @babel/core": 7.14.6 to 7.16.0
+    - @babel/eslint-parser: 7.14.7 to 7.16.0
+    - @babel/preset-env: 7.14.7 to 7.16.0
+    - @vue/test-utils: 1.2.1 to 1.2.2
+    - babel-loader: 8.2.2 to 8.2.3
+    - eslint-plugin-vuejs-accessibility: 0.7.1 to 1.1.0
+    - mocha: 9.0.2 to 9.1.3
+    - selenium-webdriver: 4.0.0-beta.4 to version 4.0.0
 - The MasterportalAPI version is updated to v1.6.0. This also raised ol to version 6.9.0.
 - WMSLayer and GroupLayer are refactored. They are no longer Backbone-models. WMSLayer uses the masterportalAPI's wms layer on creation.
 - 2D-map is removed from vuex store. Maps are now stored in a collection. Creation of 2D-map and 3D-map use masterportalAPI's abstraction layer.
 - Print formats only contain working formats now.
-- Switched CSS Preprocessor from LESS to SCSS. Edited Webpack Config, renamed .less files to .scss files including renaming of variables and mixins to match scss syntax. Edited vue components to use scss. Edited backbone modules to use scss files. Edited docs accordingly.
-- The following NPM packages are changed:
-  - devDependencies:
-    "less" => "sass", "less-loader => "sass-loader"
 - QuickHelp: moved to Vue and refactored, can now be manipulated for search, tree and routing, new QuickHelp windows can be configured. See new quickHelp.md documentation for more details.
 - Migrated the layerSlider tool from Backbone.js to Vue.js.
 
