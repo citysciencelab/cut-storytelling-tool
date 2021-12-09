@@ -117,7 +117,7 @@
     "raf": "^3.4.1",
     "regenerator-runtime": "^0.13.7",
     "replace-in-file": "^6.2.0",
-    "sass": "1.32.12",
+    "sass": "1.44.00",
     "sass-loader": "^10",
     "selenium-webdriver": "^4.0.0",
     "sinon": "^11.1.1",
