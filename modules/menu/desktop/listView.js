@@ -152,7 +152,6 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
             return model.get("type") === "layer";
         });
 
-
         // Layer Atlas sortieren
         if (Radio.request("Parser", "getTreeType") === "default") {
             layer = Radio.request("Util", "sortBy", layer, (item) => item.get("name"), this);

@@ -86,6 +86,7 @@ WMTSLayer.prototype.createLayerSource = function (attrs) {
         source.scales = attrs.scales;
     }
     else {
+
         const layerIdentifier = attrs.layers,
             url = attrs.capabilitiesUrl,
             matrixSet = attrs.tileMatrixSet,
@@ -125,18 +126,17 @@ WMTSLayer.prototype.createLayerSource = function (attrs) {
                     this.layer.getSource().refresh();
                 }
                 else {
-                    // reject("Cannot get options from WMTS-Capabilities");
+                    this.removeLayer();
+                    bridge.removeItem(this.get("id"));
+                    bridge.refreshLayerTree();
                     throw new Error("Cannot get options from WMTS-Capabilities");
                 }
             })
             .catch((error) => {
                 this.removeLayer();
-                // remove layer from project completely
                 bridge.removeItem(this.get("id"));
-                // refresh layer tree
                 bridge.refreshLayerTree();
                 if (error === "Fetch error") {
-                    // error message has already been printed earlier
                     return;
                 }
                 this.showErrorMessage(error, this.get("name"));
@@ -182,7 +182,7 @@ WMTSLayer.prototype.getWMTSCapabilities = function (url) {
  * @returns {void}
  */
 WMTSLayer.prototype.showErrorMessage = (errorMessage, layerName) => {
-    console.warn("content: Layer " + layerName + ": " + errorMessage);
+    console.error("content: Layer " + layerName + ": " + errorMessage);
 };
 
 /**
@@ -191,6 +191,7 @@ WMTSLayer.prototype.showErrorMessage = (errorMessage, layerName) => {
  * @returns {void}
  */
 WMTSLayer.prototype.createLayer = function (attrs) {
+    this.layer = {};
     const layerSource = this.createLayerSource(Object.assign(attrs)),
         tileLayer = new TileLayer({
             id: attrs.id,
@@ -241,8 +242,8 @@ WMTSLayer.prototype.createLegend = function () {
     }
     else if (this.get("optionsFromCapabilities") && !this.get("legendURL")) {
         this.getWMTSCapabilities(capabilitiesUrl)
-            .then(function (result) {
-                result.Contents.Layer.forEach(function (layer) {
+            .then((result) => {
+                result.Contents.Layer.forEach((layer) => {
                     if (layer.Identifier === this.get("layers")) {
                         const getLegend = getNestedValues(layer, "LegendURL");
 
@@ -259,15 +260,15 @@ WMTSLayer.prototype.createLegend = function () {
                         }
 
                     }
-                }.bind(this));
-            }.bind(this))
-            .catch(function (error) {
+                });
+            })
+            .catch((error) => {
                 if (error === "Fetch error") {
                     // error message has already been printed earlier
                     return;
                 }
                 this.showErrorMessage(error, this.get("name"));
-            }.bind(this));
+            });
     }
 
 };
@@ -300,14 +301,6 @@ WMTSLayer.prototype.registerLoadingListeners = function () {
 };
 
 /**
- * Reigsters the LayerLoad-Event for Errors.
- * @returns {void}
- */
-WMTS.prototype.registerErrorListener = function () {
-    this.registerTileloadError();
-};
-
-/**
  * If the WMTS-Layer has an extent defined, then this is returned.
  * Else, the extent of the projection is returned.
  * @returns {Array} - The extent of the Layer.
@@ -320,23 +313,6 @@ WMTSLayer.prototype.getExtent = function () {
     }
 
     return projection.getExtent();
-};
-
-/**
- * Sets the infoFormat to the given Parameter.
- * @param {*} infoFormat - The value for the infoFormat to be set.
- * @returns {void}
- */
-WMTSLayer.prototype.setInfoFormat = function (infoFormat) {
-    this.set("infoFormat", infoFormat);
-};
-
-/**
- * Returns the WMTS-Layer.
- * @returns {Object} - The WMTS-Layer
- */
-WMTSLayer.prototype.getLayer = function () {
-    return this.get("layer");
 };
 
 
