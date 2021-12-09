@@ -111,7 +111,7 @@ export default class InterfaceOL {
         this.intervalRegister.startPagingInterval(filterId, () => {
             const items = [];
 
-            while (idx < len && (idx === 0 || idx % paging > 0)) {
+            for (let n = 0; n < paging; n++) {
                 if (
                     (!searchInMapExtent || this.isFeatureInMapExtent(features[idx]))
                     && this.checkRules(features[idx], rules)
@@ -119,6 +119,9 @@ export default class InterfaceOL {
                     items.push(features[idx]);
                 }
                 idx++;
+                if (idx >= len) {
+                    break;
+                }
             }
             if (idx >= len) {
                 this.intervalRegister.stopPagingInterval(filterId);
@@ -186,7 +189,6 @@ export default class InterfaceOL {
      * @param {Object} rule the rule object
      * @param {String} rule.operator the operator to use
      * @param {*} [rule.value] a single value
-     * @param {*} [rule.values] an array of values
      * @param {*} featureValue the value of the feature to check
      * @param {*} [featureValue2] the second value to check for ranges with
      * @returns {Boolean} true if the rule matches the given feature values, false if not
@@ -195,29 +197,46 @@ export default class InterfaceOL {
         if (
             !isObject(rule)
             || !Object.prototype.hasOwnProperty.call(rule, "operator")
-            || !Object.prototype.hasOwnProperty.call(rule, "value") && !Object.prototype.hasOwnProperty.call(rule, "values")
+            || !Object.prototype.hasOwnProperty.call(rule, "value")
         ) {
             return false;
         }
-        return typeof rule.value !== "undefined" && (
-            rule.operator === "BETWEEN" && featureValue <= rule.value && featureValue2 >= rule.value
-            || rule.operator === "EQ" && featureValue === rule.value
-            || rule.operator === "NE" && featureValue !== rule.value
-            || rule.operator === "GT" && featureValue > rule.value
-            || rule.operator === "GE" && featureValue >= rule.value
-            || rule.operator === "LT" && featureValue < rule.value
-            || rule.operator === "LE" && featureValue <= rule.value
-            || rule.operator === "IN" && featureValue.includes(rule.value)
-            || rule.operator === "STARTSWITH" && featureValue.startsWith(rule.value)
-            || rule.operator === "ENDSWITH" && featureValue.endsWith(rule.value)
+        let ruleValueA = Array.isArray(rule.value) ? rule.value[0] : rule.value,
+            ruleValueB = Array.isArray(rule.value) ? rule.value[1] : undefined,
+            featValueA = featureValue,
+            featValueB = featureValue2;
+
+        if (typeof ruleValueA === "string") {
+            ruleValueA = ruleValueA.toLowerCase();
+        }
+        if (typeof ruleValueB === "string") {
+            ruleValueB = ruleValueB.toLowerCase();
+        }
+        if (typeof featValueA === "string") {
+            featValueA = featValueA.toLowerCase();
+        }
+        if (typeof featValueB === "string") {
+            featValueB = featValueB.toLowerCase();
+        }
+        return Array.isArray(rule.value) && (
+            rule.operator === "INTERSECTS" && featureValue <= rule.value[1] && featureValue2 >= rule.value[0]
+            || rule.operator === "BETWEEN" && featureValue >= rule.value[0] && featureValue2 <= rule.value[1]
+            || rule.operator === "EQ" && typeof rule.value.find(v => featValueA === v.toLowerCase()) !== "undefined"
+            || rule.operator === "IN" && typeof featValueA === "string" && typeof rule.value.find(v => featValueA.includes(v.toLowerCase())) !== "undefined"
+            || rule.operator === "STARTSWITH" && typeof featValueA === "string" && typeof rule.value.find(v => featValueA.startsWith(v.toLowerCase())) !== "undefined"
+            || rule.operator === "ENDSWITH" && typeof featValueA === "string" && typeof rule.value.find(v => featValueA.endsWith(v.toLowerCase())) !== "undefined"
         )
-        || Array.isArray(rule.values) && (
-            rule.operator === "INTERSECTS" && featureValue <= rule.values[1] && featureValue2 >= rule.values[0]
-            || rule.operator === "BETWEEN" && featureValue >= rule.values[0] && featureValue2 <= rule.values[1]
-            || rule.operator === "EQ" && typeof rule.values.find(v => featureValue === v) !== "undefined"
-            || rule.operator === "IN" && typeof rule.values.find(v => featureValue.includes(v)) !== "undefined"
-            || rule.operator === "STARTSWITH" && typeof rule.values.find(v => featureValue.startsWith(v)) !== "undefined"
-            || rule.operator === "ENDSWITH" && typeof rule.values.find(v => featureValue.endsWith(v)) !== "undefined"
+        || typeof rule.value !== "undefined" && (
+            rule.operator === "BETWEEN" && featureValue <= rule.value && featureValue2 >= rule.value
+            || rule.operator === "EQ" && featValueA === ruleValueA
+            || rule.operator === "NE" && featValueA !== ruleValueA
+            || rule.operator === "GT" && featValueA > ruleValueA
+            || rule.operator === "GE" && featValueA >= ruleValueA
+            || rule.operator === "LT" && featValueA < ruleValueA
+            || rule.operator === "LE" && featValueA <= ruleValueA
+            || rule.operator === "IN" && typeof featValueA === "string" && featValueA.includes(ruleValueA)
+            || rule.operator === "STARTSWITH" && typeof featValueA === "string" && featValueA.startsWith(ruleValueA)
+            || rule.operator === "ENDSWITH" && typeof featValueA === "string" && featValueA.endsWith(ruleValueA)
         );
     }
 }

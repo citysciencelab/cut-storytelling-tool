@@ -6,6 +6,18 @@ import getters from "../store/gettersFilterGeneral";
 import mutations from "../store/mutationsFilterGeneral";
 import LayerFilterSnippet from "./LayerFilterSnippet.vue";
 import {convertToNewConfig} from "../utils/convertToNewConfig";
+import MapHandler from "../utils/mapHandler.js";
+import {
+    getFeaturesByLayerId,
+    isFeatureInMapExtent,
+    getLayerByLayerId,
+    showFeaturesByIds,
+    createLayerIfNotExists
+} from "../utils/openlayerFunctions.js";
+
+// will be replaced by api
+import InterfaceOL from "../interfaces/interface.ol.js";
+import IntervalRegister from "../utils/intervalRegister.js";
 
 export default {
     name: "FilterGeneral",
@@ -15,7 +27,16 @@ export default {
     },
     data () {
         return {
-            storePath: this.$store.state.Tools.FilterGeneral
+            storePath: this.$store.state.Tools.FilterGeneral,
+            api: new InterfaceOL(new IntervalRegister(), {
+                getFeaturesByLayerId,
+                isFeatureInMapExtent
+            }),
+            mapHandler: new MapHandler({
+                getLayerByLayerId,
+                showFeaturesByIds,
+                createLayerIfNotExists
+            })
         };
     },
     computed: {
@@ -36,6 +57,7 @@ export default {
         ...mapMutations("Tools/FilterGeneral", Object.keys(mutations)),
         ...mapActions("Tools/FilterGeneral", ["initialize"]),
         convertToNewConfig,
+
         close () {
             this.setActive(false);
             const model = getComponent(this.storePath.id);
@@ -63,10 +85,15 @@ export default {
                 v-if="active"
                 id="tool-general-filter"
             />
-            <LayerFilterSnippet
-                v-if="Array.isArray(layers) && layers.length"
-                :layers-config="layers"
-            />
+            <div v-if="Array.isArray(layers) && layers.length">
+                <LayerFilterSnippet
+                    v-for="(layerConfig, indexLayer) in layers"
+                    :key="'layer-' + indexLayer"
+                    :layer-config="layerConfig"
+                    :api="api"
+                    :map-handler="mapHandler"
+                />
+            </div>
         </template>
     </Tool>
 </template>

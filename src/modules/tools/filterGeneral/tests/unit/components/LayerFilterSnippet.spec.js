@@ -15,7 +15,7 @@ describe("src/modules/tools/filterGeneral/components/LayerFilterSnippet.vue", ()
     beforeEach(() => {
         wrapper = shallowMount(LayerFilterSnippetComponent, {
             propsData: {
-                layersConfig: [{
+                layerConfig: {
                     "snippets": [
                         {
                             "attrName": "checkbox",
@@ -24,7 +24,7 @@ describe("src/modules/tools/filterGeneral/components/LayerFilterSnippet.vue", ()
                             "matchingMode": "OR"
                         }
                     ]
-                }]
+                }
             },
             localVue
         });

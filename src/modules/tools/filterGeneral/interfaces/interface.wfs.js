@@ -22,9 +22,7 @@ export default class InterfaceWFS {
             return;
         }
 
-        if (service.type === "WFS") {
-            describeFeatureTypeWFS(service?.url, service?.typename, onsuccess, onerror);
-        }
+        describeFeatureTypeWFS(service?.url, service?.typename, onsuccess, onerror);
     }
 
     /**

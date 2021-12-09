@@ -2,6 +2,16 @@
 export default {
     name: "SnippetInput",
     props: {
+        snippetId: {
+            type: Number,
+            required: false,
+            default: 0
+        },
+        attrName: {
+            type: String,
+            required: false,
+            default: ""
+        },
         label: {
             type: String,
             required: false,
@@ -27,6 +37,40 @@ export default {
             required: false,
             default: true
         }
+    },
+    data () {
+        return {
+            inputValue: this.prechecked ? this.prechecked : ""
+        };
+    },
+    watch: {
+        inputValue: {
+            handler (value) {
+                this.emitCurrentRule(value);
+            }
+        }
+    },
+    mounted () {
+        this.$nextTick(() => {
+            this.emitCurrentRule(this.inputValue);
+        });
+    },
+    methods: {
+        /**
+         * Emits the current rule to whoever is listening.
+         * @param {*} value the value to put into the rule
+         * @returns {void}
+         */
+        emitCurrentRule (value) {
+            this.$emit("ruleChanged", {
+                snippetId: this.snippetId,
+                rule: {
+                    attrName: this.attrName,
+                    operator: this.operator,
+                    value
+                }
+            });
+        }
     }
 };
 </script>
@@ -41,11 +85,11 @@ export default {
             class="snippetInputLabel"
         >{{ label }}</label>
         <input
+            v-model="inputValue"
             class="snippetInput"
             type="text"
             name="input"
             :placeholder="placeholder"
-            :value="prechecked"
         >
     </div>
 </template>

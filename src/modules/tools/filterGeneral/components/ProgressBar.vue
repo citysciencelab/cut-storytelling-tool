@@ -2,42 +2,36 @@
 export default {
     name: "ProgressBar",
     props: {
-        delay: {
-            type: Number,
-            required: true
+        paging: {
+            type: Object,
+            required: false,
+            default: () => {
+                return {
+                    page: 1,
+                    total: 1
+                };
+            }
         }
     },
-    data () {
-        return {
-            value: 0,
-            id: 0,
-            max: 100
-        };
-    },
-    mounted () {
-        this.id = setInterval(this.progress, this.delay);
-    },
     methods: {
-        progress () {
-            if (this.value < this.max) {
-                this.value++;
-            }
-            else {
-                clearInterval(this.id);
-            }
+        getValueInPercent () {
+            return this.paging.total > 0 ? Math.round(100 / this.paging.total * this.paging.page) : 100;
         }
     }
 };
 </script>
 
 <template>
-    <div class="progress-container">
+    <div
+        v-show="paging.page < paging.total"
+        class="progress-container"
+    >
         <progress
             id="progressbar"
-            :value="value"
-            :max="max"
+            :value="paging.page"
+            :max="paging.total"
         />
-        <span class="progress-value">{{ value }}%</span>
+        <span class="progress-value">{{ getValueInPercent() }}%</span>
     </div>
 </template>
 
