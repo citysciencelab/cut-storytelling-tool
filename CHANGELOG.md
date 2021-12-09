@@ -10,7 +10,7 @@
 
 ## Unreleased - in development
 ### Added
-- added parameter "rotation" to wfs features with iconPointStyle, if the parameter is not given it will fall back to standard alignment.
+- added style.json parameter "rotation" to wfs features with iconPointStyle, if the parameter is not given it will fall back to standard alignment.
 
 ### Changed
 - Migrated the map from Backbone.js to Vue.js environment.
