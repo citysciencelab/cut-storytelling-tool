@@ -177,7 +177,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
         if (typeof rotation === "object") {
             const {value, isDegree} = rotation;
 
-            if (isObjectPath(value)) {
+            if (isObjectPath(value) && this.attributes.values_ !== undefined) {
                 const rotationValueFromService = parseInt(prepareValue(this.attributes.values_, value), 10);
 
                 return isDegree ? rotationValueFromService * Math.PI / 180 : rotationValueFromService;
