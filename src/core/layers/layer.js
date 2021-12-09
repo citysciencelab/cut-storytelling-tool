@@ -170,25 +170,7 @@ Layer.prototype.checkForScale = function (options) {
 Layer.prototype.setIsOutOfRange = function (value) {
     this.set("isOutOfRange", value);
 };
-/**
- * If a single WMS-T is shown: Remove the TimeSlider.
- * If two WMS-T are shown: Remove the LayerSwiper; depending if the original layer was closed, update the layer with a new time value.
- * @returns {void}
- */
-Layer.prototype.removeTimeLayer = function () {
-    const id = this.get("id");
 
-    // If the swiper is active, two WMS-T are currently active
-    if (store.getters["WmsTime/layerSwiper"].active) {
-        if (!id.endsWith(store.getters["WmsTime/layerAppendix"])) {
-            this.setIsSelected(true);
-        }
-        store.dispatch("WmsTime/toggleSwiper", id);
-    }
-    else {
-        store.commit("WmsTime/setTimeSliderActive", {active: false, currentLayerId: ""});
-    }
-};
 /**
  * Setter for isVisibleInMap and setter for layer.setVisible
  * @param {Boolean} newValue Flag if layer is visible in map
@@ -436,7 +418,7 @@ function handleSingleBaseLayer (isSelected, layer, map) {
         }
     }
     else if (timeLayer) {
-        this.removeTimeLayer();
+        layer.removeLayer(layer.get("id"));
     }
 }
 
@@ -448,7 +430,6 @@ function handleSingleBaseLayer (isSelected, layer, map) {
 Layer.prototype.setIsJustAdded = function (value) {
     this.set("isJustAdded", value);
 };
-
 
 /**
  * Initiates the presentation of layer information.
@@ -491,6 +472,7 @@ Layer.prototype.showLayerInformation = function () {
     }
     this.setLayerInfoChecked(true);
 };
+
 /**
  * Setter for legend, commits the legend to vue store using "Legend/setLegendOnChanged"
  * @param {String} value legend
@@ -536,6 +518,7 @@ Layer.prototype.set = function (arg1, arg2) {
         }
     }
 };
+
 Layer.prototype.get = function (key) {
     if (key === "layer") {
         return this.layer;
@@ -548,6 +531,7 @@ Layer.prototype.get = function (key) {
     }
     return this.attributes[key];
 };
+
 Layer.prototype.has = function (key) {
     if (key === "layer") {
         return this.layer !== undefined;
@@ -560,9 +544,11 @@ Layer.prototype.has = function (key) {
     }
     return this.attributes[key] !== undefined;
 };
+
 Layer.prototype.getLayerStatesArray = function () {
     return this.layer.getLayerStatesArray();
 };
+
 Layer.prototype.toJSON = function () {
     const atts = {...this.attributes};
 
@@ -570,6 +556,7 @@ Layer.prototype.toJSON = function () {
     delete atts.layers;
     return deepCopy(atts);
 };
+
 Layer.prototype.on = function () {
     // do nothing
 };

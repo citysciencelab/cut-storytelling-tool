@@ -1,6 +1,6 @@
-import WMSLayer from "../../../src/core/layers/wms";
 import GroupedLayers from "../../../src/core/layers/group";
-import WmsTimeLayer from "./layer/wmsTime";
+import WMSLayer from "../../../src/core/layers/wms";
+import WMSTimeLayer from "../../../src/core/layers/wmsTime";
 import WMTSLayer from "./layer/wmts";
 import WFSLayer from "./layer/wfs";
 import StaticImageLayer from "./layer/staticImage";
@@ -181,7 +181,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         if (attrs.type === "layer") {
             if (attrs.typ === "WMS") {
                 if (attrs.time) {
-                    return new WmsTimeLayer(attrs, options);
+                    return new WMSTimeLayer(attrs, options);
                 }
                 return new WMSLayer(attrs);
             }

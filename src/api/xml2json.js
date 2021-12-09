@@ -1,25 +1,29 @@
 /**
  * Parses Xml to Json recursivly
- * @param {XMLDocument} srcDom - Dom to parse
+ * @param {XMLDocument} srcDom Dom to parse.
+ * @param {Boolean} [attributeValue=true] Returns the lowest level as value and attribute functions.
  * @returns {Object} json
  */
-export default function xml2json (srcDom) {
+export default function xml2json (srcDom, attributeValue = true) {
     // HTMLCollection to Array
     const children = [...srcDom.children],
         jsonResult = {};
 
     // base case for recursion
     if (!children.length) {
-        if (srcDom.hasAttributes()) {
+        if (attributeValue) {
+            if (srcDom.hasAttributes()) {
+                return {
+                    getValue: () => srcDom.textContent,
+                    getAttributes: () => parseNodeAttributes(srcDom.attributes)
+                };
+            }
             return {
                 getValue: () => srcDom.textContent,
-                getAttributes: () => parseNodeAttributes(srcDom.attributes)
+                getAttributes: () => undefined
             };
         }
-        return {
-            getValue: () => srcDom.textContent,
-            getAttributes: () => undefined
-        };
+        return srcDom.textContent;
     }
 
     children.forEach(child => {
@@ -31,14 +35,14 @@ export default function xml2json (srcDom) {
         // if child is array, save the values as an array of objects, else as object
         if (childIsArray) {
             if (jsonResult[keyName] === undefined) {
-                jsonResult[keyName] = [xml2json(child)];
+                jsonResult[keyName] = [xml2json(child, attributeValue)];
             }
             else {
-                jsonResult[keyName].push(xml2json(child));
+                jsonResult[keyName].push(xml2json(child, attributeValue));
             }
         }
         else {
-            jsonResult[keyName] = xml2json(child);
+            jsonResult[keyName] = xml2json(child, attributeValue);
         }
     });
 
@@ -53,9 +57,10 @@ export default function xml2json (srcDom) {
 function parseNodeAttributes (nodeAttributes) {
     const attributes = {};
 
-    nodeAttributes.forEach(node => {
-        attributes[node.name] = node.value;
+    Object.keys(nodeAttributes).forEach(key => {
+        attributes[nodeAttributes[key].name] = nodeAttributes[key].value;
     });
+
     return attributes;
 }
 
