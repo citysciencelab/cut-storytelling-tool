@@ -93,9 +93,14 @@ export default {
                         class="snippet"
                     >
                         <SnippetDate
-                            :operator="Object.prototype.hasOwnProperty.call(snippet, 'operater') ? snippet.operator : 'EQ'"
-                            :value="Object.prototype.hasOwnProperty.call(snippet, 'value') ? snippet.value : ''"
-                            :label="Object.prototype.hasOwnProperty.call(snippet, 'label') ? snippet.label : ''"
+                            :attr-name="snippet.attrName"
+                            :format="snippet.format"
+                            :label="snippet.label"
+                            :max-value="snippet.maxValue"
+                            :min-value="snippet.minValue"
+                            :operator="snippet.operator"
+                            :prechecked="snippet.prechecked"
+                            :visible="snippet.visible"
                         />
                     </div>
                     <div
