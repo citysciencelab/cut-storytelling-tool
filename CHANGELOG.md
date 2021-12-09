@@ -19,7 +19,7 @@
 
 ### Changed
 - Migrated the map from Backbone.js to Vue.js environment.
-- Migrated the layer wmsTime from Backbone.js to Vue.js environment.
+- Migrated the layer wmsTime and WMTS from Backbone.js to Vue.js environment.
 - WfsSearch:
     - Update documentation.
         - Change parameter `wfsSearch.searchInstance.requestConfig.gazetteer` from a `Boolean` to an `Object`. Move parameters `namespaces` and `memberSuffix` to that Object.

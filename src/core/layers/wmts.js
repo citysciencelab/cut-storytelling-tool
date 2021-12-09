@@ -42,106 +42,109 @@ export default function WMTSLayer (attrs, options) {
 WMTSLayer.prototype = Object.create(Layer.prototype);
 
 /**
-* Creates the LayerSource for this WMTSLayer.
+* Creates the LayerSource from definitions in the service.json for this WMTSLayer.
 * @param {Object} attrs  attributes of the layer
 * @returns {void}
 */
-WMTSLayer.prototype.createLayerSource = function (attrs) {
-    if (attrs.optionsFromCapabilities === undefined) {
-        const projection = getProjection(attrs.coordinateSystem),
-            extent = projection.getExtent(),
-            style = attrs.style,
-            format = attrs.format,
-            wrapX = attrs.wrapX ? attrs.wrapX : false,
-            urls = attrs.urls,
-            size = getWidth(extent) / parseInt(attrs.tileSize, 10),
-            resLength = parseInt(attrs.resLength, 10),
-            resolutions = new Array(resLength),
-            matrixIds = new Array(resLength),
-            source = new WMTS({
-                projection: projection,
-                attributions: attrs.olAttribution,
-                tileGrid: new WMTSTileGrid({
-                    origin: attrs.origin,
-                    resolutions: resolutions,
-                    matrixIds: matrixIds,
-                    tileSize: attrs.tileSize
-                }),
-                tilePixelRatio: DEVICE_PIXEL_RATIO,
-                urls: urls,
-                matrixSet: attrs.tileMatrixSet,
-                matrixSizes: attrs.matrixSizes,
-                layer: attrs.layers,
-                format: format,
-                style: style,
-                version: attrs.version,
-                transparent: attrs.transparent.toString(),
-                wrapX: wrapX,
-                requestEncoding: attrs.requestEncoding,
-                scales: attrs.scales
-            });
+WMTSLayer.prototype.createLayerSourceByDefinitions = function (attrs) {
+    const projection = getProjection(attrs.coordinateSystem),
+        extent = projection.getExtent(),
+        style = attrs.style,
+        format = attrs.format,
+        wrapX = attrs.wrapX ? attrs.wrapX : false,
+        urls = attrs.urls,
+        size = getWidth(extent) / parseInt(attrs.tileSize, 10),
+        resLength = parseInt(attrs.resLength, 10),
+        resolutions = new Array(resLength),
+        matrixIds = new Array(resLength),
+        source = new WMTS({
+            projection: projection,
+            attributions: attrs.olAttribution,
+            tileGrid: new WMTSTileGrid({
+                origin: attrs.origin,
+                resolutions: resolutions,
+                matrixIds: matrixIds,
+                tileSize: attrs.tileSize
+            }),
+            tilePixelRatio: DEVICE_PIXEL_RATIO,
+            urls: urls,
+            matrixSet: attrs.tileMatrixSet,
+            matrixSizes: attrs.matrixSizes,
+            layer: attrs.layers,
+            format: format,
+            style: style,
+            version: attrs.version,
+            transparent: attrs.transparent.toString(),
+            wrapX: wrapX,
+            requestEncoding: attrs.requestEncoding,
+            scales: attrs.scales
+        });
 
-        this.generateArrays(resolutions, matrixIds, resLength, size);
-        source.matrixSizes = attrs.matrixSizes;
-        source.scales = attrs.scales;
+    this.generateArrays(resolutions, matrixIds, resLength, size);
+    source.matrixSizes = attrs.matrixSizes;
+    source.scales = attrs.scales;
+    this.layer.setSource(source);
+    this.layer.getSource().refresh();
+};
+
+/**
+* Creates the LayerSource for this WMTSLayer from the WMTS capabilities.
+* @param {Object} attrs  attributes of the layer
+* @returns {void}
+*/
+WMTSLayer.prototype.createLayerSourceByCapabilities = function (attrs) {
+    const layerIdentifier = attrs.layers,
+        url = attrs.capabilitiesUrl,
+        matrixSet = attrs.tileMatrixSet,
+        capabilitiesOptions = {
+            layer: layerIdentifier
+        };
+
+    // use the matrixSet (if defined) for optionsFromCapabilities
+    // else look for a tilematrixset in epsg:3857
+    if (matrixSet && matrixSet.length > 0) {
+        capabilitiesOptions.matrixSet = matrixSet;
     }
     else {
-
-        const layerIdentifier = attrs.layers,
-            url = attrs.capabilitiesUrl,
-            matrixSet = attrs.tileMatrixSet,
-            capabilitiesOptions = {
-                layer: layerIdentifier
-            };
-
-        // use the matrixSet (if defined) for optionsFromCapabilities
-        // else look for a tilematrixset in epsg:3857
-        if (matrixSet && matrixSet.length > 0) {
-            capabilitiesOptions.matrixSet = matrixSet;
-        }
-        else {
-            capabilitiesOptions.projection = "EPSG:3857";
-        }
-
-        this.getWMTSCapabilities(url)
-            .then((result) => {
-                const options = optionsFromCapabilities(result, capabilitiesOptions),
-                    tileMatrixSet = result.Contents.TileMatrixSet.filter(set => set.Identifier === options.matrixSet)[0],
-                    matrixSizes = [],
-                    scales = [];
-
-                // Add the parameters "ScaleDenominator" and "MatrixHeight" / "MatrixWidth" to the source to be able to print WMTS layers
-                tileMatrixSet.TileMatrix.forEach(({MatrixHeight, MatrixWidth, ScaleDenominator}) => {
-                    matrixSizes.push([MatrixWidth, MatrixHeight]);
-                    scales.push(ScaleDenominator);
-                });
-
-                if (options !== null) {
-                    const source = new WMTS(options);
-
-                    source.matrixSizes = matrixSizes;
-                    source.scales = scales;
-                    this.layer.set("options", options);
-                    this.layer.setSource(source);
-                    this.layer.getSource().refresh();
-                }
-                else {
-                    this.removeLayer();
-                    bridge.removeItem(this.get("id"));
-                    bridge.refreshLayerTree();
-                    throw new Error("Cannot get options from WMTS-Capabilities");
-                }
-            })
-            .catch((error) => {
-                this.removeLayer();
-                bridge.removeItem(this.get("id"));
-                bridge.refreshLayerTree();
-                if (error === "Fetch error") {
-                    return;
-                }
-                this.showErrorMessage(error, this.get("name"));
-            });
+        capabilitiesOptions.projection = "EPSG:3857";
     }
+
+    this.getWMTSCapabilities(url)
+        .then((result) => {
+            const options = optionsFromCapabilities(result, capabilitiesOptions),
+                tileMatrixSet = result.Contents.TileMatrixSet.filter(set => set.Identifier === options.matrixSet)[0],
+                matrixSizes = [],
+                scales = [];
+
+            // Add the parameters "ScaleDenominator" and "MatrixHeight" / "MatrixWidth" to the source to be able to print WMTS layers
+            tileMatrixSet.TileMatrix.forEach(({MatrixHeight, MatrixWidth, ScaleDenominator}) => {
+                matrixSizes.push([MatrixWidth, MatrixHeight]);
+                scales.push(ScaleDenominator);
+            });
+
+            if (options !== null) {
+                const source = new WMTS(options);
+
+                source.matrixSizes = matrixSizes;
+                source.scales = scales;
+                this.layer.set("options", options);
+                this.layer.setSource(source);
+                this.layer.getSource().refresh();
+            }
+            else {
+                this.removeLayer();
+                throw new Error("Cannot get options from WMTS-Capabilities");
+            }
+        })
+        .catch((error) => {
+            this.removeLayer();
+            bridge.removeItem(this.get("id"));
+            bridge.refreshLayerTree();
+            if (error === "Fetch error") {
+                return;
+            }
+            this.showErrorMessage(error, this.get("name"));
+        });
 };
 
 /**
@@ -191,23 +194,27 @@ WMTSLayer.prototype.showErrorMessage = (errorMessage, layerName) => {
  * @returns {void}
  */
 WMTSLayer.prototype.createLayer = function (attrs) {
-    this.layer = {};
-    const layerSource = this.createLayerSource(Object.assign(attrs)),
-        tileLayer = new TileLayer({
-            id: attrs.id,
-            source: layerSource,
-            name: attrs.name,
-            minResolution: attrs.minScale,
-            maxResolution: attrs.maxScale,
-            supported: ["2D", "3D"],
-            showSettings: true,
-            extent: null,
-            typ: attrs.typ,
-            legendURL: attrs.legendURL,
-            infoFormat: attrs.infoFormat
-        });
+    const tileLayer = new TileLayer({
+        id: attrs.id,
+        source: new WMTS({}),
+        name: attrs.name,
+        minResolution: attrs.minScale,
+        maxResolution: attrs.maxScale,
+        supported: ["2D", "3D"],
+        showSettings: true,
+        extent: null,
+        typ: attrs.typ,
+        legendURL: attrs.legendURL,
+        infoFormat: attrs.infoFormat
+    });
 
     this.layer = tileLayer;
+    if (attrs.optionsFromCapabilities === undefined) {
+        this.createLayerSourceByDefinitions(Object.assign(attrs));
+    }
+    else {
+        this.createLayerSourceByCapabilities(Object.assign(attrs));
+    }
 };
 
 /**
