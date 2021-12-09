@@ -12,8 +12,6 @@ export default function WMSLayer (attrs) {
     const defaults = {
         infoFormat: "text/xml",
         gfiAsNewWindow: null,
-        // A change of the CACHEID initiates a reload of the service by openlayers and bypasses the browser cache.
-        cacheId: parseInt(Math.random() * 10000000, 10),
         supported: ["2D", "3D"],
         showSettings: true,
         extent: null,
@@ -80,7 +78,6 @@ WMSLayer.prototype.getOptions = function () {
 WMSLayer.prototype.getRawLayerAttributes = function (attrs) {
     const rawLayerAttributes = {
         id: attrs.id,
-        cacheId: attrs.cacheId,
         gutter: attrs.gutter,
         format: attrs.format,
         url: attrs.url,
@@ -118,7 +115,8 @@ WMSLayer.prototype.getLayerParams = function (attrs) {
         featureCount: attrs.featureCount,
         format: attrs.format,
         useProxy: attrs.useProxy,
-        typ: attrs.typ
+        typ: attrs.typ,
+        layerSequence: attrs.layerSequence
     };
 };
 

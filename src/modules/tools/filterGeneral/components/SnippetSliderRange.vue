@@ -1,17 +1,49 @@
 <script>
 export default {
-    name: "SnippetSlider"
+    name: "SnippetSliderRange",
+    props: {
+        label: {
+            type: String,
+            required: false,
+            default: "Slider"
+        },
+        minValue: {
+            type: Number,
+            required: false,
+            default: 0
+        },
+        maxValue: {
+            type: Number,
+            required: false,
+            default: 100
+        },
+        prechecked: {
+            type: Number,
+            required: false,
+            default: 10
+        },
+        visible: {
+            type: Boolean,
+            required: false,
+            default: true
+        }
+    },
+    data () {
+        return {
+            value: 0
+        };
+    }
 };
 </script>
 
-<template>
+<template v-show="visible">
     <div>
-        <label for="slider">slider: </label>
+        <label for="slider">{{ label }}</label>
         <input
             type="range"
-            min="1"
-            max="100"
-            value="50"
+            :min="minValue"
+            :max="maxValue"
+            :value="prechecked"
         >
     </div>
 </template>

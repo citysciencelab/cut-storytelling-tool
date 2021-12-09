@@ -138,10 +138,6 @@ export async function setValuesToState (state, params) {
 function checkDeprecated (key, translatedKey) {
     if (deprecated.find(toolId => toolId.toLowerCase() === key.toLowerCase())) {
         console.warn("Url Parameter '" + key.toUpperCase() + "' is deprecated in version 3.0.0. Please use '" + translatedKey + "' instead.");
-        store.dispatch("Alerting/addSingleAlert", i18next.t("common:utils.parametricURL.alertDeprecated", {
-            deprecatedKey: key.toUpperCase(),
-            currentUrl: `${window.location.href.split("?")[0]}?${translatedKey}`
-        }));
     }
 }
 

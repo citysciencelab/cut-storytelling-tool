@@ -2,24 +2,24 @@
 import Tool from "../../Tool.vue";
 import getComponent from "../../../../utils/getComponent";
 import {mapActions, mapGetters, mapMutations} from "vuex";
-import getters from "../store/gettersGeneralFilter";
-import mutations from "../store/mutationsGeneralFilter";
+import getters from "../store/gettersFilterGeneral";
+import mutations from "../store/mutationsFilterGeneral";
 import LayerFilterSnippet from "./LayerFilterSnippet.vue";
 import {convertToNewConfig} from "../utils/convertToNewConfig";
 
 export default {
-    name: "GeneralFilter",
+    name: "FilterGeneral",
     components: {
         Tool,
         LayerFilterSnippet
     },
     data () {
         return {
-            storePath: this.$store.state.Tools.GeneralFilter
+            storePath: this.$store.state.Tools.FilterGeneral
         };
     },
     computed: {
-        ...mapGetters("Tools/GeneralFilter", Object.keys(getters)),
+        ...mapGetters("Tools/FilterGeneral", Object.keys(getters)),
         console: () => console
     },
     created () {
@@ -33,8 +33,8 @@ export default {
         });
     },
     methods: {
-        ...mapMutations("Tools/GeneralFilter", Object.keys(mutations)),
-        ...mapActions("Tools/GeneralFilter", ["initialize"]),
+        ...mapMutations("Tools/FilterGeneral", Object.keys(mutations)),
+        ...mapActions("Tools/FilterGeneral", ["initialize"]),
         convertToNewConfig,
         close () {
             this.setActive(false);

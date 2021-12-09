@@ -4,7 +4,7 @@ import {fetchFirstModuleConfig} from "../../../../utils/fetchFirstModuleConfig";
  * @const {String} configPath an array of possible config locations. First one found will be used
  */
 const configPaths = [
-    "configJson.Portalconfig.menu.generalFilter"
+    "configJson.Portalconfig.menu.filterGeneral"
 ];
 
 
@@ -15,5 +15,5 @@ export default {
      * @returns {Boolean} false, if config does not contain the tool
      */
 
-    initialize: context => fetchFirstModuleConfig(context, configPaths, "generalFilter")
+    initialize: context => fetchFirstModuleConfig(context, configPaths, "filterGeneral")
 };

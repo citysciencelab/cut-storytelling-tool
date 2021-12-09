@@ -1,5 +1,5 @@
 import {generateSimpleMutations} from "../../../../app-store/utils/generators";
-import generalFilterState from "./stateGeneralFilter";
+import filterGeneralState from "./stateFilterGeneral";
 
 const mutations = {
     /**
@@ -8,7 +8,7 @@ const mutations = {
      * {setKey:   (state, payload) => *   state[key] = payload * }
      * will be returned.
      */
-    ...generateSimpleMutations(generalFilterState)
+    ...generateSimpleMutations(filterGeneralState)
 };
 
 export default mutations;

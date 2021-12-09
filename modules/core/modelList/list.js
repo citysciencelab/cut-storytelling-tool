@@ -568,13 +568,41 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 return layerModel.get("isBaseLayer") !== true || paramLayers.find(model => {
                     return model.id === layerModel.id;
                 }) !== undefined;
-            });
+            }),
+            treeType = Radio.request("Parser", "getTreeType");
 
         let initialLayers = [];
 
-        initialLayers = baseLayerModels.concat(layerModels);
-
+        // if the treeType is custom, handle sorting according to layerSequence
+        if (treeType === "custom") {
+            initialLayers = this.handleLayerSequence(allLayerModels);
+        }
+        else {
+            initialLayers = baseLayerModels.concat(layerModels);
+        }
         this.resetLayerIndeces(initialLayers);
+    },
+
+    /**
+     * inserts a new layer at the correct position in an array
+     * @param {Object[]} layers - sorted array with layers
+     * @param {Object} newLayer - layer to insert in array
+     * @return {Object[]} layers - sorted array with the new layer
+     */
+    addNewLayerToSequence: function (layers, newLayer) {
+        let layerIndex;
+
+        // newLayer must be inserted before first layer in sorted array that has a smaller layerSequence value
+        if (layers.length > 0 && layers.find(layer => layer.get("layerSequence") < newLayer.get("layerSequence")) !== undefined) {
+            layerIndex = layers.findIndex(layer => layer.get("layerSequence") < newLayer.get("layerSequence"));
+            layers.splice(layerIndex, 0, newLayer);
+        }
+        // if there is no scmaller layerSequence value, insert newLayer at the end of the array
+        else {
+            layers.push(newLayer);
+        }
+
+        return layers;
     },
 
     /**
@@ -617,52 +645,134 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     },
 
     /**
-     * Fetches and sorts all selected layers by their indeces. Layers with an initial index of 0 will be put
-     * on top in case of normal layer of on top of the first background layer in case of background layer.
-     * This behaviour is needed to prevent newly selected background layers from being put on top of all
-     * other layers.
+     * Fetches all selected layers. For light tree, these are all layers of the tree. for custom tree, these
+     * are only the ones listed under selected layers.
      * @return {array} Sorted selected Layers
      */
     getSortedTreeLayers: function () {
         const combinedLayers = this.getTreeLayers(),
-            newLayers = combinedLayers.filter(layer => layer.get("selectionIDX") === 0);
+            newLayers = combinedLayers.filter(layer => layer.get("selectionIDX") === 0),
+            treeType = Radio.request("Parser", "getTreeType");
 
-        let firstBaseLayerIndex,
-            // we need to devide current layers from newly added ones to be able to put the latter ones in
-            // at a nice position
-            currentLayers = combinedLayers.filter(layer => layer.get("selectionIDX") !== 0);
+        // we need to devide current layers from newly added ones to be able to put the latter ones in
+        // at a nice position
+        let currentLayers = combinedLayers.filter(layer => layer.get("selectionIDX") !== 0),
+            firstBaseLayerIndex;
 
         // first just sort all current layers
         currentLayers.sort(function (layer1, layer2) {
             return layer1.get("selectionIDX") > layer2.get("selectionIDX") ? 1 : -1;
         });
-
-        // following 3 steps must be done seperately because during this process, number of array entries
-        // and therefore its indeces will be changing
-        // ---
-        // 1: push all new normal layers, so they will be displayed on top
-        newLayers.forEach(newLayer => {
-            if (!newLayer.get("isBaseLayer")) {
-                currentLayers.push(newLayer);
-            }
-        });
-        // 2: now find the index, at which background layers should be inserted
-        currentLayers.forEach((currentLayer, currentIndex) => {
-            if (currentLayer.get("isBaseLayer")) {
-                firstBaseLayerIndex = currentIndex;
-            }
-        });
-        // 3: push all new background layers
-        newLayers.forEach(newLayer => {
-            if (newLayer.get("isBaseLayer")) {
-                currentLayers.splice(firstBaseLayerIndex + 1, 0, newLayer);
-            }
-        });
+        // if the treeType is custom, handle sorting according to layerSequence
+        if (treeType === "custom") {
+            currentLayers = this.handleLayerSequence(combinedLayers, currentLayers, newLayers);
+        }
+        else {
+            // following 3 steps must be done seperately because during this process, number of array entries
+            // and therefore its indeces will be changing
+            // ---
+            // 1: push all new normal layers, so they will be displayed on top
+            newLayers.forEach(newLayer => {
+                if (!newLayer.get("isBaseLayer")) {
+                    currentLayers.push(newLayer);
+                }
+            });
+            // 2: now find the index, at which background layers should be inserted
+            currentLayers.forEach((currentLayer, currentIndex) => {
+                if (currentLayer.get("isBaseLayer")) {
+                    firstBaseLayerIndex = currentIndex;
+                }
+            });
+            // 3: push all new background layers
+            newLayers.forEach(newLayer => {
+                if (newLayer.get("isBaseLayer")) {
+                    currentLayers.splice(firstBaseLayerIndex + 1, 0, newLayer);
+                }
+            });
+        }
 
         // finally, reset all layer indeces, so that the new layers also become part of this nice layer stack
         currentLayers = this.resetLayerIndeces(currentLayers);
 
         return currentLayers;
+    },
+
+    /**
+     * handles the sorting of the layerSequence paramter
+     * @param {Object[]} combinedLayers Combination of previously active and newly activated layers
+     * @param {Object[]} currentLayers previously active layers
+     * @param {Object[]} newLayers newly activated layers
+     * @returns {Object[]} sortedLayers - Layers sorted by layerSequence
+     */
+    handleLayerSequence: function (combinedLayers, currentLayers, newLayers) {
+        const layerWithSequence = combinedLayers.find(layer => {
+                return layer.get("layerSequence");
+            }),
+            previousLayers = currentLayers !== undefined ? currentLayers : [];
+        let sortedLayers = combinedLayers,
+            numberOfLayerWithSequence = 0,
+            layersToAdd = newLayers !== undefined ? newLayers : [];
+
+        // how many of the previously active layers have the paramter layerSequence?
+        previousLayers.forEach(layer => {
+            if (layer.get("layerSequence") !== undefined) {
+                numberOfLayerWithSequence += 1;
+            }
+        });
+
+        // check if all layers already got a layerSequence parameter, or if it is the initial call
+        if (previousLayers.length === 0 || numberOfLayerWithSequence !== previousLayers.length) {
+            if (layerWithSequence !== undefined && typeof layerWithSequence === "object") {
+                sortedLayers = this.sortLayerSequence(this.addLayerSequence(combinedLayers));
+            }
+        }
+        // add new layer
+        else if (numberOfLayerWithSequence === previousLayers.length && layersToAdd.length > 0) {
+            layersToAdd = this.addLayerSequence(layersToAdd);
+            layersToAdd.forEach(newLayer => {
+                sortedLayers = this.addNewLayerToSequence(previousLayers, newLayer);
+            });
+        }
+        else {
+            sortedLayers = this.sortLayerSequence(sortedLayers);
+        }
+        return sortedLayers;
+    },
+
+    /**
+     * Gives all passed layers a layerSequence, if they don't have one
+     * @param {Object[]} layers - layer, that should get a layerSequence
+     * @returns {Object[]} layers - layers with layerSequence
+     */
+    addLayerSequence: function (layers) {
+        let baseLayerSequence = 1000;
+
+        layers.forEach(layer => {
+            if (!layer.get("isBaseLayer") && layer.get("layerSequence") === undefined) {
+                layer.set("layerSequence", 1000);
+            }
+            else if (layer.get("isBaseLayer") && layer.get("layerSequence") === undefined) {
+                baseLayerSequence += 1;
+                layer.set("layerSequence", baseLayerSequence);
+            }
+        });
+
+        return layers;
+    },
+
+    /**
+     * sorts passed layers according to the layerSequence
+     * @param {Object[]} layers - layers
+     * @returns {Object[]} sortedLayers - sorted layers
+     */
+    sortLayerSequence: function (layers) {
+        let sortedLayers = [];
+
+        layers.forEach(layer => {
+            sortedLayers = this.addNewLayerToSequence(sortedLayers, layer);
+        });
+
+        return sortedLayers;
     },
 
     /**
@@ -674,7 +784,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         const sortedLayers = this.getSortedTreeLayers();
 
         sortedLayers.forEach(layer => {
-            Radio.trigger("Map", "addLayerToIndex", [layer.get("layer"), layer.get("selectionIDX")]);
+            Radio.trigger("Map", "addLayerToIndex", [layer.get("layer"), layer.get("selectionIDX"), layer.get("layerSequence")]);
         });
     },
 

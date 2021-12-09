@@ -10,6 +10,7 @@
 
 ## Unreleased - in development
 ### Added
+- Added the possibility to configure a predefined order of selected layers.
 - Feature: List component supports onRowClick callback
 
 ### Changed
