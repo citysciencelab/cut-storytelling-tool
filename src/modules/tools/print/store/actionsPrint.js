@@ -226,16 +226,53 @@ export default {
         }
         const printId = printJob.printAppId || state.printAppId,
             printFormat = printJob.format || state.currentFormat,
-            url = state.mapfishServiceUrl + printId + "/report." + printFormat;
+            url = state.printService === "plotservice" ? state.mapfishServiceUrl + "/create.json" : state.mapfishServiceUrl + printId + "/report." + printFormat;
         let response = "";
 
         commit("setProgressWidth", "width: 50%");
         if (typeof printJob.getResponse === "function") {
+            if (state.printService === "plotservice") {
+                printJob.payload = await dispatch("migratePayload", printJob.payload);
+            }
             response = await printJob.getResponse(url, printJob.payload);
         }
 
+        if ("getURL" in response.data) {
+            await commit("setPlotserviceIndex", state.plotserviceIndex + 1);
+            dispatch("downloadFile", {
+                "fileUrl": response.data.getURL,
+                "index": state.plotserviceIndex,
+                "filename": state.outputFilename + "." + state.outputFormat
+            });
+        }
+        else {
         response.data.index = printJob.index;
         dispatch("waitForPrintJob", response.data);
+        }
+	},
+
+    migratePayload: function (context, payload) {
+        const plotservicePayload = {},
+            decodePayload = JSON.parse(decodeURIComponent(payload.replace(/imageFormat/g, "format")));
+
+        plotservicePayload.layout = decodePayload.layout;
+        plotservicePayload.srs = decodePayload.attributes.map.projection;
+        plotservicePayload.layers = decodePayload.attributes.map.layers;
+        plotservicePayload.layers.forEach((key) => {
+            key.styles = [""];
+        });
+        plotservicePayload.pages = [{
+            center: decodePayload.attributes.map.center,
+            scale: String(decodePayload.attributes.map.scale),
+            scaleText: "Ca. 1 : " + decodePayload.attributes.map.scale,
+            geodetic: true,
+            dpi: String(decodePayload.attributes.map.dpi),
+            mapTitle: decodePayload.attributes.title
+        }];
+        plotservicePayload.outputFilename = context.state.outputFilename;
+        plotservicePayload.outputFormat = context.state.outputFormat;
+
+        return JSON.stringify(plotservicePayload);
     },
 
     /**

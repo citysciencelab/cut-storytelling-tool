@@ -43,7 +43,9 @@ const state = {
     deactivateGFI: false,
     filename: "report",
     mapfishServiceId: "",
+    printService: "mapfish",
     printAppId: "master",
+    printAppCapabilities: "capabilities.json",
     layoutList: [],
     currentLayout: undefined,
     currentLayoutName: "A4 Hochformat",
@@ -90,6 +92,30 @@ const state = {
     progressWidth: "width: 0%",
     fileDownloadUrl: "",
     fileDownloads: [],
+    outputFilename: "Ausdruck",
+    defaultOutputFilename: "Ausdruck",
+    outputFormat: "pdf",
+    plotserviceIndex: -1,
+    configFilter: {
+        "layouts": ["default_pdf_a4_hoch", "default_pdf_a4_hoch_legend", "default_pdf_a4_quer", "default_pdf_a4_quer_legend", "default_pdf_a3_hoch", "default_pdf_a3_hoch_legend", "default_pdf_a3_quer", "default_pdf_a3_quer_legend"],
+        "dpis": ["288"]
+    },
+    defaultConfigFilter: {},
+    additionals: {
+        "addparamtype": "default"
+    },
+    defaultAdditionals: {},
+    bgList: [
+        {"4431": "ALKIS zum Stichtag"},
+        {"1005": "Luftbild"},
+        {"1006": "Luftbild Graustufen"},
+        {"1002": "TopPlusOpen"},
+        {"1003": "TopPlusOpen Graustufen"},
+        {"1007": "WebAtlasDE"},
+        {"1008": "WebAtlasDE Graustufen"},
+        {"4432": "Gemarkungsübersicht zum Stichtag"}
+    ],
+    currentBackground: "",
     /**
      * @deprecated in the next major-release!
      * useProxy

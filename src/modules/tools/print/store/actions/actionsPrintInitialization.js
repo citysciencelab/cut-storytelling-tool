@@ -20,17 +20,28 @@ export default {
         if (state.mapfishServiceId !== "") {
             serviceUrl = Radio.request("RestReader", "getServiceById", state.mapfishServiceId).get("url");
             commit("setMapfishServiceUrl", serviceUrl);
-            serviceUrl = serviceUrl + state.printAppId + "/capabilities.json";
+            serviceUrl = serviceUrl + state.printAppId + "/" + state.printAppCapabilities;
+            // serviceUrl = "http://localhost/portal/boris_config/capabilities.json";
             const serviceRequest = {
                 "serviceUrl": serviceUrl,
                 "requestType": "GET",
-                "onSuccess": "parseMapfishCapabilities"
+                "onSuccess": "parseCapabilities"
             };
 
             dispatch("sendRequest", serviceRequest);
 
         }
     },
+
+    parseCapabilities: function ({state, dispatch}, response) {
+        if (state.printService === "mapfish") {
+            dispatch("parseMapfishCapabilities", response);
+        }
+        else {
+            dispatch("parsePlotserviceCapabilities", response);
+        }
+    },
+
     /**
      * Sets the capabilities from mapfish resonse.
      * @param {Object} param.state the state
@@ -46,6 +57,20 @@ export default {
         dispatch("getAttributeInLayoutByName", "gfi");
         dispatch("getAttributeInLayoutByName", "legend");
         dispatch("getAttributeInLayoutByName", "scale");
+        commit("setFormatList", response.formats);
+        commit("setCurrentScale", Radio.request("MapView", "getOptions").scale);
+        dispatch("togglePostrenderListener");
+        if (state.isGfiAvailable) {
+            dispatch("getGfiForPrint");
+            BuildSpec.buildGfi(state.isGfiSelected, state.gfiForPrint);
+        }
+    },
+
+    parsePlotserviceCapabilities: function ({state, commit, dispatch}, response) {
+        commit("setLayoutList", response.layouts);
+        dispatch("chooseCurrentLayout", response.layouts);
+        commit("setScaleList", response.scales.map(scale => parseInt(scale.value, 10)).sort((a, b) => a - b));
+        commit("setFormatList", response.outputFormats.map(format => format.name));
         commit("setCurrentScale", Radio.request("MapView", "getOptions").scale);
         dispatch("togglePostrenderListener");
         if (state.isGfiAvailable) {
@@ -377,10 +402,17 @@ export default {
      * @returns {void}
      */
     getPrintMapSize: function ({state, commit, dispatch}) {
+        if (state.printService === "plotservice") {
+            const map = state.currentLayout.map;
+
+            commit("setLayoutMapInfo", [map.width, map.height]);
+        }
+        else {
         dispatch("getAttributeInLayoutByName", "map");
         const layoutMapInfo = state.mapAttribute.clientInfo;
 
         commit("setLayoutMapInfo", [layoutMapInfo.width, layoutMapInfo.height]);
+        }
     },
 
     /**
@@ -391,9 +423,11 @@ export default {
      * @returns {void}
      */
     getPrintMapScales: function ({state, dispatch, commit}) {
+        if (state.printService !== "plotservice") {
         dispatch("getAttributeInLayoutByName", "map");
         const layoutMapInfo = state.mapAttribute.clientInfo;
 
         commit("setScaleList", layoutMapInfo.scales.sort((a, b) => a - b));
+        }
     }
 };
