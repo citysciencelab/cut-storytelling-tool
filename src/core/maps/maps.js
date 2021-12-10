@@ -32,7 +32,7 @@ function create2DMap (mapViewSettings) {
 }
 
 /**
- * Create the 3D map.
+ * Create the 3D map
  * @returns {void}
  */
 function create3DMap () {
@@ -42,7 +42,7 @@ function create3DMap () {
 }
 
 /**
- * Create the oblique map.
+ * Create the oblique map
  * @param {Object} configJs The config.js file.
  * @returns {void}
  */
