@@ -35,7 +35,11 @@ export default {
 
     /**
      * Returns the map collection.
+<<<<<<< Updated upstream
      * @returns {Array} The map collection.
+=======
+     * @returns {module:ol/PluggableMap~PluggableMap} The mapview.
+>>>>>>> Stashed changes
      */
     getMapCollection: function () {
         return mapCollection;

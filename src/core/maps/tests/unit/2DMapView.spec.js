@@ -9,6 +9,7 @@ import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 import {expect} from "chai";
+import store from "../../../../app-store";
 
 describe("src/core/maps/2DMapView.js", () => {
     /**
@@ -65,6 +66,15 @@ describe("src/core/maps/2DMapView.js", () => {
         mapView = mapCollection.getMapView("ol", "2D");
     });
 
+    it("getCurrentExtent - calculate the extent for the current view state and the passed size", function () {
+        expect(mapView.getCurrentExtent()).to.deep.equal([
+            509999.99999999994,
+            5876639.8,
+            625000.3999999999,
+            5991640.2
+        ]);
+    });
+
     describe("getProjectedBBox", () => {
         it("Returns the bounding box with the projection EPSG:4326", () => {
             expect(mapView.getProjectedBBox()).to.deep.equal([
@@ -74,6 +84,28 @@ describe("src/core/maps/2DMapView.js", () => {
                 49.98782015759816
             ]);
         });
+    });
+
+    it("getResoByScale - returns the resolution for the given scale", function () {
+        expect(mapView.getResoByScale(5000, "max")).to.deep.equal([
+            -0.37214433613366177,
+            43.73233379125262,
+            10.568026404151366,
+            49.98782015759816
+        ]);
+    });
+
+    it("resetView - sets the bbox", function () {
+        mapView.resetView();
+
+        const dispatchCalls = {};
+
+        store.dispatch = (arg1, arg2) => {
+            dispatchCalls[arg1] = arg2 !== undefined ? arg2 : "called";
+        };
+
+        expect(dispatchCalls["MapMarker/removePointMarker"].length).to.be.equals(0);
+
     });
 
     describe("setBBox", () => {

@@ -4,76 +4,226 @@ import {transformToMapProjection, transformFromMapProjection} from "masterportal
 
 import mapCollection from "../dataStorage/mapCollection";
 import calculateExtent from "../../utils/calculateExtent";
+import findWhereJs from "../../utils/findWhereJs";
+import store from "../../app-store";
+import defaults from "masterportalAPI/src/defaults";
+
+
+View.prototype.initStore = function () {
+    debugger;
+    let params;
+
+    if (this.getConstrainedResolution(this.getResolution()) === this.options_.resolution) {
+        params = this.options_.resolution;
+    }
+    // triggert model.js die Funktion checkForScale modules\core\modelList\layer\model.js
+    Radio.trigger("MapView", "changedOptions", params);
+    store.commit("Map/setScale", params?.scale);
+};
+/**
+ * calculate the extent for the current view state and the passed size
+ * @fires Core#RadioRequestMapGetSize
+ * @return {ol.extent} extent
+ */
+View.prototype.getCurrentExtent = function () {
+    const mapSize = Radio.request("Map", "getSize");
+
+    return this.calculateExtent(mapSize);
+};
 
 /**
  * Returns the bounding box in a given coordinate system (EPSG code).
  * @param {String} [epsgCode="EPSG:4326"] EPSG code into which the bounding box is transformed.
- * @param {Object} [map] The parameter to get the map from the map collection
- * @param {String} [map.mapId="ol"] The map id.
- * @param {String} [map.mapMode="2D"] The map mode.
  * @returns {Number[]} Bounding box in the specified coordinate system.
  */
-View.prototype.getProjectedBBox = function (epsgCode = "EPSG:4326", map = {mapId: "ol", mapMode: "2D"}) {
-    const olMap = mapCollection.getMap(map.mapId, map.mapMode),
-        bbox = this.calculateExtent(olMap.getSize()),
-        firstCoordTransform = transformFromMapProjection(olMap, epsgCode, [bbox[0], bbox[1]]),
-        secondCoordTransform = transformFromMapProjection(olMap, epsgCode, [bbox[2], bbox[3]]);
+View.prototype.getProjectedBBox = function (epsgCode = "EPSG:4326") {
+    const map = mapCollection.getMap("ol", "2D"),
+        bbox = this.calculateExtent(map.getSize()),
+        firstCoordTransform = transformFromMapProjection(map, epsgCode, [bbox[0], bbox[1]]),
+        secondCoordTransform = transformFromMapProjection(map, epsgCode, [bbox[2], bbox[3]]);
 
     return [firstCoordTransform[0], firstCoordTransform[1], secondCoordTransform[0], secondCoordTransform[1]];
 };
 
 /**
- * Sets the bounding box for the map view.
- * @param {Number[]} bbox The Boundingbox to fit the map.
- * @param {Object} [map] The parameter to get the map from the map collection
- * @param {String} [map.mapId="ol"] The map id.
- * @param {String} [map.mapMode="2D"] The map mode.
+ * Returns the corresponding resolution for the scale.
+ * @param  {String|number} scale - todo
+ * @param  {String} scaleType - min or max
+ * @return {number} resolution
+ */
+View.prototype.getResoByScale = function (scale, scaleType) {
+    debugger;
+    const scales = this.options_.map(function (option) {
+        return option.scale;
+    });
+
+    let index = "",
+        unionScales = scales.concat([parseInt(scale, 10)].filter(item => scales.indexOf(item) < 0));
+
+    unionScales = unionScales.sort(function (a, b) {
+        return b - a;
+    });
+
+    index = unionScales.indexOf(parseInt(scale, 10));
+    if (unionScales.length === scales.length || scaleType === "max") {
+        return this.getResolutions()[index];
+    }
+    else if (scaleType === "min") {
+        return this.getResolutions()[index - 1];
+    }
+    return null;
+};
+
+/**
+ * Sets center and resolution to initial values
+ * @fires Core#RadioRequestParametricURLGetCenter
  * @returns {void}
  */
-View.prototype.setBBox = function (bbox, map = {mapId: "ol", mapMode: "2D"}) {
+View.prototype.resetView = function () {
+    const paramUrlCenter = store.state.urlParams["Map/center"] ? store.state.urlParams["Map/center"] : null,
+        settingsCenter = this.settings !== undefined && this.settings?.startCenter ? this.defaults.settings.startCenter : undefined,
+        defaultCenter = defaults.startCenter,
+        center = paramUrlCenter || settingsCenter || defaultCenter,
+        settingsResolution = this.defaults.settings !== undefined && this.defaults.settings?.resolution ? this.defaults.settings.resolution : undefined,
+        defaultResolution = defaults.startResolution,
+        resolution = settingsResolution || defaultResolution;
+
+    this.setCenter(center);
+    this.setResolution(resolution);
+    store.dispatch("MapMarker/removePointMarker");
+};
+
+/**
+ * Sets the bounding box for the map view.
+ * @param {Number[]} bbox The Boundingbox to fit the map.
+ * @returns {void}
+ */
+View.prototype.setBBox = function (bbox) {
     if (bbox) {
-        this.fit(bbox, {size: mapCollection.getMap(map.mapId, map.mapMode).getSize()});
+        this.fit(bbox, mapCollection.getMap("ol", "2D").getSize());
     }
 };
 
 /**
- * Zoom to a given extent.
+ * @description sets the  center of the map and zoom level if defined
+ * @param  {array} coords Coordinates
+ * @param  {number} zoomLevel Zoom Level
+ * @return {void}
+ */
+View.prototype.setCenter = function (coords, zoomLevel) {
+    let first2Coords = [coords[0], coords[1]];
+
+    // Coordinates need to be integers, otherwise open layers will go nuts when you attempt to pan the
+    // map. Please fix this at the origin of those stringified numbers. However, this is to adress
+    // possible future issues:
+    if (typeof first2Coords[0] !== "number" || typeof first2Coords[1] !== "number") {
+        console.warn("Given coordinates must be of type integer! Although it might not break, something went wrong and needs to be checked!");
+        first2Coords = first2Coords.map(singleCoord => parseInt(singleCoord, 10));
+    }
+
+    this.setCenter(first2Coords);
+
+    if (zoomLevel !== undefined) {
+        this.setZoom(zoomLevel);
+    }
+};
+
+/**
+ * @description todo
+ * @param {number} resolution -
+ * @returns {void}
+ */
+View.prototype.setConstrainedResolution = function (resolution) {
+    this.setResolution(resolution);
+};
+
+/**
+ * finds the right resolution for the scale and sets it for this view
+ * @param {number} scale - map view scale
+ * @returns {void}
+ */
+View.prototype.setResolutionByScale = function (scale) {
+    const params = findWhereJs(this.options_, {scale: scale});
+
+    if (this !== undefined) {
+        this.setResolution(params.resolution);
+    }
+};
+
+/**
+ * @description sets start zoom level
+ * @param  {number} value Zoom Level
+ * @returns {void}
+ */
+View.prototype.setStartZoomLevel = function (value) {
+    if (value !== undefined) {
+        this.setResolution(this.getResolutions()[value]);
+    }
+};
+
+/**
+ * Reduces the zoomlevel by one.
+ * @return {void}
+ */
+View.prototype.setZoomLevelDown = function () {
+    this.setZoom(this.getZoom() - 1);
+};
+
+/**
+ * Increases the zoomlevel by one.
+ * @return {void}
+ */
+View.prototype.setZoomLevelUp = function () {
+    this.setZoom(this.getZoom() + 1);
+};
+
+/**
+ * @description todo
+ * @returns {void}
+ */
+View.prototype.toggleBackground = function () {
+    if (this.background === "white") {
+        this.setBackground(this.backgroundImage);
+        $("#map").css("background", this.defaults.settings.backgroundImage + "repeat scroll 0 0 rgba(0, 0, 0, 0)");
+    }
+    else {
+        this.setBackground("white");
+        $("#map").css("background", "white");
+    }
+};
+
+/**
+ * Zoom to a given extent
  * @param {String[]} extent The extent to zoom.
  * @param {Object} options Options for zoom.
  * @param {Number} [options.duration=800] The duration of the animation in milliseconds.
- * @param {Object} [map] The parameter to get the map from the map collection
- * @param {String} [map.mapId="ol"] The map id.
- * @param {String} [map.mapMode="2D"] The map mode.
  * @see {@link https://openlayers.org/en/latest/apidoc/module-ol_View-View.html#fit} for more options.
  * @returns {void}
  */
-View.prototype.zoomToExtent = function (extent, options, map = {mapId: "ol", mapMode: "2D"}) {
+View.prototype.zoomToExtent = function (extent, options) {
     this.fit(extent, {
-        size: mapCollection.getMap(map.mapId, map.mapMode).getSize(),
+        size: mapCollection.getMap("ol", "2D").getSize(),
         ...Object.assign({duration: 800}, options)
     });
 };
 
 /**
  * Zoom to features that are filtered by the ids.
- * @param {String[]} featureIds The feature ids.
+ * @param {String[]} ids The feature ids.
  * @param {String} layerId The layer id.
  * @param {Object} zoomOptions The options for zoom to extent.
- * @param {Object} [map] The parameter to get the map from the map collection
- * @param {String} [map.mapId="ol"] The map id.
- * @param {String} [map.mapMode="2D"] The map mode.
  * @returns {void}
  */
-View.prototype.zoomToFilteredFeatures = function (featureIds, layerId, zoomOptions, map = {mapId: "ol", mapMode: "2D"}) {
-    const layer = mapCollection.getMap(map.mapId, map.mapMode).getLayerById(layerId);
+View.prototype.zoomToFilteredFeatures = function (ids, layerId, zoomOptions) {
+    const layer = mapCollection.getMap("ol", "2D").getLayerById(layerId);
 
     if (layer?.getSource()) {
         const layerSource = layer.getSource(),
             source = layerSource instanceof Cluster ? layerSource.getSource() : layerSource,
-            filteredFeatures = source.getFeatures().filter(feature => featureIds.indexOf(feature.getId()) > -1);
+            filteredFeatures = source.getFeatures().filter(feature => ids.indexOf(feature.getId()) > -1);
 
         if (filteredFeatures.length > 0) {
-            this.zoomToExtent(calculateExtent(filteredFeatures), zoomOptions, {mapId: map.mapId, mapMode: map.mapMode});
+            this.zoomToExtent(calculateExtent(filteredFeatures), zoomOptions);
         }
     }
 };
@@ -100,4 +250,13 @@ View.prototype.zoomToProjExtent = function (data, map = {mapId: "ol", mapMode: "
 
         this.zoomToExtent(extentToZoom, data.options, {mapId: map.mapId, mapMode: map.mapMode});
     }
+};
+
+/**
+ * Sets the Background for the Mapview.
+ * @param  {string} value Image Url
+ * @returns {void}
+ */
+View.prototype.setBackground = function (value) {
+    this.background = value;
 };

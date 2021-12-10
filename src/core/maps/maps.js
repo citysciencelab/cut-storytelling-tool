@@ -3,9 +3,7 @@ import {getLayerList} from "masterportalAPI/src/rawLayerList";
 
 import "./2DMap";
 import "./2DMapView";
-import "./2DMapRadioBridge";
 
-import MapView from "../../../modules/core/mapView";
 import Map3dModel from "../../../modules/core/map3d";
 import ObliqueMap from "../../../modules/core/obliqueMap";
 import mapCollection from "../dataStorage/mapCollection";
@@ -25,18 +23,14 @@ function create2DMap (mapViewSettings) {
         }, "2D", {});
 
     mapCollection.addMap(map, "ol", "2D");
-
-    new MapView({
-        view: map.getView(),
-        settings: mapViewSettings
-    });
+    mapCollection.getMapView("ol", "2D").initStore();
 
     store.dispatch("Map/setMapAttributes", {map: map});
     Radio.trigger("ModelList", "addInitiallyNeededModels");
 }
 
 /**
- * Create the 3D map.
+ * Create the 3D map
  * @returns {void}
  */
 function create3DMap () {
@@ -46,7 +40,7 @@ function create3DMap () {
 }
 
 /**
- * Create the oblique map.
+ * Create the oblique map
  * @param {Object} configJs The config.js file.
  * @returns {void}
  */
