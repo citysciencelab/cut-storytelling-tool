@@ -132,17 +132,15 @@ WMTSLayer.prototype.createLayerSourceByCapabilities = function (attrs) {
                 this.layer.getSource().refresh();
             }
             else {
-                this.removeLayer();
-                throw new Error("Cannot get options from WMTS-Capabilities");
+                const errorMessage = "Cannot get options from WMTS-Capabilities";
+
+                this.removeLayerItem();
+                this.showErrorMessage(errorMessage, this.get("name"));
+                throw new Error(errorMessage);
             }
         })
         .catch((error) => {
-            this.removeLayer();
-            bridge.removeItem(this.get("id"));
-            bridge.refreshLayerTree();
-            if (error === "Fetch error") {
-                return;
-            }
+            this.removeLayerItem();
             this.showErrorMessage(error, this.get("name"));
         });
 };
@@ -227,7 +225,6 @@ WMTSLayer.prototype.createLayer = function (attrs) {
  */
 WMTSLayer.prototype.createLegend = function () {
     let legend = this.get("legend");
-    const capabilitiesUrl = this.get("capabilitiesUrl");
 
     /**
      * @deprecated in 3.0.0
@@ -248,6 +245,8 @@ WMTSLayer.prototype.createLegend = function () {
         console.error("WMTS: No legendURL is specified for the layer!");
     }
     else if (this.get("optionsFromCapabilities") && !this.get("legendURL")) {
+        const capabilitiesUrl = this.get("capabilitiesUrl");
+
         this.getWMTSCapabilities(capabilitiesUrl)
             .then((result) => {
                 result.Contents.Layer.forEach((layer) => {
@@ -320,6 +319,16 @@ WMTSLayer.prototype.getExtent = function () {
     }
 
     return projection.getExtent();
+};
+
+/**
+ * Removes the layer and the item and updates the layertree.
+ * @returns {Array} - The extent of the Layer.
+ */
+WMTSLayer.prototype.removeLayerItem = function () {
+    this.removeLayer();
+    bridge.removeItem(this.get("id"));
+    bridge.refreshLayerTree();
 };
 
 
