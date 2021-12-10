@@ -113,7 +113,8 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             id: this.get("id"),
             hitTolerance: this.get("hitTolerance"),
             altitudeMode: this.get("altitudeMode"),
-            alwaysOnTop: this.get("alwaysOnTop")
+            alwaysOnTop: this.get("alwaysOnTop"),
+            layerSequence: this.get("layerSequence")
         }));
 
         if (this.get("isSelected")) {

@@ -5,6 +5,7 @@ import SnippetDate from "./SnippetDate.vue";
 import SnippetDropdown from "./SnippetDropdown.vue";
 import SnippetInput from "./SnippetInput.vue";
 import SnippetSlider from "./SnippetSlider.vue";
+import SnippetSliderRange from "./SnippetSliderRange.vue";
 import isObject from "../../../../utils/isObject";
 
 export default {
@@ -15,6 +16,7 @@ export default {
         SnippetDropdown,
         SnippetInput,
         SnippetSlider,
+        SnippetSliderRange,
         SnippetButton
     },
     props: {
@@ -41,14 +43,14 @@ export default {
     <div>
         <div
             v-for="(layerConfig, index) in layersConfig"
-            :key="index"
+            :key="'layerConfig' + '-' + index"
         >
             <div
                 v-if="Object.prototype.hasOwnProperty.call(layerConfig, 'snippets') && Array.isArray(layerConfig.snippets)"
             >
                 <div
                     v-for="(snippet, indexFilter) in layerConfig.snippets"
-                    :key="snippet.attrName + '-' + indexFilter"
+                    :key="'snippet' + '-' + indexFilter"
                 >
                     <div
                         v-if="checkSnippetType(snippet, 'checkbox')"
@@ -109,16 +111,20 @@ export default {
                         class="snippet"
                     >
                         <SnippetSlider
-                            :operater="Object.prototype.hasOwnProperty.call(snippet, 'operater') ? snippet.operator : 'BETWEEN'"
-                            :value="Object.prototype.hasOwnProperty.call(snippet, 'value') ? snippet.value : ''"
-                            :label="Object.prototype.hasOwnProperty.call(snippet, 'label') ? snippet.label : ''"
+                            :attr-name="snippet.attrName"
+                            :label="snippet.label"
+                            :min-value="snippet.minValue"
+                            :max-value="snippet.maxValue"
+                            :operater="snippet.operator"
+                            :prechecked="snippet.prechecked"
+                            :visible="snippet.visible"
                         />
                     </div>
                     <div
                         v-else-if="checkSnippetType(snippet, 'sliderRange')"
                         class="snippet"
                     >
-                        <SnippetSlider
+                        <SnippetSliderRange
                             :operator="Object.prototype.hasOwnProperty.call(snippet, 'operater') ? snippet.operater : 'BETWEEN'"
                             :values="Object.prototype.hasOwnProperty.call(snippet, 'value') ? snippet.value : ''"
                             :label="Object.prototype.hasOwnProperty.call(snippet, 'label') ? snippet.label : ''"

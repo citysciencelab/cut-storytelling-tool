@@ -728,6 +728,7 @@
               "targetLayerNotFound": "Der gespeicherte Ziel-Layer mit der ID {{layerId}} wurde nicht gefunden."
             },
             "wfsSearch": {
+                "wrongConfig": "The layer with the id \"{{id}}\" for the search instance \"{{title}}\" is not defined.",
                 "noResults": "No results were found for your search criteria. Please try again.",
                 "optionsPlaceholder": "Please choose an option!",
                 "resetButton": "Reset",

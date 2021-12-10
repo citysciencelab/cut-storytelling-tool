@@ -11,51 +11,86 @@
 ## Unreleased - in development
 ### Added
 - Added style.json parameter "rotation" to wfs features with iconPointStyle, if the parameter is not given it will fall back to standard alignment.
+- Added the possibility to configure a predefined order of selected layers.
+- Feature: List component supports onRowClick callback
+- The following NPM packages are added:
+  - dependencies:
+    "bootstrap-sass"
 
 ### Changed
 - Migrated the map from Backbone.js to Vue.js environment.
 - Migrated the layer wmsTime from Backbone.js to Vue.js environment.
+- WfsSearch:
+    - Update documentation.
+        - Change parameter `wfsSearch.searchInstance.requestConfig.gazetteer` from a `Boolean` to an `Object`. Move parameters `namespaces` and `memberSuffix` to that Object.
+        - Change parameter `nameSpaces` to `namespaces` to be inline with the rest of the configuration.
+    - Allow parameter `namespaces` to also be a single String instead of always expecting an array.
+- Switched CSS Preprocessor from LESS to SCSS. Edited Webpack Config, renamed .less files to .scss files including renaming of variables and mixins to match scss syntax. Edited vue components to use scss. Edited backbone modules to use scss files. Edited docs accordingly.
+- The following NPM packages are changed:
+  - devDependencies:
+    "less" => "sass", "less-loader => "sass-loader"
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+- WfsSearch:
+    - Add namespace to the filter as otherwise the features are not properly filtered.
+    - Fix reset UI button.
+    - Add missing error translation for wrong config.
+
+---
+
+## v2.16.2 - 2021-12-09
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+- Clustered features are displayed correctly.
+
+---
+
+## v2.16.1 - 2021-12-08
+### Removed
+- Remove the unnecessary alert for the parametricUrl.
+
+### Fixed
+- Set the library core-js to the version 3.15.2 to fix iterations of DOM elements.
+- Fixed the parser function which convert xml to json.
+- Fix WMS requests from degree services by renaming parameter `SESSIONID` to `CACHEID`.
+
+---
 
 ## v2.16.0 - 2021-12-01
 ### Added
 - The library "svg-url-loader" was added to package.json devDependencies.
 - Added the new Tool `Routing`.
-- The following NPM packages are added:
-  - dependencies:
-    "bootstrap-sass"
-
 - Searchbar: An option "sortByName" in gdi to config if the rearching results from elastic sorted alphanumerically or not.
 - ParametricURL: An alert has been added which displays the new notation of a parameterized call.
 - Handling of polygons with holes to WKT geometry parsing.
 
 ### Changed
 - The following NPM packages are updated:
-    @babel/core": 7.14.6 to 7.16.0
-    @babel/eslint-parser: 7.14.7 to 7.16.0
-    @babel/preset-env: 7.14.7 to 7.16.0
-    @vue/test-utils: 1.2.1 to 1.2.2
-    babel-loader: 8.2.2 to 8.2.3
-    eslint-plugin-vuejs-accessibility: 0.7.1 to 1.1.0
-    mocha: 9.0.2 to 9.1.3
-    selenium-webdriver: 4.0.0-beta.4 to version 4.0.0
+    - @babel/core": 7.14.6 to 7.16.0
+    - @babel/eslint-parser: 7.14.7 to 7.16.0
+    - @babel/preset-env: 7.14.7 to 7.16.0
+    - @vue/test-utils: 1.2.1 to 1.2.2
+    - babel-loader: 8.2.2 to 8.2.3
+    - eslint-plugin-vuejs-accessibility: 0.7.1 to 1.1.0
+    - mocha: 9.0.2 to 9.1.3
+    - selenium-webdriver: 4.0.0-beta.4 to version 4.0.0
 - The MasterportalAPI version is updated to v1.6.0. This also raised ol to version 6.9.0.
 - WMSLayer and GroupLayer are refactored. They are no longer Backbone-models. WMSLayer uses the masterportalAPI's wms layer on creation.
 - 2D-map is removed from vuex store. Maps are now stored in a collection. Creation of 2D-map and 3D-map use masterportalAPI's abstraction layer.
 - Print formats only contain working formats now.
-- Switched CSS Preprocessor from LESS to SCSS. Edited Webpack Config, renamed .less files to .scss files including renaming of variables and mixins to match scss syntax. Edited vue components to use scss. Edited backbone modules to use scss files. Edited docs accordingly.
-- The following NPM packages are changed:
-  - devDependencies:
-    "less" => "sass", "less-loader => "sass-loader"
 - QuickHelp: moved to Vue and refactored, can now be manipulated for search, tree and routing, new QuickHelp windows can be configured. See new quickHelp.md documentation for more details.
 - Migrated the layerSlider tool from Backbone.js to Vue.js.
-
-### Deprecated
 
 ### Removed
 - The module CLICKCOUNTER is removed.
@@ -75,8 +110,8 @@
 - GFI: in the iframe the content is now displayed again when using the `desktopType` `attached`.
 - GFI for theme datatable is displayed. Resolution at wms layer is set correctly.
 
-
 ---
+
 ## v2.15.0 - 2021-11-03
 ### Added
 - gfiAttributes: Adding Boolean type in gfi Attributes so that the original text can be parsed to be more understandable.
@@ -106,8 +141,8 @@
 - Fixed missing highlighting in years 2010-2014 and remove of highlighting when selecting another year in addon boris.
 - For long lists the compare-feature-window provides now a scrollbar.
 
-
 ---
+
 ## v2.14.0 - 2021-10-06
 ### Added
 - Add possibility to test end2end-tests with `MicrosoftEdge` driver.
@@ -129,8 +164,6 @@
 - The scale display of the map has now new scale steps: above 10.000 it is rounded to five hundreds (e.g. 10250 -> "1 : 10.500"), scale of 1.000 up to 10.000 is rounded to its fifties (e.g. 1025 -> "1 : 1.050").
 - Searchbar topics are now configurable with i18next.
 
-### Deprecated
-
 ### Removed
 - SensorThingsHttp: the option to use onprogress event when calling get or getInExtent is removed. The onprogress technic uses the addition "&$count=true" at the STA url to calculate the progress. This addition to the url slowes down the FROST server significantly and is therefore not longer supported.
 - The url parameter CLICKCOUNTER was removed.
@@ -144,17 +177,9 @@
 - LayerInformation: setting the title directly from Metadata without translation.
 - CoordToolkit: projection name is shown correctly if no title is defined.
 
-
 ---
+
 ##  v2.13.1 - 2021-09-03
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
 ### Fixed
 - Downgrade the follow npm packages to fix the compass in 3D mode:
  - css-loader from 4.3.0 to 1.0.0
@@ -265,6 +290,7 @@
 - Coordinates tool: Validation was corrected
 - Coordinates tool: EPSG code for coordinate system ETRS89/UTM 32N is shown correct in selectbox
 - Opening a tool by footer-link will close a visible tool in sidebar.
+
 ---
 
 ## v2.12.1 - 2021-08-12
@@ -335,6 +361,7 @@
 - Issue #623: filter error in connection with provided vectorStyles is fixed.
 - Style configuration is provided for dataStreams with result 0.
 - Seamless map panning in the oblique aerial views is possible in all directions again.
+
 ---
 
 ## v2.10.0 - 2021-06-02
