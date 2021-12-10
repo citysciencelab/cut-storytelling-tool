@@ -29,6 +29,7 @@
 - The following NPM packages are changed:
   - devDependencies:
     "less" => "sass", "less-loader => "sass-loader"
+- The WFSLayer is refactored. It is no longer a Backbone-model. The WFSLayer uses the masterportalAPI's wfs layer on creation.
 
 ### Deprecated
 
@@ -86,7 +87,7 @@
     - mocha: 9.0.2 to 9.1.3
     - selenium-webdriver: 4.0.0-beta.4 to version 4.0.0
 - The MasterportalAPI version is updated to v1.6.0. This also raised ol to version 6.9.0.
-- WMSLayer, WFSLayer and GroupLayer are refactored. They are no longer Backbone-models. WMSLayer and WFSLayer use the masterportalAPI's wms layer/ wfs layer on creation.
+- WMSLayer and GroupLayer are refactored. They are no longer Backbone-models. WMSLayer uses the masterportalAPI's wms layer on creation.
 - 2D-map is removed from vuex store. Maps are now stored in a collection. Creation of 2D-map and 3D-map use masterportalAPI's abstraction layer.
 - Print formats only contain working formats now.
 - QuickHelp: moved to Vue and refactored, can now be manipulated for search, tree and routing, new QuickHelp windows can be configured. See new quickHelp.md documentation for more details.

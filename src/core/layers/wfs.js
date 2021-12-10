@@ -54,7 +54,8 @@ WFSLayer.prototype.createLayer = function (attrs) {
             gfiTheme: attrs.gfiTheme,
             hitTolerance: attrs.hitTolerance,
             altitudeMode: attrs.altitudeMode,
-            alwaysOnTop: attrs.alwaysOnTop
+            alwaysOnTop: attrs.alwaysOnTop,
+            layerSequence: attrs.layerSequence
         },
         styleFn = this.getStyleFunction(attrs),
         options = {
@@ -117,20 +118,15 @@ WFSLayer.prototype.getVersion = function (attrs) {
 /**
  * Returns a function to filter features with.
  * @param {Object} attrs  params of the raw layer
- * @returns {Function} to filter geatures with
+ * @returns {Function} to filter features with
  */
 WFSLayer.prototype.getFeaturesFilterFunction = function (attrs) {
     return function (features) {
         // only use features with a geometry
-        let filteredFeatures = features.filter(function (feature) {
-            return feature.getGeometry() !== undefined;
-        });
+        let filteredFeatures = features.filter(feature => feature.getGeometry() !== undefined);
 
         if (attrs.bboxGeometry) {
-            filteredFeatures = filteredFeatures.filter((feature) => {
-                // test if the geometry and the passed extent intersect
-                return attrs.bboxGeometry.intersectsExtent(feature.getGeometry().getExtent());
-            });
+            filteredFeatures = filteredFeatures.filter((feature) => attrs.bboxGeometry.intersectsExtent(feature.getGeometry().getExtent()));
         }
         return filteredFeatures;
     };
@@ -212,8 +208,8 @@ WFSLayer.prototype.createLegend = function () {
     let legend = this.get("legend");
 
     /**
-         * @deprecated in 3.0.0
-         */
+     * @deprecated in 3.0.0
+     */
     if (this.get("legendURL")) {
         if (this.get("legendURL") === "") {
             legend = true;
@@ -287,8 +283,10 @@ WFSLayer.prototype.showFeaturesByIds = function (featureIdList) {
     featuresToShow.forEach(feature => {
         const style = this.getStyleAsFunction(this.get("style"));
 
-        feature.set("hideInClustering", false);
-        feature.setStyle(style(feature));
+        if (feature && feature !== null) {
+            feature.set("hideInClustering", false);
+            feature.setStyle(style(feature));
+        }
     });
 
     layerSource.addFeatures(allLayerFeatures);

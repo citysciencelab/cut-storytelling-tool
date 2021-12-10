@@ -458,18 +458,16 @@ Layer.prototype.prepareFeaturesFor3D = function (features) {
 Layer.prototype.setAltitudeOnGeometry = function (geometry) {
     const type = geometry.getType(),
         coords = geometry.getCoordinates();
-    let overwrittenCoords = [];
 
     if (type === "Point") {
-        overwrittenCoords = this.getPointCoordinatesWithAltitude(coords);
+        geometry.setCoordinates(this.getPointCoordinatesWithAltitude(coords));
     }
     else if (type === "MultiPoint") {
-        overwrittenCoords = this.getMultiPointCoordinatesWithAltitude(coords);
+        geometry.setCoordinates(this.getMultiPointCoordinatesWithAltitude(coords));
     }
     else {
         console.error("Type: " + type + " is not supported yet for function \"setAltitudeOnGeometry\"!");
     }
-    geometry.setCoordinates(overwrittenCoords);
     return geometry;
 };
 /**
