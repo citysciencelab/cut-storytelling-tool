@@ -246,10 +246,10 @@ export default {
             });
         }
         else {
-        response.data.index = printJob.index;
-        dispatch("waitForPrintJob", response.data);
+            response.data.index = printJob.index;
+            dispatch("waitForPrintJob", response.data);
         }
-	},
+    },
 
     migratePayload: function (context, payload) {
         const plotservicePayload = {},
