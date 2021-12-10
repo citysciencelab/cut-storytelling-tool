@@ -106,6 +106,7 @@ export default {
                 }
                 result.push(rule);
             });
+
             return result;
         },
         /**
@@ -163,10 +164,19 @@ export default {
                     class="snippet"
                 >
                     <SnippetDropdown
-                        :multiselect="Object.prototype.hasOwnProperty.call(snippet, 'multiselect') ? snippet.multiselect : 'false'"
-                        :operator="Object.prototype.hasOwnProperty.call(snippet, 'operater') ? snippet.operator : 'EQ'"
-                        :value="Object.prototype.hasOwnProperty.call(snippet, 'value') ? snippet.value : ''"
-                        :label="Object.prototype.hasOwnProperty.call(snippet, 'label') ? snippet.label : ''"
+                        :attr-name="snippet.attrName"
+                        :add-select-all="snippet.addSelectAll"
+                        :auto-init="snippet.autoInit"
+                        :display="snippet.display"
+                        :label="snippet.label"
+                        :multiselect="snippet.multiselect"
+                        :operator="snippet.operator"
+                        :placeholder="snippet.placeholder"
+                        :prechecked="snippet.prechecked"
+                        :render-icons="snippet.renderIcons"
+                        :value="snippet.value"
+                        :visible="snippet.visible"
+                        @ruleChanged="ruleChanged"
                     />
                 </div>
                 <div
