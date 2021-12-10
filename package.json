@@ -105,8 +105,6 @@
     "jsdoc": "^3.6.7",
     "jsdom": "^14.0.0",
     "jsdom-global": "^3.0.2",
-    "less": "^4.1.1",
-    "less-loader": "^7.3.0",
     "masterportalAPI": "git+https://bitbucket.org/geowerkstatt-hamburg/masterportalapi.git#BG-1915",
     "mini-css-extract-plugin": "^0.9.0",
     "mocha": "^9.1.3",
