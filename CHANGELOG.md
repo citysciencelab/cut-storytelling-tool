@@ -40,6 +40,7 @@
     - Add namespace to the filter as otherwise the features are not properly filtered.
     - Fix reset UI button.
     - Add missing error translation for wrong config.
+- The 'Select Features' tool can now also be used to select lines.
 
 ---
 
@@ -67,7 +68,6 @@
 - Fix WMS requests from degree services by renaming parameter `SESSIONID` to `CACHEID`.
 
 ---
-- The 'Select Features' tool can now also be used to select lines.
 
 ## v2.16.0 - 2021-12-01
 ### Added
