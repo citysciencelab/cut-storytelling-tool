@@ -27,14 +27,20 @@ function highlightPolygon (commit, dispatch, highlightObject) {
     if (highlightObject.highlightStyle) {
         const newStyle = highlightObject.highlightStyle,
             feature = highlightObject.feature,
-            clonedStyle = styleObject(highlightObject, feature) ? styleObject(highlightObject, feature).clone() : undefined;
+            styleObj = styleObject(highlightObject, feature),
+            clonedStyle = styleObj ? styleObj.clone() : undefined;
 
         if (clonedStyle) {
             commit("setHighlightedFeature", feature);
             commit("setHighlightedFeatureStyle", feature.getStyle());
 
-            clonedStyle.getFill().setColor(newStyle.fill.color);
-            clonedStyle.getStroke().setWidth(newStyle.stroke.width);
+            if(clonedStyle.getFill()){
+                clonedStyle.getFill().setColor(newStyle.fill.color);
+            }
+            if(clonedStyle.getStroke()){
+                clonedStyle.getStroke().setColor(newStyle.stroke.color);
+                clonedStyle.getStroke().setWidth(newStyle.stroke.width);
+            }
             feature.setStyle(clonedStyle);
 
         }
@@ -114,9 +120,18 @@ function increaseFeature (commit, highlightObject) {
  * @returns {ol/style} ol style
  */
 function styleObject (highlightObject, feature) {
-    const styleModelByLayerId = Radio.request("StyleList", "returnModelById", highlightObject.layer.id),
-        style = styleModelByLayerId ? styleModelByLayerId.createStyle(feature, false) : undefined;
+    let styleModelByLayerId = Radio.request("StyleList", "returnModelById", highlightObject.layer.id),
+    style = undefined;
 
+    if(!styleModelByLayerId){
+        styleModelByLayerId = Radio.request("StyleList", "returnModelById", highlightObject.layer.styleId)
+    }
+    if(styleModelByLayerId){
+        style = styleModelByLayerId.createStyle(feature, false);
+        if(Array.isArray(style) && style.length > 0){
+            style = style[0];
+        }
+    }
     return style;
 }
 
