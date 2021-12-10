@@ -408,10 +408,10 @@ export default {
             commit("setLayoutMapInfo", [map.width, map.height]);
         }
         else {
-        dispatch("getAttributeInLayoutByName", "map");
-        const layoutMapInfo = state.mapAttribute.clientInfo;
+            dispatch("getAttributeInLayoutByName", "map");
+            const layoutMapInfo = state.mapAttribute.clientInfo;
 
-        commit("setLayoutMapInfo", [layoutMapInfo.width, layoutMapInfo.height]);
+            commit("setLayoutMapInfo", [layoutMapInfo.width, layoutMapInfo.height]);
         }
     },
 
@@ -424,10 +424,10 @@ export default {
      */
     getPrintMapScales: function ({state, dispatch, commit}) {
         if (state.printService !== "plotservice") {
-        dispatch("getAttributeInLayoutByName", "map");
-        const layoutMapInfo = state.mapAttribute.clientInfo;
+            dispatch("getAttributeInLayoutByName", "map");
+            const layoutMapInfo = state.mapAttribute.clientInfo;
 
-        commit("setScaleList", layoutMapInfo.scales.sort((a, b) => a - b));
+            commit("setScaleList", layoutMapInfo.scales.sort((a, b) => a - b));
         }
     }
 };
