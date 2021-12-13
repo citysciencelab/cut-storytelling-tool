@@ -134,13 +134,15 @@ WMTSLayer.prototype.createLayerSourceByCapabilities = function (attrs) {
             else {
                 const errorMessage = "Cannot get options from WMTS-Capabilities";
 
-                this.removeLayerItem();
                 this.showErrorMessage(errorMessage, this.get("name"));
                 throw new Error(errorMessage);
             }
         })
         .catch((error) => {
-            this.removeLayerItem();
+            if (error === "Fetch error") {
+                // error message has already been printed earlier
+                return;
+            }
             this.showErrorMessage(error, this.get("name"));
         });
 };
@@ -280,33 +282,6 @@ WMTSLayer.prototype.createLegend = function () {
 };
 
 /**
- * Registers the LayerLoad-Events.
- * These are dispatched to core/map, which then either adds or removes a Loading Layer.
- * @returns {void}
- */
-WMTSLayer.prototype.registerLoadingListeners = function () {
-    this.get("layerSource").on("tileloadend", function () {
-        this.set("loadingParts", this.get("loadingsParts") - 1);
-    });
-
-    this.get("layerSource").on("tileloadstart", function () {
-        const tmp = this.get("loadingParts") ? this.get("loadingParts") : 0;
-
-        this.set("loadingParts", tmp + 1);
-    });
-
-    this.get("layerSource").on("change:loadingParts", function (val) {
-        if (val.oldValue > 0 && this.get("loadingParts") === 0) {
-            this.dispatchEvent("wmtsloadend");
-            this.unset("loadingParts", {silent: true});
-        }
-        else if (val.oldValue === undefined && this.get("loadingParts") === 1) {
-            this.dispatchEvent("wmtsloadstart");
-        }
-    });
-};
-
-/**
  * If the WMTS-Layer has an extent defined, then this is returned.
  * Else, the extent of the projection is returned.
  * @returns {Array} - The extent of the Layer.
@@ -319,16 +294,6 @@ WMTSLayer.prototype.getExtent = function () {
     }
 
     return projection.getExtent();
-};
-
-/**
- * Removes the layer and the item and updates the layertree.
- * @returns {Array} - The extent of the Layer.
- */
-WMTSLayer.prototype.removeLayerItem = function () {
-    this.removeLayer();
-    bridge.removeItem(this.get("id"));
-    bridge.refreshLayerTree();
 };
 
 
