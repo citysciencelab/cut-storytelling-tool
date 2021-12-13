@@ -227,6 +227,3 @@ export function onLanguageChanged (layer) {
     }, this);
 
 }
-
-
-
