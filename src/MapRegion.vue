@@ -71,19 +71,18 @@ export default {
             <div class="elements-positioned-over-map">
                 <LayerInformation />
                 <ControlBar class="controls" />
-                <QuickHelp
-                    v-if="getConfigObject()"
-                    :quick-help-config-js-object="typeof getConfigObject().quickHelp === 'object' || typeof getConfigObject().quickHelp === 'boolean' ? getConfigObject().quickHelp : false"
-                />
                 <WmsTime />
                 <MapMarker />
             </div>
         </div>
 
-
         <!-- elements that are somewhere above the map, but don't have a fixed position or are not always present -->
         <ConfirmAction />
         <Alerting />
+        <QuickHelp
+            v-if="getConfigObject()"
+            :quick-help-config-js-object="typeof getConfigObject().quickHelp === 'object' || typeof getConfigObject().quickHelp === 'boolean' ? getConfigObject().quickHelp : false"
+        />
 
         <template v-if="i18NextInitialized">
             <component
