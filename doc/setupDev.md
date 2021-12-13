@@ -29,7 +29,7 @@ $ git config --global https.proxy <proxy-url:port>
 
 ## Node.js
 
-Install **[Node.js](http://nodejs.org)**. Last known working version is *v10.18.0 LTS* with *NPM version 6.13.4*.
+Install **[Node.js](http://nodejs.org)**. 
 
 The Node Package Manager (**[NPM](http://npmjs.org)**) comes bundled with your Node.js installation. Please test the correct installation of these tools by executing `node -v` and `npm -v` in your command line; results should look like this:
 
