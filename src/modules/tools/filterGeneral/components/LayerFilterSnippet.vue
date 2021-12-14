@@ -220,6 +220,7 @@ export default {
                 >
                     <SnippetSlider
                         :attr-name="snippet.attrName"
+                        :decimal-step="snippet.decimalStep"
                         :label="snippet.label"
                         :min-value="snippet.minValue"
                         :max-value="snippet.maxValue"

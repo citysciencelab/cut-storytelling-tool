@@ -12,6 +12,11 @@ export default {
             required: false,
             default: ""
         },
+        decimalStep: {
+            type: Number,
+            required: false,
+            default: 1
+        },
         label: {
             type: String,
             required: false,
@@ -56,6 +61,7 @@ export default {
                 url: "https://geodienste.hamburg.de/HH_WFS_Regionaler_Bildungsatlas_Bev_Stadtteil",
                 typename: "regionaler_bildungsatlas_bevoelkerung_stadtteile"
             },
+            step: this.decimalStep,
             value: this.prechecked
         };
     },
@@ -68,6 +74,7 @@ export default {
     },
     created () {
         this.value = this.getValueInRange(this.value, false);
+        this.step = this.getStep(this.step);
         this.setInvalid(this.minimumValue, this.maximumValue);
         this.setMinOnly(this.minimumValue, this.maximumValue);
         this.setMaxOnly(this.minimumValue, this.maximumValue);
@@ -75,17 +82,32 @@ export default {
     },
     methods: {
         /**
+         * Getting valid step
+         * @param {Number} value - the step for slider
+         * @returns {Number} step the step for slider
+         */
+        getStep (value) {
+            if (!isNaN(value) && Math.sign(value) > 0) {
+                return value;
+            }
+
+            console.warn("Please check the parameter decimalStep in configuration, it should be a positive number");
+            return 1;
+        },
+        /**
          * Checking if the input key is in valid format and void invalid format (number)
          * @param {Event} evt - keypress event
          * @returns {Boolean} true if the input is in valid format (number)
          */
-        checkkeyInteger (evt) {
+        checkKeyNumber (evt) {
             const charCode = evt.which ? evt.which : evt.keyCode;
 
             if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 45) {
-                store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.incorrectEntry"));
-                evt.stopPropagation();
-                return false;
+                if (Number.isInteger(this.step) || (!Number.isInteger(this.step) && charCode !== 46)) {
+                    store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.incorrectEntry"));
+                    evt.stopPropagation();
+                    return false;
+                }
             }
 
             return true;
@@ -109,10 +131,14 @@ export default {
          * @returns {Number} the original input number or converted number
          */
         getValueInRange (data, flag) {
-            let value = parseInt(data, 10);
+            let value = parseFloat(data);
 
             if (this.invalid) {
                 return false;
+            }
+
+            if (!Number.isInteger(this.step) && typeof data === "string" && data.slice(-1) === "." || data === "-") {
+                value = data;
             }
 
             if (value < this.minimumValue) {
@@ -224,13 +250,14 @@ export default {
             class="input-single"
             type="text"
             :name="label"
-            @keypress="checkkeyInteger"
+            @keypress="checkKeyNumber"
             @input="checkEmpty"
         >
         <input
             v-model="value"
             class="slider-single"
             type="range"
+            :step="step"
             :min="minimumValue"
             :max="maximumValue"
         >

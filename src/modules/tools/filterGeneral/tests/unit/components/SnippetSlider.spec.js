@@ -16,6 +16,7 @@ describe("src/modules/tools/filterGeneral/components/SnippetSlider.vue", () => {
         wrapper = shallowMount(SnippetSliderComponent, {
             propsData: {
                 attrName: "bezirk_id",
+                decimalStep: 0.1,
                 label: "Slider",
                 minValue: 0,
                 maxValue: 1000,
@@ -68,9 +69,20 @@ describe("src/modules/tools/filterGeneral/components/SnippetSlider.vue", () => {
         expect(wrapper.find(".slider-single").element.value).equals("50");
     });
 
+    it("should get a valid step value", () => {
+        expect(wrapper.vm.getStep(1)).equals(1);
+        expect(wrapper.vm.getStep(0)).equals(1);
+        expect(wrapper.vm.getStep("")).equals(1);
+        expect(wrapper.vm.getStep(null)).equals(1);
+        expect(wrapper.vm.getStep(undefined)).equals(1);
+        expect(wrapper.vm.getStep([])).equals(1);
+        expect(wrapper.vm.getStep({})).equals(1);
+        expect(wrapper.vm.getStep(1.2)).equals(1.2);
+    });
+
     it("should get the value in range", () => {
         expect(wrapper.vm.getValueInRange(40, false)).equals(40);
-        expect(wrapper.vm.getValueInRange(80.6, false)).equals(80);
+        expect(wrapper.vm.getValueInRange(80.6, false)).equals(80.6);
         expect(wrapper.vm.getValueInRange(0, false)).equals(0);
         expect(wrapper.vm.getValueInRange(1000, false)).equals(1000);
 
@@ -83,7 +95,7 @@ describe("src/modules/tools/filterGeneral/components/SnippetSlider.vue", () => {
         });
 
         expect(wrapper.vm.getValueInRange(40, false)).equals(40);
-        expect(wrapper.vm.getValueInRange(80.6, false)).equals(80);
+        expect(wrapper.vm.getValueInRange(80.6, false)).equals(80.6);
         expect(wrapper.vm.getValueInRange(60, false)).equals(60);
         expect(wrapper.vm.getValueInRange(100, false)).equals(100);
     });
