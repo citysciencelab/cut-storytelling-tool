@@ -17,6 +17,7 @@
     - dependencies:
         - "bootstrap-sass"
 - Extended CSW processing for download links in layerInformation by CSW 2.0.2 standard.
+- The tool "featureLister" has been extended and now also highlights lines and polygons on mouse-over over the feature name.
 
 ### Changed
 - Migrated the map from Backbone.js to Vue.js environment.

@@ -111,8 +111,7 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 |zoomLevel|nein|Number|7|Gibt an, auf welches ZoomLevel gezoomt werden soll.|false|
 
 **Beispiel**
-```
-#!json
+```json
 "bkg": {
     "minCharacters": 3,
     "suggestServiceId": "4",
@@ -143,8 +142,7 @@ Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer. Wird nur durch Klic
 
 **Beispiel**
 
-```
-#!json
+```json
 
 "osm": {
     "minChars": 3,
@@ -174,8 +172,7 @@ Suche bei **[Komoot Photon](https://photon.komoot.io/)**.
 
 **Beispiel**
 
-```
-#!json
+```json
 
 "komoot": {
     "minChars": 3,
@@ -214,8 +211,7 @@ Definition von Klassen, welche als Ergebnis berücksichtigt werden sollen.
 
 **Beispiel**
 
-```
-#!json
+```json
 
 "locationFinder": {
     "serviceId": "10",
@@ -258,8 +254,7 @@ Konfiguration des Gazetteer Suchdienstes
 |serviceID|ja|String||Id des Suchdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.de.md)**.|false|
 
 **Beispiel**
-```
-#!json
+```json
 "gazetteer": {
     "minChars": 3,
     "serviceId": "6",
@@ -285,8 +280,7 @@ Deprecated in 3.0.0. Bitte **[elasticSearch](#markdown-header-portalconfigsearch
 |queryObject|ja|**[queryObject](#markdown-header-portalconfigsearchbargdiqueryobject)**||Query Objekt, das vom Elastic Search Model ausgelesen wird.|false|
 
 **Beispiel**
-```
-#!json
+```json
 "gdi": {
     "minChars": 3,
     "serviceId": "elastic",
@@ -340,8 +334,7 @@ Konfiguration des Elastic Search Suchdienstes
 Als zusätzliches property kann `payload` hinzugefügt werden. Es muss nicht zwingend gesetzt sein, und passt zur Beschreibung von **[CustomObject](#markdown-header-datatypescustomobject)**. Per default wird es als leeres Objekt `{}` gesetzt. Das Objekt beschreibt die Payload, die mitgeschickt werden soll. Es muss das Attribut für den searchString vorhalten. Dieses Objekt kann im Admintool nicht gepflegt werden, da dort **[CustomObject](#markdown-header-datatypescustomobject)** nicht definiert ist.
 
  **Beispiel**
-```
-#!json
+```json
 "elasticSearch": {
     "minChars":3,
     "serviceId":"elastic_hh",
@@ -434,8 +427,7 @@ Die WFS 2 query wird dabei dynamisch durch das Masterportal erstellt. Die Konfig
 |definitions|nein|**[definition](#markdown-header-portalconfigsearchbarspecialwfsdefinition)**[]||Definition der speziellen WFS suchen.|false|
 
 **Beispiel**
-```
-#!json
+```json
 "specialWFS": {
     "minChars": 5,
     "timeout": 10000,
@@ -478,8 +470,7 @@ Konfiguration einer Definition bei der SpecialWFS Suche
 |data|nein|String||Deprecated in 3.0.0 Filterparameter für den WFS request.|false|
 
 **Beispiel**
-```
-#!json
+```json
 {
     "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
     "typeName": "app:prosin_imverfahren",
@@ -499,8 +490,7 @@ Alle Layer, die im Themenbaum des Portals sind, werden durchsucht.
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
 
 **Beispiel**
-```
-#!json
+```json
 "tree": {
     "minChars": 5
 }
@@ -516,8 +506,7 @@ Konfiguration der Suche über die sichtbaren WFS. Deprecated in 3.0.0. Verwenden
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
 
 **Beispiel**
-```
-#!json
+```json
 "visibleWFS": {
     "minChars": 3
 }
@@ -535,8 +524,7 @@ Konfiguration der Suche über die sichtbaren VectorLayer. Bei der Layerdefinitio
 |gfiOnClick|nein|Boolean|false|Öffnet das GetFeatureInfo (gfi) bei Klick auf das Suchergebnis.|false|
 
 **Beispiel**
-```
-#!json
+```json
 "visibleVector": {
     "minChars": 3,
     "layerTypes": ["WFS", "GeoJSON"]
@@ -575,14 +563,12 @@ Das Attribut attributions kann vom Typ Boolean oder Object sein. Wenn es vom Typ
 |isInitOpenMobile|nein|Boolean|false|Legt fest, ob die Attributions (Mobile-Ansicht) initial ausgeklappt werden sollen.|false|
 
 **Beispiel als Boolean**
-```
-#!json
+```json
 "attributions": true
 ```
 
 **Beispiel als Object**
-```
-#!json
+```json
 "attributions": {
     "isInitOpenDesktop": true,
     "isInitOpenMobile": false,
@@ -599,8 +585,7 @@ Das Attribut attributions kann vom Typ Boolean oder Object sein. Wenn es vom Typ
 |poiDistances|nein|Boolean/Integer[]|true|Bei poiDistances=true werden die Defaultwerte verwendet. Legt fest, ob "In meiner Nähe" geladen wird und zeigt eine Liste von Features in der Umgebung an. Bei Angabe eines Array werden die darin definierten Abstände in Metern angeboten. Bei Angabe von true werden diese Abstände angeboten: [500,1000,2000].|false|
 
 **Beispiel mit poiDistances vom Typ Boolean**
-```
-#!json
+```json
 "orientation": {
     "zoomMode": "once",
     "poiDistances": true
@@ -608,8 +593,7 @@ Das Attribut attributions kann vom Typ Boolean oder Object sein. Wenn es vom Typ
 ```
 
 **Beispiel mit poiDistances vom Typ Integer[]**
-```
-#!json
+```json
 "orientation": {
     "zoomMode": "once",
     "poiDistances": [500, 1000, 2000, 5000]
@@ -630,8 +614,7 @@ Das Attribut overviewMap kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 |isInitOpen|nein|Boolean|true|Legt fest, ob die OverviewMap beim Start dargestellt oder verborgen sein soll.|
 
 **Beispiel overviewmap als Object:**
-```
-#!json
+```json
 "overviewMap": {
     "resolution": 305.7487246381551,
     "layerId": "452",
@@ -640,8 +623,7 @@ Das Attribut overviewMap kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 ```
 
 **Beispiel overviewmap als Boolean:**
-```
-#!json
+```json
 "overviewMap": true
 ```
 
@@ -657,8 +639,7 @@ Das Attribut totalView kann vom Typ Boolean oder Object sein. Wenn es vom Typ Bo
 |tableGlyphicon|nein|String|"glyphicon-home"|Über den Parameter tableGlyphicon kann bei einem TABLE Style ein anderes Glyphicon für das Zurückschalten zur Startansicht verwendet werden.|false|
 
 **Beispiel totalView als Object:**
-```
-#!json
+```json
 "totalView" : {
     "glyphicon": "glyphicon-step-forward",
     "tableGlyphicon": "glyphicon-step-forward"
@@ -666,8 +647,7 @@ Das Attribut totalView kann vom Typ Boolean oder Object sein. Wenn es vom Typ Bo
 ```
 
 **Beispiel totalView als Boolean:**
-```
-#!json
+```json
 "totalView": true
 ```
 
@@ -683,8 +663,7 @@ Das Attribut backForward kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 |glyphiconBack|nein|String||Über den Parameter glyphiconBack kann ein anderes Glyphicon für das Zurückschalten der Kartenansicht verwendet werden.|false|
 
 **Beispiel backForward als Object:**
-```
-#!json
+```json
 "backForward" : {
     "glyphiconFor": "glyphicon-fast-forward",
     "glyphiconBack": "glyphicon-fast-backward"
@@ -692,8 +671,7 @@ Das Attribut backForward kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 ```
 
 **Beispiel backForward als Boolean:**
-```
-#!json
+```json
 "backForward": true
 ```
 
@@ -711,8 +689,7 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 |toolTip|nein|String|"Landesbetrieb Geoinformation und Vermessung"|Tooltip, der beim Hovern über das PortalLogo angezeigt wird.|false|
 
 **Beispiel portalTitle:**
-```
-#!json
+```json
 "portalTitle": {
     "title": "Master",
     "logo": "https://geodienste.hamburg.de/lgv-config/img/hh-logo.png",
@@ -739,8 +716,7 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 |options|nein|[option](#markdown-header-portalconfigmapviewoption)[]|[{"resolution":66.14579761460263,"scale":250000,"zoomLevel":0}, {"resolution":26.458319045841044,"scale":100000,"zoomLevel":1}, {"resolution":15.874991427504629,"scale":60000,"zoomLevel":2}, {"resolution": 10.583327618336419,"scale":40000,"zoomLevel":3}, {"resolution":5.2916638091682096,"scale":20000,"zoomLevel":4}, {"resolution":2.6458319045841048,"scale":10000,"zoomLevel":5}, {"resolution":1.3229159522920524,"scale":5000,"zoomLevel":6}, {"resolution":0.6614579761460262,"scale":2500,"zoomLevel":7}, {"resolution":0.2645831904584105,"scale": 1000,"zoomLevel":8}, {"resolution":0.13229159522920521,"scale":500,"zoomLevel":9}]|Die initialen Maßstabsstufen und deren Auflösungen.|false|
 
 **Beispiel:**
-```
-#!json
+```json
 "mapView": {
     "backgroundImage": "https://geodienste.hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
     "startCenter": [561210, 5932600],
@@ -821,8 +797,7 @@ Eine option definiert eine Zoomstufe. Diese muss definiert werden über die Aufl
 |zoomLevel|ja|Integer||Zoomstufe der definierten Zoomstufe.|false|
 
 **Beispiel einer mapview Option**
-```
-#!json
+```json
 {
     "resolution": 611.4974492763076,
     "scale": 2311167,
@@ -1192,8 +1167,7 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 |children|nein|**[tool](#markdown-header-portalconfigmenutool)**/**[staticlinks](#markdown-header-portalconfigmenustaticlinks)**||Kindelemente dieses Ordners.|false|
 
 **Beispiel eines folders**
-```
-#!json
+```json
 "tools":{
     "name": "Werkzeuge",
     "glyphicon": "glyphicon-wrench",
@@ -1257,7 +1231,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |coordToolkit|nein|**[tool](#markdown-header-portalconfigmenutool)**||Koordinatenabfrage: Werkzeug um Koordinaten per Maus(-Klick) abzufragen: Per Klick in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Klick auf die Anzeige direkt in die Zwischenablage kopiert werden. Koordinatensuche: Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf. Die Koordinatensysteme werden aus der config.js bezogen.|false|
 |draw|nein|**[draw](#markdown-header-portalconfigmenutooldraw)**||Mithilfe des Zeichnen-Werkzeuges können Punkte, Linien, Polygone, Kreise, Doppelkreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Die Zeichnungen können in den Formaten: KML, GeoJSON oder GPX heruntergeladen werden.|false|
 |extendedFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "filter" verwenden. Dynamisches Filtern von WFS Features. Über dieses Werkzeug können WFS features dynamisch gefiltert werden. Dies setzt jedoch eine Konfiguration der "extendedFilter" am WFS-Layer-Objekt voraus.|false|
-|featureLister|nein|**[featureLister](#markdown-header-portalconfigmenutoolfeaturelister)**||Listet alle Features eines Vektorlayers auf.|false|
+|featureLister|nein|**[featureLister](#markdown-header-portalconfigmenutoolfeaturelister)**||Listet alle Features eines Vektorlayers auf und hebt das Feature über dessen Namen sich die Maus befindet hervor.|false|
 |fileImport|nein|**[tool](#markdown-header-portalconfigmenutool)**||Import von Dateien des Typs *.kml, *.geojson und *. gpx. Über dieses Werkzeug können solche Dateien importiert werden.|false|
 |filter|nein|**[filter](#markdown-header-portalconfigmenutoolfilter)**||Filtermodul mit dem sich Vektordaten aus WFS filtern lassen.|false|
 |gfi|nein|**[gfi](#markdown-header-portalconfigmenutoolgfi)**||Mit der GetFeatureInfo(gfi) lassen sich Informationen zu beliebigen Layern anzeigen. Dabei werden bei einem WMS die Daten über die GetFeatureInfo geladen. Bei Vektordaten (WFS, Sensor, GeoJSON usw.) werden die angezeigten Attribute aus den Daten selbst verwendet.|false|
@@ -1301,8 +1275,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |resizableWindow|nein|Boolean|false|Flag, ob das Tool-Fenster vergrößer-/verkleinerbar ist.|false|
 
 **Beispiel eines Tools**
-```
-#!json
+```json
 "legend":{
     "name": "Legende",
     "glyphicon": "glyphicon-book"
@@ -1328,8 +1301,7 @@ Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Reques
 |highlightVectorRules|nein|**[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)**||Regeldefinitionen zum Überschreiben des Stylings von abgefragten Vektordaten.[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)|false|
 
 **Beispiel einer GFI Konfiguration**
-```
-#!json
+```json
 "gfi":{
     "name":"Informationen abfragen",
     "glyphicon":"glyphicon-info-sign",
@@ -1353,8 +1325,7 @@ Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Reques
 ```
 
 **Beispiel einer GFI Konfiguration zur Informationsabfrage von Features**
-```
-#!json
+```json
 "gfi":{
     "name":"Informationen abfragen",
     "glyphicon":"glyphicon-info-sign",
@@ -1383,8 +1354,7 @@ Liste der Einstellungen zum Überschreiben von Vektorstyles bei GFI Abfragen.
 |----|-------------|---|-------|------------|------|
 |color|nein|Float[]|[255, 255, 255, 0.5]|Mögliche Einstellung: color (RGBA)|false|
 
-```
-#!json
+```json
 "fill": { "color": [215, 102, 41, 0.9] }
 ```
 
@@ -1395,8 +1365,7 @@ Liste der Einstellungen zum Überschreiben von Vektorstyles bei GFI Abfragen.
 |----|-------------|---|-------|------------|------|
 |scale|nein|Float|1|Mögliche Einstellung: scale|false|
 
-```
-#!json
+```json
 "image": { "scale": 1.5 }
 ```
 
@@ -1407,8 +1376,7 @@ Liste der Einstellungen zum Überschreiben von Vektorstyles bei GFI Abfragen.
 |----|-------------|---|-------|------------|------|
 |width|nein|Integer|1|Mögliche Einstellung: width|false|
 
-```
-#!json
+```json
 "stroke": { "width": 4 }
 ```
 
@@ -1419,8 +1387,7 @@ Liste der Einstellungen zum Überschreiben von Vektorstyles bei GFI Abfragen.
 |----|-------------|---|-------|------------|------|
 |scale|nein|Float|1|Mögliche Einstellung: scale|false|
 
-```
-#!json
+```json
 "text": { "scale": 2 }
 ```
 
@@ -1443,8 +1410,7 @@ Der Filter bietet eine Vielzahl von Möglichkeiten um Vektor-Daten filtern zu k�
 |saveToUrl|nein|Boolean|true|Speichert das aktuelle Filterergebnis in der URL ab. Dadurch kann das Filterergebnis als Lesezeichen abgelegt werden.|false|
 
 **Beispiel**
-```
-#!json
+```json
 "filter":{
     "name": "Filter",
     "glyphicon": "glyphicon-filter",
@@ -1536,8 +1502,7 @@ Objekt, das eine Filtereinstellung definiert.
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 
 **Beispiel**
-```
-#!json
+```json
 {
     "layerId": "8712",
     "isActive": false,
@@ -1591,14 +1556,12 @@ Der letzte Schritt damit der Slider als Datumsfilter verwendet werden kann, ist 
 |type|nein|enum["integer", "searchInMapExtent", "date"]||Typ des Attributs.|true|
 
 **Beispiel als String**
-```
-#!json
+```json
 "Grundschulen"
 ```
 
 **Beispiel als Objekt**
-```
-#!json
+```json
 {
     "name": "Grundschulen",
     "matchingMode": "AND"
@@ -1609,8 +1572,7 @@ Der letzte Schritt damit der Slider als Datumsfilter verwendet werden kann, ist 
 
 **Beispiel als Objekt für Filter mit Date-Slider**
 
-```
-#!json
+```json
 
 "attributeWhiteList": [
   {
@@ -1637,8 +1599,7 @@ Hier können Vector Features miteinander verglichen werden.
 |numberOfAttributesToShow|nein|Integer|12|Anzahl der Attribute die angezeigt werden. Gibt es mehrere Attribute können diese über einen Button zusätzlich ein-/ bzw. ausgeblendet werden.|false|
 
 **Beispiel**
-```
-#!json
+```json
 "compareFeatures": {
     "name": "Vergleichsliste",
     "glyphicon": "glyphicon-th-list",
@@ -1672,8 +1633,7 @@ Beispiel: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeat
 |zoomLevel|nein|Number|7|Gibt an, auf welches ZoomLevel gezoomt werden soll.|false|
 
 **Beispiel**
-```
-#!json
+```json
 "parcelSearch": {
     "name": "Flurstückssuche",
     "glyphicon": "glyphicon-search",
@@ -1711,8 +1671,7 @@ Zurücksetzen des Themenbaums.
 
 **Beispiel**
 
-```
-#!json
+```json
 "resetTree": {
     "name": "translate#additional:modules.tools.resetTree.title",
     "glyphicon": "glyphicon-repeat"
@@ -1731,8 +1690,7 @@ Koordinatensuche.
 |zoomLevel|nein|Number|7|Gibt an, auf welches ZoomLevel gezoomt werden soll.|false|
 
 **Beispiel**
-```
-#!json
+```json
 "searchByCoord": {
     "name": "Flurstückssuche",
     "glyphicon": "glyphicon-record",
@@ -1766,8 +1724,7 @@ Druckmodul. Konfigurierbar für 2 Druckdienste: den High Resolution PlotService 
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 
 **Beispiel Konfiguration mit High Resolution PlotService**
-```
-#!json
+```json
 "print": {
     "name": "Karte drucken",
     "glyphicon": "glyphicon-print",
@@ -1779,8 +1736,7 @@ Druckmodul. Konfigurierbar für 2 Druckdienste: den High Resolution PlotService 
 ```
 
 **Beispiel Konfiguration mit MapfishPrint3**
-```
-#!json
+```json
 "print": {
     "name": "Karte drucken",
     "glyphicon": "glyphicon-print",
@@ -1814,8 +1770,7 @@ Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welc
 
 **Beispiel**
 
-```
-#!json
+```json
 "draw": {
     "name": "Zeichnen / Schreiben",
     "glyphicon": "glyphicon-pencil",
@@ -1873,8 +1828,7 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 
 **Beispiele**
 
-```
-#!json
+```json
     {
         "id": "iconPoint",
         "type": "simple_point",
@@ -1909,8 +1863,7 @@ Objekt zum Ändern des konfigurierten Default-Wertes des Punkt-Symbols im Zeiche
 
 **Beispiel**
 
-```
-#!json
+```json
     {
         color: [55, 126, 184, 1],
         opacity: 1
@@ -1931,8 +1884,7 @@ Objekt zum Ändern des konfigurierten Default-Wertes für eine Linie im Zeichen-
 
 **Beispiel**
 
-```
-#!json
+```json
     {
         strokeWidth: 1,
         opacityContour: 1,
@@ -1954,8 +1906,7 @@ Objekt zum Ändern des konfigurierten Default-Wertes für eine Freihandlinie im 
 
 **Beispiel**
 
-```
-#!json
+```json
     {
         strokeWidth: 1,
         opacityContour: 1,
@@ -1979,8 +1930,7 @@ Objekt zum Ändern des konfigurierten Default-Wertes für eine Fläche im Zeiche
 
 **Beispiel**
 
-```
-#!json
+```json
     {
         strokeWidth: 1,
         color: [55, 126, 184, 1],
@@ -2010,8 +1960,7 @@ Objekt zum Ändern des konfigurierten Default-Wertes für einen Kreis im Zeichen
 
 **Beispiel**
 
-```
-#!json
+```json
     {
         circleMethod: "interactive",
         unit: "m",
@@ -2045,8 +1994,7 @@ Objekt zum Ändern des konfigurierten Default-Wertes für einen Doppelkreis im Z
 
 **Beispiel**
 
-```
-#!json
+```json
     {
         circleMethod: "defined",
         unit: "m",
@@ -2076,8 +2024,7 @@ Objekt zum Ändern des konfigurierten Default-Wertes für einen Text im Zeichen-
 
 **Beispiel**
 
-```
-#!json
+```json
     {
         text: "",
         fontSize: 10,
@@ -2111,22 +2058,122 @@ Objekt zum Ändern des voreingestellten Formats beim Herunterladen einer Zeichnu
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Modul, das Vektor Features darstellt. Durch Hovern über ein Feature in der Liste wird auf der Karte der Marker gesetzt.
+Modul, das Vektor Features darstellt. Durch Hovern über ein Feature in der Liste wird auf der Karte das Feature hervorgehoben.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |maxFeatures|nein|Integer|20|Anzahl der zu zeigenden Features. Über einen Button können weitere Features in dieser Anzahl zugeladen werden.|false|
+|highlightVectorRulesPolygon|nein|**[highlightVectorRulesPolygon](#markdown-header-portalconfigmenutoolfeaturelisterhighlightvectorrulespolygon)**||Angabe der Füllfarbe und der Umriss-Farbe und -Strichstärke für das Hervorheben der Polygon-Features.|false|
+|highlightVectorRulesPointLine|nein|**[highlightVectorRulesPointLine](#markdown-header-portalconfigmenutoolfeaturelisterhighlightvectorrulespointline)**||Angabe der Umriss-Farbe und -Strichstärke für das Hervorheben von Linien und Skalierungsfaktor für das Hervorheben von Punkten.|false|
 
 **Beispiel**
-```
-#!json
+
+```json
 "featureLister": {
     "name": "Liste",
     "glyphicon": "glyphicon-menu-hamburger",
-    "maxFeatures": 10
+    "maxFeatures": 10,
+    "highlightVectorRulesPolygon": {
+        "fill": {
+            "color": [255, 0, 255, 0.9]
+        },
+        "stroke": {
+            "width": 4,
+            "color": [0, 0, 204, 0.9]
+        }
+    },
+    "highlightVectorRulesPointLine": {
+        "stroke": {
+            "width": 8,
+            "color": [255, 0, 255, 0.9]
+        },
+        "image": {
+            "scale": 2
+        }
+    }
 }
 ```
+***
 
+##### Portalconfig.menu.tool.featureLister.highlightVectorRulesPolygon
+
+Angabe der Umriss-Farbe und -Strichstärke für das Hervorheben von Linien und Skalierungsfaktor für das Hervorheben von Punkten.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|fill|nein|**[fill](#markdown-header-portalconfigmenutoolfeaturelisterhighlightvectorrulespolygonfill)**||Mögliche Einstellung: color|false|
+|stroke|nein|**[stroke](#markdown-header-portalconfigmenutoolfeaturelisterhighlightvectorrulespolygonstroke)**||Mögliche Einstellung: width|false|
+
+***
+
+##### Portalconfig.menu.tool.featureLister.highlightVectorRulesPolygon.fill
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|color|nein|Float[]|[255, 255, 255, 0.5]|Mögliche Einstellung: color (RGBA)|false|
+
+```json
+"fill": { "color": [215, 102, 41, 0.9] }
+```
+
+***
+
+##### Portalconfig.menu.tool.featureLister.highlightVectorRulesPolygon.stroke
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|width|nein|Integer|1|Mögliche Einstellung: width|false|
+|color|nein|Float[]|[255, 255, 255, 0.5]|Mögliche Einstellung: color (RGBA)|false|
+
+```json
+"stroke": { "width": 4 , "color": [255, 0, 255, 0.9]}
+```
+
+***
+
+
+##### Portalconfig.menu.tool.featureLister.highlightVectorRulesPointLine
+
+Angabe der Umriss-Farbe und -Strichstärke für das Hervorheben von Linien und Skalierungsfaktor für das Hervorheben von Punkten.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|stroke|nein|**[stroke](#markdown-header-portalconfigmenutoolfeaturelisterhighlightvectorrulespointlinestroke)**||Mögliche Einstellung: width|false|
+|image|nein|**[image](#markdown-header-portalconfigmenutoolfeaturelisterhighlightvectorrulespointlineimage)**||Mögliche Einstellung: scale|false|
+
+***
+
+##### Portalconfig.menu.tool.featureLister.highlightVectorRulesPointLine.stroke
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|width|nein|Integer|1|Mögliche Einstellung: width|false|
+|color|nein|Float[]|[255, 255, 255, 0.5]|Mögliche Einstellung: color (RGBA)|false|
+
+```json
+"stroke": { "width": 4 , "color": [255, 0, 255, 0.9]}
+```
+
+***
+
+##### Portalconfig.menu.tool.featureLister.highlightVectorRulesPointLine.image
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|scale|nein|Integer|1.5|Mögliche Einstellung: scale|false|
+
+```json
+"image": { "scale": 2}
+```
+
+***
+
+##### Portalconfig.menu.tool.gfi.highlightVectorRules.text
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|scale|nein|Float|1|Mögliche Einstellung: scale|false|
+
+```json
+"text": { "scale": 2 }
+```
+
+***
 #### Portalconfig.menu.tool.measure
 
 [inherits]: # (Portalconfig.menu.tool)
@@ -2141,7 +2188,7 @@ Mit dem Messwerkzeug können Strecken und Flächen gemessen werden. Dabei werden
 **Beispiel**
 
 ```
-#!json
+json
 "measure": {
     "name": "translate#common:menu.tools.measure",
     "earthRadius": 6378137,
@@ -2333,7 +2380,7 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
 
 **Beispiel**
 ```
-#!json
+json
 "layerSlider": {
     "name": "Zeitreihe",
     "glyphicon": "glyphicon-film",
@@ -2370,7 +2417,7 @@ Definiert einen Layer für den Layerslider.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "title": "Dienst 1",
     "layerId": "123"
@@ -2394,7 +2441,7 @@ Die Planungen müssen im virtualcityPLANNER auf öffentlich gesetzt sein, dann k
 
 **Beispiel**
 ```
-#!json
+json
 {
   "title": "virtualcityPLANNER",
   "serviceId": "1"
@@ -2417,7 +2464,7 @@ Das ShadowTool bietet eine Oberfläche zur Definition einer Zeitangabe. Über Sl
 
 **Beispiel**
 ```
-#!json
+json
 {
     "shadowTime": {
         "month": "6",
@@ -2444,7 +2491,7 @@ Todo
 
 **Beispiel**
 ```
-#!json
+json
 {
     "month": "6",
     "day": "20",
@@ -2951,7 +2998,7 @@ Zur Vorbereitung muss ein WFS-T Service bereitgestellt werden (siehe services.js
 
 **Beispiel**
 ```
-#!json
+json
 {
     "wfst": {
         "name": "WFS-T Tool",
@@ -3038,13 +3085,13 @@ Das Attribut edit / delete kann vom Typ Boolean oder String sein. Wenn es vom Ty
 
 **Beispiel als Boolean**
 ```
-#!json
+json
 "edit": true
 ```
 
 **Beispiel als String**
 ```
-#!json
+json
 "edit": "Editieren"
 ```
 
@@ -3067,7 +3114,7 @@ Koordinaten-Werkzeug. Um zusätzlich zu den 2 dimensionalen Koordinaten die Höh
 
 **Beispiel**
 ```
-#!json
+json
  "coordToolkit": {
             "name": "translate#common:menu.tools.coordToolkit",
             "glyphicon": "glyphicon-globe",
@@ -3100,7 +3147,7 @@ Routing-Werkzeug. Ermöglicht Nutzern das Planen von Routen zwischen mehreren Pu
 
 **Beispiel**
 ```
-#!json
+json
 {
     "routing": {
         "name": "translate#common:menu.tools.routing",
@@ -3212,7 +3259,7 @@ Routing-Werkzeug Download Optionen.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "download": {
         "filename": "",
@@ -3236,7 +3283,7 @@ Routing-Werkzeug Geosuche Optionen.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "geosearch": {
         "minChars": 3,
@@ -3262,7 +3309,7 @@ Routing-Werkzeug Geosuche Reverse Optionen.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "geosearchReverse": {
         "distance": 1000,
@@ -3292,7 +3339,7 @@ Routing-Werkzeug Routenplanung Optionen.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "directionsSettings": {
         "type": "ORS",
@@ -3352,7 +3399,7 @@ Routing-Werkzeug Routenplanung Routen Style Optionen.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "styleRoute": {
         "fillColor": [255, 44, 0],
@@ -3384,7 +3431,7 @@ Routing-Werkzeug Routenplanung Wegpunkt Style Optionen.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "styleWaypoint": {
         "lineColor": [255, 127, 0],
@@ -3416,7 +3463,7 @@ Routing-Werkzeug Routenplanung Sperrflächen Style Optionen.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "styleAvoidAreas": {
         "lineColor": [0, 127, 255],
@@ -3444,7 +3491,7 @@ Routing-Werkzeug Routenplanung Stapelverarbeitung Optionen.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "batchProcessing": {
         "enabled": false,
@@ -3483,7 +3530,7 @@ Routing-Werkzeug Erreichbarkeitsanalysen Optionen.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "isochronesSettings": {
         "type": "ORS",
@@ -3538,7 +3585,7 @@ Routing-Werkzeug Erreichbarkeitsanalysen Center Style Optionen.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "styleCenter": {
         "lineColor": [255, 127, 0],
@@ -3565,7 +3612,7 @@ Routing-Werkzeug Erreichbarkeitsanalysen Isochrone Style Optionen.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "styleIsochrones": {
         "lineWidth": 2,
@@ -3591,7 +3638,7 @@ Routing-Werkzeug Erreichbarkeitsanalysen Stapelverarbeitung Optionen.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "batchProcessing": {
         "enabled": false,
@@ -3614,7 +3661,7 @@ Das Array staticlink beinhaltet Objekte die entweder als Link zu einer anderen W
 
 **Beispiel als onClickTrigger**
 ```
-#!json
+json
 "staticlinks": [
     {
         "name": "Alert",
@@ -3644,7 +3691,7 @@ Ein Staticlink-Objekt enthält folgende Attribute.
 
 **Beispiel als url**
 ```
-#!json
+json
 {
     "name": "Hamburg",
     "glyphicon": "glyphicon-globe",
@@ -3654,7 +3701,7 @@ Ein Staticlink-Objekt enthält folgende Attribute.
 
 **Beispiel als onClickTrigger**
 ```
-#!json
+json
 {
     "name": "Alert",
     "glyphicon": "glyphicon-globe",
@@ -3681,7 +3728,7 @@ Ein Staticlink-Objekt enthält folgende Attribute.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "channel": "Alert",
     "event": "alert",
@@ -3732,7 +3779,7 @@ Hier werden die Hintergrundkarten definiert
 
 **Beispiel**
 ```
-#!json
+json
 "Hintergrundkarten": {
     "name": "Meine Hintergrundkarten",
     "Layer": [
@@ -3761,7 +3808,7 @@ Hier werden die Fachdaten definiert
 
 **Beispiel**
 ```
-#!json
+json
 "Fachdaten": {
     "name": "Meine Fachdaten",
     "Layer": [
@@ -3787,7 +3834,7 @@ Hier werden die 3D-Daten für die 3D-Ansicht definiert. Im custom tree und defau
 
 **Beispiel**
 ```
-#!json
+json
 "Fachdaten_3D":
     {
       "name": "Meine Fachdaten 3D",
@@ -3848,7 +3895,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 
 **Beispiel Fachdaten-Ordner mit einem Layer**
 ```
-#!json
+json
 "Fachdaten": {
     "Ordner": [
         {
@@ -3918,7 +3965,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 **Beispiel Fachdaten-Ordner mit einem Unterordner in dem ein Layer konfiguriert ist**
 
 ```
-#!json
+json
 "Fachdaten": {
     "Ordner": [
         {
@@ -3941,7 +3988,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 
 **Beispiel Fachdaten-Ordner mit einem Unterordner. Auf der Ebene des Unterordners ist auch nochmal ein Layer definiert**
 ```
-#!json
+json
 "Fachdaten": {
     "Ordner": [
         {
@@ -4021,7 +4068,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 
 **Beispiel**
 ```
-#!json
+json
 {
     "id": "myId",
     "name": "myGroupLayer",
@@ -4069,7 +4116,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 
 **Beispiel mit einer Id**
 ```
-#!json
+json
 {
     "id": "123"
 }
@@ -4077,7 +4124,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 
 **Beispiel mit einem Array von Ids**
 ```
-#!json
+json
 {
     "id": ["123", "456", "789"],
     "name": "mein testlayer"
@@ -4105,7 +4152,7 @@ Hier werden WMS typische Attribute aufgelistet.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "id": "123456",
     "name": "MyWMSLayerName",
@@ -4159,7 +4206,7 @@ Stellen Sie in einem solchen Fall *gfiAsNewWindow* wie oben beschrieben manuell 
 
 Beispiel:
 ```
-#!json
+json
 {
     "id": "123456",
     // (...)
@@ -4186,7 +4233,7 @@ Hier werden Tileset typische Attribute aufgelistet.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "id": "123456",
     "name": "TilesetLayerName",
@@ -4210,7 +4257,7 @@ Todo
 
 **Beispiel**
 ```
-#!json
+json
 "cesium3DTilesetOptions" : {
     maximumScreenSpaceError : 6
 }
@@ -4233,7 +4280,7 @@ Hier werden Terrain typische Attribute aufgelistet.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "id": "123456",
     "name": "TerrainLayerName",
@@ -4255,7 +4302,7 @@ Todo
 |requestVertexNormals|nein|Boolean||Todo|
 
 ```
-#!json
+json
 "cesiumTerrainProviderOptions": {
     "requestVertexNormals" : true
 }
@@ -4284,7 +4331,7 @@ Hier werden Entities3D typische Attribute aufgelistet.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "id": "123456",
     "name": "EntitiesLayerName",
@@ -4319,7 +4366,7 @@ Hier werden Entities3D typische Attribute aufgelistet.
 
 **Beispiel**
 ```
-#!json
+json
 {
    "name": "Fernsehturm.kmz"
 }
@@ -4345,7 +4392,7 @@ Mit StaticImage lassen sich Bilder als Layer laden und georeferenziert auf der K
 
 **Beispiel**
 ```
-#!json
+json
 {
     "id": "12345",
     "typ": "StaticImage",
@@ -4380,7 +4427,7 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
 
 **Beispiel**
 ```
-#!json
+json
 {
     "id": "123456",
     "name": "MyVectorLayerName",
@@ -4441,7 +4488,7 @@ Filteroption die vom Werkzeug "wfsFeatureFilter" in **[tools](#markdown-header-p
 
 **Beispiel**
 ```
-#!json
+json
 {
     "fieldName": "myFirstAttributeToFilter",
     "filterName": "Filter_1",
@@ -4462,7 +4509,7 @@ Style-Definition; nur für Vector Tile Layer.
 
 **Beispiel**
 ```
-#!json
+json
 {
     "id": "EINDEUTIGE_ID",
     "name": "Rote Linien",
@@ -4482,13 +4529,13 @@ Eine Koordinate besteht aus einem Array bestehend aus zwei Zahlen. Die erste rep
 
 **Beispiel Koordinate bestehend aus Ganzzahlen(Integer)**
 ```
-#!json
+json
 [561210, 5932600]
 ```
 
 **Beispiel Koordinate bestehend aus Gleitkommazahlen(Float)**
 ```
-#!json
+json
 [561210.1458, 5932600.12358]
 ```
 
@@ -4500,7 +4547,7 @@ Ein Extent besteht aus einem Array bestehend aus vier Zahlen. Ein Extent beschre
 
 **Beispiel Extent**
 ```
-#!json
+json
 [510000.0, 5850000.0, 625000.4, 6000000.0]
 ```
 
