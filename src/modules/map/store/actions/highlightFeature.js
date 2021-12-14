@@ -34,10 +34,10 @@ function highlightPolygon (commit, dispatch, highlightObject) {
             commit("setHighlightedFeature", feature);
             commit("setHighlightedFeatureStyle", feature.getStyle());
 
-            if(clonedStyle.getFill()){
+            if (clonedStyle.getFill()) {
                 clonedStyle.getFill().setColor(newStyle.fill.color);
             }
-            if(clonedStyle.getStroke()){
+            if (clonedStyle.getStroke()) {
                 clonedStyle.getStroke().setColor(newStyle.stroke.color);
                 clonedStyle.getStroke().setWidth(newStyle.stroke.width);
             }
@@ -121,14 +121,14 @@ function increaseFeature (commit, highlightObject) {
  */
 function styleObject (highlightObject, feature) {
     let styleModelByLayerId = Radio.request("StyleList", "returnModelById", highlightObject.layer.id),
-    style = undefined;
+        style;
 
-    if(!styleModelByLayerId){
-        styleModelByLayerId = Radio.request("StyleList", "returnModelById", highlightObject.layer.styleId)
+    if (!styleModelByLayerId) {
+        styleModelByLayerId = Radio.request("StyleList", "returnModelById", highlightObject.layer.styleId);
     }
-    if(styleModelByLayerId){
+    if (styleModelByLayerId) {
         style = styleModelByLayerId.createStyle(feature, false);
-        if(Array.isArray(style) && style.length > 0){
+        if (Array.isArray(style) && style.length > 0) {
             style = style[0];
         }
     }

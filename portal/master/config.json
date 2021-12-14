@@ -413,19 +413,23 @@
             "name": "translate#common:menu.tools.featureLister",
             "glyphicon": "glyphicon-menu-hamburger",
             "lister": 10,
-            "XhighlightVectorRules": {
-                "fill": {
-                    "color": [215, 102, 41, 0.9]
-                },
-                "image": {
-                    "scale": 1.5
-                },
-                "stroke": {
-                    "width": 10
-                },
-                "text": {
-                    "scale": 2
-                }
+            "highlightVectorRulesPolygon": {
+              "fill": {
+                "color": [255, 255, 255, 0.9]
+            },
+            "stroke": {
+                "width": 4,
+                "color": [0, 0, 204, 0.9]
+            }
+          },
+          "highlightVectorRulesPointLine": {
+            "stroke": {
+                "width": 8,
+                "color": [255, 0, 255, 0.9]
+              },
+              "image": {
+                  "scale": 1.5
+              }
             }
           },
           "saveSelection": {
@@ -590,20 +594,11 @@
     "Fachdaten": {
       "Layer": [
         {
-          "id": "4560",
-          "styleId": "4560",
-          "name": "WFS Polygon (Default Style)"
-				},
-				{
-          "id": "1132",
+          "idx": "1132",
           "styleId": "1132",
-          "name": "WFS Point (Default Style)"
-				},
-				{
-          "id": "1133",
-          "styleId": "4515",
-          "name": "WFS Line (Default Style)"
-				},
+          "name": "100 Jahre Stadtgruen POIs",
+          "transparency": 75
+        },
         {
           "id": "16100",
           "name": "Hauptkirchen",
@@ -745,7 +740,7 @@
         {
           "id": "1711",
           "styleId": "1711",
-          "visibility": false,
+          "visibility": true,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": [
             "name",
@@ -756,7 +751,7 @@
         },
         {
           "id": "8712",
-          "visibility": false,
+          "visibility": true,
           "name": "Schulinfosystem",
           "styleId": "8712",
           "searchField": "schulname",
