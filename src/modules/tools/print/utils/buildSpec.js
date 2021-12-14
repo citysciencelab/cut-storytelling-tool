@@ -181,14 +181,15 @@ const BuildSpecModel = {
                 if (layer instanceof Group) {
                     layer.getLayers().getArray().forEach(childLayer => {
                         printLayers.push(this.buildLayerType(childLayer, currentResolution));
+                        visibleLayerIds.push(childLayer.get("id"));
                     });
                 }
                 else {
                     printLayers.push(this.buildLayerType(layer, currentResolution));
+                    visibleLayerIds.push(layer?.get("id"));
                 }
                 printLayers.forEach(printLayer => {
                     if (typeof printLayer !== "undefined") {
-                        visibleLayerIds.push(layer?.get("id"));
                         layers.push(printLayer);
                     }
                 });
@@ -1064,7 +1065,6 @@ const BuildSpecModel = {
                         });
                     }
                 }
-
             });
         }
         this.setShowLegend(isLegendSelected);
