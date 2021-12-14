@@ -577,6 +577,19 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         if (treeType === "custom") {
             initialLayers = this.handleLayerSequence(allLayerModels);
         }
+        else if (treeType === "light") {
+            layerModels.forEach(layer => {
+                const index = allLayerModels.indexOf(layer);
+
+                if (index > -1) {
+                    baseLayerModels.splice(index, 0, layer);
+                }
+                else {
+                    baseLayerModels.push(layer);
+                }
+            });
+            initialLayers = baseLayerModels;
+        }
         else {
             initialLayers = baseLayerModels.concat(layerModels);
         }

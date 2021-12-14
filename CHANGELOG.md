@@ -44,6 +44,7 @@
     - Fix reset UI button.
     - Add missing error translation for wrong config.
 - The 'Select Features' tool can now also be used to select lines.
+- In the "light" type topic tree, layers loaded via url parameters are now sorted correctly.
 
 ---
 
