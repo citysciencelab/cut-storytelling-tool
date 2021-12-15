@@ -123,7 +123,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "moveModelInTree": this.moveModelInTree,
             "updateSelection": function (model) {
                 this.trigger("updateSelection", model);
-            }
+            },
+            "selectedChanged": this.selectedChanged
         }, this);
 
         this.listenTo(this, {
@@ -141,20 +142,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 this.trigger("traverseTree", model);
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             },
-            "change:isSelected": function (model, value) {
-                if (model.get("type") === "layer") {
-                    // Only reset Indeces in Custom Tree, because Light Tree Layers always keep their
-                    // positions regardless of active or not
-                    if (Radio.request("Parser", "getTreeType") !== "light") {
-                        model.resetSelectionIDX();
-                    }
-
-                    model.setIsVisibleInMap(value);
-                    this.updateLayerView();
-                }
-                this.trigger("updateSelection");
-                channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
-            },
+            "change:isSelected": this.selectedChanged,
             "change:transparency": function () {
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             },
@@ -1199,6 +1187,27 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     },
     addAlwaysActiveTool: function (model) {
         this.alwaysActiveTools.push(model);
+    },
+
+    /**
+     * Updates the selected layersList if selected is changed.
+     * @param {Object} model The model.
+     * @param {Boolean} value Is selected value.
+     * @returns {void}
+     */
+    selectedChanged: function (model, value) {
+        if (model.get("type") === "layer") {
+            // Only reset Indeces in Custom Tree, because Light Tree Layers always keep their
+            // positions regardless of active or not
+            if (Radio.request("Parser", "getTreeType") !== "light") {
+                model.resetSelectionIDX();
+            }
+
+            model.setIsVisibleInMap(value);
+            this.updateLayerView();
+        }
+        this.trigger("updateSelection");
+        Radio.channel("ModelList").trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
     }
 });
 

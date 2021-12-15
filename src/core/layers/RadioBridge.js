@@ -8,6 +8,7 @@
  */
 export function layerVisibilityChanged (layerModel, value) {
     Radio.trigger("Layer", "layerVisibleChanged", layerModel.get("id"), value, layerModel);
+    Radio.trigger("ModelList", "selectedChanged", layerModel, value);
     Radio.trigger("ModelList", "updatedSelectedLayerList", getLayerModelsByAttributes({isSelected: true, type: "layer"}));
 }
 /* ******************* Legend ******************* */
