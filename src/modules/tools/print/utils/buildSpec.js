@@ -348,24 +348,37 @@ const BuildSpecModel = {
      */
     buildVectorTile: async function (layer, resolution, extent) {
         MVTEncoder.useImmediateAPI = false;
-        const paperDPI = 96,
+        const mapInfo = store.state.Tools.Print.layoutMapInfo,
+            targetDPI = store.state.Tools.Print.dpiForPdf,
+            factor = targetDPI / 72,
+            targetWidth = mapInfo[0] * factor,
+            targetHeight = mapInfo[1] * factor,
             encoder = new MVTEncoder(),
-            r = await encoder.encodeMVTLayer(layer, resolution, extent, {
-                paperDPI
-            });
+            r = await encoder.encodeMVTLayer({
+                layer,
+                tileResolution: resolution,
+                printResolution: resolution,
+                printExtent: extent,
+                canvasSize: [targetWidth, targetHeight]
+            }),
+            {extent: tileExtent, baseURL: tileBaseURL} = r[0];
 
-        let spec = null;
-
-        if (r[0].baseURL.length > 6) {
-            spec = Object.assign({
-                type: "image",
-                name: layer.get("name"),
-                opacity: 1,
-                imageFormat: "image/png"
-            }, r[0]);
+        if (r.length !== 1) {
+            throw new Error("handle several results");
         }
-        // console.log("DEBUG", paperDPI, spec);
-        return spec;
+
+        if (r[0].baseURL.length <= 6) {
+            return null;
+        }
+
+        return {
+            extent: tileExtent,
+            baseURL: tileBaseURL,
+            type: "image",
+            name: layer.get("name"),
+            opacity: 1,
+            imageFormat: "image/png"
+        };
     },
     /**
      * returns tile wms layer information
