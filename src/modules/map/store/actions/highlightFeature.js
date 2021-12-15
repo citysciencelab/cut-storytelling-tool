@@ -120,14 +120,14 @@ function increaseFeature (commit, highlightObject) {
  * @returns {ol/style} ol style
  */
 function styleObject (highlightObject, feature) {
-    let styleModelByLayerId = Radio.request("StyleList", "returnModelById", highlightObject.layer.id),
+    let styleModel = Radio.request("StyleList", "returnModelById", highlightObject.layer.id),
         style;
 
-    if (!styleModelByLayerId) {
-        styleModelByLayerId = Radio.request("StyleList", "returnModelById", highlightObject.layer.styleId);
+    if (!styleModel) {
+        styleModel = Radio.request("StyleList", "returnModelById", highlightObject.layer.styleId);
     }
-    if (styleModelByLayerId) {
-        style = styleModelByLayerId.createStyle(feature, false);
+    if (styleModel) {
+        style = styleModel.createStyle(feature, false);
         if (Array.isArray(style) && style.length > 0) {
             style = style[0];
         }

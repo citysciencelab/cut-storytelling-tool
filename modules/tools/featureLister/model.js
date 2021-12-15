@@ -173,11 +173,10 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @return {void}
      */
     highlightFeature: function (featureId) {
-        const features = this.get("layer").features,
-            featureWrapper = features.find(feat => {
+        const layer = this.get("layer"),
+            featureWrapper = layer.features.find(feat => {
                 return feat.id.toString() === featureId;
             }),
-            layer = this.get("layer"),
             styleObj = layer.geometryType === "Polygon" ? this.get("highlightVectorRulesPolygon") : this.get("highlightVectorRulesPointLine"),
             highlightObject = {
                 type: layer.geometryType === "Point" || layer.geometryType === "MultiPoint" ? "increase" : "highlightPolygon",
@@ -403,6 +402,9 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @return {void}
      */
     addLayerToList: function (layer) {
+        if (!layer) {
+            return;
+        }
         const layerlist = this.get("layerlist"),
             features = layer.get("layer").getSource().getFeatures();
         let geometryType = "none";
