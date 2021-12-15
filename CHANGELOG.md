@@ -36,6 +36,7 @@
 ### Deprecated
 
 ### Removed
+- WMS layer was released by hamburgensien for the service WMS_webatlasde.
 
 ### Fixed
 - WfsSearch:

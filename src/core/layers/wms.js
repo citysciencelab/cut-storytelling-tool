@@ -31,18 +31,6 @@ export default function WMSLayer (attrs) {
     if (this.get("notSupportedFor3D").includes(this.get("id"))) {
         this.set("supported", ["2D"]);
     }
-
-    this.set("tileloaderror", false);
-    if (attrs.url?.indexOf("wms_webatlasde") !== -1) {
-        if (this.get("tileloaderror") === false) {
-            this.set("tileloaderror", true);
-            this.layer.getSource().on("tileloaderror", function () {
-                if (!navigator.cookieEnabled) {
-                    store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.core.modelList.wms.allowCookies"));
-                }
-            });
-        }
-    }
 }
 // Link prototypes and add prototype methods, means WMSLayer uses all methods and properties of Layer
 WMSLayer.prototype = Object.create(Layer.prototype);
