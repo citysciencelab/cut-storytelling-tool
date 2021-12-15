@@ -489,36 +489,34 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     addGdiLayer: function (hit) {
-        const treeType = this.get("treeType");
-        let level = 0,
-            layerTreeId,
-            parentId = "tree",
-            gdiLayer = {
-                cache: false,
-                featureCount: "3",
-                format: "image/png",
-                gutter: "0",
-                isChildLayer: false,
-                isSelected: true,
-                isVisibleInTree: true,
-                layerAttribution: "nicht vorhanden",
-                legendURL: "",
-                maxScale: "2500000",
-                minScale: "0",
-                singleTile: false,
-                tilesize: "512",
-                transparency: 0,
-                transparent: true,
-                typ: "WMS",
-                type: "layer",
-                urlIsVsible: true
-            };
+        if (hit?.source) {
+            const treeType = this.get("treeType");
+            let level = 0,
+                parentId = "tree",
+                gdiLayer = Object.assign({
+                    cache: false,
+                    featureCount: "3",
+                    format: "image/png",
+                    gfiAttributes: "showAll",
+                    gfiTheme: "default",
+                    gutter: "0",
+                    isChildLayer: false,
+                    isSelected: true,
+                    isVisibleInTree: true,
+                    layerAttribution: "nicht vorhanden",
+                    legendURL: "",
+                    maxScale: "2500000",
+                    minScale: "0",
+                    singleTile: false,
+                    tilesize: "512",
+                    transparency: 0,
+                    transparent: true,
+                    typ: "WMS",
+                    type: "layer",
+                    urlIsVsible: true
+                }, hit.source);
 
-        if (hit.source) {
-            // check if layer is already in layer tree
-            layerTreeId = this.getItemByAttributes({id: hit.source.id});
-            if (!layerTreeId) {
-
+            if (!this.getItemByAttributes({id: hit.source.id})) {
                 if (treeType === "custom") {
                     // create folder and add it as "Externe Fachdaten"
                     parentId = "extthema";
@@ -533,18 +531,11 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                     }
                 }
                 gdiLayer = Object.assign(gdiLayer, {
-                    name: hit.source.name,
-                    id: hit.source.id,
                     parentId: parentId,
                     level: level,
-                    layers: hit.source.layers,
-                    url: hit.source.url,
-                    version: hit.source.version,
-                    gfiAttributes: hit.source.gfiAttributes ? hit.source.gfiAttributes : "showAll",
-                    gfiTheme: hit.source.gfiTheme ? hit.source.gfiTheme : "default",
-                    datasets: hit.source.datasets,
                     isJustAdded: true
                 });
+
                 this.addItemAtTop(gdiLayer);
                 Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.source.id});
             }
@@ -555,7 +546,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             }
         }
         else {
-            console.error("Es konnte kein Eintrag für Layer " + hit.source.id + " in ElasticSearch gefunden werden.");
+            console.error("No entry could be found for layer " + hit.source.id + " in ElasticSearch.");
         }
     },
 

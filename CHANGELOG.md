@@ -32,6 +32,7 @@
 - The WFSLayer is refactored. It is no longer a Backbone-model. The WFSLayer uses the masterportalAPI's wfs layer on creation.
 - The following NPM packages are updated:
     - selenium-webdriver: 4.0.0 to version 4.1.0
+- The elastic search now reads out all attributes of a found layer and takes them into account when processing the layer.
 
 ### Deprecated
 
