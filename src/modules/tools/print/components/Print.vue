@@ -8,6 +8,7 @@ import thousandsSeparator from "../../../../utils/thousandsSeparator.js";
 import axios from "axios";
 import getVisibleLayer from "../utils/getVisibleLayer";
 import mapCollection from "../../../../core/dataStorage/mapCollection.js";
+import {Vector} from "ol/layer.js";
 
 /**
  * Tool to print a part of the map
@@ -68,12 +69,12 @@ export default {
         this.$on("close", this.close);
 
         Backbone.Events.listenTo(Radio.channel("ModelList"), {
-            "updatedSelectedLayerList": function () {
+            "updatedSelectedLayerList": () => {
                 if (typeof this.eventListener !== "undefined") {
                     getVisibleLayer();
                     this.updateCanvasLayer();
                 }
-            }.bind(this)
+            }
         });
     },
     mounted () {
@@ -82,10 +83,12 @@ export default {
                 if (this.active) {
                     this.retrieveCapabilites();
                     this.setCurrentMapScale(this.scale);
+                    this.togglePostrenderListener();
+                    this.updateCanvasByFeaturesLoadend(this.visibleLayerList);
                 }
-                this.togglePostrenderListener();
             });
         }
+
 
         this.setCurrentMapScale(this.scale);
     },
@@ -100,6 +103,23 @@ export default {
             "updateCanvasLayer"
         ]),
         ...mapActions("Alerting", ["addSingleAlert"]),
+
+        /**
+         * Waits until the features of Vector layers are loaded and then renders the canvas again.
+         * @param {module:ol/layer/Base~BaseLayer[]} visibleLayerList A list which contains the visible layers.
+         * @returns {void}
+         */
+        updateCanvasByFeaturesLoadend (visibleLayerList) {
+            visibleLayerList.forEach(layer => {
+                if (layer instanceof Vector) {
+                    layer.getSource().on("featuresloadend", () => {
+                        getVisibleLayer();
+                        this.updateCanvasLayer();
+                        this.togglePostrenderListener();
+                    });
+                }
+            });
+        },
 
         /**
          * returns the "beautified" scale to be shown in the dropdown box
@@ -227,7 +247,6 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
-
         }
     }
 };
