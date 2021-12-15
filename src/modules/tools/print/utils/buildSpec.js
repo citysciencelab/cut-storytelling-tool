@@ -186,16 +186,17 @@ const BuildSpecModel = {
                 }
                 else {
                     printLayers.push(this.buildLayerType(layer, currentResolution));
-                    visibleLayerIds.push(layer?.get("id"));
                 }
                 printLayers.forEach(printLayer => {
                     if (typeof printLayer !== "undefined") {
+                        if (layer?.get("id") !== undefined) {
+                            visibleLayerIds.push(layer?.get("id"));
+                        }
                         layers.push(printLayer);
                     }
                 });
             });
         }
-
         this.setVisibleLayerIds(visibleLayerIds);
         attributes.map.layers = layers.reverse();
     },
@@ -1043,6 +1044,11 @@ const BuildSpecModel = {
         if (isLegendSelected && legends.length > 0) {
             legendObject.layers = [];
             legends.forEach(legendObj => {
+
+                if (Radio.request("ModelList", "getModelByAttributes", {id: legendObj.id}).get("children")?.length > 0) {
+                    legendObj.id = Radio.request("ModelList", "getModelByAttributes", {id: legendObj.id}).get("children")[0].id;
+                }
+
                 if (this.defaults.visibleLayerIds.includes(legendObj.id)) {
                     const legendContainsPdf = this.legendContainsPdf(legendObj.legend);
 
