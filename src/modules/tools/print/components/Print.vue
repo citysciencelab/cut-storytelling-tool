@@ -9,6 +9,7 @@ import axios from "axios";
 import getVisibleLayer from "../utils/getVisibleLayer";
 import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 import {Vector} from "ol/layer.js";
+import Cluster from "ol/source/Cluster";
 
 /**
  * Tool to print a part of the map
@@ -73,6 +74,7 @@ export default {
                 if (typeof this.eventListener !== "undefined") {
                     getVisibleLayer();
                     this.updateCanvasLayer();
+                    this.updateCanvasByFeaturesLoadend(this.visibleLayerList);
                 }
             }
         });
@@ -106,13 +108,20 @@ export default {
 
         /**
          * Waits until the features of Vector layers are loaded and then renders the canvas again.
+         * Cluster layer are considered.
          * @param {module:ol/layer/Base~BaseLayer[]} visibleLayerList A list which contains the visible layers.
          * @returns {void}
          */
         updateCanvasByFeaturesLoadend (visibleLayerList) {
             visibleLayerList.forEach(layer => {
                 if (layer instanceof Vector) {
-                    layer.getSource().on("featuresloadend", () => {
+                    let layerSource = layer.getSource();
+
+                    if (layer.getSource() instanceof Cluster) {
+                        layerSource = layerSource.getSource();
+                    }
+
+                    layerSource.once("featuresloadend", () => {
                         getVisibleLayer();
                         this.updateCanvasLayer();
                         this.togglePostrenderListener();
