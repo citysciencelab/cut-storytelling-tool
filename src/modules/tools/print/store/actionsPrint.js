@@ -251,7 +251,13 @@ export default {
         }
     },
 
-    migratePayload: function (context, payload) {
+    /**
+     * migrates the payload intended for mapfish to the format High Resolution Plot Service needs
+     * @param {Object} param.state the state
+     * @param {Object} payload object to migrate
+     * @returns {Object} object for High Resolution Plot Service to start the printing
+     */
+    migratePayload: function ({state}, payload) {
         const plotservicePayload = {},
             decodePayload = JSON.parse(decodeURIComponent(payload.replace(/imageFormat/g, "format")));
 
@@ -269,8 +275,8 @@ export default {
             dpi: String(decodePayload.attributes.map.dpi),
             mapTitle: decodePayload.attributes.title
         }];
-        plotservicePayload.outputFilename = context.state.outputFilename;
-        plotservicePayload.outputFormat = context.state.outputFormat;
+        plotservicePayload.outputFilename = state.outputFilename;
+        plotservicePayload.outputFormat = state.outputFormat;
 
         return JSON.stringify(plotservicePayload);
     },

@@ -3,7 +3,7 @@ import actions from "../../../store/actionsPrint";
 import VectorLayer from "ol/layer/Vector.js";
 import sinon from "sinon";
 
-const {activatePrintStarted, startPrint, getMetaDataForPrint, createPrintJob, waitForPrintJob, waitForPrintJobSuccess, downloadFile} = actions;
+const {activatePrintStarted, startPrint, getMetaDataForPrint, createPrintJob, migratePayload, waitForPrintJob, waitForPrintJobSuccess, downloadFile} = actions;
 
 describe("src/modules/tools/print/store/actionsPrint", function () {
     describe("activatePrintStarted", function () {
@@ -176,6 +176,32 @@ describe("src/modules/tools/print/store/actionsPrint", function () {
                 {type: "setProgressWidth", payload: "width: 50%", commit: true},
                 {type: "waitForPrintJob", payload: data, dispatch: true}
             ], {}, done);
+        });
+    });
+    describe("migratePayload", function () {
+        it("should migrate the for mapfish generated JSON to plotservice", done => {
+            const state = {
+                    outputFilename: "",
+                    outputFormat: ""
+                },
+                payload = {
+                    "layout": "Default A4 hoch",
+                    "attributes": {
+                        "title": "Mein Titel",
+                        "map": {
+                            "dpi": 120,
+                            "projection": "EPSG:25832",
+                            "center": [
+                                562010,
+                                5562814
+                            ],
+                            "scale": 500000,
+                            "layers": []
+                        }
+                    }
+                };
+
+            testAction(migratePayload, encodeURIComponent(JSON.stringify(payload)), state, {}, [], {}, done);
         });
     });
     describe("waitForPrintJob", function () {

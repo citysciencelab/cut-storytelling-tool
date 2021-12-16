@@ -43,6 +43,52 @@ export default {
             set (value) {
                 this.setTitle(value);
             }
+        },
+        shownLayoutList: {
+            get () {
+                let filterArray = [];
+
+                if (this.capabilitiesFilter.length > 0 &&
+                    this.capabilitiesFilter.layouts &&
+                    this.capabilitiesFilter.layouts.length > 0) {
+                    filterArray = this.capabilitiesFilter.layouts;
+                }
+                else
+                if (this.defaultCapabilitiesFilter.length > 0 &&
+                    this.defaultCapabilitiesFilter.layouts &&
+                    this.defaultCapabilitiesFilter.layouts.length > 0) {
+                    filterArray = this.defaultCapabilitiesFilter.layouts;
+                }
+                return this.layoutList.filter(function (el) {
+                    return filterArray.indexOf(el.geoDocument) > -1 || filterArray.length === 0;
+                }, this);
+            },
+            set (value) {
+                this.setLayoutList(value);
+            }
+        },
+        shownFormatList: {
+            get () {
+                let filterArray = [];
+
+                if (this.capabilitiesFilter.length > 0 &&
+                    this.capabilitiesFilter.outputFormats &&
+                    this.capabilitiesFilter.outputFormats.length > 0) {
+                    filterArray = this.capabilitiesFilter.outputFormats;
+                }
+                else
+                if (this.defaultCapabilitiesFilter.length > 0 &&
+                    this.defaultCapabilitiesFilter.outputFormats &&
+                    this.defaultCapabilitiesFilter.outputFormats.length > 0) {
+                    filterArray = this.defaultCapabilitiesFilter.outputFormats;
+                }
+                return this.formatList.filter(function (el) {
+                    return filterArray.indexOf(el.name) > -1 || filterArray.length === 0;
+                }, this);
+            },
+            set (value) {
+                this.setFormatList(value);
+            }
         }
     },
     watch: {
@@ -80,7 +126,7 @@ export default {
         });
     },
     mounted () {
-        if (this.layoutList.length === 0) {
+        if (this.shownLayoutList.length === 0) {
             this.$nextTick(() => {
                 if (this.active) {
                     this.retrieveCapabilites();
@@ -304,7 +350,7 @@ export default {
                             @change="layoutChanged($event.target.value)"
                         >
                             <option
-                                v-for="(layout, i) in layoutList"
+                                v-for="(layout, i) in shownLayoutList"
                                 :key="i"
                                 :value="layout.name"
                                 :selected="layout.name === currentLayoutName"
@@ -328,7 +374,7 @@ export default {
                             @change="setCurrentFormat($event.target.value)"
                         >
                             <option
-                                v-for="(format, i) in formatList"
+                                v-for="(format, i) in shownFormatList"
                                 :key="i"
                                 :value="format"
                                 :selected="format === currentFormat"
