@@ -9,7 +9,6 @@ import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 import {expect} from "chai";
-import store from "../../../../app-store";
 
 describe("src/core/maps/2DMapView.js", () => {
     /**
