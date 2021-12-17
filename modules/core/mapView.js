@@ -125,7 +125,6 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @returns {void}
      */
     changedResolutionCallback: function (evt) {
-        debugger;
         const mapView = evt.target,
             constrainResolution = mapView.getConstrainedResolution(mapView.get(evt.key)),
             params = Radio.request("Util", "findWhereJs", this.get("options"), {resolution: constrainResolution});
