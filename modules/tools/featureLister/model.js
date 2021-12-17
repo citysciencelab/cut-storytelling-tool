@@ -168,7 +168,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
         }
     },
     /**
-     * Scales the style of the selected feature by 1.5
+     * Sets the style for highlighting of the selected feature depending on the geometryType.
      * @param {String} featureId id of the feature to highlight
      * @return {void}
      */
@@ -177,7 +177,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             featureWrapper = layer.features.find(feat => {
                 return feat.id.toString() === featureId;
             }),
-            styleObj = layer.geometryType === "Polygon" ? this.get("highlightVectorRulesPolygon") : this.get("highlightVectorRulesPointLine"),
+            styleObj = layer.geometryType.toLowerCase().indexOf("polygon") > -1 ? this.get("highlightVectorRulesPolygon") : this.get("highlightVectorRulesPointLine"),
             highlightObject = {
                 type: layer.geometryType === "Point" || layer.geometryType === "MultiPoint" ? "increase" : "highlightPolygon",
                 id: featureId,
