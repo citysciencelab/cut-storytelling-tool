@@ -16,6 +16,7 @@
 - The following NPM packages are added:
     - dependencies:
         - "bootstrap-sass"
+- Extended CSW processing for download links in layerInformation by CSW 2.0.2 standard.
 
 ### Changed
 - Migrated the map from Backbone.js to Vue.js environment.
