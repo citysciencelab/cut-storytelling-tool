@@ -61,6 +61,7 @@
         - "bootstrap-sass"
 - Extended CSW processing for download links in layerInformation by CSW 2.0.2 standard.
 - The tool "featureLister" has been extended and now also highlights lines and polygons on mouse-over over the feature name.
+- Added the possibility to use the High Resolution Plot Service 
 
 ### Changed
 - Migrated the map from Backbone.js to Vue.js environment.
@@ -97,7 +98,7 @@
     - Fix reset UI button.
     - Add missing error translation for wrong config.
 - SelectFeatures:
-    - The 'Select Features' tool can now also be used to select lines.
+- The 'Select Features' tool can now also be used to select lines.
 - Print:
     - The canvas is now drawn on the top layer after a new layer is switched on in the topic tree.
     - When printing is opened initially, the canvas is now always drawn on the top layer.

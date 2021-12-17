@@ -1827,12 +1827,14 @@ Print module, configurable for 2 print services: *High Resolution PlotService* a
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|mapfishServiceId|yes|String||Print service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
+|mapfishServiceId|yes|String||_Deprecated in 3.0.0._ Print service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
+|printServiceId|yes|String||Print service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
+|printService|no|String|"mapfish"|Flag determining which print service is in use. `plotservice` activates the *High Resolution PlotService*, if the parameter is not set, *Mapfish 3* is used.|false|
+|printAppCapabilities|no|String|"capabilities.json"|path for the configuration of the print service|false|
 |currentLayoutName|no|String|""|Defines which layout is the default layout on opening the print tool, e.g. "A4 portrait format". If the given layout is not available oder none is provided, the first layout mentioned in the Capabilities is used.|false|
 |printAppId|no|String|"master"|Print service print app id. This tells the print service which template(s) to use.|false|
 |filename|no|String|"report"|Print result file name.|false|
 |title|no|String|"PrintResult"|Document title appearing as header.|false|
-|version|no|String||Flag determining which print service is in use. `"HighResolutionPlotService"` activates the *High Resolution PlotService*, if the parameter is not set, *Mapfish 3* is used.|false|
 |isLegendSelected|no|Boolean|false|Defines whether a checkbox to print the legend is offered. Only used for print services supporting legend printing (Mapfish Print 3).|false|
 |legendText|no|String|"Mit Legende"|Descriptive text for the legend print checkbox.|false|
 |dpiForPdf|no|Number|200|DPI resolution for the map in the PDF file.|false|
@@ -1850,6 +1852,8 @@ Print module, configurable for 2 print services: *High Resolution PlotService* a
         "mapfishServiceId": "123456",
         "filename": "Print",
         "title": "My Title",
+        "printService": "plotservice",
+        "printAppCapabilities": "info.json",
         "version" : "HighResolutionPlotService"
     }
 }
@@ -1871,7 +1875,7 @@ Print module, configurable for 2 print services: *High Resolution PlotService* a
 ```
 
 ### Portalconfig.menu.tool.print.capabilitiesFilter
-Liste von Layouts und Formaten, welche die Antwort vom Druckdienst in der jeweiligen Kategorie filtert.
+List of layouts and formats that filters the response from the print service in the respective category.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -1879,11 +1883,12 @@ Liste von Layouts und Formaten, welche die Antwort vom Druckdienst in der jeweil
 |outputFormats|no|String[]||Array of formats should shown in the UI.|false|
 
 **Beispiel capabilitiesFilter:**
-```
-#!json
-"capabilitiesFilter": {
-    "layouts": ["A4 Hochformat", "A3 Hochformat"],
-    "outputFormats": ["PDF"]
+```json
+{
+    "capabilitiesFilter": {
+        "layouts": ["A4 Hochformat", "A3 Hochformat"],
+        "outputFormats": ["PDF"]
+    }
 }
 ```
 

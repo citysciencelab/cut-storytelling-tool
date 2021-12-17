@@ -1756,7 +1756,10 @@ Druckmodul. Konfigurierbar für 2 Druckdienste: den High Resolution PlotService 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|mapfishServiceId|ja|String||Id des Druckdienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|false|
+|mapfishServiceId|ja|String||_Deprecated in 3.0.0._ Id des Druckdienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|false|
+|printServiceId|ja|String||Id des Druckdienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|false|
+|printService|nein|String|"mapfish"|Flag welcher Druckdienst verwendet werden soll. Bei "plotservice" wird der High Resolution PlotService verwendet, wenn der Parameter nicht gesetzt wird, wird Mapfish 3 verwendet.|false|
+|printAppCapabilities|nein|String|"capabilities.json"|Pfad unter welcher die Konfiguration des Druckdienstes zu finden ist.|false|
 |currentLayoutName|nein|String|""|Legt fest, welches Layout als Standardwert beim Öffnen des Druckwerkzeuges ausgewählt sein soll. Zum Beispiel "A4 Hochformat". Wenn das angegebene Layout nicht vorhanden ist oder keins angegeben wurde, dann wird das erste Layout der Capabilities verwendet.|false|
 |printAppId|nein|String|"master"|Id der print app des Druckdienstes. Dies gibt dem Druckdienst vor welche/s Template/s er zu verwenden hat.|false|
 |filename|nein|String|"report"|Dateiname des Druckergebnisses.|false|
@@ -1775,10 +1778,11 @@ Druckmodul. Konfigurierbar für 2 Druckdienste: den High Resolution PlotService 
 "print": {
     "name": "Karte drucken",
     "glyphicon": "glyphicon-print",
-    "mapfishServiceId": "123456",
+    "printServiceId": "123456",
     "filename": "Ausdruck",
     "title": "Mein Titel",
-    "version" : "HighResolutionPlotService"
+    "printService": "plotservice",
+    "printAppCapabilities": "info.json"
 }
 ```
 
@@ -1788,7 +1792,7 @@ Druckmodul. Konfigurierbar für 2 Druckdienste: den High Resolution PlotService 
 "print": {
     "name": "Karte drucken",
     "glyphicon": "glyphicon-print",
-    "mapfishServiceId": "mapfish_printservice_id",
+    "printServiceId": "mapfish_printservice_id",
     "printAppId": "mrh",
     "filename": "Ausdruck",
     "title": "Mein Titel"
