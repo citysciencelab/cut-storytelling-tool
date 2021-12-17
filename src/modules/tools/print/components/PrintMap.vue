@@ -48,19 +48,27 @@ export default {
             get () {
                 let filterArray = [];
 
-                if (this.capabilitiesFilter.length > 0 &&
+                if (Object.keys(this.capabilitiesFilter).length > 0 &&
                     this.capabilitiesFilter.layouts &&
                     this.capabilitiesFilter.layouts.length > 0) {
                     filterArray = this.capabilitiesFilter.layouts;
                 }
                 else
-                if (this.defaultCapabilitiesFilter.length > 0 &&
+                if (Object.keys(this.defaultCapabilitiesFilter).length > 0 &&
                     this.defaultCapabilitiesFilter.layouts &&
                     this.defaultCapabilitiesFilter.layouts.length > 0) {
                     filterArray = this.defaultCapabilitiesFilter.layouts;
                 }
                 return this.layoutList.filter(function (el) {
-                    return filterArray.indexOf(el.geoDocument) > -1 || filterArray.length === 0;
+                    let res = filterArray.length === 0;
+
+                    filterArray.forEach(function (layoutFilter) {
+                        if (el.name.match(layoutFilter) !== null) {
+                            res = true;
+                        }
+                        return !res;
+                    });
+                    return res;
                 }, this);
             },
             set (value) {
@@ -71,13 +79,13 @@ export default {
             get () {
                 let filterArray = [];
 
-                if (this.capabilitiesFilter.length > 0 &&
+                if (Object.keys(this.capabilitiesFilter).length > 0 &&
                     this.capabilitiesFilter.outputFormats &&
                     this.capabilitiesFilter.outputFormats.length > 0) {
                     filterArray = this.capabilitiesFilter.outputFormats;
                 }
                 else
-                if (this.defaultCapabilitiesFilter.length > 0 &&
+                if (Object.keys(this.defaultCapabilitiesFilter).length > 0 &&
                     this.defaultCapabilitiesFilter.outputFormats &&
                     this.defaultCapabilitiesFilter.outputFormats.length > 0) {
                     filterArray = this.defaultCapabilitiesFilter.outputFormats;
@@ -114,6 +122,13 @@ export default {
      */
     created () {
         this.$on("close", this.close);
+
+        // warn if deprecated param is used
+        if (this.mapfishServiceId) {
+            console.warn("Print Tool: The parameter 'mapfishServiceId' is deprecated in the next major release! Please use printServiceId instead.");
+        }
+
+        this.setServiceId(this.mapfishServiceId && this.mapfishServiceId !== "" ? this.mapfishServiceId : this.printServiceId);
 
         Backbone.Events.listenTo(Radio.channel("ModelList"), {
             "updatedSelectedLayerList": () => {

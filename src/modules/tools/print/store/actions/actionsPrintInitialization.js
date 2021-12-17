@@ -17,11 +17,10 @@ export default {
     retrieveCapabilites: function ({state, dispatch, commit}) {
         let serviceUrl;
 
-        if (state.mapfishServiceId !== "") {
-            serviceUrl = Radio.request("RestReader", "getServiceById", state.mapfishServiceId).get("url");
-            commit("setMapfishServiceUrl", serviceUrl);
+        if (state.serviceId !== "") {
+            serviceUrl = Radio.request("RestReader", "getServiceById", state.serviceId).get("url");
+            commit("setServiceUrl", serviceUrl);
             serviceUrl = serviceUrl + state.printAppId + "/" + state.printAppCapabilities;
-            // serviceUrl = "http://localhost/portal/boris_config/capabilities.json";
             const serviceRequest = {
                 "serviceUrl": serviceUrl,
                 "requestType": "GET",
@@ -33,6 +32,13 @@ export default {
         }
     },
 
+    /**
+     * switch to decide which print service is configured and parses the response
+     * @param {Object} param.state the state
+     * @param {Object} param.dispatch the dispatch
+     * @param {Object} response capabilities fomr the configured print service
+     * @returns {void}
+     */
     parseCapabilities: function ({state, dispatch}, response) {
         if (state.printService === "mapfish") {
             dispatch("parseMapfishCapabilities", response);
@@ -43,7 +49,7 @@ export default {
     },
 
     /**
-     * Sets the capabilities from mapfish resonse.
+     * Sets the capabilities from mapfish response.
      * @param {Object} param.state the state
      * @param {Object} param.commit the commit
      * @param {Object} param.dispatch the dispatch
@@ -66,6 +72,14 @@ export default {
         }
     },
 
+    /**
+     * Sets the capabilities from mapfish response.
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
+     * @param {Object[]} response - config.yaml from mapfish.
+     * @returns {void}
+     */
     parsePlotserviceCapabilities: function ({state, commit, dispatch}, response) {
         commit("setLayoutList", response.layouts);
         dispatch("chooseCurrentLayout", response.layouts);

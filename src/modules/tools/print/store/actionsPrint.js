@@ -212,7 +212,7 @@ export default {
      */
     createPrintJob: async function ({state, dispatch, commit}, printJob) {
         commit("setPrintFileReady", false);
-        if (state.mapfishServiceUrl === "") {
+        if (state.serviceUrl === "") {
             let serviceUrl;
 
             if (state.mapfishServiceId !== "") {
@@ -222,11 +222,11 @@ export default {
                 serviceUrl = Radio.request("RestReader", "getServiceById", "mapfish").get("url");
             }
 
-            commit("setMapfishServiceUrl", serviceUrl);
+            commit("setServiceUrl", serviceUrl);
         }
         const printId = printJob.printAppId || state.printAppId,
             printFormat = printJob.format || state.currentFormat,
-            url = state.printService === "plotservice" ? state.mapfishServiceUrl + "/create.json" : state.mapfishServiceUrl + printId + "/report." + printFormat;
+            url = state.printService === "plotservice" ? state.serviceUrl + "/create.json" : state.serviceUrl + printId + "/report." + printFormat;
         let response = "";
 
         commit("setProgressWidth", "width: 50%");
@@ -242,7 +242,7 @@ export default {
             dispatch("downloadFile", {
                 "fileUrl": response.data.getURL,
                 "index": state.plotserviceIndex,
-                "filename": state.outputFilename + "." + state.outputFormat
+                "filename": state.filename + "." + state.outputFormat
             });
         }
         else {
@@ -275,7 +275,7 @@ export default {
             dpi: String(decodePayload.attributes.map.dpi),
             mapTitle: decodePayload.attributes.title
         }];
-        plotservicePayload.outputFilename = state.outputFilename;
+        plotservicePayload.outputFilename = state.filename;
         plotservicePayload.outputFormat = state.outputFormat;
 
         return JSON.stringify(plotservicePayload);
@@ -292,7 +292,7 @@ export default {
      */
     waitForPrintJob: async function ({state, dispatch, commit}, response) {
         const printAppId = state.printAppId,
-            url = state.mapfishServiceUrl + printAppId + "/status/" + response.ref + ".json",
+            url = state.serviceUrl + printAppId + "/status/" + response.ref + ".json",
             serviceRequest = {
                 "index": response.index,
                 "serviceUrl": url,
@@ -322,7 +322,7 @@ export default {
             }
             const fileSpecs = {
                 "index": response?.index,
-                "fileUrl": state.mapfishServiceUrl + state.printAppId + "/report/" + subUrl,
+                "fileUrl": state.serviceUrl + state.printAppId + "/report/" + subUrl,
                 "filename": state.filename
             };
 
@@ -340,7 +340,7 @@ export default {
                 else if (response.downloadURL.includes("mapfish_print/")) {
                     subUrl = response.downloadURL.replace("/mapfish_print/print/report/", "");
                 }
-                const url = state.mapfishServiceUrl + state.printAppId + "/status/" + subUrl + ".json",
+                const url = state.serviceUrl + state.printAppId + "/status/" + subUrl + ".json",
                     serviceRequest = {
                         "index": response.index,
                         "serviceUrl": url,
