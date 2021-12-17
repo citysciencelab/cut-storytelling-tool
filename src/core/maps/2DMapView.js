@@ -10,7 +10,6 @@ import defaults from "masterportalAPI/src/defaults";
 
 
 View.prototype.initStore = function () {
-    debugger;
     let params;
 
     if (this.getConstrainedResolution(this.getResolution()) === this.options_.resolution) {
@@ -52,8 +51,7 @@ View.prototype.getProjectedBBox = function (epsgCode = "EPSG:4326") {
  * @return {number} resolution
  */
 View.prototype.getResoByScale = function (scale, scaleType) {
-    debugger;
-    const scales = this.options_.map(function (option) {
+    const scales = this.options_.options.map(function (option) {
         return option.scale;
     });
 
@@ -81,14 +79,14 @@ View.prototype.getResoByScale = function (scale, scaleType) {
  */
 View.prototype.resetView = function () {
     const paramUrlCenter = store.state.urlParams["Map/center"] ? store.state.urlParams["Map/center"] : null,
-        settingsCenter = this.settings !== undefined && this.settings?.startCenter ? this.defaults.settings.startCenter : undefined,
+        settingsCenter = this.options_ !== undefined && this.options_.center ? this.options_.center : undefined,
         defaultCenter = defaults.startCenter,
         center = paramUrlCenter || settingsCenter || defaultCenter,
-        settingsResolution = this.defaults.settings !== undefined && this.defaults.settings?.resolution ? this.defaults.settings.resolution : undefined,
+        settingsResolution = this.options_ !== undefined && this.options_?.resolution ? this.options_.resolution : undefined,
         defaultResolution = defaults.startResolution,
         resolution = settingsResolution || defaultResolution;
 
-    this.setCenter(center);
+    this.setCenterCoord(center);
     this.setResolution(resolution);
     store.dispatch("MapMarker/removePointMarker");
 };
@@ -110,7 +108,7 @@ View.prototype.setBBox = function (bbox) {
  * @param  {number} zoomLevel Zoom Level
  * @return {void}
  */
-View.prototype.setCenter = function (coords, zoomLevel) {
+View.prototype.setCenterCoord = function (coords, zoomLevel) {
     let first2Coords = [coords[0], coords[1]];
 
     // Coordinates need to be integers, otherwise open layers will go nuts when you attempt to pan the
@@ -143,21 +141,10 @@ View.prototype.setConstrainedResolution = function (resolution) {
  * @returns {void}
  */
 View.prototype.setResolutionByScale = function (scale) {
-    const params = findWhereJs(this.options_, {scale: scale});
+    const params = findWhereJs(this.options_.options, {scale: scale});
 
     if (this !== undefined) {
         this.setResolution(params.resolution);
-    }
-};
-
-/**
- * @description sets start zoom level
- * @param  {number} value Zoom Level
- * @returns {void}
- */
-View.prototype.setStartZoomLevel = function (value) {
-    if (value !== undefined) {
-        this.setResolution(this.getResolutions()[value]);
     }
 };
 
@@ -183,8 +170,8 @@ View.prototype.setZoomLevelUp = function () {
  */
 View.prototype.toggleBackground = function () {
     if (this.background === "white") {
-        this.setBackground(this.backgroundImage);
-        $("#map").css("background", this.defaults.settings.backgroundImage + "repeat scroll 0 0 rgba(0, 0, 0, 0)");
+        this.setBackground(this.options_.backgroundImage);
+        $("#map").css("background", this.options_.backgroundImage + "repeat scroll 0 0 rgba(0, 0, 0, 0)");
     }
     else {
         this.setBackground("white");

@@ -19,8 +19,8 @@ channel.reply({
     "getResolutions": function () {
         return mapCollection.getMapView("ol", "2D").getResolutions();
     },
-    "getResoByScale": function () {
-        return mapCollection.getMapView("ol", "2D").getResoByScale();
+    "getResoByScale": function (scale, scaleType) {
+        return mapCollection.getMapView("ol", "2D").getResoByScale(scale, scaleType);
     },
     "getScales": function () {
         return mapCollection.getMapView("ol", "2D").get("options").map(function (option) {
@@ -40,7 +40,7 @@ channel.on({
         mapCollection.getMapView("ol", "2D").resetView();
     },
     "setCenter": function (coords, zoomLevel) {
-        mapCollection.getMapView("ol", "2D").setCenter(coords, zoomLevel);
+        mapCollection.getMapView("ol", "2D").setCenterCoord(coords, zoomLevel);
     },
     "setConstrainedResolution": function (resolution) {
         mapCollection.getMapView("ol", "2D").setConstrainedResolution(resolution);

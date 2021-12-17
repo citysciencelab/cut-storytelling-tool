@@ -9,7 +9,6 @@ import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 import {expect} from "chai";
-import store from "../../../../app-store";
 
 describe("src/core/maps/2DMapView.js", () => {
     /**
@@ -75,15 +74,13 @@ describe("src/core/maps/2DMapView.js", () => {
         ]);
     });
 
-    describe("getProjectedBBox", () => {
-        it("Returns the bounding box with the projection EPSG:4326", () => {
-            expect(mapView.getProjectedBBox()).to.deep.equal([
-                -0.37214433613366177,
-                43.73233379125262,
-                10.568026404151366,
-                49.98782015759816
-            ]);
-        });
+    it("Returns the bounding box with the projection EPSG:4326", () => {
+        expect(mapView.getProjectedBBox()).to.deep.equal([
+            -0.37214433613366177,
+            43.73233379125262,
+            10.568026404151366,
+            49.98782015759816
+        ]);
     });
 
     it("getResoByScale - returns the resolution for the given scale", function () {
@@ -95,26 +92,68 @@ describe("src/core/maps/2DMapView.js", () => {
         ]);
     });
 
-    it("resetView - sets the bbox", function () {
+    it("resetView - resets the view", function () {
         mapView.resetView();
 
-        const dispatchCalls = {};
-
-        store.dispatch = (arg1, arg2) => {
-            dispatchCalls[arg1] = arg2 !== undefined ? arg2 : "called";
-        };
-
-        expect(dispatchCalls["MapMarker/removePointMarker"].length).to.be.equals(0);
-
+        expect(mapView.getCenter()).to.deep.equal([565874, 5934140]);
+        expect(mapView.getResolution()).to.deep.equal(15.874991427504629);
     });
 
-    describe("setBBox", () => {
-        it("Sets the bbox", function () {
-            mapView.setBBox([565760.049, 5931747.185, 568940.626, 5935453.891]);
+    it("Sets the bbox", function () {
+        mapView.setBBox([565760.049, 5931747.185, 568940.626, 5935453.891]);
 
-            expect(mapView.getCenter()).to.deep.equal([567350.3375, 5933600.538]);
-            expect(Math.round(mapView.getZoom())).equals(15);
-        });
+        expect(mapView.getCenter()).to.deep.equal([567350.3375, 5933600.538]);
+        expect(Math.round(mapView.getZoom())).equals(12);
+    });
+
+    it("Sets the center with integers", function () {
+        mapView.setCenterCoord([1, 2]);
+
+        expect(mapView.getCenter()).to.deep.equal([567500.2, 5907500.2]);
+    });
+
+    it("Sets the center with strings", function () {
+        mapView.setCenterCoord(["1", "2"]);
+
+        expect(mapView.getCenter()).to.deep.equal([567500.2, 5907500.2]);
+    });
+
+    it("Sets the constrained resolution", function () {
+        mapView.setConstrainedResolution(17, 0);
+
+        expect(mapView.getResolution()).to.deep.equal(17);
+    });
+
+    it("Sets the resolution by scale", function () {
+        mapView.setResolutionByScale(1000);
+
+        expect(mapView.getResolution()).to.deep.equal(0.2645831904584105);
+    });
+
+    it("Sets the zoom level down", function () {
+        mapView.setZoomLevelDown();
+
+        expect(mapView.getZoom()).to.deep.equal(7.088776621377278);
+    });
+
+    it("Sets the zoom level up", function () {
+        mapView.setZoomLevelUp();
+
+        expect(mapView.getZoom()).to.deep.equal(8.088776621377278);
+    });
+
+    it("toggles the background to white", function () {
+        mapView.toggleBackground();
+
+        expect(mapView.background).to.deep.equal("white");
+    });
+
+    it("toggles the background to image", function () {
+        mapView.toggleBackground();
+        expect(mapView.background).to.equal("white");
+
+        mapView.toggleBackground();
+        expect(mapView.background).to.equal(undefined);
     });
 
     describe("zoomToExtent", () => {
@@ -187,5 +226,13 @@ describe("src/core/maps/2DMapView.js", () => {
             expect(mapView.getCenter()).to.deep.equal([624280.870335713, 5999280.470335713]);
             expect(Math.round(mapView.getZoom())).equals(13);
         });
+    });
+
+    it("sets the background", function () {
+        mapView.setBackground("Daisy Ducks custom BG");
+        expect(mapView.background).to.equal("Daisy Ducks custom BG");
+
+        mapView.setBackground("Mickey Mouses custom map");
+        expect(mapView.background).to.equal("Mickey Mouses custom map");
     });
 });

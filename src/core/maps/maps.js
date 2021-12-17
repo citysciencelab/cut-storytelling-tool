@@ -3,6 +3,8 @@ import {getLayerList} from "masterportalAPI/src/rawLayerList";
 
 import "./2DMap";
 import "./2DMapView";
+import "./2DMapRadioBridge";
+import "./2DMapViewRadioBridge";
 
 import Map3dModel from "../../../modules/core/map3d";
 import ObliqueMap from "../../../modules/core/obliqueMap";
@@ -30,7 +32,7 @@ function create2DMap (mapViewSettings) {
 }
 
 /**
- * Create the 3D map
+ * Create the 3D map.
  * @returns {void}
  */
 function create3DMap () {
@@ -40,7 +42,7 @@ function create3DMap () {
 }
 
 /**
- * Create the oblique map
+ * Create the oblique map.
  * @param {Object} configJs The config.js file.
  * @returns {void}
  */
