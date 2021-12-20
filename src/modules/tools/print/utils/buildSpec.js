@@ -192,7 +192,6 @@ const BuildSpecModel = {
                         if (layer?.get("id") !== undefined) {
                             visibleLayerIds.push(layer?.get("id"));
                         }
-                        layers.push(printLayer);
                     }
                 });
             });
@@ -1054,7 +1053,6 @@ const BuildSpecModel = {
                     if (isMetaDataAvailable) {
                         metaDataLayerList.push(legendObj.name);
                     }
-
                     if (legendContainsPdf) {
                         Radio.trigger("Alert", "alert", {
                             kategorie: "alert-info",
