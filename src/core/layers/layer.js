@@ -307,9 +307,6 @@ Layer.prototype.setIsSelected = function (newValue) {
     // do not use this.set("isSelected", value), because of neverending recursion
     this.attributes.isSelected = newValue;
     this.setIsVisibleInMap(newValue);
-    if (treeType !== "light") {
-        this.resetSelectionIDX();
-    }
 
     if (newValue) {
         bridge.addLayerToIndex(this.layer, this.get("selectionIDX"));

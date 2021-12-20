@@ -1197,12 +1197,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     selectedChanged: function (model, value) {
         if (model.get("type") === "layer") {
-            // Only reset Indeces in Custom Tree, because Light Tree Layers always keep their
-            // positions regardless of active or not
-            if (Radio.request("Parser", "getTreeType") !== "light") {
-                model.resetSelectionIDX();
-            }
-
             model.setIsVisibleInMap(value);
             this.updateLayerView();
         }
