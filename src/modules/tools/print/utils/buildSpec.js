@@ -192,7 +192,9 @@ const BuildSpecModel = {
                         if (layer?.get("id") !== undefined) {
                             visibleLayerIds.push(layer?.get("id"));
                         }
+                        layers.push(printLayer);
                     }
+
                 });
             });
         }
