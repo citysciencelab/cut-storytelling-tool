@@ -51,6 +51,8 @@
     - The canvas is now drawn on the top layer after a new layer is switched on in the topic tree.
     - When printing is opened initially, the canvas is now always drawn on the top layer.
     - Grouplayer legends are now printable.
+- ParametricUrl:
+    - Layers can be loaded by mdid value.
 
 ---
 
