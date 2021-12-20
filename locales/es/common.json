@@ -692,7 +692,8 @@
                 "address": "Dirección",
                 "location": "Lugar",
                 "subject": "Tema específico",
-                "topic": "Tema"
+                "topic": "Tema",
+                "general": "Tema"
             },
             "specialWFS": {
                 "ongoing": "en proceso",

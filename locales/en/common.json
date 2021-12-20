@@ -959,7 +959,8 @@
                 "address": "address",
                 "location": "location",
                 "subject": "subject (external topics)",
-                "topic": "issues & topics"
+                "topic": "issues & topics",
+                "general": "topics"
             },
             "specialWFS": {
                 "ongoing": "in process",

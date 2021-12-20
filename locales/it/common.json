@@ -695,7 +695,8 @@
                 "address": "indirizzo",
                 "location": "comune",
                 "subject": "dati specialistici",
-                "topic": "oggetto"
+                "topic": "oggetto",
+                "general": "oggetto"
             },
             "specialWFS": {
                 "ongoing": "in corso",

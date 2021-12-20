@@ -678,7 +678,8 @@
                 "address": "Endereço",
                 "location": "Localização",
                 "subject": "Assunto",
-                "topic": "Tópico"
+                "topic": "Tópico",
+                "general": "Tópico"
             },
             "specialWFS": {
                 "ongoing": "em processo",

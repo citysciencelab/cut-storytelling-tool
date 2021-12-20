@@ -793,7 +793,8 @@
                 "address": "Adres",
                 "location": "Yer",
                 "subject": "Teknik konu",
-                "topic": "Konu"
+                "topic": "Konu",
+                "general": "Konu"
             },
             "specialWFS": {
                 "ongoing": "Prosedürde",
