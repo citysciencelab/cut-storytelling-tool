@@ -31,8 +31,8 @@ function create2DMap (mapViewSettings) {
         settings: mapViewSettings
     });
 
-    Radio.trigger("ModelList", "addInitiallyNeededModels");
     store.dispatch("Map/setMapAttributes", {map: map});
+    Radio.trigger("ModelList", "addInitiallyNeededModels");
 }
 
 /**
