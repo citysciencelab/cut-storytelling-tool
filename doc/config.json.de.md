@@ -620,13 +620,15 @@ Das Attribut attributions kann vom Typ Boolean oder Object sein. Wenn es vom Typ
 
 #### Portalconfig.controls.overviewMap
 
+[type:Layer]: # (Datatypes.Layer)
+
 Das Attribut overviewMap kann vom Typ Boolean oder Object sein. Wenn es vom Typ Boolean ist, zeigt es die Overviewmap mit den Defaulteinstellungen an. Ist es vom Typ Object, so gelten folgende Attribute
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |resolution|nein|Integer||deprecated in 3.0.0: Legt die Resolution fest, die in der Overviewmap verwendet werden soll. Falls nicht angegeben, passt sich der Kartenausschnitt per Zoom automatisch an.|
 |baselayer|nein|String||deprecated in 3.0.0, danach bitte layerId verwenden!: Über den Parameter baselayer kann ein anderer Layer für die Overviewmap verwendet werden. Hier muss eine Id aus der services.json angegeben werden die in der config.js des Portals, im Parameter layerConf steht.|
-|layerId|nein|String||Über den Parameter layerId kann ein anderer Layer für die Overviewmap verwendet werden. Hier muss eine Id aus der services.json angegeben werden die in der config.js des Portals, im Parameter layerConf steht.|
+|layerId|nein|Layer||Über den Parameter layerId kann ein anderer Layer für die Overviewmap verwendet werden. Hier muss eine Id aus der services.json angegeben werden die in der config.js des Portals, im Parameter layerConf steht.|
 |isInitOpen|nein|Boolean|true|Legt fest, ob die OverviewMap beim Start dargestellt oder verborgen sein soll.|
 
 **Beispiel overviewmap als Object:**
@@ -4611,5 +4613,18 @@ Ein Extent besteht aus einem Array bestehend aus vier Zahlen. Ein Extent beschre
 
 Ein Objekt mit den benötigten Inhalten.
 Parameter können je nach Konfiguration, Verwendung und Backend-Komponenten unterschiedlich sein.
+
+***
+
+## Datatypes.Layer
+
+Ein Objekt mit dem Layernamen und der LayerId.
+
+**Beispiel Layer**
+```json
+{
+    "name": "Krankenhäuser",
+    "id": "1711",
+}
 
 ***
