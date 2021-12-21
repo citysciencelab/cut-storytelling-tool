@@ -292,7 +292,7 @@ Layer.prototype.toggleIsSettingVisible = function () {
 
     layers.setIsSettingVisible(false);
     this.setIsSettingVisible(!oldValue);
-    bridge.renderMenuSettings();
+    bridge.renderMenuSettings(this.get("id"));
 };
 /**
  * Sets the attribute isSelected and sets the layers visibility. If newValue is false, the layer is removed from map.

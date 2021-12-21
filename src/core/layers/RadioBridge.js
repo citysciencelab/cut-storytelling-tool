@@ -103,11 +103,12 @@ export function renderMenuSelection () {
 /**
  * Fires if settings in menu must be rendered.
  * Can be done directly or is no longer needed, if menu is refactored.
+ * @param {String} layerId The layer id.
  * @returns {void}
  */
-export function renderMenuSettings () {
-    Radio.trigger("Menu", "renderSetting");
-    Radio.trigger("MenuSelection", "renderSetting");
+export function renderMenuSettings (layerId) {
+    Radio.trigger("Menu", "renderSetting", layerId);
+    Radio.trigger("MenuSelection", "renderSetting", layerId);
 }
 /* ******************* ModelList ******************* */
 
