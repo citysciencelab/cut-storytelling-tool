@@ -214,6 +214,9 @@ describe("src/modules/tools/filterGeneral/components/SnippetDropdown.vue", () =>
 
         await options.at(0).setSelected();
 
-        expect(wrapper.find("select").element.value).to.equal("First Opt");
+        expect(wrapper.find("select").element.value).to.equal("0");
+        await options.at(1).setSelected();
+
+        expect(wrapper.find("select").element.value).to.equal("1");
     });
 });

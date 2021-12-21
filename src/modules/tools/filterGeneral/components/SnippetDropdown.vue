@@ -193,7 +193,7 @@ export default {
             <option
                 v-for="(optionValue, index) in dropdownValue"
                 :key="'optionValue' + '-' + index"
-                :value="optionValue"
+                :value="index"
             >
                 {{ optionValue }}
             </option>

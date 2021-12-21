@@ -174,6 +174,7 @@ export default {
                         :placeholder="snippet.placeholder"
                         :prechecked="snippet.prechecked"
                         :render-icons="snippet.renderIcons"
+                        :snippet-id="indexSnippet"
                         :value="snippet.value"
                         :visible="snippet.visible"
                         @ruleChanged="ruleChanged"
@@ -244,9 +245,16 @@ export default {
                     class="snippet"
                 >
                     <SnippetSliderRange
-                        :operator="Object.prototype.hasOwnProperty.call(snippet, 'operater') ? snippet.operater : 'BETWEEN'"
-                        :values="Object.prototype.hasOwnProperty.call(snippet, 'value') ? snippet.value : ''"
-                        :label="Object.prototype.hasOwnProperty.call(snippet, 'label') ? snippet.label : ''"
+                        :attr-name="snippet.attrName"
+                        :decimal-step="snippet.decimalStep"
+                        :label="snippet.label"
+                        :min-value="snippet.minValue"
+                        :max-value="snippet.maxValue"
+                        :operater="snippet.operator"
+                        :prechecked="snippet.prechecked"
+                        :snippet-id="indexSnippet"
+                        :visible="snippet.visible"
+                        @ruleChanged="ruleChanged"
                     />
                 </div>
             </div>
