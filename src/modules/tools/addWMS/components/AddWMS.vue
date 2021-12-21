@@ -30,10 +30,6 @@ export default {
             return i18next.t("common:modules.tools.addWMS.placeholder");
         },
 
-        textExample () {
-            return i18next.t("common:modules.tools.addWMS.textExample");
-        },
-
         textLoadLayer () {
             return i18next.t("common:modules.tools.addWMS.textLoadLayer");
         },
@@ -368,9 +364,6 @@ export default {
                     :placeholder="placeholder"
                     @keydown.enter="inputUrl"
                 >
-                <div class="WMS_example_text">
-                    {{ textExample }}
-                </div>
                 <button
                     id="addWMSButton"
                     type="button"

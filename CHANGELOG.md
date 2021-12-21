@@ -40,6 +40,7 @@
 
 ### Removed
 - WMS-layer: Hamburgensie for web_atlasde has been removed.
+- AddWMS: HH-specific WMS-URL example has been removed.
 
 ### Fixed
 - WfsSearch:

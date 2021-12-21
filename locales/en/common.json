@@ -298,7 +298,6 @@
                 "errorHttpsMessage": "&#10060; The WMS you requested is located under a http-url. The master portal can only integrate WMS via https (SSL).",
                 "errorEmptyUrl": "Please input an wms Url in the input field!",
                 "placeholder": "Please enter the WMS-URL here.",
-                "textExample": "Example: https://geodienste.hamburg.de/HH_WMS_Fahrradrouten",
                 "textLoadLayer": "Load layer",
                 "ifInExtent": "&#10060; The geodata provided via the WMS are outside the displayable range. Adding WMS is not possible.",
                 "checkVersion": "&#10060; Adding WMS is possible only if the version of external wms layer equals or is greater than 1.3.0."
