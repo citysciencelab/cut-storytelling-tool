@@ -219,4 +219,35 @@ describe("src/modules/tools/filterGeneral/components/SnippetDropdown.vue", () =>
 
         expect(wrapper.find("select").element.value).to.equal("1");
     });
+
+    it("should render but also be disabled", () => {
+        wrapper = shallowMount(SnippetDropdown, {
+            propsData: {
+                disabled: true,
+                operator: "EQ",
+                visible: true,
+                multiselect: false,
+                value: ["First Opt", "Second Opt"]
+            },
+            localVue
+        });
+        expect(wrapper.find("#selectbox").exists()).to.be.true;
+        expect(wrapper.vm.disabled).to.be.true;
+
+    });
+
+    it("should render and be enabaled", () => {
+        wrapper = shallowMount(SnippetDropdown, {
+            propsData: {
+                disabled: false,
+                operator: "EQ",
+                visible: true,
+                multiselect: false,
+                value: ["First Opt", "Second Opt"]
+            },
+            localVue
+        });
+        expect(wrapper.find("#selectbox").exists()).to.be.true;
+        expect(wrapper.vm.disabled).to.be.false;
+    });
 });

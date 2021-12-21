@@ -17,6 +17,11 @@ export default {
             required: false,
             default: 1
         },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         label: {
             type: String,
             required: false,
@@ -50,6 +55,7 @@ export default {
     },
     data () {
         return {
+            disable: true,
             interface: {},
             invalid: false,
             minimumValue: this.minValue,
@@ -70,6 +76,9 @@ export default {
             if (newVal) {
                 this.value = this.getValueInRange(newVal, true);
             }
+        },
+        disabled (value) {
+            this.disable = typeof value === "boolean" ? value : true;
         }
     },
     created () {
@@ -79,6 +88,7 @@ export default {
         this.setMinOnly(this.minimumValue, this.maximumValue);
         this.setMaxOnly(this.minimumValue, this.maximumValue);
         this.setMinMaxValue(this.minimumValue, this.maximumValue);
+        this.disable = false;
     },
     methods: {
         /**
@@ -211,7 +221,9 @@ export default {
                     this.maximumValue = maximumValue === undefined && isObject(minMaxObj) && Object.prototype.hasOwnProperty.call(minMaxObj, "max") ? minMaxObj.max : maximumValue;
                     this.setInvalid(this.minimumValue, this.maximumValue);
                     this.value = this.getValueInRange(this.value, false);
+                    this.disable = false;
                 }, onerror => {
+                    this.disable = false;
                     console.warn(onerror);
                 }, this.minOnly, this.maxOnly);
             }
@@ -250,6 +262,7 @@ export default {
             class="input-single"
             type="text"
             :name="label"
+            :disabled="disable"
             @keypress="checkKeyNumber"
             @input="checkEmpty"
         >
@@ -257,7 +270,9 @@ export default {
             v-model="value"
             class="slider-single"
             type="range"
+            :class="disable ? 'disabled':''"
             :step="step"
+            :disabled="disable"
             :min="minimumValue"
             :max="maximumValue"
         >
@@ -341,5 +356,46 @@ export default {
         &.max {
             float: right;
         }
+    }
+    input[type="range"].disabled {
+        -webkit-appearance: none;
+        background-color: grey;
+        height: 15px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    input[type="range"].disabled::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        background: #ddd;
+        border-radius: 50%;
+        box-shadow: -210px 0 0 200px grey;
+        cursor: pointer;
+        height: 15px;
+        width: 15px;
+        border: 0;
+    }
+
+    input[type="range"].disabled::-moz-range-thumb {
+        background: #ddd;
+        border-radius: 50%;
+        box-shadow: -1010px 0 0 1000px grey;
+        cursor: pointer;
+        height: 15px;
+        width: 15px;
+        border: 0;
+    }
+    input[type="range"].disabled::-moz-range-track {
+        background-color: grey;
+    }
+    input[type="range"].disabled::-moz-range-progress {
+        background-color: grey;
+        height: 15px
+    }
+    input[type="range"].disabled::-ms-fill-upper {
+        background-color: grey;
+    }
+    input[type="range"].disabled::-ms-fill-lower {
+        background-color: grey;
     }
 </style>

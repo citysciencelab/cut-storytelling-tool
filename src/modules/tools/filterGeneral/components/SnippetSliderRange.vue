@@ -17,6 +17,11 @@ export default {
             required: false,
             default: 1
         },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         label: {
             type: String,
             required: false,
@@ -57,6 +62,7 @@ export default {
     },
     data () {
         return {
+            disable: true,
             interface: {},
             invalid: false,
             minimumValue: this.minValue,
@@ -87,6 +93,9 @@ export default {
                 this.regulateMinMax("max");
                 this.emitCurrentRule([this.minVal, this.maxVal]);
             }
+        },
+        disabled (value) {
+            this.disable = typeof value === "boolean" ? value : true;
         }
     },
     mounted () {
@@ -102,6 +111,9 @@ export default {
         this.setMinOnly(this.minimumValue, this.maximumValue);
         this.setMaxOnly(this.minimumValue, this.maximumValue);
         this.setMinMaxValue(this.minimumValue, this.maximumValue);
+        if (!this.invalid) {
+            this.disable = false;
+        }
     },
     methods: {
         /**
@@ -301,6 +313,7 @@ export default {
                     v-model="maxVal"
                     class="slider-input-max"
                     type="number"
+                    :disabled="disable"
                     :step="step"
                     :min="minimumValue"
                     :max="maximumValue"
@@ -311,6 +324,7 @@ export default {
                     v-model="minVal"
                     class="slider-input-min"
                     type="number"
+                    :disabled="disable"
                     :step="step"
                     :min="minimumValue"
                     :max="maximumValue"
@@ -326,6 +340,8 @@ export default {
                     v-model="minVal"
                     class="slider-range-min"
                     type="range"
+                    :class="disable ? 'disabled':''"
+                    :disabled="disable"
                     :step="step"
                     :min="minimumValue"
                     :max="maximumValue"
@@ -335,6 +351,8 @@ export default {
                     v-model="maxVal"
                     class="slider-range-max"
                     type="range"
+                    :class="disable ? 'disabled':''"
+                    :disabled="disable"
                     :step="step"
                     :min="minimumValue"
                     :max="maximumValue"
@@ -465,7 +483,6 @@ export default {
         margin: 0;
     }
     input[type="number"] {
-        border: 1px solid #000;
         text-align: center;
         font-size: 12px;
         -moz-appearance: textfield;
@@ -497,5 +514,8 @@ export default {
             right: 0;
             top: 45px;
         }
+    }
+    input[type="range"].disabled::-webkit-slider-thumb {
+        background-color: #b9b5b5;
     }
 </style>

@@ -25,6 +25,11 @@ export default {
             required: false,
             default: false
         },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         display: {
             type: String,
             required: false,
@@ -75,6 +80,7 @@ export default {
     },
     data () {
         return {
+            disable: true,
             interface: {},
             invalid: false,
             service: {
@@ -93,6 +99,11 @@ export default {
             handler (value) {
                 this.emitCurrentRule(value);
             }
+        },
+        disabled: {
+            handler (value) {
+                this.disable = typeof value === "boolean" ? value : true;
+            }
         }
     },
     mounted () {
@@ -110,6 +121,10 @@ export default {
             }
 
             this.emitCurrentRule(this.dropdownSelected);
+
+            if (typeof this.dropdownValue !== "undefined" && this.dropdownValue.length > 0) {
+                this.disable = false;
+            }
         });
     },
     methods: {
@@ -139,8 +154,10 @@ export default {
                     res[list[6]] = "Harburg";
 
                     onsuccess(res);
+                    this.disable = false;
                 }
             }, error => {
+                this.disable = false;
                 console.warn(error);
             });
         },
@@ -187,7 +204,8 @@ export default {
             id="selectbox"
             v-model="dropdownSelected"
             name="selectbox"
-            :class="multiselect ? multipleClass : singleClass"
+            :disabled="disable"
+            :class="[multiselect ? multipleClass : singleClass, disable ? 'disabled':'enabled']"
             :multiple="multiselect"
         >
             <option
@@ -231,5 +249,13 @@ export default {
         vertical-align: middle;
         background: #fff;
         border: 1px solid rgb(34,34,34);
+    }
+    .disabled {
+        border-color: #dddddd;
+        background-color: #f8f8f8;
+    }
+    .enabled {
+        border-color: initial;
+        background-color: initial;
     }
 </style>

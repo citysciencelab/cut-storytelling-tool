@@ -10,6 +10,11 @@ export default {
             type: [String, Array],
             required: true
         },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         format: {
             type: String,
             required: false,
@@ -48,6 +53,7 @@ export default {
     },
     data () {
         return {
+            disable: true,
             fromDate: Array.isArray(this.prechecked) && this.prechecked.length === 2 ? this.convertDateFormat(this.prechecked[0]) : null,
             interface: null,
             invalid: false,
@@ -64,6 +70,11 @@ export default {
             }
         };
     },
+    watch: {
+        disabled (value) {
+            this.disable = typeof value === "boolean" ? value : true;
+        }
+    },
     created () {
         if (this.isInvalid()) {
             this.invalid = true;
@@ -75,6 +86,8 @@ export default {
         });
         this.checkPrechecked();
         this.checkMinMax();
+        this.disableFrom = this.disabled;
+        this.disableUntil = this.disabled;
     },
     methods: {
         /**
@@ -180,6 +193,7 @@ export default {
                 this.setMinMaxFromDate(attributeFrom, false, true);
                 this.setMinMaxUntilDate(attributeUntil, false, true);
             }
+            this.disable = false;
         },
         /**
          * Change the min value of the until field.
@@ -252,6 +266,7 @@ export default {
                     type="date"
                     :min="minFrom"
                     :max="maxFrom"
+                    :disabled="disable"
                     @change="changeMin"
                 >
             </div>
@@ -264,6 +279,7 @@ export default {
                     type="date"
                     :min="minUntil"
                     :max="maxUntil"
+                    :disabled="disable"
                 >
             </div>
         </div>

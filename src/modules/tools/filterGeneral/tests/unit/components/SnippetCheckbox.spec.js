@@ -108,4 +108,17 @@ describe("src/modules/tools/filterGeneral/components/SnippetCheckbox.vue", () =>
         expect(wrapper.find(".snippetCheckbox").element.checked).to.be.equal(false);
         expect(wrapper.find(".snippetCheckboxContainer").element.style._values.display).to.be.equal(undefined);
     });
+
+    it("should render but also be disabled", () => {
+        wrapper = shallowMount(SnippetCheckboxComponent, {
+            propsData: {
+                disabled: true,
+                label: "foobar"
+            },
+            localVue
+        });
+        expect(wrapper.find(".snippetCheckbox").exists()).to.be.true;
+        expect(wrapper.vm.disabled).to.be.true;
+        expect(wrapper.find(".snippetCheckbox").element.disabled).to.be.true;
+    });
 });

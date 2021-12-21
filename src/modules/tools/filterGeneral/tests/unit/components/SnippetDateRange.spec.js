@@ -179,4 +179,43 @@ describe("src/module/tools/filterGeneral/components/SnippetDateRange.vue", () =>
         expect(wrapper.vm.invalid).to.be.true;
     });
 
+    it("should render but also be disabled", () => {
+        wrapper = shallowMount(SnippetDateRange, {
+            propsData: {
+                disabled: true,
+                type: "dateRange",
+                attrName: ["baubeginn", "bauende"],
+                operator: "EQ",
+                prechecked: ["08.12.2021", "08.12.2021"],
+                label: "Date Slider",
+                visible: true,
+                format: "DD.MM.YYYY"
+            },
+            localVue
+        });
+        expect(wrapper.find(".snippetDateRangeFrom").exists()).to.be.true;
+        expect(wrapper.find(".snippetDateRangeUntil").exists()).to.be.true;
+        expect(wrapper.vm.disabled).to.be.true;
+
+    });
+
+    it("should render and be enabaled", () => {
+        wrapper = shallowMount(SnippetDateRange, {
+            propsData: {
+                disabled: false,
+                type: "dateRange",
+                attrName: ["baubeginn", "bauende"],
+                operator: "EQ",
+                prechecked: ["08.12.2021", "08.12.2021"],
+                label: "Date Slider",
+                visible: true,
+                format: "DD.MM.YYYY"
+            },
+            localVue
+        });
+        expect(wrapper.find(".snippetDateRangeFrom").exists()).to.be.true;
+        expect(wrapper.find(".snippetDateRangeUntil").exists()).to.be.true;
+        expect(wrapper.vm.disable).to.be.false;
+        expect(wrapper.vm.disabled).to.be.false;
+    });
 });

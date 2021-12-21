@@ -17,6 +17,7 @@ describe("src/modules/tools/filterGeneral/components/SnippetSliderRange.vue", ()
             propsData: {
                 attrName: "bezirk_id",
                 decimalStep: 1,
+                disabled: false,
                 label: "SliderRange",
                 minValue: 0,
                 maxValue: 1000,
@@ -59,6 +60,7 @@ describe("src/modules/tools/filterGeneral/components/SnippetSliderRange.vue", ()
         wrapper = shallowMount(SnippetSliderRangeComponent, {
             propsData: {
                 decimalStep: 1,
+                disabled: false,
                 minValue: 0,
                 maxValue: 1000,
                 prechecked: [400, 500]
@@ -146,6 +148,7 @@ describe("src/modules/tools/filterGeneral/components/SnippetSliderRange.vue", ()
         wrapper = shallowMount(SnippetSliderRangeComponent, {
             propsData: {
                 minValue: 0,
+                disabled: false,
                 maxValue: 100
             },
             localVue
@@ -154,7 +157,6 @@ describe("src/modules/tools/filterGeneral/components/SnippetSliderRange.vue", ()
 
         await textInput.setValue("50");
         expect(wrapper.find(".slider-input-max").element.value).equals("50");
-
         await textInput.setValue("500");
         expect(wrapper.find(".slider-input-max").element.value).equals("100");
 

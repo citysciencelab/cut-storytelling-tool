@@ -2,6 +2,11 @@
 export default {
     name: "SnippetCheckbox",
     props: {
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         label: {
             type: String,
             required: false,
@@ -42,6 +47,7 @@ export default {
             class="snippetCheckbox"
             type="checkbox"
             name="checkbox"
+            :disabled="disabled"
         >
         <label for="checkbox">{{ label }}</label>
     </div>

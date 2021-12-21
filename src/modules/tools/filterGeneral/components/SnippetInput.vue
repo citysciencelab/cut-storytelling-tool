@@ -2,15 +2,15 @@
 export default {
     name: "SnippetInput",
     props: {
-        snippetId: {
-            type: Number,
-            required: false,
-            default: 0
-        },
         attrName: {
             type: String,
             required: false,
             default: ""
+        },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         },
         label: {
             type: String,
@@ -31,6 +31,11 @@ export default {
             type: String,
             required: false,
             default: ""
+        },
+        snippetId: {
+            type: Number,
+            required: false,
+            default: 0
         },
         visible: {
             type: Boolean,
@@ -89,6 +94,7 @@ export default {
             class="snippetInput"
             type="text"
             name="input"
+            :disabled="disabled"
             :placeholder="placeholder"
         >
     </div>

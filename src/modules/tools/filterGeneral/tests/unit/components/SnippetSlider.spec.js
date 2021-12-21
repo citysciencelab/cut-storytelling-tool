@@ -172,4 +172,33 @@ describe("src/modules/tools/filterGeneral/components/SnippetSlider.vue", () => {
         await sliderInput.setValue("-1000");
         expect(wrapper.find(".input-single").element.value).equals("0");
     });
+
+    it("should render but also be disabled", () => {
+        wrapper = shallowMount(SnippetSliderComponent, {
+            propsData: {
+                disabled: true,
+                minValue: 20,
+                maxValue: 100
+            },
+            localVue
+        });
+        expect(wrapper.find(".input-single").exists()).to.be.true;
+        expect(wrapper.find(".slider-single").exists()).to.be.true;
+        expect(wrapper.vm.disabled).to.be.true;
+    });
+
+    it("should render and be enabaled", () => {
+        wrapper = shallowMount(SnippetSliderComponent, {
+            propsData: {
+                disabled: false,
+                minValue: 20,
+                maxValue: 100
+            },
+            localVue
+        });
+        expect(wrapper.find(".input-single").exists()).to.be.true;
+        expect(wrapper.find(".slider-single").exists()).to.be.true;
+        expect(wrapper.vm.disable).to.be.false;
+        expect(wrapper.vm.disabled).to.be.false;
+    });
 });

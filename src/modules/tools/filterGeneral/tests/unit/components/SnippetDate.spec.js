@@ -203,4 +203,42 @@ describe("src/modules/tools/generalFilter/components/SnippetDate.vue", () => {
         });
         expect(wrapper.vm.max).to.be.equal("2021-12-31");
     });
+
+    it("should render but also be disabled", () => {
+        wrapper = shallowMount(SnippetDateComponent, {
+            propsData: {
+                disabled: true,
+                operator: "EQ",
+                format: "DD.MM.YYYY",
+                prechecked: "12.12.2022",
+                label: "Baubegin",
+                visible: true,
+                minValue: "01.01.2021",
+                maxValue: "31.12.2021"
+            },
+            localVue
+        });
+        expect(wrapper.find("#dateInput").exists()).to.be.true;
+        expect(wrapper.vm.disabled).to.be.true;
+
+    });
+
+    it("should render and be enabaled", () => {
+        wrapper = shallowMount(SnippetDateComponent, {
+            propsData: {
+                disabled: false,
+                operator: "EQ",
+                format: "DD.MM.YYYY",
+                prechecked: "12.12.2021",
+                label: "Baubegin",
+                visible: true,
+                minValue: "01.01.2021",
+                maxValue: "31.12.2021"
+            },
+            localVue
+        });
+        expect(wrapper.find("#dateInput").exists()).to.be.true;
+        expect(wrapper.vm.disable).to.be.false;
+        expect(wrapper.vm.disabled).to.be.false;
+    });
 });

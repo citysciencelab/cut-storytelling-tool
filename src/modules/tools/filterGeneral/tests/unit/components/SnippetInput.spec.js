@@ -98,4 +98,17 @@ describe("src/modules/tools/filterGeneral/components/SnippetInput.vue", () => {
 
         expect(wrapper.find(".snippetInputLabel").text()).to.be.equal("foobar");
     });
+
+    it("should render but also be disabled", () => {
+        wrapper = shallowMount(SnippetInput, {
+            propsData: {
+                disabled: true,
+                label: "foobar"
+            },
+            localVue
+        });
+        expect(wrapper.find(".snippetInput").exists()).to.be.true;
+        expect(wrapper.vm.disabled).to.be.true;
+        expect(wrapper.find(".snippetInput").element.disabled).to.be.true;
+    });
 });

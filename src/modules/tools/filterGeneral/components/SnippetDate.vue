@@ -12,6 +12,11 @@ export default {
             required: false,
             default: ""
         },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         format: {
             type: String,
             required: false,
@@ -50,6 +55,7 @@ export default {
     },
     data () {
         return {
+            disable: true,
             max: this.convertDateFormat(this.maxValue),
             min: this.convertDateFormat(this.minValue),
             minOnly: false,
@@ -69,6 +75,9 @@ export default {
             if (newVal) {
                 this.value = this.getValueInRange(newVal);
             }
+        },
+        disabled (value) {
+            this.disable = typeof this.disabled === "boolean" ? value : true;
         }
     },
     created () {
@@ -77,6 +86,7 @@ export default {
         this.setMaxOnly(this.min, this.max);
         this.setInvalid(this.min, this.max);
         this.setMinMaxValue(this.min, this.max);
+        this.disable = false;
     },
     methods: {
         /**
@@ -212,6 +222,7 @@ export default {
             name="dateInput"
             :max="max"
             :min="min"
+            :disabled="disable"
             @input="checkEmpty"
         >
     </div>
