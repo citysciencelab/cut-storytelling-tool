@@ -655,15 +655,15 @@ The entry `attributions` may be of type boolean or object. If of type boolean, t
 
 #### Portalconfig.controls.overviewMap
 
-[type:Layer]: # (Datatypes.Layer)
+[type:LayerId]: # (Datatypes.LayerId)
 
 The attribute overviewMap may be of type boolean or object. If of type boolean, an overview map is shown with a default configuration. When of type object, the following attributes may be set:
 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
 |resolution|no|Integer||_Deprecated in 3.0.0._ Defines the overview map resolution. If not set, the map section displayed is changed on zoom automatically.|
-|baselayer|no|String||_Deprecated in 3.0.0. Please use `layerId` instead._ Allows using a different layer for the overview map element. The value must be an id from the `services.json` used in the portal's `config.js` parameter `layerConf`.|
-|layerId|no|Layer||Allows using a different layer for the overview map element. The value must be an id from the `services.json` used in the portal's `config.js` parameter `layerConf`.|
+|baselayer|no|LayerId||_Deprecated in 3.0.0. Please use `layerId` instead._ Allows using a different layer for the overview map element. The value must be an id from the `services.json` used in the portal's `config.js` parameter `layerConf`.|
+|layerId|no|LayerId||Allows using a different layer for the overview map element. The value must be an id from the `services.json` used in the portal's `config.js` parameter `layerConf`.|
 |isInitOpen|no|Boolean|true|Defines whether the overview map is initially closed or opened.|
 
 **Example using type object overviewMap**
@@ -4695,16 +4695,13 @@ An object containing the required contents. Parameters depend on configuration, 
 
 ***
 
-## Datatypes.Layer
+## Datatypes.LayerId
 
-An object containing the layer name and the layer id.
+A string that refers to a layer id from the services-internet.json. In the example, the ID "1711" is used to refer to the layer "Krankenhäuser" in the services-internet.json of the city of Hamburg.
 
-**Example Layer**
+**Example LayerId**
 ```json
-{
-    "name": "Krankenhäuser",
-    "id": "1711",
-}
+"1711"
 ```
 
 ***
