@@ -80,7 +80,7 @@
     "@babel/eslint-parser": "^7.16.0",
     "@babel/preset-env": "^7.16.0",
     "@intlify/vue-i18n-loader": "^2.1.2",
-    "@masterportal/mpconfigparser": "^1.1.2",
+    "@masterportal/mpconfigparser": "^1.2.0",
     "@sinonjs/fake-timers": "^7.1.2",
     "@vue/test-utils": "^1.2.2",
     "babel-loader": "^8.2.3",
