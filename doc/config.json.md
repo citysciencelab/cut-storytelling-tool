@@ -3231,7 +3231,7 @@ Coordinates tool. To display the height above sea level in addition to the 2 dim
 |heightValueBuilding|no|String||Coordinate query: the value in the element defined under "heightElementName" supplied by the WMS for a non-measured height in the building area, it will display the internationalized text "Building area, no heights available" under the key "common:modules.tools.coordToolkit.noHeightBuilding" in the interface. If this attribute is not specified, then the text provided by the WMS will be displayed.|false|
 |zoomLevel|no|Number|7|Coordinate search: Specifies the zoom level to which you want to zoom.|false|
 |showCopyButtons|no|Boolean|true|Switch to show or hide the buttons for copying the coordinates.|false|
-|delimiter|no|String|"Pipe-symbol"|Delimiter of the coordinates when copying the coordinate pair|false|
+|delimiter|no|String|"Pipe-Symbol"|Delimiter of the coordinates when copying the coordinate pair|false|
 
 
 
