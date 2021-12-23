@@ -3166,6 +3166,8 @@ Koordinaten-Werkzeug. Um zusätzlich zu den 2 dimensionalen Koordinaten die Höh
 |heightValueWater|nein|String||Koordinatenabfrage: Der Wert im unter "heightElementName" definierten Element, der für eine nicht gemessene Höhe im Wasser-Bereich vom WMS geliefert wird, es wird der internationalisierte Text "Gewässerfläche, keine Höhen vorhanden" unter dem Schlüssel "common:modules.tools.coordToolkit.noHeightWater" in der Oberfläche angezeigt. Wenn dieses Attribut nicht angegeben wird, dann wird der Text, den das WMS liefert angezeigt.|false|
 |heightValueBuilding|nein|String||Koordinatenabfrage: Der Wert im unter "heightElementName" definierten Element, der für eine nicht gemessene Höhe im Gebäude-Bereich vom WMS geliefert wird, es wird der internationalisierte Text "Gebäudefläche, keine Höhen vorhanden" unter dem Schlüssel "common:modules.tools.coordToolkit.noHeightBuilding" in der Oberfläche angezeigt. Wenn dieses Attribut nicht angegeben wird, dann wird der Text, den das WMS liefert angezeigt.|false|
 |zoomLevel|nein|Number|7|Koordinatensuche: Gibt an, auf welches ZoomLevel gezoomt werden soll.|false|
+|showCopyButtons|nein|Boolean|true|Schalter um die Buttons zum Kopieren der Koordinaten anzuzeigen oder auszublenden.|false|
+|delimiter|nein|String|"|"|Trenner der Koordinaten beim Kopieren des Koordinatenpaares|false|
 
 
 **Beispiel**
@@ -3179,6 +3181,8 @@ Koordinaten-Werkzeug. Um zusätzlich zu den 2 dimensionalen Koordinaten die Höh
             "heightElementName": "value_0",
             "heightValueWater": "-20",
             "heightValueBuilding": "200",
+            "delimiter": "-",
+            "showCopyButtons": true
           }
 ```
 

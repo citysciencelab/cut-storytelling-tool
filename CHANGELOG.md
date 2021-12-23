@@ -80,6 +80,7 @@
     - masterportalAPI: 1.6.1 to version 1.7.0
     - selenium-webdriver: 4.0.0 version to 4.1.0
 - The elastic search now reads out all attributes of a found layer and takes them into account when processing the layer.
+- CoordToolkit: Added Buttons to copy one coordinate or both of them with a configurable delimiter. The visibility of the buttons is also configurable.
 
 ### Deprecated
 - Parametric url: all deprecation-warnings are removed, besides STARTUPMODUL and BEZIRK.

@@ -8,6 +8,37 @@ import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 
 export default {
     /**
+     * Copies the coordinates to clipboard, delimited by limiter from state.
+     * @param {Object} param.state the state
+     * @param {Object} param.dispatch the dispatch
+     * @param {Array} coords coordinates to copy
+     * @returns {void}
+     */
+    copyCoordinates ({state, dispatch}, coords) {
+        if (Array.isArray(coords)) {
+            let toCopy = "";
+
+            coords.forEach(coord => {
+                toCopy += coord;
+                toCopy += state.delimiter;
+            });
+            if (toCopy.length > 0) {
+                toCopy = toCopy.substr(0, toCopy.length - 1);
+            }
+            navigator.clipboard.writeText(toCopy)
+                .then(() => {
+                    dispatch("Alerting/addSingleAlert", {content: i18next.t("common:modules.util.copyToClipboard.contentSaved")}, {root: true});
+                })
+                .catch(err => {
+                    dispatch("Alerting/addSingleAlert", {content: i18next.t("common:modules.util.copyToClipboard.contentNotSaved")}, {root: true});
+                    console.error(`CopyToClipboard: ${err}`);
+                });
+        }
+        else {
+            console.warn("Cannot copy coordinates to clipboard, coordinates:", coords);
+        }
+    },
+    /**
      * Dispatches the action to copy the given element to the clipboard.
      *
      * @param {Element} el element to copy

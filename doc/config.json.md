@@ -3230,6 +3230,9 @@ Coordinates tool. To display the height above sea level in addition to the 2 dim
 |heightValueWater|no|String||Coordinate query: the value in the element defined under "heightElementName" supplied by the WMS for an unmeasured height in the water area, it will display the internationalized text "Water surface, no heights available" under the key "common:modules.tools.coordToolkit.noHeightWater" in the interface. If this attribute is not specified, then the text provided by the WMS will be displayed.|false|
 |heightValueBuilding|no|String||Coordinate query: the value in the element defined under "heightElementName" supplied by the WMS for a non-measured height in the building area, it will display the internationalized text "Building area, no heights available" under the key "common:modules.tools.coordToolkit.noHeightBuilding" in the interface. If this attribute is not specified, then the text provided by the WMS will be displayed.|false|
 |zoomLevel|no|Number|7|Coordinate search: Specifies the zoom level to which you want to zoom.|false|
+|showCopyButtons|no|Boolean|true|Switch to show or hide the buttons for copying the coordinates.|false|
+|delimiter|no|String|"|"|Delimiter of the coordinates when copying the coordinate pair|false|
+
 
 
 **Example**
@@ -3243,6 +3246,8 @@ Coordinates tool. To display the height above sea level in addition to the 2 dim
             "heightElementName": "value_0",
             "heightValueWater": "-20",
             "heightValueBuilding": "200",
+            "delimiter": "-",
+            "showCopyButtons": true
           }
 ```
 
