@@ -22,7 +22,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function CoordToolkitTests ({builder, url, resolution, config, capability}) {
-    describe("CoordToolkit", function () {
+    describe.only("CoordToolkit", function () {
         const selectors = {
                 tools: By.xpath("//ul[@id='tools']/.."),
                 toolCoordToolkit: By.css("ul#tools span.glyphicon-globe"),
@@ -36,6 +36,9 @@ async function CoordToolkitTests ({builder, url, resolution, config, capability}
                 eastingField: By.css("input#coordinatesEastingField"),
                 northingLabel: By.css("label#coordinatesNorthingLabel"),
                 northingField: By.css("input#coordinatesNorthingField"),
+                copyNorthingBtn: By.css("button#copyNorthingBtn"),
+                copyEastingBtn: By.css("button#copyEastingBtn"),
+                copyCoordsPairBtn: By.css("button#copyCoordsPairBtn"),
                 heightLabel: By.css("label#coordinatesHeightLabel"),
                 heightFieldSel: By.css("input#coordinatesHeightField"),
                 wgs84Option: By.xpath("//option[contains(.,'WGS 84 (long/lat)')]"),
@@ -194,7 +197,7 @@ async function CoordToolkitTests ({builder, url, resolution, config, capability}
             });
         }
 
-        it("copies coordinate values on click to clipboard", async () => {
+        it("copies coordinate values on click in input fields to clipboard", async () => {
             /* Since there seems to be no universally supported way to check what
              * Strg+V produces, we're just dumping the information to the search
              * bar and check if the expected value arrived. */
@@ -212,6 +215,35 @@ async function CoordToolkitTests ({builder, url, resolution, config, capability}
                 expect(await searchInput.getAttribute("value")).to.equal(value);
                 await searchInput.clear();
             }
+        });
+        it("copies coordinate values to clipboard by click on copy-button", async () => {
+            const searchInput = await driver.findElement(By.css("#searchInput")),
+                copyNorthingBtn = await driver.wait(until.elementLocated(selectors.copyNorthingBtn), 5000),
+                copyEastingBtn = await driver.wait(until.elementLocated(selectors.copyEastingBtn), 5000),
+                copyCoordsPairBtn = await driver.wait(until.elementLocated(selectors.copyCoordsPairBtn), 5000),
+                northingValue = await northingField.getAttribute("value"),
+                eastingValue = await eastingField.getAttribute("value");
+
+            await copyNorthingBtn.click();
+            await closeSingleAlert(driver, "Inhalt wurde in die Zwischenablage kopiert.");
+            await driver.wait(new Promise(r => setTimeout(r, 100)));
+            await searchInput.sendKeys(Key.CONTROL, "v");
+            expect(await searchInput.getAttribute("value")).to.equal(northingValue);
+            await searchInput.clear();
+
+            await copyEastingBtn.click();
+            await closeSingleAlert(driver, "Inhalt wurde in die Zwischenablage kopiert.");
+            await driver.wait(new Promise(r => setTimeout(r, 100)));
+            await searchInput.sendKeys(Key.CONTROL, "v");
+            expect(await searchInput.getAttribute("value")).to.equal(eastingValue);
+            await searchInput.clear();
+
+            await copyCoordsPairBtn.click();
+            await closeSingleAlert(driver, "Inhalt wurde in die Zwischenablage kopiert.");
+            await driver.wait(new Promise(r => setTimeout(r, 100)));
+            await searchInput.sendKeys(Key.CONTROL, "v");
+            expect(await searchInput.getAttribute("value")).to.equal(eastingValue + "|" + northingValue);
+            await searchInput.clear();
         });
 
         it("offers the configured coordinate systems in supplyCoord-mode", async () => {

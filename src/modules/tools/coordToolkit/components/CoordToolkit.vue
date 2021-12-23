@@ -543,6 +543,7 @@ export default {
                             class="col-md-1 col-sm-1 copyBtn"
                         >
                             <button
+                                id="copyEastingBtn"
                                 type="button"
                                 class="btn singleCopy"
                                 :title="$t(`common:modules.tools.coordToolkit.copyCoordBtn`, {value: $t(getLabel('eastingLabel'))})"
@@ -611,6 +612,7 @@ export default {
                             class="col-md-1 col-sm-1 copyBtn"
                         >
                             <button
+                                id="copyNorthingBtn"
                                 type="button"
                                 class="btn singleCopy"
                                 :title="$t(`common:modules.tools.coordToolkit.copyCoordBtn`, {value: $t(getLabel('northingLabel'))})"
