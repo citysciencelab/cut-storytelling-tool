@@ -45,7 +45,8 @@ export default {
     },
     data () {
         return {
-            inputValue: this.prechecked ? this.prechecked : ""
+            inputValue: this.prechecked ? this.prechecked : "",
+            showInfo: false
         };
     },
     watch: {
@@ -75,6 +76,9 @@ export default {
                     value
                 }
             });
+        },
+        toggleInfo () {
+            this.showInfo = !this.showInfo;
         }
     }
 };
@@ -85,18 +89,38 @@ export default {
         v-show="visible"
         class="snippetInputContainer"
     >
-        <label
-            for="input"
-            class="snippetInputLabel"
-        >{{ label }}</label>
-        <input
-            v-model="inputValue"
-            class="snippetInput"
-            type="text"
-            name="input"
-            :disabled="disabled"
-            :placeholder="placeholder"
+        <div class="left">
+            <label
+                for="snippetInput"
+                class="snippetInputLabel"
+            >{{ label }}</label>
+            <input
+                id="snippetInput"
+                v-model="inputValue"
+                class="snippetInput"
+                type="text"
+                name="input"
+                :disabled="disabled"
+                :placeholder="placeholder"
+            >
+        </div>
+        <div class="right">
+            <div class="info-icon">
+                <span
+                    :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
+                    @click="toggleInfo()"
+                    @keydown.enter="toggleInfo()"
+                >&nbsp;</span>
+            </div>
+        </div>
+        <div
+            v-show="showInfo"
+            class="bottom"
         >
+            <div class="info-text">
+                info-Text
+            </div>
+        </div>
     </div>
 </template>
 
@@ -107,5 +131,41 @@ export default {
         outline: 0;
         position: relative;
         width: 100%;
+    }
+    .snippetInputContainer {
+        padding: 5px;
+    }
+    .snippetInputContainer .info-icon {
+        float: right;
+        font-size: 16px;
+        color: #ddd;
+    }
+    .snippetInputContainer .info-icon .opened {
+        color: #000;
+    }
+    .snippetInputContainer .info-icon:hover {
+        cursor: pointer;
+        color: #a5a09e;
+    }
+    .snippetInputContainer .info-text {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 10px;
+        padding: 15px 10px;
+    }
+    .glyphicon-info-sign:before {
+        content: "\E086";
+    }
+    .snippetInputContainer .bottom {
+        clear: left;
+        width: 100%;
+    }
+    .snippetInputContainer .left {
+        float: left;
+        width: 90%;
+    }
+    .snippetInputContainer .right {
+        float: right;
+        width: 10%;
     }
 </style>

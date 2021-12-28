@@ -216,7 +216,7 @@ export default {
                         @ruleChanged="ruleChanged"
                     />
                 </div>
-                <div
+                <!--<div
                     v-else-if="checkSnippetType(snippet, 'date')"
                     class="snippet"
                 >
@@ -281,7 +281,7 @@ export default {
                         :visible="snippet.visible"
                         @ruleChanged="ruleChanged"
                     />
-                </div>
+                </div>-->
             </div>
         </div>
         <div class="snippet">

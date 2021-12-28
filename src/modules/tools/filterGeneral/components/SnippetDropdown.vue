@@ -83,6 +83,7 @@ export default {
             disable: true,
             interface: {},
             invalid: false,
+            showInfo: false,
             service: {
                 type: "WFS",
                 url: "https://geodienste.hamburg.de/HH_WFS_Regionaler_Bildungsatlas_Bev_Stadtteil",
@@ -130,6 +131,9 @@ export default {
     methods: {
         translate (key) {
             return i18next.t(key);
+        },
+        toggleInfo () {
+            this.showInfo = !this.showInfo;
         },
         setUniqueValues (onsuccess) {
             this.interface = new InterfaceOL(new IntervalRegister(), {
@@ -196,26 +200,45 @@ export default {
         v-if="!invalid"
         class="snippetDropdownContainer"
     >
-        <label
-            class="snippetDropdownLabel"
-            for="selectbox"
-        >{{ label }}:</label>
-        <select
-            id="selectbox"
-            v-model="dropdownSelected"
-            name="selectbox"
-            :disabled="disable"
-            :class="[multiselect ? multipleClass : singleClass, disable ? 'disabled':'enabled']"
-            :multiple="multiselect"
-        >
-            <option
-                v-for="(optionValue, index) in dropdownValue"
-                :key="'optionValue' + '-' + index"
-                :value="index"
+        <div class="left">
+            <label
+                class="snippetDropdownLabel"
+                for="selectbox"
+            >{{ label }}:</label>
+            <select
+                id="selectbox"
+                v-model="dropdownSelected"
+                name="selectbox"
+                :disabled="disable"
+                :class="multiselect ? multipleClass : singleClass"
+                :multiple="multiselect"
             >
-                {{ optionValue }}
-            </option>
-        </select>
+                <option
+                    v-for="(optionValue, index) in dropdownValue"
+                    :key="'optionValue' + '-' + index"
+                    :value="optionValue"
+                >
+                    {{ optionValue }}
+                </option>
+            </select>
+        </div>
+        <div class="right">
+            <div class="info-icon">
+                <span
+                    :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
+                    @click="toggleInfo()"
+                    @keydown.enter="toggleInfo()"
+                >&nbsp;</span>
+            </div>
+        </div>
+        <div
+            v-show="showInfo"
+            class="bottom"
+        >
+            <div class="info-text">
+                info-Text
+            </div>
+        </div>
     </div>
 </template>
 
@@ -226,6 +249,7 @@ export default {
         outline: 0;
         position: relative;
         width: 100%;
+        margin-bottom: 5px;
     }
     .multipleClass {
         display: inline-block;
@@ -257,5 +281,41 @@ export default {
     .enabled {
         border-color: initial;
         background-color: initial;
+    }
+    .snippetDropdownContainer {
+        padding: 5px;
+    }
+    .snippetDropdownContainer .info-icon {
+        float: right;
+        font-size: 16px;
+        color: #ddd;
+    }
+    .snippetDropdownContainer .info-icon .opened {
+        color: #000;
+    }
+    .snippetDropdownContainer .info-icon:hover {
+        cursor: pointer;
+        color: #a5a09e;
+    }
+    .snippetDropdownContainer .info-text {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 10px;
+        padding: 15px 10px;
+    }
+    .glyphicon-info-sign:before {
+        content: "\E086";
+    }
+    .snippetDropdownContainer .bottom {
+        clear: left;
+        width: 100%;
+    }
+    .snippetDropdownContainer .left {
+        float: left;
+        width: 90%;
+    }
+    .snippetDropdownContainer .right {
+        float: right;
+        width: 10%;
     }
 </style>
