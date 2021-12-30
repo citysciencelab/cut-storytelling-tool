@@ -124,7 +124,6 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
         await wrapper.vm.$nextTick();
 
         expect(CoordToolkit.actions.initHeightLayer.calledOnce).to.be.true;
-        store.state.Tools.CoordToolkit.heightLayerId = null;
     });
 
     it("has initially selected projection \"EPSG:25832\"", async () => {

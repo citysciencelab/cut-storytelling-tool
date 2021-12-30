@@ -140,10 +140,11 @@ export default {
      * sets the metadata for print
      * @param {Object} param.rootGetters the rootGetters
      * @param {Object} param.dispatch the dispatch
-     * @param {Object} cswObj the object with all the info
+     * @param {Object} cswObject the object with all the info
      * @returns {void}
      */
-    getMetaDataForPrint: async function ({rootGetters, dispatch}, cswObj) {
+    getMetaDataForPrint: async function ({rootGetters, dispatch}, cswObject) {
+        const cswObj = cswObject;
         let metadata;
 
         if (cswObj.layer.get("datasets") && Array.isArray(cswObj.layer.get("datasets")) && cswObj.layer.get("datasets")[0] !== null && typeof cswObj.layer.get("datasets")[0] === "object") {

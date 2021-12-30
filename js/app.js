@@ -60,6 +60,8 @@ if (process.env.NODE_ENV === "development") {
     Vue.config.devtools = true;
 }
 
+Vue.config.productionTip = false;
+
 /**
  * load the configuration of master portal
  * @return {void}.
@@ -93,8 +95,6 @@ async function loadApp () {
 
     // import and register Vue addons according the config.js
     await loadAddons(Config.addons);
-
-    Vue.config.productionTip = false;
 
     store.commit("setConfigJs", Config);
 

@@ -95,7 +95,7 @@ export default {
          * @returns {Object} The calculated data for one weekday.
          */
         calculateDataForOneWeekday: function () {
-            const processedData = calculateWorkloadForOneWeekday(this.processedHistoricalDataByWeekday[this.weekdayIndex], this.targetValue);
+            const processedData = calculateWorkloadForOneWeekday(this.targetValue, this.processedHistoricalDataByWeekday[this.weekdayIndex]);
 
             this.titleText = [
                 this.$t(this.chartValue?.title || ""),

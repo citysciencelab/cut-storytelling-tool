@@ -26,7 +26,7 @@ describe("api/WPS", () => {
                 xmlTemplate = "<xml><ows:Identifier></ows:Identifier><wps:DataInputs></wps:DataInputs></xml>",
                 dataInputXmlTemplate = "<wps:Input><ows:Identifier></ows:Identifier><wps:Data><wps:LiteralData></wps:LiteralData></wps:Data></wps:Input>";
 
-            expect(WPS.buildXML(identifier, data, xmlTemplate, dataInputXmlTemplate)).to.have.string(expectedOutput);
+            expect(WPS.buildXML(identifier, xmlTemplate, dataInputXmlTemplate, data)).to.have.string(expectedOutput);
         });
         it("should return xml if input object is object ", () => {
             const identifier = "workbench.fmw",
@@ -34,7 +34,7 @@ describe("api/WPS", () => {
                 xmlTemplate = "<xml><ows:Identifier></ows:Identifier><wps:DataInputs></wps:DataInputs></xml>",
                 dataInputXmlTemplate = "<wps:Input><ows:Identifier></ows:Identifier><wps:Data><wps:LiteralData></wps:LiteralData></wps:Data></wps:Input>";
 
-            expect(WPS.buildXML(identifier, data, xmlTemplate, dataInputXmlTemplate)).to.have.string(expectedOutput);
+            expect(WPS.buildXML(identifier, xmlTemplate, dataInputXmlTemplate, data)).to.have.string(expectedOutput);
         });
     });
 

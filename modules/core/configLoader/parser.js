@@ -142,7 +142,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             }
         });
 
-        this.parseMenu(this.get("portalConfig").menu, "root");
+        this.parseMenu("root", this.get("portalConfig").menu);
         this.parseControls(this.get("portalConfig").controls);
         this.parseSearchBar(this.get("portalConfig").searchBar);
 
@@ -172,11 +172,11 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
     /**
      * Parsed the menu entries (everything except the contents of the tree)
-     * @param {Object} [items={}] Single levels of the menu bar, e.g. contact, legend, tools and tree
      * @param {String} parentId indicates to whom the items will be added
+     * @param {Object} [items={}] Single levels of the menu bar, e.g. contact, legend, tools and tree
      * @return {void}
      */
-    parseMenu: function (items = {}, parentId) {
+    parseMenu: function (parentId, items = {}) {
         Object.entries(items).forEach(itemX => {
             const value = itemX[1],
                 key = itemX[0];
@@ -197,7 +197,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 // Attribute aus der config.json werden von item geerbt
                 Object.assign(item, value);
                 this.addItem(item);
-                this.parseMenu(value.children, key);
+                this.parseMenu(key, value.children);
             }
             else if (key.search("staticlinks") !== -1) {
                 value.forEach(staticlink => {

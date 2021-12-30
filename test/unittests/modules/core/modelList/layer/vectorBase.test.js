@@ -1,6 +1,5 @@
-import {assert} from "chai";
+import {assert, expect} from "chai";
 import VectorBaseModel from "@modules/core/modelList/layer/vectorBase.js";
-import {expect} from "chai";
 
 describe("core/modelList/layer/vetctorBase", function () {
     let vectorBaseLayer;

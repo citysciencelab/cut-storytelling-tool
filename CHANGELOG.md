@@ -47,8 +47,10 @@
 - The following NPM packages are updated:
     - @masterportal/mpconfigparser: 1.1.2 to version 1.2.0
     - masterportalAPI: 1.6.1 to version 1.7.0
+    - eslint: 7.31.0 to 8.5.0 (In this context the code was adapted to new linter rules)
     - eslint-plugin-chai-friendly: 0.7.1 to 0.7.2
     - eslint-plugin-vue: 7.14.0 to 8.2.0 (In this context the code was adapted to new linter rules)
+    - eslint-plugin-vuejs-accessibility: 1.1.0 to 1.1.1
     - selenium-webdriver: 4.0.0 to 4.1.0
 - The elastic search now reads out all attributes of a found layer and takes them into account when processing the layer.
 

@@ -202,11 +202,11 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
     /**
      * Parses the geometry types from the subelements
-     * @param   {object[]} [subElements=[]] xml subelements
-     * @param   {string[] | string} styleGeometryType The configured geometry type of the layer
-     * @returns {string[]} geometry types of the layer
+     * @param   {Object[]} [subElements=[]] xml subelements
+     * @param   {String[] | String} [styleGeometryType=null] The configured geometry type of the layer
+     * @returns {String[]} geometry types of the layer
      */
-    getTypeAttributesFromSubelements: function (subElements = [], styleGeometryType) {
+    getTypeAttributesFromSubelements: function (subElements = [], styleGeometryType = null) {
         const geometryType = [];
 
         subElements.forEach(elements => {
