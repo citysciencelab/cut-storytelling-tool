@@ -1,5 +1,5 @@
 <script>
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import getComponent from "../../../../utils/getComponent";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersFileImport";
@@ -8,7 +8,7 @@ import mutations from "../store/mutationsFileImport";
 export default {
     name: "FileImport",
     components: {
-        Tool
+        ToolTemplate
     },
     data () {
         return {
@@ -139,7 +139,7 @@ export default {
 </script>
 
 <template lang="html">
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
         :icon="glyphicon"
         :active="active"
@@ -244,7 +244,7 @@ export default {
                 </div>
             </div>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 
 <style lang="scss" scoped>

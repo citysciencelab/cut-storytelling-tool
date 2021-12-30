@@ -169,7 +169,7 @@ export function createGfiFeature (layer, url = "", feature, features = null, doc
     }
     return {
         getTitle: () => layer.get("name"),
-        getTheme: () => layer.get("gfiTheme") || "default",
+        getTheme: () => layer.get("gfiTheme") || "defaultTheme",
         getAttributesToShow: () => layer.get("gfiAttributes"),
         getProperties: () => feature ? feature.getProperties() : {},
         getFeatures: () => features,

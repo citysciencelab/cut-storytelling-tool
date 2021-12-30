@@ -59,6 +59,7 @@
         // vue plugin Strongly Recommended Rules
         "vue/attribute-hyphenation": ["error"],
         "vue/component-definition-name-casing": ["error"],
+        "vue/first-attribute-linebreak": ["error"],
         "vue/html-closing-bracket-newline": ["error"],
         "vue/html-closing-bracket-spacing": ["error"],
         "vue/html-end-tags": ["error"],
@@ -90,6 +91,7 @@
         // vue plugin Uncategorizied Rules
         "vue/array-bracket-spacing": ["error"],
         "vue/component-name-in-template-casing": ["error"],
+        "vue/component-options-name-casing": ["error"],
         "vue/eqeqeq": ["error"],
         "vue/key-spacing": ["error"],
         "vue/match-component-file-name": ["error", {

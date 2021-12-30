@@ -1,5 +1,5 @@
 <script>
-import Modal from "../../../../share-components/modals/components/Modal.vue";
+import ModalItem from "../../../../share-components/modals/components/ModalItem.vue";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import * as constants from "../store/constantsCompareFeatures";
 import ComparisonList from "./ComparisonList.vue";
@@ -17,7 +17,7 @@ import axios from "axios";
 export default {
     name: "CompareFeatures",
     components: {
-        Modal,
+        ModalItem,
         ComparisonList
     },
     data () {
@@ -92,13 +92,13 @@ export default {
     lang="html"
     class="template"
 >
-    <Modal
+    <ModalItem
         :title="$t('common:modules.tools.compareFeatures.title')"
         :icon="glyphicon"
         :show-modal="active"
         @modalHid="close"
     >
-        <Modal
+        <ModalItem
             :title="$t('common:modules.tools.compareFeatures.title')"
             :icon="glyphicon"
             :show-modal="showAlert && !active"
@@ -146,7 +146,7 @@ export default {
                     </button>
                 </div>
             </div>
-        </Modal>
+        </ModalItem>
         <template #header>
             <h4 class="tool-compareFeatures-modal-title">
                 {{ $t('common:modules.tools.compareFeatures.title') }}
@@ -246,7 +246,7 @@ export default {
                 </div>
             </div>
         </template>
-    </Modal>
+    </ModalItem>
 </template>
 
 <style lang="scss" scoped>

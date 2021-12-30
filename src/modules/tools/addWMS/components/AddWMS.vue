@@ -2,7 +2,7 @@
 import {mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersAddWMS";
 import getComponent from "../../../../utils/getComponent";
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import mutations from "../store/mutationsAddWMS";
 import {WMSCapabilities} from "ol/format.js";
 import {intersects} from "ol/extent";
@@ -12,7 +12,7 @@ import axios from "axios";
 export default {
     name: "AddWMS",
     components: {
-        Tool
+        ToolTemplate
     },
     data: function () {
         return {
@@ -335,7 +335,7 @@ export default {
 </script>
 
 <template>
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
         :icon="glyphicon"
         :active="active"
@@ -381,7 +381,7 @@ export default {
                 </button>
             </div>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 
 <style lang="scss" scoped>

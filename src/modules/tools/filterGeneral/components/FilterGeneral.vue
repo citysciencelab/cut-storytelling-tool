@@ -1,5 +1,5 @@
 <script>
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import getComponent from "../../../../utils/getComponent";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersFilterGeneral";
@@ -22,7 +22,7 @@ import IntervalRegister from "../utils/intervalRegister.js";
 export default {
     name: "FilterGeneral",
     components: {
-        Tool,
+        ToolTemplate,
         LayerFilterSnippet
     },
     data () {
@@ -71,7 +71,7 @@ export default {
 </script>
 
 <template lang="html">
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
         :icon="glyphicon"
         :active="active"
@@ -95,7 +95,7 @@ export default {
                 />
             </div>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 
 <style lang="scss" scoped>

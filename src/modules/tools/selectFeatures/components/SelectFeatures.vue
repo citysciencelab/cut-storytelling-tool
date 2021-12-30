@@ -3,7 +3,7 @@ import {DragBox, Select} from "ol/interaction";
 import {never, platformModifierKeyOnly} from "ol/events/condition";
 import VectorSource from "ol/source/Vector.js";
 
-import Tool from "../../../../modules/tools/Tool.vue";
+import ToolTemplate from "../../../../modules/tools/ToolTemplate.vue";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersSelectFeatures";
 import mutations from "../store/mutationsSelectFeatures";
@@ -15,7 +15,7 @@ import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../utils/isPhoneN
 export default {
     name: "SelectFeatures",
     components: {
-        Tool
+        ToolTemplate
     },
     computed: {
         ...mapGetters("Tools/SelectFeatures", Object.keys(getters))
@@ -317,7 +317,7 @@ export default {
 </script>
 
 <template lang="html">
-    <Tool
+    <ToolTemplate
         :title="translate('common:menu.tools.selectFeatures')"
         :icon="glyphicon"
         :active="active"
@@ -410,7 +410,7 @@ export default {
                 </div>
             </div>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 
 <style type="scss" scoped>
