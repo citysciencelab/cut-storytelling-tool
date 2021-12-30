@@ -201,4 +201,18 @@ describe("src/modules/tools/filterGeneral/components/SnippetSlider.vue", () => {
         expect(wrapper.vm.disable).to.be.false;
         expect(wrapper.vm.disabled).to.be.false;
     });
+
+    it("should render the info span", () => {
+        wrapper = shallowMount(SnippetSliderComponent, {
+            propsData: {
+                disabled: false,
+                minValue: 20,
+                maxValue: 100,
+                info: "Die Info"
+            },
+            localVue
+        });
+        expect(wrapper.find(".info-text").exists()).to.be.true;
+        expect(wrapper.find(".info-text span").element.innerHTML).to.be.equal("Die Info");
+    });
 });

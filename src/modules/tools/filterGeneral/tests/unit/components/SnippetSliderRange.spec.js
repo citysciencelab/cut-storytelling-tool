@@ -220,4 +220,17 @@ describe("src/modules/tools/filterGeneral/components/SnippetSliderRange.vue", ()
         await sliderInput.setValue("-1000");
         expect(wrapper.find(".slider-range-max").element.value).equals("0");
     });
+
+    it("should render the info span", () => {
+        wrapper = shallowMount(SnippetSliderRangeComponent, {
+            propsData: {
+                minValue: 0,
+                maxValue: 100,
+                info: "Die Info"
+            },
+            localVue
+        });
+        expect(wrapper.find(".info-text").exists()).to.be.true;
+        expect(wrapper.find(".info-text span").element.innerHTML).to.be.equal("Die Info");
+    });
 });

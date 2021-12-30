@@ -121,4 +121,17 @@ describe("src/modules/tools/filterGeneral/components/SnippetCheckbox.vue", () =>
         expect(wrapper.vm.disabled).to.be.true;
         expect(wrapper.find(".snippetCheckbox").element.disabled).to.be.true;
     });
+
+    it("should render the info span", () => {
+        wrapper = shallowMount(SnippetCheckboxComponent, {
+            propsData: {
+                disabled: false,
+                label: "foobar",
+                info: "Die Info"
+            },
+            localVue
+        });
+        expect(wrapper.find(".info-text").exists()).to.be.true;
+        expect(wrapper.find(".info-text span").element.innerHTML).to.be.equal("Die Info");
+    });
 });

@@ -44,7 +44,11 @@ describe("src/modules/tools/filterGeneral/components/SnippetDropdown.vue", () =>
     });
 
     it("should render selectbox", () => {
-        expect(wrapper.find("#selectbox").exists()).to.be.true;
+        expect(wrapper.find("#select-box").exists()).to.be.true;
+    });
+
+    it("should render selectbox container", () => {
+        expect(wrapper.find(".select-box-container").exists()).to.be.true;
     });
 
     it("should render hidden if visible is false", () => {
@@ -74,7 +78,7 @@ describe("src/modules/tools/filterGeneral/components/SnippetDropdown.vue", () =>
             localVue
         });
 
-        expect(wrapper.find(".snippetDropdownLabel").exists()).to.be.true;
+        expect(wrapper.find(".select-box-label").exists()).to.be.true;
     });
 
     it("should render correctly if multiselect is false", () => {
@@ -129,7 +133,7 @@ describe("src/modules/tools/filterGeneral/components/SnippetDropdown.vue", () =>
             },
             localVue
         });
-        expect(wrapper.find(".snippetDropdownLabel").text()).to.be.equal("foobar:");
+        expect(wrapper.find(".select-box-label").text()).to.be.equal("foobar:");
     });
 
     it("Options should have two items", async () => {
@@ -231,7 +235,7 @@ describe("src/modules/tools/filterGeneral/components/SnippetDropdown.vue", () =>
             },
             localVue
         });
-        expect(wrapper.find("#selectbox").exists()).to.be.true;
+        expect(wrapper.find("#select-box").exists()).to.be.true;
         expect(wrapper.vm.disabled).to.be.true;
 
     });
@@ -247,7 +251,23 @@ describe("src/modules/tools/filterGeneral/components/SnippetDropdown.vue", () =>
             },
             localVue
         });
-        expect(wrapper.find("#selectbox").exists()).to.be.true;
+        expect(wrapper.find("#select-box").exists()).to.be.true;
         expect(wrapper.vm.disabled).to.be.false;
+    });
+
+    it("should render the info span", () => {
+        wrapper = shallowMount(SnippetDropdown, {
+            propsData: {
+                disabled: false,
+                operator: "EQ",
+                visible: true,
+                multiselect: false,
+                value: ["First Opt", "Second Opt"],
+                info: "Die Info"
+            },
+            localVue
+        });
+        expect(wrapper.find(".info-text").exists()).to.be.true;
+        expect(wrapper.find(".info-text span").element.innerHTML).to.be.equal("Die Info");
     });
 });

@@ -400,7 +400,14 @@
             },
             "filterGeneral": {
                 "selectAll": "Select all",
-                "selectBoxLabel": "Choose an Option"
+                "selectBoxLabel": "Choose an Option",
+                "checkBoxInfo": "Checkbox Information",
+                "dropDownInfo": "DropDown Information",
+                "textFieldInfo": "Testfield Information",
+                "sliderInfo": "Slider Information",
+                "sliderRangeInfo": "Slider Range Information",
+                "dateInfo": "Date Information",
+                "dateRangeInfo": "Date Range Information"
             },
             "filter": {
                 "result": "Result",

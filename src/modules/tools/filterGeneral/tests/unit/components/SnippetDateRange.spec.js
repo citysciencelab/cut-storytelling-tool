@@ -34,7 +34,7 @@ describe("src/module/tools/filterGeneral/components/SnippetDateRange.vue", () =>
     });
 
     it("should render correctly", () => {
-        expect(wrapper.find("div").classes("snippetDateRange")).to.be.true;
+        expect(wrapper.find("div").classes("snippetDateRangeContainer")).to.be.true;
     });
 
     it("should render correctly with prechecked empty", () => {
@@ -90,7 +90,7 @@ describe("src/module/tools/filterGeneral/components/SnippetDateRange.vue", () =>
         const snippetFrom = wrapper.find(".snippetDateRangeFrom").element,
             snippetUntil = wrapper.find(".snippetDateRangeUntil").element;
 
-        expect(wrapper.find("div").classes("snippetDateRange")).to.be.true;
+        expect(wrapper.find("div").classes("snippetDateRangeContainer")).to.be.true;
         expect(snippetFrom.min).to.be.equal("2021-12-01");
         expect(snippetUntil.min).to.be.equal("2021-12-01");
         expect(snippetFrom.max).to.be.equal("2021-12-10");
@@ -217,5 +217,24 @@ describe("src/module/tools/filterGeneral/components/SnippetDateRange.vue", () =>
         expect(wrapper.find(".snippetDateRangeUntil").exists()).to.be.true;
         expect(wrapper.vm.disable).to.be.false;
         expect(wrapper.vm.disabled).to.be.false;
+    });
+
+    it("should render the info span", () => {
+        wrapper = shallowMount(SnippetDateRange, {
+            propsData: {
+                disabled: false,
+                type: "dateRange",
+                attrName: ["baubeginn", "bauende"],
+                operator: "EQ",
+                prechecked: ["08.12.2021", "08.12.2021"],
+                label: "Date Slider",
+                visible: true,
+                format: "DD.MM.YYYY",
+                info: "Die Info"
+            },
+            localVue
+        });
+        expect(wrapper.find(".info-text").exists()).to.be.true;
+        expect(wrapper.find(".info-text span").element.innerHTML).to.be.equal("Die Info");
     });
 });

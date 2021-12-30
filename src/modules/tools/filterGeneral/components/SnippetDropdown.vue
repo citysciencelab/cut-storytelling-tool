@@ -35,6 +35,11 @@ export default {
             required: false,
             default: ""
         },
+        info: {
+            type: String,
+            required: false,
+            default: ""
+        },
         label: {
             type: String,
             required: false,
@@ -94,6 +99,11 @@ export default {
             dropdownValue: [],
             dropdownSelected: []
         };
+    },
+    computed: {
+        infoText: function () {
+            return this.info ? this.info : this.$t("modules.tools.filterGeneral.dropDownInfo");
+        }
     },
     watch: {
         dropdownSelected: {
@@ -202,25 +212,9 @@ export default {
     >
         <div class="left">
             <label
-                class="snippetDropdownLabel"
-                for="selectbox"
+                class="select-box-label"
+                for="select-box"
             >{{ label }}:</label>
-            <select
-                id="selectbox"
-                v-model="dropdownSelected"
-                name="selectbox"
-                :disabled="disable"
-                :class="multiselect ? multipleClass : singleClass"
-                :multiple="multiselect"
-            >
-                <option
-                    v-for="(optionValue, index) in dropdownValue"
-                    :key="'optionValue' + '-' + index"
-                    :value="optionValue"
-                >
-                    {{ optionValue }}
-                </option>
-            </select>
         </div>
         <div class="right">
             <div class="info-icon">
@@ -231,12 +225,30 @@ export default {
                 >&nbsp;</span>
             </div>
         </div>
+        <div class="select-box-container">
+            <select
+                id="select-box"
+                v-model="dropdownSelected"
+                name="select-box"
+                :disabled="disable"
+                :class="multiselect ? multipleClass : singleClass"
+                :multiple="multiselect"
+            >
+                <option
+                    v-for="(optionValue, index) in dropdownValue"
+                    :key="'optionValue' + '-' + index"
+                    :value="index"
+                >
+                    {{ optionValue }}
+                </option>
+            </select>
+        </div>
         <div
             v-show="showInfo"
             class="bottom"
         >
             <div class="info-text">
-                info-Text
+                <span>{{ infoText }}</span>
             </div>
         </div>
     </div>
@@ -284,6 +296,8 @@ export default {
     }
     .snippetDropdownContainer {
         padding: 5px;
+        margin-bottom: 10px;
+        height: auto;
     }
     .snippetDropdownContainer .info-icon {
         float: right;
@@ -306,6 +320,10 @@ export default {
     .glyphicon-info-sign:before {
         content: "\E086";
     }
+    .snippetDropdownContainer select {
+        clear: left;
+        width: 100%;
+    }
     .snippetDropdownContainer .bottom {
         clear: left;
         width: 100%;
@@ -315,7 +333,7 @@ export default {
         width: 90%;
     }
     .snippetDropdownContainer .right {
-        float: right;
-        width: 10%;
+        position: absolute;
+        right: 10px;
     }
 </style>

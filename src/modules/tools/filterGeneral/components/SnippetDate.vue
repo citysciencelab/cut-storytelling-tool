@@ -17,6 +17,11 @@ export default {
             required: false,
             default: false
         },
+        info: {
+            type: String,
+            required: false,
+            default: ""
+        },
         format: {
             type: String,
             required: false,
@@ -67,8 +72,14 @@ export default {
                 type: "WFS",
                 url: "https://geodienste.hamburg.de/HH_WFS_Baustellen",
                 typename: "tns_steckbrief_visualisierung"
-            }
+            },
+            showInfo: false
         };
+    },
+    computed: {
+        infoText: function () {
+            return this.info ? this.info : this.$t("modules.tools.filterGeneral.dateInfo");
+        }
     },
     watch: {
         value (newVal) {
@@ -202,6 +213,9 @@ export default {
             }
 
             return value;
+        },
+        toggleInfo () {
+            this.showInfo = !this.showInfo;
         }
     }
 };
@@ -213,32 +227,91 @@ export default {
         v-if="!invalid"
         class="snippetDateContainer"
     >
-        <label for="dateInput">{{ label }}</label>
-        <input
-            id="dateInput"
-            v-model="value"
-            class="snippetDate"
-            type="date"
-            name="dateInput"
-            :max="max"
-            :min="min"
-            :disabled="disable"
-            @input="checkEmpty"
+        <div class="right">
+            <div class="info-icon">
+                <span
+                    :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
+                    @click="toggleInfo()"
+                    @keydown.enter="toggleInfo()"
+                >&nbsp;</span>
+            </div>
+        </div>
+        <div class="input-container">
+            <label
+                class="left"
+                for="dateInput"
+            >{{ label }}</label>
+            <input
+                id="dateInput"
+                v-model="value"
+                class="snippetDate"
+                type="date"
+                name="dateInput"
+                :max="max"
+                :min="min"
+                :disabled="disable"
+                @input="checkEmpty"
+            >
+        </div>
+        <div
+            v-show="showInfo"
+            class="bottom"
         >
+            <div class="info-text">
+                <span>{{ infoText }}</span>
+            </div>
+        </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
-    label {
-        text-transform: capitalize;
-        margin: 0;
+    .snippetDateContainer {
+        padding: 5px;
+        margin-bottom: 10px;
+        height: auto;
     }
-    input {
+    .snippetDateContainer input {
+        clear: left;
+        width: 100%;
         box-sizing: border-box;
         outline: 0;
         position: relative;
+        margin-bottom: 5px;
+    }
+    .snippetDateContainer .info-icon {
+        float: right;
+        font-size: 16px;
+        color: #ddd;
+    }
+    .snippetDateContainer .info-icon .opened {
+        color: #000;
+    }
+    .snippetDateContainer .info-icon:hover {
+        cursor: pointer;
+        color: #a5a09e;
+    }
+    .snippetDateContainer .info-text {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 10px;
+        padding: 15px 10px;
+    }
+    .snippetDateContainer .bottom {
+        clear: left;
         width: 100%;
+    }
+    .snippetDateContainer .left {
+        float: left;
+        width: 90%;
+    }
+    .snippetDateContainer .right {
+        position: absolute;
+        right: 10px;
+    }
+    label {
+        text-transform: capitalize;
+        margin: 0;
     }
     input[type="date"]::-webkit-calendar-picker-indicator {
         background: transparent;

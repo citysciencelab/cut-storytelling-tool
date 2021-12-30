@@ -36,7 +36,7 @@ describe("src/modules/tools/generalFilter/components/SnippetDate.vue", () => {
     });
 
     it("should render correctly", () => {
-        expect(wrapper.find("input").classes("snippetDate")).to.be.true;
+        expect(wrapper.find("div").classes("snippetDateContainer")).to.be.true;
     });
 
     it("should set the invalid false", () => {
@@ -240,5 +240,24 @@ describe("src/modules/tools/generalFilter/components/SnippetDate.vue", () => {
         expect(wrapper.find("#dateInput").exists()).to.be.true;
         expect(wrapper.vm.disable).to.be.false;
         expect(wrapper.vm.disabled).to.be.false;
+    });
+
+    it("should render the info span", () => {
+        wrapper = shallowMount(SnippetDateComponent, {
+            propsData: {
+                disabled: false,
+                operator: "EQ",
+                format: "DD.MM.YYYY",
+                prechecked: "12.12.2021",
+                label: "Baubegin",
+                visible: true,
+                minValue: "01.01.2021",
+                maxValue: "31.12.2021",
+                info: "Die Info"
+            },
+            localVue
+        });
+        expect(wrapper.find(".info-text").exists()).to.be.true;
+        expect(wrapper.find(".info-text span").element.innerHTML).to.be.equal("Die Info");
     });
 });

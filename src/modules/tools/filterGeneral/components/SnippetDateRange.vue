@@ -15,6 +15,11 @@ export default {
             required: false,
             default: false
         },
+        info: {
+            type: String,
+            required: false,
+            default: ""
+        },
         format: {
             type: String,
             required: false,
@@ -67,8 +72,14 @@ export default {
                 type: "WFS",
                 url: "https://geodienste.hamburg.de/HH_WFS_Baustellen",
                 typename: "tns_steckbrief_visualisierung"
-            }
+            },
+            showInfo: false
         };
+    },
+    computed: {
+        infoText: function () {
+            return this.info ? this.info : this.$t("modules.tools.filterGeneral.dateRangeInfo");
+        }
     },
     watch: {
         disabled (value) {
@@ -242,6 +253,9 @@ export default {
                     this.untilDate = this.maxUntil;
                 }
             }
+        },
+        toggleInfo () {
+            this.showInfo = !this.showInfo;
         }
     }
 };
@@ -251,15 +265,30 @@ export default {
     <div
         v-if="!invalid"
         v-show="visible"
-        class="snippetDateRange"
+        class="snippetDateRangeContainer"
     >
-        <label for="dateInputContainer">
-            {{ label }}
-        </label>
-        <div class="snippetDateRangeContainer">
-            <div name="dateInputContainer">
+        <div class="left">
+            <label for="date-from-input-container">
+                {{ label }}
+            </label>
+        </div>
+        <div class="right">
+            <div class="info-icon">
+                <span
+                    :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
+                    @click="toggleInfo()"
+                    @keydown.enter="toggleInfo()"
+                >&nbsp;</span>
+            </div>
+        </div>
+        <div class="date-input-container">
+            <div
+                id="date-from-input-container"
+                class="date-from-input-container"
+            >
                 <label for="inputDateFrom">{{ Array.isArray(attrName) ? attrName[0].toLowerCase() : attrName + " From: " }}</label>
                 <input
+                    id="inputDateFrom"
                     v-model="fromDate"
                     name="inputDateFrom"
                     class="snippetDateRangeFrom"
@@ -270,9 +299,13 @@ export default {
                     @change="changeMin"
                 >
             </div>
-            <div>
+            <div
+                id="date-to-input-container"
+                class="date-to-input-container"
+            >
                 <label for="inputDateUntil">{{ Array.isArray(attrName) ? attrName[1].toLowerCase() : attrName + " To:" }}</label>
                 <input
+                    id="inputDateUntil"
                     v-model="untilDate"
                     name="inputDateUntil"
                     class="snippetDateRangeUntil"
@@ -283,11 +316,62 @@ export default {
                 >
             </div>
         </div>
+        <div
+            v-show="showInfo"
+            class="bottom"
+        >
+            <div class="info-text">
+                <span>{{ infoText }}</span>
+            </div>
+        </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    .snippetDateRangeContainer {
+        padding: 5px;
+        margin-bottom: 10px;
+        height: auto;
+    }
+    .snippetDateRangeContainer input {
+        clear: left;
+        width: 100%;
+        box-sizing: border-box;
+        outline: 0;
+        position: relative;
+        margin-bottom: 5px;
+    }
+    .snippetDateRangeContainer .info-icon {
+        float: right;
+        font-size: 16px;
+        color: #ddd;
+    }
+    .snippetDateRangeContainer .info-icon .opened {
+        color: #000;
+    }
+    .snippetDateRangeContainer .info-icon:hover {
+        cursor: pointer;
+        color: #a5a09e;
+    }
+    .snippetDateRangeContainer .info-text {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 10px;
+        padding: 15px 10px;
+    }
+    .snippetDateRangeContainer .bottom {
+        clear: left;
+        width: 100%;
+    }
+    .snippetDateRangeContainer .left {
+        float: left;
+        width: 90%;
+    }
+    .snippetDateRangeContainer .right {
+        position: absolute;
+        right: 10px;
+    }
     input[type='range'] {
         width: 10.5rem;
     }
@@ -296,9 +380,6 @@ export default {
         margin: 0;
     }
     .snippetDateRangeContainer > div {
-        display: grid;
-        /* grid-template-columns: 25% 75%; */
-        align-items: baseline;
         margin-bottom: 0.5rem;
     }
     input {

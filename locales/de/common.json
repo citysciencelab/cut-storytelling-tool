@@ -400,7 +400,14 @@
             },
             "filterGeneral": {
                 "selectAll": "Alles auswählen",
-                "selectBoxLabel": "Wählen Sie eine Option"
+                "selectBoxLabel": "Wählen Sie eine Option",
+                "checkBoxInfo": "Checkbox Information",
+                "dropDownInfo": "DropDown Information",
+                "textFieldInfo": "Testfeld Information",
+                "sliderInfo": "Slider Information",
+                "sliderRangeInfo": "Slider Range Information",
+                "dateInfo": "Date Information",
+                "dateRangeInfo": "Date Range Information"
             },
             "filter": {
                 "result": "Treffer",

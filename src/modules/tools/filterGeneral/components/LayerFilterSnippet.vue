@@ -172,6 +172,7 @@ export default {
                 >
                     <SnippetCheckbox
                         :disabled="disabled"
+                        :info="snippet.info"
                         :label="snippet.label"
                         :operator="snippet.operator"
                         :prechecked="snippet.prechecked"
@@ -188,6 +189,7 @@ export default {
                         :auto-init="snippet.autoInit"
                         :disabled="disabled"
                         :display="snippet.display"
+                        :info="snippet.info"
                         :label="snippet.label"
                         :multiselect="snippet.multiselect"
                         :operator="snippet.operator"
@@ -207,6 +209,7 @@ export default {
                     <SnippetInput
                         :attr-name="snippet.attrName"
                         :disabled="disabled"
+                        :info="snippet.info"
                         :label="snippet.label"
                         :operator="snippet.operator"
                         :placeholder="snippet.placeholder"
@@ -216,13 +219,14 @@ export default {
                         @ruleChanged="ruleChanged"
                     />
                 </div>
-                <!--<div
+                <div
                     v-else-if="checkSnippetType(snippet, 'date')"
                     class="snippet"
                 >
                     <SnippetDate
                         :attr-name="snippet.attrName"
                         :disabled="disabled"
+                        :info="snippet.info"
                         :format="snippet.format"
                         :label="snippet.label"
                         :max-value="snippet.maxValue"
@@ -239,6 +243,7 @@ export default {
                     <SnippetDateRange
                         :attr-name="snippet.attrName"
                         :disabled="disabled"
+                        :info="snippet.info"
                         :format="snippet.format"
                         :label="snippet.label"
                         :max-value="snippet.maxValue"
@@ -256,6 +261,7 @@ export default {
                         :attr-name="snippet.attrName"
                         :decimal-step="snippet.decimalStep"
                         :disabled="disabled"
+                        :info="snippet.info"
                         :label="snippet.label"
                         :min-value="snippet.minValue"
                         :max-value="snippet.maxValue"
@@ -272,6 +278,7 @@ export default {
                         :attr-name="snippet.attrName"
                         :decimal-step="snippet.decimalStep"
                         :disabled="disabled"
+                        :info="snippet.info"
                         :label="snippet.label"
                         :min-value="snippet.minValue"
                         :max-value="snippet.maxValue"
@@ -281,7 +288,7 @@ export default {
                         :visible="snippet.visible"
                         @ruleChanged="ruleChanged"
                     />
-                </div>-->
+                </div>
             </div>
         </div>
         <div class="snippet">
@@ -301,7 +308,7 @@ export default {
     @import "~/css/mixins.scss";
     .snippet {
         display: block;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         b {
             display: block;
         }

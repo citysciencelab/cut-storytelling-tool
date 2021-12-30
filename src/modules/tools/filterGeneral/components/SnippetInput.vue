@@ -12,6 +12,11 @@ export default {
             required: false,
             default: false
         },
+        info: {
+            type: String,
+            required: false,
+            default: ""
+        },
         label: {
             type: String,
             required: false,
@@ -48,6 +53,11 @@ export default {
             inputValue: this.prechecked ? this.prechecked : "",
             showInfo: false
         };
+    },
+    computed: {
+        infoText: function () {
+            return this.info ? this.info : this.$t("modules.tools.filterGeneral.textFieldInfo");
+        }
     },
     watch: {
         inputValue: {
@@ -89,10 +99,19 @@ export default {
         v-show="visible"
         class="snippetInputContainer"
     >
-        <div class="left">
+        <div class="right">
+            <div class="info-icon">
+                <span
+                    :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
+                    @click="toggleInfo()"
+                    @keydown.enter="toggleInfo()"
+                >&nbsp;</span>
+            </div>
+        </div>
+        <div class="input-container">
             <label
                 for="snippetInput"
-                class="snippetInputLabel"
+                class="snippetInputLabel left"
             >{{ label }}</label>
             <input
                 id="snippetInput"
@@ -104,21 +123,12 @@ export default {
                 :placeholder="placeholder"
             >
         </div>
-        <div class="right">
-            <div class="info-icon">
-                <span
-                    :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
-                    @click="toggleInfo()"
-                    @keydown.enter="toggleInfo()"
-                >&nbsp;</span>
-            </div>
-        </div>
         <div
             v-show="showInfo"
             class="bottom"
         >
             <div class="info-text">
-                info-Text
+                <span>{{ infoText }}</span>
             </div>
         </div>
     </div>
@@ -134,6 +144,16 @@ export default {
     }
     .snippetInputContainer {
         padding: 5px;
+        margin-bottom: 10px;
+        height: auto;
+    }
+    .snippetInputContainer input {
+        clear: left;
+        width: 100%;
+        box-sizing: border-box;
+        outline: 0;
+        position: relative;
+        margin-bottom: 5px;
     }
     .snippetInputContainer .info-icon {
         float: right;
@@ -165,7 +185,7 @@ export default {
         width: 90%;
     }
     .snippetInputContainer .right {
-        float: right;
-        width: 10%;
+        position: absolute;
+        right: 10px;
     }
 </style>

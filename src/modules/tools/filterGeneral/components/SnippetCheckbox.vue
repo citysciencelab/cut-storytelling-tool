@@ -7,6 +7,11 @@ export default {
             required: false,
             default: false
         },
+        info: {
+            type: String,
+            required: false,
+            default: ""
+        },
         label: {
             type: String,
             required: false,
@@ -34,6 +39,11 @@ export default {
             showInfo: false
         };
     },
+    computed: {
+        infoText: function () {
+            return this.info ? this.info : this.$t("modules.tools.filterGeneral.checkBoxInfo");
+        }
+    },
     methods: {
         toggleInfo () {
             this.showInfo = !this.showInfo;
@@ -56,7 +66,7 @@ export default {
                 name="checkbox"
                 :disabled="disabled"
             >
-            <label for="checkbox">{{ label }}</label>
+            <label for="checkbox">{{ label }} </label>
         </div>
         <div class="right">
             <div class="info-icon">
@@ -72,7 +82,7 @@ export default {
             class="bottom"
         >
             <div class="info-text">
-                info-Text
+                <span>{{ infoText }}</span>
             </div>
         </div>
     </div>
@@ -82,6 +92,8 @@ export default {
     @import "~/css/mixins.scss";
     .snippetCheckboxContainer {
         padding: 5px;
+        margin-bottom: 10px;
+        height: auto;
     }
     .snippetCheckboxContainer .info-icon {
         float: right;
@@ -113,7 +125,7 @@ export default {
         width: 90%;
     }
     .snippetCheckboxContainer .right {
-        float: right;
-        width: 10%;
+        position: absolute;
+        right: 10px;
     }
 </style>

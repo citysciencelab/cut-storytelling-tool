@@ -22,6 +22,11 @@ export default {
             required: false,
             default: false
         },
+        info: {
+            type: String,
+            required: false,
+            default: ""
+        },
         label: {
             type: String,
             required: false,
@@ -67,9 +72,15 @@ export default {
                 url: "https://geodienste.hamburg.de/HH_WFS_Regionaler_Bildungsatlas_Bev_Stadtteil",
                 typename: "regionaler_bildungsatlas_bevoelkerung_stadtteile"
             },
+            showInfo: false,
             step: this.decimalStep,
             value: this.prechecked
         };
+    },
+    computed: {
+        infoText: function () {
+            return this.info ? this.info : this.$t("modules.tools.filterGeneral.sliderInfo");
+        }
     },
     watch: {
         value (newVal) {
@@ -246,6 +257,9 @@ export default {
             }
 
             this.invalid = false;
+        },
+        toggleInfo () {
+            this.showInfo = !this.showInfo;
         }
     }
 };
@@ -255,8 +269,21 @@ export default {
     <div
         v-show="visible"
         v-if="!invalid"
+        class="snippetSliderContainer"
     >
-        <label for="slider-single">{{ label }}</label>
+        <div class="right">
+            <div class="info-icon">
+                <span
+                    :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
+                    @click="toggleInfo()"
+                    @keydown.enter="toggleInfo()"
+                >&nbsp;</span>
+            </div>
+        </div>
+        <label
+            class="left"
+            for="slider-single"
+        >{{ label }}</label>
         <input
             v-model="value"
             class="input-single"
@@ -266,29 +293,84 @@ export default {
             @keypress="checkKeyNumber"
             @input="checkEmpty"
         >
-        <input
-            v-model="value"
-            class="slider-single"
-            type="range"
-            :class="disable ? 'disabled':''"
-            :step="step"
-            :disabled="disable"
-            :min="minimumValue"
-            :max="maximumValue"
-        >
+        <div class="slider-input-container">
+            <input
+                id="slider-single"
+                v-model="value"
+                class="slider-single"
+                type="range"
+                :class="disable ? 'disabled':''"
+                :step="step"
+                :disabled="disable"
+                :min="minimumValue"
+                :max="maximumValue"
+            >
+        </div>
         <span class="min">{{ minimumValue }}</span>
         <span class="max">{{ maximumValue }}</span>
+        <div
+            v-show="showInfo"
+            class="bottom"
+        >
+            <div class="info-text">
+                <span>{{ infoText }}</span>
+            </div>
+        </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    .snippetSliderContainer {
+        padding: 5px;
+        margin-bottom: 10px;
+        height: auto;
+    }
+    .snippetSliderContainer input {
+        clear: left;
+        width: 100%;
+        box-sizing: border-box;
+        outline: 0;
+        position: relative;
+        margin-bottom: 5px;
+    }
+    .snippetSliderContainer .info-icon {
+        float: right;
+        font-size: 16px;
+        color: #ddd;
+    }
+    .snippetSliderContainer .info-icon .opened {
+        color: #000;
+    }
+    .snippetSliderContainer .info-icon:hover {
+        cursor: pointer;
+        color: #a5a09e;
+    }
+    .snippetSliderContainer .info-text {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 10px;
+        padding: 15px 10px;
+    }
+    .snippetSliderContainer .bottom {
+        clear: left;
+        width: 100%;
+    }
+    .snippetSliderContainer .left {
+        float: left;
+        width: 90%;
+    }
+    .snippetSliderContainer .right {
+        position: absolute;
+        right: 10px;
+    }
     input[type="text"] {
         width: 60px;
         float: right;
         margin-bottom: 10px;
         text-align: center;
         padding-top: 5px;
+        margin-top: 2px;
     }
     /* Chrome, Safari, Edge, Opera */
     input::-webkit-outer-spin-button,
@@ -349,7 +431,6 @@ export default {
         background-color: #3177b1;
     }
     span {
-        margin-top: 5px;
         &.min {
             float: left;
         }

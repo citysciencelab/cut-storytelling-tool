@@ -22,6 +22,11 @@ export default {
             required: false,
             default: false
         },
+        info: {
+            type: String,
+            required: false,
+            default: ""
+        },
         label: {
             type: String,
             required: false,
@@ -75,9 +80,15 @@ export default {
                 typename: "regionaler_bildungsatlas_schullandschaft_bezirke"
             },
             step: this.decimalStep,
+            showInfo: false,
             minVal: this.prechecked[0],
             maxVal: this.prechecked[1]
         };
+    },
+    computed: {
+        infoText: function () {
+            return this.info ? this.info : this.$t("modules.tools.filterGeneral.sliderRangeInfo");
+        }
     },
     watch: {
         minVal (newVal) {
@@ -295,6 +306,9 @@ export default {
                     result
                 }
             });
+        },
+        toggleInfo () {
+            this.showInfo = !this.showInfo;
         }
     }
 };
@@ -305,9 +319,23 @@ export default {
         v-show="visible"
         v-if="!invalid"
     >
-        <label for="sliderRangeWrapper">{{ label }}</label>
+        <div class="snippetSliderRangeContainer">
+            <div class="left">
+                <label for="slider-input-min">{{ label }}</label>
+            </div>
+            <div class="right">
+                <div class="info-icon">
+                    <span
+                        :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
+                        @click="toggleInfo()"
+                        @keydown.enter="toggleInfo()"
+                    >&nbsp;</span>
+                </div>
+            </div>
+        </div>
         <div class="sliderRangeWrapper">
             <div class="sliderInputContainer">
+                <label for="slider-input-max" />
                 <input
                     id="slider-input-max"
                     v-model="maxVal"
@@ -319,6 +347,7 @@ export default {
                     :max="maximumValue"
                     @input="checkEmpty"
                 >
+                <label for="slider-input-min" />
                 <input
                     id="slider-input-min"
                     v-model="minVal"
@@ -335,6 +364,7 @@ export default {
                 <div class="slider-range-track">
                     &nbsp;
                 </div>
+                <label for="slider1" />
                 <input
                     id="slider1"
                     v-model="minVal"
@@ -346,6 +376,7 @@ export default {
                     :min="minimumValue"
                     :max="maximumValue"
                 >
+                <label for="slider2" />
                 <input
                     id="slider2"
                     v-model="maxVal"
@@ -363,16 +394,61 @@ export default {
                 </div>
             </div>
         </div>
+        <div
+            v-show="showInfo"
+            class="bottom"
+        >
+            <div class="info-text">
+                <span>{{ infoText }}</span>
+            </div>
+        </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    .snippetSliderRangeContainer {
+        padding: 5px;
+        margin-bottom: 10px;
+        height: 20px;
+    }
+    .info-icon {
+        float: right;
+        font-size: 16px;
+        color: #ddd;
+    }
+    .info-icon .opened {
+        color: #000;
+    }
+    .info-icon:hover {
+        cursor: pointer;
+        color: #a5a09e;
+    }
+    .info-text {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 10px;
+        padding: 15px 10px;
+        margin-top: 15px;
+    }
+    .bottom {
+        clear: left;
+        width: 100%;
+        padding: 0 5px;
+    }
+    .snippetSliderRangeContainer .left {
+        float: left;
+        width: 90%;
+    }
+    .snippetSliderRangeContainer .right {
+        position: absolute;
+        right: 10px;
+    }
     .sliderRangeWrapper {
         position: relative;
         width: 100%;
         background-color: #fff;
-        padding: 0;
+        padding: 0 5px;
         margin: auto;
         position: relative;
         height: 80px;
@@ -501,7 +577,6 @@ export default {
         border: 2px solid #ff6347;
     }
     span {
-        margin-top: 5px;
         &.min {
             float: left;
             position: absolute;
