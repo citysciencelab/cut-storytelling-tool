@@ -115,24 +115,6 @@ export default {
             console.warn("Please check the parameter decimalStep in configuration, it should be a positive number");
             return 1;
         },
-        /**
-         * Checking if the input key is in valid format and void invalid format (number)
-         * @param {Event} evt - keypress event
-         * @returns {Boolean} true if the input is in valid format (number)
-         */
-        checkKeyNumber (evt) {
-            const charCode = evt.which ? evt.which : evt.keyCode;
-
-            if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 45) {
-                if (Number.isInteger(this.step) || (!Number.isInteger(this.step) && charCode !== 46)) {
-                    store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.incorrectEntry"));
-                    evt.stopPropagation();
-                    return false;
-                }
-            }
-
-            return true;
-        },
 
         /**
          * Checking if the input field is empty and set the value to the minimum value
@@ -287,10 +269,9 @@ export default {
         <input
             v-model="value"
             class="input-single"
-            type="text"
+            type="number"
             :name="label"
             :disabled="disable"
-            @keypress="checkKeyNumber"
             @input="checkEmpty"
         >
         <div class="slider-input-container">
@@ -364,11 +345,13 @@ export default {
         position: absolute;
         right: 10px;
     }
-    input[type="text"] {
+    input[type="number"] {
+        text-align: center;
+        font-size: 12px;
+        -moz-appearance: textfield;
         width: 60px;
         float: right;
         margin-bottom: 10px;
-        text-align: center;
         padding-top: 5px;
         margin-top: 2px;
     }
@@ -380,9 +363,6 @@ export default {
     }
 
     /* Firefox */
-    input[type="text"] {
-        -moz-appearance: textfield;
-    }
     input[type="range"] {
         -webkit-appearance: none;
         background-color: #ddd;
