@@ -59,6 +59,7 @@
     - eslint-plugin-vuejs-accessibility: 1.1.0 to 1.1.1
     - html2canvas: 1.1.3 to 1.4.0
     - husky: 7.0.1 to 7.0.4
+    - i18next: 20.3.3 to 21.6.4
     - inquirer: 8.1.2 to 8.2.0
     - jsts: 2.7.1 to 2.8.1
     - masterportalAPI: 1.6.1 to version 1.7.0
