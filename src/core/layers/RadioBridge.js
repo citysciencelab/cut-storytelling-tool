@@ -203,13 +203,6 @@ export function getStyleModelById (styleId) {
     return Radio.request("StyleList", "returnModelById", styleId);
 }
 /**
- * Returns the state of the initial loading of layers.
- * @returns {number} state of loading
- */
-// export function getInitialLoadingState () {
-//     return Radio.request("Map", "getInitialLoading");
-// }
-/**
  * Listens to channel i18next and changes the translations of the layer, if language changes.
  * @param {boolean} layer the layer to call the function 'changeLang' at.
  * @returns {void}
@@ -227,5 +220,24 @@ export function onLanguageChanged (layer) {
             }
         }
     }, this);
-
+}
+/**
+ * Listens to changes in Radio.channel 'Map'.
+ * Sets all layers to visible, if they support the map mode else sets their visibility to false.
+ * @param {Object} layer the layer to change visibility at
+ * @returns {void}
+ */
+export function onMapModeChanged (layer) {
+    Radio.channel("Map").on({
+        "change": function (mode) {
+            if (layer.get("supported").indexOf(mode) >= 0) {
+                if (layer.get("isVisibleInMap")) {
+                    layer.get("layer").setVisible(true);
+                }
+            }
+            else if (layer.get("layer") !== undefined) {
+                layer.get("layer").setVisible(false);
+            }
+        }
+    }, this);
 }

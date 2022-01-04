@@ -57,6 +57,7 @@ export default function Layer (attrs, layer, initialize = true) {
     this.setMinMaxResolutions();
     this.checkForScale({scale: store.getters["Map/scale"]});
     this.registerInteractionMapViewListeners();
+    bridge.onMapModeChanged(this);
     bridge.onLanguageChanged(this);
     this.changeLang();
 }

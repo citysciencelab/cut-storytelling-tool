@@ -62,6 +62,9 @@
     - Expanding transparency under 'Subject data' and 'Selected topics' now synchronous.
     - Only the selected cog will rotate.
     - The layer order is now preserved in all trees when switching on and off.
+- ObliqueMap:
+    - All layers that are not of type "Oblique" are not visible.
+    - An error that occurred after turning the oblique map on and off is fixed.
 
 ---
 
