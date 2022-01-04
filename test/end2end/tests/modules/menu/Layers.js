@@ -1,8 +1,7 @@
-/* eslint-disable one-var */
-
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    fetch = require("node-fetch"),
+    // eslint-disable-next-line
+    fetch = (...args) => import("node-fetch").then(({default: fetch}) => fetch(...args)),
     masterConfigJson = require("../../../../../portal/master/config.json"),
     masterConfigJs = require("../../../../../portal/master/config.js"),
     {getOrderedLayerIds, isLayerVisible} = require("../../../library/scripts"),

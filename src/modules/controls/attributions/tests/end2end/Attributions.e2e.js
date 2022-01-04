@@ -56,7 +56,7 @@ function AttributionsTests ({builder, url, resolution, capability}) {
                 attributionsButton = await driver.findElement(By.css(".attributions-button"));
                 await attributionsButton.click();
                 expect((await driver.findElements(By.css(".attributions-div"))).length).to.equal(0);
-                attributionsButton.click();
+                await attributionsButton.click();
                 attributionsDiv = await driver.findElement(By.css(".attributions-view"));
                 expect(attributionsDiv).to.exist;
             });
