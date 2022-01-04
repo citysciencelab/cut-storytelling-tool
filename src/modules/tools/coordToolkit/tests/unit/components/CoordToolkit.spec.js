@@ -289,6 +289,7 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
         });
         it("onInputEvent should call validateInput if mode is 'search'", async () => {
             wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
+            wrapper.vm.changeMode("supply");
             expect(store.state.Tools.CoordToolkit.mode).to.be.equals("supply");
             wrapper.vm.onInputEvent("input");
             expect(CoordToolkit.actions.validateInput.calledOnce).to.be.false;
