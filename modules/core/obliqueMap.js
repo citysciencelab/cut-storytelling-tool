@@ -4,7 +4,6 @@ import {defaults as olDefaultInteractions} from "ol/interaction.js";
 import {ViewDirection, viewDirectionNames} from "vcs-oblique/src/vcs/oblique/viewDirection";
 import {transformFromImage} from "vcs-oblique/src/vcs/oblique/helpers";
 import LoaderOverlay from "../../src/utils/loaderOverlay";
-import {Radio} from "backbone";
 import store from "../../src/app-store";
 
 /**
