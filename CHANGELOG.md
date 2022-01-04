@@ -63,6 +63,7 @@
     - inquirer: 8.1.2 to 8.2.0
     - jsts: 2.7.1 to 2.8.1
     - masterportalAPI: 1.6.1 to version 1.7.0
+    - mocha-loader: 3.0.0 to 5.1.5
     - mock-local-storage: 1.1.17 to 1.1.19
     - moment-timezone: 0.5.33 to 0.5.34
     - node-fetch: 2.6.1 to 3.1.0

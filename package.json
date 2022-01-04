@@ -107,7 +107,7 @@
     "masterportalAPI": "git+https://bitbucket.org/geowerkstatt-hamburg/masterportalapi.git#v1.7.0",
     "mini-css-extract-plugin": "^0.9.0",
     "mocha": "^9.1.3",
-    "mocha-loader": "^3.0.0",
+    "mocha-loader": "^5.1.5",
     "mochapack": "^2.1.2",
     "mock-local-storage": "^1.1.19",
     "node-fetch": "^3.1.0",
