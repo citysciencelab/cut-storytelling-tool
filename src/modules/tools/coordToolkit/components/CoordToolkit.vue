@@ -94,7 +94,6 @@ export default {
             "checkPosition",
             "changedPosition",
             "setFirstSearchPosition",
-            "copyToClipboard",
             "positionClicked",
             "setCoordinates",
             "removeMarker",
@@ -278,16 +277,6 @@ export default {
                 this.setMode(newMode);
                 this.resetErrorMessages("all");
                 this.setSupplyCoordActive();
-            }
-        },
-        /**
-         * If curent mode is "supply" content of input is copied to clipboard.
-         * @param {Event} event click-event
-         * @returns {void}
-         */
-        onInputClicked (event) {
-            if (this.mode === "supply") {
-                this.copyToClipboard(event.currentTarget);
             }
         },
         /**
@@ -521,7 +510,6 @@ export default {
                                 :readonly="isEnabled('supply')"
                                 :class="{ inputError: getEastingError, 'form-control': true}"
                                 :placeholder="isEnabled( 'search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesEastingExample : ''"
-                                @click="onInputClicked($event)"
                                 @input="onInputEvent(coordinatesEasting)"
                             ><p
                                 v-if="eastingNoCoord"
@@ -590,7 +578,6 @@ export default {
                                 :class="{ inputError: getNorthingError , 'form-control': true}"
                                 :readonly="isEnabled( 'supply')"
                                 :placeholder="isEnabled( 'search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesNorthingExample : ''"
-                                @click="onInputClicked($event)"
                                 @input="onInputEvent(coordinatesNorthing)"
                             ><p
                                 v-if="northingNoCoord"
@@ -641,7 +628,6 @@ export default {
                                 type="text"
                                 class="form-control"
                                 :readonly="true"
-                                @click="onInputClicked($event)"
                             >
                         </div>
                     </div>

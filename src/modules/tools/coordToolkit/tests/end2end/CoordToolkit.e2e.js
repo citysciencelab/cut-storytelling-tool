@@ -196,26 +196,6 @@ async function CoordToolkitTests ({builder, url, resolution, config, capability}
                 });
             });
         }
-
-        it("copies coordinate values on click in input fields to clipboard", async () => {
-            /* Since there seems to be no universally supported way to check what
-             * Strg+V produces, we're just dumping the information to the search
-             * bar and check if the expected value arrived. */
-            const searchInput = await driver.findElement(By.css("#searchInput"));
-
-            for (const field of [northingField, eastingField]) {
-                const value = await field.getAttribute("value");
-
-                await field.click();
-                await closeSingleAlert(driver, "Inhalt wurde in die Zwischenablage kopiert.");
-
-                await driver.wait(new Promise(r => setTimeout(r, 100)));
-                await searchInput.sendKeys(Key.CONTROL, "v");
-
-                expect(await searchInput.getAttribute("value")).to.equal(value);
-                await searchInput.clear();
-            }
-        });
         it("copies coordinate values to clipboard by click on copy-button", async () => {
             const searchInput = await driver.findElement(By.css("#searchInput")),
                 copyNorthingBtn = await driver.wait(until.elementLocated(selectors.copyNorthingBtn), 5000),

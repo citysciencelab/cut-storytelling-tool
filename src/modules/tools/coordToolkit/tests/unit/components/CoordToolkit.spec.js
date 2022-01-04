@@ -70,7 +70,6 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
         text = "";
 
     beforeEach(() => {
-        CoordToolkit.actions.copyToClipboard = sinon.spy(CoordToolkit.actions.copyToClipboard);
         CoordToolkit.actions.validateInput = sinon.spy(CoordToolkit.actions.validateInput);
         CoordToolkit.actions.initHeightLayer = sinon.spy(CoordToolkit.actions.initHeightLayer);
         CoordToolkit.actions.copyCoordinates = sinon.spy(CoordToolkit.actions.copyCoordinates);
@@ -100,7 +99,6 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
                 }
             },
             actions: {
-                copyToClipboard: sinon.spy(),
                 copyCoordinates: copyCoordinatesSpy
             },
             getters: {
@@ -288,25 +286,6 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             await wrapper.vm.$nextTick();
             expect(store.state.Tools.CoordToolkit.mode).to.be.equals("search");
             expect(wrapper.vm.isEnabled("search")).to.be.true;
-        });
-        it("onInputClicked should call copyToClipboard if mode is 'supply'", async () => {
-            const value = "EPSG:4326",
-                event = {
-                    target: {
-                        value: value
-                    }
-                };
-
-            wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
-            expect(store.state.Tools.CoordToolkit.mode).to.be.equals("search");
-            wrapper.vm.onInputClicked(event);
-            expect(CoordToolkit.actions.copyToClipboard.calledOnce).to.be.false;
-
-            wrapper.vm.changeMode("supply");
-            await wrapper.vm.$nextTick();
-            expect(store.state.Tools.CoordToolkit.mode).to.be.equals("supply");
-            wrapper.vm.onInputClicked(event);
-            expect(CoordToolkit.actions.copyToClipboard.calledOnce).to.be.true;
         });
         it("onInputEvent should call validateInput if mode is 'search'", async () => {
             wrapper = shallowMount(CoordToolkitComponent, {store, localVue});

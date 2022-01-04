@@ -39,15 +39,6 @@ export default {
         }
     },
     /**
-     * Dispatches the action to copy the given element to the clipboard.
-     *
-     * @param {Element} el element to copy
-     * @returns {void}
-     */
-    copyToClipboard ({dispatch}, el) {
-        dispatch("copyToClipboard", el, {root: true});
-    },
-    /**
      * Remembers the projection and shows mapmarker at the given position.
      * @param {Event} event - pointerdown-event, to get the position from
      * @returns {void}
