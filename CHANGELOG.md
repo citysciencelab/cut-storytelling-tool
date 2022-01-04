@@ -83,6 +83,7 @@
 - AddWMS: HH-specific WMS-URL example has been removed.
 - The following NPM packages are removed:
     - polyfill-object.fromentries
+    - whatwg-fetch
 
 ### Fixed
 - WfsSearch:

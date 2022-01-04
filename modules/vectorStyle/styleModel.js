@@ -4,7 +4,6 @@ import TextStyle from "./textStyle";
 import PolygonStyle from "./polygonStyle";
 import LinestringStyle from "./linestringStyle";
 import CesiumStyle from "./cesiumStyle";
-import {fetch as fetchPolyfill} from "whatwg-fetch";
 import axios from "axios";
 import getProxyUrl from "../../src/utils/getProxyUrl";
 import {mapAttributes, isObjectPath} from "../../src/utils/attributeMapper.js";
@@ -89,23 +88,26 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             url += key + "=" + params[key] + "&";
         });
         url = url.slice(0, -1);
-        fetchPolyfill(url)
-            .then(response => response.text())
-            .then(responseAsString => new window.DOMParser().parseFromString(responseAsString, "text/xml"))
-            .then(responseXML => {
-                const subElements = this.getSubelementsFromXML(responseXML, featureType),
-                    geometryTypes = this.getTypeAttributesFromSubelements(subElements, styleGeometryType);
 
-                this.createLegendInfo(geometryTypes);
-            })
-            .catch(error => {
-                console.warn("The fetch of the data failed with the following error message: " + error);
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>" + i18next.t("common:modules.vectorStyle.styleModel.getGeometryTypeFromWFSFetchfailed") + "</strong> <br>"
-                        + "<small>" + i18next.t("common:modules.vectorStyle.styleModel.getGeometryTypeFromWFSFetchfailedMessage") + "</small>",
-                    kategorie: "alert-warning"
-                });
+
+        axios({
+            method: "get",
+            url: url,
+            // headers: {"Content-Type'": "text/xml"},
+            responseType: "document"
+        }).then(response => {
+            const subElements = this.getSubelementsFromXML(response.data, featureType),
+                geometryTypes = this.getTypeAttributesFromSubelements(subElements, styleGeometryType);
+
+            this.createLegendInfo(geometryTypes);
+        }).catch(error => {
+            console.warn("The fetch of the data failed with the following error message: " + error);
+            Radio.trigger("Alert", "alert", {
+                text: "<strong>" + i18next.t("common:modules.vectorStyle.styleModel.getGeometryTypeFromWFSFetchfailed") + "</strong> <br>"
+                    + "<small>" + i18next.t("common:modules.vectorStyle.styleModel.getGeometryTypeFromWFSFetchfailedMessage") + "</small>",
+                kategorie: "alert-warning"
             });
+        });
     },
 
     /**
