@@ -47,6 +47,9 @@ describe("src/modules/tools/contact/components/ContactFormular.vue", () => {
                         Contact: ContactModule
                     }
                 }
+            },
+            getters: {
+                uiStyle: () => sinon.stub()
             }
         });
 
