@@ -132,7 +132,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     expect(await (await driver.findElement(By.className("current-language"))).getText()).to.equals("EN");
 
                 });
-                it("deprecated - ?style=simple hides control elements", async function () {
+                it("?style=simple hides control elements", async function () {
                     await loadUrl(driver, `${url}?style=simple`, mode);
 
                     await driver.wait(until.elementIsNotVisible(driver.findElement(By.id("main-nav"))), 10000);
@@ -151,7 +151,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     expect(await driver.findElements(By.className("bottom-controls"))).to.be.empty;
                 });
 
-                it("deprecated - ?center= allows setting coordinates of map", async function () {
+                it("?center= allows setting coordinates of map", async function () {
                     await loadUrl(driver, `${url}?center=566499,5942803`, mode);
                     await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
 
@@ -159,7 +159,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
 
                     expect([566499, 5942803]).to.eql(center);
                 });
-                it("deprecated - ?center= allows setting array of coordinates of map", async function () {
+                it("?center= allows setting array of coordinates of map", async function () {
                     await loadUrl(driver, `${url}?center=[566499,5942803]`, mode);
                     await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
 
@@ -176,7 +176,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     expect([566499, 5942803]).to.eql(center);
                 });
 
-                it("deprecated - ?zoomtogeometry=[number] zooms to a district", async function () {
+                it("?zoomtogeometry=[number] zooms to a district", async function () {
                     const expectedCoordinate = [556535.269, 5937846.413000001];
 
                     // Bezirk 1 is Altona according to portal/master/config.js listing
@@ -202,7 +202,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     expect(await centersTo(driver, expectedCoordinate)).to.be.true;
                 });
 
-                it("deprecated - ?zoomlevel= sets the chosen zoom level", async function () {
+                it("?zoomlevel= sets the chosen zoom level", async function () {
                     await loadUrl(driver, `${url}?zoomlevel=8`, mode);
 
                     expect(0.2645831904584105).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:1.000
@@ -214,7 +214,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     expect(0.2645831904584105).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:1.000
                 });
 
-                it("deprecated - ?isinitopen= allows opening tools initially in window", async function () {
+                it("?isinitopen= allows opening tools initially in window", async function () {
                     const toolName = "fileimport",
                         toolwindow = By.css(".tool-window-vue");
 
@@ -222,7 +222,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.wait(until.elementLocated(toolwindow), 5000);
                     expect(await driver.findElement(toolwindow)).to.exist;
                 });
-                it("deprecated - ?isinitopen=kmlimport opens fileimport in window", async function () {
+                it("?isinitopen=kmlimport opens fileimport in window", async function () {
                     const toolName = "kmlimport",
                         toolwindow = By.css(".tool-window-vue");
 
@@ -312,7 +312,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     expect(await driver.findElement(toolwindow)).to.exist;
                 });
 
-                it("deprecated - ?isinitopen= allows opening tools initially in sidebar", async function () {
+                it("?isinitopen= allows opening tools initially in sidebar", async function () {
                     const toolName = "draw",
                         toolSidebar = By.css("#tool-sidebar-vue");
 
@@ -328,7 +328,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     expect(await driver.findElement(toolSidebar)).to.exist;
                 });
 
-                it("deprecated - ?layerids=, &visibility=, and &transparency= work together to display a layer in tree and map as configured", async function () {
+                it("?layerids=, &visibility=, and &transparency= work together to display a layer in tree and map as configured", async function () {
                     // 2426 is "Bezirke"
                     await loadUrl(driver, `${url}?layerids=2426&visibility=true&transparency=0`, mode);
                     await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
@@ -360,7 +360,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     expect(visible).to.be.true;
                 });
 
-                it("deprecated - ?layerIDs=, &visibility=, and &transparency= allow configuring multiple layers and work with &center= and &zoomlevel=", async function () {
+                it("?layerIDs=, &visibility=, and &transparency= allow configuring multiple layers and work with &center= and &zoomlevel=", async function () {
                     let ortho = "";
 
                     // 2426 is "Bezirke"
@@ -432,7 +432,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     expect(10.58332761833642).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:40.000
                 });
 
-                it("deprecated - ?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - KiTa layer GFI with example 'KiTa Im Volkspark' shows gfi", async function () {
+                it("?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - KiTa layer GFI with example 'KiTa Im Volkspark' shows gfi", async function () {
                     const paramUrl = `${url}/?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`;
                     let counter = 0;
 
@@ -494,7 +494,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     expect((await driver.findElements(By.css("div.gfi"))).length).to.equal(0);
                 });
 
-                it("deprecated - ?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - hospital layer GFI with example 'Agaplesion Diakonieklinikum Hamburg' shows gfi", async function () {
+                it("?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - hospital layer GFI with example 'Agaplesion Diakonieklinikum Hamburg' shows gfi", async function () {
                     const paramUrl = `${url}/?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`;
                     let counter = 0;
 
@@ -544,7 +544,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     expect((await driver.findElements(By.css("div.gfi"))).length).to.equal(0);
                 });
 
-                it("deprecated - ?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - both layers have their respective legend loaded", async function () {
+                it("?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - both layers have their respective legend loaded", async function () {
                     const paramUrl = `${url}/?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`;
 
                     if (await driver.getCurrentUrl() !== paramUrl) {
@@ -588,7 +588,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     expect((await driver.findElements(By.css("div.legend-window"))).length).to.equal(0);
                 });
 
-                it("deprecated - ?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - layers are shown in the topic tree and present layer information", async function () {
+                it("?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - layers are shown in the topic tree and present layer information", async function () {
                     await loadUrl(driver, `${url}?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`, mode);
                     if (await (await driver.findElements(By.xpath("//div[@class='singleAlertMessage']//parent::div//parent::div//parent::div//parent::div//parent::div//preceding-sibling::span"))).length > 0) {
                         await closeSingleAlert(driver);
@@ -616,7 +616,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     expect(await driver.findElements(By.xpath("//*[contains(text(),'Fehler beim Laden der Vorschau der Metadaten.')]"))).to.be.empty;
                 });
 
-                it("deprecated - ?layerIDs=, &visibility=, and &transparency= with set zoom level have working gfi/legend/info", async function () {
+                it("?layerIDs=, &visibility=, and &transparency= with set zoom level have working gfi/legend/info", async function () {
                     await loadUrl(driver, `${url}?layerIDs=4736,4537&visibility=true,true&transparency=0,0&zoomLevel=6`, mode);
                     const coords = [566688.25, 5934320.50];
 
@@ -700,7 +700,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     expect(await driver.findElements(By.xpath("//*[contains(text(),'Fehler beim Laden der Vorschau der Metadaten.')]"))).to.be.empty;
                 });
 
-                it("deprecated - ?featureid= displays markers for features", async function () {
+                it("?featureid= displays markers for features", async function () {
                     await loadUrl(driver, `${url}?featureid=18,26`, mode);
                     await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
                     await driver.wait(async () => driver.executeScript(doesLayerWithFeaturesExist, [
@@ -742,7 +742,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.executeScript(isLayerVisible, "4200");
                 });
 
-                it("deprecated - ?config= allows selecting a config", async function () {
+                it("?config= allows selecting a config", async function () {
                     const splitUrl = url.split("_");
                     let urlAffix = "";
 
@@ -803,7 +803,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
               * With the BKG address service can not be tested, because this is only available in the fhhnet and therefore does not work on the Internet.
               */
             if (isDefault(url)) {
-                it("deprecated - ?query= fills and executes query field", async function () {
+                it("?query= fills and executes query field", async function () {
                     await loadUrl(driver, `${url}?query=Neuenfeld`, mode);
 
                     await driver.wait(until.elementLocated(By.css("#searchInput")), 12000);
@@ -834,7 +834,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
               * With the BKG address service can not be tested, because this is only available in the fhhnet and therefore does not work on the Internet.
               */
 
-                it("deprecated - ?query= fills and executes search and zooms to result if unique address", async function () {
+                it("?query= fills and executes search and zooms to result if unique address", async function () {
                     await loadUrl(driver, `${url}?query=Neuenfelder Straße,19`, mode);
 
                     await driver.wait(until.elementLocated(By.css("#searchInput")), 12000);
@@ -882,7 +882,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     }, 10000, `Expected coordinates ${expected}, but received ${center}. Did not receive matching coordinates within 10 seconds.`);
                 });
 
-                it("deprecated - ?mdid= opens and displays a layer", async function () {
+                it("?mdid= opens and displays a layer", async function () {
                     const topicSelector = By.css("div#navbarRow li:first-child");
 
                     await loadUrl(driver, `${url}?mdid=EBA4BF12-3ED2-4305-9B67-8E689FE8C445`, mode);
@@ -915,7 +915,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.executeScript(isLayerVisible, "1562_4");
                 });
 
-                it("deprecated - opening and configuring lots of layers works", async function () {
+                it("opening and configuring lots of layers works", async function () {
                     //  ?layerIDs=368,717,2423,1562,2432,1935geofox-bahn,2444,1561,2941,2452&visibility=true,false,false,false,false,false,false,false,false,false&transparency=0,0,0,0,0,0,0,0,0,0&center=572765.7219565103,5940389.380731404&zoomlevel=5
                     let layers = "368,717,2423,1562,2432,1935geofox-bahn,2444,1561,2941,2452",
                         visibility = "true,false,false,false,false,false,false,false,false,false",

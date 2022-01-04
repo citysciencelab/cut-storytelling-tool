@@ -39,6 +39,7 @@
 - The elastic search now reads out all attributes of a found layer and takes them into account when processing the layer.
 
 ### Deprecated
+- Parametric url: all deprecations are removed, besides STARTUPMODUL and BEZIRK.
 
 ### Removed
 - WMS-layer: Hamburgensie for web_atlasde has been removed.
