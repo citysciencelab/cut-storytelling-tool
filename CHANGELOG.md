@@ -81,6 +81,8 @@
 ### Removed
 - WMS-layer: Hamburgensie for web_atlasde has been removed.
 - AddWMS: HH-specific WMS-URL example has been removed.
+- The following NPM packages are removed:
+    - polyfill-object.fromentries
 
 ### Fixed
 - WfsSearch:
