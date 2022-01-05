@@ -7,8 +7,7 @@
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 
 ---
-
-## Unreleased - in development
+## v2.17.0 - 2022-01-05
 ### Added
 - Added style.json parameter "rotation" to wfs features with iconPointStyle, if the parameter is not given it will fall back to standard alignment.
 - Added the possibility to configure a predefined order of selected layers.
