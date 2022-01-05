@@ -530,6 +530,26 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                         this.addFolder("Fachthema", parentId, "ExternalLayer", 1, false, "common:tree.subjectData");
                     }
                 }
+                if (treeType === "default") {
+                    let category,
+                        parent = null;
+
+                    if (this.get("category") === "Opendata") {
+                        category = hit.source.datasets[0].kategorie_opendata[0];
+                    }
+                    else if (this.get("category") === "Inspire") {
+                        category = hit.source.datasets[0].kategorie_inspire[0];
+                    }
+                    else if (this.get("category") === "Behörde") {
+                        category = hit.source.datasets[0].kategorie_organisation;
+                    }
+                    parent = this.getItemByAttributes({name: category});
+                    if (parent) {
+                        parentId = parent.id;
+                    }
+                    level = 1;
+                }
+
                 gdiLayer = Object.assign(gdiLayer, {
                     parentId: parentId,
                     level: level,
