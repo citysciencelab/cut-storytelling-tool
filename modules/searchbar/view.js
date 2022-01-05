@@ -1036,7 +1036,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             }
             return;
         }
-        else if (hit && hit?.type && (hit.type === i18next.t("common:modules.searchbar.type.topic") || hit.type === i18next.t("common:modules.searchbar.type.subject"))) {
+        else if (hit && hit?.type && (hit.type === i18next.t("common:modules.searchbar.type.topic") || hit.type === i18next.t("common:modules.searchbar.type.subject") || hit.type === i18next.t("common:modules.searchbar.type.general"))) {
             return;
         }
 
