@@ -158,7 +158,9 @@ export default {
 </script>
 
 <template>
-    <div>
+    <div
+        class="panel-body"
+    >
         <div
             v-if="Object.prototype.hasOwnProperty.call(layerConfig, 'snippets') && Array.isArray(layerConfig.snippets)"
         >
