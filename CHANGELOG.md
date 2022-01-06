@@ -43,6 +43,8 @@
     - MasterportalAPI: v1.8.0. This also raised ol to version 6.11.0.
 - The version of node was updated, must be >= 16.13.2. See https://docs.npmjs.com/cli/v8/configuring-npm/package-lock-json#handling-old-lockfiles.
   The version of npm  was also updated, must be >= 8.1.2. The file .npmrc was added to set "engine-strict=true", as a result, the npm version and the node version are mandatory.
+- Migrated mapView to Vue.
+
 ### Deprecated
 
 ### Removed
