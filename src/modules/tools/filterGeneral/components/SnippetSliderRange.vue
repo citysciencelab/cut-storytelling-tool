@@ -96,6 +96,9 @@ export default {
                 this.minVal = this.getValueInRange(newVal, true);
                 this.regulateMinMax("min");
                 this.emitCurrentRule([this.minVal, this.maxVal]);
+                if (newVal === this.minVal) {
+                    this.$refs.inputMinNumber.value = this.minVal;
+                }
             }
         },
         maxVal (newVal) {
@@ -103,6 +106,9 @@ export default {
                 this.maxVal = this.getValueInRange(newVal, true);
                 this.regulateMinMax("max");
                 this.emitCurrentRule([this.minVal, this.maxVal]);
+                if (newVal === this.maxVal) {
+                    this.$refs.inputMaxNumber.value = this.maxVal;
+                }
             }
         },
         disabled (value) {
@@ -110,6 +116,9 @@ export default {
         }
     },
     mounted () {
+        this.$refs.inputMinNumber.value = this.minVal;
+        this.$refs.inputMaxNumber.value = this.maxVal;
+
         this.$nextTick(() => {
             this.emitCurrentRule([this.minVal, this.maxVal]);
         });
@@ -141,17 +150,36 @@ export default {
             return 1;
         },
         /**
-         * Checking if the input field is empty and set the value to the minimum value
+         * Checking if the input field is valid and reset to valid value
          * @param {Event} evt - input event
          * @returns {void}
          */
-        checkEmpty (evt) {
+        checkInput (evt) {
             if (evt?.target?.value === "") {
+                this.getAlertRangeText();
                 if (evt?.target?.id === "slider-input-max") {
-                    this.maxVal = this.maximumValue;
+                    this.$refs.inputMaxNumber.value = this.maxVal;
                 }
                 if (evt?.target?.id === "slider-input-min") {
-                    this.minVal = this.minimumValue;
+                    this.$refs.inputMinNumber.value = this.minVal;
+                }
+            }
+            else {
+                const value = this.getValueInRange(evt?.target?.value, true);
+
+                if (evt?.target?.value !== value.toString()) {
+                    if (evt?.target?.id === "slider-input-max") {
+                        this.$refs.inputMaxNumber.value = this.maxVal;
+                    }
+                    if (evt?.target?.id === "slider-input-min") {
+                        this.$refs.inputMinNumber.value = this.minVal;
+                    }
+                }
+                else {
+                    this.maxVal = this.$refs.inputMaxNumber.value;
+                    this.minVal = this.$refs.inputMinNumber.value;
+                    this.$refs.inputMaxNumber.blur();
+                    this.$refs.inputMinNumber.blur();
                 }
             }
         },
@@ -173,17 +201,16 @@ export default {
             }
 
             if (value < this.minimumValue) {
-                value = this.minimumValue;
                 if (flag) {
-                    this.getAlertRangeText();
+                    this.getAlertRangeText(value);
                 }
+                value = this.minimumValue;
             }
             else if (value > this.maximumValue) {
-                value = this.maximumValue;
-                this.getAlertRangeText();
                 if (flag) {
-                    this.getAlertRangeText();
+                    this.getAlertRangeText(value);
                 }
+                value = this.maximumValue;
             }
 
             return value;
@@ -208,10 +235,12 @@ export default {
         },
         /**
          * Getting slider range error text in alerting box
+         * @param {String} value the input value from input field
          * @returns {void}
          */
-        getAlertRangeText () {
-            store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.outOfRangeErrorMessage", {
+        getAlertRangeText (value) {
+            store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.valueOutOfRangeErrorMessage", {
+                inputValue: value,
                 minValueSlider: this.minimumValue,
                 maxValueSlider: this.maximumValue
             }));
@@ -338,26 +367,30 @@ export default {
                 <label for="slider-input-max" />
                 <input
                     id="slider-input-max"
-                    v-model="maxVal"
+                    ref="inputMaxNumber"
                     class="slider-input-max"
                     type="number"
                     :disabled="disable"
                     :step="step"
                     :min="minimumValue"
                     :max="maximumValue"
-                    @input="checkEmpty"
+                    :placeholder="maxVal"
+                    @blur="checkInput"
+                    @keyup.enter="checkInput"
                 >
                 <label for="slider-input-min" />
                 <input
                     id="slider-input-min"
-                    v-model="minVal"
+                    ref="inputMinNumber"
                     class="slider-input-min"
                     type="number"
                     :disabled="disable"
                     :step="step"
                     :min="minimumValue"
                     :max="maximumValue"
-                    @input="checkEmpty"
+                    :placeholder="minVal"
+                    @blur="checkInput"
+                    @keyup.enter="checkInput"
                 >
             </div>
             <div class="sliderRangeContainer">
@@ -482,6 +515,7 @@ export default {
         background-color: transparent;
         pointer-events: none;
     }
+    input[type=number]:focus,
     input[type=range]:focus {
         outline: none;
     }
@@ -562,6 +596,7 @@ export default {
         text-align: center;
         font-size: 12px;
         -moz-appearance: textfield;
+        outline: none;
         width: 60px;
         float: right;
         margin-bottom: 10px;
@@ -571,10 +606,6 @@ export default {
     input[type="number"]::-webkit-outer-spin-button,
     input[type="number"]::-webkit-inner-spin-button {
         -webkit-appearance: none;
-    }
-    input[type="number"]:invalid,
-    input[type="number"]:out-of-range {
-        border: 2px solid #ff6347;
     }
     span {
         &.min {

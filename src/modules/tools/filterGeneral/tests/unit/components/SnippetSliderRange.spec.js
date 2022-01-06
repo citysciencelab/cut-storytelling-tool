@@ -155,32 +155,50 @@ describe("src/modules/tools/filterGeneral/components/SnippetSliderRange.vue", ()
         });
         const textInput = wrapper.find(".slider-input-max");
 
-        await textInput.setValue("50");
+        textInput.setValue("50");
+        await textInput.trigger("blur");
         expect(wrapper.find(".slider-input-max").element.value).equals("50");
-        await textInput.setValue("500");
-        expect(wrapper.find(".slider-input-max").element.value).equals("100");
 
-        await textInput.setValue("5000");
-        expect(wrapper.find(".slider-input-max").element.value).equals("100");
+        textInput.setValue("500");
+        await textInput.trigger("blur");
+        expect(wrapper.find(".slider-input-max").element.value).equals("50");
 
-        await textInput.setValue("-1000");
-        expect(wrapper.find(".slider-input-max").element.value).equals("0");
+        textInput.setValue("5000");
+        await textInput.trigger("blur");
+        expect(wrapper.find(".slider-input-max").element.value).equals("50");
+
+        textInput.setValue("-1000");
+        await textInput.trigger("blur");
+        expect(wrapper.find(".slider-input-max").element.value).equals("50");
     });
 
     it("should set value from input text min", async () => {
+        wrapper = shallowMount(SnippetSliderRangeComponent, {
+            propsData: {
+                minValue: 0,
+                disabled: false,
+                maxValue: 100
+            },
+            localVue
+        });
+
         const textInput = wrapper.find(".slider-input-min");
 
-        await textInput.setValue("50");
+        textInput.setValue("50");
+        await textInput.trigger("blur");
         expect(wrapper.find(".slider-input-min").element.value).equals("50");
 
-        await textInput.setValue("500");
-        expect(wrapper.find(".slider-input-min").element.value).equals("500");
+        textInput.setValue("500");
+        await textInput.trigger("blur");
+        expect(wrapper.find(".slider-input-min").element.value).equals("50");
 
-        await textInput.setValue("5000");
-        expect(wrapper.find(".slider-input-min").element.value).equals("1000");
+        textInput.setValue("5000");
+        await textInput.trigger("blur");
+        expect(wrapper.find(".slider-input-min").element.value).equals("50");
 
-        await textInput.setValue("-1000");
-        expect(wrapper.find(".slider-input-min").element.value).equals("0");
+        textInput.setValue("-1000");
+        await textInput.trigger("blur");
+        expect(wrapper.find(".slider-input-min").element.value).equals("50");
 
     });
 
