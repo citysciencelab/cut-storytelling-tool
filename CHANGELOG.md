@@ -44,6 +44,9 @@
 ### Deprecated
 
 ### Removed
+- The following NPM packages are removed:
+    - polyfill-object.fromentries
+    - whatwg-fetch
 
 ### Fixed
 
@@ -75,7 +78,7 @@
 - The following NPM packages are updated:
     - @masterportal/mpconfigparser: 1.1.2 to version 1.2.0
     - masterportalAPI: 1.6.1 to version 1.7.0
-    - selenium-webdriver: 4.0.0 to 4.1.0
+    - selenium-webdriver: 4.0.0 version to 4.1.0
 - The elastic search now reads out all attributes of a found layer and takes them into account when processing the layer.
 
 ### Deprecated
@@ -84,9 +87,6 @@
 ### Removed
 - WMS-layer: Hamburgensie for web_atlasde has been removed.
 - AddWMS: HH-specific WMS-URL example has been removed.
-- The following NPM packages are removed:
-    - polyfill-object.fromentries
-    - whatwg-fetch
 
 ### Fixed
 - WfsSearch:
