@@ -3256,7 +3256,7 @@ Routing-tool. Enables user to plan routes between multiple points with multiple 
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|activeRoutingToolOption|no|String|"DIRECTONS"|Which routing tool should be open.|false|
+|activeRoutingToolOption|no|String|"DIRECTIONS"|Which routing tool should be open.|false|
 |routingToolOptions|no|String[]|[ ]|Which routing tool should be enabled. ("DIRECTIONS", "ISOCHRONES")|false|
 |download|no|**[download](#markdown-header-portalconfigmenutoolroutingdownload)**||Downloadoptions|false|
 |geosearch|no|**[geosearch](#markdown-header-portalconfigmenutoolroutinggeosearch)**||Geosearchoptions|false|
@@ -3272,8 +3272,8 @@ Routing-tool. Enables user to plan routes between multiple points with multiple 
     "routing": {
         "name": "translate#common:menu.tools.routing",
         "glyphicon": "glyphicon-road",
-        "activeRoutingToolOption": "DIRECTONS",
-        "routingToolOptions": ["DIRECTONS", "ISOCHRONES"],
+        "activeRoutingToolOption": "DIRECTIONS",
+        "routingToolOptions": ["DIRECTIONS", "ISOCHRONES"],
         "download": {
             "filename": "",
             "format": "GEOJSON"

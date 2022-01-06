@@ -18,6 +18,7 @@
 ### Removed
 
 ### Fixed
+- Fixed spelling of `DIRECTIONS` in documentation for routing tool.
 
 ---
 ## v2.17.0 - 2022-01-05

@@ -3192,7 +3192,7 @@ Routing-Werkzeug. Ermöglicht Nutzern das Planen von Routen zwischen mehreren Pu
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|activeRoutingToolOption|nein|String|"DIRECTONS"|Gibt an welches Tool geöffnet werden soll.|false|
+|activeRoutingToolOption|nein|String|"DIRECTIONS"|Gibt an welches Tool geöffnet werden soll.|false|
 |routingToolOptions|nein|String[]|[ ]|Gibt an welche Tools bereitgestellt werden soll. Möglich sind aktuell "DIRECTIONS" und "ISOCHRONES"|false|
 |download|nein|**[download](#markdown-header-portalconfigmenutoolroutingdownload)**||Downloadoptionen|false|
 |geosearch|nein|**[geosearch](#markdown-header-portalconfigmenutoolroutinggeosearch)**||Geosucheoptionen|false|
@@ -3208,8 +3208,8 @@ Routing-Werkzeug. Ermöglicht Nutzern das Planen von Routen zwischen mehreren Pu
     "routing": {
         "name": "translate#common:menu.tools.routing",
         "glyphicon": "glyphicon-road",
-        "activeRoutingToolOption": "DIRECTONS",
-        "routingToolOptions": ["DIRECTONS", "ISOCHRONES"],
+        "activeRoutingToolOption": "DIRECTIONS",
+        "routingToolOptions": ["DIRECTIONS", "ISOCHRONES"],
         "download": {
             "filename": "",
             "format": "GEOJSON"
