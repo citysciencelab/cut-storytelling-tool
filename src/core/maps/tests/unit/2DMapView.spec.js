@@ -55,7 +55,21 @@ describe("src/core/maps/2DMapView.js", () => {
             view: new View({
                 extent: [510000.0, 5850000.0, 625000.4, 6000000.0],
                 center: [565874, 5934140],
-                zoom: 2
+                zoom: 2,
+                options: [
+                    {resolution: 66.14579761460263, scale: 250000, zoomLevel: 0},
+                    {resolution: 26.458319045841044, scale: 100000, zoomLevel: 1},
+                    {resolution: 15.874991427504629, scale: 60000, zoomLevel: 2},
+                    {resolution: 10.583327618336419, scale: 40000, zoomLevel: 3},
+                    {resolution: 5.2916638091682096, scale: 20000, zoomLevel: 4},
+                    {resolution: 2.6458319045841048, scale: 10000, zoomLevel: 5},
+                    {resolution: 1.3229159522920524, scale: 5000, zoomLevel: 6},
+                    {resolution: 0.6614579761460262, scale: 2500, zoomLevel: 7},
+                    {resolution: 0.2645831904584105, scale: 1000, zoomLevel: 8},
+                    {resolution: 0.13229159522920521, scale: 500, zoomLevel: 9}
+                ],
+                resolution: 15.874991427504629,
+                resolutions: [66.14579761460263, 26.458319045841044, 15.874991427504629, 10.583327618336419, 5.2916638091682096, 2.6458319045841048, 1.3229159522920524, 0.6614579761460262, 0.2645831904584105, 0.13229159522920522]
             })
         });
 
@@ -67,29 +81,24 @@ describe("src/core/maps/2DMapView.js", () => {
 
     it("getCurrentExtent - calculate the extent for the current view state and the passed size", function () {
         expect(mapView.getCurrentExtent()).to.deep.equal([
-            509999.99999999994,
-            5876639.8,
-            625000.3999999999,
-            5991640.2
+            565080.2504286248,
+            5933346.250428624,
+            566667.7495713752,
+            5934933.749571376
         ]);
     });
 
     it("Returns the bounding box with the projection EPSG:4326", () => {
         expect(mapView.getProjectedBBox()).to.deep.equal([
-            -0.37214433613366177,
-            43.73233379125262,
-            10.568026404151366,
-            49.98782015759816
+            5.0078219731923275,
+            46.908179219825406,
+            5.158843288524674,
+            46.99452561170306
         ]);
     });
 
     it("getResoByScale - returns the resolution for the given scale", function () {
-        expect(mapView.getResoByScale(5000, "max")).to.deep.equal([
-            -0.37214433613366177,
-            43.73233379125262,
-            10.568026404151366,
-            49.98782015759816
-        ]);
+        expect(mapView.getResoByScale(5000, "max")).to.deep.equal(1.3229159522920524);
     });
 
     it("resetView - resets the view", function () {
@@ -103,19 +112,19 @@ describe("src/core/maps/2DMapView.js", () => {
         mapView.setBBox([565760.049, 5931747.185, 568940.626, 5935453.891]);
 
         expect(mapView.getCenter()).to.deep.equal([567350.3375, 5933600.538]);
-        expect(Math.round(mapView.getZoom())).equals(12);
+        expect(Math.round(mapView.getZoom())).equals(1);
     });
 
     it("Sets the center with integers", function () {
         mapView.setCenterCoord([1, 2]);
 
-        expect(mapView.getCenter()).to.deep.equal([567500.2, 5907500.2]);
+        expect(mapView.getCenter()).to.deep.equal([510793.74957137526, 5850793.749571376]);
     });
 
     it("Sets the center with strings", function () {
         mapView.setCenterCoord(["1", "2"]);
 
-        expect(mapView.getCenter()).to.deep.equal([567500.2, 5907500.2]);
+        expect(mapView.getCenter()).to.deep.equal([510793.74957137526, 5850793.749571376]);
     });
 
     it("Sets the constrained resolution", function () {
@@ -133,13 +142,13 @@ describe("src/core/maps/2DMapView.js", () => {
     it("Sets the zoom level down", function () {
         mapView.setZoomLevelDown();
 
-        expect(mapView.getZoom()).to.deep.equal(7.088776621377278);
+        expect(mapView.getZoom()).to.deep.equal(1);
     });
 
     it("Sets the zoom level up", function () {
         mapView.setZoomLevelUp();
 
-        expect(mapView.getZoom()).to.deep.equal(8.088776621377278);
+        expect(mapView.getZoom()).to.deep.equal(3);
     });
 
     it("toggles the background to white", function () {
@@ -161,7 +170,7 @@ describe("src/core/maps/2DMapView.js", () => {
             mapView.zoomToExtent([565760.049, 5931747.185, 568940.626, 5935453.891], {duration: 0});
 
             expect(mapView.getCenter()).to.deep.equal([567350.3375, 5933600.538]);
-            expect(Math.round(mapView.getZoom())).equals(15);
+            expect(Math.round(mapView.getZoom())).equals(4);
         });
     });
 
@@ -194,7 +203,7 @@ describe("src/core/maps/2DMapView.js", () => {
             mapView.zoomToFilteredFeatures(ids, "Donald", zoomOptions);
 
             expect(mapView.getCenter()).to.deep.equal([565718.355, 5927181.800]);
-            expect(Math.round(mapView.getZoom())).equals(13);
+            expect(Math.round(mapView.getZoom())).equals(2);
         });
 
         it("Zoom to extend of the given featureIds of a groupLayer", () => {
@@ -209,7 +218,7 @@ describe("src/core/maps/2DMapView.js", () => {
             mapView.zoomToFilteredFeatures(ids, "Darkwing", zoomOptions);
 
             expect(mapView.getCenter()).to.deep.equal([565718.355, 5927181.800]);
-            expect(Math.round(mapView.getZoom())).equals(13);
+            expect(Math.round(mapView.getZoom())).equals(2);
         });
     });
 
@@ -224,7 +233,7 @@ describe("src/core/maps/2DMapView.js", () => {
             mapView.zoomToProjExtent(data);
 
             expect(mapView.getCenter()).to.deep.equal([624280.870335713, 5999280.470335713]);
-            expect(Math.round(mapView.getZoom())).equals(13);
+            expect(Math.round(mapView.getZoom())).equals(2);
         });
     });
 
