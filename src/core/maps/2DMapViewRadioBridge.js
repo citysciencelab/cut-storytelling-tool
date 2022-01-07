@@ -8,7 +8,7 @@ channel.reply({
         return mapCollection.getMapView("ol", "2D").getProjection();
     },
     "getOptions": function () {
-        return findWhereJs(mapCollection.getMapView("ol", "2D").options_.options, {resolution: mapCollection.getMapView("ol", "2D").getConstrainedResolution(mapCollection.getMapView("ol", "2D").getResolution())});
+        return findWhereJs(mapCollection.getMapView("ol", "2D").options_.options, mapCollection.getMapView("ol", "2D").getConstrainedResolution(mapCollection.getMapView("ol", "2D").getResolution()));
     },
     "getCenter": function () {
         return mapCollection.getMapView("ol", "2D").getCenter();
