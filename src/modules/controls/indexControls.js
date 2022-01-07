@@ -9,7 +9,7 @@ import FullScreen from "./fullScreen/components/FullScreen.vue";
 import OrientationItem from "./orientation/components/OrientationItem.vue";
 import OverviewMap from "./overviewMap/components/OverviewMap.vue";
 import TotalView from "./totalView/components/TotalView.vue";
-import ZoomInAndOut from "./zoom/components/zoomInAndOut.vue";
+import ZoomInAndOut from "./zoom/components/ZoomInAndOut.vue";
 import FreezeScreen from "./freeze/components/FreezeScreen.vue";
 
 /**
