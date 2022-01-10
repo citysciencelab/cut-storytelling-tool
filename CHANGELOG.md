@@ -61,7 +61,7 @@
         - "bootstrap-sass"
 - Extended CSW processing for download links in layerInformation by CSW 2.0.2 standard.
 - The tool "featureLister" has been extended and now also highlights lines and polygons on mouse-over over the feature name.
-- Added the possibility to use the High Resolution Plot Service 
+- Added the possibility to use the High Resolution Plot Service
 
 ### Changed
 - Migrated the map from Backbone.js to Vue.js environment.
@@ -81,7 +81,7 @@
     - masterportalAPI: 1.6.1 to version 1.7.0
     - selenium-webdriver: 4.0.0 version to 4.1.0
 - The elastic search now reads out all attributes of a found layer and takes them into account when processing the layer.
-- CoordToolkit: 
+- CoordToolkit:
     - Added Buttons to copy one coordinate or both of them with a configurable delimiter. The visibility of the buttons is also configurable.
     - Removed copy of coordinates if click in input-field.
 
