@@ -207,10 +207,16 @@ export default {
      * @param {Object} param.state the state
      * @param {Object} param.commit the commit
      * @param {Object} param.dispatch the dispatch
-     * @param {Object} printJob the content for the printRequest
+     * @param {Object} printContent the content for the printRequest
      * @returns {void}
      */
-    createPrintJob: async function ({state, dispatch, commit}, printJob) {
+    createPrintJob: async function ({state, dispatch, commit}, printContent) {
+        const printJob = printContent,
+            printId = printJob.printAppId || state.printAppId,
+            printFormat = printJob.format || state.currentFormat;
+        let url = "",
+            response = "";
+
         commit("setPrintFileReady", false);
         if (state.serviceUrl === "") {
             let serviceUrl;
@@ -224,10 +230,8 @@ export default {
 
             commit("setServiceUrl", serviceUrl);
         }
-        const printId = printJob.printAppId || state.printAppId,
-            printFormat = printJob.format || state.currentFormat,
-            url = state.printService === "plotservice" ? state.serviceUrl + "/create.json" : state.serviceUrl + printId + "/report." + printFormat;
-        let response = "";
+
+        url = state.printService === "plotservice" ? state.serviceUrl + "/create.json" : state.serviceUrl + printId + "/report." + printFormat;
 
         commit("setProgressWidth", "width: 50%");
         if (typeof printJob.getResponse === "function") {
