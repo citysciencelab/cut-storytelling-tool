@@ -51,6 +51,11 @@
 ### Fixed
 
 ---
+## Unreleased - in development
+### Changed
+- The MasterportalAPI version is updated to v1.7.1. This fixes reading of WFS-Layer, the WFS version is taken into account when generating the WFS format.
+
+---
 ## v2.17.0 - 2022-01-05
 ### Added
 - Added style.json parameter "rotation" to wfs features with iconPointStyle, if the parameter is not given it will fall back to standard alignment.
