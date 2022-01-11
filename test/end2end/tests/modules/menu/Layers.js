@@ -1,6 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    // eslint-disable-next-line
+    // Comment code for first end2end test, because node-fetch doesn't work on saucelabs!
     // fetch = (...args) => import("node-fetch").then(({default: fetch}) => fetch(...args)),
     masterConfigJson = require("../../../../../portal/master/config.json"),
     // masterConfigJs = require("../../../../../portal/master/config.js"),
