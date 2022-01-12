@@ -20,6 +20,7 @@ export default function VectorBaseLayer (attrs) {
 }
 // Link prototypes and add prototype methods, means VectorBaseLayer uses all methods and properties of Layer
 VectorBaseLayer.prototype = Object.create(Layer.prototype);
+
 /**
  * creates the layer
  * @param {Object} attr the attributes for the layer
@@ -29,6 +30,7 @@ VectorBaseLayer.prototype.createLayer = function (attr) {
     this.layer = vectorBase.createLayer(attr);
     this.updateSource();
 };
+
 /**
  * Updates the layers source by calling refresh at source.
  * @returns {void}
@@ -39,7 +41,6 @@ VectorBaseLayer.prototype.updateSource = function () {
 
 /**
  * Creates the legend
- * @fires VectorStyle#RadioRequestStyleListReturnModelById
  * @returns {void}
  */
 VectorBaseLayer.prototype.createLegend = function () {
