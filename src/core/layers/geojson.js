@@ -6,6 +6,7 @@ import * as bridge from "./RadioBridge.js";
 import store from "../../app-store";
 import mapCollection from "../dataStorage/mapCollection";
 import LoaderOverlay from "../../utils/loaderOverlay";
+
 /**
  * Creates a layer of type GeoJSON.
  * @param {Object} attrs  attributes of the layer
@@ -32,42 +33,12 @@ export default function GeoJSONLayer (attrs) {
         this.set("isClustered", true);
     }
 
-    // ???
-
     this.createLegend(attrs);
 }
+
 // Link prototypes and add prototype methods, means GeoJSONLayer uses all methods and properties of Layer
 GeoJSONLayer.prototype = Object.create(Layer.prototype);
 
-/**
- * Triggert by Layer to create a layerSource respectively a clusterLayerSource
- * @returns {void}
- */
-/* GeoJSONLayer.prototype.createLayerSource = function () {
-    this.layer.setSource(new VectorSource());
-    if (this.has("clusterDistance")) {
-        this.createClusterLayerSource();
-    }
-};
- */
-/**
- * Triggert by createLayerSource to create a clusterLayerSource
- * @returns {void}
- */
-/* GeoJSONLayer.prototype.createClusterLayerSource = function () {
-    this.setClusterLayerSource(new Cluster({
-        source: this.get("layerSource"),
-        distance: this.get("clusterDistance"),
-        geometryFunction: function (feature) {
-            // do not cluster invisible features; can't rely on style since it will be null initially
-            if (feature.get("hideInClustering") === true) {
-                return null;
-            }
-            return feature.getGeometry();
-        }
-    }));
-};
- */
 /**
  * Triggert by Layer to create a ol/layer/Vector
  * @param {Object} attrs  attributes of the layer
@@ -83,6 +54,7 @@ GeoJSONLayer.prototype.createLayer = function (attrs) {
         layerParams = {
             name: attrs.name,
             typ: attrs.typ,
+            subTyp: attrs.subTyp,
             gfiAttributes: attrs.gfiAttributes,
             gfiTheme: attrs.gfiTheme,
             altitudeMode: attrs.altitudeMode,
@@ -128,127 +100,6 @@ GeoJSONLayer.prototype.createLayer = function (attrs) {
 };
 
 /**
- * Setter for clusterLayerSource
- * @param {ol.source.vector} value clusterLayerSource
- * @returns {void}
- */
-GeoJSONLayer.prototype.setClusterLayerSource = function (value) {
-    this.set("clusterLayerSource", value);
-};
-
-/**
- * Sends GET request with or without wfs parameter according to typ
- * @param  {boolean} [showLoader=false] shows loader div
- * @param {Object} attrs  attributes of the layer
- * @returns {void}
- */
-GeoJSONLayer.prototype.updateSource = function (showLoader, attrs) {
-    /**
-     * @deprecated in the next major-release!
-     * useProxy
-     * getProxyUrl()
-     */
-    const url = attrs.useProxy ? getProxyUrl(attrs.url) : attrs.url,
-        typ = attrs.typ,
-        xhr = new XMLHttpRequest(),
-        that = this;
-    let paramUrl;
-
-    if (typ === "WFS") {
-        paramUrl = url + "?REQUEST=GetFeature&SERVICE=WFS&TYPENAME=" + attrs.featureType + "&OUTPUTFORMAT=application/geo%2Bjson&VERSION=" + attrs.version;
-    }
-    else if (typ === "GeoJSON") {
-        paramUrl = url;
-    }
-
-    if (showLoader) {
-        Radio.trigger("Util", "showLoader");
-    }
-
-    xhr.open("GET", paramUrl, true);
-    xhr.timeout = 10000;
-    xhr.onload = function (event) {
-        that.handleResponse(event.currentTarget.responseText, xhr.status, showLoader, attrs);
-        that.expandFeaturesBySubTyp(that.get("subTyp"));
-    };
-    xhr.ontimeout = function () {
-        that.handleResponse({}, "timeout", showLoader, attrs);
-    };
-    xhr.onabort = function () {
-        that.handleResponse({}, "abort", showLoader, attrs);
-    };
-    xhr.send();
-};
-
-/**
- * Handles the xhr response
- * @fires MapView#RadioRequestGetProjection
- * @fires Alerting#RadioTriggerAlertAlert
- * @fires Util#RadioTriggerUtilHideLoader
- * @param {string} responseText response as GeoJson
- * @param {integer|string} status status of xhr-request
- * @param {boolean} [showLoader=false] Flag to show Loader
- * @param {Object} attrs  attributes of the layer
- * @returns {void}
- */
-GeoJSONLayer.prototype.handleResponse = function (responseText, status, showLoader, attrs) {
-    if (status === 200) {
-        this.handleData(responseText, attrs);
-    }
-    else {
-        Radio.trigger("Alert", "alert", "Datenabfrage fehlgeschlagen. (Technische Details: " + status + ")");
-    }
-
-    if (showLoader) {
-        Radio.trigger("Util", "hideLoader");
-    }
-};
-
-/**
- * Takes the response, parses the geojson and creates ol.features.
- * @param   {(string | object)} data   response as GeoJson
- * @param {Object} attrs  attributes of the layer
- * @returns {void}
- */
-GeoJSONLayer.prototype.handleData = function (data, attrs) {
-    const mapCrs = Radio.request("MapView", "getProjection"),
-        jsonCrs = this.getJsonProjection(data),
-        newFeatures = [];
-
-    let features = this.parseDataToFeatures(data, mapCrs, jsonCrs);
-
-    if (!features) {
-        return;
-    }
-
-    this.addId(features);
-    features = this.getFeaturesIntersectsGeometry(attrs.bboxGeometry, features);
-    this.get("layerSource").clear(true);
-    this.get("layerSource").addFeatures(features);
-    this.get("layer").setStyle(this.get("styleFunction"));
-
-    // für it-gbm
-    if (!this.has("autoRefresh")) {
-        features.forEach(function (feature) {
-            const geometry = feature.getGeometry();
-
-            if (geometry) {
-                feature.set("extent", geometry.getExtent());
-                newFeatures.push(Radio.request("Util", "omit", feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
-            }
-        });
-        Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.get("id")});
-    }
-    this.prepareFeaturesFor3D(features);
-    this.featuresLoaded(features);
-    if (features) {
-        this.getStyleFunction(attrs);
-        this.get("layer").setStyle(this.get("style"));
-    }
-};
-
-
-/**
  * Sets Style for layer.
  * @param {Object} attrs  params of the raw layer
  * @returns {void}
@@ -272,30 +123,6 @@ GeoJSONLayer.prototype.getStyleFunction = function (attrs) {
     }
 
     return style;
-};
-
-/**
- * Sets Style for layer.
- * @param {Object} attrs  attributes of the layer
- * @returns {void}
- */
-GeoJSONLayer.prototype.styling = function (attrs) {
-    const styleId = attrs.styleId,
-        styleModel = bridge.getStyleModelById(styleId);
-    let isClusterFeature = false;
-
-    if (styleModel !== undefined) {
-        this.setStyle(function (feature) {
-            const feat = feature !== undefined ? feature : this;
-
-            isClusterFeature = typeof feat.get("features") === "function" || typeof feat.get("features") === "object" && Boolean(feat.get("features"));
-
-            return styleModel.createStyle(feat, isClusterFeature);
-        });
-    }
-    else {
-        console.error(i18next.t("common:modules.core.modelList.layer.wrongStyleId", {styleId}));
-    }
 };
 
 /**
@@ -330,36 +157,6 @@ GeoJSONLayer.prototype.getFeaturesIntersectsGeometry = function (geometries, fea
     }
 
     return features;
-};
-
-/**
- * Takes the data string to extract the crs definition. According to the GeoJSON Specification (RFC 7946) the geometry is expected to be in EPSG:4326.
- * For downward compatibility a crs tag can be used.
- * @see https://tools.ietf.org/html/rfc7946
- * @see https://geojson.org/geojson-spec#named-crs
- * @param   {(string | object)} data   response as GeoJson
- * @returns {string} epsg definition
- */
-GeoJSONLayer.prototype.getJsonProjection = function (data) {
-    if (typeof data === "object") {
-        if (data.crs !== undefined) {
-            const regExp = /\d+/;
-
-            return "EPSG:" + data.crs.properties.href.match(regExp)[0];
-        }
-    }
-    else {
-        // using indexOf method to increase performance
-        const dataString = data.replace(/\s/g, ""),
-            startIndex = dataString.indexOf("\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"");
-
-        if (startIndex !== -1) {
-            const endIndex = dataString.indexOf("\"", startIndex + 43);
-
-            return dataString.substring(startIndex + 43, endIndex);
-        }
-    }
-    return "EPSG:4326";
 };
 
 /**
@@ -466,19 +263,6 @@ GeoJSONLayer.prototype.setOpenSenseMapSensorValues = function (feature, response
         feature.set(name + "_createdAt", response.createdAt);
         feature.set(name + "_sensorType", type);
     }
-};
-
-/**
- * Ensures all given features have an id
- * @param {ol/feature[]} features features
- * @returns {void}
- */
-GeoJSONLayer.prototype.addId = function (features) {
-    features.forEach(function (feature) {
-        const id = feature.get("id") || Radio.request("Util", "uniqueId");
-
-        feature.setId(id);
-    });
 };
 
 /**
