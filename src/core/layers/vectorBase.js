@@ -51,10 +51,7 @@ VectorBaseLayer.prototype.createLegend = function () {
      * @deprecated in 3.0.0
      */
     if (this.get("legendURL")) {
-        if (this.get("legendURL") === "") {
-            legend = false;
-        }
-        else if (this.get("legendURL") === "ignore") {
+        if (this.get("legendURL") === "" || this.get("legendURL") === "ignore") {
             legend = false;
         }
         else {
