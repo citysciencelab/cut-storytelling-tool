@@ -10,12 +10,9 @@ import defaults from "masterportalAPI/src/defaults";
 
 
 View.prototype.initStore = function () {
-    let params;
+    const params = findWhereJs(mapCollection.getMapView("ol", "2D").options_.options, mapCollection.getMapView("ol", "2D").getConstrainedResolution(mapCollection.getMapView("ol", "2D").getResolution()));
 
-    if (this.getConstrainedResolution(this.getResolution()) === this.options_.resolution) {
-        params = this.options_.resolution;
-    }
-    // triggert model.js die Funktion checkForScale modules\core\modelList\layer\model.js
+    // triggers the function checkForScale modules\core\modelList\layer\model.js
     Radio.trigger("MapView", "changedOptions", params);
     store.commit("Map/setScale", params?.scale);
 };
