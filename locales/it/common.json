@@ -444,8 +444,8 @@
                 "searchBtn": "Cerca",
                 "coordSystemField": "Sistema di riferimento",
                 "hdms": {
-                    "eastingLabel": "Longitudine",
-                    "northingLabel": "Latitudine"
+                    "eastingLabel": "Latitudine",
+                    "northingLabel": "Longitudine"
                 },
                 "cartesian": {
                     "eastingLabel": "Longitudine",

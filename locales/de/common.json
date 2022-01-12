@@ -551,8 +551,8 @@
                 "noHeightBuilding": "Gebäudefläche, keine Höhen vorhanden",
                 "heightLayerInfo": "Grundlage der Höheninformation ist das \"{{layer}}\" mit Höhenangaben in Metern über Normalhöhennull (NHN).",
                 "hdms": {
-                    "eastingLabel": "Länge",
-                    "northingLabel": "Breite"
+                    "eastingLabel": "Breite",
+                    "northingLabel": "Länge"
                 },
                 "cartesian": {
                     "eastingLabel": "Rechtswert",

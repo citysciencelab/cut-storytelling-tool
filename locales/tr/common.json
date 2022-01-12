@@ -470,8 +470,8 @@
                 "noHeightBuilding": "İnşaat alanı, yükseklik yok Gebäudefläche, keine Höhen vorhanden",
                 "heightLayerInfo": "Yükseklik bilgilerinin temeli, deniz seviyesinin üzerinde (NHN) ve metre cinsinden yükseklik bilgisine sahip olan \"{{layer}}\" ya dayanmaktadır.",
                 "hdms": {
-                    "eastingLabel": "Enlem",
-                    "northingLabel": "Boylam"
+                    "eastingLabel": "Boylam",
+                    "northingLabel": "Enlem"
                 },
                 "cartesian": {
                     "eastingLabel": "X-Koordinate",

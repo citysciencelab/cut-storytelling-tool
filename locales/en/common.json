@@ -551,8 +551,8 @@
                 "noHeightBuilding": "Building area, no heights available",
                 "heightLayerInfo": "The basis of the elevation information is \"{{layer}}\" with elevations in meters above sea level (NHN).",
                 "hdms": {
-                    "eastingLabel": "Longitude",
-                    "northingLabel": "Latitude"
+                    "eastingLabel": "Latitude",
+                    "northingLabel": "Longitude"
                 },
                 "cartesian": {
                     "eastingLabel": "Easting",

@@ -49,6 +49,7 @@
 
 ### Fixed
 - Fixed spelling of `DIRECTIONS` in documentation for routing tool.
+- Tool CoordToolkit: Labeling of longitude and latitude corrected if long/lat is selected as projection system.
 
 ---
 ## v2.17.1 - 2022-01-011
