@@ -20,5 +20,7 @@ export default {
     resizableWindow: true,
     deactivateGFI: false,
     configs: true,
+    layerSelectorVisible: true,
+    multiLayerSelector: true,
     layers: []
 };

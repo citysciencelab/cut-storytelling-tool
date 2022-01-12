@@ -1827,15 +1827,19 @@ Print module, configurable for 2 print services: *High Resolution PlotService* a
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|mapfishServiceId|yes|String||Print service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
+|mapfishServiceId|yes|String||_Deprecated in 3.0.0._ Print service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
+|printServiceId|yes|String||Print service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
+|printService|no|String|"mapfish"|Flag determining which print service is in use. `plotservice` activates the *High Resolution PlotService*, if the parameter is not set, *Mapfish 3* is used.|false|
+|printAppCapabilities|no|String|"capabilities.json"|path for the configuration of the print service|false|
 |currentLayoutName|no|String|""|Defines which layout is the default layout on opening the print tool, e.g. "A4 portrait format". If the given layout is not available oder none is provided, the first layout mentioned in the Capabilities is used.|false|
 |printAppId|no|String|"master"|Print service print app id. This tells the print service which template(s) to use.|false|
 |filename|no|String|"report"|Print result file name.|false|
 |title|no|String|"PrintResult"|Document title appearing as header.|false|
-|version|no|String||Flag determining which print service is in use. `"HighResolutionPlotService"` activates the *High Resolution PlotService*, if the parameter is not set, *Mapfish 3* is used.|false|
 |isLegendSelected|no|Boolean|false|Defines whether a checkbox to print the legend is offered. Only used for print services supporting legend printing (Mapfish Print 3).|false|
 |legendText|no|String|"Mit Legende"|Descriptive text for the legend print checkbox.|false|
 |dpiForPdf|no|Number|200|DPI resolution for the map in the PDF file.|false|
+|capabilitiesFilter|no|**[capabilitiesFilter](#markdown-header-portalconfigmenutoolprintcapabilitiesfilter)**||Filter for the response of the configured print service. Possible keys are layouts and outputFormats.|false|
+|defaultCapabilitiesFilter|no|**[capabilitiesFilter](#markdown-header-portalconfigmenutoolprintcapabilitiesfilter)**||If there is no key set in capabilitiesFilter, the key from this object is taken.|false|
 |useProxy|no|Boolean|false|_Deprecated in the next major release. [GDI-DE](https://www.gdi-de.org/en) recommends setting CORS headers on the required services instead of using proxies._ Defines whether a service URL should be requested via proxy. For this, dots in the URL are replaced with underscores.|false|
 
 **High Resolution PlotService example configuration**
@@ -1848,6 +1852,8 @@ Print module, configurable for 2 print services: *High Resolution PlotService* a
         "mapfishServiceId": "123456",
         "filename": "Print",
         "title": "My Title",
+        "printService": "plotservice",
+        "printAppCapabilities": "info.json",
         "version" : "HighResolutionPlotService"
     }
 }
@@ -1864,6 +1870,24 @@ Print module, configurable for 2 print services: *High Resolution PlotService* a
         "printAppId": "mrh",
         "filename": "Print",
         "title": "Mein Titel"
+    }
+}
+```
+
+### Portalconfig.menu.tool.print.capabilitiesFilter
+List of layouts and formats that filters the response from the print service in the respective category.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|layouts|no|String[]||Array of layouts should shown in the UI.|false|
+|outputFormats|no|String[]||Array of formats should shown in the UI.|false|
+
+**Beispiel capabilitiesFilter:**
+```json
+{
+    "capabilitiesFilter": {
+        "layouts": ["A4 Hochformat", "A3 Hochformat"],
+        "outputFormats": ["PDF"]
     }
 }
 ```
@@ -3230,6 +3254,9 @@ Coordinates tool. To display the height above sea level in addition to the 2 dim
 |heightValueWater|no|String||Coordinate query: the value in the element defined under "heightElementName" supplied by the WMS for an unmeasured height in the water area, it will display the internationalized text "Water surface, no heights available" under the key "common:modules.tools.coordToolkit.noHeightWater" in the interface. If this attribute is not specified, then the text provided by the WMS will be displayed.|false|
 |heightValueBuilding|no|String||Coordinate query: the value in the element defined under "heightElementName" supplied by the WMS for a non-measured height in the building area, it will display the internationalized text "Building area, no heights available" under the key "common:modules.tools.coordToolkit.noHeightBuilding" in the interface. If this attribute is not specified, then the text provided by the WMS will be displayed.|false|
 |zoomLevel|no|Number|7|Coordinate search: Specifies the zoom level to which you want to zoom.|false|
+|showCopyButtons|no|Boolean|true|Switch to show or hide the buttons for copying the coordinates.|false|
+|delimiter|no|String|"Pipe-Symbol"|Delimiter of the coordinates when copying the coordinate pair|false|
+
 
 
 **Example**
@@ -3243,6 +3270,8 @@ Coordinates tool. To display the height above sea level in addition to the 2 dim
             "heightElementName": "value_0",
             "heightValueWater": "-20",
             "heightValueBuilding": "200",
+            "delimiter": "-",
+            "showCopyButtons": true
           }
 ```
 

@@ -140,10 +140,11 @@ export default {
      * sets the metadata for print
      * @param {Object} param.rootGetters the rootGetters
      * @param {Object} param.dispatch the dispatch
-     * @param {Object} cswObj the object with all the info
+     * @param {Object} cswObject the object with all the info
      * @returns {void}
      */
-    getMetaDataForPrint: async function ({rootGetters, dispatch}, cswObj) {
+    getMetaDataForPrint: async function ({rootGetters, dispatch}, cswObject) {
+        const cswObj = cswObject;
         let metadata;
 
         if (cswObj.layer.get("datasets") && Array.isArray(cswObj.layer.get("datasets")) && cswObj.layer.get("datasets")[0] !== null && typeof cswObj.layer.get("datasets")[0] === "object") {
@@ -206,12 +207,18 @@ export default {
      * @param {Object} param.state the state
      * @param {Object} param.commit the commit
      * @param {Object} param.dispatch the dispatch
-     * @param {Object} printJob the content for the printRequest
+     * @param {Object} printContent the content for the printRequest
      * @returns {void}
      */
-    createPrintJob: async function ({state, dispatch, commit}, printJob) {
+    createPrintJob: async function ({state, dispatch, commit}, printContent) {
+        const printJob = printContent,
+            printId = printJob.printAppId || state.printAppId,
+            printFormat = printJob.format || state.currentFormat;
+        let url = "",
+            response = "";
+
         commit("setPrintFileReady", false);
-        if (state.mapfishServiceUrl === "") {
+        if (state.serviceUrl === "") {
             let serviceUrl;
 
             if (state.mapfishServiceId !== "") {
@@ -221,20 +228,61 @@ export default {
                 serviceUrl = Radio.request("RestReader", "getServiceById", "mapfish").get("url");
             }
 
-            commit("setMapfishServiceUrl", serviceUrl);
+            commit("setServiceUrl", serviceUrl);
         }
-        const printId = printJob.printAppId || state.printAppId,
-            printFormat = printJob.format || state.currentFormat,
-            url = state.mapfishServiceUrl + printId + "/report." + printFormat;
-        let response = "";
+
+        url = state.printService === "plotservice" ? state.serviceUrl + "/create.json" : state.serviceUrl + printId + "/report." + printFormat;
 
         commit("setProgressWidth", "width: 50%");
         if (typeof printJob.getResponse === "function") {
+            if (state.printService === "plotservice") {
+                printJob.payload = await dispatch("migratePayload", printJob.payload);
+            }
             response = await printJob.getResponse(url, printJob.payload);
         }
 
-        response.data.index = printJob.index;
-        dispatch("waitForPrintJob", response.data);
+        if ("getURL" in response.data) {
+            await commit("setPlotserviceIndex", state.plotserviceIndex + 1);
+            dispatch("downloadFile", {
+                "fileUrl": response.data.getURL,
+                "index": state.plotserviceIndex,
+                "filename": state.filename + "." + state.outputFormat
+            });
+        }
+        else {
+            response.data.index = printJob.index;
+            dispatch("waitForPrintJob", response.data);
+        }
+    },
+
+    /**
+     * migrates the payload intended for mapfish to the format High Resolution Plot Service needs
+     * @param {Object} param.state the state
+     * @param {Object} payload object to migrate
+     * @returns {Object} object for High Resolution Plot Service to start the printing
+     */
+    migratePayload: function ({state}, payload) {
+        const plotservicePayload = {},
+            decodePayload = JSON.parse(decodeURIComponent(payload.replace(/imageFormat/g, "format")));
+
+        plotservicePayload.layout = decodePayload.layout;
+        plotservicePayload.srs = decodePayload.attributes.map.projection;
+        plotservicePayload.layers = decodePayload.attributes.map.layers;
+        plotservicePayload.layers.forEach((key) => {
+            key.styles = [""];
+        });
+        plotservicePayload.pages = [{
+            center: decodePayload.attributes.map.center,
+            scale: String(decodePayload.attributes.map.scale),
+            scaleText: "Ca. 1 : " + decodePayload.attributes.map.scale,
+            geodetic: true,
+            dpi: String(decodePayload.attributes.map.dpi),
+            mapTitle: decodePayload.attributes.title
+        }];
+        plotservicePayload.outputFilename = state.filename;
+        plotservicePayload.outputFormat = state.outputFormat;
+
+        return JSON.stringify(plotservicePayload);
     },
 
     /**
@@ -248,7 +296,7 @@ export default {
      */
     waitForPrintJob: async function ({state, dispatch, commit}, response) {
         const printAppId = state.printAppId,
-            url = state.mapfishServiceUrl + printAppId + "/status/" + response.ref + ".json",
+            url = state.serviceUrl + printAppId + "/status/" + response.ref + ".json",
             serviceRequest = {
                 "index": response.index,
                 "serviceUrl": url,
@@ -278,7 +326,7 @@ export default {
             }
             const fileSpecs = {
                 "index": response?.index,
-                "fileUrl": state.mapfishServiceUrl + state.printAppId + "/report/" + subUrl,
+                "fileUrl": state.serviceUrl + state.printAppId + "/report/" + subUrl,
                 "filename": state.filename
             };
 
@@ -296,7 +344,7 @@ export default {
                 else if (response.downloadURL.includes("mapfish_print/")) {
                     subUrl = response.downloadURL.replace("/mapfish_print/print/report/", "");
                 }
-                const url = state.mapfishServiceUrl + state.printAppId + "/status/" + subUrl + ".json",
+                const url = state.serviceUrl + state.printAppId + "/status/" + subUrl + ".json",
                     serviceRequest = {
                         "index": response.index,
                         "serviceUrl": url,

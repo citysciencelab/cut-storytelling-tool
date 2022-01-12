@@ -1,13 +1,13 @@
 <script>
 
-import Modal from "../../../share-components/modals/components/Modal.vue";
+import ModalItem from "../../../share-components/modals/components/ModalItem.vue";
 import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "ConfirmAction",
 
     components: {
-        Modal
+        ModalItem
     },
 
     computed: {
@@ -41,7 +41,7 @@ export default {
 
 <template>
     <div>
-        <Modal
+        <ModalItem
             :show-modal="showTheModal"
             :force-click-to-close="currentConfirmAction.forceClickToClose"
             @modalHid="onModalHid"
@@ -73,7 +73,7 @@ export default {
                     </button>
                 </div>
             </div>
-        </Modal>
+        </ModalItem>
     </div>
 </template>
 

@@ -86,6 +86,9 @@ export default {
         value (newVal) {
             if (newVal) {
                 this.value = this.getValueInRange(newVal, true);
+                if (newVal === this.value) {
+                    this.$refs.inputNumber.value = this.value;
+                }
             }
         },
         disabled (value) {
@@ -100,6 +103,9 @@ export default {
         this.setMaxOnly(this.minimumValue, this.maximumValue);
         this.setMinMaxValue(this.minimumValue, this.maximumValue);
         this.disable = false;
+    },
+    mounted () {
+        this.$refs.inputNumber.value = this.value;
     },
     methods: {
         /**
@@ -117,13 +123,25 @@ export default {
         },
 
         /**
-         * Checking if the input field is empty and set the value to the minimum value
+         * Checking if the input field is valid and reset to valid value
          * @param {Event} evt - input event
          * @returns {void}
          */
-        checkEmpty (evt) {
+        checkInput (evt) {
             if (evt?.target?.value === "") {
-                this.value = this.minimumValue;
+                this.getAlertRangeText();
+                this.$refs.inputNumber.value = this.value;
+            }
+            else {
+                const value = this.getValueInRange(evt?.target?.value, true);
+
+                if (evt?.target?.value !== value.toString()) {
+                    this.$refs.inputNumber.value = this.value;
+                }
+                else {
+                    this.value = this.$refs.inputNumber.value;
+                    this.$refs.inputNumber.blur();
+                }
             }
         },
 
@@ -145,17 +163,16 @@ export default {
             }
 
             if (value < this.minimumValue) {
-                value = this.minimumValue;
                 if (flag) {
-                    this.getAlertRangeText();
+                    this.getAlertRangeText(value);
                 }
+                value = this.minimumValue;
             }
             else if (value > this.maximumValue) {
-                value = this.maximumValue;
-                this.getAlertRangeText();
                 if (flag) {
-                    this.getAlertRangeText();
+                    this.getAlertRangeText(value);
                 }
+                value = this.maximumValue;
             }
 
             return value;
@@ -163,10 +180,12 @@ export default {
 
         /**
          * Getting slider range error text in alerting box
+         * @param {String} value the input value from input field
          * @returns {void}
          */
-        getAlertRangeText () {
-            store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.outOfRangeErrorMessage", {
+        getAlertRangeText (value) {
+            store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.valueOutOfRangeErrorMessage", {
+                inputValue: value,
                 minValueSlider: this.minimumValue,
                 maxValueSlider: this.maximumValue
             }));
@@ -264,19 +283,21 @@ export default {
         </div>
         <label
             class="left"
-            for="slider-single"
+            for="input-single"
         >{{ label }}</label>
         <input
-            v-model="value"
+            ref="inputNumber"
             class="input-single"
             type="number"
             :name="label"
             :disabled="disable"
-            @input="checkEmpty"
+            :placeholder="value"
+            @blur="checkInput"
+            @keyup.enter="checkInput"
         >
         <div class="slider-input-container">
             <input
-                id="slider-single"
+                id="input-single"
                 v-model="value"
                 class="slider-single"
                 type="range"
@@ -355,6 +376,7 @@ export default {
         padding-top: 5px;
         margin-top: 2px;
     }
+
     /* Chrome, Safari, Edge, Opera */
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {

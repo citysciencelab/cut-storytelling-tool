@@ -124,7 +124,6 @@ describe("src/modules/tools/filterGeneral/components/SnippetSlider.vue", () => {
         expect(wrapper.vm.getValueInRange(1011, false)).equals(1000);
         expect(wrapper.vm.getValueInRange(1000.5, false)).equals(1000);
 
-
         wrapper = shallowMount(SnippetSliderComponent, {
             propsData: {
                 minValue: 20,
@@ -139,38 +138,59 @@ describe("src/modules/tools/filterGeneral/components/SnippetSlider.vue", () => {
     });
 
     it("should set value from input text", async () => {
+        wrapper = shallowMount(SnippetSliderComponent, {
+            propsData: {
+                minValue: 20,
+                maxValue: 100
+            },
+            localVue
+        });
+
         const textInput = wrapper.find(".input-single");
 
-        await textInput.setValue("50");
+        textInput.setValue("50");
+        await textInput.trigger("blur");
         expect(wrapper.find(".slider-single").element.value).equals("50");
 
-        await textInput.setValue("500");
-        expect(wrapper.find(".slider-single").element.value).equals("500");
+        textInput.setValue("500");
+        await textInput.trigger("blur");
+        expect(wrapper.find(".slider-single").element.value).equals("50");
 
-        await textInput.setValue("5000");
-        expect(wrapper.find(".slider-single").element.value).equals("1000");
+        textInput.setValue("5000");
+        await textInput.trigger("blur");
+        expect(wrapper.find(".slider-single").element.value).equals("50");
 
-        await textInput.setValue("-1000");
-        expect(wrapper.find(".slider-single").element.value).equals("0");
+        textInput.setValue("-1000");
+        await textInput.trigger("blur");
+        expect(wrapper.find(".slider-single").element.value).equals("50");
 
-        await textInput.setValue("");
-        expect(wrapper.find(".slider-single").element.value).equals("0");
+        textInput.setValue("");
+        await textInput.trigger("blur");
+        expect(wrapper.find(".slider-single").element.value).equals("50");
     });
 
     it("should set value from slider", async () => {
+        wrapper = shallowMount(SnippetSliderComponent, {
+            propsData: {
+                minValue: 20,
+                maxValue: 100
+            },
+            localVue
+        });
+
         const sliderInput = wrapper.find(".slider-single");
 
         await sliderInput.setValue("50");
         expect(wrapper.find(".input-single").element.value).equals("50");
 
-        await sliderInput.setValue("500");
-        expect(wrapper.find(".input-single").element.value).equals("500");
+        await sliderInput.setValue("80");
+        expect(wrapper.find(".input-single").element.value).equals("80");
 
-        await sliderInput.setValue("5000");
-        expect(wrapper.find(".input-single").element.value).equals("1000");
+        await sliderInput.setValue("90");
+        expect(wrapper.find(".input-single").element.value).equals("90");
 
-        await sliderInput.setValue("-1000");
-        expect(wrapper.find(".input-single").element.value).equals("0");
+        await sliderInput.setValue("100");
+        expect(wrapper.find(".input-single").element.value).equals("100");
     });
 
     it("should render but also be disabled", () => {

@@ -1,13 +1,13 @@
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import getComponent from "../../../../utils/getComponent";
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import constants from "../store/constantsSaveSelection";
 
 export default {
     name: "SaveSelection",
     components: {
-        Tool
+        ToolTemplate
     },
     computed: {
         ...mapGetters("Tools/SaveSelection", constants.getters)
@@ -67,7 +67,7 @@ export default {
 </script>
 
 <template>
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
         :icon="glyphicon"
         :active="active"
@@ -111,7 +111,7 @@ export default {
                 </span>
             </form>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 
 <style lang="scss" scoped>

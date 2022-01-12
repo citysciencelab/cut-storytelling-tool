@@ -1,8 +1,7 @@
-import {assert} from "chai";
+import {assert, expect} from "chai";
 import GeoJsonLayerModel from "@modules/core/modelList/layer/geojson.js";
 import Util from "@testUtil";
 import Feature from "ol/Feature.js";
-import {expect} from "chai";
 
 describe("core/modelList/layer/geojson", function () {
     let geojsonLayer,

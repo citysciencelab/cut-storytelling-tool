@@ -568,7 +568,9 @@
                 },
                 "hintSupply": "Click in the map to request coordinates",
                 "hintSearch": "Enter the coordinates to search for",
-                "disabledTooltip": "This function is not available in the 3D view."
+                "disabledTooltip": "This function is not available in the 3D view.",
+                "copyCoordsBtn": "Copy pair of coordinates",
+                "copyCoordBtn": " Copy {{value}}"
             },
             "gfi": {
                 "errorMessage": "An error has occurred  during the information request (GetFeatureInfo).<br>Please try again later. If the problem persists, please contact the operator of the service.",
@@ -1094,7 +1096,8 @@
             "from": " from",
             "to":" to",
             "incorrectEntry": "Incorrect entry, please enter a whole number!",
-            "outOfRangeErrorMessage": "The input value must be within the validity range {{minValueSlider}} and {{{maxValueSlider}}!"
+            "outOfRangeErrorMessage": "The input value must be within the validity range {{minValueSlider}} and {{{maxValueSlider}}!",
+            "valueOutOfRangeErrorMessage": "The input {{inputValue}} value must be within the validity range {{minValueSlider}} and {{{maxValueSlider}}!"
         }
     },
     "share-components": {

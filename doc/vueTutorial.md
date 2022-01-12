@@ -46,12 +46,12 @@ Open `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue` and create the V
 
 ```vue
 <script>
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 
 export default {
     name: "ScaleSwitcher",
     components: {
-        Tool
+        ToolTemplate
     }
 };
 </script>
@@ -223,7 +223,7 @@ export default {
 Import the vuex helper function `mapGetters` in the `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue`, and the *ScaleSwitchers* getters. All getter keys of the *ScaleSwitcher* and the Vuex *Map* module getters `scale` and `scales` are added. For `scale`, a setter is provided. Using `scale`, the current *Map* scale can be retrieved, and `scales` represents all available *Map* scales.
 
 ```js
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import {mapGetters} from "vuex";
 import getters from "../store/gettersScaleSwitcher";
 
@@ -248,7 +248,7 @@ import getters from "../store/gettersScaleSwitcher";
 Import the vuex helper function `mapMutations` in the `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue`, and the *ScaleSwitcher* mutations. All mutation keys of the *ScaleSwitcher* are added.
 
 ```js
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import {mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersScaleSwitcher";
 import mutations from "../store/mutationsScaleSwitcher";
@@ -299,7 +299,7 @@ In `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue`, the template is y
 
 ```html
 <template lang="html">
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
         :icon="glyphicon"
         :active="active"
@@ -332,7 +332,7 @@ In `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue`, the template is y
                 </div>
             </div>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 ```
 

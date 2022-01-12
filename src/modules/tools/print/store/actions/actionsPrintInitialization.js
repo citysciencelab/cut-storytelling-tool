@@ -17,22 +17,39 @@ export default {
     retrieveCapabilites: function ({state, dispatch, commit}) {
         let serviceUrl;
 
-        if (state.mapfishServiceId !== "") {
-            serviceUrl = Radio.request("RestReader", "getServiceById", state.mapfishServiceId).get("url");
-            commit("setMapfishServiceUrl", serviceUrl);
-            serviceUrl = serviceUrl + state.printAppId + "/capabilities.json";
+        if (state.serviceId !== "") {
+            serviceUrl = Radio.request("RestReader", "getServiceById", state.serviceId).get("url");
+            commit("setServiceUrl", serviceUrl);
+            serviceUrl = serviceUrl + state.printAppId + "/" + state.printAppCapabilities;
             const serviceRequest = {
                 "serviceUrl": serviceUrl,
                 "requestType": "GET",
-                "onSuccess": "parseMapfishCapabilities"
+                "onSuccess": "parseCapabilities"
             };
 
             dispatch("sendRequest", serviceRequest);
 
         }
     },
+
     /**
-     * Sets the capabilities from mapfish resonse.
+     * switch to decide which print service is configured and parses the response
+     * @param {Object} param.state the state
+     * @param {Object} param.dispatch the dispatch
+     * @param {Object} response capabilities fomr the configured print service
+     * @returns {void}
+     */
+    parseCapabilities: function ({state, dispatch}, response) {
+        if (state.printService === "mapfish") {
+            dispatch("parseMapfishCapabilities", response);
+        }
+        else {
+            dispatch("parsePlotserviceCapabilities", response);
+        }
+    },
+
+    /**
+     * Sets the capabilities from mapfish response.
      * @param {Object} param.state the state
      * @param {Object} param.commit the commit
      * @param {Object} param.dispatch the dispatch
@@ -46,6 +63,28 @@ export default {
         dispatch("getAttributeInLayoutByName", "gfi");
         dispatch("getAttributeInLayoutByName", "legend");
         dispatch("getAttributeInLayoutByName", "scale");
+        commit("setFormatList", response.formats);
+        commit("setCurrentScale", Radio.request("MapView", "getOptions").scale);
+        dispatch("togglePostrenderListener");
+        if (state.isGfiAvailable) {
+            dispatch("getGfiForPrint");
+            BuildSpec.buildGfi(state.isGfiSelected, state.gfiForPrint);
+        }
+    },
+
+    /**
+     * Sets the capabilities from mapfish response.
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
+     * @param {Object[]} response - config.yaml from mapfish.
+     * @returns {void}
+     */
+    parsePlotserviceCapabilities: function ({state, commit, dispatch}, response) {
+        commit("setLayoutList", response.layouts);
+        dispatch("chooseCurrentLayout", response.layouts);
+        commit("setScaleList", response.scales.map(scale => parseInt(scale.value, 10)).sort((a, b) => a - b));
+        commit("setFormatList", response.outputFormats.map(format => format.name));
         commit("setCurrentScale", Radio.request("MapView", "getOptions").scale);
         dispatch("togglePostrenderListener");
         if (state.isGfiAvailable) {
@@ -377,10 +416,17 @@ export default {
      * @returns {void}
      */
     getPrintMapSize: function ({state, commit, dispatch}) {
-        dispatch("getAttributeInLayoutByName", "map");
-        const layoutMapInfo = state.mapAttribute.clientInfo;
+        if (state.printService === "plotservice") {
+            const map = state.currentLayout.map;
 
-        commit("setLayoutMapInfo", [layoutMapInfo.width, layoutMapInfo.height]);
+            commit("setLayoutMapInfo", [map.width, map.height]);
+        }
+        else {
+            dispatch("getAttributeInLayoutByName", "map");
+            const layoutMapInfo = state.mapAttribute.clientInfo;
+
+            commit("setLayoutMapInfo", [layoutMapInfo.width, layoutMapInfo.height]);
+        }
     },
 
     /**
@@ -391,9 +437,11 @@ export default {
      * @returns {void}
      */
     getPrintMapScales: function ({state, dispatch, commit}) {
-        dispatch("getAttributeInLayoutByName", "map");
-        const layoutMapInfo = state.mapAttribute.clientInfo;
+        if (state.printService !== "plotservice") {
+            dispatch("getAttributeInLayoutByName", "map");
+            const layoutMapInfo = state.mapAttribute.clientInfo;
 
-        commit("setScaleList", layoutMapInfo.scales.sort((a, b) => a - b));
+            commit("setScaleList", layoutMapInfo.scales.sort((a, b) => a - b));
+        }
     }
 };

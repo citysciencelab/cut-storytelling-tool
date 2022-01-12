@@ -1,6 +1,6 @@
 <script>
 import {mapGetters, mapMutations, mapActions} from "vuex";
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import getComponent from "../../../../utils/getComponent";
 import getters from "../store/gettersLayerSlider";
 import mutations from "../store/mutationsLayerSlider";
@@ -10,7 +10,7 @@ import LayerSliderPlayer from "./LayerSliderPlayer.vue";
 export default {
     name: "LayerSlider",
     components: {
-        Tool,
+        ToolTemplate,
         LayerSliderHandle,
         LayerSliderPlayer
     },
@@ -57,7 +57,7 @@ export default {
 </script>
 
 <template lang="html">
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
         :icon="glyphicon"
         :active="active"
@@ -81,7 +81,7 @@ export default {
                 />
             </div>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 
 <style lang="scss" scoped>

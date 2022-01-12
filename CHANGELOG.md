@@ -6,19 +6,54 @@
 ## Known Issues
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 
-
 ---
 ## Unreleased - in development
 ### Added
 
 ### Changed
+- The following NPM packages are updated:
+    - @babel/core: 7.16.0 to 7.16.7
+    - @babel/eslint-parser: 7.16.0 to 7.16.5
+    - @babel/preset-env": 7.16.0 to 7.16.7
+    - @masterportal/mpconfigparser: 1.1.2 to 1.2.0
+    - @sinonjs/fake-timers: 7.1.2 to 8.1.0
+    - @vue/test-utils": 1.2.2 to 1.3.0
+    - axios: 0.21.1 to 0.24.0
+    - eslint: 7.31.0 to 8.6.0 (In this context the code was adapted to new linter rules)
+    - eslint-plugin-chai-friendly: 0.7.1 to 0.7.2
+    - eslint-plugin-vue: 7.14.0 to 8.2.0 (In this context the code was adapted to new linter rules)
+    - eslint-plugin-vuejs-accessibility: 1.1.0 to 1.1.1
+    - html2canvas: 1.1.3 to 1.4.0
+    - husky: 7.0.1 to 7.0.4
+    - i18next: 20.3.3 to 21.6.4
+    - inquirer: 8.1.2 to 8.2.0
+    - jsts: 2.7.1 to 2.8.1
+    - mocha-loader: 3.0.0 to 5.1.5
+    - mock-local-storage: 1.1.17 to 1.1.19
+    - moment-timezone: 0.5.33 to 0.5.34
+    - node-fetch: 2.6.1 to 3.1.0
+    - ol-mapbox-style: 6.4.1 to 6.8.1
+    - regenerator-runtime: 0.13.7 to 0.13.9
+    - replace-in-file: 6.2.0 to 6.3.2
+    - sass: 1.44.0 to 1.45.2
+    - sinon: 11.1.1 to 12.0.1
+    - vue-loader: 15.9.6 to 15.9.8
+    - zip-a-folder: 1.1.0 to 1.1.2
 
 ### Deprecated
 
 ### Removed
+- The following NPM packages are removed:
+    - polyfill-object.fromentries
+    - whatwg-fetch
 
 ### Fixed
 - Fixed spelling of `DIRECTIONS` in documentation for routing tool.
+
+---
+## v2.17.1 - 2022-01-011
+### Changed
+- The MasterportalAPI version is updated to v1.7.1. This fixes reading of WFS-Layer, the WFS version is taken into account when generating the WFS format.
 
 ---
 ## v2.17.0 - 2022-01-05
@@ -31,6 +66,7 @@
         - "bootstrap-sass"
 - Extended CSW processing for download links in layerInformation by CSW 2.0.2 standard.
 - The tool "featureLister" has been extended and now also highlights lines and polygons on mouse-over over the feature name.
+- Added the possibility to use the High Resolution Plot Service
 
 ### Changed
 - Migrated the map from Backbone.js to Vue.js environment.
@@ -48,8 +84,11 @@
 - The following NPM packages are updated:
     - @masterportal/mpconfigparser: 1.1.2 to version 1.2.0
     - masterportalAPI: 1.6.1 to version 1.7.0
-    - selenium-webdriver: 4.0.0 to version 4.1.0
+    - selenium-webdriver: 4.0.0 version to 4.1.0
 - The elastic search now reads out all attributes of a found layer and takes them into account when processing the layer.
+- CoordToolkit:
+    - Added Buttons to copy one coordinate or both of them with a configurable delimiter. The visibility of the buttons is also configurable.
+    - Removed copy of coordinates if click in input-field.
 
 ### Deprecated
 - Parametric url: all deprecation-warnings are removed, besides STARTUPMODUL and BEZIRK.
@@ -64,7 +103,7 @@
     - Fix reset UI button.
     - Add missing error translation for wrong config.
 - SelectFeatures:
-    - The 'Select Features' tool can now also be used to select lines.
+- The 'Select Features' tool can now also be used to select lines.
 - Print:
     - The canvas is now drawn on the top layer after a new layer is switched on in the topic tree.
     - When printing is opened initially, the canvas is now always drawn on the top layer.
