@@ -289,6 +289,8 @@ export default {
             ref="inputNumber"
             class="input-single"
             type="number"
+            :min="minimumValue"
+            :max="maximumValue"
             :name="label"
             :disabled="disable"
             :placeholder="value"
