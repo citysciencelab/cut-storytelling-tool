@@ -42,7 +42,8 @@ export default {
                 page: 0,
                 total: 0
             },
-            disabled: false
+            disabled: false,
+            layerModel: null
         };
     },
     watch: {
@@ -133,7 +134,53 @@ export default {
                 rules: this.getCurrentRules()
             };
 
+            this.activateLayer(this.layerConfig?.layerId);
             this.setFormDisable(true);
+            if (isObject(this.layerModel)) {
+                this.layerModel.layer.getSource().on("featuresloadend", () => {
+                    this.runApiFilter(filterQuestion);
+                });
+
+                if (this.layerModel.layer.getSource().getFeatures().length) {
+                    this.runApiFilter(filterQuestion);
+                }
+            }
+        },
+        /**
+         * Sets the disabled flag
+         * @param {Boolean} disable true/false to en/disable form
+         * @returns {void}
+         */
+        setFormDisable (disable) {
+            this.disabled = disable;
+        },
+        /**
+         * Activating the layer for filtering
+         * @param {String} layerId the layer Id from config
+         * @returns {void}
+         */
+        activateLayer (layerId) {
+            if (typeof layerId === "string") {
+                const layers = Radio.request("Map", "getLayers"),
+                    visibleLayer = typeof layers?.getArray !== "function" ? [] : layers.getArray().filter(layer => {
+                        return layer.getVisible() === true && layer.get("id") === layerId;
+                    });
+
+                if (Array.isArray(visibleLayer) && !visibleLayer.length) {
+                    Radio.trigger("ModelList", "addModelsByAttributes", {"id": layerId});
+                }
+
+                this.layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layerId});
+                this.layerModel.set("isSelected", true);
+                this.layerModel.set("isVisible", true);
+            }
+        },
+        /**
+         * Running the api function to filter the layer
+         * @param {Object} filterQuestion the filter parameters for api
+         * @returns {void}
+         */
+        runApiFilter (filterQuestion) {
             this.api.filter(filterQuestion, filterAnswer => {
                 this.paging = filterAnswer.paging;
 
@@ -143,15 +190,6 @@ export default {
             }, error => {
                 console.warn("filter error", error);
             });
-
-        },
-        /**
-         * Sets the disabled flag
-         * @param {Boolean} disable true/false to en/disable form
-         * @returns {void}
-         */
-        setFormDisable (disable) {
-            this.disabled = disable;
         }
     }
 };
