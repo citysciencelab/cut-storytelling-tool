@@ -39,6 +39,7 @@
     - sinon: 11.1.1 to 12.0.1
     - vue-loader: 15.9.6 to 15.9.8
     - zip-a-folder: 1.1.0 to 1.1.2
+    - masterportalapi from 1.7.1 to XXX
 
 ### Deprecated
 
