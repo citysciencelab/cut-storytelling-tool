@@ -145,20 +145,6 @@ describe("src/core/maps/2DMapView.js", () => {
         expect(mapView.getZoom()).to.deep.equal(3);
     });
 
-    it("toggles the background to white", function () {
-        mapView.toggleBackground();
-
-        expect(mapView.background).to.deep.equal("white");
-    });
-
-    it("toggles the background to image", function () {
-        mapView.toggleBackground();
-        expect(mapView.background).to.equal("white");
-
-        mapView.toggleBackground();
-        expect(mapView.background).to.equal(undefined);
-    });
-
     describe("zoomToExtent", () => {
         it("Zoom to the extent with duration 0 milliseconds", () => {
             mapView.zoomToExtent([565760.049, 5931747.185, 568940.626, 5935453.891], {duration: 0});
