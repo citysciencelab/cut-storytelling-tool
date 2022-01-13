@@ -79,7 +79,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @fires Map#RadioTriggerMapAddLayerToIndex
      * @fires Layer#RadioTriggerVectorLayerFeaturesLoaded
      * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
-     * @fires Core#RadioRequestMapViewGetResoByScale
+     * @fires Core#RadioRequestMapViewGetResolutionByScale
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires LegendComponent:RadioTriggerLegendComponentUpdateLegend
      * @listens Layer#changeIsSelected
@@ -429,12 +429,12 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
 
     /**
      * Sets visible min and max resolution on layer.
-     * @fires Core#RadioRequestMapViewGetResoByScale
+     * @fires Core#RadioRequestMapViewGetResolutionByScale
      * @returns {void}
      */
     getResolutions: function () {
-        const resoByMaxScale = Radio.request("MapView", "getResoByScale", this.get("maxScale"), "max"),
-            resoByMinScale = Radio.request("MapView", "getResoByScale", this.get("minScale"), "min");
+        const resoByMaxScale = Radio.request("MapView", "getResolutionByScale", this.get("maxScale"), "max"),
+            resoByMinScale = Radio.request("MapView", "getResolutionByScale", this.get("minScale"), "min");
 
         this.setMaxResolution(resoByMaxScale + (resoByMaxScale / 100));
         this.setMinResolution(resoByMinScale);

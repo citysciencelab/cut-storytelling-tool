@@ -433,10 +433,10 @@
  */
 
 /**
- * @event Core#RadioRequestMapViewGetResoByScale
+ * @event Core#RadioRequestMapViewGetResolutionByScale
  * @param {String} scale Options of mapview status
  * @description Event that gets the resolution depending on the map scale
- * @example Radio.trigger("MapView", "getResoByScale", scale)
+ * @example Radio.trigger("MapView", "getResolutionByScale", scale)
  */
 
 /**
@@ -450,11 +450,6 @@
  * @event Core#RadioTriggerMapViewSetScale
  * @description Event that sets the scale of the map view
  * @example Radio.trigger("MapView", "setScale", model)
- */
-
-/**
- * @event Core#RadioTriggerMapViewSetConstrainedResolution
- * @description Event that sets the constrained resolution of the map view
  */
 
 /**

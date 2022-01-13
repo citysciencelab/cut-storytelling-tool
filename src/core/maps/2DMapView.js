@@ -10,17 +10,14 @@ import defaults from "masterportalAPI/src/defaults";
 
 /**
  * @description initializes store and listeners
- * @param {ObjectEvent} evt - openlayers event object
- * @param {string} evt.key - the name of the property whose value is changing
- * @param {ol.View} evt.target - this.get("view")
  * @returns {void}
  */
 View.prototype.initStore = function () {
     // Listener for ol.View
-    mapCollection.getMapView("ol", "2D").on("change:resolution", (evt) => {
+    this.on("change:resolution", (evt) => {
         this.changedResolutionCallback(evt);
     });
-    mapCollection.getMapView("ol", "2D").on("change:center", function () {
+    this.on("change:center", function () {
         Radio.trigger("MapView", "changedCenter", this.getCenter());
         Radio.trigger("RemoteInterface", "postMessage", {"centerPosition": this.getCenter()});
     });
@@ -38,8 +35,6 @@ View.prototype.initStore = function () {
 /**
  * @description is called when the view resolution is changed triggers the map view options
  * @param {ObjectEvent} evt - openlayers event object
- * @param {string} evt.key - the name of the property whose value is changing
- * @param {ol.View} evt.target - this.get("view")
  * @returns {void}
  */
 View.prototype.changedResolutionCallback = function (evt) {
@@ -49,7 +44,6 @@ View.prototype.changedResolutionCallback = function (evt) {
 
     Radio.trigger("MapView", "changedOptions", params);
     store.commit("Map/setScale", params.scale);
-    Radio.trigger("MapView", "changedZoomLevel", this.getZoom());
     Radio.trigger("RemoteInterface", "postMessage", {"zoomLevel": this.getZoom()});
 };
 
@@ -84,7 +78,7 @@ View.prototype.getProjectedBBox = function (epsgCode = "EPSG:4326") {
  * @param  {String} scaleType - min or max
  * @return {number} resolution
  */
-View.prototype.getResoByScale = function (scale, scaleType) {
+View.prototype.getResolutionByScale = function (scale, scaleType) {
     const scales = this.options_.options.map(function (option) {
         return option.scale;
     });
@@ -92,9 +86,7 @@ View.prototype.getResoByScale = function (scale, scaleType) {
     let index = "",
         unionScales = scales.concat([parseInt(scale, 10)].filter(item => scales.indexOf(item) < 0));
 
-    unionScales = unionScales.sort(function (a, b) {
-        return b - a;
-    });
+    unionScales = unionScales.sort((a, b) => b - a);
 
     index = unionScales.indexOf(parseInt(scale, 10));
     if (unionScales.length === scales.length || scaleType === "max") {
@@ -112,13 +104,8 @@ View.prototype.getResoByScale = function (scale, scaleType) {
  * @returns {void}
  */
 View.prototype.resetView = function () {
-    const paramUrlCenter = store.state.urlParams["Map/center"] ? store.state.urlParams["Map/center"] : null,
-        settingsCenter = this.options_ !== undefined && this.options_.center ? this.options_.center : undefined,
-        defaultCenter = defaults.startCenter,
-        center = paramUrlCenter || settingsCenter || defaultCenter,
-        settingsResolution = this.options_ !== undefined && this.options_?.resolution ? this.options_.resolution : undefined,
-        defaultResolution = defaults.startResolution,
-        resolution = settingsResolution || defaultResolution;
+    const center = store.state.urlParams["Map/center"] || this.options_?.center || defaults.startCenter,
+        resolution = this.options_?.resolution || defaults.startResolution;
 
     this.setCenterCoord(center);
     this.setResolution(resolution);
@@ -145,10 +132,7 @@ View.prototype.setBBox = function (bbox) {
 View.prototype.setCenterCoord = function (coords, zoomLevel) {
     let first2Coords = [coords[0], coords[1]];
 
-    // Coordinates need to be integers, otherwise open layers will go nuts when you attempt to pan the
-    // map. Please fix this at the origin of those stringified numbers. However, this is to adress
-    // possible future issues:
-    if (typeof first2Coords[0] !== "number" || typeof first2Coords[1] !== "number") {
+    if (first2Coords.some(coord => typeof coord !== "number")) {
         console.warn("Given coordinates must be of type integer! Although it might not break, something went wrong and needs to be checked!");
         first2Coords = first2Coords.map(singleCoord => parseInt(singleCoord, 10));
     }
@@ -158,15 +142,6 @@ View.prototype.setCenterCoord = function (coords, zoomLevel) {
     if (zoomLevel !== undefined) {
         this.setZoom(zoomLevel);
     }
-};
-
-/**
- * @description todo
- * @param {number} resolution -
- * @returns {void}
- */
-View.prototype.setConstrainedResolution = function (resolution) {
-    this.setResolution(resolution);
 };
 
 /**
@@ -205,11 +180,11 @@ View.prototype.setZoomLevelUp = function () {
 View.prototype.toggleBackground = function () {
     if (this.background === "white") {
         this.setBackground(this.options_.backgroundImage);
-        $("#map").css("background", this.options_.backgroundImage + "repeat scroll 0 0 rgba(0, 0, 0, 0)");
+        document.getElementById("map").style.background = `url(${this.options_.backgroundImage}) repeat scroll 0 0 rgba(0, 0, 0, 0)`;
     }
     else {
         this.setBackground("white");
-        $("#map").css("background", "white");
+        document.getElementById("map").style.background = "white";
     }
 };
 
@@ -218,12 +193,15 @@ View.prototype.toggleBackground = function () {
  * @param {String[]} extent The extent to zoom.
  * @param {Object} options Options for zoom.
  * @param {Number} [options.duration=800] The duration of the animation in milliseconds.
+ * @param {Object} [map] The parameter to get the map from the map collection
+ * @param {String} [map.mapId="ol"] The map id.
+ * @param {String} [map.mapMode="2D"] The map mode.
  * @see {@link https://openlayers.org/en/latest/apidoc/module-ol_View-View.html#fit} for more options.
  * @returns {void}
  */
-View.prototype.zoomToExtent = function (extent, options) {
+View.prototype.zoomToExtent = function (extent, options, map = {mapId: "ol", mapMode: "2D"}) {
     this.fit(extent, {
-        size: mapCollection.getMap("ol", "2D").getSize(),
+        size: mapCollection.getMap(map.mapId, map.mapMode).getSize(),
         ...Object.assign({duration: 800}, options)
     });
 };

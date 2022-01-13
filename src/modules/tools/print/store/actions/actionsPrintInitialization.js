@@ -188,8 +188,8 @@ export default {
     setOriginalPrintLayer: function ({state}) {
         const invisibleLayer = state.invisibleLayer,
             mapScale = state.currentMapScale,
-            resoByMaxScale = Radio.request("MapView", "getResoByScale", mapScale, "max"),
-            resoByMinScale = Radio.request("MapView", "getResoByScale", mapScale, "min");
+            resoByMaxScale = Radio.request("MapView", "getResosolutionByScale", mapScale, "max"),
+            resoByMinScale = Radio.request("MapView", "getResolutionByScale", mapScale, "min");
 
         invisibleLayer.forEach(layer => {
             const layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layer.get("id")});
@@ -215,8 +215,8 @@ export default {
      */
     setPrintLayers: function ({state, dispatch, commit}, scale) {
         const visibleLayer = state.visibleLayerList,
-            resoByMaxScale = Radio.request("MapView", "getResoByScale", scale, "max"),
-            resoByMinScale = Radio.request("MapView", "getResoByScale", scale, "min"),
+            resoByMaxScale = Radio.request("MapView", "getResolutionByScale", scale, "max"),
+            resoByMinScale = Radio.request("MapView", "getResolutionByScale", scale, "min"),
             invisibleLayer = [];
 
         let invisibleLayerNames = "",

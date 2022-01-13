@@ -40,8 +40,8 @@ export function listenToChangeSLDBody (layerModel) {
  * @param  {String} scaleType - min or max
  * @return {number} the resolution
  */
-export function getResoByScale (scale, scaleType) {
-    return Radio.request("MapView", "getResoByScale", scale, scaleType);
+export function getResolutionByScale (scale, scaleType) {
+    return Radio.request("MapView", "getResolutionByScale", scale, scaleType);
 }
 /**
  * Triggers adding layer at given index in modelList.

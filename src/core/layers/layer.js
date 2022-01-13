@@ -560,8 +560,8 @@ Layer.prototype.setLegend = function (value) {
  * @returns {void}
  */
 Layer.prototype.setMinMaxResolutions = function () {
-    const resoByMaxScale = bridge.getResoByScale(this.get("maxScale"), "max"),
-        resoByMinScale = bridge.getResoByScale(this.get("minScale"), "min");
+    const resoByMaxScale = bridge.getResolutionByScale(this.get("maxScale"), "max"),
+        resoByMinScale = bridge.getResolutionByScale(this.get("minScale"), "min");
 
     this.get("layer").setMaxResolution(resoByMaxScale + (resoByMaxScale / 100));
     this.get("layer").setMinResolution(resoByMinScale);

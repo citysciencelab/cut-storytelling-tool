@@ -192,7 +192,7 @@ const ObliqueMap = Backbone.Model.extend({
      * Sets the tool gfi active.
      * @fires Core#RadioTriggerMapViewSetCenter
      * @fires Core#RadioTriggerMapBeforeChange
-     * @fires Core#RadioTriggerMapViewSetConstrainedResolution
+     * @fires Core#RadioTriggerMapViewSetResolution
      * @fires Core#RadioTriggerMapChange
      * @return {void}
      */
@@ -217,7 +217,7 @@ const ObliqueMap = Backbone.Model.extend({
                 map2D.getViewport().querySelector(".ol-overlaycontainer-stopevent").classList.remove("olcs-hideoverlay");
                 this.restore2DMapInteractions(map2D);
                 Radio.trigger("MapView", "setCenter", [center.coords[0], center.coords[1]]);
-                Radio.trigger("MapView", "setConstrainedResolution", resolution, 0);
+                Radio.trigger("MapView", "setResolution", resolution);
                 Radio.trigger("Map", "change", "2D");
             }.bind(this));
         }

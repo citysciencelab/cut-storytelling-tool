@@ -97,8 +97,8 @@ describe("src/core/maps/2DMapView.js", () => {
         ]);
     });
 
-    it("getResoByScale - returns the resolution for the given scale", function () {
-        expect(mapView.getResoByScale(5000, "max")).to.deep.equal(1.3229159522920524);
+    it("getResolutionByScale - returns the resolution for the given scale", function () {
+        expect(mapView.getResolutionByScale(5000, "max")).to.deep.equal(1.3229159522920524);
     });
 
     it("resetView - resets the view", function () {
@@ -125,12 +125,6 @@ describe("src/core/maps/2DMapView.js", () => {
         mapView.setCenterCoord(["1", "2"]);
 
         expect(mapView.getCenter()).to.deep.equal([510793.74957137526, 5850793.749571376]);
-    });
-
-    it("Sets the constrained resolution", function () {
-        mapView.setConstrainedResolution(17, 0);
-
-        expect(mapView.getResolution()).to.deep.equal(17);
     });
 
     it("Sets the resolution by scale", function () {

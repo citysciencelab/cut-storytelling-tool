@@ -19,11 +19,11 @@ channel.reply({
     "getResolutions": function () {
         return mapCollection.getMapView("ol", "2D").getResolutions();
     },
-    "getResoByScale": function (scale, scaleType) {
-        return mapCollection.getMapView("ol", "2D").getResoByScale(scale, scaleType);
+    "getResolutionByScale": function (scale, scaleType) {
+        return mapCollection.getMapView("ol", "2D").getResolutionByScale(scale, scaleType);
     },
     "getScales": function () {
-        return mapCollection.getMapView("ol", "2D").get("options").map(function (option) {
+        return mapCollection.getMapView("ol", "2D").options_.map(function (option) {
             return option.scale;
         });
     },
@@ -31,7 +31,7 @@ channel.reply({
         return mapCollection.getMapView("ol", "2D").getCurrentExtent();
     },
     "getBackgroundImage": function () {
-        return mapCollection.getMapView("ol", "2D").get("backgroundImage");
+        return mapCollection.getMapView("ol", "2D").options_.backgroundImage;
     }
 });
 
@@ -41,9 +41,6 @@ channel.on({
     },
     "setCenter": function (coords, zoomLevel) {
         mapCollection.getMapView("ol", "2D").setCenterCoord(coords, zoomLevel);
-    },
-    "setConstrainedResolution": function (resolution) {
-        mapCollection.getMapView("ol", "2D").setConstrainedResolution(resolution);
     },
     "setScale": function (scale) {
         mapCollection.getMapView("ol", "2D").setResolutionByScale(scale);
