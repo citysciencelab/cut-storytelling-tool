@@ -163,10 +163,6 @@ describe("src/modules/tools/filterGeneral/components/SnippetSlider.vue", () => {
         textInput.setValue("-1000");
         await textInput.trigger("blur");
         expect(wrapper.find(".slider-single").element.value).equals("50");
-
-        textInput.setValue("");
-        await textInput.trigger("blur");
-        expect(wrapper.find(".slider-single").element.value).equals("50");
     });
 
     it("should set value from slider", async () => {

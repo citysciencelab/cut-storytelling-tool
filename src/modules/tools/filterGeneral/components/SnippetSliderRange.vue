@@ -156,7 +156,7 @@ export default {
          */
         checkInput (evt) {
             if (evt?.target?.value === "") {
-                this.getAlertRangeText();
+                this.getAlertRangeText(undefined);
                 if (evt?.target?.id === "slider-input-max") {
                     this.$refs.inputMaxNumber.value = this.maxVal;
                 }
@@ -233,14 +233,15 @@ export default {
                 }
             }
         },
+
         /**
          * Getting slider range error text in alerting box
          * @param {String} value the input value from input field
          * @returns {void}
          */
         getAlertRangeText (value) {
-            if (!value) {
-                this.$store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.valueEmptyErrorMessage"));
+            if (value === undefined) {
+                store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.valueEmptyErrorMessage"));
             }
             else {
                 store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.valueOutOfRangeErrorMessage", {
@@ -250,6 +251,7 @@ export default {
                 }));
             }
         },
+
         /**
          * Setting the parameter minOnly
          * @param {Number|undefined} minimumValue the minimum value

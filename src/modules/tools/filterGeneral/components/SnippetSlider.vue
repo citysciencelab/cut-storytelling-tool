@@ -129,7 +129,7 @@ export default {
          */
         checkInput (evt) {
             if (evt?.target?.value === "") {
-                this.getAlertRangeText();
+                this.getAlertRangeText(undefined);
                 this.$refs.inputNumber.value = this.value;
             }
             else {
@@ -184,8 +184,8 @@ export default {
          * @returns {void}
          */
         getAlertRangeText (value) {
-            if (!value) {
-                this.$store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.valueEmptyErrorMessage"));
+            if (value === undefined) {
+                store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.valueEmptyErrorMessage"));
             }
             else {
                 store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.valueOutOfRangeErrorMessage", {
