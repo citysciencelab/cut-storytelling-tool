@@ -8,14 +8,51 @@ import findWhereJs from "../../utils/findWhereJs";
 import store from "../../app-store";
 import defaults from "masterportalAPI/src/defaults";
 
-
+/**
+ * @description initializes store and listeners
+ * @param {ObjectEvent} evt - openlayers event object
+ * @param {string} evt.key - the name of the property whose value is changing
+ * @param {ol.View} evt.target - this.get("view")
+ * @returns {void}
+ */
 View.prototype.initStore = function () {
-    const params = findWhereJs(mapCollection.getMapView("ol", "2D").options_.options, mapCollection.getMapView("ol", "2D").getConstrainedResolution(mapCollection.getMapView("ol", "2D").getResolution()));
+    // Listener for ol.View
+    mapCollection.getMapView("ol", "2D").on("change:resolution", (evt) => {
+        this.changedResolutionCallback(evt);
+    });
+    mapCollection.getMapView("ol", "2D").on("change:center", function () {
+        Radio.trigger("MapView", "changedCenter", this.getCenter());
+        Radio.trigger("RemoteInterface", "postMessage", {"centerPosition": this.getCenter()});
+    });
+
+    const params = findWhereJs(mapCollection.getMapView("ol", "2D").options_.options, {resolution: mapCollection.getMapView("ol", "2D").getConstrainedResolution(mapCollection.getMapView("ol", "2D").getResolution())});
 
     // triggers the function checkForScale modules\core\modelList\layer\model.js
     Radio.trigger("MapView", "changedOptions", params);
-    store.commit("Map/setScale", params?.scale);
+    store.commit("Map/setScale", params.scale);
+    // NOTE: used for scaleSwitcher-tutorial
+    store.commit("Map/setScales", {scales: this.options_.options.map(function (option) {
+        return option.scale;
+    })});
 };
+/**
+ * @description is called when the view resolution is changed triggers the map view options
+ * @param {ObjectEvent} evt - openlayers event object
+ * @param {string} evt.key - the name of the property whose value is changing
+ * @param {ol.View} evt.target - this.get("view")
+ * @returns {void}
+ */
+View.prototype.changedResolutionCallback = function (evt) {
+    const mapView = evt.target,
+        constrainResolution = this.getConstrainedResolution(mapView.get(evt.key)),
+        params = findWhereJs(this.options_.options, {resolution: constrainResolution});
+
+    Radio.trigger("MapView", "changedOptions", params);
+    store.commit("Map/setScale", params.scale);
+    Radio.trigger("MapView", "changedZoomLevel", this.getZoom());
+    Radio.trigger("RemoteInterface", "postMessage", {"zoomLevel": this.getZoom()});
+};
+
 /**
  * calculate the extent for the current view state and the passed size
  * @fires Core#RadioRequestMapGetSize
