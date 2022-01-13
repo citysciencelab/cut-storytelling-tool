@@ -184,11 +184,16 @@ export default {
          * @returns {void}
          */
         getAlertRangeText (value) {
-            store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.valueOutOfRangeErrorMessage", {
-                inputValue: value,
-                minValueSlider: this.minimumValue,
-                maxValueSlider: this.maximumValue
-            }));
+            if (!value) {
+                this.$store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.valueEmptyErrorMessage"));
+            }
+            else {
+                store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.valueOutOfRangeErrorMessage", {
+                    inputValue: value,
+                    minValueSlider: this.minimumValue,
+                    maxValueSlider: this.maximumValue
+                }));
+            }
         },
 
         /**
