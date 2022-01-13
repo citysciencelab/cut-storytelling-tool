@@ -153,21 +153,7 @@ export default {
 
             this.interface.getUniqueValues(this.service, this.attrName, list => {
                 if (typeof onsuccess === "function") {
-                    // @TODO muss mit Micha abgestimmt werden,
-                    //  wie die API funktioniert und danach hier anpassen
-                    // eventuell muss die API erweitert werden,
-                    // da zur Zeit nur die Values (uniqId) zurückgeliefert werden.
-                    const res = [];
-
-                    res[list[0]] = "Altona";
-                    res[list[1]] = "Hamburg-Mitte";
-                    res[list[2]] = "Eimsbüttel";
-                    res[list[3]] = "Hamburg-Nord";
-                    res[list[4]] = "Wandsbek";
-                    res[list[5]] = "Bergedorf";
-                    res[list[6]] = "Harburg";
-
-                    onsuccess(res);
+                    onsuccess(list);
                     this.disable = false;
                 }
             }, error => {
