@@ -50,6 +50,7 @@
 
 ### Changed
 - It is now possible to display layers at scales smaller than 1:1 000 000.
+- Migrated the layer GeoJSON from Backbone.js to Vue.js environment.
 - The following NPM packages are updated:
     - @babel/core: 7.16.0 to 7.16.12
     - @babel/eslint-parser: 7.16.0 to 7.16.5
