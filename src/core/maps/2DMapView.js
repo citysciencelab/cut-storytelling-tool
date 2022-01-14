@@ -28,9 +28,7 @@ View.prototype.initStore = function () {
     Radio.trigger("MapView", "changedOptions", params);
     store.commit("Map/setScale", params.scale);
     // NOTE: used for scaleSwitcher-tutorial
-    store.commit("Map/setScales", {scales: this.options_.options.map(function (option) {
-        return option.scale;
-    })});
+    store.commit("Map/setScales", {scales: this.options_.options.map(option => option.scale)});
 };
 /**
  * @description is called when the view resolution is changed triggers the map view options
@@ -49,7 +47,6 @@ View.prototype.changedResolutionCallback = function (evt) {
 
 /**
  * calculate the extent for the current view state and the passed size
- * @fires Core#RadioRequestMapGetSize
  * @return {ol.extent} extent
  */
 View.prototype.getCurrentExtent = function () {
@@ -61,10 +58,11 @@ View.prototype.getCurrentExtent = function () {
 /**
  * Returns the bounding box in a given coordinate system (EPSG code).
  * @param {String} [epsgCode="EPSG:4326"] EPSG code into which the bounding box is transformed.
+ * @param {Object} mapObject the map id and mode
  * @returns {Number[]} Bounding box in the specified coordinate system.
  */
-View.prototype.getProjectedBBox = function (epsgCode = "EPSG:4326") {
-    const map = mapCollection.getMap("ol", "2D"),
+View.prototype.getProjectedBBox = function (epsgCode = "EPSG:4326", mapObject = {mapId: "ol", mapMode: "2D"}) {
+    const map = mapCollection.getMap(mapObject.mapId, mapObject.mapMode),
         bbox = this.calculateExtent(map.getSize()),
         firstCoordTransform = transformFromMapProjection(map, epsgCode, [bbox[0], bbox[1]]),
         secondCoordTransform = transformFromMapProjection(map, epsgCode, [bbox[2], bbox[3]]);
@@ -79,9 +77,7 @@ View.prototype.getProjectedBBox = function (epsgCode = "EPSG:4326") {
  * @return {number} resolution
  */
 View.prototype.getResolutionByScale = function (scale, scaleType) {
-    const scales = this.options_.options.map(function (option) {
-        return option.scale;
-    });
+    const scales = this.options_.options.map(option => option.scale);
 
     let index = "",
         unionScales = scales.concat([parseInt(scale, 10)].filter(item => scales.indexOf(item) < 0));
@@ -100,7 +96,6 @@ View.prototype.getResolutionByScale = function (scale, scaleType) {
 
 /**
  * Sets center and resolution to initial values
- * @fires Core#RadioRequestParametricURLGetCenter
  * @returns {void}
  */
 View.prototype.resetView = function () {
@@ -115,11 +110,12 @@ View.prototype.resetView = function () {
 /**
  * Sets the bounding box for the map view.
  * @param {Number[]} bbox The Boundingbox to fit the map.
+ * @param {Object} map the map id and mode
  * @returns {void}
  */
-View.prototype.setBBox = function (bbox) {
+View.prototype.setBBox = function (bbox, map = {mapId: "ol", mapMode: "2D"}) {
     if (bbox) {
-        this.fit(bbox, mapCollection.getMap("ol", "2D").getSize());
+        this.fit(bbox, mapCollection.getMap(map.mapId, map.mapMode).getSize());
     }
 };
 
@@ -211,10 +207,11 @@ View.prototype.zoomToExtent = function (extent, options, map = {mapId: "ol", map
  * @param {String[]} ids The feature ids.
  * @param {String} layerId The layer id.
  * @param {Object} zoomOptions The options for zoom to extent.
+ * @param {Object} map the map id and mode
  * @returns {void}
  */
-View.prototype.zoomToFilteredFeatures = function (ids, layerId, zoomOptions) {
-    const layer = mapCollection.getMap("ol", "2D").getLayerById(layerId);
+View.prototype.zoomToFilteredFeatures = function (ids, layerId, zoomOptions, map = {mapId: "ol", mapMode: "2D"}) {
+    const layer = mapCollection.getMap(map.mapId, map.mapMode).getLayerById(layerId);
 
     if (layer?.getSource()) {
         const layerSource = layer.getSource(),
