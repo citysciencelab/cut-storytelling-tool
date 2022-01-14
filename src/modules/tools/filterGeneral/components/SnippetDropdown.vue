@@ -1,6 +1,11 @@
 <script>
+import Multiselect from "vue-multiselect";
+
 export default {
     name: "SnippetDropdown",
+    components: {
+        Multiselect
+    },
     props: {
         api: {
             type: Object,
@@ -75,9 +80,11 @@ export default {
             default: 0
         },
         value: {
-            type: [Array, undefined],
+            type: [Array],
             required: false,
-            default: undefined
+            default: () => {
+                return [];
+            }
         },
         visible: {
             type: Boolean,
@@ -119,16 +126,16 @@ export default {
         // triggers emitCurrentRule
         this.dropdownSelected = Array.isArray(this.prechecked) ? this.prechecked : [];
 
-        if (this.visible && typeof this.dropdownValue === "undefined") {
+        if (this.visible && this.dropdownValue.length === 0) {
             this.setUniqueValues(list => {
                 this.dropdownValue = list;
             });
         }
-        else if (!this.visible && typeof this.dropdownValue === "undefined") {
+        else if (!this.visible && this.dropdownValue.length === 0) {
             this.invalid = true;
         }
 
-        if (typeof this.dropdownValue !== "undefined" && this.dropdownValue.length > 0) {
+        if (this.dropdownValue.length > 0) {
             this.disable = false;
         }
 
@@ -207,22 +214,21 @@ export default {
             </div>
         </div>
         <div class="select-box-container">
-            <select
+            <Multiselect
                 id="select-box"
                 v-model="dropdownSelected"
+                :options="dropdownValue"
                 name="select-box"
                 :disabled="disable"
-                :class="multiselect ? multipleClass : singleClass"
                 :multiple="multiselect"
-            >
-                <option
-                    v-for="(optionValue, index) in dropdownValue"
-                    :key="'optionValue' + '-' + index"
-                    :value="index"
-                >
-                    {{ optionValue }}
-                </option>
-            </select>
+                :placeholder="label"
+                :show-labels="false"
+                open-direction="bottom"
+                :hide-selected="true"
+                :close-on-select="true"
+                :clear-on-select="false"
+                :loading="disable"
+            />
         </div>
         <div
             v-show="showInfo"
@@ -235,6 +241,77 @@ export default {
     </div>
 </template>
 
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+
+<style>
+    .select-box-container .multiselect .multiselect__spinner:after, .multiselect__spinner:before {
+        position: absolute;
+        content: "";
+        top: 50%;
+        left: 50%;
+        margin: -8px 0 0 -8px;
+        width: 16px;
+        height: 16px;
+        border-radius: 100%;
+        border: 2px solid transparent;
+        border-top-color: #828282;
+        box-shadow: 0 0 0 1px transparent;
+    }
+    .select-box-container .multiselect .multiselect__option {
+        display: block;
+        min-height: 30px;
+        line-height: 10px;
+        text-decoration: none;
+        text-transform: none;
+        vertical-align: middle;
+        position: relative;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+    .select-box-container .multiselect .multiselect__option--highlight {
+        background: #3177b1;
+        outline: none;
+        color: #fff;
+    }
+    .select-box-container .multiselect .multiselect__tag {
+        position: relative;
+        display: inline-block;
+        padding: 4px 26px 4px 10px;
+        border-radius: 5px;
+        margin-right: 10px;
+        color: #fff;
+        line-height: 1;
+        background: #3177b1;
+        margin-bottom: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 100%;
+        text-overflow: ellipsis;
+    }
+    .select-box-container .multiselect .multiselect__option--highlight:after {
+        content: attr(data-select);
+        background: #a1d0ff;
+        color: white;
+    }
+    .select-box-container .multiselect .multiselect__tag-icon::after {
+        content: "\D7";
+        color: #dddddd;
+        font-size: 14px;
+    }
+    .select-box-container .multiselect .multiselect__tag-icon:hover {
+        background: #299ec1;
+    }
+    .select-box-container .multiselect .multiselect__placeholder {
+        color: #adadad;
+        display: inline-block;
+        margin-bottom: 10px;
+        padding-top: 2px;
+    }
+    .select-box-container .multiselect .multiselect__tag-icon:focus, .multiselect__tag-icon:hover {
+        background: #ddd;
+    }
+</style>
+
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
     select {
@@ -243,29 +320,6 @@ export default {
         position: relative;
         width: 100%;
         margin-bottom: 5px;
-    }
-    .multipleClass {
-        display: inline-block;
-        width: 100%;
-        height: 100px;
-        padding: .375rem 1.75rem .375rem .75rem;
-        line-height: 1.5;
-        color: #495057;
-        vertical-align: middle;
-        background: #fff;
-        border: 1px solid rgb(34,34,34);
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-    }
-    .singleClass {
-        display: inline-block;
-        width: 100%;
-        height: 25px;
-        color: #495057;
-        vertical-align: middle;
-        background: #fff;
-        border: 1px solid rgb(34,34,34);
     }
     .disabled {
         border-color: #dddddd;
@@ -308,10 +362,6 @@ export default {
     .snippetDropdownContainer .bottom {
         clear: left;
         width: 100%;
-    }
-    .snippetDropdownContainer .left {
-        float: left;
-        width: 90%;
     }
     .snippetDropdownContainer .right {
         position: absolute;

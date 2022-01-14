@@ -10,7 +10,7 @@
 ## Unreleased - in development
 ### Added
 - The VectorBaseLayer is refactored. It is no longer a Backbone-model. The VectorBaseLayer uses the masterportalAPI's vectorBase layer on creation.
-
+- Package vue-multiselect: 2.1.6 is installed
 ### Changed
 - The following NPM packages are updated:
     - @babel/core: 7.16.0 to 7.16.7
