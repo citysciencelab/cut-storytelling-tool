@@ -1,4 +1,4 @@
-image: node:16.3.2
+image: node:lts
 
 definitions:
   steps:
