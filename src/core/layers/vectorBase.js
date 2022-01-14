@@ -28,15 +28,20 @@ VectorBaseLayer.prototype = Object.create(Layer.prototype);
  */
 VectorBaseLayer.prototype.createLayer = function (attr) {
     this.layer = vectorBase.createLayer(attr);
-    this.updateSource();
+
+    if (attr.isSelected) {
+        this.updateSource(this.layer, attr.features);
+    }
 };
 
 /**
  * Updates the layers source by calling refresh at source.
+ * @param {module:ol/layer/Base~BaseLayer} layer The vector base layer.
+ * @param {module:ol/Feature~Feature[]} features The ol features.
  * @returns {void}
  */
-VectorBaseLayer.prototype.updateSource = function () {
-    vectorBase.updateSource(this.layer);
+VectorBaseLayer.prototype.updateSource = function (layer, features) {
+    vectorBase.updateSource(layer, features);
 };
 
 /**

@@ -28,7 +28,8 @@ describe("src/core/layers/vectorBase.js", () => {
             name: "vectorBaseTestLayer",
             id: "id",
             typ: "VectorBase",
-            isSelected: false
+            isSelected: false,
+            features: sinon.stub()
         };
     });
 
@@ -49,6 +50,15 @@ describe("src/core/layers/vectorBase.js", () => {
         const layer = new VectorBaseLayer(attributes);
 
         expect(layer.get("legend")).to.be.deep.equals([attributes.legendURL]);
+
+    });
+
+    it("updateSource shall update source", function () {
+        const updateSourceStub = sinon.spy(VectorBaseLayer.prototype, "updateSource");
+
+        new VectorBaseLayer(Object.assign(attributes, {isSelected: true}));
+
+        expect(updateSourceStub.calledOnce).to.be.true;
 
     });
 });
