@@ -74,7 +74,7 @@ View.prototype.getProjectedBBox = function (epsgCode = "EPSG:4326") {
 
 /**
  * Returns the corresponding resolution for the scale.
- * @param  {String|number} scale - todo
+ * @param  {String|number} scale - the scale
  * @param  {String} scaleType - min or max
  * @return {number} resolution
  */
@@ -174,7 +174,7 @@ View.prototype.setZoomLevelUp = function () {
 };
 
 /**
- * @description todo
+ * @description toggles the maps background
  * @returns {void}
  */
 View.prototype.toggleBackground = function () {
