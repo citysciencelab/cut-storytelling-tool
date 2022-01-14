@@ -35,7 +35,7 @@ VectorBaseLayer.prototype.createLayer = function (attr) {
 };
 
 /**
- * Updates the layers source by calling refresh at source.
+ * Updates the layers source
  * @param {module:ol/layer/Base~BaseLayer} layer The vector base layer.
  * @param {module:ol/Feature~Feature[]} features The ol features.
  * @returns {void}
