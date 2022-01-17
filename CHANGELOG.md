@@ -166,8 +166,6 @@
 - QuickHelp: moved to Vue and refactored, can now be manipulated for search, tree and routing, new QuickHelp windows can be configured. See new quickHelp.md documentation for more details.
 - Migrated the layerSlider tool from Backbone.js to Vue.js.
 
-### Deprecated
-
 ### Removed
 - The module CLICKCOUNTER is removed.
 - The library "olcs" was removed from the package.json.
