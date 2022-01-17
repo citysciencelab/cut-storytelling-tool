@@ -68,7 +68,7 @@ export default {
         dispatch("getAttributeInLayoutByName", "gfi");
         dispatch("getAttributeInLayoutByName", "legend");
         dispatch("getAttributeInLayoutByName", "scale");
-        commit("setFormatList", response.formats);
+        commit("setFormatList", state.formatList);
         commit("setCurrentScale", Radio.request("MapView", "getOptions").scale);
         dispatch("togglePostrenderListener");
         if (state.isGfiAvailable) {

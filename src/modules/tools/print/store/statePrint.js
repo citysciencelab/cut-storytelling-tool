@@ -60,7 +60,7 @@ const state = {
     currentLayout: undefined,
     currentLayoutName: "A4 Hochformat",
     // available formats of the specified print configuration
-    formatList: ["gif", "pdf", "png", "svg", "tif", "tiff"],
+    formatList: ["gif", "pdf", "png", "jpg", "jpeg", "svg", "tif", "tiff"],
     currentFormat: "pdf",
     scaleList: [],
     currentScale: undefined,
