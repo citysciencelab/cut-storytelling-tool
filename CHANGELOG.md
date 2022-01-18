@@ -20,36 +20,43 @@
 - The following NPM packages are updated:
     - @babel/core: 7.16.0 to 7.16.7
     - @babel/eslint-parser: 7.16.0 to 7.16.5
-    - @babel/preset-env": 7.16.0 to 7.16.7
+    - @babel/preset-env": 7.16.0 to 7.16.8
     - @masterportal/mpconfigparser: 1.1.2 to 1.2.0
     - @sinonjs/fake-timers: 7.1.2 to 8.1.0
     - @vue/test-utils": 1.2.2 to 1.3.0
     - axios: 0.21.1 to 0.24.0
+    - css-loader: 1.0.0 to 1.0.1
+    - dotenv: 10.0.0 to 11.0.0
     - eslint: 7.31.0 to 8.6.0 (In this context the code was adapted to new linter rules)
     - eslint-plugin-chai-friendly: 0.7.1 to 0.7.2
     - eslint-plugin-vue: 7.14.0 to 8.2.0 (In this context the code was adapted to new linter rules)
     - eslint-plugin-vuejs-accessibility: 1.1.0 to 1.1.1
     - html2canvas: 1.1.3 to 1.4.0
     - husky: 7.0.1 to 7.0.4
-    - i18next: 20.3.3 to 21.6.4
+    - i18next: 20.3.3 to 21.6.6
+    - imports-loader: 1.0.0 to 1.2.0
     - inquirer: 8.1.2 to 8.2.0
     - jsts: 2.7.1 to 2.8.1
     - masterportalAPI: v1.8.0 (This also raised ol to version 6.11.0)
     - mocha: 9.1.3 to 9.1.4
     - mock-local-storage: 1.1.17 to 1.1.19
     - moment-timezone: 0.5.33 to 0.5.34
+    - mqtt: 4.2.8 to 4.3.4
     - node-fetch: 2.6.1 to 3.1.0
     - regenerator-runtime: 0.13.7 to 0.13.9
     - replace-in-file: 6.2.0 to 6.3.2
     - sass: 1.44.0 to 1.45.2
+    - selenium-webdriver: 4.1.0 to 4.1.1
     - sinon: 11.1.1 to 12.0.1
     - vue-loader: 15.9.6 to 15.9.8
-    - zip-a-folder: 1.1.0 to 1.1.2
+    - webpack-cli: 3.3.11 to 3.3.12
+    - webpack-dev-server: 3.11.0 to 3.11.3
+    - zip-a-folder: 1.1.0 to 1.1.3
 - The version of node was updated, must be >= 14.18.3 < 15.
   The version of npm  was also updated, must be >= 6.14.15 < 7. The file .npmrc was added to set "engine-strict=true", as a result, the npm version and the node version are mandatory.
 - Migrated the module mapView from Backbone to Vue.
 - Migrated the module vectorBaseLayer from Backbone to Vue. The VectorBaseLayer uses the masterportalAPI's vectorBase layer on creation.
-
+mandatory.
 ### Deprecated
 
 ### Removed
