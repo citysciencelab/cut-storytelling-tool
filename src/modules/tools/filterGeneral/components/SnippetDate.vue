@@ -25,7 +25,7 @@ export default {
         format: {
             type: String,
             required: false,
-            default: "DD.MM.YYYY"
+            default: "YYYY-MM-DD"
         },
         label: {
             type: String,
@@ -52,6 +52,11 @@ export default {
             required: false,
             default: ""
         },
+        snippetId: {
+            type: Number,
+            required: false,
+            default: 0
+        },
         visible: {
             type: Boolean,
             required: false,
@@ -61,11 +66,12 @@ export default {
     data () {
         return {
             disable: true,
-            max: this.convertDateFormat(this.maxValue),
-            min: this.convertDateFormat(this.minValue),
+            internalFormat: "YYYY-MM-DD",
+            max: null,
+            min: null,
             minOnly: false,
             maxOnly: false,
-            value: this.convertDateFormat(this.prechecked),
+            value: null,
             interface: {},
             invalid: false,
             service: {
@@ -85,6 +91,7 @@ export default {
         value (newVal) {
             if (newVal) {
                 this.value = this.getValueInRange(newVal);
+                this.emitCurrentRule(this.value);
             }
         },
         disabled (value) {
@@ -92,6 +99,9 @@ export default {
         }
     },
     created () {
+        this.value = this.convertToInternalDateFormat(this.prechecked, this.format);
+        this.max = this.convertToInternalDateFormat(this.maxValue, this.format);
+        this.min = this.convertToInternalDateFormat(this.minValue, this.format);
         this.value = this.getValueInRange(this.value);
         this.setMinOnly(this.min, this.max);
         this.setMaxOnly(this.min, this.max);
@@ -99,7 +109,31 @@ export default {
         this.setMinMaxValue(this.min, this.max);
         this.disable = false;
     },
+    mounted () {
+        this.$nextTick(() => {
+            this.emitCurrentRule(this.value, true);
+        });
+    },
     methods: {
+        /**
+         * Emits the current rule to whoever is listening.
+         * @param {*} value the value to put into the rule
+         * @param {Boolean} [startup=false] true if the call comes on startup, false if a user actively changed a snippet
+         * @returns {void}
+         */
+        emitCurrentRule (value, startup = false) {
+            this.$emit("ruleChanged", {
+                snippetId: this.snippetId,
+                startup,
+                rule: {
+                    attrName: this.attrName,
+                    operator: this.operator,
+                    format: this.format,
+                    value: moment(value, this.internalFormat).format(this.format)
+                }
+            });
+        },
+
         /**
          * Setting the parameter minOnly
          * @param {Number|undefined} minimumValue the minimum value
@@ -125,12 +159,13 @@ export default {
         },
 
         /**
-         * converts the format of the given date to an ISO date format "YYYY-MM-DD"
-         * @param {Date} date the date to be converted
-         * @returns {Date} the formatted date
+         * Converts the given date string to an internal format using the given format.
+         * @param {String} date the date to be converted
+         * @param {String} format the format the given date has
+         * @returns {String} the formatted date
          */
-        convertDateFormat (date) {
-            return date ? moment(date, this.format).format("YYYY-MM-DD") : date;
+        convertToInternalDateFormat (date, format) {
+            return date ? moment(date, format).format(this.internalFormat) : date;
         },
 
         /**
@@ -146,8 +181,8 @@ export default {
 
         /**
          * setting the parameter minimumValue and maximumValue
-         * @param {Number|undefined} minimumValue the minimum value
-         * @param {Number|undefined} maximumValue the maximum value
+         * @param {Number|undefined} minimumValue the minimum value in internal format
+         * @param {Number|undefined} maximumValue the maximum value in internal format
          * @returns {void}
          */
         setMinMaxValue (minimumValue, maximumValue) {
@@ -158,8 +193,18 @@ export default {
                 });
 
                 this.interface.getMinMax(this.service, this.attrName, minMaxObj => {
-                    this.min = moment(minimumValue === undefined && isObject(minMaxObj) && Object.prototype.hasOwnProperty.call(minMaxObj, "min") ? minMaxObj.min : minimumValue, "DD.MM.YYYY").format("YYYY-MM-DD");
-                    this.max = moment(maximumValue === undefined && isObject(minMaxObj) && Object.prototype.hasOwnProperty.call(minMaxObj, "max") ? minMaxObj.max : maximumValue, "DD.MM.YYYY").format("YYYY-MM-DD");
+                    if (typeof minimumValue === "undefined" && isObject(minMaxObj) && typeof minMaxObj.min === "string") {
+                        this.min = moment(minMaxObj.min, this.format).format(this.internalFormat);
+                    }
+                    else {
+                        this.min = minimumValue;
+                    }
+                    if (typeof maximumValue === "undefined" && isObject(minMaxObj) && typeof minMaxObj.max === "string") {
+                        this.max = moment(minMaxObj.max, this.format).format(this.internalFormat);
+                    }
+                    else {
+                        this.max = maximumValue;
+                    }
                     this.setInvalid(this.min, this.max);
                     this.value = this.getValueInRange(this.value);
                 }, onerror => {
@@ -179,13 +224,13 @@ export default {
                 this.invalid = true;
                 return;
             }
-            else if (moment(maximumValue) < moment(minimumValue)) {
-                console.warn("Please check your configuration or dienst manager, the end date could not be ealier than the begin date!");
+            else if (!moment(maximumValue, this.internalFormat).isValid() || !moment(minimumValue, this.internalFormat).isValid()) {
+                console.warn("Please check your configuration or dienst manager, the min and max date value should be a valid date!");
                 this.invalid = true;
                 return;
             }
-            else if (!moment(maximumValue).isValid() || !moment(minimumValue).isValid()) {
-                console.warn("Please check your configuration or dienst manager, the min and max date value should be a valid date!");
+            else if (moment(maximumValue, this.internalFormat) < moment(minimumValue, this.internalFormat)) {
+                console.warn("Please check your configuration or dienst manager, the end date could not be ealier than the begin date!");
                 this.invalid = true;
                 return;
             }
@@ -205,10 +250,10 @@ export default {
                 return false;
             }
 
-            if (moment(value) < moment(this.min)) {
+            if (moment(value, this.internalFormat) < moment(this.min, this.internalFormat)) {
                 value = this.min;
             }
-            else if (moment(value) > moment(this.max)) {
+            else if (moment(value, this.internalFormat) > moment(this.max, this.internalFormat)) {
                 value = this.max;
             }
 

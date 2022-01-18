@@ -120,7 +120,7 @@ export default {
         this.$refs.inputMaxNumber.value = this.maxVal;
 
         this.$nextTick(() => {
-            this.emitCurrentRule([this.minVal, this.maxVal]);
+            this.emitCurrentRule([this.minVal, this.maxVal], true);
         });
     },
     created () {
@@ -321,9 +321,10 @@ export default {
         /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
+         * @param {Boolean} [startup=false] true if the call comes on startup, false if a user actively changed a snippet
          * @returns {void}
          */
-        emitCurrentRule (value) {
+        emitCurrentRule (value, startup = false) {
             let result = value;
 
             if (Array.isArray(value)) {
@@ -336,6 +337,7 @@ export default {
             }
             this.$emit("ruleChanged", {
                 snippetId: this.snippetId,
+                startup,
                 rule: {
                     attrName: this.attrName,
                     operator: this.operator,

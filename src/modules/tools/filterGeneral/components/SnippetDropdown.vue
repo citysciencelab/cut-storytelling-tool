@@ -5,11 +5,6 @@ import IntervalRegister from "../utils/intervalRegister.js";
 export default {
     name: "SnippetDropdown",
     props: {
-        snippetId: {
-            type: Number,
-            required: false,
-            default: 0
-        },
         attrName: {
             type: String,
             required: false,
@@ -72,6 +67,11 @@ export default {
             required: false,
             default: "fromLegend"
         },
+        snippetId: {
+            type: Number,
+            required: false,
+            default: 0
+        },
         value: {
             type: [Array, undefined],
             required: false,
@@ -86,6 +86,7 @@ export default {
     data () {
         return {
             disable: true,
+            isInitializing: true,
             interface: {},
             invalid: false,
             showInfo: false,
@@ -108,7 +109,7 @@ export default {
     watch: {
         dropdownSelected: {
             handler (value) {
-                this.emitCurrentRule(value);
+                this.emitCurrentRule(value, this.isInitializing);
             }
         },
         disabled: {
@@ -118,24 +119,25 @@ export default {
         }
     },
     mounted () {
+        this.dropdownValue = !this.visible ? this.prechecked : this.value;
+        // triggers emitCurrentRule
+        this.dropdownSelected = Array.isArray(this.prechecked) ? this.prechecked : [];
+
+        if (this.visible && typeof this.dropdownValue === "undefined") {
+            this.setUniqueValues(list => {
+                this.dropdownValue = list;
+            });
+        }
+        else if (!this.visible && typeof this.dropdownValue === "undefined") {
+            this.invalid = true;
+        }
+
+        if (typeof this.dropdownValue !== "undefined" && this.dropdownValue.length > 0) {
+            this.disable = false;
+        }
+
         this.$nextTick(() => {
-            this.dropdownValue = !this.visible ? this.prechecked : this.value;
-            this.dropdownSelected = Array.isArray(this.prechecked) ? this.prechecked : [];
-
-            if (this.visible && typeof this.dropdownValue === "undefined") {
-                this.setUniqueValues(list => {
-                    this.dropdownValue = list;
-                });
-            }
-            else if (!this.visible && typeof this.dropdownValue === "undefined") {
-                this.invalid = true;
-            }
-
-            this.emitCurrentRule(this.dropdownSelected);
-
-            if (typeof this.dropdownValue !== "undefined" && this.dropdownValue.length > 0) {
-                this.disable = false;
-            }
+            this.isInitializing = false;
         });
     },
     methods: {
@@ -164,9 +166,10 @@ export default {
         /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
+         * @param {Boolean} [startup=false] true if the call comes on startup, false if a user actively changed a snippet
          * @returns {void}
          */
-        emitCurrentRule (value) {
+        emitCurrentRule (value, startup = false) {
             let result = value;
 
             if (Array.isArray(value)) {
@@ -179,6 +182,7 @@ export default {
             }
             this.$emit("ruleChanged", {
                 snippetId: this.snippetId,
+                startup,
                 rule: {
                     attrName: this.attrName,
                     operator: this.operator,

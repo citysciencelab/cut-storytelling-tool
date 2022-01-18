@@ -52,6 +52,11 @@ export default {
             required: false,
             default: 0
         },
+        snippetId: {
+            type: Number,
+            required: false,
+            default: 0
+        },
         visible: {
             type: Boolean,
             required: false,
@@ -89,6 +94,7 @@ export default {
                 if (newVal === this.value) {
                     this.$refs.inputNumber.value = this.value;
                 }
+                this.emitCurrentRule(this.value);
             }
         },
         disabled (value) {
@@ -106,8 +112,29 @@ export default {
     },
     mounted () {
         this.$refs.inputNumber.value = this.value;
+        this.$nextTick(() => {
+            this.emitCurrentRule(this.value, true);
+        });
     },
     methods: {
+        /**
+         * Emits the current rule to whoever is listening.
+         * @param {*} value the value to put into the rule
+         * @param {Boolean} [startup=false] true if the call comes on startup, false if a user actively changed a snippet
+         * @returns {void}
+         */
+        emitCurrentRule (value, startup = false) {
+            this.$emit("ruleChanged", {
+                snippetId: this.snippetId,
+                startup,
+                rule: {
+                    attrName: this.attrName,
+                    operator: this.operator,
+                    value
+                }
+            });
+        },
+
         /**
          * Getting valid step
          * @param {Number} value - the step for slider

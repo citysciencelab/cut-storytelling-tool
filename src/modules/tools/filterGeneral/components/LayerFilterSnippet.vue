@@ -230,12 +230,15 @@ export default {
                     class="snippet"
                 >
                     <SnippetCheckbox
+                        :attr-name="snippet.attrName"
                         :disabled="disabled"
                         :info="snippet.info"
                         :label="snippet.label"
                         :operator="snippet.operator"
                         :prechecked="snippet.prechecked"
+                        :snippet-id="indexSnippet"
                         :visible="snippet.visible"
+                        @ruleChanged="ruleChanged"
                     />
                 </div>
                 <div
@@ -292,7 +295,9 @@ export default {
                         :min-value="snippet.minValue"
                         :operator="snippet.operator"
                         :prechecked="snippet.prechecked"
+                        :snippet-id="indexSnippet"
                         :visible="snippet.visible"
+                        @ruleChanged="ruleChanged"
                     />
                 </div>
                 <div
@@ -309,7 +314,9 @@ export default {
                         :min-value="snippet.minValue"
                         :operator="snippet.operator"
                         :prechecked="snippet.prechecked"
+                        :snippet-id="indexSnippet"
                         :visible="snippet.visible"
+                        @ruleChanged="ruleChanged"
                     />
                 </div>
                 <div
@@ -326,7 +333,9 @@ export default {
                         :max-value="snippet.maxValue"
                         :operater="snippet.operator"
                         :prechecked="snippet.prechecked"
+                        :snippet-id="indexSnippet"
                         :visible="snippet.visible"
+                        @ruleChanged="ruleChanged"
                     />
                 </div>
                 <div

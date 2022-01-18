@@ -2,6 +2,11 @@
 export default {
     name: "SnippetCheckbox",
     props: {
+        attrName: {
+            type: String,
+            required: false,
+            default: ""
+        },
         disabled: {
             type: Boolean,
             required: false,
@@ -27,6 +32,11 @@ export default {
             required: false,
             default: false
         },
+        snippetId: {
+            type: Number,
+            required: false,
+            default: 0
+        },
         visible: {
             type: Boolean,
             required: false,
@@ -44,7 +54,36 @@ export default {
             return this.info ? this.info : this.$t("modules.tools.filterGeneral.checkBoxInfo");
         }
     },
+    watch: {
+        checked: {
+            handler (value) {
+                this.emitCurrentRule(value);
+            }
+        }
+    },
+    mounted () {
+        this.$nextTick(() => {
+            this.emitCurrentRule(this.checked, true);
+        });
+    },
     methods: {
+        /**
+         * Emits the current rule to whoever is listening.
+         * @param {*} value the value to put into the rule
+         * @param {Boolean} [startup=false] true if the call comes on startup, false if a user actively changed a snippet
+         * @returns {void}
+         */
+        emitCurrentRule (value, startup = false) {
+            this.$emit("ruleChanged", {
+                snippetId: this.snippetId,
+                startup,
+                rule: {
+                    attrName: this.attrName,
+                    operator: this.operator,
+                    value
+                }
+            });
+        },
         toggleInfo () {
             this.showInfo = !this.showInfo;
         }
