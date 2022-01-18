@@ -1,12 +1,15 @@
 <script>
 import store from "../../../../app-store";
-import InterfaceOL from "../interfaces/interface.ol.js";
-import IntervalRegister from "../utils/intervalRegister.js";
 import isObject from "../../../../utils/isObject";
 
 export default {
     name: "SnippetSliderRange",
     props: {
+        api: {
+            type: Object,
+            required: false,
+            default: null
+        },
         attrName: {
             type: String,
             required: false,
@@ -68,7 +71,6 @@ export default {
     data () {
         return {
             disable: true,
-            interface: {},
             invalid: false,
             minimumValue: this.minValue,
             maximumValue: this.maxValue,
@@ -284,12 +286,7 @@ export default {
          */
         setMinMaxValue (minimumValue, maximumValue) {
             if (minimumValue === undefined || maximumValue === undefined) {
-                this.interface = new InterfaceOL(new IntervalRegister(), {
-                    getFeaturesByLayerId: false,
-                    isFeatureInMapExtent: false
-                });
-
-                this.interface.getMinMax(this.service, this.attrName, minMaxObj => {
+                this.api.getMinMax(this.attrName, minMaxObj => {
                     this.minimumValue = minimumValue === undefined && isObject(minMaxObj) && Object.prototype.hasOwnProperty.call(minMaxObj, "min") ? minMaxObj.min : minimumValue;
                     this.maximumValue = maximumValue === undefined && isObject(minMaxObj) && Object.prototype.hasOwnProperty.call(minMaxObj, "max") ? minMaxObj.max : maximumValue;
                     this.setInvalid(this.minimumValue, this.maximumValue);
@@ -330,7 +327,7 @@ export default {
             if (Array.isArray(value)) {
                 result = [];
                 value.forEach(v => {
-                    if (v) {
+                    if (typeof v === "number") {
                         result.push(v);
                     }
                 });
@@ -341,7 +338,7 @@ export default {
                 rule: {
                     attrName: this.attrName,
                     operator: this.operator,
-                    result
+                    value: result
                 }
             });
         },

@@ -2,6 +2,11 @@
 export default {
     name: "SnippetCheckbox",
     props: {
+        api: {
+            type: Object,
+            required: false,
+            default: null
+        },
         attrName: {
             type: String,
             required: false,

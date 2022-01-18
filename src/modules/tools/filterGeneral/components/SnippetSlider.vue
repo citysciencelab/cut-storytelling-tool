@@ -1,12 +1,15 @@
 <script>
 import store from "../../../../app-store";
-import InterfaceOL from "../interfaces/interface.ol.js";
-import IntervalRegister from "../utils/intervalRegister.js";
 import isObject from "../../../../utils/isObject";
 
 export default {
     name: "SnippetSlider",
     props: {
+        api: {
+            type: Object,
+            required: false,
+            default: null
+        },
         attrName: {
             type: String,
             required: false,
@@ -66,17 +69,11 @@ export default {
     data () {
         return {
             disable: true,
-            interface: {},
             invalid: false,
             minimumValue: this.minValue,
             maximumValue: this.maxValue,
             minOnly: false,
             maxOnly: false,
-            service: {
-                type: "WFS",
-                url: "https://geodienste.hamburg.de/HH_WFS_Regionaler_Bildungsatlas_Bev_Stadtteil",
-                typename: "regionaler_bildungsatlas_bevoelkerung_stadtteile"
-            },
             showInfo: false,
             step: this.decimalStep,
             value: this.prechecked
@@ -255,12 +252,7 @@ export default {
          */
         setMinMaxValue (minimumValue, maximumValue) {
             if (minimumValue === undefined || maximumValue === undefined) {
-                this.interface = new InterfaceOL(new IntervalRegister(), {
-                    getFeaturesByLayerId: false,
-                    isFeatureInMapExtent: false
-                });
-
-                this.interface.getMinMax(this.service, this.attrName, minMaxObj => {
+                this.api.getMinMax(this.attrName, minMaxObj => {
                     this.minimumValue = minimumValue === undefined && isObject(minMaxObj) && Object.prototype.hasOwnProperty.call(minMaxObj, "min") ? minMaxObj.min : minimumValue;
                     this.maximumValue = maximumValue === undefined && isObject(minMaxObj) && Object.prototype.hasOwnProperty.call(minMaxObj, "max") ? minMaxObj.max : maximumValue;
                     this.setInvalid(this.minimumValue, this.maximumValue);

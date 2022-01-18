@@ -69,9 +69,9 @@ describe("src/modules/tools/filterGeneral/components/FilterGeneral.vue", () => {
         expect(layers.exists()).to.be.true;
     });
 
-    it("should update layer by passed layerIds", () => {
+    it("should update layer by passed filterIds", () => {
         wrapper = shallowMount(FilterGeneral, {store, localVue});
-        wrapper.vm.updateSelectedLayers(["8712"]);
+        wrapper.vm.updateSelectedLayers([0]);
 
         const expected = [{
             filterId: 0,
@@ -93,17 +93,17 @@ describe("src/modules/tools/filterGeneral/components/FilterGeneral.vue", () => {
         expect(wrapper.vm.selectedLayers).to.deep.equal(expected);
     });
 
-    it("should show layer if layerId is in selectedLayers", () => {
+    it("should show layer if filterId is in selectedLayers", () => {
         wrapper = shallowMount(FilterGeneral, {store, localVue});
-        wrapper.vm.updateSelectedLayers(["8712"]);
+        wrapper.vm.updateSelectedLayers([0]);
 
         expect(wrapper.vm.showLayerSnippet(0)).to.be.true;
     });
 
-    it("should not show layer if layerId is not in selectedLayers", () => {
+    it("should not show layer if filterId is not in selectedLayers", () => {
         wrapper = shallowMount(FilterGeneral, {store, localVue});
-        wrapper.vm.updateSelectedLayers(["8712"]);
+        wrapper.vm.updateSelectedLayers([1]);
 
-        expect(wrapper.vm.showLayerSnippet("1234")).to.be.false;
+        expect(wrapper.vm.showLayerSnippet(0)).to.be.false;
     });
 });

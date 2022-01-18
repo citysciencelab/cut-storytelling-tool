@@ -49,8 +49,8 @@ export default class MapHandler {
             return;
         }
         const service = isObject(filterAnswer.service) ? filterAnswer.service : false,
-            filterId = filterAnswer?.filterId ? filterAnswer.filterId : false,
-            page = filterAnswer?.paging?.page ? filterAnswer.paging.page : false,
+            filterId = typeof filterAnswer?.filterId === "number" ? filterAnswer.filterId : false,
+            page = typeof filterAnswer?.paging?.page === "number" ? filterAnswer.paging.page : false,
             items = Array.isArray(filterAnswer.items) ? filterAnswer.items : false;
 
         if (service === false) {
@@ -75,7 +75,7 @@ export default class MapHandler {
             return;
         }
 
-        if (!service?.type && service?.layerId) {
+        if (service?.layerId) {
             const layer = this.getLayerOfTreeSource(filterId, service.layerId);
 
             this.visualizeTreeSource(filterId, items, layer, page);

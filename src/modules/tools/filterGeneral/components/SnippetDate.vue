@@ -1,12 +1,15 @@
 <script>
-import InterfaceOL from "../interfaces/interface.ol.js";
-import IntervalRegister from "../utils/intervalRegister.js";
 import isObject from "../../../../utils/isObject";
 import moment from "moment";
 
 export default {
     name: "SnippetDate",
     props: {
+        api: {
+            type: Object,
+            required: false,
+            default: null
+        },
         attrName: {
             type: String,
             required: false,
@@ -72,13 +75,7 @@ export default {
             minOnly: false,
             maxOnly: false,
             value: null,
-            interface: {},
             invalid: false,
-            service: {
-                type: "WFS",
-                url: "https://geodienste.hamburg.de/HH_WFS_Baustellen",
-                typename: "tns_steckbrief_visualisierung"
-            },
             showInfo: false
         };
     },
@@ -187,12 +184,7 @@ export default {
          */
         setMinMaxValue (minimumValue, maximumValue) {
             if (minimumValue === undefined || maximumValue === undefined) {
-                this.interface = new InterfaceOL(new IntervalRegister(), {
-                    getFeaturesByLayerId: false,
-                    isFeatureInMapExtent: false
-                });
-
-                this.interface.getMinMax(this.service, this.attrName, minMaxObj => {
+                this.api.getMinMax(this.attrName, minMaxObj => {
                     if (typeof minimumValue === "undefined" && isObject(minMaxObj) && typeof minMaxObj.min === "string") {
                         this.min = moment(minMaxObj.min, this.format).format(this.internalFormat);
                     }

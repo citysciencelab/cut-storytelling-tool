@@ -1,10 +1,12 @@
 <script>
-import InterfaceOL from "../interfaces/interface.ol.js";
-import IntervalRegister from "../utils/intervalRegister.js";
-
 export default {
     name: "SnippetDropdown",
     props: {
+        api: {
+            type: Object,
+            required: false,
+            default: null
+        },
         attrName: {
             type: String,
             required: false,
@@ -87,14 +89,8 @@ export default {
         return {
             disable: true,
             isInitializing: true,
-            interface: {},
             invalid: false,
             showInfo: false,
-            service: {
-                type: "WFS",
-                url: "https://geodienste.hamburg.de/HH_WFS_Regionaler_Bildungsatlas_Bev_Stadtteil",
-                typename: "regionaler_bildungsatlas_bevoelkerung_stadtteile"
-            },
             multipleClass: "multipleClass",
             singleClass: "singleClass",
             dropdownValue: [],
@@ -148,12 +144,7 @@ export default {
             this.showInfo = !this.showInfo;
         },
         setUniqueValues (onsuccess) {
-            this.interface = new InterfaceOL(new IntervalRegister(), {
-                getFeaturesByLayerId: false,
-                isFeatureInMapExtent: false
-            });
-
-            this.interface.getUniqueValues(this.service, this.attrName, list => {
+            this.api.getUniqueValues(this.attrName, list => {
                 if (typeof onsuccess === "function") {
                     onsuccess(list);
                     this.disable = false;

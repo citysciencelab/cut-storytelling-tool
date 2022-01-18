@@ -204,7 +204,7 @@ export default class InterfaceOL {
         let ruleValueA = Array.isArray(rule.value) ? rule.value[0] : rule.value,
             ruleValueB = Array.isArray(rule.value) ? rule.value[1] : undefined,
             featValueA = featureValue,
-            featValueB = featureValue2;
+            featValueB = typeof featureValue2 !== "undefined" ? featureValue2 : featureValue;
 
         if (typeof ruleValueA === "string") {
             ruleValueA = ruleValueA.toLowerCase();
@@ -219,15 +219,15 @@ export default class InterfaceOL {
             featValueB = featValueB.toLowerCase();
         }
         return Array.isArray(rule.value) && (
-            rule.operator === "INTERSECTS" && featureValue <= rule.value[1] && featureValue2 >= rule.value[0]
-            || rule.operator === "BETWEEN" && featureValue >= rule.value[0] && featureValue2 <= rule.value[1]
-            || rule.operator === "EQ" && typeof rule.value.find(v => featValueA === v.toLowerCase()) !== "undefined"
-            || rule.operator === "IN" && typeof featValueA === "string" && typeof rule.value.find(v => featValueA.includes(v.toLowerCase())) !== "undefined"
-            || rule.operator === "STARTSWITH" && typeof featValueA === "string" && typeof rule.value.find(v => featValueA.startsWith(v.toLowerCase())) !== "undefined"
-            || rule.operator === "ENDSWITH" && typeof featValueA === "string" && typeof rule.value.find(v => featValueA.endsWith(v.toLowerCase())) !== "undefined"
+            rule.operator === "INTERSECTS" && featValueA <= rule.value[1] && featValueB >= rule.value[0]
+            || rule.operator === "BETWEEN" && featValueA >= rule.value[0] && featValueB <= rule.value[1]
+            || rule.operator === "EQ" && typeof rule.value.find(v => typeof v === "string" && featValueA === v.toLowerCase()) !== "undefined"
+            || rule.operator === "IN" && typeof featValueA === "string" && typeof rule.value.find(v => typeof v === "string" && featValueA.includes(v.toLowerCase())) !== "undefined"
+            || rule.operator === "STARTSWITH" && typeof featValueA === "string" && typeof rule.value.find(v => typeof v === "string" && featValueA.startsWith(v.toLowerCase())) !== "undefined"
+            || rule.operator === "ENDSWITH" && typeof featValueA === "string" && typeof rule.value.find(v => typeof v === "string" && featValueA.endsWith(v.toLowerCase())) !== "undefined"
         )
         || typeof rule.value !== "undefined" && (
-            rule.operator === "BETWEEN" && featureValue <= rule.value && featureValue2 >= rule.value
+            rule.operator === "BETWEEN" && featValueA <= rule.value && featValueB >= rule.value
             || rule.operator === "EQ" && featValueA === ruleValueA
             || rule.operator === "NE" && featValueA !== ruleValueA
             || rule.operator === "GT" && featValueA > ruleValueA

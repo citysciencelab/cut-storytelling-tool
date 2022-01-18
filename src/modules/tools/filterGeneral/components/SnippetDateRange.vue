@@ -1,11 +1,14 @@
 <script>
-import InterfaceOL from "../interfaces/interface.ol.js";
-import IntervalRegister from "../utils/intervalRegister.js";
 import moment from "moment";
 
 export default {
     name: "SnippetDateRange",
     props: {
+        api: {
+            type: Object,
+            required: false,
+            default: null
+        },
         attrName: {
             type: [String, Array],
             required: true
@@ -65,7 +68,6 @@ export default {
         return {
             disable: true,
             fromDate: null,
-            interface: null,
             invalid: false,
             initialMin: null,
             internalFormat: "YYYY-MM-DD",
@@ -74,11 +76,6 @@ export default {
             maxUntil: null,
             minUntil: null,
             untilDate: null,
-            service: {
-                type: "WFS",
-                url: "https://geodienste.hamburg.de/HH_WFS_Baustellen",
-                typename: "tns_steckbrief_visualisierung"
-            },
             showInfo: false
         };
     },
@@ -109,19 +106,14 @@ export default {
 
         if (this.isInvalid()) {
             this.invalid = true;
-            return;
         }
-        this.interface = new InterfaceOL(new IntervalRegister(), {
-            getFeaturesByLayerId: false,
-            isFeatureInMapExtent: false
-        });
-        this.checkPrechecked();
-        this.checkMinMax();
-        this.disableFrom = this.disabled;
-        this.disableUntil = this.disabled;
     },
     mounted () {
         this.$nextTick(() => {
+            this.checkPrechecked();
+            this.checkMinMax();
+            this.disableFrom = this.disabled;
+            this.disableUntil = this.disabled;
             this.emitCurrentRule([this.fromDate, this.untilDate], true);
         });
     },
@@ -187,17 +179,19 @@ export default {
          * @returns {void}
          */
         setMinMaxFromDate (attribute, min = false, max = false) {
-            this.interface.getMinMax(this.service, attribute, minMaxObj => {
-                const minFormated = this.convertToInternalDateFormat(minMaxObj?.min, this.format),
-                    maxFormated = this.convertToInternalDateFormat(minMaxObj?.max, this.format);
+            if (this.api) {
+                this.api.getMinMax(attribute, minMaxObj => {
+                    const minFormated = this.convertToInternalDateFormat(minMaxObj?.min, this.format),
+                        maxFormated = this.convertToInternalDateFormat(minMaxObj?.max, this.format);
 
-                this.minFrom = minFormated ? minFormated : this.minFrom;
-                this.maxFrom = maxFormated ? maxFormated : this.maxFrom;
-                // If user configured prechecked dates which are not between min and max
-                this.checkPrechecked();
-            }, onerror => {
-                console.warn(onerror);
-            }, min, max);
+                    this.minFrom = minFormated ? minFormated : this.minFrom;
+                    this.maxFrom = maxFormated ? maxFormated : this.maxFrom;
+                    // If user configured prechecked dates which are not between min and max
+                    this.checkPrechecked();
+                }, onerror => {
+                    console.warn(onerror);
+                }, min, max);
+            }
         },
         /**
          * Set min or max or both for the second datepicker.
@@ -207,18 +201,20 @@ export default {
          * @returns {void}
          */
         setMinMaxUntilDate (attribute, min = false, max = false) {
-            this.interface.getMinMax(this.service, attribute, minMaxObj => {
-                const minFormated = this.convertToInternalDateFormat(minMaxObj?.min, this.format),
-                    maxFormated = this.convertToInternalDateFormat(minMaxObj?.max, this.format);
+            if (this.api) {
+                this.api.getMinMax(attribute, minMaxObj => {
+                    const minFormated = this.convertToInternalDateFormat(minMaxObj?.min, this.format),
+                        maxFormated = this.convertToInternalDateFormat(minMaxObj?.max, this.format);
 
-                this.minUntil = minFormated ? minFormated : this.minUntil;
-                this.maxUntil = maxFormated ? maxFormated : this.maxUntil;
-                this.initialMin = this.minUntil;
-                // If user configured prechecked dates which are not between min and max
-                this.checkPrechecked();
-            }, onerror => {
-                console.warn(onerror);
-            }, min, max);
+                    this.minUntil = minFormated ? minFormated : this.minUntil;
+                    this.maxUntil = maxFormated ? maxFormated : this.maxUntil;
+                    this.initialMin = this.minUntil;
+                    // If user configured prechecked dates which are not between min and max
+                    this.checkPrechecked();
+                }, onerror => {
+                    console.warn(onerror);
+                }, min, max);
+            }
         },
         /**
          * Check min max for the 'until' and 'from' field.

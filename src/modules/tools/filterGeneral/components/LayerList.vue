@@ -28,35 +28,35 @@ export default {
     methods: {
         /**
          * Updates selectedLayers array.
-         * @param {String} layerId id which should be removed or added to selectedLayers array
+         * @param {String} filterId id which should be removed or added to selectedLayers array
          * @returns {void}
          */
-        updateSelectedLayers (layerId) {
-            if (typeof layerId !== "string") {
+        updateSelectedLayers (filterId) {
+            if (typeof filterId !== "number") {
                 return;
             }
 
             if (!this.multiLayerSelector) {
-                this.selectedLayers = this.selectedLayers.includes(layerId) ? [] : [layerId];
+                this.selectedLayers = this.selectedLayers.includes(filterId) ? [] : [filterId];
                 return;
             }
 
-            const index = this.selectedLayers.indexOf(layerId);
+            const index = this.selectedLayers.indexOf(filterId);
 
             if (index >= 0) {
                 this.selectedLayers.splice(index, 1);
             }
             else {
-                this.selectedLayers.push(layerId);
+                this.selectedLayers.push(filterId);
             }
         },
         /**
          * Check if Selector should be disabled.
-         * @param {String} layerId id to check if should be disabled
+         * @param {String} filterId id to check if should be disabled
          * @returns {void}
          */
-        disabled (layerId) {
-            return !this.multiLayerSelector && this.selectedLayers.length > 0 && !this.selectedLayers.includes(layerId);
+        disabled (filterId) {
+            return !this.multiLayerSelector && this.selectedLayers.length > 0 && !this.selectedLayers.includes(filterId);
         }
     }
 };
@@ -70,23 +70,23 @@ export default {
     >
         <div
             v-for="layer in layers"
-            :key="layer.layerId"
+            :key="layer.filterId"
             class="panel panel-default"
         >
             <div
-                :class="['panel-heading', disabled(layer.layerId) ? 'disabled' : '']"
+                :class="['panel-heading', disabled(layer.filterId) ? 'disabled' : '']"
                 role="tab"
             >
                 <h2
-                    :class="['panel-title', disabled(layer.layerId) ? 'disabled' : '']"
-                    @click="updateSelectedLayers(layer.layerId)"
-                    @keydown.enter="updateSelectedLayers(layer.layerId)"
+                    :class="['panel-title', disabled(layer.filterId) ? 'disabled' : '']"
+                    @click="updateSelectedLayers(layer.filterId)"
+                    @keydown.enter="updateSelectedLayers(layer.filterId)"
                 >
                     <a
                         role="button"
                         data-toggle="collapse"
                         data-parent="#accordion"
-                        :disabled="disabled(layer.layerId)"
+                        :disabled="disabled(layer.filterId)"
                     >
                         {{ layer.title ? layer.title : layer.layerId }}
                     </a>

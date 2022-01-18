@@ -8,6 +8,7 @@ import SnippetInput from "./SnippetInput.vue";
 import SnippetSlider from "./SnippetSlider.vue";
 import SnippetSliderRange from "./SnippetSliderRange.vue";
 import isObject from "../../../../utils/isObject";
+import FilterApi from "../interfaces/filter.api.js";
 
 export default {
     name: "LayerFilterSnippet",
@@ -26,10 +27,6 @@ export default {
             type: Object,
             required: true
         },
-        api: {
-            type: Object,
-            required: true
-        },
         mapHandler: {
             type: Object,
             required: true
@@ -45,7 +42,8 @@ export default {
             disabled: false,
             showStop: false,
             layerModel: null,
-            layerService: null
+            layerService: null,
+            api: null
         };
     },
     watch: {
@@ -58,6 +56,8 @@ export default {
     created () {
         this.activateLayer(this.layerConfig?.layerId);
         this.setLayerService(this.layerModel);
+
+        this.api = new FilterApi(this.layerConfig.filterId, this.layerService);
     },
     mounted () {
         if (Array.isArray(this.layerConfig?.snippets)) {
@@ -118,8 +118,8 @@ export default {
          */
         filter () {
             const filterQuestion = {
-                service: this.layerService,
                 filterId: this.layerConfig.filterId,
+                service: this.layerService,
                 snippetId: false,
                 commands: {
                     paging: this.layerConfig?.paging ? this.layerConfig.paging : 1000,
@@ -166,7 +166,7 @@ export default {
          * @returns {void}
          */
         activateLayer (layerId) {
-            if (typeof layerId === "string") {
+            if (typeof layerId === "string" && (!this.layerConfig?.service || this.layerConfig?.service?.type.toLowerCase() === "ol")) {
                 const layers = Radio.request("Map", "getLayers"),
                     visibleLayer = typeof layers?.getArray !== "function" ? [] : layers.getArray().filter(layer => {
                         return layer.getVisible() === true && layer.get("id") === layerId;
@@ -222,9 +222,13 @@ export default {
          * @returns {void}
          */
         stopfilter () {
-            this.api.intervalRegister.stopPagingInterval(this.layerConfig.filterId);
-            this.showStopButton(false);
-            this.setFormDisable(false);
+            this.api.stop(() => {
+                this.showStopButton(false);
+                this.setFormDisable(false);
+            },
+            err => {
+                console.warn(err);
+            });
         }
     }
 };
@@ -246,6 +250,7 @@ export default {
                     class="snippet"
                 >
                     <SnippetCheckbox
+                        :api="api"
                         :attr-name="snippet.attrName"
                         :disabled="disabled"
                         :info="snippet.info"
@@ -262,6 +267,7 @@ export default {
                     class="snippet"
                 >
                     <SnippetDropdown
+                        :api="api"
                         :attr-name="snippet.attrName"
                         :add-select-all="snippet.addSelectAll"
                         :auto-init="snippet.autoInit"
@@ -285,6 +291,7 @@ export default {
                     class="snippet"
                 >
                     <SnippetInput
+                        :api="api"
                         :attr-name="snippet.attrName"
                         :disabled="disabled"
                         :info="snippet.info"
@@ -302,6 +309,7 @@ export default {
                     class="snippet"
                 >
                     <SnippetDate
+                        :api="api"
                         :attr-name="snippet.attrName"
                         :disabled="disabled"
                         :info="snippet.info"
@@ -321,6 +329,7 @@ export default {
                     class="snippet"
                 >
                     <SnippetDateRange
+                        :api="api"
                         :attr-name="snippet.attrName"
                         :disabled="disabled"
                         :info="snippet.info"
@@ -340,6 +349,7 @@ export default {
                     class="snippet"
                 >
                     <SnippetSlider
+                        :api="api"
                         :attr-name="snippet.attrName"
                         :decimal-step="snippet.decimalStep"
                         :disabled="disabled"
@@ -359,6 +369,7 @@ export default {
                     class="snippet"
                 >
                     <SnippetSliderRange
+                        :api="api"
                         :attr-name="snippet.attrName"
                         :decimal-step="snippet.decimalStep"
                         :disabled="disabled"
