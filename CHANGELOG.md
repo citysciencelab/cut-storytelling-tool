@@ -59,6 +59,7 @@
     - whatwg-fetch
 
 ### Fixed
+- Issue #679: `saveSelection` is now configurable again within the layer tree.
 - Fixed spelling of `DIRECTIONS` in documentation for routing tool.
 - Tool CoordToolkit: Labeling of longitude and latitude corrected if long/lat is selected as projection system.
 - Fixed issue #672: layerAttribution not working correctly if layer is not initially visible
