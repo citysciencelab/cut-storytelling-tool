@@ -39,6 +39,7 @@ export default {
     @import "~/css/mixins.scss";
     progress {
         border-radius: 7px;
+        margin-top: 20px;
         width: 100%;
         height: 12px;
         box-shadow: 1px 1px 4px rgba( 0, 0, 0, 0.2 );

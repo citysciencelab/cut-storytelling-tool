@@ -59,6 +59,11 @@ export default {
         this.$on("close", this.close);
     },
     mounted () {
+        if (Array.isArray(this.layers)) {
+            this.layers.forEach((layer, filterId) => {
+                layer.filterId = filterId;
+            });
+        }
         this.$nextTick(() => {
             this.initialize();
             // console.log("Alte Config", this.configs);
@@ -106,10 +111,10 @@ export default {
         },
         /**
          * Check if layer filter should be displayed.
-         * @param {String} layerId layerid to check
+         * @param {String} filterId filterId to check
          * @returns {Boolean} true if should be displayed false if not
          */
-        showLayerSnippet (layerId) {
+        showLayerSnippet (filterId) {
             if (!Array.isArray(this.selectedLayers)) {
                 return false;
             }
@@ -117,7 +122,7 @@ export default {
                 return true;
             }
             return this.selectedLayers.some(selectedLayer => {
-                return selectedLayer.layerId === layerId;
+                return selectedLayer.filterId === filterId;
             });
         }
     }
@@ -150,7 +155,7 @@ export default {
                     #default="slotProps"
                 >
                     <div
-                        :class="['panel-collapse', 'collapse', showLayerSnippet(slotProps.layer.layerId) ? 'in' : '']"
+                        :class="['panel-collapse', 'collapse', showLayerSnippet(slotProps.layer.filterId) ? 'in' : '']"
                         role="tabpanel"
                     >
                         <LayerFilterSnippet

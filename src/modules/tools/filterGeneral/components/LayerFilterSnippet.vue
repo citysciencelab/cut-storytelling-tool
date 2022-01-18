@@ -43,6 +43,7 @@ export default {
                 total: 0
             },
             disabled: false,
+            showStop: false,
             layerModel: null
         };
     },
@@ -125,7 +126,7 @@ export default {
         filter () {
             const filterQuestion = {
                 service: this.getService(),
-                filterId: 1,
+                filterId: this.layerConfig.filterId,
                 snippetId: false,
                 commands: {
                     paging: this.layerConfig?.paging ? this.layerConfig.paging : 1000,
@@ -136,6 +137,7 @@ export default {
 
             this.activateLayer(this.layerConfig?.layerId);
             this.setFormDisable(true);
+            this.showStopButton(true);
             if (isObject(this.layerModel)) {
                 this.layerModel.layer.getSource().on("featuresloadend", () => {
                     this.runApiFilter(filterQuestion);
@@ -153,6 +155,14 @@ export default {
          */
         setFormDisable (disable) {
             this.disabled = disable;
+        },
+        /**
+         * Showing or not Showing terminate button
+         * @param {Boolean} value true/false to en/disable to show terminate button
+         * @returns {void}
+         */
+        showStopButton (value) {
+            this.showStop = value;
         },
         /**
          * Activating the layer for filtering
@@ -190,6 +200,15 @@ export default {
             }, error => {
                 console.warn("filter error", error);
             });
+        },
+        /**
+         * Terminating the filter process by terminating every snippet
+         * @returns {void}
+         */
+        stopfilter () {
+            this.api.intervalRegister.stopPagingInterval(this.layerConfig.filterId);
+            this.showStopButton(false);
+            this.setFormDisable(false);
         }
     }
 };
@@ -330,16 +349,22 @@ export default {
                     />
                 </div>
             </div>
-        </div>
-        <div class="snippet">
-            <button
-                @click="filter()"
-            >
-                Filtern
-            </button>
-            <ProgressBar
-                :paging="paging"
-            />
+            <div class="snippet">
+                <button
+                    @click="filter()"
+                >
+                    Filtern
+                </button>
+                <button
+                    v-if="paging.page < paging.total && showStop"
+                    @click="stopfilter()"
+                >
+                    {{ $t("button.stop") }}
+                </button>
+                <ProgressBar
+                    :paging="paging"
+                />
+            </div>
         </div>
     </div>
 </template>

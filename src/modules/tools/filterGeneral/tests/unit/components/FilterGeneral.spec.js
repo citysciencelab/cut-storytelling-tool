@@ -74,6 +74,7 @@ describe("src/modules/tools/filterGeneral/components/FilterGeneral.vue", () => {
         wrapper.vm.updateSelectedLayers(["8712"]);
 
         const expected = [{
+            filterId: 0,
             layerId: "8712",
             searchInMapExtent: true,
             paging: 10,
@@ -96,7 +97,7 @@ describe("src/modules/tools/filterGeneral/components/FilterGeneral.vue", () => {
         wrapper = shallowMount(FilterGeneral, {store, localVue});
         wrapper.vm.updateSelectedLayers(["8712"]);
 
-        expect(wrapper.vm.showLayerSnippet("8712")).to.be.true;
+        expect(wrapper.vm.showLayerSnippet(0)).to.be.true;
     });
 
     it("should not show layer if layerId is not in selectedLayers", () => {

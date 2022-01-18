@@ -6,7 +6,8 @@
         "search": "Suchen",
         "close": "Schließen",
         "minimize": "Minimieren",
-        "confirm": "Bestätigen"
+        "confirm": "Bestätigen",
+        "stop": "Abbrechen"
     },
     "colors": {
         "blue": "Blau",
