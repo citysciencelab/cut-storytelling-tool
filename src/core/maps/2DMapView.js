@@ -22,13 +22,17 @@ View.prototype.initStore = function () {
         Radio.trigger("RemoteInterface", "postMessage", {"centerPosition": this.getCenter()});
     });
 
-    const params = findWhereJs(mapCollection.getMapView("ol", "2D").options_?.options, {resolution: mapCollection.getMapView("ol", "2D").getConstrainedResolution(mapCollection.getMapView("ol", "2D").getResolution())});
+    const params = findWhereJs(this.get("options"), {resolution: this.getConstrainedResolution(this.getResolution())});
+
+    if (document.getElementById("map") !== null) {
+        this.setBackground(document.getElementById("map").style.backgroundImage);
+    }
 
     // triggers the function checkForScale modules\core\modelList\layer\model.js
     Radio.trigger("MapView", "changedOptions", params);
     store.commit("Map/setScale", params.scale);
     // NOTE: used for scaleSwitcher-tutorial
-    store.commit("Map/setScales", {scales: this.options_.options.map(option => option.scale)});
+    store.commit("Map/setScales", {scales: this.get("options").map(option => option.scale)});
 };
 /**
  * @description is called when the view resolution is changed triggers the map view options
@@ -38,7 +42,7 @@ View.prototype.initStore = function () {
 View.prototype.changedResolutionCallback = function (evt) {
     const mapView = evt.target,
         constrainResolution = this.getConstrainedResolution(mapView.get(evt.key)),
-        params = findWhereJs(this.options_.options, {resolution: constrainResolution});
+        params = findWhereJs(this.get("options"), {resolution: constrainResolution});
 
     Radio.trigger("MapView", "changedOptions", params);
     store.commit("Map/setScale", params.scale);
@@ -77,7 +81,7 @@ View.prototype.getProjectedBBox = function (epsgCode = "EPSG:4326", mapObject = 
  * @return {number} resolution
  */
 View.prototype.getResolutionByScale = function (scale, scaleType) {
-    const scales = this.options_.options.map(option => option.scale);
+    const scales = this.get("options").map(option => option.scale);
 
     let index = "",
         unionScales = scales.concat([parseInt(scale, 10)].filter(item => scales.indexOf(item) < 0));
@@ -99,8 +103,8 @@ View.prototype.getResolutionByScale = function (scale, scaleType) {
  * @returns {void}
  */
 View.prototype.resetView = function () {
-    const center = store.state.urlParams["Map/center"] || this.options_?.center || defaults.startCenter,
-        resolution = this.options_?.resolution || defaults.startResolution;
+    const center = store.state.urlParams["Map/center"] || this.get("center") || defaults.startCenter,
+        resolution = this.get("resolution") || defaults.startResolution;
 
     this.setCenterCoord(center);
     this.setResolution(resolution);
@@ -148,7 +152,7 @@ View.prototype.setCenterCoord = function (coords, zoomLevel) {
  * @returns {void}
  */
 View.prototype.setResolutionByScale = function (scale) {
-    const params = findWhereJs(this.options_.options, {scale: scale});
+    const params = findWhereJs(this.get("options"), {scale: scale});
 
     if (this !== undefined) {
         this.setResolution(params.resolution);
@@ -177,8 +181,8 @@ View.prototype.setZoomLevelUp = function () {
  */
 View.prototype.toggleBackground = function () {
     if (this.background === "white") {
-        this.setBackground(this.options_.backgroundImage);
-        document.getElementById("map").style.background = `url(${this.options_.backgroundImage}) repeat scroll 0 0 rgba(0, 0, 0, 0)`;
+        this.setBackground(this.get("backgroundImage"));
+        document.getElementById("map").style.background = `url(${this.get("backgroundImage")}) repeat scroll 0 0 rgba(0, 0, 0, 0)`;
     }
     else {
         this.setBackground("white");

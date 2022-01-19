@@ -8,7 +8,7 @@ channel.reply({
         return mapCollection.getMapView("ol", "2D").getProjection();
     },
     "getOptions": function () {
-        return findWhereJs(mapCollection.getMapView("ol", "2D").options_.options, {resolution: mapCollection.getMapView("ol", "2D").getConstrainedResolution(mapCollection.getMapView("ol", "2D").getResolution())});
+        return findWhereJs(mapCollection.getMapView("ol", "2D").get("options"), {resolution: mapCollection.getMapView("ol", "2D").getConstrainedResolution(mapCollection.getMapView("ol", "2D").getResolution())});
     },
     "getCenter": function () {
         return mapCollection.getMapView("ol", "2D").getCenter();
@@ -22,16 +22,11 @@ channel.reply({
     "getResolutionByScale": function (scale, scaleType) {
         return mapCollection.getMapView("ol", "2D").getResolutionByScale(scale, scaleType);
     },
-    "getScales": function () {
-        return mapCollection.getMapView("ol", "2D").options_.map(function (option) {
-            return option.scale;
-        });
-    },
     "getCurrentExtent": function () {
         return mapCollection.getMapView("ol", "2D").getCurrentExtent();
     },
     "getBackgroundImage": function () {
-        return mapCollection.getMapView("ol", "2D").options_.backgroundImage;
+        return mapCollection.getMapView("ol", "2D").get("backgroundImage");
     }
 });
 
