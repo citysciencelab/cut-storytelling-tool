@@ -51,7 +51,7 @@
             "wfsTransaction": "Strumento WFS-T",
             "scaleSwitcher": "Cambia scala",
             "selectFeatures": "Seleziona",
-            "styleVt": "Style VT",
+            "styleVt": "Style Vector Tile Layers",
             "wfsSearch": "Ricerca WFS"
         },
         "contact": "Contatti",

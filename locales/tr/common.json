@@ -55,7 +55,7 @@
             "scaleSwitcher": "ölçek değiştirmek",
             "selectFeatures": "özellikleri seçmek",
             "legend": "Harita bilgileri",
-            "styleVt": "Stil VT",
+            "styleVt": "Stil Vector Tile Layers",
             "bufferAnalysis": "Arabellek analizi",
             "wfsSearch": "WFS arama"
         },

@@ -55,7 +55,7 @@
             "scaleSwitcher": "Scale switcher",
             "selectFeatures": "Select features",
             "legend":"Legend",
-            "styleVt": "Style VT",
+            "styleVt": "Style Vector Tile Layers",
             "bufferAnalysis": "Buffer Analysis",
             "parcelSearch": "Parcel search",
             "wfsSearch": "WFS search",

@@ -56,7 +56,7 @@
             "scaleSwitcher": "Maßstab umschalten",
             "selectFeatures": "Features auswählen",
             "legend":"Legende",
-            "styleVt": "Style VT",
+            "styleVt": "Style Vector Tile Layers",
             "bufferAnalysis": "Buffer Analyse",
             "wfsSearch": "WFS Suche",
             "routing": "Routing",

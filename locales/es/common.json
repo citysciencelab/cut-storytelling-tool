@@ -50,7 +50,7 @@
             "scaleSwitcher": "Cambiar escala",
             "selectFeatures": "Seleccionar entidad",
             "legend":"Leyenda",
-            "styleVt": "Estilo VT"
+            "styleVt": "Estilo Vector Tile Layers"
         },
         "contact": "Contacto",
         "info": "Información"
