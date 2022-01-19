@@ -111,8 +111,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
             typ: this.get("typ"),
             name: this.get("name"),
             visible: this.get("visibility"),
-            declutter: true,
-            updateWhileAnimating: true
+            declutter: true
         }));
         this.setConfiguredLayerStyle();
     },
@@ -177,10 +176,6 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
      * @returns {Promise} resolves void after style was set; may reject if received style is invalid
      */
     setStyleByDefinition: function ({id, url}) {
-        // const resolutions = defaultResolutions;
-        const resolutions = undefined;
-        // const resolutions = this.get("resolutions") || defaultResolutions.slice(this.get("minZoom"), this.get("maxZoom") + 1);
-
         /**
          * @deprecated in the next major-release!
          * useProxy
@@ -215,13 +210,13 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
 
                     this.fetchSpriteData(spriteDataUrl)
                         .then(spriteData => {
-                            stylefunction(this.get("layer"), style, Object.keys(style.sources)[0], resolutions, spriteData, spriteImageUrl, addMpFonts);
+                            stylefunction(this.get("layer"), style, Object.keys(style.sources)[0], undefined, spriteData, spriteImageUrl, addMpFonts);
                             this.set("selectedStyleID", id);
                         }
                         );
                 }
                 else {
-                    stylefunction(this.get("layer"), style, Object.keys(style.sources)[0], resolutions, undefined, undefined, addMpFonts);
+                    stylefunction(this.get("layer"), style, Object.keys(style.sources)[0], undefined, undefined, undefined, addMpFonts);
                     this.set("selectedStyleID", id);
                 }
             });
