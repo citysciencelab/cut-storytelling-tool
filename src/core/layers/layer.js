@@ -21,7 +21,7 @@ export default function Layer (attrs, layer, initialize = true) {
         layerInfoClicked: false,
         singleBaselayer: false,
         legend: true,
-        maxScale: "1000000",
+        maxScale: "1000000000",
         minScale: "0",
         selectionIDX: 0,
         showSettings: true,
