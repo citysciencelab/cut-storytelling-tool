@@ -138,8 +138,6 @@ WMSLayer.prototype.getGfiUrl = function () {
         projection = mapView.getProjection(),
         coordinate = store.getters["Map/clickCoord"];
 
-        console.log(this.get("layerSource").getFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.get("infoFormat"), FEATURE_COUNT: this.get("featureCount")}))
-
     return this.get("layerSource").getFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.get("infoFormat"), FEATURE_COUNT: this.get("featureCount")});
 };
 /**

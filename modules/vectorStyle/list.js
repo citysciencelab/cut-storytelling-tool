@@ -288,16 +288,17 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
 
     /**
      * adds a style to the style list
+     * @param {Array} jsonStyles Array of styles
      * @returns  {void}
      */
     addToStyleList: function (jsonStyles) {
         const attrs = {
-            add: true,
-            colletion: this,
-            merge: false,
-            remove: false
-        },
-        styles = jsonStyles;
+                add: true,
+                colletion: this,
+                merge: false,
+                remove: false
+            },
+            styles = jsonStyles;
 
         styles.forEach(style => {
             this.add(new StyleModel(style, attrs));
