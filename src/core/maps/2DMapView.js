@@ -110,7 +110,9 @@ View.prototype.resetView = function () {
 /**
  * Sets the bounding box for the map view.
  * @param {Number[]} bbox The Boundingbox to fit the map.
- * @param {Object} map the map id and mode
+ * @param {Object} [map] The parameter to get the map from the map collection
+ * @param {String} [map.mapId="ol"] The map id.
+ * @param {String} [map.mapMode="2D"] The map mode.
  * @returns {void}
  */
 View.prototype.setBBox = function (bbox, map = {mapId: "ol", mapMode: "2D"}) {
@@ -207,7 +209,9 @@ View.prototype.zoomToExtent = function (extent, options, map = {mapId: "ol", map
  * @param {String[]} ids The feature ids.
  * @param {String} layerId The layer id.
  * @param {Object} zoomOptions The options for zoom to extent.
- * @param {Object} map the map id and mode
+ * @param {Object} [map] The parameter to get the map from the map collection
+ * @param {String} [map.mapId="ol"] The map id.
+ * @param {String} [map.mapMode="2D"] The map mode.
  * @returns {void}
  */
 View.prototype.zoomToFilteredFeatures = function (ids, layerId, zoomOptions, map = {mapId: "ol", mapMode: "2D"}) {
