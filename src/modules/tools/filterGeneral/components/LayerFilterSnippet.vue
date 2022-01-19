@@ -44,7 +44,8 @@ export default {
             },
             disabled: false,
             showStop: false,
-            layerModel: null
+            layerModel: null,
+            layerService: null
         };
     },
     watch: {
@@ -53,6 +54,10 @@ export default {
                 this.setFormDisable(false);
             }
         }
+    },
+    created () {
+        this.activateLayer(this.layerConfig?.layerId);
+        this.setLayerService(this.layerModel);
     },
     mounted () {
         if (Array.isArray(this.layerConfig?.snippets)) {
@@ -72,18 +77,6 @@ export default {
          */
         checkSnippetType (snippet, type) {
             return isObject(snippet) && Object.prototype.hasOwnProperty.call(snippet, "type") && snippet.type === type;
-        },
-        /**
-         * Returns the service object for the filter question based on config.
-         * @returns {Object} the service object to use
-         */
-        getService () {
-            if (typeof this.layerConfig?.layerId === "string") {
-                return {
-                    layerId: this.layerConfig.layerId
-                };
-            }
-            return this.layerConfig?.service ? this.layerConfig.service : {};
         },
         /**
          * Triggered when a rule changed at a snippet.
@@ -125,7 +118,7 @@ export default {
          */
         filter () {
             const filterQuestion = {
-                service: this.getService(),
+                service: this.layerService,
                 filterId: this.layerConfig.filterId,
                 snippetId: false,
                 commands: {
@@ -135,10 +128,13 @@ export default {
                 rules: this.getCurrentRules()
             };
 
-            this.activateLayer(this.layerConfig?.layerId);
             this.setFormDisable(true);
             this.showStopButton(true);
+
             if (isObject(this.layerModel)) {
+                this.layerModel.set("isSelected", true);
+                this.layerModel.set("isVisible", true);
+
                 this.layerModel.layer.getSource().on("featuresloadend", () => {
                     this.runApiFilter(filterQuestion);
                 });
@@ -181,8 +177,28 @@ export default {
                 }
 
                 this.layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layerId});
-                this.layerModel.set("isSelected", true);
-                this.layerModel.set("isVisible", true);
+            }
+        },
+        /**
+         * Setting layer service
+         * @param {Object} layerModel the layer model
+         * @returns {void}
+         */
+        setLayerService (layerModel) {
+            if (isObject(this.layerConfig?.service)) {
+                this.layerService = this.layerConfig?.service;
+            }
+            else if (isObject(layerModel) && typeof this.layerConfig?.service === "undefined") {
+                this.layerService = {
+                    "type": "OL",
+                    "layerId": this.layerConfig?.layerId,
+                    "url": layerModel.get("url"),
+                    "typename": layerModel.get("featureType"),
+                    "namespace": layerModel.get("featureNS")
+                };
+            }
+            else if (layerModel === null && typeof this.layerConfig?.service === "undefined") {
+                console.warn("Please check your configuration of layerId or service, the portal could not load them");
             }
         },
         /**
