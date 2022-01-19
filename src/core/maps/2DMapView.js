@@ -22,7 +22,7 @@ View.prototype.initStore = function () {
         Radio.trigger("RemoteInterface", "postMessage", {"centerPosition": this.getCenter()});
     });
 
-    const params = findWhereJs(mapCollection.getMapView("ol", "2D").options_.options, {resolution: mapCollection.getMapView("ol", "2D").getConstrainedResolution(mapCollection.getMapView("ol", "2D").getResolution())});
+    const params = findWhereJs(mapCollection.getMapView("ol", "2D").options_?.options, {resolution: mapCollection.getMapView("ol", "2D").getConstrainedResolution(mapCollection.getMapView("ol", "2D").getResolution())});
 
     // triggers the function checkForScale modules\core\modelList\layer\model.js
     Radio.trigger("MapView", "changedOptions", params);
