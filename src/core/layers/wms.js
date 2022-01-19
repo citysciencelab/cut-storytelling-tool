@@ -17,7 +17,6 @@ export default function WMSLayer (attrs) {
         extent: null,
         isSecured: false,
         notSupportedFor3D: ["1747", "1749", "1750", "9822", "12600", "9823", "1752", "9821", "1750", "1751", "12599", "2297"],
-        styles: "",
         useProxy: false
     };
 
@@ -138,6 +137,8 @@ WMSLayer.prototype.getGfiUrl = function () {
         resolution = store.getters["Map/resolution"],
         projection = mapView.getProjection(),
         coordinate = store.getters["Map/clickCoord"];
+
+        console.log(this.get("layerSource").getFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.get("infoFormat"), FEATURE_COUNT: this.get("featureCount")}))
 
     return this.get("layerSource").getFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.get("infoFormat"), FEATURE_COUNT: this.get("featureCount")});
 };
