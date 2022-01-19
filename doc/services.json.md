@@ -421,6 +421,9 @@ Please note the [VTL specification](https://docs.mapbox.com/vector-tiles/specifi
 
 |Name|Required|Type|Default|Description|Example|
 |----|--------|----|-------|-----------|-------|
+|minZoom|no|Number||The minimum zoom level|4|
+|mmaxZoom|no|Number||The maximum zoom level|15|
+|zDirection|no|Number|1|Specifies, if the resolutions of the service and the portal are different, in which direction the resolution should be used.|-1|
 |datasets|no|**[datasets](#markdown-header-wms_wfs_datasets)**/Boolean||Metadata specification. All metadata of the layer data is referenced here. By clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
 |gfiAttributes|yes|String/**[gfiAttributes](#markdown-header-gfi_attributes)**||GFI attributes to be shown.|`"ignore"`|
 |epsg|no|String|The portal's default EPSG code.|EPSG string used for checking the coordinate reference system. If the value does not match the VTL, a warning is shown. Vector tile services should offer the data in the target CRS for performance reasons. If `"EPSG:3857"` is set with neither `"extend"`, nor `"origin"`, `"resolutions"`, or `"tileSize"`, no *GridSet* is created. The OL default will be used instead.|`"EPSG:3857"`|
