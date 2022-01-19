@@ -57,6 +57,14 @@ export default {
          */
         disabled (filterId) {
             return !this.multiLayerSelector && this.selectedLayers.length > 0 && !this.selectedLayers.includes(filterId);
+        },
+        /**
+         * Emitting the function by transfering the filter Id of layer
+         * @param {String} filterId id to check if should be disabled
+         * @returns {void}
+         */
+        setLayerLoaded (filterId) {
+            this.$emit("setLayerLoaded", filterId);
         }
     }
 };
@@ -72,6 +80,8 @@ export default {
             v-for="layer in layers"
             :key="layer.filterId"
             class="panel panel-default"
+            @click="setLayerLoaded(layer.filterId)"
+            @keydown.enter="setLayerLoaded(layer.filterId)"
         >
             <div
                 :class="['panel-heading', disabled(layer.filterId) ? 'disabled' : '']"

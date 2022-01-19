@@ -26,7 +26,8 @@ export default {
                 createLayerIfNotExists
             }),
             selectedLayers: [],
-            alreadySelectedLayers: []
+            alreadySelectedLayers: [],
+            layerLoaded: {}
         };
     },
     computed: {
@@ -110,6 +111,14 @@ export default {
             return this.selectedLayers.some(selectedLayer => {
                 return selectedLayer.filterId === filterId;
             });
+        },
+        /**
+         * Setting the layer loaded true if the layer is clicked from the filter Id
+         * @param {String} filterId filterId to check
+         * @returns {void}
+         */
+        setLayerLoaded (filterId) {
+            this.layerLoaded[filterId] = true;
         }
     }
 };
@@ -136,6 +145,7 @@ export default {
                 :layers="layers"
                 :multi-layer-selector="multiLayerSelector"
                 @updateselectedlayers="updateSelectedLayers"
+                @setLayerLoaded="setLayerLoaded"
             >
                 <template
                     #default="slotProps"
@@ -145,6 +155,7 @@ export default {
                         role="tabpanel"
                     >
                         <LayerFilterSnippet
+                            v-if="showLayerSnippet(slotProps.layer.filterId) || layerLoaded[slotProps.layer.filterId]"
                             :layer-config="slotProps.layer"
                             :map-handler="mapHandler"
                         />
