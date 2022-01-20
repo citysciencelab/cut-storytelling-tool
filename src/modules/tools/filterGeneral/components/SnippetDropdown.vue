@@ -148,6 +148,13 @@ export default {
         });
     },
     methods: {
+        /**
+         * Returns the label to use in the gui.
+         * @returns {String} the label to use
+         */
+        getLabel () {
+            return this.label || this.attrName;
+        },
         translate (key) {
             return i18next.t(key);
         },
@@ -172,6 +179,9 @@ export default {
          * @returns {void}
          */
         emitCurrentRule (value, startup = false) {
+            if (startup && !this.prechecked.length) {
+                return;
+            }
             let result = value;
 
             if (Array.isArray(value)) {
@@ -182,13 +192,34 @@ export default {
                     }
                 });
             }
-            this.$emit("ruleChanged", {
+            this.$emit("changeRule", {
                 snippetId: this.snippetId,
                 startup,
-                rule: {
-                    attrName: this.attrName,
-                    operator: this.operator,
-                    value: result
+                fixed: !this.visible,
+                attrName: this.attrName,
+                operator: this.operator,
+                value: result
+            });
+        },
+        /**
+         * Emits the delete rule function to whoever is listening.
+         * @returns {void}
+         */
+        deleteCurrentRule () {
+            this.$emit("deleteRule", this.snippetId);
+        },
+        /**
+         * Resets the values of this snippet.
+         * @param {Function} onsuccess the function to call on success
+         * @returns {void}
+         */
+        resetSnippet (onsuccess) {
+            if (this.visible) {
+                this.dropdownSelected = [];
+            }
+            this.$nextTick(() => {
+                if (typeof onsuccess === "function") {
+                    onsuccess();
                 }
             });
         }
@@ -209,7 +240,7 @@ export default {
                 <label
                     class="select-box-label"
                     :for="'snippetSelectBox-' + snippetId"
-                >{{ label }}:</label>
+                >{{ getLabel() }}:</label>
             </div>
             <div class="right">
                 <div class="info-icon">

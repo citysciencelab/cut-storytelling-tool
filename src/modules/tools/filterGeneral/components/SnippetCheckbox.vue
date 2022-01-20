@@ -50,7 +50,7 @@ export default {
     },
     data () {
         return {
-            checked: this.prechecked,
+            checked: this.prechecked ? this.prechecked : false,
             showInfo: false
         };
     },
@@ -73,19 +73,52 @@ export default {
     },
     methods: {
         /**
+         * Returns the label to use in the gui.
+         * @returns {String} the label to use
+         */
+        getLabel () {
+            return this.label || this.attrName;
+        },
+        /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
          * @param {Boolean} [startup=false] true if the call comes on startup, false if a user actively changed a snippet
          * @returns {void}
          */
         emitCurrentRule (value, startup = false) {
-            this.$emit("ruleChanged", {
-                snippetId: this.snippetId,
-                startup,
-                rule: {
+            if (value) {
+                this.$emit("changeRule", {
+                    snippetId: this.snippetId,
+                    startup,
+                    fixed: !this.visible,
                     attrName: this.attrName,
                     operator: this.operator,
                     value
+                });
+            }
+            else {
+                this.deleteCurrentRule();
+            }
+        },
+        /**
+         * Emits the delete rule function to whoever is listening.
+         * @returns {void}
+         */
+        deleteCurrentRule () {
+            this.$emit("deleteRule", this.snippetId);
+        },
+        /**
+         * Resets the values of this snippet.
+         * @param {Function} onsuccess the function to call on success
+         * @returns {void}
+         */
+        resetSnippet (onsuccess) {
+            if (this.visible) {
+                this.checked = this.prechecked ? this.prechecked : false;
+            }
+            this.$nextTick(() => {
+                if (typeof onsuccess === "function") {
+                    onsuccess();
                 }
             });
         },
@@ -112,7 +145,7 @@ export default {
             >
             <label
                 :for="'snippetCheckbox-' + snippetId"
-            >{{ label }}</label>
+            >{{ getLabel() }}</label>
         </div>
         <div class="right">
             <div class="info-icon">

@@ -51,9 +51,9 @@ export default {
             default: "EQ"
         },
         prechecked: {
-            type: Number,
+            type: [Number, Boolean],
             required: false,
-            default: 0
+            default: false
         },
         snippetId: {
             type: Number,
@@ -76,7 +76,7 @@ export default {
             maxOnly: false,
             showInfo: false,
             step: this.decimalStep,
-            value: this.prechecked
+            value: this.prechecked ? this.prechecked : 0
         };
     },
     computed: {
@@ -110,10 +110,19 @@ export default {
     mounted () {
         this.$refs.inputNumber.value = this.value;
         this.$nextTick(() => {
-            this.emitCurrentRule(this.value, true);
+            if (this.prechecked !== false) {
+                this.emitCurrentRule(this.value, true);
+            }
         });
     },
     methods: {
+        /**
+         * Returns the label to use in the gui.
+         * @returns {String} the label to use
+         */
+        getLabel () {
+            return this.label || this.attrName;
+        },
         /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
@@ -121,13 +130,42 @@ export default {
          * @returns {void}
          */
         emitCurrentRule (value, startup = false) {
-            this.$emit("ruleChanged", {
+            this.$emit("changeRule", {
                 snippetId: this.snippetId,
                 startup,
-                rule: {
-                    attrName: this.attrName,
-                    operator: this.operator,
-                    value
+                fixed: !this.visible,
+                attrName: this.attrName,
+                operator: this.operator,
+                value
+            });
+        },
+        /**
+         * Emits the delete rule function to whoever is listening.
+         * @returns {void}
+         */
+        deleteCurrentRule () {
+            this.$emit("deleteRule", this.snippetId);
+        },
+        /**
+         * Resets the values of this snippet.
+         * @param {Function} onsuccess the function to call on success
+         * @returns {void}
+         */
+        resetSnippet (onsuccess) {
+            if (this.visible) {
+                if (typeof this.prechecked === "number") {
+                    this.value = this.prechecked;
+                }
+                else if (typeof this.minimumValue === "number") {
+                    this.value = this.minimumValue;
+                }
+                else {
+                    this.value = 0;
+                }
+            }
+            this.$nextTick(() => {
+                if (typeof onsuccess === "function") {
+                    onsuccess();
                 }
             });
         },
@@ -276,7 +314,7 @@ export default {
                 return;
             }
             else if (parseInt(maximumValue, 10) < parseInt(minimumValue, 10)) {
-                console.warn("Please check your configuration or dienst manager, the minimum value can not be bigger than maximum value");
+                console.warn("Please check your configuration or service, the minimum value can not be bigger than the maximum value. If you haven't configured a min or max value, the server of the service will be called to deliver its min and max values. Make sure these are numbers in your database, not strings.");
                 this.invalid = true;
                 return;
             }
@@ -308,7 +346,7 @@ export default {
         <label
             class="left"
             :for="'snippetSlider-' + snippetId"
-        >{{ label }}</label>
+        >{{ getLabel() }}</label>
         <input
             :id="'snippetSlider-' + snippetId"
             ref="inputNumber"

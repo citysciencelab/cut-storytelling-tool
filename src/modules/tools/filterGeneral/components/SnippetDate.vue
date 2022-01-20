@@ -96,10 +96,9 @@ export default {
         }
     },
     created () {
-        this.value = this.convertToInternalDateFormat(this.prechecked, this.format);
         this.max = this.convertToInternalDateFormat(this.maxValue, this.format);
         this.min = this.convertToInternalDateFormat(this.minValue, this.format);
-        this.value = this.getValueInRange(this.value);
+        this.value = this.convertToInternalDateFormat(this.getValueInRange(this.prechecked), this.format);
         this.setMinOnly(this.min, this.max);
         this.setMaxOnly(this.min, this.max);
         this.setInvalid(this.min, this.max);
@@ -108,10 +107,19 @@ export default {
     },
     mounted () {
         this.$nextTick(() => {
-            this.emitCurrentRule(this.value, true);
+            if (this.prechecked) {
+                this.emitCurrentRule(this.value, true);
+            }
         });
     },
     methods: {
+        /**
+         * Returns the label to use in the gui.
+         * @returns {String} the label to use
+         */
+        getLabel () {
+            return this.label || this.attrName;
+        },
         /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
@@ -119,14 +127,35 @@ export default {
          * @returns {void}
          */
         emitCurrentRule (value, startup = false) {
-            this.$emit("ruleChanged", {
+            this.$emit("changeRule", {
                 snippetId: this.snippetId,
                 startup,
-                rule: {
-                    attrName: this.attrName,
-                    operator: this.operator,
-                    format: this.format,
-                    value: moment(value, this.internalFormat).format(this.format)
+                fixed: !this.visible,
+                attrName: this.attrName,
+                operator: this.operator,
+                format: this.format,
+                value: moment(value, this.internalFormat).format(this.format)
+            });
+        },
+        /**
+         * Emits the delete rule function to whoever is listening.
+         * @returns {void}
+         */
+        deleteCurrentRule () {
+            this.$emit("deleteRule", this.snippetId);
+        },
+        /**
+         * Resets the values of this snippet.
+         * @param {Function} onsuccess the function to call on success
+         * @returns {void}
+         */
+        resetSnippet (onsuccess) {
+            if (this.visible) {
+                this.value = "";
+            }
+            this.$nextTick(() => {
+                if (typeof onsuccess === "function") {
+                    onsuccess();
                 }
             });
         },
@@ -277,7 +306,7 @@ export default {
             <label
                 class="left"
                 :for="'snippetDate-' + snippetId"
-            >{{ label }}</label>
+            >{{ getLabel() }}</label>
             <input
                 :id="'snippetDate-' + snippetId"
                 v-model="value"

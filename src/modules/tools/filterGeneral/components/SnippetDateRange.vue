@@ -49,9 +49,9 @@ export default {
             default: "EQ"
         },
         prechecked: {
-            type: Array,
+            type: [Array, Boolean],
             required: false,
-            default: () => []
+            default: false
         },
         snippetId: {
             type: Number,
@@ -114,10 +114,20 @@ export default {
             this.checkMinMax();
             this.disableFrom = this.disabled;
             this.disableUntil = this.disabled;
-            this.emitCurrentRule([this.fromDate, this.untilDate], true);
+
+            if (Array.isArray(this.prechecked)) {
+                this.emitCurrentRule([this.fromDate, this.untilDate], true);
+            }
         });
     },
     methods: {
+        /**
+         * Returns the label to use in the gui.
+         * @returns {String} the label to use
+         */
+        getLabel () {
+            return this.label || this.attrName;
+        },
         /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
@@ -125,17 +135,39 @@ export default {
          * @returns {void}
          */
         emitCurrentRule (value, startup = false) {
-            this.$emit("ruleChanged", {
+            this.$emit("changeRule", {
                 snippetId: this.snippetId,
                 startup,
-                rule: {
-                    attrName: this.attrName,
-                    operator: this.operator,
-                    format: this.format,
-                    value: [
-                        moment(value[0], this.internalFormat).format(this.format),
-                        moment(value[1], this.internalFormat).format(this.format)
-                    ]
+                fixed: !this.visible,
+                attrName: this.attrName,
+                operator: this.operator,
+                format: this.format,
+                value: [
+                    moment(value[0], this.internalFormat).format(this.format),
+                    moment(value[1], this.internalFormat).format(this.format)
+                ]
+            });
+        },
+        /**
+         * Emits the delete rule function to whoever is listening.
+         * @returns {void}
+         */
+        deleteCurrentRule () {
+            this.$emit("deleteRule", this.snippetId);
+        },
+        /**
+         * Resets the values of this snippet.
+         * @param {Function} onsuccess the function to call on success
+         * @returns {void}
+         */
+        resetSnippet (onsuccess) {
+            if (this.visible) {
+                this.fromDate = "";
+                this.untilDate = "";
+            }
+            this.$nextTick(() => {
+                if (typeof onsuccess === "function") {
+                    onsuccess();
                 }
             });
         },
@@ -144,7 +176,7 @@ export default {
          * @returns {Boolean} returns true if something is configured wrong, false if everything is ok
          */
         isInvalid () {
-            if (!Array.isArray(this.prechecked) || this.prechecked.length !== 2 && this.prechecked.length !== 0) {
+            if (this.prechecked !== false && (!Array.isArray(this.prechecked) || this.prechecked.length !== 2 && this.prechecked.length !== 0)) {
                 console.warn("Please check your configuration. Make sure to check if prechecked is an array with two date strings, an empty array of left away entirely.");
                 return true;
             }
@@ -270,7 +302,10 @@ export default {
             }
         },
         checkPrechecked () {
-            if (!Array.isArray(this.prechecked)) {
+            if (this.prechecked === false) {
+                return;
+            }
+            else if (!Array.isArray(this.prechecked)) {
                 this.invalid = true;
                 console.warn("Prechecked is not an array. It should be either an an array of 2 date strings or empty.");
                 return;
@@ -317,7 +352,7 @@ export default {
     >
         <div class="left">
             <label for="date-from-input-container">
-                {{ label }}
+                {{ getLabel() }}
             </label>
         </div>
         <div class="right">

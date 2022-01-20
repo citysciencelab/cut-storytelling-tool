@@ -212,12 +212,9 @@ export default class InterfaceOL {
         if (typeof ruleValueB === "string") {
             ruleValueB = ruleValueB.toLowerCase();
         }
-        if (typeof featValueA === "string") {
-            featValueA = featValueA.toLowerCase();
-        }
-        if (typeof featValueB === "string") {
-            featValueB = featValueB.toLowerCase();
-        }
+        featValueA = this.changeFeatureTypeToMatchRuleType(featValueA, ruleValueA);
+        featValueB = this.changeFeatureTypeToMatchRuleType(featValueB, ruleValueB);
+
         return Array.isArray(rule.value) && (
             rule.operator === "INTERSECTS" && featValueA <= rule.value[1] && featValueB >= rule.value[0]
             || rule.operator === "BETWEEN" && featValueA >= rule.value[0] && featValueB <= rule.value[1]
@@ -226,8 +223,8 @@ export default class InterfaceOL {
             || rule.operator === "STARTSWITH" && typeof featValueA === "string" && typeof rule.value.find(v => typeof v === "string" && featValueA.startsWith(v.toLowerCase())) !== "undefined"
             || rule.operator === "ENDSWITH" && typeof featValueA === "string" && typeof rule.value.find(v => typeof v === "string" && featValueA.endsWith(v.toLowerCase())) !== "undefined"
         )
-        || typeof rule.value !== "undefined" && (
-            rule.operator === "BETWEEN" && featValueA <= rule.value && featValueB >= rule.value
+        || typeof ruleValueA !== "undefined" && (
+            rule.operator === "BETWEEN" && featValueA <= ruleValueA && featValueB >= ruleValueA
             || rule.operator === "EQ" && featValueA === ruleValueA
             || rule.operator === "NE" && featValueA !== ruleValueA
             || rule.operator === "GT" && featValueA > ruleValueA
@@ -238,5 +235,37 @@ export default class InterfaceOL {
             || rule.operator === "STARTSWITH" && typeof featValueA === "string" && featValueA.startsWith(ruleValueA)
             || rule.operator === "ENDSWITH" && typeof featValueA === "string" && featValueA.endsWith(ruleValueA)
         );
+    }
+
+    /**
+     * Changes the feature value to match the type of the given ruleValue.
+     * @param {*} featValue the value of the feature
+     * @param {*} ruleValue the value of the rule to match featValue to
+     * @returns {*} featValue with changed type
+     */
+    changeFeatureTypeToMatchRuleType (featValue, ruleValue) {
+        if (Array.isArray(ruleValue)) {
+            return this.changeFeatureTypeToMatchRuleType(featValue, typeof ruleValue[0] !== "undefined" ? ruleValue[0] : ruleValue[1]);
+        }
+        else if (typeof featValue === "string") {
+            if (typeof ruleValue === "string") {
+                return String(featValue).toLowerCase();
+            }
+            else if (typeof ruleValue === "number") {
+                return parseInt(featValue, 10);
+            }
+            else if (typeof ruleValue === "boolean") {
+                return Boolean(featValue);
+            }
+        }
+        else if (typeof featValue === "number") {
+            if (typeof ruleValue === "string") {
+                return String(featValue);
+            }
+            else if (typeof ruleValue === "boolean") {
+                return Boolean(featValue);
+            }
+        }
+        return featValue;
     }
 }

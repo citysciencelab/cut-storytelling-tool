@@ -51,11 +51,9 @@ export default {
             default: "BETWEEN"
         },
         prechecked: {
-            type: Array,
+            type: [Array, Boolean],
             required: false,
-            default: () => {
-                return [0, 0];
-            }
+            default: false
         },
         snippetId: {
             type: Number,
@@ -83,8 +81,8 @@ export default {
             },
             step: this.decimalStep,
             showInfo: false,
-            minVal: this.prechecked[0],
-            maxVal: this.prechecked[1]
+            minVal: Array.isArray(this.prechecked) ? this.prechecked[0] : this.minValue,
+            maxVal: Array.isArray(this.prechecked) ? this.prechecked[1] : this.maxValue
         };
     },
     computed: {
@@ -122,7 +120,9 @@ export default {
         this.$refs.inputMaxNumber.value = this.maxVal;
 
         this.$nextTick(() => {
-            this.emitCurrentRule([this.minVal, this.maxVal], true);
+            if (Array.isArray(this.prechecked)) {
+                this.emitCurrentRule([this.minVal, this.maxVal], true);
+            }
         });
     },
     created () {
@@ -138,6 +138,13 @@ export default {
         }
     },
     methods: {
+        /**
+         * Returns the label to use in the gui.
+         * @returns {String} the label to use
+         */
+        getLabel () {
+            return this.label || this.attrName;
+        },
         /**
          * Getting valid step
          * @param {Number} value - the step for slider
@@ -332,13 +339,37 @@ export default {
                     }
                 });
             }
-            this.$emit("ruleChanged", {
+            this.$emit("changeRule", {
                 snippetId: this.snippetId,
                 startup,
-                rule: {
-                    attrName: this.attrName,
-                    operator: this.operator,
-                    value: result
+                fixed: !this.visible,
+                attrName: this.attrName,
+                operator: this.operator,
+                value: result
+            });
+        },
+        /**
+         * Emits the delete rule function to whoever is listening.
+         * @returns {void}
+         */
+        deleteCurrentRule () {
+            this.$emit("deleteRule", this.snippetId);
+        },
+        /**
+         * Resets the values of this snippet.
+         * @param {Function} onsuccess the function to call on success
+         * @returns {void}
+         */
+        resetSnippet (onsuccess) {
+            if (this.visible) {
+                this.$refs.inputMinNumber.value = this.minimumValue;
+                this.$refs.inputMaxNumber.value = this.maximumValue;
+                this.minVal = this.minimumValue;
+                this.maxVal = this.maximumValue;
+            }
+            this.$nextTick(() => {
+                if (typeof onsuccess === "function") {
+                    onsuccess();
                 }
             });
         },
@@ -358,7 +389,7 @@ export default {
             <div class="left">
                 <label
                     :for="'snippetSliderInpMin-' + snippetId"
-                >{{ label }}</label>
+                >{{ getLabel() }}</label>
             </div>
             <div class="right">
                 <div class="info-icon">

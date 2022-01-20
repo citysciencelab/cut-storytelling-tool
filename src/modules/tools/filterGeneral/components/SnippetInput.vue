@@ -67,16 +67,30 @@ export default {
     watch: {
         inputValue: {
             handler (value) {
-                this.emitCurrentRule(value);
+                if (!value) {
+                    this.deleteCurrentRule();
+                }
+                else {
+                    this.emitCurrentRule(value);
+                }
             }
         }
     },
     mounted () {
         this.$nextTick(() => {
-            this.emitCurrentRule(this.inputValue, true);
+            if (this.prechecked) {
+                this.emitCurrentRule(this.inputValue, true);
+            }
         });
     },
     methods: {
+        /**
+         * Returns the label to use in the gui.
+         * @returns {String} the label to use
+         */
+        getLabel () {
+            return this.label || this.attrName;
+        },
         /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
@@ -84,13 +98,34 @@ export default {
          * @returns {void}
          */
         emitCurrentRule (value, startup = false) {
-            this.$emit("ruleChanged", {
+            this.$emit("changeRule", {
                 snippetId: this.snippetId,
                 startup,
-                rule: {
-                    attrName: this.attrName,
-                    operator: this.operator,
-                    value
+                fixed: !this.visible,
+                attrName: this.attrName,
+                operator: this.operator,
+                value
+            });
+        },
+        /**
+         * Emits the delete rule function to whoever is listening.
+         * @returns {void}
+         */
+        deleteCurrentRule () {
+            this.$emit("deleteRule", this.snippetId);
+        },
+        /**
+         * Resets the values of this snippet.
+         * @param {Function} onsuccess the function to call on success
+         * @returns {void}
+         */
+        resetSnippet (onsuccess) {
+            if (this.visible) {
+                this.inputValue = "";
+            }
+            this.$nextTick(() => {
+                if (typeof onsuccess === "function") {
+                    onsuccess();
                 }
             });
         },
@@ -119,7 +154,7 @@ export default {
             <label
                 :for="'snippetInput-' + snippetId"
                 class="snippetInputLabel left"
-            >{{ label }}</label>
+            >{{ getLabel() }}</label>
             <input
                 :id="'snippetInput-' + snippetId"
                 v-model="inputValue"
