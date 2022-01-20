@@ -11,7 +11,10 @@
 ### Added
 - The VectorBaseLayer is refactored. It is no longer a Backbone-model. The VectorBaseLayer uses the masterportalAPI's vectorBase layer on creation.
 - Package vue-multiselect: 2.1.6 is installed
-- For vector tiles layers that are not in EPSG:3587, the default Mapbox resolutions are now used as fallback. In addition, a minimum zoom level can be configured.
+- Vector Tiles:
+    - For vector tiles layers that are not in EPSG:3587, the default Mapbox resolutions are now used as fallback.
+    - In addition, a minimum and maximum zoom level can be configured.
+    - The `zDirection` can be used to specify, if the resolutions of the service and the portal are different, in which direction the resolution should be used.
 
 ### Changed
 - It is now possible to display layers at scales smaller than 1:1 000 000.
