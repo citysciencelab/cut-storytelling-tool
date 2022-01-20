@@ -11,7 +11,10 @@
 ### Added
 - The VectorBaseLayer is refactored. It is no longer a Backbone-model. The VectorBaseLayer uses the masterportalAPI's vectorBase layer on creation.
 - Package vue-multiselect: 2.1.6 is installed
+- For vector tiles layers that are not in EPSG:3587, the default Mapbox resolutions are now used as fallback. In addition, a minimum zoom level can be configured.
+
 ### Changed
+- It is now possible to display layers at scales smaller than 1:1 000 000.
 - The following NPM packages are updated:
     - @babel/core: 7.16.0 to 7.16.7
     - @babel/eslint-parser: 7.16.0 to 7.16.5
