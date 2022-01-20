@@ -49,7 +49,7 @@ async function loadUrl (driver, url, mode) {
     });
 
     // wait until resolution is ready, else Firefox will often find uninitialized Backbone initially
-    await driver.wait(async () => await driver.executeScript(getResolution) !== null, 90000);
+    // await driver.wait(async () => await driver.executeScript(getResolution) !== null, 90000);
 
     // prepare 3D resp. OB mode for tests - 2D mode is initial mode, nothing to do
     if (mode === "3D") {
