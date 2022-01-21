@@ -107,23 +107,25 @@ export default {
                 isValidLegend = null,
                 legend = null;
 
-            if (layerForLayerInfo.get("typ") === "GROUP") {
-                legend = this.prepareLegendForGroupLayer(layerForLayerInfo.get("layerSource"));
-            }
-            else {
-                legend = this.prepareLegend(layerForLayerInfo.get("legend"));
-            }
+            if (layerForLayerInfo) {
+                if (layerForLayerInfo.get("typ") === "GROUP") {
+                    legend = this.prepareLegendForGroupLayer(layerForLayerInfo.get("layerSource"));
+                }
+                else {
+                    legend = this.prepareLegend(layerForLayerInfo.get("legend"));
+                }
 
-            legendObj = {
-                id: layerForLayerInfo.get("id"),
-                name: layerForLayerInfo.get("name"),
-                legend,
-                position: layerForLayerInfo.get("selectionIDX")
-            };
+                legendObj = {
+                    id: layerForLayerInfo.get("id"),
+                    name: layerForLayerInfo.get("name"),
+                    legend,
+                    position: layerForLayerInfo.get("selectionIDX")
+                };
 
-            isValidLegend = this.isValidLegendObj(legendObj);
-            if (isValidLegend) {
-                this.setLegendForLayerInfo(legendObj);
+                isValidLegend = this.isValidLegendObj(legendObj);
+                if (isValidLegend) {
+                    this.setLegendForLayerInfo(legendObj);
+                }
             }
         },
 
