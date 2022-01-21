@@ -6,10 +6,18 @@
 export default class IntervalRegister {
     /**
      * @constructor
+     * @param {Object} pagingIntv the paging interval
+     * @param {Object} autoRefreshIntv autorefresh intervals
      */
-    constructor () {
-        this.pagingIntv = {};
-        this.autoRefreshIntv = {};
+    constructor (pagingIntv = {}, autoRefreshIntv = {}) {
+        // make this instance a singleton
+        if (IntervalRegister.instance instanceof IntervalRegister) {
+            return IntervalRegister.instance;
+        }
+        IntervalRegister.instance = this;
+
+        this.pagingIntv = pagingIntv;
+        this.autoRefreshIntv = autoRefreshIntv;
     }
 
     /**
