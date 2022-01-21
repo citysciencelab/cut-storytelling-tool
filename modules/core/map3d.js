@@ -75,7 +75,18 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
             return;
         }
         else if (!map3d) {
+            let allLayerModels = Radio.request("ModelList", "getModelsByAttributes", {type: "layer"});
+
             Radio.trigger("Map", "beforeChange", "3D");
+            allLayerModels = allLayerModels.filter(layerModel => {
+                return ["Oblique", "TileSet3D", "Terrain3D"].indexOf(layerModel.get("typ")) === -1;
+            });
+            allLayerModels.forEach(layerWrapper => {
+                if(layerWrapper.get("isSelected") === false){
+                    layerWrapper.removeLayer();
+                }
+            });
+
             map3d = this.createMap3d();
             scene = map3d.getCesiumScene();
             this.prepareScene(scene);

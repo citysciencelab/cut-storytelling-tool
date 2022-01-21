@@ -126,11 +126,14 @@ Layer.prototype.setMinResolution = function (value) {
  * @returns {void}
  */
 Layer.prototype.removeLayer = function () {
-    const map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode);
+    let map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode);
 
+    if(!map){ //is the case, if starting by urlParam in mode 3D
+        map = mapCollection.getMap("ol", "2D");
+    }
     this.setIsVisibleInMap(false);
     bridge.removeLayerByIdFromModelList(this.get("id"));
-    map.removeLayer(this.layer);
+    map?.removeLayer(this.layer);
 };
 /**
  * Toggles the attribute isSelected. Calls Function setIsSelected.
@@ -411,7 +414,7 @@ function handleSingleBaseLayer (isSelected, layer, map) {
                     if (aLayer.get("layer") !== undefined) {
                         aLayer.get("layer").setVisible(false);
                     }
-                    map.removeLayer(aLayer.get("layer"));
+                    map?.removeLayer(aLayer.get("layer"));
                     // This makes sure that the Oblique Layer, if present in the layerList, is not selectable if switching between baseLayers
                     aLayer.checkForScale({scale: store.getters["Map/scale"]});
                 }
