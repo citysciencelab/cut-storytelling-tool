@@ -103,14 +103,16 @@ export default {
     >
         <div class="left">
             <input
-                id="checkbox"
+                :id="'snippetCheckbox-' + snippetId"
                 v-model="checked"
                 class="snippetCheckbox"
                 type="checkbox"
                 name="checkbox"
                 :disabled="disabled"
             >
-            <label for="checkbox">{{ label }} </label>
+            <label
+                :for="'snippetCheckbox-' + snippetId"
+            >{{ label }}</label>
         </div>
         <div class="right">
             <div class="info-icon">

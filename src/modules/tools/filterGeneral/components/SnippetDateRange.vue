@@ -334,9 +334,11 @@ export default {
                 id="date-from-input-container"
                 class="date-from-input-container"
             >
-                <label for="inputDateFrom">{{ Array.isArray(attrName) ? attrName[0].toLowerCase() : attrName + " From: " }}</label>
+                <label
+                    :for="'inputDateFrom-' + snippetId"
+                >{{ Array.isArray(attrName) ? attrName[0].toLowerCase() : attrName + " From: " }}</label>
                 <input
-                    id="inputDateFrom"
+                    :id="'inputDateFrom-' + snippetId"
                     v-model="fromDate"
                     name="inputDateFrom"
                     class="snippetDateRangeFrom"
@@ -351,9 +353,11 @@ export default {
                 id="date-to-input-container"
                 class="date-to-input-container"
             >
-                <label for="inputDateUntil">{{ Array.isArray(attrName) ? attrName[1].toLowerCase() : attrName + " To:" }}</label>
+                <label
+                    :for="'inputDateUntil-' + snippetId"
+                >{{ Array.isArray(attrName) ? attrName[1].toLowerCase() : attrName + " To:" }}</label>
                 <input
-                    id="inputDateUntil"
+                    :id="'inputDateUntil-' + snippetId"
                     v-model="untilDate"
                     name="inputDateUntil"
                     class="snippetDateRangeUntil"

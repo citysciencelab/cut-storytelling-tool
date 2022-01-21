@@ -307,9 +307,10 @@ export default {
         </div>
         <label
             class="left"
-            for="input-single"
+            :for="'snippetSlider-' + snippetId"
         >{{ label }}</label>
         <input
+            :id="'snippetSlider-' + snippetId"
             ref="inputNumber"
             class="input-single"
             type="number"
@@ -323,7 +324,6 @@ export default {
         >
         <div class="slider-input-container">
             <input
-                id="input-single"
                 v-model="value"
                 class="slider-single"
                 type="range"

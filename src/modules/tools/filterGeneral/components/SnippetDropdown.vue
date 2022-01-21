@@ -98,8 +98,6 @@ export default {
             isInitializing: true,
             invalid: false,
             showInfo: false,
-            multipleClass: "multipleClass",
-            singleClass: "singleClass",
             dropdownValue: [],
             dropdownSelected: []
         };
@@ -107,6 +105,12 @@ export default {
     computed: {
         infoText: function () {
             return this.info ? this.info : this.$t("modules.tools.filterGeneral.dropDownInfo");
+        },
+        emptyList: function () {
+            return this.$t("modules.tools.filterGeneral.dropDownEmptyList");
+        },
+        noElements: function () {
+            return this.$t("modules.tools.filterGeneral.dropDownNoElements");
         }
     },
     watch: {
@@ -201,7 +205,7 @@ export default {
         <div class="left">
             <label
                 class="select-box-label"
-                for="select-box"
+                :for="'snippetSelectBox-' + snippetId"
             >{{ label }}:</label>
         </div>
         <div class="right">
@@ -215,7 +219,7 @@ export default {
         </div>
         <div class="select-box-container">
             <Multiselect
-                id="select-box"
+                :id="'snippetSelectBox-' + snippetId"
                 v-model="dropdownSelected"
                 :options="dropdownValue"
                 name="select-box"
@@ -228,7 +232,10 @@ export default {
                 :close-on-select="true"
                 :clear-on-select="false"
                 :loading="disable"
-            />
+            >
+                <span slot="noOptions">{{ emptyList }}</span>
+                <span slot="noResult">{{ noElements }}</span>
+            </Multiselect>
         </div>
         <div
             v-show="showInfo"

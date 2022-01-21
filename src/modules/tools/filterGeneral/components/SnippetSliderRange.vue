@@ -356,7 +356,9 @@ export default {
     >
         <div class="snippetSliderRangeContainer">
             <div class="left">
-                <label for="slider-input-min">{{ label }}</label>
+                <label
+                    :for="'snippetSliderInpMin-' + snippetId"
+                >{{ label }}</label>
             </div>
             <div class="right">
                 <div class="info-icon">
@@ -370,9 +372,11 @@ export default {
         </div>
         <div class="sliderRangeWrapper">
             <div class="sliderInputContainer">
-                <label for="slider-input-max" />
+                <label
+                    :for="'snippetSliderInpMax-' + snippetId"
+                />
                 <input
-                    id="slider-input-max"
+                    :id="'snippetSliderInpMax-' + snippetId"
                     ref="inputMaxNumber"
                     class="slider-input-max"
                     type="number"
@@ -384,9 +388,11 @@ export default {
                     @blur="checkInput"
                     @keyup.enter="checkInput"
                 >
-                <label for="slider-input-min" />
+                <label
+                    :for="'snippetSliderInpMin-' + snippetId"
+                />
                 <input
-                    id="slider-input-min"
+                    :id="'snippetSliderInpMin-' + snippetId"
                     ref="inputMinNumber"
                     class="slider-input-min"
                     type="number"
@@ -403,9 +409,11 @@ export default {
                 <div class="slider-range-track">
                     &nbsp;
                 </div>
-                <label for="slider1" />
+                <label
+                    for="'snippetSliderRngMin-' + snippetId"
+                />
                 <input
-                    id="slider1"
+                    :id="'snippetSliderRngMin-' + snippetId"
                     v-model="minVal"
                     class="slider-range-min"
                     type="range"
@@ -415,9 +423,11 @@ export default {
                     :min="minimumValue"
                     :max="maximumValue"
                 >
-                <label for="slider2" />
+                <label
+                    for="'snippetSliderRngMax-' + snippetId"
+                />
                 <input
-                    id="slider2"
+                    id="'snippetSliderRngMax-' + snippetId"
                     v-model="maxVal"
                     class="slider-range-max"
                     type="range"

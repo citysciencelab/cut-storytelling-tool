@@ -117,11 +117,11 @@ export default {
         </div>
         <div class="input-container">
             <label
-                for="snippetInput"
+                :for="'snippetInput-' + snippetId"
                 class="snippetInputLabel left"
             >{{ label }}</label>
             <input
-                id="snippetInput"
+                :id="'snippetInput-' + snippetId"
                 v-model="inputValue"
                 class="snippetInput"
                 type="text"

@@ -276,10 +276,10 @@ export default {
         <div class="input-container">
             <label
                 class="left"
-                for="dateInput"
+                :for="'snippetDate-' + snippetId"
             >{{ label }}</label>
             <input
-                id="dateInput"
+                :id="'snippetDate-' + snippetId"
                 v-model="value"
                 class="snippetDate"
                 type="date"
