@@ -640,4 +640,7 @@ export default {
     input[type="range"].disabled::-webkit-slider-thumb {
         background-color: #b9b5b5;
     }
+    .category-layer .right {
+        right: 30px;
+    }
 </style>

@@ -374,4 +374,7 @@ export default {
         position: absolute;
         right: 10px;
     }
+    .category-layer .right {
+        right: 30px;
+    }
 </style>

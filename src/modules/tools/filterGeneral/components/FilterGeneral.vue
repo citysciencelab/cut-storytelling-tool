@@ -8,14 +8,14 @@ import LayerFilterSnippet from "./LayerFilterSnippet.vue";
 import {convertToNewConfig} from "../utils/convertToNewConfig";
 import MapHandler from "../utils/mapHandler.js";
 import {getLayerByLayerId, showFeaturesByIds, createLayerIfNotExists} from "../utils/openlayerFunctions.js";
-import LayerList from "../components/LayerList.vue";
+import LayerCategory from "../components/LayerCategory.vue";
 
 export default {
     name: "FilterGeneral",
     components: {
         ToolTemplate,
         LayerFilterSnippet,
-        LayerList
+        LayerCategory
     },
     data () {
         return {
@@ -26,19 +26,20 @@ export default {
                 createLayerIfNotExists
             }),
             selectedLayers: [],
-            alreadySelectedLayers: [],
             layerLoaded: {}
         };
     },
     computed: {
         ...mapGetters("Tools/FilterGeneral", Object.keys(getters)),
         console: () => console,
-        alreadySelectedLayersConfig () {
-            if (!this.layerSelectorVisible) {
-                return this.layers;
-            }
+        filtersOnly () {
             return this.layers.filter(layer => {
-                return this.alreadySelectedLayers.includes(layer.filterId);
+                return !Object.prototype.hasOwnProperty.call(layer, "category");
+            });
+        },
+        categoriesOnly () {
+            return this.layers.filter(layer => {
+                return Object.prototype.hasOwnProperty.call(layer, "category");
             });
         }
     },
@@ -46,11 +47,7 @@ export default {
         this.$on("close", this.close);
     },
     mounted () {
-        if (Array.isArray(this.layers)) {
-            this.layers.forEach((layer, filterId) => {
-                layer.filterId = filterId;
-            });
-        }
+        this.setFilterId();
         this.$nextTick(() => {
             this.initialize();
             // console.log("Alte Config", this.configs);
@@ -71,6 +68,28 @@ export default {
             }
         },
         /**
+         * Set a custom unique id for each filter in config.
+         * @returns {void}
+         */
+        setFilterId () {
+            if (Array.isArray(this.layers)) {
+                let filterId = 0;
+
+                this.layers.forEach(layer => {
+                    if (layer?.category) {
+                        layer.layers.forEach(subLayer => {
+                            subLayer.filterId = filterId;
+                            filterId += 1;
+                        });
+                    }
+                    else {
+                        layer.filterId = filterId;
+                        filterId += 1;
+                    }
+                });
+            }
+        },
+        /**
          * Update selectedLayers array.
          * @param {String[]|String} filterIds ids which should be added or removed
          * @returns {Object[]} selected layer fetched from config
@@ -83,17 +102,21 @@ export default {
                 return Array.isArray(filterIds) ? filterIds.includes(layer.filterId) : layer.filterId === filterIds;
             });
 
-            if (Array.isArray(filterIds)) {
-                filterIds.forEach(filterId => {
-                    if (!this.alreadySelectedLayers.includes(filterId)) {
-                        this.alreadySelectedLayers.push(filterId);
-                    }
-                });
-            }
-            else {
-                this.alreadySelectedLayers.push(filterIds);
-            }
+            for (const layer of this.layers) {
+                if (layer?.category) {
+                    const filteredSubLayer = layer.layers.filter(subLayer => {
+                        return Array.isArray(filterIds) ? filterIds.includes(subLayer.filterId) : subLayer.filterId === filterIds;
+                    });
 
+                    if (filteredSubLayer.length === 0) {
+                        continue;
+                    }
+                    confLayers.push({
+                        category: layer.category,
+                        layers: filteredSubLayer
+                    });
+                }
+            }
             this.selectedLayers = confLayers;
         },
         /**
@@ -108,9 +131,14 @@ export default {
             if (!this.layerSelectorVisible) {
                 return true;
             }
-            return this.selectedLayers.some(selectedLayer => {
+            return this.selectedLayers.filter(selectedLayer => {
+                if (selectedLayer.category) {
+                    return selectedLayer.layers.filter(subLayer => {
+                        return subLayer.filterId === filterId;
+                    }).length > 0;
+                }
                 return selectedLayer.filterId === filterId;
-            });
+            }).length > 0;
         },
         /**
          * Setting the layer loaded true if the layer is clicked from the filter Id
@@ -139,10 +167,11 @@ export default {
                 v-if="active"
                 id="tool-general-filter"
             />
-            <LayerList
+            <LayerCategory
                 v-if="Array.isArray(layers) && layers.length && layerSelectorVisible"
                 class="layerSelector"
-                :layers="layers"
+                :filters-only="filtersOnly"
+                :categories-only="categoriesOnly"
                 :multi-layer-selector="multiLayerSelector"
                 @updateselectedlayers="updateSelectedLayers"
                 @setLayerLoaded="setLayerLoaded"
@@ -161,10 +190,10 @@ export default {
                         />
                     </div>
                 </template>
-            </LayerList>
+            </LayerCategory>
             <div v-else-if="Array.isArray(layers) && layers.length">
                 <LayerFilterSnippet
-                    v-for="(layerConfig, indexLayer) in layers"
+                    v-for="(layerConfig, indexLayer) in filtersOnly"
                     :key="'layer-' + indexLayer"
                     :layer-config="layerConfig"
                     :map-handler="mapHandler"
