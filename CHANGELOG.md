@@ -9,7 +9,6 @@
 ---
 ## Unreleased - in development
 ### Added
-- The VectorBaseLayer is refactored. It is no longer a Backbone-model. The VectorBaseLayer uses the masterportalAPI's vectorBase layer on creation.
 - Package vue-multiselect: 2.1.6 is installed
 - Vector Tiles:
     - For vector tiles layers that are not in EPSG:3587, the default Mapbox resolutions are now used as fallback.
@@ -35,7 +34,8 @@
     - i18next: 20.3.3 to 21.6.4
     - inquirer: 8.1.2 to 8.2.0
     - jsts: 2.7.1 to 2.8.1
-    - mocha-loader: 3.0.0 to 5.1.5
+    - masterportalAPI: v1.8.0. This also raised ol to version 6.11.0.
+    - mocha: 9.1.3 to 9.1.4
     - mock-local-storage: 1.1.17 to 1.1.19
     - moment-timezone: 0.5.33 to 0.5.34
     - node-fetch: 2.6.1 to 3.1.0
@@ -45,15 +45,16 @@
     - sinon: 11.1.1 to 12.0.1
     - vue-loader: 15.9.6 to 15.9.8
     - zip-a-folder: 1.1.0 to 1.1.2
-    - MasterportalAPI: v1.8.0. This also raised ol to version 6.11.0.
-- The version of node was updated, must be >= 16.13.2. See https://docs.npmjs.com/cli/v8/configuring-npm/package-lock-json#handling-old-lockfiles.
-  The version of npm  was also updated, must be >= 8.1.2. The file .npmrc was added to set "engine-strict=true", as a result, the npm version and the node version are mandatory.
-- Migrated mapView to Vue.
+- The version of node was updated, must be >= 14.18.3.
+  The version of npm  was also updated, must be >= 6.14.15. The file .npmrc was added to set "engine-strict=true", as a result, the npm version and the node version are mandatory.
+- Migrated the module mapView from Backbone to Vue.
+- Migrated the module vectorBaseLayer from Backbone to Vue. The VectorBaseLayer uses the masterportalAPI's vectorBase layer on creation.
 
 ### Deprecated
 
 ### Removed
 - The following NPM packages are removed:
+    - mocha-loader
     - ol-mapbox-style
     - polyfill-object.fromentries
     - whatwg-fetch
