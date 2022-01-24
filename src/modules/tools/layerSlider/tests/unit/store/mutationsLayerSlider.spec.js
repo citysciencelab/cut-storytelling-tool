@@ -56,7 +56,7 @@ describe("src/modules/tools/layerSlider/store/mutationslayerSlider.js", () => {
 
             setProgressBarWidth(state, layerIds);
 
-            expect(state.progressBarWidth.toFixed(3)).to.equals(33.333);
+            expect(state.progressBarWidth.toFixed(3)).to.equals("33.333");
         });
         it("setProgressBarWidth to 1/11 with eleven layers", () => {
             const state = {
@@ -111,7 +111,7 @@ describe("src/modules/tools/layerSlider/store/mutationslayerSlider.js", () => {
 
             setProgressBarWidth(state, layerIds);
 
-            expect(state.progressBarWidth.toFixed(3)).to.equals(9.091);
+            expect(state.progressBarWidth.toFixed(3)).to.equals("9.091");
         });
     });
     describe("setWindowsInterval", () => {
