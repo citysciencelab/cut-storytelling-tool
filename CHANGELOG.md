@@ -39,7 +39,6 @@
     - mock-local-storage: 1.1.17 to 1.1.19
     - moment-timezone: 0.5.33 to 0.5.34
     - node-fetch: 2.6.1 to 3.1.0
-    - ol-mapbox-style: 6.4.1 to 6.8.1
     - regenerator-runtime: 0.13.7 to 0.13.9
     - replace-in-file: 6.2.0 to 6.3.2
     - sass: 1.44.0 to 1.45.2
@@ -55,6 +54,7 @@
 
 ### Removed
 - The following NPM packages are removed:
+    - ol-mapbox-style
     - polyfill-object.fromentries
     - whatwg-fetch
 
