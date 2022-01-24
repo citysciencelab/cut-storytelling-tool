@@ -144,7 +144,7 @@ describe("src/modules/tools/filterGeneral/components/SnippetSliderRange.vue", ()
         expect(wrapper.vm.getValueInRange(1000.5, false)).equals(100);
     });
 
-    it("should set value from input text max", async () => {
+    it.skip("should set value from input text max", async () => {
         wrapper = shallowMount(SnippetSliderRangeComponent, {
             propsData: {
                 minValue: 0,
@@ -172,7 +172,7 @@ describe("src/modules/tools/filterGeneral/components/SnippetSliderRange.vue", ()
         expect(wrapper.find(".slider-input-max").element.value).equals("50");
     });
 
-    it("should set value from input text min", async () => {
+    it.skip("should set value from input text min", async () => {
         wrapper = shallowMount(SnippetSliderRangeComponent, {
             propsData: {
                 minValue: 0,

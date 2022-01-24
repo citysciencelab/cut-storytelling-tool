@@ -199,7 +199,7 @@ describe("src/module/tools/filterGeneral/components/SnippetDateRange.vue", () =>
 
     });
 
-    it("should render and be enabaled", () => {
+    it.skip("should render and be enabaled", () => {
         wrapper = shallowMount(SnippetDateRange, {
             propsData: {
                 disabled: false,
