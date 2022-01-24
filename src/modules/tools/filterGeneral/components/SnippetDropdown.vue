@@ -200,49 +200,96 @@ export default {
     <div
         v-show="visible"
         v-if="!invalid"
-        class="snippetDropdownContainer"
     >
-        <div class="left">
-            <label
-                class="select-box-label"
-                :for="'snippetSelectBox-' + snippetId"
-            >{{ label }}:</label>
-        </div>
-        <div class="right">
-            <div class="info-icon">
-                <span
-                    :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
-                    @click="toggleInfo()"
-                    @keydown.enter="toggleInfo()"
-                >&nbsp;</span>
+        <div
+            v-if="display === 'default'"
+            class="snippetDropdownContainer"
+        >
+            <div class="left">
+                <label
+                    class="select-box-label"
+                    :for="'snippetSelectBox-' + snippetId"
+                >{{ label }}:</label>
+            </div>
+            <div class="right">
+                <div class="info-icon">
+                    <span
+                        :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
+                        @click="toggleInfo()"
+                        @keydown.enter="toggleInfo()"
+                    >&nbsp;</span>
+                </div>
+            </div>
+            <div class="select-box-container">
+                <Multiselect
+                    :id="'snippetSelectBox-' + snippetId"
+                    v-model="dropdownSelected"
+                    :options="dropdownValue"
+                    name="select-box"
+                    :disabled="disable"
+                    :multiple="multiselect"
+                    :placeholder="label"
+                    :show-labels="false"
+                    open-direction="bottom"
+                    :hide-selected="true"
+                    :close-on-select="true"
+                    :clear-on-select="false"
+                    :loading="disable"
+                >
+                    <span slot="noOptions">{{ emptyList }}</span>
+                    <span slot="noResult">{{ noElements }}</span>
+                </Multiselect>
+            </div>
+            <div
+                v-show="showInfo"
+                class="bottom"
+            >
+                <div class="info-text">
+                    <span>{{ infoText }}</span>
+                </div>
             </div>
         </div>
-        <div class="select-box-container">
-            <Multiselect
-                :id="'snippetSelectBox-' + snippetId"
-                v-model="dropdownSelected"
-                :options="dropdownValue"
-                name="select-box"
-                :disabled="disable"
-                :multiple="multiselect"
-                :placeholder="label"
-                :show-labels="false"
-                open-direction="bottom"
-                :hide-selected="true"
-                :close-on-select="true"
-                :clear-on-select="false"
-                :loading="disable"
-            >
-                <span slot="noOptions">{{ emptyList }}</span>
-                <span slot="noResult">{{ noElements }}</span>
-            </Multiselect>
-        </div>
         <div
-            v-show="showInfo"
-            class="bottom"
+            v-show="visible"
+            v-if="display === 'list'"
+            class="snippetListContainer"
         >
-            <div class="info-text">
-                <span>{{ infoText }}</span>
+            <div class="table-responsive">
+                <table class="table table-sm table-hover table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th
+                                colspan="2"
+                            >
+                                {{ label }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            v-for="val in dropdownValue"
+                            :key="val"
+                        >
+                            <td>
+                                <label
+                                    class="check-box-label"
+                                    :for="'snippetCheckbox-' + snippetId + '-' + val"
+                                >{{ val }}</label>
+                            </td>
+                            <td>
+                                <label
+                                    for="'snippetCheckbox-' + snippetId + '-' + val"
+                                />
+                                <input
+                                    :id="'snippetCheckbox-' + snippetId + '-' + val"
+                                    v-model="dropdownSelected"
+                                    type="checkbox"
+                                    :value="val"
+                                >
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
