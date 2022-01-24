@@ -410,7 +410,8 @@
                 "dateInfo": "To enter a date as a search criteria, click in the date input field and select a date from the opened calendar.",
                 "dateRangeInfo": "To enter a date range as a search criteria, click in the input field for the start or end date and select a start or end date from the open calendar.",
                 "dropDownEmptyList": "List is empty",
-                "dropDownNoElements": "No elements found"
+                "dropDownNoElements": "No elements found",
+                "searchInMapExtent": "Search in current map extent"
             },
             "filter": {
                 "result": "Result",

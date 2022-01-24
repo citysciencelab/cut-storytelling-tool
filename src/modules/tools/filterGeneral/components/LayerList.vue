@@ -109,13 +109,17 @@ export default {
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
     .panel-heading {
         cursor:default;
         background-color: white !important;
-    }
-    .panel-heading.disabled {
-        background-color: #f5f5f5 !important;
+        padding: 0;
+        &.disabled {
+            background-color: #f5f5f5 !important;
+        }
+        h2 {
+            padding: 15px;
+        }
     }
     .panel-title {
         cursor: pointer;

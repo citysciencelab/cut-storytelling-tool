@@ -410,7 +410,8 @@
                 "dateInfo": "Für die Eingabe eines Datums als Suchkriterium, klicken Sie im Datumseingabefeld und wählen Sie ein Datum aus dem geöffneten Kalender aus.",
                 "dateRangeInfo": "Für die Eingabe eines Datumsbereichs als Suchkriterium, klicken Sie in das Eingabefeld für das Start- bzw. End-Datum und wählen jeweils ein Start- bzw. End-Datum aus dem geöffneten Kalender aus.",
                 "dropDownEmptyList": "Die Liste ist leer",
-                "dropDownNoElements": "Keine Elemente gefunden"
+                "dropDownNoElements": "Keine Elemente gefunden",
+                "searchInMapExtent": "Suche im aktuellen Kartenausschnitt"
             },
             "filter": {
                 "result": "Treffer",

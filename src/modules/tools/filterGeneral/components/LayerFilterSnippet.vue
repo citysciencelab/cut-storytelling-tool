@@ -1,6 +1,7 @@
 <script>
 import ProgressBar from "./ProgressBar.vue";
 import SnippetCheckbox from "./SnippetCheckbox.vue";
+import SnippetCheckboxFilterInMapExtent from "./SnippetCheckboxFilterInMapExtent.vue";
 import SnippetDate from "./SnippetDate.vue";
 import SnippetDateRange from "./SnippetDateRange.vue";
 import SnippetDropdown from "./SnippetDropdown.vue";
@@ -14,6 +15,7 @@ export default {
     name: "LayerFilterSnippet",
     components: {
         SnippetCheckbox,
+        SnippetCheckboxFilterInMapExtent,
         SnippetDate,
         SnippetDateRange,
         SnippetDropdown,
@@ -43,7 +45,8 @@ export default {
             showStop: false,
             layerModel: null,
             layerService: null,
-            api: null
+            api: null,
+            searchInMapExtent: false
         };
     },
     watch: {
@@ -77,6 +80,9 @@ export default {
          */
         checkSnippetType (snippet, type) {
             return isObject(snippet) && Object.prototype.hasOwnProperty.call(snippet, "type") && snippet.type === type;
+        },
+        commandChanged (value) {
+            this.searchInMapExtent = value;
         },
         /**
          * Triggered when a rule changed at a snippet.
@@ -123,7 +129,7 @@ export default {
                 snippetId: false,
                 commands: {
                     paging: this.layerConfig?.paging ? this.layerConfig.paging : 1000,
-                    searchInMapExtent: this.layerConfig?.searchInMapExtent ? this.layerConfig.searchInMapExtent : false
+                    searchInMapExtent: this.searchInMapExtent
                 },
                 rules: this.getCurrentRules()
             };
@@ -238,6 +244,15 @@ export default {
     <div
         class="panel-body"
     >
+        <div
+            v-if="Object.prototype.hasOwnProperty.call(layerConfig, 'searchInMapExtent') && layerConfig.searchInMapExtent"
+            class="snippet"
+        >
+            <SnippetCheckboxFilterInMapExtent
+                :filter-id="layerConfig.filterId"
+                @commandChanged="commandChanged"
+            />
+        </div>
         <div
             v-if="Object.prototype.hasOwnProperty.call(layerConfig, 'snippets') && Array.isArray(layerConfig.snippets)"
         >
@@ -407,9 +422,13 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    .panel-body {
+        padding: 0 15px;
+    }
     .snippet {
-        display: block;
+        display: inline-block;
         margin-bottom: 15px;
+        width: 100%;
         b {
             display: block;
         }

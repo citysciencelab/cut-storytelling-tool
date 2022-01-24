@@ -1,94 +1,43 @@
 <script>
 export default {
-    name: "SnippetCheckbox",
+    name: "SnippetCheckboxFilterInMapExtent",
     props: {
-        api: {
-            type: Object,
-            required: false,
-            default: null
-        },
-        attrName: {
-            type: String,
-            required: false,
-            default: ""
-        },
-        disabled: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        info: {
-            type: String,
-            required: false,
-            default: ""
-        },
-        label: {
-            type: String,
-            required: false,
-            default: ""
-        },
-        operator: {
-            type: String,
-            required: false,
-            default: "EQ"
-        },
-        prechecked: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        snippetId: {
+        filterId: {
             type: Number,
-            required: false,
-            default: 0
-        },
-        visible: {
-            type: Boolean,
-            required: false,
-            default: true
+            required: true
         }
     },
     data () {
         return {
-            checked: this.prechecked,
+            checked: false,
             showInfo: false
         };
-    },
-    computed: {
-        infoText: function () {
-            return this.info ? this.info : this.$t("modules.tools.filterGeneral.checkBoxInfo");
-        }
     },
     watch: {
         checked: {
             handler (value) {
-                this.emitCurrentRule(value);
+                this.emitCurrentCommand(value);
             }
         }
     },
     mounted () {
         this.$nextTick(() => {
-            this.emitCurrentRule(this.checked, true);
+            this.emitCurrentCommand(this.checked);
         });
     },
     methods: {
         /**
-         * Emits the current rule to whoever is listening.
-         * @param {*} value the value to put into the rule
-         * @param {Boolean} [startup=false] true if the call comes on startup, false if a user actively changed a snippet
+         * Emits the current command to whoever is listening.
+         * @param {*} value the value to put into the command
          * @returns {void}
          */
-        emitCurrentRule (value, startup = false) {
-            this.$emit("ruleChanged", {
-                snippetId: this.snippetId,
-                startup,
-                rule: {
-                    attrName: this.attrName,
-                    operator: this.operator,
-                    value
-                }
-            });
+        emitCurrentCommand (value) {
+            this.$emit("commandChanged", value);
         },
+        /**
+         * Toggles the info.
+         * @returns {void}
+         */
         toggleInfo () {
             this.showInfo = !this.showInfo;
         }
@@ -98,29 +47,29 @@ export default {
 
 <template>
     <div
-        v-show="visible"
         class="snippetCheckboxContainer"
     >
         <div class="left">
             <input
-                :id="'snippetCheckbox-' + snippetId"
+                :id="'CheckboxFilterInMapExtent-' + filterId"
                 v-model="checked"
                 class="snippetCheckbox"
                 type="checkbox"
                 name="checkbox"
-                :disabled="disabled"
             >
             <label
-                :for="'snippetCheckbox-' + snippetId"
-            >{{ label }}</label>
+                :for="'CheckboxFilterInMapExtent-' + filterId"
+            >
+                {{ $t('modules.tools.filterGeneral.searchInMapExtent') }}
+            </label>
         </div>
         <div class="right">
             <div class="info-icon">
                 <span
-                    :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
+                    class="glyphicon glyphicon-info-sign"
                     @click="toggleInfo()"
                     @keydown.enter="toggleInfo()"
-                >&nbsp;</span>
+                />
             </div>
         </div>
         <div
@@ -128,7 +77,7 @@ export default {
             class="bottom"
         >
             <div class="info-text">
-                <span>{{ infoText }}</span>
+                <span>{{ $t("modules.tools.filterGeneral.checkBoxInfo") }}</span>
             </div>
         </div>
     </div>
@@ -139,6 +88,7 @@ export default {
     .snippetCheckboxContainer {
         margin-bottom: 10px;
         height: auto;
+        position: relative;
     }
     .snippetCheckboxContainer .info-icon {
         float: right;
@@ -181,6 +131,6 @@ export default {
     }
     .snippetCheckboxContainer .right {
         position: absolute;
-        right: 10px;
+        right: -10px;
     }
 </style>
