@@ -169,6 +169,13 @@ export default {
                 console.warn(error);
             });
         }
+        else {
+            this.dropdownValue = [];
+            this.$nextTick(() => {
+                this.isInitializing = false;
+                this.disable = false;
+            });
+        }
     },
     methods: {
         translateKeyWithPlausibilityCheck,

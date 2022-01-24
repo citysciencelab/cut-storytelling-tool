@@ -103,6 +103,18 @@ describe("src/modules/tools/filterGeneral/components/SnippetDropdown.vue", () =>
             expect(wrapper.find(".info-icon").exists()).to.be.false;
             wrapper.destroy();
         });
+        it("should have an empty list if autoInit is false and the api may be set", () => {
+            const wrapper = shallowMount(SnippetDropdown, {
+                propsData: {
+                    api: true,
+                    autoInit: false
+                },
+                localVue
+            });
+
+            expect(wrapper.vm.dropdownValue).to.be.an("array").and.to.be.empty;
+            wrapper.destroy();
+        });
     });
 
     describe("emitCurrentRule", () => {
