@@ -1,12 +1,9 @@
 <script>
+import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
+
 export default {
     name: "SnippetInput",
     props: {
-        api: {
-            type: Object,
-            required: false,
-            default: null
-        },
         attrName: {
             type: String,
             required: false,
@@ -18,14 +15,14 @@ export default {
             default: false
         },
         info: {
-            type: String,
+            type: [String, Boolean],
             required: false,
-            default: ""
+            default: false
         },
         label: {
-            type: String,
+            type: [String, Boolean],
             required: false,
-            default: ""
+            default: true
         },
         operator: {
             type: String,
@@ -55,42 +52,54 @@ export default {
     },
     data () {
         return {
-            inputValue: this.prechecked ? this.prechecked : "",
+            isInitializing: true,
+            value: "",
             showInfo: false
         };
     },
     computed: {
-        infoText: function () {
-            return this.info ? this.info : this.$t("modules.tools.filterGeneral.textFieldInfo");
+        labelText () {
+            if (this.label === true) {
+                return this.attrName;
+            }
+            else if (typeof this.label === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
+            }
+            return "";
+        },
+        infoText () {
+            if (this.info === true) {
+                return this.$t("common:modules.tools.filterGeneral.info.snippetInput");
+            }
+            else if (typeof this.info === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.info, key => this.$t(key));
+            }
+            return "";
         }
     },
     watch: {
-        inputValue: {
+        value: {
             handler (value) {
                 if (!value) {
                     this.deleteCurrentRule();
                 }
                 else {
-                    this.emitCurrentRule(value);
+                    this.emitCurrentRule(value, this.isInitializing);
                 }
             }
         }
     },
-    mounted () {
+    created () {
+        if (this.prechecked) {
+            this.value = this.prechecked;
+        }
         this.$nextTick(() => {
-            if (this.prechecked) {
-                this.emitCurrentRule(this.inputValue, true);
-            }
+            this.isInitializing = false;
         });
     },
     methods: {
-        /**
-         * Returns the label to use in the gui.
-         * @returns {String} the label to use
-         */
-        getLabel () {
-            return this.label || this.attrName;
-        },
+        translateKeyWithPlausibilityCheck,
+
         /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
@@ -121,7 +130,7 @@ export default {
          */
         resetSnippet (onsuccess) {
             if (this.visible) {
-                this.inputValue = "";
+                this.value = "";
             }
             this.$nextTick(() => {
                 if (typeof onsuccess === "function") {
@@ -129,6 +138,10 @@ export default {
                 }
             });
         },
+        /**
+         * Toggles the info.
+         * @returns {void}
+         */
         toggleInfo () {
             this.showInfo = !this.showInfo;
         }
@@ -141,7 +154,10 @@ export default {
         v-show="visible"
         class="snippetInputContainer"
     >
-        <div class="right">
+        <div
+            v-if="info !== false"
+            class="right"
+        >
             <div class="info-icon">
                 <span
                     :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
@@ -152,12 +168,13 @@ export default {
         </div>
         <div class="input-container">
             <label
+                v-if="label !== false"
                 :for="'snippetInput-' + snippetId"
                 class="snippetInputLabel left"
-            >{{ getLabel() }}</label>
+            >{{ labelText }}</label>
             <input
                 :id="'snippetInput-' + snippetId"
-                v-model="inputValue"
+                v-model="value"
                 class="snippetInput"
                 type="text"
                 name="input"

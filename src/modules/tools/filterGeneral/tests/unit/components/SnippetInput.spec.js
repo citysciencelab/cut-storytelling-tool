@@ -10,119 +10,167 @@ localVue.use(Vuex);
 config.mocks.$t = key => key;
 
 describe("src/modules/tools/filterGeneral/components/SnippetInput.vue", () => {
-    let wrapper;
+    describe("constructor", () => {
+        it("should have correct default values", () => {
+            const wrapper = shallowMount(SnippetInput, {localVue});
 
-    beforeEach(() => {
-        wrapper = shallowMount(SnippetInput, {
-            propsData: {
-                operator: "IN",
-                prechecked: "",
-                placeholder: "",
-                visible: true
-            },
-            localVue
-        });
-    });
-
-    afterEach(() => {
-        if (wrapper) {
+            expect(wrapper.vm.info).to.be.false;
+            expect(wrapper.vm.label).to.be.true;
+            expect(wrapper.vm.operator).to.equal("IN");
+            expect(wrapper.vm.prechecked).to.equal("");
+            expect(wrapper.vm.snippetId).to.equal(0);
+            expect(wrapper.vm.visible).to.be.true;
             wrapper.destroy();
-        }
-    });
-
-    it("should render correctly", () => {
-        expect(wrapper.find("input").classes("snippetInput")).to.be.true;
-    });
-
-    it("should render hidden if visible is false and prechecked is set", () => {
-        wrapper = shallowMount(SnippetInput, {
-            propsData: {
-                operator: "IN",
-                prechecked: "test",
-                placeholder: "Text eingeben",
-                visible: false
-            },
-            localVue
         });
+        it("should render correctly with default values", () => {
+            const wrapper = shallowMount(SnippetInput, {localVue});
 
-        expect(wrapper.find(".snippetInput").element.value).to.be.equal("test");
-        expect(wrapper.find(".snippetInputContainer").element.style._values.display).to.be.equal("none");
+            expect(wrapper.find("input").classes("snippetInput")).to.be.true;
+            wrapper.destroy();
+        });
+        it("should render hidden if visible is false", () => {
+            const wrapper = shallowMount(SnippetInput, {
+                propsData: {
+                    visible: false
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".snippetInputContainer").element.style._values.display).to.be.equal("none");
+            wrapper.destroy();
+        });
+        it("should render but also be disabled", () => {
+            const wrapper = shallowMount(SnippetInput, {
+                propsData: {
+                    disabled: true
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".snippetInput").exists()).to.be.true;
+            expect(wrapper.vm.disabled).to.be.true;
+            expect(wrapper.find(".snippetInput").element.disabled).to.be.true;
+            wrapper.destroy();
+        });
+        it("should render snippet with placeholder", () => {
+            const wrapper = shallowMount(SnippetInput, {
+                propsData: {
+                    placeholder: "this is a placeholder"
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".snippetInput").attributes("placeholder")).to.be.equal("this is a placeholder");
+            wrapper.destroy();
+        });
+        it("should render with a label if the label is a string", () => {
+            const wrapper = shallowMount(SnippetInput, {
+                propsData: {
+                    label: "foobar"
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".snippetInputLabel").text()).to.be.equal("foobar");
+            wrapper.destroy();
+        });
+        it("should render without a label if label is a boolean and false", () => {
+            const wrapper = shallowMount(SnippetInput, {
+                propsData: {
+                    label: false
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".snippetInputLabel").exists()).to.be.false;
+            wrapper.destroy();
+        });
+        it("should render the info span", () => {
+            const wrapper = shallowMount(SnippetInput, {
+                propsData: {
+                    info: "this is an info text"
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".info-text").exists()).to.be.true;
+            expect(wrapper.find(".info-text span").element.innerHTML).to.be.equal("this is an info text");
+            wrapper.destroy();
+        });
+        it("should not render the info button if info is a boolean and false", () => {
+            const wrapper = shallowMount(SnippetInput, {
+                propsData: {
+                    info: false
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".info-icon").exists()).to.be.false;
+            wrapper.destroy();
+        });
     });
 
-    it("should render snippet with placeholder", () => {
-        wrapper = shallowMount(SnippetInput, {
-            propsData: {
-                operator: "IN",
-                prechecked: "test",
-                placeholder: "Placeholder 1234",
-                visible: false
-            },
-            localVue
-        });
+    describe("emitCurrentRule", () => {
+        it("should emit changeRule function with the expected values", () => {
+            const wrapper = shallowMount(SnippetInput, {
+                propsData: {
+                    snippetId: 1234,
+                    visible: false,
+                    attrName: "attrName",
+                    operator: "operator"
+                },
+                localVue
+            });
 
-        expect(wrapper.find(".snippetInput").attributes("placeholder")).to.be.equal("Placeholder 1234");
+            wrapper.vm.emitCurrentRule("value", "startup");
+            expect(wrapper.emitted("changeRule")).to.be.an("array").and.to.have.lengthOf(1);
+            expect(wrapper.emitted("changeRule")[0]).to.be.an("array").and.to.have.lengthOf(1);
+            expect(wrapper.emitted("changeRule")[0][0]).to.deep.equal({
+                snippetId: 1234,
+                startup: "startup",
+                fixed: true,
+                attrName: "attrName",
+                operator: "operator",
+                value: "value"
+            });
+            wrapper.destroy();
+        });
     });
 
-    it("should render without placeholder", () => {
-        wrapper = shallowMount(SnippetInput, {
-            propsData: {
-                operator: "IN",
-                prechecked: "test",
-                visible: false
-            },
-            localVue
-        });
+    describe("deleteCurrentRule", () => {
+        it("should emit deleteRule function with its snippetId", () => {
+            const wrapper = shallowMount(SnippetInput, {
+                propsData: {
+                    snippetId: 1234
+                },
+                localVue
+            });
 
-        expect(wrapper.find(".snippetInput").attributes("placeholder")).to.be.equal("");
+            wrapper.vm.deleteCurrentRule();
+            expect(wrapper.emitted("deleteRule")).to.be.an("array").and.to.have.lengthOf(1);
+            expect(wrapper.emitted("deleteRule")[0]).to.be.an("array").and.to.have.lengthOf(1);
+            expect(wrapper.emitted("deleteRule")[0][0]).to.equal(1234);
+            wrapper.destroy();
+        });
     });
 
-    it("should render without props", () => {
-        wrapper = shallowMount(SnippetInput, {
-            propsData: {},
-            localVue
+    describe("resetSnippet", () => {
+        it("should reset the snippet value and call the given onsuccess handler", async () => {
+            const wrapper = shallowMount(SnippetInput, {
+                propsData: {
+                    prechecked: "value"
+                },
+                localVue
+            });
+            let called = false;
+
+            expect(wrapper.vm.value).to.equal("value");
+            await wrapper.vm.resetSnippet(() => {
+                called = true;
+            });
+            expect(wrapper.vm.value).to.equal("");
+            expect(called).to.be.true;
+            wrapper.destroy();
         });
-
-        expect(wrapper.find("input").classes("snippetInput")).to.be.true;
-        expect(wrapper.find(".snippetInput").element.value).to.be.equal("");
-        expect(wrapper.find(".snippetInput").attributes("placeholder")).to.be.equal("");
-        expect(wrapper.find(".snippetInputLabel").text()).to.be.equal("");
-    });
-
-    it("should render label", () => {
-        wrapper = shallowMount(SnippetInput, {
-            propsData: {
-                label: "foobar"
-            },
-            localVue
-        });
-
-        expect(wrapper.find(".snippetInputLabel").text()).to.be.equal("foobar");
-    });
-
-    it("should render but also be disabled", () => {
-        wrapper = shallowMount(SnippetInput, {
-            propsData: {
-                disabled: true,
-                label: "foobar"
-            },
-            localVue
-        });
-        expect(wrapper.find(".snippetInput").exists()).to.be.true;
-        expect(wrapper.vm.disabled).to.be.true;
-        expect(wrapper.find(".snippetInput").element.disabled).to.be.true;
-    });
-
-    it("should render the info span", () => {
-        wrapper = shallowMount(SnippetInput, {
-            propsData: {
-                disabled: true,
-                label: "foobar",
-                info: "Die Info"
-            },
-            localVue
-        });
-
-        expect(wrapper.find(".info-text").exists()).to.be.true;
-        expect(wrapper.find(".info-text span").element.innerHTML).to.be.equal("Die Info");
     });
 });

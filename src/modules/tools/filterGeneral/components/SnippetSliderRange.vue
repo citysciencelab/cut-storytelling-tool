@@ -1,6 +1,6 @@
 <script>
-import store from "../../../../app-store";
 import isObject from "../../../../utils/isObject";
+import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
 
 export default {
     name: "SnippetSliderRange",
@@ -15,10 +15,10 @@ export default {
             required: false,
             default: ""
         },
-        decimalStep: {
+        decimalPlaces: {
             type: Number,
             required: false,
-            default: 1
+            default: 0
         },
         disabled: {
             type: Boolean,
@@ -26,14 +26,14 @@ export default {
             default: false
         },
         info: {
-            type: String,
+            type: [String, Boolean],
             required: false,
-            default: ""
+            default: false
         },
         label: {
-            type: String,
+            type: [String, Boolean],
             required: false,
-            default: ""
+            default: true
         },
         minValue: {
             type: Number,
@@ -51,9 +51,9 @@ export default {
             default: "BETWEEN"
         },
         prechecked: {
-            type: [Array, Boolean],
+            type: Array,
             required: false,
-            default: false
+            default: undefined
         },
         snippetId: {
             type: Number,
@@ -69,259 +69,102 @@ export default {
     data () {
         return {
             disable: true,
-            invalid: false,
-            minimumValue: this.minValue,
-            maximumValue: this.maxValue,
-            minOnly: false,
-            maxOnly: false,
-            service: {
-                type: "WFS",
-                url: "https://geodienste.hamburg.de/HH_WFS_Regionaler_Bildungsatlas_Schul_Bezirk",
-                typename: "regionaler_bildungsatlas_schullandschaft_bezirke"
-            },
-            step: this.decimalStep,
+            isInitializing: true,
+            minimumValue: 0,
+            maximumValue: 100,
             showInfo: false,
-            minVal: Array.isArray(this.prechecked) ? this.prechecked[0] : this.minValue,
-            maxVal: Array.isArray(this.prechecked) ? this.prechecked[1] : this.maxValue
+            value: [0, 100]
         };
     },
     computed: {
-        infoText: function () {
-            return this.info ? this.info : this.$t("modules.tools.filterGeneral.sliderRangeInfo");
+        labelText () {
+            if (this.label === true) {
+                return this.attrName;
+            }
+            else if (typeof this.label === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
+            }
+            return "";
+        },
+        infoText () {
+            if (this.info === true) {
+                return this.$t("common:modules.tools.filterGeneral.info.snippetSliderRange");
+            }
+            else if (typeof this.info === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.info, key => this.$t(key));
+            }
+            return "";
+        },
+        inRangeValueLeft: {
+            get () {
+                const value = Math.min(this.value[1], Math.max(this.minimumValue, this.value[0]));
+
+                return !isNaN(value) ? value : 0;
+            },
+            set (value) {
+                this.$set(this.value, 0, value);
+            }
+        },
+        inRangeValueRight: {
+            get () {
+                const value = Math.min(this.maximumValue, Math.max(this.value[0], this.value[1]));
+
+                return !isNaN(value) ? value : 0;
+            },
+            set (value) {
+                this.$set(this.value, 1, value);
+            }
         }
     },
     watch: {
-        minVal (newVal) {
-            if (newVal) {
-                this.minVal = this.getValueInRange(newVal, true);
-                this.regulateMinMax("min");
-                this.emitCurrentRule([this.minVal, this.maxVal]);
-                if (newVal === this.minVal) {
-                    this.$refs.inputMinNumber.value = this.minVal;
-                }
-            }
-        },
-        maxVal (newVal) {
-            if (newVal) {
-                this.maxVal = this.getValueInRange(newVal, true);
-                this.regulateMinMax("max");
-                this.emitCurrentRule([this.minVal, this.maxVal]);
-                if (newVal === this.maxVal) {
-                    this.$refs.inputMaxNumber.value = this.maxVal;
-                }
+        value () {
+            if (!this.isInitializing || Array.isArray(this.prechecked) && this.prechecked.length === 2) {
+                this.emitCurrentRule([this.inRangeValueLeft, this.inRangeValueRight], this.isInitializing);
             }
         },
         disabled (value) {
             this.disable = typeof value === "boolean" ? value : true;
         }
     },
-    mounted () {
-        this.$refs.inputMinNumber.value = this.minVal;
-        this.$refs.inputMaxNumber.value = this.maxVal;
-
-        this.$nextTick(() => {
-            if (Array.isArray(this.prechecked)) {
-                this.emitCurrentRule([this.minVal, this.maxVal], true);
-            }
-        });
-    },
     created () {
-        this.minVal = this.getValueInRange(this.minVal, false);
-        this.maxVal = this.getValueInRange(this.maxVal, false);
-        this.step = this.getStep(this.step);
-        this.setInvalid(this.minimumValue, this.maximumValue);
-        this.setMinOnly(this.minimumValue, this.maximumValue);
-        this.setMaxOnly(this.minimumValue, this.maximumValue);
-        this.setMinMaxValue(this.minimumValue, this.maximumValue);
-        if (!this.invalid) {
-            this.disable = false;
+        if (typeof this.minValue !== "undefined" && typeof this.maxValue !== "undefined") {
+            this.minimumValue = this.minValue;
+            this.maximumValue = this.maxValue;
+            this.value = Array.isArray(this.prechecked) && this.prechecked.length === 2 ? this.prechecked : [this.minimumValue, this.maximumValue];
+            this.$nextTick(() => {
+                this.isInitializing = false;
+                this.disable = false;
+            });
+        }
+        else if (this.api) {
+            this.api.getMinMax(this.attrName, minMaxObj => {
+                if (!isObject(minMaxObj)) {
+                    return;
+                }
+                this.minimumValue = Object.prototype.hasOwnProperty.call(minMaxObj, "min") ? minMaxObj.min : this.minValue;
+                this.maximumValue = Object.prototype.hasOwnProperty.call(minMaxObj, "max") ? minMaxObj.max : this.maxValue;
+                this.value = Array.isArray(this.prechecked) && this.prechecked.length === 2 ? this.prechecked : [this.minimumValue, this.maximumValue];
+                this.$nextTick(() => {
+                    this.isInitializing = false;
+                    this.disable = false;
+                });
+            }, err => {
+                this.isInitializing = false;
+                this.disable = false;
+                console.warn(err);
+            }, typeof this.minValue === "undefined" && typeof this.maxValue !== "undefined", typeof this.minValue !== "undefined" && typeof this.maxValue === "undefined");
+        }
+        else {
+            this.value = Array.isArray(this.prechecked) && this.prechecked.length === 2 ? this.prechecked : [0, 100];
+            this.$nextTick(() => {
+                this.isInitializing = false;
+                this.disable = false;
+            });
         }
     },
     methods: {
-        /**
-         * Returns the label to use in the gui.
-         * @returns {String} the label to use
-         */
-        getLabel () {
-            return this.label || this.attrName;
-        },
-        /**
-         * Getting valid step
-         * @param {Number} value - the step for slider
-         * @returns {Number} step the step for slider
-         */
-        getStep (value) {
-            if (!isNaN(value) && Math.sign(value) > 0) {
-                return value;
-            }
+        translateKeyWithPlausibilityCheck,
 
-            console.warn("Please check the parameter decimalStep in configuration, it should be a positive number");
-            return 1;
-        },
-        /**
-         * Checking if the input field is valid and reset to valid value
-         * @param {Event} evt - input event
-         * @returns {void}
-         */
-        checkInput (evt) {
-            if (evt?.target?.value === "") {
-                this.getAlertRangeText(undefined);
-                if (evt?.target?.id === "slider-input-max") {
-                    this.$refs.inputMaxNumber.value = this.maxVal;
-                }
-                if (evt?.target?.id === "slider-input-min") {
-                    this.$refs.inputMinNumber.value = this.minVal;
-                }
-            }
-            else {
-                const value = this.getValueInRange(evt?.target?.value, true);
-
-                if (evt?.target?.value !== value.toString()) {
-                    if (evt?.target?.id === "slider-input-max") {
-                        this.$refs.inputMaxNumber.value = this.maxVal;
-                    }
-                    if (evt?.target?.id === "slider-input-min") {
-                        this.$refs.inputMinNumber.value = this.minVal;
-                    }
-                }
-                else {
-                    this.maxVal = this.$refs.inputMaxNumber.value;
-                    this.minVal = this.$refs.inputMinNumber.value;
-                    this.$refs.inputMaxNumber.blur();
-                    this.$refs.inputMinNumber.blur();
-                }
-            }
-        },
-        /**
-         * Checking if the input number is in range
-         * @param {Number} data the input number
-         * @param {Boolean} flag to decide if show the alerting box
-         * @returns {Number} the original input number or converted number
-         */
-        getValueInRange (data, flag) {
-            let value = parseFloat(data);
-
-            if (this.invalid) {
-                return false;
-            }
-
-            if (!Number.isInteger(this.step) && typeof data === "string" && data.slice(-1) === "." || data === "-") {
-                value = data;
-            }
-
-            if (value < this.minimumValue) {
-                if (flag) {
-                    this.getAlertRangeText(value);
-                }
-                value = this.minimumValue;
-            }
-            else if (value > this.maximumValue) {
-                if (flag) {
-                    this.getAlertRangeText(value);
-                }
-                value = this.maximumValue;
-            }
-
-            return value;
-        },
-        /**
-         * Regulates the minimum and maximum,
-         * when min is greater than max or max is less than min
-         * @param {String} type the type of variable to be treated
-         * @returns {void}
-         */
-        regulateMinMax (type) {
-            if (type === "min") {
-                if (this.minVal > this.maxVal) {
-                    this.maxVal = this.minVal;
-                }
-            }
-            if (type === "max") {
-                if (this.maxVal < this.minVal) {
-                    this.minVal = this.maxVal;
-                }
-            }
-        },
-
-        /**
-         * Getting slider range error text in alerting box
-         * @param {String} value the input value from input field
-         * @returns {void}
-         */
-        getAlertRangeText (value) {
-            if (value === undefined) {
-                store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.valueEmptyErrorMessage"));
-            }
-            else {
-                store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.valueOutOfRangeErrorMessage", {
-                    inputValue: value,
-                    minValueSlider: this.minimumValue,
-                    maxValueSlider: this.maximumValue
-                }));
-            }
-        },
-
-        /**
-         * Setting the parameter minOnly
-         * @param {Number|undefined} minimumValue the minimum value
-         * @param {Number|undefined} maximumValue the maximum value
-         * @returns {void}
-         */
-        setMinOnly (minimumValue, maximumValue) {
-            if (minimumValue === undefined && maximumValue !== undefined) {
-                this.minOnly = true;
-            }
-        },
-
-        /**
-         * Setting the parameter maxOnly
-         * @param {Number|undefined} minimumValue the minimum value
-         * @param {Number|undefined} maximumValue the maximum value
-         * @returns {void}
-         */
-        setMaxOnly (minimumValue, maximumValue) {
-            if (minimumValue !== undefined && maximumValue === undefined) {
-                this.maxOnly = true;
-            }
-        },
-
-        /**
-         * Setting the parameter minimumValue and maximumValue
-         * @param {Number|undefined} minimumValue the minimum value
-         * @param {Number|undefined} maximumValue the maximum value
-         * @returns {void}
-         */
-        setMinMaxValue (minimumValue, maximumValue) {
-            if (minimumValue === undefined || maximumValue === undefined) {
-                this.api.getMinMax(this.attrName, minMaxObj => {
-                    this.minimumValue = minimumValue === undefined && isObject(minMaxObj) && Object.prototype.hasOwnProperty.call(minMaxObj, "min") ? minMaxObj.min : minimumValue;
-                    this.maximumValue = maximumValue === undefined && isObject(minMaxObj) && Object.prototype.hasOwnProperty.call(minMaxObj, "max") ? minMaxObj.max : maximumValue;
-                    this.setInvalid(this.minimumValue, this.maximumValue);
-                    this.minVal = this.getValueInRange(this.minVal, false);
-                    this.maxVal = this.getValueInRange(this.maxVal, false);
-                }, onerror => {
-                    console.warn(onerror);
-                }, this.minOnly, this.maxOnly);
-            }
-        },
-        /**
-         * Setting the parameter invalid
-         * @param {Number|undefined} minimumValue the minimum value
-         * @param {Number|undefined} maximumValue the maximum value
-         * @returns {void}
-         */
-        setInvalid (minimumValue, maximumValue) {
-            if (minimumValue === undefined || maximumValue === undefined) {
-                return;
-            }
-            else if (parseInt(maximumValue, 10) < parseInt(minimumValue, 10)) {
-                console.warn("Please check your configuration or dienst manager, the minimum value can not be bigger than maximum value");
-                this.invalid = true;
-                return;
-            }
-
-            this.invalid = false;
-        },
         /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
@@ -329,23 +172,13 @@ export default {
          * @returns {void}
          */
         emitCurrentRule (value, startup = false) {
-            let result = value;
-
-            if (Array.isArray(value)) {
-                result = [];
-                value.forEach(v => {
-                    if (typeof v === "number") {
-                        result.push(v);
-                    }
-                });
-            }
             this.$emit("changeRule", {
                 snippetId: this.snippetId,
                 startup,
                 fixed: !this.visible,
                 attrName: this.attrName,
                 operator: this.operator,
-                value: result
+                value
             });
         },
         /**
@@ -362,10 +195,8 @@ export default {
          */
         resetSnippet (onsuccess) {
             if (this.visible) {
-                this.$refs.inputMinNumber.value = this.minimumValue;
-                this.$refs.inputMaxNumber.value = this.maximumValue;
-                this.minVal = this.minimumValue;
-                this.maxVal = this.maximumValue;
+                this.inRangeValueLeft = this.minimumValue;
+                this.inRangeValueRight = this.maximumValue;
             }
             this.$nextTick(() => {
                 if (typeof onsuccess === "function") {
@@ -373,8 +204,20 @@ export default {
                 }
             });
         },
+        /**
+         * Toggles the info.
+         * @returns {void}
+         */
         toggleInfo () {
             this.showInfo = !this.showInfo;
+        },
+        /**
+         * Returns the steps the slider will make over the number range.
+         * @param {Number} decimalPlaces the amount of decimal places
+         * @returns {Number} the steps
+         */
+        getSliderSteps (decimalPlaces) {
+            return 1 / Math.pow(10, decimalPlaces);
         }
     }
 };
@@ -383,15 +226,20 @@ export default {
 <template>
     <div
         v-show="visible"
-        v-if="!invalid"
+        class="snippetSliderRangeContainer"
     >
-        <div class="snippetSliderRangeContainer">
+        <div class="sliderInputWrapper">
             <div class="left">
                 <label
+                    v-if="label !== false"
                     :for="'snippetSliderInpMin-' + snippetId"
-                >{{ getLabel() }}</label>
+                    class="snippetSliderRangeLabel"
+                >{{ labelText }}</label>
             </div>
-            <div class="right">
+            <div
+                v-if="info !== false"
+                class="right"
+            >
                 <div class="info-icon">
                     <span
                         :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
@@ -403,68 +251,66 @@ export default {
         </div>
         <div class="sliderRangeWrapper">
             <div class="sliderInputContainer">
-                <label
-                    :for="'snippetSliderInpMax-' + snippetId"
-                />
-                <input
-                    :id="'snippetSliderInpMax-' + snippetId"
-                    ref="inputMaxNumber"
-                    class="slider-input-max"
-                    type="number"
-                    :disabled="disable"
-                    :step="step"
-                    :min="minimumValue"
-                    :max="maximumValue"
-                    :placeholder="maxVal"
-                    @blur="checkInput"
-                    @keyup.enter="checkInput"
-                >
-                <label
-                    :for="'snippetSliderInpMin-' + snippetId"
-                />
-                <input
-                    :id="'snippetSliderInpMin-' + snippetId"
-                    ref="inputMinNumber"
-                    class="slider-input-min"
-                    type="number"
-                    :disabled="disable"
-                    :step="step"
-                    :min="minimumValue"
-                    :max="maximumValue"
-                    :placeholder="minVal"
-                    @blur="checkInput"
-                    @keyup.enter="checkInput"
-                >
+                <div class="left">
+                    <label
+                        :for="'snippetSliderInputMin-' + snippetId"
+                    />
+                    <input
+                        :id="'snippetSliderInputMin-' + snippetId"
+                        v-model="inRangeValueLeft"
+                        class="slider-input-min"
+                        type="number"
+                        :disabled="disable"
+                        :step="getSliderSteps(decimalPlaces)"
+                        :min="minimumValue"
+                        :max="maximumValue"
+                    >
+                </div>
+                <div class="right">
+                    <label
+                        :for="'snippetSliderInputMax-' + snippetId"
+                    />
+                    <input
+                        :id="'snippetSliderInputMax-' + snippetId"
+                        v-model="inRangeValueRight"
+                        class="slider-input-max"
+                        type="number"
+                        :disabled="disable"
+                        :step="getSliderSteps(decimalPlaces)"
+                        :min="minimumValue"
+                        :max="maximumValue"
+                    >
+                </div>
             </div>
             <div class="sliderRangeContainer">
                 <div class="slider-range-track">
                     &nbsp;
                 </div>
                 <label
-                    for="'snippetSliderRngMin-' + snippetId"
+                    :for="'snippetSliderRangeMin-' + snippetId"
                 />
                 <input
-                    :id="'snippetSliderRngMin-' + snippetId"
-                    v-model="minVal"
+                    :id="'snippetSliderRangeMin-' + snippetId"
+                    v-model="inRangeValueLeft"
                     class="slider-range-min"
                     type="range"
                     :class="disable ? 'disabled':''"
                     :disabled="disable"
-                    :step="step"
+                    :step="getSliderSteps()"
                     :min="minimumValue"
                     :max="maximumValue"
                 >
                 <label
-                    for="'snippetSliderRngMax-' + snippetId"
+                    :for="'snippetSliderRangeMax-' + snippetId"
                 />
                 <input
-                    id="'snippetSliderRngMax-' + snippetId"
-                    v-model="maxVal"
+                    :id="'snippetSliderRangeMax-' + snippetId"
+                    v-model="inRangeValueRight"
                     class="slider-range-max"
                     type="range"
                     :class="disable ? 'disabled':''"
                     :disabled="disable"
-                    :step="step"
+                    :step="getSliderSteps()"
                     :min="minimumValue"
                     :max="maximumValue"
                 >
@@ -487,7 +333,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
-    .snippetSliderRangeContainer {
+    .sliderInputWrapper {
         padding: 5px;
         margin-bottom: 10px;
         height: 20px;
@@ -516,11 +362,11 @@ export default {
         width: 100%;
         padding: 0 5px;
     }
-    .snippetSliderRangeContainer .left {
+    .sliderInputWrapper .left {
         float: left;
         width: 90%;
     }
-    .snippetSliderRangeContainer .right {
+    .sliderInputWrapper .right {
         position: absolute;
         right: 10px;
     }
@@ -543,6 +389,12 @@ export default {
         width: 100%;
         height: 16px;
     }
+    .sliderInputContainer .left {
+        float: left;
+    }
+    .sliderInputContainer .right {
+        float: right;
+    }
     .values {
         position: relative;
         margin: auto;
@@ -552,7 +404,7 @@ export default {
     input[type="range"] {
         -webkit-appearance: none;
         -moz-appearance: none;
-        apearance: none;
+        appearance: none;
         width: 100%;
         outline: none;
         position: absolute;

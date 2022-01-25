@@ -1,6 +1,6 @@
 import Vuex from "vuex";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
-import LayerFilterSnippetComponent from "../../../components/LayerFilterSnippet.vue";
+import LayerFilterSnippet from "../../../components/LayerFilterSnippet.vue";
 import {expect} from "chai";
 
 const localVue = createLocalVue();
@@ -10,68 +10,75 @@ localVue.use(Vuex);
 config.mocks.$t = key => key;
 
 describe("src/modules/tools/filterGeneral/components/LayerFilterSnippet.vue", () => {
-    let wrapper, snippet, type;
+    let wrapper = null;
 
     beforeEach(() => {
-        wrapper = shallowMount(LayerFilterSnippetComponent, {
+        wrapper = shallowMount(LayerFilterSnippet, {
             propsData: {
                 layerConfig: {
-                    "snippets": [
-                        {
-                            "attrName": "checkbox",
-                            "label": "Ist dies eine Schwerpunktschule?",
-                            "type": "checkbox",
-                            "matchingMode": "OR"
-                        }
-                    ]
+                    service: {
+                        type: "something external"
+                    }
                 }
             },
             localVue
         });
     });
-
     afterEach(() => {
         if (wrapper) {
             wrapper.destroy();
         }
     });
 
-    describe("checkSnippetType", () => {
-        it("checks if the snippet type exists", () => {
-            snippet = {
-                "attrName": "checkbox",
-                "label": "Ist dies eine Schwerpunktschule?",
-                "type": "checkbox",
-                "matchingMode": "OR"
-            };
-            type = "checkbox";
-            expect(wrapper.vm.checkSnippetType(snippet, type)).to.be.true;
+    describe("constructor", () => {
+        it("should setup with an external service if no internal service is given", () => {
+            expect(wrapper.vm.layerService).to.deep.equal({
+                type: "something external"
+            });
+        });
+        it("should setup with an external service if a layerId is given, but no internal service is given", () => {
+            const localWrapper = shallowMount(LayerFilterSnippet, {
+                propsData: {
+                    layerConfig: {
+                        layerId: "layerId",
+                        service: {
+                            type: "something external"
+                        }
+                    }
+                },
+                localVue
+            });
 
-            expect(wrapper.vm.checkSnippetType(snippet, "dropdown")).to.be.false;
-            expect(wrapper.vm.checkSnippetType(snippet, "text")).to.be.false;
-            expect(wrapper.vm.checkSnippetType(snippet, "slider")).to.be.false;
-            expect(wrapper.vm.checkSnippetType(snippet, "sliderRange")).to.be.false;
-            expect(wrapper.vm.checkSnippetType(snippet, "date")).to.be.false;
-            expect(wrapper.vm.checkSnippetType(snippet, "dateRange")).to.be.false;
-
-            snippet = {
-                "attrName": "checkbox",
-                "label": "Ist dies eine Schwerpunktschule?",
-                "matchingMode": "OR"
-            };
-            type = "checkbox";
-            expect(wrapper.vm.checkSnippetType(snippet, type)).to.be.false;
-
-            expect(wrapper.vm.checkSnippetType({}, type)).to.be.false;
-            expect(wrapper.vm.checkSnippetType([], type)).to.be.false;
-            expect(wrapper.vm.checkSnippetType("", type)).to.be.false;
-            expect(wrapper.vm.checkSnippetType(null, type)).to.be.false;
-            expect(wrapper.vm.checkSnippetType(undefined, type)).to.be.false;
-            expect(wrapper.vm.checkSnippetType(false, type)).to.be.false;
-            expect(wrapper.vm.checkSnippetType(0, type)).to.be.false;
+            expect(wrapper.vm.layerService).to.deep.equal({
+                type: "something external"
+            });
+            localWrapper.destroy();
         });
     });
+    describe("hasThisSnippetTheExpectedType", () => {
+        it("should return false if the given snippet has not the expected type", () => {
+            expect(wrapper.vm.hasThisSnippetTheExpectedType(undefined)).to.be.false;
+            expect(wrapper.vm.hasThisSnippetTheExpectedType(null)).to.be.false;
+            expect(wrapper.vm.hasThisSnippetTheExpectedType(1234)).to.be.false;
+            expect(wrapper.vm.hasThisSnippetTheExpectedType("string")).to.be.false;
+            expect(wrapper.vm.hasThisSnippetTheExpectedType(true)).to.be.false;
+            expect(wrapper.vm.hasThisSnippetTheExpectedType(false)).to.be.false;
+            expect(wrapper.vm.hasThisSnippetTheExpectedType([])).to.be.false;
+            expect(wrapper.vm.hasThisSnippetTheExpectedType({})).to.be.false;
 
+            expect(wrapper.vm.hasThisSnippetTheExpectedType({type: "anything"}, "something")).to.be.false;
+        });
+        it("should return true if the given snippet has the expected type", () => {
+            expect(wrapper.vm.hasThisSnippetTheExpectedType({type: "something"}, "something")).to.be.true;
+        });
+    });
+    describe("searchInMapExtentChanged", () => {
+        it("should set the internal searchInMapExtent variable to the given value", () => {
+            expect(wrapper.vm.searchInMapExtent).to.be.false;
+            wrapper.vm.searchInMapExtentChanged(true);
+            expect(wrapper.vm.searchInMapExtent).to.be.true;
+        });
+    });
     describe("isRule", () => {
         it("should return false if anything but a rule is given", () => {
             expect(wrapper.vm.isRule(undefined)).to.be.false;

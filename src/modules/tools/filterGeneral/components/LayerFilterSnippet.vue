@@ -33,15 +33,18 @@ export default {
         },
         mapHandler: {
             type: Object,
-            required: true
+            required: false,
+            default: undefined
         },
         liveZoomToFeatures: {
             type: Boolean,
-            required: true
+            required: false,
+            default: false
         },
         minScale: {
             type: Number,
-            required: true
+            required: false,
+            default: 0
         }
     },
     data () {
@@ -61,6 +64,11 @@ export default {
             enableZoom: true
         };
     },
+    computed: {
+        snippetTagsResetAllText () {
+            return this.$t("common:modules.tools.filterGeneral.snippetTags.resetAll");
+        }
+    },
     watch: {
         paging (val) {
             if (val.page >= val.total) {
@@ -76,23 +84,53 @@ export default {
         }
     },
     created () {
-        this.activateLayer(this.layerConfig?.layerId);
-        this.setLayerService(this.layerModel);
-        this.setupSnippetIds();
+        if (!this.isExternalService(this.layerConfig?.service)) {
+            const layerId = this.layerConfig?.layerId || this.layerConfig?.service?.layerId;
 
+            if (typeof layerId !== "string" || !layerId) {
+                console.warn("Please check your filter configuration: You need to give either a layerId or a service object (or both) for a layer to filter.");
+                return;
+            }
+
+            this.layerModel = this.getActivatedLayerByLayerId(layerId);
+            if (!this.layerModel) {
+                console.warn("Please check your filter configuration: The given layerId does not exists in your config.json. Configure an extra service object for your filter configuration or add the layer to your config.json.");
+                return;
+            }
+
+            if (!this.layerConfig?.service) {
+                this.layerService = this.getServiceByLayerModel(layerId, this.layerModel);
+            }
+            else {
+                this.layerService = this.layerConfig.service;
+                if (!this.layerService?.layerId) {
+                    this.layerService.layerId = layerId;
+                }
+            }
+        }
+        else {
+            this.layerService = this.layerConfig?.service;
+        }
+
+        this.setupSnippetIds();
         this.api = new FilterApi(this.layerConfig.filterId, this.layerService);
     },
     methods: {
         /**
-         * Checking if the snippet type exists
+         * Checking if the snippet type exists.
          * @param {Object} snippet the snippet configuration
          * @param {String} type the type
          * @returns {Boolean} true if the snippet type is the expected type
          */
-        checkSnippetType (snippet, type) {
-            return isObject(snippet) && Object.prototype.hasOwnProperty.call(snippet, "type") && snippet.type === type;
+        hasThisSnippetTheExpectedType (snippet, type) {
+            return isObject(snippet) && typeof snippet.type === "string" && snippet.type === type;
         },
-        commandChanged (value) {
+        /**
+         * Changes the internal value for searchInMapExtent.
+         * @param {Boolean} value the value to change to
+         * @returns {void}
+         */
+        searchInMapExtentChanged (value) {
             this.searchInMapExtent = value;
         },
         /**
@@ -117,8 +155,15 @@ export default {
          * @returns {void}
          */
         resetAllSnippets (onsuccess) {
+            let resetCount = this.layerConfig.snippets.length;
+
             this.layerConfig.snippets.forEach(snippet => {
-                this.resetSnippet(snippet.snippetId, onsuccess);
+                this.resetSnippet(snippet.snippetId, () => {
+                    resetCount--;
+                    if (resetCount <= 0 && typeof onsuccess === "function") {
+                        onsuccess();
+                    }
+                });
             });
         },
         /**
@@ -144,7 +189,7 @@ export default {
             const len = this.rules.length;
 
             for (let i = 0; i < len; i++) {
-                if (this.rules[i] === false || this.isRule(this.rules[i]) && this.rules[i].fixed) {
+                if (!this.rules[i] || this.isRule(this.rules[i]) && this.rules[i].fixed) {
                     continue;
                 }
                 return true;
@@ -259,43 +304,41 @@ export default {
         /**
          * Activating the layer for filtering
          * @param {String} layerId the layer Id from config
-         * @returns {void}
+         * @returns {Object} the activated layer model
          */
-        activateLayer (layerId) {
-            if (typeof layerId === "string" && (!this.layerConfig?.service || this.layerConfig?.service?.type.toLowerCase() === "ol")) {
-                const layers = Radio.request("Map", "getLayers"),
-                    visibleLayer = typeof layers?.getArray !== "function" ? [] : layers.getArray().filter(layer => {
-                        return layer.getVisible() === true && layer.get("id") === layerId;
-                    });
+        getActivatedLayerByLayerId (layerId) {
+            const layers = Radio.request("Map", "getLayers"),
+                visibleLayer = typeof layers?.getArray !== "function" ? [] : layers.getArray().filter(layer => {
+                    return layer.getVisible() === true && layer.get("id") === layerId;
+                });
 
-                if (Array.isArray(visibleLayer) && !visibleLayer.length) {
-                    Radio.trigger("ModelList", "addModelsByAttributes", {"id": layerId});
-                }
-
-                this.layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layerId});
+            if (Array.isArray(visibleLayer) && !visibleLayer.length) {
+                Radio.trigger("ModelList", "addModelsByAttributes", {"id": layerId});
             }
+            return Radio.request("ModelList", "getModelByAttributes", {"id": layerId});
         },
         /**
-         * Setting layer service
+         * Returns the service using the given layer model.
+         * @param {Number} layerId the id of the layer
          * @param {Object} layerModel the layer model
-         * @returns {void}
+         * @returns {Object} the service object
          */
-        setLayerService (layerModel) {
-            if (isObject(this.layerConfig?.service)) {
-                this.layerService = this.layerConfig?.service;
-            }
-            else if (isObject(layerModel) && typeof this.layerConfig?.service === "undefined") {
-                this.layerService = {
-                    "type": "OL",
-                    "layerId": this.layerConfig?.layerId,
-                    "url": layerModel.get("url"),
-                    "typename": layerModel.get("featureType"),
-                    "namespace": layerModel.get("featureNS")
-                };
-            }
-            else if (layerModel === null && typeof this.layerConfig?.service === "undefined") {
-                console.warn("Please check your configuration of layerId or service, the portal could not load them");
-            }
+        getServiceByLayerModel (layerId, layerModel) {
+            return {
+                type: "OL",
+                layerId,
+                url: layerModel.get("url"),
+                typename: layerModel.get("featureType"),
+                namespace: layerModel.get("featureNS")
+            };
+        },
+        /**
+         * Returns true if the given service object wants to use an external interface.
+         * @param {Object} service the service to check
+         * @returns {Boolean} true if this service links to an external interface, false if not.
+         */
+        isExternalService (service) {
+            return isObject(service) && String(service.type).toLowerCase() !== "ol";
         },
         /**
          * For initialization only: Runs through the snippets and creates layer-unique snippetIds.
@@ -329,9 +372,11 @@ export default {
             this.api.filter(filterQuestion, filterAnswer => {
                 this.paging = filterAnswer.paging;
 
-                this.mapHandler.visualize(filterAnswer, error => {
-                    console.warn("map error", error);
-                });
+                if (isObject(this.mapHandler) && typeof this.mapHandler.visualize === "function") {
+                    this.mapHandler.visualize(filterAnswer, error => {
+                        console.warn("map error", error);
+                    });
+                }
 
                 if (Array.isArray(filterAnswer?.items) && filterAnswer.items.length) {
                     filterAnswer.items.forEach(item => {
@@ -365,12 +410,15 @@ export default {
     <div
         class="panel-body"
     >
-        <div class="snippetTags">
-            <div v-if="hasUnfixedRules()">
+        <div
+            v-if="layerConfig.snippetTags !== false"
+            class="snippetTags"
+        >
+            <div v-show="hasUnfixedRules()">
                 <SnippetTag
                     :is-reset-all="true"
                     label=""
-                    value="Alle löschen"
+                    :value="snippetTagsResetAllText"
                     @resetAllSnippets="resetAllSnippets"
                     @deleteAllRules="deleteAllRules"
                 />
@@ -383,7 +431,7 @@ export default {
                     v-if="isRule(rule) && rule.fixed === false"
                     :snippet-id="rule.snippetId"
                     :label="rule.attrName"
-                    :value="rule.value.toString()"
+                    :value="String(rule.value)"
                     @resetSnippet="resetSnippet"
                     @deleteRule="deleteRule"
                 />
@@ -395,7 +443,7 @@ export default {
         >
             <SnippetCheckboxFilterInMapExtent
                 :filter-id="layerConfig.filterId"
-                @commandChanged="commandChanged"
+                @commandChanged="searchInMapExtentChanged"
             />
         </div>
         <div
@@ -406,12 +454,11 @@ export default {
                 :key="'snippet-' + indexSnippet"
             >
                 <div
-                    v-if="checkSnippetType(snippet, 'checkbox')"
+                    v-if="hasThisSnippetTheExpectedType(snippet, 'checkbox')"
                     class="snippet"
                 >
                     <SnippetCheckbox
                         :ref="'snippet-' + snippet.snippetId"
-                        :api="api"
                         :attr-name="snippet.attrName"
                         :disabled="disabled"
                         :info="snippet.info"
@@ -425,7 +472,7 @@ export default {
                     />
                 </div>
                 <div
-                    v-else-if="checkSnippetType(snippet, 'dropdown')"
+                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'dropdown')"
                     class="snippet"
                 >
                     <SnippetDropdown
@@ -451,12 +498,11 @@ export default {
                     />
                 </div>
                 <div
-                    v-else-if="checkSnippetType(snippet, 'text')"
+                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'text')"
                     class="snippet"
                 >
                     <SnippetInput
                         :ref="'snippet-' + snippet.snippetId"
-                        :api="api"
                         :attr-name="snippet.attrName"
                         :disabled="disabled"
                         :info="snippet.info"
@@ -471,7 +517,7 @@ export default {
                     />
                 </div>
                 <div
-                    v-else-if="checkSnippetType(snippet, 'date')"
+                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'date')"
                     class="snippet"
                 >
                     <SnippetDate
@@ -493,7 +539,7 @@ export default {
                     />
                 </div>
                 <div
-                    v-else-if="checkSnippetType(snippet, 'dateRange')"
+                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'dateRange')"
                     class="snippet"
                 >
                     <SnippetDateRange
@@ -515,14 +561,14 @@ export default {
                     />
                 </div>
                 <div
-                    v-else-if="checkSnippetType(snippet, 'slider')"
+                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'slider')"
                     class="snippet"
                 >
                     <SnippetSlider
                         :ref="'snippet-' + snippet.snippetId"
                         :api="api"
                         :attr-name="snippet.attrName"
-                        :decimal-step="snippet.decimalStep"
+                        :decimal-places="snippet.decimalPlaces"
                         :disabled="disabled"
                         :info="snippet.info"
                         :label="snippet.label"
@@ -537,14 +583,14 @@ export default {
                     />
                 </div>
                 <div
-                    v-else-if="checkSnippetType(snippet, 'sliderRange')"
+                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'sliderRange')"
                     class="snippet"
                 >
                     <SnippetSliderRange
                         :ref="'snippet-' + snippet.snippetId"
                         :api="api"
                         :attr-name="snippet.attrName"
-                        :decimal-step="snippet.decimalStep"
+                        :decimal-places="snippet.decimalPlaces"
                         :disabled="disabled"
                         :info="snippet.info"
                         :label="snippet.label"
