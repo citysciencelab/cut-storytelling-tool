@@ -18,22 +18,24 @@
 ### Changed
 - It is now possible to display layers at scales smaller than 1:1 000 000.
 - The following NPM packages are updated:
-    - @babel/core: 7.16.0 to 7.16.7
+    - @babel/core: 7.16.0 to 7.16.12
     - @babel/eslint-parser: 7.16.0 to 7.16.5
-    - @babel/preset-env": 7.16.0 to 7.16.8
+    - @babel/preset-env": 7.16.0 to 7.16.11
     - @masterportal/mpconfigparser: 1.1.2 to 1.2.0
     - @sinonjs/fake-timers: 7.1.2 to 8.1.0
     - @vue/test-utils": 1.2.2 to 1.3.0
-    - axios: 0.21.1 to 0.24.0
+    - axios: 0.21.1 to 0.25.0
     - css-loader: 1.0.0 to 1.0.1
     - dotenv: 10.0.0 to 11.0.0
-    - eslint: 7.31.0 to 8.6.0 (In this context the code was adapted to new linter rules)
+    - eslint: 7.31.0 to 8.7.0 (In this context the code was adapted to new linter rules)
     - eslint-plugin-chai-friendly: 0.7.1 to 0.7.2
-    - eslint-plugin-vue: 7.14.0 to 8.2.0 (In this context the code was adapted to new linter rules)
+    - eslint-plugin-vue: 7.14.0 to 8.3.0 (In this context the code was adapted to new linter rules)
     - eslint-plugin-vuejs-accessibility: 1.1.0 to 1.1.1
     - html2canvas: 1.1.3 to 1.4.0
     - husky: 7.0.1 to 7.0.4
-    - i18next: 20.3.3 to 21.6.6
+    - i18next: 20.3.3 to 21.6.7
+    - i18next-browser-languagedetector: 6.1.2 to 6.1.3
+    - i18next-http-backend: 1.2.6 to 1.3.2
     - imports-loader: 1.0.0 to 1.2.0
     - inquirer: 8.1.2 to 8.2.0
     - jsts: 2.7.1 to 2.8.1
