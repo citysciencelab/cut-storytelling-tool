@@ -327,6 +327,7 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
 
         if (Object.prototype.hasOwnProperty.call(Config, "cesiumParameter")) {
             params = Config.cesiumParameter;
+            console.log("cesiumParameter", params);
             if (params?.fog) {
                 scene.fog.enabled = params.fog?.enabled ? params.fog.enabled : scene.fog.enabled;
                 scene.fog.density = params.fog?.density ? parseFloat(params.fog.density) : scene.fog.density;
@@ -353,6 +354,7 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
      * @returns {OLCesium} - ol cesium map.
      */
     createMap3d: function () {
+        console.log("createMap3d");
         return api.map.createMap({
             map2D: store.getters["Map/ol2DMap"],
             shadowTime: this.getShadowTime.bind(this)
