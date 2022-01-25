@@ -45,8 +45,8 @@
     - sinon: 11.1.1 to 12.0.1
     - vue-loader: 15.9.6 to 15.9.8
     - zip-a-folder: 1.1.0 to 1.1.2
-- The version of node was updated, must be >= 14.18.3.
-  The version of npm  was also updated, must be >= 6.14.15. The file .npmrc was added to set "engine-strict=true", as a result, the npm version and the node version are mandatory.
+- The version of node was updated, must be >= 14.18.3 < 15.
+  The version of npm  was also updated, must be >= 6.14.15 < 7. The file .npmrc was added to set "engine-strict=true", as a result, the npm version and the node version are mandatory.
 - Migrated the module mapView from Backbone to Vue.
 - Migrated the module vectorBaseLayer from Backbone to Vue. The VectorBaseLayer uses the masterportalAPI's vectorBase layer on creation.
 
