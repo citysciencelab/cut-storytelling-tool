@@ -34,7 +34,7 @@
     - i18next: 20.3.3 to 21.6.4
     - inquirer: 8.1.2 to 8.2.0
     - jsts: 2.7.1 to 2.8.1
-    - masterportalAPI: v1.8.0. This also raised ol to version 6.11.0.
+    - masterportalAPI: v1.8.0 (This also raised ol to version 6.11.0)
     - mocha: 9.1.3 to 9.1.4
     - mock-local-storage: 1.1.17 to 1.1.19
     - moment-timezone: 0.5.33 to 0.5.34
@@ -55,7 +55,7 @@
 ### Removed
 - The following NPM packages are removed:
     - mocha-loader
-    - ol-mapbox-style
+    - ol-mapbox-style (Is loaded via ol)
     - polyfill-object.fromentries
     - whatwg-fetch
 
