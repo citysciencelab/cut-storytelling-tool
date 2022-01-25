@@ -29,7 +29,7 @@ export default function GeoJSONLayer (attrs) {
         this.checkForScale({scale: store.getters["Map/scale"]});
     }
 
-    if (store.getters.clusterDistance) {
+    if (attrs.clusterDistance) {
         this.set("isClustered", true);
     }
 
