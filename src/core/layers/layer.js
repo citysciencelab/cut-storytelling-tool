@@ -128,7 +128,7 @@ Layer.prototype.setMinResolution = function (value) {
 Layer.prototype.removeLayer = function () {
     let map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode);
 
-    if(!map){ //is the case, if starting by urlParam in mode 3D
+    if (!map) { // is the case, if starting by urlParam in mode 3D
         map = mapCollection.getMap("ol", "2D");
     }
     this.setIsVisibleInMap(false);
