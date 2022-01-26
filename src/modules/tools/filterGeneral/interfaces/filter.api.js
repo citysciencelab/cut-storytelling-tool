@@ -21,17 +21,14 @@ export default class FilterApi {
         this.filterId = filterId;
         this.service = service;
 
-        if (FilterApi.instance instanceof FilterApi) {
-            return FilterApi.instance;
+        if (!(FilterApi.intervalRegister instanceof IntervalRegister)) {
+            FilterApi.intervalRegister = new IntervalRegister();
+            FilterApi.cache = {};
+            FilterApi.interfaces = {
+                ol: new InterfaceOL(FilterApi.intervalRegister, {getFeaturesByLayerId, isFeatureInMapExtent}),
+                wfs: new InterfaceWFS()
+            };
         }
-        FilterApi.instance = this;
-
-        FilterApi.intervalRegister = new IntervalRegister();
-        FilterApi.cache = {};
-        FilterApi.interfaces = {
-            ol: new InterfaceOL(FilterApi.intervalRegister, {getFeaturesByLayerId, isFeatureInMapExtent}),
-            wfs: new InterfaceWFS()
-        };
     }
     /**
      * Returns an object {attrName: Type} with all attributes and their types.
