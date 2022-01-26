@@ -19,7 +19,7 @@ export default function TerrainLayer (attrs) {
      * useProxy
      * getProxyUrl()
      */
-    if(attrs.useProxy){
+    if (attrs.useProxy) {
         attrs.url = getProxyUrl(this.get("url"));
     }
 
@@ -37,7 +37,7 @@ TerrainLayer.prototype = Object.create(Layer.prototype);
  */
 TerrainLayer.prototype.createLayer = function (attr) {
     this.layer = {
-        setVisible:(newValue) => {
+        setVisible: (newValue) => {
             this.setIsSelected(newValue);
         }
     };
@@ -68,51 +68,51 @@ TerrainLayer.prototype.setIsSelected = function (newValue) {
  */
 TerrainLayer.prototype.createLegend = function () {
     const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
-        let legend = this.get("legend");
+    let legend = this.get("legend");
 
-        /**
+    /**
          * @deprecated in 3.0.0
          */
-        if (this.get("legendURL")) {
-            if (this.get("legendURL") === "") {
-                legend = true;
-            }
-            else if (this.get("legendURL") === "ignore") {
-                legend = false;
-            }
-            else {
-                legend = this.get("legendURL");
-            }
+    if (this.get("legendURL")) {
+        if (this.get("legendURL") === "") {
+            legend = true;
         }
+        else if (this.get("legendURL") === "ignore") {
+            legend = false;
+        }
+        else {
+            legend = this.get("legendURL");
+        }
+    }
 
-        if (Array.isArray(legend)) {
-            this.setLegend(legend);
-        }
-        else if (styleModel && legend === true) {
-            this.setLegend(styleModel.getLegendInfos());
-        }
-        else if (typeof legend === "string") {
-            this.setLegend([legend]);
-        }
+    if (Array.isArray(legend)) {
+        this.setLegend(legend);
+    }
+    else if (styleModel && legend === true) {
+        this.setLegend(styleModel.getLegendInfos());
+    }
+    else if (typeof legend === "string") {
+        this.setLegend([legend]);
+    }
 };
 /**
 * Register interaction with map view. Listens to change of scale.
 * @returns {void}
 */
 TerrainLayer.prototype.registerInteractionMapViewListeners = function () {
-    //no listeners shall be registered
-}
+    // no listeners shall be registered
+};
 /**
  * Transforms transparency into opacity and sets opacity on layer.
  * @return {void}
  */
 TerrainLayer.prototype.updateLayerTransparency = function () {
-     //not needed in 3D
-}
+    // not needed in 3D
+};
 /**
  * Sets visible min and max resolution on layer.
  * @returns {void}
  */
 TerrainLayer.prototype.setMinMaxResolutions = function () {
-    //not needed in 3D
-}
+    // not needed in 3D
+};
