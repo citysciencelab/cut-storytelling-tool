@@ -499,6 +499,7 @@ export default {
                         :display="snippet.display"
                         :info="snippet.info"
                         :label="snippet.label"
+                        :layer-id="layerConfig.layerId"
                         :multiselect="snippet.multiselect"
                         :operator="snippet.operator"
                         :placeholder="snippet.placeholder"

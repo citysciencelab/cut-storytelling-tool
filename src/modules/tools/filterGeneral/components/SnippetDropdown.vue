@@ -1,6 +1,8 @@
 <script>
 import Multiselect from "vue-multiselect";
 import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
+import getIconListFromLegend from "../utils/getIconListFromLegend.js";
+import isObject from "../../../../utils/isObject.js";
 
 export default {
     name: "SnippetDropdown",
@@ -48,6 +50,11 @@ export default {
             required: false,
             default: true
         },
+        layerId: {
+            type: String,
+            required: false,
+            default: undefined
+        },
         multiselect: {
             type: Boolean,
             required: false,
@@ -69,7 +76,7 @@ export default {
             default: undefined
         },
         renderIcons: {
-            type: String,
+            type: [String, Object],
             required: false,
             default: undefined
         },
@@ -95,7 +102,8 @@ export default {
             isInitializing: true,
             showInfo: false,
             dropdownValue: [],
-            dropdownSelected: []
+            dropdownSelected: [],
+            iconList: {}
         };
     },
     computed: {
@@ -122,6 +130,21 @@ export default {
         },
         noElements () {
             return this.$t("modules.tools.filterGeneral.dropdown.noElements");
+        },
+        dropdownOptions () {
+            if (!this.anyIconExists() || !isObject(this.iconList) || !Array.isArray(this.dropdownValue)) {
+                return this.dropdownValue;
+            }
+            const result = [];
+
+            this.dropdownValue.forEach(value => {
+                result.push({
+                    title: value,
+                    desc: value,
+                    img: this.iconExists(value) ? this.iconList[value] : ""
+                });
+            });
+            return result;
         }
     },
     watch: {
@@ -177,9 +200,32 @@ export default {
             });
         }
     },
+    mounted () {
+        if (this.renderIcons === "fromLegend") {
+            this.iconList = getIconListFromLegend(this.layerId);
+        }
+        else if (isObject(this.renderIcons)) {
+            this.iconList = this.renderIcons;
+        }
+    },
     methods: {
         translateKeyWithPlausibilityCheck,
 
+        /**
+         * Returns true if an icon path exists for the given value.
+         * @param {String} value the value to check for
+         * @returns {Boolean} true if there is an icon path, false if not
+         */
+        iconExists (value) {
+            return Object.prototype.hasOwnProperty.call(this.iconList, value);
+        },
+        /**
+         * Returns true if there are any icons to show.
+         * @returns {Boolean} true if there are any icons, false if not
+         */
+        anyIconExists () {
+            return Object.keys(this.iconList).length > 0;
+        },
         /**
          * Returns the label to use in the gui.
          * @returns {String} the label to use
@@ -194,13 +240,28 @@ export default {
          * @returns {void}
          */
         emitCurrentRule (value, startup = false) {
+            let result = [];
+
+            if (typeof value === "string") {
+                result = value;
+            }
+            else if (Array.isArray(value)) {
+                value.forEach(obj => {
+                    if (typeof obj === "string") {
+                        result.push(obj);
+                    }
+                    else if (isObject(obj) && obj.title) {
+                        result.push(obj.title);
+                    }
+                });
+            }
             this.$emit("changeRule", {
                 snippetId: this.snippetId,
                 startup,
                 fixed: !this.visible,
                 attrName: this.attrName,
                 operator: this.operator,
-                value
+                value: result
             });
         },
         /**
@@ -270,7 +331,7 @@ export default {
                 <Multiselect
                     :id="'snippetSelectBox-' + snippetId"
                     v-model="dropdownSelected"
-                    :options="dropdownValue"
+                    :options="dropdownOptions"
                     name="select-box"
                     :disabled="disable"
                     :multiple="multiselect"
@@ -281,9 +342,43 @@ export default {
                     :close-on-select="true"
                     :clear-on-select="false"
                     :loading="disable"
+                    track-by="title"
+                    label="title"
                 >
                     <span slot="noOptions">{{ emptyList }}</span>
                     <span slot="noResult">{{ noElements }}</span>
+                    <template
+                        v-if="anyIconExists()"
+                        slot="singleLabel"
+                        slot-scope="props"
+                    >
+                        <span class="option__desc">
+                            <img
+                                v-if="props.option.img"
+                                class="option__image"
+                                :src="props.option.img"
+                                :alt="props.option.title"
+                            >
+                            <span class="option__title">{{ props.option.title }}</span>
+                        </span>
+                    </template>
+                    <template
+                        v-if="anyIconExists()"
+                        slot="option"
+                        slot-scope="props"
+                    >
+                        <div
+                            class="option__desc"
+                        >
+                            <img
+                                v-if="props.option.img"
+                                class="option__image"
+                                :src="props.option.img"
+                                :alt="props.option.title"
+                            >
+                            <span class="option__title">{{ props.option.title }}</span>
+                        </div>
+                    </template>
                 </Multiselect>
             </div>
             <div
@@ -306,7 +401,7 @@ export default {
                     >
                         <tr>
                             <th
-                                colspan="2"
+                                :colspan="anyIconExists() ? 3 : 2"
                             >
                                 {{ labelText }}
                             </th>
@@ -317,11 +412,15 @@ export default {
                             v-for="val in dropdownValue"
                             :key="val"
                         >
-                            <td>
-                                <label
-                                    class="check-box-label"
-                                    :for="'snippetCheckbox-' + snippetId + '-' + val"
-                                >{{ val }}</label>
+                            <td
+                                v-if="anyIconExists()"
+                            >
+                                <img
+                                    v-show="iconExists(val)"
+                                    class="snippetListContainerIcon"
+                                    :src="iconList[val]"
+                                    :alt="val"
+                                >
                             </td>
                             <td>
                                 <label
@@ -333,6 +432,12 @@ export default {
                                     type="checkbox"
                                     :value="val"
                                 >
+                            </td>
+                            <td>
+                                <label
+                                    class="check-box-label"
+                                    :for="'snippetCheckbox-' + snippetId + '-' + val"
+                                >{{ val }}</label>
                             </td>
                         </tr>
                     </tbody>
@@ -373,6 +478,9 @@ export default {
         background: #3177b1;
         outline: none;
         color: #fff;
+    }
+    .select-box-container .multiselect .option__image {
+        width: 22px;
     }
     .select-box-container .multiselect .multiselect__tag {
         position: relative;
@@ -452,6 +560,9 @@ export default {
         border-radius: 5px;
         font-size: 10px;
         padding: 15px 10px;
+    }
+    .snippetListContainer .snippetListContainerIcon {
+        width: 22px;
     }
     .glyphicon-info-sign:before {
         content: "\E086";
