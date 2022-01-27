@@ -53,22 +53,33 @@ export async function sendRequest (url, requestConfig, result) {
         urlWithPayload = type === "GET" ? url + JSON.stringify(payload) : url,
         controller = new AbortController();
     let resultWithHits = result,
-        response = null;
+        res = null;
 
     if (currentController) {
         currentController.abort();
     }
     currentController = controller;
 
-    response = await axios({
-        method: type,
-        url: urlWithPayload,
-        payload: JSON.stringify(payload),
-        headers: {
-            "Content-Type": "application/json;charset=UTF-8"
-        },
-        signal: controller.signal
-    });
-    resultWithHits = response.data.hits;
-    return resultWithHits;
+    if (type === "GET") {
+        res = await axios.get(urlWithPayload, {
+            headers: {
+                "Content-Type": "application/json;charset=UTF-8"
+            },
+            signal: controller.signal
+        });
+        resultWithHits = res.data.hits;
+        return resultWithHits;
+    }
+    else if (type === "POST") {
+        res = await axios.post(url, {
+            payload: JSON.stringify(payload),
+            headers: {
+                "Content-Type": "application/json;charset=UTF-8"
+            },
+            signal: controller.signal
+        });
+        resultWithHits = res.data.hits;
+        return resultWithHits;
+    }
+    return undefined;
 }

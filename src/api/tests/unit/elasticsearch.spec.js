@@ -1,9 +1,12 @@
 import {initializeSearch, sendRequest} from "../../elasticsearch";
 import {expect} from "chai";
+import axios from "axios";
+import sinon from "sinon";
+import * as elasticsearch from "../../elasticsearch";
 
-describe.only("api/elasticsearch", () => {
+describe("api/elasticsearch", () => {
     describe("init seach", () => {
-        it("should initialize the search", async () => {
+        it("should initialize the search", () => {
             const requestConfig = {
                     payload: {
                         id: "query",
@@ -14,37 +17,43 @@ describe.only("api/elasticsearch", () => {
                     responseEntryPath: "hits.hits",
                     serviceId: "elastic",
                     type: "GET",
-                    url: "https://geodienste.hamburg.de/layers/_search/template?source_content_type=application/json&source="
+                    url: "https://geodienste.hamburg.de/"
                 },
-                resultRe = await initializeSearch(requestConfig);
+                sendRequestMock = sinon.spy(elasticsearch, "sendRequest");
 
-            expect(resultRe.hits[0]._source.typ === "WMS").to.be.true;
-            expect(resultRe.hits.length).to.be.equal(10);
+            initializeSearch(requestConfig).returns(["hit", "hit"]);
+
+            expect(sendRequestMock.called).to.be.true;
         });
     });
     describe("send Request", () => {
-        it("should return promise after sending a request", async () => {
-            const requestConfig = {
-                    payload: {
-                        id: "query",
-                        params: {
-                            query_string: "fer"
-                        }
-                    },
-                    responseEntryPath: "hits.hits",
-                    serviceId: "elastic",
-                    type: "GET"
+        it("should send axios", () => {
+            const axiosStub = sinon.stub(axios, "get").returns(Promise.resolve({status: 200, data: {}})),
+            requestConfig = {
+                payload: {
+                    id: "query",
+                    params: {
+                        query_string: "fer"
+                    }
                 },
-                result = {
-                    status: "success",
-                    message: "",
-                    hits: []
-                },
-                url = "https://geodienste.hamburg.de/layers/_search/template?source_content_type=application/json&source=",
-                resultRe = await sendRequest(url, requestConfig, result);
+                responseEntryPath: "hits.hits",
+                serviceId: "elastic",
+                type: "GET"
+            },
+            result = {
+                status: "success",
+                message: "",
+                hits: []
+            },
+            url = "https://geodienste.hamburg.de";
 
-            expect(resultRe.hits[0]._source.typ === "WMS").to.be.true;
-            expect(resultRe.hits.length).to.be.equal(10);
+            sendRequest(url, requestConfig, result);
+
+            expect(
+                axiosStub.called
+            ).to.be.true;
+
+            axiosStub.restore();
         });
     });
 });
