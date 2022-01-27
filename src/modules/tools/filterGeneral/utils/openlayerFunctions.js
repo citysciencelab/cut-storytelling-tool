@@ -53,11 +53,24 @@ function createLayerIfNotExists (layername) {
     return Radio.request("Map", "createLayerIfNotExists", layername);
 }
 
+/**
+ * Zooms to an extent of a feature considering the min scale.
+ * @param {Number} minScale the minimum scale
+ * @param {String[]} featureIds the filtered feature Ids
+ * @param {String} layerId the layer Id
+ * @returns {void}
+ */
+function liveZoom (minScale, featureIds, layerId) {
+    const minResolution = Radio.request("MapView", "getResolutionByScale", minScale);
+
+    Radio.trigger("Map", "zoomToFilteredFeatures", featureIds, layerId, {minResolution});
+}
 
 export {
+    createLayerIfNotExists,
     getFeaturesByLayerId,
-    isFeatureInMapExtent,
     getLayerByLayerId,
-    showFeaturesByIds,
-    createLayerIfNotExists
+    isFeatureInMapExtent,
+    liveZoom,
+    showFeaturesByIds
 };

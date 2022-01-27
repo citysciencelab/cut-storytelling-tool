@@ -32,6 +32,14 @@ export default {
         mapHandler: {
             type: Object,
             required: true
+        },
+        liveZoomToFeatures: {
+            type: Boolean,
+            required: true
+        },
+        minScale: {
+            type: Number,
+            required: true
         }
     },
     data () {
@@ -46,13 +54,22 @@ export default {
             layerModel: null,
             layerService: null,
             api: null,
-            searchInMapExtent: false
+            searchInMapExtent: false,
+            filteredFeatureIds: [],
+            enableZoom: true
         };
     },
     watch: {
-        paging () {
-            if (this.paging.page >= this.paging.total) {
+        paging (val) {
+            if (val.page >= val.total) {
                 this.setFormDisable(false);
+
+                if (this.liveZoomToFeatures && this.enableZoom) {
+                    this.mapHandler.zoomToFilteredFeature(this.minScale, this.filteredFeatureIds, this.layerConfig?.layerId, error => {
+                        console.warn("map error", error);
+                    });
+                    this.setZoom(false);
+                }
             }
         }
     },
@@ -134,6 +151,8 @@ export default {
                 rules: this.getCurrentRules()
             };
 
+            this.filteredFeatureIds = [];
+            this.setZoom(true);
             this.setFormDisable(true);
             this.showStopButton(true);
 
@@ -149,6 +168,14 @@ export default {
                     this.runApiFilter(filterQuestion);
                 }
             }
+        },
+        /**
+         * Enable or disable the function zoom to feature
+         * @param {Boolean} value true/false to en/disable zoom to feature
+         * @returns {void}
+         */
+        setZoom (value) {
+            this.enableZoom = value;
         },
         /**
          * Sets the disabled flag
@@ -219,6 +246,14 @@ export default {
                 this.mapHandler.visualize(filterAnswer, error => {
                     console.warn("map error", error);
                 });
+
+                if (Array.isArray(filterAnswer?.items) && filterAnswer.items.length) {
+                    filterAnswer.items.forEach(item => {
+                        if (!this.filteredFeatureIds.includes(item.getId())) {
+                            this.filteredFeatureIds.push(item.getId());
+                        }
+                    });
+                }
             }, error => {
                 console.warn("filter error", error);
             });
