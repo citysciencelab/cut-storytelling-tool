@@ -2,6 +2,7 @@ import moment from "moment";
 import {transform, get} from "ol/proj.js";
 import store from "../../src/app-store";
 import api from "masterportalAPI/abstraction/api";
+import mapCollection from "../../src/core/dataStorage/mapCollection.js";
 
 const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
     defaults: {
@@ -94,10 +95,11 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
             this.prepareCamera(scene);
         }
         map3d.setEnabled(true);
-        Radio.trigger("Map", "change", "3D");
+        mapCollection.addMap(map3d, map3d.id, "3D");
         store.commit("Map/setMapId", map3d.id);
         store.commit("Map/setMapMode", "3D");
         store.dispatch("MapMarker/removePointMarker");
+        Radio.trigger("Map", "change", "3D");
     },
 
     /**
@@ -327,7 +329,6 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
 
         if (Object.prototype.hasOwnProperty.call(Config, "cesiumParameter")) {
             params = Config.cesiumParameter;
-            console.log("cesiumParameter", params);
             if (params?.fog) {
                 scene.fog.enabled = params.fog?.enabled ? params.fog.enabled : scene.fog.enabled;
                 scene.fog.density = params.fog?.density ? parseFloat(params.fog.density) : scene.fog.density;
@@ -354,7 +355,6 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
      * @returns {OLCesium} - ol cesium map.
      */
     createMap3d: function () {
-        console.log("createMap3d");
         return api.map.createMap({
             map2D: store.getters["Map/ol2DMap"],
             shadowTime: this.getShadowTime.bind(this)

@@ -88,6 +88,8 @@
 - Issue #486: WMS GFI can now show responses without tbody.
 
 ### Deprecated
+
+### Deprecated
 -
 ### Removed
 - The following NPM packages are removed:

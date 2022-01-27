@@ -1,6 +1,9 @@
-import Layer from "./layer";
+import store from "../../app-store";
 import {terrain} from "masterportalAPI/src";
 import getProxyUrl from "../../../src/utils/getProxyUrl";
+import mapCollection from "../../core/dataStorage/mapCollection.js";
+import * as bridge from "./RadioBridge.js";
+import Layer from "./layer";
 /**
  * Creates a terrain-layer to display on 3D-map.
  * @param {Object} attrs  attributes of the layer
@@ -11,7 +14,8 @@ export default function TerrainLayer (attrs) {
         supported: ["3D"],
         showSettings: false,
         selectionIDX: -1,
-        useProxy: false
+        useProxy: false,
+        legend: false
     };
 
     /**
@@ -26,6 +30,12 @@ export default function TerrainLayer (attrs) {
     this.createLayer(Object.assign(defaults, attrs));
     // call the super-layer
     Layer.call(this, Object.assign(defaults, attrs), this.layer, !attrs.isChildLayer);
+
+    store.watch((state, getters) => getters["Map/mapMode"], mode => {
+        if (mode === "3D") {
+            this.setIsSelected(this.get("isVisibleInMap"));
+        }
+    }).bind(this);
 }
 // Link prototypes and add prototype methods, means TerrainLayer uses all methods and properties of Layer
 TerrainLayer.prototype = Object.create(Layer.prototype);
@@ -36,27 +46,38 @@ TerrainLayer.prototype = Object.create(Layer.prototype);
  * @returns {void}
  */
 TerrainLayer.prototype.createLayer = function (attr) {
-    this.layer = {
-        setVisible: (newValue) => {
-            this.setIsSelected(newValue);
-        }
-    };
+    this.layer = terrain.createLayer(attr);
     if (attr.isSelected) {
-        this.setIsSelected(true);
+        this.setIsSelected(true, attr);
     }
+};
+
+/**
+ * Calls the function setIsSelected.
+ * @param {boolean} newValue if true, layer is selected
+ * @returns {void}
+ */
+TerrainLayer.prototype.setVisible = function (newValue) {
+    this.setIsSelected(newValue);
 };
 
 /**
  * Calls masterportalAPI's terrain-layer to set this layer visible.
  * @param {Boolean} newValue if true, layer is visible
+ * @param {Object} attr the attributes for the layer
  * @returns {void}
  */
-TerrainLayer.prototype.setIsSelected = function (newValue) {
-    if (Radio.request("Map", "isMap3d") === true) {
-        const map3d = Radio.request("Map", "getMap3d");
+TerrainLayer.prototype.setIsSelected = function (newValue, attr) {
+    const map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode);
 
-        terrain.setVisible(newValue, this.attributes, map3d);
-        if (this.get("isVisibleInMap") === true) {
+    if (map && map.mode === "3D") {
+        let isVisibleInMap = this.attributes ? this.get("isVisibleInMap") : false;
+
+        if (!this.attributes && attr) {
+            isVisibleInMap = attr.isVisibleInMap;
+        }
+        terrain.setVisible(newValue, this.attributes ? this.attributes : attr, map);
+        if (isVisibleInMap) {
             this.createLegend();
         }
     }
@@ -67,12 +88,12 @@ TerrainLayer.prototype.setIsSelected = function (newValue) {
  * @returns {void}
  */
 TerrainLayer.prototype.createLegend = function () {
-    const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+    const styleModel = bridge.getStyleModelById(this.get("styleId"));
     let legend = this.get("legend");
 
     /**
-         * @deprecated in 3.0.0
-         */
+     * @deprecated in 3.0.0
+     */
     if (this.get("legendURL")) {
         if (this.get("legendURL") === "") {
             legend = true;
@@ -84,7 +105,6 @@ TerrainLayer.prototype.createLegend = function () {
             legend = this.get("legendURL");
         }
     }
-
     if (Array.isArray(legend)) {
         this.setLegend(legend);
     }
