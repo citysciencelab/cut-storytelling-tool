@@ -126,7 +126,7 @@ describe("src/core/layers/terrain.js", () => {
         terrainLayer.createLegend();
         expect(terrainLayer.get("legend")).to.be.deep.equals([attributes.legendURL]);
     });
-    it("createLegend shall set legend", function () {
+    it("createLegend shall not set legend (ignore)", function () {
         attributes.legendURL = "ignore";
         const terrainLayer = new TerrainLayer(attributes);
 

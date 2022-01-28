@@ -15,7 +15,8 @@ export default function TerrainLayer (attrs) {
         showSettings: false,
         selectionIDX: -1,
         useProxy: false,
-        legend: false
+        legend: false,
+        isOutOfRange: false
     };
 
     /**
@@ -75,6 +76,10 @@ TerrainLayer.prototype.setIsSelected = function (newValue, attr) {
 
         if (!this.attributes && attr) {
             isVisibleInMap = attr.isVisibleInMap;
+            attr.isSelected = newValue;
+        }
+        else {
+            this.attributes.isSelected = newValue;
         }
         terrain.setVisible(newValue, this.attributes ? this.attributes : attr, map);
         if (isVisibleInMap) {
@@ -134,5 +139,21 @@ TerrainLayer.prototype.updateLayerTransparency = function () {
  * @returns {void}
  */
 TerrainLayer.prototype.setMinMaxResolutions = function () {
+    // not needed in 3D
+};
+/**
+ * Checks whether the layer is visible or not based on the scale.
+ * @param {object} options - of the map, contains scale of the map
+ * @returns {void}
+ **/
+TerrainLayer.prototype.checkForScale = function () {
+    // not needed in 3D
+};
+/**
+ * Setter for transparency and setter for opacitiy of the layer.
+ * @param {Number} newValue Tranparency in percent
+ * @returns {void}
+ */
+Layer.prototype.setTransparency = function () {
     // not needed in 3D
 };
