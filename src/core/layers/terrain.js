@@ -154,6 +154,6 @@ TerrainLayer.prototype.checkForScale = function () {
  * @param {Number} newValue Tranparency in percent
  * @returns {void}
  */
-Layer.prototype.setTransparency = function () {
+TerrainLayer.prototype.setTransparency = function () {
     // not needed in 3D
 };
