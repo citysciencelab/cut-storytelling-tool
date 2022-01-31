@@ -28,6 +28,11 @@ export default {
             type: Function,
             required: false,
             default: () => { /* noop */ }
+        },
+        maxZoom: {
+            type: Number,
+            required: false,
+            default: 5
         }
     },
     methods: {
@@ -53,7 +58,7 @@ export default {
             const geometry = feature.getGeometry();
 
             this.placingPointMarker(getCenterExtent(geometry.getExtent()));
-            Radio.trigger("Map", "zoomToExtent", geometry, {maxZoom: 5});
+            Radio.trigger("Map", "zoomToExtent", geometry, {maxZoom: this.maxZoom});
         },
         isWebLink,
         isPhoneNumber,
