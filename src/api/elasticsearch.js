@@ -5,12 +5,11 @@ let currentController = null;
 
 /**
  * Main function to start the search using the requestConfig.
- * @param {Object} requestConfig The configuration of the xhr request.
- * @param {String} requestConfig.serviceId Id of the rest-service to be used. If serviceId is give, the url from the rest-service is taken.
+ * @param {Object} requestConfig The configuration of the axios request.
+ * @param {String} requestConfig.serviceId Id of the rest-service to be used. If serviceId is given, the url from the rest-service is taken.
  * @param {String} requestConfig.url If no serviceId is given, alternatively an url can be passed.
  * @param {String} requestConfig.type Type of request. "POST" or "GET".
  * @param {Object} requestConfig.payload Payload used to "POST" to url or be appended to url if type is "GET".
- * @param {Boolean} requestConfig.async Flag if request should be sent asynchronously.
  * @param {String} requestConfig.responseEntryPath="" The path of the hits in the response JSON. The different levels of the response JSON are marked with "."
  * @returns {Object} - The result object of the request.
  */
@@ -26,6 +25,11 @@ export async function initializeSearch (requestConfig) {
         url = restService ? restService.get("url") : requestConfig.url;
 
     if (url) {
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
         url = useProxy ? getProxyUrl(url) : url;
         result = await sendRequest(url, requestConfig, result);
     }
@@ -81,5 +85,5 @@ export async function sendRequest (url, requestConfig, result) {
         resultWithHits = res.data.hits;
         return resultWithHits;
     }
-    return undefined;
+    return resultWithHits;
 }
