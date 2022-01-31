@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import xml2json from "../../../utils/xml2json";
 
-describe("src/api/xml2json.js", () => {
+describe("src/api/urils/xml2json.js", () => {
     const xmlString = `<book>
                         <title>Borne</title>
                         <description>A giant bear...</description>
