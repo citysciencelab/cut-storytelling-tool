@@ -74,6 +74,7 @@
 - Fixed issue #672: layerAttribution not working correctly if layer is not initially visible
 - Issue #673: LayerSlider: The progress bar is now displayed correctly with more than 10 configured layers.
 - 3D: terrain and background layer are displayed correctly. Loading portal in 3D by url parameters was fixed.
+- Issue #655: Only first namespace in WfsSearch was interpreted. Now, all configured namespaces are used.
 
 ---
 ## v2.17.1 - 2022-01-011
