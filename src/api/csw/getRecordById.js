@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as moment from "moment";
-import xml2json from "../xml2json";
+import xml2json from "../utils/xml2json";
 import getNestedValues from "../../utils/getNestedValues";
 
 /**

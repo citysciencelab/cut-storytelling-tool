@@ -7,7 +7,7 @@ import mutations from "../store/mutationsFilterGeneral";
 import LayerFilterSnippet from "./LayerFilterSnippet.vue";
 import {convertToNewConfig} from "../utils/convertToNewConfig";
 import MapHandler from "../utils/mapHandler.js";
-import {getLayerByLayerId, showFeaturesByIds, createLayerIfNotExists} from "../utils/openlayerFunctions.js";
+import {getLayerByLayerId, showFeaturesByIds, createLayerIfNotExists, liveZoom} from "../utils/openlayerFunctions.js";
 import LayerCategory from "../components/LayerCategory.vue";
 
 export default {
@@ -23,7 +23,8 @@ export default {
             mapHandler: new MapHandler({
                 getLayerByLayerId,
                 showFeaturesByIds,
-                createLayerIfNotExists
+                createLayerIfNotExists,
+                liveZoom
             }),
             selectedLayers: [],
             layerLoaded: {}
@@ -187,6 +188,8 @@ export default {
                             v-if="showLayerSnippet(slotProps.layer.filterId) || layerLoaded[slotProps.layer.filterId]"
                             :layer-config="slotProps.layer"
                             :map-handler="mapHandler"
+                            :min-scale="minScale"
+                            :live-zoom-to-features="liveZoomToFeatures"
                         />
                     </div>
                 </template>
@@ -197,6 +200,8 @@ export default {
                     :key="'layer-' + indexLayer"
                     :layer-config="layerConfig"
                     :map-handler="mapHandler"
+                    :min-scale="minScale"
+                    :live-zoom-to-features="liveZoomToFeatures"
                 />
             </div>
         </template>

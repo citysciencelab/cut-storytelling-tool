@@ -22,5 +22,7 @@ export default {
     configs: true,
     layerSelectorVisible: true,
     multiLayerSelector: true,
+    liveZoomToFeatures: true,
+    minScale: 5000,
     layers: []
 };

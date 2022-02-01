@@ -14,6 +14,7 @@
     - For vector tiles layers that are not in EPSG:3587, the default Mapbox resolutions are now used as fallback.
     - In addition, a minimum and maximum zoom level can be configured.
     - The `zDirection` can be used to specify, if the resolutions of the service and the portal are different, in which direction the resolution should be used.
+- Added WFS functions (GetFeature and DescribeFetureType) to the api folder to query the WFS-Requests in one place.
 
 ### Changed
 - It is now possible to display layers at scales smaller than 1:1 000 000.
