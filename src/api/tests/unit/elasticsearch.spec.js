@@ -2,15 +2,21 @@ import {initializeSearch, sendRequest} from "../../elasticsearch";
 import {expect} from "chai";
 import axios from "axios";
 import sinon from "sinon";
-import * as elasticsearch from "../../elasticsearch";
 
 describe("api/elasticsearch", () => {
     afterEach(() => {
         sinon.restore();
     });
+
+    global.AbortController = sinon.spy();
     describe("init seach", () => {
-        it("should initialize the search", () => {
-            const requestConfig = {
+        it("should initialize the search", async () => {
+            const ret = {
+                    data: {
+                        hits: ["hit", "hit"]
+                    }
+                },
+                requestConfig = {
                     payload: {
                         id: "query",
                         params: {
@@ -22,17 +28,17 @@ describe("api/elasticsearch", () => {
                     type: "GET",
                     url: "https://geodienste.hamburg.de/"
                 },
-                sendRequestMock = sinon.spy(elasticsearch, "sendRequest");
+                axiosMock = sinon.stub(axios, "get").resolves(ret);
 
-            initializeSearch(requestConfig).returns(["hit", "hit"]);
+            await initializeSearch(requestConfig);
 
-            expect(sendRequestMock.calledOnce).to.be.true;
+            expect(axiosMock.calledOnce).to.be.true;
         });
+
     });
     describe("send Request", () => {
-        it("should send axios", () => {
-            const axiosStub = sinon.stub(axios, "get").returns(Promise.resolve({status: 200, data: {}})),
-                requestConfig = {
+        it("should return promise after sending a request", async () => {
+            const requestConfig = {
                     payload: {
                         id: "query",
                         params: {
@@ -48,12 +54,17 @@ describe("api/elasticsearch", () => {
                     message: "",
                     hits: []
                 },
-                url = "https://geodienste.hamburg.de";
+                returnRes = {
+                    data: {
+                        hits: ["hit", "hit"]
+                    }
+                },
+                url = "https://geodienste.hamburg.de/",
+                axiosMock = sinon.stub(axios, "get").resolves(returnRes);
 
-            sendRequest(url, requestConfig, result);
+            await sendRequest(url, requestConfig, result);
 
-            expect(axiosStub.calledOnce).to.be.true;
-
+            expect(axiosMock.calledOnce).to.be.true;
         });
         it("should reject axios", () => {
             const axiosStub = sinon.stub(axios, "get").returns((_g, reject) => {

@@ -59,7 +59,7 @@ export async function sendRequest (url, requestConfig, result) {
     let resultWithHits = result,
         res = null;
 
-    if (currentController) {
+    if (typeof currentController === AbortController) {
         currentController.abort();
     }
     currentController = controller;
