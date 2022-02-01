@@ -71,6 +71,7 @@
     - whatwg-fetch
 
 ### Fixed
+- Issue #661: `print` downloadlink is now created for serviceUrls with structure `https://baseurl/printfolder/` or `https://baseurl/printfolder/print/`.
 - Issue #679: `saveSelection` is now configurable again within the layer tree.
 - Fixed spelling of `DIRECTIONS` in documentation for routing tool.
 - Tool CoordToolkit: Labeling of longitude and latitude corrected if long/lat is selected as projection system.
