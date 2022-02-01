@@ -2,6 +2,8 @@ import {wfs} from "masterportalAPI";
 import LoaderOverlay from "../../utils/loaderOverlay";
 import Layer from "./layer";
 import * as bridge from "./RadioBridge.js";
+import Cluster from "ol/source/Cluster";
+
 /**
  * Creates a layer of type WMS.
  * @param {Object} attrs  attributes of the layer
@@ -243,7 +245,7 @@ WFSLayer.prototype.createLegend = function () {
  * @returns {void}
  */
 WFSLayer.prototype.hideAllFeatures = function () {
-    const layerSource = this.get("layerSource"),
+    const layerSource = this.get("layerSource") instanceof Cluster ? this.get("layerSource").getSource() : this.get("layerSource"),
         features = layerSource.getFeatures();
 
     // optimization - clear and re-add to prevent cluster updates on each change
@@ -275,7 +277,7 @@ WFSLayer.prototype.showAllFeatures = function () {
  * @returns {void}
  */
 WFSLayer.prototype.showFeaturesByIds = function (featureIdList) {
-    const layerSource = this.get("layerSource"),
+    const layerSource = this.get("layerSource") instanceof Cluster ? this.get("layerSource").getSource() : this.get("layerSource"),
         allLayerFeatures = layerSource.getFeatures(),
         featuresToShow = featureIdList.map(id => layerSource.getFeatureById(id));
 
