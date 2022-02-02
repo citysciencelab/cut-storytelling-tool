@@ -375,6 +375,7 @@ export default {
                     class="snippetDateRangeFrom"
                     type="date"
                     :min="minimumValue"
+                    :max="inRangeValueRight"
                     :disabled="disable"
                 >
             </div>
@@ -391,6 +392,7 @@ export default {
                     name="inputDateUntil"
                     class="snippetDateRangeUntil"
                     type="date"
+                    :min="inRangeValueLeft"
                     :max="maximumValue"
                     :disabled="disable"
                 >
