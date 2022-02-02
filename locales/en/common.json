@@ -417,7 +417,7 @@
                     "selectAll": "Select all",
                     "defaultLabel": "Choose an Option",
                     "emptyList": "List is empty",
-                    "noElements": "No elements found",
+                    "noElements": "No elements found"
                 }
             },
             "filter": {
