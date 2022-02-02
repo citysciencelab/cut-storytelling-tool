@@ -11,6 +11,25 @@ describe("src/modules/tools/filterGeneral/interfaces/utils/interface.ol.js", () 
         });
     });
 
+    describe("changeValueToMatchReference", () => {
+        it("should convert the given value to the type of the given reference", () => {
+            expect(interfaceOL.changeValueToMatchReference(1234, "string")).to.equal("1234");
+            expect(interfaceOL.changeValueToMatchReference(1234, false)).to.be.true;
+            expect(interfaceOL.changeValueToMatchReference(0, false)).to.be.false;
+            expect(interfaceOL.changeValueToMatchReference("string", 1234)).to.equal(0);
+            expect(interfaceOL.changeValueToMatchReference("5string", 1234)).to.equal(5);
+            expect(interfaceOL.changeValueToMatchReference("UppErCasEStriNg", "string")).to.equal("uppercasestring");
+        });
+        it("should return the given value as type of the given reference if a depth of 10 is not exceeded", () => {
+            expect(interfaceOL.changeValueToMatchReference(1234, "string", 9)).to.equal("1234");
+        });
+        it("should return the given value if a depth of 10 is exceeded", () => {
+            expect(interfaceOL.changeValueToMatchReference(1234, "string", 10)).to.equal(1234);
+        });
+        it("should return an array with converted values", () => {
+            expect(interfaceOL.changeValueToMatchReference(["1string", "2string", "3string"], 1234)).to.deep.equal([1, 2, 3]);
+        });
+    });
     describe("checkRule", () => {
         it("should return false if anything but a valid rule object is given", () => {
             expect(interfaceOL.checkRule(undefined)).to.be.false;
@@ -37,9 +56,6 @@ describe("src/modules/tools/filterGeneral/interfaces/utils/interface.ol.js", () 
 
             expect(interfaceOL.checkRule({operator: "EQ", value: "string"}, "string")).to.be.true;
             expect(interfaceOL.checkRule({operator: "EQ", value: "string"}, "!string")).to.be.false;
-
-            expect(interfaceOL.checkRule({operator: "EQ", value: true}, 1)).to.be.false;
-            expect(interfaceOL.checkRule({operator: "EQ", value: false}, 0)).to.be.false;
         });
         it("should check the operator NE for a single value", () => {
             expect(interfaceOL.checkRule({operator: "NE", value: true}, true)).to.be.false;
@@ -49,9 +65,6 @@ describe("src/modules/tools/filterGeneral/interfaces/utils/interface.ol.js", () 
 
             expect(interfaceOL.checkRule({operator: "NE", value: "string"}, "string")).to.be.false;
             expect(interfaceOL.checkRule({operator: "NE", value: "string"}, "!string")).to.be.true;
-
-            expect(interfaceOL.checkRule({operator: "NE", value: true}, 1)).to.be.true;
-            expect(interfaceOL.checkRule({operator: "NE", value: false}, 0)).to.be.true;
         });
         it("should check the operator GT for a single value", () => {
             expect(interfaceOL.checkRule({operator: "GT", value: 4.9999}, 5)).to.be.true;

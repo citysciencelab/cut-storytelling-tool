@@ -1,6 +1,6 @@
 /**
  * Parses Xml to Json recursivly
- * @param {XMLDocument} srcDom Dom to parse.
+ * @param {Document|Element} srcDom - Dom to parse
  * @param {Boolean} [attributeValue=true] Returns the lowest level as value and attribute functions.
  * @returns {Object} json
  */
@@ -12,6 +12,7 @@ export default function xml2json (srcDom, attributeValue = true) {
     // base case for recursion
     if (!children.length) {
         if (attributeValue) {
+
             if (srcDom.hasAttributes()) {
                 return {
                     getValue: () => srcDom.textContent,
@@ -24,6 +25,11 @@ export default function xml2json (srcDom, attributeValue = true) {
             };
         }
         return srcDom.textContent;
+    }
+
+    // in the first iteration it is a (XML-)Document
+    if (srcDom instanceof Element && srcDom.hasAttributes()) {
+        jsonResult.attributes = parseNodeAttributes(srcDom.attributes);
     }
 
     children.forEach(child => {
@@ -57,9 +63,9 @@ export default function xml2json (srcDom, attributeValue = true) {
 function parseNodeAttributes (nodeAttributes) {
     const attributes = {};
 
-    Object.keys(nodeAttributes).forEach(key => {
-        attributes[nodeAttributes[key].name] = nodeAttributes[key].value;
-    });
+    for (const node of nodeAttributes) {
+        attributes[node.name] = node.value;
+    }
 
     return attributes;
 }

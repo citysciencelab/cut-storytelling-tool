@@ -33,6 +33,11 @@ export default class MapHandler {
                 onerror(new Error("Filter MapHandler.constructor: The given handler needs a function 'createLayerIfNotExists'"));
             }
         }
+        if (typeof this.handlers?.liveZoom !== "function") {
+            if (typeof onerror === "function") {
+                onerror(new Error("Filter MapHandler.constructor: The given handler needs a function 'liveZoom'"));
+            }
+        }
     }
 
     /**
@@ -168,5 +173,36 @@ export default class MapHandler {
         }
         this.knownLayers[filterId] = this.handlers.createLayerIfNotExists("filterGeneral-" + filterId);
         return this.knownLayers[filterId];
+    }
+
+    /**
+     * Zoom to filtered features
+     * @param {Number} minScale the minimum scale
+     * @param {String[]} filteredFeatureIds the filtered feature Ids
+     * @param {String} layerId the layer Id
+     * @param {Function} onerror a function(error) with error of type Error
+     * @returns {void}
+     */
+    zoomToFilteredFeature (minScale, filteredFeatureIds, layerId, onerror) {
+        if (typeof minScale !== "number") {
+            if (typeof onerror === "function") {
+                onerror(new Error("Filter MapHandler.zoomToFilteredFeature: The format of minScale is not right"));
+            }
+            return;
+        }
+        else if (!filteredFeatureIds.length) {
+            if (typeof onerror === "function") {
+                onerror(new Error("Filter MapHandler.zoomToFilteredFeature: There are no filtered features"));
+            }
+            return;
+        }
+        else if (typeof layerId === "undefined") {
+            if (typeof onerror === "function") {
+                onerror(new Error("Filter MapHandler.zoomToFilteredFeature: There are no valid layer Id"));
+            }
+            return;
+        }
+
+        this.handlers.liveZoom(minScale, filteredFeatureIds, layerId);
     }
 }

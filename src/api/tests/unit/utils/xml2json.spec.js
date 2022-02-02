@@ -1,23 +1,19 @@
 import {expect} from "chai";
-import xml2json from "../../xml2json";
+import xml2json from "../../../utils/xml2json";
 
-describe("src/api/xml2json.js", () => {
+describe("src/api/utils/xml2json.js", () => {
     const xmlString = `<book>
                         <title>Borne</title>
                         <description>A giant bear...</description>
                         <author>
                             <id>1</id>
-                            <name>Jeff Vandermeer</name>
+                            <name artistName="yes" nationality="usa">Jeff Vandermeer</name>
                         </author>
                         <review>Nice book</review>
                         <review>This book is not so good</review>
                         <review>Amazing work</review>
-                        <maintenanceAndUpdateFrequency>
-                            <MD_MaintenanceFrequencyCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="biannually"/>
-                        </maintenanceAndUpdateFrequency>
                     </book>`;
-    let xmlDoc,
-        json;
+    let xmlDoc, json;
 
     before(() => {
         const domParser = new DOMParser();
@@ -36,7 +32,7 @@ describe("src/api/xml2json.js", () => {
         });
 
         it("this book should have a title, a description, an author and at least one review", () => {
-            expect(json.book).to.have.all.key("title", "description", "author", "review", "maintenanceAndUpdateFrequency");
+            expect(json.book).to.have.all.key("title", "description", "author", "review");
         });
 
         it("this book should have the title 'Borne'", () => {
@@ -61,9 +57,9 @@ describe("src/api/xml2json.js", () => {
         });
 
         it("the maintenanceAndUpdateFrequency should have attributes with codeList and codeListValue'", () => {
-            expect(json.book.maintenanceAndUpdateFrequency.MD_MaintenanceFrequencyCode.getAttributes()).to.deep.equal({
-                codeList: "http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_MaintenanceFrequencyCode",
-                codeListValue: "biannually"
+            expect(json.book.author.name.getAttributes()).to.deep.equal({
+                artistName: "yes",
+                nationality: "usa"
             });
         });
     });

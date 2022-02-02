@@ -1,5 +1,6 @@
 <script>
 import isObject from "../../../../utils/isObject";
+import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
 import moment from "moment";
 
 export default {
@@ -21,9 +22,9 @@ export default {
             default: false
         },
         info: {
-            type: String,
+            type: [String, Boolean],
             required: false,
-            default: ""
+            default: false
         },
         format: {
             type: String,
@@ -31,9 +32,9 @@ export default {
             default: "YYYY-MM-DD"
         },
         label: {
-            type: String,
+            type: [String, Boolean],
             required: false,
-            default: ""
+            default: true
         },
         maxValue: {
             type: String,
@@ -53,7 +54,7 @@ export default {
         prechecked: {
             type: String,
             required: false,
-            default: ""
+            default: undefined
         },
         snippetId: {
             type: Number,
@@ -70,25 +71,59 @@ export default {
         return {
             disable: true,
             internalFormat: "YYYY-MM-DD",
-            max: null,
-            min: null,
-            minOnly: false,
-            maxOnly: false,
-            value: null,
-            invalid: false,
-            showInfo: false
+            isInitializing: true,
+            minimumValue: "",
+            maximumValue: "",
+            showInfo: false,
+            value: "",
+            precheckedIsValid: false
         };
     },
     computed: {
-        infoText: function () {
-            return this.info ? this.info : this.$t("modules.tools.filterGeneral.dateInfo");
+        labelText () {
+            if (this.label === true) {
+                return this.attrName;
+            }
+            else if (typeof this.label === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
+            }
+            return "";
+        },
+        infoText () {
+            if (this.info === true) {
+                return this.$t("common:modules.tools.filterGeneral.info.snippetDate");
+            }
+            else if (typeof this.info === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.info, key => this.$t(key));
+            }
+            return "";
+        },
+        inRangeValue: {
+            get () {
+                const momentMinimum = moment(this.minimumValue, this.internalFormat),
+                    momentMaximum = moment(this.maximumValue, this.internalFormat),
+                    momentValue = moment(this.value, this.internalFormat);
+
+                if (!momentValue.isValid()) {
+                    return "";
+                }
+                else if (momentValue.isSameOrAfter(momentMaximum)) {
+                    return momentMaximum.format(this.internalFormat);
+                }
+                else if (momentValue.isSameOrBefore(momentMinimum)) {
+                    return momentMinimum.format(this.internalFormat);
+                }
+                return momentValue.format(this.internalFormat);
+            },
+            set (value) {
+                this.value = value;
+            }
         }
     },
     watch: {
-        value (newVal) {
-            if (newVal) {
-                this.value = this.getValueInRange(newVal);
-                this.emitCurrentRule(this.value);
+        value () {
+            if (!this.isInitializing || this.precheckedIsValid) {
+                this.emitCurrentRule(moment(this.inRangeValue, this.internalFormat).format(this.format), this.isInitializing);
             }
         },
         disabled (value) {
@@ -96,22 +131,67 @@ export default {
         }
     },
     created () {
-        this.value = this.convertToInternalDateFormat(this.prechecked, this.format);
-        this.max = this.convertToInternalDateFormat(this.maxValue, this.format);
-        this.min = this.convertToInternalDateFormat(this.minValue, this.format);
-        this.value = this.getValueInRange(this.value);
-        this.setMinOnly(this.min, this.max);
-        this.setMaxOnly(this.min, this.max);
-        this.setInvalid(this.min, this.max);
-        this.setMinMaxValue(this.min, this.max);
-        this.disable = false;
-    },
-    mounted () {
-        this.$nextTick(() => {
-            this.emitCurrentRule(this.value, true);
-        });
+        const momentPrechecked = moment(this.prechecked, this.format),
+            momentMin = moment(this.minValue, this.format),
+            momentMax = moment(this.maxValue, this.format);
+
+        this.precheckedIsValid = momentPrechecked.isValid();
+
+        if (momentMin.isValid() && momentMax.isValid()) {
+            this.minimumValue = momentMin.format(this.internalFormat);
+            this.maximumValue = momentMax.format(this.internalFormat);
+
+            if (this.precheckedIsValid) {
+                this.value = momentPrechecked.format(this.internalFormat);
+            }
+            this.$nextTick(() => {
+                this.isInitializing = false;
+                this.disable = false;
+            });
+        }
+        else if (this.api) {
+            this.api.getMinMax(this.attrName, minMaxObj => {
+                if (!isObject(minMaxObj)) {
+                    return;
+                }
+
+                if (Object.prototype.hasOwnProperty.call(minMaxObj, "min")) {
+                    this.minimumValue = moment(minMaxObj.min, this.format).format(this.internalFormat);
+                }
+                else {
+                    this.minimumValue = momentMin.format(this.internalFormat);
+                }
+                if (Object.prototype.hasOwnProperty.call(minMaxObj, "max")) {
+                    this.maximumValue = moment(minMaxObj.max, this.format).format(this.internalFormat);
+                }
+                else {
+                    this.maximumValue = momentMax.format(this.internalFormat);
+                }
+
+                if (this.precheckedIsValid) {
+                    this.value = momentPrechecked.format(this.internalFormat);
+                }
+                this.$nextTick(() => {
+                    this.isInitializing = false;
+                    this.disable = false;
+                });
+            }, err => {
+                this.isInitializing = false;
+                this.disable = false;
+                console.warn(err);
+            }, typeof this.minValue === "undefined" && typeof this.maxValue !== "undefined", typeof this.minValue !== "undefined" && typeof this.maxValue === "undefined");
+        }
+        else {
+            this.value = this.precheckedIsValid ? momentPrechecked.format(this.internalFormat) : "";
+            this.$nextTick(() => {
+                this.isInitializing = false;
+                this.disable = false;
+            });
+        }
     },
     methods: {
+        translateKeyWithPlausibilityCheck,
+
         /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
@@ -119,138 +199,42 @@ export default {
          * @returns {void}
          */
         emitCurrentRule (value, startup = false) {
-            this.$emit("ruleChanged", {
+            this.$emit("changeRule", {
                 snippetId: this.snippetId,
                 startup,
-                rule: {
-                    attrName: this.attrName,
-                    operator: this.operator,
-                    format: this.format,
-                    value: moment(value, this.internalFormat).format(this.format)
+                fixed: !this.visible,
+                attrName: this.attrName,
+                operator: this.operator,
+                format: this.format,
+                value
+            });
+        },
+        /**
+         * Emits the delete rule function to whoever is listening.
+         * @returns {void}
+         */
+        deleteCurrentRule () {
+            this.$emit("deleteRule", this.snippetId);
+        },
+        /**
+         * Resets the values of this snippet.
+         * @param {Function} onsuccess the function to call on success
+         * @returns {void}
+         */
+        resetSnippet (onsuccess) {
+            if (this.visible) {
+                this.value = "";
+            }
+            this.$nextTick(() => {
+                if (typeof onsuccess === "function") {
+                    onsuccess();
                 }
             });
         },
-
         /**
-         * Setting the parameter minOnly
-         * @param {Number|undefined} minimumValue the minimum value
-         * @param {Number|undefined} maximumValue the maximum value
+         * Toggles the info.
          * @returns {void}
          */
-        setMinOnly (minimumValue, maximumValue) {
-            if (minimumValue === undefined && maximumValue !== undefined) {
-                this.minOnly = true;
-            }
-        },
-
-        /**
-         * Setting the parameter maxOnly
-         * @param {Number|undefined} minimumValue the minimum value
-         * @param {Number|undefined} maximumValue the maximum value
-         * @returns {void}
-         */
-        setMaxOnly (minimumValue, maximumValue) {
-            if (minimumValue !== undefined && maximumValue === undefined) {
-                this.maxOnly = true;
-            }
-        },
-
-        /**
-         * Converts the given date string to an internal format using the given format.
-         * @param {String} date the date to be converted
-         * @param {String} format the format the given date has
-         * @returns {String} the formatted date
-         */
-        convertToInternalDateFormat (date, format) {
-            return date ? moment(date, format).format(this.internalFormat) : date;
-        },
-
-        /**
-         * Checking if the input field is empty and set the value to the minimum value
-         * @param {Event} evt - input event
-         * @returns {void}
-         */
-        checkEmpty (evt) {
-            if (evt?.target?.value === "") {
-                this.value = this.min;
-            }
-        },
-
-        /**
-         * setting the parameter minimumValue and maximumValue
-         * @param {Number|undefined} minimumValue the minimum value in internal format
-         * @param {Number|undefined} maximumValue the maximum value in internal format
-         * @returns {void}
-         */
-        setMinMaxValue (minimumValue, maximumValue) {
-            if (minimumValue === undefined || maximumValue === undefined) {
-                this.api.getMinMax(this.attrName, minMaxObj => {
-                    if (typeof minimumValue === "undefined" && isObject(minMaxObj) && typeof minMaxObj.min === "string") {
-                        this.min = moment(minMaxObj.min, this.format).format(this.internalFormat);
-                    }
-                    else {
-                        this.min = minimumValue;
-                    }
-                    if (typeof maximumValue === "undefined" && isObject(minMaxObj) && typeof minMaxObj.max === "string") {
-                        this.max = moment(minMaxObj.max, this.format).format(this.internalFormat);
-                    }
-                    else {
-                        this.max = maximumValue;
-                    }
-                    this.setInvalid(this.min, this.max);
-                    this.value = this.getValueInRange(this.value);
-                }, onerror => {
-                    console.warn(onerror);
-                }, this.minOnly, this.maxOnly);
-            }
-        },
-
-        /**
-         * Setting the parameter invalid
-         * @param {Number|undefined} minimumValue the minimum value
-         * @param {Number|undefined} maximumValue the maximum value
-         * @returns {void}
-         */
-        setInvalid (minimumValue, maximumValue) {
-            if (minimumValue === undefined || maximumValue === undefined) {
-                this.invalid = true;
-                return;
-            }
-            else if (!moment(maximumValue, this.internalFormat).isValid() || !moment(minimumValue, this.internalFormat).isValid()) {
-                console.warn("Please check your configuration or dienst manager, the min and max date value should be a valid date!");
-                this.invalid = true;
-                return;
-            }
-            else if (moment(maximumValue, this.internalFormat) < moment(minimumValue, this.internalFormat)) {
-                console.warn("Please check your configuration or dienst manager, the end date could not be ealier than the begin date!");
-                this.invalid = true;
-                return;
-            }
-            this.invalid = false;
-        },
-
-        /**
-         * check if the given date is between min and max date
-         * and set it if it is outside min and max
-         * @param {Date} date the prechecked date
-         * @returns {Date|Boolean} the original input date or converted date or false
-         */
-        getValueInRange (date) {
-            let value = date;
-
-            if (this.invalid) {
-                return false;
-            }
-
-            if (moment(value, this.internalFormat) < moment(this.min, this.internalFormat)) {
-                value = this.min;
-            }
-            else if (moment(value, this.internalFormat) > moment(this.max, this.internalFormat)) {
-                value = this.max;
-            }
-
-            return value;
-        },
         toggleInfo () {
             this.showInfo = !this.showInfo;
         }
@@ -261,10 +245,12 @@ export default {
 <template>
     <div
         v-show="visible"
-        v-if="!invalid"
         class="snippetDateContainer"
     >
-        <div class="right">
+        <div
+            v-if="info !== false"
+            class="right"
+        >
             <div class="info-icon">
                 <span
                     :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
@@ -275,19 +261,19 @@ export default {
         </div>
         <div class="input-container">
             <label
-                class="left"
+                v-if="label !== false"
+                class="snippetDateLabel left"
                 :for="'snippetDate-' + snippetId"
-            >{{ label }}</label>
+            >{{ labelText }}</label>
             <input
                 :id="'snippetDate-' + snippetId"
-                v-model="value"
+                v-model="inRangeValue"
                 class="snippetDate"
                 type="date"
                 name="dateInput"
-                :max="max"
-                :min="min"
+                :max="maximumValue"
+                :min="minimumValue"
                 :disabled="disable"
-                @input="checkEmpty"
             >
         </div>
         <div

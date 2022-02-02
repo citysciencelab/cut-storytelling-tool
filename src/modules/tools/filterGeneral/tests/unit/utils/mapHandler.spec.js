@@ -34,11 +34,21 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
 
             expect(lastError).to.be.an.instanceof(Error);
         });
+        it("should pipe an error if function liveZoom is missing with the given handlers", () => {
+            new MapHandler({
+                getLayerByLayerId: () => false,
+                showFeaturesByIds: () => false,
+                createLayerIfNotExists: () => false
+            }, onerror.call);
+
+            expect(lastError).to.be.an.instanceof(Error);
+        });
         it("should set empty internal structure for knownLayers", () => {
             const map = new MapHandler({
                 getLayerByLayerId: () => false,
                 showFeaturesByIds: () => false,
-                createLayerIfNotExists: () => false
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
             }, onerror.call);
 
             expect(lastError).to.not.be.an.instanceof(Error);
@@ -48,7 +58,8 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
             const map = new MapHandler({
                 getLayerByLayerId: () => false,
                 showFeaturesByIds: () => false,
-                createLayerIfNotExists: () => false
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
             }, onerror.call);
 
             expect(lastError).to.not.be.an.instanceof(Error);
@@ -61,7 +72,8 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
             const map = new MapHandler({
                 getLayerByLayerId: () => false,
                 showFeaturesByIds: () => false,
-                createLayerIfNotExists: () => false
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
             }, onerror.call);
 
             map.knownLayers.alreadyUsedFilterId = "foo";
@@ -72,7 +84,8 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
             const map = new MapHandler({
                 getLayerByLayerId: () => false,
                 showFeaturesByIds: () => false,
-                createLayerIfNotExists: layername => layername
+                createLayerIfNotExists: layername => layername,
+                liveZoom: () => false
             }, onerror.call);
 
             expect(map.getLayerOfExternalSource("someFilterId")).to.equal("filterGeneral-someFilterId");
@@ -86,7 +99,8 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
             const map = new MapHandler({
                 getLayerByLayerId: () => false,
                 showFeaturesByIds: () => false,
-                createLayerIfNotExists: () => false
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
             }, onerror.call);
 
             map.visualizeExternalSource("items", {}, "page", onerror.call);
@@ -96,7 +110,8 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
             const map = new MapHandler({
                 getLayerByLayerId: () => false,
                 showFeaturesByIds: () => false,
-                createLayerIfNotExists: () => false
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
             }, onerror.call);
             let cleared = false;
 
@@ -117,7 +132,8 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
             const map = new MapHandler({
                 getLayerByLayerId: () => false,
                 showFeaturesByIds: () => false,
-                createLayerIfNotExists: () => false
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
             }, onerror.call);
             let cleared = false;
 
@@ -141,7 +157,8 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
             const map = new MapHandler({
                 getLayerByLayerId: () => false,
                 showFeaturesByIds: () => false,
-                createLayerIfNotExists: () => false
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
             }, onerror.call);
 
             map.knownLayers.alreadyUsedFilterId = "foo";
@@ -152,7 +169,8 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
             const map = new MapHandler({
                 getLayerByLayerId: layerId => layerId,
                 showFeaturesByIds: () => false,
-                createLayerIfNotExists: () => false
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
             }, onerror.call);
 
             expect(map.getLayerOfTreeSource("someFilterId", "layerId")).to.equal("layerId");
@@ -166,7 +184,8 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
             const map = new MapHandler({
                 getLayerByLayerId: () => false,
                 showFeaturesByIds: () => false,
-                createLayerIfNotExists: () => false
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
             }, onerror.call);
 
             map.currentlyFilteredItems.filterId = ["thisShouldBeCleared"];
@@ -179,7 +198,8 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
             const map = new MapHandler({
                 getLayerByLayerId: () => false,
                 showFeaturesByIds: () => false,
-                createLayerIfNotExists: () => false
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
             }, onerror.call);
 
             map.currentlyFilteredItems.filterId = ["thisShouldNotBeCleared"];
@@ -195,7 +215,8 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
             const map = new MapHandler({
                 getLayerByLayerId: () => false,
                 showFeaturesByIds: () => false,
-                createLayerIfNotExists: () => false
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
             }, onerror.call);
 
             expect(lastError).to.not.be.an.instanceof(Error);
@@ -206,7 +227,8 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
             const map = new MapHandler({
                 getLayerByLayerId: () => false,
                 showFeaturesByIds: () => false,
-                createLayerIfNotExists: () => false
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
             }, onerror.call);
 
             expect(lastError).to.not.be.an.instanceof(Error);
@@ -217,7 +239,8 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
             const map = new MapHandler({
                 getLayerByLayerId: () => false,
                 showFeaturesByIds: () => false,
-                createLayerIfNotExists: () => false
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
             }, onerror.call);
 
             expect(lastError).to.not.be.an.instanceof(Error);
@@ -230,7 +253,8 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
             const map = new MapHandler({
                 getLayerByLayerId: () => false,
                 showFeaturesByIds: () => false,
-                createLayerIfNotExists: () => false
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
             }, onerror.call);
 
             expect(lastError).to.not.be.an.instanceof(Error);
@@ -244,7 +268,8 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
             const map = new MapHandler({
                 getLayerByLayerId: () => false,
                 showFeaturesByIds: () => false,
-                createLayerIfNotExists: () => false
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
             }, onerror.call);
 
             expect(lastError).to.not.be.an.instanceof(Error);
@@ -254,6 +279,45 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
                 page: 1,
                 items: "items"
             }, onerror.call);
+            expect(lastError).to.be.an.instanceof(Error);
+        });
+    });
+
+    describe("zoomToFilteredFeature", () => {
+        it("should return an error if the type of minScale is not number", () => {
+            const map = new MapHandler({
+                getLayerByLayerId: () => false,
+                showFeaturesByIds: () => false,
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
+            }, onerror.call);
+
+            map.zoomToFilteredFeature("", [], "1", onerror.call);
+
+            expect(lastError).to.be.an.instanceof(Error);
+        });
+        it("should return an error if the filtered feature Ids is empty", () => {
+            const map = new MapHandler({
+                getLayerByLayerId: () => false,
+                showFeaturesByIds: () => false,
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
+            }, onerror.call);
+
+            map.zoomToFilteredFeature(5000, [], "1", onerror.call);
+
+            expect(lastError).to.be.an.instanceof(Error);
+        });
+        it("should return an error if there are no layer id", () => {
+            const map = new MapHandler({
+                getLayerByLayerId: () => false,
+                showFeaturesByIds: () => false,
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false
+            }, onerror.call);
+
+            map.zoomToFilteredFeature(5000, ["1", "2"], undefined, onerror.call);
+
             expect(lastError).to.be.an.instanceof(Error);
         });
     });

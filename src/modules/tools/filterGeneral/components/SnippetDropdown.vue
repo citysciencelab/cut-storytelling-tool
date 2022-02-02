@@ -1,5 +1,6 @@
 <script>
 import Multiselect from "vue-multiselect";
+import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
 
 export default {
     name: "SnippetDropdown",
@@ -25,7 +26,7 @@ export default {
         autoInit: {
             type: Boolean,
             required: false,
-            default: false
+            default: true
         },
         disabled: {
             type: Boolean,
@@ -35,17 +36,17 @@ export default {
         display: {
             type: String,
             required: false,
-            default: ""
+            default: "default"
         },
         info: {
-            type: String,
+            type: [String, Boolean],
             required: false,
-            default: ""
+            default: false
         },
         label: {
-            type: String,
+            type: [String, Boolean],
             required: false,
-            default: ""
+            default: true
         },
         multiselect: {
             type: Boolean,
@@ -65,14 +66,12 @@ export default {
         prechecked: {
             type: Array,
             required: false,
-            default: () => {
-                return [];
-            }
+            default: undefined
         },
         renderIcons: {
             type: String,
             required: false,
-            default: "fromLegend"
+            default: undefined
         },
         snippetId: {
             type: Number,
@@ -80,11 +79,9 @@ export default {
             default: 0
         },
         value: {
-            type: [Array],
+            type: Array,
             required: false,
-            default: () => {
-                return [];
-            }
+            default: undefined
         },
         visible: {
             type: Boolean,
@@ -96,74 +93,99 @@ export default {
         return {
             disable: true,
             isInitializing: true,
-            invalid: false,
             showInfo: false,
             dropdownValue: [],
             dropdownSelected: []
         };
     },
     computed: {
-        infoText: function () {
-            return this.info ? this.info : this.$t("modules.tools.filterGeneral.dropDownInfo");
+        labelText () {
+            if (this.label === true) {
+                return this.attrName;
+            }
+            else if (typeof this.label === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
+            }
+            return "";
         },
-        emptyList: function () {
-            return this.$t("modules.tools.filterGeneral.dropDownEmptyList");
+        infoText () {
+            if (this.info === true) {
+                return this.$t("common:modules.tools.filterGeneral.info.snippetDropdown");
+            }
+            else if (typeof this.info === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.info, key => this.$t(key));
+            }
+            return "";
         },
-        noElements: function () {
-            return this.$t("modules.tools.filterGeneral.dropDownNoElements");
+        emptyList () {
+            return this.$t("modules.tools.filterGeneral.dropdown.emptyList");
+        },
+        noElements () {
+            return this.$t("modules.tools.filterGeneral.dropdown.noElements");
         }
     },
     watch: {
-        dropdownSelected: {
-            handler (value) {
-                this.emitCurrentRule(value, this.isInitializing);
+        dropdownSelected (value) {
+            if (!this.isInitializing || this.isInitializing && Array.isArray(this.prechecked)) {
+                if (Array.isArray(value) && value.length) {
+                    this.emitCurrentRule(value, this.isInitializing);
+                }
+                else {
+                    this.deleteCurrentRule();
+                }
             }
         },
-        disabled: {
-            handler (value) {
-                this.disable = typeof value === "boolean" ? value : true;
-            }
+        disabled (value) {
+            this.disable = typeof value === "boolean" ? value : true;
         }
     },
-    mounted () {
-        this.dropdownValue = !this.visible ? this.prechecked : this.value;
-        // triggers emitCurrentRule
+    created () {
         this.dropdownSelected = Array.isArray(this.prechecked) ? this.prechecked : [];
 
-        if (this.visible && this.dropdownValue.length === 0) {
-            this.setUniqueValues(list => {
-                this.dropdownValue = list;
+        if (!this.visible) {
+            this.dropdownValue = Array.isArray(this.prechecked) ? this.prechecked : [];
+            this.$nextTick(() => {
+                this.isInitializing = false;
+                this.disable = false;
             });
         }
-        else if (!this.visible && this.dropdownValue.length === 0) {
-            this.invalid = true;
+        else if (Array.isArray(this.value)) {
+            this.dropdownValue = this.value;
+            this.$nextTick(() => {
+                this.isInitializing = false;
+                this.disable = false;
+            });
         }
-
-        if (this.dropdownValue.length > 0) {
-            this.disable = false;
-        }
-
-        this.$nextTick(() => {
-            this.isInitializing = false;
-        });
-    },
-    methods: {
-        translate (key) {
-            return i18next.t(key);
-        },
-        toggleInfo () {
-            this.showInfo = !this.showInfo;
-        },
-        setUniqueValues (onsuccess) {
+        else if (this.api && this.autoInit !== false) {
             this.api.getUniqueValues(this.attrName, list => {
-                if (typeof onsuccess === "function") {
-                    onsuccess(list);
+                this.dropdownValue = list;
+                this.$nextTick(() => {
+                    this.isInitializing = false;
                     this.disable = false;
-                }
+                });
             }, error => {
                 this.disable = false;
+                this.isInitializing = false;
                 console.warn(error);
             });
+        }
+        else {
+            this.dropdownValue = [];
+            this.$nextTick(() => {
+                this.isInitializing = false;
+                this.disable = false;
+            });
+        }
+    },
+    methods: {
+        translateKeyWithPlausibilityCheck,
+
+        /**
+         * Returns the label to use in the gui.
+         * @returns {String} the label to use
+         */
+        getLabel () {
+            return this.label || this.attrName;
         },
         /**
          * Emits the current rule to whoever is listening.
@@ -172,25 +194,43 @@ export default {
          * @returns {void}
          */
         emitCurrentRule (value, startup = false) {
-            let result = value;
-
-            if (Array.isArray(value)) {
-                result = [];
-                value.forEach(v => {
-                    if (v) {
-                        result.push(v);
-                    }
-                });
-            }
-            this.$emit("ruleChanged", {
+            this.$emit("changeRule", {
                 snippetId: this.snippetId,
                 startup,
-                rule: {
-                    attrName: this.attrName,
-                    operator: this.operator,
-                    value: result
+                fixed: !this.visible,
+                attrName: this.attrName,
+                operator: this.operator,
+                value
+            });
+        },
+        /**
+         * Emits the delete rule function to whoever is listening.
+         * @returns {void}
+         */
+        deleteCurrentRule () {
+            this.$emit("deleteRule", this.snippetId);
+        },
+        /**
+         * Resets the values of this snippet.
+         * @param {Function} onsuccess the function to call on success
+         * @returns {void}
+         */
+        resetSnippet (onsuccess) {
+            if (this.visible) {
+                this.dropdownSelected = [];
+            }
+            this.$nextTick(() => {
+                if (typeof onsuccess === "function") {
+                    onsuccess();
                 }
             });
+        },
+        /**
+         * Toggles the info.
+         * @returns {void}
+         */
+        toggleInfo () {
+            this.showInfo = !this.showInfo;
         }
     }
 };
@@ -199,50 +239,104 @@ export default {
 <template>
     <div
         v-show="visible"
-        v-if="!invalid"
         class="snippetDropdownContainer"
     >
-        <div class="left">
-            <label
-                class="select-box-label"
-                :for="'snippetSelectBox-' + snippetId"
-            >{{ label }}:</label>
-        </div>
-        <div class="right">
-            <div class="info-icon">
-                <span
-                    :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
-                    @click="toggleInfo()"
-                    @keydown.enter="toggleInfo()"
-                >&nbsp;</span>
+        <div
+            v-if="display === 'default'"
+            class="snippetDefaultContainer"
+        >
+            <div
+                v-if="label !== false"
+                class="left"
+            >
+                <label
+                    class="select-box-label"
+                    :for="'snippetSelectBox-' + snippetId"
+                >{{ labelText }}</label>
+            </div>
+            <div
+                v-if="info !== false"
+                class="right"
+            >
+                <div class="info-icon">
+                    <span
+                        :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
+                        @click="toggleInfo()"
+                        @keydown.enter="toggleInfo()"
+                    >&nbsp;</span>
+                </div>
+            </div>
+            <div class="select-box-container">
+                <Multiselect
+                    :id="'snippetSelectBox-' + snippetId"
+                    v-model="dropdownSelected"
+                    :options="dropdownValue"
+                    name="select-box"
+                    :disabled="disable"
+                    :multiple="multiselect"
+                    :placeholder="placeholder"
+                    :show-labels="false"
+                    open-direction="bottom"
+                    :hide-selected="true"
+                    :close-on-select="true"
+                    :clear-on-select="false"
+                    :loading="disable"
+                >
+                    <span slot="noOptions">{{ emptyList }}</span>
+                    <span slot="noResult">{{ noElements }}</span>
+                </Multiselect>
+            </div>
+            <div
+                v-show="showInfo"
+                class="bottom"
+            >
+                <div class="info-text">
+                    <span>{{ infoText }}</span>
+                </div>
             </div>
         </div>
-        <div class="select-box-container">
-            <Multiselect
-                :id="'snippetSelectBox-' + snippetId"
-                v-model="dropdownSelected"
-                :options="dropdownValue"
-                name="select-box"
-                :disabled="disable"
-                :multiple="multiselect"
-                :placeholder="label"
-                :show-labels="false"
-                open-direction="bottom"
-                :hide-selected="true"
-                :close-on-select="true"
-                :clear-on-select="false"
-                :loading="disable"
-            >
-                <span slot="noOptions">{{ emptyList }}</span>
-                <span slot="noResult">{{ noElements }}</span>
-            </Multiselect>
-        </div>
         <div
-            v-show="showInfo"
-            class="bottom"
+            v-if="display === 'list'"
+            class="snippetListContainer"
         >
-            <div class="info-text">
-                <span>{{ infoText }}</span>
+            <div class="table-responsive">
+                <table class="table table-sm table-hover table-bordered table-striped">
+                    <thead
+                        v-if="label !== false"
+                    >
+                        <tr>
+                            <th
+                                colspan="2"
+                            >
+                                {{ labelText }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            v-for="val in dropdownValue"
+                            :key="val"
+                        >
+                            <td>
+                                <label
+                                    class="check-box-label"
+                                    :for="'snippetCheckbox-' + snippetId + '-' + val"
+                                >{{ val }}</label>
+                            </td>
+                            <td>
+                                <label
+                                    for="'snippetCheckbox-' + snippetId + '-' + val"
+                                />
+                                <input
+                                    :id="'snippetCheckbox-' + snippetId + '-' + val"
+                                    v-model="dropdownSelected"
+                                    type="checkbox"
+                                    :value="val"
+                                >
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

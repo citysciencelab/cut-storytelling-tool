@@ -1,12 +1,9 @@
 <script>
+import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
+
 export default {
     name: "SnippetCheckbox",
     props: {
-        api: {
-            type: Object,
-            required: false,
-            default: null
-        },
         attrName: {
             type: String,
             required: false,
@@ -18,14 +15,14 @@ export default {
             default: false
         },
         info: {
-            type: String,
+            type: [String, Boolean],
             required: false,
-            default: ""
+            default: false
         },
         label: {
-            type: String,
+            type: [String, Boolean],
             required: false,
-            default: ""
+            default: true
         },
         operator: {
             type: String,
@@ -50,28 +47,49 @@ export default {
     },
     data () {
         return {
-            checked: this.prechecked,
+            isInitializing: true,
+            value: false,
             showInfo: false
         };
     },
     computed: {
-        infoText: function () {
-            return this.info ? this.info : this.$t("modules.tools.filterGeneral.checkBoxInfo");
+        labelText () {
+            if (this.label === true) {
+                return this.attrName;
+            }
+            else if (typeof this.label === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
+            }
+            return "";
+        },
+        infoText () {
+            if (this.info === true) {
+                return this.$t("common:modules.tools.filterGeneral.info.snippetCheckbox");
+            }
+            else if (typeof this.info === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.info, key => this.$t(key));
+            }
+            return "";
         }
     },
     watch: {
-        checked: {
+        value: {
             handler (value) {
-                this.emitCurrentRule(value);
+                this.emitCurrentRule(value, this.isInitializing);
             }
         }
     },
-    mounted () {
+    created () {
+        if (this.prechecked) {
+            this.value = this.prechecked;
+        }
         this.$nextTick(() => {
-            this.emitCurrentRule(this.checked, true);
+            this.isInitializing = false;
         });
     },
     methods: {
+        translateKeyWithPlausibilityCheck,
+
         /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
@@ -79,16 +97,46 @@ export default {
          * @returns {void}
          */
         emitCurrentRule (value, startup = false) {
-            this.$emit("ruleChanged", {
-                snippetId: this.snippetId,
-                startup,
-                rule: {
+            if (value) {
+                this.$emit("changeRule", {
+                    snippetId: this.snippetId,
+                    startup,
+                    fixed: !this.visible,
                     attrName: this.attrName,
                     operator: this.operator,
                     value
+                });
+            }
+            else {
+                this.deleteCurrentRule();
+            }
+        },
+        /**
+         * Emits the delete rule function to whoever is listening.
+         * @returns {void}
+         */
+        deleteCurrentRule () {
+            this.$emit("deleteRule", this.snippetId);
+        },
+        /**
+         * Resets the values of this snippet.
+         * @param {Function} onsuccess the function to call on success
+         * @returns {void}
+         */
+        resetSnippet (onsuccess) {
+            if (this.visible) {
+                this.value = false;
+            }
+            this.$nextTick(() => {
+                if (typeof onsuccess === "function") {
+                    onsuccess();
                 }
             });
         },
+        /**
+         * Toggles the info.
+         * @returns {void}
+         */
         toggleInfo () {
             this.showInfo = !this.showInfo;
         }
@@ -104,17 +152,22 @@ export default {
         <div class="left">
             <input
                 :id="'snippetCheckbox-' + snippetId"
-                v-model="checked"
+                v-model="value"
                 class="snippetCheckbox"
                 type="checkbox"
                 name="checkbox"
                 :disabled="disabled"
             >
             <label
+                v-if="label !== false"
                 :for="'snippetCheckbox-' + snippetId"
-            >{{ label }}</label>
+                class="snippetCheckboxLabel"
+            >{{ labelText }}</label>
         </div>
-        <div class="right">
+        <div
+            v-if="info !== false"
+            class="right"
+        >
             <div class="info-icon">
                 <span
                     :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"

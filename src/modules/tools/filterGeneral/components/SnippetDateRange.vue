@@ -1,4 +1,6 @@
 <script>
+import isObject from "../../../../utils/isObject";
+import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
 import moment from "moment";
 
 export default {
@@ -11,7 +13,8 @@ export default {
         },
         attrName: {
             type: [String, Array],
-            required: true
+            required: false,
+            default: ""
         },
         disabled: {
             type: Boolean,
@@ -19,9 +22,9 @@ export default {
             default: false
         },
         info: {
-            type: String,
+            type: [String, Boolean],
             required: false,
-            default: ""
+            default: false
         },
         format: {
             type: String,
@@ -29,29 +32,29 @@ export default {
             default: "YYYY-MM-DD"
         },
         label: {
-            type: String,
+            type: [String, Boolean],
             required: false,
-            default: ""
+            default: true
         },
         maxValue: {
-            type: [String, Array],
+            type: String,
             required: false,
             default: undefined
         },
         minValue: {
-            type: [String, Array],
+            type: String,
             required: false,
             default: undefined
         },
         operator: {
             type: String,
             required: false,
-            default: "EQ"
+            default: "BETWEEN"
         },
         prechecked: {
             type: Array,
             required: false,
-            default: () => []
+            default: undefined
         },
         snippetId: {
             type: Number,
@@ -67,57 +70,218 @@ export default {
     data () {
         return {
             disable: true,
-            fromDate: null,
-            invalid: false,
-            initialMin: null,
             internalFormat: "YYYY-MM-DD",
-            maxFrom: null,
-            minFrom: null,
-            maxUntil: null,
-            minUntil: null,
-            untilDate: null,
+            isInitializing: true,
+            minimumValue: "",
+            maximumValue: "",
+            value: ["", ""],
+            precheckedIsValid: false,
             showInfo: false
         };
     },
     computed: {
-        infoText: function () {
-            return this.info ? this.info : this.$t("modules.tools.filterGeneral.dateRangeInfo");
+        labelText () {
+            if (this.label === true) {
+                if (Array.isArray(this.attrName)) {
+                    return this.attrName[0];
+                }
+                return this.attrName;
+            }
+            else if (typeof this.label === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
+            }
+            return "";
+        },
+        infoText () {
+            if (this.info === true) {
+                return this.$t("common:modules.tools.filterGeneral.info.snippetDateRange");
+            }
+            else if (typeof this.info === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.info, key => this.$t(key));
+            }
+            return "";
+        },
+        inRangeValueLeft: {
+            get () {
+                if (!Array.isArray(this.value) || this.value.length !== 2) {
+                    return "";
+                }
+                return this.getValueWithinBorders(this.value[0], this.minimumValue, this.maximumValue, this.internalFormat);
+            },
+            set (value) {
+                this.$set(this.value, 0, value);
+            }
+        },
+        inRangeValueRight: {
+            get () {
+                if (!Array.isArray(this.value) || this.value.length !== 2) {
+                    return "";
+                }
+                return this.getValueWithinBorders(this.value[1], this.minimumValue, this.maximumValue, this.internalFormat);
+            },
+            set (value) {
+                this.$set(this.value, 1, value);
+            }
         }
     },
     watch: {
-        fromDate (value) {
-            this.emitCurrentRule([value, this.untilDate]);
-        },
-        untilDate (value) {
-            this.emitCurrentRule([this.fromDate, value]);
+        value () {
+            if (!this.isInitializing || this.precheckedIsValid) {
+                const value = [
+                    moment(this.inRangeValueLeft, this.internalFormat).format(this.format),
+                    moment(this.inRangeValueRight, this.internalFormat).format(this.format)
+                ];
+
+                this.emitCurrentRule(value, this.isInitializing);
+            }
         },
         disabled (value) {
             this.disable = typeof value === "boolean" ? value : true;
         }
     },
     created () {
-        this.fromDate = Array.isArray(this.prechecked) && this.prechecked.length === 2 ? this.convertToInternalDateFormat(this.prechecked[0], this.format) : null;
-        this.initialMin = Array.isArray(this.minValue) ? this.convertToInternalDateFormat(this.minValue[0], this.format) : this.convertToInternalDateFormat(this.minValue, this.format);
-        this.maxFrom = Array.isArray(this.minValue) ? this.convertToInternalDateFormat(this.minValue[1], this.format) : this.convertToInternalDateFormat(this.maxValue, this.format);
-        this.minFrom = Array.isArray(this.minValue) ? this.convertToInternalDateFormat(this.minValue[0], this.format) : this.convertToInternalDateFormat(this.minValue, this.format);
-        this.maxUntil = Array.isArray(this.maxValue) ? this.convertToInternalDateFormat(this.maxValue[1], this.format) : this.convertToInternalDateFormat(this.maxValue, this.format);
-        this.minUntil = Array.isArray(this.maxValue) ? this.convertToInternalDateFormat(this.maxValue[0], this.format) : this.convertToInternalDateFormat(this.minValue, this.format);
-        this.untilDate = Array.isArray(this.prechecked) && this.prechecked.length === 2 ? this.convertToInternalDateFormat(this.prechecked[1], this.format) : null;
+        const momentPrecheckedLeft = moment(Array.isArray(this.prechecked) ? this.prechecked[0] : "", this.format),
+            momentPrecheckedRight = moment(Array.isArray(this.prechecked) ? this.prechecked[1] : "", this.format),
+            momentMin = moment(this.minValue, this.format),
+            momentMax = moment(this.maxValue, this.format);
 
-        if (this.isInvalid()) {
-            this.invalid = true;
+        this.precheckedIsValid = momentPrecheckedLeft.isValid() || momentPrecheckedRight.isValid();
+
+        if (this.api) {
+            const attrName = [];
+
+            if (Array.isArray(this.attrName)) {
+                attrName.push(this.attrName[0]);
+                attrName.push(this.attrName[1]);
+            }
+            else if (typeof this.attrName === "string") {
+                attrName.push(this.attrName);
+                attrName.push(this.attrName);
+            }
+
+            if (attrName.length === 2) {
+                this.minimumValue = momentMin.format(this.internalFormat);
+                this.maximumValue = momentMax.format(this.internalFormat);
+
+                this.setMinimumMaximumValue(attrName[0], !momentMin.isValid(), false, () => {
+                    this.setMinimumMaximumValue(attrName[1], false, !momentMax.isValid(), () => {
+                        this.value[0] = momentPrecheckedLeft.isValid() ? momentPrecheckedLeft.format(this.internalFormat) : this.minimumValue;
+                        this.value[1] = momentPrecheckedRight.isValid() ? momentPrecheckedRight.format(this.internalFormat) : this.maximumValue;
+
+                        this.$nextTick(() => {
+                            this.isInitializing = false;
+                            this.disable = false;
+                        });
+                    }, error => {
+                        this.isInitializing = false;
+                        this.disable = false;
+                        console.warn(error);
+                    });
+                }, error => {
+                    this.isInitializing = false;
+                    this.disable = false;
+                    console.warn(error);
+                });
+            }
+        }
+        else {
+            this.minimumValue = momentMin.isValid() ? momentMin.format(this.internalFormat) : "";
+            this.maximumValue = momentMax.isValid() ? momentMax.format(this.internalFormat) : "";
+            if (this.precheckedIsValid) {
+                this.value = [
+                    momentPrecheckedLeft.isValid() ? momentPrecheckedLeft.format(this.internalFormat) : this.minimumValue,
+                    momentPrecheckedRight.isValid() ? momentPrecheckedRight.format(this.internalFormat) : this.maximumValue
+                ];
+            }
+            this.$nextTick(() => {
+                this.isInitializing = false;
+                this.disable = false;
+            });
         }
     },
-    mounted () {
-        this.$nextTick(() => {
-            this.checkPrechecked();
-            this.checkMinMax();
-            this.disableFrom = this.disabled;
-            this.disableUntil = this.disabled;
-            this.emitCurrentRule([this.fromDate, this.untilDate], true);
-        });
-    },
     methods: {
+        translateKeyWithPlausibilityCheck,
+
+        /**
+         * Returns the label to use in the gui as description for the left calendar box.
+         * @returns {String} the label to use
+         */
+        getLabelLeft () {
+            if (Array.isArray(this.attrName)) {
+                return this.attrName[0];
+            }
+            return "";
+        },
+        /**
+         * Returns the label to use in the gui as description for the right calendar box.
+         * @returns {String} the label to use
+         */
+        getLabelRight () {
+            if (Array.isArray(this.attrName)) {
+                return this.attrName[1];
+            }
+            return "";
+        },
+        /**
+         * Returns a value in range of the given borders.
+         * @param {String} value the value to return or correct
+         * @param {String} leftBorder the value to be the bottom/left border
+         * @param {String} rightBorder the value to be the top/right border
+         * @param {String} format the format to format from and format to
+         * @returns {String} the value but asured to be in borders
+         */
+        getValueWithinBorders (value, leftBorder, rightBorder, format) {
+            const momentMinimum = moment(leftBorder, format),
+                momentMaximum = moment(rightBorder, format),
+                momentValue = moment(value, format);
+
+            if (!momentValue.isValid()) {
+                return "";
+            }
+            else if (momentValue.isSameOrAfter(momentMaximum)) {
+                return momentMaximum.format(format);
+            }
+            else if (momentValue.isSameOrBefore(momentMinimum)) {
+                return momentMinimum.format(format);
+            }
+            return momentValue.format(format);
+        },
+        /**
+         * Calls the minMax api for the given attrName and sets minimumValue and maximumValue.
+         * @param {String} attrName the attribute to receive the min and max value from
+         * @param {Boolean} minOnly if minimumValue should be set
+         * @param {Boolean} maxOnly if maximumValue should be set
+         * @param {Function} onsuccess a function({min, max}) with the received values
+         * @param {Function} onerror a function(errorMsg)
+         * @returns {void}
+         */
+        setMinimumMaximumValue (attrName, minOnly, maxOnly, onsuccess, onerror) {
+            if (minOnly === false && maxOnly === false) {
+                if (typeof onsuccess === "function") {
+                    onsuccess();
+                }
+                return;
+            }
+
+            this.api.getMinMax(attrName, minMaxObj => {
+                if (!isObject(minMaxObj)) {
+                    if (typeof onsuccess === "function") {
+                        onsuccess();
+                    }
+                    return;
+                }
+
+                if (Object.prototype.hasOwnProperty.call(minMaxObj, "min")) {
+                    this.minimumValue = moment(minMaxObj.min, this.format).format(this.internalFormat);
+                }
+                if (Object.prototype.hasOwnProperty.call(minMaxObj, "max")) {
+                    this.maximumValue = moment(minMaxObj.max, this.format).format(this.internalFormat);
+                }
+                if (typeof onsuccess === "function") {
+                    onsuccess();
+                }
+            }, onerror, minOnly, maxOnly);
+        },
         /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
@@ -125,183 +289,42 @@ export default {
          * @returns {void}
          */
         emitCurrentRule (value, startup = false) {
-            this.$emit("ruleChanged", {
+            this.$emit("changeRule", {
                 snippetId: this.snippetId,
                 startup,
-                rule: {
-                    attrName: this.attrName,
-                    operator: this.operator,
-                    format: this.format,
-                    value: [
-                        moment(value[0], this.internalFormat).format(this.format),
-                        moment(value[1], this.internalFormat).format(this.format)
-                    ]
+                fixed: !this.visible,
+                attrName: this.attrName,
+                operator: this.operator,
+                format: this.format,
+                value
+            });
+        },
+        /**
+         * Emits the delete rule function to whoever is listening.
+         * @returns {void}
+         */
+        deleteCurrentRule () {
+            this.$emit("deleteRule", this.snippetId);
+        },
+        /**
+         * Resets the values of this snippet.
+         * @param {Function} onsuccess the function to call on success
+         * @returns {void}
+         */
+        resetSnippet (onsuccess) {
+            if (this.visible) {
+                this.value = ["", ""];
+            }
+            this.$nextTick(() => {
+                if (typeof onsuccess === "function") {
+                    onsuccess();
                 }
             });
         },
         /**
-         * Checks if something is wrong configured, throws an console.warn message if so.
-         * @returns {Boolean} returns true if something is configured wrong, false if everything is ok
-         */
-        isInvalid () {
-            if (!Array.isArray(this.prechecked) || this.prechecked.length !== 2 && this.prechecked.length !== 0) {
-                console.warn("Please check your configuration. Make sure to check if prechecked is an array with two date strings, an empty array of left away entirely.");
-                return true;
-            }
-            else if (
-                typeof this.minValue === "string"
-                && typeof this.maxValue === "string"
-                && moment(this.minValue, this.format) > moment(this.maxValue, this.format)
-            ) {
-                console.warn("Please check your configuration. Make sure to check that maxValue is not earlier than minValue.");
-                return true;
-            }
-            else if (Array.isArray(this.minValue) && this.minValue.length !== 2 || Array.isArray(this.maxValue) && this.maxValue.length !== 2) {
-                console.warn("Please check your configuration. If you use arrays for maxValue or minValue, use an array with exactly two entries which are the min and max values.");
-                return true;
-            }
-            return false;
-        },
-        /**
-         * Converts the given date string to an internal format using the given format.
-         * @param {String} date the date to be converted
-         * @param {String} format the format the given date has
-         * @returns {String} the formatted date
-         */
-        convertToInternalDateFormat (date, format) {
-            return date ? moment(date, format).format(this.internalFormat) : date;
-        },
-        /**
-         * Set min or max or both for the first datepicker.
-         * @param {String} attribute the param to fetch min max values
-         * @param {Boolean} min set true if only min is required. If both are false, min max returns.
-         * @param {Boolean} max set true if only max is required. If both are false, min max returns.
+         * Toggles the info.
          * @returns {void}
          */
-        setMinMaxFromDate (attribute, min = false, max = false) {
-            if (this.api) {
-                this.api.getMinMax(attribute, minMaxObj => {
-                    const minFormated = this.convertToInternalDateFormat(minMaxObj?.min, this.format),
-                        maxFormated = this.convertToInternalDateFormat(minMaxObj?.max, this.format);
-
-                    this.minFrom = minFormated ? minFormated : this.minFrom;
-                    this.maxFrom = maxFormated ? maxFormated : this.maxFrom;
-                    // If user configured prechecked dates which are not between min and max
-                    this.checkPrechecked();
-                }, onerror => {
-                    console.warn(onerror);
-                }, min, max);
-            }
-        },
-        /**
-         * Set min or max or both for the second datepicker.
-         * @param {String} attribute the attribute to fetch min max values
-         * @param {Boolean} min set true if only min is required. If both are false, min max returns.
-         * @param {Boolean} max set true if only max is required. If both are false, min max returns.
-         * @returns {void}
-         */
-        setMinMaxUntilDate (attribute, min = false, max = false) {
-            if (this.api) {
-                this.api.getMinMax(attribute, minMaxObj => {
-                    const minFormated = this.convertToInternalDateFormat(minMaxObj?.min, this.format),
-                        maxFormated = this.convertToInternalDateFormat(minMaxObj?.max, this.format);
-
-                    this.minUntil = minFormated ? minFormated : this.minUntil;
-                    this.maxUntil = maxFormated ? maxFormated : this.maxUntil;
-                    this.initialMin = this.minUntil;
-                    // If user configured prechecked dates which are not between min and max
-                    this.checkPrechecked();
-                }, onerror => {
-                    console.warn(onerror);
-                }, min, max);
-            }
-        },
-        /**
-         * Check min max for the 'until' and 'from' field.
-         * @returns {void}
-         */
-        checkMinMax () {
-            let attributeFrom, attributeUntil, attribute;
-
-            if (Array.isArray(this.attrName)) {
-                attributeFrom = this.attrName[0];
-                attributeUntil = this.attrName[1];
-            }
-            else {
-                // If is String
-                attribute = this.attrName;
-            }
-
-            if (!this.minValue && !this.maxValue) {
-                this.setMinMaxFromDate(attribute ? attribute : attributeFrom);
-                this.setMinMaxUntilDate(attribute ? attribute : attributeUntil);
-            }
-            else if (!this.minValue) {
-                if (attribute) {
-                    this.setMinMaxFromDate(attribute, true, false);
-                    return;
-                }
-                this.setMinMaxFromDate(attributeFrom, true, false);
-                this.setMinMaxUntilDate(attributeUntil, true, false);
-            }
-            else if (!this.maxValue) {
-                if (attribute) {
-                    this.setMinMaxUntilDate(attribute, false, true);
-                    return;
-                }
-                this.setMinMaxFromDate(attributeFrom, false, true);
-                this.setMinMaxUntilDate(attributeUntil, false, true);
-            }
-            this.disable = false;
-        },
-        /**
-         * Change the min value of the until field.
-         * @returns {void}
-         */
-        changeMin () {
-            if (this.fromDate && (moment(this.fromDate, this.internalFormat) > moment(this.initialMin, this.internalFormat))) {
-                this.minUntil = this.fromDate;
-                if (this.fromDate > this.untilDate) {
-                    this.untilDate = this.fromDate;
-                }
-            }
-            else {
-                this.minUntil = this.initialMin;
-            }
-        },
-        checkPrechecked () {
-            if (!Array.isArray(this.prechecked)) {
-                this.invalid = true;
-                console.warn("Prechecked is not an array. It should be either an an array of 2 date strings or empty.");
-                return;
-            }
-            else if (this.prechecked.length !== 2) {
-                return;
-            }
-            const precheckedBeginn = moment(this.prechecked[0], this.format),
-                precheckedEnd = moment(this.prechecked[1], this.format);
-
-            if (!precheckedBeginn.isValid() && !precheckedEnd.isValid()) {
-                return;
-            }
-
-            if (typeof this.minFrom !== "undefined" && typeof this.maxFrom !== "undefined") {
-                if (precheckedBeginn < moment(this.minFrom, this.internalFormat)) {
-                    this.fromDate = this.minFrom;
-                }
-                else if (precheckedBeginn > moment(this.maxFrom, this.internalFormat)) {
-                    this.fromDate = this.maxFrom;
-                }
-            }
-            if (typeof this.minUntil !== "undefined" && typeof this.maxUntil !== "undefined") {
-                if (precheckedEnd < moment(this.minUntil, this.internalFormat)) {
-                    this.untilDate = this.minUntil;
-                }
-                else if (precheckedEnd > moment(this.maxUntil, this.internalFormat)) {
-                    this.untilDate = this.maxUntil;
-                }
-            }
-        },
         toggleInfo () {
             this.showInfo = !this.showInfo;
         }
@@ -311,16 +334,24 @@ export default {
 
 <template>
     <div
-        v-if="!invalid"
         v-show="visible"
         class="snippetDateRangeContainer"
     >
-        <div class="left">
-            <label for="date-from-input-container">
-                {{ label }}
+        <div
+            v-if="label !== false"
+            class="left"
+        >
+            <label
+                for="date-from-input-container"
+                class="snippetDateRangeLabel"
+            >
+                {{ labelText }}
             </label>
         </div>
-        <div class="right">
+        <div
+            v-if="info !== false"
+            class="right"
+        >
             <div class="info-icon">
                 <span
                     :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
@@ -336,17 +367,15 @@ export default {
             >
                 <label
                     :for="'inputDateFrom-' + snippetId"
-                >{{ Array.isArray(attrName) ? attrName[0].toLowerCase() : attrName + " From: " }}</label>
+                >{{ getLabelLeft() }}</label>
                 <input
                     :id="'inputDateFrom-' + snippetId"
-                    v-model="fromDate"
+                    v-model="inRangeValueLeft"
                     name="inputDateFrom"
                     class="snippetDateRangeFrom"
                     type="date"
-                    :min="minFrom"
-                    :max="maxFrom"
+                    :min="minimumValue"
                     :disabled="disable"
-                    @change="changeMin"
                 >
             </div>
             <div
@@ -355,15 +384,14 @@ export default {
             >
                 <label
                     :for="'inputDateUntil-' + snippetId"
-                >{{ Array.isArray(attrName) ? attrName[1].toLowerCase() : attrName + " To:" }}</label>
+                >{{ getLabelRight() }}</label>
                 <input
                     :id="'inputDateUntil-' + snippetId"
-                    v-model="untilDate"
+                    v-model="inRangeValueRight"
                     name="inputDateUntil"
                     class="snippetDateRangeUntil"
                     type="date"
-                    :min="minUntil"
-                    :max="maxUntil"
+                    :max="maximumValue"
                     :disabled="disable"
                 >
             </div>

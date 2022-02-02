@@ -10,231 +10,294 @@ localVue.use(Vuex);
 config.mocks.$t = key => key;
 
 describe("src/module/tools/filterGeneral/components/SnippetDateRange.vue", () => {
-    let wrapper;
+    describe("constructor", () => {
+        it("should have correct default values", () => {
+            const wrapper = shallowMount(SnippetDateRange, {localVue});
 
-    beforeEach(() => {
-        wrapper = shallowMount(SnippetDateRange, {
-            propsData: {
-                type: "dateRange",
-                attrName: ["baubeginn", "bauende"],
-                operator: "EQ",
-                prechecked: ["08.12.2021", "08.12.2021"],
-                label: "Date Slider",
-                visible: true,
-                format: "DD.MM.YYYY"
-            },
-            localVue
-        });
-    });
-
-    afterEach(() => {
-        if (wrapper) {
+            expect(wrapper.vm.api).to.be.null;
+            expect(wrapper.vm.info).to.be.false;
+            expect(wrapper.vm.format).to.equal("YYYY-MM-DD");
+            expect(wrapper.vm.label).to.be.true;
+            expect(wrapper.vm.minValue).to.be.undefined;
+            expect(wrapper.vm.maxValue).to.be.undefined;
+            expect(wrapper.vm.operator).to.equal("BETWEEN");
+            expect(wrapper.vm.prechecked).to.be.undefined;
+            expect(wrapper.vm.snippetId).to.equal(0);
+            expect(wrapper.vm.visible).to.be.true;
             wrapper.destroy();
-        }
-    });
-
-    it("should render correctly", () => {
-        expect(wrapper.find("div").classes("snippetDateRangeContainer")).to.be.true;
-    });
-
-    it("should render correctly with prechecked empty", () => {
-        wrapper = shallowMount(SnippetDateRange, {
-            propsData: {
-                type: "dateRange",
-                attrName: ["baubeginn", "bauende"],
-                operator: "EQ",
-                prechecked: [],
-                label: "Date Slider",
-                visible: true,
-                format: "DD.MM.YYYY"
-            },
-            localVue
         });
-        expect(wrapper.find(".snippetDateRangeFrom").element.value).to.be.equal("");
-        expect(wrapper.find(".snippetDateRangeUntil").element.value).to.be.equal("");
+        it("should render correctly with default values", () => {
+            const wrapper = shallowMount(SnippetDateRange, {localVue});
+
+            expect(wrapper.find("div").classes("snippetDateRangeContainer")).to.be.true;
+            wrapper.destroy();
+        });
+        it("should render correctly with prechecked as set value", () => {
+            const wrapper = shallowMount(SnippetDateRange, {
+                propsData: {
+                    format: "DD_YYYY_MM",
+                    prechecked: ["24_2021_07", "24_2021_12"]
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".snippetDateRangeFrom").element.value).to.be.equal("2021-07-24");
+            expect(wrapper.find(".snippetDateRangeUntil").element.value).to.be.equal("2021-12-24");
+        });
+        it("should render hidden if visible is false", () => {
+            const wrapper = shallowMount(SnippetDateRange, {
+                propsData: {
+                    visible: false
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".snippetDateRangeContainer").element.style._values.display).to.be.equal("none");
+            wrapper.destroy();
+        });
+        it("should render but also be disabled", () => {
+            const wrapper = shallowMount(SnippetDateRange, {
+                propsData: {
+                    disabled: true
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".snippetDateRangeFrom").exists()).to.be.true;
+            expect(wrapper.find(".snippetDateRangeUntil").exists()).to.be.true;
+            expect(wrapper.vm.disabled).to.be.true;
+            wrapper.destroy();
+        });
+        it("should render with a label if the label is a string", () => {
+            const wrapper = shallowMount(SnippetDateRange, {
+                propsData: {
+                    label: "foobar"
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".snippetDateRangeLabel").text()).to.be.equal("foobar");
+            wrapper.destroy();
+        });
+        it("should render without a label if label is a boolean and false", () => {
+            const wrapper = shallowMount(SnippetDateRange, {
+                propsData: {
+                    label: false
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".snippetDateRangeLabel").exists()).to.be.false;
+            wrapper.destroy();
+        });
+        it("should render the info span", () => {
+            const wrapper = shallowMount(SnippetDateRange, {
+                propsData: {
+                    info: "this is an info text"
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".info-text").exists()).to.be.true;
+            expect(wrapper.find(".info-text span").element.innerHTML).to.be.equal("this is an info text");
+            wrapper.destroy();
+        });
+        it("should not render the info button if info is a boolean and false", () => {
+            const wrapper = shallowMount(SnippetDateRange, {
+                propsData: {
+                    info: false
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".info-icon").exists()).to.be.false;
+            wrapper.destroy();
+        });
+        it("should set both minimumValue and maximumValue from properties if given", async () => {
+            const wrapper = await shallowMount(SnippetDateRange, {
+                propsData: {
+                    format: "DD_YYYY_MM",
+                    minValue: "24_2021_12",
+                    maxValue: "24_2022_12"
+                },
+                localVue
+            });
+
+            expect(wrapper.vm.minimumValue).to.equal("2021-12-24");
+            expect(wrapper.vm.maximumValue).to.equal("2022-12-24");
+            expect(wrapper.vm.value).to.deep.equal(["", ""]);
+            wrapper.destroy();
+        });
+        it("should set both minimumValue and maximumValue from properties and value from prechecked if given", () => {
+            const wrapper = shallowMount(SnippetDateRange, {
+                propsData: {
+                    format: "DD_YYYY_MM",
+                    minValue: "24_2021_12",
+                    maxValue: "24_2022_12",
+                    prechecked: ["24_2022_07", "24_2022_09"]
+                },
+                localVue
+            });
+
+            expect(wrapper.vm.minimumValue).to.equal("2021-12-24");
+            expect(wrapper.vm.maximumValue).to.equal("2022-12-24");
+            expect(wrapper.vm.value).to.deep.equal(["2022-07-24", "2022-09-24"]);
+            wrapper.destroy();
+        });
+        it("should ask the api for minimumValue or maximumValue if minValue and maxValue are not given", () => {
+            const wrapper = shallowMount(SnippetDateRange, {
+                propsData: {
+                    format: "DD_YYYY_MM",
+                    api: {
+                        getMinMax (attrName, onsuccess) {
+                            onsuccess({
+                                min: "24_2021_12",
+                                max: "24_2022_12"
+                            });
+                        }
+                    }
+                },
+                localVue
+            });
+
+            expect(wrapper.vm.minimumValue).to.equal("2021-12-24");
+            expect(wrapper.vm.maximumValue).to.equal("2022-12-24");
+            expect(wrapper.vm.value).to.deep.equal(["2021-12-24", "2022-12-24"]);
+            wrapper.destroy();
+        });
+        it("should ask the api for minimumValue if minValue is not given", () => {
+            let lastMinOnly = false,
+                lastMaxOnly = false;
+            const wrapper = shallowMount(SnippetDateRange, {
+                propsData: {
+                    format: "DD_YYYY_MM",
+                    maxValue: "24_2022_12",
+                    api: {
+                        getMinMax (attrName, onsuccess, onerror, minOnly, maxOnly) {
+                            lastMinOnly = minOnly;
+                            lastMaxOnly = maxOnly;
+                            onsuccess({
+                                min: "24_2021_12"
+                            });
+                        }
+                    }
+                },
+                localVue
+            });
+
+            expect(lastMinOnly).to.be.true;
+            expect(lastMaxOnly).to.be.false;
+            expect(wrapper.vm.minimumValue).to.equal("2021-12-24");
+            expect(wrapper.vm.maximumValue).to.equal("2022-12-24");
+            expect(wrapper.vm.value).to.deep.equal(["2021-12-24", "2022-12-24"]);
+            wrapper.destroy();
+        });
+        it("should ask the api for maximumValue if maxValue is not given", () => {
+            let lastMinOnly = false,
+                lastMaxOnly = false;
+            const wrapper = shallowMount(SnippetDateRange, {
+                propsData: {
+                    format: "DD_YYYY_MM",
+                    minValue: "24_2021_12",
+                    api: {
+                        getMinMax (attrName, onsuccess, onerror, minOnly, maxOnly) {
+                            lastMinOnly = minOnly;
+                            lastMaxOnly = maxOnly;
+                            onsuccess({
+                                max: "24_2022_12"
+                            });
+                        }
+                    }
+                },
+                localVue
+            });
+
+            expect(lastMinOnly).to.be.false;
+            expect(lastMaxOnly).to.be.true;
+            expect(wrapper.vm.minimumValue).to.equal("2021-12-24");
+            expect(wrapper.vm.maximumValue).to.equal("2022-12-24");
+            expect(wrapper.vm.value).to.deep.equal(["2021-12-24", "2022-12-24"]);
+            wrapper.destroy();
+        });
+        it("should not emit the current rule on startup, if no prechecked is given", async () => {
+            const wrapper = await shallowMount(SnippetDateRange, {
+                propsData: {
+                    format: "DD_YYYY_MM",
+                    minValue: "24_2021_12",
+                    maxValue: "24_2022_12"
+                },
+                localVue
+            });
+
+            expect(wrapper.emitted("deleteRule")).to.be.undefined;
+            wrapper.destroy();
+        });
     });
 
-    it("should render correctly with prechecked set", () => {
-        wrapper = shallowMount(SnippetDateRange, {
-            propsData: {
-                type: "dateRange",
-                attrName: ["baubeginn", "bauende"],
-                operator: "EQ",
-                prechecked: ["08.12.2021", "08.12.2021"],
-                label: "Date Slider",
-                visible: true,
-                format: "DD.MM.YYYY"
-            },
-            localVue
+    describe("emitCurrentRule", () => {
+        it("should emit changeRule function with the expected values", () => {
+            const wrapper = shallowMount(SnippetDateRange, {
+                propsData: {
+                    snippetId: 1234,
+                    visible: false,
+                    attrName: "attrName",
+                    operator: "operator",
+                    format: "format"
+                },
+                localVue
+            });
+
+            wrapper.vm.emitCurrentRule("value", "startup");
+            expect(wrapper.emitted("changeRule")).to.be.an("array").and.to.have.lengthOf(1);
+            expect(wrapper.emitted("changeRule")[0]).to.be.an("array").and.to.have.lengthOf(1);
+            expect(wrapper.emitted("changeRule")[0][0]).to.deep.equal({
+                snippetId: 1234,
+                startup: "startup",
+                fixed: true,
+                attrName: "attrName",
+                operator: "operator",
+                format: "format",
+                value: "value"
+            });
+            wrapper.destroy();
         });
-        expect(wrapper.find(".snippetDateRangeFrom").element.value).to.be.equal("2021-12-08");
-        expect(wrapper.find(".snippetDateRangeUntil").element.value).to.be.equal("2021-12-08");
     });
 
-    it("should render with pre set min and max values", () => {
-        wrapper = shallowMount(SnippetDateRange, {
-            propsData: {
-                type: "dateRange",
-                attrName: ["baubeginn", "bauende"],
-                operator: "EQ",
-                prechecked: ["08.12.2021", "08.12.2021"],
-                label: "Date Slider",
-                visible: true,
-                format: "DD.MM.YYYY",
-                minValue: "01.12.2021",
-                maxValue: "10.12.2021"
-            },
-            localVue
+    describe("deleteCurrentRule", () => {
+        it("should emit deleteRule function with its snippetId", () => {
+            const wrapper = shallowMount(SnippetDateRange, {
+                propsData: {
+                    snippetId: 1234
+                },
+                localVue
+            });
+
+            wrapper.vm.deleteCurrentRule();
+            expect(wrapper.emitted("deleteRule")).to.be.an("array").and.to.have.lengthOf(1);
+            expect(wrapper.emitted("deleteRule")[0]).to.be.an("array").and.to.have.lengthOf(1);
+            expect(wrapper.emitted("deleteRule")[0][0]).to.equal(1234);
+            wrapper.destroy();
         });
-
-        const snippetFrom = wrapper.find(".snippetDateRangeFrom").element,
-            snippetUntil = wrapper.find(".snippetDateRangeUntil").element;
-
-        expect(wrapper.find("div").classes("snippetDateRangeContainer")).to.be.true;
-        expect(snippetFrom.min).to.be.equal("2021-12-01");
-        expect(snippetUntil.min).to.be.equal("2021-12-01");
-        expect(snippetFrom.max).to.be.equal("2021-12-10");
-        expect(snippetUntil.max).to.be.equal("2021-12-10");
     });
 
-    it("should render snippet with min values in 'from' and max values in 'until' snippet", () => {
-        wrapper = shallowMount(SnippetDateRange, {
-            propsData: {
-                type: "dateRange",
-                attrName: "baubeginn",
-                operator: "EQ",
-                prechecked: ["08.12.2021", "08.12.2021"],
-                label: "Date Slider",
-                visible: true,
-                format: "DD.MM.YYYY",
-                minValue: "01.12.2021",
-                maxValue: "10.12.2021"
-            },
-            localVue
+    describe("resetSnippet", () => {
+        it("should reset the snippet value and call the given onsuccess handler", async () => {
+            const wrapper = shallowMount(SnippetDateRange, {
+                propsData: {
+                    format: "DD_YYYY_MM",
+                    prechecked: ["24_2021_07", "24_2021_12"]
+                },
+                localVue
+            });
+            let called = false;
+
+            expect(wrapper.vm.value).to.deep.equal(["2021-07-24", "2021-12-24"]);
+            await wrapper.vm.resetSnippet(() => {
+                called = true;
+            });
+            expect(wrapper.vm.value).to.deep.equal(["", ""]);
+            expect(called).to.be.true;
+            wrapper.destroy();
         });
-
-        const snippetFrom = wrapper.find(".snippetDateRangeFrom").element,
-            snippetUntil = wrapper.find(".snippetDateRangeUntil").element;
-
-        expect(snippetFrom.min).to.be.equal("2021-12-01");
-        expect(snippetUntil.max).to.be.equal("2021-12-10");
-    });
-
-    it("date fields should be the same as minValue if prechecked min value is earlier than minValue", () => {
-        wrapper = shallowMount(SnippetDateRange, {
-            propsData: {
-                type: "dateRange",
-                attrName: "baubeginn",
-                operator: "EQ",
-                prechecked: ["01.12.2021", "08.12.2021"],
-                label: "Date Slider",
-                visible: true,
-                format: "DD.MM.YYYY",
-                minValue: "02.12.2021",
-                maxValue: "10.12.2021"
-            },
-            localVue
-        });
-
-        expect(wrapper.vm.minFrom).to.be.equal("2021-12-02");
-        expect(wrapper.vm.minUntil).to.be.equal("2021-12-02");
-    });
-
-    it("date fields should be the same as maxValue if prechecked max value is later than maxValue", () => {
-        wrapper = shallowMount(SnippetDateRange, {
-            propsData: {
-                type: "dateRange",
-                attrName: "baubeginn",
-                operator: "EQ",
-                prechecked: ["08.12.2021", "09.12.2021"],
-                label: "Date Slider",
-                visible: true,
-                format: "DD.MM.YYYY",
-                minValue: "01.12.2021",
-                maxValue: "08.12.2021"
-            },
-            localVue
-        });
-
-        expect(wrapper.vm.maxFrom).to.be.equal("2021-12-08");
-        expect(wrapper.vm.maxUntil).to.be.equal("2021-12-08");
-    });
-
-    it("should not render if minValue is higher than max value", () => {
-        wrapper = shallowMount(SnippetDateRange, {
-            propsData: {
-                type: "dateRange",
-                attrName: ["baubeginn", "bauende"],
-                operator: "EQ",
-                prechecked: ["08.12.2021", "08.12.2021"],
-                label: "Date Slider",
-                visible: true,
-                format: "DD.MM.YYYY",
-                minValue: "10.12.2021",
-                maxValue: "01.12.2021"
-            },
-            localVue
-        });
-
-        expect(wrapper.vm.invalid).to.be.true;
-    });
-
-    it("should render but also be disabled", () => {
-        wrapper = shallowMount(SnippetDateRange, {
-            propsData: {
-                disabled: true,
-                type: "dateRange",
-                attrName: ["baubeginn", "bauende"],
-                operator: "EQ",
-                prechecked: ["08.12.2021", "08.12.2021"],
-                label: "Date Slider",
-                visible: true,
-                format: "DD.MM.YYYY"
-            },
-            localVue
-        });
-        expect(wrapper.find(".snippetDateRangeFrom").exists()).to.be.true;
-        expect(wrapper.find(".snippetDateRangeUntil").exists()).to.be.true;
-        expect(wrapper.vm.disabled).to.be.true;
-
-    });
-
-    it.skip("should render and be enabaled", () => {
-        wrapper = shallowMount(SnippetDateRange, {
-            propsData: {
-                disabled: false,
-                type: "dateRange",
-                attrName: ["baubeginn", "bauende"],
-                operator: "EQ",
-                prechecked: ["08.12.2021", "08.12.2021"],
-                label: "Date Slider",
-                visible: true,
-                format: "DD.MM.YYYY"
-            },
-            localVue
-        });
-        expect(wrapper.find(".snippetDateRangeFrom").exists()).to.be.true;
-        expect(wrapper.find(".snippetDateRangeUntil").exists()).to.be.true;
-        expect(wrapper.vm.disable).to.be.false;
-        expect(wrapper.vm.disabled).to.be.false;
-    });
-
-    it("should render the info span", () => {
-        wrapper = shallowMount(SnippetDateRange, {
-            propsData: {
-                disabled: false,
-                type: "dateRange",
-                attrName: ["baubeginn", "bauende"],
-                operator: "EQ",
-                prechecked: ["08.12.2021", "08.12.2021"],
-                label: "Date Slider",
-                visible: true,
-                format: "DD.MM.YYYY",
-                info: "Die Info"
-            },
-            localVue
-        });
-        expect(wrapper.find(".info-text").exists()).to.be.true;
-        expect(wrapper.find(".info-text span").element.innerHTML).to.be.equal("Die Info");
     });
 });

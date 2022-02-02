@@ -242,6 +242,7 @@ export default {
                     :table-heads="headers"
                     :table-data="results"
                     :on-row-click-callback="setShowResultList.bind(this, false)"
+                    :max-zoom="zoomLevel"
                 />
             </template>
             <template v-else>

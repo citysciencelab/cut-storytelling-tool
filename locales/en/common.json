@@ -400,18 +400,25 @@
                 "serviceFour": "Service 4"
             },
             "filterGeneral": {
-                "selectAll": "Select all",
-                "selectBoxLabel": "Choose an Option",
-                "checkBoxInfo": "The checkbox can be enabled/disabled by a mouse click.",
-                "dropDownInfo": "You can select one or more values from the given list of values.",
-                "textFieldInfo": "You can enter the desired search criteria in the text field.",
-                "sliderInfo": "To enter a numerical value as a search criterion, you can move the slider to the right or left. In addition, you can enter the value directly in the input field.",
-                "sliderRangeInfo": "For entering two numerical values as range for the search criteria, you can slide the two sliders to the right or left. Additionally, you can enter the values directly in the input fields.",
-                "dateInfo": "To enter a date as a search criteria, click in the date input field and select a date from the opened calendar.",
-                "dateRangeInfo": "To enter a date range as a search criteria, click in the input field for the start or end date and select a start or end date from the open calendar.",
-                "dropDownEmptyList": "List is empty",
-                "dropDownNoElements": "No elements found",
-                "searchInMapExtent": "Search in current map extent"
+                "searchInMapExtent": "Search in current map extent",
+                "snippetTags": {
+                    "resetAll": "Reset all"
+                },
+                "info": {
+                    "snippetCheckbox": "The checkbox can be enabled/disabled by a mouse click.",
+                    "snippetDropdown": "You can select one or more values from the given list of values.",
+                    "snippetInput": "You can enter the desired search criteria in the text field.",
+                    "snippetSlider": "To enter a numerical value as a search criterion, you can move the slider to the right or left. In addition, you can enter the value directly in the input field.",
+                    "snippetSliderRange": "For entering two numerical values as range for the search criteria, you can slide the two sliders to the right or left. Additionally, you can enter the values directly in the input fields.",
+                    "snippetDate": "To enter a date as a search criteria, click in the date input field and select a date from the opened calendar.",
+                    "snippetDateRange": "To enter a date range as a search criteria, click in the input field for the start or end date and select a start or end date from the open calendar."
+                },
+                "dropdown": {
+                    "selectAll": "Select all",
+                    "defaultLabel": "Choose an Option",
+                    "emptyList": "List is empty",
+                    "noElements": "No elements found",
+                }
             },
             "filter": {
                 "result": "Result",

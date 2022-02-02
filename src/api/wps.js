@@ -1,5 +1,5 @@
 import axios from "axios";
-import xml2json from "./xml2json";
+import xml2json from "./utils/xml2json";
 
 export default {
     /**

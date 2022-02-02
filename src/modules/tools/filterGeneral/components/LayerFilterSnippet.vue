@@ -8,6 +8,7 @@ import SnippetDropdown from "./SnippetDropdown.vue";
 import SnippetInput from "./SnippetInput.vue";
 import SnippetSlider from "./SnippetSlider.vue";
 import SnippetSliderRange from "./SnippetSliderRange.vue";
+import SnippetTag from "./SnippetTag.vue";
 import isObject from "../../../../utils/isObject";
 import FilterApi from "../interfaces/filter.api.js";
 
@@ -22,6 +23,7 @@ export default {
         SnippetInput,
         SnippetSlider,
         SnippetSliderRange,
+        SnippetTag,
         ProgressBar
     },
     props: {
@@ -31,7 +33,18 @@ export default {
         },
         mapHandler: {
             type: Object,
-            required: true
+            required: false,
+            default: undefined
+        },
+        liveZoomToFeatures: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        minScale: {
+            type: Number,
+            required: false,
+            default: 0
         }
     },
     data () {
@@ -46,76 +59,188 @@ export default {
             layerModel: null,
             layerService: null,
             api: null,
-            searchInMapExtent: false
+            searchInMapExtent: false,
+            filteredFeatureIds: [],
+            enableZoom: true
         };
     },
+    computed: {
+        snippetTagsResetAllText () {
+            return this.$t("common:modules.tools.filterGeneral.snippetTags.resetAll");
+        }
+    },
     watch: {
-        paging () {
-            if (this.paging.page >= this.paging.total) {
+        paging (val) {
+            if (val.page >= val.total) {
                 this.setFormDisable(false);
+
+                if (this.liveZoomToFeatures && this.enableZoom) {
+                    this.mapHandler.zoomToFilteredFeature(this.minScale, this.filteredFeatureIds, this.layerConfig?.layerId, error => {
+                        console.warn("map error", error);
+                    });
+                    this.setZoom(false);
+                }
             }
         }
     },
     created () {
-        this.activateLayer(this.layerConfig?.layerId);
-        this.setLayerService(this.layerModel);
+        if (!this.isExternalService(this.layerConfig?.service)) {
+            const layerId = this.layerConfig?.layerId || this.layerConfig?.service?.layerId;
 
-        this.api = new FilterApi(this.layerConfig.filterId, this.layerService);
-    },
-    mounted () {
-        if (Array.isArray(this.layerConfig?.snippets)) {
-            this.layerConfig.snippets.forEach(snippet => {
-                this.rules.push({
-                    attrName: snippet.attrName
-                });
-            });
+            if (typeof layerId !== "string" || !layerId) {
+                console.warn("Please check your filter configuration: You need to give either a layerId or a service object (or both) for a layer to filter.");
+                return;
+            }
+
+            this.layerModel = this.getActivatedLayerByLayerId(layerId);
+            if (!this.layerModel) {
+                console.warn("Please check your filter configuration: The given layerId does not exists in your config.json. Configure an extra service object for your filter configuration or add the layer to your config.json.");
+                return;
+            }
+
+            if (!this.layerConfig?.service) {
+                this.layerService = this.getServiceByLayerModel(layerId, this.layerModel);
+            }
+            else {
+                this.layerService = this.layerConfig.service;
+                if (!this.layerService?.layerId) {
+                    this.layerService.layerId = layerId;
+                }
+            }
         }
+        else {
+            this.layerService = this.layerConfig?.service;
+        }
+
+        this.setupSnippetIds();
+        this.api = new FilterApi(this.layerConfig.filterId, this.layerService);
     },
     methods: {
         /**
-         * Checking if the snippet type exists
+         * Checking if the snippet type exists.
          * @param {Object} snippet the snippet configuration
          * @param {String} type the type
          * @returns {Boolean} true if the snippet type is the expected type
          */
-        checkSnippetType (snippet, type) {
-            return isObject(snippet) && Object.prototype.hasOwnProperty.call(snippet, "type") && snippet.type === type;
+        hasThisSnippetTheExpectedType (snippet, type) {
+            return isObject(snippet) && typeof snippet.type === "string" && snippet.type === type;
         },
-        commandChanged (value) {
+        /**
+         * Changes the internal value for searchInMapExtent.
+         * @param {Boolean} value the value to change to
+         * @returns {void}
+         */
+        searchInMapExtentChanged (value) {
             this.searchInMapExtent = value;
         },
         /**
-         * Triggered when a rule changed at a snippet.
-         * @param {Object} obj the message
-         * @param {Number} obj.snippetId the id of the snippet matching the rules index
-         * @param {Object} obj.rule the rule to set
+         * Resets a snippet by its snippetId.
+         * @param {Number} snippetId the snippetId of the snippet to reset
+         * @param {Function} onsuccess the function to call on success
          * @returns {void}
          */
-        ruleChanged (obj) {
-            const snippetId = obj?.snippetId;
+        resetSnippet (snippetId, onsuccess) {
+            const comp = this.$refs["snippet-" + snippetId];
 
-            if (typeof snippetId !== "number" || snippetId >= this.rules.length) {
-                return;
+            if (Array.isArray(comp) && typeof comp[0]?.resetSnippet === "function") {
+                comp[0].resetSnippet(onsuccess);
             }
-            this.rules[snippetId] = obj?.rule;
+            else if (typeof onsuccess === "function") {
+                onsuccess();
+            }
         },
         /**
-         * Returns the current rules with a plausability check.
-         * @returns {Object[]} the rules as array of objects
+         * Resets all snippets and deletes rules.
+         * @param {Function} onsuccess the function to call on success
+         * @returns {void}
          */
-        getCurrentRules () {
-            if (!Array.isArray(this.rules)) {
-                return [];
+        resetAllSnippets (onsuccess) {
+            let resetCount = this.layerConfig.snippets.length;
+
+            this.layerConfig.snippets.forEach(snippet => {
+                this.resetSnippet(snippet.snippetId, () => {
+                    resetCount--;
+                    if (resetCount <= 0 && typeof onsuccess === "function") {
+                        onsuccess();
+                    }
+                });
+            });
+        },
+        /**
+         * Checks if the given structure is a rule.
+         * @param {*} something the unknown structure to check
+         * @returns {Boolean} true if this is a rule, false if not
+         */
+        isRule (something) {
+            return !(
+                typeof something !== "object" || something === null
+                || typeof something?.snippetId !== "number"
+                || typeof something?.startup !== "boolean"
+                || typeof something?.fixed !== "boolean"
+                || typeof something?.attrName !== "string"
+                || typeof something?.operator !== "string"
+            );
+        },
+        /**
+         * Checks if there are rules with fixed=false in the set of rules.
+         * @returns {Boolean} true if there are unfixed rules, false if no rules or only fixed rules are left
+         */
+        hasUnfixedRules () {
+            const len = this.rules.length;
+
+            for (let i = 0; i < len; i++) {
+                if (!this.rules[i] || this.isRule(this.rules[i]) && this.rules[i].fixed) {
+                    continue;
+                }
+                return true;
             }
+            return false;
+        },
+        /**
+         * Triggered when a rule changed at a snippet.
+         * @param {Object} rule the rule to set - has to be valid against LayerFilterSnippet.isRule
+         * @returns {void}
+         */
+        changeRule (rule) {
+            if (this.isRule(rule)) {
+                this.$set(this.rules, rule.snippetId, rule);
+            }
+        },
+        /**
+         * Removes a rule by its snippetId.
+         * @param {Number} snippetId the snippetId of the rule to delete
+         * @returns {void}
+         */
+        deleteRule (snippetId) {
+            this.$set(this.rules, snippetId, false);
+        },
+        /**
+         * Removes all rules.
+         * @returns {void}
+         */
+        deleteAllRules () {
+            const len = this.rules.length;
+
+            for (let i = 0; i < len; i++) {
+                if (this.isRule(this.rules[i]) && this.rules[i].fixed) {
+                    continue;
+                }
+                this.$set(this.rules, i, false);
+            }
+        },
+        /**
+         * Returns an array where every entry is a rule.
+         * @returns {Object[]} an array of rules, no other values included like false or empty.
+         */
+        getCleanArrayOfRules () {
             const result = [];
 
             this.rules.forEach(rule => {
-                if (typeof rule !== "object" || rule === null || !rule.attrName || !rule.operator) {
+                if (!this.isRule(rule)) {
                     return;
                 }
                 result.push(rule);
             });
-
             return result;
         },
         /**
@@ -131,9 +256,11 @@ export default {
                     paging: this.layerConfig?.paging ? this.layerConfig.paging : 1000,
                     searchInMapExtent: this.searchInMapExtent
                 },
-                rules: this.getCurrentRules()
+                rules: this.getCleanArrayOfRules()
             };
 
+            this.filteredFeatureIds = [];
+            this.setZoom(true);
             this.setFormDisable(true);
             this.showStopButton(true);
 
@@ -149,6 +276,14 @@ export default {
                     this.runApiFilter(filterQuestion);
                 }
             }
+        },
+        /**
+         * Enable or disable the function zoom to feature
+         * @param {Boolean} value true/false to en/disable zoom to feature
+         * @returns {void}
+         */
+        setZoom (value) {
+            this.enableZoom = value;
         },
         /**
          * Sets the disabled flag
@@ -169,42 +304,63 @@ export default {
         /**
          * Activating the layer for filtering
          * @param {String} layerId the layer Id from config
-         * @returns {void}
+         * @returns {Object} the activated layer model
          */
-        activateLayer (layerId) {
-            if (typeof layerId === "string" && (!this.layerConfig?.service || this.layerConfig?.service?.type.toLowerCase() === "ol")) {
-                const layers = Radio.request("Map", "getLayers"),
-                    visibleLayer = typeof layers?.getArray !== "function" ? [] : layers.getArray().filter(layer => {
-                        return layer.getVisible() === true && layer.get("id") === layerId;
-                    });
+        getActivatedLayerByLayerId (layerId) {
+            const layers = Radio.request("Map", "getLayers"),
+                visibleLayer = typeof layers?.getArray !== "function" ? [] : layers.getArray().filter(layer => {
+                    return layer.getVisible() === true && layer.get("id") === layerId;
+                });
 
-                if (Array.isArray(visibleLayer) && !visibleLayer.length) {
-                    Radio.trigger("ModelList", "addModelsByAttributes", {"id": layerId});
-                }
-
-                this.layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layerId});
+            if (Array.isArray(visibleLayer) && !visibleLayer.length) {
+                Radio.trigger("ModelList", "addModelsByAttributes", {"id": layerId});
             }
+            return Radio.request("ModelList", "getModelByAttributes", {"id": layerId});
         },
         /**
-         * Setting layer service
+         * Returns the service using the given layer model.
+         * @param {Number} layerId the id of the layer
          * @param {Object} layerModel the layer model
+         * @returns {Object} the service object
+         */
+        getServiceByLayerModel (layerId, layerModel) {
+            return {
+                type: "OL",
+                layerId,
+                url: layerModel.get("url"),
+                typename: layerModel.get("featureType"),
+                namespace: layerModel.get("featureNS")
+            };
+        },
+        /**
+         * Returns true if the given service object wants to use an external interface.
+         * @param {Object} service the service to check
+         * @returns {Boolean} true if this service links to an external interface, false if not.
+         */
+        isExternalService (service) {
+            return isObject(service) && String(service.type).toLowerCase() !== "ol";
+        },
+        /**
+         * For initialization only: Runs through the snippets and creates layer-unique snippetIds.
+         * @pre the snippet objects in layerConfig have no snippetIds
+         * @post the snippet objects in layerConfig are having snippetIds
          * @returns {void}
          */
-        setLayerService (layerModel) {
-            if (isObject(this.layerConfig?.service)) {
-                this.layerService = this.layerConfig?.service;
-            }
-            else if (isObject(layerModel) && typeof this.layerConfig?.service === "undefined") {
-                this.layerService = {
-                    "type": "OL",
-                    "layerId": this.layerConfig?.layerId,
-                    "url": layerModel.get("url"),
-                    "typename": layerModel.get("featureType"),
-                    "namespace": layerModel.get("featureNS")
-                };
-            }
-            else if (layerModel === null && typeof this.layerConfig?.service === "undefined") {
-                console.warn("Please check your configuration of layerId or service, the portal could not load them");
+        setupSnippetIds () {
+            const snippets = this.layerConfig?.snippets;
+
+            if (Array.isArray(snippets)) {
+                snippets.forEach((snippet, snippetId) => {
+                    if (typeof snippet === "string") {
+                        snippets[snippetId] = {
+                            snippetId,
+                            attrName: snippet
+                        };
+                    }
+                    else if (typeof snippet === "object" && snippet !== null) {
+                        snippet.snippetId = snippetId;
+                    }
+                });
             }
         },
         /**
@@ -216,9 +372,19 @@ export default {
             this.api.filter(filterQuestion, filterAnswer => {
                 this.paging = filterAnswer.paging;
 
-                this.mapHandler.visualize(filterAnswer, error => {
-                    console.warn("map error", error);
-                });
+                if (isObject(this.mapHandler) && typeof this.mapHandler.visualize === "function") {
+                    this.mapHandler.visualize(filterAnswer, error => {
+                        console.warn("map error", error);
+                    });
+                }
+
+                if (Array.isArray(filterAnswer?.items) && filterAnswer.items.length) {
+                    filterAnswer.items.forEach(item => {
+                        if (!this.filteredFeatureIds.includes(item.getId())) {
+                            this.filteredFeatureIds.push(item.getId());
+                        }
+                    });
+                }
             }, error => {
                 console.warn("filter error", error);
             });
@@ -245,12 +411,39 @@ export default {
         class="panel-body"
     >
         <div
+            v-if="layerConfig.snippetTags !== false"
+            class="snippetTags"
+        >
+            <div v-show="hasUnfixedRules()">
+                <SnippetTag
+                    :is-reset-all="true"
+                    label=""
+                    :value="snippetTagsResetAllText"
+                    @resetAllSnippets="resetAllSnippets"
+                    @deleteAllRules="deleteAllRules"
+                />
+            </div>
+            <div
+                v-for="(rule, ruleIndex) in rules"
+                :key="'rule-' + ruleIndex"
+            >
+                <SnippetTag
+                    v-if="isRule(rule) && rule.fixed === false"
+                    :snippet-id="rule.snippetId"
+                    :label="rule.attrName"
+                    :value="String(rule.value)"
+                    @resetSnippet="resetSnippet"
+                    @deleteRule="deleteRule"
+                />
+            </div>
+        </div>
+        <div
             v-if="Object.prototype.hasOwnProperty.call(layerConfig, 'searchInMapExtent') && layerConfig.searchInMapExtent"
             class="snippet"
         >
             <SnippetCheckboxFilterInMapExtent
                 :filter-id="layerConfig.filterId"
-                @commandChanged="commandChanged"
+                @commandChanged="searchInMapExtentChanged"
             />
         </div>
         <div
@@ -261,27 +454,29 @@ export default {
                 :key="'snippet-' + indexSnippet"
             >
                 <div
-                    v-if="checkSnippetType(snippet, 'checkbox')"
+                    v-if="hasThisSnippetTheExpectedType(snippet, 'checkbox')"
                     class="snippet"
                 >
                     <SnippetCheckbox
-                        :api="api"
+                        :ref="'snippet-' + snippet.snippetId"
                         :attr-name="snippet.attrName"
                         :disabled="disabled"
                         :info="snippet.info"
                         :label="snippet.label"
                         :operator="snippet.operator"
                         :prechecked="snippet.prechecked"
-                        :snippet-id="indexSnippet"
+                        :snippet-id="snippet.snippetId"
                         :visible="snippet.visible"
-                        @ruleChanged="ruleChanged"
+                        @changeRule="changeRule"
+                        @deleteRule="deleteRule"
                     />
                 </div>
                 <div
-                    v-else-if="checkSnippetType(snippet, 'dropdown')"
+                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'dropdown')"
                     class="snippet"
                 >
                     <SnippetDropdown
+                        :ref="'snippet-' + snippet.snippetId"
                         :api="api"
                         :attr-name="snippet.attrName"
                         :add-select-all="snippet.addSelectAll"
@@ -295,18 +490,19 @@ export default {
                         :placeholder="snippet.placeholder"
                         :prechecked="snippet.prechecked"
                         :render-icons="snippet.renderIcons"
-                        :snippet-id="indexSnippet"
+                        :snippet-id="snippet.snippetId"
                         :value="snippet.value"
                         :visible="snippet.visible"
-                        @ruleChanged="ruleChanged"
+                        @changeRule="changeRule"
+                        @deleteRule="deleteRule"
                     />
                 </div>
                 <div
-                    v-else-if="checkSnippetType(snippet, 'text')"
+                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'text')"
                     class="snippet"
                 >
                     <SnippetInput
-                        :api="api"
+                        :ref="'snippet-' + snippet.snippetId"
                         :attr-name="snippet.attrName"
                         :disabled="disabled"
                         :info="snippet.info"
@@ -314,16 +510,18 @@ export default {
                         :operator="snippet.operator"
                         :placeholder="snippet.placeholder"
                         :prechecked="snippet.prechecked"
-                        :snippet-id="indexSnippet"
+                        :snippet-id="snippet.snippetId"
                         :visible="snippet.visible"
-                        @ruleChanged="ruleChanged"
+                        @changeRule="changeRule"
+                        @deleteRule="deleteRule"
                     />
                 </div>
                 <div
-                    v-else-if="checkSnippetType(snippet, 'date')"
+                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'date')"
                     class="snippet"
                 >
                     <SnippetDate
+                        :ref="'snippet-' + snippet.snippetId"
                         :api="api"
                         :attr-name="snippet.attrName"
                         :disabled="disabled"
@@ -334,16 +532,18 @@ export default {
                         :min-value="snippet.minValue"
                         :operator="snippet.operator"
                         :prechecked="snippet.prechecked"
-                        :snippet-id="indexSnippet"
+                        :snippet-id="snippet.snippetId"
                         :visible="snippet.visible"
-                        @ruleChanged="ruleChanged"
+                        @changeRule="changeRule"
+                        @deleteRule="deleteRule"
                     />
                 </div>
                 <div
-                    v-else-if="checkSnippetType(snippet, 'dateRange')"
+                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'dateRange')"
                     class="snippet"
                 >
                     <SnippetDateRange
+                        :ref="'snippet-' + snippet.snippetId"
                         :api="api"
                         :attr-name="snippet.attrName"
                         :disabled="disabled"
@@ -354,19 +554,21 @@ export default {
                         :min-value="snippet.minValue"
                         :operator="snippet.operator"
                         :prechecked="snippet.prechecked"
-                        :snippet-id="indexSnippet"
+                        :snippet-id="snippet.snippetId"
                         :visible="snippet.visible"
-                        @ruleChanged="ruleChanged"
+                        @changeRule="changeRule"
+                        @deleteRule="deleteRule"
                     />
                 </div>
                 <div
-                    v-else-if="checkSnippetType(snippet, 'slider')"
+                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'slider')"
                     class="snippet"
                 >
                     <SnippetSlider
+                        :ref="'snippet-' + snippet.snippetId"
                         :api="api"
                         :attr-name="snippet.attrName"
-                        :decimal-step="snippet.decimalStep"
+                        :decimal-places="snippet.decimalPlaces"
                         :disabled="disabled"
                         :info="snippet.info"
                         :label="snippet.label"
@@ -374,19 +576,21 @@ export default {
                         :max-value="snippet.maxValue"
                         :operater="snippet.operator"
                         :prechecked="snippet.prechecked"
-                        :snippet-id="indexSnippet"
+                        :snippet-id="snippet.snippetId"
                         :visible="snippet.visible"
-                        @ruleChanged="ruleChanged"
+                        @changeRule="changeRule"
+                        @deleteRule="deleteRule"
                     />
                 </div>
                 <div
-                    v-else-if="checkSnippetType(snippet, 'sliderRange')"
+                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'sliderRange')"
                     class="snippet"
                 >
                     <SnippetSliderRange
+                        :ref="'snippet-' + snippet.snippetId"
                         :api="api"
                         :attr-name="snippet.attrName"
-                        :decimal-step="snippet.decimalStep"
+                        :decimal-places="snippet.decimalPlaces"
                         :disabled="disabled"
                         :info="snippet.info"
                         :label="snippet.label"
@@ -394,9 +598,10 @@ export default {
                         :max-value="snippet.maxValue"
                         :operater="snippet.operator"
                         :prechecked="snippet.prechecked"
-                        :snippet-id="indexSnippet"
+                        :snippet-id="snippet.snippetId"
                         :visible="snippet.visible"
-                        @ruleChanged="ruleChanged"
+                        @changeRule="changeRule"
+                        @deleteRule="deleteRule"
                     />
                 </div>
             </div>
@@ -432,5 +637,9 @@ export default {
         b {
             display: block;
         }
+    }
+    .snippetTags {
+        display: block;
+        margin-bottom: 25px;
     }
 </style>

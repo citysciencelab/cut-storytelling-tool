@@ -1,6 +1,6 @@
 import Vuex from "vuex";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
-import SnippetDateComponent from "../../../components/SnippetDate.vue";
+import SnippetDate from "../../../components/SnippetDate.vue";
 import {expect} from "chai";
 
 const localVue = createLocalVue();
@@ -10,254 +10,292 @@ localVue.use(Vuex);
 config.mocks.$t = key => key;
 
 describe("src/modules/tools/generalFilter/components/SnippetDate.vue", () => {
-    let wrapper;
+    describe("constructor", () => {
+        it("should have correct default values", () => {
+            const wrapper = shallowMount(SnippetDate, {localVue});
 
-    beforeEach(() => {
-        wrapper = shallowMount(SnippetDateComponent, {
-            propsData: {
-                attrName: "baubeginn",
-                label: "Baubegin",
-                type: "date",
-                format: "DD.MM.YYYY",
-                operator: "EQ",
-                prechecked: "12.12.2021",
-                visible: true,
-                minValue: "01.01.2021",
-                maxValue: "31.12.2021"
-            },
-            localVue
-        });
-    });
-
-    afterEach(() => {
-        if (wrapper) {
+            expect(wrapper.vm.api).to.be.null;
+            expect(wrapper.vm.info).to.be.false;
+            expect(wrapper.vm.format).to.equal("YYYY-MM-DD");
+            expect(wrapper.vm.label).to.be.true;
+            expect(wrapper.vm.minValue).to.be.undefined;
+            expect(wrapper.vm.maxValue).to.be.undefined;
+            expect(wrapper.vm.operator).to.equal("EQ");
+            expect(wrapper.vm.prechecked).to.be.undefined;
+            expect(wrapper.vm.snippetId).to.equal(0);
+            expect(wrapper.vm.visible).to.be.true;
             wrapper.destroy();
-        }
-    });
-
-    it("should render correctly", () => {
-        expect(wrapper.find("div").classes("snippetDateContainer")).to.be.true;
-    });
-
-    it("should set the invalid false", () => {
-        expect(wrapper.vm.invalid).to.be.false;
-    });
-
-    it("should set the invalid true, if the min date is greater than the max date", () => {
-        wrapper = shallowMount(SnippetDateComponent, {
-            propsData: {
-                operator: "EQ",
-                format: "DD.MM.YYYY",
-                prechecked: "12.12.2021",
-                label: "Baubegin",
-                visible: true,
-                minValue: "01.01.2022",
-                maxValue: "31.12.2021"
-            },
-            localVue
         });
-        expect(wrapper.vm.invalid).to.be.true;
+        it("should render correctly with default values", () => {
+            const wrapper = shallowMount(SnippetDate, {localVue});
+
+            expect(wrapper.find("div").classes("snippetDateContainer")).to.be.true;
+            wrapper.destroy();
+        });
+        it("should render correctly with prechecked as set value", () => {
+            const wrapper = shallowMount(SnippetDate, {
+                propsData: {
+                    format: "DD_YYYY_MM",
+                    prechecked: "24_2021_12"
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".snippetDate").element.value).to.be.equal("2021-12-24");
+        });
+        it("should render hidden if visible is false", () => {
+            const wrapper = shallowMount(SnippetDate, {
+                propsData: {
+                    visible: false
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".snippetDateContainer").element.style._values.display).to.be.equal("none");
+            wrapper.destroy();
+        });
+        it("should render but also be disabled", () => {
+            const wrapper = shallowMount(SnippetDate, {
+                propsData: {
+                    disabled: true
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".snippetDate").exists()).to.be.true;
+            expect(wrapper.vm.disabled).to.be.true;
+            wrapper.destroy();
+        });
+        it("should render with a label if the label is a string", () => {
+            const wrapper = shallowMount(SnippetDate, {
+                propsData: {
+                    label: "foobar"
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".snippetDateLabel").text()).to.be.equal("foobar");
+            wrapper.destroy();
+        });
+        it("should render without a label if label is a boolean and false", () => {
+            const wrapper = shallowMount(SnippetDate, {
+                propsData: {
+                    label: false
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".snippetDateLabel").exists()).to.be.false;
+            wrapper.destroy();
+        });
+        it("should render the info span", () => {
+            const wrapper = shallowMount(SnippetDate, {
+                propsData: {
+                    info: "this is an info text"
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".info-text").exists()).to.be.true;
+            expect(wrapper.find(".info-text span").element.innerHTML).to.be.equal("this is an info text");
+            wrapper.destroy();
+        });
+        it("should not render the info button if info is a boolean and false", () => {
+            const wrapper = shallowMount(SnippetDate, {
+                propsData: {
+                    info: false
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".info-icon").exists()).to.be.false;
+            wrapper.destroy();
+        });
+        it("should set both minimumValue and maximumValue from properties if given", async () => {
+            const wrapper = await shallowMount(SnippetDate, {
+                propsData: {
+                    format: "DD_YYYY_MM",
+                    minValue: "24_2021_12",
+                    maxValue: "24_2022_12"
+                },
+                localVue
+            });
+
+            expect(wrapper.vm.minimumValue).to.equal("2021-12-24");
+            expect(wrapper.vm.maximumValue).to.equal("2022-12-24");
+            expect(wrapper.vm.value).to.equal("");
+            wrapper.destroy();
+        });
+        it("should set both minimumValue and maximumValue from properties and value from prechecked if given", () => {
+            const wrapper = shallowMount(SnippetDate, {
+                propsData: {
+                    format: "DD_YYYY_MM",
+                    minValue: "24_2021_12",
+                    maxValue: "24_2022_12",
+                    prechecked: "24_2021_07"
+                },
+                localVue
+            });
+
+            expect(wrapper.vm.minimumValue).to.equal("2021-12-24");
+            expect(wrapper.vm.maximumValue).to.equal("2022-12-24");
+            expect(wrapper.vm.value).to.equal("2021-07-24");
+            wrapper.destroy();
+        });
+        it("should ask the api for minimumValue or maximumValue if minValue and maxValue are not given", () => {
+            const wrapper = shallowMount(SnippetDate, {
+                propsData: {
+                    format: "DD_YYYY_MM",
+                    api: {
+                        getMinMax (attrName, onsuccess) {
+                            onsuccess({
+                                min: "24_2021_12",
+                                max: "24_2022_12"
+                            });
+                        }
+                    }
+                },
+                localVue
+            });
+
+            expect(wrapper.vm.minimumValue).to.equal("2021-12-24");
+            expect(wrapper.vm.maximumValue).to.equal("2022-12-24");
+            expect(wrapper.vm.value).to.equal("");
+            wrapper.destroy();
+        });
+        it("should ask the api for minimumValue if minValue is not given", () => {
+            let lastMinOnly = false,
+                lastMaxOnly = false;
+            const wrapper = shallowMount(SnippetDate, {
+                propsData: {
+                    format: "DD_YYYY_MM",
+                    maxValue: "24_2022_12",
+                    api: {
+                        getMinMax (attrName, onsuccess, onerror, minOnly, maxOnly) {
+                            lastMinOnly = minOnly;
+                            lastMaxOnly = maxOnly;
+                            onsuccess({
+                                min: "24_2021_12"
+                            });
+                        }
+                    }
+                },
+                localVue
+            });
+
+            expect(lastMinOnly).to.be.true;
+            expect(lastMaxOnly).to.be.false;
+            expect(wrapper.vm.minimumValue).to.equal("2021-12-24");
+            expect(wrapper.vm.maximumValue).to.equal("2022-12-24");
+            expect(wrapper.vm.value).to.equal("");
+            wrapper.destroy();
+        });
+        it("should ask the api for maximumValue if maxValue is not given", () => {
+            let lastMinOnly = false,
+                lastMaxOnly = false;
+            const wrapper = shallowMount(SnippetDate, {
+                propsData: {
+                    format: "DD_YYYY_MM",
+                    minValue: "24_2021_12",
+                    api: {
+                        getMinMax (attrName, onsuccess, onerror, minOnly, maxOnly) {
+                            lastMinOnly = minOnly;
+                            lastMaxOnly = maxOnly;
+                            onsuccess({
+                                max: "24_2022_12"
+                            });
+                        }
+                    }
+                },
+                localVue
+            });
+
+            expect(lastMinOnly).to.be.false;
+            expect(lastMaxOnly).to.be.true;
+            expect(wrapper.vm.minimumValue).to.equal("2021-12-24");
+            expect(wrapper.vm.maximumValue).to.equal("2022-12-24");
+            expect(wrapper.vm.value).to.equal("");
+            wrapper.destroy();
+        });
+        it("should not emit the current rule on startup, if no prechecked is given", async () => {
+            const wrapper = await shallowMount(SnippetDate, {
+                propsData: {
+                    format: "DD_YYYY_MM",
+                    minValue: "24_2021_12",
+                    maxValue: "24_2022_12"
+                },
+                localVue
+            });
+
+            expect(wrapper.emitted("deleteRule")).to.be.undefined;
+            wrapper.destroy();
+        });
     });
 
-    it("should set the invalid true, if max date is incorrect", () => {
-        wrapper = shallowMount(SnippetDateComponent, {
-            propsData: {
-                operator: "EQ",
-                format: "DD.MM.YYYY",
-                prechecked: "12.12.2021",
-                label: "Baubegin",
-                visible: true,
-                minValue: "31.12.2020",
-                maxValue: ""
-            },
-            localVue
+    describe("emitCurrentRule", () => {
+        it("should emit changeRule function with the expected values", () => {
+            const wrapper = shallowMount(SnippetDate, {
+                propsData: {
+                    snippetId: 1234,
+                    visible: false,
+                    attrName: "attrName",
+                    operator: "operator",
+                    format: "format"
+                },
+                localVue
+            });
+
+            wrapper.vm.emitCurrentRule("value", "startup");
+            expect(wrapper.emitted("changeRule")).to.be.an("array").and.to.have.lengthOf(1);
+            expect(wrapper.emitted("changeRule")[0]).to.be.an("array").and.to.have.lengthOf(1);
+            expect(wrapper.emitted("changeRule")[0][0]).to.deep.equal({
+                snippetId: 1234,
+                startup: "startup",
+                fixed: true,
+                attrName: "attrName",
+                operator: "operator",
+                format: "format",
+                value: "value"
+            });
+            wrapper.destroy();
         });
-        expect(wrapper.vm.invalid).to.be.true;
     });
 
-    it("should set the invalid true, if min date is incorrect", () => {
-        wrapper = shallowMount(SnippetDateComponent, {
-            propsData: {
-                operator: "EQ",
-                format: "DD.MM.YYYY",
-                prechecked: "12.12.2021",
-                label: "Baubegin",
-                visible: true,
-                minValue: "",
-                maxValue: "31.12.2020"
-            },
-            localVue
+    describe("deleteCurrentRule", () => {
+        it("should emit deleteRule function with its snippetId", () => {
+            const wrapper = shallowMount(SnippetDate, {
+                propsData: {
+                    snippetId: 1234
+                },
+                localVue
+            });
+
+            wrapper.vm.deleteCurrentRule();
+            expect(wrapper.emitted("deleteRule")).to.be.an("array").and.to.have.lengthOf(1);
+            expect(wrapper.emitted("deleteRule")[0]).to.be.an("array").and.to.have.lengthOf(1);
+            expect(wrapper.emitted("deleteRule")[0][0]).to.equal(1234);
+            wrapper.destroy();
         });
-        expect(wrapper.vm.invalid).to.be.true;
     });
 
-    it("should render correctly with prechecked", () => {
-        wrapper = shallowMount(SnippetDateComponent, {
-            propsData: {
-                operator: "EQ",
-                format: "DD.MM.YYYY",
-                prechecked: "12.12.2021",
-                label: "Baubegin",
-                visible: true,
-                minValue: "01.01.2021",
-                maxValue: "31.12.2021"
-            },
-            localVue
-        });
-        expect(wrapper.find(".snippetDate").element.value).to.be.equal("2021-12-12");
-    });
+    describe("resetSnippet", () => {
+        it("should reset the snippet value and call the given onsuccess handler", async () => {
+            const wrapper = shallowMount(SnippetDate, {
+                propsData: {
+                    format: "DD_YYYY_MM",
+                    prechecked: "24_2021_12"
+                },
+                localVue
+            });
+            let called = false;
 
-    it("should render correctly with visible as false", () => {
-        wrapper = shallowMount(SnippetDateComponent, {
-            propsData: {
-                operator: "EQ",
-                format: "DD.MM.YYYY",
-                prechecked: "12.12.2021",
-                label: "Baubegin",
-                visible: false,
-                minValue: "01.01.2021",
-                maxValue: "31.12.2021"
-            },
-            localVue
+            expect(wrapper.vm.value).to.equal("2021-12-24");
+            await wrapper.vm.resetSnippet(() => {
+                called = true;
+            });
+            expect(wrapper.vm.value).to.equal("");
+            expect(called).to.be.true;
+            wrapper.destroy();
         });
-        expect(wrapper.find(".snippetDateContainer").element.style._values.display).to.be.equal("none");
-    });
-
-    it("should set the min and max with correct format", () => {
-        wrapper = shallowMount(SnippetDateComponent, {
-            propsData: {
-                operator: "EQ",
-                format: "DD.MM.YYYY",
-                prechecked: "12.12.2021",
-                label: "Baubegin",
-                visible: true,
-                minValue: "01.01.2021",
-                maxValue: "31.12.2021"
-            },
-            localVue
-        });
-        expect(wrapper.vm.min).to.be.equal("2021-01-01");
-        expect(wrapper.vm.max).to.be.equal("2021-12-31");
-    });
-
-    it("should return the max, if the given value is greater than maxValue", () => {
-        wrapper = shallowMount(SnippetDateComponent, {
-            propsData: {
-                operator: "EQ",
-                format: "DD.MM.YYYY",
-                prechecked: "12.12.2022",
-                label: "Baubegin",
-                visible: true,
-                minValue: "01.01.2021",
-                maxValue: "31.12.2021"
-            },
-            localVue
-        });
-        expect(wrapper.vm.getValueInRange("2022-12-12")).to.be.equal("2021-12-31");
-    });
-
-    it("should return the min, if the given value is less than minValue", () => {
-        wrapper = shallowMount(SnippetDateComponent, {
-            propsData: {
-                operator: "EQ",
-                format: "DD.MM.YYYY",
-                prechecked: "12.12.2022",
-                label: "Baubegin",
-                visible: true,
-                minValue: "01.01.2021",
-                maxValue: "31.12.2021"
-            },
-            localVue
-        });
-        expect(wrapper.vm.getValueInRange("2020-01-01")).to.be.equal("2021-01-01");
-    });
-
-    it("should set the min as prechecked, if prechecked is less than minValue", () => {
-        wrapper = shallowMount(SnippetDateComponent, {
-            propsData: {
-                operator: "EQ",
-                format: "DD.MM.YYYY",
-                prechecked: "12.12.2020",
-                label: "Baubegin",
-                visible: true,
-                minValue: "01.01.2021",
-                maxValue: "31.12.2021"
-            },
-            localVue
-        });
-        expect(wrapper.vm.min).to.be.equal("2021-01-01");
-    });
-
-    it("should set the max as prechecked, if prechecked is greater than maxValue", () => {
-        wrapper = shallowMount(SnippetDateComponent, {
-            propsData: {
-                operator: "EQ",
-                format: "DD.MM.YYYY",
-                prechecked: "12.12.2022",
-                label: "Baubegin",
-                visible: true,
-                minValue: "01.01.2021",
-                maxValue: "31.12.2021"
-            },
-            localVue
-        });
-        expect(wrapper.vm.max).to.be.equal("2021-12-31");
-    });
-
-    it.skip("should render but also be disabled", () => {
-        wrapper = shallowMount(SnippetDateComponent, {
-            propsData: {
-                disabled: true,
-                operator: "EQ",
-                format: "DD.MM.YYYY",
-                prechecked: "12.12.2022",
-                label: "Baubegin",
-                visible: true,
-                minValue: "01.01.2021",
-                maxValue: "31.12.2021"
-            },
-            localVue
-        });
-        expect(wrapper.find("#dateInput").exists()).to.be.true;
-        expect(wrapper.vm.disabled).to.be.true;
-
-    });
-
-    it.skip("should render and be enabaled", () => {
-        wrapper = shallowMount(SnippetDateComponent, {
-            propsData: {
-                disabled: false,
-                operator: "EQ",
-                format: "DD.MM.YYYY",
-                prechecked: "12.12.2021",
-                label: "Baubegin",
-                visible: true,
-                minValue: "01.01.2021",
-                maxValue: "31.12.2021"
-            },
-            localVue
-        });
-        expect(wrapper.find("#dateInput").exists()).to.be.true;
-        expect(wrapper.vm.disable).to.be.false;
-        expect(wrapper.vm.disabled).to.be.false;
-    });
-
-    it("should render the info span", () => {
-        wrapper = shallowMount(SnippetDateComponent, {
-            propsData: {
-                disabled: false,
-                operator: "EQ",
-                format: "DD.MM.YYYY",
-                prechecked: "12.12.2021",
-                label: "Baubegin",
-                visible: true,
-                minValue: "01.01.2021",
-                maxValue: "31.12.2021",
-                info: "Die Info"
-            },
-            localVue
-        });
-        expect(wrapper.find(".info-text").exists()).to.be.true;
-        expect(wrapper.find(".info-text span").element.innerHTML).to.be.equal("Die Info");
     });
 });
