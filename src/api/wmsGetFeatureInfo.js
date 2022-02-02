@@ -16,9 +16,33 @@ export function requestGfi (mimeType, url) {
             const parsedDocument = parseDocumentString(docString, mimeType);
 
             if (mimeType === "text/html") {
-                if (parsedDocument.getElementsByTagName("tbody")[0]?.children.length >= 1) {
+                /* The WMS specification basically says "do whatever":
+                 *   https://portal.ogc.org/files/?artifact_id=14416
+                 *
+                 * Due to this, there's no clear indicator for "no feature" responses.
+                 * However, no GFI window is to be shown on such responses.
+                 *
+                 * Implementation rule to show GFI, derived from known services:
+                 * 1. Nodes exist
+                 * 2. No <body> exists, or it has child nodes
+                 * 3. No <tbody> exists, or it has child nodes
+                 *
+                 * Please mind that this ruleset is not absolute and may require
+                 * tweaking on "new" appearing implementations for empty responses.
+                 */
+
+                if (parsedDocument.childNodes.length > 0 &&
+                    (
+                        !parsedDocument.getElementsByTagName("body")[0] ||
+                        parsedDocument.getElementsByTagName("body")[0].children.length > 0
+                    ) &&
+                    (
+                        !parsedDocument.getElementsByTagName("tbody")[0] ||
+                        parsedDocument.getElementsByTagName("tbody")[0].children.length > 0
+                    )) {
                     return docString;
                 }
+
                 return null;
             }
 
