@@ -61,7 +61,8 @@ export default {
             api: null,
             searchInMapExtent: false,
             filteredFeatureIds: [],
-            enableZoom: true
+            enableZoom: true,
+            isFeatureLoaded: false
         };
     },
     computed: {
@@ -268,14 +269,27 @@ export default {
                 this.layerModel.set("isSelected", true);
                 this.layerModel.set("isVisible", true);
 
-                this.layerModel.layer.getSource().on("featuresloadend", () => {
-                    this.runApiFilter(filterQuestion);
-                });
-
                 if (this.layerModel.layer.getSource().getFeatures().length) {
                     this.runApiFilter(filterQuestion);
                 }
+                else {
+                    this.layerModel.layer.getSource().on("featuresloadend", () => {
+                        if (this.isFeatureLoaded) {
+                            return;
+                        }
+                        this.runApiFilter(filterQuestion);
+                        this.setFeatureLoaded(true);
+                    });
+                }
             }
+        },
+        /**
+         * Set if feature is loaded or not
+         * @param {Boolean} value true/false to set feature loaded
+         * @returns {void}
+         */
+        setFeatureLoaded (value) {
+            this.isFeatureLoaded = value;
         },
         /**
          * Enable or disable the function zoom to feature
