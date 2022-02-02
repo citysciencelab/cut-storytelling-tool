@@ -102,7 +102,7 @@ export default {
                 return !isNaN(value) ? value : 0;
             },
             set (value) {
-                this.$set(this.value, 0, value);
+                this.$set(this.value, 0, Math.min(this.inRangeValueRight, Math.max(this.minimumValue, value)));
             }
         },
         inRangeValueRight: {
@@ -112,7 +112,7 @@ export default {
                 return !isNaN(value) ? value : 0;
             },
             set (value) {
-                this.$set(this.value, 1, value);
+                this.$set(this.value, 1, Math.min(this.maximumValue, Math.max(this.inRangeValueLeft, value)));
             }
         }
     },

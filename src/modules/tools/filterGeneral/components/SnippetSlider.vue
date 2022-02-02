@@ -212,6 +212,42 @@ export default {
          */
         getSliderSteps (decimalPlaces) {
             return 1 / Math.pow(10, decimalPlaces);
+        },
+        /**
+         * Checking if the input field is valid and reset to valid value
+         * @param {Event} evt - input event
+         * @returns {void}
+         */
+        checkInput (evt) {
+            if (evt?.target?.value === "") {
+                this.getAlertRangeText(undefined);
+                this.$refs.inputNumber.value = this.inRangeValue;
+            }
+            else {
+                const value = parseFloat(evt?.target?.value);
+
+                if (value < this.minimumValue || value > this.maximumValue) {
+                    this.getAlertRangeText(value);
+                    this.$refs.inputNumber.value = this.inRangeValue;
+                }
+            }
+        },
+        /**
+         * Getting slider range error text in alerting box
+         * @param {String} value the input value from input field
+         * @returns {void}
+         */
+        getAlertRangeText (value) {
+            if (value === undefined) {
+                this.$store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.valueEmptyErrorMessage"));
+            }
+            else {
+                this.$store.dispatch("Alerting/addSingleAlert", i18next.t("common:snippets.slider.valueOutOfRangeErrorMessage", {
+                    inputValue: value,
+                    minValueSlider: this.minimumValue,
+                    maxValueSlider: this.maximumValue
+                }));
+            }
         }
     }
 };
@@ -241,6 +277,7 @@ export default {
         >{{ labelText }}</label>
         <input
             :id="'snippetSlider-' + snippetId"
+            ref="inputNumber"
             v-model="inRangeValue"
             class="input-single"
             type="number"
@@ -248,6 +285,8 @@ export default {
             :max="maximumValue"
             :name="label"
             :disabled="disable"
+            @blur="checkInput"
+            @keyup.enter="checkInput"
         >
         <div class="slider-input-container">
             <input
