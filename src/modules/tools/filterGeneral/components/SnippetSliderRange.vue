@@ -316,7 +316,7 @@ export default {
                     <input
                         :id="'snippetSliderInputMin-' + snippetId"
                         v-model="inRangeValueLeft"
-                        class="slider-input-min"
+                        class="slider-input-min form-control"
                         type="number"
                         :disabled="disable"
                         :step="getSliderSteps(decimalPlaces)"
@@ -334,7 +334,7 @@ export default {
                     <input
                         :id="'snippetSliderInputMax-' + snippetId"
                         v-model="inRangeValueRight"
-                        class="slider-input-max"
+                        class="slider-input-max form-control"
                         type="number"
                         :disabled="disable"
                         :step="getSliderSteps(decimalPlaces)"
@@ -401,9 +401,10 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    .form-control {
+        height: 28px;
+    }
     .sliderInputWrapper {
-        padding: 5px;
-        margin-bottom: 10px;
         height: 20px;
     }
     .info-icon {
@@ -478,7 +479,7 @@ export default {
         position: absolute;
         margin: auto;
         top: 0;
-        bottom: 0;
+        bottom: 1px;
         background-color: transparent;
         pointer-events: none;
     }
@@ -489,12 +490,12 @@ export default {
     .slider-range-track {
         width: 100%;
         height: 15px;
-        background-color: #ddd;
+        background-color: #3177b1;
         position: absolute;
         margin: auto;
         top: 0;
         bottom: 0;
-        border-radius: 0px;
+        border-radius: 10px;
     }
     input[type="range"]::-webkit-slider-runnable-track {
         -webkit-appearance: none;
@@ -579,13 +580,13 @@ export default {
             float: left;
             position: absolute;
             left: 0;
-            top: 45px;
+            top: 30px;
         }
         &.max {
             float: right;
             position: absolute;
             right: 0;
-            top: 45px;
+            top: 30px;
         }
     }
     input[type="range"].disabled::-webkit-slider-thumb {

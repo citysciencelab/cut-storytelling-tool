@@ -204,7 +204,6 @@ export default {
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
     .snippetCheckboxContainer {
-        margin-bottom: 10px;
         height: auto;
     }
     .snippetCheckboxContainer .info-icon {
@@ -247,8 +246,7 @@ export default {
         }
     }
     .snippetCheckboxContainer .right {
-        position: absolute;
-        right: 10px;
+        float: right;
     }
     .category-layer .right {
         right: 30px;

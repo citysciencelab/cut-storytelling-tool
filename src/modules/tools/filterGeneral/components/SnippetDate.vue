@@ -328,7 +328,7 @@ export default {
             <input
                 :id="'snippetDate-' + snippetId"
                 v-model="inRangeValue"
-                class="snippetDate"
+                class="snippetDate form-control"
                 type="date"
                 name="dateInput"
                 :max="maximumValue"
@@ -352,9 +352,10 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    .form-control {
+        height: 28px;
+    }
     .snippetDateContainer {
-        padding: 5px;
-        margin-bottom: 10px;
         height: auto;
     }
     .snippetDateContainer input {
@@ -364,6 +365,7 @@ export default {
         outline: 0;
         position: relative;
         margin-bottom: 5px;
+        height: 34px;
     }
     .snippetDateContainer .info-icon {
         float: right;
@@ -397,7 +399,6 @@ export default {
     }
     label {
         text-transform: capitalize;
-        margin: 0;
     }
     input[type="date"]::-webkit-calendar-picker-indicator {
         background: transparent;
