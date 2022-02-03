@@ -7,6 +7,18 @@
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 
 ---
+## Unreleased - in development
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+---
 ## v2.18.0 - 2022-02-03
 ### Added
 - Package vue-multiselect: 2.1.6 is installed.
