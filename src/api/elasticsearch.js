@@ -76,7 +76,7 @@ export async function sendRequest (url, requestConfig, result) {
         }
         else {
             resultWithHits.status = "error";
-            resultWithHits.message = "error occured in xhr Request!" + event;
+            resultWithHits.message = "error occured in xhr Request!" + res.statusText;
             resultWithHits.hits = [];
         }
         return resultWithHits;
@@ -94,7 +94,7 @@ export async function sendRequest (url, requestConfig, result) {
         }
         else {
             resultWithHits.status = "error";
-            resultWithHits.message = "error occured in xhr Request!" + event;
+            resultWithHits.message = "error occured in xhr Request!" + res.statusText;
             resultWithHits.hits = [];
         }
         return resultWithHits;
