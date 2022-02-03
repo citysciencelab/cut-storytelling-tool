@@ -71,7 +71,14 @@ export async function sendRequest (url, requestConfig, result) {
             },
             signal: controller.signal
         });
-        resultWithHits = res.data.hits;
+        if (res.status === 200) {
+            resultWithHits = res.data.hits;
+        }
+        else {
+            resultWithHits.status = "error";
+            resultWithHits.message = "error occured in xhr Request!" + event;
+            resultWithHits.hits = [];
+        }
         return resultWithHits;
     }
     else if (type === "POST") {
@@ -82,7 +89,14 @@ export async function sendRequest (url, requestConfig, result) {
             },
             signal: controller.signal
         });
-        resultWithHits = res.data.hits;
+        if (res.status === 200) {
+            resultWithHits = res.data.hits;
+        }
+        else {
+            resultWithHits.status = "error";
+            resultWithHits.message = "error occured in xhr Request!" + event;
+            resultWithHits.hits = [];
+        }
         return resultWithHits;
     }
     return resultWithHits;
