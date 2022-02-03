@@ -62,7 +62,9 @@ export default {
             searchInMapExtent: false,
             filteredFeatureIds: [],
             enableZoom: true,
-            isFeatureLoaded: false
+            isFeatureLoaded: false,
+            snippets: [],
+            postSnippetKey: ""
         };
     },
     computed: {
@@ -85,38 +87,123 @@ export default {
         }
     },
     created () {
-        if (!this.isExternalService(this.layerConfig?.service)) {
-            const layerId = this.layerConfig?.layerId || this.layerConfig?.service?.layerId;
-
-            if (typeof layerId !== "string" || !layerId) {
-                console.warn("Please check your filter configuration: You need to give either a layerId or a service object (or both) for a layer to filter.");
-                return;
-            }
-
-            this.layerModel = this.getActivatedLayerByLayerId(layerId);
-            if (!this.layerModel) {
-                console.warn("Please check your filter configuration: The given layerId does not exists in your config.json. Configure an extra service object for your filter configuration or add the layer to your config.json.");
-                return;
-            }
-
-            if (!this.layerConfig?.service) {
-                this.layerService = this.getServiceByLayerModel(layerId, this.layerModel);
-            }
-            else {
-                this.layerService = this.layerConfig.service;
-                if (!this.layerService?.layerId) {
-                    this.layerService.layerId = layerId;
-                }
-            }
+        if (Array.isArray(this.layerConfig?.snippets)) {
+            this.snippets = this.layerConfig?.snippets;
         }
-        else {
-            this.layerService = this.layerConfig?.service;
-        }
-
+        this.setLayerService();
         this.setupSnippetIds();
         this.api = new FilterApi(this.layerConfig.filterId, this.layerService);
     },
+    mounted () {
+        if (typeof this.layerConfig?.snippets !== "boolean") {
+            this.checkSnippetType(this.snippets);
+        }
+    },
     methods: {
+        /**
+         * Checking if the type of snippet is already defined
+         * @param {Object[]} snippets the snippet object in array list
+         * @returns {void}
+         */
+        checkSnippetType (snippets) {
+            let isSnippetTypeMissing = false;
+
+            if (!Array.isArray(snippets) || !snippets.length) {
+                isSnippetTypeMissing = true;
+            }
+            else {
+                snippets.forEach(snippet => {
+                    if (!snippet.type) {
+                        isSnippetTypeMissing = true;
+                    }
+                    this.rules.push(false);
+                });
+            }
+
+            if (isSnippetTypeMissing) {
+                this.autoRecognizeSnippetTypes(snippets);
+            }
+        },
+        /**
+         * Calls the api to get the attrTypes and dataTypes and creates new or alters present snippets.
+         * @param {Object[]} snippets an array list of snippet objects
+         * @returns {void}
+         */
+        autoRecognizeSnippetTypes (snippets) {
+            this.api.getAttrTypes(attrTypes => {
+                if (Array.isArray(snippets) && snippets.length) {
+                    snippets.forEach(snippet => {
+                        if (!snippet.type) {
+                            snippet.type = this.getDefaultSnippetTypeByDataType(attrTypes[snippet.attrName]);
+                        }
+
+                        if (!Object.prototype.hasOwnProperty.call(snippet, "multiselect")) {
+                            if (snippet.matchingMode === "AND") {
+                                snippet.multiselect = false;
+                                delete snippet.matchingMode;
+                            }
+                            else {
+                                snippet.multiselect = true;
+                                delete snippet.matchingMode;
+                            }
+                        }
+                        if (!Object.prototype.hasOwnProperty.call(snippet, "operator")) {
+                            snippet.operator = this.getDefaultOperatorByDataType(attrTypes[snippet.attrName]);
+                        }
+                    });
+
+                    this.setPostSnippetKey("rerender");
+                }
+                else {
+                    Object.entries(attrTypes).forEach(([attrName, dataType]) => {
+                        this.rules.push(false);
+                        snippets.push({
+                            type: this.getDefaultSnippetTypeByDataType(dataType),
+                            attrName,
+                            operator: this.getDefaultOperatorByDataType(dataType),
+                            visible: true
+                        });
+                    });
+                    this.setPostSnippetKey("rerender");
+                }
+            }, err => {
+                console.warn(err);
+            });
+        },
+        /**
+         * Returns the default snippet type for the given data type.
+         * @param {String} dataType the data type e.g. string, number or boolean
+         * @returns {String} the type of the snippet to use for the given dataType
+         */
+        getDefaultSnippetTypeByDataType (dataType) {
+            switch (dataType) {
+                case "boolean":
+                    return "checkbox";
+                case "string":
+                    return "dropdown";
+                case "number":
+                    return "sliderRange";
+                default:
+                    return "text";
+            }
+        },
+        /**
+         * Returns the default operator for the given data type.
+         * @param {String} dataType the data type e.g. string, number or boolean
+         * @returns {String} the operator to use as default for the given dataType
+         */
+        getDefaultOperatorByDataType (dataType) {
+            switch (dataType) {
+                case "boolean":
+                    return "EQ";
+                case "string":
+                    return "EQ";
+                case "number":
+                    return "BETWEEN";
+                default:
+                    return "EQ";
+            }
+        },
         /**
          * Checking if the snippet type exists.
          * @param {Object} snippet the snippet configuration
@@ -301,6 +388,14 @@ export default {
             this.enableZoom = value;
         },
         /**
+         * Set the post snippet key to rerender the snippet
+         * @param {String} value the post snippet key
+         * @returns {void}
+         */
+        setPostSnippetKey (value) {
+            this.postSnippetKey = value;
+        },
+        /**
          * Sets the disabled flag
          * @param {Boolean} disable true/false to en/disable form
          * @returns {void}
@@ -376,6 +471,39 @@ export default {
                         snippet.snippetId = snippetId;
                     }
                 });
+            }
+        },
+        /**
+         * Setting layer service depends on if it is external or not
+         * @returns {void}
+         */
+        setLayerService () {
+            if (!this.isExternalService(this.layerConfig?.service)) {
+                const layerId = this.layerConfig?.layerId || this.layerConfig?.service?.layerId;
+
+                if (typeof layerId !== "string" || !layerId) {
+                    console.warn("Please check your filter configuration: You need to give either a layerId or a service object (or both) for a layer to filter.");
+                    return;
+                }
+
+                this.layerModel = this.getActivatedLayerByLayerId(layerId);
+                if (!this.layerModel) {
+                    console.warn("Please check your filter configuration: The given layerId does not exists in your config.json. Configure an extra service object for your filter configuration or add the layer to your config.json.");
+                    return;
+                }
+
+                if (!this.layerConfig?.service) {
+                    this.layerService = this.getServiceByLayerModel(layerId, this.layerModel);
+                }
+                else {
+                    this.layerService = this.layerConfig.service;
+                    if (!this.layerService?.layerId) {
+                        this.layerService.layerId = layerId;
+                    }
+                }
+            }
+            else {
+                this.layerService = this.layerConfig?.service;
             }
         },
         /**
@@ -462,181 +590,177 @@ export default {
             />
         </div>
         <div
-            v-if="Object.prototype.hasOwnProperty.call(layerConfig, 'snippets') && Array.isArray(layerConfig.snippets)"
+            v-for="(snippet, indexSnippet) in snippets"
+            :key="'snippet-' + indexSnippet + postSnippetKey"
         >
             <div
-                v-for="(snippet, indexSnippet) in layerConfig.snippets"
-                :key="'snippet-' + indexSnippet"
+                v-if="hasThisSnippetTheExpectedType(snippet, 'checkbox')"
+                class="snippet"
             >
-                <div
-                    v-if="hasThisSnippetTheExpectedType(snippet, 'checkbox')"
-                    class="snippet"
-                >
-                    <SnippetCheckbox
-                        :ref="'snippet-' + snippet.snippetId"
-                        :attr-name="snippet.attrName"
-                        :disabled="disabled"
-                        :info="snippet.info"
-                        :label="snippet.label"
-                        :operator="snippet.operator"
-                        :prechecked="snippet.prechecked"
-                        :snippet-id="snippet.snippetId"
-                        :visible="snippet.visible"
-                        @changeRule="changeRule"
-                        @deleteRule="deleteRule"
-                    />
-                </div>
-                <div
-                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'dropdown')"
-                    class="snippet"
-                >
-                    <SnippetDropdown
-                        :ref="'snippet-' + snippet.snippetId"
-                        :api="api"
-                        :attr-name="snippet.attrName"
-                        :add-select-all="snippet.addSelectAll"
-                        :auto-init="snippet.autoInit"
-                        :disabled="disabled"
-                        :display="snippet.display"
-                        :info="snippet.info"
-                        :label="snippet.label"
-                        :layer-id="layerConfig.layerId"
-                        :multiselect="snippet.multiselect"
-                        :operator="snippet.operator"
-                        :placeholder="snippet.placeholder"
-                        :prechecked="snippet.prechecked"
-                        :render-icons="snippet.renderIcons"
-                        :snippet-id="snippet.snippetId"
-                        :value="snippet.value"
-                        :visible="snippet.visible"
-                        @changeRule="changeRule"
-                        @deleteRule="deleteRule"
-                    />
-                </div>
-                <div
-                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'text')"
-                    class="snippet"
-                >
-                    <SnippetInput
-                        :ref="'snippet-' + snippet.snippetId"
-                        :attr-name="snippet.attrName"
-                        :disabled="disabled"
-                        :info="snippet.info"
-                        :label="snippet.label"
-                        :operator="snippet.operator"
-                        :placeholder="snippet.placeholder"
-                        :prechecked="snippet.prechecked"
-                        :snippet-id="snippet.snippetId"
-                        :visible="snippet.visible"
-                        @changeRule="changeRule"
-                        @deleteRule="deleteRule"
-                    />
-                </div>
-                <div
-                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'date')"
-                    class="snippet"
-                >
-                    <SnippetDate
-                        :ref="'snippet-' + snippet.snippetId"
-                        :api="api"
-                        :attr-name="snippet.attrName"
-                        :disabled="disabled"
-                        :info="snippet.info"
-                        :format="snippet.format"
-                        :label="snippet.label"
-                        :max-value="snippet.maxValue"
-                        :min-value="snippet.minValue"
-                        :operator="snippet.operator"
-                        :prechecked="snippet.prechecked"
-                        :snippet-id="snippet.snippetId"
-                        :visible="snippet.visible"
-                        @changeRule="changeRule"
-                        @deleteRule="deleteRule"
-                    />
-                </div>
-                <div
-                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'dateRange')"
-                    class="snippet"
-                >
-                    <SnippetDateRange
-                        :ref="'snippet-' + snippet.snippetId"
-                        :api="api"
-                        :attr-name="snippet.attrName"
-                        :disabled="disabled"
-                        :info="snippet.info"
-                        :format="snippet.format"
-                        :label="snippet.label"
-                        :max-value="snippet.maxValue"
-                        :min-value="snippet.minValue"
-                        :operator="snippet.operator"
-                        :prechecked="snippet.prechecked"
-                        :snippet-id="snippet.snippetId"
-                        :visible="snippet.visible"
-                        @changeRule="changeRule"
-                        @deleteRule="deleteRule"
-                    />
-                </div>
-                <div
-                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'slider')"
-                    class="snippet"
-                >
-                    <SnippetSlider
-                        :ref="'snippet-' + snippet.snippetId"
-                        :api="api"
-                        :attr-name="snippet.attrName"
-                        :decimal-places="snippet.decimalPlaces"
-                        :disabled="disabled"
-                        :info="snippet.info"
-                        :label="snippet.label"
-                        :min-value="snippet.minValue"
-                        :max-value="snippet.maxValue"
-                        :operater="snippet.operator"
-                        :prechecked="snippet.prechecked"
-                        :snippet-id="snippet.snippetId"
-                        :visible="snippet.visible"
-                        @changeRule="changeRule"
-                        @deleteRule="deleteRule"
-                    />
-                </div>
-                <div
-                    v-else-if="hasThisSnippetTheExpectedType(snippet, 'sliderRange')"
-                    class="snippet"
-                >
-                    <SnippetSliderRange
-                        :ref="'snippet-' + snippet.snippetId"
-                        :api="api"
-                        :attr-name="snippet.attrName"
-                        :decimal-places="snippet.decimalPlaces"
-                        :disabled="disabled"
-                        :info="snippet.info"
-                        :label="snippet.label"
-                        :min-value="snippet.minValue"
-                        :max-value="snippet.maxValue"
-                        :operater="snippet.operator"
-                        :prechecked="snippet.prechecked"
-                        :snippet-id="snippet.snippetId"
-                        :visible="snippet.visible"
-                        @changeRule="changeRule"
-                        @deleteRule="deleteRule"
-                    />
-                </div>
-            </div>
-            <div class="snippet">
-                <button
-                    @click="filter()"
-                >
-                    Filtern
-                </button>
-                <button
-                    v-if="paging.page < paging.total && showStop"
-                    @click="stopfilter()"
-                >
-                    {{ $t("button.stop") }}
-                </button>
-                <ProgressBar
-                    :paging="paging"
+                <SnippetCheckbox
+                    :ref="'snippet-' + snippet.snippetId"
+                    :attr-name="snippet.attrName"
+                    :disabled="disabled"
+                    :info="snippet.info"
+                    :label="snippet.label"
+                    :operator="snippet.operator"
+                    :prechecked="snippet.prechecked"
+                    :snippet-id="snippet.snippetId"
+                    :visible="snippet.visible"
+                    @changeRule="changeRule"
+                    @deleteRule="deleteRule"
                 />
             </div>
+            <div
+                v-else-if="hasThisSnippetTheExpectedType(snippet, 'dropdown')"
+                class="snippet"
+            >
+                <SnippetDropdown
+                    :ref="'snippet-' + snippet.snippetId"
+                    :api="api"
+                    :attr-name="snippet.attrName"
+                    :add-select-all="snippet.addSelectAll"
+                    :auto-init="snippet.autoInit"
+                    :disabled="disabled"
+                    :display="snippet.display"
+                    :info="snippet.info"
+                    :label="snippet.label"
+                    :layer-id="layerConfig.layerId"
+                    :multiselect="snippet.multiselect"
+                    :operator="snippet.operator"
+                    :placeholder="snippet.placeholder"
+                    :prechecked="snippet.prechecked"
+                    :render-icons="snippet.renderIcons"
+                    :snippet-id="snippet.snippetId"
+                    :value="snippet.value"
+                    :visible="snippet.visible"
+                    @changeRule="changeRule"
+                    @deleteRule="deleteRule"
+                />
+            </div>
+            <div
+                v-else-if="hasThisSnippetTheExpectedType(snippet, 'text')"
+                class="snippet"
+            >
+                <SnippetInput
+                    :ref="'snippet-' + snippet.snippetId"
+                    :attr-name="snippet.attrName"
+                    :disabled="disabled"
+                    :info="snippet.info"
+                    :label="snippet.label"
+                    :operator="snippet.operator"
+                    :placeholder="snippet.placeholder"
+                    :prechecked="snippet.prechecked"
+                    :snippet-id="snippet.snippetId"
+                    :visible="snippet.visible"
+                    @changeRule="changeRule"
+                    @deleteRule="deleteRule"
+                />
+            </div>
+            <div
+                v-else-if="hasThisSnippetTheExpectedType(snippet, 'date')"
+                class="snippet"
+            >
+                <SnippetDate
+                    :ref="'snippet-' + snippet.snippetId"
+                    :api="api"
+                    :attr-name="snippet.attrName"
+                    :disabled="disabled"
+                    :info="snippet.info"
+                    :format="snippet.format"
+                    :label="snippet.label"
+                    :max-value="snippet.maxValue"
+                    :min-value="snippet.minValue"
+                    :operator="snippet.operator"
+                    :prechecked="snippet.prechecked"
+                    :snippet-id="snippet.snippetId"
+                    :visible="snippet.visible"
+                    @changeRule="changeRule"
+                    @deleteRule="deleteRule"
+                />
+            </div>
+            <div
+                v-else-if="hasThisSnippetTheExpectedType(snippet, 'dateRange')"
+                class="snippet"
+            >
+                <SnippetDateRange
+                    :ref="'snippet-' + snippet.snippetId"
+                    :api="api"
+                    :attr-name="snippet.attrName"
+                    :disabled="disabled"
+                    :info="snippet.info"
+                    :format="snippet.format"
+                    :label="snippet.label"
+                    :max-value="snippet.maxValue"
+                    :min-value="snippet.minValue"
+                    :operator="snippet.operator"
+                    :prechecked="snippet.prechecked"
+                    :snippet-id="snippet.snippetId"
+                    :visible="snippet.visible"
+                    @changeRule="changeRule"
+                    @deleteRule="deleteRule"
+                />
+            </div>
+            <div
+                v-else-if="hasThisSnippetTheExpectedType(snippet, 'slider')"
+                class="snippet"
+            >
+                <SnippetSlider
+                    :ref="'snippet-' + snippet.snippetId"
+                    :api="api"
+                    :attr-name="snippet.attrName"
+                    :decimal-places="snippet.decimalPlaces"
+                    :disabled="disabled"
+                    :info="snippet.info"
+                    :label="snippet.label"
+                    :min-value="snippet.minValue"
+                    :max-value="snippet.maxValue"
+                    :operater="snippet.operator"
+                    :prechecked="snippet.prechecked"
+                    :snippet-id="snippet.snippetId"
+                    :visible="snippet.visible"
+                    @changeRule="changeRule"
+                    @deleteRule="deleteRule"
+                />
+            </div>
+            <div
+                v-else-if="hasThisSnippetTheExpectedType(snippet, 'sliderRange')"
+                class="snippet"
+            >
+                <SnippetSliderRange
+                    :ref="'snippet-' + snippet.snippetId"
+                    :api="api"
+                    :attr-name="snippet.attrName"
+                    :decimal-places="snippet.decimalPlaces"
+                    :disabled="disabled"
+                    :info="snippet.info"
+                    :label="snippet.label"
+                    :min-value="snippet.minValue"
+                    :max-value="snippet.maxValue"
+                    :operater="snippet.operator"
+                    :prechecked="snippet.prechecked"
+                    :snippet-id="snippet.snippetId"
+                    :visible="snippet.visible"
+                    @changeRule="changeRule"
+                    @deleteRule="deleteRule"
+                />
+            </div>
+        </div>
+        <div class="snippet">
+            <button
+                @click="filter()"
+            >
+                Filtern
+            </button>
+            <button
+                v-if="paging.page < paging.total && showStop"
+                @click="stopfilter()"
+            >
+                {{ $t("button.stop") }}
+            </button>
+            <ProgressBar
+                :paging="paging"
+            />
         </div>
     </div>
 </template>
