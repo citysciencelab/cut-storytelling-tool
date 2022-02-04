@@ -9,6 +9,7 @@
 ---
 ## Unreleased - in development
 ### Added
+- The gazetteer search function now supports changing the namespace by configuration.
 
 ### Changed
 
