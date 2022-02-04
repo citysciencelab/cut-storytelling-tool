@@ -25,6 +25,11 @@ export default {
             required: false,
             default: false
         },
+        adjustment: {
+            type: [Object, Boolean],
+            required: false,
+            default: false
+        },
         autoInit: {
             type: Boolean,
             required: false,
@@ -100,6 +105,7 @@ export default {
         return {
             disable: true,
             isInitializing: true,
+            isAdjusting: false,
             showInfo: false,
             dropdownValue: [],
             dropdownSelected: [],
@@ -149,13 +155,45 @@ export default {
     },
     watch: {
         dropdownSelected (value) {
-            if (!this.isInitializing || this.isInitializing && Array.isArray(this.prechecked)) {
-                if (Array.isArray(value) && value.length) {
+            if (!this.isAdjusting && (!this.isInitializing || this.isInitializing && Array.isArray(this.prechecked))) {
+                if (typeof value === "string" && value || Array.isArray(value) && value.length) {
                     this.emitCurrentRule(value, this.isInitializing);
                 }
                 else {
                     this.deleteCurrentRule();
                 }
+            }
+        },
+        adjustment (adjusting) {
+            if (!isObject(adjusting) || this.visible === false) {
+                return;
+            }
+
+            if (adjusting?.start) {
+                this.isAdjusting = true;
+                this.dropdownValue = [];
+            }
+            if (isObject(adjusting?.adjust) && Array.isArray(adjusting.adjust?.value)) {
+                adjusting.adjust.value.forEach(value => {
+                    if (!this.dropdownValue.includes(value)) {
+                        this.dropdownValue.push(value);
+                    }
+                });
+            }
+            if (adjusting?.finish) {
+                const selected = [];
+
+                if (Array.isArray(this.dropdownValue)) {
+                    this.dropdownValue.forEach(value => {
+                        if (this.dropdownSelected.includes(value)) {
+                            selected.push(value);
+                        }
+                    });
+                }
+                this.dropdownSelected = selected;
+                this.$nextTick(() => {
+                    this.isAdjusting = false;
+                });
             }
         },
         disabled (value) {

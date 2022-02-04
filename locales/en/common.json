@@ -400,6 +400,7 @@
                 "serviceFour": "Service 4"
             },
             "filterGeneral": {
+                "filterButton": "Filter",
                 "searchInMapExtent": "Search in current map extent",
                 "snippetTags": {
                     "resetAll": "Reset all"

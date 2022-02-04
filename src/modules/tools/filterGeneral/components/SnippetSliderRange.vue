@@ -15,6 +15,11 @@ export default {
             required: false,
             default: ""
         },
+        adjustment: {
+            type: [Object, Boolean],
+            required: false,
+            default: false
+        },
         decimalPlaces: {
             type: Number,
             required: false,
@@ -70,6 +75,7 @@ export default {
         return {
             disable: true,
             isInitializing: true,
+            isAdjusting: false,
             minimumValue: 0,
             maximumValue: 100,
             showInfo: false,
@@ -118,8 +124,37 @@ export default {
     },
     watch: {
         value () {
-            if (!this.isInitializing || Array.isArray(this.prechecked) && this.prechecked.length === 2) {
+            if (!this.isAdjusting && (!this.isInitializing || Array.isArray(this.prechecked) && this.prechecked.length === 2)) {
                 this.emitCurrentRule([this.inRangeValueLeft, this.inRangeValueRight], this.isInitializing);
+            }
+        },
+        adjustment (adjusting) {
+            if (!isObject(adjusting) || this.visible === false) {
+                return;
+            }
+
+            if (adjusting?.start) {
+                this.isAdjusting = true;
+                this.minimumValue = false;
+                this.maximumValue = false;
+            }
+            if (isObject(adjusting?.adjust) && typeof adjusting.adjust?.min === "number") {
+                this.minimumValue = typeof this.minimumValue === "number" ? Math.min(this.minimumValue, adjusting.adjust.min) : adjusting.adjust.min;
+            }
+            if (isObject(adjusting?.adjust) && typeof adjusting.adjust?.max === "number") {
+                this.maximumValue = typeof this.maximumValue === "number" ? Math.max(this.maximumValue, adjusting.adjust.max) : adjusting.adjust.max;
+            }
+            if (adjusting?.finish) {
+                if (typeof this.minimumValue !== "number") {
+                    this.minimumValue = 0;
+                }
+                if (typeof this.maximumValue !== "number") {
+                    this.maximumValue = 0;
+                }
+                this.value = [Math.max(this.minimumValue, this.value[0]), Math.min(this.maximumValue, this.value[1])];
+                this.$nextTick(() => {
+                    this.isAdjusting = false;
+                });
             }
         },
         disabled (value) {
@@ -218,6 +253,29 @@ export default {
          */
         getSliderSteps (decimalPlaces) {
             return 1 / Math.pow(10, decimalPlaces);
+        },
+        /**
+         * Triggered once when changes are made at the slider to avoid set of rules during changes.
+         * @returns {void}
+         */
+        startSliderChange () {
+            if (!isObject(this.adjustment)) {
+                return;
+            }
+            this.isAdjusting = true;
+        },
+        /**
+         * Triggered once when end of changes are detected at the slider to start set of rules after changes.
+         * @returns {void}
+         */
+        endSliderChange () {
+            if (!isObject(this.adjustment)) {
+                return;
+            }
+            this.isAdjusting = false;
+            this.$nextTick(() => {
+                this.emitCurrentRule([this.inRangeValueLeft, this.inRangeValueRight], this.isInitializing);
+            });
         }
     }
 };
@@ -264,6 +322,9 @@ export default {
                         :step="getSliderSteps(decimalPlaces)"
                         :min="minimumValue"
                         :max="maximumValue"
+                        @focus="startSliderChange()"
+                        @blur="endSliderChange()"
+                        @keyup.enter="endSliderChange()"
                     >
                 </div>
                 <div class="right">
@@ -279,6 +340,9 @@ export default {
                         :step="getSliderSteps(decimalPlaces)"
                         :min="minimumValue"
                         :max="maximumValue"
+                        @focus="startSliderChange()"
+                        @blur="endSliderChange()"
+                        @keyup.enter="endSliderChange()"
                     >
                 </div>
             </div>
@@ -299,6 +363,8 @@ export default {
                     :step="getSliderSteps()"
                     :min="minimumValue"
                     :max="maximumValue"
+                    @mousedown="startSliderChange()"
+                    @mouseup="endSliderChange()"
                 >
                 <label
                     :for="'snippetSliderRangeMax-' + snippetId"
@@ -313,6 +379,8 @@ export default {
                     :step="getSliderSteps()"
                     :min="minimumValue"
                     :max="maximumValue"
+                    @mousedown="startSliderChange()"
+                    @mouseup="endSliderChange()"
                 >
                 <div class="values">
                     <span class="max">{{ maximumValue }}</span>
