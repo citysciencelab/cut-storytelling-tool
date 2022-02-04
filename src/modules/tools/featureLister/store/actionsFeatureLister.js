@@ -19,9 +19,25 @@ export default {
                 child.classList.remove("active");
             }
         });
-        // this.$("#featurelist-themes").hide();
-        // this.$("#featurelist-list").show();
-        // this.$("#featurelist-details").hide();
+    },
+    /**
+     * Switches to the themes list of all visibile layers.
+     * @param {Object} layer selected layer.
+     * @returns {void}
+     */
+    switchToThemes ({commit}) {
+        Object.entries(document.getElementsByClassName("featurelist-navtabs")[0].children).forEach(([, child]) => {
+            if (child.id === "featurelistThemeChooser") {
+                child.classList.remove("disabled");
+                child.classList.add("active");
+                commit("setLayerListView", true);
+                commit("setFeatureListView", false);
+            }
+            else {
+                child.classList.remove("active");
+                child.classList.add("disabled");
+            }
+        });
     }
 };
 

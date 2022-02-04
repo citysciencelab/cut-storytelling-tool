@@ -73,7 +73,10 @@ export default {
                     class="active featurelist-navtabs-li text-center"
                     role="presentation"
                 >
-                    <a href="#">{{ $t("modules.tools.featureLister.chooseTheme") }}</a>
+                    <a
+                        href="#"
+                        @click.prevent="switchToThemes()"
+                    >{{ $t("modules.tools.featureLister.chooseTheme") }}</a>
                 </li>
                 <li
                     id="featurelistFeaturelist"
