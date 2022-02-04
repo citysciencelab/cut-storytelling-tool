@@ -275,6 +275,7 @@ export default {
                 else {
                     this.layerModel.layer.getSource().on("featuresloadend", () => {
                         if (this.isFeatureLoaded) {
+                            this.mapHandler.showFeaturesByIds(this.layerModel.layer, this.filteredFeatureIds);
                             return;
                         }
                         this.runApiFilter(filterQuestion);
