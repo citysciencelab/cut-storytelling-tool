@@ -12,6 +12,7 @@
 - The gazetteer search function now supports changing the namespace by configuration.
 
 ### Changed
+- outsourced drawTypeOptions from constantsDraw.js into its own file
 
 ### Deprecated
 
