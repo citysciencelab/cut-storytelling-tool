@@ -48,7 +48,6 @@ const getters = {
             headers.push({key, value});
         });
         state.headers = headers;
-        console.log(indexOfFeatureWithMostAttributes, lengths, headers);
         return headers;
     }
 };
