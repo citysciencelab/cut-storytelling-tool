@@ -331,7 +331,7 @@ export default {
                 <Multiselect
                     :id="'snippetSelectBox-' + snippetId"
                     v-model="dropdownSelected"
-                    :options="dropdownOptions"
+                    :options="dropdownValue"
                     name="select-box"
                     :disabled="disable"
                     :multiple="multiselect"
@@ -342,43 +342,9 @@ export default {
                     :close-on-select="true"
                     :clear-on-select="false"
                     :loading="disable"
-                    track-by="title"
-                    label="title"
                 >
                     <span slot="noOptions">{{ emptyList }}</span>
                     <span slot="noResult">{{ noElements }}</span>
-                    <template
-                        v-if="anyIconExists()"
-                        slot="singleLabel"
-                        slot-scope="props"
-                    >
-                        <span class="option__desc">
-                            <img
-                                v-if="props.option.img"
-                                class="option__image"
-                                :src="props.option.img"
-                                :alt="props.option.title"
-                            >
-                            <span class="option__title">{{ props.option.title }}</span>
-                        </span>
-                    </template>
-                    <template
-                        v-if="anyIconExists()"
-                        slot="option"
-                        slot-scope="props"
-                    >
-                        <div
-                            class="option__desc"
-                        >
-                            <img
-                                v-if="props.option.img"
-                                class="option__image"
-                                :src="props.option.img"
-                                :alt="props.option.title"
-                            >
-                            <span class="option__title">{{ props.option.title }}</span>
-                        </div>
-                    </template>
                 </Multiselect>
             </div>
             <div
