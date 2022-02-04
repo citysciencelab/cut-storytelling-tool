@@ -6,6 +6,6 @@ const drawTypeOptions = [
     {geometry: "Circle", id: "drawCircle"},
     {geometry: "Circle", id: "drawDoubleCircle"},
     {geometry: "Point", id: "writeText"}
-]
+];
 
-export default drawTypeOptions
+export default drawTypeOptions;
