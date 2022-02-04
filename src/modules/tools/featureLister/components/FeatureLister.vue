@@ -5,6 +5,7 @@ import actions from "../store/actionsFeatureLister";
 import mutations from "../store/mutationsFeatureLister";
 import ToolTemplate from "../../ToolTemplate.vue";
 import getComponent from "../../../../utils/getComponent";
+import VectorLayer from "ol/layer/Vector.js";
 
 export default {
     name: "FeatureLister",
@@ -12,7 +13,23 @@ export default {
         ToolTemplate
     },
     computed: {
-        ...mapGetters("Tools/FeatureLister", Object.keys(getters))
+        ...mapGetters("Tools/FeatureLister", Object.keys(getters)),
+        ...mapGetters("Map", [
+            "visibleLayerList"
+        ]),
+        visibleVectorLayers: function () {
+            const vectorLayers = [];
+
+            this.visibleLayerList.forEach(layer => {
+                if (layer instanceof VectorLayer && layer.get("typ") === "WFS") { // TODO: Ist es richtig nur auf WFS zu gehen?
+                    const layerSource = layer.getSource();
+
+                    vectorLayers.push({name: layer.get("name"), id: layer.get("id"), features: layerSource.getFeatures()});
+                }
+            });
+            this.setVisibleLayers(this.visibleLayerList);
+            return vectorLayers;
+        }
     },
     created () {
         this.$on("close", this.close);
@@ -74,6 +91,7 @@ export default {
                 </li>
             </ul>
             <div
+                v-if="layerListView"
                 id="featurelist-themes"
                 class="featurelist-themes panel panel-default"
             >
@@ -84,10 +102,84 @@ export default {
                     {{ $t("modules.tools.featureLister.visibleVectorLayers") }}
                 </div>
                 <ul
+                    v-for="layer in visibleVectorLayers"
                     id="featurelist-themes-ul"
+                    :key="'tool-featureLister-' + layer.id"
                     class="nav nav-pills nav-stacked"
-                />
+                >
+                    <li
+                        :id="'featurelist-layer-' + layer.id"
+                        class="featurelist-themes-li"
+                        role="presentation"
+                    >
+                        <a
+                            href="#"
+                            @click.prevent="switchToList(layer)"
+                        >{{ layer.name }}</a>
+                    </li>
+                </ul>
             </div>
+            <template v-if="featureListView">
+                <div
+                    id="featurelist-list"
+                    class="panel panel-default featurelist-list"
+                >
+                    <div
+                        id="featurelist-list-header"
+                        class="panel-heading"
+                    >
+                        <span>{{ layer.name }}</span>
+                    </div>
+                    <div
+                        class="table-responsive  featurelist-list-table"
+                    >
+                        <table
+                            id="featurelist-list-table"
+                            class="table table-striped table-hover table-condensed table-bordered"
+                        >
+                            <tbody>
+                                <tr class="featurelist-list-table-tr">
+                                    <th
+                                        v-for="(header, index) in getHeaders"
+                                        :key="'tool-featureLister-' + index"
+                                        class="featurelist-list-table-th"
+                                    >
+                                        {{ header.value }}
+                                    </th>
+                                </tr>
+                                <tr
+                                    v-for="(feature, index) in getFeatureProperties"
+                                    :key="'tool-featureLister-' + index"
+                                    class="featurelist-list-table-tr"
+                                >
+                                    <template v-if="index < maxFeatures">
+                                        <td
+                                            v-for="(property, i) in feature"
+                                            :key="'tool-featureLister-' + i"
+                                            class="featurelist-list-table-td"
+                                        >
+                                            {{ property }}
+                                        </td>
+                                    </template>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="panel-footer featurelist-list-footer">
+                        <button
+                            type="button"
+                            class="btn btn-default navbar-btn featurelist-list-button"
+                            aria-label="Left Align"
+                        >
+                            <span
+                                class="glyphicon glyphicon-import"
+                                aria-hidden="true"
+                            /> {{ $t("modules.tools.featureLister.more") }}
+                        </button>
+                        <p class="navbar-text featurelist-list-message" />
+                    </div>
+                </div>
+            </template>
         </template>
     </ToolTemplate>
 </template>
@@ -95,4 +187,170 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    $color_1: gray;
+$color_2: black;
+$color_3: #777;
+$color_4: rgb(85, 85, 85);
+$background_color_1: rgb(255, 255, 255);
+
+/***** Destop *****/
+/***** Mobil *****/
+.featurelist-list-table-th {
+    cursor: pointer;
+    >span {
+        float: left;
+        width: 15px;
+        color: $color_1;
+    }
+    >.featurelist-list-table-th-sorted {
+        color: $color_2;
+    }
+}
+.featurelist-list-button {
+    position: relative;
+    right: 0px;
+}
+.featurelist-list-message {
+    float: left;
+    text-align: center;
+    align-items: center;
+}
+.featurelist-details-li {
+    cursor: text;
+    a:link {
+        color: royalblue;
+        text-decoration: underline;
+    }
+    a:visited {
+        color: royalblue;
+        text-decoration: underline;
+    }
+    a:hover {
+        color: blue;
+        text-decoration: underline;
+    }
+    a:active {
+        color: blue;
+        text-decoration: underline;
+    }
+}
+.featurelist-details-ul {
+    max-height: 400px;
+    overflow: auto;
+    cursor: auto;
+}
+.featurelist-list-table-td {
+    height: 15px;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.featurelist-list-table-tr {
+    cursor: pointer;
+}
+.featurelist-details {
+    display: none;
+    margin-bottom: 0px;
+}
+.featurelist-list {
+    height: 70vh;
+    width: 70vh;
+    margin-bottom: 0px;
+    display: block;
+}
+.featurelist-themes {
+    width: 100%;
+}
+.featurelist-win {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    min-width: 25%;
+    margin: 60px 10px 30px 10px;
+    display: none;
+    background-color: $background_color_1;
+    >.featurelist-win-header {
+        color: $color_3;
+        cursor: move;
+    }
+    >.featurelist-win-content {
+        overflow-y: auto;
+        padding: 5px;
+    }
+}
+.featurelist-win-header {
+    padding-left: 10px;
+    border-bottom: 1px solid rgb(229, 229, 229);
+    >.title {
+        white-space: nowrap;
+        min-width: 250px;
+        cursor: move;
+        font-size: 14px;
+        padding-top: 8px;
+        padding-bottom: 5px;
+        color: $color_4;
+    }
+    >.buttons {
+        color: $color_4;
+        font-size: 14px;
+        >span {
+            padding: 8px 3px;
+            &:hover {
+                &:not(.win-icon) {
+                    opacity: 0.7;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+.featurelist-win-content {
+    >.panel-group {
+        padding: 12px;
+        margin-bottom: 0;
+        .panel {
+            margin-top: 8px;
+        }
+    }
+}
+.featurelist-heading {
+    padding: 8px;
+    >.featurelist-title {
+        font-size: 12px;
+    }
+}
+.featurelistModal {
+    background-color: $background_color_1;
+    color: $color_4;
+    border-bottom: 1px solid rgb(229, 229, 229);
+    padding: 10px;
+    >button {
+        padding: 4px 0px;
+    }
+    >h4 {
+        >span {
+            padding: 0 8px;
+        }
+    }
+}
+.panel-heading {
+    background: #e7e7e7;
+    color: $color_4;
+    cursor: pointer;
+}
+.tdfeaturelist {
+    padding: 3px;
+    >img {
+        max-height: 35px;
+    }
+}
+.panel-featurelist {
+    overflow-x: scroll;
+    max-height: 300px;
+    padding: 8px;
+    >p {
+        margin: 0;
+    }
+}
 </style>

@@ -1,5 +1,6 @@
 import {generateSimpleMutations} from "../../../../app-store/utils/generators";
 import stateFeatureLister from "./stateFeatureLister";
+import {getGfiFeature} from "../../../../api/gfi/getGfiFeaturesByTileFeature";
 
 const mutations = {
     /**
@@ -8,7 +9,24 @@ const mutations = {
      * {setKey:   (state, payload) => *   state[key] = payload * }
      * will be returned.
      */
-    ...generateSimpleMutations(stateFeatureLister)
+    ...generateSimpleMutations(stateFeatureLister),
+    /**
+     * Sets the compare List.
+     * @param {Object} state context object.
+     * @param {Array} layers array with all visible vector layers
+     * @returns {void}
+     */
+    setGfiFeaturesOfLayer: (state, layers) => {
+        if (state.layer.features) {
+            const gfiFeatures = [],
+                sourceOfSelectedLayer = layers.find((layer) => layer.get("id") === state.layer.id);
+
+            state.layer.features.forEach(feature => {
+                gfiFeatures.push(getGfiFeature(sourceOfSelectedLayer.values_, feature.values_));
+            });
+            state.gfiFeaturesOfLayer = gfiFeatures;
+        }
+    }
 };
 
 export default mutations;
