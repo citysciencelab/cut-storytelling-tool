@@ -15,10 +15,17 @@ const getters = {
         state.gfiFeaturesOfLayer.forEach(feature => {
             featuresWithProperties.push(feature.getProperties());
         });
+
         featuresWithProperties.forEach(properties => {
             const attvalue = [];
 
             state.headers.forEach(header => {
+                if (!Object.prototype.hasOwnProperty.call(properties, header.key)) {
+                    Object.entries(properties).forEach(() => {
+                        properties[header.key] = "";
+                    });
+                }
+
                 Object.entries(properties).forEach(([key, value]) => {
                     if (header.key === key) {
                         attvalue.push(value);
