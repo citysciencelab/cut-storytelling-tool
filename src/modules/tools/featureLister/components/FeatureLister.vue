@@ -155,7 +155,7 @@ export default {
                                     :key="'tool-featureLister-' + index"
                                     class="featurelist-list-table-tr"
                                 >
-                                    <template v-if="index < maxFeatures">
+                                    <template v-if="index < shownFeatures">
                                         <td
                                             v-for="(property, i) in feature"
                                             :key="'tool-featureLister-' + i"
@@ -173,13 +173,16 @@ export default {
                             type="button"
                             class="btn btn-default navbar-btn featurelist-list-button"
                             aria-label="Left Align"
+                            @click="showMore()"
                         >
                             <span
                                 class="glyphicon glyphicon-import"
                                 aria-hidden="true"
                             /> {{ $t("modules.tools.featureLister.more") }}
                         </button>
-                        <p class="navbar-text featurelist-list-message" />
+                        <p class="navbar-text featurelist-list-message">
+                            {{ $t("modules.tools.featureLister.key", {shownFeatures, featureCount}) }}
+                        </p>
                     </div>
                 </div>
             </template>
@@ -257,7 +260,6 @@ $background_color_1: rgb(255, 255, 255);
     margin-bottom: 0px;
 }
 .featurelist-list {
-    height: 70vh;
     width: 70vh;
     margin-bottom: 0px;
     display: block;

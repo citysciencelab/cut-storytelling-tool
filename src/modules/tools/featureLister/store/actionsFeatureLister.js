@@ -8,6 +8,8 @@ export default {
         commit("setLayerId", layer.id);
         commit("setLayer", layer);
         commit("setGfiFeaturesOfLayer", state.visibleLayers);
+        commit("setShownFeatures", state.maxFeatures);
+        commit("setFeatureCount", state.gfiFeaturesOfLayer.length);
         Object.entries(document.getElementsByClassName("featurelist-navtabs")[0].children).forEach(([, child]) => {
             if (child.id === "featurelistFeaturelist") {
                 child.classList.remove("disabled");
@@ -38,6 +40,19 @@ export default {
                 child.classList.add("disabled");
             }
         });
+    },
+    /**
+     * Switches to the themes list of all visibile layers.
+     * @param {Object} layer selected layer.
+     * @returns {void}
+     */
+    showMore ({state, commit}) {
+        if (state.shownFeatures < state.featureCount - 10) {
+            commit("setShownFeatures", state.shownFeatures + 10);
+        }
+        else {
+            state.shownFeatures = state.featureCount;
+        }
     }
 };
 

@@ -38,6 +38,8 @@ const state = {
     layer: {},
     layerListView: true,
     gfiFeaturesOfLayer: [],
+    featureCount: "",
+    shownFeatures: "",
     visibleLayers: [],
     featureListView: false,
     detailView: false,
