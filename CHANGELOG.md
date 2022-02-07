@@ -12,6 +12,7 @@
 - The gazetteer search function now supports changing the namespace by configuration.
 
 ### Changed
+-  Print uses formatList from statePrint, instead of all formats from mapfish Server.
 
 ### Deprecated
 
