@@ -10,7 +10,7 @@ import HeatmapLayer from "./layer/heatmap";
 import TerrainLayer from "../../../src/core/layers/terrain";
 import EntitiesLayer from "./layer/entities";
 import TileSetLayer from "./layer/tileset";
-import VectorTileLayer from "./layer/vectorTile";
+import VectorTileLayer from "../../../src/core/layers/vectorTile";
 import VectorBaseLayer from "../../../src/core/layers/vectorBase";
 import ObliqueLayer from "./layer/oblique";
 import Folder from "./folder/model";
