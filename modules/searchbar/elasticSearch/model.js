@@ -102,7 +102,7 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
             if (typeof payload[key] === "object") {
                 payload[key] = this.appendSearchStringToPayload(payload[key], searchStringAttribute, searchString);
             }
-            if (key === searchStringAttribute) {
+            else if (key === searchStringAttribute) {
                 payload[searchStringAttribute] = searchString;
             }
         });

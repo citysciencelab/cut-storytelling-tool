@@ -18,6 +18,8 @@
 ### Removed
 
 ### Fixed
+- The elastic search query string replacement function will now only take effect
+  when the configured key did not contain an object.
 
 ---
 ## v2.18.0 - 2022-02-03
