@@ -96,7 +96,7 @@ async function loadApp () {
     // import and register Vue addons according the config.js
     await loadAddons(Config.addons);
 
-    store.commit("setConfigJs", Config);
+    store.dispatch("loadConfigJs", Config);
 
     // must be done here, else it is done too late
     readUrlParamEarly();
