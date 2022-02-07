@@ -20,18 +20,18 @@ const actions = {
      *
      * @returns {void}
      */
-    prepareModule ({commit, dispatch, getters}) {
+    prepareModule ({commit, dispatch, getters, rootGetters}) {
         dispatch("resetModule", false);
 
         const {currentInstance} = getters,
             {requestConfig: {layerId, likeFilter, restLayerId, storedQueryId}, title} = currentInstance,
             wfs = restLayerId
-                ? Radio.request("RestReader", "getServiceById", restLayerId)
+                ? rootGetters.getRestServiceById(restLayerId)
                 : Radio.request("ModelList", "getModelByAttributes", {id: layerId});
 
         if (wfs) {
             const {selectSource} = currentInstance,
-                service = {url: wfs.get("url")};
+                service = {url: wfs.url || wfs.get("url")};
 
             // NOTE: The extra object is sadly needed so that the object is reactive :(
             commit("setRequiredValues", {...prepareLiterals(currentInstance.literals)});

@@ -36,13 +36,12 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
 
         /**
          * The mock function for the Radio.request.
-         * Knitted for Radio.request("RestReader", "getServiceById", restLayerId) and
-         * Radio.request("ModelList", "getModelByAttributes", {id: layerId}).
+         * Only for Radio.request("ModelList", "getModelByAttributes", {id: layerId}).
          *
          * @returns {object} An object containing the needed parameters and function to test the action 'toggleSwiper'.
          */
         function request (...args) {
-            const wfsDefined = Boolean(args[0] === "RestReader" ? args[2] : args[2].id);
+            const wfsDefined = Boolean(args[2].id);
 
             requestSpy(...args);
 
