@@ -14,11 +14,11 @@ export default {
      * @param {Object} param.commit the commit
      * @returns {void}
      */
-    retrieveCapabilites: function ({state, dispatch, commit}) {
+    retrieveCapabilites: function ({state, dispatch, rootGetters, commit}) {
         let serviceUrl;
 
         if (state.serviceId !== "") {
-            serviceUrl = Radio.request("RestReader", "getServiceById", state.serviceId).get("url");
+            serviceUrl = rootGetters.getRestServiceById(state.serviceId).url;
 
             if (!serviceUrl.includes("/print/")) {
                 serviceUrl = serviceUrl + "print/";
