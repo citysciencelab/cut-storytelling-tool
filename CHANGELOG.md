@@ -18,6 +18,7 @@
 ### Removed
 
 ### Fixed
+- Issue #668: `layerInformation` shows legend information only if legendURL is not ignored.
 
 ---
 ## v2.18.0 - 2022-02-03
