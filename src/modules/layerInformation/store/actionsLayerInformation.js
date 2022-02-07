@@ -113,14 +113,14 @@ const actions = {
         }
         // use default csw_url from rest-services.json if csw_url not stated in the specific service
         else if (Config.cswId !== null && typeof Config.cswId !== "undefined") {
-            const service = Radio.request("RestReader", "getServiceById", Config.cswId);
+            const service = rootGetters.getRestServiceById(Config.cswId);
             let metaURL = "";
 
             if (service === undefined) {
                 console.warn("Rest Service with the ID " + Config.cswId + " is not configured in rest-services.json!");
             }
             else {
-                metaURL = service.get("url");
+                metaURL = service.url;
             }
 
             if (metaURL !== "" && typeof metaInfo.metaId !== "undefined") {
@@ -162,13 +162,13 @@ const actions = {
      * @param {Object} metaId the given metaId for one layer
      * @returns {void}
      */
-    setMetadataURL: function ({state, commit}, metaId) {
+    setMetadataURL: function ({state, commit, rootGetters}, metaId) {
         const metaURLs = [],
             metaDataCatalogueId = state.metaDataCatalogueId;
         let metaURL = "",
             service = null;
 
-        service = Radio.request("RestReader", "getServiceById", metaDataCatalogueId);
+        service = rootGetters.getRestServiceById(metaDataCatalogueId);
         if (service === undefined) {
             console.warn("Rest Service with the ID " + metaDataCatalogueId + " is not configured in rest-services.json!");
         }
@@ -176,7 +176,7 @@ const actions = {
             metaURL = state.layerInfo.showDocUrl + metaId;
         }
         else {
-            metaURL = service.get("url") + metaId;
+            metaURL = service.url + metaId;
         }
 
         if (metaId !== null && metaId !== "" && metaURLs.indexOf(metaURL) === -1) {
