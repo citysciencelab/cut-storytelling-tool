@@ -24,7 +24,7 @@ export default {
                 if (layer instanceof VectorLayer && layer.get("typ") === "WFS") { // TODO: Ist es richtig nur auf WFS zu gehen?
                     const layerSource = layer.getSource();
 
-                    vectorLayers.push({name: layer.get("name"), id: layer.get("id"), features: layerSource.getFeatures()});
+                    vectorLayers.push({name: layer.get("name"), id: layer.get("id"), features: layerSource.getFeatures(), geometryType: layerSource.getFeatures()[0].getGeometry().getType()}); // TODO: Anpassen auf Bike and Ride Parkplätze (geschachtelte Features)
                 }
             });
             this.setVisibleLayers(this.visibleLayerList);
@@ -59,6 +59,7 @@ export default {
 
 <template lang="html">
     <ToolTemplate
+        id="featureLister"
         :title="$t(name)"
         :icon="glyphicon"
         :active="active"

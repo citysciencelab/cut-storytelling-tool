@@ -46,6 +46,7 @@ const state = {
     headers: [],
     featureid: "",
     featureProps: {},
+    selectedFeature: {},
     highlightedFeature: null,
     highlightedFeatureStyle: null,
     highlightVectorRulesPolygon: {

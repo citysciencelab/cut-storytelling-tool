@@ -4,12 +4,13 @@ export default {
      * @param {Object} layer selected layer.
      * @returns {void}
      */
-    switchToList ({state, commit}, layer) {
+    switchToList ({state, commit, dispatch}, layer) {
         commit("setLayerId", layer.id);
         commit("setLayer", layer);
         commit("setGfiFeaturesOfLayer", state.visibleLayers);
         commit("setShownFeatures", state.maxFeatures);
         commit("setFeatureCount", state.gfiFeaturesOfLayer.length);
+        dispatch("addMouseEvents");
         Object.entries(document.getElementsByClassName("featurelist-navtabs")[0].children).forEach(([, child]) => {
             if (child.id === "featurelistFeaturelist") {
                 child.classList.remove("disabled");
@@ -19,6 +20,20 @@ export default {
             }
             else {
                 child.classList.remove("active");
+            }
+        });
+    },
+    // Hover event
+    addMouseEvents ({state, commit}) {
+        const featureLister = document.getElementById("featureLister");
+
+        featureLister.addEventListener("click", (evt) => {
+            const correctedFeatureIndex = evt.target.parentElement.rowIndex - 1;
+
+            if (correctedFeatureIndex >= 0) {
+                const feature = state.gfiFeaturesOfLayer[correctedFeatureIndex];
+
+                commit("setSelectedFeature", feature);
             }
         });
     },
