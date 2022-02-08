@@ -76,9 +76,13 @@ TileSetLayer.prototype.setIsSelected = function (newValue, attr) {
 
         if (!this.attributes && attr) {
             isVisibleInMap = attr.isVisibleInMap;
+            attr.isVisibleInMap = newValue;
+            attr.isSelected = newValue;
         }
-        this.setIsVisibleInMap(newValue);
-        this.attributes.isSelected = newValue;
+        else {
+            this.setIsVisibleInMap(newValue);
+            this.attributes.isSelected = newValue;
+        }
         this.layer.setVisible(newValue, this.attributes ? this.attributes : attr, map);
         if (isVisibleInMap) {
             this.createLegend();
@@ -156,7 +160,7 @@ TileSetLayer.prototype.updateLayerTransparency = function () {
  * @param {Number} newValue Tranparency in percent
  * @returns {void}
  */
-Layer.prototype.setTransparency = function () {
+TileSetLayer.prototype.setTransparency = function () {
     // not needed in 3D
 };
 /**

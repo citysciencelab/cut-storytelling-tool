@@ -26,7 +26,13 @@ describe("src/core/layers/tileset.js", () => {
             id: "1",
             mode: "3D",
             getCesiumScene: () => {
-                return {};
+                return {
+                    primitives: {
+                        show: true,
+                        contains: () => true,
+                        add: sinon.stub()
+                    }
+                };
             }
         };
         mapCollection.addMap(map, "ol", "2D");
@@ -34,9 +40,8 @@ describe("src/core/layers/tileset.js", () => {
     });
     beforeEach(() => {
         global.Cesium = {};
-        global.Cesium.CesiumtilesetProvider = () => { /* no content*/ };
-        global.Cesium.EllipsoidtilesetProvider = () => { /* no content*/ };
-        attributes =  {
+        global.Cesium.Cesium3DTileset = () => { /* no content*/ };
+        attributes = {
             id: "4002",
             name: "Gebäude LoD2",
             url: "https://geoportal-hamburg.de/gdi3d/datasource-data/LoD2",
@@ -70,7 +75,7 @@ describe("src/core/layers/tileset.js", () => {
         expect(tilesetLayer.get("name")).to.be.equals(attrs.name);
         expect(tilesetLayer.get("id")).to.be.equals(attrs.id);
         expect(tilesetLayer.get("typ")).to.be.equals(attrs.typ);
-        expect(tilesetLayer.tileset.olLayerId).toEqual(attrs.id);
+        expect(layer.tileset.layerReferenceId).to.be.equals(attrs.id);
     }
 
     it("createLayer shall create a tileset layer", function () {
@@ -78,7 +83,7 @@ describe("src/core/layers/tileset.js", () => {
             layer = tilesetLayer.get("layer");
 
         checkLayer(layer, tilesetLayer, attributes);
-        expect(cesiumtilesetProviderSpy.notCalled).to.equal(true);
+        expect(cesium3DTilesetSpy.calledOnce).to.equal(true);
 
     });
     it("createLayer shall create a visible tileset layer", function () {
@@ -106,7 +111,7 @@ describe("src/core/layers/tileset.js", () => {
 
         tilesetLayer.setIsSelected(true);
         checkLayer(layer, tilesetLayer, attributes);
-        expect(tilesetLayer.tileset.show).to.be.true;
+        expect(layer.tileset.show).to.be.true;
         expect(cesium3DTilesetSpy.calledOnce).to.equal(true);
         expect(cesium3DTilesetSpy.calledWithMatch({maximumScreenSpaceError: 6})).to.equal(true);
     });
@@ -116,7 +121,7 @@ describe("src/core/layers/tileset.js", () => {
 
         tilesetLayer.setIsSelected(false);
         checkLayer(layer, tilesetLayer, attributes);
-        expect(tilesetLayer.tileset.show).to.be.false;
+        expect(layer.tileset.show).to.be.false;
     });
     it("createLegend shall set legend", function () {
         attributes.legendURL = "https://legendUrl";
@@ -127,10 +132,11 @@ describe("src/core/layers/tileset.js", () => {
     });
     it("createLegend shall not set legend (ignore)", function () {
         attributes.legendURL = "ignore";
-        const tilesetLayer = new TileSetLayer(attributes);
+        const tilesetLayer = new TileSetLayer(attributes),
+            setLegendSpy = sinon.spy(TileSetLayer.prototype, "setLegend");
 
         tilesetLayer.createLegend();
-        expect(tilesetLayer.get("legend")).to.equal(false);
+        expect(setLegendSpy.notCalled).to.equal(true);
     });
 });
 
