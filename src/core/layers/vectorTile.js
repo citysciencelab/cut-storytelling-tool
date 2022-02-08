@@ -273,6 +273,5 @@ VectorTileLayer.prototype.fetchSpriteData = function (spriteUrl) {
  * @returns {void}
  */
 VectorTileLayer.prototype.createLegendURL = function () {
-    debugger;
     this.setLegendURL([]);
 };
