@@ -301,7 +301,6 @@ describe("core/modelList/layer/vectorTile", function () {
                     minZoom: -100000,
                     maxZoom: 1000000
                 })[key],
-                setLayerSource: sinon.spy(() => Symbol.for("Promise")),
                 createTileGrid: sinon.spy(VectorTileModel.prototype, "createTileGrid")
             };
         }
@@ -309,10 +308,9 @@ describe("core/modelList/layer/vectorTile", function () {
         it("Creates vector tile layer source", function () {
             const context = makeContext();
 
-            VectorTileModel.prototype.createLayerSource.call(context);
+            VectorTileModel.prototype.createLayerSource.call(context, attrs);
 
-            expect(context.createTileGrid.calledWith("EPSG:3857")).to.be.true;
-            expect(context.setLayerSource.calledOnce).to.be.true;
+            expect(context.createTileGrid.calledWith("EPSG:3857", attrs)).to.be.true;
         });
     });
 
@@ -333,7 +331,7 @@ describe("core/modelList/layer/vectorTile", function () {
 
         it("Creates a tilegrid", function () {
             const context = makeContext(),
-                returnedTileGrid = VectorTileModel.prototype.createTileGrid.call(context, "EPSG:3857");
+                returnedTileGrid = VectorTileModel.prototype.createTileGrid.call(context, "EPSG:3857", attrs);
 
             expect(returnedTileGrid).to.be.not.empty;
         });

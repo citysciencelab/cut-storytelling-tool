@@ -23,7 +23,10 @@ export default function VectorTileLayer (attrs) {
             useProxy: false
         },
         mapEPSG = store.getters["Map/projection"].getCode(),
-        vtEPSG = attrs.epsg;
+        vtEPSG = attrs.epsg,
+        layerSource = this.createLayerSource(Object.assign(defaults, attrs));
+
+    attrs.layerSource = layerSource;
 
     if (mapEPSG !== vtEPSG) {
         console.warn(`VT Layer ${attrs.name}: Map (${mapEPSG}) and layer (${vtEPSG}) projection mismatch. View will be erroneous.`);
@@ -41,50 +44,52 @@ VectorTileLayer.prototype = Object.create(Layer.prototype);
 /**
 * Creates vector tile layer source.
 * If no tilegrid is created, the default tilegrid ist used.
-* @return {void}
+* @param {Object} attrs the attributes for the layer
+* @return {Object} the layer source
 */
-VectorTileLayer.prototype.createLayerSource = function () {
+VectorTileLayer.prototype.createLayerSource = function (attrs) {
     /**
      * @deprecated in the next major-release!
      * useProxy
      * getProxyUrl()
      */
-    const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
-        dataEpsg = this.get("epsg") || store.getters["Map/projection"].getCode(),
-        resolutions = this.get("resolutions"),
+    const url = attrs.useProxy ? getProxyUrl(attrs.url) : attrs.url,
+        dataEpsg = attrs.epsg || store.getters["Map/projection"].getCode(),
+        resolutions = attrs.resolutions,
         params = {
             projection: dataEpsg,
             format: new MVT(),
             url: url,
-            tileSize: this.get("tileSize"),
-            zDirection: this.get("zDirection"),
-            minZoom: this.get("minZoom"),
-            maxZoom: this.get("maxZoom")
+            tileSize: attrs.tileSize,
+            zDirection: attrs.zDirection,
+            minZoom: attrs.minZoom,
+            maxZoom: attrs.maxZoom
         };
 
-    if (dataEpsg !== "EPSG:3857" || this.get("extent") || this.get("origin") || this.get("origins") || resolutions) {
-        params.tileGrid = this.createTileGrid(dataEpsg);
+    if (dataEpsg !== "EPSG:3857" || attrs.extent || attrs.origin || attrs.origins || resolutions) {
+        params.tileGrid = this.createTileGrid(dataEpsg, attrs);
     }
 
-    this.setLayerSource(new OpenLayersVectorTileSource(params));
+    return new OpenLayersVectorTileSource(params);
 };
 
 /**
  * Create a tilegrid.
  * @param {String} dataEpsg The epsgCode from the data.
+ * @param {Object} attrs The layers attributes.
  * @returns {module:ol/tilegrid/TileGrid~TileGrid} The tileGrid.
  */
-VectorTileLayer.prototype.createTileGrid = function (dataEpsg) {
-    const extent = this.get("extent") || extentFromProjection(dataEpsg),
-        origin = this.get("origin") || [extent[0], extent[3]], // upper left corner = [minX, maxY]
-        resolutions = this.get("resolutions") || defaultResolutions,
-        tileSize = this.get("tileSize") || 512,
-        origins = this.get("origins"),
+VectorTileLayer.prototype.createTileGrid = function (dataEpsg, attrs) {
+    const extent = attrs.extent || extentFromProjection(dataEpsg),
+        origin = attrs.origin || [extent[0], extent[3]], // upper left corner = [minX, maxY]
+        resolutions = attrs.resolutions || defaultResolutions,
+        tileSize = attrs.tileSize || 512,
+        origins = attrs.origins,
         tileGridParams = {
             extent: extent,
             resolutions: resolutions,
             tileSize: tileSize,
-            minZoom: this.get("minZoom")
+            minZoom: attrs.minZoom
         };
 
     if (origins) {
