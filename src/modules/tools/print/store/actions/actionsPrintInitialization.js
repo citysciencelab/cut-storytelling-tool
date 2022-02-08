@@ -19,6 +19,11 @@ export default {
 
         if (state.serviceId !== "") {
             serviceUrl = Radio.request("RestReader", "getServiceById", state.serviceId).get("url");
+
+            if (!serviceUrl.includes("/print/")) {
+                serviceUrl = serviceUrl + "print/";
+            }
+
             commit("setServiceUrl", serviceUrl);
             serviceUrl = serviceUrl + state.printAppId + "/" + state.printAppCapabilities;
             const serviceRequest = {

@@ -227,6 +227,28 @@ describe("src/modules/tools/print/store/actionsPrint", function () {
                 {type: "sendRequest", payload: serviceRequest, dispatch: true}
             ], {}, done);
         });
+        it("should start another print request with service url without /print/", done => {
+            const state = {
+                    serviceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/",
+                    printAppId: "master"
+                },
+                response = {
+                    ref: "d023a604-99b0-4a4d-aa40-a1d3b5a0fd5d@5f00580a-5fd4-4579-8d21-1ad07051d09a",
+                    index: 0
+                },
+                serviceRequest = {
+                    "index": 0,
+                    "serviceUrl": "https://geodienste.hamburg.de/mapfish_print_internet/print/master/status/d023a604-99b0-4a4d-aa40-a1d3b5a0fd5d@5f00580a-5fd4-4579-8d21-1ad07051d09a.json",
+                    "requestType": "GET",
+                    "onSuccess": "waitForPrintJobSuccess"
+                };
+
+            // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
+            testAction(waitForPrintJob, response, state, {}, [
+                {type: "setProgressWidth", payload: "width: 75%", commit: true},
+                {type: "sendRequest", payload: serviceRequest, dispatch: true}
+            ], {}, done);
+        });
     });
 
     describe("waitForPrintJobSuccess", function () {

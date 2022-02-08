@@ -142,6 +142,36 @@ describe("src/modules/tools/filterGeneral/components/SnippetDropdown.vue", () =>
             });
             wrapper.destroy();
         });
+        it("should emit changeRule function with the expected values when values are objects", () => {
+            const wrapper = shallowMount(SnippetDropdown, {
+                propsData: {
+                    snippetId: 1234,
+                    visible: false,
+                    attrName: "attrName",
+                    operator: "operator"
+                },
+                localVue
+            });
+
+            wrapper.vm.emitCurrentRule([
+                {
+                    title: "value",
+                    img: "img",
+                    desc: "desc"
+                }
+            ], "startup");
+            expect(wrapper.emitted("changeRule")).to.be.an("array").and.to.have.lengthOf(1);
+            expect(wrapper.emitted("changeRule")[0]).to.be.an("array").and.to.have.lengthOf(1);
+            expect(wrapper.emitted("changeRule")[0][0]).to.deep.equal({
+                snippetId: 1234,
+                startup: "startup",
+                fixed: true,
+                attrName: "attrName",
+                operator: "operator",
+                value: ["value"]
+            });
+            wrapper.destroy();
+        });
     });
 
     describe("deleteCurrentRule", () => {

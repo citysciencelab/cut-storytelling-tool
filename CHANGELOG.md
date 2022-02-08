@@ -9,7 +9,20 @@
 ---
 ## Unreleased - in development
 ### Added
-- Package vue-multiselect: 2.1.6 is installed
+- The gazetteer search function now supports changing the namespace by configuration.
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+---
+## v2.18.0 - 2022-02-03
+### Added
+- Package vue-multiselect: 2.1.6 is installed.
 - Vector Tiles:
     - For vector tiles layers that are not in EPSG:3587, the default Mapbox resolutions are now used as fallback.
     - In addition, a minimum and maximum zoom level can be configured.
@@ -56,14 +69,14 @@
     - webpack-dev-server: 3.11.0 to 3.11.3
     - zip-a-folder: 1.1.0 to 1.1.3
 - The version of node was updated, must be >= 14.18.3 < 15.
-  The version of npm  was also updated, must be >= 6.14.15 < 7. The file .npmrc was added to set "engine-strict=true", as a result, the npm version and the node version are mandatory.
+  The version of npm  was also updated, must be >= 6.14.15 < 7. The file .npmrc was added to set "engine-strict=true", as a result, the npm version and the node version are mandatory. (It is planed that node will be updated to LTS in version 16).
 - Migrated the module mapView from Backbone to Vue.
 - Migrated the module vectorBaseLayer from Backbone to Vue. The VectorBaseLayer uses the masterportalAPI's vectorBase layer on creation.
 - Issue #655: A parameter "zoomLevel" was added to the WfsSearch tool. This feature was not implemented for WfsSearch, but available in the previously used tool parcelSearch. The field has been added to WfsSearch to work in the same fashion. For this, the ListItem.vue was changed to allow configuration of the zoom level via prop. It defaults to the previously fixed value.
 - Issue #486: WMS GFI can now show responses without tbody.
 
 ### Deprecated
-
+-
 ### Removed
 - The following NPM packages are removed:
     - mocha-loader
@@ -72,6 +85,7 @@
     - whatwg-fetch
 
 ### Fixed
+- Issue #661: `print` downloadlink is now created for serviceUrls with structure `https://baseurl/printfolder/` or `https://baseurl/printfolder/print/`.
 - Issue #679: `saveSelection` is now configurable again within the layer tree.
 - Fixed spelling of `DIRECTIONS` in documentation for routing tool.
 - Tool CoordToolkit: Labeling of longitude and latitude corrected if long/lat is selected as projection system.
