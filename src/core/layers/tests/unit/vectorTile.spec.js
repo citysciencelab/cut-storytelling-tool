@@ -31,7 +31,11 @@ const vtStyles = [
         typ: "VectorTile",
         type: "layer",
         url: "https://doesthisurlexist.de/vt/tiles/esri/Test_VT_3857/p12/tile/{z}/{y}/{x}.pbf",
-        useConfigName: true
+        useConfigName: true,
+        vtStyles: [
+            {name: "Layer One", id: "l1"},
+            {name: "Layer Two", id: "l2"}
+        ]
     };
 
 describe("core/modelList/layer/vectorTile", function () {
@@ -329,7 +333,7 @@ describe("core/modelList/layer/vectorTile", function () {
 
         it("Creates a tilegrid", function () {
             const context = makeContext(),
-                returnedTileGrid = VectorTileModel.prototype.createTileGrid(context, "EPSG:3857");
+                returnedTileGrid = VectorTileModel.prototype.createTileGrid.call(context, "EPSG:3857");
 
             expect(returnedTileGrid).to.be.not.empty;
         });
@@ -337,21 +341,14 @@ describe("core/modelList/layer/vectorTile", function () {
 
     describe("createLayer", function () {
         beforeEach(() => {
-            store.getters = {
-                Map: {
-                    projection: {
-                        getCode: () => {
-                            return "EPSG:3857";
-                        }
-                    }
-                }
-            };
+            store.commit("Map/setProjection", {getCode: () => "EPSG:3857"});
         });
+
         it("Creates a VectorTileLayer", function () {
             const vectorTileLayer = new VectorTileModel(attrs),
                 layer = vectorTileLayer.get("layer");
 
-            expect(layer).to.be.an.instanceof(VectorTileModel);
+            expect(layer).not.to.be.undefined;
             expect(layer.get("id")).to.be.equals(attrs.id);
             expect(layer.get("name")).to.be.equals(attrs.name);
         });
