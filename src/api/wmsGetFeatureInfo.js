@@ -4,7 +4,11 @@ import axios from "axios";
 import handleAxiosResponse from "../utils/handleAxiosResponse.js";
 
 /**
- * handles the GetFeatureInfo request
+ * Handles the GetFeatureInfo request.
+ * Implementation rule to show GFI, derived from known services:
+ * 1. Nodes exist
+ * 2. No <body> exists, or it has child nodes
+ * 3. No <tbody> exists, or it has child nodes
  * @param {String} mimeType - text/xml | text/html
  * @param {String} url - the GetFeatureInfo request url
  * @returns {Promise<module:ol/Feature[]>}  Promise object represents the GetFeatureInfo request
@@ -16,21 +20,6 @@ export function requestGfi (mimeType, url) {
             const parsedDocument = parseDocumentString(docString, mimeType);
 
             if (mimeType === "text/html") {
-                /* The WMS specification basically says "do whatever":
-                 *   https://portal.ogc.org/files/?artifact_id=14416
-                 *
-                 * Due to this, there's no clear indicator for "no feature" responses.
-                 * However, no GFI window is to be shown on such responses.
-                 *
-                 * Implementation rule to show GFI, derived from known services:
-                 * 1. Nodes exist
-                 * 2. No <body> exists, or it has child nodes
-                 * 3. No <tbody> exists, or it has child nodes
-                 *
-                 * Please mind that this ruleset is not absolute and may require
-                 * tweaking on "new" appearing implementations for empty responses.
-                 */
-
                 if (parsedDocument.childNodes.length > 0 &&
                     (
                         !parsedDocument.getElementsByTagName("body")[0] ||
