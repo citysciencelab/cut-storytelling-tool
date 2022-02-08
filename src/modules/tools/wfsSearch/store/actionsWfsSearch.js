@@ -31,7 +31,7 @@ const actions = {
 
         if (wfs) {
             const {selectSource} = currentInstance,
-                service = {url: wfs.url || wfs.get("url")};
+                service = {url: wfs.url || (wfs.get ? wfs.get("url"): undefined)};
 
             // NOTE: The extra object is sadly needed so that the object is reactive :(
             commit("setRequiredValues", {...prepareLiterals(currentInstance.literals)});
@@ -44,7 +44,7 @@ const actions = {
                 setLikeFilterProperties(likeFilter);
             }
             if (!storedQueryId && layerId) {
-                service.typeName = wfs.get("featureType");
+                service.typeName = wfs.featureType || (wfs.get ? wfs.get("featureType") : undefined);
             }
             commit("setService", service);
         }
