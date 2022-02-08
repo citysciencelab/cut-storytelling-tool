@@ -100,13 +100,13 @@ describe("src/api/gfi/getGfiFeaturesByTileFeature.js", () => {
                     primitive: {
                         olLayer: {
                             get: () => {
-                                return "primitive.olLayer.id";
+                                return "primitive.olLayerId";
                             }
                         }
                     }
                 },
                 result = getLayerModelFromTileFeature(tileFeature, dummy.getModelByAttributesOpt, dummy.isCesium3dTileFeature, dummy.isCesiumEntity),
-                expected = {id: "primitive.olLayer.id"};
+                expected = {id: "primitive.olLayerId"};
 
             expect(result).to.deep.equal(expected);
         });

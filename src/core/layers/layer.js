@@ -140,11 +140,10 @@ Layer.prototype.removeLayer = function () {
  * @returns {void}
  */
 Layer.prototype.toggleIsSelected = function () {
-    const newValue = this.attributes.isSelected === undefined ? true : !this.attributes.isSelected,
-        map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode);
+    const newValue = this.attributes.isSelected === undefined ? true : !this.attributes.isSelected;
 
     this.setIsSelected(newValue);
-    handleSingleBaseLayer(newValue, this, map);
+    handleSingleBaseLayer(newValue, this);
 };
 
 /**
@@ -394,10 +393,9 @@ Layer.prototype.moveUp = function () {
  * Called from setSelected, handles singleBaseLayer and timelayers.
  * @param {Boolean} isSelected true, if layer is selected
  * @param {ol.Layer} layer the dedicated layer
- * @param {ol.Map} map the current map
  * @returns {void}
  */
-function handleSingleBaseLayer (isSelected, layer, map) {
+function handleSingleBaseLayer (isSelected, layer) {
     const id = layer.get("id"),
         layerGroup = bridge.getLayerModelsByAttributes({parentId: layer.get("parentId")}),
         singleBaselayer = layer.get("singleBaselayer") && layer.get("parentId") === "Baselayer",
@@ -406,6 +404,8 @@ function handleSingleBaseLayer (isSelected, layer, map) {
     if (isSelected) {
         // This only works for treeType 'custom', otherwise the parentId is not set on the layer
         if (singleBaselayer) {
+            const map2D = mapCollection.getMap("ol", "2D");
+
             layerGroup.forEach(aLayer => {
                 // folders parentId is baselayer too, but they have not a function checkForScale
                 if (aLayer.get("id") !== id && typeof aLayer.checkForScale === "function") {
@@ -414,7 +414,7 @@ function handleSingleBaseLayer (isSelected, layer, map) {
                     if (aLayer.get("layer") !== undefined) {
                         aLayer.get("layer").setVisible(false);
                     }
-                    map?.removeLayer(aLayer.get("layer"));
+                    map2D?.removeLayer(aLayer.get("layer"));
                     // This makes sure that the Oblique Layer, if present in the layerList, is not selectable if switching between baseLayers
                     aLayer.checkForScale({scale: store.getters["Map/scale"]});
                 }

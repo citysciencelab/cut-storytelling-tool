@@ -111,6 +111,7 @@ export function getGfiFeature (layerAttributes, properties) {
  */
 export function getLayerModelFromTileFeature (tileFeature, getModelByAttributesOpt = null, isCesium3dTileFeatureOpt = null, isCesiumEntityOpt = null) {
     let filter = null;
+    console.log("tileFeature:",tileFeature);
 
     if (tileFeature === null || typeof tileFeature !== "object") {
         return undefined;
@@ -125,8 +126,8 @@ export function getLayerModelFromTileFeature (tileFeature, getModelByAttributesO
     else if (!tileFeature?.primitive || tileFeature.primitive === null || typeof tileFeature.primitive !== "object") {
         return undefined;
     }
-    else if (tileFeature.primitive.olLayer) {
-        filter = {id: tileFeature.primitive.olLayer.get("id")};
+    else if (tileFeature.primitive.olLayerId) {
+        filter = {id: tileFeature.primitive.olLayerId};
     }
     else if (typeof isCesiumEntityOpt === "function" ? isCesiumEntityOpt(tileFeature.primitive.id) : isCesiumEntity(tileFeature.primitive.id)) {
         filter = {id: tileFeature.primitive.id.layerReferenceId};
@@ -135,7 +136,7 @@ export function getLayerModelFromTileFeature (tileFeature, getModelByAttributesO
     if (typeof getModelByAttributesOpt === "function") {
         return getModelByAttributesOpt(filter);
     }
-    return getComponent(filter.id);
+    return filter ? getComponent(filter.id) : undefined;
 }
 
 /**
