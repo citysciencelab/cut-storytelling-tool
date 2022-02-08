@@ -79,7 +79,9 @@ describe("src/modules/layerInformation/store/actionsLayerInformation.js", () => 
 
             testAction(setMetadataURL, metaId, state, {}, [
                 {type: "setMetaURLs", payload: metaURLs}
-            ], {}, done);
+            ], {}, done, {
+                getRestServiceById: id => id === "2" ? { url: "https://metaver.de/trefferanzeige?cmd=doShowDocument&docuuid=" } : {}
+            });
 
         });
 
