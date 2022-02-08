@@ -32,34 +32,7 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
             userHelp = "HALP";
         let getters,
             rootGetters,
-            requestSpy,
             service;
-
-        /**
-         * The mock function for the Radio.request.
-         * Only for Radio.request("ModelList", "getModelByAttributes", {id: layerId}).
-         *
-         * @returns {object} An object containing the needed parameters and function to test the action 'toggleSwiper'.
-         */
-        function request (...args) {
-            const wfsDefined = Boolean(args[2].id);
-
-            requestSpy(...args);
-
-            return wfsDefined
-                ? {
-                    get: prm => {
-                        if (prm === "featureType") {
-                            return typeName;
-                        }
-                        if (prm === "url") {
-                            return url;
-                        }
-                        return null;
-                    }
-                }
-                : null;
-        }
 
         beforeEach(() => {
             getters = {
@@ -76,7 +49,6 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
                 getRestServiceById: id => id === 456 ? {url, featureType: typeName} : {}
             };
             service = {url};
-            requestSpy = sinon.spy();
         });
 
         it("should reset the module if the WFS is not given", () => {

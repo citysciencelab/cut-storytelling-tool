@@ -11,7 +11,7 @@ import {
 describe("src/modules/tools/routing/utils/geosearch/routing-nominatim-geosearch.js", () => {
     beforeEach(() => {
         sinon.stub(i18next, "t").callsFake((...args) => args);
-        store.getters.getRestServiceById = () => ({url: "tmp"})
+        store.getters.getRestServiceById = () => ({url: "tmp"});
     });
 
     afterEach(() => {
