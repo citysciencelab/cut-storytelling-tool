@@ -12,6 +12,7 @@
 - The gazetteer search function now supports changing the namespace by configuration.
 
 ### Changed
+- The parsing of `rest-services.json` was migrated from Backbone to Vue.
 
 ### Deprecated
 
