@@ -77,7 +77,7 @@ export default {
             class="bottom"
         >
             <div class="info-text">
-                <span>{{ $t("modules.tools.filterGeneral.checkBoxInfo") }}</span>
+                <span>{{ $t("modules.tools.filterGeneral.info.snippetCheckbox") }}</span>
             </div>
         </div>
     </div>

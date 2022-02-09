@@ -1,7 +1,7 @@
 <script>
 import Multiselect from "vue-multiselect";
 import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
-import getIconListFromLegend from "../utils/getIconListFromLegend.js";
+import {getStyleModel, getIconListFromLegend} from "../utils/getIconListFromLegend.js";
 import isObject from "../../../../utils/isObject.js";
 
 export default {
@@ -109,6 +109,8 @@ export default {
             showInfo: false,
             dropdownValue: [],
             dropdownSelected: [],
+            styleModel: {},
+            legendsInfo: [],
             iconList: {}
         };
     },
@@ -198,6 +200,11 @@ export default {
         },
         disabled (value) {
             this.disable = typeof value === "boolean" ? value : true;
+        },
+        legendsInfo (value) {
+            if (this.renderIcons === "fromLegend") {
+                this.iconList = getIconListFromLegend(value, this.styleModel);
+            }
         }
     },
     created () {
@@ -240,7 +247,14 @@ export default {
     },
     mounted () {
         if (this.renderIcons === "fromLegend") {
-            this.iconList = getIconListFromLegend(this.layerId);
+            this.styleModel = getStyleModel(this.layerId);
+
+            if (!this.styleModel || !this.styleModel.getLegendInfos() || !Array.isArray(this.styleModel.getLegendInfos())) {
+                this.legendsInfo = [];
+            }
+            else {
+                this.legendsInfo = this.styleModel.getLegendInfos();
+            }
         }
         else if (isObject(this.renderIcons)) {
             this.iconList = this.renderIcons;
