@@ -359,15 +359,6 @@ export default {
             class="snippetDefaultContainer"
         >
             <div
-                v-if="label !== false"
-                class="left"
-            >
-                <label
-                    class="select-box-label"
-                    :for="'snippetSelectBox-' + snippetId"
-                >{{ labelText }}</label>
-            </div>
-            <div
                 v-if="info !== false"
                 class="right"
             >
@@ -378,6 +369,15 @@ export default {
                         @keydown.enter="toggleInfo()"
                     >&nbsp;</span>
                 </div>
+            </div>
+            <div
+                v-if="label !== false"
+                class="left"
+            >
+                <label
+                    class="select-box-label"
+                    :for="'snippetSelectBox-' + snippetId"
+                >{{ labelText }}</label>
             </div>
             <div class="select-box-container">
                 <Multiselect
@@ -413,7 +413,19 @@ export default {
             class="snippetListContainer"
         >
             <div class="table-responsive">
-                <table class="table table-sm table-hover table-bordered table-striped">
+                <div
+                    v-if="info"
+                    class="right"
+                >
+                    <div class="info-icon">
+                        <span
+                            :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
+                            @click="toggleInfo()"
+                            @keydown.enter="toggleInfo()"
+                        >&nbsp;</span>
+                    </div>
+                </div>
+                <table :class="['table table-sm table-hover table-bordered table-striped', info ? 'left': '']">
                     <thead
                         v-if="label !== false"
                     >
@@ -460,6 +472,14 @@ export default {
                         </tr>
                     </tbody>
                 </table>
+                <div
+                    v-show="showInfo"
+                    class="bottom"
+                >
+                    <div class="info-text">
+                        <span>{{ infoText }}</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -591,12 +611,19 @@ export default {
         clear: left;
         width: 100%;
     }
-    .snippetDropdownContainer .right {
+    .snippetDropdownContainer .table-responsive .right {
+        position: absolute;
+        right: -10px;
+    }
+    .panel .snippetDropdownContainer .right,  .snippetDropdownContainer .right{
         position: absolute;
         right: 10px;
     }
-    .category-layer .right {
+    .category-layer .panel .right {
         right: 30px;
+    }
+    .category-layer .panel .table-responsive .right {
+        right: 24px;
     }
     .table {
         margin-bottom: 10px;
