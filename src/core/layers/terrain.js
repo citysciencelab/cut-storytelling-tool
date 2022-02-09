@@ -84,7 +84,7 @@ TerrainLayer.prototype.setIsSelected = function (newValue, attr) {
             this.attributes.isSelected = newValue;
             this.setIsVisibleInMap(newValue);
         }
-        terrain.setVisible(newValue, map);
+        terrain.setVisible(newValue, this.attributes ? this.attributes : attr, map);
         if (isVisibleInMap) {
             this.createLegend();
         }
