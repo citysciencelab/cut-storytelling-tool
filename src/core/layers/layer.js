@@ -57,7 +57,7 @@ export default function Layer (attrs, layer, initialize = true) {
     this.setMinMaxResolutions();
     this.checkForScale({scale: store.getters["Map/scale"]});
     this.registerInteractionMapViewListeners();
-    bridge.onMapModeChanged(this);
+    this.onMapModeChanged(this);
     bridge.onLanguageChanged(this);
     this.changeLang();
 }
@@ -104,6 +104,22 @@ Layer.prototype.registerInteractionMapViewListeners = function () {
     store.watch((state, getters) => getters["Map/scale"], scale => {
         this.checkForScale({scale: scale});
     });
+};
+/**
+ * Sets this layers to visible, if it supports the map mode else sets the visibility to false.
+ * @returns {void}
+ */
+Layer.prototype.onMapModeChanged = function () {
+    store.watch((state, getters) => getters["Map/mapMode"], mode => {
+        if (this.get("supported").indexOf(mode) >= 0) {
+            if (this.get("isVisibleInMap")) {
+                this.get("layer").setVisible(true);
+            }
+        }
+        else {
+            this.get("layer").setVisible(false);
+        }
+    }).bind(this);
 };
 /**
  * Setter for ol/layer.setMaxResolution

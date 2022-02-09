@@ -30,12 +30,7 @@ export default function TileSetLayer (attrs) {
     this.createLayer(Object.assign(defaults, attrs));
     // call the super-layer
     Layer.call(this, Object.assign(defaults, attrs), this.layer, !attrs.isChildLayer);
-
-    store.watch((state, getters) => getters["Map/mapMode"], mode => {
-        if (mode === "3D") {
-            this.setIsSelected(this.get("isVisibleInMap"));
-        }
-    }).bind(this);
+    this.onMapModeChanged();
 }
 // Link prototypes and add prototype methods, means TileSetLayer uses all methods and properties of Layer
 TileSetLayer.prototype = Object.create(Layer.prototype);
@@ -60,6 +55,17 @@ TileSetLayer.prototype.createLayer = function (attr) {
 TileSetLayer.prototype.setVisible = function (newValue) {
     this.setIsSelected(newValue);
 };
+/**
+ * Sets this layer to visible, if mode changes to 3D.
+ * @returns {void}
+ */
+TileSetLayer.prototype.onMapModeChanged = function () {
+    store.watch((state, getters) => getters["Map/mapMode"], mode => {
+        if (mode === "3D") {
+            this.setIsSelected(this.get("isVisibleInMap"));
+        }
+    }).bind(this);
+};
 
 /**
  * Calls masterportalAPI's terrain-layer to set this layer visible.
@@ -83,7 +89,7 @@ TileSetLayer.prototype.setIsSelected = function (newValue, attr) {
             this.setIsVisibleInMap(newValue);
             this.attributes.isSelected = newValue;
         }
-        this.layer.setVisible(newValue, this.attributes ? this.attributes : attr, map);
+        this.layer.setVisible(newValue, map);
         if (isVisibleInMap) {
             this.createLegend();
         }
