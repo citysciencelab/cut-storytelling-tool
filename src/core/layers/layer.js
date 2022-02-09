@@ -532,6 +532,7 @@ Layer.prototype.showLayerInformation = function () {
         "metaIdArray": metaID,
         "layername": name,
         "url": this.get("url"),
+        "legendURL": this.get("legendURL"),
         "typ": this.get("typ"),
         "cswUrl": cswUrl,
         "showDocUrl": showDocUrl,

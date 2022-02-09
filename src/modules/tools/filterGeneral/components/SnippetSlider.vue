@@ -15,6 +15,11 @@ export default {
             required: false,
             default: ""
         },
+        adjustment: {
+            type: [Object, Boolean],
+            required: false,
+            default: false
+        },
         decimalPlaces: {
             type: Number,
             required: false,
@@ -70,6 +75,7 @@ export default {
         return {
             disable: true,
             isInitializing: true,
+            isAdjusting: false,
             minimumValue: 0,
             maximumValue: 100,
             showInfo: false,
@@ -108,8 +114,37 @@ export default {
     },
     watch: {
         value () {
-            if (!this.isInitializing || typeof this.prechecked !== "undefined") {
+            if (!this.isAdjusting && (!this.isInitializing || typeof this.prechecked !== "undefined")) {
                 this.emitCurrentRule(this.inRangeValue, this.isInitializing);
+            }
+        },
+        adjustment (adjusting) {
+            if (!isObject(adjusting) || this.visible === false) {
+                return;
+            }
+
+            if (adjusting?.start) {
+                this.isAdjusting = true;
+                this.minimumValue = false;
+                this.maximumValue = false;
+            }
+            if (isObject(adjusting?.adjust) && typeof adjusting.adjust?.min === "number") {
+                this.minimumValue = typeof this.minimumValue === "number" ? Math.min(this.minimumValue, adjusting.adjust.min) : adjusting.adjust.min;
+            }
+            if (isObject(adjusting?.adjust) && typeof adjusting.adjust?.max === "number") {
+                this.maximumValue = typeof this.maximumValue === "number" ? Math.max(this.maximumValue, adjusting.adjust.max) : adjusting.adjust.max;
+            }
+            if (adjusting?.finish) {
+                if (typeof this.minimumValue !== "number") {
+                    this.minimumValue = 0;
+                }
+                if (typeof this.maximumValue !== "number") {
+                    this.maximumValue = 0;
+                }
+                this.value = Math.min(this.maximumValue, Math.max(this.minimumValue, this.value));
+                this.$nextTick(() => {
+                    this.isAdjusting = false;
+                });
             }
         },
         disabled (value) {
@@ -214,6 +249,31 @@ export default {
             return 1 / Math.pow(10, decimalPlaces);
         },
         /**
+         * Triggered once when changes are made at the slider to avoid set of rules during changes.
+         * @returns {void}
+         */
+        startSliderChange () {
+            if (!isObject(this.adjustment)) {
+                return;
+            }
+            this.isAdjusting = true;
+        },
+        /**
+         * Triggered once when end of changes are detected at the slider to start set of rules after changes.
+         * @param {Event} evt - input event
+         * @returns {void}
+         */
+        endSliderChange (evt) {
+            this.checkInput(evt);
+            if (!isObject(this.adjustment)) {
+                return;
+            }
+            this.$nextTick(() => {
+                this.isAdjusting = false;
+                this.emitCurrentRule(this.inRangeValue, this.isInitializing);
+            });
+        },
+        /**
          * Checking if the input field is valid and reset to valid value
          * @param {Event} evt - input event
          * @returns {void}
@@ -285,8 +345,9 @@ export default {
             :max="maximumValue"
             :name="label"
             :disabled="disable"
-            @blur="checkInput"
-            @keyup.enter="checkInput"
+            @focus="startSliderChange()"
+            @blur="endSliderChange"
+            @keyup.enter="endSliderChange"
         >
         <div class="slider-input-container">
             <input
@@ -298,6 +359,8 @@ export default {
                 :disabled="disable"
                 :min="minimumValue"
                 :max="maximumValue"
+                @mousedown="startSliderChange()"
+                @mouseup="endSliderChange"
             >
         </div>
         <span class="min">{{ minimumValue }}</span>
