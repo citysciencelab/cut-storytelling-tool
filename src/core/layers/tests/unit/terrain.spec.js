@@ -77,8 +77,7 @@ describe("src/core/layers/terrain.js", () => {
             layer = terrainLayer.get("layer");
 
         checkLayer(layer, terrainLayer, attributes);
-        expect(cesiumTerrainProviderSpy.calledOnce).to.equal(true);
-        expect(cesiumTerrainProviderSpy.calledWithMatch({requestVertexNormals: true})).to.equal(true);
+        expect(cesiumTerrainProviderSpy.notCalled).to.equal(true);
         expect(cesiumEllipsoidTerrainProviderSpy.notCalled).to.equal(true);
     });
     it("createLayer shall create a visible terrain layer", function () {
@@ -118,7 +117,7 @@ describe("src/core/layers/terrain.js", () => {
         terrainLayer.setIsSelected(false);
         checkLayer(layer, terrainLayer, attributes);
         expect(cesiumEllipsoidTerrainProviderSpy.calledOnce).to.equal(true);
-        expect(cesiumTerrainProviderSpy.calledOnce).to.equal(true);
+        expect(cesiumTerrainProviderSpy.notCalled).to.equal(true);
     });
     it("createLegend shall set legend", function () {
         attributes.legendURL = "https://legendUrl";
