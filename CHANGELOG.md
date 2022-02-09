@@ -23,6 +23,7 @@
   The version of npm  was also updated, must be >= 8.1.2 < 9. (The node and npm versions are still mandatory via .npmrc.).
 - Migrated the module 3D TerrainLayer from Backbone to Vue. The TerrainLayer uses the masterportalAPI's terrain layer on creation.
 - The vectorTile Layer is now refactored to src/core.
+- Migrated the module tileset from Backbone to Vue. The tileset layer uses the masterportalAPI's tileset layer on creation.
 
 ### Deprecated
 
@@ -99,8 +100,6 @@
 - Migrated the module vectorBaseLayer from Backbone to Vue. The VectorBaseLayer uses the masterportalAPI's vectorBase layer on creation.
 - Issue #655: A parameter "zoomLevel" was added to the WfsSearch tool. This feature was not implemented for WfsSearch, but available in the previously used tool parcelSearch. The field has been added to WfsSearch to work in the same fashion. For this, the ListItem.vue was changed to allow configuration of the zoom level via prop. It defaults to the previously fixed value.
 - Issue #486: WMS GFI can now show responses without tbody.
-- Migrated the module tileset from Backbone to Vue. The tileset layer uses the masterportalAPI's tileset layer on creation.
-### Deprecated
 
 ### Deprecated
 
