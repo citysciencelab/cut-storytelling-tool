@@ -42,7 +42,8 @@ export default function TerrainLayer (attrs) {
 TerrainLayer.prototype = Object.create(Layer.prototype);
 
 /**
- * Creates the layer as a simple object with one function 'setVisible' for calling 'setIsSelected'.
+ * Creates the layer by using masterportalAPI's terrain-layer.
+ * If attribute isSelected is true, setIsSelected is called.
  * @param {Object} attr the attributes for the layer
  * @returns {void}
  */
@@ -69,7 +70,8 @@ TerrainLayer.prototype.setVisible = function (newValue) {
  * @returns {void}
  */
 TerrainLayer.prototype.setIsSelected = function (newValue, attr) {
-    const map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode);
+    const map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode),
+        treeType = store.getters.treeType;
 
     if (map && map.mode === "3D") {
         let isVisibleInMap = this.attributes ? this.get("isVisibleInMap") : false;
@@ -80,11 +82,32 @@ TerrainLayer.prototype.setIsSelected = function (newValue, attr) {
         }
         else {
             this.attributes.isSelected = newValue;
+            this.setIsVisibleInMap(newValue);
         }
-        terrain.setVisible(newValue, this.attributes ? this.attributes : attr, map);
+        terrain.setVisible(newValue, map);
         if (isVisibleInMap) {
             this.createLegend();
         }
+        if (treeType !== "light" || store.state.mobile) {
+            bridge.updateLayerView(this);
+            bridge.renderMenu();
+
+        }
+    }
+};
+/**
+ * Setter for isVisibleInMap and setter for layer.setVisible
+ * @param {Boolean} newValue Flag if layer is visible in map
+ * @returns {void}
+ */
+TerrainLayer.prototype.setIsVisibleInMap = function (newValue) {
+    const lastValue = this.get("isVisibleInMap");
+
+    this.set("isVisibleInMap", newValue);
+    if (lastValue !== newValue) {
+        // here it is possible to change the layer visibility-info in state and listen to it e.g. in LegendWindow
+        // e.g. store.dispatch("Map/toggleLayerVisibility", {layerId: this.get("id")});
+        bridge.layerVisibilityChanged(this, this.get("isVisibleInMap"));
     }
 };
 
