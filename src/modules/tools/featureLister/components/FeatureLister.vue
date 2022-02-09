@@ -148,6 +148,7 @@ export default {
                                         :key="'tool-featureLister-' + index"
                                         class="featurelist-list-table-th"
                                     >
+                                        <span class="glyphicon glyphicon-sort-by-alphabet" />
                                         {{ header.value }}
                                     </th>
                                 </tr>
