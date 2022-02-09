@@ -43,6 +43,8 @@ const state = {
     visibleLayers: [],
     featureListView: false,
     detailView: false,
+    rawFeaturesOfLayer: [],
+    nestedFeatures: false,
     headers: [],
     featureid: "",
     featureProps: {},
