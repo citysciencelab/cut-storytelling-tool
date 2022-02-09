@@ -20,6 +20,7 @@
 
 ### Fixed
 - Issue #668: `layerInformation` shows legend information only if legendURL is not ignored.
+- Config parameters that are an array completely overwrite the default values of the associated array in the store
 
 ---
 ## v2.18.0 - 2022-02-03
