@@ -13,6 +13,11 @@
 
 ### Changed
 -  Print uses formatList from statePrint, instead of all formats from mapfish Server.
+-  - The following NPM packages are updated:
+    - mocha: 9.1.4 to 9.2.0
+    - mochapack: 2.1.2 to 2.1.4
+- The version of node was updated, must be >= 16.13.2 < 17.
+  The version of npm  was also updated, must be >= 8.1.2 < 9. (The node and npm versions are still mandatory via .npmrc.)
 
 ### Deprecated
 
