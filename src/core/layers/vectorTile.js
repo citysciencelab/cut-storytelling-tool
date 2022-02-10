@@ -17,7 +17,6 @@ import axios from "axios";
  */
 export default function VectorTileLayer (attrs) {
     const defaults = {
-            ...Layer.prototype.defaults,
             selectedStyleID: undefined,
             useMpFonts: true,
             useProxy: false
