@@ -64,9 +64,16 @@ const getters = {
         });
         indexOfFeatureWithMostAttributes = lengths.indexOf(Math.max(...lengths));
 
-        Object.entries(state.gfiFeaturesOfLayer[indexOfFeatureWithMostAttributes].getAttributesToShow()).forEach(([key, value]) => {
-            headers.push({key, value});
-        });
+        if (state.gfiFeaturesOfLayer[indexOfFeatureWithMostAttributes].getAttributesToShow() === "showAll") {
+            Object.entries(state.gfiFeaturesOfLayer[indexOfFeatureWithMostAttributes].getProperties()).forEach(([key]) => {
+                headers.push({key: key, value: key});
+            });
+        }
+        else {
+            Object.entries(state.gfiFeaturesOfLayer[indexOfFeatureWithMostAttributes].getAttributesToShow()).forEach(([key, value]) => {
+                headers.push({key, value});
+            });
+        }
         state.headers = headers;
         return headers;
     }
