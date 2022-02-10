@@ -42,12 +42,12 @@ const getters = {
 
         Object.entries(state.selectedFeature.getProperties()).forEach(([propkey, propvalue]) => {
             Object.entries(state.selectedFeature.getAttributesToShow()).forEach(([key, value]) => {
-                if(propkey === key){
+                if (propkey === key) {
                     featureDetail.push([value, propvalue]);
                 }
             });
         });
-      return featureDetail;
+        return featureDetail;
     },
     /**
      * Gets the currently available layers.

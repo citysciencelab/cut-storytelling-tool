@@ -207,8 +207,14 @@ export default {
                         :key="'tool-featureLister-' + key"
                         class="list-group featurelist-details-ul"
                     >
-                        <li class="list-group-item featurelist-details-li"> <strong> {{ feature[0] }} </strong> </li>
-                        <li class="list-group-item featurelist-details-li"> {{ feature[1] }} </li>
+                        <li class="list-group-item featurelist-details-li">
+                            <strong>
+                                {{ feature[0] }}
+                            </strong>
+                        </li>
+                        <li class="list-group-item featurelist-details-li">
+                            {{ feature[1] }}
+                        </li>
                     </ul>
                 </div>
             </template>

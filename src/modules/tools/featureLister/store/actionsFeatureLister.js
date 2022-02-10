@@ -38,7 +38,7 @@ export default {
                 commit("setFeatureListView", false);
                 commit("setFeatureDetailView", true);
 
-                dispatch("switchToDetails")
+                dispatch("switchToDetails");
             }
         });
     },
@@ -63,7 +63,7 @@ export default {
         });
     },
 
-    switchToDetails ({state, commit, dispatch}, layer) {
+    switchToDetails ({commit}) {
         Object.entries(document.getElementsByClassName("featurelist-navtabs")[0].children).forEach(([, child]) => {
             if (child.id === "featurelistFeaturedetails") {
                 child.classList.remove("disabled");
