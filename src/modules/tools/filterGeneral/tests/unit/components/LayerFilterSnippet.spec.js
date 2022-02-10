@@ -18,8 +18,7 @@ describe("src/modules/tools/filterGeneral/components/LayerFilterSnippet.vue", ()
                 layerConfig: {
                     service: {
                         type: "something external"
-                    },
-                    snippets: false
+                    }
                 }
             },
             localVue
@@ -44,8 +43,7 @@ describe("src/modules/tools/filterGeneral/components/LayerFilterSnippet.vue", ()
                         layerId: "layerId",
                         service: {
                             type: "something external"
-                        },
-                        snippets: false
+                        }
                     }
                 },
                 localVue

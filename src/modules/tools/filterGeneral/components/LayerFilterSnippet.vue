@@ -29,6 +29,11 @@ export default {
         ProgressBar
     },
     props: {
+        api: {
+            type: FilterApi,
+            required: false,
+            default: undefined
+        },
         layerConfig: {
             type: Object,
             required: true
@@ -60,7 +65,6 @@ export default {
             showStop: false,
             layerModel: null,
             layerService: null,
-            api: null,
             searchInMapExtent: false,
             filteredFeatureIds: [],
             enableZoom: true,
@@ -100,12 +104,12 @@ export default {
         }
         this.setLayerService();
         this.setupSnippets();
-        this.api = new FilterApi(this.layerConfig.filterId, this.layerService);
+        if (this.api instanceof FilterApi) {
+            this.api.setDefaultService(this.layerService);
+        }
     },
     mounted () {
-        if (typeof this.layerConfig?.snippets !== "boolean") {
-            this.checkSnippetType(this.snippets);
-        }
+        this.checkSnippetType(this.snippets);
     },
     methods: {
         /**
@@ -138,6 +142,9 @@ export default {
          * @returns {void}
          */
         autoRecognizeSnippetTypes (snippets) {
+            if (!(this.api instanceof FilterApi)) {
+                return;
+            }
             this.api.getAttrTypes(attrTypes => {
                 if (Array.isArray(snippets) && snippets.length) {
                     snippets.forEach(snippet => {
@@ -565,6 +572,9 @@ export default {
          * @returns {void}
          */
         runApiFilter (filterQuestion, onsuccess) {
+            if (!(this.api instanceof FilterApi)) {
+                return;
+            }
             this.api.filter(filterQuestion, filterAnswer => {
                 this.paging = filterAnswer.paging;
 
@@ -594,6 +604,9 @@ export default {
          * @returns {void}
          */
         stopfilter () {
+            if (!(this.api instanceof FilterApi)) {
+                return;
+            }
             this.api.stop(() => {
                 this.showStopButton(false);
                 this.setFormDisable(false);
