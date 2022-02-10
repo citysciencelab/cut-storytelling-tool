@@ -154,6 +154,7 @@ export default {
                                 </tr>
                                 <tr
                                     v-for="(feature, index) in getFeatureProperties"
+                                    :id="index"
                                     :key="'tool-featureLister-' + index"
                                     class="featurelist-list-table-tr"
                                 >
