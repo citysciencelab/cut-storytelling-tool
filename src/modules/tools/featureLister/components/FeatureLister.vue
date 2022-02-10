@@ -190,7 +190,6 @@ export default {
                     </div>
                 </div>
             </template>
-
             <template v-if="featureDetailView">
                 <div
                     id="featurelist-details"
@@ -218,7 +217,6 @@ export default {
                     </ul>
                 </div>
             </template>
-
         </template>
     </ToolTemplate>
 </template>
