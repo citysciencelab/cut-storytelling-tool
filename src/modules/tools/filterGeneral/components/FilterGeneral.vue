@@ -10,6 +10,7 @@ import MapHandler from "../utils/mapHandler.js";
 import {getLayerByLayerId, showFeaturesByIds, createLayerIfNotExists, liveZoom} from "../utils/openlayerFunctions.js";
 import FilterApi from "../interfaces/filter.api.js";
 import LayerCategory from "../components/LayerCategory.vue";
+import isObject from "../../../../utils/isObject.js";
 
 export default {
     name: "FilterGeneral",
@@ -37,12 +38,12 @@ export default {
         console: () => console,
         filtersOnly () {
             return this.layers.filter(layer => {
-                return !Object.prototype.hasOwnProperty.call(layer, "category");
+                return isObject(layer) && !Object.prototype.hasOwnProperty.call(layer, "category");
             });
         },
         categoriesOnly () {
             return this.layers.filter(layer => {
-                return Object.prototype.hasOwnProperty.call(layer, "category");
+                return isObject(layer) && Object.prototype.hasOwnProperty.call(layer, "category");
             });
         }
     },
@@ -50,10 +51,11 @@ export default {
         this.$on("close", this.close);
     },
     mounted () {
-        this.setFilterId();
-        this.initializeFilterApiList();
         this.$nextTick(() => {
             this.initialize();
+            this.replaceStringWithObjectLayers();
+            this.setFilterId();
+            this.initializeFilterApiList();
             // console.log("Alte Config", this.configs);
             // console.log("Neue Config", this.convertToNewConfig(this.configs));
         });
@@ -91,6 +93,9 @@ export default {
                 else {
                     layer.filterId = filterId;
                     filterId += 1;
+                }
+                if (!Object.prototype.hasOwnProperty.call(layer, "snippets")) {
+                    layer.snippets = [];
                 }
             });
         },
@@ -173,6 +178,21 @@ export default {
          */
         setLayerLoaded (filterId) {
             this.layerLoaded[filterId] = true;
+        },
+        /**
+         * Replaces all configured layerId specified as string with an object.
+         * @returns {void}
+         */
+        replaceStringWithObjectLayers () {
+            if (Array.isArray(this.layers)) {
+                this.layers.forEach((layer, idx) => {
+                    if (typeof layer === "string") {
+                        this.layers[idx] = {
+                            layerId: layer
+                        };
+                    }
+                });
+            }
         }
     }
 };
