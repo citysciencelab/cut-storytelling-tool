@@ -9,6 +9,11 @@ export default {
             required: false,
             default: ""
         },
+        adjustment: {
+            type: [Object, Boolean],
+            required: false,
+            default: false
+        },
         disabled: {
             type: Boolean,
             required: false,
@@ -77,18 +82,6 @@ export default {
             return "";
         }
     },
-    watch: {
-        value: {
-            handler (value) {
-                if (!value) {
-                    this.deleteCurrentRule();
-                }
-                else {
-                    this.emitCurrentRule(value, this.isInitializing);
-                }
-            }
-        }
-    },
     created () {
         if (this.prechecked) {
             this.value = this.prechecked;
@@ -144,6 +137,18 @@ export default {
          */
         toggleInfo () {
             this.showInfo = !this.showInfo;
+        },
+        /**
+         * Triggers when the input field has lost its focus.
+         * @returns {void}
+         */
+        inputChanged () {
+            if (!this.value) {
+                this.deleteCurrentRule();
+            }
+            else {
+                this.emitCurrentRule(this.value, this.isInitializing);
+            }
         }
     }
 };
@@ -175,11 +180,13 @@ export default {
             <input
                 :id="'snippetInput-' + snippetId"
                 v-model="value"
-                class="snippetInput"
+                class="snippetInput form-control"
                 type="text"
                 name="input"
                 :disabled="disabled"
                 :placeholder="placeholder"
+                @blur="inputChanged()"
+                @keyup.enter="inputChanged()"
             >
         </div>
         <div
@@ -202,8 +209,6 @@ export default {
         width: 100%;
     }
     .snippetInputContainer {
-        padding: 5px;
-        margin-bottom: 10px;
         height: auto;
     }
     .snippetInputContainer input {

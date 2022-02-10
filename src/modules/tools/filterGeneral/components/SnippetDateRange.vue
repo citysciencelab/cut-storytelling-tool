@@ -1,6 +1,7 @@
 <script>
 import isObject from "../../../../utils/isObject";
 import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
+import {getMinDate, getMaxDate} from "../utils/getMinAndMaxDate.js";
 import moment from "moment";
 
 export default {
@@ -15,6 +16,11 @@ export default {
             type: [String, Array],
             required: false,
             default: ""
+        },
+        adjustment: {
+            type: [Object, Boolean],
+            required: false,
+            default: false
         },
         disabled: {
             type: Boolean,
@@ -72,6 +78,7 @@ export default {
             disable: true,
             internalFormat: "YYYY-MM-DD",
             isInitializing: true,
+            isAdjusting: false,
             minimumValue: "",
             maximumValue: "",
             value: ["", ""],
@@ -126,13 +133,43 @@ export default {
     },
     watch: {
         value () {
-            if (!this.isInitializing || this.precheckedIsValid) {
+            if (!this.isAdjusting && (!this.isInitializing || this.precheckedIsValid)) {
                 const value = [
                     moment(this.inRangeValueLeft, this.internalFormat).format(this.format),
                     moment(this.inRangeValueRight, this.internalFormat).format(this.format)
                 ];
 
                 this.emitCurrentRule(value, this.isInitializing);
+            }
+        },
+        adjustment (adjusting) {
+            if (!isObject(adjusting) || this.visible === false) {
+                return;
+            }
+
+            if (adjusting?.start) {
+                this.isAdjusting = true;
+                this.minimumValue = false;
+                this.maximumValue = false;
+            }
+            if (isObject(adjusting?.adjust) && typeof adjusting.adjust?.min === "string") {
+                this.minimumValue = typeof this.minimumValue === "string" ? getMinDate(this.minimumValue, adjusting.adjust.min, this.internalFormat) : adjusting.adjust.min;
+            }
+            if (isObject(adjusting?.adjust) && typeof adjusting.adjust?.max === "string") {
+                this.maximumValue = typeof this.maximumValue === "string" ? getMaxDate(this.maximumValue, adjusting.adjust.max, this.internalFormat) : adjusting.adjust.max;
+            }
+            if (adjusting?.finish) {
+                if (typeof this.minimumValue !== "string") {
+                    this.minimumValue = this.maximumValue;
+                }
+                if (typeof this.maximumValue !== "string") {
+                    this.minimumValue = moment().format(this.internalFormat);
+                    this.maximumValue = moment().format(this.internalFormat);
+                }
+                this.value = [getMaxDate(this.minimumValue, this.value[0], this.internalFormat), getMinDate(this.maximumValue, this.value[1], this.internalFormat)];
+                this.$nextTick(() => {
+                    this.isAdjusting = false;
+                });
             }
         },
         disabled (value) {
@@ -327,6 +364,34 @@ export default {
          */
         toggleInfo () {
             this.showInfo = !this.showInfo;
+        },
+        /**
+         * Triggered once when changes are made at the date picker to avoid set of rules during changes.
+         * @returns {void}
+         */
+        startDateChange () {
+            if (!isObject(this.adjustment)) {
+                return;
+            }
+            this.isAdjusting = true;
+        },
+        /**
+         * Triggered once when end of changes are detected at the date picker to start set of rules after changes.
+         * @returns {void}
+         */
+        endDateChange () {
+            if (!isObject(this.adjustment)) {
+                return;
+            }
+            this.isAdjusting = false;
+            this.$nextTick(() => {
+                const value = [
+                    moment(this.inRangeValueLeft, this.internalFormat).format(this.format),
+                    moment(this.inRangeValueRight, this.internalFormat).format(this.format)
+                ];
+
+                this.emitCurrentRule(value, this.isInitializing);
+            });
         }
     }
 };
@@ -372,11 +437,14 @@ export default {
                     :id="'inputDateFrom-' + snippetId"
                     v-model="inRangeValueLeft"
                     name="inputDateFrom"
-                    class="snippetDateRangeFrom"
+                    class="snippetDateRangeFrom form-control"
                     type="date"
                     :min="minimumValue"
                     :max="inRangeValueRight"
                     :disabled="disable"
+                    @focus="startDateChange()"
+                    @blur="endDateChange()"
+                    @keyup.enter="endDateChange()"
                 >
             </div>
             <div
@@ -390,11 +458,14 @@ export default {
                     :id="'inputDateUntil-' + snippetId"
                     v-model="inRangeValueRight"
                     name="inputDateUntil"
-                    class="snippetDateRangeUntil"
+                    class="snippetDateRangeUntil form-control"
                     type="date"
                     :min="inRangeValueLeft"
                     :max="maximumValue"
                     :disabled="disable"
+                    @focus="startDateChange()"
+                    @blur="endDateChange()"
+                    @keyup.enter="endDateChange()"
                 >
             </div>
         </div>
@@ -411,9 +482,10 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    .form-control {
+        height: 28px;
+    }
     .snippetDateRangeContainer {
-        padding: 5px;
-        margin-bottom: 10px;
         height: auto;
     }
     .snippetDateRangeContainer input {
@@ -423,6 +495,7 @@ export default {
         outline: 0;
         position: relative;
         margin-bottom: 5px;
+        height: 34px;
     }
     .snippetDateRangeContainer .info-icon {
         float: right;

@@ -12,12 +12,15 @@
 - The gazetteer search function now supports changing the namespace by configuration.
 
 ### Changed
+-  Print uses formatList from statePrint, instead of all formats from mapfish Server.
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+- Issue #668: `layerInformation` shows legend information only if legendURL is not ignored.
+- Config parameters that are an array completely overwrite the default values of the associated array in the store
 
 ---
 ## v2.18.0 - 2022-02-03
@@ -28,6 +31,8 @@
     - In addition, a minimum and maximum zoom level can be configured.
     - The `zDirection` can be used to specify, if the resolutions of the service and the portal are different, in which direction the resolution should be used.
 - Added WFS functions (GetFeature and DescribeFetureType) to the api folder to query the WFS-Requests in one place.
+- The VectorBaseLayer is refactored. It is no longer a Backbone-model. The VectorBaseLayer uses the masterportalAPI's vectorBase layer on creation.
+- The elastic search is now refactored.
 
 ### Changed
 - It is now possible to display layers at scales smaller than 1:1 000 000.

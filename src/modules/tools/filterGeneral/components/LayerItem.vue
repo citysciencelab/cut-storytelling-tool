@@ -20,6 +20,11 @@ export default {
             default: false
         }
     },
+    data () {
+        return {
+            selected: false
+        };
+    },
     methods: {
         /**
          * Updates selectedLayers array.
@@ -28,6 +33,7 @@ export default {
          */
         updateSelectedLayers (filterId) {
             this.$emit("updatetoselectedlayers", filterId);
+            this.selected = !this.selected;
         }
     }
 };
@@ -50,6 +56,14 @@ export default {
                 data-parent="#accordion"
             >
                 {{ layer.title ? layer.title : layer.layerId }}
+                <span
+                    v-if="!selected"
+                    class="glyphicon glyphicon-chevron-down pull-right"
+                />
+                <span
+                    v-else
+                    class="glyphicon glyphicon-chevron-up pull-right"
+                />
             </a>
         </h2>
         <slot

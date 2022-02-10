@@ -19,6 +19,7 @@ describe("src/modules/tools/filterGeneral/components/SnippetCheckbox.vue", () =>
             expect(wrapper.vm.operator).to.equal("EQ");
             expect(wrapper.vm.prechecked).to.be.false;
             expect(wrapper.vm.snippetId).to.equal(0);
+            expect(wrapper.vm.value).to.deep.equal([true, false]);
             expect(wrapper.vm.visible).to.be.true;
             wrapper.destroy();
         });
@@ -164,11 +165,11 @@ describe("src/modules/tools/filterGeneral/components/SnippetCheckbox.vue", () =>
             });
             let called = false;
 
-            expect(wrapper.vm.value).to.equal(true);
+            expect(wrapper.vm.checked).to.equal(true);
             await wrapper.vm.resetSnippet(() => {
                 called = true;
             });
-            expect(wrapper.vm.value).to.equal(false);
+            expect(wrapper.vm.checked).to.equal(false);
             expect(called).to.be.true;
             wrapper.destroy();
         });
