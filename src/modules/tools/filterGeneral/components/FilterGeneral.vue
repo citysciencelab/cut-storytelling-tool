@@ -161,7 +161,7 @@ export default {
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
         :deactivate-gfi="deactivateGFI"
-        :initial-width="300"
+        :initial-width="450"
     >
         <template #toolBody>
             <div

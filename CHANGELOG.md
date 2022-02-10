@@ -12,6 +12,7 @@
 - The gazetteer search function now supports changing the namespace by configuration.
 
 ### Changed
+-  Print uses formatList from statePrint, instead of all formats from mapfish Server.
 
 ### Deprecated
 
@@ -21,6 +22,7 @@
 - Issue #666: The elastic search query string replacement function will now only take effect
   when the configured key did not contain an object.
 - Issue #668: `layerInformation` shows legend information only if legendURL is not ignored.
+- Config parameters that are an array completely overwrite the default values of the associated array in the store
 
 ---
 ## v2.18.0 - 2022-02-03
@@ -77,7 +79,8 @@
   The version of npm  was also updated, must be >= 6.14.15 < 7. The file .npmrc was added to set "engine-strict=true", as a result, the npm version and the node version are mandatory. (It is planed that node will be updated to LTS in version 16).
 - Migrated the module mapView from Backbone to Vue.
 - Migrated the module vectorBaseLayer from Backbone to Vue. The VectorBaseLayer uses the masterportalAPI's vectorBase layer on creation.
-- Issue 655: A parameter "zoomLevel" was added to the WfsSearch tool. This feature was not implemented for WfsSearch, but available in the previously used tool parcelSearch. The field has been added to WfsSearch to work in the same fashion. For this, the ListItem.vue was changed to allow configuration of the zoom level via prop. It defaults to the previously fixed value.
+- Issue #655: A parameter "zoomLevel" was added to the WfsSearch tool. This feature was not implemented for WfsSearch, but available in the previously used tool parcelSearch. The field has been added to WfsSearch to work in the same fashion. For this, the ListItem.vue was changed to allow configuration of the zoom level via prop. It defaults to the previously fixed value.
+- Issue #486: WMS GFI can now show responses without tbody.
 
 ### Deprecated
 -

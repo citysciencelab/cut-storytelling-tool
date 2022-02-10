@@ -339,7 +339,7 @@ export default {
             :id="'snippetSlider-' + snippetId"
             ref="inputNumber"
             v-model="inRangeValue"
-            class="input-single"
+            class="input-single form-control"
             type="number"
             :min="minimumValue"
             :max="maximumValue"
@@ -378,9 +378,10 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    .form-control {
+        height: 28px;
+    }
     .snippetSliderContainer {
-        padding: 5px;
-        margin-bottom: 10px;
         height: auto;
     }
     .snippetSliderContainer input {
@@ -439,6 +440,19 @@ export default {
         margin: 0;
     }
 
+    input[type="range"]:active::-ms-thumb {
+        background-color: #fff;
+        border: 1px solid #3177b1;
+    }
+    input[type="range"]:active::-moz-range-thumb {
+        background-color: #fff;
+        border: 1px solid #3177b1;
+    }
+    input[type="range"]:active::-webkit-slider-thumb {
+        background-color: #fff;
+        border: 1px solid #3177b1;
+    }
+
     /* Firefox */
     input[type="range"] {
         -webkit-appearance: none;
@@ -446,6 +460,7 @@ export default {
         height: 15px;
         overflow: hidden;
         width: 100%;
+        border-radius: 10px;
     }
 
     input[type="range"]::-webkit-slider-runnable-track {

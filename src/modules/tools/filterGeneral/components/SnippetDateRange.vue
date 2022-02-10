@@ -437,7 +437,7 @@ export default {
                     :id="'inputDateFrom-' + snippetId"
                     v-model="inRangeValueLeft"
                     name="inputDateFrom"
-                    class="snippetDateRangeFrom"
+                    class="snippetDateRangeFrom form-control"
                     type="date"
                     :min="minimumValue"
                     :max="inRangeValueRight"
@@ -458,7 +458,7 @@ export default {
                     :id="'inputDateUntil-' + snippetId"
                     v-model="inRangeValueRight"
                     name="inputDateUntil"
-                    class="snippetDateRangeUntil"
+                    class="snippetDateRangeUntil form-control"
                     type="date"
                     :min="inRangeValueLeft"
                     :max="maximumValue"
@@ -482,9 +482,10 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    .form-control {
+        height: 28px;
+    }
     .snippetDateRangeContainer {
-        padding: 5px;
-        margin-bottom: 10px;
         height: auto;
     }
     .snippetDateRangeContainer input {
@@ -494,6 +495,7 @@ export default {
         outline: 0;
         position: relative;
         margin-bottom: 5px;
+        height: 34px;
     }
     .snippetDateRangeContainer .info-icon {
         float: right;

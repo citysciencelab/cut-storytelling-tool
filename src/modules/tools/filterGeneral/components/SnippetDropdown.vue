@@ -543,8 +543,6 @@ export default {
         background-color: initial;
     }
     .snippetDropdownContainer {
-        padding: 5px;
-        margin-bottom: 10px;
         height: auto;
     }
     .snippetDropdownContainer .info-icon {
@@ -585,5 +583,8 @@ export default {
     }
     .category-layer .right {
         right: 30px;
+    }
+    .table {
+        margin-bottom: 10px;
     }
 </style>

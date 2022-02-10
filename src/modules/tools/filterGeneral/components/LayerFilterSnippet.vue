@@ -614,7 +614,10 @@ export default {
             v-if="layerConfig.snippetTags !== false"
             class="snippetTags"
         >
-            <div v-show="hasUnfixedRules()">
+            <div
+                v-show="hasUnfixedRules()"
+                class="snippetTagsWrapper"
+            >
                 <SnippetTag
                     :is-reset-all="true"
                     label=""
@@ -626,6 +629,7 @@ export default {
             <div
                 v-for="(rule, ruleIndex) in rules"
                 :key="'rule-' + ruleIndex"
+                class="snippetTagsWrapper"
             >
                 <SnippetTag
                     v-if="isRule(rule) && rule.fixed === false"
@@ -639,7 +643,7 @@ export default {
         </div>
         <div
             v-if="Object.prototype.hasOwnProperty.call(layerConfig, 'searchInMapExtent') && layerConfig.searchInMapExtent"
-            class="snippet"
+            class="form-group"
         >
             <SnippetCheckboxFilterInMapExtent
                 :filter-id="layerConfig.filterId"
@@ -812,12 +816,14 @@ export default {
         <div class="snippet">
             <button
                 v-if="!isStrategyActive()"
+                class="btn btn-primary btn-sm"
                 @click="filter()"
             >
                 {{ labelFilterButton }}
             </button>
             <button
                 v-if="paging.page < paging.total && showStop"
+                class="btn btn-secondary btn-sm"
                 @click="stopfilter()"
             >
                 {{ $t("button.stop") }}
@@ -831,19 +837,33 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    .win-body-vue {
+        padding: 0px;
+    }
     .panel-body {
-        padding: 0 15px;
+        padding: 0 5px;
+    }
+    .panel-heading {
+        padding: 5px;
     }
     .snippet {
         display: inline-block;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
+        &:last-child {
+            margin-bottom: 10px;
+        }
         width: 100%;
         b {
             display: block;
         }
     }
     .snippetTags {
-        display: block;
-        margin-bottom: 25px;
+        display: flow-root;
+        margin: 8px 0;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    .form-group {
+        clear: both;
     }
 </style>
