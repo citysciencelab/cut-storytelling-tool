@@ -29,9 +29,9 @@ export default {
         const featureLister = document.getElementById("featureLister");
 
         featureLister.addEventListener("click", (evt) => {
-            const correctedFeatureIndex = evt.target.parentElement.rowIndex - 1;
+            const correctedFeatureIndex = evt.target.parentElement.id;
 
-            if (correctedFeatureIndex >= 0) {
+            if (correctedFeatureIndex !== "" && correctedFeatureIndex >= 0 && correctedFeatureIndex <= state.shownFeatures) {
                 const feature = state.gfiFeaturesOfLayer[correctedFeatureIndex];
 
                 commit("setSelectedFeature", feature);
