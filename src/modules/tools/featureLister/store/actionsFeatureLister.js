@@ -53,10 +53,8 @@ export default {
         dispatch("Map/removeHighlightFeature", "decrease", {root: true});
         let featureGeometryType = "";
         const layer = state.visibleLayers.find((l) => l.values_.id === state.layer.id),
-            featureWrapper = state.nestedFeatures ? state.rawFeaturesOfLayer.find(feat => {
-                featureGeometryType = feat.getGeometry().getType();
-                return feat.getId().toString() === featureId;
-            }) : layer.getSource().getFeatures().find(feat => {
+            layerFeatures = state.nestedFeatures ? state.rawFeaturesOfLayer : layer.getSource().getFeatures(),
+            featureWrapper = layerFeatures.find(feat => {
                 featureGeometryType = feat.getGeometry().getType();
                 return feat.getId().toString() === featureId;
             }),
