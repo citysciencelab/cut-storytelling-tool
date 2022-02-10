@@ -36,6 +36,19 @@ const getters = {
         });
         return sortedProperties;
     },
+
+    getFeatureDetails: state => {
+        const featureDetail = [];
+
+        Object.entries(state.selectedFeature.getProperties()).forEach(([propkey, propvalue]) => {
+            Object.entries(state.selectedFeature.getAttributesToShow()).forEach(([key, value]) => {
+                if(propkey === key){
+                    featureDetail.push([value, propvalue]);
+                }
+            });
+        });
+      return featureDetail;
+    },
     /**
      * Gets the currently available layers.
      * @param {Object} state context object.

@@ -16,6 +16,7 @@ export default {
                 child.classList.remove("disabled");
                 child.classList.add("active");
                 commit("setLayerListView", false);
+                commit("setFeatureDetailView", false);
                 commit("setFeatureListView", true);
             }
             else {
@@ -24,7 +25,7 @@ export default {
         });
     },
     // Hover event
-    addMouseEvents ({state, commit}) {
+    addMouseEvents ({state, dispatch, commit}) {
         const featureLister = document.getElementById("featureLister");
 
         featureLister.addEventListener("click", (evt) => {
@@ -34,6 +35,10 @@ export default {
                 const feature = state.gfiFeaturesOfLayer[correctedFeatureIndex];
 
                 commit("setSelectedFeature", feature);
+                commit("setFeatureListView", false);
+                commit("setFeatureDetailView", true);
+
+                dispatch("switchToDetails")
             }
         });
     },
@@ -49,6 +54,7 @@ export default {
                 child.classList.add("active");
                 commit("setLayerListView", true);
                 commit("setFeatureListView", false);
+                commit("setFeatureDetailView", false);
             }
             else {
                 child.classList.remove("active");
@@ -56,6 +62,22 @@ export default {
             }
         });
     },
+
+    switchToDetails ({state, commit, dispatch}, layer) {
+        Object.entries(document.getElementsByClassName("featurelist-navtabs")[0].children).forEach(([, child]) => {
+            if (child.id === "featurelistFeaturedetails") {
+                child.classList.remove("disabled");
+                child.classList.add("active");
+                commit("setLayerListView", false);
+                commit("setFeatureListView", false);
+                commit("setFeatureDetailView", true);
+            }
+            else {
+                child.classList.remove("active");
+            }
+        });
+    },
+
     /**
      * Switches to the themes list of all visibile layers.
      * @param {Object} layer selected layer.

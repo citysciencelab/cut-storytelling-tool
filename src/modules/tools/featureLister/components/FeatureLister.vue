@@ -84,7 +84,10 @@ export default {
                     class="featurelist-navtabs-li text-center disabled"
                     role="presentation"
                 >
-                    <a href="#">{{ $t("modules.tools.featureLister.list") }}</a>
+                    <a
+                        href="#"
+                        @click.prevent="switchToList(layer)"
+                    >{{ $t("modules.tools.featureLister.list") }}</a>
                 </li>
                 <li
                     id="featurelistFeaturedetails"
@@ -187,6 +190,29 @@ export default {
                     </div>
                 </div>
             </template>
+
+            <template v-if="featureDetailView">
+                <div
+                    id="featurelist-details"
+                    class="panel panel-default featurelist-details"
+                >
+                    <div
+                        id="featurelist-details-header"
+                        class="panel-heading"
+                    >
+                        <span> Detailansicht </span>
+                    </div>
+                    <ul
+                        v-for="(feature, key) in getFeatureDetails"
+                        :key="'tool-featureLister-' + key"
+                        class="list-group featurelist-details-ul"
+                    >
+                        <li class="list-group-item featurelist-details-li"> <strong> {{ feature[0] }} </strong> </li>
+                        <li class="list-group-item featurelist-details-li"> {{ feature[1] }} </li>
+                    </ul>
+                </div>
+            </template>
+
         </template>
     </ToolTemplate>
 </template>
@@ -257,7 +283,7 @@ $background_color_1: rgb(255, 255, 255);
     cursor: pointer;
 }
 .featurelist-details {
-    display: none;
+    display: block;
     margin-bottom: 0px;
 }
 .featurelist-list {

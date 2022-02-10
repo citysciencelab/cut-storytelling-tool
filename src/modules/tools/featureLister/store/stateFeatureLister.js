@@ -42,7 +42,7 @@ const state = {
     shownFeatures: "",
     visibleLayers: [],
     featureListView: false,
-    detailView: false,
+    featureDetailView: false,
     headers: [],
     featureid: "",
     featureProps: {},
