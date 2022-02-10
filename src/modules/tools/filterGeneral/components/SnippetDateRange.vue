@@ -132,11 +132,21 @@ export default {
         }
     },
     watch: {
-        value () {
+        inRangeValueLeft (val) {
+            if (!this.isAdjusting && (!this.isInitializing || this.precheckedIsValid)) {
+                const value = [
+                    moment(val, this.internalFormat).format(this.format),
+                    moment(this.inRangeValueRight, this.internalFormat).format(this.format)
+                ];
+
+                this.emitCurrentRule(value, this.isInitializing);
+            }
+        },
+        inRangeValueRight (val) {
             if (!this.isAdjusting && (!this.isInitializing || this.precheckedIsValid)) {
                 const value = [
                     moment(this.inRangeValueLeft, this.internalFormat).format(this.format),
-                    moment(this.inRangeValueRight, this.internalFormat).format(this.format)
+                    moment(val, this.internalFormat).format(this.format)
                 ];
 
                 this.emitCurrentRule(value, this.isInitializing);

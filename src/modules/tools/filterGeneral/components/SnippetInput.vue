@@ -82,6 +82,16 @@ export default {
             return "";
         }
     },
+    watch: {
+        value (val) {
+            if (!val) {
+                this.deleteCurrentRule();
+            }
+            else {
+                this.emitCurrentRule(this.value, this.isInitializing);
+            }
+        }
+    },
     created () {
         if (this.prechecked) {
             this.value = this.prechecked;
