@@ -35,7 +35,7 @@ const state = {
     id: "featureLister",
     layerlist: [],
     layerId: "",
-    layer: {},
+    layer: null,
     layerListView: true,
     gfiFeaturesOfLayer: [],
     featureCount: "",
@@ -48,7 +48,7 @@ const state = {
     headers: [],
     featureid: "",
     featureProps: {},
-    selectedFeature: {},
+    selectedFeature: null,
     highlightedFeature: null,
     highlightedFeatureStyle: null,
     highlightVectorRulesPolygon: {

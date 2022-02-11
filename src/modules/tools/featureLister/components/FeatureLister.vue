@@ -97,7 +97,10 @@ export default {
                     class="featurelist-navtabs-li text-center disabled"
                     role="presentation"
                 >
-                    <a href="#">{{ $t("modules.tools.featureLister.details") }}</a>
+                    <a
+                        href="#"
+                        @click.prevent="switchToDetails()"
+                    >{{ $t("modules.tools.featureLister.details") }}</a>
                 </li>
             </ul>
             <div

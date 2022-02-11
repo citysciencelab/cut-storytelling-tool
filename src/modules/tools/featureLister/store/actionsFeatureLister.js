@@ -5,61 +5,94 @@ export default {
      * @returns {void}
      */
     switchToList ({state, commit, dispatch}, layer) {
-        commit("setLayerId", layer.id);
         commit("setLayer", layer);
-        commit("setGfiFeaturesOfLayer", state.visibleLayers);
-        commit("setShownFeatures", state.maxFeatures);
-        commit("setFeatureCount", state.gfiFeaturesOfLayer.length);
-        dispatch("addMouseEvents");
-        dispatch("sortItems");
+        if (state.layer) {
+            const tabId = "featurelistFeaturelist";
+
+            commit("setLayerId", layer.id);
+            commit("setGfiFeaturesOfLayer", state.visibleLayers);
+            commit("setShownFeatures", state.maxFeatures);
+            commit("setFeatureCount", state.gfiFeaturesOfLayer.length);
+            commit("setLayerListView", false);
+            commit("setFeatureDetailView", false);
+            commit("setFeatureListView", true);
+
+            dispatch("switchTabTo", {tabId: tabId, disableOthers: false});
+            dispatch("addMouseEvents");
+            dispatch("sortItems");
+        }
+    },
+    /**
+     * Switches to a tab and deactivates or even diables the other tabs.
+     * @param {Object} payload tabId should be the id of the html tab element, if disableOthers is true the rest of the tabs gets disabled.
+     * @returns {void}
+     */
+    switchTabTo ({state}, payload) {
+        const {tabId, disableOthers} = payload;
+
         Object.entries(document.getElementsByClassName("featurelist-navtabs")[0].children).forEach(([, child]) => {
-            if (child.id === "featurelistFeaturelist") {
+            if (child.id === tabId) {
                 child.classList.remove("disabled");
                 child.classList.add("active");
-                commit("setLayerListView", false);
-                commit("setFeatureDetailView", false);
-                commit("setFeatureListView", true);
             }
             else {
                 child.classList.remove("active");
+                if (disableOthers) {
+                    child.classList.add("disabled");
+                }
             }
         });
     },
-    // Hover event
-    addMouseEvents ({state, dispatch, commit}) {
+    /**
+     * Click event that gets triggered when clicking on a feature in the list view.
+     * @param {String} featureIndex index of the clicked Feature
+     * @returns {void}
+     */
+    clickOnFeature ({state, dispatch, commit}, featureIndex) {
+        if (featureIndex !== "" && featureIndex >= 0 && featureIndex <= state.shownFeatures) {
+            const feature = state.gfiFeaturesOfLayer[featureIndex],
+                featureGeometry = state.rawFeaturesOfLayer[featureIndex].getGeometry();
+
+            commit("setSelectedFeature", feature);
+
+            dispatch("switchToDetails");
+            dispatch("Map/zoomTo", {
+                geometryOrExtent: featureGeometry,
+                options: {duration: 0, zoom: 9} // TODO: duration macht Probleme wenn nicht auf 0?
+            }, {root: true});
+        }
+    },
+    /**
+     * Hover event that gets triggered when hovering over a feature in the list view.
+     * @param {String} featureIndex index of the clicked Feature
+     * @returns {void}
+     */
+    hoverOverFeature ({state, dispatch}, featureIndex) {
+        if (featureIndex !== "" && featureIndex >= 0 && featureIndex <= state.shownFeatures) {
+            const feature = state.nestedFeatures ? state.rawFeaturesOfLayer[featureIndex] : state.layer.features[featureIndex];
+
+            dispatch("highlightFeature", feature.getId());
+        }
+    },
+    /**
+     * Adds the eventListeners to the table for clicking and hovering events .
+     * @returns {void}
+     */
+    addMouseEvents ({state, dispatch}) {
         const featureLister = document.getElementById("featureLister");
 
         featureLister.addEventListener("click", (evt) => {
-            const correctedFeatureIndex = evt.target.parentElement.id;
-
-            if (correctedFeatureIndex !== "" && correctedFeatureIndex >= 0 && correctedFeatureIndex <= state.shownFeatures) {
-                const feature = state.gfiFeaturesOfLayer[correctedFeatureIndex],
-                    featureGeometry = state.rawFeaturesOfLayer[correctedFeatureIndex].getGeometry();
-
-                commit("setSelectedFeature", feature);
-                commit("setFeatureListView", false);
-                commit("setFeatureDetailView", true);
-
-                dispatch("switchToDetails");
-
-                dispatch("Map/zoomTo", {
-                    geometryOrExtent: featureGeometry,
-                    options: {duration: 0, zoom: 9} // TODO: duration macht Probleme wenn nicht auf 0?
-                }, {root: true});
-            }
+            dispatch("clickOnFeature", evt.target.parentElement.id);
         });
         featureLister.addEventListener("mouseover", (evt) => {
-            const correctedFeatureIndex = evt.target.parentElement.id;
-
-            if (correctedFeatureIndex !== "" && correctedFeatureIndex >= 0 && correctedFeatureIndex <= state.shownFeatures) {
-
-                const feature = state.nestedFeatures ? state.rawFeaturesOfLayer[correctedFeatureIndex] : state.layer.features[correctedFeatureIndex];
-
-                dispatch("highlightFeature", feature.getId());
-            }
+            dispatch("hoverOverFeature", evt.target.parentElement.id);
         });
     },
-    // Hover event
+    /**
+     * Highlights a feature depending on its geometryType.
+     * @param {String} featureId id of the feature to be highlighted.
+     * @returns {void}
+     */
     highlightFeature ({state, dispatch}, featureId) {
         dispatch("Map/removeHighlightFeature", "decrease", {root: true});
         let featureGeometryType = "";
@@ -90,54 +123,48 @@ export default {
         dispatch("Map/highlightFeature", highlightObject, {root: true});
     },
     /**
-     * Switches to the themes list of all visibile layers.
-     * @param {Object} layer selected layer.
+     * Switches to the themes list of all visibile layers and resets the featureList and the selectedFeature.
      * @returns {void}
      */
-    switchToThemes ({commit}) {
-        Object.entries(document.getElementsByClassName("featurelist-navtabs")[0].children).forEach(([, child]) => {
-            if (child.id === "featurelistThemeChooser") {
-                child.classList.remove("disabled");
-                child.classList.add("active");
-                commit("setLayerListView", true);
-                commit("setFeatureListView", false);
-                commit("setFeatureDetailView", false);
-            }
-            else {
-                child.classList.remove("active");
-                child.classList.add("disabled");
-            }
-        });
-    },
+    switchToThemes ({commit, dispatch}) {
+        const tabId = "featurelistThemeChooser";
 
-    switchToDetails ({commit}) {
-        Object.entries(document.getElementsByClassName("featurelist-navtabs")[0].children).forEach(([, child]) => {
-            if (child.id === "featurelistFeaturedetails") {
-                child.classList.remove("disabled");
-                child.classList.add("active");
-                commit("setLayerListView", false);
-                commit("setFeatureListView", false);
-                commit("setFeatureDetailView", true);
-            }
-            else {
-                child.classList.remove("active");
-            }
-        });
-    },
+        commit("setSelectedFeature", null);
+        commit("setLayer", null);
+        commit("setLayerListView", true);
+        commit("setFeatureListView", false);
+        commit("setFeatureDetailView", false);
 
+        dispatch("switchTabTo", {tabId: tabId, disableOthers: true});
+    },
     /**
-     * Switches to the themes list of all visibile layers.
-     * @param {Object} layer selected layer.
+     * Switches to the details list of the selected feature.
+     * @returns {void}
+     */
+    switchToDetails ({state, commit, dispatch}) {
+        if (state.selectedFeature) {
+            const tabId = "featurelistFeaturedetails";
+
+            commit("setLayerListView", false);
+            commit("setFeatureListView", false);
+            commit("setFeatureDetailView", true);
+
+            dispatch("switchTabTo", {tabId: tabId, disableOthers: false});
+        }
+    },
+    /**
+     * Expands the feature list to show more features.
      * @returns {void}
      */
     showMore ({state, commit}) {
-        if (state.shownFeatures < state.featureCount - 10) {
-            commit("setShownFeatures", state.shownFeatures + 10);
-        }
-        else {
-            state.shownFeatures = state.featureCount;
-        }
+        const numberOfFeaturesToShow = state.shownFeatures < state.featureCount - 10 ? state.shownFeatures + 10 : state.featureCount;
+
+        commit("setShownFeatures", numberOfFeaturesToShow);
     },
+    /**
+     * Switches to the themes list of all visibile layers.
+     * @returns {void}
+     */
     async sortItems () {
         const tableHeaders = await document.getElementsByClassName("featurelist-list-table-th");
 
