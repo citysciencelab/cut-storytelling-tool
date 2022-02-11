@@ -52,6 +52,9 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
+            this.setFeatureListView(false);
+            this.setFeatureDetailView(false);
+            this.setLayerListView(true);
         }
     }
 };
