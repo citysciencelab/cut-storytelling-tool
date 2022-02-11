@@ -27,9 +27,10 @@ export default {
      * @param {Object} payload tabId should be the id of the html tab element, if disableOthers is true the rest of the tabs gets disabled.
      * @returns {void}
      */
-    switchTabTo ({state}, payload) {
+    switchTabTo ({commit}, payload) {
         const {tabId, disableOthers} = payload;
 
+        commit("setCurrentTab", tabId);
         Object.entries(document.getElementsByClassName("featurelist-navtabs")[0].children).forEach(([, child]) => {
             if (child.id === tabId) {
                 child.classList.remove("disabled");
@@ -78,7 +79,7 @@ export default {
      * Adds the eventListeners to the table for clicking and hovering events .
      * @returns {void}
      */
-    addMouseEvents ({state, dispatch}) {
+    addMouseEvents ({dispatch}) {
         const featureLister = document.getElementById("featureLister");
 
         featureLister.addEventListener("click", (evt) => {

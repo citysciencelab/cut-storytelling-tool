@@ -37,6 +37,7 @@ const state = {
     layerId: "",
     layer: null,
     layerListView: true,
+    currentTab: "",
     gfiFeaturesOfLayer: [],
     featureCount: "",
     shownFeatures: "",
