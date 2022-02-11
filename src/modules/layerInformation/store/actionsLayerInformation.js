@@ -183,7 +183,7 @@ const actions = {
         if (metaId !== null && metaId !== "" && metaURLs.indexOf(metaURL) === -1) {
             metaURLs.push(metaURL);
         }
-        console.log(metaURLs);
+
         commit("setMetaURLs", metaURLs);
     },
 
