@@ -33,13 +33,19 @@ export default {
             const correctedFeatureIndex = evt.target.parentElement.id;
 
             if (correctedFeatureIndex !== "" && correctedFeatureIndex >= 0 && correctedFeatureIndex <= state.shownFeatures) {
-                const feature = state.gfiFeaturesOfLayer[correctedFeatureIndex];
+                const feature = state.gfiFeaturesOfLayer[correctedFeatureIndex],
+                    featureGeometry = state.rawFeaturesOfLayer[correctedFeatureIndex].getGeometry();
 
                 commit("setSelectedFeature", feature);
                 commit("setFeatureListView", false);
                 commit("setFeatureDetailView", true);
 
                 dispatch("switchToDetails");
+
+                dispatch("Map/zoomTo", {
+                    geometryOrExtent: featureGeometry,
+                    options: {duration: 0, zoom: 9} // TODO: duration macht Probleme wenn nicht auf 0?
+                }, {root: true});
             }
         });
         featureLister.addEventListener("mouseover", (evt) => {
