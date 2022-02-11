@@ -27,6 +27,7 @@
 - The vectorTile Layer is now refactored to src/core.
 - The 3D terrain layer is refactored. It is no longer a Backbone-model.The terrain layer uses the masterportalAPI's terrain layer on creation.
 - The 3D tileset layer is refactored. It is no longer a Backbone-model.The tileset layer uses the masterportalAPI's tileset layer on creation.
+- Path updated in map and map3d because abstraction in masterportalAPI changed to maps and moved into src
 
 ### Deprecated
 
