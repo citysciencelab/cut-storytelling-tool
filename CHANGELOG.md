@@ -28,6 +28,7 @@
   when the configured key did not contain an object.
 - Issue #668: `layerInformation` shows legend information only if legendURL is not ignored.
 - Config parameters that are an array completely overwrite the default values of the associated array in the store
+- Issue #666: Elastic Search requests utilizing "POST" methods were fixed.
 
 ---
 ## v2.18.0 - 2022-02-03

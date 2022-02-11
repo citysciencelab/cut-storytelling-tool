@@ -82,8 +82,7 @@ export async function sendRequest (url, requestConfig, result) {
         return resultWithHits;
     }
     else if (type === "POST") {
-        res = await axios.post(url, {
-            payload: JSON.stringify(payload),
+        res = await axios.post(url, payload, {
             headers: {
                 "Content-Type": "application/json;charset=UTF-8"
             },
