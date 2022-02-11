@@ -7,7 +7,7 @@ import StaticImageLayer from "./layer/staticImage";
 import GeoJSONLayer from "./layer/geojson";
 import SensorLayer from "./layer/sensor";
 import HeatmapLayer from "./layer/heatmap";
-import TerrainLayer from "./layer/terrain";
+import TerrainLayer from "../../../src/core/layers/terrain";
 import EntitiesLayer from "./layer/entities";
 import TileSetLayer from "./layer/tileset";
 import VectorTileLayer from "./layer/vectorTile";
