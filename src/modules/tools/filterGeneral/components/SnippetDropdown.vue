@@ -244,6 +244,7 @@ export default {
                 this.disable = false;
             });
         }
+        this.dropdownValue.push("Reset me!");
     },
     mounted () {
         if (this.renderIcons === "fromLegend") {
@@ -344,6 +345,9 @@ export default {
          */
         toggleInfo () {
             this.showInfo = !this.showInfo;
+        },
+        onChange (value) {
+            if (value.indexOf('Reset me!') !== -1) this.dropdownSelected = [];
         }
     }
 };
@@ -394,6 +398,7 @@ export default {
                     :close-on-select="true"
                     :clear-on-select="false"
                     :loading="disable"
+                    @input="onChange"
                 >
                     <span slot="noOptions">{{ emptyList }}</span>
                     <span slot="noResult">{{ noElements }}</span>
