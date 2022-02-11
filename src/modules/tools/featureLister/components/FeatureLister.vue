@@ -6,6 +6,10 @@ import mutations from "../store/mutationsFeatureLister";
 import ToolTemplate from "../../ToolTemplate.vue";
 import getComponent from "../../../../utils/getComponent";
 import VectorLayer from "ol/layer/Vector.js";
+import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../utils/isPhoneNumber.js";
+import beautifyKey from "../../../../utils/beautifyKey";
+import {isWebLink} from "../../../../utils/urlHelper";
+import {isEmailAddress} from "../../../../utils/isEmailAddress";
 
 export default {
     name: "FeatureLister",
@@ -37,6 +41,24 @@ export default {
     methods: {
         ...mapActions("Tools/FeatureLister", Object.keys(actions)),
         ...mapMutations("Tools/FeatureLister", Object.keys(mutations)),
+        beautifyKey,
+        isWebLink,
+        isPhoneNumber,
+        getPhoneNumberAsWebLink,
+        isEmailAddress,
+        removeVerticalBar (value) {
+            return value.replaceAll("|", "<br>");
+        },
+        makeOberstufenprofileBold (value) {
+            const oldProfiles = value;
+            let newProfiles = "";
+
+            oldProfiles.replaceAll("|", "<br>");
+
+            newProfiles = oldProfiles.split("|").map(teilstring => teilstring.split(";")).map(([first, last]) => [`<b>${first}</b>`, last].join("; ")).join("<br>");
+
+            return newProfiles;
+        },
         /**
          * Closes this tool window by setting active to false
          * @returns {void}
@@ -220,7 +242,42 @@ export default {
                             </strong>
                         </li>
                         <li class="list-group-item featurelist-details-li">
-                            {{ feature[1] }}
+                            <p v-if="isWebLink(feature[1])">
+                                <a
+                                    :href="feature[1]"
+                                    target="_blank"
+                                >{{ feature[1] }}</a>
+                            </p>
+                            <p v-else-if="isPhoneNumber(feature[1])">
+                                <a :href="getPhoneNumberAsWebLink(feature[1])">{{ feature[1] }}</a>
+                            </p>
+                            <p v-else-if="isEmailAddress(feature[1])">
+                                <a :href="`mailto:${feature[1]}`">{{ feature[1] }}</a>
+                            </p>
+                            <p
+                                v-else-if="key === 'col-1'"
+                                class="bold"
+                            >
+                                {{ beautifyKey($t(feature[1])) }}
+                            </p>
+                            <p
+                                v-else-if="typeof feature[1] === 'string' && feature[1].includes(';') && key.includes('SCHULEN')"
+                            >
+                                <span v-html="makeOberstufenprofileBold(feature[1], key)" />
+                            </p>
+                            <p
+                                v-else-if="typeof feature[1] === 'string' && feature[1].includes('|')"
+                            >
+                                <span v-html="removeVerticalBar(feature[1])" />
+                            </p>
+                            <p
+                                v-else-if="typeof feature[1] === 'string' && feature[1].includes('<br>')"
+                            >
+                                <span v-html="feature[1]" />
+                            </p>
+                            <p v-else>
+                                {{ feature[1] }}
+                            </p>
                         </li>
                     </ul>
                 </div>
