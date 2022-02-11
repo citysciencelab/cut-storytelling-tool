@@ -26,6 +26,7 @@
 ### Removed
 
 ### Fixed
+- Issue #695: Optimised order in if clause. First use "show_doc_url" in layers metadata, then check if service based on the config.js's metaDataCatalogueId exists. otherwise throw console.warn
 - Issue #666: The elastic search query string replacement function will now only take effect
   when the configured key did not contain an object.
 - Issue #668: `layerInformation` shows legend information only if legendURL is not ignored.
