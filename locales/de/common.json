@@ -419,6 +419,10 @@
                     "selectAll": "Alles auswählen",
                     "emptyList": "Die Liste ist leer",
                     "noElements": "Keine Elemente gefunden"
+                },
+                "filterResult": {
+                    "label": "Alle Filter-Treffer",
+                    "unit": "Treffer"
                 }
             },
             "filter": {
