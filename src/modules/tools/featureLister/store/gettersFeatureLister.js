@@ -36,12 +36,17 @@ const getters = {
         });
         return sortedProperties;
     },
-
+    /**
+     * The v-for calls this function for every property of the selected feature and returns pairs of header and
+     * value as an array
+     * @param {Object} state context object.
+     * @returns {Array} [header, value] for each property of the selected feature
+     */
     getFeatureDetails: state => {
         const featureDetail = [];
 
-        Object.entries(state.selectedFeature.getProperties()).forEach(([propkey, propvalue]) => {
-            Object.entries(state.selectedFeature.getAttributesToShow()).forEach(([key, value]) => {
+        Object.entries(state.selectedFeature.getAttributesToShow()).forEach(([key, value]) => {
+            Object.entries(state.selectedFeature.getProperties()).forEach(([propkey, propvalue]) => {
                 if (propkey === key) {
                     featureDetail.push([value, propvalue]);
                 }

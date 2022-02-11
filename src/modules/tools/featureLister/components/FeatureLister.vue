@@ -229,7 +229,7 @@ export default {
                         id="featurelist-details-header"
                         class="panel-heading"
                     >
-                        <span> Detailansicht </span>
+                        <span> {{ $t("modules.tools.featureLister.detailsOfSelected") }} </span>
                     </div>
                     <ul
                         v-for="(feature, key) in getFeatureDetails"
@@ -255,13 +255,7 @@ export default {
                                 <a :href="`mailto:${feature[1]}`">{{ feature[1] }}</a>
                             </p>
                             <p
-                                v-else-if="key === 'col-1'"
-                                class="bold"
-                            >
-                                {{ beautifyKey($t(feature[1])) }}
-                            </p>
-                            <p
-                                v-else-if="typeof feature[1] === 'string' && feature[1].includes(';') && key.includes('SCHULEN')"
+                                v-else-if="typeof feature[1] === 'string' && feature[1].includes(';')"
                             >
                                 <span v-html="makeOberstufenprofileBold(feature[1], key)" />
                             </p>
@@ -356,7 +350,7 @@ $background_color_1: rgb(255, 255, 255);
     margin-bottom: 0px;
 }
 .featurelist-list {
-    width: 70vh;
+    width: 70vw;
     margin-bottom: 0px;
     display: block;
 }
