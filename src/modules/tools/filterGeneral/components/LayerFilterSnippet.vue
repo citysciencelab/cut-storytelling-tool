@@ -70,7 +70,8 @@ export default {
             enableZoom: true,
             isFeatureLoaded: false,
             snippets: [],
-            postSnippetKey: ""
+            postSnippetKey: "",
+            isShowResultCounts: false
         };
     },
     computed: {
@@ -427,6 +428,14 @@ export default {
             this.showStop = value;
         },
         /**
+         * Showing or not showing filtered result counts
+         * @param {Boolean} value true/false to en/disable to filtered result counts
+         * @returns {void}
+         */
+        showResultCounts (value) {
+            this.isShowResultCounts = value;
+        },
+        /**
          * Activating the layer for filtering
          * @param {String} layerId the layer Id from config
          * @returns {Object} the activated layer model
@@ -545,6 +554,7 @@ export default {
             this.setZoom(true);
             this.setFormDisable(true);
             this.showStopButton(true);
+            this.showResultCounts(true);
 
             if (isObject(this.layerModel)) {
                 this.layerModel.set("isSelected", true);
@@ -653,6 +663,17 @@ export default {
                     @deleteRule="deleteRule"
                 />
             </div>
+        </div>
+        <div
+            v-if="isShowResultCounts"
+            class="filter-result"
+        >
+            <span>
+                {{ $t("modules.tools.filterGeneral.filterResult.label") }}
+            </span>
+            <span>
+                {{ filteredFeatureIds.length + " " + $t("modules.tools.filterGeneral.filterResult.unit") }}
+            </span>
         </div>
         <div
             v-if="Object.prototype.hasOwnProperty.call(layerConfig, 'searchInMapExtent') && layerConfig.searchInMapExtent"
@@ -858,6 +879,22 @@ export default {
     }
     .panel-heading {
         padding: 5px;
+    }
+    .filter-result {
+        font-size: 16px;
+        color: #E10019;
+        margin-top: 10px;
+        display: inline-block;
+        width: 100%;
+        span {
+            width: 50%;
+            display: inline-block;
+            float: left;
+            &:last-child {
+                text-align: right;
+                padding-right: 10px;
+            }
+        }
     }
     .snippet {
         display: inline-block;
