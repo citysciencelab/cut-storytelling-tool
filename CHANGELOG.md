@@ -10,7 +10,7 @@
 ## Unreleased - in development
 ### Added
 - The gazetteer search function now supports changing the namespace by configuration.
-- Documentation for the menu item `ansichten` (map view points) has been added.
+- Issue #690: Documentation for the menu item `ansichten` (map view points) has been added.
 
 ### Changed
 -  Print uses formatList from statePrint, instead of all formats from mapfish Server.
