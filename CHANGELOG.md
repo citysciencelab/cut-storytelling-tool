@@ -32,8 +32,10 @@
 - Config parameters that are an array completely overwrite the default values of the associated array in the store
 - Issue #666: Elastic Search requests utilizing "POST" methods were fixed.
 - The GFI is now always shown as selected in the menu when it is enabled
+- Issue #689: `layerSlider` in Handle mode, the layer is now also displayed at the end of the bar
 
 ---
+
 ## v2.18.0 - 2022-02-03
 ### Added
 - Package vue-multiselect: 2.1.6 is installed.
