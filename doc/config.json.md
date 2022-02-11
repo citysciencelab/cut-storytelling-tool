@@ -1181,9 +1181,73 @@ This field allows creating and ordering menu entries. The order of tools corresp
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
+|ansichten|nein|**[ansichten](#markdown-header-portalconfigmenuansichten)**||Preconfigured map view in 2D and 3D mode|false|
 |info|no|**[info](#markdown-header-portalconfigmenuinfo)**||Menu folder containing **[tools](#markdown-header-portalconfigmenutools)** or **[staticlinks](#markdown-header-portalconfigmenustaticlinks)**.|false|
 |tools|no|**[tools](#markdown-header-portalconfigmenutools)**||Menu folder containing tools.|false|
 |tree|no|**[tree](#markdown-header-portalconfigmenutree)**||Representation and position of the topic selection tree.|false|
+
+***
+
+#### Portalconfig.menu.ansichten
+
+Configuration options for map views.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|name|ja|String||Name of the map views in the menu.|false|
+|glyphicon|nein|String|"glyphicon-list"|Glyphicon of the map views in the menu.|false|
+|children|nein|**[children](#markdown-header-portalconfigmenuansichtenchildren)**|false|Configurations of any number of map views.|false|
+
+***
+
+#### Portalconfig.menu.ansichten.children
+
+Configuration options for map views.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|view|nein|**[view](#markdown-header-portalconfigmenuansichtenchildrenview)**||Configuration of a single map view.|false|
+
+***
+
+#### Portalconfig.menu.ansichten.children.view
+
+Configuration options for a map view.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|name|ja|String||Map view name.|false|
+|type|ja|String||Type of map view, must always be "viewpoint".|false|
+|glyphicon|nein|String||Glyphicon of the map view in the menu.|false|
+|center|nein|Number[]||Coordinate at which the map view is centered.|false|
+|zoomLevel|nein|Number||Zoom level of the map view.|false|
+|altitude|nein|Number||Altitude of the camera in meters. Used only for map views in 3D mode.|false|
+|heading|nein|Number||Heading of the camera in Radiant. Used only for map views in 3D mode.|false|
+|tilt|nein|Number||Tilt of the camera in radians. Used only for map views in 3D mode.|false|
+
+**Example of a map view for 2D and 3D mode**
+```
+#!json
+"ansichten": {
+    "name": "translate#common:menu.views.name",
+    "glyphicon": "glyphicon-list",
+    "children": {
+        "view": {
+            "name": "translate#common:menu.views.view01",
+            "type": "viewpoint",
+            "glyphicon": "glyphicon-screenshot",
+            "center": [
+                564028.7954571751,
+                5934555.967867207
+            ],
+            "zoomLevel": 7.456437968949651,
+            "altitude": 272.3469798217454,
+            "heading": -0.30858728378862876,
+            "tilt": 0.9321791580603296
+        }
+    }
+}
+```
 
 ***
 

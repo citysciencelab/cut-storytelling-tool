@@ -1128,9 +1128,73 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
+|ansichten|nein|**[ansichten](#markdown-header-portalconfigmenuansichten)**||Vorkonfigurierte Kartenansicht im 2D und 3D Modus|false|
 |info|nein|**[info](#markdown-header-portalconfigmenuinfo)**||Ordner im Menü, der **[tools](#markdown-header-portalconfigmenutools)** oder **[staticlinks](#markdown-header-portalconfigmenustaticlinks)** darstellt.|false|
 |tools|nein|**[tools](#markdown-header-portalconfigmenutools)**||Ordner im Menü, der Werkzeuge darstellt.|false|
 |tree|nein|**[tree](#markdown-header-portalconfigmenutree)**||Darstellung und Position des Themenbaums.|false|
+
+***
+
+#### Portalconfig.menu.ansichten
+
+Konfigurations-Optionen für Kartenansichten.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|ja|String||Name der KartenAnsichten im Menü.|false|
+|glyphicon|nein|String|"glyphicon-list"|Glyphicon der Kartenanischten im Menü.|false|
+|children|nein|**[children](#markdown-header-portalconfigmenuansichtenchildren)**|false|Konfigurationen beliebig vieler Kartenansichten.|false|
+
+***
+
+#### Portalconfig.menu.ansichten.children
+
+Konfigurations-Optionen für Ansichten.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|view|nein|**[view](#markdown-header-portalconfigmenuansichtenchildrenview)**||Konfiguration einer einzelnen Kartenansicht.|false|
+
+***
+
+#### Portalconfig.menu.ansichten.children.view
+
+Konfigurations-Optionen für eine Kartenansicht.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|ja|String||Name der Kartenansicht.|false|
+|type|ja|String||Typ der Kartenansicht, muss immer "viewpoint" sein.|false|
+|glyphicon|nein|String||Glyphicon der Kartenansicht im Menü.|false|
+|center|nein|Number[]||Koordinate an der die Kartenansicht zentriert wird.|false|
+|zoomLevel|nein|Number||Zoom level der Kartenansicht.|false|
+|altitude|nein|Number||Höhe der Kamera in Metern. Wird nur für Kartenansichten im 3D Modus verwendet.|false|
+|heading|nein|Number||Richtung der Kamera in Radiant. Wird nur für Kartenansichten im 3D Modus verwendet.|false|
+|tilt|nein|Number||Neigung der Kamera in Radiant. Wird nur für Kartenansichten im 3D Modus verwendet.|false|
+
+**Beispiel einer Kartenansicht für den 2D und 3D Modus**
+```
+#!json
+"ansichten": {
+    "name": "translate#common:menu.views.name",
+    "glyphicon": "glyphicon-list",
+    "children": {
+        "view": {
+            "name": "translate#common:menu.views.view01",
+            "type": "viewpoint",
+            "glyphicon": "glyphicon-screenshot",
+            "center": [
+                564028.7954571751,
+                5934555.967867207
+            ],
+            "zoomLevel": 7.456437968949651,
+            "altitude": 272.3469798217454,
+            "heading": -0.30858728378862876,
+            "tilt": 0.9321791580603296
+        }
+    }
+}
+```
 
 ***
 
