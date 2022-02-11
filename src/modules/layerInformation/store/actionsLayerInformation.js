@@ -81,6 +81,7 @@ const actions = {
         const additionalLayer = state.additionalLayer;
 
         layer = additionalLayer.find(({layerName}) => layerName === chosenElementTitle);
+        console.log(layer);
         metaId = layer.metaID;
         cswUrl = layer.cswUrl;
         metaInfo = {metaId, cswUrl};
@@ -169,14 +170,14 @@ const actions = {
             service = null;
 
         service = Radio.request("RestReader", "getServiceById", metaDataCatalogueId);
-        if (service === undefined) {
-            console.warn("Rest Service with the ID " + metaDataCatalogueId + " is not configured in rest-services.json!");
-        }
-        else if (typeof state.layerInfo.showDocUrl !== "undefined" && state.layerInfo.showDocUrl !== null) {
+        if (typeof state.layerInfo.showDocUrl !== "undefined" && state.layerInfo.showDocUrl !== null) {
             metaURL = state.layerInfo.showDocUrl + metaId;
         }
-        else {
+        else if (service !== undefined) {
             metaURL = service.get("url") + metaId;
+        }
+        else {
+            console.warn("Rest Service with the ID " + metaDataCatalogueId + " is not configured in rest-services.json!");
         }
 
         if (metaId !== null && metaId !== "" && metaURLs.indexOf(metaURL) === -1) {
