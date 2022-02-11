@@ -81,7 +81,6 @@ const actions = {
         const additionalLayer = state.additionalLayer;
 
         layer = additionalLayer.find(({layerName}) => layerName === chosenElementTitle);
-        console.log(layer);
         metaId = layer.metaID;
         cswUrl = layer.cswUrl;
         metaInfo = {metaId, cswUrl};
