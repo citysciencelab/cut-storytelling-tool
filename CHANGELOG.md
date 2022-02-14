@@ -11,6 +11,7 @@
 ### Added
 - The gazetteer search function now supports changing the namespace by configuration.
 - Issue #690: Documentation for the menu item `ansichten` (map view points) has been added.
+- It is now possible to configure a loading strategy for a wfs layer (default is bbox).
 
 ### Changed
 -  Print uses formatList from statePrint, instead of all formats from mapfish Server.
