@@ -361,6 +361,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             isInThemen: true,
             isVisibleInTree: true,
             glyphicon: "glyphicon-plus-sign",
+            isFolderSelectable: this.get("isFolderSelectable"),
             quickHelp: isQuickHelpSet
         });
         Object.keys(tree).forEach(element => {
