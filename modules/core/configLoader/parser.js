@@ -725,7 +725,6 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             glyphicon: "glyphicon-plus-sign",
             id: "SelectedLayer",
             parentId: "tree",
-            isLeafFolder: true,
             isInThemen: true,
             isInitiallyExpanded: true,
             isAlwaysExpanded: isAlwaysExpandedList.includes("SelectedLayer"),

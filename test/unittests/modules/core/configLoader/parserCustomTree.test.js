@@ -120,15 +120,6 @@ describe("core/configLoader/parserCustomTree", function () {
         });
     });
 
-    describe("the flag \"isLeafFolder\"", function () {
-        it("should be set to \"true\", if the folder has no child-folders", function () {
-            expect(Radio.request("Util", "findWhereJs", getCustomModel({isFolderSelectable: true}).get("itemList"), {"name": "Denkmalschutz"}).isLeafFolder).to.be.equal(true);
-        });
-        it("should be set to \"false\", if the folder has no child-folders", function () {
-            expect(Radio.request("Util", "findWhereJs", getCustomModel({isFolderSelectable: true}).get("itemList"), {"name": "Eisenbahnwesen / Personenbeförderung"}).isLeafFolder).to.be.equal(false);
-        });
-    });
-
     describe("background maps in folder structure shall always be in background", function () {
         it("should be three with parentId baselayer", function () {
             const itemList = getCustomBackgroundMapModel().get("itemList");

@@ -371,7 +371,6 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                 glyphicon: "glyphicon-plus-sign",
                 isFolderSelectable: this.get("isFolderSelectable"),
                 isInThemen: true,
-                isLeafFolder: true,
                 level: 1,
                 parentId: category.id,
                 type: "folder",

@@ -99,7 +99,7 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
      */
     toggleKeyAction: function (event) {
         if (event.which === 32 || event.which === 13) {
-            if (this.model.get("isFolderSelectable") && this.model.get("isLeafFolder")) {
+            if (this.model.get("isFolderSelectable")) {
                 this.toggleIsSelected();
             }
             else {

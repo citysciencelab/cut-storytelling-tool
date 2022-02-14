@@ -162,7 +162,6 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
         }
         if (object?.Ordner) {
             object.Ordner.forEach(folder => {
-                const isLeafFolder = !folder?.Ordner;
                 let isFolderSelectable;
 
                 // Visiblity of SelectAll-Box. Use item property first, if not defined use global setting.
@@ -182,7 +181,6 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                     parentId: parentId,
                     name: folder.Titel,
                     id: folder.id,
-                    isLeafFolder: isLeafFolder,
                     isFolderSelectable: isFolderSelectable,
                     level: level,
                     glyphicon: "glyphicon-plus-sign",
