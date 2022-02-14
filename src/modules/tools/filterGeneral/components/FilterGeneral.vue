@@ -7,7 +7,14 @@ import mutations from "../store/mutationsFilterGeneral";
 import LayerFilterSnippet from "./LayerFilterSnippet.vue";
 import {convertToNewConfig} from "../utils/convertToNewConfig";
 import MapHandler from "../utils/mapHandler.js";
-import {getLayerByLayerId, showFeaturesByIds, createLayerIfNotExists, liveZoom} from "../utils/openlayerFunctions.js";
+import {
+    getLayerByLayerId,
+    showFeaturesByIds,
+    createLayerIfNotExists,
+    liveZoom,
+    addLayerByLayerId,
+    getLayers
+} from "../utils/openlayerFunctions.js";
 import FilterApi from "../interfaces/filter.api.js";
 import LayerCategory from "../components/LayerCategory.vue";
 import isObject from "../../../../utils/isObject.js";
@@ -26,7 +33,9 @@ export default {
                 getLayerByLayerId,
                 showFeaturesByIds,
                 createLayerIfNotExists,
-                liveZoom
+                liveZoom,
+                addLayerByLayerId,
+                getLayers
             }),
             selectedLayers: [],
             layerLoaded: {},
