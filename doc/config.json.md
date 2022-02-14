@@ -1181,7 +1181,7 @@ This field allows creating and ordering menu entries. The order of tools corresp
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|ansichten|nein|**[ansichten](#markdown-header-portalconfigmenuansichten)**||Preconfigured map view in 2D and 3D mode|false|
+|ansichten|no|**[ansichten](#markdown-header-portalconfigmenuansichten)**||Preconfigured map view in 2D and 3D mode|false|
 |info|no|**[info](#markdown-header-portalconfigmenuinfo)**||Menu folder containing **[tools](#markdown-header-portalconfigmenutools)** or **[staticlinks](#markdown-header-portalconfigmenustaticlinks)**.|false|
 |tools|no|**[tools](#markdown-header-portalconfigmenutools)**||Menu folder containing tools.|false|
 |tree|no|**[tree](#markdown-header-portalconfigmenutree)**||Representation and position of the topic selection tree.|false|
@@ -1194,9 +1194,9 @@ Configuration options for map views.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|name|ja|String||Name of the map views in the menu.|false|
-|glyphicon|nein|String|"glyphicon-list"|Glyphicon of the map views in the menu.|false|
-|children|nein|**[children](#markdown-header-portalconfigmenuansichtenchildren)**|false|Configurations of any number of map views.|false|
+|name|yes|String||Name of the map views in the menu.|false|
+|glyphicon|no|String|"glyphicon-list"|Glyphicon of the map views in the menu.|false|
+|children|no|**[children](#markdown-header-portalconfigmenuansichtenchildren)**|false|Configurations of any number of map views.|false|
 
 ***
 
@@ -1206,7 +1206,7 @@ Configuration options for map views.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|view|nein|**[view](#markdown-header-portalconfigmenuansichtenchildrenview)**||Configuration of a single map view.|false|
+|view|no|**[view](#markdown-header-portalconfigmenuansichtenchildrenview)**||Configuration of a single map view.|false|
 
 ***
 
@@ -1216,14 +1216,14 @@ Configuration options for a map view.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|name|ja|String||Map view name.|false|
-|type|ja|String||Type of map view, must always be "viewpoint".|false|
-|glyphicon|nein|String||Glyphicon of the map view in the menu.|false|
-|center|nein|Number[]||Coordinate at which the map view is centered.|false|
-|zoomLevel|nein|Number||Zoom level of the map view.|false|
-|altitude|nein|Number||Altitude of the camera in meters. Used only for map views in 3D mode.|false|
-|heading|nein|Number||Heading of the camera in Radiant. Used only for map views in 3D mode.|false|
-|tilt|nein|Number||Tilt of the camera in radians. Used only for map views in 3D mode.|false|
+|name|yes|String||Map view name.|false|
+|type|yes|String||Type of map view, must always be "viewpoint".|false|
+|glyphicon|no|String||Glyphicon of the map view in the menu.|false|
+|center|no|Number[]||Coordinate at which the map view is centered.|false|
+|zoomLevel|no|Number||Zoom level of the map view.|false|
+|altitude|no|Number||Altitude of the camera in meters. Used only for map views in 3D mode.|false|
+|heading|no|Number||Heading of the camera in Radiant. Used only for map views in 3D mode.|false|
+|tilt|no|Number||Tilt of the camera in radians. Used only for map views in 3D mode.|false|
 
 **Example of a map view for 2D and 3D mode**
 ```
@@ -1400,7 +1400,7 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |styleWMS|no|**[styleWMS](#markdown-header-portalconfigmenutoolstylewms)**||Classification of WMS services. This tool is used in the commute portal of MRH (Metropolregion Hamburg, en.: Metropolitan area Hamburg). With a mask, classifications can be defined. The GetMap request will have an SLD body as payload, used by the server to render. The WMS service now delivers its tiles in the defined classifications and colors.|true|
 |styleVT|no|**[tool](#markdown-header-portalconfigmenutool)**||Style selection for VT services. Allows switching between styles of a Vector Tile Layer that provides multiple stylings via the `services.json` file.|false|
 |supplyCoord|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use "coordToolkit" instead._ Tool to read coordinates on mouse click. When clicking once, the coordinates in the view are frozen and can be copied on clicking the displaying input elements to the clipboard, i.e. you can use them in another document/chat/mail/... with `Strg+V`.|false|
-|resetTree|nein|**[tool](#markdown-header-portalconfigmenutool)**||Tool to reset tree. Clicking on Tool name in the menu under Tools resets the tree.|false|
+|resetTree|no|**[tool](#markdown-header-portalconfigmenutool)**||Tool to reset tree. Clicking on Tool name in the menu under Tools resets the tree.|false|
 |virtualcity|no|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||*virtualcityPLANNER* planning viewer|false|
 |wfsFeatureFilter|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use `filter` instead._ Filters WFS features. This required configuring `"filterOptions"` on the WFS layer object.|false|
 |wfsSearch|no|**[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)**||Makes it possible to create a form to query WFS layers using filters. It is possible to either use a stored query (WFS@2.0.0) or define the query using the defined parameters (WFS@1.1.0).|false|
@@ -1725,10 +1725,10 @@ The last step to use the slider as a date filter is to define the key "type" as 
 |----|--------|----|-------|-----------|------|
 |name|yes|String||Attribute name.|false|
 |matchingMode|no|enum["AND", "OR"]|"OR"|Logical connection of multiple attribute values (on multiple choices) within an attribute.|false|
-|displayName|nein|String||Name of the filter.|true|
-|attrNameUntil|nein|String||Names of the attribute that will be used as the end time for the slider filter.|true|
-|format|nein|String||Format of date.|true|
-|type|nein|enum["integer", "searchInMapExtent", "date"]||Type of attribute.|true|
+|displayName|no|String||Name of the filter.|true|
+|attrNameUntil|no|String||Names of the attribute that will be used as the end time for the slider filter.|true|
+|format|no|String||Format of date.|true|
+|type|no|enum["integer", "searchInMapExtent", "date"]||Type of attribute.|true|
 
 **String example**
 ```
@@ -1852,7 +1852,7 @@ Reset the theme tree.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|-------------|---|-------|------------|------|
-|resetTree|nein|Boolean|false|Tool to reset tree. Click on the tool name in the menu under Tools to reset the tree.|false|
+|resetTree|no|Boolean|false|Tool to reset tree. Click on the tool name in the menu under Tools to reset the tree.|false|
 
 ***
 
@@ -2281,8 +2281,8 @@ Module that displays vector features. Hovering over a feature in the list highli
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |maxFeatures|no|Integer|20|Amount of features to display initially. More features of the same amount can be revealed by clicking a button.|false|
-|highlightVectorRulesPolygon|nein|**[highlightVectorRulesPolygon](#markdown-header-portalconfigmenutoolfeaturelisterhighlightvectorrulespolygon)**||Specify the fill color and outline color and stroke width for highlighting the polygon features.|false|
-|highlightVectorRulesPointLine|nein|**[highlightVectorRulesPointLine](#markdown-header-portalconfigmenutoolfeaturelisterhighlightvectorrulespointline)**||Specify outline color and stroke width for highlighting lines and scale factor for highlighting points.|false|
+|highlightVectorRulesPolygon|no|**[highlightVectorRulesPolygon](#markdown-header-portalconfigmenutoolfeaturelisterhighlightvectorrulespolygon)**||Specify the fill color and outline color and stroke width for highlighting the polygon features.|false|
+|highlightVectorRulesPointLine|no|**[highlightVectorRulesPointLine](#markdown-header-portalconfigmenutoolfeaturelisterhighlightvectorrulespointline)**||Specify outline color and stroke width for highlighting lines and scale factor for highlighting points.|false|
 
 **Example**
 
@@ -4114,7 +4114,7 @@ Folder definition. Folders may also be nested. Folders can be configured below t
 |Layer|yes|**[Layer](#markdown-header-themenconfiglayer)**/**[GroupLayer](#markdown-header-themenconfiggrouplayer)**[]||Layer definition.|false|
 |Ordner|no|**[Ordner](#markdown-header-themenconfigordner)**[]||Folder definition.|false|
 |isFolderSelectable|no|Boolean|true|Defines whether all layers of a folder can be de-/activated at once by using a checkbox.|false|
-|invertLayerOrder|nein|Boolean|false|Defines wheather the order of layers added to the map should be invert when clicking the folder.|false|
+|invertLayerOrder|no|Boolean|false|Defines wheather the order of layers added to the map should be invert when clicking the folder.|false|
 
 **Example Fachdaten-folder with one layer**
 
@@ -4426,8 +4426,8 @@ For such cases, define `gfiAsNewWindow` manually as described above.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|-------------|---|-------|------------|------|
-|name|ja|enum["_blank_","_self_"]|"_blank"|`"_blank"` opens a new browser tab or window (depending on browser) with the specified HTML content. The window appearance can be changed with the `specs` parameter. `"_self"` opens the specified HTML content within the current browser window.|true|
-|specs|nein|String||You may add an arbitrary amount of comma-separated properties like `{"specs": "width=800,height=700"}`. For more options, please read the documentation regarding `javascript` and `window.open`: [W3 Schools: Met win open](https://www.w3schools.com/jsref/met_win_open.asp) (German), [JavaScript Info: Popup windows](https://javascript.info/popup-windows) (English), [MDN: Window open](https://developer.mozilla.org/en-US/docs/Web/API/Window/open) (English)|true|
+|name|yes|enum["_blank_","_self_"]|"_blank"|`"_blank"` opens a new browser tab or window (depending on browser) with the specified HTML content. The window appearance can be changed with the `specs` parameter. `"_self"` opens the specified HTML content within the current browser window.|true|
+|specs|no|String||You may add an arbitrary amount of comma-separated properties like `{"specs": "width=800,height=700"}`. For more options, please read the documentation regarding `javascript` and `window.open`: [W3 Schools: Met win open](https://www.w3schools.com/jsref/met_win_open.asp) (German), [JavaScript Info: Popup windows](https://javascript.info/popup-windows) (English), [MDN: Window open](https://developer.mozilla.org/en-US/docs/Web/API/Window/open) (English)|true|
 
 **Example**
 
@@ -4455,7 +4455,7 @@ List of attributes typically used for tilesets.
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
 |hiddenFeatures|no|String[]|[]|List of IDs to be hidden in the plane.|
-|**[cesium3DTilesetOptions](https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html)**[]|no|**[cesium3DTilesetOption](#markdown-header-themenconfiglayertilesetcesium3dtilesetoption)**[]||Cesium 3D tileset options directly forwarded to the *Cesium tileset object*. E.g. `maximumScreenSpaceError` is relevant to the visibility.|
+|**[cesium3DTilesetOptions](https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html)**|no|**[cesium3DTilesetOption](#markdown-header-themenconfiglayertilesetcesium3dtilesetoption)**||Cesium 3D tileset options directly forwarded to the *Cesium tileset object*. E.g. `maximumScreenSpaceError` is relevant to the visibility.|
 
 **Example**
 
@@ -4610,7 +4610,7 @@ This type allows loading images as georeferenced map layers. Supported formats a
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|id|yes|String|"Eineindeutige-ID7711"|ID required to be unique.|false|
+|id|yes|String||ID required to be unique.|false|
 |typ|yes|String|"StaticImage"|Sets the layer type to `StaticImage`, meaning static images will be displayed as layers.|false|
 |url|yes|String|"https://meinedomain.de/bild.png"|Link to the image that is to be shown as layer.|false|
 |name|yes|String|"Static Image Name"|Topic selection tree layer name.|false|

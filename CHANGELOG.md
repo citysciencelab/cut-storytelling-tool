@@ -19,7 +19,7 @@
     - mochapack: 2.1.2 to 2.1.4
     - masterportalAPI: v1.9.0
 - The version of node was updated, must be >= 16.13.2 < 17.
-  The version of npm  was also updated, must be >= 8.1.2 < 9. (The node and npm versions are still mandatory via .npmrc.)
+  The version of npm  was also updated, must be >= 8.1.2 < 9. (The node and npm versions are still mandatory via .npmrc.).
 - Migrated the module 3D TerrainLayer from Backbone to Vue. The TerrainLayer uses the masterportalAPI's terrain layer on creation.
 
 ### Deprecated
@@ -27,14 +27,15 @@
 ### Removed
 
 ### Fixed
-- Issue #695: Optimised order in if clause. First use "show_doc_url" in layers metadata, then check if service based on the config.js's metaDataCatalogueId exists. otherwise throw console.warn
-- Issue #666: The elastic search query string replacement function will now only take effect
+- Issue #695: Optimised order in if clause. First use "show_doc_url" in layers metadata, then check if service based on the config.js's metaDataCatalogueId exists. otherwise throw console.warn.
+- Issue #666: The elastic search query string replacement function will now only take effect.
   when the configured key did not contain an object.
 - Issue #668: `layerInformation` shows legend information only if legendURL is not ignored.
-- Config parameters that are an array completely overwrite the default values of the associated array in the store
+- Config parameters that are an array completely overwrite the default values of the associated array in the store.
 - Issue #666: Elastic Search requests utilizing "POST" methods were fixed.
-- The GFI is now always shown as selected in the menu when it is enabled
-- Issue #689: `layerSlider` in Handle mode, the layer is now also displayed at the end of the bar
+- The GFI is now always shown as selected in the menu when it is enabled.
+- Issue #689: `layerSlider` in Handle mode, the layer is now also displayed at the end of the bar.
+- A few translation errors were adjusted in config.json.md and config.json.en.md.
 
 ---
 
