@@ -8,7 +8,9 @@ import LayerFilterSnippet from "./LayerFilterSnippet.vue";
 import {convertToNewConfig} from "../utils/convertToNewConfig";
 import MapHandler from "../utils/mapHandler.js";
 import {getLayerByLayerId, showFeaturesByIds, createLayerIfNotExists, liveZoom} from "../utils/openlayerFunctions.js";
+import FilterApi from "../interfaces/filter.api.js";
 import LayerCategory from "../components/LayerCategory.vue";
+import isObject from "../../../../utils/isObject.js";
 
 export default {
     name: "FilterGeneral",
@@ -27,7 +29,8 @@ export default {
                 liveZoom
             }),
             selectedLayers: [],
-            layerLoaded: {}
+            layerLoaded: {},
+            filterApiList: []
         };
     },
     computed: {
@@ -35,12 +38,12 @@ export default {
         console: () => console,
         filtersOnly () {
             return this.layers.filter(layer => {
-                return !Object.prototype.hasOwnProperty.call(layer, "category");
+                return isObject(layer) && !Object.prototype.hasOwnProperty.call(layer, "category");
             });
         },
         categoriesOnly () {
             return this.layers.filter(layer => {
-                return Object.prototype.hasOwnProperty.call(layer, "category");
+                return isObject(layer) && Object.prototype.hasOwnProperty.call(layer, "category");
             });
         }
     },
@@ -48,9 +51,11 @@ export default {
         this.$on("close", this.close);
     },
     mounted () {
-        this.setFilterId();
         this.$nextTick(() => {
             this.initialize();
+            this.replaceStringWithObjectLayers();
+            this.setFilterId();
+            this.initializeFilterApiList();
             // console.log("Alte Config", this.configs);
             // console.log("Neue Config", this.convertToNewConfig(this.configs));
         });
@@ -73,22 +78,47 @@ export default {
          * @returns {void}
          */
         setFilterId () {
-            if (Array.isArray(this.layers)) {
-                let filterId = 0;
-
-                this.layers.forEach(layer => {
-                    if (layer?.category) {
-                        layer.layers.forEach(subLayer => {
-                            subLayer.filterId = filterId;
-                            filterId += 1;
-                        });
-                    }
-                    else {
-                        layer.filterId = filterId;
-                        filterId += 1;
-                    }
-                });
+            if (!Array.isArray(this.layers)) {
+                return;
             }
+            let filterId = 0;
+
+            this.layers.forEach(layer => {
+                if (layer?.category) {
+                    layer.layers.forEach(subLayer => {
+                        subLayer.filterId = filterId;
+                        filterId += 1;
+                    });
+                }
+                else {
+                    layer.filterId = filterId;
+                    filterId += 1;
+                }
+                if (!Object.prototype.hasOwnProperty.call(layer, "snippets")) {
+                    layer.snippets = [];
+                }
+            });
+        },
+        /**
+         * Initializes a filter api for every layer.
+         * @pre filterApiList is empty
+         * @post filterApiList is filled with api instances
+         * @returns {void}
+         */
+        initializeFilterApiList () {
+            if (!Array.isArray(this.layers)) {
+                return;
+            }
+            this.layers.forEach(layer => {
+                if (layer?.category) {
+                    layer.layers.forEach(subLayer => {
+                        this.filterApiList[subLayer.filterId] = new FilterApi(subLayer.filterId);
+                    });
+                }
+                else {
+                    this.filterApiList[layer.filterId] = new FilterApi(layer.filterId);
+                }
+            });
         },
         /**
          * Update selectedLayers array.
@@ -148,6 +178,21 @@ export default {
          */
         setLayerLoaded (filterId) {
             this.layerLoaded[filterId] = true;
+        },
+        /**
+         * Replaces all configured layerId specified as string with an object.
+         * @returns {void}
+         */
+        replaceStringWithObjectLayers () {
+            if (Array.isArray(this.layers)) {
+                this.layers.forEach((layer, idx) => {
+                    if (typeof layer === "string") {
+                        this.layers[idx] = {
+                            layerId: layer
+                        };
+                    }
+                });
+            }
         }
     }
 };
@@ -161,7 +206,7 @@ export default {
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
         :deactivate-gfi="deactivateGFI"
-        :initial-width="300"
+        :initial-width="450"
     >
         <template #toolBody>
             <div
@@ -186,6 +231,7 @@ export default {
                     >
                         <LayerFilterSnippet
                             v-if="showLayerSnippet(slotProps.layer.filterId) || layerLoaded[slotProps.layer.filterId]"
+                            :api="filterApiList[slotProps.layer.filterId]"
                             :layer-config="slotProps.layer"
                             :map-handler="mapHandler"
                             :min-scale="minScale"
@@ -198,6 +244,7 @@ export default {
                 <LayerFilterSnippet
                     v-for="(layerConfig, indexLayer) in filtersOnly"
                     :key="'layer-' + indexLayer"
+                    :api="filterApiList[layerConfig.filterId]"
                     :layer-config="layerConfig"
                     :map-handler="mapHandler"
                     :min-scale="minScale"

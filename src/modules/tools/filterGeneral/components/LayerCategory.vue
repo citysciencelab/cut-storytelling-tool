@@ -123,7 +123,7 @@ export default {
                         data-toggle="collapse"
                         data-parent="#accordion"
                     >
-                        {{ filter.category }}
+                        {{ filter.category }} +
                     </a>
                 </h2>
                 <div
@@ -180,8 +180,11 @@ export default {
 </template>
 
 <style scoped>
+    .panel-group .panel + .panel {
+        margin-top: 10px;
+    }
     .panel-default > .panel-heading {
-        cursor:default;
+        cursor: default;
         background-color: white;
     }
     .panel-title {
