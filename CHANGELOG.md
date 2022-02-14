@@ -18,6 +18,7 @@
 ### Removed
 
 ### Fixed
+- Exported and re-imported drawn circles are now editable with the expected behaviour.
 
 ---
 ## v2.18.0 - 2022-02-03
