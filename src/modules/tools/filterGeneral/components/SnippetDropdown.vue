@@ -459,6 +459,7 @@ export default {
                             <td>
                                 <label
                                     for="'snippetRadioCheckbox-' + snippetId + '-' + val"
+                                    class="hidden"
                                 />
                                 <input
                                     :id="'snippetRadioCheckbox-' + snippetId + '-' + val"
@@ -633,11 +634,11 @@ export default {
     }
     .snippetDropdownContainer .table-responsive .right {
         position: absolute;
-        right: -10px;
+        right: -33px;
     }
     .panel .snippetDropdownContainer .right,  .snippetDropdownContainer .right{
         position: absolute;
-        right: 10px;
+        right: -33px;
     }
     .category-layer .panel .right {
         right: 30px;

@@ -30,7 +30,8 @@ export default {
             }),
             selectedLayers: [],
             layerLoaded: {},
-            filterApiList: []
+            filterApiList: [],
+            layerFilterSnippetPostKey: ""
         };
     },
     computed: {
@@ -56,6 +57,7 @@ export default {
             this.replaceStringWithObjectLayers();
             this.setFilterId();
             this.initializeFilterApiList();
+            this.setTableFilter();
             // console.log("Alte Config", this.configs);
             // console.log("Neue Config", this.convertToNewConfig(this.configs));
         });
@@ -119,6 +121,7 @@ export default {
                     this.filterApiList[layer.filterId] = new FilterApi(layer.filterId);
                 }
             });
+            this.setLayerFilterSnippetPostKey("rerender");
         },
         /**
          * Update selectedLayers array.
@@ -193,6 +196,24 @@ export default {
                     }
                 });
             }
+        },
+        /**
+         * Appending the filter in table menu
+         * @returns {void}
+         */
+        setTableFilter () {
+            if (Radio.request("Util", "getUiStyle") === "TABLE") {
+                Radio.trigger("TableMenu", "appendFilter", this.$el.querySelector("#tool-general-filter"));
+                this.$el.remove();
+            }
+        },
+        /**
+         * Setting the post key for layerFilterSnippet
+         * @param {String} value the post key of layerFilterSnippet
+         * @returns {void}
+         */
+        setLayerFilterSnippetPostKey (value) {
+            this.layerFilterSnippetPostKey = value;
         }
     }
 };
@@ -212,44 +233,45 @@ export default {
             <div
                 v-if="active"
                 id="tool-general-filter"
-            />
-            <LayerCategory
-                v-if="Array.isArray(layers) && layers.length && layerSelectorVisible"
-                class="layerSelector"
-                :filters-only="filtersOnly"
-                :categories-only="categoriesOnly"
-                :multi-layer-selector="multiLayerSelector"
-                @updateselectedlayers="updateSelectedLayers"
-                @setLayerLoaded="setLayerLoaded"
             >
-                <template
-                    #default="slotProps"
+                <LayerCategory
+                    v-if="Array.isArray(layers) && layers.length && layerSelectorVisible"
+                    class="layerSelector"
+                    :filters-only="filtersOnly"
+                    :categories-only="categoriesOnly"
+                    :multi-layer-selector="multiLayerSelector"
+                    @updateselectedlayers="updateSelectedLayers"
+                    @setLayerLoaded="setLayerLoaded"
                 >
-                    <div
-                        :class="['panel-collapse', 'collapse', showLayerSnippet(slotProps.layer.filterId) ? 'in' : '']"
-                        role="tabpanel"
+                    <template
+                        #default="slotProps"
                     >
-                        <LayerFilterSnippet
-                            v-if="showLayerSnippet(slotProps.layer.filterId) || layerLoaded[slotProps.layer.filterId]"
-                            :api="filterApiList[slotProps.layer.filterId]"
-                            :layer-config="slotProps.layer"
-                            :map-handler="mapHandler"
-                            :min-scale="minScale"
-                            :live-zoom-to-features="liveZoomToFeatures"
-                        />
-                    </div>
-                </template>
-            </LayerCategory>
-            <div v-else-if="Array.isArray(layers) && layers.length">
-                <LayerFilterSnippet
-                    v-for="(layerConfig, indexLayer) in filtersOnly"
-                    :key="'layer-' + indexLayer"
-                    :api="filterApiList[layerConfig.filterId]"
-                    :layer-config="layerConfig"
-                    :map-handler="mapHandler"
-                    :min-scale="minScale"
-                    :live-zoom-to-features="liveZoomToFeatures"
-                />
+                        <div
+                            :class="['panel-collapse', 'collapse', showLayerSnippet(slotProps.layer.filterId) ? 'in' : '']"
+                            role="tabpanel"
+                        >
+                            <LayerFilterSnippet
+                                v-if="showLayerSnippet(slotProps.layer.filterId) || layerLoaded[slotProps.layer.filterId]"
+                                :api="filterApiList[slotProps.layer.filterId]"
+                                :layer-config="slotProps.layer"
+                                :map-handler="mapHandler"
+                                :min-scale="minScale"
+                                :live-zoom-to-features="liveZoomToFeatures"
+                            />
+                        </div>
+                    </template>
+                </LayerCategory>
+                <div v-else-if="Array.isArray(layers) && layers.length">
+                    <LayerFilterSnippet
+                        v-for="(layerConfig, indexLayer) in filtersOnly"
+                        :key="'layer-' + indexLayer + layerFilterSnippetPostKey"
+                        :api="filterApiList[layerConfig.filterId]"
+                        :layer-config="layerConfig"
+                        :map-handler="mapHandler"
+                        :min-scale="minScale"
+                        :live-zoom-to-features="liveZoomToFeatures"
+                    />
+                </div>
             </div>
         </template>
     </ToolTemplate>

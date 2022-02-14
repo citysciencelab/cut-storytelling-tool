@@ -420,7 +420,7 @@ export default {
     }
     .snippetSliderContainer .right {
         position: absolute;
-        right: 10px;
+        right: -33px;
     }
     input[type="number"] {
         text-align: center;
