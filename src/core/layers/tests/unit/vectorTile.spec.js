@@ -1,7 +1,6 @@
-import VectorTileModel from "../../vectorTile.js";
+import VectorTile from "../../vectorTile.js";
 import {expect} from "chai";
 import sinon from "sinon";
-import store from "../../../../app-store";
 import axios from "axios";
 
 import * as stylefunction from "ol-mapbox-style/dist/stylefunction";
@@ -43,7 +42,7 @@ describe("core/modelList/layer/vectorTile", function () {
 
     describe("isStyleValid", function () {
         it("returns true only if required fields all exist", function () {
-            const {isStyleValid} = VectorTileModel.prototype;
+            const {isStyleValid} = VectorTile.prototype;
 
             expect(isStyleValid(undefined)).to.be.false;
             expect(isStyleValid({})).to.be.false;
@@ -64,7 +63,7 @@ describe("core/modelList/layer/vectorTile", function () {
         }
 
         it("finds a style definition by id and uses setStyleByDefinition with it", function () {
-            const {setStyleById} = VectorTileModel.prototype,
+            const {setStyleById} = VectorTile.prototype,
                 context = makeContext(),
                 returnValue = setStyleById.call(context, "l2");
 
@@ -74,7 +73,7 @@ describe("core/modelList/layer/vectorTile", function () {
         });
 
         it("returns rejecting Promise if key not found", function (done) {
-            const {setStyleById} = VectorTileModel.prototype,
+            const {setStyleById} = VectorTile.prototype,
                 context = makeContext(),
                 returnValue = setStyleById.call(context, "l3");
             let caught = false;
@@ -124,7 +123,7 @@ describe("core/modelList/layer/vectorTile", function () {
      */
         function makeContext (done) {
             return {
-                isStyleValid: VectorTileModel.prototype.isStyleValid,
+                isStyleValid: VectorTile.prototype.isStyleValid,
                 get: key => ({layer: Symbol.for("layer")})[key],
                 set: sinon.spy((key, value) => {
                     expect(stylefunction.default.calledOnce).to.be.true;
@@ -146,7 +145,7 @@ describe("core/modelList/layer/vectorTile", function () {
                 json: () => new Promise(ir => ir(validStyle))
             })));
 
-            const {setStyleByDefinition} = VectorTileModel.prototype,
+            const {setStyleByDefinition} = VectorTile.prototype,
                 context = makeContext(done);
 
             setStyleByDefinition.call(context, {id: "l0", url: "example.com/root.json"})
@@ -159,7 +158,7 @@ describe("core/modelList/layer/vectorTile", function () {
                 json: () => new Promise(ir => ir(invalidStyle))
             })));
 
-            const {setStyleByDefinition} = VectorTileModel.prototype,
+            const {setStyleByDefinition} = VectorTile.prototype,
                 context = makeContext(done);
 
             setStyleByDefinition
@@ -178,7 +177,7 @@ describe("core/modelList/layer/vectorTile", function () {
      */
         function makeContext ({styleId, givenVtStyles, done}) {
             return {
-                isStyleValid: VectorTileModel.prototype.isStyleValid,
+                isStyleValid: VectorTile.prototype.isStyleValid,
                 get: key => ({
                     styleId,
                     isSelected: Symbol.for("visibility"),
@@ -200,7 +199,7 @@ describe("core/modelList/layer/vectorTile", function () {
             const context = makeContext({styleId: "lConfigJson", givenVtStyles: vtStylesDefaultL2, done}),
                 {set} = context;
 
-            VectorTileModel.prototype.setConfiguredLayerStyle.call(context);
+            VectorTile.prototype.setConfiguredLayerStyle.call(context);
 
             expect(set.calledOnce).to.be.true;
             expect(set.calledWith("selectedStyleID", "lConfigJson")).to.be.true;
@@ -210,7 +209,7 @@ describe("core/modelList/layer/vectorTile", function () {
             const context = makeContext({givenVtStyles: vtStylesDefaultL2, done}),
                 {set, setStyleByDefinition} = context;
 
-            VectorTileModel.prototype.setConfiguredLayerStyle.call(context);
+            VectorTile.prototype.setConfiguredLayerStyle.call(context);
 
             expect(set.calledOnce).to.be.true;
             expect(set.calledWith("selectedStyleID", "l2")).to.be.true;
@@ -222,7 +221,7 @@ describe("core/modelList/layer/vectorTile", function () {
             const context = makeContext({givenVtStyles: vtStyles, done}),
                 {set, setStyleByDefinition} = context;
 
-            VectorTileModel.prototype.setConfiguredLayerStyle.call(context);
+            VectorTile.prototype.setConfiguredLayerStyle.call(context);
 
             expect(set.calledOnce).to.be.true;
             expect(set.calledWith("selectedStyleID", "l1")).to.be.true;
@@ -236,7 +235,7 @@ describe("core/modelList/layer/vectorTile", function () {
 
             sinon.stub(console, "warn");
 
-            VectorTileModel.prototype.setConfiguredLayerStyle.call(context);
+            VectorTile.prototype.setConfiguredLayerStyle.call(context);
 
             expect(set.notCalled).to.be.true;
             expect(setStyleById.notCalled).to.be.true;
@@ -251,9 +250,9 @@ describe("core/modelList/layer/vectorTile", function () {
             const italicFont1 = "Font italic",
                 italicFont2 = "Font Italic",
                 italicFont3 = "Fontitalic",
-                returnedItalicFont1 = VectorTileModel.prototype.addMpFonts(italicFont1),
-                returnedItalicFont2 = VectorTileModel.prototype.addMpFonts(italicFont2),
-                returnedItalicFont3 = VectorTileModel.prototype.addMpFonts(italicFont3);
+                returnedItalicFont1 = VectorTile.prototype.addMpFonts(italicFont1),
+                returnedItalicFont2 = VectorTile.prototype.addMpFonts(italicFont2),
+                returnedItalicFont3 = VectorTile.prototype.addMpFonts(italicFont3);
 
             expect(returnedItalicFont1).to.equal("MasterPortalFont Italic");
             expect(returnedItalicFont2).to.equal("MasterPortalFont Italic");
@@ -264,9 +263,9 @@ describe("core/modelList/layer/vectorTile", function () {
             const boldFont1 = "Font bold",
                 boldFont2 = "Font Bold",
                 boldFont3 = "Fontbold",
-                returnedBoldFont1 = VectorTileModel.prototype.addMpFonts(boldFont1),
-                returnedBoldFont2 = VectorTileModel.prototype.addMpFonts(boldFont2),
-                returnedBoldFont3 = VectorTileModel.prototype.addMpFonts(boldFont3);
+                returnedBoldFont1 = VectorTile.prototype.addMpFonts(boldFont1),
+                returnedBoldFont2 = VectorTile.prototype.addMpFonts(boldFont2),
+                returnedBoldFont3 = VectorTile.prototype.addMpFonts(boldFont3);
 
             expect(returnedBoldFont1).to.equal("MasterPortalFont Bold");
             expect(returnedBoldFont2).to.equal("MasterPortalFont Bold");
@@ -277,9 +276,9 @@ describe("core/modelList/layer/vectorTile", function () {
             const Font1 = "Font",
                 Font2 = "Font Regular",
                 Font3 = "Font Extra",
-                returnedFont1 = VectorTileModel.prototype.addMpFonts(Font1),
-                returnedFont2 = VectorTileModel.prototype.addMpFonts(Font2),
-                returnedFont3 = VectorTileModel.prototype.addMpFonts(Font3);
+                returnedFont1 = VectorTile.prototype.addMpFonts(Font1),
+                returnedFont2 = VectorTile.prototype.addMpFonts(Font2),
+                returnedFont3 = VectorTile.prototype.addMpFonts(Font3);
 
             expect(returnedFont1).to.equal("MasterPortalFont");
             expect(returnedFont2).to.equal("MasterPortalFont");
@@ -301,14 +300,14 @@ describe("core/modelList/layer/vectorTile", function () {
                     minZoom: -100000,
                     maxZoom: 1000000
                 })[key],
-                createTileGrid: sinon.spy(VectorTileModel.prototype, "createTileGrid")
+                createTileGrid: sinon.spy(VectorTile.prototype, "createTileGrid")
             };
         }
 
         it("Creates vector tile layer source", function () {
             const context = makeContext();
 
-            VectorTileModel.prototype.createLayerSource.call(context, attrs);
+            VectorTile.prototype.createLayerSource.call(context, attrs);
 
             expect(context.createTileGrid.calledWith("EPSG:3857", attrs)).to.be.true;
         });
@@ -331,24 +330,9 @@ describe("core/modelList/layer/vectorTile", function () {
 
         it("Creates a tilegrid", function () {
             const context = makeContext(),
-                returnedTileGrid = VectorTileModel.prototype.createTileGrid.call(context, "EPSG:3857", attrs);
+                returnedTileGrid = VectorTile.prototype.createTileGrid.call(context, "EPSG:3857", attrs);
 
             expect(returnedTileGrid).to.be.not.empty;
-        });
-    });
-
-    describe("createLayer", function () {
-        beforeEach(() => {
-            store.commit("Map/setProjection", {getCode: () => "EPSG:3857"});
-        });
-
-        it("Creates a VectorTileLayer", function () {
-            const vectorTileLayer = new VectorTileModel(attrs),
-                layer = vectorTileLayer.get("layer");
-
-            expect(layer).not.to.be.undefined;
-            expect(layer.get("id")).to.be.equals(attrs.id);
-            expect(layer.get("name")).to.be.equals(attrs.name);
         });
     });
 
@@ -375,7 +359,7 @@ describe("core/modelList/layer/vectorTile", function () {
                 },
                 axiosMock = sinon.stub(axios, "get").resolves(Promise.resolve(resp));
 
-            await VectorTileModel.prototype.fetchSpriteData.call(context, url);
+            await VectorTile.prototype.fetchSpriteData.call(context, url);
             expect(axiosMock.calledOnce).to.be.true;
         });
     });
@@ -390,7 +374,7 @@ describe("core/modelList/layer/vectorTile", function () {
         it("sets the legend URL", function () {
             const context = makeContext();
 
-            VectorTileModel.prototype.createLegendURL.call(context);
+            VectorTile.prototype.createLegendURL.call(context);
             expect(context.setLegendURL.calledOnce).to.be.true;
         });
     });

@@ -1,6 +1,5 @@
 import store from "../../app-store";
 import mapCollection from "../../core/dataStorage/mapCollection.js";
-import deepCopy from "../../utils/deepCopy.js";
 import * as bridge from "./RadioBridge.js";
 
 /**
@@ -644,7 +643,7 @@ Layer.prototype.toJSON = function () {
     delete atts.collection;
     delete atts.options;
 
-    return deepCopy(atts);
+    return atts;
 };
 
 Layer.prototype.on = function () {
