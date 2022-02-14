@@ -386,7 +386,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         });
     },
     /**
-     * All models of a folder 
+     * All models of a folder
      * get selected or deselected based on the parends attribute isSelected
      * @param {Folder} model - folderModel
      * @return {void}
