@@ -22,16 +22,18 @@ export default {
             "visibleLayerList"
         ]),
         visibleVectorLayers: function () {
-            const vectorLayers = [];
+            const vectorLayers = [],
+                rawVectorLayers = [];
 
             this.visibleLayerList.forEach(layer => {
                 if (layer instanceof VectorLayer && layer.get("typ") === "WFS") { // TODO: Ist es richtig nur auf WFS zu gehen?
                     const layerSource = layer.getSource();
 
                     vectorLayers.push({name: layer.get("name"), id: layer.get("id"), features: layerSource.getFeatures(), geometryType: layerSource.getFeatures()[0] ? layerSource.getFeatures()[0].getGeometry().getType() : null}); // TODO: Anpassen auf Bike and Ride Parkplätze (geschachtelte Features)
+                    rawVectorLayers.push(layer);
                 }
             });
-            this.setVisibleLayers(this.visibleLayerList);
+            this.setVisibleLayers(rawVectorLayers);
             return vectorLayers;
         }
     },
