@@ -245,7 +245,8 @@
             "attributeWhiteList": {
               "teilnahme_geburtsklinik": "Geburtshilfe",
               "teilnahme_notversorgung": "Not- und Unfallversorgung"
-            }
+            },
+            "loadingStrategy": "all"
           }
         ]
       },
