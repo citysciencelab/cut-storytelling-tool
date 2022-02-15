@@ -39,6 +39,20 @@ const mutations = {
             state.rawFeaturesOfLayer = rawFeatures;
             state.gfiFeaturesOfLayer = gfiFeatures;
         }
+    },
+    /**
+     * Resets the featureLister to the themeChooser tab by setting the
+     * selected layer and feature to null, making their respective tabs
+     * disabled.
+     * @param {Object} state context object.
+     * @returns {void}
+     */
+    resetToThemeChooser: (state) => {
+        state.selectedFeature = null;
+        state.layer = null;
+        state.layerListView = true;
+        state.featureListView = false;
+        state.featureDetailView = false;
     }
 };
 

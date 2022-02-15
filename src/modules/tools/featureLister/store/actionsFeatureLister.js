@@ -130,11 +130,7 @@ export default {
     switchToThemes ({commit, dispatch}) {
         const tabId = "featurelistThemeChooser";
 
-        commit("setSelectedFeature", null);
-        commit("setLayer", null);
-        commit("setLayerListView", true);
-        commit("setFeatureListView", false);
-        commit("setFeatureDetailView", false);
+        commit("resetToThemeChooser");
 
         dispatch("switchTabTo", {tabId: tabId, disableOthers: true});
     },
