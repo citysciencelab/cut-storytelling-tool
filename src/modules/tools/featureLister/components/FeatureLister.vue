@@ -204,11 +204,14 @@ export default {
                             </tbody>
                         </table>
                     </div>
-                    <div class="panel-footer featurelist-list-footer">
+                    <div
+                        class="panel-footer featurelist-list-footer"
+                    >
                         <button
                             type="button"
                             class="btn btn-default navbar-btn featurelist-list-button"
                             aria-label="Left Align"
+                            :disabled="featureCount <= maxFeatures || shownFeatures === featureCount"
                             @click="showMore()"
                         >
                             <span
@@ -216,7 +219,9 @@ export default {
                                 aria-hidden="true"
                             /> {{ $t("modules.tools.featureLister.more") }}
                         </button>
-                        <p class="navbar-text featurelist-list-message">
+                        <p
+                            class="navbar-text featurelist-list-message"
+                        >
                             {{ $t("modules.tools.featureLister.key", {shownFeatures, featureCount}) }}
                         </p>
                     </div>

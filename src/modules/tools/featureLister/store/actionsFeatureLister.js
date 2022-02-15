@@ -11,8 +11,8 @@ export default {
 
             commit("setLayerId", layer.id);
             commit("setGfiFeaturesOfLayer", state.visibleLayers);
-            commit("setShownFeatures", state.maxFeatures);
             commit("setFeatureCount", state.gfiFeaturesOfLayer.length);
+            commit("setShownFeatures", state.gfiFeaturesOfLayer.length < state.maxFeatures ? state.gfiFeaturesOfLayer.length : state.maxFeatures);
             commit("setLayerListView", false);
             commit("setFeatureDetailView", false);
             commit("setFeatureListView", true);
