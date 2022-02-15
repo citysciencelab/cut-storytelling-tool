@@ -37,6 +37,7 @@
 - The GFI is now always shown as selected in the menu when it is enabled.
 - Issue #689: `layerSlider` in Handle mode, the layer is now also displayed at the end of the bar.
 - A few translation errors were adjusted in config.json.md and config.json.en.md.
+- Tool Routing: Exported routes now inherit the style from route view.
 
 ---
 
@@ -116,7 +117,6 @@
 - Issue #673: LayerSlider: The progress bar is now displayed correctly with more than 10 configured layers.
 - 3D: terrain and background layer are displayed correctly. Loading portal in 3D by url parameters was fixed.
 - Issue #655: Only first namespace in WfsSearch was interpreted. Now, all configured namespaces are used.
-- Exported routes now inherit the style from route view.
 
 ---
 ## v2.17.1 - 2022-01-011
