@@ -245,8 +245,7 @@
             "attributeWhiteList": {
               "teilnahme_geburtsklinik": "Geburtshilfe",
               "teilnahme_notversorgung": "Not- und Unfallversorgung"
-            },
-            "loadingStrategy": "all"
+            }
           }
         ]
       },
@@ -744,7 +743,8 @@
             "strasse"
           ],
           "searchField": "name",
-          "extendedFilter": true
+          "extendedFilter": true,
+          "loadingStrategy": "all"
         },
         {
           "id": "8712",
