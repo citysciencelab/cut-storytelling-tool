@@ -43,10 +43,17 @@ const getters = {
      * @returns {Array} [header, value] for each property of the selected feature
      */
     getFeatureDetails: state => {
-        const featureDetail = [];
+        const featureDetail = [],
+            attributesToShow = state.selectedFeature.getAttributesToShow(),
+            featureProperties = state.selectedFeature.getProperties();
 
-        Object.entries(state.selectedFeature.getAttributesToShow()).forEach(([key, value]) => {
-            Object.entries(state.selectedFeature.getProperties()).forEach(([propkey, propvalue]) => {
+        if (attributesToShow === "showAll") {
+            Object.entries(featureProperties).forEach(([propkey, propvalue]) => {
+                featureDetail.push([propkey, propvalue]);
+            });
+        }
+        Object.entries(attributesToShow).forEach(([key, value]) => {
+            Object.entries(featureProperties).forEach(([propkey, propvalue]) => {
                 if (propkey === key) {
                     featureDetail.push([value, propvalue]);
                 }

@@ -240,7 +240,7 @@ export default {
                     >
                         <li class="list-group-item featurelist-details-li">
                             <strong>
-                                {{ feature[0] }}
+                                {{ beautifyKey(feature[0]) }}
                             </strong>
                         </li>
                         <li class="list-group-item featurelist-details-li">
