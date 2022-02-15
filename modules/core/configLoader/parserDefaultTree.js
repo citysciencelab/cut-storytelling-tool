@@ -361,7 +361,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             isInThemen: true,
             isVisibleInTree: true,
             glyphicon: "glyphicon-plus-sign",
-            isFolderSelectable: this.get("isFolderSelectable"),
+            isFolderSelectable: false,
             quickHelp: isQuickHelpSet
         });
         Object.keys(tree).forEach(element => {
@@ -370,7 +370,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             // Unterordner erzeugen
             this.addItems(category.folder, {
                 glyphicon: "glyphicon-plus-sign",
-                isFolderSelectable: this.get("isFolderSelectable"),
+                isFolderSelectable: false,
                 isInThemen: true,
                 level: 1,
                 parentId: category.id,
