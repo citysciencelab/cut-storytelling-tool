@@ -21,9 +21,9 @@
     - masterportalAPI: v1.9.0
 - The version of node was updated, must be >= 16.13.2 < 17.
   The version of npm  was also updated, must be >= 8.1.2 < 9. (The node and npm versions are still mandatory via .npmrc.).
-- Migrated the module 3D TerrainLayer from Backbone to Vue. The TerrainLayer uses the masterportalAPI's terrain layer on creation.
 - The vectorTile Layer is now refactored to src/core.
-- Migrated the module tileset from Backbone to Vue. The tileset layer uses the masterportalAPI's tileset layer on creation.
+- The 3D terrain layer is refactored. It is no longer a Backbone-model.The terrain layer uses the masterportalAPI's terrain layer on creation.
+- The 3D tileset layer is refactored. It is no longer a Backbone-model.The tileset layer uses the masterportalAPI's tileset layer on creation.
 
 ### Deprecated
 
