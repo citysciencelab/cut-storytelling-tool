@@ -434,11 +434,12 @@ $background_color_1: rgb(255, 255, 255);
         }
     }
 }
-.panel-heading {
-    background: #e7e7e7;
-    color: $color_4;
-    cursor: pointer;
-}
+    .panel-heading {
+        background: #f5f5f5;
+        color: #333333;
+        border-color: #ddd;
+        cursor: pointer;
+    }
 .tdfeaturelist {
     padding: 3px;
     >img {
@@ -453,4 +454,13 @@ $background_color_1: rgb(255, 255, 255);
         margin: 0;
     }
 }
+    #featurelist-list {
+        max-width: 426px;
+        overflow: auto;
+    }
+    #featurelist-details{
+        max-height: 440.15px;
+        max-width: 426px;
+        overflow: auto;
+    }
 </style>
