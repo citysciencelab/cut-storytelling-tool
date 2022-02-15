@@ -49,7 +49,7 @@ const getters = {
 
         if (attributesToShow === "showAll") {
             Object.entries(featureProperties).forEach(([propkey, propvalue]) => {
-                if (propvalue) {
+                if (propvalue && Config.ignoredKeys.indexOf(propkey.toUpperCase()) === -1) {
                     featureDetail.push([propkey, propvalue]);
                 }
             });
