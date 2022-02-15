@@ -210,4 +210,41 @@ describe("src/modules/tools/filterGeneral/components/SnippetDropdown.vue", () =>
             wrapper.destroy();
         });
     });
+
+    describe("display list", () => {
+        it("should render a list with radio", async () => {
+            const wrapper = shallowMount(SnippetDropdown, {
+                propsData: {
+                    "type": "dropdown",
+                    "attrName": "kapitelbezeichnung",
+                    "display": "list",
+                    "multiselect": false,
+                    "value": ["yek", "do"]
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".snippetListContainer").exists()).to.be.true;
+            expect(wrapper.find(".snippetListContainer .radio").exists()).to.be.true;
+
+            wrapper.destroy();
+        });
+        it("should render a list with checkbox", async () => {
+            const wrapper = shallowMount(SnippetDropdown, {
+                propsData: {
+                    "type": "dropdown",
+                    "attrName": "kapitelbezeichnung",
+                    "display": "list",
+                    "multiselect": true,
+                    "value": ["yek", "do"]
+                },
+                localVue
+            });
+
+            expect(wrapper.find(".snippetListContainer").exists()).to.be.true;
+            expect(wrapper.find(".snippetListContainer .checkbox").exists()).to.be.true;
+
+            wrapper.destroy();
+        });
+    });
 });

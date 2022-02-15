@@ -176,6 +176,16 @@ export default class MapHandler {
     }
 
     /**
+     * Showing only the features with the id by triggering the function in openlayerFunction file
+     * @param {ol/Layer} layer the layer to handle
+     * @param {String[]} ids a list of feature ids
+     * @returns {void}
+     */
+    showFeaturesByIds (layer, ids) {
+        this.handlers.showFeaturesByIds(layer, ids);
+    }
+
+    /**
      * Zoom to filtered features
      * @param {Number} minScale the minimum scale
      * @param {String[]} filteredFeatureIds the filtered feature Ids

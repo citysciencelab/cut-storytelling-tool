@@ -9,6 +9,11 @@ export default {
             required: false,
             default: ""
         },
+        adjustment: {
+            type: [Object, Boolean],
+            required: false,
+            default: false
+        },
         disabled: {
             type: Boolean,
             required: false,
@@ -39,6 +44,13 @@ export default {
             required: false,
             default: 0
         },
+        value: {
+            type: Array,
+            required: false,
+            default () {
+                return [true, false];
+            }
+        },
         visible: {
             type: Boolean,
             required: false,
@@ -48,7 +60,7 @@ export default {
     data () {
         return {
             isInitializing: true,
-            value: false,
+            checked: false,
             showInfo: false
         };
     },
@@ -73,15 +85,17 @@ export default {
         }
     },
     watch: {
-        value: {
-            handler (value) {
+        checked: {
+            handler (checked) {
+                const value = this.value.length >= 2 ? this.value[Number(!checked)] : checked;
+
                 this.emitCurrentRule(value, this.isInitializing);
             }
         }
     },
     created () {
         if (this.prechecked) {
-            this.value = this.prechecked;
+            this.checked = this.prechecked;
         }
         this.$nextTick(() => {
             this.isInitializing = false;
@@ -125,7 +139,7 @@ export default {
          */
         resetSnippet (onsuccess) {
             if (this.visible) {
-                this.value = false;
+                this.checked = false;
             }
             this.$nextTick(() => {
                 if (typeof onsuccess === "function") {
@@ -152,7 +166,7 @@ export default {
         <div class="left">
             <input
                 :id="'snippetCheckbox-' + snippetId"
-                v-model="value"
+                v-model="checked"
                 class="snippetCheckbox"
                 type="checkbox"
                 name="checkbox"
@@ -190,7 +204,6 @@ export default {
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
     .snippetCheckboxContainer {
-        margin-bottom: 10px;
         height: auto;
     }
     .snippetCheckboxContainer .info-icon {
@@ -233,6 +246,7 @@ export default {
         }
     }
     .snippetCheckboxContainer .right {
+        float: right;
         position: absolute;
         right: 10px;
     }
