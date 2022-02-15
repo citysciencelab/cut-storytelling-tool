@@ -111,7 +111,8 @@ export default {
             dropdownSelected: [],
             styleModel: {},
             legendsInfo: [],
-            iconList: {}
+            iconList: {},
+            allSelected: false
         };
     },
     computed: {
@@ -139,20 +140,17 @@ export default {
         noElements () {
             return this.$t("modules.tools.filterGeneral.dropdown.noElements");
         },
-        dropdownOptions () {
-            if (!this.anyIconExists() || !isObject(this.iconList) || !Array.isArray(this.dropdownValue)) {
-                return this.dropdownValue;
+        dropdownValueComputed () {
+            if (this.multiselect && this.addSelectAll) {
+                return [{
+                    selectAllLabel: this.selectAllLabel,
+                    list: this.dropdownValue
+                }];
             }
-            const result = [];
-
-            this.dropdownValue.forEach(value => {
-                result.push({
-                    title: value,
-                    desc: value,
-                    img: this.iconExists(value) ? this.iconList[value] : ""
-                });
-            });
-            return result;
+            return this.dropdownValue;
+        },
+        selectAllLabel () {
+            return !this.allSelected ? this.$t("modules.tools.filterGeneral.dropdown.selectAll") : this.$t("modules.tools.filterGeneral.dropdown.deselectAll");
         }
     },
     watch: {
@@ -165,6 +163,7 @@ export default {
                     this.deleteCurrentRule();
                 }
             }
+            this.allSelected = this.dropdownValue.length !== 0 && this.dropdownValue.length === this.dropdownSelected.length;
         },
         adjustment (adjusting) {
             if (!isObject(adjusting) || this.visible === false) {
@@ -244,7 +243,6 @@ export default {
                 this.disable = false;
             });
         }
-        this.dropdownValue.push("Reset me!");
     },
     mounted () {
         if (this.renderIcons === "fromLegend") {
@@ -346,8 +344,24 @@ export default {
         toggleInfo () {
             this.showInfo = !this.showInfo;
         },
-        onChange (value) {
-            if (value.indexOf('Reset me!') !== -1) this.dropdownSelected = [];
+        /**
+         * Select all items
+         * @returns {void}
+         */
+        selectAll () {
+            this.dropdownSelected = [];
+            for (const item of this.dropdownValue) {
+                if (item) {
+                    this.dropdownSelected.push(item);
+                }
+            }
+        },
+        /**
+         * Deselect all items
+         * @returns {void}
+         */
+        deselectAll () {
+            this.dropdownSelected = [];
         }
     }
 };
@@ -387,7 +401,7 @@ export default {
                 <Multiselect
                     :id="'snippetSelectBox-' + snippetId"
                     v-model="dropdownSelected"
-                    :options="dropdownValue"
+                    :options="dropdownValueComputed"
                     name="select-box"
                     :disabled="disable"
                     :multiple="multiselect"
@@ -398,7 +412,9 @@ export default {
                     :close-on-select="true"
                     :clear-on-select="false"
                     :loading="disable"
-                    @input="onChange"
+                    :group-select="multiselect && addSelectAll"
+                    :group-values="(multiselect && addSelectAll) ? 'list' : ''"
+                    :group-label="(multiselect && addSelectAll) ? 'selectAllLabel' : ''"
                 >
                     <span slot="noOptions">{{ emptyList }}</span>
                     <span slot="noResult">{{ noElements }}</span>
@@ -438,7 +454,23 @@ export default {
                             <th
                                 :colspan="anyIconExists() ? 3 : 2"
                             >
-                                {{ labelText }}
+                                <div
+                                    class="pull-left"
+                                >
+                                    {{ labelText }}
+                                </div>
+                                <div
+                                    v-if="multiselect && addSelectAll"
+                                    class="pull-right"
+                                >
+                                    <a
+                                        href="#"
+                                        class="link-secondary"
+                                        @click="!allSelected ? selectAll() : deselectAll()"
+                                    >
+                                        {{ selectAllLabel }}
+                                    </a>
+                                </div>
                             </th>
                         </tr>
                     </thead>

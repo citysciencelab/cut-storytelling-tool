@@ -416,6 +416,7 @@
                 },
                 "dropdown": {
                     "selectAll": "Select all",
+                    "deselectAll": "Deselect all",
                     "defaultLabel": "Choose an Option",
                     "emptyList": "List is empty",
                     "noElements": "No elements found"
