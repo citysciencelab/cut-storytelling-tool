@@ -49,12 +49,14 @@ const getters = {
 
         if (attributesToShow === "showAll") {
             Object.entries(featureProperties).forEach(([propkey, propvalue]) => {
-                featureDetail.push([propkey, propvalue]);
+                if (propvalue) {
+                    featureDetail.push([propkey, propvalue]);
+                }
             });
         }
         Object.entries(attributesToShow).forEach(([key, value]) => {
             Object.entries(featureProperties).forEach(([propkey, propvalue]) => {
-                if (propkey === key) {
+                if (propkey === key && propvalue) {
                     featureDetail.push([value, propvalue]);
                 }
             });
