@@ -1,4 +1,6 @@
 <script>
+import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
+
 export default {
     name: "LayerItem",
     props: {
@@ -34,7 +36,8 @@ export default {
         updateSelectedLayers (filterId) {
             this.$emit("updatetoselectedlayers", filterId);
             this.selected = !this.selected;
-        }
+        },
+        translateKeyWithPlausibilityCheck
     }
 };
 </script>
@@ -66,6 +69,12 @@ export default {
                 />
             </a>
         </h2>
+        <div
+            v-if="layer.shortDescription && !selected"
+            class="layerInfoText"
+        >
+            {{ translateKeyWithPlausibilityCheck(layer.shortDescription, key => $t(key)) }}
+        </div>
         <slot
             :layer="layer"
         />
