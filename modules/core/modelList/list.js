@@ -4,7 +4,7 @@ import GroupedLayers from "../../../src/core/layers/group";
 import WMSTimeLayer from "../../../src/core/layers/wmsTime";
 import WMTSLayer from "../../../src/core/layers/wmts";
 import StaticImageLayer from "./layer/staticImage";
-import GeoJSONLayer from "./layer/geojson";
+import GeoJSONLayer from "../../../src/core/layers/geojson";
 import SensorLayer from "./layer/sensor";
 import HeatmapLayer from "./layer/heatmap";
 import TerrainLayer from "../../../src/core/layers/terrain";

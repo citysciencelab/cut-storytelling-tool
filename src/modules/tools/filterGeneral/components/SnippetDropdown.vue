@@ -445,28 +445,34 @@ export default {
                             <td
                                 v-if="anyIconExists()"
                             >
-                                <img
-                                    v-show="iconExists(val)"
-                                    class="snippetListContainerIcon"
-                                    :src="iconList[val]"
-                                    :alt="val"
+                                <label
+                                    for="'snippetRadioCheckbox-' + snippetId + '-' + val"
                                 >
+                                    <img
+                                        v-show="iconExists(val)"
+                                        class="snippetListContainerIcon"
+                                        :src="iconList[val]"
+                                        :alt="val"
+                                    >
+                                </label>
                             </td>
                             <td>
                                 <label
-                                    for="'snippetCheckbox-' + snippetId + '-' + val"
+                                    for="'snippetRadioCheckbox-' + snippetId + '-' + val"
+                                    class="hidden"
                                 />
                                 <input
-                                    :id="'snippetCheckbox-' + snippetId + '-' + val"
+                                    :id="'snippetRadioCheckbox-' + snippetId + '-' + val"
                                     v-model="dropdownSelected"
-                                    type="checkbox"
+                                    :class="multiselect ? 'checkbox': 'radio'"
+                                    :type="multiselect ? 'checkbox': 'radio'"
                                     :value="val"
                                 >
                             </td>
                             <td>
                                 <label
                                     class="check-box-label"
-                                    :for="'snippetCheckbox-' + snippetId + '-' + val"
+                                    :for="'snippetRadioCheckbox-' + snippetId + '-' + val"
                                 >{{ val }}</label>
                             </td>
                         </tr>
@@ -579,6 +585,21 @@ export default {
     .snippetDropdownContainer {
         height: auto;
     }
+    .snippetDropdownContainer input[type=radio], input[type=checkbox] {
+        margin: 0;
+    }
+    .snippetDropdownContainer .radio, .snippetDropdownContainer .checkbox {
+        display: inline-block;
+    }
+    .snippetDropdownContainer label {
+        margin-bottom: 0;
+    }
+    .snippetDropdownContainer .table > thead > tr > th, .table > thead > tr > td, .table > tbody > tr > th, .table > tbody > tr > td, .table > tfoot > tr > th, .table > tfoot > tr > td {
+        padding: 4px;
+        line-height: 1.428571429;
+        vertical-align: middle;
+        border-top: 1px solid #ddd;
+    }
     .snippetDropdownContainer .info-icon {
         float: right;
         font-size: 16px;
@@ -598,7 +619,7 @@ export default {
         padding: 15px 10px;
     }
     .snippetListContainer .snippetListContainerIcon {
-        width: 22px;
+        width: 25px;
     }
     .glyphicon-info-sign:before {
         content: "\E086";
@@ -613,11 +634,11 @@ export default {
     }
     .snippetDropdownContainer .table-responsive .right {
         position: absolute;
-        right: -10px;
+        right: -33px;
     }
     .panel .snippetDropdownContainer .right,  .snippetDropdownContainer .right{
         position: absolute;
-        right: 10px;
+        right: -33px;
     }
     .category-layer .panel .right {
         right: 30px;

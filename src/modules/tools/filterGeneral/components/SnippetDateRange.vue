@@ -535,7 +535,7 @@ export default {
     }
     .snippetDateRangeContainer .right {
         position: absolute;
-        right: 10px;
+        right: -33px;
     }
     input[type='range'] {
         width: 10.5rem;

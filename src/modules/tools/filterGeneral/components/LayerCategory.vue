@@ -179,7 +179,7 @@ export default {
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
     .panel-group .panel + .panel {
         margin-top: 10px;
     }

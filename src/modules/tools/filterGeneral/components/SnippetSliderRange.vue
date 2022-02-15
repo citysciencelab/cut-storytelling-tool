@@ -437,7 +437,7 @@ export default {
     }
     .sliderInputWrapper .right {
         position: absolute;
-        right: 10px;
+        right: -33px;
     }
     .sliderRangeWrapper {
         position: relative;

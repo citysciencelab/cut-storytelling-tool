@@ -899,6 +899,7 @@ export default {
     .snippet {
         display: inline-block;
         margin-bottom: 20px;
+        position: relative;
         &:last-child {
             margin-bottom: 10px;
         }
@@ -915,5 +916,16 @@ export default {
     }
     .form-group {
         clear: both;
+    }
+    .table-filter-container {
+        #tool-general-filter {
+            .panel-body {
+                max-height: 480px;
+                overflow-y: scroll;
+                .snippet {
+                    max-width: 288px;
+                }
+            }
+        }
     }
 </style>
