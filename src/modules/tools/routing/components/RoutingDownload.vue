@@ -65,7 +65,11 @@ export default {
          */
         styleFeatures (features) {
             for (const feature of features) {
-                feature.setStyle(directionsRouteStyle(feature)[1]);
+                const routeStyle = directionsRouteStyle(feature);
+
+                if (routeStyle[1]) {
+                    feature.setStyle(routeStyle[1]);
+                }
             }
             return features;
         },
