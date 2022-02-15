@@ -109,7 +109,6 @@ VectorTileLayer.prototype.createTileGrid = function (dataEpsg, attrs) {
 VectorTileLayer.prototype.createLayer = function (attr) {
     this.layer = new OpenLayersVectorTileLayer({
         source: attr.layerSource,
-        attributes: attr,
         id: attr.id,
         typ: attr.typ,
         name: attr.name,
@@ -256,7 +255,6 @@ VectorTileLayer.prototype.isStyleValid = function (style) {
 /**
  * Fetches SpriteData Object
  * @param {String} spriteUrl url to spriteData as found in StyleDefinition
- * @param {Object} attr the attributes for the layer
  * @returns {Object} spriteData
  */
 VectorTileLayer.prototype.fetchSpriteData = function (spriteUrl) {
