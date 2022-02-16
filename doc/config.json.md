@@ -4650,6 +4650,8 @@ List of attributes typically used in vector layers. Vector layers are WFS, GeoJS
 |hitTolerance|no|String||Click tolerance for hits in pixels when firing a *GetFeatureInfo* request.|false|
 |vtStyles|no|**[vtStyle](#markdown-header-themenconfiglayervectorvtstyle)**[]||Choosable external style definitions. Only available in a *Vector Tile Layer*.|false|
 |useMpFonts|no|Boolean|true|Only available in a *Vector Tile Layer*. Switch to overwrite Fontstacks of external style definitions, to assure needed fonts are available. If set to false, used fonts need to be added separately e.g. via '<link rel=stylesheet ...>' in index.html |false|
+|loadingStrategy|no|String|"bbox"|Strategy function for loading features. Possible values are "bbox" or "all". **[More information](https://openlayers.org/en/latest/apidoc/module-ol_loadingstrategy.html)**.|false|
+
 
 
 **Example**
@@ -4671,6 +4673,7 @@ List of attributes typically used in vector layers. Vector layers are WFS, GeoJS
     "isNeverVisibleInTree": false,
     "clusterDistance": 60,
     "extendedFilter": true,
+    "loadingStrategy": "all",
     "filterOptions": [
         {
             "fieldName": "myFirstAttributeToFilter",
