@@ -353,11 +353,15 @@ $background_color_1: rgb(255, 255, 255);
 .featurelist-details {
     display: block;
     margin-bottom: 0px;
+    max-height: 440.15px;
+    max-width: 426px;
+    overflow: auto;
 }
 .featurelist-list {
-    width: 70vw;
     margin-bottom: 0px;
     display: block;
+    max-width: 426px;
+    overflow: auto;
 }
 .featurelist-themes {
     width: 100%;
@@ -454,13 +458,4 @@ $background_color_1: rgb(255, 255, 255);
         margin: 0;
     }
 }
-    #featurelist-list {
-        max-width: 426px;
-        overflow: auto;
-    }
-    #featurelist-details{
-        max-height: 440.15px;
-        max-width: 426px;
-        overflow: auto;
-    }
 </style>
