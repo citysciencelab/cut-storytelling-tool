@@ -229,6 +229,9 @@ export default {
                 this.disable = false;
             });
         }
+        if (this.precheckedIsValid) {
+            this.isInitializing = false;
+        }
     },
     methods: {
         translateKeyWithPlausibilityCheck,

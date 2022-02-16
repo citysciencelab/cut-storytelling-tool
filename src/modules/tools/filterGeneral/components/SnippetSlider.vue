@@ -172,6 +172,9 @@ export default {
                 this.disable = false;
             });
         }
+        if (typeof this.prechecked !== "undefined") {
+            this.isInitializing = false;
+        }
     },
     methods: {
         translateKeyWithPlausibilityCheck,
