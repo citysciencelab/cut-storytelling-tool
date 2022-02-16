@@ -8,7 +8,7 @@ const getters = {
      * @param {Object} state context object.
      * @returns {void}
      */
-    getFeatureProperties: state => {
+    featureProperties: state => {
         const featuresWithProperties = [],
             sortedProperties = [];
 
@@ -42,7 +42,7 @@ const getters = {
      * @param {Object} state context object.
      * @returns {Array} [header, value] for each property of the selected feature
      */
-    getFeatureDetails: state => {
+    featureDetails: state => {
         const featureDetail = [],
             attributesToShow = state.selectedFeature.getAttributesToShow(),
             featureProperties = state.selectedFeature.getProperties();
@@ -68,7 +68,7 @@ const getters = {
      * @param {Object} state context object.
      * @returns {void}
      */
-    getHeaders: state => {
+    headers: state => {
         const headers = [],
             lengths = [];
         let indexOfFeatureWithMostAttributes = "";
