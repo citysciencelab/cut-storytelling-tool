@@ -4,37 +4,14 @@ import featureListerState from "./stateFeatureLister";
 const getters = {
     ...generateSimpleGetters(featureListerState),
     /**
-     * Gets the currently available layers.
+     * Builds and returns a two-dimensional array that contains value lists per feature based on the header
      * @param {Object} state context object.
-     * @returns {void}
+     * @returns {Array} [[a1, b1], [a2, b2], ...] array for each line containing array for each property of the header
      */
     featureProperties: state => {
-        const featuresWithProperties = [],
-            sortedProperties = [];
-
-        state.gfiFeaturesOfLayer.forEach(feature => {
-            featuresWithProperties.push(feature.getProperties());
-        });
-
-        featuresWithProperties.forEach(properties => {
-            const attvalue = [];
-
-            state.headers.forEach(header => {
-                if (!Object.prototype.hasOwnProperty.call(properties, header.key)) {
-                    Object.entries(properties).forEach(() => {
-                        properties[header.key] = "";
-                    });
-                }
-
-                Object.entries(properties).forEach(([key, value]) => {
-                    if (header.key === key) {
-                        attvalue.push(value);
-                    }
-                });
-            });
-            sortedProperties.push(attvalue);
-        });
-        return sortedProperties;
+        return state.gfiFeaturesOfLayer
+            .map(feature => feature.getProperties())
+            .map(properties => state.headers.map(({key}) => properties[key] ?? ""));
     },
     /**
      * The v-for calls this function for every property of the selected feature and returns pairs of header and
@@ -43,51 +20,35 @@ const getters = {
      * @returns {Array} [header, value] for each property of the selected feature
      */
     featureDetails: state => {
-        const featureDetail = [],
-            attributesToShow = state.selectedFeature.getAttributesToShow(),
+        const attributesToShow = state.selectedFeature.getAttributesToShow(),
             featureProperties = state.selectedFeature.getProperties();
 
-        if (attributesToShow === "showAll") {
-            Object.entries(featureProperties).forEach(([propkey, propvalue]) => {
-                if (propvalue && Config.ignoredKeys.indexOf(propkey.toUpperCase()) === -1) {
-                    featureDetail.push([propkey, propvalue]);
-                }
-            });
-        }
-        Object.entries(attributesToShow).forEach(([key, value]) => {
-            Object.entries(featureProperties).forEach(([propkey, propvalue]) => {
-                if (propkey === key && propvalue) {
-                    featureDetail.push([value, propvalue]);
-                }
-            });
-        });
-        return featureDetail;
+        return attributesToShow === "showAll"
+            ? Object.entries(featureProperties)
+                .filter(([key, value]) => value && !Config.ignoredKeys.includes(key.toUpperCase()))
+            : Object.entries(attributesToShow)
+                .filter(([key]) => featureProperties[key])
+                .map(([key, value]) => [value, featureProperties[key]]);
     },
     /**
-     * Gets the currently available layers.
+     * Gets a list of all property keys to show in a table header.
      * @param {Object} state context object.
-     * @returns {void}
+     * @returns {Array} [key, value] for each property
      */
     headers: state => {
-        const headers = [],
-            lengths = [];
-        let indexOfFeatureWithMostAttributes = "";
+        const headers = Object.entries(state.gfiFeaturesOfLayer
+            .reduce((acc, it) => {
+                let keys = it.getAttributesToShow();
 
-        Object.values(state.gfiFeaturesOfLayer).forEach(element => {
-            lengths.push(Object.keys(element.getAttributesToShow()).length);
-        });
-        indexOfFeatureWithMostAttributes = lengths.indexOf(Math.max(...lengths));
+                keys = keys === "showAll"
+                    ? Object.keys(it.getProperties()).map(prop => [prop, prop])
+                    : Object.entries(keys);
+                keys.forEach(([key, value]) => {
+                    acc[key] = value;
+                });
+                return acc;
+            }, {})).map(([key, value]) => ({key, value}));
 
-        if (state.gfiFeaturesOfLayer[indexOfFeatureWithMostAttributes].getAttributesToShow() === "showAll") {
-            Object.entries(state.gfiFeaturesOfLayer[indexOfFeatureWithMostAttributes].getProperties()).forEach(([key]) => {
-                headers.push({key: key, value: key});
-            });
-        }
-        else {
-            Object.entries(state.gfiFeaturesOfLayer[indexOfFeatureWithMostAttributes].getAttributesToShow()).forEach(([key, value]) => {
-                headers.push({key, value});
-            });
-        }
         state.headers = headers;
         return headers;
     }
