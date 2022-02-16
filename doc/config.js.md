@@ -246,7 +246,7 @@ In the following, all configuration options are described. For all configuration
 |layerIDsToStyle|no|**[layerIDsToStyle](#markdown-header-treelayeridstostyle)**[]||Special implementation for a HVV (Hamburg public transportation) service. Contains objects to request various styles of a layer id.|
 |metaIDsToMerge|no|String[]||All layers found in the `services.json` regarding these meta IDs are merged to a single layer of the layer tree.|
 |metaIDsToIgnore|no|String[]||All `services.json` layers listed will not be shown in the layer tree.|
-|isFolderSelectable|no|Boolean|`true`|Globally sets whether a selection box is provided on folders that de-/activates all layers in it. An override per element exists, see **[config.json](config.json.md#Ordnerkonfiguration-Fachdaten)**.|
+|isFolderSelectable|no|Boolean|`false`|Globally sets whether a selection box is provided on folders that de-/activates all layers in it. An override per element exists, see **[config.json](config.json.md#Ordnerkonfiguration-Fachdaten)**.|
 
 ***
 
