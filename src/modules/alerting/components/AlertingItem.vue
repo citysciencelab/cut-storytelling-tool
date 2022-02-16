@@ -117,7 +117,7 @@ export default {
 
             if (data.restrictedAlerts !== undefined && typeof data.restrictedAlerts === "object") {
                 Object.keys(data.restrictedAlerts).forEach(restrictedAlertUrl => {
-                    if (restrictedAlertUrl.toLowerCase() === this.currentUrl.toLowerCase() && Array.isArray(data.restrictedAlerts[restrictedAlertUrl])) {
+                    if (this.currentUrl.toLowerCase().startsWith(restrictedAlertUrl.toLowerCase()) && Array.isArray(data.restrictedAlerts[restrictedAlertUrl])) {
                         collectedAlertIds = [...collectedAlertIds, ...data.restrictedAlerts[restrictedAlertUrl]];
                     }
                 });
