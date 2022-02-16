@@ -43,14 +43,14 @@ export default class InterfaceWFS {
                 version: "1.1.0",
                 request: "GetFeature",
                 typename: service?.typename,
-                maxfeatures: 1
+                propertyName: attrName
             },
             axiosObject = typeof axiosMock === "object" && axiosMock !== null ? axiosMock : axios,
             result = {};
 
         if (!maxOnly) {
             axiosObject.get(url, {
-                params: Object.assign({}, params, {sortby: attrName + " A"})
+                params: Object.assign({}, params, {maxfeatures: 1, sortby: attrName + " A"})
             })
                 .then(response => {
                     this.parseResponseMinMax(service?.typename, attrName, response?.request?.responseXML, min => {
@@ -156,6 +156,16 @@ export default class InterfaceWFS {
             }
             break;
         }
+
+        if (!node.hasChildNodes()) {
+            for (const childNode of responseXML.getElementsByTagName(node.tagName)) {
+                if (childNode.hasChildNodes()) {
+                    node = childNode;
+                    break;
+                }
+            }
+        }
+
         return node;
     }
     /**
