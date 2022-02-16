@@ -21,7 +21,7 @@ describe("core/configLoader/preparser", function () {
             expect(preparser.parseIsFolderSelectable(false)).to.be.false;
         });
         it("should be true if not set in config (default value)", function () {
-            expect(preparser.parseIsFolderSelectable(undefined)).to.be.true;
+            expect(preparser.parseIsFolderSelectable(undefined)).to.be.false;
         });
     });
 
