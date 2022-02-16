@@ -11,6 +11,11 @@ function getFeaturesByLayerId (layerId) {
     if (!layer || !layer?.has("layer")) {
         return [];
     }
+
+    if (layer.get("isClustered")) {
+        return layer.get("layer").getSource().getSource().getFeatures();
+    }
+
     return layer.get("layer").getSource().getFeatures();
 }
 

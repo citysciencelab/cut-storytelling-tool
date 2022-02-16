@@ -1,16 +1,18 @@
 <script>
+import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
+
 export default {
     name: "SnippetInput",
     props: {
-        api: {
-            type: Object,
-            required: false,
-            default: null
-        },
         attrName: {
             type: String,
             required: false,
             default: ""
+        },
+        adjustment: {
+            type: [Object, Boolean],
+            required: false,
+            default: false
         },
         disabled: {
             type: Boolean,
@@ -18,14 +20,14 @@ export default {
             default: false
         },
         info: {
-            type: String,
+            type: [String, Boolean],
             required: false,
-            default: ""
+            default: false
         },
         label: {
-            type: String,
+            type: [String, Boolean],
             required: false,
-            default: ""
+            default: true
         },
         operator: {
             type: String,
@@ -55,28 +57,52 @@ export default {
     },
     data () {
         return {
-            inputValue: this.prechecked ? this.prechecked : "",
+            isInitializing: true,
+            value: "",
             showInfo: false
         };
     },
     computed: {
-        infoText: function () {
-            return this.info ? this.info : this.$t("modules.tools.filterGeneral.textFieldInfo");
+        labelText () {
+            if (this.label === true) {
+                return this.attrName;
+            }
+            else if (typeof this.label === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
+            }
+            return "";
+        },
+        infoText () {
+            if (this.info === true) {
+                return this.$t("common:modules.tools.filterGeneral.info.snippetInput");
+            }
+            else if (typeof this.info === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.info, key => this.$t(key));
+            }
+            return "";
         }
     },
     watch: {
-        inputValue: {
-            handler (value) {
-                this.emitCurrentRule(value);
+        value (val) {
+            if (!val) {
+                this.deleteCurrentRule();
+            }
+            else {
+                this.emitCurrentRule(this.value, this.isInitializing);
             }
         }
     },
-    mounted () {
+    created () {
+        if (this.prechecked) {
+            this.value = this.prechecked;
+        }
         this.$nextTick(() => {
-            this.emitCurrentRule(this.inputValue, true);
+            this.isInitializing = false;
         });
     },
     methods: {
+        translateKeyWithPlausibilityCheck,
+
         /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
@@ -84,18 +110,55 @@ export default {
          * @returns {void}
          */
         emitCurrentRule (value, startup = false) {
-            this.$emit("ruleChanged", {
+            this.$emit("changeRule", {
                 snippetId: this.snippetId,
                 startup,
-                rule: {
-                    attrName: this.attrName,
-                    operator: this.operator,
-                    value
+                fixed: !this.visible,
+                attrName: this.attrName,
+                operator: this.operator,
+                value
+            });
+        },
+        /**
+         * Emits the delete rule function to whoever is listening.
+         * @returns {void}
+         */
+        deleteCurrentRule () {
+            this.$emit("deleteRule", this.snippetId);
+        },
+        /**
+         * Resets the values of this snippet.
+         * @param {Function} onsuccess the function to call on success
+         * @returns {void}
+         */
+        resetSnippet (onsuccess) {
+            if (this.visible) {
+                this.value = "";
+            }
+            this.$nextTick(() => {
+                if (typeof onsuccess === "function") {
+                    onsuccess();
                 }
             });
         },
+        /**
+         * Toggles the info.
+         * @returns {void}
+         */
         toggleInfo () {
             this.showInfo = !this.showInfo;
+        },
+        /**
+         * Triggers when the input field has lost its focus.
+         * @returns {void}
+         */
+        inputChanged () {
+            if (!this.value) {
+                this.deleteCurrentRule();
+            }
+            else {
+                this.emitCurrentRule(this.value, this.isInitializing);
+            }
         }
     }
 };
@@ -106,7 +169,10 @@ export default {
         v-show="visible"
         class="snippetInputContainer"
     >
-        <div class="right">
+        <div
+            v-if="info !== false"
+            class="right"
+        >
             <div class="info-icon">
                 <span
                     :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
@@ -117,17 +183,20 @@ export default {
         </div>
         <div class="input-container">
             <label
+                v-if="label !== false"
                 :for="'snippetInput-' + snippetId"
                 class="snippetInputLabel left"
-            >{{ label }}</label>
+            >{{ labelText }}</label>
             <input
                 :id="'snippetInput-' + snippetId"
-                v-model="inputValue"
-                class="snippetInput"
+                v-model="value"
+                class="snippetInput form-control"
                 type="text"
                 name="input"
                 :disabled="disabled"
                 :placeholder="placeholder"
+                @blur="inputChanged()"
+                @keyup.enter="inputChanged()"
             >
         </div>
         <div
@@ -150,8 +219,6 @@ export default {
         width: 100%;
     }
     .snippetInputContainer {
-        padding: 5px;
-        margin-bottom: 10px;
         height: auto;
     }
     .snippetInputContainer input {
@@ -193,7 +260,7 @@ export default {
     }
     .snippetInputContainer .right {
         position: absolute;
-        right: 10px;
+        right: -33px;
     }
     .category-layer .right {
         right: 30px;

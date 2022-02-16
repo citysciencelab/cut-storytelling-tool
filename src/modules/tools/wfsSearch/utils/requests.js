@@ -35,7 +35,7 @@ function adjustFilter (filter) {
 function parseGazetteerResponse (responseData, namespaces, memberSuffix) {
     const attributes = {},
         features = [],
-        ns = Array.isArray(namespaces) ? namespaces : [namespaces],
+        namespaceArray = Array.isArray(namespaces) ? namespaces : [namespaces],
         gmlFeatures = new DOMParser().parseFromString(responseData, "application/xml").getElementsByTagName(`wfs:${memberSuffix}`);
 
     if (gmlFeatures.length === 0) {
@@ -43,6 +43,15 @@ function parseGazetteerResponse (responseData, namespaces, memberSuffix) {
     }
 
     Array.from(gmlFeatures).forEach(feature => {
+        // read attributes by all configured namespaces
+        namespaceArray
+            .map(namespace => feature.getElementsByTagNameNS(namespace, "*"))
+            .map(htmlCollection => Object.values(htmlCollection))
+            .flat(1)
+            .forEach(attribute => {
+                attributes[attribute.localName] = attribute.textContent;
+            });
+
         if (feature.getElementsByTagName("iso19112:position").length > 0) {
             attributes.geometry = new Point(
                 feature.getElementsByTagName("iso19112:position")[0].getElementsByTagName("gml:pos")[0]
@@ -65,14 +74,9 @@ function parseGazetteerResponse (responseData, namespaces, memberSuffix) {
             ]);
         }
 
-        features.push(
-            new Feature({
-                ...attributes,
-                ...Object.values(...ns.map(namespace => feature.getElementsByTagNameNS(namespace, "*")))
-                    .reduce((acc, curr) => ({...acc, [curr.localName]: curr.textContent}), {})
-            })
-        );
+        features.push(new Feature(attributes));
     });
+
     return features;
 }
 

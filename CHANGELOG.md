@@ -9,15 +9,51 @@
 ---
 ## Unreleased - in development
 ### Added
-- Package vue-multiselect: 2.1.6 is installed
+- The gazetteer search function now supports changing the namespace by configuration.
+- Issue #690: Documentation for the menu item `ansichten` (map view points) has been added.
+- It is now possible to configure a loading strategy for a wfs layer (default is bbox).
+
+### Changed
+-  Print uses formatList from statePrint, instead of all formats from mapfish Server.
+-  The following NPM packages are updated:
+    - mocha: 9.1.4 to 9.2.0
+    - mochapack: 2.1.2 to 2.1.4
+    - masterportalAPI: v1.9.0
+- The version of node was updated, must be >= 16.13.2 < 17.
+  The version of npm  was also updated, must be >= 8.1.2 < 9. (The node and npm versions are still mandatory via .npmrc.).
+- Migrated the module 3D TerrainLayer from Backbone to Vue. The TerrainLayer uses the masterportalAPI's terrain layer on creation.
+
+### Deprecated
+
+### Removed
+
+### Fixed
+- Issue #695: Optimised order in if clause. First use "show_doc_url" in layers metadata, then check if service based on the config.js's metaDataCatalogueId exists. otherwise throw console.warn.
+- Issue #666: The elastic search query string replacement function will now only take effect.
+  when the configured key did not contain an object.
+- Issue #668: `layerInformation` shows legend information only if legendURL is not ignored.
+- Config parameters that are an array completely overwrite the default values of the associated array in the store.
+- Issue #666: Elastic Search requests utilizing "POST" methods were fixed.
+- The GFI is now always shown as selected in the menu when it is enabled.
+- Issue #689: `layerSlider` in Handle mode, the layer is now also displayed at the end of the bar.
+- A few translation errors were adjusted in config.json.md and config.json.en.md.
+
+---
+
+## v2.18.0 - 2022-02-03
+### Added
+- Package vue-multiselect: 2.1.6 is installed.
 - Vector Tiles:
     - For vector tiles layers that are not in EPSG:3587, the default Mapbox resolutions are now used as fallback.
     - In addition, a minimum and maximum zoom level can be configured.
     - The `zDirection` can be used to specify, if the resolutions of the service and the portal are different, in which direction the resolution should be used.
 - Added WFS functions (GetFeature and DescribeFetureType) to the api folder to query the WFS-Requests in one place.
+- The VectorBaseLayer is refactored. It is no longer a Backbone-model. The VectorBaseLayer uses the masterportalAPI's vectorBase layer on creation.
+- The elastic search is now refactored.
 
 ### Changed
 - It is now possible to display layers at scales smaller than 1:1 000 000.
+- Migrated the layer GeoJSON from Backbone.js to Vue.js environment.
 - The following NPM packages are updated:
     - @babel/core: 7.16.0 to 7.16.12
     - @babel/eslint-parser: 7.16.0 to 7.16.5
@@ -56,10 +92,11 @@
     - webpack-dev-server: 3.11.0 to 3.11.3
     - zip-a-folder: 1.1.0 to 1.1.3
 - The version of node was updated, must be >= 14.18.3 < 15.
-  The version of npm  was also updated, must be >= 6.14.15 < 7. The file .npmrc was added to set "engine-strict=true", as a result, the npm version and the node version are mandatory.
+  The version of npm  was also updated, must be >= 6.14.15 < 7. The file .npmrc was added to set "engine-strict=true", as a result, the npm version and the node version are mandatory. (It is planed that node will be updated to LTS in version 16).
 - Migrated the module mapView from Backbone to Vue.
 - Migrated the module vectorBaseLayer from Backbone to Vue. The VectorBaseLayer uses the masterportalAPI's vectorBase layer on creation.
-- Issue 655: A parameter "zoomLevel" was added to the WfsSearch tool. This feature was not implemented for WfsSearch, but available in the previously used tool parcelSearch. The field has been added to WfsSearch to work in the same fashion. For this, the ListItem.vue was changed to allow configuration of the zoom level via prop. It defaults to the previously fixed value.
+- Issue #655: A parameter "zoomLevel" was added to the WfsSearch tool. This feature was not implemented for WfsSearch, but available in the previously used tool parcelSearch. The field has been added to WfsSearch to work in the same fashion. For this, the ListItem.vue was changed to allow configuration of the zoom level via prop. It defaults to the previously fixed value.
+- Issue #486: WMS GFI can now show responses without tbody.
 
 ### Deprecated
 
@@ -71,12 +108,14 @@
     - whatwg-fetch
 
 ### Fixed
+- Issue #661: `print` downloadlink is now created for serviceUrls with structure `https://baseurl/printfolder/` or `https://baseurl/printfolder/print/`.
 - Issue #679: `saveSelection` is now configurable again within the layer tree.
 - Fixed spelling of `DIRECTIONS` in documentation for routing tool.
 - Tool CoordToolkit: Labeling of longitude and latitude corrected if long/lat is selected as projection system.
 - Fixed issue #672: layerAttribution not working correctly if layer is not initially visible
 - Issue #673: LayerSlider: The progress bar is now displayed correctly with more than 10 configured layers.
 - 3D: terrain and background layer are displayed correctly. Loading portal in 3D by url parameters was fixed.
+- Issue #655: Only first namespace in WfsSearch was interpreted. Now, all configured namespaces are used.
 
 ---
 ## v2.17.1 - 2022-01-011

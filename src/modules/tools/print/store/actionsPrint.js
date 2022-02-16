@@ -64,7 +64,7 @@ export default {
      * @param {Number} print.index The print index.
      * @returns {void}
      */
-    startPrint: function ({state, dispatch, commit}, print) {
+    startPrint: async function ({state, dispatch, commit}, print) {
         commit("setProgressWidth", "width: 25%");
         getVisibleLayer();
 
@@ -95,7 +95,7 @@ export default {
         if (state.isScaleAvailable) {
             spec.buildScale(state.currentScale);
         }
-        spec.buildLayers(visibleLayerList);
+        await spec.buildLayers(visibleLayerList);
 
         if (state.isGfiAvailable) {
             dispatch("getGfiForPrint");
@@ -215,7 +215,12 @@ export default {
             printId = printJob.printAppId || state.printAppId,
             printFormat = printJob.format || state.currentFormat;
         let url = "",
-            response = "";
+            response = "",
+            serviceUrlDefinition = state.serviceUrl;
+
+        if (!state.serviceUrl.includes("/print/")) {
+            serviceUrlDefinition = state.serviceUrl + "print/";
+        }
 
         commit("setPrintFileReady", false);
         if (state.serviceUrl === "") {
@@ -228,10 +233,14 @@ export default {
                 serviceUrl = Radio.request("RestReader", "getServiceById", "mapfish").get("url");
             }
 
+            if (!serviceUrl.includes("/print/")) {
+                serviceUrl = serviceUrl + "print/";
+            }
+
             commit("setServiceUrl", serviceUrl);
         }
 
-        url = state.printService === "plotservice" ? state.serviceUrl + "/create.json" : state.serviceUrl + printId + "/report." + printFormat;
+        url = state.printService === "plotservice" ? serviceUrlDefinition + "/create.json" : serviceUrlDefinition + printId + "/report." + printFormat;
 
         commit("setProgressWidth", "width: 50%");
         if (typeof printJob.getResponse === "function") {
@@ -295,8 +304,14 @@ export default {
      * @returns {void}
      */
     waitForPrintJob: async function ({state, dispatch, commit}, response) {
+        let printFolderUrlPart = "";
+
+        if (!state.serviceUrl.includes("/print/")) {
+            printFolderUrlPart = "print/";
+        }
+
         const printAppId = state.printAppId,
-            url = state.serviceUrl + printAppId + "/status/" + response.ref + ".json",
+            url = state.serviceUrl + printFolderUrlPart + printAppId + "/status/" + response.ref + ".json",
             serviceRequest = {
                 "index": response.index,
                 "serviceUrl": url,
@@ -309,6 +324,12 @@ export default {
     },
 
     waitForPrintJobSuccess: async function ({state, dispatch, commit}, response) {
+        let printFolderUrlPart = "";
+
+        if (!state.serviceUrl.includes("/print/")) {
+            printFolderUrlPart = "print/";
+        }
+
         // Error processing...
         if (response.status === "error") {
             dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.print.waitForPrintErrorMessage"), {root: true});
@@ -316,19 +337,13 @@ export default {
         }
         else if (response.done) {
             commit("setProgressWidth", "width: 100%");
-            let subUrl = "";
-
-            if (response.downloadURL.includes("mapfish_print_internet")) {
-                subUrl = response.downloadURL.replace("/mapfish_print_internet/print/report/", "");
-            }
-            else if (response.downloadURL.includes("mapfish_print/")) {
-                subUrl = response.downloadURL.replace("/mapfish_print/print/report/", "");
-            }
-            const fileSpecs = {
-                "index": response?.index,
-                "fileUrl": state.serviceUrl + state.printAppId + "/report/" + subUrl,
-                "filename": state.filename
-            };
+            const index = response.downloadURL.lastIndexOf("/"),
+                fileId = response.downloadURL.substr(index),
+                fileSpecs = {
+                    "index": response?.index,
+                    "fileUrl": state.serviceUrl + printFolderUrlPart + state.printAppId + "/report" + fileId,
+                    "filename": state.filename
+                };
 
             dispatch("downloadFile", fileSpecs);
         }
@@ -336,15 +351,9 @@ export default {
             commit("setProgressWidth", "width: 80%");
             // The report is not ready yet. Check again in 2s.
             setTimeout(() => {
-                let subUrl = "";
-
-                if (response.downloadURL.includes("mapfish_print_internet")) {
-                    subUrl = response.downloadURL.replace("/mapfish_print_internet/print/report/", "");
-                }
-                else if (response.downloadURL.includes("mapfish_print/")) {
-                    subUrl = response.downloadURL.replace("/mapfish_print/print/report/", "");
-                }
-                const url = state.serviceUrl + state.printAppId + "/status/" + subUrl + ".json",
+                const index = response.downloadURL.lastIndexOf("/"),
+                    fileId = response.downloadURL.substr(index),
+                    url = state.serviceUrl + printFolderUrlPart + state.printAppId + "/status" + fileId + ".json",
                     serviceRequest = {
                         "index": response.index,
                         "serviceUrl": url,

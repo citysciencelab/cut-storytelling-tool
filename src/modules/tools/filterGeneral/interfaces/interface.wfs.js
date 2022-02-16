@@ -46,10 +46,7 @@ export default class InterfaceWFS {
                 maxfeatures: 1
             },
             axiosObject = typeof axiosMock === "object" && axiosMock !== null ? axiosMock : axios,
-            result = {
-                min: undefined,
-                max: undefined
-            };
+            result = {};
 
         if (!maxOnly) {
             axiosObject.get(url, {
