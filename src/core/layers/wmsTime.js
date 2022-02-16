@@ -1,5 +1,4 @@
 import axios from "axios";
-import WMSCapabilities from "ol/format/WMSCapabilities";
 
 import handleAxiosResponse from "../../utils/handleAxiosResponse";
 import store from "../../app-store";
@@ -45,6 +44,25 @@ WMSTimeLayer.prototype.getRawLayerAttributes = function (attrs) {
 };
 
 /**
+ * Retrieves wmsTime-related entries from GetCapabilities layer specification.
+ * @param {String} xmlCapabilities GetCapabilities XML response
+ * @param {String} layerName name of layer to use
+ * @returns {object} dimension and extent of layer
+ */
+WMSTimeLayer.prototype.retrieveTimeData = function (xmlCapabilities, layerName) {
+    const xmlDocument = new DOMParser().parseFromString(xmlCapabilities, "text/xml"),
+        layerNode = [
+            ...xmlDocument.querySelectorAll("Layer > Name")
+        ].filter(node => node.textContent === layerName)[0].parentNode,
+        xmlDimension = layerNode.querySelector("Dimension"),
+        xmlExtent = layerNode.querySelector("Extent"),
+        dimension = xmlDimension ? this.retrieveAttributeValues(xmlDimension) : null,
+        extent = xmlExtent ? this.retrieveAttributeValues(xmlExtent) : null;
+
+    return {dimension, extent};
+};
+
+/**
  * Prepares the parameters for the WMS-T.
  * This includes creating the range of possible time values, the minimum step between these as well as the initial value set.
  * @param {Object} attrs Attributes of the layer.
@@ -55,26 +73,27 @@ WMSTimeLayer.prototype.prepareTime = function (attrs) {
     const time = attrs.time;
 
     return this.requestCapabilities(attrs.url, attrs.version, attrs.layers)
-        .then(result => {
-            const {Dimension, Extent} = result.Capability.Layer.Layer[0];
+        .then(xmlCapabilities => {
+            const {dimension, extent} = this.retrieveTimeData(xmlCapabilities, attrs.layers);
 
-            if (!Dimension || !Extent || Dimension[0].name !== "time" || Extent.name !== "time") {
+            if (!dimension || !extent || dimension.name !== "time" || extent.name !== "time") {
                 throw Error(i18next.t("common:modules.core.modelList.layer.wms.invalidTimeLayer", {id: this.id}));
             }
-            return Extent;
-        })
-        .then(extent => {
-            const {step, timeRange} = this.extractExtentValues(extent),
-                defaultValue = typeof time === "object" && timeRange[0] <= time.default && time.default <= timeRange[timeRange.length - 1]
-                    ? time.default
-                    : Number(extent.default),
-                timeData = {defaultValue, step, timeRange};
+            else {
+                const {step, timeRange} = this.extractExtentValues(extent),
+                    defaultValue = typeof time === "object" &&
+                        timeRange[0] <= time.default &&
+                        time.default <= timeRange[timeRange.length - 1]
+                        ? time.default
+                        : Number(extent.default),
+                    timeData = {defaultValue, step, timeRange};
 
-            attrs.time = typeof time === "object" ? {...time, ...timeData} : timeData;
-            timeData.layerId = attrs.id;
-            store.commit("WmsTime/addTimeSliderObject", {keyboardMovement: attrs.keyboardMovement, ...timeData});
+                attrs.time = typeof time === "object" ? {...time, ...timeData} : timeData;
+                timeData.layerId = attrs.id;
+                store.commit("WmsTime/addTimeSliderObject", {keyboardMovement: attrs.keyboardMovement, ...timeData});
 
-            return defaultValue;
+                return defaultValue;
+            }
         })
         .catch(error => {
             this.removeLayer();
@@ -95,27 +114,7 @@ WMSTimeLayer.prototype.prepareTime = function (attrs) {
  */
 WMSTimeLayer.prototype.requestCapabilities = function (url, version, layers) {
     return axios.get(encodeURI(`${url}?service=WMS&version=${version}&layers=${layers}&request=GetCapabilities`))
-        .then(response => handleAxiosResponse(response, "WMS, createLayerSource, requestCapabilities"))
-        .then(result => {
-            const capabilities = new WMSCapabilities().read(result);
-
-            capabilities.Capability.Layer.Layer[0].Extent = this.findTimeDimensionalExtent(new DOMParser().parseFromString(result, "text/xml").firstElementChild);
-            return capabilities;
-        });
-};
-
-/**
- * Search for the time dimensional Extent in the given HTMLCollection returned from a request to a WMS-T.
- * @param {HTMLCollection} element The root HTMLCollection returned from a getCapabilities request to a WMS-T.
- * @returns {?Object} An object containing the needed Values from the time dimensional extent for further usage.
- */
-WMSTimeLayer.prototype.findTimeDimensionalExtent = function (element) {
-    const capability = this.findNode(element, "Capability"),
-        outerLayer = this.findNode(capability, "Layer"),
-        innerFirstLayer = this.findNode(outerLayer, "Layer"),
-        extent = this.findNode(innerFirstLayer, "Extent");
-
-    return extent ? this.retrieveExtentValues(extent) : null;
+        .then(response => handleAxiosResponse(response, "WMS, createLayerSource, requestCapabilities"));
 };
 
 /**
@@ -131,12 +130,12 @@ WMSTimeLayer.prototype.findNode = function (element, nodeName) {
 /**
  * Retrieves the attributes from the given HTMLCollection and adds the key value pairs to an object.
  * Also retrieves its value.
- * @param {HTMLCollection} extent The Collection of values for the time dimensional Extent.
- * @returns {Object} An Object containing the attributes of the time dimensional Extent as well as its value.
+ * @param {HTMLCollection} node The Collection of values for the time node.
+ * @returns {Object} An Object containing the attributes of the time node as well as its value.
  */
-WMSTimeLayer.prototype.retrieveExtentValues = function (extent) {
-    return [...extent.attributes]
-        .reduce((acc, att) => ({...acc, [att.name]: att.value}), {values: extent.innerHTML});
+WMSTimeLayer.prototype.retrieveAttributeValues = function (node) {
+    return [...node.attributes]
+        .reduce((acc, att) => ({...acc, [att.name]: att.value}), {values: node.innerHTML});
 };
 
 /**
