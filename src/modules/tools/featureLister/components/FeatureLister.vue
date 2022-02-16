@@ -175,7 +175,7 @@ export default {
                             <tbody>
                                 <tr class="featurelist-list-table-tr">
                                     <th
-                                        v-for="(header, index) in getHeaders"
+                                        v-for="(header, index) in headers"
                                         :key="'tool-featureLister-' + index"
                                         class="featurelist-list-table-th"
                                     >
@@ -184,7 +184,7 @@ export default {
                                     </th>
                                 </tr>
                                 <tr
-                                    v-for="(feature, index) in getFeatureProperties"
+                                    v-for="(feature, index) in featureProperties"
                                     :id="index"
                                     :key="'tool-featureLister-' + index"
                                     class="featurelist-list-table-tr"
@@ -237,7 +237,7 @@ export default {
                         <span> {{ $t("modules.tools.featureLister.detailsOfSelected") }} </span>
                     </div>
                     <ul
-                        v-for="(feature, key) in getFeatureDetails"
+                        v-for="(feature, key) in featureDetails"
                         :key="'tool-featureLister-' + key"
                         class="list-group featurelist-details-ul"
                     >
