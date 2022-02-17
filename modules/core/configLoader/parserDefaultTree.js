@@ -370,7 +370,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             // Unterordner erzeugen
             this.addItems(category.folder, {
                 glyphicon: "glyphicon-plus-sign",
-                isFolderSelectable: false,
+                isFolderSelectable: true,
                 isInThemen: true,
                 level: 1,
                 parentId: category.id,
