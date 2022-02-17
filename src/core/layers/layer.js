@@ -75,6 +75,7 @@ Layer.prototype.initialize = function (attrs) {
     }
 
     this.updateLayerTransparency();
+
     if (attrs.isSelected === true || store.getters.treeType === "light") {
         this.setIsVisibleInMap(attrs.isSelected);
         this.set("isRemovable", store.state.configJson?.Portalconfig.layersRemovable);
