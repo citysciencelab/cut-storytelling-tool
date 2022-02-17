@@ -26,8 +26,8 @@ describe("core/configLoader/parserDefaultTree", function () {
     }
 
     describe("the \"select all\" checkbox", function () {
-        it("should be hidden if global-isFolderSelectable is false", function () {
-            expect(Radio.request("Util", "findWhereJs", getDefaultModel({isFolderSelectable: false}).get("itemList"), {"name": "testFolder"}).isFolderSelectable).to.be.equal(false);
+        it("folder should be true in defaulttree on toplevel", function () {
+            expect(Radio.request("Util", "findWhereJs", getDefaultModel({isFolderSelectable: false}).get("itemList"), {"name": "testFolder"}).isFolderSelectable).to.be.equal(true);
         });
     });
 
