@@ -3,7 +3,7 @@ import sinon from "sinon";
 import VectorBaseLayer from "../../vectorBase";
 import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 
-describe("src/core/layers/vectorBase.js", () => {
+describe.only("src/core/layers/vectorBase.js", () => {
     let attributes;
 
     before(() => {
@@ -113,21 +113,6 @@ describe("src/core/layers/vectorBase.js", () => {
 
         });
         it("showAllFeatures", function () {
-            sinon.stub(Radio, "request").callsFake((...args) => {
-                let ret = null;
-
-                args.forEach(arg => {
-                    if (arg === "returnModelById") {
-                        ret = {
-                            id: "id",
-                            createStyle: () => sinon.stub(),
-                            getGeometryTypeFromWFS: () => sinon.stub(),
-                            getLegendInfos: () => sinon.stub()
-                        };
-                    }
-                });
-                return ret;
-            });
             const layer = new VectorBaseLayer(attributes),
                 olLayer = layer.get("layer");
 
