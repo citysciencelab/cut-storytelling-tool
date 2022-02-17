@@ -88,10 +88,10 @@ function createPolygonSVG (style) {
 function createCircleSVG (style) {
     let svg = "";
     const circleStrokeColor = style.get("circleStrokeColor") ? convertColor(style.get("circleStrokeColor"), "rgbString") : "black",
-        circleStrokeOpacity = style.get("circleStrokeColor")[3] || 0,
-        circleStrokeWidth = style.get("circleStrokeWidth"),
+        circleStrokeOpacity = Array.isArray(style.get("circleStrokeColor")) && style.get("circleStrokeColor").length > 3 ? style.get("circleStrokeColor")[3] : 0,
+        circleStrokeWidth = style.get("circleStrokeWidth") ? style.get("circleStrokeWidth") : "auto",
         circleFillColor = style.get("circleFillColor") ? convertColor(style.get("circleFillColor"), "rgbString") : "black",
-        circleFillOpacity = style.get("circleFillColor")[3] || 0;
+        circleFillOpacity = Array.isArray(style.get("circleFillColor")) && style.get("circleFillColor").length > 3 ? style.get("circleFillColor")[3] : 0;
 
     svg += "<svg height='25' width='25'>";
     svg += "<circle cx='12.5' cy='12.5' r='10' stroke='";
