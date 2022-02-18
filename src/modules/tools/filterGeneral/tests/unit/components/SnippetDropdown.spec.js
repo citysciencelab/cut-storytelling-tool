@@ -80,29 +80,6 @@ describe("src/modules/tools/filterGeneral/components/SnippetDropdown.vue", () =>
             expect(wrapper.find(".select-box-label").exists()).to.be.false;
             wrapper.destroy();
         });
-        it("should render the info span", () => {
-            const wrapper = shallowMount(SnippetDropdown, {
-                propsData: {
-                    info: "this is an info text"
-                },
-                localVue
-            });
-
-            expect(wrapper.find(".info-text").exists()).to.be.true;
-            expect(wrapper.find(".info-text span").element.innerHTML).to.be.equal("this is an info text");
-            wrapper.destroy();
-        });
-        it("should not render the info button if info is a boolean and false", () => {
-            const wrapper = shallowMount(SnippetDropdown, {
-                propsData: {
-                    info: false
-                },
-                localVue
-            });
-
-            expect(wrapper.find(".info-icon").exists()).to.be.false;
-            wrapper.destroy();
-        });
         it("should have an empty list if autoInit is false and the api may be set", () => {
             const wrapper = shallowMount(SnippetDropdown, {
                 propsData: {
