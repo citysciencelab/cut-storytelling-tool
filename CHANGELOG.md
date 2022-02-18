@@ -14,6 +14,7 @@
 - It is now possible to configure a loading strategy for a wfs layer (default is bbox).
 
 ### Changed
+-  Default for isFolderSelectable is true. Overwriteable in config.js (globally) oder config.json(folder specific). Applies only for treeType="custom". In treeType="default" the top folders als not selectable and the child folders are selectable.
 -  Print uses formatList from statePrint, instead of all formats from mapfish Server.
 -  The following NPM packages are updated:
     - mocha: 9.1.4 to 9.2.0

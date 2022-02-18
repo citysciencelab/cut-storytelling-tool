@@ -246,10 +246,10 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     * @returns {*} todo
     */
     parseIsFolderSelectable: function (globalFlag) {
-        if (globalFlag === true) {
-            return true;
+        if (globalFlag === false) {
+            return false;
         }
-        return false;
+        return true;
     },
 
     /**
