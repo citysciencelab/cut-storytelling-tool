@@ -127,9 +127,7 @@ VectorBaseLayer.prototype.showAllFeatures = function () {
     const collection = this.get("layerSource").getFeatures();
 
     collection.forEach((feature) => {
-        const style = this.getStyleAsFunction(this.get("style"));
-
-        feature.setStyle(style(feature));
+        feature.setStyle(undefined);
     });
 };
 

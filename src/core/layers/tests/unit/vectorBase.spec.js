@@ -3,7 +3,7 @@ import sinon from "sinon";
 import VectorBaseLayer from "../../vectorBase";
 import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 
-describe.only("src/core/layers/vectorBase.js", () => {
+describe("src/core/layers/vectorBase.js", () => {
     let attributes;
 
     before(() => {
@@ -120,30 +120,12 @@ describe.only("src/core/layers/vectorBase.js", () => {
             layer.showAllFeatures();
 
             expect(layer.get("layer").getSource().getFeatures().length).to.be.equals(3);
-            expect(typeof style1).to.be.equals("function");
-            expect(style1()).not.to.be.null;
-            expect(typeof style2).to.be.equals("function");
-            expect(style2()).not.to.be.null;
-            expect(typeof style3).to.be.equals("function");
-            expect(style3()).not.to.be.null;
+            expect(style1).to.be.equals(undefined);
+            expect(style2).to.be.equals(undefined);
+            expect(style3).to.be.equals(undefined);
 
         });
         it("showFeaturesByIds", function () {
-            sinon.stub(Radio, "request").callsFake((...args) => {
-                let ret = null;
-
-                args.forEach(arg => {
-                    if (arg === "returnModelById") {
-                        ret = {
-                            id: "id",
-                            createStyle: () => sinon.stub(),
-                            getGeometryTypeFromWFS: () => sinon.stub(),
-                            getLegendInfos: () => sinon.stub()
-                        };
-                    }
-                });
-                return ret;
-            });
             const layer = new VectorBaseLayer(attributes),
                 olLayer = layer.get("layer"),
                 clearStub = sinon.stub(olLayer.getSource(), "clear");
@@ -154,8 +136,7 @@ describe.only("src/core/layers/vectorBase.js", () => {
             layer.showFeaturesByIds(["1"]);
 
             expect(layer.get("layer").getSource().getFeatures().length).to.be.equals(3);
-            expect(typeof style1).to.be.equals("function");
-            expect(style1()).not.to.be.null;
+            expect(style1).to.be.equals(undefined);
             expect(typeof style2).to.be.equals("function");
             expect(style2()).to.be.null;
             expect(typeof style3).to.be.equals("function");
