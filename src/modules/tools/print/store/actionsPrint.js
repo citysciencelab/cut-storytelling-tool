@@ -64,7 +64,7 @@ export default {
      * @param {Number} print.index The print index.
      * @returns {void}
      */
-    startPrint: function ({state, dispatch, commit}, print) {
+    startPrint: async function ({state, dispatch, commit}, print) {
         commit("setProgressWidth", "width: 25%");
         getVisibleLayer();
 
@@ -95,7 +95,7 @@ export default {
         if (state.isScaleAvailable) {
             spec.buildScale(state.currentScale);
         }
-        spec.buildLayers(visibleLayerList);
+        await spec.buildLayers(visibleLayerList);
 
         if (state.isGfiAvailable) {
             dispatch("getGfiForPrint");

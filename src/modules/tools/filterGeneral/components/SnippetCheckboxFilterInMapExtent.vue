@@ -77,7 +77,7 @@ export default {
             class="bottom"
         >
             <div class="info-text">
-                <span>{{ $t("modules.tools.filterGeneral.checkBoxInfo") }}</span>
+                <span>{{ $t("modules.tools.filterGeneral.info.snippetCheckbox") }}</span>
             </div>
         </div>
     </div>
@@ -130,7 +130,8 @@ export default {
         }
     }
     .snippetCheckboxContainer .right {
+        float: right;
         position: absolute;
-        right: -10px;
+        right: -17px;
     }
 </style>

@@ -1,7 +1,7 @@
 <script>
 import Multiselect from "vue-multiselect";
 import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
-import getIconListFromLegend from "../utils/getIconListFromLegend.js";
+import {getStyleModel, getIconListFromLegend} from "../utils/getIconListFromLegend.js";
 import isObject from "../../../../utils/isObject.js";
 
 export default {
@@ -22,6 +22,11 @@ export default {
         },
         addSelectAll: {
             type: [String, Boolean],
+            required: false,
+            default: false
+        },
+        adjustment: {
+            type: [Object, Boolean],
             required: false,
             default: false
         },
@@ -100,9 +105,12 @@ export default {
         return {
             disable: true,
             isInitializing: true,
+            isAdjusting: false,
             showInfo: false,
             dropdownValue: [],
             dropdownSelected: [],
+            styleModel: {},
+            legendsInfo: [],
             iconList: {}
         };
     },
@@ -149,8 +157,8 @@ export default {
     },
     watch: {
         dropdownSelected (value) {
-            if (!this.isInitializing || this.isInitializing && Array.isArray(this.prechecked)) {
-                if (Array.isArray(value) && value.length) {
+            if (!this.isAdjusting && (!this.isInitializing || this.isInitializing && Array.isArray(this.prechecked))) {
+                if (typeof value === "string" && value || Array.isArray(value) && value.length) {
                     this.emitCurrentRule(value, this.isInitializing);
                 }
                 else {
@@ -158,8 +166,45 @@ export default {
                 }
             }
         },
+        adjustment (adjusting) {
+            if (!isObject(adjusting) || this.visible === false) {
+                return;
+            }
+
+            if (adjusting?.start) {
+                this.isAdjusting = true;
+                this.dropdownValue = [];
+            }
+            if (isObject(adjusting?.adjust) && Array.isArray(adjusting.adjust?.value)) {
+                adjusting.adjust.value.forEach(value => {
+                    if (!this.dropdownValue.includes(value)) {
+                        this.dropdownValue.push(value);
+                    }
+                });
+            }
+            if (adjusting?.finish) {
+                const selected = [];
+
+                if (Array.isArray(this.dropdownValue)) {
+                    this.dropdownValue.forEach(value => {
+                        if (this.dropdownSelected.includes(value)) {
+                            selected.push(value);
+                        }
+                    });
+                }
+                this.dropdownSelected = selected;
+                this.$nextTick(() => {
+                    this.isAdjusting = false;
+                });
+            }
+        },
         disabled (value) {
             this.disable = typeof value === "boolean" ? value : true;
+        },
+        legendsInfo (value) {
+            if (this.renderIcons === "fromLegend") {
+                this.iconList = getIconListFromLegend(value, this.styleModel);
+            }
         }
     },
     created () {
@@ -202,7 +247,14 @@ export default {
     },
     mounted () {
         if (this.renderIcons === "fromLegend") {
-            this.iconList = getIconListFromLegend(this.layerId);
+            this.styleModel = getStyleModel(this.layerId);
+
+            if (!this.styleModel || !this.styleModel.getLegendInfos() || !Array.isArray(this.styleModel.getLegendInfos())) {
+                this.legendsInfo = [];
+            }
+            else {
+                this.legendsInfo = this.styleModel.getLegendInfos();
+            }
         }
         else if (isObject(this.renderIcons)) {
             this.iconList = this.renderIcons;
@@ -307,15 +359,6 @@ export default {
             class="snippetDefaultContainer"
         >
             <div
-                v-if="label !== false"
-                class="left"
-            >
-                <label
-                    class="select-box-label"
-                    :for="'snippetSelectBox-' + snippetId"
-                >{{ labelText }}</label>
-            </div>
-            <div
                 v-if="info !== false"
                 class="right"
             >
@@ -326,6 +369,15 @@ export default {
                         @keydown.enter="toggleInfo()"
                     >&nbsp;</span>
                 </div>
+            </div>
+            <div
+                v-if="label !== false"
+                class="left"
+            >
+                <label
+                    class="select-box-label"
+                    :for="'snippetSelectBox-' + snippetId"
+                >{{ labelText }}</label>
             </div>
             <div class="select-box-container">
                 <Multiselect
@@ -361,7 +413,19 @@ export default {
             class="snippetListContainer"
         >
             <div class="table-responsive">
-                <table class="table table-sm table-hover table-bordered table-striped">
+                <div
+                    v-if="info"
+                    class="right"
+                >
+                    <div class="info-icon">
+                        <span
+                            :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
+                            @click="toggleInfo()"
+                            @keydown.enter="toggleInfo()"
+                        >&nbsp;</span>
+                    </div>
+                </div>
+                <table :class="['table table-sm table-hover table-bordered table-striped', info ? 'left': '']">
                     <thead
                         v-if="label !== false"
                     >
@@ -381,33 +445,47 @@ export default {
                             <td
                                 v-if="anyIconExists()"
                             >
-                                <img
-                                    v-show="iconExists(val)"
-                                    class="snippetListContainerIcon"
-                                    :src="iconList[val]"
-                                    :alt="val"
+                                <label
+                                    for="'snippetRadioCheckbox-' + snippetId + '-' + val"
                                 >
+                                    <img
+                                        v-show="iconExists(val)"
+                                        class="snippetListContainerIcon"
+                                        :src="iconList[val]"
+                                        :alt="val"
+                                    >
+                                </label>
                             </td>
                             <td>
                                 <label
-                                    for="'snippetCheckbox-' + snippetId + '-' + val"
+                                    for="'snippetRadioCheckbox-' + snippetId + '-' + val"
+                                    class="hidden"
                                 />
                                 <input
-                                    :id="'snippetCheckbox-' + snippetId + '-' + val"
+                                    :id="'snippetRadioCheckbox-' + snippetId + '-' + val"
                                     v-model="dropdownSelected"
-                                    type="checkbox"
+                                    :class="multiselect ? 'checkbox': 'radio'"
+                                    :type="multiselect ? 'checkbox': 'radio'"
                                     :value="val"
                                 >
                             </td>
                             <td>
                                 <label
                                     class="check-box-label"
-                                    :for="'snippetCheckbox-' + snippetId + '-' + val"
+                                    :for="'snippetRadioCheckbox-' + snippetId + '-' + val"
                                 >{{ val }}</label>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                <div
+                    v-show="showInfo"
+                    class="bottom"
+                >
+                    <div class="info-text">
+                        <span>{{ infoText }}</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -505,9 +583,22 @@ export default {
         background-color: initial;
     }
     .snippetDropdownContainer {
-        padding: 5px;
-        margin-bottom: 10px;
         height: auto;
+    }
+    .snippetDropdownContainer input[type=radio], input[type=checkbox] {
+        margin: 0;
+    }
+    .snippetDropdownContainer .radio, .snippetDropdownContainer .checkbox {
+        display: inline-block;
+    }
+    .snippetDropdownContainer label {
+        margin-bottom: 0;
+    }
+    .snippetDropdownContainer .table > thead > tr > th, .table > thead > tr > td, .table > tbody > tr > th, .table > tbody > tr > td, .table > tfoot > tr > th, .table > tfoot > tr > td {
+        padding: 4px;
+        line-height: 1.428571429;
+        vertical-align: middle;
+        border-top: 1px solid #ddd;
     }
     .snippetDropdownContainer .info-icon {
         float: right;
@@ -528,7 +619,7 @@ export default {
         padding: 15px 10px;
     }
     .snippetListContainer .snippetListContainerIcon {
-        width: 22px;
+        width: 25px;
     }
     .glyphicon-info-sign:before {
         content: "\E086";
@@ -541,11 +632,21 @@ export default {
         clear: left;
         width: 100%;
     }
-    .snippetDropdownContainer .right {
+    .snippetDropdownContainer .table-responsive .right {
         position: absolute;
-        right: 10px;
+        right: -33px;
     }
-    .category-layer .right {
+    .panel .snippetDropdownContainer .right,  .snippetDropdownContainer .right{
+        position: absolute;
+        right: -33px;
+    }
+    .category-layer .panel .right {
         right: 30px;
+    }
+    .category-layer .panel .table-responsive .right {
+        right: 24px;
+    }
+    .table {
+        margin-bottom: 10px;
     }
 </style>

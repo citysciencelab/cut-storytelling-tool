@@ -169,19 +169,20 @@ const actions = {
             service = null;
 
         service = rootGetters.getRestServiceById(metaDataCatalogueId);
-        if (service === undefined) {
-            console.warn("Rest Service with the ID " + metaDataCatalogueId + " is not configured in rest-services.json!");
-        }
-        else if (typeof state.layerInfo.showDocUrl !== "undefined" && state.layerInfo.showDocUrl !== null) {
+        if (typeof state.layerInfo.showDocUrl !== "undefined" && state.layerInfo.showDocUrl !== null) {
             metaURL = state.layerInfo.showDocUrl + metaId;
         }
-        else {
+        else if (service !== undefined) {
             metaURL = service.url + metaId;
+        }
+        else {
+            console.warn("Rest Service with the ID " + metaDataCatalogueId + " is not configured in rest-services.json!");
         }
 
         if (metaId !== null && metaId !== "" && metaURLs.indexOf(metaURL) === -1) {
             metaURLs.push(metaURL);
         }
+
         commit("setMetaURLs", metaURLs);
     },
 

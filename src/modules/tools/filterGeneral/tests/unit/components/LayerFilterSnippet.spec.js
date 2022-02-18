@@ -183,4 +183,28 @@ describe("src/modules/tools/filterGeneral/components/LayerFilterSnippet.vue", ()
             expect(wrapper.vm.hasUnfixedRules()).to.be.true;
         });
     });
+    describe("getDefaultSnippetTypeByDataType", () => {
+        it("should return snippet type according to the input data type", () => {
+            expect(wrapper.vm.getDefaultSnippetTypeByDataType(undefined)).to.equal("text");
+            expect(wrapper.vm.getDefaultSnippetTypeByDataType(null)).to.equal("text");
+            expect(wrapper.vm.getDefaultSnippetTypeByDataType(0)).to.equal("text");
+            expect(wrapper.vm.getDefaultSnippetTypeByDataType({})).to.equal("text");
+            expect(wrapper.vm.getDefaultSnippetTypeByDataType([])).to.equal("text");
+            expect(wrapper.vm.getDefaultSnippetTypeByDataType("boolean")).to.equal("checkbox");
+            expect(wrapper.vm.getDefaultSnippetTypeByDataType("string")).to.equal("dropdown");
+            expect(wrapper.vm.getDefaultSnippetTypeByDataType("number")).to.equal("sliderRange");
+        });
+    });
+    describe("getDefaultOperatorByDataType", () => {
+        it("should return operator according to the input data type", () => {
+            expect(wrapper.vm.getDefaultOperatorByDataType(undefined)).to.equal("EQ");
+            expect(wrapper.vm.getDefaultOperatorByDataType(null)).to.equal("EQ");
+            expect(wrapper.vm.getDefaultOperatorByDataType(0)).to.equal("EQ");
+            expect(wrapper.vm.getDefaultOperatorByDataType({})).to.equal("EQ");
+            expect(wrapper.vm.getDefaultOperatorByDataType([])).to.equal("EQ");
+            expect(wrapper.vm.getDefaultOperatorByDataType("boolean")).to.equal("EQ");
+            expect(wrapper.vm.getDefaultOperatorByDataType("string")).to.equal("EQ");
+            expect(wrapper.vm.getDefaultOperatorByDataType("number")).to.equal("BETWEEN");
+        });
+    });
 });
