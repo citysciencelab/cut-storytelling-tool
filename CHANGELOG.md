@@ -45,7 +45,7 @@
 - Issue #689: `layerSlider` in Handle mode, the layer is now also displayed at the end of the bar.
 - A few translation errors were adjusted in config.json.md and config.json.en.md.
 - Tool Routing: Exported routes now inherit the style from route view.
-- Folder expand/collapse works in background maps
+- Folder expand/collapse works in background maps, if treetype is 'custom'.
 - Issue #637, Issue #656: If background maps are configured in folder structures, then when such a background map is activated, no more subject data are overlaid.
 
 ---
