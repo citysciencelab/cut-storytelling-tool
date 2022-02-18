@@ -46,7 +46,7 @@ export default {
      */
     loadConfigJs ({commit}, config) {
         commit("setConfigJs", config);
-        axios.get(config.restConf)
+        return axios.get(config.restConf)
             .then(response => commit("setRestConf", response.data))
             .catch(error => console.error(`Error occured during loading restConf specified by config.json (${config.restConf}).`, error));
     },
