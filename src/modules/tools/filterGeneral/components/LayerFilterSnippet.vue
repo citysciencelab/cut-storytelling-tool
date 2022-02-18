@@ -113,6 +113,7 @@ export default {
         this.checkSnippetType(this.snippets);
     },
     methods: {
+        translateKeyWithPlausibilityCheck,
         /**
          * Checking if the type of snippet is already defined
          * @param {Object[]} snippets the snippet object in array list
@@ -634,6 +635,12 @@ export default {
         class="panel-body"
     >
         <div
+            v-if="layerConfig.description"
+            class="layerInfoText"
+        >
+            {{ translateKeyWithPlausibilityCheck(layerConfig.description, key => $t(key)) }}
+        </div>
+        <div
             v-if="layerConfig.snippetTags !== false"
             class="snippetTags"
         >
@@ -899,6 +906,7 @@ export default {
     .snippet {
         display: inline-block;
         margin-bottom: 20px;
+        position: relative;
         &:last-child {
             margin-bottom: 10px;
         }
@@ -915,5 +923,16 @@ export default {
     }
     .form-group {
         clear: both;
+    }
+    .table-filter-container {
+        #tool-general-filter {
+            .panel-body {
+                max-height: 480px;
+                overflow-y: scroll;
+                .snippet {
+                    max-width: 288px;
+                }
+            }
+        }
     }
 </style>

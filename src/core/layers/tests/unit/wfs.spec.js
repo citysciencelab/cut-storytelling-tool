@@ -166,7 +166,8 @@ describe("src/core/layers/wfs.js", () => {
                         return true;
                     }
                     return false;
-                }
+                },
+                getExtent: () => ["1"]
             };
             const wfsLayer = new WfsLayer(attributes),
                 featuresFilterFunction = wfsLayer.getFeaturesFilterFunction(attributes),

@@ -4,7 +4,7 @@ import Layer from "./layer";
 import WMSLayer from "./wms";
 import WFSLayer from "./wfs";
 import WMTSLayer from "./wmts";
-import GeoJSONLayer from "../../../modules/core/modelList/layer/geojson";
+import GeoJSONLayer from "./geojson";
 import SensorLayer from "../../../modules/core/modelList/layer/sensor";
 import HeatmapLayer from "../../../modules/core/modelList/layer/heatmap";
 /**

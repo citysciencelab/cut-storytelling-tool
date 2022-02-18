@@ -1,7 +1,6 @@
 <script>
 import isObject from "../../../../utils/isObject";
 import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
-import {getMinDate, getMaxDate} from "../utils/getMinAndMaxDate.js";
 import moment from "moment";
 
 export default {
@@ -140,24 +139,9 @@ export default {
 
             if (adjusting?.start) {
                 this.isAdjusting = true;
-                this.minimumValue = false;
-                this.maximumValue = false;
             }
-            if (isObject(adjusting?.adjust) && typeof adjusting.adjust?.min === "string") {
-                this.minimumValue = typeof this.minimumValue === "string" ? getMinDate(this.minimumValue, adjusting.adjust.min, this.internalFormat) : adjusting.adjust.min;
-            }
-            if (isObject(adjusting?.adjust) && typeof adjusting.adjust?.max === "string") {
-                this.maximumValue = typeof this.maximumValue === "string" ? getMaxDate(this.maximumValue, adjusting.adjust.max, this.internalFormat) : adjusting.adjust.max;
-            }
+
             if (adjusting?.finish) {
-                if (typeof this.minimumValue !== "string") {
-                    this.minimumValue = this.maximumValue;
-                }
-                if (typeof this.maximumValue !== "string") {
-                    this.minimumValue = moment().format(this.internalFormat);
-                    this.maximumValue = moment().format(this.internalFormat);
-                }
-                this.value = getMinDate(this.maximumValue, getMaxDate(this.minimumValue, this.value[0], this.internalFormat), this.internalFormat);
                 this.$nextTick(() => {
                     this.isAdjusting = false;
                 });
@@ -224,6 +208,9 @@ export default {
                 this.isInitializing = false;
                 this.disable = false;
             });
+        }
+        if (this.precheckedIsValid) {
+            this.isInitializing = false;
         }
     },
     methods: {
@@ -395,7 +382,7 @@ export default {
     }
     .snippetDateContainer .right {
         position: absolute;
-        right: 10px;
+        right: -33px;
     }
     label {
         text-transform: capitalize;

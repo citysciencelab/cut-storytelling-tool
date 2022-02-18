@@ -135,23 +135,9 @@ export default {
 
             if (adjusting?.start) {
                 this.isAdjusting = true;
-                this.minimumValue = false;
-                this.maximumValue = false;
             }
-            if (isObject(adjusting?.adjust) && typeof adjusting.adjust?.min === "number") {
-                this.minimumValue = typeof this.minimumValue === "number" ? Math.min(this.minimumValue, adjusting.adjust.min) : adjusting.adjust.min;
-            }
-            if (isObject(adjusting?.adjust) && typeof adjusting.adjust?.max === "number") {
-                this.maximumValue = typeof this.maximumValue === "number" ? Math.max(this.maximumValue, adjusting.adjust.max) : adjusting.adjust.max;
-            }
+
             if (adjusting?.finish) {
-                if (typeof this.minimumValue !== "number") {
-                    this.minimumValue = 0;
-                }
-                if (typeof this.maximumValue !== "number") {
-                    this.maximumValue = 0;
-                }
-                this.value = [Math.max(this.minimumValue, this.value[0]), Math.min(this.maximumValue, this.value[1])];
                 this.$nextTick(() => {
                     this.isAdjusting = false;
                 });
@@ -195,6 +181,9 @@ export default {
                 this.isInitializing = false;
                 this.disable = false;
             });
+        }
+        if (Array.isArray(this.prechecked) && this.prechecked.length === 2) {
+            this.isInitializing = false;
         }
     },
     methods: {
@@ -437,7 +426,7 @@ export default {
     }
     .sliderInputWrapper .right {
         position: absolute;
-        right: 10px;
+        right: -33px;
     }
     .sliderRangeWrapper {
         position: relative;

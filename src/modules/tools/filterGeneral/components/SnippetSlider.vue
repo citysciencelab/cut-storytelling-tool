@@ -125,23 +125,9 @@ export default {
 
             if (adjusting?.start) {
                 this.isAdjusting = true;
-                this.minimumValue = false;
-                this.maximumValue = false;
             }
-            if (isObject(adjusting?.adjust) && typeof adjusting.adjust?.min === "number") {
-                this.minimumValue = typeof this.minimumValue === "number" ? Math.min(this.minimumValue, adjusting.adjust.min) : adjusting.adjust.min;
-            }
-            if (isObject(adjusting?.adjust) && typeof adjusting.adjust?.max === "number") {
-                this.maximumValue = typeof this.maximumValue === "number" ? Math.max(this.maximumValue, adjusting.adjust.max) : adjusting.adjust.max;
-            }
+
             if (adjusting?.finish) {
-                if (typeof this.minimumValue !== "number") {
-                    this.minimumValue = 0;
-                }
-                if (typeof this.maximumValue !== "number") {
-                    this.maximumValue = 0;
-                }
-                this.value = Math.min(this.maximumValue, Math.max(this.minimumValue, this.value));
                 this.$nextTick(() => {
                     this.isAdjusting = false;
                 });
@@ -185,6 +171,9 @@ export default {
                 this.isInitializing = false;
                 this.disable = false;
             });
+        }
+        if (typeof this.prechecked !== "undefined") {
+            this.isInitializing = false;
         }
     },
     methods: {
@@ -420,7 +409,7 @@ export default {
     }
     .snippetSliderContainer .right {
         position: absolute;
-        right: 10px;
+        right: -33px;
     }
     input[type="number"] {
         text-align: center;
