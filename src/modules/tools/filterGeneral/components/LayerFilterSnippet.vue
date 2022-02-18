@@ -502,7 +502,9 @@ export default {
                         }
 
                         this.mapHandler.addItemsToLayer(filterId, filterAnswer.items);
-                        this.amountOfFilteredItems = this.mapHandler.getAmountOfFilteredItemsByFilterId(filterId);
+                        if (!Object.prototype.hasOwnProperty.call(this.layerConfig, "showHits") || this.layerConfig.showHits) {
+                            this.amountOfFilteredItems = this.mapHandler.getAmountOfFilteredItemsByFilterId(filterId);
+                        }
 
                         if (typeof onsuccess === "function") {
                             onsuccess(filterAnswer);
