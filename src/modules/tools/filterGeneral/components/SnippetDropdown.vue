@@ -174,9 +174,10 @@ export default {
                 this.isAdjusting = true;
                 this.dropdownValue = [];
             }
+
             if (isObject(adjusting?.adjust) && Array.isArray(adjusting.adjust?.value)) {
                 adjusting.adjust.value.forEach(value => {
-                    if (!this.dropdownValue.includes(value)) {
+                    if (!this.dropdownValue.includes(value) && (!Array.isArray(this.value) || this.value.includes(value))) {
                         this.dropdownValue.push(value);
                     }
                 });

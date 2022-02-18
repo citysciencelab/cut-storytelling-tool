@@ -14,6 +14,7 @@
 - It is now possible to configure a loading strategy for a wfs layer (default is bbox).
 
 ### Changed
+-  Default for isFolderSelectable is true. Overwriteable in config.js (globally) oder config.json(folder specific). Applies only for treeType="custom". In treeType="default" the top folders als not selectable and the child folders are selectable.
 -  Print uses formatList from statePrint, instead of all formats from mapfish Server.
 -  The following NPM packages are updated:
     - mocha: 9.1.4 to 9.2.0
@@ -26,14 +27,16 @@
 - The vectorTile Layer is now refactored to src/core.
 - The 3D terrain layer is refactored. It is no longer a Backbone-model.The terrain layer uses the masterportalAPI's terrain layer on creation.
 - The 3D tileset layer is refactored. It is no longer a Backbone-model.The tileset layer uses the masterportalAPI's tileset layer on creation.
+- Path updated in map and map3d because abstraction in masterportalAPI changed to maps and moved into src
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
-- Issue #695: Optimised order in if clause. First use "show_doc_url" in layers metadata, then check if service based on the config.js's metaDataCatalogueId exists. otherwise throw console.warn.
-- Issue #666: The elastic search query string replacement function will now only take effect.
+- Issue #694: Folder with subfolders are also selectable. (Internal flag "isLeafFolder" removed)
+- Issue #695: Optimised order in if clause. First use "show_doc_url" in layers metadata, then check if service based on the config.js's metaDataCatalogueId exists. otherwise throw console.warn
+- Issue #666: The elastic search query string replacement function will now only take effect
   when the configured key did not contain an object.
 - Issue #668: `layerInformation` shows legend information only if legendURL is not ignored.
 - Config parameters that are an array completely overwrite the default values of the associated array in the store.
@@ -42,6 +45,8 @@
 - Issue #689: `layerSlider` in Handle mode, the layer is now also displayed at the end of the bar.
 - A few translation errors were adjusted in config.json.md and config.json.en.md.
 - Tool Routing: Exported routes now inherit the style from route view.
+- Folder expand/collapse works in background maps, if treetype is 'custom'.
+- Issue #637, Issue #656: If background maps are configured in folder structures, then when such a background map is activated, no more subject data are overlaid.
 
 ---
 
