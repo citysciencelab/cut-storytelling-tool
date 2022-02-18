@@ -17,15 +17,6 @@ const colorOptions = [
         colorOptions[0],
         ...colorOptions.slice(2)
     ],
-    drawTypeOptions = [
-        {geometry: "Point", id: "drawSymbol"},
-        {geometry: "LineString", id: "drawLine", altGeometry: ["MultiLineString"]},
-        {geometry: "LineString", id: "drawCurve"},
-        {geometry: "Polygon", id: "drawArea"},
-        {geometry: "Circle", id: "drawCircle"},
-        {geometry: "Circle", id: "drawDoubleCircle"},
-        {geometry: "Point", id: "writeText"}
-    ],
     fontOptions = [
         {caption: "Arial", value: "Arial"},
         {caption: "Calibri", value: "Calibri"},
@@ -81,7 +72,6 @@ const colorOptions = [
 export {
     colorOptions,
     colorContourOptions,
-    drawTypeOptions,
     fontOptions,
     fontSizeOptions,
     unitOptions,
