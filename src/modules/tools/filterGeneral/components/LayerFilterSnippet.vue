@@ -113,6 +113,7 @@ export default {
         this.checkSnippetType(this.snippets);
     },
     methods: {
+        translateKeyWithPlausibilityCheck,
         /**
          * Checking if the type of snippet is already defined
          * @param {Object[]} snippets the snippet object in array list
@@ -633,6 +634,12 @@ export default {
     <div
         class="panel-body"
     >
+        <div
+            v-if="layerConfig.description"
+            class="layerInfoText"
+        >
+            {{ translateKeyWithPlausibilityCheck(layerConfig.description, key => $t(key)) }}
+        </div>
         <div
             v-if="layerConfig.snippetTags !== false"
             class="snippetTags"

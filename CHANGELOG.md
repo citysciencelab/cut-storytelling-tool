@@ -11,6 +11,7 @@
 ### Added
 - The gazetteer search function now supports changing the namespace by configuration.
 - Issue #690: Documentation for the menu item `ansichten` (map view points) has been added.
+- It is now possible to configure a loading strategy for a wfs layer (default is bbox).
 
 ### Changed
 -  Print uses formatList from statePrint, instead of all formats from mapfish Server.
@@ -22,6 +23,9 @@
   The version of npm  was also updated, must be >= 8.1.2 < 9. (The node and npm versions are still mandatory via .npmrc.).
 - Migrated the module 3D TerrainLayer from Backbone to Vue. The TerrainLayer uses the masterportalAPI's terrain layer on creation.
 - Outsourced drawTypeOptions from constantsDraw.js into its own file
+- The vectorTile Layer is now refactored to src/core.
+- The 3D terrain layer is refactored. It is no longer a Backbone-model.The terrain layer uses the masterportalAPI's terrain layer on creation.
+- The 3D tileset layer is refactored. It is no longer a Backbone-model.The tileset layer uses the masterportalAPI's tileset layer on creation.
 
 ### Deprecated
 
@@ -37,6 +41,7 @@
 - The GFI is now always shown as selected in the menu when it is enabled.
 - Issue #689: `layerSlider` in Handle mode, the layer is now also displayed at the end of the bar.
 - A few translation errors were adjusted in config.json.md and config.json.en.md.
+- Tool Routing: Exported routes now inherit the style from route view.
 
 ---
 
