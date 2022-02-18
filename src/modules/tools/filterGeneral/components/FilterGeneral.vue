@@ -13,7 +13,9 @@ import {
     createLayerIfNotExists,
     liveZoom,
     addLayerByLayerId,
-    getLayers
+    getLayers,
+    isUiStyleTable,
+    setFilterInTableMenu
 } from "../utils/openlayerFunctions.js";
 import FilterApi from "../interfaces/filter.api.js";
 import LayerCategory from "../components/LayerCategory.vue";
@@ -66,7 +68,11 @@ export default {
             this.replaceStringWithObjectLayers();
             this.setFilterId();
             this.initializeFilterApiList();
-            this.setTableFilter();
+
+            if (isUiStyleTable()) {
+                setFilterInTableMenu(this.$el.querySelector("#tool-general-filter"));
+                this.$el.remove();
+            }
             // console.log("Alte Config", this.configs);
             // console.log("Neue Config", this.convertToNewConfig(this.configs));
         });
@@ -204,16 +210,6 @@ export default {
                         };
                     }
                 });
-            }
-        },
-        /**
-         * Appending the filter in table menu
-         * @returns {void}
-         */
-        setTableFilter () {
-            if (Radio.request("Util", "getUiStyle") === "TABLE") {
-                Radio.trigger("TableMenu", "appendFilter", this.$el.querySelector("#tool-general-filter"));
-                this.$el.remove();
             }
         },
         /**

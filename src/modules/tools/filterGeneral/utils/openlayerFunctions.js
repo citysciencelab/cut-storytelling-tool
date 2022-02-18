@@ -92,6 +92,23 @@ function getLayers () {
     return Radio.request("Map", "getLayers");
 }
 
+/**
+ * Check if current ui style is table
+ * @returns {Boolean} true/false if current ui style of portal is table
+ */
+function isUiStyleTable () {
+    return Radio.request("Util", "getUiStyle") === "TABLE";
+}
+
+/**
+ * Setting the filter in table Menu
+ * @param {Object} element the html element in Object
+ * @returns {void}
+ */
+function setFilterInTableMenu (element) {
+    Radio.trigger("TableMenu", "appendFilter", element);
+}
+
 export {
     createLayerIfNotExists,
     getFeaturesByLayerId,
@@ -100,5 +117,7 @@ export {
     liveZoom,
     showFeaturesByIds,
     addLayerByLayerId,
-    getLayers
+    getLayers,
+    isUiStyleTable,
+    setFilterInTableMenu
 };
