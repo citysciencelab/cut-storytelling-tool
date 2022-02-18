@@ -1,6 +1,7 @@
 import actions from "./actionsDraw";
 import getters from "./gettersDraw";
 import mutations from "./mutationsDraw";
+import drawTypeOptions from "./drawTypeOptions";
 
 const colorOptions = [
         {color: "blue", value: [55, 126, 184]},
@@ -72,6 +73,7 @@ const colorOptions = [
 export {
     colorOptions,
     colorContourOptions,
+    drawTypeOptions,
     fontOptions,
     fontSizeOptions,
     unitOptions,
