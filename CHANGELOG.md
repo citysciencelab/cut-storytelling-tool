@@ -53,7 +53,7 @@
 - Newsfeed:
     - Alert now also works with portal calls with index.html and url parameter.
     - News is now displayed in an iframe. If no third party cookies are allowed by the browser, no confirm is possible, because it is not allowed to store in localstorage.
-    - Added the possibility to scroll to the alerting.
+    - Added the possibility to scroll in the alert.
 
 ---
 
