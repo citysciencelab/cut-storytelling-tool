@@ -417,12 +417,13 @@
                 "dropdown": {
                     "defaultLabel": "Wählen Sie eine Option",
                     "selectAll": "Alles auswählen",
+                    "deselectAll": "Alles abwählen",
                     "emptyList": "Die Liste ist leer",
                     "noElements": "Keine Elemente gefunden"
                 },
                 "filterResult": {
                     "label": "Alle Filter-Treffer",
-                    "unit": "Treffer"
+                    "unit": "{{amountOfFilteredItems}} Treffer"
                 }
             },
             "filter": {
