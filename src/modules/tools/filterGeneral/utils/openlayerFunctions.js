@@ -41,12 +41,12 @@ function getLayerByLayerId (layerId) {
 
 /**
  * Shows the features with the given ids on the given layer
- * @param {ol/Layer} layer the layer to show the features on
+ * @param {String} layerId the id of the layer
  * @param {String[]} ids a list of feature ids
  * @returns {void}
  */
-function showFeaturesByIds (layer, ids) {
-    Radio.trigger("ModelList", "showFeaturesById", layer, ids);
+function showFeaturesByIds (layerId, ids) {
+    Radio.trigger("ModelList", "showFeaturesById", layerId, ids);
 }
 
 /**
@@ -63,12 +63,50 @@ function createLayerIfNotExists (layername) {
  * @param {Number} minScale the minimum scale
  * @param {String[]} featureIds the filtered feature Ids
  * @param {String} layerId the layer Id
+ * @param {Function} callback the callback to call when zoom has finished
  * @returns {void}
  */
-function liveZoom (minScale, featureIds, layerId) {
+function liveZoom (minScale, featureIds, layerId, callback) {
     const minResolution = Radio.request("MapView", "getResolutionByScale", minScale);
 
-    Radio.trigger("Map", "zoomToFilteredFeatures", featureIds, layerId, {minResolution});
+    Radio.trigger("Map", "zoomToFilteredFeatures", featureIds, layerId, {
+        minResolution,
+        callback
+    });
+}
+
+/**
+ * Adds a layer model by the given layerId.
+ * @param {String} layerId the layer Id
+ * @returns {void}
+ */
+function addLayerByLayerId (layerId) {
+    Radio.trigger("ModelList", "addModelsByAttributes", {"id": layerId});
+}
+
+/**
+ * Returns all current layers.
+ * @returns {ol/Layer[]} a list of layers
+ */
+function getLayers () {
+    return Radio.request("Map", "getLayers");
+}
+
+/**
+ * Check if current ui style is table
+ * @returns {Boolean} true/false if current ui style of portal is table
+ */
+function isUiStyleTable () {
+    return Radio.request("Util", "getUiStyle") === "TABLE";
+}
+
+/**
+ * Setting the filter in table Menu
+ * @param {Object} element the html element in Object
+ * @returns {void}
+ */
+function setFilterInTableMenu (element) {
+    Radio.trigger("TableMenu", "appendFilter", element);
 }
 
 export {
@@ -77,5 +115,9 @@ export {
     getLayerByLayerId,
     isFeatureInMapExtent,
     liveZoom,
-    showFeaturesByIds
+    showFeaturesByIds,
+    addLayerByLayerId,
+    getLayers,
+    isUiStyleTable,
+    setFilterInTableMenu
 };

@@ -11,6 +11,7 @@ import SnippetSliderRange from "./SnippetSliderRange.vue";
 import SnippetTag from "./SnippetTag.vue";
 import isObject from "../../../../utils/isObject";
 import FilterApi from "../interfaces/filter.api.js";
+import MapHandler from "../utils/mapHandler.js";
 import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
 import {getSnippetAdjustments} from "../utils/getSnippetAdjustments.js";
 
@@ -39,7 +40,7 @@ export default {
             required: true
         },
         mapHandler: {
-            type: Object,
+            type: MapHandler,
             required: false,
             default: undefined
         },
@@ -63,15 +64,10 @@ export default {
             },
             disabled: false,
             showStop: false,
-            layerModel: null,
-            layerService: null,
             searchInMapExtent: false,
-            filteredFeatureIds: [],
-            enableZoom: true,
-            isFeatureLoaded: false,
             snippets: [],
             postSnippetKey: "",
-            isShowResultCounts: false
+            amountOfFilteredItems: false
         };
     },
     computed: {
@@ -90,34 +86,56 @@ export default {
             if (val.page >= val.total) {
                 this.setFormDisable(false);
 
-                if (this.liveZoomToFeatures && this.enableZoom) {
-                    this.mapHandler.zoomToFilteredFeature(this.minScale, this.filteredFeatureIds, this.layerConfig?.layerId, error => {
+                if (!this.getSearchInMapExtent() && this.liveZoomToFeatures) {
+                    this.mapHandler.zoomToFilteredFeature(this.layerConfig?.filterId, this.minScale, error => {
                         console.warn("map error", error);
                     });
-                    this.setZoom(false);
                 }
             }
         }
     },
     created () {
+        const filterId = this.layerConfig.filterId,
+            layerId = this.getLayerId(filterId, this.layerConfig?.layerId, this.layerConfig?.service?.layerId),
+            service = isObject(this.layerConfig?.service) ? this.layerConfig?.service : false;
+
         if (Array.isArray(this.layerConfig?.snippets)) {
             this.snippets = this.layerConfig?.snippets;
         }
-        this.setLayerService();
-        this.setupSnippets();
-        if (this.api instanceof FilterApi) {
-            this.api.setDefaultService(this.layerService);
+        this.setupSnippets(this.snippets);
+
+        if (this.api instanceof FilterApi && this.mapHandler instanceof MapHandler) {
+            if (!service) {
+                // tree source
+                this.mapHandler.initializeLayerFromTree(filterId, layerId, error => {
+                    console.warn(error);
+                });
+                this.api.setServiceByLayerModel(layerId, this.mapHandler.getLayerModelByFilterId(filterId));
+            }
+            else {
+                // external source
+                this.mapHandler.initializeLayerFromExtern(filterId, layerId, error => {
+                    console.warn(error);
+                });
+                this.api.setServiceByServiceObject(layerId, service);
+            }
+
+            if (!this.mapHandler.getLayerModelByFilterId(filterId)) {
+                console.warn(new Error("Please check your filter configuration: The given layerId does not exist in your config.json."));
+            }
         }
     },
     mounted () {
-        this.checkSnippetType(this.snippets);
+        if (!this.checkSnippetType(this.snippets)) {
+            this.autoRecognizeSnippetTypes(this.snippets);
+        }
     },
     methods: {
         translateKeyWithPlausibilityCheck,
         /**
          * Checking if the type of snippet is already defined
          * @param {Object[]} snippets the snippet object in array list
-         * @returns {void}
+         * @returns {Boolean} true if all types are set, false if anything has to be recognized automatically
          */
         checkSnippetType (snippets) {
             let isSnippetTypeMissing = false;
@@ -130,13 +148,9 @@ export default {
                     if (!snippet.type) {
                         isSnippetTypeMissing = true;
                     }
-                    this.rules.push(false);
                 });
             }
-
-            if (isSnippetTypeMissing) {
-                this.autoRecognizeSnippetTypes(snippets);
-            }
+            return !isSnippetTypeMissing;
         },
         /**
          * Calls the api to get the attrTypes and dataTypes and creates new or alters present snippets.
@@ -173,7 +187,6 @@ export default {
                 }
                 else {
                     Object.entries(attrTypes).forEach(([attrName, dataType]) => {
-                        this.rules.push(false);
                         snippets.push({
                             type: this.getDefaultSnippetTypeByDataType(dataType),
                             attrName,
@@ -238,11 +251,18 @@ export default {
             return isObject(snippet) && typeof snippet.type === "string" && snippet.type === type;
         },
         /**
+         * Getter for searchInMapExtent.
+         * @returns {Boolean} the value of searchInMapExtent
+         */
+        getSearchInMapExtent () {
+            return this.searchInMapExtent;
+        },
+        /**
          * Changes the internal value for searchInMapExtent.
          * @param {Boolean} value the value to change to
          * @returns {void}
          */
-        searchInMapExtentChanged (value) {
+        setSearchInMapExtent (value) {
             this.searchInMapExtent = value;
         },
         /**
@@ -389,22 +409,6 @@ export default {
             return result;
         },
         /**
-         * Set if feature is loaded or not
-         * @param {Boolean} value true/false to set feature loaded
-         * @returns {void}
-         */
-        setFeatureLoaded (value) {
-            this.isFeatureLoaded = value;
-        },
-        /**
-         * Enable or disable the function zoom to feature
-         * @param {Boolean} value true/false to en/disable zoom to feature
-         * @returns {void}
-         */
-        setZoom (value) {
-            this.enableZoom = value;
-        },
-        /**
          * Set the post snippet key to rerender the snippet
          * @param {String} value the post snippet key
          * @returns {void}
@@ -429,61 +433,13 @@ export default {
             this.showStop = value;
         },
         /**
-         * Showing or not showing filtered result counts
-         * @param {Boolean} value true/false to en/disable to filtered result counts
-         * @returns {void}
-         */
-        showResultCounts (value) {
-            this.isShowResultCounts = value;
-        },
-        /**
-         * Activating the layer for filtering
-         * @param {String} layerId the layer Id from config
-         * @returns {Object} the activated layer model
-         */
-        getActivatedLayerByLayerId (layerId) {
-            const layers = Radio.request("Map", "getLayers"),
-                visibleLayer = typeof layers?.getArray !== "function" ? [] : layers.getArray().filter(layer => {
-                    return layer.getVisible() === true && layer.get("id") === layerId;
-                });
-
-            if (Array.isArray(visibleLayer) && !visibleLayer.length) {
-                Radio.trigger("ModelList", "addModelsByAttributes", {"id": layerId});
-            }
-            return Radio.request("ModelList", "getModelByAttributes", {"id": layerId});
-        },
-        /**
-         * Returns the service using the given layer model.
-         * @param {Number} layerId the id of the layer
-         * @param {Object} layerModel the layer model
-         * @returns {Object} the service object
-         */
-        getServiceByLayerModel (layerId, layerModel) {
-            return {
-                type: "OL",
-                layerId,
-                url: layerModel.get("url"),
-                typename: layerModel.get("featureType"),
-                namespace: layerModel.get("featureNS")
-            };
-        },
-        /**
-         * Returns true if the given service object wants to use an external interface.
-         * @param {Object} service the service to check
-         * @returns {Boolean} true if this service links to an external interface, false if not.
-         */
-        isExternalService (service) {
-            return isObject(service) && String(service.type).toLowerCase() !== "ol";
-        },
-        /**
          * For initialization only: Runs through the snippets and creates layer-unique snippetIds and initializes the adjustments.
+         * @param {Object[]} snippets the snippets to setup
          * @pre the snippet objects in layerConfig have no snippetIds, adjustments are empty
          * @post the snippet objects in layerConfig are having snippetIds, adjustments are filled with objects for each snippet
          * @returns {void}
          */
-        setupSnippets () {
-            const snippets = this.layerConfig?.snippets;
-
+        setupSnippets (snippets) {
             if (Array.isArray(snippets)) {
                 snippets.forEach((snippet, snippetId) => {
                     if (typeof snippet === "string") {
@@ -501,37 +457,20 @@ export default {
             }
         },
         /**
-         * Setting layer service depends on if it is external or not
-         * @returns {void}
+         * Returns the layerId based on the given parameters.
+         * @param {Number} filterId the unique id of the internal layer filter
+         * @param {String} layerId the layer id from configuration (root scope)
+         * @param {Object} serviceLayerId the id given by service, may also be a layerId
+         * @returns {String} the layerId to use resulting from input params
          */
-        setLayerService () {
-            if (!this.isExternalService(this.layerConfig?.service)) {
-                const layerId = this.layerConfig?.layerId || this.layerConfig?.service?.layerId;
-
-                if (typeof layerId !== "string" || !layerId) {
-                    console.warn("Please check your filter configuration: You need to give either a layerId or a service object (or both) for a layer to filter.");
-                    return;
-                }
-
-                this.layerModel = this.getActivatedLayerByLayerId(layerId);
-                if (!this.layerModel) {
-                    console.warn("Please check your filter configuration: The given layerId does not exists in your config.json. Configure an extra service object for your filter configuration or add the layer to your config.json.");
-                    return;
-                }
-
-                if (!this.layerConfig?.service) {
-                    this.layerService = this.getServiceByLayerModel(layerId, this.layerModel);
-                }
-                else {
-                    this.layerService = this.layerConfig.service;
-                    if (!this.layerService?.layerId) {
-                        this.layerService.layerId = layerId;
-                    }
-                }
+        getLayerId (filterId, layerId, serviceLayerId) {
+            if (typeof layerId === "string" && layerId) {
+                return layerId;
             }
-            else {
-                this.layerService = this.layerConfig?.service;
+            else if (typeof serviceLayerId === "string" && serviceLayerId) {
+                return serviceLayerId;
             }
+            return "FilterGeneral-" + filterId;
         },
         /**
          * Filters the layer with the current snippet rules.
@@ -540,81 +479,47 @@ export default {
          * @returns {void}
          */
         filter (snippetId = false, onsuccess = false) {
-            const filterQuestion = {
-                filterId: this.layerConfig.filterId,
-                service: this.layerService,
-                snippetId: typeof snippetId === "number" ? snippetId : false,
-                commands: {
-                    paging: this.layerConfig?.paging ? this.layerConfig.paging : 1000,
-                    searchInMapExtent: this.searchInMapExtent
-                },
-                rules: this.getCleanArrayOfRules()
-            };
+            const filterId = this.layerConfig.filterId,
+                filterQuestion = {
+                    filterId,
+                    snippetId: typeof snippetId === "number" ? snippetId : false,
+                    commands: {
+                        paging: this.layerConfig?.paging ? this.layerConfig.paging : 1000,
+                        searchInMapExtent: this.getSearchInMapExtent()
+                    },
+                    rules: this.getCleanArrayOfRules()
+                };
 
-            this.filteredFeatureIds = [];
-            this.setZoom(true);
             this.setFormDisable(true);
             this.showStopButton(true);
-            this.showResultCounts(true);
 
-            if (isObject(this.layerModel)) {
-                this.layerModel.set("isSelected", true);
-                this.layerModel.set("isVisible", true);
-
-                if (this.layerModel.layer.getSource().getFeatures().length) {
-                    this.runApiFilter(filterQuestion, onsuccess);
-                }
-                else {
-                    this.layerModel.layer.getSource().on("featuresloadend", () => {
-                        if (this.isFeatureLoaded) {
-                            this.mapHandler.showFeaturesByIds(this.layerModel.layer, this.filteredFeatureIds);
-                            return;
+            if (this.api instanceof FilterApi && this.mapHandler instanceof MapHandler) {
+                this.mapHandler.activateLayer(filterId, () => {
+                    this.api.filter(filterQuestion, filterAnswer => {
+                        this.paging = filterAnswer.paging;
+                        if (this.paging?.page === 1) {
+                            this.mapHandler.clearLayer(filterId);
                         }
-                        this.runApiFilter(filterQuestion, onsuccess);
-                        this.setFeatureLoaded(true);
-                    });
-                }
-            }
-        },
-        /**
-         * Running the api function to filter the layer
-         * @param {Object} filterQuestion the filter parameters for api
-         * @param {Function} onsuccess a function(filterAnswer) to call on success
-         * @returns {void}
-         */
-        runApiFilter (filterQuestion, onsuccess) {
-            if (!(this.api instanceof FilterApi)) {
-                return;
-            }
-            this.api.filter(filterQuestion, filterAnswer => {
-                this.paging = filterAnswer.paging;
 
-                if (isObject(this.mapHandler) && typeof this.mapHandler.visualize === "function") {
-                    this.mapHandler.visualize(filterAnswer, error => {
-                        console.warn("map error", error);
-                    });
-                }
-
-                if (Array.isArray(filterAnswer?.items) && filterAnswer.items.length) {
-                    filterAnswer.items.forEach(item => {
-                        if (!this.filteredFeatureIds.includes(item.getId())) {
-                            this.filteredFeatureIds.push(item.getId());
+                        this.mapHandler.addItemsToLayer(filterId, filterAnswer.items);
+                        if (!Object.prototype.hasOwnProperty.call(this.layerConfig, "showHits") || this.layerConfig.showHits) {
+                            this.amountOfFilteredItems = this.mapHandler.getAmountOfFilteredItemsByFilterId(filterId);
                         }
-                    });
-                }
 
-                if (typeof onsuccess === "function") {
-                    onsuccess(filterAnswer);
-                }
-            }, error => {
-                console.warn("filter error", error);
-            });
+                        if (typeof onsuccess === "function") {
+                            onsuccess(filterAnswer);
+                        }
+                    }, error => {
+                        console.warn(error);
+                    });
+                });
+            }
         },
         /**
          * Terminating the filter process by terminating every snippet
          * @returns {void}
          */
-        stopfilter () {
+        stopFilter () {
             if (!(this.api instanceof FilterApi)) {
                 return;
             }
@@ -672,14 +577,14 @@ export default {
             </div>
         </div>
         <div
-            v-if="isShowResultCounts"
+            v-if="typeof amountOfFilteredItems === 'number'"
             class="filter-result"
         >
             <span>
                 {{ $t("modules.tools.filterGeneral.filterResult.label") }}
             </span>
             <span>
-                {{ filteredFeatureIds.length + " " + $t("modules.tools.filterGeneral.filterResult.unit") }}
+                {{ $t("modules.tools.filterGeneral.filterResult.unit", {amountOfFilteredItems}) }}
             </span>
         </div>
         <div
@@ -688,7 +593,7 @@ export default {
         >
             <SnippetCheckboxFilterInMapExtent
                 :filter-id="layerConfig.filterId"
-                @commandChanged="searchInMapExtentChanged"
+                @commandChanged="setSearchInMapExtent"
             />
         </div>
         <div
@@ -865,7 +770,7 @@ export default {
             <button
                 v-if="paging.page < paging.total && showStop"
                 class="btn btn-secondary btn-sm"
-                @click="stopfilter()"
+                @click="stopFilter()"
             >
                 {{ $t("button.stop") }}
             </button>
