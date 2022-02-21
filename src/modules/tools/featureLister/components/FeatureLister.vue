@@ -447,7 +447,7 @@ $background_color_1: rgb(255, 255, 255);
         background: #f5f5f5;
         color: #333333;
         border-color: #ddd;
-        cursor: pointer;
+        cursor: default;
     }
 .tdfeaturelist {
     padding: 3px;
