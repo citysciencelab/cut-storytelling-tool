@@ -164,7 +164,7 @@ export default class InterfaceWFS {
             break;
         }
 
-        if (!node.hasChildNodes()) {
+        if (node !== null && !node.hasChildNodes()) {
             for (const childNode of responseXML.getElementsByTagName(node.tagName)) {
                 if (childNode.hasChildNodes()) {
                     node = childNode;
