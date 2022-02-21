@@ -423,7 +423,7 @@
                 },
                 "filterResult": {
                     "label": "All filtered Counts",
-                    "unit": "Results"
+                    "unit": "{{amountOfFilteredItems}} Results"
                 }
             },
             "filter": {
