@@ -76,7 +76,7 @@ export default {
         }
         catch {
             this.availableLocalStorage = false;
-            console.error("Locarelstorage is not available in this application. Please allow third party cookies in your browser!");
+            console.error("Spelling localestorage is not available in this application. Please allow third party cookies in your browser!");
         }
     },
 
