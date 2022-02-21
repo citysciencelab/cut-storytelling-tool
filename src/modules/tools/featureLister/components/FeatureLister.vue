@@ -160,15 +160,15 @@ export default {
                 </div>
                 <template v-if="featureListView">
                     <div
+                        id="featurelist-list-header"
+                        class="panel-heading"
+                    >
+                        <span>{{ layer.name }}</span>
+                    </div>
+                    <div
                         id="featurelist-list"
                         class="panel panel-default featurelist-list"
                     >
-                        <div
-                            id="featurelist-list-header"
-                            class="panel-heading"
-                        >
-                            <span>{{ layer.name }}</span>
-                        </div>
                         <div
                             class="table-responsive  featurelist-list-table"
                         >
@@ -231,15 +231,15 @@ export default {
                 </template>
                 <template v-if="featureDetailView">
                     <div
+                        id="featurelist-details-header"
+                        class="panel-heading"
+                    >
+                        <span> {{ $t("modules.tools.featureLister.detailsOfSelected") }} </span>
+                    </div>
+                    <div
                         id="featurelist-details"
                         class="panel panel-default featurelist-details"
                     >
-                        <div
-                            id="featurelist-details-header"
-                            class="panel-heading"
-                        >
-                            <span> {{ $t("modules.tools.featureLister.detailsOfSelected") }} </span>
-                        </div>
                         <ul
                             v-for="(feature, key) in featureDetails"
                             :key="'tool-featureLister-' + key"
@@ -312,6 +312,9 @@ $background_color_1: rgb(255, 255, 255);
         color: $color_2;
     }
 }
+    #featurelist-list-table {
+        overflow: auto;
+    }
 .featurelist-list-button {
     position: relative;
     right: 0px;
@@ -446,8 +449,9 @@ $background_color_1: rgb(255, 255, 255);
     .panel-heading {
         background: #f5f5f5;
         color: #333333;
-        border-color: #ddd;
         cursor: default;
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
     }
 .tdfeaturelist {
     padding: 3px;
