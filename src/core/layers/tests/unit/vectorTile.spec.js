@@ -100,10 +100,38 @@ describe("core/modelList/layer/vectorTile", function () {
                 useProxy: false
             },
             vtLayer = new VectorTile(requiredAttrs),
-            layer = vtLayer.get("layer");
-            
-            expect(layer.get("zDirection")).to.equal(defaultValues.zDirection);
-            
+            layer = vtLayer.get("layer"),
+            source = layer.getSource(),
+            tileGrid = source.getTileGrid();
+
+            expect(vtLayer.get('useProxy')).to.be.false;
+            expect(vtLayer.get('layerAttribution')).to.be.undefined;
+
+            expect(layer.getOpacity()).to.equal(1);
+            expect(layer.getVisible()).to.be.false;
+
+            expect(source.zDirection).to.equal(defaultValues.zDirection);
+            expect(source.getProjection().getCode()).to.equal(defaultValues.epsg);
+            expect(source.getAttributions()).to.be.null;
+
+            // Note: this should be the extent of the projection but is the extent of EPSG:3857
+            //       this is because in masterportalAPI is no definition of the extent of the 
+            //       default projection which is EPSG:25832 
+            expect(tileGrid.getExtent()).to.deep.equal([
+                -20015077.371242613,
+                -20015077.371242613,
+                20015077.371242613,
+                20015077.371242613
+            ]);
+            // Note: this should be the top left corner of the projection extent but is top left 
+            //       corner of extent of EPSG:3857 this is because in masterportalAPI is no 
+            //       definition of the extent of the default projection which is EPSG:25832 
+            expect(tileGrid.getOrigin()).to.deep.equal([
+                -20015077.371242613,
+                20015077.371242613
+            ]);
+            expect(tileGrid.getResolutions()).to.deep.equal(defaultValues.resolutions);
+            expect(tileGrid.getTileSize()).to.deep.equal(new Array(2).fill(defaultValues.tileSize));
         })
     })
 
