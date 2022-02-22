@@ -24,7 +24,7 @@ async function CoordTests ({builder, url, resolution, config, capability}) {
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
-        describe("SupplyCoord", function () {
+        describe.only("SupplyCoord", function () {
             const selectors = {
                 tools: By.xpath("//ul[@id='tools']/.."),
                 toolCoord: By.css("ul#tools span.glyphicon-screenshot"),
