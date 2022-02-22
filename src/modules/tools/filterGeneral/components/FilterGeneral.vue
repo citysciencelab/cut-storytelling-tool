@@ -7,7 +7,16 @@ import mutations from "../store/mutationsFilterGeneral";
 import LayerFilterSnippet from "./LayerFilterSnippet.vue";
 import {convertToNewConfig} from "../utils/convertToNewConfig";
 import MapHandler from "../utils/mapHandler.js";
-import {getLayerByLayerId, showFeaturesByIds, createLayerIfNotExists, liveZoom} from "../utils/openlayerFunctions.js";
+import {
+    getLayerByLayerId,
+    showFeaturesByIds,
+    createLayerIfNotExists,
+    liveZoom,
+    addLayerByLayerId,
+    getLayers,
+    isUiStyleTable,
+    setFilterInTableMenu
+} from "../utils/openlayerFunctions.js";
 import FilterApi from "../interfaces/filter.api.js";
 import LayerCategory from "../components/LayerCategory.vue";
 import isObject from "../../../../utils/isObject.js";
@@ -26,7 +35,9 @@ export default {
                 getLayerByLayerId,
                 showFeaturesByIds,
                 createLayerIfNotExists,
-                liveZoom
+                liveZoom,
+                addLayerByLayerId,
+                getLayers
             }),
             selectedLayers: [],
             layerLoaded: {},
@@ -57,7 +68,11 @@ export default {
             this.replaceStringWithObjectLayers();
             this.setFilterId();
             this.initializeFilterApiList();
-            this.setTableFilter();
+
+            if (isUiStyleTable()) {
+                setFilterInTableMenu(this.$el.querySelector("#tool-general-filter"));
+                this.$el.remove();
+            }
             // console.log("Alte Config", this.configs);
             // console.log("Neue Config", this.convertToNewConfig(this.configs));
         });
@@ -195,16 +210,6 @@ export default {
                         };
                     }
                 });
-            }
-        },
-        /**
-         * Appending the filter in table menu
-         * @returns {void}
-         */
-        setTableFilter () {
-            if (Radio.request("Util", "getUiStyle") === "TABLE") {
-                Radio.trigger("TableMenu", "appendFilter", this.$el.querySelector("#tool-general-filter"));
-                this.$el.remove();
             }
         },
         /**

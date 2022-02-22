@@ -16,8 +16,10 @@
   - Dimension/Extent name to use can now be overridden (default is `"time"`).
   - The Extent.default value `"current"` can now be interpreted.
   - The time field of WMS requests is now filled with ISO 8601 timestamps of same precision as Extent specification.
+- It is now possible to configure a loading strategy for a wfs layer (default is bbox).
 
 ### Changed
+-  Default for isFolderSelectable is true. Overwriteable in config.js (globally) oder config.json(folder specific). Applies only for treeType="custom". In treeType="default" the top folders als not selectable and the child folders are selectable.
 -  Print uses formatList from statePrint, instead of all formats from mapfish Server.
 -  The following NPM packages are updated:
     - mocha: 9.1.4 to 9.2.0
@@ -27,14 +29,22 @@
   The version of npm  was also updated, must be >= 8.1.2 < 9. (The node and npm versions are still mandatory via .npmrc.).
 - Migrated the module 3D TerrainLayer from Backbone to Vue. The TerrainLayer uses the masterportalAPI's terrain layer on creation.
 - Issue #685: Changes WMS-T TimeSlider layout to accomodate larger timestamps.
+- Outsourced drawTypeOptions from constantsDraw.js into its own file
+- The vectorTile Layer is now refactored to src/core.
+- The 3D terrain layer is refactored. It is no longer a Backbone-model.The terrain layer uses the masterportalAPI's terrain layer on creation.
+- The 3D tileset layer is refactored. It is no longer a Backbone-model.The tileset layer uses the masterportalAPI's tileset layer on creation.
+- Path updated in map and map3d because abstraction in masterportalAPI changed to maps and moved into src
+- Checking the allowed version for wfs layers has been moved to the masterportalAPI.
+- Migrated the parsing of `rest-services.json` from Backbone to Vue. Backbone components using RestReader are connected using RadioBridge.
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
-- Issue #695: Optimised order in if clause. First use "show_doc_url" in layers metadata, then check if service based on the config.js's metaDataCatalogueId exists. otherwise throw console.warn.
-- Issue #666: The elastic search query string replacement function will now only take effect.
+- Issue #694: Folder with subfolders are also selectable. (Internal flag "isLeafFolder" removed)
+- Issue #695: Optimised order in if clause. First use "show_doc_url" in layers metadata, then check if service based on the config.js's metaDataCatalogueId exists. otherwise throw console.warn
+- Issue #666: The elastic search query string replacement function will now only take effect
   when the configured key did not contain an object.
 - Issue #668: `layerInformation` shows legend information only if legendURL is not ignored.
 - Config parameters that are an array completely overwrite the default values of the associated array in the store.
@@ -45,6 +55,10 @@
 - Issue #685:
   - WMS-T now works with all ISO 8601 timestamps (i.e. "2022", "2022-01-26T00:00:00.000Z", and all precision grades in between) as specified by OGC.
   - WMS-T now dynamically finds a layer's Extent/Dimension in GetCapabilities Response (position was hard-wired previously).
+- Tool Routing: Exported routes now inherit the style from route view.
+- Folder expand/collapse works in background maps, if treetype is 'custom'.
+- Issue #637, Issue #656: If background maps are configured in folder structures, then when such a background map is activated, no more subject data are overlaid.
+- Tool print: printing of the measurement result is fixed.
 
 ---
 
