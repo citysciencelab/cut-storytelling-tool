@@ -1,9 +1,17 @@
 import VectorTile from "../../vectorTile.js";
+
 import {expect} from "chai";
 import sinon from "sinon";
 import axios from "axios";
 
+import { crs } from "masterportalAPI";
+
 import * as stylefunction from "ol-mapbox-style/dist/stylefunction";
+import { altShiftKeysOnly } from "ol/events/condition";
+
+
+
+import store from "../../../../app-store";
 
 const vtStyles = [
         {name: "Layer One", id: "l1"},
@@ -35,10 +43,69 @@ const vtStyles = [
             {name: "Layer One", id: "l1"},
             {name: "Layer Two", id: "l2"}
         ]
+    },
+    // minimal VectorLayer config defined in services.json.md
+    requiredAttrs = {
+        gfiAttributes: "showAll",
+        gfiTheme: "default",
+        id: "911",
+        maxScale: "1000000",
+        minScale: "0",
+        name: "Foobar",
+        typ: "VectorTile",
+        url: "https://doesthisurlexist.de/vt/tiles/esri/Test_VT_3857/p12/tile/{z}/{y}/{x}.pbf"
+
     };
 
 describe("core/modelList/layer/vectorTile", function () {
     afterEach(sinon.restore);
+
+    beforeEach(() => crs.registerProjections());
+
+    describe("vector tile layer config", function() {
+
+        it("should apply in services.json.md defined defaults", function() {
+            const mapStub = sinon.stub(store, 'getters')
+            mapStub.value({"Map/projection": {getCode: () => { return "EPSG:25382"; }}})
+
+            const defaultValues = { // defaults defined in services.json.md
+                zDirection: 1,
+                epsg: "EPSG:25832", // default value from config.json.md/MapView. Should be the default CRS
+                extent: [ // If not set, the portal's coordinate reference system's extent is used
+                    -1877994.66, 
+                    3932281.56, 
+                    836715.13, 
+                    9440581.95
+                ], 
+                origin: [ // if not set, the portal's coordinate reference system's top-left corner is used.
+                    -1877994.66, 
+                    836715.13
+                ], 
+                resolutions: [ // If not used, the portal's resolutions are used. (Missing default resolution definition? used default resolutions from masterportal-api)
+                    66.14579761460263,
+                    26.458319045841044,
+                    15.874991427504629,
+                    10.583327618336419,
+                    5.2916638091682096,
+                    2.6458319045841048,
+                    1.3229159522920524,
+                    0.6614579761460262,
+                    0.2645831904584105,
+                    0.13229159522920521,
+                ], 
+                tileSize: 512,
+                layerAttribution: "nicht vorhanden",
+                transparency: 0,
+                visibility: false,
+                useProxy: false
+            },
+            vtLayer = new VectorTile(requiredAttrs),
+            layer = vtLayer.get("layer");
+            
+            expect(layer.get("zDirection")).to.equal(defaultValues.zDirection);
+            
+        })
+    })
 
     describe("isStyleValid", function () {
         it("returns true only if required fields all exist", function () {
@@ -54,7 +121,7 @@ describe("core/modelList/layer/vectorTile", function () {
     });
 
     describe("setStyleById", function () {
-    /** @returns {object} mock context for setStyleById */
+    /* @returns {object} mock context for setStyleById */
         function makeContext () {
             return {
                 get: key => ({vtStyles})[key],
@@ -116,8 +183,7 @@ describe("core/modelList/layer/vectorTile", function () {
                 version: 8,
                 sources: {}
             };
-
-        /**
+    /**
      * @param {function} done mocha callback done
      * @returns {object} mock context for setStyleById
      */
@@ -283,56 +349,6 @@ describe("core/modelList/layer/vectorTile", function () {
             expect(returnedFont1).to.equal("MasterPortalFont");
             expect(returnedFont2).to.equal("MasterPortalFont");
             expect(returnedFont3).to.equal("MasterPortalFont");
-        });
-    });
-
-    describe("createLayerSource", function () {
-
-        /** @returns {object} mock context for setStyleById */
-        function makeContext () {
-            return {
-                get: key => ({
-                    useProxy: false,
-                    url: "www.unicornsarentreal.com/vt/tiles/esri/Test_VT_3857/p12/tile/{z}/{y}/{x}.pbf",
-                    resolutions: [78271.51696401172, 38.21851414258385, 19.109257071291925, 9.554628535645962, 4.777314267822981, 2.3886571339114906],
-                    epsg: "EPSG:3857",
-                    tileSize: 512,
-                    minZoom: -100000,
-                    maxZoom: 1000000
-                })[key],
-                createTileGrid: sinon.spy(VectorTile.prototype, "createTileGrid")
-            };
-        }
-
-        it("Creates vector tile layer source", function () {
-            const context = makeContext();
-
-            VectorTile.prototype.createLayerSource.call(context, attrs);
-
-            expect(context.createTileGrid.calledWith("EPSG:3857", attrs)).to.be.true;
-        });
-    });
-
-    describe("createTileGrid", function () {
-
-        /** @returns {object} mock context for setStyleById */
-        function makeContext () {
-            return {
-                get: key => ({
-                    resolutions: [78271.51696401172, 38.21851414258385, 19.109257071291925, 9.554628535645962, 4.777314267822981, 2.3886571339114906],
-                    tileSize: 512,
-                    minZoom: -100000,
-                    origin: [-20037508.342787, 20037508.342787],
-                    extent: [902186.6748764697, 7054472.604709217, 1161598.3542590786, 7175683.411718197]
-                })[key]
-            };
-        }
-
-        it("Creates a tilegrid", function () {
-            const context = makeContext(),
-                returnedTileGrid = VectorTile.prototype.createTileGrid.call(context, "EPSG:3857", attrs);
-
-            expect(returnedTileGrid).to.be.not.empty;
         });
     });
 
