@@ -24,11 +24,9 @@ const vtStyles = [
     attrs = {
         epsg: "EPSG:3857",
         extent: [902186.6748764697, 7054472.604709217, 1161598.3542590786, 7175683.411718197],
-        format: "image/png",
         gfiAttributes: "showAll",
         gfiTheme: "default",
         id: "911",
-        level: 0,
         name: "InsideJob",
         origin: [-20037508.342787, 20037508.342787],
         resolutions: [78271.51696401172, 305.7481131406708, 152.8740565703354, 76.4370282851677, 2.3886571339114906],
@@ -36,9 +34,7 @@ const vtStyles = [
         tileSize: 512,
         transparency: 0,
         typ: "VectorTile",
-        type: "layer",
         url: "https://doesthisurlexist.de/vt/tiles/esri/Test_VT_3857/p12/tile/{z}/{y}/{x}.pbf",
-        useConfigName: true,
         vtStyles: [
             {name: "Layer One", id: "l1"},
             {name: "Layer Two", id: "l2"}
