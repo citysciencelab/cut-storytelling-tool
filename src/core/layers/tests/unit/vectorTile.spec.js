@@ -60,6 +60,27 @@ describe("core/modelList/layer/vectorTile", function () {
 
     describe("vector tile layer config", function() {
 
+        it("should create a layer with minimal config", function() {
+            const mapStub = sinon.stub(store, 'getters')
+            mapStub.value({"Map/projection": {getCode: () => { return "EPSG:25832"; }}})
+
+            const vtLayer = new VectorTile(requiredAttrs),
+            layer = vtLayer.get("layer"),
+            source = layer.getSource(),
+            tileGrid = source.getTileGrid();
+
+            expect(vtLayer.get("gfiAttributes")).to.equal("showAll");
+            expect(vtLayer.get("gfiTheme")).to.equal("default");
+            expect(vtLayer.get("id")).to.equal("911");
+            expect(vtLayer.get("minScale")).to.equal("0");
+            expect(vtLayer.get("maxScale")).to.equal("1000000")
+            
+            expect(layer.get("id")).to.equal("911");
+            expect(layer.get("name")).to.equal("Foobar");
+
+            expect(source.getUrls()[0]).to.equal("https://doesthisurlexist.de/vt/tiles/esri/Test_VT_3857/p12/tile/{z}/{y}/{x}.pbf")
+        })
+
         it("should apply in services.json.md defined defaults", function() {
             const mapStub = sinon.stub(store, 'getters')
             mapStub.value({"Map/projection": {getCode: () => { return "EPSG:25382"; }}})
@@ -128,6 +149,54 @@ describe("core/modelList/layer/vectorTile", function () {
             ]);
             expect(tileGrid.getResolutions()).to.deep.equal(defaultValues.resolutions);
             expect(tileGrid.getTileSize()).to.deep.equal(new Array(2).fill(defaultValues.tileSize));
+        })
+
+        it("should apply given attributes correct", function() {
+            const mapStub = sinon.stub(store, "getters")
+            mapStub.value({"Map/projection": {getCode: () => { return "EPSG:3857"; }}});
+
+            const vtLayer = new VectorTile(attrs),
+                  layer = vtLayer.get("layer"),
+                  source = layer.getSource(),
+                  tileGrid = source.getTileGrid();
+
+            expect(vtLayer.get("useProxy")).to.be.false;
+            expect(vtLayer.get("layerAttribution")).to.be.undefined;
+            expect(vtLayer.get("gfiAttributes")).to.equal(attrs.gfiAttributes);
+            expect(vtLayer.get("gfiTheme")).to.equal(attrs.gfiTheme);
+            expect(vtLayer.get("id")).to.equal(attrs.id);
+            expect(vtLayer.get("name")).to.equal(attrs.name)
+            expect(vtLayer.get("styleId")).to.equal(attrs.styleId);
+            expect(vtLayer.get("selectedStyleID")).to.equal(attrs.styleId);
+            expect(vtLayer.get("vtStyles")).to.deep.equal(attrs.vtStyles);
+            
+            expect(layer.get("id")).to.equal(attrs.id);
+            expect(layer.get("name")).to.equal(attrs.name);
+            expect(layer.getOpacity()).to.equal(1);
+            expect(layer.getVisible()).to.be.false;
+
+            expect(source.zDirection).to.equal(1);
+            expect(source.getProjection().getCode()).to.equal("EPSG:3857");
+            expect(source.getAttributions()).to.be.null;
+
+            expect(tileGrid.getExtent()).to.deep.equal([
+                902186.6748764697, 
+                7054472.604709217, 
+                1161598.3542590786, 
+                7175683.411718197
+            ]);
+            expect(tileGrid.getOrigin()).to.deep.equal([
+                -20037508.342787, 
+                20037508.342787
+            ]);
+            expect(tileGrid.getResolutions()).to.deep.equal([
+                78271.51696401172, 
+                305.7481131406708, 
+                152.8740565703354, 
+                76.4370282851677, 
+                2.3886571339114906
+            ]);
+            expect(tileGrid.getTileSize()).to.deep.equal([512, 512]);
         })
     })
 
