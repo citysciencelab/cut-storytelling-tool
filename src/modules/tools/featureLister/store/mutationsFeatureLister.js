@@ -23,7 +23,7 @@ const mutations = {
                 sourceOfSelectedLayer = layers.find((layer) => layer.get("id") === state.layer.id);
 
             state.layer.features.forEach(feature => {
-                if (Object.prototype.hasOwnProperty.call(feature.values_, "features")) {
+                if (feature.values_ && Object.prototype.hasOwnProperty.call(feature.values_, "features")) {
                     feature.values_.features.forEach(nestedFeature => {
                         rawFeatures.push(nestedFeature);
                         gfiFeatures.push(getGfiFeature(sourceOfSelectedLayer.values_, nestedFeature.values_));
