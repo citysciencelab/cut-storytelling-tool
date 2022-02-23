@@ -23,7 +23,7 @@ export default {
         }
     },
     /**
-     * Switches to a tab and deactivates or even diables the other tabs.
+     * Switches to a tab and deactivates or even disables the other tabs.
      * @param {Object} payload tabId should be the id of the html tab element, if disableOthers is true the rest of the tabs gets disabled.
      * @returns {void}
      */
