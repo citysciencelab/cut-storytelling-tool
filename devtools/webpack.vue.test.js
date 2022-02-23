@@ -87,7 +87,8 @@ module.exports = {
             // fs: "fs",
             // requestAnimationFrame: "raf"
         }),
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new webpack.IgnorePlugin(/canvas/, /jsdom$/)
     ],
     node: {
         fs: "empty"

@@ -1,8 +1,12 @@
 <script>
 import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
+import SnippetInfo from "./SnippetInfo.vue";
 
 export default {
     name: "SnippetInput",
+    components: {
+        SnippetInfo
+    },
     props: {
         attrName: {
             type: String,
@@ -59,7 +63,7 @@ export default {
         return {
             isInitializing: true,
             value: "",
-            showInfo: false
+            translationKey: "snippetInput"
         };
     },
     computed: {
@@ -69,15 +73,6 @@ export default {
             }
             else if (typeof this.label === "string") {
                 return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
-            }
-            return "";
-        },
-        infoText () {
-            if (this.info === true) {
-                return this.$t("common:modules.tools.filterGeneral.info.snippetInput");
-            }
-            else if (typeof this.info === "string") {
-                return this.translateKeyWithPlausibilityCheck(this.info, key => this.$t(key));
             }
             return "";
         }
@@ -142,13 +137,6 @@ export default {
             });
         },
         /**
-         * Toggles the info.
-         * @returns {void}
-         */
-        toggleInfo () {
-            this.showInfo = !this.showInfo;
-        },
-        /**
          * Triggers when the input field has lost its focus.
          * @returns {void}
          */
@@ -170,16 +158,13 @@ export default {
         class="snippetInputContainer"
     >
         <div
-            v-if="info !== false"
+            v-if="info"
             class="right"
         >
-            <div class="info-icon">
-                <span
-                    :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
-                    @click="toggleInfo()"
-                    @keydown.enter="toggleInfo()"
-                >&nbsp;</span>
-            </div>
+            <SnippetInfo
+                :info="info"
+                :translation-key="translationKey"
+            />
         </div>
         <div class="input-container">
             <label
@@ -198,14 +183,6 @@ export default {
                 @blur="inputChanged()"
                 @keyup.enter="inputChanged()"
             >
-        </div>
-        <div
-            v-show="showInfo"
-            class="bottom"
-        >
-            <div class="info-text">
-                <span>{{ infoText }}</span>
-            </div>
         </div>
     </div>
 </template>
@@ -228,27 +205,6 @@ export default {
         outline: 0;
         position: relative;
         margin-bottom: 5px;
-    }
-    .snippetInputContainer .info-icon {
-        float: right;
-        font-size: 16px;
-        color: #ddd;
-    }
-    .snippetInputContainer .info-icon .opened {
-        color: #000;
-    }
-    .snippetInputContainer .info-icon:hover {
-        cursor: pointer;
-        color: #a5a09e;
-    }
-    .snippetInputContainer .info-text {
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 10px;
-        padding: 15px 10px;
-    }
-    .glyphicon-info-sign:before {
-        content: "\E086";
     }
     .snippetInputContainer .bottom {
         clear: left;

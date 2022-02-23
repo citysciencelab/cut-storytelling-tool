@@ -1,4 +1,5 @@
 import {intersects} from "ol/extent.js";
+import LayerGroup from "ol/layer/Group";
 
 /**
  * Returns all features of a layer specified with the given layerId.
@@ -6,7 +7,7 @@ import {intersects} from "ol/extent.js";
  * @returns {ol/Feature[]} the features
  */
 function getFeaturesByLayerId (layerId) {
-    const layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+    let layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
 
     if (!layer || !layer?.has("layer")) {
         return [];
@@ -14,6 +15,18 @@ function getFeaturesByLayerId (layerId) {
 
     if (layer.get("isClustered")) {
         return layer.get("layer").getSource().getSource().getFeatures();
+    }
+
+    if (layer.layer instanceof LayerGroup) {
+        const layerSource = layer.get("layerSource");
+
+        layerSource.forEach(childLayer => {
+            if (childLayer.id === layerId) {
+                layer = childLayer;
+            }
+        });
+
+        return layer.layer.getSource().getFeatures();
     }
 
     return layer.get("layer").getSource().getFeatures();

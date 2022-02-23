@@ -3,11 +3,13 @@ import Multiselect from "vue-multiselect";
 import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
 import {getStyleModel, getIconListFromLegend} from "../utils/getIconListFromLegend.js";
 import isObject from "../../../../utils/isObject.js";
+import SnippetInfo from "./SnippetInfo.vue";
 
 export default {
     name: "SnippetDropdown",
     components: {
-        Multiselect
+        Multiselect,
+        SnippetInfo
     },
     props: {
         api: {
@@ -106,13 +108,13 @@ export default {
             disable: true,
             isInitializing: true,
             isAdjusting: false,
-            showInfo: false,
             dropdownValue: [],
             dropdownSelected: [],
             styleModel: {},
             legendsInfo: [],
             iconList: {},
-            allSelected: false
+            allSelected: false,
+            translationKey: "snippetDropdown"
         };
     },
     computed: {
@@ -122,15 +124,6 @@ export default {
             }
             else if (typeof this.label === "string") {
                 return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
-            }
-            return "";
-        },
-        infoText () {
-            if (this.info === true) {
-                return this.$t("common:modules.tools.filterGeneral.info.snippetDropdown");
-            }
-            else if (typeof this.info === "string") {
-                return this.translateKeyWithPlausibilityCheck(this.info, key => this.$t(key));
             }
             return "";
         },
@@ -339,13 +332,6 @@ export default {
             });
         },
         /**
-         * Toggles the info.
-         * @returns {void}
-         */
-        toggleInfo () {
-            this.showInfo = !this.showInfo;
-        },
-        /**
          * Select all items
          * @returns {void}
          */
@@ -374,21 +360,18 @@ export default {
         class="snippetDropdownContainer"
     >
         <div
+            v-if="info"
+            class="right"
+        >
+            <SnippetInfo
+                :info="info"
+                :translation-key="translationKey"
+            />
+        </div>
+        <div
             v-if="display === 'default'"
             class="snippetDefaultContainer"
         >
-            <div
-                v-if="info !== false"
-                class="right"
-            >
-                <div class="info-icon">
-                    <span
-                        :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
-                        @click="toggleInfo()"
-                        @keydown.enter="toggleInfo()"
-                    >&nbsp;</span>
-                </div>
-            </div>
             <div
                 v-if="label !== false"
                 class="left"
@@ -421,32 +404,12 @@ export default {
                     <span slot="noResult">{{ noElements }}</span>
                 </Multiselect>
             </div>
-            <div
-                v-show="showInfo"
-                class="bottom"
-            >
-                <div class="info-text">
-                    <span>{{ infoText }}</span>
-                </div>
-            </div>
         </div>
         <div
             v-if="display === 'list'"
             class="snippetListContainer"
         >
             <div class="table-responsive">
-                <div
-                    v-if="info"
-                    class="right"
-                >
-                    <div class="info-icon">
-                        <span
-                            :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
-                            @click="toggleInfo()"
-                            @keydown.enter="toggleInfo()"
-                        >&nbsp;</span>
-                    </div>
-                </div>
                 <table :class="['table table-sm table-hover table-bordered table-striped', info ? 'left': '']">
                     <thead
                         v-if="label !== false"
@@ -516,14 +479,6 @@ export default {
                         </tr>
                     </tbody>
                 </table>
-                <div
-                    v-show="showInfo"
-                    class="bottom"
-                >
-                    <div class="info-text">
-                        <span>{{ infoText }}</span>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -638,29 +593,8 @@ export default {
         vertical-align: middle;
         border-top: 1px solid #ddd;
     }
-    .snippetDropdownContainer .info-icon {
-        float: right;
-        font-size: 16px;
-        color: #ddd;
-    }
-    .snippetDropdownContainer .info-icon .opened {
-        color: #000;
-    }
-    .snippetDropdownContainer .info-icon:hover {
-        cursor: pointer;
-        color: #a5a09e;
-    }
-    .snippetDropdownContainer .info-text {
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 10px;
-        padding: 15px 10px;
-    }
     .snippetListContainer .snippetListContainerIcon {
         width: 25px;
-    }
-    .glyphicon-info-sign:before {
-        content: "\E086";
     }
     .snippetDropdownContainer select {
         clear: left;

@@ -592,6 +592,7 @@ export default {
             class="form-group"
         >
             <SnippetCheckboxFilterInMapExtent
+                :info="layerConfig.searchInMapExtentInfo"
                 :filter-id="layerConfig.filterId"
                 @commandChanged="setSearchInMapExtent"
             />

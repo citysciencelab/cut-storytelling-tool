@@ -2,9 +2,13 @@
 import isObject from "../../../../utils/isObject";
 import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
 import moment from "moment";
+import SnippetInfo from "./SnippetInfo.vue";
 
 export default {
     name: "SnippetDateRange",
+    components: {
+        SnippetInfo
+    },
     props: {
         api: {
             type: Object,
@@ -82,7 +86,7 @@ export default {
             maximumValue: "",
             value: ["", ""],
             precheckedIsValid: false,
-            showInfo: false
+            translationKey: "snippetDateRange"
         };
     },
     computed: {
@@ -95,15 +99,6 @@ export default {
             }
             else if (typeof this.label === "string") {
                 return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
-            }
-            return "";
-        },
-        infoText () {
-            if (this.info === true) {
-                return this.$t("common:modules.tools.filterGeneral.info.snippetDateRange");
-            }
-            else if (typeof this.info === "string") {
-                return this.translateKeyWithPlausibilityCheck(this.info, key => this.$t(key));
             }
             return "";
         },
@@ -356,13 +351,6 @@ export default {
             });
         },
         /**
-         * Toggles the info.
-         * @returns {void}
-         */
-        toggleInfo () {
-            this.showInfo = !this.showInfo;
-        },
-        /**
          * Triggered once when changes are made at the date picker to avoid set of rules during changes.
          * @returns {void}
          */
@@ -411,16 +399,13 @@ export default {
             </label>
         </div>
         <div
-            v-if="info !== false"
+            v-if="info"
             class="right"
         >
-            <div class="info-icon">
-                <span
-                    :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
-                    @click="toggleInfo()"
-                    @keydown.enter="toggleInfo()"
-                >&nbsp;</span>
-            </div>
+            <SnippetInfo
+                :info="info"
+                :translation-key="translationKey"
+            />
         </div>
         <div class="date-input-container">
             <div
@@ -466,14 +451,6 @@ export default {
                 >
             </div>
         </div>
-        <div
-            v-show="showInfo"
-            class="bottom"
-        >
-            <div class="info-text">
-                <span>{{ infoText }}</span>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -493,28 +470,6 @@ export default {
         position: relative;
         margin-bottom: 5px;
         height: 34px;
-    }
-    .snippetDateRangeContainer .info-icon {
-        float: right;
-        font-size: 16px;
-        color: #ddd;
-    }
-    .snippetDateRangeContainer .info-icon .opened {
-        color: #000;
-    }
-    .snippetDateRangeContainer .info-icon:hover {
-        cursor: pointer;
-        color: #a5a09e;
-    }
-    .snippetDateRangeContainer .info-text {
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 10px;
-        padding: 15px 10px;
-    }
-    .snippetDateRangeContainer .bottom {
-        clear: left;
-        width: 100%;
     }
     .snippetDateRangeContainer .left {
         float: left;

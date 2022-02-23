@@ -88,29 +88,6 @@ describe("src/modules/tools/generalFilter/components/SnippetDate.vue", () => {
             expect(wrapper.find(".snippetDateLabel").exists()).to.be.false;
             wrapper.destroy();
         });
-        it("should render the info span", () => {
-            const wrapper = shallowMount(SnippetDate, {
-                propsData: {
-                    info: "this is an info text"
-                },
-                localVue
-            });
-
-            expect(wrapper.find(".info-text").exists()).to.be.true;
-            expect(wrapper.find(".info-text span").element.innerHTML).to.be.equal("this is an info text");
-            wrapper.destroy();
-        });
-        it("should not render the info button if info is a boolean and false", () => {
-            const wrapper = shallowMount(SnippetDate, {
-                propsData: {
-                    info: false
-                },
-                localVue
-            });
-
-            expect(wrapper.find(".info-icon").exists()).to.be.false;
-            wrapper.destroy();
-        });
         it("should set both minimumValue and maximumValue from properties if given", async () => {
             const wrapper = await shallowMount(SnippetDate, {
                 propsData: {
