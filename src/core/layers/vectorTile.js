@@ -23,7 +23,7 @@ export default function VectorTileLayer (attrs) {
             useProxy: false
         },
         mapEPSG = store.getters["Map/projection"].getCode(),
-        vtEPSG = attrs.epsg;
+        vtEPSG = attrs.epsg || mapEPSG;
 
     if (mapEPSG !== vtEPSG) {
         console.warn(`VT Layer ${attrs.name}: Map (${mapEPSG}) and layer (${vtEPSG}) projection mismatch. View will be erroneous.`);
