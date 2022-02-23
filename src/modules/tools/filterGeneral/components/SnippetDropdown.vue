@@ -237,6 +237,10 @@ export default {
                 this.disable = false;
             });
         }
+
+        if (this.visible && Array.isArray(this.prechecked) && this.prechecked.length) {
+            this.emitCurrentRule(this.prechecked, true);
+        }
     },
     mounted () {
         if (this.renderIcons === "fromLegend") {
@@ -252,6 +256,8 @@ export default {
         else if (isObject(this.renderIcons)) {
             this.iconList = this.renderIcons;
         }
+
+        this.$emit("setSnippetPrechecked", this.visible && Array.isArray(this.prechecked) && this.prechecked.length);
     },
     methods: {
         translateKeyWithPlausibilityCheck,

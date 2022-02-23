@@ -95,6 +95,12 @@ export default {
         this.$nextTick(() => {
             this.isInitializing = false;
         });
+        if (this.visible && this.prechecked) {
+            this.emitCurrentRule(this.prechecked, true);
+        }
+    },
+    mounted () {
+        this.$emit("setSnippetPrechecked", this.visible && this.prechecked);
     },
     methods: {
         translateKeyWithPlausibilityCheck,

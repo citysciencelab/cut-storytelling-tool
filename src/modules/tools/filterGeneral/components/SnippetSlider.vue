@@ -167,9 +167,12 @@ export default {
                 this.disable = false;
             });
         }
-        if (typeof this.prechecked !== "undefined") {
-            this.isInitializing = false;
+        if (this.visible && typeof this.prechecked !== "undefined") {
+            this.emitCurrentRule(this.prechecked, true);
         }
+    },
+    mounted () {
+        this.$emit("setSnippetPrechecked", this.visible && typeof this.prechecked !== "undefined");
     },
     methods: {
         translateKeyWithPlausibilityCheck,

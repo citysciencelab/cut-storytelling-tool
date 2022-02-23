@@ -67,7 +67,8 @@ export default {
             searchInMapExtent: false,
             snippets: [],
             postSnippetKey: "",
-            amountOfFilteredItems: false
+            amountOfFilteredItems: false,
+            precheckedSnippets: []
         };
     },
     computed: {
@@ -90,6 +91,21 @@ export default {
                     this.mapHandler.zoomToFilteredFeature(this.layerConfig?.filterId, this.minScale, error => {
                         console.warn("map error", error);
                     });
+                }
+            }
+        },
+        precheckedSnippets (val) {
+            if (this.isStrategyActive() && val.length === this.layerConfig?.snippets.length) {
+                const snippetIds = [];
+
+                val.forEach((v, index) => {
+                    if (v) {
+                        snippetIds.push(index);
+                    }
+                });
+
+                if (snippetIds.length) {
+                    this.handleActiveStrategy(snippetIds);
                 }
             }
         }
@@ -330,17 +346,17 @@ export default {
         },
         /**
          * Handles the active strategy.
-         * @param {Object} rule the rule to use
+         * @param {Number|Number[]} snippetId the snippet Id(s)
          * @returns {void}
          */
-        handleActiveStrategy (rule) {
-            this.filter(rule.snippetId, filterAnswer => {
+        handleActiveStrategy (snippetId) {
+            this.filter(snippetId, filterAnswer => {
                 const adjustments = getSnippetAdjustments(this.layerConfig.snippets, filterAnswer?.items, filterAnswer?.paging?.page, filterAnswer?.paging?.total),
                     start = typeof adjustments?.start === "boolean" ? adjustments.start : false,
                     finish = typeof adjustments?.finish === "boolean" ? adjustments.finish : false;
 
                 this.layerConfig.snippets.forEach(snippet => {
-                    if (filterAnswer?.snippetId === snippet.snippetId) {
+                    if (filterAnswer?.snippetId === snippet.snippetId || Array.isArray(filterAnswer?.snippetId) && filterAnswer?.snippetId.includes(snippet.snippetId)) {
                         return;
                     }
                     snippet.adjustment = {
@@ -352,6 +368,14 @@ export default {
             });
         },
         /**
+         * Pushing the value if there are prechecked value in snippet
+         * @param {Boolean} value true/false for prechecked value
+         * @returns {void}
+         */
+        setSnippetPrechecked (value) {
+            this.precheckedSnippets.push(value);
+        },
+        /**
          * Triggered when a rule changed at a snippet.
          * @param {Object} rule the rule to set
          * @returns {void}
@@ -361,7 +385,7 @@ export default {
                 this.$set(this.rules, rule.snippetId, rule);
                 if (!rule.startup && this.isStrategyActive()) {
                     this.$nextTick(() => {
-                        this.handleActiveStrategy(rule);
+                        this.handleActiveStrategy(rule.snippetId);
                     });
                 }
             }
@@ -375,7 +399,7 @@ export default {
             this.$set(this.rules, snippetId, false);
             if (this.isStrategyActive()) {
                 this.$nextTick(() => {
-                    this.handleActiveStrategy(this.rules[snippetId]);
+                    this.handleActiveStrategy(snippetId);
                 });
             }
         },
@@ -474,7 +498,7 @@ export default {
         },
         /**
          * Filters the layer with the current snippet rules.
-         * @param {Number} [snippetId=false] the id of the snippet that triggered the filtering
+         * @param {Number|Number[]} [snippetId=false] the id(s) of the snippet that triggered the filtering
          * @param {Function} [onsuccess=false] a function to call on success
          * @returns {void}
          */
@@ -482,7 +506,7 @@ export default {
             const filterId = this.layerConfig.filterId,
                 filterQuestion = {
                     filterId,
-                    snippetId: typeof snippetId === "number" ? snippetId : false,
+                    snippetId: typeof snippetId === "number" || Array.isArray(snippetId) ? snippetId : false,
                     commands: {
                         paging: this.layerConfig?.paging ? this.layerConfig.paging : 1000,
                         searchInMapExtent: this.getSearchInMapExtent()
@@ -618,6 +642,7 @@ export default {
                     :visible="snippet.visible"
                     @changeRule="changeRule"
                     @deleteRule="deleteRule"
+                    @setSnippetPrechecked="setSnippetPrechecked"
                 />
             </div>
             <div
@@ -646,6 +671,7 @@ export default {
                     :visible="snippet.visible"
                     @changeRule="changeRule"
                     @deleteRule="deleteRule"
+                    @setSnippetPrechecked="setSnippetPrechecked"
                 />
             </div>
             <div
@@ -665,6 +691,7 @@ export default {
                     :visible="snippet.visible"
                     @changeRule="changeRule"
                     @deleteRule="deleteRule"
+                    @setSnippetPrechecked="setSnippetPrechecked"
                 />
             </div>
             <div
@@ -688,6 +715,7 @@ export default {
                     :visible="snippet.visible"
                     @changeRule="changeRule"
                     @deleteRule="deleteRule"
+                    @setSnippetPrechecked="setSnippetPrechecked"
                 />
             </div>
             <div
@@ -711,6 +739,7 @@ export default {
                     :visible="snippet.visible"
                     @changeRule="changeRule"
                     @deleteRule="deleteRule"
+                    @setSnippetPrechecked="setSnippetPrechecked"
                 />
             </div>
             <div
@@ -734,6 +763,7 @@ export default {
                     :visible="snippet.visible"
                     @changeRule="changeRule"
                     @deleteRule="deleteRule"
+                    @setSnippetPrechecked="setSnippetPrechecked"
                 />
             </div>
             <div
@@ -757,6 +787,7 @@ export default {
                     :visible="snippet.visible"
                     @changeRule="changeRule"
                     @deleteRule="deleteRule"
+                    @setSnippetPrechecked="setSnippetPrechecked"
                 />
             </div>
         </div>

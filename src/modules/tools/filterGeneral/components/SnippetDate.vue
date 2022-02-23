@@ -204,9 +204,12 @@ export default {
                 this.disable = false;
             });
         }
-        if (this.precheckedIsValid) {
-            this.isInitializing = false;
+        if (this.visible && this.precheckedIsValid) {
+            this.emitCurrentRule(this.prechecked, true);
         }
+    },
+    mounted () {
+        this.$emit("setSnippetPrechecked", this.visible && this.precheckedIsValid);
     },
     methods: {
         translateKeyWithPlausibilityCheck,

@@ -177,9 +177,12 @@ export default {
                 this.disable = false;
             });
         }
-        if (Array.isArray(this.prechecked) && this.prechecked.length === 2) {
-            this.isInitializing = false;
+        if (this.visible && Array.isArray(this.prechecked) && this.prechecked.length === 2) {
+            this.emitCurrentRule(this.prechecked, true);
         }
+    },
+    mounted () {
+        this.$emit("setSnippetPrechecked", this.visible && Array.isArray(this.prechecked) && this.prechecked.length === 2);
     },
     methods: {
         translateKeyWithPlausibilityCheck,
