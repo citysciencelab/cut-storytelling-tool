@@ -294,12 +294,9 @@ export default {
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
     $color_1: gray;
-$color_2: black;
-$color_3: #777;
-$color_4: rgb(85, 85, 85);
-$background_color_1: rgb(255, 255, 255);
+    $color_2: black;
 
-/***** Destop *****/
+/***** Desktop *****/
 /***** Mobil *****/
 .featurelist-list-table-th {
     cursor: pointer;
@@ -342,6 +339,9 @@ $background_color_1: rgb(255, 255, 255);
         color: blue;
         text-decoration: underline;
     }
+    p {
+        color: $color_2;
+    }
 }
 .featurelist-details-ul {
     max-height: 400px;
@@ -374,97 +374,11 @@ $background_color_1: rgb(255, 255, 255);
 .featurelist-themes {
     width: 100%;
 }
-.featurelist-win {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    min-width: 25%;
-    margin: 60px 10px 30px 10px;
-    display: none;
-    background-color: $background_color_1;
-    >.featurelist-win-header {
-        color: $color_3;
-        cursor: move;
-    }
-    >.featurelist-win-content {
-        overflow-y: auto;
-        padding: 5px;
-    }
-}
-.featurelist-win-header {
-    padding-left: 10px;
-    border-bottom: 1px solid rgb(229, 229, 229);
-    >.title {
-        white-space: nowrap;
-        min-width: 250px;
-        cursor: move;
-        font-size: 14px;
-        padding-top: 8px;
-        padding-bottom: 5px;
-        color: $color_4;
-    }
-    >.buttons {
-        color: $color_4;
-        font-size: 14px;
-        >span {
-            padding: 8px 3px;
-            &:hover {
-                &:not(.win-icon) {
-                    opacity: 0.7;
-                    cursor: pointer;
-                }
-            }
-        }
-    }
-}
-.featurelist-win-content {
-    >.panel-group {
-        padding: 12px;
-        margin-bottom: 0;
-        .panel {
-            margin-top: 8px;
-        }
-    }
-}
-.featurelist-heading {
-    padding: 8px;
-    >.featurelist-title {
-        font-size: 12px;
-    }
-}
-.featurelistModal {
-    background-color: $background_color_1;
-    color: $color_4;
-    border-bottom: 1px solid rgb(229, 229, 229);
-    padding: 10px;
-    >button {
-        padding: 4px 0px;
-    }
-    >h4 {
-        >span {
-            padding: 0 8px;
-        }
-    }
-}
-    .panel-heading {
-        background: #f5f5f5;
-        color: #333333;
-        cursor: default;
-        border-left: 1px solid #ddd;
-        border-right: 1px solid #ddd;
-    }
-.tdfeaturelist {
-    padding: 3px;
-    >img {
-        max-height: 35px;
-    }
-}
-.panel-featurelist {
-    overflow-x: scroll;
-    max-height: 300px;
-    padding: 8px;
-    >p {
-        margin: 0;
-    }
+.panel-heading {
+    background: #f5f5f5;
+    color: #333333;
+    cursor: default;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
 }
 </style>

@@ -44,7 +44,9 @@ const getters = {
                     ? Object.keys(it.getProperties()).map(prop => [prop, prop])
                     : Object.entries(keys);
                 keys.forEach(([key, value]) => {
-                    acc[key] = value;
+                    if (!Config.ignoredKeys.includes(key.toUpperCase())) {
+                        acc[key] = value;
+                    }
                 });
                 return acc;
             }, {})).map(([key, value]) => ({key, value}));
