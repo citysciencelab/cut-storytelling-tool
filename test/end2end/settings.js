@@ -172,7 +172,7 @@ function getCapabilities () {
             "browserVersion": "latest",
             "platformName": "Windows 10"
         }
-         /*,
+        /* ,
         {
             ...baseSaucelabs,
             "browserName": "firefox",
