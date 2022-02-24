@@ -35,7 +35,7 @@ describe("src/modules/tools/featureLister/components/FeatureLister.vue", () => {
         wrapper;
 
     beforeEach(() => {
-        FeatureLister.actions.switchTabTo = sinon.spy();
+        FeatureLister.actions.switchTabTo = sinon.spy(FeatureLister.actions.switchTabTo);
         FeatureLister.actions.addMouseEvents = sinon.spy();
         FeatureLister.getters.headers = () => [{key: "name", value: "Name"}];
 
@@ -58,6 +58,8 @@ describe("src/modules/tools/featureLister/components/FeatureLister.vue", () => {
             }
         });
     });
+
+    afterEach(sinon.restore);
 
     it("renders list of visible vector layers", () => {
 
