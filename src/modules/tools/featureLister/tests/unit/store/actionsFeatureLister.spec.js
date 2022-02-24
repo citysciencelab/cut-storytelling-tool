@@ -5,6 +5,18 @@ import actions from "../../../store/actionsFeatureLister";
 describe("tools/featureLister/store/actionsFeatureLister", () => {
     let commit, dispatch;
 
+    document.body.innerHTML =
+        "<div id=\"parent\">" +
+        "   <div id=\"featureLister\">" +
+        "       <p id=\"featurelistFeaturelist\" >Hello</p>" +
+        "   </div id=\"featureLister\">" +
+        "   <ul class=\"featurelist-navtabs\">" +
+        "       <li id=\"featurelistThemeChooser\" >Hello</li>" +
+        "       <li id=\"featurelistFeaturelist\" >Hello</li>" +
+        "       <li id=\"featurelistFeaturedetails\" >Hello</li>" +
+        "   </ul class=\"featurelist-navtabs\">" +
+        "</div id=\"parent\">";
+
     beforeEach(() => {
         commit = sinon.spy();
         dispatch = sinon.spy();
@@ -33,12 +45,6 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
     });
 
     describe("switchTabTo", () => {
-        document.body.innerHTML =
-            "<ul class=\"featurelist-navtabs\">" +
-            "  <li id=\"featurelistThemeChooser\" >Hello</li>" +
-            "  <li id=\"featurelistFeaturelist\" >Hello</li>" +
-            "  <li id=\"featurelistFeaturedetails\" >Hello</li>" +
-            "</ul class=\"featurelist-navtabs\">";
         it("switches the tabs", () => {
             const payload = {tabId: "featurelistFeaturelist", disableOthers: false};
 
@@ -84,6 +90,14 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
             expect(dispatch.firstCall.args[1]).to.equal("3");
         });
     });
+
+    // describe("addMouseEvents", () => {
+    //     it("adds the eventListeners for clicking and hovering features", () => {
+
+    //         actions.addMouseEvents({dispatch});
+    //         expect(dispatch.firstCall.args[0]).to.equal("clickOnFeature");
+    //     });
+    // });
 
     describe("highlightFeature", () => {
         const state = {
