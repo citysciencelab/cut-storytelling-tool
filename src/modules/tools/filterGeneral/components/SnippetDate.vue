@@ -2,9 +2,13 @@
 import isObject from "../../../../utils/isObject";
 import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
 import moment from "moment";
+import SnippetInfo from "./SnippetInfo.vue";
 
 export default {
     name: "SnippetDate",
+    components: {
+        SnippetInfo
+    },
     props: {
         api: {
             type: Object,
@@ -80,9 +84,9 @@ export default {
             isAdjusting: false,
             minimumValue: "",
             maximumValue: "",
-            showInfo: false,
             value: "",
-            precheckedIsValid: false
+            precheckedIsValid: false,
+            translationKey: "snippetDate"
         };
     },
     computed: {
@@ -92,15 +96,6 @@ export default {
             }
             else if (typeof this.label === "string") {
                 return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
-            }
-            return "";
-        },
-        infoText () {
-            if (this.info === true) {
-                return this.$t("common:modules.tools.filterGeneral.info.snippetDate");
-            }
-            else if (typeof this.info === "string") {
-                return this.translateKeyWithPlausibilityCheck(this.info, key => this.$t(key));
             }
             return "";
         },
@@ -256,13 +251,6 @@ export default {
             });
         },
         /**
-         * Toggles the info.
-         * @returns {void}
-         */
-        toggleInfo () {
-            this.showInfo = !this.showInfo;
-        },
-        /**
          * Triggered once when changes are made at the date picker to avoid set of rules during changes.
          * @returns {void}
          */
@@ -295,16 +283,13 @@ export default {
         class="snippetDateContainer"
     >
         <div
-            v-if="info !== false"
+            v-if="info"
             class="right"
         >
-            <div class="info-icon">
-                <span
-                    :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
-                    @click="toggleInfo()"
-                    @keydown.enter="toggleInfo()"
-                >&nbsp;</span>
-            </div>
+            <SnippetInfo
+                :info="info"
+                :translation-key="translationKey"
+            />
         </div>
         <div class="input-container">
             <label
@@ -326,14 +311,6 @@ export default {
                 @keyup.enter="endDateChange()"
             >
         </div>
-        <div
-            v-show="showInfo"
-            class="bottom"
-        >
-            <div class="info-text">
-                <span>{{ infoText }}</span>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -353,28 +330,6 @@ export default {
         position: relative;
         margin-bottom: 5px;
         height: 34px;
-    }
-    .snippetDateContainer .info-icon {
-        float: right;
-        font-size: 16px;
-        color: #ddd;
-    }
-    .snippetDateContainer .info-icon .opened {
-        color: #000;
-    }
-    .snippetDateContainer .info-icon:hover {
-        cursor: pointer;
-        color: #a5a09e;
-    }
-    .snippetDateContainer .info-text {
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 10px;
-        padding: 15px 10px;
-    }
-    .snippetDateContainer .bottom {
-        clear: left;
-        width: 100%;
     }
     .snippetDateContainer .left {
         float: left;

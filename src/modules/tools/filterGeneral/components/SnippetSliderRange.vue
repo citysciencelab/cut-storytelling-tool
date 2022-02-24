@@ -1,9 +1,13 @@
 <script>
 import isObject from "../../../../utils/isObject";
 import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
+import SnippetInfo from "./SnippetInfo.vue";
 
 export default {
     name: "SnippetSliderRange",
+    components: {
+        SnippetInfo
+    },
     props: {
         api: {
             type: Object,
@@ -78,8 +82,8 @@ export default {
             isAdjusting: false,
             minimumValue: 0,
             maximumValue: 100,
-            showInfo: false,
-            value: [0, 100]
+            value: [0, 100],
+            translationKey: "snippetSliderRange"
         };
     },
     computed: {
@@ -89,15 +93,6 @@ export default {
             }
             else if (typeof this.label === "string") {
                 return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
-            }
-            return "";
-        },
-        infoText () {
-            if (this.info === true) {
-                return this.$t("common:modules.tools.filterGeneral.info.snippetSliderRange");
-            }
-            else if (typeof this.info === "string") {
-                return this.translateKeyWithPlausibilityCheck(this.info, key => this.$t(key));
             }
             return "";
         },
@@ -229,13 +224,6 @@ export default {
             });
         },
         /**
-         * Toggles the info.
-         * @returns {void}
-         */
-        toggleInfo () {
-            this.showInfo = !this.showInfo;
-        },
-        /**
          * Returns the steps the slider will make over the number range.
          * @param {Number} decimalPlaces the amount of decimal places
          * @returns {Number} the steps
@@ -284,16 +272,13 @@ export default {
                 >{{ labelText }}</label>
             </div>
             <div
-                v-if="info !== false"
+                v-if="info"
                 class="right"
             >
-                <div class="info-icon">
-                    <span
-                        :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
-                        @click="toggleInfo()"
-                        @keydown.enter="toggleInfo()"
-                    >&nbsp;</span>
-                </div>
+                <SnippetInfo
+                    :info="info"
+                    :translation-key="translationKey"
+                />
             </div>
         </div>
         <div class="sliderRangeWrapper">
@@ -377,14 +362,6 @@ export default {
                 </div>
             </div>
         </div>
-        <div
-            v-show="showInfo"
-            class="bottom"
-        >
-            <div class="info-text">
-                <span>{{ infoText }}</span>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -395,30 +372,6 @@ export default {
     }
     .sliderInputWrapper {
         height: 20px;
-    }
-    .info-icon {
-        float: right;
-        font-size: 16px;
-        color: #ddd;
-    }
-    .info-icon .opened {
-        color: #000;
-    }
-    .info-icon:hover {
-        cursor: pointer;
-        color: #a5a09e;
-    }
-    .info-text {
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 10px;
-        padding: 15px 10px;
-        margin-top: 15px;
-    }
-    .bottom {
-        clear: left;
-        width: 100%;
-        padding: 0 5px;
     }
     .sliderInputWrapper .left {
         float: left;
