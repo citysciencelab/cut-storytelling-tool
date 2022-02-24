@@ -337,7 +337,7 @@ export default {
     }
     .snippetDateContainer .right {
         position: absolute;
-        right: -33px;
+        right: 0;
     }
     label {
         text-transform: capitalize;

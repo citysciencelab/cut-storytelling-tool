@@ -364,7 +364,7 @@ export default {
     }
     .snippetSliderContainer .right {
         position: absolute;
-        right: -33px;
+        right: 0;
     }
     input[type="number"] {
         text-align: center;

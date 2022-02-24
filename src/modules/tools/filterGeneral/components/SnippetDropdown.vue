@@ -606,11 +606,14 @@ export default {
     }
     .snippetDropdownContainer .table-responsive .right {
         position: absolute;
-        right: -33px;
+        right: 0;
     }
-    .panel .snippetDropdownContainer .right,  .snippetDropdownContainer .right{
+    .snippetDropdownContainer .table-responsive a {
+        margin-right: 20px;
+    }
+    .panel .snippetDropdownContainer .right,  .snippetDropdownContainer .right {
         position: absolute;
-        right: -33px;
+        right: 0;
     }
     .category-layer .panel .right {
         right: 30px;
