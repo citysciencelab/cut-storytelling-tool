@@ -5,7 +5,6 @@
 
 ## Known Issues
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
-- WMS-T: Behaviour is undefined on using multiple configured WMS-T.
 
 ---
 ## Unreleased - in development
@@ -55,6 +54,7 @@
 - Issue #685:
   - WMS-T now works with all ISO 8601 timestamps (i.e. "2022", "2022-01-26T00:00:00.000Z", and all precision grades in between) as specified by OGC.
   - WMS-T now dynamically finds a layer's Extent/Dimension in GetCapabilities Response (position was hard-wired previously).
+  - WMS-T are now mutually exclusive.
 - Tool Routing: Exported routes now inherit the style from route view.
 - Folder expand/collapse works in background maps, if treetype is 'custom'.
 - Issue #637, Issue #656: If background maps are configured in folder structures, then when such a background map is activated, no more subject data are overlaid.
