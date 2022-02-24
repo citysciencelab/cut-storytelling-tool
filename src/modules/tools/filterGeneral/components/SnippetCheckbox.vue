@@ -184,7 +184,10 @@ export default {
         height: auto;
     }
     .snippetCheckboxContainer .left {
-        float: left;
+        input[type=radio], input[type=checkbox] {
+            margin: 0 5px 0 0;
+        }
+        /*float: left;*/
         input {
             float: left;
             width: 15px;
@@ -192,15 +195,13 @@ export default {
         }
         label {
             float: left;
-            width: calc(100% - 20px);
-            margin-bottom: 0;
+            /*margin-bottom: 0;*/
             cursor: pointer;
         }
     }
     .snippetCheckboxContainer .right {
-        float: right;
         position: absolute;
-        right: -33px;
+        right: 0px;
     }
     .category-layer .right {
         right: 30px;

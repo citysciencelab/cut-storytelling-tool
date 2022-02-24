@@ -216,7 +216,7 @@ export default {
     }
     .snippetInputContainer .right {
         position: absolute;
-        right: -33px;
+        right: 0;
     }
     .category-layer .right {
         right: 30px;
