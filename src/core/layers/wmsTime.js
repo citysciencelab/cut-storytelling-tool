@@ -298,13 +298,13 @@ WMSTimeLayer.prototype.getIncrementsFromResolution = function (resolution) {
  */
 WMSTimeLayer.prototype.createTimeRange = function (min, max, increment) {
     const increments = Object.entries(increment),
-        start = moment(min),
-        end = moment(max),
+        start = moment.utc(min),
+        end = moment.utc(max),
         timeRange = [],
         format = detectIso8601Precision(min),
         suffix = min.endsWith("Z") ? "Z" : "";
 
-    while (start.valueOf() < end.valueOf()) {
+    while (start.valueOf() <= end.valueOf()) {
         timeRange.push(start.format(format) + suffix);
         increments.forEach(([units, difference]) => {
             start.add(Number(difference), units);

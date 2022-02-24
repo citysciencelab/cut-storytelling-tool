@@ -82,7 +82,7 @@ describe("src/core/layers/wmsTime.js", () => {
             step: {
                 years: "2"
             },
-            timeRange: ["2006", "2008", "2010", "2012", "2014", "2016"]
+            timeRange: ["2006", "2008", "2010", "2012", "2014", "2016", "2018"]
         });
     });
     it("createTimeRange - create an array with the time range", function () {
