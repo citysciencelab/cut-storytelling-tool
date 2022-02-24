@@ -1,4 +1,5 @@
 import isObject from "../../../../utils/isObject.js";
+import LayerGroup from "ol/layer/Group";
 
 /**
  * The MapHandler has control over OL and the Map.
@@ -68,6 +69,21 @@ export default class MapHandler {
             this.handlers.addLayerByLayerId(layerId);
         }
         layerModel = this.handlers.getLayerByLayerId(layerId);
+
+        if (layerModel?.layer instanceof LayerGroup) {
+            const layerSource = layerModel.get("layerSource"),
+                isVisible = layerModel.get("visible") || layerModel.get("isSelected"),
+                isVisibleInMap = layerModel.get("isVisibleInMap");
+
+            layerSource.forEach(layer => {
+                if (layer.id === layerId) {
+                    layerModel = layer;
+                }
+            });
+
+            layerModel.set("isVisible", isVisible);
+            layerModel.set("isVisibleInMap", isVisibleInMap);
+        }
 
         if (!layerModel) {
             onerror(new Error("mapHandler - initializeInternalLayer: Please check your filter configuration. The given layerId does not exist in your config.json. Configure an extra service object for your filter configuration or add the layer to your config.json."));
@@ -272,8 +288,8 @@ export default class MapHandler {
         const layerModel = this.getLayerModelByFilterId(filterId),
             filteredFeatureIds = this.getFilteredIdsByFilterId(filterId);
 
-        this.isZooming = true;
-        if (isObject(layerModel) && Array.isArray(filteredFeatureIds)) {
+        if (isObject(layerModel) && Array.isArray(filteredFeatureIds) && filteredFeatureIds.length) {
+            this.isZooming = true;
             this.handlers.liveZoom(minScale, filteredFeatureIds, layerModel.get("id"), () => {
                 this.isZooming = false;
             });

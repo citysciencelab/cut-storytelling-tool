@@ -583,7 +583,7 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
             map.layers.filterId = {
                 get: () => false
             };
-            map.filteredIds.filterId = [];
+            map.filteredIds.filterId = ["1", "2"];
 
             map.zoomToFilteredFeature("filterId", 0, onerror.call);
 

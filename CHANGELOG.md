@@ -29,6 +29,7 @@
 - The 3D tileset layer is refactored. It is no longer a Backbone-model.The tileset layer uses the masterportalAPI's tileset layer on creation.
 - Path updated in map and map3d because abstraction in masterportalAPI changed to maps and moved into src
 - Checking the allowed version for wfs layers has been moved to the masterportalAPI.
+- Migrated the parsing of `rest-services.json` from Backbone to Vue. Backbone components using RestReader are connected using RadioBridge.
 
 ### Deprecated
 
@@ -50,6 +51,10 @@
 - Issue #637, Issue #656: If background maps are configured in folder structures, then when such a background map is activated, no more subject data are overlaid.
 - Tool print: printing of the measurement result is fixed.
 - Tools Draw and File import: Exported and re-imported drawn circles are now editable with the expected behaviour.
+- Newsfeed:
+    - Alert now also works with portal calls with index.html and url parameter.
+    - News is now displayed in an iframe. If no third party cookies are allowed by the browser, no confirm is possible, because it is not allowed to store in localstorage.
+    - Added the possibility to scroll in the alert.
 
 ---
 
