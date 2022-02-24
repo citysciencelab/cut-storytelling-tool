@@ -6,14 +6,12 @@ import store from "../../app-store";
 import detectIso8601Precision from "../../utils/detectIso8601Precision";
 import WMSLayer from "./wms";
 
-const wmstRegister = [];
-
 /**
  * Creates a layer of type WMSTime.
  * @param {Object} attrs Attributes of the layer.
  * @returns {void}
- */
-export default function WMSTimeLayer (attrs) {
+ */export default function WMSTimeLayer (attrs) {
+
     const defaults = {
         keyboardMovement: 5,
         time: true
@@ -21,8 +19,6 @@ export default function WMSTimeLayer (attrs) {
 
     // call the super-layer
     WMSLayer.call(this, Object.assign(defaults, attrs));
-
-    wmstRegister.push(this);
 }
 
 // Link prototypes and add prototype methods, means WMSTimeLayer uses all methods and properties of WMSLayer
@@ -38,27 +34,6 @@ WMSTimeLayer.prototype.updateTime = function (id, newValue) {
     if (id === this.get("id")) {
         this.get("layerSource").updateParams({"TIME": newValue});
     }
-};
-
-/**
- * Setter for isVisibleInMap and setter for layer.setVisible.
- * Deactivates other WMS-T, since their display is mutually exclusive.
- * @param {Boolean} newValue Flag if layer is visible in map
- * @returns {void}
- */
-WMSTimeLayer.prototype.setIsVisibleInMap = function (newValue) {
-    if (newValue) {
-        wmstRegister.forEach(wmst => {
-            if (wmst !== this) {
-                const row = document.getElementById(`layer-list-group-item-${wmst.id}`);
-
-                if (row && row.classList.contains("checked")) {
-                    row.click();
-                }
-            }
-        });
-    }
-    WMSLayer.prototype.setIsVisibleInMap.call(this, newValue);
 };
 
 /**
