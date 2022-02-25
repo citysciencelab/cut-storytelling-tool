@@ -847,7 +847,7 @@
                         }
                     },
                     "preference": {
-                        "RECOMMENDED": "Schnellste Route",
+                        "RECOMMENDED": "Empfohlene Route",
                         "SHORTEST": "Kürzeste Route"
                     }
                 },

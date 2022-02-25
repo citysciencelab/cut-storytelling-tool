@@ -224,9 +224,12 @@ export default {
                 this.disable = false;
             });
         }
-        if (this.precheckedIsValid) {
-            this.isInitializing = false;
+        if (this.visible && this.precheckedIsValid) {
+            this.emitCurrentRule(this.prechecked, true);
         }
+    },
+    mounted () {
+        this.$emit("setSnippetPrechecked", this.visible && this.precheckedIsValid);
     },
     methods: {
         translateKeyWithPlausibilityCheck,
@@ -477,7 +480,7 @@ export default {
     }
     .snippetDateRangeContainer .right {
         position: absolute;
-        right: -33px;
+        right: 0;
     }
     input[type='range'] {
         width: 10.5rem;

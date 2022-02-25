@@ -94,6 +94,12 @@ export default {
         this.$nextTick(() => {
             this.isInitializing = false;
         });
+        if (this.visible && this.prechecked !== "") {
+            this.emitCurrentRule(this.prechecked, true);
+        }
+    },
+    mounted () {
+        this.$emit("setSnippetPrechecked", this.visible && this.prechecked !== "");
     },
     methods: {
         translateKeyWithPlausibilityCheck,
@@ -216,7 +222,7 @@ export default {
     }
     .snippetInputContainer .right {
         position: absolute;
-        right: -33px;
+        right: 0;
     }
     .category-layer .right {
         right: 30px;

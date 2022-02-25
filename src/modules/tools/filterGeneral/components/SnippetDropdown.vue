@@ -237,6 +237,10 @@ export default {
                 this.disable = false;
             });
         }
+
+        if (this.visible && Array.isArray(this.prechecked) && this.prechecked.length) {
+            this.emitCurrentRule(this.prechecked, true);
+        }
     },
     mounted () {
         if (this.renderIcons === "fromLegend") {
@@ -252,6 +256,8 @@ export default {
         else if (isObject(this.renderIcons)) {
             this.iconList = this.renderIcons;
         }
+
+        this.$emit("setSnippetPrechecked", this.visible && Array.isArray(this.prechecked) && this.prechecked.length);
     },
     methods: {
         translateKeyWithPlausibilityCheck,
@@ -606,11 +612,14 @@ export default {
     }
     .snippetDropdownContainer .table-responsive .right {
         position: absolute;
-        right: -33px;
+        right: 0;
     }
-    .panel .snippetDropdownContainer .right,  .snippetDropdownContainer .right{
+    .snippetDropdownContainer .table-responsive a {
+        margin-right: 20px;
+    }
+    .panel .snippetDropdownContainer .right,  .snippetDropdownContainer .right {
         position: absolute;
-        right: -33px;
+        right: 0;
     }
     .category-layer .panel .right {
         right: 30px;
