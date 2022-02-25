@@ -31,6 +31,7 @@
 - Checking the allowed version for wfs layers has been moved to the masterportalAPI.
 - Migrated the parsing of `rest-services.json` from Backbone to Vue. Backbone components using RestReader are connected using RadioBridge.
 - Routing tool: german translation of recommended route was corrected.
+- Migrated the tool featureLister from Backbone to Vue.
 
 ### Deprecated
 
