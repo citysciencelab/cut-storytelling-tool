@@ -91,14 +91,6 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
         });
     });
 
-    // describe("addMouseEvents", () => {
-    //     it("adds the eventListeners for clicking and hovering features", () => {
-
-    //         actions.addMouseEvents({dispatch});
-    //         expect(dispatch.firstCall.args[0]).to.equal("clickOnFeature");
-    //     });
-    // });
-
     describe("highlightFeature", () => {
         const state = {
             geometry: {getType: () => {

@@ -36,7 +36,7 @@ describe("src/modules/tools/featureLister/components/FeatureLister.vue", () => {
 
     beforeEach(() => {
         FeatureLister.actions.switchTabTo = sinon.spy(FeatureLister.actions.switchTabTo);
-        FeatureLister.actions.addMouseEvents = sinon.spy();
+        FeatureLister.actions.addMouseEvents = sinon.spy(FeatureLister.actions.addMouseEvents);
         FeatureLister.getters.headers = () => [{key: "name", value: "Name"}];
 
         store = new Vuex.Store({
