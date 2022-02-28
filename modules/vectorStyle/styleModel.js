@@ -545,11 +545,6 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             return this.compareValues(featureValue, referenceValue);
         }
 
-        // check if rule checks for boolean flag
-        if (typeof featureValue === "boolean" && typeof referenceValue === "boolean") {
-            return featureValue === referenceValue;
-        }
-
         return false;
     },
 
