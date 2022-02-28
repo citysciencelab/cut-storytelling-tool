@@ -52,7 +52,7 @@ export default {
             required: false,
             default: false
         },
-        label: {
+        title: {
             type: [String, Boolean],
             required: false,
             default: true
@@ -118,12 +118,12 @@ export default {
         };
     },
     computed: {
-        labelText () {
-            if (this.label === true) {
+        titleText () {
+            if (this.title === true) {
                 return this.attrName;
             }
-            else if (typeof this.label === "string") {
-                return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
+            else if (typeof this.title === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.title, key => this.$t(key));
             }
             return "";
         },
@@ -136,13 +136,13 @@ export default {
         dropdownValueComputed () {
             if (this.multiselect && this.addSelectAll) {
                 return [{
-                    selectAllLabel: this.selectAllLabel,
+                    selectAllTitle: this.selectAllTitle,
                     list: this.dropdownValue
                 }];
             }
             return this.dropdownValue;
         },
-        selectAllLabel () {
+        selectAllTitle () {
             return !this.allSelected ? this.$t("modules.tools.filterGeneral.dropdown.selectAll") : this.$t("modules.tools.filterGeneral.dropdown.deselectAll");
         }
     },
@@ -237,6 +237,10 @@ export default {
                 this.disable = false;
             });
         }
+
+        if (this.visible && Array.isArray(this.prechecked) && this.prechecked.length) {
+            this.emitCurrentRule(this.prechecked, true);
+        }
     },
     mounted () {
         if (this.renderIcons === "fromLegend") {
@@ -252,6 +256,8 @@ export default {
         else if (isObject(this.renderIcons)) {
             this.iconList = this.renderIcons;
         }
+
+        this.$emit("setSnippetPrechecked", this.visible && Array.isArray(this.prechecked) && this.prechecked.length);
     },
     methods: {
         translateKeyWithPlausibilityCheck,
@@ -272,11 +278,11 @@ export default {
             return Object.keys(this.iconList).length > 0;
         },
         /**
-         * Returns the label to use in the gui.
-         * @returns {String} the label to use
+         * Returns the title to use in the gui.
+         * @returns {String} the title to use
          */
-        getLabel () {
-            return this.label || this.attrName;
+        getTitle () {
+            return this.title || this.attrName;
         },
         /**
          * Emits the current rule to whoever is listening.
@@ -373,13 +379,13 @@ export default {
             class="snippetDefaultContainer"
         >
             <div
-                v-if="label !== false"
+                v-if="title !== false"
                 class="left"
             >
                 <label
                     class="select-box-label"
                     :for="'snippetSelectBox-' + snippetId"
-                >{{ labelText }}</label>
+                >{{ titleText }}</label>
             </div>
             <div class="select-box-container">
                 <Multiselect
@@ -398,7 +404,7 @@ export default {
                     :loading="disable"
                     :group-select="multiselect && addSelectAll"
                     :group-values="(multiselect && addSelectAll) ? 'list' : ''"
-                    :group-label="(multiselect && addSelectAll) ? 'selectAllLabel' : ''"
+                    :group-label="(multiselect && addSelectAll) ? 'selectAllTitle' : ''"
                 >
                     <span slot="noOptions">{{ emptyList }}</span>
                     <span slot="noResult">{{ noElements }}</span>
@@ -412,7 +418,7 @@ export default {
             <div class="table-responsive">
                 <table :class="['table table-sm table-hover table-bordered table-striped', info ? 'left': '']">
                     <thead
-                        v-if="label !== false"
+                        v-if="title !== false"
                     >
                         <tr>
                             <th
@@ -421,7 +427,7 @@ export default {
                                 <div
                                     class="pull-left"
                                 >
-                                    {{ labelText }}
+                                    {{ titleText }}
                                 </div>
                                 <div
                                     v-if="multiselect && addSelectAll"
@@ -432,7 +438,7 @@ export default {
                                         class="link-secondary"
                                         @click="!allSelected ? selectAll() : deselectAll()"
                                     >
-                                        {{ selectAllLabel }}
+                                        {{ selectAllTitle }}
                                     </a>
                                 </div>
                             </th>
@@ -458,13 +464,10 @@ export default {
                                 </label>
                             </td>
                             <td>
-                                <label
-                                    for="'snippetRadioCheckbox-' + snippetId + '-' + val"
-                                    class="hidden"
-                                />
                                 <input
                                     :id="'snippetRadioCheckbox-' + snippetId + '-' + val"
                                     v-model="dropdownSelected"
+                                    :aria-label="'snippetRadioCheckbox-' + snippetId + '-' + val"
                                     :class="multiselect ? 'checkbox': 'radio'"
                                     :type="multiselect ? 'checkbox': 'radio'"
                                     :value="val"
@@ -606,11 +609,14 @@ export default {
     }
     .snippetDropdownContainer .table-responsive .right {
         position: absolute;
-        right: -33px;
+        right: 0;
     }
-    .panel .snippetDropdownContainer .right,  .snippetDropdownContainer .right{
+    .snippetDropdownContainer .table-responsive a {
+        margin-right: 20px;
+    }
+    .panel .snippetDropdownContainer .right,  .snippetDropdownContainer .right {
         position: absolute;
-        right: -33px;
+        right: 0;
     }
     .category-layer .panel .right {
         right: 30px;

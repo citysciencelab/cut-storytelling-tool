@@ -52,7 +52,7 @@ export default {
                 :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
                 @click="toggleInfo()"
                 @keydown.enter="toggleInfo()"
-            >&nbsp;</span>
+            />
         </div>
         <div
             v-show="showInfo"
@@ -77,10 +77,10 @@ export default {
     .info-icon {
         float: right;
         font-size: 16px;
-        color: #ddd;
+        color: #525252;
     }
     .info-icon .opened {
-        color: #000;
+        color: #08589e;
     }
     .info-icon:hover {
         cursor: pointer;

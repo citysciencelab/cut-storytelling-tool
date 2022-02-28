@@ -39,7 +39,7 @@ export default {
             required: false,
             default: false
         },
-        label: {
+        title: {
             type: [String, Boolean],
             required: false,
             default: true
@@ -87,12 +87,12 @@ export default {
         };
     },
     computed: {
-        labelText () {
-            if (this.label === true) {
+        titleText () {
+            if (this.title === true) {
                 return this.attrName;
             }
-            else if (typeof this.label === "string") {
-                return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
+            else if (typeof this.title === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.title, key => this.$t(key));
             }
             return "";
         },
@@ -167,9 +167,12 @@ export default {
                 this.disable = false;
             });
         }
-        if (typeof this.prechecked !== "undefined") {
-            this.isInitializing = false;
+        if (this.visible && typeof this.prechecked !== "undefined") {
+            this.emitCurrentRule(this.prechecked, true);
         }
+    },
+    mounted () {
+        this.$emit("setSnippetPrechecked", this.visible && typeof this.prechecked !== "undefined");
     },
     methods: {
         translateKeyWithPlausibilityCheck,
@@ -305,10 +308,10 @@ export default {
             />
         </div>
         <label
-            v-if="label !== false"
+            v-if="title !== false"
             :for="'snippetSlider-' + snippetId"
             class="snippetSliderLabel left"
-        >{{ labelText }}</label>
+        >{{ titleText }}</label>
         <input
             :id="'snippetSlider-' + snippetId"
             ref="inputNumber"
@@ -317,7 +320,7 @@ export default {
             type="number"
             :min="minimumValue"
             :max="maximumValue"
-            :name="label"
+            :name="title"
             :disabled="disable"
             @focus="startSliderChange()"
             @blur="endSliderChange"
@@ -364,7 +367,7 @@ export default {
     }
     .snippetSliderContainer .right {
         position: absolute;
-        right: -33px;
+        right: 0;
     }
     input[type="number"] {
         text-align: center;

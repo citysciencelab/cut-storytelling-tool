@@ -28,7 +28,7 @@ export default {
             required: false,
             default: false
         },
-        label: {
+        title: {
             type: [String, Boolean],
             required: false,
             default: true
@@ -69,12 +69,12 @@ export default {
         };
     },
     computed: {
-        labelText () {
-            if (this.label === true) {
+        titleText () {
+            if (this.title === true) {
                 return this.attrName;
             }
-            else if (typeof this.label === "string") {
-                return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
+            else if (typeof this.title === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.title, key => this.$t(key));
             }
             return "";
         }
@@ -95,6 +95,12 @@ export default {
         this.$nextTick(() => {
             this.isInitializing = false;
         });
+        if (this.visible && this.prechecked) {
+            this.emitCurrentRule(this.prechecked, true);
+        }
+    },
+    mounted () {
+        this.$emit("setSnippetPrechecked", this.visible && this.prechecked);
     },
     methods: {
         translateKeyWithPlausibilityCheck,
@@ -161,10 +167,10 @@ export default {
                 :disabled="disabled"
             >
             <label
-                v-if="label !== false"
+                v-if="title !== false"
                 :for="'snippetCheckbox-' + snippetId"
                 class="snippetCheckboxLabel"
-            >{{ labelText }}</label>
+            >{{ titleText }}</label>
         </div>
         <div
             v-if="info"
@@ -184,7 +190,10 @@ export default {
         height: auto;
     }
     .snippetCheckboxContainer .left {
-        float: left;
+        input[type=radio], input[type=checkbox] {
+            margin: 0 5px 0 0;
+        }
+        /*float: left;*/
         input {
             float: left;
             width: 15px;
@@ -192,15 +201,13 @@ export default {
         }
         label {
             float: left;
-            width: calc(100% - 20px);
-            margin-bottom: 0;
+            /*margin-bottom: 0;*/
             cursor: pointer;
         }
     }
     .snippetCheckboxContainer .right {
-        float: right;
         position: absolute;
-        right: -33px;
+        right: 0px;
     }
     .category-layer .right {
         right: 30px;
