@@ -5,12 +5,17 @@
 
 ## Known Issues
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
+- WMS-T: Behaviour is undefined on using multiple configured WMS-T.
 
 ---
 ## Unreleased - in development
 ### Added
 - The gazetteer search function now supports changing the namespace by configuration.
 - Issue #690: Documentation for the menu item `ansichten` (map view points) has been added.
+- Issue #685:
+  - Dimension/Extent name to use can now be overridden (default is `"time"`).
+  - The Extent.default value `"current"` can now be interpreted.
+  - The time field of WMS requests is now filled with ISO 8601 timestamps of same precision as Extent specification.
 - It is now possible to configure a loading strategy for a wfs layer (default is bbox).
 
 ### Changed
@@ -23,6 +28,7 @@
 - The version of node was updated, must be >= 16.13.2 < 17.
   The version of npm  was also updated, must be >= 8.1.2 < 9. (The node and npm versions are still mandatory via .npmrc.).
 - Migrated the module 3D TerrainLayer from Backbone to Vue. The TerrainLayer uses the masterportalAPI's terrain layer on creation.
+- Issue #685: Changes WMS-T TimeSlider layout to accomodate larger timestamps.
 - Outsourced drawTypeOptions from constantsDraw.js into its own file
 - The vectorTile Layer is now refactored to src/core.
 - The 3D terrain layer is refactored. It is no longer a Backbone-model.The terrain layer uses the masterportalAPI's terrain layer on creation.
@@ -47,6 +53,9 @@
 - The GFI is now always shown as selected in the menu when it is enabled.
 - Issue #689: `layerSlider` in Handle mode, the layer is now also displayed at the end of the bar.
 - A few translation errors were adjusted in config.json.md and config.json.en.md.
+- Issue #685:
+  - WMS-T now works with all ISO 8601 timestamps (i.e. "2022", "2022-01-26T00:00:00.000Z", and all precision grades in between) as specified by OGC.
+  - WMS-T now dynamically finds a layer's Extent/Dimension in GetCapabilities Response (position was hard-wired previously).
 - Tool Routing: Exported routes now inherit the style from route view.
 - Folder expand/collapse works in background maps, if treetype is 'custom'.
 - Issue #637, Issue #656: If background maps are configured in folder structures, then when such a background map is activated, no more subject data are overlaid.
