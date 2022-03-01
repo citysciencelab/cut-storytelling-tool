@@ -60,6 +60,7 @@
 - Folder expand/collapse works in background maps, if treetype is 'custom'.
 - Issue #637, Issue #656: If background maps are configured in folder structures, then when such a background map is activated, no more subject data are overlaid.
 - Tool print: printing of the measurement result is fixed.
+- Tools Draw and File import: Exported and re-imported drawn circles are now editable with the expected behaviour.
 - Newsfeed:
     - Alert now also works with portal calls with index.html and url parameter.
     - News is now displayed in an iframe. If no third party cookies are allowed by the browser, no confirm is possible, because it is not allowed to store in localstorage.
