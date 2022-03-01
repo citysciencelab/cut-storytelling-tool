@@ -39,7 +39,7 @@ export default {
             required: false,
             default: false
         },
-        label: {
+        title: {
             type: [String, Boolean],
             required: false,
             default: true
@@ -87,12 +87,12 @@ export default {
         };
     },
     computed: {
-        labelText () {
-            if (this.label === true) {
+        titleText () {
+            if (this.title === true) {
                 return this.attrName;
             }
-            else if (typeof this.label === "string") {
-                return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
+            else if (typeof this.title === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.title, key => this.$t(key));
             }
             return "";
         },
@@ -269,10 +269,10 @@ export default {
         <div class="sliderInputWrapper">
             <div class="left">
                 <label
-                    v-if="label !== false"
+                    v-if="title !== false"
                     :for="'snippetSliderInpMin-' + snippetId"
                     class="snippetSliderRangeLabel"
-                >{{ labelText }}</label>
+                >{{ titleText }}</label>
             </div>
             <div
                 v-if="info"
@@ -287,12 +287,10 @@ export default {
         <div class="sliderRangeWrapper">
             <div class="sliderInputContainer">
                 <div class="left">
-                    <label
-                        :for="'snippetSliderInputMin-' + snippetId"
-                    />
                     <input
                         :id="'snippetSliderInputMin-' + snippetId"
                         v-model="inRangeValueLeft"
+                        :aria-label="'snippetSliderInputMin-' + snippetId"
                         class="slider-input-min form-control"
                         type="number"
                         :disabled="disable"
@@ -305,12 +303,10 @@ export default {
                     >
                 </div>
                 <div class="right">
-                    <label
-                        :for="'snippetSliderInputMax-' + snippetId"
-                    />
                     <input
                         :id="'snippetSliderInputMax-' + snippetId"
                         v-model="inRangeValueRight"
+                        :aria-label="'snippetSliderInputMax-' + snippetId"
                         class="slider-input-max form-control"
                         type="number"
                         :disabled="disable"
@@ -327,12 +323,10 @@ export default {
                 <div class="slider-range-track">
                     &nbsp;
                 </div>
-                <label
-                    :for="'snippetSliderRangeMin-' + snippetId"
-                />
                 <input
                     :id="'snippetSliderRangeMin-' + snippetId"
                     v-model="inRangeValueLeft"
+                    :aria-label="'snippetSliderRangeMin-' + snippetId"
                     class="slider-range-min"
                     type="range"
                     :class="disable ? 'disabled':''"
@@ -343,12 +337,10 @@ export default {
                     @mousedown="startSliderChange()"
                     @mouseup="endSliderChange()"
                 >
-                <label
-                    :for="'snippetSliderRangeMax-' + snippetId"
-                />
                 <input
                     :id="'snippetSliderRangeMax-' + snippetId"
                     v-model="inRangeValueRight"
+                    :aria-label="'snippetSliderRangeMax-' + snippetId"
                     class="slider-range-max"
                     type="range"
                     :class="disable ? 'disabled':''"
@@ -525,13 +517,13 @@ export default {
             float: left;
             position: absolute;
             left: 0;
-            top: 30px;
+            top: 48px;
         }
         &.max {
             float: right;
             position: absolute;
             right: 0;
-            top: 30px;
+            top: 48px;
         }
     }
     input[type="range"].disabled::-webkit-slider-thumb {
