@@ -8,14 +8,14 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
     document.body.innerHTML =
         "<div id=\"parent\">" +
         "   <div id=\"featureLister\">" +
-        "       <p id=\"featurelistFeaturelist\" >Hello</p>" +
-        "   </div id=\"featureLister\">" +
+        "       <p id=\"featurelistFeaturelist\" >Liste der Feature</p>" +
+        "   </div>" +
         "   <ul class=\"featurelist-navtabs\">" +
-        "       <li id=\"featurelistThemeChooser\" >Hello</li>" +
-        "       <li id=\"featurelistFeaturelist\" >Hello</li>" +
-        "       <li id=\"featurelistFeaturedetails\" >Hello</li>" +
-        "   </ul class=\"featurelist-navtabs\">" +
-        "</div id=\"parent\">";
+        "       <li id=\"featurelistThemeChooser\" >Liste der Layer</li>" +
+        "       <li id=\"featurelistFeaturelist\" >Liste der Feature</li>" +
+        "       <li id=\"featurelistFeaturedetails\" >Detailansicht</li>" +
+        "   </ul>" +
+        "</div>";
 
     beforeEach(() => {
         commit = sinon.spy();
@@ -96,13 +96,9 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
             geometry: {getType: () => {
                 "Point";
             }},
-            source: {getFeatures: () => [{name: "feature", id: "1", getId: () => "1", getGeometry: () => {
-                return state.geometry;
-            }}]},
+            source: {getFeatures: () => [{name: "feature", id: "1", getId: () => "1", getGeometry: () => state.geometry}]},
             visibleLayers: [
-                {name: "ersterLayer", values_: {id: "123"}, getSource: () => {
-                    return state.source;
-                }, features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"},
+                {name: "ersterLayer", values_: {id: "123"}, getSource: () => state.source, features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"},
                 {name: "zweiterLayer", values_: {id: "456"}, features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"},
                 {name: "dritterLayer", values_: {id: "789"}, features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"}],
             layer: {

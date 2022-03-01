@@ -78,10 +78,7 @@ describe("src/modules/tools/featureLister/components/FeatureLister.vue", () => {
         const layer1 = new VectorLayer({
                 name: "ersterLayer", id: "123", features: [{getAttributesToShow: () => [{key: "name", value: "Name"}]}], geometryType: "Point", values_: [1, 2]
             }),
-            layer2 = new VectorLayer({
-                name: "ersterLayer", id: "123", features: [{getAttributesToShow: () => [{key: "name", value: "Name"}]}], geometryType: "Point", values_: [1, 2]
-            }),
-            layerList = [layer1, layer2],
+            layerList = [layer1],
             layer = {name: "ersterLayer", id: "123", features: [{values_: {features: [1, 2]}}], geometryType: "Point"};
 
         store.commit("Tools/FeatureLister/setVisibleLayers", layerList);

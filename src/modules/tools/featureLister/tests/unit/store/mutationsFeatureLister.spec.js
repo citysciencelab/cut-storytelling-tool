@@ -16,15 +16,9 @@ describe("tools/featureLister/store/mutationsFeatureLister", () => {
     describe("setGfiFeaturesOfLayer", () => {
         it("sets the rawFeatures and gfiFeatures of a layer to state", () => {
             const layers = [
-                {name: "ersterLayer", values_: {id: "1"}, get: () => {
-                    return "1";
-                }},
-                {name: "zweiterLayer", values_: {id: "2"}, get: () => {
-                    return "2";
-                }},
-                {name: "dritterLayer", values_: {id: "3"}, get: () => {
-                    return "3";
-                }}];
+                {name: "ersterLayer", values_: {id: "1"}, get: () => "1"},
+                {name: "zweiterLayer", values_: {id: "2"}, get: () => "2"},
+                {name: "dritterLayer", values_: {id: "3"}, get: () => "3"}];
 
             mutations.setGfiFeaturesOfLayer(state, layers);
             expect(state.rawFeaturesOfLayer).to.eql([{name: "erstesFeature", id: "123"}, {name: "zweitesFeature", id: "456"}, {name: "drittesFeature", id: "789"}]);
