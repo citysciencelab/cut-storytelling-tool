@@ -12,12 +12,19 @@
  * @property {Number} maxFeatures default value for maxFeatures that can be overwritten in config
  * @property {Array} layerlist array of layers in the format {id, name, features}
  * @property {String} layerid id of visibleLayer to be displayed
- * @property {Object} layerFeatures layer object from layerlist with required layerid
+ * @property {Object} layer layer object of the selected layer
+ * @property {Boolean} layerListView if true list of visibile vector layers gets displayed
+ * @property {String} currentTab id of the currently displayed tab
+ * @property {Array} gfiFeaturesOfLayer array of the gfiFeatures of the selected layer
+ * @property {String} featureCount number of total features of the selected layer
+ * @property {String} shownFeatures currently count of features displayed in featureListView table
+ * @property {Array} visibleLayers array of all visible vector layers
+ * @property {Boolean} featureListView if true the list of features from selected layer gets displayed
+ * @property {Array} rawFeaturesOfLayer array of raw features from selected layer, differs from gfiFeatures
+ * @property {Boolean} nestedFeatures some features have features themself, if true they get recognized
+ * @property {Boolean} featureDetailView if true the detail page of the selected feature gets displayed
  * @property {Array} headers list of headings in list
- * @property {String} featureid id of feature to be displayed
- * @property {Object} featureProps properties of feature with searched featureid
- * @property {Object} highlightedFeature feature to be highlighted
- * @property {Object} highlightedFeatureStyle style of highlighted feature
+ * @property {Object} selectedFeature object of the selected feature
  * @property {Object} highlightVectorRulesPolygon default style for highlighting polygons
  * @property {Object} highlightVectorRulesPointLine default style for highlighting lines and points
  */
@@ -47,11 +54,7 @@ const state = {
     nestedFeatures: false,
     featureDetailView: false,
     headers: [],
-    featureid: "",
-    featureProps: {},
     selectedFeature: null,
-    highlightedFeature: null,
-    highlightedFeatureStyle: null,
     highlightVectorRulesPolygon: {
         "fill": {
             "color": [255, 0, 255, 0.9]
