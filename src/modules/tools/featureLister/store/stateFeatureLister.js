@@ -1,5 +1,5 @@
 /**
- * User type definition
+ * featureLister tool state definition.
  * @typedef {Object} FeatureListerState
  * @property {Boolean} active if true, featureLister will be rendered
  * @property {String} id id of the FeatureLister component
