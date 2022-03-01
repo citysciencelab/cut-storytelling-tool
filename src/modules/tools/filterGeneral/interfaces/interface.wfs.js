@@ -8,6 +8,14 @@ import describeFeatureTypeWFS from "../utils/describeFeatureType/describeFeature
  */
 export default class InterfaceWFS {
     /**
+     * @constructor
+     * @param {IntervalRegister} intervalRegister the object to register and unregister intervals with
+     */
+    constructor (intervalRegister) {
+        this.intervalRegister = intervalRegister;
+    }
+
+    /**
      * Returns an object {attrName: Type} with all attributes and their types.
      * @param {Object} service the service to call, identical to filterQuestion.service
      * @param {Function} onsuccess a function({attrName: Type}[])
@@ -125,12 +133,11 @@ export default class InterfaceWFS {
     /**
      * Filters the given filterQuestion and returns the resulting filterAnswer.
      * @param {Object} filterQuestion an object with filterId, service and rules
-     * @param {IntervalRegister} intervalRegister the object to register and unregister intervals with
      * @param {Function} onsuccess a function(filterAnswer)
      * @param {Function} onerror a function(errorMsg)
      * @returns {void}
      */
-    filter (filterQuestion, intervalRegister, onsuccess, onerror) {
+    filter (filterQuestion, onsuccess, onerror) {
         if (typeof onsuccess === "function") {
             onsuccess(null);
         }
@@ -157,7 +164,7 @@ export default class InterfaceWFS {
             break;
         }
 
-        if (!node.hasChildNodes()) {
+        if (node !== null && !node.hasChildNodes()) {
             for (const childNode of responseXML.getElementsByTagName(node.tagName)) {
                 if (childNode.hasChildNodes()) {
                     node = childNode;

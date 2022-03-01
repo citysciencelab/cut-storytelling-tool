@@ -30,31 +30,6 @@ describe("src/modules/tools/filterGeneral/components/LayerFilterSnippet.vue", ()
         }
     });
 
-    describe("constructor", () => {
-        it("should setup with an external service if no internal service is given", () => {
-            expect(wrapper.vm.layerService).to.deep.equal({
-                type: "something external"
-            });
-        });
-        it("should setup with an external service if a layerId is given, but no internal service is given", () => {
-            const localWrapper = shallowMount(LayerFilterSnippet, {
-                propsData: {
-                    layerConfig: {
-                        layerId: "layerId",
-                        service: {
-                            type: "something external"
-                        }
-                    }
-                },
-                localVue
-            });
-
-            expect(wrapper.vm.layerService).to.deep.equal({
-                type: "something external"
-            });
-            localWrapper.destroy();
-        });
-    });
     describe("hasThisSnippetTheExpectedType", () => {
         it("should return false if the given snippet has not the expected type", () => {
             expect(wrapper.vm.hasThisSnippetTheExpectedType(undefined)).to.be.false;
@@ -72,10 +47,10 @@ describe("src/modules/tools/filterGeneral/components/LayerFilterSnippet.vue", ()
             expect(wrapper.vm.hasThisSnippetTheExpectedType({type: "something"}, "something")).to.be.true;
         });
     });
-    describe("searchInMapExtentChanged", () => {
+    describe("setSearchInMapExtent", () => {
         it("should set the internal searchInMapExtent variable to the given value", () => {
             expect(wrapper.vm.searchInMapExtent).to.be.false;
-            wrapper.vm.searchInMapExtentChanged(true);
+            wrapper.vm.setSearchInMapExtent(true);
             expect(wrapper.vm.searchInMapExtent).to.be.true;
         });
     });

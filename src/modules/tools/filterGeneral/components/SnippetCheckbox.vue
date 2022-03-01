@@ -1,8 +1,12 @@
 <script>
 import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
+import SnippetInfo from "./SnippetInfo.vue";
 
 export default {
     name: "SnippetCheckbox",
+    components: {
+        SnippetInfo
+    },
     props: {
         attrName: {
             type: String,
@@ -24,7 +28,7 @@ export default {
             required: false,
             default: false
         },
-        label: {
+        title: {
             type: [String, Boolean],
             required: false,
             default: true
@@ -61,25 +65,16 @@ export default {
         return {
             isInitializing: true,
             checked: false,
-            showInfo: false
+            translationKey: "snippetCheckbox"
         };
     },
     computed: {
-        labelText () {
-            if (this.label === true) {
+        titleText () {
+            if (this.title === true) {
                 return this.attrName;
             }
-            else if (typeof this.label === "string") {
-                return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
-            }
-            return "";
-        },
-        infoText () {
-            if (this.info === true) {
-                return this.$t("common:modules.tools.filterGeneral.info.snippetCheckbox");
-            }
-            else if (typeof this.info === "string") {
-                return this.translateKeyWithPlausibilityCheck(this.info, key => this.$t(key));
+            else if (typeof this.title === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.title, key => this.$t(key));
             }
             return "";
         }
@@ -100,6 +95,12 @@ export default {
         this.$nextTick(() => {
             this.isInitializing = false;
         });
+        if (this.visible && this.prechecked) {
+            this.emitCurrentRule(this.prechecked, true);
+        }
+    },
+    mounted () {
+        this.$emit("setSnippetPrechecked", this.visible && this.prechecked);
     },
     methods: {
         translateKeyWithPlausibilityCheck,
@@ -146,13 +147,6 @@ export default {
                     onsuccess();
                 }
             });
-        },
-        /**
-         * Toggles the info.
-         * @returns {void}
-         */
-        toggleInfo () {
-            this.showInfo = !this.showInfo;
         }
     }
 };
@@ -173,30 +167,19 @@ export default {
                 :disabled="disabled"
             >
             <label
-                v-if="label !== false"
+                v-if="title !== false"
                 :for="'snippetCheckbox-' + snippetId"
                 class="snippetCheckboxLabel"
-            >{{ labelText }}</label>
+            >{{ titleText }}</label>
         </div>
         <div
-            v-if="info !== false"
+            v-if="info"
             class="right"
         >
-            <div class="info-icon">
-                <span
-                    :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
-                    @click="toggleInfo()"
-                    @keydown.enter="toggleInfo()"
-                >&nbsp;</span>
-            </div>
-        </div>
-        <div
-            v-show="showInfo"
-            class="bottom"
-        >
-            <div class="info-text">
-                <span>{{ infoText }}</span>
-            </div>
+            <SnippetInfo
+                :info="info"
+                :translation-key="translationKey"
+            />
         </div>
     </div>
 </template>
@@ -206,33 +189,11 @@ export default {
     .snippetCheckboxContainer {
         height: auto;
     }
-    .snippetCheckboxContainer .info-icon {
-        float: right;
-        font-size: 16px;
-        color: #ddd;
-    }
-    .snippetCheckboxContainer .info-icon .opened {
-        color: #000;
-    }
-    .snippetCheckboxContainer .info-icon:hover {
-        cursor: pointer;
-        color: #a5a09e;
-    }
-    .snippetCheckboxContainer .info-text {
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 10px;
-        padding: 15px 10px;
-    }
-    .glyphicon-info-sign:before {
-        content: "\E086";
-    }
-    .snippetCheckboxContainer .bottom {
-        clear: left;
-        width: 100%;
-    }
     .snippetCheckboxContainer .left {
-        float: left;
+        input[type=radio], input[type=checkbox] {
+            margin: 0 5px 0 0;
+        }
+        /*float: left;*/
         input {
             float: left;
             width: 15px;
@@ -240,15 +201,13 @@ export default {
         }
         label {
             float: left;
-            width: calc(100% - 20px);
-            margin-bottom: 0;
+            /*margin-bottom: 0;*/
             cursor: pointer;
         }
     }
     .snippetCheckboxContainer .right {
-        float: right;
         position: absolute;
-        right: -33px;
+        right: 0px;
     }
     .category-layer .right {
         right: 30px;

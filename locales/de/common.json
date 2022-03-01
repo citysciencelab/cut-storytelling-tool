@@ -423,7 +423,7 @@
                 },
                 "filterResult": {
                     "label": "Alle Filter-Treffer",
-                    "unit": "Treffer"
+                    "unit": "{{amountOfFilteredItems}} Treffer"
                 }
             },
             "filter": {
@@ -847,7 +847,7 @@
                         }
                     },
                     "preference": {
-                        "RECOMMENDED": "Schnellste Route",
+                        "RECOMMENDED": "Empfohlene Route",
                         "SHORTEST": "Kürzeste Route"
                     }
                 },

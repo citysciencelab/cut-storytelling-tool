@@ -1,9 +1,13 @@
 <script>
 import isObject from "../../../../utils/isObject";
 import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
+import SnippetInfo from "./SnippetInfo.vue";
 
 export default {
     name: "SnippetSliderRange",
+    components: {
+        SnippetInfo
+    },
     props: {
         api: {
             type: Object,
@@ -35,7 +39,7 @@ export default {
             required: false,
             default: false
         },
-        label: {
+        title: {
             type: [String, Boolean],
             required: false,
             default: true
@@ -78,26 +82,17 @@ export default {
             isAdjusting: false,
             minimumValue: 0,
             maximumValue: 100,
-            showInfo: false,
-            value: [0, 100]
+            value: [0, 100],
+            translationKey: "snippetSliderRange"
         };
     },
     computed: {
-        labelText () {
-            if (this.label === true) {
+        titleText () {
+            if (this.title === true) {
                 return this.attrName;
             }
-            else if (typeof this.label === "string") {
-                return this.translateKeyWithPlausibilityCheck(this.label, key => this.$t(key));
-            }
-            return "";
-        },
-        infoText () {
-            if (this.info === true) {
-                return this.$t("common:modules.tools.filterGeneral.info.snippetSliderRange");
-            }
-            else if (typeof this.info === "string") {
-                return this.translateKeyWithPlausibilityCheck(this.info, key => this.$t(key));
+            else if (typeof this.title === "string") {
+                return this.translateKeyWithPlausibilityCheck(this.title, key => this.$t(key));
             }
             return "";
         },
@@ -182,9 +177,12 @@ export default {
                 this.disable = false;
             });
         }
-        if (Array.isArray(this.prechecked) && this.prechecked.length === 2) {
-            this.isInitializing = false;
+        if (this.visible && Array.isArray(this.prechecked) && this.prechecked.length === 2) {
+            this.emitCurrentRule(this.prechecked, true);
         }
+    },
+    mounted () {
+        this.$emit("setSnippetPrechecked", this.visible && Array.isArray(this.prechecked) && this.prechecked.length === 2);
     },
     methods: {
         translateKeyWithPlausibilityCheck,
@@ -229,13 +227,6 @@ export default {
             });
         },
         /**
-         * Toggles the info.
-         * @returns {void}
-         */
-        toggleInfo () {
-            this.showInfo = !this.showInfo;
-        },
-        /**
          * Returns the steps the slider will make over the number range.
          * @param {Number} decimalPlaces the amount of decimal places
          * @returns {Number} the steps
@@ -278,33 +269,28 @@ export default {
         <div class="sliderInputWrapper">
             <div class="left">
                 <label
-                    v-if="label !== false"
+                    v-if="title !== false"
                     :for="'snippetSliderInpMin-' + snippetId"
                     class="snippetSliderRangeLabel"
-                >{{ labelText }}</label>
+                >{{ titleText }}</label>
             </div>
             <div
-                v-if="info !== false"
+                v-if="info"
                 class="right"
             >
-                <div class="info-icon">
-                    <span
-                        :class="['glyphicon glyphicon-info-sign', showInfo ? 'opened' : '']"
-                        @click="toggleInfo()"
-                        @keydown.enter="toggleInfo()"
-                    >&nbsp;</span>
-                </div>
+                <SnippetInfo
+                    :info="info"
+                    :translation-key="translationKey"
+                />
             </div>
         </div>
         <div class="sliderRangeWrapper">
             <div class="sliderInputContainer">
                 <div class="left">
-                    <label
-                        :for="'snippetSliderInputMin-' + snippetId"
-                    />
                     <input
                         :id="'snippetSliderInputMin-' + snippetId"
                         v-model="inRangeValueLeft"
+                        :aria-label="'snippetSliderInputMin-' + snippetId"
                         class="slider-input-min form-control"
                         type="number"
                         :disabled="disable"
@@ -317,12 +303,10 @@ export default {
                     >
                 </div>
                 <div class="right">
-                    <label
-                        :for="'snippetSliderInputMax-' + snippetId"
-                    />
                     <input
                         :id="'snippetSliderInputMax-' + snippetId"
                         v-model="inRangeValueRight"
+                        :aria-label="'snippetSliderInputMax-' + snippetId"
                         class="slider-input-max form-control"
                         type="number"
                         :disabled="disable"
@@ -339,12 +323,10 @@ export default {
                 <div class="slider-range-track">
                     &nbsp;
                 </div>
-                <label
-                    :for="'snippetSliderRangeMin-' + snippetId"
-                />
                 <input
                     :id="'snippetSliderRangeMin-' + snippetId"
                     v-model="inRangeValueLeft"
+                    :aria-label="'snippetSliderRangeMin-' + snippetId"
                     class="slider-range-min"
                     type="range"
                     :class="disable ? 'disabled':''"
@@ -355,12 +337,10 @@ export default {
                     @mousedown="startSliderChange()"
                     @mouseup="endSliderChange()"
                 >
-                <label
-                    :for="'snippetSliderRangeMax-' + snippetId"
-                />
                 <input
                     :id="'snippetSliderRangeMax-' + snippetId"
                     v-model="inRangeValueRight"
+                    :aria-label="'snippetSliderRangeMax-' + snippetId"
                     class="slider-range-max"
                     type="range"
                     :class="disable ? 'disabled':''"
@@ -377,14 +357,6 @@ export default {
                 </div>
             </div>
         </div>
-        <div
-            v-show="showInfo"
-            class="bottom"
-        >
-            <div class="info-text">
-                <span>{{ infoText }}</span>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -396,37 +368,13 @@ export default {
     .sliderInputWrapper {
         height: 20px;
     }
-    .info-icon {
-        float: right;
-        font-size: 16px;
-        color: #ddd;
-    }
-    .info-icon .opened {
-        color: #000;
-    }
-    .info-icon:hover {
-        cursor: pointer;
-        color: #a5a09e;
-    }
-    .info-text {
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 10px;
-        padding: 15px 10px;
-        margin-top: 15px;
-    }
-    .bottom {
-        clear: left;
-        width: 100%;
-        padding: 0 5px;
-    }
     .sliderInputWrapper .left {
         float: left;
         width: 90%;
     }
     .sliderInputWrapper .right {
         position: absolute;
-        right: -33px;
+        right: 0;
     }
     .sliderRangeWrapper {
         position: relative;
@@ -569,13 +517,13 @@ export default {
             float: left;
             position: absolute;
             left: 0;
-            top: 30px;
+            top: 48px;
         }
         &.max {
             float: right;
             position: absolute;
             right: 0;
-            top: 30px;
+            top: 48px;
         }
     }
     input[type="range"].disabled::-webkit-slider-thumb {
