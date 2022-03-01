@@ -737,7 +737,6 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                 });
 
                 it.skip("?featureViaURL test line", async function () {
-                    //kann das mit WGS84-Koordinaten funktionieren, wenn in der config.js epsg: 25832 angegeben ist?
                     await loadUrl(driver, `${url}?featureViaURL=[{"layerId":"4200","features":[{"coordinates":[[10.15,53.5],[10.05,53.5],[10.05,53.55]],"label":"TestLinie"}]}]`, mode);
                     await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
                     await driver.executeScript(isLayerVisible, "4200");
