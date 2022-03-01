@@ -336,6 +336,7 @@
                 "formatLabel": "Format",
                 "scaleLabel": "Printing scale",
                 "withLegendLabel": "With legend",
+                "autoAdjustScale": "Adjust printing scale automatically",
                 "printLabel": "Create file",
                 "downloadFile": "Download file",
                 "createDownloadFile": "Will be created...",
