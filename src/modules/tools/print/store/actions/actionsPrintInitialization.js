@@ -325,7 +325,8 @@ export default {
         if (state.isScaleSelectedManually) {
             canvasPrintOptions.scale = state.currentScale;
             commit("setIsScaleSelectedManually", false);
-        } else if (state.autoAdjustScale) {
+        }
+        else if (state.autoAdjustScale) {
             dispatch("getOptimalScale", canvasOptions);
             canvasPrintOptions.scale = state.optimalScale;
         }
