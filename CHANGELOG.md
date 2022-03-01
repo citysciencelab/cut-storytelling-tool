@@ -9,6 +9,7 @@
 ---
 ## Unreleased - in development
 ### Added
+- Issue #530: New checkbox for the print module to disable the auto adjustment of the print mask scale
 - The gazetteer search function now supports changing the namespace by configuration.
 - Issue #690: Documentation for the menu item `ansichten` (map view points) has been added.
 - It is now possible to configure a loading strategy for a wfs layer (default is bbox).
