@@ -16,7 +16,6 @@ export default function WFSLayer (attrs) {
         showSettings: true,
         isSecured: false,
         isClustered: false,
-        allowedVersions: ["1.0.0", "1.1.0", "2.0.0"],
         altitudeMode: "clampToGround",
         useProxy: false,
         sourceUpdated: false
@@ -48,7 +47,8 @@ WFSLayer.prototype.createLayer = function (attrs) {
             url: attrs.url,
             clusterDistance: attrs.clusterDistance,
             featureNS: attrs.featureNS,
-            featureType: attrs.featureType
+            featureType: attrs.featureType,
+            version: attrs.version
         },
         layerParams = {
             name: attrs.name,
@@ -70,7 +70,6 @@ WFSLayer.prototype.createLayer = function (attrs) {
                 }
                 return feature.getGeometry();
             },
-            version: this.getVersion(attrs),
             featuresFilter: this.getFeaturesFilterFunction(attrs),
             // If an Object contains a property which holds a Function, the property is called a method.
             // This method, when called, will always have it's this variable set to the Object it is associated with.
@@ -108,20 +107,6 @@ WFSLayer.prototype.createLayer = function (attrs) {
 };
 
 /**
- * Returns the version found in attrs, if allowed.
- * @param {Object} attrs  params of the raw layer
- * @returns {String} the version
- */
-WFSLayer.prototype.getVersion = function (attrs) {
-    const allowedVersions = attrs.allowedVersions,
-        isVersionValid = this.checkVersion(attrs.name, attrs.version, allowedVersions);
-
-    if (!isVersionValid) {
-        return allowedVersions[0];
-    }
-    return attrs.version;
-};
-/**
  * Returns a function to filter features with.
  * @param {Object} attrs  params of the raw layer
  * @returns {Function} to filter features with
@@ -136,25 +121,6 @@ WFSLayer.prototype.getFeaturesFilterFunction = function (attrs) {
         }
         return filteredFeatures;
     };
-};
-/**
- * Checks the version of the wfs against allowed versions.
- * @param {String} name name from layer
- * @param {String} version version from wfs
- * @param {String[]} allowedVersions contains the allowed versions
- * @return {Boolean} is version valid
- */
-WFSLayer.prototype.checkVersion = function (name, version, allowedVersions) {
-    let isVersionValid = true;
-
-    if (!allowedVersions.includes(version)) {
-        isVersionValid = false;
-
-        console.warn(`The WFS layer: "${name}" is configured in version: ${version}.`
-             + ` OpenLayers accepts WFS only in the versions: ${allowedVersions},`
-             + ` It tries to load the layer: "${name}" in version ${allowedVersions[0]}!`);
-    }
-    return isVersionValid;
 };
 /**
  * Returns the propertynames as comma separated string.
@@ -200,8 +166,8 @@ WFSLayer.prototype.getStyleFunction = function (attrs) {
  */
 WFSLayer.prototype.updateSource = function () {
     if (this.get("sourceUpdated") === false) {
-        this.layer.getSource().refresh();
         this.set("sourceUpdated", true);
+        this.layer.getSource().refresh();
     }
 };
 /**

@@ -3,7 +3,7 @@ import {fromCircle} from "ol/geom/Polygon.js";
 import {GeoJSON, GPX} from "ol/format.js";
 import convertFeaturesToKml from "../../../../../../src/utils/convertFeaturesToKml.js";
 
-import {transform, transformPoint} from "../../utils/download/transformGeometry";
+import {transform, transformPoint, transformGeometry} from "../../utils/download/transformGeometry";
 
 /**
  * Converts the features from OpenLayers Features to features in the chosen format.
@@ -115,6 +115,10 @@ function setDownloadFeatures ({state, commit, dispatch}) {
         }
 
         if (geometry instanceof Circle) {
+            feature.set("isGeoCircle", true);
+            transformGeometry(geometry);
+            feature.set("geoCircleCenter", geometry.getCenter().join(","));
+            feature.set("geoCircleRadius", geometry.getRadius());
             feature.setGeometry(fromCircle(geometry));
         }
 

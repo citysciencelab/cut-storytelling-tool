@@ -906,7 +906,7 @@ const BuildSpecModel = {
             convertedFeature = undefined;
         }
         // if its a cluster remove property features
-        if (convertedFeature.properties && Object.prototype.hasOwnProperty.call(convertedFeature.properties, "features")) {
+        if (convertedFeature?.properties && Object.prototype.hasOwnProperty.call(convertedFeature.properties, "features")) {
             delete convertedFeature.properties.features;
         }
         return convertedFeature;

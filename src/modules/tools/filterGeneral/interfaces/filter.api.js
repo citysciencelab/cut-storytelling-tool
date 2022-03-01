@@ -31,12 +31,28 @@ export default class FilterApi {
         }
     }
     /**
-     * Setter for the default service.
+     * Setter for the default service using layerId and the original service object.
+     * @param {String} layerId the layer id
      * @param {Object} service the service object
      * @returns {void}
      */
-    setDefaultService (service) {
-        this.service = service;
+    setServiceByServiceObject (layerId, service) {
+        this.service = Object.assign({layerId}, service);
+    }
+    /**
+     * Setter for the default service by layerId and layerModel.
+     * @param {String} layerId the layer id
+     * @param {ol/Layer} layerModel the layer model
+     * @returns {void}
+     */
+    setServiceByLayerModel (layerId, layerModel) {
+        this.service = {
+            type: "ol",
+            layerId,
+            url: layerModel.get("url"),
+            typename: layerModel.get("featureType"),
+            namespace: layerModel.get("featureNS")
+        };
     }
     /**
      * Returns an object {attrName: Type} with all attributes and their types.
@@ -140,7 +156,7 @@ export default class FilterApi {
         }
         const connector = this.getInterfaceByService(this.service);
 
-        connector.filter(filterQuestion, onsuccess, onerror, refreshed);
+        connector.filter(Object.assign(filterQuestion, {service: this.service}), onsuccess, onerror, refreshed);
     }
     /**
      * Stops the current filter.
@@ -170,6 +186,9 @@ export default class FilterApi {
             onerror(new Error("FilterApi: No usefull connector found for this api service to stop."));
         }
     }
+
+
+    /* private */
 
     /**
      * Returns the interface for the given service.
