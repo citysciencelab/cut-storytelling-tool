@@ -309,9 +309,9 @@ export default {
         color: $color_2;
     }
 }
-    #featurelist-list-table {
-        overflow: auto;
-    }
+#featurelist-list-table {
+    overflow: auto;
+}
 .featurelist-list-button {
     position: relative;
     right: 0px;
