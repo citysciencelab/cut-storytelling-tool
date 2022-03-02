@@ -1370,6 +1370,7 @@ A folder object defined by a name, glyphicon, and its children.
 [type:wfst]: # (Portalconfig.menu.tool.wfst)
 
 List of all configurable tools. Each tool inherits the properties of **[tool](#markdown-header-portalconfigmenutool)** and can (or must, respectively) provide the defined attributes as mentioned in that definition.
+Alternatively, also the paths **Portalconfig.menu.info**, **Portalconfig.menu.simulation** or **Portalconfig.menu.utilities** can be used to hold tool configs.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
