@@ -4,6 +4,7 @@ import {doSpecialBackboneHandling, triggerParametricURLReady, translateToBackbon
 import store from "../../app-store";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
 import mapCollection from "../../core/dataStorage/mapCollection";
+import zoomTo from "masterportalAPI/src/lib/zoomTo";
 
 /**
  * Searches for the keys in state and if found, sets the value at it.
@@ -114,6 +115,7 @@ export async function setValuesToState (state, params) {
     await params.forEach(function (value, key) {
         setValueToState(state, key, value);
     });
+    state.urlParams.zoomTo = JSON.parse(JSON.stringify(state.urlParams.zoomTo));
     triggerParametricURLReady();
     Object.keys(state.urlParams).forEach(key => {
         const value = state.urlParams[key];
@@ -154,7 +156,13 @@ export async function setValueToState (state, key, value) {
                     }
                 }
             }
-            state.urlParams[entry.key] = entry.value;
+            console.log(entry);
+            if (entry.key.startsWith("zoomTo")) {
+                state.urlParams.zoomTo[entry.key.substring(6)] = entry.value;
+            }
+            else {
+                state.urlParams[entry.key] = entry.value;
+            }
             return entry;
         }).catch(error => {
             console.warn("Error occured during applying url param to state ", error);

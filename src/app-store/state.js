@@ -14,7 +14,9 @@ const state = {
     isDevMode,
     i18NextInitialized: false,
     idCounter: 1,
-    urlParams: {}
+    urlParams: {
+        zoomTo: {}
+    }
 };
 
 export default state;

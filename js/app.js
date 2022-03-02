@@ -28,6 +28,7 @@ import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
 import {initiateVueI18Next} from "./vueI18Next";
 import {handleUrlParamsBeforeVueMount, readUrlParamEarly} from "../src/utils/parametricUrl/ParametricUrlBridge";
 import {createMaps} from "../src/core/maps/maps.js";
+import zoomTo from "../src/utils/zoomTo";
 
 /**
  * WFSFeatureFilterView
@@ -130,6 +131,7 @@ async function loadApp () {
     new WFSTransactionModel();
     new MenuLoader();
 
+    /*
     if (Object.prototype.hasOwnProperty.call(Config, "zoomToGeometry")) {
         new ZoomToGeometry(Config.zoomToGeometry);
     }
@@ -138,6 +140,10 @@ async function loadApp () {
     }
     if (Object.prototype.hasOwnProperty.call(Config, "featureViaURL")) {
         new FeatureViaURL(Config.featureViaURL);
+    }
+     */
+    if (Object.prototype.hasOwnProperty.call(Config, "zoomTo")) {
+        zoomTo(Config.zoomTo);
     }
 
     new SliderView();
