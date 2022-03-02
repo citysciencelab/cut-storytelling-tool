@@ -105,9 +105,10 @@ VectorTileLayer.prototype.setStyleById = function (styleID) {
  * @param {object} styleDefinition style definition as found in service.json file
  * @param {string} styleDefinition.url url where style is kept
  * @param {string} styleDefinition.id id of style
+ * @param {Number[]} [styleDefinition.resolutions] resolutions to style zoom levels mapping
  * @returns {Promise} resolves void after style was set; may reject if received style is invalid
  */
-VectorTileLayer.prototype.setStyleByDefinition = function ({id, url}) {
+VectorTileLayer.prototype.setStyleByDefinition = function ({id, url, resolutions}) {
     /**
      * @deprecated in the next major-release!
      * useProxy
@@ -142,13 +143,13 @@ VectorTileLayer.prototype.setStyleByDefinition = function ({id, url}) {
 
                 this.fetchSpriteData(spriteDataUrl)
                     .then(spriteData => {
-                        vectorTile.setStyle(this.get("layer"), style, {spriteData: spriteData, spriteImageUrl: spriteImageUrl, getFonts: addMpFonts})
+                        vectorTile.setStyle(this.get("layer"), style, {resolutions: resolutions, spriteData: spriteData, spriteImageUrl: spriteImageUrl, getFonts: addMpFonts})
                         this.set("selectedStyleID", id);
                     }
                     );
             }
             else {
-                vectorTile.setStyle(this.get("layer"), style, {getFonts: addMpFonts})
+                vectorTile.setStyle(this.get("layer"), style, {resolutions: resolutions, getFonts: addMpFonts})
                 this.set("selectedStyleID", id);
             }
         });

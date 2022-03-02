@@ -5052,6 +5052,7 @@ Style definitions. Available for *Vector Tile Layers* only.
 |name|yes|String||Display name, e.g. used in the selection tool.|false|
 |url|yes|String||URL to load a style from. The linked JSON *must* match the [Mapbox style specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/).|false|
 |defaultStyle|no|String||If set `true`, this style is used initially; if no field is set `true`, the first style is used.|false|
+|resolutions|no|Number[]|Default resolutions from ol-mapbox-style project|Resolutions for zoom levels defined in style|false|
 
 **Example**
 
@@ -5060,7 +5061,15 @@ Style definitions. Available for *Vector Tile Layers* only.
     "id": "UNIQUE_ID",
     "name": "Red lines",
     "url": "https://example.com/asdf/styles/root.json",
-    "defaultStyle": true
+    "defaultStyle": true,
+    "resolutions": [
+        661.4579761460263,
+        264.58319045841048,
+        66.14579761460263,
+        26.458319045841044,
+        15.874991427504629,
+        10.583327618336419
+    ]
 }
 ```
 
