@@ -19,7 +19,7 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
      */
     initialize: function () {
         this.treeType = Radio.request("Parser", "getTreeType");
-        this.menuStyle = Radio.request("Util", "getUiStyle");
+        this.menuStyle = store.getters.uiStyle;
 
         // im Table-Style soll das ui nicht verändert werden
         if (this.menuStyle === "DEFAULT") {
