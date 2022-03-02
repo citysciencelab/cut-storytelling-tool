@@ -102,6 +102,7 @@ export default {
     watch: {
         active: function () {
             if (this.active) {
+                this.setIsScaleSelectedManually(false);
                 this.retrieveCapabilites();
                 this.setCurrentMapScale(this.scale);
             }
