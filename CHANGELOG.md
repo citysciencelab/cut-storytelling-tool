@@ -8,6 +8,17 @@
 - WMS-T: Behaviour is undefined on using multiple configured WMS-T.
 
 ---
+## Unreleased - in development
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+---
 ## v2.19.0 - 2022-03-02
 ### Added
 - The gazetteer search function now supports changing the namespace by configuration.
