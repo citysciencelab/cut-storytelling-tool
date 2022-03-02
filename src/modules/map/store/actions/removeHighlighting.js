@@ -37,7 +37,7 @@ function removeSingleHighlightedFeature (state, commit, feature) {
  * @param {Function} store the store context
  * @param {Function} store.commit commit function
  * @param {Function} store.state state function
- * @param {module:ol/Feature} feature the feature to remove from the highlighted features, remove all if none is given
+ * @param {module:ol/Feature} [feature] the feature to remove from the highlighted features, remove all if none is given
  * @returns {void}
  */
 function removeHighlightFeature ({commit, state}, feature) {
