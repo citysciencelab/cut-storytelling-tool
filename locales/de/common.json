@@ -416,6 +416,7 @@
                 "filterButton": "Filtern",
                 "searchInMapExtent": "Suche im aktuellen Kartenausschnitt",
                 "snippetTags": {
+                    "selectionText": "Ihre Auswahl:",
                     "resetAll": "Zurücksetzen"
                 },
                 "info": {

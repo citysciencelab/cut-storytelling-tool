@@ -38,7 +38,18 @@ function transformPoint (coords) {
     return proj4(projections.sourceProj, projections.destProj, coords);
 }
 
+/**
+ * Transforms the given geometry from EPSG:25832 to EPSG:4326.
+ *
+ * @param {Geometry} geometry Geometry.
+ * @returns {Geometry} The given geometry.
+ */
+function transformGeometry (geometry) {
+    return geometry.transform("EPSG:25832", "EPSG:4326");
+}
+
 export {
     transform,
-    transformPoint
+    transformPoint,
+    transformGeometry
 };

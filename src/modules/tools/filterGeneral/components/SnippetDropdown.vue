@@ -387,7 +387,10 @@ export default {
                     :for="'snippetSelectBox-' + snippetId"
                 >{{ titleText }}</label>
             </div>
-            <div class="select-box-container">
+            <div
+                ref="selectBoxContainer"
+                class="select-box-container"
+            >
                 <Multiselect
                     :id="'snippetSelectBox-' + snippetId"
                     v-model="dropdownSelected"
@@ -416,7 +419,7 @@ export default {
             class="snippetListContainer"
         >
             <div class="table-responsive">
-                <table :class="['table table-sm table-hover table-bordered table-striped', info ? 'left': '']">
+                <table :class="['table table-sm', info ? 'left': '']">
                     <thead
                         v-if="title !== false"
                     >
@@ -465,11 +468,21 @@ export default {
                             </td>
                             <td>
                                 <input
+                                    v-if="multiselect"
                                     :id="'snippetRadioCheckbox-' + snippetId + '-' + val"
                                     v-model="dropdownSelected"
                                     :aria-label="'snippetRadioCheckbox-' + snippetId + '-' + val"
-                                    :class="multiselect ? 'checkbox': 'radio'"
-                                    :type="multiselect ? 'checkbox': 'radio'"
+                                    class="checkbox"
+                                    type="checkbox"
+                                    :value="val"
+                                >
+                                <input
+                                    v-else
+                                    :id="'snippetRadioCheckbox-' + snippetId + '-' + val"
+                                    v-model="dropdownSelected[0]"
+                                    :aria-label="'snippetRadioCheckbox-' + snippetId + '-' + val"
+                                    class="radio"
+                                    type="radio"
                                     :value="val"
                                 >
                             </td>
@@ -513,6 +526,7 @@ export default {
         position: relative;
         cursor: pointer;
         white-space: nowrap;
+        font-size: 14px;
     }
     .select-box-container .multiselect .multiselect__option--highlight {
         background: #3177b1;
@@ -537,6 +551,12 @@ export default {
         max-width: 100%;
         text-overflow: ellipsis;
     }
+    .select-box-container .multiselect .multiselect__tags:focus-within {
+        border-color: #66afe9;
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
+        box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
+    }
     .select-box-container .multiselect .multiselect__option--highlight:after {
         content: attr(data-select);
         background: #a1d0ff;
@@ -553,11 +573,30 @@ export default {
     .select-box-container .multiselect .multiselect__placeholder {
         color: #adadad;
         display: inline-block;
-        margin-bottom: 10px;
-        padding-top: 2px;
+        margin-bottom: 0px;
+        padding-top: 0px;
     }
     .select-box-container .multiselect .multiselect__tag-icon:focus, .multiselect__tag-icon:hover {
         background: #ddd;
+    }
+    .select-box-container .multiselect__select {
+        height: 34px;
+        line-height: 14px;
+    }
+    .select-box-container .multiselect .multiselect__tags {
+        min-height: 34px;
+        font-size: 14px;
+        line-height: 1.428571429;
+        color: #555555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
+        box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
+        -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+        -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+        transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
     }
 </style>
 
@@ -589,12 +628,19 @@ export default {
     }
     .snippetDropdownContainer label {
         margin-bottom: 0;
+        text-transform: capitalize;
     }
     .snippetDropdownContainer .table > thead > tr > th, .table > thead > tr > td, .table > tbody > tr > th, .table > tbody > tr > td, .table > tfoot > tr > th, .table > tfoot > tr > td {
         padding: 4px;
         line-height: 1.428571429;
         vertical-align: middle;
-        border-top: 1px solid #ddd;
+        border: none;
+    }
+    .snippetDropdownContainer .table > thead {
+        text-transform: capitalize;
+    }
+    .snippetDropdownContainer .table > thead > tr > th {
+        font-weight: normal;
     }
     .snippetListContainer .snippetListContainerIcon {
         width: 25px;
