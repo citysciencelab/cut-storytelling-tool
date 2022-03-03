@@ -329,7 +329,7 @@ export default {
         :icon="glyphicon"
         :active="active"
         :show-in-sidebar="true"
-        :initial-width="350"
+        :initial-width="400"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
         :deactivate-gfi="deactivateGFI"
