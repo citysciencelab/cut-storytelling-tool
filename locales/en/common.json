@@ -1,5 +1,11 @@
 {
     "masterPortalVersion": "Masterportal V. {{masterPortalVersionNumber}}",
+    "general": {
+        "opened": "Open",
+        "cancelled": "Cancelled",
+        "error": "Error",
+        "success": "Success"
+    },
     "button": {
         "back": "Back",
         "download": "Download",
@@ -7,6 +13,13 @@
         "close": "Close",
         "minimize": "Minimize",
         "confirm": "Confirm",
+        "edit": "Edit",
+        "delete": "Delete",
+        "save": "Save",
+        "cancel": "Cancel",
+        "open": "Open",
+        "load": "Load",
+        "reset": "Reset",
         "stop": "Stop"
     },
     "colors": {
