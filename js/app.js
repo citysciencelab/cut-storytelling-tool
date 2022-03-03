@@ -13,7 +13,7 @@ import WFSTransactionModel from "../modules/wfsTransaction/model";
 import MenuLoader from "../modules/menu/menuLoader";
 import ZoomToGeometry from "../modules/zoomToGeometry/model";
 import ZoomToFeature from "../modules/zoomToFeature/model";
-import FeatureViaURL from "../modules/featureViaURL/model";
+import featureViaURL from "../src/utils/featureViaURL";
 import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
@@ -137,7 +137,7 @@ async function loadApp () {
         new ZoomToFeature(Config.zoomToFeature);
     }
     if (Object.prototype.hasOwnProperty.call(Config, "featureViaURL")) {
-        new FeatureViaURL(Config.featureViaURL);
+        featureViaURL(Config.featureViaURL);
     }
 
     new SliderView();
