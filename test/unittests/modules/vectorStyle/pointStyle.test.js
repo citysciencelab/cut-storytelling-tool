@@ -4,7 +4,7 @@ import {Style, Icon, Circle} from "ol/style.js";
 import {GeoJSON} from "ol/format.js";
 import Util from "@testUtil";
 
-describe("textStyleModel", function () {
+describe.only("textStyleModel", function () {
     const geojsonReader = new GeoJSON(),
         jsonFeatures = {
             "type": "FeatureCollection",
@@ -48,6 +48,11 @@ describe("textStyleModel", function () {
 
     describe("getStyle", function () {
         it("should return a style object", function () {
+            expect(styleModel.getStyle()).to.be.an.instanceof(Style);
+        });
+        it("should not break if a feature on a cluster layer has no 'features' member", function () {
+            styleModel.set("isClustered", true); // while feature is still regular
+
             expect(styleModel.getStyle()).to.be.an.instanceof(Style);
         });
     });
