@@ -10,6 +10,18 @@
 ---
 ## Unreleased - in development
 ### Added
+- Issue #530: New checkbox for the print module to disable the auto adjustment of the print mask scale
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+---
+## v2.19.0 - 2022-03-02
+### Added
 - The gazetteer search function now supports changing the namespace by configuration.
 - Issue #690: Documentation for the menu item `ansichten` (map view points) has been added.
 - Issue #685:
@@ -17,6 +29,7 @@
   - The Extent.default value `"current"` can now be interpreted.
   - The time field of WMS requests is now filled with ISO 8601 timestamps of same precision as Extent specification.
 - It is now possible to configure a loading strategy for a wfs layer (default is bbox).
+- A new filter module called `filterGeneral` to replace of the `filter` module with a more catchy configuration, new features and new UI.
 
 ### Changed
 -  Default for isFolderSelectable is true. Overwriteable in config.js (globally) oder config.json(folder specific). Applies only for treeType="custom". In treeType="default" the top folders als not selectable and the child folders are selectable.
@@ -43,6 +56,7 @@
 ### Removed
 
 ### Fixed
+- Issue #483/Issue #687: Fixed responsiveness when switching between mobile and desktop
 - Issue #694: Folder with subfolders are also selectable. (Internal flag "isLeafFolder" removed)
 - Issue #695: Optimised order in if clause. First use "show_doc_url" in layers metadata, then check if service based on the config.js's metaDataCatalogueId exists. otherwise throw console.warn
 - Issue #666: The elastic search query string replacement function will now only take effect
@@ -60,10 +74,12 @@
 - Folder expand/collapse works in background maps, if treetype is 'custom'.
 - Issue #637, Issue #656: If background maps are configured in folder structures, then when such a background map is activated, no more subject data are overlaid.
 - Tool print: printing of the measurement result is fixed.
+- Tools Draw and File import: Exported and re-imported drawn circles are now editable with the expected behaviour.
 - Newsfeed:
     - Alert now also works with portal calls with index.html and url parameter.
     - News is now displayed in an iframe. If no third party cookies are allowed by the browser, no confirm is possible, because it is not allowed to store in localstorage.
     - Added the possibility to scroll in the alert.
+- Issue #671: Tool print: once selected scale is not set back on move print cutout.
 
 ---
 
