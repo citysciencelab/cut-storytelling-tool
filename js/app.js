@@ -31,7 +31,7 @@ import {createMaps} from "../src/core/maps/maps.js";
 
 /**
  * Vuetify
- * @description Test vuetify as main UI framework in /addons/cosi
+ * @description Test vuetify as main UI framework
  * @external
  */
 import {instantiateVuetify} from "../src/plugins/vuetify/vuetify";
@@ -79,7 +79,7 @@ async function loadApp () {
         utilConfig = {},
         style = Radio.request("Util", "getUiStyle"),
         vueI18Next = initiateVueI18Next(),
-        // instantiate Vue w/ Vuetify Plugin if the "vuetify" flag is set in the config.js
+        // instantiate Vue with Vuetify Plugin if the "vuetify" flag is set in the config.js
         // returns undefined if not
         vuetify = await instantiateVuetify();
 
