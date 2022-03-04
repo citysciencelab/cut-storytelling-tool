@@ -418,83 +418,75 @@ export default {
             v-if="display === 'list'"
             class="snippetListContainer"
         >
-            <div class="table-responsive">
-                <table :class="['table table-sm', info ? 'left': '']">
-                    <thead
-                        v-if="title !== false"
+            <div class="grid-container">
+                <div
+                    class="grid-item"
+                >
+                    {{ titleText }}
+                </div>
+                <div
+                    v-if="multiselect && addSelectAll"
+                    class="grid-item"
+                >
+                    <a
+                        href="#"
+                        class="link-secondary"
+                        @click="!allSelected ? selectAll() : deselectAll()"
                     >
-                        <tr>
-                            <th
-                                :colspan="anyIconExists() ? 3 : 2"
-                            >
-                                <div
-                                    class="pull-left"
-                                >
-                                    {{ titleText }}
-                                </div>
-                                <div
-                                    v-if="multiselect && addSelectAll"
-                                    class="pull-right"
-                                >
-                                    <a
-                                        href="#"
-                                        class="link-secondary"
-                                        @click="!allSelected ? selectAll() : deselectAll()"
-                                    >
-                                        {{ selectAllTitle }}
-                                    </a>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr
-                            v-for="val in dropdownValue"
-                            :key="val"
+                        {{ selectAllTitle }}
+                    </a>
+                </div>
+                <div
+                    v-for="val in dropdownValue"
+                    :key="val"
+                    class="grid-item"
+                >
+                    <span
+                        v-if="anyIconExists()"
+                        class="subItem"
+                    >
+                        <label
+                            :for="'snippetRadioCheckbox-' + snippetId + '-' + val"
                         >
-                            <td
-                                v-if="anyIconExists()"
+                            <img
+                                v-show="iconExists(val)"
+                                class="snippetListContainerIcon"
+                                :src="iconList[val]"
+                                :alt="val"
                             >
-                                <label
-                                    for="'snippetRadioCheckbox-' + snippetId + '-' + val"
-                                >
-                                    <img
-                                        v-show="iconExists(val)"
-                                        class="snippetListContainerIcon"
-                                        :src="iconList[val]"
-                                        :alt="val"
-                                    >
-                                </label>
-                            </td>
-                            <td>
-                                <input
-                                    v-if="multiselect"
-                                    :id="'snippetRadioCheckbox-' + snippetId + '-' + val"
-                                    v-model="dropdownSelected"
-                                    :aria-label="'snippetRadioCheckbox-' + snippetId + '-' + val"
-                                    class="checkbox"
-                                    type="checkbox"
-                                    :value="val"
-                                >
-                                <input
-                                    v-else
-                                    :id="'snippetRadioCheckbox-' + snippetId + '-' + val"
-                                    v-model="dropdownSelected[0]"
-                                    :aria-label="'snippetRadioCheckbox-' + snippetId + '-' + val"
-                                    class="radio"
-                                    type="radio"
-                                    :value="val"
-                                >
-                            </td>
-                            <td>
-                                <label
-                                    class="check-box-label"
-                                    :for="'snippetRadioCheckbox-' + snippetId + '-' + val"
-                                >{{ val }}</label>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                        </label>
+                    </span>
+                    <span
+                        class="subItem"
+                    >
+                        <input
+                            v-if="multiselect"
+                            :id="'snippetRadioCheckbox-' + snippetId + '-' + val"
+                            v-model="dropdownSelected"
+                            :aria-label="'snippetRadioCheckbox-' + snippetId + '-' + val"
+                            class="checkbox"
+                            type="checkbox"
+                            :value="val"
+                        >
+                        <input
+                            v-else
+                            :id="'snippetRadioCheckbox-' + snippetId + '-' + val"
+                            v-model="dropdownSelected[0]"
+                            :aria-label="'snippetRadioCheckbox-' + snippetId + '-' + val"
+                            class="radio"
+                            type="radio"
+                            :value="val"
+                        >
+                    </span>
+                    <span
+                        class="subItem"
+                    >
+                        <label
+                            class="check-box-label"
+                            :for="'snippetRadioCheckbox-' + snippetId + '-' + val"
+                        >{{ val }}</label>
+                    </span>
+                </div>
             </div>
         </div>
     </div>
@@ -602,6 +594,26 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    .snippetListContainer .check-box-label {
+        margin-top: 2px;
+    }
+    .snippetListContainer .subItem {
+        padding: 0 5px 0 0;
+        vertical-align: middle;
+    }
+    .snippetListContainer .grid-container {
+        display: grid;
+        grid-template-columns: auto;
+        padding: 5px;
+    }
+    .snippetListContainer .grid-item {
+        padding: 5px;
+        text-align: left;
+    }
+    .snippetListContainer .grid-container > div {
+        text-align: left;
+        padding: 5px 0;
+    }
     select {
         box-sizing: border-box;
         outline: 0;
@@ -620,27 +632,12 @@ export default {
     .snippetDropdownContainer {
         height: auto;
     }
-    .snippetDropdownContainer input[type=radio], input[type=checkbox] {
-        margin: 0;
-    }
     .snippetDropdownContainer .radio, .snippetDropdownContainer .checkbox {
         display: inline-block;
     }
     .snippetDropdownContainer label {
         margin-bottom: 0;
         text-transform: capitalize;
-    }
-    .snippetDropdownContainer .table > thead > tr > th, .table > thead > tr > td, .table > tbody > tr > th, .table > tbody > tr > td, .table > tfoot > tr > th, .table > tfoot > tr > td {
-        padding: 4px;
-        line-height: 1.428571429;
-        vertical-align: middle;
-        border: none;
-    }
-    .snippetDropdownContainer .table > thead {
-        text-transform: capitalize;
-    }
-    .snippetDropdownContainer .table > thead > tr > th {
-        font-weight: normal;
     }
     .snippetListContainer .snippetListContainerIcon {
         width: 25px;
@@ -653,24 +650,11 @@ export default {
         clear: left;
         width: 100%;
     }
-    .snippetDropdownContainer .table-responsive .right {
-        position: absolute;
-        right: 0;
-    }
-    .snippetDropdownContainer .table-responsive a {
-        margin-right: 20px;
-    }
     .panel .snippetDropdownContainer .right,  .snippetDropdownContainer .right {
         position: absolute;
         right: 0;
     }
     .category-layer .panel .right {
         right: 30px;
-    }
-    .category-layer .panel .table-responsive .right {
-        right: 24px;
-    }
-    .table {
-        margin-bottom: 10px;
     }
 </style>
