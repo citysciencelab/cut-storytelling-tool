@@ -19,6 +19,8 @@
 ### Removed
 
 ### Fixed
+- Migrated the module featureViaURL from Backbone to Vue as a util. E2E tests were fixed and re-enabled.
+
 ---
 ## v2.19.0 - 2022-03-02
 ### Added
