@@ -102,8 +102,8 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 // src/modules/quickHelp
                 require("../../src/modules/quickHelp/tests/end2end/QuickHelp.e2e.js"),
 
-                // src\utils
-                // require("../../src/utils/tests/end2end/parametricUrl/ParametricUrl.e2e.js"),
+                // src/utils
+                require("../../src/utils/tests/end2end/parametricUrl/ParametricUrl.e2e.js"),
 
                 // non-module tests
                 require("../../src/tests/end2end/Pan.e2e.js"),
