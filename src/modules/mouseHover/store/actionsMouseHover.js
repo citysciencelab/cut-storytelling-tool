@@ -6,9 +6,13 @@ export default {
      * @param {module:ol/Map} map map object
      * @returns {void}
      */
-    initialize ({commit}, map) {
+    initialize ({rootState, commit}, map) {
         const {numFeaturesToShow, infoText} = Config.mouseHover;
         let featuresAtPixel = [];
+
+        commit("setLayersFromConfig", rootState.configJson.Themenconfig.Fachdaten.Layer);
+        commit("setMouseHoverLayers");
+        commit("setMouseHoverInfos");
 
         if (numFeaturesToShow) {
             commit("setNumFeaturesToShow", numFeaturesToShow);
@@ -38,6 +42,9 @@ export default {
                     }
                 }
             });
+            // if (featuresAtPixel[0]) {
+            //     console.log(featuresAtPixel[0].getProperties());
+            // }
         });
     }
 };

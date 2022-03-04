@@ -6,5 +6,9 @@
  */
 export default {
     numFeaturesToShow: 2,
-    infoText: ""
+    infoText: "",
+    visibleLayerList: [],
+    layersFromConfig: [],
+    mouseHoverLayers: [],
+    mouseHoverInfos: []
 };
