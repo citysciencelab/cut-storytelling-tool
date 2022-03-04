@@ -325,18 +325,20 @@ export default {
         if (state.isScaleSelectedManually) {
             canvasPrintOptions.scale = state.currentScale;
         }
-        else {
+        else if (state.autoAdjustScale) {
             dispatch("getOptimalScale", canvasOptions);
             canvasPrintOptions.scale = state.optimalScale;
         }
-
+        else {
+            canvasPrintOptions.scale = state.currentScale;
+        }
 
         dispatch("drawMask", drawMaskOpt);
         dispatch("drawPrintPage", canvasPrintOptions);
         context.fillStyle = "rgba(0, 5, 25, 0.55)";
         context.fill();
 
-        dispatch("setPrintLayers", state.optimalScale);
+        dispatch("setPrintLayers", canvasPrintOptions.scale);
     },
     /**
      * gets the optimal print scale for a map
