@@ -1,4 +1,4 @@
-import FeatureViaURL from "@modules/featureViaURL/model";
+import {createGeoJSON, getFeatureIds} from "../../../featureViaURL";
 import {expect} from "chai";
 import sinon from "sinon";
 
@@ -13,8 +13,7 @@ describe("featureViaURL", function () {
         spy.resetHistory();
     });
     describe("createGeoJSON", function () {
-        const {createGeoJSON} = FeatureViaURL.prototype,
-            geometryType = "Point",
+        const geometryType = "Point",
             regExp = /\d+/;
         let features = [{coordinates: [10, 53.5], label: "TestPunktEins"}, {coordinates: [10.5, 53.5], label: "TestPunktZwei"}],
             geoJSON;
@@ -96,8 +95,7 @@ describe("featureViaURL", function () {
             },
             fakeFunction = sinon.fake.returns({
                 getArray: () => [fakeLayer]
-            }),
-            {getFeatureIds} = FeatureViaURL.prototype;
+            });
 
         beforeEach(function () {
             sinon.stub(Radio, "request").callsFake(fakeFunction);

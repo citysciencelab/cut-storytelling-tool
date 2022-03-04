@@ -1,6 +1,9 @@
 import addGeoJSON from "../addGeoJSON.js";
 import store from "../../app-store";
 
+// All functions are exported, this is only for unit testing.
+// Usually, you'll want to use the default export.
+
 const gfiAttributes = {
         featureLabel: "",
         coordLabel: "",
@@ -16,7 +19,7 @@ const gfiAttributes = {
  * @param {Number} [epsg=4326] The EPSG-Code in which the features are coded.
  * @returns {Object} GeoJSON containing the features.
  */
-function createGeoJSON (features, geometryType, epsg = 4326) {
+export function createGeoJSON (features, geometryType, epsg = 4326) {
     const geoJSON = {
         type: "FeatureCollection",
         crs: {
@@ -67,7 +70,7 @@ function createGeoJSON (features, geometryType, epsg = 4326) {
  * @param {String} layerId Unique Id of the layer in which the features reside.
  * @returns {String[]} Array of FeatureIds.
  */
-function getFeatureIds (layerId) {
+export function getFeatureIds (layerId) {
     const featureArray = [],
         layer = Radio.request("Map", "getLayers").getArray().find(l => l.get("id") === layerId);
 
@@ -87,7 +90,7 @@ function getFeatureIds (layerId) {
  *
  * @returns {void}
  */
-function translate () {
+export function translate () {
     gfiAttributes.coordLabel = i18next.t("common:modules.featureViaURL.coordLabel");
     gfiAttributes.featureLabel = i18next.t("common:modules.featureViaURL.featureLabel");
     gfiAttributes.folderName = i18next.t("common:modules.featureViaURL.coordLabel");
@@ -102,7 +105,7 @@ function translate () {
  *
  * @returns {void}
  */
-function updateLayers () {
+export function updateLayers () {
     let layer;
 
     layerIds.forEach(id => {
