@@ -4,7 +4,7 @@ import {Style, Icon, Circle} from "ol/style.js";
 import {GeoJSON} from "ol/format.js";
 import Util from "@testUtil";
 
-describe.only("textStyleModel", function () {
+describe("textStyleModel", function () {
     const geojsonReader = new GeoJSON(),
         jsonFeatures = {
             "type": "FeatureCollection",
