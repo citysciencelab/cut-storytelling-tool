@@ -1315,6 +1315,7 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 [type:wfst]: # (Portalconfig.menu.tool.wfst)
 
 Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdown-header-portalconfigmenutool)** und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
+Neben **Portalconfig.menu.tools** können auch die Pfade **Portalconfig.menu.info**, **Portalconfig.menu.simulation** oder **Portalconfig.menu.utilities** verwendet werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
