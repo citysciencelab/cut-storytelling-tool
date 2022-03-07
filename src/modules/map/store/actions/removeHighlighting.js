@@ -2,7 +2,7 @@ import Feature from "ol/Feature";
 
 /**
  * Removes all features from the highlighted features
- * @param {Function} state state function
+ * @param {Object} state map state
  * @param {Function} commit commit function
  * @returns {void}
  */
@@ -17,7 +17,7 @@ function removeAllHighlightedFeatures (state, commit) {
 
 /**
  * Remove a single feature from the highlighted features
- * @param {Function} state state function
+ * @param {Object} state map state
  * @param {Function} commit commit function
  * @param {module:ol/Feature} feature the feature to remove from the highlighted features, remove all if none is given
  * @returns {void}
@@ -36,9 +36,9 @@ function removeSingleHighlightedFeature (state, commit, feature) {
 
 /**
  * reset highlighted feature style
- * @param {Function} store the store context
- * @param {Function} store.commit commit function
- * @param {Function} store.state state function
+ * @param {Object} ctx the store context
+ * @param {Function} ctx.commit commit function
+ * @param {Object} ctx.state map state
  * @param {module:ol/Feature} [feature] the feature to remove from the highlighted features, remove all if none is given
  * @returns {void}
  */

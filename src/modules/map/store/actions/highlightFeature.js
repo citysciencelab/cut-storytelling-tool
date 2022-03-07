@@ -1,6 +1,9 @@
 /**
  * check how to highlight
- * @param {Object} state state object
+ * @param {Object} ctx store context
+ * @param {Function} ctx.commit commit function
+ * @param {Function} ctx.dispatch dispatch function
+ * @param {Object} ctx.getters map getters
  * @param {Object} highlightObject contains several parameters for feature highlighting
  * @returns {void}
  */
@@ -18,7 +21,7 @@ function highlightFeature ({commit, dispatch, getters}, highlightObject) {
 /**
  * highlights a polygon feature
  * @param {Function} commit commit function
- * @param {Function} dispatch commit function
+ * @param {Function} dispatch dispatch function
  * @param {Object} highlightObject contains several parameters for feature highlighting
  * @fires VectorStyle#RadioRequestStyleListReturnModelById
  * @returns {void}
