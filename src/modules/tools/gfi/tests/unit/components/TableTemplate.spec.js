@@ -126,10 +126,6 @@ describe("src/modules/tools/gfi/components/templates/TableTemplate.vue", () => {
             button = wrapper.find("span.icon-turnarticle");
 
         await button.trigger("click");
-        console.log(button);
-        // console.log(wrapper.vm.rotateAngle);
-        // console.log(wrapper.vm);
-        // console.log(wrapper);
         expect(wrapper.vm.rotateAngle).to.be.equal(-90);
     });
 
