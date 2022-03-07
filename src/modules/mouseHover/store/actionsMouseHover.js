@@ -68,7 +68,7 @@ export default {
             features.map(feature => {
                 const configInfosForFeature = state.mouseHoverInfos.find(info => info.id === feature.getLayerId()),
                     featureProperties = feature.getProperties(),
-                    featureInfos = configInfosForFeature ? Object.keys(featureProperties).filter(key => configInfosForFeature.mouseHoverField.includes(key)) : "",
+                    featureInfos = configInfosForFeature ? configInfosForFeature.mouseHoverField.filter(key => Object.keys(featureProperties).includes(key)) : "",
                     featureDetails = [];
 
                 featureInfos.forEach(info => {
