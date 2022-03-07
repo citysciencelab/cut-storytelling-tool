@@ -2,7 +2,9 @@
 import DefaultTheme from "../themes/default/components/DefaultTheme.vue";
 import SensorTheme from "../themes/sensor/components/SensorTheme.vue";
 import getTheme from "../../utils/getTheme";
-import {mapActions, mapGetters} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
+
+import getters from "../../store/gettersGfi";
 import ToolWindow from "../../../../../share-components/ToolWindow.vue";
 
 export default {
@@ -25,6 +27,7 @@ export default {
     },
     computed: {
         ...mapGetters("Map", ["clickCoord"]),
+        ...mapGetters("Tools/Gfi", Object.keys(getters)),
         /**
          * Returns the title of the gfi.
          * @returns {String} the title
@@ -44,14 +47,28 @@ export default {
     },
     mounted: function () {
         this.placingPointMarker(this.clickCoord);
+        if (this.currentRotation !== null) {
+            this.rotateAngle = this.currentRotation;
+            this.rotate();
+        }
+        if (this.currentPosition !== null) {
+            this.$el.style.cssText = this.currentPosition;
+        }
     },
     beforeDestroy: function () {
+        if (this.$el.style.cssText) {
+            this.setCurrentPosition(this.$el.style.cssText);
+        }
+
         this.removePointMarker();
     },
     methods: {
         ...mapActions("MapMarker", ["removePointMarker", "placingPointMarker"]),
+        ...mapMutations("Tools/Gfi", ["setCurrentRotation", "setCurrentPosition"]),
 
         close () {
+            this.setCurrentRotation(null);
+            this.setCurrentPosition(null);
             this.$emit("close");
         },
 
@@ -66,6 +83,7 @@ export default {
                 className = this.$el.className.substring(0, this.$el.className.indexOf("rotate")).trim(),
                 transformOrigin = `${headerwidth - 40}px ${headerHeight - 20}px`;
 
+            this.setCurrentRotation(this.rotateAngle);
             this.rotateAngle = this.rotateAngle - 90;
             if (this.rotateAngle === -360) {
                 this.rotateAngle = 0;
