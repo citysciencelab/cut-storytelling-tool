@@ -47,11 +47,11 @@ export default {
     },
     mounted: function () {
         this.placingPointMarker(this.clickCoord);
-        if (this.currentRotation !== null) {
+        if (this.currentRotation) {
             this.rotateAngle = this.currentRotation;
             this.rotate();
         }
-        if (this.currentPosition !== null) {
+        if (this.currentPosition) {
             this.$el.style.cssText = this.currentPosition;
         }
     },
@@ -67,8 +67,6 @@ export default {
         ...mapMutations("Tools/Gfi", ["setCurrentRotation", "setCurrentPosition"]),
 
         close () {
-            this.setCurrentRotation(null);
-            this.setCurrentPosition(null);
             this.$emit("close");
         },
 
