@@ -347,6 +347,7 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                 state = {
                     layoutMapInfo: [772, 1044],
                     isScaleSelectedManually: false,
+                    autoAdjustScale: true,
                     scaleList: [500, 1000, 2500, 5000, 10000, 20000, 40000, 60000, 100000],
                     optimalScale: 20000
                 },
@@ -392,6 +393,7 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                 state = {
                     layoutMapInfo: [772, 1044],
                     isScaleSelectedManually: false,
+                    autoAdjustScale: true,
                     scaleList: [500, 1000, 2500, 5000, 10000, 20000, 40000, 60000, 100000],
                     optimalScale: 20000,
                     DOTS_PER_INCH: 72,
@@ -534,6 +536,7 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                 state = {
                     layoutMapInfo: [772, 1044],
                     isScaleSelectedManually: false,
+                    autoAdjustScale: true,
                     scaleList: [500, 1000, 2500, 5000, 10000, 20000, 40000, 60000, 100000],
                     optimalScale: 20000,
                     DOTS_PER_INCH: 72,

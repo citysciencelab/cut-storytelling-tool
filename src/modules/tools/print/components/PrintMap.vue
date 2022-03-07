@@ -329,7 +329,7 @@ export default {
         :icon="glyphicon"
         :active="active"
         :show-in-sidebar="true"
-        :initial-width="350"
+        :initial-width="400"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
         :deactivate-gfi="deactivateGFI"
@@ -440,6 +440,26 @@ export default {
                         class="hint-info"
                     >
                         {{ $t("common:modules.tools.print.hintInfoScale") }}
+                    </div>
+                </div>
+                <div
+                    class="form-group form-group-sm"
+                >
+                    <label
+                        class="col-sm-5 control-label"
+                        for="autoAdjustScale"
+                    >
+                        {{ $t("common:modules.tools.print.autoAdjustScale") }}
+                    </label>
+                    <div class="col-sm-7">
+                        <div class="checkbox">
+                            <input
+                                id="autoAdjustScale"
+                                type="checkbox"
+                                :checked="autoAdjustScale"
+                                @change="setAutoAdjustScale($event.target.checked)"
+                            >
+                        </div>
                     </div>
                 </div>
                 <div
