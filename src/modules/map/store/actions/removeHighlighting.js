@@ -1,3 +1,5 @@
+import Feature from "ol/Feature";
+
 /**
  * Removes all features from the highlighted features
  * @param {Function} state state function
@@ -41,7 +43,7 @@ function removeSingleHighlightedFeature (state, commit, feature) {
  * @returns {void}
  */
 function removeHighlightFeature ({commit, state}, feature) {
-    if (feature) {
+    if (feature && feature instanceof Feature) {
         removeSingleHighlightedFeature(state, commit, feature);
     }
     else {
