@@ -25,13 +25,14 @@ export default {
 
 <template>
     <div
+        v-if="active"
         id="mousehover-overlay"
         class="tooltip top in"
         role="tooltip"
     >
         <div
             v-if="infoBox"
-            class="tooltip-inner mouseHover in"
+            class="tooltip-inner mouseHover"
         >
             <div
                 v-for="(text, x) in infoBox"
@@ -50,10 +51,10 @@ export default {
                 </span>
             </div>
             <span
-                v-if="pleaseZoom"
+                v-if="pleaseZoom && infoText"
                 class="info"
             >
-                <p>{{ $t("mouseHover.infoText") }}</p>
+                <p>{{ $t(infoText) }}</p>
             </span>
         </div>
     </div>
@@ -64,9 +65,6 @@ export default {
 $color_1: #777;
 $background_color_1: rgb(255, 255, 255);
 
-.tooltip {
-    pointer-events: none;
-}
 .mouseHover {
     font-size: 12px;
     text-align: left;

@@ -1,3 +1,4 @@
+import Overlay from "ol/Overlay.js";
 /**
  * User type definition
  * @typedef {Object} MouseHoverState
@@ -13,6 +14,9 @@
  * @property {Boolean} pleaseZoom True if more features are being hovered than the configured max in numFeaturesToShow.
  */
 export default {
+    active: false,
+    overlay: new Overlay({
+    }),
     numFeaturesToShow: 2,
     infoText: "",
     visibleLayerList: [],

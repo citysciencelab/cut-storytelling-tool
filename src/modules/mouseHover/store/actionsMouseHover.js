@@ -1,5 +1,4 @@
 import {createGfiFeature} from "../../../api/gfi/getWmsFeaturesByMimeType";
-import Overlay from "ol/Overlay.js";
 
 export default {
     /**
@@ -15,6 +14,7 @@ export default {
         commit("setLayersFromConfig", rootState.configJson.Themenconfig.Fachdaten.Layer);
         commit("setMouseHoverLayers");
         commit("setMouseHoverInfos");
+        commit("setInfoText", Config.mouseHover.infoText);
 
         if (numFeaturesToShow) {
             commit("setNumFeaturesToShow", numFeaturesToShow);
@@ -23,13 +23,8 @@ export default {
             commit("setInfoText", infoText);
         }
         map.on("pointermove", (evt) => {
-            const overlay = new Overlay({
-            });
-
             featuresAtPixel = [];
             commit("setHoverPosition", evt.coordinate);
-            overlay.setPosition(evt.coordinate);
-            overlay.setElement(document.querySelector("#mousehover-overlay"));
             map.forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
                 if (layer?.getVisible() && layer?.get("gfiAttributes") && layer?.get("gfiAttributes") !== "ignore") {
                     if (feature.getProperties().features) {
@@ -50,8 +45,9 @@ export default {
                     }
                 }
             });
-            Radio.trigger("Map", "addOverlay", overlay);
-            commit("setPleaseZoom", featuresAtPixel.length > state.numFeaturesToShow);
+            state.overlay.setPosition(state.hoverPosition);
+            state.overlay.setElement(document.querySelector("#mousehover-overlay"));
+            Radio.trigger("Map", "addOverlay", state.overlay);
             return featuresAtPixel.length > 0 ? dispatch("filterInfos", featuresAtPixel) : commit("setInfoBox", null);
         });
     },
@@ -64,18 +60,30 @@ export default {
         const infoBox = [];
 
         if (features.length > 0) {
-
             features.map(feature => {
-                const configInfosForFeature = state.mouseHoverInfos.find(info => info.id === feature.getLayerId()),
-                    featureProperties = feature.getProperties(),
-                    featureInfos = configInfosForFeature ? configInfosForFeature.mouseHoverField.filter(key => Object.keys(featureProperties).includes(key)) : "",
-                    featureDetails = [];
+                const configInfosForFeature = state.mouseHoverInfos.find(info => info.id === feature.getLayerId());
 
-                featureInfos.forEach(info => {
-                    featureDetails.push(featureProperties[info]);
-                });
-                infoBox.push(featureDetails);
-                return commit("setInfoBox", infoBox.slice(0, state.numFeaturesToShow));
+                if (configInfosForFeature) {
+                    commit("setActive", true);
+
+                    const featureProperties = feature.getProperties(),
+                        featureInfos = typeof configInfosForFeature.mouseHoverField === "string" ? configInfosForFeature.mouseHoverField : configInfosForFeature.mouseHoverField.filter(key => Object.keys(featureProperties).includes(key)),
+                        featureDetails = [];
+
+                    if (Array.isArray(featureInfos)) {
+                        featureInfos.forEach(info => {
+                            featureDetails.push(featureProperties[info]);
+                        });
+                    }
+                    else {
+                        featureDetails.push(featureProperties[featureInfos]);
+                    }
+
+                    infoBox.push(featureDetails);
+                    commit("setPleaseZoom", features.length > state.numFeaturesToShow);
+                    commit("setInfoBox", infoBox.slice(0, state.numFeaturesToShow));
+                }
+                return null;
             });
         }
     }
