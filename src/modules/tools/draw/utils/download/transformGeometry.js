@@ -44,7 +44,7 @@ function transformPoint (sourceProjectionCode, coords) {
  * @returns {Geometry} The given geometry.
  */
 function transformGeometry (sourceProjectionCode, geometry) {
-    return geometry.transform(proj4(sourceProjectionCode), "EPSG:4326");
+    return geometry.transform(sourceProjectionCode, "EPSG:4326");
 }
 
 export {
