@@ -54,8 +54,8 @@ describe("src/modules/map/store/actions/removeHighlighting.js", () => {
         };
         it("should reset the feature icon increase", done => {
             testAction(actions.removeHighlightFeature, olFeature, state, {}, [
-                {type: "setHighlightedFeature", payload: []},
-                {type: "setHighlightedFeatureStyle", payload: []}
+                {type: "setHighlightedFeatureStyles", payload: []},
+                {type: "setHighlightedFeatures", payload: []}
             ], {}, done);
         });
     });

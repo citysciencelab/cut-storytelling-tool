@@ -23,7 +23,8 @@ function removeAllHighlightedFeatures (state, commit) {
  * @returns {void}
  */
 function removeSingleHighlightedFeature (state, commit, feature) {
-    const index = this.highlightedFeatures.indexOf(feature);
+
+    const index = state.highlightedFeatures.indexOf(feature);
 
     if (index !== -1) {
         const highlightedFeatureStyle = state.highlightedFeatureStyles[index];
