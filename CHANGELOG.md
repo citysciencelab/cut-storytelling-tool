@@ -19,6 +19,8 @@
 ### Removed
 
 ### Fixed
+- Tool Print: Increase timeouts to fix some false-negative tests
+
 ---
 ## v2.19.0 - 2022-03-02
 ### Added

@@ -252,7 +252,7 @@ describe("src/modules/tools/print/store/actionsPrint", function () {
     });
 
     describe("waitForPrintJobSuccess", function () {
-        it.skip("is not done yet so it should start another print request", done => {
+        it("is not done yet so it should start another print request", done => {
             const state = {
                     serviceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
                     printAppId: "master"
@@ -277,7 +277,7 @@ describe("src/modules/tools/print/store/actionsPrint", function () {
                 {type: "setProgressWidth", payload: "width: 80%", commit: true},
                 {type: "sendRequest", payload: serviceRequest, dispatch: true}
             ], {}, done);
-        }).timeout(3000);
+        }).timeout(10000);
         it("is done so it should activate the download", done => {
             const state = {
                     serviceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
