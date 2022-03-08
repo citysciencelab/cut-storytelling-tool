@@ -45,7 +45,7 @@ const FilterModel = Tool.extend({
                     return query.layerId === layerId;
                 });
 
-                return predefinedQuery[0].name;
+                return predefinedQuery[0]?.name;
             },
             "getFilters": function () {
                 const predefinedQueries = this.get("predefinedQueries");
