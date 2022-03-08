@@ -19,7 +19,7 @@
 ### Removed
 
 ### Fixed
-- Issue #680, #683: transparency setting has no visible effect in treeType custom
+- Issue #733, #680, #683: transparency setting has no visible effect in treeType custom
 
 ---
 ## v2.19.0 - 2022-03-02

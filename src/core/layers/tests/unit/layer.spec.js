@@ -263,8 +263,6 @@ describe("src/core/layers/layer.js", () => {
         const layerWrapper = new Layer(attributes, olLayer);
 
         expect(layerWrapper.attributes.transparency).to.be.equals(50);
-        expect(layerWrapper.get("layer").getOpacity()).to.be.equals(0);
-        layerWrapper.updateLayerTransparency();
         expect(layerWrapper.get("layer").getOpacity()).to.be.equals(0.5);
     });
     it("updateLayerTransparency shall update layers opacity if selected is false", function () {
