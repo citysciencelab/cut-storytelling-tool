@@ -45,9 +45,10 @@ export default {
                     }
                 }
             });
-            state.overlay.setPosition(state.hoverPosition);
+            state.overlay.setPosition(evt.coordinate);
             state.overlay.setElement(document.querySelector("#mousehover-overlay"));
             Radio.trigger("Map", "addOverlay", state.overlay);
+            commit("setActive", true);
             return featuresAtPixel.length > 0 ? dispatch("filterInfos", featuresAtPixel) : commit("setInfoBox", null);
         });
     },
@@ -64,7 +65,6 @@ export default {
                 const configInfosForFeature = state.mouseHoverInfos.find(info => info.id === feature.getLayerId());
 
                 if (configInfosForFeature) {
-                    commit("setActive", true);
 
                     const featureProperties = feature.getProperties(),
                         featureInfos = typeof configInfosForFeature.mouseHoverField === "string" ? configInfosForFeature.mouseHoverField : configInfosForFeature.mouseHoverField.filter(key => Object.keys(featureProperties).includes(key)),
