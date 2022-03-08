@@ -13,7 +13,8 @@
 - Issue #530: New checkbox for the print module to disable the auto adjustment of the print mask scale
 
 ### Changed
-
+- Issue #684: The download of the draw tool now supports the projection of the map
+-
 ### Deprecated
 
 ### Removed
