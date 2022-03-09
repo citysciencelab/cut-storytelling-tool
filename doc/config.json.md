@@ -5052,7 +5052,7 @@ Style definitions. Available for *Vector Tile Layers* only.
 |name|yes|String||Display name, e.g. used in the selection tool.|false|
 |url|yes|String||URL to load a style from. The linked JSON *must* match the [Mapbox style specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/).|false|
 |defaultStyle|no|String||If set `true`, this style is used initially; if no field is set `true`, the first style is used.|false|
-|resolutions|no|Number[]|Default resolutions from ol-mapbox-style project|Resolutions for zoom levels defined in style|false|
+|resolutions|no|Number[]||Resolutions for zoom levels defined in style. If not set default resolutions from ol-mapbox-style project are used.|false|
 
 **Example**
 

@@ -4970,7 +4970,7 @@ Style-Definition; nur für Vector Tile Layer.
 |name|ja|String||Anzeigename, z.B. für das Auswahltool|false|
 |url|ja|String||URL, von der der Style bezogen werden kann. Die verlinkte JSON muss zur [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/) passen.|false|
 |defaultStyle|nein|String||Falls hier `true` gesetzt ist, wird der Style initial ausgewählt, unabhängig von seinem Index; wenn das Feld nirgends auf `true` gesetzt ist, wird der erste Style benutzt|false|
-|resolutions|no|Number[]|Default Resolutions aus dem ol-mapbox-style Projekt|Auflösungen für die im Styling definierten Zoom Level|false|
+|resolutions|no|Number[]||Auflösungen für die im Styling definierten Zoom Level. Wenn nicht angegeben werden die default Resolutions aus dem ol-mapbox-style Projekt benutzt|false|
 
 **Beispiel**
 ```
