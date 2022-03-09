@@ -23,7 +23,7 @@ export default {
     layersFromConfig: [],
     mouseHoverLayers: [],
     mouseHoverInfos: [],
-    infoBox: [],
+    infoBox: null,
     hoverPosition: null,
     pleaseZoom: false
 };

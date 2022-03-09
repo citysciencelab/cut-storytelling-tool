@@ -27,35 +27,35 @@ export default {
     <div
         v-if="active"
         id="mousehover-overlay"
-        class="tooltip top in"
-        role="tooltip"
     >
         <div
             v-if="infoBox"
-            class="tooltip-inner mouseHover"
+            class="tooltip in mouseHover"
+            role="tooltip"
         >
-            <div
-                v-for="(text, x) in infoBox"
-                :key="x"
-            >
-                <span
-                    v-for="(info, i) in text"
-                    :key="i"
-                ><p
-                     v-if="i === 0"
-                     class="title"
-                 >{{ info }}</p>
-                    <p
-                        v-else
-                    >{{ info }}</p>
+            <div>
+                <div
+                    v-for="(info, x) in infoBox"
+                    :key="x"
+                >
+                    <span
+                        v-for="(text, i) in info"
+                        :key="i"
+                    >
+                        <p
+                            v-if="i === 0"
+                            class="title"
+                        >{{ text }}</p>
+                        <p v-else>{{ text }}</p>
+                    </span>
+                    <br v-if="x !== infoBox.length - 1 || pleaseZoom">
+                </div><span
+                    v-if="pleaseZoom"
+                    class="info"
+                >
+                    <p>{{ $t(infoText) }}</p>
                 </span>
             </div>
-            <span
-                v-if="pleaseZoom && infoText"
-                class="info"
-            >
-                <p>{{ $t(infoText) }}</p>
-            </span>
         </div>
     </div>
 </template>
@@ -64,15 +64,16 @@ export default {
 @import "~/css/mixins.scss";
 $color_1: #777;
 $background_color_1: rgb(255, 255, 255);
-
+.hide {
+    display: none;
+}
 .mouseHover {
     font-size: 12px;
     text-align: left;
     max-width: inherit;
-    padding: 8px;
     background-color: $background_color_1;
     color: $color_1;
-    white-space: pre;
+    white-space: nowrap;
     border: 1px solid rgba(0, 0, 0, 0.2);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
     .title {
@@ -83,15 +84,5 @@ $background_color_1: rgb(255, 255, 255);
         font-size: 14px;
         font-style: italic;
     }
-}
-.text {
-    padding: 8px;
-}
-
-.tooltip.bottom {
-    margin-top: 8px;
-}
-.tooltip.top {
-    margin-top: -8px;
 }
 </style>
