@@ -22,6 +22,7 @@
 
 ### Fixed
 - Issue #733, #680, #683: transparency setting has no visible effect in treeType custom
+- Issue #700: Print tool now updates layout name on initialization.
 
 ---
 ## v2.19.0 - 2022-03-02
@@ -75,7 +76,6 @@
 - Issue #685:
   - WMS-T now works with all ISO 8601 timestamps (i.e. "2022", "2022-01-26T00:00:00.000Z", and all precision grades in between) as specified by OGC.
   - WMS-T now dynamically finds a layer's Extent/Dimension in GetCapabilities Response (position was hard-wired previously).
-- Issue #700: Print tool now updates layout name on initialization.
 - Tool Routing: Exported routes now inherit the style from route view.
 - Folder expand/collapse works in background maps, if treetype is 'custom'.
 - Issue #637, Issue #656: If background maps are configured in folder structures, then when such a background map is activated, no more subject data are overlaid.
