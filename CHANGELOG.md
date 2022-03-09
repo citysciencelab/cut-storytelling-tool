@@ -13,12 +13,16 @@
 - Issue #530: New checkbox for the print module to disable the auto adjustment of the print mask scale
 
 ### Changed
+- Issue #676: addWMS tool now uses crs of the map instead of hard coded crs
 
 ### Deprecated
 
 ### Removed
+- Removed hardcoded LayerIds for 3D support in wms.js. Setting has to be done now via services.json attribute notSupportedIn3D.
 
 ### Fixed
+- Issue #733, #680, #683: transparency setting has no visible effect in treeType custom
+
 ---
 ## v2.19.0 - 2022-03-02
 ### Added
@@ -50,6 +54,7 @@
 - Checking the allowed version for wfs layers has been moved to the masterportalAPI.
 - Migrated the parsing of `rest-services.json` from Backbone to Vue. Backbone components using RestReader are connected using RadioBridge.
 - Routing tool: german translation of recommended route was corrected.
+- The action Map/HighlightFeature now works for more than one feature, via removeHighlightFeature(feature) an individual highlighting can be removed, or all if no argument is given
 
 ### Deprecated
 
