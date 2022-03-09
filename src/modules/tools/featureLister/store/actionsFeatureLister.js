@@ -59,7 +59,7 @@ export default {
             dispatch("switchToDetails");
             dispatch("Map/zoomTo", {
                 geometryOrExtent: featureGeometry,
-                options: {duration: 0, zoom: 9} // TODO: duration macht Probleme wenn nicht auf 0?
+                options: {duration: 800, zoom: 9}
             }, {root: true});
         }
     },
