@@ -47,7 +47,7 @@ export default {
     },
     mounted: function () {
         this.placingPointMarker(this.clickCoord);
-        if (this.currentRotation) {
+        if (typeof this.currentRotation === "number") {
             this.rotateAngle = this.currentRotation;
             this.rotate();
         }
