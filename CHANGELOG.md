@@ -25,6 +25,7 @@
 - Issue #605: Draw Tool fixed to support not using simple_point as first item of iconList.
 - Issue #733, #680, #683: transparency setting has no visible effect in treeType custom
 - Issue #700: Print tool now updates layout name on initialization.
+- Print will now use serviceUrl when generated
 
 ---
 ## v2.19.0 - 2022-03-02
