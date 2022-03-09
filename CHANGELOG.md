@@ -15,6 +15,7 @@
 - Adds a bitbucket pipeline to run `npm audit` automatically.
 - Module `filterGeneral`: wfs filter via server (aka `external wfs filtering`) added
 - Added a `showGeographicIdentifier` attribute to be able to use the `geographicIdentifier` to display the gazetteer search result.
+- Searchbar: Added a `showGeographicIdentifier` attribute to be able to use the `geographicIdentifier` to display the gazetteer search result.
 
 ### Changed
 - Issue #674, #676: addWMS tool and orientation control are now using the CRS of the map instead of hard coded CRS
@@ -31,7 +32,7 @@
 
 ### Removed
 - Removed hardcoded LayerIds for 3D support in wms.js. Setting has to be done now via services.json attribute notSupportedIn3D.
-- Configuration option of `namespace` was removed from gazetteer search, because masterportalAPI removes namespace from search hits.
+- Searchbar: Configuration option of `namespace` was removed from gazetteer search, because masterportalAPI removes namespace from search hits.
 
 ### Fixed
 - Issue #605: Draw Tool fixed to support not using simple_point as first item of iconList.
