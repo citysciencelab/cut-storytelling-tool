@@ -4,12 +4,9 @@ import {expect} from "chai";
 import sinon from "sinon";
 import axios from "axios";
 
-import { crs } from "masterportalAPI";
+import {crs} from "masterportalAPI";
 
 import * as stylefunction from "ol-mapbox-style/dist/stylefunction";
-import { altShiftKeysOnly } from "ol/events/condition";
-
-
 
 import store from "../../../../app-store";
 
@@ -58,71 +55,80 @@ describe("core/modelList/layer/vectorTile", function () {
 
     beforeEach(() => crs.registerProjections());
 
-    describe("vector tile layer config", function() {
+    describe("vector tile layer config", function () {
 
-        it("should create a layer with minimal config", function() {
-            const mapStub = sinon.stub(store, 'getters')
-            mapStub.value({"Map/projection": {getCode: () => { return "EPSG:25832"; }}})
+        it("should create a layer with minimal config", function () {
+            const mapStub = sinon.stub(store, "getters");
 
+            mapStub.value({"Map/projection": {getCode: () => {
+                return "EPSG:25832";
+            }}});
+
+            // eslint-disable-next-line one-var
             const vtLayer = new VectorTile(requiredAttrs),
-            layer = vtLayer.get("layer"),
-            source = layer.getSource(),
-            tileGrid = source.getTileGrid();
+                layer = vtLayer.get("layer"),
+                source = layer.getSource();
+
 
             expect(vtLayer.get("gfiAttributes")).to.equal("showAll");
             expect(vtLayer.get("gfiTheme")).to.equal("default");
             expect(vtLayer.get("id")).to.equal("911");
             expect(vtLayer.get("minScale")).to.equal("0");
-            expect(vtLayer.get("maxScale")).to.equal("1000000")
-            
+            expect(vtLayer.get("maxScale")).to.equal("1000000");
+
             expect(layer.get("id")).to.equal("911");
             expect(layer.get("name")).to.equal("Foobar");
 
-            expect(source.getUrls()[0]).to.equal("https://doesthisurlexist.de/vt/tiles/esri/Test_VT_3857/p12/tile/{z}/{y}/{x}.pbf")
-        })
+            expect(source.getUrls()[0]).to.equal("https://doesthisurlexist.de/vt/tiles/esri/Test_VT_3857/p12/tile/{z}/{y}/{x}.pbf");
+        });
 
-        it("should apply in services.json.md defined defaults", function() {
-            const mapStub = sinon.stub(store, 'getters')
-            mapStub.value({"Map/projection": {getCode: () => { return "EPSG:25382"; }}})
+        it("should apply in services.json.md defined defaults", function () {
+            const mapStub = sinon.stub(store, "getters");
 
+            mapStub.value({"Map/projection": {getCode: () => {
+                return "EPSG:25382";
+            }}});
+
+            // eslint-disable-next-line one-var
             const defaultValues = { // defaults defined in services.json.md
-                zDirection: 1,
-                epsg: "EPSG:25832", // default value from config.json.md/MapView. Should be the default CRS
-                extent: [ // If not set, the portal's coordinate reference system's extent is used
-                    -1877994.66, 
-                    3932281.56, 
-                    836715.13, 
-                    9440581.95
-                ], 
-                origin: [ // if not set, the portal's coordinate reference system's top-left corner is used.
-                    -1877994.66, 
-                    836715.13
-                ], 
-                resolutions: [ // If not used, the portal's resolutions are used. (Missing default resolution definition? used default resolutions from masterportal-api)
-                    66.14579761460263,
-                    26.458319045841044,
-                    15.874991427504629,
-                    10.583327618336419,
-                    5.2916638091682096,
-                    2.6458319045841048,
-                    1.3229159522920524,
-                    0.6614579761460262,
-                    0.2645831904584105,
-                    0.13229159522920521,
-                ], 
-                tileSize: 512,
-                layerAttribution: "nicht vorhanden",
-                transparency: 0,
-                visibility: false,
-                useProxy: false
-            },
-            vtLayer = new VectorTile(requiredAttrs),
-            layer = vtLayer.get("layer"),
-            source = layer.getSource(),
-            tileGrid = source.getTileGrid();
+                    zDirection: 1,
+                    epsg: "EPSG:25832", // default value from config.json.md/MapView. Should be the default CRS
+                    extent: [ // If not set, the portal's coordinate reference system's extent is used
+                        -1877994.66,
+                        3932281.56,
+                        836715.13,
+                        9440581.95
+                    ],
+                    origin: [ // if not set, the portal's coordinate reference system's top-left corner is used.
+                        -1877994.66,
+                        836715.13
+                    ],
+                    resolutions: [ // If not used, the portal's resolutions are used. (Missing default resolution definition? used default resolutions from masterportal-api)
+                        66.14579761460263,
+                        26.458319045841044,
+                        15.874991427504629,
+                        10.583327618336419,
+                        5.2916638091682096,
+                        2.6458319045841048,
+                        1.3229159522920524,
+                        0.6614579761460262,
+                        0.2645831904584105,
+                        0.1322915952292052
+                    ],
+                    tileSize: 512,
+                    layerAttribution: "nicht vorhanden",
+                    transparency: 0,
+                    visibility: false,
+                    useProxy: false
+                },
+                vtLayer = new VectorTile(requiredAttrs),
+                layer = vtLayer.get("layer"),
+                source = layer.getSource(),
+                tileGrid = source.getTileGrid();
 
-            expect(vtLayer.get('useProxy')).to.be.false;
-            expect(vtLayer.get('layerAttribution')).to.be.undefined;
+
+            expect(vtLayer.get("useProxy")).to.be.false;
+            expect(vtLayer.get("layerAttribution")).to.be.undefined;
 
             expect(layer.getOpacity()).to.equal(1);
             expect(layer.getVisible()).to.be.false;
@@ -132,44 +138,48 @@ describe("core/modelList/layer/vectorTile", function () {
             expect(source.getAttributions()).to.be.null;
 
             // Note: this should be the extent of the projection but is the extent of EPSG:3857
-            //       this is because in masterportalAPI is no definition of the extent of the 
-            //       default projection which is EPSG:25832 
+            //       this is because in masterportalAPI is no definition of the extent of the
+            //       default projection which is EPSG:25832
             expect(tileGrid.getExtent()).to.deep.equal([
                 -20015077.371242613,
                 -20015077.371242613,
                 20015077.371242613,
                 20015077.371242613
             ]);
-            // Note: this should be the top left corner of the projection extent but is top left 
-            //       corner of extent of EPSG:3857 this is because in masterportalAPI is no 
-            //       definition of the extent of the default projection which is EPSG:25832 
+            // Note: this should be the top left corner of the projection extent but is top left
+            //       corner of extent of EPSG:3857 this is because in masterportalAPI is no
+            //       definition of the extent of the default projection which is EPSG:25832
             expect(tileGrid.getOrigin()).to.deep.equal([
                 -20015077.371242613,
                 20015077.371242613
             ]);
             expect(tileGrid.getResolutions()).to.deep.equal(defaultValues.resolutions);
             expect(tileGrid.getTileSize()).to.deep.equal(new Array(2).fill(defaultValues.tileSize));
-        })
+        });
 
-        it("should apply given attributes correct", function() {
-            const mapStub = sinon.stub(store, "getters")
-            mapStub.value({"Map/projection": {getCode: () => { return "EPSG:3857"; }}});
+        it("should apply given attributes correct", function () {
+            const mapStub = sinon.stub(store, "getters");
 
+            mapStub.value({"Map/projection": {getCode: () => {
+                return "EPSG:3857";
+            }}});
+
+            // eslint-disable-next-line one-var
             const vtLayer = new VectorTile(attrs),
-                  layer = vtLayer.get("layer"),
-                  source = layer.getSource(),
-                  tileGrid = source.getTileGrid();
+                layer = vtLayer.get("layer"),
+                source = layer.getSource(),
+                tileGrid = source.getTileGrid();
 
             expect(vtLayer.get("useProxy")).to.be.false;
             expect(vtLayer.get("layerAttribution")).to.be.undefined;
             expect(vtLayer.get("gfiAttributes")).to.equal(attrs.gfiAttributes);
             expect(vtLayer.get("gfiTheme")).to.equal(attrs.gfiTheme);
             expect(vtLayer.get("id")).to.equal(attrs.id);
-            expect(vtLayer.get("name")).to.equal(attrs.name)
+            expect(vtLayer.get("name")).to.equal(attrs.name);
             expect(vtLayer.get("styleId")).to.equal(attrs.styleId);
             expect(vtLayer.get("selectedStyleID")).to.equal(attrs.styleId);
             expect(vtLayer.get("vtStyles")).to.deep.equal(attrs.vtStyles);
-            
+
             expect(layer.get("id")).to.equal(attrs.id);
             expect(layer.get("name")).to.equal(attrs.name);
             expect(layer.getOpacity()).to.equal(1);
@@ -180,25 +190,25 @@ describe("core/modelList/layer/vectorTile", function () {
             expect(source.getAttributions()).to.be.null;
 
             expect(tileGrid.getExtent()).to.deep.equal([
-                902186.6748764697, 
-                7054472.604709217, 
-                1161598.3542590786, 
+                902186.6748764697,
+                7054472.604709217,
+                1161598.3542590786,
                 7175683.411718197
             ]);
             expect(tileGrid.getOrigin()).to.deep.equal([
-                -20037508.342787, 
+                -20037508.342787,
                 20037508.342787
             ]);
             expect(tileGrid.getResolutions()).to.deep.equal([
-                78271.51696401172, 
-                305.7481131406708, 
-                152.8740565703354, 
-                76.4370282851677, 
+                78271.51696401172,
+                305.7481131406708,
+                152.8740565703354,
+                76.4370282851677,
                 2.3886571339114906
             ]);
             expect(tileGrid.getTileSize()).to.deep.equal([512, 512]);
-        })
-    })
+        });
+    });
 
     describe("isStyleValid", function () {
         it("returns true only if required fields all exist", function () {
@@ -214,7 +224,7 @@ describe("core/modelList/layer/vectorTile", function () {
     });
 
     describe("setStyleById", function () {
-    /* @returns {object} mock context for setStyleById */
+        /* eslint-disable-next-line require-jsdoc */
         function makeContext () {
             return {
                 get: key => ({vtStyles})[key],
@@ -276,7 +286,8 @@ describe("core/modelList/layer/vectorTile", function () {
                 version: 8,
                 sources: {}
             };
-    /**
+
+        /**
      * @param {function} done mocha callback done
      * @returns {object} mock context for setStyleById
      */

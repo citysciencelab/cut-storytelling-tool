@@ -57,7 +57,7 @@ VectorTileLayer.prototype.setConfiguredLayerStyle = function () {
     }
     else {
 
-        if(typeof this.get("vtStyles") !== "undefined") {
+        if (typeof this.get("vtStyles") !== "undefined") {
             const style = this.get("vtStyles").find(({defaultStyle}) => defaultStyle) || this.get("vtStyles")[0];
 
             if (typeof style !== "undefined") {
@@ -136,13 +136,13 @@ VectorTileLayer.prototype.setStyleByDefinition = function ({id, url, resolutions
 
                 this.fetchSpriteData(spriteDataUrl)
                     .then(spriteData => {
-                        vectorTile.setStyle(this.get("layer"), style, {resolutions: resolutions, spriteData: spriteData, spriteImageUrl: spriteImageUrl, getFonts: addMpFonts})
+                        vectorTile.setStyle(this.get("layer"), style, {resolutions: resolutions, spriteData: spriteData, spriteImageUrl: spriteImageUrl, getFonts: addMpFonts});
                         this.set("selectedStyleID", id);
                     }
                     );
             }
             else {
-                vectorTile.setStyle(this.get("layer"), style, {resolutions: resolutions, getFonts: addMpFonts})
+                vectorTile.setStyle(this.get("layer"), style, {resolutions: resolutions, getFonts: addMpFonts});
                 this.set("selectedStyleID", id);
             }
         });
