@@ -172,6 +172,9 @@ $background_color_2: #646262;
             text-overflow: ellipsis;
         }
     }
+    .vue-tool-content-body {
+        border-radius: 12px;
+    }
     .vue-tool-content-body .body {
         max-height: 175px;
         overflow-x: hidden;
