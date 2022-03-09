@@ -13,7 +13,7 @@
 - Issue #530: New checkbox for the print module to disable the auto adjustment of the print mask scale
 
 ### Changed
-- Issue #676: addWMS tool now uses crs of the map instead of hard coded crs
+- Issue #674, #676: addWMS tool and orientation control are now using the CRS of the map instead of hard coded CRS
 - Issue #684: The download of the draw tool now supports the projection of the map
 
 ### Deprecated
