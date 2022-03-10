@@ -50,8 +50,6 @@ const actions = {
                 Radio.trigger("ModelList", "setModelAttributesById", id, {transparency});
                 commit("setTimeSliderDefaultValue", TIME);
             }
-            console.log('removed')
-            console.log(id)
         }
         Radio.trigger("Util", "refreshTree");
     },
