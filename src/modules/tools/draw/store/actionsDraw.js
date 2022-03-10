@@ -571,8 +571,8 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
                 featureToRemove = features[features.length - 1];
 
             if (typeof featureToRemove !== "undefined" && featureToRemove !== null) {
-                dispatch("updateUndoArray", {remove: true});
                 dispatch("updateRedoArray", {remove: false, feature: featureToRemove});
+                dispatch("updateUndoArray", {remove: true});
                 state.layer.getSource().removeFeature(featureToRemove);
             }
         },
