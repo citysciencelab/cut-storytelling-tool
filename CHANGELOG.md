@@ -13,6 +13,7 @@
 - Issue #530: New checkbox for the print module to disable the auto adjustment of the print mask scale
 
 ### Changed
+- Migrated the module mouseHover from Backbone to Vue.
 
 ### Deprecated
 
