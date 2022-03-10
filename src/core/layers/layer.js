@@ -164,6 +164,7 @@ Layer.prototype.toggleIsSelected = function () {
 
     this.setIsSelected(newValue);
     handleSingleBaseLayer(newValue, this);
+    handleSingleTimeLayer(newValue, this);
 };
 
 
@@ -464,7 +465,7 @@ Layer.prototype.moveUp = function () {
     bridge.moveModelInTree(this, 1);
 };
 /**
- * Called from setSelected, handles singleBaseLayer and timelayers.
+ * Called from setSelected, handles singleBaseLayer.
  * @param {Boolean} isSelected true, if layer is selected
  * @param {ol.Layer} layer the dedicated layer
  * @returns {void}
@@ -472,8 +473,7 @@ Layer.prototype.moveUp = function () {
 function handleSingleBaseLayer (isSelected, layer) {
     const id = layer.get("id"),
         layerGroup = bridge.getLayerModelsByAttributes({parentId: layer.get("parentId")}),
-        singleBaselayer = layer.get("singleBaselayer") && layer.get("parentId") === "Baselayer",
-        timeLayer = layer.get("typ") === "WMS" && layer.get("time");
+        singleBaselayer = layer.get("singleBaselayer") && layer.get("parentId") === "Baselayer";
 
     if (isSelected) {
         // This only works for treeType 'custom', otherwise the parentId is not set on the layer
@@ -495,12 +495,43 @@ function handleSingleBaseLayer (isSelected, layer) {
             });
             bridge.renderMenu();
         }
-        if (timeLayer) {
+    }
+}
+
+/**
+ * Called from setSelected, handles single time layers.
+ * @param {Boolean} isSelected true, if layer is selected
+ * @param {ol.Layer} layer the dedicated layer
+ * @returns {void}
+ */
+function handleSingleTimeLayer (isSelected, layer) {
+    const id = layer.get("id"),
+        timeLayer = layer.get("typ") === "WMS" && layer.get("time");
+
+    if (timeLayer) {
+        if (isSelected) {
+            const selectedLayers = bridge.getLayerModelsByAttributes({isSelected: true, type: "layer", typ: "WMS"}),
+                map2D = mapCollection.getMap("ol", "2D");
+            let found = false;
+
+            selectedLayers.forEach(sLayer => {
+                if (sLayer.get("time") && sLayer.get("id") !== id) {
+                    map2D?.removeLayer(sLayer.get("layer"));
+                    sLayer.set("isSelected", false);
+                    if (!sLayer.get("id").endsWith(store.state["WmsTime/layerAppendix"])) {
+                        found = sLayer.get("id");
+                    }
+                }
+            });
+            if (found) {
+                store.dispatch("WmsTime/toggleSwiper", found);
+            }
+
             store.commit("WmsTime/setTimeSliderActive", {active: true, currentLayerId: id});
         }
-    }
-    else if (timeLayer) {
-        layer.removeLayer(layer.get("id"));
+        else {
+            layer.removeLayer(layer.get("id"));
+        }
     }
 }
 
