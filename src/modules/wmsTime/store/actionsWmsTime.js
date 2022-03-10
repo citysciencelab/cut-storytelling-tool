@@ -50,6 +50,9 @@ const actions = {
                 Radio.trigger("ModelList", "setModelAttributesById", id, {transparency});
                 commit("setTimeSliderDefaultValue", TIME);
             }
+            mapCollection.getMap("ol", "2D").removeLayer(layerModel.get("layer"));
+            Radio.trigger("ModelList", "removeModelsById", secondId);
+            Radio.trigger("Parser", "removeItem", secondId);
         }
         Radio.trigger("Util", "refreshTree");
     },
