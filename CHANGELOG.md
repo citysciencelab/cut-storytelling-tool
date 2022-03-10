@@ -14,6 +14,7 @@
 
 ### Changed
 - Issue #674, #676: addWMS tool and orientation control are now using the CRS of the map instead of hard coded CRS
+- Issue #684: The download of the draw tool now supports the projection of the map
 
 ### Deprecated
 
@@ -23,6 +24,7 @@
 ### Fixed
 - Issue #605: Draw Tool fixed to support not using simple_point as first item of iconList.
 - Issue #733, #680, #683: transparency setting has no visible effect in treeType custom
+- Issue #700: Print tool now updates layout name on initialization.
 
 ---
 ## v2.19.0 - 2022-03-02
@@ -62,6 +64,7 @@
 ### Removed
 
 ### Fixed
+- Occasional language name "DE-DE" in the footer was changed to "DE".
 - Issue #483/Issue #687: Fixed responsiveness when switching between mobile and desktop
 - Issue #694: Folder with subfolders are also selectable. (Internal flag "isLeafFolder" removed)
 - Issue #695: Optimised order in if clause. First use "show_doc_url" in layers metadata, then check if service based on the config.js's metaDataCatalogueId exists. otherwise throw console.warn
