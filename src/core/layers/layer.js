@@ -515,14 +515,15 @@ function handleSingleTimeLayer (isSelected, layer) {
 
             selectedLayers.forEach(sLayer => {
                 if (sLayer.get("time") && sLayer.get("id") !== id) {
-                    map2D?.removeLayer(sLayer.get("layer"));
-                    sLayer.set("isSelected", false);
                     if (sLayer.get("id").endsWith(store.getters["WmsTime/layerAppendix"])) {
                         sLayer.removeLayer(sLayer.get("id"));
                     }
+                    else {
+                        map2D?.removeLayer(sLayer.get("layer"));
+                        sLayer.set("isSelected", false);
+                    }
                 }
             });
-
 
             store.commit("WmsTime/setTimeSliderActive", {active: true, currentLayerId: id});
         }
