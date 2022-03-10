@@ -14,7 +14,11 @@ import handleAxiosResponse from "../utils/handleAxiosResponse.js";
  * @returns {Promise<module:ol/Feature[]>}  Promise object represents the GetFeatureInfo request
  */
 export function requestGfi (mimeType, url) {
-    return axios.get(url)
+    return axios({
+        method: "get",
+        url,
+        withCredentials: true
+    })
         .then(response => handleAxiosResponse(response, "requestGfi"))
         .then(docString => {
             const parsedDocument = parseDocumentString(docString, mimeType);

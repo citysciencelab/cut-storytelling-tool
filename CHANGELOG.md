@@ -23,6 +23,7 @@
 
 ### Fixed
 - Issue #733, #680, #683: transparency setting has no visible effect in treeType custom
+- Issue #701: Secured WMS GFI requests now work. Previously, authorization failed.
 - Issue #700: Print tool now updates layout name on initialization.
 
 ---
