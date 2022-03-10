@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import sinon from "sinon";
-import actions from "../../store/actionsMouseHover";
-import stateMouseHover from "../../store/stateMouseHover";
+import actions from "../../../store/actionsMouseHover";
+import stateMouseHover from "../../../store/stateMouseHover";
 
 
 describe("tools/mouseHover/store/actionsMouseHover", () => {
