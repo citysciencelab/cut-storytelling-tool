@@ -59,7 +59,8 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
 
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
             testAction(chooseCurrentLayout, payload, state, {}, [
-                {type: "setCurrentLayout", payload: state.currentLayout}
+                {type: "setCurrentLayout", payload: state.currentLayout},
+                {type: "setCurrentLayoutName", payload: state.currentLayout.name}
             ], {}, done);
         });
     });

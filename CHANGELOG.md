@@ -13,7 +13,7 @@
 - Issue #530: New checkbox for the print module to disable the auto adjustment of the print mask scale
 
 ### Changed
-- Issue #676: addWMS tool now uses crs of the map instead of hard coded crs
+- Issue #674, #676: addWMS tool and orientation control are now using the CRS of the map instead of hard coded CRS
 
 ### Deprecated
 
@@ -22,6 +22,7 @@
 
 ### Fixed
 - Issue #733, #680, #683: transparency setting has no visible effect in treeType custom
+- Issue #700: Print tool now updates layout name on initialization.
 
 ---
 ## v2.19.0 - 2022-03-02
