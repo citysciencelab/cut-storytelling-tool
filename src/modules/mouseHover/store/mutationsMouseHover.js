@@ -1,7 +1,6 @@
 import {generateSimpleMutations} from "../../../app-store/utils/generators";
 import mouseHoverState from "./stateMouseHover";
 
-
 const mutations = {
     /**
      * Creates from every state-key a setter.
