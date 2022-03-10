@@ -14,7 +14,6 @@ export default {
         commit("setLayersFromConfig", rootState.configJson.Themenconfig.Fachdaten.Layer);
         commit("setMouseHoverLayers");
         commit("setMouseHoverInfos");
-        commit("setInfoText", Config.mouseHover.infoText);
 
         if (numFeaturesToShow) {
             commit("setNumFeaturesToShow", numFeaturesToShow);
@@ -78,13 +77,12 @@ export default {
                     else {
                         featureDetails.push(featureProperties[featureInfos]);
                     }
-
                     infoBox.push(featureDetails);
-                    commit("setPleaseZoom", features.length > state.numFeaturesToShow);
-                    commit("setInfoBox", infoBox.slice(0, state.numFeaturesToShow));
                 }
-                return null;
+                return infoBox;
             });
+            commit("setPleaseZoom", features.length > state.numFeaturesToShow);
+            commit("setInfoBox", infoBox.slice(0, state.numFeaturesToShow));
         }
     }
 };
