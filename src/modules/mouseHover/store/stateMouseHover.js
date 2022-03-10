@@ -2,6 +2,8 @@ import Overlay from "ol/Overlay.js";
 /**
  * User type definition
  * @typedef {Object} MouseHoverState
+ * @property {Boolean} active If true the overlay gets rendered.
+ * @property {Object} overlay =new Overlay({}) mouseHover overlay (tooltip) - paramaters get set during initialization.
  * @property {Number} numFeaturesToShow The number of features that will be shown in the popup.
  * @property {Number} infoText The text that will be shown in the popup.
  * @property {Array} visibleLayerList Array with the visible layers.
