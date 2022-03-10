@@ -512,20 +512,17 @@ function handleSingleTimeLayer (isSelected, layer) {
         if (isSelected) {
             const selectedLayers = bridge.getLayerModelsByAttributes({isSelected: true, type: "layer", typ: "WMS"}),
                 map2D = mapCollection.getMap("ol", "2D");
-            let found = false;
 
             selectedLayers.forEach(sLayer => {
                 if (sLayer.get("time") && sLayer.get("id") !== id) {
                     map2D?.removeLayer(sLayer.get("layer"));
                     sLayer.set("isSelected", false);
-                    if (!sLayer.get("id").endsWith(store.state["WmsTime/layerAppendix"])) {
-                        found = sLayer.get("id");
+                    if (sLayer.get("id").endsWith(store.getters["WmsTime/layerAppendix"])) {
+                        sLayer.removeLayer(sLayer.get("id"));
                     }
                 }
             });
-            if (found) {
-                store.dispatch("WmsTime/toggleSwiper", found);
-            }
+
 
             store.commit("WmsTime/setTimeSliderActive", {active: true, currentLayerId: id});
         }

@@ -5,6 +5,7 @@ import handleAxiosResponse from "../../utils/handleAxiosResponse";
 import store from "../../app-store";
 import detectIso8601Precision from "../../utils/detectIso8601Precision";
 import WMSLayer from "./wms";
+import mapCollection from "../dataStorage/mapCollection";
 
 /**
  * Creates a layer of type WMSTime.
