@@ -61,7 +61,7 @@ describe("tools/mouseHover/store/actionsMouseHover", () => {
 
         it("filters the infos from each feature", () => {
             state.mouseHoverInfos = [{id: "layerId-1", mouseHoverField: ["name", "id"]}, {id: "layerId-2", mouseHoverField: ["name", "kategorie"]}];
-            actions.filterInfos({state, commit}, features);
+            actions.filterInfos({state, commit, dispatch}, features);
             expect(commit.firstCall.args[0]).to.equal("setPleaseZoom");
             expect(commit.firstCall.args[1]).to.equal(false);
             expect(commit.secondCall.args[0]).to.equal("setInfoBox");
