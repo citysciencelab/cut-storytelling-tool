@@ -56,10 +56,11 @@ export default {
      * @param {Array} features array of hovered Features
      * @returns {void}
      */
-    filterInfos ({state, commit}, features) {
+    filterInfos ({state, commit, dispatch}, features) {
         const infoBox = [];
 
         if (features.length > 0) {
+
             features.map(feature => {
                 const configInfosForFeature = state.mouseHoverInfos.find(info => info.id === feature.getLayerId());
 
@@ -83,6 +84,23 @@ export default {
             });
             commit("setPleaseZoom", features.length > state.numFeaturesToShow);
             commit("setInfoBox", infoBox.slice(0, state.numFeaturesToShow));
+            dispatch("setOffset");
+        }
+    },
+    /**
+     * Sets the offset for the mouseHover popup depending on its height.
+     * It has to be an async function for the HTML Collection to be filled with
+     * the expected div.
+     * @returns {void}
+     */
+    async setOffset ({state}) {
+        try {
+            const htmlElement = await document.getElementsByClassName("mouseHover");
+
+            state.overlay.setOffset([0, -htmlElement[0].offsetHeight]);
+        }
+        catch (error) {
+            console.error(error);
         }
     }
 };

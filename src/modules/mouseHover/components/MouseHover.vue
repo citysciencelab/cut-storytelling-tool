@@ -64,8 +64,8 @@ export default {
 @import "~/css/mixins.scss";
 $color_1: #777;
 $background_color_1: rgb(255, 255, 255);
-.hide {
-    display: none;
+.tooltip {
+    pointer-events: none;
 }
 .mouseHover {
     font-size: 12px;
