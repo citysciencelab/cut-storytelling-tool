@@ -33,6 +33,7 @@
 - Issue #696: Draw tool now undoes and redoes drawn features in correct order
 - Gfi now remembers position and rotation in dipas
 - Issue #740: Adding `name` to `Fachdaten_Zeit` or `Fachdaten_3d` in `config.json` now successfully changes the name of the folder in the layerTree.
+- Fix some vulnerabilities in dependencies.
 
 ---
 
