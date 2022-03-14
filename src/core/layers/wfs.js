@@ -62,6 +62,7 @@ WFSLayer.prototype.createLayer = function (attrs) {
         },
         styleFn = this.getStyleFunction(attrs),
         options = {
+            doNotLoadInitially: attrs.doNotLoadInitially,
             wfsFilter: attrs.wfsFilter,
             clusterGeometryFunction: (feature) => {
                 // do not cluster invisible features; can't rely on style since it will be null initially

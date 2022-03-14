@@ -13,6 +13,7 @@
 ### Added
 - Issue #530: New checkbox for the print module to disable the auto adjustment of the print mask scale
 - Adds a bitbucket pipeline to run `npm audit` automatically.
+- Module `filterGeneral`: wfs filter via server (aka `external wfs filtering`) added
 
 ### Changed
 - Issue #674, #676: addWMS tool and orientation control are now using the CRS of the map instead of hard coded CRS
