@@ -1139,7 +1139,8 @@
               "true": "yes",
               "No": "no"
             },
-            "zoomToResult": "Zoom to result"
+            "zoomToResult": "Zoom to result",
+            "pagination": "Pagination"
         }
     }
 }

@@ -3039,6 +3039,7 @@ Multiple formulars (**[SearchInstances](#markdown-header-portalconfigmenutoolwfs
 |----|--------|----|-------|-----------|------|
 |instances|yes|**[searchInstance](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)**[]||Array of `searchInstances`. A singular **[searchInstance](#markdown-header-portalconfigmenutoolwfssearchsearchinstance)** corresponds to its own search form.|false|
 |zoomLevel|no|Number|5|Defines to which zoom level the tool should zoom. Should a chosen feature not fit the zoom level, a fitting zoom level is chosen automatically.|false|
+|resultsPerPage|no|Number|0|The search result list will at most show this amount of results at a time. Further results will be offered on separate result pages. 0 means showing all at the same time.|false|
 
 **Example**
 
