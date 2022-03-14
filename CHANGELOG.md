@@ -17,6 +17,7 @@
 - Module `filterGeneral`: wfs filter via server (aka `external wfs filtering`) added
 - Added a `showGeographicIdentifier` attribute to be able to use the `geographicIdentifier` to display the gazetteer search result.
 - Searchbar: Added a `showGeographicIdentifier` attribute to be able to use the `geographicIdentifier` to display the gazetteer search result.
+- Added new layer type OAF (OGCApiFeatures)
 
 ### Changed
 - Issue #674, #676: addWMS tool and orientation control are now using the CRS of the map instead of hard coded CRS
