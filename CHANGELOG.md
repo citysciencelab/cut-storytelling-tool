@@ -15,6 +15,7 @@
 ### Changed
 - Issue #674, #676: addWMS tool and orientation control are now using the CRS of the map instead of hard coded CRS
 - Issue #684: The download of the draw tool now supports the projection of the map
+- Issue #610: Refactor Elastic Search: The CreateHit() function has been modified to allow the Glyphicon and HitType to be assigned from the backend.
 
 ### Deprecated
 
