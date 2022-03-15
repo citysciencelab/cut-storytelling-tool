@@ -8,6 +8,7 @@
 - WMS-T: Behaviour is undefined on using multiple configured WMS-T.
 
 ---
+
 ## Unreleased - in development
 ### Added
 - Issue #530: New checkbox for the print module to disable the auto adjustment of the print mask scale
@@ -31,6 +32,9 @@
 - Print will now use serviceUrl when generated
 - Issue #696: Draw tool now undoes and redoes drawn features in correct order
 - Gfi now remembers position and rotation in dipas
+- Issue #740: Adding `name` to `Fachdaten_Zeit` or `Fachdaten_3d` in `config.json` now successfully changes the name of the folder in the layerTree.
+
+---
 
 ## v2.19.0 - 2022-03-02
 ### Added
