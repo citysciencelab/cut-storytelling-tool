@@ -15,6 +15,7 @@
 ### Changed
 - Issue #674, #676: addWMS tool and orientation control are now using the CRS of the map instead of hard coded CRS
 - Issue #684: The download of the draw tool now supports the projection of the map
+- Issue #610: Refactor Elastic Search: The CreateHit() function has been modified to allow the Glyphicon and HitType to be assigned from the backend.
 
 ### Deprecated
 
@@ -25,11 +26,12 @@
 - Issue #714: The configuration for the orientation control now accepts "poiDistances":true again. Also fixed a bug with features which have geometry type circle.
 - Issue #605: Draw Tool fixed to support not using simple_point as first item of iconList.
 - Issue #733, #680, #683: transparency setting has no visible effect in treeType custom
+- Issue #701: Secured WMS GFI requests now work. Previously, authorization failed.
 - Issue #700: Print tool now updates layout name on initialization.
 - Issue #581: Print tool now features a flag "printMapMarker" to optionally print map markers.
 - Print will now use serviceUrl when generated
+- Issue #696: Draw tool now undoes and redoes drawn features in correct order
 
----
 ## v2.19.0 - 2022-03-02
 ### Added
 - The gazetteer search function now supports changing the namespace by configuration.
