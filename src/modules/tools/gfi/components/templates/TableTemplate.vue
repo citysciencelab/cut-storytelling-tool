@@ -79,7 +79,7 @@ export default {
             const headerwidth = this.$el.getElementsByClassName("tool-window-heading")[0].offsetWidth,
                 headerHeight = this.$el.getElementsByClassName("tool-window-heading")[0].offsetHeight,
                 className = this.$el.className.substring(0, this.$el.className.indexOf("rotate")).trim(),
-                transformOrigin = `${headerwidth - 40}px ${headerHeight - 20}px`;
+                transformOrigin = `${headerwidth - 47}px ${headerHeight - 17}px`;
 
             this.setCurrentRotation(this.rotateAngle);
             this.rotateAngle = this.rotateAngle - 90;
