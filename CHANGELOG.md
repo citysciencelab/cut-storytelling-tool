@@ -29,9 +29,6 @@
 - Issue #581: Print tool now features a flag "printMapMarker" to optionally print map markers.
 - Print will now use serviceUrl when generated
 - Issue #696: Draw tool now undoes and redoes drawn features in correct order
-- Tool Print: Increase timeouts to fix some false-negative tests
-
----
 
 ## v2.19.0 - 2022-03-02
 ### Added
