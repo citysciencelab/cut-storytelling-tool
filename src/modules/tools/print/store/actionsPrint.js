@@ -66,7 +66,7 @@ export default {
      */
     startPrint: async function ({state, dispatch, commit}, print) {
         commit("setProgressWidth", "width: 25%");
-        getVisibleLayer();
+        getVisibleLayer(state.printMapMarker);
 
         const visibleLayerList = state.visibleLayerList,
             attr = {
