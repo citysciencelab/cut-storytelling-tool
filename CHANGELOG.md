@@ -37,6 +37,7 @@
 - Gfi now remembers position and rotation in dipas
 - Issue #740: Adding `name` to `Fachdaten_Zeit` or `Fachdaten_3d` in `config.json` now successfully changes the name of the folder in the layerTree.
 - Fix some vulnerabilities in dependencies.
+- Issue #746: Fix issue with playback function of timeSlider (WMS-T) not properly stopping after it reached the end of the time series.
 
 ---
 
