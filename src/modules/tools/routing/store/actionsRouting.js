@@ -39,7 +39,7 @@ export default {
             checkPaths = constantsRouting.nonOptionalConfigFields.map(field => field.split(".")),
             missing = checkPaths.filter(path => {
                 const val = path.reduce((partObj, partPath) => {
-                    return partObj[partPath];
+                    return partObj?.[partPath];
                 }, state);
 
                 return val === undefined || val === null;
