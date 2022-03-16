@@ -85,40 +85,6 @@ export function getFeatureIds (layerId) {
 }
 
 /**
- * Translates the values of this module, namely "coordLabel", "featureLabel", "folderName" and "typeLabel"
- * and updates the gfiAttributes on the added layers.
- *
- * @returns {void}
- */
-export function translate () {
-    gfiAttributes.coordLabel = i18next.t("common:modules.featureViaURL.coordLabel");
-    gfiAttributes.featureLabel = i18next.t("common:modules.featureViaURL.featureLabel");
-    gfiAttributes.folderName = i18next.t("common:modules.featureViaURL.coordLabel");
-    gfiAttributes.typeLabel = i18next.t("common:modules.featureViaURL.typeLabel");
-    updateLayers();
-}
-
-/**
- * Updates the labels for the features for all layers.
- * NOTE: When the gfi-window is still open, the values are not yet translated.
- * It needs to be reopened so that the changes take effect.
- *
- * @returns {void}
- */
-export function updateLayers () {
-    let layer;
-
-    layerIds.forEach(id => {
-        layer = Radio.request("Map", "getLayers").getArray().find(l => l.get("id") === id);
-        if (typeof layer !== "undefined") {
-            layer.get("gfiAttributes").featureLabel = gfiAttributes.featureLabel;
-            layer.get("gfiAttributes").coordLabel = gfiAttributes.coordLabel;
-            layer.get("gfiAttributes").typeLabel = gfiAttributes.typeLabel;
-        }
-    });
-}
-
-/**
  * Creates a basic GeoJSON structure and adds the features given by the user from the URL to it.
  *
  * @param {Object[]} features The features given by the user to be added to the map.
@@ -127,8 +93,6 @@ export function updateLayers () {
  * @returns {Object} GeoJSON containing the features.
  */
 export default function ({layers, epsg, zoomTo}) {
-    Radio.on("i18next", "languageChanged", translate);
-
     store.watch(state => state.urlParams, params => {
         const urlLayers = params.featureViaURL ? JSON.parse(params.featureViaURL) : [],
             treeType = Radio.request("Parser", "getTreeType");
