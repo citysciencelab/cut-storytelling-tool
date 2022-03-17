@@ -8,18 +8,38 @@
 - WMS-T: Behaviour is undefined on using multiple configured WMS-T.
 
 ---
+
 ## Unreleased - in development
 ### Added
 - Issue #530: New checkbox for the print module to disable the auto adjustment of the print mask scale
+- Adds a bitbucket pipeline to run `npm audit` automatically.
 
 ### Changed
+- Issue #674, #676: addWMS tool and orientation control are now using the CRS of the map instead of hard coded CRS
+- Issue #684: The download of the draw tool now supports the projection of the map
+- Issue #610: Refactor Elastic Search: The CreateHit() function has been modified to allow the Glyphicon and HitType to be assigned from the backend.
+-  The following NPM packages are updated:
+    - jsdoc: 3.6.7 to 3.6.10
 
 ### Deprecated
 
 ### Removed
+- Removed hardcoded LayerIds for 3D support in wms.js. Setting has to be done now via services.json attribute notSupportedIn3D.
 
 ### Fixed
+- Issue #605: Draw Tool fixed to support not using simple_point as first item of iconList.
+- Issue #733, #680, #683: transparency setting has no visible effect in treeType custom
+- Issue #701: Secured WMS GFI requests now work. Previously, authorization failed.
+- Issue #700: Print tool now updates layout name on initialization.
+- Issue #581: Print tool now features a flag "printMapMarker" to optionally print map markers.
+- Print will now use serviceUrl when generated
+- Issue #696: Draw tool now undoes and redoes drawn features in correct order
+- Gfi now remembers position and rotation in dipas
+- Issue #740: Adding `name` to `Fachdaten_Zeit` or `Fachdaten_3d` in `config.json` now successfully changes the name of the folder in the layerTree.
+- Fix some vulnerabilities in dependencies.
+
 ---
+
 ## v2.19.0 - 2022-03-02
 ### Added
 - The gazetteer search function now supports changing the namespace by configuration.
@@ -50,12 +70,14 @@
 - Checking the allowed version for wfs layers has been moved to the masterportalAPI.
 - Migrated the parsing of `rest-services.json` from Backbone to Vue. Backbone components using RestReader are connected using RadioBridge.
 - Routing tool: german translation of recommended route was corrected.
+- The action Map/HighlightFeature now works for more than one feature, via removeHighlightFeature(feature) an individual highlighting can be removed, or all if no argument is given
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+- Occasional language name "DE-DE" in the footer was changed to "DE".
 - Issue #483/Issue #687: Fixed responsiveness when switching between mobile and desktop
 - Issue #694: Folder with subfolders are also selectable. (Internal flag "isLeafFolder" removed)
 - Issue #695: Optimised order in if clause. First use "show_doc_url" in layers metadata, then check if service based on the config.js's metaDataCatalogueId exists. otherwise throw console.warn

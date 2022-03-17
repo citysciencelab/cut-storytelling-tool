@@ -90,6 +90,9 @@ export default {
         };
     },
     computed: {
+        ariaLabelDate () {
+            return this.$t("modules.tools.filterGeneral.ariaLabel.date", {param: this.attrName});
+        },
         titleText () {
             if (this.title === true) {
                 return this.attrName;
@@ -303,6 +306,7 @@ export default {
             <input
                 :id="'snippetDate-' + snippetId"
                 v-model="inRangeValue"
+                :aria-label="ariaLabelDate"
                 class="snippetDate form-control"
                 type="date"
                 name="dateInput"
