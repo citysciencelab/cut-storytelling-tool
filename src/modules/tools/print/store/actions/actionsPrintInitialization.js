@@ -118,9 +118,11 @@ export default {
      * @returns {void}
      */
     chooseCurrentLayout: function ({state, commit}, layouts) {
-        const currentLayout = layouts.filter(layout => layout.name === state.currentLayoutName);
+        const configuredLayout = layouts.find(layout => layout.name === state.currentLayoutName),
+            layoutToUse = configuredLayout || layouts[0];
 
-        commit("setCurrentLayout", currentLayout.length === 1 ? currentLayout[0] : layouts[0]);
+        commit("setCurrentLayout", layoutToUse);
+        commit("setCurrentLayoutName", layoutToUse.name);
     },
 
     /**
@@ -168,7 +170,7 @@ export default {
     togglePostrenderListener: function ({state, dispatch, commit}) {
         const foundVectorTileLayers = [];
 
-        getVisibleLayer();
+        getVisibleLayer(state.printMapMarker);
 
         /*
         * Since MapFish 3 does not yet support VTL (see https://github.com/mapfish/mapfish-print/issues/659),
