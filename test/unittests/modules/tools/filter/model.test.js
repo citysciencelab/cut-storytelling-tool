@@ -33,7 +33,7 @@ function fakeRadio () {
     });
 }
 
-describe.only("modules/tools/filter/model", function () {
+describe("modules/tools/filter/model", function () {
     let model;
     const predefinedQueries = [{
         "layerId": "8712",
