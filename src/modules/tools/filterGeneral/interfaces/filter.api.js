@@ -1,6 +1,7 @@
 import hash from "object-hash";
 import isObject from "../../../../utils/isObject";
 import {
+    getMapProjection,
     getFeaturesByLayerId,
     isFeatureInMapExtent
 } from "../utils/openlayerFunctions.js";
@@ -31,28 +32,41 @@ export default class FilterApi {
         }
     }
     /**
-     * Setter for the default service using layerId and the original service object.
-     * @param {String} layerId the layer id
-     * @param {Object} service the service object
-     * @returns {void}
-     */
-    setServiceByServiceObject (layerId, service) {
-        this.service = Object.assign({layerId}, service);
-    }
-    /**
      * Setter for the default service by layerId and layerModel.
      * @param {String} layerId the layer id
      * @param {ol/Layer} layerModel the layer model
+     * @param {Boolean} extern if true, the type given by layerModel is used, otherwise "tree" is used
      * @returns {void}
      */
-    setServiceByLayerModel (layerId, layerModel) {
-        this.service = {
-            type: "ol",
-            layerId,
-            url: layerModel.get("url"),
-            typename: layerModel.get("featureType"),
-            namespace: layerModel.get("featureNS")
-        };
+    setServiceByLayerModel (layerId, layerModel, extern) {
+        if (!layerModel) {
+            return;
+        }
+        const typ = layerModel.get("typ").toLowerCase(),
+            featureNS = layerModel.get("featureNS");
+
+        if (!extern && typ === "wfs") {
+            this.service = {
+                type: "tree",
+                layerId,
+                url: layerModel.get("url"),
+                typename: layerModel.get("featureType"),
+                namespace: featureNS
+            };
+        }
+        else if (extern && typ === "wfs") {
+            this.service = {
+                type: "wfs",
+                layerId,
+                url: layerModel.get("url"),
+                typename: layerModel.get("featureType"),
+                namespace: featureNS,
+                srsName: getMapProjection(),
+                featureNS: featureNS.substr(0, featureNS.lastIndexOf("/")),
+                featurePrefix: featureNS.substr(featureNS.lastIndexOf("/") + 1),
+                featureTypes: [layerModel.get("featureType")]
+            };
+        }
     }
     /**
      * Returns an object {attrName: Type} with all attributes and their types.
@@ -63,7 +77,7 @@ export default class FilterApi {
     getAttrTypes (onsuccess, onerror) {
         if (!isObject(this.service)) {
             if (typeof onerror === "function") {
-                onerror(new Error("FitlerApi - getAttrTypes: You have to set a default service first before using this function."));
+                onerror(new Error("FilterApi - getAttrTypes: You have to set a default service first before using this function."));
             }
             return;
         }
@@ -93,7 +107,7 @@ export default class FilterApi {
     getMinMax (attrName, onsuccess, onerror, minOnly, maxOnly) {
         if (!isObject(this.service)) {
             if (typeof onerror === "function") {
-                onerror(new Error("FitlerApi - getMinMax: You have to set a default service first before using this function."));
+                onerror(new Error("FilterApi - getMinMax: You have to set a default service first before using this function."));
             }
             return;
         }
@@ -121,7 +135,7 @@ export default class FilterApi {
     getUniqueValues (attrName, onsuccess, onerror) {
         if (!isObject(this.service)) {
             if (typeof onerror === "function") {
-                onerror(new Error("FitlerApi - getUniqueValues: You have to set a default service first before using this function."));
+                onerror(new Error("FilterApi - getUniqueValues: You have to set a default service first before using this function."));
             }
             return;
         }
@@ -144,19 +158,18 @@ export default class FilterApi {
      * @param {Object} filterQuestion an object with filterId, service and rules
      * @param {Function} onsuccess a function(filterAnswer)
      * @param {Function} onerror a function(errorMsg)
-     * @param {Boolean} [refreshed=false] internal parameter to flag filter by refresh
      * @returns {void}
      */
-    filter (filterQuestion, onsuccess, onerror, refreshed = false) {
+    filter (filterQuestion, onsuccess, onerror) {
         if (!isObject(this.service)) {
             if (typeof onerror === "function") {
-                onerror(new Error("FitlerApi - filter: You have to set a default service first before using this function."));
+                onerror(new Error("FilterApi - filter: You have to set a default service first before using this function."));
             }
             return;
         }
         const connector = this.getInterfaceByService(this.service);
 
-        connector.filter(Object.assign(filterQuestion, {service: this.service}), onsuccess, onerror, refreshed);
+        connector.filter(Object.assign(filterQuestion, {service: this.service}), onsuccess, onerror);
     }
     /**
      * Stops the current filter.
@@ -167,7 +180,7 @@ export default class FilterApi {
     stop (onsuccess, onerror) {
         if (!isObject(this.service)) {
             if (typeof onerror === "function") {
-                onerror(new Error("FitlerApi - stop: You have to set a default service first before using this function."));
+                onerror(new Error("FilterApi - stop: You have to set a default service first before using this function."));
             }
             return;
         }
