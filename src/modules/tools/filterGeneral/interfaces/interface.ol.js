@@ -1,5 +1,4 @@
 import isObject from "../../../../utils/isObject.js";
-import deepAssign from "../../../../utils/deepAssign.js";
 import InterfaceWFS from "./interface.wfs.js";
 
 /**
@@ -62,15 +61,12 @@ export default class InterfaceOL {
      * @param {Object} filterQuestion an object with filterId, service and rules
      * @param {Function} onsuccess a function(filterAnswer)
      * @param {Function} onerror a function(errorMsg)
-     * @param {Boolean} [refreshed=false] internal parameter to flag filter by refresh
      * @returns {void}
      */
-    filter (filterQuestion, onsuccess, onerror, refreshed = false) {
+    filter (filterQuestion, onsuccess, onerror) {
         if (
             typeof this.intervalRegister?.startPagingInterval !== "function"
             || typeof this.intervalRegister?.stopPagingInterval !== "function"
-            || typeof this.intervalRegister?.startAutoRefreshing !== "function"
-            || typeof this.intervalRegister?.stopAutoRefreshing !== "function"
         ) {
             if (typeof onerror === "function") {
                 onerror(new Error("filter: unvalid intervalRegister"));
@@ -102,7 +98,6 @@ export default class InterfaceOL {
             commands = clonedQuestion?.commands,
             rules = clonedQuestion?.rules,
             searchInMapExtent = commands?.searchInMapExtent,
-            autoRefreshing = commands?.autoRefreshing,
             paging = commands?.paging > 0 ? commands.paging : 1000,
             features = this.getFeaturesByLayerId(service?.layerId),
             len = Array.isArray(features) ? features.length : 0;
@@ -136,22 +131,10 @@ export default class InterfaceOL {
                         page: Math.ceil(idx / paging),
                         total: Math.ceil(len / paging)
                     },
-                    items,
-                    refreshed
+                    items
                 });
             }
         }, 1);
-
-        if (autoRefreshing > 0) {
-            // set autoRefreshing to 0 to avoid cycles
-            deepAssign(clonedQuestion, {commands: {autoRefreshing: 0}});
-
-            this.intervalRegister.stopAutoRefreshing(filterId);
-            this.intervalRegister.startAutoRefreshing(filterId, () => {
-                this.intervalRegister.stopPagingInterval(filterId);
-                this.filter(clonedQuestion, this.intervalRegister, onsuccess, onerror, true);
-            }, autoRefreshing * 1000);
-        }
     }
 
     /* private */

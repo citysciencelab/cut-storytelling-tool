@@ -1155,7 +1155,8 @@
                 "true": "ja",
                 "No": "nein"
             },
-            "zoomToResult": "Zum Ergebnis zoomen"
+            "zoomToResult": "Zum Ergebnis zoomen",
+            "pagination": "Ergebnisseite"
         }
     }
 }
