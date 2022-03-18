@@ -23,6 +23,7 @@
 - Issue #610: Refactor Elastic Search: The CreateHit() function has been modified to allow the Glyphicon and HitType to be assigned from the backend.
 -  The following NPM packages are updated:
     - jsdoc: 3.6.7 to 3.6.10
+    - masterportalapi: 1.10.0 to 2.0.0 (is now loaded via npm and the notation has changed)
 - Searchbar:
     - Search results of elasticSearch are now displayed in the search bar in the order they come from the server.
     - The Gazetteer search is now performed via the MasterportalAPI. A new attribute `searchAddress` has been introduced.
