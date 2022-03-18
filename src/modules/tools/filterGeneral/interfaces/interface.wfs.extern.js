@@ -18,10 +18,10 @@ import {
 } from "ol/format/filter";
 
 /**
- * InterfaceWFS is the filter interface for WFS services
+ * InterfaceWfsExtern is the filter interface for WFS services
  * @class
  */
-export default class InterfaceWFS {
+export default class InterfaceWfsExtern {
     /**
      * @constructor
      */
@@ -39,7 +39,7 @@ export default class InterfaceWFS {
     getAttrTypes (service, onsuccess, onerror) {
         if (!isObject(service)) {
             if (typeof onerror === "function") {
-                onerror(new Error("InterfaceWFS.getAttrTypes: missing service object"));
+                onerror(new Error("InterfaceWfsExtern.getAttrTypes: missing service object"));
             }
             return;
         }
@@ -161,7 +161,7 @@ export default class InterfaceWFS {
             }
         }
         else if (typeof onerror === "function") {
-            onerror(new Error("InterfaceWFS: The request can't be stopped because it does not exist or has already finished."));
+            onerror(new Error("InterfaceWfsExtern.stop: The request can't be stopped because it does not exist or has already finished."));
         }
     }
 
@@ -273,7 +273,7 @@ export default class InterfaceWFS {
 
         if (!node) {
             if (typeof onerror === "function") {
-                onerror(new Error("InterfaceWFS.parseResponseMinMax: The requested typename '" + typename + "' wasn't found."));
+                onerror(new Error("InterfaceWfsExtern.parseResponseMinMax: The requested typename '" + typename + "' wasn't found."));
             }
             return;
         }
@@ -283,7 +283,7 @@ export default class InterfaceWFS {
             onsuccess(node.textContent);
         }
         else if (typeof onerror === "function") {
-            onerror(new Error("InterfaceWFS.parseResponseMinMax: The requested attrName '" + attrName + "' wasn't found."));
+            onerror(new Error("InterfaceWfsExtern.parseResponseMinMax: The requested attrName '" + attrName + "' wasn't found."));
         }
     }
     /**
@@ -309,7 +309,7 @@ export default class InterfaceWFS {
 
             if (!node) {
                 if (typeof onerror === "function") {
-                    onerror(new Error("InterfaceWFS.parseResponseUniqueValues: The requested typename '" + typename + "' wasn't found."));
+                    onerror(new Error("InterfaceWfsExtern.parseResponseUniqueValues: The requested typename '" + typename + "' wasn't found."));
                 }
                 return;
             }

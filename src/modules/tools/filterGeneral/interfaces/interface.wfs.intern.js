@@ -1,11 +1,11 @@
 import isObject from "../../../../utils/isObject.js";
-import InterfaceWFS from "./interface.wfs.js";
+import InterfaceWfsExtern from "./interface.wfs.extern.js";
 
 /**
- * InterfaceOL is the filter interface for OpenLayers
+ * InterfaceWfsIntern is the filter interface for Wfs filtered by OpenLayers
  * @class
  */
-export default class InterfaceOL {
+export default class InterfaceWfsIntern {
     /**
      * @constructor
      * @param {IntervalRegister} intervalRegister the object to register and unregister intervals with
@@ -16,7 +16,7 @@ export default class InterfaceOL {
         this.intervalRegister = intervalRegister;
         this.getFeaturesByLayerId = getFeaturesByLayerId;
         this.isFeatureInMapExtent = isFeatureInMapExtent;
-        this.interfaceWFS = new InterfaceWFS(intervalRegister);
+        this.interfaceWfsExtern = new InterfaceWfsExtern(intervalRegister);
     }
 
     /**
@@ -27,7 +27,7 @@ export default class InterfaceOL {
      * @returns {void}
      */
     getAttrTypes (service, onsuccess, onerror) {
-        return this.interfaceWFS.getAttrTypes(service, onsuccess, onerror);
+        return this.interfaceWfsExtern.getAttrTypes(service, onsuccess, onerror);
     }
 
     /**
@@ -41,7 +41,7 @@ export default class InterfaceOL {
      * @returns {void}
      */
     getMinMax (service, attrName, onsuccess, onerror, minOnly, maxOnly) {
-        return this.interfaceWFS.getMinMax(service, attrName, onsuccess, onerror, minOnly, maxOnly);
+        return this.interfaceWfsExtern.getMinMax(service, attrName, onsuccess, onerror, minOnly, maxOnly);
     }
 
     /**
@@ -53,7 +53,28 @@ export default class InterfaceOL {
      * @returns {void}
      */
     getUniqueValues (service, attrName, onsuccess, onerror) {
-        return this.interfaceWFS.getUniqueValues(service, attrName, onsuccess, onerror);
+        return this.interfaceWfsExtern.getUniqueValues(service, attrName, onsuccess, onerror);
+    }
+
+    /**
+     * Cancels the current filtering.
+     * @param {Number} filterId the id of the filter that should stop
+     * @param {Function} onsuccess a function to call when finished
+     * @param {Function} onerror a function to call on error
+     * @returns {void}
+     */
+    stop (filterId, onsuccess, onerror) {
+        if (typeof this.intervalRegister?.stopPagingInterval !== "function") {
+            if (typeof onerror === "function") {
+                onerror(new Error("InterfaceWfsIntern.stop: invalid intervalRegister"));
+            }
+            return;
+        }
+
+        this.intervalRegister.stopPagingInterval(filterId);
+        if (typeof onsuccess === "function") {
+            onsuccess();
+        }
     }
 
     /**
@@ -64,30 +85,27 @@ export default class InterfaceOL {
      * @returns {void}
      */
     filter (filterQuestion, onsuccess, onerror) {
-        if (
-            typeof this.intervalRegister?.startPagingInterval !== "function"
-            || typeof this.intervalRegister?.stopPagingInterval !== "function"
-        ) {
+        if (typeof this.intervalRegister?.startPagingInterval !== "function" || typeof this.intervalRegister?.stopPagingInterval !== "function") {
             if (typeof onerror === "function") {
-                onerror(new Error("filter: unvalid intervalRegister"));
+                onerror(new Error("InterfaceWfsIntern.filter: invalid intervalRegister"));
             }
             return;
         }
         else if (typeof this.getFeaturesByLayerId !== "function") {
             if (typeof onerror === "function") {
-                onerror(new Error("filter: getFeaturesByLayerId must be a function"));
+                onerror(new Error("InterfaceWfsIntern.filter: getFeaturesByLayerId must be a function"));
             }
             return;
         }
         else if (typeof this.isFeatureInMapExtent !== "function") {
             if (typeof onerror === "function") {
-                onerror(new Error("filter: isFeatureInMapExtent must be a function"));
+                onerror(new Error("InterfaceWfsIntern.filter: isFeatureInMapExtent must be a function"));
             }
             return;
         }
         else if (!isObject(filterQuestion)) {
             if (typeof onerror === "function") {
-                onerror(new Error("filter: filterQuestion must be an object"));
+                onerror(new Error("InterfaceWfsIntern.filter: filterQuestion must be an object"));
             }
             return;
         }

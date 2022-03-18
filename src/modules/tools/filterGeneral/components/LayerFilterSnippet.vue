@@ -123,7 +123,9 @@ export default {
             this.mapHandler.initializeLayer(filterId, layerId, this.isExtern(), error => {
                 console.warn(error);
             });
-            this.api.setServiceByLayerModel(layerId, this.mapHandler.getLayerModelByFilterId(filterId), this.isExtern());
+            this.api.setServiceByLayerModel(layerId, this.mapHandler.getLayerModelByFilterId(filterId), this.isExtern(), error => {
+                console.warn(error);
+            });
 
             if (!this.mapHandler.getLayerModelByFilterId(filterId)) {
                 console.warn(new Error("Please check your filter configuration: The given layerId does not exist in your config.json."));
