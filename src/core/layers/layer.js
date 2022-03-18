@@ -496,7 +496,11 @@ function handleSingleBaseLayer (isSelected, layer) {
             bridge.renderMenu();
         }
         if (timeLayer) {
-            store.commit("WmsTime/setTimeSliderActive", {active: true, currentLayerId: id});
+            store.commit("WmsTime/setTimeSliderActive", {
+                active: true,
+                currentLayerId: id,
+                playbackDelay: layer.get("time")?.playbackDelay || 1
+            });
         }
     }
     else if (timeLayer) {
