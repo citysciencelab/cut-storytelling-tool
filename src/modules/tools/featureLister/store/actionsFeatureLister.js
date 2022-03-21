@@ -1,6 +1,9 @@
 export default {
     /**
      * Switches to the feature list of the selected layer.
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
      * @param {Object} layer selected layer.
      * @returns {void}
      */
@@ -24,6 +27,7 @@ export default {
     },
     /**
      * Switches to a tab and deactivates or even disables the other tabs.
+     * @param {Object} param.commit the commit
      * @param {Object} payload tabId should be the id of the html tab element, if disableOthers is true the rest of the tabs gets disabled.
      * @returns {void}
      */
@@ -46,10 +50,13 @@ export default {
     },
     /**
      * Click event that gets triggered when clicking on a feature in the list view.
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
      * @param {String} featureIndex index of the clicked Feature
      * @returns {void}
      */
-    clickOnFeature ({state, dispatch, commit}, featureIndex) {
+    clickOnFeature ({state, commit, dispatch}, featureIndex) {
         if (featureIndex !== "" && featureIndex >= 0 && featureIndex <= state.shownFeatures) {
             const feature = state.gfiFeaturesOfLayer[featureIndex],
                 featureGeometry = state.rawFeaturesOfLayer[featureIndex].getGeometry();
@@ -65,6 +72,8 @@ export default {
     },
     /**
      * Hover event that gets triggered when hovering over a feature in the list view.
+     * @param {Object} param.state the state
+     * @param {Object} param.dispatch the dispatch
      * @param {String} featureIndex index of the clicked Feature
      * @returns {void}
      */
@@ -76,7 +85,8 @@ export default {
         }
     },
     /**
-     * Adds the eventListeners to the table for clicking and hovering events .
+     * Adds the eventListeners to the table for clicking and hovering events.
+     * @param {Object} param.dispatch the dispatch
      * @returns {void}
      */
     addMouseEvents ({dispatch}) {
@@ -91,6 +101,8 @@ export default {
     },
     /**
      * Highlights a feature depending on its geometryType.
+     * @param {Object} param.state the state
+     * @param {Object} param.dispatch the dispatch
      * @param {String} featureId id of the feature to be highlighted.
      * @returns {void}
      */
@@ -125,6 +137,8 @@ export default {
     },
     /**
      * Switches to the themes list of all visibile layers and resets the featureList and the selectedFeature.
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
      * @returns {void}
      */
     switchToThemes ({commit, dispatch}) {
@@ -136,6 +150,9 @@ export default {
     },
     /**
      * Switches to the details list of the selected feature.
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
      * @returns {void}
      */
     switchToDetails ({state, commit, dispatch}) {
@@ -151,6 +168,8 @@ export default {
     },
     /**
      * Expands the feature list to show more features.
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
      * @returns {void}
      */
     showMore ({state, commit}) {
