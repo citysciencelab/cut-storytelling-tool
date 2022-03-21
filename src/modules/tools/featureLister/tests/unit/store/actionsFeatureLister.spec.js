@@ -8,12 +8,12 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
     document.body.innerHTML =
         "<div id=\"parent\">" +
         "   <div id=\"featureLister\">" +
-        "       <p id=\"featurelistFeaturelist\" >Liste der Feature</p>" +
+        "       <p id=\"tool-feature-lister-list\" >Liste der Feature</p>" +
         "   </div>" +
-        "   <ul class=\"featurelist-navtabs\">" +
-        "       <li id=\"featurelistThemeChooser\" >Liste der Layer</li>" +
-        "       <li id=\"featurelistFeaturelist\" >Liste der Feature</li>" +
-        "       <li id=\"featurelistFeaturedetails\" >Detailansicht</li>" +
+        "   <ul class=\"feature-lister-navtabs\">" +
+        "       <li id=\"tool-feature-lister-themeChooser\" >Liste der Layer</li>" +
+        "       <li id=\"tool-feature-lister-list\" >Liste der Feature</li>" +
+        "       <li id=\"tool-feature-lister-details\" >Detailansicht</li>" +
         "   </ul>" +
         "</div>";
 
@@ -38,7 +38,7 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
             expect(commit.thirdCall.args[0]).to.equal("setGfiFeaturesOfLayer");
 
             expect(dispatch.firstCall.args[0]).to.equal("switchTabTo");
-            expect(dispatch.firstCall.args[1]).to.eql({tabId: "featurelistFeaturelist", disableOthers: false});
+            expect(dispatch.firstCall.args[1]).to.eql({tabId: "tool-feature-lister-list", disableOthers: false});
             expect(dispatch.secondCall.args[0]).to.equal("addMouseEvents");
             expect(dispatch.thirdCall.args[0]).to.equal("sortItems");
         });
@@ -46,7 +46,7 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
 
     describe("switchTabTo", () => {
         it("switches the tabs", () => {
-            const payload = {tabId: "featurelistFeaturelist", disableOthers: false};
+            const payload = {tabId: "tool-feature-lister-list", disableOthers: false};
 
             actions.switchTabTo({commit}, payload);
             expect(commit.firstCall.args[0]).to.equal("setCurrentTab");
@@ -151,7 +151,7 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
 
     describe("switchToThemes", () => {
         it("switches to the themes tab", () => {
-            const expectedPayload = {tabId: "featurelistThemeChooser", disableOthers: true};
+            const expectedPayload = {tabId: "tool-feature-lister-themeChooser", disableOthers: true};
 
             actions.switchToThemes({commit, dispatch});
             expect(commit.firstCall.args[0]).to.equal("resetToThemeChooser");
@@ -165,7 +165,7 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
             const state = {
                     selectedFeature: true
                 },
-                expectedPayload = {tabId: "featurelistFeaturedetails", disableOthers: false};
+                expectedPayload = {tabId: "tool-feature-lister-details", disableOthers: false};
 
             actions.switchToDetails({state, commit, dispatch});
             expect(commit.firstCall.args[0]).to.equal("setLayerListView");

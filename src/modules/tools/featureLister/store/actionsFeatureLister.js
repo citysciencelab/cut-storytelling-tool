@@ -7,7 +7,7 @@ export default {
     switchToList ({state, commit, dispatch}, layer) {
         commit("setLayer", layer);
         if (state.layer) {
-            const tabId = "featurelistFeaturelist";
+            const tabId = "tool-feature-lister-list";
 
             commit("setLayerId", layer.id);
             commit("setGfiFeaturesOfLayer", state.visibleLayers);
@@ -31,7 +31,7 @@ export default {
         const {tabId, disableOthers} = payload;
 
         commit("setCurrentTab", tabId);
-        Object.entries(document.getElementsByClassName("featurelist-navtabs")[0].children).forEach(([, child]) => {
+        Object.entries(document.getElementsByClassName("feature-lister-navtabs")[0].children).forEach(([, child]) => {
             if (child.id === tabId) {
                 child.classList.remove("disabled");
                 child.classList.add("active");
@@ -128,7 +128,7 @@ export default {
      * @returns {void}
      */
     switchToThemes ({commit, dispatch}) {
-        const tabId = "featurelistThemeChooser";
+        const tabId = "tool-feature-lister-themeChooser";
 
         commit("resetToThemeChooser");
 
@@ -140,7 +140,7 @@ export default {
      */
     switchToDetails ({state, commit, dispatch}) {
         if (state.selectedFeature) {
-            const tabId = "featurelistFeaturedetails";
+            const tabId = "tool-feature-lister-details";
 
             commit("setLayerListView", false);
             commit("setFeatureListView", false);
@@ -163,7 +163,7 @@ export default {
      * @returns {void}
      */
     async sortItems () {
-        const tableHeaders = await document.getElementsByClassName("featurelist-list-table-th");
+        const tableHeaders = await document.getElementsByClassName("feature-lister-list-table-th");
 
         try {
             tableHeaders.forEach(th_elem => {

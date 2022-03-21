@@ -67,8 +67,8 @@ describe("src/modules/tools/featureLister/components/FeatureLister.vue", () => {
         store.commit("Tools/FeatureLister/setLayerListView", true);
         wrapper = shallowMount(FeatureListerComponent, {store, localVue});
 
-        expect(wrapper.find("#featurelist-themes").exists()).to.be.true;
-        expect(wrapper.find("#tool-featureLister").exists()).to.be.true;
+        expect(wrapper.find("#feature-lister-themes").exists()).to.be.true;
+        expect(wrapper.find("#tool-feature-lister").exists()).to.be.true;
         expect(store.state.Tools.FeatureLister.featureDetailView).to.be.false;
         expect(store.state.Tools.FeatureLister.featureListView).to.be.false;
         expect(store.state.Tools.FeatureLister.layerListView).to.be.true;
@@ -85,7 +85,7 @@ describe("src/modules/tools/featureLister/components/FeatureLister.vue", () => {
         store.dispatch("Tools/FeatureLister/switchToList", layer);
         wrapper = shallowMount(FeatureListerComponent, {store, localVue});
 
-        expect(wrapper.find("#featurelist-list").exists()).to.be.true;
+        expect(wrapper.find("#feature-lister-list").exists()).to.be.true;
         expect(store.state.Tools.FeatureLister.featureDetailView).to.be.false;
         expect(store.state.Tools.FeatureLister.featureListView).to.be.true;
         expect(store.state.Tools.FeatureLister.layerListView).to.be.false;
@@ -97,7 +97,7 @@ describe("src/modules/tools/featureLister/components/FeatureLister.vue", () => {
         store.dispatch("Tools/FeatureLister/switchToDetails");
         wrapper = shallowMount(FeatureListerComponent, {store, localVue});
 
-        expect(wrapper.find("#featurelist-details").exists()).to.be.true;
+        expect(wrapper.find("#feature-lister-details").exists()).to.be.true;
         expect(store.state.Tools.FeatureLister.featureDetailView).to.be.true;
         expect(store.state.Tools.FeatureLister.featureListView).to.be.false;
         expect(store.state.Tools.FeatureLister.layerListView).to.be.false;
@@ -109,7 +109,7 @@ describe("src/modules/tools/featureLister/components/FeatureLister.vue", () => {
             wrapper.vm.close();
             await wrapper.vm.$nextTick();
 
-            expect(wrapper.find("#tool-featureLister").exists()).to.be.false;
+            expect(wrapper.find("#tool-feature-lister").exists()).to.be.false;
             expect(store.state.Tools.FeatureLister.active).to.be.false;
         });
     });

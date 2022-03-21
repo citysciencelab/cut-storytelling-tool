@@ -90,12 +90,12 @@ export default {
         <template #toolBody>
             <div
                 v-if="active"
-                id="tool-featureLister"
+                id="tool-feature-lister"
             >
-                <ul class="nav nav-tabs featurelist-navtabs">
+                <ul class="nav nav-tabs feature-lister-navtabs">
                     <li
-                        id="featurelistThemeChooser"
-                        class="active featurelist-navtabs-li text-center"
+                        id="tool-feature-lister-themeChooser"
+                        class="active feature-lister-navtabs-li text-center"
                         role="presentation"
                     >
                         <a
@@ -104,8 +104,8 @@ export default {
                         >{{ $t("modules.tools.featureLister.chooseTheme") }}</a>
                     </li>
                     <li
-                        id="featurelistFeaturelist"
-                        class="featurelist-navtabs-li text-center disabled"
+                        id="tool-feature-lister-list"
+                        class="feature-lister-navtabs-li text-center disabled"
                         role="presentation"
                     >
                         <a
@@ -114,8 +114,8 @@ export default {
                         >{{ $t("modules.tools.featureLister.list") }}</a>
                     </li>
                     <li
-                        id="featurelistFeaturedetails"
-                        class="featurelist-navtabs-li text-center disabled"
+                        id="tool-feature-lister-details"
+                        class="feature-lister-navtabs-li text-center disabled"
                         role="presentation"
                     >
                         <a
@@ -126,24 +126,24 @@ export default {
                 </ul>
                 <div
                     v-if="layerListView"
-                    id="featurelist-themes"
-                    class="featurelist-themes panel panel-default"
+                    id="feature-lister-themes"
+                    class="feature-lister-themes panel panel-default"
                 >
                     <div
-                        id="featurelist-themes-header"
+                        id="feature-lister-themes-header"
                         class="panel-heading"
                     >
                         {{ $t("modules.tools.featureLister.visibleVectorLayers") }}
                     </div>
                     <ul
                         v-for="layer in visibleVectorLayers"
-                        id="featurelist-themes-ul"
-                        :key="'tool-featureLister-' + layer.id"
+                        id="feature-lister-themes-ul"
+                        :key="'tool-feature-lister-' + layer.id"
                         class="nav nav-pills nav-stacked"
                     >
                         <li
-                            :id="'featurelist-layer-' + layer.id"
-                            class="featurelist-themes-li"
+                            :id="'feature-lister-layer-' + layer.id"
+                            class="feature-lister-themes-li"
                             role="presentation"
                         >
                             <a
@@ -155,28 +155,28 @@ export default {
                 </div>
                 <template v-if="featureListView">
                     <div
-                        id="featurelist-list-header"
+                        id="feature-lister-list-header"
                         class="panel-heading"
                     >
                         <span>{{ layer.name }}</span>
                     </div>
                     <div
-                        id="featurelist-list"
-                        class="panel panel-default featurelist-list"
+                        id="feature-lister-list"
+                        class="panel panel-default feature-lister-list"
                     >
                         <div
-                            class="table-responsive  featurelist-list-table"
+                            class="table-responsive  feature-lister-list-table"
                         >
                             <table
-                                id="featurelist-list-table"
+                                id="feature-lister-list-table"
                                 class="table table-striped table-hover table-condensed table-bordered"
                             >
                                 <tbody>
-                                    <tr class="featurelist-list-table-tr">
+                                    <tr class="feature-lister-list-table-tr">
                                         <th
                                             v-for="(header, index) in headers"
-                                            :key="'tool-featureLister-' + index"
-                                            class="featurelist-list-table-th"
+                                            :key="'tool-feature-lister-' + index"
+                                            class="feature-lister-list-table-th"
                                         >
                                             <span class="glyphicon glyphicon-sort-by-alphabet" />
                                             {{ header.value }}
@@ -185,14 +185,14 @@ export default {
                                     <tr
                                         v-for="(feature, index) in featureProperties"
                                         :id="index"
-                                        :key="'tool-featureLister-' + index"
-                                        class="featurelist-list-table-tr"
+                                        :key="'tool-feature-lister-' + index"
+                                        class="feature-lister-list-table-tr"
                                     >
                                         <template v-if="index < shownFeatures">
                                             <td
                                                 v-for="(property, i) in feature"
-                                                :key="'tool-featureLister-' + i"
-                                                class="featurelist-list-table-td"
+                                                :key="'tool-feature-lister-' + i"
+                                                class="feature-lister-list-table-td"
                                             >
                                                 {{ property }}
                                             </td>
@@ -202,11 +202,11 @@ export default {
                             </table>
                         </div>
                         <div
-                            class="panel-footer featurelist-list-footer"
+                            class="panel-footer feature-lister-list-footer"
                         >
                             <button
                                 type="button"
-                                class="btn btn-default navbar-btn featurelist-list-button"
+                                class="btn btn-default navbar-btn feature-lister-list-button"
                                 aria-label="Left Align"
                                 :disabled="featureCount <= maxFeatures || shownFeatures === featureCount"
                                 @click="showMore()"
@@ -217,7 +217,7 @@ export default {
                                 /> {{ $t("modules.tools.featureLister.more") }}
                             </button>
                             <p
-                                class="navbar-text featurelist-list-message"
+                                class="navbar-text feature-lister-list-message"
                             >
                                 {{ $t("modules.tools.featureLister.key", {shownFeatures, featureCount}) }}
                             </p>
@@ -226,26 +226,26 @@ export default {
                 </template>
                 <template v-if="featureDetailView">
                     <div
-                        id="featurelist-details-header"
+                        id="feature-lister-details-header"
                         class="panel-heading"
                     >
                         <span> {{ $t("modules.tools.featureLister.detailsOfSelected") }} </span>
                     </div>
                     <div
-                        id="featurelist-details"
-                        class="panel panel-default featurelist-details"
+                        id="feature-lister-details"
+                        class="panel panel-default feature-lister-details"
                     >
                         <ul
                             v-for="(feature, key) in featureDetails"
-                            :key="'tool-featureLister-' + key"
-                            class="list-group featurelist-details-ul"
+                            :key="'tool-feature-lister-' + key"
+                            class="list-group feature-lister-details-ul"
                         >
-                            <li class="list-group-item featurelist-details-li">
+                            <li class="list-group-item feature-lister-details-li">
                                 <strong>
                                     {{ beautifyKey(feature[0]) }}
                                 </strong>
                             </li>
-                            <li class="list-group-item featurelist-details-li">
+                            <li class="list-group-item feature-lister-details-li">
                                 <p v-if="isWebLink(feature[1])">
                                     <a
                                         :href="feature[1]"
@@ -293,30 +293,30 @@ export default {
 
 /***** Desktop *****/
 /***** Mobil *****/
-.featurelist-list-table-th {
+.feature-lister-list-table-th {
     cursor: pointer;
     >span {
         float: left;
         width: 15px;
         color: $color_1;
     }
-    >.featurelist-list-table-th-sorted {
+    >.feature-lister-list-table-th-sorted {
         color: $color_2;
     }
 }
-#featurelist-list-table {
+#feature-lister-list-table {
     overflow: auto;
 }
-.featurelist-list-button {
+.feature-lister-list-button {
     position: relative;
     right: 0px;
 }
-.featurelist-list-message {
+.feature-lister-list-message {
     float: left;
     text-align: center;
     align-items: center;
 }
-.featurelist-details-li {
+.feature-lister-details-li {
     cursor: text;
     a:link {
         color: royalblue;
@@ -338,35 +338,35 @@ export default {
         color: $color_2;
     }
 }
-.featurelist-details-ul {
+.feature-lister-details-ul {
     max-height: 400px;
     overflow: auto;
     cursor: auto;
 }
-.featurelist-list-table-td {
+.feature-lister-list-table-td {
     height: 15px;
     max-width: 150px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.featurelist-list-table-tr {
+.feature-lister-list-table-tr {
     cursor: pointer;
 }
-.featurelist-details {
+.feature-lister-details {
     display: block;
     margin-bottom: 0px;
     max-height: 440.15px;
     max-width: 426px;
     overflow: auto;
 }
-.featurelist-list {
+.feature-lister-list {
     margin-bottom: 0px;
     display: block;
     max-width: 426px;
     overflow: auto;
 }
-.featurelist-themes {
+.feature-lister-themes {
     width: 100%;
 }
 .panel-heading {
