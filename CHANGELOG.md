@@ -52,8 +52,7 @@
 - Issue #740: Adding `name` to `Fachdaten_Zeit` or `Fachdaten_3d` in `config.json` now successfully changes the name of the folder in the layerTree.
 - Fix some vulnerabilities in dependencies.
 - Issue #710: Routing tool's configuration may be outside the tools sub-menu now.
-
----
+- Issue #745 The TimeSlider will now use the passed playBackDelay.
 
 ## v2.19.0 - 2022-03-02
 ### Added
