@@ -10,6 +10,7 @@ import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../utils/isPhoneN
 import beautifyKey from "../../../../utils/beautifyKey";
 import {isWebLink} from "../../../../utils/urlHelper";
 import {isEmailAddress} from "../../../../utils/isEmailAddress";
+import toBold from "../../../../utils/toBold";
 
 export default {
     name: "FeatureLister",
@@ -29,7 +30,14 @@ export default {
                 if (layer instanceof VectorLayer && layer.get("typ") === "WFS") {
                     const layerSource = layer.getSource();
 
-                    vectorLayers.push({name: layer.get("name"), id: layer.get("id"), features: layerSource.getFeatures(), geometryType: layerSource.getFeatures()[0] ? layerSource.getFeatures()[0].getGeometry().getType() : null});
+                    vectorLayers.push(
+                        {
+                            name: layer.get("name"),
+                            id: layer.get("id"),
+                            features: layerSource.getFeatures(),
+                            geometryType: layerSource.getFeatures()[0] ? layerSource.getFeatures()[0].getGeometry().getType() : null
+                        }
+                    );
                     rawVectorLayers.push(layer);
                 }
             });
@@ -48,18 +56,9 @@ export default {
         isPhoneNumber,
         getPhoneNumberAsWebLink,
         isEmailAddress,
+        toBold,
         removeVerticalBar (value) {
             return value.replaceAll("|", "<br>");
-        },
-        makeOberstufenprofileBold (value) {
-            const oldProfiles = value;
-            let newProfiles = "";
-
-            oldProfiles.replaceAll("|", "<br>");
-
-            newProfiles = oldProfiles.split("|").map(teilstring => teilstring.split(";")).map(([first, last]) => [`<b>${first}</b>`, last].join("; ")).join("<br>");
-
-            return newProfiles;
         },
         /**
          * Closes this tool window by setting active to false
@@ -266,7 +265,7 @@ export default {
                                 <p
                                     v-else-if="typeof feature[1] === 'string' && feature[1].includes(';')"
                                 >
-                                    <span v-html="makeOberstufenprofileBold(feature[1], key)" />
+                                    <span v-html="toBold(feature[1], key)" />
                                 </p>
                                 <p
                                     v-else-if="typeof feature[1] === 'string' && feature[1].includes('|')"
