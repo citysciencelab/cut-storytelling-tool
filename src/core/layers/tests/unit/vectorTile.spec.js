@@ -113,7 +113,7 @@ describe("core/modelList/layer/vectorTile", function () {
                         1.3229159522920524,
                         0.6614579761460262,
                         0.2645831904584105,
-                        0.1322915952292052
+                        0.13229159522920522
                     ],
                     tileSize: 512,
                     layerAttribution: "nicht vorhanden",
