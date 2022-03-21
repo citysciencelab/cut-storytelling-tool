@@ -4,7 +4,7 @@ import {expect} from "chai";
 import sinon from "sinon";
 import axios from "axios";
 
-import {crs} from "masterportalAPI";
+import {crs} from "masterportalapi";
 
 import * as stylefunction from "ol-mapbox-style/dist/stylefunction";
 
