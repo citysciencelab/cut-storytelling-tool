@@ -10,8 +10,6 @@ export default {
     switchToList ({state, commit, dispatch}, layer) {
         commit("setLayer", layer);
         if (state.layer) {
-            const tabId = "tool-feature-lister-list";
-
             commit("setLayerId", layer.id);
             commit("setGfiFeaturesOfLayer", state.visibleLayers);
             commit("setFeatureCount", state.gfiFeaturesOfLayer.length);
@@ -20,7 +18,7 @@ export default {
             commit("setFeatureDetailView", false);
             commit("setFeatureListView", true);
 
-            dispatch("switchTabTo", {tabId: tabId, disableOthers: false});
+            dispatch("switchTabTo", {tabId: "tool-feature-lister-list", disableOthers: false});
             dispatch("addMouseEvents");
             dispatch("sortItems");
         }
@@ -142,11 +140,9 @@ export default {
      * @returns {void}
      */
     switchToThemes ({commit, dispatch}) {
-        const tabId = "tool-feature-lister-themeChooser";
-
         commit("resetToThemeChooser");
 
-        dispatch("switchTabTo", {tabId: tabId, disableOthers: true});
+        dispatch("switchTabTo", {tabId: "tool-feature-lister-themeChooser", disableOthers: true});
     },
     /**
      * Switches to the details list of the selected feature.
@@ -157,13 +153,11 @@ export default {
      */
     switchToDetails ({state, commit, dispatch}) {
         if (state.selectedFeature) {
-            const tabId = "tool-feature-lister-details";
-
             commit("setLayerListView", false);
             commit("setFeatureListView", false);
             commit("setFeatureDetailView", true);
 
-            dispatch("switchTabTo", {tabId: tabId, disableOthers: false});
+            dispatch("switchTabTo", {tabId: "tool-feature-lister-details", disableOthers: false});
         }
     },
     /**
