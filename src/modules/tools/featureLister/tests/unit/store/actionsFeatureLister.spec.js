@@ -37,19 +37,8 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
             expect(commit.secondCall.args[0]).to.equal("setLayerId");
             expect(commit.thirdCall.args[0]).to.equal("setGfiFeaturesOfLayer");
 
-            expect(dispatch.firstCall.args[0]).to.equal("switchTabTo");
-            expect(dispatch.firstCall.args[1]).to.eql({tabId: "tool-feature-lister-list", disableOthers: false});
-            expect(dispatch.secondCall.args[0]).to.equal("addMouseEvents");
-            expect(dispatch.thirdCall.args[0]).to.equal("sortItems");
-        });
-    });
-
-    describe("switchTabTo", () => {
-        it("switches the tabs", () => {
-            const payload = {tabId: "tool-feature-lister-list", disableOthers: false};
-
-            actions.switchTabTo({commit}, payload);
-            expect(commit.firstCall.args[0]).to.equal("setCurrentTab");
+            expect(dispatch.firstCall.args[0]).to.equal("addMouseEvents");
+            expect(dispatch.secondCall.args[0]).to.equal("sortItems");
         });
     });
 
@@ -151,31 +140,25 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
 
     describe("switchToThemes", () => {
         it("switches to the themes tab", () => {
-            const expectedPayload = {tabId: "tool-feature-lister-themeChooser", disableOthers: true};
 
-            actions.switchToThemes({commit, dispatch});
+            actions.switchToThemes({commit});
             expect(commit.firstCall.args[0]).to.equal("resetToThemeChooser");
-            expect(dispatch.firstCall.args[0]).to.equal("switchTabTo");
-            expect(dispatch.firstCall.args[1]).to.eql(expectedPayload);
         });
     });
 
     describe("switchToDetails", () => {
         it("switches to the details tab", () => {
             const state = {
-                    selectedFeature: true
-                },
-                expectedPayload = {tabId: "tool-feature-lister-details", disableOthers: false};
+                selectedFeature: true
+            };
 
-            actions.switchToDetails({state, commit, dispatch});
+            actions.switchToDetails({state, commit});
             expect(commit.firstCall.args[0]).to.equal("setLayerListView");
             expect(commit.firstCall.args[1]).to.equal(false);
             expect(commit.secondCall.args[0]).to.equal("setFeatureListView");
             expect(commit.secondCall.args[1]).to.equal(false);
             expect(commit.thirdCall.args[0]).to.equal("setFeatureDetailView");
             expect(commit.thirdCall.args[1]).to.equal(true);
-            expect(dispatch.firstCall.args[0]).to.equal("switchTabTo");
-            expect(dispatch.firstCall.args[1]).to.eql(expectedPayload);
         });
     });
 

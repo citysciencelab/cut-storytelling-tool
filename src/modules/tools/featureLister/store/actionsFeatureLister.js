@@ -18,33 +18,9 @@ export default {
             commit("setFeatureDetailView", false);
             commit("setFeatureListView", true);
 
-            dispatch("switchTabTo", {tabId: "tool-feature-lister-list", disableOthers: false});
             dispatch("addMouseEvents");
             dispatch("sortItems");
         }
-    },
-    /**
-     * Switches to a tab and deactivates or even disables the other tabs.
-     * @param {Object} param.commit the commit
-     * @param {Object} payload tabId should be the id of the html tab element, if disableOthers is true the rest of the tabs gets disabled.
-     * @returns {void}
-     */
-    switchTabTo ({commit}, payload) {
-        const {tabId, disableOthers} = payload;
-
-        commit("setCurrentTab", tabId);
-        Object.entries(document.getElementsByClassName("feature-lister-navtabs")[0].children).forEach(([, child]) => {
-            if (child.id === tabId) {
-                child.classList.remove("disabled");
-                child.classList.add("active");
-            }
-            else {
-                child.classList.remove("active");
-                if (disableOthers) {
-                    child.classList.add("disabled");
-                }
-            }
-        });
     },
     /**
      * Click event that gets triggered when clicking on a feature in the list view.
@@ -139,10 +115,8 @@ export default {
      * @param {Object} param.dispatch the dispatch
      * @returns {void}
      */
-    switchToThemes ({commit, dispatch}) {
+    switchToThemes ({commit}) {
         commit("resetToThemeChooser");
-
-        dispatch("switchTabTo", {tabId: "tool-feature-lister-themeChooser", disableOthers: true});
     },
     /**
      * Switches to the details list of the selected feature.
@@ -151,13 +125,11 @@ export default {
      * @param {Object} param.dispatch the dispatch
      * @returns {void}
      */
-    switchToDetails ({state, commit, dispatch}) {
+    switchToDetails ({state, commit}) {
         if (state.selectedFeature) {
             commit("setLayerListView", false);
             commit("setFeatureListView", false);
             commit("setFeatureDetailView", true);
-
-            dispatch("switchTabTo", {tabId: "tool-feature-lister-details", disableOthers: false});
         }
     },
     /**

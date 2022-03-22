@@ -17,6 +17,13 @@ export default {
     components: {
         ToolTemplate
     },
+    data: function () {
+        return {
+            defaultTabClass: "feature-lister-navtabs-li text-center",
+            activeTabClass: "feature-lister-navtabs-li text-center active",
+            disabledTabClass: "feature-lister-navtabs-li text-center disabled"
+        };
+    },
     computed: {
         ...mapGetters("Tools/FeatureLister", Object.keys(getters)),
         ...mapGetters("Map", [
@@ -43,6 +50,15 @@ export default {
             });
             this.setVisibleLayers(rawVectorLayers);
             return vectorLayers;
+        },
+        themeTabClasses: function () {
+            return this.layerListView ? this.activeTabClass : this.defaultTabClass;
+        },
+        listTabClasses: function () {
+            return this.featureListView || this.featureDetailView ? this.activeTabClass : this.disabledTabClass;
+        },
+        detailsTabClasses: function () {
+            return this.featureDetailView || this.selectedFeature ? this.activeTabClass : this.disabledTabClass;
         }
     },
     created () {
@@ -95,7 +111,7 @@ export default {
                 <ul class="nav nav-tabs feature-lister-navtabs">
                     <li
                         id="tool-feature-lister-themeChooser"
-                        class="active feature-lister-navtabs-li text-center"
+                        :class="themeTabClasses"
                         role="presentation"
                     >
                         <a
@@ -105,7 +121,7 @@ export default {
                     </li>
                     <li
                         id="tool-feature-lister-list"
-                        class="feature-lister-navtabs-li text-center disabled"
+                        :class="listTabClasses"
                         role="presentation"
                     >
                         <a
@@ -115,7 +131,7 @@ export default {
                     </li>
                     <li
                         id="tool-feature-lister-details"
-                        class="feature-lister-navtabs-li text-center disabled"
+                        :class="detailsTabClasses"
                         role="presentation"
                     >
                         <a
