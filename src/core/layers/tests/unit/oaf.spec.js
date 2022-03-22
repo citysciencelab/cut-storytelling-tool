@@ -184,6 +184,7 @@ describe("src/core/layers/oaf.js", () => {
                         ret = {
                             id: "id",
                             createStyle: () => sinon.stub(),
+                            getGeometryTypeFromOAF: () => sinon.stub(),
                             getLegendInfos: () => sinon.stub()
                         };
                     }
@@ -218,69 +219,6 @@ describe("src/core/layers/oaf.js", () => {
             oafLayer.updateSource();
             expect(spy.notCalled).to.be.true;
             expect(oafLayer.get("sourceUpdated")).to.be.true;
-        });
-    });
-    describe("createLegend", () => {
-        it.skip("createLegend shall set not secured legend", function () {
-            let count1 = 0,
-                count2 = 0;
-
-            sinon.stub(Radio, "request").callsFake((...args) => {
-                let ret = null;
-
-                args.forEach(arg => {
-                    if (arg === "returnModelById") {
-                        ret = {
-                            id: "id",
-                            getGeometryTypeFromWFS: () => {
-                                ++count1;
-                            },
-                            getGeometryTypeFromSecuredWFS: () => {
-                                ++count2;
-                            },
-                            getLegendInfos: () => ["legendInfos"]
-                        };
-                    }
-                });
-                return ret;
-            });
-            attributes.legend = true;
-            const oafLayer = new OAFLayer(attributes);
-
-            expect(oafLayer.get("legend")).not.to.be.true;
-            expect(count1).to.be.equals(1);
-            expect(count2).to.be.equals(0);
-        });
-        it.skip("createLegend shall set secured legend", function () {
-            let count1 = 0,
-                count2 = 0;
-
-            sinon.stub(Radio, "request").callsFake((...args) => {
-                let ret = null;
-
-                args.forEach(arg => {
-                    if (arg === "returnModelById") {
-                        ret = {
-                            id: "id",
-                            getGeometryTypeFromWFS: () => {
-                                ++count1;
-                            },
-                            getGeometryTypeFromSecuredWFS: () => {
-                                ++count2;
-                            },
-                            getLegendInfos: () => ["legendInfos"]
-                        };
-                    }
-                });
-                return ret;
-            });
-            attributes.legend = true;
-            attributes.isSecured = true;
-            const oafLayer = new OAFLayer(attributes);
-
-            expect(oafLayer.get("legend")).not.to.be.true;
-            expect(count1).to.be.equals(0);
-            expect(count2).to.be.equals(1);
         });
     });
     describe("functions for features", () => {
@@ -342,6 +280,7 @@ describe("src/core/layers/oaf.js", () => {
                         ret = {
                             id: "id",
                             createStyle: () => sinon.stub(),
+                            getGeometryTypeFromOAF: () => sinon.stub(),
                             getLegendInfos: () => sinon.stub()
                         };
                     }
@@ -361,7 +300,6 @@ describe("src/core/layers/oaf.js", () => {
             expect(style2()).not.to.be.null;
             expect(typeof style3).to.be.equals("function");
             expect(style3()).not.to.be.null;
-
         });
         it("showFeaturesByIds", function () {
             sinon.stub(Radio, "request").callsFake((...args) => {
@@ -372,6 +310,7 @@ describe("src/core/layers/oaf.js", () => {
                         ret = {
                             id: "id",
                             createStyle: () => sinon.stub(),
+                            getGeometryTypeFromOAF: () => sinon.stub(),
                             getLegendInfos: () => sinon.stub()
                         };
                     }
