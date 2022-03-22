@@ -7,11 +7,11 @@ export default {
      * @param {Object} layer selected layer.
      * @returns {void}
      */
-    switchToList ({state, commit, dispatch}, layer) {
+    switchToList ({state, rootGetters, commit, dispatch}, layer) {
         commit("setLayer", layer);
         if (state.layer) {
             commit("setLayerId", layer.id);
-            commit("setGfiFeaturesOfLayer", state.visibleLayers);
+            commit("setGfiFeaturesOfLayer", rootGetters["Map/visibleLayerList"]);
             commit("setFeatureCount", state.gfiFeaturesOfLayer.length);
             commit("setShownFeatures", state.gfiFeaturesOfLayer.length < state.maxFeatures ? state.gfiFeaturesOfLayer.length : state.maxFeatures);
             commit("setLayerListView", false);
@@ -84,10 +84,10 @@ export default {
      * @param {String} featureId id of the feature to be highlighted.
      * @returns {void}
      */
-    highlightFeature ({state, dispatch}, featureId) {
+    highlightFeature ({state, rootGetters, dispatch}, featureId) {
         dispatch("Map/removeHighlightFeature", "decrease", {root: true});
         let featureGeometryType = "";
-        const layer = state.visibleLayers.find((l) => l.values_.id === state.layer.id),
+        const layer = rootGetters["Map/visibleLayerList"].find((l) => l.values_.id === state.layer.id),
             layerFeatures = state.nestedFeatures ? state.rawFeaturesOfLayer : layer.getSource().getFeatures(),
             featureWrapper = layerFeatures.find(feat => {
                 featureGeometryType = feat.getGeometry().getType();

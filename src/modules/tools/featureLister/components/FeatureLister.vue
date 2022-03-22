@@ -48,7 +48,6 @@ export default {
                     rawVectorLayers.push(layer);
                 }
             });
-            this.setVisibleLayers(rawVectorLayers);
             return vectorLayers;
         },
         themeTabClasses: function () {

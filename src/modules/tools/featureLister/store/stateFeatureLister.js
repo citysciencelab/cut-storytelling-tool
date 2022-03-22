@@ -18,7 +18,6 @@
  * @property {Array} gfiFeaturesOfLayer array of the gfiFeatures of the selected layer
  * @property {String} featureCount number of total features of the selected layer
  * @property {String} shownFeatures currently count of features displayed in featureListView table
- * @property {Array} visibleLayers array of all visible vector layers
  * @property {Boolean} featureListView if true the list of features from selected layer gets displayed
  * @property {Array} rawFeaturesOfLayer array of raw features from selected layer, differs from gfiFeatures
  * @property {Boolean} nestedFeatures some features have features themself, if true they get recognized
@@ -47,7 +46,6 @@ const state = {
     gfiFeaturesOfLayer: [],
     featureCount: "",
     shownFeatures: "",
-    visibleLayers: [],
     featureListView: false,
     rawFeaturesOfLayer: [],
     nestedFeatures: false,
