@@ -436,6 +436,22 @@
                     "emptyList": "List is empty",
                     "noElements": "No elements found"
                 },
+                "ariaLabel": {
+                    "input": "Input for {{param}}",
+                    "checkbox": "Checkbox for {{param}}",
+                    "radio": "Radio for {{param}}",
+                    "dropdown": "SelectBox for {{param}}",
+                    "sliderRange": {
+                        "min": "Slider min for {{param}}",
+                        "max": "Slider max for {{param}}"
+                    },
+                    "slider": "Slider range for {{param}}",
+                    "date": "Date for {{param}}",
+                    "dateRange": {
+                        "from": "Start date from {{param}}",
+                        "to": "End date from {{param}}"
+                    }
+                },
                 "filterResult": {
                     "label": "All filtered Counts",
                     "unit": "{{amountOfFilteredItems}} Results"
@@ -1024,7 +1040,9 @@
         "vectorStyle": {
             "styleModel": {
                 "getGeometryTypeFromWFSFetchfailed": "The legend could not be created in the layer information!",
-                "getGeometryTypeFromWFSFetchfailedMessage": "Details: A required service is not responding."
+                "getGeometryTypeFromWFSFetchfailedMessage": "Details: A required service is not responding.",
+                "getGeometryTypeFromOAFFetchfailed": "The legend could not be created in the layer information!",
+                "getGeometryTypeFromOAFFetchfailedMessage": "Details: The API is not available."
             }
         },
         "wmsTime": {
@@ -1139,7 +1157,8 @@
               "true": "yes",
               "No": "no"
             },
-            "zoomToResult": "Zoom to result"
+            "zoomToResult": "Zoom to result",
+            "pagination": "Pagination"
         }
     }
 }

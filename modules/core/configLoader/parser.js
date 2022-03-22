@@ -752,20 +752,21 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         const enabled = id === "3d_daten" ? !Radio.request("Util", "isViewMobile") : true;
 
         if (enabled && overLayer !== undefined) {
-            const name = overLayer?.name ? overLayer.name : i18next.t(defaultTranslationKey),
-                // If no name and no translation-function was found, the translation of the default value is used
-                i18nextTranslate = overLayer?.name && overLayer?.i18nextTranslate
-                    ? overLayer.i18nextTranslate
-                    : setter => {
-                        if (typeof setter === "function" && i18next.exists(defaultTranslationKey)) {
-                            setter("name", i18next.t(defaultTranslationKey));
-                        }
-                    };
+            const name = overLayer?.name ? overLayer.name : null;
 
             this.addItemByPosition({
                 type: "folder",
-                name,
-                i18nextTranslate,
+                name: name ? name : i18next.t(defaultTranslationKey),
+                i18nextTranslate: (setter) => {
+                    if (typeof setter === "function") {
+                        if (name) {
+                            setter("name", i18next.exists(name) ? i18next.t(name) : name);
+                        }
+                        else if (i18next.exists(defaultTranslationKey)) {
+                            setter("name", i18next.t(defaultTranslationKey));
+                        }
+                    }
+                },
                 id,
                 parentId: "tree",
                 isInThemen: true,

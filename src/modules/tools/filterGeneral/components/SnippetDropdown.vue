@@ -118,6 +118,15 @@ export default {
         };
     },
     computed: {
+        ariaLabelDropdown () {
+            return this.$t("modules.tools.filterGeneral.ariaLabel.dropdown", {param: this.attrName});
+        },
+        ariaLabelRadio () {
+            return this.$t("modules.tools.filterGeneral.ariaLabel.radio", {param: this.attrName});
+        },
+        ariaLabelCheckbox () {
+            return this.$t("modules.tools.filterGeneral.ariaLabel.checkbox", {param: this.attrName});
+        },
         titleText () {
             if (this.title === true) {
                 return this.attrName;
@@ -394,6 +403,7 @@ export default {
                 <Multiselect
                     :id="'snippetSelectBox-' + snippetId"
                     v-model="dropdownSelected"
+                    :aria-label="ariaLabelDropdown"
                     :options="dropdownValueComputed"
                     name="select-box"
                     :disabled="disable"
@@ -463,19 +473,21 @@ export default {
                             v-if="multiselect"
                             :id="'snippetRadioCheckbox-' + snippetId + '-' + val"
                             v-model="dropdownSelected"
-                            :aria-label="'snippetRadioCheckbox-' + snippetId + '-' + val"
+                            :aria-label="ariaLabelCheckbox"
                             class="checkbox"
                             type="checkbox"
                             :value="val"
+                            tabindex="0"
                         >
                         <input
                             v-else
                             :id="'snippetRadioCheckbox-' + snippetId + '-' + val"
                             v-model="dropdownSelected[0]"
-                            :aria-label="'snippetRadioCheckbox-' + snippetId + '-' + val"
+                            :aria-label="ariaLabelRadio"
                             class="radio"
                             type="radio"
                             :value="val"
+                            tabindex="0"
                         >
                     </span>
                     <span

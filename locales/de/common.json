@@ -436,6 +436,22 @@
                     "emptyList": "Die Liste ist leer",
                     "noElements": "Keine Elemente gefunden"
                 },
+                "ariaLabel": {
+                    "input": "Input für {{param}}",
+                    "checkbox": "Checkbox für {{param}}",
+                    "radio": "Radio für {{param}}",
+                    "dropdown": "SelectBox für {{param}}",
+                    "sliderRange": {
+                        "min": "Slider min für {{param}}",
+                        "max": "Slider max für {{param}}"
+                    },
+                    "slider": "Slider range für {{param}}",
+                    "date": "Datum für {{param}}",
+                    "dateRange": {
+                        "from": "Startdatum von {{param}}",
+                        "to": "Enddatum von {{param}}"
+                    }
+                },
                 "filterResult": {
                     "label": "Alle Filter-Treffer",
                     "unit": "{{amountOfFilteredItems}} Treffer"
@@ -1024,7 +1040,9 @@
         "vectorStyle": {
             "styleModel": {
                 "getGeometryTypeFromWFSFetchfailed": "Die Legende konnte in der Layerinformation nicht erstellt werden!",
-                "getGeometryTypeFromWFSFetchfailedMessage": "Details: Ein benötigter Dienst antwortet nicht."
+                "getGeometryTypeFromWFSFetchfailedMessage": "Details: Ein benötigter Dienst antwortet nicht.",
+                "getGeometryTypeFromOAFFetchfailed": "Die Legende konnte in der Layerinformation nicht erstellt werden!",
+                "getGeometryTypeFromOAFFetchfailedMessage": "Details: Die API antwortet nicht."
             }
         },
         "wmsTime": {
@@ -1139,7 +1157,8 @@
                 "true": "ja",
                 "No": "nein"
             },
-            "zoomToResult": "Zum Ergebnis zoomen"
+            "zoomToResult": "Zum Ergebnis zoomen",
+            "pagination": "Ergebnisseite"
         }
     }
 }
