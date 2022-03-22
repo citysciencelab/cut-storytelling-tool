@@ -4,7 +4,6 @@ import sinon from "sinon";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import FeatureListerComponent from "../../../components/FeatureLister.vue";
 import FeatureLister from "../../../store/indexFeatureLister";
-import VectorLayer from "ol/layer/Vector.js";
 
 const localVue = createLocalVue();
 
@@ -32,7 +31,8 @@ describe("src/modules/tools/featureLister/components/FeatureLister.vue", () => {
             }
         };
     let store,
-        wrapper;
+        wrapper,
+        rootGetters;
 
     beforeEach(() => {
         FeatureLister.actions.switchTabTo = sinon.spy(FeatureLister.actions.switchTabTo);
@@ -75,14 +75,9 @@ describe("src/modules/tools/featureLister/components/FeatureLister.vue", () => {
     });
 
     it("renders list of layer features", () => {
-        const layer1 = new VectorLayer({
-                name: "ersterLayer", id: "123", features: [{getAttributesToShow: () => [{key: "name", value: "Name"}]}], geometryType: "Point", values_: [1, 2]
-            }),
-            layerList = [layer1],
-            layer = {name: "ersterLayer", id: "123", features: [{values_: {features: [1, 2]}}], geometryType: "Point"};
+        const layer = {name: "ersterLayer", id: "123", features: [{values_: {features: [1, 2]}}], geometryType: "Point"};
 
-        store.commit("Tools/FeatureLister/setVisibleLayers", layerList);
-        store.dispatch("Tools/FeatureLister/switchToList", layer);
+        store.dispatch("Tools/FeatureLister/switchToList", {rootGetters}, layer);
         wrapper = shallowMount(FeatureListerComponent, {store, localVue});
 
         expect(wrapper.find("#feature-lister-list").exists()).to.be.true;

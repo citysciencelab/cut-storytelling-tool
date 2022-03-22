@@ -3,7 +3,7 @@ import sinon from "sinon";
 import actions from "../../../store/actionsFeatureLister";
 
 describe("tools/featureLister/store/actionsFeatureLister", () => {
-    let commit, dispatch;
+    let commit, dispatch, rootGetters;
 
     document.body.innerHTML =
         "<div id=\"parent\">" +
@@ -31,7 +31,7 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
             };
 
         it("switches to the feature list view", () => {
-            actions.switchToList({state, commit, dispatch}, layer);
+            actions.switchToList({state, rootGetters, commit, dispatch}, layer);
             expect(commit.firstCall.args[0]).to.equal("setLayer");
             expect(commit.firstCall.args[1]).to.equal(layer);
             expect(commit.secondCall.args[0]).to.equal("setLayerId");
@@ -119,10 +119,15 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
             }
         };
 
+        rootGetters = {"Map/visibleLayerList": [
+            {name: "ersterLayer", values_: {id: "123"}, getSource: () => state.source, features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"},
+            {name: "zweiterLayer", values_: {id: "456"}, features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"},
+            {name: "dritterLayer", values_: {id: "789"}, features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"}]};
+
         it("highlights a feature depending on its geometryType", () => {
             const featureId = "123";
 
-            actions.highlightFeature({state, dispatch}, featureId);
+            actions.highlightFeature({state, rootGetters, dispatch}, featureId);
             expect(dispatch.firstCall.args[0]).to.equal("Map/removeHighlightFeature");
             expect(dispatch.firstCall.args[1]).to.equal("decrease");
             expect(dispatch.secondCall.args[0]).to.equal("Map/highlightFeature");
@@ -131,7 +136,7 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
             const featureId = "123";
 
             state.nestedFeatures = true;
-            actions.highlightFeature({state, dispatch}, featureId);
+            actions.highlightFeature({state, rootGetters, dispatch}, featureId);
             expect(dispatch.firstCall.args[0]).to.equal("Map/removeHighlightFeature");
             expect(dispatch.firstCall.args[1]).to.equal("decrease");
             expect(dispatch.secondCall.args[0]).to.equal("Map/highlightFeature");
