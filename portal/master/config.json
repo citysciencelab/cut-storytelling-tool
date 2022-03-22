@@ -644,7 +644,9 @@
           "id": "10220"
         },
         {
-          "id": "2426"
+          "id": "2426",
+          "visibility": true,
+          "autoRefresh": 6000
         },
         {
           "id": "1933",
@@ -710,6 +712,7 @@
           "id": "47",
           "styleId": "47",
           "styleGeometryType": "Point",
+          "visibility": true,
           "mouseHoverField": [
             "baubeginn",
             "bauende"
@@ -760,11 +763,12 @@
           ],
           "searchField": "name",
           "extendedFilter": true,
-          "loadingStrategy": "all"
+          "loadingStrategy": "all",
+          "autoRefresh": 6000
         },
         {
           "id": "8712",
-          "visibility": true,
+          "visibility": false,
           "name": "Schulinfosystem",
           "styleId": "8712",
           "searchField": "schulname",

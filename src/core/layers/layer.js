@@ -43,20 +43,21 @@ export default function Layer (attrs, layer, initialize = true) {
         settingsText: i18next.t("common:tree.settings"),
         infosAndLegendText: i18next.t("common:tree.infosAndLegend"),
         isAutoRefreshing: false,
-        intervalAutoRefresh: -1
+        intervalAutoRefresh: -1,
+        isClustered: false
     };
 
     this.layer = layer;
     this.observersAutoRefresh = [];
     this.attributes = {...Object.assign({}, this.layer.values_, defaults, attrs)};
     this.id = attrs.id;
+
     delete this.attributes.source;
     if (initialize) {
         this.initialize(attrs);
     }
     else if (attrs.isSelected === true || store.getters.treeType === "light") {
         this.setIsVisibleInMap(attrs.isSelected);
-        this.setIsSelected(attrs.isSelected);
     }
     this.setMinMaxResolutions();
     this.checkForScale({scale: store.getters["Map/scale"]});
@@ -73,6 +74,9 @@ export default function Layer (attrs, layer, initialize = true) {
 Layer.prototype.initialize = function (attrs) {
     if (store.state.configJson?.Portalconfig.singleBaselayer !== undefined) {
         this.set("singleBaselayer", store.state.configJson?.Portalconfig.singleBaselayer);
+    }
+    if (attrs.clusterDistance) {
+        this.set("isClustered", true);
     }
 
     this.updateLayerTransparency();
@@ -350,7 +354,6 @@ Layer.prototype.setIsSelected = function (newValue) {
     }
 
     if (typeof autoRefresh === "number" || typeof autoRefresh === "string") {
-        console.log(this);
         this.set("isAutoRefreshing", true);
         this.activateAutoRefresh(newValue, Math.max(500, autoRefresh));
     }
@@ -416,7 +419,6 @@ Layer.prototype.activateAutoRefresh = function (isLayerSelected, autoRefresh) {
  * @returns {void}
  */
 Layer.prototype.setAutoRefreshEvent = function (layer) {
-    console.log(layer);
     if (!layer) {
         return;
     }
