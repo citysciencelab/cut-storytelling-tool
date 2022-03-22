@@ -55,10 +55,22 @@ export default {
             return this.layerListView ? this.activeTabClass : this.defaultTabClass;
         },
         listTabClasses: function () {
-            return this.featureListView || this.featureDetailView ? this.activeTabClass : this.disabledTabClass;
+            if (this.featureListView) {
+                return this.activeTabClass;
+            }
+            if (this.featureDetailView) {
+                return this.defaultTabClass;
+            }
+            return this.disabledTabClass;
         },
         detailsTabClasses: function () {
-            return this.featureDetailView || this.selectedFeature ? this.activeTabClass : this.disabledTabClass;
+            if (this.featureDetailView) {
+                return this.activeTabClass;
+            }
+            if (this.selectedFeature) {
+                return this.defaultTabClass;
+            }
+            return this.disabledTabClass;
         }
     },
     created () {
@@ -200,7 +212,7 @@ export default {
                                     </tr>
                                     <tr
                                         v-for="(feature, index) in featureProperties"
-                                        :id="index"
+                                        :id="'tool-feature-lister-feature-' + index"
                                         :key="'tool-feature-lister-' + index"
                                         class="feature-lister-list-table-tr"
                                     >

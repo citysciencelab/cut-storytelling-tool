@@ -67,10 +67,14 @@ export default {
         const featureLister = document.getElementById("featureLister");
 
         featureLister.addEventListener("click", (evt) => {
-            dispatch("clickOnFeature", evt.target.parentElement.id);
+            if (evt.target.parentElement.id.includes("tool-feature-lister-feature-")) {
+                dispatch("clickOnFeature", evt.target.parentElement.id.slice(-1));
+            }
         });
         featureLister.addEventListener("mouseover", (evt) => {
-            dispatch("hoverOverFeature", evt.target.parentElement.id);
+            if (evt.target.parentElement.id.includes("tool-feature-lister-feature-")) {
+                dispatch("hoverOverFeature", evt.target.parentElement.id.slice(-1));
+            }
         });
     },
     /**
