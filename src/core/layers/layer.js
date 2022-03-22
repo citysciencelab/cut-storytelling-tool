@@ -56,6 +56,7 @@ export default function Layer (attrs, layer, initialize = true) {
     }
     else if (attrs.isSelected === true || store.getters.treeType === "light") {
         this.setIsVisibleInMap(attrs.isSelected);
+        this.setIsSelected(attrs.isSelected);
     }
     this.setMinMaxResolutions();
     this.checkForScale({scale: store.getters["Map/scale"]});
@@ -78,6 +79,7 @@ Layer.prototype.initialize = function (attrs) {
 
     if (attrs.isSelected === true || store.getters.treeType === "light") {
         this.setIsVisibleInMap(attrs.isSelected);
+        this.setIsSelected(attrs.isSelected);
         this.set("isRemovable", store.state.configJson?.Portalconfig.layersRemovable);
     }
     else {
@@ -348,6 +350,8 @@ Layer.prototype.setIsSelected = function (newValue) {
     }
 
     if (typeof autoRefresh === "number" || typeof autoRefresh === "string") {
+        console.log(this);
+        this.set("isAutoRefreshing", true);
         this.activateAutoRefresh(newValue, Math.max(500, autoRefresh));
     }
 };
@@ -394,15 +398,14 @@ Layer.prototype.activateAutoRefresh = function (isLayerSelected, autoRefresh) {
 
     if (isLayerSelected) {
         this.set("intervalAutoRefresh", setInterval(() => {
-            if (!this.get("isVisibleInMap") || this.get("isAutoRefreshing")) {
-                return;
-            }
-            this.setAutoRefreshEvent(layers[0]?.layer ? layers[0].layer : layers[0]);
-            layers.forEach(layer => {
-                const layerSource = layer?.layer ? layer.layer.getSource() : layer.getSource();
+            if (this.get("isVisibleInMap") && this.get("isAutoRefreshing")) {
+                this.setAutoRefreshEvent(layers[0]?.layer ? layers[0].layer : layers[0]);
+                layers.forEach(layer => {
+                    const layerSource = layer?.layer ? layer.layer.getSource() : layer.getSource();
 
-                layerSource.refresh();
-            });
+                    layerSource.refresh();
+                });
+            }
         }, autoRefresh));
     }
 };
@@ -413,12 +416,11 @@ Layer.prototype.activateAutoRefresh = function (isLayerSelected, autoRefresh) {
  * @returns {void}
  */
 Layer.prototype.setAutoRefreshEvent = function (layer) {
+    console.log(layer);
     if (!layer) {
         return;
     }
     const layerSource = layer.getSource();
-
-    this.set("isAutoRefreshing", true);
 
     layerSource.once("featuresloadend", () => {
         this.observersAutoRefresh.forEach(handler => {
@@ -426,7 +428,6 @@ Layer.prototype.setAutoRefreshEvent = function (layer) {
                 handler(layerSource.getFeatures());
             }
         });
-        this.set("isAutoRefreshing", false);
     });
 };
 /**
@@ -662,6 +663,7 @@ Layer.prototype.setMinMaxResolutions = function () {
 Layer.prototype.featuresLoaded = function (layerId, features) {
     bridge.featuresLoaded(layerId, features);
 };
+
 /**
  * Get layers as array.
  * @returns {Layer[]} layer as array
@@ -671,6 +673,7 @@ Layer.prototype.getLayers = function () {
 
     return [layer];
 };
+
 // NOTICE: backbone-relevant functions, may be removed if all layers are no longer backbone models.
 // But set, get and has may stay, because they are convenient:)
 Layer.prototype.set = function (arg1, arg2) {
