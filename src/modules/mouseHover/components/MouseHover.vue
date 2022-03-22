@@ -71,6 +71,7 @@ $background_color_1: rgb(255, 255, 255);
     font-size: 12px;
     text-align: left;
     max-width: inherit;
+    padding: 8px;
     background-color: $background_color_1;
     color: $color_1;
     white-space: nowrap;
