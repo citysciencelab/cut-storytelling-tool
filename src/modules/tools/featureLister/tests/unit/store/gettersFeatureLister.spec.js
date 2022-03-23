@@ -14,6 +14,9 @@ describe("tools/featureLister/store/gettersFeatureLister", () => {
         gfiFeature3 = {
             getAttributesToShow: () => ({generic: "Show Generic", beta: "Show Beta"}),
             getProperties: () => ({generic: "Test", alpha: "ohne", beta: "", gamma: "Delta"})
+        },
+        listOfHeaders = {
+            mapHeaders: (list) => Object.fromEntries(list.map(({key, value}) => [key, value]))
         };
 
     let state;
@@ -24,19 +27,13 @@ describe("tools/featureLister/store/gettersFeatureLister", () => {
     });
 
     describe("headers", () => {
-        /* eslint-disable func-style */
-        /* eslint-disable require-jsdoc */
-        const mapHeaders = (list) => Object.fromEntries(list.map(({key, value}) => [key, value]));
-        /* eslint-enable func-style */
-        /* eslint-enable require-jsdoc */
-
         it("lists all used attributes", () => {
             state.gfiFeaturesOfLayer = [gfiFeature2, gfiFeature3];
-            expect(mapHeaders(headers(state))).to.deep.equal({generic: "Show Generic", alpha: "Show Alpha", beta: "Show Beta"});
+            expect(listOfHeaders.mapHeaders(headers(state))).to.deep.equal({generic: "Show Generic", alpha: "Show Alpha", beta: "Show Beta"});
         });
         it("shows all properties with showAll feature", () => {
             state.gfiFeaturesOfLayer = [gfiFeature1, gfiFeature2];
-            expect(Object.keys(mapHeaders(headers(state)))).to.deep.equal(["generic", "alpha", "beta", "gamma", "delta"]);
+            expect(Object.keys(listOfHeaders.mapHeaders(headers(state)))).to.deep.equal(["generic", "alpha", "beta", "gamma", "delta"]);
         });
     });
 
