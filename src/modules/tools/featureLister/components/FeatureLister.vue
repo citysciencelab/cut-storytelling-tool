@@ -30,8 +30,7 @@ export default {
             "visibleLayerList"
         ]),
         visibleVectorLayers: function () {
-            const vectorLayers = [],
-                rawVectorLayers = [];
+            const vectorLayers = [];
 
             this.visibleLayerList.forEach(layer => {
                 if (layer instanceof VectorLayer && layer.get("typ") === "WFS") {
@@ -45,7 +44,6 @@ export default {
                             geometryType: layerSource.getFeatures()[0] ? layerSource.getFeatures()[0].getGeometry().getType() : null
                         }
                     );
-                    rawVectorLayers.push(layer);
                 }
             });
             return vectorLayers;
