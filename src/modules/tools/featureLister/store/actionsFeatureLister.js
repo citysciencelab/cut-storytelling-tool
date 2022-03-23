@@ -18,7 +18,6 @@ export default {
             commit("setFeatureDetailView", false);
             commit("setFeatureListView", true);
 
-            dispatch("addMouseEvents");
             dispatch("sortItems");
         }
     },
@@ -57,25 +56,6 @@ export default {
 
             dispatch("highlightFeature", feature.getId());
         }
-    },
-    /**
-     * Adds the eventListeners to the table for clicking and hovering events.
-     * @param {Object} param.dispatch the dispatch
-     * @returns {void}
-     */
-    addMouseEvents ({dispatch}) {
-        const featureLister = document.getElementById("featureLister");
-
-        featureLister.addEventListener("click", (evt) => {
-            if (evt.target.parentElement.id.includes("tool-feature-lister-feature-")) {
-                dispatch("clickOnFeature", evt.target.parentElement.id.slice(-1));
-            }
-        });
-        featureLister.addEventListener("mouseover", (evt) => {
-            if (evt.target.parentElement.id.includes("tool-feature-lister-feature-")) {
-                dispatch("hoverOverFeature", evt.target.parentElement.id.slice(-1));
-            }
-        });
     },
     /**
      * Highlights a feature depending on its geometryType.

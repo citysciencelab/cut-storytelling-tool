@@ -37,8 +37,7 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
             expect(commit.secondCall.args[0]).to.equal("setLayerId");
             expect(commit.thirdCall.args[0]).to.equal("setGfiFeaturesOfLayer");
 
-            expect(dispatch.firstCall.args[0]).to.equal("addMouseEvents");
-            expect(dispatch.secondCall.args[0]).to.equal("sortItems");
+            expect(dispatch.firstCall.args[0]).to.equal("sortItems");
         });
     });
 

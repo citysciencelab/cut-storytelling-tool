@@ -212,6 +212,9 @@ export default {
                                         :id="'tool-feature-lister-feature-' + index"
                                         :key="'tool-feature-lister-' + index"
                                         class="feature-lister-list-table-tr"
+                                        @click="clickOnFeature(index)"
+                                        @mouseover="hoverOverFeature(index)"
+                                        @focus="hoverOverFeature(index)"
                                     >
                                         <template v-if="index < shownFeatures">
                                             <td
