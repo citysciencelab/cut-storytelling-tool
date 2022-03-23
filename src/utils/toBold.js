@@ -10,7 +10,7 @@ export default function toBold (value) {
 
     oldProfiles.replaceAll("|", "<br>");
 
-    newProfiles = oldProfiles.split("|").map(teilstring => teilstring.split(";")).map(([first, last]) => [`<b>${first}</b>`, last].join("; ")).join("<br>");
+    newProfiles = oldProfiles.split("|").map(substring => substring.split(";")).map(([first, last]) => [`<b>${first}</b>`, last].join("; ")).join("<br>");
 
     return newProfiles;
 }
