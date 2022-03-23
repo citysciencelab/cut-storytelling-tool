@@ -53,6 +53,7 @@ export default {
         },
         listTabClasses: function () {
             if (this.featureListView) {
+                this.sortItems();
                 return this.activeTabClass;
             }
             if (this.featureDetailView) {
@@ -97,6 +98,42 @@ export default {
                 model.set("isActive", false);
             }
             this.resetToThemeChooser();
+        },
+        /**
+         * Sorts the table items accoring to the clicked table header.
+         * @returns {void}
+         */
+        async sortItems () {
+            const tableHeaders = await document.getElementsByClassName("feature-lister-list-table-th");
+
+            try {
+                tableHeaders.forEach(th_elem => {
+                    let asc = true;
+                    const index = Array.from(th_elem.parentNode.children).indexOf(th_elem);
+
+                    th_elem.addEventListener("click", () => {
+                        const arr = [...th_elem.closest("table").querySelectorAll("tbody tr")].slice(1);
+
+                        arr.sort((a, b) => {
+                            let a_val = "",
+                                b_val = "";
+
+                            if (a.children[index] !== undefined && b.children[index] !== undefined) {
+                                a_val = a.children[index].innerText;
+                                b_val = b.children[index].innerText;
+                            }
+                            return asc ? a_val.localeCompare(b_val) : b_val.localeCompare(a_val);
+                        });
+                        arr.forEach(elem => {
+                            th_elem.closest("table").querySelector("tbody").appendChild(elem);
+                        });
+                        asc = !asc;
+                    });
+                });
+            }
+            catch (error) {
+                console.error(error);
+            }
         }
     }
 };

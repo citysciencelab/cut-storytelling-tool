@@ -7,7 +7,7 @@ export default {
      * @param {Object} layer selected layer.
      * @returns {void}
      */
-    switchToList ({state, rootGetters, commit, dispatch}, layer) {
+    switchToList ({state, rootGetters, commit}, layer) {
         commit("setLayer", layer);
         if (state.layer) {
             commit("setLayerId", layer.id);
@@ -17,8 +17,6 @@ export default {
             commit("setLayerListView", false);
             commit("setFeatureDetailView", false);
             commit("setFeatureListView", true);
-
-            dispatch("sortItems");
         }
     },
     /**
@@ -126,42 +124,6 @@ export default {
         const numberOfFeaturesToShow = state.shownFeatures < state.featureCount - 10 ? state.shownFeatures + 10 : state.featureCount;
 
         commit("setShownFeatures", numberOfFeaturesToShow);
-    },
-    /**
-     * Switches to the themes list of all visibile layers.
-     * @returns {void}
-     */
-    async sortItems () {
-        const tableHeaders = await document.getElementsByClassName("feature-lister-list-table-th");
-
-        try {
-            tableHeaders.forEach(th_elem => {
-                let asc = true;
-                const index = Array.from(th_elem.parentNode.children).indexOf(th_elem);
-
-                th_elem.addEventListener("click", () => {
-                    const arr = [...th_elem.closest("table").querySelectorAll("tbody tr")].slice(1);
-
-                    arr.sort((a, b) => {
-                        let a_val = "",
-                            b_val = "";
-
-                        if (a.children[index] !== undefined && b.children[index] !== undefined) {
-                            a_val = a.children[index].innerText;
-                            b_val = b.children[index].innerText;
-                        }
-                        return asc ? a_val.localeCompare(b_val) : b_val.localeCompare(a_val);
-                    });
-                    arr.forEach(elem => {
-                        th_elem.closest("table").querySelector("tbody").appendChild(elem);
-                    });
-                    asc = !asc;
-                });
-            });
-        }
-        catch (error) {
-            console.error(error);
-        }
     }
 };
 

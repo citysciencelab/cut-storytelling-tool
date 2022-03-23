@@ -36,8 +36,6 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
             expect(commit.firstCall.args[1]).to.equal(layer);
             expect(commit.secondCall.args[0]).to.equal("setLayerId");
             expect(commit.thirdCall.args[0]).to.equal("setGfiFeaturesOfLayer");
-
-            expect(dispatch.firstCall.args[0]).to.equal("sortItems");
         });
     });
 
