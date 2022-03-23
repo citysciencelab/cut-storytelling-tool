@@ -5,7 +5,6 @@
 
 ## Known Issues
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
-- WMS-T: Behaviour is undefined on using multiple configured WMS-T.
 
 ---
 
