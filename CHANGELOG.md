@@ -23,7 +23,7 @@
 - Issue #674, #676: addWMS tool and orientation control are now using the CRS of the map instead of hard coded CRS
 - Issue #684: The download of the draw tool now supports the projection of the map
 - Issue #610: Refactor Elastic Search: The CreateHit() function has been modified to allow the Glyphicon and HitType to be assigned from the backend.
--  The following NPM packages are updated:
+- The following NPM packages are updated:
     - jsdoc: 3.6.7 to 3.6.10
     - masterportalapi: 1.10.0 to 2.0.0 (is now loaded via npm and the notation has changed)
 - Searchbar:
@@ -32,6 +32,7 @@
     - Addresses pasted with `copy & paste` or the url parameter `query` are now executed directly on exactly one search hit in the gazetteer.
     - The `recommendedList` is now sorted by the attribute `searchResultOrder`.
 - Parametric URL: For the URL parameters `QUERY` and `SEARCH/QUERY` the house numbers must now be separated with a blank. This way the call in the URL is always the same as the displayed search result.
+- Issue #551: Tools `coordToolKit` and `supplyCoord` are no longer usable in 3d mode due to [limitations of ol-cesium](https://openlayers.org/ol-cesium/apidoc/index.html#limitations).
 
 ### Deprecated
 
@@ -52,6 +53,7 @@
 - Issue #740: Adding `name` to `Fachdaten_Zeit` or `Fachdaten_3d` in `config.json` now successfully changes the name of the folder in the layerTree.
 - Fix some vulnerabilities in dependencies.
 - Issue #710: Routing tool's configuration may be outside the tools sub-menu now.
+- Issue #746: Fix issue with playback function of timeSlider (WMS-T) not properly stopping after it reached the end of the time series.
 
 ---
 
