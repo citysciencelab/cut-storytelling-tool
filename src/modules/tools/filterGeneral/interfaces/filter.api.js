@@ -77,14 +77,19 @@ export default class FilterApi {
             }
         }
         else if (type === "oaf") {
-            this.service = {
-                type,
-                extern,
-                layerId,
-                url: layerModel.get("url"),
-                typename: layerModel.get("featureType"),
-                namespace: featureNS
-            };
+            if (!extern) {
+                this.service = {
+                    type,
+                    extern,
+                    layerId,
+                    url: layerModel.get("url"),
+                    typename: layerModel.get("featureType"),
+                    namespace: featureNS
+                };
+            }
+            else {
+                onerror(new Error("FilterApi.setServiceByLayerModel: Filtering oaf extern is not supported yet."));
+            }
         }
         else if (typeof onerror === "function") {
             onerror(new Error("FilterApi.setServiceByLayerModel: Unknown layer type " + type));
