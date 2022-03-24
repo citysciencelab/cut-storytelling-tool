@@ -121,13 +121,7 @@ WMSLayer.prototype.updateSourceSLDBody = function () {
 WMSLayer.prototype.updateSource = function () {
     wms.updateSource(this.layer);
 };
-/**
- * Returns the layers of the WMS layer.
- * @returns {*} String or Array of layers
- */
-WMSLayer.prototype.getLayers = function () {
-    return this.get("layers");
-};
+
 /**
  * Gets the gfi url from the layers source.
  * @returns {String} - The created getFeature info url.

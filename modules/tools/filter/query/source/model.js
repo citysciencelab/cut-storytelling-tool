@@ -118,7 +118,7 @@ const SourceModel = QueryModel.extend({
         if (model !== undefined) {
             layerSource = model.get("layerSource");
             layerSource = this.retrieveLayerSource(layerSource, layerId);
-            features = layerSource.getFeatures();
+            features = model.get("features") || layerSource.getFeatures();
         }
         return features;
     },

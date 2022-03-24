@@ -1,3 +1,6 @@
+import isObject from "../../../../utils/isObject.js";
+import describeFeatureTypeOAF from "../utils/describeFeatureType/describeFeatureTypeOAF.js";
+
 /**
  * InterfaceOafExtern is the filter interface for Oaf services
  * @class
@@ -18,7 +21,13 @@ export default class InterfaceOafExtern {
      * @returns {void}
      */
     getAttrTypes (service, onsuccess, onerror) {
-        onerror(new Error("tbd: oaf getAttrTypes not implemented yet"));
+        if (!isObject(service)) {
+            if (typeof onerror === "function") {
+                onerror(new Error("InterfaceOafExtern.getAttrTypes: missing service object"));
+            }
+            return;
+        }
+        describeFeatureTypeOAF(service?.url, service?.typename, onsuccess, onerror);
     }
 
     /**
