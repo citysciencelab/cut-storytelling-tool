@@ -155,7 +155,7 @@ export default class FilterApi {
         }
     }
     /**
-     * Returns a list of unique values (unsorted) of the given service and attrName.
+     * Returns a list of sorted unique values of the given service and attrName.
      * @param {String} attrName the attribute to receive unique values from
      * @param {Function} onsuccess a function([]) with the received unique values as Array of values
      * @param {Function} onerror a function(Error)
@@ -176,6 +176,11 @@ export default class FilterApi {
         }
         else if (isObject(connector) && typeof connector.getUniqueValues === "function") {
             connector.getUniqueValues(this.service, attrName, result => {
+                if (Array.isArray(result)) {
+                    result.sort((a, b) => {
+                        return String(a).toLowerCase() > String(b).toLowerCase() ? 1 : -1;
+                    });
+                }
                 FilterApi.cache[cacheKey] = result;
                 if (typeof onsuccess === "function") {
                     onsuccess(result);
