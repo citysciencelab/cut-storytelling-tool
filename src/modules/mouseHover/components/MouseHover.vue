@@ -8,13 +8,18 @@ export default {
     name: "MouseHover",
     computed: {
         ...mapGetters("Map", ["ol2DMap", "visibleLayerList"]),
-        ...mapGetters("MouseHover", Object.keys(getters))
+        ...mapGetters("MouseHover", Object.keys(getters)),
+        ...mapGetters({
+            isMobile: "mobile"
+        })
     },
     mounted () {
-        this.$nextTick(function () {
-            this.setVisibleLayerList(this.visibleLayerList);
-            this.initialize(this.ol2DMap);
-        });
+        if (!this.isMobile) {
+            this.$nextTick(function () {
+                this.setVisibleLayerList(this.visibleLayerList);
+                this.initialize(this.ol2DMap);
+            });
+        }
     },
     methods: {
         ...mapActions("MouseHover", Object.keys(actions)),
