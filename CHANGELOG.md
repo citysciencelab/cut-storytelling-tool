@@ -34,6 +34,7 @@
     - The `recommendedList` is now sorted by the attribute `searchResultOrder`.
 - Parametric URL: For the URL parameters `QUERY` and `SEARCH/QUERY` the house numbers must now be separated with a blank. This way the call in the URL is always the same as the displayed search result.
 - Issue #551: Tools `coordToolKit` and `supplyCoord` are no longer usable in 3d mode due to [limitations of ol-cesium](https://openlayers.org/ol-cesium/apidoc/index.html#limitations).
+- The function `makeOberstufenprofileBold` used by the `comparisonList` and `featureLister` is provided as a util named `toBold` now.
 
 ### Deprecated
 
