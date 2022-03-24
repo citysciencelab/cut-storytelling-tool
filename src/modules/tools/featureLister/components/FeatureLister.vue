@@ -227,7 +227,7 @@ export default {
                         class="panel panel-default feature-lister-list"
                     >
                         <div
-                            class="table-responsive  feature-lister-list-table"
+                            class="table-responsive  feature-lister-list-table-container"
                         >
                             <table
                                 id="feature-lister-list-table"
@@ -358,6 +358,9 @@ export default {
 
 /***** Desktop *****/
 /***** Mobil *****/
+#featureLister {
+    width: 426px;
+}
 .feature-lister-list-table-th {
     cursor: pointer;
     >span {
@@ -368,6 +371,10 @@ export default {
     >.feature-lister-list-table-th-sorted {
         color: $color_2;
     }
+}
+.feature-lister-list-table-container {
+    border-left: 1px solid #ddd !important;
+    border-right: 1px solid #ddd !important;
 }
 #feature-lister-list-table {
     overflow: auto;
@@ -421,14 +428,12 @@ export default {
 .feature-lister-details {
     display: block;
     margin-bottom: 0px;
-    max-height: 440.15px;
-    max-width: 426px;
+    max-height: 100%;
     overflow: auto;
 }
 .feature-lister-list {
     margin-bottom: 0px;
-    display: block;
-    max-width: 426px;
+    display: contents;
     overflow: auto;
 }
 .feature-lister-themes {
