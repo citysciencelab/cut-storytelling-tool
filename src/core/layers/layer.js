@@ -43,13 +43,15 @@ export default function Layer (attrs, layer, initialize = true) {
         settingsText: i18next.t("common:tree.settings"),
         infosAndLegendText: i18next.t("common:tree.infosAndLegend"),
         isAutoRefreshing: false,
-        intervalAutoRefresh: -1
+        intervalAutoRefresh: -1,
+        isClustered: false
     };
 
     this.layer = layer;
     this.observersAutoRefresh = [];
     this.attributes = {...Object.assign({}, this.layer.values_, defaults, attrs)};
     this.id = attrs.id;
+
     delete this.attributes.source;
     if (initialize) {
         this.initialize(attrs);
@@ -73,11 +75,15 @@ Layer.prototype.initialize = function (attrs) {
     if (store.state.configJson?.Portalconfig.singleBaselayer !== undefined) {
         this.set("singleBaselayer", store.state.configJson?.Portalconfig.singleBaselayer);
     }
+    if (attrs.clusterDistance) {
+        this.set("isClustered", true);
+    }
 
     this.updateLayerTransparency();
 
     if (attrs.isSelected === true || store.getters.treeType === "light") {
         this.setIsVisibleInMap(attrs.isSelected);
+        this.setIsSelected(attrs.isSelected);
         this.set("isRemovable", store.state.configJson?.Portalconfig.layersRemovable);
     }
     else {
@@ -348,6 +354,7 @@ Layer.prototype.setIsSelected = function (newValue) {
     }
 
     if (typeof autoRefresh === "number" || typeof autoRefresh === "string") {
+        this.set("isAutoRefreshing", true);
         this.activateAutoRefresh(newValue, Math.max(500, autoRefresh));
     }
 };
@@ -394,15 +401,14 @@ Layer.prototype.activateAutoRefresh = function (isLayerSelected, autoRefresh) {
 
     if (isLayerSelected) {
         this.set("intervalAutoRefresh", setInterval(() => {
-            if (!this.get("isVisibleInMap") || this.get("isAutoRefreshing")) {
-                return;
-            }
-            this.setAutoRefreshEvent(layers[0]?.layer ? layers[0].layer : layers[0]);
-            layers.forEach(layer => {
-                const layerSource = layer?.layer ? layer.layer.getSource() : layer.getSource();
+            if (this.get("isVisibleInMap") && this.get("isAutoRefreshing")) {
+                this.setAutoRefreshEvent(layers[0]?.layer ? layers[0].layer : layers[0]);
+                layers.forEach(layer => {
+                    const layerSource = layer?.layer ? layer.layer.getSource() : layer.getSource();
 
-                layerSource.refresh();
-            });
+                    layerSource.refresh();
+                });
+            }
         }, autoRefresh));
     }
 };
@@ -418,15 +424,12 @@ Layer.prototype.setAutoRefreshEvent = function (layer) {
     }
     const layerSource = layer.getSource();
 
-    this.set("isAutoRefreshing", true);
-
     layerSource.once("featuresloadend", () => {
         this.observersAutoRefresh.forEach(handler => {
             if (typeof handler === "function") {
                 handler(layerSource.getFeatures());
             }
         });
-        this.set("isAutoRefreshing", false);
     });
 };
 /**
@@ -662,6 +665,7 @@ Layer.prototype.setMinMaxResolutions = function () {
 Layer.prototype.featuresLoaded = function (layerId, features) {
     bridge.featuresLoaded(layerId, features);
 };
+
 /**
  * Get layers as array.
  * @returns {Layer[]} layer as array
@@ -671,6 +675,7 @@ Layer.prototype.getLayers = function () {
 
     return [layer];
 };
+
 // NOTICE: backbone-relevant functions, may be removed if all layers are no longer backbone models.
 // But set, get and has may stay, because they are convenient:)
 Layer.prototype.set = function (arg1, arg2) {

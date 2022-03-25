@@ -15,7 +15,6 @@ export default function WFSLayer (attrs) {
         supported: ["2D", "3D"],
         showSettings: true,
         isSecured: false,
-        isClustered: false,
         altitudeMode: "clampToGround",
         useProxy: false,
         sourceUpdated: false
@@ -27,9 +26,6 @@ export default function WFSLayer (attrs) {
     Layer.call(this, Object.assign(defaults, attrs), this.layer, !attrs.isChildLayer);
     this.set("style", this.getStyleFunction(attrs));
     this.prepareFeaturesFor3D(this.layer.getSource().getFeatures());
-    if (attrs.clusterDistance) {
-        this.set("isClustered", true);
-    }
     this.createLegend();
 }
 // Link prototypes and add prototype methods, means WFSLayer uses all methods and properties of Layer
