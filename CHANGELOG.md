@@ -56,6 +56,7 @@
 - Issue #710: Routing tool's configuration may be outside the tools sub-menu now.
 - Issue #746: Fix issue with playback function of timeSlider (WMS-T) not properly stopping after it reached the end of the time series.
 - Issue #747: The auto refresh now also works for wms layer again.
+- Issue #745 The TimeSlider will now use the passed playBackDelay.
 
 ---
 
