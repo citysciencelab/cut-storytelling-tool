@@ -32,6 +32,7 @@
     - The `recommendedList` is now sorted by the attribute `searchResultOrder`.
 - Parametric URL: For the URL parameters `QUERY` and `SEARCH/QUERY` the house numbers must now be separated with a blank. This way the call in the URL is always the same as the displayed search result.
 - Issue #551: Tools `coordToolKit` and `supplyCoord` are no longer usable in 3d mode due to [limitations of ol-cesium](https://openlayers.org/ol-cesium/apidoc/index.html#limitations).
+- Issue #636: The WMS layer respects crs code at rawlayer. The WMS request now contains the attribute CRS. If not available, projection of the map is used.
 
 ### Deprecated
 
@@ -54,6 +55,7 @@
 - Issue #710: Routing tool's configuration may be outside the tools sub-menu now.
 - Issue #746: Fix issue with playback function of timeSlider (WMS-T) not properly stopping after it reached the end of the time series.
 - Issue #708: When adding a new WMS-T Layer previous added WMS-T layer will be removed
+- Issue #747: The auto refresh now also works for wms layer again.
 ---
 
 ## v2.19.0 - 2022-03-02

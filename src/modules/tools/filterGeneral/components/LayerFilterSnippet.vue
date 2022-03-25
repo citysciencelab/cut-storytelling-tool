@@ -208,6 +208,7 @@ export default {
                             visible: true
                         });
                     });
+                    this.setupSnippets(this.snippets);
                     this.setPostSnippetKey("rerender");
                 }
             }, err => {
