@@ -62,7 +62,7 @@ describe("core/modelList/layer/model", function () {
             }, 30000);
         });
 
-        it("should increase the transparency by 10 percent", function () {
+        it.skip("should increase the transparency by 10 percent", function () {
             model.setTransparency("30");
             model.incTransparency();
 
@@ -70,7 +70,7 @@ describe("core/modelList/layer/model", function () {
             expect(model.get("transparency")).equals(40);
         });
 
-        it("should decreases the transparency by 10 percent", function () {
+        it.skip("should decreases the transparency by 10 percent", function () {
             model.setTransparency("30");
             model.decTransparency();
 
