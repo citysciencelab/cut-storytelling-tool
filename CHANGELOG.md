@@ -119,7 +119,7 @@
     - News is now displayed in an iframe. If no third party cookies are allowed by the browser, no confirm is possible, because it is not allowed to store in localstorage.
     - Added the possibility to scroll in the alert.
 - Issue #671: Tool print: once selected scale is not set back on move print cutout.
-- Fix loadingParams in wfs.js createLayer - in case of no value undefined is now returned. For the mpAPI it is necessary to return undefined instead of an empty string or null. Otherwise there will be incorrect processing in "createLayerSource" in wfs.js of the mpAPI.
+- Fix loadingParams in wfs.js createLayer - in case of no value undefined is now returned. For the mpAPI it is necessary to return undefined instead of an empty string or null.
 
 ---
 
