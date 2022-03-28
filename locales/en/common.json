@@ -402,7 +402,7 @@
                 "more": "More...",
                 "detailsOfSelected": "Details of the selected feature",
                 "alert": "The attempt to show the selected feature failed because it has no geometry.",
-                "key": "{{shownFeatures.x}} of {{shownFeatures.y}} features listed"
+                "key": "{{shownFeatures}} of {{featureCount}} features listed"
             },
             "layerSlider": {
                 "displayLayers": "Display of various layers.",

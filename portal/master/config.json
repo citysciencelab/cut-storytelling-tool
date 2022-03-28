@@ -411,7 +411,7 @@
           "featureLister": {
             "name": "translate#common:menu.tools.featureLister",
             "glyphicon": "glyphicon-menu-hamburger",
-            "lister": 10,
+            "maxFeatures": 10,
             "highlightVectorRulesPolygon": {
               "fill": {
                 "color": [

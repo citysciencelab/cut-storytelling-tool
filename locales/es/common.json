@@ -325,7 +325,7 @@
                 "more": "Más...",
                 "detailsOfSelected": "Detalles de la característica seleccionada",
                 "alert": "El intento de mostrar la característica seleccionada falló, porque no tiene geometría.",
-                "key": "{{shownFeatures.x}} de {{shownFeatures.y}} entidades listadas"
+                "key": "{{shownFeatures}} de {{featureCount}} entidades listadas"
             },
             "layerSlider": {
                 "displayLayers": "Visualización de varias capas.",
