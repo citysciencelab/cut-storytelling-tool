@@ -1,4 +1,4 @@
-import {wms} from "masterportalAPI";
+import {wms} from "masterportalapi";
 import store from "../../app-store";
 import Layer from "./layer";
 import mapCollection from "../../core/dataStorage/mapCollection.js";
@@ -72,10 +72,11 @@ WMSLayer.prototype.getRawLayerAttributes = function (attrs) {
         layers: attrs.layers,
         version: attrs.version,
         olAttribution: attrs.olAttribution,
-        transparent: attrs.transparent.toString(),
+        transparent: attrs.transparent?.toString(),
         singleTile: attrs.singleTile,
         minScale: parseInt(attrs.minScale, 10),
-        maxScale: parseInt(attrs.maxScale, 10)
+        maxScale: parseInt(attrs.maxScale, 10),
+        crs: attrs.crs
     };
 
     if (attrs.styles !== "nicht vorhanden") {
@@ -121,13 +122,7 @@ WMSLayer.prototype.updateSourceSLDBody = function () {
 WMSLayer.prototype.updateSource = function () {
     wms.updateSource(this.layer);
 };
-/**
- * Returns the layers of the WMS layer.
- * @returns {*} String or Array of layers
- */
-WMSLayer.prototype.getLayers = function () {
-    return this.get("layers");
-};
+
 /**
  * Gets the gfi url from the layers source.
  * @returns {String} - The created getFeature info url.

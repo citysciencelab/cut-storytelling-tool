@@ -2,7 +2,7 @@ import WMSGetFeatureInfo from "ol/format/WMSGetFeatureInfo.js";
 import Feature from "ol/Feature";
 import axios from "axios";
 import handleAxiosResponse from "../utils/handleAxiosResponse.js";
-import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
+import {getLayerWhere} from "masterportalapi/src/rawLayerList";
 
 /**
  * Handles the GetFeatureInfo request.
@@ -128,14 +128,14 @@ function parseOgcConformFeatures (doc) {
 function parseEsriFeatures (doc) {
     const features = [];
 
-    doc.getElementsByTagName("FIELDS").forEach(element => {
+    for (const element of doc.getElementsByTagName("FIELDS")) {
         const feature = new Feature();
 
-        element.attributes.forEach(attribute => {
+        for (const attribute of element.attributes) {
             feature.set(attribute.localName, attribute.value);
-        });
+        }
         features.push(feature);
-    });
+    }
 
     return features;
 }

@@ -46,7 +46,6 @@ import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
  */
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import TreeFilterView from "../modules/treeFilter/view";
-import FeatureLister from "../modules/tools/featureLister/view";
 import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
@@ -191,10 +190,6 @@ async function loadApp () {
             }
             case "treeFilter": {
                 new TreeFilterView({model: tool});
-                break;
-            }
-            case "featureLister": {
-                new FeatureLister({model: tool});
                 break;
             }
             case "styleWMS": {

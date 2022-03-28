@@ -313,7 +313,7 @@
                 "more": "Scaria di più",
                 "detailsOfSelected": "Dettagli del elemento selezionato",
                 "alert": "Il tentativo di mostrare la funzione selezionata è fallito perché non ha una geometria.",
-                "key": "{{shownFeatures.x}} di {{shownFeatures.y}} elementi scaricati"
+                "key": "{{shownFeatures}} di {{featureCount}} elementi scaricati"
             },
             "layerSlider": {
                 "displayLayers": "Visualizzazione di vari layer.",

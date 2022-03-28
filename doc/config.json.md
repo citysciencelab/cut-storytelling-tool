@@ -2587,7 +2587,9 @@ Object to change the drawing tool's download preselected format. It should be on
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Module that displays vector features. Hovering over a feature in the list highlights the feature on the map.
+This module can display loaded vector data from WFS layers in a table. The module receives the available layers from the map via the visible vector layers and shows them in the first tab. If an entry (layer) is selected in this tab, its LayerId is saved. Then, from the layer list, the selected layer is filtered and saved. As a reaction to that selection, the layer features are evaluated and listed in the second tab. Not all features, but at most the configured amount of features is initially loaded, and a button is shown that allows loading additional features to this table.
+
+A hover event controls highlighting hovered features in the map. By clicking a feature, its attributes are shown completely in a third tab. In the future, WFS-T attributes should be editable here. The table also provides sort functionalities.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|

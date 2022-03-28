@@ -402,7 +402,7 @@
                 "more": "Mehr...",
                 "detailsOfSelected": "Details des ausgewählten Features",
                 "alert": "Der Versuch das selektierte Feature zu zeigen ist fehlgeschlagen, da es keine Geometrie hat.",
-                "key": "{{shownFeatures.x}} von {{shownFeatures.y}} Features gelistet"
+                "key": "{{shownFeatures}} von {{featureCount}} Features gelistet"
             },
             "layerSlider": {
                 "displayLayers": "Anzeige diverser Layer.",
