@@ -5,7 +5,6 @@
 
 ## Known Issues
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
-- WMS-T: Behaviour is undefined on using multiple configured WMS-T.
 
 ---
 
@@ -58,6 +57,7 @@
 - Fix some vulnerabilities in dependencies.
 - Issue #710: Routing tool's configuration may be outside the tools sub-menu now.
 - Issue #746: Fix issue with playback function of timeSlider (WMS-T) not properly stopping after it reached the end of the time series.
+- Issue #708: When adding a new WMS-T Layer previous added WMS-T layer will be removed
 - Issue #747: The auto refresh now also works for wms layer again.
 - Issue #731: Printing of measured lines works for all cases.
 
