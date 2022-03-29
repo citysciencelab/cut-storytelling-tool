@@ -155,7 +155,7 @@ export async function setValueToState (state, key, value) {
                     }
                 }
             }
-            console.log(entry);
+
             if (entry.key.startsWith("zoomTo")) {
                 state.urlParams.zoomTo[entry.key.substring(6)] = entry.value;
             }
