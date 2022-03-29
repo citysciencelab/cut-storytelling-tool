@@ -11,8 +11,6 @@ import RemoteInterface from "../modules/remoteInterface/model";
 import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
 import MenuLoader from "../modules/menu/menuLoader";
-import ZoomToGeometry from "../modules/zoomToGeometry/model";
-import ZoomToFeature from "../modules/zoomToFeature/model";
 import FeatureViaURL from "../modules/featureViaURL/model";
 import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
@@ -142,17 +140,10 @@ async function loadApp () {
     new WFSTransactionModel();
     new MenuLoader();
 
-    /*
-    if (Object.prototype.hasOwnProperty.call(Config, "zoomToGeometry")) {
-        new ZoomToGeometry(Config.zoomToGeometry);
-    }
-    if (Object.prototype.hasOwnProperty.call(Config, "zoomToFeature")) {
-        new ZoomToFeature(Config.zoomToFeature);
-    }
     if (Object.prototype.hasOwnProperty.call(Config, "featureViaURL")) {
         new FeatureViaURL(Config.featureViaURL);
     }
-     */
+
     if (Object.prototype.hasOwnProperty.call(Config, "zoomTo")) {
         zoomTo(Config.zoomTo);
     }

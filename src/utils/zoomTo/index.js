@@ -1,15 +1,8 @@
-import Feature from "ol/Feature.js";
 import {WFS} from "ol/format.js";
-import Point from "ol/geom/Point.js";
-import {Icon, Style} from "ol/style.js";
-import {Vector as VectorLayer} from "ol/layer.js";
-import VectorSource from "ol/source/Vector.js";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
-import getProxyUrl from "../../utils/getProxyUrl";
 import store from "../../app-store";
 import mapCollection from "../../core/dataStorage/mapCollection";
 import calculateExtent from "../../utils/calculateExtent";
-import {value} from "text-loader";
 import axios from "axios";
 
 /*

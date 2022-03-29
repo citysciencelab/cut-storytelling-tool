@@ -4,7 +4,6 @@ import {doSpecialBackboneHandling, triggerParametricURLReady, translateToBackbon
 import store from "../../app-store";
 import {transformToMapProjection} from "masterportalapi/src/crs";
 import mapCollection from "../../core/dataStorage/mapCollection";
-import zoomTo from "masterportalAPI/src/lib/zoomTo";
 
 /**
  * Searches for the keys in state and if found, sets the value at it.
