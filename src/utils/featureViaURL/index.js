@@ -1,5 +1,6 @@
 import addGeoJSON from "../addGeoJSON.js";
 import store from "../../app-store";
+import {transform} from "masterportalapi/src/crs";
 
 // All functions are exported, this is only for unit testing.
 // Usually, you'll want to use the default export.
@@ -13,7 +14,8 @@ const gfiAttributes = {
 
 /**
  * Creates a basic GeoJSON structure and adds the features given by the user from the URL to it.
- *
+ * If another projection than "EPSG:4326" is configured, the coordinates get transformed according
+ * to this projection, otherwise the features will not get displayed correctly.
  * @param {Object[]} features The features given by the user to be added to the map.
  * @param {String} geometryType Geometry type of the given features.
  * @param {Number} [epsg=4326] The EPSG-Code in which the features are coded.
@@ -36,7 +38,7 @@ export function createGeoJSON (features, geometryType, epsg = 4326) {
         flag = false;
 
     features.forEach(feature => {
-        coordinates = feature.coordinates;
+        coordinates = epsg === 4326 ? feature.coordinates : transform("EPSG:" + epsg, "EPSG:4326", feature.coordinates);
         if (!coordinates || !Array.isArray(coordinates) || coordinates.length === 0 || !feature.label) {
             flag = true;
             return;

@@ -1,6 +1,7 @@
 import {createGeoJSON, getFeatureIds} from "../../../featureViaURL";
 import {expect} from "chai";
 import sinon from "sinon";
+import {transform} from "masterportalapi/src/crs";
 
 describe("featureViaURL", function () {
     const spy = sinon.spy();
@@ -23,8 +24,8 @@ describe("featureViaURL", function () {
 
             geoJSON = createGeoJSON(features, geometryType, epsg);
             geoJSON.features.forEach((feature, index) => {
-                expect(feature.geometry.coordinates).to.eql(features[index].coordinates);
-                expect(feature.properties.coordLabel).to.eql(features[index].coordinates);
+                expect(feature.geometry.coordinates).to.eql(transform("EPSG:" + epsg, "EPSG:4326", features[index].coordinates));
+                expect(feature.properties.coordLabel).to.eql(transform("EPSG:" + epsg, "EPSG:4326", features[index].coordinates));
                 expect(feature.properties.featureLabel).to.equal(features[index].label);
                 expect(feature.geometry.type).to.equal(geometryType);
                 expect(feature.properties.typeLabel).to.equal(geometryType);
