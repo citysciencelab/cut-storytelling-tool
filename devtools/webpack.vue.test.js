@@ -68,6 +68,20 @@ module.exports = {
             {
                 test: /\.xml$/i,
                 use: "raw-loader"
+            },
+            {
+                test: /\.worker\.js$/,
+                use: {
+                    loader: "worker-loader"
+                }
+            },
+            {
+                test: /\.(png|jpe?g|gif)$/i,
+                use: [
+                    {
+                        loader: "file-loader"
+                    }
+                ]
             }
         ]
     },
