@@ -31,6 +31,13 @@ import {createMaps} from "../src/core/maps/maps.js";
 import zoomTo from "../src/utils/zoomTo";
 
 /**
+ * Vuetify
+ * @description Test vuetify as main UI framework
+ * @external
+ */
+import {instantiateVuetify} from "../src/plugins/vuetify/vuetify";
+
+/**
  * WFSFeatureFilterView
  * @deprecated in 3.0.0
  */
@@ -41,7 +48,6 @@ import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
  */
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import TreeFilterView from "../modules/treeFilter/view";
-import FeatureLister from "../modules/tools/featureLister/view";
 import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
@@ -72,7 +78,11 @@ async function loadApp () {
     const legacyAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
         utilConfig = {},
         style = Radio.request("Util", "getUiStyle"),
-        vueI18Next = initiateVueI18Next();
+        vueI18Next = initiateVueI18Next(),
+        // instantiate Vue with Vuetify Plugin if the "vuetify" flag is set in the config.js
+        // returns undefined if not
+        vuetify = await instantiateVuetify();
+
     /* eslint-disable no-undef */
     let app = {},
         searchbarAttributes = {};
@@ -107,7 +117,8 @@ async function loadApp () {
         name: "VueApp",
         render: h => h(App),
         store,
-        i18n: vueI18Next
+        i18n: vueI18Next,
+        vuetify
     });
 
 
@@ -190,10 +201,6 @@ async function loadApp () {
             }
             case "treeFilter": {
                 new TreeFilterView({model: tool});
-                break;
-            }
-            case "featureLister": {
-                new FeatureLister({model: tool});
                 break;
             }
             case "styleWMS": {
