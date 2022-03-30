@@ -111,10 +111,7 @@ export function handleXmlResponse (featureInfos, layer, url) {
         });
     }
 
-    // Create a merged feature because some themes might display multiple features at once
-    if (result.length > 0 && layer && ["DataTable"].indexOf(layer.get("gfiTheme")) !== -1) {
-        result = [createGfiFeature(layer, url, null, result)];
-    }
+    result = mergeFeatures(result, layer, url);
 
     return result;
 }
@@ -158,10 +155,7 @@ export function handleJSONResponse (featureInfos, layer, url) {
         });
     }
 
-    // Create a merged feature because some themes might display multiple features at once
-    if (result.length > 0 && layer && ["DataTable"].indexOf(layer.get("gfiTheme")) !== -1) {
-        result = [createGfiFeature(layer, url, null, result)];
-    }
+    result = mergeFeatures(result, layer, url);
 
     return result;
 }
@@ -231,6 +225,20 @@ export function createGfiFeature (layer, url = "", feature = null, features = nu
         getLayerId: () => layer.get("id") ? layer.get("id") : "",
         getDocument: () => document
     };
+}
+
+/**
+ * Create a merged feature because some themes might display multiple features at once
+ * @param {Object[]} result Array of objects representing features
+ * @param {Object} layer to show the properties of
+ * @param {String} url the url to call the wms features from
+ * @returns {object[]}  an array of only one feature object or an empty object
+ */
+export function mergeFeatures (result, layer, url) {
+    if (result.length > 0 && layer && ["DataTable"].indexOf(layer.get("gfiTheme")) !== -1) {
+        return [createGfiFeature(layer, url, null, result)];
+    }
+    return result;
 }
 
 export default {getWmsFeaturesByMimeType, openFeaturesInNewWindow, getXmlFeatures, createGfiFeature, handleXmlResponse, handleHTMLResponse};
