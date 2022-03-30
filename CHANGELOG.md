@@ -60,6 +60,7 @@
 - Issue #747: The auto refresh now also works for wms layer again.
 - Issue #731: Printing of measured lines works for all cases.
 - Categories can be changed in the topic tree even if the topic is closed.
+- Issue #745 The TimeSlider will now use the passed playBackDelay.
 
 ---
 
