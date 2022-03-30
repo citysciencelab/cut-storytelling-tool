@@ -60,6 +60,7 @@
 - Issue #747: The auto refresh now also works for wms layer again.
 - Issue #731: Printing of measured lines works for all cases.
 - Categories can be changed in the topic tree even if the topic is closed.
+- Fix loadingParams in oaf.js createLayer - in case of no value undefined is now returned. For the mpAPI it is necessary to return undefined instead of an empty string or null.
 
 ---
 
