@@ -5,7 +5,6 @@
 
 ## Known Issues
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
-- WMS-T: Behaviour is undefined on using multiple configured WMS-T.
 
 ---
 
@@ -22,6 +21,7 @@
 
 ### Changed
 - Issue #674, #676: addWMS tool and orientation control are now using the CRS of the map instead of hard coded CRS
+- Migrated the tool featureLister from Backbone to Vue.
 - Issue #684: The download of the draw tool now supports the projection of the map
 - Issue #610: Refactor Elastic Search: The CreateHit() function has been modified to allow the Glyphicon and HitType to be assigned from the backend.
 - The following NPM packages are updated:
@@ -34,6 +34,8 @@
     - The `recommendedList` is now sorted by the attribute `searchResultOrder`.
 - Parametric URL: For the URL parameters `QUERY` and `SEARCH/QUERY` the house numbers must now be separated with a blank. This way the call in the URL is always the same as the displayed search result.
 - Issue #551: Tools `coordToolKit` and `supplyCoord` are no longer usable in 3d mode due to [limitations of ol-cesium](https://openlayers.org/ol-cesium/apidoc/index.html#limitations).
+- The function `makeOberstufenprofileBold` used by the `comparisonList` and `featureLister` is provided as a util named `toBold` now.
+- Issue #636: The WMS layer respects crs code at rawlayer. The WMS request now contains the attribute CRS. If not available, projection of the map is used.
 
 ### Deprecated
 
@@ -55,6 +57,9 @@
 - Fix some vulnerabilities in dependencies.
 - Issue #710: Routing tool's configuration may be outside the tools sub-menu now.
 - Issue #746: Fix issue with playback function of timeSlider (WMS-T) not properly stopping after it reached the end of the time series.
+- Issue #708: When adding a new WMS-T Layer previous added WMS-T layer will be removed
+- Issue #747: The auto refresh now also works for wms layer again.
+- Issue #731: Printing of measured lines works for all cases.
 
 ---
 
@@ -115,6 +120,7 @@
     - News is now displayed in an iframe. If no third party cookies are allowed by the browser, no confirm is possible, because it is not allowed to store in localstorage.
     - Added the possibility to scroll in the alert.
 - Issue #671: Tool print: once selected scale is not set back on move print cutout.
+- Fix loadingParams in wfs.js createLayer - in case of no value undefined is now returned. For the mpAPI it is necessary to return undefined instead of an empty string or null.
 
 ---
 
