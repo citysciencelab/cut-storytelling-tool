@@ -31,7 +31,7 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
         },
         style = {
             getText: () => {
-                return { 
+                return {
                     getText: () => "veryCreativeLabelText"
                 };
             }
