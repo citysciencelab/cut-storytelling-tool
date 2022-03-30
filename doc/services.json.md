@@ -1220,6 +1220,7 @@ If the gfiAttributes are given as an object, a key's value may also be an object
 |bboxCrs|false|String|`"EPSG:25832"`|The coordinate reference system of the value of the bbox parameter.|`"EPSG:25832"`|
 |datetime|false|String||Either a date-time or a period string that adheres to RFC 3339.|`"2018-02-12T00:00:00Z/2018-03-18T12:31:12Z" or "2018-02-12T00:00:00Z/P1M6DT12H31M12S"`|
 |crs|false|String|EPSG:25832|The coordinate reference system of the response geometries.|`"EPSG:25832"`|
+|jsonAcceptHeader|false|String|application/vnd.oai.openapi+json|The mediatype to use for all non feature requests if the server requires other than specified.|`"application/json"`|
 
 **OAF example:**
 
