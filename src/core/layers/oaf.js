@@ -97,8 +97,8 @@ OAFLayer.prototype.createLayer = function (attrs) {
                 console.error("masterportal oaf loading error:", error);
             },
             loadingParams: {
-                xhrParameters: attrs.isSecured ? {credentials: "include"} : null,
-                propertyname: this.getPropertyname(attrs),
+                xhrParameters: attrs.isSecured ? {credentials: "include"} : undefined,
+                propertyname: this.getPropertyname(attrs) || undefined,
                 // only used if loading strategy is all
                 bbox: attrs.bboxGeometry ? attrs.bboxGeometry.getExtent().toString() : undefined
             },
