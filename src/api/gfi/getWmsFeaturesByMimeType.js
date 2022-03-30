@@ -145,7 +145,7 @@ export function getJSONFeatures (layer, url) {
 export function handleJSONResponse (featureInfos, layer, url) {
     let result = [];
 
-    if (typeof featureInfos === "object" && Array.isArray(featureInfos.features)) {
+    if (typeof featureInfos === "object" && Array.isArray(featureInfos?.features)) {
         featureInfos.features.forEach(function (feature) {
             if (typeof feature === "object") {
                 feature.getProperties = () => feature.properties || {};
