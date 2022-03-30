@@ -114,7 +114,7 @@ export async function setValuesToState (state, params) {
     await params.forEach(function (value, key) {
         setValueToState(state, key, value);
     });
-    state.urlParams.zoomTo = JSON.parse(JSON.stringify(state.urlParams.zoomTo));
+
     triggerParametricURLReady();
     Object.keys(state.urlParams).forEach(key => {
         const value = state.urlParams[key];
