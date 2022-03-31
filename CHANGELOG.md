@@ -5,7 +5,6 @@
 
 ## Known Issues
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
-- WMS-T: Behaviour is undefined on using multiple configured WMS-T.
 
 ---
 
@@ -18,6 +17,7 @@
 - Added a `showGeographicIdentifier` attribute to be able to use the `geographicIdentifier` to display the gazetteer search result.
 - Searchbar: Added a `showGeographicIdentifier` attribute to be able to use the `geographicIdentifier` to display the gazetteer search result.
 - Added new layer type OAF (OGCApiFeatures)
+- Added "application/json" as supported WMS *GetFeatureInfo* response format
 
 ### Changed
 - Issue #674, #676: addWMS tool and orientation control are now using the CRS of the map instead of hard coded CRS
@@ -57,8 +57,11 @@
 - Fix some vulnerabilities in dependencies.
 - Issue #710: Routing tool's configuration may be outside the tools sub-menu now.
 - Issue #746: Fix issue with playback function of timeSlider (WMS-T) not properly stopping after it reached the end of the time series.
+- Issue #708: When adding a new WMS-T Layer previous added WMS-T layer will be removed
 - Issue #747: The auto refresh now also works for wms layer again.
 - Issue #731: Printing of measured lines works for all cases.
+- Categories can be changed in the topic tree even if the topic is closed.
+- Issue #745 The TimeSlider will now use the passed playBackDelay.
 
 ---
 
@@ -119,6 +122,7 @@
     - News is now displayed in an iframe. If no third party cookies are allowed by the browser, no confirm is possible, because it is not allowed to store in localstorage.
     - Added the possibility to scroll in the alert.
 - Issue #671: Tool print: once selected scale is not set back on move print cutout.
+- Fix loadingParams in wfs.js createLayer - in case of no value undefined is now returned. For the mpAPI it is necessary to return undefined instead of an empty string or null.
 
 ---
 

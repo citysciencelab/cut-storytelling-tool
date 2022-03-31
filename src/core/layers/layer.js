@@ -170,6 +170,7 @@ Layer.prototype.toggleIsSelected = function () {
 
     this.setIsSelected(newValue);
     handleSingleBaseLayer(newValue, this);
+    handleSingleTimeLayer(newValue, this);
 };
 
 
@@ -467,7 +468,7 @@ Layer.prototype.moveUp = function () {
     bridge.moveModelInTree(this, 1);
 };
 /**
- * Called from setSelected, handles singleBaseLayer and timelayers.
+ * Called from setSelected, handles singleBaseLayer.
  * @param {Boolean} isSelected true, if layer is selected
  * @param {ol.Layer} layer the dedicated layer
  * @returns {void}
@@ -475,8 +476,7 @@ Layer.prototype.moveUp = function () {
 function handleSingleBaseLayer (isSelected, layer) {
     const id = layer.get("id"),
         layerGroup = bridge.getLayerModelsByAttributes({parentId: layer.get("parentId")}),
-        singleBaselayer = layer.get("singleBaselayer") && layer.get("parentId") === "Baselayer",
-        timeLayer = layer.get("typ") === "WMS" && layer.get("time");
+        singleBaselayer = layer.get("singleBaselayer") && layer.get("parentId") === "Baselayer";
 
     if (isSelected) {
         // This only works for treeType 'custom', otherwise the parentId is not set on the layer
@@ -498,12 +498,45 @@ function handleSingleBaseLayer (isSelected, layer) {
             });
             bridge.renderMenu();
         }
-        if (timeLayer) {
-            store.commit("WmsTime/setTimeSliderActive", {active: true, currentLayerId: id});
-        }
     }
-    else if (timeLayer) {
-        layer.removeLayer(layer.get("id"));
+}
+
+/**
+ * Called from setSelected, handles single time layers.
+ * @param {Boolean} isSelected true, if layer is selected
+ * @param {ol.Layer} layer the dedicated layer
+ * @returns {void}
+ */
+function handleSingleTimeLayer (isSelected, layer) {
+    const id = layer.get("id"),
+        timeLayer = layer.get("typ") === "WMS" && layer.get("time");
+
+    if (timeLayer) {
+        if (isSelected) {
+            const selectedLayers = bridge.getLayerModelsByAttributes({isSelected: true, type: "layer", typ: "WMS"}),
+                map2D = mapCollection.getMap("ol", "2D");
+
+            selectedLayers.forEach(sLayer => {
+                if (sLayer.get("time") && sLayer.get("id") !== id) {
+                    if (sLayer.get("id").endsWith(store.getters["WmsTime/layerAppendix"])) {
+                        sLayer.removeLayer(sLayer.get("id"));
+                    }
+                    else {
+                        map2D?.removeLayer(sLayer.get("layer"));
+                        sLayer.set("isSelected", false);
+                    }
+                }
+            });
+
+            store.commit("WmsTime/setTimeSliderActive", {
+                active: true,
+                currentLayerId: id,
+                playbackDelay: layer.get("time")?.playbackDelay || 1
+            });
+        }
+        else {
+            layer.removeLayer(layer.get("id"));
+        }
     }
 }
 

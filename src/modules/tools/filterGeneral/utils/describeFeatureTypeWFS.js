@@ -1,6 +1,6 @@
 import axios from "axios";
-import isObject from "../../../../../utils/isObject";
-import {convertAttrTypeXML} from "../convertAttrType.js";
+import isObject from "../../../../utils/isObject";
+import {convertAttrTypeXML} from "./convertAttrType.js";
 
 /**
  * Calls DescribeFeatureType on the given url for the given typename.

@@ -1,5 +1,5 @@
 import isObject from "../../../../utils/isObject.js";
-import describeFeatureTypeOAF from "../utils/describeFeatureType/describeFeatureTypeOAF.js";
+import {getOafAttributeTypes} from "../utils/getOafAttributeTypes.js";
 
 /**
  * InterfaceOafExtern is the filter interface for Oaf services
@@ -27,7 +27,8 @@ export default class InterfaceOafExtern {
             }
             return;
         }
-        describeFeatureTypeOAF(service?.url, service?.typename, onsuccess, onerror);
+
+        getOafAttributeTypes(service.url, service.collection, onsuccess, onerror, service.jsonAcceptHeader);
     }
 
     /**
