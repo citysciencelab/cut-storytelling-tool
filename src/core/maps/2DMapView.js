@@ -1,9 +1,5 @@
 import View from "ol/View";
-import {transformFromMapProjection} from "@masterportal/masterportalapi/src/crs";
-import mapCollection from "../dataStorage/mapCollection";
 import findWhereJs from "../../utils/findWhereJs";
-import store from "../../app-store";
-import defaults from "@masterportal/masterportalapi/src/defaults";
 
 /**
  * @description initializes store and listeners
@@ -62,14 +58,14 @@ import defaults from "@masterportal/masterportalapi/src/defaults";
  * @param {Object} mapObject the map id and mode
  * @returns {Number[]} Bounding box in the specified coordinate system.
  */
-View.prototype.getProjectedBBox = function (epsgCode = "EPSG:4326", mapObject = {mapId: "ol", mapMode: "2D"}) {
+/* View.prototype.getProjectedBBox = function (epsgCode = "EPSG:4326", mapObject = {mapId: "ol", mapMode: "2D"}) {
     const map = mapCollection.getMap(mapObject.mapId, mapObject.mapMode),
         bbox = this.calculateExtent(map.getSize()),
         firstCoordTransform = transformFromMapProjection(map, epsgCode, [bbox[0], bbox[1]]),
         secondCoordTransform = transformFromMapProjection(map, epsgCode, [bbox[2], bbox[3]]);
 
     return [firstCoordTransform[0], firstCoordTransform[1], secondCoordTransform[0], secondCoordTransform[1]];
-};
+}; */
 
 /**
  * Returns the corresponding resolution for the scale.
@@ -77,7 +73,7 @@ View.prototype.getProjectedBBox = function (epsgCode = "EPSG:4326", mapObject = 
  * @param  {String} scaleType - min or max
  * @return {number} resolution
  */
-View.prototype.getResolutionByScale = function (scale, scaleType) {
+/* View.prototype.getResolutionByScale = function (scale, scaleType) {
     const scales = this.get("options").map(option => option.scale);
 
     let index = "",
@@ -93,7 +89,7 @@ View.prototype.getResolutionByScale = function (scale, scaleType) {
         return this.getResolutions()[index - 1];
     }
     return null;
-};
+}; */
 
 // /**
 //  * Sets center and resolution to initial values
@@ -116,11 +112,11 @@ View.prototype.getResolutionByScale = function (scale, scaleType) {
  * @param {String} [map.mapMode="2D"] The map mode.
  * @returns {void}
  */
-View.prototype.setBBox = function (bbox, map = {mapId: "ol", mapMode: "2D"}) {
+/* View.prototype.setBBox = function (bbox, map = {mapId: "ol", mapMode: "2D"}) {
     if (bbox) {
         this.fit(bbox, mapCollection.getMap(map.mapId, map.mapMode).getSize());
     }
-};
+}; */
 
 // /**
 //  * @description sets the  center of the map and zoom level if defined
