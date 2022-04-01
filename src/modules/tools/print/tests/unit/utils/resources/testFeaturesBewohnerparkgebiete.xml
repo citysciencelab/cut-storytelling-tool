@@ -1,0 +1,30 @@
+<wfs:FeatureCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd https://registry.gdi-de.org/id/de.hh.up https://geodienste.hamburg.de/HH_WFS_bewohnerparkgebiete?SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=DescribeFeatureType&amp;OUTPUTFORMAT=text%2Fxml%3B+subtype%3Dgml%2F3.1.1&amp;TYPENAME=de.hh.up:bewohnerparkgebiete&amp;NAMESPACE=xmlns(de.hh.up=https%3A%2F%2Fregistry.gdi-de.org%2Fid%2Fde.hh.up)" xmlns:wfs="http://www.opengis.net/wfs" timeStamp="2022-04-01T11:38:35Z" xmlns:gml="http://www.opengis.net/gml">
+  <gml:featureMember>
+    <de.hh.up:bewohnerparkgebiete xmlns:de.hh.up="https://registry.gdi-de.org/id/de.hh.up" gml:id="DE.HH.UP_BEWOHNERPARKGEBIETE_992">
+      <de.hh.up:objectid>29</de.hh.up:objectid>
+      <de.hh.up:bwp_name>A 106 Fischers Park</de.hh.up:bwp_name>
+      <de.hh.up:bwp_code>A106</de.hh.up:bwp_code>
+      <de.hh.up:geplant_aktiv>2</de.hh.up:geplant_aktiv>
+      <de.hh.up:sonderbewirtschaftung>0</de.hh.up:sonderbewirtschaftung>
+      <de.hh.up:bemerkung>Stand 2020</de.hh.up:bemerkung>
+      <de.hh.up:bewirtschaftungsart>Parkschein, Bewohner mit Ausweis frei</de.hh.up:bewirtschaftungsart>
+      <de.hh.up:bewirtschaftungszeit>täglich 9-22 Uhr</de.hh.up:bewirtschaftungszeit>
+      <de.hh.up:hoechstparkdauer>180</de.hh.up:hoechstparkdauer>
+      <de.hh.up:gebuehrenzone>3,00€ je Stunde</de.hh.up:gebuehrenzone>
+      <de.hh.up:geom>
+        <!--Inlined geometry 'DE.HH.UP_BEWOHNERPARKGEBIETE_992_DE.HH.UP_GEOM'-->
+        <gml:MultiPolygon gml:id="DE.HH.UP_BEWOHNERPARKGEBIETE_992_DE.HH.UP_GEOM" srsName="EPSG:25832">
+          <gml:polygonMember>
+            <gml:Polygon srsName="EPSG:25832">
+              <gml:exterior>
+                <gml:LinearRing srsName="EPSG:25832">
+                  <gml:posList>560999.089 5934346.022 561060.605 5934333.454 561093.101 5934337.847 561106.701 5934339.685 561175.529 5934355.213 561204.916 5934361.842 561250.117 5934377.361 561291.756 5934391.656 561328.037 5934357.767 561358.159 5934329.631 561385.803 5934303.809 561412.141 5934279.207 561351.287 5934231.582 561292.149 5934173.998 561267.807 5934151.508 561265.526 5934139.762 561285.326 5934120.888 561289.224 5934115.628 561340.891 5934045.903 561340.979 5934036.600 561341.066 5934027.398 561362.806 5933984.977 561341.780 5933952.034 561312.335 5933949.879 561296.588 5933868.246 561293.104 5933850.184 561285.236 5933846.090 561263.276 5933842.915 561255.603 5933828.099 561259.307 5933799.524 561296.146 5933790.457 561301.299 5933748.040 561312.732 5933722.667 561306.458 5933698.034 561304.052 5933622.508 561303.652 5933609.959 561315.344 5933589.314 561305.593 5933571.771 561311.085 5933506.999 561311.287 5933504.623 561319.436 5933489.248 561330.578 5933468.230 561335.215 5933455.711 561345.148 5933428.891 561341.135 5933345.232 561178.874 5933342.852 560967.471 5933321.421 560762.170 5933390.432 560745.068 5933403.477 560713.471 5933408.733 560715.852 5933427.254 560745.651 5933442.313 560746.806 5933519.262 560747.029 5933534.170 560747.756 5933582.586 560748.061 5933602.915 560749.498 5933681.704 560749.763 5933693.938 560752.085 5933736.271 560754.735 5933784.591 560739.400 5933788.146 560732.521 5933829.951 560746.411 5933854.785 560749.983 5933861.172 560751.344 5933867.927 560765.226 5933936.833 560780.146 5933965.153 560779.924 5933965.644 560792.615 5933965.519 560792.615 5933987.744 560769.868 5933987.891 560766.870 5933994.521 560767.304 5934006.672 560770.820 5934105.141 560770.896 5934107.268 560794.732 5934110.511 560791.557 5934119.507 560771.243 5934116.991 560771.679 5934129.195 560766.992 5934142.545 560758.804 5934165.869 560751.485 5934186.716 560749.084 5934196.018 560744.539 5934213.633 560745.380 5934234.838 560746.279 5934257.518 560754.489 5934268.465 560764.535 5934281.860 560776.465 5934293.890 560799.504 5934300.518 560849.901 5934289.791 560875.396 5934308.318 560887.797 5934340.590 560904.500 5934384.055 560962.047 5934404.891 560999.089 5934346.022</gml:posList>
+                </gml:LinearRing>
+              </gml:exterior>
+            </gml:Polygon>
+          </gml:polygonMember>
+        </gml:MultiPolygon>
+      </de.hh.up:geom>
+    </de.hh.up:bewohnerparkgebiete>
+  </gml:featureMember>
+</wfs:FeatureCollection>

@@ -471,6 +471,9 @@ const BuildSpecModel = {
 
             styles.forEach((style, index) => {
                 if (style !== null) {
+                    const styleModel = this.getStyleModel(layer);
+                    let limiter = ",";
+
                     clonedFeature = feature.clone();
                     styleAttributes.forEach(attribute => {
                         clonedFeature.set(attribute, (clonedFeature.get("features") ? clonedFeature.get("features")[0] : clonedFeature).get(attribute) + "_" + String(index));
@@ -483,13 +486,16 @@ const BuildSpecModel = {
                         clonedFeature.setGeometry(styleGeometryFunction(clonedFeature));
                         geometryType = styleGeometryFunction(clonedFeature).getType();
                     }
-                    stylingRules = this.getStylingRules(layer, clonedFeature, styleAttributes, style)
-                        .replaceAll(",", " AND ");
+                    stylingRules = this.getStylingRules(layer, clonedFeature, styleAttributes, style);
+                    if (styleModel !== undefined && styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
+                        stylingRules = stylingRules.replaceAll(limiter, " AND ");
+                        limiter = " AND ";
+                    }
                     stylingRulesSplit = stylingRules
                         .replaceAll("[", "")
                         .replaceAll("]", "")
                         .replaceAll("*", "")
-                        .split(" AND ")
+                        .split(limiter)
                         .map(rule => rule.split("="));
 
                     if (Array.isArray(stylingRulesSplit) && stylingRulesSplit.length) {
@@ -534,6 +540,15 @@ const BuildSpecModel = {
             });
         });
         return mapfishStyleObject;
+    },
+
+    getStyleModel (layer) {
+        const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer?.get("id")});
+
+        if (typeof layerModel?.get === "function") {
+            return Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+        }
+        return undefined;
     },
 
     /**
@@ -951,9 +966,8 @@ const BuildSpecModel = {
      * @returns {string} an ECQL Expression
      */
     getStylingRules: function (layer, feature, styleAttributes, style, styleIndex) {
-        const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
-            styleAttr = feature.get("styleId") ? "styleId" : styleAttributes;
-        let styleModel;
+        const styleAttr = feature.get("styleId") ? "styleId" : styleAttributes,
+            styleModel = this.getStyleModel(layer);
 
         if (styleAttr.length === 1 && styleAttr[0] === "") {
             if (feature.get("features") && feature.get("features").length === 1) {
@@ -1017,15 +1031,11 @@ const BuildSpecModel = {
             }, "[").slice(0, -1) + "]";
         }
         // feature with geometry style and label style
-        if (typeof layerModel?.get === "function" && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
-            styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+        if (styleModel !== undefined && styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
+            const labelField = styleModel.get("labelField");
 
-            if (styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
-                const labelField = styleModel.get("labelField");
-
-                return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}' AND ${labelField}='${feature.get(labelField)}',`, "[").slice(0, -1)
-                    + "]";
-            }
+            return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}' AND ${labelField}='${feature.get(labelField)}',`, "[").slice(0, -1)
+                + "]";
         }
         // feature with geometry style
         if (styleAttr instanceof Array) {
@@ -1042,13 +1052,12 @@ const BuildSpecModel = {
      * @returns {String[]} the attributes by whose value the feature is styled
      */
     getStyleAttributes: function (layer, feature) {
-        const layerId = layer.get("id");
-        let layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
-            styleFields = ["styleId"];
+        const layerId = layer.get("id"),
+            styleList = this.getStyleModel(layer);
+        let styleFields = ["styleId"],
+            layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")});
 
-        if (typeof layerModel?.get === "function") {
-            const styleList = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
-
+        if (styleList !== undefined) {
             layerModel = this.getChildModelIfGroupLayer(layerModel, layerId);
 
             if (layerModel.get("styleId")) {
