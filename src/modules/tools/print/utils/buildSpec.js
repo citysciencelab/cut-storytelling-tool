@@ -907,7 +907,7 @@ const BuildSpecModel = {
     convertFeatureToGeoJson: function (feature, style) {
         const clonedFeature = feature.clone(),
             geojsonFormat = new GeoJSON(),
-            labelText = style.getText().getText() || "";
+            labelText = style.getText()?.getText() || "";
         let convertedFeature;
 
         // remove all object and array properties except geometry. Otherwise mapfish runs into an error
