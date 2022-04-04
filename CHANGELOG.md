@@ -17,6 +17,8 @@
 - Added a `showGeographicIdentifier` attribute to be able to use the `geographicIdentifier` to display the gazetteer search result.
 - Searchbar: Added a `showGeographicIdentifier` attribute to be able to use the `geographicIdentifier` to display the gazetteer search result.
 - Added new layer type OAF (OGCApiFeatures)
+- Added "application/json" as supported WMS *GetFeatureInfo* response format
+- Added the possibility to load controls as addons, see [description](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/addOnsVue.md).
 
 ### Changed
 - Issue #674, #676: addWMS tool and orientation control are now using the CRS of the map instead of hard coded CRS
@@ -25,7 +27,7 @@
 - Issue #610: Refactor Elastic Search: The CreateHit() function has been modified to allow the Glyphicon and HitType to be assigned from the backend.
 - The following NPM packages are updated:
     - jsdoc: 3.6.7 to 3.6.10
-    - masterportalapi: 1.10.0 to 2.0.0 (is now loaded via npm and the notation has changed)
+    - masterportalapi: 1.10.0 to 2.1.0 (is now loaded via npm and the notation has changed)
 - Searchbar:
     - Search results of elasticSearch are now displayed in the search bar in the order they come from the server.
     - The Gazetteer search is now performed via the MasterportalAPI. A new attribute `searchAddress` has been introduced.
@@ -60,6 +62,8 @@
 - Issue #747: The auto refresh now also works for wms layer again.
 - Issue #731: Printing of measured lines works for all cases.
 - Categories can be changed in the topic tree even if the topic is closed.
+- Issue #745 The TimeSlider will now use the passed playBackDelay.
+- Fix loadingParams in oaf.js createLayer - in case of no value undefined is now returned. For the mpAPI it is necessary to return undefined instead of an empty string or null.
 
 ---
 
