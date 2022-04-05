@@ -534,6 +534,10 @@ export default {
                         if (typeof onsuccess === "function") {
                             onsuccess(filterAnswer);
                         }
+
+                        if (this.isExtern()) {
+                            this.mapHandler.addExternalLayerToTree(filterId);
+                        }
                     }, error => {
                         console.warn(error);
                     });
