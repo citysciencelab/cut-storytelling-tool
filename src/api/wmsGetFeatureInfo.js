@@ -24,10 +24,15 @@ export function requestGfi (mimeType, url, layer) {
         withCredentials: layerIsSecured,
         url})
         .then(response => handleAxiosResponse(response, "requestGfi"))
-        .then(docString => {
-            const parsedDocument = parseDocumentString(docString, mimeType);
+        .then(responseData => {
+            let parsedDocument = null;
 
-            if (mimeType === "text/html") {
+            if (mimeType === "text/xml") {
+                parsedDocument = parseDocumentString(responseData, mimeType);
+            }
+            else if (mimeType === "text/html") {
+                parsedDocument = parseDocumentString(responseData, mimeType);
+
                 if (parsedDocument.childNodes.length > 0 &&
                     (
                         !parsedDocument.getElementsByTagName("body")[0] ||
@@ -37,10 +42,13 @@ export function requestGfi (mimeType, url, layer) {
                         !parsedDocument.getElementsByTagName("tbody")[0] ||
                         parsedDocument.getElementsByTagName("tbody")[0].children.length > 0
                     )) {
-                    return docString;
+                    return responseData;
                 }
 
                 return null;
+            }
+            else if (mimeType === "application/json") {
+                parsedDocument = responseData;
             }
 
             return parsedDocument;

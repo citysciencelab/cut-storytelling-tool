@@ -50,7 +50,9 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
             "setCameraParameter": this.setCameraParameter
         }, this);
         if (Config.startingMap3D) {
-            this.activateMap3d();
+            setTimeout(() => {
+                this.activateMap3d();
+            }, 200);
         }
     },
 
@@ -83,7 +85,7 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
                 return ["Oblique", "TileSet3D", "Terrain3D"].indexOf(layerModel.get("typ")) === -1;
             });
             allLayerModels.forEach(layerWrapper => {
-                if (layerWrapper.get("isSelected") === false) {
+                if (layerWrapper.get("isSelected") !== true) {
                     layerWrapper.removeLayer();
                 }
             });

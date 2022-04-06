@@ -1,6 +1,6 @@
 import axios from "axios";
 import isObject from "../../../../utils/isObject.js";
-import {describeFeatureTypeWFS} from "../utils/describeFeatureType/describeFeatureTypeWFS.js";
+import {describeFeatureTypeWFS} from "../utils/describeFeatureTypeWFS.js";
 import {WFS} from "ol/format";
 import {
     bbox as bboxFilter,
