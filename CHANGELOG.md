@@ -8,7 +8,7 @@
 
 ---
 
-## Unreleased - in development
+## v2.20.0 - 2022-04-06
 ### Added
 - Issue #530: New checkbox for the print module to disable the auto adjustment of the print mask scale
 - WfsSearch result list can now use pagination by filling the resultsPerPage parameter.
