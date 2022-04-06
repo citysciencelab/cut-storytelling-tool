@@ -69,7 +69,7 @@ describe("src/core/layers/wms.js", () => {
         expect(wmsLayer.get("isVisibleInMap")).to.be.false;
         expect(wmsLayer.get("layer").getVisible()).to.be.false;
     });
-    it.skip("createLayer with crs=EPSG:4326 shall have this projection at source", function () {
+    it("createLayer with crs=EPSG:4326 shall have this projection at source", function () {
         attributes.crs = "EPSG:4326";
         const wmsLayer = new WMSLayer(attributes),
             layer = wmsLayer.get("layer");

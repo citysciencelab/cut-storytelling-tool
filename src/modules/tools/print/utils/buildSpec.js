@@ -471,6 +471,9 @@ const BuildSpecModel = {
 
             styles.forEach((style, index) => {
                 if (style !== null) {
+                    const styleModel = this.getStyleModel(layer);
+                    let limiter = ",";
+
                     clonedFeature = feature.clone();
                     styleAttributes.forEach(attribute => {
                         clonedFeature.set(attribute, (clonedFeature.get("features") ? clonedFeature.get("features")[0] : clonedFeature).get(attribute) + "_" + String(index));
@@ -483,13 +486,16 @@ const BuildSpecModel = {
                         clonedFeature.setGeometry(styleGeometryFunction(clonedFeature));
                         geometryType = styleGeometryFunction(clonedFeature).getType();
                     }
-                    stylingRules = this.getStylingRules(layer, clonedFeature, styleAttributes, style)
-                        .replaceAll(",", " AND ");
+                    stylingRules = this.getStylingRules(layer, clonedFeature, styleAttributes, style);
+                    if (styleModel !== undefined && styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
+                        stylingRules = stylingRules.replaceAll(limiter, " AND ");
+                        limiter = " AND ";
+                    }
                     stylingRulesSplit = stylingRules
                         .replaceAll("[", "")
                         .replaceAll("]", "")
                         .replaceAll("*", "")
-                        .split(" AND ")
+                        .split(limiter)
                         .map(rule => rule.split("="));
 
                     if (Array.isArray(stylingRulesSplit) && stylingRulesSplit.length) {
@@ -500,7 +506,7 @@ const BuildSpecModel = {
                             [])
                         );
                     }
-                    this.addFeatureToGeoJsonList(clonedFeature, geojsonList);
+                    this.addFeatureToGeoJsonList(clonedFeature, geojsonList, style);
 
                     // do nothing if we already have a style object for this CQL rule
                     if (Object.prototype.hasOwnProperty.call(mapfishStyleObject, stylingRules)) {
@@ -534,6 +540,15 @@ const BuildSpecModel = {
             });
         });
         return mapfishStyleObject;
+    },
+
+    getStyleModel (layer) {
+        const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer?.get("id")});
+
+        if (typeof layerModel?.get === "function") {
+            return Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+        }
+        return undefined;
     },
 
     /**
@@ -656,7 +671,10 @@ const BuildSpecModel = {
 
         return {
             type: "text",
-            label: style.getText() !== undefined ? style.getText() : "",
+            // tell MapFish that each feature has a property "_label" which contains the label-string
+            // it is necessary to "add/fill" the "_label"-property when we call convertFeatureToGeoJson()
+            // before we add it to the geoJSONList
+            label: "[_label]",
             fontColor: convertColor(fontColor, "hex"),
             fontOpacity: fontColor[0] !== "#" ? fontColor[3] : 1,
             labelOutlineColor: stroke ? convertColor(stroke.getColor(), "hex") : undefined,
@@ -856,14 +874,15 @@ const BuildSpecModel = {
      * adds the feature to the geojson list
      * @param {ol.Feature} feature - the feature can be clustered
      * @param {GeoJSON[]} geojsonList -
+     * @param {ol.style.Style[]} style - the feature-style
      * @returns {void}
      */
-    addFeatureToGeoJsonList: function (feature, geojsonList) {
+    addFeatureToGeoJsonList: function (feature, geojsonList, style) {
         let convertedFeature;
 
         if (feature.get("features") && feature.get("features").length === 1) {
             feature.get("features").forEach((clusteredFeature) => {
-                convertedFeature = this.convertFeatureToGeoJson(clusteredFeature);
+                convertedFeature = this.convertFeatureToGeoJson(clusteredFeature, style);
 
                 if (convertedFeature) {
                     geojsonList.push(convertedFeature);
@@ -871,7 +890,7 @@ const BuildSpecModel = {
             });
         }
         else {
-            convertedFeature = this.convertFeatureToGeoJson(feature);
+            convertedFeature = this.convertFeatureToGeoJson(feature, style);
 
             if (convertedFeature) {
                 geojsonList.push(convertedFeature);
@@ -882,21 +901,27 @@ const BuildSpecModel = {
     /**
      * converts an openlayers feature to a GeoJSON feature object
      * @param {ol.Feature} feature - the feature to convert
+     * @param {ol.style.Style[]} style - the feature-style
      * @returns {object} GeoJSON object
      */
-    convertFeatureToGeoJson: function (feature) {
+    convertFeatureToGeoJson: function (feature, style) {
         const clonedFeature = feature.clone(),
-            geojsonFormat = new GeoJSON();
+            geojsonFormat = new GeoJSON(),
+            labelText = style.getText()?.getText() || "";
         let convertedFeature;
 
-        // remove all object properties except geometry. Otherwise mapfish runs into an error
+        // remove all object and array properties except geometry. Otherwise mapfish runs into an error
         Object.keys(clonedFeature.getProperties()).forEach(property => {
-            if (isObject(clonedFeature.get(property)) && !(clonedFeature.get(property) instanceof Geometry)) {
+            if (isObject(clonedFeature.get(property)) && !(clonedFeature.get(property) instanceof Geometry) || Array.isArray(clonedFeature.get(property))) {
                 clonedFeature.unset(property);
             }
         });
+
         // take over id from feature because the feature id is not set in the clone.
         clonedFeature.setId(feature.getId() || feature.ol_uid);
+        // set "_label"-Propterty.
+        // This is necessary because the *label* of the *text-Style* (buildTextStyle()) now referrs to it.
+        clonedFeature.set("_label", labelText);
         // circle is not suppported by geojson
         if (clonedFeature.getGeometry().getType() === "Circle") {
             clonedFeature.setGeometry(fromCircle(clonedFeature.getGeometry()));
@@ -950,9 +975,8 @@ const BuildSpecModel = {
      * @returns {string} an ECQL Expression
      */
     getStylingRules: function (layer, feature, styleAttributes, style, styleIndex) {
-        const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
-            styleAttr = feature.get("styleId") ? "styleId" : styleAttributes;
-        let styleModel;
+        const styleAttr = feature.get("styleId") ? "styleId" : styleAttributes,
+            styleModel = this.getStyleModel(layer);
 
         if (styleAttr.length === 1 && styleAttr[0] === "") {
             if (feature.get("features") && feature.get("features").length === 1) {
@@ -1016,15 +1040,11 @@ const BuildSpecModel = {
             }, "[").slice(0, -1) + "]";
         }
         // feature with geometry style and label style
-        if (typeof layerModel?.get === "function" && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
-            styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+        if (styleModel !== undefined && styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
+            const labelField = styleModel.get("labelField");
 
-            if (styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
-                const labelField = styleModel.get("labelField");
-
-                return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}' AND ${labelField}='${feature.get(labelField)}',`, "[").slice(0, -1)
-                    + "]";
-            }
+            return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}' AND ${labelField}='${feature.get(labelField)}',`, "[").slice(0, -1)
+                + "]";
         }
         // feature with geometry style
         if (styleAttr instanceof Array) {
@@ -1041,13 +1061,12 @@ const BuildSpecModel = {
      * @returns {String[]} the attributes by whose value the feature is styled
      */
     getStyleAttributes: function (layer, feature) {
-        const layerId = layer.get("id");
-        let layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
-            styleFields = ["styleId"];
+        const layerId = layer.get("id"),
+            styleList = this.getStyleModel(layer);
+        let styleFields = ["styleId"],
+            layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")});
 
-        if (typeof layerModel?.get === "function") {
-            const styleList = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
-
+        if (styleList !== undefined) {
             layerModel = this.getChildModelIfGroupLayer(layerModel, layerId);
 
             if (layerModel.get("styleId")) {
