@@ -228,6 +228,8 @@ export default {
                     return "dropdown";
                 case "number":
                     return "sliderRange";
+                case "dateTime":
+                    return "dateRange";
                 default:
                     return "text";
             }
@@ -531,6 +533,10 @@ export default {
 
                         if (typeof onsuccess === "function") {
                             onsuccess(filterAnswer);
+                        }
+
+                        if (this.isExtern()) {
+                            this.mapHandler.addExternalLayerToTree(filterId);
                         }
                     }, error => {
                         console.warn(error);
