@@ -45,7 +45,7 @@ const actions = {
                 .catch(error => console.error("zoomTo: An error occurred while trying to fetch features from the given service.", error));
         }
         else {
-            // TODO: 1.1 removal of zoomToFeature 1.2 removal of zoomToGeometry 2. styling of features 3. Implement and add new zoomTo
+            // TODO: 1. styling of features 2. Implement and add new zoomTo
         }
     }
 };
