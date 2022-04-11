@@ -103,6 +103,10 @@ function callActions (state) {
     if (typeof state.urlParams["Map/zoomLevel"] === "number") {
         store.dispatch("Map/setZoomLevel", state.Map.zoomLevel);
     }
+    if (Object.prototype.hasOwnProperty.call(state.ZoomTo, "zoomToGeometry") || Object.prototype.hasOwnProperty.call(state.ZoomTo, "zoomToFeatureId")) {
+        store.dispatch("ZoomTo/zoomToFeatures");
+    }
+
 }
 /**
  * Sets the url params at state and produces desired reaction.
@@ -155,9 +159,8 @@ export async function setValueToState (state, key, value) {
                     }
                 }
             }
-
-            if (entry.key.startsWith("zoomTo")) {
-                state.urlParams.zoomTo[entry.key.substring(6)] = entry.value;
+            if (entry.key === "Map/zoomToGeometry" || entry.key === "Map/zoomToFeatureId") {
+                state.ZoomTo[entry.key.substring(4)] = entry.value;
             }
             else {
                 state.urlParams[entry.key] = entry.value;

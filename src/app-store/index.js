@@ -22,6 +22,8 @@ import actions from "./actions";
 import controlsModule from "../modules/controls/indexControls";
 import toolsModule from "../modules/tools/indexTools";
 
+import ZoomTo from "../utils/zoomTo/store/indexZoomTo";
+
 import isMobile from "../utils/isMobile";
 
 Vue.use(Vuex);
@@ -43,6 +45,7 @@ const store = new Vuex.Store({
         controls: {
             ...controlsModule
         },
+        ZoomTo,
         Tools: {
             ...toolsModule
         }

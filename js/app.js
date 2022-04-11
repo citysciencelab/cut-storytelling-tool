@@ -26,7 +26,6 @@ import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
 import {initiateVueI18Next} from "./vueI18Next";
 import {handleUrlParamsBeforeVueMount, readUrlParamEarly} from "../src/utils/parametricUrl/ParametricUrlBridge";
 import {createMaps} from "../src/core/maps/maps.js";
-import zoomTo from "../src/utils/zoomTo";
 
 /**
  * Vuetify
@@ -145,7 +144,18 @@ async function loadApp () {
     }
 
     if (Object.prototype.hasOwnProperty.call(Config, "zoomTo")) {
-        zoomTo(Config.zoomTo);
+        store.commit("ZoomTo/setConfig", Config.zoomTo);
+    }
+    // NOTE: When using these deprecated parameters, the two url parameters can't be used in conjunction
+    if (Object.prototype.hasOwnProperty.call(Config, "zoomToFeature")) {
+        console.warn("The configuration parameter 'zoomToFeature' is deprecated in v3.0.0. Please use 'zoomTo' instead.");
+        store.commit("ZoomTo/setConfig", {zoomToFeature: Config.zoomToFeature});
+        store.commit("ZoomTo/setDeprecatedParameters", true);
+    }
+    if (Object.prototype.hasOwnProperty.call(Config, "zoomToGeometry")) {
+        console.warn("The configuration parameter 'zoomToGeometry' is deprecated in v3.0.0. Please use 'zoomTo' instead.");
+        store.commit("ZoomTo/setConfig", {zoomToGeometry: Config.zoomToGeometry});
+        store.commit("ZoomTo/setDeprecatedParameters", true);
     }
 
     new SliderView();
