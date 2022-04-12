@@ -22,9 +22,9 @@ const Config = {
     },
     zoomTo: [
         {
-            id: "Geometry",
-            property: "bezirk_name",
+            id: "zoomToGeometry",
             layerId: "1692",
+            property: "bezirk_name",
             allowedValues: [
                 "ALTONA",
                 "HARBURG",
@@ -36,9 +36,9 @@ const Config = {
             ]
         },
         {
-            id: "Feature",
-            property: "flaechenid",
+            id: "zoomToFeatureId",
             layerId: "4560",
+            property: "flaechenid",
             styleId: "location_eventlotse",
             point: true
         }
