@@ -1897,18 +1897,6 @@
  * @example Radio.trigger("i18next", "languageChanged", lng);
  */
 
-/** -------------------- ZOOMTOGEOMETRY -------------------- */
-
-/**
- * @event ZoomToGeometry#RadioTriggerZoomToGeometryZoomToGeometry
- * @description Zooms the map to a geometry from wfs.
- */
-
- /**
- * @event ZoomToGeometry#RadioTriggerZoomToGeometrySetIsRender
- * @description Todo
- */
-
  /** -------------------- TOOLS.PARCELSEARCH -------------------- */
 
 /**

@@ -200,14 +200,6 @@ describe("src/utils/parametricUrl/ParametricUrlBridge.js", () => {
                 projection: undefined
             })).to.be.true;
         });
-        it("test url param key 'Map/zoomToGeometry'", () => {
-            const radioTrigger = sinon.spy(Radio, "trigger"),
-                key = "Map/zoomToGeometry",
-                value = "bergedorf";
-
-            doSpecialBackboneHandling(key, value);
-            expect(radioTrigger.calledOnceWithExactly("ZoomToGeometry", "zoomToGeometry", "BERGEDORF", Config.zoomToGeometry.layerId, Config.zoomToGeometry.attribute)).to.be.true;
-        });
         it("test url param key 'style'", () => {
             const radioTrigger = sinon.spy(Radio, "trigger"),
                 key = "style",

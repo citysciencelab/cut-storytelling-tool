@@ -119,13 +119,6 @@ export function doSpecialBackboneHandling (key, value) {
             projection: store.state.urlParams?.projection || store.state.Map?.projection?.getCode()
         });
     }
-    else if (key === "Map/zoomToGeometry") {
-        const gemometryToZoom = parseZoomToGeometry(value);
-
-        if (gemometryToZoom !== "") {
-            Radio.trigger("ZoomToGeometry", "zoomToGeometry", gemometryToZoom, Config.zoomToGeometry.layerId, Config.zoomToGeometry.attribute);
-        }
-    }
     else if (key === "style") {
         const resultUpperCase = value.toUpperCase();
 
@@ -133,32 +126,6 @@ export function doSpecialBackboneHandling (key, value) {
             Radio.trigger("Util", "setUiStyle", resultUpperCase);
         }
     }
-}
-/**
-     * Parses a Gemometry to be zoomed on.
-     * Only configured geometries are zoomed in.
-     * @param {String} urlParamValue Geometry to be zoomed on
-     * @returns {String} Geometry to be zoomed on
-     */
-function parseZoomToGeometry (urlParamValue) {
-    let geometries,
-        gemometryToZoom = "";
-
-    if (Object.prototype.hasOwnProperty.call(Config, "zoomToGeometry") && Object.prototype.hasOwnProperty.call(Config.zoomToGeometry, "geometries")) {
-        geometries = Config.zoomToGeometry.geometries;
-
-        if (geometries.includes(urlParamValue.toUpperCase())) {
-            gemometryToZoom = urlParamValue.toUpperCase();
-        }
-        else if (Number.isInteger(parseInt(urlParamValue, 10))) {
-            gemometryToZoom = geometries[parseInt(urlParamValue, 10) - 1];
-        }
-        else {
-            store.dispatch("Alerting/addSingleAlert", i18next.t("common:utils.parametricURL.alertZoomToGeometry"));
-        }
-    }
-
-    return gemometryToZoom;
 }
 
 /**
