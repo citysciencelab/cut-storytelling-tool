@@ -291,4 +291,15 @@ describe("src/modules/tools/filterGeneral/components/LayerFilterSnippet.vue", ()
             expect(wrapper.vm.checkSnippetTypeConsistency(snippets)).to.be.true;
         });
     });
+    describe("getTitle", () => {
+        it("should return true if title is true", () => {
+            expect(wrapper.vm.getTitle(true), 1).to.be.true;
+        });
+        it("should return the title if title is set", () => {
+            expect(wrapper.vm.getTitle({title: "title"}, 1)).to.be.equal("title");
+        });
+        it("should return true if title is not set", () => {
+            expect(wrapper.vm.getTitle({}, 1)).to.be.true;
+        });
+    });
 });

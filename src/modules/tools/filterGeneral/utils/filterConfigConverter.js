@@ -221,7 +221,13 @@ export default class FilterConfigConverter {
             if (isCheckboxClassic) {
                 return this.createSnippetCheckboxClassic(attribute);
             }
-            return attribute;
+            return this.createSnippetStandard(
+                attribute,
+                undefined,
+                "OR",
+                undefined,
+                "dropdown"
+            );
         }
         else if (!isObject(attribute)) {
             return false;
@@ -264,14 +270,20 @@ export default class FilterConfigConverter {
      * @returns {Object} the snippet
      */
     createSnippetStandard (name, displayName, matchingMode, format, type) {
-        return {
+        const snippet = {
             attrName: name,
-            title: displayName,
             matchingMode,
             operator: "EQ",
             format,
-            type
+            type,
+            delimitor: "|"
         };
+
+        if (typeof displayName === "string") {
+            snippet.title = displayName;
+        }
+
+        return snippet;
     }
 
     /**

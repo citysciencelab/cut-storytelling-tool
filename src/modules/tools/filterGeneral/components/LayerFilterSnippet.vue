@@ -14,6 +14,7 @@ import FilterApi from "../interfaces/filter.api.js";
 import MapHandler from "../utils/mapHandler.js";
 import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
 import {getSnippetAdjustments} from "../utils/getSnippetAdjustments.js";
+import {getLayerByLayerId} from "../utils/openlayerFunctions";
 
 export default {
     name: "LayerFilterSnippet",
@@ -195,6 +196,7 @@ export default {
                         snippets.push({
                             type: this.getDefaultSnippetTypeByDataType(dataType),
                             attrName,
+                            title: true,
                             visible: true
                         });
                     });
@@ -591,6 +593,29 @@ export default {
             err => {
                 console.warn(err);
             });
+        },
+        /**
+         * Get the title or if no title is set get the matching gfiAttribute.
+         * @param {Object} snippet the snippet to fetch the title for
+         * @param {Number} layerId the layerId
+         * @returns {String|Boolean} the title - true if no title is set and no gfiAttribute is found
+         */
+        getTitle (snippet, layerId) {
+            if (!isObject(snippet) || typeof layerId === "undefined") {
+                return true;
+            }
+            if (Object.prototype.hasOwnProperty.call(snippet, "title")) {
+                return snippet.title;
+            }
+            const model = getLayerByLayerId(layerId),
+                title = isObject(model) ? model.get("gfiAttributes")[
+                    Array.isArray(snippet.attrName) ? snippet.attrName[0] : snippet.attrName
+                ] : undefined;
+
+            if (typeof title !== "undefined") {
+                return title;
+            }
+            return true;
         }
     }
 };
@@ -674,7 +699,7 @@ export default {
                     :attr-name="snippet.attrName"
                     :disabled="disabled"
                     :info="snippet.info"
-                    :title="snippet.title"
+                    :title="getTitle(snippet, layerConfig.layerId)"
                     :operator="snippet.operator"
                     :prechecked="snippet.prechecked"
                     :snippet-id="snippet.snippetId"
@@ -700,7 +725,7 @@ export default {
                     :disabled="disabled"
                     :display="snippet.display"
                     :info="snippet.info"
-                    :title="snippet.title"
+                    :title="getTitle(snippet, layerConfig.layerId)"
                     :layer-id="layerConfig.layerId"
                     :multiselect="snippet.multiselect"
                     :operator="snippet.operator"
@@ -724,7 +749,7 @@ export default {
                     :attr-name="snippet.attrName"
                     :disabled="disabled"
                     :info="snippet.info"
-                    :title="snippet.title"
+                    :title="getTitle(snippet, layerConfig.layerId)"
                     :operator="snippet.operator"
                     :placeholder="snippet.placeholder"
                     :prechecked="snippet.prechecked"
@@ -747,7 +772,7 @@ export default {
                     :disabled="disabled"
                     :info="snippet.info"
                     :format="snippet.format"
-                    :title="snippet.title"
+                    :title="getTitle(snippet, layerConfig.layerId)"
                     :max-value="snippet.maxValue"
                     :min-value="snippet.minValue"
                     :operator="snippet.operator"
@@ -771,7 +796,7 @@ export default {
                     :disabled="disabled"
                     :info="snippet.info"
                     :format="snippet.format"
-                    :title="snippet.title"
+                    :title="getTitle(snippet, layerConfig.layerId)"
                     :max-value="snippet.maxValue"
                     :min-value="snippet.minValue"
                     :operator="snippet.operator"
@@ -795,7 +820,7 @@ export default {
                     :decimal-places="snippet.decimalPlaces"
                     :disabled="disabled"
                     :info="snippet.info"
-                    :title="snippet.title"
+                    :title="getTitle(snippet, layerConfig.layerId)"
                     :min-value="snippet.minValue"
                     :max-value="snippet.maxValue"
                     :operater="snippet.operator"
@@ -819,7 +844,7 @@ export default {
                     :decimal-places="snippet.decimalPlaces"
                     :disabled="disabled"
                     :info="snippet.info"
-                    :title="snippet.title"
+                    :title="getTitle(snippet, layerConfig.layerId)"
                     :min-value="snippet.minValue"
                     :max-value="snippet.maxValue"
                     :operater="snippet.operator"

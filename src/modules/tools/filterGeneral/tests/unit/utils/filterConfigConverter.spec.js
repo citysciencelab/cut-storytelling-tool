@@ -118,7 +118,8 @@ describe("src/module/tools/filterGeneral/utils/filterConfigConverter.js", () => 
                 matchingMode: "matchingMode",
                 operator: "EQ",
                 format: "format",
-                type: "type"
+                type: "type",
+                delimitor: "|"
             };
 
             expect(converter.createSnippetStandard("name", "displayName", "matchingMode", "format", "type")).to.deep.equal(expected);
@@ -126,7 +127,16 @@ describe("src/module/tools/filterGeneral/utils/filterConfigConverter.js", () => 
     });
     describe("createSnippetByAttribute", () => {
         it("should return a string if the first parameter is a string and the second parameter is not set", () => {
-            expect(converter.createSnippetByAttribute("attribute")).to.equal("attribute");
+            const expected = {
+                attrName: "attribute",
+                matchingMode: "OR",
+                operator: "EQ",
+                format: undefined,
+                type: "dropdown",
+                delimitor: "|"
+            };
+
+            expect(converter.createSnippetByAttribute("attribute")).to.deep.equal(expected);
         });
         it("should return an object if the first parameter is a string and the second parameter is true", () => {
             expect(converter.createSnippetByAttribute("attribute", true)).to.be.an("object").and.not.to.be.empty;
@@ -158,7 +168,24 @@ describe("src/module/tools/filterGeneral/utils/filterConfigConverter.js", () => 
             expect(converter.getSnippetsByAttributeWhitelist({key: "value"})).to.be.an("array").and.not.to.be.empty;
         });
         it("should return an array of strings if first param is an array of strings", () => {
-            expect(converter.getSnippetsByAttributeWhitelist(["foo", "bar"])).to.deep.equal(["foo", "bar"]);
+            const expectedFoo = {
+                    "attrName": "foo",
+                    "delimitor": "|",
+                    "format": undefined,
+                    "matchingMode": "OR",
+                    "operator": "EQ",
+                    "type": "dropdown"
+                },
+                expectedBar = {
+                    "attrName": "bar",
+                    "delimitor": "|",
+                    "format": undefined,
+                    "matchingMode": "OR",
+                    "operator": "EQ",
+                    "type": "dropdown"
+                };
+
+            expect(converter.getSnippetsByAttributeWhitelist(["foo", "bar"])).to.deep.equal([expectedFoo, expectedBar]);
         });
     });
     describe("getSnippetsByPredefinedRules", () => {

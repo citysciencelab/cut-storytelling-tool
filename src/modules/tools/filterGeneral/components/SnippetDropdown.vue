@@ -149,13 +149,19 @@ export default {
             return this.$t("modules.tools.filterGeneral.dropdown.noElements");
         },
         dropdownValueComputed () {
+            const dropdownValue = this.dropdownValue;
+
+            dropdownValue.sort((a, b) => {
+                return String(a).toLowerCase() > String(b).toLowerCase() ? 1 : -1;
+            });
+
             if (this.multiselect && this.addSelectAll) {
                 return [{
                     selectAllTitle: this.selectAllTitle,
-                    list: this.dropdownValue
+                    list: dropdownValue
                 }];
             }
-            return this.dropdownValue;
+            return dropdownValue;
         },
         selectAllTitle () {
             return !this.allSelected ? this.$t("modules.tools.filterGeneral.dropdown.selectAll") : this.$t("modules.tools.filterGeneral.dropdown.deselectAll");
@@ -188,9 +194,6 @@ export default {
             if (adjusting?.finish) {
                 this.setDropdownSelectedAfterAdjustment(this.dropdownValue, this.dropdownSelected, selected => {
                     this.dropdownSelected = selected;
-                });
-                this.dropdownValue.sort((a, b) => {
-                    return String(a).toLowerCase() > String(b).toLowerCase() ? 1 : -1;
                 });
 
                 this.$nextTick(() => {
