@@ -1,5 +1,6 @@
 import {generateSimpleMutations} from "../../../app-store/utils/generators";
 import mouseHoverState from "./stateMouseHover";
+import {getLayerList} from "masterportalapi/src/rawLayerList";
 
 const mutations = {
     /**
@@ -15,7 +16,7 @@ const mutations = {
      * @returns {Array} array of all layers with a mouseHoverFild property
      */
     setMouseHoverLayers: (state) => {
-        state.mouseHoverLayers = state.layersFromConfig.filter(function (layer) {
+        state.mouseHoverLayers = getLayerList().filter(function (layer) {
             return layer?.mouseHoverField && layer.mouseHoverField !== "";
         });
     },

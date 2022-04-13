@@ -40,11 +40,10 @@ describe("tools/mouseHover/store/actionsMouseHover", () => {
 
         it("initializes the mouseHover module", () => {
             actions.initialize({state, rootState, commit, dispatch}, map);
-            expect(commit.firstCall.args[0]).to.equal("setLayersFromConfig");
-            expect(commit.secondCall.args[0]).to.equal("setMouseHoverLayers");
-            expect(commit.thirdCall.args[0]).to.equal("setMouseHoverInfos");
-            expect(commit.args[3]).to.eql(["setNumFeaturesToShow", 2]);
-            expect(commit.args[4]).to.eql(["setInfoText", "(weitere Objekte. Bitte zoomen.)"]);
+            expect(commit.firstCall.args[0]).to.equal("setMouseHoverLayers");
+            expect(commit.secondCall.args[0]).to.equal("setMouseHoverInfos");
+            expect(commit.args[2]).to.eql(["setNumFeaturesToShow", 2]);
+            expect(commit.args[3]).to.eql(["setInfoText", "(weitere Objekte. Bitte zoomen.)"]);
         });
     });
 
@@ -65,7 +64,7 @@ describe("tools/mouseHover/store/actionsMouseHover", () => {
             expect(commit.firstCall.args[0]).to.equal("setPleaseZoom");
             expect(commit.firstCall.args[1]).to.equal(false);
             expect(commit.secondCall.args[0]).to.equal("setInfoBox");
-            expect(commit.secondCall.args[1]).to.eql([["erstesFeature", "123"], ["zweitesFeature", "456"]]);
+            expect(commit.args[3]).to.eql(["setInfoBox", [["erstesFeature", "123"], ["zweitesFeature", "456"]]]);
         });
     });
 });

@@ -7,11 +7,10 @@ export default {
      * @param {module:ol/Map} map map object
      * @returns {void}
      */
-    initialize ({state, rootState, commit, dispatch}, map) {
+    initialize ({state, commit, dispatch}, map) {
         const {numFeaturesToShow, infoText} = Config.mouseHover;
         let featuresAtPixel = [];
 
-        commit("setLayersFromConfig", rootState.configJson.Themenconfig.Fachdaten.Layer);
         commit("setMouseHoverLayers");
         commit("setMouseHoverInfos");
 
@@ -60,12 +59,10 @@ export default {
         const infoBox = [];
 
         if (features.length > 0) {
-
-            features.map(feature => {
+            features.forEach((feature) => {
                 const configInfosForFeature = state.mouseHoverInfos.find(info => info.id === feature.getLayerId());
 
                 if (configInfosForFeature) {
-
                     const featureProperties = feature.getProperties(),
                         featureInfos = typeof configInfosForFeature.mouseHoverField === "string" ? configInfosForFeature.mouseHoverField : configInfosForFeature.mouseHoverField.filter(key => Object.keys(featureProperties).includes(key)),
                         featureDetails = [];
@@ -79,12 +76,11 @@ export default {
                         featureDetails.push(featureProperties[featureInfos]);
                     }
                     infoBox.push(featureDetails);
+                    commit("setPleaseZoom", features.length > state.numFeaturesToShow);
+                    commit("setInfoBox", infoBox.slice(0, state.numFeaturesToShow));
+                    dispatch("setOffset");
                 }
-                return infoBox;
             });
-            commit("setPleaseZoom", features.length > state.numFeaturesToShow);
-            commit("setInfoBox", infoBox.slice(0, state.numFeaturesToShow));
-            dispatch("setOffset");
         }
     },
     /**
