@@ -21,6 +21,12 @@
 - Issue #758: featureLister threw a JavaScript exception when building the list of layers.
 
 ---
+## v2.20.1 - 2022-04-xx
+
+### Fixed
+- Allow searchAddress to find street names with a prefix.
+
+---
 
 ## v2.20.0 - 2022-04-06
 ### Added
