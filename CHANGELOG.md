@@ -16,6 +16,7 @@
 ### Removed
 
 ### Fixed
+- Issue #758: featureLister threw a JavaScript exception when building the list of layers.
 
 ---
 
@@ -33,6 +34,7 @@
 - Issue #744: It is now possible to assign each feature its own label when printing.
 
 ### Changed
+- Migrated the module mouseHover from Backbone to Vue.
 - Issue #674, #676: addWMS tool and orientation control are now using the CRS of the map instead of hard coded CRS
 - Migrated the tool featureLister from Backbone to Vue.
 - Issue #684: The download of the draw tool now supports the projection of the map
