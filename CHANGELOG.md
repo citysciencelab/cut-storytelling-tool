@@ -10,6 +10,8 @@
 ### Added
 
 ### Changed
+- Migrated the module featureViaURL from Backbone to Vue as a util. E2E tests were fixed and re-enabled.
+- Migrated the module mouseHover from Backbone to Vue.
 
 ### Deprecated
 
@@ -34,7 +36,6 @@
 - Issue #744: It is now possible to assign each feature its own label when printing.
 
 ### Changed
-- Migrated the module mouseHover from Backbone to Vue.
 - Issue #674, #676: addWMS tool and orientation control are now using the CRS of the map instead of hard coded CRS
 - Migrated the tool featureLister from Backbone to Vue.
 - Issue #684: The download of the draw tool now supports the projection of the map
@@ -57,7 +58,6 @@
 - Searchbar: Configuration option of `namespace` was removed from gazetteer search, because masterportalAPI removes namespace from search hits.
 
 ### Fixed
-- Migrated the module featureViaURL from Backbone to Vue as a util. E2E tests were fixed and re-enabled.
 - Issue #714: The configuration for the orientation control now accepts "poiDistances":true again. Also fixed a bug with features which have geometry type circle.
 - Issue #605: Draw Tool fixed to support not using simple_point as first item of iconList.
 - Issue #733, #680, #683: transparency setting has no visible effect in treeType custom
