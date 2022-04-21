@@ -14,6 +14,7 @@
 - Migrated the module mouseHover from Backbone to Vue.
 - The following NPM packages are updated:
     - @masterportal/masterportalapi: 2.1.1 to 2.2.0 (masterportalapi was renamed @masterportal/masterportalapi in the process)
+- Replaced hardcoded EPSG code of map projection by a getter which identifies the projection of the map in withoutGUIDraw
 
 ### Deprecated
 
