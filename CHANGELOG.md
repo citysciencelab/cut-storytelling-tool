@@ -38,6 +38,7 @@
 - Issue #621: WMTS support for overviewMap implemented.
 - Update print configuration for tiledWMS, layers are printed as tiledwms with tileSize.
 - WFSSearch, has been adjusted so that it zooms directly to the first feature found if no `resultList` is configured.
+- `default`-gfiTheme: If a `|`-character is part of the response, every element separated by the character will be displayed in a separate paragraph.
 
 ### Deprecated
 
