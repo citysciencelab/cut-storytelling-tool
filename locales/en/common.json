@@ -1067,11 +1067,6 @@
             "noLegendForLayerInfo": "No legend available",
             "toggleCollapseAll": "Toggle all legends"
         },
-        "zoomToGeometry": {
-          "alertNoFoundFeature" : "No object was found! Please check the input parameters.",
-          "alertParameterizedAccess": "Unfortunately, the parameterized access to the portal went wrong!",
-          "alertRequiredService": "Details: A required service is not responding."
-        },
         "util": {
             "copyToClipboard": {
                 "contentSaved": "Content was copied to the clipboard.",
@@ -1112,7 +1107,6 @@
             "newYearsEve": "New Year's Eve"
         },
         "parametricURL": {
-          "alertZoomToGeometry": "The parameterized call of the portal has unfortunately gone wrong!<br>Please make sure that all parameters were entered correctly.",
           "alertWrongLayerIds": "The called link contains topics that can no longer be found.</br> To avoid receiving this error message in the future, please take the following steps:<ul> <li>Check your desired map section for missing content.</li> <li>Save your selection again with the tool \"Save selection\".</li></ul>",
           "alertWrongAmountVisibility": "<strong>Parameterized call incorrect!</strong></br>The specifications for <b>layerIds</b> do not match <b>visibility</b> or <b>transparency</b>. They must be specified in the same number in each case.",
           "errorLoadConfig": "The requested configuration file could not be loaded under the following path: {{url}}<br>The URL paramater <strong>configJson</strong> requests a file with the extension \".json\".<br>An attempt is made to load the config.json under the default path.",

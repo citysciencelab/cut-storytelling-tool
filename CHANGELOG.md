@@ -6,9 +6,29 @@
 ## Known Issues
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 
+## Unreleased - in development
+### Added
+
+### Changed
+- Migrated the module featureViaURL from Backbone to Vue as a util. E2E tests were fixed and re-enabled.
+- Migrated the module mouseHover from Backbone to Vue.
+
+### Deprecated
+
+### Removed
+
+### Fixed
+- Issue #758: featureLister threw a JavaScript exception when building the list of layers.
+
+---
+## v2.20.1 - 2022-04-21
+
+### Fixed
+- Allow searchAddress to find street names with a prefix.
+
 ---
 
-## Unreleased - in development
+## v2.20.0 - 2022-04-06
 ### Added
 - Issue #530: New checkbox for the print module to disable the auto adjustment of the print mask scale
 - WfsSearch result list can now use pagination by filling the resultsPerPage parameter.
@@ -19,6 +39,7 @@
 - Added new layer type OAF (OGCApiFeatures)
 - Added "application/json" as supported WMS *GetFeatureInfo* response format
 - Added the possibility to load controls as addons, see [description](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/addOnsVue.md).
+- Issue #744: It is now possible to assign each feature its own label when printing.
 
 ### Changed
 - Issue #674, #676: addWMS tool and orientation control are now using the CRS of the map instead of hard coded CRS
@@ -37,8 +58,6 @@
 - Issue #551: Tools `coordToolKit` and `supplyCoord` are no longer usable in 3d mode due to [limitations of ol-cesium](https://openlayers.org/ol-cesium/apidoc/index.html#limitations).
 - The function `makeOberstufenprofileBold` used by the `comparisonList` and `featureLister` is provided as a util named `toBold` now.
 - Issue #636: The WMS layer respects crs code at rawlayer. The WMS request now contains the attribute CRS. If not available, projection of the map is used.
-
-### Deprecated
 
 ### Removed
 - Removed hardcoded LayerIds for 3D support in wms.js. Setting has to be done now via services.json attribute notSupportedIn3D.

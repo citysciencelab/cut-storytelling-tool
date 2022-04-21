@@ -111,7 +111,6 @@
             }
           },
           "parametricURL": {
-            "alertZoomToGeometry": "¡La llamada parametrizada del portal lamentablemente salió mal!<br>Asegúrese de que todos los parámetros se han introducido correctamente.",
             "alertWrongLayerIds": "<strong>¡La llamada parametrizada es defectuosa!</strong></br>¡El <b>id layer</b> en esa porición: {{wrongIdsPositionsConcat}} no existe y se ignorara!"
           }
         },
@@ -739,11 +738,6 @@
             "linkToPdf": "A la leyenda externa (PDF)",
             "noLegendForLayerInfo": "Leyenda no disponible",
             "toggleCollapseAll": "Mostrar/ocultar todas las leyendas"
-        },
-        "zoomToGeometry": {
-          "alertNoFoundFeature" : "No se ha encontrado ningún objeto. Compruebe los parámetros de entrada.",
-          "alertParameterizedAccess": "¡La llamada parametrizada del portal lamentablemente salió mal!",
-          "alertRequiredService": "Detalles: Un servicio requerido no responde."
         },
         "util": {
             "copyToClipboard": {

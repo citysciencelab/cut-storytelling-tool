@@ -11,11 +11,10 @@ import RemoteInterface from "../modules/remoteInterface/model";
 import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
 import MenuLoader from "../modules/menu/menuLoader";
-import FeatureViaURL from "../modules/featureViaURL/model";
+import featureViaURL from "../src/utils/featureViaURL";
 import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
-import MouseHoverPopupView from "../modules/mouseHover/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import ShadowView from "../modules/tools/shadow/view";
@@ -140,7 +139,7 @@ async function loadApp () {
     new MenuLoader();
 
     if (Object.prototype.hasOwnProperty.call(Config, "featureViaURL")) {
-        new FeatureViaURL(Config.featureViaURL);
+        featureViaURL(Config.featureViaURL);
     }
 
     if (Object.prototype.hasOwnProperty.call(Config, "zoomTo")) {
@@ -161,10 +160,6 @@ async function loadApp () {
     new SliderView();
     new SliderRangeView();
     new DropdownView();
-
-    if (Object.prototype.hasOwnProperty.call(Config, "mouseHover")) {
-        new MouseHoverPopupView(Config.mouseHover);
-    }
 
     // Module laden
     // Tools
