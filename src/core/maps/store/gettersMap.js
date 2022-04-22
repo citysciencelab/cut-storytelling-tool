@@ -27,7 +27,7 @@ const getters = {
      * @returns {Object} layer collection of the map.
      */
     getLayers: () => {
-        return mapCollection.getMap("2D").getLayers();
+        return getters.get2DMap().getLayers();
     },
     /**
      * Gets the features at the given pixel for the gfi
@@ -40,7 +40,7 @@ const getters = {
             map3D = getters.get3DMap();
 
         if (clickPixel) {
-            mapCollection.getMap("2D").forEachFeatureAtPixel(clickPixel, (feature, layer) => {
+            getters.get2DMap().forEachFeatureAtPixel(clickPixel, (feature, layer) => {
                 if (layer?.getVisible() && layer?.get("gfiAttributes") && layer?.get("gfiAttributes") !== "ignore") {
                     if (feature.getProperties().features) {
                         feature.get("features").forEach(function (clusteredFeature) {
@@ -136,37 +136,37 @@ const getters = {
      * @returns {Object} Returns the camera of the 3D map
      */
     getCamera: () => {
-        return mapCollection.getMap("3D").getCamera();
+        return getters.get3DMap().getCamera();
     },
     /**
      * Returns the globe of Cesium scene
      * @returns {Object} Returns the 3D globe object.
      */
     getGlobe: () => {
-        return mapCollection.getMap("3D").getCesiumScene().globe;
+        return getters.get3DMap().getCesiumScene().globe;
     },
     /**
      * Returns the Cesium scene
      * @returns {Object} Returns the cesium scene.
      */
     getCesiumScene: () => {
-        return mapCollection.getMap("3D").getCesiumScene();
+        return getters.get3DMap().getCesiumScene();
     },
     /**
      * Returns the shadowMap of the cesium scene
      * @returns {Object} Returns the shadowMap.
      */
     getShadowMap: () => {
-        return mapCollection.getMap("3D").getCesiumScene().shadowMap;
+        return getters.get3DMap().getCesiumScene().shadowMap;
     },
     /**
      * Cesium time function.
      * @param {Object} _ state
-     * @param {Object} g getters
+     * @param {Object} getter getters
      * @returns {Cesium.JulianDate} - shadow time in julian date format.
      */
-    getShadowTime: (_, g) => {
-        return g.get3DMap().time || Cesium.JulianDate.fromDate(new Date());
+    getShadowTime: (_, getter) => {
+        return getter.get3DMap().time || Cesium.JulianDate.fromDate(new Date());
     },
     /**
      * Reverse the gfi features
@@ -190,16 +190,16 @@ const getters = {
     },
     /**
      * @param {Object} _ state
-     * @param {Object} g getters
+     * @param {Object} getter getters
      * @returns {Boolean} whether current zoom level is the maximum zoom level
      */
-    maximumZoomLevelActive: (_, g) => g.getView.getZoom() >= g.getView.getMaxZoom(),
+    maximumZoomLevelActive: (_, getter) => getter.getView.getZoom() >= getter.getView.getMaxZoom(),
     /**
      * @param {Object} _ state
-     * @param {Object} g getters
+     * @param {Object} getter getters
      * @returns {Boolean} whether current zoom level is the minimal zoom level
      */
-    minimumZoomLevelActive: (_, g) => g.getView.getZoom() <= g.getView.getMinZoom(),
+    minimumZoomLevelActive: (_, getter) => getter.getView.getZoom() <= getter.getView.getMinZoom(),
     /**
      * @param {Object} _ state
      * @param {Object} params getter parameters
@@ -240,9 +240,9 @@ const getters = {
      * @returns {String} pretty-printed mouse coordinate
      */
     prettyMouseCoord: (_, {mouseCoordinate}) => mouseCoordinate ? `${mouseCoordinate[0].toString().substr(0, 9)}, ${mouseCoordinate[1].toString().substr(0, 10)}` : "",
-    projectionCode: (_, g) => g.projection?.getCode(),
-    projectionMetersPerUnit: (_, g) => g.projection?.getMetersPerUnit(),
-    projectionUnits: (_, g) => g.projection?.getUnits(),
+    projectionCode: (_, getter) => getter.projection?.getCode(),
+    projectionMetersPerUnit: (_, getter) => getter.projection?.getMetersPerUnit(),
+    projectionUnits: (_, getter) => getter.projection?.getUnits(),
     /*
      * Layerlist
      *
