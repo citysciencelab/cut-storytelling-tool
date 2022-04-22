@@ -6,8 +6,8 @@ export default {
      * @param {module:ol/interaction/Interaction} interaction - Interaction to be added to map.
      * @returns {void}
      */
-    addInteraction ({getters}, interaction) {
-        const map = getters.get2DMap;
+    async addInteraction ({getters}, interaction) {
+        const map = await getters.get2DMap;
 
         map.addInteraction(interaction);
     },
@@ -33,8 +33,8 @@ export default {
      * @param {Function} payload.callback The callback function.
      * @returns {void}
      */
-    registerListener ({getters}, {event, callback}) {
-        const map = getters.get2DMap;
+    async registerListener ({getters}, {event, callback}) {
+        const map = await getters.get2DMap;
 
         map.on(event, callback);
     },

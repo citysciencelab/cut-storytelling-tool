@@ -33,8 +33,8 @@ channel.on({
     "addLayerOnTop": function (layer) {
         store.dispatch("Maps/addLayer", layer);
     },
-    "addOverlay": function (overlay) {
-        store.getters["Maps/get2DMap"].addOverlay(overlay);
+    "addOverlay": async function (overlay) {
+        await store.getters["Maps/get2DMap"].addOverlay(overlay);
     },
     "addInteraction": function (interaction) {
         store.dispatch("Maps/addInteraction", interaction);
@@ -42,8 +42,8 @@ channel.on({
     "removeLayer": function (layer) {
         store.getters["Maps/get2DMap"].removeLayer(layer);
     },
-    "removeOverlay": function (overlay) {
-        store.getters["Maps/get2DMap"].removeOverlay(overlay);
+    "removeOverlay": async function (overlay) {
+        await store.getters["Maps/get2DMap"].removeOverlay(overlay);
     },
     "removeInteraction": function (interaction) {
         store.dispatch("Maps/removeInteraction", interaction);
