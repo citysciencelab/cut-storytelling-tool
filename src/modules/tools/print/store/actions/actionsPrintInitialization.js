@@ -4,7 +4,6 @@ import thousandsSeparator from "../../../../../utils/thousandsSeparator.js";
 import Canvas from "./../../utils/buildCanvas";
 import BuildSpec from "./../../utils/buildSpec";
 import getVisibleLayer from "./../../utils/getVisibleLayer";
-import mapCollection from "../../../../../core/dataStorage/mapCollection.js";
 import {createEmpty, extendCoordinate} from "ol/extent.js";
 import {apply as applyTransform} from "ol/transform.js";
 
@@ -163,11 +162,12 @@ export default {
      * if the tool is activated and there is a layout,
      * a callback function is registered to the postrender event of the map
      * @param {Object} param.state the state
+     * @param {Object} param.getters the getters
      * @param {Object} param.commit the commit
      * @param {Object} param.dispatch the dispatch
      * @returns {void}
      */
-    togglePostrenderListener: function ({state, dispatch, commit}) {
+    togglePostrenderListener: function ({state, getters, dispatch, commit}) {
         const foundVectorTileLayers = [];
 
         getVisibleLayer(state.printMapMarker);
@@ -196,7 +196,7 @@ export default {
                 commit("setHintInfo", "");
             }
         }
-        mapCollection.getMap("2D").render();
+        getters["Maps/get2DMap"].render();
     },
 
     /**

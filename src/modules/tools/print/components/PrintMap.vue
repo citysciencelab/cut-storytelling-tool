@@ -7,7 +7,6 @@ import getComponent from "../../../../utils/getComponent";
 import thousandsSeparator from "../../../../utils/thousandsSeparator.js";
 import axios from "axios";
 import getVisibleLayer from "../utils/getVisibleLayer";
-import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 import {Vector} from "ol/layer.js";
 import Cluster from "ol/source/Cluster";
 
@@ -26,7 +25,7 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/Print", Object.keys(getters)),
-        ...mapGetters("Maps", ["scales, size", "scale"]),
+        ...mapGetters("Maps", ["scales, size", "scale", "get2DMap"]),
         ...mapGetters("Tools/Gfi", ["currentFeature"]),
         currentScale: {
             get () {
@@ -223,7 +222,7 @@ export default {
             this.setIsScaleSelectedManually(true);
             this.getOptimalResolution(resolution);
             this.updateCanvasLayer();
-            mapCollection.getMap("2D").render();
+            this.get2DMap.render();
         },
 
         /**
@@ -238,7 +237,7 @@ export default {
             this.getAttributeInLayoutByName("gfi");
             this.getAttributeInLayoutByName("legend");
             this.updateCanvasLayer();
-            mapCollection.getMap("2D").render();
+            this.get2DMap.render();
         },
 
         /**

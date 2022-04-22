@@ -105,7 +105,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
     liveZoom: function () {
         const minResolution = Radio.request("MapView", "getResolutionByScale", this.get("minScale"));
 
-        Radio.trigger("Maps", "zoomToFilteredFeatures", {ids: this.get("featureIds"), layerId: this.get("layerId"), zoomOptions: {minResolution}});
+        Radio.trigger("Map", "zoomToFilteredFeatures", {ids: this.get("featureIds"), layerId: this.get("layerId"), zoomOptions: {minResolution}});
     },
 
     isSearchInMapExtentActive: function () {

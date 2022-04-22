@@ -4,7 +4,6 @@ import getProxyUrl from "../../utils/getProxyUrl";
 import Layer from "./layer";
 import * as bridge from "./RadioBridge.js";
 import store from "../../app-store";
-import mapCollection from "../dataStorage/mapCollection";
 import LoaderOverlay from "../../utils/loaderOverlay";
 
 /**
@@ -64,7 +63,7 @@ GeoJSONLayer.prototype.createLayer = function (attrs) {
         styleFn = this.getStyleFunction(attrs),
         options = {
             layerStyle: styleFn,
-            map: mapCollection.getMap("2D"),
+            map: store.getters["Maps/get2DMap"],
             clusterGeometryFunction: (feature) => {
                 // do not cluster invisible features; can't rely on style since it will be null initially
                 if (feature.get("hideInClustering") === true) {

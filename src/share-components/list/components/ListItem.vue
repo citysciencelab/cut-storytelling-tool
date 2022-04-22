@@ -85,7 +85,7 @@ export default {
             const geometry = feature.getGeometry();
 
             this.placingPointMarker(getCenterExtent(geometry.getExtent()));
-            Radio.trigger("Maps", "zoomToExtent", {extent: geometry, options: {maxZoom: this.maxZoom}});
+            Radio.trigger("Map", "zoomToExtent", {extent: geometry, options: {maxZoom: this.maxZoom}});
         },
         isWebLink,
         isPhoneNumber,

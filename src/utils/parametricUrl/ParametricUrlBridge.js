@@ -113,7 +113,7 @@ export function doSpecialBackboneHandling (key, value) {
         setLayersVisible(layers);
     }
     else if (key === "Map/zoomToExtent") {
-        Radio.trigger("Maps", "zoomToProjExtent", {data: {
+        Radio.trigger("Map", "zoomToProjExtent", {data: {
             extent: convert(value),
             options: {duration: 0},
             projection: store.state.urlParams?.projection || store.state.Map?.projection?.getCode()

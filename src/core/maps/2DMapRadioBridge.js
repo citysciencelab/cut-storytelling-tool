@@ -1,23 +1,22 @@
-import mapCollection from "../dataStorage/mapCollection";
 import store from "../../app-store";
 
 const channel = Radio.channel("Map");
 
 channel.reply({
     "getLayers": function () {
-        return mapCollection.getMap("2D").getLayers();
+        return store.getters["Maps/get2DMap"].getLayers();
     },
     "createLayerIfNotExists": function (layerName) {
         return store.dispatch("Maps/addNewLayerIfNotExists", {layerName});
     },
     "getSize": function () {
-        return mapCollection.getMap("2D").getSize();
+        return store.getters["Maps/get2DMap"].getSize();
     },
     "registerListener": function (event, callback, context) {
         store.dispatch("Maps/registerListener", {event: event, callback: callback, context: context});
     },
     "getMap": function () {
-        return mapCollection.getMap("2D");
+        return store.getters["Maps/get2DMap"];
     },
     "getLayerByName": function (name) {
         return store.dispatch("Maps/getLayerByName", name);
@@ -35,16 +34,16 @@ channel.on({
         store.dispatch("Maps/addLayer", layer);
     },
     "addOverlay": function (overlay) {
-        mapCollection.getMap("2D").addOverlay(overlay);
+        store.getters["Maps/get2DMap"].addOverlay(overlay);
     },
     "addInteraction": function (interaction) {
         store.dispatch("Maps/addInteraction", interaction);
     },
     "removeLayer": function (layer) {
-        mapCollection.getMap("2D").removeLayer(layer);
+        store.getters["Maps/get2DMap"].removeLayer(layer);
     },
     "removeOverlay": function (overlay) {
-        mapCollection.getMap("2D").removeOverlay(overlay);
+        store.getters["Maps/get2DMap"].removeOverlay(overlay);
     },
     "removeInteraction": function (interaction) {
         store.dispatch("Maps/removeInteraction", interaction);
@@ -53,7 +52,7 @@ channel.on({
         store.commit("Maps/setBBox", {bbox: bbox});
     },
     "render": function () {
-        mapCollection.getMap("2D").render();
+        store.getters["Maps/get2DMap"].render();
     },
     "zoomToExtent": function (extent, options) {
         store.dispatch("Maps/zoomToExtent", {extent: extent, options: options});
@@ -71,6 +70,6 @@ channel.on({
         store.dispatch("Maps/unregisterListener", {event: event, callback: callback});
     },
     "updateSize": function () {
-        mapCollection.getMap("2D").updateSize();
+        store.getters["Maps/get2DMap"].updateSize();
     }
 });

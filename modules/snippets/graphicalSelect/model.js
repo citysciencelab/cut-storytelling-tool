@@ -5,7 +5,7 @@ import {fromCircle} from "ol/geom/Polygon.js";
 import {Draw} from "ol/interaction.js";
 import {createBox} from "ol/interaction/Draw.js";
 import {Circle} from "ol/geom.js";
-import mapCollection from "../../../src/core/dataStorage/mapCollection";
+import store from "../../../src/app-store";
 
 const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSelectModel.prototype */{
     defaults: {
@@ -150,8 +150,8 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
             if (typeof this.get("drawInteraction") === "object") {
                 this.get("drawInteraction").setActive(false);
             }
-            mapCollection.getMap("2D").removeOverlay(this.get("circleOverlay"));
-            mapCollection.getMap("2D").removeOverlay(this.get("tooltipOverlay"));
+            store.getters["Maps/get2DMap"].removeOverlay(this.get("circleOverlay"));
+            store.getters["Maps/get2DMap"].removeOverlay(this.get("tooltipOverlay"));
         }
     },
 
@@ -287,8 +287,8 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
 
         if (layer) {
             layer.getSource().clear();
-            mapCollection.getMap("2D").removeOverlay(this.get("circleOverlay"));
-            mapCollection.getMap("2D").removeOverlay(this.get("tooltipOverlay"));
+            store.getters["Maps/get2DMap"].removeOverlay(this.get("circleOverlay"));
+            store.getters["Maps/get2DMap"].removeOverlay(this.get("tooltipOverlay"));
             Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
         }
     },
@@ -351,7 +351,7 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
             Radio.trigger("Map", "addOverlay", overlay);
         }
         else {
-            mapCollection.getMap("2D").removeOverlay(overlay);
+            store.getters["Maps/get2DMap"].removeOverlay(overlay);
         }
     },
 

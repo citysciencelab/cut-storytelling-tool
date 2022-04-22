@@ -13,6 +13,7 @@ import {
     Point,
     Polygon
 } from "ol/geom";
+import store from "../../../../../../app-store";
 
 describe("src/modules/tools/bufferAnalysis/store/actionsBufferAnalysis.js", () => {
     let commit, dispatch, rootGetters, rootState, state, tick;
@@ -159,7 +160,7 @@ describe("src/modules/tools/bufferAnalysis/store/actionsBufferAnalysis.js", () =
             actions.showBuffer({commit, getters: state, dispatch, rootGetters});
 
             expect(commit.calledOnce).to.be.true;
-            expect(mapCollection.getMap("2D").addLayer.callCount).to.equal(1);
+            expect(store.getters["Maps/get2DMap"].addLayer.callCount).to.equal(1);
         });
     });
     describe("removeGeneratedLayers", () => {
@@ -169,7 +170,7 @@ describe("src/modules/tools/bufferAnalysis/store/actionsBufferAnalysis.js", () =
             actions.removeGeneratedLayers({commit, rootState, getters: state});
 
             expect(commit.callCount).to.equal(4);
-            expect(mapCollection.getMap("2D").removeLayer.calledTwice).to.be.true;
+            expect(store.getters["Maps/get2DMap"].removeLayer.calledTwice).to.be.true;
         });
     });
     describe("resetModule", () => {

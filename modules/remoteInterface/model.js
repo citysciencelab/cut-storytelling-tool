@@ -59,7 +59,7 @@ const RemoteInterface = Backbone.Model.extend({
             Radio.trigger("wfsTransaction", "transact", event.data.layerId, event.data.transactFeatureById, event.data.mode, event.data.attributes);
         }
         else if (event.data?.zoomToExtent) {
-            Radio.trigger("Maps", "zoomToExtent", {extent: event.data.zoomToExtent});
+            Radio.trigger("Map", "zoomToExtent", {extent: event.data.zoomToExtent});
         }
         else if (event.data?.highlightfeature) {
             store.dispatch("Maps/highlightFeature", {type: "viaLayerAndLayerId", layerAndLayerId: event.data.highlightfeature});

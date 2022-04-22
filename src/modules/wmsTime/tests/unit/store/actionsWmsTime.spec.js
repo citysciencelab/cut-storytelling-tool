@@ -4,6 +4,7 @@ import {expect} from "chai";
 import actions from "../../../store/actionsWmsTime";
 import initialState from "../../../store/stateWmsTime";
 import mapCollection from "../../../../../core/dataStorage/mapCollection.js";
+import store from "../../../../../app-store";
 
 const layerString = "When I grow up I will be a real layer!";
 
@@ -95,7 +96,7 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             rootGetters = {
                 "Maps/mode": "2D"
             };
-            mapCollection.getMap("2D").removeLayer = sinon.spy();
+            store.getters["Maps/get2DMap"].removeLayer = sinon.spy();
             state = Object.assign({}, initialState);
             sinon.stub(Radio, "request").callsFake(request);
             sinon.stub(Radio, "trigger").callsFake(trigger);
@@ -125,8 +126,8 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             expect(commitSpy.firstCall.args).to.eql(["setLayerSwiperActive", false]);
             expect(requestSpy.calledOnce).to.be.true;
             expect(requestSpy.firstCall.args).to.eql(["ModelList", "getModelByAttributes", {id}]);
-            expect(mapCollection.getMap("2D").removeLayer.calledOnce).to.be.true;
-            expect(mapCollection.getMap("2D").removeLayer.firstCall.args).to.eql([layerString]);
+            expect(store.getters["Maps/get2DMap"].removeLayer.calledOnce).to.be.true;
+            expect(store.getters["Maps/get2DMap"].removeLayer.firstCall.args).to.eql([layerString]);
             expect(trigger.calledThrice).to.be.true;
             expect(trigger.firstCall.args).to.eql(["ModelList", "removeModelsById", id]);
             expect(trigger.secondCall.args).to.eql(["Parser", "removeItem", id]);
@@ -148,8 +149,8 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             expect(trigger.secondCall.args).to.eql(["ModelList", "removeModelsById", secondId]);
             expect(trigger.thirdCall.args).to.eql(["Parser", "removeItem", secondId]);
             expect(trigger.lastCall.args).to.eql(["Util", "refreshTree"]);
-            expect(mapCollection.getMap("2D").removeLayer.calledOnce).to.be.true;
-            expect(mapCollection.getMap("2D").removeLayer.firstCall.args).to.eql([layerString]);
+            expect(store.getters["Maps/get2DMap"].removeLayer.calledOnce).to.be.true;
+            expect(store.getters["Maps/get2DMap"].removeLayer.firstCall.args).to.eql([layerString]);
         });
     });
 
