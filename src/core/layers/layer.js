@@ -160,6 +160,7 @@ Layer.prototype.removeLayer = function () {
     if (!map) { // is the case, if starting by urlParam in mode 3D
         map = store.getters["Maps/get2DMap"];
     }
+
     this.setIsVisibleInMap(false);
     bridge.removeLayerByIdFromModelList(this.get("id"));
     map?.removeLayer(this.layer);
