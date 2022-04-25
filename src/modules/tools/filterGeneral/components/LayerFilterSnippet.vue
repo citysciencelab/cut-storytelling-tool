@@ -616,6 +616,18 @@ export default {
                 return title;
             }
             return true;
+        },
+        /**
+         * Getting the tag title from rule
+         * @param {Object} rule the rule to set
+         * @returns {String} the tag title
+         */
+        getTagTitle (rule) {
+            if (Object.prototype.hasOwnProperty.call(rule, "tagTitle")) {
+                return String(rule.tagTitle);
+            }
+
+            return String(rule.value);
         }
     }
 };
@@ -659,7 +671,7 @@ export default {
                 <SnippetTag
                     v-if="isRule(rule) && rule.fixed === false"
                     :snippet-id="rule.snippetId"
-                    :value="String(rule.value)"
+                    :value="getTagTitle(rule)"
                     @resetSnippet="resetSnippet"
                     @deleteRule="deleteRule"
                 />

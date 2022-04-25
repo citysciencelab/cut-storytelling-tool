@@ -302,4 +302,19 @@ describe("src/modules/tools/filterGeneral/components/LayerFilterSnippet.vue", ()
             expect(wrapper.vm.getTitle({}, 1)).to.be.true;
         });
     });
+    describe("getTagTitle", () => {
+        it("should return value if there is no tagTitle defined", () => {
+            expect(wrapper.vm.getTagTitle({value: "title"})).to.equal("title");
+            expect(wrapper.vm.getTagTitle({value: false})).to.equal("false");
+            expect(wrapper.vm.getTagTitle({value: 0})).to.equal("0");
+            expect(wrapper.vm.getTagTitle({value: undefined})).to.equal("undefined");
+            expect(wrapper.vm.getTagTitle({value: null})).to.equal("null");
+        });
+        it("should return tagTitle if there is tagTitle defined", () => {
+            expect(wrapper.vm.getTagTitle({value: "title", tagTitle: "tagTitle"})).to.equal("tagTitle");
+            expect(wrapper.vm.getTagTitle({value: "title", tagTitle: false})).to.equal("false");
+            expect(wrapper.vm.getTagTitle({value: "title", tagTitle: 0})).to.equal("0");
+            expect(wrapper.vm.getTagTitle({value: "title", tagTitle: null})).to.equal("null");
+        });
+    });
 });
