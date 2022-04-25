@@ -116,7 +116,7 @@ describe("src/module/tools/filterGeneral/utils/filterConfigConverter.js", () => 
                 attrName: "name",
                 title: "displayName",
                 matchingMode: "matchingMode",
-                operator: "EQ",
+                operator: "IN",
                 format: "format",
                 type: "type",
                 delimitor: "|"
@@ -130,7 +130,7 @@ describe("src/module/tools/filterGeneral/utils/filterConfigConverter.js", () => 
             const expected = {
                 attrName: "attribute",
                 matchingMode: "OR",
-                operator: "EQ",
+                operator: "IN",
                 format: undefined,
                 type: "dropdown",
                 delimitor: "|"
@@ -173,7 +173,7 @@ describe("src/module/tools/filterGeneral/utils/filterConfigConverter.js", () => 
                     "delimitor": "|",
                     "format": undefined,
                     "matchingMode": "OR",
-                    "operator": "EQ",
+                    "operator": "IN",
                     "type": "dropdown"
                 },
                 expectedBar = {
@@ -181,7 +181,7 @@ describe("src/module/tools/filterGeneral/utils/filterConfigConverter.js", () => 
                     "delimitor": "|",
                     "format": undefined,
                     "matchingMode": "OR",
-                    "operator": "EQ",
+                    "operator": "IN",
                     "type": "dropdown"
                 };
 

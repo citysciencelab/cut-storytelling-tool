@@ -273,7 +273,7 @@ export default class FilterConfigConverter {
         const snippet = {
             attrName: name,
             matchingMode,
-            operator: "EQ",
+            operator: "IN",
             format,
             type,
             delimitor: "|"
