@@ -66,7 +66,7 @@ Search bar configuration.
 |locationFinder|no|**[locationFinder](#markdown-header-portalconfigsearchbarlocationfinder)**||LocationFinder search service configuration.|false|
 |placeholder|no|String|"Suche"|Input text field placeholder shown when no input has been given yet.|false|
 |recommendedListLength|no|Integer|5|Maximum amount of entries in the suggestion list.|false|
-|quickHelp|no|Boolean|false|Defines whether the QuickHelp feature is offered for the search bar.|false|
+|quickHelp|no|Boolean|false|Deprecated in the next major-release. Defines whether the QuickHelp feature is offered for the search bar.|false|
 |specialWFS|no|**[specialWFS](#markdown-header-portalconfigsearchbarspecialwfs)**||specialWFS search service configuration.|false|
 |tree|no|**[tree](#markdown-header-portalconfigsearchbartree)**||Topic selection tree search configuration.|false|
 |visibleWFS|no|**[visibleWFS](#markdown-header-portalconfigsearchbarvisiblewfs)**||Visible WFS layer search configuration.|false|
@@ -1298,6 +1298,7 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 |name|yes|String||Name des Themenbaumes.|false|
 |glyphicon|no|String||CSS Klasse des glyphicons.|false|
 |isInitOpen|no|Boolean|false|Gibt an ob der Themenbaum initial geöffnet ist.|false|
+|quickHelp|no|Boolean|false|Deprecated in the next major-release. Defines whether the QuickHelp feature is offered for the search bar.|false|
 
 ***
 

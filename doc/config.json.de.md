@@ -60,7 +60,7 @@ Konfiguration der Searchbar
 |locationFinder|nein|**[locationFinder](#markdown-header-portalconfigsearchbarlocationfinder)**||Konfiguration des LocationFinder-Suchdienstes.|false|
 |placeholder|nein|String|"Suche"|Placeholder für das Freitextfeld.|false|
 |recommendedListLength|nein|Integer|5|Anzahl der Einträge in der Vorschlagsliste.|false|
-|quickHelp|nein|Boolean|false|Gibt an ob eine Schnellhilfe angeboten wird.|false|
+|quickHelp|nein|Boolean|false|Deprecated im nächsten Major-Release. Gibt an ob eine Schnellhilfe angeboten wird.|false|
 |specialWFS|nein|**[specialWFS](#markdown-header-portalconfigsearchbarspecialwfs)**||Konfiguration des specialWFS Suchdienstes.|false|
 |tree|nein|**[tree](#markdown-header-portalconfigsearchbartree)**||Konfiguration der Suche im Themenbaum.|false|
 |visibleWFS|nein|**[visibleWFS](#markdown-header-portalconfigsearchbarvisiblewfs)**||Konfiguration der Suche über die sichtbaren WFS Layer.|false|
@@ -1243,6 +1243,7 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 |name|ja|String||Name des Themenbaumes.|false|
 |glyphicon|nein|String||CSS Klasse des glyphicons.|false|
 |isInitOpen|nein|Boolean|false|Gibt an ob der Themenbaum initial geöffnet ist.|false|
+|quickHelp|nein|Boolean|false|Deprecated im nächsten Major-Release. Gibt an ob eine Schnellhilfe angeboten wird.|false|
 
 ***
 
@@ -2511,7 +2512,7 @@ Objekt zum Ändern des voreingestellten Formats beim Herunterladen einer Zeichnu
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Dieses Modul kann geladene Vektordaten von WFS Layern in einer Tabelle darstellen. Das Modul erhält über die sichtbaren Vektorlayer aus der Map die verfügbaren Layer und zeigt diese im ersten Tab. Wird ein Eintrag (Layer) in diesem Tab ausgewählt, so wird dessen LayerId gespeichert. Aus der Layerliste wird dann der selektierte Layer gefiltert und gespeichert. Darauf wird reagiert und die Features des Layers werden ausgewertet und im zweiten Tab der Tabelle aufgelistet. Es werden nicht alle Features geladen sondern max. soviele, wie in der Konfiguration angegeben. Sind nicht alle Features geladen, wird ein Knopf angezeigt, der das Nachladen weiterer Features ermöglicht. 
+Dieses Modul kann geladene Vektordaten von WFS Layern in einer Tabelle darstellen. Das Modul erhält über die sichtbaren Vektorlayer aus der Map die verfügbaren Layer und zeigt diese im ersten Tab. Wird ein Eintrag (Layer) in diesem Tab ausgewählt, so wird dessen LayerId gespeichert. Aus der Layerliste wird dann der selektierte Layer gefiltert und gespeichert. Darauf wird reagiert und die Features des Layers werden ausgewertet und im zweiten Tab der Tabelle aufgelistet. Es werden nicht alle Features geladen sondern max. soviele, wie in der Konfiguration angegeben. Sind nicht alle Features geladen, wird ein Knopf angezeigt, der das Nachladen weiterer Features ermöglicht.
 
 Sobald man den Mauszeiger über einem Feature in der Liste positioniert wird dieses in der Karte hervogehoben. Durch Klick auf ein Feature werden dessen Attribute in einem dritten Tab vollständig dargestellt. Zukünftig könnten hier die Attribute bei WFS-T auch editiert werden. Der Tabelle wurde eine Sortiermöglichkeit implementiert.
 
