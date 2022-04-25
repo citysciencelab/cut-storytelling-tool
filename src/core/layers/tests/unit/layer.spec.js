@@ -12,7 +12,7 @@ const localVue = createLocalVue();
 
 localVue.use(Vuex);
 
-describe.only("src/core/layers/layer.js", () => {
+describe("src/core/layers/layer.js", () => {
     let attributes,
         store,
         layerRemoved = false,
