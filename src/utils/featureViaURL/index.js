@@ -1,6 +1,6 @@
 import addGeoJSON from "../addGeoJSON.js";
 import store from "../../app-store";
-import {transform} from "masterportalapi/src/crs";
+import {transform} from "@masterportal/masterportalapi/src/crs";
 
 // All functions are exported, this is only for unit testing.
 // Usually, you'll want to use the default export.

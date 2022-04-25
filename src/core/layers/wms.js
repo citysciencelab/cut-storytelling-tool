@@ -1,4 +1,4 @@
-import {wms} from "masterportalapi";
+import {wms} from "@masterportal/masterportalapi";
 import store from "../../app-store";
 import Layer from "./layer";
 import mapCollection from "../../core/dataStorage/mapCollection.js";

@@ -1,4 +1,4 @@
-import {wfs} from "masterportalapi";
+import {wfs} from "@masterportal/masterportalapi";
 import LoaderOverlay from "../../utils/loaderOverlay";
 import Layer from "./layer";
 import * as bridge from "./RadioBridge.js";

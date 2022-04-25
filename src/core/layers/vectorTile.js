@@ -1,4 +1,4 @@
-import {vectorTile} from "masterportalapi";
+import {vectorTile} from "@masterportal/masterportalapi";
 import Layer from "./layer";
 import store from "../../app-store";
 import getProxyUrl from "../../utils/getProxyUrl";

@@ -1,5 +1,5 @@
 import store from "../../app-store";
-import {Tileset} from "masterportalapi/src";
+import {Tileset} from "@masterportal/masterportalapi/src";
 import getProxyUrl from "../../../src/utils/getProxyUrl";
 import mapCollection from "../../core/dataStorage/mapCollection.js";
 import * as bridge from "./RadioBridge.js";

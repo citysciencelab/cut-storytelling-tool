@@ -12,6 +12,8 @@
 ### Changed
 - Migrated the module featureViaURL from Backbone to Vue as a util. E2E tests were fixed and re-enabled.
 - Migrated the module mouseHover from Backbone to Vue.
+- The following NPM packages are updated:
+    - @masterportal/masterportalapi: 2.1.1 to 2.2.0 (masterportalapi was renamed @masterportal/masterportalapi in the process)
 
 ### Deprecated
 
@@ -22,6 +24,9 @@
 
 ---
 ## v2.20.1 - 2022-04-21
+### Changed
+- The following NPM packages are updated:
+    - masterportalapi: 2.1.0 to 2.1.1
 
 ### Fixed
 - Allow searchAddress to find street names with a prefix.

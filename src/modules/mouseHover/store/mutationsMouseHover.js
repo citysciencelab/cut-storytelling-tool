@@ -1,6 +1,6 @@
 import {generateSimpleMutations} from "../../../app-store/utils/generators";
 import mouseHoverState from "./stateMouseHover";
-import {getLayerList} from "masterportalapi/src/rawLayerList";
+import {getLayerList} from "@masterportal/masterportalapi/src/rawLayerList";
 
 const mutations = {
     /**
