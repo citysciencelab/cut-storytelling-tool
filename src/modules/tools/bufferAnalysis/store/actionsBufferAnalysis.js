@@ -47,7 +47,8 @@ const actions = {
             vectorSource = new VectorSource(),
             bufferLayer = new VectorLayer({
                 id: "buffer_layer",
-                source: vectorSource
+                source: vectorSource,
+                alwaysOnTop: true
             });
 
         commit("setBufferLayer", bufferLayer);
@@ -222,7 +223,8 @@ const actions = {
                 resultLayer = new VectorLayer({
                     id: "result_layer",
                     source: vectorSource,
-                    style: selectedTargetLayer.get("style")
+                    style: selectedTargetLayer.get("style"),
+                    alwaysOnTop: true
                 });
 
             commit("setResultLayer", resultLayer);

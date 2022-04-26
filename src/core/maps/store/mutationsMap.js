@@ -82,7 +82,7 @@ const mutations = {
      * @returns {void}
      */
     addLoadedLayerId (state, layerId) {
-        state.layerIds.push(layerId);
+        state.loadedLayers.push(layerId);
     },
     /**
      * Sets the bounding box for the map view.
