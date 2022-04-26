@@ -27,7 +27,7 @@ const actions = {
                 allowedValues = config.zoomToGeometry.geometries;
             }
             else {
-                console.error("zoomTo: The given configuration is missing the id of the layer or a mismatch between url parameters and configuration occurred.");
+                console.error("zoomTo: A mismatch between url parameters and configuration occurred.");
                 return;
             }
             getAndFilterFeatures(layerId, property, urlValues)

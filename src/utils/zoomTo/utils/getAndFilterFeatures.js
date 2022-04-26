@@ -12,10 +12,14 @@ import handleAxiosResponse from "../../handleAxiosResponse";
  * @returns {Promise<Feature[]>} If resolved, returns an array of features.
  */
 export default function (layerId, property, values) {
-    const {url, version, featureType} = getLayerWhere({id: layerId});
+    const layer = getLayerWhere({id: layerId});
+
+    if (layer === null) {
+        throw new Error(`The layer with the id ${layerId} could not be found.`);
+    }
 
     return axios
-        .get(`${url}?service=WFS&version=${version}&request=GetFeature&typeName=${featureType}`)
+        .get(`${layer.url}?service=WFS&version=${layer.version}&request=GetFeature&typeName=${layer.featureType}`)
         .then(response => handleAxiosResponse(response, "utils/zoomTo/actionsZoomTo/zoomToFeatures"))
         .then(data => new WFS().readFeatures(data))
         .then(features => features.filter(feature => {
