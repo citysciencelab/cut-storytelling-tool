@@ -15,7 +15,7 @@ export default function (layerId, property, values) {
     const layer = getLayerWhere({id: layerId});
 
     if (layer === null) {
-        throw new Error(`The layer with the id ${layerId} could not be found.`);
+        return new Promise((_, reject) => reject(`The layer with the id ${layerId} could not be found.`));
     }
 
     return axios
