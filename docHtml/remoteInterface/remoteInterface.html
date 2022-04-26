@@ -1,0 +1,506 @@
+<blockquote>
+<p>Use the remote interface.</p>
+</blockquote>
+<p>[TOC]</p>
+<h1>Remote interface</h1>
+<p>The remote interface allows programmatic interaction with the Masterportal. It gives access to all registered VueX actions and a set of dedicated additional functions.</p>
+<h2>Generic remote interface to call VueX actions</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>namespace</td>
+<td>String</td>
+<td>Namespace of VueX module</td>
+</tr>
+<tr>
+<td>action</td>
+<td>String</td>
+<td>Name of action to call on module</td>
+</tr>
+<tr>
+<td>args</td>
+<td>Object</td>
+<td>Parameter object provided as payload to action</td>
+</tr>
+</tbody>
+</table>
+<h3>Example</h3>
+<p>Any VueX action may be called as follows:</p>
+<pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;);
+myIframe.contentWindow.postMessage({
+    namespace: &quot;Name/Space/Of/VueX/Store&quot;,
+    action: &quot;nameOfAction&quot;,
+    args: {
+        &quot;param1&quot;: &quot;value1&quot;,
+        &quot;paramX&quot;: &quot;valueX&quot;
+    }
+});
+</code></pre>
+<p>The remote interface will interpret the message given and produce the following call:</p>
+<pre><code class="language-js">store.dispatch(
+    &quot;Name/Space/Of/VueX/Store/nameOfAction&quot;,
+    {
+        &quot;param1&quot;: &quot;value1&quot;,
+        &quot;paramX&quot;: &quot;valueX&quot;
+    },
+    { root: true }
+);
+</code></pre>
+<h2>Calling a dedicated function via remote interface</h2>
+<p>The singular key given to <code>.postMessage()</code>'s parameter object is to correspond to a function name. The value of this key must be an array and will be spread to be the call’s parameters.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>${nameOfFunction}</code></td>
+<td>Array</td>
+<td>Parameters to call <code>${nameOfFunction}</code> with</td>
+</tr>
+<tr>
+<td>domain</td>
+<td>String</td>
+<td>Receiver window’s domain</td>
+</tr>
+</tbody>
+</table>
+<h3>Example</h3>
+<p>A function may be called as follows:</p>
+<pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;);
+const nameOfFunction = &quot;this should be the name of a function&quot;;
+myIframe.contentWindow.postMessage(
+    { [nameOfFunction]: [&quot;param1&quot;, &quot;param2&quot;, &quot;paramX&quot;] },
+    domain
+);
+</code></pre>
+<h3>List of dedicated functions</h3>
+<h4>showPositionByExtent</h4>
+<p>A map marker will be placed at the center of the given extent, and the map’s view will center on it.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>showPositionByExtent</td>
+<td>Array</td>
+<td>extent; map marker will be set to its center</td>
+</tr>
+<tr>
+<td>domain</td>
+<td>String</td>
+<td>receiver window’s domain</td>
+</tr>
+</tbody>
+</table>
+<h5>Example</h5>
+<pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;).contentWindow;
+iframe.postMessage({
+    &quot;showPositionByExtent&quot;: [xMin, yMin, xMax, yMax]
+}, domain);
+</code></pre>
+<h4>showPositionByExtentNoScroll</h4>
+<p>A map marker will be placed at the center of the given extent. The map is <strong>not</strong> center to it, hence it may remain outside of the user’s view.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>showPositionByExtent</td>
+<td>Array</td>
+<td>extent; map marker will be set to its center</td>
+</tr>
+<tr>
+<td>domain</td>
+<td>String</td>
+<td>receiver window’s domain</td>
+</tr>
+</tbody>
+</table>
+<h5>Example</h5>
+<pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;).contentWindow;
+iframe.postMessage({
+    &quot;showPositionByExtentNoScroll&quot;: [xMin, yMin, xMax, yMax]
+}, domain);
+</code></pre>
+<h4>transactFeatureById</h4>
+<p>Modify a WFS-T layer’s feature, triggering a server interaction.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>transactFeaturesById</td>
+<td>String</td>
+<td>feature id</td>
+</tr>
+<tr>
+<td>layerId</td>
+<td>String</td>
+<td>WFS-T layer id</td>
+</tr>
+<tr>
+<td>attributes</td>
+<td>String</td>
+<td>JSON containing feature attributes</td>
+</tr>
+<tr>
+<td>mode</td>
+<td>String</td>
+<td>name of the WFS-T operation that is to be executed; Currently only “update” is available</td>
+</tr>
+<tr>
+<td>domain</td>
+<td>String</td>
+<td>receiver window’s domain</td>
+</tr>
+</tbody>
+</table>
+<h5>Example</h5>
+<pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;).contentWindow;
+const id = &quot;the id of the feature to modify&quot;;
+iframe.postMessage({
+    &quot;transactFeatureById&quot;: id,
+    &quot;layerId&quot;: layerId,
+    &quot;attributes&quot;: attrs,
+    &quot;mode&quot;: &quot;update&quot;
+}, domain);
+</code></pre>
+<h4>zoomToExtent</h4>
+<p>The map’s view will fit the given extent.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>zoomToExtent</td>
+<td>Array</td>
+<td>extent</td>
+</tr>
+<tr>
+<td>domain</td>
+<td>String</td>
+<td>receiver window’s domain</td>
+</tr>
+</tbody>
+</table>
+<h5>Example</h5>
+<pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;).contentWindow;
+iframe.postMessage({
+    &quot;zoomToExtent&quot;: [xmin, ymin, xmax, ymax]
+}, domain);
+</code></pre>
+<h4>highlightfeature</h4>
+<p>Highlight a vector feature on the map.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>highlightfeature</td>
+<td>String</td>
+<td>id of layer and feature as comma-separated string</td>
+</tr>
+<tr>
+<td>domain</td>
+<td>String</td>
+<td>receiver window’s domain</td>
+</tr>
+</tbody>
+</table>
+<h5>Example</h5>
+<pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;).contentWindow;
+iframe.postMessage({
+    &quot;highlightfeature&quot;: &quot;layerid,featureId&quot;
+}, domain);
+</code></pre>
+<h4>hidePosition</h4>
+<p>Hide the map marker.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hidePosition</td>
+<td>String</td>
+<td>used standalone (not in object)</td>
+</tr>
+<tr>
+<td>domain</td>
+<td>String</td>
+<td>receiver window’s domain</td>
+</tr>
+</tbody>
+</table>
+<h5>Example</h5>
+<pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;).contentWindow;
+iframe.postMessage(&quot;hidePosition&quot;, domain);
+</code></pre>
+<h2>Generic remote interface for <code>Backbone.Radio</code> (deprecated)</h2>
+<p>The functions registered to the <code>Backbone.Radio</code> element may also be used via <code>postMessage()</code>. They are called by channel and function name.</p>
+<blockquote>
+<p>Please mind that the usage of Backbone.Radio itself is currently deprecated. Backbone will eventually be removed.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>radio_channel</td>
+<td>String</td>
+<td>radio channel to target</td>
+</tr>
+<tr>
+<td>radio_function</td>
+<td>String</td>
+<td>radio channel function to call</td>
+</tr>
+<tr>
+<td>radio_para_object</td>
+<td>Object</td>
+<td>optional parameter object forwarded to the called function</td>
+</tr>
+<tr>
+<td>domain</td>
+<td>String</td>
+<td>receiver window’s domain</td>
+</tr>
+</tbody>
+</table>
+<h3>Example</h3>
+<pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;).contentWindow;
+iframe.postMessage({
+    &quot;radio_channel&quot;: &quot;MyRadioChannel&quot;,
+    &quot;radio_function&quot;: &quot;myRequestedFunction&quot;,
+    &quot;radio_para_object&quot;: {
+        &quot;param1&quot;: &quot;param1&quot;,
+        &quot;paramX&quot;: &quot;paramX&quot;
+    }
+}, domain);
+</code></pre>
+<p>This will construct and execute the following call.</p>
+<pre><code class="language-js">Radio.request(
+    &quot;MyRadioChannel&quot;,
+    &quot;myRequestedFunction&quot;,
+    {
+        &quot;param1&quot;: &quot;param1&quot;,
+        &quot;paramX&quot;: &quot;paramX&quot;
+    }
+);
+</code></pre>
+<h2>Masterportal communication to the parent window</h2>
+<p>Previously the <em>top-down</em> communication (parent to Masterportal) has been shown. The Masterportal may also communicate in the opposite direction.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>params</td>
+<td>Object</td>
+<td>parameter object sent to parent window</td>
+</tr>
+</tbody>
+</table>
+<h3>Examples</h3>
+<pre><code class="language-js">// From a Vue component
+this.$remoteInterface.sendMessage({
+    &quot;param1&quot;: &quot;param1&quot;,
+    &quot;paramX&quot;: &quot;paramX&quot;
+});
+</code></pre>
+<pre><code class="language-js">// From a VueX action
+this._vm.$remoteInterface.sendMessage({
+    &quot;param1&quot;: &quot;param1&quot;,
+    &quot;paramX&quot;: &quot;paramX&quot;
+});
+</code></pre>
+<p>The remote interface translates both to the following call:</p>
+<pre><code class="language-js">parent.postMessage({
+    &quot;param1&quot;: &quot;param1&quot;,
+    &quot;paramX&quot;: &quot;paramX&quot;
+}, options.postMessageUrl);
+</code></pre>
+<h2>Masterportal communication to the parent window via <code>Backbone.Radio</code> (deprecated)</h2>
+<blockquote>
+<p>Please mind that the usage of Backbone.Radio itself is currently deprecated. Backbone will eventually be removed.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>params</td>
+<td>Object</td>
+<td>parameter object sent to parent window</td>
+</tr>
+</tbody>
+</table>
+<h3>Example</h3>
+<pre><code class="language-js">Radio.trigger(
+    &quot;RemoteInterface&quot;,
+    &quot;postMessage&quot;, {
+        &quot;param1&quot;: &quot;param1&quot;,
+        &quot;paramX&quot;: &quot;paramX&quot;
+    }
+);
+</code></pre>
+<h2>Tutorial: Integration of the master portal into an iframe</h2>
+<p>The following tutorial shows how to use the masterportal remote interface within an iFrame.</p>
+<h3>The first step</h3>
+<p>Configure the remoteInterface in the config.js of a portal. This entry is necessary to open the interface to the outside of the portal.</p>
+<pre><code class="language-js">const Config = {
+...
+    remoteInterface: {
+        postMessageUrl: &quot;https://localhost:9001&quot;
+    },
+...
+}
+</code></pre>
+<h3>The second step</h3>
+<p>Configure the input map and in it the target projection in the config.js of the same portals as the first step. Coordinates will be translated to it before being communicated via remoteInterface.</p>
+<pre><code class="language-js">const Config = {
+...
+    inputMap: {
+        targetProjection: &quot;EPSG:4326&quot;
+    },
+...
+}
+</code></pre>
+<h3>The third step</h3>
+<p>Create an html-file and add the follow content. In it, an iframe is created in which the portal <code>https://localhost:9001/portal/master</code> is loaded. Then 3 buttons are created and a click event is assigned to each.</p>
+<p>Note: The html-file must be stored in a path that is accessible via the localhost.</p>
+<p>The example can also be called directly here with a running server:  <strong><a href="https://localhost:9001/doc/remoteInterface/iframeExample.html">iframe Example</a></strong>.
+To do this, the following must be added to <code>portal/master/config.js</code></p>
+<pre><code class="language-js">remoteInterface: {
+    postMessageUrl: &quot;http://localhost:8080&quot;
+},
+</code></pre>
+<p>Example of an iframe:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html style=&quot;height:100%&quot;&gt;
+&lt;body style=&quot;height:100%&quot;&gt;
+
+&lt;style&gt;
+    html, body { height:100%; }
+    button { width: 50px; }
+&lt;/style&gt;
+
+&lt;!-- Create a iframe with the portal master as source. --&gt;
+&lt;iframe
+    id=&quot;iframe&quot;
+    src=&quot;https://localhost:9001/portal/master&quot;
+    width=&quot;100%&quot;
+    height=&quot;85%&quot;
+    name=&quot;SELFHTML_in_a_box&quot;
+&gt;&lt;/iframe&gt;
+
+&lt;!-- Createthree buttons. --&gt;
+&lt;button id=&quot;b1&quot;&gt;1&lt;/button&gt;
+&lt;button id=&quot;b2&quot;&gt;2&lt;/button&gt;
+&lt;button id=&quot;b3&quot;&gt;3&lt;/button&gt;
+
+&lt;/body&gt;
+
+&lt;script&gt;
+    // Gets the elements from dom.
+    const iframe1 = document.getElementById(&quot;iframe&quot;),
+        b1 = document.getElementById(&quot;b1&quot;),
+        b2 = document.getElementById(&quot;b2&quot;),
+        b3 = document.getElementById(&quot;b3&quot;);
+
+    // Sets the screen back to the start scale
+    b1.addEventListener(&quot;click&quot;, event =&gt; {
+        iframe1.contentWindow.postMessage({
+            radio_channel: &quot;RemoteInterface&quot;,
+            radio_function: &quot;resetView&quot;,
+            radio_para_object: {}
+        });
+    });
+
+    // Outputs a message with the message &quot;foo&quot;.
+    b2.addEventListener(&quot;click&quot;, event =&gt; {
+        iframe1.contentWindow.postMessage({
+            namespace: &quot;Alerting&quot;,
+            action: &quot;addSingleAlert&quot;,
+            args: {content: &quot;foo&quot;}
+        });
+    });
+
+    // Starts a draw event. A polygon can be drawn on the map with the mouse.
+    b3.addEventListener(&quot;click&quot;, event =&gt; {
+        iframe1.contentWindow.postMessage({
+            namespace: &quot;Tools/Draw&quot;,
+            action: &quot;initializeWithoutGUI&quot;,
+            args: {&quot;drawType&quot;: &quot;Polygon&quot;, &quot;color&quot;: [127,255,0,0.5], &quot;opacity&quot;: 0.5, &quot;maxFeatures&quot;: null, &quot;initialJSON&quot;: null}
+        });
+    });
+
+    // Logs the message event.
+    window.addEventListener(&quot;message&quot;, function (messageEvent) {
+        console.log(messageEvent);
+        if (messageEvent.data === &quot;portalReady&quot;) {
+            Radio.request(&quot;RemoteInterface&quot;, &quot;getZoomLevel&quot;);
+        }
+    }, false);
+
+&lt;/script&gt;
+
+&lt;/html&gt;
+
+</code></pre>

@@ -1,0 +1,1298 @@
+<blockquote>
+<p><strong><a href="doc.md">Return to the Masterportal documentation</a></strong>.</p>
+</blockquote>
+<p>[TOC]</p>
+<h1>style.json</h1>
+<p>The <em>style.json</em> file describes visualization rules to control the styling of vector features. It may be used in all sorts of vector layers, namely <em>WFS</em>, <em>GeoJSON</em>, and <em>Sensor</em>.</p>
+<p>Style rules may be defined for <em>3DTileSets</em>, too.</p>
+<h2>What happens on Masterportal start-up</h2>
+<p>The Masterportal reads the configured <em>style.json</em> file and processes it to a list of defined styles in an internal data structure. Layers may request their respective styling instructions from it.</p>
+<blockquote>
+<p>💡 Hint: Each list entry may be requested via development console by its <em>styleId</em> for test purposes. <code>Backbone.Radio.request(&quot;StyleList&quot;, &quot;returnModelById&quot;, &quot;styleId&quot;)</code></p>
+</blockquote>
+<p>At the time of layer visualization, the readied <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Style-Style.html" title="OpenLayers Styles">OpenLayers Styles</a> are fetched from the internal data structure and applied to the features.</p>
+<blockquote>
+<p>💡 Hint: Malformed <em>style.json</em> files will be rejected without repair attempt. A warning will be shown. We recommend using an online validator to check your file’s syntax, e.g. <a href="https://jsonlint.com/" title="jsonlint">jsonlint</a>.</p>
+</blockquote>
+<h2>Style module configuration</h2>
+<p>The <em>style.json</em>’s path is defined in the <strong><a href="config.js.md">config.js</a></strong> file. Follow the link for details. Please mind the following parameters::</p>
+<ul>
+<li><em>styleConf</em>: Defining the file path</li>
+</ul>
+<blockquote>
+<p>💡 Hint: Incorrect path information is reported with an error message.</p>
+</blockquote>
+<h2>Layer connection</h2>
+<p>Within the <strong><a href="config.json.md">config.json</a></strong> section <em>Themenconfig.Layer.Vector</em> the portal’s layers are defined. This includes setting the obligatory <em>styleId</em> for vector layers. The <em>styleId</em> references a <em>style.json</em>’s entry holding the very same <em>styleId</em>. See <a href="#markdown-header-structure">Structure</a>.</p>
+<blockquote>
+<p>💡 Hint: Incorrect style ids do not provoke a run-time error. A warning is logged to the console to inform administrators of the erroneous configuration. Portal users will only notice that the misconfigured layer has the OpenLayers default vector styling.</p>
+</blockquote>
+<h2>Structure</h2>
+<p>This chapter describes the syntactic and schematic structure as well as the functionality of the <em>style.json</em>.</p>
+<blockquote>
+<p>💡 Hint: The basic JSON file syntax <a href="https://www.json.org">explained on json.org</a> applies to the <em>style.json</em> file.</p>
+</blockquote>
+<p>The <em>style.json</em> holds an array of objects at root level. Each object corresponds to a style definition and may be referred to by any vector layer.</p>
+<p><strong>Example 1: Two empty styles</strong></p>
+<pre><code class="language-json">[
+    {},
+    {}
+]
+</code></pre>
+<p>To connect a style of the array to a layer, the attribute <em>styleId</em> is required. See chapter <a href="#markdown-header-layerconnection">Layer connection</a>.</p>
+<p><strong>Example 2: Style with id</strong></p>
+<pre><code class="language-json">{
+    &quot;styleId&quot;: &quot;1711&quot;
+}
+</code></pre>
+<p>Next to the <em>styleId</em> attribute, a <em>rules</em> attribute is required. This is another array and encompasses all the layer’s styling rules.</p>
+<p><strong>Example 3: Style with rules</strong></p>
+<pre><code class="language-json">{
+    &quot;styleId&quot;: &quot;1711&quot;,
+    &quot;rules&quot;: []
+}
+</code></pre>
+<p>Each of the <em>rules</em> array entries is another object with at least the attribute <em>style</em>. This attribute holds the display instructions to be applied if the current rule is met. Please see <a href="#markdown-header-displayrules">Display rules</a> for details.</p>
+<p><strong>Example 4: Value for a <code>rules</code> entry</strong></p>
+<pre><code class="language-json">[
+    {
+        &quot;style&quot;: {}
+    }
+]
+</code></pre>
+<p>Next to the <em>style</em> attribute an optional <em>conditions</em> can be added. This is supposed to contain the conditions to be met for the style to be applied to a feature. See chapter <a href="#markdown-header-conditions">Conditions</a> for details.</p>
+<p><strong>Example 5: Value for a <code>rules</code> entry with optional conditions entry</strong></p>
+<pre><code class="language-json">[
+    {
+        &quot;conditions&quot;: {},
+        &quot;style&quot;: {}
+    }
+]
+</code></pre>
+<p><strong>A RULE IS APPLIED TO A FEATURE BY A LOGICAL <em>OR</em>, WHERE THE ARRAY IS CHECKED TOP-DOWN (INDEX 0 TO MAX), WHEREAS EACH RULE APPLIES A LOGICAL <em>AND</em> OF <em>PROPERTIES</em> and <em>SEQUENCE</em> (IN CONDITIONS).</strong></p>
+<p><strong>THE FEATURE WILL HAVE THE FIRST RULE’S STYLE APPLIED WHERE IT FULLY MEETS THE <em>CONDITIONS</em>.</strong></p>
+<blockquote>
+<p>💡 Hint: If no rule’s <em>conditions</em> are met, an empty style object is used, effectively rendering the feature invisible.</p>
+</blockquote>
+<p>Unless this is desired behavior, we suggest providing a rule <strong>without</strong> <em>conditions</em> as fallback.</p>
+<p><strong>Example 6: Fallback solution</strong></p>
+<pre><code class="language-json">&quot;rules&quot;: [
+    {
+        &quot;conditions&quot;: {},
+        &quot;style&quot;: {}
+    },
+    {
+        &quot;style&quot;: {}
+    }
+]
+</code></pre>
+<blockquote>
+<p>💡 Hint: The order of array elements is essential. The style with the first matching <em>conditions</em> is used, and all rules following are ignored. Hence, all rules following a default style (any style without <em>conditions</em>) are ignored. If the rules in example 6 were swapped, the condition-free rule would always be met and applied, and the rule holding conditions would have been made obsolete.</p>
+</blockquote>
+<h2>Conditions</h2>
+<p>This section describes the file structure for the <em>conditions</em> value as introduced in the chapter <a href="#markdown-header-structure">Structure</a>.</p>
+<p>Two optional <em>condition types</em> may be used in a condition:</p>
+<ul>
+<li><em>properties</em></li>
+<li><em>sequence</em></li>
+</ul>
+<pre><code class="language-json">&quot;conditions&quot;: {
+    &quot;properties&quot;: {},
+    &quot;sequence&quot;: []
+}
+</code></pre>
+<h3><em>properties</em></h3>
+<p>The attribute <em>properties</em> activates a feature property check by comparing the noted values with the actual <a href="https://openlayers.org/en/latest/apidoc/module-ol_Feature-Feature.html#getProperties">feature properties</a>. <em>properties</em> are combined with a logical AND, meaning all key-value pairs must hold; in this fashion, all <em>conditions</em> are connected.</p>
+<p><em>properties</em> are defined as an object, where the key corresponds to a feature attribute’s name, and the value to the value expected for it.</p>
+<pre><code class="language-json">&quot;conditions&quot;: {
+    &quot;properties&quot;: {
+        &quot;key&quot;: &quot;value&quot;,
+        &quot;key2&quot;: &quot;value2&quot;
+    }
+}
+</code></pre>
+<p><em>properties</em> can also be configured as an array of objects.
+<em>properties</em> as objects are combined with a logical AND, meaning all key-value pairs must hold; in this fashion, all <em>conditions</em> are connected.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>attrName</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Name of attribute.</td>
+<td><code>&quot;attr1&quot;</code></td>
+</tr>
+<tr>
+<td>value</td>
+<td>yes</td>
+<td>String/Number/[String]/[Number]</td>
+<td></td>
+<td>Value or Array of values to be checked</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">&quot;conditions&quot;: {
+    &quot;properties&quot;: [
+        {
+            &quot;attrName&quot;: &quot;key&quot;,
+            &quot;value&quot;: [0, 100]
+        }
+    ]
+}
+</code></pre>
+<h3>attributeObject</h3>
+<p>Then it is possible to configure an object instead of an attribute key.</p>
+<p>If the <em>attrName</em> is given as an object, the following confurations are possible.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Name to be shown on an exact match.</td>
+<td><code>&quot;Test&quot;</code></td>
+</tr>
+<tr>
+<td>condition</td>
+<td>yes</td>
+<td>enum[“contains”, “startsWith”, “endsWith”]</td>
+<td></td>
+<td>Condition checked on each feature attribute.</td>
+<td><code>&quot;startsWith&quot;</code></td>
+</tr>
+<tr>
+<td>type</td>
+<td>no</td>
+<td>enum[“string”, “date”, “number”, “boolean”]</td>
+<td><code>&quot;string&quot;</code></td>
+<td>If <code>&quot;date&quot;</code>, the portal will attempt to parse the attribute value to a date; If <code>&quot;Number&quot;</code>, the portal will attempt to parse the attribute value to with thousand seperator; If “boolean”, the portal will attempt to parse the attribute value to boolean value.</td>
+<td><code>&quot;date&quot;</code></td>
+</tr>
+<tr>
+<td>format</td>
+<td>no</td>
+<td>String/Object</td>
+<td><code>&quot;DD.MM.YYYY HH:mm:ss&quot;/{&quot;key&quot;: &quot;value&quot;}</code></td>
+<td>Data format.</td>
+<td><code>&quot;DD.MM.YYY&quot;</code></td>
+</tr>
+<tr>
+<td>prefix</td>
+<td>no</td>
+<td>String</td>
+<td></td>
+<td>Attribute value prefix.</td>
+<td>Add string to value without whitespace <code>&quot;https://&quot;</code></td>
+</tr>
+<tr>
+<td>suffix</td>
+<td>no</td>
+<td>String</td>
+<td></td>
+<td>Attribute value suffix.</td>
+<td><code>&quot;°C&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">&quot;conditions&quot;: {
+    &quot;properties&quot;: [
+        {
+        &quot;attrName&quot;: {
+            &quot;name&quot;: &quot;-fillLevel&quot;,
+            &quot;condition&quot;: &quot;endsWith&quot;
+        },
+        &quot;value&quot;: [0, 100]
+        }
+    ]
+}
+</code></pre>
+<h4>key</h4>
+<p>The <em>key</em> is a feature attribute’s name of a direct feature child element.</p>
+<blockquote>
+<p>💡 Hint: If a key does not exist, the <em>condition</em> is not met.</p>
+</blockquote>
+<p>Alternatively an arbitrarily nested property within the feature may be addressed by utilizing an <a href="#markdown-header-objectpathreference">object path reference</a>.</p>
+<blockquote>
+<p>💡 Hint: Object paths are e.g. used by sensor layers in properties using multiple Datastreams.</p>
+</blockquote>
+<p>A <em>key</em> is always of type <em>String</em> or an <a href="#markdown-header-attributeobject">attributeObject</a>.</p>
+<h4>value</h4>
+<p>A <em>value</em> is the reference value which is compared to the feature’s property with name <em>key</em>. <em>Values</em> may have these types:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Boolean</td>
+<td>Direct equality comparison between feature attribute and reference value.</td>
+</tr>
+<tr>
+<td>String</td>
+<td>Direct equality comparison between feature attribute and reference value.</td>
+</tr>
+<tr>
+<td>Number</td>
+<td>Direct equality comparison of the numerical feature attribute and reference value. Should the attribute value be of type <em>String</em>, casting it to a numerical value for comparison is attempted.</td>
+</tr>
+<tr>
+<td>[Number, Number]</td>
+<td>An array with two numerical values defines a range interpreted as [minValue, maxValue]. It is checked whether the feature attribute is within that range. Should the attribute value be of type <em>String</em>, casting it to a numerical value for comparison is attempted.</td>
+</tr>
+<tr>
+<td>[Number, Number, Number, Number]</td>
+<td>An array with four numerical values defines a relative range [minValue, maxValue, minRelative, maxRelative]. The attribute value is brought in relation to relativeMin and relativeMax, and it is checked whether the result is within the range [minValue, maxValue]. Should the attribute value be of type <em>String</em>, casting it to a numerical value for comparison is attempted.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 Hint: Checking an attribute value <code>x</code> against a relative range happens by checking whether <code>1/(relativMax-relativMin)(x-relativMin)</code> is in range <code>[minValue, maxValue]</code>.</p>
+</blockquote>
+<blockquote>
+<p>💡 Hint: <code>x</code> is in a range <code>[minValue, maxValue]</code> if <code>minValue &lt;= x &lt; maxValue</code> is true.</p>
+</blockquote>
+<p>Alternatively a <em>value</em> for any of the previously mentioned data types may refer to an arbitrarily nested attribute within a feature property. See chapter <a href="#markdown-header-objectpathreference">Object path reference</a> for details.</p>
+<h4>Example</h4>
+<p>This is an exemplary configuration of <em>properties</em>. It is assumed features offer matching attributes <em>name</em>, <em>type</em>, <em>bedCount</em>, <em>staffCount</em>, <em>operationCount</em>, <em>hamburgOverall.OperationsTargetMin</em>, and <em>hamburgOverall.OperationsTargetMax</em>.</p>
+<pre><code class="language-json">{
+    &quot;conditions&quot;: {
+        &quot;properties&quot;: {
+            &quot;name&quot;: &quot;Children's hospital Wilhelmsstift&quot;,
+            &quot;type&quot;: 1,
+            &quot;bedCount&quot;: [50, 100],
+            &quot;staffCount&quot;: [25, 50, 100, 500],
+            &quot;operationCount&quot;: [0, 50, &quot;@hamburgGesamt.OperationenSollMin&quot;, &quot;@hamburgGesamt.OperationenSollMax&quot;]
+        }
+    }
+}
+</code></pre>
+<h3><em>sequence</em></h3>
+<p>The attribute <em>sequence</em> controls an indexical check for <em>MultiGeometry</em> features. It is only relevant to these geometry types:</p>
+<ul>
+<li><em>MultiPoint</em></li>
+<li><em>MultiLinestring</em></li>
+<li><em>MultiPolygon</em></li>
+<li><em>GeometryCollection</em></li>
+</ul>
+<blockquote>
+<p>💡 Hint: The check is skipped for features with geometry types not listed.</p>
+</blockquote>
+<p><strong>All <em>MultiGeometry-Features</em>  consist of simple <em>Features</em>.</strong> Each <em>Feature</em> within a <em>MultiGeometry</em> feature is iterated over and styled individually. Using <em>sequence</em>, an index range of features within the <em>MultiGeometry</em> feature can be defined, and only features in this range will be checked for meeting the <em>condition</em>.</p>
+<p>The range is defined with an array of two numerical values [lowerIndex, upperIndex], so that in the following example the second and third feature are checked in a <em>MultiGeometry</em> feature with at least three <em>Features</em>.</p>
+<blockquote>
+<p>💡 Hint: Arrays are zero-based. The first feature of a <em>Multi-Geometry</em> is indexed as zeroth entry.</p>
+</blockquote>
+<pre><code class="language-json">{
+    &quot;sequence&quot;: [1, 2]
+}
+</code></pre>
+<blockquote>
+<p>💡 Hint: <em>Sequence</em> is optional for <em>MultiGeometry</em> features.</p>
+</blockquote>
+<h3>Object path reference</h3>
+<p>Object path references may be set for both <em>keys</em> and <em>values</em> in the <em>properties</em>.</p>
+<p><strong>Any string prefixed <code>@</code> is interpreted as object path reference.</strong></p>
+<p>Using such a reference is e.g. useful when attributes contain nested values that need to be referred to.</p>
+<blockquote>
+<p>💡 Hint: Object paths are especially used in sensor layers as they partially work on multiple Datastreams that need to be differentiated.</p>
+</blockquote>
+<p>For example, an object path <code>&quot;@Datastreams.0.ObservedProperty.name&quot;</code> returns <code>&quot;myName&quot;</code> from the following structure:</p>
+<pre><code class="language-js">{
+    &quot;featureProperties&quot;: {
+        &quot;name&quot;: &quot;Children's hospital Wilhelmsstift&quot;,
+        &quot;Datastreams&quot;: [
+            {
+                &quot;ObservedProperty&quot;: {
+                    &quot;name&quot;: &quot;myName&quot;
+                }
+            }
+        ]
+    }
+}
+</code></pre>
+<blockquote>
+<p>💡 Hint: Object paths may contain both objects and arrays. The entry <code>Datastrams.0</code> describes following an arrays first entry.</p>
+</blockquote>
+<blockquote>
+<p>💡 Hint: Arrays are zero-based. An array’s first entry is adressed with <code>Datastreams.0</code>, its second with <code>Datastreams.1</code>, and so on.</p>
+</blockquote>
+<p>You may also use object path references for direct child elements. For example, features with direct child properties may be structured like this:</p>
+<pre><code class="language-js">{
+    &quot;featureProperties&quot;: {
+        &quot;name&quot;: &quot;Children's hospital Wilhelmsstift&quot;,
+        &quot;alternativeName&quot;: &quot;Wartestube&quot;
+    }
+}
+</code></pre>
+<p>You can check whether the fields <code>&quot;name&quot;</code> and <code>&quot;alternativeName&quot;</code> are identical with this <em>condition</em>:</p>
+<pre><code class="language-js">{
+    &quot;conditions&quot;: {
+        &quot;properties&quot;: {
+            &quot;name&quot;: &quot;@alternativeName&quot;
+        }
+    }
+}
+</code></pre>
+<h2>Display rules</h2>
+<p>This chapter describes how a <em>style</em> as introduced in the <a href="#markdown-header-structure">Structure</a> chapter is constructed.</p>
+<p>Styling depends on the <em>GeometryType</em> of a <em>Feature</em>. All <em>MultiGeometry</em> features  consist of simpler <em>Features</em>. Within a <em>MultiGeomtry</em> feature all child <em>Features</em> are iterated and each one is styled individually. The following <em>GeometryTypes</em> can currently be styled:</p>
+<ul>
+<li><a href="#markdown-header-linestring">Linestring</a></li>
+<li><a href="#markdown-header-point">Point</a></li>
+<li><a href="#markdown-header-polygon">Polygon</a></li>
+<li><a href="#markdown-header-cesium">Cesium</a></li>
+</ul>
+<blockquote>
+<p>💡 Hint: <em>MultiGeometries</em> defined within a <em>GeometryCollection</em> (doubly nested) can currently not be styled.</p>
+</blockquote>
+<p>The <em>GeometryType</em> is determined by calling the <em>DescribeFeatureTypes</em> service of a WFS layer. In some cases, the type <em>“Geometry”</em> is returned, which leads to the creation of styles for LineString, Point, and Polygon. You may override this behaviour on the <a href="config.json.md#markdown-header-themenconfiglayervector">config.json’s styleGeometryType parameter</a> of each layer.</p>
+<p>Styling is based on the feature’s <em>GeometryType</em>. For each type, default display rules are applied that may be overwritten by <em>style</em> entries.</p>
+<p><strong><em>style</em> example:</strong></p>
+<pre><code class="language-json">{
+    &quot;style&quot;: {
+        &quot;imageName&quot;: &quot;hospital.png&quot;,
+        &quot;clusterImageName&quot;: &quot;hospital.png&quot;
+    }
+}
+</code></pre>
+<blockquote>
+<p>This allows styling multiple <em>GeometryTypes</em> (Point, Linestring, Polygon, …) within a <em>style</em> by adding display rules.</p>
+</blockquote>
+<p>Furthermore, all named geometry types may receive a text annotation. See chapter <a href="#markdown-header-text">Text</a> for details.</p>
+<p>For individual legend texts, see chapter <a href="#markdown-header-legend">Legend</a>.</p>
+<h3>Point</h3>
+<p>The display rules for points are separated in</p>
+<ul>
+<li>simple point geometries: See the following parameter <em>type</em>.</li>
+<li>clustered points: If the layer configuration in the (<strong><a href="config.json.md">config.json</a></strong>) file has <em>clusterDistance</em> set, a ClusterStyle is created. See the following parameter <em>clusterType</em>.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td></td>
+<td>String</td>
+<td><code>&quot;circle&quot;</code></td>
+<td>Type of styling; one of <a href="#markdown-header-pointicon">icon</a>, <a href="#markdown-header-pointcircle">circle</a>, <a href="#markdown-header-pointnominal">nominal</a>, <a href="#markdown-header-pointinterval">interval</a>.</td>
+</tr>
+<tr>
+<td>clusterType</td>
+<td></td>
+<td>String</td>
+<td><code>&quot;circle&quot;</code></td>
+<td>Type of styling for clustered points; one of <a href="#markdown-header-pointclustericon">icon</a>, <a href="#markdown-header-pointclustercircle">circle</a>.</td>
+</tr>
+</tbody>
+</table>
+<p>In the following, all options are described in detail.</p>
+<h4>Point.Icon</h4>
+<p>Please see the <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Icon-Icon.html" title="OpenLayers Icon documentation">OpenLayers Icon documentation</a> for additional details.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imageName</td>
+<td></td>
+<td>String</td>
+<td><code>&quot;blank.png&quot;</code></td>
+<td>Image name</td>
+</tr>
+<tr>
+<td>imageWidth</td>
+<td></td>
+<td>String</td>
+<td><code>1</code></td>
+<td>Image width</td>
+</tr>
+<tr>
+<td>imageHeight</td>
+<td></td>
+<td>String</td>
+<td><code>1</code></td>
+<td>Image height</td>
+</tr>
+<tr>
+<td>imageScale</td>
+<td></td>
+<td>String</td>
+<td><code>1</code></td>
+<td>Image scale</td>
+</tr>
+<tr>
+<td>imageOffsetX</td>
+<td></td>
+<td>Float</td>
+<td><code>0.5</code></td>
+<td>Image x Offset</td>
+</tr>
+<tr>
+<td>imageOffsetY</td>
+<td></td>
+<td>Float</td>
+<td><code>0.5</code></td>
+<td>Image y offset</td>
+</tr>
+<tr>
+<td>imageOffsetXUnit</td>
+<td></td>
+<td>String</td>
+<td><code>&quot;fraction&quot;</code></td>
+<td>Units in which the anchor x value is specified.</td>
+</tr>
+<tr>
+<td>imageOffsetYUnit</td>
+<td></td>
+<td>String</td>
+<td><code>&quot;fraction&quot;</code></td>
+<td>Units in which the anchor y value is specified.</td>
+</tr>
+<tr>
+<td>rotation</td>
+<td>no</td>
+<td><strong><a href="#markdown-header-pointiconrotation">rotation</a></strong></td>
+<td><code>0</code></td>
+<td>Attribute for rotation of wfs features. If not set, the default value is <code>0</code> to show icons in standard alignment.</td>
+</tr>
+</tbody>
+</table>
+<h4>Point.Icon.rotation</h4>
+<p>If set, the entry <code>rotation</code> has to be from type object with the following attributes:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rotation.isDegree</td>
+<td></td>
+<td>Boolean</td>
+<td><code>false</code></td>
+<td>Whether value should be treated as degrees or radiants.</td>
+</tr>
+<tr>
+<td>rotation.value</td>
+<td></td>
+<td>Number</td>
+<td><code>0</code></td>
+<td>Rotation value (positive rotation clockwise).</td>
+</tr>
+</tbody>
+</table>
+<h4>Point.Circle</h4>
+<p>Please see the <a href="https://openlayers.org/en/latest/apidoc/module-ol_geom_Circle-Circle.html" title="OpenLayers Circle documentation">OpenLayers Circle documentation</a> for additional details.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>circleRadius</td>
+<td></td>
+<td>Integer</td>
+<td><code>10</code></td>
+<td>Circle radius</td>
+</tr>
+<tr>
+<td>circleStrokeColor</td>
+<td></td>
+<td>Integer[]</td>
+<td><code>[0, 0, 0, 1]</code></td>
+<td>Circle stroke color as rgba</td>
+</tr>
+<tr>
+<td>circleStrokeWidth</td>
+<td></td>
+<td>Integer</td>
+<td><code>2</code></td>
+<td>Circle stroke width in pixels</td>
+</tr>
+<tr>
+<td>circleFillColor</td>
+<td></td>
+<td>Integer[]</td>
+<td><code>[0, 153, 255, 1]</code></td>
+<td>Circle fill color as rgba</td>
+</tr>
+</tbody>
+</table>
+<h4>Point.Interval</h4>
+<p>A dynamic style is set for each feature. This style supports sensor feature updates for numerical data having a natural order, e.g. meters and degree Celsius.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>scalingShape</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Display type <code>&quot;CIRCLE_BAR&quot;</code></td>
+</tr>
+<tr>
+<td>scalingAttribute</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Attribute used for styling</td>
+</tr>
+<tr>
+<td>circleBarScalingFactor</td>
+<td></td>
+<td>Float</td>
+<td><code>1</code></td>
+<td>Factor by which the attribute value is scaled. Required for very large positive or negative values and values nearby zero.</td>
+</tr>
+<tr>
+<td>circleBarRadius</td>
+<td></td>
+<td>Float</td>
+<td><code>6</code></td>
+<td>Point radius</td>
+</tr>
+<tr>
+<td>circleBarLineStroke</td>
+<td></td>
+<td>Float</td>
+<td><code>5</code></td>
+<td>Bar width</td>
+</tr>
+<tr>
+<td>circleBarCircleFillColor</td>
+<td></td>
+<td>Integer[]</td>
+<td><code>[0, 0, 0, 1]</code></td>
+<td>Point color fill in rgba</td>
+</tr>
+<tr>
+<td>circleBarCircleStrokeColor</td>
+<td></td>
+<td>Integer[]</td>
+<td><code>[0, 0, 0, 1]</code></td>
+<td>Point stroke color in rgba</td>
+</tr>
+<tr>
+<td>circleBarCircleStrokeWidth</td>
+<td></td>
+<td></td>
+<td><code>1</code></td>
+<td>Point stroke width in pixels</td>
+</tr>
+<tr>
+<td>circleBarLineStrokeColor</td>
+<td></td>
+<td>Integer[]</td>
+<td><code>[0, 0, 0, 1]</code></td>
+<td>Bar color in rgba</td>
+</tr>
+</tbody>
+</table>
+<h4>Point.Nominal</h4>
+<p>A dynamic style is set for each feature. This style supports sensor feature updates for data without natural order, e.g. colors and shapes.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>scalingShape</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Display type <code>&quot;CIRCLESEGMENTS&quot;</code></td>
+</tr>
+<tr>
+<td>scalingAttribute</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Attribute used for styling. You may use an <a href="#markdown-header-objectpathreference">object path reference</a>.</td>
+</tr>
+<tr>
+<td>scalingValues</td>
+<td></td>
+<td>Object</td>
+<td></td>
+<td>Attribute values with defined color, e.g. <code>{&quot;charging&quot; : [220, 0, 0, 1]}</code>. An arbitrary amount of attribute values may be specified.</td>
+</tr>
+<tr>
+<td>scalingValueDefaultColor</td>
+<td></td>
+<td>Integer[]</td>
+<td><code>[0, 0, 0, 1]</code></td>
+<td>Default color for all values not defined in the previously described <em>scalingValues</em> field.</td>
+</tr>
+<tr>
+<td>circleSegmentsRadius</td>
+<td></td>
+<td>Float</td>
+<td><code>10</code></td>
+<td>Circle segment radius</td>
+</tr>
+<tr>
+<td>circleSegmentsStrokeWidth</td>
+<td></td>
+<td>Float</td>
+<td><code>4</code></td>
+<td>Circle segment width</td>
+</tr>
+<tr>
+<td>circleSegmentsGap</td>
+<td></td>
+<td>Float</td>
+<td><code>10</code></td>
+<td>Space between circle segments</td>
+</tr>
+<tr>
+<td>circleSegmentsBackgroundColor</td>
+<td></td>
+<td>Integer[]</td>
+<td><code>[255, 255, 255, 0]</code></td>
+<td>Circle color</td>
+</tr>
+</tbody>
+</table>
+<h4>Point.Cluster</h4>
+<p>Clustered points represent multiple close-by features with a single symbol. See the <a href="https://openlayers.org/en/latest/apidoc/module-ol_source_Cluster-Cluster.html" title="OpenLayers Cluster documentation">OpenLayers Cluster documentation</a> for further details. Display depends upon amount and position of features, current zoom level, and the layer’s defined <em>clusterDistance</em>. <em>PointClusters</em> may be displayed with these types:</p>
+<ul>
+<li><a href="#markdown-header-pointclustericon%22">Icon</a></li>
+<li><a href="#markdown-header-pointclustercircle">Circle</a></li>
+</ul>
+<p>You may also add text to clustered points. This is usually done to add the amount of clustered points to a feature. See chapter <a href="#markdown-header-pointclustertext">ClusterText</a>.</p>
+<h4>Point.Cluster.Icon</h4>
+<p>Please see the <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Icon-Icon.html" title="OpenLayers Icon documentation">OpenLayers Icon documentation</a> for additional details.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clusterImageName</td>
+<td></td>
+<td>String</td>
+<td><code>&quot;blank.png&quot;</code></td>
+<td>Cluster style image name</td>
+</tr>
+<tr>
+<td>clusterImageWidth</td>
+<td></td>
+<td>Integer</td>
+<td><code>1</code></td>
+<td>Cluster style image width</td>
+</tr>
+<tr>
+<td>clusterImageHeight</td>
+<td></td>
+<td>Integer</td>
+<td><code>1</code></td>
+<td>Cluster style image height</td>
+</tr>
+<tr>
+<td>clusterImageScale</td>
+<td></td>
+<td>Integer</td>
+<td><code>1</code></td>
+<td>Cluster style image scale</td>
+</tr>
+<tr>
+<td>clusterImageOffsetX</td>
+<td></td>
+<td>Float</td>
+<td><code>0.5</code></td>
+<td>Cluster style X offset</td>
+</tr>
+<tr>
+<td>clusterImageOffsetY</td>
+<td></td>
+<td>Float</td>
+<td><code>0.5</code></td>
+<td>Cluster style Y offset</td>
+</tr>
+</tbody>
+</table>
+<h4>Point.Cluster.Circle</h4>
+<p>Please see the <a href="https://openlayers.org/en/latest/apidoc/module-ol_geom_Circle-Circle.html" title="OpenLayers Circle documentation">OpenLayers Circle documentation</a> for additional details.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clusterCircleRadius</td>
+<td></td>
+<td>Integer</td>
+<td><code>10</code></td>
+<td>Cluster style circle radius</td>
+</tr>
+<tr>
+<td>clusterCircleFillColor</td>
+<td></td>
+<td>Integer[]</td>
+<td><code>[0, 153, 255, 1]</code></td>
+<td>Cluster style circle fill in rgba</td>
+</tr>
+<tr>
+<td>clusterCircleStrokeColor</td>
+<td></td>
+<td>Integer[]</td>
+<td><code>[0, 0, 0, 1]</code></td>
+<td>Cluster style stroke color in rgba</td>
+</tr>
+<tr>
+<td>clusterCircleStrokeWidth</td>
+<td></td>
+<td>Integer</td>
+<td><code>2</code></td>
+<td>Cluster style stroke width in pixels</td>
+</tr>
+</tbody>
+</table>
+<h4>Point.Cluster.Text</h4>
+<p>Please see the <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Text-Text.html" title="OpenLayers Text documentation">OpenLayers Text documentation</a> for additional details.</p>
+<p>Two types of cluster types may be shown, depending on the attribute <em>clusterTextType</em>:</p>
+<ul>
+<li><em>counter</em>: amount of clustered features</li>
+<li><em>text</em>: a fixed text</li>
+<li><em>none</em>: no text at all</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clusterTextType</td>
+<td></td>
+<td>String</td>
+<td><code>&quot;counter&quot;</code></td>
+<td>One of <code>&quot;counter&quot;</code>, <code>&quot;none&quot;</code>, <code>&quot;text&quot;</code></td>
+</tr>
+<tr>
+<td>clusterText</td>
+<td>only if <em>clusterTextType</em> is set to <code>&quot;text&quot;</code></td>
+<td>String</td>
+<td><code>&quot;undefined&quot;</code></td>
+<td>Text to be displayed</td>
+</tr>
+<tr>
+<td>clusterTextAlign</td>
+<td></td>
+<td>String</td>
+<td><code>&quot;center&quot;</code></td>
+<td>Text alignment</td>
+</tr>
+<tr>
+<td>clusterTextFont</td>
+<td></td>
+<td>String</td>
+<td><code>&quot;Comic Sans MS&quot;</code></td>
+<td>Text font</td>
+</tr>
+<tr>
+<td>clusterTextScale</td>
+<td></td>
+<td>Integer</td>
+<td><code>2</code></td>
+<td>Text scale</td>
+</tr>
+<tr>
+<td>clusterTextOffsetX</td>
+<td></td>
+<td>Integer</td>
+<td><code>0</code></td>
+<td>Text x offset</td>
+</tr>
+<tr>
+<td>clusterTextOffsetY</td>
+<td></td>
+<td>Integer</td>
+<td><code>2</code></td>
+<td>Text y offset</td>
+</tr>
+<tr>
+<td>clusterTextFillColor</td>
+<td></td>
+<td>Integer[]</td>
+<td><code>[255, 255, 255, 1]</code></td>
+<td>Text fill color in rgba</td>
+</tr>
+<tr>
+<td>clusterTextStrokeColor</td>
+<td></td>
+<td>Integer[]</td>
+<td><code>[0, 0, 0, 0]</code></td>
+<td>Text stroke color in rgba</td>
+</tr>
+<tr>
+<td>clusterTextStrokeWidth</td>
+<td></td>
+<td>Integer</td>
+<td><code>0</code></td>
+<td>Text stroke width</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 Hint: A cluster text is prioritized to a general text.</p>
+</blockquote>
+<h3>LineString</h3>
+<p>Please see the <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Stroke-Stroke.html" title="OpenLayers Stroke documentation">OpenLayers Stroke documentation</a> for additional details.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lineStrokeColor</td>
+<td></td>
+<td>Integer[]</td>
+<td><code>[255, 0, 0, 1]</code></td>
+<td>Line color in rgba</td>
+</tr>
+<tr>
+<td>lineStrokeWidth</td>
+<td></td>
+<td>Integer</td>
+<td><code>5</code></td>
+<td>Line width</td>
+</tr>
+<tr>
+<td>lineStrokeCap</td>
+<td></td>
+<td>String</td>
+<td><code>&quot;round&quot;</code></td>
+<td>Line cap style</td>
+</tr>
+<tr>
+<td>lineStrokeJoin</td>
+<td></td>
+<td>String</td>
+<td>“round”`</td>
+<td>Line join style</td>
+</tr>
+<tr>
+<td>lineStrokeDash</td>
+<td></td>
+<td>Integer[]</td>
+<td><code>null</code></td>
+<td>Line dash style</td>
+</tr>
+<tr>
+<td>lineStrokeDashOffset</td>
+<td></td>
+<td>Integer</td>
+<td><code>0</code></td>
+<td>Line dash offset</td>
+</tr>
+<tr>
+<td>lineStrokeMiterLimit</td>
+<td></td>
+<td>Integer</td>
+<td><code>10</code></td>
+<td>Miter limit</td>
+</tr>
+</tbody>
+</table>
+<h3>Polygon</h3>
+<p>Please see the <a href="%5B-%5D(https://openlayers.org/en/latest/apidoc/module-ol_style_Fill-Fill.html)" title="OpenLayers Fill documentation">OpenLayers Fill</a> and <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Stroke-Stroke.html" title="OpenLayers Stroke documentation">OpenLayers Stroke</a> documentation for additional details.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>polygonStrokeColor</td>
+<td></td>
+<td>Integer[]</td>
+<td><code>[0, 0, 0, 1]</code></td>
+<td>Line color in rgba</td>
+</tr>
+<tr>
+<td>polygonStrokeWidth</td>
+<td></td>
+<td>Integer</td>
+<td><code>1</code></td>
+<td>Line width</td>
+</tr>
+<tr>
+<td>polygonStrokeCap</td>
+<td></td>
+<td>String</td>
+<td><code>&quot;round&quot;</code></td>
+<td>Line cap style</td>
+</tr>
+<tr>
+<td>polygonStrokeJoin</td>
+<td></td>
+<td>String</td>
+<td><code>&quot;round&quot;</code></td>
+<td>Line join style</td>
+</tr>
+<tr>
+<td>polygonStrokeDash</td>
+<td></td>
+<td>Integer[]</td>
+<td><code>null</code></td>
+<td>Line dash style</td>
+</tr>
+<tr>
+<td>polygonStrokeDashOffset</td>
+<td></td>
+<td>Integer</td>
+<td><code>0</code></td>
+<td>Line dash offset</td>
+</tr>
+<tr>
+<td>polygonStrokeMiterLimit</td>
+<td></td>
+<td>Integer</td>
+<td><code>10</code></td>
+<td><code>Miter limit</code></td>
+</tr>
+<tr>
+<td>polygonFillColor</td>
+<td></td>
+<td>Integer[]</td>
+<td><code>[10, 200, 100, 0.5]</code></td>
+<td>Fill color in rgba</td>
+</tr>
+</tbody>
+</table>
+<h3>Cesium</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>color</td>
+<td></td>
+<td>String</td>
+<td></td>
+<td>Color as rgb(a) string</td>
+</tr>
+</tbody>
+</table>
+<h4>3DTileSets example</h4>
+<pre><code class="language-json">{
+    &quot;styleId&quot;: &quot;3DTileSetStyle&quot;,
+    &quot;rules&quot;: [
+        {
+            &quot;conditions&quot;: {
+                &quot;attr3&quot;: [15, 17],
+                &quot;attr4&quot;: &quot;abc&quot;
+            },
+            &quot;style&quot;: {
+                &quot;type&quot;: &quot;cesium&quot;,
+                &quot;color&quot;: &quot;rgba(0, 0, 255, 0.5)&quot;
+            }
+        },
+        {
+            &quot;conditions&quot;: {
+                &quot;attr2&quot;: [0, 10]
+            },
+            &quot;style&quot;: {
+                &quot;type&quot;: &quot;cesium&quot;,
+                &quot;color&quot;: &quot;rgba(0, 255, 0, 0.5)&quot;
+            }
+        },
+        {
+            &quot;conditions&quot;: {
+                &quot;attr1&quot;: 50.5
+            },
+            &quot;style&quot;: {
+                &quot;type&quot;: &quot;cesium&quot;,
+                &quot;color&quot;: &quot;rgb(255, 0, 0)&quot;
+            }
+        },
+        {
+            &quot;style&quot;: {
+                &quot;type&quot;: &quot;cesium&quot;,
+                &quot;color&quot;: &quot;rgba(150, 150, 150, 0.5)&quot;
+            }
+        }
+    ]
+}
+</code></pre>
+<h3>Text</h3>
+<p>Please see the <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Text-Text.html" title="OpenLayers Text documentation">OpenLayers Text documentation</a> for additional details.</p>
+<p>Use the attribute <em>labelField</em> within the <em>style</em> to choose one of the <em>FeatureProperties</em> to be printed and styled to the feature.
+.</p>
+<blockquote>
+<p>💡 Hint: Is no attribute <em>labelField</em> is set, no label will be created.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>labelField</td>
+<td>yes</td>
+<td>String</td>
+<td><code>&quot;undefined&quot;</code></td>
+<td>Feature attribute to be used as label. You may also use an <a href="#markdown-header-objectpathreference">object path reference</a> or an <a href="#markdown-header-attributeobject">attributeObject</a>.</td>
+</tr>
+<tr>
+<td>textAlign</td>
+<td></td>
+<td>String</td>
+<td><code>&quot;center&quot;</code></td>
+<td>Text alignment</td>
+</tr>
+<tr>
+<td>textFont</td>
+<td></td>
+<td>String</td>
+<td><code>&quot;Comic Sans MS&quot;</code></td>
+<td>Text font</td>
+</tr>
+<tr>
+<td>textScale</td>
+<td></td>
+<td>Integer</td>
+<td><code>2</code></td>
+<td>Text scale</td>
+</tr>
+<tr>
+<td>textOffsetX</td>
+<td></td>
+<td>Integer</td>
+<td><code>10</code></td>
+<td>Text x offset</td>
+</tr>
+<tr>
+<td>textOffsetY</td>
+<td></td>
+<td>Integer</td>
+<td><code>-8</code></td>
+<td>Text y offset</td>
+</tr>
+<tr>
+<td>textFillColor</td>
+<td></td>
+<td>Integer[]</td>
+<td>`[69, 96, 166, 1]</td>
+<td>Text fill color in rgba</td>
+</tr>
+<tr>
+<td>textStrokeColor</td>
+<td></td>
+<td>Integer[]</td>
+<td><code>[240, 240, 240, 1]</code></td>
+<td>Text stroke color in rgba</td>
+</tr>
+<tr>
+<td>textStrokeWidth</td>
+<td></td>
+<td>Integer</td>
+<td><code>3</code></td>
+<td>Text stroke width in pixels</td>
+</tr>
+<tr>
+<td>textSuffix</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;&quot;</code></td>
+<td>Text suffix added to each text</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 Hint: A cluster text is prioritized to this.</p>
+</blockquote>
+<h3>Legend</h3>
+<p>The textual legend description can be controlled by setting the parameter <em>legendValue</em> accordingly.</p>
+<pre><code class="language-json">{
+    &quot;style&quot;: {
+        &quot;legendValue&quot;: &quot;my legend text&quot;
+    }
+}
+</code></pre>
+<blockquote>
+<p>💡 Hint: The attribute <em>legendValue</em> must be unique per layer and geometry type; else, the legend will be incomplete.</p>
+</blockquote>
+<h2>Example</h2>
+<p>A SensorLayer example configuration.</p>
+<pre><code class="language-json">[
+    {
+        &quot;styleId&quot;: &quot;1711&quot;,
+        &quot;rules&quot;: [
+            {
+                &quot;conditions&quot;: {
+                    &quot;properties&quot;: {
+                        &quot;@Datastreams.1.Observations.0.result&quot;: [1, 3]
+                    }
+                },
+                &quot;style&quot;: {
+                    &quot;type&quot;: &quot;circle&quot;,
+                    &quot;circleFillColor&quot;: [255, 0, 0, 1],
+                    &quot;clusterType&quot;: &quot;circle&quot;
+                }
+            },
+            {
+                &quot;conditions&quot;: {
+                    &quot;properties&quot;: {
+                        &quot;@Datastreams.1.Observations.0.result&quot;: [3, 8]
+                    }
+                },
+                &quot;style&quot;: {
+                    &quot;type&quot;: &quot;circle&quot;,
+                    &quot;circleFillColor&quot;: [255, 255, 102, 1],
+                    &quot;clusterType&quot;: &quot;circle&quot;
+                }
+            },
+            {
+                &quot;conditions&quot;: {
+                    &quot;properties&quot;: {
+                        &quot;@Datastreams.1.Observations.0.result&quot;: [8, 50]
+                    }
+                },
+                &quot;style&quot;: {
+                    &quot;type&quot;: &quot;circle&quot;,
+                    &quot;circleFillColor&quot;: [132, 222, 2, 1],
+                    &quot;clusterType&quot;: &quot;circle&quot;
+                }
+            },
+            {
+                &quot;conditions&quot;: {
+                    &quot;properties&quot;: {
+                        &quot;@Datastreams.1.Observations.0.result&quot;: &quot;no data&quot;
+                    }
+                },
+                &quot;style&quot;: {
+                    &quot;type&quot;: &quot;circle&quot;,
+                    &quot;circleFillColor&quot;: [200, 200, 1, 1],
+                    &quot;clusterType&quot;: &quot;circle&quot;
+                }
+            },
+            {
+                &quot;conditions&quot;: { 
+                    &quot;properties&quot;:{
+                        &quot;@Datastreams.0.Observations.0.result&quot;:true
+                    }
+                },
+                &quot;style&quot;: { 
+                    &quot;lineStrokeColor&quot;: [44,127,184, 0.7]
+                }
+            },
+            {
+                &quot;style&quot;: {
+                    &quot;type&quot;: &quot;circle&quot;,
+                    &quot;circleFillColor&quot;: [211, 211, 211, 1],
+                    &quot;clusterType&quot;: &quot;circle&quot;
+                }
+            }
+        ]
+    }
+]
+</code></pre>

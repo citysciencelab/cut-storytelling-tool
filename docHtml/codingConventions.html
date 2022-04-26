@@ -1,0 +1,211 @@
+<h1>Coding conventions</h1>
+<h2>Introduction</h2>
+<p>As developer, you’re motivated to write your code not only fully functional, but as sustainable as possible. This encompasses a wide range of properties based on the “Clean Code” principles - which will hold true for your code.</p>
+<p>To decide as objectively as possible whether your code will pass its pull request, we’re using a linter and defined a set of function.</p>
+<p>For the linter, we use <strong><a href="https://eslint.org/">ESLint</a></strong>, with its configuration file <strong><a href="../.eslintrc">.eslintrc</a></strong> included in the repository. On each push, the linter and unit tests will run automatically. Should an error occur, the push is prevented.</p>
+<p>Our conventions are divided into two parts. Any violation of a section A convention does result in a pull request declined. Section B covers guidelines. Compliance with those improve the reusability and maintainability of the code. While not mandatory, please consider following these rules, too.</p>
+<h2>Conventions</h2>
+<h3>Section A</h3>
+<p>All the following rules must hold.</p>
+<h4>A.1 Linter and functionality</h4>
+<ul>
+<li>A.1.1 The code works on Edge, Chrome, and Firefox.</li>
+<li>A.1.2 The code works on the mobile view of the browsers mentioned in A.1.1.</li>
+<li>A.1.3 The linter is active.</li>
+<li>A.1.4 The linter detects no errors.</li>
+<li>A.1.5 Files are encoded <code>UTF-8</code>.</li>
+<li>A.1.6 Backbone: No arrow functions are used in templates.</li>
+</ul>
+<hr>
+<h4>A.2 Packages and libraries</h4>
+<ul>
+<li>A.2.1 The code uses the frameworks and libraries set by <em>Geowerkstatt</em>; they are not bypassed.</li>
+<li>A.2.2 No methods of <em>Underscore.js</em> are in use, except for calls to <code>_.template()</code>.</li>
+<li>A.2.3 No redundant packages are installed.</li>
+<li>A.2.4 JQuery is only to be used in combination with Backbone.js.</li>
+<li>A.2.5 The addition of packages/libraries has to be agreed on by the <em>LGV</em> team. At least 3 libs need to be evaluated before decisions can be made. Use a form from <strong>[library evalutaion](./library evaluation/)</strong> and add to PR.</li>
+</ul>
+<hr>
+<h4>A.3 Code</h4>
+<ul>
+<li>A.3.1 New files are created in accordance with the existing structure.</li>
+<li>A.3.2 Names for variables, functions, folders, and files are in English and speaking.</li>
+<li>A.3.3 Comments are written in English.</li>
+<li>A.3.4 A function’s block comment always describes its use.</li>
+<li>A.3.5 Styles are written in the <code>.scss</code> dialect.</li>
+<li>A.3.6 No use of <code>important!</code> in styles.</li>
+<li>A.3.7 Modules and components must only influence behavior and style of their own and child elements.</li>
+<li>A.3.8 No style changes may happen via JavaScript.</li>
+<li>A.3.9 All styles have a module dependant ID as prefix or are written in <code>scoped</code> mode.</li>
+<li>A.3.10 No inline styles exist.</li>
+</ul>
+<hr>
+<h4>A.4 Code documentation (via JSDoc)</h4>
+<ul>
+<li>A.4.1 The documentation is written in English.</li>
+<li>A.4.2 The documentation build via <code>npm run buildJsDoc</code> does not throw an error.</li>
+<li>A.4.3 Backbone: For each function a JSDoc block comment with description, parameters, return value, and possibly events, is provided.</li>
+<li>A.4.4 Backbone: Class definitions are located above the <code>initialize()</code> with specification of all default values. All event listeners, event triggers, and event requests occurring are part of the class documentation.</li>
+<li>A.4.5 Backbone: If a class is inherited from, a <em>lend</em> comment exists.</li>
+<li>A.4.6 Backbone: Namespaces are defined in <strong><a href="../devtools/jsdoc/namespaces.js">namespaces.js</a></strong>. They represent the folder structure and modules of the code.</li>
+<li>A.4.7 Backbone: Events are defined in <strong><a href="../devtools/jsdoc/events.js">events.js</a></strong>.</li>
+</ul>
+<hr>
+<h4>A.5 Unit tests</h4>
+<ul>
+<li>A.5.1 Unit tests exist for each testable function.</li>
+<li>A.5.2 For each module a test file exists with file extension <code>.test.js</code> (Backbone) or <code>.spec.js</code> (Vue). It lives in <strong><a href="../test/unittests/modules">test/unittests/modules</a></strong> within a folder structure mirroring the code folder structure.</li>
+<li>A.5.3 For each function a positive test (call with plausible values) and a negative test (call with bad values, e.g. <code>undefined</code>, <code>[]</code>, <code>{}</code>, <code>&quot;&quot;</code>, …).</li>
+</ul>
+<hr>
+<h4>A.6 Backwards compatibility and configurability</h4>
+<ul>
+<li>A.6.1 No hard-coded URLs or paths to external sources exist.</li>
+<li>A.6.2 Configurable parameters are documented in the <code>.md</code> files.</li>
+<li>A.6.3 All previously noted configuration parameters can still be used as described.</li>
+<li>A.6.4 Renamed or deleted parameters are marked <code>Deprecated</code>.</li>
+</ul>
+<hr>
+<h4>A.7 Languages</h4>
+<ul>
+<li>A.7.1 Locales are extended in or added to all relevant files.</li>
+<li>A.7.2 Locale files are maintained in at least English and German.</li>
+<li>A.7.3 The fallback language is German.</li>
+<li>A.7.4 The documentation is maintained in English, with the only exception being the <code>config.json.md</code>, which is also maintained in German as <code>config.json.de.md</code>.</li>
+</ul>
+<hr>
+<h4>A.8 Changelog</h4>
+<ul>
+<li>A.8.1 The changelog language is English.</li>
+<li>A.8.2 Deleting and adding features as well as fixing bugs is recorded in the changelog.</li>
+<li>A.8.3 Changes regarding UI, interfaces, or configuration are recorded in the changelog.</li>
+<li>A.8.4 Entries are assigned to one of the following categories: Added, Changed, Deprecated, Removed, Fixed.</li>
+<li>A.8.5 Entries are to be written in simple language. Avoid jargon. The changelog is read by users and developers alike.</li>
+</ul>
+<hr>
+<h4>A.9 File structure</h4>
+<p>A.9.1 The file structure of new modules is to be created according to the following scheme:</p>
+<pre><code class="language-bash">src
+|--app-store
+|   |-- utils
+|   |-- actions.js
+|   |-- getters.js
+|   |-- index.js
+|   |-- mutations.js
+|   |-- state.js
+|   |-- tests
+|
+|-- modules
+|   |-- exampleModule
+|   |   |-- components
+|   |   |   |-- ExampleModule.vue
+|   |   |   |-- ...
+|   |   |-- store
+|   |   |   |-- actionsExampleModule.js
+|   |   |   |-- constantsExampleModule.js
+|   |   |   |-- gettersExampleModule.js
+|   |   |   |-- indexExampleModule.js
+|   |   |   |-- mutationsExampleModule.js
+|   |   |   |-- stateExampleModule.js
+|   |   |
+|   |   |-- tests
+|   |   |   |-- unit
+|   |   |   |   |-- components
+|   |   |   |   |   |-- exampleModule.spec.js
+|   |   |   |   |-- store
+|   |   |   |   |   |-- actionsExampleModule.spec.js
+|   |   |   |   |   |-- gettersExampleModule.spec.js
+|   |   |   |   |   |-- mutationsExampleModule.spec.js
+|   |   |   |-- end2end	(module-specific)
+|   |   |   |   |-- ExampleModule.e2e.js
+|   |
+|   |-- controls
+|   |   |-- ControlBar.vue
+|   |   |-- ControlIcon.vue
+|   |   |-- gettersControls.js
+|   |   |-- indexControls.js
+|   |   |-- mutationsControls.js
+|   |   |-- ...
+|   |   |-- exampleControl
+|   |   |   |-- components
+|   |   |   |-- store
+|   |   |   |-- tests
+|   |
+|   |-- tools
+|   |   |-- actionsTool.js
+|   |   |-- indexTools.js
+|   |   |-- Tool.vue
+|   |   |-- exampleTool
+|   |   |   |-- components
+|   |   |   |-- store
+|   |   |   |-- tests
+|   |
+|-- share-components
+|   |-- exampleShareComponent.vue
+|
+|-- tests
+|   |--end2end
+|   |   |--exampleGlobalTest.e2e.js
+|
+|-- utils
+|   |-- exampleGlobalFunction.js
+|
+|-- addons.js
+|-- App.vue
+|-- MainNav.vue
+|-- MapRegion.vue
+</code></pre>
+<hr>
+<h3>Section B (optional)</h3>
+<p>The code is written as readable and understandable as possible. The goal is not to save lines, but the time of future developers working on the code.</p>
+<h4>B.1 Structure</h4>
+<ul>
+<li>B.1.1 Markup (templates), styles (CSS), and logic (controller) are written with clean separation of concerns.</li>
+<li>B.1.2 The controller does not produce any HTML.</li>
+<li>B.1.3 The code holds no redundancies. (<a href="https://de.wikipedia.org/wiki/Don%E2%80%99t_repeat_yourself">No duplicated code / DRY</a>)</li>
+<li>B.1.4 Common functions with global applicability are store in a helper file.</li>
+<li>B.1.5 Each function has <em>one</em> well-defined task. (<a href="https://de.wikipedia.org/wiki/Single-Responsibility-Prinzip">Curly’s Law</a>)</li>
+<li>B.1.6 Self-defined functions never change values by reference, but returns the calculated value.</li>
+<li>B.1.7 Templates contain no data-modifying logic or business logic.</li>
+<li>B.1.8 Vue: Persisting data and communicating is done via the VueX Store.</li>
+</ul>
+<hr>
+<h4>B.2 Readability and comprehensibility</h4>
+<ul>
+<li>B.2.1 The code is written as simple as possible. (<a href="https://de.wikipedia.org/wiki/KISS-Prinzip">KISS</a>)</li>
+<li>B.2.2 Arrow functions are used whenever possible. The <code>this</code> context is not dragged along unnecessarily.</li>
+<li>B.2.3 Function parameters and properties have defined default values where applicable.</li>
+<li>B.2.4 Native ECMAScript functions and objects are used.</li>
+<li>B.2.5 Type checks are done with <code>typeof</code>, <code>instanceof</code>, <code>Array.isArray()</code>, and <code>===</code>.</li>
+</ul>
+<hr>
+<h4>B.3 Vue Best Practice</h4>
+<ul>
+<li>B.3.1 Vue components in the <code>share-components</code> folder contain comments according to the <a href="https://vue-styleguidist.github.io/">Vue Styleguidist</a>.</li>
+<li>B.3.2 Backbone Radio - New Vue modules should avoid using the <code>Backbone.Radio</code> where possible. Radio events in old modules can be replaced with VueX store interaction.</li>
+<li>B.3.3 For requests it is recommended to use the library Axios.</li>
+</ul>
+<hr>
+<h4>B.4 Vue Best Practice - State management</h4>
+<ul>
+<li>B.4.1 For simple getters and mutations the generator functions provided in <code>./src/app-store/utils/generator.js</code> are used.</li>
+<li>B.4.2 The VueX helper functions (<code>mapGetters</code>, <code>mapMutations</code>, …) are used to integrate store data into components.</li>
+</ul>
+<hr>
+<h4>B.5 Vue Best Practice - Style</h4>
+<ul>
+<li>B.5.1 Use <code>scoped</code> within the style tag whenever possible.</li>
+<li>B.5.2 Avoid usage of the <code>!important</code> keyword.</li>
+<li>B.5.3 Avoid setting <code>width</code> and <code>height</code> to absolute values, as this hinders designing responsively.</li>
+<li>B.5.4 The global scss file <code>variables.scss</code> contains all variables required by <em>BootstrapV3</em> and the Masterportal. All theming variables (fonts, colors, …) are maintained here. The file <code>variables.scss</code> must only contain variables, mixins, and functions. Adding CSS rules would result in a repetition per import, bloating the CSS size. The <code>variables.scss</code> is imported to a component’s style tag by using the <code>import</code> command.</li>
+</ul>
+<hr>
+<h4>B.6 Error message output</h4>
+<ul>
+<li>B.6.1 Make use of the module <em>Alerting</em>.</li>
+<li>B.6.2 Write a speaking error that describes to the user what has gone wrong. Provide the message in multiple languages.</li>
+<li>B.6.3 Only display errors when relevant to the user and the user’s current work step.</li>
+<li>B.6.4 When communicating an error to the user, include what went wrong, why it went wrong, and what can be done to resolve the situation. If the user has no option to rectify the situation, reconsider whether the error needs to be communicated at all.</li>
+<li>B.6.5 For technical details use <code>console.error()</code> or <code>console.warn()</code> and print information in English for your fellow developers.</li>
+</ul>
+<hr>

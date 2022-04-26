@@ -1,0 +1,161 @@
+<blockquote>
+<p>This describes how to set up the local development environment.</p>
+</blockquote>
+<p>[TOC]</p>
+<h1>System requirements</h1>
+<h2>git</h2>
+<p>Install <strong><a href="http://git-scm.com/">git</a></strong>.</p>
+<p>The git installation path (<code>C:\Program Files\Git\bin\</code> by default) must be added to the system-wide PATH environment variable.</p>
+<h3>Firewall issues (optional)</h3>
+<p>The git protocol may be blocked by firewalls. Should this be an issue, configure git to use https instead.</p>
+<pre><code class="language-console">$ git config --global url.https://.insteadof git://
+</code></pre>
+<h3>Git proxy (optional)</h3>
+<p>If you’re working from behind a corporate proxy, you may need to configure a proxy for both the normal <strong>and</strong> admin shell that is started with administrative rights.</p>
+<pre><code class="language-console">$ git config --global http.proxy &lt;proxy-url:port&gt;
+$ git config --global https.proxy &lt;proxy-url:port&gt;
+</code></pre>
+<h2>Node.js</h2>
+<p>Install <strong><a href="http://nodejs.org">Node.js</a></strong>.</p>
+<p>The Node Package Manager (<strong><a href="http://npmjs.org">NPM</a></strong>) comes bundled with your Node.js installation. Please test the correct installation of these tools by executing <code>node -v</code> and <code>npm -v</code> in your command line; results should look like this:</p>
+<pre><code class="language-console">$ node -v
+v16.13.2
+
+$ npm -v
+8.1.2
+</code></pre>
+<p>Npm can be configured via command line. Configuration entries are added to the file <code>C:\Users\&lt;user&gt;\.npmrc</code> that may also be edited directly. To view your complete configuration, run these lines:</p>
+<pre><code class="language-console">$ npm config list
+$ npm config ls -l
+</code></pre>
+<h3>Cache configuration (optional)</h3>
+<p>Npm will use a package cache to avoid overly reloading packages. By default, this cache is in <code>C:\Users\&lt;user&gt;\AppData\Roaming\npm-cache</code>. Depending on your system, this folder may be synchronized within a roaming profile and slow down the process of logging in/out. In such circumstances it is advised to change the cache path by either editing the <code>.npmrc</code> file, or via <code>cmd</code> <strong>and</strong> <code>cmd</code> with administrator rights with e.g. this line:</p>
+<pre><code class="language-console">npm config set cache D:\npm-cache
+</code></pre>
+<h3>Proxy configuration (optional)</h3>
+<p>Only relevant when a proxy is in use.</p>
+<p>Run in <code>cmd</code> <strong>and</strong> <code>cmd</code> with administrative rights these lines:</p>
+<pre><code class="language-console">$ npm config set proxy &lt;proxy-url:port&gt;
+$ npm config set https-proxy &lt;proxy-url:port&gt;
+$ setx http_proxy &lt;proxy-url:port&gt;
+$ setx https_proxy &lt;proxy-url:port&gt;
+$ setx proxy &lt;proxy-url:port&gt;
+</code></pre>
+<p>For changes to take effect, close and reopen all your command lines. The <code>setx</code> lines will also add the proxies to your system variables. Please mind that other tools reading these variables may be affected.</p>
+<h3>Globally install npm packages with administrative rights (optional)</h3>
+<p>Some npm packages for the setup require global admin installation to be runnable via command line with your user account. To prepare this step, run a <code>cmd</code> with administrative rights:</p>
+<blockquote>
+<p>⚠️ Please determine the correct system path before running this line. The example path is taken from a german Windows 10 installation.</p>
+</blockquote>
+<pre><code class="language-console">$ npm config set prefix C:\Programme\nodejs\
+</code></pre>
+<p>Globally installed packages will be stored in that path. For more information refer to the <strong><a href="https://docs.npmjs.com/files/folders">npm folder documentation</a></strong>.</p>
+<h2>Masterportal installation</h2>
+<p>Execute the git bash as admin and navigate to the folder the repository is to be cloned to.</p>
+<p>Clone the repository and navigate to the folder created:</p>
+<pre><code class="language-console">$ git clone https://bitbucket.org/geowerkstatt-hamburg/masterportal.git
+$ cd masterportal
+</code></pre>
+<p>Install the <code>node_modules</code> required for the Masterportal:</p>
+<pre><code class="language-console">$ npm install
+</code></pre>
+<p>With this, all dependencies are installed.</p>
+<p>In case add-ons are to be used, please refer to the <strong><a href="addOnsVue.md">add-ons documentation</a></strong> for further assistance.</p>
+<h3><code>npm start</code></h3>
+<p>This command starts a local development server.</p>
+<pre><code class="language-console">$ npm start
+</code></pre>
+<ul>
+<li>After compilation, you may open the following links for comprehensive demo applications:
+<ul>
+<li><a href="https://localhost:9001/portal/basic">https://localhost:9001/portal/basic</a> A portal with a simple configuration</li>
+<li><a href="https://localhost:9001/portal/master">https://localhost:9001/portal/master</a> Simple topic tree</li>
+<li><a href="https://localhost:9001/portal/masterCustom">https://localhost:9001/portal/masterCustom</a> Complex topic tree with folder structure</li>
+<li><a href="https://localhost:9001/portal/masterDefault">https://localhost:9001/portal/masterDefault</a> Default topic tree loading all WMS layers from the <code>services.json</code> file</li>
+</ul>
+</li>
+</ul>
+<h3><code>npm run test</code></h3>
+<p>Executes unit tests. This also includes the unit tests of <strong><a href="addonsVue.md">add-ons</a></strong>.</p>
+<pre><code class="language-console">$ npm run test
+</code></pre>
+<blockquote>
+<p>⚠️ If not available, the folder <code>portalconfigs/test</code> must be created. The test runner will also execute all tests in this folder.</p>
+</blockquote>
+<ul>
+<li>bundles all tests</li>
+<li>logs unit test results to the console</li>
+<li>after changing tested code or unit tests, the command <code>npm run test</code> must be re-run</li>
+</ul>
+<h3><code>npm run build</code></h3>
+<p>Creates the distributable source folder for all portals, ready for publication.</p>
+<pre><code class="language-console">$ npm run build
+</code></pre>
+<p>The created files are stored in the <em>dist</em> folder. The folder will be created automatically in the Masterportal folder root. The source code is bundled within the <strong>Mastercode</strong> folder with the current version.</p>
+<h3><code>npm run buildExamples</code></h3>
+<p>Creates a build from the example folder.</p>
+<pre><code class="language-console">$ npm run buildExamples
+</code></pre>
+<p>The produced <code>examples.zip</code> and <code>examples-x.x.x.zip</code> (versioned) both contain runnable Masterportal instances (<em>Basic</em>) including a <em>resources</em> folder.</p>
+<h2>Updating dependencies</h2>
+<p>To update all NPM packages, run</p>
+<pre><code class="language-console">$ npm update
+</code></pre>
+<p>Please refer to the <a href="https://docs.npmjs.com/cli/v6/commands/npm-update">npm update documentation</a> on how caret and tilde prefixes to versions in the <code>package.json</code> are handled by this step.</p>
+<h2>Set up debugging in Visual Studio Code</h2>
+<ol>
+<li>
+<p>Install extension Firefox/Chrome-Debugger</p>
+<p><img src="https://vscode-westus.azurewebsites.net/assets/docs/nodejs/reactjs/debugger-for-chrome.png" alt="Debugger for Chrome on the marketplace"></p>
+</li>
+<li>
+<p>Switch to debugger view</p>
+<p><img src="https://i0.wp.com/www.mattgoldspink.co.uk/wp-content/uploads/2019/02/Screenshot-2019-02-01-at-21.03.13.png?w=640&amp;ssl=1" alt="Debugger view"></p>
+</li>
+<li>
+<p>Open <code>launch.json</code> configuration</p>
+<p><img src="https://docs.microsoft.com/ja-jp/windows/images/vscode-debug-launch-configuration.png" alt="Open launch.json configuration"></p>
+</li>
+<li>
+<p>Add a new Firefox configuration to the opened <code>launch.json</code> file</p>
+</li>
+</ol>
+<pre><code class="language-javascript">    {
+        &quot;name&quot;: &quot;Launch localhost&quot;,
+        &quot;type&quot;: &quot;firefox&quot;,
+        &quot;request&quot;: &quot;launch&quot;,
+        &quot;reAttach&quot;: true,
+        &quot;url&quot;: &quot;https://localhost:9001/&quot;,
+        &quot;webRoot&quot;: &quot;${workspaceFolder}/build&quot;,
+        &quot;pathMappings&quot;: [
+            {
+            &quot;url&quot;: &quot;webpack:///modules/core&quot;,
+            &quot;path&quot;: &quot;${workspaceFolder}/modules/core&quot;
+            }
+        ]
+    },
+</code></pre>
+<p>and/or a Chrome configuration.</p>
+<pre><code class="language-javascript">    {
+        &quot;name&quot;: &quot;Launch Chrome&quot;,
+        &quot;type&quot;: &quot;chrome&quot;,
+        &quot;request&quot;: &quot;launch&quot;,
+        &quot;url&quot;: &quot;https://localhost:9001/&quot;,
+        &quot;webRoot&quot;: &quot;${workspaceFolder}/build&quot;,
+    },
+</code></pre>
+<ol start="5">
+<li>Start server</li>
+</ol>
+<pre><code class="language-console">$ npm start
+</code></pre>
+<ol start="6">
+<li>
+<p>Choose (1) and start (2) a debugger</p>
+<p><img src="https://i.stack.imgur.com/aJatw.png" alt="Choose and start debugger"></p>
+</li>
+<li>
+<p>Set a breakpoint</p>
+<p><img src="https://docs.microsoft.com/en-us/sharepoint/dev/images/vscode-debugging-breakpoint-configured.png" alt="Set a breakpoint"></p>
+</li>
+</ol>

@@ -1,0 +1,353 @@
+<h1>Masterportal translation guide</h1>
+<p>This document describes how to work with languages and translations in the Masterportal. It is intended for beginners, advanced users, and experts.</p>
+<p>These are the objectives of the document:</p>
+<ol>
+<li>Explain how to expand language files and add new languages (beginners)</li>
+<li>Explain how to use localization in new models (advanced users)</li>
+<li>Explain how the internationalization system works (experts)</li>
+</ol>
+<h2>Background</h2>
+<p>This section provides background information and common knowledge on working with translations and languages in the Masterportal.</p>
+<h3>Technology</h3>
+<p>The Masterportal uses the <a href="https://www.i18next.com/">i18next</a> technology for translations.</p>
+<p>For advanced users and experts, we recommend reading the short and on-point i18next documentation.</p>
+<p>The following i18next plugins are used:</p>
+<ul>
+<li><a href="https://github.com/i18next/i18next-http-backend">i18next-http-backend</a> to use language files rather than hard coded translations</li>
+<li><a href="https://github.com/i18next/i18next-browser-languageDetector">i18next-browser-languagedetector</a> to detect the browser language, use the localStorage, and react to the URL query</li>
+</ul>
+<p>An i18next language change is currently broadcasted with this <code>Backbone.Radio</code> event: <code>&quot;i18next#RadioTriggerLanguageChanged&quot;</code>. i18next is available as global variable (also named <code>i18next</code>) and can be accessed in browser consoles via <code>Backbone.i18next</code>.</p>
+<blockquote>
+<p>⚠️ Please mind that Backbone is deprecated and will eventually be replaced with the VueX store.</p>
+</blockquote>
+<h3>Languages</h3>
+<p>The Masterportal’s main development team is seated in Hamburg, Germany. For this reason, the fallback language is currently German. You may change the fallback language within the <code>config.js</code> file.</p>
+<p>A complete english translation is provided.</p>
+<h3>Configuration</h3>
+<p>i18next’s languages are configured in the <code>config.js</code> file. See the <strong><a href="config.js.md">config.js documentation</a></strong> for details.</p>
+<h3>Language files</h3>
+<p>Language files are used to store translations by <em>keys</em>. These <em>keys</em> are used to access translations in-code and in the Masterportal configuration. To work with language files, basic JSON syntax knowledge is required.</p>
+<p>For beginners, we recommend a quick look at these JSON guides:</p>
+<ul>
+<li><a href="https://restfulapi.net/json-syntax/">https://restfulapi.net/json-syntax/</a></li>
+<li><a href="https://www.w3schools.com/js/js_json_syntax.asp">https://www.w3schools.com/js/js_json_syntax.asp</a></li>
+</ul>
+<h2>Language files</h2>
+<p>Language files are translation core. To support a language, a separate language file is needed for it. We decided to split translations into two files:</p>
+<ol>
+<li>common</li>
+<li>additional</li>
+</ol>
+<p>See the <strong><a href="i18next.jpeg">i18next architecture</a></strong> on how these files are used.</p>
+<h3>Common language file - <code>common.json</code></h3>
+<p>The common language file contains all translations used throughout the Masterportal in its standard configuration. This includes common modules as well as the most used menu entries and application logic.</p>
+<h3>Additional language file - <code>additional.json</code></h3>
+<p>The additional language file is used for add-ons (formerly <em>custom modules</em>).</p>
+<h2>Translation of config.json names</h2>
+<p>This section describes how to use i18next to translate config.json values</p>
+<p>After a best practice scenario, the background mechanisms are explained in detail.</p>
+<h3>Best practice scenario</h3>
+<h4>Menu</h4>
+<p>To translate a config.json value, the value itself must be formatted correctly. The formatted value must then be added to the translation files. If the part of the config.json is considered for translations by the Masterportal, the translation will take place. Please mind that only the field <code>&quot;name&quot;</code> is considered during translation.</p>
+<p><strong>Translation file common.json:</strong></p>
+<pre><code class="language-json">{
+    &quot;foo&quot;: {
+        &quot;bar&quot;: {
+            &quot;exampleMenuTitle&quot;: &quot;titulum menu&quot;,
+            &quot;exampleLayerName&quot;: &quot;aliquid&quot;,
+            &quot;exampleSubjectData&quot;: &quot;subject data&quot;
+        }
+    }
+}
+</code></pre>
+<p><strong>Translatable config.json menu part:</strong></p>
+<pre><code class="language-json">{
+    &quot;Portalconfig&quot;: {
+        &quot;menu&quot;: {
+            &quot;example&quot;: {
+                &quot;name&quot;: &quot;translate#common:foo.bar.exampleMenuTitle&quot;,
+                &quot;glyphicon&quot;: &quot;glyphicon-list&quot;,
+                &quot;isInitOpen&quot;: false
+            }
+        }
+    }
+}
+</code></pre>
+<p>The translation key must be prefixed with <code>&quot;translate#&quot;</code> and the file name. The structure of such a key is <code>translate#[filename]:[path.to.key]</code>, resulting in e.g. <code>translate#common:foo.bar.exampleMenuTitle</code>.</p>
+<p>The menu is programmed to react to the translation prefix <code>&quot;translate#&quot;</code>, and no further action is required.</p>
+<h3>Layer tree</h3>
+<p>The layer tree (de: “Themenbaum”) can be translated as well.</p>
+<blockquote>
+<p>⚠️ <strong>Plate note</strong>: Adding a translation key to a layer tree entry will overwrite any title or name of the service.</p>
+</blockquote>
+<p>If the treeType is <code>&quot;default&quot;</code> or <code>&quot;custom&quot;</code>, folder names can be specified. In the following example, the tree would show the value for the key <code>&quot;foo.bar.exampleSubjectData&quot;</code> instead of “Subject data”.</p>
+<p>Default translations:</p>
+<ul>
+<li>Baselayer: “Background maps” (de: “Hintergrundkarten”)</li>
+<li>Overlay: “Subject data” (de: “Fachthemen”)</li>
+<li>3d-layer: “3D data” (de: “3D Daten”)</li>
+</ul>
+<p><strong>Translatable config.json layer tree part:</strong></p>
+<pre><code class="language-json">{
+    &quot;Themenconfig&quot;: {
+        &quot;Fachdaten&quot;: {
+            &quot;name&quot;: &quot;translate#common:foo.bar.exampleSubjectData&quot;,
+            &quot;Layer&quot;: [
+                  {
+                    &quot;id&quot;: &quot;2128&quot;,
+                    &quot;name&quot;: &quot;translate#common:foo.bar.exampleLayerName&quot;
+                  }
+            ]
+        }
+    }
+}
+</code></pre>
+<p>These possibilities and hierarchy exist:</p>
+<ul>
+<li><code>&quot;name&quot;: &quot;my special subjects&quot;</code> is never translated</li>
+<li><code>&quot;name&quot;: &quot;translate#common:foo.bar.exampleMenuTitle&quot;</code> is translated if the key exists</li>
+<li>if no name is specified (that is, the field name does not exist), the default translation is applied (see above)</li>
+</ul>
+<h3>Tools</h3>
+<p>Tools (de: “Werkzeuge”) can be translated similarly to tools. This includes the menu entry within the “Tools” folder and the tool window’s title.</p>
+<p><strong>Translatable config.json tool part:</strong></p>
+<pre><code class="language-json">{
+    &quot;tools&quot;: {
+        &quot;name&quot;: &quot;Tools&quot;,
+        &quot;glyphicon&quot;: &quot;glyphicon-wrench&quot;,
+        &quot;children&quot;: {
+            &quot;draw&quot;: {
+                &quot;name&quot;: &quot;translate#common:foo.bar.exampleMenuTitle&quot;,
+                &quot;glyphicon&quot;: &quot;glyphicon-pencil&quot;
+            },
+        }
+    }
+}
+</code></pre>
+<p>The following possibilities and hierarchy exist:</p>
+<ul>
+<li><code>&quot;name&quot;: &quot;Draw / Write&quot;</code> is never translated</li>
+<li><code>&quot;name&quot;: &quot;translate#common:foo.bar.exampleMenuTitle&quot;</code> is translated if the key exists</li>
+<li>if no name is specified (that is, the field name does not exist), the name is set by the model.js (in this scenario, <code>../tools/draw/model.js</code>)</li>
+</ul>
+<h4>Define tool name in the <code>model.js</code></h4>
+<p>If the field <code>&quot;name&quot;</code> in the <code>model.js</code> is filled, it is interpreted as default name, and not translated.</p>
+<pre><code class="language-js">const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
+    defaults: Object.assign({}, Tool.prototype.defaults, {
+        name: &quot;Draw / Write&quot;,
+        ...
+</code></pre>
+<p>To add translation, use the attribute name <code>&quot;nameTranslationKey&quot;</code> to provide the key instead.</p>
+<pre><code class="language-js">const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
+    defaults: Object.assign({}, Tool.prototype.defaults, {
+        nameTranslationKey: &quot;common:menu.tools.draw&quot;,
+        ...
+</code></pre>
+<h2>Translation in add-ons</h2>
+<p>The language files can be found under <code>./addons/{addon-name}/locales/{language}/additional.json</code>.</p>
+<p>A translation is implemented this way:</p>
+<pre><code class="language-js">i18next.t(&quot;additional:modules.tools.example.title&quot;),
+</code></pre>
+<p><a href="https://bitbucket.org/geowerkstatt-hamburg/addons/src/master/populationRequest/">See this for an example.</a></p>
+<h2>Interesting i18nxt translation functions</h2>
+<h3>Interpolation</h3>
+<p>Use dynamic values in your translations.</p>
+<p><strong>Key</strong></p>
+<pre><code class="language-json">{
+    &quot;key&quot;: &quot;{{what}} is {{how}}&quot;
+}
+</code></pre>
+<p><strong>Example</strong></p>
+<pre><code class="language-js">i18next.t('key', { what: 'i18next', how: 'great' });
+// -&gt; &quot;i18next is great&quot;
+</code></pre>
+<p>See the <a href="https://www.i18next.com/translation-function/interpolation#basic">i18next interpolation documentation</a> for further details.</p>
+<h3>Singular / Plural</h3>
+<p>i18next features automatic recognition of singular and plural forms.</p>
+<blockquote>
+<p>⚠️ Note: The variable name must be <code>count</code>!</p>
+</blockquote>
+<p><strong>Keys</strong></p>
+<pre><code class="language-json">{
+  &quot;key&quot;: &quot;item&quot;,
+  &quot;key_plural&quot;: &quot;items&quot;,
+  &quot;keyWithCount&quot;: &quot;{{count}} item&quot;,
+  &quot;keyWithCount_plural&quot;: &quot;{{count}} items&quot;
+}
+</code></pre>
+<p><strong>Example</strong></p>
+<pre><code class="language-js">i18next.t('key', {count: 0}); // -&gt; &quot;items&quot;
+i18next.t('key', {count: 1}); // -&gt; &quot;item&quot;
+i18next.t('key', {count: 5}); // -&gt; &quot;items&quot;
+i18next.t('key', {count: 100}); // -&gt; &quot;items&quot;
+i18next.t('keyWithCount', {count: 0}); // -&gt; &quot;0 items&quot;
+i18next.t('keyWithCount', {count: 1}); // -&gt; &quot;1 item&quot;
+i18next.t('keyWithCount', {count: 5}); // -&gt; &quot;5 items&quot;
+i18next.t('keyWithCount', {count: 100}); // -&gt; &quot;100 items&quot;
+</code></pre>
+<p>See the <a href="https://www.i18next.com/translation-function/plurals#singular-plural">i18next singular-plural documentation</a> for more details.</p>
+<h3>Nesting</h3>
+<p>Nesting allows you to reference other keys within a translation.</p>
+<p><strong>Keys</strong></p>
+<pre><code class="language-json">{
+    &quot;nesting1&quot;: &quot;1 $t(nesting2)&quot;,
+    &quot;nesting2&quot;: &quot;2 $t(nesting3)&quot;,
+    &quot;nesting3&quot;: &quot;3&quot;,
+}
+</code></pre>
+<p><strong>Example</strong></p>
+<pre><code class="language-js">i18next.t('nesting1'); // -&gt; &quot;1 2 3&quot;
+</code></pre>
+<p>See the <a href="https://www.i18next.com/translation-function/nesting#basic">i18next nesting documentation</a> for more details.</p>
+<h3>Formatting</h3>
+<p>Please read the <a href="https://www.i18next.com/translation-function/formatting#formatting">i18next formatting documentation</a> regarding this topic.</p>
+<h2>Common errors</h2>
+<blockquote>
+<p>You have set a translation key, but instead of the actual translation, the key is visible.</p>
+</blockquote>
+<p>Please check the correct spelling of the key. i18next can’t find this key neither in the selected language file nor in the fallback language file.</p>
+<blockquote>
+<p>You have set a translation key in the config.json, but the translation does not change on language changes.</p>
+</blockquote>
+<p>Please check first whether the module controlled by this part of the config.json has been programmed to react to translations at all.</p>
+<blockquote>
+<p>Expert hint: The <code>config.json</code> is translated initially when the Masterportal starts. For language changes, <code>i18next.translate</code> must be used in the code. If not used, the content will permanently remain in the initially active language.</p>
+</blockquote>
+<h2>How to use i18next in production Vue</h2>
+<p>The following section is a guide on how to integrate i18next into your MP project using Vue.</p>
+<h3>Translate in the template</h3>
+<p>The translation of the values to be displayed can be done directly in the template of a Vue component. For this purpose <code>$t()</code> is used. In the following example, the <code>name</code> attribute is translated.</p>
+<p>ExampleTemplate</p>
+<pre><code class="language-vue">&lt;template lang=&quot;html&quot;&gt;
+    &lt;Tool
+        :title=&quot;$t(name)&quot;
+        :icon=&quot;glyphicon&quot;
+    &gt;
+&lt;/template&gt;
+</code></pre>
+<h3>Translate in script</h3>
+<p>To translate the values in the script part of a Vue component, this must be done in the computed property. For this purpose <code>this.$t()</code> is used.</p>
+<pre><code class="language-js"> computed: {
+    /**
+    * Gets the exmaple attributes.
+    * @returns {Object} The exmaple attributes.
+    */
+    example: function () {
+        const example = {
+            exampleTitle: this.$t(&quot;common:foo.bar.exampleTitle&quot;),
+            exampleText: this.$t(&quot;common:foo.bar.exampleText&quot;)
+        };
+
+        return example;
+    },
+ }
+</code></pre>
+<h3>Translate to unit tests</h3>
+<p>i18next provides a test mode for unit tests.
+In test mode, no real translation is performed (no files are loaded).
+Instead, i18next always responds with the specified key.</p>
+<p>For unit tests in the master portal, we use “Chai”.
+When i18next exits in a component, a mock must be created in the associated unit test.</p>
+<pre><code class="language-js">import {config} from &quot;@vue/test-utils&quot;;
+config.mocks.$t = key =&gt; key;
+</code></pre>
+<h2>How to use i18next in production Backbone (Deprecated)</h2>
+<p>This section is a guide on how to integrate i18next into your Masterportal project using MV*.</p>
+<h3>Translate your model</h3>
+<p>To translate values for your model with i18next, simply set the values using the translation function of i18next. Listening to the <code>Backbone.Radio</code> event <code>&quot;i18next#RadioTriggerLanguageChanged&quot;</code> allows value changes to the currently chosen language at run-time.</p>
+<p><strong>ExampleModel:</strong></p>
+<pre><code class="language-js">const ExampleModel = Backbone.Model.extend(/** @lends ExampleModel.prototype */ {
+    defaults: {
+        currentLng: &quot;&quot;,
+        exampleTitle: &quot;&quot;,
+        exampleText: &quot;&quot;
+    },
+    /**
+     * @class ExampleModel
+     * @extends Backbone.Model
+     * @memberof Example
+     * @constructs
+     * @listens i18next#RadioTriggerLanguageChanged
+     */
+    initialize: function () {
+        this.listenTo(Radio.channel(&quot;i18next&quot;), {
+            &quot;languageChanged&quot;: this.changeLang
+        });
+
+        this.changeLang(i18next.language);
+    },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function (lng) {
+        this.set({
+            currentLng: lng,
+            exampleTitle: i18next.t(&quot;common:foo.bar.exampleTitle&quot;),
+            exampleText: i18next.t(&quot;common:foo.bar.exampleText&quot;)
+        });
+    }
+});
+
+export default ExampleModel;
+</code></pre>
+<h4>Listen to your model</h4>
+<p>If set up properly, the view listens to model changes and renders the template when required. The Masterportal uses <em>Underscore.js</em> for templating. To show how this SHOULD be implemented, the model from above is used to set up the MV* in the following example.</p>
+<p><strong>ExampleTemplate:</strong></p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;div class=&quot;title&quot;&gt;&lt;%= exampleTitle %&gt;&lt;/div&gt;
+&lt;div class=&quot;text&quot;&gt;&lt;%= exampleText %&gt;&lt;/div&gt;
+</code></pre>
+<p><strong>ExampleView:</strong></p>
+<pre><code class="language-js">import ExampleTemplate from &quot;text-loader!./template.html&quot;;
+import ExampleModel from &quot;./model&quot;;
+
+const ExampleView = Backbone.View.extend(/** @lends ExampleView.prototype */{
+    /**
+     * @class ExampleView
+     * @extends Backbone.View
+     * @memberof Example
+     * @constructs
+     * @listens ExampleModel#changeExampleText
+     */
+    initialize: function () {
+        this.model = new ExampleModel();
+
+        this.listenTo(this.model, {
+            &quot;change:currentLng&quot;: this.render
+        });
+
+        this.render();
+    },
+
+    /**
+     * renders the view
+     * @param {ExampleModel} model the model of the view
+     * @param {Boolean} value the values of the changes made to the model
+     * @returns {Void}  -
+     */
+    render: function () {
+        const template = _.template(ExampleTemplate),
+            params = this.model.toJSON();
+
+        this.$el.html(template(params));
+
+        return this;
+    }
+});
+
+export default ExampleView;
+</code></pre>
+<h2>Unit Tests</h2>
+<p>i18next provides a test mode for unit testing. In test mode, no real translation will be provided, and no files are loaded. Instead, i18next simply responds with the given key.</p>
+<p>For Masterportal unit testing, <code>chai</code> is used as an assertion library.</p>
+<p>To set up i18next for unit testing, initialize it in the language <code>&quot;cimode&quot;</code>. This sets i18next to test mode.</p>
+<pre><code class="language-js">before(function () {
+    i18next.init({
+        lng: &quot;cimode&quot;,
+        debug: false
+    });
+    model = new Model();
+});
+</code></pre>

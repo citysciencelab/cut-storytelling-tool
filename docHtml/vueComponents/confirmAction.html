@@ -1,0 +1,94 @@
+<h1>The ConfirmAction module</h1>
+<p>A simple modal dialog asking the user to confirm an action or make a decision. Callback functions can be defined for confirmation, rejection, and closing the modal dialog.</p>
+<p>A confirmation action may be added in this fashion:</p>
+<pre><code class="language-js">import store from &quot;[...]/src/app-store/index&quot;;
+
+// [...]
+
+const
+    confirmCallback = function () {
+        console.log(&quot;Confirmed&quot;);
+    },
+    denyCallback = function () {
+        console.log(&quot;Denied&quot;);
+    },
+    escapeCallback = function () {
+        console.log(&quot;Escaped&quot;);
+    },
+    confirmActionSettings = {
+        actionConfirmedCallback: confirmCallback,
+        actionDeniedCallback: denyCallback,
+        actionEscapedCallback: escapeCallback,
+        confirmCaption: &quot;OK&quot;,
+        textContent: &quot;Do you want to delete this important document?&quot;,
+        denyCaption: &quot;Deny&quot;,
+        forceClickToClose: true,
+        headline: &quot;Warning&quot;
+    };
+
+store.dispatch(&quot;ConfirmAction/addSingleAction&quot;, confirmActionSettings);
+
+</code></pre>
+<h2>Parameters used to create a ConfirmAction</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>actionConfirmedCallback</td>
+<td>no</td>
+<td>Function</td>
+<td>false</td>
+<td>Callback function fired on clicking the confirmation button.</td>
+</tr>
+<tr>
+<td>actionDeniedCallback</td>
+<td>no</td>
+<td>Function</td>
+<td>false</td>
+<td>Callback function fired on clocking the deny button.</td>
+</tr>
+<tr>
+<td>confirmCaption</td>
+<td>no</td>
+<td>String</td>
+<td>“common:modules.confirmAction.defaultConfirmCaption”</td>
+<td>Confirm button text.</td>
+</tr>
+<tr>
+<td>textContent</td>
+<td>no</td>
+<td>String</td>
+<td>“common:modules.confirmAction.defaultCopy”</td>
+<td>Display text describing the situation to be resolved.</td>
+</tr>
+<tr>
+<td>denyCaption</td>
+<td>no</td>
+<td>String</td>
+<td>“common:modules.confirmAction.defaultDenyCaption”</td>
+<td>Deny button text.</td>
+</tr>
+<tr>
+<td>forceClickToClose</td>
+<td>no</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Flag indicating whether the modal dialog may only be closed on clicking the X button.</td>
+</tr>
+<tr>
+<td>headline</td>
+<td>no</td>
+<td>String</td>
+<td>“common:modules.confirmAction.defaultHeadline”</td>
+<td>Header text.</td>
+</tr>
+</tbody>
+</table>

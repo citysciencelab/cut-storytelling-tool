@@ -1,0 +1,210 @@
+<blockquote>
+<p><strong><a href="doc.md">Return to the Masterportal documentation</a></strong>.</p>
+</blockquote>
+<h1>rest-services.json</h1>
+<p>This is the file referred to by the <em>config.js</em> as <code>restConf</code>. It is read on Masterportal start-up and kept in memory. Modules may then refer to the web service definitions in it.</p>
+<p>The file defines all web services that do not belong to OGC services like WMS and WFS; that is, all services not requested for visually representing data. See our <strong><a href="https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/src/master/rest-services-internet.json">master restConf file</a></strong> for an example.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Unique <code>rest-services.json</code> entry ID</td>
+<td><code>&quot;1&quot;</code></td>
+</tr>
+<tr>
+<td>name</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Service name</td>
+<td><code>&quot;CSW Summary&quot;</code></td>
+</tr>
+<tr>
+<td>typ</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Service type</td>
+<td><code>&quot;CSW&quot;</code></td>
+</tr>
+<tr>
+<td>url</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Service URL</td>
+<td><code>&quot;http://metaver.de/trefferanzeige?docuuid=&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Usually defined services</h2>
+<ol>
+<li>Print services</li>
+<li>Metadata sources (CSW HMDK)</li>
+<li>BKG geocoding service</li>
+<li>Gazetteer URL</li>
+<li>WPS</li>
+<li>Email Services</li>
+<li>virtualcityPLANNER Service</li>
+</ol>
+<p>In some scenarios different URLs are required, depending on whether requests are sent from an Intranet or the Internet. This can be solved by providing two files only differing in their service URLs. While filenames can be chosen freely, we suggest using these names:</p>
+<ul>
+<li><code>rest-services-internet.json</code></li>
+<li><code>rest-services-intranet.json</code></li>
+</ul>
+<h2><code>rest-services-internet.json</code> example file</h2>
+<pre><code class="language-json">[
+  {
+    &quot;id&quot;: &quot;1&quot;,
+    &quot;name&quot;: &quot;CSW HMDK Summary&quot;,
+    &quot;url&quot;: &quot;http://metaver.de/csw?service=CSW&amp;version=2.0.2&amp;request=GetRecordById&amp;typeNames=csw:Record&amp;elementsetname=summary&quot;,
+    &quot;typ&quot;: &quot;CSW&quot;
+  },
+  {
+    &quot;id&quot; : &quot;2&quot;,
+    &quot;name&quot; : &quot;Metadata URL&quot;,
+    &quot;url&quot; : &quot;http://metaver.de/trefferanzeige?docuuid=&quot;,
+    &quot;typ&quot; : &quot;URL&quot;
+  }
+]
+</code></pre>
+<h2>Print services</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Unique <code>rest-services.json</code> entry ID</td>
+<td><code>&quot;1&quot;</code></td>
+</tr>
+<tr>
+<td>name</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Service name</td>
+<td><code>&quot;MapFishPrintService&quot;</code></td>
+</tr>
+<tr>
+<td>typ</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Service type</td>
+<td><code>&quot;Print&quot;</code></td>
+</tr>
+<tr>
+<td>url</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Service URL</td>
+<td><code>&quot;https://printbase.de/printfolder/&quot;</code> or <code>&quot;https://printbase.de/printfolder/print/&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">{
+    &quot;id&quot; : &quot;mapfish_internet&quot;,
+    &quot;name&quot; : &quot;MapFishPrintService&quot;,
+    &quot;typ&quot;: &quot;Print&quot;,
+    &quot;url&quot;: &quot;https://printbase.de/printfolder/&quot;
+
+}
+</code></pre>
+<h2>virtualcityPLANNER Service</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Unique <code>rest-services.json</code> entry ID</td>
+<td><code>&quot;1&quot;</code></td>
+</tr>
+<tr>
+<td>name</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Service name</td>
+<td><code>&quot;virtualcityPLANNER 1&quot;</code></td>
+</tr>
+<tr>
+<td>typ</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Service type</td>
+<td><code>&quot;virtualcityPLANNER&quot;</code></td>
+</tr>
+<tr>
+<td>url</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Service URL</td>
+<td><code>&quot;https://devel.virtualcityplanner.de&quot;</code></td>
+</tr>
+<tr>
+<td>scenarioId</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>ScenarioId</td>
+<td><code>&quot;BjtEA4zwBEiZeG2CX&quot;</code></td>
+</tr>
+<tr>
+<td>projectId</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>ProjectId</td>
+<td><code>&quot;2wbbuKTSqojZMBooz&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">{
+    &quot;id&quot; : &quot;virtualcityPLANNER&quot;,
+    &quot;name&quot; : &quot;virtualcityPLANNER&quot;,
+    &quot;url&quot;: &quot;https://devel.virtualcityplanner.de&quot;,
+    &quot;projectId&quot;: &quot;2wbbuKTSqojZMBooz&quot;,
+    &quot;typ&quot;: &quot;virtualcityPLANNER&quot;,
+    &quot;scenarioId&quot;: &quot;BjtEA4zwBEiZeG2CX&quot;
+}
+</code></pre>

@@ -1,0 +1,358 @@
+<h1>Vue.js Add-ons</h1>
+<p>The Masterportal offers a mechanism to inject your own developments into the sources, without them becoming a part of the Masterportal repository. See <strong><a href="setupDev.md">setting up the development environment</a></strong> for more information.</p>
+<p>An add-on in itself is identically programmed as a native module is. For an example, see <strong><a href="vueTutorial.md">Tutorial 01: Creating a new module (Scale Switcher)</a></strong>. However, an add-on lives in another repository and thus allows separate management.</p>
+<p>All add-ons to be added are placed in the folder <code>addons</code> found at Masterportal root level. Any number of such add-ons may be configured in a portal’s <strong><a href="config.js.md">config.js</a></strong>. Add-ons may bring their own <code>package.json</code> file to specify further dependencies.</p>
+<p>Please adhere to the following structure, in this example adding a tool (MyAddon1) and a GFI theme (MyGfiTheme):</p>
+<h2>Add-on folder structure</h2>
+<h3>File system example</h3>
+<p>Only files related to add-ons must be placed in the <code>addons</code> folder.</p>
+<pre><code>addons
+|-- myAddon1
+|    index.js
+|   |-- components
+|	|   |-- MyAddOn1.vue
+|   |   |-- ...
+|	|-- store
+|   |   |-- actionsMyAddOn1.js
+|   |   |-- gettersMyAddOn1.js
+|   |   |-- indexMyAddOn1.js
+|   |   |-- mutationsMyAddOn1.js
+|   |   |-- MyAddOn1.js // the equivalent of index.js
+|   |
+|	|-- locales
+|	|   |-- de
+|   |	|   |-- additional.json
+|	|   |-- en
+|   |	|   |-- additional.json
+|   |
+|	|-- doc
+|	|   |-- config.json.md
+|   |
+|	|-- tests
+|	|   |-- end2end
+|   |	|   |-- MyAddOn1.e2e.js
+|	|   |-- unit
+|   |	|   |-- components
+|   |   |	|   |-- MyAddOn1.spec.js
+|   |	|   |-- store
+|   |   |	|   |-- actionsMyAddOn1.spec.js
+|   |   |	|   |-- gettersMyAddOn1.spec.js
+|   |   |	|   |-- mutationsMyAddOn1.spec.js
+|   |
+|   |-- package.json
+
+|-- myGfiTheme
+|   index.js
+|   |-- components
+|	|   |-- MyGfiTheme.vue
+|   |   |-- ...
+|	|-- locales
+|	|   |-- de
+|   |	|   |-- additional.json
+|	|   |-- en
+|   |	|   |-- additional.json
+|   |
+|	|-- doc
+|	|   |-- config.json.md
+|   |
+|	|-- tests
+|	|   |-- end2end
+|   |	|   |-- MyGfiTheme.e2e.js
+|	|   |-- unit
+|   |	|   |-- components
+|   |   |	|   |-- MyGfiTheme.spec.js
+|   |
+|   |-- package.json
+
+|-- myGFIThemesFolder
+|   |-- myGFISubFolder
+|   |   index.js
+|   |   |-- components
+|   |   |   |-- MyGfiTheme.vue
+|   |   |   |-- ...
+|   |   |-- locales
+|   |   |   |-- de
+|   |   |   |   |-- additional.json
+|   |   |   |-- en
+|   |   |   |   |-- additional.json
+|   |   |
+|   |   |-- doc
+|   |   |   |-- config.json.md
+|   |   |
+|   |   |-- tests
+|   |   |   |-- end2end
+|   |   |   |   |-- MyGfiTheme.e2e.js
+|   |   |   |-- unit
+|   |   |   |   |-- components
+|   |   |   |   |   |-- MyGfiTheme.spec.js
+|   |   |
+|   |   |-- package.json
+
+|-- myControl
+|   index.js
+|   |-- components
+|	|   |-- MyControl.vue
+|   |   |-- ...
+|	|-- locales
+|	|   |-- de
+|   |	|   |-- additional.json
+|	|   |-- en
+|   |	|   |-- additional.json
+|   |
+|	|-- doc
+|	|   |-- config.json.md
+|   |
+|	|-- tests
+|	|   |-- end2end
+|   |	|   |-- MyControl.e2e.js
+|	|   |-- unit
+|   |	|   |-- components
+|   |   |	|   |-- MyControl.spec.js
+|   |
+|   |-- package.json
+
+|-- myControlFolder
+|   |-- myControlSubFolder
+|   |   index.js
+|   |   |-- components
+|   |   |   |-- MyControl.vue
+|   |   |   |-- ...
+|   |   |-- locales
+|   |   |   |-- de
+|   |   |   |   |-- additional.json
+|   |   |   |-- en
+|   |   |   |   |-- additional.json
+|   |   |
+|   |   |-- doc
+|   |   |   |-- config.json.md
+|   |   |
+|   |   |-- tests
+|   |   |   |-- end2end
+|   |   |   |   |-- MyControl.e2e.js
+|   |   |   |-- unit
+|   |   |   |   |-- components
+|   |   |   |   |   |-- MyControl.spec.js
+|   |   |
+|   |   |-- package.json
+
+
+</code></pre>
+<p>The entry point of each add-on must be a file named <code>index.js</code> on add-on folder root level.</p>
+<h3>Configuration file</h3>
+<p>Within the add-ons folder, a configuration file <code>addonsConf.json</code> must exist. This file is to contain JSON that has the add-on’s name as key; i.e., an add-on in <code>addons/myAddOn1</code> would have <code>myAddOn1</code> as key.</p>
+<h4><code>addonsConf.json</code> example</h4>
+<p>Matching the example above, this would be a fitting configuration.</p>
+<p>Two types of add-ons are supported:</p>
+<ul>
+<li>tools (<code>&quot;type&quot;: &quot;tool&quot;</code>)</li>
+<li>GFI themes (<code>&quot;type&quot;: &quot;gfiTheme&quot;</code>)</li>
+<li>Controls (<code>&quot;type&quot;: &quot;control&quot;</code>)</li>
+</ul>
+<p>All entries to the <code>addonsConf.json</code> defined by an object are expected to be written in Vue. The deprecated Backbone add-ons are always defined by a string.</p>
+<p>By default, an add-on’s key is the name of its folder. By using the parameter <code>path</code> you may specify any other path. This way, you may group multiple add-ons in a folder.</p>
+<pre><code class="language-json">{
+  &quot;myAddOn1&quot;: {
+    &quot;vue&quot;: true
+  },
+  &quot;myGfiTheme&quot;: {
+    &quot;type&quot;: &quot;gfiTheme&quot;
+  },
+  &quot;anotherGFITheme&quot;: {
+    &quot;type&quot;: &quot;gfiTheme&quot;,
+    &quot;path&quot;: &quot;myGFIThemesFolder/myGFISubFolder&quot;
+  }
+  },
+  &quot;myControl&quot;: {
+    &quot;type&quot;: &quot;control&quot;
+  },
+  &quot;anotherControl&quot;: {
+    &quot;type&quot;: &quot;control&quot;,
+    &quot;path&quot;: &quot;myControlFolder/myControlSubFolder&quot;
+  }
+}
+</code></pre>
+<p>Only files related to <code>add-ons</code> may end up in this folder.</p>
+<p>For additional required dependencies not included in the Masterportal, add a separate minimal <code>package.json</code> file.</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;exampleAddon&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;description&quot;: &quot;I'm an example! I can say hello world.&quot;,
+  &quot;dependencies&quot;: {
+    &quot;hello&quot;: &quot;^0.3.2&quot;
+  }
+}
+</code></pre>
+<h2>Add-on example</h2>
+<h3>Create files</h3>
+<p>The add-on example shall have the name <em>VueAddOn</em> with entry point file <code>index.js</code>. The component <code>VueAddOn.vue</code> is placed in the folder <code>components</code>. From this, the following file structure results:</p>
+<pre><code>myMasterPortalFolder/
+    addons/
+        vueAddOn/
+            index.js
+            components/
+                VueAddOn.vue
+            store
+                VueAddOn.js
+    devtools/
+    doc/
+    [...]
+</code></pre>
+<h3>Example store</h3>
+<pre><code class="language-js">// myMasterPortalFolder/addons/VueAddon/store/VueAddon.js
+
+import GenericTool from &quot;../../../src/modules/tools/indexTools&quot;;
+import composeModules from &quot;../../../src/app-store/utils/composeModules&quot;;
+import getters from &quot;./gettersVueAddon&quot;;
+import mutations from &quot;./mutationsVueAddon&quot;;
+import actions from &quot;./actionsVueAddon&quot;;
+import state from &quot;./stateVueAddon&quot;;
+
+export default composeModules([GenericTool, {
+    namespaced: true, // mandatory
+    state,
+    mutations,
+    actions,
+    getters
+}]);
+</code></pre>
+<p>The contents <code>state</code>, <code>mutations</code>, <code>actions</code>, and <code>getters</code> may be placed in separate files or can alternatively be written directly to the store file. Please mind that setting <code>namespaced: true</code> is mandatory.</p>
+<pre><code class="language-vue">// myMasterPortalFolder/addons/vueAddon/components/VueAddon.vue
+
+&lt;script&gt;
+import Tool from &quot;../../../src/modules/tools/Tool.vue&quot;;
+import {mapGetters, mapActions, mapMutations} from &quot;vuex&quot;;
+import getters from &quot;../store/gettersVueAddon&quot;;
+import mutations from &quot;../store/mutationsVueAddon&quot;;
+
+export default {
+    name: &quot;VueAddon&quot;,
+    components: {
+        Tool
+    },
+    computed: {
+        ...mapGetters(&quot;Tools/VueAddon&quot;, Object.keys(getters))
+    },
+    created () {
+        this.$on(&quot;close&quot;, this.close);
+    },
+    /**
+     * Put initialize here if mounting occurs after config parsing
+     * @returns {void}
+     */
+    mounted () {
+        this.initialize();
+        if (this.isActive) {
+            this.setActive(true);
+        }
+        this.applyTranslationKey(this.name);
+    },
+    methods: {
+        ...mapActions(&quot;Tools/VueAddon&quot;, [
+            &quot;initialize&quot;
+        ]),
+        ...mapMutations(&quot;Tools/VueAddon&quot;, Object.keys(mutations)),
+
+        /**
+         * Closes this tool window by setting active to false
+         * @returns {void}
+         */
+        close () {
+            this.setActive(false);
+
+            // TODO replace trigger when Menu is migrated
+            // set the backbone model to active false for changing CSS class in menu (menu/desktop/tool/view.toggleIsActiveClass)
+            // else the menu-entry for this tool is always highlighted
+            const model = Radio.request(&quot;ModelList&quot;, &quot;getModelByAttributes&quot;, {id: this.$store.state.Tools.VueAddon.id});
+
+            if (model) {
+                model.set(&quot;isActive&quot;, false);
+            }
+        }
+    }
+};
+&lt;/script&gt;
+
+&lt;template lang=&quot;html&quot;&gt;
+    &lt;Tool
+        :title=&quot;$t(name)&quot;
+        :icon=&quot;glyphicon&quot;
+        :active=&quot;active&quot;
+        :render-to-window=&quot;renderToWindow&quot;
+        :resizable-window=&quot;resizableWindow&quot;
+        :deactivateGFI=&quot;deactivateGFI&quot;
+    &gt;
+        &lt;template v-slot:toolBody&gt;
+            &lt;div
+                v-if=&quot;active&quot;
+                id=&quot;vue-addon&quot;
+            &gt;
+                {{ $t(&quot;additional:modules.tools.vueAddon.content&quot;) }}
+            &lt;/div&gt;
+        &lt;/template&gt;
+    &lt;/Tool&gt;
+&lt;/template&gt;
+</code></pre>
+<h3>Writing the <code>index.js</code> file</h3>
+<p>Within the <code>index.js</code> file, all components (Vue components, store, translations, …) are aggregated and exported via a single entry point.</p>
+<p>Theoretically, the entry point may be configured within the <code>addonsConf.json</code> file arbitrarily. However, it is required to be <code>index.js</code>, since webpack will not load the module correctly else.</p>
+<p>Please check that all components are imported correctly, and not in a <code>.default</code> one level deeper in the object. This may e.g. happen if you use <code>import * as VueAddonComponent from&quot; ./components/VueAddon.vue &quot;;</code> to import the component.</p>
+<pre><code class="language-js">// myMasterPortalFolder/addons/VueAddon/index.js
+
+import VueAddonComponent from &quot;./components/VueAddon.vue&quot;;
+import VueAddonStore from &quot;./store/VueAddon&quot;;
+import deLocale from &quot;./locales/de/additional.json&quot;;
+import enLocale from &quot;./locales/en/additional.json&quot;;
+
+export default {
+    component: VueAddonComponent,
+    store: VueAddonStore,
+    locales: {
+        de: deLocale,
+        en: enLocale
+    }
+};
+</code></pre>
+<h3>Creating the <code>addonsConf.json</code></h3>
+<pre><code class="language-json">// myMasterPortalFolder/addons/addonsConf.json
+
+{
+  &quot;vueAddon&quot;: {
+    &quot;type&quot;: &quot;tool&quot;
+  }
+}
+</code></pre>
+<h3>Activate the add-on example in the portal’s <code>config.js</code></h3>
+<pre><code class="language-js">// myMasterPortalFolder/config.js
+const Config = {
+    // [...]
+    addons: [&quot;VueAddon&quot;],
+    // [...]
+};
+</code></pre>
+<h3>Configure the add-on example as tool in the portal’s <code>config.json</code> for it to appear in the menu</h3>
+<pre><code class="language-json">// myMasterPortalFolder/config.json
+...
+    &quot;tools&quot;: {
+        &quot;name&quot;: &quot;Tools&quot;,
+        &quot;glyphicon&quot;: &quot;glyphicon-wrench&quot;,
+        &quot;children&quot;: {
+           &quot;vueAddon&quot;: {
+                &quot;name&quot;: &quot;translate#additional:modules.tools.vueAddon.title&quot;,
+                &quot;glyphicon&quot;: &quot;glyphicon-th-list&quot;
+          },
+</code></pre>
+<h3>Write JSDoc</h3>
+<p>For this, create a file <code>namespaces.js</code> in the <code>jsdoc</code> folder and <strong>add</strong> <code>Addons</code> as <code>@memberof</code>.</p>
+<pre><code class="language-js">/**
+ * @namespace ExampleAddon
+ * @memberof Addons
+ */
+</code></pre>
+<p>In the file <code>model.js</code>, <code>@memberOf</code> must be prefixed with <code>Addons.</code> for this to work correctly.</p>
+<pre><code class="language-js">/**
+* @class exampleAddon
+* @extends Tool
+* @memberof Addons.ExampleAddon
+* @constructs
+*/
+</code></pre>

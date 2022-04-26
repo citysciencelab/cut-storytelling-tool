@@ -1,0 +1,280 @@
+<h1>Unit tests in Vue</h1>
+<p>For an example test suite, see <em>masterportal/src/modules/tools/scaleSwitcher/tests</em>. Tests can be started in the Masterportal’s root folder by either calling <code>npm run test:vue</code> (one-time run) or <code>npm run test:vue:watch</code> (updates on file changes).</p>
+<h2>How to write tests</h2>
+<h3>Test file location</h3>
+<p>Test files are to be saved with the file extension <code>.spec.js</code>. All test files are to be placed next to the component and store being tested in a separate <code>tests/unit</code> folder. For illustration, the following example was constructed using the <code>ScaleSwitcher</code> component.</p>
+<pre><code>src
+|-- modules
+|   |-- tools
+|   |   |-- scaleSwitcher
+|   |   |   |-- components
+|   |   |	|   |-- ScaleSwitcher.vue
+|   |   |   |   |-- ...
+|   |   |	|-- store
+|   |   |   |   |-- actionsScaleSwitcher.js
+|   |   |   |   |-- gettersScaleSwitcher.js
+|   |   |   |   |-- indexScaleSwitcher.js
+|   |   |   |   |-- mutationsScaleSwitcher.js
+|   |   |   |   |-- stateScaleSwitcher.js
+|   |   |   |
+|   |   |	|-- tests
+|   |   |	|   |-- end2end
+|   |   |   |	|   |-- ScaleSwitcher.e2e.js
+|   |   |	|   |-- unit
+|   |   |   |	|   |-- components
+|   |   |   |   |	|   |-- ScaleSwitcher.spec.js
+|   |   |   |	|   |-- store
+|   |   |   |   |	|   |-- actionsScaleSwitcher.spec.js
+|   |   |   |   |	|   |-- gettersScaleSwitcher.spec.js
+|   |   |   |   |	|   |-- mutationsScaleSwitcher.spec.js
+</code></pre>
+<h2>File structure</h2>
+<p>The following sub-chapters contain example test files that may be used as guideline.</p>
+<h3>Component test</h3>
+<pre><code class="language-js">// modules/tools/scaleSwitcher/components/ScaleSwitcher.vue
+import Vuex from &quot;vuex&quot;;
+import {config, shallowMount, createLocalVue} from &quot;@vue/test-utils&quot;;
+import ScaleSwitcherComponent from &quot;../../../components/ScaleSwitcher.vue&quot;;
+import ScaleSwitcher from &quot;../../../store/indexScaleSwitcher&quot;;
+import {expect} from &quot;chai&quot;;
+import sinon from &quot;sinon&quot;;
+
+const localVue = createLocalVue();
+
+localVue.use(Vuex);
+config.mocks.$t = key =&gt; key;
+
+describe(&quot;src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue&quot;, () =&gt; {
+    const scales = [&quot;1000&quot;, &quot;5000&quot;, &quot;10000&quot;],
+        mockMapGetters = {
+            scales: () =&gt; scales,
+            scale: sinon.stub(),
+            getView: sinon.stub()
+        },
+        mockMapActions = {
+            setResolutionByIndex: sinon.stub()
+        },
+        mockMapMutations = {
+            setScale: sinon.stub()
+        },
+        mockConfigJson = {
+            Portalconfig: {
+                menu: {
+                    tools: {
+                        children: {
+                            scaleSwitcher:
+                            {
+                                &quot;name&quot;: &quot;translate#common:menu.tools.scaleSwitcher&quot;,
+                                &quot;glyphicon&quot;: &quot;glyphicon-resize-small&quot;,
+                                &quot;renderToWindow&quot;: true
+                            }
+                        }
+                    }
+                }
+            }
+        };
+    let store;
+
+    beforeEach(() =&gt; {
+        store = new Vuex.Store({
+            namespaced: true,
+            modules: {
+                Tools: {
+                    namespaced: true,
+                    modules: {
+                        ScaleSwitcher
+                    }
+                },
+                Map: {
+                    namespaced: true,
+                    getters: mockMapGetters,
+                    mutations: mockMapMutations,
+                    actions: mockMapActions
+                }
+            },
+            state: {
+                configJson: mockConfigJson
+            }
+        });
+        store.dispatch(&quot;Tools/ScaleSwitcher/setActive&quot;, true);
+    });
+
+    it(&quot;renders the scaleSwitcher&quot;, () =&gt; {
+        const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue});
+
+        expect(wrapper.find(&quot;#scale-switcher&quot;).exists()).to.be.true;
+    });
+
+    it(&quot;do not render the scaleSwitchers select if not active&quot;, () =&gt; {
+        store.dispatch(&quot;Tools/ScaleSwitcher/setActive&quot;, false);
+        const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue});
+
+        expect(wrapper.find(&quot;#scale-switcher&quot;).exists()).to.be.false;
+    });
+
+    it(&quot;has initially set all scales to select&quot;, () =&gt; {
+        const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue}),
+            options = wrapper.findAll(&quot;option&quot;);
+
+        expect(options.length).to.equal(scales.length);
+        scales.forEach((scale, index) =&gt; {
+            expect(scale).to.equal(options.at(index).attributes().value);
+        });
+    });
+
+    it(&quot;select another scale changes scale in map&quot;, async () =&gt; {
+        const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue}),
+            options = wrapper.findAll(&quot;option&quot;);
+
+        options.at(1).trigger(&quot;change&quot;);
+        await wrapper.vm.$nextTick();
+        expect(options.at(1).attributes().selected).to.equals(&quot;true&quot;);
+        expect(options.at(0).attributes().selected).to.be.undefined;
+        expect(options.at(2).attributes().selected).to.be.undefined;
+        // maps scale change should be called
+        expect(mockMapActions.setResolutionByIndex.calledOnce).to.equal(true);
+
+        options.at(2).trigger(&quot;change&quot;);
+        await wrapper.vm.$nextTick();
+        expect(options.at(2).attributes().selected).to.equals(&quot;true&quot;);
+        // maps scale change should be called
+        expect(mockMapActions.setResolutionByIndex.calledTwice).to.equal(true);
+    });
+
+    it(&quot;method selectionChanged shall change currentScale&quot;, async () =&gt; {
+        const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue}),
+            event = {
+                target: {
+                    value: scales[1],
+                    selectedIndex: 1
+                }
+            };
+
+        wrapper.vm.selectionChanged(event);
+        await wrapper.vm.$nextTick();
+
+        expect(store.state.Tools.ScaleSwitcher.currentScale).to.equals(scales[1]);
+    });
+});
+</code></pre>
+<h3>Store/getters test</h3>
+<pre><code class="language-js">// modules/tools/scaleSwitcher/store/gettersScaleSwitcher.js
+import {expect} from &quot;chai&quot;;
+import getters from &quot;../../../store/gettersScaleSwitcher&quot;;
+import stateScaleSwitcher from &quot;../../../store/stateScaleSwitcher&quot;;
+
+const {currentScale} = getters;
+
+describe(&quot;src/modules/tools/scaleSwitcher/store/gettersScaleSwitcher.js&quot;, () =&gt; {
+    describe(&quot;getCurrentScale&quot;, () =&gt; {
+        it(&quot;returns the scale from state&quot;, () =&gt; {
+            const state = {
+                currentScale: &quot;1000&quot;
+            };
+
+            expect(currentScale(state)).to.equals(&quot;1000&quot;);
+        });
+    });
+    describe(&quot;testing default values&quot;, () =&gt; {
+        it(&quot;returns the name default value from state&quot;, () =&gt; {
+            expect(name(stateScaleSwitcher)).to.be.equals(&quot;common:menu.tools.scaleSwitcher&quot;);
+        });
+        // (...) - test further default values
+    });
+});
+</code></pre>
+<h3>Store/actions test</h3>
+<p>Note the use of the <code>testAction</code> function imported from <code>test/unittests/VueTestUtils</code>. This tool shortens the code required and provides a sound action test base.</p>
+<pre><code class="language-js">// modules/tools/scaleSwitcher/store/actionsScaleSwitcher.js
+import testAction from &quot;../../../../../../../test/unittests/VueTestUtils&quot;;
+import actions from &quot;../../../store/actionsScaleSwitcher&quot;;
+
+const {setActive} = actions;
+
+describe(&quot;src/modules/tools/scaleSwitcher/store/actionsScaleSwitcher.js&quot;, () =&gt; {
+    describe(&quot;setActive&quot;, () =&gt; {
+        const rootState = {
+            Map: {
+                scale: &quot;60033.65329850641&quot;
+            }
+        };
+
+        it(&quot;setActive(true) should set rounded currentScale&quot;, done =&gt; {
+            const payload = true,
+                mutationActivePayload = true,
+                mutationScalePayload = 60000;
+
+            testAction(setActive, payload, {}, rootState, [
+                {type: &quot;setActive&quot;, payload: mutationActivePayload},
+                {type: &quot;setCurrentScale&quot;, payload: mutationScalePayload}
+            ], {}, done);
+
+        });
+        it(&quot;setActive(false) should not set currentScale&quot;, done =&gt; {
+            const payload = false,
+                mutationActivePayload = false;
+
+            testAction(setActive, payload, {}, rootState, [
+                {type: &quot;setActive&quot;, payload: mutationActivePayload}
+            ], {}, done);
+
+        });
+    });
+});
+</code></pre>
+<h3>Store/mutations test</h3>
+<pre><code class="language-js">// modules/tools/scaleSwitcher/store/mutationsScaleSwitcher.js
+import {expect} from &quot;chai&quot;;
+import mutations from &quot;../../../store/mutationsScaleSwitcher&quot;;
+
+const {setCurrentScale} = mutations;
+
+describe(&quot;src/modules/tools/scaleSwitcher/store/mutationsScaleSwitcher.js&quot;, () =&gt; {
+    describe(&quot;setCurrentScale&quot;, () =&gt; {
+        it(&quot;sets the scale to state&quot;, () =&gt; {
+            const state = {
+                currentScale: null
+            },
+            payload = &quot;1000&quot;;
+
+            setCurrentScale(state, payload)
+            expect(state.currentScale).to.equals(&quot;1000&quot;);
+        });
+    });
+});
+</code></pre>
+<h2>About the libraries</h2>
+<h3>Mocha</h3>
+<p><code>describe</code> is used to declare a section. In the example, the outer <code>describe</code> is used to describe the module being tested. Nested <code>describe</code>s are used to name the function currently under test.</p>
+<p>You may use <code>describe.only</code> to run only a specific test section, or <code>describe.skip</code> to temporarily comment out tests during development.</p>
+<pre><code class="language-js">describe(name, callback)
+</code></pre>
+<p>With <code>it</code>, the single test cases are encapsulated. For the first parameter, provide a descriptive text that outlines a property the method under test should have.</p>
+<p>For the second parameter, provide a callback function that checks whether this described property actually holds. Use <code>expect</code> (see below) for checks.</p>
+<p>The suffixes <code>.skip</code> and <code>.only</code> work the same way as described for <code>describe</code>.</p>
+<pre><code class="language-js">it(testCaseDescription, callback)
+</code></pre>
+<p>The function <code>before</code> is used for test preparations for multiple <code>it</code> cases and is executed <em>once</em> within the surrounding <code>describe</code>.</p>
+<p>The function <code>beforeEach</code> is used for test preparations per <code>it</code> case and is therefore executed <code>once</code> per <code>it</code> in the surrounding <code>describe</code>.</p>
+<p>The functions <code>after</code> and <code>afterEach</code> work comparably after test execution.</p>
+<p>For more documentation regarding Mocha, please read the <a href="https://mochajs.org/">Mocha documentation pages</a>.</p>
+<h3>Chai</h3>
+<p>Each <code>it</code> case should contain a call to the <code>expect</code> function.</p>
+<p><code>expect</code> can be used to check one or multiple properties of an object.</p>
+<pre><code class="language-js">expect(model.testMe()).to.be.true;
+
+expect(model.testMe()).to.deep.equal({name: &quot;Jon Snow&quot;});
+</code></pre>
+<p>For more documentation regarding Chai, please read the <a href="https://chaijs.com/api/bdd/">Chai API reference</a>.</p>
+<h2>Best practices</h2>
+<p>A test should fail for a <em>single reason</em>. That is, per <code>it</code> only a single <code>expect</code> should be used, if possible.</p>
+<p>Test cases should be <em>simple</em>. Two small quick tests are preferred to one complex construct covering multiple cases.</p>
+<p>When testing, ponder which <em>edge cases</em> should be considered. That is, test with unusual values, e.g. extremely high or low values, or seemingly nonsensical inputs like <code>undefined</code> or the empty string.</p>
+<p>Test positively and negatively. That is, do not only ensure that the expected result is returned, but also validate no undesired side effects are produced.</p>
+<h2>Further reading</h2>
+<ul>
+<li><a href="https://vue-test-utils.vuejs.org/">Vue test utils</a></li>
+<li><a href="https://lmiller1990.github.io/vue-testing-handbook/">Vue testing handbook</a></li>
+<li><a href="https://vuejs.org/v2/guide/unit-testing.html#ad">Vue.js testing guide</a></li>
+<li><a href="https://vuex.vuejs.org/guide/testing.html">VueX testing</a></li>
+</ul>

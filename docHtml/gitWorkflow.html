@@ -1,0 +1,74 @@
+<blockquote>
+<p>Our git workflow.</p>
+</blockquote>
+<p>[TOC]</p>
+<h1>Git workflow</h1>
+<h2>Commit</h2>
+<ul>
+<li>Commit early, commit often</li>
+<li>A commit represents an idea or a change</li>
+<li>Use verbs for your commits: <strong>add</strong>/<strong>remove</strong>/<strong>update</strong>/<strong>refactor</strong>/<strong>fix</strong>/<strong>config</strong>/<strong>hotfix</strong></li>
+<li>Do not commit <code>console.log</code> statements</li>
+</ul>
+<h2>Branches and workflow</h2>
+<ul>
+<li>The development of new features and bug fixing usually takes place on features branches based on the <code>dev</code> branch. We use the <strong><a href="https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow">Gitflow Workflow</a></strong>.</li>
+<li>The development branch is named <code>dev</code>.</li>
+<li>Use verbs for merge commits: <strong>add</strong>/<strong>remove</strong>/<strong>update</strong>/<strong>refactor</strong>/<strong>fix</strong>/<strong>config</strong>/<strong>hotfix</strong>. Merge commit messages should be in English and speaking.</li>
+<li>Branches are deleted after merging.</li>
+</ul>
+<h2>Pushing</h2>
+<ul>
+<li>The commits are written to the repository with thematically closed pushes; however, the aim is not to include entire features in one push, but to model activities. Pushing your local development state on a daily basis is recommended to prevent data loss.</li>
+</ul>
+<h2>Definition Of Done</h2>
+<ul>
+<li>Before opening a pull request, the author checks whether these conditions are met:
+<ul>
+<li>The target branch has been merged to the feature branch immediately before opening the pull request. Hence, there are no merge conflicts.</li>
+<li>The code is fine:
+<ul>
+<li>There are no warnings or errors in the linter report.</li>
+<li>The code honors the <strong><a href="codingConventions.md">conventions</a></strong>.</li>
+</ul>
+</li>
+<li>The documentation has been extended:
+<ul>
+<li><strong><a href="doc.md">User documentation</a></strong></li>
+<li><strong><a href="devdoc.md">Developer documentation</a></strong></li>
+</ul>
+</li>
+<li>Test suites with tests are available:
+<ul>
+<li>For new functions: A short description of a test case to add it to the test protocol is provided. (Should result from the ticket.)</li>
+<li>Unit tests are written: <strong><a href="testing.md">Test documentation</a></strong></li>
+</ul>
+</li>
+<li>A functional tests on a build portal was executed:
+<ul>
+<li>According to ticket description.</li>
+<li>Cross-Browser (Chrome, IE 11, FF) - mobile behavior emulated in the browser.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2>Forks</h2>
+<ul>
+<li><strong>External developers</strong> are not team members and do not receive write permission to the repository. Please <strong><a href="https://bitbucket.org/geowerkstatt-hamburg/masterportal/fork">fork</a></strong> the <code>dev</code> branch for your development.</li>
+<li>Commit and push to your fork. From the fork, a pull request targeting the <code>dev</code> branch may be opened.</li>
+<li>Please also fix bugs targeting the <code>dev</code> branch:
+<ul>
+<li>Please indicate in the pull request if the bug should be published as a hotfix… Please note our <strong><a href="versioning.md">hints regarding versioning</a></strong>.</li>
+<li>Team members take care of transferring the required code.</li>
+<li>We use <strong><a href="https://git-scm.com/docs/git-cherry-pick">cherry-picking</a></strong> to apply <strong>hotfix</strong> commits. This is simpler when <strong>hotfix</strong> commits contain the hotfix and nothing else. Please note our <strong><a href="codingConventions.md">coding conventions</a></strong> regarding this.</li>
+</ul>
+</li>
+</ul>
+<h2>Pull Requests</h2>
+<ul>
+<li>Commits pushed to branches may only reach the <code>dev</code> branch via pull requests.</li>
+<li><strong>External developers</strong> set their PR’s reviewer to <strong><a href="https://bitbucket.org/geowerkstatt">geowerkstatt</a></strong>. This is a technical user that will note the team members.</li>
+<li>The review is done by at least one team member. The reviewer checks the pull request based on the Definition of Done. Errors or comments may be added directly to the code or as comments within the pull request.</li>
+<li>A pull request passing all checks is approved. The approving team member merges the commit for <strong>external developers</strong>.</li>
+</ul>

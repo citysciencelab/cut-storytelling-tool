@@ -1,0 +1,155 @@
+<h1>The BasicResizeHandle Component</h1>
+<p>This component may be used to make a container “resizable”. The components is the handle itself.</p>
+<p>Component may be used like this:</p>
+<pre><code>&lt;script&gt;
+
+import BasicResizeHandle from &quot;./share-components/BasicResizeHandle.vue&quot;;
+
+// [...]
+
+export default {
+    name: &quot;MyComponent&quot;,
+    components: {
+        BasicResizeHandle
+    },
+    methods: {
+        onStartResizing: function (event) {
+            console.log(event);
+        },
+        onEndResizing: function (event) {
+            console.log(event);
+        },
+        onLeftScreen: function (event) {
+            console.log(event);
+        },
+        onResizing: function (event) {
+            console.log(event);
+        }
+    }
+};
+&lt;/script&gt;
+
+&lt;template&gt;
+    &lt;div 
+        id=&quot;container-to-resize&quot;
+        @startResizing=&quot;onStartResizing&quot;
+        @endResizing=&quot;onEndResizing&quot;
+        @leftScreen=&quot;onLeftScreen&quot;
+        @resizing=&quot;onResizing&quot;
+    &gt;
+        &lt;BasicResizeHandle
+            v-for=&quot;hPos in ['tl', 't', 'tr', 'r', 'br', 'b', 'bl', 'l']&quot;
+            :key=&quot;hPos&quot;
+            :hPos=&quot;hPos&quot;
+            targetEl=&quot;#container-to-resize&quot;
+            grid=&quot;10&quot;
+            minW=&quot;50&quot;
+            minH=&quot;50&quot;
+        /&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;style lang=&quot;scss&quot; scoped&gt;
+    #container-to-resize {
+        width:100px;
+        height:100px;
+        background-color:#AAAAAA;
+        
+        .basic-resize-handle {
+            position:absolute;
+            width:6px;
+            height:6px;
+            background-color:#FF0000;
+        }
+        #basic-resize-handle-tl { top:0px; left:0px; }
+        #basic-resize-handle-t { top:0px; left:50%; }
+        #basic-resize-handle-tr { top:0px; right:0px;}
+        #basic-resize-handle-r { top:50%; right:0px;}
+        #basic-resize-handle-br { bottom:0px; right:0px;}
+        #basic-resize-handle-b { bottom:0px; right:50%;}
+        #basic-resize-handle-bl { bottom:0px; left:0px;}
+        #basic-resize-handle-l { bottom:50%; left:0px;}
+    }
+&lt;/style&gt;
+
+</code></pre>
+<h2>Parameters of Component</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>targetEl</td>
+<td>no</td>
+<td>String</td>
+<td>“”</td>
+<td>Selector used on document node downwards to find the “draggable” node. If omitted, param “targetSel” will be used instead.</td>
+</tr>
+<tr>
+<td>targetSel</td>
+<td>no</td>
+<td>String</td>
+<td>“offsetParent”</td>
+<td>Selector to find “draggable” node upwards, starting at handle itself. If “offsetParent” ist used as value, “draggable” element will be the offsetParent node. This param is only used, when “targetEl” is omitted.</td>
+</tr>
+<tr>
+<td>grid</td>
+<td>no</td>
+<td>Number</td>
+<td>1</td>
+<td>A snapping grid may be defined with this param.</td>
+</tr>
+<tr>
+<td>hPos</td>
+<td>no</td>
+<td>String</td>
+<td>“bl”</td>
+<td>Handle position. This position only changes handle’s behaviour, not its actual position on screen. Possible Values are “tl” (top left), “t” (top), “tr” (top right), “r” (right), “br” (bottom right), “b” (bottom), “bl” (bottom left), “l” (left).</td>
+</tr>
+<tr>
+<td>symResize</td>
+<td>no</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Flag for symmetric resizing. If true, the element will scale relative to its center point. If false, it will scale relative to its opposing handle’s point.</td>
+</tr>
+<tr>
+<td>minW</td>
+<td>no</td>
+<td>Number</td>
+<td>-Infinity</td>
+<td>Minimum width of element.</td>
+</tr>
+<tr>
+<td>maxW</td>
+<td>no</td>
+<td>Number</td>
+<td>Infinity</td>
+<td>Maximum width of element.</td>
+</tr>
+<tr>
+<td>minH</td>
+<td>no</td>
+<td>Number</td>
+<td>-Infinity</td>
+<td>Minimum height of element.</td>
+</tr>
+<tr>
+<td>minH</td>
+<td>no</td>
+<td>Number</td>
+<td>Infinity</td>
+<td>Maximum height of element.</td>
+</tr>
+</tbody>
+</table>
+<h2>Events</h2>
+<p>BasicResizeHandle Component throws following events:
+startResizing, endResizing, leftScreen, resizing</p>

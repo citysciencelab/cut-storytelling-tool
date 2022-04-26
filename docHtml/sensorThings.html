@@ -1,0 +1,616 @@
+<blockquote>
+<p><strong><a href="doc.md">Return to the Masterportal documentation</a></strong>.</p>
+</blockquote>
+<p>[TOC]</p>
+<h1>Sensor Layer</h1>
+<p>This document describes the technical details of the Masterportal’s sensor layer based on the <em>SensorThingsAPI</em>.</p>
+<h2>Definition of terms</h2>
+<h3>OGC SensorThingsAPI</h3>
+<p>The OGC’s (Open Geospatial Consortium) SensorThingsAPI “provides an open standard-based and geospatial-enabled framework to interconnect the Internet of Things devices, data, and applications over the Web.” (<a href="https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#6">source</a>) The framework provides a data model describing the connection between the “Broker” (Server), a network of “Publishers” (Sensors), and “Clients” (in this case, the Masterportal application).</p>
+<p>For more information on the open standard-based <em>SensorThingsAPI</em>, visit:</p>
+<ul>
+<li><a href="https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#1">https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#1</a></li>
+<li><a href="http://developers.sensorup.com/docs/">http://developers.sensorup.com/docs/</a></li>
+<li><a href="https://gost1.docs.apiary.io/#reference/0/things">https://gost1.docs.apiary.io/#reference/0/things</a></li>
+</ul>
+<p>For a quick overview of the data model, see <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#24">The Sensing Entities</a>.</p>
+<h3>FROST Server</h3>
+<p>The FROST Server is an open source SensorThings Server developed by the Fraunhofer Institut. It is “a Server implementation of the OGC SensorThings API.” (<a href="https://github.com/FraunhoferIOSB/FROST-Server">source</a>) It acts as the Broker, establishing a link between Publishers (sensors) and the Client (Masterportal, browser). Calls to the FROST Server can be in pure <em>http</em> to use its REST API, or you may establish a bidirectional link via <em>mqtt</em> or <em>CoAP</em>.</p>
+<h3>The REST API - HTTP</h3>
+<p>To subscribe to required IDs of Things, use a HTTP REST call to fetch all required IDs.</p>
+<blockquote>
+<p>⚠️ <code>expand</code>, <code>filter</code>, and so on as URL query parameters are usable with HTTP REST calls only. With mqtt, you may subscribe to a plain path, and URL queries (“?” and beyond) will be ignored.</p>
+</blockquote>
+<p>Basic examples for data calls via REST API:</p>
+<ul>
+<li><a href="https://iot.hamburg.de/">Overview</a></li>
+<li><a href="https://iot.hamburg.de/v1.0/Things">All things of the SensorThingsAPI</a></li>
+<li><a href="https://iot.hamburg.de/v1.0/Things(26)">One thing of the SensorThingsAPI</a></li>
+<li><a href="https://iot.hamburg.de/v1.0/Datastreams(74)">One data stream</a></li>
+<li><a href="https://iot.hamburg.de/v1.0/Things(26)/Datastreams">All data streams of one thing</a></li>
+<li><a href="https://iot.hamburg.de/v1.0/Datastreams(74)/Observations">All observations of a data stream</a></li>
+</ul>
+<p>The FROST Server implements a REST API that allows you to <code>expand</code> and <code>filter</code> the query based on a query language comparable to SQL. To join tables, use the <code>$expand</code> tag as URL query parameter, and separate multiple joins with a comma.</p>
+<ul>
+<li><a href="https://iot.hamburg.de/v1.0/Things(26)?$expand=Locations">One Thing with its Location</a></li>
+<li><a href="https://iot.hamburg.de/v1.0/Things(26)?$expand=Locations,Datastreams/Observations">One Thing with its Location and Observations</a> (note that observations are in relation to data streams, not things)</li>
+</ul>
+<p>To filter things without knowing their identifier, use <code>$filter</code> as URL query parameter.</p>
+<ul>
+<li><a href="https://iot.hamburg.de/v1.0/Things?$filter=name%20eq%20%27StadtRad-Station%20Grandweg%20/%20Veilchenweg%27">Find a Thing by its name with <code>$filter=name eq '...'</code></a></li>
+</ul>
+<p>To order things, use <code>$orderby</code>. This can e.g. be used to retrieve the latest Observation by ordering Observations descending by date and adding <code>$top=1</code> to fetch the first element only.</p>
+<ul>
+<li><a href="https://iot.hamburg.de/v1.0/Datastreams(74)/Observations?$orderby=phenomenonTime%20desc&amp;$top=1">Order the Observations and pick the first one using <code>$orderby=phenomenonTime desc&amp;$top=1</code></a></li>
+</ul>
+<p>You may also use nested statements:</p>
+<ul>
+<li><a href="http://iot.hamburg.de/v1.0/Things(614)?$expand=Datastreams($expand=Observations),Locations"><code>?$expand=Datastreams($expand=Observations),Locations</code></a></li>
+</ul>
+<p>To retrieve Things within an extent, use a <code>POLYGON</code>:</p>
+<ul>
+<li><a href="https://iot.hamburg.de/v1.0/Things?$filter=startswith(Things/name,%27StadtRad-Station%27)%20and%20st_within(Locations/location,geography%27POLYGON%20((10.0270%2053.5695,10.0370%2053.5695,10.0370%2053.5795,10.0270%2053.5795,10.0270%2053.5695))%27)&amp;$expand=Locations">Retrieve things within a polygon</a></li>
+</ul>
+<p>URL in detail:</p>
+<ul>
+<li><a href="https://iot.hamburg.de/v1.0/Things">https://iot.hamburg.de/v1.0/Things</a>?</li>
+<li>$filter=
+<ul>
+<li>startswith(Things/name,‘StadtRad-Station’)</li>
+<li>and st_within(
+<ul>
+<li>Locations/location,geograph’POLYGON ((
+<ul>
+<li>10.0270 53.5695,</li>
+<li>10.0370 53.5695,</li>
+<li>10.0370 53.5795,</li>
+<li>10.0270 53.5795,</li>
+<li>10.0270 53.5695</li>
+</ul>
+</li>
+<li>))’</li>
+</ul>
+</li>
+<li>)</li>
+</ul>
+</li>
+<li>&amp;$expand=Locations</li>
+</ul>
+<p>You will only receive Things located within the given polygon. Use this to increase network request speed by only retrieving and subscribing to Things in the user’s current view.</p>
+<h3>The REST API - mqtt</h3>
+<p>mqtt is a protocol developed for the <em>Internet of Things</em> to keep an open connection to servers and communicate with pull (commands from client to server) and push (messages from server to client) requests, using an established connection that does not close in the meantime.</p>
+<p>In the browser, this might e.g. be implemented by using <a href="http://socket.io">socket.io</a>.</p>
+<p>If you use npm, refer to the mqtt package instead.</p>
+<p>The Client uses the mqtt protocol to subscribe to a Topic. A Topic is a plain path to something, e.g. <code>v1.0/Datastreams(74)/Observations</code>. Note that the host is given to mqtt during the connect operation, and is omitted during further interaction.</p>
+<p>After subscribing to a Topic (e.g. <code>v1.0/Datastreams(74)/Observations</code>), the server will push every new message (in this case, a new Observation in Datastream 74), using the opened mqtt connection, to the Client.</p>
+<p>As mqtt may only subscribe and unsubscribe Topics, you have to use HTTP requests (as shown above) to assemble the parts of your Topic. All entities of the SensorThingsAPI can be requested as Topic.</p>
+<p>As mentioned before, you can only subscribe to plain REST URLs. Everything in the query part will be ignored:</p>
+<ul>
+<li>positive mqtt example: <code>mqtt://iot.hamburg.de/v1.0/Datastreams(74)/Observations</code></li>
+<li>negative mqtt example: <code> mqtt://iot.hamburg.de/v1.0/Datastreams(74)?$expand=Observations</code></li>
+</ul>
+<p>Currently used mqtt versions:</p>
+<ul>
+<li><a href="http://public.dhe.ibm.com/software/dw/webservices/ws-mqtt/mqtt-v3r1.html">mqtt v3.1</a></li>
+<li><a href="https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html">mqtt v3.1.1</a></li>
+<li><a href="https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html">mqtt v5.0</a></li>
+</ul>
+<h2>SensorThingsHttp</h2>
+<p>The SensorThingsAPI provides automatic splitting of server responses to chunks to avoid overly large payloads. This allows displaying the progress of SensorThingsAPI calls for improved user experience. See <a href="#markdown-header-automatic-split">Automatic Split</a> for details.</p>
+<p>The request can be minimized further by limiting it to the extent currently visible in the browser. See <a href="#markdown-header-automatic-call-in-extent">Automatic call in Extent</a> for details.</p>
+<p>The Masterportal implements a software layer called <code>SensorThingsHttp</code> that provides the both split and extent handling.</p>
+<blockquote>
+<p>⚠️ Please mind that automatic progress and “call in extent” are only available if your server side implementation of the SensorThingsAPI (e.g. the FROST Server) provides - <em>and has set to active!</em> - the skip and geography functions.</p>
+</blockquote>
+<h3>Automatic split</h3>
+<p>Your server configuration should activate the automatic splitting of responses. When activated, responses too large for a single response will contain a follow-up link (“@iot.nextLink”) to the next data chunk. The total number of chunks is included as “@iot.count” value.</p>
+<p>Using the <code>SensorThingsHttp.get()</code> function, the <code>SensorThingsHttp</code> layer handles “@iot.nextLink” (see <a href="#markdown-header-the-iotnextlink-value">The “@iot.nextLink” Value</a>) and “@iot.count” (see <a href="#markdown-header-the-iotcount-value">The “@iot.count” Value</a>) for you.</p>
+<p>Here is a basic implementation of <code>SensorThingsHttp</code>, using basic events of the Masterportal, to show its functionality:</p>
+<pre><code class="language-js">import {SensorThingsHttp} from &quot;@modules/core/modelList/layer/sensorThingsHttp&quot;;
+
+const http = new SensorThingsHttp(),
+    url = &quot;https://iot.hamburg.de/v1.0/Things&quot;;
+http.get(url, function (response) {
+    // onsuccess
+    // do something with the complete response
+}, function () {
+    // onstart
+    Radio.trigger(&quot;Util&quot;, &quot;showLoader&quot;);
+}, function () {
+    // oncomplete (always called finally)
+    Radio.trigger(&quot;Util&quot;, &quot;hideLoader&quot;);
+}, function (error) {
+    // onerror
+    console.warn(error);
+}, function (progress) {
+    // onprogress
+    // the progress (percentage = Math.round(progress * 100)) to update your progress bar with
+});
+
+</code></pre>
+<p>Please note that the <code>http.get</code> call in itself is asynchronous. All parameters of <code>SensorThingsHttp.get()</code>, except for <code>url</code>, are optional. At least a function for <code>onsuccess</code> should be provided anyway, or the response is lost.</p>
+<h3>Configuration</h3>
+<p>SensorThingsHttp can be configured with two parameters via constructor.</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>mandatory</th>
+<th>type</th>
+<th>default</th>
+<th>description</th>
+<th>example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>removeIotLinks</td>
+<td>No</td>
+<td>Boolean</td>
+<td>false</td>
+<td>removes all “@iot.navigationLink” and “@iot.selfLink” from the response to reduce the size of the result</td>
+<td><code>const http = new SensorThingsHttp({removeIotLinks: true});</code></td>
+</tr>
+<tr>
+<td>httpClient</td>
+<td>No</td>
+<td>Function</td>
+<td>null</td>
+<td>can be used to change the default http handler (in our case axios), e.g. for testing</td>
+<td><code>const http = new SensorThingsHttp({httpClient: (url, onsuccess, onerror) =&gt; {}});</code></td>
+</tr>
+</tbody>
+</table>
+<h3>The “@iot.nextLink” value</h3>
+<p>If you don’t want to use <code>SensorThingsHttp</code> to automatically split the data, here are some hints regarding your implementation.</p>
+<p>If a call’s response contains too many datasets, the server splits the result into chunks, indicated by a “@iot.nextLink” for the follow-up chunk. You can follow through all “@iot.nextLink” URLs, gathering the responses until the end of data is received. If no follow-up link (“@iot.nextLink”) exists, all chunks have been retrieved.</p>
+<h4>Example</h4>
+<p>The following URL will fetch 100 datasets, and the response will include an “@iot.nextLink” to the next chunk: <a href="https://iot.hamburg.de/v1.0/Things">All Things</a></p>
+<pre><code class="language-json">{
+  &quot;@iot.nextLink&quot; : &quot;https://iot.hamburg.de/v1.0/Things?$skip=100&quot;,
+  &quot;value&quot; : [{
+      &quot;...&quot;: &quot;...&quot;
+  }]
+}
+</code></pre>
+<p>Calling the nextLink (<a href="https://iot.hamburg.de/v1.0/Things?$skip=100">https://iot.hamburg.de/v1.0/Things?$skip=100</a>) provides you with the next chunk of data and another follow-up link (“@iot.nextLink”) and so on, until the last dataset is reached.</p>
+<h3>@iot.nextLink structures</h3>
+<p>If you don’t want to use <code>SensorThingsHttp</code> to automatically follow @iot.nextLinks, please mind the following hint.</p>
+<p>Complex calls to the SensorThingsAPI may result in many chunks. The FROST Server is capable to split any delivered array - also in sub-structures - and provide them with an @iot.nextLink. These links hold the split array’s key as prefix; e.g. Observations@iot.nextLink, or Datastreams@iot.nextLink.</p>
+<h4>Example</h4>
+<ul>
+<li>URL: <a href="https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things?$expand=Datastreams($top=2;$expand=Observations($top=2))">https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things?$expand=Datastreams($top=2;$expand=Observations($top=2))</a></li>
+<li>Response: Many Things, with lots of Datastreams and Observations.</li>
+<li>Hint: In this example, we use <code>$top=2</code> to enforce splitting with [prefix]@iot.nextLink on any expanded sublevel.</li>
+</ul>
+<pre><code class="language-json">{
+    &quot;@iot.nextLink&quot; : &quot;https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things?$skip=100&amp;$expand=Datastreams%28%24top%3D2%3B%24expand%3DObservations%28%24top%3D2%29%29&quot;,
+    &quot;value&quot; : [ {
+        &quot;Datastreams&quot; : [ {
+            &quot;Observations&quot; : [...],
+            &quot;Observations@iot.nextLink&quot; : &quot;https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13976)/Observations?$top=2&amp;$skip=2&quot;,
+        }, {
+            &quot;Observations&quot; : [...],
+            &quot;Observations@iot.nextLink&quot; : &quot;https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13978)/Observations?$top=2&amp;$skip=2&quot;,
+        } ],
+        &quot;Datastreams@iot.nextLink&quot; : &quot;https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?$top=2&amp;$skip=2&amp;$expand=Observations%28%24top%3D2%29&quot;,
+    }]
+}
+</code></pre>
+<p>On following the <a href="https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?$top=2&amp;$skip=2&amp;$expand=Observations%28%24top%3D2%29">Datastreams@iot.nextLink</a>, a structure describing further Datastreams is returned:</p>
+<pre><code class="language-json">{
+    &quot;@iot.nextLink&quot; : &quot;https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?$top=2&amp;$skip=4&amp;$expand=Observations%28%24top%3D2%29&quot;,
+    &quot;value&quot; : [ {
+        &quot;Observations&quot; : [...],
+        &quot;Observations@iot.nextLink&quot; : &quot;https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13980)/Observations?$top=2&amp;$skip=2&quot;,
+    }]
+}
+</code></pre>
+<p>Keep in mind that a single Thing has neither an @iot.nextLink, nor a “value” key. E.g. <a href="https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)?$expand=Datastreams($top=2)">this link</a> returns such a feature. Still, this case contains [prefix]@iot.nextLinks to follow in nested structures.</p>
+<h3>@iot.nextLink and depth barriers</h3>
+<p>The end of @iot.nextLink follow-ups is marked by the absence of a next @iot.nextLink to follow.</p>
+<p>However: If you limit the response using <code>$top=X</code> (with X being the number of entities to load), an @iot.nextLink may exist.
+Following these links will lead to a cascade of server calls - for example, <code>$top=1</code> on a request that would return 1000 entities would start 1000 server calls, slowing down the system immensely.</p>
+<p><a href="https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13980)/Observations?$top=1">Example call for this scenario</a></p>
+<pre><code class="language-json">{
+  &quot;@iot.nextLink&quot; : &quot;https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13980)/Observations?$top=1&amp;$skip=1&quot;,
+  &quot;value&quot; : [ {...} ]
+}
+</code></pre>
+<p>Unfortunately, you may not simply ignore @iot.nextLinks if you find a <code>$top=X</code> in the @iot.nextLink, as the X in <code>$top=X</code> may exceed “the service-driven pagination limitation”, and multiple requests are required to actually retrieve X entities:</p>
+<blockquote>
+<p>“In addition, if the $top value exceeds the service-driven pagination limitation (…), the $top query option SHALL be discarded and the server-side pagination limitation SHALL be imposed.” (<a href="https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#51">source</a>)</p>
+</blockquote>
+<p>An @iot.nextLink search for <code>$top=X</code> or <code>%24top=X</code> in combination with <code>$skip=Y</code> or <code>%24skip=Y</code> will do the trick, as any <code>$top=X</code> not related to the root structure is url encoded with “%3D” instead of “=”.</p>
+<p>Example: <a href="https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?%24top=2&amp;%24skip=2&amp;%24expand=Observations%28%24top%3D2%29">https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?%24top=2&amp;%24skip=2&amp;%24expand=Observations%28%24top%3D2%29</a></p>
+<ul>
+<li>Regex for <code>$top=X</code>: <code>/[\$|%24]top=([0-9]+)/</code></li>
+<li>Regex for <code>$skip=X</code>: <code>/[\$|%24]skip=([0-9]+)/</code></li>
+</ul>
+<p>Use this pseudo-code as guideline for your additional depth barrier:</p>
+<pre><code class="language-pseudo">// pseudo code, some nextLink is given
+int topX = fetchTopFromNextLink(nextLink);
+int skipX = fetchSkipFromNextLink(nextLink);
+
+if (topX &gt; 0 &amp;&amp; topX &lt;= skipX) {
+    // do not follow (depth barrier reached)
+}
+</code></pre>
+<h3>The “@iot.count” Value</h3>
+<p>The number of expected chunks can be requested by adding <code>$count=true</code> to the call, which will fill the value for “@iot.count” in the response.</p>
+<p>This total number in combination with the current skip value can be used to calculate the loading progress of the application, which may then be shown to the user by a loading bar or other UI elements.</p>
+<h4>Example</h4>
+<p>To get the total number of datasets to expect from a call, simply add <code>$count=true</code> to any <em>SensorThingsAPI</em> URL: <a href="https://iot.hamburg.de/v1.0/Things?$count=true">https://iot.hamburg.de/v1.0/Things?$count=true</a></p>
+<pre><code class="language-json">{
+  &quot;@iot.count&quot; : 4723,
+  &quot;@iot.nextLink&quot; : &quot;https://iot.hamburg.de/v1.0/Things?$skip=100&amp;$count=true&quot;,
+  &quot;value&quot; : [ {
+      &quot;...&quot;: &quot;...&quot;
+  }]
+}
+</code></pre>
+<p>Combining the absolute number (“@iot.count”) and the value of the current <code>$skip</code> parameter gives you the progress with <code>1 / @iot.count * skip</code>.</p>
+<h3>Automatic use of extent</h3>
+<p>You may want your server implementation of the <em>SensorThingsAPI</em> (e.g. the FROST Server) to return data only within a given extent (e.g. a polygon). The FROST Server provides you with this functionality. To use this feature, the <code>SensorThingsHttp</code> layer provides a method <code>SensorThingsHttp.getInExtent()</code> to retrieve data only within the given extent.</p>
+<p>Using <code>SensorThingsHttp.getInExtent()</code>, you may also use the splitting progress explained <a href="#markdown-header-automatic-split">above</a>. The <code>SensorThingsHttp</code> layer creates the correct URL query parameter <code>st_within(Locations/location,geography'POLYGON ((...))')</code> (see <a href="#the_use_of_polygon">The use of POLYGON</a>) for you.</p>
+<p>The extent needs to be described including its source projection and target projection. The following extent options are mandatory for the use of <code>SensorThingsHttp.getInExtent()</code>:</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>mandatory</th>
+<th>type</th>
+<th>default</th>
+<th>description</th>
+<th>example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>extent</td>
+<td>yes</td>
+<td>Number[]</td>
+<td>-</td>
+<td>the extent of your current view</td>
+<td>[556925.7670922858, 5925584.829527992, 573934.2329077142, 5942355.170472008]</td>
+</tr>
+<tr>
+<td>sourceProjection</td>
+<td>yes</td>
+<td>String</td>
+<td>-</td>
+<td>the extent’s projection</td>
+<td>“EPSG:25832”</td>
+</tr>
+<tr>
+<td>targetProjection</td>
+<td>yes</td>
+<td>String</td>
+<td>-</td>
+<td>projection expected by the <em>SensorThingsAPI</em> server</td>
+<td>“EPSG:4326”</td>
+</tr>
+</tbody>
+</table>
+<p>See this basic implementation of <code>SensorThingsHttp</code> to receive data within the browser’s current view extent only, using Masterportal events to show its functionality, as an example:</p>
+<pre><code class="language-js">import {SensorThingsHttp} from &quot;@modules/core/modelList/layer/sensorThingsHttp&quot;;
+
+const http = new SensorThingsHttp(),
+    extent = Radio.request(&quot;MapView&quot;, &quot;getCurrentExtent&quot;),
+    projection = Radio.request(&quot;MapView&quot;, &quot;getProjection&quot;).getCode(),
+    epsg = this.get(&quot;epsg&quot;),
+    url = &quot;https://iot.hamburg.de/v1.0/Things&quot;;
+
+http.getInExtent(url, {
+    extent: extent,
+    sourceProjection: projection,
+    targetProjection: epsg
+}, function (response) {
+    // on success
+    // do something with the response
+
+}, function () {
+    // on start (always called)
+    Radio.trigger(&quot;Util&quot;, &quot;showLoader&quot;);
+
+}, function () {
+    // on complete (always called)
+    Radio.trigger(&quot;Util&quot;, &quot;hideLoader&quot;);
+
+}, function (error) {
+    // on error
+    console.warn(error);
+
+}, function (progress) {
+    // on wait
+    // the progress to update your progress bar with
+    // to get the percentage use Math.round(progress * 100)
+});
+
+</code></pre>
+<p>When using <code>SensorThingsHttp.getInExtent()</code>, the <code>url</code> and <code>extent</code> parameters are mandatory. To retrieve the response you need to set the third parameter as an on success function. The others are optional.</p>
+<p>An optional eighth parameter <code>httpClient</code> exists that can be used to replace the default HTTP handler, which is <code>axios</code>. This optional <code>httpClient</code>, if used, must be a function with parameters <code>url</code>, <code>onsuccess</code>, and <code>onerror</code>.</p>
+<h3>The use of <code>POLYGON</code></h3>
+<p>If you don’t want to use <code>SensorThingsHttp</code> software layer to access sensors in the current map view, consider these hints for your convenience.</p>
+<p>To receive data only in a specified extent, the <em>SensorThingsAPI</em> provides certain geospatial functions using <code>POINT</code> or <code>POLYGON</code> structures. See <a href="https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#56">the documentation</a> for more details. You may set your extent by using such a <code>POLYGON</code>, using the Location of Things to filter them by,</p>
+<p>Basic example:</p>
+<p><a href="https://iot.hamburg.de/v1.0/Things?$filter=st_within(Locations/location,geography%27POLYGON%20((10.0270%2053.5695,10.0370%2053.5695,10.0370%2053.5795,10.0270%2053.5795,10.0270%2053.5695))%27)&amp;$expand=Locations">https://iot.hamburg.de/v1.0/Things?$filter=st_within(Locations/location,geography%27POLYGON%20((10.0270%2053.5695,10.0370%2053.5695,10.0370%2053.5795,10.0270%2053.5795,10.0270%2053.5695))%27)&amp;$expand=Locations</a></p>
+<blockquote>
+<p>⚠️ Convert your projection to the projection used by the <em>SensorThingsAPI</em>. If the server uses “EPSG:4326”, but your Masterportal is set to “EPSG:25832”, you must use OpenLayers (or <code>masterportalAPI/src/crs</code>, exporting a <code>transform</code> function) to convert the coordinates.</p>
+</blockquote>
+<p>Example to transform a Location from your current projection into “EPSG:4326”:</p>
+<pre><code class="language-js">import {transform} from &quot;@masterportal/masterportalapi/src/crs&quot;;
+
+const extent = Radio.request(&quot;MapView&quot;, &quot;getCurrentExtent&quot;),
+    projection = Radio.request(&quot;MapView&quot;, &quot;getProjection&quot;).getCode(),
+    epsg = &quot;EPSG:4326&quot;,
+    topLeftCorner = transform(projection, epsg, {x: extent[0], y: extent[1]}),
+    bottomRightCorner = transform(projection, epsg, {x: extent[2], y: extent[3]});
+
+</code></pre>
+<p>This way you will get the top left and bottom right corner of the view. To draw yourself a <code>POLYGON</code> to be used with <em>SensorThingsAPI</em> from that, the rectangle needs to be constructed as follows:</p>
+<pre><code class="language-js">const extent = Radio.request(&quot;MapView&quot;, &quot;getCurrentExtent&quot;),
+    polygon = [
+        {x: extent[0], y: extent[1]},
+        {x: extent[2], y: extent[1]},
+        {x: extent[2], y: extent[3]},
+        {x: extent[0], y: extent[3]},
+        {x: extent[0], y: extent[1]}
+    ];
+
+</code></pre>
+<h2>SensorThingsMqtt</h2>
+<p>The Masterportal SensorThings software layer is capable of handling mqtt subscriptions for <code>mqtt 3.1</code>, <code>mqtt 3.1.1</code>, and <code>mqtt 5.0</code>. The mqtt version running on the server to be used has to be known and used in <code>SensorThingsMqtt</code>’s constructor.</p>
+<p>This is a basic example for <code>mqtt 5.0</code>:</p>
+<pre><code class="language-js">import {SensorThingsMqtt} from &quot;./sensorThingsMqtt&quot;;
+
+const mqtt = new SensorThingsMqtt({
+        mqttUrl: &quot;wss://iot.hamburg.de/mqtt&quot;,
+        mqttVersion: &quot;5.0&quot;,
+        context: this
+    });
+
+mqtt.on(&quot;message&quot;, (topic, message, packet) =&gt; {
+    // handler
+    console.log(&quot;received message:&quot;, topic, message, packet);
+}, error =&gt; {
+    // onerror
+    console.warn(error);
+});
+
+mqtt.subscribe(&quot;v1.0/Datastreams(1234)/Observations&quot;, {
+    rh: 0
+}, () =&gt; {
+    // onsuccess
+    console.log(&quot;success&quot;);
+}, error =&gt; {
+    // onerror
+    console.warn(error);
+});
+</code></pre>
+<p>This is a basic example for <code>mqtt 3.1</code> and <code>3.1.1</code>:</p>
+<pre><code class="language-js">import {SensorThingsMqtt} from &quot;./sensorThingsMqtt&quot;;
+
+const mqtt = new SensorThingsMqtt({
+        mqttUrl: &quot;wss://iot.hamburg.de/mqtt&quot;,
+        mqttVersion: &quot;3.1.1&quot;, // &quot;3.1&quot; respective
+        rhPath: &quot;https://iot.hamburg.de&quot;,
+        context: this
+    });
+
+mqtt.on(&quot;message&quot;, (topic, message, packet) =&gt; {
+    // handler
+    console.log(&quot;received message:&quot;, topic, message, packet);
+}, error =&gt; {
+    // onerror
+    console.warn(error);
+});
+
+mqtt.subscribe(&quot;v1.0/Datastreams(1234)/Observations&quot;, {
+    rh: 0
+}, () =&gt; {
+    // onsuccess
+    console.log(&quot;success&quot;);
+}, error =&gt; {
+    // onerror
+    console.warn(error);
+});
+</code></pre>
+<p>Please note that Messages are not received when using “subscribe”, but will come in via an <code>on(message)</code> event.</p>
+<p>The <code>on(message)</code> event’s messages must be redirected to your processes with help of the supplied topics.</p>
+<h3>Configuration - Constructor</h3>
+<p>The software layer <code>SensorThingsMqtt</code> is a class to be configured at construction time. Creating a new instance, the connection to the mqtt Server is established once per instance in the background.</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>mandatory</th>
+<th>type</th>
+<th>default</th>
+<th>description</th>
+<th>example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mqttUrl</td>
+<td>yes</td>
+<td>String</td>
+<td>“”</td>
+<td>The url to your mqtt server.</td>
+<td>“wss://iot.hamburg.de/mqtt”</td>
+</tr>
+<tr>
+<td>mqttVersion</td>
+<td>no</td>
+<td>String</td>
+<td>“3.1.1”</td>
+<td>The mqtt version your server runs on.</td>
+<td>“3.1”, “3.1.1”, “5.0”</td>
+</tr>
+<tr>
+<td>rhPath</td>
+<td>no</td>
+<td>String</td>
+<td>“”</td>
+<td>For 3.1 and 3.1.1 only, you need to set the basic http path to your <em>SensorThingsAPI</em> to simulate Retained Handling.</td>
+<td>“<a href="https://iot.hamburg.de">https://iot.hamburg.de</a>”</td>
+</tr>
+<tr>
+<td>context</td>
+<td>no</td>
+<td>JavaScript Scope</td>
+<td>The scope to run the events in.</td>
+<td>If you set the context to <code>this</code>, you can use <code>this</code> in your event functions to reach your current module.</td>
+<td>this</td>
+</tr>
+</tbody>
+</table>
+<h4>mqttUrl</h4>
+<p>mqttUrl is the URL to connect to the mqtt service. The URL may use any of the protocols ‘mqtt’, ‘mqtts’, ‘tcp’, ‘tls’, ‘ws’, or ‘wss’. See the <a href="https://www.npmjs.com/package/mqtt">mqtt package documentation</a> for additional details.</p>
+<h4>mqttVersion</h4>
+<p>The mqttVersion will trigger different behavior of the <code>SensorThingsMqtt</code> software layer.</p>
+<ul>
+<li>“3.1”: the internal protocolId is “MQIsdp” (3.1.1 and 5.0 use “MQTT”); the internal protocolVersion is 3 (3.1.1 and 5.0 use protocolVersion 4); simulation of Retained Handling will be activated if you provide a rhPath</li>
+<li>“3.1.1”: simulation of Retained Handling will be activated if you provide a rhPath</li>
+<li>“5.0”: no simulation of Retained Handling necessary (you must not provide a rhPath!), the event <code>on(&quot;disconnect&quot;)</code> is provided as feature for 5.0</li>
+</ul>
+<h4>rhPath</h4>
+<p>The rhPath is used to simulate Retained Handling on mqtt versions 3.1 and 3.1.1, and has to be set to protocol plus domain. To figure out your rhPath, think of it as the missing prefix for a Topic.</p>
+<p>E.g., if you accessed your <em>SensorThingsAPI</em> via “<a href="https://iot.hamburg.de/v1.0/Things(1234)/Datastreams">https://iot.hamburg.de/v1.0/Things(1234)/Datastreams</a>”, you’d subscribe to a Topic via mqtt with “v1.0/Things(1234)/Datastreams”. The rhPath is the leftover URL part missing to actually receive data via http. In this case, “<a href="https://iot.hamburg.de">https://iot.hamburg.de</a>” is the rhPath.</p>
+<p>Be aware that your http path might differ from your mqtt path depending on the protocol to be used; e.g. “wss://iot.hamburg.de/mqtt” could be an rhPath to subscribe to “v1.0/Things(1234)/Datastreams”.</p>
+<p>Examples:</p>
+<ul>
+<li><em>SensorThingsAPI</em>: “<a href="https://iot.hamburg.de/v1.0/Things(1234)/Datastreams">https://iot.hamburg.de/v1.0/Things(1234)/Datastreams</a>”</li>
+<li>mqttUrl: “wss://iot.hamburg.de/mqtt”</li>
+<li>Topic: “v1.0/Things(1234)/Datastreams”</li>
+<li>rhPath: “<a href="https://iot.hamburg.de">https://iot.hamburg.de</a>”</li>
+</ul>
+<h3>Configuration - Subscribe</h3>
+<p>After construction, you can subscribe using the instance of <code>SensorThingsMqtt</code>.</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>mandatory</th>
+<th>type</th>
+<th>default</th>
+<th>description</th>
+<th>example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>qos</td>
+<td>no</td>
+<td>Number</td>
+<td>0</td>
+<td>Quality of service subscription level, <a href="https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169">see documentation</a>.</td>
+<td>0, 1, or 2</td>
+</tr>
+<tr>
+<td>rh</td>
+<td>no</td>
+<td>Number</td>
+<td>2</td>
+<td>“This option specifies whether retained messages are sent on subscription.” (<a href="https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169">source</a>)</td>
+<td>0, 1, or 2</td>
+</tr>
+</tbody>
+</table>
+<h4>rh</h4>
+<p>Retained Handling (rh) between Client and Server is only available for mqtt 5.0, since previous version to not support this feature.</p>
+<p>However, for 3.1 and 3.1.1, <code>SensorThingsMqtt</code> may simulate Retained Messages by bypassing mqtt with http, internally using <code>SensorThingsHttp</code> to receive the latest sensor message.</p>
+<p>The Retained Handling can be configured as rh := 0, 1, or 2.</p>
+<ul>
+<li>rh := 0; On subscription, you’ll receive one old message (the latest message) from the Sensor immediately by message event.</li>
+<li>rh := 1; On subscription, you’ll receive one old message (the latest message), but only if it’s the first process in the application to subscribe to this topic.</li>
+<li>rh := 2; On subscription, you will not receive any latest message of the Sensor, but “fresh” messages in the future.</li>
+</ul>
+<h3>Retained Handling</h3>
+<p>An important option for mqtt subscriptions is the so-called “Retained Handling” (rh).</p>
+<p>A “Retained Message” is a Sensor message sent in the past, but stored by the server to send immediately after subscription.</p>
+<pre><code class="language-js">import {SensorThingsMqtt} from &quot;./sensorThingsMqtt&quot;;
+
+const mqtt = new SensorThingsMqtt({
+        mqttUrl: &quot;wss://iot.hamburg.de/mqtt&quot;,
+        mqttVersion: &quot;5.0&quot;,
+        context: this
+    });
+
+mqtt.on(&quot;message&quot;, (topic, message, packet) =&gt; {
+    if (packet.retain === 1) {
+        console.log(&quot;this is a retained message&quot;);
+    }
+    else {
+        console.log(&quot;this is a new message&quot;);
+    }
+});
+
+mqtt.subscribe(&quot;v1.0/Datastreams(1234)/Observations&quot;, {rh: 0});
+</code></pre>
+<p>As this might be an unwanted behavior, Retained Handling is inactive by default, that is, rh is set to 2 by default.</p>
+<pre><code class="language-js">import {SensorThingsMqtt} from &quot;./sensorThingsMqtt&quot;;
+
+const mqtt = new SensorThingsMqtt({
+        mqttUrl: &quot;wss://iot.hamburg.de/mqtt&quot;,
+        mqttVersion: &quot;5.0&quot;,
+        context: this
+    });
+
+mqtt.on(&quot;message&quot;, (topic, message, packet) =&gt; {
+    if (packet.retain === 1) {
+        console.log(&quot;this will never happen&quot;);
+    }
+    else {
+        console.log(&quot;this is a new message&quot;);
+    }
+});
+
+mqtt.subscribe(&quot;v1.0/Datastreams(1234)/Observations&quot;);
+</code></pre>
+<p>To identify whether a message is a Retained Message, check the <code>packet.retain</code> flag included.</p>
+<pre><code class="language-js">import {SensorThingsMqtt} from &quot;./sensorThingsMqtt&quot;;
+
+const mqtt = new SensorThingsMqtt({
+        mqttUrl: &quot;wss://iot.hamburg.de/mqtt&quot;,
+        mqttVersion: &quot;5.0&quot;,
+        context: this
+    });
+
+mqtt.on(&quot;message&quot;, (topic, message, packet) =&gt; {
+    if (topic === &quot;v1.0/Datastreams(1234)/Observations&quot; &amp;&amp; packet.retain === 1) {
+        console.log(&quot;this is for the second subscription only&quot;);
+    }
+    else if (topic === &quot;v1.0/Datastreams(1234)/Observations&quot;) {
+        console.log(&quot;this is for the first and second subscription&quot;);
+    }
+    else if (topic === &quot;v1.0/Things(4321)/Datastreams&quot;) {
+        console.log(&quot;this is for the third subscription, retain flag is&quot;, packet.retain);
+    }
+});
+
+// first subscription
+mqtt.subscribe(&quot;v1.0/Datastreams(1234)/Observations&quot;, {rh: 2});
+
+// second subscription
+mqtt.subscribe(&quot;v1.0/Datastreams(1234)/Observations&quot;, {rh: 0});
+
+// third subscription
+mqtt.subscribe(&quot;v1.0/Things(4321)/Datastreams&quot;, {rh: 0});
+</code></pre>
+<h3>Closing a mqtt connection</h3>
+<p>To close a mqtt connection, execute <code>end</code> on the <code>SensorThingsMqtt</code> instance.</p>
+<pre><code class="language-js">import {SensorThingsMqtt} from &quot;./sensorThingsMqtt&quot;;
+
+const mqtt = new SensorThingsMqtt({
+        mqttUrl: &quot;wss://iot.hamburg.de/mqtt&quot;,
+        mqttVersion: &quot;5.0&quot;,
+        context: this
+    });
+
+mqtt.end(false, {}, () =&gt; {
+    console.log(&quot;finished&quot;);
+});
+</code></pre>
+<p>For more information on the <code>end</code> function parameters, visit <a href="https://www.npmjs.com/package/mqtt#end">the end function documentation of mqtt</a>; this called is passed through to the mqtt package without further effects.</p>

@@ -1,0 +1,1334 @@
+<blockquote>
+<p><strong><a href="doc.md">Return to the Masterportal documentation</a></strong></p>
+</blockquote>
+<p>[TOC]</p>
+<h1>config.js</h1>
+<p>The <code>config.js</code> contains Masterportal configuration not directly related to UI or layers. For example, paths to other configuration files belong here. This file is usually placed next to the <code>index.html</code> and <code>config.json</code> files.</p>
+<p>In the following, all configuration options are described. For all configuration options of type <code>object</code>, further nested options are linked and described in detail after the main table. You may also refer to <strong><a href="https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/portal/basic/config.js">this config.js example file</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>layerConf</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Path to the <strong><a href="services.json.md">services.json</a></strong> file containing all available WMS layers and WFS feature types. The path is relative to <em>js/main.js</em>.</td>
+<td><code>https://geodienste.hamburg.de/lgv-config/services-internet.json&quot;</code></td>
+</tr>
+<tr>
+<td>namedProjections</td>
+<td>yes</td>
+<td>String[]</td>
+<td></td>
+<td>Definition of the usable coordinate systems. See <strong><a href="http://proj4js.org/#named-projections">syntax definition</a></strong> for details…</td>
+<td><code>[[&quot;EPSG:25832&quot;, &quot;+title=ETRS89/UTM 32N +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs&quot;]]</code></td>
+</tr>
+<tr>
+<td>restConf</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Path to the <strong><a href="rest-services.json.md">rest-services.json</a></strong> file describing further services, e.g. print service, WPS, CSW. The path is relative to <em>js/main.js</em>.</td>
+<td><code>https://geodienste.hamburg.de/lgv-config/rest-services-internet.json&quot;</code></td>
+</tr>
+<tr>
+<td>styleConf</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Path to the <strong><a href="style.json.md">style.json</a></strong> file describing vector layer (WFS) styles. The path is relative to <em>js/main.js</em>.</td>
+<td><code>https://geodienste.hamburg.de/lgv-config/style.json&quot;</code></td>
+</tr>
+<tr>
+<td>addons</td>
+<td>no</td>
+<td>String[]</td>
+<td><code>[]</code></td>
+<td>List of names for custom modules. The modules are to be placed in the folder <code>/addons/</code>, with their entry points being defined in the <code>addonsConf.json</code>.</td>
+<td><code>[&quot;myAddon1&quot;, &quot;myAddon2&quot;]</code></td>
+</tr>
+<tr>
+<td>alerting</td>
+<td>no</td>
+<td><strong><a href="#markdown-header-alerting">alerting</a></strong></td>
+<td><code>{&quot;category&quot;: &quot;alert-info&quot;, &quot;isDismissable&quot;: true, &quot;isConfirmable&quot;: false, &quot;position&quot;: &quot;top-center&quot;, &quot;fadeOut&quot;: null}</code></td>
+<td>Overrides the alert module’s default values.</td>
+<td>{fadeOut: 6000}</td>
+</tr>
+<tr>
+<td>cameraParameter</td>
+<td>no</td>
+<td><strong><a href="#markdown-header-cameraparameter">cameraParameter</a></strong></td>
+<td></td>
+<td>Initial camera parameter</td>
+<td></td>
+</tr>
+<tr>
+<td>cesiumParameter</td>
+<td>no</td>
+<td><strong><a href="#markdown-header-cesiumparameter">cesiumParameter</a></strong></td>
+<td></td>
+<td>Cesium flags</td>
+<td></td>
+</tr>
+<tr>
+<td>cswId</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;3&quot;</code></td>
+<td>Reference to a CSW interface used to retrieve layer information. The ID will be resolved to a service defined in the <strong><a href="rest-services.json.md">rest-services.json</a></strong> file.</td>
+<td><code>&quot;my CSW-ID&quot;</code></td>
+</tr>
+<tr>
+<td>defaultToolId</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;gfi&quot;</code></td>
+<td>The tool with the given ID will be active when no other tool is active.</td>
+<td>“filter”</td>
+</tr>
+<tr>
+<td>featureViaURL</td>
+<td>no</td>
+<td><strong><a href="#markdown-header-featureviaurl">featureViaURL</a></strong></td>
+<td></td>
+<td>Optional configuration for the URL parameter <code>featureViaURL</code>. See <strong><a href="urlParameter.md">urlParameter</a></strong> for details. Implemented for treeTypes <em>light</em> and <em>custom</em>.</td>
+<td></td>
+</tr>
+<tr>
+<td>footer</td>
+<td>no</td>
+<td><strong><a href="#markdown-header-footer">footer</a></strong></td>
+<td></td>
+<td>If set, a footer is shown and configured with this object.</td>
+<td></td>
+</tr>
+<tr>
+<td>gfiWindow</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;detached&quot;</code></td>
+<td><em>Deprecated in the next major release. Please use the attribute “Portalconfig.menu.tool.gfi.desktopType” of the <strong><a href="#config.json.md">config.json</a></strong> instead.</em> Display type and attribute information for all layer types. <strong>attached</strong>: the attribute information window is opened at click position <strong>detached</strong>: the attribute information window is opened at the top right of the map; a marker is set to the click position.</td>
+<td><code>&quot;attached&quot;</code></td>
+</tr>
+<tr>
+<td>ignoredKeys</td>
+<td>no</td>
+<td>String[]</td>
+<td><code>[&quot;BOUNDEDBY&quot;, &quot;SHAPE&quot;, &quot;SHAPE_LENGTH&quot;, &quot;SHAPE_AREA&quot;, &quot;OBJECTID&quot;, &quot;GLOBALID&quot;, &quot;GEOMETRY&quot;, &quot;SHP&quot;, &quot;SHP_AREA&quot;, &quot;SHP_LENGTH&quot;,&quot;GEOM&quot;]</code></td>
+<td>List of attribute names to be ignored for attribute information lists of all layer types. Only used with “gfiAttributes”: “showAll”.</td>
+<td><code>[&quot;BOUNDEDBY&quot;, &quot;SHAPE&quot;, &quot;SHAPE_LENGTH&quot;, &quot;SHAPE_AREA&quot;, &quot;OBJECTID&quot;, &quot;GLOBALID&quot;, &quot;GEOMETRY&quot;, &quot;SHP&quot;, &quot;SHP_AREA&quot;, &quot;SHP_LENGTH&quot;,&quot;GEOM&quot;]</code></td>
+</tr>
+<tr>
+<td>infoJson</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;info.json&quot;</code></td>
+<td>Path to the <code>info.json</code> file containing additional information on snippets. The path is relative to the <em>index.html</em>.</td>
+<td><code>&quot;info.json&quot;</code></td>
+</tr>
+<tr>
+<td>inputMap</td>
+<td>no</td>
+<td>Object</td>
+<td><code>{}</code></td>
+<td>If this object is set, and its field <code>setMarker</code> is set to true, the Masterportal is configured as input element for data. In that case, each click sets a Map Marker and communicates the coordinates via <strong><a href="remoteInterface.md">remoteInterface</a></strong> in the chosen coordinate reference system.</td>
+<td><code>{setMarker: true, targetProjection: &quot;EPSG:4326&quot;, setCenter: false}</code></td>
+</tr>
+<tr>
+<td>inputMap.setCenter</td>
+<td>no</td>
+<td>Boolean</td>
+<td><code>false</code></td>
+<td>Center on a marker after producing it?</td>
+<td><code>setCenter: true</code></td>
+</tr>
+<tr>
+<td>inputMap.setMarker</td>
+<td>no</td>
+<td>Boolean</td>
+<td><code>false</code></td>
+<td>Flag to activate the ‘setMarker’ functionality.</td>
+<td><code>setMarker: true</code></td>
+</tr>
+<tr>
+<td>inputMap.targetProjection</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;EPSG:25832&quot;</code></td>
+<td>The target coordinate reference system. Coordinates will be translated to it before being communicated via <strong><a href="remoteInterface.md">remoteInterface</a></strong>.</td>
+<td><code>targetprojection: &quot;EPSG:4326&quot;</code></td>
+</tr>
+<tr>
+<td>mapMarker</td>
+<td>no</td>
+<td><strong><a href="#markdown-header-mapmarker">mapMarker</a></strong></td>
+<td></td>
+<td>Overrides the map marker module’s default values. Useful for 3D markers since OpenLayers’s overlays can not be displayed in 3D mode. For this, the map marker has to be defined as vector layer.</td>
+<td></td>
+</tr>
+<tr>
+<td>metaDataCatalogueId</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;2&quot;</code></td>
+<td>URL to the metadata catalog linked to in the layer information window. The ID is resolved to a service of the <strong><a href="rest-services.json.md">rest-services.json</a></strong> file. Note: This attribute is only necessary, when no “show_doc_url” is configured in the metadata dataset in the <strong><a href="services.json.md">services.json</a></strong>. The url can either be set globally (<strong><a href="config.js.md">config.js</a></strong>) or layer-specific(<strong><a href="services.json.md">services.json</a></strong>).</td>
+<td><code>&quot;MetaDataCatalogueUrl&quot;</code></td>
+</tr>
+<tr>
+<td>metadata</td>
+<td>no</td>
+<td><strong><a href="#markdown-header-metadata">metadata</a></strong></td>
+<td></td>
+<td>Allows configuration of which metadata URLs are to be resolved via proxy.</td>
+<td></td>
+</tr>
+<tr>
+<td>mouseHover</td>
+<td>no</td>
+<td><strong><a href="#markdown-header-mousehover">mouseHover</a></strong></td>
+<td></td>
+<td>Activates the MouseHover feature for vector layers, both WFS and GeoJSON. For per-layer configuration, see the <strong><a href="config.json.md">config.json</a></strong>’s section <em>Themenconfig.Fachdaten.Layer</em>.</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>obliqueMap</td>
+<td>no</td>
+<td>Boolean</td>
+<td><code>false</code></td>
+<td>If set to <code>true</code>, an oblique map layer is created. An additional oblique layer must be defined.</td>
+<td></td>
+</tr>
+<tr>
+<td>portalConf</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;config.json&quot;</code></td>
+<td>Path to the portal’s <code>config.json</code> file. You may also enter a node; in that case the taken path is controlled by the urlParameter <code>config</code>.</td>
+<td>Direct path: “…/masterTree/config.json”; Node: “…/…/portal/master/”. In the node scenario, a query parameter like <code>config=config.json</code> must exist in the URL.</td>
+</tr>
+<tr>
+<td>postMessageUrl</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;http://localhost:8080&quot;</code></td>
+<td>URL the portal is supposed to post messages to and receive messages from with the <code>postMessage</code> feature.</td>
+<td>“<a href="http://localhost:8080">http://localhost:8080</a>”</td>
+</tr>
+<tr>
+<td>proxyHost</td>
+<td>no</td>
+<td>String</td>
+<td></td>
+<td>Host name of a remote proxy with CORS configured to support the portal’s domain, among others.</td>
+<td><code>&quot;https://proxy.example.com&quot;</code></td>
+</tr>
+<tr>
+<td>quickHelp</td>
+<td>no</td>
+<td>Object</td>
+<td><code>{}</code></td>
+<td>Activates the QuickHelp module. This displays a window containing help text for supported functions of the modules. Available for the layer tree (CustomTree), the search bar (Searchbar) and the routing tool (RoutingTool).</td>
+<td></td>
+</tr>
+<tr>
+<td>remoteInterface</td>
+<td>no</td>
+<td><strong><a href="#markdown-header-remoteinterface">remoteInterface</a></strong></td>
+<td></td>
+<td>Optional remote interface configuration.</td>
+<td></td>
+</tr>
+<tr>
+<td>scaleLine</td>
+<td>no</td>
+<td>Boolean</td>
+<td><code>false</code></td>
+<td>Controls whether a scale line is displayed at the bottom right of the map.</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>simpleMap</td>
+<td>no</td>
+<td>Boolean</td>
+<td><code>false</code></td>
+<td><em>Deprecated in the next major release. Please use the parameter <code>simpleMap</code> as part of the configuration of the <code>saveSelection</code> tool in the <strong><a href="config.json.md">config.json</a></strong>.</em> Adds a SimpleMap URL to the <code>Save selection</code> dialogue. When calling this URL, the menu bar, layer tree, and map controls are deactivated. Not implemented for tree type <em>„light“</em>.</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>startingMap3D</td>
+<td>bi</td>
+<td>Boolean</td>
+<td><code>false</code></td>
+<td>Controls whether the map should start in 3D mode.</td>
+<td></td>
+</tr>
+<tr>
+<td>tree</td>
+<td>no</td>
+<td><strong><a href="#tree">tree</a></strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>uiStyle</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;default&quot;</code></td>
+<td>Sets the control element layout.</td>
+<td><code>table</code></td>
+</tr>
+<tr>
+<td>wfsImgPath</td>
+<td>no</td>
+<td>String</td>
+<td></td>
+<td>Path to the folder holding images for the WFS styles. The path is relative to <em>js/main.js</em>.</td>
+<td><code>https://geodienste.hamburg.de/lgv-config/img/&quot;</code></td>
+</tr>
+<tr>
+<td>wpsID</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;&quot;</code></td>
+<td>Reference to a WPS interface used in various modules. The ID is resolved to a service defined in the <strong><a href="rest-services.json.md">rest-services.json</a></strong> file.</td>
+<td><code>&quot;&quot;</code></td>
+</tr>
+<tr>
+<td>zoomToFeature</td>
+<td>no</td>
+<td><strong><a href="#markdown-header-zoomtofeature">zoomToFeature</a></strong></td>
+<td></td>
+<td>Optional configuration of the URL query parameter <code>featureid</code>. For details, see <strong><a href="urlParameter.md">urlParameter</a></strong>.</td>
+<td></td>
+</tr>
+<tr>
+<td>layerInformation</td>
+<td>no</td>
+<td><strong><a href="#markdown-header-layerinformation">layerInformation</a></strong></td>
+<td></td>
+<td>Configuration for the layerInformation window.</td>
+<td></td>
+</tr>
+<tr>
+<td>vuetify</td>
+<td>no</td>
+<td>String</td>
+<td>undefined</td>
+<td>Path to the optional instance of the vuetify UI library. e.g. portal or addon specific.</td>
+<td><code>addons/cosi/vuetify/index.js</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>alerting</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fetchBroadcastUrl</td>
+<td>no</td>
+<td>String</td>
+<td><code>false</code></td>
+<td>The alerting module will initially use a linked configuration file from this URL, if set.</td>
+</tr>
+<tr>
+<td>localStorageDisplayedAlertsKey</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;displayedAlerts&quot;</code></td>
+<td>Arbitrary key used to store information regarding the alerting module in the browser’s local storage.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>cameraParameter</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>heading</td>
+<td>no</td>
+<td>Number</td>
+<td></td>
+<td>Camera’s initial heading in radians</td>
+</tr>
+<tr>
+<td>tilt</td>
+<td>no</td>
+<td>Number</td>
+<td></td>
+<td>Camera’s initial tile in radians</td>
+</tr>
+<tr>
+<td>altitude</td>
+<td>no</td>
+<td>Number</td>
+<td></td>
+<td>Camera’s initial height in meters</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>cesiumParameter</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fog</td>
+<td>no</td>
+<td>Object</td>
+<td></td>
+<td>Fog options. See <a href="https://cesiumjs.org/Cesium/Build/Documentation/Fog.html">fog documentation</a> for details.</td>
+</tr>
+<tr>
+<td>enableLighting</td>
+<td>no</td>
+<td>Boolean</td>
+<td><code>false</code></td>
+<td>Activates light effects on the map based on the sun’s position.</td>
+</tr>
+<tr>
+<td>maximumScreenSpaceError</td>
+<td>no</td>
+<td>Number</td>
+<td><code>2.0</code></td>
+<td>Detail level in which terrain/raster tiles are fetched. 4/3 is the highest quality level.</td>
+</tr>
+<tr>
+<td>fxaa</td>
+<td>no</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>activates <em>fast approximate anti-aliasing</em></td>
+</tr>
+<tr>
+<td>tileCacheSize</td>
+<td>no</td>
+<td>Number</td>
+<td><code>100</code></td>
+<td>terrain/raster tile cache size</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>footer</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>urls</td>
+<td>no</td>
+<td><strong><a href="#markdown-header-footerurls">urls</a></strong>[]</td>
+<td></td>
+<td>Array of URL configuration objects.</td>
+</tr>
+<tr>
+<td>showVersion</td>
+<td>no</td>
+<td>Boolean</td>
+<td><code>false</code></td>
+<td>If <code>true</code>, the Masterportal version number is included in the footer.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3>footer.urls</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>alias</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;Landesbetrieb Geoinformation und Vermessung&quot;</code></td>
+<td>Link text for desktop applications</td>
+</tr>
+<tr>
+<td>alias_mobil</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;LGV&quot;</code></td>
+<td>Link text for mobile applications</td>
+</tr>
+<tr>
+<td>bezeichnung</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;Kartographie und Gestaltung: &quot;</code></td>
+<td>Link prefix</td>
+</tr>
+<tr>
+<td>url</td>
+<td>no</td>
+<td>String</td>
+<td></td>
+<td>the URL the <code>alias</code> (or <code>alias_mobile</code>) text links to, e.g. <code>&quot;https://example.com/&quot;</code>. You may also link to mail creation with e.g. <code>&quot;mailto:my_mail@example.com&quot;</code></td>
+</tr>
+<tr>
+<td>toolModelId</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;SdpDownload&quot;</code></td>
+<td>The id of a module to be opened on clicking the link. Do not include a URL for such cases.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<pre><code class="language-json">{
+    &quot;footer&quot;: {
+        &quot;urls&quot;: [
+            {
+                &quot;bezeichnung&quot;: &quot;Cartography and design: &quot;,
+                &quot;url&quot;: &quot;https://geoinfo.hamburg.de/&quot;,
+                &quot;alias&quot;: &quot;Landesbetrieb Geoniformation und Vermessung&quot;,
+                &quot;alias_mobil&quot;: &quot;LGV&quot;
+            },
+            {
+                &quot;bezeichnung&quot;: &quot;&quot;,
+                &quot;url&quot;: &quot;http://www.hamburg.de/bsu/timonline&quot;,
+                &quot;alias&quot;: &quot;Map inconsistencies&quot;
+            },
+            {
+                &quot;bezeichnung&quot;: &quot;&quot;,
+                &quot;url&quot;: &quot;&quot;,
+                &quot;alias&quot;: &quot;SDP Download&quot;,
+                &quot;toolModelId&quot;: &quot;sdpdownload&quot;
+            }
+        ],
+        &quot;showVersion&quot;: true
+    }
+}
+</code></pre>
+<hr>
+<h2>mapMarker</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pointStyleId</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;defaultMapMarkerPoint&quot;</code></td>
+<td>StyleId to refer to a <code>style.json</code> point style. If not set, the <code>img/mapMarker.svg</code> is used.</td>
+</tr>
+<tr>
+<td>polygonStyleId</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;defaultMapMarkerPolygon&quot;</code></td>
+<td>StyleId to refer to a <code>style.json</code> polygon style.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<pre><code class="language-json">{
+    &quot;mapMarker&quot;: {
+        &quot;pointStyleId&quot;: &quot;customMapMarkerPoint&quot;,
+        &quot;polygonStyleId&quot;: &quot;customMapMarkerPolygon&quot;
+    }
+}
+</code></pre>
+<hr>
+<h2>mouseHover</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>numFeaturesToShow</td>
+<td>no</td>
+<td>Integer</td>
+<td><code>2</code></td>
+<td>Maximum amount of element information per tooltip; when exceeded, an information text informs the user of cut content.</td>
+</tr>
+<tr>
+<td>infoText</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;(Further objects. Please zoom.)&quot;</code></td>
+<td>Information text shown when <code>numFeaturesToShow</code> is exceeded.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>portalLanguage</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>enabled</td>
+<td>yes</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Controls whether a button to switch the portal’s language is provided.</td>
+</tr>
+<tr>
+<td>debug</td>
+<td>no</td>
+<td>Boolean</td>
+<td><code>false</code></td>
+<td>Controls whether debug information regarding translations is logged to the console.</td>
+</tr>
+<tr>
+<td>languages</td>
+<td>yes</td>
+<td>Object</td>
+<td><code>{ de: &quot;deutsch&quot;, en: &quot;englisch&quot; }</code></td>
+<td>Language abbreviations. Please mind that matching locale files must exist.</td>
+</tr>
+<tr>
+<td>fallbackLanguage</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;de&quot;</code></td>
+<td>Fallback language used if contents are not available in the currently selected language.</td>
+</tr>
+<tr>
+<td>changeLanguageOnStartWhen</td>
+<td>no</td>
+<td>String[]</td>
+<td><code>[&quot;querystring&quot;, &quot;localStorage&quot;, &quot;navigator&quot;, &quot;htmlTag&quot;]</code></td>
+<td>Order of user language detection. See <a href="https://github.com/i18next/i18next-browser-languageDetector">i18next browser language detection documentation</a> for details.</td>
+</tr>
+<tr>
+<td>loadPath</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;/locales/{{lng}}/{{ns}}.json&quot;</code></td>
+<td>Path to load language files from, or a function returning such a path: <code>function(lngs, namespaces) { return path; }</code>. <code>lng</code> and <code>ns</code> are read from the path, if given, as if from a static path. You may also provide a URL like <code>&quot;https://localhost:9001/locales/{{lng}}/{{ns}}.json&quot;</code>. See <a href="https://github.com/i18next/i18next-http-backend">i18next http backend documentation</a> for details.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<pre><code class="language-json">{
+&quot;portalLanguage&quot;: {
+        &quot;enabled&quot;: true,
+        &quot;debug&quot;: false,
+        &quot;languages&quot;: {
+            &quot;de&quot;: &quot;deutsch&quot;,
+            &quot;en&quot;: &quot;englisch&quot;
+        },
+        &quot;fallbackLanguage&quot;: &quot;de&quot;,
+        &quot;changeLanguageOnStartWhen&quot;: [&quot;querystring&quot;, &quot;localStorage&quot;, &quot;navigator&quot;, &quot;htmlTag&quot;],
+        &quot;loadPath&quot;: &quot;/locales/{{lng}}/{{ns}}.json&quot;
+    }
+}
+</code></pre>
+<hr>
+<h2>quickHelp</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imgPath</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;/&quot;</code></td>
+<td>An absolute or relative path to the folder containing the quick help images.</td>
+</tr>
+<tr>
+<td>searchbarAllgemeines1</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;allgemein.png&quot;</code></td>
+<td>First quick help image regarding the Searchbar, belonging to the chapter “General information”. The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>searchbarAllgemeines2</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;allgemein_2.png&quot;</code></td>
+<td>Second quick help image regarding the Searchbar, belonging to the chapter “General information”. The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>searchbarAllgemeines3</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;allgemein_3.png&quot;</code></td>
+<td>Third quick help image regarding the Searchbar, belonging to the chapter “General information”. The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>searchbarFlurstueckssuche</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;allgemein_4.png&quot;</code></td>
+<td>Quick help image regarding the Searchbar, belonging to the chapter “Parcel search”. The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>aufbau1</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;themen.png&quot;</code></td>
+<td>First quick help image regarding the layer tree (CustomTree), belonging to the structure chapter. The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>aufbau2</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;themen_2.png&quot;</code></td>
+<td>Second quick help image regarding the layer tree (CustomTree), belonging to the structure chapter. The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>routingTool1</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;routing_1.png&quot;</code></td>
+<td>First quick help image regarding the routing tool (RoutingTool). The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>routingTool2</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;routing_2.png&quot;</code></td>
+<td>Second quick help image regarding the routing tool (RoutingTool). The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>routingTool3</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;routing_3.png&quot;</code></td>
+<td>Third quick help image regarding the routing tool (RoutingTool). The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>routingTool4</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;routing_4.png&quot;</code></td>
+<td>Fourth quick help image regarding the routing tool (RoutingTool). The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>routingTool5</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;routing_5.png&quot;</code></td>
+<td>Fifth quick help image regarding the routing tool (RoutingTool). The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>routingTool6</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;routing_6.png&quot;</code></td>
+<td>Sixth quick help image regarding the routing tool (RoutingTool). The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>routingTool7</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;routing_7.png&quot;</code></td>
+<td>Seventh quick help image regarding the routing tool (RoutingTool). The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>routingTool8</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;routing_8.png&quot;</code></td>
+<td>Eighth quick help image regarding the routing tool (RoutingTool). The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>routingTool9</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;routing_9.png&quot;</code></td>
+<td>Nineth quick help image regarding the routing tool (RoutingTool). The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>routingTool10</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;routing_10.png&quot;</code></td>
+<td>Tenth quick help image regarding the routing tool (RoutingTool). The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>routingTool11</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;routing_11.png&quot;</code></td>
+<td>Eleventh quick help image regarding the routing tool (RoutingTool). The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>routingTool12</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;routing_12.png&quot;</code></td>
+<td>Twelfth quick help image regarding the routing tool (RoutingTool). The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>routingTool13</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;routing_13.png&quot;</code></td>
+<td>Thirteenth quick help image regarding the routing tool (RoutingTool). The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>routingTool14</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;routing_14.png&quot;</code></td>
+<td>Fourteenth quick help image regarding the routing tool (RoutingTool). The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>routingTool15</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;routing_15.png&quot;</code></td>
+<td>Fifteenth quick help image regarding the routing tool (RoutingTool). The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+<tr>
+<td>routingTool16</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;routing_16.png&quot;</code></td>
+<td>Sixteenth quick help image regarding the routing tool (RoutingTool). The image must exist in the <code>imgPath</code> folder.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>remoteInterface</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>postMessageUrl</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;http://localhost:8080&quot;</code></td>
+<td>URL the portal will post to and receive messages from with the <code>postMessage</code> feature.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<pre><code class="language-json">{
+    &quot;remoteInterface&quot;: {
+        &quot;postMessageUrl&quot;: &quot;http://localhost:8080&quot;
+    }
+}
+</code></pre>
+<hr>
+<h2>tree</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>orderBy</td>
+<td>no</td>
+<td>String</td>
+<td><code>&quot;OpenData&quot;</code></td>
+<td>Category the layer tree is sorted by initially.</td>
+</tr>
+<tr>
+<td>layerIDsToIgnore</td>
+<td>no</td>
+<td>Array</td>
+<td></td>
+<td>Array of <code>services.json</code> layer ids not to be shown in the layer tree.</td>
+</tr>
+<tr>
+<td>layerIDsToStyle</td>
+<td>no</td>
+<td><strong><a href="#markdown-header-treelayeridstostyle">layerIDsToStyle</a></strong>[]</td>
+<td></td>
+<td>Special implementation for a HVV (Hamburg public transportation) service. Contains objects to request various styles of a layer id.</td>
+</tr>
+<tr>
+<td>metaIDsToMerge</td>
+<td>no</td>
+<td>String[]</td>
+<td></td>
+<td>All layers found in the <code>services.json</code> regarding these meta IDs are merged to a single layer of the layer tree.</td>
+</tr>
+<tr>
+<td>metaIDsToIgnore</td>
+<td>no</td>
+<td>String[]</td>
+<td></td>
+<td>All <code>services.json</code> layers listed will not be shown in the layer tree.</td>
+</tr>
+<tr>
+<td>isFolderSelectable</td>
+<td>no</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Globally sets whether a selection box is provided on folders that de-/activates all layers in it. An override per element exists, see <strong><a href="config.json.md#Ordnerkonfiguration-Fachdaten">config.json</a></strong>.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3>tree.layerIDsToStyle</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>no</td>
+<td>Sring</td>
+<td></td>
+<td>a <code>services.json</code> layer’s id</td>
+</tr>
+<tr>
+<td>styles</td>
+<td>no</td>
+<td>String/String[]</td>
+<td></td>
+<td>Style to be used as string; if multiple styles are to be used, they are listed in an array.</td>
+</tr>
+<tr>
+<td>name</td>
+<td>no</td>
+<td>String/String[]</td>
+<td></td>
+<td>Name to be used as string; if multiple names are to be used, they are listed in an array.</td>
+</tr>
+<tr>
+<td>legendUrl</td>
+<td>no</td>
+<td>String/String[]</td>
+<td></td>
+<td>Legend image URL to be used as string; if multiple legend images are to be used, their URLs are listed in an array.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<pre><code class="language-json">{
+    &quot;tree&quot;: {
+        &quot;orderBy&quot;: &quot;opendata&quot;,
+        &quot;layerIDsToIgnore&quot;: [&quot;1912&quot;, &quot;1913&quot;],
+        &quot;layerIDsToStyle&quot;: [
+            {
+                &quot;id&quot;: &quot;1935&quot;,
+                &quot;styles&quot;: [&quot;geofox_Faehre&quot;, &quot;geofox-bahn&quot;, &quot;geofox-bus&quot;, &quot;geofox_BusName&quot;],
+                &quot;name&quot;: [&quot;Fährverbindungen&quot;, &quot;Bahnlinien&quot;, &quot;Buslinien&quot;, &quot;Busliniennummern&quot;],
+                &quot;legendURL&quot;: [&quot;http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-faehre.png&quot;, &quot;http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bahn.png&quot;, &quot;http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png&quot;, &quot;http://87.106.16.168/legende_mrh/hvv-bus.png&quot;]
+            }
+        ],
+        &quot;metaIDsToMerge&quot;: [
+            &quot;FE4DAF57-2AF6-434D-85E3-220A20B8C0F1&quot;
+        ],
+        &quot;metaIDsToIgnore&quot;: [
+            &quot;09DE39AB-A965-45F4-B8F9-0C339A45B154&quot;
+        ],
+        &quot;isFolderSelectable&quot;: false
+    }
+}
+</code></pre>
+<hr>
+<h2>metadata</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>useProxy</td>
+<td>no</td>
+<td>String[]</td>
+<td></td>
+<td><em>Deprecated in the next major release. <em><a href="https://www.gdi-de.org/en">GDI-DE</a></em> recommends setting CORS headers on the required services instead.</em> Describes which metadata URLs are to be requested via proxy. The request will contain the requested URL as path, with dots replaced by underscores.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<pre><code class="language-json">{
+    &quot;metadata&quot;: {
+        &quot;useProxy&quot;: [
+            &quot;https://metaver.de/csw&quot;
+        ]
+    }
+}
+</code></pre>
+<hr>
+<h2>zoomToFeature</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imgLink</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Marker link. <em>Deprecated in the next major release.</em></td>
+</tr>
+<tr>
+<td>wfsId</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>ID to a WFS layer of which features to a position are requested from.</td>
+</tr>
+<tr>
+<td>attribute</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Attribute by which the WFS is filtered.</td>
+</tr>
+<tr>
+<td>styleId</td>
+<td>no</td>
+<td>String</td>
+<td></td>
+<td>A styleId from the <code>styles.json</code> may be supplied to override the map marker’s design</td>
+</tr>
+<tr>
+<td>useProxy</td>
+<td>no</td>
+<td>Boolean</td>
+<td><code>false</code></td>
+<td><em>Deprecated in the next major release. <em><a href="https://www.gdi-de.org/en">GDI-DE</a></em> recommends setting CORS headers on the required services instead.</em> Whether the service URL is to be requested via proxy. The request will contain the requested URL as path, with dots replaced by underdashes.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<pre><code class="language-json">{
+    &quot;zoomtofeature&quot;: {
+        &quot;attribute&quot;: &quot;flaechenid&quot;,
+        &quot;wfsId&quot;: &quot;4560&quot;,
+        &quot;styleId&quot;: &quot;location_eventlotse&quot;
+    }
+}
+</code></pre>
+<hr>
+<h2>zoomToGeometry</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imgLink</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Marker link. <em>Deprecated in the next major release.</em></td>
+</tr>
+<tr>
+<td>layerId</td>
+<td>yes</td>
+<td>String</td>
+<td><code>&quot;123456789&quot;</code></td>
+<td>Id of the WFS layer the geometry is requested from.</td>
+</tr>
+<tr>
+<td>attribute</td>
+<td>yes</td>
+<td>String</td>
+<td><code>&quot;district_name&quot;</code></td>
+<td>Attribute by which the WFS is filtered.</td>
+</tr>
+<tr>
+<td>geometries</td>
+<td>yes</td>
+<td>String</td>
+<td><code>[&quot;DISTRICT1&quot;, &quot;DISTRICT2&quot;]</code></td>
+<td>Contains the geometries to be filtered from the WFS.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<pre><code class="language-json">{
+    &quot;zoomToGeometry&quot;: {
+        &quot;layerId&quot;: &quot;123456789&quot;,
+        &quot;attribute&quot;: &quot;district_name&quot;,
+        &quot;geometries&quot;: [&quot;DISTRICT1&quot;, &quot;DISTRICT2&quot;]
+    }
+}
+</code></pre>
+<hr>
+<h2>featureViaURL</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>epsg</td>
+<td>no</td>
+<td>Integer</td>
+<td><code>4326</code></td>
+<td>EPSG code for coordinate reference system to translate coordinates to.</td>
+</tr>
+<tr>
+<td>layers</td>
+<td>yes</td>
+<td><strong><a href="#markdown-header-featureviaurllayers">layers</a></strong>[]</td>
+<td></td>
+<td>Layer configuration array for given features.</td>
+</tr>
+<tr>
+<td>zoomTo</td>
+<td></td>
+<td>String/String[]</td>
+<td></td>
+<td>Id of <strong><a href="#markdown-header-featureviaurllayers">layers</a></strong> or array thereof, to which the Masterportal initially zooms. If none are given, the usual initial center coordinate is used.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<pre><code class="language-json">{
+    &quot;featureViaURL&quot;: {
+        &quot;epsg&quot;: 25832,
+        &quot;zoomTo&quot;: &quot;urlPointFeatures&quot;,
+        &quot;layers&quot;: [
+            {
+                &quot;id&quot;: &quot;urlPointFeatures&quot;,
+                &quot;geometryType&quot;: &quot;Point&quot;,
+                &quot;name&quot;: &quot;URL Point Features&quot;,
+                &quot;styleId&quot;: &quot;url_points&quot;
+            },
+            {
+                &quot;id&quot;: &quot;urlLineFeatures&quot;,
+                &quot;geometryType&quot;: &quot;LineString&quot;,
+                &quot;name&quot;: &quot;URL Line Features&quot;,
+                &quot;styleId&quot;: &quot;url_lines&quot;
+            },
+            {
+                &quot;id&quot;: &quot;urlPolygonFeatures&quot;,
+                &quot;geometryType&quot;: &quot;Polygon&quot;,
+                &quot;name&quot;: &quot;URL Polygon Features&quot;,
+                &quot;styleId&quot;: &quot;url_polygons&quot;
+            },
+            {
+                &quot;id&quot;: &quot;urlMultiPointFeatures&quot;,
+                &quot;geometryType&quot;: &quot;MultiPoint&quot;,
+                &quot;name&quot;: &quot;URL MultiPoint Features&quot;,
+                &quot;styleId&quot;: &quot;url_mulitpoints&quot;
+            },
+            {
+                &quot;id&quot;: &quot;urlMultiLineStringFeatures&quot;,
+                &quot;geometryType&quot;: &quot;MultiLineString&quot;,
+                &quot;name&quot;: &quot;URL MultiLineString Features&quot;,
+                &quot;styleId&quot;: &quot;url_multilinestring&quot;
+            },
+            {
+                &quot;id&quot;: &quot;urlMultiPolygonFeatures&quot;,
+                &quot;geometryType&quot;: &quot;MultiPolygon&quot;,
+                &quot;name&quot;: &quot;URL MultiPolygon Features&quot;,
+                &quot;styleId&quot;: &quot;url_multipolygons&quot;
+            }
+        ]
+    }
+}
+</code></pre>
+<hr>
+<h3>featureViaURL.layers</h3>
+<p>The parameters described apply for each entry of the <strong><a href="#markdown-header-featureviaurllayers">layers</a></strong> array.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>unique ID for the layer to be created</td>
+</tr>
+<tr>
+<td>geometryType</td>
+<td>yes</td>
+<td>enum[“LineString”, “Point”, “Polygon”, “MultiPoint”, “MultiLineString”, “MultiPolygon”]</td>
+<td></td>
+<td>Geometry type of the feature to be shown.</td>
+</tr>
+<tr>
+<td>name</td>
+<td>yes</td>
+<td>String</td>
+<td></td>
+<td>Layer name displayed in the layer tree, the legend, and the GFI pop-up.</td>
+</tr>
+<tr>
+<td>styleId</td>
+<td>no</td>
+<td>String</td>
+<td></td>
+<td>Style id to be used for the feature, referring to the <strong><a href="style.json.md">style.json</a></strong>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<pre><code class="language-json">{
+    &quot;layers&quot;: [{
+        &quot;id&quot;: &quot;urlPolygonFeatures&quot;,
+        &quot;geometryType&quot;: &quot;Polygon&quot;,
+        &quot;name&quot;: &quot;URL Polygon Features&quot;,
+        &quot;styleId&quot;: &quot;url_polygons&quot;
+    }]
+}
+</code></pre>
+<hr>
+<h2>layerInformation</h2>
+<p>Configuration for the layerInformation window.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>showUrlGlobal</td>
+<td>no</td>
+<td>Boolean</td>
+<td></td>
+<td>parameter to globally toggle the dispaly of the service url for all layers. Referring to the “urlIsVisible” Parameter (see <strong><a href="config.json.md#markdown-header-themenconfiglayer">config.json</a></strong> )</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<pre><code class="language-json">{
+    &quot;layerInformation&quot;: {
+        &quot;showUrlGlobal&quot;: true
+    },
+}
+</code></pre>
+<hr>
+<blockquote>
+<p><strong><a href="languages.md">Masterportal translation documentation</a></strong></p>
+</blockquote>
+<blockquote>
+<p><strong><a href="doc.md">Return to the Masterportal documentation</a></strong></p>
+</blockquote>

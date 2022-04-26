@@ -1,0 +1,72 @@
+<p>##Unit Tests der eines Backbone-Moduls##</p>
+<p><strong>Beispiel:</strong>
+<em>masterportal/test/unittests/ExampleTest/</em></p>
+<p><strong>Aufruf</strong>:</p>
+<p>npm run test</p>
+<hr>
+<p>##Wie man Tests schreibt:###</p>
+<p>###Ort###
+Im Projektverzeichnis <em>/test/unittests</em>.
+In diesem Ordner ist ein Ordner names <em>modules</em>.
+Hier wird die Struktur unter <em>masterportal/modules</em> repliziert.
+D.h. Zu diesem <em>modules</em> Ordner sollte die Testdatei den gleichen relativen Pfad haben, wie die zu testende Datei zum <em>modules</em>-Ordner im Projektverzeichnis.</p>
+<p>Beispiel:
+soll die Datei <em>masterportal/modules/tools/download/model.js</em> getestet werden, dann gehört die Testdatei in <em>masterportal/test/modules/tools/download/model.test.js</em></p>
+<p>Alle Tests zu einer Komponente z.b. einem Model sollen in eine Testdatei mit gleichem Namen und der Endung <em>test.js</em> abgelegt werden.</p>
+<p>Eine Testdatei beschreibt dabei immer nur genau eine zu testende Datei.</p>
+<p>Die Unittest werden beim pushen durch eine pre-push Hook geprüft.</p>
+<p>###Struktur###</p>
+<p><strong>BeispielStruktur:</strong></p>
+<pre><code>
+import {expect} from &quot;chai&quot;;
+import Model from &quot;./testModel.js&quot;;
+
+    describe(&quot;testModul&quot;, function () {
+        describe(&quot;getEmployeesByName&quot;, function () {
+             before(function () {
+                /* runs before the first it() is executed */
+                console.log(&quot;before getEmployeesByName&quot;);
+                model = new Model();
+                model.setEmployees([{name: &quot;Robin&quot;, coffeeCount: 0}, {name: &quot;Jonas&quot;, coffeeCount: 1}]);
+            });
+             // type test using expect
+            it(&quot;getEmployeesByName('Jonas') should return an array of length one&quot;, function () {
+                expect(model.getEmployeesByName(&quot;Jonas&quot;)).to.be.a(&quot;array&quot;).with.lengthOf(1);
+            });
+            it(&quot;getEmployeesByName return an array containing &quot;, function () {
+                expect(model.getEmployeesByName(&quot;Jonas&quot;)).to.deep.include({name: &quot;Jonas&quot;, coffeeCount: 1});
+            });
+        });
+
+</code></pre>
+<p><strong>Describe</strong> wird benutzt um einen Abschnitt Kenntlich zu machen.
+Im Beispiel wird das Äußere <strong>describe</strong> benutzt, um zu beschreiben Welches Modul getestet wird.
+Im Inneren <strong>describe</strong> wird die Funktion, die gerade getestet werden soll beschrieben.</p>
+<p><strong>Syntax:</strong></p>
+<pre><code>    describe(name, callback)
+</code></pre>
+<p><strong>It</strong> kapselt die einzelnen Testcases. Als erster Parameter wird ein Text übergeben der Beschreibt welche Eigenschaft die zu testende Methode haben sollte.
+Als zweiten Parameter wird eine Callback übergeben, in der mit Hilfe eines <em>expect</em> (siehe unten) geprüft wird, ob die Eingenschaft tatsächlich besteht.</p>
+<p><strong>Syntax:</strong></p>
+<pre><code>    it(testcaseDescription, callback)
+</code></pre>
+<p><strong>before</strong> ist eine Funktion, die benutzt werden kann, um Vorbereitungen für eine Gruppe von Tests durchzuführen. Sie wird innerhalb einen <strong>describe</strong> genau <em>einmal</em> ausgeführt.</p>
+<p><strong>beforeEach</strong> ist eine Funktion, die benutzt werden kann, um Vorbereitungen für einzelne Testfälle durchzuführen. Sie wird für <em>jedes</em> <strong>it</strong> in einem <strong>describe</strong> <em>einmal</em> durchgeführt.</p>
+<p><a href="https://mochajs.org/">Mehr Infos</a></p>
+<p>###Die Testcases###</p>
+<p>Innerhalb eines <strong>it</strong> sollte ein <strong>expect</strong> stehen.</p>
+<p><strong>expect</strong> kann genutzt werden, um eine oder mehrere Eigenschaften eines Objektes zu untersuchen.</p>
+<p><strong>Syntax:</strong></p>
+<pre><code> expect(model.testMe()).to.be.true;
+
+ expect(model.testMe()).to.deep.equal({name: &quot;Jon Snow&quot;});
+</code></pre>
+<p><a href="https://chaijs.com/api/bdd/">Mehr Infos</a></p>
+<p>###Best practices###</p>
+<p>Ein Test sollte immer möglichst nur aus genau <strong>einem Grund</strong> fehlschlagen.
+D.h. pro <strong>It</strong> sollte möglichst nur ein <strong>expect</strong> verwendet werden.</p>
+<p>Tests sollten möglichst <strong>simple</strong> sein. Lieber schnell zwei kleine Tests schreiben als ein kompliziertes Konstrukt das mehrere Sachen auf einmal abdeckt.</p>
+<p>Man sollte sich überlegen welche <strong>Corner-Cases</strong> man testen sollte.
+D.h. Ungewöhnliche Fälle testen, z.b. sehr hohe oder sehr geringe Eingaben oder unsinnige Eingaben, wie undefined oder ein Leerstring.</p>
+<p>Positiv und <strong>negativ</strong> testen.
+D.h. nicht nur testen, ob das erwünschte Ergebnis produziert wird, sondern auch, dass keine Unerwünschten Nebeneffekte auftreten.</p>

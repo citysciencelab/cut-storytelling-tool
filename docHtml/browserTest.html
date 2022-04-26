@@ -1,0 +1,457 @@
+<blockquote>
+<p>Browser testing with Selenium WebDriver</p>
+</blockquote>
+<p>[TOC]</p>
+<h1>Install browser test drivers (WebDrivers)</h1>
+<p>To locally run the browser tests, drivers have to be installed on your system. At least <em>chromedriver</em> should be installed, but you may also install further drivers for test automation. (Hint: For Firefox, the name of the WebDriver is <em>geckodriver</em>.)</p>
+<p>Using the variable “browser” (see below), these browsers can be used for automated tests:</p>
+<ul>
+<li>“chrome”: Chrome-Browser</li>
+<li>“firefox”: Firefox</li>
+<li>“edge”: Microsoft Edge</li>
+</ul>
+<p>For installation, <a href="https://docs.seleniumhq.org/download/">download the required drivers</a> and make them available to the system environment. On Windows, this is done by adding the driver’s paths to the <code>path</code> variable in your system environment variables. The <code>.exe</code> file must have been placed in a folder where <code>.exe</code> files are allowed to be executed.</p>
+<p>To test your setup, open a new <code>cmd</code> terminal (no administrative rights required) and run e.g. <code>chromedriver</code>. This should print <em>“ChromeDriver was started successfully.”</em>, or any other confirmation, depending on the driver you’re testing.</p>
+<h1>Locally run tests</h1>
+<p>To locally run the tests, a Masterportal dev server has to be started. Run <code>npm start</code> to do so. Then, run <code>npm run browsertest</code> to execute the tests.</p>
+<p>You may also start a run with modified parameters to e.g. use your local proxy, set the browser to test, or change the URL the portal is running on.</p>
+<pre><code class="language-console">$ browser=firefox url=[url] proxy=[proxyurl] ./node_modules/.bin/mocha ./test/end2end/TestRunner.js
+</code></pre>
+<p>You may also define the variables for your test environment by creating a file <code>.env</code> in the Masterportal root, containing your variables. The file will be read on each test run.</p>
+<h1>Run tests on <a href="http://SauceLabs.com">SauceLabs.com</a></h1>
+<p>To run the local systems tests on Sauce Labs, you need to open a <a href="https://docs.saucelabs.com/secure-connections">sauce trusted connection</a>:</p>
+<ul>
+<li>You need to download <a href="https://docs.saucelabs.com/secure-connections/sauce-connect/installation">Sauce Connect Proxy</a></li>
+<li>Then define your <a href="https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/setup-configuration">setup and configuration</a></li>
+</ul>
+<pre><code class="language-console">$ bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -x $SAUCE_DC -i TUNNEL_ID'
+</code></pre>
+<ul>
+<li>When sauce connect is up you can run the browsertest</li>
+</ul>
+<pre><code class="language-console">$ npm run browsertestOnSauceLabs
+</code></pre>
+<h1>How to write tests</h1>
+<h2>Test file location</h2>
+<p>Test files have to be saved with the file extension <code>.e2e.js</code>. All test files have to be placed next to the component and store being tested in a separate <code>tests/end2end</code> folder. For illustration, the following example was constructed using the <code>ScaleSwitcher</code> component.</p>
+<pre><code>src
+|-- modules
+|   |-- tools
+|   |   |-- scaleSwitcher
+|   |   |   |-- components
+|   |   |	|   |-- ScaleSwitcher.vue
+|   |   |   |   |-- ...
+|   |   |	|-- store
+|   |   |   |   |-- actionsScaleSwitcher.js
+|   |   |   |   |-- gettersScaleSwitcher.js
+|   |   |   |   |-- indexScaleSwitcher.js
+|   |   |   |   |-- mutationsScaleSwitcher.js
+|   |   |   |   |-- stateScaleSwitcher.js
+|   |   |   |
+|   |   |	|-- tests
+|   |   |	|   |-- end2end
+|   |   |   |	|   |-- ScaleSwitcher.e2e.js
+|   |   |	|   |-- unit
+|   |   |   |	|   |-- components
+|   |   |   |   |	|   |-- ScaleSwitcher.spec.js
+|   |   |   |	|   |-- store
+|   |   |   |   |	|   |-- actionsScaleSwitcher.spec.js
+|   |   |   |   |	|   |-- gettersScaleSwitcher.spec.js
+|   |   |   |   |	|   |-- mutationsScaleSwitcher.spec.js
+</code></pre>
+<h2>File structure</h2>
+<p>The following sub-chapters contain example test files that may be used as guideline.</p>
+<h2>Creating the ScaleSwitcher.e2e.js</h2>
+<pre><code class="language-js">const webdriver = require(&quot;selenium-webdriver&quot;);
+
+/**
+ * Tests regarding scale switcher tool.
+ * @param {e2eTestParams} params The parameter set.
+ * @returns {void}
+ */
+async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
+
+}
+
+module.exports = ScaleSwitcherTests;
+</code></pre>
+<h2>Register the “ScaleSwitcher.e2e.js”</h2>
+<p>Open <code>masterportal/test/end2end/test.js</code> and add the path of the <code>ScaleSwitcher.e2e.js</code> to the array <code>suites</code>. In this file all paths to the files are configured with end2end tests.</p>
+<pre><code class="language-js">const suites = [
+    ...
+
+                // modules/tools
+                require(&quot;../../src/modules/tools/contact/tests/end2end/Contact.e2e.js&quot;),
+                // require(&quot;./tests/modules/tools/PopulationRequest_HH.js&quot;),
+                require(&quot;./tests/modules/tools/ExtendedFilter.js&quot;),
+                require(&quot;./tests/modules/tools/List.js&quot;),
+                require(&quot;../../src/modules/tools/supplyCoord/tests/end2end/SupplyCoord.e2e.js&quot;),
+                require(&quot;../../src/modules/tools/measure/tests/end2end/Measure.e2e.js&quot;),
+                require(&quot;../../src/modules/tools/scaleSwitcher/tests/end2end/ScaleSwitcher.e2e.js&quot;), // add the tool scaleSwitcher
+                require(&quot;./tests/modules/tools/ParcelSearch.js&quot;),
+                require(&quot;../../src/modules/tools/searchByCoord/tests/end2end/SearchByCoord.e2e.js&quot;),
+
+...
+            ],
+</code></pre>
+<h2>Add a describe for testing</h2>
+<p>The tests should only be tested in the <code>portal/master</code>, because the scale switcher is only configured in this portal.
+At the beginning, an <code>only</code> can be appended to the <code>describe</code>. This way, when starting the End2End tests, only the tests within this describe will be tested. This is especially helpful when creating tests.
+Note: After completion of the tests the <code>only</code> must be removed again, so that <strong>all</strong> tests are running again.</p>
+<pre><code class="language-js">const webdriver = require(&quot;selenium-webdriver&quot;),
+    {isMaster} = require(&quot;../../../../../../test/end2end/settings&quot;);
+
+
+/**
+ * Tests regarding scale switcher tool.
+ * @param {e2eTestParams} params The parameter set.
+ * @returns {void}
+ */
+async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
+    const testIsApplicable = isMaster(url);
+
+    // The test will only run on the `masterportal/portal/master`
+    if (testIsApplicable) {
+        describe.only(&quot;ScaleSwitcher&quot;, function () {
+        });
+    }
+}
+
+module.exports = ScaleSwitcherTests;
+
+</code></pre>
+<h2>Add Hooks</h2>
+<p>There are basically 3 hooks added.</p>
+<h3>Before</h3>
+<p>Executed once in describe.
+Sets the title of the test, if the tests are executed via a pipeline on Saucelabs. Get the driver.</p>
+<pre><code class="language-js"> before(async function () {
+    if (capability) {
+        // Title for the tests on saucelabs
+        capability.name = this.currentTest.fullTitle();
+        // Title for the tests on saucelabs
+        capability[&quot;sauce:options&quot;].name = this.currentTest.fullTitle();
+        // After a change, this must be communicated to the builder
+        builder.withCapabilities(capability);
+    }
+    // Get the driver
+    driver = await getDriver();
+});
+</code></pre>
+<h3>After</h3>
+<p>Will be executed once after all tests have been run.
+If the tests are piped to Saucelabs, the URL to executed tests is logged to Saucelabs.</p>
+<pre><code class="language-js">after(async function () {
+    if (capability) {
+        // Logs the url to the test on saucelabs if the tests were started there
+        driver.session_.then(function (sessionData) {
+            logTestingCloudUrlToTest(sessionData.id_);
+        });
+    }
+});
+</code></pre>
+<h3>AfterEach</h3>
+<p>Will be executed after each test.
+It serves as a fallback, if a test fails it will be restarted. This is done because it can happen that a resource from the web does not respond on the first try.</p>
+<pre><code class="language-js">afterEach(async function () {
+    // Executed only once after the failure of a test
+    if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+        // Quit the driver
+        await quitDriver();
+        // Initialize the driver again
+        driver = await initDriver(builder, url, resolution);
+    }
+});
+</code></pre>
+<h3>All hooks together:</h3>
+<pre><code class="language-js">const webdriver = require(&quot;selenium-webdriver&quot;),
+    {isMaster} = require(&quot;../../../../../../test/end2end/settings&quot;),
+    {initDriver, getDriver, quitDriver} = require(&quot;../../../../../../test/end2end/library/driver&quot;),
+    {logTestingCloudUrlToTest} = require(&quot;../../../../../../test/end2end/library/utils&quot;);
+
+
+/**
+ * Tests regarding scale switcher tool.
+ * @param {e2eTestParams} params The parameter set.
+ * @returns {void}
+ */
+async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
+    const testIsApplicable = isMaster(url);
+
+    if (testIsApplicable) {
+        describe.only(&quot;ScaleSwitcher&quot;, function () {
+            let driver;
+
+            before(async function () {
+                if (capability) {
+
+                    capability.name = this.currentTest.fullTitle();
+                    capability[&quot;sauce:options&quot;].name = this.currentTest.fullTitle();
+                    builder.withCapabilities(capability);
+                }
+                driver = await getDriver();
+            });
+
+            after(async function () {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logTestingCloudUrlToTest(sessionData.id_);
+                    });
+                }
+            });
+
+            afterEach(async function () {
+                if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                    await quitDriver();
+                    driver = await initDriver(builder, url, resolution);
+                }
+            });
+        });
+    }
+}
+
+module.exports = ScaleSwitcherTests;
+
+</code></pre>
+<h2>Add first tests</h2>
+<p>When testing a tool, it is generally advisable to open it first. To do this, you should first check whether the tool is already open. Then check whether all the desired elements are present and have the correct content. The tests are performed asynchronously, so an <code>await</code> must always be used when querying elements.</p>
+<pre><code class="language-js">const webdriver = require(&quot;selenium-webdriver&quot;),
+    {isMaster} = require(&quot;../../../../../../test/end2end/settings&quot;),
+    {initDriver, getDriver, quitDriver} = require(&quot;../../../../../../test/end2end/library/driver&quot;),
+    {logTestingCloudUrlToTest} = require(&quot;../../../../../../test/end2end/library/utils&quot;),
+    {expect} = require(&quot;chai&quot;),
+    {By, until} = webdriver;
+
+...
+
+it(&quot;Open the tool scaleSwitcher and check if all elements are visible&quot;, async function () {
+    let counter = 0;
+
+    do {
+        // Try to open the tool a maximum of 10 times in intervals of 100 milliseconds
+        expect(counter++).to.be.below(10);
+        // Open the scaleSwitcher with two clicks
+        await (await driver.findElement(By.xpath(&quot;//ul[@id='tools']//..&quot;))).click();
+        await (await driver.findElement(By.css(&quot;#tools .glyphicon-resize-small&quot;))).click();
+        // Interval of 100 milliseconds.
+        await driver.wait(new Promise(r =&gt; setTimeout(r, 100)));
+    // If the tool was found the condition is fulfilled
+    } while ((await driver.findElements(By.id(&quot;scale-switcher&quot;))).length === 0);
+
+    // Check if the scaleSwitcher is visible
+    await driver.wait(until.elementIsVisible(await driver.findElement(By.id(&quot;scale-switcher&quot;))));
+
+    // Get the elements that are in the tool
+    const header = await driver.findElement(By.css(&quot;div.win-heading div.heading-element p.title&quot;), 5000),
+        label = await driver.findElement(By.css(&quot;div#scale-switcher label&quot;), 5000),
+        select = await driver.findElement(By.id(&quot;scale-switcher-select&quot;), 5000),
+        selectValue = await select.getAttribute(&quot;value&quot;);
+
+    // Check if the contents of the elements have the right content
+    expect(await header.getText()).to.equals(&quot;Maßstab umschalten&quot;);
+    expect(await label.getText()).to.equals(&quot;Maßstab&quot;);
+    expect(selectValue).to.equals(&quot;60000&quot;);
+});
+</code></pre>
+<h2>Other tests</h2>
+<p>In further tests the reactions of the elements can be tested. For example, whether a desired state has occurred after clicking on an element.</p>
+<p>With the ScaleSwitcher it is tested whether after selection of a scale the map has adopted the same scale. To query the map scale, a function is added in the <code>masterportal/test/end2end/library/scripts</code> file that queries the scale from the map. This function is reqiuired in the ScaleSwitcher test file.
+If one of the other tests fails and is executed again by the <code>afterEach</code> hook, it is necessary that the initial conditions are executed there again. In this case the tool should be opened again.</p>
+<p>masterportal/src/modules/tools/scaleSwitcher/tests/end2end/ScaleSwitcher.e2e.js</p>
+<pre><code class="language-js">const webdriver = require(&quot;selenium-webdriver&quot;),
+    {isMaster} = require(&quot;../../../../../../test/end2end/settings&quot;),
+    {initDriver, getDriver, quitDriver} = require(&quot;../../../../../../test/end2end/library/driver&quot;),
+    {logTestingCloudUrlToTest} = require(&quot;../../../../../../test/end2end/library/utils&quot;),
+    {expect} = require(&quot;chai&quot;),
+    {By, until} = webdriver,
+    {getScale} = require(&quot;../../../../../../test/end2end/library/scripts&quot;);
+
+...
+afterEach(async function () {
+    if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+        await quitDriver();
+        driver = await initDriver(builder, url, resolution);
+        // Open the scaleSwitcher tool again
+        await (await driver.findElement(By.xpath(&quot;//ul[@id='tools']//..&quot;))).click();
+        await (await driver.findElement(By.css(&quot;#tools .glyphicon-resize-small&quot;))).click();
+    }
+});
+
+...
+
+it(&quot;Switch scale to 1 : 10000 and check if the scale of the map has switched as well&quot;, async function () {
+    // Get the dropdown with scales
+    const select = await driver.findElement(By.id(&quot;scale-switcher-select&quot;), 5000),
+        targetScale = 10000;
+
+    // Click for the scale 1 : 10000
+    await select.click();
+    await (await driver.findElement(By.css(`#scale-switcher-select option[value=&quot;${targetScale}&quot;]`))).click();
+
+    // Check if the value of the dropdown and the map have adopted the new scale 10000.
+    expect(await select.getAttribute(&quot;value&quot;)).to.equals(String(targetScale));
+    expect(await driver.executeScript(getScale)).to.equals(targetScale);
+});
+
+it(&quot;Switch scale to 1 : 250000 and check if the scale of the map has switched as well&quot;, async function () {
+    // Get the dropdown with scales
+    const select = await driver.findElement(By.id(&quot;scale-switcher-select&quot;), 5000),
+        targetScale = 250000;
+
+    // Click for the scale 1 : 25000
+    await select.click();
+    await (await driver.findElement(By.css(`#scale-switcher-select option[value=&quot;${targetScale}&quot;]`))).click();
+
+    // Check if the value of the dropdown and the map have adopted the new scale 25000.
+    expect(await select.getAttribute(&quot;value&quot;)).to.equals(String(targetScale));
+    expect(await driver.executeScript(getScale)).to.equals(targetScale);
+});
+</code></pre>
+<p>masterportal/test/end2end/library/scripts</p>
+<pre><code class="language-js">/**
+ * @returns {String} The scale of the map.
+ */
+function getScale () {
+    const options = Backbone.Radio.request(&quot;MapView&quot;, &quot;getOptions&quot;);
+
+    return options ? options.scale : null;
+}
+
+...
+
+module.exports = {
+    mockGeoLocationAPI,
+    mouseWheelUp,
+    mouseWheelDown,
+    areAllLayersHidden,
+    areRegExpsInMeasureLayer,
+    areAllFeaturesOfLayerVisible,
+    basicAuth,
+    getMarkerPointCoord,
+    getMeasureLayersTexts,
+    isFullscreen,
+    isLayerVisible,
+    isMarkerPointVisible,
+    imageLoaded,
+    isInitalLoadingFinished,
+    isObModeOn,
+    getOrderedLayerIds,
+    getObModeResolution,
+    getCoordinatesOfXthFeatureInLayer,
+    hasVectorLayerLength,
+    hasVectorLayerStyle,
+    areLayersOrdered,
+    doesLayerWithFeaturesExist,
+    getCenter,
+    getResolution,
+    getScale, // the export of the function `getScale`
+    getTilt,
+    getHeading,
+    getDirection,
+    setCenter,
+    setResolution,
+    setTilt,
+    zoomIn,
+    zoomOut
+};
+</code></pre>
+<h2>The complete test file: masterportal/src/modules/tools/scaleSwitcher/tests/end2end/ScaleSwitcher.e2e.js</h2>
+<p>Remove the <code>only</code> from the <code>describe</code>. After that the file looks like this.</p>
+<pre><code class="language-js">const webdriver = require(&quot;selenium-webdriver&quot;),
+    {isMaster} = require(&quot;../../../../../../test/end2end/settings&quot;),
+    {initDriver, getDriver, quitDriver} = require(&quot;../../../../../../test/end2end/library/driver&quot;),
+    {logTestingCloudUrlToTest} = require(&quot;../../../../../../test/end2end/library/utils&quot;),
+    {expect} = require(&quot;chai&quot;),
+    {By, until} = webdriver,
+    {getScale} = require(&quot;../../../../../../test/end2end/library/scripts&quot;);
+
+
+/**
+ * Tests regarding scale switcher tool.
+ * @param {e2eTestParams} params The parameter set.
+ * @returns {void}
+ */
+async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
+    const testIsApplicable = isMaster(url);
+
+    if (testIsApplicable) {
+        describe(&quot;ScaleSwitcher&quot;, function () {
+            let driver;
+
+            before(async function () {
+                if (capability) {
+
+                    capability.name = this.currentTest.fullTitle();
+                    capability[&quot;sauce:options&quot;].name = this.currentTest.fullTitle();
+                    builder.withCapabilities(capability);
+                }
+                driver = await getDriver();
+            });
+
+            after(async function () {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logTestingCloudUrlToTest(sessionData.id_);
+                    });
+                }
+            });
+
+            afterEach(async function () {
+                if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                    await quitDriver();
+                    driver = await initDriver(builder, url, resolution);
+                    await (await driver.findElement(By.xpath(&quot;//ul[@id='tools']//..&quot;))).click();
+                    await (await driver.findElement(By.css(&quot;#tools .glyphicon-resize-small&quot;))).click();
+                }
+            });
+
+            it(&quot;Open the tool scaleSwitcher and check if all elements are visible&quot;, async function () {
+                let counter = 0;
+
+                do {
+                    expect(counter++).to.be.below(10);
+                    await (await driver.findElement(By.xpath(&quot;//ul[@id='tools']//..&quot;))).click();
+                    await (await driver.findElement(By.css(&quot;#tools .glyphicon-resize-small&quot;))).click();
+                    await driver.wait(new Promise(r =&gt; setTimeout(r, 100)));
+                } while ((await driver.findElements(By.id(&quot;scale-switcher&quot;))).length === 0);
+
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.id(&quot;scale-switcher&quot;))));
+
+                const header = await driver.findElement(By.css(&quot;div.win-heading div.heading-element p.title&quot;), 5000),
+                    label = await driver.findElement(By.css(&quot;div#scale-switcher label&quot;), 5000),
+                    select = await driver.findElement(By.id(&quot;scale-switcher-select&quot;), 5000),
+                    selectValue = await select.getAttribute(&quot;value&quot;);
+
+                expect(await header.getText()).to.equals(&quot;Maßstab umschalten&quot;);
+                expect(await label.getText()).to.equals(&quot;Maßstab&quot;);
+                expect(selectValue).to.equals(&quot;60000&quot;);
+            });
+
+            it(&quot;Switch scale to 1 : 10000 and check if the scale of the map has switched as well&quot;, async function () {
+                const select = await driver.findElement(By.id(&quot;scale-switcher-select&quot;), 5000),
+                    targetScale = 10000;
+
+                await select.click();
+                await (await driver.findElement(By.css(`#scale-switcher-select option[value=&quot;${targetScale}&quot;]`))).click();
+
+                expect(await select.getAttribute(&quot;value&quot;)).to.equals(String(targetScale));
+                expect(await driver.executeScript(getScale)).to.equals(targetScale);
+            });
+
+            it(&quot;Switch scale to 1 : 250000 and check if the scale of the map has switched as well&quot;, async function () {
+                const select = await driver.findElement(By.id(&quot;scale-switcher-select&quot;), 5000),
+                    targetScale = 250000;
+
+                await select.click();
+                await (await driver.findElement(By.css(`#scale-switcher-select option[value=&quot;${targetScale}&quot;]`))).click();
+
+                expect(await select.getAttribute(&quot;value&quot;)).to.equals(String(targetScale));
+                expect(await driver.executeScript(getScale)).to.equals(targetScale);
+            });
+        });
+    }
+}
+
+module.exports = ScaleSwitcherTests;
+
+</code></pre>
