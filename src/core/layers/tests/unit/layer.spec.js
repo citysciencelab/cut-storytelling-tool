@@ -1,5 +1,4 @@
-import Vuex from "vuex";
-import {createLocalVue} from "@vue/test-utils";
+import store from "../../../../app-store";
 import {expect} from "chai";
 import sinon from "sinon";
 import {Point, MultiPoint} from "ol/geom.js";
@@ -8,13 +7,14 @@ import Layer from "../../layer";
 import Group from "../../group";
 import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 
-const localVue = createLocalVue();
+/* const localVue = createLocalVue();
 
-localVue.use(Vuex);
+localVue.use(Vuex); */
 
 describe("src/core/layers/layer.js", () => {
     let attributes,
-        store,
+        // store,
+        mapOL,
         layerRemoved = false,
         layerVisible = false,
         newLayerSource = false,
@@ -61,7 +61,7 @@ describe("src/core/layers/layer.js", () => {
 
     before(() => {
         mapCollection.clear();
-        const mapOL = {
+        mapOL = {
             id: "ol",
             mode: "2D",
             addInteraction: sinon.spy(),
@@ -92,24 +92,25 @@ describe("src/core/layers/layer.js", () => {
             layers: "layer1,layer2",
             transparent: false
         };
-        store = new Vuex.Store({
+       /*  store = new Vuex.Store({
             namespaces: true,
             modules: {
                 Maps: {
                     namespaced: true,
                     getters: {
                         mode: () => "2D",
-                        get2DMap: () => {
-                            return mapCollection.getMap("2D");
-                        }
+                        get2DMap: () => mapOL
                     }
                 }
             }
-        });
+        }); */
 
         store.getters = {
-            treeType: "custom"
-        };
+            treeType: "custom",
+            "Maps/get2DMap": {removeLayer: () => {
+                layerRemoved = true;
+                return layerRemoved;
+            }}};
         featureList = [];
         featureList.push(new Feature(new Point([1, 1])));
         featureList.push(new Feature(new MultiPoint([[1, 1], [2, 2]])));
@@ -893,7 +894,11 @@ describe("src/core/layers/layer.js", () => {
         let layerWrapper = null;
 
         store.getters = {
-            treeType: treetype
+            treeType: treetype,
+            "Maps/get2DMap": {removeLayer: () => {
+                layerRemoved = true;
+                return layerRemoved;
+            }}
         };
 
         attributes.isSelected = !isSelected;
@@ -921,7 +926,11 @@ describe("src/core/layers/layer.js", () => {
         let layerWrapper = null;
 
         store.getters = {
-            treeType: treeType
+            treeType: treeType,
+            "Maps/get2DMap": {removeLayer: () => {
+                layerRemoved = true;
+                return layerRemoved;
+            }}
         };
 
         attributes.isVisibleInMap = !isVisibleInMap;
