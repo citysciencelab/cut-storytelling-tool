@@ -1,10 +1,10 @@
 <blockquote>
-<p><strong><a href="doc.md">Return to the Masterportal documentation</a></strong>.</p>
+<p><strong><a href="doc.html">Return to the Masterportal documentation</a></strong>.</p>
 </blockquote>
 <p>[TOC]</p>
 <h1>services.json</h1>
-<p>All services available for display in the Masterportal (WMS, WFS, <a href="sensorThings.md">SensorThings-API</a>, and more) are configured and maintained in this JSON file. The file is linked to from the <em>config.js</em> of each individual portal by the <em>layerConf</em> parameter. For an example, see the <em>services-internet.json</em> included in the <em>examples.zip</em> at <em>//examples/Basic/resources/</em>.</p>
-<p>All layer information the portal needs to use the services is stored here. Configuration details differ between WMS, WFS, <a href="sensorThings.md">SensorThings-API</a> and other services types. You may also use local GeoJSON files; see GeoJSON example.</p>
+<p>All services available for display in the Masterportal (WMS, WFS, <a href="sensorThings.html">SensorThings-API</a>, and more) are configured and maintained in this JSON file. The file is linked to from the <em>config.js</em> of each individual portal by the <em>layerConf</em> parameter. For an example, see the <em>services-internet.json</em> included in the <em>examples.zip</em> at <em>//examples/Basic/resources/</em>.</p>
+<p>All layer information the portal needs to use the services is stored here. Configuration details differ between WMS, WFS, <a href="sensorThings.html">SensorThings-API</a> and other services types. You may also use local GeoJSON files; see GeoJSON example.</p>
 <hr>
 <h2>WMS layer</h2>
 <table>
@@ -24,7 +24,7 @@
 <td>no</td>
 <td>Boolean</td>
 <td></td>
-<td>Is this layer part of a cached service? If <code>true</code>, this layer is preferred to layers that share the same metadata, but have <code>cache</code> set to <code>false</code>. This only works in portals with <code>&quot;treeType&quot;: &quot;default&quot;</code> in their <strong><a href="config.json.md">config.json</a></strong>. The parameter has no effects on other tree types.</td>
+<td>Is this layer part of a cached service? If <code>true</code>, this layer is preferred to layers that share the same metadata, but have <code>cache</code> set to <code>false</code>. This only works in portals with <code>&quot;treeType&quot;: &quot;default&quot;</code> in their <strong><a href="config.json.html">config.json</a></strong>. The parameter has no effects on other tree types.</td>
 <td><code>false</code></td>
 </tr>
 <tr>
@@ -32,7 +32,7 @@
 <td>no</td>
 <td><strong><a href="#markdown-header-wms_wfs_oaf_datasets">datasets</a></strong>/Boolean</td>
 <td></td>
-<td>Metadata specification. All metadata the layer data is referenced here. On clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.md">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.md">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</td>
+<td>Metadata specification. All metadata the layer data is referenced here. On clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.html">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.html">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</td>
 <td></td>
 </tr>
 <tr>
@@ -88,7 +88,7 @@
 <td>no</td>
 <td>String</td>
 <td>“text/xml”</td>
-<td><strong><a href="services.json.md">services.json</a></strong> value. WMS <em>GetFeatureInfo</em> response format. The formats: <code>&quot;text/xml&quot;</code>, <code>&quot;text/html&quot;</code>, <code>&quot;application/json&quot;</code> <code>&quot;application/vnd.ogc.gml&quot;</code> are supported. When using <code>&quot;text/html&quot;</code>, the service response is checked and will only be used when it contains a fully valid and filled HTML table.</td>
+<td><strong><a href="services.json.html">services.json</a></strong> value. WMS <em>GetFeatureInfo</em> response format. The formats: <code>&quot;text/xml&quot;</code>, <code>&quot;text/html&quot;</code>, <code>&quot;application/json&quot;</code> <code>&quot;application/vnd.ogc.gml&quot;</code> are supported. When using <code>&quot;text/html&quot;</code>, the service response is checked and will only be used when it contains a fully valid and filled HTML table.</td>
 <td><code>&quot;text/xml&quot;</code></td>
 </tr>
 <tr>
@@ -120,7 +120,7 @@
 <td>no</td>
 <td>Boolean/String/String[]</td>
 <td></td>
-<td>Value of the <strong><a href="services.json.md">services.json</a></strong> file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.</td>
+<td>Value of the <strong><a href="services.json.html">services.json</a></strong> file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.</td>
 <td><code>false</code></td>
 </tr>
 <tr>
@@ -442,7 +442,7 @@ If a parameter is also present in the service, the definition in this config is 
 <td>no</td>
 <td>String[]</td>
 <td></td>
-<td>Value of the <strong><a href="services.json.md">services.json</a></strong> file. URL to be used to request a static legend image. Use a string[] to link an image or a PDF file.</td>
+<td>Value of the <strong><a href="services.json.html">services.json</a></strong> file. URL to be used to request a static legend image. Use a string[] to link an image or a PDF file.</td>
 <td><code>false</code></td>
 </tr>
 <tr>
@@ -666,7 +666,7 @@ If a parameter is also present in the service, the definition in this config is 
 <td>yes</td>
 <td><strong><a href="#markdown-header-wms_wfs_oaf_datasets">datasets</a></strong>[]/Boolean</td>
 <td></td>
-<td>Metadata specification. All metadata of the layer data is referenced here. By clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.md">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.md">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</td>
+<td>Metadata specification. All metadata of the layer data is referenced here. By clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.html">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.html">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</td>
 <td></td>
 </tr>
 <tr>
@@ -730,7 +730,7 @@ If a parameter is also present in the service, the definition in this config is 
 <td>no</td>
 <td>Boolean/String/String[]</td>
 <td></td>
-<td>Value of the <strong><a href="services.json.md">services.json</a></strong> file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.</td>
+<td>Value of the <strong><a href="services.json.html">services.json</a></strong> file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.</td>
 <td><code>false</code></td>
 </tr>
 <tr>
@@ -1056,7 +1056,7 @@ to &lt;br&gt;
 <td>no</td>
 <td><strong><a href="#markdown-header-wms_wfs_oaf_datasets">datasets</a></strong>/Boolean</td>
 <td></td>
-<td>Metadata specification. All metadata of the layer data is referenced here. By clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.md">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.md">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</td>
+<td>Metadata specification. All metadata of the layer data is referenced here. By clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.html">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.html">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</td>
 <td></td>
 </tr>
 <tr>
@@ -1176,7 +1176,7 @@ to &lt;br&gt;
 <td>no</td>
 <td>vtStyle[]</td>
 <td></td>
-<td>See example and definition in <strong><a href="config.json.md">config.json</a></strong>. Describes available styles usable with the <em>styleVT</em> tool.</td>
+<td>See example and definition in <strong><a href="config.json.html">config.json</a></strong>. Describes available styles usable with the <em>styleVT</em> tool.</td>
 <td>see example below</td>
 </tr>
 <tr>
@@ -1247,7 +1247,7 @@ to &lt;br&gt;
 <h2>SensorLayer</h2>
 <p>A feature kann hold multiple Datastreams. For each Datastream, the latest obervation is added as a feature attribute as <code>&quot;dataStream_[id]_[name]&quot;</code>, where <code>id</code> is the Datastream’s <code>@iot.id</code>.</p>
 <p>The name is read from <code>datastream.properties.type</code>; if not available, <code>datastream.unitOfMeasurement.name</code> is used.</p>
-<p>For more details, consider reading the <a href="sensorThings.md">extensive SensorThings-API documentation.</a>.</p>
+<p>For more details, consider reading the <a href="sensorThings.html">extensive SensorThings-API documentation.</a>.</p>
 <table>
 <thead>
 <tr>
@@ -1321,7 +1321,7 @@ to &lt;br&gt;
 <td>no</td>
 <td>Boolean/String/String[]</td>
 <td></td>
-<td>Value of the <strong><a href="services.json.md">services.json</a></strong> file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.</td>
+<td>Value of the <strong><a href="services.json.html">services.json</a></strong> file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.</td>
 <td><code>false</code></td>
 </tr>
 <tr>
@@ -1353,7 +1353,7 @@ to &lt;br&gt;
 <td>no</td>
 <td>Number</td>
 <td>2</td>
-<td>Quality of service subscription level. For more information see <strong><a href="sensorThings.md">sensorThings</a></strong></td>
+<td>Quality of service subscription level. For more information see <strong><a href="sensorThings.html">sensorThings</a></strong></td>
 <td>0</td>
 </tr>
 <tr>
@@ -1361,7 +1361,7 @@ to &lt;br&gt;
 <td>no</td>
 <td>Number</td>
 <td>2</td>
-<td>This option specifies whether retained messages are sent on subscription. For more information see <strong><a href="sensorThings.md">sensorThings</a></strong></td>
+<td>This option specifies whether retained messages are sent on subscription. For more information see <strong><a href="sensorThings.html">sensorThings</a></strong></td>
 <td>0</td>
 </tr>
 <tr>
@@ -1579,7 +1579,7 @@ to &lt;br&gt;
 <td>no</td>
 <td>String/Array</td>
 <td></td>
-<td>See <a href="sensorThings.md">full documentation</a></td>
+<td>See <a href="sensorThings.html">full documentation</a></td>
 <td><code>&quot;Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)&quot;</code></td>
 </tr>
 <tr>
@@ -1587,7 +1587,7 @@ to &lt;br&gt;
 <td>no</td>
 <td>String</td>
 <td></td>
-<td>See <a href="sensorThings.md">full documentation</a></td>
+<td>See <a href="sensorThings.html">full documentation</a></td>
 <td><code>&quot;startswith(Things/name,'Charging')&quot;</code></td>
 </tr>
 <tr>
@@ -1624,7 +1624,7 @@ to &lt;br&gt;
 </code></pre>
 <hr>
 <h2>WMS_WFS_OAF_datasets</h2>
-<p>Metadata specification. All metadata of the layer data is referenced here. By clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.md">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.md">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</p>
+<p>Metadata specification. All metadata of the layer data is referenced here. By clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.html">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.html">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</p>
 <table>
 <thead>
 <tr>
@@ -2233,7 +2233,7 @@ to &lt;br&gt;
 <li><code>&quot;ignore&quot;</code>: GFI requests disabled</li>
 <li><code>&quot;showAll&quot;</code>: All GFI attributes are requested and shown as given</li>
 </ul>
-<p>The portal excludes a set of standard attributes that have no information value to users. See <strong><a href="config.js.md">config.js</a></strong> for details.</p>
+<p>The portal excludes a set of standard attributes that have no information value to users. See <strong><a href="config.js.html">config.js</a></strong> for details.</p>
 <p><strong>gfiAttributes string example:</strong></p>
 <pre><code class="language-json">{
    &quot;gfiAttributes&quot;: &quot;showAll&quot;
@@ -2482,7 +2482,7 @@ to &lt;br&gt;
 <td>no</td>
 <td>Boolean/String/String[]</td>
 <td></td>
-<td>Value of the <strong><a href="services.json.md">services.json</a></strong> file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.</td>
+<td>Value of the <strong><a href="services.json.html">services.json</a></strong> file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.</td>
 <td><code>false</code></td>
 </tr>
 <tr>
@@ -2583,7 +2583,7 @@ to &lt;br&gt;
 <td>yes</td>
 <td><strong><a href="#markdown-header-wms_wfs_oaf_datasets">datasets</a></strong>[]/Boolean</td>
 <td></td>
-<td>Metadata specification. All metadata of the layer data is referenced here. By clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.md">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.md">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</td>
+<td>Metadata specification. All metadata of the layer data is referenced here. By clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.html">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.html">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</td>
 <td></td>
 </tr>
 <tr>
@@ -2623,7 +2623,7 @@ to &lt;br&gt;
 <td>no</td>
 <td>Boolean/String/String[]</td>
 <td></td>
-<td>Value of the <strong><a href="services.json.md">services.json</a></strong> file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a OAF request or the OAF styling respectively. Use a string to link an image or a PDF file.</td>
+<td>Value of the <strong><a href="services.json.html">services.json</a></strong> file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a OAF request or the OAF styling respectively. Use a string to link an image or a PDF file.</td>
 <td><code>false</code></td>
 </tr>
 <tr>
@@ -2873,7 +2873,7 @@ to &lt;br&gt;
 <td>no</td>
 <td><strong><a href="#markdown-header-wms_wfs_oaf_datasets">datasets</a></strong>/Boolean</td>
 <td></td>
-<td>Metadata specification. All metadata the layer data is referenced here. On clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.md">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.md">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</td>
+<td>Metadata specification. All metadata the layer data is referenced here. On clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.html">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.html">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</td>
 <td></td>
 </tr>
 <tr>
@@ -2913,7 +2913,7 @@ to &lt;br&gt;
 <td>no</td>
 <td>Boolean/String/String[]</td>
 <td></td>
-<td>Value of the <strong><a href="services.json.md">services.json</a></strong> file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.</td>
+<td>Value of the <strong><a href="services.json.html">services.json</a></strong> file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.</td>
 <td><code>false</code></td>
 </tr>
 <tr>
@@ -3015,7 +3015,7 @@ to &lt;br&gt;
 <td>no</td>
 <td><strong><a href="#markdown-header-wms_wfs_oaf_datasets">datasets</a></strong>/Boolean</td>
 <td></td>
-<td>Metadata specification. All metadata of the layer data is referenced here. By clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.md">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.md">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</td>
+<td>Metadata specification. All metadata of the layer data is referenced here. By clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.html">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.html">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</td>
 <td></td>
 </tr>
 <tr>
@@ -3047,7 +3047,7 @@ to &lt;br&gt;
 <td>no</td>
 <td>Boolean/String/String[]</td>
 <td></td>
-<td>Value of the <strong><a href="services.json.md">services.json</a></strong> file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.</td>
+<td>Value of the <strong><a href="services.json.html">services.json</a></strong> file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.</td>
 <td><code>false</code></td>
 </tr>
 <tr>
@@ -3140,7 +3140,7 @@ to &lt;br&gt;
 <td>no</td>
 <td><strong><a href="#markdown-header-wms_wfs_oaf_datasets">datasets</a></strong>/Boolean</td>
 <td></td>
-<td>Metadata specification. All metadata of the layer data is referenced here. By clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.md">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.md">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</td>
+<td>Metadata specification. All metadata of the layer data is referenced here. By clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.html">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.html">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</td>
 <td></td>
 </tr>
 <tr>
@@ -3279,7 +3279,7 @@ to &lt;br&gt;
 <td>no</td>
 <td><strong><a href="#markdown-header-wms_wfs_oaf_datasets">datasets</a></strong>/Boolean</td>
 <td></td>
-<td>Metadata specification. All metadata of the layer data is referenced here. By clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.md">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.md">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</td>
+<td>Metadata specification. All metadata of the layer data is referenced here. By clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.html">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.html">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</td>
 <td></td>
 </tr>
 <tr>
@@ -3477,5 +3477,5 @@ to &lt;br&gt;
    }
 </code></pre>
 <blockquote>
-<p><strong><a href="doc.md">Return to the Masterportal documentation</a></strong>.</p>
+<p><strong><a href="doc.html">Return to the Masterportal documentation</a></strong>.</p>
 </blockquote>

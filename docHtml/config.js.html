@@ -1,5 +1,5 @@
 <blockquote>
-<p><strong><a href="doc.md">Return to the Masterportal documentation</a></strong></p>
+<p><strong><a href="doc.html">Return to the Masterportal documentation</a></strong></p>
 </blockquote>
 <p>[TOC]</p>
 <h1>config.js</h1>
@@ -22,7 +22,7 @@
 <td>yes</td>
 <td>String</td>
 <td></td>
-<td>Path to the <strong><a href="services.json.md">services.json</a></strong> file containing all available WMS layers and WFS feature types. The path is relative to <em>js/main.js</em>.</td>
+<td>Path to the <strong><a href="services.json.html">services.json</a></strong> file containing all available WMS layers and WFS feature types. The path is relative to <em>js/main.js</em>.</td>
 <td><code>https://geodienste.hamburg.de/lgv-config/services-internet.json&quot;</code></td>
 </tr>
 <tr>
@@ -38,7 +38,7 @@
 <td>yes</td>
 <td>String</td>
 <td></td>
-<td>Path to the <strong><a href="rest-services.json.md">rest-services.json</a></strong> file describing further services, e.g. print service, WPS, CSW. The path is relative to <em>js/main.js</em>.</td>
+<td>Path to the <strong><a href="rest-services.json.html">rest-services.json</a></strong> file describing further services, e.g. print service, WPS, CSW. The path is relative to <em>js/main.js</em>.</td>
 <td><code>https://geodienste.hamburg.de/lgv-config/rest-services-internet.json&quot;</code></td>
 </tr>
 <tr>
@@ -46,7 +46,7 @@
 <td>yes</td>
 <td>String</td>
 <td></td>
-<td>Path to the <strong><a href="style.json.md">style.json</a></strong> file describing vector layer (WFS) styles. The path is relative to <em>js/main.js</em>.</td>
+<td>Path to the <strong><a href="style.json.html">style.json</a></strong> file describing vector layer (WFS) styles. The path is relative to <em>js/main.js</em>.</td>
 <td><code>https://geodienste.hamburg.de/lgv-config/style.json&quot;</code></td>
 </tr>
 <tr>
@@ -86,7 +86,7 @@
 <td>no</td>
 <td>String</td>
 <td><code>&quot;3&quot;</code></td>
-<td>Reference to a CSW interface used to retrieve layer information. The ID will be resolved to a service defined in the <strong><a href="rest-services.json.md">rest-services.json</a></strong> file.</td>
+<td>Reference to a CSW interface used to retrieve layer information. The ID will be resolved to a service defined in the <strong><a href="rest-services.json.html">rest-services.json</a></strong> file.</td>
 <td><code>&quot;my CSW-ID&quot;</code></td>
 </tr>
 <tr>
@@ -102,7 +102,7 @@
 <td>no</td>
 <td><strong><a href="#markdown-header-featureviaurl">featureViaURL</a></strong></td>
 <td></td>
-<td>Optional configuration for the URL parameter <code>featureViaURL</code>. See <strong><a href="urlParameter.md">urlParameter</a></strong> for details. Implemented for treeTypes <em>light</em> and <em>custom</em>.</td>
+<td>Optional configuration for the URL parameter <code>featureViaURL</code>. See <strong><a href="urlParameter.html">urlParameter</a></strong> for details. Implemented for treeTypes <em>light</em> and <em>custom</em>.</td>
 <td></td>
 </tr>
 <tr>
@@ -142,7 +142,7 @@
 <td>no</td>
 <td>Object</td>
 <td><code>{}</code></td>
-<td>If this object is set, and its field <code>setMarker</code> is set to true, the Masterportal is configured as input element for data. In that case, each click sets a Map Marker and communicates the coordinates via <strong><a href="remoteInterface.md">remoteInterface</a></strong> in the chosen coordinate reference system.</td>
+<td>If this object is set, and its field <code>setMarker</code> is set to true, the Masterportal is configured as input element for data. In that case, each click sets a Map Marker and communicates the coordinates via <strong><a href="remoteInterface.html">remoteInterface</a></strong> in the chosen coordinate reference system.</td>
 <td><code>{setMarker: true, targetProjection: &quot;EPSG:4326&quot;, setCenter: false}</code></td>
 </tr>
 <tr>
@@ -166,7 +166,7 @@
 <td>no</td>
 <td>String</td>
 <td><code>&quot;EPSG:25832&quot;</code></td>
-<td>The target coordinate reference system. Coordinates will be translated to it before being communicated via <strong><a href="remoteInterface.md">remoteInterface</a></strong>.</td>
+<td>The target coordinate reference system. Coordinates will be translated to it before being communicated via <strong><a href="remoteInterface.html">remoteInterface</a></strong>.</td>
 <td><code>targetprojection: &quot;EPSG:4326&quot;</code></td>
 </tr>
 <tr>
@@ -182,7 +182,7 @@
 <td>no</td>
 <td>String</td>
 <td><code>&quot;2&quot;</code></td>
-<td>URL to the metadata catalog linked to in the layer information window. The ID is resolved to a service of the <strong><a href="rest-services.json.md">rest-services.json</a></strong> file. Note: This attribute is only necessary, when no “show_doc_url” is configured in the metadata dataset in the <strong><a href="services.json.md">services.json</a></strong>. The url can either be set globally (<strong><a href="config.js.md">config.js</a></strong>) or layer-specific(<strong><a href="services.json.md">services.json</a></strong>).</td>
+<td>URL to the metadata catalog linked to in the layer information window. The ID is resolved to a service of the <strong><a href="rest-services.json.html">rest-services.json</a></strong> file. Note: This attribute is only necessary, when no “show_doc_url” is configured in the metadata dataset in the <strong><a href="services.json.html">services.json</a></strong>. The url can either be set globally (<strong><a href="config.js.html">config.js</a></strong>) or layer-specific(<strong><a href="services.json.html">services.json</a></strong>).</td>
 <td><code>&quot;MetaDataCatalogueUrl&quot;</code></td>
 </tr>
 <tr>
@@ -198,7 +198,7 @@
 <td>no</td>
 <td><strong><a href="#markdown-header-mousehover">mouseHover</a></strong></td>
 <td></td>
-<td>Activates the MouseHover feature for vector layers, both WFS and GeoJSON. For per-layer configuration, see the <strong><a href="config.json.md">config.json</a></strong>’s section <em>Themenconfig.Fachdaten.Layer</em>.</td>
+<td>Activates the MouseHover feature for vector layers, both WFS and GeoJSON. For per-layer configuration, see the <strong><a href="config.json.html">config.json</a></strong>’s section <em>Themenconfig.Fachdaten.Layer</em>.</td>
 <td><code>true</code></td>
 </tr>
 <tr>
@@ -262,7 +262,7 @@
 <td>no</td>
 <td>Boolean</td>
 <td><code>false</code></td>
-<td><em>Deprecated in the next major release. Please use the parameter <code>simpleMap</code> as part of the configuration of the <code>saveSelection</code> tool in the <strong><a href="config.json.md">config.json</a></strong>.</em> Adds a SimpleMap URL to the <code>Save selection</code> dialogue. When calling this URL, the menu bar, layer tree, and map controls are deactivated. Not implemented for tree type <em>„light“</em>.</td>
+<td><em>Deprecated in the next major release. Please use the parameter <code>simpleMap</code> as part of the configuration of the <code>saveSelection</code> tool in the <strong><a href="config.json.html">config.json</a></strong>.</em> Adds a SimpleMap URL to the <code>Save selection</code> dialogue. When calling this URL, the menu bar, layer tree, and map controls are deactivated. Not implemented for tree type <em>„light“</em>.</td>
 <td><code>false</code></td>
 </tr>
 <tr>
@@ -302,7 +302,7 @@
 <td>no</td>
 <td>String</td>
 <td><code>&quot;&quot;</code></td>
-<td>Reference to a WPS interface used in various modules. The ID is resolved to a service defined in the <strong><a href="rest-services.json.md">rest-services.json</a></strong> file.</td>
+<td>Reference to a WPS interface used in various modules. The ID is resolved to a service defined in the <strong><a href="rest-services.json.html">rest-services.json</a></strong> file.</td>
 <td><code>&quot;&quot;</code></td>
 </tr>
 <tr>
@@ -310,7 +310,7 @@
 <td>no</td>
 <td><strong><a href="#markdown-header-zoomtofeature">zoomToFeature</a></strong></td>
 <td></td>
-<td>Optional configuration of the URL query parameter <code>featureid</code>. For details, see <strong><a href="urlParameter.md">urlParameter</a></strong>.</td>
+<td>Optional configuration of the URL query parameter <code>featureid</code>. For details, see <strong><a href="urlParameter.html">urlParameter</a></strong>.</td>
 <td></td>
 </tr>
 <tr>
@@ -1281,7 +1281,7 @@
 <td>no</td>
 <td>String</td>
 <td></td>
-<td>Style id to be used for the feature, referring to the <strong><a href="style.json.md">style.json</a></strong>.</td>
+<td>Style id to be used for the feature, referring to the <strong><a href="style.json.html">style.json</a></strong>.</td>
 </tr>
 </tbody>
 </table>
@@ -1327,8 +1327,8 @@
 </code></pre>
 <hr>
 <blockquote>
-<p><strong><a href="languages.md">Masterportal translation documentation</a></strong></p>
+<p><strong><a href="languages.html">Masterportal translation documentation</a></strong></p>
 </blockquote>
 <blockquote>
-<p><strong><a href="doc.md">Return to the Masterportal documentation</a></strong></p>
+<p><strong><a href="doc.html">Return to the Masterportal documentation</a></strong></p>
 </blockquote>

@@ -16,7 +16,7 @@ fs.rmSync(documentationTarget, {recursive: true, force: true});
  * @param {String} target target directory to compile to
  * @returns {void}
  */
-function recursiveBuilder(source = documentationSource, target = documentationTarget) {
+function recursiveBuilder (source = documentationSource, target = documentationTarget) {
     fs.mkdirSync(target, {recursive: true});
     fs.readdir(source, {withFileTypes: true}, function (err, files) {
         if (err) {
@@ -36,6 +36,10 @@ function recursiveBuilder(source = documentationSource, target = documentationTa
                     targetPath = targetPath.replace(/\.md$/, ".html");
                     data = fs.readFileSync(sourcePath, {encoding: "utf8"});
                     data = md.render(data);
+                    data = data.replace(
+                        /(<a href="[\w.-]+).md(">)/g,
+                        "$1.html$2"
+                    );
                 }
                 else {
                     data = fs.readFileSync(sourcePath);

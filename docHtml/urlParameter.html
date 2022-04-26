@@ -1,5 +1,5 @@
 <blockquote>
-<p><a href="doc.md">Return to the Masterportal documentation</a></p>
+<p><a href="doc.html">Return to the Masterportal documentation</a></p>
 </blockquote>
 <h1>URL parameters</h1>
 <p>Special URL parameters exist to change configuration details or execute initial actions on opening the Masterportal. The URL parameter list begins with a <code>&quot;?&quot;</code>, and individual parameters are separated with <code>&quot;&amp;&quot;</code> characters. The Parameters are not case sensitive.</p>
@@ -29,43 +29,43 @@
 </tr>
 <tr>
 <td>CENTER</td>
-<td>Moves the view to center the given coordinate. If <code>PROJECTION</code> is given as parameter, the <code>CENTER</code> coordinates are expected to be given in it, and are translated to the map’s coordinate reference system before usage. If <code>PROJECTION</code> is not given, the <code>CENTER</code> coordinates must be given in the map’s configured coordinate reference system; see <strong><a href="config.js.md">config.namedProjections.epsg</a></strong>.</td>
+<td>Moves the view to center the given coordinate. If <code>PROJECTION</code> is given as parameter, the <code>CENTER</code> coordinates are expected to be given in it, and are translated to the map’s coordinate reference system before usage. If <code>PROJECTION</code> is not given, the <code>CENTER</code> coordinates must be given in the map’s configured coordinate reference system; see <strong><a href="config.js.html">config.namedProjections.epsg</a></strong>.</td>
 <td><code>?center=553925,5931898</code></td>
 <td></td>
 </tr>
 <tr>
 <td>MAP/CENTER</td>
-<td>Moves the view to center the given coordinate. If <code>PROJECTION</code> is given as parameter, the <code>CENTER</code> coordinates are expected to be given in it, and are translated to the map’s coordinate reference system before usage. If <code>PROJECTION</code> is not given, the <code>CENTER</code> coordinates must be given in the map’s configured coordinate reference system; see <strong><a href="config.js.md">config.namedProjections.epsg</a></strong>.</td>
+<td>Moves the view to center the given coordinate. If <code>PROJECTION</code> is given as parameter, the <code>CENTER</code> coordinates are expected to be given in it, and are translated to the map’s coordinate reference system before usage. If <code>PROJECTION</code> is not given, the <code>CENTER</code> coordinates must be given in the map’s configured coordinate reference system; see <strong><a href="config.js.html">config.namedProjections.epsg</a></strong>.</td>
 <td><code>?Map/center=[553925,5931898]</code></td>
 <td><code>?center=[553925,5931898]</code> or `?center=553925,5931898</td>
 </tr>
 <tr>
 <td>CONFIG</td>
-<td>Sets the configuration file to use. This is done by either providing an absolute URL (<code>http://...</code> resp. <code>https://...</code>) or a relative path. In the second case, the relative path is combined with the path given in the <strong><a href="config.js.md">config.portalConf</a></strong>, and the resulting path must link to a config.json file.</td>
+<td>Sets the configuration file to use. This is done by either providing an absolute URL (<code>http://...</code> resp. <code>https://...</code>) or a relative path. In the second case, the relative path is combined with the path given in the <strong><a href="config.js.html">config.portalConf</a></strong>, and the resulting path must link to a config.json file.</td>
 <td><code>?config=../config.json</code></td>
 <td></td>
 </tr>
 <tr>
 <td>CONFIGJSON</td>
-<td>Sets the configuration file to use. This is done by either providing an absolute URL (<code>http://...</code> resp. <code>https://...</code>) or a relative path. In the second case, the relative path is combined with the path given in the <strong><a href="config.js.md">config.portalConf</a></strong>, and the resulting path must link to a config.json file.</td>
+<td>Sets the configuration file to use. This is done by either providing an absolute URL (<code>http://...</code> resp. <code>https://...</code>) or a relative path. In the second case, the relative path is combined with the path given in the <strong><a href="config.js.html">config.portalConf</a></strong>, and the resulting path must link to a config.json file.</td>
 <td><code>?configJson=../config.json</code></td>
 <td></td>
 </tr>
 <tr>
 <td>FEATUREID</td>
-<td>Zooms to the features of a WFS configured via <strong><a href="config.js.md">config.zoomtofeature</a></strong>.</td>
+<td>Zooms to the features of a WFS configured via <strong><a href="config.js.html">config.zoomtofeature</a></strong>.</td>
 <td><code>?featureid=18,26</code></td>
 <td></td>
 </tr>
 <tr>
 <td>MAP/ZOOMTOFEATUREID</td>
-<td>Zooms to the features of a WFS configured via <strong><a href="config.js.md">config.zoomtofeature</a></strong>.</td>
+<td>Zooms to the features of a WFS configured via <strong><a href="config.js.html">config.zoomtofeature</a></strong>.</td>
 <td><code>?Map/zoomToFeatureId=18,26</code></td>
 <td><code>?zoomToFeatureId=18,26</code></td>
 </tr>
 <tr>
 <td>FEATUREVIAURL</td>
-<td>Creates the given features and adds them to a GeoJSON layer. A <code>layerId</code> should be given for each feature set, and each feature must provide the fields <code>coordinates</code> and <code>label</code>. The coordinates should match the respective <em>GeometryType</em> according to the <a href="https://tools.ietf.org/html/rfc7946">GeoJSON specification RFC7946</a>, which also states that the coordinates must fit the <code>&quot;EPSG:4326&quot;</code> coordinate system. The parameters also depend on the module’s configuration in <strong><a href="config.js.md">config.featureviaurl</a></strong>. If another coordinate system is defined in the module´s configuration, the coordinates will be transformed to <code>&quot;EPSG:4326&quot;</code>.</td>
+<td>Creates the given features and adds them to a GeoJSON layer. A <code>layerId</code> should be given for each feature set, and each feature must provide the fields <code>coordinates</code> and <code>label</code>. The coordinates should match the respective <em>GeometryType</em> according to the <a href="https://tools.ietf.org/html/rfc7946">GeoJSON specification RFC7946</a>, which also states that the coordinates must fit the <code>&quot;EPSG:4326&quot;</code> coordinate system. The parameters also depend on the module’s configuration in <strong><a href="config.js.html">config.featureviaurl</a></strong>. If another coordinate system is defined in the module´s configuration, the coordinates will be transformed to <code>&quot;EPSG:4326&quot;</code>.</td>
 <td><code>&amp;featureviaurl=[{&quot;layerId&quot;:&quot;42&quot;,&quot;features&quot;:[{&quot;coordinates&quot;:[10,53.5],&quot;label&quot;:&quot;TestPunkt&quot;}]}]</code></td>
 <td></td>
 </tr>
@@ -107,13 +107,13 @@
 </tr>
 <tr>
 <td>LAYERIDS</td>
-<td>Overrides the initially visible layers. The effect depends on the <strong><a href="config.json.md">config.Portalconfig.treeType</a></strong>. If set to <code>&quot;light&quot;</code>, layers are set visible <em>additionally</em>. In other trees, the base configuration is overwritten. This can be complemented with the <code>VISIBILITY</code> and <code>TRANSPARENCY</code> flags.</td>
+<td>Overrides the initially visible layers. The effect depends on the <strong><a href="config.json.html">config.Portalconfig.treeType</a></strong>. If set to <code>&quot;light&quot;</code>, layers are set visible <em>additionally</em>. In other trees, the base configuration is overwritten. This can be complemented with the <code>VISIBILITY</code> and <code>TRANSPARENCY</code> flags.</td>
 <td><code>&amp;layerids=453,2128</code></td>
 <td></td>
 </tr>
 <tr>
 <td>MAP/LAYERIDS</td>
-<td>Overrides the initially visible layers. The effect depends on the <strong><a href="config.json.md">config.Portalconfig.treeType</a></strong>. If set to <code>&quot;light&quot;</code>, layers are set visible <em>additionally</em>. In other trees, the base configuration is overwritten. This can be complemented with the <code>VISIBILITY</code> and <code>TRANSPARENCY</code> flags.</td>
+<td>Overrides the initially visible layers. The effect depends on the <strong><a href="config.json.html">config.Portalconfig.treeType</a></strong>. If set to <code>&quot;light&quot;</code>, layers are set visible <em>additionally</em>. In other trees, the base configuration is overwritten. This can be complemented with the <code>VISIBILITY</code> and <code>TRANSPARENCY</code> flags.</td>
 <td><code>&amp;Map/layerids=453,2128</code></td>
 <td></td>
 </tr>
@@ -131,13 +131,13 @@
 </tr>
 <tr>
 <td>MARKER</td>
-<td>Sets a marker to the given coordinate and zooms to it. If <code>PROJECTION</code> is given as parameter, the marker coordinates are to be expected in that coordinate reference system and are translated before application. Else, the given coordinates must match the map’s coordinate reference system. See <strong><a href="config.js.md">config.namedProjections.epsg</a></strong>.</td>
+<td>Sets a marker to the given coordinate and zooms to it. If <code>PROJECTION</code> is given as parameter, the marker coordinates are to be expected in that coordinate reference system and are translated before application. Else, the given coordinates must match the map’s coordinate reference system. See <strong><a href="config.js.html">config.namedProjections.epsg</a></strong>.</td>
 <td><code>&amp;marker=565874,5934140</code></td>
 <td></td>
 </tr>
 <tr>
 <td>MAPMARKER</td>
-<td>Sets a marker to the given coordinate and zooms to it. If <code>PROJECTION</code> is given as parameter, the marker coordinates are to be expected in that coordinate reference system and are translated before application. Else, the given coordinates must match the map’s coordinate reference system. See <strong><a href="config.js.md">config.namedProjections.epsg</a></strong>.</td>
+<td>Sets a marker to the given coordinate and zooms to it. If <code>PROJECTION</code> is given as parameter, the marker coordinates are to be expected in that coordinate reference system and are translated before application. Else, the given coordinates must match the map’s coordinate reference system. See <strong><a href="config.js.html">config.namedProjections.epsg</a></strong>.</td>
 <td><code>?MapMarker=[565874,5934140]</code></td>
 <td><code>?MapMarker=565874,5934140</code></td>
 </tr>
@@ -215,13 +215,13 @@
 </tr>
 <tr>
 <td>ZOOMLEVEL</td>
-<td>The initial zoom level is the given zoom level; see <strong><a href="config.js.md">config.view.options</a></strong>.</td>
+<td>The initial zoom level is the given zoom level; see <strong><a href="config.js.html">config.view.options</a></strong>.</td>
 <td><code>?zoomlevel=2</code></td>
 <td></td>
 </tr>
 <tr>
 <td>MAP/ZOOMLEVEL</td>
-<td>The initial zoom level is the given zoom level; see <strong><a href="config.js.md">config.view.options</a></strong>.</td>
+<td>The initial zoom level is the given zoom level; see <strong><a href="config.js.html">config.view.options</a></strong>.</td>
 <td><code>?Map/zoomLevel=7</code></td>
 <td></td>
 </tr>
@@ -239,13 +239,13 @@
 </tr>
 <tr>
 <td>ZOOMTOGEOMETRY</td>
-<td>Zooms to a feature requested from a WFS. Allowed parameters depend on <strong><a href="config.js.md">config.zoomToGeometry</a></strong>. As an alternative to the feature name, features may also be addressed by their <code>geometries</code> array index, starting at 1.</td>
+<td>Zooms to a feature requested from a WFS. Allowed parameters depend on <strong><a href="config.js.html">config.zoomToGeometry</a></strong>. As an alternative to the feature name, features may also be addressed by their <code>geometries</code> array index, starting at 1.</td>
 <td><code>?zoomToGeometry=bergedorf</code></td>
 <td></td>
 </tr>
 <tr>
 <td>MAP/ZOOMTOGEOMETRY</td>
-<td>Zooms to a feature requested from a WFS. Allowed parameters depend on <strong><a href="config.js.md">config.zoomToGeometry</a></strong>. As an alternative to the feature name, features may also be addressed by their <code>geometries</code> array index, starting at 1.</td>
+<td>Zooms to a feature requested from a WFS. Allowed parameters depend on <strong><a href="config.js.html">config.zoomToGeometry</a></strong>. As an alternative to the feature name, features may also be addressed by their <code>geometries</code> array index, starting at 1.</td>
 <td><code>?Map/zoomToGeometry=bergedorf</code></td>
 <td></td>
 </tr>

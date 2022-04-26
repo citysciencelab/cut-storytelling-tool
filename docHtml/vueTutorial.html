@@ -5,7 +5,7 @@
 <h2>Creating a new tool</h2>
 <p>Switch to the folder <code>src/modules/tools</code> and create a new folder. The folder name should indicate the nature of the tool - e.g. <code>scaleSwitcher</code>. Create folders <code>components</code> and <code>store</code> in that folder, and the required files as shown in the example file tree below.</p>
 <blockquote>
-<p>💡 Hint: Testing is not part of this guide, but essential to merge a pull request. See our <a href="testing.md">testing documentation</a> for more information.</p>
+<p>💡 Hint: Testing is not part of this guide, but essential to merge a pull request. See our <a href="testing.html">testing documentation</a> for more information.</p>
 </blockquote>
 <pre><code>src
 |-- modules
@@ -53,7 +53,7 @@ export default {
 &lt;/style&gt;
 </code></pre>
 <h2>Register the <em>ScaleSwitcher</em> component</h2>
-<p>Open <code>src/modules/tools/stateTools.js</code>, import the <em>ScaleSwitcher</em> and add it to the component map. The <em>ToolManager</em> (<code>src/modules/tools/ToolManager.vue</code>) initializes the component and loads the <em>ScaleSwitcher</em> configuration from the <code>config.json</code>, making it available in its state. The paths <code>configJson.Portalconfig.menu.scaleSwitcher</code> and <code>configJson.Portalconfig.menu.tools.children.scaleSwitcher</code> will be searched for <em>ScaleSwitcher</em> configuration. See the <a href="config.json.md">config.json documentation</a>. The <em>ToolManager</em> is part of the <em>MapRegion’s</em> template. It will only be created when the <a href="https://vuejs.org/v2/api/#v-if"><em>v-if</em> directive</a> finds the <code>config.json</code> has become part of the global state.</p>
+<p>Open <code>src/modules/tools/stateTools.js</code>, import the <em>ScaleSwitcher</em> and add it to the component map. The <em>ToolManager</em> (<code>src/modules/tools/ToolManager.vue</code>) initializes the component and loads the <em>ScaleSwitcher</em> configuration from the <code>config.json</code>, making it available in its state. The paths <code>configJson.Portalconfig.menu.scaleSwitcher</code> and <code>configJson.Portalconfig.menu.tools.children.scaleSwitcher</code> will be searched for <em>ScaleSwitcher</em> configuration. See the <a href="config.json.html">config.json documentation</a>. The <em>ToolManager</em> is part of the <em>MapRegion’s</em> template. It will only be created when the <a href="https://vuejs.org/v2/api/#v-if"><em>v-if</em> directive</a> finds the <code>config.json</code> has become part of the global state.</p>
 <pre><code class="language-js">import ScaleSwitcher from &quot;./scaleSwitcher/components/ScaleSwitcher.vue&quot;;
 // ... import more tools
 
@@ -319,7 +319,7 @@ Calling it will set the map’s resolution to a new value.</p>
     ...
 </code></pre>
 <h2>Internationalization</h2>
-<p>Labels should be available in multiple languages. For this, create localization keys in the translation files <code>locales/[de/en]/common.json</code>. Read the <a href="languages.md">internationalization documentation</a> for more details.</p>
+<p>Labels should be available in multiple languages. For this, create localization keys in the translation files <code>locales/[de/en]/common.json</code>. Read the <a href="languages.html">internationalization documentation</a> for more details.</p>
 <pre><code class="language-js">&quot;modules&quot;: {
     &quot;tools&quot;: {
         &quot;scaleSwitcher&quot;: {

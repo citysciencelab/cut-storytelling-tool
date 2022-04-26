@@ -1,5 +1,5 @@
 <blockquote>
-<p><strong><a href="doc.md">Return to the Masterportal documentation</a></strong>.</p>
+<p><strong><a href="doc.html">Return to the Masterportal documentation</a></strong>.</p>
 </blockquote>
 <p>[TOC]</p>
 <h1>style.json</h1>
@@ -15,7 +15,7 @@
 <p>💡 Hint: Malformed <em>style.json</em> files will be rejected without repair attempt. A warning will be shown. We recommend using an online validator to check your file’s syntax, e.g. <a href="https://jsonlint.com/" title="jsonlint">jsonlint</a>.</p>
 </blockquote>
 <h2>Style module configuration</h2>
-<p>The <em>style.json</em>’s path is defined in the <strong><a href="config.js.md">config.js</a></strong> file. Follow the link for details. Please mind the following parameters::</p>
+<p>The <em>style.json</em>’s path is defined in the <strong><a href="config.js.html">config.js</a></strong> file. Follow the link for details. Please mind the following parameters::</p>
 <ul>
 <li><em>styleConf</em>: Defining the file path</li>
 </ul>
@@ -23,7 +23,7 @@
 <p>💡 Hint: Incorrect path information is reported with an error message.</p>
 </blockquote>
 <h2>Layer connection</h2>
-<p>Within the <strong><a href="config.json.md">config.json</a></strong> section <em>Themenconfig.Layer.Vector</em> the portal’s layers are defined. This includes setting the obligatory <em>styleId</em> for vector layers. The <em>styleId</em> references a <em>style.json</em>’s entry holding the very same <em>styleId</em>. See <a href="#markdown-header-structure">Structure</a>.</p>
+<p>Within the <strong><a href="config.json.html">config.json</a></strong> section <em>Themenconfig.Layer.Vector</em> the portal’s layers are defined. This includes setting the obligatory <em>styleId</em> for vector layers. The <em>styleId</em> references a <em>style.json</em>’s entry holding the very same <em>styleId</em>. See <a href="#markdown-header-structure">Structure</a>.</p>
 <blockquote>
 <p>💡 Hint: Incorrect style ids do not provoke a run-time error. A warning is logged to the console to inform administrators of the erroneous configuration. Portal users will only notice that the misconfigured layer has the OpenLayers default vector styling.</p>
 </blockquote>
@@ -390,7 +390,7 @@
 <p>The display rules for points are separated in</p>
 <ul>
 <li>simple point geometries: See the following parameter <em>type</em>.</li>
-<li>clustered points: If the layer configuration in the (<strong><a href="config.json.md">config.json</a></strong>) file has <em>clusterDistance</em> set, a ClusterStyle is created. See the following parameter <em>clusterType</em>.</li>
+<li>clustered points: If the layer configuration in the (<strong><a href="config.json.html">config.json</a></strong>) file has <em>clusterDistance</em> set, a ClusterStyle is created. See the following parameter <em>clusterType</em>.</li>
 </ul>
 <table>
 <thead>

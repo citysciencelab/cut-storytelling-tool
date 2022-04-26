@@ -1,10 +1,10 @@
 <h1>backbone Addons</h1>
 <p>ACHTUNG: das masterportal wird vom Backbone nach Vue.js migriert. Daher ist es ratsam neue addons in vue.js zu schreiben, um die später notwendige Migrierung zu vermeiden! <a href="">Vue Addons</a></p>
-<p>Um eigene Entwicklungen in das MasterPortal zu integrieren existiert ein Mechanismus der es erlaubt, Code von außerhalb des MasterPortal-Repositories in die MasterPortal Sourcen zu integrieren. Siehe auch <strong><a href="setup-dev.md">lokale Entwicklungsumgebung einrichten</a></strong>.</p>
+<p>Um eigene Entwicklungen in das MasterPortal zu integrieren existiert ein Mechanismus der es erlaubt, Code von außerhalb des MasterPortal-Repositories in die MasterPortal Sourcen zu integrieren. Siehe auch <strong><a href="setup-dev.html">lokale Entwicklungsumgebung einrichten</a></strong>.</p>
 <p>Dadurch werden die Models der externen Sourcen erst ganz zum Schluß initialisiert. Es wird temporär ein Platzhalter-Model in der Model-List angelegt.</p>
 <p>Die View-Klasse der externen Sourcen muss das zugehörige Model neu anlegen. Dieses wird dann in der Model-Liste mit dem Platzhalter-Model ausgetauscht.</p>
-<p>Das Addon selbst ist identisch wie ein natives Modul zu programmieren (siehe auch <strong><a href="02_tutorial_new_module_scale_switcher.md">Tutorial 01: Ein neues Modul erstellen (Scale Switcher)</a></strong>). Es liegt lediglich außerhalb des Repository und erlaubt so eine getrennte Verwaltung.</p>
-<p>Alle Addons liegen in einem Ordner namens “addons” auf Root-Ebene des Masterportals. Beliebig viele dieser Addons lassen sich in einem Portal in der <strong><a href="config.js.md">config.js</a></strong> konfigurieren.</p>
+<p>Das Addon selbst ist identisch wie ein natives Modul zu programmieren (siehe auch <strong><a href="02_tutorial_new_module_scale_switcher.html">Tutorial 01: Ein neues Modul erstellen (Scale Switcher)</a></strong>). Es liegt lediglich außerhalb des Repository und erlaubt so eine getrennte Verwaltung.</p>
+<p>Alle Addons liegen in einem Ordner namens “addons” auf Root-Ebene des Masterportals. Beliebig viele dieser Addons lassen sich in einem Portal in der <strong><a href="config.js.html">config.js</a></strong> konfigurieren.</p>
 <p>Folgende Struktur ist dabei zu beachten:</p>
 <h2>1. Dateistruktur von Addons</h2>
 <p>1.1. Jedes <em>Addon</em> liegt in einem eigenen Ordner, welcher so heißt, wie in <strong>addonsConf.json</strong> als key definiert. In diesen Ordnern liegen alle für die jeweiligen <em>Addons</em> benötigten Dateien. Dazu gehören auch die Ordner <strong>doc</strong>, <strong>jsdoc</strong> und <strong>unittests</strong> mit den jeweiligen <strong>.md</strong>, <strong>.js</strong> und <strong>.test.js</strong> Dateien.
