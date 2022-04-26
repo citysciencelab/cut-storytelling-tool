@@ -30,11 +30,12 @@ export function calculateLineLengths (projection, lines, radius, accuracy, selec
         }
         else if (selectedUnitName === "nm") {
             // see https://en.wikipedia.org/wiki/Nautical_mile
-            const metresPerNm = 1852;
+            const metresPerNm = 1852,
+                unitLength = length / metresPerNm;
 
-            accumulator[lineKey] = measurementAccuracy === "decimeter" || (measurementAccuracy === "dynamic" && length < 10)
-                ? `${(length / metresPerNm).toFixed(1)} nm`
-                : `${(length / metresPerNm).toFixed(0)} nm`;
+            accumulator[lineKey] = measurementAccuracy === "decimeter" || (measurementAccuracy === "dynamic" && unitLength < 10)
+                ? `${unitLength.toFixed(1)} nm`
+                : `${unitLength.toFixed(0)} nm`;
         }
 
         return accumulator;
@@ -67,9 +68,11 @@ export function calculatePolygonAreas (projection, polygons, radius, accuracy, s
                 : `${area.toFixed(0)} m²`;
         }
         else if (selectedUnitName === "ha") {
-            accumulator[polygonKey] = measurementAccuracy === "decimeter" || (measurementAccuracy === "dynamic" && area < 10)
-                ? `${(area / 10000).toFixed(1)} ha`
-                : `${(area / 10000).toFixed(0)} ha`;
+            const unitArea = area / 10000;
+
+            accumulator[polygonKey] = measurementAccuracy === "decimeter" || (measurementAccuracy === "dynamic" && unitArea < 10)
+                ? `${unitArea.toFixed(1)} ha`
+                : `${unitArea.toFixed(0)} ha`;
         }
         else if (selectedUnitName === "km²") {
             accumulator[polygonKey] = `${(area / 1000000).toFixed(1)} km²`;

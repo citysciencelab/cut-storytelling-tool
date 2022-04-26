@@ -7,7 +7,7 @@ import {calculateLineLengths, calculatePolygonAreas} from "../../../utils/measur
 
 describe("tools/measure/utils/measureCalculation", function () {
     describe("calculateLineLengths", function () {
-        it("should format measured linestring(s) in m/nm/km correctly", function () {
+        it("should format measured linestring(s) in m/km/nm correctly", function () {
             const feature = new Feature({
                 geometry: new LineString([[0, 0], [1, 1]])
             });
