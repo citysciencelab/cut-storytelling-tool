@@ -194,7 +194,7 @@ describe("src/utils/parametricUrl/ParametricUrlBridge.js", () => {
                 valueAsString = value.join(",");
 
             doSpecialBackboneHandling(key, valueAsString);
-            expect(radioTrigger.calledOnceWithExactly("Maps", "zoomToProjExtent", {data: {
+            expect(radioTrigger.calledOnceWithExactly("Map", "zoomToProjExtent", {data: {
                 extent: value,
                 options: {duration: 0},
                 projection: undefined
