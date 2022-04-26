@@ -339,11 +339,6 @@ Layer.prototype.setIsSelected = function (newValue) {
         treeType = store.getters.treeType,
         autoRefresh = this.get("autoRefresh");
 
-    console.log('----------------------------------------------------------------');
-    console.log('----------------------------------------------------------------');
-    console.log('----------------------------------------------------------------');
-    console.log(store.getters["Maps/get2DMap"]);
-
     // do not use this.set("isSelected", value), because of neverending recursion
     this.attributes.isSelected = newValue;
     this.setIsVisibleInMap(newValue);
