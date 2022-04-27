@@ -271,6 +271,9 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
                     if (command === "isSelected") {
                         return false;
                     }
+                    else if (command === "sourceUpdated") {
+                        return false;
+                    }
                     return true;
                 },
                 set: (command, value) => {
