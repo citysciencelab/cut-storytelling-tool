@@ -1,4 +1,13 @@
-<h2>Tutorial: Ein neues Tool erstellen (Scale-Switcher)</h2>
+
+                        <!DOCTYPE html>
+                        <html>
+                            <head>
+                                <meta charset="utf-8">
+                                <title>📚Masterportal Docs</title>
+                                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+                            </head>
+                            <body>
+                            <h2>Tutorial: Ein neues Tool erstellen (Scale-Switcher)</h2>
 <p>Eine Schritt für Schritt Dokumentation zur Erstellung eines neuen Tools (Moduls).</p>
 <h3>Beispiel Anforderung</h3>
 <p>Wir wollen ein Tool schreiben, über welches man den Kartenmaßstab steuern kann. Dabei soll über ein Drop-Down-Menü der Maßstab ausgewählt werden. Sobald der Maßstab gesetzt wurde, soll sich die Karte anpassen.
@@ -53,7 +62,7 @@ import ScaleView from &quot;../modules/tools/scale/view&quot;;
 &lt;/select&gt;
 </code></pre>
 <h3>Template in die View einbinden</h3>
-<p>Das Template muss in die View eingebunden werden. Hierzu wird in einer neuen Variable (ScaleTemplate) das Template importiert und mithilfe von underscore (“_”) als Template zur Verfügung gestellt. Dieses Template wird dem View als Attribut “template” zugefügt.</p>
+<p>Das Template muss in die View eingebunden werden. Hierzu wird in einer neuen Variable (ScaleTemplate) das Template importiert und mithilfe von underscore (&quot;_&quot;) als Template zur Verfügung gestellt. Dieses Template wird dem View als Attribut “template” zugefügt.</p>
 <pre><code class="language-js">
    import ScaleTemplate from &quot;text-loader!./template.html&quot;;
 
@@ -343,3 +352,6 @@ export default ScaleView;
         }
       }
 </code></pre>
+
+                            </body>
+                        </html>

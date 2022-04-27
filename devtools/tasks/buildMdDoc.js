@@ -40,6 +40,18 @@ function recursiveBuilder (source = documentationSource, target = documentationT
                         /(<a href="[\w.-]+).md(">)/g,
                         "$1.html$2"
                     );
+                    data = `
+                        <!DOCTYPE html>
+                        <html>
+                            <head>
+                                <meta charset="utf-8">
+                                <title>📚Masterportal Docs</title>
+                                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+                            </head>
+                            <body>
+                            ${data}
+                            </body>
+                        </html>`;
                 }
                 else {
                     data = fs.readFileSync(sourcePath);

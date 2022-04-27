@@ -1,4 +1,13 @@
-<blockquote>
+
+                        <!DOCTYPE html>
+                        <html>
+                            <head>
+                                <meta charset="utf-8">
+                                <title>📚Masterportal Docs</title>
+                                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+                            </head>
+                            <body>
+                            <blockquote>
 <p><strong><a href="doc.html">Back to the Masterportal documentation</a></strong>.</p>
 </blockquote>
 <p>[TOC]</p>
@@ -6246,7 +6255,7 @@ The last step to use the slider as a date filter is to define the key “type”
 </blockquote>
 <p>We warn against automatically setting the customer email as <em>REPLY-TO</em>.</p>
 <blockquote>
-<p>The unchecked copying of data to email headers is warned against depending on the security level (resp. age) of the SMTP server, since the risk of <em>Carriage Return</em> and <em>Line Feed</em> injections may lead to e.g. allowing <em>REPLY-TO</em> from the email header line to be escaped to ultimately manipulate the email header itself. (Example: “<a href="mailto:test@example.com">test@example.com</a>\r\nBCC:target1@example.com<a href="mailto:,target2@example.com">,target2@example.com</a>,(…),target(n)@example.com”). In a more abstract case, UTF attacks may be possible, where normally harmless UTF-16 or UTF-32 characters may change the email header’s behavior when interpreted as ANSI or UTF-8, having a comparable effect.</p>
+<p>The unchecked copying of data to email headers is warned against depending on the security level (resp. age) of the SMTP server, since the risk of <em>Carriage Return</em> and <em>Line Feed</em> injections may lead to e.g. allowing <em>REPLY-TO</em> from the email header line to be escaped to ultimately manipulate the email header itself. (Example: “<a href="mailto:test@example.com">test@example.com</a>\r\nBCC:target1@example.com,target2@example.com,(…),target(n)@example.com”). In a more abstract case, UTF attacks may be possible, where normally harmless UTF-16 or UTF-32 characters may change the email header’s behavior when interpreted as ANSI or UTF-8, having a comparable effect.</p>
 </blockquote>
 <hr>
 <h4>Portalconfig.menu.tool.contact.email</h4>
@@ -10620,3 +10629,6 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 <pre><code class="language-json">&quot;1711&quot;
 </code></pre>
 <hr>
+
+                            </body>
+                        </html>

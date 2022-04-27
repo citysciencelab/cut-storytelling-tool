@@ -1,4 +1,13 @@
-<blockquote>
+
+                        <!DOCTYPE html>
+                        <html>
+                            <head>
+                                <meta charset="utf-8">
+                                <title>📚Masterportal Docs</title>
+                                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+                            </head>
+                            <body>
+                            <blockquote>
 <p><strong><a href="doc.html">Return to the Masterportal documentation</a></strong>.</p>
 </blockquote>
 <p>[TOC]</p>
@@ -19,7 +28,7 @@
 <h3>The REST API - HTTP</h3>
 <p>To subscribe to required IDs of Things, use a HTTP REST call to fetch all required IDs.</p>
 <blockquote>
-<p>⚠️ <code>expand</code>, <code>filter</code>, and so on as URL query parameters are usable with HTTP REST calls only. With mqtt, you may subscribe to a plain path, and URL queries (“?” and beyond) will be ignored.</p>
+<p>⚠️ <code>expand</code>, <code>filter</code>, and so on as URL query parameters are usable with HTTP REST calls only. With mqtt, you may subscribe to a plain path, and URL queries (&quot;?&quot; and beyond) will be ignored.</p>
 </blockquote>
 <p>Basic examples for data calls via REST API:</p>
 <ul>
@@ -103,7 +112,7 @@
 <p>⚠️ Please mind that automatic progress and “call in extent” are only available if your server side implementation of the SensorThingsAPI (e.g. the FROST Server) provides - <em>and has set to active!</em> - the skip and geography functions.</p>
 </blockquote>
 <h3>Automatic split</h3>
-<p>Your server configuration should activate the automatic splitting of responses. When activated, responses too large for a single response will contain a follow-up link (“@iot.nextLink”) to the next data chunk. The total number of chunks is included as “@iot.count” value.</p>
+<p>Your server configuration should activate the automatic splitting of responses. When activated, responses too large for a single response will contain a follow-up link (&quot;@iot.nextLink&quot;) to the next data chunk. The total number of chunks is included as “@iot.count” value.</p>
 <p>Using the <code>SensorThingsHttp.get()</code> function, the <code>SensorThingsHttp</code> layer handles “@iot.nextLink” (see <a href="#markdown-header-the-iotnextlink-value">The “@iot.nextLink” Value</a>) and “@iot.count” (see <a href="#markdown-header-the-iotcount-value">The “@iot.count” Value</a>) for you.</p>
 <p>Here is a basic implementation of <code>SensorThingsHttp</code>, using basic events of the Masterportal, to show its functionality:</p>
 <pre><code class="language-js">import {SensorThingsHttp} from &quot;@modules/core/modelList/layer/sensorThingsHttp&quot;;
@@ -163,7 +172,7 @@ http.get(url, function (response) {
 </table>
 <h3>The “@iot.nextLink” value</h3>
 <p>If you don’t want to use <code>SensorThingsHttp</code> to automatically split the data, here are some hints regarding your implementation.</p>
-<p>If a call’s response contains too many datasets, the server splits the result into chunks, indicated by a “@iot.nextLink” for the follow-up chunk. You can follow through all “@iot.nextLink” URLs, gathering the responses until the end of data is received. If no follow-up link (“@iot.nextLink”) exists, all chunks have been retrieved.</p>
+<p>If a call’s response contains too many datasets, the server splits the result into chunks, indicated by a “@iot.nextLink” for the follow-up chunk. You can follow through all “@iot.nextLink” URLs, gathering the responses until the end of data is received. If no follow-up link (&quot;@iot.nextLink&quot;) exists, all chunks have been retrieved.</p>
 <h4>Example</h4>
 <p>The following URL will fetch 100 datasets, and the response will include an “@iot.nextLink” to the next chunk: <a href="https://iot.hamburg.de/v1.0/Things">All Things</a></p>
 <pre><code class="language-json">{
@@ -173,7 +182,7 @@ http.get(url, function (response) {
   }]
 }
 </code></pre>
-<p>Calling the nextLink (<a href="https://iot.hamburg.de/v1.0/Things?$skip=100">https://iot.hamburg.de/v1.0/Things?$skip=100</a>) provides you with the next chunk of data and another follow-up link (“@iot.nextLink”) and so on, until the last dataset is reached.</p>
+<p>Calling the nextLink (<a href="https://iot.hamburg.de/v1.0/Things?$skip=100">https://iot.hamburg.de/v1.0/Things?$skip=100</a>) provides you with the next chunk of data and another follow-up link (&quot;@iot.nextLink&quot;) and so on, until the last dataset is reached.</p>
 <h3>@iot.nextLink structures</h3>
 <p>If you don’t want to use <code>SensorThingsHttp</code> to automatically follow @iot.nextLinks, please mind the following hint.</p>
 <p>Complex calls to the SensorThingsAPI may result in many chunks. The FROST Server is capable to split any delivered array - also in sub-structures - and provide them with an @iot.nextLink. These links hold the split array’s key as prefix; e.g. Observations@iot.nextLink, or Datastreams@iot.nextLink.</p>
@@ -249,7 +258,7 @@ if (topX &gt; 0 &amp;&amp; topX &lt;= skipX) {
   }]
 }
 </code></pre>
-<p>Combining the absolute number (“@iot.count”) and the value of the current <code>$skip</code> parameter gives you the progress with <code>1 / @iot.count * skip</code>.</p>
+<p>Combining the absolute number (&quot;@iot.count&quot;) and the value of the current <code>$skip</code> parameter gives you the progress with <code>1 / @iot.count * skip</code>.</p>
 <h3>Automatic use of extent</h3>
 <p>You may want your server implementation of the <em>SensorThingsAPI</em> (e.g. the FROST Server) to return data only within a given extent (e.g. a polygon). The FROST Server provides you with this functionality. To use this feature, the <code>SensorThingsHttp</code> layer provides a method <code>SensorThingsHttp.getInExtent()</code> to retrieve data only within the given extent.</p>
 <p>Using <code>SensorThingsHttp.getInExtent()</code>, you may also use the splitting progress explained <a href="#markdown-header-automatic-split">above</a>. The <code>SensorThingsHttp</code> layer creates the correct URL query parameter <code>st_within(Locations/location,geography'POLYGON ((...))')</code> (see <a href="#the_use_of_polygon">The use of POLYGON</a>) for you.</p>
@@ -360,7 +369,7 @@ const extent = Radio.request(&quot;MapView&quot;, &quot;getCurrentExtent&quot;),
 
 </code></pre>
 <h2>SensorThingsMqtt</h2>
-<p>The Masterportal SensorThings software layer is capable of handling mqtt subscriptions for <code>mqtt 3.1</code>, <code>mqtt 3.1.1</code>, and <code>mqtt 5.0</code>. The mqtt version running on the server to be used has to be known and used in <code>SensorThingsMqtt</code>’s constructor.</p>
+<p>The Masterportal SensorThings software layer is capable of handling mqtt subscriptions for <code>mqtt 3.1</code>, <code>mqtt 3.1.1</code>, and <code>mqtt 5.0</code>. The mqtt version running on the server to be used has to be known and used in <code>SensorThingsMqtt</code>'s constructor.</p>
 <p>This is a basic example for <code>mqtt 5.0</code>:</p>
 <pre><code class="language-js">import {SensorThingsMqtt} from &quot;./sensorThingsMqtt&quot;;
 
@@ -614,3 +623,6 @@ mqtt.end(false, {}, () =&gt; {
 });
 </code></pre>
 <p>For more information on the <code>end</code> function parameters, visit <a href="https://www.npmjs.com/package/mqtt#end">the end function documentation of mqtt</a>; this called is passed through to the mqtt package without further effects.</p>
+
+                            </body>
+                        </html>

@@ -1,4 +1,13 @@
-<blockquote>
+
+                        <!DOCTYPE html>
+                        <html>
+                            <head>
+                                <meta charset="utf-8">
+                                <title>📚Masterportal Docs</title>
+                                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+                            </head>
+                            <body>
+                            <blockquote>
 <p><strong><a href="doc.html">back to Masterportal documentation</a></strong></p>
 </blockquote>
 <blockquote>
@@ -6,7 +15,7 @@
 </blockquote>
 <h1>Proxy (<em>deprecated</em>)</h1>
 <p>Various Masterportal functions send XHR requests to other domains, e.g. <code>WMS GetFeatureInfo</code> requests or calls to <code>WFS</code> and <code>CSW</code> services. These are restricted by the <strong><a href="https://en.wikipedia.org/wiki/Same-origin_policy">same-origin policy</a></strong> implemented in all browsers.</p>
-<p>For this reason, the Masterportal requires local proxies on the server it’s running on for all services that are requested via XHR from another domain. URLs for such requests are translated to local proxy URLs by default; here all dots (“.”) in the URL’s hostname are replaced with underscores (“_”).</p>
+<p>For this reason, the Masterportal requires local proxies on the server it’s running on for all services that are requested via XHR from another domain. URLs for such requests are translated to local proxy URLs by default; here all dots (&quot;.&quot;) in the URL’s hostname are replaced with underscores (&quot;_&quot;).</p>
 <h2>Example</h2>
 <p>Assuming a WMS server’s URL is <code>https://geodienste.hamburg.de/HH-WMS-Gruenes-Netz</code>, the Masterportal translates it to <code>/geodienste_hamburg_de/HH-WMS-Gruenes-Netz</code> and uses this local address for its request.</p>
 <p>For this purpose a reverse proxy must be set up.</p>
@@ -19,3 +28,6 @@ ProxyPassReverse /geodienste_hamburg_de https://geodienste.hamburg.de
 <blockquote>
 <p>Forward all requests to <strong>/geodienste_hamburg_de</strong> to <strong><a href="https://geodienste-hamburg.de">https://geodienste-hamburg.de</a></strong>, and return the answer as if from <strong>/geodienste_hamburg_de</strong>.</p>
 </blockquote>
+
+                            </body>
+                        </html>

@@ -1,4 +1,13 @@
-<blockquote>
+
+                        <!DOCTYPE html>
+                        <html>
+                            <head>
+                                <meta charset="utf-8">
+                                <title>📚Masterportal Docs</title>
+                                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+                            </head>
+                            <body>
+                            <blockquote>
 <p><strong><a href="doc.html">Zurück zur Dokumentation Masterportal</a></strong>.</p>
 </blockquote>
 <p>[TOC]</p>
@@ -6239,7 +6248,7 @@ Vor der ungeprüften Übernahme durch den SMTP-Server der Kunden-Email als <em>A
 </blockquote>
 <p>Wir warnen vor der automatischen Einstellung der Kunden-Mail als <em>REPLY-TO</em>.</p>
 <blockquote>
-<p>Die ungeprüfte Übernahme von Daten in den Email-Header ist je nach Sicherheitsstand (bzw. Alter) des SMTP-Servers mit dem Risiko verbunden, dass im einfachsten Fall durch Injektion von <em>Carriage Return</em> und <em>Line Feed</em> in z.B. <em>REPLY-TO</em> aus der Email-Header-Zeile ausgebrochen und der Email-Header selbst manipuliert wird (Beispiel: “<a href="mailto:test@example.com">test@example.com</a>\r\nBCC:target1@example.com<a href="mailto:,target2@example.com">,target2@example.com</a>,(…),target(n)@example.com”). In einem abstrakteren Fall sind auch UTF-Attacken denkbar, bei der eigentlich harmlose UTF-16- oder UTF-32-Zeichen durch Interpretation als ANSI oder UTF-8 zu Verhaltensänderungen des Email-Headers mit einem ähnlichen Ergebnis führen.</p>
+<p>Die ungeprüfte Übernahme von Daten in den Email-Header ist je nach Sicherheitsstand (bzw. Alter) des SMTP-Servers mit dem Risiko verbunden, dass im einfachsten Fall durch Injektion von <em>Carriage Return</em> und <em>Line Feed</em> in z.B. <em>REPLY-TO</em> aus der Email-Header-Zeile ausgebrochen und der Email-Header selbst manipuliert wird (Beispiel: “<a href="mailto:test@example.com">test@example.com</a>\r\nBCC:target1@example.com,target2@example.com,(…),target(n)@example.com”). In einem abstrakteren Fall sind auch UTF-Attacken denkbar, bei der eigentlich harmlose UTF-16- oder UTF-32-Zeichen durch Interpretation als ANSI oder UTF-8 zu Verhaltensänderungen des Email-Headers mit einem ähnlichen Ergebnis führen.</p>
 </blockquote>
 <hr>
 <h4>Portalconfig.menu.tool.contact.email</h4>
@@ -10638,3 +10647,6 @@ Parameter können je nach Konfiguration, Verwendung und Backend-Komponenten unte
 <pre><code class="language-json">&quot;1711&quot;
 </code></pre>
 <hr>
+
+                            </body>
+                        </html>
