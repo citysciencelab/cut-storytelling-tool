@@ -8,7 +8,7 @@ The Masterportal is a project by [Geowerkstatt Hamburg](https://www.hamburg.de/g
 
 * [Download](https://bitbucket.org/geowerkstatt-hamburg/masterportal/downloads/)
 * [Quick start for users](https://htmlpreview.github.io/?https://bitbucket.org/geowerkstatt-hamburg/masterportal/raw/d078d7fb5483d4dbab44d6046fb461a0260dbdad/docHtml/setup.html)
-* [Remote interface](https://htmlpreview.github.io/?https://bitbucket.org/geowerkstatt-hamburg/masterportal/raw/d078d7fb5483d4dbab44d6046fb461a0260dbdad/docHtml/remoteInterface.html)
+* [Remote interface](https://htmlpreview.github.io/?https://bitbucket.org/geowerkstatt-hamburg/masterportal/raw/d078d7fb5483d4dbab44d6046fb461a0260dbdad/docHtml/remoteInterface/remoteInterface.html)
 * [User documentation](https://htmlpreview.github.io/?https://bitbucket.org/geowerkstatt-hamburg/masterportal/raw/d078d7fb5483d4dbab44d6046fb461a0260dbdad/docHtml/doc.html)
 * [Community board (User forum and issue tracker)](https://trello.com/c/qajdXkMa/110-willkommen)
 
