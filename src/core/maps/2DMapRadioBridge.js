@@ -54,8 +54,8 @@ channel.on({
     "render": function () {
         store.getters["Maps/get2DMap"].render();
     },
-    "zoomToExtent": function (extent, options) {
-        store.dispatch("Maps/zoomToExtent", {extent: extent, options: options});
+    "zoomToExtent": function (extentOptions) {
+        store.dispatch("Maps/zoomToExtent", {extent: extentOptions.extent, options: extentOptions.options});
     },
     "zoomToProjExtent": function (data) {
         store.dispatch("Maps/zoomToProjExtent", {data: data});
