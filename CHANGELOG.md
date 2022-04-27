@@ -23,6 +23,7 @@
 ### Fixed
 - Issue #758: featureLister threw a JavaScript exception when building the list of layers.
 - Issue #766: The performance of opening large folders in the tree of type custom or default has been increased.
+- Print Tool now works as expected when unchecking and checking the auto adjusted scale checkbox or selecting a scale manually.
 
 ---
 ## v2.20.1 - 2022-04-21
