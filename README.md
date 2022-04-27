@@ -4,6 +4,10 @@ The Masterportal is a tool-kit to create geo web applications based on [OpenLaye
 
 The Masterportal is a project by [Geowerkstatt Hamburg](https://www.hamburg.de/geowerkstatt/).
 
+## Testbereich - hier ein "new-style" Link zur HTML-Doku (fix auf einen Commit, sodass unterschiedliche Docs verlinkt werden könnten)
+
+* [Testlink auf die "User documentation"](https://htmlpreview.github.io/?https://bitbucket.org/geowerkstatt-hamburg/masterportal/raw/3ee0c1bdd703d8949084704e5b698e650a7efef2/docHtml/doc.html)
+
 ## User section
 
 * [Download](https://bitbucket.org/geowerkstatt-hamburg/masterportal/downloads/)
