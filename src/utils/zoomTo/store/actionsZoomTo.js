@@ -5,7 +5,7 @@ import calculateExtent from "../../calculateExtent";
 import createStyledFeatures from "../utils/createStyledFeatures";
 
 const actions = {
-    async zoomToFeatures ({state, getters: {config, deprecatedParameters}, commit, dispatch}) {
+    zoomToFeatures ({state, getters: {config, deprecatedParameters}, commit, dispatch}) {
         let allowedValues, layerId, property, styleId, urlValues;
 
         // NOTE(roehlipa): Everything included in the if-closure can be removed when the deprecated config parameters have been removed.
@@ -27,10 +27,9 @@ const actions = {
                 allowedValues = config.zoomToGeometry.geometries;
             }
             else {
-                console.error("zoomTo: A mismatch between url parameters and configuration occurred.");
-                return;
+                return new Promise((_, reject) => reject("zoomTo: A mismatch between url parameters and configuration occurred."));
             }
-            getAndFilterFeatures(layerId, property, urlValues)
+            return getAndFilterFeatures(layerId, property, urlValues)
                 .then(featureCollection => {
                     const geometryOrExtent = calculateExtent(
                         allowedValues === undefined
@@ -49,56 +48,54 @@ const actions = {
                 })
                 .catch(error => console.error("zoomTo: An error occurred while trying to fetch features from the given service.", error));
         }
-        else {
-            const featurePromises = config.map(conf => {
-                const {id} = conf;
+        const featurePromises = config.map(conf => {
+            const {id} = conf;
 
-                if (state[id] === undefined) {
-                    return [];
-                }
-                if (id === "zoomToFeatureId") {
-                    urlValues = state[id].map(value => String(value));
-                    styleId = conf.styleId;
-                }
-                else if (id === "zoomToGeometry") {
-                    urlValues = state[id].split(",").map(value => value.toUpperCase().trim());
-                    allowedValues = conf.allowedValues;
-                }
-                else {
-                    console.error("zoomTo: The specified id for the url parameter does not exist. Please use either 'zoomToGeometry' or 'zoomToFeatureId'.");
-                    return [];
-                }
-                layerId = conf.layerId;
-                property = conf.property;
+            if (state[id] === undefined) {
+                return [];
+            }
+            if (id === "zoomToFeatureId") {
+                urlValues = state[id].map(value => String(value));
+                styleId = conf.styleId;
+            }
+            else if (id === "zoomToGeometry") {
+                urlValues = state[id].split(",").map(value => value.toUpperCase().trim());
+                allowedValues = conf.allowedValues;
+            }
+            else {
+                console.error("zoomTo: The specified id for the url parameter does not exist. Please use either 'zoomToGeometry' or 'zoomToFeatureId'.");
+                return [];
+            }
+            layerId = conf.layerId;
+            property = conf.property;
 
-                return getAndFilterFeatures(layerId, property, urlValues)
-                    .then(featureCollection => {
-                        let filteredFeatures = featureCollection;
+            return getAndFilterFeatures(layerId, property, urlValues)
+                .then(featureCollection => {
+                    let filteredFeatures = featureCollection;
 
-                        if (allowedValues !== undefined) {
-                            filteredFeatures = filteredFeatures.filter(feature => allowedValues.includes(feature.get(property).toUpperCase().trim()));
-                        }
-                        if (styleId) {
-                            filteredFeatures = createStyledFeatures(filteredFeatures, styleId);
-                        }
-                        return filteredFeatures;
-                    });
-            });
-
-            Promise.all(featurePromises)
-                .then(result => {
-                    const features = result.flat(1);
-
-                    commit("Map/addLayerToMap", new VectorLayer({
-                        source: new VectorSource({features})
-                    }), {root: true});
-                    return dispatch("Map/zoomTo", {geometryOrExtent: calculateExtent(features)}, {root: true});
-                })
-                .catch(error => {
-                    console.error("zoomTo: An error occurred while trying to fetch features from the given service.", error);
+                    if (allowedValues !== undefined) {
+                        filteredFeatures = filteredFeatures.filter(feature => allowedValues.includes(feature.get(property).toUpperCase().trim()));
+                    }
+                    if (styleId) {
+                        filteredFeatures = createStyledFeatures(filteredFeatures, styleId);
+                    }
+                    return filteredFeatures;
                 });
-            // TODO: 1. Adjust docs 2. adjust tests
-        }
+        });
+
+        return Promise.all(featurePromises)
+            .then(result => {
+                const features = result.flat(1);
+
+                commit("Map/addLayerToMap", new VectorLayer({
+                    source: new VectorSource({features})
+                }), {root: true});
+                return dispatch("Map/zoomTo", {geometryOrExtent: calculateExtent(features)}, {root: true});
+            })
+            .catch(error => {
+                console.error("zoomTo: An error occurred while trying to fetch features from the given service.", error);
+            });
+        // TODO: 1. Adjust docs 2. adjust tests
     }
 };
 
