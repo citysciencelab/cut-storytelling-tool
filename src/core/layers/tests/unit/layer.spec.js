@@ -7,13 +7,9 @@ import Layer from "../../layer";
 import Group from "../../group";
 import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 
-/* const localVue = createLocalVue();
-
-localVue.use(Vuex); */
 
 describe("src/core/layers/layer.js", () => {
     let attributes,
-        // store,
         mapOL,
         layerRemoved = false,
         layerVisible = false,
@@ -92,25 +88,14 @@ describe("src/core/layers/layer.js", () => {
             layers: "layer1,layer2",
             transparent: false
         };
-       /*  store = new Vuex.Store({
-            namespaces: true,
-            modules: {
-                Maps: {
-                    namespaced: true,
-                    getters: {
-                        mode: () => "2D",
-                        get2DMap: () => mapOL
-                    }
-                }
-            }
-        }); */
 
         store.getters = {
             treeType: "custom",
             "Maps/get2DMap": {removeLayer: () => {
                 layerRemoved = true;
                 return layerRemoved;
-            }}};
+            }}
+        };
         featureList = [];
         featureList.push(new Feature(new Point([1, 1])));
         featureList.push(new Feature(new MultiPoint([[1, 1], [2, 2]])));
@@ -549,17 +534,19 @@ describe("src/core/layers/layer.js", () => {
                 md_id: "B6A59A2B-2D40-4676-9094-0EB73039ED34",
                 show_doc_url: "https://metaver.de/trefferanzeige?cmd=doShowDocument&docuuid="
             };
+
         let layerWrapper = null,
             layerInfo = null;
 
         store.dispatch = (arg1, arg2) => {
             dispatchCalls[arg1] = arg2 !== undefined ? arg2 : "called";
         };
+
         attributes.datasets = [dataset];
         layerWrapper = new Layer(attributes, olLayer);
 
         layerWrapper.showLayerInformation();
-        layerInfo = store.dispatch["LayerInformation/layerInfo"];
+        layerInfo = dispatchCalls["LayerInformation/layerInfo"];
 
         expect(layerInfo.id).to.be.equals(layerWrapper.get("id"));
         expect(layerInfo.metaID).to.be.equals(dataset.md_id);
