@@ -10,7 +10,7 @@
                             <blockquote>
 <p><strong><a href="doc.html">Return to the Masterportal documentation</a></strong>.</p>
 </blockquote>
-<p>[TOC]</p>
+<p></p>
 <h1>Sensor Layer</h1>
 <p>This document describes the technical details of the Masterportal’s sensor layer based on the <em>SensorThingsAPI</em>.</p>
 <h2>Definition of terms</h2>
@@ -104,7 +104,7 @@
 <li><a href="https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html">mqtt v3.1.1</a></li>
 <li><a href="https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html">mqtt v5.0</a></li>
 </ul>
-<h2>SensorThingsHttp</h2>
+<h2 id="markdown-header-sensorthingshttp">SensorThingsHttp</h2>
 <p>The SensorThingsAPI provides automatic splitting of server responses to chunks to avoid overly large payloads. This allows displaying the progress of SensorThingsAPI calls for improved user experience. See <a href="#markdown-header-automatic-split">Automatic Split</a> for details.</p>
 <p>The request can be minimized further by limiting it to the extent currently visible in the browser. See <a href="#markdown-header-automatic-call-in-extent">Automatic call in Extent</a> for details.</p>
 <p>The Masterportal implements a software layer called <code>SensorThingsHttp</code> that provides the both split and extent handling.</p>
@@ -138,7 +138,7 @@ http.get(url, function (response) {
 
 </code></pre>
 <p>Please note that the <code>http.get</code> call in itself is asynchronous. All parameters of <code>SensorThingsHttp.get()</code>, except for <code>url</code>, are optional. At least a function for <code>onsuccess</code> should be provided anyway, or the response is lost.</p>
-<h3>Configuration</h3>
+<h3 id="markdown-header-configuration">Configuration</h3>
 <p>SensorThingsHttp can be configured with two parameters via constructor.</p>
 <table>
 <thead>
@@ -173,7 +173,7 @@ http.get(url, function (response) {
 <h3>The “@iot.nextLink” value</h3>
 <p>If you don’t want to use <code>SensorThingsHttp</code> to automatically split the data, here are some hints regarding your implementation.</p>
 <p>If a call’s response contains too many datasets, the server splits the result into chunks, indicated by a “@iot.nextLink” for the follow-up chunk. You can follow through all “@iot.nextLink” URLs, gathering the responses until the end of data is received. If no follow-up link (&quot;@iot.nextLink&quot;) exists, all chunks have been retrieved.</p>
-<h4>Example</h4>
+<h4 id="markdown-header-example">Example</h4>
 <p>The following URL will fetch 100 datasets, and the response will include an “@iot.nextLink” to the next chunk: <a href="https://iot.hamburg.de/v1.0/Things">All Things</a></p>
 <pre><code class="language-json">{
   &quot;@iot.nextLink&quot; : &quot;https://iot.hamburg.de/v1.0/Things?$skip=100&quot;,
@@ -186,7 +186,7 @@ http.get(url, function (response) {
 <h3>@iot.nextLink structures</h3>
 <p>If you don’t want to use <code>SensorThingsHttp</code> to automatically follow @iot.nextLinks, please mind the following hint.</p>
 <p>Complex calls to the SensorThingsAPI may result in many chunks. The FROST Server is capable to split any delivered array - also in sub-structures - and provide them with an @iot.nextLink. These links hold the split array’s key as prefix; e.g. Observations@iot.nextLink, or Datastreams@iot.nextLink.</p>
-<h4>Example</h4>
+<h4 id="markdown-header-example">Example</h4>
 <ul>
 <li>URL: <a href="https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things?$expand=Datastreams($top=2;$expand=Observations($top=2))">https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things?$expand=Datastreams($top=2;$expand=Observations($top=2))</a></li>
 <li>Response: Many Things, with lots of Datastreams and Observations.</li>
@@ -248,7 +248,7 @@ if (topX &gt; 0 &amp;&amp; topX &lt;= skipX) {
 <h3>The “@iot.count” Value</h3>
 <p>The number of expected chunks can be requested by adding <code>$count=true</code> to the call, which will fill the value for “@iot.count” in the response.</p>
 <p>This total number in combination with the current skip value can be used to calculate the loading progress of the application, which may then be shown to the user by a loading bar or other UI elements.</p>
-<h4>Example</h4>
+<h4 id="markdown-header-example">Example</h4>
 <p>To get the total number of datasets to expect from a call, simply add <code>$count=true</code> to any <em>SensorThingsAPI</em> URL: <a href="https://iot.hamburg.de/v1.0/Things?$count=true">https://iot.hamburg.de/v1.0/Things?$count=true</a></p>
 <pre><code class="language-json">{
   &quot;@iot.count&quot; : 4723,
@@ -368,7 +368,7 @@ const extent = Radio.request(&quot;MapView&quot;, &quot;getCurrentExtent&quot;),
     ];
 
 </code></pre>
-<h2>SensorThingsMqtt</h2>
+<h2 id="markdown-header-sensorthingsmqtt">SensorThingsMqtt</h2>
 <p>The Masterportal SensorThings software layer is capable of handling mqtt subscriptions for <code>mqtt 3.1</code>, <code>mqtt 3.1.1</code>, and <code>mqtt 5.0</code>. The mqtt version running on the server to be used has to be known and used in <code>SensorThingsMqtt</code>'s constructor.</p>
 <p>This is a basic example for <code>mqtt 5.0</code>:</p>
 <pre><code class="language-js">import {SensorThingsMqtt} from &quot;./sensorThingsMqtt&quot;;
@@ -475,16 +475,16 @@ mqtt.subscribe(&quot;v1.0/Datastreams(1234)/Observations&quot;, {
 </tr>
 </tbody>
 </table>
-<h4>mqttUrl</h4>
+<h4 id="markdown-header-mqtturl">mqttUrl</h4>
 <p>mqttUrl is the URL to connect to the mqtt service. The URL may use any of the protocols ‘mqtt’, ‘mqtts’, ‘tcp’, ‘tls’, ‘ws’, or ‘wss’. See the <a href="https://www.npmjs.com/package/mqtt">mqtt package documentation</a> for additional details.</p>
-<h4>mqttVersion</h4>
+<h4 id="markdown-header-mqttversion">mqttVersion</h4>
 <p>The mqttVersion will trigger different behavior of the <code>SensorThingsMqtt</code> software layer.</p>
 <ul>
 <li>“3.1”: the internal protocolId is “MQIsdp” (3.1.1 and 5.0 use “MQTT”); the internal protocolVersion is 3 (3.1.1 and 5.0 use protocolVersion 4); simulation of Retained Handling will be activated if you provide a rhPath</li>
 <li>“3.1.1”: simulation of Retained Handling will be activated if you provide a rhPath</li>
 <li>“5.0”: no simulation of Retained Handling necessary (you must not provide a rhPath!), the event <code>on(&quot;disconnect&quot;)</code> is provided as feature for 5.0</li>
 </ul>
-<h4>rhPath</h4>
+<h4 id="markdown-header-rhpath">rhPath</h4>
 <p>The rhPath is used to simulate Retained Handling on mqtt versions 3.1 and 3.1.1, and has to be set to protocol plus domain. To figure out your rhPath, think of it as the missing prefix for a Topic.</p>
 <p>E.g., if you accessed your <em>SensorThingsAPI</em> via “<a href="https://iot.hamburg.de/v1.0/Things(1234)/Datastreams">https://iot.hamburg.de/v1.0/Things(1234)/Datastreams</a>”, you’d subscribe to a Topic via mqtt with “v1.0/Things(1234)/Datastreams”. The rhPath is the leftover URL part missing to actually receive data via http. In this case, “<a href="https://iot.hamburg.de">https://iot.hamburg.de</a>” is the rhPath.</p>
 <p>Be aware that your http path might differ from your mqtt path depending on the protocol to be used; e.g. “wss://iot.hamburg.de/mqtt” could be an rhPath to subscribe to “v1.0/Things(1234)/Datastreams”.</p>
@@ -527,7 +527,7 @@ mqtt.subscribe(&quot;v1.0/Datastreams(1234)/Observations&quot;, {
 </tr>
 </tbody>
 </table>
-<h4>rh</h4>
+<h4 id="markdown-header-rh">rh</h4>
 <p>Retained Handling (rh) between Client and Server is only available for mqtt 5.0, since previous version to not support this feature.</p>
 <p>However, for 3.1 and 3.1.1, <code>SensorThingsMqtt</code> may simulate Retained Messages by bypassing mqtt with http, internally using <code>SensorThingsHttp</code> to receive the latest sensor message.</p>
 <p>The Retained Handling can be configured as rh := 0, 1, or 2.</p>

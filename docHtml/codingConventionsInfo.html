@@ -11,10 +11,10 @@
 <p>Explanations and examples are given for some points mentioned in the <a href="./codingConventions.md">coding conventions</a> below.</p>
 <hr>
 <h3>Section A</h3>
-<h4>A.1.6</h4>
+<h4 id="markdown-header-a16">A.1.6</h4>
 <p>Babel currently does not translate TPL files.</p>
 <hr>
-<h4>A.4.3</h4>
+<h4 id="markdown-header-a43">A.4.3</h4>
 <p>These two examples illustrate how to write JSDoc comment blocks.</p>
 <pre><code class="language-js">/**
 * This function does some things that are explained right here.
@@ -34,7 +34,7 @@ functionWithParamsAndReturn: function (param1) {
 }
 </code></pre>
 <hr>
-<h4>A.4.4</h4>
+<h4 id="markdown-header-a44">A.4.4</h4>
 <p><em>Example for the <code>initialize()</code> function:</em></p>
 <pre><code class="language-js">defaults: {
     channel: Radio.channel(&quot;Alert&quot;),
@@ -77,12 +77,12 @@ initialize: function () {
 template: _.template(AlertingTemplate),
 </code></pre>
 <hr>
-<h4>A.4.5</h4>
+<h4 id="markdown-header-a45">A.4.5</h4>
 <p><em>Comment on inheritance:</em></p>
 <pre><code class="language-js">    const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype */{
 </code></pre>
 <hr>
-<h4>A.4.6</h4>
+<h4 id="markdown-header-a46">A.4.6</h4>
 <p>Namespace definition.</p>
 <p><em>Example namespace Alerting in Root:</em></p>
 <pre><code class="language-js">/**
@@ -114,7 +114,7 @@ template: _.template(AlertingTemplate),
  */
 </code></pre>
 <hr>
-<h4>A.4.7</h4>
+<h4 id="markdown-header-a47">A.4.7</h4>
 <p>Event definition.</p>
 <p><em>Example: <code>Radio.trigger(&quot;Channel&quot;, &quot;Event&quot;);</code></em></p>
 <pre><code class="language-js">/**
@@ -168,7 +168,7 @@ template: _.template(AlertingTemplate),
  */
 </code></pre>
 <hr>
-<h4>A.5.1</h4>
+<h4 id="markdown-header-a51">A.5.1</h4>
 <p>Example for testable and untestable functions.</p>
 <pre><code class="language-js">function testableFunction (uebergabeParameter) {
     let rueckgabeParameter = &quot;Hello &quot; + uebergabeParameter;
@@ -184,11 +184,11 @@ function untestableFunction (param) {
 }
 </code></pre>
 <hr>
-<h4>A.5.2</h4>
+<h4 id="markdown-header-a52">A.5.2</h4>
 <p>For more information on unit tests in Vue, refer to <a href="./unitTestVue.md">the Vue unit test documentation</a>.</p>
 <p>Tests employ the libraries <strong><a href="https://www.chaijs.com/">Chai</a></strong> and <strong><a href="https://mochajs.org/">Mocha</a></strong>.</p>
 <hr>
-<h4>A.6.2</h4>
+<h4 id="markdown-header-a62">A.6.2</h4>
 <p>Extend the <code>.md</code> file documentation by following these instructions.</p>
 <ul>
 <li>For new configuration parameters that do not directly influence the Masterportal UI and displayed layers, or on changes to such existing parameters, extend the file <strong><a href="./config.js.md">config.js.md</a></strong>.</li>
@@ -243,7 +243,7 @@ The row <code>Expert</code> only applies to the <strong><a href="./config.json.m
     }
 </code></pre>
 <hr>
-<h4>A.6.4</h4>
+<h4 id="markdown-header-a64">A.6.4</h4>
 <p>On changing, refactoring, or deleting a parameter:</p>
 <ul>
 <li>Note “Deprecated in [next major release]” within the parameter’s documentation.</li>
@@ -282,15 +282,15 @@ updateTreeType: function (attributes, response) {
 },
 </code></pre>
 <hr>
-<h4>A.7.1</h4>
+<h4 id="markdown-header-a71">A.7.1</h4>
 <p>The library <a href="https://www.i18next.com/">i18next</a> is used for internationalization.</p>
 <hr>
-<h4>A.8.3</h4>
+<h4 id="markdown-header-a83">A.8.3</h4>
 <p>For more information of versions, read the <a href="./versioning.md">versioning documentation</a>.</p>
 <p>For each pull request, add an entry to the chapter “Unreleased” of the <a href="../CHANGELOG.md">CHANGELOG</a> file. Avoid technical jargon. The changelog is supposed to be readable by both users and developers.</p>
 <hr>
 <h3>Section B (optional)</h3>
-<h4>B.3.1</h4>
+<h4 id="markdown-header-b31">B.3.1</h4>
 <pre><code class="language-js">// code example for generating simple getters
 import state from &quot;./state&quot;;
 import {generateSimpleMutations} from &quot;~generators&quot;;
@@ -299,7 +299,7 @@ const mutations = {
     ...generateSimpleMutations(state),
 </code></pre>
 <hr>
-<h4>B.4.2</h4>
+<h4 id="markdown-header-b42">B.4.2</h4>
 <ul>
 <li><a href="https://vuex.vuejs.org/guide/state.html#the-mapstate-helper">mapState documentation</a></li>
 <li><a href="https://vuex.vuejs.org/guide/getters.html#the-mapgetters-helper">mapGetters documentation</a></li>
@@ -307,13 +307,13 @@ const mutations = {
 <li><a href="https://vuex.vuejs.org/guide/actions.html#dispatching-actions-in-components">mapActions documentation</a></li>
 </ul>
 <hr>
-<h4>B.5.4</h4>
+<h4 id="markdown-header-b54">B.5.4</h4>
 <pre><code class="language-html">&lt;style lang=&quot;scss&quot; scoped&gt;
     @import &quot;~variables&quot;;
 &lt;/style&gt;
 </code></pre>
 <hr>
-<h4>B.6</h4>
+<h4 id="markdown-header-b6">B.6</h4>
 <p>An example simply displaying “My First Alert Message”:</p>
 <pre><code class="language-js">import store from &quot;masterportal/src/app-store/index&quot;;
 store.dispatch(&quot;Alerting/addSingleAlert&quot;, &quot;My First Alert Message.&quot;);

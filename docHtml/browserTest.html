@@ -10,7 +10,7 @@
                             <blockquote>
 <p>Browser testing with Selenium WebDriver</p>
 </blockquote>
-<p>[TOC]</p>
+<p></p>
 <h1>Install browser test drivers (WebDrivers)</h1>
 <p>To locally run the browser tests, drivers have to be installed on your system. At least <em>chromedriver</em> should be installed, but you may also install further drivers for test automation. (Hint: For Firefox, the name of the WebDriver is <em>geckodriver</em>.)</p>
 <p>Using the variable “browser” (see below), these browsers can be used for automated tests:</p>
@@ -131,7 +131,7 @@ module.exports = ScaleSwitcherTests;
 </code></pre>
 <h2>Add Hooks</h2>
 <p>There are basically 3 hooks added.</p>
-<h3>Before</h3>
+<h3 id="markdown-header-before">Before</h3>
 <p>Executed once in describe.
 Sets the title of the test, if the tests are executed via a pipeline on Saucelabs. Get the driver.</p>
 <pre><code class="language-js"> before(async function () {
@@ -147,7 +147,7 @@ Sets the title of the test, if the tests are executed via a pipeline on Saucelab
     driver = await getDriver();
 });
 </code></pre>
-<h3>After</h3>
+<h3 id="markdown-header-after">After</h3>
 <p>Will be executed once after all tests have been run.
 If the tests are piped to Saucelabs, the URL to executed tests is logged to Saucelabs.</p>
 <pre><code class="language-js">after(async function () {
@@ -159,7 +159,7 @@ If the tests are piped to Saucelabs, the URL to executed tests is logged to Sauc
     }
 });
 </code></pre>
-<h3>AfterEach</h3>
+<h3 id="markdown-header-aftereach">AfterEach</h3>
 <p>Will be executed after each test.
 It serves as a fallback, if a test fails it will be restarted. This is done because it can happen that a resource from the web does not respond on the first try.</p>
 <pre><code class="language-js">afterEach(async function () {

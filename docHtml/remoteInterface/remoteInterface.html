@@ -10,7 +10,7 @@
                             <blockquote>
 <p>Use the remote interface.</p>
 </blockquote>
-<p>[TOC]</p>
+<p></p>
 <h1>Remote interface</h1>
 <p>The remote interface allows programmatic interaction with the Masterportal. It gives access to all registered VueX actions and a set of dedicated additional functions.</p>
 <h2>Generic remote interface to call VueX actions</h2>
@@ -40,7 +40,7 @@
 </tr>
 </tbody>
 </table>
-<h3>Example</h3>
+<h3 id="markdown-header-example">Example</h3>
 <p>Any VueX action may be called as follows:</p>
 <pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;);
 myIframe.contentWindow.postMessage({
@@ -85,7 +85,7 @@ myIframe.contentWindow.postMessage({
 </tr>
 </tbody>
 </table>
-<h3>Example</h3>
+<h3 id="markdown-header-example">Example</h3>
 <p>A function may be called as follows:</p>
 <pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;);
 const nameOfFunction = &quot;this should be the name of a function&quot;;
@@ -95,7 +95,7 @@ myIframe.contentWindow.postMessage(
 );
 </code></pre>
 <h3>List of dedicated functions</h3>
-<h4>showPositionByExtent</h4>
+<h4 id="markdown-header-showpositionbyextent">showPositionByExtent</h4>
 <p>A map marker will be placed at the center of the given extent, and the map’s view will center on it.</p>
 <table>
 <thead>
@@ -118,13 +118,13 @@ myIframe.contentWindow.postMessage(
 </tr>
 </tbody>
 </table>
-<h5>Example</h5>
+<h5 id="markdown-header-example">Example</h5>
 <pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;).contentWindow;
 iframe.postMessage({
     &quot;showPositionByExtent&quot;: [xMin, yMin, xMax, yMax]
 }, domain);
 </code></pre>
-<h4>showPositionByExtentNoScroll</h4>
+<h4 id="markdown-header-showpositionbyextentnoscroll">showPositionByExtentNoScroll</h4>
 <p>A map marker will be placed at the center of the given extent. The map is <strong>not</strong> center to it, hence it may remain outside of the user’s view.</p>
 <table>
 <thead>
@@ -147,13 +147,13 @@ iframe.postMessage({
 </tr>
 </tbody>
 </table>
-<h5>Example</h5>
+<h5 id="markdown-header-example">Example</h5>
 <pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;).contentWindow;
 iframe.postMessage({
     &quot;showPositionByExtentNoScroll&quot;: [xMin, yMin, xMax, yMax]
 }, domain);
 </code></pre>
-<h4>transactFeatureById</h4>
+<h4 id="markdown-header-transactfeaturebyid">transactFeatureById</h4>
 <p>Modify a WFS-T layer’s feature, triggering a server interaction.</p>
 <table>
 <thead>
@@ -191,7 +191,7 @@ iframe.postMessage({
 </tr>
 </tbody>
 </table>
-<h5>Example</h5>
+<h5 id="markdown-header-example">Example</h5>
 <pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;).contentWindow;
 const id = &quot;the id of the feature to modify&quot;;
 iframe.postMessage({
@@ -201,7 +201,7 @@ iframe.postMessage({
     &quot;mode&quot;: &quot;update&quot;
 }, domain);
 </code></pre>
-<h4>zoomToExtent</h4>
+<h4 id="markdown-header-zoomtoextent">zoomToExtent</h4>
 <p>The map’s view will fit the given extent.</p>
 <table>
 <thead>
@@ -224,13 +224,13 @@ iframe.postMessage({
 </tr>
 </tbody>
 </table>
-<h5>Example</h5>
+<h5 id="markdown-header-example">Example</h5>
 <pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;).contentWindow;
 iframe.postMessage({
     &quot;zoomToExtent&quot;: [xmin, ymin, xmax, ymax]
 }, domain);
 </code></pre>
-<h4>highlightfeature</h4>
+<h4 id="markdown-header-highlightfeature">highlightfeature</h4>
 <p>Highlight a vector feature on the map.</p>
 <table>
 <thead>
@@ -253,13 +253,13 @@ iframe.postMessage({
 </tr>
 </tbody>
 </table>
-<h5>Example</h5>
+<h5 id="markdown-header-example">Example</h5>
 <pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;).contentWindow;
 iframe.postMessage({
     &quot;highlightfeature&quot;: &quot;layerid,featureId&quot;
 }, domain);
 </code></pre>
-<h4>hidePosition</h4>
+<h4 id="markdown-header-hideposition">hidePosition</h4>
 <p>Hide the map marker.</p>
 <table>
 <thead>
@@ -282,7 +282,7 @@ iframe.postMessage({
 </tr>
 </tbody>
 </table>
-<h5>Example</h5>
+<h5 id="markdown-header-example">Example</h5>
 <pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;).contentWindow;
 iframe.postMessage(&quot;hidePosition&quot;, domain);
 </code></pre>
@@ -322,7 +322,7 @@ iframe.postMessage(&quot;hidePosition&quot;, domain);
 </tr>
 </tbody>
 </table>
-<h3>Example</h3>
+<h3 id="markdown-header-example">Example</h3>
 <pre><code class="language-js">const myIframe = document.getElementById(&quot;my-iframe&quot;).contentWindow;
 iframe.postMessage({
     &quot;radio_channel&quot;: &quot;MyRadioChannel&quot;,
@@ -361,7 +361,7 @@ iframe.postMessage({
 </tr>
 </tbody>
 </table>
-<h3>Examples</h3>
+<h3 id="markdown-header-examples">Examples</h3>
 <pre><code class="language-js">// From a Vue component
 this.$remoteInterface.sendMessage({
     &quot;param1&quot;: &quot;param1&quot;,
@@ -400,7 +400,7 @@ this._vm.$remoteInterface.sendMessage({
 </tr>
 </tbody>
 </table>
-<h3>Example</h3>
+<h3 id="markdown-header-example">Example</h3>
 <pre><code class="language-js">Radio.trigger(
     &quot;RemoteInterface&quot;,
     &quot;postMessage&quot;, {

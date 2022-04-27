@@ -17,7 +17,9 @@ fs.rmSync(documentationTarget, {recursive: true, force: true});
  * @returns {void}
  */
 function recursiveBuilder (source = documentationSource, target = documentationTarget) {
+    // create current nesting level as folder
     fs.mkdirSync(target, {recursive: true});
+
     fs.readdir(source, {withFileTypes: true}, function (err, files) {
         if (err) {
             console.error(
@@ -26,6 +28,7 @@ function recursiveBuilder (source = documentationSource, target = documentationT
             exit(1);
         }
 
+        // for all files/folders
         files.forEach((file) => {
             const sourcePath = path.join(source, file.name);
             let targetPath = path.join(target, file.name),
@@ -33,13 +36,29 @@ function recursiveBuilder (source = documentationSource, target = documentationT
 
             if (file.isFile()) {
                 if (file.name.endsWith(".md")) {
+                    // rename file
                     targetPath = targetPath.replace(/\.md$/, ".html");
+                    // convert to html
                     data = fs.readFileSync(sourcePath, {encoding: "utf8"});
                     data = md.render(data);
+
+                    // replace links – linkling to .html, not .md anymore
                     data = data.replace(
                         /(<a href="[\w.-]+).md(">)/g,
                         "$1.html$2"
                     );
+
+                    // add anchors – they're a bitbucket-specific feature
+                    data = data.replace(
+                        /<a href="#([\w-]+)">/g,
+                        (_, p1) => `<a href="#${p1.toLowerCase()}">`
+                    );
+                    data = data.replace(
+                        /(<h[1-6])(>)([\w.]+)(<\/h[1-6]>)/g,
+                        (_, p1, __, p3, p4) => `${p1} id="markdown-header-${p3.split(".").join("").toLowerCase()}">${p3}${p4}`
+                    );
+
+                    // add html context, add some MIT-licensed classless css
                     data = `
                         <!DOCTYPE html>
                         <html>
@@ -52,8 +71,15 @@ function recursiveBuilder (source = documentationSource, target = documentationT
                             ${data}
                             </body>
                         </html>`;
+
+                    // build table of contents – maybe eventually, delete [TOC] for now
+                    data = data.replace(
+                        "[TOC]",
+                        ""
+                    );
                 }
                 else {
+                    // just prepare all other file types for copying
                     data = fs.readFileSync(sourcePath);
                 }
                 fs.writeFileSync(targetPath, data);

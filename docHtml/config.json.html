@@ -10,11 +10,11 @@
                             <blockquote>
 <p><strong><a href="doc.html">Back to the Masterportal documentation</a></strong>.</p>
 </blockquote>
-<p>[TOC]</p>
+<p></p>
 <hr>
-<h1>config.json</h1>
+<h1 id="markdown-header-configjson">config.json</h1>
 <p>The <em>config.json</em> file contains all configuration of the portal interface. It controls which elements are placed where on the menu bar, how the map is to be centered initially, and which layers are to be loaded. See <strong><a href="https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/portal/basic/config.json">this file for an example</a></strong>.</p>
-<p>The configuration is separated into two sections, <strong><a href="#markdown-header-Portalconfig">Portalconfig</a></strong> and <strong><a href="#markdown-header-Themenconfig">Themenconfig</a></strong></p>
+<p>The configuration is separated into two sections, <strong><a href="#markdown-header-portalconfig">Portalconfig</a></strong> and <strong><a href="#markdown-header-themenconfig">Themenconfig</a></strong></p>
 <pre><code class="language-json">{
    &quot;Portalconfig&quot;: {},
    &quot;Themenconfig&quot;: {}
@@ -24,7 +24,7 @@
 <p>Since the portals original language was German, some technical keys are still in German.</p>
 </blockquote>
 <hr>
-<h2>Portalconfig</h2>
+<h2 id="markdown-header-portalconfig">Portalconfig</h2>
 <p>The section <em>Portalconfig</em> controls the following properties:</p>
 <ol>
 <li>Title &amp; logo (<em>portalTitle</em>)</li>
@@ -123,7 +123,7 @@
 <tr>
 <td>quickHelp</td>
 <td>no</td>
-<td><strong><a href="#markdown-header-portalconfigquickHelp">quickHelp</a></strong></td>
+<td><strong><a href="#markdown-header-portalconfigquickhelp">quickHelp</a></strong></td>
 <td></td>
 <td>Configuration of new and manipulation of existing QuickHelp windows.</td>
 <td>false</td>
@@ -131,7 +131,7 @@
 </tbody>
 </table>
 <hr>
-<h3>Portalconfig.searchBar</h3>
+<h3 id="markdown-header-portalconfigsearchbar">Portalconfig.searchBar</h3>
 <p>Search bar configuration.</p>
 <table>
 <thead>
@@ -292,7 +292,7 @@
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.searchBar.bkg</h4>
+<h4 id="markdown-header-portalconfigsearchbarbkg">Portalconfig.searchBar.bkg</h4>
 <p>BKG search service configuration.</p>
 <blockquote>
 <p><strong>This requires a backend!</strong></p>
@@ -445,7 +445,7 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.searchBar.osm</h4>
+<h4 id="markdown-header-portalconfigsearchbarosm">Portalconfig.searchBar.osm</h4>
 <p>OpenStreetMap search for city, street, and house number. Only executed on clicking the search icon or pressing enter since the amount of requests to the OSM search service is limited.</p>
 <table>
 <thead>
@@ -513,7 +513,7 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.searchBar.komoot</h4>
+<h4 id="markdown-header-portalconfigsearchbarkomoot">Portalconfig.searchBar.komoot</h4>
 <p>Search with <strong><a href="https://photon.komoot.io/">Komoot Photon</a></strong>.</p>
 <table>
 <thead>
@@ -615,7 +615,7 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.searchBar.locationFinder</h4>
+<h4 id="markdown-header-portalconfigsearchbarlocationfinder">Portalconfig.searchBar.locationFinder</h4>
 <p>Search configuration to use a <em>ESRI CH LocationFinder</em>.</p>
 <table>
 <thead>
@@ -648,7 +648,7 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 <tr>
 <td>classes</td>
 <td>no</td>
-<td><strong><a href="#markdown-header-portalconfigsearchbarlocationfinderLocationFinderClass">LocationFinderClass</a></strong></td>
+<td><strong><a href="#markdown-header-portalconfigsearchbarlocationfinderlocationfinderclass">LocationFinderClass</a></strong></td>
 <td></td>
 <td>May contain classes (with properties) to use in searches. If nothing is specified, all classes are considered valid.</td>
 <td>false</td>
@@ -671,7 +671,7 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 </tr>
 </tbody>
 </table>
-<h5>Portalconfig.searchBar.locationFinder.LocationFinderClass</h5>
+<h5 id="markdown-header-portalconfigsearchbarlocationfinderlocationfinderclass">Portalconfig.searchBar.locationFinder.LocationFinderClass</h5>
 <p>Definition of classes to be taken into account for results.</p>
 <table>
 <thead>
@@ -742,7 +742,7 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.searchBar.gazetteer</h4>
+<h4 id="markdown-header-portalconfigsearchbargazetteer">Portalconfig.searchBar.gazetteer</h4>
 <p>Gazetteer search service configuration.</p>
 <blockquote>
 <p><strong>This requires a backend!</strong></p>
@@ -849,7 +849,7 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.searchBar.gdi</h4>
+<h4 id="markdown-header-portalconfigsearchbargdi">Portalconfig.searchBar.gdi</h4>
 <p>GFI search service configuration.</p>
 <blockquote>
 <p>Deprecated in 3.0.0. Please use <strong><a href="#markdown-header-portalconfigsearchbarelasticsearch">elasticSearch</a></strong> instead.</p>
@@ -916,7 +916,7 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.searchBar.gdi.queryObject</h4>
+<h4 id="markdown-header-portalconfigsearchbargdiqueryobject">Portalconfig.searchBar.gdi.queryObject</h4>
 <p>Todo.</p>
 <table>
 <thead>
@@ -949,7 +949,7 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.searchBar.gdi.queryObject.params</h4>
+<h4 id="markdown-header-portalconfigsearchbargdiqueryobjectparams">Portalconfig.searchBar.gdi.queryObject.params</h4>
 <p>Todo</p>
 <table>
 <thead>
@@ -974,7 +974,7 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.searchBar.elasticSearch</h4>
+<h4 id="markdown-header-portalconfigsearchbarelasticsearch">Portalconfig.searchBar.elasticSearch</h4>
 <p>Elasticsearch service configuration.</p>
 <table>
 <thead>
@@ -1100,7 +1100,7 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.searchBar.elasticSearch.hitMap</h4>
+<h4 id="markdown-header-portalconfigsearchbarelasticsearchhitmap">Portalconfig.searchBar.elasticSearch.hitMap</h4>
 <p>Object mapping result object attributes to keys.</p>
 <table>
 <thead>
@@ -1141,7 +1141,7 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.searchBar.elasticSearch.triggerEvent</h4>
+<h4 id="markdown-header-portalconfigsearchbarelasticsearchtriggerevent">Portalconfig.searchBar.elasticSearch.triggerEvent</h4>
 <p>Radio event triggered on mouse hover and click.</p>
 <table>
 <thead>
@@ -1174,7 +1174,7 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.searchBar.specialWFS</h4>
+<h4 id="markdown-header-portalconfigsearchbarspecialwfs">Portalconfig.searchBar.specialWFS</h4>
 <p>WFS search function configuration. Requests features from a WFS. The service must be configured to allow WFS 2.0 requests.</p>
 <p>For example, on entering “Kronenmatten” the service
 <a href="https://geoportal.freiburg.de/geoportal_freiburg_de/wfs/stpla_bplan/wfs_mapfile/geltungsbereiche">https://geoportal.freiburg.de/geoportal_freiburg_de/wfs/stpla_bplan/wfs_mapfile/geltungsbereiche</a>
@@ -1275,7 +1275,7 @@ will be requested with the following XML attached as payload, and the service wi
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.searchBar.specialWFS.definition</h4>
+<h4 id="markdown-header-portalconfigsearchbarspecialwfsdefinition">Portalconfig.searchBar.specialWFS.definition</h4>
 <p>SpecialWFS search definition configuration.</p>
 <table>
 <thead>
@@ -1373,7 +1373,7 @@ will be requested with the following XML attached as payload, and the service wi
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.searchBar.tree</h4>
+<h4 id="markdown-header-portalconfigsearchbartree">Portalconfig.searchBar.tree</h4>
 <p>Searching all topic selection tree layers.</p>
 <table>
 <thead>
@@ -1405,7 +1405,7 @@ will be requested with the following XML attached as payload, and the service wi
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.searchBar.visibleWFS</h4>
+<h4 id="markdown-header-portalconfigsearchbarvisiblewfs">Portalconfig.searchBar.visibleWFS</h4>
 <p>Visible WFS search configuration. <em>Deprecated in 3.0.0. Please use <strong><a href="#markdown-header-portalconfigsearchbarvisiblevector">visibleVector</a></strong> instead.</em></p>
 <table>
 <thead>
@@ -1437,7 +1437,7 @@ will be requested with the following XML attached as payload, and the service wi
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.searchBar.visibleVector</h4>
+<h4 id="markdown-header-portalconfigsearchbarvisiblevector">Portalconfig.searchBar.visibleVector</h4>
 <p>Visible vector layer search configuration. For all vector layers supposed to be searchable, set the <strong><a href="#markdown-header-themenconfiglayervector">searchField</a></strong> attribute in the layer definition object “Fachdaten”.</p>
 <table>
 <thead>
@@ -1486,7 +1486,7 @@ will be requested with the following XML attached as payload, and the service wi
 }
 </code></pre>
 <hr>
-<h3>Portalconfig.controls</h3>
+<h3 id="markdown-header-portalconfigcontrols">Portalconfig.controls</h3>
 <table>
 <thead>
 <tr>
@@ -1614,7 +1614,7 @@ will be requested with the following XML attached as payload, and the service wi
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.controls.attributions</h4>
+<h4 id="markdown-header-portalconfigcontrolsattributions">Portalconfig.controls.attributions</h4>
 <p>The entry <code>attributions</code> may be of type boolean or object. If of type boolean, the flag decides whether available attributions are shown. When of type object, the following attributes may be set:</p>
 <table>
 <thead>
@@ -1660,7 +1660,7 @@ will be requested with the following XML attached as payload, and the service wi
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.controls.orientation</h4>
+<h4 id="markdown-header-portalconfigcontrolsorientation">Portalconfig.controls.orientation</h4>
 <table>
 <thead>
 <tr>
@@ -1708,7 +1708,7 @@ will be requested with the following XML attached as payload, and the service wi
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.controls.overviewMap</h4>
+<h4 id="markdown-header-portalconfigcontrolsoverviewmap">Portalconfig.controls.overviewMap</h4>
 <p>The attribute overviewMap may be of type boolean or object. If of type boolean, an overview map is shown with a default configuration. When of type object, the following attributes may be set:</p>
 <table>
 <thead>
@@ -1766,7 +1766,7 @@ will be requested with the following XML attached as payload, and the service wi
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.controls.totalView</h4>
+<h4 id="markdown-header-portalconfigcontrolstotalview">Portalconfig.controls.totalView</h4>
 <p>The attribute totalView may be of type boolean or object. If of type boolean, it shows a button using the default configuration that allows the user to switch back to the initial view. When of type object, the following attributes may be set:</p>
 <table>
 <thead>
@@ -1812,7 +1812,7 @@ will be requested with the following XML attached as payload, and the service wi
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.controls.backForward</h4>
+<h4 id="markdown-header-portalconfigcontrolsbackforward">Portalconfig.controls.backForward</h4>
 <p>The attribute backForward may be of type boolean or object. If of type boolean, it shows a button using the default configuration that allows the user to switch back and forth between view states. When of type object, the following attributes may be set:</p>
 <table>
 <thead>
@@ -1858,7 +1858,7 @@ will be requested with the following XML attached as payload, and the service wi
 }
 </code></pre>
 <hr>
-<h3>Portalconfig.portalTitle</h3>
+<h3 id="markdown-header-portalconfigportaltitle">Portalconfig.portalTitle</h3>
 <p>The menu bar allows showing a portal name and portal image if sufficient horizontal space is available. The elements are not shown in mobile mode.</p>
 <table>
 <thead>
@@ -1925,7 +1925,7 @@ will be requested with the following XML attached as payload, and the service wi
 }
 </code></pre>
 <hr>
-<h3>Portalconfig.mapView</h3>
+<h3 id="markdown-header-portalconfigmapview">Portalconfig.mapView</h3>
 <table>
 <thead>
 <tr>
@@ -2074,7 +2074,7 @@ will be requested with the following XML attached as payload, and the service wi
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.mapView.option</h4>
+<h4 id="markdown-header-portalconfigmapviewoption">Portalconfig.mapView.option</h4>
 <p>An option defines a zoom level. Each zoom level is defined by resolution, scale number, and a unique zoom level. The higher the zoom level, the smaller the scale and the closer you have zoomed.</p>
 <table>
 <thead>
@@ -2122,7 +2122,7 @@ will be requested with the following XML attached as payload, and the service wi
 }
 </code></pre>
 <hr>
-<h3>Portalconfig.quickHelp</h3>
+<h3 id="markdown-header-portalconfigquickhelp">Portalconfig.quickHelp</h3>
 <p>For a detailed documentation of the QuickHelp window see <strong><a href="quickHelp.html">the QuickHelp documentation</a></strong> .</p>
 <table>
 <thead>
@@ -2154,7 +2154,7 @@ will be requested with the following XML attached as payload, and the service wi
     }
 }
 </code></pre>
-<h4>Portalconfig.quickHelp.configs</h4>
+<h4 id="markdown-header-portalconfigquickhelpconfigs">Portalconfig.quickHelp.configs</h4>
 <table>
 <thead>
 <tr>
@@ -2196,7 +2196,7 @@ will be requested with the following XML attached as payload, and the service wi
     }
 }
 </code></pre>
-<h5>Portalconfig.quickHelp.configs.search</h5>
+<h5 id="markdown-header-portalconfigquickhelpconfigssearch">Portalconfig.quickHelp.configs.search</h5>
 <table>
 <thead>
 <tr>
@@ -2240,7 +2240,7 @@ will be requested with the following XML attached as payload, and the service wi
     }
 }
 </code></pre>
-<h5>Portalconfig.quickHelp.configs.search.section</h5>
+<h5 id="markdown-header-portalconfigquickhelpconfigssearchsection">Portalconfig.quickHelp.configs.search.section</h5>
 <p>A section is an object with a title and a list of paragraphs.
 A section can be manipulated using “before”, “after” and “hide” keywords.</p>
 <table>
@@ -2315,7 +2315,7 @@ A section can be manipulated using “before”, “after” and “hide” keyw
     }
 }
 </code></pre>
-<h5>Portalconfig.quickHelp.configs.search.section.paragraph</h5>
+<h5 id="markdown-header-portalconfigquickhelpconfigssearchsectionparagraph">Portalconfig.quickHelp.configs.search.section.paragraph</h5>
 <p>A paragraph in the sense of the QuickHelp configuration is an object or string that exactly describes the content at that point.
 There are two types of paragraph elements.</p>
 <p><strong>The paragraph text element</strong></p>
@@ -2412,7 +2412,7 @@ Configure as an object to specify external images with imgPath as url and imgNam
     }
 }
 </code></pre>
-<h4>Portalconfig.quickHelp.configs.tree</h4>
+<h4 id="markdown-header-portalconfigquickhelpconfigstree">Portalconfig.quickHelp.configs.tree</h4>
 <table>
 <thead>
 <tr>
@@ -2456,7 +2456,7 @@ Configure as an object to specify external images with imgPath as url and imgNam
     }
 }
 </code></pre>
-<h5>Portalconfig.quickHelp.configs.tree.section</h5>
+<h5 id="markdown-header-portalconfigquickhelpconfigstreesection">Portalconfig.quickHelp.configs.tree.section</h5>
 <p>A section is an object with a title and a list of paragraphs.
 A section can be manipulated using “before”, “after” and “hide” keywords.</p>
 <table>
@@ -2531,7 +2531,7 @@ A section can be manipulated using “before”, “after” and “hide” keyw
     }
 }
 </code></pre>
-<h5>Portalconfig.quickHelp.configs.tree.section.paragraph</h5>
+<h5 id="markdown-header-portalconfigquickhelpconfigstreesectionparagraph">Portalconfig.quickHelp.configs.tree.section.paragraph</h5>
 <p>A paragraph in the sense of the QuickHelp configuration is an object or string that exactly describes the content at that point.
 There are two types of paragraph elements.</p>
 <p><strong>The paragraph text element</strong></p>
@@ -2629,7 +2629,7 @@ Configure as an object to specify external images with imgPath as url and imgNam
 }
 </code></pre>
 <hr>
-<h3>Portalconfig.menu</h3>
+<h3 id="markdown-header-portalconfigmenu">Portalconfig.menu</h3>
 <p>This field allows creating and ordering menu entries. The order of tools corresponds to the entry order within the <em>config.json</em> file.</p>
 <table>
 <thead>
@@ -2678,7 +2678,7 @@ Configure as an object to specify external images with imgPath as url and imgNam
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.menu.ansichten</h4>
+<h4 id="markdown-header-portalconfigmenuansichten">Portalconfig.menu.ansichten</h4>
 <p>Configuration options for map views.</p>
 <table>
 <thead>
@@ -2719,7 +2719,7 @@ Configure as an object to specify external images with imgPath as url and imgNam
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.menu.ansichten.children</h4>
+<h4 id="markdown-header-portalconfigmenuansichtenchildren">Portalconfig.menu.ansichten.children</h4>
 <p>Configuration options for map views.</p>
 <table>
 <thead>
@@ -2744,7 +2744,7 @@ Configure as an object to specify external images with imgPath as url and imgNam
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.menu.ansichten.children.view</h4>
+<h4 id="markdown-header-portalconfigmenuansichtenchildrenview">Portalconfig.menu.ansichten.children.view</h4>
 <p>Configuration options for a map view.</p>
 <table>
 <thead>
@@ -2847,7 +2847,7 @@ Configure as an object to specify external images with imgPath as url and imgNam
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.legend</h4>
+<h4 id="markdown-header-portalconfigmenulegend">Portalconfig.menu.legend</h4>
 <p>Legend configuration options.</p>
 <table>
 <thead>
@@ -2921,7 +2921,7 @@ Configure as an object to specify external images with imgPath as url and imgNam
 </tbody>
 </table>
 <hr>
-<h5>Portalconfig.menu.info.children</h5>
+<h5 id="markdown-header-portalconfigmenuinfochildren">Portalconfig.menu.info.children</h5>
 <p>List of tools (<code>tools</code>) or links (<code>staticlinks</code>) appearing in the menu tab <code>info</code>.</p>
 <table>
 <thead>
@@ -2946,7 +2946,7 @@ Configure as an object to specify external images with imgPath as url and imgNam
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.menu.tree</h4>
+<h4 id="markdown-header-portalconfigmenutree">Portalconfig.menu.tree</h4>
 <p>Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ergibt sich aus der Reihenfolge in der <em>Config.json</em>.</p>
 <table>
 <thead>
@@ -2987,7 +2987,7 @@ Configure as an object to specify external images with imgPath as url and imgNam
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.menu.folder</h4>
+<h4 id="markdown-header-portalconfigmenufolder">Portalconfig.menu.folder</h4>
 <p>A folder object defined by a name, glyphicon, and its children.</p>
 <table>
 <thead>
@@ -3042,7 +3042,7 @@ Configure as an object to specify external images with imgPath as url and imgNam
 }
 </code></pre>
 <hr>
-<h3>Portalconfig.menu.tools</h3>
+<h3 id="markdown-header-portalconfigmenutools">Portalconfig.menu.tools</h3>
 <table>
 <thead>
 <tr>
@@ -3066,7 +3066,7 @@ Configure as an object to specify external images with imgPath as url and imgNam
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.menu.tools.children</h4>
+<h4 id="markdown-header-portalconfigmenutoolschildren">Portalconfig.menu.tools.children</h4>
 <p>List of all configurable tools. Each tool inherits the properties of <strong><a href="#markdown-header-portalconfigmenutool">tool</a></strong> and can (or must, respectively) provide the defined attributes as mentioned in that definition.
 Alternatively, also the paths <strong><a href="http://Portalconfig.menu.info">Portalconfig.menu.info</a></strong>, <strong>Portalconfig.menu.simulation</strong> or <strong>Portalconfig.menu.utilities</strong> can be used to hold tool configs.</p>
 <table>
@@ -3196,7 +3196,7 @@ Alternatively, also the paths <strong><a href="http://Portalconfig.menu.info">Po
 <tr>
 <td>layerClusterToggler</td>
 <td>no</td>
-<td><strong><a href="#markdown-header-portalconfigtoollayerClusterToggler">tool</a></strong></td>
+<td><strong><a href="#markdown-header-portalconfigtoollayerclustertoggler">tool</a></strong></td>
 <td></td>
 <td><em>This tool allows a cluster layers to be active and deactive together.</em></td>
 <td>false</td>
@@ -3348,7 +3348,7 @@ Alternatively, also the paths <strong><a href="http://Portalconfig.menu.info">Po
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.menu.tool</h4>
+<h4 id="markdown-header-portalconfigmenutool">Portalconfig.menu.tool</h4>
 <p>A tool’s attribute key defines which tool is loaded. Each tool provides at least the following attributes. To see further configuration options, please visit the <strong><a href="#markdown-header-portalconfigmenutools">tools</a></strong> section.</p>
 <table>
 <thead>
@@ -3437,7 +3437,7 @@ Alternatively, also the paths <strong><a href="http://Portalconfig.menu.info">Po
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.gfi</h4>
+<h4 id="markdown-header-portalconfigmenutoolgfi">Portalconfig.menu.tool.gfi</h4>
 <p>Displays information to a clicked feature by firing a <em>GetFeatureInfo</em> or <em>GetFeature</em> request, respectively using the loaded data on vector layers.</p>
 <table>
 <thead>
@@ -3543,7 +3543,7 @@ Alternatively, also the paths <strong><a href="http://Portalconfig.menu.info">Po
 }
 </code></pre>
 <hr>
-<h5>Portalconfig.menu.tool.gfi.highlightVectorRules</h5>
+<h5 id="markdown-header-portalconfigmenutoolgfihighlightvectorrules">Portalconfig.menu.tool.gfi.highlightVectorRules</h5>
 <p>Configuration list to overwrite vector styles on gfi requests.
 Hint: highlighting only works if there is a styleId in config.json configured for the layer.</p>
 <table>
@@ -3593,7 +3593,7 @@ Hint: highlighting only works if there is a styleId in config.json configured fo
 </tbody>
 </table>
 <hr>
-<h5>Portalconfig.menu.tool.gfi.highlightVectorRules.fill</h5>
+<h5 id="markdown-header-portalconfigmenutoolgfihighlightvectorrulesfill">Portalconfig.menu.tool.gfi.highlightVectorRules.fill</h5>
 <table>
 <thead>
 <tr>
@@ -3621,7 +3621,7 @@ Hint: highlighting only works if there is a styleId in config.json configured fo
 }
 </code></pre>
 <hr>
-<h5>Portalconfig.menu.tool.gfi.highlightVectorRules.image</h5>
+<h5 id="markdown-header-portalconfigmenutoolgfihighlightvectorrulesimage">Portalconfig.menu.tool.gfi.highlightVectorRules.image</h5>
 <table>
 <thead>
 <tr>
@@ -3649,7 +3649,7 @@ Hint: highlighting only works if there is a styleId in config.json configured fo
 }
 </code></pre>
 <hr>
-<h5>Portalconfig.menu.tool.gfi.highlightVectorRules.stroke</h5>
+<h5 id="markdown-header-portalconfigmenutoolgfihighlightvectorrulesstroke">Portalconfig.menu.tool.gfi.highlightVectorRules.stroke</h5>
 <table>
 <thead>
 <tr>
@@ -3677,7 +3677,7 @@ Hint: highlighting only works if there is a styleId in config.json configured fo
 }
 </code></pre>
 <hr>
-<h5>Portalconfig.menu.tool.gfi.highlightVectorRules.text</h5>
+<h5 id="markdown-header-portalconfigmenutoolgfihighlightvectorrulestext">Portalconfig.menu.tool.gfi.highlightVectorRules.text</h5>
 <table>
 <thead>
 <tr>
@@ -3705,7 +3705,7 @@ Hint: highlighting only works if there is a styleId in config.json configured fo
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.filter</h4>
+<h4 id="markdown-header-portalconfigmenutoolfilter">Portalconfig.menu.tool.filter</h4>
 <p>The filter tool offers a range of options to filter vector data.</p>
 <table>
 <thead>
@@ -3854,7 +3854,7 @@ Hint: highlighting only works if there is a styleId in config.json configured fo
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.filter.predefinedQuery</h4>
+<h4 id="markdown-header-portalconfigmenutoolfilterpredefinedquery">Portalconfig.menu.tool.filter.predefinedQuery</h4>
 <p>Object defining a filter query.</p>
 <table>
 <thead>
@@ -3958,7 +3958,7 @@ Hint: highlighting only works if there is a styleId in config.json configured fo
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.filter.predefinedQuery.predefinedRule</h4>
+<h4 id="markdown-header-portalconfigmenutoolfilterpredefinedquerypredefinedrule">Portalconfig.menu.tool.filter.predefinedQuery.predefinedRule</h4>
 <p>Filter rule always applied to pre-filter data.</p>
 <table>
 <thead>
@@ -3997,7 +3997,7 @@ Hint: highlighting only works if there is a styleId in config.json configured fo
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.filter.predefinedQuery.attributeWhiteListObject</h4>
+<h4 id="markdown-header-portalconfigmenutoolfilterpredefinedqueryattributewhitelistobject">Portalconfig.menu.tool.filter.predefinedQuery.attributeWhiteListObject</h4>
 <p>This key may have as value either a string representing the attribute name or an object. When given as an object, the attributes to be filtered can be renamed in the process. In that case, the key is the original attribute name, and the value the new name.</p>
 <p>An AttributeWhiteList as an object allows a slider to be used as a filter for selecting a start and end time.
 The prerequisite for this is that a start and end time exist in a certain format as an attribute.
@@ -4091,7 +4091,7 @@ The last step to use the slider as a date filter is to define the key “type”
   }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.filterGeneral</h4>
+<h4 id="markdown-header-portalconfigmenutoolfiltergeneral">Portalconfig.menu.tool.filterGeneral</h4>
 <p>The filter tool offers a range of options to filter vector data.</p>
 <table>
 <thead>
@@ -4166,7 +4166,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.filterGeneral.filterLayer</h4>
+<h4 id="markdown-header-portalconfigmenutoolfiltergeneralfilterlayer">Portalconfig.menu.tool.filterGeneral.filterLayer</h4>
 <p>An object to define a layer to filter with.</p>
 <table>
 <thead>
@@ -4361,7 +4361,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.filterGeneral.filterLayer.snippets</h4>
+<h4 id="markdown-header-portalconfigmenutoolfiltergeneralfilterlayersnippets">Portalconfig.menu.tool.filterGeneral.filterLayer.snippets</h4>
 <p>An object defining a single snippet.</p>
 <table>
 <thead>
@@ -4636,7 +4636,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.compareFeatures</h4>
+<h4 id="markdown-header-portalconfigmenutoolcomparefeatures">Portalconfig.menu.tool.compareFeatures</h4>
 <p>This tool allows comparing vector features.</p>
 <table>
 <thead>
@@ -4679,7 +4679,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.parcelSearch</h4>
+<h4 id="markdown-header-portalconfigmenutoolparcelsearch">Portalconfig.menu.tool.parcelSearch</h4>
 <p>Parcel search.</p>
 <blockquote>
 <p><strong>This requires a backend!</strong></p>
@@ -4765,7 +4765,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.saveSelection</h4>
+<h4 id="markdown-header-portalconfigmenutoolsaveselection">Portalconfig.menu.tool.saveSelection</h4>
 <p>Tool to save the current map content as a url.</p>
 <table>
 <thead>
@@ -4790,7 +4790,7 @@ The last step to use the slider as a date filter is to define the key “type”
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.menu.tool.resetTree</h4>
+<h4 id="markdown-header-portalconfigmenutoolresettree">Portalconfig.menu.tool.resetTree</h4>
 <p>Reset the theme tree.</p>
 <table>
 <thead>
@@ -4815,7 +4815,7 @@ The last step to use the slider as a date filter is to define the key “type”
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.menu.tool.searchByCoord</h4>
+<h4 id="markdown-header-portalconfigmenutoolsearchbycoord">Portalconfig.menu.tool.searchByCoord</h4>
 <p>Coordinate search.</p>
 <table>
 <thead>
@@ -4849,7 +4849,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.print</h4>
+<h4 id="markdown-header-portalconfigmenutoolprint">Portalconfig.menu.tool.print</h4>
 <p>Print module, configurable for 2 print services: <em>High Resolution PlotService</em> and <em>MapfishPrint 3</em>. Printing vector tile layers is not supported, since the print services themselves do not support it. Should users try to print such layers, a warning will be shown.</p>
 <blockquote>
 <p><strong>This requires a backend!</strong></p>
@@ -5015,7 +5015,7 @@ The last step to use the slider as a date filter is to define the key “type”
     }
 }
 </code></pre>
-<h3>Portalconfig.menu.tool.print.capabilitiesFilter</h3>
+<h3 id="markdown-header-portalconfigmenutoolprintcapabilitiesfilter">Portalconfig.menu.tool.print.capabilitiesFilter</h3>
 <p>List of layouts and formats that filters the response from the print service in the respective category.</p>
 <table>
 <thead>
@@ -5056,7 +5056,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.draw</h4>
+<h4 id="markdown-header-portalconfigmenutooldraw">Portalconfig.menu.tool.draw</h4>
 <p>Module used to draw features on the map. This includes points, which may also be represented by symbols, and (double) circles, polygons, polylines, and text.</p>
 <table>
 <thead>
@@ -5197,7 +5197,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.draw.icon</h4>
+<h4 id="markdown-header-portalconfigmenutooldrawicon">Portalconfig.menu.tool.draw.icon</h4>
 <p>Dot object consisting of text, type, and value.</p>
 <table>
 <thead>
@@ -5277,7 +5277,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.draw.drawSymbolSet</h4>
+<h4 id="markdown-header-portalconfigmenutooldrawdrawsymbolset">Portalconfig.menu.tool.draw.drawSymbolSet</h4>
 <p>Object to change the drawing tool’s configured point symbol default value.</p>
 <table>
 <thead>
@@ -5316,7 +5316,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.draw.drawLineSet</h4>
+<h4 id="markdown-header-portalconfigmenutooldrawdrawlineset">Portalconfig.menu.tool.draw.drawLineSet</h4>
 <p>Object to change the drawing tool’s configured line default value.</p>
 <table>
 <thead>
@@ -5364,7 +5364,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.draw.drawCurveSet</h4>
+<h4 id="markdown-header-portalconfigmenutooldrawdrawcurveset">Portalconfig.menu.tool.draw.drawCurveSet</h4>
 <p>Object to change the drawing tool’s configured freehand drawing default value.</p>
 <table>
 <thead>
@@ -5412,7 +5412,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.draw.drawAreaSet</h4>
+<h4 id="markdown-header-portalconfigmenutooldrawdrawareaset">Portalconfig.menu.tool.draw.drawAreaSet</h4>
 <p>Object to change the drawing tool’s configured area default value.</p>
 <table>
 <thead>
@@ -5478,7 +5478,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.draw.drawCircleSet</h4>
+<h4 id="markdown-header-portalconfigmenutooldrawdrawcircleset">Portalconfig.menu.tool.draw.drawCircleSet</h4>
 <p>Object to change the drawing tool’s configured circle default value.</p>
 <table>
 <thead>
@@ -5580,7 +5580,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.draw.drawDoubleCircleSet</h4>
+<h4 id="markdown-header-portalconfigmenutooldrawdrawdoublecircleset">Portalconfig.menu.tool.draw.drawDoubleCircleSet</h4>
 <p>Object to change the drawing tool’s configured circle default value.</p>
 <table>
 <thead>
@@ -5690,7 +5690,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.draw.writeTextSet</h4>
+<h4 id="markdown-header-portalconfigmenutooldrawwritetextset">Portalconfig.menu.tool.draw.writeTextSet</h4>
 <p>Object to change the drawing tool’s configured text default value.</p>
 <table>
 <thead>
@@ -5756,7 +5756,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.draw.download</h4>
+<h4 id="markdown-header-portalconfigmenutooldrawdownload">Portalconfig.menu.tool.draw.download</h4>
 <p>Object to change the drawing tool’s download preselected format. It should be one of “KML”, “GEOJSON” and “GPX”.</p>
 <table>
 <thead>
@@ -5786,7 +5786,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.featureLister</h4>
+<h4 id="markdown-header-portalconfigmenutoolfeaturelister">Portalconfig.menu.tool.featureLister</h4>
 <p>This module can display loaded vector data from WFS layers in a table. The module receives the available layers from the map via the visible vector layers and shows them in the first tab. If an entry (layer) is selected in this tab, its LayerId is saved. Then, from the layer list, the selected layer is filtered and saved. As a reaction to that selection, the layer features are evaluated and listed in the second tab. Not all features, but at most the configured amount of features is initially loaded, and a button is shown that allows loading additional features to this table.</p>
 <p>A hover event controls highlighting hovered features in the map. By clicking a feature, its attributes are shown completely in a third tab. In the future, WFS-T attributes should be editable here. The table also provides sort functionalities.</p>
 <table>
@@ -5853,7 +5853,7 @@ The last step to use the slider as a date filter is to define the key “type”
     }
 }
 </code></pre>
-<h5>Portalconfig.menu.tool.featureLister.highlightVectorRulesPolygon</h5>
+<h5 id="markdown-header-portalconfigmenutoolfeaturelisterhighlightvectorrulespolygon">Portalconfig.menu.tool.featureLister.highlightVectorRulesPolygon</h5>
 <p>Specify the fill color and outline color and stroke width for highlighting the polygon features.</p>
 <table>
 <thead>
@@ -5886,7 +5886,7 @@ The last step to use the slider as a date filter is to define the key “type”
 </tbody>
 </table>
 <hr>
-<h5>Portalconfig.menu.tool.featureLister.highlightVectorRulesPolygon.fill</h5>
+<h5 id="markdown-header-portalconfigmenutoolfeaturelisterhighlightvectorrulespolygonfill">Portalconfig.menu.tool.featureLister.highlightVectorRulesPolygon.fill</h5>
 <table>
 <thead>
 <tr>
@@ -5912,7 +5912,7 @@ The last step to use the slider as a date filter is to define the key “type”
 <pre><code class="language-json">&quot;fill&quot;: { &quot;color&quot;: [215, 102, 41, 0.9] }
 </code></pre>
 <hr>
-<h5>Portalconfig.menu.tool.featureLister.highlightVectorRulesPolygon.stroke</h5>
+<h5 id="markdown-header-portalconfigmenutoolfeaturelisterhighlightvectorrulespolygonstroke">Portalconfig.menu.tool.featureLister.highlightVectorRulesPolygon.stroke</h5>
 <table>
 <thead>
 <tr>
@@ -5946,7 +5946,7 @@ The last step to use the slider as a date filter is to define the key “type”
 <pre><code class="language-json">&quot;stroke&quot;: { &quot;width&quot;: 4 , &quot;color&quot;: [255, 0, 255, 0.9]}
 </code></pre>
 <hr>
-<h5>Portalconfig.menu.tool.featureLister.highlightVectorRulesPointLine</h5>
+<h5 id="markdown-header-portalconfigmenutoolfeaturelisterhighlightvectorrulespointline">Portalconfig.menu.tool.featureLister.highlightVectorRulesPointLine</h5>
 <p>Specify outline color and stroke width for highlighting lines and scale factor for highlighting points.</p>
 <table>
 <thead>
@@ -5979,7 +5979,7 @@ The last step to use the slider as a date filter is to define the key “type”
 </tbody>
 </table>
 <hr>
-<h5>Portalconfig.menu.tool.featureLister.highlightVectorRulesPointLine.stroke</h5>
+<h5 id="markdown-header-portalconfigmenutoolfeaturelisterhighlightvectorrulespointlinestroke">Portalconfig.menu.tool.featureLister.highlightVectorRulesPointLine.stroke</h5>
 <table>
 <thead>
 <tr>
@@ -6013,7 +6013,7 @@ The last step to use the slider as a date filter is to define the key “type”
 <pre><code class="language-json">&quot;stroke&quot;: { &quot;width&quot;: 4 , &quot;color&quot;: [255, 0, 255, 0.9]}
 </code></pre>
 <hr>
-<h5>Portalconfig.menu.tool.featureLister.highlightVectorRulesPointLine.image</h5>
+<h5 id="markdown-header-portalconfigmenutoolfeaturelisterhighlightvectorrulespointlineimage">Portalconfig.menu.tool.featureLister.highlightVectorRulesPointLine.image</h5>
 <table>
 <thead>
 <tr>
@@ -6039,7 +6039,7 @@ The last step to use the slider as a date filter is to define the key “type”
 <pre><code class="language-json">&quot;image&quot;: { &quot;scale&quot;: 2}
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.measure</h4>
+<h4 id="markdown-header-portalconfigmenutoolmeasure">Portalconfig.menu.tool.measure</h4>
 <p>The measure tool allows measuring distances and areas. This includes the specification of measurement inaccuracies.</p>
 <table>
 <thead>
@@ -6080,7 +6080,7 @@ The last step to use the slider as a date filter is to define the key “type”
     }
 }
 </code></pre>
-<h4>Portalconfig.menu.tool.contact</h4>
+<h4 id="markdown-header-portalconfigmenutoolcontact">Portalconfig.menu.tool.contact</h4>
 <p>The contact form allows users to send messages to a configured mail address.</p>
 <blockquote>
 <p><strong>This requires a backend!</strong></p>
@@ -6258,7 +6258,7 @@ The last step to use the slider as a date filter is to define the key “type”
 <p>The unchecked copying of data to email headers is warned against depending on the security level (resp. age) of the SMTP server, since the risk of <em>Carriage Return</em> and <em>Line Feed</em> injections may lead to e.g. allowing <em>REPLY-TO</em> from the email header line to be escaped to ultimately manipulate the email header itself. (Example: “<a href="mailto:test@example.com">test@example.com</a>\r\nBCC:target1@example.com,target2@example.com,(…),target(n)@example.com”). In a more abstract case, UTF attacks may be possible, where normally harmless UTF-16 or UTF-32 characters may change the email header’s behavior when interpreted as ANSI or UTF-8, having a comparable effect.</p>
 </blockquote>
 <hr>
-<h4>Portalconfig.menu.tool.contact.email</h4>
+<h4 id="markdown-header-portalconfigmenutoolcontactemail">Portalconfig.menu.tool.contact.email</h4>
 <p>E-Mail object containing a mail address, and a display name.</p>
 <table>
 <thead>
@@ -6297,7 +6297,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.layerClusterToggler</h4>
+<h4 id="markdown-header-portalconfigmenutoollayerclustertoggler">Portalconfig.menu.tool.layerClusterToggler</h4>
 <p>The layer cluster toggler tool allows to activate and deactivate cluster layers together</p>
 <table>
 <thead>
@@ -6330,7 +6330,7 @@ The last step to use the slider as a date filter is to define the key “type”
 <tr>
 <td>clusterList</td>
 <td>yes</td>
-<td><strong><a href="#markdown-header-portalconfigmenutoollayerClusterTogglerclusterList">clusterList</a></strong>[]</td>
+<td><strong><a href="#markdown-header-portalconfigmenutoollayerclustertogglerclusterlist">clusterList</a></strong>[]</td>
 <td>[]</td>
 <td>Array of layer id objects or layer id string.</td>
 <td>false</td>
@@ -6347,7 +6347,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.layerClusterToggler.clusterList</h4>
+<h4 id="markdown-header-portalconfigmenutoollayerclustertogglerclusterlist">Portalconfig.menu.tool.layerClusterToggler.clusterList</h4>
 <p>Defines a cluster of layer</p>
 <table>
 <thead>
@@ -6408,7 +6408,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.layerSlider</h4>
+<h4 id="markdown-header-portalconfigmenutoollayerslider">Portalconfig.menu.tool.layerSlider</h4>
 <p>The layer slider tool allows showing multiple layers in a row. This may e.g. be used to animate a time series of aerial imagery.</p>
 <table>
 <thead>
@@ -6482,7 +6482,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.layerSlider.layerId</h4>
+<h4 id="markdown-header-portalconfigmenutoollayersliderlayerid">Portalconfig.menu.tool.layerSlider.layerId</h4>
 <p>Defines a layer slider layer.</p>
 <table>
 <thead>
@@ -6521,7 +6521,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.virtualcity</h4>
+<h4 id="markdown-header-portalconfigmenutoolvirtualcity">Portalconfig.menu.tool.virtualcity</h4>
 <p>The virtualcity tool allows showing plans from the <em>virtualcityPLANNER</em> service in the Masterportal. The <em>virtualcityPLANNER</em> plans must be <em>public</em> to be available in this tool.</p>
 <table>
 <thead>
@@ -6556,7 +6556,7 @@ The last step to use the slider as a date filter is to define the key “type”
     &quot;serviceId&quot;: &quot;1&quot;
 }
 </code></pre>
-<h4>Portalconfig.menu.tool.shadow</h4>
+<h4 id="markdown-header-portalconfigmenutoolshadow">Portalconfig.menu.tool.shadow</h4>
 <p>The shadow tool provides a UI element to define a point in time. By using sliders and date pickers, you may enter it in a 30-minute grid. The chosen time allows rendering the shadows of all 3D objects in 3D mode by simulating the sun’s position. By pulling the sliders or selecting a different date, a new sun position is calculated immediately. By default, the tool starts with the current time, which can be overwritten in the parameters.</p>
 <table>
 <thead>
@@ -6597,7 +6597,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.shadow.shadowTime</h4>
+<h4 id="markdown-header-portalconfigmenutoolshadowshadowtime">Portalconfig.menu.tool.shadow.shadowTime</h4>
 <p>Todo.</p>
 <table>
 <thead>
@@ -6649,7 +6649,7 @@ The last step to use the slider as a date filter is to define the key “type”
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.styleWMS</h4>
+<h4 id="markdown-header-portalconfigmenutoolstylewms">Portalconfig.menu.tool.styleWMS</h4>
 <p>WMS service classification. This tool is used in the MRH (Metropolregion Hamburg, en.: Metropolitan area Hamburg) commute portal. With a mask, classifications can be defined. The GetMap request will have an SLD body as payload, used by the server to render. The WMS service now delivers its tiles in the defined classifications and colors.</p>
 <table>
 <thead>
@@ -6672,7 +6672,7 @@ The last step to use the slider as a date filter is to define the key “type”
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.menu.tool.wfsSearch</h4>
+<h4 id="markdown-header-portalconfigmenutoolwfssearch">Portalconfig.menu.tool.wfsSearch</h4>
 <p>Makes it possible to create a form to query WFS layers using filters through a separate interface.
 It is assumed that a stored query is used when using a WFS@2.0.0. When using a WFS@1.1.0, it is assumed that the way the WFS should be filtered is defined through the configuration.</p>
 <p>Multiple formulars (<strong><a href="#markdown-header-portalconfigmenutoolwfssearchsearchinstance">SearchInstances</a></strong>) can be defined, which will be selectable through a dropdown menu.</p>
@@ -6754,7 +6754,7 @@ It is assumed that a stored query is used when using a WFS@2.0.0. When using a W
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.wfsSearch.searchInstance</h4>
+<h4 id="markdown-header-portalconfigmenutoolwfssearchsearchinstance">Portalconfig.menu.tool.wfsSearch.searchInstance</h4>
 <p>A singular instance of the WFS Search which will be selectable through a dropdown in the tool.</p>
 <table>
 <thead>
@@ -6873,7 +6873,7 @@ It is assumed that a stored query is used when using a WFS@2.0.0. When using a W
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.wfsSearch.searchInstance.literal</h4>
+<h4 id="markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteral">Portalconfig.menu.tool.wfsSearch.searchInstance.literal</h4>
 <p>A <code>literal</code> can either have the parameter <code>clause</code>, or the parameter <code>field</code>. If both are set, the <code>clause</code>-part will be ignored.
 However, a <code>field</code> needs to be wrapped inside a <code>clause</code> (as seen in most examples).</p>
 <table>
@@ -6954,7 +6954,7 @@ However, a <code>field</code> needs to be wrapped inside a <code>clause</code> (
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.wfsSearch.searchInstance.literal.clause</h4>
+<h4 id="markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralclause">Portalconfig.menu.tool.wfsSearch.searchInstance.literal.clause</h4>
 <p>A <code>clause</code> defines the way multiple <code>literals</code> should be queried together.</p>
 <table>
 <thead>
@@ -7012,7 +7012,7 @@ However, a <code>field</code> needs to be wrapped inside a <code>clause</code> (
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.wfsSearch.searchInstance.literal.field</h4>
+<h4 id="markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfield">Portalconfig.menu.tool.wfsSearch.searchInstance.literal.field</h4>
 <p>A <code>field</code> represents the selection field for a value in the service.</p>
 <p>It is possible to use a <code>field</code> for multiple search parameters. To do this, each parameter needs to be an array where each element of the array corresponds to a single parameter of the service.
 A configuration like</p>
@@ -7187,7 +7187,7 @@ Assume the source looks like this:</p>
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.wfsSearch.searchInstance.literal.field.option</h4>
+<h4 id="markdown-header-portalconfigmenutoolwfssearchsearchinstanceliteralfieldoption">Portalconfig.menu.tool.wfsSearch.searchInstance.literal.field.option</h4>
 <p>A selectable option for a queryable parameter.</p>
 <table>
 <thead>
@@ -7226,7 +7226,7 @@ Assume the source looks like this:</p>
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.wfsSearch.searchInstance.resultList</h4>
+<h4 id="markdown-header-portalconfigmenutoolwfssearchsearchinstanceresultlist">Portalconfig.menu.tool.wfsSearch.searchInstance.resultList</h4>
 <p>Settings for the output of the found features in the result list.</p>
 <p>By specifying <code>showAll</code> all attributes of the found features are displayed in their original form.</p>
 <p>By using an Object, a key of the Object must represent one of the attributes of the feature,
@@ -7244,7 +7244,7 @@ and the corresponding value defines the textual output of that attribute.</p>
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.wfsSearch.searchInstance.requestConfig</h4>
+<h4 id="markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfig">Portalconfig.menu.tool.wfsSearch.searchInstance.requestConfig</h4>
 <p>Information about the WFS service that is supposed to be requested.
 Either <code>layerId</code> or <code>restLayerId</code> need to be present. If <code>layerId</code> is chosen, the layer needs to be configured in the <strong><a href="config.json.html">config.json</a></strong>.
 If both are defined <code>restLayerId</code> is used.</p>
@@ -7319,7 +7319,7 @@ If both are defined <code>restLayerId</code> is used.</p>
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.wfsSearch.searchInstance.requestConfig.likeFilter</h4>
+<h4 id="markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfiglikefilter">Portalconfig.menu.tool.wfsSearch.searchInstance.requestConfig.likeFilter</h4>
 <p>Values inside a filter for a WFS service can be compared with an <code>equal</code> or a <code>like</code>.
 If the comparison should be with a <code>like</code> then the filter needs additional properties. These may vary in value and property definition.
 For the documentation, it is assumed that the properties are called <code>wildCard</code>, <code>singleChar</code> and <code>escape</code>; variations like e.g. <code>wildCard</code>, <code>single</code> and <code>escape</code> are possible and need to be configured in line with the service.</p>
@@ -7362,7 +7362,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.menu.tool.wfsSearch.searchInstance.requestConfig.gazetteer</h4>
+<h4 id="markdown-header-portalconfigmenutoolwfssearchsearchinstancerequestconfiggazetteer">Portalconfig.menu.tool.wfsSearch.searchInstance.requestConfig.gazetteer</h4>
 <p>Parameters that are exclusively needed for using a WFS-G (Gazetteer).</p>
 <table>
 <thead>
@@ -7406,7 +7406,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.wfsSearch.searchInstance.suggestions</h4>
+<h4 id="markdown-header-portalconfigmenutoolwfssearchsearchinstancesuggestions">Portalconfig.menu.tool.wfsSearch.searchInstance.suggestions</h4>
 <p>Configuration for the suggestions of the user input.</p>
 <table>
 <thead>
@@ -7439,7 +7439,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 </tbody>
 </table>
 <hr>
-<h4>Portalconfig.menu.tool.wfst</h4>
+<h4 id="markdown-header-portalconfigmenutoolwfst">Portalconfig.menu.tool.wfst</h4>
 <p>WFS-T module to visualize (<em>GetFeature</em>), create (<em>insert</em>), update (<em>update</em>), and delete (<em>delete</em>) features of a Web Feature Service (<em>WFS</em>). To use this tool, a WFS-T layer must be provided. See <code>services.json.md</code>.</p>
 <table>
 <thead>
@@ -7483,21 +7483,21 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 <tr>
 <td>pointButton</td>
 <td>no</td>
-<td><a href="#markdown-header-portalconfigmenutoolwfstButton">Button</a>[]</td>
+<td><a href="#markdown-header-portalconfigmenutoolwfstbutton">Button</a>[]</td>
 <td>false</td>
 <td>Configuration of which layers allow creating points and what label the button should have.</td>
 </tr>
 <tr>
 <td>lineButton</td>
 <td>no</td>
-<td><a href="#markdown-header-portalconfigmenutoolwfstButton">Button</a>[]</td>
+<td><a href="#markdown-header-portalconfigmenutoolwfstbutton">Button</a>[]</td>
 <td>false</td>
 <td>Configuration of which layers allow creating lines and what label the button should have.</td>
 </tr>
 <tr>
 <td>areaButton</td>
 <td>no</td>
-<td><a href="#markdown-header-portalconfigmenutoolwfstButton">Button</a>[]</td>
+<td><a href="#markdown-header-portalconfigmenutoolwfstbutton">Button</a>[]</td>
 <td>false</td>
 <td>Configuration of which layers allow creating areas and what label the button should have.</td>
 </tr>
@@ -7556,7 +7556,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.wfst.Button</h4>
+<h4 id="markdown-header-portalconfigmenutoolwfstbutton">Portalconfig.menu.tool.wfst.Button</h4>
 <p>The attributes <code>pointButton</code>/<code>lineButton</code>/<code>areaButton</code> may be of type boolean or object. When of type boolean, it decides whether the create function is available to all layers. Else, the following attributes may be provided:</p>
 <table>
 <thead>
@@ -7619,7 +7619,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.wfst.EditDelete</h4>
+<h4 id="markdown-header-portalconfigmenutoolwfsteditdelete">Portalconfig.menu.tool.wfst.EditDelete</h4>
 <p>The attributes <code>edit</code> and <code>delete</code> may be of type boolean or string. If of type boolean, it indicates whether the respective function is available. When of type string, it is offered with the string as its label.</p>
 <table>
 <thead>
@@ -7677,7 +7677,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.coordToolkit</h4>
+<h4 id="markdown-header-portalconfigmenutoolcoordtoolkit">Portalconfig.menu.tool.coordToolkit</h4>
 <p>Coordinates tool. To display the height above sea level in addition to the 2 dimensional coordinates, a ‘heightLayerId’ of a WMS service that provides the height must be specified. The format XML is expected and the attribute for the heights is expected under the value of the parameter ‘heightElementName’.</p>
 <table>
 <thead>
@@ -7764,7 +7764,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
           }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.routing</h4>
+<h4 id="markdown-header-portalconfigmenutoolrouting">Portalconfig.menu.tool.routing</h4>
 <p>Routing-tool. Enables user to plan routes between multiple points with multiple options to choose from. In addition users can create isochrones. Both functions are available with mass requests for specific use cases.</p>
 <table>
 <thead>
@@ -7936,7 +7936,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.routing.download</h4>
+<h4 id="markdown-header-portalconfigmenutoolroutingdownload">Portalconfig.menu.tool.routing.download</h4>
 <p>Routing-tool download options.</p>
 <table>
 <thead>
@@ -7978,7 +7978,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.routing.geosearch</h4>
+<h4 id="markdown-header-portalconfigmenutoolroutinggeosearch">Portalconfig.menu.tool.routing.geosearch</h4>
 <p>Routing-tool geosearch options.</p>
 <table>
 <thead>
@@ -8038,7 +8038,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.routing.geosearchReverse</h4>
+<h4 id="markdown-header-portalconfigmenutoolroutinggeosearchreverse">Portalconfig.menu.tool.routing.geosearchReverse</h4>
 <p>Routing-tool geosearch reverse options.</p>
 <table>
 <thead>
@@ -8098,7 +8098,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.routing.directionsSettings</h4>
+<h4 id="markdown-header-portalconfigmenutoolroutingdirectionssettings">Portalconfig.menu.tool.routing.directionsSettings</h4>
 <p>Routing-tool directions options.</p>
 <table>
 <thead>
@@ -8222,7 +8222,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.routing.directionsSettings.styleRoute</h4>
+<h4 id="markdown-header-portalconfigmenutoolroutingdirectionssettingsstyleroute">Portalconfig.menu.tool.routing.directionsSettings.styleRoute</h4>
 <p>Routing-tool directions route style options.</p>
 <table>
 <thead>
@@ -8300,7 +8300,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.routing.directionsSettings.styleWaypoint</h4>
+<h4 id="markdown-header-portalconfigmenutoolroutingdirectionssettingsstylewaypoint">Portalconfig.menu.tool.routing.directionsSettings.styleWaypoint</h4>
 <p>Routing-tool directions waypoint style options.</p>
 <table>
 <thead>
@@ -8396,7 +8396,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.routing.directionsSettings.styleAvoidAreas</h4>
+<h4 id="markdown-header-portalconfigmenutoolroutingdirectionssettingsstyleavoidareas">Portalconfig.menu.tool.routing.directionsSettings.styleAvoidAreas</h4>
 <p>Routing-tool directions avoid areas style options.</p>
 <table>
 <thead>
@@ -8474,7 +8474,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.routing.directionsSettings.batchProcessing</h4>
+<h4 id="markdown-header-portalconfigmenutoolroutingdirectionssettingsbatchprocessing">Portalconfig.menu.tool.routing.directionsSettings.batchProcessing</h4>
 <p>Routing-tool directions batch processing options.</p>
 <table>
 <thead>
@@ -8534,7 +8534,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.routing.isochronesSettings</h4>
+<h4 id="markdown-header-portalconfigmenutoolroutingisochronessettings">Portalconfig.menu.tool.routing.isochronesSettings</h4>
 <p>Routing-tool isochrones options.</p>
 <table>
 <thead>
@@ -8718,7 +8718,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.routing.isochronesSettings.styleCenter</h4>
+<h4 id="markdown-header-portalconfigmenutoolroutingisochronessettingsstylecenter">Portalconfig.menu.tool.routing.isochronesSettings.styleCenter</h4>
 <p>Routing-tool isochrones centers style options.</p>
 <table>
 <thead>
@@ -8787,7 +8787,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.routing.isochronesSettings.styleIsochrones</h4>
+<h4 id="markdown-header-portalconfigmenutoolroutingisochronessettingsstyleisochrones">Portalconfig.menu.tool.routing.isochronesSettings.styleIsochrones</h4>
 <p>Routing-tool isochrones style options.</p>
 <table>
 <thead>
@@ -8847,7 +8847,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.tool.routing.isochronesSettings.batchProcessing</h4>
+<h4 id="markdown-header-portalconfigmenutoolroutingisochronessettingsbatchprocessing">Portalconfig.menu.tool.routing.isochronesSettings.batchProcessing</h4>
 <p>Routing-tool isochrones batch processing options.</p>
 <table>
 <thead>
@@ -8907,7 +8907,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h3>Portalconfig.menu.staticlinks</h3>
+<h3 id="markdown-header-portalconfigmenustaticlinks">Portalconfig.menu.staticlinks</h3>
 <p>The staticlinks array contains objects either describing links to other web resources or triggers of defined events.</p>
 <table>
 <thead>
@@ -8949,7 +8949,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.staticlinks.staticlink</h4>
+<h4 id="markdown-header-portalconfigmenustaticlinksstaticlink">Portalconfig.menu.staticlinks.staticlink</h4>
 <p>Ein Staticlink-Objekt enthält folgende Attribute.</p>
 <table>
 <thead>
@@ -9018,7 +9018,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Portalconfig.menu.staticlinks.staticlink.onClickTrigger</h4>
+<h4 id="markdown-header-portalconfigmenustaticlinksstaticlinkonclicktrigger">Portalconfig.menu.staticlinks.staticlink.onClickTrigger</h4>
 <p>Defines an event trigger, possibly containing a payload.</p>
 <table>
 <thead>
@@ -9066,7 +9066,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h2>Themenconfig</h2>
+<h2 id="markdown-header-themenconfig">Themenconfig</h2>
 <p>The <code>Themenconfig</code> entry defines the contents and their order in the topic selection. Depending on your <code>treeType</code> configuration, the <a href="#markdown-header-themenconfigfachdaten">Fachdaten</a> section may also contain folder structures.</p>
 <table>
 <thead>
@@ -9125,7 +9125,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h3>Themenconfig.Hintergrundkarten</h3>
+<h3 id="markdown-header-themenconfighintergrundkarten">Themenconfig.Hintergrundkarten</h3>
 <p>Background map definition.</p>
 <table>
 <thead>
@@ -9178,7 +9178,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h3>Themenconfig.Fachdaten</h3>
+<h3 id="markdown-header-themenconfigfachdaten">Themenconfig.Fachdaten</h3>
 <p>Technical data definition.</p>
 <table>
 <thead>
@@ -9231,7 +9231,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h3>Themenconfig.Fachdaten_3D</h3>
+<h3 id="markdown-header-themenconfigfachdaten_3d">Themenconfig.Fachdaten_3D</h3>
 <p>3D data definition for the 3D mode in <code>treeType</code> <code>custom</code> and <code>default</code>. Only shown when 3D mode is active.</p>
 <table>
 <thead>
@@ -9276,7 +9276,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h3>Themenconfig.Fachdaten_Zeit</h3>
+<h3 id="markdown-header-themenconfigfachdaten_zeit">Themenconfig.Fachdaten_Zeit</h3>
 <p>Definition for WMS-T layers <code>treeType</code> <code>custom</code> and <code>default</code>. The layers can also be defined under <strong><a href="#markdown-header-themenconfigfachdaten">Fachdaten</a></strong>.</p>
 <table>
 <thead>
@@ -9321,7 +9321,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h3>Themenconfig.Ordner</h3>
+<h3 id="markdown-header-themenconfigordner">Themenconfig.Ordner</h3>
 <p>Folder definition. Folders may also be nested. Folders can be configured below the “Fachdaten” and “Hintergrundkarten”.</p>
 <table>
 <thead>
@@ -9511,7 +9511,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h3>Themenconfig.GroupLayer</h3>
+<h3 id="markdown-header-themenconfiggrouplayer">Themenconfig.GroupLayer</h3>
 <p>Group layer definition. Multiple ways to define group layers exist. Most attributes are defined in the <strong><a href="services.json.html">services.json</a></strong>, but may be overwritten in the layer definition.</p>
 <p>Also, type-specific attributes for <strong><a href="#markdown-header-themenconfiglayerwms">WMS</a></strong> and <strong><a href="#markdown-header-themenconfiglayervector">VTS</a></strong> exist.</p>
 <table>
@@ -9657,7 +9657,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h3>Themenconfig.Layer</h3>
+<h3 id="markdown-header-themenconfiglayer">Themenconfig.Layer</h3>
 <p>Layer definition. Multiple ways to define layers exist. Most attributes are defined in the <strong><a href="services.json.html">services.json</a></strong>, but may be overwritten in the layer definition.</p>
 <table>
 <thead>
@@ -9797,7 +9797,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Themenconfig.Layer.WMS</h4>
+<h4 id="markdown-header-themenconfiglayerwms">Themenconfig.Layer.WMS</h4>
 <p>List of typical WMS attributes.</p>
 <table>
 <thead>
@@ -9862,7 +9862,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 <tr>
 <td>gfiAsNewWindow</td>
 <td>no</td>
-<td><strong><a href="#markdown-header-themenconfiglayerwmsgfiAsNewWindow">gfiAsNewWindow</a></strong></td>
+<td><strong><a href="#markdown-header-themenconfiglayerwmsgfiasnewwindow">gfiAsNewWindow</a></strong></td>
 <td>null</td>
 <td>Relevant if <code>&quot;text/html&quot;</code> is used.</td>
 <td>true</td>
@@ -9903,7 +9903,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Themenconfig.Layer.WMS.gfiAsNewWindow</h4>
+<h4 id="markdown-header-themenconfiglayerwmsgfiasnewwindow">Themenconfig.Layer.WMS.gfiAsNewWindow</h4>
 <p>The parameter <code>gfiAsNewWindow</code> is only in use when <code>infoFormat</code> is set to <code>&quot;text/html&quot;</code>.</p>
 <p>This feature allows opening WMS HTML responses in their own window or tab rather than in an iFrame or GFI. To open HTML contents in a standard browser window, set the empty object <code>{}</code> instead of <code>null</code>.</p>
 <p>You may change the opening behaviour by setting the parameter <code>name</code>:</p>
@@ -9954,7 +9954,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Themenconfig.Layer.Tileset</h4>
+<h4 id="markdown-header-themenconfiglayertileset">Themenconfig.Layer.Tileset</h4>
 <p>List of attributes typically used for tilesets.</p>
 <table>
 <thead>
@@ -9995,7 +9995,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Themenconfig.Layer.Tileset.cesium3DTilesetOption</h4>
+<h4 id="markdown-header-themenconfiglayertilesetcesium3dtilesetoption">Themenconfig.Layer.Tileset.cesium3DTilesetOption</h4>
 <p>Todo</p>
 <table>
 <thead>
@@ -10025,7 +10025,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Themenconfig.Layer.Terrain</h4>
+<h4 id="markdown-header-themenconfiglayerterrain">Themenconfig.Layer.Terrain</h4>
 <p>List of attributes typically used for <em>Terrain</em>.</p>
 <table>
 <thead>
@@ -10058,7 +10058,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Themenconfig.Layer.Terrain.cesiumTerrainProviderOption</h4>
+<h4 id="markdown-header-themenconfiglayerterraincesiumterrainprovideroption">Themenconfig.Layer.Terrain.cesiumTerrainProviderOption</h4>
 <p>Todo</p>
 <table>
 <thead>
@@ -10088,7 +10088,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Themenconfig.Layer.Entity3D</h4>
+<h4 id="markdown-header-themenconfiglayerentity3d">Themenconfig.Layer.Entity3D</h4>
 <p>List of attributes typically used for <em>Entities 3D</em>.</p>
 <table>
 <thead>
@@ -10217,7 +10217,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Themenconfig.Layer.Entity3D.Attribute</h4>
+<h4 id="markdown-header-themenconfiglayerentity3dattribute">Themenconfig.Layer.Entity3D.Attribute</h4>
 <table>
 <thead>
 <tr>
@@ -10246,7 +10246,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Themenconfig.Layer.StaticImage</h4>
+<h4 id="markdown-header-themenconfiglayerstaticimage">Themenconfig.Layer.StaticImage</h4>
 <p>This type allows loading images as georeferenced map layers. Supported formats are <code>jpeg</code> and <code>png</code>.</p>
 <table>
 <thead>
@@ -10313,7 +10313,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Themenconfig.Layer.Vector</h4>
+<h4 id="markdown-header-themenconfiglayervector">Themenconfig.Layer.Vector</h4>
 <p>List of attributes typically used in vector layers. Vector layers are WFS, GeoJSON (EPSG:4326 only), <a href="sensorThings.html">SensorLayer</a>, and Vector Tile Layer.</p>
 <table>
 <thead>
@@ -10474,7 +10474,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h4>Themenconfig.Layer.Vector.filterOption</h4>
+<h4 id="markdown-header-themenconfiglayervectorfilteroption">Themenconfig.Layer.Vector.filterOption</h4>
 <p>Filter options used by the <strong><a href="#markdown-header-portalconfigmenutools">tool</a></strong> <code>wfsFeatureFilter</code>.</p>
 <table>
 <thead>
@@ -10530,7 +10530,7 @@ For the documentation, it is assumed that the properties are called <code>wildCa
     &quot;filterType&quot;: &quot;combo&quot;
 }
 </code></pre>
-<h4>Themenconfig.Layer.Vector.vtStyle</h4>
+<h4 id="markdown-header-themenconfiglayervectorvtstyle">Themenconfig.Layer.Vector.vtStyle</h4>
 <p>Style definitions. Available for <em>Vector Tile Layers</em> only.</p>
 <table>
 <thead>
@@ -10603,9 +10603,9 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 }
 </code></pre>
 <hr>
-<h1>Datatypes</h1>
+<h1 id="markdown-header-datatypes">Datatypes</h1>
 <p>This chapter defines expected data types.</p>
-<h2>Datatypes.Coordinate</h2>
+<h2 id="markdown-header-datatypescoordinate">Datatypes.Coordinate</h2>
 <p>A coordinate is an array of two numbers. The first represents the easting, the second the northing.</p>
 <p><strong>Example integer coordinate</strong></p>
 <pre><code class="language-json">[561210, 5932600]
@@ -10614,16 +10614,16 @@ For the documentation, it is assumed that the properties are called <code>wildCa
 <pre><code class="language-json">[561210.1458, 5932600.12358]
 </code></pre>
 <hr>
-<h2>Datatypes.Extent</h2>
+<h2 id="markdown-header-datatypesextent">Datatypes.Extent</h2>
 <p>An extent is an array of four numbers describing a rectangular scope. The rectangle is constructed from the “lower left” and “upper right” corner, so the scheme used is <code>[Easting lower left, Northing lower left, Easting upper right, Northing upper right]</code>, or <code>[minx, miny, maxx, maxy]</code>.</p>
 <p><strong>Example extent</strong></p>
 <pre><code class="language-json">[510000.0, 5850000.0, 625000.4, 6000000.0]
 </code></pre>
 <hr>
-<h2>Datatypes.CustomObject</h2>
+<h2 id="markdown-header-datatypescustomobject">Datatypes.CustomObject</h2>
 <p>An object containing the required contents. Parameters depend on configuration, usage, and backend components.</p>
 <hr>
-<h2>Datatypes.LayerId</h2>
+<h2 id="markdown-header-datatypeslayerid">Datatypes.LayerId</h2>
 <p>A string that refers to a layer id from the services-internet.json. In the example, the ID “1711” is used to refer to the layer “Krankenhäuser” in the services-internet.json of the city of Hamburg.</p>
 <p><strong>Example LayerId</strong></p>
 <pre><code class="language-json">&quot;1711&quot;

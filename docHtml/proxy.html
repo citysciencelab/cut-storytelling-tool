@@ -16,7 +16,7 @@
 <h1>Proxy (<em>deprecated</em>)</h1>
 <p>Various Masterportal functions send XHR requests to other domains, e.g. <code>WMS GetFeatureInfo</code> requests or calls to <code>WFS</code> and <code>CSW</code> services. These are restricted by the <strong><a href="https://en.wikipedia.org/wiki/Same-origin_policy">same-origin policy</a></strong> implemented in all browsers.</p>
 <p>For this reason, the Masterportal requires local proxies on the server it’s running on for all services that are requested via XHR from another domain. URLs for such requests are translated to local proxy URLs by default; here all dots (&quot;.&quot;) in the URL’s hostname are replaced with underscores (&quot;_&quot;).</p>
-<h2>Example</h2>
+<h2 id="markdown-header-example">Example</h2>
 <p>Assuming a WMS server’s URL is <code>https://geodienste.hamburg.de/HH-WMS-Gruenes-Netz</code>, the Masterportal translates it to <code>/geodienste_hamburg_de/HH-WMS-Gruenes-Netz</code> and uses this local address for its request.</p>
 <p>For this purpose a reverse proxy must be set up.</p>
 <h2>Example for an Apache server</h2>

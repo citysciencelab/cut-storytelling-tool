@@ -253,7 +253,7 @@ describe(&quot;src/modules/tools/scaleSwitcher/store/mutationsScaleSwitcher.js&q
 });
 </code></pre>
 <h2>About the libraries</h2>
-<h3>Mocha</h3>
+<h3 id="markdown-header-mocha">Mocha</h3>
 <p><code>describe</code> is used to declare a section. In the example, the outer <code>describe</code> is used to describe the module being tested. Nested <code>describe</code>s are used to name the function currently under test.</p>
 <p>You may use <code>describe.only</code> to run only a specific test section, or <code>describe.skip</code> to temporarily comment out tests during development.</p>
 <pre><code class="language-js">describe(name, callback)
@@ -267,7 +267,7 @@ describe(&quot;src/modules/tools/scaleSwitcher/store/mutationsScaleSwitcher.js&q
 <p>The function <code>beforeEach</code> is used for test preparations per <code>it</code> case and is therefore executed <code>once</code> per <code>it</code> in the surrounding <code>describe</code>.</p>
 <p>The functions <code>after</code> and <code>afterEach</code> work comparably after test execution.</p>
 <p>For more documentation regarding Mocha, please read the <a href="https://mochajs.org/">Mocha documentation pages</a>.</p>
-<h3>Chai</h3>
+<h3 id="markdown-header-chai">Chai</h3>
 <p>Each <code>it</code> case should contain a call to the <code>expect</code> function.</p>
 <p><code>expect</code> can be used to check one or multiple properties of an object.</p>
 <pre><code class="language-js">expect(model.testMe()).to.be.true;

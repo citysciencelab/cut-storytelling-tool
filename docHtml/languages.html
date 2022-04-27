@@ -15,9 +15,9 @@
 <li>Explain how to use localization in new models (advanced users)</li>
 <li>Explain how the internationalization system works (experts)</li>
 </ol>
-<h2>Background</h2>
+<h2 id="markdown-header-background">Background</h2>
 <p>This section provides background information and common knowledge on working with translations and languages in the Masterportal.</p>
-<h3>Technology</h3>
+<h3 id="markdown-header-technology">Technology</h3>
 <p>The Masterportal uses the <a href="https://www.i18next.com/">i18next</a> technology for translations.</p>
 <p>For advanced users and experts, we recommend reading the short and on-point i18next documentation.</p>
 <p>The following i18next plugins are used:</p>
@@ -29,10 +29,10 @@
 <blockquote>
 <p>⚠️ Please mind that Backbone is deprecated and will eventually be replaced with the VueX store.</p>
 </blockquote>
-<h3>Languages</h3>
+<h3 id="markdown-header-languages">Languages</h3>
 <p>The Masterportal’s main development team is seated in Hamburg, Germany. For this reason, the fallback language is currently German. You may change the fallback language within the <code>config.js</code> file.</p>
 <p>A complete english translation is provided.</p>
-<h3>Configuration</h3>
+<h3 id="markdown-header-configuration">Configuration</h3>
 <p>i18next’s languages are configured in the <code>config.js</code> file. See the <strong><a href="config.js.html">config.js documentation</a></strong> for details.</p>
 <h3>Language files</h3>
 <p>Language files are used to store translations by <em>keys</em>. These <em>keys</em> are used to access translations in-code and in the Masterportal configuration. To work with language files, basic JSON syntax knowledge is required.</p>
@@ -56,7 +56,7 @@
 <p>This section describes how to use i18next to translate config.json values</p>
 <p>After a best practice scenario, the background mechanisms are explained in detail.</p>
 <h3>Best practice scenario</h3>
-<h4>Menu</h4>
+<h4 id="markdown-header-menu">Menu</h4>
 <p>To translate a config.json value, the value itself must be formatted correctly. The formatted value must then be added to the translation files. If the part of the config.json is considered for translations by the Masterportal, the translation will take place. Please mind that only the field <code>&quot;name&quot;</code> is considered during translation.</p>
 <p><strong>Translation file common.json:</strong></p>
 <pre><code class="language-json">{
@@ -117,7 +117,7 @@
 <li><code>&quot;name&quot;: &quot;translate#common:foo.bar.exampleMenuTitle&quot;</code> is translated if the key exists</li>
 <li>if no name is specified (that is, the field name does not exist), the default translation is applied (see above)</li>
 </ul>
-<h3>Tools</h3>
+<h3 id="markdown-header-tools">Tools</h3>
 <p>Tools (de: “Werkzeuge”) can be translated similarly to tools. This includes the menu entry within the “Tools” folder and the tool window’s title.</p>
 <p><strong>Translatable config.json tool part:</strong></p>
 <pre><code class="language-json">{
@@ -159,7 +159,7 @@
 </code></pre>
 <p><a href="https://bitbucket.org/geowerkstatt-hamburg/addons/src/master/populationRequest/">See this for an example.</a></p>
 <h2>Interesting i18nxt translation functions</h2>
-<h3>Interpolation</h3>
+<h3 id="markdown-header-interpolation">Interpolation</h3>
 <p>Use dynamic values in your translations.</p>
 <p><strong>Key</strong></p>
 <pre><code class="language-json">{
@@ -195,7 +195,7 @@ i18next.t('keyWithCount', {count: 5}); // -&gt; &quot;5 items&quot;
 i18next.t('keyWithCount', {count: 100}); // -&gt; &quot;100 items&quot;
 </code></pre>
 <p>See the <a href="https://www.i18next.com/translation-function/plurals#singular-plural">i18next singular-plural documentation</a> for more details.</p>
-<h3>Nesting</h3>
+<h3 id="markdown-header-nesting">Nesting</h3>
 <p>Nesting allows you to reference other keys within a translation.</p>
 <p><strong>Keys</strong></p>
 <pre><code class="language-json">{
@@ -208,7 +208,7 @@ i18next.t('keyWithCount', {count: 100}); // -&gt; &quot;100 items&quot;
 <pre><code class="language-js">i18next.t('nesting1'); // -&gt; &quot;1 2 3&quot;
 </code></pre>
 <p>See the <a href="https://www.i18next.com/translation-function/nesting#basic">i18next nesting documentation</a> for more details.</p>
-<h3>Formatting</h3>
+<h3 id="markdown-header-formatting">Formatting</h3>
 <p>Please read the <a href="https://www.i18next.com/translation-function/formatting#formatting">i18next formatting documentation</a> regarding this topic.</p>
 <h2>Common errors</h2>
 <blockquote>

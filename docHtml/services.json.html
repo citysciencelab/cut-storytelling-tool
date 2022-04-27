@@ -10,8 +10,8 @@
                             <blockquote>
 <p><strong><a href="doc.html">Return to the Masterportal documentation</a></strong>.</p>
 </blockquote>
-<p>[TOC]</p>
-<h1>services.json</h1>
+<p></p>
+<h1 id="markdown-header-servicesjson">services.json</h1>
 <p>All services available for display in the Masterportal (WMS, WFS, <a href="sensorThings.html">SensorThings-API</a>, and more) are configured and maintained in this JSON file. The file is linked to from the <em>config.js</em> of each individual portal by the <em>layerConf</em> parameter. For an example, see the <em>services-internet.json</em> included in the <em>examples.zip</em> at <em>//examples/Basic/resources/</em>.</p>
 <p>All layer information the portal needs to use the services is stored here. Configuration details differ between WMS, WFS, <a href="sensorThings.html">SensorThings-API</a> and other services types. You may also use local GeoJSON files; see GeoJSON example.</p>
 <hr>
@@ -920,7 +920,7 @@ If a parameter is also present in the service, the definition in this config is 
     ]
   }
 </code></pre>
-<h3>wfsFilter</h3>
+<h3 id="markdown-header-wfsfilter">wfsFilter</h3>
 <p>You can create an xml ressource using wfs standard to request your server with complex filters.
 To learn more about wfs filter encoding see <a href="https://mapserver.org/de/ogc/filter_encoding.html">https://mapserver.org/de/ogc/filter_encoding.html</a> .</p>
 <p>Remember to use the correct feature namespace (see prop featureNS) for xmlns:app.</p>
@@ -953,7 +953,7 @@ If it doesn’t work with the first try, go through your file - line for line - 
 &lt;/wfs:GetFeature&gt;
 </code></pre>
 <hr>
-<h2>wfs_id</h2>
+<h2 id="markdown-header-wfs_id">wfs_id</h2>
 <p>If the layer id is in an object format, the content in the object should be in the format:</p>
 <table>
 <thead>
@@ -1246,7 +1246,7 @@ to &lt;br&gt;
 }
 </code></pre>
 <hr>
-<h2>SensorLayer</h2>
+<h2 id="markdown-header-sensorlayer">SensorLayer</h2>
 <p>A feature kann hold multiple Datastreams. For each Datastream, the latest obervation is added as a feature attribute as <code>&quot;dataStream_[id]_[name]&quot;</code>, where <code>id</code> is the Datastream’s <code>@iot.id</code>.</p>
 <p>The name is read from <code>datastream.properties.type</code>; if not available, <code>datastream.unitOfMeasurement.name</code> is used.</p>
 <p>For more details, consider reading the <a href="sensorThings.html">extensive SensorThings-API documentation.</a>.</p>
@@ -1487,7 +1487,7 @@ to &lt;br&gt;
       }
    }
 </code></pre>
-<h2>SensorLayer.mqttOptions</h2>
+<h2 id="markdown-header-sensorlayermqttoptions">SensorLayer.mqttOptions</h2>
 <p>Used to configure the target of a mqtt web socket connection. If nothing is set, the portal tries to infer the parameters from the service URL.</p>
 <table>
 <thead>
@@ -1562,7 +1562,7 @@ to &lt;br&gt;
       }
    }
 </code></pre>
-<h2>SensorLayer.urlParameter</h2>
+<h2 id="markdown-header-sensorlayerurlparameter">SensorLayer.urlParameter</h2>
 <p>Enables filtering SensorThingsAPI requests.</p>
 <table>
 <thead>
@@ -1625,7 +1625,7 @@ to &lt;br&gt;
 }
 </code></pre>
 <hr>
-<h2>WMS_WFS_OAF_datasets</h2>
+<h2 id="markdown-header-wms_wfs_oaf_datasets">WMS_WFS_OAF_datasets</h2>
 <p>Metadata specification. All metadata of the layer data is referenced here. By clicking the “i” button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the <strong><a href="rest-services.json.html">rest-services.json</a></strong> has to provide the URL of the metadata catalog resp. its CSW interface. The values <em>kategorie_opendata</em>, <em>kategorie_inspire</em>, and <em>kategorie_organisation</em> are used for layer categorization if the <strong><a href="config.json.html">config.json</a></strong> has <code>treeType</code> set to <code>&quot;default&quot;</code>. To remove the “i” button altogether, explicitly set <code>&quot;datasets&quot;: false</code>.</p>
 <table>
 <thead>
@@ -1719,7 +1719,7 @@ to &lt;br&gt;
 ]
 </code></pre>
 <hr>
-<h2>gfi_theme</h2>
+<h2 id="markdown-header-gfi_theme">gfi_theme</h2>
 <p>This attribute may be either a string or an object. In case it’s a string, the matching template will be used. In case it’s an object, the following parameters are interpreted.</p>
 <table>
 <thead>
@@ -1757,7 +1757,7 @@ to &lt;br&gt;
 }
 </code></pre>
 <hr>
-<h2>gfi_theme_params</h2>
+<h2 id="markdown-header-gfi_theme_params">gfi_theme_params</h2>
 <p>Definition of template-specific parameters.</p>
 <table>
 <thead>
@@ -1778,7 +1778,7 @@ to &lt;br&gt;
 </tbody>
 </table>
 <hr>
-<h2>gfi_theme_default_params</h2>
+<h2 id="markdown-header-gfi_theme_default_params">gfi_theme_default_params</h2>
 <p>Definition of parameters for GFI template <code>&quot;default&quot;</code>.</p>
 <table>
 <thead>
@@ -1870,7 +1870,7 @@ to &lt;br&gt;
 }
 </code></pre>
 <hr>
-<h2>gfi_theme_default_params_iframe</h2>
+<h2 id="markdown-header-gfi_theme_default_params_iframe">gfi_theme_default_params_iframe</h2>
 <p>The GFI can be displayed as an iframe. Here you can define the size of the iframe.</p>
 <p>Note: Only works if the infoFormat=“text/html” is configured for the layer.</p>
 <table>
@@ -1909,7 +1909,7 @@ to &lt;br&gt;
 }
 </code></pre>
 <hr>
-<h2>gfi_theme_sensor_params</h2>
+<h2 id="markdown-header-gfi_theme_sensor_params">gfi_theme_sensor_params</h2>
 <p>This theme allows the visualization of historical data regarding a SensorThings-API layer. For each configured Observation result an image is created. Therefore, this GFI theme is only usable for results providing a status; e.g., for charging stations such a status range is “free”, “loading”, “out of order”.</p>
 <table>
 <thead>
@@ -1946,7 +1946,7 @@ to &lt;br&gt;
 <tr>
 <td>historicalData</td>
 <td>no</td>
-<td><strong><a href="#markdown-header-gfi_theme_sensor_params_historicalData">historicalData</a></strong></td>
+<td><strong><a href="#markdown-header-gfi_theme_sensor_params_historicaldata">historicalData</a></strong></td>
 <td></td>
 <td>Indicates for which period the historical Observations should be requested.</td>
 </tr>
@@ -2010,7 +2010,7 @@ to &lt;br&gt;
 }
 </code></pre>
 <hr>
-<h2>gfi_theme_sensor_params_charts</h2>
+<h2 id="markdown-header-gfi_theme_sensor_params_charts">gfi_theme_sensor_params_charts</h2>
 <p>Chart display parameters.</p>
 <table>
 <thead>
@@ -2026,7 +2026,7 @@ to &lt;br&gt;
 <tr>
 <td>values</td>
 <td>yes</td>
-<td>String[]/<strong><a href="#markdown-header-gfi_theme_sensor_params_charts_valuesObject">valuesObject</a></strong></td>
+<td>String[]/<strong><a href="#markdown-header-gfi_theme_sensor_params_charts_valuesobject">valuesObject</a></strong></td>
 <td></td>
 <td>Definition of which Observation Results are turned into charts. A separate tab will be created for each result. Results may be entered as array or object; when given as object, further attributes may be defined.</td>
 </tr>
@@ -2082,7 +2082,7 @@ to &lt;br&gt;
 }
 </code></pre>
 <hr>
-<h2>gfi_theme_sensor_params_charts_valuesObject</h2>
+<h2 id="markdown-header-gfi_theme_sensor_params_charts_valuesobject">gfi_theme_sensor_params_charts_valuesObject</h2>
 <p>Layout definition for each result’s chart.</p>
 <table>
 <thead>
@@ -2135,7 +2135,7 @@ to &lt;br&gt;
 }
 </code></pre>
 <hr>
-<h2>gfi_theme_sensor_params_data</h2>
+<h2 id="markdown-header-gfi_theme_sensor_params_data">gfi_theme_sensor_params_data</h2>
 <p>Data display configuration.</p>
 <table>
 <thead>
@@ -2184,7 +2184,7 @@ to &lt;br&gt;
 }
 </code></pre>
 <hr>
-<h2>gfi_theme_sensor_params_historicalData</h2>
+<h2 id="markdown-header-gfi_theme_sensor_params_historicaldata">gfi_theme_sensor_params_historicalData</h2>
 <p>Configuration of historical data period to be request.</p>
 <table>
 <thead>
@@ -2228,7 +2228,7 @@ to &lt;br&gt;
 }
 </code></pre>
 <hr>
-<h2>gfi_attributes</h2>
+<h2 id="markdown-header-gfi_attributes">gfi_attributes</h2>
 <p>Potentially cryptic service-side attribute names may be translated with these key-value pairs within the portal.</p>
 <p>Other options:</p>
 <ul>

@@ -10,8 +10,8 @@
                             <blockquote>
 <p><strong><a href="doc.html">Return to the Masterportal documentation</a></strong>.</p>
 </blockquote>
-<p>[TOC]</p>
-<h1>style.json</h1>
+<p></p>
+<h1 id="markdown-header-stylejson">style.json</h1>
 <p>The <em>style.json</em> file describes visualization rules to control the styling of vector features. It may be used in all sorts of vector layers, namely <em>WFS</em>, <em>GeoJSON</em>, and <em>Sensor</em>.</p>
 <p>Style rules may be defined for <em>3DTileSets</em>, too.</p>
 <h2>What happens on Masterportal start-up</h2>
@@ -36,7 +36,7 @@
 <blockquote>
 <p>💡 Hint: Incorrect style ids do not provoke a run-time error. A warning is logged to the console to inform administrators of the erroneous configuration. Portal users will only notice that the misconfigured layer has the OpenLayers default vector styling.</p>
 </blockquote>
-<h2>Structure</h2>
+<h2 id="markdown-header-structure">Structure</h2>
 <p>This chapter describes the syntactic and schematic structure as well as the functionality of the <em>style.json</em>.</p>
 <blockquote>
 <p>💡 Hint: The basic JSON file syntax <a href="https://www.json.org">explained on json.org</a> applies to the <em>style.json</em> file.</p>
@@ -98,7 +98,7 @@
 <blockquote>
 <p>💡 Hint: The order of array elements is essential. The style with the first matching <em>conditions</em> is used, and all rules following are ignored. Hence, all rules following a default style (any style without <em>conditions</em>) are ignored. If the rules in example 6 were swapped, the condition-free rule would always be met and applied, and the rule holding conditions would have been made obsolete.</p>
 </blockquote>
-<h2>Conditions</h2>
+<h2 id="markdown-header-conditions">Conditions</h2>
 <p>This section describes the file structure for the <em>conditions</em> value as introduced in the chapter <a href="#markdown-header-structure">Structure</a>.</p>
 <p>Two optional <em>condition types</em> may be used in a condition:</p>
 <ul>
@@ -161,7 +161,7 @@
     ]
 }
 </code></pre>
-<h3>attributeObject</h3>
+<h3 id="markdown-header-attributeobject">attributeObject</h3>
 <p>Then it is possible to configure an object instead of an attribute key.</p>
 <p>If the <em>attrName</em> is given as an object, the following confurations are possible.</p>
 <table>
@@ -238,7 +238,7 @@
     ]
 }
 </code></pre>
-<h4>key</h4>
+<h4 id="markdown-header-key">key</h4>
 <p>The <em>key</em> is a feature attribute’s name of a direct feature child element.</p>
 <blockquote>
 <p>💡 Hint: If a key does not exist, the <em>condition</em> is not met.</p>
@@ -248,7 +248,7 @@
 <p>💡 Hint: Object paths are e.g. used by sensor layers in properties using multiple Datastreams.</p>
 </blockquote>
 <p>A <em>key</em> is always of type <em>String</em> or an <a href="#markdown-header-attributeobject">attributeObject</a>.</p>
-<h4>value</h4>
+<h4 id="markdown-header-value">value</h4>
 <p>A <em>value</em> is the reference value which is compared to the feature’s property with name <em>key</em>. <em>Values</em> may have these types:</p>
 <table>
 <thead>
@@ -287,7 +287,7 @@
 <p>💡 Hint: <code>x</code> is in a range <code>[minValue, maxValue]</code> if <code>minValue &lt;= x &lt; maxValue</code> is true.</p>
 </blockquote>
 <p>Alternatively a <em>value</em> for any of the previously mentioned data types may refer to an arbitrarily nested attribute within a feature property. See chapter <a href="#markdown-header-objectpathreference">Object path reference</a> for details.</p>
-<h4>Example</h4>
+<h4 id="markdown-header-example">Example</h4>
 <p>This is an exemplary configuration of <em>properties</em>. It is assumed features offer matching attributes <em>name</em>, <em>type</em>, <em>bedCount</em>, <em>staffCount</em>, <em>operationCount</em>, <em>hamburgOverall.OperationsTargetMin</em>, and <em>hamburgOverall.OperationsTargetMax</em>.</p>
 <pre><code class="language-json">{
     &quot;conditions&quot;: {
@@ -395,7 +395,7 @@
 </blockquote>
 <p>Furthermore, all named geometry types may receive a text annotation. See chapter <a href="#markdown-header-text">Text</a> for details.</p>
 <p>For individual legend texts, see chapter <a href="#markdown-header-legend">Legend</a>.</p>
-<h3>Point</h3>
+<h3 id="markdown-header-point">Point</h3>
 <p>The display rules for points are separated in</p>
 <ul>
 <li>simple point geometries: See the following parameter <em>type</em>.</li>
@@ -429,7 +429,7 @@
 </tbody>
 </table>
 <p>In the following, all options are described in detail.</p>
-<h4>Point.Icon</h4>
+<h4 id="markdown-header-pointicon">Point.Icon</h4>
 <p>Please see the <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Icon-Icon.html" title="OpenLayers Icon documentation">OpenLayers Icon documentation</a> for additional details.</p>
 <table>
 <thead>
@@ -507,7 +507,7 @@
 </tr>
 </tbody>
 </table>
-<h4>Point.Icon.rotation</h4>
+<h4 id="markdown-header-pointiconrotation">Point.Icon.rotation</h4>
 <p>If set, the entry <code>rotation</code> has to be from type object with the following attributes:</p>
 <table>
 <thead>
@@ -536,7 +536,7 @@
 </tr>
 </tbody>
 </table>
-<h4>Point.Circle</h4>
+<h4 id="markdown-header-pointcircle">Point.Circle</h4>
 <p>Please see the <a href="https://openlayers.org/en/latest/apidoc/module-ol_geom_Circle-Circle.html" title="OpenLayers Circle documentation">OpenLayers Circle documentation</a> for additional details.</p>
 <table>
 <thead>
@@ -579,7 +579,7 @@
 </tr>
 </tbody>
 </table>
-<h4>Point.Interval</h4>
+<h4 id="markdown-header-pointinterval">Point.Interval</h4>
 <p>A dynamic style is set for each feature. This style supports sensor feature updates for numerical data having a natural order, e.g. meters and degree Celsius.</p>
 <table>
 <thead>
@@ -657,7 +657,7 @@
 </tr>
 </tbody>
 </table>
-<h4>Point.Nominal</h4>
+<h4 id="markdown-header-pointnominal">Point.Nominal</h4>
 <p>A dynamic style is set for each feature. This style supports sensor feature updates for data without natural order, e.g. colors and shapes.</p>
 <table>
 <thead>
@@ -728,14 +728,14 @@
 </tr>
 </tbody>
 </table>
-<h4>Point.Cluster</h4>
+<h4 id="markdown-header-pointcluster">Point.Cluster</h4>
 <p>Clustered points represent multiple close-by features with a single symbol. See the <a href="https://openlayers.org/en/latest/apidoc/module-ol_source_Cluster-Cluster.html" title="OpenLayers Cluster documentation">OpenLayers Cluster documentation</a> for further details. Display depends upon amount and position of features, current zoom level, and the layer’s defined <em>clusterDistance</em>. <em>PointClusters</em> may be displayed with these types:</p>
 <ul>
 <li><a href="#markdown-header-pointclustericon%22">Icon</a></li>
 <li><a href="#markdown-header-pointclustercircle">Circle</a></li>
 </ul>
 <p>You may also add text to clustered points. This is usually done to add the amount of clustered points to a feature. See chapter <a href="#markdown-header-pointclustertext">ClusterText</a>.</p>
-<h4>Point.Cluster.Icon</h4>
+<h4 id="markdown-header-pointclustericon">Point.Cluster.Icon</h4>
 <p>Please see the <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Icon-Icon.html" title="OpenLayers Icon documentation">OpenLayers Icon documentation</a> for additional details.</p>
 <table>
 <thead>
@@ -792,7 +792,7 @@
 </tr>
 </tbody>
 </table>
-<h4>Point.Cluster.Circle</h4>
+<h4 id="markdown-header-pointclustercircle">Point.Cluster.Circle</h4>
 <p>Please see the <a href="https://openlayers.org/en/latest/apidoc/module-ol_geom_Circle-Circle.html" title="OpenLayers Circle documentation">OpenLayers Circle documentation</a> for additional details.</p>
 <table>
 <thead>
@@ -835,7 +835,7 @@
 </tr>
 </tbody>
 </table>
-<h4>Point.Cluster.Text</h4>
+<h4 id="markdown-header-pointclustertext">Point.Cluster.Text</h4>
 <p>Please see the <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Text-Text.html" title="OpenLayers Text documentation">OpenLayers Text documentation</a> for additional details.</p>
 <p>Two types of cluster types may be shown, depending on the attribute <em>clusterTextType</em>:</p>
 <ul>
@@ -929,7 +929,7 @@
 <blockquote>
 <p>💡 Hint: A cluster text is prioritized to a general text.</p>
 </blockquote>
-<h3>LineString</h3>
+<h3 id="markdown-header-linestring">LineString</h3>
 <p>Please see the <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Stroke-Stroke.html" title="OpenLayers Stroke documentation">OpenLayers Stroke documentation</a> for additional details.</p>
 <table>
 <thead>
@@ -993,7 +993,7 @@
 </tr>
 </tbody>
 </table>
-<h3>Polygon</h3>
+<h3 id="markdown-header-polygon">Polygon</h3>
 <p>Please see the <a href="%5B-%5D(https://openlayers.org/en/latest/apidoc/module-ol_style_Fill-Fill.html)" title="OpenLayers Fill documentation">OpenLayers Fill</a> and <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Stroke-Stroke.html" title="OpenLayers Stroke documentation">OpenLayers Stroke</a> documentation for additional details.</p>
 <table>
 <thead>
@@ -1064,7 +1064,7 @@
 </tr>
 </tbody>
 </table>
-<h3>Cesium</h3>
+<h3 id="markdown-header-cesium">Cesium</h3>
 <table>
 <thead>
 <tr>
@@ -1126,7 +1126,7 @@
     ]
 }
 </code></pre>
-<h3>Text</h3>
+<h3 id="markdown-header-text">Text</h3>
 <p>Please see the <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Text-Text.html" title="OpenLayers Text documentation">OpenLayers Text documentation</a> for additional details.</p>
 <p>Use the attribute <em>labelField</em> within the <em>style</em> to choose one of the <em>FeatureProperties</em> to be printed and styled to the feature.
 .</p>
@@ -1219,7 +1219,7 @@
 <blockquote>
 <p>💡 Hint: A cluster text is prioritized to this.</p>
 </blockquote>
-<h3>Legend</h3>
+<h3 id="markdown-header-legend">Legend</h3>
 <p>The textual legend description can be controlled by setting the parameter <em>legendValue</em> accordingly.</p>
 <pre><code class="language-json">{
     &quot;style&quot;: {
@@ -1230,7 +1230,7 @@
 <blockquote>
 <p>💡 Hint: The attribute <em>legendValue</em> must be unique per layer and geometry type; else, the legend will be incomplete.</p>
 </blockquote>
-<h2>Example</h2>
+<h2 id="markdown-header-example">Example</h2>
 <p>A SensorLayer example configuration.</p>
 <pre><code class="language-json">[
     {
