@@ -15,6 +15,7 @@
 - The following NPM packages are updated:
     - @masterportal/masterportalapi: 2.1.1 to 2.2.0 (masterportalapi was renamed @masterportal/masterportalapi in the process)
 - Replaced hardcoded EPSG code of map projection by a getter which identifies the projection of the map in withoutGUIDraw
+- Layer with isNeverVisibleInTree will not be initialized in menu tree.
 
 ### Deprecated
 
@@ -23,6 +24,7 @@
 ### Fixed
 - Issue #758: featureLister threw a JavaScript exception when building the list of layers.
 - Issue #766: The performance of opening large folders in the tree of type custom or default has been increased.
+- Issue #756: The QuickHelp can now be configured or unconfigured for the SearchBar and the topic tree.
 
 ---
 ## v2.20.1 - 2022-04-21

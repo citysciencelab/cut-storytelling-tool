@@ -655,11 +655,20 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             overLayers = this.get("overlayer"),
             baseLayersName = baseLayers?.name ? baseLayers.name : null,
             overLayersName = overLayers?.name ? overLayers.name : null,
-            isQuickHelpSet = store.getters["QuickHelp/isSet"],
             baseLayersDefaultKey = "common:tree.backgroundMaps",
             overLayersDefaultKey = "common:tree.subjectData";
         let baseLayerI18nextTranslate = null,
-            overLayerI18nextTranslate = null;
+            overLayerI18nextTranslate = null,
+            isQuickHelpSet = store.getters["QuickHelp/isSet"];
+
+        // @deprecated in the next major-release!
+        if (this.get("portalConfig")?.menu?.tree?.quickHelp === true || this.get("portalConfig")?.menu?.tree?.quickHelp === false) {
+            console.warn("The attribute 'Portalconfig.tree.quickHelp' is deprecated in the next major-release. Please use 'Portalconfig.quickHelp.configs.tree'!");
+            isQuickHelpSet = this.get("portalConfig").menu.tree.quickHelp;
+        }
+        if (this.get("portalConfig")?.quickHelp?.configs?.tree !== undefined) {
+            isQuickHelpSet = this.get("portalConfig").quickHelp.configs.tree;
+        }
 
         if (!baseLayersName && !baseLayers.i18nextTranslate) {
             // no name and no translation-function found: provide translation of default key

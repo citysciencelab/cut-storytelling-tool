@@ -6,6 +6,12 @@
       "link": "https://geoinfo.hamburg.de",
       "toolTip": "Landesbetrieb Geoinformation und Vermessung"
     },
+    "quickHelp": {
+      "configs": {
+        "search": true,
+        "tree": true
+      }
+    },
     "searchBar": {
       "gazetteer": {
         "minchars": 3,
@@ -472,7 +478,7 @@
           "print": {
             "name": "translate#common:menu.tools.print",
             "glyphicon": "glyphicon-print",
-            "mapfishServiceId": "mapfish",
+            "printServiceId": "mapfish",
             "printAppId": "master",
             "filename": "Ausdruck",
             "title": "Mein Titel",
