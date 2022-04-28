@@ -247,7 +247,7 @@ async function loadApp () {
     }
 
     searchbarAttributes = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
-    sbconfig = Object.assign({}, Object.prototype.hasOwnProperty.call(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
+    sbconfig = Object.assign({}, {quickHelp: store.getters.portalConfig?.quickHelp} || {});
     sbconfig = Object.assign(sbconfig, searchbarAttributes);
 
     if (searchbarAttributes !== undefined && sbconfig) {

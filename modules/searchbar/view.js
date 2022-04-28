@@ -102,6 +102,14 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         });
 
         this.model.setQuickHelp(store.getters["QuickHelp/isSet"]);
+        // @deprecated in the next major-release!
+        if (config?.quickHelp === true || config?.quickHelp === false) {
+            console.warn("The attribute 'Portalconfig.searchBar.quickHelp' is deprecated in the next major-release. Please use 'Portalconfig.quickHelp.configs.search'!");
+            this.model.setQuickHelp(config?.quickHelp);
+        }
+        if (config?.quickHelp?.configs?.search !== undefined) {
+            this.model.setQuickHelp(config?.quickHelp?.configs?.search);
+        }
 
         this.initialRender();
 

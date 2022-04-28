@@ -456,7 +456,7 @@ export default {
                             <input
                                 id="autoAdjustScale"
                                 type="checkbox"
-                                :checked="autoAdjustScale"
+                                :checked="autoAdjustScale && !isScaleSelectedManually"
                                 @change="setAutoAdjustScale($event.target.checked)"
                             >
                         </div>
