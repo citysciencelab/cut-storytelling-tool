@@ -27,6 +27,7 @@
 - Issue #766: The performance of opening large folders in the tree of type custom or default has been increased.
 - Print Tool now works as expected when unchecking and checking the auto adjusted scale checkbox or selecting a scale manually.
 - Issue #756: The QuickHelp can now be configured or unconfigured for the SearchBar and the topic tree.
+- Measure Tool print style was erroneous for some situations, where polygon styles would be applied to lines and vice versa. This has been resolved.
 
 ---
 ## v2.20.1 - 2022-04-21
