@@ -8,12 +8,14 @@
 
 ## Unreleased - in development
 ### Added
+- Added new module `zoomTo` which combines the modules `zoomToFeature` and `zoomToGeometry`.
 
 ### Changed
 - Migrated the module featureViaURL from Backbone to Vue as a util. E2E tests were fixed and re-enabled.
 - Migrated the module mouseHover from Backbone to Vue.
 
 ### Deprecated
+- Configuration (`config.js`) parameters `zoomToFeature` and `zoomToGeometry` have been marked as deprecated in an upcoming major release.
 
 ### Removed
 
