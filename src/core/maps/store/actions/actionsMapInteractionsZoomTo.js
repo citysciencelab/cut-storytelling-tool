@@ -37,7 +37,7 @@ export default {
      * @returns {void}
      */
     async zoomToFilteredFeatures ({dispatch}, {ids, layerId, zoomOptions}) {
-        const layer = dispatch("getLayerById", {layerId: layerId});
+        const layer = await dispatch("getLayerById", {layerId: layerId});
 
         if (layer?.getSource()) {
             const layerSource = layer.getSource(),

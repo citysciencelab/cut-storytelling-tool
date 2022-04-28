@@ -84,7 +84,7 @@ export default {
         this.createDomOverlay({id: "circle-overlay", overlay: this.circleOverlay});
         this.createDomOverlay({id: "tooltip-overlay", overlay: this.tooltipOverlay});
         this.createDrawInteraction();
-        this.addLayerToMap(this.layer);
+        this.addLayerOnTop(this.layer);
         this.checkOptions();
         this.setDefaultSelection(this.selectedOptionData);
     },
@@ -92,8 +92,8 @@ export default {
     methods: {
         ...mapMutations("GraphicalSelect", Object.keys(mutations)),
         ...mapActions("GraphicalSelect", Object.keys(actions)),
-        ...mapMutations("Maps", ["addLayerToMap", "removeLayerFromMap"]),
-        ...mapActions("Maps", ["addInteraction", "removeInteraction"]),
+        ...mapActions("Maps", ["addLayerToMap", "removeLayerFromMap"]),
+        ...mapActions("Maps", ["addLayerOnTop", "addInteraction", "removeInteraction"]),
         ...mapActions("Alerting", ["addSingleAlert"]),
 
         /**
@@ -155,9 +155,11 @@ export default {
          * @todo Replace if removeOverlay is available in vue
          * @returns {void}
          */
-        resetView: function () {
+        resetView: async function () {
             this.layer.getSource().clear();
+            this.drawInteraction.setActive(false);
             this.removeInteraction(this.draw);
+            console.log(this);
             this.circleOverlay.element.innerHTML = "";
             Radio.trigger("Map", "removeOverlay", this.circleOverlay);
             Radio.trigger("Map", "removeOverlay", this.tooltipOverlay);
