@@ -68,6 +68,8 @@ export default {
             searchInMapExtent: false,
             snippets: [],
             postSnippetKey: "",
+            autoRefreshSet: false,
+            isRefreshing: false,
             amountOfFilteredItems: false,
             precheckedSnippets: []
         };
@@ -87,12 +89,12 @@ export default {
         paging (val) {
             if (val.page >= val.total) {
                 this.setFormDisable(false);
-
-                if (!this.getSearchInMapExtent() && this.liveZoomToFeatures) {
+                if (!this.isRefreshing && !this.getSearchInMapExtent() && this.liveZoomToFeatures) {
                     this.mapHandler.zoomToFilteredFeature(this.layerConfig?.filterId, this.minScale, error => {
                         console.warn("map error", error);
                     });
                 }
+                this.isRefreshing = false;
             }
         },
         precheckedSnippets (val) {
@@ -565,12 +567,25 @@ export default {
                             this.amountOfFilteredItems = this.mapHandler.getAmountOfFilteredItemsByFilterId(filterId);
                         }
 
-                        if (typeof onsuccess === "function") {
-                            onsuccess(filterAnswer);
-                        }
-
                         if (this.isExtern()) {
                             this.mapHandler.addExternalLayerToTree(filterId);
+                        }
+
+                        if (!this.autoRefreshSet && this.mapHandler.hasAutoRefreshInterval(filterId)) {
+                            this.autoRefreshSet = true;
+                            this.mapHandler.setObserverAutoInterval(filterId, () => {
+                                this.isRefreshing = true;
+                                if (this.isStrategyActive()) {
+                                    this.handleActiveStrategy();
+                                }
+                                else {
+                                    this.filter();
+                                }
+                            });
+                        }
+
+                        if (typeof onsuccess === "function") {
+                            onsuccess(filterAnswer);
                         }
                     }, error => {
                         console.warn(error);
