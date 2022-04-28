@@ -35,6 +35,7 @@
 - Measure Tool print style was erroneous for some situations, where polygon styles would be applied to lines and vice versa. This has been resolved.
 - Issue #770: 3D mode can now be started again, even if no Backbone Tool is configured.
 - Issue #763: In the `custom` topic tree, layers are now always set to the top position when they are shown or hidden.
+- The control `PoiOrientation` now also works with points that use the default style.
 
 ---
 ## v2.20.1 - 2022-04-21
