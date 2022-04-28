@@ -39,8 +39,7 @@ const Config = {
             id: "zoomToFeatureId",
             layerId: "4560",
             property: "flaechenid",
-            styleId: "location_eventlotse",
-            point: true
+            styleId: "location_eventlotse"
         }
     ],
     namedProjections: [
