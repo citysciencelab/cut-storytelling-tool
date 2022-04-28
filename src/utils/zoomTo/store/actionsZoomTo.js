@@ -52,7 +52,7 @@ const actions = {
             const {id} = conf;
 
             if (state[id] === undefined) {
-                return [];
+                return new Promise(resolve => resolve([]));
             }
             if (id === "zoomToFeatureId") {
                 urlValues = state[id].map(value => String(value));
@@ -63,8 +63,7 @@ const actions = {
                 allowedValues = conf.allowedValues;
             }
             else {
-                console.error("zoomTo: The specified id for the url parameter does not exist. Please use either 'zoomToGeometry' or 'zoomToFeatureId'.");
-                return [];
+                return new Promise((_, reject) => reject("zoomTo: The specified id for the url parameter does not exist. Please use either 'zoomToGeometry' or 'zoomToFeatureId'."));
             }
             layerId = conf.layerId;
             property = conf.property;
@@ -79,21 +78,32 @@ const actions = {
                     if (styleId) {
                         filteredFeatures = createStyledFeatures(filteredFeatures, styleId);
                     }
-                    return filteredFeatures;
+                    return new Promise(resolve => resolve(filteredFeatures));
                 });
         });
 
-        return Promise.all(featurePromises)
-            .then(result => {
-                const features = result.flat(1);
+        return Promise.allSettled(featurePromises)
+            .then(results => {
+                const features = results
+                    .map(result => {
+                        if (result.status === "fulfilled") {
+                            return result.value;
+                        }
+                        dispatch("Alerting/addSingleAlert", "common:path.to.translation", {root: true});
+                        return [];
+                    })
+                    .flat(1);
 
-                commit("Map/addLayerToMap", new VectorLayer({
-                    source: new VectorSource({features})
-                }), {root: true});
-                return dispatch("Map/zoomTo", {geometryOrExtent: calculateExtent(features)}, {root: true});
+                if (features.length > 0) {
+                    commit("Map/addLayerToMap", new VectorLayer({
+                        source: new VectorSource({features})
+                    }), {root: true});
+                    return dispatch("Map/zoomTo", {geometryOrExtent: calculateExtent(features)}, {root: true});
+                }
+                return console.error("zoomTo: No features were found for the given layer.");
             })
             .catch(error => {
-                console.error("zoomTo: An error occurred while trying to fetch features from the given service.", error);
+                console.error("zoomTo: An error occurred while trying to fetch features from one of the given services.", error);
             });
         // TODO: 1. Adjust docs 2. adjust tests
     }
