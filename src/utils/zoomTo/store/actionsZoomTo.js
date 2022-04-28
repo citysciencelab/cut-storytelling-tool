@@ -63,10 +63,10 @@ const actions = {
                 allowedValues = conf.allowedValues;
             }
             else {
-                return new Promise((_, reject) => reject("zoomTo: The specified id for the url parameter does not exist. Please use either 'zoomToGeometry' or 'zoomToFeatureId'."));
+                return new Promise((_, reject) => reject(i18next.t("common:utils.parametricURL.zoomTo", {wrongConfigId: id})));
             }
             layerId = conf.layerId;
-            property = conf.property;
+            property = conf.attribute;
 
             return getAndFilterFeatures(layerId, property, urlValues)
                 .then(featureCollection => {
@@ -89,7 +89,7 @@ const actions = {
                         if (result.status === "fulfilled") {
                             return result.value;
                         }
-                        dispatch("Alerting/addSingleAlert", "common:path.to.translation", {root: true});
+                        dispatch("Alerting/addSingleAlert", result.reason, {root: true});
                         return [];
                     })
                     .flat(1);
