@@ -1,4 +1,4 @@
-import {geojson} from "masterportalapi";
+import {geojson} from "@masterportal/masterportalapi";
 import {GeoJSON} from "ol/format.js";
 import getProxyUrl from "../../utils/getProxyUrl";
 import Layer from "./layer";

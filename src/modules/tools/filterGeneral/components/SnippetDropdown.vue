@@ -185,8 +185,10 @@ export default {
             }
 
             if (adjusting?.start) {
+                if (this.snippetId !== adjusting.snippetId) {
+                    this.dropdownValue = [];
+                }
                 this.isAdjusting = true;
-                this.dropdownValue = [];
             }
 
             this.addDropdownValueForAdjustment(this.dropdownValue, this.value, adjusting?.adjust?.value, this.delimitor);

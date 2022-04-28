@@ -66,7 +66,7 @@ Search bar configuration.
 |locationFinder|no|**[locationFinder](#markdown-header-portalconfigsearchbarlocationfinder)**||LocationFinder search service configuration.|false|
 |placeholder|no|String|"Suche"|Input text field placeholder shown when no input has been given yet.|false|
 |recommendedListLength|no|Integer|5|Maximum amount of entries in the suggestion list.|false|
-|quickHelp|no|Boolean|false|Defines whether the QuickHelp feature is offered for the search bar.|false|
+|quickHelp|no|Boolean|false|Deprecated in the next major-release. Defines whether the QuickHelp feature is offered for the search bar.|false|
 |specialWFS|no|**[specialWFS](#markdown-header-portalconfigsearchbarspecialwfs)**||specialWFS search service configuration.|false|
 |tree|no|**[tree](#markdown-header-portalconfigsearchbartree)**||Topic selection tree search configuration.|false|
 |visibleWFS|no|**[visibleWFS](#markdown-header-portalconfigsearchbarvisiblewfs)**||Visible WFS layer search configuration.|false|
@@ -592,6 +592,7 @@ Visible vector layer search configuration. For all vector layers supposed to be 
 |freeze|no|Boolean|false|Whether a "lock view" button is shown. Within the `TABLE` style, this element is part of the tool window.|false|
 |backforward|no|**[backForward](#markdown-header-portalconfigcontrolsbackforward)**|false|_Deprecated in 3.0.0. Please use "backForward" instead._|false|
 |backForward|no|**[backForward](#markdown-header-portalconfigcontrolsbackforward)**|false|Shows buttons to jump to previous and next map views.|false|
+|startTool|no|**[startTool](#markdown-header-portalconfigcontrolsbackforward)**|false|Displays buttons for the configured tools. These can be used to open and close the respective tools.|false|
 
 ***
 
@@ -746,6 +747,24 @@ The attribute backForward may be of type boolean or object. If of type boolean, 
 ```json
 {
     "backForward": true
+}
+```
+
+***
+
+#### Portalconfig.controls.startTool
+
+The startTool attribute must be of type Object. A button is displayed for each configured tool, which can be used to open and close the respective tool. The requirement is that the tools are also configured under **[Tools](Portalconfig.menu.tools)**.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|tools|yes|String[]||Here you can configure the tools to which a button is to be attached..|false|
+
+**Example startTool:**
+```
+#!json
+"startTool": {
+    "tools": ["selectFeatures", "draw"]
 }
 ```
 
@@ -1298,6 +1317,7 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 |name|yes|String||Name des Themenbaumes.|false|
 |glyphicon|no|String||CSS Klasse des glyphicons.|false|
 |isInitOpen|no|Boolean|false|Gibt an ob der Themenbaum initial geöffnet ist.|false|
+|quickHelp|no|Boolean|false|Deprecated in the next major-release. Defines whether the QuickHelp feature is offered for the search bar.|false|
 
 ***
 
@@ -1394,7 +1414,7 @@ Alternatively, also the paths **Portalconfig.menu.info**, **Portalconfig.menu.si
 |layerClusterToggler|no|**[tool](#markdown-header-portalconfigtoollayerClusterToggler)**||_This tool allows a cluster layers to be active and deactive together._|false|
 |layerSlider|no|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||The layerSlider tool allows showing arbitrary services in order. This can e.g. be used to show aerial footage from multiple years in succession.|false|
 |legend|no|**[legend](#markdown-header-portalconfigmenulegend)**||The legend for all visible layers is displayed here.|false|
-|measure|no|**[measure](#markdown-header-portalconfigmenutoolmeasure)**||Allows measuring areas and distances in the units m/km resp. m²/km².|false|
+|measure|no|**[measure](#markdown-header-portalconfigmenutoolmeasure)**||Allows measuring areas and distances in the units m/km/nm resp. m²/ha/km².|false|
 |parcelSearch|no|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||_Deprecated in the next major release. Please use `wfsSearch` instead._ The parcel search tool allows searching for parcels by district and parcel number. Many German administrative units feature a tripartite order, hence the tool offers searching by "Gemarkung" (district), "Flur" (parcel) (not used in Hamburg), and "Flurstück" (literally "parcel piece").|false|
 |print|no|**[print](#markdown-header-portalconfigmenutoolprint)**||Printing module that can be used to export the map's current view as PDF.|false|
 |routing|no|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Routing module to create routes and isochrones.|false|
@@ -2705,7 +2725,9 @@ The measure tool allows measuring distances and areas. This includes the specifi
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |earthRadius|no|Number|6378137|Earth radius in meters. Please mind that the earth radius should be chosen in accordance with the reference ellipsoid. E.g., GRS80 should be used for ETRS89 (EPSG:25832).|false|
-|measurementAccuracy|no|String|"meter"|Indicates how accurately the measurement result is displayed for m and m². Options are "decimeter" for one decimal place. "meter" for no decimal place. And "dynamic" for one decimal place for results smaller 10m / 10m² and no decimal place for results greater or equal 10m / 10m².|false|
+|measurementAccuracy|no|String|"meter"|Indicates how accurately the measurement result is displayed for "m", "nm", "m²", "ha". Options are "decimeter" for one decimal place. "meter" for no decimal place. "dynamic" for one decimal place for results smaller 10 and no decimal place for results greater or equal 10 of the respective unit.|false|
+|lineStringUnits|no|String[]|["m", "km"]|Indicates which units for length measurements will be selectable by users. Options are "m" (metres), "km" (kilometres), "nm" (nautical miles).|false|
+|polygonUnits|no|String[]|["m²", "km²"]|Indicates which units for area measurements will be selectable by users. Options are "m²", "ha", "km²".|false|
 
 **Example**
 
@@ -5052,6 +5074,7 @@ Style definitions. Available for *Vector Tile Layers* only.
 |name|yes|String||Display name, e.g. used in the selection tool.|false|
 |url|yes|String||URL to load a style from. The linked JSON *must* match the [Mapbox style specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/).|false|
 |defaultStyle|no|String||If set `true`, this style is used initially; if no field is set `true`, the first style is used.|false|
+|resolutions|no|Number[]||Resolutions for zoom levels defined in style. If not set default resolutions from ol-mapbox-style project are used.|false|
 
 **Example**
 
@@ -5060,7 +5083,15 @@ Style definitions. Available for *Vector Tile Layers* only.
     "id": "UNIQUE_ID",
     "name": "Red lines",
     "url": "https://example.com/asdf/styles/root.json",
-    "defaultStyle": true
+    "defaultStyle": true,
+    "resolutions": [
+        661.4579761460263,
+        264.58319045841048,
+        66.14579761460263,
+        26.458319045841044,
+        15.874991427504629,
+        10.583327618336419
+    ]
 }
 ```
 

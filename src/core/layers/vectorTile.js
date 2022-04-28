@@ -1,11 +1,5 @@
+import {vectorTile} from "@masterportal/masterportalapi";
 import Layer from "./layer";
-import MVT from "ol/format/MVT";
-import OpenLayersVectorTileLayer from "ol/layer/VectorTile";
-import OpenLayersVectorTileSource from "ol/source/VectorTile";
-import TileGrid from "ol/tilegrid/TileGrid";
-import {extentFromProjection} from "ol/tilegrid";
-import {defaultResolutions} from "ol-mapbox-style/dist/util";
-import stylefunction from "ol-mapbox-style/dist/stylefunction";
 import store from "../../app-store";
 import getProxyUrl from "../../utils/getProxyUrl";
 import axios from "axios";
@@ -22,14 +16,11 @@ export default function VectorTileLayer (attrs) {
             useProxy: false
         },
         mapEPSG = store.getters["Map/projection"].getCode(),
-        vtEPSG = attrs.epsg,
-        layerSource = this.createLayerSource(Object.assign(defaults, attrs));
-
-    attrs.layerSource = layerSource;
+        vtEPSG = attrs.epsg || mapEPSG;
 
     if (mapEPSG !== vtEPSG) {
         console.warn(`VT Layer ${attrs.name}: Map (${mapEPSG}) and layer (${vtEPSG}) projection mismatch. View will be erroneous.`);
-        this.set("isNeverVisibleInTree", true);
+        attrs.isNeverVisibleInTree = true;
     }
     this.createLayer(Object.assign(defaults, attrs));
     // call the super-layer
@@ -41,85 +32,12 @@ export default function VectorTileLayer (attrs) {
 VectorTileLayer.prototype = Object.create(Layer.prototype);
 
 /**
-* Creates vector tile layer source.
-* If no tilegrid is created, the default tilegrid ist used.
-* @param {Object} attrs the attributes for the layer
-* @return {Object} the layer source
-*/
-VectorTileLayer.prototype.createLayerSource = function (attrs) {
-    /**
-     * @deprecated in the next major-release!
-     * useProxy
-     * getProxyUrl()
-     */
-    const url = attrs.useProxy ? getProxyUrl(attrs.url) : attrs.url,
-        dataEpsg = attrs.epsg || store.getters["Map/projection"].getCode(),
-        resolutions = attrs.resolutions,
-        params = {
-            projection: dataEpsg,
-            format: new MVT(),
-            url: url,
-            tileSize: attrs.tileSize,
-            zDirection: attrs.zDirection,
-            minZoom: attrs.minZoom,
-            maxZoom: attrs.maxZoom
-        };
-
-    if (dataEpsg !== "EPSG:3857" || attrs.extent || attrs.origin || attrs.origins || resolutions) {
-        params.tileGrid = this.createTileGrid(dataEpsg, attrs);
-    }
-
-    return new OpenLayersVectorTileSource(params);
-};
-
-/**
- * Create a tilegrid.
- * @param {String} dataEpsg The epsgCode from the data.
- * @param {Object} attrs The layers attributes.
- * @returns {module:ol/tilegrid/TileGrid~TileGrid} The tileGrid.
- */
-VectorTileLayer.prototype.createTileGrid = function (dataEpsg, attrs) {
-    const extent = attrs.extent || extentFromProjection(dataEpsg),
-        origin = attrs.origin || [extent[0], extent[3]], // upper left corner = [minX, maxY]
-        resolutions = attrs.resolutions || defaultResolutions,
-        tileSize = attrs.tileSize || 512,
-        origins = attrs.origins,
-        tileGridParams = {
-            extent: extent,
-            resolutions: resolutions,
-            tileSize: tileSize,
-            minZoom: attrs.minZoom
-        };
-
-    if (origins) {
-        tileGridParams.origins = origins;
-    }
-    else {
-        tileGridParams.origin = origin;
-    }
-
-    return new TileGrid(tileGridParams);
-};
-
-/**
  * Creates vector tile layer.
  * @param {Object} attr the attributes for the layer
  * @return {void}
  */
 VectorTileLayer.prototype.createLayer = function (attr) {
-    this.layer = new OpenLayersVectorTileLayer({
-        source: attr.layerSource,
-        id: attr.id,
-        typ: attr.typ,
-        name: attr.name,
-        visible: attr.visibility,
-        declutter: true,
-        styleId: attr.styleId,
-        vtStyles: attr.vtStyles,
-        isSelected: attr.isSelected,
-        useProxy: attr.useProxy,
-        useMpFonts: attr.useMpFonts
-    });
+    this.layer = vectorTile.createLayer(attr);
 };
 
 /**
@@ -138,14 +56,18 @@ VectorTileLayer.prototype.setConfiguredLayerStyle = function () {
         stylingPromise = this.setStyleById(this.get("styleId"));
     }
     else {
-        const style = this.get("vtStyles").find(({defaultStyle}) => defaultStyle) || this.get("vtStyles")[0];
 
-        if (typeof style !== "undefined") {
-            this.set("selectedStyleID", style.id);
-            stylingPromise = this.setStyleByDefinition(style);
+        if (typeof this.get("vtStyles") !== "undefined") {
+            const style = this.get("vtStyles").find(({defaultStyle}) => defaultStyle) || this.get("vtStyles")[0];
+
+            if (typeof style !== "undefined") {
+                this.set("selectedStyleID", style.id);
+                stylingPromise = this.setStyleByDefinition(style);
+            }
         }
-        else {
+        if (!stylingPromise) {
             console.warn(`Rendering VT layer ${this.get("name")} without style; falls back to OL default styles.`);
+            return;
         }
     }
 
@@ -176,9 +98,10 @@ VectorTileLayer.prototype.setStyleById = function (styleID) {
  * @param {object} styleDefinition style definition as found in service.json file
  * @param {string} styleDefinition.url url where style is kept
  * @param {string} styleDefinition.id id of style
+ * @param {Number[]} [styleDefinition.resolutions] resolutions to style zoom levels mapping
  * @returns {Promise} resolves void after style was set; may reject if received style is invalid
  */
-VectorTileLayer.prototype.setStyleByDefinition = function ({id, url}) {
+VectorTileLayer.prototype.setStyleByDefinition = function ({id, url, resolutions}) {
     /**
      * @deprecated in the next major-release!
      * useProxy
@@ -213,13 +136,13 @@ VectorTileLayer.prototype.setStyleByDefinition = function ({id, url}) {
 
                 this.fetchSpriteData(spriteDataUrl)
                     .then(spriteData => {
-                        stylefunction(this.get("layer"), style, Object.keys(style.sources)[0], undefined, spriteData, spriteImageUrl, addMpFonts);
+                        vectorTile.setStyle(this.get("layer"), style, {resolutions: resolutions, spriteData: spriteData, spriteImageUrl: spriteImageUrl, getFonts: addMpFonts});
                         this.set("selectedStyleID", id);
                     }
                     );
             }
             else {
-                stylefunction(this.get("layer"), style, Object.keys(style.sources)[0], undefined, undefined, undefined, addMpFonts);
+                vectorTile.setStyle(this.get("layer"), style, {resolutions: resolutions, getFonts: addMpFonts});
                 this.set("selectedStyleID", id);
             }
         });

@@ -120,7 +120,8 @@ describe("src/modules/tools/filterGeneral/components/SnippetCheckbox.vue", () =>
                 fixed: true,
                 attrName: "attrName",
                 operator: "operator",
-                value: true
+                value: true,
+                tagTitle: "attrName"
             });
             wrapper.destroy();
         });

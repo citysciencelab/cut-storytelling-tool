@@ -1,7 +1,7 @@
 import {createGeoJSON, getFeatureIds} from "../../../featureViaURL";
 import {expect} from "chai";
 import sinon from "sinon";
-import {transform} from "masterportalapi/src/crs";
+import {transform} from "@masterportal/masterportalapi/src/crs";
 
 describe("featureViaURL", function () {
     const spy = sinon.spy();

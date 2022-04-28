@@ -158,139 +158,6 @@ describe("src/modules/tools/filterGeneral/components/LayerFilterSnippet.vue", ()
             expect(wrapper.vm.hasUnfixedRules()).to.be.true;
         });
     });
-    describe("getDefaultSnippetTypeByDataType", () => {
-        it("should return snippet type according to the input data type", () => {
-            expect(wrapper.vm.getDefaultSnippetTypeByDataType(undefined)).to.equal("text");
-            expect(wrapper.vm.getDefaultSnippetTypeByDataType(null)).to.equal("text");
-            expect(wrapper.vm.getDefaultSnippetTypeByDataType(0)).to.equal("text");
-            expect(wrapper.vm.getDefaultSnippetTypeByDataType({})).to.equal("text");
-            expect(wrapper.vm.getDefaultSnippetTypeByDataType([])).to.equal("text");
-            expect(wrapper.vm.getDefaultSnippetTypeByDataType("boolean")).to.equal("checkbox");
-            expect(wrapper.vm.getDefaultSnippetTypeByDataType("string")).to.equal("dropdown");
-            expect(wrapper.vm.getDefaultSnippetTypeByDataType("number")).to.equal("sliderRange");
-        });
-    });
-    describe("getDefaultOperatorBySnippetType", () => {
-        it("should return operator according to the input snippet type", () => {
-            expect(wrapper.vm.getDefaultOperatorBySnippetType(undefined)).to.equal("EQ");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType(null)).to.equal("EQ");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType(0)).to.equal("EQ");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType({})).to.equal("EQ");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType([])).to.equal("EQ");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType("checkbox")).to.equal("EQ");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType("date")).to.equal("EQ");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType("dateRange")).to.equal("INTERSECTS");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType("dropdown")).to.equal("EQ");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType("text")).to.equal("IN");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType("slider")).to.equal("EQ");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType("sliderRange")).to.equal("BETWEEN");
-        });
-        it("should return expected operator if the second parameter is set to true", () => {
-            expect(wrapper.vm.getDefaultOperatorBySnippetType(undefined, true)).to.equal("EQ");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType(null, true)).to.equal("EQ");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType(0, true)).to.equal("EQ");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType({}, true)).to.equal("EQ");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType([], true)).to.equal("EQ");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType("checkbox", true)).to.equal("EQ");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType("date", true)).to.equal("EQ");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType("dateRange", true)).to.equal("INTERSECTS");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType("dropdown", true)).to.equal("IN");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType("text", true)).to.equal("IN");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType("slider", true)).to.equal("EQ");
-            expect(wrapper.vm.getDefaultOperatorBySnippetType("sliderRange", true)).to.equal("BETWEEN");
-        });
-    });
-    describe("addMissingPropertiesToSnippets", () => {
-        it("should not change the first parameter if anything but an array is given", () => {
-            let snippets;
-
-            wrapper.vm.addMissingPropertiesToSnippets(snippets);
-            expect(snippets).to.be.undefined;
-
-            snippets = null;
-            wrapper.vm.addMissingPropertiesToSnippets(snippets);
-            expect(snippets).to.be.null;
-
-            snippets = "string";
-            wrapper.vm.addMissingPropertiesToSnippets(snippets);
-            expect(snippets).to.equal("string");
-
-            snippets = 1234;
-            wrapper.vm.addMissingPropertiesToSnippets(snippets);
-            expect(snippets).to.equal(1234);
-
-            snippets = {};
-            wrapper.vm.addMissingPropertiesToSnippets(snippets);
-            expect(snippets).to.be.an("object").and.to.be.empty;
-        });
-        it("should add missing properties to the given snippets", () => {
-            const snippets = [
-                    {test: "snippet with set snippetId - should be overriden"},
-                    {test: "snippet with set adjustment - should be overriden", adjustment: "something"},
-                    {test: "snippet with set multiselect", multiselect: "multiselect"},
-                    {test: "snippet with matchingMode AND", matchingMode: "AND"},
-                    {test: "snippet with any other matchingMode", matchingMode: "anything"},
-                    {test: "snippet with dropdown type but without delimitor", type: "dropdown"},
-                    {test: "snippet with dropdown type and delimitor", type: "dropdown", delimitor: "delimitor"}
-                ],
-                expected = [
-                    {test: "snippet with set snippetId - should be overriden", adjustment: {}, multiselect: true, operator: "EQ"},
-                    {test: "snippet with set adjustment - should be overriden", adjustment: {}, multiselect: true, operator: "EQ"},
-                    {test: "snippet with set multiselect", multiselect: "multiselect", adjustment: {}, operator: "EQ"},
-                    {test: "snippet with matchingMode AND", adjustment: {}, multiselect: false, operator: "EQ"},
-                    {test: "snippet with any other matchingMode", adjustment: {}, multiselect: true, operator: "EQ"},
-                    {test: "snippet with dropdown type but without delimitor", type: "dropdown", adjustment: {}, multiselect: true, operator: "EQ"},
-                    {test: "snippet with dropdown type and delimitor", type: "dropdown", delimitor: "delimitor", adjustment: {}, multiselect: true, operator: "IN"}
-                ];
-
-            wrapper.vm.addMissingPropertiesToSnippets(snippets);
-            expect(snippets).to.deep.equal(expected);
-        });
-    });
-    describe("checkSnippetTypeConsistency", () => {
-        it("should return false if anything but an array is given", () => {
-            expect(wrapper.vm.checkSnippetTypeConsistency(undefined)).to.be.false;
-            expect(wrapper.vm.checkSnippetTypeConsistency(null)).to.be.false;
-            expect(wrapper.vm.checkSnippetTypeConsistency("string")).to.be.false;
-            expect(wrapper.vm.checkSnippetTypeConsistency(1234)).to.be.false;
-            expect(wrapper.vm.checkSnippetTypeConsistency(true)).to.be.false;
-            expect(wrapper.vm.checkSnippetTypeConsistency(false)).to.be.false;
-            expect(wrapper.vm.checkSnippetTypeConsistency({})).to.be.false;
-        });
-        it("should return false if the given array is empty", () => {
-            expect(wrapper.vm.checkSnippetTypeConsistency([])).to.be.false;
-        });
-        it("should return false if any entry of the given array is not an object", () => {
-            const snippets = [
-                {type: "type"},
-                {type: "type"},
-                null,
-                {type: "type"}
-            ];
-
-            expect(wrapper.vm.checkSnippetTypeConsistency(snippets)).to.be.false;
-        });
-        it("should return false if any object in the given array has no type", () => {
-            const snippets = [
-                {type: "type"},
-                {type: "type"},
-                {notype: "notype"},
-                {type: "type"}
-            ];
-
-            expect(wrapper.vm.checkSnippetTypeConsistency(snippets)).to.be.false;
-        });
-        it("should return true if every object in the given array has a type", () => {
-            const snippets = [
-                {type: "type"},
-                {type: "type"},
-                {type: "type"},
-                {type: "type"}
-            ];
-
-            expect(wrapper.vm.checkSnippetTypeConsistency(snippets)).to.be.true;
-        });
-    });
     describe("getTitle", () => {
         it("should return true if title is true", () => {
             expect(wrapper.vm.getTitle(true), 1).to.be.true;
@@ -300,6 +167,21 @@ describe("src/modules/tools/filterGeneral/components/LayerFilterSnippet.vue", ()
         });
         it("should return true if title is not set", () => {
             expect(wrapper.vm.getTitle({}, 1)).to.be.true;
+        });
+    });
+    describe("getTagTitle", () => {
+        it("should return value if there is no tagTitle defined", () => {
+            expect(wrapper.vm.getTagTitle({value: "title"})).to.equal("title");
+            expect(wrapper.vm.getTagTitle({value: false})).to.equal("false");
+            expect(wrapper.vm.getTagTitle({value: 0})).to.equal("0");
+            expect(wrapper.vm.getTagTitle({value: undefined})).to.equal("undefined");
+            expect(wrapper.vm.getTagTitle({value: null})).to.equal("null");
+        });
+        it("should return tagTitle if there is tagTitle defined", () => {
+            expect(wrapper.vm.getTagTitle({value: "title", tagTitle: "tagTitle"})).to.equal("tagTitle");
+            expect(wrapper.vm.getTagTitle({value: "title", tagTitle: false})).to.equal("false");
+            expect(wrapper.vm.getTagTitle({value: "title", tagTitle: 0})).to.equal("0");
+            expect(wrapper.vm.getTagTitle({value: "title", tagTitle: null})).to.equal("null");
         });
     });
 });

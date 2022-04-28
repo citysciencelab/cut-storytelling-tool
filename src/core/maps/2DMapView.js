@@ -1,12 +1,12 @@
 import View from "ol/View";
 import Cluster from "ol/source/Cluster.js";
-import {transformToMapProjection, transformFromMapProjection} from "masterportalapi/src/crs";
+import {transformToMapProjection, transformFromMapProjection} from "@masterportal/masterportalapi/src/crs";
 
 import mapCollection from "../dataStorage/mapCollection";
 import calculateExtent from "../../utils/calculateExtent";
 import findWhereJs from "../../utils/findWhereJs";
 import store from "../../app-store";
-import defaults from "masterportalapi/src/defaults";
+import defaults from "@masterportal/masterportalapi/src/defaults";
 
 /**
  * @description initializes store and listeners

@@ -1,6 +1,6 @@
 import "../model";
 import store from "../../../src/app-store";
-import {search, setGazetteerUrl, setShowGeographicIdentifier} from "masterportalapi/src/searchAddress";
+import {search, setGazetteerUrl, setShowGeographicIdentifier} from "@masterportal/masterportalapi/src/searchAddress";
 
 const GazetteerModel = Backbone.Model.extend({
     defaults: {

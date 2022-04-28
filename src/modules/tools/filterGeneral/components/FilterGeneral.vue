@@ -6,6 +6,7 @@ import getters from "../store/gettersFilterGeneral";
 import mutations from "../store/mutationsFilterGeneral";
 import LayerFilterSnippet from "./LayerFilterSnippet.vue";
 import MapHandler from "../utils/mapHandler.js";
+import {compileLayers} from "../utils/compileLayers.js";
 import {
     getLayerByLayerId,
     showFeaturesByIds,
@@ -15,9 +16,9 @@ import {
     setParserAttributeByLayerId,
     getLayers,
     isUiStyleTable,
-    setFilterInTableMenu
+    setFilterInTableMenu,
+    getSnippetInfos
 } from "../utils/openlayerFunctions.js";
-import FilterApi from "../interfaces/filter.api.js";
 import LayerCategory from "../components/LayerCategory.vue";
 import isObject from "../../../../utils/isObject.js";
 
@@ -40,9 +41,9 @@ export default {
                 setParserAttributeByLayerId,
                 getLayers
             }),
+            layerConfigs: [],
             selectedLayers: [],
             layerLoaded: {},
-            filterApiList: [],
             layerFilterSnippetPostKey: ""
         };
     },
@@ -50,12 +51,12 @@ export default {
         ...mapGetters("Tools/FilterGeneral", Object.keys(getters)),
         console: () => console,
         filtersOnly () {
-            return this.layers.filter(layer => {
+            return this.layerConfigs.filter(layer => {
                 return isObject(layer) && !Object.prototype.hasOwnProperty.call(layer, "category");
             });
         },
         categoriesOnly () {
-            return this.layers.filter(layer => {
+            return this.layerConfigs.filter(layer => {
                 return isObject(layer) && Object.prototype.hasOwnProperty.call(layer, "category");
             });
         }
@@ -64,13 +65,14 @@ export default {
         this.$on("close", this.close);
     },
     mounted () {
-        this.$nextTick(() => {
-            this.initialize();
-            this.convertConfig();
-            this.replaceStringWithObjectLayers();
-            this.setFilterId();
-            this.initializeFilterApiList();
+        this.initialize();
+        this.convertConfig({
+            snippetInfos: getSnippetInfos()
+        });
 
+        this.layerConfigs = compileLayers(this.layers);
+
+        this.$nextTick(() => {
             if (isUiStyleTable()) {
                 setFilterInTableMenu(this.$el.querySelector("#tool-general-filter"));
                 this.$el.remove();
@@ -90,54 +92,6 @@ export default {
             }
         },
         /**
-         * Set a custom unique id for each filter in config.
-         * @returns {void}
-         */
-        setFilterId () {
-            if (!Array.isArray(this.layers)) {
-                return;
-            }
-            let filterId = 0;
-
-            this.layers.forEach(layer => {
-                if (layer?.category) {
-                    layer.layers.forEach(subLayer => {
-                        subLayer.filterId = filterId;
-                        filterId += 1;
-                    });
-                }
-                else {
-                    layer.filterId = filterId;
-                    filterId += 1;
-                }
-                if (!Object.prototype.hasOwnProperty.call(layer, "snippets")) {
-                    layer.snippets = [];
-                }
-            });
-        },
-        /**
-         * Initializes a filter api for every layer.
-         * @pre filterApiList is empty
-         * @post filterApiList is filled with api instances
-         * @returns {void}
-         */
-        initializeFilterApiList () {
-            if (!Array.isArray(this.layers)) {
-                return;
-            }
-            this.layers.forEach(layer => {
-                if (layer?.category) {
-                    layer.layers.forEach(subLayer => {
-                        this.filterApiList[subLayer.filterId] = new FilterApi(subLayer.filterId);
-                    });
-                }
-                else {
-                    this.filterApiList[layer.filterId] = new FilterApi(layer.filterId);
-                }
-            });
-            this.setLayerFilterSnippetPostKey("rerender");
-        },
-        /**
          * Update selectedLayers array.
          * @param {String[]|String} filterIds ids which should be added or removed
          * @returns {Object[]} selected layer fetched from config
@@ -146,11 +100,11 @@ export default {
             if (!Array.isArray(filterIds) && typeof filterIds !== "number") {
                 return;
             }
-            const confLayers = this.layers.filter(layer => {
+            const confLayers = this.layerConfigs.filter(layer => {
                 return Array.isArray(filterIds) ? filterIds.includes(layer.filterId) : layer.filterId === filterIds;
             });
 
-            for (const layer of this.layers) {
+            for (const layer of this.layerConfigs) {
                 if (layer?.category) {
                     const filteredSubLayer = layer.layers.filter(subLayer => {
                         return Array.isArray(filterIds) ? filterIds.includes(subLayer.filterId) : subLayer.filterId === filterIds;
@@ -197,21 +151,6 @@ export default {
             this.layerLoaded[filterId] = true;
         },
         /**
-         * Replaces all configured layerId specified as string with an object.
-         * @returns {void}
-         */
-        replaceStringWithObjectLayers () {
-            if (Array.isArray(this.layers)) {
-                this.layers.forEach((layer, idx) => {
-                    if (typeof layer === "string") {
-                        this.layers[idx] = {
-                            layerId: layer
-                        };
-                    }
-                });
-            }
-        },
-        /**
          * Setting the post key for layerFilterSnippet
          * @param {String} value the post key of layerFilterSnippet
          * @returns {void}
@@ -239,7 +178,7 @@ export default {
                 id="tool-general-filter"
             >
                 <LayerCategory
-                    v-if="Array.isArray(layers) && layers.length && layerSelectorVisible"
+                    v-if="Array.isArray(layerConfigs) && layerConfigs.length && layerSelectorVisible"
                     class="layerSelector"
                     :filters-only="filtersOnly"
                     :categories-only="categoriesOnly"
@@ -257,7 +196,7 @@ export default {
                         >
                             <LayerFilterSnippet
                                 v-if="showLayerSnippet(slotProps.layer.filterId) || layerLoaded[slotProps.layer.filterId]"
-                                :api="filterApiList[slotProps.layer.filterId]"
+                                :api="slotProps.layer.api"
                                 :layer-config="slotProps.layer"
                                 :map-handler="mapHandler"
                                 :min-scale="minScale"
@@ -266,11 +205,11 @@ export default {
                         </div>
                     </template>
                 </LayerCategory>
-                <div v-else-if="Array.isArray(layers) && layers.length">
+                <div v-else-if="Array.isArray(layerConfigs) && layerConfigs.length">
                     <LayerFilterSnippet
                         v-for="(layerConfig, indexLayer) in filtersOnly"
                         :key="'layer-' + indexLayer + layerFilterSnippetPostKey"
-                        :api="filterApiList[layerConfig.filterId]"
+                        :api="layerConfig.api"
                         :layer-config="layerConfig"
                         :map-handler="mapHandler"
                         :min-scale="minScale"

@@ -122,7 +122,8 @@ export default {
                     fixed: !this.visible,
                     attrName: this.attrName,
                     operator: this.operator,
-                    value
+                    value,
+                    tagTitle: this.titleText
                 });
             }
             else {

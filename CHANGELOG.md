@@ -8,11 +8,18 @@
 
 ## Unreleased - in development
 ### Added
+- A control has been added to create buttons for any tools. These can be used to open and close the configured tools.
+- Added style.json parameter "styleMultiGeomOnlyWithRule". If true, **no** fallback for styling of multiGeometries is used. Default is false, means the the previous behavior.
 - Added new module `zoomTo` which combines the modules `zoomToFeature` and `zoomToGeometry`.
 
 ### Changed
 - Migrated the module featureViaURL from Backbone to Vue as a util. E2E tests were fixed and re-enabled.
 - Migrated the module mouseHover from Backbone to Vue.
+- The following NPM packages are updated:
+    - @masterportal/masterportalapi: 2.1.1 to 2.2.0 (masterportalapi was renamed @masterportal/masterportalapi in the process)
+- Replaced hardcoded EPSG code of map projection by a getter which identifies the projection of the map in withoutGUIDraw
+- Layer with isNeverVisibleInTree will not be initialized in menu tree.
+- Update print configuration for tiledWMS, layers are printed as tiledwms with tileSize.
 
 ### Deprecated
 - Configuration (`config.js`) parameters `zoomToFeature` and `zoomToGeometry` have been marked as deprecated in an upcoming major release.
@@ -21,9 +28,15 @@
 
 ### Fixed
 - Issue #758: featureLister threw a JavaScript exception when building the list of layers.
+- Issue #766: The performance of opening large folders in the tree of type custom or default has been increased.
+- Print Tool now works as expected when unchecking and checking the auto adjusted scale checkbox or selecting a scale manually.
+- Issue #756: The QuickHelp can now be configured or unconfigured for the SearchBar and the topic tree.
 
 ---
 ## v2.20.1 - 2022-04-21
+### Changed
+- The following NPM packages are updated:
+    - masterportalapi: 2.1.0 to 2.1.1
 
 ### Fixed
 - Allow searchAddress to find street names with a prefix.
@@ -60,6 +73,9 @@
 - Issue #551: Tools `coordToolKit` and `supplyCoord` are no longer usable in 3d mode due to [limitations of ol-cesium](https://openlayers.org/ol-cesium/apidoc/index.html#limitations).
 - The function `makeOberstufenprofileBold` used by the `comparisonList` and `featureLister` is provided as a util named `toBold` now.
 - Issue #636: The WMS layer respects crs code at rawlayer. The WMS request now contains the attribute CRS. If not available, projection of the map is used.
+- Move OpenLayers related Vector Tile layer creation into masterportalapi
+
+### Deprecated
 
 ### Removed
 - Removed hardcoded LayerIds for 3D support in wms.js. Setting has to be done now via services.json attribute notSupportedIn3D.

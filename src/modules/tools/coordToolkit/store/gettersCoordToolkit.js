@@ -1,5 +1,5 @@
 
-import {transformFromMapProjection} from "masterportalapi/src/crs";
+import {transformFromMapProjection} from "@masterportal/masterportalapi/src/crs";
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
 import coordState from "./stateCoordToolkit";
 

@@ -1,7 +1,7 @@
 import {fromCircle} from "ol/geom/Polygon.js";
 import {createStyle} from "../../utils/style/createStyle";
 import Feature from "ol/Feature";
-import {getMapProjection} from "masterportalapi/src/crs";
+import {getMapProjection} from "@masterportal/masterportalapi/src/crs";
 import {GeoJSON} from "ol/format.js";
 import MultiLine from "ol/geom/MultiLineString.js";
 import MultiPoint from "ol/geom/MultiPoint.js";
@@ -194,7 +194,7 @@ function editFeaturesWithoutGUI ({dispatch}) {
  * @param {Boolean} prmObject.zoomToExtent The map will be zoomed to the extent of the GeoJson if set to true.
  * @returns {String} GeoJSON of all Features as a String
  */
-function initializeWithoutGUI ({state, commit, dispatch, getters}, {drawType, color, opacity, maxFeatures, initialJSON, transformWGS, zoomToExtent}) {
+function initializeWithoutGUI ({state, commit, dispatch, getters, rootGetters}, {drawType, color, opacity, maxFeatures, initialJSON, transformWGS, zoomToExtent}) {
     const collection = Radio.request("ModelList", "getCollection"),
         drawTypeId = getDrawId(drawType);
     let featJSON,
@@ -241,10 +241,10 @@ function initializeWithoutGUI ({state, commit, dispatch, getters}, {drawType, co
                     format = new GeoJSON({
                         defaultDataProjection: "EPSG:4326"
                     });
-                    // read GeoJSON and transform the coordiantes from WGS84 to UTM32
+                    // read GeoJSON and transform the coordiantes from WGS84 to the projection of the map
                     featJSON = format.readFeatures(initialJSON, {
                         dataProjection: "EPSG:4326",
-                        featureProjection: "EPSG:25832"
+                        featureProjection: rootGetters["Map/projectionCode"]
                     });
                 }
                 else {
