@@ -18,7 +18,7 @@ describe("snippets/graphicalSelect/model", function () {
         };
 
         mapCollection.clear();
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
 
         model = new Model({
             id: "test_graphicalselection"

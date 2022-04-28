@@ -64,7 +64,7 @@ export default {
             });
 
             map3D = await dispatch("createMap3D");
-            await mapCollection.addMap(map3D, "olcs", "3D");
+            await mapCollection.addMap(map3D, "3D");
             scene = map3D.getCesiumScene();
             api.map.olcsMap.prepareScene({scene: scene, map3D: map3D, callback: clickEventCallback}, Config);
         }

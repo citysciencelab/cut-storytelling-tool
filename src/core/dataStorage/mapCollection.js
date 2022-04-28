@@ -4,12 +4,10 @@ export default {
     /**
      * Adds a map to the mapCollection
      * @param {module:ol/PluggableMap~PluggableMap} map The map.
-     * @param {String} id The map id.
      * @param {String} mode The map mode.
      * @returns {void}
      */
-    addMap: function (map, id, mode) {
-        map.id = id;
+    addMap: function (map, mode) {
         map.mode = mode;
 
         mapCollection.push(map);

@@ -159,7 +159,6 @@ export default {
             this.layer.getSource().clear();
             this.drawInteraction.setActive(false);
             this.removeInteraction(this.draw);
-            console.log(this);
             this.circleOverlay.element.innerHTML = "";
             Radio.trigger("Map", "removeOverlay", this.circleOverlay);
             Radio.trigger("Map", "removeOverlay", this.tooltipOverlay);

@@ -24,7 +24,7 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             removeLayer: sinon.spy()
         };
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
 
     beforeEach(() => {

@@ -28,7 +28,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             })
         };
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
     afterEach(sinon.restore);
 
@@ -483,7 +483,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
                 getInteractions: () => [drawOne, drawTwo, noDraw]
             };
 
-            mapCollection.addMap(map, "ol", "2D");
+            mapCollection.addMap(map, "2D");
             rootState = {
                 Maps: {
                     mode: "2D"

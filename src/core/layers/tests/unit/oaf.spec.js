@@ -26,7 +26,7 @@ describe("src/core/layers/oaf.js", () => {
             }
         };
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
         i18next.init({
             lng: "cimode",
             debug: false

@@ -46,7 +46,7 @@ describe("src/modules/tools/routing/components/Isochrones/IsochronesItem.vue", (
             removeInteraction: sinon.spy()
         };
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
 
 

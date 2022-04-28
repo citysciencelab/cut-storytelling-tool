@@ -53,7 +53,7 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
                 })
             };
 
-            mapCollection.addMap(map, "ol", "2D");
+            mapCollection.addMap(map, "2D");
             item = new Feature({
                 geometry: new Polygon(coordinates)
             });

@@ -41,7 +41,7 @@ describe("src/core/layers/group.js", () => {
             }
         };
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
     beforeEach(() => {
         wmsLayerAttributes = {

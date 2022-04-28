@@ -88,14 +88,13 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
 
         mapCollection.clear();
         mapCollection.addMap({
-            id: "ol",
             mode: "2D",
             getView: () => ({
                 fit: () => sinon.spy()
             }),
             addLayer: sinon.spy(),
             removeLayer: sinon.spy()
-        }, "ol", "2D");
+        }, "2D");
 
         state = {
             settings: {

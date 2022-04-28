@@ -20,7 +20,7 @@ describe("src/utils/parametricUrl/converter.js", () => {
         };
 
         mapCollection.clear();
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
     describe("convert", () => {
         it("convert String  to boolean", () => {

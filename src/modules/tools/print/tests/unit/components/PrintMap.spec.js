@@ -36,7 +36,7 @@ describe("src/modules/tools/Print/components/PrintMap.vue", () => {
         };
 
         mapCollection.clear();
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
 
     beforeEach(() => {

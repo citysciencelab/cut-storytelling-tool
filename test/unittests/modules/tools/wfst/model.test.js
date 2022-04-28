@@ -28,13 +28,12 @@ describe("WfstModel", function () {
     before(() => {
         mapCollection.clear();
         mapCollection.addMap({
-            id: "ol",
             mode: "2D",
             addNewLayerIfNotExists: sinon.spy(),
             addInteraction: sinon.spy(),
             registerListener: sinon.spy(),
             removeInteraction: sinon.spy()
-        }, "ol", "2D");
+        }, "2D");
 
         model = new Model();
         utilModel = new Util();

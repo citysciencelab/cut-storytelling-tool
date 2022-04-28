@@ -29,8 +29,8 @@ describe("src/core/layers/terrain.js", () => {
                 return {};
             }
         };
-        mapCollection.addMap(map, "ol", "2D");
-        mapCollection.addMap(map3D, "map3D_0", "3D");
+        mapCollection.addMap(map, "2D");
+        mapCollection.addMap(map3D, "3D");
     });
     beforeEach(() => {
         global.Cesium = {};

@@ -39,7 +39,7 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
             removeLayer: sinon.spy()
         };
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
 
     beforeEach(() => {
@@ -77,7 +77,7 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
         };
 
         mapCollection.clear();
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
         BufferAnalysis.actions.checkIntersection = originalCheckIntersection;
         BufferAnalysis.actions.showBuffer = originalShowBuffer;
         store.commit("Tools/BufferAnalysis/setActive", false);

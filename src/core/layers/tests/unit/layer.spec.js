@@ -73,7 +73,7 @@ describe("src/core/layers/layer.js", () => {
             }
         };
 
-        mapCollection.addMap(mapOL, "ol", "2D");
+        mapCollection.addMap(mapOL, "2D");
     });
     beforeEach(() => {
         attributes = {

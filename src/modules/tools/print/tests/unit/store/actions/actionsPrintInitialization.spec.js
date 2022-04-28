@@ -34,7 +34,7 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
         };
 
         mapCollection.clear();
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
     describe("chooseCurrentLayout", () => {
         it("should choose the current Layout", done => {

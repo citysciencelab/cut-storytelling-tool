@@ -61,7 +61,7 @@ describe("src/core/maps/actions/actionsMapLayers.js", () => {
         });
 
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
 
     describe("addLayer", () => {

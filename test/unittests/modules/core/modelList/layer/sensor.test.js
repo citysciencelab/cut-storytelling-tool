@@ -15,11 +15,10 @@ describe("core/modelList/layer/sensor", function () {
     before(() => {
         mapCollection.clear();
         mapCollection.addMap({
-            id: "ol",
             mode: "2D",
             registerListener: sinon.spy(),
             unregisterListener: sinon.spy()
-        }, "ol", "2D");
+        }, "2D");
 
         sensorLayer = new SensorLayerModel();
         sensorLayer.set("url", "test/test/test", {silent: true});

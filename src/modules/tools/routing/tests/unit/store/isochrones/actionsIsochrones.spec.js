@@ -82,7 +82,6 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
 
         mapCollection.clear();
         mapCollection.addMap({
-            id: "ol",
             mode: "2D",
             getView: () => ({
                 fit: () => sinon.spy()
@@ -91,7 +90,7 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
             removeLayer: sinon.spy(),
             addInteraction: sinon.spy(),
             removeInteraction: sinon.spy()
-        }, "ol", "2D");
+        }, "2D");
 
         state = {
             settings: {},

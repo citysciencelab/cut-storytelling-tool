@@ -22,7 +22,7 @@ function create2DMap (mapViewSettings) {
             layerConf: getLayerList()
         }, "2D", {});
 
-    mapCollection.addMap(map, "ol", "2D");
+    mapCollection.addMap(map, "2D");
     store.dispatch("Maps/initView");
     store.dispatch("Maps/setMapAttributes", {map: map});
     Radio.trigger("ModelList", "addInitiallyNeededModels");

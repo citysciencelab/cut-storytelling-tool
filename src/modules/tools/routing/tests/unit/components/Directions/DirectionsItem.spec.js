@@ -37,14 +37,13 @@ describe("src/modules/tools/routing/components/Directions/DirectionsItem.vue", (
     beforeEach(() => {
         mapCollection.clear();
         mapCollection.addMap({
-            id: "ol",
             mode: "2D",
             mapMode: "2D",
             addLayer: sinon.spy(),
             removeLayer: sinon.spy(),
             addInteraction: sinon.spy(),
             removeInteraction: sinon.spy()
-        }, "ol", "2D");
+        }, "2D");
 
         store = new Vuex.Store({
             namespaced: true,

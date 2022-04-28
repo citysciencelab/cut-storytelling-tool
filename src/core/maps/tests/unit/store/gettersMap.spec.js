@@ -38,7 +38,7 @@ describe("src/core/maps/store/gettersMap.js", () => {
                 };
 
             mapCollection.clear();
-            mapCollection.addMap(map, "ol", "2D");
+            mapCollection.addMap(map, "2D");
             expect(getters.getLayerList()).to.be.a("array");
         });
         it("returns the 2D map", () => {
@@ -48,7 +48,7 @@ describe("src/core/maps/store/gettersMap.js", () => {
             };
 
             mapCollection.clear();
-            mapCollection.addMap(map, "ol", "2D");
+            mapCollection.addMap(map, "2D");
 
             expect(getters.get2DMap()).to.deep.equal({id: "ol", mode: "2D"});
         });
@@ -58,7 +58,7 @@ describe("src/core/maps/store/gettersMap.js", () => {
                 mode: "3D"
             };
 
-            mapCollection.addMap(map, "olcs", "3D");
+            mapCollection.addMap(map, "3D");
 
             expect(getters.get3DMap()).to.deep.equal({id: "olcs", mode: "3D"});
         });
@@ -83,7 +83,7 @@ describe("src/core/maps/store/gettersMap.js", () => {
                 };
 
             mapCollection.clear();
-            mapCollection.addMap(map, "ol", "2D");
+            mapCollection.addMap(map, "2D");
             addLayerToMap(state, layer);
 
             expect(getters.getLayers().values_.name).to.equals("layer123");
@@ -104,7 +104,7 @@ describe("src/core/maps/store/gettersMap.js", () => {
                 };
 
             mapCollection.clear();
-            mapCollection.addMap(map, "ol", "2D");
+            mapCollection.addMap(map, "2D");
             expect(getters.gfiFeaturesAtPixel(state, [40, 50])).be.a("array");
         });
         it("returns the visibleLayerList", () => {
@@ -114,7 +114,7 @@ describe("src/core/maps/store/gettersMap.js", () => {
             });
 
             mapCollection.clear();
-            mapCollection.addMap(map, "ol", "2D");
+            mapCollection.addMap(map, "2D");
             expect(getters.getVisibleLayerList()).to.be.a("array");
         });
         it("returns the visibleLayerListWithChildrenFromGroupLayers with Group layers", () => {
@@ -139,7 +139,7 @@ describe("src/core/maps/store/gettersMap.js", () => {
                 };
 
             mapCollection.clear();
-            mapCollection.addMap(map, "ol", "2D");
+            mapCollection.addMap(map, "2D");
             addLayerToMap(state, grouplayer);
 
             expect(getters.visibleLayerListWithChildrenFromGroupLayers()).to.be.a("array").that.contains(layer1, layer2);
@@ -168,7 +168,7 @@ describe("src/core/maps/store/gettersMap.js", () => {
                 };
 
             mapCollection.clear();
-            mapCollection.addMap(map, "ol", "2D");
+            mapCollection.addMap(map, "2D");
             addLayerToMap(state, layer1);
 
             expect(getters.visibleLayerListWithChildrenFromGroupLayers()).to.be.a("array").that.contains(layer1);
@@ -197,7 +197,7 @@ describe("src/core/maps/store/gettersMap.js", () => {
                 };
 
             mapCollection.clear();
-            mapCollection.addMap(map, "ol", "2D");
+            mapCollection.addMap(map, "2D");
             addLayerToMap(state, grouplayer);
 
             expect(getters.visibleWmsLayerList()).to.be.a("array").that.contains(layer1, layer3);
@@ -286,7 +286,7 @@ describe("src/core/maps/store/gettersMap.js", () => {
 
             map.setSize([1059, 887]);
 
-            mapCollection.addMap(map, "ol", "2D");
+            mapCollection.addMap(map, "2D");
         });
 
         it("getCurrentExtent - calculate the extent for the current view state and the passed size", function () {

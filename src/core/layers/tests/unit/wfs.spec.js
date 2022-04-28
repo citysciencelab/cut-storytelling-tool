@@ -27,7 +27,7 @@ describe("src/core/layers/wfs.js", () => {
             }
         };
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
         i18next.init({
             lng: "cimode",
             debug: false
