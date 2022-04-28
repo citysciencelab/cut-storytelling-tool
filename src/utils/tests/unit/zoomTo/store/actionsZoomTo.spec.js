@@ -192,7 +192,7 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
             getters.config = [{
                 id: "zoomToGeometry",
                 layerId: id,
-                attribute: "flaechenid",
+                property: "flaechenid",
                 allowedValues: [18, 26, 42]
             }];
             state.zoomToGeometry = "18,25";
@@ -215,7 +215,7 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
             getters.config = [{id: "somethingWrong"}, {
                 id: "zoomToFeatureId",
                 layerId: id,
-                attribute: "flaechenid",
+                property: "flaechenid",
                 styleId: "stylish"
             }];
             state.somethingWrong = "values";
@@ -250,7 +250,7 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
             getters.config = [{
                 id: "zoomToFeatureId",
                 layerId: id,
-                attribute: "flaechenid",
+                property: "flaechenid",
                 styleId: "stylish"
             }];
             state.zoomToFeatureId = [18, 26];
@@ -282,7 +282,7 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
             getters.config = [{
                 id: "zoomToGeometry",
                 layerId: id,
-                attribute: "flaechenid",
+                property: "flaechenid",
                 allowedValues: [18, 26, 42]
             }];
             state.zoomToGeometry = "18,25";
@@ -311,13 +311,13 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
                 {
                     id: "zoomToFeatureId",
                     layerId: id,
-                    attribute: "flaechenid",
+                    property: "flaechenid",
                     styleId: "stylish"
                 },
                 {
                     id: "zoomToGeometry",
                     layerId: id,
-                    attribute: "flaechenid",
+                    property: "flaechenid",
                     allowedValues: [18, 26, 42]
                 }
             ];

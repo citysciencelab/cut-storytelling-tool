@@ -66,7 +66,7 @@ const actions = {
                 return new Promise((_, reject) => reject(i18next.t("common:utils.parametricURL.zoomTo", {wrongConfigId: id})));
             }
             layerId = conf.layerId;
-            property = conf.attribute;
+            property = conf.property;
 
             return getAndFilterFeatures(layerId, property, urlValues)
                 .then(featureCollection => {
