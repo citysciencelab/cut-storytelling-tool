@@ -46,7 +46,8 @@ In the following, all configuration options are described. For all configuration
 |uiStyle|no|String|`"default"`|Sets the control element layout. |`table`|
 |wfsImgPath|no|String||Path to the folder holding images for the WFS styles. The path is relative to *js/main.js*.|`https://geodienste.hamburg.de/lgv-config/img/"`|
 |wpsID|no|String|`""`|Reference to a WPS interface used in various modules. The ID is resolved to a service defined in the **[rest-services.json](rest-services.json.md)** file.|`""`|
-|zoomToFeature|no|**[zoomToFeature](#markdown-header-zoomtofeature)**||Optional configuration of the URL query parameter `featureid`. For details, see **[urlParameter](urlParameter.md)**.||
+|zoomToFeature|no|**[zoomToFeature](#markdown-header-zoomtofeature)**||_Deprecated in the next major release. Please use **[zoomTo](#markdown-header-zoomto)** instead._ Optional configuration of the URL query parameter `featureid`. For details, see **[urlParameter](urlParameter.md)**. ||
+|zoomTo|no|**[zoomTo](#markdown-header-zoomto)**[]|Configuration for the URL query parameters `zoomToFeatureId` and `zoomToGeometry`.||
 |layerInformation|no|**[layerInformation](#markdown-header-layerinformation)**||Configuration for the layerInformation window.||
 |vuetify|no|String|undefined|Path to the optional instance of the vuetify UI library. e.g. portal or addon specific.|`addons/cosi/vuetify/index.js`|
 
@@ -307,7 +308,51 @@ In the following, all configuration options are described. For all configuration
 
 ***
 
+## zoomTo
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+
+|id|yes|enum["zoomToFeatureId", "zoomToGeometry"]||Id of the URL query parameter the configuration refers to.|
+|layerId|yes|String||Id of the layer the feature should be fetched from.|
+|property|yes|String||Name of the property the features should be filtered by.|
+|allowedValues|no|Array||Only relevant when `id` equal `zoomToGeometry`. Further filters the values allowed in the URL query parameters.|
+|styleId|no|String||Only relevant when `id` equal `zoomToFeatureId`. Id of the `StyleModel` that should be used to style the features retrieved from the service.|
+
+**Example**:
+
+```js
+{
+    zoomTo: [
+        {
+            id: "zoomToGeometry",
+            layerId: "1692",
+            property: "bezirk_name",
+            allowedValues: [
+                "ALTONA",
+                "HARBURG",
+                "HAMBURG-NORD",
+                "BERGEDORF",
+                "EIMSBÜTTEL",
+                "HAMBURG-MITTE",
+                "WANDSBEK"
+            ]
+        },
+        {
+            id: "zoomToFeatureId",
+            layerId: "4560",
+            property: "flaechenid",
+            styleId: "location_eventlotse"
+        }
+    ]
+}
+```
+
+***
+
 ## zoomToFeature
+
+_Deprecated in the next major release. Please use **[zoomTo](#markdown-header-zoomto)** instead._
 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
@@ -332,6 +377,8 @@ In the following, all configuration options are described. For all configuration
 ***
 
 ## zoomToGeometry
+
+_Deprecated in the next major release. Please use **[zoomTo](#markdown-header-zoomto)** instead._
 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
