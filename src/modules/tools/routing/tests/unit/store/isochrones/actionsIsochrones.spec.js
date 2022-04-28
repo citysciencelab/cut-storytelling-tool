@@ -145,6 +145,8 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
 
     it("should initIsochrones without mapListenerAdded", async () => {
         state.mapListenerAdded = false;
+        state.isochronesAreaLayer = true;
+        state.isochronesPointLayer = true;
         await actionsIsochrones.initIsochrones({state, getters, commit, dispatch, rootState});
 
         expect(commitSpy.args).to.deep.equal([
@@ -153,17 +155,23 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
 
         expect(dispatchSpy.args).to.deep.equal([
             ["createIsochronePointModifyInteractionListener"],
+            ["Maps/addLayerOnTop", true, {root: true}],
+            ["Maps/addLayerOnTop", true, {root: true}],
             ["createIsochronesPointDrawInteraction"]
         ]);
     });
 
     it("should initIsochrones with mapListenerAdded", async () => {
         state.mapListenerAdded = true;
+        state.isochronesAreaLayer = true;
+        state.isochronesPointLayer = true;
         await actionsIsochrones.initIsochrones({state, getters, commit, dispatch, rootState});
 
         expect(commitSpy.args).to.deep.equal([]);
 
         expect(dispatchSpy.args).to.deep.equal([
+            ["Maps/addLayerOnTop", true, {root: true}],
+            ["Maps/addLayerOnTop", true, {root: true}],
             ["createIsochronesPointDrawInteraction"]
         ]);
     });

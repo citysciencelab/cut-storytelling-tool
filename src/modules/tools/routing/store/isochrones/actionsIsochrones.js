@@ -110,9 +110,8 @@ export default {
      * @param {Object} context actions context object.
      * @returns {void}
      */
-    initIsochrones ({rootState, state, commit, dispatch}) {
-        const {isochronesPointLayer, isochronesAreaLayer, isochronesPointDrawInteraction, mapListenerAdded} = state,
-            map = mapCollection.getMap(rootState.Maps.mode);
+    initIsochrones ({state, commit, dispatch}) {
+        const {isochronesPointLayer, isochronesAreaLayer, isochronesPointDrawInteraction, mapListenerAdded} = state;
 
         if (!mapListenerAdded) {
             isochronesPointDrawInteraction.on("drawend", event => dispatch("onIsochronesPointDrawEnd", event));
@@ -120,9 +119,8 @@ export default {
             commit("setMapListenerAdded", true);
         }
 
-        map.addLayer(isochronesAreaLayer);
-        map.addLayer(isochronesPointLayer);
-
+        dispatch("Maps/addLayerOnTop", isochronesAreaLayer, {root: true});
+        dispatch("Maps/addLayerOnTop", isochronesPointLayer, {root: true});
         dispatch("createIsochronesPointDrawInteraction");
     },
 

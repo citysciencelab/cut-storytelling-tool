@@ -232,13 +232,18 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
 
     it("should initDirections without mapListenerAdded", async () => {
         state.mapListenerAdded = false;
+        state.directionsRouteLayer = true;
+        state.directionsWaypointsLayer = true;
+        state.directionsAvoidLayer = true;
         await actionsDirections.initDirections({state, getters, commit, dispatch, rootState});
-
         expect(dispatchSpy.args).to.deep.equal([
             ["initWaypoints"],
             ["createDirectionsWaypointsModifyInteractionListener"],
             ["createDirectionsAvoidModifyInteractionListener"],
             ["createDirectionsRouteModifyInteractionListener"],
+            ["Maps/addLayerOnTop", true, {root: true}],
+            ["Maps/addLayerOnTop", true, {root: true}],
+            ["Maps/addLayerOnTop", true, {root: true}],
             ["createInteractionFromMapInteractionMode"]
         ]);
 
@@ -249,10 +254,17 @@ describe("src/modules/tools/routing/store/directions/actionsDirections.js", () =
 
     it("should initDirections with mapListenerAdded", async () => {
         state.mapListenerAdded = true;
+        state.directionsRouteLayer = true;
+        state.directionsWaypointsLayer = true;
+        state.directionsAvoidLayer = true;
+
         await actionsDirections.initDirections({state, getters, commit, dispatch, rootState});
 
         expect(dispatchSpy.args).to.deep.equal([
             ["initWaypoints"],
+            ["Maps/addLayerOnTop", true, {root: true}],
+            ["Maps/addLayerOnTop", true, {root: true}],
+            ["Maps/addLayerOnTop", true, {root: true}],
             ["createInteractionFromMapInteractionMode"]
         ]);
     });

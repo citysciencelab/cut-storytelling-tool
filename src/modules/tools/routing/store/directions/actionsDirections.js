@@ -240,17 +240,16 @@ export default {
      * @param {Object} context actions context object.
      * @returns {void}
      */
-    async initDirections ({rootState, state, dispatch, commit}) {
+    async initDirections ({state, dispatch, commit}) {
         const {
-                directionsWaypointsLayer,
-                directionsRouteLayer,
-                directionsAvoidLayer,
-                directionsWaypointsDrawInteraction,
-                directionsAvoidDrawInteraction,
-                directionsAvoidSelectInteraction,
-                mapListenerAdded
-            } = state,
-            map = await mapCollection.getMap(rootState.Maps.mode);
+            directionsWaypointsLayer,
+            directionsRouteLayer,
+            directionsAvoidLayer,
+            directionsWaypointsDrawInteraction,
+            directionsAvoidDrawInteraction,
+            directionsAvoidSelectInteraction,
+            mapListenerAdded
+        } = state;
 
         dispatch("initWaypoints");
 
@@ -264,9 +263,10 @@ export default {
             commit("setMapListenerAdded", true);
         }
 
-        map.addLayer(directionsRouteLayer);
-        map.addLayer(directionsWaypointsLayer);
-        map.addLayer(directionsAvoidLayer);
+        dispatch("Maps/addLayerOnTop", directionsRouteLayer, {root: true});
+        dispatch("Maps/addLayerOnTop", directionsWaypointsLayer, {root: true});
+        dispatch("Maps/addLayerOnTop", directionsAvoidLayer, {root: true});
+
 
         dispatch("createInteractionFromMapInteractionMode");
     },
