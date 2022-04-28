@@ -134,6 +134,20 @@ export default class MapHandler {
     }
 
     /**
+     * Checks if the layer has been updated at least one time.
+     * @param {Number} filterId the filter id
+     * @returns {Boolean} true if the layer has been updated at least once, false if never updated up to now
+     */
+    isSourceUpdated (filterId) {
+        const layerModel = this.getLayerModelByFilterId(filterId);
+
+        if (isObject(layerModel)) {
+            return layerModel.get("sourceUpdated") ? layerModel.get("sourceUpdated") : false;
+        }
+        return false;
+    }
+
+    /**
      * Checks if the layer for the given filterId exists and is visible in general (may not be visible on map).
      * @param {Number} filterId the filter id
      * @returns {Boolean} true if the layer is ready to use
@@ -174,7 +188,7 @@ export default class MapHandler {
             return;
         }
 
-        if (!this.isLayerActivated(filterId)) {
+        if (!this.isLayerActivated(filterId) && !this.isSourceUpdated(filterId)) {
             layerModel.layer.getSource().once("featuresloadend", () => {
                 if (typeof onActivated === "function") {
                     onActivated();
@@ -182,7 +196,7 @@ export default class MapHandler {
             });
             layerModel.set("isSelected", true);
         }
-        else if (!this.isLayerVisibleInMap(filterId)) {
+        else if (!this.isLayerVisibleInMap(filterId) || !this.isLayerActivated(filterId)) {
             layerModel.set("isSelected", true);
             if (typeof onActivated === "function") {
                 onActivated();
