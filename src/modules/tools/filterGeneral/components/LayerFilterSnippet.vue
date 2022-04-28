@@ -254,10 +254,8 @@ export default {
                     finish = typeof adjustments?.finish === "boolean" ? adjustments.finish : false;
 
                 this.snippets.forEach(snippet => {
-                    if (filterAnswer?.snippetId === snippet.snippetId || Array.isArray(filterAnswer?.snippetId) && filterAnswer?.snippetId.includes(snippet.snippetId)) {
-                        return;
-                    }
                     snippet.adjustment = {
+                        snippetId,
                         start,
                         finish,
                         adjust: isObject(adjustments[snippet.snippetId]) ? adjustments[snippet.snippetId] : false
