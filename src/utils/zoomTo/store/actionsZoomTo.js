@@ -60,7 +60,7 @@ const actions = {
             }
             else if (id === "zoomToGeometry") {
                 urlValues = state[id].split(",").map(value => value.toUpperCase().trim());
-                allowedValues = conf.allowedValues;
+                allowedValues = conf.allowedValues.map(value => String(value));
             }
             else {
                 return new Promise((_, reject) => reject(i18next.t("common:utils.parametricURL.zoomTo", {wrongConfigId: id})));
