@@ -16,14 +16,14 @@ const actions = {
             if (Object.prototype.hasOwnProperty.call(config, "zoomToFeature") && state.zoomToFeatureId !== undefined) {
                 layerId = config.zoomToFeature.wfsId;
                 property = config.zoomToFeature.attribute;
-                urlValues = state.zoomToFeatureId.map(value => String(value)); // TODO: Add these to the state
+                urlValues = state.zoomToFeatureId.map(value => String(value));
                 styleId = config.zoomToFeature.styleId ? config.zoomToFeature.styleId : config.zoomToFeature.imgLink;
             }
             // zoomToGeometry
             else if (Object.prototype.hasOwnProperty.call(config, "zoomToGeometry") && state.zoomToGeometry !== undefined) {
                 layerId = config.zoomToGeometry.layerId;
                 property = config.zoomToGeometry.attribute;
-                urlValues = state.zoomToGeometry.split(",").map(value => value.toUpperCase().trim()); // TODO: Add these to the state
+                urlValues = state.zoomToGeometry.split(",").map(value => value.toUpperCase().trim());
                 allowedValues = config.zoomToGeometry.geometries;
             }
             else {
@@ -105,7 +105,6 @@ const actions = {
             .catch(error => {
                 console.error("zoomTo: An error occurred while trying to fetch features from one of the given services.", error);
             });
-        // TODO: 1. Adjust docs 2. adjust tests
     }
 };
 
