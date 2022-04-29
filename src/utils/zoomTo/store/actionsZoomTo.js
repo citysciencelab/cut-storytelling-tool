@@ -16,7 +16,7 @@ const actions = {
             if (Object.prototype.hasOwnProperty.call(config, "zoomToFeature") && state.zoomToFeatureId !== undefined) {
                 layerId = config.zoomToFeature.wfsId;
                 property = config.zoomToFeature.attribute;
-                urlValues = state.zoomToFeatureId.map(value => String(value));
+                urlValues = (Array.isArray(state.zoomToFeatureId) ? state.zoomToFeatureId : [state.zoomToFeatureId]).map(value => String(value));
                 styleId = config.zoomToFeature.styleId ? config.zoomToFeature.styleId : config.zoomToFeature.imgLink;
             }
             // zoomToGeometry
@@ -55,7 +55,7 @@ const actions = {
                 return new Promise(resolve => resolve([]));
             }
             if (id === "zoomToFeatureId") {
-                urlValues = state[id].map(value => String(value));
+                urlValues = (Array.isArray(state[id]) ? state[id] : [state[id]]).map(value => String(value));
                 styleId = conf.styleId;
             }
             else if (id === "zoomToGeometry") {
