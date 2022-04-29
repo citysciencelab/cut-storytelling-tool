@@ -85,7 +85,7 @@ const getters = {
      * @returns {Object} Returns current 2D map view .
      */
     getView: () => {
-        return mapCollection.getMapView("ol", "2D");
+        return mapCollection.getMapView("2D");
     },
     /**
      * Returns a map overlay of a certain id.

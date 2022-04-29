@@ -45,7 +45,7 @@ describe("src/core/maps/mutationsMap.js", () => {
         map.setSize([1059, 887]);
 
         mapCollection.addMap(map, "2D");
-        mapView = mapCollection.getMapView("ol", "2D");
+        mapView = mapCollection.getMapView("2D");
     });
     it("Sets the resolution by scale", function () {
         mutations.setResolutionByScale({}, 1000);

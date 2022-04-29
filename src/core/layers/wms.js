@@ -54,7 +54,7 @@ WMSLayer.prototype.createLayer = function (attrs) {
  * @returns {Object} The options.
  */
 WMSLayer.prototype.getOptions = function () {
-    return {resolutions: mapCollection.getMapView("ol", "2D").getResolutions(), origin: [442800, 5809000]};
+    return {resolutions: mapCollection.getMapView("2D").getResolutions(), origin: [442800, 5809000]};
 };
 
 /**
@@ -128,7 +128,7 @@ WMSLayer.prototype.updateSource = function () {
  * @returns {String} - The created getFeature info url.
  */
 WMSLayer.prototype.getGfiUrl = function () {
-    const mapView = mapCollection.getMapView("ol", "2D"),
+    const mapView = mapCollection.getMapView("2D"),
         resolution = store.getters["Maps/resolution"],
         projection = mapView.getProjection(),
         coordinate = store.getters["Maps/clickCoordinate"];

@@ -75,7 +75,7 @@ describe("src/core/maps/store/actions/actionsMapInteractionsZoomTo.js", () => {
         map.setSize([1059, 887]);
 
         mapCollection.addMap(map, "2D");
-        mapView = mapCollection.getMapView("ol", "2D");
+        mapView = mapCollection.getMapView("2D");
     });
     describe.skip("zoomToExtent", () => {
         it("Zoom to the extent with duration 0 milliseconds", () => {
