@@ -167,7 +167,7 @@ export default {
      * @param {Object} param.dispatch the dispatch
      * @returns {void}
      */
-    togglePostrenderListener: function ({state, getters, dispatch, commit}) {
+    togglePostrenderListener: function ({state, dispatch, commit, rootGetters}) {
         const foundVectorTileLayers = [];
 
         getVisibleLayer(state.printMapMarker);
@@ -196,7 +196,7 @@ export default {
                 commit("setHintInfo", "");
             }
         }
-        getters["Maps/get2DMap"].render();
+        rootGetters["Maps/get2DMap"].render();
     },
 
     /**

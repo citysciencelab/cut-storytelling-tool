@@ -43,8 +43,8 @@ export default {
      * @param {module:ol/interaction/Interaction} interaction - Interaction to be removed from map.
      * @returns {void}
      */
-    removeInteraction ({getters}, interaction) {
-        const map = getters.get2DMap;
+    async removeInteraction ({getters}, interaction) {
+        const map = await getters.get2DMap;
 
         map.removeInteraction(interaction);
     },

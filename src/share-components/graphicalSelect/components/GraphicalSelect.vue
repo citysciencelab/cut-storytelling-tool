@@ -157,7 +157,6 @@ export default {
          */
         resetView: async function () {
             this.layer.getSource().clear();
-            this.drawInteraction.setActive(false);
             this.removeInteraction(this.draw);
             this.circleOverlay.element.innerHTML = "";
             Radio.trigger("Map", "removeOverlay", this.circleOverlay);
