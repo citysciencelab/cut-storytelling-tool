@@ -114,36 +114,38 @@ describe("src/core/maps/actions/actionsMapLayers.js", () => {
     });
 
     describe.skip("getLayerById", () => {
+        /* eslint-disable new-cap */
         it("Returns the layer with the correct id", () => {
             store.dispatch("Maps/addLayer", layer1);
             store.dispatch("Maps/addLayer", layer2);
             store.dispatch("Maps/addLayer", layer3);
             store.dispatch("Maps/addLayer", layer4);
 
-            expect(store.dispatch("Maps/getLayerById", {layerId: "Donald"})).equals(layer1);
-            expect(store.dispatch("Maps/getLayerById", {layerId: "Dagobert"})).equals(layer2);
-            expect(store.dispatch("Maps/getLayerById", {layerId: "Darkwing"})).equals(layer3);
-            expect(store.dispatch("Maps/getLayerById", {layerId: "Daisy"})).equals(layer4);
+            expect(store.getters["Maps/getLayerById"]({layerId: "Donald"})).equals(layer1);
+            expect(store.getters["Maps/getLayerById"]({layerId: "Dagobert"})).equals(layer2);
+            expect(store.getters["Maps/getLayerById"]({layerId: "Darkwing"})).equals(layer3);
+            expect(store.getters["Maps/getLayerById"]({layerId: "Daisy"})).equals(layer4);
         });
 
         it("Returns the layer from groupLayer with the correct id", () => {
             store.dispatch("Maps/addLayer", layer1);
             store.dispatch("Maps/addLayer", layer8);
 
-            expect(store.dispatch("Maps/getLayerById", {layerId: "Donald"})).equals(layer1);
-            expect(store.dispatch("Maps/getLayerById", {layerId: "Tick"})).equals(layer5);
-            expect(store.dispatch("Maps/getLayerById", {layerId: "Trick"})).equals(layer6);
-            expect(store.dispatch("Maps/getLayerById", {layerId: "Track"})).equals(layer7);
+            expect(store.getters["Maps/getLayerById"]({layerId: "Donald"})).equals(layer1);
+            expect(store.getters["Maps/getLayerById"]({layerId: "Tick"})).equals(layer5);
+            expect(store.getters["Maps/getLayerById"]({layerId: "Trick"})).equals(layer6);
+            expect(store.getters["Maps/getLayerById"]({layerId: "Track"})).equals(layer7);
         });
 
         it("Returns no groupLayer if searchInGroupLayers= false", () => {
             store.dispatch("Maps/addLayer", layer1);
             store.dispatch("Maps/addLayer", layer8);
 
-            expect(store.dispatch("Maps/getLayerById", {layerId: "Donald"})).equals(layer1);
-            expect(store.dispatch("Maps/getLayerById", {layerId: "Tick", searchInGroupLayers: false})).equals(null);
-            expect(store.dispatch("Maps/getLayerById", {layerId: "Trick", searchInGroupLayers: false})).equals(null);
-            expect(store.dispatch("Maps/getLayerById", {layerId: "Track", searchInGroupLayers: false})).equals(null);
+            expect(store.getters["Maps/getLayerById"]({layerId: "Donald"})).equals(layer1);
+            expect(store.getters["Maps/getLayerById"]({layerId: "Tick", searchInGroupLayers: false})).equals(null);
+            expect(store.getters["Maps/getLayerById"]({layerId: "Trick", searchInGroupLayers: false})).equals(null);
+            expect(store.getters["Maps/getLayerById"]({layerId: "Track", searchInGroupLayers: false})).equals(null);
+        /* eslint-enable new-cap */
         });
     });
 

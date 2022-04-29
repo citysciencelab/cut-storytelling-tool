@@ -1,6 +1,5 @@
 import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";
-import {Group as LayerGroup} from "ol/layer.js";
 
 
 export default {
@@ -93,8 +92,8 @@ export default {
      * @param {Boolean} [alwaysOnTop=true] Layers with the attribute "alwaysOnTop": true are set on top of the map.
      * @returns {module:ol/layer/Base~BaseLaye}  the found layer or a new layer with the given name.
      */
-    async addNewLayerIfNotExists ({dispatch}, {layerName, alwaysOnTop = true}) {
-        let resultLayer = await dispatch("getLayerByName", layerName);
+    async addNewLayerIfNotExists ({getters, dispatch}, {layerName, alwaysOnTop = true}) {
+        let resultLayer = await getters.getLayerByName(layerName);
 
         if (!resultLayer) {
             resultLayer = new VectorLayer({
@@ -107,38 +106,5 @@ export default {
             dispatch("addLayer", resultLayer);
         }
         return resultLayer;
-    },
-    /**
-    * Returns a layer or a child layer of a layer group by id.
-    * @param {Object} context parameter object.
-    * @param  {String} layerId Id of the Layer.
-    * @param  {Boolean} searchInGroupLayers Specifies whether to search for the id in the childLayers of groupLayers.
-    * @return {module:ol/layer/Base~BaseLayer} The layer found by id.
-    */
-    getLayerById ({getters}, {layerId, searchInGroupLayers = true}) {
-        let returnLayer = null;
-
-        getters.get2DMap.getLayers().getArray().forEach(layer => {
-            if (searchInGroupLayers && layer instanceof LayerGroup) {
-                const groupLayer = layer.getLayers().getArray().find(childLayer => childLayer.get("id") === layerId);
-
-                returnLayer = groupLayer || returnLayer;
-            }
-            else if (layer.get("id") === layerId) {
-                returnLayer = layer;
-            }
-        });
-
-        return returnLayer;
-    },
-    /**
-    * Returns a layer by a given layer name.
-    * @param {Object} context parameter object.
-    * @param  {String} layerName Name of the Layer.
-    * @return {module:ol/layer/Base~BaseLayer} The layer found by name.
-    */
-    getLayerByName ({getters}, layerName) {
-        return getters.get2DMap.getLayers().getArray().find(layer => layer.get("name") === layerName);
     }
 };
-

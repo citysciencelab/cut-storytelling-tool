@@ -5,6 +5,7 @@ import {getGfiFeaturesByTileFeature} from "../../../api/gfi/getGfiFeaturesByTile
 import thousandsSeparator from "../../../utils/thousandsSeparator.js";
 import mapCollection from "../../../core/maps/mapCollection.js";
 import {transformFromMapProjection} from "masterportalapi/src/crs";
+import {Group as LayerGroup} from "ol/layer.js";
 
 const getters = {
     ...generateSimpleGetters(initialState),
@@ -305,6 +306,37 @@ const getters = {
         const mapSize = getters.getSize;
 
         return getters.getView().calculateExtent(mapSize);
+    },
+    /**
+    * Returns a layer or a child layer of a layer group by id.
+    * @param {Object} context parameter object.
+    * @param  {String} layerId Id of the Layer.
+    * @param  {Boolean} searchInGroupLayers Specifies whether to search for the id in the childLayers of groupLayers.
+    * @return {module:ol/layer/Base~BaseLayer} The layer found by id.
+    */
+    getLayerById ({layerId, searchInGroupLayers = true}) {
+        let returnLayer = null;
+
+        getters.get2DMap().getLayers().getArray().forEach(layer => {
+            if (searchInGroupLayers && layer instanceof LayerGroup) {
+                const groupLayer = layer.getLayers().getArray().find(childLayer => childLayer.get("id") === layerId);
+
+                returnLayer = groupLayer || returnLayer;
+            }
+            else if (layer.get("id") === layerId) {
+                returnLayer = layer;
+            }
+        });
+
+        return returnLayer;
+    },
+    /**
+    * Returns a layer by a given layer name.
+    * @param  {String} layerName Name of the Layer.
+    * @return {module:ol/layer/Base~BaseLayer} The layer found by name.
+    */
+    getLayerByName (layerName) {
+        return getters.get2DMap().getLayers().getArray().find(layer => layer.get("name") === layerName);
     }
 };
 

@@ -19,7 +19,8 @@ channel.reply({
         return store.getters["Maps/get2DMap"];
     },
     "getLayerByName": function (name) {
-        return store.dispatch("Maps/getLayerByName", name);
+        // eslint-disable-next-line new-cap
+        return store.getters["Maps/getLayerByName"](name);
     },
     "getMapMode": function () {
         return store.getters["Maps/mode"];
