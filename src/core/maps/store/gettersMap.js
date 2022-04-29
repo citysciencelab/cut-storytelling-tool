@@ -88,14 +88,6 @@ const getters = {
         return mapCollection.getMapView("2D");
     },
     /**
-     * Returns a map overlay of a certain id.
-     * @param {String} id of the overlay.
-     * @returns {Object} overlay of the map.
-     */
-    getOverlayById: (id) => {
-        return getters.get2DMap().getOverlayById(id);
-    },
-    /**
      * Returns the corresponding resolution for the scale.
      * @param  {String|Number} scale - the scale
      * @param  {String} scaleType - min or max
