@@ -716,4 +716,70 @@ describe("src/module/tools/filterGeneral/utils/mapHandler.js", () => {
             expect(map.isZooming).to.be.false;
         });
     });
+    describe("setObserverAutoInterval", () => {
+        it("should set the given handler as observer", () => {
+            let last_observer = false;
+            const map = new MapHandler({
+                getLayerByLayerId: () => false,
+                showFeaturesByIds: () => false,
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false,
+                addLayerByLayerId: () => false,
+                getLayers: () => false,
+                setParserAttributeByLayerId: () => false
+            }, onerror.call);
+
+            map.layers.filterId = {
+                setObserverAutoInterval: observer => {
+                    last_observer = observer;
+                }
+            };
+
+            map.setObserverAutoInterval("filterId", "handler");
+            expect(last_observer).to.equal("handler");
+        });
+    });
+    describe("hasAutoRefreshInterval", () => {
+        it("should return false if the layer has no autoRefresh set", () => {
+            const map = new MapHandler({
+                getLayerByLayerId: () => false,
+                showFeaturesByIds: () => false,
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false,
+                addLayerByLayerId: () => false,
+                getLayers: () => false,
+                setParserAttributeByLayerId: () => false
+            }, onerror.call);
+
+            map.layers.filterId = {
+                get: () => {
+                    return false;
+                }
+            };
+
+            expect(map.hasAutoRefreshInterval("filterId", "handler")).to.be.false;
+        });
+        it("should return true if the layer has an autoRefresh set", () => {
+            const map = new MapHandler({
+                getLayerByLayerId: () => false,
+                showFeaturesByIds: () => false,
+                createLayerIfNotExists: () => false,
+                liveZoom: () => false,
+                addLayerByLayerId: () => false,
+                getLayers: () => false,
+                setParserAttributeByLayerId: () => false
+            }, onerror.call);
+
+            map.layers.filterId = {
+                get: what => {
+                    if (what === "autoRefresh") {
+                        return 10000;
+                    }
+                    return false;
+                }
+            };
+
+            expect(map.hasAutoRefreshInterval("filterId", "handler")).to.be.true;
+        });
+    });
 });
