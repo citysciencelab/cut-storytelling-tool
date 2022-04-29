@@ -5,7 +5,7 @@ import {GeoJSON} from "ol/format.js";
 import {expect} from "chai";
 import sinon from "sinon";
 import GeoJSONLayer from "../../geojson";
-import mapCollection from "../../../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../../../core/maps/mapCollection.js";
 import store from "../../../../app-store";
 
 describe("src/core/layers/geojson.js", () => {

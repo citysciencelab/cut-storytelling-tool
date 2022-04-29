@@ -1,4 +1,4 @@
-import mapCollection from "../dataStorage/mapCollection";
+import mapCollection from "../maps/mapCollection";
 import findWhereJs from "../../utils/findWhereJs";
 import store from "../../app-store";
 

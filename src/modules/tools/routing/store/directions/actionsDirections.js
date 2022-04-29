@@ -2,7 +2,7 @@ import {RoutingWaypoint} from "../../utils/classes/routing-waypoint";
 import {fetchRoutingOrsDirections} from "../../utils/directions/routing-ors-directions";
 import Feature from "ol/Feature";
 import LineString from "ol/geom/LineString";
-import mapCollection from "../../../../../core/dataStorage/mapCollection";
+import mapCollection from "../../../../../core/maps/mapCollection";
 
 export default {
     /**

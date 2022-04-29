@@ -9,7 +9,7 @@ import LayerGroup from "ol/layer/Group";
 import View from "ol/View";
 import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";
-import mapCollection from "../../../../dataStorage/mapCollection";
+import mapCollection from "../../../../maps/mapCollection";
 
 const {addLayerToMap} = mutations;
 

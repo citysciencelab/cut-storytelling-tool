@@ -8,7 +8,7 @@ import RoutingBatchProcessingCheckboxComponent from "../../../../components/Rout
 import RoutingSliderInputComponent from "../../../../components/RoutingSliderInput.vue";
 import RoutingDownloadComponent from "../../../../components/RoutingDownload.vue";
 import Routing from "../../../../store/indexRouting";
-import mapCollection from "../../../../../../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../../../../../../core/maps/mapCollection.js";
 
 const localVue = createLocalVue();
 

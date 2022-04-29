@@ -3,7 +3,7 @@ import actions from "../../../../store/actions/actionsPrintInitialization";
 import VectorLayer from "ol/layer/Vector.js";
 import Canvas from "../../../../utils/buildCanvas";
 import sinon from "sinon";
-import mapCollection from "../../../../../../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../../../../../../core/maps/mapCollection.js";
 
 const {
     chooseCurrentLayout,

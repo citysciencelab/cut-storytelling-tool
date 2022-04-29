@@ -1,4 +1,4 @@
-import mapCollection from "../../../dataStorage/mapCollection";
+import mapCollection from "../../../maps/mapCollection";
 import api from "masterportalapi/src/maps/api";
 import store from "../../../../app-store";
 

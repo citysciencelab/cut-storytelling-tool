@@ -7,7 +7,7 @@ import DirectionsItemBatchProcessingComponent from "../../../../components/Direc
 import RoutingBatchProcessingCheckboxComponent from "../../../../components/RoutingBatchProcessingCheckbox.vue";
 import RoutingDownloadComponent from "../../../../components/RoutingDownload.vue";
 import Routing from "../../../../store/indexRouting";
-import mapCollection from "../../../../../../../core/dataStorage/mapCollection";
+import mapCollection from "../../../../../../../core/maps/mapCollection";
 
 const localVue = createLocalVue();
 
