@@ -40,7 +40,7 @@ export default {
             mapView.fit(featureGeometry, {
                 duration: 800,
                 callback: () => {
-                    commit("Maps/setCenter", mapView.getCenter(), {root: true});
+                    dispatch("Maps/setCenter", mapView.getCenter(), {root: true});
                 }
             });
         }

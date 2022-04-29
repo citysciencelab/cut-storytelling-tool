@@ -18,10 +18,10 @@ export default {
      * @see {@link https://openlayers.org/en/latest/apidoc/module-ol_View-View.html#fit} for more options.
      * @returns {void}
      */
-    zoomToExtent ({getters, commit}, {extent, options, map = {mapMode: "2D"}}) {
+    zoomToExtent ({getters, dispatch}, {extent, options, map = {mapMode: "2D"}}) {
         getters.getView.fit(extent, {
             size: mapCollection.getMap(map.mapMode).getSize(),
-            ...Object.assign({duration: 800, callBack: commit("setCenter", getters.getView.getCenter())}, options)
+            ...Object.assign({duration: 800, callBack: dispatch("setCenter", getters.getView.getCenter())}, options)
         });
     },
 

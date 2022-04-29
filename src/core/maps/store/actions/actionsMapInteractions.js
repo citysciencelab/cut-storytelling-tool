@@ -6,8 +6,8 @@ export default {
      * @param {module:ol/interaction/Interaction} interaction - Interaction to be added to map.
      * @returns {void}
      */
-    async addInteraction ({getters}, interaction) {
-        const map = await getters.get2DMap;
+    addInteraction ({getters}, interaction) {
+        const map = getters.get2DMap;
 
         map.addInteraction(interaction);
     },

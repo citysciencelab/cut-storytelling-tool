@@ -76,7 +76,7 @@ function makeObject (keys, value) {
  */
 function callMutations (state) {
     if (state.urlParams["Map/center"]) {
-        let centerCoords = state.Map.center;
+        let centerCoords = state.Maps.center;
 
         if (state.urlParams.projection !== undefined) {
             centerCoords = transformToMapProjection(mapCollection.getMap(state.Maps.mode), state.urlParams.projection, centerCoords);
