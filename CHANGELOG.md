@@ -9,6 +9,7 @@
 ## Unreleased - in development
 ### Added
 - A control has been added to create buttons for any tools. These can be used to open and close the configured tools.
+- Added style.json parameter "styleMultiGeomOnlyWithRule". If true, **no** fallback for styling of multiGeometries is used. Default is false, means the the previous behavior.
 
 ### Changed
 - Migrated the module featureViaURL from Backbone to Vue as a util. E2E tests were fixed and re-enabled.
@@ -17,6 +18,8 @@
     - @masterportal/masterportalapi: 2.1.1 to 2.2.0 (masterportalapi was renamed @masterportal/masterportalapi in the process)
 - Replaced hardcoded EPSG code of map projection by a getter which identifies the projection of the map in withoutGUIDraw
 - Layer with isNeverVisibleInTree will not be initialized in menu tree.
+- Issue #621: WMTS support for overviewMap implemented.
+- Update print configuration for tiledWMS, layers are printed as tiledwms with tileSize.
 
 ### Deprecated
 

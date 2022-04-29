@@ -70,6 +70,10 @@ export default {
             map = this.ol2DMap,
             view = getOverviewMapView(map, this.resolution);
 
+        // try to display overviewMap layer in all available resolutions
+        layer.setMaxResolution(view.getMaxResolution());
+        layer.setMinResolution(view.getMinResolution());
+
         if (layer) {
             this.overviewMap = new OverviewMap({
                 layers: [layer],

@@ -221,6 +221,35 @@ export default class MapHandler {
     }
 
     /**
+     * Sets the observer for auto interval for the layer referenced by the given filterid.
+     * @param {Number} filterId the filter id
+     * @param {Function} handler a function to call when auto refresh is triggered
+     * @returns {void}
+     */
+    setObserverAutoInterval (filterId, handler) {
+        const layerModel = this.getLayerModelByFilterId(filterId);
+
+        if (!isObject(layerModel)) {
+            return;
+        }
+        layerModel.setObserverAutoInterval(handler);
+    }
+
+    /**
+     * Checks if the layer referenced by filterId has an auto refresh interval.
+     * @param {Number} filterId the filter id
+     * @returns {Boolean} true if autoRefresh is set
+     */
+    hasAutoRefreshInterval (filterId) {
+        const layerModel = this.getLayerModelByFilterId(filterId);
+
+        if (!isObject(layerModel)) {
+            return false;
+        }
+        return layerModel.get("autoRefresh") > 0;
+    }
+
+    /**
      * Add the external Layer into Tree under the category Subject data
      * @param {Number} filterId the filter id
      * @returns {void}
