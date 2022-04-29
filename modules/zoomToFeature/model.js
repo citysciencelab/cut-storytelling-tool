@@ -42,7 +42,7 @@ const ZoomToFeature = Backbone.Model.extend({
             this.setIds(Array.isArray(ids) ? ids : [ids]);
             this.getFeaturesFromWFS();
             this.createFeatureCenterList();
-            if (this.get("setMarker")) {
+            if (this.get("setFeature")) {
                 this.putIconsForFeatureIds(this.get("featureCenterList"),
                     this.get("imgLink"), // @deprecated in version 3.0.0
                     this.get("anchor"), // @deprecated in version 3.0.0
