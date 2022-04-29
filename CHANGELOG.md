@@ -19,6 +19,7 @@
     - @masterportal/masterportalapi: 2.1.1 to 2.2.0 (masterportalapi was renamed @masterportal/masterportalapi in the process)
 - Replaced hardcoded EPSG code of map projection by a getter which identifies the projection of the map in withoutGUIDraw
 - Layer with isNeverVisibleInTree will not be initialized in menu tree.
+- Issue #621: WMTS support for overviewMap implemented.
 - Update print configuration for tiledWMS, layers are printed as tiledwms with tileSize.
 
 ### Deprecated
@@ -31,6 +32,7 @@
 - Issue #766: The performance of opening large folders in the tree of type custom or default has been increased.
 - Print Tool now works as expected when unchecking and checking the auto adjusted scale checkbox or selecting a scale manually.
 - Issue #756: The QuickHelp can now be configured or unconfigured for the SearchBar and the topic tree.
+- Measure Tool print style was erroneous for some situations, where polygon styles would be applied to lines and vice versa. This has been resolved.
 
 ---
 ## v2.20.1 - 2022-04-21
