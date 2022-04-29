@@ -316,6 +316,7 @@ In the following, all configuration options are described. For all configuration
 |id|yes|enum["zoomToFeatureId", "zoomToGeometry"]||Id of the URL query parameter the configuration refers to.|
 |layerId|yes|String||Id of the layer the feature should be fetched from.|
 |property|yes|String||Name of the property the features should be filtered by.|
+|addFeatures|no|Boolean|true|Specifies whether the desired features should be added to the map in a separate layer.|
 |allowedValues|no|Array||Only relevant when `id` equal `zoomToGeometry`. Further filters the values allowed in the URL query parameters.|
 |styleId|no|String||Only relevant when `id` equal `zoomToFeatureId`. Id of the `StyleModel` that should be used to style the features retrieved from the service.|
 
@@ -361,6 +362,7 @@ _Deprecated in the next major release. Please use **[zoomTo](#markdown-header-zo
 |attribute|yes|String||Attribute by which the WFS is filtered.|
 |styleId|no|String||A styleId from the `styles.json` may be supplied to override the map marker's design|
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Whether the service URL is to be requested via proxy. The request will contain the requested URL as path, with dots replaced by underdashes.|
+|addFeatures|no|Boolean|true|Specifies whether the desired features should be added to the map in a separate layer.|
 
 **Example:**
 
