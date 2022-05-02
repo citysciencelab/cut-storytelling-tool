@@ -75,7 +75,7 @@ function makeObject (keys, value) {
  * @returns {void}
  */
 function callMutations (state) {
-    if (state.urlParams["Map/center"]) {
+    if (state.urlParams["Maps/center"]) {
         let centerCoords = state.Maps.center;
 
         if (state.urlParams.projection !== undefined) {
@@ -101,9 +101,9 @@ function callActions (state) {
             store.dispatch("MapMarker/placingPointMarker", coordinates);
         }, 500);
     }
-    if (typeof state.urlParams["Map/zoomLevel"] === "number") {
-        store.commit("Maps/setInitialZoomLevel", state.urlParams["Map/zoomLevel"]);
-        store.dispatch("Maps/setZoomLevel", state.urlParams["Map/zoomLevel"]);
+    if (typeof state.urlParams["Maps/zoomLevel"] === "number") {
+        store.commit("Maps/setInitialZoomLevel", state.urlParams["Maps/zoomLevel"]);
+        store.dispatch("Maps/setZoomLevel", state.urlParams["Maps/zoomLevel"]);
         store.commit("Maps/setInitialResolution", store.getters["Maps/getView"].getResolution());
     }
 }

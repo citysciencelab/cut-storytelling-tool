@@ -1,5 +1,5 @@
 import Cluster from "ol/source/Cluster.js";
-import * as transformToMapProjection from "masterportalapi/src/crs";
+import {transformToMapProjection} from "masterportalapi/src/crs";
 
 import mapCollection from "../../../maps/mapCollection";
 import calculateExtent from "../../../../utils/calculateExtent";
@@ -66,13 +66,13 @@ export default {
      */
     zoomToProjExtent ({dispatch}, {data, map = {mapMode: "2D"}}) {
         if (Object.values(data).every(val => val !== undefined)) {
-            const leftBottom = data.extent.slice(0, 2),
-                topRight = data.extent.slice(2, 4),
-                transformedLeftBottom = transformToMapProjection(mapCollection.getMap(map.mapMode), data.projection, leftBottom),
-                transformedTopRight = transformToMapProjection(mapCollection.getMap(map.mapMode), data.projection, topRight),
+            const leftBottom = data.data.extent.slice(0, 2),
+                topRight = data.data.extent.slice(2, 4),
+                transformedLeftBottom = transformToMapProjection(mapCollection.getMap(map.mapMode), data.data.projection, leftBottom),
+                transformedTopRight = transformToMapProjection(mapCollection.getMap(map.mapMode), data.data.projection, topRight),
                 extentToZoom = transformedLeftBottom.concat(transformedTopRight);
 
-            dispatch("Maps/zoomToExtent", {extent: extentToZoom, options: data.options, map: {mapMode: map.mapMode}});
+            dispatch("zoomToExtent", {extent: extentToZoom, options: data.data.options, map: {mapMode: map.mapMode}});
         }
     }
 };

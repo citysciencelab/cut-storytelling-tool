@@ -99,7 +99,7 @@ export function translateToBackbone (urlParamsKey, urlParamsValue) {
  * @returns {void}
  */
 export function doSpecialBackboneHandling (key, value) {
-    if (key === "Map/mapMode") {
+    if (key === "Maps/mapMode") {
         if (value === "3D" || String(value).toLowerCase() === "3d") {
             // set mapMode manually back to '2D', is set to '3D' in activateMap im map3D and 3D-layers watches to that
             // can be removed, if Radio trigger 'mapChangeTo3d' is removed
@@ -107,20 +107,20 @@ export function doSpecialBackboneHandling (key, value) {
             Radio.trigger("Map", "mapChangeTo3d");
         }
     }
-    else if (key === "Map/mdId") {
+    else if (key === "Maps/mdId") {
         const layers = getLayersUsingMetaId(value);
 
         setLayersVisible(layers);
     }
-    else if (key === "Map/zoomToExtent") {
+    else if (key === "Maps/zoomToExtent") {
         Radio.trigger("Map", "zoomToProjExtent", {data: {
             extent: convert(value),
             options: {duration: 0},
-            projection: store.state.urlParams?.projection || store.state.Map?.projection?.getCode()
+            projection: store.state.urlParams?.projection || store.state.Maps?.projection?.getCode()
         }
         });
     }
-    else if (key === "Map/zoomToGeometry") {
+    else if (key === "Maps/zoomToGeometry") {
         const gemometryToZoom = parseZoomToGeometry(value);
 
         if (gemometryToZoom !== "") {
