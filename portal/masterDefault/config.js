@@ -90,7 +90,6 @@ const Config = {
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
     restConf: "https://geodienste.hamburg.de/lgv-config/rest-services-internet.json",
     styleConf: "https://geodienste.hamburg.de/lgv-config/style_v3.json",
-    isMenubarVisible: true,
     gemarkungen: "https://geodienste.hamburg.de/lgv-config/gemarkung.json",
     obliqueMap: true,
     cesiumParameter: {
