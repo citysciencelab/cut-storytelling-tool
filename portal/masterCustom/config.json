@@ -261,7 +261,7 @@
           },
           "searchByCoord": {
             "name": "translate#common:menu.tools.searchByCoord",
-            "icon": "bi-record-circle"
+            "icon": "bi-search"
           },
           "coordToolkit": {
             "name": "translate#common:menu.tools.coordToolkit",
@@ -322,7 +322,7 @@
       },
       "legend": {
         "name": "translate#common:modules.legend.name",
-        "icon": "bi-journal",
+        "icon": "bi-lightbulb",
         "showCollapseAllButton": true
       },
       "contact": {

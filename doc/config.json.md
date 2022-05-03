@@ -1279,7 +1279,7 @@ Legend configuration options.
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |name|yes|String||Legend name.|false|
-|icon|no|String|"bi-journal"|Legend icon.|false|
+|icon|no|String|"bi-lightbulb"|Legend icon.|false|
 |showCollapseAllButton|no|Boolean|false|Option to en-/disable all legends.|false|
 |showLegend|no|Boolean|false|Option to display the legend when starting the portal|false|
 
@@ -1344,7 +1344,7 @@ A folder object defined by a name, icon, and its children.
         "children": {
             "legend": {
                 "name": "Legende",
-                "icon": "bi-journal"
+                "icon": "bi-lightbulb"
             }
         }
     }
@@ -1454,7 +1454,7 @@ A tool's attribute key defines which tool is loaded. Each tool provides at least
 {
     "legend":{
         "name": "Legende",
-        "icon": "bi-journal"
+        "icon": "bi-lightbulb"
     }
 }
 ```
@@ -2203,7 +2203,7 @@ Coordinate search.
 {
     "searchByCoord": {
         "name": "Flurstückssuche",
-        "icon": "bi-record-circle",
+        "icon": "bi-search",
         "zoomLevel": 7
     }
 }

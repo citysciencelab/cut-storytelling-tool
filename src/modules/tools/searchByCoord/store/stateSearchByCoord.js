@@ -19,7 +19,7 @@ const state = {
     zoomLevel: 7,
     // mandatory defaults for config.json parameters
     name: "Koordinatensuche",
-    icon: "bi-record-circle",
+    icon: "bi-search",
     renderToWindow: true,
     resizableWindow: true,
     isVisibleInMenu: true,

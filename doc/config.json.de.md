@@ -1225,7 +1225,7 @@ Konfigurations-Optionen der Legende.
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |name|ja|String||Name der Legende.|false|
-|icon|nein|String|"bi-journal"|Icon der Legende.|false|
+|icon|nein|String|"bi-lightbulb"|Icon der Legende.|false|
 |showCollapseAllButton|nein|Boolean|false|Option zum Ein- bzw. Ausblenden aller Legenden|false|
 |showLegend|nein|Boolean|false|Option zum Anzeigen der Legende beim Start des Portals|false|
 
@@ -1288,7 +1288,7 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "icon" noch d
     "children": {
         {
             "name": "Legende",
-            "icon": "bi-journal"
+            "icon": "bi-lightbulb"
         }
     }
 }
@@ -1396,7 +1396,7 @@ Neben **Portalconfig.menu.tools** können auch die Pfade **Portalconfig.menu.inf
 #!json
 "legend":{
     "name": "Legende",
-    "icon": "bi-journal"
+    "icon": "bi-lightbulb"
 }
 ```
 
@@ -2131,7 +2131,7 @@ Koordinatensuche.
 #!json
 "searchByCoord": {
     "name": "Flurstückssuche",
-    "icon": "bi-record-circle",
+    "icon": "bi-search",
     "zoomLevel": 7
 }
 ```

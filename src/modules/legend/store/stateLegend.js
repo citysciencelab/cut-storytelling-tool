@@ -1,7 +1,7 @@
 export default {
     id: "legend",
     name: "Legende",
-    icon: "bi-journal",
+    icon: "bi-lightbulb",
     showLegend: false,
     legends: [],
     layerIdForLayerInfo: "",

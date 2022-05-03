@@ -16,7 +16,7 @@ describe("LegendMenu.vue", () => {
                 menu: {
                     legend: {
                         name: "common:modules.legend.name",
-                        icon: "bi-journal",
+                        icon: "bi-lightbulb",
                         showCollapseAllButton: true
                     }
                 }
