@@ -30,7 +30,7 @@
     "menu": {
       "tree": {
         "name": "translate#common:menu.topics",
-        "icon": "bi-list-ul",
+        "icon": "bi-stack",
         "isAlwaysExpanded": [
           "SelectedLayer"
         ]
@@ -53,7 +53,7 @@
           },
           "measure": {
             "name": "translate#common:menu.tools.measure",
-            "icon": "bi-arrows-angle-expand"
+            "icon": "bi-rulers"
           },
           "gfi": {
             "name": "translate#common:menu.tools.getInfos",
@@ -74,7 +74,7 @@
           },
           "searchByCoord": {
             "name": "translate#common:menu.tools.searchByCoord",
-            "icon": "bi-record-circle"
+            "icon": "bi-search"
           },
           "coordToolkit": {
             "name": "translate#common:menu.tools.coordToolkit",
@@ -86,7 +86,7 @@
           },
           "fileImport": {
             "name": "translate#common:menu.tools.fileImport",
-            "icon": "bi-cloud-download"
+            "icon": "bi-box-arrow-in-down"
           },
           "draw": {
             "name": "translate#common:menu.tools.draw",
@@ -115,7 +115,7 @@
           "saveSelection": {
             "name": "translate#common:menu.tools.saveSelection",
             "simpleMap": true,
-            "icon": "bi-box-arrow-up-right"
+            "icon": "bi-bookmark-check"
           },
           "shadow": {
             "name": "Schatten",

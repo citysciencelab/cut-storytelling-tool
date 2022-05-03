@@ -2861,7 +2861,7 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
 #!json
 "layerSlider": {
     "name": "Zeitreihe",
-    "icon": "bi-film",
+    "icon": "bi-hourglass-split",
     "title": "Simulation von Beispiel-WMS",
     "sliderType": "player",
     "timeInterval": 2000,

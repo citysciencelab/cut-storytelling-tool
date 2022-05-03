@@ -20,7 +20,7 @@ const state = {
     id: "saveSelection",
     // defaults for config.json tool parameters
     name: "common:menu.tools.saveSelection",
-    icon: "bi-box-arrow-up-right",
+    icon: "bi-bookmark-check",
     renderToWindow: true,
     resizableWindow: true,
     isVisibleInMenu: true,

@@ -18,7 +18,7 @@ describe("src/modules/tools/layerSlider/components/LayerSliderPlayer.vue", () =>
                     children: {
                         layerSlider: {
                             "name": "translate#common:menu.tools.layerSlider",
-                            "icon": "bi-film",
+                            "icon": "bi-hourglass-split",
                             "windowsInterval": null
                         }
                     }

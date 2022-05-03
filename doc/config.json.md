@@ -2927,7 +2927,7 @@ The layer slider tool allows showing multiple layers in a row. This may e.g. be 
 {
     "layerSlider": {
         "name": "Timeline",
-        "icon": "bi-film",
+        "icon": "bi-hourglass-split",
         "title": "Example WMS simulation",
         "sliderType": "player",
         "timeInterval": 2000,

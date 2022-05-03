@@ -13,7 +13,7 @@
 const state = {
     active: false,
     deactivateGFI: true,
-    icon: "bi-droplet-fill",
+    icon: "bi-paint-bucket",
     id: "styleVT",
     layerModel: null,
     name: "common:menu.tools.styleVt",

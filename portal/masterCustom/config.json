@@ -71,14 +71,14 @@
           "source": "_source"
         },
         "hitType": "common:modules.searchbar.type.subject",
-        "hitGlyphicon": "bi-list-ul"
+        "hitIcon": "bi-list-ul"
       },
       "placeholder": "translate#common:modules.searchbar.placeholder.addressHospitalBplan"
     },
     "menu": {
       "tree": {
         "name": "translate#common:menu.topics",
-        "icon": "bi-list-ul",
+        "icon": "bi-stack",
         "isInitOpen": true,
         "isAlwaysExpanded": [
           "SelectedLayer"
@@ -215,7 +215,7 @@
           },
           "measure": {
             "name": "translate#common:menu.tools.measure",
-            "icon": "bi-arrows-angle-expand"
+            "icon": "bi-rulers"
           },
           "supplyCoord": {
             "name": "translate#common:menu.tools.supplyCoord",
@@ -230,7 +230,7 @@
           "layerSlider": {
             "name": "translate#common:menu.tools.layerSlider",
             "sliderType": "handle",
-            "icon": "bi-film",
+            "icon": "bi-hourglass-split",
             "timeInterval": 2000,
             "layerIds": [
               {
@@ -269,7 +269,7 @@
           },
           "fileImport": {
             "name": "translate#common:menu.tools.fileImport",
-            "icon": "bi-cloud-download"
+            "icon": "bi-box-arrow-in-down"
           },
           "extendedFilter": {
             "name": "Erweiterter Filter",
@@ -307,7 +307,7 @@
           },
           "saveSelection": {
             "name": "translate#common:menu.tools.saveSelection",
-            "icon": "bi-box-arrow-up-right"
+            "icon": "bi-bookmark-check"
           },
           "addWMS": {
             "name": "translate#common:menu.tools.addWms",
@@ -315,7 +315,7 @@
           },
           "styleWMS": {
             "name": "Style WMS",
-            "icon": "bi-droplet-fill",
+            "icon": "bi-paint-bucket",
             "onlyDesktop": true
           }
         }

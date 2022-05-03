@@ -115,12 +115,12 @@
     "menu": {
       "tree": {
         "name": "translate#common:menu.topics",
-        "icon": "bi-list-ul",
+        "icon": "bi-stack",
         "isInitOpen": false
       },
       "ansichten": {
         "name": "translate#common:menu.views.name",
-        "icon": "bi-list-ul",
+        "icon": "bi-binoculars-fill",
         "children": {
           "view1": {
             "name": "translate#common:menu.views.view01",
@@ -309,7 +309,7 @@
           },
           "populationRequest": {
             "name": "translate#additional:modules.tools.populationRequest.title",
-            "icon": "bi-wrench",
+            "icon": "bi-person-bounding-box",
             "onlyDesktop": false
           },
           "compareFeatures": {
@@ -328,7 +328,7 @@
           },
           "measure": {
             "name": "translate#common:menu.tools.measure",
-            "icon": "bi-arrows-angle-expand"
+            "icon": "bi-rulers"
           },
           "supplyCoord": {
             "name": "translate#common:menu.tools.supplyCoord",
@@ -355,19 +355,19 @@
           },
           "bufferAnalysis": {
             "name": "bufferAnalysis",
-            "icon": "bi-arrows-angle-expand"
+            "icon": "bi-record-circle"
           },
           "searchByCoord": {
             "name": "translate#common:menu.tools.searchByCoord",
-            "icon": "bi-record-circle"
+            "icon": "bi-search"
           },
           "selectFeatures": {
             "name": "translate#common:menu.tools.selectFeatures",
-            "icon": "bi-card-list"
+            "icon": "bi-hand-index-thumb-fill"
           },
           "fileImport": {
             "name": "translate#common:menu.tools.fileImport",
-            "icon": "bi-cloud-download"
+            "icon": "bi-box-arrow-in-down"
           },
           "extendedFilter": {
             "name": "Erweiterter Filter",
@@ -399,7 +399,7 @@
           },
           "styleWMS": {
             "name": "translate#common:menu.tools.styleWMS",
-            "icon": "bi-droplet-fill"
+            "icon": "bi-paint-bucket"
           },
           "featureLister": {
             "name": "translate#common:menu.tools.featureLister",
@@ -441,11 +441,11 @@
           },
           "saveSelection": {
             "name": "translate#common:menu.tools.saveSelection",
-            "icon": "bi-box-arrow-up-right"
+            "icon": "bi-bookmark-check"
           },
           "layerSlider": {
             "name": "translate#common:menu.tools.layerSlider",
-            "icon": "bi-film",
+            "icon": "bi-hourglass-split",
             "timeInterval": 1000,
             "layerIds": [
               {
@@ -482,7 +482,7 @@
           },
           "tacticalMark": {
             "name": "Taktische Zeichen",
-            "icon": "bi-geo-alt-fill"
+            "icon": "bi-signpost-split-fill"
           }
         }
       },

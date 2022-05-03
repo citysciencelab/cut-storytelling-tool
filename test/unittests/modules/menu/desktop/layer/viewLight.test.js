@@ -111,11 +111,11 @@ describe("menu/desktop/layer/viewLight", function () {
 
             const layerView = new CustomLayerView({model: fakeModel});
 
-            expect(layerView.$el.find(".bi-droplet-fill").length).to.be.equal(1);
+            expect(layerView.$el.find(".bi-paint-bucket").length).to.be.equal(1);
 
             layerView.rerender();
 
-            expect(layerView.$el.find(".bi-droplet-fill").length).to.be.equal(1);
+            expect(layerView.$el.find(".bi-paint-bucket").length).to.be.equal(1);
         });
         it("should be hidden for other not styleable layers", function () {
 
@@ -124,11 +124,11 @@ describe("menu/desktop/layer/viewLight", function () {
 
             const layerView = new CustomLayerView({model: fakeModel});
 
-            expect(layerView.$el.find(".bi-droplet-fill").length).to.be.equal(0);
+            expect(layerView.$el.find(".bi-paint-bucket").length).to.be.equal(0);
 
             layerView.rerender();
 
-            expect(layerView.$el.find(".bi-droplet-fill").length).to.be.equal(0);
+            expect(layerView.$el.find(".bi-paint-bucket").length).to.be.equal(0);
         });
     });
     describe("the layer checkbox", function () {

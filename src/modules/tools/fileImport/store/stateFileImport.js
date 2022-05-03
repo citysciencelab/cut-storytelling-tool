@@ -16,7 +16,7 @@
 export default {
     active: false,
     deactivateGFI: false,
-    icon: "bi-cloud-download",
+    icon: "bi-box-arrow-in-down",
     id: "fileImport",
     name: "common:menu.tools.fileImport",
     onlyDesktop: true,
