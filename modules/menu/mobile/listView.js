@@ -26,19 +26,19 @@ const MobileMenu = Backbone.View.extend({
                 }
             }
         });
-        this.render();
+        this.render(false);
         this.breadCrumbListView = new BreadCrumbListView();
     },
     collection: {},
     el: "nav#main-nav",
     attributes: {role: "navigation"},
     breadCrumbListView: {},
-    render: function () {
+    render: function (notFirstCall) {
         const rootModels = this.collection.where({parentId: "root"});
 
         $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
         $("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
-        this.addViews(rootModels);
+        this.addViews(rootModels, notFirstCall);
         store.dispatch("Legend/setShowLegendInMenu", true);
         return this;
     },
@@ -173,7 +173,7 @@ const MobileMenu = Backbone.View.extend({
      * @param {Item[]} models - all models
      * @returns {void}
      */
-    addViews: function (models) {
+    addViews: function (models, notFirstCall = true) {
         const treeType = this.doRequestTreeType(),
             newModels = models.filter(model => !(model.get("onlyDesktop") === true));
 
@@ -182,6 +182,9 @@ const MobileMenu = Backbone.View.extend({
 
         newModels.forEach(model => {
             model.setIsVisibleInTree(true);
+            if (notFirstCall && model.get("name") === "common:modules.legend.name") {
+                return;
+            }
             switch (model.get("type")) {
                 case "folder": {
                     attr = model.toJSON();
