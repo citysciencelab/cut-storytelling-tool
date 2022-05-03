@@ -335,7 +335,7 @@ const getters = {
     * @param  {String} layerName Name of the Layer.
     * @return {module:ol/layer/Base~BaseLayer} The layer found by name.
     */
-    getLayerByName (layerName) {
+    getLayerByName: () => (layerName) => {
         return getters.get2DMap().getLayers().getArray().find(layer => layer.get("name") === layerName);
     }
 };
