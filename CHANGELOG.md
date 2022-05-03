@@ -10,6 +10,7 @@
 ### Added
 - A control has been added to create buttons for any tools. These can be used to open and close the configured tools.
 - Added style.json parameter "styleMultiGeomOnlyWithRule". If true, **no** fallback for styling of multiGeometries is used. Default is false, means the the previous behavior.
+- Russian, Ukrainian and Platt is now available as a new language selection.
 - Added new module `zoomTo` which combines the modules `zoomToFeature` and `zoomToGeometry`.
 
 ### Changed
@@ -21,6 +22,7 @@
 - Layer with isNeverVisibleInTree will not be initialized in menu tree.
 - Issue #621: WMTS support for overviewMap implemented.
 - Update print configuration for tiledWMS, layers are printed as tiledwms with tileSize.
+- WFSSearch, has been adjusted so that it zooms directly to the first feature found if no `resultList` is configured.
 
 ### Deprecated
 - Configuration (`config.js`) parameters `zoomToFeature` and `zoomToGeometry` have been marked as deprecated in an upcoming major release.
@@ -33,6 +35,9 @@
 - Print Tool now works as expected when unchecking and checking the auto adjusted scale checkbox or selecting a scale manually.
 - Issue #756: The QuickHelp can now be configured or unconfigured for the SearchBar and the topic tree.
 - Measure Tool print style was erroneous for some situations, where polygon styles would be applied to lines and vice versa. This has been resolved.
+- Issue #770: 3D mode can now be started again, even if no Backbone Tool is configured.
+- Issue #763: In the `custom` topic tree, layers are now always set to the top position when they are shown or hidden.
+- The control `PoiOrientation` now also works with points that use the default style.
 
 ---
 ## v2.20.1 - 2022-04-21

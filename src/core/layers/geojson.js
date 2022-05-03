@@ -83,6 +83,13 @@ GeoJSONLayer.prototype.createLayer = function (attrs) {
                 }
             }.bind(this),
             afterLoading: function (features) {
+                if (Array.isArray(features)) {
+                    features.forEach((feature, idx) => {
+                        if (typeof feature?.getId === "function" && typeof feature.getId() === "undefined") {
+                            feature.setId("geojson-" + attrs.id + "-feature-id-" + idx);
+                        }
+                    });
+                }
                 this.featuresLoaded(attrs.id, features);
                 if (this.get("isSelected") || attrs.isSelected) {
                     LoaderOverlay.hide();

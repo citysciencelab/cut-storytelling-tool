@@ -92,8 +92,6 @@ module.exports = {
         numFeaturesToShow: 2,
         infoText: "(weitere Objekte. Bitte zoomen.)"
     },
-    isMenubarVisible: true,
-    geoAPI: false,
     remoteInterface: {
         postMessageUrl: "http://localhost:8080"
     },
