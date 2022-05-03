@@ -204,7 +204,7 @@ A translation is implemented this way:
 i18next.t("additional:modules.tools.example.title"),
 ```
 
-[See this for an example.](https://bitbucket.org/geowerkstatt-hamburg/addons/src/master/populationRequest/)
+[See this for an example.](https://bitbucket.org/geowerkstatt-hamburg/addons/src/dev/populationRequest/)
 
 ## Interesting i18nxt translation functions
 
