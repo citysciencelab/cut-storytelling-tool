@@ -122,6 +122,9 @@ function mdTranslator (data) {
                     body {
                         max-width: 1200px;
                     }
+                    table {
+                        table-layout: auto;
+                    }
                 </style>
             </head>
             <body>
