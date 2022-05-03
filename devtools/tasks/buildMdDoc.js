@@ -118,6 +118,11 @@ function mdTranslator (data) {
                 <meta charset="utf-8">
                 <title>📚Masterportal Docs</title>
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+                <style>
+                    body {
+                        max-width: 1200px;
+                    }
+                </style>
             </head>
             <body>
                 ${html}
