@@ -26,6 +26,7 @@ const ZoomToFeature = Backbone.Model.extend({
             anchorYUnits: "pixels"
         }, // @deprecated in version 3.0.0
         imageScale: 2, // @deprecated in version 3.0.0,
+        setFeature: true,
         useProxy: false
     },
     initialize: function () {
@@ -33,7 +34,6 @@ const ZoomToFeature = Backbone.Model.extend({
     },
 
     init: function () {
-
         let ids = "";
 
         this.setStyleListModel(Radio.request("StyleList", "returnModelById", this.get("styleId")));
@@ -42,11 +42,13 @@ const ZoomToFeature = Backbone.Model.extend({
             this.setIds(Array.isArray(ids) ? ids : [ids]);
             this.getFeaturesFromWFS();
             this.createFeatureCenterList();
-            this.putIconsForFeatureIds(this.get("featureCenterList"),
-                this.get("imgLink"), // @deprecated in version 3.0.0
-                this.get("anchor"), // @deprecated in version 3.0.0
-                this.get("imageScale"), // @deprecated in version 3.0.0
-                this.get("styleListModel"));
+            if (this.get("setFeature")) {
+                this.putIconsForFeatureIds(this.get("featureCenterList"),
+                    this.get("imgLink"), // @deprecated in version 3.0.0
+                    this.get("anchor"), // @deprecated in version 3.0.0
+                    this.get("imageScale"), // @deprecated in version 3.0.0
+                    this.get("styleListModel"));
+            }
             this.zoomToFeatures();
         }
     },
@@ -64,7 +66,7 @@ const ZoomToFeature = Backbone.Model.extend({
     putIconsForFeatureIds: function (featureCenterList, imgLink, anchor, imageScale, styleListModel) {
         const iconFeatures = [];
 
-        featureCenterList.forEach(function (featureCenter, index) {
+        featureCenterList.forEach((featureCenter, index) => {
             const featureName = "featureIcon" + index,
                 iconFeature = this.createIconFeature(featureCenter, featureName);
             let iconStyle;
@@ -79,7 +81,7 @@ const ZoomToFeature = Backbone.Model.extend({
 
             iconFeature.setStyle(iconStyle);
             iconFeatures.push(iconFeature);
-        }, this);
+        });
 
         Radio.trigger("Map", "addLayerOnTop", this.createIconVectorLayer(iconFeatures));
     },

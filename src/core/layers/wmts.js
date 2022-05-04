@@ -256,11 +256,13 @@ WMTSLayer.prototype.createLegend = function () {
                         const getLegend = getNestedValues(layer, "LegendURL");
 
                         if (getLegend !== null && getLegend !== undefined) {
-                            legend = getLegend[0][0].href;
-                            this.setLegend([legend]);
+                            legend = getLegend[0]?.[0]?.href;
+                            if (legend) {
+                                this.setLegend([legend]);
 
-                            // rebuild Legend
-                            bridge.setLegendLayerList();
+                                // rebuild Legend
+                                bridge.setLegendLayerList();
+                            }
                         }
                         else {
                             this.setLegend(null);

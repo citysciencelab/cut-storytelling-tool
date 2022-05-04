@@ -10,6 +10,8 @@ import InterfaceWfsIntern from "./interface.wfs.intern.js";
 import InterfaceWfsExtern from "./interface.wfs.extern.js";
 import InterfaceOafIntern from "./interface.oaf.intern.js";
 import InterfaceOafExtern from "./interface.oaf.extern.js";
+import InterfaceGeojsonIntern from "./interface.geojson.intern.js";
+import InterfaceGeojsonExtern from "./interface.geojson.extern.js";
 
 /**
  * FilterApi is the api to use in vue environment. It encapsulates the filter interfaces.
@@ -32,7 +34,9 @@ export default class FilterApi {
                 wfsIntern: new InterfaceWfsIntern(FilterApi.intervalRegister, {getFeaturesByLayerId, isFeatureInMapExtent}),
                 wfsExtern: new InterfaceWfsExtern(),
                 oafIntern: new InterfaceOafIntern(FilterApi.intervalRegister, {getFeaturesByLayerId, isFeatureInMapExtent}),
-                oafExtern: new InterfaceOafExtern()
+                oafExtern: new InterfaceOafExtern(),
+                geojsonIntern: new InterfaceGeojsonIntern(FilterApi.intervalRegister, {getFeaturesByLayerId, isFeatureInMapExtent}),
+                geojsonExtern: new InterfaceGeojsonExtern()
             };
         }
     }
@@ -91,6 +95,19 @@ export default class FilterApi {
             }
             else {
                 onerror(new Error("FilterApi.setServiceByLayerModel: Filtering oaf extern is not supported yet."));
+            }
+        }
+        else if (type === "geojson") {
+            if (!extern) {
+                this.service = {
+                    type,
+                    extern,
+                    layerId,
+                    url: layerModel.get("url")
+                };
+            }
+            else {
+                onerror(new Error("FilterApi.setServiceByLayerModel: Filtering geojson extern is not supported."));
             }
         }
         else if (typeof onerror === "function") {
@@ -314,6 +331,12 @@ export default class FilterApi {
         }
         else if (type === "oaf" && service.extern) {
             return FilterApi.interfaces.oafExtern;
+        }
+        else if (type === "geojson" && !service.extern) {
+            return FilterApi.interfaces.geojsonIntern;
+        }
+        else if (type === "geojson" && service.extern) {
+            return FilterApi.interfaces.geojsonExtern;
         }
         else if (typeof onerror === "function") {
             onerror(new Error("FilterApi.getInterfaceByService: Unknown service type " + type));

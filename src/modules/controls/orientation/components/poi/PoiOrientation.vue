@@ -3,6 +3,7 @@ import {mapGetters, mapMutations} from "vuex";
 import getters from "../../store/gettersOrientation";
 import mutations from "../../store/mutationsOrientation";
 import {extractEventCoordinates} from "../../../../../../src/utils/extractEventCoordinates";
+import Icon from "ol/style/Icon";
 
 export default {
     name: "PoiOrientation",
@@ -156,26 +157,24 @@ export default {
             const style = Radio.request("StyleList", "returnModelById", feat.styleId);
 
             if (style) {
-                style.getLegendInfos().forEach(legendInfo => {
-                    if (legendInfo.geometryType === "Point") {
-                        const type = legendInfo.styleObject.get("type");
+                const featureStyle = style.createStyle(feat, false);
 
-                        if (type === "icon") {
-                            const featureStyle = style.createStyle(feat, false);
-
-                            imagePath = featureStyle?.getImage()?.getSrc() ? featureStyle?.getImage()?.getSrc() : "";
-                        }
-                        else if (type === "circle") {
+                if (featureStyle?.getImage() instanceof Icon) {
+                    imagePath = featureStyle.getImage()?.getSrc() ? featureStyle.getImage()?.getSrc() : "";
+                }
+                else {
+                    style.getLegendInfos().forEach(legendInfo => {
+                        if (legendInfo.geometryType === "Point" && legendInfo.styleObject.get("type") === "circle") {
                             imagePath = this.createCircleSVG(legendInfo.styleObject);
                         }
-                    }
-                    else if (legendInfo.geometryType === "LineString") {
-                        imagePath = this.createLineSVG(legendInfo.styleObject);
-                    }
-                    else if (legendInfo.geometryType === "Polygon") {
-                        imagePath = this.createPolygonSVG(legendInfo.styleObject);
-                    }
-                });
+                        else if (legendInfo.geometryType === "LineString") {
+                            imagePath = this.createLineSVG(legendInfo.styleObject);
+                        }
+                        else if (legendInfo.geometryType === "Polygon") {
+                            imagePath = this.createPolygonSVG(legendInfo.styleObject);
+                        }
+                    });
+                }
             }
 
             return imagePath;

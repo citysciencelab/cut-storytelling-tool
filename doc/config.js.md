@@ -315,6 +315,7 @@ In the following, all configuration options are described. For all configuration
 |wfsId|yes|String||ID to a WFS layer of which features to a position are requested from.|
 |attribute|yes|String||Attribute by which the WFS is filtered.|
 |styleId|no|String||A styleId from the `styles.json` may be supplied to override the map marker's design|
+|setFeature|no|Boolean|yes||Specifies a feature with which to create the specified style.
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Whether the service URL is to be requested via proxy. The request will contain the requested URL as path, with dots replaced by underdashes.|
 
 **Example:**
