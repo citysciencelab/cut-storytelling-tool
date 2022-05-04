@@ -33,7 +33,7 @@ const MobileMenu = Backbone.View.extend({
     el: "nav#main-nav",
     attributes: {role: "navigation"},
     breadCrumbListView: {},
-    render: function (notFirstCall = true) {
+    render: function (notFirstCall) {
         const rootModels = this.collection.where({parentId: "root"});
 
         $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
@@ -171,10 +171,10 @@ const MobileMenu = Backbone.View.extend({
      * separates by modelType and add Views
      * add only tools that have the attribute "isVisibleInMenu" === true
      * @param {Item[]} models - all models
-     * @param {boolean} notFirstCall Whether this is the first time this function has been called; used for a fix on the menu item of the legend.
+     * @param {boolean} [notFirstCall = true] Whether this is the first time this function has been called; used for a fix on the menu item of the legend.
      * @returns {void}
      */
-    addViews: function (models, notFirstCall) {
+    addViews: function (models, notFirstCall = true) {
         const treeType = this.doRequestTreeType(),
             newModels = models.filter(model => !(model.get("onlyDesktop") === true));
 
