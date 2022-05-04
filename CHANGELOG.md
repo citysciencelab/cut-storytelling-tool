@@ -6,7 +6,7 @@
 ## Known Issues
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 
-## Unreleased - in development
+## v2.21.0 - 2022-05-04
 ### Added
 - A control has been added to create buttons for any tools. These can be used to open and close the configured tools.
 - Added style.json parameter "styleMultiGeomOnlyWithRule". If true, **no** fallback for styling of multiGeometries is used. Default is false, means the the previous behavior.
