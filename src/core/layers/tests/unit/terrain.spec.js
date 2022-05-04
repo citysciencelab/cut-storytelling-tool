@@ -48,6 +48,9 @@ describe("src/core/layers/terrain.js", () => {
         cesiumTerrainProviderSpy = sinon.spy(global.Cesium, "CesiumTerrainProvider");
         cesiumEllipsoidTerrainProviderSpy = sinon.spy(global.Cesium, "EllipsoidTerrainProvider");
         store.state.Maps.mode = "3D";
+        store.getters = {
+            "Maps/mode": store.state.Maps.mode
+        };
     });
 
     afterEach(() => {

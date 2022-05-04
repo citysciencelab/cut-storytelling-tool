@@ -33,8 +33,8 @@ function create2DMap (mapViewSettings) {
  * @param {Object} configJs The settings of config.json file.
  * @returns {void}
  */
-function create3DMap () {
-    if (window.Cesium && Config.startingMap3D) {
+function create3DMap (configJs) {
+    if (window.Cesium && configJs.startingMap3D) {
         store.dispatch("Maps/activateMap3D");
     }
 

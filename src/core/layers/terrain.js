@@ -70,7 +70,7 @@ TerrainLayer.prototype.setVisible = function (newValue) {
  * @returns {void}
  */
 TerrainLayer.prototype.setIsSelected = function (newValue, attr) {
-    const map = mapCollection.getMap(store.state.Maps.mode),
+    const map = mapCollection.getMap(store.getters["Maps/mode"]),
         treeType = store.getters.treeType;
 
     if (map && map.mode === "3D") {

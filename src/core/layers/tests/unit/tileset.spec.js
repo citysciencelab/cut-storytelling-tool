@@ -53,6 +53,9 @@ describe("src/core/layers/tileset.js", () => {
         };
         cesium3DTilesetSpy = sinon.spy(global.Cesium, "Cesium3DTileset");
         store.state.Maps.mode = "3D";
+        store.getters = {
+            "Maps/mode": store.state.Maps.mode
+        };
     });
 
     afterEach(() => {
