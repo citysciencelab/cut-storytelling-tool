@@ -314,7 +314,7 @@ const getters = {
     * @param  {Boolean} searchInGroupLayers Specifies whether to search for the id in the childLayers of groupLayers.
     * @return {module:ol/layer/Base~BaseLayer} The layer found by id.
     */
-    getLayerById ({layerId, searchInGroupLayers = true}) {
+    getLayerById: () => ({layerId, searchInGroupLayers = true}) => {
         let returnLayer = null;
 
         getters.get2DMap().getLayers().getArray().forEach(layer => {

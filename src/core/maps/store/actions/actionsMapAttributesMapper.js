@@ -26,7 +26,7 @@ export default {
         }
         dispatch("setViewAttributes", map.getView());
 
-        const layerIds = await dispatch("normalizeLayers", map.getLayers().getArray()),
+        const layerIds = await dispatch("normalizeLayers", await map.getLayers().getArray()),
             channel = Radio.channel("VectorLayer");
 
         // listen to featuresLoaded event to be able to determine if all features of a layer are completely loaded
