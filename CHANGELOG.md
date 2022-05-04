@@ -7,10 +7,17 @@
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 ## Unreleased - in development
 ### Added
+- The following NPM packages are added:
+    - dependencies:
+        - "bootstrap-sass"
+        - "bootstrap-icons"
+- Added a mixin for changing the colour and padding of an active pill inside the css class `nav-pills`.
 
 ### Changed
+- `default`-gfiTheme: If a `|`-character is part of the response, every element separated by the character will be displayed in a separate paragraph.
 
 ### Deprecated
+- Switched Icon Library from Glyphicon to Bootstrap Icons. Edited Webpack Config. Updated icon usage in vue components to use scss. Updated icon usage in backbone modules. Edited docs & tests accordingly.
 
 ### Removed
 
@@ -23,11 +30,6 @@
 - Added style.json parameter "styleMultiGeomOnlyWithRule". If true, **no** fallback for styling of multiGeometries is used. Default is false, means the the previous behavior.
 - ZoomToFeature: A `setFeature` attribute has been added to zoom only to a feature per ID. A new feature with the specified style is not created in this case.
 - Russian, Ukrainian and Platt is now available as a new language selection.
-- The following NPM packages are added:
-    - dependencies:
-        - "bootstrap-sass"
-        - "bootstrap-icons"
-- Added a mixin for changing the colour and padding of an active pill inside the css class `nav-pills`.
 
 ### Changed
 - Migrated the module featureViaURL from Backbone to Vue as a util. E2E tests were fixed and re-enabled.
@@ -39,7 +41,6 @@
 - Issue #621: WMTS support for overviewMap implemented.
 - Update print configuration for tiledWMS, layers are printed as tiledwms with tileSize.
 - WFSSearch, has been adjusted so that it zooms directly to the first feature found if no `resultList` is configured.
-- `default`-gfiTheme: If a `|`-character is part of the response, every element separated by the character will be displayed in a separate paragraph.
 
 ### Deprecated
 
@@ -97,9 +98,6 @@
 - The function `makeOberstufenprofileBold` used by the `comparisonList` and `featureLister` is provided as a util named `toBold` now.
 - Issue #636: The WMS layer respects crs code at rawlayer. The WMS request now contains the attribute CRS. If not available, projection of the map is used.
 - Move OpenLayers related Vector Tile layer creation into masterportalapi
-
-### Deprecated
-- Switched Icon Library from Glyphicon to Bootstrap Icons. Edited Webpack Config. Updated icon usage in vue components to use scss. Updated icon usage in backbone modules. Edited docs & tests accordingly.
 
 ### Removed
 - Removed hardcoded LayerIds for 3D support in wms.js. Setting has to be done now via services.json attribute notSupportedIn3D.
