@@ -105,8 +105,8 @@ export default {
         ]),
         ...mapActions("Alerting", ["addSingleAlert"]),
         ...mapActions("Maps", {
-            addPointerMoveHandlerToMap: "addPointerMoveHandler",
-            removePointerMoveHandlerFromMap: "removePointerMoveHandler"
+            addPointerMoveHandlerToMap: "registerListener",
+            removePointerMoveHandlerFromMap: "unregisterListener"
         }),
         ...mapActions("Maps", {
             addInteractionToMap: "addInteraction",
@@ -186,7 +186,7 @@ export default {
          */
         setSupplyCoordInactive () {
             if (this.selectPointerMove !== null) {
-                this.removePointerMoveHandlerFromMap(this.setCoordinates);
+                this.removePointerMoveHandlerFromMap("pointermove", this.setCoordinates);
                 this.setUpdatePosition(true);
                 this.removeInteractionFromMap(this.selectPointerMove);
                 this.setSelectPointerMove(null);
@@ -198,7 +198,7 @@ export default {
          */
         setSupplyCoordActive () {
             if (this.selectPointerMove === null) {
-                this.addPointerMoveHandlerToMap(this.setCoordinates);
+                this.addPointerMoveHandlerToMap("pointermove", this.setCoordinates);
                 this.setMapProjection(this.projection);
                 this.createInteraction();
                 this.setPositionMapProjection(this.mouseCoordinate);

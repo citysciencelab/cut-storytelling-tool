@@ -37,14 +37,14 @@ export default {
             this.removePointMarker();
 
             if (value) {
-                this.addPointerMoveHandlerToMap(this.setCoordinates);
+                this.addPointerMoveHandlerToMap("pointermove", this.setCoordinates);
                 this.createInteraction();
                 this.setPositionMapProjection(this.mouseCoordinate);
                 this.changedPosition();
                 this.setFocusToFirstControl();
             }
             else {
-                this.removePointerMoveHandlerFromMap(this.setCoordinates);
+                this.removePointerMoveHandlerFromMap("pointermove", this.setCoordinates);
                 this.setUpdatePosition(true);
                 this.removeInteraction();
             }
@@ -67,8 +67,8 @@ export default {
         ...mapActions("MapMarker", ["removePointMarker"]),
         ...mapActions("Alerting", ["addSingleAlert"]),
         ...mapActions("Maps", {
-            addPointerMoveHandlerToMap: "addPointerMoveHandler",
-            removePointerMoveHandlerFromMap: "removePointerMoveHandler"
+            addPointerMoveHandlerToMap: "registerListener",
+            removePointerMoveHandlerFromMap: "unregisterListener"
         }),
         ...mapActions("Maps", {
             addInteractionToMap: "addInteraction",
