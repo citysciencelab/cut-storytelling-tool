@@ -43,7 +43,7 @@ export default {
         let map3D = mapCollection.getMap("3D"),
             scene;
 
-        if (Radio.request("Map", "isMap3d")) {
+        if (getters.is3D) {
             return;
         }
         else if (mapMode === "Oblique") {
@@ -83,8 +83,8 @@ export default {
      * @fires Core#RadioTriggerMapChange
      * @returns {void}
      */
-    deactivateMap3D ({commit}) {
-        const map3D = mapCollection.getMap("3D"),
+    deactivateMap3D ({commit, getters}) {
+        const map3D = getters.get3DMap,
             map = Radio.request("Map", "getMap"),
             view = map.getView();
         let resolution,

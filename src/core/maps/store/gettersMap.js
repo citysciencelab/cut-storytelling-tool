@@ -154,11 +154,11 @@ const getters = {
     },
     /**
      * Cesium time function.
-     * @param {Object} _ state
+     * @param {Object} state state
      * @param {Object} getter getters
      * @returns {Cesium.JulianDate} - shadow time in julian date format.
      */
-    getShadowTime: (_, getter) => {
+    getShadowTime: (state, getter) => {
         return getter.get3DMap().time || Cesium.JulianDate.fromDate(new Date());
     },
     /**
@@ -182,36 +182,36 @@ const getters = {
         return mode === "3D";
     },
     /**
-     * @param {Object} _ state
+     * @param {Object} state state
      * @param {Object} getter getters
      * @returns {Boolean} whether current zoom level is the maximum zoom level
      */
-    maximumZoomLevelActive: (_, getter) => getter.getView.getZoom() >= getter.getView.getMaxZoom(),
+    maximumZoomLevelActive: (state, getter) => getter.getView.getZoom() >= getter.getView.getMaxZoom(),
     /**
-     * @param {Object} _ state
+     * @param {Object} state state
      * @param {Object} getter getters
      * @returns {Boolean} whether current zoom level is the minimal zoom level
      */
-    minimumZoomLevelActive: (_, getter) => getter.getView.getZoom() <= getter.getView.getMinZoom(),
+    minimumZoomLevelActive: (state, getter) => getter.getView.getZoom() <= getter.getView.getMinZoom(),
     /**
-     * @param {Object} _ state
+     * @param {Object} state state
      * @param {Object} params getter parameters
      * @param {Number} params.scale x from computed scale value 1:x
      * @returns {String} pretty-printed scale to 2cms
      */
-    scaleWithUnit: (_, {scale}) => {
+    scaleWithUnit: (state, {scale}) => {
         const scaleNumber = Math.round(0.02 * scale);
 
         return scaleNumber >= 1000 ? `${Math.round(scaleNumber / 100) / 10} km` : `${scaleNumber} m`;
     },
     /**
      * Returns a beautified state in format "1 : scale" where scale is rounded based on its value
-     * @param {Object} _ state
+     * @param {Object} state state
      * @param {Object} params getter parameters
      * @param {Number} params.scale a value (number) from computed scale 1:x
      * @returns {String} pretty-printed scale as "1 : scale"
      */
-    scaleToOne: (_, {scale}) => {
+    scaleToOne: (state, {scale}) => {
         if (typeof scale !== "number" || scale <= 0) {
             return "1 : scale must be a positive number";
         }
@@ -227,15 +227,15 @@ const getters = {
         return "1 : " + thousandsSeparator(result);
     },
     /**
-     * @param {Object} _ state
+     * @param {Object} state state
      * @param {Object} params getter parameters
      * @param {Number[]} params.mouseCoord the mouse coord as array
      * @returns {String} pretty-printed mouse coordinate
      */
-    prettyMouseCoord: (_, {mouseCoordinate}) => mouseCoordinate ? `${mouseCoordinate[0].toString().substr(0, 9)}, ${mouseCoordinate[1].toString().substr(0, 10)}` : "",
-    projectionCode: (_, getter) => getter.projection?.getCode(),
-    projectionMetersPerUnit: (_, getter) => getter.projection?.getMetersPerUnit(),
-    projectionUnits: (_, getter) => getter.projection?.getUnits(),
+    prettyMouseCoord: (state, {mouseCoordinate}) => mouseCoordinate ? `${mouseCoordinate[0].toString().substr(0, 9)}, ${mouseCoordinate[1].toString().substr(0, 10)}` : "",
+    projectionCode: (state, getter) => getter.projection?.getCode(),
+    projectionMetersPerUnit: (state, getter) => getter.projection?.getMetersPerUnit(),
+    projectionUnits: (state, getter) => getter.projection?.getUnits(),
     /*
      * Layerlist
      *
