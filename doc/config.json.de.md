@@ -1284,7 +1284,7 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "icon" noch d
 #!json
 "tools":{
     "name": "Werkzeuge",
-    "icon": "bi-wrench",
+    "icon": "bi-tools",
     "children": {
         {
             "name": "Legende",

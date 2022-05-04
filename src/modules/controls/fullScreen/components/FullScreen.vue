@@ -127,7 +127,7 @@ export default {
         <component
             :is="component"
             :title="$t(`common:modules.controls.fullScreen.${active ? 'disable' : 'enable'}`)"
-            :icon-name="active ? 'arrows-angle-contract' : 'arrows-angle-expand'"
+            :icon-name="active ? 'fullscreen-exit' : 'arrows-fullscreen'"
             :on-click="toggleFullScreen"
         />
     </div>

@@ -256,7 +256,7 @@
       },
       "tools": {
         "name": "translate#common:menu.tools.name",
-        "icon": "bi-wrench",
+        "icon": "bi-tools",
         "children": {
           "wfsSearch": {
             "name": "translate#common:menu.tools.parcelSearch",

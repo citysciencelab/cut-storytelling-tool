@@ -157,7 +157,7 @@ Tools (de: "Werkzeuge") can be translated similarly to tools. This includes the 
 {
     "tools": {
         "name": "Tools",
-        "icon": "bi-wrench",
+        "icon": "bi-tools",
         "children": {
             "draw": {
                 "name": "translate#common:foo.bar.exampleMenuTitle",

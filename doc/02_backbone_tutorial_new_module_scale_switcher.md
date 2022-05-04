@@ -372,7 +372,7 @@ Um das Tool in einem Portal zu verwenden, muss dies in der config.json konfiguri
       "tools":
       {
         "name": "Werkzeuge",
-        "icon": "bi-wrench",
+        "icon": "bi-tools",
         "children": {
           "scale":
           {

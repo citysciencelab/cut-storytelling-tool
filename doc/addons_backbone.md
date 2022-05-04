@@ -179,7 +179,7 @@ const Config = {
 ...
     "tools": {
         "name": "Werkzeuge",
-        "icon": "bi-wrench",
+        "icon": "bi-tools",
         "children": {
           "exampleAddon": {
             "name": "Beispiel Addon"
