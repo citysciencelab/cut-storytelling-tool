@@ -53,7 +53,7 @@ WMTSLayer.prototype.createLayerSourceByDefinitions = function (attrs) {
         format = attrs.format,
         wrapX = attrs.wrapX ? attrs.wrapX : false,
         urls = attrs.urls,
-        size = getWidth(extent) / parseInt(attrs.tileSize, 10),
+        size = extent ? getWidth(extent) / parseInt(attrs.tileSize, 10) : null,
         resLength = parseInt(attrs.resLength, 10),
         resolutions = new Array(resLength),
         matrixIds = new Array(resLength),
@@ -80,7 +80,13 @@ WMTSLayer.prototype.createLayerSourceByDefinitions = function (attrs) {
             scales: attrs.scales
         });
 
-    this.generateArrays(resolutions, matrixIds, resLength, size);
+    if (size) {
+        this.generateArrays(resolutions, matrixIds, resLength, size);
+    }
+    else {
+        console.error(`${projection.getCode()} has been given as projection to wmts.js for layer with id ${attrs.id}, but only "EPSG:4326" and "EPSG:3857" are supported. Please use the "capabilitiesUrl" and "optionsFromCapabilities" configuration parameters on this layer.`);
+    }
+
     source.matrixSizes = attrs.matrixSizes;
     source.scales = attrs.scales;
     this.layer.setSource(source);

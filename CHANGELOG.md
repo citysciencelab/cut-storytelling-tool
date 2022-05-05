@@ -15,6 +15,7 @@
 ### Removed
 
 ### Fixed
+- Issue #686: Add logging and documentation regarding manual WMTS configuration's limitations
 
 
 ## v2.21.0 - 2022-05-04
