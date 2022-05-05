@@ -15,6 +15,7 @@
 ### Removed
 
 ### Fixed
+- The order of printed features from the draw and measure layer is now corrected.
 
 
 ## v2.21.0 - 2022-05-04
