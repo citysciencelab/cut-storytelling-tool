@@ -50,7 +50,7 @@
           "source": "_source"
         },
         "hitType": "common:modules.searchbar.type.subject",
-        "hitGlyphicon": "glyphicon-list"
+        "hitIcon": "bi-list-ul"
       },
       "visibleVector": {
         "gfiOnClick": true
@@ -115,17 +115,17 @@
     "menu": {
       "tree": {
         "name": "translate#common:menu.topics",
-        "glyphicon": "glyphicon-list",
+        "icon": "bi-stack",
         "isInitOpen": false
       },
       "ansichten": {
         "name": "translate#common:menu.views.name",
-        "glyphicon": "glyphicon-list",
+        "icon": "bi-binoculars-fill",
         "children": {
           "view1": {
             "name": "translate#common:menu.views.view01",
             "type": "viewpoint",
-            "glyphicon": "glyphicon-screenshot",
+            "icon": "bi-bullseye",
             "heading": -0.30858728378862876,
             "tilt": 0.9321791580603296,
             "altitude": 272.3469798217454,
@@ -137,9 +137,9 @@
           }
         }
       },
-      "filter": {
+      "filterGeneral": {
         "name": "translate#common:menu.filter",
-        "glyphicon": "glyphicon-filter",
+        "icon": "bi-funnel-fill",
         "deactivateGFI": false,
         "isGeneric": false,
         "isInitOpen": false,
@@ -256,7 +256,7 @@
       },
       "tools": {
         "name": "translate#common:menu.tools.name",
-        "glyphicon": "glyphicon-wrench",
+        "icon": "bi-tools",
         "children": {
           "wfsSearch": {
             "name": "translate#common:menu.tools.parcelSearch",
@@ -309,18 +309,18 @@
           },
           "populationRequest": {
             "name": "translate#additional:modules.tools.populationRequest.title",
-            "glyphicon": "glyphicon-wrench",
+            "icon": "bi-person-bounding-box",
             "onlyDesktop": false
           },
           "compareFeatures": {
             "name": "translate#common:menu.tools.compareFeatures",
-            "glyphicon": "glyphicon-th-list",
+            "icon": "bi-list-ul",
             "numberOfFeaturesToShow": 3,
             "numberOfAttributesToShow": 12
           },
           "parcelSearch": {
             "name": "translate#common:menu.tools.parcelSearch",
-            "glyphicon": "glyphicon-search",
+            "icon": "bi-search",
             "serviceId": "6",
             "storedQueryID": "Flurstueck",
             "configJSON": "https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json",
@@ -328,15 +328,15 @@
           },
           "measure": {
             "name": "translate#common:menu.tools.measure",
-            "glyphicon": "glyphicon-resize-full"
+            "icon": "bi-rulers"
           },
           "supplyCoord": {
             "name": "translate#common:menu.tools.supplyCoord",
-            "glyphicon": "glyphicon-screenshot"
+            "icon": "bi-bullseye"
           },
           "coordToolkit": {
             "name": "translate#common:menu.tools.coordToolkit",
-            "glyphicon": "glyphicon-globe",
+            "icon": "bi-globe",
             "heightLayerId": "19173",
             "heightElementName": "value_0",
             "heightValueWater": "-20",
@@ -344,37 +344,39 @@
           },
           "shadow": {
             "name": "translate#common:menu.tools.shadow",
-            "glyphicon": "glyphicon-lamp",
+            "icon": "bi-lamp-fill",
             "isShadowEnabled": true
           },
           "gfi": {
             "name": "translate#common:menu.tools.getInfos",
             "desktopType": "detached",
-            "glyphicon": "glyphicon-info-sign",
+            "icon": "bi-info-circle-fill",
             "active": true
           },
           "bufferAnalysis": {
-            "name": "bufferAnalysis"
+            "name": "bufferAnalysis",
+            "icon": "bi-record-circle"
           },
           "searchByCoord": {
             "name": "translate#common:menu.tools.searchByCoord",
-            "glyphicon": "glyphicon-record"
+            "icon": "bi-search"
           },
           "selectFeatures": {
-            "name": "translate#common:menu.tools.selectFeatures"
+            "name": "translate#common:menu.tools.selectFeatures",
+            "icon": "bi-hand-index-thumb-fill"
           },
           "fileImport": {
             "name": "translate#common:menu.tools.fileImport",
-            "glyphicon": "glyphicon-import"
+            "icon": "bi-box-arrow-in-down"
           },
           "extendedFilter": {
             "name": "Erweiterter Filter",
-            "glyphicon": "glyphicon-filter",
+            "icon": "bi-funnel-fill",
             "deactivateGFI": false
           },
           "draw": {
             "name": "translate#common:menu.tools.draw",
-            "glyphicon": "glyphicon-pencil",
+            "icon": "bi-pencil-fill",
             "iconList": [
               {
                 "id": "iconPoint",
@@ -397,12 +399,12 @@
           },
           "styleWMS": {
             "name": "translate#common:menu.tools.styleWMS",
-            "glyphicon": "glyphicon-tint"
+            "icon": "bi-paint-bucket"
           },
           "featureLister": {
             "name": "translate#common:menu.tools.featureLister",
-            "glyphicon": "glyphicon-menu-hamburger",
             "maxFeatures": 10,
+            "icon": "bi-list",
             "highlightVectorRulesPolygon": {
               "fill": {
                 "color": [
@@ -439,11 +441,11 @@
           },
           "saveSelection": {
             "name": "translate#common:menu.tools.saveSelection",
-            "glyphicon": "glyphicon-share"
+            "icon": "bi-bookmark-check"
           },
           "layerSlider": {
             "name": "translate#common:menu.tools.layerSlider",
-            "glyphicon": "glyphicon-film",
+            "icon": "bi-hourglass-split",
             "timeInterval": 1000,
             "layerIds": [
               {
@@ -462,8 +464,8 @@
           },
           "print": {
             "name": "translate#common:menu.tools.print",
-            "glyphicon": "glyphicon-print",
-            "printServiceId": "mapfish",
+            "icon": "bi-printer-fill",
+            "mapfishServiceId": "mapfish",
             "printAppId": "master",
             "filename": "Ausdruck",
             "title": "Mein Titel",
@@ -472,22 +474,26 @@
           },
           "scaleSwitcher": {
             "name": "translate#common:menu.tools.scaleSwitcher",
-            "glyphicon": "glyphicon-resize-small"
+            "icon": "bi-arrows-angle-contract"
           },
           "vueAddon": {
             "name": "AddonTool",
-            "glyphicon": "glyphicon-screenshot"
+            "icon": "bi-bullseye"
+          },
+          "tacticalMark": {
+            "name": "Taktische Zeichen",
+            "icon": "bi-signpost-split-fill"
           }
         }
       },
       "legend": {
         "name": "common:modules.legend.name",
-        "glyphicon": "glyphicon-book",
+        "icon": "bi-lightbulb",
         "showCollapseAllButton": true
       },
       "contact": {
         "name": "translate#common:menu.contact",
-        "glyphicon": "glyphicon-envelope",
+        "icon": "bi-envelope-fill",
         "serviceId": "80001",
         "includeSystemInfo": true,
         "from": [
@@ -505,17 +511,17 @@
       },
       "info": {
         "name": "translate#common:menu.info",
-        "glyphicon": "glyphicon-info-sign",
+        "icon": "bi-info-circle-fill",
         "children": {
           "staticlinks": [
             {
               "name": "translate#common:modules.tools.info.disclaimer",
-              "glyphicon": "glyphicon-globe",
+              "icon": "bi-globe",
               "url": "https://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
             },
             {
               "name": "translate#common:modules.tools.info.home.name",
-              "glyphicon": "glyphicon-globe",
+              "icon": "bi-globe",
               "url": "https://www.hamburg.de/"
             }
           ]

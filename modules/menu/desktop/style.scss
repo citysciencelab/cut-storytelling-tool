@@ -38,7 +38,7 @@ ul#tree {
         display: block;
     }
     .menu-row {
-        line-height: 180%;
+        // line-height: 180%;
         flex-basis: 100%;
         display: flex;
         margin: 0;
@@ -55,6 +55,9 @@ ul#tree {
     }
     .last-item {
         margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 3px;
     }
     ul {
         list-style: none;
@@ -65,7 +68,7 @@ ul#tree {
         max-width: 500px;
         max-height: 55vh;
         .title {
-            padding: 0 0 0 5px;
+            padding: 4px 0 0 5px;
             font-family: $font_family_2;
             font-size: 12px;
             cursor: pointer;
@@ -81,7 +84,7 @@ ul#tree {
                 flex-grow: 1;
                 &:hover {
                     color: $color_1;
-                    background-color: lighten($primary_inactive, 40%);
+                    background-color: lighten($primary_red_inactive, 40%);
                 }
 
             }
@@ -93,15 +96,17 @@ ul#tree {
             background-color: $accent_active;
         }
     }
-    .glyphicon {
+    .bootstrap-icon {
         cursor: pointer;
         font-size: 15px;
-        padding: 2px;
+        padding: 4px 2px 1px 2px;
     }
-    .glyphicon-info-sign, .glyphicon-cog, .glyphicon-tint, .glyphicon-remove-circle {
+    .bi-info-circle-fill, .bi-gear, .bi-paint-bucket, .bi-x-circle {
         font-size: 18px;
-        color: $secondary_icon_button;
 
+        &:not(:hover) {
+            color: $secondary_icon_button;
+        }
     }
     .highlightLayerInformationIcon {
         color: $secondary_hover;
@@ -116,8 +121,8 @@ ul#tree {
         > div > a {
             flex-grow: 1;
             color: $accent_contrast;
-            .control-label {
-                padding: 0 0 0 5px;
+            .form-label {
+                padding: 1px 0 0 5px;
             }
         }
     }
@@ -125,8 +130,9 @@ ul#tree {
         font-size: 11px;
         font-weight: 400;
         > select {
+            margin-left: 5px;
             height: 20px;
-            padding: 0;
+            padding: 2px;
             font-size: 11px;
         }
     }
@@ -175,7 +181,7 @@ ul#tree.light {
     font-size: 12px;
     color: $color_1;
     li {
-        padding: 5px 5px 0px 5px;
+        padding: 5px;
         display: flex;
         flex-wrap: wrap;
         > div > a {
@@ -183,7 +189,7 @@ ul#tree.light {
             flex-grow: 1;
         }
         span.title {
-            padding: 2px 0 0 5px; 
+            padding: 4px 0 0 5px; 
             cursor: pointer;
         }
     }

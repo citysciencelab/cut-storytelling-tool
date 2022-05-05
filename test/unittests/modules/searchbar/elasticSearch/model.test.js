@@ -26,7 +26,7 @@ describe("modules/searchbar/elasticSearch", function () {
             "source": "_source"
         },
         "hitType": "Fachthema",
-        "hitGlyphicon": "glyphicon-list"
+        "hitIcon": "bi-list-ul"
     };
 
     before(function () {
@@ -117,20 +117,20 @@ describe("modules/searchbar/elasticSearch", function () {
                     key: "deeperKey.key"
                 },
                 hitType = "type",
-                hitGlyphicon = "glyphicon-abc",
+                hitIcon = "bi-abc",
                 triggerEvent = {
                     channel: "MyChannel",
                     event: "MyEvent"
                 };
 
-            expect(model.createHit(result, hitMap, hitType, hitGlyphicon, triggerEvent)).to.deep.equal(
+            expect(model.createHit(result, hitMap, hitType, hitIcon, triggerEvent)).to.deep.equal(
                 {
                     id: "0815",
                     name: "name",
                     coordinate: [123456, 456789],
                     key: "value",
                     type: "type",
-                    glyphicon: "glyphicon-abc",
+                    icon: "bi-abc",
                     triggerEvent: {
                         channel: "MyChannel",
                         event: "MyEvent"
@@ -156,18 +156,18 @@ describe("modules/searchbar/elasticSearch", function () {
                     key: "deeperKey.key"
                 },
                 hitType = "type",
-                hitGlyphicon = "glyphicon-abc",
+                hitIcon = "bi-abc",
                 triggerEvent = {
                 };
 
-            expect(model.createHit(result, hitMap, hitType, hitGlyphicon, triggerEvent)).to.deep.equal(
+            expect(model.createHit(result, hitMap, hitType, hitIcon, triggerEvent)).to.deep.equal(
                 {
                     id: "0815",
                     name: "name",
                     coordinate: [123456, 456789],
                     key: "value",
                     type: "type",
-                    glyphicon: "glyphicon-abc"
+                    icon: "bi-abc"
                 }
             );
         });
@@ -181,7 +181,7 @@ describe("modules/searchbar/elasticSearch", function () {
                     deeperKey: {
                         key: "value",
                         type: "type2",
-                        hitGlyphicon: "glyphicon-cba"
+                        hitIcon: "glyphicon-cba"
                     }
                 },
                 hitMap = {
@@ -190,7 +190,7 @@ describe("modules/searchbar/elasticSearch", function () {
                     coordinate: ["x", "y"],
                     key: "deeperKey.key",
                     type: "deeperKey.type",
-                    glyphicon: "deeperKey.hitGlyphicon"
+                    icon: "deeperKey.hitGlyphicon"
                 },
                 hitType = "type",
                 hitGlyphicon = "glyphicon-abc",
@@ -203,8 +203,8 @@ describe("modules/searchbar/elasticSearch", function () {
                     name: "name",
                     coordinate: [123456, 456789],
                     key: "value",
-                    type: "type2",
-                    glyphicon: "glyphicon-cba"
+                    type: "type",
+                    icon: "glyphicon-abc"
                 }
             );
         });

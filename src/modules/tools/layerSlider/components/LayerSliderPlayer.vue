@@ -84,7 +84,7 @@ export default {
 
 <template lang="html">
     <div id="tool-layer-slider-player">
-        <div class="progress">
+        <div class="progress mb-3">
             <div
                 class="progress-bar"
                 role="progressbar"
@@ -93,69 +93,77 @@ export default {
                 :aria-valuemax="layerIds.length"
                 :style="currentProgressBarWidth"
             >
-                <span class="sr-only">{{ $t("modules.tools.layerSlider.displayLayers") }}</span>
+                <span class="visually-hidden">{{ $t("modules.tools.layerSlider.displayLayers") }}</span>
             </div>
         </div>
         <div class="input-group">
-            <span class="input-group-btn">
-                <button
-                    v-if="windowsInterval === null"
-                    id="play"
-                    type="button"
-                    class="btn btn-default active-button"
-                    @click="startInterval"
+            <button
+                v-if="windowsInterval === null"
+                id="play"
+                type="button"
+                class="btn btn-outline-default active-button"
+                @click="startInterval"
+            >
+                <span
+                    class="bootstrap-icon"
+                    aria-hidden="true"
                 >
-                    <span
-                        class="glyphicon glyphicon-play"
-                        aria-hidden="true"
-                    />
-                </button>
-                <button
-                    v-else
-                    id="pause"
-                    type="button"
-                    class="btn btn-default active-button"
-                    @click="stopInterval"
+                    <i class="bi-play-fill" />
+                </span>
+            </button>
+            <button
+                v-else
+                id="pause"
+                type="button"
+                class="btn btn-outline-default active-button"
+                @click="stopInterval"
+            >
+                <span
+                    class="bootstrap-icon"
+                    aria-hidden="true"
                 >
-                    <span
-                        class="glyphicon glyphicon-pause"
-                        aria-hidden="true"
-                    />
-                </button>
-                <button
-                    id="stop"
-                    type="button"
-                    class="btn btn-default active-button"
-                    @click="reset"
+                    <i class="bi-pause" />
+                </span>
+            </button>
+            <button
+                id="stop"
+                type="button"
+                class="btn btn-outline-default active-button"
+                @click="reset"
+            >
+                <span
+                    class="bootstrap-icon"
+                    aria-hidden="true"
                 >
-                    <span
-                        class="glyphicon glyphicon-stop"
-                        aria-hidden="true"
-                    />
-                </button>
-                <button
-                    id="backward"
-                    type="button"
-                    class="btn btn-default active-button"
-                    @click="backwardLayer"
+                    <i class="bi-stop-fill" />
+                </span>
+            </button>
+            <button
+                id="backward"
+                type="button"
+                class="btn btn-outline-default active-button"
+                @click="backwardLayer"
+            >
+                <span
+                    class="bootstrap-icon"
+                    aria-hidden="true"
                 >
-                    <span
-                        class="glyphicon glyphicon-backward"
-                        aria-hidden="true"
-                    />
-                </button>
-                <button
-                    id="forward"
-                    type="button"
-                    class="btn btn-default active-button"
-                    @click="forwardLayer"
+                    <i class="bi-skip-backward-fill" />
+                </span>
+            </button>
+            <button
+                id="forward"
+                type="button"
+                class="btn btn-outline-default active-button"
+                @click="forwardLayer"
+            >
+                <span
+                    class="bootstrap-icon"
+                    aria-hidden="true"
                 >
-                    <span
-                        class="glyphicon glyphicon-forward"
-                        aria-hidden="true"
-                    />
-                </button>
-            </span>
+                    <i class="bi-skip-forward-fill" />
+                </span>
+            </button>
             <label for="title" />
             <input
                 id="title"
@@ -201,7 +209,6 @@ $background_color_1: #eee;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        padding: 16px 12px 17px 12px;
     }
 }
 </style>

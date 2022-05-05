@@ -312,7 +312,7 @@ export default {
                     clazz = "eastingToBottomTwoErrors";
                 }
             }
-            return clazz + " form-group form-group-sm";
+            return clazz + " form-group form-group-sm row";
         },
         /**
          * Returns the className for the northing input field. Special Handling because fields positions are transformed.
@@ -341,14 +341,14 @@ export default {
                     clazz = "northingToTopTwoErrors";
                 }
             }
-            return clazz + " form-group form-group-sm";
+            return clazz + " form-group form-group-sm row";
         },
         /**
          * Returns the className for the labels.
          * @returns {String} the className for the labels
          */
         getLabelClass () {
-            return this.showCopyButtons ? "col-md-3 col-sm-3 control-label" : "col-md-5 col-sm-5 control-label";
+            return this.showCopyButtons ? "col-md-3 col-sm-3 col-form-label" : "col-md-5 col-sm-5 col-form-label";
         },
         /**
          * Returns the className for the input elements.
@@ -409,7 +409,7 @@ export default {
 <template lang="html">
     <ToolTemplate
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
@@ -430,6 +430,7 @@ export default {
                                 id="supplyCoordRadio"
                                 type="radio"
                                 name="mode"
+                                class="form-check-input"
                                 :checked="isSupplyCoordChecked()"
                                 :disabled="isSupplyCoordDisabled()"
                                 @click="changeMode('supply')"
@@ -437,7 +438,7 @@ export default {
                             <label
                                 for="supplyCoordRadio"
                                 :title="isSupplyCoordDisabled()? $t('modules.tools.coordToolkit.disabledTooltip'): ''"
-                                :class="{ 'control-label': true, 'enabled': isEnabled('supply') }"
+                                :class="{ 'form-check-label': true, 'enabled': isEnabled('supply') }"
                                 @click="changeMode('supply')"
                                 @keydown.enter="changeMode('supply')"
                             >{{ $t("modules.tools.coordToolkit.supply") }}</label>
@@ -447,12 +448,13 @@ export default {
                                 id="searchByCoordRadio"
                                 type="radio"
                                 name="mode"
+                                class="form-check-input"
                                 :checked="!isSupplyCoordChecked()"
                                 @click="changeMode('search')"
                             >
                             <label
                                 for="searchByCoordRadio"
-                                :class="{'control-label': true, 'enabled': isEnabled('search') }"
+                                :class="{'form-check-label': true, 'enabled': isEnabled('search') }"
                                 @click="changeMode('search')"
                                 @keydown.enter="changeMode('search')"
                             >{{ $t("modules.tools.coordToolkit.search") }}</label>
@@ -460,17 +462,17 @@ export default {
                     </div>
                     <div
                         v-if="mode === 'supply'"
-                        class="hint col-md-12 col-sm-12"
+                        class="hint col-md-12"
                     >
                         {{ $t("modules.tools.coordToolkit.hintSupply") }}
                     </div>
                     <div
                         v-if="mode === 'search'"
-                        class="hint col-md-12 col-sm-12"
+                        class="hint col-md-12"
                     >
                         {{ $t("modules.tools.coordToolkit.hintSearch") }}
                     </div>
-                    <div class="form-group form-group-sm">
+                    <div class="form-group form-group-sm row">
                         <label
                             for="coordSystemField"
                             :class="getLabelClass()"
@@ -479,7 +481,7 @@ export default {
                             <select
                                 id="coordSystemField"
                                 ref="coordSystemField"
-                                class="font-arial form-control input-sm pull-left"
+                                class="font-arial form-select form-select-sm float-start"
                                 @change="selectionChanged($event)"
                             >
                                 <option
@@ -533,14 +535,16 @@ export default {
                             <button
                                 id="copyEastingBtn"
                                 type="button"
-                                class="btn singleCopy"
+                                class="btn btn-outline-default"
                                 :title="$t(`common:modules.tools.coordToolkit.copyCoordBtn`, {value: $t(getLabel('eastingLabel'))})"
                                 @click="copyCoords(['coordinatesEastingField'])"
                             >
                                 <span
-                                    class="glyphicon glyphicon-copy"
+                                    class="bootstrap-icon"
                                     aria-hidden="true"
-                                />
+                                >
+                                    <i class="bi-files" />
+                                </span>
                             </button>
                         </div>
                         <div
@@ -550,14 +554,16 @@ export default {
                             <button
                                 id="copyCoordsPairBtn"
                                 type="button"
-                                class="btn"
+                                class="btn btn-outline-default"
                                 :title="$t(`common:modules.tools.coordToolkit.copyCoordsBtn`)"
                                 @click="copyCoords(['coordinatesEastingField', 'coordinatesNorthingField'])"
                             >
                                 <span
-                                    class="glyphicon glyphicon-copy"
+                                    class="bootstrap-icon"
                                     aria-hidden="true"
-                                />
+                                >
+                                    <i class="bi-files" />
+                                </span>
                             </button>
                         </div>
                     </div>
@@ -601,20 +607,22 @@ export default {
                             <button
                                 id="copyNorthingBtn"
                                 type="button"
-                                class="btn singleCopy"
+                                class="btn btn-outline-default"
                                 :title="$t(`common:modules.tools.coordToolkit.copyCoordBtn`, {value: $t(getLabel('northingLabel'))})"
                                 @click="copyCoords(['coordinatesNorthingField'])"
                             >
                                 <span
-                                    class="glyphicon glyphicon-copy"
+                                    class="bootstrap-icon"
                                     aria-hidden="true"
-                                />
+                                >
+                                    <i class="bi-files" />
+                                </span>
                             </button>
                         </div>
                     </div>
                     <div
-                        v-if="isEnabled( 'supply') && heightLayer !== null"
-                        class="form-group form-group-sm inputDiv"
+                        v-if="isEnabled('supply') && heightLayer !== null"
+                        class="form-group form-group-sm inputDiv row"
                     >
                         <label
                             id="coordinatesHeightLabel"
@@ -633,9 +641,9 @@ export default {
                     </div>
                     <div
                         v-if="isDefaultStyle()"
-                        class="form-group form-group-sm"
+                        class="form-group form-group-sm row"
                     >
-                        <div class="col-md-12 col-sm-12 info">
+                        <div class="col-md-12 info">
                             {{ $t("modules.tools.measure.influenceFactors") }}
                             <span v-if="heightLayer !== null">
                                 <br>
@@ -646,12 +654,12 @@ export default {
                     </div>
                     <div
                         v-if="isEnabled('search')"
-                        class="form-group form-group-sm"
+                        class="form-group form-group-sm row"
                     >
-                        <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-12 d-grid gap-2">
                             <button
                                 id="searchByCoordBtn"
-                                class="btn btn-primary btn-block"
+                                class="btn btn-primary"
                                 :disabled="getEastingError || getNorthingError || !coordinatesEasting.value || !coordinatesNorthing.value"
                                 type="button"
                                 @click="searchCoordinate(coordinatesEasting, coordinatesNorthing)"
@@ -726,17 +734,13 @@ export default {
         transform: translate(0px, -75px)
     }
     #copyCoordsPairBtn{
-        height: 75px;
+        height: 85px;
         position: absolute;
-        top: 0;
     }
     .copyBtn{
         padding-right: 0;
         padding-left: 0;
         max-width: 50px;
-    }
-    .singleCopy{
-        max-height: 30px
     }
    @media (max-width: 767px) {
         .eastingToBottomNoError{

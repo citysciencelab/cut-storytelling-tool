@@ -1,4 +1,5 @@
 import Template from "text-loader!./template.html";
+import Collapse from "bootstrap/js/dist/collapse";
 
 const CategoryView = Backbone.View.extend({
     events: {
@@ -32,15 +33,18 @@ const CategoryView = Backbone.View.extend({
     render: function () {
         $("#table-nav").append(this.$el.html(this.template()));
         if (Radio.request("TableMenu", "getActiveElement") === "Category") {
-            this.$(".table-nav-cat-panel").collapse("show");
+            // Upgrade to BT5
+            const collapse = Collapse.getInstance($("#table-nav-cat-panel").get(0));
+
+            collapse.show();
         }
         return this;
     },
     id: "table-category-list",
-    className: "table-category-list table-nav col-md-2",
+    className: "table-category-list table-nav col-lg-2",
     template: _.template(Template),
     toggleCategoryMenu: function () {
-        if (this.$(".table-nav-cat-panel").hasClass("in")) {
+        if (this.$(".table-nav-cat-panel").hasClass("show")) {
             this.hideCategoryMenu();
         }
         else if (!this.$el.hasClass("disableCategoryButton")) {
@@ -48,13 +52,13 @@ const CategoryView = Backbone.View.extend({
         }
     },
     hideCategoryMenu: function () {
-        this.$(".table-nav-cat-panel").removeClass("in");
+        this.$(".table-nav-cat-panel").removeClass("show");
         this.$el.removeClass("table-category-active");
         Radio.trigger("TableMenu", "deactivateCloseClickFrame");
     },
     showCategoryMenu: function () {
         this.$el.addClass("table-category-active");
-        this.$(".table-nav-cat-panel").addClass("in");
+        this.$(".table-nav-cat-panel").addClass("show");
         this.$("div.btn-group.header").hide();
 
         if (this.$("#table-nav").attr("class") === "table-nav-0deg" || this.$("#table-nav").attr("class") === "table-nav-180deg") {

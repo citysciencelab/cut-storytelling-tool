@@ -18,6 +18,8 @@ import Folder from "./folder/model";
 import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
 import Filter from "../../tools/filter/model";
+import Dropdown from "bootstrap/js/dist/dropdown";
+import Collapse from "bootstrap/js/dist/collapse";
 
 /**
  * WfsFeatureFilter
@@ -944,11 +946,13 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     showModelInTree: function (modelId) {
         const mode = Radio.request("Map", "getMapMode"),
-            lightModel = Radio.request("Parser", "getItemByAttributes", {id: modelId});
+            lightModel = Radio.request("Parser", "getItemByAttributes", {id: modelId}),
+            dropdown = Dropdown.getInstance("#root li:first-child > .dropdown-toggle");
 
         this.closeAllExpandedFolder();
         // open the layerTree
-        $("#root li:first-child").addClass("open");
+        // Upgrade to BT5, use JS method instead of class addition
+        dropdown.show();
         // Parent and possible siblings are added
         this.addAndExpandModelsRecursive(lightModel.parentId);
         if (this.get(modelId).get("supported").indexOf(mode) >= 0) {
@@ -962,7 +966,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         // für DIPAS Table Ansicht
         if (Radio.request("Util", "getUiStyle") === "TABLE") {
             Radio.request("ModelList", "getModelByAttributes", {id: modelId}).setIsJustAdded(true);
-            $("#table-nav-layers-panel").collapse("show");
+            // Upgrade to BT5
+            const collapse = Collapse.getInstance($("#table-nav-layers-panel").get(0));
+
+            collapse.show();
 
         }
     },

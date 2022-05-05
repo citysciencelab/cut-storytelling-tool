@@ -81,7 +81,7 @@ export default {
 <template lang="html">
     <ToolTemplate
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
@@ -91,17 +91,18 @@ export default {
             <div
                 v-if="active"
                 id="scale-switcher"
+                class="row"
             >
                 <label
                     for="scale-switcher-select"
-                    class="col-md-5 col-sm-5 control-label"
+                    class="col-md-5 col-form-label"
                 >{{ $t("modules.tools.scaleSwitcher.label") }}</label>
-                <div class="col-md-7 col-sm-7">
+                <div class="col-md-7">
                     <select
                         id="scale-switcher-select"
                         ref="scale-switcher-select"
                         v-model="scale"
-                        class="font-arial form-control input-sm pull-left"
+                        class="font-arial form-select form-select-sm float-start"
                         @change="setResolutionByIndex($event.target.selectedIndex)"
                     >
                         <option
@@ -117,11 +118,3 @@ export default {
         </template>
     </ToolTemplate>
 </template>
-
-<style lang="scss" scoped>
-    @import "~variables";
-
-    label {
-        margin-top: 7px;
-    }
-</style>

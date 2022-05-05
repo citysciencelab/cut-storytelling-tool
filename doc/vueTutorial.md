@@ -99,7 +99,7 @@ const state = {
     id: "scaleSwitcher",
     // mandatory defaults for config.json parameters
     name: "common:menu.tools.scaleSwitcher",
-    glyphicon: "glyphicon-resize-full",
+    icon: "bi-arrows-angle-expand",
     renderToWindow: true,
     resizableWindow: true,
     isVisibleInMenu: true,
@@ -301,7 +301,7 @@ In `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue`, the template is y
 <template lang="html">
     <ToolTemplate
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
@@ -311,15 +311,15 @@ In `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue`, the template is y
             <div id="scale-switcher" v-if="active">
                 <label
                     for="scale-switcher-select"
-                    class="col-md-5 col-sm-5 control-label"
+                    class="col-md-5 col-form-label"
                 >
                     Scale
                 </label>
-                <div class="col-md-7 col-sm-7">
+                <div class="col-md-7">
                     <select
                         id="scale-switcher-select"
                         v-model="scale"
-                        class="font-arial form-control input-sm pull-left"
+                        class="font-arial form-select form-select-sm float-start"
                     >
                         <option
                             v-for="(scaleValue, i) in scales"
@@ -361,7 +361,7 @@ Within the `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue` template, 
 ```html
 <select
     id="scale-switcher-select"
-    class="font-arial form-control input-sm pull-left"
+    class="font-arial form-select form-select-sm float-start"
     @change="setResolutionByIndex($event.target.selectedIndex)"
 >
 ```
@@ -398,7 +398,7 @@ The value can be accessed directly in the template by using the globally availab
 ```html
 <label
     for="scale-switcher-select"
-    class="col-md-5 col-sm-5 control-label"
+    class="col-md-5 col-form-label"
 >
     {{ $t("modules.tools.scaleSwitcher.label") }}
 </label>
@@ -412,11 +412,11 @@ To make the tool usable within a portal, it has to be configured in the portal's
 {
     "tools": {
         "name": "Tools",
-        "glyphicon": "glyphicon-wrench",
+        "icon": "bi-wrench",
         "children": {
             "scaleSwitcher": {
                 "name": "translate#common:menu.tools.scaleSwitcher",
-                "glyphicon": "glyphicon-resize-small",
+                "icon": "bi-arrows-angle-contract",
                 "renderToWindow": true
             }
         }

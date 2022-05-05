@@ -35,10 +35,14 @@ $border_color_3: #003063;
         display: none;
     }
     &+span {
-        right: 38px;
+        position: absolute;
+        right: 50px;
+        top: 0;
+        bottom: 0;
         z-index: 3;
         color: $color_2;
         display: none;
+        align-items: center; // necessary after display: inline-flex is set dynamically
         pointer-events: all;
         cursor: pointer;
     }
@@ -69,7 +73,7 @@ $border_color_3: #003063;
     &:hover {
         background-color: $background_color_1;
     }
-    >.glyphicon-remove {
+    >.bootstrap-icon > .bi-x-lg {
         font-size: 12px;
     }
 }
@@ -85,13 +89,16 @@ $border_color_3: #003063;
     max-width: 480px;
     position: absolute;
     top: 100%;
+    right: 0;
+    left: auto;
     z-index: 1001;
     padding: 0;
-    .glyphicon {
+    .bootstrap-icon {
         color: $color_1;
         padding-right: 12px;
         padding-left: 3px;
-        font-size: 12px;
+        padding-top: 5px;
+        font-size: 17px;
     }
     img {
         width: 25px;
@@ -117,12 +124,12 @@ $border_color_3: #003063;
     }
 }
 .btn-search {
-    >.glyphicon-search {
+    >.bootstrap-icon > .bi-search {
         font-size: 13px;
     }
     &:hover {
         background-color: $accent_hover;
-        color: $primary_contrast;
+        color: $primary_red_contrast;
     }
 }
 
@@ -131,16 +138,16 @@ $border_color_3: #003063;
     background: 0;
     padding: 0;
     margin: 0;
-    >.glyphicon {
+    >.bootstrap-icon {
         color: $secondary_icon_button;
-        padding: 5px;
+        padding: 5px 5px 3px 5px;
         font-size: 20px;
         &:hover {
             background-color: $accent_hover;
             color: $accent_contrast;
         }
     }
-    >.glyphicon.quickhelp-is-shown {
+    >.bootstrap-icon.quickhelp-is-shown {
         color: $secondary_hover;
         &:hover {
             background-color: $accent_hover;
@@ -157,7 +164,7 @@ $border_color_3: #003063;
     border-top-width: 2px;
     color: $color_4;
     >div {
-        >.glyphicon {
+        >.bootstrap-icon {
             color: $color_4;
             font-size: 16px;
             vertical-align: middle;
@@ -192,7 +199,7 @@ li.results {
 
     .list-group-item {
 
-            .glyphicon {
+            .bootstrap-icon {
                 float:left;
             }
             .list-group-item-theme {
@@ -211,11 +218,18 @@ li.results {
                 padding-top: 10px;
             }
 
+            > .badge {
+                background-color: #686868;
+                border-radius: 10px;
+                font-size: 12px;
+            }
+
         }
 
 }
 #table-searchForm {
-    button.btn.btn-default.btn-table-search {
+    button.btn.btn-outline-default.btn-table-search {
+        background-color: $background_color_1;
         border-radius: 12px;
         border-color: $border_color_2;
         height: 40px;
@@ -259,11 +273,12 @@ li.results {
         z-index: 1001;
         padding: 0;
         top: auto;
-        .glyphicon {
+        .bootstrap-icon {
             color: $color_1;
             padding-right: 12px;
             padding-left: 3px;
-            font-size: 12px;
+            padding-top: 5px;
+            font-size: 17px;
         }
         img {
             width: 25px;
@@ -351,7 +366,6 @@ li.results {
     input#searchInput.form-control {
         font-family: $font_family_3;
         font-size: 22px;
-        width: 350px;
     }
     input#searchInput {
         &::placeholder {
@@ -370,7 +384,9 @@ li.results {
     #searchbar {
         position: relative;
         top: -9px;
-        left: 55px;
+        padding-right: 0;
+        flex-grow: 1;
+        display: block !important;
     }
 }
 input#searchInput.form-control {
@@ -409,6 +425,10 @@ input#searchInput.form-control {
         position: absolute;
         right: 0;
         top: 0;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        padding-left: 15px;
+        padding-right: 15px;
     }
     #searchInput {
         max-width: 350px;

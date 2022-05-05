@@ -200,7 +200,9 @@ export default {
                         @click="decreasePagerIndex"
                         @keydown.enter="decreasePagerIndex"
                     >
-                        <span class="glyphicon glyphicon-chevron-left" />
+                        <span class="bootstrap-icon">
+                            <i class="bi-chevron-left" />
+                        </span>
                     </div>
                     <div
                         tabindex="0"
@@ -208,7 +210,9 @@ export default {
                         @click="increasePagerIndex"
                         @keydown.enter="increasePagerIndex"
                     >
-                        <span class="glyphicon glyphicon-chevron-right" />
+                        <span class="bootstrap-icon">
+                            <i class="bi-chevron-right" />
+                        </span>
                     </div>
                 </div>
             </template>
@@ -235,6 +239,8 @@ export default {
             cursor: pointer;
             width: 50%;
             margin: 0;
+            text-align: center;
+            list-style: none;
         }
 
         .pager-left {
@@ -247,7 +253,7 @@ export default {
         }
         .disabled {
             cursor: not-allowed;
-            background-color: $primary_inactive_contrast;
+            background-color: $primary_red_inactive_contrast;
             opacity: 0.2;
         }
 

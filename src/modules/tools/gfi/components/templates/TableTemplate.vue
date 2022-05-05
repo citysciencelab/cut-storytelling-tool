@@ -121,7 +121,7 @@ export default {
         <template #rightOfTitle>
             <span
                 tabindex="0"
-                class="icon-turnarticle glyphicon"
+                class="icon-turnarticle bootstrap-icon"
                 @click="rotate"
                 @keydown.enter="rotate"
             />
@@ -200,7 +200,6 @@ $background_color_2: #646262;
         color: $background_color_1;
         position: relative;
         display: inline-block;
-        bottom: 20px;
         right: 25px;
         margin: 6px 0 0 10px;
         cursor: pointer;
@@ -215,7 +214,7 @@ $background_color_2: #646262;
     .icon-turnarticle::before {
         color: $background_color_1;
     }
-    span.glyphicon.glyphicon-remove::before {
+    span.bootstrap-icon > .bi-x-lg::before {
         color: $background_color_1;
     }
 }

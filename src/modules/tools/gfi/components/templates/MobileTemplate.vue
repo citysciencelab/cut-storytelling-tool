@@ -81,16 +81,15 @@ export default {
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button
+                    <span
                         type="button"
-                        class="close"
+                        class="close bootstrap-icon"
                         aria-label="Close"
                         @click="close"
+                        @keydown.enter="close"
                     >
-                        <span
-                            class="glyphicon glyphicon-remove"
-                        />
-                    </button>
+                        <i class="bi-x-lg" />
+                    </span>
                     <h5 class="modal-title">
                         {{ $t(title) }}
                     </h5>
@@ -155,6 +154,8 @@ export default {
         cursor: pointer;
         width: 50%;
         margin: 0;
+        text-align: center;
+        list-style: none;
     }
 
     .pager-left {
@@ -168,7 +169,7 @@ export default {
 
     .disabled {
         cursor: not-allowed;
-        background-color: $primary_inactive_contrast;
+        background-color: $primary_red_inactive_contrast;
         opacity: 0.2;
     }
 }

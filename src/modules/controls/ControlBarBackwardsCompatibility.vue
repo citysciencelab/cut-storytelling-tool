@@ -30,21 +30,21 @@ export default {
 
     /* using this classname to scope css effects; can not use scoped scss here since controls are not within scope, but added by jQuery */
     .backwards-compatibility-controls {
-        /* use old styling way for glyphicons for old controls */
-        .glyphicon {
+        /* use old styling way for icons for old controls */
+        .bootstrap-icon {
             color: $color_1;
             background-color: $background_color_1;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
             &:hover {
                 cursor: pointer;
-                background-color: $primary_hover;
+                background-color: $primary_red_hover;
             }
             &:focus {
-                background-color: $primary_focus;
-                outline: 1px solid $primary_outline;
+                background-color: $primary_red_focus;
+                outline: 1px solid $primary_red_outline;
             }
             &:active {
-                background-color: $primary_active;
+                background-color: $primary_red_active;
             }
         }
         > .toggleButtonPressed {
@@ -59,6 +59,11 @@ export default {
         .row {
             margin-right: 0;
             margin-left: 0;
+
+            > * {
+                padding-right: 0;
+                padding-left: 0;
+            }
         }
         > div {
             padding: 5px;

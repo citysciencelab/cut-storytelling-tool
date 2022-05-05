@@ -114,20 +114,22 @@ export default {
             <span>{{ $t('common:modules.tools.routing.batchProcessing.isProcessing') }}</span>
             <div class="d-flex">
                 <progress
-                    class="col-xs-8"
+                    class="col-8"
                     max="100"
                     :value="progress"
                 />
                 <span
                     id="routing-batch-processing-isprocessing-progresstext"
-                    class="col-xs-3"
+                    class="col-3"
                 >{{ progress }} %</span>
                 <span
-                    class="col-xs-1 glyphicon glyphicon-remove pointer"
+                    class="col-1 bootstrap-icon pointer"
                     :title="$t('common:modules.tools.routing.batchProcessing.cancel')"
                     @click="$emit('cancelProcess')"
                     @keydown.enter="$emit('cancelProcess')"
-                />
+                >
+                    <i class="bi-x-lg" />
+                </span>
             </div>
         </div>
 
@@ -171,8 +173,8 @@ export default {
             </div>
 
             <button
-                class="btn btn-block"
-                type="button"
+                class="btn"
+                type="button flex-grow-1"
                 @click="startFileInput()"
             >
                 {{ $t('common:modules.tools.routing.batchProcessing.uploadFile') }}
