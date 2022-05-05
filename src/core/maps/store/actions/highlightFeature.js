@@ -1,9 +1,9 @@
 /**
  * check how to highlight
- * @param {Object} ctx store context
- * @param {Function} ctx.commit commit function
- * @param {Function} ctx.dispatch dispatch function
- * @param {Object} ctx.getters map getters
+ * @param {Object} param store context
+ * @param {Object} param.commit the commit
+ * @param {Object} param.dispatch the dispatch
+ * @param {Object} param.getters the getters
  * @param {Object} highlightObject contains several parameters for feature highlighting
  * @returns {void}
  */
@@ -20,8 +20,8 @@ function highlightFeature ({commit, dispatch, getters}, highlightObject) {
 }
 /**
  * highlights a polygon feature
- * @param {Function} commit commit function
- * @param {Function} dispatch dispatch function
+ * @param {Object} commit the commit
+ * @param {Object} dispatch the dispatch
  * @param {Object} highlightObject contains several parameters for feature highlighting
  * @fires VectorStyle#RadioRequestStyleListReturnModelById
  * @returns {void}
@@ -58,8 +58,8 @@ function highlightPolygon (commit, dispatch, highlightObject) {
 }
 /**
  * highlights a feature via layerid and featureid
- * @param {Function} dispatch commit function
- * @param {Object} getters map getters
+ * @param {Object} dispatch the dispatch
+ * @param {Object} getters the getters
  * @param {String} layerIdAndFeatureId contains layerid and featureid
  * @fires ModelList#RadioRequestModelListGetModelByAttributes
  * @returns {void}
@@ -81,7 +81,7 @@ function highlightViaParametricUrl (dispatch, getters, layerIdAndFeatureId) {
  * Searches the feature which shall be hightlighted
  * @param {String} layerId Id of the layer, containing the feature to hightlight
  * @param {String} featureId Id of feature which shall be hightlighted
- * @param {Object} getters map getters
+ * @param {Object} getters the getters
  * @fires ModelList#RadioRequestModelListGetModelByAttributes
  * @returns {ol/feature} feature to highlight
  */
@@ -97,8 +97,8 @@ function getHighlightFeature (layerId, featureId, getters) {
 }
 /**
  * increases the icon of the feature
- * @param {Function} commit commit function
- * @param {Object} getters map getters
+ * @param {Object} commit the commit
+ * @param {Object} getters the getters
  * @param {Object} highlightObject contains several parameters for feature highlighting
  * @fires VectorStyle#RadioRequestStyleListReturnModelById
  * @returns {void}

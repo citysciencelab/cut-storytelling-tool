@@ -15,7 +15,10 @@ export default {
 
     /**
      * collects features for the gfi.
-     *
+     * @param {Object} param store context
+     * @param {Object} param.getters the getter
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
      * @returns {void}
      */
     collectGfiFeatures ({getters, commit, dispatch}) {
@@ -60,6 +63,10 @@ export default {
     },
     /**
      * @description initializes view listeners and sets store values
+     * @param {Object} param store context
+     * @param {Object} param.dispatch the dispatch
+     * @param {Object} param.getters the getters
+     * @param {Object} param.commit the commit
      * @returns {void}
      */
     initView ({dispatch, getters, commit}) {
@@ -86,6 +93,9 @@ export default {
     },
     /**
      * @description is called when the view resolution is changed triggers the map view options
+     * @param {Object} param store context
+     * @param {Object} param.commit the commit
+     * @param {Object} param.getters the getter
      * @param {ObjectEvent} evt - openlayers event object
      * @returns {void}
      */
@@ -101,6 +111,8 @@ export default {
     },
     /**
      * Creates the olcesium  3D map.
+     * @param {Object} param store context
+     * @param {Object} param.getters the getter
      * @fires Core#RadioRequestMapGetMap
      * @returns {OLCesium} - ol cesium map.
      */

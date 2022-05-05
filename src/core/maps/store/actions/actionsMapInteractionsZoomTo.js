@@ -8,12 +8,14 @@ export default {
 
     /**
      * Zoom to a given extent
-     * @param {Object} state state object
-     * @param {Object} payload parameter object
+     * @param {Object} param store context.
+     * @param {Object} param.getters the getters.
+     * @param {Object} param.dispatch the dispatch.
+     * @param {Object} payload parameter object.
      * @param {String[]} payload.extent The extent to zoom.
      * @param {Object} payload.options Options for zoom.
      * @param {Number} [payload.options.duration=800] The duration of the animation in milliseconds.
-     * @param {Object} [payload.map] The parameter to get the map from the map collection
+     * @param {Object} [payload.map] The parameter to get the map from the map collection.
      * @param {String} [payload.map.mapMode="2D"] The map mode.
      * @see {@link https://openlayers.org/en/latest/apidoc/module-ol_View-View.html#fit} for more options.
      * @returns {void}
@@ -27,12 +29,14 @@ export default {
 
     /**
      * Zoom to features that are filtered by the ids.
-     * @param {Object} state state object
-     * @param {Object} payload parameter object
+     * @param {Object} param store context.
+     * @param {Object} param.getters the getters.
+     * @param {Object} param.dispatch the dispatch.
+     * @param {Object} payload parameter object.
      * @param {String[]} payload.ids The feature ids.
      * @param {String} payload.layerId The layer id.
      * @param {Object} payload.zoomOptions The options for zoom to extent.
-     * @param {Object} [payload.map] The parameter to get the map from the map collection
+     * @param {Object} [payload.map] The parameter to get the map from the map collection.
      * @param {String} [payload.map.mapMode="2D"] The map mode.
      * @returns {void}
      */
@@ -54,13 +58,14 @@ export default {
     /**
      * Zoom to a given extent, this function allows to give projection of extent
      * Note: Used in remoteInterface.
-     * @param {Object} state state object
-     * @param {Object} payload parameter object
+     * @param {Object} param store context.
+     * @param {Object} param.dispatch the dispatch.
+     * @param {Object} payload parameter object.
      * @param {Object} payload.data Contains extent, options as Object and projection.
      * @param {String[]} payload.data.extent The extent to zoom.
      * @param {Object} payload.data.options Options for zoom.
      * @param {string} payload.data.projection The projection from RUL parameter.
-     * @param {Object} [payload.map] The parameter to get the map from the map collection
+     * @param {Object} [payload.map] The parameter to get the map from the map collection.
      * @param {String} [payload.map.mapMode="2D"] The map mode.
      * @returns {void}
      */

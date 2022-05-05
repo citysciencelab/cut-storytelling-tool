@@ -17,6 +17,7 @@ function clickEventCallback (clickObject) {
 export default {
     /**
      * Deactivates oblique mode and listens to change event to activate 3d mode.
+     * @param {Object} param.dispatch the dispatch.
      * @listens Core#RadioTriggerMapChange
      * @fires Core#RadioTriggerObliqueMapDeactivate
      * @returns {void}
@@ -32,6 +33,10 @@ export default {
     /**
      * Activates the map3d if it not already set.
      * If mapmode is "Oblique" it deactivates it.
+     * @param {Object} param store context.
+     * @param {Object} param.getters the getters.
+     * @param {Object} param.dispatch the dispatch.
+     * @param {Object} param.commit the commit.
      * @fires Core#RadioRequestMapGetMapMode
      * @fires Core#RadioTriggerMapBeforeChange
      * @fires Alerting#RadioTriggerAlertAlert
@@ -77,6 +82,9 @@ export default {
 
     /**
      * Deactivates the 3d mode.
+     * @param {Object} param store context.
+     * @param {Object} param.commit the commit.
+     * @param {Object} param.getters the getters.
      * @fires Core#RadioRequestMapGetMap
      * @fires Core#RadioTriggerMapBeforeChange
      * @fires Alerting#RadioTriggerAlertAlert

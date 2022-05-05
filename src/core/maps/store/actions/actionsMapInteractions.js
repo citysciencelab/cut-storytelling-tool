@@ -28,6 +28,8 @@ export default {
     /**
      * Registered listener for certain events on the map.
      * @see https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html
+     * @param {Object} param store context
+     * @param {Object} param.getters the getters
      * @param {Object} payload parameter object
      * @param {String | Object} payload.event The event type or an object used as a key.
      * @param {Function} payload.callback The callback function.
@@ -40,6 +42,8 @@ export default {
     },
     /**
      * Removes an interaction from the map.
+     * @param {Object} param store context
+     * @param {Object} param.getters the getters
      * @param {module:ol/interaction/Interaction} interaction - Interaction to be removed from map.
      * @returns {void}
      */
@@ -50,6 +54,10 @@ export default {
     },
     /**
      * Sets center and resolution to initial values.
+     * @param {Object} param store context
+     * @param {Object} param.state the state
+     * @param {Object} param.dispatch the dispatch
+     * @param {Object} param.getters the getters
      * @returns {void}
      */
     resetView ({state, dispatch, getters}) {
@@ -61,6 +69,8 @@ export default {
     },
     /**
      * Sets the Background for the Mapview.
+     * @param {Object} param store context
+     * @param {Object} param.getters the getters
      * @param  {string} value Image Url
      * @returns {void}
      */
@@ -71,7 +81,10 @@ export default {
     },
     /**
      * Sets the center of the current view.
-     * @param {number[]} coords An array of numbers representing a xy-coordinate.
+     * @param {Object} param store context
+     * @param {Object} param.getters the getters
+     * @param {Object} param.commit the commit
+     * @param {number[]} coords An array of numbers representing a xy-coordinate
      * @returns {void}
      */
     setCenter ({commit, getters}, coords) {
@@ -91,7 +104,9 @@ export default {
     },
     /**
      * Sets a new zoom level to map and store. All other fields will be updated onmoveend.
-     * @param {Number} zoomLevel The zoomLevel to zoom to.
+     * @param {Object} param store context
+     * @param {Object} param.getters the getters
+     * @param {Number} zoomLevel The zoomLevel to zoom to
      * @returns {void}
      */
     setZoomLevel ({getters}, zoomLevel) {
@@ -103,6 +118,10 @@ export default {
     },
     /**
      * toggles the maps background
+     * @param {Object} param store context
+     * @param {Object} param.state the state
+     * @param {Object} param.dispatch the dispatch
+     * @param {Object} param.getters the getters
      * @returns {void}
      */
     toggleBackground ({state, dispatch, getters}) {
@@ -119,10 +138,12 @@ export default {
     },
     /**
      * Unsubscribes listener to certain events.
+     * @param {Object} param store context
+     * @param {Object} param.getters the getters
      * @param {Object} payload parameter object
-     * @param {String | Object} payload.event The event type or an object used as a key.
-     * @param {Function} payload.callback The callback function.
-     * @param {Object} payload.context The context.
+     * @param {String | Object} payload.event The event type or an object used as a key
+     * @param {Function} payload.callback The callback function
+     * @param {Object} payload.context The context
      * @returns {void}
      */
     unregisterListener ({getters}, {event, callback, context}) {

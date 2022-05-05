@@ -32,7 +32,7 @@ const getters = {
     },
     /**
      * Gets the features at the given pixel for the gfi
-     * @param {Object} state - the map state
+     * @param {Object} state - the state
      * @param {Number[]} state.clickPixel - the pixel coordinate of the click event
      * @returns {Object[]} gfi features
      */
@@ -154,7 +154,7 @@ const getters = {
     },
     /**
      * Cesium time function.
-     * @param {Object} state state
+     * @param {Object} state the state
      * @param {Object} getter getters
      * @returns {Cesium.JulianDate} - shadow time in julian date format.
      */
@@ -163,7 +163,7 @@ const getters = {
     },
     /**
      * Reverse the gfi features
-     * @param {object} state - the map state
+     * @param {object} state - the state
      * @returns {Array} reversed gfiFeatures Array from state
      */
     gfiFeaturesReverse: (state) => {
@@ -182,19 +182,19 @@ const getters = {
         return mode === "3D";
     },
     /**
-     * @param {Object} state state
-     * @param {Object} getter getters
+     * @param {Object} state the state
+     * @param {Object} getter the getters
      * @returns {Boolean} whether current zoom level is the maximum zoom level
      */
     maximumZoomLevelActive: (state, getter) => getter.getView.getZoom() >= getter.getView.getMaxZoom(),
     /**
-     * @param {Object} state state
-     * @param {Object} getter getters
+     * @param {Object} state the state
+     * @param {Object} getter the getters
      * @returns {Boolean} whether current zoom level is the minimal zoom level
      */
     minimumZoomLevelActive: (state, getter) => getter.getView.getZoom() <= getter.getView.getMinZoom(),
     /**
-     * @param {Object} state state
+     * @param {Object} state the state
      * @param {Object} params getter parameters
      * @param {Number} params.scale x from computed scale value 1:x
      * @returns {String} pretty-printed scale to 2cms
@@ -206,7 +206,7 @@ const getters = {
     },
     /**
      * Returns a beautified state in format "1 : scale" where scale is rounded based on its value
-     * @param {Object} state state
+     * @param {Object} state the state
      * @param {Object} params getter parameters
      * @param {Number} params.scale a value (number) from computed scale 1:x
      * @returns {String} pretty-printed scale as "1 : scale"
@@ -227,7 +227,7 @@ const getters = {
         return "1 : " + thousandsSeparator(result);
     },
     /**
-     * @param {Object} state state
+     * @param {Object} state the state
      * @param {Object} params getter parameters
      * @param {Number[]} params.mouseCoord the mouse coord as array
      * @returns {String} pretty-printed mouse coordinate
@@ -288,7 +288,7 @@ const getters = {
     },
     /**
      * Gets all visible wms layers at the current resolution
-     * @param {Object} state - the map state
+     * @param {Object} state - the state
      * @param {Object} getters - the map getters
      * @param {Object[]} getters.visibleWmsLayerList - all visible wms layers in the map
      * @returns {Object[]} all visible wms layers at the current resolution
@@ -309,7 +309,6 @@ const getters = {
     },
     /**
     * Returns a layer or a child layer of a layer group by id.
-    * @param {Object} context parameter object.
     * @param  {String} layerId Id of the Layer.
     * @param  {Boolean} searchInGroupLayers Specifies whether to search for the id in the childLayers of groupLayers.
     * @return {module:ol/layer/Base~BaseLayer} The layer found by id.

@@ -6,7 +6,9 @@ export default {
     /**
      * Creates a new vector layer and adds it to the map.
      * If it already exists, this layer is returned.
-     * @param {Object} context parameter object
+     * @param {Object} param store context.
+     * @param {Object} param.state the state.
+     * @param {Object} param.dispatch the dispatch.
      * @param {String} name The name and the id for the layer.
      * @returns {module:ol/layer} The created or the already existing layer.
      */
@@ -33,7 +35,9 @@ export default {
     /**
      * Adds a layer to the map.
      * Layers with the attribute "alwaysOnTop": true are set on top of the map.
-     * @param {Object} context parameter object
+     * @param {Object} param store context.
+     * @param {Object} param.dispatch the dispatch.
+     * @param {Object} param.getters the getters.
      * @param {module:ol/layer/Base~BaseLayer} layer The layer to add.
      * @returns {void}
      */
@@ -45,7 +49,7 @@ export default {
     },
     /**
      * Pushes layers with the attribute: "alwaysOnTop" to the top of the layer collection.
-     * @param {Object} state parameter object
+     * @param {Object} state state object
      * @param {module:ol/Collection~Collection} layers Layer Collection.
      * @returns {void}
      */
@@ -60,8 +64,10 @@ export default {
      * Adds a layer with a zIndex to the map.
      * If the layer already exists, only the zIndex of the layer will be reset.
      * Layers with the attribute "alwaysOnTop": true are set on top of the map.
-     * @param {Object} context parameter object
-     * @param {Object} payload parameter object
+     * @param {Object} param store context.
+     * @param {Object} param.dispatch the dispatch.
+     * @param {Object} param.getters the getters.
+     * @param {Object} payload parameter object.
      * @param {module:ol/layer/Base~BaseLayer} payload.layer The layer to add.
      * @param {Number} payload.zIndex The zIndex of the layer.
      * @returns {void}
@@ -77,7 +83,9 @@ export default {
     /**
      * Adds a layer on top of the map
      * Layers with the attribute "alwaysOnTop": true are set on top of the map.
-     * @param {Object} context parameter object
+     * @param {Object} param store context.
+     * @param {Object} param.dispatch the dispatch.
+     * @param {Object} param.getters the getters.
      * @param {module:ol/layer/Base~BaseLayer} layer The layer to add.
      * @returns {void}
      */
@@ -87,7 +95,9 @@ export default {
     /**
      * Checks if the layer with the given name already exists and uses it,
      * creates a new layer and returns it if not.
-     * @param {Object} context parameter object
+     * @param {Object} param store context.
+     * @param {Object} param.getters the getters.
+     * @param {Object} param.dispatch the dispatch.
      * @param {String} layerName The name of the layer to check.
      * @param {Boolean} [alwaysOnTop=true] Layers with the attribute "alwaysOnTop": true are set on top of the map.
      * @returns {module:ol/layer/Base~BaseLaye}  the found layer or a new layer with the given name.

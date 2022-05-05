@@ -8,7 +8,7 @@ const mutations = {
     ...generateSimpleMutations(initialState),
     /**
      * Sets the visibility of a layer.
-     * @param {Object} state state object
+     * @param {Object} state the state
      * @param {Object} payload parameter object
      * @param {String} payload.layerId id of layer to set visibility of
      * @param {Boolean} payload.visibility isVisible
@@ -19,7 +19,7 @@ const mutations = {
     },
     /**
      * Sets the opacity of a layer.
-     * @param {Object} state state object
+     * @param {Object} state the state
      * @param {Object} payload parameter object
      * @param {String} payload.layerId id of layer to change opacity of
      * @param {Number} payload.opacity opacity value in range (0, 1)
@@ -30,7 +30,7 @@ const mutations = {
     },
     /**
      * Sets the scales for the map.
-     * @param {Object} state state object
+     * @param {Object} state the state
      * @param {String} scales list of scales
      * @returns {void}
      */
@@ -40,7 +40,7 @@ const mutations = {
 
     /**
      * Adds the given layer to the top of this map.
-     * @param {Object} state - The map state.
+     * @param {Object} state the state.
      * @param {module:ol/layer/Base} layer - The given layer.
      * @returns {void}
      */
@@ -52,7 +52,7 @@ const mutations = {
 
     /**
      * Removes the given layer from the map.
-     * @param {Object} state - The map state.
+     * @param {Object} state the state.
      * @param {module:ol/layer/Base} layer - The given layer.
      * @returns {void}
      */
@@ -63,7 +63,7 @@ const mutations = {
     },
     /**
      * Adds a layerId to the array of all complete loaded layers.
-     * @param {Object} state The state object.
+     * @param {Object} state the state.
      * @param {String} layerId The ID of the layer that is loaded completely
      * @returns {void}
      */
@@ -72,7 +72,7 @@ const mutations = {
     },
     /**
      * Sets the bounding box for the map view.
-     * @param {Object} state The state object.
+     * @param {Object} state the state.
      * @param {Number[]} bbox The Boundingbox to fit the map.
      * @returns {void}
      */
@@ -83,7 +83,7 @@ const mutations = {
     },
     /**
      * finds the right resolution for the scale and sets it for this view
-     * @param {Object} state The state object.
+     * @param {Object} state the state.
      * @param {Number} scale - map view scale
      * @returns {void}
      */
