@@ -79,7 +79,7 @@ export default {
 
 <template>
     <span
-        v-if="componentExists('compareFeatures') && mapMode === '2D'"
+        v-if="componentExists('compareFeatures') && mode === '2D'"
         :class="'bootstrap-icon'"
         :title="titleCompareList"
         tabindex="0"

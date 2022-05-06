@@ -4,7 +4,7 @@ import {createGfiFeature} from "../../../api/gfi/getWmsFeaturesByMimeType";
 import {getGfiFeaturesByTileFeature} from "../../../api/gfi/getGfiFeaturesByTileFeature";
 import thousandsSeparator from "../../../utils/thousandsSeparator.js";
 import mapCollection from "../../../core/maps/mapCollection.js";
-import {transformFromMapProjection} from "masterportalapi/src/crs";
+import {transformFromMapProjection} from "@masterportal/masterportalapi/src/crs";
 import {Group as LayerGroup} from "ol/layer.js";
 
 const getters = {

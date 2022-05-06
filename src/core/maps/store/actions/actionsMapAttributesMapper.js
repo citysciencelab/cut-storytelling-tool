@@ -157,10 +157,11 @@ export default {
 
     /**
      * Normalizes layer data of map for easy access.
+     * @param {Object} state the state
      * @param {module:ol/Layer[]} layerArray array of layers of ol/Map
      * @returns {[object, LayerData[]]} returns layer byId and idList according to store normalization
      */
-    normalizeLayers (layerArray) {
+    normalizeLayers (state, layerArray) {
         const layers = {},
             layerIds = [];
 
