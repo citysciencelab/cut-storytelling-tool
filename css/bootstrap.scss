@@ -88,11 +88,6 @@
     padding: 3px 20px;
 }
 
-// Partially overwrite rule to prevent overflows
-.dropdown-item {
-    white-space: normal;
-}
-
 // Overwrite default color to mimic old bootstrap style
 .btn-outline-default {
     color: #333;
