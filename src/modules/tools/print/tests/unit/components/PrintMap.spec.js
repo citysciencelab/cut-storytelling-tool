@@ -53,7 +53,7 @@ describe("src/modules/tools/Print/components/PrintMap.vue", () => {
                         }
                     }
                 },
-                Map: {
+                Maps: {
                     namespaced: true,
                     getters: mockMapGetters,
                     actions: mockMapActions

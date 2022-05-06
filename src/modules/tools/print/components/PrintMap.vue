@@ -211,7 +211,7 @@ export default {
          * @param {event} event the click event
          * @returns {void}
          */
-        scaleChanged (event) {
+        async scaleChanged (event) {
             const scale = parseInt(event.target.value, 10),
                 resolution = {
                     "scale": scale,
@@ -222,7 +222,7 @@ export default {
             this.setIsScaleSelectedManually(true);
             this.getOptimalResolution(resolution);
             this.updateCanvasLayer();
-            this.get2DMap.render();
+            await this.get2DMap.render();
         },
 
         /**
@@ -230,14 +230,14 @@ export default {
          * @param {String} value the chosen layout
          * @returns {void}
          */
-        layoutChanged (value) {
+        async layoutChanged (value) {
             this.resetLayoutParameter();
             this.setCurrentLayoutName(value);
             this.setCurrentLayout(this.layoutList.find(layout => layout.name === value));
             this.getAttributeInLayoutByName("gfi");
             this.getAttributeInLayoutByName("legend");
             this.updateCanvasLayer();
-            this.get2DMap.render();
+            await this.get2DMap.render();
         },
 
         /**
