@@ -77,8 +77,7 @@ export default {
         <div :class="htmlElement === 'input' ? 'input-group' : ''">
             <label
                 :class="[
-                    'control-label',
-                    'input-group-addon',
+                    'input-group-text',
                     htmlElement === 'textarea' ? 'force-border' : ''
                 ]"
                 :for="`tool-contact-${inputName}-input`"
@@ -90,7 +89,7 @@ export default {
                 :value="inputValue"
                 :autocomplete="autocomplete"
                 :type="htmlElement === 'input' ? inputType : ''"
-                class="form-control"
+                :class="[(htmlElement === 'select' ? 'form-select' : 'form-control'), (validInput ? 'is-valid' : '')]"
                 :aria-describedby="`tool-contact-${inputName}-help`"
                 :placeholder="$t(`common:modules.tools.contact.placeholder.${inputName}`)"
                 :rows="htmlElement === 'textarea' ? rows : ''"
@@ -98,17 +97,7 @@ export default {
             />
         </div>
         <span
-            v-if="validInput"
-            :class="[
-                'glyphicon',
-                'glyphicon-ok',
-                'form-control-feedback',
-                htmlElement === 'textarea' ? 'lift-tick' : ''
-            ]"
-            aria-hidden="true"
-        />
-        <span
-            v-else
+            v-if="!validInput"
             :id="`tool-contact-${inputName}-help`"
             class="help-block"
         >
@@ -121,15 +110,15 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-.input-group-addon:first-child.force-border {
+.input-group-text:first-child.force-border {
     border-right: 1px solid #ccc;
 }
 
-.has-error .input-group-addon:first-child.force-border {
+.has-error .input-group-text:first-child.force-border {
     border-right: 1px solid #a94442;
 }
 
-.has-success .input-group-addon:first-child.force-border {
+.has-success .input-group-text:first-child.force-border {
     border-right: 1px solid #3c763d;
 }
 
@@ -141,7 +130,15 @@ export default {
     resize: none;
 }
 
-.control-label {
+.input-group-text {
     min-width: 65px;
 }
+
+.help-block {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: #737373;
+}
+
 </style>

@@ -49,7 +49,7 @@ export default {
             :is="component"
             :class="[component ? 'control' : 'Table']"
             :title="$t(`common:modules.controls.freeze.freeze`)"
-            :icon-name="'ban-circle'"
+            :icon-name="'lock-fill'"
             :on-click="showFreezeWin"
         />
         <FreezeScreenWindow

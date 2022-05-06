@@ -147,10 +147,12 @@ export default {
             <div class="heading-element">
                 <span
                     tabindex="0"
-                    class="glyphicon glyphicon-print"
+                    class="bootstrap-icon"
                     @click="print"
                     @keydown.enter="print"
-                />
+                >
+                    <i class="bi-printer-fill" />
+                </span>
             </div>
         </template>
         <template #body>
@@ -178,18 +180,18 @@ export default {
                     >
                         <p
                             v-if="subSection.type === 'text/plain'"
-                            class="col-md-12"
+                            class="col-lg-12"
                         >
                             {{ translate(subSection.text, subSection.interpolation) }}
                         </p>
                         <p
                             v-else-if="subSection.type === 'text/html'"
-                            class="col-md-12"
+                            class="col-lg-12"
                             v-html="translate(subSection.text, subSection.interpolation)"
                         />
                         <p
                             v-else-if="subSection.imgName"
-                            class="col-md-12 quick-help-img"
+                            class="col-lg-12 quick-help-img"
                         >
                             <img
                                 class="img-responsive img-thumbnail"
@@ -215,7 +217,7 @@ export default {
     z-index: 2000;
 }
 
-.glyphicon-print {
+.bi-printer-fill {
     cursor: pointer;
     font-size: 16px;
 }
@@ -232,7 +234,7 @@ export default {
     }
     >a:hover, a:focus {
         background-color: $accent_hover;
-        color: $primary_contrast;
+        color: $primary_red_contrast;
         cursor: pointer;
     }
 }

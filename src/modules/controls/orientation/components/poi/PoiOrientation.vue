@@ -313,14 +313,16 @@ export default {
                 <div class="modal-header">
                     <span
                         ref="close-icon"
-                        class="glyphicon glyphicon-remove"
+                        class="bootstrap-icon"
                         tabindex="0"
                         aria-hidden="true"
-                        data-dismiss="modal"
+                        data-bs-dismiss="modal"
                         :title="$t('button.close')"
                         @click="closeIconTriggered($event)"
                         @keydown="closeIconTriggered($event)"
-                    />
+                    >
+                        <i class="bi-x-lg" />
+                    </span>
                     <h4 class="modal-title">
                         {{ $t("common:modules.controls.orientation.titleGeolocatePOI") }}
                     </h4>
@@ -333,15 +335,17 @@ export default {
                         <li
                             v-for="(feature, index) in poiFeatures"
                             :key="index"
-                            :class="feature.category === activeCategory ? 'active' : ''"
+                            class="nav-item"
                             @click="changedCategory"
                             @keydown.enter="changedCategory"
                         >
                             <a
+                                class="nav-link"
+                                :class="feature.category === activeCategory ? 'active' : ''"
                                 :href="'#' + feature.category"
                                 :aria-controls="feature.category"
                                 role="button"
-                                data-toggle="pill"
+                                data-bs-toggle="pill"
                             >{{ feature.category + 'm' }}
                                 <span
                                     class="badge"
@@ -356,7 +360,7 @@ export default {
                             :id="feature.category"
                             :key="'list' + index"
                             role="tabpanel"
-                            :class="['tab-pane fade in', feature.category === activeCategory ? 'active' : '']"
+                            :class="['tab-pane fade show', feature.category === activeCategory ? 'active' : '']"
                         >
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover">
@@ -396,7 +400,7 @@ export default {
         </div>
         <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events -->
         <div
-            class="modal-backdrop fade in"
+            class="modal-backdrop fade show"
             @click="hidePoi"
         />
         <!--
@@ -423,7 +427,7 @@ export default {
             text-overflow: ellipsis;
             overflow: hidden;
         }
-        .glyphicon-remove {
+        .bi-x-lg {
             font-size: 16px;
             float: right;
             padding: 12px;

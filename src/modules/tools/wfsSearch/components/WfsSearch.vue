@@ -129,7 +129,7 @@ export default {
     <div>
         <ToolTemplate
             :title="$t(name)"
-            :icon="glyphicon"
+            :icon="icon"
             :active="active"
             :render-to-window="renderToWindow"
             :resizable-window="resizableWindow"
@@ -145,42 +145,44 @@ export default {
                     <template
                         v-if="instances.length > 1"
                     >
-                        <label
-                            id="tool-wfsSearch-instances-select-label"
-                            class="col-md-5 col-sm-5 control-label"
-                            for="tool-wfsSearch-instances-select"
-                        >
-                            {{ $t("common:modules.tools.wfsSearch.instancesSelectLabel") }}
-                        </label>
-                        <div class="col-md-7 col-sm-7">
-                            <select
-                                id="tool-wfsSearch-instances-select"
-                                class="form-control input-sm"
-                                @change="instanceChanged($event.currentTarget.value)"
+                        <div class="form-group form-group-sm row">
+                            <label
+                                id="tool-wfsSearch-instances-select-label"
+                                class="col-md-5 col-form-label"
+                                for="tool-wfsSearch-instances-select"
                             >
-                                <option
-                                    v-for="({title}, i) of instances"
-                                    :key="title + i"
-                                    :value="i"
+                                {{ $t("common:modules.tools.wfsSearch.instancesSelectLabel") }}
+                            </label>
+                            <div class="col-md-7">
+                                <select
+                                    id="tool-wfsSearch-instances-select"
+                                    class="form-select form-select-sm"
+                                    @change="instanceChanged($event.currentTarget.value)"
                                 >
-                                    {{ title }}
-                                </option>
-                            </select>
+                                    <option
+                                        v-for="({title}, i) of instances"
+                                        :key="title + i"
+                                        :value="i"
+                                    >
+                                        {{ title }}
+                                    </option>
+                                </select>
+                            </div>
                         </div>
                         <hr>
                     </template>
                     <div
                         v-if="userHelp !== 'hide'"
                         id="tool-wfsSearch-userHelp"
-                        class="form-group form-group-sm"
+                        class="form-group form-group-sm row"
                     >
                         <i
                             id="tool-wfsSearch-userHelp-icon"
-                            class="col-md-1 col-sm-1 glyphicon glyphicon-info-sign"
+                            class="col-md-1 bi-info-circle-fill"
                         />
                         <span
                             id="tool-wfsSearch-userHelp-text"
-                            class="col-md-11 col-sm-11"
+                            class="col-md-11"
                             :aria-label="$t('common:modules.tools.wfsSearch.userHelp.label')"
                             v-html="$t('common:modules.tools.wfsSearch.userHelp.text', {userHelp})"
                         />
@@ -193,33 +195,33 @@ export default {
                         />
                         <hr :key="'tool-wfsSearch-clause-divider' + i">
                     </template>
-                    <div class="form-group form-group-sm">
-                        <div class="col-md-6 col-sm-6">
+                    <div class="form-group form-group-sm row">
+                        <div class="col-md-6">
                             <button
                                 id="tool-wfsSearch-button-resetUI"
                                 type="button"
-                                class="btn btn-lgv-grey col-md-12 col-sm-12"
+                                class="btn btn-lgv-grey col-md-12"
                                 @click="resetUI"
                             >
                                 {{ $t("common:modules.tools.wfsSearch.resetButton") }}
                             </button>
                         </div>
-                        <div class="col-md-6 col-sm-6">
+                        <div class="col-md-6">
                             <input
                                 id="tool-wfsSearch-button-search"
                                 type="submit"
-                                class="btn btn-lgv-grey col-md-12 col-sm-12"
+                                class="btn btn-lgv-grey col-md-12"
                                 :disabled="requiredFields"
                                 :value="$t('common:modules.tools.wfsSearch.searchButton')"
                             >
                         </div>
                         <div
                             v-if="searched && instances[0].resultList !== undefined"
-                            class="col-md-12 col-sm-12"
+                            class="col-md-12"
                         >
                             <button
                                 id="tool-wfsSearch-button-showResults"
-                                class="btn btn-lgv-grey col-md-12 col-sm-12"
+                                class="btn btn-lgv-grey col-md-12"
                                 :disabled="results.length === 0 || !headers"
                                 @click="setShowResultList(true)"
                             >
@@ -232,7 +234,7 @@ export default {
         </ToolTemplate>
         <ModalItem
             :title="$t(name)"
-            :icon="glyphicon"
+            :icon="icon"
             :show-modal="showResults"
             modal-inner-wrapper-style="padding: 10px;min-width: 70vw;"
             modal-content-container-style="padding: 0;overflow: auto;max-height: 70vh;"

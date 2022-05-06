@@ -194,6 +194,28 @@ export default {
     .snippetCheckboxContainer {
         height: auto;
     }
+    .snippetCheckboxContainer .info-icon {
+        float: right;
+        font-size: 16px;
+        color: #ddd;
+    }
+    .snippetCheckboxContainer .info-icon .opened {
+        color: #000;
+    }
+    .snippetCheckboxContainer .info-icon:hover {
+        cursor: pointer;
+        color: #a5a09e;
+    }
+    .snippetCheckboxContainer .info-text {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 10px;
+        padding: 15px 10px;
+    }
+    .snippetCheckboxContainer .bottom {
+        clear: left;
+        width: 100%;
+    }
     .snippetCheckboxContainer .left {
         input[type=radio], input[type=checkbox] {
             margin: 0 5px 0 0;

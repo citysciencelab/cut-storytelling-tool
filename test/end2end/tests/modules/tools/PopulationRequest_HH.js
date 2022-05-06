@@ -63,15 +63,15 @@ async function PopulationRequestTests ({builder, url, resolution, capability}) {
                 await driver.wait(until.elementIsVisible(await driver.findElement(selectors.modal)));
 
                 // TODO add checks for expected elements
-                // wrench-glyphicon, Text “Einwohneranzahl abfragen”, minus and remove glyphicons
+                // wrench-icon, Text “Einwohneranzahl abfragen”, minus and remove icons
                 /*
                     <div id="window" class="tool-window ui-widget-content ui-draggable" style="position: relative; max-height: 843px; display: block; overflow: auto;">
                         <div class="win-heading header">
-                            <p class="buttons pull-right">
-                                <span class="glyphicon glyphicon-minus" title="Minimieren"></span>
-                                <span class="glyphicon glyphicon-remove" title="Schließen"></span>
-                            <p class="buttons pull-left move">
-                                <span class="glyphicon glyphicon-wrench win-icon"></span>
+                            <p class="buttons float-end">
+                                <span class="bootstrap-icon" title="Minimieren"><i class="bi-dash-lg"></i></span>
+                                <span class="bootstrap-icon" title="Schließen"><i class="bi-x-lg"></i></span>
+                            <p class="buttons float-start move">
+                                <span class="bootstrap-icon win-icon"><i class="bi-wrench"></i></span>
                             <p class="title move">
                                 <span>Einwohneranzahl abfragen</span>
                 */
@@ -86,19 +86,19 @@ async function PopulationRequestTests ({builder, url, resolution, capability}) {
                 /*
                 <div class="dropdown"><div><div class="graphical-select"><div class="dropdown-container">
                     <div class="btn-group bootstrap-select" style="width: 100%;">
-                        <button type="button" class="btn dropdown-toggle btn-default" data-toggle="dropdown" role="button" title="Rechteck aufziehen">
-                            <span class="filter-option pull-left">Rechteck aufziehen</span>&nbsp;<span class="bs-caret"><span class="caret"></span></span>
+                        <button type="button" class="btn dropdown-toggle btn-outline-default" data-bs-toggle="dropdown" role="button" title="Rechteck aufziehen">
+                            <span class="filter-option float-start">Rechteck aufziehen</span>&nbsp;<span class="bs-caret"><span class="caret"></span></span>
                         </button>
                         <div class="dropdown-menu open" role="combobox">
                             <ul class="dropdown-menu inner" role="listbox" aria-expanded="false">
                                 <li data-original-index="1" class="selected"><a tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
-                                    <span class="text">Rechteck aufziehen</span><span class="glyphicon glyphicon-ok check-mark"></span></a>
+                                    <span class="text">Rechteck aufziehen</span><span class="bootstrap-icon check-mark"><i class="bi-check-lg"></i></span></a>
                                 </li>
                                 <li data-original-index="2"><a tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false">
-                                    <span class="text">Kreis aufziehen</span><span class="glyphicon glyphicon-ok check-mark"></span></a>
+                                    <span class="text">Kreis aufziehen</span><span class="bootstrap-icon check-mark"><i class="bi-check-lg"></i></span></a>
                                 </li>
                                 <li data-original-index="3"><a tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false">
-                                    <span class="text">Fläche zeichnen</span><span class="glyphicon glyphicon-ok check-mark"></span></a>
+                                    <span class="text">Fläche zeichnen</span><span class="bootstrap-icon check-mark"><i class="bi-check-lg"></i></span></a>
                                 </li>
                             </ul>
                         </div>
@@ -112,21 +112,21 @@ async function PopulationRequestTests ({builder, url, resolution, capability}) {
                 // Text “ALKIS Adressen anzeigen (ab 1: 20.000)”, & checkbox to the right “Aus”.
                 /*
                     <div class="checkbox"><div class="checkbox-container"><div class="form-inline">
-                        <div class="title-checkbox pull-left">
+                        <div class="title-checkbox float-start">
                             <label>Raster Layer anzeigen (ab 1: 100.000)</label>
-                            <div class="toggle btn btn-default off btn-sm" data-toggle="toggle" style="width: 63.9167px; height: 31px;">
-                                <input type="checkbox" title="Filter ausschalten" data-toggle="toggle"><div class="toggle-group">
-                                <label class="btn btn-primary btn-sm toggle-on">An</label><label class="btn btn-default btn-sm active toggle-off">Aus</label>
-                                <span class="toggle-handle btn btn-default btn-sm"></span></div></div>
+                            <div class="toggle btn btn-outline-default off btn-sm" data-bs-toggle="toggle" style="width: 63.9167px; height: 31px;">
+                                <input type="checkbox" title="Filter ausschalten" data-bs-toggle="toggle"><div class="toggle-group">
+                                <label class="btn btn-primary btn-sm toggle-on">An</label><label class="btn btn-outline-default btn-sm active toggle-off">Aus</label>
+                                <span class="toggle-handle btn btn-outline-default btn-sm"></span></div></div>
                         </div>
                     </div>
                     </div><div class="checkbox-container"><div class="form-inline">
-                        <div class="title-checkbox pull-left">
+                        <div class="title-checkbox float-start">
                             <label>ALKIS Adressen anzeigen (ab 1: 20.000)</label>
-                            <div class="toggle btn btn-default off btn-sm" data-toggle="toggle" style="width: 63.9167px; height: 31px;">
-                                <input type="checkbox" title="Filter ausschalten" data-toggle="toggle"><div class="toggle-group">
-                                <label class="btn btn-primary btn-sm toggle-on">An</label><label class="btn btn-default btn-sm active toggle-off">Aus</label>
-                                <span class="toggle-handle btn btn-default btn-sm"></span></div></div>
+                            <div class="toggle btn btn-outline-default off btn-sm" data-bs-toggle="toggle" style="width: 63.9167px; height: 31px;">
+                                <input type="checkbox" title="Filter ausschalten" data-bs-toggle="toggle"><div class="toggle-group">
+                                <label class="btn btn-primary btn-sm toggle-on">An</label><label class="btn btn-outline-default btn-sm active toggle-off">Aus</label>
+                                <span class="toggle-handle btn btn-outline-default btn-sm"></span></div></div>
                         </div>
                     </div>
                 */
@@ -241,7 +241,7 @@ async function PopulationRequestTests ({builder, url, resolution, capability}) {
             /*
                 <div id="messages" class="top-center">
                     <div id="813" class="alert alert-info alert-dismissable" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                     <p>
