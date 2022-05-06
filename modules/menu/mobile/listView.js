@@ -183,9 +183,7 @@ const MobileMenu = Backbone.View.extend({
 
         newModels.forEach(model => {
             model.setIsVisibleInTree(true);
-            if (notFirstCall && model.get("name") === "common:modules.legend.name") {
-                return;
-            }
+
             switch (model.get("type")) {
                 case "folder": {
                     attr = model.toJSON();
@@ -202,6 +200,9 @@ const MobileMenu = Backbone.View.extend({
                 }
                 case "tool": {
                     if (model.get("isVisibleInMenu")) {
+                        if (notFirstCall && (model.get("name") === "common:modules.legend.name" || model.get("name") === i18next.t("common:modules.legend.name"))) {
+                            return;
+                        }
                         nodeView = new ToolView({model: model});
                     }
                     else {
