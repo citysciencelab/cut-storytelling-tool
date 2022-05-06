@@ -4618,7 +4618,7 @@ Also, type-specific attributes for **[WMS](#markdown-header-themenconfiglayerwms
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|id|yes|String/String[]||Layer ID(s). Resolved using the **[services.json](services.json.md)** file.|false|
+|id|yes|String||Internal layer id to reference this layer. The actual services are referenced in the `children` field.|false|
 |children|no|**[Layer](#markdown-header-themenconfiglayer)**[]||When used, a group layer containing an arbitrary amount of layers is created. In that case, the unique `id` has to be chosen by you.|false|
 |name|no|String||Layer name.|false|
 |transparency|no|Integer|0|Layer transparency.|false|
