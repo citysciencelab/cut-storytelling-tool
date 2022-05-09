@@ -31,7 +31,7 @@ export default class InterfaceOafExtern {
             return;
         }
 
-        getOafAttributeTypes(service.url, service.collection, onsuccess, onerror, service.jsonAcceptHeader);
+        getOafAttributeTypes(service.url, service.collection, onsuccess, onerror);
     }
 
     /**
