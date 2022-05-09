@@ -1,8 +1,8 @@
 {
-  "mobilityDataDraw": {
-    "type": "tool"
-  },
   "storyTellingTool": {
+    "type": "tool"
+  }, 
+  "storyCreationTool": {
     "type": "tool"
   }
 }

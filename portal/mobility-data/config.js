@@ -1,5 +1,5 @@
 const Config = {
-    addons: ["storyTellingTool", "mobilityDataDraw"],
+    addons: ["storyTellingTool", "storyCreationTool"],
     ignoredKeys: [
         "BOUNDEDBY",
         "SHAPE",
@@ -120,7 +120,7 @@ const Config = {
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
     restConf:
         "https://geodienste.hamburg.de/lgv-config/rest-services-internet.json",
-    uiStyle: "table",
+    uiStyle: "default",
     styleConf: "https://raw.githubusercontent.com/herzogrh/faircare-verkehr/main/assets/data/style.json",
     storyConf: "./assets/story.json",
     isMenubarVisible: true,

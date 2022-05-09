@@ -19,7 +19,7 @@
         "white": "Weiß"
     },
     "menu": {
-        "topics": "Themen",
+        "topics": "Daten",
         "name": "Menü",
         "views": {
             "name": "Ansichten",
@@ -28,7 +28,7 @@
         "wayToSchool": "Schulweg-Routing",
         "filter": "Filter",
         "tools": {
-            "name": "Werkzeuge",
+            "name": "Story-Tools",
             "compareFeatures": "Vergleichsliste",
             "parcelSearch": "Flurstückssuche",
             "print": "Karte Drucken",
