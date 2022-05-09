@@ -25,7 +25,7 @@
 ### Removed
 
 ### Fixed
-
+- Issue #737: Fix issue of some items in the layer tree overflowing
 
 ## v2.21.0 - 2022-05-04
 ### Added
