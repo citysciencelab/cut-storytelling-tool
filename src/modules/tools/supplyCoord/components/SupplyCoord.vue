@@ -14,7 +14,7 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/SupplyCoord", Object.keys(getters)),
-        ...mapGetters("Map", ["projection", "mouseCoord"]),
+        ...mapGetters("Maps", ["projection", "mouseCoordinate"]),
         /**
          * Must be a two-way computed property, because it is used as v-model for select-Element, see https://vuex.vuejs.org/guide/forms.html.
          */
@@ -37,14 +37,14 @@ export default {
             this.removePointMarker();
 
             if (value) {
-                this.addPointerMoveHandlerToMap(this.setCoordinates);
+                this.addPointerMoveHandlerToMap("pointermove", this.setCoordinates);
                 this.createInteraction();
-                this.setPositionMapProjection(this.mouseCoord);
+                this.setPositionMapProjection(this.mouseCoordinate);
                 this.changedPosition();
                 this.setFocusToFirstControl();
             }
             else {
-                this.removePointerMoveHandlerFromMap(this.setCoordinates);
+                this.removePointerMoveHandlerFromMap("pointermove", this.setCoordinates);
                 this.setUpdatePosition(true);
                 this.removeInteraction();
             }
@@ -66,9 +66,11 @@ export default {
         ]),
         ...mapActions("MapMarker", ["removePointMarker"]),
         ...mapActions("Alerting", ["addSingleAlert"]),
-        ...mapActions("Map", {
-            addPointerMoveHandlerToMap: "addPointerMoveHandler",
-            removePointerMoveHandlerFromMap: "removePointerMoveHandler",
+        ...mapActions("Maps", {
+            addPointerMoveHandlerToMap: "registerListener",
+            removePointerMoveHandlerFromMap: "unregisterListener"
+        }),
+        ...mapActions("Maps", {
             addInteractionToMap: "addInteraction",
             removeInteractionFromMap: "removeInteraction"
         }),
@@ -160,7 +162,7 @@ export default {
 <template lang="html">
     <ToolTemplate
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
@@ -175,17 +177,17 @@ export default {
                     class="form-horizontal"
                     role="form"
                 >
-                    <div class="form-group form-group-sm">
+                    <div class="form-group form-group-sm row">
                         <label
                             for="coordSystemField"
-                            class="col-md-5 col-sm-5 control-label"
+                            class="col-md-5 col-form-label"
                         >{{ $t("modules.tools.supplyCoord.coordSystemField") }}</label>
-                        <div class="col-md-7 col-sm-7">
+                        <div class="col-md-7">
                             <select
                                 id="coordSystemField"
                                 ref="coordSystemField"
                                 v-model="currentSelection"
-                                class="font-arial form-control input-sm pull-left"
+                                class="font-arial form-select form-select-sm float-start"
                                 @change="selectionChanged($event)"
                             >
                                 <option
@@ -199,36 +201,36 @@ export default {
                             </select>
                         </div>
                     </div>
-                    <div class="form-group form-group-sm">
+                    <div class="form-group form-group-sm row">
                         <label
                             id="coordinatesEastingLabel"
                             for="coordinatesEastingField"
-                            class="col-md-5 col-sm-5 control-label"
+                            class="col-md-5 col-form-label"
                         >{{ $t(label("eastingLabel")) }}</label>
-                        <div class="col-md-7 col-sm-7">
+                        <div class="col-md-7">
                             <input
                                 id="coordinatesEastingField"
                                 v-model="coordinatesEastingField"
                                 type="text"
-                                class="form-control"
+                                class="form-control form-control-sm"
                                 readonly
                                 contenteditable="false"
                                 @click="copyToClipboard($event.currentTarget)"
                             >
                         </div>
                     </div>
-                    <div class="form-group form-group-sm">
+                    <div class="form-group form-group-sm row">
                         <label
                             id="coordinatesNorthingLabel"
                             for="coordinatesNorthingField"
-                            class="col-md-5 col-sm-5 control-label"
+                            class="col-md-5 col-form-label"
                         >{{ $t(label("northingLabel")) }}</label>
-                        <div class="col-md-7 col-sm-7">
+                        <div class="col-md-7">
                             <input
                                 id="coordinatesNorthingField"
                                 v-model="coordinatesNorthingField"
                                 type="text"
-                                class="form-control"
+                                class="form-control form-control-sm"
                                 readonly
                                 contenteditable="false"
                                 @click="copyToClipboard($event.currentTarget)"

@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import sinon from "sinon";
 import VectorBaseLayer from "../../vectorBase";
-import mapCollection from "../../../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../../../core/maps/mapCollection.js";
 
 describe("src/core/layers/vectorBase.js", () => {
     let attributes;
@@ -21,7 +21,7 @@ describe("src/core/layers/vectorBase.js", () => {
             }
         };
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
     beforeEach(() => {
         attributes = {

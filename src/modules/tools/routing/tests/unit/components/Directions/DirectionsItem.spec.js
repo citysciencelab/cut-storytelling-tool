@@ -7,7 +7,7 @@ import DirectionsItemBatchProcessingComponent from "../../../../components/Direc
 import RoutingBatchProcessingCheckboxComponent from "../../../../components/RoutingBatchProcessingCheckbox.vue";
 import RoutingDownloadComponent from "../../../../components/RoutingDownload.vue";
 import Routing from "../../../../store/indexRouting";
-import mapCollection from "../../../../../../../core/dataStorage/mapCollection";
+import mapCollection from "../../../../../../../core/maps/mapCollection";
 
 const localVue = createLocalVue();
 
@@ -23,7 +23,7 @@ describe("src/modules/tools/routing/components/Directions/DirectionsItem.vue", (
                         routing:
                             {
                                 "name": "translate#common:menu.tools.routing",
-                                "glyphicon": "glyphicon-road",
+                                "icon": "bi-signpost-2-fill",
                                 "renderToWindow": true
                             }
                     }
@@ -37,13 +37,13 @@ describe("src/modules/tools/routing/components/Directions/DirectionsItem.vue", (
     beforeEach(() => {
         mapCollection.clear();
         mapCollection.addMap({
-            id: "ol",
             mode: "2D",
+            mapMode: "2D",
             addLayer: sinon.spy(),
             removeLayer: sinon.spy(),
             addInteraction: sinon.spy(),
             removeInteraction: sinon.spy()
-        }, "ol", "2D");
+        }, "2D");
 
         store = new Vuex.Store({
             namespaced: true,
@@ -54,12 +54,10 @@ describe("src/modules/tools/routing/components/Directions/DirectionsItem.vue", (
                         Routing
                     }
                 },
-                Map: {
+                Maps: {
                     namespaced: true,
-                    state: {
-                        mapId: "ol",
-                        mapMode: "2D"
-                    }
+                    mode: "2D",
+                    removeLayer: sinon.spy()
                 }
             },
             state: {

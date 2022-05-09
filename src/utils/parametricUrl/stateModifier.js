@@ -3,7 +3,7 @@ import {deepAssignIgnoreCase} from "../deepAssign";
 import {doSpecialBackboneHandling, triggerParametricURLReady, translateToBackbone} from "./ParametricUrlBridge";
 import store from "../../app-store";
 import {transformToMapProjection} from "@masterportal/masterportalapi/src/crs";
-import mapCollection from "../../core/dataStorage/mapCollection";
+import mapCollection from "../../core/maps/mapCollection";
 
 /**
  * Searches for the keys in state and if found, sets the value at it.
@@ -75,13 +75,14 @@ function makeObject (keys, value) {
  * @returns {void}
  */
 function callMutations (state) {
-    if (state.urlParams["Map/center"]) {
-        let centerCoords = state.Map.center;
+    if (state.urlParams["Maps/center"]) {
+        let centerCoords = state.Maps.center;
 
         if (state.urlParams.projection !== undefined) {
-            centerCoords = transformToMapProjection(mapCollection.getMap(state.Map.mapId, state.Map.mapMode), state.urlParams.projection, centerCoords);
+            centerCoords = transformToMapProjection(mapCollection.getMap(state.Maps.mode), state.urlParams.projection, centerCoords);
         }
-        store.commit("Map/setCenter", centerCoords);
+        store.commit("Maps/setInitialCenter", centerCoords);
+        store.dispatch("Maps/setCenter", centerCoords);
     }
 }
 /**
@@ -94,14 +95,16 @@ function callActions (state) {
         let coordinates = state.MapMarker.coordinates;
 
         if (state.urlParams.projection !== undefined) {
-            coordinates = transformToMapProjection(mapCollection.getMap(state.Map.mapId, state.Map.mapMode), state.urlParams.projection, coordinates);
+            coordinates = transformToMapProjection(mapCollection.getMap(state.Maps.mode), state.urlParams.projection, coordinates);
         }
         setTimeout(() => {
             store.dispatch("MapMarker/placingPointMarker", coordinates);
         }, 500);
     }
-    if (typeof state.urlParams["Map/zoomLevel"] === "number") {
-        store.dispatch("Map/setZoomLevel", state.Map.zoomLevel);
+    if (typeof state.urlParams["Maps/zoomLevel"] === "number") {
+        store.commit("Maps/setInitialZoomLevel", state.urlParams["Maps/zoomLevel"]);
+        store.dispatch("Maps/setZoomLevel", state.urlParams["Maps/zoomLevel"]);
+        store.commit("Maps/setInitialResolution", store.getters["Maps/getView"].getResolution());
     }
     if (Object.prototype.hasOwnProperty.call(state.ZoomTo, "zoomToGeometry") || Object.prototype.hasOwnProperty.call(state.ZoomTo, "zoomToFeatureId")) {
         store.dispatch("ZoomTo/zoomToFeatures");
@@ -157,7 +160,7 @@ export async function setValueToState (state, key, value) {
                     }
                 }
             }
-            if (entry.key === "Map/zoomToGeometry" || entry.key === "Map/zoomToFeatureId") {
+            if (entry.key === "Maps/zoomToGeometry" || entry.key === "Map/zoomToFeatureId") {
                 state.ZoomTo[entry.key.substring(4)] = entry.value;
             }
             else {

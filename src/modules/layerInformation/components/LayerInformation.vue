@@ -135,7 +135,7 @@ export default {
          * @returns {String} classNames of the tab
          */
         getTabPaneClasses (tab) {
-            return {active: this.isActiveTab(tab), in: this.isActiveTab(tab), "tab-pane": true, fade: true};
+            return {active: this.isActiveTab(tab), show: this.isActiveTab(tab), "tab-pane": true, fade: true};
         },
         /**
          * stops the click event from closing the menu tree
@@ -183,11 +183,11 @@ export default {
                 <div
                     v-if="showMoreLayers"
                     class="dropdown mb-2"
-                    :class="{ open: openDropdown }"
                 >
                     <button
                         id="changeLayerInfo"
-                        class="btn btn-default dropdown-toggle"
+                        class="btn btn-outline-default dropdown-toggle"
+                        :class="{ show: openDropdown }"
                         type="button"
                         @click="onClickDropdown"
                     >
@@ -196,6 +196,7 @@ export default {
                     </button>
                     <ul
                         class="dropdown-menu"
+                        :class="{ show: openDropdown }"
                     >
                         <li
                             v-for="name in layerInfo.layerNames"
@@ -203,7 +204,7 @@ export default {
                         >
                             <a
                                 href="#"
-                                class="abstractChange"
+                                class="dropdown-item abstractChange"
                                 :class="{ active: name === currentLayerName }"
                                 @click="changeLayerAbstract"
                             >{{ $t(name) }}</a>
@@ -218,7 +219,7 @@ export default {
                     <p
                         v-for="url in metaURLs"
                         :key="url"
-                        class="pull-right"
+                        class="float-end"
                     >
                         <a
                             :href="url"
@@ -243,12 +244,14 @@ export default {
                     <li
                         v-if="legendURL !== 'ignore'"
                         value="layerinfo-legend"
-                        :class="{active: isActiveTab('layerinfo-legend') }"
+                        class="nav-item"
                         @click="onClick"
                         @keydown.enter="onClick"
                     >
                         <a
                             href="#layerinfo-legend"
+                            class="nav-link"
+                            :class="{active: isActiveTab('layerinfo-legend') }"
                             @click="setActiveTab"
                         >{{ $t("common:modules.layerInformation.legend") }}
                         </a>
@@ -256,12 +259,14 @@ export default {
                     <li
                         v-if="showDownloadLinks"
                         value="LayerInfoDataDownload"
-                        :class="{active: isActiveTab('LayerInfoDataDownload') }"
+                        class="nav-item"
                         @click="onClick"
                         @keydown.enter="onClick"
                     >
                         <a
                             href="#LayerInfoDataDownload"
+                            class="nav-link"
+                            :class="{active: isActiveTab('LayerInfoDataDownload') }"
                             @click="setActiveTab"
                         >{{ $t("common:modules.layerInformation.downloadDataset") }}
                         </a>
@@ -269,12 +274,14 @@ export default {
                     <li
                         v-if="showUrl"
                         value="url"
-                        :class="{active: isActiveTab('url') }"
+                        class="nav-item"
                         @click="onClick"
                         @keydown.enter="onClick"
                     >
                         <a
                             href="#url"
+                            class="nav-link"
+                            :class="{active: isActiveTab('url') }"
                             @click="setActiveTab"
                         >{{ $t(layerInfo.typ) }} - {{ $t("common:modules.layerInformation.addressSuffix") }}
                         </a>
@@ -295,7 +302,7 @@ export default {
                         :show="isActiveTab('LayerInfoDataDownload')"
                         :type="String('LayerInfoDataDownload')"
                     >
-                        <div class="col-md-7">
+                        <div class="col-lg-7">
                             <ul
                                 v-if="showDownloadLinks"
                                 class="pt-5"
@@ -316,7 +323,7 @@ export default {
                         </div>
                         <div
                             v-if="(showAttachFile)"
-                            class="col-md-5 pt-5"
+                            class="col-lg-5 pt-5"
                         >
                             <span class="download-note">{{ $t(("common:modules.layerInformation.attachFileMessage")) }}</span>
                         </div>
@@ -407,7 +414,7 @@ export default {
         border-bottom: 1px solid rgb(229, 229, 229);
         cursor: move;
     }
-    .glyphicon-remove {
+    .bi-x-lg {
         &:hover {
             opacity: 0.7;
             cursor: pointer;
@@ -421,7 +428,6 @@ export default {
             >a {
                 text-overflow: ellipsis;
                 overflow: hidden;
-                height: 100%;
             }
         }
     }

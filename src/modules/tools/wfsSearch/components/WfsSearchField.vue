@@ -211,14 +211,14 @@ export default {
 </script>
 
 <template>
-    <div class="form-group form-group-sm">
+    <div class="form-group form-group-sm row">
         <div
             v-if="Array.isArray(inputLabel)"
-            class="col-md-5 col-sm-5"
+            class="col-md-5"
         >
             <select
                 :id="`tool-wfsSearch-${selectableParameters.fieldName}-${selectableParameters.fieldId}-fieldSelection`"
-                class="form-control input-sm"
+                class="form-select form-select-sm"
                 :aria-label="$t('common:modules.tools.wfsSearch.fieldSelectionLabel')"
                 @change="parameterIndex = $event.currentTarget.value"
             >
@@ -233,18 +233,20 @@ export default {
         </div>
         <label
             v-else
-            class="col-md-5 col-sm-5 control-label"
+            class="col-md-5 col-form-label"
             :for="`tool-wfsSearch-${selectableParameters.fieldName}-${selectableParameters.fieldId}-input`"
         >
             {{ inputLabel }}
         </label>
-        <div class="col-md-7 col-sm-7">
+        <div class="col-md-7">
             <component
                 :is="htmlElement"
                 :id="`tool-wfsSearch-${selectableParameters.fieldName}-${selectableParameters.fieldId}-input`"
                 :class="{
-                    'form-control': true,
-                    'input-sm': htmlElement === 'select',
+                    'form-control': htmlElement !== 'select',
+                    'form-select': htmlElement === 'select',
+                    'form-control-sm': htmlElement !== 'select',
+                    'form-select-sm': htmlElement === 'select',
                     'tool-wfsSearch-field-input': htmlElement === 'input'
                 }"
                 :placeholder="htmlElement === 'input' ? selectableParameters.inputPlaceholder : ''"

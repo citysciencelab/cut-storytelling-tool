@@ -77,21 +77,20 @@ export default {
             <li
                 v-if="showLegendInMenu"
                 :class="{ 'open': showLegend }"
-                class="dropdown dropdown-folder legend-menu-item"
+                class="nav-item dropdown dropdown-folder legend-menu-item"
                 @click="toggleLegend"
                 @keydown.enter.stop.prevent="toggleLegend"
                 @keydown.space.stop.prevent="toggleLegend"
             >
                 <a
                     href="#"
-                    class="dropdown-toggle tabable"
+                    class="nav-link dropdown-toggle tabable"
                     tabindex="0"
                     :title="$t(name)"
                 >
-                    <span
-                        :class="glyphicon"
-                        class="glyphicon hidden-sm"
-                    />
+                    <span class="bootstrap-icon d-sm-none d-md-inline-block">
+                        <i :class="icon" />
+                    </span>
                     <span class="menuitem">{{ $t(name) }}</span>
                 </a>
             </li>
@@ -109,10 +108,9 @@ export default {
                 @keydown.enter="toggleLegend"
             >
                 <div>
-                    <span
-                        :class="glyphicon"
-                        class="glyphicon hidden-sm"
-                    />
+                    <span class="bootstrap-icon d-sm-none d-md-inline-block">
+                        <i :class="icon" />
+                    </span>
                     <span class="title">{{ $t(name) }}</span>
                 </div>
             </li>
@@ -123,10 +121,9 @@ export default {
             class="dropdown-toggle"
             @click="toggleLegend"
         >
-            <span
-                :class="glyphicon"
-                class="glyphicon hidden-sm"
-            />
+            <span class="bootstrap-icon d-sm-none d-md-inline-block">
+                <i :class="icon" />
+            </span>
             <span class="menuitem">{{ $t(name) }}</span>
         </a>
     </div>

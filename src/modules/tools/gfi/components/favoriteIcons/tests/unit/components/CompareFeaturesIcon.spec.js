@@ -25,7 +25,7 @@ describe("src/modules/tools/gfi/favoriteIcons/components/CompareFeatureIcon.vue"
                 },
                 computed: {
                     featureIsOnCompareList: sinon.fake.returns(false),
-                    mapMode: sinon.fake.returns("2D")
+                    mode: sinon.fake.returns("2D")
                 }
             });
         });
@@ -35,8 +35,8 @@ describe("src/modules/tools/gfi/favoriteIcons/components/CompareFeatureIcon.vue"
             expect(wrapper.find("span").exists()).to.be.true;
         });
         it("should render empty star button if feature is already on compare list", () => {
-            expect(wrapper.find("span").classes("glyphicon-star-empty")).to.be.true;
-            expect(wrapper.find("span").classes("glyphicon-star")).to.be.false;
+            expect(wrapper.find("span > i").classes("bi-star")).to.be.true;
+            expect(wrapper.find("span > i").classes("bi-star-fill")).to.be.false;
             expect(wrapper.find("span").attributes().title).equals("modules.tools.gfi.favoriteIcons.compareFeatureIcon.toCompareList");
         });
     });
@@ -60,15 +60,15 @@ describe("src/modules/tools/gfi/favoriteIcons/components/CompareFeatureIcon.vue"
                 },
                 computed: {
                     featureIsOnCompareList: sinon.fake.returns(true),
-                    mapMode: sinon.fake.returns("2D")
+                    mode: sinon.fake.returns("2D")
                 }
             });
         });
         afterEach(sinon.restore);
 
         it("should render star button if feature is already on compare list", () => {
-            expect(wrapper.find("span").classes("glyphicon-star-empty")).to.be.false;
-            expect(wrapper.find("span").classes("glyphicon-star")).to.be.true;
+            expect(wrapper.find("span > i").classes("bi-star")).to.be.false;
+            expect(wrapper.find("span > i").classes("bi-star-fill")).to.be.true;
             expect(wrapper.find("span").attributes().title).equals("modules.tools.gfi.favoriteIcons.compareFeatureIcon.fromCompareList");
         });
     });

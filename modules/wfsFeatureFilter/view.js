@@ -3,7 +3,7 @@ import WfsFeatureFilterTemplate from "text-loader!./template.html";
 const WfsFeatureFilterView = Backbone.View.extend({
     events: {
         "click #filterbutton": "getFilterInfos",
-        "click .panel-heading": "toggleHeading"
+        "click .card-header": "toggleHeading"
     },
     initialize: function () {
         this.listenTo(Radio.channel("ModelList"), {
@@ -33,13 +33,13 @@ const WfsFeatureFilterView = Backbone.View.extend({
         this.$("." + id + "_wfs_panel").each(function (index, ele) {
             $(ele).toggle();
         });
-        if (this.$("#wfsfeaturefilter_resizemarker").hasClass("glyphicon-resize-small")) {
-            this.$("#wfsfeaturefilter_resizemarker").removeClass("glyphicon-resize-small");
-            this.$("#wfsfeaturefilter_resizemarker").addClass("glyphicon-resize-full");
+        if (this.$("#wfsfeaturefilter_resizemarker").find("i").hasClass("bi-arrows-angle-contract")) {
+            this.$("#wfsfeaturefilter_resizemarker").find("i").removeClass("bi-arrows-angle-contract");
+            this.$("#wfsfeaturefilter_resizemarker").find("i").addClass("bi-arrows-angle-expand");
         }
         else {
-            this.$("#wfsfeaturefilter_resizemarker").addClass("glyphicon-resize-small");
-            this.$("#wfsfeaturefilter_resizemarker").removeClass("glyphicon-resize-full");
+            this.$("#wfsfeaturefilter_resizemarker").find("i").addClass("bi-arrows-angle-contract");
+            this.$("#wfsfeaturefilter_resizemarker").find("i").removeClass("bi-arrows-angle-expand");
         }
     },
     getFilterInfos: function () {

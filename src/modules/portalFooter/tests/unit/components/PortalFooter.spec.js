@@ -61,7 +61,7 @@ describe("src/modules/portalFooter/components/PortalFooter.vue", () => {
                 Map: {
                     namespaced: true,
                     getters: {
-                        is3d: () => false
+                        is3D: () => false
                     }
                 }
             },
@@ -103,7 +103,7 @@ describe("src/modules/portalFooter/components/PortalFooter.vue", () => {
             localVue
         });
 
-        expect(wrapper.find(".hidden-xs").exists()).to.be.true;
+        expect(wrapper.find(".d-none.d-md-block").exists()).to.be.true;
     });
 
     it("renders the urls in footer", async () => {
@@ -168,7 +168,7 @@ describe("src/modules/portalFooter/components/PortalFooter.vue", () => {
                 footerConfig: () => sinon.stub(),
                 masterPortalVersionNumber: () => sinon.stub(),
                 mobile: () => false,
-                is3d: () => true
+                is3D: () => true
             },
             localVue
         });
@@ -192,7 +192,7 @@ describe("src/modules/portalFooter/components/PortalFooter.vue", () => {
                 footerConfig: () => sinon.stub(),
                 masterPortalVersionNumber: () => sinon.stub(),
                 mobile: () => false,
-                is3d: () => true
+                is3D: () => true
             },
             localVue
         });

@@ -18,7 +18,7 @@ describe("src/modules/tools/layerSlider/components/LayerSliderPlayer.vue", () =>
                     children: {
                         layerSlider: {
                             "name": "translate#common:menu.tools.layerSlider",
-                            "glyphicon": "glyphicon-film",
+                            "icon": "bi-hourglass-split",
                             "windowsInterval": null
                         }
                     }
@@ -60,8 +60,8 @@ describe("src/modules/tools/layerSlider/components/LayerSliderPlayer.vue", () =>
 
         expect(wrapper.find("#tool-layer-slider-player > div.progress").exists()).to.be.true;
         expect(wrapper.find("#tool-layer-slider-player > div.progress > div.progress-bar").exists()).to.be.true;
-        expect(wrapper.find("#tool-layer-slider-player > div.progress > div.progress-bar > span.sr-only").exists()).to.be.true;
-        expect(wrapper.find("#tool-layer-slider-player > div.progress > div.progress-bar > span.sr-only").text()).equals("modules.tools.layerSlider.displayLayers");
+        expect(wrapper.find("#tool-layer-slider-player > div.progress > div.progress-bar > span.visually-hidden").exists()).to.be.true;
+        expect(wrapper.find("#tool-layer-slider-player > div.progress > div.progress-bar > span.visually-hidden").text()).equals("modules.tools.layerSlider.displayLayers");
     });
 
     it("renders the input-group with buttons", () => {
@@ -70,10 +70,9 @@ describe("src/modules/tools/layerSlider/components/LayerSliderPlayer.vue", () =>
         wrapper = shallowMount(LayerSliderPlayerComponent, {store, localVue});
 
         expect(wrapper.find("#tool-layer-slider-player > div.input-group").exists()).to.be.true;
-        expect(wrapper.find("#tool-layer-slider-player > div.input-group > span.input-group-btn").exists()).to.be.true;
-        expect(wrapper.findAll("#tool-layer-slider-player > div.input-group > span.input-group-btn > button").length).equals(4);
+        expect(wrapper.findAll("#tool-layer-slider-player > div.input-group > button").length).equals(4);
 
-        wrapper.findAll("#tool-layer-slider-player > div.input-group > span.input-group-btn > button").wrappers.forEach((button, index) => {
+        wrapper.findAll("#tool-layer-slider-player > div.input-group > button").wrappers.forEach((button, index) => {
             expect(button.attributes("id")).equals(buttonIds[index]);
         });
 
@@ -95,10 +94,10 @@ describe("src/modules/tools/layerSlider/components/LayerSliderPlayer.vue", () =>
 
         wrapper = shallowMount(LayerSliderPlayerComponent, {store, localVue});
 
-        await wrapper.find("#tool-layer-slider-player > div.input-group > span.input-group-btn > button#play").trigger("click");
+        await wrapper.find("#tool-layer-slider-player > div.input-group > button#play").trigger("click");
 
-        expect(wrapper.find("#tool-layer-slider-player > div.input-group > span.input-group-btn > button#play").exists()).to.be.false;
-        expect(wrapper.find("#tool-layer-slider-player > div.input-group > span.input-group-btn > button#pause").exists()).to.be.true;
+        expect(wrapper.find("#tool-layer-slider-player > div.input-group > button#play").exists()).to.be.false;
+        expect(wrapper.find("#tool-layer-slider-player > div.input-group > button#pause").exists()).to.be.true;
     });
 
     it("skip to next layer with forward button", async () => {
@@ -120,13 +119,13 @@ describe("src/modules/tools/layerSlider/components/LayerSliderPlayer.vue", () =>
 
         expect(store.getters["Tools/LayerSlider/activeLayer"].index).equals(0);
 
-        await wrapper.find("#tool-layer-slider-player > div.input-group > span.input-group-btn > button#forward").trigger("click");
+        await wrapper.find("#tool-layer-slider-player > div.input-group > button#forward").trigger("click");
         expect(store.getters["Tools/LayerSlider/activeLayer"].index).equals(1);
 
-        await wrapper.find("#tool-layer-slider-player > div.input-group > span.input-group-btn > button#forward").trigger("click");
+        await wrapper.find("#tool-layer-slider-player > div.input-group > button#forward").trigger("click");
         expect(store.getters["Tools/LayerSlider/activeLayer"].index).equals(2);
 
-        await wrapper.find("#tool-layer-slider-player > div.input-group > span.input-group-btn > button#forward").trigger("click");
+        await wrapper.find("#tool-layer-slider-player > div.input-group > button#forward").trigger("click");
         expect(store.getters["Tools/LayerSlider/activeLayer"].index).equals(0);
     });
 
@@ -149,13 +148,13 @@ describe("src/modules/tools/layerSlider/components/LayerSliderPlayer.vue", () =>
 
         expect(store.getters["Tools/LayerSlider/activeLayer"].index).equals(0);
 
-        await wrapper.find("#tool-layer-slider-player > div.input-group > span.input-group-btn > button#backward").trigger("click");
+        await wrapper.find("#tool-layer-slider-player > div.input-group > button#backward").trigger("click");
         expect(store.getters["Tools/LayerSlider/activeLayer"].index).equals(2);
 
-        await wrapper.find("#tool-layer-slider-player > div.input-group > span.input-group-btn > button#backward").trigger("click");
+        await wrapper.find("#tool-layer-slider-player > div.input-group > button#backward").trigger("click");
         expect(store.getters["Tools/LayerSlider/activeLayer"].index).equals(1);
 
-        await wrapper.find("#tool-layer-slider-player > div.input-group > span.input-group-btn > button#backward").trigger("click");
+        await wrapper.find("#tool-layer-slider-player > div.input-group > button#backward").trigger("click");
         expect(store.getters["Tools/LayerSlider/activeLayer"].index).equals(0);
     });
 });

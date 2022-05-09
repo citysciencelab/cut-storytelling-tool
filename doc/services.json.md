@@ -1211,7 +1211,6 @@ If the gfiAttributes are given as an object, a key's value may also be an object
 |authenticationUrl|no|String||Additional url called to trigger basic authentication in the browser.|"https://api.hamburg.de/datasets/v1/schulen/collections/staatliche_schulen/appschema"|
 |limit|false|Number||Limits the number of items presented in the response document. Ignored if bulk is `true`.|`10`|
 |crs|false|String|EPSG:25832|The coordinate reference system of the response geometries.|`"EPSG:25832"`|
-|jsonAcceptHeader|false|String|application/vnd.oai.openapi+json|The mediatype to use for all non feature requests if the server requires other than specified.|`"application/json"`|
 
 **OAF example:**
 

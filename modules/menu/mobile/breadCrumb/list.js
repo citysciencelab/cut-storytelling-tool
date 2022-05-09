@@ -1,5 +1,5 @@
 import BreadCrumbItem from "./model";
-import "bootstrap/js/collapse";
+import "bootstrap/js/dist/collapse";
 
 const BreadCrumbList = Backbone.Collection.extend({
     model: BreadCrumbItem,
@@ -54,7 +54,7 @@ const BreadCrumbList = Backbone.Collection.extend({
             Radio.trigger("ModelList", "setModelAttributesById", models[0], {isExpanded: false});
         }
         else if (modelIndex === 0) {
-            $("div.collapse.navbar-collapse").removeClass("in");
+            $("div.collapse.navbar-collapse").removeClass("show");
         }
     },
 

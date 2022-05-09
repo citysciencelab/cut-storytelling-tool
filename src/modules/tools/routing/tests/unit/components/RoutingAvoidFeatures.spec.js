@@ -2,7 +2,7 @@ import Vuex from "vuex";
 import {expect} from "chai";
 import sinon from "sinon";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
-import mapCollection from "../../../../../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../../../../../core/maps/mapCollection.js";
 import RoutingAvoidFeaturesComponent from "../../../components/RoutingAvoidFeatures.vue";
 import mutations from "../../../store/mutationsRouting";
 import actions from "../../../store/actionsRouting";
@@ -25,7 +25,7 @@ describe("src/modules/tools/routing/components/RoutingAvoidFeatures.vue", () => 
                         routing:
                             {
                                 "name": "translate#common:menu.tools.routing",
-                                "glyphicon": "glyphicon-road",
+                                "icon": "bi-signpost-2-fill",
                                 "renderToWindow": true
                             }
                     }

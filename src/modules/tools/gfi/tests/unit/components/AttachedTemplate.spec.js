@@ -24,7 +24,7 @@ describe("src/modules/tools/gfi/components/templates/AttachedTemplate.vue", () =
             }
         },
         computed: {
-            clickCoord: () => [],
+            clickCoordinate: () => [],
             styleContent: () => [{
                 "max-width": "",
                 "max-height": ""
@@ -39,6 +39,15 @@ describe("src/modules/tools/gfi/components/templates/AttachedTemplate.vue", () =
         if (wrapper) {
             wrapper.destroy();
         }
+    });
+    /**
+         * Is needed to run the tests.
+         * Check if its fixed with vue 3
+         * @see https://github.com/vuejs/vue-test-utils-next/issues/293
+         * @returns {void}
+         */
+    before(() => {
+        global.ShadowRoot = () => "";
     });
 
     it("should have a title", () => {
@@ -56,7 +65,7 @@ describe("src/modules/tools/gfi/components/templates/AttachedTemplate.vue", () =
                 }
             },
             computed: {
-                clickCoord: () => [],
+                clickCoordinate: () => [],
                 styleContent: () => [{
                     "max-width": "",
                     "max-height": ""
@@ -114,7 +123,7 @@ describe("src/modules/tools/gfi/components/templates/AttachedTemplate.vue", () =
                 }
             },
             computed: {
-                clickCoord: () => [],
+                clickCoordinate: () => [],
                 styleContent: () => [{
                     "max-width": "",
                     "max-height": ""

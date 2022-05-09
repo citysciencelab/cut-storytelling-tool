@@ -1,7 +1,7 @@
 import store from "../../app-store";
 import {terrain} from "@masterportal/masterportalapi/src";
 import getProxyUrl from "../../../src/utils/getProxyUrl";
-import mapCollection from "../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../core/maps/mapCollection.js";
 import * as bridge from "./RadioBridge.js";
 import Layer from "./layer";
 /**
@@ -32,7 +32,7 @@ export default function TerrainLayer (attrs) {
     // call the super-layer
     Layer.call(this, Object.assign(defaults, attrs), this.layer, !attrs.isChildLayer);
 
-    store.watch((state, getters) => getters["Map/mapMode"], mode => {
+    store.watch((state, getters) => getters["Maps/mode"], mode => {
         if (mode === "3D") {
             this.setIsSelected(this.get("isVisibleInMap"));
         }
@@ -70,7 +70,7 @@ TerrainLayer.prototype.setVisible = function (newValue) {
  * @returns {void}
  */
 TerrainLayer.prototype.setIsSelected = function (newValue, attr) {
-    const map = mapCollection.getMap(store.state.Map.mapId, store.state.Map.mapMode),
+    const map = mapCollection.getMap(store.getters["Maps/mode"]),
         treeType = store.getters.treeType;
 
     if (map && map.mode === "3D") {

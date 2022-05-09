@@ -21,7 +21,7 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
     const mockMapGetters = {
             map: () => sinon.stub(),
             projection: () => sinon.stub(),
-            mouseCoord: () => sinon.stub()
+            mouseCoordinate: () => sinon.stub()
         },
         mockMapMarkerActions = {
             removePointMarker: sinon.stub()
@@ -42,7 +42,7 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
                             coord:
                             {
                                 "name": "translate#common:menu.tools.supplyCoord",
-                                "glyphicon": "glyphicon-screenshot"
+                                "icon": "bi-bullseye"
                             }
                         }
                     }
@@ -62,7 +62,7 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
                         SupplyCoord
                     }
                 },
-                Map: {
+                Maps: {
                     namespaced: true,
                     getters: mockMapGetters,
                     mutations: mockMapMutations,
