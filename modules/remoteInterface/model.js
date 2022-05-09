@@ -1,6 +1,5 @@
 import {getCenter} from "ol/extent.js";
 import store from "../../src/app-store";
-import mapCollection from "../../src/core/dataStorage/mapCollection";
 
 const RemoteInterface = Backbone.Model.extend({
     defaults: {
@@ -60,10 +59,10 @@ const RemoteInterface = Backbone.Model.extend({
             Radio.trigger("wfsTransaction", "transact", event.data.layerId, event.data.transactFeatureById, event.data.mode, event.data.attributes);
         }
         else if (event.data?.zoomToExtent) {
-            Radio.trigger("Map", "zoomToExtent", event.data.zoomToExtent);
+            Radio.trigger("Map", "zoomToExtent", {extent: event.data.zoomToExtent});
         }
         else if (event.data?.highlightfeature) {
-            store.commit("Map/setVectorFeaturesLoaded", {type: "viaLayerAndLayerId", layerAndLayerId: event.data.highlightfeature});
+            store.dispatch("Maps/highlightFeature", {type: "viaLayerAndLayerId", layerAndLayerId: event.data.highlightfeature});
         }
         else if (event.data === "hidePosition") {
             store.dispatch("MapMarker/removePointMarker");
@@ -126,7 +125,8 @@ const RemoteInterface = Backbone.Model.extend({
         return store.getters["Tools/SaveSelection/url"];
     },
     getWGS84MapSizeBBOX: function () {
-        mapCollection.getMapView("ol", "2D").getProjectedBBox("EPSG:4326");
+        // eslint-disable-next-line new-cap
+        return store.getters["Maps/getProjectedBBox"]("EPSG:4326");
     },
     setPostMessageUrl: function (value) {
         this.set("postMessageUrl", value);

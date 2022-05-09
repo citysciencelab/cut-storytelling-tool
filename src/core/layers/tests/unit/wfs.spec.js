@@ -5,7 +5,7 @@ import {WFS} from "ol/format.js";
 import {expect} from "chai";
 import sinon from "sinon";
 import WfsLayer from "../../wfs";
-import mapCollection from "../../../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../../../core/maps/mapCollection.js";
 import store from "../../../../app-store";
 
 describe("src/core/layers/wfs.js", () => {
@@ -27,7 +27,7 @@ describe("src/core/layers/wfs.js", () => {
             }
         };
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
         i18next.init({
             lng: "cimode",
             debug: false

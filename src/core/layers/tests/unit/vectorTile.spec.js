@@ -60,7 +60,7 @@ describe("core/modelList/layer/vectorTile", function () {
         it("should create a layer with minimal config", function () {
             const mapStub = sinon.stub(store, "getters");
 
-            mapStub.value({"Map/projection": {getCode: () => {
+            mapStub.value({"Maps/projection": {getCode: () => {
                 return "EPSG:25832";
             }}});
 
@@ -85,7 +85,7 @@ describe("core/modelList/layer/vectorTile", function () {
         it("should apply in services.json.md defined defaults", function () {
             const mapStub = sinon.stub(store, "getters");
 
-            mapStub.value({"Map/projection": {getCode: () => {
+            mapStub.value({"Maps/projection": {getCode: () => {
                 return "EPSG:25382";
             }}});
 
@@ -160,7 +160,7 @@ describe("core/modelList/layer/vectorTile", function () {
         it("should apply given attributes correct", function () {
             const mapStub = sinon.stub(store, "getters");
 
-            mapStub.value({"Map/projection": {getCode: () => {
+            mapStub.value({"Maps/projection": {getCode: () => {
                 return "EPSG:3857";
             }}});
 

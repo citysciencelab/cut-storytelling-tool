@@ -26,13 +26,11 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/FeatureLister", Object.keys(getters)),
-        ...mapGetters("Map", [
-            "visibleLayerList"
-        ]),
+        ...mapGetters("Maps", ["getVisibleLayerList"]),
         visibleVectorLayers: function () {
             const vectorLayers = [];
 
-            this.visibleLayerList.forEach(layer => {
+            this.getVisibleLayerList.forEach(layer => {
                 if (layer instanceof VectorLayer && layer.get("typ") === "WFS") {
                     const layerSource = layer.getSource();
 
@@ -97,7 +95,7 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
-            this.$store.dispatch("Map/removeHighlightFeature", "decrease", {root: true});
+            this.$store.dispatch("Maps/removeHighlightFeature", "decrease", {root: true});
             this.resetToThemeChooser();
         },
         /**

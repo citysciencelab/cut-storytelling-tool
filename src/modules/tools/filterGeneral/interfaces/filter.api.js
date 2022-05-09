@@ -89,7 +89,6 @@ export default class FilterApi {
                     layerId,
                     url: layerModel.get("url"),
                     collection: layerModel.get("collection"),
-                    jsonAcceptHeader: layerModel.get("jsonAcceptHeader"),
                     namespace: featureNS
                 };
             }

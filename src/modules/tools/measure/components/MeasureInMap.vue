@@ -19,7 +19,7 @@ export default {
     computed: {
         ...mapGetters("Tools/Measure", Object.keys(getters)),
         ...mapGetters(["uiStyle"]),
-        ...mapGetters("Map", ["layerById", "is3d", "ol2DMap"])
+        ...mapGetters("Maps", ["is3D", "get2DMap"])
     },
     watch: {
         /**
@@ -49,7 +49,7 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-        this.ol2DMap.addLayer(this.layer);
+        this.$store.dispatch("Maps/addLayer", this.layer);
     },
     mounted () {
         if (this.active) {
@@ -150,7 +150,7 @@ export default {
                                     :key="'measure-tool-geometry-select-' + geometryValue"
                                     :value="geometryValue"
                                 >
-                                    {{ is3d
+                                    {{ is3D
                                         ? selectedGeometry
                                         : $t("modules.tools.measure." +
                                             (geometryValue === "LineString" ? "stretch" : "area"))

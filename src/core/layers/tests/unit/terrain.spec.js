@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import sinon from "sinon";
 import TerrainLayer from "../../terrain";
-import mapCollection from "../../../dataStorage/mapCollection.js";
+import mapCollection from "../../../maps/mapCollection.js";
 import store from "../../../../app-store";
 
 describe("src/core/layers/terrain.js", () => {
@@ -29,8 +29,8 @@ describe("src/core/layers/terrain.js", () => {
                 return {};
             }
         };
-        mapCollection.addMap(map, "ol", "2D");
-        mapCollection.addMap(map3D, "map3D_0", "3D");
+        mapCollection.addMap(map, "2D");
+        mapCollection.addMap(map3D, "3D");
     });
     beforeEach(() => {
         global.Cesium = {};
@@ -47,15 +47,16 @@ describe("src/core/layers/terrain.js", () => {
         };
         cesiumTerrainProviderSpy = sinon.spy(global.Cesium, "CesiumTerrainProvider");
         cesiumEllipsoidTerrainProviderSpy = sinon.spy(global.Cesium, "EllipsoidTerrainProvider");
-        store.state.Map.mapId = "map3D_0";
-        store.state.Map.mapMode = "3D";
+        store.state.Maps.mode = "3D";
+        store.getters = {
+            "Maps/mode": store.state.Maps.mode
+        };
     });
 
     afterEach(() => {
         sinon.restore();
         global.Cesium = null;
-        store.state.Map.mapId = "ol";
-        store.state.Map.mapMode = "2D";
+        store.state.Maps.mode = "2D";
     });
 
     /**

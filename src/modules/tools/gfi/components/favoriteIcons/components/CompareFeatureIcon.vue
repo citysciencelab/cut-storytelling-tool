@@ -23,7 +23,7 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/CompareFeatures", ["isFeatureSelected"]),
-        ...mapGetters("Map", ["mapMode"]),
+        ...mapGetters("Maps", ["mode"]),
         /**
          * Returns Boolean after checking if feature is on comparison list.
          * @returns {String} Title for the comparelist.
@@ -79,7 +79,7 @@ export default {
 
 <template>
     <span
-        v-if="componentExists('compareFeatures') && mapMode === '2D'"
+        v-if="componentExists('compareFeatures') && mode === '2D'"
         :class="'bootstrap-icon'"
         :title="titleCompareList"
         tabindex="0"
