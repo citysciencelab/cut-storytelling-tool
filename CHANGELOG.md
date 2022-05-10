@@ -25,6 +25,8 @@
 
 ### Fixed
 - Issue #737: Fix issue of some items in the layer tree overflowing
+- Issue #760: Fixed double display of folder in menu topic-tree when using FeatureViaUrl
+- Issue #760: Features added with FeatureViaUrl are now correctly displayed under Selected Topics
 
 ## v2.21.0 - 2022-05-04
 ### Added
