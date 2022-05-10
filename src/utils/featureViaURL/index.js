@@ -97,17 +97,16 @@ export function getFeatureIds (layerId) {
 export default function ({layers, epsg, zoomTo}) {
     store.watch(state => state.urlParams, params => {
         const urlLayers = params.featureViaURL ? JSON.parse(params.featureViaURL) : [],
-            treeType = Radio.request("Parser", "getTreeType");
+            treeType = Radio.request("Parser", "getTreeType"),
+            parentId = treeType === "custom" || treeType === "light" ? "featureViaURLFolder" : undefined;
         let features,
             geoJSON,
             geometryType,
             layerId,
-            parentId = "tree",
             pos;
 
-        if (treeType === "custom") {
+        if (treeType === "custom" || treeType === "light") {
             Radio.trigger("Parser", "addFolder", gfiAttributes.folderName, "featureViaURLFolder", "Overlayer", 0, true, "modules.featureViaURL.folderName");
-            parentId = "featureViaURLFolder";
         }
 
         urlLayers.forEach(layer => {
@@ -136,7 +135,9 @@ export default function ({layers, epsg, zoomTo}) {
                 Radio.trigger("Alert", "alert", i18next.t("common:modules.featureViaURL.messages.featureParsingNoneAdded"));
             }
             layerIds.push(layerId);
-            addGeoJSON(layers[pos].name, layers[pos].id, geoJSON, layers[pos].styleId, parentId, gfiAttributes);
+            if (parentId !== undefined) {
+                addGeoJSON(layers[pos].name, layers[pos].id, geoJSON, layers[pos].styleId, parentId, gfiAttributes);
+            }
             if (typeof zoomTo !== "undefined" && (zoomTo === layerId || zoomTo.indexOf(layerId) !== -1)) {
                 Radio.trigger("Map", "zoomToFilteredFeatures", getFeatureIds(layerId), layerId);
             }
