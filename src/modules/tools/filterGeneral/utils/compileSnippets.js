@@ -1,4 +1,5 @@
 import isObject from "../../../../utils/isObject";
+import FilterApi from "../interfaces/filter.api.js";
 
 /**
  * Clones, checks and modifies the given original snippets to match the needs for LayerFilterSnippet.
@@ -22,6 +23,7 @@ function compileSnippets (originalSnippets, api, onfinish, onerror) {
     createSnippetsIfNoSnippetsAreGiven(snippets, api, () => {
         addSnippetIds(snippets);
         addSnippetAdjustment(snippets);
+        addSnippetApi(snippets);
         addSnippetMultiselect(snippets);
 
         if (typeof api?.getAttrTypes === "function" && !checkSnippetTypeConsistency(snippets)) {
@@ -135,6 +137,20 @@ function addSnippetIds (snippets) {
 function addSnippetAdjustment (snippets) {
     snippets.forEach(snippet => {
         snippet.adjustment = {};
+    });
+}
+
+/**
+ * Initializes and adds a snippet api to every snippet if the snippet has its own service.
+ * @param {Object[]} snippets - An array of snippet objects.
+ * @returns {void}
+ */
+function addSnippetApi (snippets) {
+    snippets.forEach(snippet => {
+        if (isObject(snippet) && snippet !== null && typeof snippet.service !== "undefined") {
+            snippet.api = new FilterApi();
+            snippet.api.setService(snippet.service);
+        }
     });
 }
 
@@ -257,6 +273,7 @@ export {
     convertStringSnippetsIntoObjects,
     addSnippetIds,
     addSnippetAdjustment,
+    addSnippetApi,
     addSnippetMultiselect,
     addSnippetOperator,
     addSnippetTypes,

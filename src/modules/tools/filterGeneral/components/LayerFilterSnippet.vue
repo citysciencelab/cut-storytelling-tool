@@ -578,7 +578,7 @@ export default {
             >
                 <SnippetDropdown
                     :ref="'snippet-' + snippet.snippetId"
-                    :api="api"
+                    :api="snippet.api || api"
                     :attr-name="snippet.attrName"
                     :add-select-all="snippet.addSelectAll"
                     :adjustment="snippet.adjustment"

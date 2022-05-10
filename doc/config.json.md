@@ -1943,6 +1943,7 @@ An object defining a single snippet.
 |addSelectAll|no|Boolean|false|For type `dropdown` with `multiselect: true` only: Adds an additional entry on top of the list to select/deselect all entries.|false|
 |delimitor|no|String||For type `dropdown` only: If feature attributes are themselfs again seperated by a delimitor to act as pseudo array, setting delimitor to the sign that seperates the terms, will result in the expected outcome.|false|
 |renderIcons|no|String|"none"|For type `dropdown` with `display: "list"` only: If set to `fromLegend` icons will be placed left hand side of each entry. Icons are taken from legend. Use an object with attrNames as keys and imagePath as value {attrName: imagePath} to manually set images (see example).|false|
+|service|no|[service](#markdown-header-portalconfigmenutoolfiltergeneralfilterlayersnippetsservice)||For the initial filling of a snippet (dropdown, date, slider) an alternative service can be used. This may increase the performance during initial loading. The default is the service of the configured [filterLayer](#markdown-header-portalconfigmenutoolfiltergeneralfilterlayer).|false|
 
 **Example**
 
@@ -2094,6 +2095,28 @@ Example for a date range snippet. A date range with two attrName for min and max
 }
 ```
 
+***
+#### Portalconfig.menu.tool.filterGeneral.filterLayer.snippets.service
+
+An object that describes a service for a snippet. All service types that the filter supports can theoretically be used.
+The configuration depends on the type of service. So far only tested with **WFS**.
+
+**WFS**
+|Name|Required|Typ|Default|Description|Expert|
+|----|-------------|---|-------|------------|------|
+|type|ja|String||The type of service.|false|
+|url|ja|String||The service url.|false|
+|typename|ja|String||The feature type that will be loaded.|false|
+
+**Beispiel**
+
+```json
+{
+    "type": "WFS",
+    "url": "https://qs-geodienste.hamburg.de/HH_WFS_verbreitungskarten_tiere",
+    "typename": "verbreitung_tiere_eindeutige_liste"
+}
+```
 ***
 
 #### Portalconfig.menu.tool.compareFeatures

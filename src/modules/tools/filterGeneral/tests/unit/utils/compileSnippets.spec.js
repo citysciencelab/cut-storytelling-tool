@@ -4,6 +4,7 @@ import {
     convertStringSnippetsIntoObjects,
     addSnippetIds,
     addSnippetAdjustment,
+    addSnippetApi,
     addSnippetMultiselect,
     addSnippetOperator,
     addSnippetTypes,
@@ -87,6 +88,31 @@ describe("src/modules/tools/filterGeneral/utils/compileSnippets.js", () => {
             expect(snippets).to.deep.equal(expected);
         });
     });
+
+    describe("addSnippetApi", () => {
+        it("should add an api to every snippet if the snippet has its own service", () => {
+            const snippets = [
+                    {service: "service"},
+                    {noService: "noApi"}
+                ],
+                expected = [
+                    {
+                        service: "service",
+                        api: {
+                            filterId: undefined,
+                            service: "service"
+                        }
+                    },
+                    {
+                        noService: "noApi"
+                    }
+                ];
+
+            addSnippetApi(snippets);
+            expect(snippets).to.deep.equal(expected);
+        });
+    });
+
     describe("addSnippetMultiselect", () => {
         it("should add a key multiselect depending on matichingMode if a snippet has no multiselect", () => {
             const snippets = [
