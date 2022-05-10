@@ -149,8 +149,13 @@ export default {
             return this.$t("modules.tools.filterGeneral.dropdown.noElements");
         },
         dropdownValueComputed () {
-            const dropdownValue = this.dropdownValue;
+            const dropdownValue = [];
 
+            if (Array.isArray(this.dropdownValue)) {
+                this.dropdownValue.forEach(value => {
+                    dropdownValue.push(value);
+                });
+            }
             dropdownValue.sort((a, b) => {
                 return String(a).toLowerCase() > String(b).toLowerCase() ? 1 : -1;
             });
