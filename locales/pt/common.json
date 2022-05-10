@@ -717,7 +717,7 @@
             "linkToPdf": "Para a lenda externa (PDF)",
             "noLegendForLayerInfo": "Legenda não disponível",
             "toggleCollapseAll": "Mostrar/ocultar todas as legendas"
-        },
+        }
     },
     "snippets": {
         "checkbox": {
