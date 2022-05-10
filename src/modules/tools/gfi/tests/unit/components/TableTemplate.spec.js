@@ -3,6 +3,7 @@ import {config, mount, shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import TableTemplate from "../../../components/templates/TableTemplate.vue";
 import sinon from "sinon";
+import getters from "../../../store/gettersGfi";
 
 const localVue = createLocalVue();
 
@@ -35,6 +36,18 @@ describe("src/modules/tools/gfi/components/templates/TableTemplate.vue", () => {
         store = new Vuex.Store({
             namespaced: true,
             modules: {
+                Tools: {
+                    namespaced: true,
+                    modules: {
+                        Gfi: {
+                            namespaced: true,
+                            mutations: {
+                                setCurrentRotation: () => sinon.stub()
+                            },
+                            getters: getters
+                        }
+                    }
+                },
                 MapMarker: {
                     namespaced: true,
                     actions: {
