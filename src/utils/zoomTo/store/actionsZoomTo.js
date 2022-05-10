@@ -39,14 +39,14 @@ const actions = {
             }
             return getAndFilterFeatures(layerId, property, urlValues)
                 .then(featureCollection => {
-                    const geometryOrExtent = calculateExtent(
+                    const extent = calculateExtent(
                         allowedValues === undefined
                             ? featureCollection
                             : featureCollection.filter(feature => allowedValues.includes(feature.get(property).toUpperCase().trim()))
                     );
 
                     if (addFeatures) {
-                        commit("Map/addLayerToMap", new VectorLayer({
+                        commit("Maps/addLayerToMap", new VectorLayer({
                             source: new VectorSource({
                                 features: styleId === undefined
                                     ? featureCollection
@@ -54,7 +54,7 @@ const actions = {
                             })
                         }), {root: true});
                     }
-                    return dispatch("Map/zoomTo", {geometryOrExtent}, {root: true});
+                    return dispatch("Maps/zoomToExtent", {extent}, {root: true});
                 })
                 .catch(error => console.error("zoomTo: An error occurred while trying to fetch features from the given service.", error));
         }
@@ -94,7 +94,7 @@ const actions = {
                         filteredFeatures = createStyledFeatures(filteredFeatures, styleId);
                     }
                     if (addFeatures && filteredFeatures.length > 0) {
-                        commit("Map/addLayerToMap", new VectorLayer({
+                        commit("Maps/addLayerToMap", new VectorLayer({
                             source: new VectorSource({features: filteredFeatures})
                         }), {root: true});
                     }
@@ -115,7 +115,7 @@ const actions = {
                     .flat(1);
 
                 if (features.length > 0) {
-                    return dispatch("Map/zoomTo", {geometryOrExtent: calculateExtent(features)}, {root: true});
+                    return dispatch("Maps/zoomToExtent", {extent: calculateExtent(features)}, {root: true});
                 }
                 return console.warn("zoomTo: No features were found for the given layer.");
             })

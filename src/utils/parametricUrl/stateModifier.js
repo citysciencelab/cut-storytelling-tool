@@ -160,8 +160,8 @@ export async function setValueToState (state, key, value) {
                     }
                 }
             }
-            if (entry.key === "Maps/zoomToGeometry" || entry.key === "Map/zoomToFeatureId") {
-                state.ZoomTo[entry.key.substring(4)] = entry.value;
+            if (entry.key === "Maps/zoomToGeometry" || entry.key === "Maps/zoomToFeatureId") {
+                state.ZoomTo[entry.key.substring(5)] = entry.value;
             }
             else {
                 state.urlParams[entry.key] = entry.value;
