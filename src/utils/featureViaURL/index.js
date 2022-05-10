@@ -137,6 +137,7 @@ export default function ({layers, epsg, zoomTo}) {
             layerIds.push(layerId);
             if (parentId !== undefined) {
                 addGeoJSON(layers[pos].name, layers[pos].id, geoJSON, layers[pos].styleId, parentId, gfiAttributes);
+                Radio.trigger("Util", "refreshTree");
             }
             if (typeof zoomTo !== "undefined" && (zoomTo === layerId || zoomTo.indexOf(layerId) !== -1)) {
                 Radio.trigger("Map", "zoomToFilteredFeatures", getFeatureIds(layerId), layerId);
