@@ -174,43 +174,14 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
             expect(dispatch.firstCall.args[2]).to.eql({root: true});
         });
 
-        it("should log an error if a config is given but no url parameter", async () => {
+        it("should should resolve with a reason if a config is given but no url parameter", () => {
             getters.config = [{id: "zoomToFeatureId"}];
-            await actions.zoomToFeatures({state, getters, commit, dispatch});
-
-            expect(consoleWarnSpy.notCalled).to.be.true;
-            expect(consoleErrorSpy.calledOnce).to.be.true;
-            expect(consoleErrorSpy.firstCall.args.length).to.equal(1);
-            expect(consoleErrorSpy.firstCall.args[0]).to.equal("zoomTo: No features were found for the given layer.");
-        });
-        it("should throw an error and dispatch an alert if one configuration is present with only an invalid id for the url parameter", async () => {
-            getters.config = [{id: "somethingWrong"}];
-            state.somethingWrong = "values";
-            await actions.zoomToFeatures({state, getters, commit, dispatch});
-
-            expect(consoleWarnSpy.notCalled).to.be.true;
-            expect(dispatch.calledOnce).to.be.true;
-            expect(dispatch.firstCall.args.length).to.equal(3);
-            expect(dispatch.firstCall.args).to.eql(["Alerting/addSingleAlert", "utils.parametricURL.zoomTo", {root: true}]);
-            expect(consoleErrorSpy.calledOnce).to.be.true;
-            expect(consoleErrorSpy.firstCall.args.length).to.equal(1);
-            expect(consoleErrorSpy.firstCall.args[0]).to.equal("zoomTo: No features were found for the given layer.");
-        });
-        it("should throw an error and dispatch two alerts if two configurations are present with only an invalid id for the url parameter", async () => {
-            getters.config = [{id: "somethingWrong"}, {id: "someOtherId"}];
-            state.somethingWrong = "values";
-            state.someOtherId = "values";
-            await actions.zoomToFeatures({state, getters, commit, dispatch});
-
-            expect(consoleWarnSpy.notCalled).to.be.true;
-            expect(dispatch.calledTwice).to.be.true;
-            expect(dispatch.firstCall.args.length).to.equal(3);
-            expect(dispatch.firstCall.args).to.eql(["Alerting/addSingleAlert", "utils.parametricURL.zoomTo", {root: true}]);
-            expect(dispatch.secondCall.args.length).to.equal(3);
-            expect(dispatch.secondCall.args).to.eql(["Alerting/addSingleAlert", "utils.parametricURL.zoomTo", {root: true}]);
-            expect(consoleErrorSpy.calledOnce).to.be.true;
-            expect(consoleErrorSpy.firstCall.args.length).to.equal(1);
-            expect(consoleErrorSpy.firstCall.args[0]).to.equal("zoomTo: No features were found for the given layer.");
+            actions.zoomToFeatures({state, getters, commit, dispatch})
+                .then(reason => {
+                    expect(consoleWarnSpy.notCalled).to.be.true;
+                    expect(consoleErrorSpy.notCalled).to.be.true;
+                    expect(reason).to.equal("zoomTo: No url parameters were given by the user.");
+                });
         });
         it("should throw an error and dispatch an alert if an error occurs while fetching the features", async () => {
             getters.config = [{
@@ -227,13 +198,13 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
             sinon.stub(console, "warn").callsFake(consoleWarnSpy);
             await actions.zoomToFeatures({state, getters, commit, dispatch});
 
-            expect(consoleWarnSpy.notCalled).to.be.true;
+            expect(consoleErrorSpy.notCalled).to.be.true;
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args.length).to.equal(3);
             expect(dispatch.firstCall.args).to.eql(["Alerting/addSingleAlert", "Custom testing error!", {root: true}]);
-            expect(consoleErrorSpy.calledOnce).to.be.true;
-            expect(consoleErrorSpy.firstCall.args.length).to.equal(1);
-            expect(consoleErrorSpy.firstCall.args[0]).to.equal("zoomTo: No features were found for the given layer.");
+            expect(consoleWarnSpy.calledOnce).to.be.true;
+            expect(consoleWarnSpy.firstCall.args.length).to.equal(1);
+            expect(consoleWarnSpy.firstCall.args[0]).to.equal("zoomTo: No features were found for the given layer.");
         });
         it("should add features to the map for one working config (zoomToFeatureId) and dispatch an alert for a configuration with an invalid id if both are present", async () => {
             getters.config = [{id: "somethingWrong"}, {
