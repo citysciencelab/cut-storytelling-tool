@@ -25,7 +25,7 @@ export default {
     },
     computed: {
         ...mapGetters(
-            "Map",
+            "Maps",
             ["maximumZoomLevelActive", "minimumZoomLevelActive"]
         )
     },
@@ -37,7 +37,7 @@ export default {
         this.mapChannel.off("change", this.checkModeVisibility);
     },
     methods: {
-        ...mapActions("Map", ["increaseZoomLevel", "decreaseZoomLevel"]),
+        ...mapActions("Maps", ["increaseZoomLevel", "decreaseZoomLevel"]),
         /**
          * Checks the map mode to note whether the zoom control is supposed to be
          * visible, which is only the case in 2D mode. In all other modes, more
@@ -57,13 +57,13 @@ export default {
         class="zoom-buttons"
     >
         <ControlIcon
-            icon-name="plus"
+            icon-name="plus-icon"
             :title="$t(`common:modules.controls.zoom.zoomIn`)"
             :disabled="maximumZoomLevelActive"
             :on-click="increaseZoomLevel"
         />
         <ControlIcon
-            icon-name="minus"
+            icon-name="minus-icon"
             :title="$t(`common:modules.controls.zoom.zoomOut`)"
             :disabled="minimumZoomLevelActive"
             :on-click="decreaseZoomLevel"

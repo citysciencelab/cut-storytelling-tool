@@ -220,7 +220,7 @@ const TreeModel = Backbone.Model.extend(/** @lends TreeModel.prototype */{
                 name: model.name,
                 metaName,
                 type: i18next.t("common:modules.searchbar.type.topic"),
-                glyphicon: "glyphicon-list",
+                icon: "bi-stack",
                 id: model.id
             });
         });

@@ -16,6 +16,7 @@ import Searchbar from "./model";
 import "./RadioBridge.js";
 import store from "../../src/app-store/index";
 import {getWKTGeom} from "../../src/utils/getWKTGeom";
+import Collapse from "bootstrap/js/dist/collapse";
 
 /**
  * @member SearchbarTemplate
@@ -43,7 +44,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         "input input": "controlEvent",
         "focusin input": "toggleStyleForRemoveIcon",
         "focusout input": "toggleStyleForRemoveIcon",
-        "click .form-control-feedback": "deleteSearchString",
+        "click .x-icon": "deleteSearchString",
         "click .btn-search": "searchAll",
         "click .list-group-item.hit": "hitSelected",
         "click .list-group-item.results": "renderHitList",
@@ -81,7 +82,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             this.render();
         }
 
-        this.className = "navbar-form col-xs-9";
+        this.className = "d-flex col-9 col-md-auto";
 
         this.listenTo(this.model, {
             "renderRecommendedList": this.renderRecommendedList,
@@ -171,7 +172,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         $(window).on("resize", this.onresizeCallback.bind(this));
     },
     id: "searchbar", // is ignored, with renderToDOM
-    className: "navbar-form col-xs-9", // is ignored, with renderToDOM
+    className: "d-flex col-9 col-md-auto", // is ignored, with renderToDOM
     searchbarKeyNavSelector: "#searchInputUL",
     template: _.template(SearchbarTemplate),
     templateTable: _.template(TemplateTable),
@@ -188,7 +189,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         if (menuStyle !== "TABLE") {
             this.$el.html(this.template(attr));
             if (window.innerWidth < 768) {
-                $(".navbar-toggle").before(this.$el); // prior of toggleButton
+                $(".navbar-toggler").before(this.$el); // prior of toggleButton
             }
             else {
                 $(".navbar-collapse").append(this.$el); // right in the menubar
@@ -270,10 +271,10 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      */
     toggleBtnQuestionColor: function () {
         if (store.getters["QuickHelp/active"]) {
-            this.$("span.glyphicon-question-sign").addClass("quickhelp-is-shown");
+            this.$("span.bootstrap-icon.question-icon").addClass("quickhelp-is-shown");
         }
         else {
-            this.$("span.glyphicon-question-sign").removeClass("quickhelp-is-shown");
+            this.$("span.bootstrap-icon.question-icon").removeClass("quickhelp-is-shown");
         }
     },
 
@@ -361,8 +362,11 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         attr.uiStyle = Radio.request("Util", "getUiStyle");
 
         // If the topic tree is open on the table, it should be closed when the search is initialized.
-        if ($("#table-nav-layers-panel").length > 0) {
-            $("#table-nav-layers-panel").collapse("hide");
+        if ($("#table-nav-layers-panel").length > 0 && $("#table-nav-layers-panel").hasClass("show")) {
+            // Upgrade to BT5
+            const collapse = Collapse.getInstance($("#table-nav-layers-panel").get(0));
+
+            collapse.hide();
             Radio.trigger("TableMenu", "deactivateCloseClickFrame");
         }
         // sz, does not want to work in a local environment, so first use the template as variable
@@ -379,7 +383,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         if (this.model.get("finalHitList").length === 1 && this.model.get("initSearchString") === this.model.get("finalHitList")[0].name) {
             this.hitSelected();
         }
-        this.$("#searchInput + span").show();
+        this.$("#searchInput + span").css("display", "inline-flex");
     },
 
     /**
@@ -620,7 +624,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             store.dispatch("MapMarker/removePointMarker");
             store.dispatch("MapMarker/placingPolygonMarker", getWKTGeom(hit));
             extent = store.getters["MapMarker/markerPolygon"].getSource().getExtent();
-            Radio.trigger("Map", "zoomToExtent", extent, {maxZoom: zoomLevel});
+            Radio.trigger("Map", "zoomToExtent", {extent: extent, options: {maxZoom: zoomLevel}});
         }
     },
     /**
@@ -910,7 +914,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
 
             // the "x-button" in the searchbar
             if (evt.target.value.length > 0) {
-                this.$("#searchInput + span").show();
+                this.$("#searchInput + span").css("display", "inline-flex");
             }
             else {
                 this.$("#searchInput + span").hide();

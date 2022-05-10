@@ -130,7 +130,7 @@ describe("src/modules/tools/filterGeneral/utils/getOafAttributeTypes.js", () => 
 
             await getOafAttributeTypes("url", "collection", "onsuccess", error => {
                 lastError = error;
-            }, "jsonAcceptHeader", config => new Promise(resolve => {
+            }, config => new Promise(resolve => {
                 lastConfig = config;
                 resolve();
             }));
@@ -139,7 +139,7 @@ describe("src/modules/tools/filterGeneral/utils/getOafAttributeTypes.js", () => 
                 method: "get",
                 url: "url/api",
                 headers: {
-                    accept: "jsonAcceptHeader"
+                    accept: "application/vnd.oai.openapi+json"
                 }
             });
         });

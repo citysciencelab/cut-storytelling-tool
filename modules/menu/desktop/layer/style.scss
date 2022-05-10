@@ -9,11 +9,11 @@ ul#tree {
         border-top: 1px solid #ddd;
         padding: 10px 0px 10px 5px;
         font-size: 12px;
-        .glyphicon {
+        .bootstrap-icon {
             font-size: 15px;
             padding: 0px;
         }
-        .glyphicon-picture {
+        .bi-image {
             padding-right: 16px;
         }
         .remove-layer {
@@ -30,6 +30,8 @@ ul#tree {
         }
         .badge {
             padding-top: 6px;
+            font-size: 12px;
+            border-radius: 10px;
             background-color: #686868;
         }
     }

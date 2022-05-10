@@ -70,7 +70,7 @@ export default {
 <template>
     <ToolTemplate
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
@@ -91,21 +91,21 @@ export default {
                     class="form-horizontal"
                     role="form"
                 >
-                    <div class="form-group form-group-sm col-md-12 col-sm-12">
+                    <div class="form-group form-group-sm col-md-12">
                         <label
                             for="tool-styleVT-selectedLayerField"
-                            class="range-label"
+                            class="range-label mb-1"
                         >
                             {{ $t("common:modules.tools.styleVT.theme") }}
                         </label>
                         <select
                             id="tool-styleVT-selectedLayerField"
                             ref="tool-styleVT-selectedLayerField"
-                            class="form-control input-sm"
+                            class="form-select form-select-sm"
                             @change="setLayerModelById($event.target.value)"
                         >
                             <option
-                                class="pull-left"
+                                class="float-start"
                                 value=""
                                 selected
                             >
@@ -114,7 +114,7 @@ export default {
                             <option
                                 v-for="vectorTileLayer in vectorTileLayerList"
                                 :key="vectorTileLayer.id"
-                                class="pull-left"
+                                class="float-start"
                                 :value="vectorTileLayer.id"
                                 :selected="selectedLayerId(vectorTileLayer.id)"
                             >
@@ -124,7 +124,7 @@ export default {
                     </div>
                     <div
                         v-if="layerModel"
-                        class="form-group form-group-sm col-md-12 col-sm-12"
+                        class="form-group form-group-sm col-md-12"
                     >
                         <label
                             for="tool-styleVT-selectedStyleField"
@@ -134,13 +134,13 @@ export default {
                         </label>
                         <select
                             id="tool-styleVT-selectedStyleField"
-                            class="form-control input-sm"
+                            class="form-select form-select-sm"
                             @change="triggerStyleUpdate($event.target.value)"
                         >
                             <option
                                 v-for="vtStyle in layerModel.get('vtStyles')"
                                 :key="vtStyle.id"
-                                class="pull-left"
+                                class="float-start"
                                 :value="vtStyle.id"
                                 :selected="selectedStyle(vtStyle.id)"
                             >

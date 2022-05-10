@@ -7,16 +7,25 @@
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 ## Unreleased - in development
 ### Added
+- The following NPM packages are added:
+    - dependencies:
+        - "bootstrap-sass"
+        - "bootstrap-icons"
+- Added a mixin for changing the colour and padding of an active pill inside the css class `nav-pills`.
+- HochwasserPrint: new print module for Hochwasserrisikomanagement
 
 ### Changed
+- `default`-gfiTheme: If a `|`-character is part of the response, every element separated by the character will be displayed in a separate paragraph.
+- map moved with new structure from src/modules/map to src/core/maps.
 
 ### Deprecated
+- Switched Icon Library from Glyphicon to Bootstrap Icons. Edited Webpack Config. Updated icon usage in vue components to use scss. Updated icon usage in backbone modules. Edited docs & tests accordingly.
 
 ### Removed
 
 ### Fixed
 - The order of printed features from the draw and measure layer is now corrected.
-
+- Issue #737: Fix issue of some items in the layer tree overflowing
 
 ## v2.21.0 - 2022-05-04
 ### Added
@@ -92,8 +101,6 @@
 - The function `makeOberstufenprofileBold` used by the `comparisonList` and `featureLister` is provided as a util named `toBold` now.
 - Issue #636: The WMS layer respects crs code at rawlayer. The WMS request now contains the attribute CRS. If not available, projection of the map is used.
 - Move OpenLayers related Vector Tile layer creation into masterportalapi
-
-### Deprecated
 
 ### Removed
 - Removed hardcoded LayerIds for 3D support in wms.js. Setting has to be done now via services.json attribute notSupportedIn3D.
@@ -272,9 +279,6 @@
 - Added style.json parameter "rotation" to wfs features with iconPointStyle, if the parameter is not given it will fall back to standard alignment.
 - Added the possibility to configure a predefined order of selected layers.
 - Feature: List component supports onRowClick callback
-- The following NPM packages are added:
-    - dependencies:
-        - "bootstrap-sass"
 - Extended CSW processing for download links in layerInformation by CSW 2.0.2 standard.
 - The tool "featureLister" has been extended and now also highlights lines and polygons on mouse-over over the feature name.
 - Added the possibility to use the High Resolution Plot Service
@@ -300,6 +304,7 @@
 - CoordToolkit:
     - Added Buttons to copy one coordinate or both of them with a configurable delimiter. The visibility of the buttons is also configurable.
     - Removed copy of coordinates if click in input-field.
+    - selenium-webdriver: 4.0.0 to version 4.1.0
 
 ### Deprecated
 - Parametric URL: all deprecation-warnings are removed, besides STARTUPMODUL and BEZIRK.

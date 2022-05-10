@@ -12,26 +12,26 @@ export default {
         ControlIcon
     },
     props: {
-        /** glyphicon name of the forward button */
-        glyphiconFor: {
+        /** icon name of the forward button */
+        iconFor: {
             type: String,
-            default: "glyphicon-step-forward"
+            default: "skip-end-fill"
         },
-        /** glyphicon name of the backward button */
-        glyphiconBack: {
+        /** icon name of the backward button */
+        iconBack: {
             type: String,
-            default: "glyphicon-step-backward"
+            default: "skip-start-fill"
         }
     },
     computed: {
         ...mapGetters("controls/backForward", ["forthAvailable", "backAvailable"]),
-        ...mapGetters("Map", ["ol2DMap"])
+        ...mapGetters("Maps", ["get2DMap"])
     },
     mounted () {
-        this.ol2DMap.on("moveend", this.memorizeMap);
+        this.get2DMap.on("moveend", this.memorizeMap);
     },
     beforeDestroy () {
-        this.ol2DMap.un("moveend", this.memorizeMap);
+        this.get2DMap.un("moveend", this.memorizeMap);
     },
     methods: {
         ...mapMutations(
@@ -39,13 +39,13 @@ export default {
             ["forward", "backward", "memorize"]
         ),
         memorizeMap () {
-            this.memorize(this.ol2DMap.getView());
+            this.memorize(this.get2DMap.getView());
         },
         moveForward () {
-            this.forward(this.ol2DMap);
+            this.forward(this.get2DMap);
         },
         moveBackward () {
-            this.backward(this.ol2DMap);
+            this.backward(this.get2DMap);
         }
     }
 };
@@ -57,14 +57,14 @@ export default {
             class="forward"
             :title="$t(`common:modules.controls.backForward.stepForward`)"
             :disabled="!forthAvailable"
-            :icon-name="glyphiconFor"
+            :icon-name="iconFor"
             :on-click="moveForward"
         />
         <ControlIcon
             class="backward"
             :title="$t(`common:modules.controls.backForward.stepBackward`)"
             :disabled="!backAvailable"
-            :icon-name="glyphiconBack"
+            :icon-name="iconBack"
             :on-click="moveBackward"
         />
     </div>

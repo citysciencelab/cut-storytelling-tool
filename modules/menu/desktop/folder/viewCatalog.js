@@ -1,5 +1,6 @@
 import CatalogTemplate from "text-loader!./templateCatalog.html";
 import store from "../../../../src/app-store";
+import Dropdown from "bootstrap/js/dist/dropdown";
 
 /**
  * @member CatalogTemplate
@@ -10,21 +11,21 @@ import store from "../../../../src/app-store";
 const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prototype */{
     events: {
         "change select": "setSelection",
-        "keydown .form-control": function (event) {
+        "keydown .form-select": function (event) {
             event.stopPropagation();
         },
-        "click .header > a > .glyphicon, .header > a > .control-label": "toggleIsExpanded",
+        "click .header > a > .bootstrap-icon, .header > a > .form-label": "toggleIsExpanded",
         "keydown .header > a": "keyAction",
 
-        "click .Baselayer .catalog_buttons .glyphicon-question-sign": function () {
+        "click .Baselayer .catalog_buttons .question-icon": function () {
             this.openHelp();
         },
-        "keydown .Baselayer .catalog_buttons .glyphicon-question-sign": function (event) {
+        "keydown .Baselayer .catalog_buttons .question-icon": function (event) {
             this.handleKeyboardTriggeredAction(event, "openHelp");
         },
 
-        "click .glyphicon-adjust": "toggleBackground",
-        "keydown .glyphicon-adjust": function (event) {
+        "click .background-icon": "toggleBackground",
+        "keydown .background-icon": function (event) {
             this.handleKeyboardTriggeredAction(event, "toggleBackground");
         },
 
@@ -75,7 +76,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
             }
         });
         this.listenTo(this.model, {
-            "change:isExpanded": this.toggleGlyphicon
+            "change:isExpanded": this.toggleIcon
         }, this);
         this.$el.on({
             click: function (e) {
@@ -179,12 +180,15 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         this.model.collection.get("saveSelection").setIsActive(true);
         store.dispatch("Tools/setToolActive", {id: "saveSelection", active: true});
         // closes the menu tree
-        $(".nav li:first-child").removeClass("open");
+        // Upgrade to BT5, use JS method instead of class removal
+        const dropdown = Dropdown.getInstance(".nav li:first-child > .dropdown-toggle");
+
+        dropdown.hide();
         $(".dropdown-menu.fixed").removeClass("fixed");
-        $(".glyphicon-pushpin").removeClass("rotate-pin");
-        $(".glyphicon-pushpin").addClass("rotate-pin-back");
+        $(".bi-pin-angle-fill").parent(".bootstrap-icon").removeClass("rotate-pin");
+        $(".bi-pin-angle-fill").parent(".bootstrap-icon").addClass("rotate-pin-back");
         // closes the mobile menu
-        $(".navbar-collapse").removeClass("in");
+        $(".navbar-collapse").removeClass("show");
         // selects the url
         $(".input-save-url").select();
     },
@@ -198,19 +202,19 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
     },
 
     /**
-     * Toogle Glyphicon
+     * Toogle Icon
      * @return {void}
      */
-    toggleGlyphicon: function () {
-        const elem = $("ul#" + this.model.get("id")).prev().find(".glyphicon:first");
+    toggleIcon: function () {
+        const elem = $("ul#" + this.model.get("id")).prev().find(".bootstrap-icon:first > i");
 
         if (!this.model.get("isExpanded")) {
-            elem.removeClass("glyphicon-minus-sign");
-            elem.addClass("glyphicon-plus-sign");
+            elem.removeClass("bi-dash-circle-fill");
+            elem.addClass("bi-plus-circle-fill");
         }
         else {
-            elem.removeClass("glyphicon-plus-sign");
-            elem.addClass("glyphicon-minus-sign");
+            elem.removeClass("bi-plus-circle-fill");
+            elem.addClass("bi-dash-circle-fill");
         }
         // Hässlicher IE Bugfix, weil IE 11 mit overflow: auto und remove probleme macht (leerer Katalog wird sehr hoch und bekommt die Höhe -0.01)
         if (!this.model.get("isExpanded")) {
@@ -227,8 +231,8 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
      */
     toggleBackground: function () {
         Radio.trigger("MapView", "toggleBackground");
-        $(".glyphicon-adjust").toggleClass("rotate-adjust");
-        $(".glyphicon-adjust").toggleClass("rotate-adjust-back");
+        $(".background-icon").toggleClass("rotate-adjust");
+        $(".background-icon").toggleClass("rotate-adjust-back");
     },
 
     /**
@@ -253,8 +257,8 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         $("body").on("click", "#map", this.helpForFixing);
         $("body").on("click", "#searchbar", this.helpForFixing);
         this.$el.parent().addClass("fixed");
-        $(".glyphicon-pushpin").addClass("rotate-pin");
-        $(".glyphicon-pushpin").removeClass("rotate-pin-back");
+        $(".bi-pin-angle-fill").parent(".bootstrap-icon").addClass("rotate-pin");
+        $(".bi-pin-angle-fill").parent(".bootstrap-icon").removeClass("rotate-pin-back");
         this.model.setIsPinned(true);
     },
 
@@ -266,8 +270,8 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         $("body").off("click", "#map", this.helpForFixing);
         $("body").off("click", "#searchbar", this.helpForFixing);
         this.$el.parent().removeClass("fixed");
-        $(".glyphicon-pushpin").removeClass("rotate-pin");
-        $(".glyphicon-pushpin").addClass("rotate-pin-back");
+        $(".bi-pin-angle-fill").parent(".bootstrap-icon").removeClass("rotate-pin");
+        $(".bi-pin-angle-fill").parent(".bootstrap-icon").addClass("rotate-pin-back");
         this.model.setIsPinned(false);
     },
 

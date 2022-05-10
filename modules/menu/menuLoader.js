@@ -3,6 +3,7 @@ import Menu from "./desktop/listView";
 import MobileMenu from "./mobile/listView";
 import TableMenu from "./table/view";
 import store from "../../src/app-store/index";
+import Dropdown from "bootstrap/js/dist/dropdown";
 
 const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
     defaults: {
@@ -78,9 +79,9 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
      * @return {Void}  -
      */
     reloadMenu: function () {
-        if ($(".glyphicon-pushpin") && $(".glyphicon-pushpin").hasClass("rotate-pin")) {
+        if ($(".bi-pin-angle-fill") && $(".bi-pin-angle-fill").hasClass("rotate-pin")) {
             // tree is pinned
-            if ($(".dropdown.dropdown-folder").hasClass("open")) {
+            if ($(".dropdown.dropdown-folder > .dropdown-toggle").hasClass("show")) {
                 // menu is open
                 this.set("isOpen", true);
             }
@@ -148,7 +149,10 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
             }
             else if (this.get("isOpen")) {
                 this.currentMenu = new Menu({firstTime: false});
-                $(".nav-menu.nav.navbar-nav.desktop:first-child").addClass("open");
+                // Upgrade to BT5, use JS method instead of class addition
+                const dropdown = Dropdown.getInstance(".nav-menu.nav.navbar-nav.desktop:first-child > .dropdown-toggle");
+
+                dropdown.show();
             }
             else {
                 this.currentMenu = new Menu();

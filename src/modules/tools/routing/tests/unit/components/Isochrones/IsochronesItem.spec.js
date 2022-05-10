@@ -8,7 +8,7 @@ import RoutingBatchProcessingCheckboxComponent from "../../../../components/Rout
 import RoutingSliderInputComponent from "../../../../components/RoutingSliderInput.vue";
 import RoutingDownloadComponent from "../../../../components/RoutingDownload.vue";
 import Routing from "../../../../store/indexRouting";
-import mapCollection from "../../../../../../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../../../../../../core/maps/mapCollection.js";
 
 const localVue = createLocalVue();
 
@@ -24,7 +24,7 @@ describe("src/modules/tools/routing/components/Isochrones/IsochronesItem.vue", (
                         routing:
                             {
                                 "name": "translate#common:menu.tools.routing",
-                                "glyphicon": "glyphicon-road",
+                                "icon": "bi-signpost-2-fill",
                                 "renderToWindow": true
                             }
                     }
@@ -46,7 +46,7 @@ describe("src/modules/tools/routing/components/Isochrones/IsochronesItem.vue", (
             removeInteraction: sinon.spy()
         };
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
 
 
@@ -60,11 +60,10 @@ describe("src/modules/tools/routing/components/Isochrones/IsochronesItem.vue", (
                         Routing
                     }
                 },
-                Map: {
+                Maps: {
                     namespaced: true,
                     state: {
-                        mapId: "ol",
-                        mapMode: "2D"
+                        mode: "2D"
                     }
                 }
             },

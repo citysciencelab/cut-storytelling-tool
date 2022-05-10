@@ -69,7 +69,7 @@ export default {
 <template>
     <ToolTemplate
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
@@ -83,7 +83,7 @@ export default {
                         id="tool-saveSelection-input-url"
                         ref="tool-saveSelection-input-url"
                         type="text"
-                        class="form-control input-sm"
+                        class="form-control form-control-sm"
                         :value="url"
                         @click="copyToClipboard($event.currentTarget)"
                     >
@@ -97,7 +97,7 @@ export default {
                     <input
                         id="tool-saveSelection-input-simpleMapUrl"
                         type="text"
-                        class="form-control input-sm"
+                        class="form-control form-control-sm"
                         :value="url + '&uiStyle=simple'"
                         @click="copyToClipboard($event.currentTarget)"
                     >

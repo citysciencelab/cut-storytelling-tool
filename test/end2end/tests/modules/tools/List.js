@@ -40,14 +40,14 @@ async function ListTests ({builder, url, resolution, browsername, capability, mo
                     await quitDriver();
                     driver = await initDriver(builder, url, resolution);
                     await (await driver.findElement(By.xpath("//ul[@id='tools']//.."))).click();
-                    await (await driver.findElement(By.css("#tools .glyphicon-menu-hamburger"))).click();
+                    await (await driver.findElement(By.css("#tools .bi-list"))).click();
                 }
             });
 
             it.skip("tool opens with 3 tabs, initially listing active vector layers", async function () {
                 if ((await driver.findElements(By.css("ul.nav.nav-tabs.feature-lister-navtabs"))).length === 0) {
                     await (await driver.findElement(By.xpath("//ul[@id='tools']//.."))).click();
-                    await (await driver.findElement(By.css("#tools .glyphicon-menu-hamburger"))).click();
+                    await (await driver.findElement(By.css("#tools .bi-list"))).click();
                 }
 
                 await driver.wait(until.elementIsVisible(
@@ -81,8 +81,8 @@ async function ListTests ({builder, url, resolution, browsername, capability, mo
             });
 
             it.skip("visible features list can be expanded", async function () {
-                await (await driver.findElement(By.css(".panel-footer .feature-lister-list-button"))).click();
-                featureListEntries = await driver.findElements(By.css("#feature-lister-list-table tbody tr"));
+                await (await driver.findElement(By.css(".card-footer .featurelist-list-button"))).click();
+                featureListEntries = await driver.findElements(By.css("#featurelist-list-table tbody tr"));
 
                 expect(featureListEntries).to.have.lengthOf(20);
             });

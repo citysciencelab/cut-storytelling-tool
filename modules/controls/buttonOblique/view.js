@@ -2,6 +2,7 @@ import ButtonObliqueTemplate from "text-loader!./template.html";
 import ButtonObliqueTemplateTable from "text-loader!./templateTable.html";
 import ButtonObliqueModel from "./model";
 import store from "../../../src/app-store";
+
 /**
  * @member ButtonObliqueTemplate
  * @description Template used for the "oblique aerial photos" button
@@ -28,7 +29,6 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
      * @fires ObliqueMap#RadioTriggerObliqueMapDeactivate
      * @fires Alerting#RadioTriggerAlertAlertRemove
      * @fires Core#RadioRequestMapIsMap3d
-     * @fires Core#RadioTriggerMapDeactivateMap3d
      * @fires ObliqueMap#RadioTriggerObliqueMapActivate
      * @fires Alerting#RadioTriggerAlertAlert
      * @listens Core#RadioTriggerMapChange
@@ -140,7 +140,6 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
      * @fires ObliqueMap#RadioTriggerObliqueMapDeactivate
      * @fires Alerting#RadioTriggerAlertAlertRemove
      * @fires Core#RadioRequestMapIsMap3d
-     * @fires Core#RadioTriggerMapDeactivateMap3d
      * @fires ObliqueMap#RadioTriggerObliqueMapActivate
      * @fires Alerting#RadioTriggerAlertAlert
      * @listens Core#RadioTriggerMapChange
@@ -168,7 +167,7 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
                     this.mapChange();
                 }
             }.bind(this));
-            Radio.trigger("Map", "deactivateMap3d");
+            store.dispatch("Maps/deactivateMap3D");
             return;
         }
         this.$("#ObliqueTable-title-open").hide();

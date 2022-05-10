@@ -85,7 +85,7 @@ export default {
             const geometry = feature.getGeometry();
 
             this.placingPointMarker(getCenterExtent(geometry.getExtent()));
-            Radio.trigger("Map", "zoomToExtent", geometry, {maxZoom: this.maxZoom});
+            Radio.trigger("Map", "zoomToExtent", {extent: geometry, options: {maxZoom: this.maxZoom}});
         },
         isWebLink,
         isPhoneNumber,
@@ -139,7 +139,7 @@ export default {
                     <template v-if="key === geometryName">
                         <button
                             type="button"
-                            class="btn btn-lgv-grey col-md-12 col-sm-12"
+                            class="btn btn-lgv-grey col-md-12"
                         >
                             {{ $t("common:share-components.list.zoomToResult") }}
                         </button>
@@ -206,7 +206,7 @@ table {
         border: $table-borders;
         padding: 12px $table-padding;
         text-align: left;
-        background-color: $primary;
+        background-color: $primary_red;
         color: $accent_contrast;
     }
 

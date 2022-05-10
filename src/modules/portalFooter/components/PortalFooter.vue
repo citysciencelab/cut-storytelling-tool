@@ -20,7 +20,7 @@ export default {
     },
     computed: {
         ...mapGetters(["footerConfig", "mobile", "masterPortalVersionNumber"]),
-        ...mapGetters("Map", ["is3d"]),
+        ...mapGetters("Maps", ["is3D"]),
         ...mapGetters("PortalFooter", Object.keys(getters)),
         showLanguageSwitcher () {
             return this.$i18n.i18next.options.isEnabled() && Object.keys(this.$i18n.i18next.options.getLanguages()).length > 1;
@@ -69,7 +69,7 @@ export default {
             if (!toolModelId) {
                 return true;
             }
-            if (this.is3d) {
+            if (this.is3D) {
                 const toolsSupportedIn3d = Radio.request("Tool", "getSupportedIn3d");
 
                 return toolsSupportedIn3d.find(name => name.toLowerCase() === toolModelId.toLowerCase());
@@ -103,12 +103,14 @@ export default {
                     </a>
                     <span
                         v-if="index < Object.keys(urls).length - 1 || showVersion"
-                        class="glyphicon glyphicon-option-vertical hidden-xs"
-                    />
+                        class="bootstrap-icon d-none d-md-inline-block"
+                    >
+                        <i class="bi-three-dots-vertical" />
+                    </span>
                 </span>
             </template>
             <template v-if="showVersion">
-                <span class="hidden-xs">
+                <span class="d-none d-md-block">
                     {{ $t("masterPortalVersion", {masterPortalVersionNumber}) }}
                 </span>
             </template>
@@ -158,7 +160,7 @@ export default {
             flex-grow: 1;
         }
 
-        .glyphicon-option-vertical {
+        .bootstrap-icon {
             padding: 0 8px;
         }
 

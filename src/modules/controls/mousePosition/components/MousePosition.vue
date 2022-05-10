@@ -20,7 +20,7 @@ export default {
     },
     computed: {
         ...mapGetters(["controlsConfig", "mobile", "uiStyle"]),
-        ...mapGetters("Map", ["prettyMouseCoord"]),
+        ...mapGetters("Maps", ["prettyMouseCoord"]),
         // MousePosition is the only control that needs to do this itself since it's not a ControlBar child
         show () {
             return !this.mobile && this.controlsConfig?.mousePosition && this.uiStyle !== "SIMPLE";
@@ -71,8 +71,8 @@ export default {
         display: flex;
         flex-direction: row;
 
-        background-color: $primary;
-        color: $primary_contrast;
+        background-color: $primary_red;
+        color: $primary_red_contrast;
         font-size: $font_size_small_custom;
         line-height: $icon_length_small;
         min-height: $icon_length_small;
@@ -83,12 +83,12 @@ export default {
 
         &.closed {
             /* using translateX to prevent multiline flicker on width transformation */
-            transform: translateX(calc(-100% + $icon_length_small));
+            transform: translateX(calc(-100% + #{$icon_length_small}));
         }
 
         .mouse-position-span {
             padding: 0 8px;
-            border-right: 1px solid $primary_contrast;
+            border-right: 1px solid $primary_red_contrast;
             color: #FFFFFF;
             min-width: 150px;
         }

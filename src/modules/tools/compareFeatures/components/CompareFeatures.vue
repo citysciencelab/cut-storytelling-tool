@@ -94,13 +94,13 @@ export default {
 >
     <ModalItem
         :title="$t('common:modules.tools.compareFeatures.title')"
-        :icon="glyphicon"
+        :icon="icon"
         :show-modal="active"
         @modalHid="close"
     >
         <ModalItem
             :title="$t('common:modules.tools.compareFeatures.title')"
-            :icon="glyphicon"
+            :icon="icon"
             :show-modal="showAlert && !active"
             @modalHid="setShowAlert(false)"
         >
@@ -131,7 +131,7 @@ export default {
                 </div>
                 <div id="tool-compareFeatures-buttons">
                     <button
-                        class="btn btn-default btn-infos"
+                        class="btn btn-outline-default btn-infos"
                         :title="$t('common:button.back')"
                         @click="setShowAlert(false)"
                     >
@@ -158,14 +158,14 @@ export default {
                 <hr>
                 <label
                     id="tool-compareFeatures-select-label"
-                    class="col-xs-3"
+                    class="col-3"
                     for="tool-compareFeatures-select"
                 >{{ $t("common:modules.tools.compareFeatures.topicsSelection") }}</label>
-                <div class="col-xs-3">
+                <div class="col-3">
                     <select
                         id="tool-compareFeatures-select"
                         v-model="selected"
-                        class="form-control"
+                        class="form-select"
                     >
                         <option
                             v-for="layer in selectableLayers"
@@ -216,7 +216,7 @@ export default {
                 <hr>
 
                 <button
-                    class="btn btn-default btn-infos"
+                    class="btn btn-outline-default btn-infos"
                     :title="!showMoreInfo ? $t('common:modules.tools.compareFeatures.moreInfo') : $t('common:modules.tools.compareFeatures.lessInfo')"
                     :disabled="!showMoreInfoButton"
                     @click="moreInfo()"
@@ -232,7 +232,7 @@ export default {
                 </button>
                 <div
                     v-if="printStarted"
-                    class="form-group col-md-12 col-xs-12 pt-20"
+                    class="form-group col-12 pt-20"
                 >
                     <div class="progress">
                         <div
@@ -240,7 +240,7 @@ export default {
                             role="progressbar"
                             :style="progressWidth"
                         >
-                            <span class="sr-only">30% Complete</span>
+                            <span class="visually-hidden">30% Complete</span>
                         </div>
                     </div>
                 </div>
@@ -289,7 +289,7 @@ export default {
         margin: 10px;
         padding-right: 10px;
 
-        .btn, .btn-default, .btn-primary {
+        .btn, .btn-outline-default, .btn-primary {
             margin-right: 20px;
             margin-left: 20px;
             &:focus {

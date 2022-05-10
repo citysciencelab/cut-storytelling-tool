@@ -26,7 +26,7 @@ describe("src/modules/tools/routing/components/RoutingCoordinateInput.vue", () =
                         routing:
                             {
                                 "name": "translate#common:menu.tools.routing",
-                                "glyphicon": "glyphicon-road",
+                                "icon": "bi-signpost-2-fill",
                                 "renderToWindow": true
                             }
                     }
@@ -97,39 +97,13 @@ describe("src/modules/tools/routing/components/RoutingCoordinateInput.vue", () =
         expect(wrapper.find(".form-group-sm.mb-4.mx-0").exists()).to.be.true;
     });
 
-    it("renders info text on focus", async () => {
-        wrapper = shallowMount(RoutingCoordinateInputComponent, {
-            store,
-            localVue,
-            propsData: props
-        });
-        wrapper.find("input").element.focus();
-        await wrapper.vm.$nextTick();
-        expect(wrapper.find(".helptext").exists()).to.be.true;
-    });
-
-    it("hides info text on blur", async () => {
-        wrapper = shallowMount(RoutingCoordinateInputComponent, {
-            store,
-            localVue,
-            propsData: props
-        });
-        wrapper.find("input").element.focus();
-        await wrapper.vm.$nextTick();
-        expect(wrapper.find(".helptext").exists()).to.be.true;
-
-        wrapper.find("input").element.blur();
-        await wrapper.vm.$nextTick();
-        expect(wrapper.find(".helptext").exists()).to.be.false;
-    });
-
     it("emits moveWaypointUp", async () => {
         wrapper = shallowMount(RoutingCoordinateInputComponent, {
             store,
             localVue,
             propsData: props
         });
-        const input = wrapper.find(".glyphicon-chevron-up");
+        const input = wrapper.find(".bi-chevron-up");
 
         input.element.click();
         await wrapper.vm.$nextTick();
@@ -142,7 +116,7 @@ describe("src/modules/tools/routing/components/RoutingCoordinateInput.vue", () =
             localVue,
             propsData: props
         });
-        const input = wrapper.find(".glyphicon-chevron-down");
+        const input = wrapper.find(".bi-chevron-down");
 
         input.element.click();
         await wrapper.vm.$nextTick();
@@ -155,7 +129,7 @@ describe("src/modules/tools/routing/components/RoutingCoordinateInput.vue", () =
             localVue,
             propsData: props
         });
-        const input = wrapper.find(".selfAlignCenter.pointer.glyphicon.glyphicon-remove.ml-4");
+        const input = wrapper.find(".bootstrap-icon.m-2 > .bi-x-lg");
 
         input.element.click();
         await wrapper.vm.$nextTick();
@@ -170,7 +144,7 @@ describe("src/modules/tools/routing/components/RoutingCoordinateInput.vue", () =
         });
         wrapper.setData({search: "testsearch"});
         await wrapper.vm.$nextTick();
-        expect(wrapper.find(".glyphicon.glyphicon-remove.form-control-feedback.pointer").exists()).to.be.true;
+        expect(wrapper.find(".bootstrap-icon.pointer.form-control-feedback > .bi-x-lg").exists()).to.be.true;
     });
 
     it("renders searchResults", async () => {

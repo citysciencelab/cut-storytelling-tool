@@ -28,7 +28,7 @@ $fontSizeSmall: 12px;
 
     }
 
-    .record-button > .glyphicon {
+    .record-button > .bootstrap-icon {
         font-size: 15px;
     }
 
@@ -44,7 +44,7 @@ $fontSizeSmall: 12px;
         border-color: #204d74;
     }
 
-    .record-button > .glyphicon-play, .record-button > .glyphicon-minus {
+    .record-button > .bootstrap-icon > .bi-play-fill, .record-button > .bootstrap-icon > .bi-dash-lg {
         transform: rotate(45deg);
     }
 
@@ -56,7 +56,7 @@ $fontSizeSmall: 12px;
         min-width: 310px;
     }
 
-    .input-sm {
+    .form-control-sm, .form-select-sm {
         height: 25px !important;
         margin-top: 0px !important;
     }
@@ -75,7 +75,7 @@ $fontSizeSmall: 12px;
         width: 400px;
     }
 
-    .form-control.input-sm.input {
+    .form-control.form-control-sm.input {
         padding: 2px 5px;
         height: 23px !important;
     }
@@ -101,12 +101,12 @@ $fontSizeSmall: 12px;
         border: 1px solid red;
     }
 
-    .control-label.mandatory::after {
+    .col-form-label.mandatory::after {
         content: " *";
         color: red;
     }
 
-    .glyphicon-info-sign.info-sign {
+    .info-sign > .bi-info-circle-fill {
         opacity: 0.8;
         font-size: 16px;
         padding: 5px;
@@ -131,7 +131,7 @@ $fontSizeSmall: 12px;
     }
 
 
-    .input-group-addon.input-sm {
+    .input-group-sm .input-group-text {
         font-size: 11px; 
     }
 

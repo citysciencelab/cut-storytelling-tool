@@ -77,7 +77,7 @@ export default {
             class="attributions-button"
             :disabled="!openable"
             :title="$t(`common:modules.controls.attributions.${open ? 'hideAttributions' : 'showAttributions'}`)"
-            :icon-name="open ? 'forward' : 'info-sign'"
+            :icon-name="open ? 'forward-fill' : 'info-circle-fill'"
             :on-click="toggleAttributionsFlyout"
         />
         <div
@@ -128,7 +128,7 @@ export default {
                 margin-bottom: 0;
             }
             dt {
-                color: $primary;
+                color: $primary_red;
                 font-size: $font_size_big;
                 font-family: $font_family_narrow;
                 font-weight: 400;

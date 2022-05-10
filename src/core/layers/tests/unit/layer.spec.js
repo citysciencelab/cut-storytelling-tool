@@ -1,14 +1,16 @@
+import store from "../../../../app-store";
 import {expect} from "chai";
 import sinon from "sinon";
 import {Point, MultiPoint} from "ol/geom.js";
 import Feature from "ol/Feature.js";
 import Layer from "../../layer";
 import Group from "../../group";
-import store from "../../../../app-store";
-import mapCollection from "../../../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../../../core/maps/mapCollection.js";
+
 
 describe("src/core/layers/layer.js", () => {
     let attributes,
+        mapOL,
         layerRemoved = false,
         layerVisible = false,
         newLayerSource = false,
@@ -55,7 +57,7 @@ describe("src/core/layers/layer.js", () => {
 
     before(() => {
         mapCollection.clear();
-        const map = {
+        mapOL = {
             id: "ol",
             mode: "2D",
             addInteraction: sinon.spy(),
@@ -71,7 +73,7 @@ describe("src/core/layers/layer.js", () => {
             }
         };
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(mapOL, "2D");
     });
     beforeEach(() => {
         attributes = {
@@ -86,8 +88,13 @@ describe("src/core/layers/layer.js", () => {
             layers: "layer1,layer2",
             transparent: false
         };
+
         store.getters = {
-            treeType: "custom"
+            treeType: "custom",
+            "Maps/get2DMap": {removeLayer: () => {
+                layerRemoved = true;
+                return layerRemoved;
+            }}
         };
         featureList = [];
         featureList.push(new Feature(new Point([1, 1])));
@@ -220,7 +227,6 @@ describe("src/core/layers/layer.js", () => {
         groupLayer = new Group(groupAtts);
         childLayer = groupLayer.get("layerSource");
 
-
         expect(groupLayer.attributes.isVisibleInMap).to.be.false;
         expect(childLayer).to.be.an("array").with.lengthOf(1);
         groupLayer.setIsVisibleInMap(true);
@@ -258,7 +264,7 @@ describe("src/core/layers/layer.js", () => {
         expect(layerWrapper.attributes.transparency).to.be.equals(100);
     });
     it("updateLayerTransparency shall update layers opacity", function () {
-        // attributes.isSelected = false;
+        attributes.isSelected = false;
         attributes.transparency = 50;
         const layerWrapper = new Layer(attributes, olLayer);
 
@@ -528,12 +534,14 @@ describe("src/core/layers/layer.js", () => {
                 md_id: "B6A59A2B-2D40-4676-9094-0EB73039ED34",
                 show_doc_url: "https://metaver.de/trefferanzeige?cmd=doShowDocument&docuuid="
             };
+
         let layerWrapper = null,
             layerInfo = null;
 
         store.dispatch = (arg1, arg2) => {
             dispatchCalls[arg1] = arg2 !== undefined ? arg2 : "called";
         };
+
         attributes.datasets = [dataset];
         layerWrapper = new Layer(attributes, olLayer);
 
@@ -870,20 +878,15 @@ describe("src/core/layers/layer.js", () => {
      * @returns {void}
      */
     function testSetIsSelected (treetype, selectionIDX, calls, isSelected) {
-        let layerWrapper = null,
-            counter = 0;
+        let layerWrapper = null;
 
         store.getters = {
-            treeType: treetype
+            treeType: treetype,
+            "Maps/get2DMap": {removeLayer: () => {
+                layerRemoved = true;
+                return layerRemoved;
+            }}
         };
-        sinon.stub(Radio, "trigger").callsFake((...args) => {
-            args.forEach(arg => {
-                if (arg === "rerender" || arg === "updateSelection" || arg === "updateLayerView") {
-                    counter++;
-                }
-            });
-        });
-
 
         attributes.isSelected = !isSelected;
         attributes.isVisibleInMap = !isSelected;
@@ -897,7 +900,6 @@ describe("src/core/layers/layer.js", () => {
         expect(layerWrapper.attributes.isSelected).to.be.equals(isSelected);
         expect(layerWrapper.attributes.isVisibleInMap).to.be.equals(isSelected);
         expect(layerWrapper.attributes.selectionIDX).to.be.equals(selectionIDX);
-        expect(counter).to.be.equals(calls);
     }
 
     /**
@@ -907,20 +909,16 @@ describe("src/core/layers/layer.js", () => {
      * @param {Number} calls calls to trigger
      * @returns {void}
      */
-    function testIsVisibleInMap (treeType, isVisibleInMap, calls) {
-        let layerWrapper = null,
-            counter = 0;
+    function testIsVisibleInMap (treeType, isVisibleInMap) {
+        let layerWrapper = null;
 
         store.getters = {
-            treeType: treeType
+            treeType: treeType,
+            "Maps/get2DMap": {removeLayer: () => {
+                layerRemoved = true;
+                return layerRemoved;
+            }}
         };
-        sinon.stub(Radio, "trigger").callsFake((...args) => {
-            args.forEach(arg => {
-                if (arg === "rerender" || arg === "updateSelection" || arg === "updateLayerView") {
-                    counter++;
-                }
-            });
-        });
 
         attributes.isVisibleInMap = !isVisibleInMap;
         attributes.isSelected = !isVisibleInMap;
@@ -930,6 +928,5 @@ describe("src/core/layers/layer.js", () => {
         layerWrapper.toggleIsVisibleInMap();
         expect(layerWrapper.attributes.isVisibleInMap).to.be.equals(isVisibleInMap);
         expect(layerVisible).to.be.equals(isVisibleInMap);
-        expect(counter).to.be.equals(calls);
     }
 });

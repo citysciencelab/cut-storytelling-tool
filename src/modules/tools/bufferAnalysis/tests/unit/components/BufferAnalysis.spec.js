@@ -6,7 +6,7 @@ import {expect} from "chai";
 import sinon from "sinon";
 import {createLayersArray} from "../utils/functions";
 import FakeTimers from "@sinonjs/fake-timers";
-import mapCollection from "../../../../../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../../../../../core/maps/mapCollection.js";
 
 const localVue = createLocalVue();
 
@@ -22,7 +22,7 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
                         bufferAnalysis:
                             {
                                 "name": "translate#common:menu.tools.bufferAnalysis",
-                                "glyphicon": "glyphicon-random"
+                                "icon": "bi-shuffle"
                             }
                     }
                 }
@@ -39,7 +39,7 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
             removeLayer: sinon.spy()
         };
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
 
     beforeEach(() => {
@@ -60,9 +60,8 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
             },
             state: {
                 configJson: mockConfigJson,
-                Map: {
-                    mapId: "ol",
-                    mapMode: "2D"
+                Maps: {
+                    mode: "2D"
                 }
             }
         });
@@ -78,7 +77,7 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
         };
 
         mapCollection.clear();
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
         BufferAnalysis.actions.checkIntersection = originalCheckIntersection;
         BufferAnalysis.actions.showBuffer = originalShowBuffer;
         store.commit("Tools/BufferAnalysis/setActive", false);

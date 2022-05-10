@@ -7,7 +7,7 @@ import getters from "../store/gettersMouseHover";
 export default {
     name: "MouseHover",
     computed: {
-        ...mapGetters("Map", ["ol2DMap", "visibleLayerList"]),
+        ...mapGetters("Maps", ["get2DMap", "visibleLayerList"]),
         ...mapGetters("MouseHover", Object.keys(getters)),
         ...mapGetters({
             isMobile: "mobile"
@@ -17,7 +17,7 @@ export default {
         if (!this.isMobile && Config.mouseHover) {
             this.$nextTick(function () {
                 this.setVisibleLayerList(this.visibleLayerList);
-                this.initialize(this.ol2DMap);
+                this.initialize(this.get2DMap);
             });
         }
     },

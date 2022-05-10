@@ -14,7 +14,6 @@ export default {
     data: () => ({playing: false, playbackHandle: null, sliderValue: 0}),
     computed: {
         ...mapGetters("WmsTime", Object.keys(getters)),
-        ...mapGetters("Map", ["map"]),
         sliderOptionCount () {
             return this.timeRange.length - 1;
         },
@@ -116,7 +115,7 @@ export default {
                     :disabled="nextIndex(false) === -1"
                     @click="moveOne(false)"
                 >
-                    <i class="glyphicon glyphicon-backward" />
+                    <i class="bi-skip-end-fill" />
                 </button>
                 <button
                     :id="'timeSlider-button-play-' + layerId"
@@ -125,7 +124,7 @@ export default {
                     @click="play"
                 >
                     <i
-                        :class="['glyphicon', playing ? 'glyphicon-pause' : 'glyphicon-play']"
+                        :class="[playing ? 'bi-pause-fill' : 'bi-play-fill']"
                     />
                 </button>
                 <button
@@ -135,7 +134,7 @@ export default {
                     :disabled="nextIndex() === timeRange.length"
                     @click="moveOne(true)"
                 >
-                    <i class="glyphicon glyphicon-forward" />
+                    <i class="bi-skip-start-fill" />
                 </button>
             </div>
         </div>
@@ -164,7 +163,7 @@ export default {
 
 .timeSlider-wrapper {
     $base-margin: 0.25em;
-    $bigger-margin: calc($base-margin * 3);
+    $bigger-margin: calc(#{$base-margin} * 3);
 
     position: absolute;
     bottom: 6em;

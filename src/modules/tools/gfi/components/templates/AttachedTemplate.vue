@@ -4,8 +4,8 @@ import SensorTheme from "../themes/sensor/components/SensorTheme.vue";
 import {mapGetters} from "vuex";
 import getTheme from "../../utils/getTheme";
 import Overlay from "ol/Overlay.js";
-import "bootstrap/js/tooltip";
-import "bootstrap/js/popover";
+import "bootstrap/js/dist/tooltip";
+import Popover from "bootstrap/js/dist/popover";
 
 export default {
     name: "AttachedTemplate",
@@ -25,7 +25,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("Map", ["clickCoord"]),
+        ...mapGetters("Maps", ["clickCoordinate"]),
         /**
          * Returns the title of the gfi.
          * @returns {String} the title
@@ -53,7 +53,10 @@ export default {
         feature () {
             this.$nextTick(() => {
                 this.overlay.setPosition(this.clickCoord);
-                $(this.overlay.getElement()).popover("show");
+                // Upgrade to BT5
+                const popover = Popover.getInstance(this.overlay.getElement());
+
+                popover.show();
             });
         }
     },
@@ -85,7 +88,7 @@ export default {
             document.body.appendChild(gfipopup);
             this.overlay.setElement(document.getElementById("gfipopup"));
             Radio.trigger("Map", "addOverlay", this.overlay);
-            this.overlay.setPosition(this.clickCoord);
+            this.overlay.setPosition(this.clickCoordinate);
         },
 
         /**
@@ -93,20 +96,19 @@ export default {
          * @returns {void}
          */
         createPopover () {
-            $(this.overlay.getElement()).popover({
+            // Upgrade to BT5
+            const popover = new Popover(this.overlay.getElement(), {
                 content: this.$el,
                 html: true,
-                viewport: ".ol-viewport",
-                placement: function () {
-                    if (this.getPosition().top > document.getElementById("map").offsetHeight / 2) {
-                        return "top";
-                    }
-
-                    return "bottom";
-
-                }
+                boundary: ".ol-viewport",
+                selector: "#gfipopup",
+                // place popup next to overlay element, necessary for correct popover removal
+                container: this.overlay.getElement().parentElement,
+                placement: "top",
+                fallbackPlacements: ["bottom"]
             });
-            $(this.overlay.getElement()).popover("show");
+
+            popover.show();
         },
 
         /**
@@ -143,23 +145,22 @@ export default {
 <template>
     <div class="gfi-attached">
         <!-- header -->
-        <div class="gfi-header">
+        <div class="gfi-header row">
+            <h5 class="col-11">
+                {{ translate(title) }}
+            </h5>
             <button
                 ref="gfi-close-button"
-                type="button"
-                class="close"
+                class="close btn btn-sm col-1"
                 aria-label="Close"
                 tabindex="0"
                 @click="close"
                 @keydown="close"
             >
-                <span
-                    class="glyphicon glyphicon-remove"
-                />
+                <span class="bootstrap-icon">
+                    <i class="bi-x-lg" />
+                </span>
             </button>
-            <h5>
-                {{ translate(title) }}
-            </h5>
         </div>
         <!-- theme -->
         <div
@@ -189,14 +190,15 @@ export default {
         background-color: #ffffff;
     }
     .gfi-header {
-        font-size: 13px;
-        font-weight: normal;
-        line-height: 17px;
-        color: #646262;
         padding: 0 15px;
         border-bottom: 1px solid #e5e5e5;
+        h5 {
+            font-size: 13px;
+            font-weight: normal;
+            line-height: 17px;
+            color: #646262;
+        }
         button {
-            font-size: 16px;
             opacity: 0.6;
         }
     }
@@ -216,16 +218,11 @@ export default {
 </style>
 
 <style lang="scss">
-    .ol-viewport {
-        .popover {
-            padding: 0;
-            width: max-content;
-            max-width: 40vw;
-            border: 0;
-            z-index: 1;
-        }
-        .popover-content {
-            padding: 0;
-        }
+    .popover {
+        padding: 0 !important;
+        width: max-content;
+        max-width: 40vw !important;
+        border: 0 !important;
+        z-index: 1 !important;
     }
 </style>
