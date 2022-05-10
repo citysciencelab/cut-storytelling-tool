@@ -13,6 +13,9 @@ const actions = {
         //                 It might be useful to refactor this action slightly for version 3.0.0.
         if (deprecatedParameters) {
             console.warn("zoomTo: A deprecated configuration was found. Using it, until it gets removed...");
+            if (state.zoomToFeatureId === undefined && state.zoomToGeometry === undefined) {
+                return new Promise(resolve => resolve("zoomTo: No url parameters were given by the user."));
+            }
             // zoomToFeature
             if (Object.prototype.hasOwnProperty.call(config, "zoomToFeature") && state.zoomToFeatureId !== undefined) {
                 layerId = config.zoomToFeature.wfsId;
@@ -114,7 +117,7 @@ const actions = {
                 if (features.length > 0) {
                     return dispatch("Map/zoomTo", {geometryOrExtent: calculateExtent(features)}, {root: true});
                 }
-                return console.error("zoomTo: No features were found for the given layer.");
+                return console.warn("zoomTo: No features were found for the given layer.");
             })
             .catch(error => {
                 console.error("zoomTo: An error occurred while trying to fetch features from one of the given services.", error);
