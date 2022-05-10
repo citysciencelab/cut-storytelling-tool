@@ -138,6 +138,9 @@ export default function ({layers, epsg, zoomTo}) {
             if (parentId !== undefined) {
                 addGeoJSON(layers[pos].name, layers[pos].id, geoJSON, layers[pos].styleId, parentId, gfiAttributes);
                 Radio.trigger("Util", "refreshTree");
+            } else {
+                Radio.trigger("Alert", "alert", i18next.t("common:modules.featureViaURL.messages.defaultTreeNotSupported"));
+                return;
             }
             if (typeof zoomTo !== "undefined" && (zoomTo === layerId || zoomTo.indexOf(layerId) !== -1)) {
                 Radio.trigger("Map", "zoomToFilteredFeatures", getFeatureIds(layerId), layerId);
