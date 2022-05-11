@@ -92,24 +92,78 @@ describe("src/modules/tools/filterGeneral/utils/compileSnippets.js", () => {
     describe("addSnippetApi", () => {
         it("should add an api to every snippet if the snippet has its own service", () => {
             const snippets = [
-                    {service: "service"},
-                    {noService: "noApi"}
-                ],
-                expected = [
                     {
-                        service: "service",
-                        api: {
-                            filterId: undefined,
-                            service: "service"
+                        service: {
+                            name: "serviceA"
                         }
                     },
                     {
-                        noService: "noApi"
+                        service: {
+                            name: "serviceB"
+                        }
                     }
-                ];
+                ],
+                expected = [
+                    {
+                        name: "serviceA"
+                    },
+                    {
+                        name: "serviceB"
+                    }
+                ],
+                allSetServices = [];
 
-            addSnippetApi(snippets);
-            expect(snippets).to.deep.equal(expected);
+            addSnippetApi(snippets, () => {
+                return {
+                    setService: service => {
+                        allSetServices.push(service);
+                    }
+                };
+            });
+
+            expect(allSetServices).to.deep.equal(expected);
+            expect(snippets[0]).to.be.an("object");
+            expect(snippets[0].api).to.be.an("object");
+            expect(snippets[1]).to.be.an("object");
+            expect(snippets[1].api).to.be.an("object");
+        });
+        it("should not add an api to a snippet if the snippet does not have its own service", () => {
+            const snippets = [
+                    {
+                        noService: {
+                            name: "noApi"
+                        }
+                    }
+                ],
+                allSetServices = [];
+
+            addSnippetApi(snippets, () => {
+                return {
+                    setService: service => {
+                        allSetServices.push(service);
+                    }
+                };
+            });
+            expect(allSetServices).to.be.empty;
+            expect(snippets[0]).to.be.an("object");
+            expect(snippets[0].api).to.not.be.an("object");
+        });
+        it("should only add an api to a snippet if the snippet service is an object", () => {
+            const snippets = [
+                    {service: "serviceB"}
+                ],
+                allSetServices = [];
+
+            addSnippetApi(snippets, () => {
+                return {
+                    setService: service => {
+                        allSetServices.push(service);
+                    }
+                };
+            });
+            expect(allSetServices).to.be.empty;
+            expect(snippets[0]).to.be.an("object");
+            expect(snippets[0].api).to.not.be.an("object");
         });
     });
 

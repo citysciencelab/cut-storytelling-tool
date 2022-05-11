@@ -628,7 +628,7 @@ export default {
             >
                 <SnippetDate
                     :ref="'snippet-' + snippet.snippetId"
-                    :api="api"
+                    :api="snippet.api || api"
                     :adjustment="snippet.adjustment"
                     :attr-name="snippet.attrName"
                     :disabled="disabled"
@@ -652,7 +652,7 @@ export default {
             >
                 <SnippetDateRange
                     :ref="'snippet-' + snippet.snippetId"
-                    :api="api"
+                    :api="snippet.api || api"
                     :adjustment="snippet.adjustment"
                     :attr-name="snippet.attrName"
                     :disabled="disabled"
@@ -676,7 +676,7 @@ export default {
             >
                 <SnippetSlider
                     :ref="'snippet-' + snippet.snippetId"
-                    :api="api"
+                    :api="snippet.api || api"
                     :adjustment="snippet.adjustment"
                     :attr-name="snippet.attrName"
                     :decimal-places="snippet.decimalPlaces"
@@ -700,7 +700,7 @@ export default {
             >
                 <SnippetSliderRange
                     :ref="'snippet-' + snippet.snippetId"
-                    :api="api"
+                    :api="snippet.api || api"
                     :adjustment="snippet.adjustment"
                     :attr-name="snippet.attrName"
                     :decimal-places="snippet.decimalPlaces"

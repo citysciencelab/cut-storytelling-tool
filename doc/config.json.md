@@ -2099,14 +2099,15 @@ Example for a date range snippet. A date range with two attrName for min and max
 #### Portalconfig.menu.tool.filterGeneral.filterLayer.snippets.service
 
 An object that describes a service for a snippet. All service types that the filter supports can theoretically be used.
-The configuration depends on the type of service. So far only tested with **WFS**.
+The configuration depends on the type of service.
 
 **WFS**
 |Name|Required|Typ|Default|Description|Expert|
 |----|-------------|---|-------|------------|------|
-|type|ja|String||The type of service.|false|
-|url|ja|String||The service url.|false|
-|typename|ja|String||The feature type that will be loaded.|false|
+|type|yes|String||The type of service.|false|
+|url|yes|String||The service url.|false|
+|typename|yes|String||The feature type that will be loaded. Only for WFS|false|
+|collection|yes|String||The collection that will be loaded. Only for OAF|false|
 
 **Beispiel**
 
@@ -2117,6 +2118,25 @@ The configuration depends on the type of service. So far only tested with **WFS*
     "typename": "verbreitung_tiere_eindeutige_liste"
 }
 ```
+
+**Beispiel GeoJSON**
+
+```json
+{
+    "type": "GeoJSON",
+    "url": "../chartjs/charts_stadtteil.geojson"
+}
+```
+**Beispiel OAF**
+
+```json
+{
+    "url": "https://api.hamburg.de/datasets/v1/schulen",
+    "collection" : "staatliche_schulen",
+    "type": "OAF"
+}
+``
+
 ***
 
 #### Portalconfig.menu.tool.compareFeatures

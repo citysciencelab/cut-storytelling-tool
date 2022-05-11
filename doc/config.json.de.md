@@ -2024,22 +2024,41 @@ Beispiel für ein DateRange-Snippet. Mit zwei Attribut-Namen für Min- und Maxwe
 #### Portalconfig.menu.tool.filterGeneral.filterLayer.snippets.service
 
 Ein Objekt das einen Service für ein Snippet beschreibt. Alle Servicetypen, die der Filter unterstützt, können theoretisch genutzt werden.
-Die Konfiguration hängt vom Typ des Services ab. Bisher nur mit **WFS** getestet.
+Die Konfiguration hängt vom Typ des Services ab.
 
 **WFS**
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|type|ja|String||Der Typ des Services.|false|
+|type|ja|String||Der Typ des Services (WFS, GeoJSON oder OAF).|false|
 |url|ja|String||Die Service Url.|false|
-|typename|ja|String||Der Featuretype der geladen wird.|false|
+|typename|ja|String||Der Featuretype der geladen wird. Nur bei WFS.|false|
+|collection|ja|String||Die Collection die geladen wird. Nur bei OAF.|false|
 
-**Beispiel**
+**Beispiel WFS**
 
 ```json
 {
     "type": "WFS",
     "url": "https://qs-geodienste.hamburg.de/HH_WFS_verbreitungskarten_tiere",
     "typename": "verbreitung_tiere_eindeutige_liste"
+}
+```
+
+**Beispiel GeoJSON**
+
+```json
+{
+    "type": "GeoJSON",
+    "url": "../chartjs/charts_stadtteil.geojson"
+}
+```
+**Beispiel OAF**
+
+```json
+{
+    "url": "https://api.hamburg.de/datasets/v1/schulen",
+    "collection" : "staatliche_schulen",
+    "type": "OAF"
 }
 ```
 

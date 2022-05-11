@@ -23,7 +23,7 @@ function compileSnippets (originalSnippets, api, onfinish, onerror) {
     createSnippetsIfNoSnippetsAreGiven(snippets, api, () => {
         addSnippetIds(snippets);
         addSnippetAdjustment(snippets);
-        addSnippetApi(snippets);
+        addSnippetApi(snippets, () => new FilterApi());
         addSnippetMultiselect(snippets);
 
         if (typeof api?.getAttrTypes === "function" && !checkSnippetTypeConsistency(snippets)) {
@@ -143,12 +143,13 @@ function addSnippetAdjustment (snippets) {
 /**
  * Initializes and adds a snippet api to every snippet if the snippet has its own service.
  * @param {Object[]} snippets - An array of snippet objects.
+ * @param {Function} createNewFilterAPI - Factory method for creating a new filter api.
  * @returns {void}
  */
-function addSnippetApi (snippets) {
+function addSnippetApi (snippets, createNewFilterAPI) {
     snippets.forEach(snippet => {
-        if (isObject(snippet) && snippet !== null && typeof snippet.service !== "undefined") {
-            snippet.api = new FilterApi();
+        if (isObject(snippet) && isObject(snippet.service) && typeof createNewFilterAPI === "function") {
+            snippet.api = createNewFilterAPI();
             snippet.api.setService(snippet.service);
         }
     });
