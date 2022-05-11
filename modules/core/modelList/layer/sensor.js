@@ -9,7 +9,13 @@ import {buffer, containsExtent} from "ol/extent";
 import {GeoJSON} from "ol/format.js";
 import changeTimeZone from "../../../../src/utils/changeTimeZone.js";
 import getProxyUrl from "../../../../src/utils/getProxyUrl";
+import mapCollection from "../../../../src/core/maps/mapCollection";
 import store from "../../../../src/app-store";
+import {
+    resetVectorLayerFeatures,
+    changeFeatureGFI,
+    getStyleModelById
+} from "../../../../src/core/layers/RadioBridge.js";
 
 const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -132,20 +138,20 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                     // call subscriptions
                     this.updateSubscription();
                     // create listener of moveend event
-                    this.setMoveendListener(Radio.request("Map", "registerListener", "moveend", this.updateSubscription.bind(this)));
+                    this.setMoveendListener(store.dispatch("Maps/registerListener", {event: "moveend", callback: this.updateSubscription.bind(this)}));
                 }.bind(this));
             }
             else {
                 // call subscriptions
                 this.updateSubscription();
                 // create listener of moveend event
-                this.setMoveendListener(Radio.request("Map", "registerListener", "moveend", this.updateSubscription.bind(this)));
+                this.setMoveendListener(store.dispatch("Maps/registerListener", {event: "moveend", callback: this.updateSubscription.bind(this)}));
             }
         }
         else if (state === false) {
             this.setIsSubscribed(false);
             // remove listener of moveend event
-            Radio.trigger("Map", "unregisterListener", "moveend", this.updateSubscription.bind(this));
+            store.dispatch("Maps/unregisterListener", {event: "moveend", callback: this.updateSubscription.bind(this)});
             this.setMoveendListener(null);
             // remove connection to live update
             this.unsubscribeFromSensorThings();
@@ -240,7 +246,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             if (Array.isArray(features) && features.length) {
                 this.get("layerSource").addFeatures(features);
                 this.prepareFeaturesFor3D(features);
-                Radio.trigger("VectorLayer", "resetFeatures", this.get("id"), features);
+                resetVectorLayerFeatures(this.get("id"), features);
             }
 
             if (features !== undefined) {
@@ -248,7 +254,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 this.get("layer").setStyle(this.get("style"));
             }
 
-            features.forEach(feature => Radio.trigger("GFI", "changeFeature", feature));
+            features.forEach(feature => changeFeatureGFI(feature));
 
             if (typeof onsuccess === "function") {
                 onsuccess();
@@ -396,8 +402,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         const requestUrl = this.buildSensorThingsUrl(url, version, urlParams),
             http = new SensorThingsHttp(),
             currentExtent = {
-                extent: Radio.request("MapView", "getCurrentExtent"),
-                sourceProjection: Radio.request("MapView", "getProjection").getCode(),
+                extent: store.getters["Maps/getCurrentExtent"],
+                sourceProjection: mapCollection.getMapView("2D").getProjection().getCode(),
                 targetProjection: this.get("epsg")
             },
             /**
@@ -688,7 +694,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {ol/Feature} ol feature
      */
     parseJson: function (data) {
-        const mapCrs = Radio.request("MapView", "getProjection"),
+        const mapCrs = mapCollection.getMapView("2D").getProjection(),
             thingEPSG = this.get("epsg"),
             geojsonReader = new GeoJSON({
                 featureProjection: mapCrs,
@@ -819,7 +825,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     styling: function (isClustered) {
-        const stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        const stylelistmodel = getStyleModelById(this.get("styleId"));
 
         if (stylelistmodel !== undefined) {
             this.setStyle(function (feature) {
@@ -944,7 +950,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      */
     getFeaturesInExtent: function () {
         const features = this.get("layer").getSource().getFeatures(),
-            currentExtent = Radio.request("MapView", "getCurrentExtent"),
+            currentExtent = store.getters["Maps/getCurrentExtent"],
             enlargedExtent = this.enlargeExtent(currentExtent, 0.05),
             featuresInExtent = [];
 
@@ -1032,7 +1038,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         feature.set("dataStreamValue", this.replaceStreamProperties(feature, "dataStreamValue", dataStreamId, preparedResult));
         feature.set("dataStreamPhenomenonTime", this.replaceStreamProperties(feature, "dataStreamPhenomenonTime", dataStreamId, phenomenonTime));
 
-        Radio.trigger("GFI", "changeFeature", feature);
+        changeFeatureGFI(feature);
     },
 
     /**
@@ -1128,7 +1134,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     createLegend: function () {
-        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        const styleModel = getStyleModelById(this.get("styleId"));
         let legend = this.get("legend");
 
         /**
