@@ -18,7 +18,7 @@ export default {
     data() {
         return {
             constants,
-            mode: none,
+            mode: "create",
             storyConfPath: Config.storyConf
         };
     },
@@ -81,7 +81,7 @@ export default {
          */
         active(value) {
             if (!value) {
-                this.mode = null;
+                this.mode = "create";
             }
         }
     },

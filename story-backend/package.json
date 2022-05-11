@@ -1,0 +1,18 @@
+{
+  "name": "story-backend",
+  "version": "1.0.0",
+  "description": "Backend that serves the APIs needed for the Story Creation and Story Telling Tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongoose": "^6.3.3",
+    "nodemon": "^2.0.16"
+  }
+}

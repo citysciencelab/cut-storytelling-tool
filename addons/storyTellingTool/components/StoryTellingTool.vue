@@ -187,7 +187,7 @@ export default {
                 >
 
                     <v-flex v-for="option in modeOptions"  :key="option.title">
-                        <v-item v-slot="{ active, toggle }" >
+                        <v-item v-slot="{ active, toggle }">
                             <v-card  :disabled="option.disabled" class="my-4">
                                 <v-img v-if="option.title == 'Story starten'"
                                     src="https://raw.githubusercontent.com/herzogrh/faircare-verkehr/main/assets/img/stroller-1.jpg"
@@ -199,13 +199,6 @@ export default {
                                     <v-btn v-if="option.title == 'Story starten'" text @click="toggle" >
                                         {{ option.title }}
                                     </v-btn>
-                                    <v-col class="text-center" v-if="option.title == 'Story erstellen'">
-                                        <p><i>- Experimentell -</i></p>
-                                        <v-btn   outlined small color="" @click="toggle" >
-                                            <v-icon>add</v-icon>
-                                            Eigene {{ option.title }}
-                                        </v-btn>
-                                    </v-col>
                                     
                                 </v-card-actions>
                             </v-card>

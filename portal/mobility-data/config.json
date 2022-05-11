@@ -37,12 +37,12 @@
           "storyTellingTool": {
             "name": "translate#additional:modules.tools.storyTellingTool.title",
             "glyphicon": "glyphicon-book",
-            "active": true
+            "active": false
           },
           "storyCreationTool": {
             "name": "translate#additional:modules.tools.storyCreationTool.title",
             "glyphicon": "glyphicon-text-size",
-            "active": true
+            "active": false
           },
           "gfi": {
             "name": "translate#common:menu.tools.getInfos",
