@@ -458,10 +458,14 @@ const BuildSpecModel = {
      */
     buildStyle: function (layer, features, geojsonList) {
         const mapfishStyleObject = {
-            "version": "2"
-        };
+                "version": "2"
+            },
+            layersToNotReverse = ["measure_layer", "import_draw_layer"];
 
-        features.reverse().forEach(feature => {
+        if (!layersToNotReverse.includes(layer.values_.id)) {
+            features.reverse();
+        }
+        features.forEach(feature => {
             const styles = this.getFeatureStyle(feature, layer),
                 styleAttributes = this.getStyleAttributes(layer, feature);
 

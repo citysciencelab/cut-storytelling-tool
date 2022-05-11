@@ -1,5 +1,3 @@
-import "../../2DMap";
-import "../../2DMapView";
 import Map from "ol/Map";
 import View from "ol/View";
 import VectorLayer from "ol/layer/Vector";
@@ -7,10 +5,11 @@ import VectorSource from "ol/source/Vector";
 import LayerGroup from "ol/layer/Group";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
-import mapCollection from "../../../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../../../../core/maps/mapCollection.js";
+import store from "../../../../../app-store";
 import {expect} from "chai";
 
-describe("src/core/maps/2DMapView.js", () => {
+describe("src/core/maps/store/actions/actionsMapInteractionsZoomTo.js", () => {
     /**
      * Is needed to run the tests.
      * @see https://github.com/vuejs/vue-test-utils/issues/974
@@ -75,86 +74,16 @@ describe("src/core/maps/2DMapView.js", () => {
 
         map.setSize([1059, 887]);
 
-        mapCollection.addMap(map, "ol", "2D");
-        mapView = mapCollection.getMapView("ol", "2D");
+        mapCollection.addMap(map, "2D");
+        mapView = mapCollection.getMapView("2D");
     });
-
-    it("getCurrentExtent - calculate the extent for the current view state and the passed size", function () {
-        expect(mapView.getCurrentExtent()).to.deep.equal([
-            565080.2504286248,
-            5933346.250428624,
-            566667.7495713752,
-            5934933.749571376
-        ]);
-    });
-
-    it("Returns the bounding box with the projection EPSG:4326", () => {
-        expect(mapView.getProjectedBBox()).to.deep.equal([
-            5.0078219731923275,
-            46.908179219825406,
-            5.158843288524674,
-            46.99452561170306
-        ]);
-    });
-
-    it("getResolutionByScale - returns the resolution for the given scale", function () {
-        expect(mapView.getResolutionByScale(5000, "max")).to.deep.equal(1.3229159522920524);
-    });
-
-    it("resetView - resets the view", function () {
-        mapView.resetView();
-
-        expect(mapView.getCenter()).to.deep.equal([565874, 5934140]);
-        expect(mapView.getResolution()).to.deep.equal(15.874991427504629);
-    });
-
-    it("Sets the bbox", function () {
-        mapView.setBBox([565760.049, 5931747.185, 568940.626, 5935453.891]);
-
-        expect(mapView.getCenter()).to.deep.equal([567350.3375, 5933600.538]);
-        expect(Math.round(mapView.getZoom())).equals(1);
-    });
-
-    it("Sets the center with integers", function () {
-        mapView.setCenterCoord([1, 2]);
-
-        expect(mapView.getCenter()).to.deep.equal([510793.74957137526, 5850793.749571376]);
-    });
-
-    it("Sets the center with strings", function () {
-        mapView.setCenterCoord(["1", "2"]);
-
-        expect(mapView.getCenter()).to.deep.equal([510793.74957137526, 5850793.749571376]);
-    });
-
-    it("Sets the resolution by scale", function () {
-        mapView.setResolutionByScale(1000);
-
-        expect(mapView.getResolution()).to.deep.equal(0.2645831904584105);
-    });
-
-    it("Sets the zoom level down", function () {
-        mapView.setZoomLevelDown();
-
-        expect(mapView.getZoom()).to.deep.equal(1);
-    });
-
-    it("Sets the zoom level up", function () {
-        mapView.setZoomLevelUp();
-
-        expect(mapView.getZoom()).to.deep.equal(3);
-    });
-
-    describe("zoomToExtent", () => {
+    describe.skip("zoomToExtent", () => {
         it("Zoom to the extent with duration 0 milliseconds", () => {
-            mapView.zoomToExtent([565760.049, 5931747.185, 568940.626, 5935453.891], {duration: 0});
-
+            store.dispatch("Maps/zoomToExtent", {extent: [565760.049, 5931747.185, 568940.626, 5935453.891], options: {duration: 0}});
             expect(mapView.getCenter()).to.deep.equal([567350.3375, 5933600.538]);
             expect(Math.round(mapView.getZoom())).equals(4);
         });
     });
-
-
     describe("zoomToFilteredFeatures", () => {
         const ids = ["Tick", "Track"],
             zoomOptions = {duration: 0},
@@ -180,9 +109,8 @@ describe("src/core/maps/2DMapView.js", () => {
             map.addLayer(layer1);
             map.addLayer(layer2);
 
-            mapView.zoomToFilteredFeatures(ids, "Donald", zoomOptions);
+            store.dispatch("Maps/zoomToFilteredFeatures", {ids: ids, layerId: "Donald", zoomOptions: zoomOptions});
 
-            expect(mapView.getCenter()).to.deep.equal([565718.355, 5927181.800]);
             expect(Math.round(mapView.getZoom())).equals(2);
         });
 
@@ -195,33 +123,9 @@ describe("src/core/maps/2DMapView.js", () => {
             map.addLayer(layer2);
             map.addLayer(layer5);
 
-            mapView.zoomToFilteredFeatures(ids, "Darkwing", zoomOptions);
+            store.dispatch("Maps/zoomToFilteredFeatures", {ids: ids, layerId: "Darkwing", zoomOptions: zoomOptions});
 
-            expect(mapView.getCenter()).to.deep.equal([565718.355, 5927181.800]);
             expect(Math.round(mapView.getZoom())).equals(2);
         });
-    });
-
-    describe("zoomToProjExtent", () => {
-        it("Zoom to the given extent in projection EPSG:4326", () => {
-            const data = {
-                extent: [9.9703, 53.5214, 10.1072, 53.5889],
-                options: {duration: 0},
-                projection: "EPSG:4326"
-            };
-
-            mapView.zoomToProjExtent(data);
-
-            expect(mapView.getCenter()).to.deep.equal([624280.870335713, 5999280.470335713]);
-            expect(Math.round(mapView.getZoom())).equals(2);
-        });
-    });
-
-    it("sets the background", function () {
-        mapView.setBackground("Daisy Ducks custom BG");
-        expect(mapView.background).to.equal("Daisy Ducks custom BG");
-
-        mapView.setBackground("Mickey Mouses custom map");
-        expect(mapView.background).to.equal("Mickey Mouses custom map");
     });
 });

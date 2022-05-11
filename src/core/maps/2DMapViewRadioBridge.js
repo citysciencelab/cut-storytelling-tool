@@ -1,52 +1,57 @@
-import mapCollection from "../dataStorage/mapCollection";
+import mapCollection from "../maps/mapCollection";
 import findWhereJs from "../../utils/findWhereJs";
+import store from "../../app-store";
 
 const channel = Radio.channel("MapView");
 
 channel.reply({
     "getProjection": function () {
-        return mapCollection.getMapView("ol", "2D").getProjection();
+        return mapCollection.getMapView("2D").getProjection();
     },
     "getOptions": function () {
-        return findWhereJs(mapCollection.getMapView("ol", "2D").get("options"), {resolution: mapCollection.getMapView("ol", "2D").getConstrainedResolution(mapCollection.getMapView("ol", "2D").getResolution())});
+        return findWhereJs(mapCollection.getMapView("2D").get("options"), {resolution: mapCollection.getMapView("2D").getConstrainedResolution(mapCollection.getMapView("2D").getResolution())});
     },
     "getCenter": function () {
-        return mapCollection.getMapView("ol", "2D").getCenter();
+        return mapCollection.getMapView("2D").getCenter();
     },
     "getZoomLevel": function () {
-        return mapCollection.getMapView("ol", "2D").getZoom();
+        return mapCollection.getMapView("2D").getZoom();
     },
     "getResolutions": function () {
-        return mapCollection.getMapView("ol", "2D").getResolutions();
+        return mapCollection.getMapView("2D").getResolutions();
     },
     "getResolutionByScale": function (scale, scaleType) {
-        return mapCollection.getMapView("ol", "2D").getResolutionByScale(scale, scaleType);
+        // eslint-disable-next-line new-cap
+        return store.getters["Maps/getResolutionByScale"](scale, scaleType);
     },
     "getCurrentExtent": function () {
-        return mapCollection.getMapView("ol", "2D").getCurrentExtent();
+        return store.getters["Maps/getCurrentExtent"];
     },
     "getBackgroundImage": function () {
-        return mapCollection.getMapView("ol", "2D").get("backgroundImage");
+        return mapCollection.getMapView("2D").get("backgroundImage");
     }
 });
 
 channel.on({
     "resetView": function () {
-        mapCollection.getMapView("ol", "2D").resetView();
+        store.dispatch("Maps/resetView");
     },
     "setCenter": function (coords, zoomLevel) {
-        mapCollection.getMapView("ol", "2D").setCenterCoord(coords, zoomLevel);
+        store.dispatch("Maps/setCenter", coords);
+        if (zoomLevel !== undefined) {
+            store.dispatch("Maps/setZoomLevel", zoomLevel);
+        }
     },
     "setScale": function (scale) {
-        mapCollection.getMapView("ol", "2D").setResolutionByScale(scale);
+        store.commit("Maps/setResolutionByScale", scale);
     },
     "setZoomLevelDown": function () {
-        mapCollection.getMapView("ol", "2D").setZoomLevelDown();
+        store.dispatch("Maps/decreaseZoomLevel");
     },
     "setZoomLevelUp": function () {
-        mapCollection.getMapView("ol", "2D").setZoomLevelUp();
+        store.dispatch("Maps/increaseZoomLevel");
     },
     "toggleBackground": function () {
-        mapCollection.getMapView("ol", "2D").toggleBackground();
+        store.dispatch("Maps/toggleBackground");
     }
 });

@@ -26,6 +26,9 @@ describe("src/modules/tools/print/utils/buildSpec.buildStyle", function () {
             }
         },
         layer = {
+            values_: {
+                id: "1711"
+            },
             get: sinon.stub()
         },
         geometry = new Polygon([[[0, 0], [1000, 0], [0, 1000], [0, 0]]]),

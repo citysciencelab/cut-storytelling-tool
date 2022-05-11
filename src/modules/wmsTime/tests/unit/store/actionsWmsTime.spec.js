@@ -1,30 +1,38 @@
+import Vuex from "vuex";
+import {createLocalVue} from "@vue/test-utils";
 import sinon from "sinon";
 import {expect} from "chai";
 
 import actions from "../../../store/actionsWmsTime";
 import initialState from "../../../store/stateWmsTime";
-import mapCollection from "../../../../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../../../../core/maps/mapCollection.js";
 
-const layerString = "When I grow up I will be a real layer!";
+const localVue = createLocalVue(),
+    layerString = "When I grow up I will be a real layer!";
+
+localVue.use(Vuex);
+
 
 describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
-    let commit, dispatch, getters, rootGetters, state, trigger;
+    let commit, dispatch, getters, rootGetters, state, trigger, map;
 
     before(() => {
         mapCollection.clear();
-        const map = {
+        map = {
             id: "ol",
             mode: "2D",
             removeLayer: sinon.spy()
         };
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
 
     beforeEach(() => {
         commit = sinon.spy();
         dispatch = sinon.spy();
-        getters = {currentTimeSliderObject: {keyboardMovement: 5}};
+        getters = {
+            currentTimeSliderObject: {keyboardMovement: 5}
+        };
         trigger = sinon.spy();
     });
 
@@ -93,17 +101,16 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             id = "someId";
             requestSpy = sinon.spy();
             rootGetters = {
-                "Map/mapId": "ol",
-                "Map/mapMode": "2D"
+                "Maps/mode": "2D"
             };
-            mapCollection.getMap("ol", "2D").removeLayer = sinon.spy();
+            getters = {"Maps/get2DMap": {removeLayer: sinon.spy()}};
             state = Object.assign({}, initialState);
             sinon.stub(Radio, "request").callsFake(request);
             sinon.stub(Radio, "trigger").callsFake(trigger);
         });
 
         it("should trigger the Parser to add a layer, add said layer to the ModelList and refresh tree if the swiper was activated", () => {
-            actions.toggleSwiper({commit, state, rootGetters}, id);
+            actions.toggleSwiper({commit, getters, state}, id);
 
             expect(commitSpy.calledOnce).to.be.true;
             expect(commitSpy.firstCall.args).to.eql(["setLayerSwiperActive", true]);
@@ -120,14 +127,14 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             id += state.layerAppendix;
 
             state.layerSwiper.active = true;
-            actions.toggleSwiper({commit, state, rootGetters}, id);
+            actions.toggleSwiper({commit, getters, state, rootGetters}, id);
 
             expect(commitSpy.calledOnce).to.be.true;
             expect(commitSpy.firstCall.args).to.eql(["setLayerSwiperActive", false]);
             expect(requestSpy.calledOnce).to.be.true;
             expect(requestSpy.firstCall.args).to.eql(["ModelList", "getModelByAttributes", {id}]);
-            expect(mapCollection.getMap("ol", "2D").removeLayer.calledOnce).to.be.true;
-            expect(mapCollection.getMap("ol", "2D").removeLayer.firstCall.args).to.eql([layerString]);
+            expect(getters["Maps/get2DMap"].removeLayer.calledOnce).to.be.true;
+            expect(getters["Maps/get2DMap"].removeLayer.firstCall.args).to.eql([layerString]);
             expect(trigger.calledThrice).to.be.true;
             expect(trigger.firstCall.args).to.eql(["ModelList", "removeModelsById", id]);
             expect(trigger.secondCall.args).to.eql(["Parser", "removeItem", id]);
@@ -137,7 +144,7 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             const secondId = id + state.layerAppendix;
 
             state.layerSwiper.active = true;
-            actions.toggleSwiper({commit, state, rootGetters}, id);
+            actions.toggleSwiper({commit, getters, state, rootGetters}, id);
 
             expect(commitSpy.calledTwice).to.be.true;
             expect(commitSpy.firstCall.args).to.eql(["setLayerSwiperActive", false]);
@@ -149,8 +156,8 @@ describe("src/modules/wmsTime/store/actionsWmsTime.js", () => {
             expect(trigger.secondCall.args).to.eql(["ModelList", "removeModelsById", secondId]);
             expect(trigger.thirdCall.args).to.eql(["Parser", "removeItem", secondId]);
             expect(trigger.lastCall.args).to.eql(["Util", "refreshTree"]);
-            expect(mapCollection.getMap("ol", "2D").removeLayer.calledOnce).to.be.true;
-            expect(mapCollection.getMap("ol", "2D").removeLayer.firstCall.args).to.eql([layerString]);
+            expect(getters["Maps/get2DMap"].removeLayer.calledOnce).to.be.true;
+            expect(getters["Maps/get2DMap"].removeLayer.firstCall.args).to.eql([layerString]);
         });
     });
 

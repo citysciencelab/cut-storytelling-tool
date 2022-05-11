@@ -41,21 +41,21 @@ export async function translate (urlParamsKey, urlParamsValue) {
         }
         case "center":
         case "map/center": {
-            const key = "Map/center",
+            const key = "Maps/center",
                 value = convert(urlParamsValue);
 
             return {key: key, value: value};
         }
         case "zoomlevel":
         case "map/zoomlevel": {
-            const key = "Map/zoomLevel",
+            const key = "Maps/zoomLevel",
                 value = parseInt(urlParamsValue, 10);
 
             return {key: key, value: value};
         }
         case "zoomtoextent":
         case "map/zoomtoextent": {
-            const key = "Map/zoomToExtent",
+            const key = "Maps/zoomToExtent",
                 value = convert(urlParamsValue);
 
             return {key: key, value: value};
@@ -63,7 +63,7 @@ export async function translate (urlParamsKey, urlParamsValue) {
         case "zoomtogeometry":
         case "bezirk":
         case "map/zoomtogeometry": {
-            const key = "Map/zoomToGeometry",
+            const key = "Maps/zoomToGeometry",
                 value = urlParamsValue;
 
             if (checkedKey.toLowerCase() === "bezirk") {
@@ -74,21 +74,21 @@ export async function translate (urlParamsKey, urlParamsValue) {
         case "map":
         case "mapmode":
         case "map/mapmode": {
-            const key = "Map/mapMode",
+            const key = "Maps/mapMode",
                 value = urlParamsValue;
 
             return {key: key, value: value};
         }
         case "layerids":
         case "map/layerids": {
-            const key = "Map/layerIds",
+            const key = "Maps/layerIds",
                 value = convert(urlParamsValue);
 
             return {key: key, value: value};
         }
         case "mdid":
         case "map/mdid": {
-            const key = "Map/mdId",
+            const key = "Maps/mdId",
                 value = convert(urlParamsValue);
 
             return {key: key, value: value};
@@ -96,7 +96,7 @@ export async function translate (urlParamsKey, urlParamsValue) {
         case "featureid":
         case "zoomtofeatureid":
         case "map/zoomtofeatureid": {
-            const key = "Map/zoomToFeatureId",
+            const key = "Maps/zoomToFeatureId",
                 value = convert(urlParamsValue);
 
             return {key: key, value: value};
@@ -109,7 +109,7 @@ export async function translate (urlParamsKey, urlParamsValue) {
         }
         case "highlightfeature":
         case "map/highlightfeature": {
-            const key = "Map/highlightFeature",
+            const key = "Maps/highlightFeature",
                 value = urlParamsValue;
 
             return {key: key, value: value};

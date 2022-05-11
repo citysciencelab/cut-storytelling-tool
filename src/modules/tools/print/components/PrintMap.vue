@@ -7,7 +7,6 @@ import getComponent from "../../../../utils/getComponent";
 import thousandsSeparator from "../../../../utils/thousandsSeparator.js";
 import axios from "axios";
 import getVisibleLayer from "../utils/getVisibleLayer";
-import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 import {Vector} from "ol/layer.js";
 import Cluster from "ol/source/Cluster";
 
@@ -26,7 +25,7 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/Print", Object.keys(getters)),
-        ...mapGetters("Map", ["scales, size", "scale"]),
+        ...mapGetters("Maps", ["scales, size", "scale", "get2DMap"]),
         ...mapGetters("Tools/Gfi", ["currentFeature"]),
         currentScale: {
             get () {
@@ -212,7 +211,7 @@ export default {
          * @param {event} event the click event
          * @returns {void}
          */
-        scaleChanged (event) {
+        async scaleChanged (event) {
             const scale = parseInt(event.target.value, 10),
                 resolution = {
                     "scale": scale,
@@ -223,7 +222,7 @@ export default {
             this.setIsScaleSelectedManually(true);
             this.getOptimalResolution(resolution);
             this.updateCanvasLayer();
-            mapCollection.getMap("ol", "2D").render();
+            await this.get2DMap.render();
         },
 
         /**
@@ -231,14 +230,14 @@ export default {
          * @param {String} value the chosen layout
          * @returns {void}
          */
-        layoutChanged (value) {
+        async layoutChanged (value) {
             this.resetLayoutParameter();
             this.setCurrentLayoutName(value);
             this.setCurrentLayout(this.layoutList.find(layout => layout.name === value));
             this.getAttributeInLayoutByName("gfi");
             this.getAttributeInLayoutByName("legend");
             this.updateCanvasLayer();
-            mapCollection.getMap("ol", "2D").render();
+            await this.get2DMap.render();
         },
 
         /**

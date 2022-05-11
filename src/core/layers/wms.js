@@ -1,7 +1,7 @@
 import {wms} from "@masterportal/masterportalapi";
 import store from "../../app-store";
 import Layer from "./layer";
-import mapCollection from "../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../core/maps/mapCollection.js";
 import * as bridge from "./RadioBridge.js";
 /**
  * Creates a layer of type WMS.
@@ -54,7 +54,7 @@ WMSLayer.prototype.createLayer = function (attrs) {
  * @returns {Object} The options.
  */
 WMSLayer.prototype.getOptions = function () {
-    return {resolutions: mapCollection.getMapView("ol", "2D").getResolutions(), origin: [442800, 5809000]};
+    return {resolutions: mapCollection.getMapView("2D").getResolutions(), origin: [442800, 5809000]};
 };
 
 /**
@@ -128,10 +128,10 @@ WMSLayer.prototype.updateSource = function () {
  * @returns {String} - The created getFeature info url.
  */
 WMSLayer.prototype.getGfiUrl = function () {
-    const mapView = mapCollection.getMapView("ol", "2D"),
-        resolution = store.getters["Map/resolution"],
+    const mapView = mapCollection.getMapView("2D"),
+        resolution = store.getters["Maps/resolution"],
         projection = mapView.getProjection(),
-        coordinate = store.getters["Map/clickCoord"];
+        coordinate = store.getters["Maps/clickCoordinate"];
 
     return this.get("layerSource").getFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.get("infoFormat"), FEATURE_COUNT: this.get("featureCount")});
 };

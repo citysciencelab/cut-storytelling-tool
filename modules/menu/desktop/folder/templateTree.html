@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <div class="menu-row">
     <% if(isFolderSelectable && isSelected) { %>
-        <a class="<%= id %> dropdown-item tabable checked" tabindex="0">
+        <a class="<%= id %> dropdown-item layer-dropdown-item tabable checked" tabindex="0">
     <%} else {%>
-        <a class="<%= id %> dropdown-item tabable" tabindex="0">
+        <a class="<%= id %> dropdown-item layer-dropdown-item tabable" tabindex="0">
     <% } %>
 
         <% if (this.model.get("isExpanded")) { %>
         <span class="bootstrap-icon minimize-icon"><i class="bi-dash-circle-fill"></i></span>
         <% } else { %>
         <span class="bootstrap-icon maximize-icon"><i class="bi-plus-circle-fill"></i></span>
-        <% } %> 
+        <% } %>
         <% if(isFolderSelectable) { %> <% if(isSelected) { %>
         <span
             class="bootstrap-icon selectall"

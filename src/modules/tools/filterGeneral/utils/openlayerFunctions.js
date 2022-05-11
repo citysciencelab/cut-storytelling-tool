@@ -7,7 +7,7 @@ import LayerGroup from "ol/layer/Group";
  * @returns {String} the projection
  */
 function getMapProjection () {
-    return store.getters["Map/projection"].getCode();
+    return store.getters["Maps/projection"].getCode();
 }
 
 /**
@@ -91,9 +91,10 @@ function createLayerIfNotExists (layername) {
 function liveZoom (minScale, featureIds, layerId, callback) {
     const minResolution = Radio.request("MapView", "getResolutionByScale", minScale);
 
-    Radio.trigger("Map", "zoomToFilteredFeatures", featureIds, layerId, {
+    Radio.trigger("Map", "zoomToFilteredFeatures", {ids: featureIds, layerId: layerId, zoomOptions: {
         minResolution,
         callback
+    }
     });
 }
 

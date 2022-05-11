@@ -7,7 +7,7 @@ import {expect} from "chai";
 import VectorLayer from "ol/layer/Vector.js";
 import {Vector as VectorSource} from "ol/source.js";
 import sinon from "sinon";
-import mapCollection from "../../../../../../src/core/dataStorage/mapCollection";
+import mapCollection from "../../../../../../src/core/maps/mapCollection";
 
 describe("core/modelList/layer/sensor", function () {
     let sensorLayer;
@@ -15,11 +15,10 @@ describe("core/modelList/layer/sensor", function () {
     before(() => {
         mapCollection.clear();
         mapCollection.addMap({
-            id: "ol",
             mode: "2D",
             registerListener: sinon.spy(),
             unregisterListener: sinon.spy()
-        }, "ol", "2D");
+        }, "2D");
 
         sensorLayer = new SensorLayerModel();
         sensorLayer.set("url", "test/test/test", {silent: true});
@@ -37,6 +36,13 @@ describe("core/modelList/layer/sensor", function () {
             }
             else if (channel === "Map" && topic === "registerListener") {
                 return {"key": "test"};
+            }
+
+            return null;
+        });
+        sinon.stub(Radio, "trigger").callsFake(function (channel, topic) {
+            if (channel === "Map" && topic === "unregisterListener") {
+                return null;
             }
 
             return null;

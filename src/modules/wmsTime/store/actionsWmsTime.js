@@ -1,6 +1,6 @@
 import drawLayer from "../utils/drawLayer";
 import getPosition from "../utils/getPosition";
-import mapCollection from "../../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../../core/maps/mapCollection.js";
 
 const actions = {
     windowWidthChanged ({commit, dispatch, state, getters}) {
@@ -24,7 +24,7 @@ const actions = {
      * @fires Core.ConfigLoader#RadioTriggerParserRemoveItem
      * @returns {void}
      */
-    toggleSwiper ({commit, state}, id) {
+    toggleSwiper ({commit, getters, state}, id) {
         commit("setLayerSwiperActive", !state.layerSwiper.active);
 
         const secondId = id.endsWith(state.layerAppendix) ? id : id + state.layerAppendix,
@@ -50,7 +50,8 @@ const actions = {
                 Radio.trigger("ModelList", "setModelAttributesById", id, {transparency});
                 commit("setTimeSliderDefaultValue", TIME);
             }
-            mapCollection.getMap("ol", "2D").removeLayer(layerModel.get("layer"));
+
+            getters["Maps/get2DMap"].removeLayer(layerModel.get("layer"));
             Radio.trigger("ModelList", "removeModelsById", secondId);
             Radio.trigger("Parser", "removeItem", secondId);
         }
@@ -77,9 +78,9 @@ const actions = {
      */
     updateMap ({state, rootGetters}) {
         if (!state.timeSlider.playing) {
-            mapCollection.getMap(rootGetters["Map/mapId"], rootGetters["Map/mapMode"]).render();
+            mapCollection.getMap(rootGetters["Maps/mode"]).render();
         }
-        state.layerSwiper.targetLayer.once("prerender", renderEvent => drawLayer(mapCollection.getMap(rootGetters["Map/mapId"], rootGetters["Map/mapMode"]).getSize(), renderEvent, state.layerSwiper.valueX));
+        state.layerSwiper.targetLayer.once("prerender", renderEvent => drawLayer(mapCollection.getMap(rootGetters["Maps/mode"]).getSize(), renderEvent, state.layerSwiper.valueX));
         state.layerSwiper.targetLayer.once("postrender", ({context}) => {
             context.restore();
         });

@@ -4,7 +4,7 @@ import {expect} from "chai";
 import PrintComponent from "../../../components/PrintMap.vue";
 import Print from "../../../store/indexPrint";
 import sinon from "sinon";
-import mapCollection from "../../../../../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../../../../../core/maps/mapCollection.js";
 
 const localVue = createLocalVue();
 
@@ -36,7 +36,7 @@ describe("src/modules/tools/Print/components/PrintMap.vue", () => {
         };
 
         mapCollection.clear();
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
 
     beforeEach(() => {
@@ -53,7 +53,7 @@ describe("src/modules/tools/Print/components/PrintMap.vue", () => {
                         }
                     }
                 },
-                Map: {
+                Maps: {
                     namespaced: true,
                     getters: mockMapGetters,
                     actions: mockMapActions
@@ -68,6 +68,8 @@ describe("src/modules/tools/Print/components/PrintMap.vue", () => {
 
         wrapper = mount(PrintComponent, {store, localVue});
     });
+
+    afterEach(sinon.restore);
 
     describe("PrintMap.vue methods", () => {
         it("method layoutChanged sets other print layout", () => {
