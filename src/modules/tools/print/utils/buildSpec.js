@@ -535,6 +535,9 @@ const BuildSpecModel = {
                         styleObject.symbolizers.push(this.buildPolygonStyle(style, layer));
                     }
                     else if (geometryType === "LineString" || geometryType === "MultiLineString") {
+                        if (layer.values_.id === "measure_layer" && style.stroke_ === null) {
+                            return;
+                        }
                         styleObject.symbolizers.push(this.buildLineStringStyle(style, layer));
                     }
                     // label styling
