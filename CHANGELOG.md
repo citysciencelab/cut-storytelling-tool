@@ -16,6 +16,7 @@
 
 ### Changed
 - `default`-gfiTheme: If a `|`-character is part of the response, every element separated by the character will be displayed in a separate paragraph.
+- Issue #764: Using parameters in WfsSearch as defined in [Filter Encoding Implementation Specification](https://portal.ogc.org/files/?artifact_id=8340); the default name for the like filter escape character is now `escapeChar` rather than `escape`. This requires a change of configuration for services deviating from the standard implementation, see docs.
 - map moved with new structure from src/modules/map to src/core/maps.
 
 ### Deprecated
@@ -27,6 +28,7 @@
 - The order of printed features from the draw and measure layer is now corrected.
 - Issue #737: Fix issue of some items in the layer tree overflowing
 - The attribute `startingMap3D` in config.js now ensures that the 3D mode is started by default.
+- Issue #736: Fix console error when users forbid their localization.
 
 
 ## v2.21.0 - 2022-05-04
