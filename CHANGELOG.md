@@ -23,6 +23,7 @@
 - map moved with new structure from src/modules/map to src/core/maps.
 - The tool `coordTookit` can now be used in 3D mode again. A height is now also displayed in 3D mode.
 - The Measure tool is no longer available in 3D mode.
+- The 3D entities layer is refactored. It is no longer a Backbone-model.The entities layer uses the masterportalAPI's entities layer on creation.
 
 ### Deprecated
 - Switched Icon Library from Glyphicon to Bootstrap Icons. Edited Webpack Config. Updated icon usage in vue components to use scss. Updated icon usage in backbone modules. Edited docs & tests accordingly.
