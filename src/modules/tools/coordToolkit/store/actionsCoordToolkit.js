@@ -98,8 +98,8 @@ export default {
      * @returns {void}
      */
     getHeight ({dispatch, rootGetters, state}, position) {
-        const projection = rootGetters["Map/projection"],
-            resolution = rootGetters["Map/resolution"],
+        const projection = rootGetters["Maps/projection"],
+            resolution = rootGetters["Maps/resolution"],
             gfiParams = {INFO_FORMAT: state.heightInfoFormat, FEATURE_COUNT: 1};
         let url = state.heightLayer.get("layerSource").getFeatureInfoUrl(position, resolution, projection, gfiParams);
 
@@ -163,7 +163,7 @@ export default {
     changedPosition ({dispatch, state, rootGetters, getters}) {
         if (state.mode === "supply") {
             const targetProjectionName = state.currentProjection?.name,
-                position = getters.getTransformedPosition(rootGetters["Map/ol2DMap"], targetProjectionName);
+                position = getters.getTransformedPosition(rootGetters["Maps/get2DMap"], targetProjectionName);
 
             if (position) {
                 dispatch("adjustPosition", {position: position, targetProjection: state.currentProjection});
@@ -177,12 +177,12 @@ export default {
     setFirstSearchPosition ({dispatch, commit, state, rootState, rootGetters, getters}) {
         if (state.mode === "search" && state.active) {
             const targetProjectionName = state.currentProjection?.name,
-                position = getters.getTransformedPosition(rootGetters["Map/ol2DMap"], targetProjectionName);
+                position = getters.getTransformedPosition(rootGetters["Maps/get2DMap"], targetProjectionName);
 
-            if (position && position[0] === 0 && position[1] === 0 && rootState.Map.center) {
-                commit("setCoordinatesEasting", {id: "easting", value: String(rootState.Map.center[0])});
-                commit("setCoordinatesNorthing", {id: "northing", value: String(rootState.Map.center[1])});
-                dispatch("moveToCoordinates", rootState.Map.center);
+            if (position && position[0] === 0 && position[1] === 0 && rootState.Maps.center) {
+                commit("setCoordinatesEasting", {id: "easting", value: String(rootState.Maps.center[0])});
+                commit("setCoordinatesNorthing", {id: "northing", value: String(rootState.Maps.center[1])});
+                dispatch("moveToCoordinates", rootState.Maps.center);
             }
         }
     },
@@ -442,7 +442,7 @@ export default {
      * @returns {void}
      */
     setZoom: function ({dispatch}, zoomLevel) {
-        dispatch("Map/setZoomLevel", zoomLevel, {root: true});
+        dispatch("Maps/setZoomLevel", zoomLevel, {root: true});
     },
     /**
      * Takes the selected coordinates and centers the map to the new position.
@@ -454,6 +454,6 @@ export default {
         // coordinates come as string and have to be changed to numbers for setCenter from mutations to work.
         const newCoords = [parseFloat(coordinates[0]), parseFloat(coordinates[1])];
 
-        dispatch("Map/setCenter", newCoords, {root: true});
+        dispatch("Maps/setCenter", newCoords, {root: true});
     }
 };

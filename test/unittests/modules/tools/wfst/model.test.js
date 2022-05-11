@@ -4,7 +4,7 @@ import Util from "@testUtil";
 import {Draw} from "ol/interaction.js";
 import sinon from "sinon";
 import VectorSource from "ol/source/Vector";
-import mapCollection from "../../../../../src/core/dataStorage/mapCollection";
+import mapCollection from "../../../../../src/core/maps/mapCollection";
 
 describe("WfstModel", function () {
     let model,
@@ -28,13 +28,12 @@ describe("WfstModel", function () {
     before(() => {
         mapCollection.clear();
         mapCollection.addMap({
-            id: "ol",
             mode: "2D",
             addNewLayerIfNotExists: sinon.spy(),
             addInteraction: sinon.spy(),
             registerListener: sinon.spy(),
             removeInteraction: sinon.spy()
-        }, "ol", "2D");
+        }, "2D");
 
         model = new Model();
         utilModel = new Util();

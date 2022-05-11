@@ -7,7 +7,7 @@ import MultiLine from "ol/geom/MultiLineString.js";
 import MultiPoint from "ol/geom/MultiPoint.js";
 import MultiPolygon from "ol/geom/MultiPolygon.js";
 import * as setters from "./settersDraw";
-import mapCollection from "../../../../../core/dataStorage/mapCollection";
+import mapCollection from "../../../../../core/maps/mapCollection";
 
 /**
  * Resets and deactivates the Draw Tool.
@@ -52,7 +52,7 @@ function downloadFeaturesWithoutGUI ({state, rootState}, payload) {
         targetProjection = null;
     const featureArray = [],
         format = new GeoJSON(),
-        mapProjection = getMapProjection(mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode)),
+        mapProjection = getMapProjection(mapCollection.getMap(rootState.Maps.mode)),
         multiLine = new MultiLine([]),
         multiPoint = new MultiPoint([]),
         multiPolygon = new MultiPolygon([]);
@@ -256,7 +256,7 @@ function initializeWithoutGUI ({state, commit, dispatch, getters, rootGetters}, 
                     state.layer.getSource().addFeatures(featJSON);
                 }
                 if (featJSON.length > 0 && zoomToExtent) {
-                    Radio.trigger("Map", "zoomToExtent", state.layer.getSource().getExtent());
+                    Radio.trigger("Map", "zoomToExtent", {extent: state.layer.getSource().getExtent()});
                 }
             }
             catch (e) {

@@ -4,7 +4,7 @@ import actions from "../../../store/actionsDraw";
 import Feature from "ol/Feature";
 import Polygon from "ol/geom/Polygon";
 import MultiPolygon from "ol/geom/MultiPolygon";
-import mapCollection from "../../../../../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../../../../../core/maps/mapCollection.js";
 
 describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
     let commit, dispatch, state, getters;
@@ -53,14 +53,13 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
                 })
             };
 
-            mapCollection.addMap(map, "ol", "2D");
+            mapCollection.addMap(map, "2D");
             item = new Feature({
                 geometry: new Polygon(coordinates)
             });
             rootState = {
-                Map: {
-                    mapId: "ol",
-                    mapMode: "2D"
+                Maps: {
+                    mode: "2D"
                 }
             };
             state = {

@@ -33,7 +33,7 @@ export default {
             ignoredKeys: "ignoredKeys"
         }),
         ...mapGetters("Tools/Gfi", Object.keys(getters)),
-        ...mapGetters("Map", {
+        ...mapGetters("Maps", {
             gfiFeatures: "gfiFeaturesReverse",
             mapSize: "size"
         }),
@@ -119,7 +119,7 @@ export default {
         this.createMappedProperties(this.feature);
     },
     methods: {
-        ...mapMutations("Map", ["setGfiFeatures"]),
+        ...mapMutations("Maps", ["setGfiFeatures"]),
         ...mapMutations("Tools/Gfi", ["setCurrentFeature"]),
         /**
          * Reset means to set the gfiFeatures to null.

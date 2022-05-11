@@ -140,7 +140,7 @@ describe("src/utils/parametricUrl/ParametricUrlBridge.js", () => {
     describe("doSpecialBackboneHandling", function () {
         it("test url param key 'Map/mapMode'", () => {
             const radioTrigger = sinon.spy(Radio, "trigger"),
-                key = "Map/mapMode";
+                key = "Maps/mapMode";
 
             doSpecialBackboneHandling(key, "3D");
             expect(radioTrigger.calledOnceWithExactly("Map", "mapChangeTo3d")).to.be.true;
@@ -155,7 +155,7 @@ describe("src/utils/parametricUrl/ParametricUrlBridge.js", () => {
                     id: "idLayer",
                     setIsSelected: sinon.stub()
                 },
-                key = "Map/mdId",
+                key = "Maps/mdId",
                 value = "6E28E698-F4FA-4231-A8C5-CC44441FF2A7";
             let getItemsByMetaIDCallCount = 0,
                 metaIdAsParam = false;
@@ -187,22 +187,22 @@ describe("src/utils/parametricUrl/ParametricUrlBridge.js", () => {
         });
         it("test url param key 'Map/zoomToExtent'", () => {
             store.state.urlParams.projection = undefined;
-            store.state.Map.projection = undefined;
+            store.state.Maps.projection = undefined;
             const radioTrigger = sinon.spy(Radio, "trigger"),
-                key = "Map/zoomToExtent",
+                key = "Maps/zoomToExtent",
                 value = [510000, 5850000, 625000, 6000000],
                 valueAsString = value.join(",");
 
             doSpecialBackboneHandling(key, valueAsString);
-            expect(radioTrigger.calledOnceWithExactly("Map", "zoomToProjExtent", {
+            expect(radioTrigger.calledOnceWithExactly("Map", "zoomToProjExtent", {data: {
                 extent: value,
                 options: {duration: 0},
                 projection: undefined
-            })).to.be.true;
+            }})).to.be.true;
         });
         it("test url param key 'Map/zoomToGeometry'", () => {
             const radioTrigger = sinon.spy(Radio, "trigger"),
-                key = "Map/zoomToGeometry",
+                key = "Maps/zoomToGeometry",
                 value = "bergedorf";
 
             doSpecialBackboneHandling(key, value);

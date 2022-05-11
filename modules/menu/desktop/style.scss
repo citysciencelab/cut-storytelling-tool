@@ -189,8 +189,12 @@ ul#tree.light {
             flex-grow: 1;
         }
         span.title {
-            padding: 4px 0 0 5px; 
+            padding: 4px 0 0 5px;
             cursor: pointer;
         }
     }
+}
+
+.layer-dropdown-item {
+    white-space: normal;
 }

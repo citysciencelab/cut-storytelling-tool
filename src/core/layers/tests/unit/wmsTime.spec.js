@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import sinon from "sinon";
 import WMSTimeLayer from "../../wmsTime";
-import mapCollection from "../../../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../../../core/maps/mapCollection.js";
 import store from "../../../../app-store";
 
 describe("src/core/layers/wmsTime.js", () => {
@@ -22,7 +22,7 @@ describe("src/core/layers/wmsTime.js", () => {
             }
         };
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
     beforeEach(() => {
         attributes = {

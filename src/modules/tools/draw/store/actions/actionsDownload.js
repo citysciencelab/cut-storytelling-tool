@@ -103,9 +103,9 @@ function prepareDownload ({state, commit, dispatch}) {
  */
 function setDownloadFeatures ({state, commit, dispatch, rootGetters}) {
     const downloadFeatures = [],
-        drawnFeatures = state.layer.getSource().getFeatures();
+        drawnFeatures = state.layer?.getSource().getFeatures();
 
-    drawnFeatures.forEach(drawnFeature => {
+    drawnFeatures?.forEach(drawnFeature => {
         const feature = drawnFeature.clone(),
             geometry = feature.getGeometry();
 
@@ -116,7 +116,7 @@ function setDownloadFeatures ({state, commit, dispatch, rootGetters}) {
 
         if (geometry instanceof Circle) {
             feature.set("isGeoCircle", true);
-            transformGeometry(rootGetters["Map/projection"], geometry);
+            transformGeometry(rootGetters["Maps/projection"], geometry);
             feature.set("geoCircleCenter", geometry.getCenter().join(","));
             feature.set("geoCircleRadius", geometry.getRadius());
             feature.setGeometry(fromCircle(geometry));
@@ -161,7 +161,7 @@ function setDownloadFileName ({state, commit, dispatch}, {currentTarget}) {
 async function setDownloadSelectedFormat ({state, commit, dispatch}, value) {
 
     commit("setDownloadSelectedFormat", value);
-    if (state.layer.getSource().getFeatures().length > 0) {
+    if (state.layer?.getSource().getFeatures().length > 0) {
         await dispatch("prepareData");
         dispatch("prepareDownload");
     }
@@ -180,11 +180,11 @@ function transformCoordinates ({dispatch, rootGetters}, geometry) {
 
     switch (type) {
         case "LineString":
-            return transform(rootGetters["Map/projectionCode"], coords, false);
+            return transform(rootGetters["Maps/projectionCode"], coords, false);
         case "Point":
-            return transformPoint(rootGetters["Map/projectionCode"], coords);
+            return transformPoint(rootGetters["Maps/projectionCode"], coords);
         case "Polygon":
-            return transform(rootGetters["Map/projectionCode"], coords, true);
+            return transform(rootGetters["Maps/projectionCode"], coords, true);
         default:
             dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.download.unknownGeometry", {geometry: type}), {root: true});
             return [];

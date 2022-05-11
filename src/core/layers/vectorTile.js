@@ -15,7 +15,7 @@ export default function VectorTileLayer (attrs) {
             useMpFonts: true,
             useProxy: false
         },
-        mapEPSG = store.getters["Map/projection"].getCode(),
+        mapEPSG = store.getters["Maps/projection"].getCode(),
         vtEPSG = attrs.epsg || mapEPSG;
 
     if (mapEPSG !== vtEPSG) {

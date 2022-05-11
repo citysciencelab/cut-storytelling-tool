@@ -48,7 +48,9 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
                     rawFeaturesOfLayer: [{getGeometry: () => "Point"}, {getGeometry: () => "Point"}]
                 };
 
-            actions.clickOnFeature({state, dispatch, commit}, featureIndex);
+            rootGetters = {"Maps/getView": {fit: () => true}};
+
+            actions.clickOnFeature({state, commit, dispatch, rootGetters}, featureIndex);
             expect(commit.firstCall.args[0]).to.equal("setSelectedFeature");
             expect(commit.firstCall.args[1]).to.eql(state.gfiFeaturesOfLayer[1]);
         });
@@ -116,27 +118,40 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
             }
         };
 
-        rootGetters = {"Map/visibleLayerList": [
+        rootGetters = {"Maps/getVisibleLayerList": [
             {name: "ersterLayer", values_: {id: "123"}, getSource: () => state.source, features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"},
             {name: "zweiterLayer", values_: {id: "456"}, features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"},
-            {name: "dritterLayer", values_: {id: "789"}, features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"}]};
+            {name: "dritterLayer", values_: {id: "789"}, features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"}]
+        };
 
         it("highlights a feature depending on its geometryType", () => {
             const featureId = "123";
 
+            rootGetters = {"Maps/getVisibleLayerList": [
+                {name: "ersterLayer", values_: {id: "123"}, getSource: () => state.source, features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"},
+                {name: "zweiterLayer", values_: {id: "456"}, features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"},
+                {name: "dritterLayer", values_: {id: "789"}, features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"}]
+            };
+
             actions.highlightFeature({state, rootGetters, dispatch}, featureId);
-            expect(dispatch.firstCall.args[0]).to.equal("Map/removeHighlightFeature");
+            expect(dispatch.firstCall.args[0]).to.equal("Maps/removeHighlightFeature");
             expect(dispatch.firstCall.args[1]).to.equal("decrease");
-            expect(dispatch.secondCall.args[0]).to.equal("Map/highlightFeature");
+            expect(dispatch.secondCall.args[0]).to.equal("Maps/highlightFeature");
         });
         it("highlights a nested feature depending on its geometryType", () => {
             const featureId = "123";
 
+            rootGetters = {"Maps/getVisibleLayerList": [
+                {name: "ersterLayer", values_: {id: "123"}, getSource: () => state.source, features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"},
+                {name: "zweiterLayer", values_: {id: "456"}, features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"},
+                {name: "dritterLayer", values_: {id: "789"}, features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"}]
+            };
+
             state.nestedFeatures = true;
             actions.highlightFeature({state, rootGetters, dispatch}, featureId);
-            expect(dispatch.firstCall.args[0]).to.equal("Map/removeHighlightFeature");
+            expect(dispatch.firstCall.args[0]).to.equal("Maps/removeHighlightFeature");
             expect(dispatch.firstCall.args[1]).to.equal("decrease");
-            expect(dispatch.secondCall.args[0]).to.equal("Map/highlightFeature");
+            expect(dispatch.secondCall.args[0]).to.equal("Maps/highlightFeature");
         });
     });
 

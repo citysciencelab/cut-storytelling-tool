@@ -8,11 +8,10 @@ import {getValueFromObjectByPath} from "../../../../utils/getValueFromObjectByPa
  * @param {String} collection the configured collection to use
  * @param {Function} onsuccess a function(attrTypes) to call on success
  * @param {Function} onerror a function(Error) to call on error
- * @param {String} [jsonAcceptHeader="application/vnd.oai.openapi+json"] the accept header to use for non feature requests, default see https://docs.opengeospatial.org/is/17-069r3/17-069r3.html#mediatypes
  * @param {Object} [axiosMock=false] the axios object if anything other than axios from the library should be used
  * @returns {Object} an object {attrTypes, data} with attrTypes a key-value list and data the original response from the server
  */
-function getOafAttributeTypes (url, collection, onsuccess, onerror, jsonAcceptHeader = "application/vnd.oai.openapi+json", axiosMock = false) {
+function getOafAttributeTypes (url, collection, onsuccess, onerror, axiosMock = false) {
     if (typeof url !== "string") {
         onerror(new Error("getOafAttributeTypes: url is needed as string, no url given"));
         return;
@@ -27,7 +26,7 @@ function getOafAttributeTypes (url, collection, onsuccess, onerror, jsonAcceptHe
         method: "get",
         url: url + "/api",
         headers: {
-            accept: jsonAcceptHeader
+            accept: "application/vnd.oai.openapi+json"
         }
     }).then(response => {
         if (typeof onsuccess === "function") {

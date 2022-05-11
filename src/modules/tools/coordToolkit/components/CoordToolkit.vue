@@ -14,7 +14,7 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/CoordToolkit", Object.keys(getters)),
-        ...mapGetters("Map", ["projection", "mouseCoord", "mapMode"]),
+        ...mapGetters("Maps", {projection: "projection", mouseCoordinate: "mouseCoordinate", mapMode: "mode"}),
         ...mapGetters(["uiStyle", "mobile"]),
         eastingNoCoordMessage: function () {
             if (this.currentProjection.projName !== "longlat") {
@@ -104,9 +104,11 @@ export default {
             "copyCoordinates"
         ]),
         ...mapActions("Alerting", ["addSingleAlert"]),
-        ...mapActions("Map", {
-            addPointerMoveHandlerToMap: "addPointerMoveHandler",
-            removePointerMoveHandlerFromMap: "removePointerMoveHandler",
+        ...mapActions("Maps", {
+            addPointerMoveHandlerToMap: "registerListener",
+            removePointerMoveHandlerFromMap: "unregisterListener"
+        }),
+        ...mapActions("Maps", {
             addInteractionToMap: "addInteraction",
             removeInteractionFromMap: "removeInteraction"
         }),
@@ -184,7 +186,7 @@ export default {
          */
         setSupplyCoordInactive () {
             if (this.selectPointerMove !== null) {
-                this.removePointerMoveHandlerFromMap(this.setCoordinates);
+                this.removePointerMoveHandlerFromMap("pointermove", this.setCoordinates);
                 this.setUpdatePosition(true);
                 this.removeInteractionFromMap(this.selectPointerMove);
                 this.setSelectPointerMove(null);
@@ -196,10 +198,10 @@ export default {
          */
         setSupplyCoordActive () {
             if (this.selectPointerMove === null) {
-                this.addPointerMoveHandlerToMap(this.setCoordinates);
+                this.addPointerMoveHandlerToMap("pointermove", this.setCoordinates);
                 this.setMapProjection(this.projection);
                 this.createInteraction();
-                this.setPositionMapProjection(this.mouseCoord);
+                this.setPositionMapProjection(this.mouseCoordinate);
                 this.changedPosition();
             }
         },
@@ -358,11 +360,11 @@ export default {
             return this.showCopyButtons ? "col-md-6 col-sm-6" : "col-md-7 col-sm-7";
         },
         /**
-         * Returns true, if mapMode is 2D.
-         * @returns {boolean} true, if mapMode is 2D.
+         * Returns true, if mode is 2D.
+         * @returns {boolean} true, if mode is 2D.
          */
         isSupplyCoordDisabled () {
-            return this.mapMode === "3D";
+            return this.mode === "3D";
         },
         /**
          * Returns true, if supplyCoord is active.
@@ -511,7 +513,7 @@ export default {
                                 type="text"
                                 :readonly="isEnabled('supply')"
                                 :class="{ inputError: getEastingError, 'form-control': true}"
-                                :placeholder="isEnabled( 'search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesEastingExample : ''"
+                                :placeholder="isEnabled('search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesEastingExample : ''"
                                 @input="onInputEvent(coordinatesEasting)"
                             ><p
                                 v-if="eastingNoCoord"
@@ -582,8 +584,8 @@ export default {
                                 v-model="coordinatesNorthing.value"
                                 type="text"
                                 :class="{ inputError: getNorthingError , 'form-control': true}"
-                                :readonly="isEnabled( 'supply')"
-                                :placeholder="isEnabled( 'search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesNorthingExample : ''"
+                                :readonly="isEnabled('supply')"
+                                :placeholder="isEnabled('search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesNorthingExample : ''"
                                 @input="onInputEvent(coordinatesNorthing)"
                             ><p
                                 v-if="northingNoCoord"

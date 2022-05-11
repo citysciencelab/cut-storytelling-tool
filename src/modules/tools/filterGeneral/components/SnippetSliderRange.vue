@@ -194,6 +194,28 @@ export default {
         translateKeyWithPlausibilityCheck,
 
         /**
+         * Calculates the position of the left slider button in percent.
+         * @info a 5% offset is calculated in to compensate for button width
+         * @returns {String} the percentage to use for css left style
+         */
+        getMeasureLeft () {
+            const range = this.maximumValue - this.minimumValue,
+                left = this.inRangeValueLeft - this.minimumValue;
+
+            return String((95 / Math.max(1, range) * left).toFixed(1)) + "%";
+        },
+        /**
+         * Calculates the distance between both slider buttons in percent.
+         * @info a 5% offset is calculated in to compensate for button width
+         * @returns {String} the percentage to use for css width style
+         */
+        getMeasureWidth () {
+            const range = this.maximumValue - this.minimumValue,
+                measure = this.inRangeValueRight - this.inRangeValueLeft;
+
+            return String((95 / Math.max(1, range) * measure + 5).toFixed(1)) + "%";
+        },
+        /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
          * @param {Boolean} [startup=false] true if the call comes on startup, false if a user actively changed a snippet
@@ -327,7 +349,10 @@ export default {
             </div>
             <div class="sliderRangeContainer">
                 <div class="slider-range-track">
-                    &nbsp;
+                    <div
+                        class="slider-range-measure"
+                        :style="{ left: getMeasureLeft(), width: getMeasureWidth() }"
+                    />
                 </div>
                 <input
                     :id="'snippetSliderRangeMin-' + snippetId"
@@ -423,6 +448,7 @@ export default {
         margin: auto;
         top: 0;
         bottom: 1px;
+        left: 0px;
         background-color: transparent;
         pointer-events: none;
     }
@@ -433,9 +459,17 @@ export default {
     .slider-range-track {
         width: 100%;
         height: 15px;
-        background-color: #3177b1;
+        background-color: #ddd;
         position: absolute;
         margin: auto;
+        top: 0;
+        bottom: 0;
+        border-radius: 10px;
+    }
+    .slider-range-measure {
+        height: 15px;
+        background-color: #3177b1;
+        position: absolute;
         top: 0;
         bottom: 0;
         border-radius: 10px;
