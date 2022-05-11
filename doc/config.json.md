@@ -3481,6 +3481,18 @@ For the documentation, it is assumed that the properties are called `wildCard`, 
 |singleChar|yes|String|"#"|The single character value for the like filter.|true|
 |escapeChar|yes|String|"!"|The escape character value for the like filter.|true|
 
+**Example**
+
+In this example case, the key for `escapeChar` deviates.
+
+```json
+{
+    "wildCard": "*",
+    "singleChar": "#",
+    "escape": "!"
+}
+```
+
 ***
 
 #### Portalconfig.menu.tool.wfsSearch.searchInstance.requestConfig.gazetteer
