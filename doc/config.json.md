@@ -3473,13 +3473,25 @@ If both are defined `restLayerId` is used.
 
 Values inside a filter for a WFS service can be compared with an `equal` or a `like`.
 If the comparison should be with a `like` then the filter needs additional properties. These may vary in value and property definition.
-For the documentation, it is assumed that the properties are called `wildCard`, `singleChar` and `escape`; variations like e.g. `wildCard`, `single` and `escape` are possible and need to be configured in line with the service.
+For the documentation, it is assumed that the properties are called `wildCard`, `singleChar` and `escapeChar`; variations like e.g. `single` and `escape` are possible and need to be configured in line with the service. All key-value pairs are used in the request as given.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |wildCard|yes|String|"*"|The wildcard value for the like filter.|true|
 |singleChar|yes|String|"#"|The single character value for the like filter.|true|
-|escape|yes|String|"!"|The escape character value for the like filter.|true|
+|escapeChar|yes|String|"!"|The escape character value for the like filter.|true|
+
+**Example**
+
+In this example case, the key for `escapeChar` deviates.
+
+```json
+{
+    "wildCard": "*",
+    "singleChar": "#",
+    "escape": "!"
+}
+```
 
 ***
 
