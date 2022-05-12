@@ -1,9 +1,10 @@
-import {emptyStoryConf} from "./constantsStoryTellingTool";
+import {emptyStoryConf, emptyStoryLibrary} from "./constantsStoryTellingTool";
 
 /**
  * User type definition
  * @typedef {object} StoryTellingToolState
  * @property {string} id the ID of the story telling tool
+ * @property {Object} storyLibrary the list of stories that are available
  * @property {Object} storyConf the configuration of the story
  * @property {Object} htmlContents the HTML contents used for story creation
  * @property {Object} htmlContentsImages the HTML content images used for story creation
@@ -20,6 +21,7 @@ import {emptyStoryConf} from "./constantsStoryTellingTool";
  */
 const state = {
     id: "storyTellingTool",
+    storyLibrary: {...emptyStoryLibrary},
     storyConf: {...emptyStoryConf},
     htmlContents: {},
     htmlContentsImages: {},

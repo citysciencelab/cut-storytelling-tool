@@ -1,7 +1,7 @@
 const storyTellingModes = {
-        CREATE: "create",
-        PLAY: "play"
-    },
+    CREATE: "create",
+    PLAY: "play"
+},
     storyTellingModeIcons = {
         [storyTellingModes.CREATE]: "add",
         [storyTellingModes.PLAY]: "play_arrow"
@@ -15,26 +15,33 @@ const storyTellingModes = {
         chapters: [],
         steps: []
     },
+    emptyStoryLibrary = [],
     htmlEditorToolbar = [
-        [{header: [false, 1, 2, 3, 4, 5, 6]}],
+        [{ header: [false, 1, 2, 3, 4, 5, 6] }],
         ["bold", "italic", "underline", "strike"],
         [
-            {align: ""},
-            {align: "center"},
-            {align: "right"},
-            {align: "justify"}
+            { align: "" },
+            { align: "center" },
+            { align: "right" },
+            { align: "justify" }
         ],
-        [{list: "ordered"}, {list: "bullet"}],
+        [{ list: "ordered" }, { list: "bullet" }],
         ["blockquote", "code-block"],
-        [{color: []}, {background: []}],
+        [{ color: [] }, { background: [] }],
         ["link", "image"],
         ["clean"]
-    ];
+    ],
+    
+    backendConfig = {
+        url: "localhost:3000/"  //Replace with Docker env variable later
+    };
 
 export {
     storyTellingModes,
     storyTellingModeIcons,
     storyCreationViews,
     emptyStoryConf,
-    htmlEditorToolbar
+    emptyStoryLibrary,
+    htmlEditorToolbar,
+    backendConfig
 };

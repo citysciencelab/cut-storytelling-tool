@@ -20,6 +20,7 @@ export default {
             constants,
             mode: null,
             storyConfPath: Config.storyConf
+
         };
     },
     computed: {
@@ -45,6 +46,8 @@ export default {
     },
     created() {
         this.$on("close", this.close);
+
+        console.log(constants.backendConfig.url)
 
         // Fix masterportal main menu styles for "TABLE" UI Style
         if (Radio.request("Util", "getUiStyle") === "TABLE") {
