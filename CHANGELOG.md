@@ -29,6 +29,7 @@
 - The order of printed features from the draw and measure layer is now corrected.
 - Issue #737: Fix issue of some items in the layer tree overflowing
 - The attribute `startingMap3D` in config.js now ensures that the 3D mode is started by default.
+- Issue #736: Fix console error when users forbid their localization.
 
 
 ## v2.21.0 - 2022-05-04

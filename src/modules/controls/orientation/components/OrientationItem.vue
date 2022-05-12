@@ -268,11 +268,13 @@ export default {
          * @returns {void}
          */
         toggleBackground () {
+            const geolocateIcon = document.getElementById("geolocate");
+
             if (this.isGeolocationDenied) {
-                this.$el.querySelector(".bi-geo-alt-fill").parent(".bootstrap-icon").style.background = "rgb(221, 221, 221)";
+                geolocateIcon.style.backgroundColor = "grey";
             }
             else {
-                this.$el.querySelector(".bi-geo-alt-fill").parent(".bootstrap-icon").style.background = "#E10019";
+                geolocateIcon.style.backgroundColor = "#E10019";
             }
         },
 
