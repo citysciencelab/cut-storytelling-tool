@@ -4,7 +4,7 @@ import WMSLayer from "../../wms";
 import WFSLayer from "../../wfs";
 import OAFLayer from "../../oaf";
 import GroupedLayers from "../../group";
-import mapCollection from "../../../../core/dataStorage/mapCollection.js";
+import mapCollection from "../../../../core/maps/mapCollection.js";
 import store from "../../../../app-store";
 
 describe("src/core/layers/group.js", () => {
@@ -41,7 +41,7 @@ describe("src/core/layers/group.js", () => {
             }
         };
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
     beforeEach(() => {
         wmsLayerAttributes = {

@@ -128,13 +128,13 @@ If a parameter is also present in the service, the definition in this config is 
 
 WMTS layers can be added by
 
-* entering all the following WMTS parameters
+* entering all the following WMTS parameters (EPSG:4326 and EPSG:3857 only)
 * using OpenLayers' `optionsFromCapabilities` method (see second example below)
 
 |Name|Required|Type|Default|Description|Example|
 |----|--------|----|-------|-----------|-------|
 |capabilitiesUrl|no|String||Service's capabilities URL|`"https://www.wmts.nrw.de/geobasis/wmts_nw_dtk/1.0.0/WMTSCapabilities.xml"`|
-|coordinateSystem|yes|String||Layer's coordinate reference system|`"EPSG:3857"`|
+|coordinateSystem|yes|enum["EPSG:4326", "EPSG:3857"]||Layer's coordinate reference system|`"EPSG:3857"`|
 |format|yes|String||Image format of layer tiles. Only required with parameter `requestEncoding` set to `"KVP"` ist.|`"image/png"`|
 |id|yes|String||Arbitrary id|`"320"`|
 |layers|yes|String||Layer name. Must match the name noted in the WMTS capabilities.|`"geolandbasemap"`|
@@ -1211,7 +1211,6 @@ If the gfiAttributes are given as an object, a key's value may also be an object
 |authenticationUrl|no|String||Additional url called to trigger basic authentication in the browser.|"https://api.hamburg.de/datasets/v1/schulen/collections/staatliche_schulen/appschema"|
 |limit|false|Number||Limits the number of items presented in the response document. Ignored if bulk is `true`.|`10`|
 |crs|false|String|EPSG:25832|The coordinate reference system of the response geometries.|`"EPSG:25832"`|
-|jsonAcceptHeader|false|String|application/vnd.oai.openapi+json|The mediatype to use for all non feature requests if the server requires other than specified.|`"application/json"`|
 
 **OAF example:**
 

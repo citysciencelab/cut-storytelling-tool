@@ -4,7 +4,6 @@ import {getLayerWhere} from "@masterportal/masterportalapi/src/rawLayerList";
 import axios from "axios";
 import store from "../../src/app-store/index";
 import calculateExtent from "../../src/utils/calculateExtent";
-import mapCollection from "../../src/core/dataStorage/mapCollection";
 
 const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype */{
     defaults: {
@@ -27,7 +26,6 @@ const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype
      * @listens ZoomToGeometry#RadioTriggerZoomToGeometryZoomToGeometry
      * @listens ZoomToGeometry#RadioTriggerZoomToGeometrySetIsRender
      * @fires Core#RadioRequestParametricURLGetZoomToGeometry
-     * @fires Core#RadioTriggerMapRegisterListener
      * @fires Core#RadioTriggerMapZoomToExtent
      */
     initialize: function () {
@@ -101,7 +99,7 @@ const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype
             store.dispatch("Alerting/addSingleAlert", i18next.t("modules.zoomToGeometry.alertNoFoundFeature"));
         }
         else {
-            mapCollection.getMapView("ol", "2D").zoomToExtent(calculateExtent([foundFeature]));
+            store.dispatch("Maps/zoomToExtent", {extent: calculateExtent([foundFeature])});
         }
 
         this.setFeatureGeometry(foundFeature.getGeometry());

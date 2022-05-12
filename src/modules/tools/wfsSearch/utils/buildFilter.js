@@ -1,7 +1,7 @@
 let likeFilterProperties = {
     wildCard: "*",
     singleChar: "#",
-    escape: "!"
+    escapeChar: "!"
 };
 
 /**

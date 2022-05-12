@@ -1,4 +1,5 @@
 import isObject from "../../../../utils/isObject";
+import FilterApi from "../interfaces/filter.api.js";
 
 /**
  * Clones, checks and modifies the given original snippets to match the needs for LayerFilterSnippet.
@@ -15,13 +16,17 @@ function compileSnippets (originalSnippets, api, onfinish, onerror) {
         }
         return;
     }
-    const snippets = removeInvalidSnippets(JSON.parse(JSON.stringify(originalSnippets)));
+    let snippets = JSON.parse(JSON.stringify(originalSnippets));
 
+    snippets = removeInvalidSnippets(snippets);
     convertStringSnippetsIntoObjects(snippets);
+    addParent(snippets);
+    snippets = getFlatArrayOfParentsAndChildren(snippets);
 
     createSnippetsIfNoSnippetsAreGiven(snippets, api, () => {
         addSnippetIds(snippets);
         addSnippetAdjustment(snippets);
+        addSnippetApi(snippets, () => new FilterApi());
         addSnippetMultiselect(snippets);
 
         if (typeof api?.getAttrTypes === "function" && !checkSnippetTypeConsistency(snippets)) {
@@ -97,6 +102,10 @@ function removeInvalidSnippets (snippets) {
             return;
         }
         result.push(snippet);
+
+        if (Array.isArray(snippet.children)) {
+            snippet.children = removeInvalidSnippets(snippet.children);
+        }
     });
     return result;
 }
@@ -113,7 +122,43 @@ function convertStringSnippetsIntoObjects (snippets) {
                 attrName: snippet
             };
         }
+
+        if (Array.isArray(snippet.children)) {
+            convertStringSnippetsIntoObjects(snippet.children);
+        }
     });
+}
+
+/**
+ * Adds the parent snippet as value at the child snippets.
+ * @param {Object[]} children the list of snippets
+ * @param {Object} [parent=null] the parent snippet to set
+ * @returns {void}
+ */
+function addParent (children, parent = null) {
+    children.forEach(child => {
+        child.parent = parent;
+        if (Array.isArray(child.children)) {
+            addParent(child.children, child);
+        }
+    });
+}
+
+/**
+ * Hooks in all children (and childrens children) after their parents into the root node.
+ * @param {Object[]} rootSnippets the list of root snippets
+ * @returns {void}
+ */
+function getFlatArrayOfParentsAndChildren (rootSnippets) {
+    let result = [];
+
+    rootSnippets.forEach(snippet => {
+        result.push(snippet);
+        if (Array.isArray(snippet.children)) {
+            result = result.concat(getFlatArrayOfParentsAndChildren(snippet.children));
+        }
+    });
+    return result;
 }
 
 /**
@@ -135,6 +180,21 @@ function addSnippetIds (snippets) {
 function addSnippetAdjustment (snippets) {
     snippets.forEach(snippet => {
         snippet.adjustment = {};
+    });
+}
+
+/**
+ * Initializes and adds a snippet api to every snippet if the snippet has its own service.
+ * @param {Object[]} snippets - An array of snippet objects.
+ * @param {Function} createNewFilterAPI - Factory method for creating a new filter api.
+ * @returns {void}
+ */
+function addSnippetApi (snippets, createNewFilterAPI) {
+    snippets.forEach(snippet => {
+        if (isObject(snippet) && isObject(snippet.service) && typeof createNewFilterAPI === "function") {
+            snippet.api = createNewFilterAPI();
+            snippet.api.setService(snippet.service);
+        }
     });
 }
 
@@ -255,8 +315,11 @@ export {
     compileSnippets,
     removeInvalidSnippets,
     convertStringSnippetsIntoObjects,
+    addParent,
+    getFlatArrayOfParentsAndChildren,
     addSnippetIds,
     addSnippetAdjustment,
+    addSnippetApi,
     addSnippetMultiselect,
     addSnippetOperator,
     addSnippetTypes,

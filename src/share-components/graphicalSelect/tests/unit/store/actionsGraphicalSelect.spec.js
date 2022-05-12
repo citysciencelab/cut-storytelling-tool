@@ -70,8 +70,8 @@ describe("src/share-components/graphicalSelect/store/actionsGraphicalSelect", ()
                 tooltipMessagePolygon: "MessagePolygon"
             },
             rootState = {
-                Map: {
-                    mouseCoord: [11.549606597773037, 48.17285700012215]
+                Maps: {
+                    mouseCoordinate: [11.549606597773037, 48.17285700012215]
                 }
             };
 
@@ -90,14 +90,14 @@ describe("src/share-components/graphicalSelect/store/actionsGraphicalSelect", ()
                 tooltipMessagePolygon: "MessagePolygon"
             },
             rootState = {
-                Map: {
-                    mouseCoord: [11.549606597773037, 48.17285700012215]
+                Maps: {
+                    mouseCoordinate: [11.549606597773037, 48.17285700012215]
                 }
             };
 
         await actions.showTooltipOverlay({state, rootState});
 
-        expect(state.tooltipOverlay.getPosition()).to.eql(rootState.Map.mouseCoord);
+        expect(state.tooltipOverlay.getPosition()).to.eql(rootState.Maps.mouseCoordinate);
 
     });
     it("toggleOverlay adds overlayCircle for type Circle with Radio.trigger", () => {

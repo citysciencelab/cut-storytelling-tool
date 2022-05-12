@@ -40,6 +40,16 @@ export default class FilterApi {
             };
         }
     }
+
+    /**
+     * Setter for the service.
+     * @param {Object} service - The api service.
+     * @returns {void}
+     */
+    setService (service) {
+        this.service = service;
+    }
+
     /**
      * Setter for the default service by layerId and layerModel.
      * @param {String} layerId the layer id
@@ -89,7 +99,6 @@ export default class FilterApi {
                     layerId,
                     url: layerModel.get("url"),
                     collection: layerModel.get("collection"),
-                    jsonAcceptHeader: layerModel.get("jsonAcceptHeader"),
                     namespace: featureNS
                 };
             }

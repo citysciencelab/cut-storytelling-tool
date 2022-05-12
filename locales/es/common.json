@@ -193,7 +193,8 @@
                 "geometryNotSupported": "Entidad via URL: Del tipo de geometría {{geometryType}} declarado en la configuración para la capa {{layerId}} no es compatible.",
                 "layerNotFound": "Entidad via URL: No se ha podido encontrar ninguna capa con el ID {{layerId}}.",
                 "noLayers": "Entidad via URL: Para las entidades transferidas no se ha definido ninguna capa en la configuración.",
-                "noNameDefined": "Entidad via URL: No se ha definido ningún nombre para la capa con el ID {{layerId}} en la configuración."
+                "noNameDefined": "Entidad via URL: No se ha definido ningún nombre para la capa con el ID {{layerId}} en la configuración.",
+                "defaultTreeNotSupported": "FeatureViaURL: FeatureViaURL est uniquement pris en charge pour Treetype custom ou light."
             }
         },
         "quickHelp": {

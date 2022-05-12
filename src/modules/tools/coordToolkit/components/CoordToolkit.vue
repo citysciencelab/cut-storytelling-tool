@@ -12,9 +12,19 @@ export default {
     components: {
         ToolTemplate
     },
+    data () {
+        return {
+            eventHandler: null
+        };
+    },
     computed: {
         ...mapGetters("Tools/CoordToolkit", Object.keys(getters)),
-        ...mapGetters("Map", ["projection", "mouseCoord", "mapMode"]),
+        ...mapGetters("Maps", {
+            projection: "projection",
+            mouseCoordinate: "mouseCoordinate",
+            get3DMap: "get3DMap",
+            mapMode: "mode"
+        }),
         ...mapGetters(["uiStyle", "mobile"]),
         eastingNoCoordMessage: function () {
             if (this.currentProjection.projName !== "longlat") {
@@ -54,24 +64,26 @@ export default {
             if (value) {
                 this.initProjections();
                 this.setExample();
-                if (this.mapMode === "2D") {
-                    this.setMode("supply");
-                    this.setSupplyCoordActive();
-                }
-                else {
-                    this.setMode("search");
-                }
+                this.setMode("supply");
+                this.setSupplyCoordActive();
                 this.setFocusToFirstControl();
             }
             else {
                 this.resetErrorMessages("all");
                 this.resetValues();
                 this.setSupplyCoordInactive();
+                this.removeInputActions();
             }
         },
-        mapMode (value) {
-            if (value === "3D") {
-                this.changeMode("search");
+        /**
+         * Allows switching between 2D and 3D when the tool is open.
+         * @returns {void}
+         */
+        mapMode () {
+            if (this.active) {
+                this.setSupplyCoordInactive();
+                this.removeInputActions();
+                this.setSupplyCoordActive();
             }
         }
     },
@@ -95,7 +107,6 @@ export default {
             "changedPosition",
             "setFirstSearchPosition",
             "positionClicked",
-            "setCoordinates",
             "removeMarker",
             "searchCoordinate",
             "validateInput",
@@ -104,9 +115,11 @@ export default {
             "copyCoordinates"
         ]),
         ...mapActions("Alerting", ["addSingleAlert"]),
-        ...mapActions("Map", {
-            addPointerMoveHandlerToMap: "addPointerMoveHandler",
-            removePointerMoveHandlerFromMap: "removePointerMoveHandler",
+        ...mapActions("Maps", {
+            addPointerMoveHandlerToMap: "registerListener",
+            removePointerMoveHandlerFromMap: "unregisterListener"
+        }),
+        ...mapActions("Maps", {
             addInteractionToMap: "addInteraction",
             removeInteractionFromMap: "removeInteraction"
         }),
@@ -184,7 +197,6 @@ export default {
          */
         setSupplyCoordInactive () {
             if (this.selectPointerMove !== null) {
-                this.removePointerMoveHandlerFromMap(this.setCoordinates);
                 this.setUpdatePosition(true);
                 this.removeInteractionFromMap(this.selectPointerMove);
                 this.setSelectPointerMove(null);
@@ -196,10 +208,9 @@ export default {
          */
         setSupplyCoordActive () {
             if (this.selectPointerMove === null) {
-                this.addPointerMoveHandlerToMap(this.setCoordinates);
                 this.setMapProjection(this.projection);
                 this.createInteraction();
-                this.setPositionMapProjection(this.mouseCoord);
+                this.setPositionMapProjection(this.mouseCoordinate);
                 this.changedPosition();
             }
         },
@@ -222,20 +233,32 @@ export default {
          * @returns {void}
          */
         createInteraction () {
-            const pointerMove = new Pointer(
-                {
-                    handleMoveEvent: function (evt) {
-                        this.checkPosition(evt.coordinate);
-                    }.bind(this),
-                    handleDownEvent: function (evt) {
-                        this.positionClicked(evt);
-                    }.bind(this)
-                },
-                this
-            );
+            if (this.mapMode === "2D") {
+                const pointerMove = new Pointer(
+                    {
+                        handleMoveEvent: function () {
+                            this.checkPosition();
+                        }.bind(this),
+                        handleDownEvent: function () {
+                            this.positionClicked();
+                        }.bind(this)
+                    },
+                    this
+                );
 
-            this.setSelectPointerMove(pointerMove);
-            this.addInteractionToMap(pointerMove);
+                this.setSelectPointerMove(pointerMove);
+                this.addInteractionToMap(pointerMove);
+            }
+            else if (this.mapMode === "3D") {
+                this.eventHandler = new window.Cesium.ScreenSpaceEventHandler(this.get3DMap.getCesiumScene().canvas);
+                this.eventHandler.setInputAction(this.checkPosition, window.Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+                this.eventHandler.setInputAction(this.positionClicked, window.Cesium.ScreenSpaceEventType.LEFT_CLICK);
+            }
+        },
+        removeInputActions () {
+            if (this.eventHandler) {
+                this.eventHandler.destroy();
+            }
         },
         /**
          * Closes this tool window by setting active to false
@@ -273,7 +296,7 @@ export default {
                 this.setSupplyCoordInactive();
                 this.setFirstSearchPosition();
             }
-            else if (this.mapMode !== "3D") {
+            else {
                 this.setMode(newMode);
                 this.resetErrorMessages("all");
                 this.setSupplyCoordActive();
@@ -358,23 +381,6 @@ export default {
             return this.showCopyButtons ? "col-md-6 col-sm-6" : "col-md-7 col-sm-7";
         },
         /**
-         * Returns true, if mapMode is 2D.
-         * @returns {boolean} true, if mapMode is 2D.
-         */
-        isSupplyCoordDisabled () {
-            return this.mapMode === "3D";
-        },
-        /**
-         * Returns true, if supplyCoord is active.
-         * @returns {boolean} true, true, if supplyCoord is active
-         */
-        isSupplyCoordChecked () {
-            if (this.mapMode === "3D") {
-                return false;
-            }
-            return this.mode === "supply";
-        },
-        /**
          * Returns true, if uiStyle is not SIMPLE or TABLE.
          * @returns {boolean} true, if is default style
          */
@@ -431,13 +437,11 @@ export default {
                                 type="radio"
                                 name="mode"
                                 class="form-check-input"
-                                :checked="isSupplyCoordChecked()"
-                                :disabled="isSupplyCoordDisabled()"
+                                :checked="true"
                                 @click="changeMode('supply')"
                             >
                             <label
                                 for="supplyCoordRadio"
-                                :title="isSupplyCoordDisabled()? $t('modules.tools.coordToolkit.disabledTooltip'): ''"
                                 :class="{ 'form-check-label': true, 'enabled': isEnabled('supply') }"
                                 @click="changeMode('supply')"
                                 @keydown.enter="changeMode('supply')"
@@ -449,7 +453,6 @@ export default {
                                 type="radio"
                                 name="mode"
                                 class="form-check-input"
-                                :checked="!isSupplyCoordChecked()"
                                 @click="changeMode('search')"
                             >
                             <label
@@ -511,7 +514,7 @@ export default {
                                 type="text"
                                 :readonly="isEnabled('supply')"
                                 :class="{ inputError: getEastingError, 'form-control': true}"
-                                :placeholder="isEnabled( 'search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesEastingExample : ''"
+                                :placeholder="isEnabled('search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesEastingExample : ''"
                                 @input="onInputEvent(coordinatesEasting)"
                             ><p
                                 v-if="eastingNoCoord"
@@ -582,8 +585,8 @@ export default {
                                 v-model="coordinatesNorthing.value"
                                 type="text"
                                 :class="{ inputError: getNorthingError , 'form-control': true}"
-                                :readonly="isEnabled( 'supply')"
-                                :placeholder="isEnabled( 'search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesNorthingExample : ''"
+                                :readonly="isEnabled('supply')"
+                                :placeholder="isEnabled('search') ? $t('modules.tools.coordToolkit.exampleAcronym') + coordinatesNorthingExample : ''"
                                 @input="onInputEvent(coordinatesNorthing)"
                             ><p
                                 v-if="northingNoCoord"
@@ -621,7 +624,7 @@ export default {
                         </div>
                     </div>
                     <div
-                        v-if="isEnabled('supply') && heightLayer !== null"
+                        v-if="isEnabled('supply') && (heightLayer !== null || mapMode === '3D')"
                         class="form-group form-group-sm inputDiv row"
                     >
                         <label
@@ -645,7 +648,7 @@ export default {
                     >
                         <div class="col-md-12 info">
                             {{ $t("modules.tools.measure.influenceFactors") }}
-                            <span v-if="heightLayer !== null">
+                            <span v-if="heightLayer !== null && mapMode === '2D'">
                                 <br>
                                 <br>
                                 {{ $t("modules.tools.coordToolkit.heightLayerInfo", {layer: heightLayer.get("name")}) }}
@@ -710,13 +713,13 @@ export default {
         max-width: 550px;
     }
     .eastingToBottomNoError .copyPairBtn{
-        transform: translate(0px, -45px)
+        transform: translate(0px, -50px)
     }
     .eastingToBottomNoError{
-        transform: translate(0px, 45px)
+        transform: translate(0px, 50px)
     }
     .northingToTopNoError{
-        transform: translate(0px, -45px)
+        transform: translate(0px, -50px)
     }
     .northingToTopEastingError{
         transform: translate(0px, -95px)

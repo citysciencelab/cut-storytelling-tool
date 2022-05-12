@@ -9,25 +9,25 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
     describe("supplyCoord actions", () => {
         it("positionClicked without height", done => {
-            const payload = {
-                    coordinate: [1000, 2000]
-                },
+            const coordinate = [1000, 2000],
                 state = {
                     updatePosition: true,
                     positionMapProjection: [300, 300]
+                },
+                rootGetters = {
+                    "Maps/mouseCoordinate": coordinate,
+                    "Maps/mode": "2D"
                 };
 
-            testAction(actions.positionClicked, payload, state, {}, [
-                {type: "setPositionMapProjection", payload: payload.coordinate},
+            testAction(actions.positionClicked, {}, state, {}, [
+                {type: "setPositionMapProjection", payload: coordinate},
                 {type: "changedPosition", payload: undefined, dispatch: true},
                 {type: "setUpdatePosition", payload: false},
-                {type: "MapMarker/placingPointMarker", payload: payload.coordinate, dispatch: true}
-            ], {}, done);
+                {type: "MapMarker/placingPointMarker", payload: coordinate, dispatch: true}
+            ], {}, done, rootGetters);
         });
         it("positionClicked with height and update position is true", done => {
-            const payload = {
-                    coordinate: [1000, 2000]
-                },
+            const coordinate = [1000, 2000],
                 state = {
                     updatePosition: true,
                     heightLayer: {
@@ -35,20 +35,22 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                         name: "Digitales Höhenmodell Hamburg (DGM1)"
                     },
                     positionMapProjection: [300, 300]
+                },
+                rootGetters = {
+                    "Maps/mouseCoordinate": coordinate,
+                    "Maps/mode": "2D"
                 };
 
-            testAction(actions.positionClicked, payload, state, {}, [
-                {type: "setPositionMapProjection", payload: payload.coordinate},
+            testAction(actions.positionClicked, {}, state, {}, [
+                {type: "setPositionMapProjection", payload: coordinate},
                 {type: "changedPosition", payload: undefined, dispatch: true},
                 {type: "setUpdatePosition", payload: false},
-                {type: "MapMarker/placingPointMarker", payload: payload.coordinate, dispatch: true},
-                {type: "getHeight", payload: payload.coordinate, dispatch: true}
-            ], {}, done);
+                {type: "MapMarker/placingPointMarker", payload: coordinate, dispatch: true},
+                {type: "getHeight", payload: coordinate, dispatch: true}
+            ], {}, done, rootGetters);
         });
         it("positionClicked with height and update position is false", done => {
-            const payload = {
-                    coordinate: [1000, 2000]
-                },
+            const coordinate = [1000, 2000],
                 state = {
                     updatePosition: false,
                     heightLayer: {
@@ -56,15 +58,19 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                         name: "Digitales Höhenmodell Hamburg (DGM1)"
                     },
                     positionMapProjection: [300, 300]
+                },
+                rootGetters = {
+                    "Maps/mouseCoordinate": coordinate,
+                    "Maps/mode": "2D"
                 };
 
-            testAction(actions.positionClicked, payload, state, {}, [
-                {type: "setPositionMapProjection", payload: payload.coordinate},
+            testAction(actions.positionClicked, {}, state, {}, [
+                {type: "setPositionMapProjection", payload: coordinate},
                 {type: "changedPosition", payload: undefined, dispatch: true},
                 {type: "setUpdatePosition", payload: true},
-                {type: "MapMarker/placingPointMarker", payload: payload.coordinate, dispatch: true},
+                {type: "MapMarker/placingPointMarker", payload: coordinate, dispatch: true},
                 {type: "setHeight", payload: ""}
-            ], {}, done);
+            ], {}, done, rootGetters);
         });
         it("retrieveHeightFromGfiResponse - real height", done => {
             const heightElementName = "value_0",
@@ -267,7 +273,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                         targetProjection: proj2
                     },
                     rootGetters = {
-                        "Map/ol2DMap": {
+                        "Maps/get2DMap": {
                             removeLayer: sinon.spy(),
                             addLayer: sinon.spy()
                         }
@@ -297,7 +303,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
         describe("setFirstSearchPosition", () => {
             const center = [1000, 2000],
                 rootState = {
-                    Map: {
+                    Maps: {
 
                         center: center
 
@@ -317,7 +323,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 const payloadEasting = {id: "easting", value: String(center[0])},
                     payloadNorthing = {id: "northing", value: String(center[1])},
                     rootGetters = {
-                        "Map/ol2DMap": {
+                        "Maps/get2DMap": {
                             removeLayer: sinon.spy(),
                             addLayer: sinon.spy()
                         }
@@ -333,7 +339,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
             });
             it("setFirstSearchPosition will do nothing if position is set", done => {
                 const rootGetters = {
-                    "Map/ol2DMap": {
+                    "Maps/get2DMap": {
                         removeLayer: sinon.spy(),
                         addLayer: sinon.spy()
                     }
@@ -432,51 +438,27 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 testAction(actions.adjustPosition, payload, {}, rootState, [], {}, done);
             });
         });
-        describe("setCoordinates", () => {
-            it("setCoordinates updates position", done => {
-                const state = {
-                        updatePosition: true
-                    },
-                    position = [100, 200],
-                    payload = {
-                        coordinate: position
-                    };
-
-                testAction(actions.setCoordinates, payload, state, {}, [
-                    {type: "setPositionMapProjection", payload: position},
-                    {type: "changedPosition", payload: undefined, dispatch: true}
-                ], {}, done);
-            });
-            it("setCoordinates not updates position", done => {
-                const state = {
-                        updatePosition: false
-                    },
-                    position = [100, 200],
-                    payload = {
-                        coordinate: position
-                    };
-
-                testAction(actions.setCoordinates, payload, state, {}, [], {}, done);
-            });
-        });
         describe("checkPosition", () => {
             it("checkPosition sets positionMapProjection", done => {
                 const state = {
                         updatePosition: true
                     },
-                    position = [100, 200];
+                    position = [100, 200],
+                    rootGetters = {
+                        "Maps/mouseCoordinate": position,
+                        "Maps/mode": "2D"
+                    };
 
-                testAction(actions.checkPosition, position, state, {}, [
+                testAction(actions.checkPosition, {}, state, {}, [
                     {type: "setPositionMapProjection", payload: position}
-                ], {}, done);
+                ], {}, done, rootGetters);
             });
             it("checkPosition not sets positionMapProjection", done => {
                 const state = {
-                        updatePosition: false
-                    },
-                    position = [100, 200];
+                    updatePosition: false
+                };
 
-                testAction(actions.checkPosition, position, state, {}, [], {}, done);
+                testAction(actions.checkPosition, {}, state, {}, [], {}, done);
             });
         });
     });

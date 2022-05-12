@@ -1,74 +1,76 @@
-import mapCollection from "../dataStorage/mapCollection";
-import {getMapMode} from "./maps.js";
+import store from "../../app-store";
 
 const channel = Radio.channel("Map");
 
 channel.reply({
     "getLayers": function () {
-        return mapCollection.getMap("ol", "2D").getLayers();
+        return store.getters["Maps/get2DMap"].getLayers();
     },
-    "createLayerIfNotExists": function (name) {
-        return mapCollection.getMap("ol", "2D").addNewLayerIfNotExists(name);
+    "createLayerIfNotExists": function (layerName) {
+        return store.dispatch("Maps/addNewLayerIfNotExists", {layerName});
     },
     "getSize": function () {
-        return mapCollection.getMap("ol", "2D").getSize();
+        return store.getters["Maps/get2DMap"].getSize();
     },
     "registerListener": function (event, callback, context) {
-        mapCollection.getMap("ol", "2D").registerListener(event, callback, context);
+        store.dispatch("Maps/registerListener", {type: event, listener: callback, context: context});
     },
     "getMap": function () {
-        return mapCollection.getMap("ol", "2D");
+        return store.getters["Maps/get2DMap"];
     },
     "getLayerByName": function (name) {
-        return mapCollection.getMap("ol", "2D").getLayerByName(name);
+        // eslint-disable-next-line new-cap
+        return store.getters["Maps/getLayerByName"](name);
     },
-    "getMapMode": getMapMode
+    "getMapMode": function () {
+        return store.getters["Maps/mode"];
+    }
 });
 
 channel.on({
     "addLayerToIndex": function (args) {
-        mapCollection.getMap("ol", "2D").addLayerToIndex(args[0], args[1]);
+        store.dispatch("Maps/addLayerToIndex", {layer: args[0], zIndex: args[1]});
     },
     "addLayerOnTop": function (layer) {
-        mapCollection.getMap("ol", "2D").addLayer(layer);
+        store.dispatch("Maps/addLayer", layer);
     },
-    "addOverlay": function (overlay) {
-        mapCollection.getMap("ol", "2D").addOverlay(overlay);
+    "addOverlay": async function (overlay) {
+        await store.getters["Maps/get2DMap"].addOverlay(overlay);
     },
     "addInteraction": function (interaction) {
-        mapCollection.getMap("ol", "2D").addInteraction(interaction);
+        store.dispatch("Maps/addInteraction", interaction);
     },
     "removeLayer": function (layer) {
-        mapCollection.getMap("ol", "2D").removeLayer(layer);
+        store.getters["Maps/get2DMap"].removeLayer(layer);
     },
-    "removeOverlay": function (overlay) {
-        mapCollection.getMap("ol", "2D").removeOverlay(overlay);
+    "removeOverlay": async function (overlay) {
+        await store.getters["Maps/get2DMap"].removeOverlay(overlay);
     },
     "removeInteraction": function (interaction) {
-        mapCollection.getMap("ol", "2D").removeInteraction(interaction);
+        store.dispatch("Maps/removeInteraction", interaction);
     },
     "setBBox": function (bbox) {
-        mapCollection.getMapView("ol", "2D").setBBox(bbox);
+        store.commit("Maps/setBBox", {bbox: bbox});
     },
     "render": function () {
-        mapCollection.getMap("ol", "2D").render();
+        store.getters["Maps/get2DMap"].render();
     },
-    "zoomToExtent": function (extent, options) {
-        mapCollection.getMapView("ol", "2D").zoomToExtent(extent, options);
+    "zoomToExtent": function (extentOptions) {
+        store.dispatch("Maps/zoomToExtent", {extent: extentOptions.extent, options: extentOptions.options});
     },
     "zoomToProjExtent": function (data) {
-        mapCollection.getMapView("ol", "2D").zoomToProjExtent(data);
+        store.dispatch("Maps/zoomToProjExtent", {data: data});
     },
     "zoomToFilteredFeatures": function (ids, layerId, zoomOptions) {
-        mapCollection.getMapView("ol", "2D").zoomToFilteredFeatures(ids, layerId, zoomOptions);
+        store.dispatch("Maps/zoomToFilteredFeatures", {ids: ids, layerId: layerId, zoomOptions: zoomOptions});
     },
-    "registerListener": function (event, callback, context) {
-        mapCollection.getMap("ol", "2D").registerListener(event, callback, context);
+    "registerListener": function (event, callback) {
+        store.dispatch("Maps/registerListener", {type: event, listener: callback});
     },
-    "unregisterListener": function (event, callback, context) {
-        mapCollection.getMap("ol", "2D").unregisterListener(event, callback, context);
+    "unregisterListener": function (event, callback) {
+        store.dispatch("Maps/unregisterListener", {type: event, listener: callback});
     },
     "updateSize": function () {
-        mapCollection.getMap("ol", "2D").updateSize();
+        store.getters["Maps/get2DMap"].updateSize();
     }
 });

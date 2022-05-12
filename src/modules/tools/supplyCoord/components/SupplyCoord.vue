@@ -14,7 +14,7 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/SupplyCoord", Object.keys(getters)),
-        ...mapGetters("Map", ["projection", "mouseCoord"]),
+        ...mapGetters("Maps", ["projection", "mouseCoordinate"]),
         /**
          * Must be a two-way computed property, because it is used as v-model for select-Element, see https://vuex.vuejs.org/guide/forms.html.
          */
@@ -37,14 +37,14 @@ export default {
             this.removePointMarker();
 
             if (value) {
-                this.addPointerMoveHandlerToMap(this.setCoordinates);
+                this.addPointerMoveHandlerToMap({type: "pointermove", listener: this.setCoordinates});
                 this.createInteraction();
-                this.setPositionMapProjection(this.mouseCoord);
+                this.setPositionMapProjection(this.mouseCoordinate);
                 this.changedPosition();
                 this.setFocusToFirstControl();
             }
             else {
-                this.removePointerMoveHandlerFromMap(this.setCoordinates);
+                this.removePointerMoveHandlerFromMap({type: "pointermove", listener: this.setCoordinates});
                 this.setUpdatePosition(true);
                 this.removeInteraction();
             }
@@ -66,9 +66,11 @@ export default {
         ]),
         ...mapActions("MapMarker", ["removePointMarker"]),
         ...mapActions("Alerting", ["addSingleAlert"]),
-        ...mapActions("Map", {
-            addPointerMoveHandlerToMap: "addPointerMoveHandler",
-            removePointerMoveHandlerFromMap: "removePointerMoveHandler",
+        ...mapActions("Maps", {
+            addPointerMoveHandlerToMap: "registerListener",
+            removePointerMoveHandlerFromMap: "unregisterListener"
+        }),
+        ...mapActions("Maps", {
             addInteractionToMap: "addInteraction",
             removeInteractionFromMap: "removeInteraction"
         }),

@@ -15,7 +15,7 @@ import getDrawTypeByGeometryType from "../utils/getDrawTypeByGeometryType";
 import postDrawEnd from "../utils/postDrawEnd";
 
 import stateDraw from "./stateDraw";
-import mapCollection from "../../../../core/dataStorage/mapCollection";
+import mapCollection from "../../../../core/maps/mapCollection";
 
 // NOTE: The Update and the Redo Buttons weren't working with the select and modify interaction in Backbone and are not yet working in Vue too.
 
@@ -72,8 +72,8 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
          * @param {module:ol/interaction/Interaction} interaction interaction with the map.
          * @returns {void}
          */
-        addInteraction ({rootState}, interaction) {
-            mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).addInteraction(interaction);
+        addInteraction ({dispatch}, interaction) {
+            dispatch("Maps/addInteraction", interaction, {root: true});
         },
         /**
          * Removes all features from the layer.
@@ -93,8 +93,8 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
          */
         clearTooltip ({rootState}, tooltip) {
             tooltip.getElement().parentNode.removeChild(tooltip.getElement());
-            mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).un("pointermove", tooltip.get("mapPointerMoveEvent"));
-            mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).removeOverlay(tooltip);
+            mapCollection.getMap(rootState.Maps.mode).un("pointermove", tooltip.get("mapPointerMoveEvent"));
+            mapCollection.getMap(rootState.Maps.mode).removeOverlay(tooltip);
         },
         /**
          * Returns the center point of a Line or Polygon or a point itself.
@@ -110,7 +110,7 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
                 centerPointCoords = [];
 
             const featureType = feature.getGeometry().getType(),
-                map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode);
+                map = mapCollection.getMap(rootState.Maps.mode);
 
             if (featureType === "LineString") {
                 if (targetProjection !== undefined) {
@@ -162,7 +162,7 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
             commit("setDrawInteraction", drawInteraction);
             dispatch("manipulateInteraction", {interaction: "draw", active: active});
             dispatch("createDrawInteractionListener", {isOuterCircle: false, drawInteraction: "", maxFeatures});
-            dispatch("addInteraction", drawInteraction);
+            dispatch("Maps/addInteraction", drawInteraction, {root: true});
 
             // NOTE: This leads to the creation of a second (the outer) circle instead of a MultiPolygon right now.
             if (state.drawType.id === "drawDoubleCircle") {
@@ -171,7 +171,7 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
                 commit("setDrawInteractionTwo", drawInteractionTwo);
                 dispatch("manipulateInteraction", {interaction: "draw", active: active});
                 dispatch("createDrawInteractionListener", {isOuterCircle: true, drawInteraction: "Two", maxFeatures});
-                dispatch("addInteraction", drawInteractionTwo);
+                dispatch("Maps/addInteraction", drawInteractionTwo, {root: true});
             }
         },
         /**
@@ -194,8 +194,8 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
 
                 if (!tooltip && state?.drawType?.id === "drawCircle" || state?.drawType?.id === "drawDoubleCircle") {
                     tooltip = createTooltipOverlay({getters, commit, dispatch});
-                    mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).addOverlay(tooltip);
-                    mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).on("pointermove", tooltip.get("mapPointerMoveEvent"));
+                    mapCollection.getMap(rootState.Maps.mode).addOverlay(tooltip);
+                    mapCollection.getMap(rootState.Maps.mode).on("pointermove", tooltip.get("mapPointerMoveEvent"));
                     event.feature.getGeometry().on("change", tooltip.get("featureChangeEvent"));
                 }
             });
@@ -252,11 +252,11 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
             commit("setModifyInteraction", modifyInteraction);
             dispatch("manipulateInteraction", {interaction: "modify", active: active});
             dispatch("createModifyInteractionListener");
-            dispatch("addInteraction", modifyInteraction);
+            dispatch("Maps/addInteraction", modifyInteraction, {root: true});
 
             commit("setSelectInteractionModify", selectInteractionModify);
             dispatch("createSelectInteractionModifyListener");
-            dispatch("addInteraction", selectInteractionModify);
+            dispatch("Maps/addInteraction", selectInteractionModify, {root: true});
         },
         /**
          * Listener to change the features through the modify interaction.
@@ -292,8 +292,8 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
                             if (!tooltip && (state.drawType.id === "drawCircle" || state.drawType.id === "drawDoubleCircle")) {
                                 if (center === JSON.stringify(feature.getGeometry().getCenter())) {
                                     tooltip = createTooltipOverlay({getters, commit, dispatch});
-                                    mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).addOverlay(tooltip);
-                                    mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).on("pointermove", tooltip.get("mapPointerMoveEvent"));
+                                    mapCollection.getMap(rootState.Maps.mode).addOverlay(tooltip);
+                                    mapCollection.getMap(rootState.Maps.mode).on("pointermove", tooltip.get("mapPointerMoveEvent"));
                                     state.selectedFeature.getGeometry().on("change", tooltip.get("featureChangeEvent"));
                                 }
                             }
@@ -361,7 +361,7 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
             commit("setSelectInteraction", selectInteraction);
             dispatch("manipulateInteraction", {interaction: "delete", active: active});
             dispatch("createSelectInteractionListener");
-            dispatch("addInteraction", selectInteraction);
+            dispatch("Maps/addInteraction", selectInteraction, {root: true});
         },
         /**
          * Listener to select (for deletion) the features through the select interaction.
@@ -385,7 +385,7 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
          * @returns {void}
          */
         deactivateDrawInteractions ({state, rootState}) {
-            mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).getInteractions().forEach(int => {
+            mapCollection.getMap(rootState.Maps.mode).getInteractions().forEach(int => {
                 if (int instanceof Draw) {
                     int.setActive(false);
                     if (state.deactivatedDrawInteractions.indexOf(int) === -1) {
@@ -452,8 +452,8 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
          * @param {module:ol/interaction/Interaction} interaction interaction with the map.
          * @returns {void}
          */
-        removeInteraction ({rootState}, interaction) {
-            mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode).removeInteraction(interaction);
+        removeInteraction ({dispatch}, interaction) {
+            dispatch("Maps/removeInteraction", interaction, {root: true});
         },
         /**
          * Resets the Draw Tool.
@@ -600,7 +600,7 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
                 const feature = state.selectedFeature,
                     circleCenter = feature.getGeometry().getCenter();
 
-                calculateCircle({feature}, circleCenter, radius, mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode));
+                calculateCircle({feature}, circleCenter, radius, mapCollection.getMap(rootState.Maps.mode));
 
                 dispatch("addDrawStateToFeature", state.selectedFeature);
             }

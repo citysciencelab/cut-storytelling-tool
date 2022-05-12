@@ -48,7 +48,7 @@ export default {
     },
     computed: {
         ...mapGetters("controls/orientation", Object.keys(getters)),
-        ...mapGetters("Map", ["ol2DMap", "projection"]),
+        ...mapGetters("Maps", ["get2DMap", "projection"]),
         poiDistancesLocal () {
             return this.poiDistances === true ? [500, 1000, 2000] : this.poiDistances;
         }
@@ -100,7 +100,7 @@ export default {
             let geolocation = null;
 
             if (this.isGeolocationDenied === false) {
-                this.ol2DMap.addOverlay(this.marker);
+                this.get2DMap.addOverlay(this.marker);
                 if (this.geolocation === null) {
                     geolocation = new Geolocation({tracking: true, projection: Proj.get("EPSG:4326")});
                     this.setGeolocation(geolocation);
@@ -153,7 +153,7 @@ export default {
          * @returns {void}
          */
         removeOverlay () {
-            this.ol2DMap.removeOverlay(this.marker);
+            this.get2DMap.removeOverlay(this.marker);
         },
 
         /**
@@ -268,11 +268,13 @@ export default {
          * @returns {void}
          */
         toggleBackground () {
+            const geolocateIcon = document.getElementById("geolocate");
+
             if (this.isGeolocationDenied) {
-                this.$el.querySelector(".bi-geo-alt-fill").parent(".bootstrap-icon").style.background = "rgb(221, 221, 221)";
+                geolocateIcon.style.backgroundColor = "grey";
             }
             else {
-                this.$el.querySelector(".bi-geo-alt-fill").parent(".bootstrap-icon").style.background = "#E10019";
+                geolocateIcon.style.backgroundColor = "#E10019";
             }
         },
 
@@ -295,7 +297,7 @@ export default {
 
             if (this.poiModeCurrentPositionEnabled) {
                 this.$store.dispatch("MapMarker/removePointMarker");
-                this.ol2DMap.addOverlay(this.marker);
+                this.get2DMap.addOverlay(this.marker);
                 if (this.geolocation === null) {
                     geolocation = new Geolocation({tracking: true, projection: Proj.get("EPSG:4326")});
                     this.setGeolocation(geolocation);

@@ -11,12 +11,10 @@ const localVue = createLocalVue(),
     mockMapGetters = {
     },
     mockMapActions = {
+        addLayerOnTop: sinon.stub(),
         removeInteraction: sinon.stub(),
-        addInteraction: sinon.stub()
-    },
-    mockMapMutations = {
-        addLayerToMap: sinon.stub(),
-        removeLayerFromMap: sinon.stub()
+        addInteraction: sinon.stub(),
+        registerListener: sinon.stub()
     };
 
 localVue.use(Vuex);
@@ -40,10 +38,9 @@ describe("src/share-components/graphicalSelect/components/GraphicalSelect.vue", 
             namespaces: true,
             modules: {
                 GraphicalSelect: GraphicalSelectModule,
-                Map: {
+                Maps: {
                     namespaced: true,
                     getters: mockMapGetters,
-                    mutations: mockMapMutations,
                     actions: mockMapActions
                 }
             }
