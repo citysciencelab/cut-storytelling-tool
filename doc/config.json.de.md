@@ -1866,8 +1866,10 @@ Ein Objekt das ein einzelnes Snippet beschreibt.
 |placeholder|nein|String|""|Nur für Snippet-Typ `dropdown`: Der Platzhalter bei Nicht-Einstellung der Dropdown. Kann ein Übersetzungs-Key sein.|false|
 |multiselect|nein|Boolean|true|Nur für Snippet-Typ `dropdown`: Gleichzeitige Auswahl vieler Werte. Auf `false` stellen um auf Einzelauswahl umzustellen.|false|
 |addSelectAll|nein|Boolean|false|Nur für Snippet-Typ `dropdown` mit `multiselect: true`: Ein zusätzlicher Eintrag zum Selektieren/Deselektieren aller Werte wird angeboten.|false|
+|optionsLimit|nein|Number|20000|Nur für Snippet-Typ `dropdown`: Einer Parameter für Anzahl der Optionen in der Dropdown-List.|false|
 |delimitor|nein|String||Nur für Snippet-Typ `dropdown`: Sollte das Attribut eines Features ein String sein, dessen Wert mit einem Separator als Quasi-Array gedacht ist, kann durch Angabe des separierenden Zeichens (des Delimitors) die Verarbeitung des Strings als Array erzwungen werden.|false|
 |renderIcons|nein|String|"none"|Nur für Snippet-Typ `dropdown` mit `display: "list"`: Wenn auf den String `fromLegend` eingestellt, werden Icons aus der Legende bezogen und links neben den Werten angezeigt. Wird hier ein Objekt angegeben, werden die Key-Namen als Wert und der Value als Bild-Pfad verwendet: {attrName: imagePath} (siehe Beispiele).|false|
+|service|nein|[service](#markdown-header-portalconfigmenutoolfiltergeneralfilterlayersnippetsservice)||Für das initiale Befüllen eines Snippets (Dropdown, Date, Slider) kann ein alternativer Service genutzt werden. Das kann unter Umständen die Performanz beim initialen Laden erhöhen. Standard ist der Service des konfigurierten [filterLayer](#markdown-header-portalconfigmenutoolfiltergeneralfilterlayer).|false|
 
 **Beispiel**
 
@@ -1924,6 +1926,7 @@ Beispiel für ein Dropdown-Snippet. Eine als Liste dargestellte Auswahl (nicht a
     "type": "dropdown",
     "display": "list",
     "multiselect": true,
+    "optionsLimit": 20000,
     "addSelectAll": true,
     "value": [
         "Whitehall and Westminster",
@@ -2020,7 +2023,48 @@ Beispiel für ein DateRange-Snippet. Mit zwei Attribut-Namen für Min- und Maxwe
 ```
 
 ***
+#### Portalconfig.menu.tool.filterGeneral.filterLayer.snippets.service
 
+Ein Objekt das einen Service für ein Snippet beschreibt. Alle Servicetypen, die der Filter unterstützt, können theoretisch genutzt werden.
+Die Konfiguration hängt vom Typ des Services ab.
+
+**WFS**
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|type|ja|String||Der Typ des Services (WFS, GeoJSON oder OAF).|false|
+|url|ja|String||Die Service Url.|false|
+|typename|ja|String||Der Featuretype der geladen wird. Nur bei WFS.|false|
+|collection|ja|String||Die Collection die geladen wird. Nur bei OAF.|false|
+
+**Beispiel WFS**
+
+```json
+{
+    "type": "WFS",
+    "url": "https://qs-geodienste.hamburg.de/HH_WFS_verbreitungskarten_tiere",
+    "typename": "verbreitung_tiere_eindeutige_liste"
+}
+```
+
+**Beispiel GeoJSON**
+
+```json
+{
+    "type": "GeoJSON",
+    "url": "../chartjs/charts_stadtteil.geojson"
+}
+```
+**Beispiel OAF**
+
+```json
+{
+    "url": "https://api.hamburg.de/datasets/v1/schulen",
+    "collection" : "staatliche_schulen",
+    "type": "OAF"
+}
+```
+
+****
 #### Portalconfig.menu.tool.compareFeatures
 
 [inherits]: # (Portalconfig.menu.tool)
@@ -3410,13 +3454,25 @@ Falls beide Parameter gesetzt wurden, dann wird `restLayerId` verwendet.
 
 Innerhalb eines Filters für einen WFS-Dienst können Werte mit einem `equal` oder einem `like` verglichen werden.
 Wenn der Vergleich mit einem `like` durchgeführt werden soll, dann werden weitere Eigenschaften benötigt. Diese können sowohl im Wert, als auch in der Eigenschaftsdefinition variieren.
-Es wird für die Dokumentation angenommen, dass die Eigenschaften `wildCard`, `singleChar` und `escape` heißen; Variationen wie `wildCard`, `single` und `escape` sind jedoch auch möglich und müssen dem Dienst entsprechend für den Filter angegeben werden.
+Es wird für die Dokumentation angenommen, dass die Eigenschaften `wildCard`, `singleChar` und `escapeChar` heißen; Variationen wie `single` und `escape` sind jedoch auch möglich und müssen dem Dienst entsprechend für den Filter angegeben werden. Die Schlüssel-Wert-Paare des hier übergebenen Objekts werden immer wie angegeben in den Request übertragen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |wildCard|ja|String|"*"|Der Wildcardwert für den like Filter.|true|
 |singleChar|ja|String|"#"|Der Wert für einen einzelnen Charakter für den like Filter.|true|
-|escape|ja|String|"!"|Der Escape-Wert für den like Filter.|true|
+|escapeChar|ja|String|"!"|Der Escape-Wert für den like Filter.|true|
+
+**Beispiel**
+
+In diesem Beispiel weicht der Key für `escapeChar` ab.
+
+```json
+{
+    "wildCard": "*",
+    "singleChar": "#",
+    "escape": "!"
+}
+```
 
 ***
 
@@ -4529,14 +4585,13 @@ In diesem Beispiel wird der Layer mit der Id 123 vor dem Layer 456 der Map hinzu
 [type:Layer]: # (Themenconfig.Layer)
 [type:Extent]: # (Datatypes.Extent)
 
-Hier werden die GruppenLayer definiert. Layer können auf viele verschiedene Arten konfiguriert werden. Ein Großteil der Attribute ist in der **[services.json](services.json.de.md)** definiert, kann jedoch hier am Layer überschrieben werden.
-Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#markdown-header-themenconfiglayerwms)** und **[Vector](#markdown-header-themenconfiglayervector)**.
+Hier werden die GruppenLayer definiert, die mehrere Dienste mittels eines Klicks ein-/ausblenden.
 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|id|ja|String/String[]||Id des Layers. In der **[services.json](services.json.de.md)** werden die ids aufgelöst und die notwendigen Informationen herangezogen.|false|
-|children|nein|**[Layer](#markdown-header-themenconfiglayer)**[]||Wird dieses Attribut verwendet, so wird ein Gruppenlayer erzeugt, der beliebig viele Layer beinhaltet. In diesem Fall ist eine einzigartige Id manuell zu wählen.|false|
+|id|ja|String||Interne Layer-ID, mit der der Layer referenziert werden kann. Die eingebundenen Dienste werden über das `children`-Feld bestimmt. Bitte beachten Sie, dass die ID nicht mit einer ID aus der **[services.json](services.json.md)** übereinstimmen darf.|false|
+|children|ja|**[Layer](#markdown-header-themenconfiglayer)**[]||Hier werden die einzelnen Dienste des Gruppenlayers definiert.|false|
 |name|nein|String||Name des Layers.|false|
 |transparency|nein|Integer|0|Transparenz des Layers.|false|
 |visibility|nein|Boolean|false|Sichtbarkeit des Layers.|false|

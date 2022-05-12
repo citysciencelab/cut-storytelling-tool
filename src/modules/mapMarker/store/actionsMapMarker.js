@@ -25,7 +25,8 @@ export default {
      * @param {String[]} value The array with the markable coordinate pair.
      * @returns {void}
      */
-    placingPointMarker ({state, rootState, commit, dispatch}, value) {
+    placingPointMarker ({state, rootState, commit, dispatch, rootGetters}, value) {
+
         const styleListModel = Radio.request("StyleList", "returnModelById", state.pointStyleId);
         let coordValues = [];
 
@@ -37,6 +38,8 @@ export default {
                 value.forEach(val => {
                     coordValues.push(Math.round(val));
                 });
+                // tilt the camera to recognize the mapMarker
+                rootGetters["Maps/getCamera"].tilt_ = -200;
             }
             else {
                 coordValues = value;

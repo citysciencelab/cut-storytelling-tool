@@ -40,6 +40,16 @@ export default class FilterApi {
             };
         }
     }
+
+    /**
+     * Setter for the service.
+     * @param {Object} service - The api service.
+     * @returns {void}
+     */
+    setService (service) {
+        this.service = service;
+    }
+
     /**
      * Setter for the default service by layerId and layerModel.
      * @param {String} layerId the layer id

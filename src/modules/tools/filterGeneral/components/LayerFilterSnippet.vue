@@ -578,7 +578,7 @@ export default {
             >
                 <SnippetDropdown
                     :ref="'snippet-' + snippet.snippetId"
-                    :api="api"
+                    :api="snippet.api || api"
                     :attr-name="snippet.attrName"
                     :add-select-all="snippet.addSelectAll"
                     :adjustment="snippet.adjustment"
@@ -597,6 +597,7 @@ export default {
                     :snippet-id="snippet.snippetId"
                     :value="snippet.value"
                     :visible="snippet.visible"
+                    :options-limit="snippet.optionsLimit"
                     @changeRule="changeRule"
                     @deleteRule="deleteRule"
                     @setSnippetPrechecked="setSnippetPrechecked"
@@ -628,7 +629,7 @@ export default {
             >
                 <SnippetDate
                     :ref="'snippet-' + snippet.snippetId"
-                    :api="api"
+                    :api="snippet.api || api"
                     :adjustment="snippet.adjustment"
                     :attr-name="snippet.attrName"
                     :disabled="disabled"
@@ -652,7 +653,7 @@ export default {
             >
                 <SnippetDateRange
                     :ref="'snippet-' + snippet.snippetId"
-                    :api="api"
+                    :api="snippet.api || api"
                     :adjustment="snippet.adjustment"
                     :attr-name="snippet.attrName"
                     :disabled="disabled"
@@ -676,7 +677,7 @@ export default {
             >
                 <SnippetSlider
                     :ref="'snippet-' + snippet.snippetId"
-                    :api="api"
+                    :api="snippet.api || api"
                     :adjustment="snippet.adjustment"
                     :attr-name="snippet.attrName"
                     :decimal-places="snippet.decimalPlaces"
@@ -700,7 +701,7 @@ export default {
             >
                 <SnippetSliderRange
                     :ref="'snippet-' + snippet.snippetId"
-                    :api="api"
+                    :api="snippet.api || api"
                     :adjustment="snippet.adjustment"
                     :attr-name="snippet.attrName"
                     :decimal-places="snippet.decimalPlaces"
