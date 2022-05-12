@@ -1925,7 +1925,7 @@ An object defining a single snippet.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|attrName|yes|String||The attribute name used for filtering. Can be an array of two strings also if a range with start and end point should be filtered (array only for type: `dateRange` - see example).|false|
+|attrName|yes|String||The attribute name used for filtering. Is to be an array if `dateRange` or `featureInfo` is to be used (see examples).|false|
 |title|no|String||The title of the snippet. Can be a translation key. If not set, the title is taken from the gfiAttributes and if they are not present, then the attrName is used. Can be set to `false` to disable the display of a title. Can be set to `true` to force the display of the attrName.|false|
 |info|no|String||An info text or translation key. If set, a little icon will shown right hand side of the snippet. Can be set to `true` to display a default text for the snippet type.|false|
 |type|no|String||The type of this snippet. Can be one of the following: `checkbox`, `dropdown`, `text`, `slider`, `sliderRange`, `date`, `dateRange`. Will be indentified automatically if left away, following a data type rule: boolean becomes `checkbox`, string becomes `dropdown`, number becomes `sliderRange`, unknown becomes `text`.|false|
@@ -2120,6 +2120,18 @@ Example for a date range snippet. A date range with two attrName for min and max
     "type": "dateRange",
     "operator": "INTERSECTS",
     "format": "DD.MM.YY"
+}
+```
+
+**Example**
+
+Example for a feature info snippet. Displays all values of the configured attribute names(attrName) of all filtered features in the filter.
+
+```json
+{
+    "title": "Steckbrief"
+    "attrName": ["tierartengruppe", "deutscher_artname", "artname", "rote_liste_d", "rote_liste_hh"],
+    "type": "featureInfo",
 }
 ```
 

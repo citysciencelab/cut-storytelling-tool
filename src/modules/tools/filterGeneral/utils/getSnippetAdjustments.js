@@ -168,6 +168,12 @@ function getSnippetAdjustments (snippets, items, page, total) {
                 max: sortedValue[sortedValue.length - 1]
             };
         }
+        else if (snippet.type === "featureInfo") {
+            for (const [key, value] of Object.entries(valueByAttrName)) {
+                valueByAttrName[key] = value.join(", ");
+            }
+            result[snippet.snippetId] = valueByAttrName;
+        }
     });
 
     return result;
