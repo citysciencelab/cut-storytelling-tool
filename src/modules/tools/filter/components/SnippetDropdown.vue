@@ -616,7 +616,8 @@ export default {
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
-<style>
+<style lang="scss" scoped>
+    @import "~variables";
     .select-box-container .multiselect .multiselect__spinner:after, .multiselect__spinner:before {
         position: absolute;
         content: "";
@@ -645,7 +646,7 @@ export default {
     .select-box-container .multiselect .multiselect__option--highlight {
         background: #3177b1;
         outline: none;
-        color: #fff;
+        color: $white;
     }
     .select-box-container .multiselect .option__image {
         width: 22px;
@@ -656,7 +657,7 @@ export default {
         padding: 4px 26px 4px 10px;
         border-radius: 5px;
         margin-right: 10px;
-        color: #fff;
+        color: $white;
         line-height: 1;
         background: #3177b1;
         margin-bottom: 5px;
@@ -699,7 +700,7 @@ export default {
     }
     .multiselect--active {
         color: #212529;
-        background-color: #fff;
+        background-color: $white;
         border-color: #86b7fe;
         outline: 0;
         box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075), 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
@@ -709,7 +710,7 @@ export default {
         font-size: 14px;
         line-height: 1.428571429;
         color: #555555;
-        background-color: #fff;
+        background-color: $white;
         background-image: none;
         border: 1px solid #ccc;
         border-radius: 0;
@@ -723,6 +724,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    @import "~variables";
     .snippetListContainer .check-box-label {
         margin: 0;
     }

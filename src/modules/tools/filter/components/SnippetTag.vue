@@ -58,6 +58,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    @import "~variables";
     .snippetTagContainer {
         margin: 0 0 2px 2px;
         float: left;
@@ -65,8 +66,7 @@ export default {
     .snippetTagContainer button {
         padding: 5px 6px;
         font-size: 12px;
-        font-family: "MasterPortalFont", "Arial", sans-serif;
-        color: #fff;
+        color: $white;
         background-color: rgba(0, 0, 0, 0.5);
         border: none;
     }

@@ -2,17 +2,13 @@
 
 $color_1: rgb(51, 51, 51);
 $color_2: rgb( 119, 119, 119);
-$color_4: #fff;
 
 $font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
 $font_family_2: "MasterPortalFont","Arial Narrow",Arial,sans-serif;
 $font_family_3: "MasterPortalFont", sans-serif;
-$background_color_1: #ffffff;
-$background_color_2: #fff;
 $background_color_3: #efefef;
 $background_color_5: rgb(169,169,169);
 $border_color_1: rgb(204, 204, 204);
-$border_color_2: white;
 $border_color_3: #003063;
 
 /*----------------------------------Table Template------------------------------------------------------------*/
@@ -70,7 +66,7 @@ $border_color_3: #003063;
     color: $color_1;
     border-color: $border_color_1;
     &:hover {
-        background-color: $background_color_1;
+        background-color: $white;
     }
     >.bootstrap-icon > .bi-x-lg {
         font-size: 12px;
@@ -78,7 +74,7 @@ $border_color_3: #003063;
 }
 .dropdown-menu-search {
     background-clip: padding-box;
-    background-color: $background_color_2;
+    background-color: $white;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
     float: left;
     font-size: 13px;
@@ -109,7 +105,7 @@ $border_color_3: #003063;
         padding-left: 10px;
     }
     li.type {
-        background: white;
+        background: $white;
     }
     li {
         &:hover {
@@ -117,7 +113,7 @@ $border_color_3: #003063;
             opacity: 1;
             background-color: $accent_hover;
             span, small {
-                color: white;
+                color: $white;
             }
         }
     }
@@ -161,10 +157,10 @@ $border_color_3: #003063;
     text-align: right;
     padding: 6px;
     border-top-width: 2px;
-    color: $color_4;
+    color: $white;
     >div {
         >.bootstrap-icon {
-            color: $color_4;
+            color: $white;
             font-size: 16px;
             vertical-align: middle;
         }
@@ -183,9 +179,9 @@ li.results {
     }
     .selected {
         background: $secondary_hover;
-        color: $color_4;
+        color: $white;
         #searchInputLi {
-            color: $color_4;
+            color: $white;
         }
     }
     .line-break { 
@@ -228,9 +224,9 @@ li.results {
 }
 #table-searchForm {
     button.btn.btn-outline-default.btn-table-search {
-        background-color: $background_color_1;
+        background-color: $white;
         border-radius: 12px;
-        border-color: $border_color_2;
+        border-color: $white;
         height: 40px;
         width: 40px;
         padding: 6px 12px 1px 5px;
@@ -260,7 +256,7 @@ li.results {
     }
     .dropdown-menu-search {
         background-clip: padding-box;
-        background-color: $background_color_2;
+        background-color: $white;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
         float: left;
         font-size: 13px;

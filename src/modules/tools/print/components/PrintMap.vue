@@ -631,7 +631,7 @@ export default {
             }
 
             #tool-print-download-button-disabled {
-                border-color: #FFFFFF;
+                border-color: $white;
             }
 
             #tool-print-download-loader {

@@ -1,9 +1,9 @@
 @import "../../../css/mixins.scss";
+@import "~variables";
 
 $darkblueColor: rgba(8, 88, 158, 1);
 $darkgreyColor: rgba(85, 85, 85, 1);
 $lightgreyColor: rgba(203, 203, 203, 1);
-$whiteColor: white;
 $hoverOpacity: 0.8;
 $borderRadius0: 0;
 $borderRadius12: 12px;
@@ -33,13 +33,13 @@ $fontSizeSmall: 12px;
     }
 
     .record-active {
-        color: #fff;
+        color: $white;
         background-color: $secondary_focus;
         border-color: #2e6da4;
     }
 
     .record-active:hover {
-        color: #fff;
+        color: $white;
         background-color: #286090;
         border-color: #204d74;
     }
@@ -137,7 +137,7 @@ $fontSizeSmall: 12px;
 
     .datepicker {
         display: inline-table;
-        background-color: $whiteColor;
+        background-color: $white;
         border-radius: $borderRadius12;
         .datepicker-days {
             .table-condensed {
@@ -160,7 +160,7 @@ $fontSizeSmall: 12px;
                             &:hover {
                                 opacity: $hoverOpacity;
                                 background-color: $darkblueColor;
-                                color: $whiteColor;
+                                color: $white;
                                 border-radius: $borderRadius0;
                             }
                         }
@@ -175,7 +175,7 @@ $fontSizeSmall: 12px;
                             &:hover {
                                 opacity: $hoverOpacity;
                                 background-color: $darkblueColor;
-                                color: $whiteColor;
+                                color: $white;
                             }
                             &.today {
                                 border: 2px solid $darkblueColor;;
@@ -183,7 +183,7 @@ $fontSizeSmall: 12px;
                             &.active {
                                 border-radius: $borderRadius0;
                                 background-color: $darkblueColor;;
-                                color: $whiteColor;
+                                color: $white;
                             }
                         }
                     }

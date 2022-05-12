@@ -37,6 +37,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    @import "~variables";
     progress {
         border-radius: 7px;
         margin-top: 20px;
@@ -46,7 +47,7 @@ export default {
     }
 
     progress::-webkit-progress-bar {
-        background-color: #fff;
+        background-color: $white;
         border-radius: 5px;
     }
 
@@ -56,7 +57,7 @@ export default {
     }
 
     progress::-moz-progress-bar {
-        background-color: #fff;
+        background-color: $white;
         border-radius: 5px;
     }
     .progress-container {

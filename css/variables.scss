@@ -83,6 +83,8 @@ $icon-font-path: "fonts/";
 $bootstrap-icons-font-src: url("../node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff2?a74547b2f0863226942ff8ded57db345") format("woff2"),
 url("../node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff2?a74547b2f0863226942ff8ded57db345") format("woff") !default;
 
+// Colors
+
 /* primary_grey: Map Interaction
  * Used for control elements placed directly on the map.
  * Elements: Buttons and button-like elements.
@@ -101,6 +103,7 @@ $primary_grey_outline: #050505;
 * Used fpr primary buttons like in the tools (print, draw etc.)
 */
 $primary: #003063;
+$white: #ffffff;
 
 /* SECONDARY: Navigation
  * Used for the nav bar, its children, and going back and forth within elements.

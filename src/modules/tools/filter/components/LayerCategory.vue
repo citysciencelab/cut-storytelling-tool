@@ -214,8 +214,10 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+    @import "~variables";
+
     #tool-general-filter .panel {
-        background-color: #fff;
+        background-color: $white;
         border: 1px solid #ddd;
         padding: 10px;
     }
@@ -224,7 +226,7 @@ export default {
     }
     .panel-default > .panel-heading {
         cursor: default;
-        background-color: white;
+        background-color: $white;
     }
     .panel-title {
         cursor: pointer;

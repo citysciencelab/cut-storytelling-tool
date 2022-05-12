@@ -801,7 +801,6 @@ export default {
     @import "~/css/mixins.scss";
 
     $color_1: #000000;
-    $color_2: rgb(255, 255, 255);
     $font_family_2: "MasterPortalFont", sans-serif;
     $background_color_3: #f2f2f2;
     $background_color_4: #646262;
@@ -816,7 +815,7 @@ export default {
             max-width:600px;
             right: 0;
             margin: 10px 10px 30px 10px;
-            background-color: #ffffff;
+            background-color: $white;
             z-index: 9999;
         }
         .legend-window-mobile {
@@ -824,7 +823,7 @@ export default {
             width: calc(100% - 20px);
             top: 10px;
             left: 10px;
-            background-color: #ffffff;
+            background-color: $white;
             z-index: 1;
         }
         .legend-title {
@@ -884,7 +883,7 @@ export default {
         .legend-title-table {
             font-family: $font_family_2;
             font-size: 14px;
-            color: $color_2;
+            color: $white;
             padding: 10px;
             cursor: move;
             .close-legend {

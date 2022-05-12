@@ -6,9 +6,7 @@ $color_3: #808080;
 $color_4: #003063;
 $font_family_1: "MasterPortalFont",sans-serif;
 $font_family_2: "MasterPortalFont", sans-serif;
-$background_color_2: #fff;
 $background_color_3: #808080;
-$background_color_4: #ffffff;
 $background_color_5: transparent;
 $background_color_6: #D8D8D8;
 
@@ -64,7 +62,7 @@ $background_color_6: #D8D8D8;
 #table-layer-list {
     position: relative;
     width: 40px;
-    background-color: $background_color_2;
+    background-color: $white;
     order: -1;
     left: 8px;
     top: -5px;
@@ -295,7 +293,7 @@ a {
 }
 .icon-burgermenu_alt.collapsed {
     #table-nav-layers-panel-toggler {
-        background-color: $background_color_4;
+        background-color: $white;
         .icon-cross1:before {
                 display: none;
         }

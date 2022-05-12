@@ -177,6 +177,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    @import "~variables";
 
     button.close {
         &:focus {
@@ -187,7 +188,7 @@ export default {
         }
     }
     .gfi-attached {
-        background-color: #ffffff;
+        background-color: $white;
     }
     .gfi-header {
         padding: 0 15px;

@@ -370,6 +370,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    @import "~variables";
     .form-control {
         height: 28px;
     }
@@ -414,15 +415,15 @@ export default {
     }
 
     input[type="range"]:active::-ms-thumb {
-        background-color: #fff;
+        background-color: $white;
         border: 1px solid #3177b1;
     }
     input[type="range"]:active::-moz-range-thumb {
-        background-color: #fff;
+        background-color: $white;
         border: 1px solid #3177b1;
     }
     input[type="range"]:active::-webkit-slider-thumb {
-        background-color: #fff;
+        background-color: $white;
         border: 1px solid #3177b1;
     }
 
@@ -443,7 +444,7 @@ export default {
 
     input[type="range"]::-webkit-slider-thumb {
         -webkit-appearance: none;
-        background: #ffffff;
+        background: $white;
         border-radius: 50%;
         box-shadow: -210px 0 0 200px #3177b1;
         cursor: pointer;
@@ -453,7 +454,7 @@ export default {
     }
 
     input[type="range"]::-moz-range-thumb {
-        background: #ffffff;
+        background: $white;
         border-radius: 50%;
         box-shadow: -1010px 0 0 1000px #3177b1;
         cursor: pointer;

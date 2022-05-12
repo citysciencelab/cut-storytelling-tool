@@ -228,7 +228,7 @@ export default {
         margin: 5px;
         border: 1px solid silver;
         float: left;
-        background: #ffffff;
+        background: $white;
         text-decoration: none;
         color: #333333;
     }

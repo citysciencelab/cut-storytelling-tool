@@ -409,6 +409,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    @import "~variables";
     .form-control {
         height: 28px;
     }
@@ -426,7 +427,7 @@ export default {
     .sliderRangeWrapper {
         position: relative;
         width: 100%;
-        background-color: #fff;
+        background-color: $white;
         padding: 0 5px;
         margin: auto;
         position: relative;
@@ -495,7 +496,6 @@ export default {
         height: 3px;
         width: 100%;
         cursor: pointer;
-        animate: 0.2s;
         border-radius: 1px;
         box-shadow: none;
     }
@@ -511,7 +511,7 @@ export default {
         -webkit-appearance: none;
         height: 15px;
         width: 15px;
-        background-color: #fff;
+        background-color: $white;
         cursor: pointer;
         border-radius: 10px;
         pointer-events: auto;
@@ -522,7 +522,7 @@ export default {
         -webkit-appearance: none;
         height: 15px;
         width: 15px;
-        background-color: #fff;
+        background-color: $white;
         cursor: pointer;
         border-radius: 50%;
         pointer-events: auto;
@@ -531,21 +531,21 @@ export default {
         -appearance: none;
         height: 15px;
         width: 15px;
-        background-color: #fff;
+        background-color: $white;
         cursor: pointer;
         border-radius: 50%;
         pointer-events: auto;
     }
     input[type="range"]:active::-ms-thumb {
-        background-color: #fff;
+        background-color: $white;
         border: 1px solid #3177b1;
     }
     input[type="range"]:active::-moz-range-thumb {
-        background-color: #fff;
+        background-color: $white;
         border: 1px solid #3177b1;
     }
     input[type="range"]:active::-webkit-slider-thumb {
-        background-color: #fff;
+        background-color: $white;
         border: 1px solid #3177b1;
     }
     input::-webkit-outer-spin-button,
