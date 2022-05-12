@@ -5,7 +5,7 @@ import calculateExtent from "../../calculateExtent";
 import createStyledFeatures from "../utils/createStyledFeatures";
 
 const actions = {
-    zoomToFeatures ({state, getters: {config, deprecatedParameters}, commit, dispatch}) {
+    zoomToFeatures ({state, getters: {config, deprecatedParameters}, dispatch}) {
         let addFeatures = true,
             allowedValues, layerId, property, styleId, urlValues;
 
@@ -46,7 +46,7 @@ const actions = {
                     );
 
                     if (addFeatures) {
-                        commit("Maps/addLayerToMap", new VectorLayer({
+                        dispatch("Maps/addLayer", new VectorLayer({
                             source: new VectorSource({
                                 features: styleId === undefined
                                     ? featureCollection
@@ -94,7 +94,7 @@ const actions = {
                         filteredFeatures = createStyledFeatures(filteredFeatures, styleId);
                     }
                     if (addFeatures && filteredFeatures.length > 0) {
-                        commit("Maps/addLayerToMap", new VectorLayer({
+                        dispatch("Maps/addLayer", new VectorLayer({
                             source: new VectorSource({features: filteredFeatures})
                         }), {root: true});
                     }

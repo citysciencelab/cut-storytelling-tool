@@ -22,7 +22,6 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
     describe("zoomToFeatures", () => {
         let consoleErrorSpy,
             consoleWarnSpy,
-            commit,
             dispatch,
             getters,
             requestSpy,
@@ -31,7 +30,6 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
         beforeEach(() => {
             consoleErrorSpy = sinon.spy();
             consoleWarnSpy = sinon.spy();
-            commit = sinon.spy();
             dispatch = sinon.spy();
             requestSpy = sinon.spy();
             sinon.stub(axios, "get").callsFake(axiosFake);
@@ -53,7 +51,7 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
         it("should log an error and return if a deprecated configuration parameter is used and a zoomToFeature url parameter is used without valid configuration", () => {
             getters.deprecatedParameters = true;
             state.zoomToFeatureId = "something";
-            actions.zoomToFeatures({state, getters, commit, dispatch})
+            actions.zoomToFeatures({state, getters, dispatch})
                 .catch(error => {
                     expect(consoleWarnSpy.calledOnce).to.be.true;
                     expect(consoleWarnSpy.firstCall.args.length).to.equal(1);
@@ -64,7 +62,7 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
         it("should log an error and return if a deprecated configuration parameter is used and a zoomToGeometry url parameter is used without valid configuration", () => {
             getters.deprecatedParameters = true;
             state.zoomToGeometry = "something";
-            actions.zoomToFeatures({state, getters, commit, dispatch})
+            actions.zoomToFeatures({state, getters, dispatch})
                 .catch(error => {
                     expect(consoleWarnSpy.calledOnce).to.be.true;
                     expect(consoleWarnSpy.firstCall.args.length).to.equal(1);
@@ -85,7 +83,7 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
             sinon.stub(axios, "get").callsFake(() => new Promise((_, reject) => reject("Custom testing error!")));
             sinon.stub(console, "error").callsFake(consoleErrorSpy);
             sinon.stub(console, "warn").callsFake(consoleWarnSpy);
-            await actions.zoomToFeatures({state, getters, commit, dispatch});
+            await actions.zoomToFeatures({state, getters, dispatch});
 
             expect(consoleWarnSpy.calledOnce).to.be.true;
             expect(consoleWarnSpy.firstCall.args.length).to.equal(1);
@@ -102,25 +100,24 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
                 styleId: "stylish"
             };
             state.zoomToFeatureId = [18, 26];
-            await actions.zoomToFeatures({state, getters, commit, dispatch});
+            await actions.zoomToFeatures({state, getters, dispatch});
 
             expect(consoleWarnSpy.calledOnce).to.be.true;
             expect(consoleWarnSpy.firstCall.args.length).to.equal(1);
             expect(consoleWarnSpy.firstCall.args[0]).to.equal("zoomTo: A deprecated configuration was found. Using it, until it gets removed...");
-            expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args.length).to.equal(3);
-            expect(commit.firstCall.args[0]).to.equal("Maps/addLayerToMap");
-            expect(commit.firstCall.args[1] instanceof VectorLayer).to.be.true;
-            expect(commit.firstCall.args[1].getSource().getFeatures().length).to.equal(2);
-            expect(commit.firstCall.args[2]).to.eql({root: true});
-            expect(dispatch.calledOnce).to.be.true;
+            expect(dispatch.calledTwice).to.be.true;
             expect(dispatch.firstCall.args.length).to.equal(3);
-            expect(dispatch.firstCall.args[0]).to.equal("Maps/zoomToExtent");
-            expect(dispatch.firstCall.args[1] instanceof Object).to.be.true;
-            expect(Object.prototype.hasOwnProperty.call(dispatch.firstCall.args[1], "extent")).to.be.true;
-            expect(dispatch.firstCall.args[1].extent.length).to.equal(4);
-            expect(dispatch.firstCall.args[1].extent.every(val => typeof val === "number")).to.be.true;
+            expect(dispatch.firstCall.args[0]).to.equal("Maps/addLayer");
+            expect(dispatch.firstCall.args[1] instanceof VectorLayer).to.be.true;
+            expect(dispatch.firstCall.args[1].getSource().getFeatures().length).to.equal(2);
             expect(dispatch.firstCall.args[2]).to.eql({root: true});
+            expect(dispatch.secondCall.args.length).to.equal(3);
+            expect(dispatch.secondCall.args[0]).to.equal("Maps/zoomToExtent");
+            expect(dispatch.secondCall.args[1] instanceof Object).to.be.true;
+            expect(Object.prototype.hasOwnProperty.call(dispatch.secondCall.args[1], "extent")).to.be.true;
+            expect(dispatch.secondCall.args[1].extent.length).to.equal(4);
+            expect(dispatch.secondCall.args[1].extent.every(val => typeof val === "number")).to.be.true;
+            expect(dispatch.secondCall.args[2]).to.eql({root: true});
         });
         it("should fetch features and call respective vuex store functions if a correct (but deprecated) configuration and url parameter match for zoomToFeature is provided; not adding the features to the map as a new layer through config parameter", async () => {
             getters.deprecatedParameters = true;
@@ -131,12 +128,11 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
                 addFeatures: false
             };
             state.zoomToFeatureId = [18, 26];
-            await actions.zoomToFeatures({state, getters, commit, dispatch});
+            await actions.zoomToFeatures({state, getters, dispatch});
 
             expect(consoleWarnSpy.calledOnce).to.be.true;
             expect(consoleWarnSpy.firstCall.args.length).to.equal(1);
             expect(consoleWarnSpy.firstCall.args[0]).to.equal("zoomTo: A deprecated configuration was found. Using it, until it gets removed...");
-            expect(commit.notCalled).to.be.true;
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args.length).to.equal(3);
             expect(dispatch.firstCall.args[0]).to.equal("Maps/zoomToExtent");
@@ -154,29 +150,28 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
                 allowedValues: [18, 26, 42]
             };
             state.zoomToGeometry = "18,25";
-            await actions.zoomToFeatures({state, getters, commit, dispatch});
+            await actions.zoomToFeatures({state, getters, dispatch});
 
             expect(consoleWarnSpy.calledOnce).to.be.true;
             expect(consoleWarnSpy.firstCall.args.length).to.equal(1);
             expect(consoleWarnSpy.firstCall.args[0]).to.equal("zoomTo: A deprecated configuration was found. Using it, until it gets removed...");
-            expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args.length).to.equal(3);
-            expect(commit.firstCall.args[0]).to.equal("Maps/addLayerToMap");
-            expect(commit.firstCall.args[1] instanceof VectorLayer).to.be.true;
-            expect(commit.firstCall.args[2]).to.eql({root: true});
-            expect(dispatch.calledOnce).to.be.true;
+            expect(dispatch.calledTwice).to.be.true;
             expect(dispatch.firstCall.args.length).to.equal(3);
-            expect(dispatch.firstCall.args[0]).to.equal("Maps/zoomToExtent");
-            expect(dispatch.firstCall.args[1] instanceof Object).to.be.true;
-            expect(Object.prototype.hasOwnProperty.call(dispatch.firstCall.args[1], "extent")).to.be.true;
-            expect(dispatch.firstCall.args[1].extent.length).to.equal(4);
-            expect(dispatch.firstCall.args[1].extent.every(val => typeof val === "number")).to.be.true;
+            expect(dispatch.firstCall.args[0]).to.equal("Maps/addLayer");
+            expect(dispatch.firstCall.args[1] instanceof VectorLayer).to.be.true;
             expect(dispatch.firstCall.args[2]).to.eql({root: true});
+            expect(dispatch.secondCall.args.length).to.equal(3);
+            expect(dispatch.secondCall.args[0]).to.equal("Maps/zoomToExtent");
+            expect(dispatch.secondCall.args[1] instanceof Object).to.be.true;
+            expect(Object.prototype.hasOwnProperty.call(dispatch.secondCall.args[1], "extent")).to.be.true;
+            expect(dispatch.secondCall.args[1].extent.length).to.equal(4);
+            expect(dispatch.secondCall.args[1].extent.every(val => typeof val === "number")).to.be.true;
+            expect(dispatch.secondCall.args[2]).to.eql({root: true});
         });
 
         it("should should resolve with a reason if a config is given but no url parameter", () => {
             getters.config = [{id: "zoomToFeatureId"}];
-            actions.zoomToFeatures({state, getters, commit, dispatch})
+            actions.zoomToFeatures({state, getters, dispatch})
                 .then(reason => {
                     expect(consoleWarnSpy.notCalled).to.be.true;
                     expect(consoleErrorSpy.notCalled).to.be.true;
@@ -196,7 +191,7 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
             sinon.stub(axios, "get").callsFake(() => new Promise((_, reject) => reject("Custom testing error!")));
             sinon.stub(console, "error").callsFake(consoleErrorSpy);
             sinon.stub(console, "warn").callsFake(consoleWarnSpy);
-            await actions.zoomToFeatures({state, getters, commit, dispatch});
+            await actions.zoomToFeatures({state, getters, dispatch});
 
             expect(consoleErrorSpy.notCalled).to.be.true;
             expect(dispatch.calledOnce).to.be.true;
@@ -215,26 +210,25 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
             }];
             state.somethingWrong = "values";
             state.zoomToFeatureId = [18, 26];
-            await actions.zoomToFeatures({state, getters, commit, dispatch});
+            await actions.zoomToFeatures({state, getters, dispatch});
 
             expect(consoleWarnSpy.notCalled).to.be.true;
             expect(consoleErrorSpy.notCalled).to.be.true;
-            expect(dispatch.calledTwice).to.be.true;
+            expect(dispatch.calledThrice).to.be.true;
             expect(dispatch.firstCall.args.length).to.equal(3);
-            expect(dispatch.firstCall.args).to.eql(["Alerting/addSingleAlert", "utils.parametricURL.zoomTo", {root: true}]);
+            expect(dispatch.firstCall.args[0]).to.equal("Maps/addLayer");
+            expect(dispatch.firstCall.args[1] instanceof VectorLayer).to.be.true;
+            expect(dispatch.firstCall.args[1].getSource().getFeatures().length).to.equal(2);
+            expect(dispatch.firstCall.args[2]).to.eql({root: true});
             expect(dispatch.secondCall.args.length).to.equal(3);
-            expect(dispatch.secondCall.args[0]).to.equal("Maps/zoomToExtent");
-            expect(dispatch.secondCall.args[1] instanceof Object).to.be.true;
-            expect(Object.prototype.hasOwnProperty.call(dispatch.secondCall.args[1], "extent")).to.be.true;
-            expect(dispatch.secondCall.args[1].extent.length).to.equal(4);
-            expect(dispatch.secondCall.args[1].extent.every(val => typeof val === "number")).to.be.true;
-            expect(dispatch.secondCall.args[2]).to.eql({root: true});
-            expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args.length).to.equal(3);
-            expect(commit.firstCall.args[0]).to.equal("Maps/addLayerToMap");
-            expect(commit.firstCall.args[1] instanceof VectorLayer).to.be.true;
-            expect(commit.firstCall.args[1].getSource().getFeatures().length).to.equal(2);
-            expect(commit.firstCall.args[2]).to.eql({root: true});
+            expect(dispatch.secondCall.args).to.eql(["Alerting/addSingleAlert", "utils.parametricURL.zoomTo", {root: true}]);
+            expect(dispatch.thirdCall.args.length).to.equal(3);
+            expect(dispatch.thirdCall.args[0]).to.equal("Maps/zoomToExtent");
+            expect(dispatch.thirdCall.args[1] instanceof Object).to.be.true;
+            expect(Object.prototype.hasOwnProperty.call(dispatch.thirdCall.args[1], "extent")).to.be.true;
+            expect(dispatch.thirdCall.args[1].extent.length).to.equal(4);
+            expect(dispatch.thirdCall.args[1].extent.every(val => typeof val === "number")).to.be.true;
+            expect(dispatch.thirdCall.args[2]).to.eql({root: true});
             expect(requestSpy.calledTwice).to.be.true;
             expect(requestSpy.firstCall.args.length).to.equal(3);
             expect(requestSpy.firstCall.args).to.eql(["StyleList", "returnModelById", "stylish"]);
@@ -249,24 +243,23 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
                 styleId: "stylish"
             }];
             state.zoomToFeatureId = [18, 26];
-            await actions.zoomToFeatures({state, getters, commit, dispatch});
+            await actions.zoomToFeatures({state, getters, dispatch});
 
             expect(consoleWarnSpy.notCalled).to.be.true;
             expect(consoleErrorSpy.notCalled).to.be.true;
-            expect(dispatch.calledOnce).to.be.true;
+            expect(dispatch.calledTwice).to.be.true;
             expect(dispatch.firstCall.args.length).to.equal(3);
-            expect(dispatch.firstCall.args[0]).to.equal("Maps/zoomToExtent");
-            expect(dispatch.firstCall.args[1] instanceof Object).to.be.true;
-            expect(Object.prototype.hasOwnProperty.call(dispatch.firstCall.args[1], "extent")).to.be.true;
-            expect(dispatch.firstCall.args[1].extent.length).to.equal(4);
-            expect(dispatch.firstCall.args[1].extent.every(val => typeof val === "number")).to.be.true;
+            expect(dispatch.firstCall.args[0]).to.equal("Maps/addLayer");
+            expect(dispatch.firstCall.args[1] instanceof VectorLayer).to.be.true;
+            expect(dispatch.firstCall.args[1].getSource().getFeatures().length).to.equal(2);
             expect(dispatch.firstCall.args[2]).to.eql({root: true});
-            expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args.length).to.equal(3);
-            expect(commit.firstCall.args[0]).to.equal("Maps/addLayerToMap");
-            expect(commit.firstCall.args[1] instanceof VectorLayer).to.be.true;
-            expect(commit.firstCall.args[1].getSource().getFeatures().length).to.equal(2);
-            expect(commit.firstCall.args[2]).to.eql({root: true});
+            expect(dispatch.secondCall.args.length).to.equal(3);
+            expect(dispatch.secondCall.args[0]).to.equal("Maps/zoomToExtent");
+            expect(dispatch.secondCall.args[1] instanceof Object).to.be.true;
+            expect(Object.prototype.hasOwnProperty.call(dispatch.secondCall.args[1], "extent")).to.be.true;
+            expect(dispatch.secondCall.args[1].extent.length).to.equal(4);
+            expect(dispatch.secondCall.args[1].extent.every(val => typeof val === "number")).to.be.true;
+            expect(dispatch.secondCall.args[2]).to.eql({root: true});
             expect(requestSpy.calledTwice).to.be.true;
             expect(requestSpy.firstCall.args.length).to.equal(3);
             expect(requestSpy.firstCall.args).to.eql(["StyleList", "returnModelById", "stylish"]);
@@ -282,7 +275,7 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
                 addFeatures: false
             }];
             state.zoomToFeatureId = [18, 26];
-            await actions.zoomToFeatures({state, getters, commit, dispatch});
+            await actions.zoomToFeatures({state, getters, dispatch});
 
             expect(consoleWarnSpy.notCalled).to.be.true;
             expect(consoleErrorSpy.notCalled).to.be.true;
@@ -294,7 +287,6 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
             expect(dispatch.firstCall.args[1].extent.length).to.equal(4);
             expect(dispatch.firstCall.args[1].extent.every(val => typeof val === "number")).to.be.true;
             expect(dispatch.firstCall.args[2]).to.eql({root: true});
-            expect(commit.notCalled).to.be.true;
             expect(requestSpy.calledTwice).to.be.true;
             expect(requestSpy.firstCall.args.length).to.equal(3);
             expect(requestSpy.firstCall.args).to.eql(["StyleList", "returnModelById", "stylish"]);
@@ -309,25 +301,24 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
                 allowedValues: [18, 26, 42]
             }];
             state.zoomToGeometry = "18,25";
-            await actions.zoomToFeatures({state, getters, commit, dispatch});
+            await actions.zoomToFeatures({state, getters, dispatch});
 
             expect(consoleWarnSpy.notCalled).to.be.true;
             expect(consoleErrorSpy.notCalled).to.be.true;
             expect(requestSpy.notCalled).to.be.true;
-            expect(dispatch.calledOnce).to.be.true;
+            expect(dispatch.calledTwice).to.be.true;
             expect(dispatch.firstCall.args.length).to.equal(3);
-            expect(dispatch.firstCall.args[0]).to.equal("Maps/zoomToExtent");
-            expect(dispatch.firstCall.args[1] instanceof Object).to.be.true;
-            expect(Object.prototype.hasOwnProperty.call(dispatch.firstCall.args[1], "extent")).to.be.true;
-            expect(dispatch.firstCall.args[1].extent.length).to.equal(4);
-            expect(dispatch.firstCall.args[1].extent.every(val => typeof val === "number")).to.be.true;
+            expect(dispatch.firstCall.args[0]).to.equal("Maps/addLayer");
+            expect(dispatch.firstCall.args[1] instanceof VectorLayer).to.be.true;
+            expect(dispatch.firstCall.args[1].getSource().getFeatures().length).to.equal(1);
             expect(dispatch.firstCall.args[2]).to.eql({root: true});
-            expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args.length).to.equal(3);
-            expect(commit.firstCall.args[0]).to.equal("Maps/addLayerToMap");
-            expect(commit.firstCall.args[1] instanceof VectorLayer).to.be.true;
-            expect(commit.firstCall.args[1].getSource().getFeatures().length).to.equal(1);
-            expect(commit.firstCall.args[2]).to.eql({root: true});
+            expect(dispatch.secondCall.args.length).to.equal(3);
+            expect(dispatch.secondCall.args[0]).to.equal("Maps/zoomToExtent");
+            expect(dispatch.secondCall.args[1] instanceof Object).to.be.true;
+            expect(Object.prototype.hasOwnProperty.call(dispatch.secondCall.args[1], "extent")).to.be.true;
+            expect(dispatch.secondCall.args[1].extent.length).to.equal(4);
+            expect(dispatch.secondCall.args[1].extent.every(val => typeof val === "number")).to.be.true;
+            expect(dispatch.secondCall.args[2]).to.eql({root: true});
         });
         it("should zoom to the feature extent but not add the features for one config of zoomToGeometry with addFeatures set to false", async () => {
             getters.config = [{
@@ -338,7 +329,7 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
                 addFeatures: false
             }];
             state.zoomToGeometry = "18,25";
-            await actions.zoomToFeatures({state, getters, commit, dispatch});
+            await actions.zoomToFeatures({state, getters, dispatch});
 
             expect(consoleWarnSpy.notCalled).to.be.true;
             expect(consoleErrorSpy.notCalled).to.be.true;
@@ -351,7 +342,6 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
             expect(dispatch.firstCall.args[1].extent.length).to.equal(4);
             expect(dispatch.firstCall.args[1].extent.every(val => typeof val === "number")).to.be.true;
             expect(dispatch.firstCall.args[2]).to.eql({root: true});
-            expect(commit.notCalled).to.be.true;
         });
         it("should add features to the map for one config of zoomToFeatureId and one of zoomToGeometry", async () => {
             getters.config = [
@@ -370,29 +360,28 @@ describe("src/utils/zoomTo/store/actionsZoomTo.js", () => {
             ];
             state.zoomToFeatureId = [18];
             state.zoomToGeometry = "24,42";
-            await actions.zoomToFeatures({state, getters, commit, dispatch});
+            await actions.zoomToFeatures({state, getters, dispatch});
 
             expect(consoleWarnSpy.notCalled).to.be.true;
             expect(consoleErrorSpy.notCalled).to.be.true;
-            expect(dispatch.calledOnce).to.be.true;
+            expect(dispatch.calledThrice).to.be.true;
             expect(dispatch.firstCall.args.length).to.equal(3);
-            expect(dispatch.firstCall.args[0]).to.equal("Maps/zoomToExtent");
-            expect(dispatch.firstCall.args[1] instanceof Object).to.be.true;
-            expect(Object.prototype.hasOwnProperty.call(dispatch.firstCall.args[1], "extent")).to.be.true;
-            expect(dispatch.firstCall.args[1].extent.length).to.equal(4);
-            expect(dispatch.firstCall.args[1].extent.every(val => typeof val === "number")).to.be.true;
+            expect(dispatch.firstCall.args[0]).to.equal("Maps/addLayer");
+            expect(dispatch.firstCall.args[1] instanceof VectorLayer).to.be.true;
+            expect(dispatch.firstCall.args[1].getSource().getFeatures().length).to.equal(1);
             expect(dispatch.firstCall.args[2]).to.eql({root: true});
-            expect(commit.calledTwice).to.be.true;
-            expect(commit.firstCall.args.length).to.equal(3);
-            expect(commit.firstCall.args[0]).to.equal("Maps/addLayerToMap");
-            expect(commit.firstCall.args[1] instanceof VectorLayer).to.be.true;
-            expect(commit.firstCall.args[1].getSource().getFeatures().length).to.equal(1);
-            expect(commit.firstCall.args[2]).to.eql({root: true});
-            expect(commit.secondCall.args.length).to.equal(3);
-            expect(commit.secondCall.args[0]).to.equal("Maps/addLayerToMap");
-            expect(commit.secondCall.args[1] instanceof VectorLayer).to.be.true;
-            expect(commit.secondCall.args[1].getSource().getFeatures().length).to.equal(1);
-            expect(commit.secondCall.args[2]).to.eql({root: true});
+            expect(dispatch.secondCall.args.length).to.equal(3);
+            expect(dispatch.secondCall.args[0]).to.equal("Maps/addLayer");
+            expect(dispatch.secondCall.args[1] instanceof VectorLayer).to.be.true;
+            expect(dispatch.secondCall.args[1].getSource().getFeatures().length).to.equal(1);
+            expect(dispatch.secondCall.args[2]).to.eql({root: true});
+            expect(dispatch.thirdCall.args.length).to.equal(3);
+            expect(dispatch.thirdCall.args[0]).to.equal("Maps/zoomToExtent");
+            expect(dispatch.thirdCall.args[1] instanceof Object).to.be.true;
+            expect(Object.prototype.hasOwnProperty.call(dispatch.thirdCall.args[1], "extent")).to.be.true;
+            expect(dispatch.thirdCall.args[1].extent.length).to.equal(4);
+            expect(dispatch.thirdCall.args[1].extent.every(val => typeof val === "number")).to.be.true;
+            expect(dispatch.thirdCall.args[2]).to.eql({root: true});
             expect(requestSpy.calledTwice).to.be.true;
             expect(requestSpy.firstCall.args.length).to.equal(3);
             expect(requestSpy.firstCall.args).to.eql(["StyleList", "returnModelById", "stylish"]);
