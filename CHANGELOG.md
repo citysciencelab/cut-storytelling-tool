@@ -13,7 +13,9 @@
         - "bootstrap-icons"
 - Added a mixin for changing the colour and padding of an active pill inside the css class `nav-pills`.
 - HochwasserPrint: new print module for Hochwasserrisikomanagement
-- FilterModule: new option optionsLimit for dropdown snippet
+- FilterModule:
+  - new option optionsLimit for dropdown snippet
+  - Parent-child Filter Mode in Dropdown snippet
 
 ### Changed
 - `default`-gfiTheme: If a `|`-character is part of the response, every element separated by the character will be displayed in a separate paragraph.

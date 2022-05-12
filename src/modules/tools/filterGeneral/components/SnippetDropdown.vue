@@ -58,6 +58,11 @@ export default {
             required: false,
             default: false
         },
+        isParent: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         title: {
             type: [String, Boolean],
             required: false,
@@ -187,10 +192,10 @@ export default {
                     this.deleteCurrentRule();
                 }
             }
-            this.allSelected = this.dropdownValue.length !== 0 && this.dropdownValue.length === this.dropdownSelected.length;
+            this.allSelected = this.dropdownValue.length !== 0 && Array.isArray(this.dropdownSelected) && this.dropdownValue.length === this.dropdownSelected.length;
         },
         adjustment (adjusting) {
-            if (!isObject(adjusting) || this.visible === false) {
+            if (!isObject(adjusting) || this.visible === false || this.isParent) {
                 return;
             }
 
@@ -421,26 +426,28 @@ export default {
          * @returns {void}
          */
         setDropdownSelectedAfterAdjustment (dropdownValue, dropdownSelected, setDropdownSelected) {
+            const selected = typeof dropdownSelected === "string" ? [dropdownSelected] : dropdownSelected,
+                result = [],
+                dropdownSelectedAssoc = {};
+
             if (typeof setDropdownSelected !== "function") {
                 return;
             }
-            else if (!Array.isArray(dropdownValue) || !Array.isArray(dropdownSelected)) {
+            else if (!Array.isArray(dropdownValue) || !Array.isArray(selected)) {
                 setDropdownSelected([]);
                 return;
             }
-            const selected = [],
-                dropdownSelectedAssoc = {};
 
-            dropdownSelected.forEach(value => {
+            selected.forEach(value => {
                 dropdownSelectedAssoc[value] = true;
             });
             dropdownValue.forEach(value => {
                 if (dropdownSelectedAssoc[value]) {
-                    selected.push(value);
+                    result.push(value);
                 }
             });
 
-            setDropdownSelected(selected);
+            setDropdownSelected(result);
         }
     }
 };
