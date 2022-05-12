@@ -234,7 +234,7 @@ export default {
     }
     >a:hover, a:focus {
         background-color: $accent_hover;
-        color: $primary_red_contrast;
+        color: $primary_grey_contrast;
         cursor: pointer;
     }
 }

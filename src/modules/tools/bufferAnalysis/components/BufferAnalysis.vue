@@ -293,7 +293,7 @@ export default {
                 <div class="col-md-12 form-group form-group-sm d-grid gap-2">
                     <button
                         id="tool-bufferAnalysis-resetButton"
-                        class="float-end btn btn-lgv-grey"
+                        class="float-end btn btn-secondary"
                         :disabled="!selectedSourceLayer"
                         @click="resetModule"
                     >

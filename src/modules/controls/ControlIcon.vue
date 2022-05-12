@@ -88,8 +88,8 @@ export default {
     }
 
     .control-icon {
-        background-color: $primary_red;
-        color: $primary_red_contrast;
+        background-color: $primary_grey;
+        color: $primary_grey_contrast;
 
         pointer-events: all;
         cursor: pointer;
@@ -107,28 +107,28 @@ export default {
 
         /* pseudo-class state effects */
         &:hover {
-            background-color: $primary_red_hover;
+            background-color: $primary_grey_hover;
         }
         &:focus {
-            background-color: $primary_red_focus;
-            outline: 1px solid $primary_red_outline;
+            background-color: $primary_grey_focus;
+            outline: 1px solid $primary_grey_outline;
         }
         &:active {
-            background-color: $primary_red_active;
+            background-color: $primary_grey_active;
         }
 
         &:disabled {
-            background-color: $primary_red_inactive;
-            color: $primary_red_inactive_contrast;
+            background-color: $primary_grey_inactive;
+            color: $primary_grey_inactive_contrast;
             cursor: default;
         }
     }
     .bi-plus-icon {
-        content: url("data:image/svg+xml, %3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-plus-lg' viewBox='0 0 16 16'%3e%3cpath fill-rule='evenodd' d='M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z' stroke='white' stroke-width='1'/%3e%3c/svg%3e");
+        content: url("data:image/svg+xml, %3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-plus-lg' viewBox='0 0 16 16'%3e%3cpath fill-rule='evenodd' d='M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z' stroke='black'/%3e%3c/svg%3e");
         height: 28px;
     }
     .bi-minus-icon {
-        content: url("data:image/svg+xml, %3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-dash-lg' viewBox='0 0 16 16'%3e%3cpath fill-rule='evenodd' d='M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z' stroke='white' stroke-width='1'/%3e%3c/svg%3e");
+        content: url("data:image/svg+xml, %3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-dash-lg' viewBox='0 0 16 16'%3e%3cpath fill-rule='evenodd' d='M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z' stroke='black' stroke-width='1'/%3e%3c/svg%3e");
         height: 28px;
     }
     /* TODO: Since every bootstrap-icon is supported via config, rules for every bootstrap-icon should exist here */

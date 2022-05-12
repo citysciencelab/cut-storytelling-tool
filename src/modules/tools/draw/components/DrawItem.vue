@@ -839,7 +839,7 @@ export default {
                         <button
                             id="tool-draw-drawInteraction"
                             class="btn btn-sm"
-                            :class="currentInteraction === 'draw' ? 'btn-primary' : 'btn-lgv-grey'"
+                            :class="currentInteraction === 'draw' ? 'btn-primary' : 'btn-secondary'"
                             :disabled="currentInteraction === 'draw'"
                             @click="toggleInteraction('draw'); setCanvasCursorByInteraction('draw')"
                         >
@@ -854,7 +854,7 @@ export default {
                     <div class="col-12 d-grid gap-2">
                         <button
                             id="tool-draw-undoInteraction"
-                            class="btn btn-sm btn-lgv-grey"
+                            class="btn btn-sm btn-secondary"
                             @click="undoLastStep"
                         >
                             <span class="bootstrap-icon">
@@ -868,7 +868,7 @@ export default {
                     <div class="col-12 d-grid gap-2">
                         <button
                             id="tool-draw-redoInteraction"
-                            class="btn btn-sm btn-lgv-grey"
+                            class="btn btn-sm btn-secondary"
                             @click="redoLastStep"
                         >
                             <span class="bootstrap-icon">
@@ -883,7 +883,7 @@ export default {
                         <button
                             id="tool-draw-editInteraction"
                             class="btn btn-sm"
-                            :class="currentInteraction === 'modify' ? 'btn-primary' : 'btn-lgv-grey'"
+                            :class="currentInteraction === 'modify' ? 'btn-primary' : 'btn-secondary'"
                             :disabled="currentInteraction === 'modify'"
                             @click="toggleInteraction('modify'); setCanvasCursorByInteraction('modify')"
                         >
@@ -899,7 +899,7 @@ export default {
                         <button
                             id="tool-draw-deleteInteraction"
                             class="btn btn-sm"
-                            :class="currentInteraction === 'delete' ? 'btn-primary' : 'btn-lgv-grey'"
+                            :class="currentInteraction === 'delete' ? 'btn-primary' : 'btn-secondary'"
                             :disabled="currentInteraction === 'delete'"
                             @click="toggleInteraction('delete'); setCanvasCursorByInteraction('delete')"
                         >
@@ -914,7 +914,7 @@ export default {
                     <div class="col-12 d-grid gap-2">
                         <button
                             id="tool-draw-deleteAllInteraction"
-                            class="btn btn-sm btn-lgv-grey"
+                            class="btn btn-sm btn-secondary"
                             @click="clearLayer"
                         >
                             <span class="bootstrap-icon">

@@ -139,7 +139,7 @@ export default {
                     <template v-if="key === geometryName">
                         <button
                             type="button"
-                            class="btn btn-lgv-grey col-md-12"
+                            class="btn btn-secondary col-md-12"
                         >
                             {{ $t("common:share-components.list.zoomToResult") }}
                         </button>
@@ -206,7 +206,7 @@ table {
         border: $table-borders;
         padding: 12px $table-padding;
         text-align: left;
-        background-color: $primary_red;
+        background-color: $primary_grey;
         color: $accent_contrast;
     }
 

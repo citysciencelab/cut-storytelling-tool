@@ -25,7 +25,6 @@ export default {
 <style lang="scss">
     @import "~variables";
     $color_1: #f3f3f3;
-    $background_color_1: #E10019;
     $background_color_2: rgb(8,88,158);
 
     /* using this classname to scope css effects; can not use scoped scss here since controls are not within scope, but added by jQuery */
@@ -33,18 +32,18 @@ export default {
         /* use old styling way for icons for old controls */
         .bootstrap-icon {
             color: $color_1;
-            background-color: $background_color_1;
+            background-color: $primary_grey;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
             &:hover {
                 cursor: pointer;
-                background-color: $primary_red_hover;
+                background-color: $primary_grey_hover;
             }
             &:focus {
-                background-color: $primary_red_focus;
-                outline: 1px solid $primary_red_outline;
+                background-color: $primary_grey_focus;
+                outline: 1px solid $primary_grey_outline;
             }
             &:active {
-                background-color: $primary_red_active;
+                background-color: $primary_grey_active;
             }
         }
         > .toggleButtonPressed {

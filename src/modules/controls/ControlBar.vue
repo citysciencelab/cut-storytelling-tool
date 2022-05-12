@@ -193,15 +193,15 @@ export default {
 </style>
 
 <style lang="scss">
+    @import "~variables";
     /* using this classname to scope css effects; can not use scoped scss here since controls are not within scope, but added by jQuery */
     .backwards-compatibility-controls {
         $color_1: #f3f3f3;
-        $background_color_1: #E10019;
         $background_color_2: rgb(8,88,158);
         /* use old styling way for icons for old controls */
         .bootstrap-icon {
-            color: $color_1;
-            background-color: $background_color_1;
+            color: $primary_grey_contrast;
+            background-color: $primary_grey;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
             &:hover {
                 cursor: pointer;

@@ -10,7 +10,6 @@ $font_family_3: "MasterPortalFont", sans-serif;
 $background_color_1: #ffffff;
 $background_color_2: #fff;
 $background_color_3: #efefef;
-$background_color_4: #E10019;
 $background_color_5: rgb(169,169,169);
 $border_color_1: rgb(204, 204, 204);
 $border_color_2: white;
@@ -129,7 +128,7 @@ $border_color_3: #003063;
     }
     &:hover {
         background-color: $accent_hover;
-        color: $primary_red_contrast;
+        color: $primary_grey_contrast;
     }
 }
 
@@ -157,7 +156,7 @@ $border_color_3: #003063;
 }
 
 .results {
-    background-color: $background_color_4;
+    background-color: $primary_grey;
     font-size: 12px;
     text-align: right;
     padding: 6px;
@@ -174,7 +173,7 @@ $border_color_3: #003063;
 li.results {
     &:hover {
         opacity: 0.6;
-        background-color: $background_color_4;
+        background-color: $primary_grey;
     }
 }
 #searchInputUL {
