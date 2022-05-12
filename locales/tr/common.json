@@ -188,7 +188,8 @@
               "geometryNotSupported": "FeatureViaURL:{{layerId}} katmanı için yapılandırmada beyan edilen {{geometryType}} geometri türü desteklenmiyor.",
               "layerNotFound": "FeatureViaURL: {{layerId}} kimliğine sahip katman bulunamadı.",
               "noLayers": "FeatureViaURL: Aktarılan özellikler için yapılandırmada hiçbir katman tanımlanmadı.",
-              "noNameDefined": "FeatureViaURL: Yapılandırmada kimliği {{layerId}} olan katman için bir ad tanımlanmadı."
+              "noNameDefined": "FeatureViaURL: Yapılandırmada kimliği {{layerId}} olan katman için bir ad tanımlanmadı.",
+              "defaultTreeNotSupported": "FeatureViaURL: FeatureViaURL yalnızca Treetype custom veya light için desteklenir.."
           }
         },
         "quickHelp": {
