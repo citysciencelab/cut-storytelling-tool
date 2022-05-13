@@ -43,6 +43,15 @@ describe("src/modules/tools/bufferAnalysis/store/actionsBufferAnalysis.js", () =
         rootState = {
             Maps: {
                 mode: "2D"
+            },
+            urlParams: {
+                "Tools/bufferAnalysis/active": true,
+                initvalues: [
+                    "{\"applySelectedSourceLayer\":\"1711\"",
+                    "\"applyBufferRadius\":\"1010\"",
+                    "\"setResultType\":0",
+                    "\"applySelectedTargetLayer\":\"2128\"}"
+                ]
             }
         };
         state = {...stateBufferAnalysis};
@@ -178,6 +187,23 @@ describe("src/modules/tools/bufferAnalysis/store/actionsBufferAnalysis.js", () =
 
             expect(dispatch.callCount).to.equal(3);
             expect(commit.calledTwice).to.be.true;
+        });
+    });
+    describe("applyValuesFromSavedUrlBuffer", () => {
+        it("applies the values from a saved buffer analysis url", () => {
+            state.selectOptions = [{name: "Krankenhäuser", id: "1711"}, {name: "Verkehrskamers", id: "2128"}];
+            actions.applyValuesFromSavedUrlBuffer({rootState, dispatch, commit, state});
+
+            expect(dispatch.firstCall.args[0]).to.equal("applySelectedSourceLayer");
+            expect(dispatch.firstCall.args[1]).to.eql({name: "Krankenhäuser", id: "1711"});
+            expect(dispatch.secondCall.args[0]).to.equal("applyBufferRadius");
+            expect(dispatch.secondCall.args[1]).to.equal("1010");
+            expect(dispatch.thirdCall.args[0]).to.equal("applySelectedTargetLayer");
+            expect(dispatch.thirdCall.args[1]).to.eql({name: "Verkehrskamers", id: "2128"});
+            expect(commit.firstCall.args[0]).to.equal("setInputBufferRadius");
+            expect(commit.firstCall.args[1]).to.equal("1010");
+            expect(commit.secondCall.args[0]).to.equal("setResultType");
+            expect(commit.secondCall.args[1]).to.equal("0");
         });
     });
 });
