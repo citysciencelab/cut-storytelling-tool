@@ -138,6 +138,11 @@ export default {
         this.loadSelectOptions();
         this.$on("close", this.close);
     },
+    mounted () {
+        this.$nextTick(() => {
+            this.applyValuesFromSavedUrlBuffer();
+        });
+    },
     methods: {
         ...mapMutations("Tools/BufferAnalysis", Object.keys(mutations)),
         ...mapActions("Tools/BufferAnalysis", Object.keys(actions)),

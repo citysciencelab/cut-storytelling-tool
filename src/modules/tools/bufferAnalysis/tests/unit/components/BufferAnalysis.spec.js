@@ -47,6 +47,7 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
         originalShowBuffer = BufferAnalysis.actions.showBuffer;
         BufferAnalysis.actions.checkIntersection = sinon.spy();
         BufferAnalysis.actions.showBuffer = sinon.spy();
+        BufferAnalysis.actions.applyValuesFromSavedUrlBuffer = sinon.spy();
 
         store = new Vuex.Store({
             namespaces: true,

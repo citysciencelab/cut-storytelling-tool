@@ -48,7 +48,8 @@ const actions = {
             bufferLayer = new VectorLayer({
                 id: "buffer_layer",
                 source: vectorSource,
-                alwaysOnTop: true
+                alwaysOnTop: true,
+                zIndex: 10
             });
 
         commit("setBufferLayer", bufferLayer);
@@ -282,6 +283,30 @@ const actions = {
                 }
             }});
         });
+    },
+    /**
+     * Applies values from previous saved buffer analysis
+     * that was copied into the URL.
+     * @return {void}
+     */
+    applyValuesFromSavedUrlBuffer ({rootState, state, dispatch, commit}) {
+        if (rootState.urlParams["Tools/bufferAnalysis/active"]) {
+            const extractedParams = rootState.urlParams.initvalues.map((element) => {
+                    return element.replace(/\\"/g, "\"").split(":")[1].replaceAll("\"", "").replaceAll("}", "");
+                }),
+                selectedSourceLayerFromUrl = extractedParams[0],
+                bufferRadiusFromUrl = extractedParams[1],
+                resultTypeFromUrl = extractedParams[2],
+                selectedTargetLayerFromUrl = extractedParams[3],
+                foundSourceLayer = state.selectOptions.find(layer => layer.id === selectedSourceLayerFromUrl),
+                foundTargetLayer = state.selectOptions.find(layer => layer.id === selectedTargetLayerFromUrl);
+
+            dispatch("applySelectedSourceLayer", foundSourceLayer);
+            commit("setInputBufferRadius", bufferRadiusFromUrl);
+            dispatch("applyBufferRadius", bufferRadiusFromUrl);
+            commit("setResultType", resultTypeFromUrl);
+            dispatch("applySelectedTargetLayer", foundTargetLayer);
+        }
     }
 };
 
