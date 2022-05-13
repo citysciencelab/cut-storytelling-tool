@@ -294,18 +294,16 @@ const actions = {
             const extractedParams = rootState.urlParams.initvalues.map((element) => {
                     return element.replace(/\\"/g, "\"").split(":")[1].replaceAll("\"", "").replaceAll("}", "");
                 }),
-                selectedSourceLayerFromUrl = extractedParams[0],
+                selectedSourceLayerFromUrl = state.selectOptions.find(layer => layer.id === extractedParams[0]),
                 bufferRadiusFromUrl = extractedParams[1],
                 resultTypeFromUrl = extractedParams[2],
-                selectedTargetLayerFromUrl = extractedParams[3],
-                foundSourceLayer = state.selectOptions.find(layer => layer.id === selectedSourceLayerFromUrl),
-                foundTargetLayer = state.selectOptions.find(layer => layer.id === selectedTargetLayerFromUrl);
+                selectedTargetLayerFromUrl = state.selectOptions.find(layer => layer.id === extractedParams[3]);
 
-            dispatch("applySelectedSourceLayer", foundSourceLayer);
+            dispatch("applySelectedSourceLayer", selectedSourceLayerFromUrl);
             commit("setInputBufferRadius", bufferRadiusFromUrl);
             dispatch("applyBufferRadius", bufferRadiusFromUrl);
             commit("setResultType", resultTypeFromUrl);
-            dispatch("applySelectedTargetLayer", foundTargetLayer);
+            dispatch("applySelectedTargetLayer", selectedTargetLayerFromUrl);
         }
     }
 };
