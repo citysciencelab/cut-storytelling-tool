@@ -2,8 +2,11 @@ import {expect} from "chai";
 import {
     removeInvalidSnippets,
     convertStringSnippetsIntoObjects,
+    addParent,
+    getFlatArrayOfParentsAndChildren,
     addSnippetIds,
     addSnippetAdjustment,
+    addSnippetApi,
     addSnippetMultiselect,
     addSnippetOperator,
     addSnippetTypes,
@@ -57,6 +60,42 @@ describe("src/modules/tools/filterGeneral/utils/compileSnippets.js", () => {
             expect(snippets).to.deep.equal(expected);
         });
     });
+    describe("addParent", () => {
+        it("should add the given parent as parent to all given children, should work recursive", () => {
+            const snippets = [
+                {},
+                {children: [
+                    {}
+                ]}
+            ];
+
+            addParent(snippets, "parent");
+            expect(snippets).to.be.an("array").and.to.have.lengthOf(2);
+            expect(snippets[0]).to.be.an("object").and.to.include.all.keys(["parent"]);
+            expect(snippets[1]).to.be.an("object").and.to.include.all.keys(["parent"]);
+            expect(snippets[1].children).to.be.an("array").and.to.have.lengthOf(1);
+            expect(snippets[1].children[0]).to.be.an("object").and.to.include.all.keys(["parent"]);
+        });
+    });
+    describe("getFlatArrayOfParentsAndChildren", () => {
+        it("should hook all found children after their parents into the given array", () => {
+            const snippets = [
+                    {id: 0, children: [
+                        {id: 1}
+                    ]},
+                    {id: 2}
+                ],
+                result = getFlatArrayOfParentsAndChildren(snippets);
+
+            expect(result).to.be.an("array").and.to.have.lengthOf(3);
+            expect(result[0]).to.be.an("object");
+            expect(result[0].id).to.equal(0);
+            expect(result[1]).to.be.an("object");
+            expect(result[1].id).to.equal(1);
+            expect(result[2]).to.be.an("object");
+            expect(result[2].id).to.equal(2);
+        });
+    });
     describe("addSnippetIds", () => {
         it("should add a snippetId to every snippet overriding previous snippetId", () => {
             const snippets = [
@@ -87,6 +126,85 @@ describe("src/modules/tools/filterGeneral/utils/compileSnippets.js", () => {
             expect(snippets).to.deep.equal(expected);
         });
     });
+
+    describe("addSnippetApi", () => {
+        it("should add an api to every snippet if the snippet has its own service", () => {
+            const snippets = [
+                    {
+                        service: {
+                            name: "serviceA"
+                        }
+                    },
+                    {
+                        service: {
+                            name: "serviceB"
+                        }
+                    }
+                ],
+                expected = [
+                    {
+                        name: "serviceA"
+                    },
+                    {
+                        name: "serviceB"
+                    }
+                ],
+                allSetServices = [];
+
+            addSnippetApi(snippets, () => {
+                return {
+                    setService: service => {
+                        allSetServices.push(service);
+                    }
+                };
+            });
+
+            expect(allSetServices).to.deep.equal(expected);
+            expect(snippets[0]).to.be.an("object");
+            expect(snippets[0].api).to.be.an("object");
+            expect(snippets[1]).to.be.an("object");
+            expect(snippets[1].api).to.be.an("object");
+        });
+        it("should not add an api to a snippet if the snippet does not have its own service", () => {
+            const snippets = [
+                    {
+                        noService: {
+                            name: "noApi"
+                        }
+                    }
+                ],
+                allSetServices = [];
+
+            addSnippetApi(snippets, () => {
+                return {
+                    setService: service => {
+                        allSetServices.push(service);
+                    }
+                };
+            });
+            expect(allSetServices).to.be.empty;
+            expect(snippets[0]).to.be.an("object");
+            expect(snippets[0].api).to.not.be.an("object");
+        });
+        it("should only add an api to a snippet if the snippet service is an object", () => {
+            const snippets = [
+                    {service: "serviceB"}
+                ],
+                allSetServices = [];
+
+            addSnippetApi(snippets, () => {
+                return {
+                    setService: service => {
+                        allSetServices.push(service);
+                    }
+                };
+            });
+            expect(allSetServices).to.be.empty;
+            expect(snippets[0]).to.be.an("object");
+            expect(snippets[0].api).to.not.be.an("object");
+        });
+    });
+
     describe("addSnippetMultiselect", () => {
         it("should add a key multiselect depending on matichingMode if a snippet has no multiselect", () => {
             const snippets = [

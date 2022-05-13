@@ -168,7 +168,8 @@
                 "geometryNotSupported": "FeatureViaURL: O tipo de geometria {{geometryType}} na configuração da camada {{layerId}} não é suportado.",
                 "layerNotFound": "FeatureViaURL: A camada com o ID {{layerId}} não foi encontrado.",
                 "noLayers": "FeatureViaURL: Para as funções não existem camadas definidas na configuração.",
-                "noNameDefined": "FeatureViaURL: O nome da camada com o ID {{layerId}} não foi definido nas configurações."
+                "noNameDefined": "FeatureViaURL: O nome da camada com o ID {{layerId}} não foi definido nas configurações.",
+                "defaultTreeNotSupported": "FeatureViaURL só é compatível com Treetype custom ou light."
             }
         },
         "quickHelp": {

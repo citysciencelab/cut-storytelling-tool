@@ -190,7 +190,8 @@
                 "geometryNotSupported": "FeatureViaURL: Il tipo di geometria {{geometryType}}} dichiarata nella configurazione per il layer {{layerId}} non è supportato.",
                 "layerNotFound": "FeatureViaURL: Non è stato possibile trovare alcun layer con l'ID {{layerId}}.",
                 "noLayers": "FeatureViaURL: Nella configurazione non è stato definito alcun layer per i feature trasferiti.",
-                "noNameDefined": "FeatureViaURL: Nella configurazione non è stato specificato un nome per layer {{layerId}}."
+                "noNameDefined": "FeatureViaURL: Nella configurazione non è stato specificato un nome per layer {{layerId}}.",
+                "defaultTreeNotSupported": "FeatureViaURL è supportato solo per Treetype custom o light."
             }
         },
         "quickHelp": {

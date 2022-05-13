@@ -13,10 +13,15 @@
         - "bootstrap-icons"
 - Added a mixin for changing the colour and padding of an active pill inside the css class `nav-pills`.
 - HochwasserPrint: new print module for Hochwasserrisikomanagement
+- FilterModule:
+  - new option optionsLimit for dropdown snippet
+  - Parent-child Filter Mode in Dropdown snippet
 
 ### Changed
 - `default`-gfiTheme: If a `|`-character is part of the response, every element separated by the character will be displayed in a separate paragraph.
+- Issue #764: Using parameters in WfsSearch as defined in [Filter Encoding Implementation Specification](https://portal.ogc.org/files/?artifact_id=8340); the default name for the like filter escape character is now `escapeChar` rather than `escape`. This requires a change of configuration for services deviating from the standard implementation, see docs.
 - map moved with new structure from src/modules/map to src/core/maps.
+- The tool `coordTookit` can now be used in 3D mode again. A height is now also displayed in 3D mode.
 
 ### Deprecated
 - Switched Icon Library from Glyphicon to Bootstrap Icons. Edited Webpack Config. Updated icon usage in vue components to use scss. Updated icon usage in backbone modules. Edited docs & tests accordingly.
@@ -24,10 +29,14 @@
 ### Removed
 
 ### Fixed
+- Issue #686: Add logging and documentation regarding manual WMTS configuration's limitations
 - The order of printed features from the draw and measure layer is now corrected.
 - Issue #737: Fix issue of some items in the layer tree overflowing
 - The attribute `startingMap3D` in config.js now ensures that the 3D mode is started by default.
-
+- Issue #736: Fix console error when users forbid their localization.
+- 3D: static display of markerPoint and markerPolygon from mapMarker is now visible during search, coordinateSearch and coordToolkit.
+- Issue #760: Fixed double display of folder in menu topic-tree when using FeatureViaUrl
+- Issue #760: Features added with FeatureViaUrl are now correctly displayed under Selected Topics
 
 ## v2.21.0 - 2022-05-04
 ### Added

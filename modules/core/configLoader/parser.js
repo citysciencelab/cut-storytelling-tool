@@ -315,25 +315,34 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     addFolder: function (name, id, parentId, level, isExpanded, i18nKey, invertLayerOrder = false, isFolderSelectable = false) {
-        const folder = {
-            type: "folder",
-            name: i18nKey ? i18next.t(i18nKey) : name,
-            i18nextTranslate: i18nKey ? function (setter) {
-                if (typeof setter === "function" && i18next.exists(i18nKey)) {
-                    setter("name", i18next.t(i18nKey));
-                }
-            } : null,
-            icon: "bi-plus-circle-fill",
-            id: id,
-            parentId: parentId,
-            isExpanded: isExpanded ? isExpanded : false,
-            level: level,
-            quickHelp: store.getters["QuickHelp/isSet"],
-            invertLayerOrder,
-            isFolderSelectable
-        };
+        const itemList = this.get("itemList"),
+            folder = {
+                type: "folder",
+                name: i18nKey ? i18next.t(i18nKey) : name,
+                i18nextTranslate: i18nKey ? function (setter) {
+                    if (typeof setter === "function" && i18next.exists(i18nKey)) {
+                        setter("name", i18next.t(i18nKey));
+                    }
+                } : null,
+                icon: "bi-plus-circle-fill",
+                id: id,
+                parentId: parentId,
+                isExpanded: isExpanded ? isExpanded : false,
+                level: level,
+                quickHelp: store.getters["QuickHelp/isSet"],
+                invertLayerOrder,
+                isFolderSelectable
+            };
+        let folderExists = false;
 
-        this.addItem(folder);
+        itemList.forEach(element => {
+            if (element.id === id) {
+                folderExists = true;
+            }
+        });
+        if (!folderExists) {
+            this.addItem(folder);
+        }
     },
 
     /**
