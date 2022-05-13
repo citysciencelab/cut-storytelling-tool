@@ -435,7 +435,19 @@ Layer.prototype.setAutoRefreshEvent = function (layer) {
     layerSource.once("featuresloadend", () => {
         this.observersAutoRefresh.forEach(handler => {
             if (typeof handler === "function") {
-                handler(layerSource.getFeatures());
+                const features = layerSource.getFeatures();
+
+                if (layer.get("typ") === "GeoJSON") {
+                    if (Array.isArray(features)) {
+                        features.forEach((feature, idx) => {
+                            if (typeof feature?.getId === "function" && typeof feature.getId() === "undefined") {
+                                feature.setId("geojson-" + layer.get("id") + "-feature-id-" + idx);
+                            }
+                        });
+                    }
+                }
+
+                handler(features);
             }
         });
     });
