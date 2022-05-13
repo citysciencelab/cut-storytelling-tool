@@ -4,8 +4,6 @@ $color_1: rgb(85, 85, 85);
 $color_2: rgba(169, 68, 66, 1);
 $color_3: #E10019;
 $font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
-$background_color_1: rgb(255, 255, 255);
-$background_color_2: white;
 
 .style-wms-win {
     position: absolute;
@@ -15,7 +13,7 @@ $background_color_2: white;
     margin: 10px 10px 30px 10px;
     display: none;
     z-index: 1010;
-    background-color: $background_color_1;
+    background-color: $white;
     box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.176);
     border: 1px solid rgb(229, 229, 229);
     >.header {
@@ -38,7 +36,7 @@ $background_color_2: white;
         }
     }
     >.content {
-        background-color: $background_color_2;
+        background-color: $white;
         padding: 12px;
     }
     .layer-name {

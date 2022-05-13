@@ -85,25 +85,28 @@ url("../node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff2?a74547b2f0
 
 // Colors
 
-/* primary_grey: Map Interaction
+/* light_grey: Map Interaction
  * Used for control elements placed directly on the map.
  * Elements: Buttons and button-like elements.
  * Examples: ZoomButtons, MousePosition, ...
  */
-$primary_grey: #E3E3E3;
-$primary_grey_hover: lighten($primary_grey, 5%);
-$primary_grey_focus: lighten($primary_grey, 15%);
-$primary_grey_active: darken($primary_grey, 10%);
-$primary_grey_contrast: black;
-$primary_grey_inactive: grey;
-$primary_grey_inactive_contrast: black;
-$primary_grey_outline: #050505;
+$light_grey: #E3E3E3;
+$light_grey_hover: lighten($light_grey, 5%);
+$light_grey_focus: lighten($light_grey, 15%);
+$light_grey_active: darken($light_grey, 10%);
+$light_grey_contrast: black;
+$light_grey_inactive: #424242;
+$light_grey_inactive_contrast: black;
+$light_grey_outline: #050505;
 
 /* PRIMARY: The primary Buttons blue
 * Used fpr primary buttons like in the tools (print, draw etc.)
 */
-$primary: #003063;
+$dark_blue: #003063;
+$primary: $dark_blue;
 $white: #ffffff;
+$dark_grey: #424242;
+$light_blue: #00437A;
 
 /* SECONDARY: Navigation
  * Used for the nav bar, its children, and going back and forth within elements.
@@ -111,7 +114,7 @@ $white: #ffffff;
  * Examples: NavBar, open/close tool, layer list, change tabs, back button, next entry ...
  * NOTE Bootstrap 3 has some colours for "NavBar" and "Panels" - use instead of a secondary?
  */
-$secondary: #E3E3E3;
+$secondary: $light_grey;
 $secondary_table_style: #E2E2E2;  // background for table view style
 $secondary_border: #e5e5e5;
 $secondary_hover: #00437A;

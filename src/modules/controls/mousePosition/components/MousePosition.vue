@@ -71,8 +71,8 @@ export default {
         display: flex;
         flex-direction: row;
 
-        background-color: $primary_grey;
-        color: $primary_grey_contrast;
+        background-color: $light_grey;
+        color: $light_grey_contrast;
         font-size: $font_size_small_custom;
         line-height: $icon_length_small;
         min-height: $icon_length_small;
@@ -88,7 +88,7 @@ export default {
 
         .mouse-position-span {
             padding: 0 8px;
-            border-right: 1px solid $primary_grey_contrast;
+            border-right: 1px solid $light_grey_contrast;
             color: black;
             min-width: 150px;
         }

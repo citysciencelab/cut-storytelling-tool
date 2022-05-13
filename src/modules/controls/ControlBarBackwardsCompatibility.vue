@@ -32,18 +32,18 @@ export default {
         /* use old styling way for icons for old controls */
         .bootstrap-icon {
             color: $color_1;
-            background-color: $primary_grey;
+            background-color: $light_grey;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
             &:hover {
                 cursor: pointer;
-                background-color: $primary_grey_hover;
+                background-color: $light_grey_hover;
             }
             &:focus {
-                background-color: $primary_grey_focus;
-                outline: 1px solid $primary_grey_outline;
+                background-color: $light_grey_focus;
+                outline: 1px solid $light_grey_outline;
             }
             &:active {
-                background-color: $primary_grey_active;
+                background-color: $light_grey_active;
             }
         }
         > .toggleButtonPressed {

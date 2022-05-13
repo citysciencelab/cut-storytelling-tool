@@ -157,7 +157,7 @@ export default {
             border: 0;
 
             .ol-overviewmap-box {
-                border: 2px solid $primary_grey;
+                border: 2px solid $light_grey;
             }
 
             .ol-overviewmap-map {

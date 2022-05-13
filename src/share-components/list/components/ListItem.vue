@@ -206,7 +206,7 @@ table {
         border: $table-borders;
         padding: 12px $table-padding;
         text-align: left;
-        background-color: $primary_grey;
+        background-color: $light_grey;
         color: $accent_contrast;
     }
 

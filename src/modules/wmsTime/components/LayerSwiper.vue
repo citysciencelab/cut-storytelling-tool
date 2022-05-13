@@ -56,7 +56,7 @@ export default {
 
 button {
     width: 50px;
-    background-color: $primary_grey;
+    background-color: $light_grey;
     height: 30px;
     max-height: 100px;
     position: absolute;
@@ -73,7 +73,7 @@ button {
         bottom: -5000px;
         left: 50%;
         width: 4px;
-        background: $primary_grey_contrast;
+        background: $light_grey_contrast;
         z-index: -1;
         transform: translate(-2px, 0);
         -webkit-transform: translate(-2px, 0);

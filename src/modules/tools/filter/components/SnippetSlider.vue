@@ -486,7 +486,7 @@ export default {
     }
     input[type="range"].disabled {
         -webkit-appearance: none;
-        background-color: grey;
+        background-color: $dark_grey;
         height: 15px;
         overflow: hidden;
         width: 100%;
@@ -496,7 +496,7 @@ export default {
         -webkit-appearance: none;
         background: #ddd;
         border-radius: 50%;
-        box-shadow: -210px 0 0 200px grey;
+        box-shadow: -210px 0 0 200px #808080;
         cursor: pointer;
         height: 15px;
         width: 15px;
@@ -506,24 +506,24 @@ export default {
     input[type="range"].disabled::-moz-range-thumb {
         background: #ddd;
         border-radius: 50%;
-        box-shadow: -1010px 0 0 1000px grey;
+        box-shadow: -1010px 0 0 1000px $dark_grey;
         cursor: pointer;
         height: 15px;
         width: 15px;
         border: 0;
     }
     input[type="range"].disabled::-moz-range-track {
-        background-color: grey;
+        background-color: $dark_grey;
     }
     input[type="range"].disabled::-moz-range-progress {
-        background-color: grey;
+        background-color: $dark_grey;
         height: 15px
     }
     input[type="range"].disabled::-ms-fill-upper {
-        background-color: grey;
+        background-color: $dark_grey;
     }
     input[type="range"].disabled::-ms-fill-lower {
-        background-color: grey;
+        background-color: $dark_grey;
     }
     .category-layer .right {
         right: 30px;

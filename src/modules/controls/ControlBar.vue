@@ -200,8 +200,8 @@ export default {
         $background_color_2: rgb(8,88,158);
         /* use old styling way for icons for old controls */
         .bootstrap-icon {
-            color: $primary_grey_contrast;
-            background-color: $primary_grey;
+            color: $light_grey_contrast;
+            background-color: $light_grey;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
             &:hover {
                 cursor: pointer;

@@ -88,8 +88,8 @@ export default {
     }
 
     .control-icon {
-        background-color: $primary_grey;
-        color: $primary_grey_contrast;
+        background-color: $light_grey;
+        color: $light_grey_contrast;
 
         pointer-events: all;
         cursor: pointer;
@@ -107,19 +107,19 @@ export default {
 
         /* pseudo-class state effects */
         &:hover {
-            background-color: $primary_grey_hover;
+            background-color: $light_grey_hover;
         }
         &:focus {
-            background-color: $primary_grey_focus;
-            outline: 1px solid $primary_grey_outline;
+            background-color: $light_grey_focus;
+            outline: 1px solid $light_grey_outline;
         }
         &:active {
-            background-color: $primary_grey_active;
+            background-color: $light_grey_active;
         }
 
         &:disabled {
-            background-color: $primary_grey_inactive;
-            color: $primary_grey_inactive_contrast;
+            background-color: $light_grey_inactive;
+            color: $light_grey_inactive_contrast;
             cursor: default;
         }
     }

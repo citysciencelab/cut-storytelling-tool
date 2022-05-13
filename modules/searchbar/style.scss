@@ -124,7 +124,7 @@ $border_color_3: #003063;
     }
     &:hover {
         background-color: $accent_hover;
-        color: $primary_grey_contrast;
+        color: $light_grey_contrast;
     }
 }
 
@@ -152,7 +152,7 @@ $border_color_3: #003063;
 }
 
 .results {
-    background-color: $primary_grey;
+    background-color: $light_grey;
     font-size: 12px;
     text-align: right;
     padding: 6px;
@@ -169,7 +169,7 @@ $border_color_3: #003063;
 li.results {
     &:hover {
         opacity: 0.6;
-        background-color: $primary_grey;
+        background-color: $light_grey;
     }
 }
 #searchInputUL {
