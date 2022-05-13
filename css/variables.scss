@@ -105,6 +105,7 @@ $light_grey_outline: #050505;
 $dark_blue: #003063;
 $primary: $dark_blue;
 $white: #ffffff;
+$black: #000;
 $dark_grey: #424242;
 $light_blue: #00437A;
 
@@ -115,7 +116,7 @@ $light_blue: #00437A;
  * NOTE Bootstrap 3 has some colours for "NavBar" and "Panels" - use instead of a secondary?
  */
 $secondary: $light_grey;
-$secondary_table_style: #E2E2E2;  // background for table view style
+$secondary_table_style: #F2F2F2;  // background for table view style
 $secondary_border: #e5e5e5;
 $secondary_hover: #00437A;
 $secondary_hover_contrast: #F3F3F3;

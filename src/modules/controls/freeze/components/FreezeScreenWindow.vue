@@ -119,7 +119,7 @@ export default {
         height: 60px;
         line-height: 60px;
         text-align: center;
-        background-color: #646262;
+        background-color: $dark_grey;
         color: $white;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
         &.table {

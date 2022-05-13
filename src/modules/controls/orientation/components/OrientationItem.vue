@@ -503,7 +503,7 @@ export default {
         }
     }
     .geolocation_marker {
-        color: #F3F3F3;
+        color: $secondary_hover_contrast;
         padding: 2px 3px 2px 2px;
         background: none repeat scroll #D42132;
         border-radius: 50px;
