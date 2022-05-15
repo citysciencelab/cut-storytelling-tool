@@ -864,7 +864,7 @@ export default {
         #tool-general-filter {
             .panel-body {
                 max-height: 480px;
-                overflow-y: scroll;
+                overflow-y: auto;
                 .snippet {
                     max-width: 288px;
                 }
