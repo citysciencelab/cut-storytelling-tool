@@ -8,6 +8,7 @@ import {Icon, Style} from "ol/style.js";
  * @param {Number} pointSize The size of the point.
  * @param {Object} symbol The symbol for the point.
  * @param {Number} zIndex Determines in which order features are rendered on the view.
+ * @see {@link https://community.cesium.com/t/cors-and-billboard-image/3920/2} crossOrigin: "anonymous", is necessary for the 3D mode.
  * @returns {module:ol/style/Style} style for points with an icon.
  * @throws Error if the type of the symbol is not supported.
  */
@@ -17,6 +18,7 @@ export function createIconStyle (color, imgPath, pointSize, symbol, zIndex) {
     if (symbol?.type === "image") {
         style = new Style({
             image: new Icon({
+                crossOrigin: "anonymous",
                 src: symbol.value.indexOf("/") === -1 && imgPath ? imgPath + symbol.value : symbol.value,
                 scale: symbol?.scale ? symbol.scale : 1 / (96 / pointSize),
                 // funktioniert nicht bei kml:

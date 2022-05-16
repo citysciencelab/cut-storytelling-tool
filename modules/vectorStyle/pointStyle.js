@@ -121,6 +121,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
     /**
     * Creates simpleClusterStyle.
     * all clustered features get same image.
+    * @see {@link https://community.cesium.com/t/cors-and-billboard-image/3920/2} crossOrigin: "anonymous", is necessary for the 3D mode.
     * @returns {ol/style} - The created style.
     */
     createIconClusterStyle: function () {
@@ -133,6 +134,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
 
         return new Style({
             image: new Icon({
+                crossOrigin: "anonymous",
                 src: src,
                 width: width,
                 height: height,
@@ -190,6 +192,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
     /**
     * Creates pointStyle as icon.
     * all features get same image.
+    * @see {@link https://community.cesium.com/t/cors-and-billboard-image/3920/2} crossOrigin: "anonymous", is necessary for the 3D mode.
     * @returns {ol/style} - The created style.
     */
     createIconPointStyle: function () {
@@ -205,6 +208,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
 
         return new Style({
             image: new Icon({
+                crossOrigin: "anonymous",
                 src: src,
                 width: width,
                 height: height,
@@ -287,6 +291,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
     /**
      * create Style for SVG
      * @param  {String} svgPath - contains the params to be draw
+     * @see {@link https://community.cesium.com/t/cors-and-billboard-image/3920/2} crossOrigin: "anonymous", is necessary for the 3D mode.
      * @return {ol.Style} style
      */
     createSVGStyle: function (svgPath) {
@@ -294,6 +299,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
 
         return new Style({
             image: new Icon({
+                crossOrigin: "anonymous",
                 src: "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgPath),
                 imgSize: [size, size]
             })

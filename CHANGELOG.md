@@ -47,6 +47,7 @@
 - Issue #760: Features added with FeatureViaUrl are now correctly displayed under Selected Topics
 - Fix Filter of GeoJSON after AutoRefresh by adding ID to each feature of the GeoJSON after AutoRefresh
 - Issue #712: Fix issue of multiple legend menu items in mobile view.
+- Vector layers like WFS, GeoJSON or OAF (OGC API - Features) are now displayed in 3D mode.
 
 ---
 
