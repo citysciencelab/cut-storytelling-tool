@@ -106,7 +106,7 @@ function callActions (state) {
         store.dispatch("Maps/setZoomLevel", state.urlParams["Maps/zoomLevel"]);
         store.commit("Maps/setInitialResolution", store.getters["Maps/getView"].getResolution());
     }
-    if (Object.prototype.hasOwnProperty.call(state.ZoomTo, "zoomToGeometry") || Object.prototype.hasOwnProperty.call(state.ZoomTo, "zoomToFeatureId")) {
+    if ((Object.prototype.hasOwnProperty.call(state.ZoomTo, "zoomToGeometry") && state.ZoomTo.zoomToGeometry !== undefined) || (Object.prototype.hasOwnProperty.call(state.ZoomTo, "zoomToFeatureId") && state.ZoomTo.zoomToFeatureId !== undefined)) {
         store.dispatch("ZoomTo/zoomToFeatures");
     }
 
