@@ -29,7 +29,7 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
             }
         }
     };
-    let store, originalCheckIntersection, originalShowBuffer, wrapper;
+    let store, originalCheckIntersection, originalShowBuffer, originalApplyValuesFromSavedUrlBuffer, wrapper;
 
     before(() => {
         mapCollection.clear();
@@ -45,8 +45,10 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
     beforeEach(() => {
         originalCheckIntersection = BufferAnalysis.actions.checkIntersection;
         originalShowBuffer = BufferAnalysis.actions.showBuffer;
+        originalApplyValuesFromSavedUrlBuffer = BufferAnalysis.actions.applyValuesFromSavedUrlBuffer;
         BufferAnalysis.actions.checkIntersection = sinon.spy();
         BufferAnalysis.actions.showBuffer = sinon.spy();
+        BufferAnalysis.actions.applyValuesFromSavedUrlBuffer = sinon.spy();
 
         store = new Vuex.Store({
             namespaces: true,
@@ -80,6 +82,7 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
         mapCollection.addMap(map, "2D");
         BufferAnalysis.actions.checkIntersection = originalCheckIntersection;
         BufferAnalysis.actions.showBuffer = originalShowBuffer;
+        BufferAnalysis.actions.applyValuesFromSavedUrlBuffer = originalApplyValuesFromSavedUrlBuffer;
         store.commit("Tools/BufferAnalysis/setActive", false);
         store.commit("Tools/BufferAnalysis/setSelectOptions", []);
         store.dispatch("Tools/BufferAnalysis/resetModule");

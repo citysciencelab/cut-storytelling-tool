@@ -35,6 +35,7 @@
 - The attribute `startingMap3D` in config.js now ensures that the 3D mode is started by default.
 - Issue #736: Fix console error when users forbid their localization.
 - Fix issue with black lines that showed up when printing the measure_layer.
+- Saved results from the bufferAnalysis now get displayed correctly when opening a copied URL from the tool.
 - 3D: static display of markerPoint and markerPolygon from mapMarker is now visible during search, coordinateSearch and coordToolkit.
 - Issue #760: Fixed double display of folder in menu topic-tree when using FeatureViaUrl
 - Issue #760: Features added with FeatureViaUrl are now correctly displayed under Selected Topics
