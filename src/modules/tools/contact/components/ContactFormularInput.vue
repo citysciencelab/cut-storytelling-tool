@@ -110,12 +110,14 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+@import "~variables";
+
 .input-group-text:first-child.force-border {
-    border-right: 1px solid #ccc;
+    border-right: 1px solid $light_grey;
 }
 
 .has-error .input-group-text:first-child.force-border {
-    border-right: 1px solid #a94442;
+    border-right: 1px solid $light_red;
 }
 
 .has-success .input-group-text:first-child.force-border {
@@ -138,7 +140,7 @@ export default {
     display: block;
     margin-top: 5px;
     margin-bottom: 10px;
-    color: #737373;
+    color: $dark_grey;
 }
 
 </style>

@@ -682,7 +682,6 @@ export default {
 <style lang="scss" scoped>
 @import "~variables";
 
-
     @media (max-width: 767px) {
         .checkbox-container .form-inline {
             font-size: 12px;
@@ -703,7 +702,7 @@ export default {
     }
     .error-text {
         font-size: 85%;
-        color: #a94442;
+        color: $light_red;
     }
     .hint{
         margin: 5px 0px 25px;

@@ -127,6 +127,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    @import "~variables";
 
     #portal-footer {
         width: 100%;
@@ -173,7 +174,7 @@ export default {
         }
 
         a[target=_blank]{
-            color: #1F4B70;
+            color: $dark_blue;
         }
 
         .portal-footer-scaleLine {

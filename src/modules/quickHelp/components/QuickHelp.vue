@@ -226,11 +226,11 @@ export default {
     >a {
         padding: 5px;
         margin: 5px;
-        border: 1px solid silver;
+        border: 1px solid $light_grey;
         float: left;
         background: $white;
         text-decoration: none;
-        color: #333333;
+        color: $dark_grey;
     }
     >a:hover, a:focus {
         background-color: $accent_hover;

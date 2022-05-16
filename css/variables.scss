@@ -59,8 +59,6 @@ $navbar-nav-link-padding-x: 0.9375rem;
 $navbar-toggler-padding-x: .625rem;
 $navbar-toggler-focus-width: 0;
 
-$navbar-light-color: #333333;
-
 // Dropdowns
 //
 // Dropdown menu container and contents.
@@ -106,6 +104,7 @@ $dark_blue: #003063;
 $primary: $dark_blue;
 $white: #ffffff;
 $black: #000;
+$light_red: #E10019;
 $dark_grey: #424242;
 $light_blue: #00437A;
 
@@ -153,6 +152,7 @@ $icon_length_list: 0px; // TODO figure out correct value before usage
 
 /* FONT STYLES
  * TODO why is Arial Narrow an alternative to MPF Bold?
+ * I don't know ... is it?
  */
 $font_family_default: "MasterPortalFont", "Arial", sans-serif;
 $font_family_narrow: "MasterPortalFont", "Arial Narrow", Arial, sans-serif;

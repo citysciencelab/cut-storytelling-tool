@@ -799,11 +799,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
-
-    $color_1: #000000;
-    $font_family_2: "MasterPortalFont", sans-serif;
-    $background_color_3: #f2f2f2;
-    $background_color_4: #646262;
+    @import "~variables";
 
     #legend.legend-mobile {
         width: 100%;
@@ -858,7 +854,7 @@ export default {
             .layer-title {
                 padding: 5px;
                 font-weight: bold;
-                background-color: #e7e7e7;
+                background-color: $light_grey;
                 span {
                     vertical-align: -webkit-baseline-middle;
                 }
@@ -874,14 +870,12 @@ export default {
     .legend-window-table {
         position: absolute;
         right: 0;
-        font-family: $font_family_2;
         border-radius: 12px;
-        background-color: $background_color_4;
+        background-color: $dark_grey;
         width: 300px;
         margin: 10px 10px 30px 10px;
         z-index: 9999;
         .legend-title-table {
-            font-family: $font_family_2;
             font-size: 14px;
             color: $white;
             padding: 10px;
@@ -908,16 +902,16 @@ export default {
         .legend-content {
             border-bottom-left-radius: 12px;
             border-bottom-right-radius: 12px;
-            background-color: $background_color_3;
+            background-color: $light_grey;
             .card {
-                background-color: $background_color_3;
+                background-color: $light_grey;
             }
             .layer-title {
                 border-radius: 12px;
                 padding: 5px;
-                color: $color_1;
+                color: $black;
                 font-weight: bold;
-                background-color: #e7e7e7;
+                background-color: $light_grey;
                 span {
                     vertical-align: -webkit-baseline-middle;
                 }

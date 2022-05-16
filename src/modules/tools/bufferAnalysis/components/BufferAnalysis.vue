@@ -328,7 +328,7 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-    // @import "~variables";
+    @import "~variables";
     #tool-bufferAnalysis-radiusRangeInput {
         -webkit-appearance: none;
         appearance: none;
@@ -342,7 +342,7 @@ export default {
         &::-moz-range-thumb, &::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            background-color: #08589e;
+            background-color: $light_blue;
             cursor: pointer;
             border-width: 1px;
             border-color: white;
