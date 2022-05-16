@@ -9,6 +9,10 @@ const actions = {
         let addFeatures = true,
             allowedValues, layerId, property, styleId, urlValues;
 
+        if (config === null) {
+            return false;
+        }
+
         // NOTE(roehlipa): Everything included in the if-closure can be removed when the deprecated config parameters have been removed.
         //                 It might be useful to refactor this action slightly for version 3.0.0.
         if (deprecatedParameters) {

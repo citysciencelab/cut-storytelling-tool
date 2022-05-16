@@ -91,11 +91,10 @@ function createLayerIfNotExists (layername) {
 function liveZoom (minScale, featureIds, layerId, callback) {
     const minResolution = Radio.request("MapView", "getResolutionByScale", minScale);
 
-    Radio.trigger("Map", "zoomToFilteredFeatures", {ids: featureIds, layerId: layerId, zoomOptions: {
+    store.dispatch("Maps/zoomToFilteredFeatures", {ids: featureIds, layerId: layerId, zoomOptions: {
         minResolution,
         callback
-    }
-    });
+    }});
 }
 
 /**
