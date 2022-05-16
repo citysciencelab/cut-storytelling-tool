@@ -119,7 +119,6 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         dataWithDefaultValue.push(this.getMapmarkerPolygonDefaultStyle());
 
         styleIds.push(this.getStyleIdsFromLayers(layers));
-        styleIds.push(this.getStyleIdForZoomToFeature());
         styleIds.push(this.getStyleIdForMapMarkerPoint());
         styleIds.push(this.getStyleIdForMapMarkerPolygon());
         styleIds.push(this.getStyleIdsFromTools(tools));
@@ -204,20 +203,6 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         }
         return styleIds;
     },
-
-    /**
-     * Gets styleId from config for zoomToFeature
-     * @returns {String} - Style id
-     */
-    getStyleIdForZoomToFeature: function () {
-        let styleId;
-
-        if (Object.prototype.hasOwnProperty.call(Config, "zoomToFeature") && Object.prototype.hasOwnProperty.call(Config.zoomToFeature, "styleId")) {
-            styleId = Config.zoomToFeature.styleId;
-        }
-        return styleId;
-    },
-
     /**
      * Gets the default style for mapmarker as point.
      * @returns {Object} The default style for mapMarker point Style.

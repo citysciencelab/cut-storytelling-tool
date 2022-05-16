@@ -106,6 +106,10 @@ function callActions (state) {
         store.dispatch("Maps/setZoomLevel", state.urlParams["Maps/zoomLevel"]);
         store.commit("Maps/setInitialResolution", store.getters["Maps/getView"].getResolution());
     }
+    if (Object.prototype.hasOwnProperty.call(state.ZoomTo, "zoomToGeometry") || Object.prototype.hasOwnProperty.call(state.ZoomTo, "zoomToFeatureId")) {
+        store.dispatch("ZoomTo/zoomToFeatures");
+    }
+
 }
 /**
  * Sets the url params at state and produces desired reaction.
@@ -115,7 +119,7 @@ function callActions (state) {
  */
 export async function setValuesToState (state, params) {
     await params.forEach(async (value, key) => setValueToState(state, key, value));
-    state.urlParams = JSON.parse(JSON.stringify(state.urlParams));
+
     triggerParametricURLReady();
     Object.keys(state.urlParams).forEach(key => {
         const value = state.urlParams[key];
@@ -156,7 +160,12 @@ export async function setValueToState (state, key, value) {
                     }
                 }
             }
-            state.urlParams[entry.key] = entry.value;
+            if (entry.key === "Maps/zoomToGeometry" || entry.key === "Maps/zoomToFeatureId") {
+                state.ZoomTo[entry.key.substring(5)] = entry.value;
+            }
+            else {
+                state.urlParams[entry.key] = entry.value;
+            }
             return entry;
         }).catch(error => {
             console.warn("Error occured during applying url param to state ", error);
