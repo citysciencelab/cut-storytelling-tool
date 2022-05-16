@@ -205,7 +205,8 @@
                 "geometryNotSupported": "FeatureViaURL: Тип геометрії {{geometryType}}, оголошений у конфігурації для шару {{layerId}}, не підтримується.",
                 "layerNotFound": "FeatureViaURL: Не вдалося знайти шар з ідентифікатором {{layerId}}.",
                 "noLayers": "FeatureViaURL: Для переданого об'єкта шари в конфігурації не визначені.",
-                "noNameDefined": "FeatureViaURL: Ім'я шару з ідентифікатором {{layerId}} в конфігурації не визначено."
+                "noNameDefined": "FeatureViaURL: Ім'я шару з ідентифікатором {{layerId}} в конфігурації не визначено.",
+                "defaultTreeNotSupported": "FeatureViaURL: FeatureViaURL підтримується лише для Treetype, custom або light."
             }
         },
         "quickHelp": {
@@ -619,7 +620,6 @@
                 },
                 "hintSupply": "Клацніть на карту, щоб запросити координати",
                 "hintSearch": "Введіть координати для пошуку",
-                "disabledTooltip": "Ця функція недоступна в 3D-поданні",
                 "copyCoordsBtn": "Скопіювати пару координат",
                 "copyCoordBtn": " {{value}} скопіювати"
             },

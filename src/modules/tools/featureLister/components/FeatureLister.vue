@@ -144,7 +144,7 @@ export default {
     <ToolTemplate
         :id="id"
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
@@ -241,7 +241,7 @@ export default {
                                             :key="'tool-feature-lister-' + index"
                                             class="feature-lister-list-table-th"
                                         >
-                                            <span class="glyphicon glyphicon-sort-by-alphabet" />
+                                            <span class="bi-sort-alpha-down" />
                                             {{ header.value }}
                                         </th>
                                     </tr>
@@ -278,7 +278,7 @@ export default {
                                 @click="showMore()"
                             >
                                 <span
-                                    class="glyphicon glyphicon-import"
+                                    class="bi-box-arrow-in-up"
                                     aria-hidden="true"
                                 /> {{ $t("modules.tools.featureLister.more") }}
                             </button>

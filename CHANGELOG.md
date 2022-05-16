@@ -13,11 +13,15 @@
         - "bootstrap-icons"
 - Added a mixin for changing the colour and padding of an active pill inside the css class `nav-pills`.
 - HochwasserPrint: new print module for Hochwasserrisikomanagement
+- FilterModule:
+  - new option optionsLimit for dropdown snippet
+  - Parent-child Filter Mode in Dropdown snippet
 
 ### Changed
 - `default`-gfiTheme: If a `|`-character is part of the response, every element separated by the character will be displayed in a separate paragraph.
 - Issue #764: Using parameters in WfsSearch as defined in [Filter Encoding Implementation Specification](https://portal.ogc.org/files/?artifact_id=8340); the default name for the like filter escape character is now `escapeChar` rather than `escape`. This requires a change of configuration for services deviating from the standard implementation, see docs.
 - map moved with new structure from src/modules/map to src/core/maps.
+- The tool `coordTookit` can now be used in 3D mode again. A height is now also displayed in 3D mode.
 
 ### Deprecated
 - Switched Icon Library from Glyphicon to Bootstrap Icons. Edited Webpack Config. Updated icon usage in vue components to use scss. Updated icon usage in backbone modules. Edited docs & tests accordingly.
@@ -25,19 +29,24 @@
 ### Removed
 
 ### Fixed
+- Issue #686: Add logging and documentation regarding manual WMTS configuration's limitations
 - The order of printed features from the draw and measure layer is now corrected.
 - Issue #737: Fix issue of some items in the layer tree overflowing
 - The attribute `startingMap3D` in config.js now ensures that the 3D mode is started by default.
 - Issue #736: Fix console error when users forbid their localization.
 - Fix issue with black lines that showed up when printing the measure_layer.
-
+- 3D: static display of markerPoint and markerPolygon from mapMarker is now visible during search, coordinateSearch and coordToolkit.
+- Issue #760: Fixed double display of folder in menu topic-tree when using FeatureViaUrl
+- Issue #760: Features added with FeatureViaUrl are now correctly displayed under Selected Topics
+- Fix Filter of GeoJSON after AutoRefresh by adding ID to each feature of the GeoJSON after AutoRefresh
+- Issue #712: Fix issue of multiple legend menu items in mobile view.
 
 ## v2.21.0 - 2022-05-04
 ### Added
 - A control has been added to create buttons for any tools. These can be used to open and close the configured tools.
 - Added style.json parameter "styleMultiGeomOnlyWithRule". If true, **no** fallback for styling of multiGeometries is used. Default is false, means the the previous behavior.
-- ZoomToFeature: A `setFeature` attribute has been added to zoom only to a feature per ID. A new feature with the specified style is not created in this case.
 - Russian, Ukrainian and Platt is now available as a new language selection.
+- Added new module `zoomTo` which combines the modules `zoomToFeature` and `zoomToGeometry`.
 
 ### Changed
 - Migrated the module featureViaURL from Backbone to Vue as a util. E2E tests were fixed and re-enabled.
@@ -51,6 +60,7 @@
 - WFSSearch, has been adjusted so that it zooms directly to the first feature found if no `resultList` is configured.
 
 ### Deprecated
+- Configuration (`config.js`) parameters `zoomToFeature` and `zoomToGeometry` have been marked as deprecated in an upcoming major release.
 
 ### Removed
 

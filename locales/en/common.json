@@ -204,7 +204,8 @@
                 "geometryNotSupported": "FeatureViaURL: The geometryType {{geometryType}} for the Layer {{layerId}} is not supported.",
                 "layerNotFound": "FeatureViaURL: The layer with the id {{layerId}} was not found.",
                 "noLayers": "FeatureViaURL: No layers were defined in the config for the given features.",
-                "noNameDefined": "FeatureViaURL: No name was defined for the layer with the id {{layerId}}."
+                "noNameDefined": "FeatureViaURL: No name was defined for the layer with the id {{layerId}}.",
+                "defaultTreeNotSupported": "FeatureViaURL: FeatureViaURL is only supported for Treetype custom or light."
             }
         },
         "quickHelp": {
@@ -619,7 +620,6 @@
                 },
                 "hintSupply": "Click in the map to request coordinates",
                 "hintSearch": "Enter the coordinates to search for",
-                "disabledTooltip": "This function is not available in the 3D view.",
                 "copyCoordsBtn": "Copy pair of coordinates",
                 "copyCoordBtn": " Copy {{value}}"
             },
@@ -1070,11 +1070,6 @@
             "noLegendForLayerInfo": "No legend available",
             "toggleCollapseAll": "Toggle all legends"
         },
-        "zoomToGeometry": {
-          "alertNoFoundFeature" : "No object was found! Please check the input parameters.",
-          "alertParameterizedAccess": "Unfortunately, the parameterized access to the portal went wrong!",
-          "alertRequiredService": "Details: A required service is not responding."
-        },
         "util": {
             "copyToClipboard": {
                 "contentSaved": "Content was copied to the clipboard.",
@@ -1115,11 +1110,13 @@
             "newYearsEve": "New Year's Eve"
         },
         "parametricURL": {
-          "alertZoomToGeometry": "The parameterized call of the portal has unfortunately gone wrong!<br>Please make sure that all parameters were entered correctly.",
-          "alertWrongLayerIds": "The called link contains topics that can no longer be found.</br> To avoid receiving this error message in the future, please take the following steps:<ul> <li>Check your desired map section for missing content.</li> <li>Save your selection again with the tool \"Save selection\".</li></ul>",
-          "alertWrongAmountVisibility": "<strong>Parameterized call incorrect!</strong></br>The specifications for <b>layerIds</b> do not match <b>visibility</b> or <b>transparency</b>. They must be specified in the same number in each case.",
-          "errorLoadConfig": "The requested configuration file could not be loaded under the following path: {{url}}<br>The URL paramater <strong>configJson</strong> requests a file with the extension \".json\".<br>An attempt is made to load the config.json under the default path.",
-          "alertDeprecated": "The URL-parameter <b>?{{deprecatedKey}}</b> is deprecated and will be removed with Masterportal version 3.0.0.<br>Please use <b><a href='{{currentUrl}}'>{{currentUrl}}</a></b> instead."
+            "alertWrongLayerIds": "The called link contains topics that can no longer be found.</br> To avoid receiving this error message in the future, please take the following steps:<ul> <li>Check your desired map section for missing content.</li> <li>Save your selection again with the tool \"Save selection\".</li></ul>",
+            "alertWrongAmountVisibility": "<strong>Parameterized call incorrect!</strong></br>The specifications for <b>layerIds</b> do not match <b>visibility</b> or <b>transparency</b>. They must be specified in the same number in each case.",
+            "errorLoadConfig": "The requested configuration file could not be loaded under the following path: {{url}}<br>The URL paramater <strong>configJson</strong> requests a file with the extension \".json\".<br>An attempt is made to load the config.json under the default path.",
+            "alertDeprecated": "The URL-parameter <b>?{{deprecatedKey}}</b> is deprecated and will be removed with Masterportal version 3.0.0.<br>Please use <b><a href='{{currentUrl}}'>{{currentUrl}}</a></b> instead.",
+            "zoomTo": {
+                "wrongConfigId": "zoomTo: The specified id {{configId}} for the url parameter does not exist. Please use either 'zoomToGeometry' or 'zoomToFeatureId'."
+            }
         }
     },
     "snippets": {

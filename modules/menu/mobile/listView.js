@@ -26,19 +26,19 @@ const MobileMenu = Backbone.View.extend({
                 }
             }
         });
-        this.render();
+        this.render(false);
         this.breadCrumbListView = new BreadCrumbListView();
     },
     collection: {},
     el: "nav#main-nav",
     attributes: {role: "navigation"},
     breadCrumbListView: {},
-    render: function () {
+    render: function (notFirstCall) {
         const rootModels = this.collection.where({parentId: "root"});
 
         $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
         $("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
-        this.addViews(rootModels);
+        this.addViews(rootModels, notFirstCall);
         store.dispatch("Legend/setShowLegendInMenu", true);
         return this;
     },
@@ -171,9 +171,10 @@ const MobileMenu = Backbone.View.extend({
      * separates by modelType and add Views
      * add only tools that have the attribute "isVisibleInMenu" === true
      * @param {Item[]} models - all models
+     * @param {boolean} [notFirstCall = true] Whether this is the first time this function has been called; used for a fix on the menu item of the legend.
      * @returns {void}
      */
-    addViews: function (models) {
+    addViews: function (models, notFirstCall = true) {
         const treeType = this.doRequestTreeType(),
             newModels = models.filter(model => !(model.get("onlyDesktop") === true));
 
@@ -182,6 +183,7 @@ const MobileMenu = Backbone.View.extend({
 
         newModels.forEach(model => {
             model.setIsVisibleInTree(true);
+
             switch (model.get("type")) {
                 case "folder": {
                     attr = model.toJSON();
@@ -198,6 +200,9 @@ const MobileMenu = Backbone.View.extend({
                 }
                 case "tool": {
                     if (model.get("isVisibleInMenu")) {
+                        if (notFirstCall && (model.get("name") === "common:modules.legend.name" || model.get("name") === i18next.t("common:modules.legend.name"))) {
+                            return;
+                        }
                         nodeView = new ToolView({model: model});
                     }
                     else {

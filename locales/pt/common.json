@@ -92,7 +92,6 @@
             }
           },
           "parametricURL": {
-            "alertZoomToGeometry": "A chamada parametrizada do portal infelizmente correu mal!<br>Por favor, certifique-se de que todos os parâmetros foram introduzidos correctamente.",
             "alertWrongLayerIds": "<strong>A chamada parametrizada está avariada!</strong></br>O <b>layerIds</b> nas posições: {{wrongIdsPositionsConcat}} não existem e são ignorados!"
           }
         },
@@ -169,7 +168,8 @@
                 "geometryNotSupported": "FeatureViaURL: O tipo de geometria {{geometryType}} na configuração da camada {{layerId}} não é suportado.",
                 "layerNotFound": "FeatureViaURL: A camada com o ID {{layerId}} não foi encontrado.",
                 "noLayers": "FeatureViaURL: Para as funções não existem camadas definidas na configuração.",
-                "noNameDefined": "FeatureViaURL: O nome da camada com o ID {{layerId}} não foi definido nas configurações."
+                "noNameDefined": "FeatureViaURL: O nome da camada com o ID {{layerId}} não foi definido nas configurações.",
+                "defaultTreeNotSupported": "FeatureViaURL só é compatível com Treetype custom ou light."
             }
         },
         "quickHelp": {
@@ -718,11 +718,6 @@
             "linkToPdf": "Para a lenda externa (PDF)",
             "noLegendForLayerInfo": "Legenda não disponível",
             "toggleCollapseAll": "Mostrar/ocultar todas as legendas"
-        },
-        "zoomToGeometry": {
-          "alertNoFoundFeature": "Nenhum objecto foi encontrado! Por favor verifique os parâmetros de entrada.",
-          "alertParameterizedAccess": "A chamada parametrizada do portal infelizmente correu mal!",
-          "alertRequiredService": "Detalhes: Um serviço necessário não responde."
         }
     },
     "snippets": {

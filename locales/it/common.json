@@ -109,7 +109,6 @@
             }
           },
           "parametricURL": {
-            "alertZoomToGeometry": "La chiamata parametrizzata del portale è andata male!<br>Si prega di assicurarsi che tutti i parametri siano stati inseriti correttamente.",
             "alertWrongLayerIds": "<strong>La chiamata parametrizzata è errata!</strong> </br>I <b>layerIds</b> nelle posizioni: {{wrongIdsPositionsConcat}} non essistono e vengono ignorate!"
           }
         },
@@ -191,7 +190,8 @@
                 "geometryNotSupported": "FeatureViaURL: Il tipo di geometria {{geometryType}}} dichiarata nella configurazione per il layer {{layerId}} non è supportato.",
                 "layerNotFound": "FeatureViaURL: Non è stato possibile trovare alcun layer con l'ID {{layerId}}.",
                 "noLayers": "FeatureViaURL: Nella configurazione non è stato definito alcun layer per i feature trasferiti.",
-                "noNameDefined": "FeatureViaURL: Nella configurazione non è stato specificato un nome per layer {{layerId}}."
+                "noNameDefined": "FeatureViaURL: Nella configurazione non è stato specificato un nome per layer {{layerId}}.",
+                "defaultTreeNotSupported": "FeatureViaURL è supportato solo per Treetype custom o light."
             }
         },
         "quickHelp": {
@@ -749,9 +749,6 @@
             "linkToPdf": "Vai all legenda esterna (PDF)",
             "noLegendForLayerInfo": "Legenda non disponibile",
             "toggleCollapseAll": "Mostra / nascondi tutte le legende"
-        },
-        "zoomToGeometry": {
-          "alertNoFoundFeature" : "Nessun oggetto è stato trovato! Si prega di controllare i parametri di ingresso."
         },
         "util": {
             "copyToClipboard": {

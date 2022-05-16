@@ -111,7 +111,6 @@
             }
           },
           "parametricURL": {
-            "alertZoomToGeometry": "¡La llamada parametrizada del portal lamentablemente salió mal!<br>Asegúrese de que todos los parámetros se han introducido correctamente.",
             "alertWrongLayerIds": "<strong>¡La llamada parametrizada es defectuosa!</strong></br>¡El <b>id layer</b> en esa porición: {{wrongIdsPositionsConcat}} no existe y se ignorara!"
           }
         },
@@ -193,7 +192,8 @@
                 "geometryNotSupported": "Entidad via URL: Del tipo de geometría {{geometryType}} declarado en la configuración para la capa {{layerId}} no es compatible.",
                 "layerNotFound": "Entidad via URL: No se ha podido encontrar ninguna capa con el ID {{layerId}}.",
                 "noLayers": "Entidad via URL: Para las entidades transferidas no se ha definido ninguna capa en la configuración.",
-                "noNameDefined": "Entidad via URL: No se ha definido ningún nombre para la capa con el ID {{layerId}} en la configuración."
+                "noNameDefined": "Entidad via URL: No se ha definido ningún nombre para la capa con el ID {{layerId}} en la configuración.",
+                "defaultTreeNotSupported": "FeatureViaURL: FeatureViaURL est uniquement pris en charge pour Treetype custom ou light."
             }
         },
         "quickHelp": {
@@ -742,11 +742,6 @@
             "linkToPdf": "A la leyenda externa (PDF)",
             "noLegendForLayerInfo": "Leyenda no disponible",
             "toggleCollapseAll": "Mostrar/ocultar todas las leyendas"
-        },
-        "zoomToGeometry": {
-          "alertNoFoundFeature" : "No se ha encontrado ningún objeto. Compruebe los parámetros de entrada.",
-          "alertParameterizedAccess": "¡La llamada parametrizada del portal lamentablemente salió mal!",
-          "alertRequiredService": "Detalles: Un servicio requerido no responde."
         },
         "util": {
             "copyToClipboard": {

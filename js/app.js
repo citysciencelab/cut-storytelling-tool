@@ -11,8 +11,6 @@ import RemoteInterface from "../modules/remoteInterface/model";
 import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
 import MenuLoader from "../modules/menu/menuLoader";
-import ZoomToGeometry from "../modules/zoomToGeometry/model";
-import ZoomToFeature from "../modules/zoomToFeature/model";
 import featureViaURL from "../src/utils/featureViaURL";
 import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
@@ -140,14 +138,23 @@ async function loadApp () {
     new WFSTransactionModel();
     new MenuLoader();
 
-    if (Object.prototype.hasOwnProperty.call(Config, "zoomToGeometry")) {
-        new ZoomToGeometry(Config.zoomToGeometry);
-    }
-    if (Object.prototype.hasOwnProperty.call(Config, "zoomToFeature")) {
-        new ZoomToFeature(Config.zoomToFeature);
-    }
     if (Object.prototype.hasOwnProperty.call(Config, "featureViaURL")) {
         featureViaURL(Config.featureViaURL);
+    }
+
+    if (Object.prototype.hasOwnProperty.call(Config, "zoomTo")) {
+        store.commit("ZoomTo/setConfig", Config.zoomTo);
+    }
+    // NOTE: When using these deprecated parameters, the two url parameters can't be used in conjunction
+    if (Object.prototype.hasOwnProperty.call(Config, "zoomToFeature")) {
+        console.warn("The configuration parameter 'zoomToFeature' is deprecated in v3.0.0. Please use 'zoomTo' instead.");
+        store.commit("ZoomTo/setConfig", {zoomToFeature: Config.zoomToFeature});
+        store.commit("ZoomTo/setDeprecatedParameters", true);
+    }
+    if (Object.prototype.hasOwnProperty.call(Config, "zoomToGeometry")) {
+        console.warn("The configuration parameter 'zoomToGeometry' is deprecated in v3.0.0. Please use 'zoomTo' instead.");
+        store.commit("ZoomTo/setConfig", {zoomToGeometry: Config.zoomToGeometry});
+        store.commit("ZoomTo/setDeprecatedParameters", true);
     }
 
     new SliderView();
