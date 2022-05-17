@@ -90,7 +90,7 @@ describe("src/modules/tools/filterGeneral/components/SnippetFeatureInfo.vue", ()
         expect(wrapper.find("dd").text()).to.be.equal("bar");
         wrapper.destroy();
     });
-    describe.only("mergeFeatureInfo", () => {
+    describe("mergeFeatureInfo", () => {
         it("should merge given objects correctly", () => {
             const wrapper = shallowMount(SnippetFeatureInfo, {
                     localVue
