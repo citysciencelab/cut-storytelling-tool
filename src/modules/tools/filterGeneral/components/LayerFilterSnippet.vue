@@ -303,15 +303,15 @@ export default {
         },
 
         /**
-         * Sets the visible of a snippet by its id.
+         * Sets the visibility of a snippet by its id.
          * @param {Boolean} value - The value for visible.
          * @param {String} id - The id of a snippet.
          * @returns {void}
          */
         setSnippetVisibleById (value, id) {
-            const foundedSnippet = this.snippets.find(snippet => snippet.snippetId === id);
+            const foundedSnippet = this.getSnippetById(id);
 
-            if (typeof foundedSnippet !== "undefined") {
+            if (isObject(foundedSnippet)) {
                 foundedSnippet.visible = value;
             }
         },

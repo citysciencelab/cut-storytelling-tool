@@ -2,6 +2,7 @@
 import isObject from "../../../../utils/isObject.js";
 import {getLayerByLayerId} from "../utils/openlayerFunctions";
 import beautifyKey from "../../../../utils/beautifyKey.js";
+import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
 
 export default {
     name: "SnippetFeatureInfo",
@@ -38,6 +39,14 @@ export default {
             featureInfo: null
         };
     },
+    computed: {
+        titleText () {
+            if (typeof this.title === "string") {
+                return translateKeyWithPlausibilityCheck(this.title, key => this.$t(key));
+            }
+            return "";
+        }
+    },
     watch: {
         adjustment (adjusting) {
             if (!isObject(adjusting)) {
@@ -48,12 +57,14 @@ export default {
                 this.featureInfo = null;
             }
 
+            this.featureInfo = this.mergeFeatureInfo(this.featureInfo, adjusting.adjust);
+
             if (adjusting?.finish) {
                 if (typeof this.gfiAttributes === "undefined") {
-                    this.featureInfo = this.beautifyObjectKeys(adjusting.adjust);
+                    this.featureInfo = this.beautifyObjectKeys(this.featureInfo);
                 }
                 else {
-                    this.featureInfo = Radio.request("Util", "renameKeys", this.gfiAttributes, adjusting.adjust);
+                    this.featureInfo = Radio.request("Util", "renameKeys", this.gfiAttributes, this.featureInfo);
                 }
                 if (this.visible === false) {
                     this.$emit("setSnippetVisibleById", true, this.snippetId);
@@ -76,9 +87,9 @@ export default {
         beautifyObjectKeys (unlovelyObject) {
             const beautifiedObj = {};
 
-            for (const [key, value] of Object.entries(unlovelyObject)) {
+            Object.entries(unlovelyObject).forEach(([key, value]) => {
                 beautifiedObj[beautifyKey(key)] = value;
-            }
+            });
             return beautifiedObj;
         },
 
@@ -91,6 +102,34 @@ export default {
             const layer = getLayerByLayerId(layerId);
 
             this.gfiAttributes = layer?.get("gfiAttributes");
+        },
+
+        /**
+         * Merge feature info and deletes duplicate values.
+         * @param {Object|Null} existingInfo - Existing feature info otherwise null.
+         * @param {Object|boolean} newInfo - New available feature info otherwise false.
+         * @returns {Object} New merged Object.
+         */
+        mergeFeatureInfo (existingInfo, newInfo) {
+            // No new feature info
+            if (!newInfo) {
+                return existingInfo;
+            }
+            // No existing feature info - first merge
+            if (existingInfo === null) {
+                return newInfo;
+            }
+
+            const obj = {};
+
+            Object.keys({...existingInfo, ...newInfo}).forEach(key => {
+
+                const unionInfo = [...existingInfo[key]?.split(", ") || "", ...newInfo[key]?.split(", ") || ""];
+
+                obj[key] = [...new Set(unionInfo)].join(", ");
+            });
+
+            return obj;
         }
     }
 };
@@ -99,10 +138,10 @@ export default {
 <template>
     <div
         v-show="visible"
-        class="snippetSummaryContainer"
+        class="snippetFeatureInfoContainer"
     >
         <h6 v-if="title">
-            {{ title }}
+            {{ titleText }}
         </h6>
         <dl class="row">
             <template v-for="(value, key, index) in featureInfo">
@@ -134,7 +173,7 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-    .snippetSummaryContainer {
+    .snippetFeatureInfoContainer {
         border: 1px solid #ddd;
         padding: 8px;
         h6 {

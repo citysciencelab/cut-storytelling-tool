@@ -1,7 +1,8 @@
-import {shallowMount, createLocalVue} from "@vue/test-utils";
+import {shallowMount, createLocalVue, config} from "@vue/test-utils";
 import SnippetFeatureInfo from "../../../components/SnippetFeatureInfo.vue";
 import {expect} from "chai";
-import sinon from "sinon";
+
+config.mocks.$t = key => key;
 
 const localVue = createLocalVue();
 
@@ -88,5 +89,71 @@ describe("src/modules/tools/filterGeneral/components/SnippetFeatureInfo.vue", ()
         expect(wrapper.find("dt").text()).to.be.equal("foo:");
         expect(wrapper.find("dd").text()).to.be.equal("bar");
         wrapper.destroy();
+    });
+    describe.only("mergeFeatureInfo", () => {
+        it("should merge given objects correctly", () => {
+            const wrapper = shallowMount(SnippetFeatureInfo, {
+                    localVue
+                }),
+                objOne = {
+                    "foo": "bar",
+                    "bezirk": "mitte",
+                    "stadtteil": "eims, pauli",
+                    "tst": "hallo"
+                },
+                objTwo = {
+                    "foo": "bar",
+                    "bezirk": "nord",
+                    "stadtteil": "wilhelm, pauli",
+                    "star": "eric"
+                },
+                expected = {
+                    "star": "eric",
+                    "foo": "bar",
+                    "bezirk": "mitte, nord",
+                    "stadtteil": "eims, pauli, wilhelm",
+                    "tst": "hallo"
+                };
+
+            expect(wrapper.vm.mergeFeatureInfo(objOne, objTwo)).to.deep.equal(expected);
+            wrapper.destroy();
+        });
+
+        it("should return the first passed parameter if it is an object the second parameter is false", () => {
+            const wrapper = shallowMount(SnippetFeatureInfo, {
+                    localVue
+                }),
+                objOne = {
+                    "foo": "bar",
+                    "bezirk": "mitte",
+                    "stadtteil": "eims, pauli"
+                };
+
+            expect(wrapper.vm.mergeFeatureInfo(objOne, false)).to.deep.equal(objOne);
+            wrapper.destroy();
+        });
+
+        it("should return the second passed parameter if the first parameter is null and the seconde an object", () => {
+            const wrapper = shallowMount(SnippetFeatureInfo, {
+                    localVue
+                }),
+                obj = {
+                    "foo": "bar",
+                    "bezirk": "mitte",
+                    "stadtteil": "eims, pauli"
+                };
+
+            expect(wrapper.vm.mergeFeatureInfo(null, obj)).to.deep.equal(obj);
+            wrapper.destroy();
+        });
+
+        it("should return null if the first param is null and the second false", () => {
+            const wrapper = shallowMount(SnippetFeatureInfo, {
+                localVue
+            });
+
+            expect(wrapper.vm.mergeFeatureInfo(null, false)).to.be.null;
+            wrapper.destroy();
+        });
     });
 });

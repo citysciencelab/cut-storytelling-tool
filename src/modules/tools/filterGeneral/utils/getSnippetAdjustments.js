@@ -169,9 +169,9 @@ function getSnippetAdjustments (snippets, items, page, total) {
             };
         }
         else if (snippet.type === "featureInfo") {
-            for (const [key, value] of Object.entries(valueByAttrName)) {
+            Object.entries(valueByAttrName).forEach(([key, value]) => {
                 valueByAttrName[key] = value.join(", ");
-            }
+            });
             result[snippet.snippetId] = valueByAttrName;
         }
     });
