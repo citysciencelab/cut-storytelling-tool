@@ -65,7 +65,6 @@ $navbar-toggler-focus-width: 0;
 
 $dropdown-spacer: 0;
 
-
 // List group
 
 $list-group-disabled-bg:  #eeeeee;
@@ -107,6 +106,8 @@ $black: #000;
 $light_red: #E10019;
 $dark_grey: #424242;
 $light_blue: #00437A;
+
+$navbar-light-color: $dark_grey;
 
 /* SECONDARY: Navigation
  * Used for the nav bar, its children, and going back and forth within elements.
