@@ -573,28 +573,19 @@ describe("core/modelList/layer/sensor", function () {
     });
 
     describe("getLayerState", function () {
-        it("should be undefined on startup", function () {
-            expect(sensorLayer.getLayerState()).to.be.undefined;
-            expect(sensorLayer.get("isSubscribed")).to.be.false;
+        it("should return true if certain params are given", () => {
+            expect(sensorLayer.getLayerState(false, true, false)).to.be.true;
         });
-
-        it("should be true when inRange and selected", function () {
-            sensorLayer.set("isOutOfRange", false, {silent: true});
-            sensorLayer.set("isSelected", true, {silent: true});
-            expect(sensorLayer.getLayerState()).to.be.true;
+        it("should return false if certain params are given", () => {
+            expect(sensorLayer.getLayerState(false, false, true)).to.be.false;
+            expect(sensorLayer.getLayerState(true, false, true)).to.be.false;
+            expect(sensorLayer.getLayerState(true, true, true)).to.be.false;
         });
-
-        it("should be false when out of range", function () {
-            sensorLayer.set("isOutOfRange", true, {silent: true});
-            sensorLayer.set("isSelected", true, {silent: true});
-            sensorLayer.set("isSubscribed", true, {silent: true});
-            expect(sensorLayer.getLayerState()).to.be.false;
-        });
-
-        it("should be false when unselected", function () {
-            sensorLayer.set("isOutOfRange", false, {silent: true});
-            sensorLayer.set("isSelected", false, {silent: true});
-            expect(sensorLayer.getLayerState()).to.be.false;
+        it("should return undefined if certain params are given", () => {
+            expect(sensorLayer.getLayerState(false, true, true)).to.be.undefined;
+            expect(sensorLayer.getLayerState(false, false, false)).to.be.undefined;
+            expect(sensorLayer.getLayerState(true, false, false)).to.be.undefined;
+            expect(sensorLayer.getLayerState(true, true, false)).to.be.undefined;
         });
     });
 
