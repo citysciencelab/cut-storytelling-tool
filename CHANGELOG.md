@@ -51,6 +51,7 @@
     - Static display of markerPoint and markerPolygon from mapMarker is now visible during search, coordinateSearch and coordToolkit.
     - Vector layers like WFS, GeoJSON or OAF (OGC API - Features) are now displayed in 3D mode.
     - The Control Attributions now also works in 3D mode.
+- Fix error in menu if GFI Tool is set to isVisibleInMenu = false and no other tool is configured
 
 ---
 
