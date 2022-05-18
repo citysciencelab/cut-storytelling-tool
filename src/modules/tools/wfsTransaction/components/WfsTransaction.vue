@@ -1,13 +1,8 @@
-<template>
+<template lang="html">
     <ToolTemplate
         :title="$t(name)"
         :icon="icon"
         :active="active"
-        :render-to-window="renderToWindow"
-        :resizable-window="resizableWindow"
-        :initial-width="initialWidth"
-        :initial-width-mobile="initialWidthMobile"
-        :deactivate-gfi="deactivateGFI"
     >
         <template #toolBody />
     </ToolTemplate>
@@ -15,9 +10,14 @@
 
 <script>
 import ToolTemplate from "../../ToolTemplate.vue";
+import {mapGetters} from "vuex";
+
 export default {
     name: "WfsTransaction",
-    components: {ToolTemplate}
+    components: {ToolTemplate},
+    computed: {
+        ...mapGetters("Tools/WfsTransaction", ["active", "icon", "name"])
+    }
 };
 </script>
 
