@@ -170,7 +170,7 @@ function getSnippetAdjustments (snippets, items, page, total) {
         }
         else if (snippet.type === "featureInfo") {
             Object.entries(valueByAttrName).forEach(([key, value]) => {
-                valueByAttrName[key] = value.join(", ");
+                valueByAttrName[key] = value;
             });
             result[snippet.snippetId] = valueByAttrName;
         }

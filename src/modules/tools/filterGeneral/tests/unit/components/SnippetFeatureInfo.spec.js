@@ -87,7 +87,7 @@ describe("src/modules/tools/filterGeneral/components/SnippetFeatureInfo.vue", ()
         await wrapper.setData({featureInfo: {"foo": "bar"}});
 
         expect(wrapper.find("dt").text()).to.be.equal("foo:");
-        expect(wrapper.find("dd").text()).to.be.equal("bar");
+        expect(wrapper.find("dd").text()).to.be.equal("b, a, r");
         wrapper.destroy();
     });
     describe("mergeFeatureInfo", () => {
@@ -96,23 +96,23 @@ describe("src/modules/tools/filterGeneral/components/SnippetFeatureInfo.vue", ()
                     localVue
                 }),
                 objOne = {
-                    "foo": "bar",
-                    "bezirk": "mitte",
-                    "stadtteil": "eims, pauli",
-                    "tst": "hallo"
+                    "foo": ["bar"],
+                    "bezirk": ["mitte"],
+                    "stadtteil": ["eims", "pauli"],
+                    "internet": ["intranet"]
                 },
                 objTwo = {
-                    "foo": "bar",
-                    "bezirk": "nord",
-                    "stadtteil": "wilhelm, pauli",
-                    "star": "eric"
+                    "foo": ["bar"],
+                    "bezirk": ["nord"],
+                    "stadtteil": ["wilhelm", "pauli"],
+                    "star": ["eric"]
                 },
                 expected = {
-                    "star": "eric",
-                    "foo": "bar",
-                    "bezirk": "mitte, nord",
-                    "stadtteil": "eims, pauli, wilhelm",
-                    "tst": "hallo"
+                    "star": ["eric"],
+                    "foo": ["bar", "bar"],
+                    "bezirk": ["mitte", "nord"],
+                    "stadtteil": ["eims", "pauli", "wilhelm", "pauli"],
+                    "internet": ["intranet"]
                 };
 
             expect(wrapper.vm.mergeFeatureInfo(objOne, objTwo)).to.deep.equal(expected);

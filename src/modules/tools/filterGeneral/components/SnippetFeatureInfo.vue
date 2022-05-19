@@ -35,7 +35,6 @@ export default {
     },
     data () {
         return {
-            // the infos that are displayed
             featureInfo: null
         };
     },
@@ -45,6 +44,17 @@ export default {
                 return translateKeyWithPlausibilityCheck(this.title, key => this.$t(key));
             }
             return "";
+        },
+        featureInfoWithoutDuplicates () {
+            if (this.featureInfo === null) {
+                return [];
+            }
+            const result = {};
+
+            Object.entries(this.featureInfo).forEach(([key, value]) => {
+                result[key] = [...new Set(value)].join(", ");
+            });
+            return result;
         }
     },
     watch: {
@@ -73,7 +83,6 @@ export default {
         }
     },
     created () {
-        // this is only used to beautify the keys of the feature info
         if (this.layerId) {
             this.setGfiAttributes(this.layerId);
         }
@@ -94,42 +103,41 @@ export default {
         },
 
         /**
-         * Sets the gfiAttributes of a layer by the id if available.
+         * Sets the gfiAttributes of a layer by the id if available
+         * and if gfiAttributes are an object. It can also be a string ("ignore" or "showAll").
+         * Is used to beautify the keys of the feature info.
          * @param {String} layerId - The id of the layer.
          * @returns {void}
          */
         setGfiAttributes (layerId) {
             const layer = getLayerByLayerId(layerId);
 
-            this.gfiAttributes = layer?.get("gfiAttributes");
+            this.gfiAttributes = isObject(layer?.get("gfiAttributes")) ? layer.get("gfiAttributes") : undefined;
         },
 
         /**
-         * Merge feature info and deletes duplicate values.
-         * @param {Object|Null} existingInfo - Existing feature info otherwise null.
-         * @param {Object|boolean} newInfo - New available feature info otherwise false.
-         * @returns {Object} New merged Object.
+         * Merge existing and new feature info.
+         * @param {Object} existingFeatureInfo - Existing feature info otherwise null.
+         * @param {Object|Boolean} newFeatureInfo - New available feature info otherwise false.
+         * @returns {Object} New merged feature info.
          */
-        mergeFeatureInfo (existingInfo, newInfo) {
-            // No new feature info
-            if (!newInfo) {
-                return existingInfo;
+        mergeFeatureInfo (existingFeatureInfo, newFeatureInfo) {
+            if (!newFeatureInfo) {
+                return existingFeatureInfo;
             }
-            // No existing feature info - first merge
-            if (existingInfo === null) {
-                return newInfo;
+            if (existingFeatureInfo === null) {
+                return newFeatureInfo;
             }
 
-            const obj = {};
+            Object.entries(newFeatureInfo).forEach(([key, value]) => {
+                if (!Object.prototype.hasOwnProperty.call(existingFeatureInfo, key)) {
+                    existingFeatureInfo[key] = [];
+                }
 
-            Object.keys({...existingInfo, ...newInfo}).forEach(key => {
-
-                const unionInfo = [...existingInfo[key]?.split(", ") || "", ...newInfo[key]?.split(", ") || ""];
-
-                obj[key] = [...new Set(unionInfo)].join(", ");
+                existingFeatureInfo[key] = existingFeatureInfo[key].concat(value);
             });
 
-            return obj;
+            return existingFeatureInfo;
         }
     }
 };
@@ -144,7 +152,7 @@ export default {
             {{ titleText }}
         </h6>
         <dl class="row">
-            <template v-for="(value, key, index) in featureInfo">
+            <template v-for="(value, key, index) in featureInfoWithoutDuplicates">
                 <dt
                     :key="key + index"
                     class="col-sm-4"
