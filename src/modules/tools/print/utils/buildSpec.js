@@ -552,10 +552,17 @@ const BuildSpecModel = {
         return mapfishStyleObject;
     },
 
-    getStyleModel (layer) {
+    getStyleModel (layer, layerId) {
         const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer?.get("id")});
+        let foundChild;
 
-        if (typeof layerModel?.get === "function") {
+        if (layerModel.get("typ") === "GROUP") {
+            foundChild = layerModel.get("children").find(child => child.id === layerId);
+            if (foundChild) {
+                return Radio.request("StyleList", "returnModelById", foundChild.styleId);
+            }
+        }
+        else if (typeof layerModel?.get === "function") {
             return Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
         }
         return undefined;
@@ -1032,6 +1039,7 @@ const BuildSpecModel = {
         // cluster feature with geometry style
         if (feature.get("features") !== undefined) {
             if ((style !== undefined && style.getText().getText() !== undefined) || feature.get("features").length > 1) {
+
                 const value = feature.get("features")[0].get(styleAttr[0])
                     + "_"
                     + style !== undefined && style.getText().getText() !== undefined ? style.getText().getText() : "cluster";
@@ -1072,7 +1080,7 @@ const BuildSpecModel = {
      */
     getStyleAttributes: function (layer, feature) {
         const layerId = layer.get("id"),
-            styleList = this.getStyleModel(layer);
+            styleList = this.getStyleModel(layer, layerId);
         let styleFields = ["styleId"],
             layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")});
 
