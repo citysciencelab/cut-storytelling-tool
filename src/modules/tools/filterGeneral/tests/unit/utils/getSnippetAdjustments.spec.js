@@ -164,7 +164,7 @@ describe("src/modules/tools/filterGeneral/utils/getSnippetAdjustments.js", () =>
                 {snippetId: 4, type: "date", attrName: "E", format: "DD.MM.YYYY"},
                 {snippetId: 5, type: "dateRange", attrName: ["F", "G"], format: "DD.MM.YYYY"},
                 {snippetId: 6, type: "anything", attrName: "H"},
-                {snippetId: 77, type: "featureInfo"}
+                {snippetId: 77, type: "featureInfo", attrName: ["A", "B", "E", "F"]}
             ], [
                 {get: attrName => responses[0][attrName]},
                 {get: attrName => responses[1][attrName]},
@@ -183,12 +183,8 @@ describe("src/modules/tools/filterGeneral/utils/getSnippetAdjustments.js", () =>
                 77: {
                     "A": ["v07", "v24", "v42", "v01"],
                     "B": ["1", "2", "3", "4", "5", "6"],
-                    "C": ["8", "9", "11", "12", "19"],
-                    "D": ["7", "13", "14", "16", "17", "18"],
                     "E": ["24.02.2022", "24.03.2022", "24.04.2022", "24.05.2022", "24.06.2022", "24.07.2022"],
-                    "F": ["05.01.2022", "05.06.2022", "05.04.2022", "05.12.2021", "05.05.2022"],
-                    "G": ["05.12.2022", "05.11.2022", "05.10.2022", "05.09.2022", "05.08.2023", "05.07.2022"],
-                    "H": ["anything"]
+                    "F": ["05.01.2022", "05.06.2022", "05.04.2022", "05.12.2021", "05.05.2022"]
                 }
             });
         });

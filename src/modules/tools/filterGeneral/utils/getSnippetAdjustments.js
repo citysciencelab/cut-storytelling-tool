@@ -170,9 +170,13 @@ function getSnippetAdjustments (snippets, items, page, total) {
         }
         else if (snippet.type === "featureInfo") {
             Object.entries(valueByAttrName).forEach(([key, value]) => {
-                valueByAttrName[key] = value;
+                if (Array.isArray(snippet.attrName) && snippet.attrName.includes(key)) {
+                    if (!isObject(result[snippet.snippetId])) {
+                        result[snippet.snippetId] = {};
+                    }
+                    result[snippet.snippetId][key] = value;
+                }
             });
-            result[snippet.snippetId] = valueByAttrName;
         }
     });
 
