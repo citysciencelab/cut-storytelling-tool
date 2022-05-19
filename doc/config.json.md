@@ -1942,6 +1942,7 @@ An object defining a single snippet.
 |multiselect|no|Boolean|true|For type `dropdown` only: Selection of multiple entries. Set to `false` to switch to single select.|false|
 |addSelectAll|no|Boolean|false|For type `dropdown` with `multiselect: true` only: Adds an additional entry on top of the list to select/deselect all entries.|false|
 |optionsLimit|no|Number|20000|For type `dropdown` only: Adds a limit of options in dropdown list.|false|
+|localeCompareParams|no|[localeCompareParams](#markdown-header-portalconfigmenutoolfiltergeneralfilterlayersnippetslocalecompareparams)||For type Snippet-Typ `dropdown` only: The sorting of the dropdown boxes can be adjusted according to your own wishes via this parameter.|false|
 |delimitor|no|String||For type `dropdown` only: If feature attributes are themselfs again seperated by a delimitor to act as pseudo array, setting delimitor to the sign that seperates the terms, will result in the expected outcome.|false|
 |renderIcons|no|String|"none"|For type `dropdown` with `display: "list"` only: If set to `fromLegend` icons will be placed left hand side of each entry. Icons are taken from legend. Use an object with attrNames as keys and imagePath as value {attrName: imagePath} to manually set images (see example).|false|
 |service|no|[service](#markdown-header-portalconfigmenutoolfiltergeneralfilterlayersnippetsservice)||For the initial filling of a snippet (dropdown, date, slider) an alternative service can be used. This may increase the performance during initial loading. The default is the service of the configured [filterLayer](#markdown-header-portalconfigmenutoolfiltergeneralfilterlayer).|false|
@@ -2129,9 +2130,9 @@ Example for a feature info snippet. Displays all values of the configured attrib
 
 ```json
 {
-    "title": "Steckbrief"
+    "title": "Steckbrief",
     "attrName": ["tierartengruppe", "deutscher_artname", "artname", "rote_liste_d", "rote_liste_hh"],
-    "type": "featureInfo",
+    "type": "featureInfo"
 }
 ```
 
@@ -2149,7 +2150,7 @@ The configuration depends on the type of service.
 |typename|yes|String||The feature type that will be loaded. Only for WFS|false|
 |collection|yes|String||The collection that will be loaded. Only for OAF|false|
 
-**Beispiel**
+**Example**
 
 ```json
 {
@@ -2159,7 +2160,7 @@ The configuration depends on the type of service.
 }
 ```
 
-**Beispiel GeoJSON**
+**Example GeoJSON**
 
 ```json
 {
@@ -2167,7 +2168,7 @@ The configuration depends on the type of service.
     "url": "../chartjs/charts_stadtteil.geojson"
 }
 ```
-**Beispiel OAF**
+**Example OAF**
 
 ```json
 {
@@ -2175,7 +2176,55 @@ The configuration depends on the type of service.
     "collection" : "staatliche_schulen",
     "type": "OAF"
 }
-``
+```
+
+***
+#### Portalconfig.menu.tool.filterGeneral.filterLayer.snippets.localeCompareParams
+
+A string or object that supply the parameters for util function localeCompare.
+
+
+**Example String**
+
+"localeCompareParams": "de"
+
+**Object**
+
+|Name|Required|Typ|Default|Description|Expert|
+|----|--------|---|-------|-----------|------|
+|locale|no|String||The locale code according ISO 3166|false|
+|options|no|[options](#markdown-header-portalconfigmenutoolfiltergeneralfilterlayersnippetslocalecompareparamsoptions)||The custom options for sorting in localeCompare|false|
+
+
+**Example Object**
+
+```json
+{
+    "locale": "de",
+    "options": {
+        "ignorePunctuation": true
+    }
+}
+```
+
+***
+#### Portalconfig.menu.tool.filterGeneral.filterLayer.snippets.localeCompareParams.options
+
+An object for custom control of the localeCompare function used to sort dropdown boxes, the documentation is: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare
+
+|Name|Required|Typ|Default|Description|Expert|
+|----|--------|---|-------|-----------|------|
+|ignorePunctuation|no|Boolean|false|Determines whether punctuation will be ignored.|false|
+|sensitivity|no|String|"variant"|Determines whether string collation will be used.|false|
+|numeric|no|Boolean|false|Determines whether numeric collation will be used|false|
+
+**Example**
+
+```json
+{
+    "ignorePunctuation": true
+}
+```
 
 ***
 

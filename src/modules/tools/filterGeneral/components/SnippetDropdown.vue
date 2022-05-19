@@ -4,8 +4,9 @@ import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyW
 import {getStyleModel, getIconListFromLegend} from "../utils/getIconListFromLegend.js";
 import {getDefaultOperatorBySnippetType} from "../utils/compileSnippets.js";
 import splitListWithDelimitor from "../utils/splitListWithDelimitor.js";
-import isObject from "../../../../utils/isObject.js";
+import isObject from "../../../../utils/isObject";
 import SnippetInfo from "./SnippetInfo.vue";
+import localeCompare from "../../../../utils/localeCompare";
 
 export default {
     name: "SnippetDropdown",
@@ -38,6 +39,11 @@ export default {
             type: Boolean,
             required: false,
             default: true
+        },
+        localeCompareParams: {
+            type: [String, Object],
+            required: false,
+            default: undefined
         },
         delimitor: {
             type: String,
@@ -174,7 +180,13 @@ export default {
                 });
             }
             dropdownValue.sort((a, b) => {
-                return String(a).toLowerCase() > String(b).toLowerCase() ? 1 : -1;
+                if (typeof this.localeCompareParams === "string") {
+                    return localeCompare(a, b, this.localeCompareParams);
+                }
+                else if (isObject(this.localeCompareParams)) {
+                    return localeCompare(a, b, this.localeCompareParams.locale, this.localeCompareParams.options);
+                }
+                return localeCompare(a, b);
             });
 
             if (this.multiselect && this.addSelectAll) {

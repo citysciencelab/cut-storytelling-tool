@@ -12,6 +12,7 @@ import InterfaceOafIntern from "./interface.oaf.intern.js";
 import InterfaceOafExtern from "./interface.oaf.extern.js";
 import InterfaceGeojsonIntern from "./interface.geojson.intern.js";
 import InterfaceGeojsonExtern from "./interface.geojson.extern.js";
+import localeCompare from "../../../../utils/localeCompare";
 
 /**
  * FilterApi is the api to use in vue environment. It encapsulates the filter interfaces.
@@ -256,7 +257,7 @@ export default class FilterApi {
             connector.getUniqueValues(this.service, attrName, result => {
                 if (Array.isArray(result)) {
                     result.sort((a, b) => {
-                        return String(a).toLowerCase() > String(b).toLowerCase() ? 1 : -1;
+                        return localeCompare(a, b);
                     });
                 }
                 FilterApi.cache[cacheKey] = result;
