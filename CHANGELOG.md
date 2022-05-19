@@ -54,8 +54,6 @@
 
 ---
 
----
-
 ## v2.21.0 - 2022-05-04
 ### Added
 - A control has been added to create buttons for any tools. These can be used to open and close the configured tools.
