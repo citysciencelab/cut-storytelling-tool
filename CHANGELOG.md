@@ -43,6 +43,7 @@
 - Issue #760: Features added with FeatureViaUrl are now correctly displayed under Selected Topics
 - Fix Filter of GeoJSON after AutoRefresh by adding ID to each feature of the GeoJSON after AutoRefresh
 - Issue #712: Fix issue of multiple legend menu items in mobile view.
+- Issue #771: Fix issue of WMS-TimeLayer being displayed wrong and without TimeSlider, when set visivle through URLParameter
 
 ## v2.21.0 - 2022-05-04
 ### Added
