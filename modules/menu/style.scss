@@ -1,20 +1,17 @@
-$color_1: #555;
-$font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
-$background_color_1: rgba(227, 227, 227, 0.5);
+@import "~variables";
 
 /*------------------------Menubar--------------------------------------*/
 .navbar {
     min-height: 50px;
-    font-family: $font_family_1;
     border: 0;
     position: relative;
     margin-bottom: 0;
     display: none;
-    background: white;
+    background: $white;
 }
 
 .navbar .navbar-nav > li > a {
-    color: rgb(51,51,51);
+    color: $dark_grey;
     padding-top: 14px;
 }
 .dropdown-menu {
@@ -22,14 +19,14 @@ $background_color_1: rgba(227, 227, 227, 0.5);
 }
 #root {
     >.dropdown {
-        color: black;
+        color: $dark_grey;
         font-size: 14px;
     }
     .dropdown {
-        border-right: 1px solid #e5e5e5;
+        border-right: 1px solid $light_grey;
     }
     .active {
-        background-color: $background_color_1;
+        background-color: rgba(227, 227, 227, 0.5);
     }
     padding-left: 0px;
 }

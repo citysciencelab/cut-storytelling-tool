@@ -89,12 +89,12 @@ export default {
         .mouse-position-span {
             padding: 0 8px;
             border-right: 1px solid $light_grey_contrast;
-            color: black;
+            color: $black;
             min-width: 150px;
         }
 
         #hide-mouse-position{
-            color: black;
+            color: $black;
         }
     }
 </style>
