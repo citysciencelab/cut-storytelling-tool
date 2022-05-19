@@ -524,7 +524,7 @@ function handleSingleBaseLayer (isSelected, layer) {
  * Called from setSelected or modelList, handles single time layers.
  * @param {Boolean} isSelected true, if layer is selected
  * @param {ol.Layer} layer the dedicated layer
- * * @param {Object} model the dedicated model from modelList
+ * @param {Object} model the dedicated model from modelList
  * @returns {void}
  */
 export function handleSingleTimeLayer (isSelected, layer, model) {
