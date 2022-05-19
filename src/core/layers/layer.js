@@ -521,19 +521,21 @@ function handleSingleBaseLayer (isSelected, layer) {
 }
 
 /**
- * Called from setSelected, handles single time layers.
+ * Called from setSelected or modelList, handles single time layers.
  * @param {Boolean} isSelected true, if layer is selected
  * @param {ol.Layer} layer the dedicated layer
+ * * @param {Object} model the dedicated model from modelList
  * @returns {void}
  */
-function handleSingleTimeLayer (isSelected, layer) {
-    const id = layer.get("id"),
-        timeLayer = layer.get("typ") === "WMS" && layer.get("time");
+export function handleSingleTimeLayer (isSelected, layer, model) {
+    const selectedLayers = bridge.getLayerModelsByAttributes({isSelected: true, type: "layer", typ: "WMS"}),
+        id = layer?.get("id") || model.id,
+        timeLayer = layer || selectedLayers.find(it => it.id === id),
+        isTimeLayer = timeLayer?.get("typ") === "WMS" && timeLayer?.get("time");
 
-    if (timeLayer) {
+    if (isTimeLayer) {
         if (isSelected) {
-            const selectedLayers = bridge.getLayerModelsByAttributes({isSelected: true, type: "layer", typ: "WMS"}),
-                map2D = store.getters["Maps/get2DMap"];
+            const map2D = store.getters["Maps/get2DMap"];
 
             selectedLayers.forEach(sLayer => {
                 if (sLayer.get("time") && sLayer.get("id") !== id) {
@@ -550,11 +552,11 @@ function handleSingleTimeLayer (isSelected, layer) {
             store.commit("WmsTime/setTimeSliderActive", {
                 active: true,
                 currentLayerId: id,
-                playbackDelay: layer.get("time")?.playbackDelay || 1
+                playbackDelay: timeLayer?.get("time")?.playbackDelay
             });
         }
         else {
-            layer.removeLayer(layer.get("id"));
+            timeLayer.removeLayer(timeLayer.get("id"));
         }
     }
 }

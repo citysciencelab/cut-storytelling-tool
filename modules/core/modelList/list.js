@@ -1,5 +1,6 @@
 import WMSLayer from "../../../src/core/layers/wms";
 import WFSLayer from "../../../src/core/layers/wfs";
+import {handleSingleTimeLayer} from "../../../src/core/layers/layer";
 import OAFLayer from "../../../src/core/layers/oaf";
 import GroupedLayers from "../../../src/core/layers/group";
 import WMSTimeLayer from "../../../src/core/layers/wmsTime";
@@ -838,10 +839,14 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 if (Object.prototype.hasOwnProperty.call(model, "children")) {
                     if (model.children.length > 0) {
                         this.add(model);
+                        // if more than one WMS-Time-Layer is set to be visible - only show the last one
+                        this.checkTimeLayerHandling(model);
                     }
                 }
                 else {
                     this.add(model);
+                    // if more than one WMS-Time-Layer is set to be visible - only show the last one
+                    this.checkTimeLayerHandling(model);
                 }
             }, this);
         }
@@ -854,9 +859,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
             paramLayers.forEach(paramLayer => {
                 lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
-
                 if (lightModel !== undefined) {
                     this.add(lightModel);
+                    // if more than one WMS-Time-Layer is set to be visible - only show the last one
+                    this.checkTimeLayerHandling(lightModel);
                     this.setModelAttributesById(paramLayer.id, {isSelected: true, transparency: paramLayer.transparency});
                     // selektierte Layer werden automatisch sichtbar geschaltet, daher muss hier nochmal der Layer auf nicht sichtbar gestellt werden
                     if (paramLayer.visibility === false && this.get(paramLayer.id) !== undefined) {
@@ -873,6 +879,27 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
         this.initLayerIndeces(paramLayers);
         this.updateLayerView();
+    },
+
+
+    /**
+     * Checks if the Model, that is about to be added is a WMSTimeLayer and handles correct display of the TImeSlider
+     * @param  {Object[]} model Light models requested from Parser
+     * @param  {Object[]} selectedTimeLayer Parameters from parametric url
+     * @return {void}
+     */
+    checkTimeLayerHandling: function (model) {
+        const selectedTimeLayer = Radio.request("Parser", "getItemsByAttributes", {type: "layer", isSelected: true, typ: "WMS"}).filter(it => it.time !== undefined);
+
+        // if more than one WMS-Time-Layer is set to be visible - only show the last one
+        if (model.id === selectedTimeLayer[selectedTimeLayer.length - 1].id) {
+            setTimeout(function () {
+                handleSingleTimeLayer(true, null, model);
+            }, 0);
+        }
+        if (selectedTimeLayer.length > 1) {
+            Radio.trigger("Alert", "alert", i18next.t("common:modules.core.modelList.layer.wms.warningTimeLayerQuantity", {name: selectedTimeLayer[selectedTimeLayer.length - 1].name}));
+        }
     },
 
     /**
