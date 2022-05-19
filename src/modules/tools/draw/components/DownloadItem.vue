@@ -105,11 +105,9 @@ export default {
 @import "~variables";
 
 a {
-    color: #000;
+    color: $black;
 }
-.bold {
-    font-weight: bold;
-}
+
 .disabled {
     cursor: not-allowed;
 }

@@ -72,6 +72,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    @import "~variables";
     .bottom {
         position: sticky;
         width: 340px;
@@ -82,17 +83,17 @@ export default {
     .info-icon {
         float: right;
         font-size: 16px;
-        color: #525252;
+        color: $dark_grey;
     }
     .info-icon .opened {
-        color: #08589e;
+        color: lighten($dark_grey, 20%);
     }
     .info-icon:hover {
         cursor: pointer;
-        color: #a5a09e;
+        color: lighten($dark_grey, 15%);
     }
     .info-text {
-        border: 1px solid #ddd;
+        border: 1px solid $light_grey;
         border-radius: 5px;
         font-size: 11px;
         padding: 15px 10px;

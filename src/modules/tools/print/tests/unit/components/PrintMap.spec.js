@@ -155,13 +155,13 @@ describe("src/modules/tools/Print/components/PrintMap.vue", () => {
 
             expect(wrapper.find("#tool-print-downloads-container").exists()).to.be.true;
             expect(wrapper.find(".tool-print-download-title-container").exists()).to.be.true;
-            expect(wrapper.find("#tool-print-download-title").exists()).to.be.true;
+            expect(wrapper.find(".tool-print-download-title").exists()).to.be.true;
             expect(wrapper.find(".tool-print-download-icon-container").exists()).to.be.true;
-            expect(wrapper.find("#tool-print-download-loader").exists()).to.be.false;
-            expect(wrapper.find("#tool-print-download-icon").exists()).to.be.true;
+            expect(wrapper.find(".tool-print-download-loader").exists()).to.be.false;
+            expect(wrapper.find(".tool-print-download-icon").exists()).to.be.true;
             expect(wrapper.find(".tool-print-download-button-container").exists()).to.be.true;
-            expect(wrapper.find("#tool-print-download-button-active").exists()).to.be.true;
-            expect(wrapper.find("#tool-print-download-button-disabled").exists()).to.be.false;
+            expect(wrapper.find(".tool-print-download-button-active").exists()).to.be.true;
+            expect(wrapper.find(".tool-print-download-button-disabled").exists()).to.be.false;
         });
 
         it("should show loader download file", () => {
@@ -177,13 +177,13 @@ describe("src/modules/tools/Print/components/PrintMap.vue", () => {
 
             expect(wrapper.find("#tool-print-downloads-container").exists()).to.be.true;
             expect(wrapper.find(".tool-print-download-title-container").exists()).to.be.true;
-            expect(wrapper.find("#tool-print-download-title").exists()).to.be.true;
+            expect(wrapper.find(".tool-print-download-title").exists()).to.be.true;
             expect(wrapper.find(".tool-print-download-icon-container").exists()).to.be.true;
-            expect(wrapper.find("#tool-print-download-loader").exists()).to.be.true;
-            expect(wrapper.find("#tool-print-download-icon").exists()).to.be.false;
+            expect(wrapper.find(".tool-print-download-loader").exists()).to.be.true;
+            expect(wrapper.find(".tool-print-download-icon").exists()).to.be.false;
             expect(wrapper.find(".tool-print-download-button-container").exists()).to.be.true;
-            expect(wrapper.find("#tool-print-download-button-active").exists()).to.be.false;
-            expect(wrapper.find("#tool-print-download-button-disabled").exists()).to.be.true;
+            expect(wrapper.find(".tool-print-download-button-active").exists()).to.be.false;
+            expect(wrapper.find(".tool-print-download-button-disabled").exists()).to.be.true;
         });
     });
 

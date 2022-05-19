@@ -1,15 +1,6 @@
 @import "../../../css/mixins.scss";
 @import "~variables";
 
-$darkblueColor: rgba(8, 88, 158, 1);
-$darkgreyColor: rgba(85, 85, 85, 1);
-$lightgreyColor: rgba(203, 203, 203, 1);
-$hoverOpacity: 0.8;
-$borderRadius0: 0;
-$borderRadius12: 12px;
-$fontSizeBig: 15px;
-$fontSizeSmall: 12px;
-
 .wfst-module {
     .record-button {
         float: left;
@@ -35,13 +26,13 @@ $fontSizeSmall: 12px;
     .record-active {
         color: $white;
         background-color: $secondary_focus;
-        border-color: #2e6da4;
+        border-color: $light_blue;
     }
 
     .record-active:hover {
         color: $white;
-        background-color: #286090;
-        border-color: #204d74;
+        background-color: $light_blue;
+        border-color: $dark_blue;
     }
 
     .record-button > .bootstrap-icon > .bi-play-fill, .record-button > .bootstrap-icon > .bi-dash-lg {
@@ -98,12 +89,12 @@ $fontSizeSmall: 12px;
     }
 
     .input.mandatory {
-        border: 1px solid red;
+        border: 1px solid $light_red;
     }
 
     .col-form-label.mandatory::after {
         content: " *";
-        color: red;
+        color: $light_red;
     }
 
     .info-sign > .bi-info-circle-fill {
@@ -126,7 +117,7 @@ $fontSizeSmall: 12px;
     }
 
     .warning-text {
-        color: red;
+        color: $light_red;
         width: 211px;
     }
 
@@ -138,30 +129,29 @@ $fontSizeSmall: 12px;
     .datepicker {
         display: inline-table;
         background-color: $white;
-        border-radius: $borderRadius12;
+        border-radius: 12px;
         .datepicker-days {
             .table-condensed {
                 width: 100%;
-                font-size: $fontSizeSmall;
                 thead {
                     tr {
-                        border-radius: $borderRadius0;
+                        border-radius: 0;
                         background: none;
                         .datepicker-switch {
                             cursor: default;
-                            font-size: $fontSizeBig;
+                            font-size: 15px;
                             &:hover {
                                 background: none;							
                             }
                         }
-                        color: $darkblueColor;
+                        color: $dark_blue;
                         .next, .prev {
-                            color: $darkgreyColor;
+                            color: $dark_grey;
                             &:hover {
-                                opacity: $hoverOpacity;
-                                background-color: $darkblueColor;
+                                opacity: 0.8;
+                                background-color: $dark_blue;
                                 color: $white;
-                                border-radius: $borderRadius0;
+                                border-radius: 0;
                             }
                         }
                     }
@@ -169,20 +159,20 @@ $fontSizeSmall: 12px;
                 tbody {
                     tr {
                         td {
-                            border-radius: $borderRadius0;
+                            border-radius: 0;
                             background: none;
-                            color: $darkgreyColor;
+                            color: $dark_grey;
                             &:hover {
-                                opacity: $hoverOpacity;
-                                background-color: $darkblueColor;
+                                opacity: 0.8;
+                                background-color: $dark_blue;
                                 color: $white;
                             }
                             &.today {
-                                border: 2px solid $darkblueColor;;
+                                border: 2px solid $dark_blue;
                             }
                             &.active {
-                                border-radius: $borderRadius0;
-                                background-color: $darkblueColor;;
+                                border-radius: 0;
+                                background-color: $dark_blue;
                                 color: $white;
                             }
                         }

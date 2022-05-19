@@ -101,13 +101,14 @@ export default {
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+    @import "~variables";
     .panel-default > .panel-heading {
         cursor:default;
-        background-color: white;
+        background-color: $white;
     }
     .panel-default > .panel-heading.disabled {
-        background-color: #f5f5f5;
+        background-color: $light_grey;
     }
     .panel-title {
         cursor: pointer;

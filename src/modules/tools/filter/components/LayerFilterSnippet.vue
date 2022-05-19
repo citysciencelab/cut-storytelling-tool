@@ -857,6 +857,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    @import "~variables";
     .win-body-vue {
         padding: 0px;
     }
@@ -868,7 +869,7 @@ export default {
     }
     .filter-result {
         font-size: 16px;
-        color: #E10019;
+        color: $light_red;
         margin-top: 10px;
         display: inline-block;
         width: 100%;

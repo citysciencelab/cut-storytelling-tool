@@ -536,7 +536,7 @@ export default {
                 >
                     <div class="col-md-4 tool-print-download-title-container">
                         <span
-                            id="tool-print-download-title"
+                            class="tool-print-download-title"
                         >
                             {{ file.title }}
                         </span>
@@ -544,12 +544,11 @@ export default {
                     <div class="col-md-2 tool-print-download-icon-container">
                         <div
                             v-if="!file.finishState"
-                            id="tool-print-download-loader"
+                            class="tool-print-download-loader"
                         />
                         <div
                             v-else
-                            id="tool-print-download-icon"
-                            class="bootstrap-icon"
+                            class="bootstrap-icon tool-print-download-icon"
                         >
                             <i class="bi-check-lg" />
                         </div>
@@ -557,16 +556,14 @@ export default {
                     <div class="col-md-6 d-grid gap-2 tool-print-download-button-container">
                         <button
                             v-if="file.finishState"
-                            id="tool-print-download-button-active"
-                            class="btn btn-primary btn-sm"
+                            class="btn btn-primary btn-sm tool-print-download-button-active"
                             @click="download($event.target, file.downloadUrl, file.filename)"
                         >
                             {{ $t("common:modules.tools.print.downloadFile") }}
                         </button>
                         <button
                             v-else
-                            id="tool-print-download-button-disabled"
-                            class="btn btn-outline-default btn-sm"
+                            class="btn btn-outline-default btn-sm tool-print-download-button-disabled"
                             disabled
                         >
                             {{ $t("common:modules.tools.print.createDownloadFile") }}
@@ -599,12 +596,12 @@ export default {
                 width: 100%;
                 z-index: 10;
                 background: $white;
-                border: 1px solid #555;
+                border: 1px solid $dark_grey;
                 padding: 5px;
             }
             .grey-icon {
                 span {
-                    color: #a5a5a5;
+                    color: $light_grey;
                 }
             }
         }
@@ -625,19 +622,26 @@ export default {
                 margin: 5px 0 0 0;
             }
 
-            #tool-print-download-icon {
+            .tool-print-download-icon {
                 font-size: 18px;
-                color:#286090;
+                color: $light_blue;
             }
 
-            #tool-print-download-button-disabled {
-                border-color: $white;
+            .tool-print-download-button-disabled {
+                border-color: $dark_grey;
+                color: $dark-grey;
             }
 
-            #tool-print-download-loader {
-                border: 4px solid #f3f3f3;
+            .tool-print-download-button-active {
+                border-color: $dark_grey;
+                background-color: $light_grey;
+                color: $dark_grey;
+            }
+
+            .tool-print-download-loader {
+                border: 4px solid $light_grey;
                 border-radius: 50%;
-                border-top: 4px solid #286090;
+                border-top: 4px solid $light_blue;
                 width: 25px;
                 height: 25px;
                 -webkit-animation: spin 1s linear infinite; /* Safari */

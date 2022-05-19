@@ -72,8 +72,8 @@ export default {
     }
     .snippetTagContainer button:hover {
         opacity: 1;
-        background-color: #3177b1;
-        color: #F3F3F3;
+        background-color: $light_blue;
+        color: $light_grey;
         cursor: pointer;
     }
     .snippetTagContainer .snippetTagLabel {
@@ -83,6 +83,6 @@ export default {
         padding-right: 5px;
     }
     .bi-x-lg:hover {
-        color: #E10019;
+        color: $light_red;
     }
 </style>

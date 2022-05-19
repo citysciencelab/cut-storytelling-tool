@@ -201,23 +201,24 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    @import "~variables";
     .snippetCheckboxContainer {
         height: auto;
     }
     .snippetCheckboxContainer .info-icon {
         float: right;
         font-size: 16px;
-        color: #ddd;
+        color: $light_grey;
     }
     .snippetCheckboxContainer .info-icon .opened {
-        color: #000;
+        color: $black;
     }
     .snippetCheckboxContainer .info-icon:hover {
         cursor: pointer;
-        color: #a5a09e;
+        color: $light_grey;
     }
     .snippetCheckboxContainer .info-text {
-        border: 1px solid #ddd;
+        border: 1px solid $light_grey;
         border-radius: 5px;
         font-size: 10px;
         padding: 15px 10px;

@@ -52,7 +52,7 @@ export default {
     }
 
     progress::-webkit-progress-value {
-        background-color: #3177b1;
+        background-color: $light_blue;
         border-radius: 5px;
     }
 

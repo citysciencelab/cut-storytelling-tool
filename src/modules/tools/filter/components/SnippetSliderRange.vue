@@ -453,7 +453,7 @@ export default {
         position: relative;
         margin: auto;
         font-size: 12px;
-        color: #000;
+        color: $black;
     }
     input[type="range"] {
         -webkit-appearance: none;
@@ -476,7 +476,7 @@ export default {
     .slider-range-track {
         width: 100%;
         height: 15px;
-        background-color: #ddd;
+        background-color: $light_grey;
         position: absolute;
         margin: auto;
         top: 0;
@@ -485,7 +485,7 @@ export default {
     }
     .slider-range-measure {
         height: 15px;
-        background-color: #3177b1;
+        background-color: $light_blue;
         position: absolute;
         top: 0;
         bottom: 0;
@@ -538,15 +538,15 @@ export default {
     }
     input[type="range"]:active::-ms-thumb {
         background-color: $white;
-        border: 1px solid #3177b1;
+        border: 1px solid $light_blue;
     }
     input[type="range"]:active::-moz-range-thumb {
         background-color: $white;
-        border: 1px solid #3177b1;
+        border: 1px solid $light_blue;
     }
     input[type="range"]:active::-webkit-slider-thumb {
         background-color: $white;
-        border: 1px solid #3177b1;
+        border: 1px solid $light_blue;
     }
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
@@ -583,7 +583,7 @@ export default {
         }
     }
     input[type="range"].disabled::-webkit-slider-thumb {
-        background-color: #b9b5b5;
+        background-color: $light_grey;
     }
     .category-layer .right {
         right: 30px;

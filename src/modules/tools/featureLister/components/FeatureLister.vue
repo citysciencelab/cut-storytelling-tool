@@ -361,8 +361,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
-    $color_1: gray;
-    $color_2: black;
+    @import "~variables";
 
 /***** Desktop *****/
 /***** Mobil *****/
@@ -374,15 +373,15 @@ export default {
     >span {
         float: left;
         width: 15px;
-        color: $color_1;
+        color: $dark_grey;
     }
     >.feature-lister-list-table-th-sorted {
-        color: $color_2;
+        color: $black;
     }
 }
 .feature-lister-list-table-container {
-    border-left: 1px solid #ddd !important;
-    border-right: 1px solid #ddd !important;
+    border-left: 1px solid $light_grey !important;
+    border-right: 1px solid $light_grey !important;
 }
 #feature-lister-list-table {
     overflow: auto;
@@ -427,16 +426,16 @@ export default {
 }
 .panel-heading {
     background: #f5f5f5;
-    color: #333333;
+    color: $dark_grey;
     cursor: default;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
+    border-left: 1px solid $light_grey;
+    border-right: 1px solid $light_grey;
     padding: 10px 15px;
     border-bottom: 1px solid transparent;
 }
 #feature-lister-themes-ul {
     .nav-item:hover {
-        background-color: lightgray;
+        background-color: $light_grey;
     }
 }
 

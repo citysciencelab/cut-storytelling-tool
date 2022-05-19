@@ -231,7 +231,7 @@ export default {
     font-weight: bold;
 }
 .gfi-footer {
-        color: #646262;
+        color: $dark_grey;
         font-size: 22px;
          .pager {
             background-color: $secondary;
@@ -245,7 +245,7 @@ export default {
 
         .pager-left {
             float: left;
-            border-right: 1px solid #ddd;
+            border-right: 1px solid $light_grey;
         }
 
         .pager-right {

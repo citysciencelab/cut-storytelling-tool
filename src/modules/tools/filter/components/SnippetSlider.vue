@@ -407,30 +407,23 @@ export default {
         margin-top: 2px;
     }
 
-    /* Chrome, Safari, Edge, Opera */
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
     input[type="range"]:active::-ms-thumb {
         background-color: $white;
-        border: 1px solid #3177b1;
+        border: 1px solid $light_blue;
     }
     input[type="range"]:active::-moz-range-thumb {
         background-color: $white;
-        border: 1px solid #3177b1;
+        border: 1px solid $light_blue;
     }
     input[type="range"]:active::-webkit-slider-thumb {
         background-color: $white;
-        border: 1px solid #3177b1;
+        border: 1px solid $light_blue;
     }
 
     /* Firefox */
     input[type="range"] {
         -webkit-appearance: none;
-        background-color: #ddd;
+        background-color: $light_grey;
         height: 15px;
         overflow: hidden;
         width: 100%;
@@ -446,7 +439,7 @@ export default {
         -webkit-appearance: none;
         background: $white;
         border-radius: 50%;
-        box-shadow: -210px 0 0 200px #3177b1;
+        box-shadow: -210px 0 0 200px $light_blue;
         cursor: pointer;
         height: 15px;
         width: 15px;
@@ -456,7 +449,7 @@ export default {
     input[type="range"]::-moz-range-thumb {
         background: $white;
         border-radius: 50%;
-        box-shadow: -1010px 0 0 1000px #3177b1;
+        box-shadow: -1010px 0 0 1000px $light_blue;
         cursor: pointer;
         height: 15px;
         width: 15px;
@@ -464,17 +457,17 @@ export default {
     }
 
     input[type="range"]::-moz-range-track {
-        background-color: #ddd;
+        background-color: $light_grey;
     }
     input[type="range"]::-moz-range-progress {
-        background-color: #3177b1;
+        background-color: $light_blue;
         height: 15px
     }
     input[type="range"]::-ms-fill-upper {
-        background-color: #ddd;
+        background-color: $light_grey;
     }
     input[type="range"]::-ms-fill-lower {
-        background-color: #3177b1;
+        background-color: $light_blue;
     }
     span {
         &.min {
@@ -494,9 +487,9 @@ export default {
 
     input[type="range"].disabled::-webkit-slider-thumb {
         -webkit-appearance: none;
-        background: #ddd;
+        background: $light_grey;
         border-radius: 50%;
-        box-shadow: -210px 0 0 200px #808080;
+        box-shadow: -210px 0 0 200px $light_grey;
         cursor: pointer;
         height: 15px;
         width: 15px;
