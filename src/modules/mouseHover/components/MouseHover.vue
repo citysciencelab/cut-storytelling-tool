@@ -63,16 +63,15 @@ export default {
 
 <style lang="scss" scoped>
 @import "~/css/mixins.scss";
-$color_1: #777;
-$background_color_1: rgb(255, 255, 255);
+@import "~variables";
 
 .mouseHover {
     font-size: 12px;
     text-align: left;
     max-width: inherit;
     padding: 8px;
-    background-color: $background_color_1;
-    color: $color_1;
+    background-color: $white;
+    color: $light_grey;
     white-space: nowrap;
     border: 1px solid rgba(0, 0, 0, 0.2);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);

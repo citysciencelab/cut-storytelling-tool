@@ -1,9 +1,5 @@
 @import "../../../css/mixins.scss";
-
-$color_1: rgb(85, 85, 85);
-$color_2: rgba(169, 68, 66, 1);
-$color_3: #E10019;
-$font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
+@import "~variables";
 
 .style-wms-win {
     position: absolute;
@@ -23,10 +19,10 @@ $font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
             cursor: move;
             font-size: 14px;
             padding: 8px 0;
-            color: $color_1;
+            color: $dark_grey;
         }
         >.buttons {
-            color: $color_1;
+            color: $dark_grey;
             font-size: 14px;
             margin: 0;
             >span {
@@ -40,16 +36,16 @@ $font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
         padding: 12px;
     }
     .layer-name {
-        color: $color_3;
+        color: $light_red;
         padding-bottom: 6px;
     }
 }
 .error {
     font-size: 10px;
-    color: $color_2;
+    color: $light_red;
 }
 .range-label {
-    font-family: $font_family_1;
+    font-family: $font_family_accent;
 }
 #style-wms-colorpicker {
     &:focus {

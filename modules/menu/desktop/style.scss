@@ -1,9 +1,5 @@
 @import "../../../css/mixins.scss";
-
-$color_1: rgb(51, 51, 51);
-$font_family_1: "MasterPortalFont", "Arial Narrow", Arial, sans-serif;
-$font_family_2: MasterPortalFont, "Arial Narrow", Arial, sans-serif;
-$background_color_1: rgb(51, 51, 51);
+@import "~variables";
 
 /**************** Menu ***********************/
 /**************** Themenbaum ****************/
@@ -13,7 +9,7 @@ $background_color_1: rgb(51, 51, 51);
 /*-------------------Selection/Settings----------------------*/
 .submenu-style {
     padding: 5px 0;
-    border-bottom: 1px solid rgb(229, 229, 229);
+    border-bottom: 1px solid $light_grey;
 }
 #root, ul#tree, ul#legend-menu, .portal-title {
     .tabable {
@@ -30,7 +26,6 @@ $background_color_1: rgb(51, 51, 51);
 
 ul#tree {
     border: none;
-    font-family: $font_family_1;
     padding: 0px 0;
     min-width: 380px;
 
@@ -50,7 +45,7 @@ ul#tree {
     }
     .closed {
         &:not(.SelectedLayer) {
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid $light_grey;
         }
     }
     .last-item {
@@ -69,7 +64,6 @@ ul#tree {
         max-height: 55vh;
         .title {
             padding: 4px 0 0 5px;
-            font-family: $font_family_2;
             font-size: 12px;
             cursor: pointer;
         }
@@ -80,10 +74,10 @@ ul#tree {
             a {
                 font-size: 15px;
                 margin: 0px;
-                color: $color_1;
+                color: $dark_grey;
                 flex-grow: 1;
                 &:hover {
-                    color: $color_1;
+                    color: $dark_grey;
                     background-color: lighten($light_grey_inactive, 40%);
                 }
 
@@ -114,7 +108,7 @@ ul#tree {
     li.layer-catalog {
         > .header {
             padding: 8px 5px 7px 5px;
-            background-color: $background_color_1;
+            background-color: $dark_grey;
             color: $accent_contrast;
             font-size: 13px;
         }
@@ -179,13 +173,13 @@ ul#tree {
 ul#tree.light {
     overflow-y: auto;
     font-size: 12px;
-    color: $color_1;
+    color: $dark_grey;
     li {
         padding: 5px;
         display: flex;
         flex-wrap: wrap;
         > div > a {
-            color: $color_1;
+            color: $dark_grey;
             flex-grow: 1;
         }
         span.title {

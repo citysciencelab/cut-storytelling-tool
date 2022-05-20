@@ -24,14 +24,12 @@ export default {
 
 <style lang="scss">
     @import "~variables";
-    $color_1: #f3f3f3;
-    $background_color_2: rgb(8,88,158);
 
     /* using this classname to scope css effects; can not use scoped scss here since controls are not within scope, but added by jQuery */
     .backwards-compatibility-controls {
         /* use old styling way for icons for old controls */
         .bootstrap-icon {
-            color: $color_1;
+            color: $black;
             background-color: $light_grey;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
             &:hover {
@@ -47,7 +45,7 @@ export default {
             }
         }
         > .toggleButtonPressed {
-            background-color: $background_color_2;
+            background-color: $light_blue;
         }
         /* forcing compatibility by overriding old-style layouting */
         .controls-row-right {

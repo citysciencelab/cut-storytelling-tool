@@ -356,12 +356,9 @@ export default {
 
 <style lang="scss" scoped>
     @import "~variables";
-    $color_1: #E10019;
-    $background_color_1: white;
-    $background_color_2: rgb(255, 255, 255);
 
     .subtitle {
-        color: $color_1;
+        color: $light_red;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -379,7 +376,7 @@ export default {
     }
     .body {
         >ul {
-            background-color: $background_color_1;
+            background-color: $white;
         }
         max-height: 66vh;
         overflow-y: auto;
@@ -397,9 +394,9 @@ export default {
         width: 45vw;
         margin: 0 10px 30px 10px;
         z-index: 1010;
-        background-color: $background_color_2;
+        background-color: $white;
         box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.176);
-        border: 1px solid rgb(229, 229, 229);
+        border: 1px solid $light_grey;
 
         @media (max-width: 768px) {
             inset: 12px auto auto 0;
@@ -411,7 +408,7 @@ export default {
 
     .header {
         padding: 10px 10px 5px 10px;
-        border-bottom: 1px solid rgb(229, 229, 229);
+        border-bottom: 1px solid $light_grey;
         cursor: move;
     }
     .bi-x-lg {

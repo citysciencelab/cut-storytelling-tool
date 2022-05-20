@@ -107,7 +107,7 @@ export default {
 
         .attributions-view {
             color: $secondary_contrast;
-            background-color: $secondary;
+            background-color: $white;
 
             max-width: 40vw;
             width: max-content;

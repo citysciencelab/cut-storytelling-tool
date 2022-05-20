@@ -88,8 +88,8 @@ export default {
     }
 
     .control-icon {
-        background-color: $light_grey;
-        color: $light_grey_contrast;
+        background-color: $dark_blue;
+        color: $white;
 
         pointer-events: all;
         cursor: pointer;
@@ -107,28 +107,28 @@ export default {
 
         /* pseudo-class state effects */
         &:hover {
-            background-color: $light_grey_hover;
+            background-color: lighten($dark_blue, 10%);;
         }
         &:focus {
-            background-color: $light_grey_focus;
-            outline: 1px solid $light_grey_outline;
+            background-color: lighten($dark_blue, 15%);
+            outline: 1px solid lighten($dark_blue, 15%);
         }
         &:active {
-            background-color: $light_grey_active;
+            background-color: lighten($dark_blue, 5%);
         }
 
         &:disabled {
-            background-color: $light_grey_inactive;
-            color: $light_grey_inactive_contrast;
+            background-color: $light-grey;
+            color: $dark_grey;
             cursor: default;
         }
     }
     .bi-plus-icon {
-        content: url("data:image/svg+xml, %3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-plus-lg' viewBox='0 0 16 16'%3e%3cpath fill-rule='evenodd' d='M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z' stroke='black'/%3e%3c/svg%3e");
+        content: url("data:image/svg+xml, %3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-plus-lg' viewBox='0 0 16 16'%3e%3cpath fill-rule='evenodd' d='M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z' stroke='white'/%3e%3c/svg%3e");
         height: 28px;
     }
     .bi-minus-icon {
-        content: url("data:image/svg+xml, %3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-dash-lg' viewBox='0 0 16 16'%3e%3cpath fill-rule='evenodd' d='M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z' stroke='black' stroke-width='1'/%3e%3c/svg%3e");
+        content: url("data:image/svg+xml, %3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-dash-lg' viewBox='0 0 16 16'%3e%3cpath fill-rule='evenodd' d='M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z' stroke='white' stroke-width='1'/%3e%3c/svg%3e");
         height: 28px;
     }
     /* TODO: Since every bootstrap-icon is supported via config, rules for every bootstrap-icon should exist here */
