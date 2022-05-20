@@ -12,6 +12,11 @@ export default {
             required: false,
             default: false
         },
+        attrName: {
+            type: Array,
+            required: false,
+            default: () => []
+        },
         title: {
             type: [String, Boolean],
             required: false,
@@ -27,15 +32,16 @@ export default {
             required: false,
             default: 0
         },
-        visible: {
-            type: Boolean,
+        filteredItems: {
+            type: Array,
             required: false,
-            default: false
+            default: () => []
         }
     },
     data () {
         return {
-            featureInfo: null
+            featureInfo: null,
+            visible: false
         };
     },
     computed: {
@@ -52,34 +58,26 @@ export default {
             const result = {};
 
             Object.entries(this.featureInfo).forEach(([key, value]) => {
-                result[key] = [...new Set(value)].join(", ");
+                result[key] = Array.isArray(value) ? value.join(", ") : value;
             });
             return result;
         }
     },
     watch: {
-        adjustment (adjusting) {
-            if (!isObject(adjusting)) {
-                return;
-            }
+        filteredItems (items) {
+            const attributesObject = this.getUniqueObjectFromAttributes(this.attrName, items);
 
-            if (adjusting?.start) {
-                this.featureInfo = null;
-            }
-
-            this.featureInfo = this.mergeFeatureInfo(this.featureInfo, adjusting.adjust);
-
-            if (adjusting?.finish) {
-                if (typeof this.gfiAttributes === "undefined") {
-                    this.featureInfo = this.beautifyObjectKeys(this.featureInfo);
+            this.featureInfo = attributesObject !== null ? this.beautifyObjectKeys(attributesObject) : null;
+        },
+        featureInfo: {
+            handler () {
+                if (isObject(this.featureInfo) && Object.keys(this.featureInfo).length > 0) {
+                    this.visible = true;
+                    return;
                 }
-                else {
-                    this.featureInfo = Radio.request("Util", "renameKeys", this.gfiAttributes, this.featureInfo);
-                }
-                if (this.visible === false) {
-                    this.$emit("setSnippetVisibleById", true, this.snippetId);
-                }
-            }
+                this.visible = false;
+            },
+            deep: true
         }
     },
     created () {
@@ -103,7 +101,7 @@ export default {
         },
 
         /**
-         * Sets the gfiAttributes of a layer by the id if available
+         * Sets the gfiAttributes of a layer by the id if available.
          * and if gfiAttributes are an object. It can also be a string ("ignore" or "showAll").
          * Is used to beautify the keys of the feature info.
          * @param {String} layerId - The id of the layer.
@@ -116,28 +114,38 @@ export default {
         },
 
         /**
-         * Merge existing and new feature info.
-         * @param {Object} existingFeatureInfo - Existing feature info otherwise null.
-         * @param {Object|Boolean} newFeatureInfo - New available feature info otherwise false.
-         * @returns {Object} New merged feature info.
+         * Gets an object with unique list of values for each attribute.
+         * @param {String[]} attrName an array of attrNames
+         * @param {Object[]} features an array of objects
+         * @returns {Object|null} returns object or null if given features is not an array
          */
-        mergeFeatureInfo (existingFeatureInfo, newFeatureInfo) {
-            if (!newFeatureInfo) {
-                return existingFeatureInfo;
+        getUniqueObjectFromAttributes (attrName, features) {
+            if (!Array.isArray(attrName) || !Array.isArray(features) || features.length === 0) {
+                return null;
             }
-            if (existingFeatureInfo === null) {
-                return newFeatureInfo;
-            }
+            const uniqueObjects = {},
+                result = {};
 
-            Object.entries(newFeatureInfo).forEach(([key, value]) => {
-                if (!Object.prototype.hasOwnProperty.call(existingFeatureInfo, key)) {
-                    existingFeatureInfo[key] = [];
-                }
-
-                existingFeatureInfo[key] = existingFeatureInfo[key].concat(value);
+            features.forEach(feature => {
+                attrName.forEach(attr => {
+                    if (!isObject(uniqueObjects[attr])) {
+                        uniqueObjects[attr] = {};
+                    }
+                    uniqueObjects[attr][feature.get(attr)] = true;
+                });
+            });
+            Object.entries(uniqueObjects).forEach(([attr, obj]) => {
+                result[attr] = [];
+                Object.keys(obj).forEach(value => {
+                    if (value === "undefined") {
+                        result[attr].push("");
+                        return;
+                    }
+                    result[attr].push(value);
+                });
             });
 
-            return existingFeatureInfo;
+            return result;
         }
     }
 };
@@ -145,7 +153,7 @@ export default {
 
 <template>
     <div
-        v-show="visible"
+        v-if="visible"
         class="snippetFeatureInfoContainer"
     >
         <h6 v-if="title">

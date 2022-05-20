@@ -184,27 +184,4 @@ describe("src/modules/tools/filterGeneral/components/LayerFilterSnippet.vue", ()
             expect(wrapper.vm.getTagTitle({value: "title", tagTitle: null})).to.equal("null");
         });
     });
-
-    describe("setSnippetVisibleById", () => {
-        it("should set the snippet visible to true", () => {
-            const snippet = {
-                visible: false
-            };
-
-            wrapper.vm.snippets.push(snippet);
-            wrapper.vm.setSnippetVisibleById(true, 0);
-
-            expect(wrapper.vm.snippets[0].visible).to.be.true;
-        });
-        it("should do nothing if the snippet of the passed id does not exist", () => {
-            const snippet = {
-                visible: false
-            };
-
-            wrapper.vm.snippets.push(snippet);
-            wrapper.vm.setSnippetVisibleById(true, 1);
-
-            expect(wrapper.vm.snippets[0].visible).to.be.false;
-        });
-    });
 });
