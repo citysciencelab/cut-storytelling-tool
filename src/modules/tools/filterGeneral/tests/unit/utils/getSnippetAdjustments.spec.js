@@ -163,7 +163,8 @@ describe("src/modules/tools/filterGeneral/utils/getSnippetAdjustments.js", () =>
                 {snippetId: 3, type: "sliderRange", attrName: ["C", "D"]},
                 {snippetId: 4, type: "date", attrName: "E", format: "DD.MM.YYYY"},
                 {snippetId: 5, type: "dateRange", attrName: ["F", "G"], format: "DD.MM.YYYY"},
-                {snippetId: 6, type: "anything", attrName: "H"}
+                {snippetId: 6, type: "anything", attrName: "H"},
+                {snippetId: 77, type: "featureInfo", attrName: ["A", "B", "E", "F"]}
             ], [
                 {get: attrName => responses[0][attrName]},
                 {get: attrName => responses[1][attrName]},
@@ -178,7 +179,13 @@ describe("src/modules/tools/filterGeneral/utils/getSnippetAdjustments.js", () =>
                 2: {min: 1, max: 6},
                 3: {min: 7, max: 19},
                 4: {min: "24.02.2022", max: "24.07.2022"},
-                5: {min: "05.12.2021", max: "05.08.2023"}
+                5: {min: "05.12.2021", max: "05.08.2023"},
+                77: {
+                    "A": ["v07", "v24", "v42", "v01"],
+                    "B": ["1", "2", "3", "4", "5", "6"],
+                    "E": ["24.02.2022", "24.03.2022", "24.04.2022", "24.05.2022", "24.06.2022", "24.07.2022"],
+                    "F": ["05.01.2022", "05.06.2022", "05.04.2022", "05.12.2021", "05.05.2022"]
+                }
             });
         });
     });

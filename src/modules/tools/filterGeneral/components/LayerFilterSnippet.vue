@@ -9,6 +9,7 @@ import SnippetInput from "./SnippetInput.vue";
 import SnippetSlider from "./SnippetSlider.vue";
 import SnippetSliderRange from "./SnippetSliderRange.vue";
 import SnippetTag from "./SnippetTag.vue";
+import SnippetFeatureInfo from "./SnippetFeatureInfo.vue";
 import isObject from "../../../../utils/isObject";
 import FilterApi from "../interfaces/filter.api.js";
 import MapHandler from "../utils/mapHandler.js";
@@ -29,6 +30,7 @@ export default {
         SnippetSlider,
         SnippetSliderRange,
         SnippetTag,
+        SnippetFeatureInfo,
         ProgressBar
     },
     props: {
@@ -298,6 +300,20 @@ export default {
          */
         setSnippetPrechecked (value) {
             this.precheckedSnippets.push(value);
+        },
+
+        /**
+         * Sets the visibility of a snippet by its id.
+         * @param {Boolean} value - The value for visible.
+         * @param {String} id - The id of a snippet.
+         * @returns {void}
+         */
+        setSnippetVisibleById (value, id) {
+            const foundedSnippet = this.getSnippetById(id);
+
+            if (isObject(foundedSnippet)) {
+                foundedSnippet.visible = value;
+            }
         },
         /**
          * Triggered when a rule changed at a snippet.
@@ -807,6 +823,20 @@ export default {
                     @changeRule="changeRule"
                     @deleteRule="deleteRule"
                     @setSnippetPrechecked="setSnippetPrechecked"
+                />
+            </div>
+            <div
+                v-else-if="hasThisSnippetTheExpectedType(snippet, 'featureInfo')"
+                class="snippet"
+            >
+                <SnippetFeatureInfo
+                    :ref="'snippet-' + snippet.snippetId"
+                    :adjustment="snippet.adjustment"
+                    :title="snippet.title"
+                    :layer-id="layerConfig.layerId"
+                    :snippet-id="snippet.snippetId"
+                    :visible="snippet.visible"
+                    @setSnippetVisibleById="setSnippetVisibleById"
                 />
             </div>
         </div>

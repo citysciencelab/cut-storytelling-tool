@@ -1136,11 +1136,30 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
     /**
      * Removes layer from Collection
+     * Note: The model is removed from Collection based on the position,
+     * because `this.remove` works only with Backbone.models.
+     * But most layers are js models.
      * @param {String} id LayerId to be removed
      * @return {void}
      */
     removeLayerById: function (id) {
-        this.remove(id);
+        if (this.get(id) instanceof Backbone.Model) {
+            this.remove(id);
+        }
+        else {
+            let modelIndex = null;
+
+            this.each((model, index) => {
+                if (model.get("id") === id) {
+                    modelIndex = index;
+                }
+            });
+
+            if (modelIndex !== null) {
+                // eslint-disable-next-line backbone/no-collection-models
+                this.models.splice(modelIndex, 1);
+            }
+        }
     },
 
     /**

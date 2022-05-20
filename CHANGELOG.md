@@ -5,6 +5,9 @@
 
 ## Known Issues
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
+
+---
+
 ## Unreleased - in development
 ### Added
 - The following NPM packages are added:
@@ -14,16 +17,19 @@
 - Added a mixin for changing the colour and padding of an active pill inside the css class `nav-pills`.
 - HochwasserPrint: new print module for Hochwasserrisikomanagement
 - FilterModule:
-  - new option optionsLimit for dropdown snippet
-  - Parent-child Filter Mode in Dropdown snippet
+    - new option optionsLimit for dropdown snippet
+    - Parent-child Filter Mode in Dropdown snippet
+- Added possibility to display a legend for a layer of type 'StaticImage'.
 
 ### Changed
 - `default`-gfiTheme: If a `|`-character is part of the response, every element separated by the character will be displayed in a separate paragraph.
 - Issue #764: Using parameters in WfsSearch as defined in [Filter Encoding Implementation Specification](https://portal.ogc.org/files/?artifact_id=8340); the default name for the like filter escape character is now `escapeChar` rather than `escape`. This requires a change of configuration for services deviating from the standard implementation, see docs.
 - map moved with new structure from src/modules/map to src/core/maps.
-- The tool `coordTookit` can now be used in 3D mode again. A height is now also displayed in 3D mode.
-- The Measure tool is no longer available in 3D mode.
-- The 3D entities layer is refactored. It is no longer a Backbone-model.The entities layer uses the masterportalAPI's entities layer on creation.
+- 3D Mode:
+    - The tool `coordTookit` can now be used in 3D mode again. A height is now also displayed in 3D mode.
+    - The Measure tool is no longer available in 3D mode.
+    - The 3D entities layer is refactored. It is no longer a Backbone-model. The entities layer uses the masterportalAPI's entities layer on creation.
+    - Decouple Cesium from window object.
 
 ### Deprecated
 - Switched Icon Library from Glyphicon to Bootstrap Icons. Edited Webpack Config. Updated icon usage in vue components to use scss. Updated icon usage in backbone modules. Edited docs & tests accordingly.
@@ -34,15 +40,21 @@
 - Issue #686: Add logging and documentation regarding manual WMTS configuration's limitations
 - The order of printed features from the draw and measure layer is now corrected.
 - Issue #737: Fix issue of some items in the layer tree overflowing
-- The attribute `startingMap3D` in config.js now ensures that the 3D mode is started by default.
 - Issue #736: Fix console error when users forbid their localization.
 - Fix issue with black lines that showed up when printing the measure_layer.
 - Saved results from the bufferAnalysis now get displayed correctly when opening a copied URL from the tool.
-- 3D: static display of markerPoint and markerPolygon from mapMarker is now visible during search, coordinateSearch and coordToolkit.
 - Issue #760: Fixed double display of folder in menu topic-tree when using FeatureViaUrl
 - Issue #760: Features added with FeatureViaUrl are now correctly displayed under Selected Topics
 - Fix Filter of GeoJSON after AutoRefresh by adding ID to each feature of the GeoJSON after AutoRefresh
 - Issue #712: Fix issue of multiple legend menu items in mobile view.
+- 3D Mode:
+    - The attribute `startingMap3D` in config.js now ensures that the 3D mode is started by default.
+    - Static display of markerPoint and markerPolygon from mapMarker is now visible during search, coordinateSearch and coordToolkit.
+    - Vector layers like WFS, GeoJSON or OAF (OGC API - Features) are now displayed in 3D mode.
+    - The Control Attributions now also works in 3D mode.
+- Fix error in menu if GFI Tool is set to isVisibleInMenu = false and no other tool is configured
+
+---
 
 ## v2.21.0 - 2022-05-04
 ### Added
@@ -65,8 +77,6 @@
 ### Deprecated
 - Configuration (`config.js`) parameters `zoomToFeature` and `zoomToGeometry` have been marked as deprecated in an upcoming major release.
 
-### Removed
-
 ### Fixed
 - Issue #758: featureLister threw a JavaScript exception when building the list of layers.
 - Issue #766: The performance of opening large folders in the tree of type custom or default has been increased.
@@ -78,6 +88,7 @@
 - The control `PoiOrientation` now also works with points that use the default style.
 
 ---
+
 ## v2.20.1 - 2022-04-21
 ### Changed
 - The following NPM packages are updated:
