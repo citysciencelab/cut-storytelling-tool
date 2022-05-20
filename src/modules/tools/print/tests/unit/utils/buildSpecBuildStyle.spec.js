@@ -10,7 +10,6 @@ describe("src/modules/tools/print/utils/buildSpec.buildStyle", function () {
         polygonFeatures,
         getStylingRules,
         getFeatureStyle,
-        getStyleAttributes,
         buildPolygonStyle;
     const attr = {
             "layout": "A4 Hochformat",
@@ -64,7 +63,6 @@ describe("src/modules/tools/print/utils/buildSpec.buildStyle", function () {
         buildSpec = BuildSpec;
         getStylingRules = buildSpec.getStylingRules;
         getFeatureStyle = buildSpec.getFeatureStyle;
-        getStyleAttributes = buildSpec.getStyleAttributes;
         buildPolygonStyle = buildSpec.buildPolygonStyle;
         buildSpec.setAttributes(attr);
         polygonFeatures = createTestFeatures("resources/testFeaturesBewohnerparkgebiete.xml");
@@ -73,7 +71,6 @@ describe("src/modules/tools/print/utils/buildSpec.buildStyle", function () {
     afterEach(() => {
         buildSpec.getStylingRules = getStylingRules;
         buildSpec.getFeatureStyle = getFeatureStyle;
-        buildSpec.getStyleAttributes = getStyleAttributes;
         buildSpec.buildPolygonStyle = buildPolygonStyle;
         sinon.restore();
     });
@@ -85,6 +82,7 @@ describe("src/modules/tools/print/utils/buildSpec.buildStyle", function () {
                 // stylingRule: bewirtschaftungsart='Parkschein, Bewohner mit Ausweis frei_0'
             const stylingRule = "bewirtschaftungsart=" + polygonFeatures[0].values_.bewirtschaftungsart + "_0";
 
+            buildSpec.getStyleModel = sinon.spy();
             buildSpec.getStylingRules = () => stylingRule;
             buildSpec.getFeatureStyle = () => [style];
             buildSpec.getStyleAttributes = () => ["bewirtschaftungsart"];
