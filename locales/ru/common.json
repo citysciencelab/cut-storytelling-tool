@@ -418,7 +418,7 @@
                 "serviceThree": "Сервис 3",
                 "serviceFour": "Сервис 4"
             },
-            "filterGeneral": {
+            "filter": {
                 "filterButton": "Фильтровать",
                 "searchInMapExtent": "Поиск в текущем разделе карты",
                 "snippetTags": {
@@ -461,15 +461,6 @@
                     "label": "Все попадания в фильтр",
                     "unit": "{{amountOfFilteredItems}} попаданиe"
                 }
-            },
-            "filter": {
-                "result": "Попаданиe",
-                "results": "Попаданиe",
-                "zoomOnResults": "Увеличение при попадании",
-                "filter": "-фильтр",
-                "yourSelection": "Ваш выбор: ",
-                "noFilterOptionSelected": "Пока не выбрана опция фильтрации",
-                "deleteAll":"Удалить всё"
             },
             "pendler": {
                 "animation": {

@@ -418,7 +418,7 @@
                 "serviceThree": "Service 3",
                 "serviceFour": "Service 4"
             },
-            "filterGeneral": {
+            "filter": {
                 "filterButton": "Filter",
                 "searchInMapExtent": "Search in current map extent",
                 "snippetTags": {
@@ -461,15 +461,6 @@
                     "label": "All filtered Counts",
                     "unit": "{{amountOfFilteredItems}} Results"
                 }
-            },
-            "filter": {
-                "result": "Result",
-                "results": "Results",
-                "zoomOnResults": "Zoom on results",
-                "filter": " filters",
-                "yourSelection": "Your Selection: ",
-                "noFilterOptionSelected": "No filter option selected",
-                "deleteAll": "Delete all"
             },
             "pendler": {
                 "animation": {

@@ -109,7 +109,7 @@
 - Issue #530: New checkbox for the print module to disable the auto adjustment of the print mask scale
 - WfsSearch result list can now use pagination by filling the resultsPerPage parameter.
 - Adds a bitbucket pipeline to run `npm audit` automatically.
-- Module `filterGeneral`: wfs filter via server (aka `external wfs filtering`) added
+- Module `filter`: wfs filter via server (aka `external wfs filtering`) added
 - Added a `showGeographicIdentifier` attribute to be able to use the `geographicIdentifier` to display the gazetteer search result.
 - Searchbar: Added a `showGeographicIdentifier` attribute to be able to use the `geographicIdentifier` to display the gazetteer search result.
 - Added new layer type OAF (OGCApiFeatures)
@@ -172,7 +172,7 @@
   - The Extent.default value `"current"` can now be interpreted.
   - The time field of WMS requests is now filled with ISO 8601 timestamps of same precision as Extent specification.
 - It is now possible to configure a loading strategy for a wfs layer (default is bbox).
-- A new filter module called `filterGeneral` to replace of the `filter` module with a more catchy configuration, new features and new UI.
+- A new filter module called `filter` to replace of the `filter` module with a more catchy configuration, new features and new UI.
 
 ### Changed
 -  Default for isFolderSelectable is true. Overwriteable in config.js (globally) oder config.json(folder specific). Applies only for treeType="custom". In treeType="default" the top folders als not selectable and the child folders are selectable.

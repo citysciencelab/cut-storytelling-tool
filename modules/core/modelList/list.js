@@ -18,7 +18,6 @@ import ObliqueLayer from "./layer/oblique";
 import Folder from "./folder/model";
 import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
-import Filter from "../../tools/filter/model";
 import Dropdown from "bootstrap/js/dist/dropdown";
 import Collapse from "bootstrap/js/dist/collapse";
 
@@ -231,9 +230,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "styleWMS") {
                 return new StyleWMS(attrs, options);
-            }
-            else if (attrs.id === "filter") {
-                return new Filter(attrs, options);
             }
             else if (attrs.id === "shadow") {
                 return new Shadow(attrs, options);

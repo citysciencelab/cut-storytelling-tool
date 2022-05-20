@@ -137,7 +137,7 @@
           }
         }
       },
-      "filterGeneral": {
+      "filter": {
         "name": "translate#common:menu.filter",
         "icon": "bi-funnel-fill",
         "deactivateGFI": false,

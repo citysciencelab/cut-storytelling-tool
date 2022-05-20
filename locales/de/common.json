@@ -418,7 +418,7 @@
                 "serviceThree": "Dienst 3",
                 "serviceFour": "Dienst 4"
             },
-            "filterGeneral": {
+            "filter": {
                 "filterButton": "Filtern",
                 "searchInMapExtent": "Suche im aktuellen Kartenausschnitt",
                 "snippetTags": {
@@ -461,15 +461,6 @@
                     "label": "Alle Filter-Treffer",
                     "unit": "{{amountOfFilteredItems}} Treffer"
                 }
-            },
-            "filter": {
-                "result": "Treffer",
-                "results": "Treffer",
-                "zoomOnResults": "Zoom auf Treffer",
-                "filter": "-Filter",
-                "yourSelection": "Ihre Auswahl: ",
-                "noFilterOptionSelected": "Noch keine Filteroption ausgewählt",
-                "deleteAll":"Alles löschen"
             },
             "pendler": {
                 "animation": {

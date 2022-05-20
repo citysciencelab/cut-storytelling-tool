@@ -417,7 +417,7 @@
                 "serviceThree": "картографічний сервіс 3",
                 "serviceFour": "картографічний сервіс 4"
             },
-            "filterGeneral": {
+            "filter": {
                 "filterButton": "Фільтрувати",
                 "searchInMapExtent": "Пошук в поточному фрагменті карти",
                 "snippetTags": {
@@ -460,15 +460,6 @@
                     "label": "Все результати фільтрації",
                     "unit": "{{amountOfFilteredItems}} Результати"
                 }
-            },
-            "filter": {
-                "result": "Результат",
-                "results": "Результати",
-                "zoomOnResults": "Збільште масштаб до результату",
-                "filter": "-Фільтр",
-                "yourSelection": "Ваш вибір: ",
-                "noFilterOptionSelected": "Параметр фільтра ще не вибрано",
-                "deleteAll":"Видалити всі"
             },
             "pendler": {
                 "animation": {
