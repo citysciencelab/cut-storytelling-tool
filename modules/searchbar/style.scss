@@ -131,7 +131,7 @@
         }
     }
     >.bootstrap-icon.quickhelp-is-shown {
-        color: $secondary_hover;
+        color: $light_blue;
         &:hover {
             background-color: $accent_hover;
             color: $accent_contrast;
@@ -166,7 +166,7 @@ li.results {
         border-radius: 0px;
     }
     .selected {
-        background: $secondary_hover;
+        background: $light_blue;
         color: $white;
         #searchInputLi {
             color: $white;

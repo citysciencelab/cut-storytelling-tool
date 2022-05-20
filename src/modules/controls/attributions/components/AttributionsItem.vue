@@ -113,7 +113,7 @@ export default {
             width: max-content;
             min-width: min-content;
 
-            border: 1px solid $secondary_border;
+            border: 1px solid $light_grey;
             box-shadow: 0 6px 12px $shadow;
 
             cursor: initial;
