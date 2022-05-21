@@ -7,6 +7,7 @@ import actions from "../store/actionsStoryTellingTool";
 import getters from "../store/gettersStoryTellingTool";
 import mutations from "../store/mutationsStoryTellingTool";
 import * as constants from "../store/constantsStoryTellingTool";
+import axios from "axios";
 
 export default {
     name: "StoryTellingTool",
@@ -19,7 +20,8 @@ export default {
         return {
             constants,
             mode: null,
-            storyConfPath: Config.storyConf
+            storyConfPath: Config.storyConf,
+            storyList: {}
 
         };
     },
@@ -94,6 +96,9 @@ export default {
      */
     mounted() {
         this.applyTranslationKey(this.name);
+        axios
+            .get("http://" + constants.backendConfig.url + "getStories")
+            .then(response => (this.storyList = response.data))
     },
     methods: {
         ...mapMutations("Tools/StoryTellingTool", Object.keys(mutations)),
@@ -179,6 +184,7 @@ export default {
         :deactivate-gfi="deactivateGFI"
         :initial-width="initialWidth"
         :initial-width-mobile="initialWidthMobile"
+        
     >
         <template #toolBody>
             <v-app v-if="active" id="tool-storyTellingTool" :class="mode">
