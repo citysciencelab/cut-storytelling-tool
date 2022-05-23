@@ -10,6 +10,7 @@ describe("src/modules/tools/print/utils/buildSpec.buildStyle", function () {
         polygonFeatures,
         getStylingRules,
         getFeatureStyle,
+        getStyleAttributes,
         buildPolygonStyle;
     const attr = {
             "layout": "A4 Hochformat",
@@ -63,6 +64,7 @@ describe("src/modules/tools/print/utils/buildSpec.buildStyle", function () {
         buildSpec = BuildSpec;
         getStylingRules = buildSpec.getStylingRules;
         getFeatureStyle = buildSpec.getFeatureStyle;
+        getStyleAttributes = buildSpec.getStyleAttributes;
         buildPolygonStyle = buildSpec.buildPolygonStyle;
         buildSpec.setAttributes(attr);
         polygonFeatures = createTestFeatures("resources/testFeaturesBewohnerparkgebiete.xml");
@@ -71,6 +73,7 @@ describe("src/modules/tools/print/utils/buildSpec.buildStyle", function () {
     afterEach(() => {
         buildSpec.getStylingRules = getStylingRules;
         buildSpec.getFeatureStyle = getFeatureStyle;
+        buildSpec.getStyleAttributes = getStyleAttributes;
         buildSpec.buildPolygonStyle = buildPolygonStyle;
         sinon.restore();
     });
