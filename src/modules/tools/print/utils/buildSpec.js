@@ -1039,14 +1039,12 @@ const BuildSpecModel = {
         // cluster feature with geometry style
         if (feature.get("features") !== undefined) {
             if ((style !== undefined && style.getText().getText() !== undefined) || feature.get("features").length > 1) {
-
                 const value = feature.get("features")[0].get(styleAttr[0])
                     + "_"
                     + style !== undefined && style.getText().getText() !== undefined ? style.getText().getText() : "cluster";
 
                 feature.set(styleAttr[0], value);
                 return `[${styleAttr[0]}='${value}']`;
-
             }
 
             // Current feature is not clustered but a single feature in a clustered layer
