@@ -6,7 +6,7 @@ import CoordToolkit from "./coordToolkit/components/CoordToolkit.vue";
 import DrawItem from "./draw/components/DrawItem.vue";
 import FeatureLister from "./featureLister/components/FeatureLister.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
-import Filter from "./filter/components/Filter.vue";
+import FilterGeneral from "./filter/components/FilterGeneral.vue";
 import GetFeatureInfo from "./gfi/components/GetFeatureInfo.vue";
 import LayerClusterToggler from "./layerClusterToggler/components/LayerClusterToggler.vue";
 import LayerSlider from "./layerSlider/components/LayerSlider.vue";
@@ -38,7 +38,7 @@ const state = {
         featureLister: FeatureLister,
         fileImport: FileImport,
         gfi: GetFeatureInfo,
-        filter: Filter,
+        filter: FilterGeneral,
         layerClusterToggler: LayerClusterToggler,
         layerSlider: LayerSlider,
         measure: MeasureInMap,

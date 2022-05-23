@@ -23,7 +23,7 @@ import LayerCategory from "./LayerCategory.vue";
 import isObject from "../../../../utils/isObject.js";
 
 export default {
-    name: "Filter",
+    name: "FilterGeneral",
     components: {
         ToolTemplate,
         LayerFilterSnippet,
