@@ -80,7 +80,13 @@ export default {
     },
     methods: {
         ...mapMutations("Tools/Filter", Object.keys(mutations)),
-        ...mapActions("Tools/Filter", ["initialize", "convertConfig"]),
+        ...mapActions("Tools/Filter", [
+            "initialize",
+            "convertConfig",
+            "updateRules",
+            "deleteAllRules",
+            "updateFilterHits"
+        ]),
 
         close () {
             this.setActive(false);
@@ -200,6 +206,11 @@ export default {
                                 :map-handler="mapHandler"
                                 :min-scale="minScale"
                                 :live-zoom-to-features="liveZoomToFeatures"
+                                :filter-rules="filters[slotProps.layer.filterId]"
+                                :filter-hits="filtersHits[slotProps.layer.filterId]"
+                                @updateRules="updateRules"
+                                @deleteAllRules="deleteAllRules"
+                                @updateFilterHits="updateFilterHits"
                             />
                         </div>
                     </template>
@@ -213,6 +224,11 @@ export default {
                         :map-handler="mapHandler"
                         :min-scale="minScale"
                         :live-zoom-to-features="liveZoomToFeatures"
+                        :filter-rules="filters[layerConfig.filterId]"
+                        :filter-hits="filtersHits[layerConfig.filterId]"
+                        @updateRules="updateRules"
+                        @deleteAllRules="deleteAllRules"
+                        @updateFilterHits="updateFilterHits"
                     />
                 </div>
             </div>

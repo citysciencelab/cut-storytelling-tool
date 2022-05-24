@@ -24,5 +24,7 @@ export default {
     liveZoomToFeatures: true,
     minScale: 5000,
     saveTo: "void",
-    layers: []
+    layers: [],
+    filters: [],
+    filtersHits: []
 };
