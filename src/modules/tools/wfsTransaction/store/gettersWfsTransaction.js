@@ -50,13 +50,16 @@ const getters = {
             if (layerConfiguration === undefined) {
                 return;
             }
-            configuration[val].available = layerConfiguration.show;
+            configuration[val].available = layerConfiguration.show; // TODO(roehlipa): Maybe deprecate parameter "show" in favour of "available"?
             configuration[val].caption = layerConfiguration.caption ? layerConfiguration.caption : configuration[val].caption;
         });
         return configuration;
     },
     currentLayerId (state) {
         return state.layerIds[state.currentLayerIndex];
+    },
+    showInteractionsButtons (state) {
+        return [null, "delete", "edit"].includes(state.selectedInteraction);
     }
 };
 

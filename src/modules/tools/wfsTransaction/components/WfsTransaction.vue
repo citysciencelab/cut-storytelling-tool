@@ -16,12 +16,8 @@
                     <select
                         id="tool-wfsTransaction-layerSelect"
                         class="form-select"
-                        @change="setCurrentLayerIndex($event.target.options.selectedIndex)"
+                        @change="layerChanged($event.target.options.selectedIndex)"
                     >
-                        <!--
-                            TODO(roehlipa): Add to @change
-                                ==> If formular open, deactivate and remove all stuff from map (should also happen on close)
-                        -->
                         <option
                             v-for="id of layerIds"
                             :key="id"
@@ -31,29 +27,25 @@
                     </select>
                 </div>
                 <div
-                    v-if="selectedInteraction === null"
+                    v-if="showInteractionsButtons"
                     id="tool-wfsTransaction-interactionSelect-container"
                 >
-                    <template v-for="config in currentInteractionConfig">
+                    <template v-for="(config, key) in currentInteractionConfig">
                         <SimpleButton
                             v-if="config.available"
-                            :key="config.caption"
+                            :key="key"
                             :caption="config.caption"
                             :icon="config.icon"
-                            :interaction="() => console.warn('I\'ll be a real function when I grow up :)')"
+                            :interaction="() => interactionChanged(key)"
                         />
-                        <!--
-                            TODO(roehlipa): Add interaction
-                                ==> Adds interactions with the map
-                                ==> Adds formular for saving features OR
-                                ==> Updates / Deletes features of service on selection
-                         -->
                     </template>
                 </div>
                 <div
-                    v-if="selectedInteraction !== null"
+                    v-else
                     id="tool-wfsTransaction-formular-container"
-                />
+                >
+                    {{ selectedInteraction }}
+                </div>
             </div>
         </template>
     </ToolTemplate>
@@ -61,6 +53,7 @@
 
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
+import prepareInteractions from "../utils/prepareInteractions";
 import ToolTemplate from "../../ToolTemplate.vue";
 import SimpleButton from "../../../../share-components/SimpleButton.vue";
 
@@ -68,14 +61,20 @@ export default {
     name: "WfsTransaction",
     components: {SimpleButton, ToolTemplate},
     computed: {
-        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "layerIds", "active", "icon", "name"]),
-        selectedInteraction () {
-            return null;
-        }
+        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "layerIds", "selectedInteraction", "showInteractionsButtons", "active", "icon", "name"])
     },
     methods: {
-        ...mapMutations("Tools/WfsTransaction", ["setCurrentLayerIndex"]),
-        ...mapActions("Tools/WfsTransaction", ["setActive"])
+        ...mapMutations("Tools/WfsTransaction", ["setCurrentLayerIndex", "setSelectedInteraction"]),
+        ...mapActions("Tools/WfsTransaction", ["setActive"]),
+        layerChanged (index) {
+            this.setCurrentLayerIndex(index);
+            this.setSelectedInteraction(null);
+            // TODO(roehlipa): If formular open, deactivate and remove all stuff from map (should also happen on close)
+        },
+        interactionChanged (key) {
+            this.setSelectedInteraction(key);
+            prepareInteractions(key);
+        }
     }
 };
 </script>
