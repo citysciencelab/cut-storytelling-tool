@@ -893,6 +893,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         if (timeLayers.length > 0) {
 
             if (treeType === "light") {
+                // in treeType light - the Layer will be shown additionally - so we need to check all selected Layers
                 const selectedTimeLayer = timeLayers.filter(it => it.isSelected === true);
 
                 if (model.id === selectedTimeLayer[selectedTimeLayer.length - 1].id) {
@@ -905,7 +906,17 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 }
             }
             else {
-                const selectedTimeLayer = timeLayers.filter(it => it.isSelected === false);
+                // in all other tree-types (custom or default) - only the layer added via URLparameters will be shown
+                const paramlayers = store.state.urlParams && store.state.urlParams["Map/layerIds"] ? store.state.urlParams["Map/layerIds"] : [],
+                    selectedTimeLayer = [];
+
+                paramlayers.forEach(paramLayer => {
+                    const layer = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
+
+                    if (layer && layer.time !== undefined) {
+                        selectedTimeLayer.push(layer);
+                    }
+                });
 
                 if (model.id === selectedTimeLayer[selectedTimeLayer.length - 1].id) {
                     setTimeout(function () {
@@ -913,6 +924,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                     }, 0);
                 }
                 if (selectedTimeLayer.length > 1) {
+                    console.warn("zu viele selectedTimeLayer ?", selectedTimeLayer);
                     Radio.trigger("Alert", "alert", i18next.t("common:modules.core.modelList.layer.wms.warningTimeLayerQuantity", {name: selectedTimeLayer[selectedTimeLayer.length - 1].name}));
                 }
             }
