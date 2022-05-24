@@ -204,7 +204,7 @@ export default {
                             <button
                                 id="measure-delete"
                                 type="button"
-                                class="btn btn-secondary col-md-12"
+                                class="btn btn-primary col-md-12"
                                 @click="deleteFeatures"
                             >
                                 {{ $t('modules.tools.measure.deleteMeasurements') }}
