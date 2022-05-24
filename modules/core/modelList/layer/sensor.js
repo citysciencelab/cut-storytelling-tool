@@ -127,7 +127,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      */
     toggleSubscriptionsOnMapChanges: function () {
         const features = this.get("layer").getSource().getFeatures(),
-            state = this.getLayerState();
+            state = this.getLayerState(this.get("isOutOfRange"), this.get("isSelected"), this.get("isSubscribed"));
 
         if (state === true) {
             this.setIsSubscribed(true);
@@ -152,13 +152,16 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
     /**
      * Returns the state of the layer based on out of range value, isSelected and isSubscribed.
+     * @param {Boolean} isOutOfRange The flag if map Scale is out of defined layer minScale and maxScale.
+     * @param {Boolean} isSelected The flag if value model is selected or not.
+     * @param {Boolean} isSubscribed The flag to prevent multiple executions.
      * @returns {Boolean} true if layer should be subscribed, false if not
      */
-    getLayerState: function () {
-        if (this.get("isOutOfRange") === false && this.get("isSelected") === true && this.get("isSubscribed") === false) {
+    getLayerState: function (isOutOfRange, isSelected, isSubscribed) {
+        if (!isOutOfRange && isSelected && !isSubscribed) {
             return true;
         }
-        else if ((this.get("isOutOfRange") === true || this.get("isSelected") === false) && this.get("isSubscribed") === true) {
+        else if ((isOutOfRange || !isSelected) && isSubscribed) {
             return false;
         }
         return undefined;
@@ -171,7 +174,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     createLayerSource: function () {
         this.setLayerSource(new VectorSource());
         if (this.has("clusterDistance")) {
-            this.createClusterLayerSource();
+            this.createClusterLayerSource(this.get("layerSource"), this.get("clusterDistance"));
         }
     },
 
@@ -199,12 +202,14 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
     /**
      * Creates ClusterLayerSource.
+     * @param {ol/source/Source} layerSource the source of the layer
+     * @param {Number} clusterDistance the distance where clustering should occur
      * @returns {void}
      */
-    createClusterLayerSource: function () {
+    createClusterLayerSource: function (layerSource, clusterDistance) {
         this.setClusterLayerSource(new Cluster({
-            source: this.get("layerSource"),
-            distance: this.get("clusterDistance")
+            source: layerSource,
+            distance: clusterDistance
         }));
     },
 
@@ -223,12 +228,20 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
             version = this.get("version"),
             urlParams = this.get("urlParameter"),
-            intersect = typeof this.get("intersect") === "boolean" ? this.get("intersect") : true;
+            currentExtent = {
+                extent: store.getters["Maps/getCurrentExtent"],
+                sourceProjection: mapCollection.getMapView("2D").getProjection().getCode(),
+                targetProjection: this.get("epsg")
+            },
+            intersect = typeof this.get("intersect") === "boolean" ? this.get("intersect") : true,
+            mapProjection = mapCollection.getMapView("2D").getProjection(),
+            epsg = this.get("epsg"),
+            gfiTheme = this.get("gfiTheme"),
+            utc = this.get("utc"),
+            isClustered = this.has("clusterDistance");
 
-        this.callSensorThingsAPI(url, version, urlParams, intersect, function (sensorData) {
-            const epsg = this.get("epsg"),
-                features = this.createFeaturesFromSensorData(sensorData, epsg),
-                isClustered = this.has("clusterDistance");
+        this.callSensorThingsAPI(url, version, urlParams, currentExtent, intersect, sensorData => {
+            const features = this.createFeaturesFromSensorData(sensorData, mapProjection, epsg, gfiTheme, utc);
 
             this.clearLayerSource();
             if (Array.isArray(features) && features.length) {
@@ -247,23 +260,33 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             if (typeof onsuccess === "function") {
                 onsuccess();
             }
-        }.bind(this));
+        }, error => {
+            store.dispatch("Alerting/addSingleAlert", i18next.t("modules.core.modelList.layer.sensor.httpOnError", {name: this.get("name")}));
+            console.warn(error);
+        });
     },
 
     /**
      * Creates features from given sensor data
      * @param {Object[]} sensorData sensor with location and properties
-     * @param {String} epsg the epsg from sensortype
+     * @param {ol/proj/Projection} mapProjection projection of the map
+     * @param {String} epsg the epsg of sensortype
+     * @param {String|Object} gfiTheme The name of the gfiTheme or an object of gfiTheme
+     * @param {String} utc="+1" UTC-Timezone to calculate correct time.
      * @returns {ol/Feature[]} feature to draw
      */
-    createFeaturesFromSensorData: function (sensorData, epsg) {
+    createFeaturesFromSensorData: function (sensorData, mapProjection, epsg, gfiTheme, utc) {
         let features = [],
             feature;
 
         if (Array.isArray(sensorData)) {
-            sensorData.forEach(function (data, index) {
-                if (data?.location && data.location && epsg !== undefined) {
-                    feature = this.createFeatureByLocation(data.location);
+            sensorData.forEach((data, index) => {
+                if (data?.location && data.location && typeof epsg !== "undefined") {
+                    feature = this.createFeatureByLocation(
+                        data.location,
+                        mapProjection,
+                        epsg
+                    );
                 }
                 else {
                     return;
@@ -272,14 +295,14 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 feature.setId(index);
                 feature.setProperties(data.properties, true);
 
-                if (typeof this.get("gfiTheme") === "object") {
-                    feature.set("gfiParams", this.get("gfiTheme").params, true);
+                if (typeof gfiTheme === "object") {
+                    feature.set("gfiParams", gfiTheme?.params, true);
                 }
-                feature.set("utc", this.get("utc"), true);
+                feature.set("utc", utc, true);
                 feature = this.aggregateDataStreamValue(feature);
                 feature = this.aggregateDataStreamPhenomenonTime(feature);
                 features.push(feature);
-            }, this);
+            });
 
             features = features.filter(subFeature => typeof subFeature.getGeometry() !== "undefined");
         }
@@ -379,18 +402,15 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @param {String} url The url to service
      * @param {String} version The version from service
      * @param {String} urlParams The url parameters
+     * @param {Object} currentExtent the extent coordinates
      * @param {Boolean} intersect true if it intersects, false if not
      * @param {Function} onsuccess a callback function (result) with the result to call on success and result: all things with attributes and location
+     * @param {Function} onerror a callback function (err) to pass errors with
      * @returns {void}
      */
-    callSensorThingsAPI: function (url, version, urlParams, intersect, onsuccess) {
+    callSensorThingsAPI: function (url, version, urlParams, currentExtent, intersect, onsuccess, onerror) {
         const requestUrl = this.buildSensorThingsUrl(url, version, urlParams),
             http = new SensorThingsHttp(),
-            currentExtent = {
-                extent: store.getters["Maps/getCurrentExtent"],
-                sourceProjection: mapCollection.getMapView("2D").getProjection().getCode(),
-                targetProjection: this.get("epsg")
-            },
             /**
              * a function to receive the response of a http call
              * @param {Object} result the response from the http request as array buffer
@@ -406,29 +426,20 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                     allThings = this.flattenArray(result);
                 }
 
-                allThings = this.createPropertiesOfDatastreams(allThings);
+                allThings = this.createPropertiesOfDatastreams(allThings, this.get("showNoDataValue"), this.get("noDataValue"));
 
                 allThings = this.aggregatePropertiesOfThings(allThings);
 
                 if (typeof onsuccess === "function") {
                     onsuccess(allThings);
                 }
-            }.bind(this),
-            /**
-             * Function to call on error
-             * @param {Error} error the occurring error
-             * @returns {void}
-             */
-            httpOnError = function (error) {
-                store.dispatch("Alerting/addSingleAlert", i18next.t("modules.core.modelList.layer.sensor.httpOnError", {name: this.get("name")}));
-                console.warn(error);
             }.bind(this);
 
         if (!this.get("loadThingsOnlyInCurrentExtent")) {
-            http.get(requestUrl, httpOnSuccess, null, null, httpOnError);
+            http.get(requestUrl, httpOnSuccess, null, null, onerror);
         }
         else {
-            http.getInExtent(requestUrl, currentExtent, intersect, httpOnSuccess, null, null, httpOnError);
+            http.getInExtent(requestUrl, currentExtent, intersect, httpOnSuccess, null, null, onerror);
         }
     },
 
@@ -529,9 +540,11 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * "dataStream_[dataStreamId]_[dataStreamName]" and
      * "dataStream_[dataStreamId]_[dataStreamName]_phenomenonTime".
      * @param {Object} thing thing.
+     * @param {Boolean} showNoDataValue true if "nodata" value should be shown, false if not
+     * @param {String} noDataValue the value to use for "nodata"
      * @returns {void}
      */
-    createPropertiesOfDatastreamsHelper (thing) {
+    createPropertiesOfDatastreamsHelper (thing, showNoDataValue, noDataValue) {
         const dataStreams = thing.Datastreams;
 
         thing.properties.dataStreamId = [];
@@ -558,10 +571,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 thing.properties.dataStreamValue.push(dataStreamValue);
                 thing.properties.dataPhenomenonTime.push(phenomenonTime);
             }
-            else if (this.get("showNoDataValue")) {
-                thing.properties[key] = this.get("noDataValue");
-                thing.properties[key + "_phenomenonTime"] = this.get("noDataValue");
-                thing.properties.dataStreamValue.push(this.get("noDataValue"));
+            else if (showNoDataValue) {
+                thing.properties[key] = noDataValue;
+                thing.properties[key + "_phenomenonTime"] = noDataValue;
+                thing.properties.dataStreamValue.push(noDataValue);
             }
 
         });
@@ -581,7 +594,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     moveDatastreamPropertiesToThing: function (thingProperties, dataStreamProperties) {
         if (dataStreamProperties) {
             Object.entries(dataStreamProperties).forEach(([key, value]) => {
-                if (thingProperties[key] !== undefined) {
+                if (typeof thingProperties[key] !== "undefined") {
                     thingProperties[key] = thingProperties[key] + " | " + value;
                 }
                 else {
@@ -594,9 +607,11 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     /**
      * Iterates over things and creates attributes for each observed property.
      * @param {Object[]} allThings All things.
+     * @param {Boolean} showNoDataValue true if "nodata" value should be shown, false if not
+     * @param {String} noDataValue the value to use for "nodata"
      * @returns {Object[]} All things with the newest observation for each dataStream.
      */
-    createPropertiesOfDatastreams: function (allThings) {
+    createPropertiesOfDatastreams: function (allThings, showNoDataValue, noDataValue) {
         const allThingsWithSensorData = allThings;
 
         allThingsWithSensorData.forEach(thing => {
@@ -604,7 +619,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 thing.properties = {};
             }
             if (thing?.Datastreams) {
-                this.createPropertiesOfDatastreamsHelper(thing);
+                this.createPropertiesOfDatastreamsHelper(thing, showNoDataValue, noDataValue);
             }
         });
 
@@ -670,15 +685,15 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     /**
      * Tries to parse object to ol/format/GeoJson
      * @param {Object} data the object to parse
+     * @param {ol/proj/Projection} mapProjection projection of the map
+     * @param {String} thingEPSG projection of the thing
      * @returns {ol/Feature} the ol feature
      */
-    createFeatureByLocation: function (data) {
-        const mapCrs = mapCollection.getMapView("2D").getProjection(),
-            thingEPSG = this.get("epsg"),
-            geojsonReader = new GeoJSON({
-                featureProjection: mapCrs,
-                dataProjection: thingEPSG
-            });
+    createFeatureByLocation: function (data, mapProjection, thingEPSG) {
+        const geojsonReader = new GeoJSON({
+            featureProjection: mapProjection,
+            dataProjection: thingEPSG
+        });
 
         let jsonObjects;
 
@@ -806,8 +821,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     styling: function (isClustered) {
         const stylelistmodel = getStyleModelById(this.get("styleId"));
 
-        if (stylelistmodel !== undefined) {
-            this.setStyle(function (feature) {
+        if (typeof stylelistmodel !== "undefined") {
+            this.setStyle(feature => {
                 return stylelistmodel.createStyle(feature, isClustered);
             });
         }
@@ -844,7 +859,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
             if (Array.isArray(result) && result.length > 1) {
                 jsonData.dataStreamId = result[1];
-                this.updateFeatureByObservation(jsonData);
+                this.updateFeatureByObservation(jsonData, this.get("layerSource"), this.get("timezone"), this.get("showNoDataValue"), this.get("noDataValue"));
             }
         });
     },
@@ -854,7 +869,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     subscribeToSensorThings: function () {
-        const features = this.getFeaturesInExtent(),
+        const features = this.getFeaturesInExtent(this.get("layer").getSource().getFeatures(), store.getters["Maps/getCurrentExtent"]),
             dataStreamIds = this.getDatastreamIds(features),
             version = this.get("version"),
             client = this.get("mqttClient"),
@@ -875,7 +890,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     unsubscribeFromSensorThings: function () {
-        const features = this.getFeaturesInExtent(),
+        const features = this.getFeaturesInExtent(this.get("layer").getSource().getFeatures(), store.getters["Maps/getCurrentExtent"]),
             dataStreamIds = this.getDatastreamIds(features),
             dataStreamIdsInverted = {},
             subscriptionTopics = this.get("subscriptionTopics"),
@@ -923,12 +938,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
     /**
      * Returns features in enlarged extent (enlarged by a fixed percentage to make sure moving features close to the extent can move into the mapview).
-     * @returns {ol/Feature[]} the features
+     * @param {ol/Feature[]} features all features
+     * @param {ol/extent} currentExtent the current browser extent coordinates
+     * @returns {ol/Feature[]} the features in the given extent
      */
-    getFeaturesInExtent: function () {
-        const features = this.get("layer").getSource().getFeatures(),
-            currentExtent = store.getters["Maps/getCurrentExtent"],
-            enlargedExtent = this.enlargeExtent(currentExtent, 0.05),
+    getFeaturesInExtent: function (features, currentExtent) {
+        const enlargedExtent = this.enlargeExtent(currentExtent, 0.05),
             featuresInExtent = [];
 
         features.forEach(feature => {
@@ -956,20 +971,22 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * Updates the phenomenonTime and states of the feature.
      * This function is triggerd from mqtt.
      * @param {Object} observation The observation containing new data.
+     * @param {ol/source/Source} layerSource The layer source of open layers.
+     * @param {String} timezone The timezone of Sensors.
+     * @param {Boolean} showNoDataValue true if "nodata" value should be shown, false if not
+     * @param {String} noDataValue the value to use for "nodata"
      * @returns {void}
      */
-    updateFeatureByObservation: function (observation) {
+    updateFeatureByObservation: function (observation, layerSource, timezone, showNoDataValue, noDataValue) {
         const observationToUpdate = typeof observation !== "undefined" ? observation : {},
             dataStreamId = String(observationToUpdate.dataStreamId),
-            layerSource = this.get("layerSource"),
             features = layerSource ? layerSource.getFeatures() : [],
             feature = this.getFeatureByDatastreamId(features, dataStreamId),
             result = observationToUpdate.result,
-            timezone = this.get("timezone"),
             phenomenonTime = this.getLocalTimeFormat(observationToUpdate.phenomenonTime, timezone);
 
         this.updateObservationForDatastreams(feature, dataStreamId, observation);
-        this.updateFeatureProperties(feature, dataStreamId, result, phenomenonTime);
+        this.updateFeatureProperties(feature, dataStreamId, result, phenomenonTime, showNoDataValue, noDataValue);
     },
 
     /**
@@ -984,8 +1001,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             return;
         }
 
-        feature.get("Datastreams").forEach(function (datastream) {
-            if (datastream["@iot.id"] !== undefined && String(datastream["@iot.id"]) === String(dataStreamId)) {
+        feature.get("Datastreams").forEach(datastream => {
+            if (typeof datastream["@iot.id"] !== "undefined" && String(datastream["@iot.id"]) === String(dataStreamId)) {
                 datastream.Observations = [observation];
             }
         });
@@ -997,17 +1014,19 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @param {String} dataStreamId the datastream id
      * @param {String} result the new state
      * @param {String} phenomenonTime the new phenomenonTime
+     * @param {Boolean} showNoDataValue true if "nodata" value should be shown, false if not
+     * @param {String} noDataValue the value to use for "nodata"
      * @fires GFI#RadioTriggerGFIChangeFeature
      * @returns {void}
      */
-    updateFeatureProperties: function (feature, dataStreamId, result, phenomenonTime) {
+    updateFeatureProperties: function (feature, dataStreamId, result, phenomenonTime, showNoDataValue, noDataValue) {
         if (typeof feature?.get !== "function") {
             return;
         }
         const dataStreamIdIdx = feature.get("dataStreamId").split(" | ").indexOf(String(dataStreamId)),
             dataStreamNameArray = feature.get("dataStreamName").split(" | "),
             dataStreamName = Object.prototype.hasOwnProperty.call(dataStreamNameArray, dataStreamIdIdx) ? dataStreamNameArray[dataStreamIdIdx] : "",
-            preparedResult = result === "" && this.get("showNoDataValue") ? this.get("noDataValue") : result;
+            preparedResult = result === "" && showNoDataValue ? noDataValue : result;
 
         feature.set("dataStream_" + dataStreamId + "_" + dataStreamName, preparedResult, true);
         feature.set("dataStream_" + dataStreamId + "_" + dataStreamName + "_phenomenonTime", phenomenonTime, true);
@@ -1045,7 +1064,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     getDatastreamIdsHelper: function (feature, dataStreamIdsArray) {
-        let dataStreamIds = feature && feature.get("dataStreamId") !== undefined ? feature.get("dataStreamId") : "";
+        let dataStreamIds = feature && typeof feature.get("dataStreamId") !== "undefined" ? feature.get("dataStreamId") : "";
 
         if (dataStreamIds.indexOf("|") >= 0) {
             dataStreamIds = dataStreamIds.split("|");
@@ -1071,17 +1090,17 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             return [];
         }
 
-        features.forEach(function (feature) {
+        features.forEach(feature => {
             if (Array.isArray(feature.get("features"))) {
                 // obviously clustered featuers are activated
-                feature.get("features").forEach(function (subfeature) {
+                feature.get("features").forEach(subfeature => {
                     this.getDatastreamIdsHelper(subfeature, dataStreamIdsArray);
-                }.bind(this));
+                });
             }
             else {
                 this.getDatastreamIdsHelper(feature, dataStreamIdsArray);
             }
-        }.bind(this));
+        });
 
         return dataStreamIdsArray;
     },
@@ -1210,7 +1229,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     setHttpSubFolder: function (value) {
         this.set("httpSubFolder", value);
     }
-
 });
 
 export default SensorLayer;

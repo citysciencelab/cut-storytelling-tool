@@ -74,7 +74,8 @@ export default {
             autoRefreshSet: false,
             isRefreshing: false,
             amountOfFilteredItems: false,
-            precheckedSnippets: []
+            precheckedSnippets: [],
+            filteredItems: []
         };
     },
     computed: {
@@ -301,20 +302,6 @@ export default {
         setSnippetPrechecked (value) {
             this.precheckedSnippets.push(value);
         },
-
-        /**
-         * Sets the visibility of a snippet by its id.
-         * @param {Boolean} value - The value for visible.
-         * @param {String} id - The id of a snippet.
-         * @returns {void}
-         */
-        setSnippetVisibleById (value, id) {
-            const foundedSnippet = this.getSnippetById(id);
-
-            if (isObject(foundedSnippet)) {
-                foundedSnippet.visible = value;
-            }
-        },
         /**
          * Triggered when a rule changed at a snippet.
          * @param {Object} rule the rule to set
@@ -476,6 +463,7 @@ export default {
                 this.mapHandler.activateLayer(filterId, () => {
                     this.api.filter(filterQuestion, filterAnswer => {
                         this.paging = filterAnswer.paging;
+                        this.filteredItems = [];
                         if (this.paging?.page === 1) {
                             this.mapHandler.clearLayer(filterId, this.isExtern());
                         }
@@ -500,6 +488,9 @@ export default {
                                         this.filter();
                                     }
                                 });
+                            }
+                            if (Array.isArray(filterAnswer?.items) && filterAnswer?.items.length > 0) {
+                                this.filteredItems = this.filteredItems.concat(filterAnswer.items);
                             }
                         }
                         else {
@@ -831,12 +822,13 @@ export default {
             >
                 <SnippetFeatureInfo
                     :ref="'snippet-' + snippet.snippetId"
+                    :attr-name="snippet.attrName"
                     :adjustment="snippet.adjustment"
                     :title="snippet.title"
                     :layer-id="layerConfig.layerId"
                     :snippet-id="snippet.snippetId"
                     :visible="snippet.visible"
-                    @setSnippetVisibleById="setSnippetVisibleById"
+                    :filtered-items="filteredItems"
                 />
             </div>
         </div>
