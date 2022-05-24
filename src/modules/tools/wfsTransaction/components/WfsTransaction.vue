@@ -73,11 +73,6 @@ export default {
             return null;
         }
     },
-    watch: {
-        active (val) {
-            this.setActive(val);
-        }
-    },
     methods: {
         ...mapMutations("Tools/WfsTransaction", ["setCurrentLayerIndex"]),
         ...mapActions("Tools/WfsTransaction", ["setActive"])
