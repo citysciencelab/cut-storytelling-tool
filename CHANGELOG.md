@@ -53,6 +53,7 @@
     - Vector layers like WFS, GeoJSON or OAF (OGC API - Features) are now displayed in 3D mode.
     - The Control Attributions now also works in 3D mode.
 - Fix error in menu if GFI Tool is set to isVisibleInMenu = false and no other tool is configured
+- Issue #751: Fix issue when printing groups of WFS layers.
 
 ---
 
