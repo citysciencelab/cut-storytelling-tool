@@ -37,7 +37,8 @@ describe("src/modules/tools/wfsSearch/components/WfsSearchLiteral.vue", () => {
                     field: {
                         id: "test",
                         usesId: false,
-                        fieldName: "fieldName"
+                        fieldName: "fieldName",
+                        inputLabel: "inputLabel"
                     }
                 }
             }
