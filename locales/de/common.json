@@ -807,6 +807,16 @@
                     "text": "Die Ergebnisse der Suche werden die Bedingungen / Klauseln {{userHelp}} erfüllen. <br /> *Pflichtfeld"
                 }
             },
+            "wfsTransaction": {
+                "layerSelectLabel" : "Aktueller Layer:",
+                "interactionSelect": {
+                    "edit": "Geometrie bearbeiten",
+                    "delete": "Geometrie löschen",
+                    "line": "Linie erfassen",
+                    "point": "Punkt erfassen",
+                    "polygon": "Fläche erfassen"
+                }
+            },
             "routing": {
                 "coordinateInputHelp": "Suchen Sie einen Ort oder fügen Sie einen Punkt durch Klick in die Karte hinzu",
                 "startpoint": "Startpunkt",

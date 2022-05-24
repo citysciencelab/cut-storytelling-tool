@@ -807,6 +807,16 @@
                     "text": "The results of the search will fulfill the conditions / clauses {{userHelp}}. <br /> *Mandatory field"
                 }
             },
+            "wfsTransaction": {
+                "layerSelectLabel": "Current Layer:",
+                "interactionSelect": {
+                  "edit": "Edit geometry",
+                  "delete": "Delete geometry",
+                  "line": "Add line",
+                  "point": "Add point",
+                  "polygon": "Add area"
+                }
+            },
             "routing": {
                 "coordinateInputHelp": "Finde a place or add a point by clicking on the map",
                 "startpoint": "Startpoint",
