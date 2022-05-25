@@ -810,11 +810,23 @@
             "wfsTransaction": {
                 "layerSelectLabel": "Current Layer:",
                 "interactionSelect": {
-                  "edit": "Edit geometry",
-                  "delete": "Delete geometry",
-                  "line": "Add line",
-                  "point": "Add point",
-                  "polygon": "Add area"
+                    "edit": "Edit geometry",
+                    "delete": "Delete geometry",
+                    "line": "Add line",
+                    "point": "Add point",
+                    "polygon": "Add area"
+                },
+                "form": {
+                    "buttons": {
+                        "discard": "Discard",
+                        "save": "Save"
+                    },
+                    "featuresProperties": {
+                        "annotation": "Annotation",
+                        "date": "Date",
+                        "name": "Name",
+                        "number": "Number"
+                    }
                 }
             },
             "routing": {

@@ -15,10 +15,28 @@ const state = {
     name: "WfsTransaction",
     icon: "bi-globe",
     // Module specific configuration
-    layerIds: [],
     areaButton: [], // TODO(roehlipa): deprecate this --> polygonButton is the new one
     edit: false,
     delete: false,
+    featuresProperties: [ // TODO(roehlipa): These values should be the default but it should be configurable (values depend on used service)
+        {
+            label: "common:modules.tools.wfsTransaction.form.featuresProperties.name",
+            key: "name" // TODO(roehlipa): Check the actual needed property defaults
+        },
+        {
+            label: "common:modules.tools.wfsTransaction.form.featuresProperties.number",
+            key: "number"
+        },
+        {
+            label: "common:modules.tools.wfsTransaction.form.featuresProperties.annotation",
+            key: "annotation"
+        },
+        {
+            label: "common:modules.tools.wfsTransaction.form.featuresProperties.date",
+            key: "date"
+        }
+    ],
+    layerIds: [],
     lineButton: [],
     pointButton: [],
     polygonButton: [],

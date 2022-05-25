@@ -815,6 +815,18 @@
                     "line": "Linie erfassen",
                     "point": "Punkt erfassen",
                     "polygon": "Fläche erfassen"
+                },
+                "form": {
+                    "buttons": {
+                        "discard": "Verwerfen",
+                        "save": "Speichern"
+                    },
+                    "featuresProperties": {
+                        "annotation": "Bemerkung",
+                        "date": "Datum",
+                        "name": "Name",
+                        "number": "Nummer"
+                    }
                 }
             },
             "routing": {
