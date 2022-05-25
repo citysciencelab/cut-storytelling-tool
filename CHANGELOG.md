@@ -57,6 +57,7 @@
 - Fix error in menu if GFI Tool is set to isVisibleInMenu = false and no other tool is configured
 
 ---
+- Issue #771: Fix issue of WMS-TimeLayer being displayed wrong and without TimeSlider, when set visivle through URLParameter
 
 ## v2.21.0 - 2022-05-04
 ### Added
