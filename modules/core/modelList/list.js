@@ -896,13 +896,16 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 // in treeType light - the Layer will be shown additionally - so we need to check all selected Layers
                 const selectedTimeLayer = timeLayers.filter(it => it.isSelected === true);
 
-                if (model.id === selectedTimeLayer[selectedTimeLayer.length - 1].id) {
-                    setTimeout(function () {
-                        handleSingleTimeLayer(true, null, model);
-                    }, 0);
-                }
-                if (selectedTimeLayer.length > 1) {
-                    Radio.trigger("Alert", "alert", i18next.t("common:modules.core.modelList.layer.wms.warningTimeLayerQuantity", {name: selectedTimeLayer[selectedTimeLayer.length - 1].name}));
+                if (selectedTimeLayer.length > 0) {
+
+                    if (model.id === selectedTimeLayer[selectedTimeLayer.length - 1].id) {
+                        setTimeout(function () {
+                            handleSingleTimeLayer(true, null, model);
+                        }, 0);
+                    }
+                    if (selectedTimeLayer.length > 1) {
+                        Radio.trigger("Alert", "alert", i18next.t("common:modules.core.modelList.layer.wms.warningTimeLayerQuantity", {name: selectedTimeLayer[selectedTimeLayer.length - 1].name}));
+                    }
                 }
             }
             else {
@@ -917,15 +920,16 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                         selectedTimeLayer.push(layer);
                     }
                 });
-
-                if (model.id === selectedTimeLayer[selectedTimeLayer.length - 1].id) {
-                    setTimeout(function () {
-                        handleSingleTimeLayer(true, null, model);
-                    }, 0);
-                }
-                if (selectedTimeLayer.length > 1) {
-                    console.warn("zu viele selectedTimeLayer ?", selectedTimeLayer);
-                    Radio.trigger("Alert", "alert", i18next.t("common:modules.core.modelList.layer.wms.warningTimeLayerQuantity", {name: selectedTimeLayer[selectedTimeLayer.length - 1].name}));
+                if (selectedTimeLayer.length > 0) {
+                    if (model.id === selectedTimeLayer[selectedTimeLayer.length - 1].id) {
+                        setTimeout(function () {
+                            handleSingleTimeLayer(true, null, model);
+                        }, 0);
+                    }
+                    if (selectedTimeLayer.length > 1) {
+                        console.warn("zu viele selectedTimeLayer ?", selectedTimeLayer);
+                        Radio.trigger("Alert", "alert", i18next.t("common:modules.core.modelList.layer.wms.warningTimeLayerQuantity", {name: selectedTimeLayer[selectedTimeLayer.length - 1].name}));
+                    }
                 }
             }
         }
