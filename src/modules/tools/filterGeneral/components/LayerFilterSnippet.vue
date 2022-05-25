@@ -691,6 +691,7 @@ export default {
                     :value="snippet.value"
                     :visible="snippet.visible"
                     :options-limit="snippet.optionsLimit"
+                    :locale-compare-params="snippet.localeCompareParams"
                     @changeRule="changeRule"
                     @deleteRule="deleteRule"
                     @setSnippetPrechecked="setSnippetPrechecked"

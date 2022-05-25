@@ -132,7 +132,8 @@
               "wms": {
                 "allowCookies":"<strong>Please allow cookies to load this background map.</strong>",
                 "errorTimeLayer": "Error while retrieving information for the layer with the id {{id}}: {{error}}",
-                "invalidTimeLayer": "The configured layer with the id {{id}} does not contain the necessary values for a WMS-T."
+                "invalidTimeLayer": "The configured layer with the id {{id}} does not contain the necessary values for a WMS-T.",
+                "warningTimeLayerQuantity": "<strong>Warning:</strong> More than one TimeLayer was initially selected. </br>Only <strong>{{name}} </strong>is displayed."
               }
             }
           }
