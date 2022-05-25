@@ -55,6 +55,7 @@
     - Vector layers like WFS, GeoJSON or OAF (OGC API - Features) are now displayed in 3D mode.
     - The Control Attributions now also works in 3D mode.
 - Fix error in menu if GFI Tool is set to isVisibleInMenu = false and no other tool is configured
+- Issue G31DEV1-731: Fix map resized when a tool is as sidebar and defined with active:true in config.json
 
 ---
 - Issue #771: Fix issue of WMS-TimeLayer being displayed wrong and without TimeSlider, when set visivle through URLParameter
