@@ -327,15 +327,6 @@
                 "serviceThree": "Servizio 3",
                 "serviceFour": "Servizio 4"
             },
-            "filter": {
-                "result": "Risultato",
-                "results": "Risultati",
-                "zoomOnResults": "Zoom al risultato",
-                "filter": "-Filtro",
-                "yourSelection": "La vostra selezione: ",
-                "noFilterOptionSelected": "Nessuna opzione di filtro selezionata",
-                "deleteAll":"Cancella tutto"
-            },
             "pendler": {
                 "animation": {
                     "domicile": "Residenza",
