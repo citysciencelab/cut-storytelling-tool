@@ -65,7 +65,6 @@ export default {
         this.$on("close", this.close);
     },
     mounted () {
-        this.initialize();
         this.convertConfig({
             snippetInfos: getSnippetInfos()
         });
