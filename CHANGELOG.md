@@ -109,7 +109,7 @@
 - Issue #530: New checkbox for the print module to disable the auto adjustment of the print mask scale
 - WfsSearch result list can now use pagination by filling the resultsPerPage parameter.
 - Adds a bitbucket pipeline to run `npm audit` automatically.
-- Module `filter`: wfs filter via server (aka `external wfs filtering`) added
+- Module `filterGeneral`: wfs filter via server (aka `external wfs filtering`) added
 - Added a `showGeographicIdentifier` attribute to be able to use the `geographicIdentifier` to display the gazetteer search result.
 - Searchbar: Added a `showGeographicIdentifier` attribute to be able to use the `geographicIdentifier` to display the gazetteer search result.
 - Added new layer type OAF (OGCApiFeatures)
