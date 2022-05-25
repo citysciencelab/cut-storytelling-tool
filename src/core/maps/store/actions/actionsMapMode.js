@@ -66,7 +66,7 @@ export default {
 
             map3D = await dispatch("createMap3D");
             mapCollection.addMap(map3D, "3D");
-            api.map.olcsMap.prepareScene({scene: map3D.getCesiumScene(), map3D: map3D, callback: (clickObject) => dispatch("clickEventCallback", clickObject)}, Config);
+            api.map.olcsMap.handle3DEvents({scene: map3D.getCesiumScene(), map3D: map3D, callback: (clickObject) => dispatch("clickEventCallback", clickObject)});
         }
         dispatch("controlZoomLevel", {currentMapMode: mapMode, targetMapMode: "3D"});
         map3D.setEnabled(true);

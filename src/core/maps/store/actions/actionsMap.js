@@ -118,6 +118,7 @@ export default {
      */
     createMap3D ({getters}) {
         return api.map.createMap({
+            cesiumParameter: Config?.cesiumParameter,
             map2D: getters.get2DMap,
             shadowTime: function () {
                 return this.time || Cesium.JulianDate.fromDate(new Date());

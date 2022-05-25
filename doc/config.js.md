@@ -64,6 +64,9 @@ In the following, all configuration options are described. For all configuration
 
 ## cameraParameter
 
+Cesium Scene camera settings in 3D mode.
+_Deprecated in the next major release. Please use **[cesiumParameter](#markdown-header-cesiumParameter)** instead._
+
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
 |heading|no|Number||Camera's initial heading in radians|
@@ -73,13 +76,30 @@ In the following, all configuration options are described. For all configuration
 ***
 
 ## cesiumParameter
+
+Cesium Scene settings in 3D mode.
+For more attributes see **[Scene](https://cesium.com/learn/cesiumjs/ref-doc/Scene.html?classFilter=scene)**
+
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
-|fog|no|Object||Fog options. See [fog documentation](https://cesiumjs.org/Cesium/Build/Documentation/Fog.html) for details.|
+|camera|no|**[camera](#markdown-header-cesiumParametercamera)**||Cesium Scene camera settings in 3D mode.|
 |enableLighting|no|Boolean|`false`|Activates light effects on the map based on the sun's position.|
-|maximumScreenSpaceError|no|Number|`2.0`|Detail level in which terrain/raster tiles are fetched. 4/3 is the highest quality level.|
+|fog|no|Object||Fog options. See [fog documentation](https://cesiumjs.org/Cesium/Build/Documentation/Fog.html) for details.|
 |fxaa|no|Boolean|`true`|activates *fast approximate anti-aliasing*|
+|maximumScreenSpaceError|no|Number|`2.0`|Detail level in which terrain/raster tiles are fetched. 4/3 is the highest quality level.|
 |tileCacheSize|no|Number|`100`|terrain/raster tile cache size|
+
+***
+
+### cesiumParameter.camera
+
+Cesium Scene camera settings in 3D mode.
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|altitude|no|Number||Camera's initial height in meters|
+|heading|no|Number||Camera's initial heading in radians|
+|tilt|no|Number||Camera's initial tile in radians|
 
 ***
 

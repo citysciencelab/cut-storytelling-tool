@@ -33,10 +33,12 @@
     - The 3D entities layer is refactored. It is no longer a Backbone-model. The entities layer uses the masterportalAPI's entities layer on creation.
     - Decouple Cesium from window object.
     - The Get Feature Info (GFI) for WFS features can now be displayed in 3D mode.
+    - Values from the attribute `cesiumParameter` from config.js are now set when instantiating map3D at the 3D scene.
 - renamed FilterGeneral to Filter and removed old Filter Files.
 
 ### Deprecated
 - Switched Icon Library from Glyphicon to Bootstrap Icons. Edited Webpack Config. Updated icon usage in vue components to use scss. Updated icon usage in backbone modules. Edited docs & tests accordingly.
+- The attribute `cameraParameter` in config.js is deprecated in the next major release. Please use `cesiumParameter.camera` instead.
 
 ### Removed
 
@@ -285,8 +287,6 @@
 - Issue #486: WMS GFI can now show responses without tbody.
 - The Vue component `Tool` has been renamed to `ToolTemplate` due to a new linter rule.
 
-### Deprecated
-
 ### Removed
 - The following NPM packages are removed:
     - mocha-loader
@@ -448,8 +448,6 @@
 ### Changed
 - Coding-Conventions: For unittests in Vue (/src/...) the vast majority of test-folders are called "tests", going back to a mutual understanding of folder naming. Please use "tests" for your unit or e2e tests in Vue in the future.
 - Migrated the print Tool from Backbone.js to Vue.js. It is now also possible to create multiple prints in parallel.
-
-### Deprecated
 
 ### Removed
 - src/utils function isArrayOfStrings is removed, use one liner .every(v => typeof v === "string") instead in the future.
