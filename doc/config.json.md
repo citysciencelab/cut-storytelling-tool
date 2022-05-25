@@ -2675,7 +2675,7 @@ Object to change the drawing tool's download preselected format. It should be on
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|preSelectedFormat|no|String|"KML"|Pre-configured pre-selected form.|false|
+|preSelectedFormat|no|enum["KML","GEOJSON","GPX"]|"KML"|Pre-configured pre-selected form.|false|
 
 **Example**
 
