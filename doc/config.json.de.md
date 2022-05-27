@@ -2742,7 +2742,7 @@ Dies können die Layer-IDs als Strings sein, oder als Objekt wenn die Suffix-Tec
 |layerId|ja|String||Id des Dienstes, der im Portal angezeigt werden soll. ACHTUNG: Diese LayerId muss auch in der Themenconfig konfiguriert sein.|false|
 |suffix|ja|String||Suffix des Layers. Dieser Suffix muss auch in der Themenconfig konfiguriert sein.|false|
 
-**Example**
+**Beispiel**
 
 ```json
 {

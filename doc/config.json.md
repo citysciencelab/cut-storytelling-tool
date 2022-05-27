@@ -2202,7 +2202,7 @@ List of layouts and formats that filters the response from the print service in 
 |layouts|no|String[]||Array of layouts should shown in the UI.|false|
 |outputFormats|no|String[]||Array of formats should shown in the UI.|false|
 
-**Beispiel capabilitiesFilter:**
+**Example capabilitiesFilter:**
 ```json
 {
     "capabilitiesFilter": {

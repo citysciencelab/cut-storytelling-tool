@@ -83,17 +83,39 @@ For more attributes see **[Scene](https://cesium.com/learn/cesiumjs/ref-doc/Scen
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
 |camera|no|**[camera](#markdown-header-cesiumParametercamera)**||Cesium Scene camera settings in 3D mode.|
-|enableLighting|no|Boolean|`false`|Activates light effects on the map based on the sun's position.|
-|fog|no|Object||Fog options. See [fog documentation](https://cesiumjs.org/Cesium/Build/Documentation/Fog.html) for details.|
+|fog|no|**[fog](#markdown-header-cesiumParameterfog)**||Cesium Scene fog settings in 3D mode.|
 |fxaa|no|Boolean|`true`|activates *fast approximate anti-aliasing*|
+|globe|no|**[globe](#markdown-header-cesiumParameterglobe)**||Cesium Scene globe settings in 3D mode.|
 |maximumScreenSpaceError|no|Number|`2.0`|Detail level in which terrain/raster tiles are fetched. 4/3 is the highest quality level.|
 |tileCacheSize|no|Number|`100`|terrain/raster tile cache size|
 
+**Example**
+
+```json
+{
+    "camera": {
+        "altitude": 127,
+        "heading": -1.2502079000000208,
+        "tilt": 45
+    },
+    "fog": {
+        "enabled": true
+    },
+    "fxaa": true,
+    "globe": {
+        "enableLighting": true
+    },
+    "maximumScreenSpaceError": 2,
+    "tileCacheSize": 20,
+}
+```
 ***
 
 ### cesiumParameter.camera
 
 Cesium Scene camera settings in 3D mode.
+The camera is defined by a position, orientation, and view frustum.
+For more attributes see **[Scene](https://cesium.com/learn/cesiumjs/ref-doc/Camera.html)**
 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
@@ -101,6 +123,59 @@ Cesium Scene camera settings in 3D mode.
 |heading|no|Number||Camera's initial heading in radians|
 |tilt|no|Number||Camera's initial tile in radians|
 
+**Example**
+
+```json
+{
+    "camera": {
+        "altitude": 127,
+        "heading": -1.2502079000000208,
+        "tilt": 45
+    }
+}
+```
+***
+
+### cesiumParameter.fog
+
+Cesium Scene fog settings in 3D mode.
+Blends the atmosphere to geometry far from the camera for horizon views.
+For more attributes see **[Scene](https://cesium.com/learn/cesiumjs/ref-doc/Fog.html)**
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|enabled|no|Boolean|`false`|True if fog is enabled.|
+
+**Example**
+
+```json
+{
+    "fog": {
+        "enabled": true
+    }
+}
+```
+***
+
+### cesiumParameter.globe
+
+Cesium Scene globe settings in 3D mode.
+The globe rendered in the scene, including its terrain and imagery layers.
+For more attributes see **[Scene](https://cesium.com/learn/cesiumjs/ref-doc/Globe.html)**
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|enableLighting|no|Boolean|`false`|Activates light effects on the map based on the sun's position.|
+
+**Example**
+
+```json
+{
+    "globe": {
+        "enableLighting": true
+    }
+}
+```
 ***
 
 ## footer
