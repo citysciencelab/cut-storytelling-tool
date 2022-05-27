@@ -35,6 +35,8 @@
     - The Get Feature Info (GFI) for WFS features can now be displayed in 3D mode.
     - Values from the attribute `cesiumParameter` from config.js are now set when instantiating map3D at the 3D scene.
 - renamed FilterGeneral to Filter and removed old Filter Files.
+- The following NPM packages are updated:
+    - @masterportal/masterportalapi: 2.2.0 to 2.3.0 (This also raised ol to version 6.14.1)
 
 ### Deprecated
 - Switched Icon Library from Glyphicon to Bootstrap Icons. Edited Webpack Config. Updated icon usage in vue components to use scss. Updated icon usage in backbone modules. Edited docs & tests accordingly.
