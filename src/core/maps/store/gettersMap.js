@@ -83,9 +83,9 @@ const getters = {
                     && clickFeature.primitive.olLayer?.get("gfiAttributes") !== "ignore"
                 ) {
                     featuresAtPixel.push(createGfiFeature(
-                        clickFeature?.primitive?.olLayer,
+                        clickFeature.primitive?.olLayer,
                         "",
-                        clickFeature?.primitive?.olFeature
+                        clickFeature.primitive?.olFeature
                     ));
                 }
             });
