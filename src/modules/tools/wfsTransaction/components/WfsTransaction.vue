@@ -19,10 +19,10 @@
                         @change="layerChanged($event.target.options.selectedIndex)"
                     >
                         <option
-                            v-for="id of layerNames"
-                            :key="id"
+                            v-for="name of layerNames"
+                            :key="name"
                         >
-                            {{ id }}
+                            {{ $t(name) }}
                         </option>
                     </select>
                 </div>
