@@ -19,10 +19,10 @@
                         @change="layerChanged($event.target.options.selectedIndex)"
                     >
                         <option
-                            v-for="id of layerIds"
+                            v-for="id of layerNames"
                             :key="id"
                         >
-                            {{ id }} <!-- TODO(roehlipa): Get the name from the config -->
+                            {{ id }}
                         </option>
                     </select>
                 </div>
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 import prepareInteractions from "../utils/prepareInteractions";
 import ToolTemplate from "../../ToolTemplate.vue";
 import SimpleButton from "../../../../share-components/SimpleButton.vue";
@@ -83,12 +83,16 @@ import SimpleButton from "../../../../share-components/SimpleButton.vue";
 export default {
     name: "WfsTransaction",
     components: {SimpleButton, ToolTemplate},
+    data: () => ({layerNames: []}),
     computed: {
-        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "featuresProperties", "layerIds", "selectedInteraction", "showInteractionsButtons", "active", "icon", "name"])
+        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "featuresProperties", "layerIds", "selectedInteraction", "showInteractionsButtons", "active", "icon", "name"]),
+        ...mapGetters("Maps", ["getLayerById"])
+    },
+    created () {
+        this.layerNames = this.layerIds.map(layerId => this.getLayerById({layerId}).values_.name);
     },
     methods: {
         ...mapMutations("Tools/WfsTransaction", ["setCurrentLayerIndex", "setSelectedInteraction"]),
-        ...mapActions("Tools/WfsTransaction", ["setActive"]),
         layerChanged (index) {
             this.setCurrentLayerIndex(index);
             this.setSelectedInteraction(null);
