@@ -60,7 +60,7 @@ export default {
                 return ["Oblique", "TileSet3D", "Terrain3D", "Entities3D"].indexOf(layerModel.get("typ")) === -1;
             });
             allLayerModels.forEach(layerWrapper => {
-                if (layerWrapper.get("isSelected") === false) {
+                if (layerWrapper.get("isSelected") === false && Radio.request("Parser", "getTreeType") === "light") {
                     layerWrapper.removeLayer();
                 }
             });

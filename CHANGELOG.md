@@ -63,14 +63,15 @@
     - Static display of markerPoint and markerPolygon from mapMarker is now visible during search, coordinateSearch and coordToolkit.
     - Vector layers like WFS, GeoJSON or OAF (OGC API - Features) are now displayed in 3D mode.
     - The Control Attributions now also works in 3D mode.
+    - Issue #787: Layers in the topic tree under subject data (Fachdaten) are now preserved when switching to 3D mode.
 - Fix error in menu if GFI Tool is set to isVisibleInMenu = false and no other tool is configured
 - Issue #751: Fix issue when printing groups of WFS layers.
-- Issue G31DEV1-731: Fix map resized when a tool is as sidebar and defined with active:true in config.json
 - Fix withoutGUIDraw
 - Legend now works correctly again, for multiple layers with the same legend reference.
+- Fix map resized when a tool is as sidebar and defined with active:true in config.json
+- Issue #771: Fix issue of WMS-TimeLayer being displayed wrong and without TimeSlider, when set visivle through URLParameter
 
 ---
-- Issue #771: Fix issue of WMS-TimeLayer being displayed wrong and without TimeSlider, when set visivle through URLParameter
 
 ## v2.21.0 - 2022-05-04
 ### Added
