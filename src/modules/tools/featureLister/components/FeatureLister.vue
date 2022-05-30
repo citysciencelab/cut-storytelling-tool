@@ -425,11 +425,11 @@ export default {
     width: 100%;
 }
 .panel-heading {
-    background: #f5f5f5;
+    background: $light_grey;
     color: $dark_grey;
     cursor: default;
-    border-left: 1px solid $light_grey;
-    border-right: 1px solid $light_grey;
+    border-left: 1px solid $dark_grey;
+    border-right: 1px solid $dark_grey;
     padding: 10px 15px;
     border-bottom: 1px solid transparent;
 }
