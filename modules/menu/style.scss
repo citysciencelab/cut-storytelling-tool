@@ -18,6 +18,11 @@
 .dropdown-menu {
     padding: 0;
 }
+#tools {
+    .bootstrap-icon {
+        font-size: 1rem;
+    }
+}
 #root {
     >.dropdown {
         color: $dark_grey;
