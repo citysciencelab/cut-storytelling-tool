@@ -430,7 +430,7 @@ Die WFS 2 query wird dabei dynamisch durch das Masterportal erstellt. Die Konfig
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
-|icon|nein|String|"glyhicon-home"|Default icon das in der Vorschlagsliste erscheint. Kann in der **[definition](#markdown-header-portalconfigsearchbarspecialwfsdefinition)** überschrieben werden.|false|
+|icon|nein|String|"bi-house-fill"|Default icon das in der Vorschlagsliste erscheint. Kann in der **[definition](#markdown-header-portalconfigsearchbarspecialwfsdefinition)** überschrieben werden.|false|
 |maxFeatures|nein|Integer|20|Maximale Anzahl an gefundenen Features. Kann in der **[definition](#markdown-header-portalconfigsearchbarspecialwfsdefinition)** überschrieben werden.|false|
 |timeout|nein|Integer|6000|Timeout in ms für die Dienste Anfrage.|false|
 |definitions|nein|**[definition](#markdown-header-portalconfigsearchbarspecialwfsdefinition)**[]||Definition der speziellen WFS suchen.|false|
@@ -471,7 +471,7 @@ Konfiguration einer Definition bei der SpecialWFS Suche
 |----|-------------|---|-------|------------|------|
 |url|nein|String||URL des WFS. Je nach proxy-Konfiguration muss die relative url vom Server des Portals aus angegeben werden. |false|
 |name|nein|String||Name der Kategorie. Erscheint in der Vorschlagsliste.|false|
-|icon|nein|String|"glyhicon-home"|CSS Klasse des Icons das in der Vorschlagsliste erscheint.|false|
+|icon|nein|String|"bi-house-fill"|CSS Klasse des Icons das in der Vorschlagsliste erscheint.|false|
 |typeName|nein|String||Der Name des abzufragenden Layers innerhalb des WFS.|false|
 |propertyNames|nein|String[]||Array von Attributnamen. Diese Attribute werden durchsucht.|false|
 |geometryName|nein|String|"app:geom"|Attributname der Geometrie wird benötigt um darauf zu zoomen.|false|
@@ -1162,7 +1162,7 @@ Konfigurations-Optionen für Kartenansichten.
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |name|ja|String||Name der KartenAnsichten im Menü.|false|
-|glyphicon|nein|String|"glyphicon-list"|Glyphicon der Kartenanischten im Menü.|false|
+|icon|nein|String|"bi-binoculars-fill"|Icon der Kartenanischten im Menü.|false|
 |children|nein|**[children](#markdown-header-portalconfigmenuansichtenchildren)**|false|Konfigurationen beliebig vieler Kartenansichten.|false|
 
 ***
@@ -1185,7 +1185,7 @@ Konfigurations-Optionen für eine Kartenansicht.
 |----|-------------|---|-------|------------|------|
 |name|ja|String||Name der Kartenansicht.|false|
 |type|ja|String||Typ der Kartenansicht, muss immer "viewpoint" sein.|false|
-|glyphicon|nein|String||Glyphicon der Kartenansicht im Menü.|false|
+|icon|nein|String||icon der Kartenansicht im Menü.|false|
 |center|nein|Number[]||Koordinate an der die Kartenansicht zentriert wird.|false|
 |zoomLevel|nein|Number||Zoom level der Kartenansicht.|false|
 |altitude|nein|Number||Höhe der Kamera in Metern. Wird nur für Kartenansichten im 3D Modus verwendet.|false|
@@ -1197,12 +1197,12 @@ Konfigurations-Optionen für eine Kartenansicht.
 #!json
 "ansichten": {
     "name": "translate#common:menu.views.name",
-    "glyphicon": "glyphicon-list",
+    "icon": "bi-binoculars-fill",
     "children": {
         "view": {
             "name": "translate#common:menu.views.view01",
             "type": "viewpoint",
-            "glyphicon": "glyphicon-screenshot",
+            "icon": "bi-bullseye",
             "center": [
                 564028.7954571751,
                 5934555.967867207
@@ -1539,7 +1539,7 @@ Beispiel für die Konfiguration eines Filters mit einem einzigen Layer. Das Laye
     "filter":{
         "active": false,
         "name": "Filter",
-        "glyphicon": "glyphicon-filter",
+        "icon": "bi-funnel-fill",
         "renderToWindow": false,
         "deactivateGFI": false,
         "layerSelectorVisible": false,

@@ -446,7 +446,7 @@ The WFS 2.0 query is dynamically created by the Masterportal. No stored query co
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |minChars|no|Integer|3|Minimum amount of characters required to start a search.|false|
-|icon|no|String|"glyhicon-home"|Default icon used in the suggestion list. Overwritable by a **[definition](#markdown-header-portalconfigsearchbarspecialwfsdefinition)**.|false|
+|icon|no|String|"bi-house-fill"|Default icon used in the suggestion list. Overwritable by a **[definition](#markdown-header-portalconfigsearchbarspecialwfsdefinition)**.|false|
 |maxFeatures|no|Integer|20|Maximum amount of features returned. Overwritable by a **[definition](#markdown-header-portalconfigsearchbarspecialwfsdefinition)**.|false|
 |timeout|no|Integer|6000|Service request timeout in ms.|false|
 |definitions|no|**[definition](#markdown-header-portalconfigsearchbarspecialwfsdefinition)**[]||Special WFS search definitions.|false|
@@ -489,7 +489,7 @@ SpecialWFS search definition configuration.
 |----|--------|----|-------|-----------|------|
 |url|no|String||WFS URL. Depending on your proxy configuration, the relative URL from the portal server must be given.|false|
 |name|no|String||Category name displayed in the suggestion list.|false|
-|icon|no|String|"glyhicon-home"|CSS icon class of search results, shown before the result name.|false|
+|icon|no|String|"bi-house-fill"|CSS icon class of search results, shown before the result name.|false|
 |typeName|no|String||The name of the WFS layer to be requested.|false|
 |propertyNames|no|String[]||Array of attribute names to be searched.|false|
 |geometryName|no|String|"app:geom"|Geometry attribute name required for zoom functionality.|false|
@@ -1216,7 +1216,7 @@ Configuration options for map views.
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |name|yes|String||Name of the map views in the menu.|false|
-|glyphicon|no|String|"glyphicon-list"|Glyphicon of the map views in the menu.|false|
+|icon|no|String|"bi-binoculars-fill"|Icon of the map views in the menu.|false|
 |children|no|**[children](#markdown-header-portalconfigmenuansichtenchildren)**|false|Configurations of any number of map views.|false|
 
 ***
@@ -1239,7 +1239,7 @@ Configuration options for a map view.
 |----|--------|----|-------|-----------|------|
 |name|yes|String||Map view name.|false|
 |type|yes|String||Type of map view, must always be "viewpoint".|false|
-|glyphicon|no|String||Glyphicon of the map view in the menu.|false|
+|icon|no|String||icon of the map view in the menu.|false|
 |center|no|Number[]||Coordinate at which the map view is centered.|false|
 |zoomLevel|no|Number||Zoom level of the map view.|false|
 |altitude|no|Number||Altitude of the camera in meters. Used only for map views in 3D mode.|false|
@@ -1251,12 +1251,12 @@ Configuration options for a map view.
 #!json
 "ansichten": {
     "name": "translate#common:menu.views.name",
-    "glyphicon": "glyphicon-list",
+    "icon": "bi-binoculars-fill",
     "children": {
         "view": {
             "name": "translate#common:menu.views.view01",
             "type": "viewpoint",
-            "glyphicon": "glyphicon-screenshot",
+            "icon": "bi-bullseye",
             "center": [
                 564028.7954571751,
                 5934555.967867207
@@ -1605,7 +1605,7 @@ The following example uses only a layer id to generate the filter automatically.
     "filter":{
         "active": false,
         "name": "Filter",
-        "glyphicon": "glyphicon-filter",
+        "icon": "bi-funnel-fill",
         "renderToWindow": false,
         "deactivateGFI": false,
         "layerSelectorVisible": false,
