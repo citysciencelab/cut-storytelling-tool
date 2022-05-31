@@ -22,7 +22,7 @@
     .bootstrap-icon {
         color: $secondary;
         background-color: $light_grey;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+        box-shadow: 0 6px 12px $black;
 
         &:hover {
             cursor: pointer;
@@ -76,7 +76,7 @@
 .geolocation_marker {
     color: $secondary;
     padding: 2px 3px 2px 2px;
-    background: none repeat scroll #D42132;
+    background: none repeat scroll $dark_blue;
     border-radius: 50px;
     font-size: 20px;
 }
@@ -223,7 +223,6 @@
 }
 .control-box-btn{
     display: inline-block;
-    border: 1px solid #5F5F5F;
     background-color: rgba(49, 49, 49, 0.61);
     background-position: center;
     background-repeat: no-repeat;
