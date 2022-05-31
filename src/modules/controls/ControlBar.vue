@@ -201,10 +201,6 @@ export default {
             color: $white;
             background-color: $dark_blue;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-            &:hover {
-                cursor: pointer;
-                opacity: 0.7;
-            }
         }
         > .toggleButtonPressed {
             background-color: $light_blue;
