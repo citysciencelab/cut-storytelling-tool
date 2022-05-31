@@ -16,7 +16,7 @@ import store from "../../app-store";
 function create2DMap (mapViewSettings) {
     const map = api.map.createMap(
         {
-            ...Config?.namedProjections,
+            ...Config,
             ...mapViewSettings,
             layerConf: getLayerList()
         }, "2D", {});
