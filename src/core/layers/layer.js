@@ -84,6 +84,7 @@ Layer.prototype.initialize = function (attrs) {
         this.setIsVisibleInMap(attrs.isSelected);
         if (attrs.isSelected) {
             this.setIsSelected(attrs.isSelected);
+            bridge.layerVisibilityChanged(this, attrs.isSelected);
         }
 
         this.set("isRemovable", store.state.configJson?.Portalconfig.layersRemovable);

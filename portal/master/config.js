@@ -2,24 +2,6 @@ const Config = {
     addons: ["obliqueControl", "populationRequest", "vueAddon", "tacticalMark", "trinkwasser", "schulinfo", "trafficCount", "verkehrsstaerken", "solaratlas", "dataTable"],
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
-    zoomToFeature: {
-        attribute: "flaechenid",
-        wfsId: "4560",
-        styleId: "location_eventlotse"
-    },
-    zoomToGeometry: {
-        layerId: "1692",
-        attribute: "bezirk_name",
-        geometries: [
-            "ALTONA",
-            "HARBURG",
-            "HAMBURG-NORD",
-            "BERGEDORF",
-            "EIMSBÜTTEL",
-            "HAMBURG-MITTE",
-            "WANDSBEK"
-        ]
-    },
     zoomTo: [
         {
             id: "zoomToGeometry",

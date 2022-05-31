@@ -1288,6 +1288,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @returns {void}
      */
     selectedChanged: function (model, value) {
+        let selectedLayers = [];
+
         if (model.get("type") === "layer") {
             model.setIsVisibleInMap(value);
             this.updateLayerView();
@@ -1296,7 +1298,13 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         Radio.channel("ModelList").trigger("updateVisibleInMapList");
         Radio.channel("ModelList").trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
 
-        store.dispatch("Tools/SaveSelection/createUrlParams", filterAndReduceLayerList(this.where({isSelected: true, type: "layer"})));
+        selectedLayers = this.where({isSelected: true, type: "layer"});
+
+        if (this.findWhere({id: model.get("id")}) === undefined) {
+            selectedLayers.push(model);
+        }
+
+        store.dispatch("Tools/SaveSelection/createUrlParams", filterAndReduceLayerList(selectedLayers));
     }
 });
 
