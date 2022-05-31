@@ -277,12 +277,8 @@
     font-size: 17px;
     margin-top: 4px;
     padding: 10px 6px 6px 6px;
-    font-family: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
+    font-family: $font_family_accent;
     border: 0;
-    &:focus {
-        background-color: $light_grey_focus;
-        outline: 1px solid $light_grey_outline;
-    }
 
 }
 /***** Oblique *****/
@@ -294,11 +290,6 @@
     margin-top: 4px;
     padding: 6px 7px 3px 7px;
     border: 0;
-    &:focus {
-        background-color: $light_grey_focus;
-        outline: 1px solid $light_grey_outline;
-    }
-
 }
 
 @media (max-width: 767px) {
