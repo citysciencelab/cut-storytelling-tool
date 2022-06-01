@@ -116,9 +116,13 @@ export default {
                 document.getElementById("tool-wfsSearch-button-showResults").focus();
                 this.setShowResultList(true);
             }
-            else {
+            else if (features.length > 0) {
                 this.placingPointMarker(features[0].getGeometry().getCoordinates());
                 Radio.trigger("MapView", "setCenter", features[0].getGeometry().getCoordinates(), this.zoomLevel);
+                this.setShowResultList(false);
+            }
+            else {
+                this.setShowResultList(true);
             }
         }
     }
