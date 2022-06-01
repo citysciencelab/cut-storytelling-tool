@@ -8,7 +8,7 @@
 
 ---
 
-## Unreleased - in development
+## v2.22.0 - 2022-06-01
 ### __Breaking Changes__
 
 #### *Bootstrap upgrade*
