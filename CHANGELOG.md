@@ -88,6 +88,7 @@ Issue #764: Using parameters in WfsSearch as defined in [Filter Encoding Impleme
 - Fix map resized when a tool is as sidebar and defined with active:true in config.json
 - Issue #771: Fix issue of WMS-TimeLayer being displayed wrong and without TimeSlider, when set visivle through URLParameter
 - Fix measure tool throws error if used after changed to 3D and back to 2D.
+- Issue #668: Fix broken metadata url control with urlIsVisible.
 
 ---
 
