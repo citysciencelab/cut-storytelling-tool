@@ -6,7 +6,7 @@
     "url": "https://www.masterportal.org"
   },
   "bugs": "https://bitbucket.org/geowerkstatt-hamburg/masterportal/issues",
-  "version": "2.22.0",
+  "version": "2.21.0",
   "license": "MIT",
   "description": "The MasterPortal as OpenSource Geoportal",
   "repository": {
@@ -34,7 +34,7 @@
     "versionHotfix": "npm version patch && npm run versionLatest && git push --tags",
     "versionMinor": "npm version minor && npm run versionLatest && git push --tags",
     "versionMajor": "npm version major && npm run versionLatest && git push --tags",
-    "versionLatest": "git push origin --delete latest --no-verify && git tag latest",
+    "versionLatest": "git push origin --delete latest --no-verify && git branch -d latest && git tag latest",
     "versionHotfix:all": "npm run versionHotfix && cd addons && npm run versionHotfix && cd .. && cd portalconfigs && npm run versionHotfix && cd ..",
     "versionMinor:all": "npm run versionMinor && cd addons && npm run versionMinor && cd .. && cd portalconfigs && npm run versionMinor && cd ..",
     "versionMajor:all": "npm run versionMajor && cd addons && npm run versionMajor && cd .. && cd portalconfigs && npm run versionMajor && cd ..",
