@@ -17,6 +17,8 @@
 ### Deprecated
 
 ### Removed
+- deleted snipets: dropdown, exportButton, graphicalSelect, multiCheckbox
+- removed bootstrap-select
 
 ### Fixed
 - The light grey color in Search and transparency are now dark
