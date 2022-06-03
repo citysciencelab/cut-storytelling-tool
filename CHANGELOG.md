@@ -14,6 +14,8 @@
 
 ### Changed
 
+- Issue #663: Fixed tool Buffer Analysis where layer visibility updates would not be recognized in custom trees. Now, all visible layers at tool starting time are available within the tool.
+
 ### Deprecated
 
 ### Removed
