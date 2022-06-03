@@ -20,9 +20,10 @@
 
 ### Fixed
 
+---
+
 ## v2.22.0 - 2022-06-01
 ### __Breaking Changes__
-
 #### *Bootstrap upgrade*
 The Bootstrap package was upgraded from 3.4.1 to 5.1.3. Masterportal developments with minor versions than Bootstrap 5.1.3 are no longer supported.
 
@@ -72,8 +73,6 @@ Issue #764: Using parameters in WfsSearch as defined in [Filter Encoding Impleme
 - Switched Icon Library from Glyphicon to Bootstrap Icons. Edited Webpack Config. Updated icon usage in vue components to use scss. Updated icon usage in backbone modules. Edited docs & tests accordingly.
 - The attribute `cameraParameter` in config.js is deprecated in the next major release. Please use `cesiumParameter.camera` instead.
 - The attributes: `cesiumParameter.enableLighting`, `cesiumParameter.maximumScreenSpaceError` and `cesiumParameter.tileCacheSize` in config.js are deprecated in the next major release. Please use `cesiumParameter.globe.enableLighting`, `cesiumParameter.globe.maximumScreenSpaceError`, `cesiumParameter.globe.tileCacheSize` instead.
-
-### Removed
 
 ### Fixed
 - Issue #686: Add logging and documentation regarding manual WMTS configuration's limitations
