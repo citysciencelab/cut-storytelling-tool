@@ -36,13 +36,6 @@ module.exports = router;
 
 
 
-
-
-// GET - get stories
-// /story            get list of all stories
-// /story/1          get metadata-json of story 1
-// /step/1/2/3/     get story 1's step 2.3 html & image
-
 router.get('/story', controllers.getStories)
 router.get('/story/:storyId', controllers.getStoryStructure)
 

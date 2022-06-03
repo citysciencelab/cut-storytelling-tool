@@ -4,22 +4,29 @@ This backend can save stories that were created by the Story Creation Tool and p
 
 The API is structured as the following: 
 
-## POST
 
-_POST /createStory_
+## API OVERVIEW
 
-Save a new story's metadata to the database
+**GET**
+```
+/story 			 get list of all stories
+/story/1         get metadata-json of story 1
+/step/1/2/3/     get story 1's step 2.3 html & image
+```
+**POST**
+```
+/add/story/			add new story
+/add/step/1/2/3/    add to story 1 step 2.3
+```
 
-expects in body
-	- name (string)
-	- category (string)
-	- story_json (string)
+**DELETE**
+```
+/delete/story/1		delete story 1
+/delete/step/1    	delete all steps to story 1
+/delete/step/1/2    delete all steps belonging to major step 2 of story 1
+/delete/step/1/2/3  delete step 2.3 of story 1
 
-example curl:
-`curl -XPOST -d '{"name": "My New Story", "category" : "test", "story_json" : "{\"some json\" : \"as a string\"}"}' -H 'content-type: application/json' localhost:3000/add/story`
-
-
-
+```
 
 
 ## GET
@@ -48,28 +55,27 @@ Returns an overview over all steps
 _GET /step/:storyId/:step_major/:step_minor_
 ```
 Returns image and html of a specific step of a specific story
-
+```
 
 ## POST 
+
+_POST /add/story/
 ```
-_POST /story/1_
-```
-Returns an overview of all stories 
+ 
+Creates a new story entry. (metadata only)
+
+expects in body
+	- name (string): the name of the story
+	- category (string): the story category
+	- story_json (string): the story structure as  json (originally the "story json file")
+
+example curl:
+`curl -XPOST -d '{"name": "My New Story", "category" : "test", "story_json" : "{\"relevant json\" : \"as a string\"}"}' -H 'content-type: application/json' localhost:3000/add/story`
 
 
 ```
-_POST /story/:storyId_
-```
-Returns the story.json file of a story with the respective id
 
-
-```
-_POST /step/:storyId/:step_major/:step_minor
-```
-
-
-```
-_POST /createStep/:storyID/:step_major/:step_major_
+_POST /add/step/:storyId/:step_major/:step_major_
 ```
 
 Creates a story "step" for the story specified in `:storyID` (as created by /add/story). The `:step_major` and `:step_major` parameters are the equivalent of the `1-2.html` notation we originally have in the file names.
@@ -83,14 +89,9 @@ example  curl:
 `curl -XPOST -d '{"html": "<blink>does this html tag still work?</blink>"}' -H 'content-type: application/json' localhost:3000/add/step/1/2/3`
 
 ```
-_GET /step/:storyId/:step_major/:step_minor_
-```
-
-Returns image and html of a specific step of a specific story
-
 
 ## DELETE
-```
+
 _DELETE /story/:storyId_
 ```
 delete a story and all its steps. Note: Stories can only be deleted if ALL steps belonging to that story have been deleted first (see /delete/step/)!
