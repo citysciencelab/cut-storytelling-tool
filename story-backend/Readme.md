@@ -24,7 +24,7 @@ example curl:
 
 ## GET
 
-```
+
 _GET /story_
 ```
 
