@@ -19,44 +19,78 @@ example curl:
 `curl -XPOST -d '{"name": "My New Story", "category" : "test", "story_json" : "{\"some json\" : \"as a string\"}"}' -H 'content-type: application/json' localhost:3000/add/story`
 
 
-_POST /createStep/:storyID/:step_major/:step_major_
 
-Creates a story "step" for the story specified in `:storyID` (as created by /createStory). The `:step_major` and `:step_major` parameters are the equivalent of the `1-2.html` notation we originally have in the file names.
+
+
+## GET
+
+```
+_GET /story_
+```
+
+Returns an overview of all stories 
+
+
+```
+_GET /story/:storyId_
+```
+
+Returns the story.json file of a story with the respective id
+
+
+```
+_GET /step/
+```
+Returns an overview over all steps
+
+
+```
+_GET /step/:storyId/:step_major/:step_minor_
+```
+Returns image and html of a specific step of a specific story
+
+
+## POST 
+```
+_POST /story/1_
+```
+Returns an overview of all stories 
+
+
+```
+_POST /story/:storyId_
+```
+Returns the story.json file of a story with the respective id
+
+
+```
+_POST /step/:storyId/:step_major/:step_minor
+```
+
+
+```
+_POST /createStep/:storyID/:step_major/:step_major_
+```
+
+Creates a story "step" for the story specified in `:storyID` (as created by /add/story). The `:step_major` and `:step_major` parameters are the equivalent of the `1-2.html` notation we originally have in the file names.
 
 expects in body
     - html content of the step (as character string)
     - (image for the step - not yet implemented) 
 
 example  curl:
-curl -XPOST -d '{"html": "<blink>does this html tag still work?</blink>"}' -H 'content-type: application/json' localhost:3000/add/step/1/2/3 
 
-
-## GET
-_GET /getStories_
+`curl -XPOST -d '{"html": "<blink>does this html tag still work?</blink>"}' -H 'content-type: application/json' localhost:3000/add/step/1/2/3`
 
 ```
-Returns an overview of all stories 
+_GET /step/:storyId/:step_major/:step_minor_
 ```
 
+Returns image and html of a specific step of a specific story
 
-_GET /story/:storyId_
 
+## DELETE
 ```
-Returns the story.json file of a story with the respective id
-```
-
-_GET /story/:storyId/:stepHTML _
-```
-Returns the html file of a specific step in a specific story
-```
-
-_GET /story/:storyId/:stepHTML/:imageId _
-```
-Returns a specific image of a specific step in a specific story
-```
-
-
-
 _DELETE /story/:storyId_
 ```
 delete a story and all its steps. Note: Stories can only be deleted if ALL steps belonging to that story have been deleted first (see /delete/step/)!
@@ -92,6 +126,9 @@ example curl (delete step 2.3 of story 1):
 curl -X "DELETE" localhost:3000/delete/step/1/2/3
 
 ```
+
+
+
 
 
 
