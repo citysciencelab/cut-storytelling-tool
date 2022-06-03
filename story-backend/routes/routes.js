@@ -21,16 +21,14 @@ router.get('/story/:storyId', controllers.getStoryStructure)
 
 
 //Get Story Steps
-router.get('/story/:storyId/:step', controllers.getStoryStep)
-
-
-
+router.get('/story/:storyId/:major_step/:minor_step', controllers.getStoryStep)
 
 router.get('/getStories', controllers.getStories)
 
 
 
 router.get('/story', controllers.getStories) // copy of /getStories endpoint for easier debugging
+
 // POST
 
 

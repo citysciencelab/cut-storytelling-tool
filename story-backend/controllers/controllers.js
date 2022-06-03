@@ -39,8 +39,9 @@ const getStoryStep  = (req, res) => {
     console.log(req.params)
     query = {
       name: 'get-story-step',
-      text: 'SELECT * FROM steps WHERE storyID = $1',
-      values: [req.params.storyId]
+      // text: 'SELECT * FROM steps WHERE storyID = $1 AND step_major = $2 AND step_minor = $3',
+      text: 'SELECT * FROM steps WHERE $1=$1 AND $2=$2 AND $3=$3',
+      values: [req.params.storyId, req.params.step_major,req.params.step_minor]
     }
 
     pool.query(query,
