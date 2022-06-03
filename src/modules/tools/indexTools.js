@@ -14,7 +14,7 @@ import CoordToolkit from "./coordToolkit/store/indexCoordToolkit";
 import Draw from "./draw/store/indexDraw";
 import FeatureLister from "./featureLister/store/indexFeatureLister";
 import FileImport from "./fileImport/store/indexFileImport";
-import FilterGeneral from "./filterGeneral/store/indexFilterGeneral";
+import Filter from "./filter/store/indexFilter";
 import Gfi from "./gfi/store/indexGfi";
 import LayerClusterToggler from "./layerClusterToggler/store/indexLayerClusterToggler";
 import LayerSlider from "./layerSlider/store/indexLayerSlider";
@@ -44,7 +44,7 @@ export default {
         Draw,
         FeatureLister,
         FileImport,
-        FilterGeneral,
+        Filter,
         Gfi,
         LayerClusterToggler,
         LayerSlider,

@@ -56,7 +56,10 @@ export default {
     <Component
         :is="'table'"
     >
-        <table v-if="hasFeatures && !hasMultipleLayers">
+        <table
+            v-if="hasFeatures && !hasMultipleLayers"
+            class="border"
+        >
             <tbody>
                 <tr
                     v-for="(column, index) in listOfFeatures"
@@ -298,10 +301,6 @@ export default {
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
 
-    $background_color_2: #f5f5f5;
-    $background_color_3: #e6e6e6;
-    $font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
-
     #tool-compareFeatures {
         z-index: -1;
         display: inline-flex;
@@ -334,16 +333,16 @@ export default {
                 max-width: 25px !important;
             }
             &:nth-child(odd) {
-                background-color: $background_color_2;
+                background-color: $white;
             }
             &:nth-child(even) {
-                background-color: $background_color_3;
+                background-color: $light_grey;
             }
         }
         td {
             padding: 8px;
             text-align: left;
-            border-left: 1px solid #ccc;
+            border-left: 1px solid $light_grey;
             vertical-align: top;
             &:nth-child(1) {
                 width: 20%;

@@ -337,15 +337,6 @@
                 "serviceThree": "Dienst 3",
                 "key": "Konfiguration vun Warktüüg <b>{{alertMessage.x}}</b> fehlerhaft: <b>sliderType</b> \"{{alertMessage.y}}\" ist noch nicht implementiert!"
             },
-            "filter": {
-                "result": "Dreeper",
-                "results": "Dreeper",
-                "zoomOnResults": "Zoom op de Dreeper",
-                "filter": "-Filter",
-                "yourSelection": "Dien Utwahl: ",
-                "noFilterOptionSelected": "Noch keen Filteroption utwählt",
-                "deleteAll":"All utdoon"
-            },
             "pendler": {
                 "animation": {
                     "domicile": "Wohnort",

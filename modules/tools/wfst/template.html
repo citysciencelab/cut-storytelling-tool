@@ -24,7 +24,7 @@
     <tr>
         <% if (buttonConfig[0]) { %>
             <td>
-                <button id="wfst-module-recordButton-point" class="btn btn-sm btn-lgv-grey record-button inactive" icon="bi-pencil-fill">
+                <button id="wfst-module-recordButton-point" class="btn btn-sm btn-secondary record-button inactive" icon="bi-pencil-fill">
                     <span class="bootstrap-icon" aria-hidden="true"><i class="bi-record-circle"></i></span>
                     <br>
                     <span class="record-label"> <%= buttonTitleConfig[0] %></span>
@@ -34,7 +34,7 @@
         <% } %>
         <% if (buttonConfig[1]) { %>
             <td>
-                <button id="wfst-module-recordButton-line" class="btn btn-sm btn-lgv-grey record-button" icon="icon-pencil-fill">
+                <button id="wfst-module-recordButton-line" class="btn btn-sm btn-secondary record-button" icon="icon-pencil-fill">
                     <span class="bootstrap-icon" aria-hidden="true"><i class="bi-dash-lg"></i></span>
                     <br>
                     <span class="record-label"><%= buttonTitleConfig[1] %></span>
@@ -43,7 +43,7 @@
         <% } %>
         <% if (buttonConfig[2]) { %>
             <td>
-                <button id="wfst-module-recordButton-area" class="btn btn-sm btn-lgv-grey record-button" icon="icon-pencil-fill">
+                <button id="wfst-module-recordButton-area" class="btn btn-sm btn-secondary record-button" icon="icon-pencil-fill">
                     <span class="bootstrap-icon" aria-hidden="true"><i class="bi-play-fill"></i></span>
                     <br>
                     <span class="record-label"><%= buttonTitleConfig[2] %></span>
@@ -52,7 +52,7 @@
         <% } %>
         <% if (editButton) { %>
         <td>
-            <button id="wfst-module-recordButton-edit" class="btn btn-sm btn-lgv-grey record-button" icon="bi-wrench">
+            <button id="wfst-module-recordButton-edit" class="btn btn-sm btn-secondary record-button" icon="bi-wrench">
                 <span class="bootstrap-icon" aria-hidden="true"><i class="bi-pencil-square"></i></span>
                 <br>
                 <span class="record-label"><%= editButtonTitle %></span>
@@ -61,7 +61,7 @@
         <% } %>
         <% if (deleteButton) { %>
         <td>
-            <button id="wfst-module-recordButton-delete" class="btn btn-sm btn-lgv-grey record-button" icon="bi-trash">
+            <button id="wfst-module-recordButton-delete" class="btn btn-sm btn-secondary record-button" icon="bi-trash">
                 <span class="bootstrap-icon" aria-hidden="true"><i class="bi-trash"></i></span>
                 <br>
                 <span class="record-label"> <%= deleteButtonTitle %></span>
@@ -72,7 +72,7 @@
     <% if (showAttrTable === true) { %>
     <tr>
         <td>
-            <button id="wfst-module-recordButton-save" class="btn btn-sm btn-lgv-grey record-button" title="Änderung der Attribute Speichern">
+            <button id="wfst-module-recordButton-save" class="btn btn-sm btn-secondary record-button" title="Änderung der Attribute Speichern">
                 <span class="bootstrap-icon" aria-hidden="true"><i class="bi-save-fill"></i></span>
                 <br>
                 <span class="record-label">Speichern</span>
@@ -124,7 +124,7 @@
     </tr>
     <tr>
         <td>
-            <button id="wfst-module-recordButton-discard" class="btn btn-lgv-grey record-button" title="Änderungen der Attribute verwerfen">
+            <button id="wfst-module-recordButton-discard" class="btn btn-secondary record-button" title="Änderungen der Attribute verwerfen">
                 <span class="bootstrap-icon x-icon" aria-hidden="true"><i class="bi-x-circle"></i></span>
                 <br>
                 <span class="record-label">Verwerfen</span>

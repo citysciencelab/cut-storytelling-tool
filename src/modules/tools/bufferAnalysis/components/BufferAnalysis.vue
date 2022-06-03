@@ -293,7 +293,7 @@ export default {
                 <div class="col-md-12 form-group form-group-sm d-grid gap-2">
                     <button
                         id="tool-bufferAnalysis-resetButton"
-                        class="float-end btn btn-lgv-grey"
+                        class="float-end btn btn-secondary"
                         :disabled="!selectedSourceLayer"
                         @click="resetModule"
                     >
@@ -328,7 +328,7 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-    // @import "~variables";
+    @import "~variables";
     #tool-bufferAnalysis-radiusRangeInput {
         -webkit-appearance: none;
         appearance: none;
@@ -342,7 +342,7 @@ export default {
         &::-moz-range-thumb, &::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            background-color: #08589e;
+            background-color: $light_blue;
             cursor: pointer;
             border-width: 1px;
             border-color: white;

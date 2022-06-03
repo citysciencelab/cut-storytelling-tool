@@ -1,4 +1,5 @@
 $color_4: rgb(82, 82, 82);
+@import "~variables";
 
 /**************** Layer Settings ****************/
 /**************** Layer Settings Button Animation ****************/
@@ -17,9 +18,9 @@ ul#tree {
             padding-right: 16px;
         }
         .remove-layer {
-            color: #f2f2f2;
+            color: $light_grey;
             font-weight: bold;
-            background-color :$color_4;
+            background-color: $dark_grey;
             border-radius: 10px;
             padding: 5px;
             margin-left: 25px;
@@ -32,7 +33,7 @@ ul#tree {
             padding-top: 6px;
             font-size: 12px;
             border-radius: 10px;
-            background-color: #686868;
+            background-color: $light_grey;
         }
     }
 }

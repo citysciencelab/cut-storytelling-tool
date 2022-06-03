@@ -3,7 +3,6 @@ import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersWmsTime";
 import mutations from "../store/mutationsWmsTime";
 import actions from "../store/actionsWmsTime";
-import mapCollection from "../../../core/maps/mapCollection.js";
 
 export default {
     name: "LayerSwiper",
@@ -56,7 +55,7 @@ export default {
 
 button {
     width: 50px;
-    background-color: $primary_red;
+    background-color: $light_grey;
     height: 30px;
     max-height: 100px;
     position: absolute;
@@ -73,7 +72,7 @@ button {
         bottom: -5000px;
         left: 50%;
         width: 4px;
-        background: $primary_red_contrast;
+        background: $light_grey_contrast;
         z-index: -1;
         transform: translate(-2px, 0);
         -webkit-transform: translate(-2px, 0);

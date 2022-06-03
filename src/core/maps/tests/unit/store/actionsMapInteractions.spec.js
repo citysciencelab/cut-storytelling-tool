@@ -11,8 +11,7 @@ const {
 describe("src/core/maps/store/actions/actionsMapInteractions.js", () => {
     describe("registerlistener and unregisterlistener", () => {
         let olMap,
-            payload,
-            getters;
+            payload;
 
         before(() => {
             olMap = new Map();
@@ -21,21 +20,20 @@ describe("src/core/maps/store/actions/actionsMapInteractions.js", () => {
                 listener: "updatePointer",
                 listenerType: "dispatch"
             };
-            getters = {
-                get2DMap: olMap
-            };
+            mapCollection.clear();
+            mapCollection.addMap(olMap, "2D");
         });
 
         it("register pointermove listener to ol map", () => {
             const dispatch = sinon.spy(),
                 commit = sinon.spy();
 
-            registerListener({getters, commit, dispatch}, payload);
+            registerListener({commit, dispatch}, payload);
             expect(Object.keys(olMap.listeners_)).include("pointermove");
         });
 
         it("unregister pointermove listener from ol map", () => {
-            unregisterListener({getters}, payload);
+            unregisterListener({}, payload);
             expect(Object.keys(olMap.listeners_)).not.include("pointermove");
         });
     });

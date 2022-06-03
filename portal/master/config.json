@@ -137,7 +137,7 @@
           }
         }
       },
-      "filterGeneral": {
+      "filter": {
         "name": "translate#common:menu.filter",
         "icon": "bi-funnel-fill",
         "deactivateGFI": false,
@@ -467,7 +467,7 @@
           "print": {
             "name": "translate#common:menu.tools.print",
             "icon": "bi-printer-fill",
-            "mapfishServiceId": "mapfish",
+            "printServiceId": "mapfish",
             "printAppId": "master",
             "filename": "Ausdruck",
             "title": "Mein Titel",
@@ -484,7 +484,7 @@
           },
           "tacticalMark": {
             "name": "Taktische Zeichen",
-            "icon": "bi-signpost-split-fill"
+            "icon": "bi-geo-fill"
           }
         }
       },

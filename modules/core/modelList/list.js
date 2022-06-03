@@ -1,5 +1,6 @@
 import WMSLayer from "../../../src/core/layers/wms";
 import WFSLayer from "../../../src/core/layers/wfs";
+import {handleSingleTimeLayer} from "../../../src/core/layers/layer";
 import OAFLayer from "../../../src/core/layers/oaf";
 import GroupedLayers from "../../../src/core/layers/group";
 import WMSTimeLayer from "../../../src/core/layers/wmsTime";
@@ -13,11 +14,11 @@ import EntitiesLayer from "../../../src/core/layers/entities";
 import VectorTileLayer from "../../../src/core/layers/vectorTile";
 import TileSetLayer from "../../../src/core/layers/tileset";
 import VectorBaseLayer from "../../../src/core/layers/vectorBase";
+import filterAndReduceLayerList from "../../../src/modules/tools/saveSelection/utils/filterAndReduceLayerList";
 import ObliqueLayer from "./layer/oblique";
 import Folder from "./folder/model";
 import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
-import Filter from "../../tools/filter/model";
 import Dropdown from "bootstrap/js/dist/dropdown";
 import Collapse from "bootstrap/js/dist/collapse";
 
@@ -133,6 +134,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "change:isVisibleInMap": function () {
                 channel.trigger("updateVisibleInMapList");
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
+                store.dispatch("Tools/SaveSelection/createUrlParams", filterAndReduceLayerList(this.where({isSelected: true, type: "layer"})));
                 // this.sortLayersAndSetIndex();
             },
             "change:isExpanded": function (model) {
@@ -147,6 +149,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "change:isSelected": this.selectedChanged,
             "change:transparency": function () {
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
+                store.dispatch("Tools/SaveSelection/createUrlParams", filterAndReduceLayerList(this.where({isSelected: true, type: "layer"})));
             },
             "change:selectionIDX": function () {
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
@@ -230,9 +233,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "styleWMS") {
                 return new StyleWMS(attrs, options);
-            }
-            else if (attrs.id === "filter") {
-                return new Filter(attrs, options);
             }
             else if (attrs.id === "shadow") {
                 return new Shadow(attrs, options);
@@ -842,6 +842,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 }
                 else {
                     this.add(model);
+                    // if more than one WMS-Time-Layer is set to be visible - only show the last one
+                    this.checkTimeLayerHandling(model);
                 }
             }, this);
         }
@@ -854,7 +856,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
             paramLayers.forEach(paramLayer => {
                 lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
-
                 if (lightModel !== undefined) {
                     this.add(lightModel);
                     this.setModelAttributesById(paramLayer.id, {isSelected: true, transparency: paramLayer.transparency});
@@ -862,6 +863,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                     if (paramLayer.visibility === false && this.get(paramLayer.id) !== undefined) {
                         this.get(paramLayer.id).setIsVisibleInMap(false);
                     }
+                    // if more than one WMS-Time-Layer is set to be visible - only show the last one
+                    this.checkTimeLayerHandling(lightModel);
                 }
             });
             this.addModelsByAttributes({typ: "Oblique"});
@@ -873,6 +876,62 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
         this.initLayerIndeces(paramLayers);
         this.updateLayerView();
+    },
+
+
+    /**
+     * Checks if the Model, that is about to be added is a WMSTimeLayer and handles correct display of the TImeSlider
+     * if more than one WMS-Time-Layer is set to be visible - only show the last one
+     * @param  {Object[]} model Light models requested from Parser
+     * @return {void}
+     */
+    checkTimeLayerHandling: function (model) {
+        const timeLayers = Radio.request("Parser", "getItemsByAttributes", {type: "layer", typ: "WMS"}).filter(it => it.time !== undefined),
+            treeType = Radio.request("Parser", "getTreeType");
+
+        if (timeLayers.length > 0) {
+
+            if (treeType === "light") {
+                // in treeType light - the Layer will be shown additionally - so we need to check all selected Layers
+                const selectedTimeLayer = timeLayers.filter(it => it.isSelected === true);
+
+                if (selectedTimeLayer.length > 0) {
+
+                    if (model.id === selectedTimeLayer[selectedTimeLayer.length - 1].id) {
+                        setTimeout(function () {
+                            handleSingleTimeLayer(true, null, model);
+                        }, 0);
+                    }
+                    if (selectedTimeLayer.length > 1) {
+                        Radio.trigger("Alert", "alert", i18next.t("common:modules.core.modelList.layer.wms.warningTimeLayerQuantity", {name: selectedTimeLayer[selectedTimeLayer.length - 1].name}));
+                    }
+                }
+            }
+            else {
+                // in all other tree-types (custom or default) - only the layer added via URLparameters will be shown
+                const paramlayers = store.state.urlParams && store.state.urlParams["Map/layerIds"] ? store.state.urlParams["Map/layerIds"] : [],
+                    selectedTimeLayer = [];
+
+                paramlayers.forEach(paramLayer => {
+                    const layer = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
+
+                    if (layer && layer.time !== undefined) {
+                        selectedTimeLayer.push(layer);
+                    }
+                });
+                if (selectedTimeLayer.length > 0) {
+                    if (model.id === selectedTimeLayer[selectedTimeLayer.length - 1].id) {
+                        setTimeout(function () {
+                            handleSingleTimeLayer(true, null, model);
+                        }, 0);
+                    }
+                    if (selectedTimeLayer.length > 1) {
+                        console.warn("zu viele selectedTimeLayer ?", selectedTimeLayer);
+                        Radio.trigger("Alert", "alert", i18next.t("common:modules.core.modelList.layer.wms.warningTimeLayerQuantity", {name: selectedTimeLayer[selectedTimeLayer.length - 1].name}));
+                    }
+                }
+            }
+        }
     },
 
     /**
@@ -1229,6 +1288,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @returns {void}
      */
     selectedChanged: function (model, value) {
+        let selectedLayers = [];
+
         if (model.get("type") === "layer") {
             model.setIsVisibleInMap(value);
             this.updateLayerView();
@@ -1236,6 +1297,14 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         this.trigger("updateSelection");
         Radio.channel("ModelList").trigger("updateVisibleInMapList");
         Radio.channel("ModelList").trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
+
+        selectedLayers = this.where({isSelected: true, type: "layer"});
+
+        if (this.findWhere({id: model.get("id")}) === undefined) {
+            selectedLayers.push(model);
+        }
+
+        store.dispatch("Tools/SaveSelection/createUrlParams", filterAndReduceLayerList(selectedLayers));
     }
 });
 

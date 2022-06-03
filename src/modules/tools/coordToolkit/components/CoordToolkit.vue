@@ -22,7 +22,6 @@ export default {
         ...mapGetters("Maps", {
             projection: "projection",
             mouseCoordinate: "mouseCoordinate",
-            get3DMap: "get3DMap",
             mapMode: "mode"
         }),
         ...mapGetters(["uiStyle", "mobile"]),
@@ -201,6 +200,9 @@ export default {
                 this.removeInteractionFromMap(this.selectPointerMove);
                 this.setSelectPointerMove(null);
             }
+            if (this.mapMode === "3D") {
+                this.eventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
+            }
         },
         /**
          * Adds pointer-move-handler and interaction to map.
@@ -250,8 +252,7 @@ export default {
                 this.addInteractionToMap(pointerMove);
             }
             else if (this.mapMode === "3D") {
-                this.eventHandler = new Cesium.ScreenSpaceEventHandler(this.get3DMap.getCesiumScene().canvas);
-                this.eventHandler.setInputAction(this.checkPosition, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+                this.eventHandler = new Cesium.ScreenSpaceEventHandler(mapCollection.getMap("3D").getCesiumScene().canvas);
                 this.eventHandler.setInputAction(this.positionClicked, Cesium.ScreenSpaceEventType.LEFT_CLICK);
             }
         },
@@ -680,7 +681,6 @@ export default {
 <style lang="scss" scoped>
 @import "~variables";
 
-
     @media (max-width: 767px) {
         .checkbox-container .form-inline {
             font-size: 12px;
@@ -701,7 +701,7 @@ export default {
     }
     .error-text {
         font-size: 85%;
-        color: #a94442;
+        color: $light_red;
     }
     .hint{
         margin: 5px 0px 25px;

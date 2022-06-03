@@ -132,7 +132,8 @@
               "wms": {
                 "allowCookies":"<strong>Please allow cookies to load this background map.</strong>",
                 "errorTimeLayer": "Error while retrieving information for the layer with the id {{id}}: {{error}}",
-                "invalidTimeLayer": "The configured layer with the id {{id}} does not contain the necessary values for a WMS-T."
+                "invalidTimeLayer": "The configured layer with the id {{id}} does not contain the necessary values for a WMS-T.",
+                "warningTimeLayerQuantity": "<strong>Warning:</strong> More than one TimeLayer was initially selected. </br>Only <strong>{{name}} </strong>is displayed."
               }
             }
           }
@@ -417,7 +418,7 @@
                 "serviceThree": "Service 3",
                 "serviceFour": "Service 4"
             },
-            "filterGeneral": {
+            "filter": {
                 "filterButton": "Filter",
                 "searchInMapExtent": "Search in current map extent",
                 "snippetTags": {
@@ -460,15 +461,6 @@
                     "label": "All filtered Counts",
                     "unit": "{{amountOfFilteredItems}} Results"
                 }
-            },
-            "filter": {
-                "result": "Result",
-                "results": "Results",
-                "zoomOnResults": "Zoom on results",
-                "filter": " filters",
-                "yourSelection": "Your Selection: ",
-                "noFilterOptionSelected": "No filter option selected",
-                "deleteAll": "Delete all"
             },
             "pendler": {
                 "animation": {

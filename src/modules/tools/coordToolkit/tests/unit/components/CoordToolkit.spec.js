@@ -24,12 +24,7 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
         mockMapGetters = {
             projection: () => sinon.stub(),
             mouseCoordinate: () => sinon.stub(),
-            mode: (state) => state.mode,
-            get3DMap: () => {
-                return {
-                    getCesiumScene: () => sinon.stub()
-                };
-            }
+            mode: (state) => state.mode
         },
         mockMapMarkerActions = {
             removePointMarker: sinon.stub()
@@ -253,6 +248,13 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
 
             it("createInteraction for 3D and the eventHandler is not null", () => {
                 wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
+                const canvas = {},
+                    map3D = {
+                        mode: "3D",
+                        getCesiumScene: () => canvas
+                    };
+
+                mapCollection.addMap(map3D, "3D");
 
                 expect(wrapper.vm.eventHandler).to.be.null;
 

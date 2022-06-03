@@ -210,16 +210,16 @@ export default {
 
 <style lang="scss" scoped>
     @import "~variables";
-#search-by-coord {
-    @media (min-width: 768px) {
-        width: 350px;
+    #search-by-coord {
+        @media (min-width: 768px) {
+            width: 350px;
+        }
     }
-}
-.error-text {
-    font-size: 100%;
-    color: #a94442;
-}
-.inputError {
-    border: 1px solid #a94442;
-}
+    .error-text {
+        font-size: 100%;
+        color: $light_red;
+    }
+    .inputError {
+        border: 1px solid $light_red;
+    }
 </style>
