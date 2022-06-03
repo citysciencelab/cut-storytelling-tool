@@ -32,34 +32,42 @@ The API is structured as the following:
 ## GET
 
 
-_GET /story_
+### _GET /story_
+
 ```
 
 Returns an overview of all stories 
 
 
 ```
-_GET /story/:storyId_
+
+### _GET /story/:storyId_
+
 ```
 
 Returns the story.json file of a story with the respective id
 
 
 ```
-_GET /step/
+
+### _GET /step/_
+
 ```
 Returns an overview over all steps
 
 
 ```
-_GET /step/:storyId/:step_major/:step_minor_
+
+### _GET /step/:storyId/:step_major/:step_minor_
+
 ```
 Returns image and html of a specific step of a specific story
 ```
 
 ## POST 
 
-_POST /add/story/
+### _POST /add/story/_
+
 ```
  
 Creates a new story entry. (metadata only)
@@ -75,8 +83,10 @@ example curl:
 
 ```
 
-_POST /add/step/:storyId/:step_major/:step_major_
+### _POST /add/step/:storyId/:step_major/:step_major_
+
 ```
+
 
 Creates a story "step" for the story specified in `:storyID` (as created by /add/story). The `:step_major` and `:step_major` parameters are the equivalent of the `1-2.html` notation we originally have in the file names.
 
@@ -92,7 +102,8 @@ example  curl:
 
 ## DELETE
 
-_DELETE /story/:storyId_
+### _DELETE /story/:storyId_
+
 ```
 delete a story and all its steps. Note: Stories can only be deleted if ALL steps belonging to that story have been deleted first (see /delete/step/)!
 example curl:
@@ -101,7 +112,7 @@ curl -X "DELETE" localhost:3000/delete/story/1
 
 ```
 
-_DELETE /step/:storyId_
+### _DELETE /step/:storyId_
 ```
 delete all steps belonging to a story
 example curl (delete all steps of story 1):
@@ -110,7 +121,8 @@ curl -X "DELETE" localhost:3000/delete/step/1
 
 ```
 
-_DELETE /step/:storyId/:step_major_
+### _DELETE /step/:storyId/:step_major_
+
 ```
 delete all steps with the same major step belonging to a story
 example curl (delete step 2.x of story 1):
@@ -119,7 +131,8 @@ curl -X "DELETE" localhost:3000/delete/step/1/1
 
 ```
 
-_DELETE /step/:storyId/:step_major/:step_minor_
+### _DELETE /step/:storyId/:step_major/:step_minor_
+
 ```
 delete a minor step in a story
 example curl (delete step 2.3 of story 1):
@@ -133,7 +146,7 @@ curl -X "DELETE" localhost:3000/delete/step/1/2/3
 
 
 
-## Database setup
+# Database setup
 
 (following [this tutorial](https://blog.logrocket.com/nodejs-expressjs-postgresql-crud-rest-api-example/))
 
