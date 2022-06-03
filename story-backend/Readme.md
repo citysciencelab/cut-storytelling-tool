@@ -159,17 +159,14 @@ curl -X "DELETE" localhost:3000/delete/step/1/2/3
 
 
 ### create database
-2. create a user
+2. create a new user and database in psql console 
 ```
 psql postgres
-```
-then in postgres console:
-
-```
 CREATE ROLE me WITH LOGIN PASSWORD 'password';
 CREATE DATABASE stories;
 \q
 ```
+
 3. then run database init file in /db/setup/
 
 `psql -U me -d stories -a -f ./db/setup/db_setup.sql`
