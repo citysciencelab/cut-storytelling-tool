@@ -40,7 +40,7 @@ const getStoryStep  = (req, res) => {
     query = {
       name: 'get-story-step',
       // text: 'SELECT * FROM steps WHERE storyID = $1 AND step_major = $2 AND step_minor = $3',
-      text: 'SELECT * FROM steps WHERE $1=$1 AND $2=$2 AND $3=$3',
+      text: 'SELECT * FROM steps WHERE storyID=$1 AND step_major=$2 AND step_minor=$3',
       values: [req.params.storyId, req.params.step_major,req.params.step_minor]
     }
 
@@ -84,19 +84,19 @@ const createStep = (request, response) => {
 //   html TEXT,
 //   image bytea
 
-  console.log(request.body);
-  const query_new_story = {
-    name: 'new-story',
+
+  var query = {
+    name: 'new-step',
     text: 'INSERT INTO steps (storyID, step_major, step_minor, html) VALUES ($1, $2, $3, $4)',
     values: [request.params.storyId, request.params.step_major, request.params.step_minor, request.body.html],
   }
 
-  pool.query(query_new_story,
+  pool.query(query,
     (error, results) => {
      if (error) {
       throw error
     }
-    response.status(201).send(`story added`)
+    response.status(201).send(`step added`)
   })
 }
 
@@ -104,8 +104,6 @@ const createStep = (request, response) => {
 
 
 // curl --data "a=test1&b=test2" http://localhost:3000/
-
-
 
 
 const getStories = (request, response) => {
@@ -117,12 +115,112 @@ const getStories = (request, response) => {
   })
 }
 
+
+const getSteps = (request, response) => {
+    pool.query('SELECT * FROM steps', (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+
+const deleteStory = (request, response) => {
+
+  var query = {
+    name: 'delete-story',
+    text: 'DELETE FROM stories WHERE storyID = $1;',
+    values: [request.params.storyId]
+  }
+
+  pool.query(query,
+    (error, results) => {
+     if (error) {
+      throw error
+    }
+    response.status(201).send(`story deleted`)
+  })
+
+
+}
+
+
+
+const deleteAllStorySteps = (request, response) => {
+  
+  var query = {
+    name: 'delete-step-all',
+    text: 'DELETE FROM steps WHERE storyID = $1',
+    values: [request.params.storyId]
+  }
+
+  pool.query(query,
+    (error, results) => {
+     if (error) {
+      throw error
+    }
+    response.status(201).send(`all steps of story deleted`)
+  })
+
+
+}
+
+
+const deleteStepMajor = (request, response) => {
+  
+  var query = {
+    name: 'delete-step-major',
+    text: 'DELETE FROM steps WHERE storyID = $1 AND step_major = $2;',
+    values: [request.params.storyId, request.params.step_major]
+  }
+
+  pool.query(query,
+    (error, results) => {
+     if (error) {
+      throw error
+    }
+    response.status(201).send(`major step deleted`)
+  })
+
+
+}
+
+
+
+const deleteStepMinor = (request, response) => {
+  
+  var query = {
+    name: 'delete-step-minor',
+    text: 'DELETE FROM steps WHERE storyID = $1 AND step_major = $2 AND step_minor = $3;',
+    values: [request.params.storyId, request.params.step_major, request.params.step_minor]
+  }
+
+  pool.query(query,
+    (error, results) => {
+     if (error) {
+      throw error
+    }
+    response.status(201).send(`minor step deleted`)
+  })
+
+
+}
+
+
+
+
 module.exports = {
   getStories,
   getStoryStructure,
+  getSteps,
   getStoryStep,
   createStory,
-  createStep
+  createStep,
+  deleteStory,
+  deleteAllStorySteps,
+  deleteStepMajor,
+  deleteStepMinor
 }
 
 

@@ -16,19 +16,19 @@ expects in body
 	- story_json (string)
 
 example curl:
-`curl -XPOST -d '{"name": "My New Story", "category" : "test", "story_json" : "{\"some json\" : \"as a string\"}"}' -H 'content-type: application/json' localhost:3000/createStory`
+`curl -XPOST -d '{"name": "My New Story", "category" : "test", "story_json" : "{\"some json\" : \"as a string\"}"}' -H 'content-type: application/json' localhost:3000/add/story`
 
 
-_POST /createStep/:storyID/:major_step/:minor_step_
+_POST /createStep/:storyID/:step_major/:step_major_
 
-Creates a story "step" for the story specified in `:storyID` (as created by /createStory). The `:major_step` and `:minor_step` parameters are the equivalent of the `1-2.html` notation we originally have in the file names.
+Creates a story "step" for the story specified in `:storyID` (as created by /createStory). The `:step_major` and `:step_major` parameters are the equivalent of the `1-2.html` notation we originally have in the file names.
 
 expects in body
     - html content of the step (as character string)
     - (image for the step - not yet implemented) 
 
 example  curl:
-`curl -XPOST -d '{"html": "<blink>does this html tag still work?</blink>"}' -H 'content-type: application/json' localhost:3000/createStep/3/1/1`
+curl -XPOST -d '{"html": "<blink>does this html tag still work?</blink>"}' -H 'content-type: application/json' localhost:3000/add/step/1/2/3 
 
 
 ## GET
@@ -55,6 +55,43 @@ _GET /story/:storyId/:stepHTML/:imageId _
 Returns a specific image of a specific step in a specific story
 ```
 
+
+
+_DELETE /story/:storyId_
+```
+delete a story and all its steps. Note: Stories can only be deleted if ALL steps belonging to that story have been deleted first (see /delete/step/)!
+example curl:
+
+curl -X "DELETE" localhost:3000/delete/story/1
+
+```
+
+_DELETE /step/:storyId_
+```
+delete all steps belonging to a story
+example curl (delete all steps of story 1):
+
+curl -X "DELETE" localhost:3000/delete/step/1
+
+```
+
+_DELETE /step/:storyId/:step_major_
+```
+delete all steps with the same major step belonging to a story
+example curl (delete step 2.x of story 1):
+
+curl -X "DELETE" localhost:3000/delete/step/1/1
+
+```
+
+_DELETE /step/:storyId/:step_major/:step_minor_
+```
+delete a minor step in a story
+example curl (delete step 2.3 of story 1):
+
+curl -X "DELETE" localhost:3000/delete/step/1/2/3
+
+```
 
 
 
