@@ -9,20 +9,20 @@ The API is structured as the following:
 
 **GET**
 ```
-/story 			 get list of all stories
-/story/1         get metadata-json of story 1
-/step/1/2/3/     get story 1's step 2.3 html & image
+/story              get list of all stories
+/story/1            get metadata-json of story 1
+/step/1/2/3/        get story 1's step 2.3 html & image
 ```
 **POST**
 ```
-/add/story/			add new story
+/add/story/         add new story
 /add/step/1/2/3/    add to story 1 step 2.3
 ```
 
 **DELETE**
 ```
-/delete/story/1		delete story 1
-/delete/step/1    	delete all steps to story 1
+/delete/story/1     delete story 1
+/delete/step/1      delete all steps to story 1
 /delete/step/1/2    delete all steps belonging to major step 2 of story 1
 /delete/step/1/2/3  delete step 2.3 of story 1
 
