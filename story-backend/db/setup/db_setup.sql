@@ -20,9 +20,9 @@ CREATE TABLE IF NOT EXISTS steps (
   storyID INT,
   step_major INT,
   step_minor INT,
-  story_json TEXT,
-  image bytea,
   html TEXT,
+  image bytea,
+
   PRIMARY KEY(stepID),
   CONSTRAINT storyID
     FOREIGN KEY(storyID)
