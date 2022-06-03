@@ -1,45 +1,36 @@
 const { Date } = require('core-js');
 const express = require('express');
+const controllers = require('../controllers/controllers')
 
 const router = express.Router()
 
 module.exports = router;
 
-//Get by Story ID 
-router.get('/getStories', (req, res) => {
-    
-    // Todo: Connection to the database
-    var data = {
-        fetchDate: Date.now(),
-        stories: [
-            {
-                id: 1,
-                name: "FairCare Verkehr",
-                category: ["mobility"]
-            }, 
-            {
-                id: 2,
-                name: "Example story",
-                category: ["whatever"]
-            }
-        ]
-    }
-    
-    res.send(data)
-})
+
+// GET
 
 
 //Get by Story ID 
-router.get('/story/:storyId', (req, res) => {
-    
-    // Todo: Connection to the database
-    var data = require("../dummyData/"+req.params.storyId+"/story.json")
-    
-    res.send(data)
-})
+router.get('/story/:storyId', controllers.getStoryStructure)
 
 //Get Story Steps 
 router.get('/story/:storyId/:stepHTML', (req, res) => {
         
     res.sendFile("dummyData/"+req.params.storyId+"/story/"+req.params.stepHTML+".html", {root: "."})
 })
+
+
+
+router.get('/getStories', controllers.getStories)
+
+
+
+// POST
+
+
+router.post('/createStory', controllers.createStory)
+
+
+
+
+
