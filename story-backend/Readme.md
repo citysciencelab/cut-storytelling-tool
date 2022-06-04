@@ -55,10 +55,16 @@ Returns all step's data as json (not including images)
 
 ```
 
-### _GET /step/:storyId/:step_major/:step_minor_
+### _GET /step/:storyId/:step_major/:step_minor/html_
 
 ```
-Returns image and html of a specific step of a specific story
+Returns html of a specific step of a specific story
+```
+
+### _GET /step/:storyId/:step_major/:step_minor/image_
+
+```
+Returns image of a specific step of a specific story
 ```
 
 ## POST 
