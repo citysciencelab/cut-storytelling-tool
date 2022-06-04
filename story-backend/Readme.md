@@ -9,22 +9,26 @@ The API is structured as the following:
 
 **GET**
 ```
-/story              get list of all stories
-/story/1            get metadata-json of story 1
-/step/1/2/3/        get story 1's step 2.3 html & image
+/story                    get list of all stories
+/story/1                  get metadata-json of story 1
+/step/1/2/3/html          get html  of step 2.3 of story 1
+/step/1/2/3/image         get image of step 2.3 of story 1
+
 ```
 **POST**
 ```
-/add/story/         add new story
-/add/step/1/2/3/    add to story 1 step 2.3
+/add/story/               add new story
+/add/step/1/2/3/          add step 2.3 to story 1
+/add/step/1/2/3/html      add html to step 2.3 of story 1
+/add/step/1/2/3/image     add image to step 2.3 of story 1 
 ```
 
 **DELETE**
 ```
-/delete/story/1     delete story 1
-/delete/step/1      delete all steps to story 1
-/delete/step/1/2    delete all steps belonging to major step 2 of story 1
-/delete/step/1/2/3  delete step 2.3 of story 1
+/delete/story/1           delete story 1
+/delete/step/1            delete all steps to story 1
+/delete/step/1/2          delete all steps belonging to major step 2 of story 1
+/delete/step/1/2/3        delete step 2.3 of story 1
 
 ```
 
@@ -35,26 +39,19 @@ The API is structured as the following:
 ### _GET /story_
 
 ```
-
-Returns an overview of all stories 
-
-
+Returns an overview over all stories 
 ```
 
 ### _GET /story/:storyId_
 
 ```
-
 Returns the story.json file of a story with the respective id
-
-
 ```
 
 ### _GET /step/_
 
 ```
-Returns an overview over all steps
-
+Returns all step's data as json (not including images)
 
 ```
 
@@ -83,7 +80,7 @@ example curl:
 
 ```
 
-### _POST /add/step/:storyId/:step_major/:step_major_
+### _POST /add/step/:storyId/:step_major/:step_minor_
 
 ```
 
@@ -92,12 +89,33 @@ Creates a story "step" for the story specified in `:storyID` (as created by /add
 
 expects in body
     - html content of the step (as character string)
-    - (image for the step - not yet implemented) 
 
 example  curl:
 
 `curl -XPOST -d '{"html": "<blink>does this html tag still work?</blink>"}' -H 'content-type: application/json' localhost:3000/add/step/1/2/3`
 
+```
+
+
+
+### _POST /add/step/:storyId/:step_major/:step_minor/html_
+
+```
+post a steps html content. The matching story and step must have been created first!
+
+example curl:
+curl -X POST localhost:3000/add/step/1/1/1/html -H 'Content-Type: application/json' -d '{"html":"some <b>story</b> content!"}'
+
+```
+
+
+### _POST /add/step/:storyId/:step_major/:step_minor/image_
+
+```
+post an image. The matching story and step must have been created first!
+
+example curl:
+curl -F "image=@./testimage.png" localhost:3000/add/step/1/1/1/image
 ```
 
 ## DELETE
@@ -140,10 +158,6 @@ example curl (delete step 2.3 of story 1):
 curl -X "DELETE" localhost:3000/delete/step/1/2/3
 
 ```
-
-
-
-
 
 
 # Database setup

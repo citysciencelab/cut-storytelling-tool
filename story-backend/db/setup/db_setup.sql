@@ -1,6 +1,6 @@
 -- NOTE: likely not safe to store user generated html in db in serve that html to others. maybe markdown?
--- DROP TABLE stories;
 -- DROP TABLE steps;
+-- DROP TABLE stories;
 
 -- two connected tables:
 --  "stories" contains metadata on all stored stories
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS steps (
   step_major INT,
   step_minor INT,
   html TEXT,
-  image bytea,
+  image TEXT,
 
   PRIMARY KEY(stepID),
   CONSTRAINT storyID
