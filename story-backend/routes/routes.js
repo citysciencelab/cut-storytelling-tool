@@ -7,19 +7,16 @@ const router = express.Router()
 
 module.exports = router;
 
+
 // GET
-
-
 router.get('/story', controllers.getStories)
 router.get('/story/:storyId', controllers.getStoryStructure)
 router.get('/step/', controllers.getSteps)
-// router.get('/step/:storyId/:step_major/:step_minor', controllers.getStoryStep)
 router.get('/step/:storyId/:step_major/:step_minor/image', controllers.getImage)
 router.get('/step/:storyId/:step_major/:step_minor/html', controllers.getHtml)
 
 
 // POST
-
 router.post('/add/story', controllers.createStory)
 router.post('/add/step/:storyId/:step_major/:step_minor', controllers.createStep)
 router.post('/add/step/:storyId/:step_major/:step_minor/image', controllers.imageUpload.single('image'), controllers.addImagePath)
@@ -27,7 +24,7 @@ router.post('/add/step/:storyId/:step_major/:step_minor/html', controllers.addHt
 
 
 
-//
+// DELETE
 router.delete('/delete/story/:storyId', controllers.deleteStory)
 router.delete('/delete/step/:storyId/', controllers.deleteAllStorySteps)
 router.delete('/delete/step/:storyId/:step_major/', controllers.deleteStepMajor)

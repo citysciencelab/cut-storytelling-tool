@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS steps (
 
   PRIMARY KEY(stepID),
   CONSTRAINT storyID
-    FOREIGN KEY(storyID)
-    REFERENCES stories(storyID)
+  FOREIGN KEY(storyID)
+  REFERENCES stories(storyID)
 
 );
