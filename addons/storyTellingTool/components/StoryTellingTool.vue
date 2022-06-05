@@ -23,7 +23,7 @@ export default {
       storyConfPath: Config.storyConf,
       storyList: {},
       selectedStory: null,
-      storyjson: null
+      storyjson: null,
     };
   },
   computed: {
@@ -97,15 +97,6 @@ export default {
     ...mapActions("Tools/StoryTellingTool", Object.keys(actions)),
 
     /**
-     * Handles story telling mode changes.
-     * @param {Number} index the index of the new story telling mode
-     * @returns {void}
-     */
-    onChangeStoryTellingMode(index) {
-      this.mode = Object.values(this.constants.storyTellingModes)[index];
-    },
-
-    /**
      * Closes this tool window by setting active to false
      * @returns {void}
      */
@@ -160,17 +151,19 @@ export default {
 
     /**
      * Changes the story that is selected and fetches the corresponding Story json from the API
-     * @param {integer} storyID The ID of the selected story
+     * @param {integer} storyId The ID of the selected story
      * @returns {void}
      */
     onStorySelected(storyId) {
       console.log("A story was selected: ID " + storyId);
       this.selectedStory = storyId;
       this.storyConfPath = "http://" + constants.backendConfig.url + "story/" + storyId;
+      this.mode = "play";
+
 
       //axios
-       // .get(this.storyConfPath)
-       // .then((response) => (this.storyjson = response.data));
+      // .get(this.storyConfPath)
+      // .then((response) => (this.storyjson = response.data));
 
       //this.setStoryConf(this.storyjson);
     },
@@ -195,37 +188,35 @@ export default {
                 <v-item-group
                     v-if="!mode"
                     :value="mode"
-                    @change="onChangeStoryTellingMode"
                     id="tool-storyTellingTool-modeSelection"
                 >
 
                     <v-col
-          v-for="(item, i) in storyList.stories"
-          :key="i"
-          cols="12"
-        >
-        
-        <v-item v-slot="{ active, toggle }">
-          <v-card>
-            <div class="d-flex flex-no-wrap justify-space-between">
-              <div>
-                <v-card-title
-                  class="text-h5"
-                  v-text="item.title"
-                ></v-card-title>
+                        v-for="(item, i) in storyList.stories"
+                        :key="i"
+                        cols="12"
+                    >
+                        <v-item v-slot="{ active, toggle }">
+                            <v-card>
+                                <div class="d-flex flex-no-wrap justify-space-between">
+                                <div>
+                                    <v-card-title
+                                    class="text-h5"
+                                    v-text="item.title"
+                                    ></v-card-title>
 
-                <v-card-subtitle v-text="item.subtitle"></v-card-subtitle>
+                                    <v-card-subtitle v-text="item.subtitle"></v-card-subtitle>
 
-                <v-card-actions>
-                  <v-btn class="ml-2 mt-5" text @click="onStorySelected(item.id), toggle()">
-                    Story starten
-                  </v-btn>
-                </v-card-actions>
-              </div>
-            </div>
-          </v-card>
-          </v-item>
-        </v-col>
+                                    <v-card-actions>
+                                    <v-btn class="ml-2 mt-5" text @click="onStorySelected(item.id), toggle()">
+                                        Story starten
+                                    </v-btn>
+                                    </v-card-actions>
+                                </div>
+                                </div>
+                            </v-card>
+                        </v-item>
+                    </v-col>
 
                     
                     <!-- 
@@ -251,15 +242,13 @@ export default {
                     -->
                 </v-item-group>
 
-                <StoryCreator
-                    v-if="mode === constants.storyTellingModes.CREATE"
-                />
                 <StoryPlayer
                     v-if="
                         mode === constants.storyTellingModes.PLAY &&
                             storyConfPath
                     "
                     :storyConfPath="storyConfPath"
+                    :storyId="selectedStory"
                 />
             </v-app>
         </template>

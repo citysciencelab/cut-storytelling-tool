@@ -43,5 +43,5 @@ router.get('/story/:storyId', (req, res) => {
 //Get Story Steps 
 router.get('/story/:storyId/:stepHTML', (req, res) => {
         
-    res.sendFile("dummyData/"+req.params.storyId+"/story/"+req.params.stepHTML+".html", {root: "."})
+    res.sendFile("dummyData/"+req.params.storyId+"/story/step_"+req.params.stepHTML+".html", {root: "."})
 })
