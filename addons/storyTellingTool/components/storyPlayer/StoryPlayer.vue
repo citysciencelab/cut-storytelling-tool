@@ -44,6 +44,7 @@ export default {
     return {
       getStepReference,
       getHTMLContentReference,
+      constants,
       currentStepIndex: 0,
       loadedContent: null,
       isHovering: null,
@@ -216,12 +217,13 @@ export default {
       let url =
         "http://" +
         constants.backendConfig.url +
-        "story/" +
+        "step/" +
         this.storyId +
         "/" +
         this.currentStep.associatedChapter +
-        "-" +
-        this.currentStep.stepNumber;
+        "/" +
+        this.currentStep.stepNumber +
+        "/html";
       
       fetchDataFromUrl(url)
       .then((data) => (this.loadedContent = data))

@@ -89,7 +89,7 @@ export default {
   mounted() {
     this.applyTranslationKey(this.name);
     axios
-      .get("http://" + constants.backendConfig.url + "getStories")
+      .get("http://" + constants.backendConfig.url + "story")
       .then((response) => (this.storyList = response.data));
   },
   methods: {
@@ -192,7 +192,7 @@ export default {
                 >
 
                     <v-col
-                        v-for="(item, i) in storyList.stories"
+                        v-for="(item, i) in storyList"
                         :key="i"
                         cols="12"
                     >
@@ -202,10 +202,10 @@ export default {
                                 <div>
                                     <v-card-title
                                     class="text-h5"
-                                    v-text="item.title"
+                                    v-text="item.name"
                                     ></v-card-title>
 
-                                    <v-card-subtitle v-text="item.subtitle"></v-card-subtitle>
+                                    <v-card-subtitle v-text="item.category"></v-card-subtitle>
 
                                     <v-card-actions>
                                     <v-btn class="ml-2 mt-5" text @click="onStorySelected(item.id), toggle()">
@@ -217,29 +217,6 @@ export default {
                             </v-card>
                         </v-item>
                     </v-col>
-
-                    
-                    <!-- 
-                    <v-flex v-for="option in modeOptions"  :key="option.title">
-                        <v-item v-slot="{ active, toggle }">
-                            <v-card  :disabled="option.disabled" class="my-4">
-                                <v-img v-if="option.title == 'Story starten'"
-                                    src="https://raw.githubusercontent.com/herzogrh/faircare-verkehr/main/assets/img/stroller-1.jpg"
-                                    height="200px"
-                                    ></v-img>
-                                <v-card-title v-if="option.title == 'Story starten'">FairCare Verkehr</v-card-title>
-                                <v-card-subtitle v-if="option.title == 'Story starten'">Eine Geschichte zur Mobilität von Personen, die unbezahlte Sorgearbeit ausüben.</v-card-subtitle>
-                                <v-card-actions>
-                                    <v-btn v-if="option.title == 'Story starten'" text @click="toggle" >
-                                        {{ option.title }}
-                                    </v-btn>
-                                    
-                                </v-card-actions>
-                            </v-card>
-                        </v-item>
-                        <v-spacer></v-spacer>
-                    </v-flex>
-                    -->
                 </v-item-group>
 
                 <StoryPlayer
