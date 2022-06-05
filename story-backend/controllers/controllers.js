@@ -355,4 +355,3 @@ const getImage = (request, response) => {
     getHtml
   }
 
-
