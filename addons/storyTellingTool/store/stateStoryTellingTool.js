@@ -21,7 +21,6 @@ import {emptyStoryConf, emptyStoryLibrary} from "./constantsStoryTellingTool";
  */
 const state = {
     id: "storyTellingTool",
-    storyLibrary: {...emptyStoryLibrary},
     storyConf: {...emptyStoryConf},
     htmlContents: {},
     htmlContentsImages: {},

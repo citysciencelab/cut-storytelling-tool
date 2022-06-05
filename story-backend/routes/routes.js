@@ -35,11 +35,3 @@ router.delete('/delete/step/:storyId/:step_major/:step_minor', controllers.delet
 // DEBUGGING
 
 router.get('/debug/step',controllers.getSteps)
-
-
-
-
-
-
-
-
