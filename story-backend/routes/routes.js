@@ -11,8 +11,9 @@ module.exports = router;
 // GET
 router.get('/story', controllers.getStories)
 router.get('/story/:storyId', controllers.getStoryStructure)
-router.get('/step/', controllers.getSteps)
 router.get('/step/:storyId/:step_major/:step_minor/image', controllers.getImage)
+router.get('/step/:storyId/:step_major/:step_minor/image/:imageId', controllers.getImage)
+
 router.get('/step/:storyId/:step_major/:step_minor/html', controllers.getHtml)
 
 
@@ -30,6 +31,10 @@ router.delete('/delete/step/:storyId/', controllers.deleteAllStorySteps)
 router.delete('/delete/step/:storyId/:step_major/', controllers.deleteStepMajor)
 router.delete('/delete/step/:storyId/:step_major/:step_minor', controllers.deleteStepMinor)
 
+
+// DEBUGGING
+
+router.get('/debug/step',controllers.getSteps)
 
 
 

@@ -87,37 +87,39 @@ const getStoryStructure  = (req, res) => {
 
 
 
-  // const getStoryStep  = (req, res) => {
+  const getStoryStep  = (req, res) => {
 
-  //   // Todo: Connection to the database
-  //   // var data = require("../dummyData/"+req.params.storyId+"/story.json")
-  //   console.log(req.params)
-  //   query = {
-  //     name: 'get-story-step',
-  //     // text: 'SELECT * FROM steps WHERE storyID = $1 AND step_major = $2 AND step_minor = $3',
-  //     text: 'SELECT * FROM steps WHERE storyID=$1 AND step_major=$2 AND step_minor=$3',
-  //     values: [req.params.storyId, req.params.step_major,req.params.step_minor]
-  //   }
+    // Todo: Connection to the database
+    // var data = require("../dummyData/"+req.params.storyId+"/story.json")
+    console.log(req.params)
+    query = {
+      name: 'get-story-step',
+      // text: 'SELECT * FROM steps WHERE storyID = $1 AND step_major = $2 AND step_minor = $3',
+      text: 'SELECT * FROM steps WHERE storyID=$1 AND step_major=$2 AND step_minor=$3',
+      values: [req.params.storyId, req.params.step_major,req.params.step_minor]
+    }
 
-  //   pool.query(query,
-  //     (error, results) => {
-  //      if (error) {
-  //       throw error
-  //     }
-  //     res.status(200).json(results.rows)
-  //   })
+    pool.query(query,
+      (error, results) => {
+       if (error) {
+        throw error
+      }
+      res.status(200).json(results.rows)
+    })
 
-  // }
+  }
 
 
 const getImage = (request, response) => {
 
 
-
+    if(!request.params.imageId){
+      request.params.imageId = 1
+    }
     var query = {
       name: "get-image-file-path",
-      text: "SELECT image FROM steps WHERE storyID = $1 AND step_major = $2 AND step_minor = $3 LIMIT 1",
-      values: [request.params.storyId, request.params.step_major,request.params.step_minor]
+      text: "SELECT image[$4] FROM steps WHERE storyID = $1 AND step_major = $2 AND step_minor = $3 LIMIT 1",
+      values: [request.params.storyId, request.params.step_major,request.params.step_minor, request.params.imageId]
     }
 
     pool.query(query,
@@ -126,7 +128,10 @@ const getImage = (request, response) => {
         throw error
       }
       image_path = results.rows[0].image
-      response.sendFile(image_path, { root: __dirname + "/../"});
+      if(!image_path){response.status(400).send("nonexistent image id")}else{
+              response.sendFile(image_path, { root: __dirname + "/../"});        
+      }
+
     });
 
 
@@ -205,7 +210,8 @@ const getImage = (request, response) => {
     // console.log(filepath)
     var query = {
       name: "store-image-file-path",
-      text: "UPDATE steps SET image = $4 WHERE storyID = $1 AND step_major = $2 AND step_minor = $3",
+      // UPDATE table SET array_field = array_field || '{"new item"}' WHERE ...
+      text: 'UPDATE steps SET image = image || ARRAY[$4] WHERE storyID = $1 AND step_major = $2 AND step_minor = $3',
       values: [request.params.storyId, request.params.step_major,request.params.step_minor,filepath]
     }
 
