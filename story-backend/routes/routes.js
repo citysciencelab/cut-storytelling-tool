@@ -11,7 +11,7 @@ module.exports = router;
 // GET
 router.get('/story', controllers.getStories)
 router.get('/story/:storyId', controllers.getStoryStructure)
-router.get('/step/', controllers.getSteps)
+// router.get('/step/', controllers.getSteps)
 router.get('/step/:storyId/:step_major/:step_minor/image', controllers.getImage)
 router.get('/step/:storyId/:step_major/:step_minor/html', controllers.getHtml)
 
