@@ -14,12 +14,14 @@ router.get('/getStories', (req, res) => {
         stories: [
             {
                 id: 1,
-                name: "FairCare Verkehr",
+                title: "FairCare Verkehr",
+                subtitle: "A story about unpaid careworkers",
                 category: ["mobility"]
             }, 
             {
                 id: 2,
-                name: "Example story",
+                title: "Example story",
+                subtitle: "A story about statuting an example",
                 category: ["whatever"]
             }
         ]
