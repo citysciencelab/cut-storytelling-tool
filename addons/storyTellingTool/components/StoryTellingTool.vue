@@ -23,6 +23,7 @@ export default {
       storyConfPath: Config.storyConf,
       storyList: {},
       selectedStory: null,
+      storyjson: null
     };
   },
   computed: {
@@ -163,10 +164,15 @@ export default {
      * @returns {void}
      */
     onStorySelected(storyId) {
-        console.log("A story was selected: ID " + storyId);
-        this.selectedStory = storyId;
-        this.storyConfPath = "http://" + constants.backendConfig.url + "story/" + storyId;
-        this.state.storyConf
+      console.log("A story was selected: ID " + storyId);
+      this.selectedStory = storyId;
+      this.storyConfPath = "http://" + constants.backendConfig.url + "story/" + storyId;
+
+      //axios
+       // .get(this.storyConfPath)
+       // .then((response) => (this.storyjson = response.data));
+
+      //this.setStoryConf(this.storyjson);
     },
   },
 };
@@ -211,7 +217,7 @@ export default {
                 <v-card-subtitle v-text="item.subtitle"></v-card-subtitle>
 
                 <v-card-actions>
-                  <v-btn class="ml-2 mt-5" text @click="onStorySelected(item.id), toggle">
+                  <v-btn class="ml-2 mt-5" text @click="onStorySelected(item.id), toggle()">
                     Story starten
                   </v-btn>
                 </v-card-actions>

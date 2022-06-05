@@ -80,7 +80,9 @@ export default {
     },
     mounted() {
         if (this.storyConfPath) {
+            console.log(this.storyConfPath);
             fetchDataFromUrl(this.storyConfPath).then(loadedStoryConf => {
+                console.log(loadedStoryConf);
                 this.setStoryConf(loadedStoryConf);
                 this.loadStep();
             });
@@ -217,7 +219,7 @@ export default {
                 // Load HTML file for the story step
                 fetchDataFromUrl(
                     "./assets/" +
-                        this.storyConf.htmlFolder +
+                        this.storyConf.htmlFolder + 
                         "/" +
                         this.currentStep.htmlFile
                 ).then(data => (this.loadedContent = data));
