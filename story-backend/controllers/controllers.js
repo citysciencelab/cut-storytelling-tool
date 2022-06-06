@@ -196,11 +196,7 @@ const getImage = (request, response) => {
        if (error) {
         throw error
       }
-
-      // if successfully inserted, return latest story ID
-
       
-      console.log(results)
       response.status(201).send({success:true,storyID: results.rows[0].max})
         
       })
@@ -210,6 +206,8 @@ const getImage = (request, response) => {
 
 
   const createStep = (request, response) => {
+    console.log("create step call received")
+    console.log(request);
 
     var query = {
       name: 'new-step',
@@ -222,6 +220,7 @@ const getImage = (request, response) => {
        if (error) {
         throw error
       }
+      console.log(response);
       response.status(201).send(`step added`)
     })
   }
