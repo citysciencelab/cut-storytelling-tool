@@ -107,6 +107,15 @@ export default {
         .then((response) => (this.storyList = response.data));
     },
 
+     /**
+     * Sets the mode back to the overview
+     * @param {void}  
+     * @returns {void}
+     */
+    returnToOverview() {
+      this.mode = null;
+    },
+
     /**
      * Closes this tool window by setting active to false
      * @returns {void}
@@ -196,6 +205,12 @@ export default {
     >
         <template #toolBody>
             <v-app v-if="active" id="tool-storyTellingTool" :class="mode">
+
+                <v-btn class="ml-2 mt-5" text @click="returnToOverview()" elevation="2" v-if="mode">
+                  <v-icon left> return </v-icon>
+                    Zurück zur Übersicht
+                </v-btn>
+
                 <v-item-group
                     v-if="!mode"
                     :value="mode"
