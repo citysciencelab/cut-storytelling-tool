@@ -97,6 +97,17 @@ export default {
     ...mapActions("Tools/StoryTellingTool", Object.keys(actions)),
 
     /**
+     * Refreshes the StoryList
+     * @param {void}  The
+     * @returns {void}
+     */
+    refreshStoryList() {
+      axios
+        .get("http://" + constants.backendConfig.url + "story")
+        .then((response) => (this.storyList = response.data));
+    },
+
+    /**
      * Closes this tool window by setting active to false
      * @returns {void}
      */
@@ -157,9 +168,9 @@ export default {
     onStorySelected(storyId) {
       console.log("A story was selected: ID " + storyId);
       this.selectedStory = storyId;
-      this.storyConfPath = "http://" + constants.backendConfig.url + "story/" + storyId;
+      this.storyConfPath =
+        "http://" + constants.backendConfig.url + "story/" + storyId;
       this.mode = "play";
-
 
       //axios
       // .get(this.storyConfPath)
@@ -190,6 +201,12 @@ export default {
                     :value="mode"
                     id="tool-storyTellingTool-modeSelection"
                 >
+                <v-btn class="ml-2 mt-5" text @click="refreshStoryList()" elevation="2">
+                <v-icon left>
+                  refresh
+               </v-icon>
+                  Stories aktualisieren
+                </v-btn>
 
                     <v-col
                         v-for="(item, i) in storyList"
