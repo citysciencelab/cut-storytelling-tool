@@ -175,13 +175,36 @@ const getImage = (request, response) => {
       text: 'INSERT INTO stories (name, category, story_json) VALUES ($1, $2, $3)',
       values: [request.body.name, request.body.category, request.body.story_json],
     }
+    const query_latest_story_id = {
+      name: 'latest-story-id',
+      text: 'SELECT max(storyID) FROM stories',
+      values: [],
+    }
 
     pool.query(query_new_story,
       (error, results) => {
        if (error) {
         throw error
       }
-      response.status(201).send(`story added`)
+
+      // if successfully inserted, return latest story ID
+
+      var storyID = null;
+      
+      pool.query(query_latest_story_id,
+      (error, results) => {
+       if (error) {
+        throw error
+      }
+
+      // if successfully inserted, return latest story ID
+
+      
+      console.log(results)
+      response.status(201).send({success:true,storyID: results.rows[0].max})
+        
+      })
+
     })
   }
 
