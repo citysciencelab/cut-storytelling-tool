@@ -2,13 +2,16 @@
   "Portalconfig": {
     "treeType": "light",
     "mapView": {
+      "startCenter": [566537.98, 5932926.34],
       "extent": [
-        442800,
-        5809000,
-        738000,
-        6102200
+        563049.07,
+        5930074.19,
+        570069.12,
+        5935712.26
       ],
-      "startResolution": 5.2916638091682096
+      "startZoomLevel": 4,
+      "backgroundImage" : "./assets/img/white.jpg"
+      
     },
     "searchBar": {
       "minChars": 3,
@@ -88,7 +91,7 @@
             "13656"
           ],
           "name": "Geobasiskarten (grau-blau)",
-          "visibility": true,
+          "visibility": false,
           "isVisibleInTree": false,
           "legend": false
         }
@@ -96,6 +99,20 @@
     },
     "Fachdaten": {
       "Layer": [
+        {
+          "id": "20220609",
+          "typ": "StaticImage",
+          "url": "./assets/img/gameboard.png",
+          "name": "Gameboard",
+          "visibility": true,
+          "extent": [
+            563049.07,
+            5930074.19,
+            570069.12,
+            5935712.26
+          ]
+      },
+        
         {
           "id": "2425",
           "name": "Stadtteile",
