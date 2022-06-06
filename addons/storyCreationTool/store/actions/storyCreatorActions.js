@@ -228,14 +228,46 @@ function postStoryHtmlContent(htmlContent, storyID){
     //     );
 }
 
-function postStoryImage(image, stepReference, storyID){
-    console.log("post story image...");
+
+
+// uploading images requires a bunch of stuff, here's the helper functions:
+// partially from: https://gist.github.com/ibreathebsb/a104a9297d5df4c8ae944a4ed149bcf1
+
+const dataURLtoFile = (dataurl, filename) => {
+  const arr = dataurl.split(',')
+  const mime = arr[0].match(/:(.*?);/)[1]
+  const bstr = atob(arr[1])
+  let n = bstr.length
+  const u8arr = new Uint8Array(n)
+  while (n) {
+    u8arr[n - 1] = bstr.charCodeAt(n - 1)
+    n -= 1 // to make eslint happy
+  }
+  return new File([u8arr], filename, { type: mime })
+}
+
+
+
+
+
+function postStoryImage(image_dataURL, stepReference, storyID){
     var step = parseStepReference(stepReference);
     var query_url = 'http://' + constants.backendConfig.url + "add/step/"+storyID+"/"+step[0]+"/"+step[1]+"/image";
     
-     axios.post(query_url, {
-        image
-    });
+    // generate file from base64 string
+    const file = dataURLtoFile(image_dataURL)
+    // put file into form data
+    const data = new FormData()
+    data.append('img', file, file.name)
+
+    // now upload
+    const config = {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }
+    axios.post(query_url, data, config).then(response => {
+        console.log(response.data)
+        })
+
 
 }
 
@@ -281,19 +313,36 @@ function postStoryImage(image, stepReference, storyID){
     .then(
            () => {
             for (const htmlContent of htmlContents) {
-                postStoryHtmlContent(htmlContent,storyID);
-                var images = state.htmlContentsImages[stepReference] || [];
-                var stepReference = htmlContent[0];
-                console.log("start image loop..");
+                
+                // postStoryHtmlContent(htmlContent,storyID);
+                const a = "test";
+                const stepReference = htmlContent[0];
+                const images = Object.entries(state.htmlContentsImages);
                 console.log(images);
-                console.log(images.entries);
-                console.log(images.entries());
+                for(const image of images){
+                    // console.log(image);
+                    var step = image[0];
+                    // console.log(Object.entries(image[1][0]));
+                    // console.log(Object.entries(image[1][0])[0]);
+                    var image_data = Object.entries(image[1][0])[0][1]; // i dont understand what objeckt.entries does. This worked somehow. pray with me for the edge cases 
+                    postStoryImage(image_data, step, storyID);
+                }
+                      // images = state.htmlContentsImages[stepReference] || [];
+                // console.log(stepReference);
+                // console.log(stepReference);
+                // var stepReference = htmlContent[0];
+                // const images = state.htmlContentsImages[stepReference] || [];                
+                // console.log("start image loop..");
+                // console.log(images);
+                // console.log(images.entries);
+                // console.log(images.entries());
 
             // HIER:
             // for (const [imageIndex, image] of images.entries()) {
-                
-            //         const imageNumber = imageIndex + 1;
-            //         postStoryImage(image.dataUrl.replace(/data:.+?base64,/, ""), stepReference,storyID);
+                // console.log('test');
+            //     console.log(imageIndex);
+            // //         const imageNumber = imageIndex + 1;
+            // //         postStoryImage(image.dataUrl.replace(/data:.+?base64,/, ""), stepReference,storyID);
                 
             // }
 

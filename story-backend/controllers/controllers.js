@@ -34,7 +34,7 @@ const imageUpload = multer({
         );
     }
   }
-  ), 
+  )
 });
 
 
@@ -169,7 +169,7 @@ const getImage = (request, response) => {
   const createStory = (request, response) => {
 
     const { name, category } = request.body
-
+    console.log(request.body);
     const query_new_story = {
       name: 'new-story',
       text: 'INSERT INTO stories (name, category, story_json) VALUES ($1, $2, $3)',
@@ -206,8 +206,6 @@ const getImage = (request, response) => {
 
 
   const createStep = (request, response) => {
-    console.log("create step call received")
-    console.log(request);
 
     var query = {
       name: 'new-step',
@@ -220,7 +218,6 @@ const getImage = (request, response) => {
        if (error) {
         throw error
       }
-      console.log(response);
       response.status(201).send(`step added`)
     })
   }
