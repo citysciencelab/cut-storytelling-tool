@@ -1,3 +1,4 @@
+// MMMMMMMMMMMM here ist the state! html contents etc. while editing the story
 import {emptyStoryConf} from "./constantsStoryCreationTool";
 
 /**
