@@ -281,7 +281,7 @@ function postStoryImage(image, stepReference, storyID){
     .then(
            () => {
             for (const htmlContent of htmlContents) {
-                // postStoryHtmlContent(htmlContent,storyID);
+                postStoryHtmlContent(htmlContent,storyID);
                 var images = state.htmlContentsImages[stepReference] || [];
                 var stepReference = htmlContent[0];
                 console.log("start image loop..");
