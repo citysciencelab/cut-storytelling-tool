@@ -169,7 +169,7 @@ const getImage = (request, response) => {
   const createStory = (request, response) => {
 
     const { name, category } = request.body
-    console.log(request.body);
+
     const query_new_story = {
       name: 'new-story',
       text: 'INSERT INTO stories (name, category, story_json) VALUES ($1, $2, $3)',
