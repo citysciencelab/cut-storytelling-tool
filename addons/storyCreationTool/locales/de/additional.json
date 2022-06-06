@@ -56,7 +56,8 @@
           "submitAddStep": "Schritt zur Story hinzufügen",
           "submitEditStep": "Schritt speichern",
           "previewStory": "Vorschau",
-          "downloadStory": "Story herunterladen"
+          "downloadStory": "Story herunterladen",
+          "uploadStory": "Story abschicken"
         },
         "newChapter": "Neues Kapitel"
       }

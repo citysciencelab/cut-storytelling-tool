@@ -171,6 +171,18 @@ export default {
                         )
                     }}
                 </button>
+                <button
+                    type="button"
+                    class="btn btn-lgv-grey"
+                    @click="uploadStoryFiles"
+                >
+                    {{
+                        $t(
+                            "additional:modules.tools.storyCreationTool.button.uploadStory"
+                        )
+                    }}
+                </button>
+
             </div>
         </form>
     </div>

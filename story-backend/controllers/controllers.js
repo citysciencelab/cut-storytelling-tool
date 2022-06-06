@@ -153,7 +153,8 @@ const getImage = (request, response) => {
        if (error) {
         throw error
       }
-      response.status(201).send(results.rows[0].html)
+      //response.status(201).send(results.rows[0].html)
+      response.status(201).send(results.rows[0]) // html throws errors if there are no html files registered for a step
     });
 
 
