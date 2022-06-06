@@ -217,9 +217,6 @@ function parseStepReference(stepReference){
 function postStoryHtmlContent(htmlContent, storyID){
     var step = parseStepReference(htmlContent[0]);
     var query_url = 'http://' + constants.backendConfig.url + "add/step/"+storyID+"/"+step[0]+"/"+step[1];
-    console.log("query_url:");
-    console.log(query_url);
-    console.log(htmlContent);
      axios.post(query_url, {
         html: htmlContent[1]
     });
@@ -231,20 +228,15 @@ function postStoryHtmlContent(htmlContent, storyID){
     //     );
 }
 
-function postStoryImage(image, storyID, step_major, step_minor){
-    console.log("post story html!");
-    console.log(constants.backendConfig.url);
-    var query_url = 'http://' + constants.backendConfig.url + "add/step/"+storyID+"/"+step_major+"/"+step_minor+"/"+"image";
-
+function postStoryImage(image, stepReference, storyID){
+    console.log("post story image...");
+    var step = parseStepReference(stepReference);
+    var query_url = 'http://' + constants.backendConfig.url + "add/step/"+storyID+"/"+step[0]+"/"+step[1]+"/image";
+    
      axios.post(query_url, {
         image
-    })
-    .then((response)=> {
-        console.log(response);
-    })
-    .then(
+    });
 
-        )
 }
 
 
@@ -273,7 +265,7 @@ function postStoryImage(image, storyID, step_major, step_minor){
         story_json: storyConf
     })
 
-    // Steo 1 - get current storyID back from server
+    // Step 1 - get current storyID back from server
     .then((response)=> {
         // store story ID to state
         commit("setStoryConf", {
@@ -285,11 +277,29 @@ function postStoryImage(image, storyID, step_major, step_minor){
     }).then(
     () => {console.log('ok')})
 
-    // Step 3 - upload each step's html content
+    // Step 2 - upload each step's html content
     .then(
            () => {
             for (const htmlContent of htmlContents) {
                 postStoryHtmlContent(htmlContent,storyID);
+                var images = state.htmlContentsImages[stepReference] || [];
+                var stepReference = htmlContent[0];
+                console.log("start image loop..");
+                console.log(images);
+                console.log(images.entries);
+                console.log(images.entries());
+
+            // HIER:
+            // for (const [imageIndex, image] of images.entries()) {
+                
+            //         const imageNumber = imageIndex + 1;
+            //         postStoryImage(image.dataUrl.replace(/data:.+?base64,/, ""), stepReference,storyID);
+                
+            // }
+
+
+                
+
             }
             
         }
