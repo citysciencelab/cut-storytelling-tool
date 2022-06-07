@@ -31,7 +31,7 @@ services:
       - traefik.http.routers.story-api.entrypoints=https
       - traefik.http.routers.story-api.tls=true
       - traefik.http.routers.story-api.tls.certresolver=lets-encr
-      - traefik.http.routers.story-api.rule=Host('story-api.cut.hcu-hamburg.de')
+      - traefik.http.routers.story-api.rule=Host(`story-api.cut.hcu-hamburg.de`)
     #ports:
     #  - '8080:8080'
 
@@ -48,7 +48,7 @@ services:
       - traefik.http.routers.story-frontend.entrypoints=https
       - traefik.http.routers.story-frontend.tls=true
       - traefik.http.routers.story-frontend.tls.certresolver=lets-encr
-      - traefik.http.routers.story-frontend.rule=Host('republica.cut.hcu-hamburg.de')
+      - traefik.http.routers.story-frontend.rule=Host(`republica.cut.hcu-hamburg.de`)
 
     #ports: // No port necessary for traefik setup
     #  - '80:80'
