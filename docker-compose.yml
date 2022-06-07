@@ -60,4 +60,5 @@ services:
 networks:
   proxy:
     external: true
-  
+  story-db:
+    external: true
