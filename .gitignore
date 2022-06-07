@@ -53,7 +53,7 @@ npm-debug.log
 !/portal/masterCustom
 !/portal/masterDefault
 !/portal/data-drawing-tool
-!/portal/mobility-data
+!/portal/urban-digitope
 
 # Docker build
 .DS_Store
