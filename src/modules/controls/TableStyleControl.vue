@@ -89,15 +89,15 @@ export default {
         margin: 0 0 6px;
         padding: 6px 0 0;
 
-        color: #808080;
+        color: $dark_grey;
         font-size: 17px;
 
         border-style: solid;
-        border-color: #C0C0C0;
+        border-color: $light_grey;
         border-width: 1px 0 0 0;
 
         > a {
-            color: #808080;
+            color: $dark_grey;
         }
 
         /* position icon in center of button */

@@ -111,14 +111,35 @@ export default {
     },
     /**
      * Creates the olcesium  3D map.
-     * @param {Object} param store context
-     * @param {Object} param.getters the getter
      * @fires Core#RadioRequestMapGetMap
      * @returns {OLCesium} - ol cesium map.
      */
-    createMap3D ({getters}) {
+    createMap3D () {
+        const backwardsConfigCesiumParameter = {...Config?.cesiumParameter};
+
+        /**
+         * @deprecated in the next major-release!
+         * Backward compatibility: globe parameters are set in the object globe now
+         */
+        if (!backwardsConfigCesiumParameter.globe) {
+            backwardsConfigCesiumParameter.globe = {};
+        }
+        if (backwardsConfigCesiumParameter.enableLighting) {
+            backwardsConfigCesiumParameter.globe.enableLighting = backwardsConfigCesiumParameter.enableLighting;
+            console.warn("The attribute 'cesiumParameter.enableLighting' is deprecated. Please use 'cesiumParameter.globe.enableLighting'!");
+        }
+        if (backwardsConfigCesiumParameter.maximumScreenSpaceError) {
+            backwardsConfigCesiumParameter.globe.maximumScreenSpaceError = backwardsConfigCesiumParameter.maximumScreenSpaceError;
+            console.warn("The attribute 'cesiumParameter.maximumScreenSpaceError' is deprecated. Please use 'cesiumParameter.globe.maximumScreenSpaceError'!");
+        }
+        if (backwardsConfigCesiumParameter.tileCacheSize) {
+            backwardsConfigCesiumParameter.globe.tileCacheSize = backwardsConfigCesiumParameter.tileCacheSize;
+            console.warn("The attribute 'cesiumParameter.tileCacheSize' is deprecated. Please use 'cesiumParameter.globe.tileCacheSize'!");
+        }
+
         return api.map.createMap({
-            map2D: getters.get2DMap,
+            cesiumParameter: backwardsConfigCesiumParameter,
+            map2D: mapCollection.getMap("2D"),
             shadowTime: function () {
                 return this.time || Cesium.JulianDate.fromDate(new Date());
             }

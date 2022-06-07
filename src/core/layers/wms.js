@@ -1,7 +1,6 @@
 import {wms} from "@masterportal/masterportalapi";
 import store from "../../app-store";
 import Layer from "./layer";
-import mapCollection from "../../core/maps/mapCollection.js";
 import * as bridge from "./RadioBridge.js";
 /**
  * Creates a layer of type WMS.
@@ -187,5 +186,5 @@ WMSLayer.prototype.getExtent = function () {
     if (this.has("extent")) {
         return this.get("extent");
     }
-    return store.getters["Map/bbox"];
+    return store.getters["Maps/bbox"];
 };

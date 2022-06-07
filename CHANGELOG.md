@@ -7,8 +7,38 @@
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 
 ---
-
 ## Unreleased - in development
+### __Breaking Changes__
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+---
+
+## v2.22.0 - 2022-06-01
+### __Breaking Changes__
+#### *Bootstrap upgrade*
+The Bootstrap package was upgraded from 3.4.1 to 5.1.3. Masterportal developments with minor versions than Bootstrap 5.1.3 are no longer supported.
+
+Please check if your own developments e.g. addons are affected and you have to make adaptions to the new bootstrap version.
+Also the configuration of e.g. tools and controls in config.json has changed ("icon" instead of "glyphicon") and have to be updated. See [documentation](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/config.json.md)
+
+The upgrade included following necessary changes:
+
+- Code-Refactoring to the new Bootstrap structure. Here new Bootstrap classes replaced old ones. For examples see the [Masterportal Refactoring](https://bitbucket.org/geowerkstatt-hamburg/masterportal/pull-requests/3406) or [Bootstrap documentation](https://getbootstrap.com/docs/5.0/migration/)
+- Less is no longer supported, instead Sass has to be used for CSS. For examples see also [Masterportal Refactoring](https://bitbucket.org/geowerkstatt-hamburg/masterportal/pull-requests/3406)
+- As icon set [Bootstrap Icons](https://icons.getbootstrap.com/) replaced glyphicons. Also, the configuration in config.json considering elements like tools and controls have changed. The old attribute "glypicon" has changed to "icon" and as values the new bootstrap-icons have to be used.
+
+#### *Change in WFS filter parameter*
+Issue #764: Using parameters in WfsSearch as defined in [Filter Encoding Implementation Specification](https://portal.ogc.org/files/?artifact_id=8340); the default name for the like filter escape character is now `escapeChar` rather than `escape`. This requires a change of configuration for services deviating from the standard implementation, see docs.
+
 ### Added
 - The following NPM packages are added:
     - dependencies:
@@ -18,23 +48,31 @@
 - HochwasserPrint: new print module for Hochwasserrisikomanagement
 - FilterModule:
     - new option optionsLimit for dropdown snippet
+    - new option localeCompareParams for dropdown snippet
     - Parent-child Filter Mode in Dropdown snippet
 - Added possibility to display a legend for a layer of type 'StaticImage'.
+- Util function: localeCompare for sorting with locales
+- Added latest Tag to release-Scripts.
 
 ### Changed
 - `default`-gfiTheme: If a `|`-character is part of the response, every element separated by the character will be displayed in a separate paragraph.
-- Issue #764: Using parameters in WfsSearch as defined in [Filter Encoding Implementation Specification](https://portal.ogc.org/files/?artifact_id=8340); the default name for the like filter escape character is now `escapeChar` rather than `escape`. This requires a change of configuration for services deviating from the standard implementation, see docs.
 - map moved with new structure from src/modules/map to src/core/maps.
+- renamed FilterGeneral to Filter and removed old Filter Files.
 - 3D Mode:
-    - The tool `coordTookit` can now be used in 3D mode again. A height is now also displayed in 3D mode.
+    - The tool `coordTookit` can now be used in 3D mode again. A height and mapMarker is now also displayed in 3D mode.
     - The Measure tool is no longer available in 3D mode.
     - The 3D entities layer is refactored. It is no longer a Backbone-model. The entities layer uses the masterportalAPI's entities layer on creation.
     - Decouple Cesium from window object.
+    - The Get Feature Info (GFI) for WFS features can now be displayed in 3D mode.
+    - Values from the attribute `cesiumParameter` from config.js are now set when instantiating map3D at the 3D scene.
+    - The maps are removed from vuex-state and getters. The mapCollection is a global object now. Use it to get the 2D-map, the 3D-map or the 2D-view.
+- The following NPM packages are updated:
+    - @masterportal/masterportalapi: 2.2.0 to 2.3.0 (This also raised ol to version 6.14.1)
 
 ### Deprecated
 - Switched Icon Library from Glyphicon to Bootstrap Icons. Edited Webpack Config. Updated icon usage in vue components to use scss. Updated icon usage in backbone modules. Edited docs & tests accordingly.
-
-### Removed
+- The attribute `cameraParameter` in config.js is deprecated in the next major release. Please use `cesiumParameter.camera` instead.
+- The attributes: `cesiumParameter.enableLighting`, `cesiumParameter.maximumScreenSpaceError` and `cesiumParameter.tileCacheSize` in config.js are deprecated in the next major release. Please use `cesiumParameter.globe.enableLighting`, `cesiumParameter.globe.maximumScreenSpaceError`, `cesiumParameter.globe.tileCacheSize` instead.
 
 ### Fixed
 - Issue #686: Add logging and documentation regarding manual WMTS configuration's limitations
@@ -52,7 +90,16 @@
     - Static display of markerPoint and markerPolygon from mapMarker is now visible during search, coordinateSearch and coordToolkit.
     - Vector layers like WFS, GeoJSON or OAF (OGC API - Features) are now displayed in 3D mode.
     - The Control Attributions now also works in 3D mode.
+    - Issue #787: Layers in the topic tree under subject data (Fachdaten) are now preserved when switching to 3D mode.
+    - Fixed a bug that occurred when using the share component `GraphicalSelect` after switching from 3D to 2D mode
 - Fix error in menu if GFI Tool is set to isVisibleInMenu = false and no other tool is configured
+- Issue #751: Fix issue when printing groups of WFS layers.
+- Fix withoutGUIDraw
+- Legend now works correctly again, for multiple layers with the same legend reference.
+- Fix map resized when a tool is as sidebar and defined with active:true in config.json
+- Issue #771: Fix issue of WMS-TimeLayer being displayed wrong and without TimeSlider, when set visivle through URLParameter
+- Fix measure tool throws error if used after changed to 3D and back to 2D.
+- Issue #668: Fix broken metadata url control with urlIsVisible.
 
 ---
 
@@ -167,7 +214,7 @@
   - The Extent.default value `"current"` can now be interpreted.
   - The time field of WMS requests is now filled with ISO 8601 timestamps of same precision as Extent specification.
 - It is now possible to configure a loading strategy for a wfs layer (default is bbox).
-- A new filter module called `filterGeneral` to replace of the `filter` module with a more catchy configuration, new features and new UI.
+- A new filter module called `filter` to replace of the `filter` module with a more catchy configuration, new features and new UI.
 
 ### Changed
 -  Default for isFolderSelectable is true. Overwriteable in config.js (globally) oder config.json(folder specific). Applies only for treeType="custom". In treeType="default" the top folders als not selectable and the child folders are selectable.
@@ -277,8 +324,6 @@
 - Issue #655: A parameter "zoomLevel" was added to the WfsSearch tool. This feature was not implemented for WfsSearch, but available in the previously used tool parcelSearch. The field has been added to WfsSearch to work in the same fashion. For this, the ListItem.vue was changed to allow configuration of the zoom level via prop. It defaults to the previously fixed value.
 - Issue #486: WMS GFI can now show responses without tbody.
 - The Vue component `Tool` has been renamed to `ToolTemplate` due to a new linter rule.
-
-### Deprecated
 
 ### Removed
 - The following NPM packages are removed:
@@ -441,8 +486,6 @@
 ### Changed
 - Coding-Conventions: For unittests in Vue (/src/...) the vast majority of test-folders are called "tests", going back to a mutual understanding of folder naming. Please use "tests" for your unit or e2e tests in Vue in the future.
 - Migrated the print Tool from Backbone.js to Vue.js. It is now also possible to create multiple prints in parallel.
-
-### Deprecated
 
 ### Removed
 - src/utils function isArrayOfStrings is removed, use one liner .every(v => typeof v === "string") instead in the future.

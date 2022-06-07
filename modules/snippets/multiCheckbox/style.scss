@@ -1,9 +1,10 @@
+@import "~variables";
 
 .multicheckbox-container {
     padding-left: 10px;
-    color: #808080;
+    color: $dark_grey;
     .checked {
-        color: #003063;
+        color: $dark_blue;
     }
     .multicheckbox {
         margin-bottom: 5px;

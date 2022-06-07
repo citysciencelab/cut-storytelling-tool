@@ -339,15 +339,6 @@
                 "serviceThree": "Servicio 3",
                 "serviceFour": "Servicio 4"
             },
-            "filter": {
-                "result": "Acierto",
-                "results": "Acierto",
-                "zoomOnResults": "Acercar y centrar el acierto",
-                "filter": "-Filtro",
-                "yourSelection": "Su elección: ",
-                "noFilterOptionSelected": "Todavía no se ha seleccionado ningun filtro",
-                "deleteAll":"Borrarlo todo"
-            },
             "pendler": {
                 "animation": {
                     "domicile": "Dirección",

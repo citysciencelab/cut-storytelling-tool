@@ -35,7 +35,7 @@ export default {
         if (rootGetters["Maps/is3D"]) {
             dispatch("deleteFeatures");
             interaction = makeDraw3d(
-                rootGetters["Maps/get3DMap"],
+                mapCollection.getMap("3D"),
                 rootGetters["Maps/projectionCode"],
                 unlistener => commit("addUnlistener", unlistener),
                 rootState._store

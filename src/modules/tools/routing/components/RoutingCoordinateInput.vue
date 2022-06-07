@@ -240,7 +240,7 @@ label {
   margin-bottom: 0;
 }
 .bootstrap-icon.form-control-feedback {
-    color: #777;
+    color: $dark_grey;
     pointer-events: all;
     margin-left: -20px;
     margin-top: 8px;

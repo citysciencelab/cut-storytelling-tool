@@ -19,12 +19,12 @@ import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import ShadowView from "../modules/tools/shadow/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
-import FilterView from "../modules/tools/filter/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
 import {initiateVueI18Next} from "./vueI18Next";
 import {handleUrlParamsBeforeVueMount, readUrlParamEarly} from "../src/utils/parametricUrl/ParametricUrlBridge";
 import {createMaps} from "../src/core/maps/maps.js";
+import mapCollection from "../src/core/maps/mapCollection.js";
 
 /**
  * Vuetify
@@ -62,6 +62,8 @@ let sbconfig,
 if (process.env.NODE_ENV === "development") {
     Vue.config.devtools = true;
 }
+
+global.mapCollection = mapCollection;
 
 Vue.config.productionTip = false;
 
@@ -167,10 +169,6 @@ async function loadApp () {
 
     Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}).forEach(tool => {
         switch (tool.id) {
-            case "filter": {
-                new FilterView({model: tool});
-                break;
-            }
             case "shadow": {
                 new ShadowView({model: tool});
                 break;

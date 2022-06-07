@@ -295,20 +295,19 @@ export default {
 
 <style lang="scss" scoped>
     @import "~variables";
-    $background_color: #FFFFFF;
 
     .sensor-button-container {
         text-align: center;
         .leftButton {
             float: left;
-            background-color: $background_color;
+            background-color: $white;
             padding: 1px 6px;
             outline: none;
             box-shadow: none;
         }
         .rightButton {
             float: right;
-            background-color: $background_color;
+            background-color: $white;
             padding: 1px 6px;
             outline: none;
             box-shadow: none;

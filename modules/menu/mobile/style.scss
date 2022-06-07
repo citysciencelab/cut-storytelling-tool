@@ -1,12 +1,10 @@
-$color_1: black;
-$font_family_1: "MasterPortalFont","Arial Narrow",Arial,sans-serif;
+@import "~variables";
 
 /*staticlink*/
 .mobile {
     max-height: 66vh;
     overflow-y: auto;
     span.title {
-        font-family: $font_family_1;
         font-size: 14px;
         padding-left: 6px;
         vertical-align: text-bottom;
@@ -29,9 +27,8 @@ $font_family_1: "MasterPortalFont","Arial Narrow",Arial,sans-serif;
 }
 .item-settings {
     margin-top: 10px;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid $light_grey;
     padding-top: 8px;
-    font-family: $font_family_1;
     >.form-inline {
         >.form-group {
             >label {
@@ -71,6 +68,6 @@ $font_family_1: "MasterPortalFont","Arial Narrow",Arial,sans-serif;
         }
     }
     a {
-        color: $color_1;
+        color: $black;
     }
 }

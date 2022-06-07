@@ -394,7 +394,7 @@ export default {
     }
     .WMS_example_text {
         margin-top: 10px;
-        color: #777;
+        color: $light_grey;
     }
     #addWMSButton {
         margin-top: 15px;
@@ -402,7 +402,7 @@ export default {
     }
     .addwms_error {
         font-size: 16px;
-        color: #d42132;
+        color: $light_red;
         margin-bottom: 10px;
     }
 </style>

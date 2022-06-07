@@ -3,9 +3,7 @@ import View from "ol/View";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import LayerGroup from "ol/layer/Group";
-import mapCollection from "../../../../../core/maps/mapCollection.js";
 import store from "../../../../../app-store";
-import mapGetters from "../../../store/gettersMap.js";
 import {expect} from "chai";
 
 describe("src/core/maps/actions/actionsMapLayers.js", () => {
@@ -73,7 +71,7 @@ describe("src/core/maps/actions/actionsMapLayers.js", () => {
             store.dispatch("Maps/addLayer", layer2, 1);
             store.dispatch("Maps/addLayer", layer3, 2);
 
-            mapGetters.get2DMap().getLayers().forEach((layer, index) => {
+            mapCollection.getMap("2D").getLayers().forEach((layer, index) => {
                 expect(layer.getZIndex()).equals(zIndexes[index]);
                 expect(layer.get("id")).equals(ids[index]);
             });
@@ -89,7 +87,7 @@ describe("src/core/maps/actions/actionsMapLayers.js", () => {
             store.dispatch("Maps/addLayerToIndex", {layer: layer2, zIndex: 1});
             store.dispatch("Maps/addLayerToIndex", {layer: layer3, zIndex: 2});
 
-            mapGetters.get2DMap().getLayers().forEach((layer, index) => {
+            mapCollection.getMap("2D").getLayers().forEach((layer, index) => {
                 expect(layer.getZIndex()).equals(zIndexes[index]);
                 expect(layer.get("id")).equals(ids[index]);
             });
@@ -106,7 +104,7 @@ describe("src/core/maps/actions/actionsMapLayers.js", () => {
             store.dispatch("Maps/addLayer", layer2, 3);
             store.dispatch("Maps/addLayer", layer3, 2);
 
-            mapGetters.get2DMap().getLayers().forEach((layer, index) => {
+            mapCollection.getMap("2D").getLayers().forEach((layer, index) => {
                 expect(layer.getZIndex()).equals(zIndexes[index]);
                 expect(layer.get("id")).equals(ids[index]);
             });

@@ -181,8 +181,6 @@ export default {
 @import "../../../../../css/mixins.scss";
 @import "~variables";
 
-$color_1: black;
-$background_color_1: #eee;
 
 #tool-layer-slider-player {
     .progress-bar {
@@ -191,10 +189,10 @@ $background_color_1: #eee;
     }
     .progress {
         height: 25px;
-        background-color: $background_color_1;
+        background-color: $light_grey;
     }
     .active-button {
-        background-color: $background_color_1;
+        background-color: $light_grey;
         transition: all .2s ease-in-out;
         &:focus {
             @include primary_action_focus;
@@ -204,7 +202,7 @@ $background_color_1: #eee;
         }
     }
     input[readonly] {
-        color: $color_1;
+        color: $black;
         cursor: not-allowed;
         white-space: nowrap;
         overflow: hidden;

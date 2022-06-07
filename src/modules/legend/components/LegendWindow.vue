@@ -799,12 +799,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
-
-    $color_1: #000000;
-    $color_2: rgb(255, 255, 255);
-    $font_family_2: "MasterPortalFont", sans-serif;
-    $background_color_3: #f2f2f2;
-    $background_color_4: #646262;
+    @import "~variables";
 
     #legend.legend-mobile {
         width: 100%;
@@ -816,7 +811,7 @@ export default {
             max-width:600px;
             right: 0;
             margin: 10px 10px 30px 10px;
-            background-color: #ffffff;
+            background-color: $white;
             z-index: 9999;
         }
         .legend-window-mobile {
@@ -824,7 +819,7 @@ export default {
             width: calc(100% - 20px);
             top: 10px;
             left: 10px;
-            background-color: #ffffff;
+            background-color: $white;
             z-index: 1;
         }
         .legend-title {
@@ -859,7 +854,7 @@ export default {
             .layer-title {
                 padding: 5px;
                 font-weight: bold;
-                background-color: #e7e7e7;
+                background-color: $light_grey;
                 span {
                     vertical-align: -webkit-baseline-middle;
                 }
@@ -875,16 +870,14 @@ export default {
     .legend-window-table {
         position: absolute;
         right: 0;
-        font-family: $font_family_2;
         border-radius: 12px;
-        background-color: $background_color_4;
+        background-color: $dark_grey;
         width: 300px;
         margin: 10px 10px 30px 10px;
         z-index: 9999;
         .legend-title-table {
-            font-family: $font_family_2;
             font-size: 14px;
-            color: $color_2;
+            color: $white;
             padding: 10px;
             cursor: move;
             .close-legend {
@@ -909,16 +902,16 @@ export default {
         .legend-content {
             border-bottom-left-radius: 12px;
             border-bottom-right-radius: 12px;
-            background-color: $background_color_3;
+            background-color: $light_grey;
             .card {
-                background-color: $background_color_3;
+                background-color: $light_grey;
             }
             .layer-title {
                 border-radius: 12px;
                 padding: 5px;
-                color: $color_1;
+                color: $black;
                 font-weight: bold;
-                background-color: #e7e7e7;
+                background-color: $light_grey;
                 span {
                     vertical-align: -webkit-baseline-middle;
                 }
