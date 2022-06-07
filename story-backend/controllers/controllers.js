@@ -1,5 +1,5 @@
 const fs = require('fs');
-
+const uuid = require('uuid');
 
 // usually this file should not be public but hey
 // This info must match the details of a running postgres database. See readme.md for details on DB setup
@@ -29,8 +29,7 @@ const imageUpload = multer({
       cb(
         null,
         new Date().valueOf() + 
-        '_' +
-        file.originalname
+        '_' + uuid.v4()
         );
     }
   }
@@ -227,7 +226,8 @@ const getImage = (request, response) => {
   const addImagePath = (request, response) => {
     console.log("ADD IMAGE PATH")
     const filepath = request.file.path; 
-    // console.log(filepath)
+    console.log(filepath)
+console.log(request.params)
     var query = {
       name: "store-image-file-path",
       // UPDATE table SET array_field = array_field || '{"new item"}' WHERE ...
