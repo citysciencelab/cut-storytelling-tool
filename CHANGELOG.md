@@ -19,7 +19,7 @@
 ### Removed
 
 ### Fixed
-- light grey color in Search and transparency are now dark
+- The light grey color in Search and transparency are now dark
 
 ---
 
