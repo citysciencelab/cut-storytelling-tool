@@ -1,45 +1,37 @@
 const { Date } = require('core-js');
 const express = require('express');
+const path = require('path');
+const controllers = require('../controllers/controllers')
 
 const router = express.Router()
 
 module.exports = router;
 
-//Get by Story ID 
-router.get('/getStories', (req, res) => {
-    
-    // Todo: Connection to the database
-    var data = {
-        fetchDate: Date.now(),
-        stories: [
-            {
-                id: 1,
-                name: "FairCare Verkehr",
-                category: ["mobility"]
-            }, 
-            {
-                id: 2,
-                name: "Example story",
-                category: ["whatever"]
-            }
-        ]
-    }
-    
-    res.send(data)
-})
+
+// GET
+router.get('/story', controllers.getStories)
+router.get('/story/:storyId', controllers.getStoryStructure)
+router.get('/step/:storyId/:step_major/:step_minor/image', controllers.getImage)
+router.get('/step/:storyId/:step_major/:step_minor/image/:imageId', controllers.getImage)
+
+router.get('/step/:storyId/:step_major/:step_minor/html', controllers.getHtml)
 
 
-//Get by Story ID 
-router.get('/story/:storyId', (req, res) => {
-    
-    // Todo: Connection to the database
-    var data = require("../dummyData/"+req.params.storyId+"/story.json")
-    
-    res.send(data)
-})
+// POST
+router.post('/add/story', controllers.createStory)
+router.post('/add/step/:storyId/:step_major/:step_minor', controllers.createStep)
+router.post('/add/step/:storyId/:step_major/:step_minor/image', controllers.imageUpload.single('image'), controllers.addImagePath)
+router.post('/add/step/:storyId/:step_major/:step_minor/html', controllers.addHtml)
 
-//Get Story Steps 
-router.get('/story/:storyId/:stepHTML', (req, res) => {
-        
-    res.sendFile("dummyData/"+req.params.storyId+"/story/"+req.params.stepHTML+".html", {root: "."})
-})
+
+
+// DELETE
+router.delete('/delete/story/:storyId', controllers.deleteStory)
+router.delete('/delete/step/:storyId/', controllers.deleteAllStorySteps)
+router.delete('/delete/step/:storyId/:step_major/', controllers.deleteStepMajor)
+router.delete('/delete/step/:storyId/:step_major/:step_minor', controllers.deleteStepMinor)
+
+
+// DEBUGGING
+
+router.get('/debug/step',controllers.getSteps)
