@@ -13,7 +13,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: stories
     ports:
-      -5432:5432
+      - "5432:5432"
 
   # Expernal API to retrieve aggregated data of the gathered mobility data
   story-api:
