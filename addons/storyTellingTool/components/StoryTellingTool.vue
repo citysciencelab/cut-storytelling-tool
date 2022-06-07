@@ -97,6 +97,26 @@ export default {
     ...mapActions("Tools/StoryTellingTool", Object.keys(actions)),
 
     /**
+     * Refreshes the StoryList
+     * @param {void}  The
+     * @returns {void}
+     */
+    refreshStoryList() {
+      axios
+        .get("http://" + constants.backendConfig.url + "story")
+        .then((response) => (this.storyList = response.data));
+    },
+
+     /**
+     * Sets the mode back to the overview
+     * @param {void}  
+     * @returns {void}
+     */
+    returnToOverview() {
+      this.mode = null;
+    },
+
+    /**
      * Closes this tool window by setting active to false
      * @returns {void}
      */
@@ -157,9 +177,9 @@ export default {
     onStorySelected(storyId) {
       console.log("A story was selected: ID " + storyId);
       this.selectedStory = storyId;
-      this.storyConfPath = "http://" + constants.backendConfig.url + "story/" + storyId;
+      this.storyConfPath =
+        "http://" + constants.backendConfig.url + "story/" + storyId;
       this.mode = "play";
-
 
       //axios
       // .get(this.storyConfPath)
@@ -185,11 +205,23 @@ export default {
     >
         <template #toolBody>
             <v-app v-if="active" id="tool-storyTellingTool" :class="mode">
+
+                <v-btn class="ml-2 mt-5" text @click="returnToOverview()" elevation="2" v-if="mode">
+                  <v-icon left> return </v-icon>
+                    Zurück zur Übersicht
+                </v-btn>
+
                 <v-item-group
                     v-if="!mode"
                     :value="mode"
                     id="tool-storyTellingTool-modeSelection"
                 >
+                <v-btn class="ml-2 mt-5" text @click="refreshStoryList()" elevation="2">
+                <v-icon left>
+                  refresh
+               </v-icon>
+                  Stories aktualisieren
+                </v-btn>
 
                     <v-col
                         v-for="(item, i) in storyList"

@@ -153,7 +153,8 @@ const getImage = (request, response) => {
        if (error) {
         throw error
       }
-      response.status(201).send(results.rows[0].html)
+      //response.status(201).send(results.rows[0].html)
+      response.status(201).send(results.rows[0]) // html throws errors if there are no html files registered for a step
     });
 
 
@@ -168,11 +169,16 @@ const getImage = (request, response) => {
   const createStory = (request, response) => {
 
     const { name, category } = request.body
-    console.log(request.body);
+
     const query_new_story = {
       name: 'new-story',
       text: 'INSERT INTO stories (name, category, story_json) VALUES ($1, $2, $3)',
       values: [request.body.name, request.body.category, request.body.story_json],
+    }
+    const query_latest_story_id = {
+      name: 'latest-story-id',
+      text: 'SELECT max(storyID) FROM stories',
+      values: [],
     }
 
     pool.query(query_new_story,
@@ -180,12 +186,28 @@ const getImage = (request, response) => {
        if (error) {
         throw error
       }
-      response.status(201).send(`story added`)
+
+      // if successfully inserted, return latest story ID
+
+      var storyID = null;
+      
+      pool.query(query_latest_story_id,
+      (error, results) => {
+       if (error) {
+        throw error
+      }
+      
+      response.status(201).send({success:true,storyID: results.rows[0].max})
+        
+      })
+
     })
   }
 
 
   const createStep = (request, response) => {
+    console.log("create step call received")
+    console.log(request);
 
     var query = {
       name: 'new-step',
@@ -198,6 +220,7 @@ const getImage = (request, response) => {
        if (error) {
         throw error
       }
+      console.log(response);
       response.status(201).send(`step added`)
     })
   }

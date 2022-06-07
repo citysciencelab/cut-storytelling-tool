@@ -56,7 +56,8 @@
           "submitAddStep": "Add Step to Story",
           "submitEditStep": "Save Step",
           "previewStory": "Preview Story",
-          "downloadStory": "Download Story"
+          "downloadStory": "Download Story",
+          "uploadStory": "Upload Story"
         },
         "newChapter": "New Chapter"
       }

@@ -29,12 +29,17 @@ const storyTellingModes = {
         [{color: []}, {background: []}],
         ["link", "image"],
         ["clean"]
-    ];
+    ],
+
+    backendConfig = {
+        url: "localhost:3000/"  //Replace with Docker env variable later
+    };
 
 export {
     storyTellingModes,
     storyTellingModeIcons,
     storyCreationViews,
     emptyStoryConf,
-    htmlEditorToolbar
+    htmlEditorToolbar,
+    backendConfig
 };
