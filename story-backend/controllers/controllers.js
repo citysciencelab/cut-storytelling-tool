@@ -6,7 +6,7 @@ const fs = require('fs');
 const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'me',
-  host: 'postgres-storytelling',
+  host: 'http://postgres-storytelling',
   database: 'stories',
   password: 'password',
   port: 5432,
