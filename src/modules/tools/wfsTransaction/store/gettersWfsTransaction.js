@@ -10,23 +10,23 @@ const getters = {
             line: {
                 available: false,
                 caption: "common:modules.tools.wfsTransaction.interactionSelect.line",
-                icon: ""
+                icon: "bi-slash-lg"
             },
             point: {
                 available: false,
                 caption: "common:modules.tools.wfsTransaction.interactionSelect.point",
-                icon: ""
+                icon: "bi-record-circle"
             },
             polygon: {
                 available: false,
                 caption: "common:modules.tools.wfsTransaction.interactionSelect.polygon",
-                icon: ""
+                icon: "bi-hexagon-fill"
             },
             edit: {
-                icon: ""
+                icon: "bi-pencil-square"
             },
             delete: {
-                icon: ""
+                icon: "bi-trash"
             }
         };
 
