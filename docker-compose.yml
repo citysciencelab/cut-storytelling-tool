@@ -23,7 +23,7 @@ services:
       dockerfile: story-backend/Dockerfile
     restart: always
     depends_on:
-      - postgres
+      - postgres-storytelling
     networks:
       - proxy
     labels:
