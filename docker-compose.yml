@@ -12,6 +12,10 @@ services:
       POSTGRES_USER: me
       POSTGRES_PASSWORD: password
       POSTGRES_DB: stories
+    networks:
+      - story-db
+    ports:
+      - '5432:5432'
 
   # Expernal API to retrieve aggregated data of the gathered mobility data
   story-api:
@@ -24,6 +28,7 @@ services:
       - postgres-storytelling
     networks:
       - proxy
+      - story-db
     labels:
       - traefik.enable=true
       - traefik.http.routers.story-api.entrypoints=https
