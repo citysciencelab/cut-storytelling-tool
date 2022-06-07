@@ -215,7 +215,6 @@ export default {
 
       // Fetch HTML from the server
       let url =
-        "http://" +
         constants.backendConfig.url +
         "step/" +
         this.storyId +

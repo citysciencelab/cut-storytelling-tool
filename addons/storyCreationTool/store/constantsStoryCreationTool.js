@@ -32,7 +32,7 @@ const storyTellingModes = {
     ],
 
     backendConfig = {
-        url: "localhost:3000/"  //Replace with Docker env variable later
+        url: "https://story-api.cut.hcu-hamburg.de/"
     };
 
 export {

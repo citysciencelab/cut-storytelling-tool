@@ -1,17 +1,19 @@
 version: '3.9'
 services:
   # Postgres database
-  postgres:
-    container_name: postgres_storytelling
+  postgres-storytelling:
+    container_name: postgres-storytelling
     image: postgres:10.4
     volumes:
       - ./postgresdata:/var/lib/postgresql/data
       - ./story-backend/db/setup/dbinit.sql:/docker-entrypoint-initdb.d/dbinit.sql
     restart: always
     environment:
-      POSTGRES_USER: stories
-      POSTGRES_PASSWORD: hECJFh7*th
-      POSTGRES_DB: mobility-db
+      POSTGRES_USER: me
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: stories
+    ports:
+      -5432:5432
 
   # Expernal API to retrieve aggregated data of the gathered mobility data
   story-api:
@@ -39,8 +41,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        API_BASE_URL: http://localhost:8080
     networks:
       - proxy
     labels:
