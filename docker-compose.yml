@@ -32,6 +32,7 @@ services:
       - traefik.http.routers.story-api.tls=true
       - traefik.http.routers.story-api.tls.certresolver=lets-encr
       - traefik.http.routers.story-api.rule=Host(`story-api.cut.hcu-hamburg.de`)
+      - traefik.http.services.story-api.loadbalancer.server.port=3000
     #ports:
     #  - '8080:8080'
 
