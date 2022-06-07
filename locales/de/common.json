@@ -821,7 +821,7 @@
                         "discard": "Verwerfen",
                         "save": "Speichern"
                     },
-                    "featuresProperties": {
+                    "featureProperties": {
                         "annotation": "Bemerkung",
                         "date": "Datum",
                         "name": "Name",

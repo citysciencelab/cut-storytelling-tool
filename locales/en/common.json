@@ -821,7 +821,7 @@
                         "discard": "Discard",
                         "save": "Save"
                     },
-                    "featuresProperties": {
+                    "featureProperties": {
                         "annotation": "Annotation",
                         "date": "Date",
                         "name": "Name",

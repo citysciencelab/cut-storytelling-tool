@@ -16,18 +16,25 @@
                     <select
                         id="tool-wfsTransaction-layerSelect"
                         class="form-select"
+                        :disabled="currentLayerIndex === -1"
                         @change="layerChanged($event.target.options.selectedIndex)"
                     >
                         <option
-                            v-for="name of layerNames"
-                            :key="name"
+                            v-for="(layer, index) of layerInformation"
+                            :key="layer.id"
+                            :selected="index === currentLayerIndex"
                         >
-                            {{ $t(name) }}
+                            {{ $t(layer.name) }}
                         </option>
                     </select>
                 </div>
+                <template v-if="typeof featureProperties === 'string'">
+                    <div id="tool-wfsTransaction-layerFailure">
+                        {{ $t(featureProperties) }}
+                    </div>
+                </template>
                 <div
-                    v-if="showInteractionsButtons"
+                    v-else-if="showInteractionsButtons"
                     id="tool-wfsTransaction-interactionSelect-container"
                 >
                     <template v-for="(config, key) in currentInteractionConfig">
@@ -43,31 +50,36 @@
                 <template v-else>
                     <hr>
                     <form id="tool-wfsTransaction-form">
-                        <template v-for="property of featuresProperties">
-                            <label
-                                :key="`label-${property.key}`"
-                                :for="`tool-wfsTransaction-form-input-${property.key}`"
-                                class="form-label"
-                            >
-                                {{ $t(property.label) }}
-                            </label>
-                            <input
-                                :id="`tool-wfsTransaction-form-input-${property.key}`"
-                                :key="`input-${property.key}`"
-                                class="form-control"
-                            >
+                        <template v-for="property of featureProperties">
+                            <template v-if="property.type !== 'geometry'">
+                                <label
+                                    :key="`${property.key}-label`"
+                                    :for="`tool-wfsTransaction-form-input-${property.key}`"
+                                    class="form-label"
+                                >
+                                    {{ $t(property.label) }}
+                                </label>
+                                <input
+                                    :id="`tool-wfsTransaction-form-input-${property.key}`"
+                                    :key="`${property.key}-input`"
+                                    class="form-control"
+                                    :type="getInputType(property.type)"
+                                    :required="property.required"
+                                >
+                            </template>
                         </template>
+                        <div id="tool-wfsTransaction-form-buttons">
+                            <SimpleButton
+                                :interaction="discard"
+                                caption="common:modules.tools.wfsTransaction.form.buttons.discard"
+                            />
+                            <SimpleButton
+                                :interaction="save"
+                                caption="common:modules.tools.wfsTransaction.form.buttons.save"
+                                type="submit"
+                            />
+                        </div>
                     </form>
-                    <div id="tool-wfsTransaction-form-buttons">
-                        <SimpleButton
-                            :interaction="discard"
-                            caption="common:modules.tools.wfsTransaction.form.buttons.discard"
-                        />
-                        <SimpleButton
-                            :interaction="save"
-                            caption="common:modules.tools.wfsTransaction.form.buttons.save"
-                        />
-                    </div>
                 </template>
             </div>
         </template>
@@ -75,7 +87,7 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import prepareInteractions from "../utils/prepareInteractions";
 import ToolTemplate from "../../ToolTemplate.vue";
 import SimpleButton from "../../../../share-components/SimpleButton.vue";
@@ -83,18 +95,32 @@ import SimpleButton from "../../../../share-components/SimpleButton.vue";
 export default {
     name: "WfsTransaction",
     components: {SimpleButton, ToolTemplate},
-    data: () => ({layerNames: []}),
     computed: {
-        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "featuresProperties", "layerIds", "selectedInteraction", "showInteractionsButtons", "active", "icon", "name"]),
+        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "currentLayerIndex", "featureProperties", "layerInformation", "selectedInteraction", "showInteractionsButtons", "active", "icon", "name"]),
         ...mapGetters("Maps", ["getLayerById"])
     },
+    watch: {
+        active (val) {
+            this.setActive(val);
+        }
+    },
     created () {
-        this.layerNames = this.layerIds.map(layerId => this.getLayerById({layerId}).values_.name);
+        this.$on("close", this.close);
     },
     methods: {
         ...mapMutations("Tools/WfsTransaction", ["setCurrentLayerIndex", "setSelectedInteraction"]),
+        ...mapActions("Tools/WfsTransaction", ["setActive", "setFeatureProperties"]),
+        close () {
+            this.setActive(false);
+            const model = Radio.request("ModelList", "getModelByAttributes", {id: "wfsTransaction"});
+
+            if (model) {
+                model.set("isActive", false);
+            }
+        },
         layerChanged (index) {
             this.setCurrentLayerIndex(index);
+            this.setFeatureProperties();
             this.setSelectedInteraction(null);
             // TODO(roehlipa): If formular open, deactivate and remove all stuff from map (should also happen on close, save and discard)
         },
@@ -107,8 +133,24 @@ export default {
             this.setSelectedInteraction(null);
         },
         save () {
+            // TODO(roehlipa): Form validation
             console.warn("You saved!");
             this.setSelectedInteraction(null);
+        },
+        getInputType (type) {
+            if (type === "string") {
+                return "text";
+            }
+            if (type === "integer" || type === "int" || type === "decimal") {
+                return "number";
+            }
+            if (type === "boolean") {
+                return "checkbox";
+            }
+            if (type === "date") {
+                return "date";
+            }
+            return "";
         }
     }
 };
@@ -137,6 +179,12 @@ $grid-gap: 15px;
         }
     }
 
+    #tool-wfsTransaction-layerFailure {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+    }
+
     #tool-wfsTransaction-interactionSelect-container {
         display: flex;
         justify-content: space-between;
@@ -156,11 +204,17 @@ $grid-gap: 15px;
         display: grid;
         grid-template-columns: 10em 30em;
         grid-row-gap: calc(#{$grid-gap} / 2);
+
+        label {
+            align-self: center;
+            margin: 0;
+        }
     }
 
     #tool-wfsTransaction-form-buttons {
         display: grid;
         grid-template-columns: repeat(2, 20em);
+        margin-top: calc(#{$grid-gap} / 2);
 
         button:first-child {
             margin-right: calc(#{$grid-gap} / 2);

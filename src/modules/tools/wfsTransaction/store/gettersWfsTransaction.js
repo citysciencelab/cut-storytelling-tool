@@ -1,5 +1,5 @@
-import {generateSimpleGetters} from "../../../../app-store/utils/generators";
 import initialState from "./stateWfsTransaction";
+import {generateSimpleGetters} from "../../../../app-store/utils/generators";
 
 const getters = {
     ...generateSimpleGetters(initialState),
