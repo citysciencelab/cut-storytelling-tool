@@ -259,7 +259,7 @@ a {
 }
 .icon-checkbox {
     &:before {
-        color: $dark_blue;
+        color: $primary;
         margin-top: 8px;
         font-weight: 900;
         padding-left: 8px;
@@ -293,7 +293,7 @@ a {
         }
     }
     &:before {
-        color: $dark_blue;
+        color: $primary;
         display: block;
     }
 
@@ -320,7 +320,7 @@ a {
             }
             .just-added {
                 font-weight: bold;
-                color: $dark_blue;
+                color: $primary;
             }
         }
     }
@@ -330,7 +330,7 @@ a {
         border-radius: 10px;
     }
     .layers::-webkit-scrollbar-thumb {
-        background: $dark_blue;
+        background: $primary;
         border-radius: 10px;
         border: 1px solid $light_grey;
     }

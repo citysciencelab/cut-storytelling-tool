@@ -25,12 +25,12 @@
                             background: none;
                         }
                     }
-                    color: $dark_blue;
+                    color: $primary;
                     .next, .prev {
                         color: $dark_grey;
                         &:hover {
                             opacity: 0.8;
-                            background-color: $dark_blue;
+                            background-color: $primary;
                             color: $white;
                             border-radius: 0;
                         }
@@ -40,7 +40,7 @@
             tbody tr {
                 &.week {
                     &:hover {
-                        outline: 2px solid $dark_blue;
+                        outline: 2px solid $primary;
                     }
                 }
                 &.week-active {
@@ -48,7 +48,7 @@
                         outline: 0px;
                     }
                     border-radius: 0;
-                    background-color: $dark_blue;
+                    background-color: $primary;
                     color: $white;
                     td {
                         background-image: none;
@@ -56,7 +56,7 @@
                         &:hover {
                             &:not(.disabled) {
                                 background-color: $white;
-                                color: $dark_blue;
+                                color: $primary;
                             }
                         }
                         &.cw {
@@ -70,22 +70,22 @@
                     color: $dark_grey;
                     &:hover {
                         opacity: 0.8;
-                        background-color: $dark_blue;
+                        background-color: $primary;
                         color: $white;
                     }
                     &.today {
-                        border: 2px solid $dark_blue;
+                        border: 2px solid $primary;
                     }
                     &.active {
                         border-radius: 0;
-                        background-color: $dark_blue;
+                        background-color: $primary;
                         color: $white;
                     }
                     &.disabled {
                         color: $light_grey;
                     }
                     &.cw {
-                        color: $dark_blue;
+                        color: $primary;
                     }
                     &.holiday {
                         font-weight: bold;
@@ -111,12 +111,12 @@
                             background: none;
                         }
                     }
-                    color: $dark_blue;
+                    color: $primary;
                     .next, .prev {
                         color: $dark_grey;
                         &:hover {
                             opacity: 0.8;
-                            background-color: $dark_blue;
+                            background-color: $primary;
                             color: $white;
                             border-radius: 0;
                         }
@@ -128,11 +128,11 @@
                 background: none;
                 color: $dark_grey;
                 &:hover {
-                    color: $dark_blue;
-                    outline: 2px solid $dark_blue;
+                    color: $primary;
+                    outline: 2px solid $primary;
                 }
                 &.active {
-                    background: $dark_blue;
+                    background: $primary;
                     color: $white;
                     outline: none;
                 }

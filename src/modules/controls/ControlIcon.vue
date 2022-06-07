@@ -88,7 +88,7 @@ export default {
     }
 
     .control-icon {
-        background-color: $dark_blue;
+        background-color: $primary;
         color: $white;
 
         pointer-events: all;
@@ -107,14 +107,14 @@ export default {
 
         /* pseudo-class state effects */
         &:hover {
-            background-color: lighten($dark_blue, 10%);;
+            background-color: lighten($primary, 10%);;
         }
         &:focus {
-            background-color: lighten($dark_blue, 15%);
-            outline: 1px solid lighten($dark_blue, 15%);
+            background-color: lighten($primary, 15%);
+            outline: 1px solid lighten($primary, 15%);
         }
         &:active {
-            background-color: lighten($dark_blue, 5%);
+            background-color: lighten($primary, 5%);
         }
 
         &:disabled {

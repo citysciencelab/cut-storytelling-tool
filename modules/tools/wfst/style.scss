@@ -32,7 +32,7 @@
     .record-active:hover {
         color: $white;
         background-color: $light_blue;
-        border-color: $dark_blue;
+        border-color: $primary;
     }
 
     .record-button > .bootstrap-icon > .bi-play-fill, .record-button > .bootstrap-icon > .bi-dash-lg {
@@ -144,12 +144,12 @@
                                 background: none;							
                             }
                         }
-                        color: $dark_blue;
+                        color: $primary;
                         .next, .prev {
                             color: $dark_grey;
                             &:hover {
                                 opacity: 0.8;
-                                background-color: $dark_blue;
+                                background-color: $primary;
                                 color: $white;
                                 border-radius: 0;
                             }
@@ -164,15 +164,15 @@
                             color: $dark_grey;
                             &:hover {
                                 opacity: 0.8;
-                                background-color: $dark_blue;
+                                background-color: $primary;
                                 color: $white;
                             }
                             &.today {
-                                border: 2px solid $dark_blue;
+                                border: 2px solid $primary;
                             }
                             &.active {
                                 border-radius: 0;
-                                background-color: $dark_blue;
+                                background-color: $primary;
                                 color: $white;
                             }
                         }

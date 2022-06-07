@@ -19,10 +19,10 @@
 @mixin primary_action_hover {
     opacity: 1;
     &.btn-select, &:active, &.active, &:checked, &::selection, &.show, &[aria-expanded="true"] {
-        background-color: $dark_blue;
+        background-color: $primary;
         border-radius: .25rem;
     }
-    background-color: lighten($dark_blue, 10%);
+    background-color: lighten($primary, 10%);
     color: $light_grey_contrast;
     cursor: pointer;
 }

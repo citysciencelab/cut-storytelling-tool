@@ -186,7 +186,7 @@ export default {
     }
 
     .vue-tool-content-body .body::-webkit-scrollbar-thumb {
-        background-color: $dark_blue;
+        background-color: $primary;
         border: 6px solid transparent;
         border-radius: 12px;
         background-clip: content-box;
