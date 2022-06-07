@@ -58,7 +58,6 @@
       "mini-css-extract-plugin": "after 0.9.0: several breaking changes https://github.com/webpack-contrib/mini-css-extract-plugin/releases/tag/v1.0.0",
       "rbush": "dependency of vcs-oblique in masterportal and of turf in addons (^2.0.1)",
       "rbush-knn": "dependency of vcs-oblique in masterportal and of turf in addons (^2.0.1)",
-      "sass": "is being refactored with bootstrap 5",
       "webpack": "remains on version 4 until switched to version 5",
       "webpack-cli": "depending on webpack",
       "webpack-dev-server": "depending on webpack",
