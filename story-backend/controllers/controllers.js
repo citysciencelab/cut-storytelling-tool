@@ -72,7 +72,7 @@ const getStoryStructure  = (req, res, next) => {
 
       try{ 
 
-      if(results.rows.length=0){throw new Error('found no story for this ID')}
+      console.log(results.rows)
       res.status(200).json(JSON.parse(results.rows[0].story_json))}  // the json is stored as a string, so we have to parse that string before sending back the data. Would be better to store json properly in the database.
       catch (err){next(err);}
   })
@@ -91,6 +91,17 @@ const getStoryStructure  = (req, res, next) => {
     })
   }
 
+
+
+const getStoriesAllData = (request, response, next) => {
+    pool.query('SELECT * FROM stories', (error, results) => {
+      if (error) {
+        next(error);
+      }
+      try{response.status(200).json(results.rows)}catch(err){next(err)}
+      
+    })
+  }
 
 
   const getStoryStep  = (req, res, next) => {
@@ -372,6 +383,7 @@ console.log(request.params)
   module.exports = {
     imageUpload,
     getStories,
+    getStoriesAllData,
     getStoryStructure,
     getSteps,
     getStoryStep,
