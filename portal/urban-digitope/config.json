@@ -2,28 +2,35 @@
   "Portalconfig": {
     "treeType": "light",
     "mapView": {
-      "startCenter": [566537.98, 5932926.34],
-      "extent": [
-        563049.07,
-        5930074.19,
-        570069.12,
-        5935712.26
+      "startCenter": [
+        566650,
+        5932500
       ],
-      "startZoomLevel": 4,
-      "backgroundImage" : "./assets/img/white.jpg"
-      
-    },
-    "searchBar": {
-      "minChars": 3,
-      "placeholder": "translate#common:modules.searchbar.placeholder.addressTopicParcel",
-      "quickHelp": false,
-      "osm": {
-        "minChars": 3,
-        "serviceId": "10",
-        "limit": 60,
-        "states": "Hamburg, Nordrhein-Westfalen, Niedersachsen",
-        "classes": "place,highway,building,shop,historic,leisure,city,county"
-      }
+      "extent": [
+        563000,
+        5930000,
+        570000,
+        5934944
+      ],
+      "backgroundImage": "./assets/img/white.jpg",
+      "options": [
+        {
+          "resolution": 5.2916638091682096,
+          "scale": 20000,
+          "zoomLevel": 4
+        },
+        {
+          "resolution": 2.6458319045841048,
+          "scale": 10000,
+          "zoomLevel": 5
+        },
+        {
+          "resolution": 1.3229159522920524,
+          "scale": 5000,
+          "zoomLevel": 6
+        }
+      ], 
+      "resolution": 5.2916638091682096
     },
     "menu": {
       "tree": {
@@ -46,32 +53,20 @@
             "name": "translate#additional:modules.tools.storyCreationTool.title",
             "glyphicon": "glyphicon-text-size",
             "active": false
-          },
-          "gfi": {
-            "name": "translate#common:menu.tools.getInfos",
-            "glyphicon": "glyphicon-info-sign",
-            "desktopType": "attached",
-            "active": true
           }
         }
-      },
-      "legend": {
-        "name": "common:modules.legend.name",
-        "glyphicon": "glyphicon-book",
-        "showCollapseAllButton": true,
-        "showLegend": false
       }
     },
     "controls": {
       "orientation3d": false,
       "button3d": false,
-      "toggleMenu": true,
-      "fullScreen": false,
+      "toggleMenu": false,
+      "fullScreen": true,
       "zoom": true,
       "orientation": false,
       "mousePosition": false,
       "attributions": false,
-      "buttonOblique": true
+      "buttonOblique": false
     },
     "singleBaselayer": true
   },
@@ -86,18 +81,29 @@
           "name": "Gameboard",
           "visibility": true,
           "extent": [
-            563049.07,
-            5930074.19,
-            570069.12,
-            5935712.26
+            563000,
+            5930000,
+            570000,
+            5934944
           ]
-      }
+        }
       ]
     },
     "Fachdaten": {
       "Layer": [
-        
-       
+        {
+          "id": "20220610",
+          "typ": "StaticImage",
+          "url": "./assets/img/metro.png",
+          "name": "Metrolinien",
+          "visibility": false,
+          "extent": [
+            563000,
+            5930000,
+            570000,
+            5934944
+          ]
+        }
       ]
     }
   }
