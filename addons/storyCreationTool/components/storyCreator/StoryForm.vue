@@ -7,21 +7,21 @@ import * as constants from "../../store/constantsStoryCreationTool";
 import { getStepReference } from "../../utils/getReference";
 
 export default {
-    name: "StoryForm",
-    components: {},
-    data() {
-        return {
-            constants,
-            getStepReference
-        };
-    },
-    computed: {
-        ...mapGetters("Tools/StoryCreationTool", Object.keys(getters))
-    },
-    methods: {
-        ...mapMutations("Tools/StoryCreationTool", Object.keys(mutations)),
-        ...mapActions("Tools/StoryCreationTool", Object.keys(actions))
-    }
+  name: "StoryForm",
+  components: {},
+  data() {
+    return {
+      constants,
+      getStepReference,
+    };
+  },
+  computed: {
+    ...mapGetters("Tools/StoryCreationTool", Object.keys(getters)),
+  },
+  methods: {
+    ...mapMutations("Tools/StoryCreationTool", Object.keys(mutations)),
+    ...mapActions("Tools/StoryCreationTool", Object.keys(actions)),
+  },
 };
 </script>
 
@@ -174,7 +174,9 @@ export default {
                 <button
                     type="button"
                     class="btn btn-lgv-grey"
+                    :disabled="!storyConf.steps || !storyConf.steps.length"
                     @click="uploadStoryFiles"
+                    
                 >
                     {{
                         $t(
@@ -183,6 +185,15 @@ export default {
                     }}
                 </button>
 
+                <p></p>
+
+                <v-alert
+                    type="info"
+                    v-show="!storyConf.steps || !storyConf.steps.length"
+                >
+                    Story abschicken ist erst möglich sobald mindestens ein Schritt zur Story hinzugefügt wurde
+                </v-alert>
+
             </div>
         </form>
     </div>
@@ -190,16 +201,16 @@ export default {
 
 <style lang="less" scoped>
 #tool-storyCreationTool-creator-storyForm {
-    max-width: 460px;
+  max-width: 460px;
 
-    .story-step-button {
-        min-width: 46px;
-        height: 46px;
-        padding: 0;
-    }
+  .story-step-button {
+    min-width: 46px;
+    height: 46px;
+    padding: 0;
+  }
 
-    .tool-storyCreationTool-creator-actions {
-        margin-top: 20px;
-    }
+  .tool-storyCreationTool-creator-actions {
+    margin-top: 20px;
+  }
 }
 </style>

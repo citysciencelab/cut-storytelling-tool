@@ -307,7 +307,9 @@ function postStoryImage(image_dataURL, stepReference, storyID){
     axios.post(constants.backendConfig.url + "add/story", {
         name: storyConf.name,
         category: storyConf.author,
-        story_json: storyConf
+        story_json: storyConf,
+        author: storyConf.author,
+        description: storyConf.description
     })
 
     // Step 1 - get current storyID back from server

@@ -48,7 +48,7 @@ export default {
                 htmlFile: null,
                 centerCoordinate: null,
                 zoomLevel: null,
-                layers: [],
+                layers: ["20220609"], // Gameboard layer is preselected
                 interactionAddons: []
             },
             newChapter: {
@@ -713,6 +713,7 @@ export default {
                 </v-select>
             </div>
 
+            <!-- not needed for re_publica
             <div class="form-group">
                 <label class="form-label">
                     {{
@@ -732,6 +733,7 @@ export default {
                 >
                 </v-select>
             </div>
+            -->
 
             <div class="form-group">
                 <label class="form-label">
