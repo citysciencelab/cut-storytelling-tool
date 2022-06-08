@@ -9,6 +9,8 @@
 ---
 
 ## Unreleased - in development
+### __Breaking Changes__
+
 ### Added
 - FilterModule:
     - A new attribute clearAll for clearing all the filtered results after clicking button "Reset All"
