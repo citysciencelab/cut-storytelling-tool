@@ -337,13 +337,13 @@ function postStoryImage(image_dataURL, stepReference, storyID){
     )
     .then((response)=>{
 
-        const images = Object.entries(state.htmlContentsImages);
-        console.log(images);
-        for(const image of images){
-            var step = image[0];
-                    var image_data = Object.entries(image[1][0])[0][1]; // pray
-                    postStoryImage(image_data, step, storyID);
-                }
+        // const images = Object.entries(state.htmlContentsImages);
+        // console.log(images);
+        // for(const image of images){
+        //     var step = image[0];
+        //             var image_data = Object.entries(image[1][0])[0][1]; // pray
+        //             postStoryImage(image_data, step, storyID);
+        //         }
 
             
 
