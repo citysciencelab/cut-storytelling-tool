@@ -1,0 +1,110 @@
+{
+  "Portalconfig": {
+    "treeType": "light",
+    "mapView": {
+      "startCenter": [
+        566650,
+        5932500
+      ],
+      "extent": [
+        563000,
+        5930000,
+        570000,
+        5934944
+      ],
+      "backgroundImage": "./assets/img/white.jpg",
+      "options": [
+        {
+          "resolution": 5.2916638091682096,
+          "scale": 20000,
+          "zoomLevel": 4
+        },
+        {
+          "resolution": 2.6458319045841048,
+          "scale": 10000,
+          "zoomLevel": 5
+        },
+        {
+          "resolution": 1.3229159522920524,
+          "scale": 5000,
+          "zoomLevel": 6
+        }
+      ], 
+      "resolution": 5.2916638091682096
+    },
+    "menu": {
+      "tree": {
+        "name": "translate#common:menu.topics",
+        "glyphicon": "glyphicon-list",
+        "isAlwaysExpanded": [
+          "SelectedLayer"
+        ]
+      },
+      "tools": {
+        "name": "translate#common:menu.tools.name",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+          "storyTellingTool": {
+            "name": "translate#additional:modules.tools.storyTellingTool.title",
+            "glyphicon": "glyphicon-book",
+            "active": false
+          },
+          "storyCreationTool": {
+            "name": "translate#additional:modules.tools.storyCreationTool.title",
+            "glyphicon": "glyphicon-text-size",
+            "active": false
+          }
+        }
+      }
+    },
+    "controls": {
+      "orientation3d": false,
+      "button3d": false,
+      "toggleMenu": false,
+      "fullScreen": true,
+      "zoom": true,
+      "orientation": false,
+      "mousePosition": false,
+      "attributions": false,
+      "buttonOblique": false
+    },
+    "singleBaselayer": true
+  },
+  "Themenconfig": {
+    "Hintergrundkarten": {
+      "name": "translate#common:tree.backgroundMaps",
+      "Layer": [
+        {
+          "id": "20220609",
+          "typ": "StaticImage",
+          "url": "./assets/img/gameboard.png",
+          "name": "Gameboard",
+          "visibility": true,
+          "extent": [
+            563000,
+            5930000,
+            570000,
+            5934944
+          ]
+        }
+      ]
+    },
+    "Fachdaten": {
+      "Layer": [
+        {
+          "id": "20220610",
+          "typ": "StaticImage",
+          "url": "./assets/img/metro.png",
+          "name": "Metrolinien",
+          "visibility": false,
+          "extent": [
+            563000,
+            5930000,
+            570000,
+            5934944
+          ]
+        }
+      ]
+    }
+  }
+}
