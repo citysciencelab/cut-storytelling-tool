@@ -18,6 +18,8 @@
 ### Deprecated
 
 ### Removed
+- Deleted the following snippets: dropdown, exportButton, graphicalSelect, multiCheckbox.
+- Removed the dependency `bootstrap-select`.
 
 ### Fixed
 
