@@ -65,7 +65,9 @@ export default {
     },
     watch: {
         filteredItems (items) {
-            const attributesObject = this.getUniqueObjectFromAttributes(this.attrName, items);
+            const attributesObject = this.getUniqueObjectFromAttributes(this.attrName, items),
+                localFeatureInfo = this.featureInfo ? this.featureInfo : {};
+            let beautifiedObjects;
 
             if (attributesObject === null) {
                 this.featureInfo = null;
@@ -73,11 +75,24 @@ export default {
             }
 
             if (typeof this.gfiAttributes === "undefined") {
-                this.featureInfo = this.beautifyObjectKeys(attributesObject);
+                beautifiedObjects = this.beautifyObjectKeys(attributesObject);
             }
             else {
-                this.featureInfo = Radio.request("Util", "renameKeys", this.gfiAttributes, attributesObject);
+                beautifiedObjects = Radio.request("Util", "renameKeys", this.gfiAttributes, attributesObject);
             }
+
+            Object.entries(beautifiedObjects).forEach(([key, val]) => {
+                if (!Array.isArray(localFeatureInfo[key])) {
+                    localFeatureInfo[key] = [];
+                }
+                val.forEach(value => {
+                    if (localFeatureInfo[key].includes(value)) {
+                        return;
+                    }
+                    localFeatureInfo[key].push(value);
+                });
+            });
+            this.featureInfo = localFeatureInfo;
         },
         featureInfo: {
             handler () {
