@@ -43,7 +43,7 @@ const imageUpload = multer({
 
 
 const getStories = (request, response, next) => {
-    pool.query('SELECT storyid AS id, name, category FROM stories', (error, results) => {
+    pool.query('SELECT storyid AS id, name, author, description, category  FROM stories', (error, results) => {
       if (error) {
         next(error)
       }
@@ -193,8 +193,8 @@ const getImage = (request, response, next) => {
     console.log(request.body);
     const query_new_story = {
       name: 'new-story',
-      text: 'INSERT INTO stories (name, category, story_json) VALUES ($1, $2, $3)',
-      values: [request.body.name, request.body.category, request.body.story_json],
+      text: 'INSERT INTO stories (name, category, story_json, author, description) VALUES ($1, $2, $3,$4,$5)',
+      values: [request.body.name, request.body.category, request.body.story_json, request.body.author, request.body.description],
     }
     const query_latest_story_id = {
       name: 'latest-story-id',
