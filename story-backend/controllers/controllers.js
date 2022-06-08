@@ -1,5 +1,5 @@
 const fs = require('fs');
-
+const uuid = require('uuid');
 
 // usually this file should not be public but hey
 // This info must match the details of a running postgres database. See readme.md for details on DB setup
@@ -29,12 +29,11 @@ const imageUpload = multer({
       cb(
         null,
         new Date().valueOf() + 
-        '_' +
-        file.originalname
+        '_' + uuid.v4()
         );
     }
   }
-  ), 
+  )
 });
 
 
@@ -43,18 +42,19 @@ const imageUpload = multer({
 
 
 
-const getStories = (request, response) => {
+const getStories = (request, response, next) => {
     pool.query('SELECT storyid AS id, name, category FROM stories', (error, results) => {
       if (error) {
-        throw error
+        next(error)
       }
-      response.status(200).json(results.rows)
+      try{response.status(200).json(results.rows)} catch(err) {next(err)}
+      
     })
   }
 
 
 
-const getStoryStructure  = (req, res) => {
+const getStoryStructure  = (req, res, next) => {
 
     // Todo: Connection to the database
     // var data = require("../dummyData/"+req.params.storyId+"/story.json")
@@ -67,27 +67,44 @@ const getStoryStructure  = (req, res) => {
     pool.query(query,
       (error, results) => {
        if (error) {
-        throw error
+        next(error);
       }
-    res.status(200).json(JSON.parse(results.rows[0].story_json)) // the json is stored as a string, so we have to parse that string before sending back the data. Would be better to store json properly in the database.
+
+      try{ 
+
+      console.log(results.rows)
+      res.status(200).json(JSON.parse(results.rows[0].story_json))}  // the json is stored as a string, so we have to parse that string before sending back the data. Would be better to store json properly in the database.
+      catch (err){next(err);}
   })
 
   }
 
 
 
-  const getSteps = (request, response) => {
+  const getSteps = (request, response, next) => {
     pool.query('SELECT * FROM steps', (error, results) => {
       if (error) {
-        throw error
+        next(error);
       }
-      response.status(200).json(results.rows)
+      try{response.status(200).json(results.rows)}catch(err){next(err)}
+      
     })
   }
 
 
 
-  const getStoryStep  = (req, res) => {
+const getStoriesAllData = (request, response, next) => {
+    pool.query('SELECT * FROM stories', (error, results) => {
+      if (error) {
+        next(error);
+      }
+      try{response.status(200).json(results.rows)}catch(err){next(err)}
+      
+    })
+  }
+
+
+  const getStoryStep  = (req, res, next) => {
 
     // Todo: Connection to the database
     // var data = require("../dummyData/"+req.params.storyId+"/story.json")
@@ -102,15 +119,15 @@ const getStoryStructure  = (req, res) => {
     pool.query(query,
       (error, results) => {
        if (error) {
-        throw error
+         next(error);
       }
-      res.status(200).json(results.rows)
+      try{res.status(200).json(results.rows)}catch(err){next(err)}
     })
 
   }
 
 
-const getImage = (request, response) => {
+const getImage = (request, response, next) => {
 
 
     if(!request.params.imageId){
@@ -125,14 +142,17 @@ const getImage = (request, response) => {
     pool.query(query,
       (error, results) => {
        if (error) {
-        throw error
+        next(error);
       }
+
+      try{
       image_path = results.rows[0].image
       if(!image_path){response.status(400).send("nonexistent image id")}else{
               response.sendFile(image_path, { root: __dirname + "/../"});        
       }
+    }catch(err){ next(err)}
 
-    });
+    })
 
 
     
@@ -140,7 +160,7 @@ const getImage = (request, response) => {
   }
 
 
-  const getHtml = (request, response) => {
+  const getHtml = (request, response, next) => {
 
     var query = {
       name: "get-hml",
@@ -151,14 +171,15 @@ const getImage = (request, response) => {
     pool.query(query,
       (error, results) => {
        if (error) {
-        throw error
+        next(error);
       }
-      //response.status(201).send(results.rows[0].html)
-      response.status(201).send(results.rows[0]) // html throws errors if there are no html files registered for a step
-    });
-
-
-    
+      try{
+        console.log(results.rows.size);
+        response.status(201).send(results.rows[0].html);        
+      }catch(err){next(err)}
+        
+      
+    })    
 
   }
 
@@ -166,10 +187,10 @@ const getImage = (request, response) => {
   // POST/PUT
 
 
-  const createStory = (request, response) => {
+  const createStory = (request, response, next) => {
 
     const { name, category } = request.body
-
+    console.log(request.body);
     const query_new_story = {
       name: 'new-story',
       text: 'INSERT INTO stories (name, category, story_json) VALUES ($1, $2, $3)',
@@ -184,7 +205,7 @@ const getImage = (request, response) => {
     pool.query(query_new_story,
       (error, results) => {
        if (error) {
-        throw error
+        next(error)
       }
 
       // if successfully inserted, return latest story ID
@@ -194,10 +215,11 @@ const getImage = (request, response) => {
       pool.query(query_latest_story_id,
       (error, results) => {
        if (error) {
-        throw error
+        next(error); 
       }
+      try{response.status(201).send({success:true,storyID: results.rows[0].max})
+    } catch(err){next(err);}
       
-      response.status(201).send({success:true,storyID: results.rows[0].max})
         
       })
 
@@ -205,9 +227,7 @@ const getImage = (request, response) => {
   }
 
 
-  const createStep = (request, response) => {
-    console.log("create step call received")
-    console.log(request);
+  const createStep = (request, response, next) => {
 
     var query = {
       name: 'new-step',
@@ -218,19 +238,19 @@ const getImage = (request, response) => {
     pool.query(query,
       (error, results) => {
        if (error) {
-        throw error
+        next(error);
       }
-      console.log(response);
-      response.status(201).send(`step added`)
+      try{response.status(201).send(`step added`)}catch(err){next(err);}
     })
   }
 
 
 
-  const addImagePath = (request, response) => {
+  const addImagePath = (request, response, next) => {
     console.log("ADD IMAGE PATH")
     const filepath = request.file.path; 
-    // console.log(filepath)
+    console.log(filepath)
+console.log(request.params)
     var query = {
       name: "store-image-file-path",
       // UPDATE table SET array_field = array_field || '{"new item"}' WHERE ...
@@ -241,16 +261,16 @@ const getImage = (request, response) => {
     pool.query(query,
       (error, results) => {
        if (error) {
-        throw error
+        next (error)
       }
-      response.json({sucess:true, filepath})
+      try{response.json({sucess:true, filepath})}catch(err){next(err);}
     });
   }
 
 
 
 
-  const addHtml = (request, response) => {
+  const addHtml = (request, response, next) => {
     console.log(request)
     var query = {
       name: "store-image-file-path",
@@ -261,9 +281,9 @@ const getImage = (request, response) => {
     pool.query(query,
       (error, results) => {
        if (error) {
-        throw error
+        next(error);
       }
-      response.status(201).send(`added html`)
+      try{response.status(201).send(`added html`)}catch(err){next(err);}
     });
   }
 
@@ -274,7 +294,7 @@ const getImage = (request, response) => {
 // DELETE
 
 
-  const deleteStory = (request, response) => {
+  const deleteStory = (request, response, next) => {
 
     var query = {
       name: 'delete-story',
@@ -285,9 +305,9 @@ const getImage = (request, response) => {
     pool.query(query,
       (error, results) => {
        if (error) {
-        throw error
+        next(error);
       }
-      response.status(201).send(`story deleted`)
+      try{response.status(201).send(`story deleted`)}catch(err){next(err);}
     })
 
 
@@ -295,7 +315,7 @@ const getImage = (request, response) => {
 
 
 
-  const deleteAllStorySteps = (request, response) => {
+  const deleteAllStorySteps = (request, response, next) => {
 
     var query = {
       name: 'delete-step-all',
@@ -306,16 +326,16 @@ const getImage = (request, response) => {
     pool.query(query,
       (error, results) => {
        if (error) {
-        throw error
+        next(error)
       }
-      response.status(201).send(`all steps of story deleted`)
+      try{response.status(201).send(`all steps of story deleted`)}catch(err){next(err);}
     })
 
 
   }
 
 
-  const deleteStepMajor = (request, response) => {
+  const deleteStepMajor = (request, response, next) => {
 
     var query = {
       name: 'delete-step-major',
@@ -326,9 +346,9 @@ const getImage = (request, response) => {
     pool.query(query,
       (error, results) => {
        if (error) {
-        throw error
+        next(error)
       }
-      response.status(201).send(`major step deleted`)
+      try{response.status(201).send(`major step deleted`)}catch(err){next(err);}
     })
 
 
@@ -336,7 +356,7 @@ const getImage = (request, response) => {
 
 
 
-  const deleteStepMinor = (request, response) => {
+  const deleteStepMinor = (request, response, next) => {
 
     var query = {
       name: 'delete-step-minor',
@@ -347,9 +367,9 @@ const getImage = (request, response) => {
     pool.query(query,
       (error, results) => {
        if (error) {
-        throw error
+        next(error)
       }
-      response.status(201).send(`minor step deleted`)
+      try{response.status(201).send(`minor step deleted`)}catch(err){next(err);}
     })
 
 
@@ -363,6 +383,7 @@ const getImage = (request, response) => {
   module.exports = {
     imageUpload,
     getStories,
+    getStoriesAllData,
     getStoryStructure,
     getSteps,
     getStoryStep,
