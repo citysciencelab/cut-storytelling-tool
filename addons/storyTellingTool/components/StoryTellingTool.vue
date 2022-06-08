@@ -237,7 +237,8 @@ export default {
                                     v-text="item.name"
                                     ></v-card-title>
 
-                                    <v-card-subtitle v-text="item.category"></v-card-subtitle>
+                                    <v-card-subtitle v-text="item.author"></v-card-subtitle>
+                                    <v-card-text v-text="item.description"></v-card-text>
 
                                     <v-card-actions>
                                     <v-btn class="ml-2 mt-5" text @click="onStorySelected(item.id), toggle()">
