@@ -6,7 +6,7 @@ const uuid = require('uuid');
 const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'me',
-  host: 'localhost',
+  host: 'postgres-storytelling',
   database: 'stories',
   password: 'password',
   port: 5432,

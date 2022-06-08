@@ -216,10 +216,11 @@ function parseStepReference(stepReference){
 
 function postStoryHtmlContent(htmlContent, storyID){
     var step = parseStepReference(htmlContent[0]);
-    var query_url = 'http://' + constants.backendConfig.url + "add/step/"+storyID+"/"+step[0]+"/"+step[1];
+    var query_url = constants.backendConfig.url + "add/step/"+storyID+"/"+step[0]+"/"+step[1];
     
     // htmlContent[1] = htmlContent[1].replace(image.dataUrl, `FILE PATH TBD`);
     axios.post(query_url, {
+
         html: htmlContent[1]
     });
     // .then((response)=> {
@@ -254,7 +255,7 @@ return new File([u8arr], filename, { type: mime })
 
 function postStoryImage(image_dataURL, stepReference, storyID){
     var step = parseStepReference(stepReference);
-    var query_url = 'http://' + constants.backendConfig.url + "add/step/"+storyID+"/"+step[0]+"/"+step[1]+"/image";
+    var query_url = constants.backendConfig.url + "add/step/"+storyID+"/"+step[0]+"/"+step[1]+"/image";
     
     // generate file from base64 string
     const file = dataURLtoFile(image_dataURL)
@@ -303,7 +304,7 @@ function postStoryImage(image_dataURL, stepReference, storyID){
     //Step 0 - register story with backend
     
     var storyID;
-    axios.post('http://' + constants.backendConfig.url + "add/story", {
+    axios.post(constants.backendConfig.url + "add/story", {
         name: storyConf.name,
         category: storyConf.author,
         story_json: storyConf

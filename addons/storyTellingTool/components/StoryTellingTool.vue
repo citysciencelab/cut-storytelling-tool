@@ -89,7 +89,7 @@ export default {
   mounted() {
     this.applyTranslationKey(this.name);
     axios
-      .get("http://" + constants.backendConfig.url + "story")
+      .get(constants.backendConfig.url + "story")
       .then((response) => (this.storyList = response.data));
   },
   methods: {
@@ -103,7 +103,7 @@ export default {
      */
     refreshStoryList() {
       axios
-        .get("http://" + constants.backendConfig.url + "story")
+        .get(constants.backendConfig.url + "story")
         .then((response) => (this.storyList = response.data));
     },
 
@@ -178,7 +178,7 @@ export default {
       console.log("A story was selected: ID " + storyId);
       this.selectedStory = storyId;
       this.storyConfPath =
-        "http://" + constants.backendConfig.url + "story/" + storyId;
+        constants.backendConfig.url + "story/" + storyId;
       this.mode = "play";
 
       //axios
