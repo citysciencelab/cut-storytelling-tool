@@ -10,17 +10,20 @@ const getters = {
             LineString: {
                 available: false,
                 caption: "common:modules.tools.wfsTransaction.interactionSelect.line",
-                icon: "bi-slash-lg"
+                icon: "bi-slash-lg",
+                multi: false
             },
             Point: {
                 available: false,
                 caption: "common:modules.tools.wfsTransaction.interactionSelect.point",
-                icon: "bi-record-circle"
+                icon: "bi-record-circle",
+                multi: false
             },
             Polygon: {
                 available: false,
                 caption: "common:modules.tools.wfsTransaction.interactionSelect.polygon",
-                icon: "bi-hexagon-fill"
+                icon: "bi-hexagon-fill",
+                multi: false
             },
             edit: {
                 icon: "bi-pencil-square"
@@ -52,6 +55,7 @@ const getters = {
             }
             configuration[val].available = layerConfiguration.show; // TODO(roehlipa): Maybe deprecate parameter "show" in favour of "available"?
             configuration[val].caption = layerConfiguration.caption ? layerConfiguration.caption : configuration[val].caption;
+            configuration[val].multi = layerConfiguration.multi ? layerConfiguration.multi : false;
         });
         return configuration;
     },
@@ -62,6 +66,7 @@ const getters = {
         return state.featureProperties.every(property => property.required ? property.value !== null : true);
     },
     showInteractionsButtons (state) {
+        // TODO(roehlipa): The form should also be displayed when editing a feature to be able to update the properties
         return [null, "delete", "edit"].includes(state.selectedInteraction);
     }
 };
