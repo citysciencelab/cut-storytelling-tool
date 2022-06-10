@@ -45,6 +45,7 @@ function parseDescribeFeatureTypeResponse (responseData, featureType) {
         }, {
             label: "",
             key: "",
+            value: null,
             type: "string",
             required: false
         }));
