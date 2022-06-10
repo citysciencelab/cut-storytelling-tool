@@ -43,7 +43,7 @@
                             :key="key"
                             :caption="config.caption"
                             :icon="config.icon"
-                            :interaction="() => interactionChanged(key)"
+                            :interaction="() => prepareInteraction(key)"
                         /> <!-- TODO(roehlipa): Align the icons within the buttons properly -->
                     </template>
                 </div>
@@ -65,12 +65,13 @@
                                     class="form-control"
                                     :type="getInputType(property.type)"
                                     :required="property.required"
+                                    @input="event => property.value = event.target.value"
                                 >
                             </template>
                         </template>
                         <div id="tool-wfsTransaction-form-buttons">
                             <SimpleButton
-                                :interaction="discard"
+                                :interaction="reset"
                                 caption="common:modules.tools.wfsTransaction.form.buttons.discard"
                             />
                             <SimpleButton
@@ -90,7 +91,6 @@
 
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
-import prepareInteractions from "../utils/prepareInteractions";
 import ToolTemplate from "../../ToolTemplate.vue";
 import SimpleButton from "../../../../share-components/SimpleButton.vue";
 
@@ -111,7 +111,7 @@ export default {
     },
     methods: {
         ...mapMutations("Tools/WfsTransaction", ["setCurrentLayerIndex", "setSelectedInteraction"]),
-        ...mapActions("Tools/WfsTransaction", ["setActive", "setFeatureProperties"]),
+        ...mapActions("Tools/WfsTransaction", ["prepareInteraction", "reset", "save", "setActive", "setFeatureProperties"]),
         close () {
             this.setActive(false);
             const model = Radio.request("ModelList", "getModelByAttributes", {id: "wfsTransaction"});
@@ -124,26 +124,14 @@ export default {
             this.setCurrentLayerIndex(index);
             this.setFeatureProperties();
             this.setSelectedInteraction(null);
-            // TODO(roehlipa): If formular open, deactivate and remove all stuff from map (should also happen on close, save and discard)
-        },
-        interactionChanged (key) {
-            this.setSelectedInteraction(key);
-            prepareInteractions(key);
-        },
-        discard () {
-            console.warn("You discarded!");
-            this.setSelectedInteraction(null);
-        },
-        save () {
-            // TODO(roehlipa): Form validation
-            console.warn("You saved!");
-            this.setSelectedInteraction(null);
+            // TODO(roehlipa): If formular open, deactivate it and remove all stuff from map (should also happen on close, save and discard)
         },
         getInputType (type) {
             if (type === "string") {
                 return "text";
             }
             if (type === "integer" || type === "int" || type === "decimal") {
+                // TODO(roehlipa): (Possibly) If input type is a float, the input should automatically change to a float (1,2 => 1.2; 1 => 1.0)
                 return "number";
             }
             if (type === "boolean") {

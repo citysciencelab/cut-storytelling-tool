@@ -49,7 +49,7 @@
  * @property {number} currentLayerIndex Index of the currently selected layer.
  * @property {FeatureProperty[]} featureProperties Possible properties to be set on a feature for the current layer.
  * @property {TransactionLayer[]} layerInformation Information about the different WFS-T layers configured for the tool.
- * @property {string|null} selectedInteraction Which selection is currently active, if any.
+ * @property {("LineString"|"Point"|"Polygon"|"delete"|"edit"|null)} selectedInteraction Which selection is currently active, if any.
  */
 const state = {
     id: "wfsTransaction",
