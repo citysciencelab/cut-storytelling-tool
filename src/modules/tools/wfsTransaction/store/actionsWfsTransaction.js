@@ -2,6 +2,7 @@ import axios from "axios";
 import {Draw, Modify} from "ol/interaction";
 import prepareFeatureProperties from "../utils/prepareFeatureProperties";
 import writeTransaction from "../utils/writeTransaction";
+import loader from "../../../../utils/loaderOverlay";
 
 let drawInteraction,
     drawLayer,
@@ -92,7 +93,7 @@ const actions = {
                 // TODO(roehlipa): Do correct data type for value; even for not set ones => not set ones get null
             }
         });
-        // TODO(roehlipa) showLoader
+        loader.show();
         axios({
             url,
             data: writeTransaction(feature, getters.layerInformation[getters.currentLayerIndex], getters.selectedInteraction, rootGetters["Maps/projectionCode"]),
@@ -112,7 +113,7 @@ const actions = {
                 // TODO(roehlipa): Show error or give feedback
             })
             .finally(() => {
-                // TODO(roehlipa): Hide loader
+                loader.hide();
                 dispatch("reset");
             });
 
