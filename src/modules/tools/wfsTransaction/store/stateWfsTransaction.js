@@ -65,7 +65,7 @@ const state = {
     lineButton: [],
     pointButton: [],
     polygonButton: [],
-    toggleLayer: false, // TODO(roehlipa): Implement me
+    toggleLayer: false,
     // Actual state
     currentLayerIndex: -1,
     featureProperties: [],

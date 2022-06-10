@@ -21,7 +21,7 @@ const actions = {
             const style = getters.layerInformation[getters.currentLayerIndex].style,
                 drawOptions = {
                     source: drawLayer.getSource(),
-                    // TODO(roehlipa): It would generally be really cool to be able to actually draw Multi-X geometries
+                    // TODO: It would generally be really cool to be able to actually draw Multi-X geometries
                     //  and not just have this as a fix for services only accepting Multi-X geometries
                     type: (getters.currentInteractionConfig[interaction].multi ? "Multi" : "") + interaction,
                     geometryName: getters.featureProperties.find(({type}) => type === "geometry").key
@@ -34,7 +34,9 @@ const actions = {
             modifyInteraction = new Modify({source: drawLayer.getSource()});
             drawLayer.setStyle(style);
 
-            // TODO(roehlipa): If toggleLayer => hide features
+            if (getters.toggleLayer) {
+                Radio.request("ModelList", "getModelByAttributes", {id: getters.currentLayerId}).setIsVisibleInMap(false);
+            }
 
             drawInteraction.on("drawend", () => {
                 if (Radio.request("ModelList", "getModelByAttributes", {id: getters.currentLayerId}).get("isOutOfRange")) {
@@ -59,7 +61,7 @@ const actions = {
         // TODO(roehlipa): key === delete
         //  ==> Delete operation
     },
-    reset ({commit, dispatch}) {
+    reset ({commit, dispatch, getters}) {
         commit("setSelectedInteraction", null);
         dispatch("Maps/removeInteraction", drawInteraction, {root: true});
         dispatch("Maps/removeInteraction", modifyInteraction, {root: true});
@@ -67,6 +69,7 @@ const actions = {
         drawInteraction = undefined;
         modifyInteraction = undefined;
         drawLayer = undefined;
+        Radio.request("ModelList", "getModelByAttributes", {id: getters.currentLayerId}).setIsVisibleInMap(true);
     },
     save ({dispatch, getters, rootGetters}) {
         // TODO(roehlipa): Form validation
