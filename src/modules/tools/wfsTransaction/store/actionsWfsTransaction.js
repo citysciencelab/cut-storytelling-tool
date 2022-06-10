@@ -68,7 +68,7 @@ const actions = {
         modifyInteraction = undefined;
         drawLayer = undefined;
     },
-    save ({dispatch, getters}) {
+    save ({dispatch, getters, rootGetters}) {
         // TODO(roehlipa): Form validation
         console.warn("You clicked save!");
         const feature = drawLayer.getSource().getFeatures()[0],
@@ -90,15 +90,14 @@ const actions = {
             }
         });
         // TODO(roehlipa) showLoader
-        writeTransaction(feature, getters.layerInformation[getters.currentLayerIndex], getters.selectedInteraction)
-            .then(transaction => axios({
-                url,
-                data: transaction,
-                method: "POST",
-                withCredentials: isSecured,
-                headers: {"Content-Type": "text/xml"},
-                responseType: "text/xml"
-            }))
+        axios({
+            url,
+            data: writeTransaction(feature, getters.layerInformation[getters.currentLayerIndex], getters.selectedInteraction),
+            method: "POST",
+            withCredentials: isSecured,
+            headers: {"Content-Type": "text/xml"},
+            responseType: "text/xml"
+        })
             .then(() => {
                 /*
                     TODO(roehlipa):
