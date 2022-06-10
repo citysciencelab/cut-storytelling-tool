@@ -16,6 +16,7 @@
     - A new attribute clearAll for clearing all the filtered results after clicking button "Reset All"
 
 ### Changed
+- Changed class for several title elements on page from span to h1 or h2 and standardized their styling
 
 ### Deprecated
 
@@ -450,7 +451,6 @@ Issue #764: Using parameters in WfsSearch as defined in [Filter Encoding Impleme
 - Handling of polygons with holes to WKT geometry parsing.
 
 ### Changed
-- Changed class for several title elements on page from span to h1 or h2 and standardized their styling
 - The following NPM packages are updated:
     - @babel/core": 7.14.6 to 7.16.0
     - @babel/eslint-parser: 7.14.7 to 7.16.0
