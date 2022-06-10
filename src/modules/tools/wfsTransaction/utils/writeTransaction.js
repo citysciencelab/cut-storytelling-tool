@@ -7,9 +7,10 @@ import {WFS} from "ol/format";
  * @param {module:ol/Feature} feature Feature to be inserted, edited or deleted.
  * @param {TransactionLayer} layerInformation Information about the layer to be manipulated.
  * @param {("LineString"|"Point"|"Polygon"|"delete"|"edit"|null)} selectedInteraction Interaction deciding which transaction to perform.
+ * @param {string} srsName EPSG code currently used by the map.
  * @returns {string} WFS Transaction as an XML String.
  */
-export default function (feature, layerInformation, selectedInteraction) {
+export default function (feature, layerInformation, selectedInteraction, srsName) {
     const {featureNS, featurePrefix, featureType, version} = layerInformation,
         transaction = [[], [], []];
 
@@ -31,8 +32,8 @@ export default function (feature, layerInformation, selectedInteraction) {
                     featureNS,
                     featurePrefix,
                     featureType,
-                    srsName: "EPSG:25832", // TODO(roehlipa): Get this from the map
-                    version
+                    version,
+                    srsName
                 })
         );
 }

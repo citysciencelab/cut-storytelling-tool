@@ -92,7 +92,7 @@ const actions = {
         // TODO(roehlipa) showLoader
         axios({
             url,
-            data: writeTransaction(feature, getters.layerInformation[getters.currentLayerIndex], getters.selectedInteraction),
+            data: writeTransaction(feature, getters.layerInformation[getters.currentLayerIndex], getters.selectedInteraction, rootGetters["Maps/projectionCode"]),
             method: "POST",
             withCredentials: isSecured,
             headers: {"Content-Type": "text/xml"},
