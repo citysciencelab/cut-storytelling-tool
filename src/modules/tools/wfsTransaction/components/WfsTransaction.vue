@@ -77,7 +77,9 @@
                                 :interaction="save"
                                 caption="common:modules.tools.wfsTransaction.form.buttons.save"
                                 type="submit"
-                            />
+                                :disabled="requiredFieldsFilled"
+                                :aria-disabled="requiredFieldsFilled"
+                            /> <!-- TODO(roehlipa): Where should information be displayed about the status of the button if it is disabled? -->
                         </div>
                     </form>
                 </template>
@@ -96,7 +98,7 @@ export default {
     name: "WfsTransaction",
     components: {SimpleButton, ToolTemplate},
     computed: {
-        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "currentLayerIndex", "featureProperties", "layerInformation", "selectedInteraction", "showInteractionsButtons", "active", "icon", "name"]),
+        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "currentLayerIndex", "featureProperties", "layerInformation", "requiredFieldsFilled", "selectedInteraction", "showInteractionsButtons", "active", "icon", "name"]),
         ...mapGetters("Maps", ["getLayerById"])
     },
     watch: {

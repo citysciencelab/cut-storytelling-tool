@@ -58,6 +58,9 @@ const getters = {
     currentLayerId (state) {
         return state.layerIds[state.currentLayerIndex];
     },
+    requiredFieldsFilled (state) {
+        return state.featureProperties.every(property => property.required ? property.value !== null : true);
+    },
     showInteractionsButtons (state) {
         return [null, "delete", "edit"].includes(state.selectedInteraction);
     }
