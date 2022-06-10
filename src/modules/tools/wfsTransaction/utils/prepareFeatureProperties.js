@@ -20,5 +20,5 @@ export default async function (layer) {
             .reduce((array, property) => layer.gfiAttributes[property.key] !== undefined
                 ? [...array, {...property, label: layer.gfiAttributes[property.key]}]
                 : array,
-            []);
+            [properties.find(({type}) => type === "geometry")]);
 }
