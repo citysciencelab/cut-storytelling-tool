@@ -38,10 +38,17 @@ const getters = {
             configuration[val].caption = typeof state[val] === "string" ? state[val] : `common:modules.tools.wfsTransaction.interactionSelect.${val}`;
         });
         ["LineString", "Point", "Polygon"].forEach(val => {
-            // TODO(roehlipa): Do extra step for "areaButton" -> soon to be deprecated parameter
-            const geometryConfiguration = state[(val.endsWith("String") ? val.replace("String", "") : val).toLowerCase() + "Button"];
-            let layerConfiguration = null;
+            let geometryConfiguration,
+                layerConfiguration = null;
 
+            if (val === "Polygon" && state.areaButton !== undefined) {
+                // TODO: Shrink this to a single const when areaButton is removed
+                console.warn("WfsTransaction: The configuration parameter 'areaButton' has been deprecated. Please use 'polygonButton' instead.");
+                geometryConfiguration = state.areaButton;
+            }
+            else {
+                geometryConfiguration = state[(val.endsWith("String") ? val.replace("String", "") : val).toLowerCase() + "Button"];
+            }
             if (!geometryConfiguration) {
                 return;
             }

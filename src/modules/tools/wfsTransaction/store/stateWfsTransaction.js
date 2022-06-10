@@ -58,7 +58,7 @@ const state = {
     name: "WfsTransaction",
     icon: "bi-globe",
     // Module specific configuration
-    areaButton: [], // TODO(roehlipa): deprecate this --> polygonButton is the new one
+    areaButton: [],
     edit: false, // TODO(roehlipa): edit and delete should receive the same configuration possibilities as the buttons
     delete: false,
     layerIds: [],
