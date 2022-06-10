@@ -32,7 +32,6 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
         this.fetch({async: false,
             error: (model, xhr, error) => {
                 store.dispatch("Alerting/addSingleAlert", i18next.t("common:utils.parametricURL.errorLoadConfig", {url: this.url}), {root: true});
-
                 if (error.textStatus === "parsererror") {
                     // reload page once
                     if (window.localStorage) {

@@ -1,8 +1,14 @@
 import Vuex from "vuex";
 import {expect} from "chai";
+import sinon from "sinon";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import RoutingDistanceDisplayComponent from "../../../components/RoutingDistanceDisplay.vue";
-import Routing from "../../../store/indexRouting";
+import mutations from "../../../store/mutationsRouting";
+import actions from "../../../store/actionsRouting";
+import getters from "../../../store/gettersRouting";
+import state from "../../../store/stateRouting";
+import Directions from "../../../store/directions/indexDirections";
+import Isochrones from "../../../store/isochrones/indexIsochrones";
 import thousandsSeparator from "../../../../../../utils/thousandsSeparator";
 
 const localVue = createLocalVue();
@@ -19,7 +25,7 @@ describe("src/modules/tools/routing/components/RoutingDistanceDisplay.vue", () =
                         routing:
                             {
                                 "name": "translate#common:menu.tools.routing",
-                                "glyphicon": "glyphicon-road",
+                                "icon": "bi-signpost-2-fill",
                                 "renderToWindow": true
                             }
                     }
@@ -38,7 +44,24 @@ describe("src/modules/tools/routing/components/RoutingDistanceDisplay.vue", () =
                 Tools: {
                     namespaced: true,
                     modules: {
-                        Routing
+                        Routing:
+                        {
+                            namespaced: true,
+                            modules: {
+                                Directions,
+                                Isochrones
+                            },
+                            state: {...state},
+                            mutations,
+                            actions,
+                            getters
+                        }
+                    }
+                },
+                Alerting: {
+                    namespaced: true,
+                    actions: {
+                        addSingleAlert: sinon.stub()
                     }
                 }
             },

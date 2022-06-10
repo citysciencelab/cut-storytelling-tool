@@ -72,7 +72,7 @@ export default {
 
 <template>
     <div
-        class="toggleCheckboxComponent toggle btn btn-default btn-sm"
+        class="toggleCheckboxComponent toggle btn btn-outline-default btn-sm"
         :class="{'off': !isActive}"
         tabindex="0"
         @keydown="toggle($event)"
@@ -82,7 +82,7 @@ export default {
             aria-label="checkbox"
             type="checkbox"
             :title="title"
-            data-toggle="toggle"
+            data-bs-toggle="toggle"
             :checked="isActive"
             @click="toggle($event)"
             @keydown="toggle($event)"
@@ -97,7 +97,7 @@ export default {
                 {{ textOn }}
             </div>
             <div
-                class="btn btn-default btn-sm toggle-off"
+                class="btn btn-outline-default btn-sm toggle-off"
                 :class="{'active': !isActive}"
                 @click="toggle($event)"
                 @keydown="toggle($event)"
@@ -105,7 +105,7 @@ export default {
                 {{ textOff }}
             </div>
             <span
-                class="toggle-handle btn btn-default btn-sm"
+                class="toggle-handle btn btn-outline-default btn-sm"
                 @click="toggle($event)"
                 @keydown="toggle($event)"
             />
@@ -113,17 +113,17 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
-    @import "~/css/mixins.less";
+<style lang="scss" scoped>
+    @import "~/css/mixins.scss";
 
     div.toggleCheckboxComponent {
         width:63px;
 
         &:hover {
-            .primary_action_hover();
+            @include primary_action_hover;
         }
         &:focus {
-            .primary_action_focus();
+            @include primary_action_focus;
         }
     }
 </style>

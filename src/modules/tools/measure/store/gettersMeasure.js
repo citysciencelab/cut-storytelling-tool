@@ -13,7 +13,7 @@ const getters = {
      * @returns {String[]} options for geometry selection
      */
     geometryValues ({geometryValues3d, geometryValues}, _, __, rootGetters) {
-        return rootGetters["Map/is3d"]
+        return rootGetters["Maps/is3D"]
             ? geometryValues3d
             : geometryValues;
     },
@@ -25,7 +25,7 @@ const getters = {
      * @returns {String} selected geometry selection option
      */
     selectedGeometry ({geometryValues3d, selectedGeometry}, _, __, rootGetters) {
-        return rootGetters["Map/is3d"]
+        return rootGetters["Maps/is3D"]
             ? geometryValues3d[0] // 3D mode only has one option
             : selectedGeometry;
     },
@@ -37,7 +37,7 @@ const getters = {
      * @returns {String[]} options for measurement units
      */
     currentUnits ({selectedGeometry, lineStringUnits, polygonUnits}, _, __, rootGetters) {
-        return rootGetters["Map/is3d"] || selectedGeometry === "LineString"
+        return rootGetters["Maps/is3D"] || selectedGeometry === "LineString"
             ? lineStringUnits
             : polygonUnits;
     },
@@ -49,13 +49,14 @@ const getters = {
      * @param {object} rootGetters root getters
      * @return {String[]} calculated display values
      */
-    lineLengths ({lines, earthRadius, measurementAccuracy, selectedUnit}, _, __, rootGetters) {
+    lineLengths ({lines, earthRadius, measurementAccuracy, selectedUnit, lineStringUnits}, _, __, rootGetters) {
         return calculateLineLengths(
-            rootGetters["Map/projection"].getCode(),
+            rootGetters["Maps/projection"].getCode(),
             lines,
             earthRadius,
             measurementAccuracy,
-            selectedUnit
+            selectedUnit,
+            lineStringUnits
         );
     },
     /**
@@ -66,13 +67,14 @@ const getters = {
      * @param {object} rootGetters root getters
      * @return {String[]} calculated display values
      */
-    polygonAreas ({polygons, earthRadius, measurementAccuracy, selectedUnit}, _, __, rootGetters) {
+    polygonAreas ({polygons, earthRadius, measurementAccuracy, selectedUnit, polygonUnits}, _, __, rootGetters) {
         return calculatePolygonAreas(
-            rootGetters["Map/projection"].getCode(),
+            rootGetters["Maps/projection"].getCode(),
             polygons,
             earthRadius,
             measurementAccuracy,
-            selectedUnit
+            selectedUnit,
+            polygonUnits
         );
     }
 };

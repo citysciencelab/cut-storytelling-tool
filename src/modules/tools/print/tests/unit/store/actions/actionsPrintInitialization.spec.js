@@ -7,6 +7,7 @@ import sinon from "sinon";
 const {
     chooseCurrentLayout,
     parseMapfishCapabilities,
+    parsePlotserviceCapabilities,
     getGfiForPrint,
     getAttributeInLayoutByName,
     togglePostrenderListener,
@@ -22,6 +23,18 @@ const {
 } = actions;
 
 describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", () => {
+    let map = null;
+
+    before(() => {
+        map = {
+            id: "ol",
+            mode: "2D",
+            render: sinon.spy()
+        };
+
+        mapCollection.clear();
+        mapCollection.addMap(map, "2D");
+    });
     describe("chooseCurrentLayout", () => {
         it("should choose the current Layout", done => {
             const payload = [
@@ -45,7 +58,8 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
 
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
             testAction(chooseCurrentLayout, payload, state, {}, [
-                {type: "setCurrentLayout", payload: state.currentLayout}
+                {type: "setCurrentLayout", payload: state.currentLayout},
+                {type: "setCurrentLayoutName", payload: state.currentLayout.name}
             ], {}, done);
         });
     });
@@ -74,6 +88,39 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
 
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
             testAction(parseMapfishCapabilities, payload, {}, {}, [
+                {type: "setLayoutList", payload: payload.layouts}
+            ], {}, done);
+        });
+    });
+
+    describe("parsePlotserviceCapabilities", function () {
+        it("should parse the plotservice capabilities", done => {
+            const payload = {
+                layouts: [
+                    {
+                        name: "A4 Hochformat",
+                        geoDocument: "pdf_a4_hoch"
+                    },
+                    {
+                        name: "A4 Querformat",
+                        geoDocument: "pdf_a4_quer"
+                    },
+                    {
+                        name: "A3 Hochformat",
+                        geoDocument: "pdf_a3_hoch"
+                    },
+                    {
+                        name: "A3 Querformat",
+                        geoDocument: "pdf_a3_quer"
+                    }
+                ],
+                formats: [
+                    "jpg", "png", "pdf"
+                ]
+            };
+
+            // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
+            testAction(parsePlotserviceCapabilities, payload, {}, {}, [
                 {type: "setLayoutList", payload: payload.layouts}
             ], {}, done);
         });
@@ -291,6 +338,7 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                     },
                     frameState: {
                         size: [1348, 864],
+                        pixelToCoordinateTransform: [10.583327618336, 0, 0, -10.583327618336, 1104618.7926526342, 7087941.480887591],
                         viewState: {
                             resolution: 15.874991427504629
                         }
@@ -299,6 +347,7 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                 state = {
                     layoutMapInfo: [772, 1044],
                     isScaleSelectedManually: false,
+                    autoAdjustScale: true,
                     scaleList: [500, 1000, 2500, 5000, 10000, 20000, 40000, 60000, 100000],
                     optimalScale: 20000
                 },
@@ -314,6 +363,7 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                 },
                 canvasPrintOptions = {
                     "mapSize": evt.frameState.size,
+                    "pixelToCoordinateTransform": evt.frameState.pixelToCoordinateTransform,
                     "resolution": evt.frameState.viewState.resolution,
                     "printMapSize": state.layoutMapInfo,
                     "scale": 20000,
@@ -343,6 +393,7 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                 state = {
                     layoutMapInfo: [772, 1044],
                     isScaleSelectedManually: false,
+                    autoAdjustScale: true,
                     scaleList: [500, 1000, 2500, 5000, 10000, 20000, 40000, 60000, 100000],
                     optimalScale: 20000,
                     DOTS_PER_INCH: 72,
@@ -475,6 +526,7 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                         }
                     },
                     frameState: {
+                        pixelToCoordinateTransform: [10.583327618336, 0, 0, -10.583327618336, 1104618.7926526342, 7087941.480887591],
                         size: [1348, 864],
                         viewState: {
                             resolution: 15.874991427504629
@@ -484,6 +536,7 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                 state = {
                     layoutMapInfo: [772, 1044],
                     isScaleSelectedManually: false,
+                    autoAdjustScale: true,
                     scaleList: [500, 1000, 2500, 5000, 10000, 20000, 40000, 60000, 100000],
                     optimalScale: 20000,
                     DOTS_PER_INCH: 72,
@@ -491,6 +544,7 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                 },
                 canvasPrintOptions = {
                     "mapSize": evt.frameState.size,
+                    "pixelToCoordinateTransform": evt.frameState.pixelToCoordinateTransform,
                     "resolution": evt.frameState.viewState.resolution,
                     "printMapSize": state.layoutMapInfo,
                     "scale": 20000,

@@ -3,6 +3,7 @@ import {mapGetters, mapActions} from "vuex";
 import * as constants from "./../store/constantsRouting";
 import {GeoJSON, GPX} from "ol/format.js";
 import convertFeaturesToKml from "../../../../utils/convertFeaturesToKml";
+import directionsRouteStyle from "../utils/map/directions/route/directionsRouteStyle";
 import Feature from "ol/Feature";
 
 export default {
@@ -55,6 +56,22 @@ export default {
             }
 
             return this.isochronesAreaSource.getFeatures();
+        },
+        /**
+         * Retrieves the features and styles them for export with default route style
+         *
+         * @param {module:ol/Feature[]} features which are to be converted.
+         * @returns {module:ol/Feature[]} openlayers features
+         */
+        styleFeatures (features) {
+            for (const feature of features) {
+                const routeStyle = directionsRouteStyle(feature);
+
+                if (routeStyle[1]) {
+                    feature.setStyle(routeStyle[1]);
+                }
+            }
+            return features;
         },
         /**
          * Converts the features from OpenLayers Features to features in the chosen format.
@@ -132,7 +149,7 @@ export default {
             if (this.isDisabled) {
                 return;
             }
-            const downloadString = await this.getDownloadStringInFormat(this.getDownloadFeatures()),
+            const downloadString = await this.getDownloadStringInFormat(this.styleFeatures(this.getDownloadFeatures())),
                 fileName = this.getFileName();
 
             if (typeof navigator.msSaveOrOpenBlob === "function") {
@@ -166,13 +183,13 @@ export default {
         <div class="d-flex mb-2">
             <label
                 for="routing-DownloadFormatOptions"
-                class="col-md-4 col-sm-4 control-label d-flex align-self-center"
+                class="col-md-4 col-form-label d-flex align-self-center"
             >{{ $t('common:modules.tools.routing.download.format') }}</label>
 
-            <div class="col-md-8 col-sm-8">
+            <div class="col-md-8">
                 <select
                     id="routing-DownloadFormatOptions"
-                    class="form-control input-sm mt-4"
+                    class="form-select form-select-sm mt-4"
                     @change="download.format = $event.target.value"
                 >
                     <option
@@ -191,10 +208,10 @@ export default {
         <div class="d-flex mb-2">
             <label
                 for="routing-download-filename"
-                class="col-md-4 col-sm-4 control-label d-flex align-self-center"
+                class="col-md-4 col-form-label d-flex align-self-center"
             >{{ $t('common:modules.tools.routing.download.filename') }}</label>
 
-            <div class="col-md-8 col-sm-8">
+            <div class="col-md-8">
                 <input
                     id="routing-download-filename"
                     v-model="download.fileName"
@@ -206,16 +223,16 @@ export default {
         </div>
 
         <div class="form-group form-group-sm">
-            <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="col-12 d-grid gap-2">
                 <button
-                    class="btn btn-sm btn-block"
+                    class="btn btn-sm"
                     type="button"
                     :disabled="isDisabled"
                     @click="downloadResult()"
                 >
-                    <span
-                        class="glyphicon glyphicon-floppy-disk pointer"
-                    />
+                    <span class="bootstrap-icon pointer">
+                        <i class="bi-save-fill" />
+                    </span>
                     {{ $t('common:modules.tools.routing.download.saveResult') }}
                 </button>
             </div>

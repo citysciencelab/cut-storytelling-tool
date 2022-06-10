@@ -63,12 +63,14 @@ const Config = {
             en: "English",
             es: "Español",
             it: "Italiano",
+            platt: "Platt",
             pt: "Português",
-            tr: "Türkçe"
+            ru: "Русский",
+            tr: "Türkçe",
+            ua: "Українська"
         },
         fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"],
-        loadPath: "/locales/{{lng}}/{{ns}}.json"
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"]
     }
 };
 

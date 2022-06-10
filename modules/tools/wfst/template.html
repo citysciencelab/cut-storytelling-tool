@@ -4,17 +4,17 @@
         <td colspan="5">
             <div class = "form-group form-group-sm layerSelect">
                 <div class="row">
-                    <label for="wfstSelectLayer" class="col-sm-5 control-label"> <%= buttonTitleConfig[3] + ":"%> </label>
-                    <div class="col-sm-5">
-                        <select class="form-control input-sm" id="wfstSelectLayer">
+                    <label for="wfstSelectLayer" class="col-md-5 col-form-label"> <%= buttonTitleConfig[3] + ":"%> </label>
+                    <div class="col-md-5">
+                        <select class="form-select form-select-sm" id="wfstSelectLayer">
                             <% for (let key in activeLayers) {
                                 if (activeLayers.hasOwnProperty(key)) { %>
                                     <option value="<%= key %>" <% if (key==currentLayerId){ %> selected <%}%>><%= activeLayers[key] %></option>
                             <% }} %>
                         </select>
                     </div>
-                    <div class="col-sm-1">
-                        <span tabindex="0" class="glyphicon glyphicon-info-sign info-sign" aria-hidden="true"></span>
+                    <div class="col-md-1">
+                        <span tabindex="0" class="bootstrap-icon info-icon info-sign" aria-hidden="true"><i class="bi-info-circle-fill"></i></span>
                     </div>
                 </div>
                 <div id="wfst-module-infoText">Es können nur WFS-T Layer ausgewählt werden, welche im Themenbaum aktiv sind.</div>
@@ -24,8 +24,8 @@
     <tr>
         <% if (buttonConfig[0]) { %>
             <td>
-                <button id="wfst-module-recordButton-point" class="btn btn-sm btn-lgv-grey record-button inactive" glyphicon="glyphicon-pencil">
-                    <span class="glyphicon glyphicon-record" aria-hidden="true"></span>
+                <button id="wfst-module-recordButton-point" class="btn btn-sm btn-secondary record-button inactive" icon="bi-pencil-fill">
+                    <span class="bootstrap-icon" aria-hidden="true"><i class="bi-record-circle"></i></span>
                     <br>
                     <span class="record-label"> <%= buttonTitleConfig[0] %></span>
                 </button>
@@ -34,8 +34,8 @@
         <% } %>
         <% if (buttonConfig[1]) { %>
             <td>
-                <button id="wfst-module-recordButton-line" class="btn btn-sm btn-lgv-grey record-button" glyphicon="glyphicon-pencil">
-                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                <button id="wfst-module-recordButton-line" class="btn btn-sm btn-secondary record-button" icon="icon-pencil-fill">
+                    <span class="bootstrap-icon" aria-hidden="true"><i class="bi-dash-lg"></i></span>
                     <br>
                     <span class="record-label"><%= buttonTitleConfig[1] %></span>
                 </button>
@@ -43,8 +43,8 @@
         <% } %>
         <% if (buttonConfig[2]) { %>
             <td>
-                <button id="wfst-module-recordButton-area" class="btn btn-sm btn-lgv-grey record-button" glyphicon="glyphicon-pencil">
-                    <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                <button id="wfst-module-recordButton-area" class="btn btn-sm btn-secondary record-button" icon="icon-pencil-fill">
+                    <span class="bootstrap-icon" aria-hidden="true"><i class="bi-play-fill"></i></span>
                     <br>
                     <span class="record-label"><%= buttonTitleConfig[2] %></span>
                 </button>
@@ -52,8 +52,8 @@
         <% } %>
         <% if (editButton) { %>
         <td>
-            <button id="wfst-module-recordButton-edit" class="btn btn-sm btn-lgv-grey record-button" glyphicon="glyphicon-wrench">
-                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+            <button id="wfst-module-recordButton-edit" class="btn btn-sm btn-secondary record-button" icon="bi-wrench">
+                <span class="bootstrap-icon" aria-hidden="true"><i class="bi-pencil-square"></i></span>
                 <br>
                 <span class="record-label"><%= editButtonTitle %></span>
             </button>
@@ -61,8 +61,8 @@
         <% } %>
         <% if (deleteButton) { %>
         <td>
-            <button id="wfst-module-recordButton-delete" class="btn btn-sm btn-lgv-grey record-button" glyphicon="glyphicon-trash">
-                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            <button id="wfst-module-recordButton-delete" class="btn btn-sm btn-secondary record-button" icon="bi-trash">
+                <span class="bootstrap-icon" aria-hidden="true"><i class="bi-trash"></i></span>
                 <br>
                 <span class="record-label"> <%= deleteButtonTitle %></span>
             </button>
@@ -72,8 +72,8 @@
     <% if (showAttrTable === true) { %>
     <tr>
         <td>
-            <button id="wfst-module-recordButton-save" class="btn btn-sm btn-lgv-grey record-button" title="Änderung der Attribute Speichern">
-                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+            <button id="wfst-module-recordButton-save" class="btn btn-sm btn-secondary record-button" title="Änderung der Attribute Speichern">
+                <span class="bootstrap-icon" aria-hidden="true"><i class="bi-save-fill"></i></span>
                 <br>
                 <span class="record-label">Speichern</span>
             </button>
@@ -82,7 +82,7 @@
             <form class="form-horizontal record-form">
                 <% wfstFields.forEach(function (field, index) { %>
                     <% let fieldValue, mandatory, mandatoryLabel; %>
-                <div class="form-group form-group-sm">
+                <div class="form-group form-group-sm row">
                     <% if (field.mandatory === true) {
                         mandatoryLabel = "mandatory";
                         if (featureProperties === undefined || featureProperties[field.field] === "") {
@@ -95,26 +95,28 @@
                     else if (featureProperties !== undefined || featureProperties[field.field] !== "") {
                         fieldValue = featureProperties[field.field];
                     } %>
-                    <label for="<%= field.field %>" class="col-sm-5 control-label <%= mandatoryLabel %>" style="text-align: left;"><%= field.caption %></label>
-                    <div class="col-sm-7">
+                    <label for="<%= field.field %>" class="col-md-5 col-form-label <%= mandatoryLabel %>" style="text-align: left;"><%= field.caption %></label>
+                    <div class="col-md-7">
                         <% if (field.type && field.inputFieldType === "checkbox") { %>
-                            <input type="checkbox" class="form-check-input input-xs input <%= mandatory %>" id="<%= field.field %>" <% if (fieldValue === "true") { %> checked <% } %>>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input input-xs input <%= mandatory %>" id="<%= field.field %>" <% if (fieldValue === "true") { %> checked <% } %>>
+                            </div>
                         <% } 
                         else if (field.type && field.inputFieldType === "date") { %> 
-                            <div class="input-group">
-                                <div class="input-group-addon input-sm">
-                                    <i class="glyphicon glyphicon-calendar"></i>
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-text">
+                                    <span class="bootstrap-icon"><i class="bi-calendar3"></i></span>
                                 </div>
                                 <div class="testDate">
-                                    <input data-provide="datepicker" class="form-control input-sm <%= field.type%> <%= mandatory %> datepicker" data-date-format="yyyy-mm-dd" data-date-language="de" data-date-autoclose=true data-date-today-highlight=true id="<%= field.field %>" autocomplete="off" placeholder="yyyy-mm-dd" type="text" value="<%= fieldValue %>"/>
+                                    <input data-provide="datepicker" class="form-control form-control-sm <%= field.type%> <%= mandatory %> datepicker" data-date-format="yyyy-mm-dd" data-date-language="de" data-date-autoclose=true data-date-today-highlight=true id="<%= field.field %>" autocomplete="off" placeholder="yyyy-mm-dd" type="text" value="<%= fieldValue %>"/>
                                 </div>
                             </div>
                         <% }
                         else if (field.type && field.inputFieldType) { %>
-                            <input type="<%= field.inputFieldType %>" class="form-control input-sm input <%= field.type%> <%= mandatory %>" id="<%= field.field %>" autocomplete="off" value="<%= fieldValue %>">
+                            <input type="<%= field.inputFieldType %>" class="form-control form-control-sm input <%= field.type%> <%= mandatory %>" id="<%= field.field %>" autocomplete="off" value="<%= fieldValue %>">
                         <% } %>
                     </div>
-                    <div id="warning-text <%= field.field %>" class="col-sm-offset-5 col-sm-7 warning-text"></div>
+                    <div id="warning-text <%= field.field %>" class="offset-md-5 col-md-7 warning-text"></div>
                 </div>
                 <% }); %>
             </form>
@@ -122,8 +124,8 @@
     </tr>
     <tr>
         <td>
-            <button id="wfst-module-recordButton-discard" class="btn btn-lgv-grey record-button" title="Änderungen der Attribute verwerfen">
-                <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+            <button id="wfst-module-recordButton-discard" class="btn btn-secondary record-button" title="Änderungen der Attribute verwerfen">
+                <span class="bootstrap-icon x-icon" aria-hidden="true"><i class="bi-x-circle"></i></span>
                 <br>
                 <span class="record-label">Verwerfen</span>
             </button>
@@ -132,7 +134,7 @@
     <% } else if (showCancel === true) { %>
         <tr>
             <td colspan="5">
-                <div class="col-sm-5">
+                <div class="col-md-5">
                     <button id="wfst-module-recordButton-cancel" class="btn btn-danger record-button" title="Aktion Abbrechen">
                         <span class="record-label">Abbrechen</span>
                     </button>

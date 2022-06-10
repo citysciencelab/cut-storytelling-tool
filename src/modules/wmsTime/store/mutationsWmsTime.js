@@ -9,12 +9,16 @@ const mutations = {
         state.windowWidth = window.innerWidth;
     },
     // TimeSlider mutations
-    addTimeSliderObject (state, object) {
-        state.timeSlider.objects.push(object);
+    addTimeSliderObject (state, timeSliderObject) {
+        state.timeSlider.objects = [
+            ...state.timeSlider.objects,
+            timeSliderObject
+        ];
     },
-    setTimeSliderActive ({timeSlider}, {active, currentLayerId}) {
+    setTimeSliderActive ({timeSlider}, {active, currentLayerId, playbackDelay}) {
         timeSlider.active = active;
         timeSlider.currentLayerId = currentLayerId;
+        timeSlider.playbackDelay = playbackDelay;
     },
     setTimeSliderDefaultValue ({timeSlider: {currentLayerId, objects}}, newValue) {
         const currentObject = findCurrentTimeSliderObject(currentLayerId, objects);

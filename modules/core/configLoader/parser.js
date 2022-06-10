@@ -1,6 +1,6 @@
 import Backbone from "backbone";
 import ModelList from "../modelList/list";
-import {getLayerList} from "masterportalAPI/src/rawLayerList";
+import {getLayerList} from "@masterportal/masterportalapi/src/rawLayerList";
 import store from "../../../src/app-store/index";
 
 const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
@@ -116,16 +116,6 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
         this.listenTo(this, {
             "change:category": function () {
-                const modelList = Radio.request("ModelList", "getCollection"),
-                    modelListToRemove = modelList.filter(function (model) {
-                        // Alle Fachdaten Layer
-                        return model.get("type") === "layer" && model.get("parentId") !== "Baselayer";
-                    });
-
-                modelListToRemove.forEach(model => {
-                    model.setIsSelected(false);
-                });
-                modelList.remove(modelListToRemove);
                 this.setItemList([]);
                 this.addTreeMenuItems();
                 this.parseTree(getLayerList());
@@ -142,7 +132,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             }
         });
 
-        this.parseMenu(this.get("portalConfig").menu, "root");
+        this.parseMenu("root", this.get("portalConfig").menu);
         this.parseControls(this.get("portalConfig").controls);
         this.parseSearchBar(this.get("portalConfig").searchBar);
 
@@ -172,11 +162,11 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
     /**
      * Parsed the menu entries (everything except the contents of the tree)
-     * @param {Object} [items={}] Single levels of the menu bar, e.g. contact, legend, tools and tree
      * @param {String} parentId indicates to whom the items will be added
+     * @param {Object} [items={}] Single levels of the menu bar, e.g. contact, legend, tools and tree
      * @return {void}
      */
-    parseMenu: function (items = {}, parentId) {
+    parseMenu: function (parentId, items = {}) {
         Object.entries(items).forEach(itemX => {
             const value = itemX[1],
                 key = itemX[0];
@@ -197,7 +187,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 // Attribute aus der config.json werden von item geerbt
                 Object.assign(item, value);
                 this.addItem(item);
-                this.parseMenu(value.children, key);
+                this.parseMenu(key, value.children);
             }
             else if (key.search("staticlinks") !== -1) {
                 value.forEach(staticlink => {
@@ -321,27 +311,38 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {Boolean} isExpanded - if true, folder will be expanded
      * @param {String} i18nKey - key for the name to translate
      * @param {Boolean} [invertLayerOrder=false] inverts the order the layers when added to the map on folder click
+     * @param {Boolean} [isFolderSelectable=false] flag if folder is selectable or not
      * @returns {void}
      */
-    addFolder: function (name, id, parentId, level, isExpanded, i18nKey, invertLayerOrder = false) {
-        const folder = {
-            type: "folder",
-            name: i18nKey ? i18next.t(i18nKey) : name,
-            i18nextTranslate: i18nKey ? function (setter) {
-                if (typeof setter === "function" && i18next.exists(i18nKey)) {
-                    setter("name", i18next.t(i18nKey));
-                }
-            } : null,
-            glyphicon: "glyphicon-plus-sign",
-            id: id,
-            parentId: parentId,
-            isExpanded: isExpanded ? isExpanded : false,
-            level: level,
-            quickHelp: store.getters["QuickHelp/isSet"],
-            invertLayerOrder
-        };
+    addFolder: function (name, id, parentId, level, isExpanded, i18nKey, invertLayerOrder = false, isFolderSelectable = false) {
+        const itemList = this.get("itemList"),
+            folder = {
+                type: "folder",
+                name: i18nKey ? i18next.t(i18nKey) : name,
+                i18nextTranslate: i18nKey ? function (setter) {
+                    if (typeof setter === "function" && i18next.exists(i18nKey)) {
+                        setter("name", i18next.t(i18nKey));
+                    }
+                } : null,
+                icon: "bi-plus-circle-fill",
+                id: id,
+                parentId: parentId,
+                isExpanded: isExpanded ? isExpanded : false,
+                level: level,
+                quickHelp: store.getters["QuickHelp/isSet"],
+                invertLayerOrder,
+                isFolderSelectable
+            };
+        let folderExists = false;
 
-        this.addItem(folder);
+        itemList.forEach(element => {
+            if (element.id === id) {
+                folderExists = true;
+            }
+        });
+        if (!folderExists) {
+            this.addItem(folder);
+        }
     },
 
     /**
@@ -358,7 +359,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {(boolean/object)} [time = false] If set to `true` or and Object, the configured Layer is expected to be a WMS-T.
      * @returns {void}
      */
-    addLayer: function (name, id, parentId, level, layers, url, version, {transparent = true, isSelected = false, time = false}) {
+    addLayer: function (name, id, parentId, level, layers, url, version, {transparent = true, isSelected = false, time = false, styles = ""}) {
         const layer = {
             id,
             name,
@@ -370,6 +371,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             transparent,
             isSelected,
             time,
+            styles,
             cache: false,
             datasets: [],
             featureCount: 3,
@@ -445,9 +447,10 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {String} [parentId] Id for the correct position of the layer in the layertree.
      * @param {String} [styleId] Id for the styling of the features; should correspond to a style from the style.json.
      * @param {(String | Object)} [gfiAttributes="ignore"] Attributes to be shown when clicking on the feature using the GFI tool.
+     * @param {Object} [opts] additional options to append to the model on initialization
      * @returns {void}
      */
-    addVectorLayer: function (name, id, features, parentId, styleId, gfiAttributes = "ignore") {
+    addVectorLayer: function (name, id, features, parentId, styleId, gfiAttributes = "ignore", opts = {}) {
         const layer = {
             type: "layer",
             name: name,
@@ -465,7 +468,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             isSelected: true,
             cache: false,
             datasets: [],
-            urlIsVisible: false
+            urlIsVisible: false,
+            ...opts
         };
 
         if (styleId !== undefined) {
@@ -489,36 +493,34 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     addGdiLayer: function (hit) {
-        const treeType = this.get("treeType");
-        let level = 0,
-            layerTreeId,
-            parentId = "tree",
-            gdiLayer = {
-                cache: false,
-                featureCount: "3",
-                format: "image/png",
-                gutter: "0",
-                isChildLayer: false,
-                isSelected: true,
-                isVisibleInTree: true,
-                layerAttribution: "nicht vorhanden",
-                legendURL: "",
-                maxScale: "2500000",
-                minScale: "0",
-                singleTile: false,
-                tilesize: "512",
-                transparency: 0,
-                transparent: true,
-                typ: "WMS",
-                type: "layer",
-                urlIsVsible: true
-            };
+        if (hit?.source) {
+            const treeType = this.get("treeType");
+            let level = 0,
+                parentId = "tree",
+                gdiLayer = Object.assign({
+                    cache: false,
+                    featureCount: "3",
+                    format: "image/png",
+                    gfiAttributes: "showAll",
+                    gfiTheme: "default",
+                    gutter: "0",
+                    isChildLayer: false,
+                    isSelected: true,
+                    isVisibleInTree: true,
+                    layerAttribution: "nicht vorhanden",
+                    legendURL: "",
+                    maxScale: "2500000",
+                    minScale: "0",
+                    singleTile: false,
+                    tilesize: "512",
+                    transparency: 0,
+                    transparent: true,
+                    typ: "WMS",
+                    type: "layer",
+                    urlIsVsible: true
+                }, hit.source);
 
-        if (hit.source) {
-            // check if layer is already in layer tree
-            layerTreeId = this.getItemByAttributes({id: hit.source.id});
-            if (!layerTreeId) {
-
+            if (!this.getItemByAttributes({id: hit.source.id})) {
                 if (treeType === "custom") {
                     // create folder and add it as "Externe Fachdaten"
                     parentId = "extthema";
@@ -532,19 +534,32 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                         this.addFolder("Fachthema", parentId, "ExternalLayer", 1, false, "common:tree.subjectData");
                     }
                 }
+                if (treeType === "default") {
+                    let category,
+                        parent = null;
+
+                    if (this.get("category") === "Opendata") {
+                        category = hit.source.datasets[0].kategorie_opendata[0];
+                    }
+                    else if (this.get("category") === "Inspire") {
+                        category = hit.source.datasets[0].kategorie_inspire[0];
+                    }
+                    else if (this.get("category") === "Behörde") {
+                        category = hit.source.datasets[0].kategorie_organisation;
+                    }
+                    parent = this.getItemByAttributes({name: category});
+                    if (parent) {
+                        parentId = parent.id;
+                    }
+                    level = 1;
+                }
+
                 gdiLayer = Object.assign(gdiLayer, {
-                    name: hit.source.name,
-                    id: hit.source.id,
                     parentId: parentId,
                     level: level,
-                    layers: hit.source.layers,
-                    url: hit.source.url,
-                    version: hit.source.version,
-                    gfiAttributes: hit.source.gfiAttributes ? hit.source.gfiAttributes : "showAll",
-                    gfiTheme: hit.source.gfiTheme ? hit.source.gfiTheme : "default",
-                    datasets: hit.source.datasets,
                     isJustAdded: true
                 });
+
                 this.addItemAtTop(gdiLayer);
                 Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.source.id});
             }
@@ -555,7 +570,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             }
         }
         else {
-            console.error("Es konnte kein Eintrag für Layer " + hit.source.id + " in ElasticSearch gefunden werden.");
+            console.error("No entry could be found for layer " + hit.source.id + " in ElasticSearch.");
         }
     },
 
@@ -649,11 +664,20 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             overLayers = this.get("overlayer"),
             baseLayersName = baseLayers?.name ? baseLayers.name : null,
             overLayersName = overLayers?.name ? overLayers.name : null,
-            isQuickHelpSet = store.getters["QuickHelp/isSet"],
             baseLayersDefaultKey = "common:tree.backgroundMaps",
             overLayersDefaultKey = "common:tree.subjectData";
         let baseLayerI18nextTranslate = null,
-            overLayerI18nextTranslate = null;
+            overLayerI18nextTranslate = null,
+            isQuickHelpSet = store.getters["QuickHelp/isSet"];
+
+        // @deprecated in the next major-release!
+        if (this.get("portalConfig")?.menu?.tree?.quickHelp === true || this.get("portalConfig")?.menu?.tree?.quickHelp === false) {
+            console.warn("The attribute 'Portalconfig.tree.quickHelp' is deprecated in the next major-release. Please use 'Portalconfig.quickHelp.configs.tree'!");
+            isQuickHelpSet = this.get("portalConfig").menu.tree.quickHelp;
+        }
+        if (this.get("portalConfig")?.quickHelp?.configs?.tree !== undefined) {
+            isQuickHelpSet = this.get("portalConfig").quickHelp.configs.tree;
+        }
 
         if (!baseLayersName && !baseLayers.i18nextTranslate) {
             // no name and no translation-function found: provide translation of default key
@@ -675,7 +699,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             type: "folder",
             name: baseLayersName ? baseLayersName : i18next.t(baseLayersDefaultKey),
             i18nextTranslate: baseLayers.i18nextTranslate ? baseLayers.i18nextTranslate : baseLayerI18nextTranslate,
-            glyphicon: "glyphicon-plus-sign",
+            icon: "bi-plus-circle-fill",
             id: "Baselayer",
             parentId: "tree",
             isInThemen: true,
@@ -689,7 +713,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             type: "folder",
             name: overLayersName ? overLayersName : i18next.t(overLayersDefaultKey),
             i18nextTranslate: overLayers.i18nextTranslate ? overLayers.i18nextTranslate : overLayerI18nextTranslate,
-            glyphicon: "glyphicon-plus-sign",
+            icon: "bi-plus-circle-fill",
             id: "Overlayer",
             parentId: "tree",
             isInThemen: true,
@@ -710,10 +734,9 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                     setter("name", i18next.t("common:tree.selectedTopics"));
                 }
             },
-            glyphicon: "glyphicon-plus-sign",
+            icon: "bi-plus-circle-fill",
             id: "SelectedLayer",
             parentId: "tree",
-            isLeafFolder: true,
             isInThemen: true,
             isInitiallyExpanded: true,
             isAlwaysExpanded: isAlwaysExpandedList.includes("SelectedLayer"),
@@ -737,20 +760,21 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         const enabled = id === "3d_daten" ? !Radio.request("Util", "isViewMobile") : true;
 
         if (enabled && overLayer !== undefined) {
-            const name = overLayer?.name ? overLayer.name : i18next.t(defaultTranslationKey),
-                // If no name and no translation-function was found, the translation of the default value is used
-                i18nextTranslate = overLayer?.name && overLayer?.i18nextTranslate
-                    ? overLayer.i18nextTranslate
-                    : setter => {
-                        if (typeof setter === "function" && i18next.exists(defaultTranslationKey)) {
-                            setter("name", i18next.t(defaultTranslationKey));
-                        }
-                    };
+            const name = overLayer?.name ? overLayer.name : null;
 
             this.addItemByPosition({
                 type: "folder",
-                name,
-                i18nextTranslate,
+                name: name ? name : i18next.t(defaultTranslationKey),
+                i18nextTranslate: (setter) => {
+                    if (typeof setter === "function") {
+                        if (name) {
+                            setter("name", i18next.exists(name) ? i18next.t(name) : name);
+                        }
+                        else if (i18next.exists(defaultTranslationKey)) {
+                            setter("name", i18next.t(defaultTranslationKey));
+                        }
+                    }
+                },
                 id,
                 parentId: "tree",
                 isInThemen: true,

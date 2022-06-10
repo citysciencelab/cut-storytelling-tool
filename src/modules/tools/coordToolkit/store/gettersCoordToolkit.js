@@ -1,5 +1,5 @@
 
-import {transformFromMapProjection} from "masterportalAPI/src/crs";
+import {transformFromMapProjection} from "@masterportal/masterportalapi/src/crs";
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
 import coordState from "./stateCoordToolkit";
 
@@ -22,7 +22,7 @@ const getters = {
             positionTargetProjection = transformFromMapProjection(
                 map,
                 targetProjection,
-                state.positionMapProjection
+                [...state.positionMapProjection]
             );
         }
         return positionTargetProjection;

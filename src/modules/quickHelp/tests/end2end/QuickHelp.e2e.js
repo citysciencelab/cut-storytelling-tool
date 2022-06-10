@@ -41,7 +41,7 @@ async function QuickHelpTests ({builder, url, resolution, capability}) {
             });
 
             it("clicking questionmark sign near searchbar opens quick help", async () => {
-                navBarIcon = await driver.findElement(By.css("div#searchbar span.glyphicon-question-sign"));
+                navBarIcon = await driver.findElement(By.css("div#searchbar span.bootstrap-icon > .bi-question-circle-fill"));
                 await navBarIcon.click();
 
                 quickHelp = await driver.wait(until.elementLocated(By.css("#quickHelp")), 1000);
@@ -49,17 +49,19 @@ async function QuickHelpTests ({builder, url, resolution, capability}) {
             });
 
             it.skip("clicking the cross sign in the quick help window will close it", async () => {
-                const cross = await driver.findElement(By.css("#quickHelp span.glyphicon-remove"));
+                const cross = await driver.findElement(By.css("#quickHelp span.bootstrap-icon > .bi-x-lg"));
 
                 await cross.click();
                 await driver.wait(
                     async () => (await driver.findElements(By.css("#quickHelp"))).length <= 0,
-                    1000
+                    5000
                 );
             });
 
-            it.skip("clicking questionmark sign near searchbar after opened it before it close the quick help window", async () => {
+            it("will close the quickHelp if clicking the questionmark sign twice", async () => {
+                navBarIcon = await driver.findElement(By.css("div#searchbar span.glyphicon-question-sign"));
                 await navBarIcon.click();
+
                 quickHelp = await driver.wait(until.elementLocated(By.css("#quickHelp")), 1000);
                 await driver.wait(until.elementIsVisible(quickHelp), 5000);
                 await navBarIcon.click();
@@ -73,7 +75,7 @@ async function QuickHelpTests ({builder, url, resolution, capability}) {
                 await navBarIcon.click();
                 quickHelp = await driver.wait(until.elementLocated(By.css("#quickHelp")), 1000);
                 await driver.wait(until.elementIsVisible(quickHelp), 5000);
-                const print = await driver.findElement(By.css("#quickHelp span.glyphicon-print")),
+                const print = await driver.findElement(By.css("#quickHelp span.bootstrap-icon > .bi-printer-fill")),
                     originalWindow = await driver.getWindowHandle();
 
                 if ((await driver.getAllWindowHandles()).length !== 1) {

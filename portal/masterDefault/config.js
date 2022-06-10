@@ -8,6 +8,7 @@ const Config = {
         layerIDsToIgnore: [
             "1912", "1913", "1914", "1915", "1916", "1917", // UESG
             "2298", // Straßenbaumkataster cache grau
+            "2297", // Straßenbaumkataster cache
             "1791", // nachträgliche Bodenrichtwerte lagetypisch 1964
             "8713" // Layer Schulinfo
         ],
@@ -89,7 +90,6 @@ const Config = {
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
     restConf: "https://geodienste.hamburg.de/lgv-config/rest-services-internet.json",
     styleConf: "https://geodienste.hamburg.de/lgv-config/style_v3.json",
-    isMenubarVisible: true,
     gemarkungen: "https://geodienste.hamburg.de/lgv-config/gemarkung.json",
     obliqueMap: true,
     cesiumParameter: {
@@ -112,12 +112,14 @@ const Config = {
             en: "English",
             es: "Español",
             it: "Italiano",
+            platt: "Platt",
             pt: "Português",
-            tr: "Türkçe"
+            ru: "Русский",
+            tr: "Türkçe",
+            ua: "Українська"
         },
         fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"],
-        loadPath: "/locales/{{lng}}/{{ns}}.json"
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"]
     }
 };
 

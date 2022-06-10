@@ -12,6 +12,10 @@ import uniqueId from "../../../../utils/uniqueId";
 import findWhereJs from "../../../../utils/findWhereJs";
 import Geometry from "ol/geom/Geometry";
 import {convertColor} from "../../../../utils/convertColor";
+import {MVTEncoder} from "@geoblocks/print";
+import VectorTileLayer from "ol/layer/VectorTile";
+import {getLastPrintedExtent} from "../store/actions/actionsPrintInitialization";
+
 
 const BuildSpecModel = {
     defaults: {
@@ -168,33 +172,36 @@ const BuildSpecModel = {
      * @param {ol.layer.Layer[]} layerList All visible layers on the map.
      * @returns {void}
      */
-    buildLayers: function (layerList) {
+    buildLayers: async function (layerList) {
         const layers = [],
             attributes = this.defaults.attributes,
             currentResolution = Radio.request("MapView", "getOptions")?.resolution,
             visibleLayerIds = [];
 
         if (Array.isArray(layerList)) {
-            layerList.forEach(layer => {
+            for (const layer of layerList) {
                 const printLayers = [];
 
                 if (layer instanceof Group) {
-                    layer.getLayers().getArray().forEach(childLayer => {
-                        printLayers.push(this.buildLayerType(childLayer, currentResolution));
-                    });
+                    for (const childLayer of layer.getLayers().getArray()) {
+                        printLayers.push(await this.buildLayerType(childLayer, currentResolution));
+                        visibleLayerIds.push(childLayer.get("id"));
+                    }
                 }
                 else {
-                    printLayers.push(this.buildLayerType(layer, currentResolution));
+                    printLayers.push(await this.buildLayerType(layer, currentResolution));
                 }
                 printLayers.forEach(printLayer => {
                     if (typeof printLayer !== "undefined") {
-                        visibleLayerIds.push(layer?.get("id"));
+                        if (layer?.get("id") !== undefined) {
+                            visibleLayerIds.push(layer?.get("id"));
+                        }
                         layers.push(printLayer);
                     }
-                });
-            });
-        }
 
+                });
+            }
+        }
         this.setVisibleLayerIds(visibleLayerIds);
         attributes.map.layers = layers.reverse();
     },
@@ -229,7 +236,7 @@ const BuildSpecModel = {
      * @param {Number} currentResolution Current map resolution
      * @returns {Object} - LayerObject for MapFish print.
      */
-    buildLayerType: function (layer, currentResolution) {
+    buildLayerType: async function (layer, currentResolution) {
         const extent = Radio.request("MapView", "getCurrentExtent"),
             layerMinRes = typeof layer?.get === "function" ? layer.get("minResolution") : false,
             layerMaxRes = typeof layer?.get === "function" ? layer.get("maxResolution") : false,
@@ -240,7 +247,12 @@ const BuildSpecModel = {
         if (isInScaleRange) {
             const source = layer.getSource();
 
-            if (layer instanceof Image) {
+            if (layer instanceof VectorTileLayer) {
+                const maskExtent = getLastPrintedExtent();
+
+                returnLayer = await this.buildVectorTile(layer, currentResolution, maskExtent);
+            }
+            else if (layer instanceof Image) {
                 returnLayer = this.buildImageWms(layer);
             }
             else if (layer instanceof Tile) {
@@ -328,6 +340,47 @@ const BuildSpecModel = {
     },
 
     /**
+     * returns vector tile layer information
+     * @param {ol.layer.VectorTile} layer vector tile layer with vector tile source
+     * @param {number} resolution print resolution
+     * @param {ol.Extent} extent printed extent
+     * @returns {Object} - static image layer spec
+     */
+    buildVectorTile: async function (layer, resolution, extent) {
+        MVTEncoder.useImmediateAPI = false;
+        const mapInfo = store.state.Tools.Print.layoutMapInfo,
+            targetDPI = store.state.Tools.Print.dpiForPdf,
+            factor = targetDPI / 72,
+            targetWidth = mapInfo[0] * factor,
+            targetHeight = mapInfo[1] * factor,
+            encoder = new MVTEncoder(),
+            r = await encoder.encodeMVTLayer({
+                layer,
+                tileResolution: resolution,
+                printResolution: resolution,
+                printExtent: extent,
+                canvasSize: [targetWidth, targetHeight]
+            }),
+            {extent: tileExtent, baseURL: tileBaseURL} = r[0];
+
+        if (r.length !== 1) {
+            throw new Error("handle several results");
+        }
+
+        if (r[0].baseURL.length <= 6) {
+            return null;
+        }
+
+        return {
+            extent: tileExtent,
+            baseURL: tileBaseURL,
+            type: "image",
+            name: layer.get("name"),
+            opacity: 1,
+            imageFormat: "image/png"
+        };
+    },
+    /**
      * returns tile wms layer information
      * @param {ol.layer.Tile} layer tile layer with tile wms source
      * @returns {Object} - wms layer spec
@@ -337,7 +390,7 @@ const BuildSpecModel = {
             mapObject = {
                 baseURL: source.getUrls()[0],
                 opacity: layer.getOpacity(),
-                type: "WMS",
+                type: source.getParams().SINGLETILE ? "WMS" : "tiledwms",
                 layers: source.getParams().LAYERS.split(","),
                 styles: source.getParams().STYLES ? source.getParams().STYLES.split(",") : undefined,
                 imageFormat: source.getParams().FORMAT,
@@ -347,6 +400,9 @@ const BuildSpecModel = {
                 }
             };
 
+        if (!source.getParams().SINGLETILE) {
+            mapObject.tileSize = [source.getParams().WIDTH, source.getParams().HEIGHT];
+        }
         if (Object.prototype.hasOwnProperty.call(source.getParams(), "SLD_BODY") && source.getParams().SLD_BODY !== undefined) {
             mapObject.customParams.SLD_BODY = source.getParams().SLD_BODY;
             mapObject.styles = ["style"];
@@ -402,10 +458,14 @@ const BuildSpecModel = {
      */
     buildStyle: function (layer, features, geojsonList) {
         const mapfishStyleObject = {
-            "version": "2"
-        };
+                "version": "2"
+            },
+            layersToNotReverse = ["measure_layer", "import_draw_layer"];
 
-        features.reverse().forEach(feature => {
+        if (!layersToNotReverse.includes(layer.values_.id)) {
+            features.reverse();
+        }
+        features.forEach(feature => {
             const styles = this.getFeatureStyle(feature, layer),
                 styleAttributes = this.getStyleAttributes(layer, feature);
 
@@ -418,6 +478,9 @@ const BuildSpecModel = {
 
             styles.forEach((style, index) => {
                 if (style !== null) {
+                    const styleModel = this.getStyleModel(layer);
+                    let limiter = ",";
+
                     clonedFeature = feature.clone();
                     styleAttributes.forEach(attribute => {
                         clonedFeature.set(attribute, (clonedFeature.get("features") ? clonedFeature.get("features")[0] : clonedFeature).get(attribute) + "_" + String(index));
@@ -429,14 +492,20 @@ const BuildSpecModel = {
                     if (styleGeometryFunction !== null && styleGeometryFunction !== undefined) {
                         clonedFeature.setGeometry(styleGeometryFunction(clonedFeature));
                         geometryType = styleGeometryFunction(clonedFeature).getType();
+                        if (geometryType === "Polygon") {
+                            this.checkPolygon(clonedFeature);
+                        }
                     }
-                    stylingRules = this.getStylingRules(layer, clonedFeature, styleAttributes, style)
-                        .replaceAll(",", " AND ");
+                    stylingRules = this.getStylingRules(layer, clonedFeature, styleAttributes, style);
+                    if (styleModel !== undefined && styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
+                        stylingRules = stylingRules.replaceAll(limiter, " AND ");
+                        limiter = " AND ";
+                    }
                     stylingRulesSplit = stylingRules
                         .replaceAll("[", "")
                         .replaceAll("]", "")
                         .replaceAll("*", "")
-                        .split(" AND ")
+                        .split(limiter)
                         .map(rule => rule.split("="));
 
                     if (Array.isArray(stylingRulesSplit) && stylingRulesSplit.length) {
@@ -447,7 +516,7 @@ const BuildSpecModel = {
                             [])
                         );
                     }
-                    this.addFeatureToGeoJsonList(clonedFeature, geojsonList);
+                    this.addFeatureToGeoJsonList(clonedFeature, geojsonList, style);
 
                     // do nothing if we already have a style object for this CQL rule
                     if (Object.prototype.hasOwnProperty.call(mapfishStyleObject, stylingRules)) {
@@ -469,6 +538,9 @@ const BuildSpecModel = {
                         styleObject.symbolizers.push(this.buildPolygonStyle(style, layer));
                     }
                     else if (geometryType === "LineString" || geometryType === "MultiLineString") {
+                        if (layer.values_.id === "measure_layer" && style.stroke_ === null) {
+                            return;
+                        }
                         styleObject.symbolizers.push(this.buildLineStringStyle(style, layer));
                     }
                     // label styling
@@ -481,6 +553,47 @@ const BuildSpecModel = {
             });
         });
         return mapfishStyleObject;
+    },
+
+    /**
+     * The geometry of the feature is checked for not closed linearRing. Used for type Polygon.
+     * If it is not closed, the coordinates are adapted.
+     * @param {ol.Feature} feature to inspect
+     * @returns {ol.Feature} corrected feature, if necessary
+     */
+    checkPolygon (feature) {
+        if (Array.isArray(feature.getGeometry().getCoordinates()[0])) {
+            const coordinates = feature.getGeometry().getCoordinates()[0];
+
+            if (coordinates[0][0] !== coordinates[coordinates.length - 1][0] && coordinates[0][1] !== coordinates[coordinates.length - 1][1]) {
+                const coords = [];
+
+                coordinates.forEach(coord => {
+                    coords.push(coord);
+                });
+                feature.getGeometry().setCoordinates(coords);
+            }
+
+        }
+        return feature;
+    },
+
+    getStyleModel (layer, layerId) {
+        const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer?.get("id")});
+        let foundChild;
+
+        if (typeof layerModel?.get === "function") {
+            if (layerModel.get("typ") === "GROUP") {
+                foundChild = layerModel.get("children").find(child => child.id === layerId);
+                if (foundChild) {
+                    return Radio.request("StyleList", "returnModelById", foundChild.styleId);
+                }
+            }
+            else {
+                return Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+            }
+        }
+        return undefined;
     },
 
     /**
@@ -570,6 +683,9 @@ const BuildSpecModel = {
         else if (src.charAt(0) === "/") {
             url = origin + src;
         }
+        else if (src.indexOf("../") === 0) {
+            url = new URL(src, window.location.href).href;
+        }
         else if (origin.indexOf("localhost") === -1) {
             // backwards-compatibility:
             url = origin + "/lgv-config/img/" + this.getImageName(src);
@@ -577,6 +693,7 @@ const BuildSpecModel = {
         else if (src.indexOf("data:image/svg+xml;charset=utf-8") === 0) {
             url = src;
         }
+
         return url;
     },
 
@@ -599,7 +716,10 @@ const BuildSpecModel = {
 
         return {
             type: "text",
-            label: style.getText() !== undefined ? style.getText() : "",
+            // tell MapFish that each feature has a property "_label" which contains the label-string
+            // it is necessary to "add/fill" the "_label"-property when we call convertFeatureToGeoJson()
+            // before we add it to the geoJSONList
+            label: "[_label]",
             fontColor: convertColor(fontColor, "hex"),
             fontOpacity: fontColor[0] !== "#" ? fontColor[3] : 1,
             labelOutlineColor: stroke ? convertColor(stroke.getColor(), "hex") : undefined,
@@ -799,14 +919,15 @@ const BuildSpecModel = {
      * adds the feature to the geojson list
      * @param {ol.Feature} feature - the feature can be clustered
      * @param {GeoJSON[]} geojsonList -
+     * @param {ol.style.Style[]} style - the feature-style
      * @returns {void}
      */
-    addFeatureToGeoJsonList: function (feature, geojsonList) {
+    addFeatureToGeoJsonList: function (feature, geojsonList, style) {
         let convertedFeature;
 
         if (feature.get("features") && feature.get("features").length === 1) {
             feature.get("features").forEach((clusteredFeature) => {
-                convertedFeature = this.convertFeatureToGeoJson(clusteredFeature);
+                convertedFeature = this.convertFeatureToGeoJson(clusteredFeature, style);
 
                 if (convertedFeature) {
                     geojsonList.push(convertedFeature);
@@ -814,7 +935,7 @@ const BuildSpecModel = {
             });
         }
         else {
-            convertedFeature = this.convertFeatureToGeoJson(feature);
+            convertedFeature = this.convertFeatureToGeoJson(feature, style);
 
             if (convertedFeature) {
                 geojsonList.push(convertedFeature);
@@ -825,21 +946,27 @@ const BuildSpecModel = {
     /**
      * converts an openlayers feature to a GeoJSON feature object
      * @param {ol.Feature} feature - the feature to convert
+     * @param {ol.style.Style[]} style - the feature-style
      * @returns {object} GeoJSON object
      */
-    convertFeatureToGeoJson: function (feature) {
+    convertFeatureToGeoJson: function (feature, style) {
         const clonedFeature = feature.clone(),
-            geojsonFormat = new GeoJSON();
+            geojsonFormat = new GeoJSON(),
+            labelText = style.getText()?.getText() || "";
         let convertedFeature;
 
-        // remove all object properties except geometry. Otherwise mapfish runs into an error
+        // remove all object and array properties except geometry. Otherwise mapfish runs into an error
         Object.keys(clonedFeature.getProperties()).forEach(property => {
-            if (isObject(clonedFeature.get(property)) && !(clonedFeature.get(property) instanceof Geometry)) {
+            if (isObject(clonedFeature.get(property)) && !(clonedFeature.get(property) instanceof Geometry) || Array.isArray(clonedFeature.get(property))) {
                 clonedFeature.unset(property);
             }
         });
+
         // take over id from feature because the feature id is not set in the clone.
         clonedFeature.setId(feature.getId() || feature.ol_uid);
+        // set "_label"-Propterty.
+        // This is necessary because the *label* of the *text-Style* (buildTextStyle()) now referrs to it.
+        clonedFeature.set("_label", labelText);
         // circle is not suppported by geojson
         if (clonedFeature.getGeometry().getType() === "Circle") {
             clonedFeature.setGeometry(fromCircle(clonedFeature.getGeometry()));
@@ -853,7 +980,7 @@ const BuildSpecModel = {
             convertedFeature = undefined;
         }
         // if its a cluster remove property features
-        if (convertedFeature.properties && Object.prototype.hasOwnProperty.call(convertedFeature.properties, "features")) {
+        if (convertedFeature?.properties && Object.prototype.hasOwnProperty.call(convertedFeature.properties, "features")) {
             delete convertedFeature.properties.features;
         }
         return convertedFeature;
@@ -893,9 +1020,8 @@ const BuildSpecModel = {
      * @returns {string} an ECQL Expression
      */
     getStylingRules: function (layer, feature, styleAttributes, style, styleIndex) {
-        const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
-            styleAttr = feature.get("styleId") ? "styleId" : styleAttributes;
-        let styleModel;
+        const styleAttr = feature.get("styleId") ? "styleId" : styleAttributes,
+            styleModel = this.getStyleModel(layer);
 
         if (styleAttr.length === 1 && styleAttr[0] === "") {
             if (feature.get("features") && feature.get("features").length === 1) {
@@ -947,7 +1073,6 @@ const BuildSpecModel = {
 
                 feature.set(styleAttr[0], value);
                 return `[${styleAttr[0]}='${value}']`;
-
             }
 
             // Current feature is not clustered but a single feature in a clustered layer
@@ -959,15 +1084,11 @@ const BuildSpecModel = {
             }, "[").slice(0, -1) + "]";
         }
         // feature with geometry style and label style
-        if (typeof layerModel?.get === "function" && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
-            styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+        if (styleModel !== undefined && styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
+            const labelField = styleModel.get("labelField");
 
-            if (styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
-                const labelField = styleModel.get("labelField");
-
-                return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}' AND ${labelField}='${feature.get(labelField)}',`, "[").slice(0, -1)
-                    + "]";
-            }
+            return styleAttr.reduce((acc, curr) => acc + `${curr}='${feature.get(curr)}' AND ${labelField}='${feature.get(labelField)}',`, "[").slice(0, -1)
+                + "]";
         }
         // feature with geometry style
         if (styleAttr instanceof Array) {
@@ -984,13 +1105,12 @@ const BuildSpecModel = {
      * @returns {String[]} the attributes by whose value the feature is styled
      */
     getStyleAttributes: function (layer, feature) {
-        const layerId = layer.get("id");
-        let layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
-            styleFields = ["styleId"];
+        const layerId = layer.get("id"),
+            styleList = this.getStyleModel(layer, layerId);
+        let styleFields = ["styleId"],
+            layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")});
 
-        if (typeof layerModel?.get === "function") {
-            const styleList = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
-
+        if (styleList !== undefined) {
             layerModel = this.getChildModelIfGroupLayer(layerModel, layerId);
 
             if (layerModel.get("styleId")) {
@@ -1042,13 +1162,16 @@ const BuildSpecModel = {
         if (isLegendSelected && legends.length > 0) {
             legendObject.layers = [];
             legends.forEach(legendObj => {
+                if (Radio.request("ModelList", "getModelByAttributes", {id: legendObj.id}).get("children")?.length > 0) {
+                    legendObj.id = Radio.request("ModelList", "getModelByAttributes", {id: legendObj.id}).get("children")[0].id;
+                }
+
                 if (this.defaults.visibleLayerIds.includes(legendObj.id)) {
                     const legendContainsPdf = this.legendContainsPdf(legendObj.legend);
 
                     if (isMetaDataAvailable) {
                         metaDataLayerList.push(legendObj.name);
                     }
-
                     if (legendContainsPdf) {
                         Radio.trigger("Alert", "alert", {
                             kategorie: "alert-info",
@@ -1064,7 +1187,6 @@ const BuildSpecModel = {
                         });
                     }
                 }
-
             });
         }
         this.setShowLegend(isLegendSelected);

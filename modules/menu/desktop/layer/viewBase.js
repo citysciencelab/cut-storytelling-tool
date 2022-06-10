@@ -1,5 +1,6 @@
 import axios from "axios";
 import store from "../../../../src/app-store";
+import Dropdown from "bootstrap/js/dist/dropdown";
 
 /**
  * Base class for layer view that provides common functionality.
@@ -26,13 +27,16 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
 
     /**
      * Draws the settings (transparency, metainfo, ...)
+     * @param {String} layerId The layer id.
      * @return {void}
      */
-    renderSetting: function () {
+    renderSetting: function (layerId) {
         const attr = this.model.toJSON();
 
-        // Animation Zahnrad
-        this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
+        // Animation cog
+        if (layerId === attr.id) {
+            this.$(".bi-gear").parent(".bootstrap-icon").toggleClass("rotate rotate-back");
+        }
         // Slide-Animation templateSetting
         if (this.model.get("isSettingVisible") === false) {
             this.$el.find(".layer-settings").slideUp("slow", function () {
@@ -89,7 +93,7 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
             this.model.showLayerInformation();
             this.highlightLayerInformationIcon();
             // close navigation
-            this.$("div.collapse.navbar-collapse").removeClass("in");
+            this.$("div.collapse.navbar-collapse").removeClass("show");
         }
     },
 
@@ -208,13 +212,13 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
      * @returns {void}
      */
     disableComponent: function (text) {
-        const statusCheckbox = this.$el.find("span.glyphicon.glyphicon-unchecked").length;
+        const statusCheckbox = this.$el.find("span.bootstrap-icon > .bi-square").length;
 
         this.$el.addClass("disabled");
         this.$el.find("*").css("cursor", "not-allowed");
         this.$el.find("*").css("pointer-events", "none");
         if (statusCheckbox === 0) {
-            this.$el.find("span.pull-left").css({"pointer-events": "auto", "cursor": "pointer"});
+            this.$el.find("span.float-start").css({"pointer-events": "auto", "cursor": "pointer"});
         }
         this.$el.attr("title", text);
 
@@ -246,7 +250,7 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
      */
     highlightLayerInformationIcon: function () {
         if (this.model.get("layerInfoChecked")) {
-            this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerInformationIcon");
+            this.$el.find("span.bootstrap-icon.info-icon").addClass("highlightLayerInformationIcon");
         }
     },
 
@@ -255,7 +259,7 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
      * @returns {void}
      */
     unhighlightLayerInformationIcon: function () {
-        this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
+        this.$el.find("span.bootstrap-icon.info-icon").removeClass("highlightLayerInformationIcon");
         this.model.setLayerInfoChecked(false);
     },
 
@@ -282,7 +286,7 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
      */
     moveModelDown: function () {
         this.model.moveDown();
-        $(".arrows > .glyphicon-arrow-down").trigger("focus");
+        $(".arrows > .bootstrap-icon .bi-arrow-down").trigger("focus");
     },
 
     /**
@@ -291,7 +295,7 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
      */
     moveModelUp: function () {
         this.model.moveUp();
-        $(".arrows > .glyphicon-arrow-up").trigger("focus");
+        $(".arrows > .bootstrap-icon > .bi-arrow-up").trigger("focus");
     },
 
     /**
@@ -312,16 +316,19 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
 
     /**
      * Triggers the styleWMS tool to open
-     * Removes the class "open" from ".nav li:first-child"
+     * Closes dropdown menu"
      * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
      * @returns {void}
      */
     openStyleWMS: function () {
         Radio.trigger("StyleWMS", "openStyleWMS", this.model);
-        $(".nav li:first-child").removeClass("open");
+        // Upgrade to BT5, use JS method instead of class removal
+        const dropdown = Dropdown.getInstance(".nav li:first-child > .dropdown-toggle");
+
+        dropdown.hide();
         $(".dropdown-menu.fixed").removeClass("fixed");
-        $(".glyphicon-pushpin").removeClass("rotate-pin");
-        $(".glyphicon-pushpin").addClass("rotate-pin-back");
+        $(".bi-pin-angle-fill").parent(".bootstrap-icon").removeClass("rotate-pin");
+        $(".bi-pin-angle-fill").parent(".bootstrap-icon").addClass("rotate-pin-back");
     },
 
     /**

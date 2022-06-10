@@ -10,25 +10,25 @@ import TableStyleControl from "../../TableStyleControl.vue";
 export default {
     name: "TotalView",
     props: {
-        /** glyphicon name for the control icon */
-        glyphicon: {
+        /** icon name for the control icon */
+        icon: {
             type: String,
-            default: "fast-backward"
+            default: "skip-backward-fill"
         },
-        /** glyphicon name for the control icon in style table */
-        tableGlyphicon: {
+        /** icon name for the control icon in style table */
+        tableIcon: {
             type: String,
-            default: "home"
+            default: "house-door-fill"
         }
     },
     computed: {
-        ...mapGetters("Map", ["initialCenter", "initialZoomLevel", "ol2DMap"]),
+        ...mapGetters("Maps", ["initialCenter", "initialZoomLevel"]),
 
         component () {
             return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
         },
-        glyphiconToUse () {
-            return Radio.request("Util", "getUiStyle") === "TABLE" ? this.tableGlyphicon : this.glyphicon;
+        iconToUse () {
+            return Radio.request("Util", "getUiStyle") === "TABLE" ? this.tableIcon : this.icon;
         },
 
         /**
@@ -36,7 +36,7 @@ export default {
          * @returns {Boolean} true if map is not in initial zoom/center.
          */
         mapMoved: function () {
-            const view = this.ol2DMap.getView(),
+            const view = mapCollection.getMapView("2D"),
                 center = view.getCenter();
 
             return this.initialCenter[0] !== center[0] ||
@@ -45,7 +45,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions("Map", ["resetView"]),
+        ...mapActions("Maps", ["resetView"]),
 
         startResetView: function () {
             this.resetView();
@@ -62,12 +62,12 @@ export default {
             class="total-view-button"
             :title="$t('common:modules.controls.totalView.titleButton')"
             :disabled="!mapMoved"
-            :icon-name="glyphiconToUse"
+            :icon-name="iconToUse"
             :on-click="startResetView"
         />
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
 </style>

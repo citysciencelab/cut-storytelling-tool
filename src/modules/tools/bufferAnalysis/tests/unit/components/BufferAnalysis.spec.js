@@ -6,7 +6,6 @@ import {expect} from "chai";
 import sinon from "sinon";
 import {createLayersArray} from "../utils/functions";
 import FakeTimers from "@sinonjs/fake-timers";
-import mapCollection from "../../../../../../core/dataStorage/mapCollection.js";
 
 const localVue = createLocalVue();
 
@@ -22,14 +21,14 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
                         bufferAnalysis:
                             {
                                 "name": "translate#common:menu.tools.bufferAnalysis",
-                                "glyphicon": "glyphicon-random"
+                                "icon": "bi-shuffle"
                             }
                     }
                 }
             }
         }
     };
-    let store, originalCheckIntersection, originalShowBuffer, wrapper;
+    let store, originalCheckIntersection, originalShowBuffer, originalApplyValuesFromSavedUrlBuffer, wrapper;
 
     before(() => {
         mapCollection.clear();
@@ -39,14 +38,16 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
             removeLayer: sinon.spy()
         };
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
 
     beforeEach(() => {
         originalCheckIntersection = BufferAnalysis.actions.checkIntersection;
         originalShowBuffer = BufferAnalysis.actions.showBuffer;
+        originalApplyValuesFromSavedUrlBuffer = BufferAnalysis.actions.applyValuesFromSavedUrlBuffer;
         BufferAnalysis.actions.checkIntersection = sinon.spy();
         BufferAnalysis.actions.showBuffer = sinon.spy();
+        BufferAnalysis.actions.applyValuesFromSavedUrlBuffer = sinon.spy();
 
         store = new Vuex.Store({
             namespaces: true,
@@ -60,9 +61,8 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
             },
             state: {
                 configJson: mockConfigJson,
-                Map: {
-                    mapId: "ol",
-                    mapMode: "2D"
+                Maps: {
+                    mode: "2D"
                 }
             }
         });
@@ -78,9 +78,10 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
         };
 
         mapCollection.clear();
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
         BufferAnalysis.actions.checkIntersection = originalCheckIntersection;
         BufferAnalysis.actions.showBuffer = originalShowBuffer;
+        BufferAnalysis.actions.applyValuesFromSavedUrlBuffer = originalApplyValuesFromSavedUrlBuffer;
         store.commit("Tools/BufferAnalysis/setActive", false);
         store.commit("Tools/BufferAnalysis/setSelectOptions", []);
         store.dispatch("Tools/BufferAnalysis/resetModule");

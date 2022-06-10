@@ -127,12 +127,12 @@ export default {
         <component
             :is="component"
             :title="$t(`common:modules.controls.fullScreen.${active ? 'disable' : 'enable'}`)"
-            :icon-name="active ? 'resize-small' : 'fullscreen'"
+            :icon-name="active ? 'fullscreen-exit' : 'arrows-fullscreen'"
             :on-click="toggleFullScreen"
         />
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
 </style>

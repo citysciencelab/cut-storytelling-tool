@@ -18,14 +18,18 @@ export default {
         name: "markerPoint",
         source: new VectorSource(),
         visible: false,
-        style: new Style()
+        style: new Style(),
+        alwaysOnTop: true,
+        altitudeMode: "clampToGround"
     }),
     markerPolygon: new VectorLayer({
         id: "marker_polygon_layer",
         name: "markerPolygon",
         source: new VectorSource(),
         visible: false,
-        style: new Style()
+        style: new Style(),
+        alwaysOnTop: true,
+        altitudeMode: "clampToGround"
     }),
     coordinates: []
 };

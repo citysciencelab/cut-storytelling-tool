@@ -1,5 +1,5 @@
 <script>
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import getComponent from "../../../../utils/getComponent";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersFileImport";
@@ -8,7 +8,7 @@ import mutations from "../store/mutationsFileImport";
 export default {
     name: "FileImport",
     components: {
-        Tool
+        ToolTemplate
     },
     data () {
         return {
@@ -93,8 +93,8 @@ export default {
             files.forEach(file => {
                 const reader = new FileReader();
 
-                reader.onload = f => {
-                    const vectorLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+                reader.onload = async f => {
+                    const vectorLayer = await Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
 
                     this.importKML({raw: f.target.result, layer: vectorLayer, filename: file.name});
                 };
@@ -139,9 +139,9 @@ export default {
 </script>
 
 <template lang="html">
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
@@ -244,11 +244,12 @@ export default {
                 </div>
             </div>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 
-<style lang="less" scoped>
-    @import "~/css/mixins.less";
+<style lang="scss" scoped>
+    @import "~/css/mixins.scss";
+    @import "~variables";
 
     .h-seperator {
         margin:12px 0 12px 0;
@@ -263,19 +264,19 @@ export default {
     }
 
     .upload-button-wrapper {
-        color: #FFFFFF;
-        background-color: @secondary_focus;
+        color: $white;
+        background-color: $secondary_focus;
         display: block;
         text-align:center;
         padding: 8px 12px;
         cursor: pointer;
         margin:12px 0 0 0;
-        font-size: @font_size_big;
+        font-size: $font_size_big;
         &:focus {
-            .primary_action_focus();
+            @include primary_action_focus;
         }
         &:hover {
-            .primary_action_hover();
+            @include primary_action_hover;
         }
     }
 
@@ -283,18 +284,18 @@ export default {
         margin-bottom:12px;
     }
     .drop-area-fake {
-        background-color: #FFFFFF;
+        background-color: $white;
         border-radius: 12px;
-        border: 2px dashed @accent;
+        border: 2px dashed $accent;
         padding:24px;
         transition: background 0.25s, border-color 0.25s;
 
         &.dzReady {
-            background-color:@accent_hover;
+            background-color:$accent_hover;
             border-color:transparent;
 
             p.caption {
-                color:#FFFFFF;
+                color: $white;
             }
         }
 
@@ -302,9 +303,9 @@ export default {
             margin:0;
             text-align:center;
             transition: color 0.35s;
-            font-family: @font_family_accent;
-            font-size: @font_size_huge;
-            color: @accent;
+            font-family: $font_family_accent;
+            font-size: $font_size_huge;
+            color: $accent;
         }
     }
     .drop-area {

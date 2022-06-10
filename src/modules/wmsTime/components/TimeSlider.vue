@@ -14,47 +14,66 @@ export default {
     data: () => ({playing: false, playbackHandle: null, sliderValue: 0}),
     computed: {
         ...mapGetters("WmsTime", Object.keys(getters)),
-        ...mapGetters("Map", ["map"])
+        sliderOptionCount () {
+            return this.timeRange.length - 1;
+        },
+        selectedTime () {
+            return this.timeRange[this.sliderValue];
+        }
     },
     watch: {
         defaultValue () {
-            this.sliderValue = this.defaultValue;
+            this.sliderValue = this.timeRange.indexOf(this.defaultValue);
         },
         sliderValue () {
-            if (this.timeRange.indexOf(this.sliderValue) === -1) {
-                // If possible, find the next higher (or if not existent, lower) value inside the timeRange.
-                const valTooHigh = this.timeRange[this.timeRange.length - 1] < this.sliderValue,
-                    index = this.timeRange.findIndex(val => valTooHigh ? val < this.sliderValue : val > this.sliderValue);
-
-                this.sliderValue = this.timeRange[index];
+            if (!this.timeRange[this.sliderValue]) {
+                // revert to 0 in case of fault
+                this.sliderValue = 0;
             }
-            Radio.trigger("WmsTime", "updateTime", this.layerId, this.sliderValue);
 
-            if (this.layerSwiper.active) {
-                this.updateMap();
+            const layer = Radio.request(
+                    "ModelList",
+                    "getModelByAttributes",
+                    {id: this.layerId}
+                ),
+                targetTime = this.timeRange[this.sliderValue];
+
+            if (layer) {
+                layer.updateTime(this.layerId, targetTime);
+                if (this.layerSwiper.active) {
+                    this.updateMap();
+                }
             }
         }
     },
     created () {
-        this.sliderValue = this.defaultValue;
+        this.sliderValue = this.timeRange.indexOf(this.defaultValue);
     },
     methods: {
         ...mapActions("WmsTime", ["toggleSwiper", "updateMap"]),
         ...mapMutations("WmsTime", Object.keys(mutations)),
+        setSliderValue (value) {
+            this.sliderValue = Number(value);
+        },
         animate () {
             const index = this.nextIndex();
 
             if (index === this.timeRange.length) {
                 this.playing = false;
+                this.clearPlayback();
                 return;
             }
-            this.sliderValue = this.timeRange[index];
+            this.sliderValue = index;
+        },
+        clearPlayback () {
+            clearInterval(this.playbackHandle);
+            this.playbackHandle = null;
         },
         nextIndex (forward = true) {
-            return this.timeRange.indexOf(this.sliderValue) + (forward ? 1 : -1);
+            return this.sliderValue + (forward ? 1 : -1);
         },
         moveOne (forward) {
-            this.sliderValue = this.timeRange[this.nextIndex(forward)];
+            this.sliderValue = this.nextIndex(forward);
         },
         play () {
             this.playing = !this.playing;
@@ -66,8 +85,7 @@ export default {
                 this.playbackHandle = setInterval(this.animate, this.timeSlider.playbackDelay * 1000);
             }
             else {
-                clearInterval(this.playbackHandle);
-                this.playbackHandle = null;
+                this.clearPlayback();
             }
         }
     }
@@ -76,77 +94,76 @@ export default {
 
 <template>
     <div class="timeSlider-wrapper centered-box-wrapper">
-        <div
-            v-if="minWidth"
-            class="timeSlider-innerWrapper"
-        >
-            <button
-                :id="'timeSlider-activate-layerSwiper-' + layerId"
-                class="btn btn-sm btn-lgv-grey"
-                @click="toggleSwiper(layerId)"
+        <div class="timeSlider-control-row">
+            <div
+                v-if="minWidth"
+                class="timeSlider-innerWrapper"
             >
-                {{ $t(`common:modules.wmsTime.timeSlider.buttons.${minWidth && layerSwiper.active ? "deactivateL" : "l"}ayerSwiper`) }}
-            </button>
-        </div>
-        <div class="timeSlider-innerWrapper-interactions">
-            <fieldset>
+                <button
+                    :id="'timeSlider-activate-layerSwiper-' + layerId"
+                    class="btn btn-sm btn-secondary"
+                    @click="toggleSwiper(layerId)"
+                >
+                    {{ $t(`common:modules.wmsTime.timeSlider.buttons.${minWidth && layerSwiper.active ? "deactivateL" : "l"}ayerSwiper`) }}
+                </button>
+            </div>
+            <div class="timeSlider-innerWrapper-interactions">
                 <button
                     :id="'timeSlider-button-backward-' + layerId"
-                    class="btn btn-sm btn-lgv-grey"
+                    class="btn btn-sm btn-secondary"
                     :aria-label="$t('common:modules.wmsTime.timeSlider.buttons.backward')"
                     :disabled="nextIndex(false) === -1"
                     @click="moveOne(false)"
                 >
-                    <i class="glyphicon glyphicon-backward" />
+                    <i class="bi-skip-end-fill" />
                 </button>
                 <button
                     :id="'timeSlider-button-play-' + layerId"
-                    class="btn btn-sm btn-lgv-grey"
+                    class="btn btn-sm btn-secondary"
                     :aria-label="$t('common:modules.wmsTime.timeSlider.buttons.play')"
                     @click="play"
                 >
                     <i
-                        :class="['glyphicon', playing ? 'glyphicon-pause' : 'glyphicon-play']"
+                        :class="[playing ? 'bi-pause-fill' : 'bi-play-fill']"
                     />
                 </button>
                 <button
                     :id="'timeSlider-button-forward-' + layerId"
-                    class="btn btn-sm btn-lgv-grey"
+                    class="btn btn-sm btn-secondary"
                     :aria-label="$t('common:modules.wmsTime.timeSlider.buttons.forward')"
                     :disabled="nextIndex() === timeRange.length"
                     @click="moveOne(true)"
                 >
-                    <i class="glyphicon glyphicon-forward" />
+                    <i class="bi-skip-start-fill" />
                 </button>
-            </fieldset>
-            <fieldset>
-                <label
-                    :id="`timeSlider-input-range-${layerId}-label`"
-                    :for="'timeSlider-input-range-' + layerId"
-                >{{ sliderValue }}</label>
-            </fieldset>
-            <fieldset>
-                <input
-                    :id="'timeSlider-input-range-' + layerId"
-                    type="range"
-                    :value="sliderValue"
-                    :min="min"
-                    :max="max"
-                    :step="step"
-                    :aria-label="$t('common:modules.wmsTime.timeSlider.inputRangeLabel')"
-                    @input="sliderValue = Number($event.target.value)"
-                >
-            </fieldset>
+            </div>
         </div>
+        <label
+            :id="`timeSlider-input-range-${layerId}-label`"
+            :for="'timeSlider-input-range-' + layerId"
+            class="timeSlider-input-range-label"
+        >
+            <input
+                :id="'timeSlider-input-range-' + layerId"
+                type="range"
+                :value="sliderValue"
+                :min="0"
+                :max="sliderOptionCount"
+                :step="1"
+                :aria-label="$t('common:modules.wmsTime.timeSlider.inputRangeLabel')"
+                @input="setSliderValue($event.target.value)"
+            >
+            {{ selectedTime }}
+        </label>
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 @import "~variables";
 
 .timeSlider-wrapper {
-    @base-margin: 0.25em;
-    @bigger-margin: calc(@base-margin * 3);
+    $base-margin: 0.25em;
+    $bigger-margin: calc(#{$base-margin} * 3);
 
     position: absolute;
     bottom: 6em;
@@ -156,41 +173,30 @@ export default {
     display: flex;
     flex-direction: column;
     background: white;
-    box-shadow: @tool_box_shadow;
+    box-shadow: $tool_box_shadow;
+
+    .timeSlider-control-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
 
     .timeSlider-innerWrapper {
         display: flex;
         justify-content: flex-start;
         // No margin on bottom
-        margin: @bigger-margin @bigger-margin 0;
+        margin: $bigger-margin;
+    }
+
+    .timeSlider-input-range-label {
+        margin: $bigger-margin;
     }
 
     .timeSlider-innerWrapper-interactions {
-        @border-style: 1px solid black;
-
         display: flex;
         justify-content: space-between;
         align-items: center;
-        width: 28em;
-        margin: @bigger-margin;
-        border: 1px solid black;
-
-        > fieldset {
-            display: flex;
-
-            button {
-                margin: @base-margin;
-            }
-            input {
-                margin-right: @base-margin;
-            }
-            label {
-                border-left: @border-style;
-                border-right: @border-style;
-                margin: 0;
-                padding: @bigger-margin;
-            }
-        }
+        margin: $bigger-margin;
     }
 }
 </style>

@@ -2,17 +2,17 @@
 import {mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersAddWMS";
 import getComponent from "../../../../utils/getComponent";
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import mutations from "../store/mutationsAddWMS";
 import {WMSCapabilities} from "ol/format.js";
 import {intersects} from "ol/extent";
-import {transform as transformCoord, getProjection} from "masterportalAPI/src/crs";
+import {transform as transformCoord, getProjection} from "@masterportal/masterportalapi/src/crs";
 import axios from "axios";
 
 export default {
     name: "AddWMS",
     components: {
-        Tool
+        ToolTemplate
     },
     data: function () {
         return {
@@ -25,13 +25,10 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/AddWMS", Object.keys(getters)),
+        ...mapGetters("Maps", ["projection"]),
 
         placeholder () {
             return i18next.t("common:modules.tools.addWMS.placeholder");
-        },
-
-        textExample () {
-            return i18next.t("common:modules.tools.addWMS.textExample");
         },
 
         textLoadLayer () {
@@ -280,15 +277,15 @@ export default {
                     secondLayerExtent = [];
 
                 layer.forEach(singleLayer => {
-                    if (singleLayer.crs === "EPSG:25832") {
+                    if (singleLayer.crs === this.projection.getCode()) {
                         firstLayerExtent = [singleLayer.extent[0], singleLayer.extent[1]];
                         secondLayerExtent = [singleLayer.extent[2], singleLayer.extent[3]];
                     }
                 });
 
                 if (!firstLayerExtent.length && !secondLayerExtent.length) {
-                    firstLayerExtent = transformCoord(layer[0].crs, "EPSG:25832", [layer[0].extent[0], layer[0].extent[1]]);
-                    secondLayerExtent = transformCoord(layer[0].crs, "EPSG:25832", [layer[0].extent[2], layer[0].extent[3]]);
+                    firstLayerExtent = transformCoord(layer[0].crs, this.projection.getCode(), [layer[0].extent[0], layer[0].extent[1]]);
+                    secondLayerExtent = transformCoord(layer[0].crs, this.projection.getCode(), [layer[0].extent[2], layer[0].extent[3]]);
                 }
 
                 layerExtent = [firstLayerExtent[0], firstLayerExtent[1], secondLayerExtent[0], secondLayerExtent[1]];
@@ -339,9 +336,9 @@ export default {
 </script>
 
 <template>
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
@@ -368,9 +365,6 @@ export default {
                     :placeholder="placeholder"
                     @keydown.enter="inputUrl"
                 >
-                <div class="WMS_example_text">
-                    {{ textExample }}
-                </div>
                 <button
                     id="addWMSButton"
                     type="button"
@@ -382,23 +376,25 @@ export default {
                         aria-hidden="true"
                     >{{ textLoadLayer }}</span>
                     <span
-                        class="glyphicon glyphicon-ok"
+                        class="bootstrap-icon"
                         aria-hidden="true"
-                    />
+                    >
+                        <i class="bi-check-lg" />
+                    </span>
                 </button>
             </div>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
     .addWMS {
         min-width: 400px;
     }
     .WMS_example_text {
         margin-top: 10px;
-        color: #777;
+        color: $light_grey;
     }
     #addWMSButton {
         margin-top: 15px;
@@ -406,7 +402,7 @@ export default {
     }
     .addwms_error {
         font-size: 16px;
-        color: #d42132;
+        color: $light_red;
         margin-bottom: 10px;
     }
 </style>

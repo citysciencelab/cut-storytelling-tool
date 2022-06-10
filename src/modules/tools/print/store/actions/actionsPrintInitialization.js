@@ -4,6 +4,18 @@ import thousandsSeparator from "../../../../../utils/thousandsSeparator.js";
 import Canvas from "./../../utils/buildCanvas";
 import BuildSpec from "./../../utils/buildSpec";
 import getVisibleLayer from "./../../utils/getVisibleLayer";
+import {createEmpty, extendCoordinate} from "ol/extent.js";
+import {apply as applyTransform} from "ol/transform.js";
+
+let lastPrintedExtent;
+
+/**
+ * Return last printed extent
+ * @returns {Extent} OL extent
+ */
+export function getLastPrintedExtent () {
+    return lastPrintedExtent;
+}
 
 export default {
     /**
@@ -13,25 +25,47 @@ export default {
      * @param {Object} param.commit the commit
      * @returns {void}
      */
-    retrieveCapabilites: function ({state, dispatch, commit}) {
+    retrieveCapabilites: function ({state, dispatch, rootGetters, commit}) {
         let serviceUrl;
 
-        if (state.mapfishServiceId !== "") {
-            serviceUrl = Radio.request("RestReader", "getServiceById", state.mapfishServiceId).get("url");
-            commit("setMapfishServiceUrl", serviceUrl);
-            serviceUrl = serviceUrl + state.printAppId + "/capabilities.json";
+        if (state.serviceId !== "") {
+            serviceUrl = rootGetters.getRestServiceById(state.serviceId).url;
+
+            if (!serviceUrl.includes("/print/")) {
+                serviceUrl = serviceUrl + "print/";
+            }
+
+            commit("setServiceUrl", serviceUrl);
+            serviceUrl = serviceUrl + state.printAppId + "/" + state.printAppCapabilities;
             const serviceRequest = {
                 "serviceUrl": serviceUrl,
                 "requestType": "GET",
-                "onSuccess": "parseMapfishCapabilities"
+                "onSuccess": "parseCapabilities"
             };
 
             dispatch("sendRequest", serviceRequest);
 
         }
     },
+
     /**
-     * Sets the capabilities from mapfish resonse.
+     * switch to decide which print service is configured and parses the response
+     * @param {Object} param.state the state
+     * @param {Object} param.dispatch the dispatch
+     * @param {Object} response capabilities fomr the configured print service
+     * @returns {void}
+     */
+    parseCapabilities: function ({state, dispatch}, response) {
+        if (state.printService === "mapfish") {
+            dispatch("parseMapfishCapabilities", response);
+        }
+        else {
+            dispatch("parsePlotserviceCapabilities", response);
+        }
+    },
+
+    /**
+     * Sets the capabilities from mapfish response.
      * @param {Object} param.state the state
      * @param {Object} param.commit the commit
      * @param {Object} param.dispatch the dispatch
@@ -45,6 +79,28 @@ export default {
         dispatch("getAttributeInLayoutByName", "gfi");
         dispatch("getAttributeInLayoutByName", "legend");
         dispatch("getAttributeInLayoutByName", "scale");
+        commit("setFormatList", state.formatList);
+        commit("setCurrentScale", Radio.request("MapView", "getOptions").scale);
+        dispatch("togglePostrenderListener");
+        if (state.isGfiAvailable) {
+            dispatch("getGfiForPrint");
+            BuildSpec.buildGfi(state.isGfiSelected, state.gfiForPrint);
+        }
+    },
+
+    /**
+     * Sets the capabilities from mapfish response.
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
+     * @param {Object[]} response - config.yaml from mapfish.
+     * @returns {void}
+     */
+    parsePlotserviceCapabilities: function ({state, commit, dispatch}, response) {
+        commit("setLayoutList", response.layouts);
+        dispatch("chooseCurrentLayout", response.layouts);
+        commit("setScaleList", response.scales.map(scale => parseInt(scale.value, 10)).sort((a, b) => a - b));
+        commit("setFormatList", response.outputFormats.map(format => format.name));
         commit("setCurrentScale", Radio.request("MapView", "getOptions").scale);
         dispatch("togglePostrenderListener");
         if (state.isGfiAvailable) {
@@ -61,9 +117,11 @@ export default {
      * @returns {void}
      */
     chooseCurrentLayout: function ({state, commit}, layouts) {
-        const currentLayout = layouts.filter(layout => layout.name === state.currentLayoutName);
+        const configuredLayout = layouts.find(layout => layout.name === state.currentLayoutName),
+            layoutToUse = configuredLayout || layouts[0];
 
-        commit("setCurrentLayout", currentLayout.length === 1 ? currentLayout[0] : layouts[0]);
+        commit("setCurrentLayout", layoutToUse);
+        commit("setCurrentLayoutName", layoutToUse.name);
     },
 
     /**
@@ -74,7 +132,7 @@ export default {
      */
     getGfiForPrint: function ({rootGetters, commit}) {
         if (rootGetters["Tools/Gfi/currentFeature"] !== null) {
-            commit("setGfiForPrint", [rootGetters["Tools/Gfi/currentFeature"].getMappedProperties(), rootGetters["Tools/Gfi/currentFeature"].getTitle(), rootGetters["Map/clickCoord"]]);
+            commit("setGfiForPrint", [rootGetters["Tools/Gfi/currentFeature"].getMappedProperties(), rootGetters["Tools/Gfi/currentFeature"].getTitle(), rootGetters["Maps/clickCoordinate"]]);
         }
         else {
             commit("setGfiForPrint", []);
@@ -111,7 +169,7 @@ export default {
     togglePostrenderListener: function ({state, dispatch, commit}) {
         const foundVectorTileLayers = [];
 
-        getVisibleLayer();
+        getVisibleLayer(state.printMapMarker);
 
         /*
         * Since MapFish 3 does not yet support VTL (see https://github.com/mapfish/mapfish-print/issues/659),
@@ -137,7 +195,7 @@ export default {
                 commit("setHintInfo", "");
             }
         }
-        Radio.trigger("Map", "render");
+        mapCollection.getMap("2D").render();
     },
 
     /**
@@ -148,8 +206,8 @@ export default {
     setOriginalPrintLayer: function ({state}) {
         const invisibleLayer = state.invisibleLayer,
             mapScale = state.currentMapScale,
-            resoByMaxScale = Radio.request("MapView", "getResoByScale", mapScale, "max"),
-            resoByMinScale = Radio.request("MapView", "getResoByScale", mapScale, "min");
+            resoByMaxScale = Radio.request("MapView", "getResosolutionByScale", mapScale, "max"),
+            resoByMinScale = Radio.request("MapView", "getResolutionByScale", mapScale, "min");
 
         invisibleLayer.forEach(layer => {
             const layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layer.get("id")});
@@ -175,8 +233,8 @@ export default {
      */
     setPrintLayers: function ({state, dispatch, commit}, scale) {
         const visibleLayer = state.visibleLayerList,
-            resoByMaxScale = Radio.request("MapView", "getResoByScale", scale, "max"),
-            resoByMinScale = Radio.request("MapView", "getResoByScale", scale, "min"),
+            resoByMaxScale = Radio.request("MapView", "getResolutionByScale", scale, "max"),
+            resoByMinScale = Radio.request("MapView", "getResolutionByScale", scale, "min"),
             invisibleLayer = [];
 
         let invisibleLayerNames = "",
@@ -240,7 +298,7 @@ export default {
      * @param {ol.render.Event} evt - postrender
      * @returns {void}
      */
-    createPrintMask: function ({dispatch, commit, state}, evt) {
+    createPrintMask: function ({dispatch, state}, evt) {
         dispatch("getPrintMapSize");
         dispatch("getPrintMapScales");
 
@@ -251,6 +309,7 @@ export default {
                 "context": evt.context
             },
             canvasPrintOptions = {
+                "pixelToCoordinateTransform": frameState.pixelToCoordinateTransform,
                 "mapSize": frameState.size,
                 "resolution": frameState.viewState.resolution,
                 "printMapSize": state.layoutMapInfo,
@@ -266,20 +325,21 @@ export default {
 
         if (state.isScaleSelectedManually) {
             canvasPrintOptions.scale = state.currentScale;
-            commit("setIsScaleSelectedManually", false);
         }
-        else {
+        else if (state.autoAdjustScale) {
             dispatch("getOptimalScale", canvasOptions);
             canvasPrintOptions.scale = state.optimalScale;
         }
-
+        else {
+            canvasPrintOptions.scale = state.currentScale;
+        }
 
         dispatch("drawMask", drawMaskOpt);
         dispatch("drawPrintPage", canvasPrintOptions);
         context.fillStyle = "rgba(0, 5, 25, 0.55)";
         context.fill();
 
-        dispatch("setPrintLayers", state.optimalScale);
+        dispatch("setPrintLayers", canvasPrintOptions.scale);
     },
     /**
      * gets the optimal print scale for a map
@@ -342,7 +402,11 @@ export default {
             minx = center[0] - (boundWidth / 2),
             miny = center[1] - (boundHeight / 2),
             maxx = center[0] + (boundWidth / 2),
-            maxy = center[1] + (boundHeight / 2);
+            maxy = center[1] + (boundHeight / 2),
+            extent = createEmpty(),
+            transform = canvasPrintOptions.pixelToCoordinateTransform,
+            c1 = applyTransform(transform, [minx, miny]),
+            c2 = applyTransform(transform, [maxx, maxy]);
 
         // Inner polygon,must be counter-clockwise
         canvasPrintOptions.context.moveTo(minx, miny);
@@ -351,6 +415,11 @@ export default {
         canvasPrintOptions.context.lineTo(maxx, miny);
         canvasPrintOptions.context.lineTo(minx, miny);
         canvasPrintOptions.context.closePath();
+
+        // Keep the print extent available for later use
+        extendCoordinate(extent, c1);
+        extendCoordinate(extent, c2);
+        lastPrintedExtent = extent;
     },
 
     /**
@@ -376,10 +445,17 @@ export default {
      * @returns {void}
      */
     getPrintMapSize: function ({state, commit, dispatch}) {
-        dispatch("getAttributeInLayoutByName", "map");
-        const layoutMapInfo = state.mapAttribute.clientInfo;
+        if (state.printService === "plotservice") {
+            const map = state.currentLayout.map;
 
-        commit("setLayoutMapInfo", [layoutMapInfo.width, layoutMapInfo.height]);
+            commit("setLayoutMapInfo", [map.width, map.height]);
+        }
+        else {
+            dispatch("getAttributeInLayoutByName", "map");
+            const layoutMapInfo = state.mapAttribute.clientInfo;
+
+            commit("setLayoutMapInfo", [layoutMapInfo.width, layoutMapInfo.height]);
+        }
     },
 
     /**
@@ -390,9 +466,11 @@ export default {
      * @returns {void}
      */
     getPrintMapScales: function ({state, dispatch, commit}) {
-        dispatch("getAttributeInLayoutByName", "map");
-        const layoutMapInfo = state.mapAttribute.clientInfo;
+        if (state.printService !== "plotservice") {
+            dispatch("getAttributeInLayoutByName", "map");
+            const layoutMapInfo = state.mapAttribute.clientInfo;
 
-        commit("setScaleList", layoutMapInfo.scales.sort((a, b) => a - b));
+            commit("setScaleList", layoutMapInfo.scales.sort((a, b) => a - b));
+        }
     }
 };

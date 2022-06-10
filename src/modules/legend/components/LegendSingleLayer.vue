@@ -41,14 +41,14 @@ export default {
 <template>
     <div
         :id="id"
-        class="layer-legend collapse in"
+        class="card-body layer-legend collapse show"
     >
         <template
             v-if="legendObj !== undefined"
         >
             <div
-                v-for="legendPart in legendObj.legend"
-                :key="JSON.stringify(legendPart)"
+                v-for="(legendPart, index) in legendObj.legend"
+                :key="JSON.stringify(legendPart) + '_' + index"
                 class="layer-legend-container"
             >
                 <!-- String -->
@@ -136,7 +136,7 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
 
     .layer-legend {

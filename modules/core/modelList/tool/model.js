@@ -5,13 +5,13 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
         isVisibleInMenu: true,
         isRoot: false,
         parentId: "",
-        glyphicon: "",
+        icon: "",
         name: "",
         isActive: false,
         deactivateGFI: false,
         renderToWindow: true,
         resizableWindow: false,
-        supportedIn3d: ["supplyCoord", "gfi", "wfsFeatureFilter", "searchByCoord", "legend", "contact", "saveSelection", "measure", "parcelSearch", "coordToolkit"],
+        supportedIn3d: ["supplyCoord", "gfi", "wfsFeatureFilter", "searchByCoord", "legend", "contact", "saveSelection", "parcelSearch", "coordToolkit"],
         supportedOnlyIn3d: ["shadow"],
         supportedInOblique: ["contact"],
         supportedOnlyInOblique: [],
@@ -27,7 +27,7 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
      * @property {Boolean} isVisibleInMenu=true Flag of Tool is visible in menu
      * @property {Boolean} is isRoot=false Flag if Tool button is shown on first level in menu
      * @property {String} parentId="" Id of Parent Object
-     * @property {String} glyphicon="" default glyphicon. Icon gets shown before tool name
+     * @property {String} icon="" default icon. Icon gets shown before tool name
      * @property {String} name="" default name
      * @property {Boolean} isActive=false Flag if tool is active
      * @property {Boolean} deactivateGFI=false Flag if tool should deactivate gfi
@@ -49,9 +49,19 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
      * @listens Core.ModelList.Tool#RadioRequestToolGetCollection
      * @listens i18next#RadioTriggerLanguageChanged
      */
-    superInitialize: function () {
+
+    initialize: function () {
         const channel = Radio.channel("Tool");
 
+        channel.reply({
+            getSupportedIn3d: this.get("supportedIn3d"),
+            getSupportedOnlyIn3d: this.get("supportedOnlyIn3d"),
+            getSupportedOnlyInOblique: this.get("supportedOnlyInOblique"),
+            getCollection: this.collection
+        });
+    },
+
+    superInitialize: function () {
         this.listenTo(this, {
             "change:isActive": function (model, value) {
                 const gfiModel = model.collection ? model.collection.findWhere({id: "gfi"}) : undefined;
@@ -86,13 +96,6 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
                     }
                 }
             }
-        });
-
-        channel.reply({
-            getSupportedIn3d: this.get("supportedIn3d"),
-            getSupportedOnlyIn3d: this.get("supportedOnlyIn3d"),
-            getSupportedOnlyInOblique: this.get("supportedOnlyInOblique"),
-            getCollection: this.collection
         });
 
         Radio.trigger("Autostart", "initializedModule", this.get("id"));

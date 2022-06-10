@@ -24,7 +24,7 @@ const symbol = {
      * @property {String[]} filterList.drawTypes The drawTypes to be filtered.
      * @property {String} filterList.name The name of the corresponding filter.
      * @property {Boolean} freeHand Distinction between a freeHand line drawing or a static one.
-     * @property {String} glyphicon Glyphicon used in the header of the window.
+     * @property {String} icon Icon used in the header of the window.
      * @property {Object[]} iconList List of icons used for the point draw interaction.
      * @property {String} id Internal Identifier for the Tool.
      * @property {Integer} idCounter Amount of features drawn.
@@ -36,6 +36,7 @@ const symbol = {
      * @property {String} outerBorderColor The color of the border of the dropdown menu for the selection of the outer radius of a circle.
      * @property {Number} pointSize The size of the point.
      * @property {Number[]} redoArray Array of the IDs of features removed through the undo button.
+     * @property {Number[]} undoArray Array of the IDs of features to be removed through the undo button.
      * @property {Boolean} renderToWindow Decides whether the Tool should be displayed as a window or as a sidebar.
      * @property {Boolean} resizableWindow Determines whether the Tool window can be resized.
      * @property {module:ol/interaction/Select} selectInteraction The select interaction of the draw tool.
@@ -115,7 +116,7 @@ const symbol = {
         fId: 0,
         filterList: null,
         freeHand: false,
-        glyphicon: "glyphicon-pencil",
+        icon: "bi-pencil-fill",
         iconList: [
             symbol,
             {
@@ -134,6 +135,7 @@ const symbol = {
         outerBorderColor: "",
         pointSize: 16,
         redoArray: [],
+        undoArray: [],
         renderToWindow: false,
         resizableWindow: true,
         selectInteraction: null,

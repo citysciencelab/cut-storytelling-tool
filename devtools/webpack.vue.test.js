@@ -26,12 +26,6 @@ module.exports = {
     // output: {
     //     devtoolModuleFilenameTemplate: "[absolute-resource-path]"
     // },
-    devtool: "inline-cheap-module-source-map",
-    output: {
-        // use absolute paths in sourcemaps (important for debugging via IDE)
-        devtoolModuleFilenameTemplate: "[absolute-resource-path]",
-        devtoolFallbackModuleFilenameTemplate: "[absolute-resource-path]?[hash]"
-    },
 
     resolve: {
         alias: {
@@ -42,7 +36,7 @@ module.exports = {
         rules: [
             {
                 test: /\.js$/,
-                exclude: [/\bcore-js\b/, /node_modules/],
+                exclude: /\bcore-js\b|\bvideo.js\b|\bsinon\b|\bturf\b|\bjsts\b/,
                 use: {
                     loader: "babel-loader"
                 }
@@ -56,7 +50,7 @@ module.exports = {
                 }
             },
             {
-                test: /\.(le|c|sa)ss$/,
+                test: /\.(le|c|sa|sc)ss$/,
                 use: "null-loader"
             },
             {
@@ -68,6 +62,24 @@ module.exports = {
                         options: {
                             noquotes: true
                         }
+                    }
+                ]
+            },
+            {
+                test: /\.xml$/i,
+                use: "raw-loader"
+            },
+            {
+                test: /\.worker\.js$/,
+                use: {
+                    loader: "worker-loader"
+                }
+            },
+            {
+                test: /\.(png|jpe?g|gif)$/i,
+                use: [
+                    {
+                        loader: "file-loader"
                     }
                 ]
             }
@@ -84,12 +96,14 @@ module.exports = {
             Radio: "backbone.radio",
             _: "underscore",
             i18next: ["i18next/dist/cjs/i18next.js"],
+            mapCollection: [path.resolve(path.join(__dirname, "../src/core/maps/mapCollection.js")), "default"],
             Config: path.resolve(__dirname, "../test/unittests/deps/testConfig")
             // XMLSerializer: path.resolve(__dirname, "../test/unittests/deps/testXmlSerializer"),
             // fs: "fs",
             // requestAnimationFrame: "raf"
         }),
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new webpack.IgnorePlugin(/canvas/, /jsdom$/)
     ],
     node: {
         fs: "empty"

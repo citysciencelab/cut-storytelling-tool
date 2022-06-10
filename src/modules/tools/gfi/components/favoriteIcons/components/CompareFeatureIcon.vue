@@ -23,7 +23,7 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/CompareFeatures", ["isFeatureSelected"]),
-        ...mapGetters("Map", ["mapMode"]),
+        ...mapGetters("Maps", ["mode"]),
         /**
          * Returns Boolean after checking if feature is on comparison list.
          * @returns {String} Title for the comparelist.
@@ -66,7 +66,7 @@ export default {
          * @returns {void}
          */
         toogleFeatureToCompareList: function (event) {
-            if (event?.target?.classList?.contains("glyphicon-star-empty")) {
+            if (event?.target?.classList?.contains("bi-star")) {
                 this.isFeatureOnCompareList(this.gfiFeature);
             }
             else {
@@ -79,30 +79,32 @@ export default {
 
 <template>
     <span
-        v-if="componentExists('compareFeatures') && mapMode === '2D'"
-        :class="['glyphicon', featureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty']"
+        v-if="componentExists('compareFeatures') && mode === '2D'"
+        :class="'bootstrap-icon'"
         :title="titleCompareList"
         tabindex="0"
         @click="toogleFeatureToCompareList"
         @keydown.enter="toogleFeatureToCompareList"
-    />
+    >
+        <i :class="[featureIsOnCompareList ? 'bi-star-fill' : 'bi-star']" />
+    </span>
 </template>
 
-<style lang="less" scoped>
-@import "~/css/mixins.less";
+<style lang="scss" scoped>
+@import "~/css/mixins.scss";
 
-@color: #fec44f;
+$color: #fec44f;
 
-span.glyphicon {
+span.bootstrap-icon {
     &:focus {
-        .primary_action_focus();
+        @include primary_action_focus;
     }
     &:hover {
-        .primary_action_hover();
+        @include primary_action_hover;
     }
 }
 
-.glyphicon-star {
-    color: @color;
+.bi-star-fill {
+    color: $color;
 }
 </style>

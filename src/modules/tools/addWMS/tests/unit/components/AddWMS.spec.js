@@ -19,7 +19,7 @@ describe("src/modules/tools/addWMS/components/AddWMS.vue", () => {
                             addWMS:
                                 {
                                     "name": "translate#common:menu.tools.addWms",
-                                    "glyphicon": "glyphicon-plus",
+                                    "icon": ".bi-plus-lg",
                                     "renderToWindow": true
                                 }
                         }
@@ -82,10 +82,6 @@ describe("src/modules/tools/addWMS/components/AddWMS.vue", () => {
 
     it("renders the iput field", () => {
         expect(wrapper.find("#wmsUrl").exists()).to.be.true;
-    });
-
-    it("renders the example text for url", () => {
-        expect(wrapper.find(".WMS_example_text").exists()).to.be.true;
     });
 
     it("renders the AddWMS button", () => {

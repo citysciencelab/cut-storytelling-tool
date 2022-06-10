@@ -201,6 +201,19 @@ describe("vectorStyleModel", function () {
                     "polygonStrokeColor": [100, 100, 100, 1]
                 }
             }
+        ],
+        rulesWithOneEntry = [
+            {
+                "conditions": {
+                    "sequence": [0, 0],
+                    "properties": {
+                        "@Datastreams.0.Observations.0.result": [81, 101]}},
+                "style": {
+                    "lineStrokeColor": [37, 52, 148, 1],
+                    "lineStrokeDash": [20, 20, 5, 2000],
+                    "lineStrokeDashOffset": 20,
+                    "lineStrokeWidth": 5,
+                    "labelField": ""}}
         ];
 
     let styleModel,
@@ -267,6 +280,9 @@ describe("vectorStyleModel", function () {
             expect(styleModel.getGeometryStyle(jsonObjects[0], rules, false)).to.be.an.instanceof(Style);
             expect(styleModel.getGeometryStyle(jsonObjects[0], rules, false).getImage().getStroke().getColor()).to.be.an("array").to.include.ordered.members([255, 0, 0, 1]);
         });
+        it("should return default style if no rule is found", function () {
+            expect(styleModel.getGeometryStyle(jsonObjects[0], [], false).getImage().getFill().getColor()).to.be.an("array").to.include.ordered.members([0, 153, 255, 1]);
+        });
     });
 
     describe("getSimpleGeometryStyle", function () {
@@ -320,6 +336,14 @@ describe("vectorStyleModel", function () {
             expect(styleModel.getMultiGeometryStyle("GeometryCollection", jsonObjects[6], rules, false)[0].getImage().getStroke()).to.be.an.instanceof(Stroke);
             expect(styleModel.getMultiGeometryStyle("GeometryCollection", jsonObjects[6], rules, false)[0].getImage().getStroke().getColor()).to.be.an("array").to.include.ordered.members([255, 0, 0, 1]);
             expect(styleModel.getMultiGeometryStyle("GeometryCollection", jsonObjects[6], rules, false)[1].getStroke()).to.be.an.instanceof(Stroke);
+        });
+        it("features with more geometries than rules (rules: 1, geometries: 2) should have only style for the amount of rules - styleMultiGeomOnlyWithRule=true", function () {
+            styleModel.set("styleMultiGeomOnlyWithRule", true);
+            expect(styleModel.getMultiGeometryStyle("MultiLineString", jsonObjects[4], rulesWithOneEntry, false)).to.be.an("array").to.have.lengthOf(1);
+        });
+        it("features with more geometries than rules (rules: 1, geometries: 2) should have style for all geometries - styleMultiGeomOnlyWithRule=false", function () {
+            styleModel.set("styleMultiGeomOnlyWithRule", false);
+            expect(styleModel.getMultiGeometryStyle("MultiLineString", jsonObjects[4], rulesWithOneEntry, false)).to.be.an("array").to.have.lengthOf(2);
         });
     });
 
@@ -402,6 +426,14 @@ describe("vectorStyleModel", function () {
             expect(styleModel.checkProperty(jsonObjects[0].getProperties(), "id", null)).to.be.false;
             expect(styleModel.checkProperty(jsonObjects[0].getProperties(), "id", [0])).to.be.false;
             expect(styleModel.checkProperty(jsonObjects[0].getProperties(), "id", [0, 1, 2])).to.be.false;
+        });
+        it("should return true for a clustered feature", function () {
+            const clusterFeatureProperties = {
+                features: [jsonObjects[0]],
+                geometry: jsonObjects[0].getGeometry()
+            };
+
+            expect(styleModel.checkProperty(clusterFeatureProperties, "id", "test1")).to.be.true;
         });
     });
 

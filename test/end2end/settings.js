@@ -171,7 +171,8 @@ function getCapabilities () {
             "browserName": "chrome",
             "browserVersion": "latest",
             "platformName": "Windows 10"
-        },
+        }
+        /* ,
         {
             ...baseSaucelabs,
             "browserName": "firefox",
@@ -183,7 +184,7 @@ function getCapabilities () {
             "browserName": "MicrosoftEdge",
             "browserVersion": "latest",
             "platformName": "Windows 10"
-        } /* ,
+        }
         {
             ...baseSaucelabsMacOS,
             "browserName": "safari",

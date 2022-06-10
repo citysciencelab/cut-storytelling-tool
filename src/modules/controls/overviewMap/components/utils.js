@@ -1,16 +1,9 @@
 import ImageWMS from "ol/source/ImageWMS.js";
 import Image from "ol/layer/Image.js";
+import WMTSLayer from "../../../../core/layers/wmts";
 import View from "ol/View.js";
-import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
+import {getLayerWhere} from "@masterportal/masterportalapi/src/rawLayerList";
 import store from "../../../../app-store/index";
-
-/*
- * NOTE I'm unsure where these belong.
- * A) Component? Makes component unreadable and most functions are used one time only.
- * B) Store? It does not really hold/modify data, only one layer. => Maybe when layers are in store?
- * C) Global utils? Only used locally, would pollute global space.
- * So I'm leaving those here for now. Discussion welcome!
- */
 
 /**
  * @param {module:ol/Map} map openlayers map
@@ -57,11 +50,10 @@ function getInitialVisibleBaseLayerId () {
 }
 
 /**
- * @description Derives the baselayer parameters from the global layer collection.
- * @param {String} id id of base layer to get parameters for
- * @returns {?Object} parameter object
+ * @param {String} id id of layer to use
+ * @returns {ol/BaseLayer} base layer to use for overviewMap
  */
-function getLayerParameters (id) {
+function getOvmLayer (id) {
     const model = getLayerWhere({id});
 
     if (model === null) {
@@ -69,10 +61,34 @@ function getLayerParameters (id) {
         return null;
     }
 
+    if (model.typ === "WMS") {
+        return new Image({
+            source: new ImageWMS(getWmsParameters(model))
+        });
+    }
+
+    if (model.typ === "WMTS") {
+        const wmtsLayer = new WMTSLayer(model, {});
+
+        // overviewMap layer must always be visible – no further controls
+        wmtsLayer.layer.setVisible(true);
+
+        return wmtsLayer.layer;
+    }
+
+    console.error(`OverviewMap supports WMS/WMTS, but layer ${id} is of type ${model.typ}.`);
+    return null;
+}
+
+/**
+ * @description Derives the WMS parameters from the layer model.
+ * @param {object} model model of layer to use
+ * @returns {object} parameter object
+ */
+function getWmsParameters (model) {
     return {
-        url: model.url,
+        url: model.url || model.urls,
         params: {
-            // TODO what are t and zufall good for?
             t: new Date().getMilliseconds(),
             zufall: Math.random(),
             LAYERS: model.layers,
@@ -81,20 +97,4 @@ function getLayerParameters (id) {
             TRANSPARENT: model.transparent.toString()
         }
     };
-}
-
-/**
- * @param {String} id id of baselayer to use
- * @returns {ol/Image} image layer to use for overviewMap
- */
-function getOvmLayer (id) {
-    const parameters = getLayerParameters(id);
-
-    if (!parameters) {
-        return null;
-    }
-
-    return new Image({
-        source: new ImageWMS(parameters)
-    });
 }

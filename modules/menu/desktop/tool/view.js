@@ -1,5 +1,6 @@
 import ItemTemplate from "text-loader!./template.html";
 import store from "../../../../src/app-store/index";
+import Dropdown from "bootstrap/js/dist/dropdown";
 /**
  * @member ToolTemplate
  * @description Template for a Tool
@@ -26,7 +27,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
         // Listener for addOns so that multilanguage geht initially adjusted.
         this.listenTo(this.model, {
             "change:name": this.rerender,
-            "change:glyphicon": this.rerender
+            "change:bootstrap-icon": this.rerender
         });
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
@@ -39,7 +40,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
         this.toggleIsActiveClass();
     },
     tagName: "li",
-    className: "dropdown",
+    className: "nav-item dropdown",
     template: _.template(ItemTemplate),
     /**
      * @todo Write the documentation.
@@ -119,11 +120,11 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
     setCssClass: function () {
         if (this.model.get("parentId") === "root") {
             this.$el.addClass("menu-style");
-            this.$el.find("span").addClass("hidden-sm");
+            this.$el.find("span").addClass("d-md-none d-lg-inline-block");
             this.$el.attr("title", this.model.get("name"));
         }
         else {
-            this.$el.addClass("submenu-style");
+            this.$el.addClass("submenu-style").removeClass("nav-item");
         }
     },
     /**
@@ -180,11 +181,14 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
             }
 
             // menu navigation is closed
-            $("div.collapse.navbar-collapse").removeClass("in");
-            $("li.dropdown-folder.open").removeClass("open");
+            $("div.collapse.navbar-collapse").removeClass("show");
+            // Upgrade to BT5, use JS method instead of class removal
+            const dropdown = Dropdown.getInstance("li.dropdown-folder > .dropdown-toggle.show");
+
+            dropdown?.hide();
             $(".dropdown-menu.fixed").removeClass("fixed");
-            $(".glyphicon-pushpin").removeClass("rotate-pin");
-            $(".glyphicon-pushpin").addClass("rotate-pin-back");
+            $(".bi-pin-angle-fill").parent(".bootstrap-icon").removeClass("rotate-pin");
+            $(".bi-pin-angle-fill").parent(".bootstrap-icon").addClass("rotate-pin-back");
         }
     }
 });

@@ -12,8 +12,9 @@ import CompareFeatures from "./compareFeatures/store/indexCompareFeatures";
 import Contact from "./contact/store/indexContact";
 import CoordToolkit from "./coordToolkit/store/indexCoordToolkit";
 import Draw from "./draw/store/indexDraw";
+import FeatureLister from "./featureLister/store/indexFeatureLister";
 import FileImport from "./fileImport/store/indexFileImport";
-import GeneralFilter from "./generalFilter/store/indexGeneralFilter";
+import Filter from "./filter/store/indexFilter";
 import Gfi from "./gfi/store/indexGfi";
 import LayerClusterToggler from "./layerClusterToggler/store/indexLayerClusterToggler";
 import LayerSlider from "./layerSlider/store/indexLayerSlider";
@@ -41,8 +42,9 @@ export default {
         Contact,
         CoordToolkit,
         Draw,
+        FeatureLister,
         FileImport,
-        GeneralFilter,
+        Filter,
         Gfi,
         LayerClusterToggler,
         LayerSlider,

@@ -1,5 +1,5 @@
 import "../model";
-import {transformToMapProjection} from "masterportalAPI/src/crs";
+import {transformToMapProjection} from "@masterportal/masterportalapi/src/crs";
 import store from "../../../src/app-store";
 
 const KomootModel = Backbone.Model.extend(/** @lends KomootModel.prototype */{
@@ -209,7 +209,7 @@ const KomootModel = Backbone.Model.extend(/** @lends KomootModel.prototype */{
                 metaName: metaName,
                 type: "Komoot",
                 komoot: true,
-                glyphicon: "glyphicon-road",
+                icon: "bi-signpost-2-fill",
                 id: Radio.request("Util", "uniqueId", "komootSuggest"),
                 marker: hit.class === "building",
                 coordinate: center

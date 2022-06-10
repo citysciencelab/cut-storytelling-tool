@@ -40,6 +40,10 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
             "getDefaultStyle": this.model.getDefaultStyle
         }, this);
 
+        channel.on({
+            "addToStyleList": jsonStyles => this.addToStyleList(jsonStyles)
+        }, this);
+
         if (Object.prototype.hasOwnProperty.call(Config, "styleConf") && Config.styleConf !== "") {
             this.fetchStyles(Config.styleConf);
         }
@@ -115,7 +119,6 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         dataWithDefaultValue.push(this.getMapmarkerPolygonDefaultStyle());
 
         styleIds.push(this.getStyleIdsFromLayers(layers));
-        styleIds.push(this.getStyleIdForZoomToFeature());
         styleIds.push(this.getStyleIdForMapMarkerPoint());
         styleIds.push(this.getStyleIdForMapMarkerPolygon());
         styleIds.push(this.getStyleIdsFromTools(tools));
@@ -200,20 +203,6 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         }
         return styleIds;
     },
-
-    /**
-     * Gets styleId from config for zoomToFeature
-     * @returns {String} - Style id
-     */
-    getStyleIdForZoomToFeature: function () {
-        let styleId;
-
-        if (Object.prototype.hasOwnProperty.call(Config, "zoomToFeature") && Object.prototype.hasOwnProperty.call(Config.zoomToFeature, "styleId")) {
-            styleId = Config.zoomToFeature.styleId;
-        }
-        return styleId;
-    },
-
     /**
      * Gets the default style for mapmarker as point.
      * @returns {Object} The default style for mapMarker point Style.
@@ -280,6 +269,25 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
             styleId = store.getters["MapMarker/polygonStyleId"];
         }
         return styleId;
+    },
+
+    /**
+     * adds a style to the style list
+     * @param {Array} jsonStyles Array of styles
+     * @returns  {void}
+     */
+    addToStyleList: function (jsonStyles) {
+        const attrs = {
+                add: true,
+                colletion: this,
+                merge: false,
+                remove: false
+            },
+            styles = jsonStyles;
+
+        styles.forEach(style => {
+            this.add(new StyleModel(style, attrs));
+        });
     }
 });
 

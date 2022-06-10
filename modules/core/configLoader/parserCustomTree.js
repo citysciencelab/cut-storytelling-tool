@@ -1,5 +1,5 @@
 import Parser from "./parser";
-import {getLayerWhere, getLayerList} from "masterportalAPI/src/rawLayerList";
+import {getLayerWhere, getLayerList} from "@masterportal/masterportalapi/src/rawLayerList";
 import store from "../../../src/app-store/index";
 
 const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
@@ -20,15 +20,15 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
      * The object from config.json and services.json are merged by id.
      *
      * @param  {Object} [object={}] - Baselayer | Overlayer | Folder
-     * @param  {string} parentId Id of parent item.
-     * @param  {Number} level Level of recursion. Equals to level in layertree.
+     * @param  {String} [parentId=""] Id of parent item.
+     * @param  {Number} [level=0] Level of recursion. Equals to level in layertree.
      * @fires Core#RadioRequestRawLayerListGetLayerAttributesWhere
      * @fires Core#RadioRequestRawLayerListGetLayerAttributesList
      * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
      * @returns {void}
      */
-    parseTree: function (object = {}, parentId, level) {
-        const isBaseLayer = Boolean(parentId === "Baselayer" || parentId === "tree"),
+    parseTree: function (object = {}, parentId = "", level = 0) {
+        const isBaseLayer = Boolean(parentId === "Baselayer" || parentId === "tree" || this.isAncestorBaseLayer(parentId)),
             treeType = Radio.request("Parser", "getTreeType");
 
         if (object?.Layer) {
@@ -162,7 +162,6 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
         }
         if (object?.Ordner) {
             object.Ordner.forEach(folder => {
-                const isLeafFolder = !folder?.Ordner;
                 let isFolderSelectable;
 
                 // Visiblity of SelectAll-Box. Use item property first, if not defined use global setting.
@@ -182,19 +181,41 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                     parentId: parentId,
                     name: folder.Titel,
                     id: folder.id,
-                    isLeafFolder: isLeafFolder,
                     isFolderSelectable: isFolderSelectable,
                     level: level,
-                    glyphicon: "glyphicon-plus-sign",
+                    icon: "bi-plus-circle-fill",
                     isVisibleInTree: this.getIsVisibleInTree(level, "folder", true, treeType),
                     isInThemen: true,
                     quickHelp: store.getters["QuickHelp/isSet"],
                     invertLayerOrder: folder.invertLayerOrder
                 });
                 // rekursiver Aufruf
-                this.parseTree(folder, isBaseLayer ? parentId : folder.id, level + 1);
+                this.parseTree(folder, folder.id, level + 1);
             });
         }
+    },
+
+    /**
+     * Returns true, if the parent or grandparent has the parentId 'Baselayer'.
+     * @param {String} parentId id of the parent
+     * @returns {Boolean} true, if one of the next 2 ancestors has the parentId 'Baselayer'
+     */
+    isAncestorBaseLayer: function (parentId) {
+        const parent = Radio.request("Parser", "getItemByAttributes", {id: parentId});
+
+        if (parent) {
+            if (parent.parentId === "Baselayer") {
+                return true;
+            }
+
+            const grandParent = Radio.request("Parser", "getItemByAttributes", {id: parent.parentId});
+
+            if (grandParent && grandParent.parentId === "Baselayer") {
+                return true;
+            }
+
+        }
+        return false;
     },
 
     getRawLayerList: function () {

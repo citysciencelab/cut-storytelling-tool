@@ -1,12 +1,26 @@
 {
     "masterPortalVersion": "Masterportal V. {{masterPortalVersionNumber}}",
+    "general": {
+        "opened": "Open",
+        "cancelled": "Cancelled",
+        "error": "Error",
+        "success": "Success"
+    },
     "button": {
         "back": "Back",
         "download": "Download",
         "search": "Search",
         "close": "Close",
         "minimize": "Minimize",
-        "confirm": "Confirm"
+        "confirm": "Confirm",
+        "edit": "Edit",
+        "delete": "Delete",
+        "save": "Save",
+        "cancel": "Cancel",
+        "open": "Open",
+        "load": "Load",
+        "reset": "Reset",
+        "stop": "Stop"
     },
     "colors": {
         "blue": "Blue",
@@ -54,7 +68,7 @@
             "scaleSwitcher": "Scale switcher",
             "selectFeatures": "Select features",
             "legend":"Legend",
-            "styleVt": "Style VT",
+            "styleVt": "Style Vector Tile Layers",
             "bufferAnalysis": "Buffer Analysis",
             "parcelSearch": "Parcel search",
             "wfsSearch": "WFS search",
@@ -102,8 +116,11 @@
             "en": "English",
             "es": "Español",
             "it": "Italiano",
+            "platt": "Platt",
             "pt": "Português",
-            "tr": "Türkçe"
+            "ru": "Русский",
+            "tr": "Türkçe",
+            "ua": "Українська"
         },
         "core": {
           "modelList": {
@@ -115,7 +132,8 @@
               "wms": {
                 "allowCookies":"<strong>Please allow cookies to load this background map.</strong>",
                 "errorTimeLayer": "Error while retrieving information for the layer with the id {{id}}: {{error}}",
-                "invalidTimeLayer": "The configured layer with the id {{id}} does not contain the necessary values for a WMS-T."
+                "invalidTimeLayer": "The configured layer with the id {{id}} does not contain the necessary values for a WMS-T.",
+                "warningTimeLayerQuantity": "<strong>Warning:</strong> More than one TimeLayer was initially selected. </br>Only <strong>{{name}} </strong>is displayed."
               }
             }
           }
@@ -187,7 +205,8 @@
                 "geometryNotSupported": "FeatureViaURL: The geometryType {{geometryType}} for the Layer {{layerId}} is not supported.",
                 "layerNotFound": "FeatureViaURL: The layer with the id {{layerId}} was not found.",
                 "noLayers": "FeatureViaURL: No layers were defined in the config for the given features.",
-                "noNameDefined": "FeatureViaURL: No name was defined for the layer with the id {{layerId}}."
+                "noNameDefined": "FeatureViaURL: No name was defined for the layer with the id {{layerId}}.",
+                "defaultTreeNotSupported": "FeatureViaURL: FeatureViaURL is only supported for Treetype custom or light."
             }
         },
         "quickHelp": {
@@ -298,7 +317,6 @@
                 "errorHttpsMessage": "&#10060; The WMS you requested is located under a http-url. The master portal can only integrate WMS via https (SSL).",
                 "errorEmptyUrl": "Please input an wms Url in the input field!",
                 "placeholder": "Please enter the WMS-URL here.",
-                "textExample": "Example: https://geodienste.hamburg.de/HH_WMS_Fahrradrouten",
                 "textLoadLayer": "Load layer",
                 "ifInExtent": "&#10060; The geodata provided via the WMS are outside the displayable range. Adding WMS is not possible.",
                 "checkVersion": "&#10060; Adding WMS is possible only if the version of external wms layer equals or is greater than 1.3.0."
@@ -336,6 +354,7 @@
                 "formatLabel": "Format",
                 "scaleLabel": "Printing scale",
                 "withLegendLabel": "With legend",
+                "autoAdjustScale": "Adjust printing scale automatically",
                 "printLabel": "Create file",
                 "downloadFile": "Download file",
                 "createDownloadFile": "Will be created...",
@@ -388,7 +407,7 @@
                 "more": "More...",
                 "detailsOfSelected": "Details of the selected feature",
                 "alert": "The attempt to show the selected feature failed because it has no geometry.",
-                "key": "{{shownFeatures.x}} of {{shownFeatures.y}} features listed"
+                "key": "{{shownFeatures}} of {{featureCount}} features listed"
             },
             "layerSlider": {
                 "displayLayers": "Display of various layers.",
@@ -400,13 +419,48 @@
                 "serviceFour": "Service 4"
             },
             "filter": {
-                "result": "Result",
-                "results": "Results",
-                "zoomOnResults": "Zoom on results",
-                "filter": " filters",
-                "yourSelection": "Your Selection: ",
-                "noFilterOptionSelected": "No filter option selected",
-                "deleteAll": "Delete all"
+                "filterButton": "Filter",
+                "searchInMapExtent": "Search in current map extent",
+                "snippetTags": {
+                    "selectionText": "Your selection:",
+                    "resetAll": "Reset all"
+                },
+                "info": {
+                    "snippetCheckbox": "The checkbox can be enabled/disabled by a mouse click.",
+                    "snippetDropdown": "You can select one or more values from the given list of values.",
+                    "snippetInput": "You can enter the desired search criteria in the text field.",
+                    "snippetSlider": "To enter a numerical value as a search criterion, you can move the slider to the right or left. In addition, you can enter the value directly in the input field.",
+                    "snippetSliderRange": "For entering two numerical values as range for the search criteria, you can slide the two sliders to the right or left. Additionally, you can enter the values directly in the input fields.",
+                    "snippetDate": "To enter a date as a search criteria, click in the date input field and select a date from the opened calendar.",
+                    "snippetDateRange": "To enter a date range as a search criteria, click in the input field for the start or end date and select a start or end date from the open calendar."
+                },
+                "dropdown": {
+                    "selectAll": "Select all",
+                    "deselectAll": "Deselect all",
+                    "defaultLabel": "Choose an Option",
+                    "emptyList": "List is empty",
+                    "noElements": "No elements found"
+                },
+                "ariaLabel": {
+                    "input": "Input for {{param}}",
+                    "checkbox": "Checkbox for {{param}}",
+                    "radio": "Radio for {{param}}",
+                    "dropdown": "SelectBox for {{param}}",
+                    "sliderRange": {
+                        "min": "Slider min for {{param}}",
+                        "max": "Slider max for {{param}}"
+                    },
+                    "slider": "Slider range for {{param}}",
+                    "date": "Date for {{param}}",
+                    "dateRange": {
+                        "from": "Start date from {{param}}",
+                        "to": "End date from {{param}}"
+                    }
+                },
+                "filterResult": {
+                    "label": "All filtered Counts",
+                    "unit": "{{amountOfFilteredItems}} Results"
+                }
             },
             "pendler": {
                 "animation": {
@@ -541,8 +595,8 @@
                 "noHeightBuilding": "Building area, no heights available",
                 "heightLayerInfo": "The basis of the elevation information is \"{{layer}}\" with elevations in meters above sea level (NHN).",
                 "hdms": {
-                    "eastingLabel": "Longitude",
-                    "northingLabel": "Latitude"
+                    "eastingLabel": "Latitude",
+                    "northingLabel": "Longitude"
                 },
                 "cartesian": {
                     "eastingLabel": "Easting",
@@ -558,7 +612,8 @@
                 },
                 "hintSupply": "Click in the map to request coordinates",
                 "hintSearch": "Enter the coordinates to search for",
-                "disabledTooltip": "This function is not available in the 3D view."
+                "copyCoordsBtn": "Copy pair of coordinates",
+                "copyCoordBtn": " Copy {{value}}"
             },
             "gfi": {
                 "errorMessage": "An error has occurred  during the information request (GetFeatureInfo).<br>Please try again later. If the problem persists, please contact the operator of the service.",
@@ -728,6 +783,7 @@
               "targetLayerNotFound": "Der gespeicherte Ziel-Layer mit der ID {{layerId}} wurde nicht gefunden."
             },
             "wfsSearch": {
+                "wrongConfig": "The layer with the id \"{{id}}\" for the search instance \"{{title}}\" is not defined.",
                 "noResults": "No results were found for your search criteria. Please try again.",
                 "optionsPlaceholder": "Please choose an option!",
                 "resetButton": "Reset",
@@ -948,7 +1004,8 @@
                 "address": "address",
                 "location": "location",
                 "subject": "subject (external topics)",
-                "topic": "issues & topics"
+                "topic": "issues & topics",
+                "general": "topics"
             },
             "specialWFS": {
                 "ongoing": "in process",
@@ -978,7 +1035,9 @@
         "vectorStyle": {
             "styleModel": {
                 "getGeometryTypeFromWFSFetchfailed": "The legend could not be created in the layer information!",
-                "getGeometryTypeFromWFSFetchfailedMessage": "Details: A required service is not responding."
+                "getGeometryTypeFromWFSFetchfailedMessage": "Details: A required service is not responding.",
+                "getGeometryTypeFromOAFFetchfailed": "The legend could not be created in the layer information!",
+                "getGeometryTypeFromOAFFetchfailedMessage": "Details: The API is not available."
             }
         },
         "wmsTime": {
@@ -1002,11 +1061,6 @@
             "linkToPdf": "Link to extern legend (PDF)",
             "noLegendForLayerInfo": "No legend available",
             "toggleCollapseAll": "Toggle all legends"
-        },
-        "zoomToGeometry": {
-          "alertNoFoundFeature" : "No object was found! Please check the input parameters.",
-          "alertParameterizedAccess": "Unfortunately, the parameterized access to the portal went wrong!",
-          "alertRequiredService": "Details: A required service is not responding."
         },
         "util": {
             "copyToClipboard": {
@@ -1048,11 +1102,13 @@
             "newYearsEve": "New Year's Eve"
         },
         "parametricURL": {
-          "alertZoomToGeometry": "The parameterized call of the portal has unfortunately gone wrong!<br>Please make sure that all parameters were entered correctly.",
-          "alertWrongLayerIds": "The called link contains topics that can no longer be found.</br> To avoid receiving this error message in the future, please take the following steps:<ul> <li>Check your desired map section for missing content.</li> <li>Save your selection again with the tool \"Save selection\".</li></ul>",
-          "alertWrongAmountVisibility": "<strong>Parameterized call incorrect!</strong></br>The specifications for <b>layerIds</b> do not match <b>visibility</b> or <b>transparency</b>. They must be specified in the same number in each case.",
-          "errorLoadConfig": "The requested configuration file could not be loaded under the following path: {{url}}<br>The URL paramater <strong>configJson</strong> requests a file with the extension \".json\".<br>An attempt is made to load the config.json under the default path.",
-          "alertDeprecated": "The URL-parameter <b>?{{deprecatedKey}}</b> is deprecated and will be removed with Masterportal version 3.0.0.<br>Please use <b><a href='{{currentUrl}}'>{{currentUrl}}</a></b> instead."
+            "alertWrongLayerIds": "The called link contains topics that can no longer be found.</br> To avoid receiving this error message in the future, please take the following steps:<ul> <li>Check your desired map section for missing content.</li> <li>Save your selection again with the tool \"Save selection\".</li></ul>",
+            "alertWrongAmountVisibility": "<strong>Parameterized call incorrect!</strong></br>The specifications for <b>layerIds</b> do not match <b>visibility</b> or <b>transparency</b>. They must be specified in the same number in each case.",
+            "errorLoadConfig": "The requested configuration file could not be loaded under the following path: {{url}}<br>The URL paramater <strong>configJson</strong> requests a file with the extension \".json\".<br>An attempt is made to load the config.json under the default path.",
+            "alertDeprecated": "The URL-parameter <b>?{{deprecatedKey}}</b> is deprecated and will be removed with Masterportal version 3.0.0.<br>Please use <b><a href='{{currentUrl}}'>{{currentUrl}}</a></b> instead.",
+            "zoomTo": {
+                "wrongConfigId": "zoomTo: The specified id {{configId}} for the url parameter does not exist. Please use either 'zoomToGeometry' or 'zoomToFeatureId'."
+            }
         }
     },
     "snippets": {
@@ -1082,7 +1138,9 @@
             "from": " from",
             "to":" to",
             "incorrectEntry": "Incorrect entry, please enter a whole number!",
-            "outOfRangeErrorMessage": "The input value must be within the validity range {{minValueSlider}} and {{{maxValueSlider}}!"
+            "outOfRangeErrorMessage": "The input value must be within the validity range {{minValueSlider}} and {{{maxValueSlider}}!",
+            "valueEmptyErrorMessage": "The input value must not be empty!",
+            "valueOutOfRangeErrorMessage": "The input {{inputValue}} value must be within the validity range {{minValueSlider}} and {{{maxValueSlider}}!"
         }
     },
     "share-components": {
@@ -1091,7 +1149,8 @@
               "true": "yes",
               "No": "no"
             },
-            "zoomToResult": "Zoom to result"
+            "zoomToResult": "Zoom to result",
+            "pagination": "Pagination"
         }
     }
 }

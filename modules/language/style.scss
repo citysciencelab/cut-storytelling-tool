@@ -1,0 +1,76 @@
+@import "~variables";
+#languagebar {
+    .currentLan {
+        cursor: pointer;
+        /* font-size: 12px; */
+        text-transform: uppercase;
+        color: $primary;
+        font-weight: 900;
+    }
+    .popup-language {
+        display: none;
+        position: absolute;
+        right: 10px;
+        padding: 10px 0 20px;
+        min-width: 400px;
+        background: $white;
+        padding: 10px 0 20px;
+        z-index: 10010;
+        box-shadow: 0 6px 12px $dark_grey;
+        bottom: 50px;
+        .lng-header {
+            display: block;
+            float: right;
+            width: 100%;
+            border-bottom: 1px solid $light_grey;
+            padding: 0px 0px 3px 10px;
+            span {
+                width: 30px;
+                cursor: pointer;
+            }
+        }
+        .form-group {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            padding: 20px 0 0;
+            a {
+                font-size: 12px;
+                &:hover{
+                    background-color: $light_blue;
+                    color: $white;
+                }
+                &.disabled {
+                    background-color: $light_grey;
+                }
+            }
+        }
+    }
+}
+
+.footer #languagebar {
+    float: right;
+}
+
+.ol-overlaycontainer-stopevent #languagebar {
+    position: absolute;
+    right: 0px;
+    width: 25px;
+    min-height: 22px;
+    bottom: 0;
+    padding-bottom: 2px;
+    z-index: 2000;
+}
+
+@media (max-width: 767px) {
+    #languagebar {
+        .currentLan {
+            text-align: right;
+        }
+        .popup-language {
+            width: calc(100% - 20px);
+            min-width: inherit;
+            right: 0;
+        }
+    }
+}

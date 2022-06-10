@@ -1,11 +1,18 @@
 import BuildSpec from "./../../../utils/buildSpec";
 import {Style as OlStyle} from "ol/style.js";
 import WMTSTileGrid from "ol/tilegrid/WMTS";
+import TileGrid from "ol/tilegrid/TileGrid";
 import {TileWMS, ImageWMS, WMTS} from "ol/source.js";
 import {Tile, Vector} from "ol/layer.js";
+import VectorLayer from "ol/layer/Vector.js";
+import VectorSource from "ol/source/Vector.js";
+import Feature from "ol/Feature.js";
+import {Polygon} from "ol/geom.js";
 import {expect} from "chai";
 import {EOL} from "os";
+import measureStyle from "./../../../../measure/utils/measureStyle";
 import createTestFeatures from "./testHelper";
+import sinon from "sinon";
 
 describe("src/modules/tools/print/utils/buildSpec", function () {
     let buildSpec,
@@ -14,31 +21,66 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
         lineStringFeatures,
         multiLineStringFeatures,
         polygonFeatures,
-        multiPolygonFeatures;
+        multiPolygonFeatures,
+        originalGetStyleModel;
 
     const attr = {
-        "layout": "A4 Hochformat",
-        "outputFormat": "pdf",
-        "attributes": {
-            "title": "TestTitel",
-            "map": {
-                "dpi": 96,
-                "projection": "EPSG:25832",
-                "center": [561210, 5932600],
-                "scale": 40000
+            "layout": "A4 Hochformat",
+            "outputFormat": "pdf",
+            "attributes": {
+                "title": "TestTitel",
+                "map": {
+                    "dpi": 96,
+                    "projection": "EPSG:25832",
+                    "center": [561210, 5932600],
+                    "scale": 40000
+                }
             }
-        }
-    };
+        },
+        style = {
+            getText: () => {
+                return {
+                    getText: () => "veryCreativeLabelText"
+                };
+            }
+        },
+        modelFromRadio = {
+            get: key => ({
+                styleId: "8712",
+                id: "8712",
+                typ: "WFS",
+                children: sinon.spy()
+            })[key]
+        },
+        groupLayer = {
+            get: key => ({
+                styleId: "8712-child",
+                id: "8712-child",
+                typ: "GROUP",
+                children: [{id: "8712-child"}]
+            })[key]
+        };
 
     before(() => {
         buildSpec = BuildSpec;
         buildSpec.setAttributes(attr);
+        originalGetStyleModel = buildSpec.getStyleModel;
         pointFeatures = createTestFeatures("resources/testFeatures.xml");
         multiPointFeatures = createTestFeatures("resources/testFeaturesSpassAmWasserMultiPoint.xml");
         polygonFeatures = createTestFeatures("resources/testFeaturesNaturschutzPolygon.xml");
         multiPolygonFeatures = createTestFeatures("resources/testFeaturesBplanMultiPolygon.xml");
         lineStringFeatures = createTestFeatures("resources/testFeaturesVerkehrsnetzLineString.xml");
         multiLineStringFeatures = createTestFeatures("resources/testFeaturesVeloroutenMultiLineString.xml");
+        buildSpec.getStyleModel = sinon.spy();
+    });
+
+    beforeEach(() => {
+        buildSpec.getStyleModel = sinon.spy();
+    });
+
+    afterEach(() => {
+        buildSpec.getStyleModel = originalGetStyleModel;
+        sinon.restore();
     });
 
     describe("parseAddressToString", function () {
@@ -412,8 +454,15 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
                 params: {
                     LAYERS: "layer1,layer2",
                     FORMAT: "image/png",
-                    TRANSPARENT: true
-                }
+                    TRANSPARENT: true,
+                    WIDTH: 512,
+                    HEIGHT: 512
+                },
+                tileGrid: new TileGrid({
+                    extent: [510000.0, 5850000.0, 625000.4, 6000000.0],
+                    resolutions: [78271.51696401172, 305.7481131406708, 152.8740565703354, 76.4370282851677, 2.3886571339114906],
+                    tileSize: [512, 512]
+                })
             }),
             opacity: 1
         });
@@ -422,13 +471,14 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
             expect(buildSpec.buildTileWms(tileWmsLayer)).to.deep.own.include({
                 baseURL: "url",
                 opacity: 1,
-                type: "WMS",
+                type: "tiledwms",
                 layers: ["layer1", "layer2"],
                 imageFormat: "image/png",
                 customParams: {
                     TRANSPARENT: true,
                     DPI: 200
-                }
+                },
+                tileSize: [512, 512]
             });
         });
     });
@@ -459,10 +509,32 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
             });
         });
     });
+    describe("getStyleModel", function () {
+        const vectorLayer = new Vector();
+        let layerId;
+
+        it("should return the style model from a given layer", function () {
+            layerId = "1711";
+            sinon.stub(Radio, "request").callsFake(() => {
+                return modelFromRadio;
+            });
+            buildSpec.getStyleModel = originalGetStyleModel;
+            expect(buildSpec.getStyleModel(vectorLayer, layerId)).to.eql(modelFromRadio);
+        });
+        it("should return the style model of a child from a group layer", function () {
+            layerId = "8712-child";
+            sinon.stub(Radio, "request").callsFake(() => {
+                return groupLayer;
+            });
+            buildSpec.getStyleModel = originalGetStyleModel;
+            expect(buildSpec.getStyleModel(vectorLayer, layerId)).to.eql(groupLayer);
+        });
+    });
     describe("getStyleAttributes", function () {
         const vectorLayer = new Vector();
 
         it("should return \"styleId\" if styleList is not available", function () {
+            buildSpec.getStyleModel = sinon.spy();
             expect(buildSpec.getStyleAttributes(vectorLayer, pointFeatures[0], false)).to.eql(["styleId"]);
         });
     });
@@ -478,7 +550,7 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
         let list = [];
 
         it("should return array with point JSON", function () {
-            buildSpec.addFeatureToGeoJsonList(pointFeatures[0], list);
+            buildSpec.addFeatureToGeoJsonList(pointFeatures[0], list, style);
             expect(list).to.be.an("array");
             expect(list[0]).to.deep.own.include({
                 type: "Feature",
@@ -495,7 +567,8 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
                     stand: "01.01.2016",
                     strasse: "Bodelschwinghstraße 24",
                     teilnahme_geburtsklinik: "Nein",
-                    teilnahme_notversorgung: "false"
+                    teilnahme_notversorgung: "false",
+                    _label: "veryCreativeLabelText"
                 },
                 geometry: {
                     type: "Point",
@@ -506,7 +579,7 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
         it("should return array with multiPoint JSON", function () {
             list = [];
 
-            buildSpec.addFeatureToGeoJsonList(multiPointFeatures[0], list);
+            buildSpec.addFeatureToGeoJsonList(multiPointFeatures[0], list, style);
             expect(list).to.be.an("array");
             expect(list[0]).to.deep.own.include({
                 type: "Feature",
@@ -517,7 +590,8 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
                     kategorie: "Badeseen",
                     adresse: "Tonndorfer Strand 30, 22045 Hamburg",
                     link: "http://www.hamburg.de/sommerbad-ostende/",
-                    kurztext: "Das Strandbad Ostende verfügt über einen Sandstrand und eine große Liegewiese mit Spielgeräten für Kinder"
+                    kurztext: "Das Strandbad Ostende verfügt über einen Sandstrand und eine große Liegewiese mit Spielgeräten für Kinder",
+                    _label: "veryCreativeLabelText"
                 },
                 geometry: {
                     type: "MultiPoint",
@@ -530,7 +604,7 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
         it("should return array with lineString JSON", function () {
             list = [];
 
-            buildSpec.addFeatureToGeoJsonList(lineStringFeatures[0], list);
+            buildSpec.addFeatureToGeoJsonList(lineStringFeatures[0], list, style);
             expect(list).to.be.an("array");
             expect(list[0]).to.deep.own.include({
                 type: "Feature",
@@ -547,7 +621,8 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
                     strasse: "A 7",
                     strassenart: "A",
                     strassenname: "BAB A7",
-                    strassennummer: "7"
+                    strassennummer: "7",
+                    _label: "veryCreativeLabelText"
                 },
                 geometry: {
                     type: "LineString",
@@ -567,7 +642,7 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
         it("should return array with multiLineString JSON", function () {
             list = [];
 
-            buildSpec.addFeatureToGeoJsonList(multiLineStringFeatures[0], list);
+            buildSpec.addFeatureToGeoJsonList(multiLineStringFeatures[0], list, style);
             expect(list).to.be.an("array");
             expect(list[0]).to.deep.own.include({
                 type: "Feature",
@@ -580,7 +655,8 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
                     Group_: "1. Grüner Ring_Hauptroute_Hinweg",
                     Routennummer: "0",
                     Verlauf: `${EOL}Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken${EOL}`,
-                    Routeninformation: `${EOL}Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken${EOL}`
+                    Routeninformation: `${EOL}Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken${EOL}`,
+                    _label: "veryCreativeLabelText"
                 },
                 geometry: {
                     type: "MultiLineString",
@@ -599,7 +675,7 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
         it("should return array with polygon JSON", function () {
             list = [];
 
-            buildSpec.addFeatureToGeoJsonList(polygonFeatures[0], list);
+            buildSpec.addFeatureToGeoJsonList(polygonFeatures[0], list, style);
             expect(list).to.be.an("array");
             expect(list[0]).to.deep.own.include({
                 type: "Feature",
@@ -613,7 +689,8 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
                     flaechensicherung: "k.A.",
                     flaeche: "6837.878000000001",
                     hektar: "0.6838000000000001",
-                    kompensationsmassnahme_detail: "Bepflanzung mit Gehölzen und/oder Sträuchern"
+                    kompensationsmassnahme_detail: "Bepflanzung mit Gehölzen und/oder Sträuchern",
+                    _label: "veryCreativeLabelText"
                 },
                 geometry: {
                     type: "Polygon",
@@ -637,7 +714,7 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
         it("should return array with multiPolygon JSON", function () {
             list = [];
 
-            buildSpec.addFeatureToGeoJsonList(multiPolygonFeatures[0], list);
+            buildSpec.addFeatureToGeoJsonList(multiPolygonFeatures[0], list, style);
             expect(list).to.be.an("array");
             expect(list[0]).to.deep.own.include({
                 type: "Feature",
@@ -655,7 +732,8 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
                     name_png: "Bahrenfeld18.png",
                     planjahr_m: "1969",
                     planrecht: "Bahrenfeld18                                                                                                                                                                                                                                                   ",
-                    staedtebaulichervertrag: undefined
+                    staedtebaulichervertrag: undefined,
+                    _label: "veryCreativeLabelText"
                 },
                 geometry: {
                     type: "MultiPolygon",
@@ -696,7 +774,7 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
     });
     describe("convertFeatureToGeoJson", function () {
         it("should convert point feature to JSON", function () {
-            expect(buildSpec.convertFeatureToGeoJson(pointFeatures[0])).to.deep.own.include({
+            expect(buildSpec.convertFeatureToGeoJson(pointFeatures[0], style)).to.deep.own.include({
                 type: "Feature",
                 properties: {
                     anzahl_plaetze_teilstationaer: "43",
@@ -711,7 +789,8 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
                     stand: "01.01.2016",
                     strasse: "Bodelschwinghstraße 24",
                     teilnahme_geburtsklinik: "Nein",
-                    teilnahme_notversorgung: "false"
+                    teilnahme_notversorgung: "false",
+                    _label: "veryCreativeLabelText"
                 },
                 geometry: {
                     type: "Point",
@@ -720,7 +799,7 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
             });
         });
         it("should convert multiPoint feature to JSON", function () {
-            expect(buildSpec.convertFeatureToGeoJson(multiPointFeatures[0])).to.deep.own.include({
+            expect(buildSpec.convertFeatureToGeoJson(multiPointFeatures[0], style)).to.deep.own.include({
                 type: "Feature",
                 id: "APP_SPASS_IM_UND_AM_WASSER_1",
                 properties: {
@@ -729,7 +808,8 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
                     kategorie: "Badeseen",
                     adresse: "Tonndorfer Strand 30, 22045 Hamburg",
                     link: "http://www.hamburg.de/sommerbad-ostende/",
-                    kurztext: "Das Strandbad Ostende verfügt über einen Sandstrand und eine große Liegewiese mit Spielgeräten für Kinder"
+                    kurztext: "Das Strandbad Ostende verfügt über einen Sandstrand und eine große Liegewiese mit Spielgeräten für Kinder",
+                    _label: "veryCreativeLabelText"
                 },
                 geometry: {
                     type: "MultiPoint",
@@ -740,7 +820,7 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
             });
         });
         it("should convert lineString feature to JSON", function () {
-            expect(buildSpec.convertFeatureToGeoJson(lineStringFeatures[0])).to.deep.own.include({
+            expect(buildSpec.convertFeatureToGeoJson(lineStringFeatures[0], style)).to.deep.own.include({
                 type: "Feature",
                 id: "APP_STRASSENNETZ_INSPIRE_BAB_6351",
                 properties: {
@@ -755,7 +835,8 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
                     strasse: "A 7",
                     strassenart: "A",
                     strassenname: "BAB A7",
-                    strassennummer: "7"
+                    strassennummer: "7",
+                    _label: "veryCreativeLabelText"
                 },
                 geometry: {
                     type: "LineString",
@@ -773,7 +854,7 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
             });
         });
         it("should convert multiLineString feature to JSON", function () {
-            expect(buildSpec.convertFeatureToGeoJson(multiLineStringFeatures[0])).to.deep.own.include({
+            expect(buildSpec.convertFeatureToGeoJson(multiLineStringFeatures[0], style)).to.deep.own.include({
                 type: "Feature",
                 id: "Erster_Gruener_Ring.1",
                 properties: {
@@ -784,7 +865,8 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
                     Group_: "1. Grüner Ring_Hauptroute_Hinweg",
                     Routennummer: "0",
                     Verlauf: `${EOL}Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken${EOL}`,
-                    Routeninformation: `${EOL}Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken${EOL}`
+                    Routeninformation: `${EOL}Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken${EOL}`,
+                    _label: "veryCreativeLabelText"
                 },
                 geometry: {
                     type: "MultiLineString",
@@ -801,7 +883,7 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
             });
         });
         it("should convert polygon feature to JSON", function () {
-            expect(buildSpec.convertFeatureToGeoJson(polygonFeatures[0])).to.deep.own.include({
+            expect(buildSpec.convertFeatureToGeoJson(polygonFeatures[0], style)).to.deep.own.include({
                 type: "Feature",
                 id: "APP_AUSGLEICHSFLAECHEN_333876",
                 properties: {
@@ -813,7 +895,8 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
                     flaechensicherung: "k.A.",
                     flaeche: "6837.878000000001",
                     hektar: "0.6838000000000001",
-                    kompensationsmassnahme_detail: "Bepflanzung mit Gehölzen und/oder Sträuchern"
+                    kompensationsmassnahme_detail: "Bepflanzung mit Gehölzen und/oder Sträuchern",
+                    _label: "veryCreativeLabelText"
                 },
                 geometry: {
                     type: "Polygon",
@@ -835,7 +918,7 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
             });
         });
         it("should convert multiPolygon feature to JSON", function () {
-            expect(buildSpec.convertFeatureToGeoJson(multiPolygonFeatures[0])).to.deep.own.include({
+            expect(buildSpec.convertFeatureToGeoJson(multiPolygonFeatures[0], style)).to.deep.own.include({
                 type: "Feature",
                 id: "APP_PROSIN_FESTGESTELLT_1",
                 properties: {
@@ -851,7 +934,8 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
                     name_png: "Bahrenfeld18.png",
                     planjahr_m: "1969",
                     planrecht: "Bahrenfeld18                                                                                                                                                                                                                                                   ",
-                    staedtebaulichervertrag: undefined
+                    staedtebaulichervertrag: undefined,
+                    _label: "veryCreativeLabelText"
                 },
                 geometry: {
                     type: "MultiPolygon",
@@ -961,5 +1045,44 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
         });
 
 
+    });
+    describe("checkPolygon", function () {
+        it("should correct coordinates of measure-layer polygon with measureStyle", function () {
+            const source = new VectorSource(),
+                layer = new VectorLayer({
+                    source,
+                    style: measureStyle
+                }),
+                feature = new Feature({
+                    geometry: new Polygon([[[0, 0], [0, 1], [1, 1], [0, 0]]])
+                });
+            let styles = null,
+                checked1 = false,
+                checked2 = false;
+
+            layer.getSource().addFeature(feature);
+            styles = layer.getStyleFunction()(feature);
+            styles.forEach((aStyle) => {
+                const geom = aStyle.getGeometryFunction()(feature);
+                let corrected = null,
+                    coordinates = null;
+
+                feature.setGeometry(geom);
+                corrected = buildSpec.checkPolygon(feature);
+                coordinates = corrected.getGeometry().getCoordinates();
+                if (coordinates.length === 1) {
+                    if (coordinates[0].length === 4) {
+                        expect(corrected.getGeometry().getCoordinates()).to.deep.equals([[[0, 0], [0, 1], [1, 1], [0, 0]]]);
+                        checked1 = true;
+                    }
+                }
+                else if (coordinates.length === 2) {
+                    expect(corrected.getGeometry().getCoordinates()).to.deep.equals([[0, 0], [0, 0]]);
+                    checked2 = true;
+                }
+            });
+            expect(checked1).to.be.true;
+            expect(checked2).to.be.true;
+        });
     });
 });

@@ -1,5 +1,5 @@
 import "../model";
-import {transformToMapProjection} from "masterportalAPI/src/crs";
+import {transformToMapProjection} from "@masterportal/masterportalapi/src/crs";
 import store from "../../../src/app-store";
 
 const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
@@ -171,7 +171,7 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
                         metaName: metaName,
                         type: "OpenStreetMap",
                         osm: true,
-                        glyphicon: "glyphicon-road",
+                        icon: "bi-signpost-2-fill",
                         id: Radio.request("Util", "uniqueId", "osmSuggest"),
                         marker: hit.class === "building",
                         coordinate: center

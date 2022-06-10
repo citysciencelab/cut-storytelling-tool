@@ -1,0 +1,46 @@
+@import "~variables";
+
+/**************** Layer Settings ****************/
+/**************** Layer Settings Button Animation ****************/
+ul#tree {
+    .layer-settings {
+        flex-basis: 100%;
+        margin-top: 10px;
+        border-top: 1px solid $white;
+        padding: 10px 0px 10px 5px;
+        font-size: 12px;
+        .bootstrap-icon {
+            font-size: 15px;
+            padding: 0px;
+        }
+        .bi-image {
+            padding-right: 16px;
+        }
+        .remove-layer {
+            color: $white;
+            font-weight: bold;
+            background-color: $dark_grey;
+            border-radius: 10px;
+            padding: 5px;
+            margin-left: 25px;
+            cursor: pointer;
+        }
+        .transparency {
+            padding-left: 20px;
+        }
+        .badge {
+            padding-top: 6px;
+            font-size: 12px;
+            border-radius: 10px;
+            background-color: $dark_grey;
+        }
+    }
+}
+.rotate {
+    transform: rotate(-360deg);
+    transition: 0.5s;
+}
+.rotate-back {
+    transform: rotate(0deg);
+    transition: 0.5s;
+}

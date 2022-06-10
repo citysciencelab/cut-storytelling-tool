@@ -2,11 +2,7 @@ import {translate} from "./translator";
 import {deepAssignIgnoreCase} from "../deepAssign";
 import {doSpecialBackboneHandling, triggerParametricURLReady, translateToBackbone} from "./ParametricUrlBridge";
 import store from "../../app-store";
-import {transformToMapProjection} from "masterportalAPI/src/crs";
-import mapCollection from "../../core/dataStorage/mapCollection";
-
-const deprecated = ["isinitopen", "startupmodul", "style", "query", "center", "zoomlevel", "zoomtoextent", "zoomtogeometry", "bezirk",
-    "map", "layerids", "mdid", "featureid", "highlightfeature", "projection", "config", "marker"];
+import {transformToMapProjection} from "@masterportal/masterportalapi/src/crs";
 
 /**
  * Searches for the keys in state and if found, sets the value at it.
@@ -78,13 +74,14 @@ function makeObject (keys, value) {
  * @returns {void}
  */
 function callMutations (state) {
-    if (state.urlParams["Map/center"]) {
-        let centerCoords = state.Map.center;
+    if (state.urlParams["Maps/center"]) {
+        let centerCoords = state.Maps.center;
 
         if (state.urlParams.projection !== undefined) {
-            centerCoords = transformToMapProjection(mapCollection.getMap(state.Map.mapId, state.Map.mapMode), state.urlParams.projection, centerCoords);
+            centerCoords = transformToMapProjection(mapCollection.getMap(state.Maps.mode), state.urlParams.projection, centerCoords);
         }
-        store.commit("Map/setCenter", centerCoords);
+        store.commit("Maps/setInitialCenter", centerCoords);
+        store.dispatch("Maps/setCenter", centerCoords);
     }
 }
 /**
@@ -97,15 +94,21 @@ function callActions (state) {
         let coordinates = state.MapMarker.coordinates;
 
         if (state.urlParams.projection !== undefined) {
-            coordinates = transformToMapProjection(mapCollection.getMap(state.Map.mapId, state.Map.mapMode), state.urlParams.projection, coordinates);
+            coordinates = transformToMapProjection(mapCollection.getMap(state.Maps.mode), state.urlParams.projection, coordinates);
         }
         setTimeout(() => {
             store.dispatch("MapMarker/placingPointMarker", coordinates);
         }, 500);
     }
-    if (typeof state.urlParams["Map/zoomLevel"] === "number") {
-        store.dispatch("Map/setZoomLevel", state.Map.zoomLevel);
+    if (typeof state.urlParams["Maps/zoomLevel"] === "number") {
+        store.commit("Maps/setInitialZoomLevel", state.urlParams["Maps/zoomLevel"]);
+        store.dispatch("Maps/setZoomLevel", state.urlParams["Maps/zoomLevel"]);
+        store.commit("Maps/setInitialResolution", store.getters["Maps/getView"].getResolution());
     }
+    if ((Object.prototype.hasOwnProperty.call(state.ZoomTo, "zoomToGeometry") && state.ZoomTo.zoomToGeometry !== undefined) || (Object.prototype.hasOwnProperty.call(state.ZoomTo, "zoomToFeatureId") && state.ZoomTo.zoomToFeatureId !== undefined)) {
+        store.dispatch("ZoomTo/zoomToFeatures");
+    }
+
 }
 /**
  * Sets the url params at state and produces desired reaction.
@@ -114,9 +117,8 @@ function callActions (state) {
  *  @returns {void}
  */
 export async function setValuesToState (state, params) {
-    await params.forEach(function (value, key) {
-        setValueToState(state, key, value);
-    });
+    await params.forEach(async (value, key) => setValueToState(state, key, value));
+
     triggerParametricURLReady();
     Object.keys(state.urlParams).forEach(key => {
         const value = state.urlParams[key];
@@ -126,23 +128,6 @@ export async function setValuesToState (state, params) {
 
     callMutations(state);
     callActions(state);
-}
-
-
-/**
- * Checks the key for deprecated url param keys and logs a warning then.
- * @param {String} key to check
- * @param {String} translatedKey replacement for the key
- * @returns {void}
- */
-function checkDeprecated (key, translatedKey) {
-    if (deprecated.find(toolId => toolId.toLowerCase() === key.toLowerCase())) {
-        console.warn("Url Parameter '" + key.toUpperCase() + "' is deprecated in version 3.0.0. Please use '" + translatedKey + "' instead.");
-        store.dispatch("Alerting/addSingleAlert", i18next.t("common:utils.parametricURL.alertDeprecated", {
-            deprecatedKey: key.toUpperCase(),
-            currentUrl: `${window.location.href.split("?")[0]}?${translatedKey}`
-        }));
-    }
 }
 
 /**
@@ -155,7 +140,6 @@ function checkDeprecated (key, translatedKey) {
 export async function setValueToState (state, key, value) {
     if (typeof key === "string") {
         translate(key.trim(), value).then(entry => {
-            checkDeprecated(key, entry.key);
             const found = searchAndSetValue(state, entry.key.split("/"), entry.value);
 
             if (!found) {
@@ -175,7 +159,12 @@ export async function setValueToState (state, key, value) {
                     }
                 }
             }
-            state.urlParams[entry.key] = entry.value;
+            if (entry.key === "Maps/zoomToGeometry" || entry.key === "Maps/zoomToFeatureId") {
+                state.ZoomTo[entry.key.substring(5)] = entry.value;
+            }
+            else {
+                state.urlParams[entry.key] = entry.value;
+            }
             return entry;
         }).catch(error => {
             console.warn("Error occured during applying url param to state ", error);

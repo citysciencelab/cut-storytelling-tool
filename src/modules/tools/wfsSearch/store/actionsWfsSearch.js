@@ -1,7 +1,7 @@
 import axios from "axios";
 import handleAxiosResponse from "../../../../utils/handleAxiosResponse";
 import {setLikeFilterProperties} from "../utils/buildFilter";
-import {createUserHelp, prepareLiterals} from "../utils/literalFunctions";
+import {createUserHelp, prepareLiterals, resetFieldValues} from "../utils/literalFunctions";
 
 const actions = {
     /**
@@ -20,18 +20,18 @@ const actions = {
      *
      * @returns {void}
      */
-    prepareModule ({commit, dispatch, getters}) {
+    prepareModule ({commit, dispatch, getters, rootGetters}) {
         dispatch("resetModule", false);
 
         const {currentInstance} = getters,
-            {requestConfig: {layerId, likeFilter, restLayerId, storedQueryId}} = currentInstance,
+            {requestConfig: {layerId, likeFilter, restLayerId, storedQueryId}, title} = currentInstance,
             wfs = restLayerId
-                ? Radio.request("RestReader", "getServiceById", restLayerId)
+                ? rootGetters.getRestServiceById(restLayerId)
                 : Radio.request("ModelList", "getModelByAttributes", {id: layerId});
 
         if (wfs) {
             const {selectSource} = currentInstance,
-                service = {url: wfs.get("url")};
+                service = {url: wfs.url || (wfs.get ? wfs.get("url") : undefined)};
 
             // NOTE: The extra object is sadly needed so that the object is reactive :(
             commit("setRequiredValues", {...prepareLiterals(currentInstance.literals)});
@@ -44,13 +44,13 @@ const actions = {
                 setLikeFilterProperties(likeFilter);
             }
             if (!storedQueryId && layerId) {
-                service.typeName = wfs.get("featureType");
+                service.typeName = wfs.featureType || (wfs.get ? wfs.get("featureType") : undefined);
             }
             commit("setService", service);
         }
         else {
             dispatch("resetModule", true);
-            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.wfsSearch.wrongConfig", {name: this.name}), {root: true});
+            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.wfsSearch.wrongConfig", {id: restLayerId ? restLayerId : layerId, title}), {root: true});
         }
     },
     /**
@@ -90,12 +90,13 @@ const actions = {
      * Also removes the map marker.
      * @returns {void}
      */
-    resetResult ({commit, dispatch, state}) {
+    resetResult ({commit, dispatch, getters, state}) {
         commit("setValuesReset", true);
         commit("setSearched", false);
         commit("setResults", []);
         commit("setSelectedOptions", {});
         dispatch("MapMarker/removePointMarker", null, {root: true});
+        resetFieldValues(getters.currentInstance.literals);
 
         // Reset dropdowns
         if (state.requiredValues !== null) {

@@ -4,7 +4,6 @@ import TextStyle from "./textStyle";
 import PolygonStyle from "./polygonStyle";
 import LinestringStyle from "./linestringStyle";
 import CesiumStyle from "./cesiumStyle";
-import {fetch as fetchPolyfill} from "whatwg-fetch";
 import axios from "axios";
 import getProxyUrl from "../../src/utils/getProxyUrl";
 import {mapAttributes, isObjectPath} from "../../src/utils/attributeMapper.js";
@@ -14,7 +13,8 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         labelField: null,
         legendInfos: [],
         rules: null,
-        styleId: null
+        styleId: null,
+        styleMultiGeomOnlyWithRule: false
     },
 
     /**
@@ -27,6 +27,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @param {Object[]} legendInfos list of used styling rules for legend graphic
      * @param {Object[]} rules Array with styling rules and its conditions.
      * @param {String} styleId styleId is set in style.json
+     * @param {String} styleMultiGeomOnlyWithRule if true, use fallback for styling of multiGeometries
      * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function () {
@@ -62,7 +63,41 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
         return styleObject;
     },
+    /**
+     * Requests the geometry type of the OAF collection and creates the legend info
+     * @param   {string} oafURL url from layer
+     * @param   {String} collection the collection name to fetch geometry type for
+     * @returns {void}
+     */
+    getGeometryTypeFromOAF: function (oafURL, collection) {
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const url = oafURL + "/collections/" + collection + "/items?limit=1";
 
+        axios({
+            method: "get",
+            url: url,
+            headers: {
+                accept: "application/geo+json"
+            }
+        }).then(response => {
+            const geometryType = response.data?.features[0]?.geometry?.type;
+
+            if (geometryType) {
+                this.createLegendInfo([geometryType]);
+            }
+        }).catch(error => {
+            console.warn("The fetch of the data failed with the following error message: " + error);
+            Radio.trigger("Alert", "alert", {
+                text: "<strong>" + i18next.t("common:modules.vectorStyle.styleModel.getGeometryTypeFromOAFFetchfailed") + "</strong> <br>"
+                    + "<small>" + i18next.t("common:modules.vectorStyle.styleModel.getGeometryTypeFromOAFFetchfailedMessage") + "</small>",
+                kategorie: "alert-warning"
+            });
+        });
+    },
     /**
      * Requests the DescribeFeatureType of the wfs layer and starts the function to parse the xml and creates the legend info
      * @param   {string} wfsURL url from layer
@@ -89,23 +124,26 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             url += key + "=" + params[key] + "&";
         });
         url = url.slice(0, -1);
-        fetchPolyfill(url)
-            .then(response => response.text())
-            .then(responseAsString => new window.DOMParser().parseFromString(responseAsString, "text/xml"))
-            .then(responseXML => {
-                const subElements = this.getSubelementsFromXML(responseXML, featureType),
-                    geometryTypes = this.getTypeAttributesFromSubelements(subElements, styleGeometryType);
 
-                this.createLegendInfo(geometryTypes);
-            })
-            .catch(error => {
-                console.warn("The fetch of the data failed with the following error message: " + error);
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>" + i18next.t("common:modules.vectorStyle.styleModel.getGeometryTypeFromWFSFetchfailed") + "</strong> <br>"
-                        + "<small>" + i18next.t("common:modules.vectorStyle.styleModel.getGeometryTypeFromWFSFetchfailedMessage") + "</small>",
-                    kategorie: "alert-warning"
-                });
+
+        axios({
+            method: "get",
+            url: url,
+            // headers: {"Content-Type'": "text/xml"},
+            responseType: "document"
+        }).then(response => {
+            const subElements = this.getSubelementsFromXML(response.data, featureType),
+                geometryTypes = this.getTypeAttributesFromSubelements(subElements, styleGeometryType);
+
+            this.createLegendInfo(geometryTypes);
+        }).catch(error => {
+            console.warn("The fetch of the data failed with the following error message: " + error);
+            Radio.trigger("Alert", "alert", {
+                text: "<strong>" + i18next.t("common:modules.vectorStyle.styleModel.getGeometryTypeFromWFSFetchfailed") + "</strong> <br>"
+                    + "<small>" + i18next.t("common:modules.vectorStyle.styleModel.getGeometryTypeFromWFSFetchfailedMessage") + "</small>",
+                kategorie: "alert-warning"
             });
+        });
     },
 
     /**
@@ -202,11 +240,11 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
     /**
      * Parses the geometry types from the subelements
-     * @param   {object[]} [subElements=[]] xml subelements
-     * @param   {string[] | string} styleGeometryType The configured geometry type of the layer
-     * @returns {string[]} geometry types of the layer
+     * @param   {Object[]} [subElements=[]] xml subelements
+     * @param   {String[] | String} [styleGeometryType=null] The configured geometry type of the layer
+     * @returns {String[]} geometry types of the layer
      */
-    getTypeAttributesFromSubelements: function (subElements = [], styleGeometryType) {
+    getTypeAttributesFromSubelements: function (subElements = [], styleGeometryType = null) {
         const geometryType = [];
 
         subElements.forEach(elements => {
@@ -288,8 +326,11 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             return this.getMultiGeometryStyle(geometryType, feature, rules, isClustered);
         }
 
-        console.warn("No valid styling rule found.");
-        return new Style();
+        // fall back to default styles as configured in geomType specific styles, if no rule is matched
+        console.warn("No valid styling rule found. Falling back to defaults");
+        return isMultiGeometry
+            ? this.getMultiGeometryStyle(geometryType, feature, undefined, isClustered)
+            : this.getSimpleGeometryStyle(geometryType, feature, undefined, isClustered);
     },
 
     /**
@@ -301,10 +342,10 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {ol/style/Style}    style is always returned
      */
     getSimpleGeometryStyle: function (geometryType, feature, rule, isClustered) {
-        const style = rule.style;
+        const style = rule?.style;
         let styleObject;
 
-        if (Object.prototype.hasOwnProperty.call(style, "labelField")) {
+        if (style && Object.prototype.hasOwnProperty.call(style, "labelField")) {
             this.set("labelField", style.labelField);
         }
         if (geometryType === "Point") {
@@ -368,13 +409,13 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
             geometries.forEach((geometry, index) => {
                 const geometryTypeSimpleGeom = geometry.getType(),
-                    rule = this.getRuleForIndex(rules, index);
+                    rule = rules ? this.getRuleForIndex(rules, index) : undefined;
 
                 // For simplicity reasons we do not support multi encasulated multi geometries but ignore them.
                 if (this.isMultiGeometry(geometryTypeSimpleGeom)) {
                     console.warn("Multi encapsulated multiGeometries are not supported.");
                 }
-                else if (rule) {
+                else if (!this.get("styleMultiGeomOnlyWithRule") || rule) {
                     const simpleStyle = this.getSimpleGeometryStyle(geometryTypeSimpleGeom, feature, rule, isClustered);
 
                     simpleStyle.setGeometry(geometry);
@@ -481,7 +522,6 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         if (rule?.conditions?.properties) {
             const featureProperties = feature.getProperties(),
                 properties = rule.conditions.properties;
-
             let key,
                 i;
 
@@ -532,11 +572,11 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             }
         }
 
-        const featureValue = mapAttributes(featureProperties, key, false),
+        const featureValue = mapAttributes(featureProperty, key, false),
             referenceValue = this.getReferenceValue(featureProperty, value);
 
         if ((typeof featureValue === "boolean" || typeof featureValue === "string" || typeof featureValue === "number") && (typeof referenceValue === "boolean" || typeof referenceValue === "string" || typeof referenceValue === "number" ||
-            (Array.isArray(referenceValue) && referenceValue.every(element => typeof element === "number") &&
+            (Array.isArray(referenceValue) && referenceValue.every(element => typeof element === "number" || element === null) &&
                 (referenceValue.length === 2 || referenceValue.length === 4)))) {
             return this.compareValues(featureValue, referenceValue);
         }
@@ -626,9 +666,8 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             }
         }
         // compare value in range
-        else if (Array.isArray(referenceValue) && referenceValue.every(element => typeof element === "number") && (referenceValue.length === 2 || referenceValue.length === 4)) {
+        else if (Array.isArray(referenceValue) && referenceValue.every(element => typeof element === "number" || element === null) && (referenceValue.length === 2 || referenceValue.length === 4)) {
             value = parseFloat(this.getValueWithoutComma(value));
-
             if (!isNaN(this.getValueWithoutComma(featureValue))) {
                 // value in absolute range of numbers [minValue, maxValue]
                 if (referenceValue.length === 2) {

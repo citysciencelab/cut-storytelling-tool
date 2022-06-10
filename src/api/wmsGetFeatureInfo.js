@@ -2,24 +2,53 @@ import WMSGetFeatureInfo from "ol/format/WMSGetFeatureInfo.js";
 import Feature from "ol/Feature";
 import axios from "axios";
 import handleAxiosResponse from "../utils/handleAxiosResponse.js";
+import {getLayerWhere} from "@masterportal/masterportalapi/src/rawLayerList";
 
 /**
- * handles the GetFeatureInfo request
+ * Handles the GetFeatureInfo request.
+ * Implementation rule to show GFI, derived from known services:
+ * 1. Nodes exist
+ * 2. No <body> exists, or it has child nodes
+ * 3. No <tbody> exists, or it has child nodes
  * @param {String} mimeType - text/xml | text/html
  * @param {String} url - the GetFeatureInfo request url
+ * @param {ol/layer} layer - layer that's requested (used to infer credential use)
  * @returns {Promise<module:ol/Feature[]>}  Promise object represents the GetFeatureInfo request
  */
-export function requestGfi (mimeType, url) {
-    return axios.get(url)
-        .then(response => handleAxiosResponse(response, "requestGfi"))
-        .then(docString => {
-            const parsedDocument = parseDocumentString(docString, mimeType);
+export function requestGfi (mimeType, url, layer) {
+    const layerSpecification = getLayerWhere({id: layer.get("id")}),
+        layerIsSecured = Boolean(layerSpecification?.isSecured);
 
-            if (mimeType === "text/html") {
-                if (parsedDocument.getElementsByTagName("tbody")[0]?.children.length >= 1) {
-                    return docString;
+    return axios({
+        method: "get",
+        withCredentials: layerIsSecured,
+        url})
+        .then(response => handleAxiosResponse(response, "requestGfi"))
+        .then(responseData => {
+            let parsedDocument = null;
+
+            if (mimeType === "text/xml") {
+                parsedDocument = parseDocumentString(responseData, mimeType);
+            }
+            else if (mimeType === "text/html") {
+                parsedDocument = parseDocumentString(responseData, mimeType);
+
+                if (parsedDocument.childNodes.length > 0 &&
+                    (
+                        !parsedDocument.getElementsByTagName("body")[0] ||
+                        parsedDocument.getElementsByTagName("body")[0].children.length > 0
+                    ) &&
+                    (
+                        !parsedDocument.getElementsByTagName("tbody")[0] ||
+                        parsedDocument.getElementsByTagName("tbody")[0].children.length > 0
+                    )) {
+                    return responseData;
                 }
+
                 return null;
+            }
+            else if (mimeType === "application/json") {
+                parsedDocument = responseData;
             }
 
             return parsedDocument;
@@ -59,8 +88,8 @@ export function parseDocumentString (documentString, mimeType, parseFromStringOp
     if (parsererror instanceof HTMLCollection && parsererror.length > 0) {
         for (errObj of parsererror) {
             console.warn("requestGfi, parseDocumentString: parsererror", errObj);
-            throw Error("requestGfi, parseDocumentString: the parsererror has reported a problem");
         }
+        throw Error("requestGfi, parseDocumentString: the parsererror has reported a problem");
     }
 
     return doc;
@@ -107,14 +136,14 @@ function parseOgcConformFeatures (doc) {
 function parseEsriFeatures (doc) {
     const features = [];
 
-    doc.getElementsByTagName("FIELDS").forEach(element => {
+    for (const element of doc.getElementsByTagName("FIELDS")) {
         const feature = new Feature();
 
-        element.attributes.forEach(attribute => {
+        for (const attribute of element.attributes) {
             feature.set(attribute.localName, attribute.value);
-        });
+        }
         features.push(feature);
-    });
+    }
 
     return features;
 }

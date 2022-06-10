@@ -1,6 +1,6 @@
 import {expect} from "chai";
 import {checkIsURLQueryValid, setValueToState} from "../../../parametricUrl/stateModifier";
-import * as crs from "masterportalAPI/src/crs";
+import * as crs from "@masterportal/masterportalapi/src/crs";
 
 const namedProjections = [
     ["EPSG:31467", "+title=Bessel/Gauß-Krüger 3 +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
@@ -9,7 +9,7 @@ const namedProjections = [
     ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
 ];
 
-describe("src/utils/stateModifier.js", () => {
+describe("src/utils/parametricUrl/stateModifier.js", () => {
     describe("setValueToState", () => {
         it("setValueToState does not react if key is not an array", () => {
             const state = {
@@ -228,31 +228,31 @@ describe("src/utils/stateModifier.js", () => {
                 valueAsString = "[553925,5931898]";
             const state = {
                     urlParams: {},
-                    Map: {
+                    Maps: {
                         center: [0, 0]
                     }
                 },
                 value = [553925, 5931898];
 
             await setValueToState(state, key, valueAsString);
-            expect(state.Map.center).to.be.deep.equals(value);
+            expect(state.Maps.center).to.be.deep.equals(value);
 
-            state.Map.center = [0, 0];
+            state.Maps.center = [0, 0];
             key = "center";
             await setValueToState(state, key, valueAsString);
-            expect(state.Map.center).to.be.deep.equals(value);
+            expect(state.Maps.center).to.be.deep.equals(value);
 
-            state.Map.center = [0, 0];
+            state.Maps.center = [0, 0];
             key = "Map/center";
             valueAsString = "553925,5931898";
             await setValueToState(state, key, valueAsString);
-            expect(state.Map.center).to.be.deep.equals(value);
+            expect(state.Maps.center).to.be.deep.equals(value);
 
-            state.Map.center = [0, 0];
+            state.Maps.center = [0, 0];
             key = "center";
             valueAsString = "553925,5931898";
             await setValueToState(state, key, valueAsString);
-            expect(state.Map.center).to.be.deep.equals(value);
+            expect(state.Maps.center).to.be.deep.equals(value);
         });
         it("test param marker and MapMarker, coordinates as array or comma separated", async () => {
             let key = "marker",
@@ -301,25 +301,25 @@ describe("src/utils/stateModifier.js", () => {
             await setValueToState(state, key, valueAsString);
             await setValueToState(state, "Map/projection", "EPSG:8395");
             expect(state.MapMarker.coordinates).to.be.deep.equals(value);
-            expect(state.urlParams.projection.name).to.be.deep.equals("EPSG:8395");
+            expect(state.urlParams.projection.name).to.be.deep.equals("http://www.opengis.net/gml/srs/epsg.xml#8395");
         });
         it("test param zoomLevel", async () => {
             let key = "zoomLevel";
             const valueAsString = "5",
                 state = {
                     urlParams: {},
-                    Map: {
+                    Maps: {
                         zoomLevel: 2
                     }
                 };
 
             await setValueToState(state, key, valueAsString);
-            expect(state.Map.zoomLevel).to.be.equals(5);
+            expect(state.Maps.zoomLevel).to.be.equals(5);
 
-            state.Map.zoomLevel = 2;
+            state.Maps.zoomLevel = 2;
             key = "zoomlevel";
             await setValueToState(state, key, valueAsString);
-            expect(state.Map.zoomLevel).to.be.deep.equals(5);
+            expect(state.Maps.zoomLevel).to.be.deep.equals(5);
 
         });
         it("test param map", async () => {
@@ -327,65 +327,66 @@ describe("src/utils/stateModifier.js", () => {
                 valueAsString = "3D";
             const state = {
                 urlParams: {},
-                Map: {
+                Maps: {
                     mapMode: "2D"
                 }
             };
 
             await setValueToState(state, key, valueAsString);
-            expect(state.Map.mapMode).to.be.equals("3D");
+            expect(state.Maps.mapMode).to.be.equals("3D");
 
             key = "mapmode";
             valueAsString = "2D";
             await setValueToState(state, key, valueAsString);
-            expect(state.Map.mapMode).to.be.equals("2D");
+            expect(state.Maps.mapMode).to.be.equals("2D");
 
             key = "map/mapmode";
             valueAsString = "3D";
             await setValueToState(state, key, valueAsString);
-            expect(state.Map.mapMode).to.be.equals("3D");
+            expect(state.Maps.mapMode).to.be.equals("3D");
 
         });
         it("test param layerIds", async () => {
-            let key = "Map/layerIds";
+            let key = "Maps/layerIds";
             const state = {
                     urlParams: {},
-                    Map: {
+                    Maps: {
                         layerIds: null
                     }
                 },
                 valueAsString = "1711,20622";
 
             await setValueToState(state, key, valueAsString);
-            expect(state.Map.layerIds).to.be.deep.equals([1711, 20622]);
+            expect(state.Maps.layerIds).to.be.deep.equals([1711, 20622]);
 
             key = "layerIds";
             await setValueToState(state, key, valueAsString);
-            expect(state.Map.layerIds).to.be.deep.equals([1711, 20622]);
+            expect(state.Maps.layerIds).to.be.deep.equals([1711, 20622]);
 
             key = "layerids";
             await setValueToState(state, key, valueAsString);
-            expect(state.Map.layerIds).to.be.deep.equals([1711, 20622]);
+            expect(state.Maps.layerIds).to.be.deep.equals([1711, 20622]);
 
         });
         it("test param featureid", async () => {
             let key = "featureid";
             const state = {
-                    urlParams: {}
+                    urlParams: {},
+                    ZoomTo: {}
                 },
                 valueAsString = "1,2",
                 result = [1, 2];
 
             await setValueToState(state, key, valueAsString);
-            expect(state.urlParams["Map/zoomToFeatureId"]).to.be.deep.equals(result);
+            expect(state.urlParams["Maps/zoomToFeatureId"]).to.be.deep.equals(result);
 
             key = "zoomToFeatureId";
             await setValueToState(state, key, valueAsString);
-            expect(state.urlParams["Map/zoomToFeatureId"]).to.be.deep.equals(result);
+            expect(state.urlParams["Maps/zoomToFeatureId"]).to.be.deep.equals(result);
 
-            key = "Map/zoomTofeatureId";
+            key = "Maps/zoomTofeatureId";
             await setValueToState(state, key, valueAsString);
-            expect(state.urlParams["Map/zoomToFeatureId"]).to.be.deep.equals(result);
+            expect(state.urlParams["Maps/zoomToFeatureId"]).to.be.deep.equals(result);
 
         });
         it("test param featureViaUrl", async () => {
@@ -410,11 +411,11 @@ describe("src/utils/stateModifier.js", () => {
                 valueAsString = "8712,APP_STAATLICHE_SCHULEN_452280";
 
             await setValueToState(state, key, valueAsString);
-            expect(state.urlParams["Map/highlightFeature"]).to.be.equals(valueAsString);
+            expect(state.urlParams["Maps/highlightFeature"]).to.be.equals(valueAsString);
 
-            key = "Map/highlightFeature";
+            key = "Maps/highlightFeature";
             await setValueToState(state, key, valueAsString);
-            expect(state.urlParams["Map/highlightFeature"]).to.be.equals(valueAsString);
+            expect(state.urlParams["Maps/highlightFeature"]).to.be.equals(valueAsString);
         });
         it("test param uiStyle", async () => {
             let key = "uiStyle";
@@ -431,7 +432,7 @@ describe("src/utils/stateModifier.js", () => {
             expect(state.urlParams.uiStyle).to.be.equals(valueAsString);
         });
         it("test param Map/zoomToExtent", async () => {
-            let key = "Map/zoomToExtent";
+            let key = "Maps/zoomToExtent";
             const state = {
                     urlParams: {}
                 },
@@ -439,43 +440,44 @@ describe("src/utils/stateModifier.js", () => {
                 result = [510000, 5850000, 625000, 6000000];
 
             await setValueToState(state, key, valueAsString);
-            expect(state.urlParams["Map/zoomToExtent"]).to.be.deep.equals(result);
+            expect(state.urlParams["Maps/zoomToExtent"]).to.be.deep.equals(result);
 
             key = "zoomToExtent";
             await setValueToState(state, key, valueAsString);
-            expect(state.urlParams["Map/zoomToExtent"]).to.be.deep.equals(result);
+            expect(state.urlParams["Maps/zoomToExtent"]).to.be.deep.equals(result);
         });
         it("test param Map/zoomToGeometry", async () => {
             let key = "Map/zoomToGeometry";
             const state = {
-                    urlParams: {}
+                    urlParams: {},
+                    ZoomTo: {}
                 },
                 valueAsString = "altona";
 
             await setValueToState(state, key, valueAsString);
-            expect(state.urlParams["Map/zoomToGeometry"]).to.be.equals(valueAsString);
+            expect(state.urlParams["Maps/zoomToGeometry"]).to.be.equals(valueAsString);
 
             key = "zoomToGeometry";
             await setValueToState(state, key, valueAsString);
-            expect(state.urlParams["Map/zoomToGeometry"]).to.be.equals(valueAsString);
+            expect(state.urlParams["Maps/zoomToGeometry"]).to.be.equals(valueAsString);
 
             key = "bezirk";
             await setValueToState(state, key, valueAsString);
-            expect(state.urlParams["Map/zoomToGeometry"]).to.be.equals(valueAsString);
+            expect(state.urlParams["Maps/zoomToGeometry"]).to.be.equals(valueAsString);
         });
-        it("test param Map/mdid", async () => {
-            let key = "Map/mdid";
+        it("test param Map/mdId", async () => {
+            let key = "Maps/mdId";
             const state = {
                     urlParams: {}
                 },
                 valueAsString = "F35EAC11-C236-429F-B1BF-751C0C18E8B7";
 
             await setValueToState(state, key, valueAsString);
-            expect(state.urlParams["Map/mdId"]).to.be.equals(valueAsString);
+            expect(state.urlParams["Maps/mdId"]).to.be.equals(valueAsString);
 
             key = "mdId";
             await setValueToState(state, key, valueAsString);
-            expect(state.urlParams["Map/mdId"]).to.be.equals(valueAsString);
+            expect(state.urlParams["Maps/mdId"]).to.be.equals(valueAsString);
         });
         it("test param filter", async () => {
             const key = "filter",

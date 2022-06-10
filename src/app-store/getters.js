@@ -7,7 +7,7 @@ export default {
     footerConfig: state => state?.configJs?.footer || null,
     loaderText: state => state?.configJs?.loaderText || "",
     scaleLineConfig: state => state?.configJs?.scaleLine || null,
-    uiStyle: state => (state?.urlParams?.uiStyle || state?.configJs?.uiStyle)?.toUpperCase(),
+    uiStyle: state => (state?.urlParams?.uiStyle || state?.configJs?.uiStyle || "DEFAULT")?.toUpperCase(),
     // gfiWindow is deprecated in the next major-release
     gfiWindow: state => state?.configJs.gfiWindow,
     ignoredKeys: state => state?.configJs.ignoredKeys || [],
@@ -85,6 +85,13 @@ export default {
             }
         }
         return tool;
-    }
+    },
+
+    /**
+     * Returns a rest service from restConf by ID
+     * @param {Object} state the store state
+     * @returns {Object} the rest service config object
+     */
+    getRestServiceById: state => id => state?.restConf?.find(service => service.id === id)
 };
 

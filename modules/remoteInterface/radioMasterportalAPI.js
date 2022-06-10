@@ -1,5 +1,5 @@
-import {getProjection, getProjections, transformToMapProjection, transformFromMapProjection, transform} from "masterportalAPI/src/crs";
-import {getLayerWhere, getLayerList, getDisplayNamesOfFeatureAttributes} from "masterportalAPI/src/rawLayerList";
+import {getProjection, getProjections, transformToMapProjection, transformFromMapProjection, transform} from "@masterportal/masterportalapi/src/crs";
+import {getLayerWhere, getLayerList, getDisplayNamesOfFeatureAttributes} from "@masterportal/masterportalapi/src/rawLayerList";
 
 const RadioMasterportalAPI = Backbone.Model.extend(/** @lends RadioMasterportalAPI */{
     defaults: {},

@@ -1,4 +1,4 @@
-import {getProjections} from "masterportalAPI/src/crs";
+import {getProjections} from "@masterportal/masterportalapi/src/crs";
 
 /**
  *  Converts a boolean string to a boolean.
@@ -54,18 +54,7 @@ function convertStringToArray (string) {
  * @returns {Object} projection object to given EPSG code
  */
 function findProjection (string) {
-    let projection = null;
-
-    if (string === "EPSG:25832") {
-        projection = getProjections().find(proj => proj.name === "http://www.opengis.net/gml/srs/epsg.xml#25832");
-        if (!projection) {
-            projection = getProjections().find(proj => proj.name === string);
-        }
-    }
-    else {
-        projection = getProjections().find(proj => proj.name === string);
-    }
-    return projection;
+    return getProjections().find(proj => proj.name === "http://www.opengis.net/gml/srs/epsg.xml#" + string.split(":")[1]);
 }
 /**
      * Parse parameter to search in searchbar.

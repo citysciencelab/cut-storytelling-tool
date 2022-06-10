@@ -8,8 +8,7 @@ import {createGfiFeature} from "../../src/api/gfi/getWmsFeaturesByMimeType";
 
 Radio.channel("VisibleVector").on({
     "gfiOnClick": function (hit) {
-        const layerList = store.getters["Map/layerList"],
-            foundLayer = layerList.find(layer => layer.get("id") === hit.layer_id),
+        const foundLayer = Radio.request("ModelList", "getModelByAttributes", {id: hit.layer_id}),
             layer = {
                 get: (key) => {
                     if (key === "name") {
@@ -33,15 +32,15 @@ Radio.channel("VisibleVector").on({
                 hit.feature
             );
 
-        store.commit("Map/setClickCoord", [hit.coordinate[0], hit.coordinate[1]]);
-        store.commit("Map/setGfiFeatures", [feature]);
+        store.commit("Maps/setClickCoordinate", [hit.coordinate[0], hit.coordinate[1]]);
+        store.commit("Maps/setGfiFeatures", [feature]);
     }
 });
 
 Radio.channel("GFI").on({
     "setIsVisible": function (isVisible) {
         if (!isVisible) {
-            store.commit("Map/setGfiFeatures", null);
+            store.commit("Maps/setGfiFeatures", null);
         }
     }
 });

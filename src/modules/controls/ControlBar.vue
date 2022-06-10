@@ -53,6 +53,18 @@ export default {
                     bottom: [fallbackBottomRight]
                 };
             }
+            this.$controlAddons.forEach(controlName => {
+                const addonControlConfig = this.controlsConfig[controlName];
+
+                if (addonControlConfig) {
+                    if (addonControlConfig.hiddenMobile) {
+                        this.mobileHiddenControls.push(controlName);
+                    }
+                    if (addonControlConfig.bottomControl) {
+                        this.bottomControls.push(controlName);
+                    }
+                }
+            }, this);
 
             Object
                 .keys(this.controlsConfig)
@@ -148,7 +160,7 @@ export default {
     </ul>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
 
     .right-bar {
@@ -180,24 +192,18 @@ export default {
     }
 </style>
 
-<style lang="less">
-    /* using this classname to scope css effects; can not use scoped less here since controls are not within scope, but added by jQuery */
+<style lang="scss">
+    @import "~variables";
+    /* using this classname to scope css effects; can not use scoped scss here since controls are not within scope, but added by jQuery */
     .backwards-compatibility-controls {
-        @color_1: #f3f3f3;
-        @background_color_1: #E10019;
-        @background_color_2: rgb(8,88,158);
-        /* use old styling way for glyphicons for old controls */
-        .glyphicon {
-            color: @color_1;
-            background-color: @background_color_1;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
-            &:hover {
-                cursor: pointer;
-                opacity: 0.7;
-            }
+        /* use old styling way for icons for old controls */
+        .bootstrap-icon {
+            color: $white;
+            background-color: $primary;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
         }
         > .toggleButtonPressed {
-            background-color: @background_color_2;
+            background-color: $light_blue;
         }
         /* forcing compatibility by overriding old-style layouting */
         .controls-row-right {
@@ -208,6 +214,11 @@ export default {
         .row {
             margin-right: 0;
             margin-left: 0;
+
+            > * {
+                padding-right: 0;
+                padding-left: 0;
+            }
         }
         > div {
             padding: 5px;

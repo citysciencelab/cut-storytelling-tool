@@ -9,7 +9,6 @@ import {RoutingWaypoint} from "../../../../utils/classes/routing-waypoint";
 import {RoutingGeosearchResult} from "../../../../utils/classes/routing-geosearch-result";
 import {RoutingIsochrones} from "../../../../utils/classes/routing-isochrones";
 import {RoutingIsochronesArea} from "../../../../utils/classes/routing-isochrones-area";
-import mapCollection from "../../../../../../../core/dataStorage/mapCollection";
 
 describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () => {
     let state, commitSpy, commit, dispatchSpy, dispatch, dispatchMocks, getters, rootState, waypoint, isochronesAreaSource, isochronesResult;
@@ -62,6 +61,12 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
             else if (args[0] === "Tools/Routing/fetchTextByCoordinates") {
                 return new RoutingGeosearchResult(args[1].coordinates[0], args[1].coordinates[1], "test");
             }
+            else if (args[0] === "Maps/removeInteraction") {
+                return state.isochronesPointDrawInteraction;
+            }
+            else if (args[0] === "Maps/addInteraction") {
+                return state.isochronesPointDrawInteraction;
+            }
             return dispatchMocks[args[0]];
         };
         getters = {
@@ -69,15 +74,13 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
         };
 
         rootState = {
-            Map: {
-                mapId: "ol",
-                mapMode: "2D"
+            Maps: {
+                mode: "2D"
             }
         };
 
         mapCollection.clear();
         mapCollection.addMap({
-            id: "ol",
             mode: "2D",
             getView: () => ({
                 fit: () => sinon.spy()
@@ -86,13 +89,23 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
             removeLayer: sinon.spy(),
             addInteraction: sinon.spy(),
             removeInteraction: sinon.spy()
-        }, "ol", "2D");
+        }, "2D");
 
         state = {
             settings: {},
             waypoint: waypoint,
             isochronesAreaSource: isochronesAreaSource,
             isochronesPointDrawInteraction: new Draw({
+                source: "",
+                type: "Point",
+                geometryFunction: undefined
+            }),
+            isochronesPointModifyInteraction: new Draw({
+                source: "",
+                type: "Point",
+                geometryFunction: undefined
+            }),
+            isochronesPointSnapInteraction: new Draw({
                 source: "",
                 type: "Point",
                 geometryFunction: undefined
@@ -130,6 +143,8 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
 
     it("should initIsochrones without mapListenerAdded", async () => {
         state.mapListenerAdded = false;
+        state.isochronesAreaLayer = true;
+        state.isochronesPointLayer = true;
         await actionsIsochrones.initIsochrones({state, getters, commit, dispatch, rootState});
 
         expect(commitSpy.args).to.deep.equal([
@@ -138,17 +153,23 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
 
         expect(dispatchSpy.args).to.deep.equal([
             ["createIsochronePointModifyInteractionListener"],
+            ["Maps/addLayerOnTop", true, {root: true}],
+            ["Maps/addLayerOnTop", true, {root: true}],
             ["createIsochronesPointDrawInteraction"]
         ]);
     });
 
     it("should initIsochrones with mapListenerAdded", async () => {
         state.mapListenerAdded = true;
+        state.isochronesAreaLayer = true;
+        state.isochronesPointLayer = true;
         await actionsIsochrones.initIsochrones({state, getters, commit, dispatch, rootState});
 
         expect(commitSpy.args).to.deep.equal([]);
 
         expect(dispatchSpy.args).to.deep.equal([
+            ["Maps/addLayerOnTop", true, {root: true}],
+            ["Maps/addLayerOnTop", true, {root: true}],
             ["createIsochronesPointDrawInteraction"]
         ]);
     });
@@ -180,7 +201,8 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
 
         expect(dispatchSpy.args).to.deep.equal([
             ["Tools/Routing/transformCoordinatesLocalToWgs84Projection", [10, 10], {root: true}],
-            ["Tools/Routing/fetchTextByCoordinates", {coordinates: [10, 10]}, {root: true}]
+            ["Tools/Routing/fetchTextByCoordinates", {coordinates: [10, 10]}, {root: true}],
+            ["Maps/removeInteraction", state.isochronesPointDrawInteraction, {root: true}]
         ]);
 
         expect(waypoint.getDisplayName()).equal("test");
@@ -193,7 +215,9 @@ describe("src/modules/tools/routing/store/isochrones/actionsIsochrones.js", () =
         expect(commitSpy.args).to.deep.equal([]);
 
         expect(dispatchSpy.args).to.deep.equal([
-            ["removeIsochronesPointDrawInteraction"]
+            ["removeIsochronesPointDrawInteraction"],
+            ["Maps/addInteraction", state.isochronesPointModifyInteraction, {root: true}],
+            ["Maps/addInteraction", state.isochronesPointSnapInteraction, {root: true}]
         ]);
     });
 });

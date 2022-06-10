@@ -31,35 +31,8 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
             url = "myWfs",
             userHelp = "HALP";
         let getters,
-            requestSpy,
+            rootGetters,
             service;
-
-        /**
-         * The mock function for the Radio.request.
-         * Knitted for Radio.request("RestReader", "getServiceById", restLayerId) and
-         * Radio.request("ModelList", "getModelByAttributes", {id: layerId}).
-         *
-         * @returns {object} An object containing the needed parameters and function to test the action 'toggleSwiper'.
-         */
-        function request (...args) {
-            const wfsDefined = Boolean(args[0] === "RestReader" ? args[2] : args[2].id);
-
-            requestSpy(...args);
-
-            return wfsDefined
-                ? {
-                    get: prm => {
-                        if (prm === "featureType") {
-                            return typeName;
-                        }
-                        if (prm === "url") {
-                            return url;
-                        }
-                        return null;
-                    }
-                }
-                : null;
-        }
 
         beforeEach(() => {
             getters = {
@@ -72,28 +45,27 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
                     userHelp
                 }
             };
+            rootGetters = {
+                getRestServiceById: id => id === 456 ? {url, featureType: typeName} : {}
+            };
             service = {url};
-            requestSpy = sinon.spy();
-            sinon.stub(Radio, "request").callsFake(request);
         });
 
         it("should reset the module if the WFS is not given", () => {
             delete getters.currentInstance.requestConfig.restLayerId;
 
-            actions.prepareModule({commit, dispatch, getters});
+            actions.prepareModule({commit, dispatch, getters, rootGetters});
 
-            expect(requestSpy.calledOnce).to.be.true;
             expect(dispatch.calledThrice).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["resetModule", false]);
             expect(dispatch.secondCall.args).to.eql(["resetModule", true]);
             expect(dispatch.thirdCall.args[0]).to.eql("Alerting/addSingleAlert");
-            expect(dispatch.thirdCall.args[1]).to.eql(i18next.t("common:modules.tools.wfsSearch.wrongConfig", {name: "wfsName"}));
+            expect(dispatch.thirdCall.args[1]).to.eql(i18next.t("common:modules.tools.wfsSearch.wrongConfig", {id: "wfsId"}));
             expect(dispatch.thirdCall.args[2]).to.eql({root: true});
         });
         it("should prepare the module if the WFS is given", () => {
-            actions.prepareModule({commit, dispatch, getters});
+            actions.prepareModule({commit, dispatch, getters, rootGetters});
 
-            expect(requestSpy.calledOnce).to.be.true;
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["resetModule", false]);
             expect(commit.calledThrice).to.be.true;
@@ -106,9 +78,8 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
         it("should prepare the module if the WFS is given while also dispatching 'retrieveData' if the parameter 'selectSource' is given in the currentInstance", () => {
             getters.currentInstance.selectSource = 122;
 
-            actions.prepareModule({commit, dispatch, getters});
+            actions.prepareModule({commit, dispatch, getters, rootGetters});
 
-            expect(requestSpy.calledOnce).to.be.true;
             expect(dispatch.calledTwice).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["resetModule", false]);
             expect(dispatch.secondCall.args).to.eql(["retrieveData"]);
@@ -124,9 +95,8 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
             getters.currentInstance.requestConfig.layerId = 569;
             service.typeName = typeName;
 
-            actions.prepareModule({commit, dispatch, getters});
+            actions.prepareModule({commit, dispatch, getters, rootGetters});
 
-            expect(requestSpy.calledOnce).to.be.true;
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["resetModule", false]);
             expect(commit.calledThrice).to.be.true;
@@ -169,10 +139,11 @@ describe("src/modules/tools/wfsSearch/store/actionsWfsSearch.js", () => {
     describe("resetResult", () => {
         it("should reset the results in the state", () => {
             const state = {
-                requiredValues: {Gemarkung: "Waldesch", Flur: 5}
-            };
+                    requiredValues: {Gemarkung: "Waldesch", Flur: 5}
+                },
+                getters = {currentInstance: {literals: []}};
 
-            actions.resetResult({state, commit, dispatch});
+            actions.resetResult({state, getters, commit, dispatch});
 
             expect(commit.callCount).to.equal(4);
             expect(commit.firstCall.args).to.eql(["setValuesReset", true]);

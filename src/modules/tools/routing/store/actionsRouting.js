@@ -1,11 +1,19 @@
+import {getByDotSyntax} from "../../../../utils/fetchFirstModuleConfig";
 import {
     fetchRoutingNominatimGeosearch,
     fetchRoutingNominatimGeosearchReverse
 } from "../utils/geosearch/routing-nominatim-geosearch";
-import {getMapProjection, transform} from "masterportalAPI/src/crs";
+import {getMapProjection, transform} from "@masterportal/masterportalapi/src/crs";
 import {fetchRoutingBkgGeosearch, fetchRoutingBkgGeosearchReverse} from "../utils/geosearch/routing-bkg-geosearch";
 import * as constantsRouting from "./constantsRouting";
-import mapCollection from "../../../../core/dataStorage/mapCollection";
+
+/**
+ * @const {String} configPath an array of possible config locations. First one found will be used
+ */
+const configPaths = [
+    "configJson.Portalconfig.menu.tools.children.routing",
+    "configJson.Portalconfig.menu.routing"
+];
 
 export default {
     /**
@@ -24,11 +32,13 @@ export default {
      */
     checkNonOptionalConfigFields ({rootState}) {
         // Needs to use rootState because state does not contain values from config.json on the initial load
-        const state = rootState.configJson.Portalconfig.menu.tools.children.routing,
+        const state = configPaths
+                .map(path => getByDotSyntax(rootState, path))
+                .find(config => config !== undefined),
             checkPaths = constantsRouting.nonOptionalConfigFields.map(field => field.split(".")),
             missing = checkPaths.filter(path => {
                 const val = path.reduce((partObj, partPath) => {
-                    return partObj[partPath];
+                    return partObj?.[partPath];
                 }, state);
 
                 return val === undefined || val === null;
@@ -128,7 +138,7 @@ export default {
      */
     transformCoordinatesLocalToWgs84Projection ({rootState}, coordinates) {
         return transform(
-            getMapProjection(mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode)),
+            getMapProjection(mapCollection.getMap(rootState.Maps.mode)),
             "EPSG:4326",
             coordinates
         );
@@ -142,7 +152,7 @@ export default {
     transformCoordinatesWgs84ToLocalProjection ({rootState}, coordinates) {
         return transform(
             "EPSG:4326",
-            getMapProjection(mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode)),
+            getMapProjection(mapCollection.getMap(rootState.Maps.mode)),
             coordinates
         );
     }

@@ -9,7 +9,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 config.mocks.$t = key => key;
 
-describe("LayerInformation.vue", () => {
+describe("src/modules/LayerInformation.vue - GroupLayer", () => {
     let store;
 
     beforeEach(() => {
@@ -42,12 +42,14 @@ describe("LayerInformation.vue", () => {
                         abstractText: () => "Test",
                         noMetadataLoaded: () => "",
                         metaURLs: () => [],
-                        currentLayerName: () => ""
+                        currentLayerName: () => "",
+                        showUrlGlobal: () => false
                     },
                     actions: {
                         activate: () => sinon.stub(),
                         layerInfo: () => sinon.stub(),
-                        changeLayerInfo: () => sinon.stub()
+                        changeLayerInfo: () => sinon.stub(),
+                        setConfigParams: () => sinon.stub()
                     }
                 }
             },
@@ -74,7 +76,7 @@ describe("LayerInformation.vue", () => {
             localVue
         });
 
-        expect(wrapper.find(".glyphicon-remove")).to.exist;
+        expect(wrapper.find(".bi-x-lg")).to.exist;
     });
 
     it("should emitted close event if button is clicked", async () => {
@@ -82,7 +84,7 @@ describe("LayerInformation.vue", () => {
                 store,
                 localVue
             }),
-            button = wrapper.find(".glyphicon-remove");
+            button = wrapper.find(".bi-x-lg");
 
         expect(button).to.exist;
 

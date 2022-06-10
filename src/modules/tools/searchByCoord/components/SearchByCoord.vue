@@ -1,5 +1,5 @@
 <script>
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersSearchByCoord";
 import actions from "../store/actionsSearchByCoord";
@@ -9,7 +9,7 @@ import state from "../store/stateSearchByCoord";
 export default {
     name: "SearchByCoord",
     components: {
-        Tool
+        ToolTemplate
     },
     computed: {
         ...mapGetters("Tools/SearchByCoord", Object.keys(getters)),
@@ -92,9 +92,9 @@ export default {
 </script>
 
 <template lang="html">
-    <Tool
+    <ToolTemplate
         :title="name"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
@@ -109,16 +109,16 @@ export default {
                     class="form-horizontal"
                     role="form"
                 >
-                    <div class="form-group form-group-sm">
+                    <div class="form-group form-group-sm row">
                         <label
-                            class="col-md-5 col-sm-5 control-label"
+                            class="col-md-5 col-form-label"
                             for="coordSystemField"
                         >{{ $t("modules.tools.searchByCoord.coordinateSystem") }}</label>
-                        <div class="col-md-7 col-sm-7">
+                        <div class="col-md-7">
                             <select
                                 id="coordSystemField"
                                 ref="coordSystemField"
-                                class="font-arial form-control input-sm pull-left"
+                                class="font-arial form-select form-select-sm float-start"
                                 :value="currentSelection"
                                 @change="selectionChanged"
                             >
@@ -132,19 +132,19 @@ export default {
                             </select>
                         </div>
                     </div>
-                    <div class="form-group form-group-sm">
+                    <div class="form-group form-group-sm row">
                         <label
                             id="coordinatesEastingLabel"
                             for="coordinatesEastingField"
-                            class="col-md-5 col-sm-5 control-label"
+                            class="col-md-5 col-form-label"
                         >{{ $t(getLabel("eastingLabel")) }}</label>
-                        <div class="col-md-7 col-sm-7">
+                        <div class="col-md-7">
                             <input
                                 id="coordinatesEastingField"
                                 v-model="coordinatesEasting.value"
                                 :class="{ inputError: getEastingError }"
                                 type="text"
-                                class="form-control"
+                                class="form-control form-control-sm"
                                 :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesEastingExample"
                                 @input="validateInput(coordinatesEasting)"
                             ><p
@@ -161,19 +161,19 @@ export default {
                             </p>
                         </div>
                     </div>
-                    <div class="form-group form-group-sm">
+                    <div class="form-group form-group-sm row">
                         <label
                             id="coordinatesNorthingLabel"
                             for="coordinatesNorthingField"
-                            class="col-md-5 col-sm-5 control-label"
+                            class="col-md-5 col-form-label"
                         >{{ $t(getLabel("northingLabel")) }}</label>
-                        <div class="col-md-7 col-sm-7">
+                        <div class="col-md-7">
                             <input
                                 id="coordinatesNorthingField"
                                 v-model="coordinatesNorthing.value"
                                 :class="{ inputError: getNorthingError }"
                                 type="text"
-                                class="form-control"
+                                class="form-control form-control-sm"
                                 :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesNorthingExample"
                                 @input="validateInput(coordinatesNorthing)"
                             ><p
@@ -190,10 +190,10 @@ export default {
                             </p>
                         </div>
                     </div>
-                    <div class="form-group form-group-sm">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group form-group-sm row">
+                        <div class="col-12 d-grid gap-2">
                             <button
-                                class="btn btn-primary btn-block"
+                                class="btn btn-primary"
                                 :disabled="getEastingError || getNorthingError || !coordinatesEasting.value || !coordinatesNorthing.value"
                                 type="button"
                                 @click="searchCoordinate(coordinatesEasting, coordinatesNorthing)"
@@ -205,21 +205,21 @@ export default {
                 </form>
             </div>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
-#search-by-coord {
-    @media (min-width: 768px) {
-        width: 350px;
+    #search-by-coord {
+        @media (min-width: 768px) {
+            width: 350px;
+        }
     }
-}
-.error-text {
-    font-size: 100%;
-    color: #a94442;
-}
-.inputError {
-    border: 1px solid #a94442;
-}
+    .error-text {
+        font-size: 100%;
+        color: $light_red;
+    }
+    .inputError {
+        border: 1px solid $light_red;
+    }
 </style>

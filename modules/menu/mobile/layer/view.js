@@ -8,14 +8,14 @@ import axios from "axios";
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {
         "click .layer-item": "preToggleIsSelected",
-        "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
-        "click .selected-layer-item > .glyphicon-remove": "removeFromSelection",
+        "click .layer-info-item > .info-icon": "showLayerInformation",
+        "click .selected-layer-item  > .x-icon": "removeFromSelection",
         "click .selected-layer-item > div": "toggleIsVisibleInMap",
-        "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
-        "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
-        "click .layer-sort-item > .glyphicon-triangle-bottom": "moveModelDown",
+        "click .layer-info-item > .settings-icon": "toggleIsSettingVisible",
+        "click .layer-sort-item > .up-icon": "moveModelUp",
+        "click .layer-sort-item > .down-icon": "moveModelDown",
         "change select": "setTransparency",
-        "click .glyphicon-tint": "openStyleWMS"
+        "click .style-icon": "openStyleWMS"
     },
 
     /**
@@ -74,12 +74,12 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         }
         if (model.has("minScale") === true) {
             if (value === true) {
-                const statusCheckbox = this.$el.find(".glyphicon.glyphicon-unchecked").length;
+                const statusCheckbox = this.$el.find(".bootstrap-icon > .bi-square").length;
 
                 this.$el.addClass("disabled");
                 this.$el.find("*").css("pointer-events", "none");
                 if (statusCheckbox === 0) {
-                    this.$el.find("div.pull-left").css("pointer-events", "auto");
+                    this.$el.find("div.float-start").css("pointer-events", "auto");
                 }
             }
             else {
@@ -111,13 +111,16 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
 
     /**
      * Draws the settings (transparency, metainfo, ...)
+     * @param {String} layerId The layer id.
      * @returns {void}
      */
-    renderSetting: function () {
+    renderSetting: function (layerId) {
         const attr = this.model.toJSON();
 
-        // Animation Zahnrad
-        this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
+        // Animation cog
+        if (layerId === attr.id) {
+            this.$(".bi-gear").parent(".bootstrap-icon").toggleClass("rotate rotate-back");
+        }
         // Slide-Animation templateSetting
         if (this.model.get("isSettingVisible") === false) {
             this.$el.find(".item-settings").slideUp("slow", function () {
@@ -214,7 +217,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.$el.remove();
 
         if (this.model.get("typ") === "WMS" && this.model.get("time")) {
-            this.model.removeTimeLayer(this.model.get("id"));
+            this.model.removeLayer(this.model.get("id"));
         }
     },
 
@@ -234,7 +237,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     showLayerInformation: function () {
         this.model.showLayerInformation();
         // Navigation wird geschlossen
-        this.$("div.collapse.navbar-collapse").removeClass("in");
+        this.$("div.collapse.navbar-collapse").removeClass("show");
     },
 
     /**
@@ -287,7 +290,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     openStyleWMS: function () {
         Radio.trigger("StyleWMS", "openStyleWMS", this.model);
-        this.$(".navbar-collapse").removeClass("in");
+        this.$(".navbar-collapse").removeClass("show");
     },
 
     /**

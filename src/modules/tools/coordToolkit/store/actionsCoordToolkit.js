@@ -1,42 +1,72 @@
-import {toStringHDMS, toStringXY} from "ol/coordinate.js";
+import {toStringHDMS} from "ol/coordinate.js";
 import proj4 from "proj4";
 import isMobile from "../../../../utils/isMobile";
 import {convertSexagesimalFromString, convertSexagesimalToDecimal, convertSexagesimalFromDecimal} from "../../../../utils/convertSexagesimalCoordinates";
 import getProxyUrl from "../../../../utils/getProxyUrl";
 import {requestGfi} from "../../../../api/wmsGetFeatureInfo";
-import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
+import {getLayerWhere} from "@masterportal/masterportalapi/src/rawLayerList";
 
 export default {
     /**
-     * Dispatches the action to copy the given element to the clipboard.
-     *
-     * @param {Element} el element to copy
+     * Copies the coordinates to clipboard, delimited by limiter from state.
+     * @param {Object} param.state the state
+     * @param {Object} param.dispatch the dispatch
+     * @param {Array} coords coordinates to copy
      * @returns {void}
      */
-    copyToClipboard ({dispatch}, el) {
-        dispatch("copyToClipboard", el, {root: true});
+    copyCoordinates ({state, dispatch}, coords) {
+        if (Array.isArray(coords)) {
+            let toCopy = "";
+
+            coords.forEach(coord => {
+                toCopy += coord;
+                toCopy += state.delimiter;
+            });
+            if (toCopy.length > 0) {
+                toCopy = toCopy.substr(0, toCopy.length - 1);
+            }
+            navigator.clipboard.writeText(toCopy)
+                .then(() => {
+                    dispatch("Alerting/addSingleAlert", {content: i18next.t("common:modules.util.copyToClipboard.contentSaved")}, {root: true});
+                })
+                .catch(err => {
+                    dispatch("Alerting/addSingleAlert", {content: i18next.t("common:modules.util.copyToClipboard.contentNotSaved")}, {root: true});
+                    console.error(`CopyToClipboard: ${err}`);
+                });
+        }
+        else {
+            console.warn("Cannot copy coordinates to clipboard, coordinates:", coords);
+        }
     },
     /**
      * Remembers the projection and shows mapmarker at the given position.
      * @param {Event} event - pointerdown-event, to get the position from
      * @returns {void}
      */
-    positionClicked: function ({commit, dispatch, state}, event) {
+    positionClicked: function ({commit, dispatch, state, rootGetters}) {
         const updatePosition = isMobile() ? true : state.updatePosition,
-            position = event.coordinate;
+            position = rootGetters["Maps/mouseCoordinate"],
+            mapMode = rootGetters["Maps/mode"];
 
         commit("setPositionMapProjection", position);
         dispatch("changedPosition");
         commit("setUpdatePosition", !updatePosition);
 
-        dispatch("MapMarker/placingPointMarker", position, {root: true});
-        if (state.heightLayer) {
-            if (updatePosition) {
-                dispatch("getHeight", position);
+        if (mapMode === "2D") {
+            dispatch("MapMarker/placingPointMarker", position, {root: true});
+
+            if (state.heightLayer) {
+                if (updatePosition) {
+                    dispatch("getHeight", position);
+                }
+                else {
+                    commit("setHeight", "");
+                }
             }
-            else {
-                commit("setHeight", "");
-            }
+        }
+        else if (mapMode === "3D" && position.length === 3) {
+            dispatch("MapMarker/placingPointMarker", position, {root: true});
+            commit("setHeight", position[2].toFixed(1));
         }
     },
     /**
@@ -58,7 +88,8 @@ export default {
                     Radio.trigger("Layer", "prepareLayerObject", layer);
                 }
                 if (layer.has("layerSource")) {
-                    commit("setHeightLayer", layer);
+                    // freeze the layer, else vuex is observing it in mode 3D
+                    commit("setHeightLayer", Object.freeze(layer));
                 }
                 else {
                     console.warn("CoordToolkit: Layer with id " + state.heightLayerId + " to retrieve height from has no layerSource. Heights are not available!");
@@ -76,8 +107,8 @@ export default {
      * @returns {void}
      */
     getHeight ({dispatch, rootGetters, state}, position) {
-        const projection = rootGetters["Map/projection"],
-            resolution = rootGetters["Map/resolution"],
+        const projection = rootGetters["Maps/projection"],
+            resolution = rootGetters["Maps/resolution"],
             gfiParams = {INFO_FORMAT: state.heightInfoFormat, FEATURE_COUNT: 1};
         let url = state.heightLayer.get("layerSource").getFeatureInfoUrl(position, resolution, projection, gfiParams);
 
@@ -88,7 +119,7 @@ export default {
          */
         url = state.heightLayer.get("useProxy") ? getProxyUrl(url) : url;
 
-        requestGfi("text/xml", url, false).then(features => {
+        requestGfi("text/xml", url, state.heightLayer).then(features => {
             dispatch("retrieveHeightFromGfiResponse", features);
         });
     },
@@ -138,10 +169,10 @@ export default {
      * Delegates the calculation and transformation of the position according to the projection
      * @returns {void}
      */
-    changedPosition ({dispatch, state, rootGetters, getters}) {
+    changedPosition ({dispatch, state, getters}) {
         if (state.mode === "supply") {
             const targetProjectionName = state.currentProjection?.name,
-                position = getters.getTransformedPosition(rootGetters["Map/ol2DMap"], targetProjectionName);
+                position = getters.getTransformedPosition(mapCollection.getMap("2D"), targetProjectionName);
 
             if (position) {
                 dispatch("adjustPosition", {position: position, targetProjection: state.currentProjection});
@@ -152,15 +183,15 @@ export default {
      * Sets the position to map's center, if coordinates are  not set.
      * @returns {void}
      */
-    setFirstSearchPosition ({dispatch, commit, state, rootState, rootGetters, getters}) {
+    setFirstSearchPosition ({dispatch, commit, state, rootState, getters}) {
         if (state.mode === "search" && state.active) {
             const targetProjectionName = state.currentProjection?.name,
-                position = getters.getTransformedPosition(rootGetters["Map/ol2DMap"], targetProjectionName);
+                position = getters.getTransformedPosition(mapCollection.getMap("2D"), targetProjectionName);
 
-            if (position && position[0] === 0 && position[1] === 0 && rootState.Map.center) {
-                commit("setCoordinatesEasting", {id: "easting", value: String(rootState.Map.center[0])});
-                commit("setCoordinatesNorthing", {id: "northing", value: String(rootState.Map.center[1])});
-                dispatch("moveToCoordinates", rootState.Map.center);
+            if (position && position[0] === 0 && position[1] === 0 && rootState.Maps.center) {
+                commit("setCoordinatesEasting", {id: "easting", value: String(rootState.Maps.center[0])});
+                commit("setCoordinatesNorthing", {id: "northing", value: String(rootState.Maps.center[1])});
+                dispatch("moveToCoordinates", rootState.Maps.center);
             }
         }
     },
@@ -174,12 +205,12 @@ export default {
     adjustPosition ({commit}, {position, targetProjection}) {
         let coord, easting, northing;
 
-        if (targetProjection && Array.isArray(position) && position.length === 2) {
+        if (targetProjection && Array.isArray(position) && position.length >= 2) {
             // geographical coordinates
             if (targetProjection.projName === "longlat") {
                 let converted;
 
-                coord = toStringHDMS(position);
+                coord = toStringHDMS(position.slice(0, 2));
                 if (targetProjection.id === "EPSG:4326-DG") {
                     converted = convertSexagesimalToDecimal(coord);
                 }
@@ -191,25 +222,11 @@ export default {
             }
             // cartesian coordinates
             else {
-                coord = toStringXY(position, 2);
-                easting = Number.parseFloat(coord.split(",")[0].trim()).toFixed(2);
-                northing = Number.parseFloat(coord.split(",")[1].trim()).toFixed(2);
+                easting = position[0].toFixed(2);
+                northing = position[1].toFixed(2);
             }
             commit("setCoordinatesEasting", {id: "easting", value: String(easting)});
             commit("setCoordinatesNorthing", {id: "northing", value: String(northing)});
-        }
-    },
-    /**
-     * Sets the coordinates from the maps pointermove-event.
-     * @param {Event} event pointermove-event, to get the position from
-     * @returns {void}
-     */
-    setCoordinates: function ({state, commit, dispatch}, event) {
-        const position = event.coordinate;
-
-        if (state.updatePosition) {
-            commit("setPositionMapProjection", position);
-            dispatch("changedPosition");
         }
     },
     /**
@@ -217,11 +234,19 @@ export default {
      * @param {Number[]} position contains coordinates of mouse position
      * @returns {void}
      */
-    checkPosition ({state, commit, dispatch}, position) {
-        if (state.updatePosition) {
-            dispatch("MapMarker/placingPointMarker", position, {root: true});
+    checkPosition ({state, commit, dispatch, rootGetters}) {
+        const position = rootGetters["Maps/mouseCoordinate"],
+            mapMode = rootGetters["Maps/mode"];
 
+        if (state.updatePosition) {
+            if (mapMode === "2D") {
+                dispatch("MapMarker/placingPointMarker", position, {root: true});
+            }
+            if (mapMode === "3D" && position.length === 3) {
+                commit("setHeight", position[2].toFixed(1));
+            }
             commit("setPositionMapProjection", position);
+            dispatch("changedPosition");
         }
     },
     /**
@@ -420,7 +445,7 @@ export default {
      * @returns {void}
      */
     setZoom: function ({dispatch}, zoomLevel) {
-        dispatch("Map/setZoomLevel", zoomLevel, {root: true});
+        dispatch("Maps/setZoomLevel", zoomLevel, {root: true});
     },
     /**
      * Takes the selected coordinates and centers the map to the new position.
@@ -432,6 +457,6 @@ export default {
         // coordinates come as string and have to be changed to numbers for setCenter from mutations to work.
         const newCoords = [parseFloat(coordinates[0]), parseFloat(coordinates[1])];
 
-        dispatch("Map/setCenter", newCoords, {root: true});
+        dispatch("Maps/setCenter", newCoords, {root: true});
     }
 };

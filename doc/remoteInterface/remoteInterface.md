@@ -304,7 +304,14 @@ Create an html-file and add the follow content. In it, an iframe is created in w
 
 Note: The html-file must be stored in a path that is accessible via the localhost.
 
-The example can also be called directly here with a running server:  **[iframe Example](https://localhost:9001/doc/remoteInterface/iframeExample.html)**
+The example can also be called directly here with a running server:  **[iframe Example](https://localhost:9001/doc/remoteInterface/iframeExample.html)**.
+To do this, the following must be added to `portal/master/config.js`
+
+```js
+remoteInterface: {
+    postMessageUrl: "http://localhost:8080"
+},
+```
 
 Example of an iframe:
 ```html

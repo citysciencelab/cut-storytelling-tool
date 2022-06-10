@@ -26,9 +26,11 @@
  * @property {String} heightElementName element name in the response of getFeatureRequest of height layer
  * @property {String} heightValueWater value in the response of getFeatureRequest of height layer, if there is water area
  * @property {String} heightValueBuilding value in the response of getFeatureRequest of height layer, if there is building area
+ * @property {Boolean} showCopyButtons if true, copy-buttons are shown
+ * @property {String} delimiter delimits the copies coordinates
  * @property {String} zoomLevel used by search
  * @property {String} name displayed as title (config-param)
- * @property {String} glyphicon icon next to title (config-param)
+ * @property {String} icon icon next to title (config-param)
  * @property {Boolean} renderToWindow if true, tool is rendered in a window, else in sidebar (config-param)
  * @property {Boolean} resizableWindow if true, window is resizable (config-param)
  * @property {Boolean} isVisibleInMenu if true, tool is selectable in menu (config-param)
@@ -61,10 +63,12 @@ const state = {
     heightElementName: null,
     heightValueWater: null,
     heightValueBuilding: null,
+    showCopyButtons: true,
+    delimiter: "|",
 
     // defaults for config.json parameters
     name: "common:menu.tools.coordToolkit",
-    glyphicon: "glyphicon-globe",
+    icon: "bi-globe",
     renderToWindow: true,
     resizableWindow: true,
     isVisibleInMenu: true,

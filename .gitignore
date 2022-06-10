@@ -10,6 +10,7 @@
 .history
 /img/*.db
 /jsdoc
+/docHtml
 /nbproject/private/
 styleguide
 .history

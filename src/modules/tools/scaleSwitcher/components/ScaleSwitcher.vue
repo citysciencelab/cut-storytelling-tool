@@ -1,7 +1,7 @@
 <script>
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 import getComponent from "../../../../utils/getComponent";
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import getters from "../store/gettersScaleSwitcher";
 import mutations from "../store/mutationsScaleSwitcher";
 
@@ -11,17 +11,17 @@ import mutations from "../store/mutationsScaleSwitcher";
 export default {
     name: "ScaleSwitcher",
     components: {
-        Tool
+        ToolTemplate
     },
     computed: {
         ...mapGetters("Tools/ScaleSwitcher", Object.keys(getters)),
-        ...mapGetters("Map", ["scales"]),
+        ...mapGetters("Maps", ["getView"]),
         scale: {
             get () {
-                return this.$store.state.Map.scale;
+                return this.$store.state.Maps.scale;
             },
             set (value) {
-                this.$store.commit("Map/setScale", value);
+                this.$store.commit("Maps/setScale", value);
             }
         }
     },
@@ -42,10 +42,10 @@ export default {
      * @returns {void}
      */
     created () {
+        this.scales = this.getView.get("options").map(option => option.scale);
         this.$on("close", this.close);
     },
     methods: {
-        ...mapActions("Map", ["setResolutionByIndex"]),
         ...mapMutations("Tools/ScaleSwitcher", Object.keys(mutations)),
 
         /**
@@ -73,15 +73,20 @@ export default {
                     this.$refs["scale-switcher-select"].focus();
                 }
             });
+        },
+        setResolutionByIndex (index) {
+            const view = this.getView;
+
+            view.setResolution(view.getResolutions()[index]);
         }
     }
 };
 </script>
 
 <template lang="html">
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
@@ -91,17 +96,18 @@ export default {
             <div
                 v-if="active"
                 id="scale-switcher"
+                class="row"
             >
                 <label
                     for="scale-switcher-select"
-                    class="col-md-5 col-sm-5 control-label"
+                    class="col-md-5 col-form-label"
                 >{{ $t("modules.tools.scaleSwitcher.label") }}</label>
-                <div class="col-md-7 col-sm-7">
+                <div class="col-md-7">
                     <select
                         id="scale-switcher-select"
                         ref="scale-switcher-select"
                         v-model="scale"
-                        class="font-arial form-control input-sm pull-left"
+                        class="font-arial form-select form-select-sm float-start"
                         @change="setResolutionByIndex($event.target.selectedIndex)"
                     >
                         <option
@@ -115,13 +121,5 @@ export default {
                 </div>
             </div>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
-
-<style lang="less" scoped>
-    @import "~variables";
-
-    label {
-        margin-top: 7px;
-    }
-</style>

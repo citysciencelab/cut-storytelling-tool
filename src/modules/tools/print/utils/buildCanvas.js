@@ -1,4 +1,4 @@
-import {Image, Tile, Vector, Group} from "ol/layer.js";
+import {Image, Tile, Vector, VectorTile, Group} from "ol/layer.js";
 
 const CanvasModel = {
     /**
@@ -7,7 +7,7 @@ const CanvasModel = {
      * @returns {Object} - LayerObject for print mask.
      */
     getCanvasLayer: function (layerList) {
-        const currentResolution = Radio.request("MapView", "getOptions").resolution;
+        const currentResolution = Radio.request("MapView", "getOptions")?.resolution;
         let canvasLayerList = [],
             canvasLayer = {};
 
@@ -49,10 +49,7 @@ const CanvasModel = {
             returnLayer;
 
         if (isInScaleRange) {
-            if (layer instanceof Image) {
-                returnLayer = layer;
-            }
-            else if (layer instanceof Tile) {
+            if (layer instanceof Image || layer instanceof Tile || layer instanceof VectorTile) {
                 returnLayer = layer;
             }
             else if (layer instanceof Vector) {

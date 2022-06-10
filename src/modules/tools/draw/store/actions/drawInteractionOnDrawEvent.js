@@ -1,6 +1,5 @@
 import {createStyle} from "../../utils/style/createStyle";
 import {calculateCircle} from "../../utils/circleCalculations";
-import mapCollection from "../../../../../core/dataStorage/mapCollection";
 
 const errorBorder = "#E10019";
 
@@ -24,6 +23,7 @@ export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState}
 
     commit("setAddFeatureListener", layerSource.once("addfeature", event => {
         event.feature.set("fromDrawTool", true);
+        dispatch("updateUndoArray", {remove: false, feature: event.feature});
         if (circleMethod === "defined" && drawType.geometry === "Circle") {
             const innerRadius = !isNaN(styleSettings.circleRadius) ? parseFloat(styleSettings.circleRadius) : null,
                 outerRadius = !isNaN(styleSettings.circleOuterRadius) ? parseFloat(styleSettings.circleOuterRadius) : null,
@@ -58,11 +58,11 @@ export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState}
                         state.outerBorderColor = errorBorder;
                     }
                     else {
-                        calculateCircle(event, circleCenter, circleRadius, mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode));
+                        calculateCircle(event, circleCenter, circleRadius, mapCollection.getMap(rootState.Maps.mode));
                     }
                 }
                 else {
-                    calculateCircle(event, circleCenter, circleRadius, mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode));
+                    calculateCircle(event, circleCenter, circleRadius, mapCollection.getMap(rootState.Maps.mode));
                     state.outerBorderColor = "";
                 }
                 state.innerBorderColor = "";

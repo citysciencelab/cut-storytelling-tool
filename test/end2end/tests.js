@@ -57,7 +57,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
             }
         });
         const suites = [
-                // src/modules/controls
+            // src/modules/controls
                 require("../../src/modules/controls/attributions/tests/end2end/Attributions.e2e.js"),
                 require("../../src/modules/controls/backForward/tests/end2end/BackForward.e2e.js"),
                 // TODO - uncommented Button3D because the pipeline takes too long
@@ -102,7 +102,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 // src/modules/quickHelp
                 require("../../src/modules/quickHelp/tests/end2end/QuickHelp.e2e.js"),
 
-                // src\utils
+                // src/utils
                 require("../../src/utils/tests/end2end/parametricUrl/ParametricUrl.e2e.js"),
 
                 // non-module tests

@@ -4,7 +4,6 @@ import actions from "../../../store/actionsDraw";
 import Feature from "ol/Feature";
 import Polygon from "ol/geom/Polygon";
 import MultiPolygon from "ol/geom/MultiPolygon";
-import mapCollection from "../../../../../../core/dataStorage/mapCollection.js";
 
 describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
     let commit, dispatch, state, getters;
@@ -53,14 +52,13 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
                 })
             };
 
-            mapCollection.addMap(map, "ol", "2D");
+            mapCollection.addMap(map, "2D");
             item = new Feature({
                 geometry: new Polygon(coordinates)
             });
             rootState = {
-                Map: {
-                    mapId: "ol",
-                    mapMode: "2D"
+                Maps: {
+                    mode: "2D"
                 }
             };
             state = {
@@ -110,12 +108,18 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
         const color = Symbol(),
             maxFeatures = Symbol();
         let drawType = Symbol(),
-            request;
+            request,
+            rootState;
 
         beforeEach(() => {
             request = sinon.spy();
             state = {};
             sinon.stub(Radio, "request").callsFake(request);
+            rootState = {
+                Maps: {
+                    mode: "2D"
+                }
+            };
         });
 
         /**
@@ -138,16 +142,16 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
 
         it("should commit and dispatch as intended if the given drawType is not a Point, LineString, Polygon or Circle", () => {
             getters = createGetters("test");
-            actions.initializeWithoutGUI({state, commit, dispatch, getters}, {drawType});
+            actions.initializeWithoutGUI({state, commit, dispatch, getters, rootState}, {drawType});
 
             expect(commit.callCount).to.equal(2);
             expect(commit.firstCall.args).to.eql(["setFreeHand", false]);
             expect(commit.secondCall.args).to.eql(["setWithoutGUI", true]);
         });
-        it("should commit and dispatch as intended if the given drawType is a Point, LineString, Polygon or Circle", () => {
+        it("should commit and dispatch as intended if the given drawType is a Point, LineString, Polygon or Circle", async () => {
             drawType = "Point";
             getters = createGetters(drawType);
-            actions.initializeWithoutGUI({state, commit, dispatch, getters}, {drawType, maxFeatures});
+            await actions.initializeWithoutGUI({state, commit, dispatch, getters, rootState}, {drawType, maxFeatures});
 
             expect(commit.callCount).to.equal(4);
             expect(commit.firstCall.args).to.eql(["setFreeHand", false]);
@@ -160,10 +164,10 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
             expect(dispatch.thirdCall.args).to.eql(["createModifyInteractionAndAddToMap", false]);
 
         });
-        it("should commit and dispatch as intended if the given drawType is a Point, LineString, Polygon or Circle and the color is defined", () => {
+        it("should commit and dispatch as intended if the given drawType is a Point, LineString, Polygon or Circle and the color is defined", async () => {
             drawType = "LineString";
             getters = createGetters(drawType, {color: null, colorContour: null});
-            actions.initializeWithoutGUI({state, commit, dispatch, getters}, {drawType, color, maxFeatures});
+            await actions.initializeWithoutGUI({state, commit, dispatch, getters, rootState}, {drawType, color, maxFeatures});
 
             expect(commit.callCount).to.equal(5);
             expect(commit.firstCall.args).to.eql(["setFreeHand", false]);
@@ -176,14 +180,14 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
             expect(dispatch.secondCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
             expect(dispatch.thirdCall.args).to.eql(["createModifyInteractionAndAddToMap", false]);
         });
-        it("should commit and dispatch as intended if the given drawType is a Point, LineString, Polygon or Circle and the opacity is defined", () => {
+        it("should commit and dispatch as intended if the given drawType is a Point, LineString, Polygon or Circle and the opacity is defined", async () => {
             const opacity = "3.5",
                 resultColor = [0, 1, 2, 3.5];
 
             drawType = "Polygon";
             getters = createGetters(drawType, {color: [0, 1, 2, 0], opacity: 0});
 
-            actions.initializeWithoutGUI({state, commit, dispatch, getters}, {drawType, opacity, maxFeatures});
+            await actions.initializeWithoutGUI({state, commit, dispatch, getters, rootState}, {drawType, opacity, maxFeatures});
 
             expect(commit.callCount).to.equal(5);
             expect(commit.firstCall.args).to.eql(["setFreeHand", false]);

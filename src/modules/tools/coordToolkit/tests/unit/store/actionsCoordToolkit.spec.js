@@ -9,25 +9,25 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
     describe("supplyCoord actions", () => {
         it("positionClicked without height", done => {
-            const payload = {
-                    coordinate: [1000, 2000]
-                },
+            const coordinate = [1000, 2000],
                 state = {
                     updatePosition: true,
                     positionMapProjection: [300, 300]
+                },
+                rootGetters = {
+                    "Maps/mouseCoordinate": coordinate,
+                    "Maps/mode": "2D"
                 };
 
-            testAction(actions.positionClicked, payload, state, {}, [
-                {type: "setPositionMapProjection", payload: payload.coordinate},
+            testAction(actions.positionClicked, {}, state, {}, [
+                {type: "setPositionMapProjection", payload: coordinate},
                 {type: "changedPosition", payload: undefined, dispatch: true},
                 {type: "setUpdatePosition", payload: false},
-                {type: "MapMarker/placingPointMarker", payload: payload.coordinate, dispatch: true}
-            ], {}, done);
+                {type: "MapMarker/placingPointMarker", payload: coordinate, dispatch: true}
+            ], {}, done, rootGetters);
         });
         it("positionClicked with height and update position is true", done => {
-            const payload = {
-                    coordinate: [1000, 2000]
-                },
+            const coordinate = [1000, 2000],
                 state = {
                     updatePosition: true,
                     heightLayer: {
@@ -35,20 +35,22 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                         name: "Digitales Höhenmodell Hamburg (DGM1)"
                     },
                     positionMapProjection: [300, 300]
+                },
+                rootGetters = {
+                    "Maps/mouseCoordinate": coordinate,
+                    "Maps/mode": "2D"
                 };
 
-            testAction(actions.positionClicked, payload, state, {}, [
-                {type: "setPositionMapProjection", payload: payload.coordinate},
+            testAction(actions.positionClicked, {}, state, {}, [
+                {type: "setPositionMapProjection", payload: coordinate},
                 {type: "changedPosition", payload: undefined, dispatch: true},
                 {type: "setUpdatePosition", payload: false},
-                {type: "MapMarker/placingPointMarker", payload: payload.coordinate, dispatch: true},
-                {type: "getHeight", payload: payload.coordinate, dispatch: true}
-            ], {}, done);
+                {type: "MapMarker/placingPointMarker", payload: coordinate, dispatch: true},
+                {type: "getHeight", payload: coordinate, dispatch: true}
+            ], {}, done, rootGetters);
         });
         it("positionClicked with height and update position is false", done => {
-            const payload = {
-                    coordinate: [1000, 2000]
-                },
+            const coordinate = [1000, 2000],
                 state = {
                     updatePosition: false,
                     heightLayer: {
@@ -56,15 +58,19 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                         name: "Digitales Höhenmodell Hamburg (DGM1)"
                     },
                     positionMapProjection: [300, 300]
+                },
+                rootGetters = {
+                    "Maps/mouseCoordinate": coordinate,
+                    "Maps/mode": "2D"
                 };
 
-            testAction(actions.positionClicked, payload, state, {}, [
-                {type: "setPositionMapProjection", payload: payload.coordinate},
+            testAction(actions.positionClicked, {}, state, {}, [
+                {type: "setPositionMapProjection", payload: coordinate},
                 {type: "changedPosition", payload: undefined, dispatch: true},
                 {type: "setUpdatePosition", payload: true},
-                {type: "MapMarker/placingPointMarker", payload: payload.coordinate, dispatch: true},
+                {type: "MapMarker/placingPointMarker", payload: coordinate, dispatch: true},
                 {type: "setHeight", payload: ""}
-            ], {}, done);
+            ], {}, done, rootGetters);
         });
         it("retrieveHeightFromGfiResponse - real height", done => {
             const heightElementName = "value_0",
@@ -263,21 +269,15 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
             it("changedPosition will call adjustPosition in mode 'supply'", done => {
                 const payload = {
-                        position: [100, 200],
-                        targetProjection: proj2
-                    },
-                    rootGetters = {
-                        "Map/ol2DMap": {
-                            removeLayer: sinon.spy(),
-                            addLayer: sinon.spy()
-                        }
-                    };
+                    position: [100, 200],
+                    targetProjection: proj2
+                };
 
                 testAction(actions.changedPosition, null, state, rootState, [
                     {type: "adjustPosition", payload: payload, dispatch: true}
                 ], {getTransformedPosition: () => {
                     return [100, 200];
-                }}, done, rootGetters);
+                }}, done);
             });
             it("changedPosition will not call adjustPosition in mode 'serach'", done => {
                 state.mode = "search";
@@ -297,7 +297,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
         describe("setFirstSearchPosition", () => {
             const center = [1000, 2000],
                 rootState = {
-                    Map: {
+                    Maps: {
 
                         center: center
 
@@ -315,13 +315,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
             it("setFirstSearchPosition will call setCoordinatesEasting and others if position is not set", done => {
                 const payloadEasting = {id: "easting", value: String(center[0])},
-                    payloadNorthing = {id: "northing", value: String(center[1])},
-                    rootGetters = {
-                        "Map/ol2DMap": {
-                            removeLayer: sinon.spy(),
-                            addLayer: sinon.spy()
-                        }
-                    };
+                    payloadNorthing = {id: "northing", value: String(center[1])};
 
                 testAction(actions.setFirstSearchPosition, null, state, rootState, [
                     {type: "setCoordinatesEasting", payload: payloadEasting},
@@ -329,22 +323,15 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                     {type: "moveToCoordinates", payload: center, dispatch: true}
                 ], {getTransformedPosition: () => {
                     return [0, 0];
-                }}, done, rootGetters);
+                }}, done);
             });
             it("setFirstSearchPosition will do nothing if position is set", done => {
-                const rootGetters = {
-                    "Map/ol2DMap": {
-                        removeLayer: sinon.spy(),
-                        addLayer: sinon.spy()
-                    }
-                };
-
                 state.mode = "search";
 
                 testAction(actions.setFirstSearchPosition, null, state, rootState, [
                 ], {getTransformedPosition: () => {
                     return [100, 200];
-                }}, done, rootGetters);
+                }}, done);
             });
             it("setFirstSearchPosition will do nothing if mode is not 'search'", done => {
                 state.mode = "supply";
@@ -432,51 +419,27 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 testAction(actions.adjustPosition, payload, {}, rootState, [], {}, done);
             });
         });
-        describe("setCoordinates", () => {
-            it("setCoordinates updates position", done => {
-                const state = {
-                        updatePosition: true
-                    },
-                    position = [100, 200],
-                    payload = {
-                        coordinate: position
-                    };
-
-                testAction(actions.setCoordinates, payload, state, {}, [
-                    {type: "setPositionMapProjection", payload: position},
-                    {type: "changedPosition", payload: undefined, dispatch: true}
-                ], {}, done);
-            });
-            it("setCoordinates not updates position", done => {
-                const state = {
-                        updatePosition: false
-                    },
-                    position = [100, 200],
-                    payload = {
-                        coordinate: position
-                    };
-
-                testAction(actions.setCoordinates, payload, state, {}, [], {}, done);
-            });
-        });
         describe("checkPosition", () => {
             it("checkPosition sets positionMapProjection", done => {
                 const state = {
                         updatePosition: true
                     },
-                    position = [100, 200];
+                    position = [100, 200],
+                    rootGetters = {
+                        "Maps/mouseCoordinate": position,
+                        "Maps/mode": "2D"
+                    };
 
-                testAction(actions.checkPosition, position, state, {}, [
+                testAction(actions.checkPosition, {}, state, {}, [
                     {type: "setPositionMapProjection", payload: position}
-                ], {}, done);
+                ], {}, done, rootGetters);
             });
             it("checkPosition not sets positionMapProjection", done => {
                 const state = {
-                        updatePosition: false
-                    },
-                    position = [100, 200];
+                    updatePosition: false
+                };
 
-                testAction(actions.checkPosition, position, state, {}, [], {}, done);
+                testAction(actions.checkPosition, {}, state, {}, [], {}, done);
             });
         });
     });
@@ -830,8 +793,58 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 expect(dispatch.secondCall.args[0]).to.equal("moveToCoordinates");
                 expect(dispatch.secondCall.args[1]).to.eql(proj4Result);
             });
-        });
+            describe("copyCoordinates", () => {
+                it("copyCoordinates one value", () => {
+                    navigator.clipboard = {
+                        writeText: (aText) => {
+                            text = aText;
+                        }
+                    };
+                    let text = "";
+                    const state = {
+                            delimiter: "&"
+                        },
+                        coords = ["123456"],
+                        stub = sinon.stub(navigator.clipboard, "writeText").resolves(text);
 
+                    actions.copyCoordinates({state, dispatch}, coords);
+                    expect(stub.calledOnce).to.be.true;
+                    expect(stub.firstCall.args[0]).to.equal("123456");
+                });
+                it("copyCoordinates 2 values, use default delimiter", () => {
+                    navigator.clipboard = {
+                        writeText: (aText) => {
+                            text = aText;
+                        }
+                    };
+                    let text = "";
+                    const state = {delimiter: "|"},
+                        coords = ["123456", "789123"],
+                        stub = sinon.stub(navigator.clipboard, "writeText").resolves(text);
+
+                    actions.copyCoordinates({state, dispatch}, coords);
+                    expect(stub.calledOnce).to.be.true;
+                    expect(stub.firstCall.args[0]).to.equal("123456|789123");
+                });
+                it("copyCoordinates 2 values delimiter change", () => {
+                    navigator.clipboard = {
+                        writeText: (aText) => {
+                            text = aText;
+                        }
+                    };
+                    let text = "";
+                    const state = {
+                            delimiter: "&"
+                        },
+                        coords = ["123456", "789123"],
+                        stub = sinon.stub(navigator.clipboard, "writeText").resolves(text);
+
+                    actions.copyCoordinates({state, dispatch}, coords);
+                    expect(stub.calledOnce).to.be.true;
+                    expect(stub.firstCall.args[0]).to.equal("123456&789123");
+                });
+            });
+        });
     });
 });
 

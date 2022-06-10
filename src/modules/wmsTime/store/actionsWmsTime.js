@@ -1,6 +1,5 @@
 import drawLayer from "../utils/drawLayer";
 import getPosition from "../utils/getPosition";
-import mapCollection from "../../../core/dataStorage/mapCollection.js";
 
 const actions = {
     windowWidthChanged ({commit, dispatch, state, getters}) {
@@ -24,19 +23,19 @@ const actions = {
      * @fires Core.ConfigLoader#RadioTriggerParserRemoveItem
      * @returns {void}
      */
-    toggleSwiper ({commit, state, rootGetters}, id) {
+    toggleSwiper ({commit, state}, id) {
         commit("setLayerSwiperActive", !state.layerSwiper.active);
 
         const secondId = id.endsWith(state.layerAppendix) ? id : id + state.layerAppendix,
             layerModel = Radio.request("ModelList", "getModelByAttributes", {id: state.layerSwiper.active ? id : secondId});
 
         if (state.layerSwiper.active) {
-            const {name, parentId, level, layers, url, version, time} = layerModel.attributes;
+            const {name, parentId, transparent, level, layers, url, version, time} = layerModel.attributes;
 
             Radio.trigger("Parser", "addLayer",
                 name + "_second", secondId, parentId,
                 level, layers, url, version,
-                {transparent: false, isSelected: true, time}
+                {transparent, isSelected: true, time}
             );
             Radio.trigger("ModelList", "addModelsByAttributes", {id: secondId});
         }
@@ -46,11 +45,12 @@ const actions = {
                 const {TIME} = layerModel.get("layerSource").params_,
                     {transparency} = layerModel.attributes;
 
-                Radio.trigger("WmsTime", "updateTime", id, TIME);
+                layerModel.updateTime(id, TIME);
                 Radio.trigger("ModelList", "setModelAttributesById", id, {transparency});
                 commit("setTimeSliderDefaultValue", TIME);
             }
-            mapCollection.getMap(rootGetters["Map/mapId"], rootGetters["Map/mapMode"]).removeLayer(layerModel.get("layer"));
+
+            mapCollection.getMap("2D").removeLayer(layerModel.get("layer"));
             Radio.trigger("ModelList", "removeModelsById", secondId);
             Radio.trigger("Parser", "removeItem", secondId);
         }
@@ -77,9 +77,9 @@ const actions = {
      */
     updateMap ({state, rootGetters}) {
         if (!state.timeSlider.playing) {
-            mapCollection.getMap(rootGetters["Map/mapId"], rootGetters["Map/mapMode"]).render();
+            mapCollection.getMap(rootGetters["Maps/mode"]).render();
         }
-        state.layerSwiper.targetLayer.once("prerender", renderEvent => drawLayer(mapCollection.getMap(rootGetters["Map/mapId"], rootGetters["Map/mapMode"]).getSize(), renderEvent, state.layerSwiper.valueX));
+        state.layerSwiper.targetLayer.once("prerender", renderEvent => drawLayer(mapCollection.getMap(rootGetters["Maps/mode"]).getSize(), renderEvent, state.layerSwiper.valueX));
         state.layerSwiper.targetLayer.once("postrender", ({context}) => {
             context.restore();
         });

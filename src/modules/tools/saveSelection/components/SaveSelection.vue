@@ -1,13 +1,13 @@
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import getComponent from "../../../../utils/getComponent";
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import constants from "../store/constantsSaveSelection";
 
 export default {
     name: "SaveSelection",
     components: {
-        Tool
+        ToolTemplate
     },
     computed: {
         ...mapGetters("Tools/SaveSelection", constants.getters)
@@ -19,17 +19,12 @@ export default {
          * @returns {void}
          */
         active (isActive) {
-            this.filterExternalLayer(Radio.request("ModelList", "getModelsByAttributes", {isSelected: true, type: "layer"}));
             if (isActive) {
                 this.setFocusToFirstControl();
             }
         }
     },
     created () {
-        Backbone.Events.listenTo(Radio.channel("ModelList"), {
-            "updatedSelectedLayerList": this.filterExternalLayer
-        });
-
         if (Object.prototype.hasOwnProperty.call(Config, "simpleMap")) {
             console.warn("The Parameter 'simpleMap' in the config.js is deprecated in the next major release. Please use the parameter 'simpleMap' as part of the configuration of the 'saveSelection' tool in the config.json.");
             this.setSimpleMap(Config.simpleMap);
@@ -67,9 +62,9 @@ export default {
 </script>
 
 <template>
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
@@ -83,7 +78,7 @@ export default {
                         id="tool-saveSelection-input-url"
                         ref="tool-saveSelection-input-url"
                         type="text"
-                        class="form-control input-sm"
+                        class="form-control form-control-sm"
                         :value="url"
                         @click="copyToClipboard($event.currentTarget)"
                     >
@@ -97,7 +92,7 @@ export default {
                     <input
                         id="tool-saveSelection-input-simpleMapUrl"
                         type="text"
-                        class="form-control input-sm"
+                        class="form-control form-control-sm"
                         :value="url + '&uiStyle=simple'"
                         @click="copyToClipboard($event.currentTarget)"
                     >
@@ -111,10 +106,10 @@ export default {
                 </span>
             </form>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 @import "~variables";
 
 @media (min-width: 768px) {

@@ -2,6 +2,8 @@ import Button3dTemplate from "text-loader!./template.html";
 import Button3dTemplateTable from "text-loader!./templateTable.html";
 import Button3dModel from "./model";
 import store from "../../../src/app-store";
+import Dropdown from "bootstrap/js/dist/dropdown";
+
 /**
  * @member Button3dTemplate
  * @description Template used for the 3D Button
@@ -22,12 +24,10 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * @fires Core#RadioRequestUtilGetUiStyle
      * @fires Core#RadioRequestMapIsMap3d
      * @fires Core.ModelList#RadioTriggerModelListToggleWfsCluster
-     * @fires Core#RadioTriggerMapDeactivateMap3d
      * @fires Alerting#RadioTriggerAlertAlertRemove
      * @fires Tools.Filter#RadioTriggerFilterEnable
      * @fires Core#RadioTriggerObliqueMapDeactivate
      * @fires Tools.Filter#RadioTriggerFilterDisable
-     * @fires Core#RadioTriggerMapActivateMap3d
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core.ModelList.Tool#RadioRequestToolGetSupportedOnlyIn3d
      * @fires Core.ModelList.Tool#RadioRequestToolGetSupportedIn3d
@@ -84,19 +84,12 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
             this.$("#button3D").addClass("toggleButtonPressed");
             this.$("#3d-titel-open").hide();
             this.$("#3d-titel-close").show();
-            store.commit("Map/setMapMode", 1);
         }
         else {
             // 3d open
             this.$("#button3D").removeClass("toggleButtonPressed");
             this.$("#3d-titel-close").hide();
             this.$("#3d-titel-open").show();
-            if (mapMode === "2D") {
-                store.commit("Map/setMapMode", 0);
-            }
-            else {
-                store.commit("Map/setMapMode", 2);
-            }
         }
     },
     /**
@@ -188,14 +181,13 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * @param {Backbone.Collection} activeTools contains all activated tools
      * @param {String[]} supportedOnlyIn3d contains all tools that are only supported in 3D-Modues
      * @fires Core.ModelList#RadioTriggerModelListToggleWfsCluster
-     * @fires Core#RadioTriggerMapDeactivateMap3d
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Tools.Filter#RadioTriggerFilterEnable
      * @returns {void}
      */
     controlsMapChangeClose3D: function (activeTools, supportedOnlyIn3d) {
         Radio.trigger("ModelList", "toggleWfsCluster", true);
-        Radio.trigger("Map", "deactivateMap3d");
+        store.dispatch("Maps/deactivateMap3D");
         Radio.trigger("Alert", "alert:remove");
         Radio.trigger("Filter", "enable");
         this.$("#3d-titel-close").hide();
@@ -209,7 +201,10 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
         });
 
         if (document.getElementById("root").hasChildNodes()) {
-            document.getElementById("root").firstChild.classList.remove("open");
+            // Upgrade to BT5, use JS method instead of class removal
+            const dropdown = Dropdown.getInstance(document.getElementById("root").firstChild.querySelector(".dropdown-toggle"));
+
+            dropdown.hide();
         }
     },
 
@@ -242,7 +237,6 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * @param {String[]} supportedIn3d contains all tools that are supported in 3D-Modues
      * @fires Tools.Filter#RadioTriggerFilterDisable
      * @fires Core.ModelList#RadioTriggerModelListToggleWfsCluster
-     * @fires Core#RadioTriggerMapActivateMap3d
      * @fires Alerting#RadioTriggerAlertAlert
      * @returns {void}
      */
@@ -263,10 +257,9 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
             this.$("#3d-titel-close").show();
             Radio.trigger("Filter", "disable");
             Radio.trigger("ModelList", "toggleWfsCluster", false);
-            Radio.trigger("Map", "activateMap3d");
-            this.model.setButtonTitle("2D");
-
             this.open3dCatalog();
+            store.dispatch("Maps/activateMap3D");
+            this.model.setButtonTitle("2D");
         }, 200);
     },
 

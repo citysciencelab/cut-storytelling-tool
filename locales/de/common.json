@@ -1,12 +1,26 @@
 {
     "masterPortalVersion": "Masterportal V. {{masterPortalVersionNumber}}",
+    "general": {
+        "opened": "Geöffnet",
+        "cancelled": "Abgebrochen",
+        "error": "Fehler",
+        "success": "Erfolgreich"
+    },
     "button": {
         "back": "Zurück",
         "download": "Herunterladen",
         "search": "Suchen",
         "close": "Schließen",
         "minimize": "Minimieren",
-        "confirm": "Bestätigen"
+        "confirm": "Bestätigen",
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "save": "Speichern",
+        "cancel": "Abbrechen",
+        "open": "Öffnen",
+        "load": "Laden",
+        "reset": "Zurücksetzen",
+        "stop": "Abbrechen"
     },
     "colors": {
         "blue": "Blau",
@@ -55,7 +69,7 @@
             "scaleSwitcher": "Maßstab umschalten",
             "selectFeatures": "Features auswählen",
             "legend":"Legende",
-            "styleVt": "Style VT",
+            "styleVt": "Style Vector Tile Layers",
             "bufferAnalysis": "Buffer Analyse",
             "wfsSearch": "WFS Suche",
             "routing": "Routing",
@@ -106,7 +120,8 @@
               "wms": {
                 "allowCookies":"<strong>Bitte erlauben sie Cookies, damit diese Hintergrundkarte geladen werden kann.</strong>",
                 "errorTimeLayer": "Es ist ein Fehler bei der Vorbereitung des Layer mit der id {{id}} aufgetreten: {{error}}",
-                "invalidTimeLayer": "Der konfigurierte Layer mit der Id {{id}} enthält nicht alle notwendigen Parameter für einen WMS-T."
+                "invalidTimeLayer": "Der konfigurierte Layer mit der Id {{id}} enthält nicht alle notwendigen Parameter für einen WMS-T.",
+                "warningTimeLayerQuantity": "<strong>Achtung:</strong> Es wurden mehr als ein Timelayer initial ausgewählt. </br>Es wird nur <strong> {{name}} </strong>angezeigt."
               }
             }
           }
@@ -133,8 +148,11 @@
             "en": "English",
             "es": "Español",
             "it": "Italiano",
+            "platt": "Platt",
             "pt": "Português",
-            "tr": "Türkçe"
+            "ru": "Русский",
+            "tr": "Türkçe",
+            "ua": "Українська"
         },
         "cswParser": {
             "noMetadataMessage": "Keine Metadaten vorhanden.",
@@ -188,7 +206,8 @@
                 "geometryNotSupported": "FeatureViaURL: Der in der Konfiguration für den Layer {{layerId}} deklarierte Geometrietyp {{geometryType}} wird nicht unterstützt.",
                 "layerNotFound": "FeatureViaURL: Es konnte kein Layer mit der ID {{layerId}} gefunden werden.",
                 "noLayers": "FeatureViaURL: Für die übergebenen Feature wurden keine Layer in der Konfiguration definiert.",
-                "noNameDefined": "FeatureViaURL: Es wurde kein Name für den Layer mit der ID {{layerId}} in der Konfiguration definiert."
+                "noNameDefined": "FeatureViaURL: Es wurde kein Name für den Layer mit der ID {{layerId}} in der Konfiguration definiert.",
+                "defaultTreeNotSupported": "FeatureViaURL: FeatureViaURL ist nur für den Treetype custom oder light verfügbar."
             }
         },
         "quickHelp": {
@@ -299,7 +318,6 @@
                 "errorHttpsMessage": " &#10060; Das von Ihnen angeforderte WMS befindet sich unter einer http-Url. Das Masterportal kann nur WMS über https (SSL) einbinden.",
                 "errorEmptyUrl": "Bitte die URL eines WMS in das Textfeld eingeben!",
                 "placeholder": "Hier bitte die WMS-URL eingeben.",
-                "textExample": "Beispiel: https://geodienste.hamburg.de/HH_WMS_Fahrradrouten",
                 "textLoadLayer": "Layer Laden",
                 "ifInExtent": "&#10060; Die über den WMS bereitgestellten Geodaten liegen außerhalb des darstellbaren Bereichs. WMS hinzufügen ist nicht möglich.",
                 "checkVersion": "&#10060; WMS hinzufügen ist nur möglich wenn die Version des externen WMS Layers gleich oder größer als 1.3.0 ist."
@@ -336,6 +354,7 @@
                 "formatLabel": "Format",
                 "scaleLabel": "Druckmaßstab",
                 "withLegendLabel": "Mit Legende",
+                "autoAdjustScale": "Druckmaßstab automatisch anpassen",
                 "printLabel": "Datei erstellen",
                 "downloadFile": "Herunterladen",
                 "createDownloadFile": "Wird erstellt...",
@@ -388,7 +407,7 @@
                 "more": "Mehr...",
                 "detailsOfSelected": "Details des ausgewählten Features",
                 "alert": "Der Versuch das selektierte Feature zu zeigen ist fehlgeschlagen, da es keine Geometrie hat.",
-                "key": "{{shownFeatures.x}} von {{shownFeatures.y}} Features gelistet"
+                "key": "{{shownFeatures}} von {{featureCount}} Features gelistet"
             },
             "layerSlider": {
                 "displayLayers": "Anzeige diverser Layer.",
@@ -400,13 +419,48 @@
                 "serviceFour": "Dienst 4"
             },
             "filter": {
-                "result": "Treffer",
-                "results": "Treffer",
-                "zoomOnResults": "Zoom auf Treffer",
-                "filter": "-Filter",
-                "yourSelection": "Ihre Auswahl: ",
-                "noFilterOptionSelected": "Noch keine Filteroption ausgewählt",
-                "deleteAll":"Alles löschen"
+                "filterButton": "Filtern",
+                "searchInMapExtent": "Suche im aktuellen Kartenausschnitt",
+                "snippetTags": {
+                    "selectionText": "Ihre Auswahl:",
+                    "resetAll": "Zurücksetzen"
+                },
+                "info": {
+                    "snippetCheckbox": "Das Kontrollkästchen kann durch einen Mausklick aktiviert/deaktiviert werden.",
+                    "snippetDropdown": "Sie können einen oder mehrere Werte aus der vorgegebenen Werte-Liste auswählen.",
+                    "snippetInput": "Sie können die gewünschten Suchkriterien im Textfeld eingeben.",
+                    "snippetSlider": "Für die Eingabe eines numerischen Wertes als Suchkriterium, können Sie den Schieberegler nach Rechts oder Links schieben. Zusätzlich können Sie den Wert direkt im Eingabefeld eingeben.",
+                    "snippetSliderRange": "Für die Eingabe von numerischen Werten als Minimum- bzw. Maximum-Suchkriterium können Sie den linken bzw. den rechten Schieberegler verschieben. Zusätzlich können Sie die Werte direkt in den Eingabefeldern eingeben.",
+                    "snippetDate": "Für die Eingabe eines Datums als Suchkriterium, klicken Sie im Datumseingabefeld und wählen Sie ein Datum aus dem geöffneten Kalender aus.",
+                    "snippetDateRange": "Für die Eingabe eines Datumsbereichs als Suchkriterium, klicken Sie in das Eingabefeld für das Start- bzw. End-Datum und wählen jeweils ein Start- bzw. End-Datum aus dem geöffneten Kalender aus."
+                },
+                "dropdown": {
+                    "defaultLabel": "Wählen Sie eine Option",
+                    "selectAll": "Alles auswählen",
+                    "deselectAll": "Alles abwählen",
+                    "emptyList": "Die Liste ist leer",
+                    "noElements": "Keine Elemente gefunden"
+                },
+                "ariaLabel": {
+                    "input": "Input für {{param}}",
+                    "checkbox": "Checkbox für {{param}}",
+                    "radio": "Radio für {{param}}",
+                    "dropdown": "SelectBox für {{param}}",
+                    "sliderRange": {
+                        "min": "Slider min für {{param}}",
+                        "max": "Slider max für {{param}}"
+                    },
+                    "slider": "Slider range für {{param}}",
+                    "date": "Datum für {{param}}",
+                    "dateRange": {
+                        "from": "Startdatum von {{param}}",
+                        "to": "Enddatum von {{param}}"
+                    }
+                },
+                "filterResult": {
+                    "label": "Alle Filter-Treffer",
+                    "unit": "{{amountOfFilteredItems}} Treffer"
+                }
             },
             "pendler": {
                 "animation": {
@@ -541,8 +595,8 @@
                 "noHeightBuilding": "Gebäudefläche, keine Höhen vorhanden",
                 "heightLayerInfo": "Grundlage der Höheninformation ist das \"{{layer}}\" mit Höhenangaben in Metern über Normalhöhennull (NHN).",
                 "hdms": {
-                    "eastingLabel": "Länge",
-                    "northingLabel": "Breite"
+                    "eastingLabel": "Breite",
+                    "northingLabel": "Länge"
                 },
                 "cartesian": {
                     "eastingLabel": "Rechtswert",
@@ -558,7 +612,8 @@
                 },
                 "hintSupply": "Klicken Sie in die Karte um Koordinaten abzufragen",
                 "hintSearch": "Geben Sie die zu suchenden Koordinaten ein",
-                "disabledTooltip": "Diese Funktion steht nicht in der 3D Ansicht zur Verfügung"
+                "copyCoordsBtn": "Koordinatenpaar kopieren",
+                "copyCoordBtn": " {{value}} kopieren"
             },
             "gfi": {
                 "errorMessage": "Bei der Informationsabfrage (GetFeatureInfo) ist ein Fehler aufgetreten.<br>Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes.",
@@ -728,6 +783,7 @@
                 "targetLayerNotFound": "Der gespeicherte Ziel-Layer mit der ID {{layerId}} wurde nicht gefunden."
             },
             "wfsSearch": {
+                "wrongConfig": "Der Layer mit der Id \"{{id}}\" der Suchinstanz \"{{title}}\" ist nicht definiert.",
                 "noResults": "Es wurden keine Ergebnisse für Ihre Suchkriterien gefunden. Bitte versuchen Sie es erneut.",
                 "optionsPlaceholder": "Bitte wählen Sie eine Option aus!",
                 "resetButton": "Zurücksetzen",
@@ -817,7 +873,7 @@
                         }
                     },
                     "preference": {
-                        "RECOMMENDED": "Schnellste Route",
+                        "RECOMMENDED": "Empfohlene Route",
                         "SHORTEST": "Kürzeste Route"
                     }
                 },
@@ -948,7 +1004,8 @@
                 "address": "Adresse",
                 "location": "Ort",
                 "subject": "Thema (externe Fachdaten)",
-                "topic": "Thema (Fachdaten)"
+                "topic": "Thema (Fachdaten)",
+                "general": "Fachdaten"
             },
             "specialWFS": {
                 "ongoing": "im Verfahren",
@@ -978,7 +1035,9 @@
         "vectorStyle": {
             "styleModel": {
                 "getGeometryTypeFromWFSFetchfailed": "Die Legende konnte in der Layerinformation nicht erstellt werden!",
-                "getGeometryTypeFromWFSFetchfailedMessage": "Details: Ein benötigter Dienst antwortet nicht."
+                "getGeometryTypeFromWFSFetchfailedMessage": "Details: Ein benötigter Dienst antwortet nicht.",
+                "getGeometryTypeFromOAFFetchfailed": "Die Legende konnte in der Layerinformation nicht erstellt werden!",
+                "getGeometryTypeFromOAFFetchfailedMessage": "Details: Die API antwortet nicht."
             }
         },
         "wmsTime": {
@@ -1002,11 +1061,6 @@
             "linkToPdf": "Zur externen Legende (PDF)",
             "noLegendForLayerInfo": "Legende nicht verfügbar",
             "toggleCollapseAll": "Alle Legenden ein-/ausklappen"
-        },
-        "zoomToGeometry": {
-          "alertNoFoundFeature" : "Es wurde kein Objekt gefunden! Bitte überprüfen Sie die Eingabeparameter.",
-          "alertParameterizedAccess": "Der parametrisierte Aufruf des Portals ist leider schief gelaufen!",
-          "alertRequiredService": "Details: Ein benötigter Dienst antwortet nicht."
         },
         "util": {
             "copyToClipboard": {
@@ -1048,12 +1102,14 @@
             "newYearsEve": "Silvester"
         },
         "parametricURL": {
-            "alertZoomToGeometry": "Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!<br>Bitte stellen Sie sicher das alle Parameter richtig angegeben wurden.",
             "alertWrongLayerIds": "Im aufgerufenen Link sind Themen enthalten, die nicht mehr gefunden werden können.</br> Um diese Fehlermeldung zukünftig nicht mehr zu erhalten unternehmen Sie bitte folgende Schritte:<ul> <li> Prüfen Sie Ihren gewünschten Kartenausschnitt auf fehlende Inhalte.</li> <li>Speichern Sie Ihre Auswahl erneut mit dem Werkzeug \"Auswahl Speichern\" ab.</li></ul>",
             "alertWrongAmountVisibility": "<strong>Parametrisierter Aufruf fehlerhaft!</strong></br>Die Angaben zu <b>layerIds</b> passen nicht zu <b>visibility</b> bzw. <b>transparency</b>. Sie müssen jeweils in der gleichen Anzahl angegeben werden.",
             "errorLoadConfig": "Die gewünschte Konfigurationsdatei konnte unter folgendem Pfad nicht geladen werden: {{url}}<br>Der URL-Paramater <strong>configJson</strong> verlangt eine Datei mit der Endung \".json\".<br>Es wird versucht die config.json unter dem Standardpfad zu laden.",
-            "alertDeprecated": "Der URL-Parameter <b>?{{deprecatedKey}}</b> ist veraltet und wird mit der Masterportal Version 3.0.0 entfernt.<br>Bitte verwenden Sie stattdessen <b><a href='{{currentUrl}}'>{{currentUrl}}</a></b>."
-          }
+            "alertDeprecated": "Der URL-Parameter <b>?{{deprecatedKey}}</b> ist veraltet und wird mit der Masterportal Version 3.0.0 entfernt.<br>Bitte verwenden Sie stattdessen <b><a href='{{currentUrl}}'>{{currentUrl}}</a></b>.",
+            "zoomTo": {
+                "wrongConfigId": "zoomTo: Die angegebene id {{configId}} für den Url Parameter existiert nicht. Bitte verwenden Sie 'zoomToGeometry' bzw. 'zoomToFeatureId' in der Konfiguration."
+            }
+        }
     },
     "snippets": {
         "checkbox": {
@@ -1082,7 +1138,9 @@
             "from": " ab",
             "to":" bis",
             "incorrectEntry": "Fehlerhafte Eingabe, bitte eine ganze Zahl eingeben!",
-            "outOfRangeErrorMessage": "Der Eingabewert muss innerhalb des Gültigkeitsbereiches {{minValueSlider}} und {{maxValueSlider}} liegen!"
+            "outOfRangeErrorMessage": "Der Eingabewert muss innerhalb des Gültigkeitsbereiches {{minValueSlider}} und {{maxValueSlider}} liegen!",
+            "valueEmptyErrorMessage": "Der Eingabewert darf nicht leer sein!",
+            "valueOutOfRangeErrorMessage": "Der Eingabewert {{inputValue}} muss innerhalb des Gültigkeitsbereiches {{minValueSlider}} und {{maxValueSlider}} liegen!"
         }
     },
     "share-components": {
@@ -1091,7 +1149,8 @@
                 "true": "ja",
                 "No": "nein"
             },
-            "zoomToResult": "Zum Ergebnis zoomen"
+            "zoomToResult": "Zum Ergebnis zoomen",
+            "pagination": "Ergebnisseite"
         }
     }
 }

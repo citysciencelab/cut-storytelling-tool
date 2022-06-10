@@ -1,3 +1,4 @@
+import axios from "axios";
 import {getByArraySyntax} from "../utils/fetchFirstModuleConfig";
 
 export default {
@@ -39,6 +40,17 @@ export default {
         }
     },
     /**
+     * Function to save config.js's content and load the config files which path is specified in config.js.
+     * @param {Object} config the config.js
+     * @returns {void}
+     */
+    loadConfigJs ({commit}, config) {
+        commit("setConfigJs", config);
+        return axios.get(config.restConf)
+            .then(response => commit("setRestConf", response.data))
+            .catch(error => console.error(`Error occured during loading restConf specified by config.json (${config.restConf}).`, error));
+    },
+    /**
      * Function to check if the deprecated parameters could be specified for more than one location e.g. they (location of the parameter or tool) have multiple possible paths.
     * Furthermore the function checks whether the given paths for the parameters are defined or undefined.
     * @param {Object} deprecatedPath an object with keys (dotted string as new path) and String[] as values, holding the old and deprecated paths
@@ -65,10 +77,10 @@ export default {
      * Secondly: the output given by the config.json for the path with the deprecated parameter. (output)
      * Thirdly: the deprecated key/parameter itself. (deprecatedKey)
      * @param {[String, String[]]} [entry=[]] - Array with the single "steps" / elements of the deprecated path. entry[0] ist the new path, elem[1] is an array of old paths
-     * @param {Object} config - The config.json or config.js.
+     * @param {Object} [config={}] - The config.json or config.js.
      * @returns {Object} - returns an object with the three mentioned above parameters.
     */
-    getDeprecatedParameters (entry = [], config) {
+    getDeprecatedParameters (entry = [], config = {}) {
         const newSplittedPath = entry[0].split(".");
         let oldSplittedPath = "",
             output = "",

@@ -104,7 +104,7 @@ const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype
                     metaName: hit.suggestion,
                     type: i18next.t("common:modules.searchbar.type.location"),
                     bkg: true,
-                    glyphicon: "glyphicon-road",
+                    icon: "bi-signpost-2-fill",
                     id: this.uniqueId("bkgSuggest"),
                     triggerEvent: {
                         channel: "Searchbar",
@@ -158,7 +158,7 @@ const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype
                     metaName: hit.suggestion,
                     type: i18next.t("common:modules.searchbar.type.location"),
                     bkg: true,
-                    glyphicon: "glyphicon-road",
+                    icon: "bi-signpost-2-fill",
                     id: this.uniqueId("bkgSuggest"),
                     triggerEvent: {
                         channel: "Searchbar",
@@ -218,7 +218,6 @@ const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype
     /**
      * Triggered by bkg this method receives the XML of the searched address.
      * @param {string} data Die Data-Object des request.
-     * @fires Core#RadioTriggerMapZoomToExtent
      * @fires Core#RadioTriggerMapViewSetCenter
      * @param {number} zoomLevel The level to zoom.
      * @returns {void}

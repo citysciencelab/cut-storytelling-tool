@@ -1,4 +1,4 @@
-import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
+import {getLayerWhere} from "@masterportal/masterportalapi/src/rawLayerList";
 import {convert, convertToStringArray, convertTransparency, parseQuery} from "./converter";
 import {setValueToState} from "./stateModifier";
 import store from "../../app-store";
@@ -99,25 +99,26 @@ export function translateToBackbone (urlParamsKey, urlParamsValue) {
  * @returns {void}
  */
 export function doSpecialBackboneHandling (key, value) {
-    if (key === "Map/mapMode") {
+    if (key === "Maps/mapMode") {
         if (value === "3D" || String(value).toLowerCase() === "3d") {
+            // set mapMode manually back to '2D', is set to '3D' in activateMap im map3D and 3D-layers watches to that
+            // can be removed, if Radio trigger 'mapChangeTo3d' is removed
+            store.commit("Maps/setMode", "2D");
             Radio.trigger("Map", "mapChangeTo3d");
         }
     }
-    else if (key === "Map/mdId") {
+    else if (key === "Maps/mdId") {
         const layers = getLayersUsingMetaId(value);
 
         setLayersVisible(layers);
     }
-    else if (key === "Map/zoomToExtent") {
-        Radio.trigger("Map", "zoomToExtent", convert(value), {duration: 0}, store.state.urlParams?.projection);
-    }
-    else if (key === "Map/zoomToGeometry") {
-        const gemometryToZoom = parseZoomToGeometry(value);
-
-        if (gemometryToZoom !== "") {
-            Radio.trigger("ZoomToGeometry", "zoomToGeometry", gemometryToZoom, Config.zoomToGeometry.layerId, Config.zoomToGeometry.attribute);
+    else if (key === "Maps/zoomToExtent") {
+        Radio.trigger("Map", "zoomToProjExtent", {data: {
+            extent: convert(value),
+            options: {duration: 0},
+            projection: store.state.urlParams?.projection || store.state.Maps?.projection?.getCode()
         }
+        });
     }
     else if (key === "style") {
         const resultUpperCase = value.toUpperCase();
@@ -126,32 +127,6 @@ export function doSpecialBackboneHandling (key, value) {
             Radio.trigger("Util", "setUiStyle", resultUpperCase);
         }
     }
-}
-/**
-     * Parses a Gemometry to be zoomed on.
-     * Only configured geometries are zoomed in.
-     * @param {String} urlParamValue Geometry to be zoomed on
-     * @returns {String} Geometry to be zoomed on
-     */
-function parseZoomToGeometry (urlParamValue) {
-    let geometries,
-        gemometryToZoom = "";
-
-    if (Object.prototype.hasOwnProperty.call(Config, "zoomToGeometry") && Object.prototype.hasOwnProperty.call(Config.zoomToGeometry, "geometries")) {
-        geometries = Config.zoomToGeometry.geometries;
-
-        if (geometries.includes(urlParamValue.toUpperCase())) {
-            gemometryToZoom = urlParamValue.toUpperCase();
-        }
-        else if (Number.isInteger(parseInt(urlParamValue, 10))) {
-            gemometryToZoom = geometries[parseInt(urlParamValue, 10) - 1];
-        }
-        else {
-            store.dispatch("Alerting/addSingleAlert", i18next.t("common:utils.parametricURL.alertZoomToGeometry"));
-        }
-    }
-
-    return gemometryToZoom;
 }
 
 /**
@@ -315,7 +290,7 @@ function setLayersVisible (layerParams) {
                 Radio.trigger("ModelList", "addModelsByAttributes", {id: optionsOfLayer.id});
                 layer = Radio.request("ModelList", "getModelByAttributes", {id: optionsOfLayer.id});
                 layer.setIsSelected(optionsOfLayer.visibility);
-                layer.setVisible(optionsOfLayer.visibility);
+                layer.setIsVisibleInMap(optionsOfLayer.visibility);
                 Radio.trigger("Util", "refreshTree");
             }
             else if (layerFromParser === undefined) {

@@ -92,7 +92,6 @@
             }
           },
           "parametricURL": {
-            "alertZoomToGeometry": "A chamada parametrizada do portal infelizmente correu mal!<br>Por favor, certifique-se de que todos os parâmetros foram introduzidos correctamente.",
             "alertWrongLayerIds": "<strong>A chamada parametrizada está avariada!</strong></br>O <b>layerIds</b> nas posições: {{wrongIdsPositionsConcat}} não existem e são ignorados!"
           }
         },
@@ -117,8 +116,11 @@
             "en": "English",
             "es": "Español",
             "it": "Italiano",
+            "platt": "Platt",
             "pt": "Português",
-            "tr": "Türkçe"
+            "ru": "Русский",
+            "tr": "Türkçe",
+            "ua": "Українська"
         },
         "cswParser": {
             "noMetadataMessage": "Metadados não estão disponíveis.",
@@ -166,7 +168,8 @@
                 "geometryNotSupported": "FeatureViaURL: O tipo de geometria {{geometryType}} na configuração da camada {{layerId}} não é suportado.",
                 "layerNotFound": "FeatureViaURL: A camada com o ID {{layerId}} não foi encontrado.",
                 "noLayers": "FeatureViaURL: Para as funções não existem camadas definidas na configuração.",
-                "noNameDefined": "FeatureViaURL: O nome da camada com o ID {{layerId}} não foi definido nas configurações."
+                "noNameDefined": "FeatureViaURL: O nome da camada com o ID {{layerId}} não foi definido nas configurações.",
+                "defaultTreeNotSupported": "FeatureViaURL só é compatível com Treetype custom ou light."
             }
         },
         "quickHelp": {
@@ -242,7 +245,6 @@
                 "errorMessage": " serviço especificado não pôde ser carregado. Por favor, certifique-se de que o URL foi especificado correctamente.<br><br> FSe o problema ainda ocorrer, por favor contacte o operador do serviço com a seguinte nota:<br><strong>Deve-se assegurar que um cabeçalho CORS é definido para o serviço. Isto é recomendado pelo <a target='_blank' href='https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile'>GDI-DE</a> no capítulo 4.7.1.</strong>",
                 "errorHttpsMessage": "O WMS que solicitou está localizado sob uma http url. O \"Masterportal\" só pode integrar WMS através de https (SSL).",
                 "placeholder": "Por favor introduza aqui o URL do WMS.",
-                "textExample": "Exemplo: https://geodienste.hamburg.de/HH_WMS_Gruenes_Netz",
                 "textLoadLayer": "Carregar camada",
                 "ifInExtent": "Os geodados fornecidos através do WMS estão fora da área de exposição. Adicionar WMS não é possível.",
                 "checkVersion": "Adicionar WMS só é possível se camada externa do WMS for igual ou superior a versão 1.3.0."
@@ -315,7 +317,7 @@
                 "more": "Mais...",
                 "detailsOfSelected": "Detalhes da característica seleccionada",
                 "alert": "A tentativa de mostrar a característica seleccionada falhou porque não tem geometria.",
-                "key": "{{shownFeatures.x}} von {{shownFeatures.y}} Features gelistet"
+                "key": "{{shownFeatures}} von {{featureCount}} Features gelistet"
             },
             "layerSlider": {
                 "displayLayers": "Visualização de várias camadas.",
@@ -325,15 +327,6 @@
                 "serviceTwo": "Serviço 2",
                 "serviceThree": "Serviço 3",
                 "serviceFour": "Serviço 4"
-            },
-            "filter": {
-                "result": "Acerto",
-                "results": "Acertos",
-                "zoomOnResults": "Zoom sobre o acerto",
-                "filter": "-Filtro",
-                "yourSelection": "A sua selecção: ",
-                "noFilterOptionSelected": "Ainda sem opção de filtro seleccionada",
-                "deleteAll":"Apagar tudo"
             },
             "pendler": {
                 "animation": {
@@ -679,7 +672,8 @@
                 "address": "Endereço",
                 "location": "Localização",
                 "subject": "Assunto",
-                "topic": "Tópico"
+                "topic": "Tópico",
+                "general": "Tópico"
             },
             "specialWFS": {
                 "ongoing": "em processo",
@@ -715,11 +709,6 @@
             "linkToPdf": "Para a lenda externa (PDF)",
             "noLegendForLayerInfo": "Legenda não disponível",
             "toggleCollapseAll": "Mostrar/ocultar todas as legendas"
-        },
-        "zoomToGeometry": {
-          "alertNoFoundFeature": "Nenhum objecto foi encontrado! Por favor verifique os parâmetros de entrada.",
-          "alertParameterizedAccess": "A chamada parametrizada do portal infelizmente correu mal!",
-          "alertRequiredService": "Detalhes: Um serviço necessário não responde."
         }
     },
     "snippets": {

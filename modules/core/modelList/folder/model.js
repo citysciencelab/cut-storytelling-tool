@@ -10,10 +10,9 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
         isSelected: false,
         type: "",
         parentId: "",
-        isLeafFolder: false,
         id: "",
-        selectAllGlyphicon: "glyphicon-unchecked",
-        glyphicon: "glyphicon-folder-open",
+        selectAllIcon: "bi-square",
+        icon: "bi-folder2-open",
         obliqueModeBlacklist: ["tree", "tools"],
         isPinned: false,
         isSecured: false,
@@ -42,10 +41,9 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
      * @property {Boolean} isPinned=false Flag if tree is pinned
      * @property {String} type="" Flag what kind of item it is. "folder".
      * @property {String} parentId="" Id of parent node.
-     * @property {Boolean} isLeafFolder=false Flag if folder does not have subfolders.
      * @property {String} id="" Unique id for folder.
-     * @property {String} selectAllGlyphicon="glyphicon-unchecked" Glyphicon class of folder to select all children.
-     * @property {String} glyphicon="glyphicon-folder-open" Glyphicon class of folder
+     * @property {String} selectAllIcon="bi-square" Icon class of folder to select all children.
+     * @property {String} icon="bi-folder2-open" icon class of folder
      * @property {String} currentLng=""contains the current language - view listens to it
      * @property {String} saveSelectionText="" will be translated
      * @property {String} topicsHelpText="" will be translated
@@ -200,12 +198,12 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
     },
 
     /**
-     * Sets the attribute "selectAllGlyphicon"
-     * @param {String} value Glyphicon class.
+     * Sets the attribute "selectAllIcon"
+     * @param {String} value Icon class.
      * @returns {void}
      */
-    setSelectAllGlyphicon: function (value) {
-        this.set("selectAllGlyphicon", value);
+    setSelectAllIcon: function (value) {
+        this.set("selectAllIcon", value);
     },
     /**
      * Translates the given key

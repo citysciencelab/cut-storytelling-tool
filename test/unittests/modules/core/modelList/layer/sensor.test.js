@@ -11,7 +11,14 @@ import sinon from "sinon";
 describe("core/modelList/layer/sensor", function () {
     let sensorLayer;
 
-    before(function () {
+    before(() => {
+        mapCollection.clear();
+        mapCollection.addMap({
+            mode: "2D",
+            registerListener: sinon.spy(),
+            unregisterListener: sinon.spy()
+        }, "2D");
+
         sensorLayer = new SensorLayerModel();
         sensorLayer.set("url", "test/test/test", {silent: true});
 
@@ -28,6 +35,13 @@ describe("core/modelList/layer/sensor", function () {
             }
             else if (channel === "Map" && topic === "registerListener") {
                 return {"key": "test"};
+            }
+
+            return null;
+        });
+        sinon.stub(Radio, "trigger").callsFake(function (channel, topic) {
+            if (channel === "Map" && topic === "unregisterListener") {
+                return null;
             }
 
             return null;
@@ -169,7 +183,7 @@ describe("core/modelList/layer/sensor", function () {
         });
     });
 
-    describe("parseDatastreams", function () {
+    describe("getThingsFromSensorData", function () {
         it("should return an object[] with Thing data in the root and datastream data in the second level", function () {
             const sensordata = [
                     {
@@ -212,7 +226,7 @@ describe("core/modelList/layer/sensor", function () {
                     "name",
                     "properties"
                 ],
-                parseDatastreams = sensorLayer.parseDatastreams(sensordata, datastreamAttributes, thingAttributes);
+                parseDatastreams = sensorLayer.getThingsFromSensorData(sensordata, datastreamAttributes, thingAttributes);
 
             expect(parseDatastreams).to.be.an("array");
             expect(parseDatastreams.length).equals(1);
@@ -249,7 +263,7 @@ describe("core/modelList/layer/sensor", function () {
         });
     });
 
-    describe("mergeDatastreamsByThingId", function () {
+    describe("unifyThingsByIds", function () {
         it("should return a thing array with merged datastreams", function () {
             const sensordata = [{
                     "@iot.id": 999,
@@ -308,7 +322,7 @@ describe("core/modelList/layer/sensor", function () {
                     ]
                 }],
                 uniqueIds = [999],
-                parseDatastreams = sensorLayer.mergeDatastreamsByThingId(sensordata, uniqueIds);
+                parseDatastreams = sensorLayer.unifyThingsByIds(sensordata, uniqueIds);
 
             expect(parseDatastreams).to.be.an("array");
             expect(parseDatastreams.length).equals(1);
@@ -358,31 +372,31 @@ describe("core/modelList/layer/sensor", function () {
         });
     });
 
-    describe("createFeatures", function () {
+    describe("createFeaturesFromSensorData", function () {
         it("should return an empty array for empty array input", function () {
-            expect(sensorLayer.createFeatures([], undefined)).to.be.an("array").that.is.empty;
+            expect(sensorLayer.createFeaturesFromSensorData([], undefined)).to.be.an("array").that.is.empty;
         });
         it("should return an empty array for undefined input", function () {
-            expect(sensorLayer.createFeatures(undefined, undefined)).to.be.an("array").that.is.empty;
+            expect(sensorLayer.createFeaturesFromSensorData(undefined, undefined)).to.be.an("array").that.is.empty;
         });
         it("should return an empty array for obj and undefined epsg input", function () {
             const data = [{location: [10, 10]}];
 
-            expect(sensorLayer.createFeatures(data, undefined)).to.be.an("array").that.is.empty;
+            expect(sensorLayer.createFeaturesFromSensorData(data, undefined)).to.be.an("array").that.is.empty;
         });
     });
-    describe("getFeatureByDataStreamId", function () {
+    describe("getFeatureByDatastreamId", function () {
         it("should return undefined on undefined inputs", function () {
-            expect(sensorLayer.getFeatureByDataStreamId(undefined, undefined)).to.be.undefined;
+            expect(sensorLayer.getFeatureByDatastreamId(undefined, undefined)).to.be.undefined;
         });
         it("should return undefined on undefined array", function () {
-            expect(sensorLayer.getFeatureByDataStreamId(undefined, "1")).to.be.undefined;
+            expect(sensorLayer.getFeatureByDatastreamId(undefined, "1")).to.be.undefined;
         });
         it("should return undefined on empty array and undefined datastreamid", function () {
-            expect(sensorLayer.getFeatureByDataStreamId([], undefined)).to.be.undefined;
+            expect(sensorLayer.getFeatureByDatastreamId([], undefined)).to.be.undefined;
         });
         it("should return undefined on empty array", function () {
-            expect(sensorLayer.getFeatureByDataStreamId([], "1")).to.be.undefined;
+            expect(sensorLayer.getFeatureByDatastreamId([], "1")).to.be.undefined;
         });
         it("should return a Feature", function () {
             const feature0 = new Feature({
@@ -395,7 +409,7 @@ describe("core/modelList/layer/sensor", function () {
                 }),
                 features = [feature0, feature1];
 
-            expect(sensorLayer.getFeatureByDataStreamId(features, "1")).to.be.an.instanceof(Feature);
+            expect(sensorLayer.getFeatureByDatastreamId(features, "1")).to.be.an.instanceof(Feature);
         });
         it("should return a Feature with combined dataStreamId", function () {
             const feature0 = new Feature({
@@ -408,12 +422,12 @@ describe("core/modelList/layer/sensor", function () {
                 }),
                 features = [feature0, feature1];
 
-            expect(sensorLayer.getFeatureByDataStreamId(features, "3")).to.be.an.instanceof(Feature);
+            expect(sensorLayer.getFeatureByDatastreamId(features, "3")).to.be.an.instanceof(Feature);
         });
     });
-    describe("getDataStreamIds", function () {
+    describe("getDatastreamIds", function () {
         it("should return a empty array for undefined input", function () {
-            expect(sensorLayer.getDataStreamIds(undefined)).to.be.an("array").that.is.empty;
+            expect(sensorLayer.getDatastreamIds(undefined)).to.be.an("array").that.is.empty;
         });
         it("should return an array with Strings for features input", function () {
             const feature0 = new Feature({
@@ -424,7 +438,7 @@ describe("core/modelList/layer/sensor", function () {
                 }),
                 features = [feature0, feature1];
 
-            expect(sensorLayer.getDataStreamIds(features)).to.be.an("array").that.includes("", "");
+            expect(sensorLayer.getDatastreamIds(features)).to.be.an("array").that.includes("", "");
         });
     });
     describe("aggregateDataStreamValue", function () {
@@ -499,18 +513,18 @@ describe("core/modelList/layer/sensor", function () {
         });
     });
 
-    describe("excludeDataStreamKeys", function () {
+    describe("excludeKeysByPrefix", function () {
         it("should return undefined for undefined input", function () {
-            expect(sensorLayer.excludeDataStreamKeys(undefined, undefined)).to.be.undefined;
+            expect(sensorLayer.excludeKeysByPrefix(undefined, undefined)).to.be.undefined;
         });
         it("should return empty array for empty keys", function () {
-            expect(sensorLayer.excludeDataStreamKeys([], "test_")).to.be.an("array").that.is.empty;
+            expect(sensorLayer.excludeKeysByPrefix([], "test_")).to.be.an("array").that.is.empty;
         });
         it("should return empty array for empty string", function () {
-            expect(sensorLayer.excludeDataStreamKeys(["test_1", "test_2"], "")).to.be.undefined;
+            expect(sensorLayer.excludeKeysByPrefix(["test_1", "test_2"], "")).to.be.undefined;
         });
         it("should return empty array with only one key", function () {
-            expect(sensorLayer.excludeDataStreamKeys(["test_1", "test_2", "hello"], "test_")).to.deep.equal(["hello"]);
+            expect(sensorLayer.excludeKeysByPrefix(["test_1", "test_2", "hello"], "test_")).to.deep.equal(["hello"]);
         });
     });
 
@@ -523,7 +537,7 @@ describe("core/modelList/layer/sensor", function () {
         });
     });
 
-    describe("getFeaturesInExtent", function () {
+    describe.skip("getFeaturesInExtent", function () {
         it("should return no feature within extent", function () {
             sensorLayer.setLayer(new VectorLayer({
                 source: new VectorSource(),
@@ -557,33 +571,24 @@ describe("core/modelList/layer/sensor", function () {
         });
     });
 
-    describe("checkConditionsForSubscription", function () {
-        it("should be undefined on startup", function () {
-            expect(sensorLayer.checkConditionsForSubscription()).to.be.undefined;
-            expect(sensorLayer.get("isSubscribed")).to.be.false;
+    describe("getLayerState", function () {
+        it("should return true if certain params are given", () => {
+            expect(sensorLayer.getLayerState(false, true, false)).to.be.true;
         });
-
-        it("should be true when inRange and selected", function () {
-            sensorLayer.set("isOutOfRange", false, {silent: true});
-            sensorLayer.set("isSelected", true, {silent: true});
-            expect(sensorLayer.checkConditionsForSubscription()).to.be.true;
+        it("should return false if certain params are given", () => {
+            expect(sensorLayer.getLayerState(false, false, true)).to.be.false;
+            expect(sensorLayer.getLayerState(true, false, true)).to.be.false;
+            expect(sensorLayer.getLayerState(true, true, true)).to.be.false;
         });
-
-        it("should be false when out of range", function () {
-            sensorLayer.set("isOutOfRange", true, {silent: true});
-            sensorLayer.set("isSelected", true, {silent: true});
-            sensorLayer.set("isSubscribed", true, {silent: true});
-            expect(sensorLayer.checkConditionsForSubscription()).to.be.false;
-        });
-
-        it("should be false when unselected", function () {
-            sensorLayer.set("isOutOfRange", false, {silent: true});
-            sensorLayer.set("isSelected", false, {silent: true});
-            expect(sensorLayer.checkConditionsForSubscription()).to.be.false;
+        it("should return undefined if certain params are given", () => {
+            expect(sensorLayer.getLayerState(false, true, true)).to.be.undefined;
+            expect(sensorLayer.getLayerState(false, false, false)).to.be.undefined;
+            expect(sensorLayer.getLayerState(true, false, false)).to.be.undefined;
+            expect(sensorLayer.getLayerState(true, true, false)).to.be.undefined;
         });
     });
 
-    describe("changedConditions", function () {
+    describe.skip("toggleSubscriptionsOnMapChanges", function () {
         it("should set moveendListener", function () {
             sensorLayer.set("mqttClient", {
                 subscribe: function () {
@@ -597,7 +602,7 @@ describe("core/modelList/layer/sensor", function () {
             sensorLayer.set("isSubscribed", false, {silent: true});
             sensorLayer.set("isOutOfRange", false, {silent: true});
             sensorLayer.set("isSelected", true, {silent: true});
-            sensorLayer.changedConditions();
+            sensorLayer.toggleSubscriptionsOnMapChanges();
             expect(sensorLayer.get("moveendListener")).to.not.be.null;
         });
 
@@ -605,12 +610,12 @@ describe("core/modelList/layer/sensor", function () {
             sensorLayer.set("isSubscribed", true, {silent: true});
             sensorLayer.set("isOutOfRange", true, {silent: true});
             sensorLayer.set("isSelected", true, {silent: true});
-            sensorLayer.changedConditions();
+            sensorLayer.toggleSubscriptionsOnMapChanges();
             expect(sensorLayer.get("moveendListener")).to.be.null;
         });
     });
 
-    describe("subscribeToSensorThings", function () {
+    describe.skip("subscribeToSensorThings", function () {
         let topics = [];
         const feature0 = new Feature({
                 dataStreamId: "1",
@@ -660,7 +665,7 @@ describe("core/modelList/layer/sensor", function () {
         });
     });
 
-    describe("unsubscribeFromSensorThings", function () {
+    describe.skip("unsubscribeFromSensorThings", function () {
         let topics = [];
 
         it("should unsubscribe from a topic", function () {
@@ -710,7 +715,7 @@ describe("core/modelList/layer/sensor", function () {
         });
     });
 
-    describe("getJsonGeometry", function () {
+    describe("getThingsGeometry", function () {
         it("should return the location in geometry", function () {
             const testObject = {
                 Locations: [
@@ -725,8 +730,8 @@ describe("core/modelList/layer/sensor", function () {
                 ]
             };
 
-            expect(sensorLayer.getJsonGeometry(testObject, 0)).to.be.an("object").to.include({test: "Test"});
-            expect(sensorLayer.getJsonGeometry(testObject, 1)).to.be.null;
+            expect(sensorLayer.getThingsGeometry(testObject, 0)).to.be.an("object").to.include({test: "Test"});
+            expect(sensorLayer.getThingsGeometry(testObject, 1)).to.be.null;
         });
         it("should return the location without geometry", function () {
             const testObject2 = {
@@ -740,12 +745,12 @@ describe("core/modelList/layer/sensor", function () {
                 ]
             };
 
-            expect(sensorLayer.getJsonGeometry(testObject2, 0)).to.be.an("object").to.include({test: "Test"});
-            expect(sensorLayer.getJsonGeometry(testObject2, 1)).to.be.null;
+            expect(sensorLayer.getThingsGeometry(testObject2, 0)).to.be.an("object").to.include({test: "Test"});
+            expect(sensorLayer.getThingsGeometry(testObject2, 1)).to.be.null;
         });
     });
 
-    describe("parseJson", function () {
+    describe.skip("createFeatureByLocation", function () {
         it("should parse point object", function () {
             const obj = {
                 "type": "Point",
@@ -753,12 +758,12 @@ describe("core/modelList/layer/sensor", function () {
             };
 
             sensorLayer.set("epsg", "EPSG:4326", {silent: true});
-            expect(sensorLayer.parseJson(obj)).to.be.an.instanceof(Feature);
-            expect(sensorLayer.parseJson(obj).getGeometry()).to.be.an.instanceof(Point);
+            expect(sensorLayer.createFeatureByLocation(obj)).to.be.an.instanceof(Feature);
+            expect(sensorLayer.createFeatureByLocation(obj).getGeometry()).to.be.an.instanceof(Point);
         });
     });
 
-    describe("parseJson", function () {
+    describe.skip("createFeatureByLocation", function () {
         it("should parse line object", function () {
             const obj = {
                 "type": "LineString",
@@ -766,8 +771,8 @@ describe("core/modelList/layer/sensor", function () {
             };
 
             sensorLayer.set("epsg", "EPSG:4326", {silent: true});
-            expect(sensorLayer.parseJson(obj)).to.be.an.instanceof(Feature);
-            expect(sensorLayer.parseJson(obj).getGeometry()).to.be.an.instanceof(LineString);
+            expect(sensorLayer.createFeatureByLocation(obj)).to.be.an.instanceof(Feature);
+            expect(sensorLayer.createFeatureByLocation(obj).getGeometry()).to.be.an.instanceof(LineString);
         });
     });
 

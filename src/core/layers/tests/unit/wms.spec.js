@@ -1,7 +1,6 @@
 import {expect} from "chai";
 import sinon from "sinon";
 import WMSLayer from "../../wms";
-import mapCollection from "../../../../core/dataStorage/mapCollection.js";
 import store from "../../../../app-store";
 
 describe("src/core/layers/wms.js", () => {
@@ -22,7 +21,7 @@ describe("src/core/layers/wms.js", () => {
             }
         };
 
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
     });
     beforeEach(() => {
         attributes = {
@@ -68,6 +67,16 @@ describe("src/core/layers/wms.js", () => {
         expect(wmsLayer.get("layer")).not.to.be.undefined;
         expect(wmsLayer.get("isVisibleInMap")).to.be.false;
         expect(wmsLayer.get("layer").getVisible()).to.be.false;
+    });
+    it("createLayer with crs=EPSG:4326 shall have this projection at source", function () {
+        attributes.crs = "EPSG:4326";
+        const wmsLayer = new WMSLayer(attributes),
+            layer = wmsLayer.get("layer");
+
+        expect(layer).not.to.be.undefined;
+        expect(layer.getSource()).not.to.be.undefined;
+        expect(layer.getSource().getProjection()).not.to.be.undefined;
+        expect(layer.getSource().getProjection().getCode()).to.be.equals(attributes.crs);
     });
     it("updateSourceSLDBody shall call updateParams at layers source", function () {
         attributes.SLDBody = "SLD_BODY";

@@ -3,7 +3,7 @@ import actions from "../../../store/actionsPrint";
 import VectorLayer from "ol/layer/Vector.js";
 import sinon from "sinon";
 
-const {activatePrintStarted, startPrint, getMetaDataForPrint, createPrintJob, waitForPrintJob, waitForPrintJobSuccess, downloadFile} = actions;
+const {activatePrintStarted, startPrint, getMetaDataForPrint, createPrintJob, migratePayload, waitForPrintJob, waitForPrintJobSuccess, downloadFile} = actions;
 
 describe("src/modules/tools/print/store/actionsPrint", function () {
     describe("activatePrintStarted", function () {
@@ -165,7 +165,7 @@ describe("src/modules/tools/print/store/actionsPrint", function () {
                     }
                 },
                 state = {
-                    mapfishServiceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
+                    serviceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
                     printAppId: "master",
                     currentFormat: "A4 Hochformat"
                 };
@@ -178,10 +178,58 @@ describe("src/modules/tools/print/store/actionsPrint", function () {
             ], {}, done);
         });
     });
+    describe("migratePayload", function () {
+        it("should migrate the for mapfish generated JSON to plotservice", done => {
+            const state = {
+                    outputFilename: "",
+                    outputFormat: ""
+                },
+                payload = {
+                    "layout": "Default A4 hoch",
+                    "attributes": {
+                        "title": "Mein Titel",
+                        "map": {
+                            "dpi": 120,
+                            "projection": "EPSG:25832",
+                            "center": [
+                                562010,
+                                5562814
+                            ],
+                            "scale": 500000,
+                            "layers": []
+                        }
+                    }
+                };
+
+            testAction(migratePayload, encodeURIComponent(JSON.stringify(payload)), state, {}, [], {}, done);
+        });
+    });
     describe("waitForPrintJob", function () {
         it("should start another print request", done => {
             const state = {
-                    mapfishServiceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
+                    serviceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
+                    printAppId: "master"
+                },
+                response = {
+                    ref: "d023a604-99b0-4a4d-aa40-a1d3b5a0fd5d@5f00580a-5fd4-4579-8d21-1ad07051d09a",
+                    index: 0
+                },
+                serviceRequest = {
+                    "index": 0,
+                    "serviceUrl": "https://geodienste.hamburg.de/mapfish_print_internet/print/master/status/d023a604-99b0-4a4d-aa40-a1d3b5a0fd5d@5f00580a-5fd4-4579-8d21-1ad07051d09a.json",
+                    "requestType": "GET",
+                    "onSuccess": "waitForPrintJobSuccess"
+                };
+
+            // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
+            testAction(waitForPrintJob, response, state, {}, [
+                {type: "setProgressWidth", payload: "width: 75%", commit: true},
+                {type: "sendRequest", payload: serviceRequest, dispatch: true}
+            ], {}, done);
+        });
+        it("should start another print request with service url without /print/", done => {
+            const state = {
+                    serviceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/",
                     printAppId: "master"
                 },
                 response = {
@@ -204,9 +252,17 @@ describe("src/modules/tools/print/store/actionsPrint", function () {
     });
 
     describe("waitForPrintJobSuccess", function () {
-        it.skip("is not done yet so it should start another print request", done => {
+        let clock;
+
+        before(function () {
+            clock = sinon.useFakeTimers();
+        });
+        after(function () {
+            clock.restore();
+        });
+        it("is not done yet so it should start another print request", done => {
             const state = {
-                    mapfishServiceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
+                    serviceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
                     printAppId: "master"
                 },
                 response = {
@@ -218,10 +274,10 @@ describe("src/modules/tools/print/store/actionsPrint", function () {
                     waitingTime: 0
                 },
                 serviceRequest = {
-                    "index": 0,
-                    "serviceUrl": "https://geodienste.hamburg.de/mapfish_print_internet/print/master/status/5dbc66f1-0ff5-4ba6-8257-640c600150d0@a8cb3d11-7c03-48d3-995e-b7734c564164.json",
-                    "requestType": "GET",
-                    "onSuccess": "waitForPrintJobSuccess"
+                    index: 0,
+                    serviceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/master/status/5dbc66f1-0ff5-4ba6-8257-640c600150d0@a8cb3d11-7c03-48d3-995e-b7734c564164.json",
+                    requestType: "GET",
+                    onSuccess: "waitForPrintJobSuccess"
                 };
 
             // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
@@ -229,10 +285,11 @@ describe("src/modules/tools/print/store/actionsPrint", function () {
                 {type: "setProgressWidth", payload: "width: 80%", commit: true},
                 {type: "sendRequest", payload: serviceRequest, dispatch: true}
             ], {}, done);
-        }).timeout(3000);
+            clock.tick(2001);
+        });
         it("is done so it should activate the download", done => {
             const state = {
-                    mapfishServiceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
+                    serviceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
                     printAppId: "master",
                     filename: "Meine Datey"
                 },
@@ -260,7 +317,7 @@ describe("src/modules/tools/print/store/actionsPrint", function () {
         describe("downloadFile", function () {
             it("should set parameters for one download file", done => {
                 const state = {
-                        mapfishServiceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
+                        serviceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
                         printAppId: "master",
                         filename: "Pikachu"
                     },
@@ -279,7 +336,7 @@ describe("src/modules/tools/print/store/actionsPrint", function () {
 
             it("should set parameters for more than one download file", done => {
                 const state = {
-                        mapfishServiceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
+                        serviceUrl: "https://geodienste.hamburg.de/mapfish_print_internet/print/",
                         printAppId: "master",
                         filename: "Pikachu"
                     },

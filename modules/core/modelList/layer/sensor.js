@@ -10,6 +10,11 @@ import {GeoJSON} from "ol/format.js";
 import changeTimeZone from "../../../../src/utils/changeTimeZone.js";
 import getProxyUrl from "../../../../src/utils/getProxyUrl";
 import store from "../../../../src/app-store";
+import {
+    resetVectorLayerFeatures,
+    changeFeatureGFI,
+    getStyleModelById
+} from "../../../../src/core/layers/RadioBridge.js";
 
 const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -63,11 +68,11 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @extends Layer
      * @memberof Core.ModelList.Layer
      * @constructs
-     * @property {String} url the url to initialiy call the SensorThings-API with
+     * @property {String} url the url to initially call the SensorThings-API with
      * @property {String} epsg="EPSG:4326" EPSG-Code for incoming sensor geometries.
-     * @property {String} utc="+1" UTC-Timezone to calulate correct time.
+     * @property {String} utc="+1" UTC-Timezone to calculate correct time.
      * @property {String} timezone="Europe/Berlin" Sensors origin timezone name.
-     * @property {String} version="1.0" Version the SensorThingsAPI is requested.
+     * @property {String} version="1.0" The version the SensorThingsAPI is requested.
      * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      * @fires Core#RadioRequestMapViewGetOptions
      * @fires Core#RadioRequestUtilGetProxyURL
@@ -78,14 +83,14 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @fires GFI#RadioTriggerGFIChangeFeature
      * @fires Core#RadioRequestMapViewGetCurrentExtent
      * @listens Layer#RadioRequestVectorLayerGetFeatures
-     * @description This layer type requests its data from the SensorThinsgAPI (STA).
+     * @description This layer type requests its data from the SensorThings-API (STA).
      * The layer reacts to changes of the own features triggered by the STA.
      * The technology used therefore is WebSocketSecure (wss) and the MessageQueuingTelemetryTransport(MQTT)-Protocol.
-     * This makes it possible to update vector-data in the application without reloading the entire page.
+     * This makes it possible to update vector data in the application without reloading the entire page.
      * The newest observation data of each attribute is set as follows:
      * name = If "datastream.properties.type" is not undefined, take this. Otherwise take the value in "datastream.unitOfMeasurment.name"
      * The attribute key is "dataStream_[dataStreamId]_[name]".
-     * All available dataStreams, their ids, their latest observation and values are separately aggregated and stored (separated by " | ") in the following attributes:
+     * All available dataStreams, their ids, their latest observation and value are separately aggregated and stored (separated by " | ") in the following attributes:
      * dataStreamId, dataStreamName, dataStreamValue, dataStreamPhenomenonTime
      * The "name" and the "description" of each thing are also taken as "properties".
      */
@@ -97,7 +102,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
          */
         const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url");
 
-        // set subscriptionTopics as instance variable (!)
         this.setSubscriptionTopics({});
         this.setHttpSubFolder(url && String(url).split("/").length > 3 ? "/" + String(url).split("/").slice(3).join("/") : "");
 
@@ -112,58 +116,53 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             Layer.prototype.initialize.apply(this);
         }
 
-        // change language from moment.js to german
         moment.locale("de");
     },
 
     /**
-     * Start or stop subscription according to its conditions.
-     * Because of usage of serveral listeners it's necessary to create a "isSubscribed" flag to prevent multiple executions.
+     * Starts or stops subscription according to its conditions.
+     * Because of usage of several listeners it's necessary to create a "isSubscribed" flag to prevent multiple executions.
      * @returns {void}
      */
-    changedConditions: function () {
+    toggleSubscriptionsOnMapChanges: function () {
         const features = this.get("layer").getSource().getFeatures(),
-            state = this.checkConditionsForSubscription();
+            state = this.getLayerState(this.get("isOutOfRange"), this.get("isSelected"), this.get("isSubscribed"));
 
         if (state === true) {
             this.setIsSubscribed(true);
             if (!this.get("loadThingsOnlyInCurrentExtent") && Array.isArray(features) && !features.length) {
                 this.initializeConnection(function () {
-                    // call subscriptions
                     this.updateSubscription();
-                    // create listener of moveend event
-                    this.setMoveendListener(Radio.request("Map", "registerListener", "moveend", this.updateSubscription.bind(this)));
+                    this.setMoveendListener(store.dispatch("Maps/registerListener", {event: "moveend", callback: this.updateSubscription.bind(this)}));
                 }.bind(this));
             }
             else {
-                // call subscriptions
                 this.updateSubscription();
-                // create listener of moveend event
-                this.setMoveendListener(Radio.request("Map", "registerListener", "moveend", this.updateSubscription.bind(this)));
+                this.setMoveendListener(store.dispatch("Maps/registerListener", {event: "moveend", callback: this.updateSubscription.bind(this)}));
             }
         }
         else if (state === false) {
             this.setIsSubscribed(false);
-            // remove listener of moveend event
-            Radio.trigger("Map", "unregisterListener", this.get("moveendListener"));
+            store.dispatch("Maps/unregisterListener", {event: "moveend", callback: this.updateSubscription.bind(this)});
             this.setMoveendListener(null);
-            // remove connection to live update
             this.unsubscribeFromSensorThings();
         }
     },
 
     /**
-     * Check if layer is whithin range and selected to determine if all conditions are fullfilled.
-     * @returns {void}
+     * Returns the state of the layer based on out of range value, isSelected and isSubscribed.
+     * @param {Boolean} isOutOfRange The flag if map Scale is out of defined layer minScale and maxScale.
+     * @param {Boolean} isSelected The flag if value model is selected or not.
+     * @param {Boolean} isSubscribed The flag to prevent multiple executions.
+     * @returns {Boolean} true if layer should be subscribed, false if not
      */
-    checkConditionsForSubscription: function () {
-        if (this.get("isOutOfRange") === false && this.get("isSelected") === true && this.get("isSubscribed") === false) {
+    getLayerState: function (isOutOfRange, isSelected, isSubscribed) {
+        if (!isOutOfRange && isSelected && !isSubscribed) {
             return true;
         }
-        else if ((this.get("isOutOfRange") === true || this.get("isSelected") === false) && this.get("isSubscribed") === true) {
+        else if ((isOutOfRange || !isSelected) && isSubscribed) {
             return false;
         }
-
         return undefined;
     },
 
@@ -174,7 +173,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     createLayerSource: function () {
         this.setLayerSource(new VectorSource());
         if (this.has("clusterDistance")) {
-            this.createClusterLayerSource();
+            this.createClusterLayerSource(this.get("layerSource"), this.get("clusterDistance"));
         }
     },
 
@@ -193,28 +192,28 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             id: this.get("id"),
             altitudeMode: this.get("altitudeMode")
         }));
-
-        // subscription / unsubscription to mmqt only happens by this change events
         this.listenTo(this, {
-            "change:isVisibleInMap": this.changedConditions,
-            "change:isOutOfRange": this.changedConditions
+            "change:isVisibleInMap": this.toggleSubscriptionsOnMapChanges,
+            "change:isOutOfRange": this.toggleSubscriptionsOnMapChanges
         });
         this.createLegend();
     },
 
     /**
      * Creates ClusterLayerSource.
+     * @param {ol/source/Source} layerSource the source of the layer
+     * @param {Number} clusterDistance the distance where clustering should occur
      * @returns {void}
      */
-    createClusterLayerSource: function () {
+    createClusterLayerSource: function (layerSource, clusterDistance) {
         this.setClusterLayerSource(new Cluster({
-            source: this.get("layerSource"),
-            distance: this.get("clusterDistance")
+            source: layerSource,
+            distance: clusterDistance
         }));
     },
 
     /**
-     * Initial loading of sensor data function
+     * Initial loading of sensor data
      * @param {Function} onsuccess a function to call on success
      * @fires Core#RadioRequestUtilGetProxyURL
      * @returns {void}
@@ -228,19 +227,26 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
             version = this.get("version"),
             urlParams = this.get("urlParameter"),
-            intersect = typeof this.get("intersect") === "boolean" ? this.get("intersect") : true;
+            currentExtent = {
+                extent: store.getters["Maps/getCurrentExtent"],
+                sourceProjection: mapCollection.getMapView("2D").getProjection().getCode(),
+                targetProjection: this.get("epsg")
+            },
+            intersect = typeof this.get("intersect") === "boolean" ? this.get("intersect") : true,
+            mapProjection = mapCollection.getMapView("2D").getProjection(),
+            epsg = this.get("epsg"),
+            gfiTheme = this.get("gfiTheme"),
+            utc = this.get("utc"),
+            isClustered = this.has("clusterDistance");
 
-        this.loadSensorThings(url, version, urlParams, intersect, function (sensorData) {
-            const epsg = this.get("epsg"),
-                features = this.createFeatures(sensorData, epsg),
-                isClustered = this.has("clusterDistance");
+        this.callSensorThingsAPI(url, version, urlParams, currentExtent, intersect, sensorData => {
+            const features = this.createFeaturesFromSensorData(sensorData, mapProjection, epsg, gfiTheme, utc);
 
             this.clearLayerSource();
-            // Add features to vectorlayer
             if (Array.isArray(features) && features.length) {
                 this.get("layerSource").addFeatures(features);
                 this.prepareFeaturesFor3D(features);
-                Radio.trigger("VectorLayer", "resetFeatures", this.get("id"), features);
+                resetVectorLayerFeatures(this.get("id"), features);
             }
 
             if (features !== undefined) {
@@ -248,28 +254,38 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 this.get("layer").setStyle(this.get("style"));
             }
 
-            features.forEach(feature => Radio.trigger("GFI", "changeFeature", feature));
+            features.forEach(feature => changeFeatureGFI(feature));
 
             if (typeof onsuccess === "function") {
                 onsuccess();
             }
-        }.bind(this));
+        }, error => {
+            store.dispatch("Alerting/addSingleAlert", i18next.t("modules.core.modelList.layer.sensor.httpOnError", {name: this.get("name")}));
+            console.warn(error);
+        });
     },
 
     /**
-     * draw points on the map
-     * @param  {array} sensorData - sensor with location and properties
-     * @param  {Sting} epsg - from Sensortype
-     * @return {Ol.Features} feature to draw
+     * Creates features from given sensor data
+     * @param {Object[]} sensorData sensor with location and properties
+     * @param {ol/proj/Projection} mapProjection projection of the map
+     * @param {String} epsg the epsg of sensortype
+     * @param {String|Object} gfiTheme The name of the gfiTheme or an object of gfiTheme
+     * @param {String} utc="+1" UTC-Timezone to calculate correct time.
+     * @returns {ol/Feature[]} feature to draw
      */
-    createFeatures: function (sensorData, epsg) {
+    createFeaturesFromSensorData: function (sensorData, mapProjection, epsg, gfiTheme, utc) {
         let features = [],
             feature;
 
         if (Array.isArray(sensorData)) {
-            sensorData.forEach(function (data, index) {
-                if (data?.location && data.location && epsg !== undefined) {
-                    feature = this.parseJson(data.location);
+            sensorData.forEach((data, index) => {
+                if (data?.location && data.location && typeof epsg !== "undefined") {
+                    feature = this.createFeatureByLocation(
+                        data.location,
+                        mapProjection,
+                        epsg
+                    );
                 }
                 else {
                     return;
@@ -278,27 +294,25 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 feature.setId(index);
                 feature.setProperties(data.properties, true);
 
-                // for a special theme
-                if (typeof this.get("gfiTheme") === "object") {
-                    feature.set("gfiParams", this.get("gfiTheme").params, true);
-                    feature.set("utc", this.get("utc"), true);
+                if (typeof gfiTheme === "object") {
+                    feature.set("gfiParams", gfiTheme?.params, true);
                 }
+                feature.set("utc", utc, true);
                 feature = this.aggregateDataStreamValue(feature);
                 feature = this.aggregateDataStreamPhenomenonTime(feature);
                 features.push(feature);
-            }, this);
+            });
 
-            // only features with geometry
-            features = features.filter(subFeature => subFeature.getGeometry() !== undefined);
+            features = features.filter(subFeature => typeof subFeature.getGeometry() !== "undefined");
         }
 
         return features;
     },
 
     /**
-     * Aggregates the values and adds them as property "dataStreamValues".
-     * @param {ol/feature} feature OL-feature.
-     * @returns {ol/feature} - Feature with new attribute "dataStreamValues".
+     * Aggregates the value and adds them as property "dataStreamValues".
+     * @param {ol/Feature} feature The ol feature.
+     * @returns {ol/Feature} The feature with new attribute "dataStreamValues".
      */
     aggregateDataStreamValue: function (feature) {
         const modifiedFeature = feature,
@@ -324,8 +338,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
     /**
      * Aggregates the phenomenonTimes and adds them as property "dataStreamPhenomenonTime".
-     * @param {ol/feature} feature OL-feature.
-     * @returns {ol/feature} - Feature with new attribute "dataStreamPhenomenonTime".
+     * @param {ol/Feature} feature The ol feature.
+     * @returns {ol/Feature} The feature with new attribute "dataStreamPhenomenonTime".
      */
     aggregateDataStreamPhenomenonTime: function (feature) {
         const modifiedFeature = feature,
@@ -348,11 +362,11 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Some sensor deliver an time interval like "2020-04-02T14:00:01.000Z/2020-04-02T14:15:00.000Z".
+     * Some sensors deliver a time interval like "2020-04-02T14:00:01.000Z/2020-04-02T14:15:00.000Z".
      * Other sensors deliver a single time like "2020-04-02T14:00:01.000Z".
-     * This functions returns the first time given in string. Delimiter is always "/".
-     * @param   {string} phenomenonTime phenomenonTime given by sensor
-     * @returns {string} first phenomenonTime
+     * This function returns the first time given in string. Delimiter is always "/".
+     * @param {String} phenomenonTime The phenomenonTime given by sensor
+     * @returns {String} The first phenomenonTime
      */
     getFirstPhenomenonTime (phenomenonTime) {
         if (typeof phenomenonTime !== "string") {
@@ -366,109 +380,95 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Returns Date and time in clients local aware format converting utc time to sensors origin timezone.
-     * @param  {String} phenomenonTime phenomenonTime given by sensor
-     * @param  {String} timezone name of the sensors origin timezone
+     * Returns date and time in clients local format converting utc time to sensors origin timezone.
+     * @param {String} phenomenonTime phenomenonTime given by sensor
+     * @param {String} timezone name of the sensors origin timezone
      * @see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-     * @return {String} phenomenonTime converted with UTC
+     * @see https://momentjs.com/timezone/docs/
+     * @returns {String} A date string based on phenomenonTime and timezone in clients local format or an empty string if an unknown phenomenonTime is given.
      */
     getLocalTimeFormat: function (phenomenonTime, timezone) {
         const utcTime = this.getFirstPhenomenonTime(phenomenonTime);
 
         if (utcTime) {
-            // "LLL" outputs month name, day of month, year, time in local aware date of the client. For example "16. März 2020 14:31"
             return moment(utcTime).tz(timezone).format("LLL");
         }
-
         return "";
     },
 
     /**
-     * load SensorThings by
-     * @param  {String} url - url to service
-     * @param  {String} version - version from service
-     * @param  {String} urlParams - url parameters
-     * @param  {Boolean} intersect - if it is intersect or not
-     * @return {array} all things with attributes and location
-     * @param  {Function} onsuccess a callback function (result) with the result to call on success and result: all things with attributes and location
+     * Calls the SensorThings-API via http.
+     * @param {String} url The url to service
+     * @param {String} version The version from service
+     * @param {String} urlParams The url parameters
+     * @param {Object} currentExtent the extent coordinates
+     * @param {Boolean} intersect true if it intersects, false if not
+     * @param {Function} onsuccess a callback function (result) with the result to call on success and result: all things with attributes and location
+     * @param {Function} onerror a callback function (err) to pass errors with
+     * @returns {void}
      */
-    loadSensorThings: function (url, version, urlParams, intersect, onsuccess) {
+    callSensorThingsAPI: function (url, version, urlParams, currentExtent, intersect, onsuccess, onerror) {
         const requestUrl = this.buildSensorThingsUrl(url, version, urlParams),
             http = new SensorThingsHttp(),
-            currentExtent = {
-                extent: Radio.request("MapView", "getCurrentExtent"),
-                sourceProjection: Radio.request("MapView", "getProjection").getCode(),
-                targetProjection: this.get("epsg")
-            },
             /**
              * a function to receive the response of a http call
              * @param {Object} result the response from the http request as array buffer
              * @returns {void}
              */
-            httpOnSucess = function (result) {
+            httpOnSuccess = function (result) {
                 let allThings;
 
                 if (urlParams?.root === "Datastreams") {
-                    allThings = this.parseDatastreams(result, this.get("datastreamAttributes"), this.get("thingAttributes"));
+                    allThings = this.getThingsFromSensorData(result, this.get("datastreamAttributes"), this.get("thingAttributes"));
                 }
                 else {
                     allThings = this.flattenArray(result);
                 }
 
-                allThings = this.getNewestSensorData(allThings);
+                allThings = this.createPropertiesOfDatastreams(allThings, this.get("showNoDataValue"), this.get("noDataValue"));
 
                 allThings = this.aggregatePropertiesOfThings(allThings);
 
                 if (typeof onsuccess === "function") {
                     onsuccess(allThings);
                 }
-            }.bind(this),
-            /**
-             * a function to call on error
-             * @param {Error} error the occuring error
-             * @returns {void}
-             */
-            httpOnError = function (error) {
-                store.dispatch("Alerting/addSingleAlert", i18next.t("modules.core.modelList.layer.sensor.httpOnError", {name: this.get("name")}));
-                console.warn(error);
             }.bind(this);
 
         if (!this.get("loadThingsOnlyInCurrentExtent")) {
-            http.get(requestUrl, httpOnSucess, null, null, httpOnError);
+            http.get(requestUrl, httpOnSuccess, null, null, onerror);
         }
         else {
-            http.getInExtent(requestUrl, currentExtent, intersect, httpOnSucess, null, null, httpOnError);
+            http.getInExtent(requestUrl, currentExtent, intersect, httpOnSuccess, null, null, onerror);
         }
     },
 
     /**
      * Parse the sensorThings-API data with datastreams as root.
-     * The datastreams are merged based on the Id of the thing if the Ids exist multiple times.
+     * The datastreams are merged based on the id of the thing if the ids exist multiple times.
      * @param {Object[]} sensordata the sensordata with datastream as root.
-     * @param {String[]} datastreamAttributes  The datastreamattributes.
+     * @param {String[]} datastreamAttributes The datastream attributes.
      * @param {String[]} thingAttributes The thing attributes.
      * @returns {Object[]} The sensordata with merged things as root.
      */
-    parseDatastreams: function (sensordata, datastreamAttributes, thingAttributes) {
-        let allThings = this.changeSensordataRoot(sensordata, datastreamAttributes, thingAttributes);
+    getThingsFromSensorData: function (sensordata, datastreamAttributes, thingAttributes) {
+        let allThings = this.changeSensordataRootToThings(sensordata, datastreamAttributes, thingAttributes);
         const thingIds = allThings.map(thing => thing["@iot.id"]),
-            uniqeThingIds = [... new Set(thingIds)];
+            uniqueThingIds = [... new Set(thingIds)];
 
-        if (thingIds.length > uniqeThingIds.length) {
-            allThings = this.mergeDatastreamsByThingId(allThings, uniqeThingIds);
+        if (thingIds.length > uniqueThingIds.length) {
+            allThings = this.unifyThingsByIds(allThings, uniqueThingIds);
         }
-
         return allThings;
     },
 
     /**
      * Changes the root in the sensordata from datastream to thing.
      * @param {Object[]} sensordata the sensordata with datastream as root.
-     * @param {String[]} datastreamAttributes  The datastreamattributes.
+     * @param {String[]} datastreamAttributes The datastream attributes.
      * @param {String[]} thingAttributes The thing attributes.
      * @returns {Object[]} The sensordata with things as root.
      */
-    changeSensordataRoot: function (sensordata, datastreamAttributes, thingAttributes) {
+    changeSensordataRootToThings: function (sensordata, datastreamAttributes, thingAttributes) {
         const things = [],
             datastreamAttributesAssociation = this.createAssociationObject(datastreamAttributes),
             thingAttributesAssociation = this.createAssociationObject(thingAttributes);
@@ -495,9 +495,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Converts elments of an array to keys in an object with values to be true.
-     * @param {String[]} [array=[]] Array with values to be convert to an object.
-     * @returns {Object} The object with values of the given array as keys.
+     * Converts elements of an array to keys in an object with value to be true.
+     * @param {String[]} [array=[]] Array with value to convert to an object.
+     * @returns {Object} The object with value of the given array as keys.
      */
     createAssociationObject: function (array = []) {
         const associationObject = {};
@@ -515,7 +515,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @param {Number[]} uniqueIds The unique ids from the sensordata things.
      * @returns {Object[]} The sensordata with merged things as root.
      */
-    mergeDatastreamsByThingId: function (allThings, uniqueIds) {
+    unifyThingsByIds: function (allThings, uniqueIds) {
         const mergedThings = [];
 
         uniqueIds.forEach((thingId, thingIdIndex) => {
@@ -535,13 +535,15 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Iterates over the dataStreams and creates for each datastream the attributes:
+     * Iterates over the dataStreams and creates the attributes for each datastream:
      * "dataStream_[dataStreamId]_[dataStreamName]" and
      * "dataStream_[dataStreamId]_[dataStreamName]_phenomenonTime".
      * @param {Object} thing thing.
+     * @param {Boolean} showNoDataValue true if "nodata" value should be shown, false if not
+     * @param {String} noDataValue the value to use for "nodata"
      * @returns {void}
      */
-    getNewestSensorDataOfDatastream (thing) {
+    createPropertiesOfDatastreamsHelper (thing, showNoDataValue, noDataValue) {
         const dataStreams = thing.Datastreams;
 
         thing.properties.dataStreamId = [];
@@ -556,7 +558,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 key = "dataStream_" + dataStreamId + "_" + dataStreamName;
             let phenomenonTime = dataStream?.Observations ? dataStream.Observations[0]?.phenomenonTime : "";
 
-            this.addDatastreamProperties(thing.properties, dataStream.properties);
+            this.moveDatastreamPropertiesToThing(thing.properties, dataStream.properties);
             phenomenonTime = changeTimeZone(phenomenonTime?.split("/")[0], this.get("utc"));
 
             thing.properties.dataStreamId.push(dataStreamId);
@@ -568,10 +570,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 thing.properties.dataStreamValue.push(dataStreamValue);
                 thing.properties.dataPhenomenonTime.push(phenomenonTime);
             }
-            else if (this.get("showNoDataValue")) {
-                thing.properties[key] = this.get("noDataValue");
-                thing.properties[key + "_phenomenonTime"] = this.get("noDataValue");
-                thing.properties.dataStreamValue.push(this.get("noDataValue"));
+            else if (showNoDataValue) {
+                thing.properties[key] = noDataValue;
+                thing.properties[key + "_phenomenonTime"] = noDataValue;
+                thing.properties.dataStreamValue.push(noDataValue);
             }
 
         });
@@ -583,15 +585,15 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Adds data from datastream to thing with pipe separator.
-     * @param {Object} thingProperties - The properties from thing.
-     * @param {Object} dataStreamProperties - The properties from dataStream.
+     * Adds data from datastream to the thing with pipe separator.
+     * @param {Object} thingProperties The properties from the thing.
+     * @param {Object} dataStreamProperties The properties from the dataStream.
      * @returns {void}
      */
-    addDatastreamProperties: function (thingProperties, dataStreamProperties) {
+    moveDatastreamPropertiesToThing: function (thingProperties, dataStreamProperties) {
         if (dataStreamProperties) {
             Object.entries(dataStreamProperties).forEach(([key, value]) => {
-                if (thingProperties[key] !== undefined) {
+                if (typeof thingProperties[key] !== "undefined") {
                     thingProperties[key] = thingProperties[key] + " | " + value;
                 }
                 else {
@@ -604,33 +606,31 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     /**
      * Iterates over things and creates attributes for each observed property.
      * @param {Object[]} allThings All things.
-     * @returns {Object[]} - All things with the newest observation for each dataStream.
+     * @param {Boolean} showNoDataValue true if "nodata" value should be shown, false if not
+     * @param {String} noDataValue the value to use for "nodata"
+     * @returns {Object[]} All things with the newest observation for each dataStream.
      */
-    getNewestSensorData: function (allThings) {
+    createPropertiesOfDatastreams: function (allThings, showNoDataValue, noDataValue) {
         const allThingsWithSensorData = allThings;
 
         allThingsWithSensorData.forEach(thing => {
-
-            // A thing may not have properties. So we ensure we can access them.
             if (!thing?.properties) {
                 thing.properties = {};
             }
-
             if (thing?.Datastreams) {
-                this.getNewestSensorDataOfDatastream(thing);
+                this.createPropertiesOfDatastreamsHelper(thing, showNoDataValue, noDataValue);
             }
-
         });
 
         return allThingsWithSensorData;
     },
 
     /**
-     * build SensorThings URL
-     * @param  {String} url - url to service
-     * @param  {String} version - version from service
-     * @param  {String} urlParams - url parameters
-     * @return {String} URL to request sensorThings
+     * Builds the SensorThings url.
+     * @param {String} url the url to the service
+     * @param {String} version the version from the service
+     * @param {String} urlParams the url parameters
+     * @returns {String} url to request the sensorThings with
      */
     buildSensorThingsUrl: function (url, version, urlParams) {
         const root = urlParams?.root || "Things",
@@ -663,13 +663,13 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     /**
      * Searches the thing for its geometry location.
      * For some reason there are two different object pathes to check.
-     * @param   {object} thing    aggregated thing
-     * @param   {integer} index   index of location in array Locations
-     * @returns {object|null} Json object or null
+     * @param {Object} thing the aggregated thing
+     * @param {Number} index the index of the location in array Locations
+     * @returns {Object} the geometry object or null if none was found
      */
-    getJsonGeometry: function (thing, index) {
-        const Locations = thing?.Locations || thing?.Thing?.Locations,
-            location = Locations && Object.prototype.hasOwnProperty.call(Locations, index) && Locations[index]?.location ? Locations[index].location : null;
+    getThingsGeometry: function (thing, index) {
+        const locations = thing?.Locations || thing?.Thing?.Locations,
+            location = locations && Object.prototype.hasOwnProperty.call(locations, index) && locations[index]?.location ? locations[index].location : null;
 
         if (location && location?.geometry && location.geometry?.type) {
             return location.geometry;
@@ -682,18 +682,17 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Tries to parse object to ol.format.GeoJson
-     * @param   {object} data object to parse
-     * @throws an error if the argument cannot be parsed.
-     * @returns {ol/Feature} ol feature
+     * Tries to parse object to ol/format/GeoJson
+     * @param {Object} data the object to parse
+     * @param {ol/proj/Projection} mapProjection projection of the map
+     * @param {String} thingEPSG projection of the thing
+     * @returns {ol/Feature} the ol feature
      */
-    parseJson: function (data) {
-        const mapCrs = Radio.request("MapView", "getProjection"),
-            thingEPSG = this.get("epsg"),
-            geojsonReader = new GeoJSON({
-                featureProjection: mapCrs,
-                dataProjection: thingEPSG
-            });
+    createFeatureByLocation: function (data, mapProjection, thingEPSG) {
+        const geojsonReader = new GeoJSON({
+            featureProjection: mapProjection,
+            dataProjection: thingEPSG
+        });
 
         let jsonObjects;
 
@@ -701,7 +700,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             jsonObjects = geojsonReader.readFeature(data);
         }
         catch (err) {
-            console.error("JSON structure in sensor thing location cannot be parsed.");
+            console.error("JSON structure in sensor thing location can't be parsed.");
         }
 
         return jsonObjects;
@@ -709,8 +708,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
     /**
      * Aggregates the properties of the things.
-     * @param {Object[]} allThings - all things
-     * @returns {Object[]} - aggregatedThings
+     * @param {Object[]} allThings all things
+     * @returns {Object[]} aggregated things
      */
     aggregatePropertiesOfThings: function (allThings) {
         /**
@@ -729,7 +728,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                     props = {},
                     datastreams = [];
 
-                aggregatedThing.location = this.getJsonGeometry(thing[0], 0);
+                aggregatedThing.location = this.getThingsGeometry(thing[0], 0);
                 thing.forEach(thing2 => {
                     keys.push(Object.keys(thing2.properties));
                     props = Object.assign(props, thing2.properties);
@@ -743,12 +742,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 keys.push("@iot.id");
                 aggregatedThing.properties = Object.assign({}, props, this.aggregateProperties(thing, keys));
                 if (datastreams.length > 0) {
-                    keys = this.excludeDataStreamKeys(keys, "dataStream_");
+                    keys = this.excludeKeysByPrefix(keys, "dataStream_");
                     aggregatedThing.properties.Datastreams = datastreams;
                 }
             }
             else {
-                aggregatedThing.location = this.getJsonGeometry(thing, 0);
+                aggregatedThing.location = this.getThingsGeometry(thing, 0);
                 aggregatedThing.properties = thing.properties;
                 aggregatedThing.properties.name = thing.name;
                 aggregatedThing.properties.description = thing.description;
@@ -768,22 +767,22 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * flattenArray creates a new array with all sub-array elements concatenated
+     * Creates a new array with concatenated sub array elements.
      * @info this is equivalent to Array.flat() - except no addition for testing is needed for this one
-     * @param {*} array the array to flatten its sub-arrays or anything else
-     * @returns {*}  the flattened array if an array was given, the untouched input otherwise
+     * @param {*} array the array to flatten sub arrays or anything else
+     * @returns {*} the flattened array if an array was given, the untouched input otherwise
      */
     flattenArray: function (array) {
         return Array.isArray(array) ? array.reduce((acc, val) => acc.concat(val), []) : array;
     },
 
     /**
-     * Excludes the keys starting with the given startsWithString
-     * @param {String[]} keys  - keys
-     * @param {String} startsWithString - startsWithString
-     * @returns {String[]} - reducedKeys
+     * Excludes the keys starting with the given startsWithString.
+     * @param {String[]} keys keys to reduce
+     * @param {String} startsWithString the prefix of keys to exclude
+     * @returns {String[]} the reduced keys
      */
-    excludeDataStreamKeys: function (keys, startsWithString) {
+    excludeKeysByPrefix: function (keys, startsWithString) {
         let keysToIgnore,
             reducedKeys;
 
@@ -796,10 +795,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Aggregates the properties of the given keys and joins them by  " | "
-     * @param {Object} thingArray - Array of things to aggregate
-     * @param {String[]} keys - Keys to aggregate
-     * @returns {Object} - aggregatedProperties
+     * Aggregates the properties of the given keys and joins them by " | ".
+     * @param {Object[]} thingArray Array of things to aggregate
+     * @param {String[]} keys Keys to aggregate
+     * @returns {Object} the aggregated properties
      */
     aggregateProperties: function (thingArray, keys) {
         const aggregatedProperties = {};
@@ -813,25 +812,25 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * create style, function triggers to style_v2.json
-     * @param  {boolean} isClustered - should
+     * Creates style, function triggers to style_v2.json
+     * @param {Boolean} isClustered true if the layer is clustered, false if not
      * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @returns {void}
      */
     styling: function (isClustered) {
-        const stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        const stylelistmodel = getStyleModelById(this.get("styleId"));
 
-        if (stylelistmodel !== undefined) {
-            this.setStyle(function (feature) {
+        if (typeof stylelistmodel !== "undefined") {
+            this.setStyle(feature => {
                 return stylelistmodel.createStyle(feature, isClustered);
             });
         }
     },
 
     /**
-     * create connection to a given MQTT-Broker
-     * this must be passes this as a context to call the updateFromMqtt function
-     * @param {array} features - features with DatastreamID
+     * Creates the connection to a given MQTT-Broker.
+     * Remember to bind this context.
+     * @param {ol/Feature[]} features features with DatastreamID
      * @returns {void}
      */
     createMqttConnectionToSensorThings: function () {
@@ -853,26 +852,24 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         this.setMqttClient(mqtt);
 
-        // messages from the server
         mqtt.on("message", (topic, jsonData) => {
-            // search value in topic, that represents the datastreamid on position 1
             const regex = /\((.*)\)/,
                 result = topic.match(regex);
 
             if (Array.isArray(result) && result.length > 1) {
                 jsonData.dataStreamId = result[1];
-                this.updateFromMqtt(jsonData);
+                this.updateFeatureByObservation(jsonData, this.get("layerSource"), this.get("timezone"), this.get("showNoDataValue"), this.get("noDataValue"));
             }
         });
     },
 
     /**
-     * subscribes to the mqtt client with the features in the current extent
-     * @returns {Void}  -
+     * Subscribes to the mqtt client with the features in the current extent.
+     * @returns {void}
      */
     subscribeToSensorThings: function () {
-        const features = this.getFeaturesInExtent(),
-            dataStreamIds = this.getDataStreamIds(features),
+        const features = this.getFeaturesInExtent(this.get("layer").getSource().getFeatures(), store.getters["Maps/getCurrentExtent"]),
+            dataStreamIds = this.getDatastreamIds(features),
             version = this.get("version"),
             client = this.get("mqttClient"),
             subscriptionTopics = this.get("subscriptionTopics"),
@@ -888,12 +885,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * unsubscribes from the mqtt client with topics formerly subscribed
-     * @returns {Void}  -
+     * Unsubscribes from the mqtt client with topics subscribed in the past.
+     * @returns {void}
      */
     unsubscribeFromSensorThings: function () {
-        const features = this.getFeaturesInExtent(),
-            dataStreamIds = this.getDataStreamIds(features),
+        const features = this.getFeaturesInExtent(this.get("layer").getSource().getFeatures(), store.getters["Maps/getCurrentExtent"]),
+            dataStreamIds = this.getDatastreamIds(features),
             dataStreamIdsInverted = {},
             subscriptionTopics = this.get("subscriptionTopics"),
             version = this.get("version"),
@@ -914,7 +911,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Refresh all connections by ending all established connections and creating new ones
+     * Refreshes all subscriptions by ending all established subscriptions and creating new ones.
      * @returns {void}
      */
     updateSubscription: function () {
@@ -928,7 +925,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Loading things only in the current extent and updating the subscriptions.
+     * Loads things only in the current extent and updates the subscriptions.
      * @returns {void}
      */
     loadFeaturesInExtentAndUpdateSubscription: function () {
@@ -939,13 +936,13 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Returns features in enlarged extent (enlarged by 5% to make sure moving features close to the extent can move into the mapview)
-     * @returns {ol/featre[]} features
+     * Returns features in enlarged extent (enlarged by a fixed percentage to make sure moving features close to the extent can move into the mapview).
+     * @param {ol/Feature[]} features all features
+     * @param {ol/extent} currentExtent the current browser extent coordinates
+     * @returns {ol/Feature[]} the features in the given extent
      */
-    getFeaturesInExtent: function () {
-        const features = this.get("layer").getSource().getFeatures(),
-            currentExtent = Radio.request("MapView", "getCurrentExtent"),
-            enlargedExtent = this.enlargeExtent(currentExtent, 0.05),
+    getFeaturesInExtent: function (features, currentExtent) {
+        const enlargedExtent = this.enlargeExtent(currentExtent, 0.05),
             featuresInExtent = [];
 
         features.forEach(feature => {
@@ -958,10 +955,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * enlarge given extent by factor
-     * @param   {ol/extent} extent extent to enlarge
-     * @param   {float} factor factor to enlarge extent
-     * @returns {ol/extent} enlargedExtent
+     * Enlarges the given extent by the given factor.
+     * @param {ol/extent} extent extent to enlarge
+     * @param {Number} factor factor to enlarge extent
+     * @returns {ol/extent} the enlarged extent
      */
     enlargeExtent: function (extent, factor) {
         const bufferAmount = (extent[2] - extent[0]) * factor;
@@ -970,80 +967,83 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * update the phenomenontime and states of the Feature
-     * this function is triggerd from MQTT
-     * @param  {json} thing - thing contains a new observation and accompanying topic
+     * Updates the phenomenonTime and states of the feature.
+     * This function is triggerd from mqtt.
+     * @param {Object} observation The observation containing new data.
+     * @param {ol/source/Source} layerSource The layer source of open layers.
+     * @param {String} timezone The timezone of Sensors.
+     * @param {Boolean} showNoDataValue true if "nodata" value should be shown, false if not
+     * @param {String} noDataValue the value to use for "nodata"
      * @returns {void}
      */
-    updateFromMqtt: function (thing) {
-        const thingToUpdate = thing !== undefined ? thing : {},
-            dataStreamId = String(thingToUpdate.dataStreamId),
-            layerSource = this.get("layerSource"),
+    updateFeatureByObservation: function (observation, layerSource, timezone, showNoDataValue, noDataValue) {
+        const observationToUpdate = typeof observation !== "undefined" ? observation : {},
+            dataStreamId = String(observationToUpdate.dataStreamId),
             features = layerSource ? layerSource.getFeatures() : [],
-            feature = this.getFeatureByDataStreamId(features, dataStreamId),
-            result = thingToUpdate.result,
-            timezone = this.get("timezone"),
-            phenomenonTime = this.getLocalTimeFormat(thingToUpdate.phenomenonTime, timezone);
+            feature = this.getFeatureByDatastreamId(features, dataStreamId),
+            result = observationToUpdate.result,
+            phenomenonTime = this.getLocalTimeFormat(observationToUpdate.phenomenonTime, timezone);
 
-        this.updateObservationForDatastreams(feature, dataStreamId, thing);
-        this.liveUpdate(feature, dataStreamId, result, phenomenonTime);
+        this.updateObservationForDatastreams(feature, dataStreamId, observation);
+        this.updateFeatureProperties(feature, dataStreamId, result, phenomenonTime, showNoDataValue, noDataValue);
     },
 
     /**
-     * updates the Datastreams of the given feature with received time and result of the Observation
-     * @param {ol/feature} feature - feature to be updated
-     * @param {String} dataStreamId - dataStreamId
+     * Updates the datastreams of the given feature with received time and result of the observation.
+     * @param {ol/Feature} feature feature to be updated
+     * @param {String} dataStreamId the datastream id
      * @param {Object} observation the observation to update the old observation with
-     * @returns {Void}  -
+     * @returns {void}
      */
     updateObservationForDatastreams: function (feature, dataStreamId, observation) {
         if (typeof feature?.get !== "function" || !Array.isArray(feature.get("Datastreams"))) {
             return;
         }
 
-        feature.get("Datastreams").forEach(function (datastream) {
-            if (datastream["@iot.id"] !== undefined && String(datastream["@iot.id"]) === String(dataStreamId)) {
+        feature.get("Datastreams").forEach(datastream => {
+            if (typeof datastream["@iot.id"] !== "undefined" && String(datastream["@iot.id"]) === String(dataStreamId)) {
                 datastream.Observations = [observation];
             }
         });
     },
 
     /**
-     * performs the live update
-     * @param  {ol/feature} feature - feature to be updated
-     * @param  {String} dataStreamId - dataStreamId
-     * @param  {String} result - the new state
-     * @param  {String} phenomenonTime - the new phenomenonTime
+     * Updates feature properties.
+     * @param {ol/Feature} feature feature to be updated
+     * @param {String} dataStreamId the datastream id
+     * @param {String} result the new state
+     * @param {String} phenomenonTime the new phenomenonTime
+     * @param {Boolean} showNoDataValue true if "nodata" value should be shown, false if not
+     * @param {String} noDataValue the value to use for "nodata"
      * @fires GFI#RadioTriggerGFIChangeFeature
      * @returns {void}
      */
-    liveUpdate: function (feature, dataStreamId, result, phenomenonTime) {
+    updateFeatureProperties: function (feature, dataStreamId, result, phenomenonTime, showNoDataValue, noDataValue) {
         if (typeof feature?.get !== "function") {
             return;
         }
         const dataStreamIdIdx = feature.get("dataStreamId").split(" | ").indexOf(String(dataStreamId)),
             dataStreamNameArray = feature.get("dataStreamName").split(" | "),
             dataStreamName = Object.prototype.hasOwnProperty.call(dataStreamNameArray, dataStreamIdIdx) ? dataStreamNameArray[dataStreamIdIdx] : "",
-            preparedResult = result === "" && this.get("showNoDataValue") ? this.get("noDataValue") : result;
+            preparedResult = result === "" && showNoDataValue ? noDataValue : result;
 
-        // Here we only work with a reference to the feature, otherwise it leads to blinking behavior with clustered features.
         feature.set("dataStream_" + dataStreamId + "_" + dataStreamName, preparedResult, true);
         feature.set("dataStream_" + dataStreamId + "_" + dataStreamName + "_phenomenonTime", phenomenonTime, true);
-        feature.set("dataStreamValue", this.replaceStreamProperties(feature, "dataStreamValue", dataStreamId, preparedResult));
-        feature.set("dataStreamPhenomenonTime", this.replaceStreamProperties(feature, "dataStreamPhenomenonTime", dataStreamId, phenomenonTime));
+        feature.set("dataStreamValue", this.replaceValueInPipedProperty(feature, "dataStreamValue", dataStreamId, preparedResult));
+        feature.set("dataStreamPhenomenonTime", this.replaceValueInPipedProperty(feature, "dataStreamPhenomenonTime", dataStreamId, phenomenonTime));
 
-        Radio.trigger("GFI", "changeFeature", feature);
+        changeFeatureGFI(feature);
     },
 
     /**
-     * Replaced a property of the feature in the place of the given datastreamId.
-     * @param {ol/feature} feature - Feature with properties.
-     * @param {String} property - Property to be updated.
-     * @param  {String} dataStreamId - The dataStreamId.
-     * @param  {String} result - The new value.
-     * @returns {String} - The updated Property.
+     * Replaces a value of a piped property using dataStreamId to locate the right position in the piped property.
+     * @param {ol/Feature} feature the feature with properties
+     * @param {String} property the property to be updated
+     * @param {String} dataStreamId the datastream id
+     * @param {String} result the new value
+     * @returns {String} the updated property
      */
-    replaceStreamProperties: function (feature, property, dataStreamId, result) {
+    replaceValueInPipedProperty: function (feature, property, dataStreamId, result) {
         const dataStreamIds = feature.get("dataStreamId").split(" | "),
             dataStreamProperty = feature.get(property).split(" | ");
 
@@ -1057,13 +1057,13 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * helper function for getDataStreamIds: pushes the datastream ids into the given array
+     * Helper function for getDatastreamIds: Pushes the datastream ids into the given array.
      * @param {ol/Feature} feature the feature containing datastream ids
      * @param {String[]} dataStreamIdsArray the array to push the datastream ids into
-     * @returns {Void}  -
+     * @returns {void}
      */
-    getDataStreamIdsHelper: function (feature, dataStreamIdsArray) {
-        let dataStreamIds = feature && feature.get("dataStreamId") !== undefined ? feature.get("dataStreamId") : "";
+    getDatastreamIdsHelper: function (feature, dataStreamIdsArray) {
+        let dataStreamIds = feature && typeof feature.get("dataStreamId") !== "undefined" ? feature.get("dataStreamId") : "";
 
         if (dataStreamIds.indexOf("|") >= 0) {
             dataStreamIds = dataStreamIds.split("|");
@@ -1078,39 +1078,39 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * get DataStreamIds for this layer - using dataStreamId property with expected pipe delimitors
-     * @param  {ol/Feature[]} features - features with datastream ids or features with features (see clustering) with datastreamids
-     * @return {String[]} dataStreamIdsArray - contains all datastream ids from this layer
+     * Getter for datastream ids for this layer - using dataStreamId property with expected pipe delimitors.
+     * @param {ol/Feature[]} features features with datastream ids or features with features (see clustering) with datastreamids
+     * @returns {String[]} an array containing all datastream ids from this layer
      */
-    getDataStreamIds: function (features) {
+    getDatastreamIds: function (features) {
         const dataStreamIdsArray = [];
 
         if (!Array.isArray(features)) {
             return [];
         }
 
-        features.forEach(function (feature) {
+        features.forEach(feature => {
             if (Array.isArray(feature.get("features"))) {
                 // obviously clustered featuers are activated
-                feature.get("features").forEach(function (subfeature) {
-                    this.getDataStreamIdsHelper(subfeature, dataStreamIdsArray);
-                }.bind(this));
+                feature.get("features").forEach(subfeature => {
+                    this.getDatastreamIdsHelper(subfeature, dataStreamIdsArray);
+                });
             }
             else {
-                this.getDataStreamIdsHelper(feature, dataStreamIdsArray);
+                this.getDatastreamIdsHelper(feature, dataStreamIdsArray);
             }
-        }.bind(this));
+        });
 
         return dataStreamIdsArray;
     },
 
     /**
-     * get feature by a given id
-     * @param  {array} features - features to seacrh for
-     * @param  {number} id - the if from examined feature
-     * @return {array} featureArray
+     * Getter for feature by a given id.
+     * @param {ol/Feature[]} features the features to search through
+     * @param {Number} id the id to lookup the feature for
+     * @returns {ol/Feature} the ol feature with the given id
      */
-    getFeatureByDataStreamId: function (features, id) {
+    getFeatureByDatastreamId: function (features, id) {
         let feature;
 
         if (features?.length > 0 && id) {
@@ -1123,12 +1123,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Creates the legend
+     * Creates the legend.
      * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @returns {void}
      */
     createLegend: function () {
-        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        const styleModel = getStyleModelById(this.get("styleId"));
         let legend = this.get("legend");
 
         /**
@@ -1158,17 +1158,17 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * clears all open layer features hold in the VectorSource
+     * Clears all open layer features hold in the VectorSource.
      * @post VectorSource is emptied
-     * @return {Void}  -
+     * @returns {void}
      */
     clearLayerSource: function () {
         this.get("layerSource").clear();
     },
 
     /**
-     * Setter for style
-     * @param {function}  value Stylefunction.
+     * Setter for style.
+     * @param {Function} value the style function
      * @returns {void}
      */
     setStyle: function (value) {
@@ -1176,8 +1176,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Setter for clusterLayerSource
-     * @param {ol/source/cluster} value clusterLayerSource
+     * Setter for clusterLayerSource.
+     * @param {ol/source/Cluster} value the clusterLayerSource
      * @returns {void}
      */
     setClusterLayerSource: function (value) {
@@ -1185,8 +1185,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Setter for isSubscribed
-     * @param {boolean} value isSubscribed
+     * Setter for isSubscribed.
+     * @param {Boolean} value the value to set isSubscribed
      * @returns {void}
      */
     setIsSubscribed: function (value) {
@@ -1194,8 +1194,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Setter for mqttClient
-     * @param {boolean} value mqttClient
+     * Setter for mqttClient.
+     * @param {Object} value the mqttClient to set
      * @returns {void}
      */
     setMqttClient: function (value) {
@@ -1203,8 +1203,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Setter for moveendListener
-     * @param {boolean} value moveendListener
+     * Setter for moveendListener.
+     * @param {Function} value the moveendListener to set
      * @returns {void}
      */
     setMoveendListener: function (value) {
@@ -1212,23 +1212,22 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Setter for SubscriptionTopics
-     * @param {Object} value the SubscriptionTopic as object
-     * @returns {Void}  -
+     * Setter for subscription topics for this instance.
+     * @param {Object} value the subscription topic as object
+     * @returns {void}
      */
     setSubscriptionTopics: function (value) {
         this.set("subscriptionTopics", value);
     },
 
     /**
-     * Setter for the HttpSubFolder
+     * Setter for the HttpSubFolder.
      * @param {String} value the httpSubFolder as String
-     * @returns {Void}  -
+     * @returns {void}
      */
     setHttpSubFolder: function (value) {
         this.set("httpSubFolder", value);
     }
-
 });
 
 export default SensorLayer;

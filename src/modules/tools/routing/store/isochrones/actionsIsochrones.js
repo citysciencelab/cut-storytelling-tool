@@ -1,7 +1,6 @@
 import {fetchRoutingOrsIsochrones} from "../../utils/isochrones/routing-ors-isochrones";
 import Polygon from "ol/geom/Polygon";
 import Feature from "ol/Feature";
-import mapCollection from "../../../../../core/dataStorage/mapCollection";
 
 export default {
     /**
@@ -19,7 +18,7 @@ export default {
                 waypoint.getCoordinates(),
                 {root: true}
             ),
-            map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode);
+            map = mapCollection.getMap(rootState.Maps.mode);
 
         commit("setIsLoadingIsochrones", true);
         await dispatch("resetIsochronesResult");
@@ -60,7 +59,7 @@ export default {
      * @returns {void}
      */
     zoomOnWaypoint ({state, rootState}) {
-        const map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode);
+        const map = mapCollection.getMap(rootState.Maps.mode);
 
         map.getView().fit(state.waypoint.getFeature().getGeometry(), {maxZoom: 7});
     },
@@ -110,9 +109,8 @@ export default {
      * @param {Object} context actions context object.
      * @returns {void}
      */
-    initIsochrones ({rootState, state, commit, dispatch}) {
-        const {isochronesPointLayer, isochronesAreaLayer, isochronesPointDrawInteraction, mapListenerAdded} = state,
-            map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode);
+    initIsochrones ({state, commit, dispatch}) {
+        const {isochronesPointLayer, isochronesAreaLayer, isochronesPointDrawInteraction, mapListenerAdded} = state;
 
         if (!mapListenerAdded) {
             isochronesPointDrawInteraction.on("drawend", event => dispatch("onIsochronesPointDrawEnd", event));
@@ -120,9 +118,8 @@ export default {
             commit("setMapListenerAdded", true);
         }
 
-        map.addLayer(isochronesAreaLayer);
-        map.addLayer(isochronesPointLayer);
-
+        dispatch("Maps/addLayerOnTop", isochronesAreaLayer, {root: true});
+        dispatch("Maps/addLayerOnTop", isochronesPointLayer, {root: true});
         dispatch("createIsochronesPointDrawInteraction");
     },
 
@@ -133,7 +130,7 @@ export default {
      */
     closeIsochrones ({rootState, state, dispatch}) {
         const {isochronesPointLayer, isochronesAreaLayer} = state,
-            map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode);
+            map = mapCollection.getMap(rootState.Maps.mode);
 
         map.removeLayer(isochronesPointLayer);
         map.removeLayer(isochronesAreaLayer);
@@ -146,9 +143,8 @@ export default {
      * @param {Object} event OL OnDrawEvent.
      * @returns {void}
      */
-    async onIsochronesPointDrawEnd ({state, dispatch, rootState}, event) {
+    async onIsochronesPointDrawEnd ({state, dispatch}, event) {
         const {waypoint, isochronesPointSource, isochronesPointDrawInteraction} = state,
-            map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode),
             coordinates = await dispatch(
                 "Tools/Routing/transformCoordinatesLocalToWgs84Projection",
                 event.feature.getGeometry().getCoordinates(),
@@ -166,7 +162,7 @@ export default {
         waypoint.setCoordinates(event.feature.getGeometry().getCoordinates());
         isochronesPointSource.removeFeature(event.feature);
 
-        map.removeInteraction(isochronesPointDrawInteraction);
+        dispatch("Maps/removeInteraction", isochronesPointDrawInteraction, {root: true});
     },
 
     /**
@@ -202,21 +198,19 @@ export default {
      * @param {Object} context actions context object.
      * @returns {void}
      */
-    createIsochronesPointDrawInteraction ({state, dispatch, rootState}) {
+    createIsochronesPointDrawInteraction ({state, dispatch}) {
         dispatch("removeIsochronesPointDrawInteraction");
         const {
-                isochronesPointModifyInteraction,
-                isochronesPointSnapInteraction,
-                isochronesPointDrawInteraction
-            } = state,
-
-            map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode);
+            isochronesPointModifyInteraction,
+            isochronesPointSnapInteraction,
+            isochronesPointDrawInteraction
+        } = state;
 
         if (state.waypoint.getCoordinates().length < 2) {
-            map.addInteraction(isochronesPointDrawInteraction);
+            dispatch("Maps/addInteraction", isochronesPointDrawInteraction, {root: true});
         }
-        map.addInteraction(isochronesPointModifyInteraction);
-        map.addInteraction(isochronesPointSnapInteraction);
+        dispatch("Maps/addInteraction", isochronesPointModifyInteraction, {root: true});
+        dispatch("Maps/addInteraction", isochronesPointSnapInteraction, {root: true});
     },
 
     /**
@@ -226,19 +220,17 @@ export default {
      * @param {Object} context actions context object.
      * @returns {void}
      */
-    removeIsochronesPointDrawInteraction ({state, rootState}) {
+    removeIsochronesPointDrawInteraction ({state, dispatch}) {
         const {
-                isochronesPointDrawInteraction,
-                isochronesPointModifyInteraction,
-                isochronesPointSnapInteraction
-            } = state,
-
-            map = mapCollection.getMap(rootState.Map.mapId, rootState.Map.mapMode);
+            isochronesPointDrawInteraction,
+            isochronesPointModifyInteraction,
+            isochronesPointSnapInteraction
+        } = state;
 
         isochronesPointDrawInteraction.abortDrawing();
 
-        map.removeInteraction(isochronesPointDrawInteraction);
-        map.removeInteraction(isochronesPointModifyInteraction);
-        map.removeInteraction(isochronesPointSnapInteraction);
+        dispatch("Maps/removeInteraction", isochronesPointDrawInteraction, {root: true});
+        dispatch("Maps/removeInteraction", isochronesPointModifyInteraction, {root: true});
+        dispatch("Maps/removeInteraction", isochronesPointSnapInteraction, {root: true});
     }
 };

@@ -530,7 +530,7 @@ function zoomOut () {
  * @returns {void}
  */
 function setResolution () {
-    Backbone.Radio.trigger("MapView", "setConstrainedResolution", arguments[0], 0);
+    Backbone.Radio.trigger("MapView", "setResolution", arguments[0]);
 }
 
 /**
@@ -543,6 +543,18 @@ function getOrderedLayerIds () {
         .request("Map", "getMap")
         .getLayers()
         .getArray()
+        .sort((layer1, layer2) => {
+            const a = layer1.get("zIndex"),
+                b = layer2.get("zIndex");
+
+            if (a < b) {
+                return -1;
+            }
+            if (a > b) {
+                return 1;
+            }
+            return 0;
+        })
         .map(layer => {
             if (layer.get("id")) {
                 // if id available, use it

@@ -3,26 +3,25 @@ import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersWmsTime";
 import mutations from "../store/mutationsWmsTime";
 import actions from "../store/actionsWmsTime";
-import mapCollection from "../../../core/dataStorage/mapCollection.js";
 
 export default {
     name: "LayerSwiper",
     computed: {
-        ...mapGetters("Map", ["visibleLayerList", "mapMode", "mapId"]),
+        ...mapGetters("Maps", ["visibleLayerList", "mode"]),
         ...mapGetters("WmsTime", Object.keys(getters))
     },
     mounted () {
         const target = document.getElementById("wmsTime-layerSwiper-button");
 
         this.setLayerSwiperTargetLayer(this.visibleLayerList.find(element => element.values_.id === this.currentTimeSliderObject.layerId + this.layerAppendix));
-        this.setLayerSwiperValueX(mapCollection.getMap(this.mapId, this.mapMode).getSize()[0] / 2);
-        mapCollection.getMap(this.mapId, this.mapMode).on("postcompose", this.updateMap);
+        this.setLayerSwiperValueX(mapCollection.getMap(this.mode).getSize()[0] / 2);
+        mapCollection.getMap(this.mode).on("postcompose", this.updateMap);
 
         target.focus();
         this.setLayerSwiperDomSwiper(target);
     },
     beforeDestroy: function () {
-        mapCollection.getMap(this.mapId, this.mapMode).un("postcompose", this.updateMap);
+        mapCollection.getMap(this.mode).un("postcompose", this.updateMap);
     },
     methods: {
         ...mapMutations("WmsTime", Object.keys(mutations)),
@@ -51,12 +50,12 @@ export default {
     />
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 @import "~variables";
 
 button {
     width: 50px;
-    background-color: @primary;
+    background-color: $light_grey;
     height: 30px;
     max-height: 100px;
     position: absolute;
@@ -73,7 +72,7 @@ button {
         bottom: -5000px;
         left: 50%;
         width: 4px;
-        background: @primary_contrast;
+        background: $light_grey_contrast;
         z-index: -1;
         transform: translate(-2px, 0);
         -webkit-transform: translate(-2px, 0);

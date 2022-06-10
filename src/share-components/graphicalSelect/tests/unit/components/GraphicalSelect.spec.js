@@ -11,12 +11,10 @@ const localVue = createLocalVue(),
     mockMapGetters = {
     },
     mockMapActions = {
+        addLayerOnTop: sinon.stub(),
         removeInteraction: sinon.stub(),
-        addInteraction: sinon.stub()
-    },
-    mockMapMutations = {
-        addLayerToMap: sinon.stub(),
-        removeLayerFromMap: sinon.stub()
+        addInteraction: sinon.stub(),
+        registerListener: sinon.stub()
     };
 
 localVue.use(Vuex);
@@ -40,10 +38,9 @@ describe("src/share-components/graphicalSelect/components/GraphicalSelect.vue", 
             namespaces: true,
             modules: {
                 GraphicalSelect: GraphicalSelectModule,
-                Map: {
+                Maps: {
                     namespaced: true,
                     getters: mockMapGetters,
-                    mutations: mockMapMutations,
                     actions: mockMapActions
                 }
             }
@@ -64,17 +61,17 @@ describe("src/share-components/graphicalSelect/components/GraphicalSelect.vue", 
             expect(formElement.exists()).to.be.true;
         });
 
-        it("the form element has a select element of class form-control", () => {
+        it("the form element has a select element of class form-select", () => {
             const wrapper = shallowMount(GraphicalSelectComponent, {store, localVue, parentComponent: Parent, stubs: {"Dropdown": Dropdown}}),
-                formElement = wrapper.find("select.form-control");
+                formElement = wrapper.find("select.form-select");
 
             expect(formElement.exists()).to.be.true;
         });
 
-        it("the select element of class form-control has at least one option element", () => {
+        it("the select element of class form-select has at least one option element", () => {
             const wrapper = shallowMount(GraphicalSelectComponent, {store, localVue, parentComponent: Parent, stubs: {"Dropdown": Dropdown}});
 
-            expect(wrapper.findAll("select.form-control > option")).to.not.have.lengthOf(0);
+            expect(wrapper.findAll("select.form-select > option")).to.not.have.lengthOf(0);
         });
 
         it("options contain only provided draw modus", () => {

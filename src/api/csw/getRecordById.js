@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as moment from "moment";
-import xml2json from "../xml2json";
+import xml2json from "../utils/xml2json";
 import getNestedValues from "../../utils/getNestedValues";
 
 /**
@@ -157,7 +157,7 @@ function parseDownloadLinks (json) {
                     // location (address) for on-line access
                     link: resource?.linkage?.URL.getValue(),
                     // name of the online resource
-                    linkName: resource?.name?.CharacterString.getValue() || resource?.linkage?.URL.getValue()
+                    linkName: resource?.name?.CharacterString.getValue() || resource?.description?.CharacterString.getValue() || resource?.linkage?.URL.getValue()
                 });
             }
         });

@@ -1,11 +1,26 @@
 {
     "masterPortalVersion": "Masterportal V. {{masterPortalVersionNumber}}",
+    "general": {
+        "opened": "Abierto",
+        "cancelled": "Anulado",
+        "error": "Error",
+        "success": "Éxito"
+    },
     "button": {
         "back": "Volver",
         "download": "Descargar",
         "search": "Buscar",
         "close": "Cerrar",
-        "minimize": "Minimizar"
+        "minimize": "Minimizar",
+        "confirm": "Confirmar",
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "save": "Salvar",
+        "cancel": "Cancelar",
+        "open": "Abrir",
+        "load": "Carga",
+        "reset": "Reiniciar",
+        "stop": "Detener"
     },
     "colors": {
         "blue": "Azul",
@@ -50,7 +65,7 @@
             "scaleSwitcher": "Cambiar escala",
             "selectFeatures": "Seleccionar entidad",
             "legend":"Leyenda",
-            "styleVt": "Estilo VT"
+            "styleVt": "Estilo Vector Tile Layers"
         },
         "contact": "Contacto",
         "info": "Información"
@@ -96,7 +111,6 @@
             }
           },
           "parametricURL": {
-            "alertZoomToGeometry": "¡La llamada parametrizada del portal lamentablemente salió mal!<br>Asegúrese de que todos los parámetros se han introducido correctamente.",
             "alertWrongLayerIds": "<strong>¡La llamada parametrizada es defectuosa!</strong></br>¡El <b>id layer</b> en esa porición: {{wrongIdsPositionsConcat}} no existe y se ignorara!"
           }
         },
@@ -121,8 +135,11 @@
             "en": "English",
             "es": "Español",
             "it": "Italiano",
+            "platt": "Platt",
             "pt": "Português",
-            "tr": "Türkçe"
+            "ru": "Русский",
+            "tr": "Türkçe",
+            "ua": "Українська"
         },
         "cswParser": {
             "noMetadataMessage": "Metadatos no disponibles.",
@@ -175,7 +192,8 @@
                 "geometryNotSupported": "Entidad via URL: Del tipo de geometría {{geometryType}} declarado en la configuración para la capa {{layerId}} no es compatible.",
                 "layerNotFound": "Entidad via URL: No se ha podido encontrar ninguna capa con el ID {{layerId}}.",
                 "noLayers": "Entidad via URL: Para las entidades transferidas no se ha definido ninguna capa en la configuración.",
-                "noNameDefined": "Entidad via URL: No se ha definido ningún nombre para la capa con el ID {{layerId}} en la configuración."
+                "noNameDefined": "Entidad via URL: No se ha definido ningún nombre para la capa con el ID {{layerId}} en la configuración.",
+                "defaultTreeNotSupported": "FeatureViaURL: FeatureViaURL est uniquement pris en charge pour Treetype custom ou light."
             }
         },
         "quickHelp": {
@@ -226,7 +244,6 @@
                 "errorHttpsMessage": " &#10060; El WMS que ha solicitado se encuentra bajo una http-url. El portal principal sólo puede integrar WMS a través de https (SSL).",
                 "errorEmptyUrl": "¡Introduzca aqui por favor la URL de un Servicio WMS!",
                 "placeholder": "Introduzca aquí la WMS-URL.",
-                "textExample": "Por ejemplo: https://geodienste.hamburg.de/HH_WMS_Gruenes_Netz",
                 "textLoadLayer": "Cargar capa",
                 "ifInExtent": "&#10060; Los geodatos proporcionados a través del WMS están fuera del área de visualización. No es posible añadir el servicio WMS.",
                 "checkVersion": "&#10060; Añadir WMS sólo es posible si la versión de la capa WMS externa es igual o superior a 1.3.0."
@@ -311,7 +328,7 @@
                 "more": "Más...",
                 "detailsOfSelected": "Detalles de la característica seleccionada",
                 "alert": "El intento de mostrar la característica seleccionada falló, porque no tiene geometría.",
-                "key": "{{shownFeatures.x}} de {{shownFeatures.y}} entidades listadas"
+                "key": "{{shownFeatures}} de {{featureCount}} entidades listadas"
             },
             "layerSlider": {
                 "displayLayers": "Visualización de varias capas.",
@@ -321,15 +338,6 @@
                 "serviceTwo": "Servicio 2",
                 "serviceThree": "Servicio 3",
                 "serviceFour": "Servicio 4"
-            },
-            "filter": {
-                "result": "Acierto",
-                "results": "Acierto",
-                "zoomOnResults": "Acercar y centrar el acierto",
-                "filter": "-Filtro",
-                "yourSelection": "Su elección: ",
-                "noFilterOptionSelected": "Todavía no se ha seleccionado ningun filtro",
-                "deleteAll":"Borrarlo todo"
             },
             "pendler": {
                 "animation": {
@@ -693,7 +701,8 @@
                 "address": "Dirección",
                 "location": "Lugar",
                 "subject": "Tema específico",
-                "topic": "Tema"
+                "topic": "Tema",
+                "general": "Tema"
             },
             "specialWFS": {
                 "ongoing": "en proceso",
@@ -724,11 +733,6 @@
             "linkToPdf": "A la leyenda externa (PDF)",
             "noLegendForLayerInfo": "Leyenda no disponible",
             "toggleCollapseAll": "Mostrar/ocultar todas las leyendas"
-        },
-        "zoomToGeometry": {
-          "alertNoFoundFeature" : "No se ha encontrado ningún objeto. Compruebe los parámetros de entrada.",
-          "alertParameterizedAccess": "¡La llamada parametrizada del portal lamentablemente salió mal!",
-          "alertRequiredService": "Detalles: Un servicio requerido no responde."
         },
         "util": {
             "copyToClipboard": {
