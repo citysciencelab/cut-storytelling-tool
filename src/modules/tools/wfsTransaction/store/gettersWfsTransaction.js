@@ -7,17 +7,17 @@ const getters = {
         // TODO(roehlipa): Adjust doc for edit and delete and functionality
         // TODO(roehlipa): Add config and interactions to call on click
         const configuration = {
-            line: {
+            LineString: {
                 available: false,
                 caption: "common:modules.tools.wfsTransaction.interactionSelect.line",
                 icon: "bi-slash-lg"
             },
-            point: {
+            Point: {
                 available: false,
                 caption: "common:modules.tools.wfsTransaction.interactionSelect.point",
                 icon: "bi-record-circle"
             },
-            polygon: {
+            Polygon: {
                 available: false,
                 caption: "common:modules.tools.wfsTransaction.interactionSelect.polygon",
                 icon: "bi-hexagon-fill"
@@ -34,9 +34,9 @@ const getters = {
             configuration[val].available = typeof state[val] === "boolean" ? state[val] : true;
             configuration[val].caption = typeof state[val] === "string" ? state[val] : `common:modules.tools.wfsTransaction.interactionSelect.${val}`;
         });
-        ["line", "point", "polygon"].forEach(val => {
+        ["LineString", "Point", "Polygon"].forEach(val => {
             // TODO(roehlipa): Do extra step for "areaButton" -> soon to be deprecated parameter
-            const geometryConfiguration = state[val + "Button"];
+            const geometryConfiguration = state[(val.endsWith("String") ? val.replace("String", "") : val).toLowerCase() + "Button"];
             let layerConfiguration = null;
 
             if (!geometryConfiguration) {
