@@ -25,6 +25,7 @@
 
 ### Fixed
 - Lines imported as KML can now be edited and modified with the Draw tool.
+- Issue #663: Fixed tool Buffer Analysis where layer visibility updates would not be recognized in custom trees. Now, all visible layers at tool starting time are available within the tool.
 
 ---
 
@@ -34,8 +35,6 @@
 - Issue #790: Resolve import of isObject util failed was fixed.
 - The Sensor Data GFI theme's layout is correct now.
 - A console warning on creating an entities-layer was removed.
-
-- Issue #663: Fixed tool Buffer Analysis where layer visibility updates would not be recognized in custom trees. Now, all visible layers at tool starting time are available within the tool.
 
 ---
 
