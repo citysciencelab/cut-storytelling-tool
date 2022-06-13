@@ -179,15 +179,17 @@ export default {
                     dropdownValue.push(value);
                 });
             }
-            dropdownValue.sort((a, b) => {
-                if (typeof this.localeCompareParams === "string") {
-                    return localeCompare(a, b, this.localeCompareParams);
-                }
-                else if (isObject(this.localeCompareParams)) {
-                    return localeCompare(a, b, this.localeCompareParams.locale, this.localeCompareParams.options);
-                }
-                return localeCompare(a, b);
-            });
+            if (!Array.isArray(this.value)) {
+                dropdownValue.sort((a, b) => {
+                    if (typeof this.localeCompareParams === "string") {
+                        return localeCompare(a, b, this.localeCompareParams);
+                    }
+                    else if (isObject(this.localeCompareParams)) {
+                        return localeCompare(a, b, this.localeCompareParams.locale, this.localeCompareParams.options);
+                    }
+                    return localeCompare(a, b);
+                });
+            }
 
             if (this.multiselect && this.addSelectAll) {
                 return [{
