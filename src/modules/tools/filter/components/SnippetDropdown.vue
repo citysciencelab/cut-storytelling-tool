@@ -227,7 +227,7 @@ export default {
             }
 
             if (adjusting?.start) {
-                if (this.snippetId !== adjusting.snippetId) {
+                if (this.snippetId !== adjusting.snippetId && (!Array.isArray(adjusting.snippetId) || !adjusting.snippetId.includes(this.snippetId))) {
                     this.dropdownValue = [];
                 }
                 this.isAdjusting = true;
