@@ -155,14 +155,14 @@ GroupedLayers.prototype.showLayerInformation = function () {
 
     store.dispatch("LayerInformation/layerInfo", {
         "id": this.get("id"),
-        "metaID": metaID[0],
+        "metaID": metaID.find(x => x),
         "metaIdArray": metaID,
         "layername": name,
         "layerNames": layerNames,
         "url": null,
         "typ": null,
-        "cswUrl": cswUrls[0],
-        "showDocUrl": showDocUrls[0],
+        "cswUrl": cswUrls.find(x => x),
+        "showDocUrl": showDocUrls.find(x => x),
         "urlIsVisible": this.get("urlIsVisible")
     });
 

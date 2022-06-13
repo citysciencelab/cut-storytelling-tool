@@ -43,7 +43,9 @@ describe("src/modules/LayerInformation.vue - GroupLayer", () => {
                         noMetadataLoaded: () => "",
                         metaURLs: () => [],
                         currentLayerName: () => "",
-                        showUrlGlobal: () => false
+                        showUrlGlobal: () => false,
+                        displayableLayerNames: () => ["name", "name_name"],
+                        displayableMetaIdArray: () => ["123", "456"]
                     },
                     actions: {
                         activate: () => sinon.stub(),
