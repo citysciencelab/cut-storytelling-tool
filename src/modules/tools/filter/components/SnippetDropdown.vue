@@ -350,7 +350,7 @@ export default {
                 return [];
             }
             else if (isObject(dropdownValue[0])) {
-                return dropdownValue[0]?.list;
+                return Array.isArray(dropdownValue[0].list) ? dropdownValue[0].list : [];
             }
             return dropdownValue;
         },
@@ -454,7 +454,7 @@ export default {
                 if (delimitor && typeof value === "string" && value.indexOf(delimitor)) {
                     this.addDropdownValueForAdjustment(dropdownValue, configValue, value.split(delimitor), false);
                 }
-                else if (!dropdownValueAssoc[value] && (!Array.isArray(configValue) || configValue[value])) {
+                else if (!dropdownValueAssoc[value] && (!Array.isArray(configValue) || Array.isArray(configValue) && configValueAssoc[value])) {
                     dropdownValueAssoc[value] = true;
                     this.dropdownValue.push(value);
                 }
