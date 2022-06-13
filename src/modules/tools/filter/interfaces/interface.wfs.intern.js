@@ -49,30 +49,37 @@ export default class InterfaceWfsIntern {
     }
 
     /**
-     * Returns the min and max values of the given service and attrName.
+     * Returns the min and max value of the given service and attrName.
      * @param {Object} service the service to call, identical to filterQuestion.service
      * @param {String} attrName the attribute to receive the min and max value from
-     * @param {Function} onsuccess a function({min, max}) with the received values
+     * @param {Function} onsuccess a function({min, max}) with the received value
      * @param {Function} onerror a function(errorMsg)
      * @param {Boolean} [minOnly=false] if only min is of interest
      * @param {Boolean} [maxOnly=false] if only max is of interest
      * @param {Boolean} [isDate=false] if only from date type or dateRange type
+     * @param {Object} filterQuestion an object of with keys rules, filterId and format (only for date)
+     * @param {Object[]} filterQuestion.rules the rules
+     * @param {Number} filterQuestion.filterId the filterId
+     * @param {String} filterQuestion.format the date format - only needed if isDate is true
      * @returns {void}
      */
-    getMinMax (service, attrName, onsuccess, onerror, minOnly, maxOnly, isDate) {
-        return this.interfaceWfsExtern.getMinMax(service, attrName, onsuccess, onerror, minOnly, maxOnly, isDate);
+    getMinMax (service, attrName, onsuccess, onerror, minOnly, maxOnly, isDate, filterQuestion) {
+        return this.interfaceWfsExtern.getMinMax(service, attrName, onsuccess, onerror, minOnly, maxOnly, isDate, filterQuestion);
     }
 
     /**
-     * Returns a list of unique values (unsorted) of the given service and attrName.
+     * Returns a list of unique value (unsorted) of the given service and attrName.
      * @param {Object} service the service to call, identical to filterQuestion.service
-     * @param {String} attrName the attribute to receive unique values from
-     * @param {Function} onsuccess a function([]) with the received unique values as Array of values
+     * @param {String} attrName the attribute to receive unique value from
+     * @param {Function} onsuccess a function([]) with the received unique value as Array of value
      * @param {Function} onerror a function(errorMsg)
+     * @param {Object} filterQuestion an object of with keys rules and filterId
+     * @param {Object[]} filterQuestion.rules the rules
+     * @param {Number} filterQuestion.filterId the filterId
      * @returns {void}
      */
-    getUniqueValues (service, attrName, onsuccess, onerror) {
-        return this.interfaceWfsExtern.getUniqueValues(service, attrName, onsuccess, onerror);
+    getUniqueValues (service, attrName, onsuccess, onerror, filterQuestion) {
+        return this.interfaceWfsExtern.getUniqueValues(service, attrName, onsuccess, onerror, filterQuestion);
     }
 
     /**
@@ -205,13 +212,13 @@ export default class InterfaceWfsIntern {
     }
 
     /**
-     * Checks if the given feature values match with the given rule.
+     * Checks if the given feature value match with the given rule.
      * @param {Object} rule the rule object
      * @param {String} rule.operator the operator to use
      * @param {*} [rule.value] a single value
      * @param {*} featureValue the value of the feature to check
      * @param {*} [featureValue2] the second value to check for ranges with
-     * @returns {Boolean} true if the rule matches the given feature values, false if not
+     * @returns {Boolean} true if the rule matches the given feature value, false if not
      */
     checkRule (rule, featureValue, featureValue2) {
         if (
@@ -259,7 +266,7 @@ export default class InterfaceWfsIntern {
 
     /**
      * Checks a reference and returns the given value as type of the reference.
-     * @info will also convert the values of a given array in depth
+     * @info will also convert the value of a given array in depth
      * @param {*} value the value of the rule to match featValue to
      * @param {*} reference the reference to match value for
      * @param {Number} [depth=0] the depth of the recursion to avoid infinit loop
