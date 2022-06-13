@@ -338,6 +338,21 @@ export default {
             return this.title || this.attrName;
         },
         /**
+         * Returns the computed dropdown value to display in the list.
+         * @returns {String[]} An array of value to display.
+         */
+        getDropdownValueForList () {
+            const dropdownValue = this.dropdownValueComputed;
+
+            if (!Array.isArray(dropdownValue) || !dropdownValue.length) {
+                return [];
+            }
+            else if (isObject(dropdownValue[0])) {
+                return dropdownValue[0]?.list;
+            }
+            return dropdownValue;
+        },
+        /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
          * @param {Boolean} [startup=false] true if the call comes on startup, false if a user actively changed a snippet
@@ -557,8 +572,8 @@ export default {
                     </a>
                 </div>
                 <div
-                    v-for="val in dropdownValue"
-                    :key="val"
+                    v-for="val in getDropdownValueForList()"
+                    :key="snippetId + '-' + val"
                     class="grid-item"
                 >
                     <span
