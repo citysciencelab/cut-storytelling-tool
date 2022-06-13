@@ -17,6 +17,7 @@ import {compileSnippets} from "../utils/compileSnippets.js";
 import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
 import {getSnippetAdjustments} from "../utils/getSnippetAdjustments.js";
 import {getLayerByLayerId} from "../utils/openlayerFunctions";
+import {isRule} from "../utils/isRule.js";
 
 export default {
     name: "LayerFilterSnippet",
@@ -57,11 +58,20 @@ export default {
             type: Number,
             required: false,
             default: 0
+        },
+        filterRules: {
+            type: Array,
+            required: false,
+            default: () => []
+        },
+        filterHits: {
+            type: [Number, Boolean],
+            required: false,
+            default: undefined
         }
     },
     data () {
         return {
-            rules: [],
             paging: {
                 page: 0,
                 total: 0
@@ -115,6 +125,20 @@ export default {
                     this.handleActiveStrategy(snippetIds);
                 }
             }
+        },
+        amountOfFilteredItems (val) {
+            if (this.isStrategyActive()) {
+                return;
+            }
+            let amount = val;
+
+            if (typeof val !== "number") {
+                amount = false;
+            }
+            this.$emit("updateFilterHits", {
+                filterId: this.layerConfig?.filterId,
+                hits: amount
+            });
         }
     },
     created () {
@@ -140,10 +164,38 @@ export default {
         }, error => {
             console.warn(error);
         });
+
+        this.setSnippetValueByState(this.filterRules);
+        if (typeof this.filterHits === "number" && !this.isStrategyActive()) {
+            this.amountOfFilteredItems = this.filterHits;
+        }
     },
     methods: {
+        isRule,
         translateKeyWithPlausibilityCheck,
 
+        /**
+         * Set the prechecked value for each snippet by state data.
+         * @param {Object[]} rules an array of rules
+         * @returns {void}
+         */
+        setSnippetValueByState (rules) {
+            if (!Array.isArray(rules)) {
+                return;
+            }
+
+            rules.forEach(rule => {
+                if (this.isRule(rule)) {
+                    if (this.snippets[rule.snippetId]?.type === "dropdown"
+                        || this.snippets[rule.snippetId]?.type === "sliderRange"
+                        || this.snippets[rule.snippetId]?.type === "dateRange"
+                        && !Array.isArray(rule?.value)) {
+                        this.snippets[rule.snippetId].prechecked = [rule?.value];
+                    }
+                    this.snippets[rule.snippetId].prechecked = rule?.value;
+                }
+            });
+        },
         /**
          * Getter for a snippet configuration by snippetId.
          * @param {Number} snippetId the id to return the snippet for
@@ -244,29 +296,14 @@ export default {
             });
         },
         /**
-         * Checks if the given structure is a rule.
-         * @param {*} something the unknown structure to check
-         * @returns {Boolean} true if this is a rule, false if not
-         */
-        isRule (something) {
-            return !(
-                typeof something !== "object" || something === null
-                || typeof something?.snippetId !== "number"
-                || typeof something?.startup !== "boolean"
-                || typeof something?.fixed !== "boolean"
-                || typeof something?.attrName !== "string" && !Array.isArray(something.attrName)
-                || typeof something?.operator !== "string"
-            );
-        },
-        /**
          * Checks if there are rules with fixed=false in the set of rules.
          * @returns {Boolean} true if there are unfixed rules, false if no rules or only fixed rules are left
          */
         hasUnfixedRules () {
-            const len = this.rules.length;
+            const len = this.filterRules.length;
 
             for (let i = 0; i < len; i++) {
-                if (!this.rules[i] || this.isRule(this.rules[i]) && this.rules[i].fixed) {
+                if (!this.filterRules[i] || this.isRule(this.filterRules[i]) && this.filterRules[i].fixed) {
                     continue;
                 }
                 return true;
@@ -309,7 +346,11 @@ export default {
          */
         changeRule (rule) {
             if (this.isRule(rule)) {
-                this.$set(this.rules, rule.snippetId, rule);
+                this.$emit("updateRules", {
+                    filterId: this.layerConfig.filterId,
+                    snippetId: rule.snippetId,
+                    rule
+                });
                 this.deleteRulesOfChildren(this.getSnippetById(rule.snippetId));
                 if (!rule.startup && (this.isStrategyActive() || this.isParentSnippet(rule.snippetId))) {
                     this.$nextTick(() => {
@@ -324,7 +365,14 @@ export default {
          * @returns {void}
          */
         deleteRule (snippetId) {
-            this.$set(this.rules, snippetId, false);
+            if (typeof snippetId !== "number") {
+                return;
+            }
+            this.$emit("updateRules", {
+                filterId: this.layerConfig.filterId,
+                snippetId,
+                rule: false
+            });
             this.deleteRulesOfChildren(this.getSnippetById(snippetId));
             if (this.isStrategyActive() || this.isParentSnippet(snippetId)) {
                 this.$nextTick(() => {
@@ -343,7 +391,14 @@ export default {
                 return;
             }
             parent.children.forEach(child => {
-                this.$set(this.rules, child?.snippetId, false);
+                if (typeof child?.snippetId !== "number") {
+                    return;
+                }
+                this.$emit("updateRules", {
+                    filterId: this.layerConfig.filterId,
+                    snippetId: child.snippetId,
+                    rule: false
+                });
                 this.deleteRulesOfChildren(child);
             });
         },
@@ -352,13 +407,14 @@ export default {
          * @returns {void}
          */
         deleteAllRules () {
-            const len = this.rules.length;
+            this.$emit("deleteAllRules", {
+                filterId: this.layerConfig.filterId
+            });
 
-            for (let i = 0; i < len; i++) {
-                if (this.isRule(this.rules[i]) && this.rules[i].fixed) {
-                    continue;
-                }
-                this.$set(this.rules, i, false);
+            if (this.isStrategyActive()) {
+                this.$nextTick(() => {
+                    this.handleActiveStrategy();
+                });
             }
         },
         /**
@@ -368,7 +424,7 @@ export default {
         getCleanArrayOfRules () {
             const result = [];
 
-            this.rules.forEach(rule => {
+            this.filterRules.forEach(rule => {
                 if (!this.isRule(rule)) {
                     return;
                 }
@@ -381,16 +437,16 @@ export default {
          * @returns {Boolean} true if only parents have rules left in rules.
          */
         hasOnlyParentRules () {
-            if (!Array.isArray(this.rules)) {
+            if (!Array.isArray(this.filterRules)) {
                 return false;
             }
-            const len = this.rules.length;
+            const len = this.filterRules.length;
             let hasAnyRules = false;
 
             for (let i = 0; i < len; i++) {
-                if (this.isRule(this.rules[i])) {
+                if (this.isRule(this.filterRules[i])) {
                     hasAnyRules = true;
-                    if (!this.isParentSnippet(this.rules[i].snippetId)) {
+                    if (!this.isParentSnippet(this.filterRules[i].snippetId)) {
                         return false;
                     }
                 }
@@ -468,7 +524,15 @@ export default {
                             this.mapHandler.clearLayer(filterId, this.isExtern());
                         }
 
-                        if (!this.isParentSnippet(snippetId) && !this.hasOnlyParentRules() && (Array.isArray(filterQuestion.rules) && filterQuestion.rules.length)) {
+                        if (!this.isParentSnippet(snippetId) && !this.hasOnlyParentRules()) {
+                            if (this.layerConfig.clearAll && (!Array.isArray(filterQuestion.rules) || !filterQuestion.rules.length)) {
+                                this.amountOfFilteredItems = false;
+                                if (typeof onsuccess === "function") {
+                                    onsuccess(filterAnswer);
+                                }
+                                return;
+                            }
+
                             this.mapHandler.addItemsToLayer(filterId, filterAnswer.items, this.isExtern());
                             if (!Object.prototype.hasOwnProperty.call(this.layerConfig, "showHits") || this.layerConfig.showHits) {
                                 this.amountOfFilteredItems = this.mapHandler.getAmountOfFilteredItemsByFilterId(filterId);
@@ -606,7 +670,7 @@ export default {
                 />
             </div>
             <div
-                v-for="(rule, ruleIndex) in rules"
+                v-for="(rule, ruleIndex) in filterRules"
                 :key="'rule-' + ruleIndex"
                 class="snippetTagsWrapper"
             >

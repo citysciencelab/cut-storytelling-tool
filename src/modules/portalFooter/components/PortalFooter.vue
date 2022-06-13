@@ -174,7 +174,7 @@ export default {
         }
 
         a[target=_blank]{
-            color: $dark_blue;
+            color: $primary;
         }
 
         .portal-footer-scaleLine {

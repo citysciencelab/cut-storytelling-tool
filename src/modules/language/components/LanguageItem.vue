@@ -100,7 +100,7 @@ export default {
         .current-language {
             display: block;
             position: relative;
-            color: $dark_blue;
+            color: $primary;
 
             cursor: pointer;
 

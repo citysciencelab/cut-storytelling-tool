@@ -199,7 +199,7 @@ export default {
         /* use old styling way for icons for old controls */
         .bootstrap-icon {
             color: $white;
-            background-color: $dark_blue;
+            background-color: $primary;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
         }
         > .toggleButtonPressed {

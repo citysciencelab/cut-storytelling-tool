@@ -200,7 +200,7 @@ export default {
                 this.removeInteractionFromMap(this.selectPointerMove);
                 this.setSelectPointerMove(null);
             }
-            if (this.mapMode === "3D") {
+            if (this.mapMode === "3D" && this.eventHandler) {
                 this.eventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
             }
         },

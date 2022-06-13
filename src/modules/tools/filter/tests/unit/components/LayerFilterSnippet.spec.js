@@ -54,29 +54,8 @@ describe("src/modules/tools/filter/components/LayerFilterSnippet.vue", () => {
             expect(wrapper.vm.searchInMapExtent).to.be.true;
         });
     });
-    describe("isRule", () => {
-        it("should return false if anything but a rule is given", () => {
-            expect(wrapper.vm.isRule(undefined)).to.be.false;
-            expect(wrapper.vm.isRule(null)).to.be.false;
-            expect(wrapper.vm.isRule("string")).to.be.false;
-            expect(wrapper.vm.isRule(1234)).to.be.false;
-            expect(wrapper.vm.isRule(true)).to.be.false;
-            expect(wrapper.vm.isRule(false)).to.be.false;
-            expect(wrapper.vm.isRule([])).to.be.false;
-            expect(wrapper.vm.isRule({})).to.be.false;
-        });
-        it("should return true if a rule is given", () => {
-            expect(wrapper.vm.isRule({
-                snippetId: 0,
-                startup: false,
-                fixed: false,
-                attrName: "",
-                operator: ""
-            })).to.be.true;
-        });
-    });
     describe("changeRule", () => {
-        it("should add the new rule", () => {
+        it("should emit the updateRules event", async () => {
             wrapper.vm.changeRule({
                 snippetId: 0,
                 startup: false,
@@ -84,53 +63,19 @@ describe("src/modules/tools/filter/components/LayerFilterSnippet.vue", () => {
                 attrName: "test",
                 operator: "EQ"
             });
-            expect(wrapper.vm.rules).to.deep.equal([{
-                snippetId: 0,
-                startup: false,
-                fixed: false,
-                attrName: "test",
-                operator: "EQ"
-            }]);
-        });
-        it("should change an existing rule", () => {
-            wrapper.vm.changeRule({
-                snippetId: 0,
-                startup: false,
-                fixed: false,
-                attrName: "test",
-                operator: "EQ"
-            });
-            wrapper.vm.changeRule({
-                snippetId: 0,
-                startup: false,
-                fixed: false,
-                attrName: "test",
-                operator: "IN"
-            });
-            expect(wrapper.vm.rules).to.deep.equal([{
-                snippetId: 0,
-                startup: false,
-                fixed: false,
-                attrName: "test",
-                operator: "IN"
-            }]);
+            await wrapper.vm.$nextTick();
+            expect(wrapper.emitted().updateRules).to.be.an("array").with.lengthOf(1);
         });
     });
     describe("deleteRule", () => {
-        it("should delete an existing rule", () => {
-            wrapper.vm.changeRule({
-                snippetId: 0,
-                startup: false,
-                fixed: false,
-                attrName: "test",
-                operator: "EQ"
-            });
+        it("should emit the update function", async () => {
             wrapper.vm.deleteRule(0);
-            expect(wrapper.vm.rules).to.deep.equal([false]);
+            await wrapper.vm.$nextTick();
+            expect(wrapper.emitted().updateRules).to.be.an("array").with.lengthOf(1);
         });
     });
     describe("hasUnfixedRules", () => {
-        it("should return false if there are no rules with fixed=false", () => {
+        it("should return false if there are no rules with fixed=false", async () => {
             wrapper.vm.changeRule({
                 snippetId: 1,
                 startup: false,
@@ -138,22 +83,27 @@ describe("src/modules/tools/filter/components/LayerFilterSnippet.vue", () => {
                 attrName: "test",
                 operator: "EQ"
             });
+            await wrapper.vm.$nextTick();
             expect(wrapper.vm.hasUnfixedRules()).to.be.false;
         });
-        it("should return true if there are rules with fixed=false in the rules", () => {
-            wrapper.vm.changeRule({
-                snippetId: 0,
-                startup: false,
-                fixed: false,
-                attrName: "test",
-                operator: "EQ"
-            });
-            wrapper.vm.changeRule({
-                snippetId: 1,
-                startup: false,
-                fixed: true,
-                attrName: "test",
-                operator: "EQ"
+        it("should return true if there are rules with fixed=false in the rules", async () => {
+            await wrapper.setProps({
+                filterRules: [
+                    {
+                        snippetId: 0,
+                        startup: false,
+                        fixed: false,
+                        attrName: "test",
+                        operator: "EQ"
+                    },
+                    {
+                        snippetId: 1,
+                        startup: false,
+                        fixed: true,
+                        attrName: "test",
+                        operator: "EQ"
+                    }
+                ]
             });
             expect(wrapper.vm.hasUnfixedRules()).to.be.true;
         });

@@ -7,18 +7,33 @@
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 
 ---
+
 ## Unreleased - in development
 ### __Breaking Changes__
 
 ### Added
+- FilterModule:
+    - A new attribute clearAll for clearing all the filtered results after clicking button "Reset All"
 
 ### Changed
 
 ### Deprecated
 
 ### Removed
+- Deleted the following snippets: dropdown, exportButton, graphicalSelect, multiCheckbox.
+- Removed the dependency `bootstrap-select`.
 
 ### Fixed
+- Lines imported as KML can now be edited and modified with the Draw tool.
+
+---
+
+## v2.22.1 - 2202-06-08
+### Fixed
+- The light grey color in Search and transparency are now dark
+- Issue #790: Resolve import of isObject util failed was fixed.
+- The Sensor Data GFI theme's layout is correct now.
+- A console warning on creating an entities-layer was removed.
 
 - Issue #663: Fixed tool Buffer Analysis where layer visibility updates would not be recognized in custom trees. Now, all visible layers at tool starting time are available within the tool.
 

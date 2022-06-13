@@ -71,7 +71,7 @@ export default {
         display: flex;
         flex-direction: row;
 
-        background-color: $dark_blue;
+        background-color: $primary;
         color: $white;
         font-size: $font_size_small_custom;
         line-height: $icon_length_small;

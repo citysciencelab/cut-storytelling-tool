@@ -92,8 +92,8 @@ $light_grey_hover: lighten($light_grey, 5%);
 $light_grey_focus: lighten($light_grey, 15%);
 $light_grey_active: darken($light_grey, 10%);
 $light_grey_contrast: #ffffff;
-$light_grey_inactive: #424242;
-$light_grey_inactive_contrast: black;
+$light_grey_inactive: darken($light_grey, 20%);
+$light_grey_inactive_contrast: #424242;
 $light_grey_outline: #050505;
 
 /* PRIMARY: The primary Buttons blue
