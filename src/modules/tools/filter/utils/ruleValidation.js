@@ -58,11 +58,10 @@ function betweenForArray (featValueA, featValueB, ruleValueA, ruleValueB, format
  * @returns {Boolean} true if it matches the equals check
  */
 function equalsForArray (featValueA, value, format) {
-    const featValA = moment(featValueA, format);
-
-    if (!format || !featValA.isValid()) {
+    if (!format || !moment(featValueA, format).isValid()) {
         return typeof value.find(v => typeof v === "string" && featValueA === v.toLowerCase()) !== "undefined";
     }
+    const featValA = moment(featValueA, format);
 
     return typeof value.find(v => moment(v, format).isSame(featValA)) !== "undefined";
 }
