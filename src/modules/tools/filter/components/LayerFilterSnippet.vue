@@ -85,7 +85,8 @@ export default {
             isRefreshing: false,
             amountOfFilteredItems: false,
             precheckedSnippets: [],
-            filteredItems: []
+            filteredItems: [],
+            isLockedHandleActiveStrategy: false
         };
     },
     computed: {
@@ -316,6 +317,10 @@ export default {
          * @returns {void}
          */
         handleActiveStrategy (snippetId) {
+            if (this.isLockedHandleActiveStrategy) {
+                return;
+            }
+
             this.filter(snippetId, filterAnswer => {
                 const adjustments = getSnippetAdjustments(this.snippets, filterAnswer?.items, filterAnswer?.paging?.page, filterAnswer?.paging?.total),
                     start = typeof adjustments?.start === "boolean" ? adjustments.start : false,
@@ -407,12 +412,15 @@ export default {
          * @returns {void}
          */
         deleteAllRules () {
+            this.isLockedHandleActiveStrategy = this.isStrategyActive();
+
             this.$emit("deleteAllRules", {
                 filterId: this.layerConfig.filterId
             });
 
             if (this.isStrategyActive()) {
                 this.$nextTick(() => {
+                    this.isLockedHandleActiveStrategy = false;
                     this.handleActiveStrategy();
                 });
             }

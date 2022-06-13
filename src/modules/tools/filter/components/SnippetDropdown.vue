@@ -179,15 +179,17 @@ export default {
                     dropdownValue.push(value);
                 });
             }
-            dropdownValue.sort((a, b) => {
-                if (typeof this.localeCompareParams === "string") {
-                    return localeCompare(a, b, this.localeCompareParams);
-                }
-                else if (isObject(this.localeCompareParams)) {
-                    return localeCompare(a, b, this.localeCompareParams.locale, this.localeCompareParams.options);
-                }
-                return localeCompare(a, b);
-            });
+            if (!Array.isArray(this.value)) {
+                dropdownValue.sort((a, b) => {
+                    if (typeof this.localeCompareParams === "string") {
+                        return localeCompare(a, b, this.localeCompareParams);
+                    }
+                    else if (isObject(this.localeCompareParams)) {
+                        return localeCompare(a, b, this.localeCompareParams.locale, this.localeCompareParams.options);
+                    }
+                    return localeCompare(a, b);
+                });
+            }
 
             if (this.multiselect && this.addSelectAll) {
                 return [{
@@ -225,7 +227,7 @@ export default {
             }
 
             if (adjusting?.start) {
-                if (this.snippetId !== adjusting.snippetId) {
+                if (this.snippetId !== adjusting.snippetId && (!Array.isArray(adjusting.snippetId) || !adjusting.snippetId.includes(this.snippetId))) {
                     this.dropdownValue = [];
                 }
                 this.isAdjusting = true;
@@ -338,6 +340,21 @@ export default {
             return this.title || this.attrName;
         },
         /**
+         * Returns the computed dropdown value to display in the list.
+         * @returns {String[]} An array of value to display.
+         */
+        getDropdownValueForList () {
+            const dropdownValue = this.dropdownValueComputed;
+
+            if (!Array.isArray(dropdownValue) || !dropdownValue.length) {
+                return [];
+            }
+            else if (isObject(dropdownValue[0])) {
+                return Array.isArray(dropdownValue[0].list) ? dropdownValue[0].list : [];
+            }
+            return dropdownValue;
+        },
+        /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
          * @param {Boolean} [startup=false] true if the call comes on startup, false if a user actively changed a snippet
@@ -437,7 +454,7 @@ export default {
                 if (delimitor && typeof value === "string" && value.indexOf(delimitor)) {
                     this.addDropdownValueForAdjustment(dropdownValue, configValue, value.split(delimitor), false);
                 }
-                else if (!dropdownValueAssoc[value] && (!Array.isArray(configValue) || configValue[value])) {
+                else if (!dropdownValueAssoc[value] && (!Array.isArray(configValue) || Array.isArray(configValue) && configValueAssoc[value])) {
                     dropdownValueAssoc[value] = true;
                     this.dropdownValue.push(value);
                 }
@@ -557,8 +574,8 @@ export default {
                     </a>
                 </div>
                 <div
-                    v-for="val in dropdownValue"
-                    :key="val"
+                    v-for="val in getDropdownValueForList()"
+                    :key="snippetId + '-' + val"
                     class="grid-item"
                 >
                     <span
