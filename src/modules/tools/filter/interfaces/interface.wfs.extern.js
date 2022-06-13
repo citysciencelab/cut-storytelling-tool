@@ -140,7 +140,7 @@ export default class InterfaceWfsExtern {
                     if (typeof onsuccess === "function") {
                         onsuccess(list);
                     }
-                }, onerror);
+                });
             })
             .catch(error => {
                 if (typeof onerror === "function") {
@@ -370,10 +370,9 @@ export default class InterfaceWfsExtern {
      * @param {String} attrName the attribute to lookup
      * @param {Object} responseXML the node
      * @param {Function} onsuccess a function(list) a list of values
-     * @param {Function} onerror a function(Error) called on error
      * @returns {void}
      */
-    parseResponseUniqueValues (typename, attrName, responseXML, onsuccess, onerror) {
+    parseResponseUniqueValues (typename, attrName, responseXML, onsuccess) {
         if (!responseXML?.firstElementChild?.childElementCount) {
             if (typeof onsuccess === "function") {
                 onsuccess([]);
@@ -386,9 +385,6 @@ export default class InterfaceWfsExtern {
             let node = this.getNodeByTagname(element, typename);
 
             if (!node) {
-                if (typeof onerror === "function") {
-                    onerror(new Error("InterfaceWfsExtern.parseResponseUniqueValues: The requested typename '" + typename + "' wasn't found."));
-                }
                 return;
             }
             node = node.getElementsByTagNameNS(node.namespaceURI, attrName)[0];
