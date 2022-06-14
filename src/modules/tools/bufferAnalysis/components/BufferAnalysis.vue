@@ -80,30 +80,6 @@ export default {
     },
     watch: {
         /**
-         * Watches the value of selectedTargetLayer
-         * deselects the previous selected target layer if it exists and a new selection is made
-         * @param {Object} layer the new selected target layer
-         * @param {Object} previous  the previous selected target layer
-         * @returns {void}
-         */
-        selectedTargetLayer (layer, previous) {
-            if (previous && layer) {
-                previous.setIsSelected(false);
-            }
-        },
-        /**
-         * Watches the value of selectedSourceLayer
-         * deselects the previous selected source layer if it exists and the new selected layer is falsy
-         * @param {Object} layer the new selected source layer
-         * @param {Object} previous  the previous selected source layer
-         * @returns {void}
-         */
-        selectedSourceLayer (layer, previous) {
-            if (previous && !layer) {
-                previous.setIsSelected(false);
-            }
-        },
-        /**
          * Watches the value of inputBufferRadius
          * debounces the input values to prevent unnecessary calculations
          * @param {Number} newBufferRadius the new selected buffer radius
@@ -123,6 +99,8 @@ export default {
         active (isActive) {
             if (isActive) {
                 this.setFocusToFirstControl();
+                this.setSelectOptions([]);
+                this.loadSelectOptions();
             }
         }
     },
@@ -293,7 +271,7 @@ export default {
                 <div class="col-md-12 form-group form-group-sm d-grid gap-2">
                     <button
                         id="tool-bufferAnalysis-resetButton"
-                        class="float-end btn btn-lgv-grey"
+                        class="float-end btn btn-secondary"
                         :disabled="!selectedSourceLayer"
                         @click="resetModule"
                     >
@@ -328,7 +306,7 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-    // @import "~variables";
+    @import "~variables";
     #tool-bufferAnalysis-radiusRangeInput {
         -webkit-appearance: none;
         appearance: none;
@@ -342,7 +320,7 @@ export default {
         &::-moz-range-thumb, &::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            background-color: #08589e;
+            background-color: $light_blue;
             cursor: pointer;
             border-width: 1px;
             border-color: white;

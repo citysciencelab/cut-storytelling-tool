@@ -3,7 +3,7 @@ import {deepAssignIgnoreCase} from "../deepAssign";
 import {doSpecialBackboneHandling, triggerParametricURLReady, translateToBackbone} from "./ParametricUrlBridge";
 import store from "../../app-store";
 import {transformToMapProjection} from "@masterportal/masterportalapi/src/crs";
-import mapCollection from "../../core/maps/mapCollection";
+import highlightFeaturesByAttribute from "../../api/highlightFeaturesByAttribute";
 
 /**
  * Searches for the keys in state and if found, sets the value at it.
@@ -106,10 +106,23 @@ function callActions (state) {
         store.dispatch("Maps/setZoomLevel", state.urlParams["Maps/zoomLevel"]);
         store.commit("Maps/setInitialResolution", store.getters["Maps/getView"].getResolution());
     }
-    if (Object.prototype.hasOwnProperty.call(state.ZoomTo, "zoomToGeometry") || Object.prototype.hasOwnProperty.call(state.ZoomTo, "zoomToFeatureId")) {
+    if ((Object.prototype.hasOwnProperty.call(state.ZoomTo, "zoomToGeometry") && state.ZoomTo.zoomToGeometry !== undefined) || (Object.prototype.hasOwnProperty.call(state.ZoomTo, "zoomToFeatureId") && state.ZoomTo.zoomToFeatureId !== undefined)) {
         store.dispatch("ZoomTo/zoomToFeatures");
     }
 
+    if (state.urlParams["api/highlightFeaturesByAttribute"]) {
+        const propName = state.urlParams?.attributeName,
+            propValue = state.urlParams?.attributeValue,
+            queryType = state.urlParams?.attributeQuery,
+            wfsId = state.urlParams?.wfsId;
+
+        if (propName && propValue && wfsId) {
+            highlightFeaturesByAttribute.highlightFeaturesByAttribute(store.dispatch, wfsId, propName, propValue, queryType);
+        }
+        else {
+            console.warn("Not all required URL parameters given for highlightFeaturesByAttribute.");
+        }
+    }
 }
 /**
  * Sets the url params at state and produces desired reaction.

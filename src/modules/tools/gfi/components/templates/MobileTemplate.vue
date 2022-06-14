@@ -144,7 +144,7 @@ export default {
 }
 
 .modal-footer {
-    color: #646262;
+    color: $dark_grey;
     padding: 0;
     font-size: 22px;
 
@@ -160,7 +160,7 @@ export default {
 
     .pager-left {
         float: left;
-        border-right: 1px solid #ddd;
+        border-right: 1px solid $light_grey;
     }
 
     .pager-right {
@@ -169,7 +169,7 @@ export default {
 
     .disabled {
         cursor: not-allowed;
-        background-color: $primary_red_inactive_contrast;
+        background-color: $light_grey_inactive_contrast;
         opacity: 0.2;
     }
 }

@@ -1,4 +1,4 @@
-$color_4: rgb(82, 82, 82);
+@import "~variables";
 
 /**************** Layer Settings ****************/
 /**************** Layer Settings Button Animation ****************/
@@ -6,7 +6,7 @@ ul#tree {
     .layer-settings {
         flex-basis: 100%;
         margin-top: 10px;
-        border-top: 1px solid #ddd;
+        border-top: 1px solid $white;
         padding: 10px 0px 10px 5px;
         font-size: 12px;
         .bootstrap-icon {
@@ -17,9 +17,9 @@ ul#tree {
             padding-right: 16px;
         }
         .remove-layer {
-            color: #f2f2f2;
+            color: $white;
             font-weight: bold;
-            background-color :$color_4;
+            background-color: $dark_grey;
             border-radius: 10px;
             padding: 5px;
             margin-left: 25px;
@@ -32,7 +32,7 @@ ul#tree {
             padding-top: 6px;
             font-size: 12px;
             border-radius: 10px;
-            background-color: #686868;
+            background-color: $dark_grey;
         }
     }
 }

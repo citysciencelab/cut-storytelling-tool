@@ -6,7 +6,6 @@ import DirectionsComponent from "../../../../components/Directions/DirectionsIte
 import DirectionsItemBatchProcessingComponent from "../../../../components/Directions/DirectionsItemBatchProcessing.vue";
 import RoutingBatchProcessingCheckboxComponent from "../../../../components/RoutingBatchProcessingCheckbox.vue";
 import RoutingDownloadComponent from "../../../../components/RoutingDownload.vue";
-import mapCollection from "../../../../../../../core/maps/mapCollection";
 import mutations from "../../../../store/mutationsRouting";
 import actions from "../../../../store/actionsRouting";
 import getters from "../../../../store/gettersRouting";
@@ -45,11 +44,7 @@ describe("src/modules/tools/routing/components/Directions/DirectionsItem.vue", (
         mapCollection.clear();
         mapCollection.addMap({
             mode: "2D",
-            mapMode: "2D",
-            addLayer: sinon.spy(),
-            removeLayer: sinon.spy(),
-            addInteraction: sinon.spy(),
-            removeInteraction: sinon.spy()
+            mapMode: "2D"
         }, "2D");
 
         store = new Vuex.Store({
@@ -80,7 +75,11 @@ describe("src/modules/tools/routing/components/Directions/DirectionsItem.vue", (
                 Maps: {
                     namespaced: true,
                     mode: "2D",
-                    removeLayer: sinon.spy()
+                    actions: {
+                        addLayerOnTop: sinon.stub(),
+                        removeInteraction: sinon.stub(),
+                        addInteraction: sinon.stub()
+                    }
                 }
             },
             state: {
@@ -91,6 +90,7 @@ describe("src/modules/tools/routing/components/Directions/DirectionsItem.vue", (
     });
 
     afterEach(() => {
+        sinon.restore();
         if (wrapper) {
             wrapper.destroy();
         }

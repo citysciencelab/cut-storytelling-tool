@@ -336,15 +336,6 @@
                 "serviceThree": "hizmet 3",
                 "serviceFour": "hizmet 4"
             },
-            "filter": {
-                "result": "sonuç",
-                "results": "Sonuçlar",
-                "zoomOnResults": "Sonuçları Yakınlaştır",
-                "filter": "-filtre",
-                "yourSelection": "senin seçimin: ",
-                "noFilterOptionSelected": "Henüz filtre seçeneği seçilmedi",
-                "deleteAll":"Hepsini sil"
-            },
             "pendler": {
                 "animation": {
                     "domicile": "ikamet yeri",

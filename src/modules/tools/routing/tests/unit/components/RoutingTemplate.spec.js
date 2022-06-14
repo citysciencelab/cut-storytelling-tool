@@ -3,7 +3,6 @@ import {expect} from "chai";
 import {config, shallowMount, createLocalVue, mount} from "@vue/test-utils";
 import RoutingComponent from "../../../components/RoutingTemplate.vue";
 import sinon from "sinon";
-import mapCollection from "../../../../../../core/maps/mapCollection.js";
 import mutations from "../../../store/mutationsRouting";
 import actions from "../../../store/actionsRouting";
 import getters from "../../../store/gettersRouting";
@@ -47,10 +46,26 @@ describe("src/modules/tools/routing/components/RoutingTemplate.vue", () => {
         };
 
         mapCollection.clear();
-        mapCollection.addMap(map, "ol", "2D");
+        mapCollection.addMap(map, "2D");
+
         store = new Vuex.Store({
             namespaced: true,
             modules: {
+                Maps: {
+                    namespaced: true,
+                    actions: {
+                        addPointerMoveHandler: sinon.stub(),
+                        removePointerMoveHandler: sinon.stub(),
+                        removeInteraction: sinon.stub(),
+                        addInteraction: sinon.stub(),
+                        addLayerOnTop: sinon.stub(),
+                        unregisterListener: sinon.stub(),
+                        registerListener: sinon.stub()
+                    },
+                    state: {
+                        mode: "2D"
+                    }
+                },
                 Tools: {
                     namespaced: true,
                     modules: {
@@ -79,11 +94,7 @@ describe("src/modules/tools/routing/components/RoutingTemplate.vue", () => {
                 uiStyle: () => ""
             },
             state: {
-                configJson: mockConfigJson,
-                Map: {
-                    mapId: "ol",
-                    mapMode: "2D"
-                }
+                configJson: mockConfigJson
             }
         });
         store.commit("Tools/Routing/setActive", true);

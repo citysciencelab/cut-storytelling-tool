@@ -82,6 +82,7 @@ export default {
 
 <style lang="scss">
     @import "~/css/mixins.scss";
+    @import "~variables";
 
     #language-bar {
         a, span {
@@ -99,7 +100,7 @@ export default {
         .current-language {
             display: block;
             position: relative;
-            color: #1F4B70;
+            color: $primary;
 
             cursor: pointer;
 
@@ -126,7 +127,7 @@ export default {
             .language-header {
                 float: right;
                 width: 100%;
-                border-bottom: 1px solid #e5e5e5;
+                border-bottom: 1px solid $light_grey;
                 padding: 0 0 3px 10px;
             }
             .form-group {
@@ -137,7 +138,7 @@ export default {
                 a {
                     font-size: 12px;
                     &.disabled {
-                        background-color: #e7e7e7;
+                        background-color: $light_grey;
                     }
                 }
             }

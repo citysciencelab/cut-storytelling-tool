@@ -21,6 +21,11 @@ let strippedLocation = null,
 // wenn Config.js nicht in der index.html als Script-Tag eingebunden ist, muss sie zunächst zugefügt und geladen werden
 if (!("Config" in window)) {
 
+    // temporary solution for portals that didn't have loaded Cesium in index.html until lazy loading is implemented
+    if (typeof Cesium === "undefined") {
+        global.Cesium = null;
+    }
+
     // Pfad zur Config.js bei ParametricUrl
     if (window.location.search !== "") {
         strippedLocation = window.location.href.split("?").shift();

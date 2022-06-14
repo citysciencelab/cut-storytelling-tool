@@ -7,6 +7,7 @@ import {isUrl} from "../../urlHelper";
 /**
  * @param {Feature[]} features Features, which center coordinates should be styled.
  * @param {string} styleId Id of the styleModel.
+ * @see {@link https://community.cesium.com/t/cors-and-billboard-image/3920/2} crossOrigin: "anonymous", is necessary for the 3D mode.
  * @returns {Feature[]} Styled features.
  */
 export default function (features, styleId) {
@@ -23,6 +24,7 @@ export default function (features, styleId) {
                 console.warn("zoomTo: The usage of the configuration parameter 'imgLink' will be deprecated in v3.0.0. Please use 'styleId' instead.");
                 style = new Style({
                     image: new Icon({
+                        crossOrigin: "anonymous",
                         anchor: [0.5, 24],
                         anchorXUnits: "fraction",
                         anchorYUnits: "pixels",

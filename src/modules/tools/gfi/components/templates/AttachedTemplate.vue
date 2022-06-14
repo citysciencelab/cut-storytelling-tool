@@ -46,17 +46,13 @@ export default {
     watch: {
         /**
          * When the feature changes, the popover is redrawn to keep the position of the click coordinate.
-         * Note: Starting from Bootstrap version 4 an update function for the popover is available.
-         *       Should be adapted when updating Bootstrap.
          * @returns {void}
          */
         feature () {
             this.$nextTick(() => {
-                this.overlay.setPosition(this.clickCoord);
-                // Upgrade to BT5
                 const popover = Popover.getInstance(this.overlay.getElement());
 
-                popover.show();
+                popover.update();
             });
         }
     },
@@ -177,6 +173,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    @import "~variables";
 
     button.close {
         &:focus {
@@ -187,16 +184,16 @@ export default {
         }
     }
     .gfi-attached {
-        background-color: #ffffff;
+        background-color: $white;
     }
     .gfi-header {
         padding: 0 15px;
-        border-bottom: 1px solid #e5e5e5;
+        border-bottom: 1px solid $light_grey;
         h5 {
             font-size: 13px;
             font-weight: normal;
             line-height: 17px;
-            color: #646262;
+            color: $dark_grey;
         }
         button {
             opacity: 0.6;

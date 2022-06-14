@@ -145,29 +145,24 @@ export default {
 
 <style lang="scss">
 @import "~/css/mixins.scss";
-
-$color_1: #808080;
-$font_family_1: "MasterPortalFont";
-$background_color_1: #F2F2F2;
-$background_color_2: #646262;
+@import "~variables";
 
 .gfi-detached-table {
     box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.3);
     border-radius: 12px;
-    background-color:  $background_color_2;
-    font-family: $font_family_1;
-    color: $color_1;
+    background-color:  $dark_grey;
+    color: $dark_grey;
     touch-action: pan-x pan-y;
     .tool-window-heading{
         padding: 0;
-        border-bottom: 1px solid $color_1;
+        border-bottom: 1px solid $dark_grey;
         border-radius: 11px 11px 0px 0px;
-        background-color: $background_color_2;
-        color:$background_color_1;
+        background-color: $dark_grey;
+        color: $light_grey;
         padding-top: 8px;
         padding-left: 8px;
         .tool-window-heading-title {
-            color: $background_color_1;
+            color: $light_grey;
             margin-right: 50px;
             text-overflow: ellipsis;
         }
@@ -187,17 +182,17 @@ $background_color_2: #646262;
         border: 5px solid transparent;
         border-radius: 12px;
         background-clip: content-box;
-        background-color: #d3d3d3;
+        background-color: $light_grey;
     }
 
     .vue-tool-content-body .body::-webkit-scrollbar-thumb {
-        background-color: #003063;
+        background-color: $primary;
         border: 6px solid transparent;
         border-radius: 12px;
         background-clip: content-box;
     }
     .icon-turnarticle {
-        color: $background_color_1;
+        color: $light_grey;
         position: relative;
         display: inline-block;
         right: 25px;
@@ -212,10 +207,10 @@ $background_color_2: #646262;
         }
     }
     .icon-turnarticle::before {
-        color: $background_color_1;
+        color: $light_grey;
     }
     span.bootstrap-icon > .bi-x-lg::before {
-        color: $background_color_1;
+        color: $light_grey;
     }
 }
 .rotate0{

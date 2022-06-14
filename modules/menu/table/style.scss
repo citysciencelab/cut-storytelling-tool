@@ -1,14 +1,7 @@
 @import "../../../css/variables.scss";
 
-$color_1: #000;
-$color_2: #F2F2F2;
 $color_3: #808080;
-$color_4: #003063;
-$font_family_1: "MasterPortalFont",sans-serif;
-$font_family_2: "MasterPortalFont", sans-serif;
-$background_color_2: #fff;
 $background_color_3: #808080;
-$background_color_4: #ffffff;
 $background_color_5: transparent;
 $background_color_6: #D8D8D8;
 
@@ -16,7 +9,6 @@ $background_color_6: #D8D8D8;
 #table-navigation {
     z-index: 5;;
     position: absolute;
-    font-family: $font_family_1;
     touch-action: pan-x pan-y;
     border-radius: 12px;
 }
@@ -64,7 +56,7 @@ $background_color_6: #D8D8D8;
 #table-layer-list {
     position: relative;
     width: 40px;
-    background-color: $background_color_2;
+    background-color: $white;
     order: -1;
     left: 8px;
     top: -5px;
@@ -72,7 +64,7 @@ $background_color_6: #D8D8D8;
 #table-category-list {
     .icon-categories {
         font-size: 27.5px;
-        color: $color_1;
+        color: $black;
     }
     width: 40px;
     background-color: $secondary_table_style;
@@ -80,12 +72,12 @@ $background_color_6: #D8D8D8;
     position: relative;
 }
 #table-category-list.table-category-active {
-    background-color: $background_color_3;
+    background-color: $light_grey;
 }
 .table-category-active {
     .icon-categories {
         &:after {
-            color: $color_2;
+            color: $secondary_table_style;
         }
     }
 }
@@ -171,10 +163,10 @@ a {
     }
 }
 .table-tools-active {
-    background-color: $background_color_3;
+    background-color: $light_grey;
     .icon-tools {
         &:before {
-            color: $color_2;
+            color: $secondary_table_style;
         }
     }
 }
@@ -182,9 +174,9 @@ a {
     margin-bottom: 6px;
     padding-top: 6px;
     font-size: 17px;
-    border-top: 1px solid #C0C0C0;
+    border-top: 1px solid $light_grey;
     >a {
-        color: $color_3;
+        color: $secondary_table_style;
     }
 }
 #table-nav-layers-panel-toggler {
@@ -260,14 +252,14 @@ a {
 }
 .icon-checkbox2 {
     &:before {
-        color: $color_3;
+        color: $light_grey;
         margin-top: 8px;
         padding-left: 8px;
     }
 }
 .icon-checkbox {
     &:before {
-        color: $color_4;
+        color: $primary;
         margin-top: 8px;
         font-weight: 900;
         padding-left: 8px;
@@ -282,11 +274,11 @@ a {
 }
 .icon-burgermenu_alt {
     #table-nav-layers-panel-toggler {
-        background-color: $background_color_3;
+        background-color: $light_grey;
         border-radius: 12px;
         .icon-cross1:before {
             display: block;
-            color: $color_2;
+            color: $secondary_table_style;
             top: 11px;
             left: 11px;
             font-size: 18px;
@@ -295,13 +287,13 @@ a {
 }
 .icon-burgermenu_alt.collapsed {
     #table-nav-layers-panel-toggler {
-        background-color: $background_color_4;
+        background-color: $white;
         .icon-cross1:before {
                 display: none;
         }
     }
     &:before {
-        color: $color_4;
+        color: $primary;
         display: block;
     }
 
@@ -319,7 +311,6 @@ a {
         overflow-x: auto;
         margin: 4px 4px;
         .layer-item {
-            font-family: $font_family_2;
             font-size: 17px;
             flex-
             .title{
@@ -329,19 +320,19 @@ a {
             }
             .just-added {
                 font-weight: bold;
-                color: #003063;
+                color: $primary;
             }
         }
     }
     .layers::-webkit-scrollbar {
-        background: #cccccc;
+        background: $light_grey;
         width: 10px;
         border-radius: 10px;
     }
     .layers::-webkit-scrollbar-thumb {
-        background: #003063;
+        background: $primary;
         border-radius: 10px;
-        border: 1px solid #ccc;
+        border: 1px solid $light_grey;
     }
     ul#layers {
         border: none;
@@ -372,12 +363,12 @@ a {
         .badge {
             font-size: 14px;
             padding-top: 6px;
-            background-color: #686868;
+            background-color: $light_grey;
         }
         .remove-layer {
-            color: #F2F2F2;
+            color: $secondary_table_style;
             font-weight: bold;
-            background-color: #808080;
+            background-color: $light_grey;
             border-radius: 10px;
             padding: 6px 4px 4px 4px;
             margin-left: auto;

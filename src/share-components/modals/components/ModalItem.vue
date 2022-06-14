@@ -131,6 +131,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    @import "~variables";
 
     #modal-1-container{
         display:none;
@@ -178,7 +179,7 @@ export default {
     }
     #modal-1-inner-wrapper {
         text-align:left;
-        background-color:#FFFFFF;
+        background-color: $white;
         display:inline-block;
         vertical-align:middle;
         max-width:90%;

@@ -45,7 +45,10 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
                 state = {
                     shownFeatures: 20,
                     gfiFeaturesOfLayer: [{erstesFeature: "first"}, {zweitesFeature: "second"}, {drittesFeature: "third"}],
-                    rawFeaturesOfLayer: [{getGeometry: () => "Point"}, {getGeometry: () => "Point"}]
+                    rawFeaturesOfLayer: [{getGeometry: () => "Point"}, {getGeometry: () => "Point"}],
+                    layer: {
+                        geometryType: "Point"
+                    }
                 };
 
             rootGetters = {"Maps/getView": {fit: () => true}};
@@ -92,12 +95,13 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
             layer: {
                 name: "ersterLayer",
                 id: "123",
+                styleId: "123",
                 geometryType: "Point"
             },
             nestedFeatures: false,
-            rawFeaturesOfLayer: [{name: "ersterLayer", id: "123", getId: () => "123", features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point", getGeometry: () => {
+            rawFeaturesOfLayer: [{name: "ersterLayer", id: "123", styleId: "123", getId: () => "123", features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point", getGeometry: () => {
                 return state.geometry;
-            }}, {name: "zweiterLayer", id: "456", features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"}, {name: "dritterLayer", id: "789", features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"}],
+            }}, {name: "zweiterLayer", id: "456", styleId: "456", features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"}, {name: "dritterLayer", id: "789", styleId: "789", features: [{getAttributesToShow: () => "TestAttributes"}], geometryType: "Point"}],
             highlightVectorRulesPolygon: {
                 "fill": {
                     "color": [255, 0, 255, 0.9]
@@ -105,7 +109,8 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
                 "stroke": {
                     "width": 4,
                     "color": [0, 0, 204, 0.9]
-                }
+                },
+                "zoomLevel": 5
             },
             highlightVectorRulesPointLine: {
                 "stroke": {
@@ -114,7 +119,8 @@ describe("tools/featureLister/store/actionsFeatureLister", () => {
                 },
                 "image": {
                     "scale": 2
-                }
+                },
+                "zoomLevel": 5
             }
         };
 

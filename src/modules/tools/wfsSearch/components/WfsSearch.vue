@@ -116,9 +116,13 @@ export default {
                 document.getElementById("tool-wfsSearch-button-showResults").focus();
                 this.setShowResultList(true);
             }
-            else {
+            else if (features.length > 0) {
                 this.placingPointMarker(features[0].getGeometry().getCoordinates());
                 Radio.trigger("MapView", "setCenter", features[0].getGeometry().getCoordinates(), this.zoomLevel);
+                this.setShowResultList(false);
+            }
+            else {
+                this.setShowResultList(true);
             }
         }
     }
@@ -200,7 +204,7 @@ export default {
                             <button
                                 id="tool-wfsSearch-button-resetUI"
                                 type="button"
-                                class="btn btn-lgv-grey col-md-12"
+                                class="btn btn-secondary col-md-12"
                                 @click="resetUI"
                             >
                                 {{ $t("common:modules.tools.wfsSearch.resetButton") }}
@@ -210,7 +214,7 @@ export default {
                             <input
                                 id="tool-wfsSearch-button-search"
                                 type="submit"
-                                class="btn btn-lgv-grey col-md-12"
+                                class="btn btn-primary col-md-12"
                                 :disabled="requiredFields"
                                 :value="$t('common:modules.tools.wfsSearch.searchButton')"
                             >
@@ -221,7 +225,7 @@ export default {
                         >
                             <button
                                 id="tool-wfsSearch-button-showResults"
-                                class="btn btn-lgv-grey col-md-12"
+                                class="btn btn-secondary col-md-12"
                                 :disabled="results.length === 0 || !headers"
                                 @click="setShowResultList(true)"
                             >

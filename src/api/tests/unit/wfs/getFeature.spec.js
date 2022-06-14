@@ -333,31 +333,6 @@ describe("src/api/wfs/getFeature.js", () => {
             expect(console.error.calledOnce).to.be.true;
             expect(console.error.calledWith("api/wfs/getFeatureGET: FeatureType is [object Object]. Payload has to have the featureType attribute and it has to be defined and a string or an array.")).to.be.true;
         });
-
-        it("should return a reponse if the first (url) and second (payload) parameter are correct", async () => {
-            const response = await getFeatureGET("https://geodienste.hamburg.de/HH_WFS_Krankenhaeuser", {
-                version: "1.1.0",
-                featureType: "krankenhaeuser_hh"
-            });
-
-            expect(response).to.be.a("string");
-        });
-        it("should call the errorHandling method if called with an invalid url", async () => {
-            await getFeatureGET("https://geodienste.hamburg.de/HH_WFS_Kranken", {
-                version: "1.1.0",
-                featureType: "krankenhaeuser_hh"
-            });
-
-            expect(spyErrorHandling.calledOnce).to.be.true;
-        });
-        it("should return undefined if called with an invalid url", async () => {
-            const response = await getFeatureGET("https://geodienste.hamburg.de/HH_WFS_Kranken", {
-                version: "1.1.0",
-                featureType: "krankenhaeuser_hh"
-            });
-
-            expect(response).to.be.undefined;
-        });
     });
 
     describe("getFeaturePOST", () => {
@@ -597,27 +572,6 @@ describe("src/api/wfs/getFeature.js", () => {
 
             expect(console.error.calledOnce).to.be.true;
             expect(console.error.calledWith("api/wfs/getFeaturePOST: FeatureTypes is [object Object]. FeatureTypes has to be defined and an array.")).to.be.true;
-        });
-        it("should return a reponse if the first (url) and second (payload) parameter are correct", async () => {
-            const response = await getFeaturePOST("https://geodienste.hamburg.de/HH_WFS_Krankenhaeuser", {
-                featureTypes: ["krankenhaeuser_hh"]
-            });
-
-            expect(response).to.be.a("string");
-        });
-        it("should call the errorHandling method if called with an invalid url", async () => {
-            await getFeaturePOST("https://geodienste.hamburg.de/HH_WFS_Kranken", {
-                featureTypes: ["krankenhaeuser_hh"]
-            });
-
-            expect(spyErrorHandling.calledOnce).to.be.true;
-        });
-        it("should return undefined if called with an invalid url", async () => {
-            const response = await getFeatureGET("https://geodienste.hamburg.de/HH_WFS_Kranken", {
-                featureTypes: ["krankenhaeuser_hh"]
-            });
-
-            expect(response).to.be.undefined;
         });
     });
 });

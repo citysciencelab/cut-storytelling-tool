@@ -492,6 +492,9 @@ const BuildSpecModel = {
                     if (styleGeometryFunction !== null && styleGeometryFunction !== undefined) {
                         clonedFeature.setGeometry(styleGeometryFunction(clonedFeature));
                         geometryType = styleGeometryFunction(clonedFeature).getType();
+                        if (geometryType === "Polygon") {
+                            this.checkPolygon(clonedFeature);
+                        }
                     }
                     stylingRules = this.getStylingRules(layer, clonedFeature, styleAttributes, style);
                     if (styleModel !== undefined && styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
@@ -552,11 +555,43 @@ const BuildSpecModel = {
         return mapfishStyleObject;
     },
 
-    getStyleModel (layer) {
+    /**
+     * The geometry of the feature is checked for not closed linearRing. Used for type Polygon.
+     * If it is not closed, the coordinates are adapted.
+     * @param {ol.Feature} feature to inspect
+     * @returns {ol.Feature} corrected feature, if necessary
+     */
+    checkPolygon (feature) {
+        if (Array.isArray(feature.getGeometry().getCoordinates()[0])) {
+            const coordinates = feature.getGeometry().getCoordinates()[0];
+
+            if (coordinates[0][0] !== coordinates[coordinates.length - 1][0] && coordinates[0][1] !== coordinates[coordinates.length - 1][1]) {
+                const coords = [];
+
+                coordinates.forEach(coord => {
+                    coords.push(coord);
+                });
+                feature.getGeometry().setCoordinates(coords);
+            }
+
+        }
+        return feature;
+    },
+
+    getStyleModel (layer, layerId) {
         const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer?.get("id")});
+        let foundChild;
 
         if (typeof layerModel?.get === "function") {
-            return Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+            if (layerModel.get("typ") === "GROUP") {
+                foundChild = layerModel.get("children").find(child => child.id === layerId);
+                if (foundChild) {
+                    return Radio.request("StyleList", "returnModelById", foundChild.styleId);
+                }
+            }
+            else {
+                return Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+            }
         }
         return undefined;
     },
@@ -1038,7 +1073,6 @@ const BuildSpecModel = {
 
                 feature.set(styleAttr[0], value);
                 return `[${styleAttr[0]}='${value}']`;
-
             }
 
             // Current feature is not clustered but a single feature in a clustered layer
@@ -1072,7 +1106,7 @@ const BuildSpecModel = {
      */
     getStyleAttributes: function (layer, feature) {
         const layerId = layer.get("id"),
-            styleList = this.getStyleModel(layer);
+            styleList = this.getStyleModel(layer, layerId);
         let styleFields = ["styleId"],
             layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")});
 

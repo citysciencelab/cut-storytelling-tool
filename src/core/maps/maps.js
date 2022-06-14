@@ -6,7 +6,6 @@ import "./2DMapViewRadioBridge";
 import "./3DMapRadioBridge";
 
 import ObliqueMap from "../../../modules/core/obliqueMap";
-import mapCollection from "../maps/mapCollection";
 import store from "../../app-store";
 
 /**
@@ -34,7 +33,7 @@ function create2DMap (mapViewSettings) {
  * @returns {void}
  */
 async function create3DMap (configJs) {
-    if (window.Cesium && configJs.startingMap3D) {
+    if (Cesium && configJs.startingMap3D) {
         await store.commit("Maps/setMode", "2D");
         Radio.trigger("Map", "mapChangeTo3d");
     }

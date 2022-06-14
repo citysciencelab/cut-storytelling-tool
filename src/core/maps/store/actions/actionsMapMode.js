@@ -1,4 +1,3 @@
-import mapCollection from "../../../maps/mapCollection";
 import api from "@masterportal/masterportalapi/src/maps/api";
 
 let eventHandler;
@@ -37,6 +36,8 @@ export default {
         let map3D = mapCollection.getMap("3D");
 
         dispatch("unregisterListener", {type: "pointermove", listener: "updatePointer", listenerType: "dispatch"});
+        dispatch("unregisterListener", {type: "click", listener: "updateClick", listenerType: "dispatch"});
+        dispatch("unregisterListener", {type: "moveend", listener: "updateAttributes", listenerType: "dispatch"});
         if (getters.is3D) {
             return;
         }
@@ -56,25 +57,25 @@ export default {
             }
             Radio.trigger("Map", "beforeChange", "3D");
             allLayerModels = allLayerModels.filter(layerModel => {
-                return ["Oblique", "TileSet3D", "Terrain3D"].indexOf(layerModel.get("typ")) === -1;
+                return ["Oblique", "TileSet3D", "Terrain3D", "Entities3D"].indexOf(layerModel.get("typ")) === -1;
             });
             allLayerModels.forEach(layerWrapper => {
-                if (layerWrapper.get("isSelected") === false) {
+                if (layerWrapper.get("isSelected") === false && Radio.request("Parser", "getTreeType") === "light") {
                     layerWrapper.removeLayer();
                 }
             });
 
             map3D = await dispatch("createMap3D");
             mapCollection.addMap(map3D, "3D");
-            api.map.olcsMap.prepareScene({scene: map3D.getCesiumScene(), map3D: map3D, callback: (clickObject) => dispatch("clickEventCallback", clickObject)}, Config);
+            api.map.olcsMap.handle3DEvents({scene: map3D.getCesiumScene(), map3D: map3D, callback: (clickObject) => dispatch("clickEventCallback", Object.freeze(clickObject))});
         }
         dispatch("controlZoomLevel", {currentMapMode: mapMode, targetMapMode: "3D"});
         map3D.setEnabled(true);
         commit("setMode", "3D");
         Radio.trigger("Map", "change", "3D");
         dispatch("MapMarker/removePointMarker", null, {root: true});
-        eventHandler = new window.Cesium.ScreenSpaceEventHandler(map3D.getCesiumScene().canvas);
-        eventHandler.setInputAction((evt) => dispatch("updatePointer", evt), window.Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+        eventHandler = new Cesium.ScreenSpaceEventHandler(map3D.getCesiumScene().canvas);
+        eventHandler.setInputAction((evt) => dispatch("updatePointer", evt), Cesium.ScreenSpaceEventType.MOUSE_MOVE);
     },
 
     /**
@@ -98,17 +99,13 @@ export default {
      * Callback function for the 3D click event.
      * @param {Object} param store context.
      * @param {Object} param.dispatch the dispatch.
-     * @param {Object} param.getters the getters.
      * @param {Object} clickObject contains the attributes for the callback function .
-     * @fires Core#RadioRequestMapClickedWindowPosition
      * @returns {void}
      */
-    clickEventCallback ({dispatch, getters}, clickObject) {
+    clickEventCallback ({dispatch}, clickObject) {
         if (clickObject) {
-            const extendedClickObject = Object.assign(clickObject, {map: getters.get2DMap});
-
-            dispatch("updateClick", extendedClickObject);
-            Radio.trigger("Map", "clickedWindowPosition", extendedClickObject);
+            dispatch("updateClick", clickObject);
+            Radio.trigger("Map", "clickedWindowPosition", clickObject);
         }
     },
 
@@ -123,13 +120,15 @@ export default {
      * @returns {void}
      */
     deactivateMap3D ({commit, getters, dispatch}) {
-        const map3D = getters.get3DMap;
+        const map3D = mapCollection.getMap("3D");
 
         if (map3D) {
             const view = getters.getView;
 
             eventHandler.destroy();
             dispatch("registerListener", {type: "pointermove", listener: "updatePointer", listenerType: "dispatch"});
+            dispatch("registerListener", {type: "click", listener: "updateClick", listenerType: "dispatch"});
+            dispatch("registerListener", {type: "moveend", listener: "updateAttributes", listenerType: "dispatch"});
             Radio.trigger("Map", "beforeChange", "2D");
             view.animate({rotation: 0}, () => {
                 map3D.setEnabled(false);

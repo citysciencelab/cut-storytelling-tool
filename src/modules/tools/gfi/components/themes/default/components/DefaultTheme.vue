@@ -384,7 +384,7 @@ export default {
     margin: auto;
     display: block;
     text-align: center;
-    color: black;
+    color: $black;
 }
 .favorite-icon-container {
     display: flex;

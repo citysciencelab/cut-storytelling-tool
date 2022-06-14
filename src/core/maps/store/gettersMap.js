@@ -3,45 +3,31 @@ import initialState from "./stateMap";
 import {createGfiFeature} from "../../../api/gfi/getWmsFeaturesByMimeType";
 import {getGfiFeaturesByTileFeature} from "../../../api/gfi/getGfiFeaturesByTileFeature";
 import thousandsSeparator from "../../../utils/thousandsSeparator.js";
-import mapCollection from "../../../core/maps/mapCollection.js";
 import {transformFromMapProjection} from "@masterportal/masterportalapi/src/crs";
 import {Group as LayerGroup} from "ol/layer.js";
 
 const getters = {
     ...generateSimpleGetters(initialState),
     /**
-     * Returns the 2D ol map from the map collection.
-     * @returns {module:ol/PluggableMap~PluggableMap} ol 2D map
-     */
-    get2DMap: () => {
-        return mapCollection.getMap("2D");
-    },
-    /**
-     * Returns the 3D olcs map from the map collection.
-     * @returns {module:ol/PluggableMap~PluggableMap} ol 2D map
-     */
-    get3DMap: () => {
-        return mapCollection.getMap("3D");
-    },
-    /**
      * Returns the layer collection of the map
      * @returns {Object} layer collection of the map.
      */
     getLayers: () => {
-        return getters.get2DMap().getLayers();
+        return mapCollection.getMap("2D").getLayers();
     },
     /**
      * Gets the features at the given pixel for the gfi
      * @param {Object} state - the state
-     * @param {Number[]} state.clickPixel - the pixel coordinate of the click event
+     * @param {Number[]} state.clickPixel - the pixel coordinate of the click event in 2D
+     * @param {Number[]} state.clickCartesianCoordinate - the coordinate of the click event in 3D
+     * @param {String} state.mode - the current map mode
      * @returns {Object[]} gfi features
      */
-    gfiFeaturesAtPixel: (state, {clickPixel}) => {
-        const featuresAtPixel = [],
-            map3D = getters.get3DMap();
+    gfiFeaturesAtPixel: (state, {clickPixel, clickCartesianCoordinate, mode}) => {
+        const featuresAtPixel = [];
 
-        if (clickPixel) {
-            getters.get2DMap().forEachFeatureAtPixel(clickPixel, (feature, layer) => {
+        if (clickPixel && mode === "2D") {
+            mapCollection.getMap("2D").forEachFeatureAtPixel(clickPixel, (feature, layer) => {
                 if (layer?.getVisible() && layer?.get("gfiAttributes") && layer?.get("gfiAttributes") !== "ignore") {
                     if (feature.getProperties().features) {
                         feature.get("features").forEach(function (clusteredFeature) {
@@ -61,24 +47,34 @@ const getters = {
                     }
                 }
             });
+        }
+        if (mode === "3D" && Array.isArray(clickCartesianCoordinate) && clickCartesianCoordinate.length === 2) {
+            // add features from map3d
+            const scene = mapCollection.getMap("3D").getCesiumScene(),
+                clickFeatures = scene.drillPick({x: clickCartesianCoordinate[0], y: clickCartesianCoordinate[1]});
 
-            if (map3D && Array.isArray(clickPixel) && clickPixel.length === 2) {
-                // add features from map3d
-                const scene = map3D.getCesiumScene(),
-                    tileFeatures = scene.drillPick({x: clickPixel[0], y: clickPixel[1]});
-
-                tileFeatures.forEach(tileFeature => {
-                    const gfiFeatures = getGfiFeaturesByTileFeature(tileFeature);
+            clickFeatures.forEach(clickFeature => {
+                if (clickFeature instanceof Cesium.Cesium3DTileFeature) {
+                    const gfiFeatures = getGfiFeaturesByTileFeature(clickFeature);
 
                     if (Array.isArray(gfiFeatures)) {
                         gfiFeatures.forEach(gfiFeature => {
                             featuresAtPixel.push(gfiFeature);
                         });
                     }
-                });
-            }
+                }
+                else if (clickFeature?.primitive instanceof Cesium.Billboard
+                    && clickFeature.primitive.olLayer?.get("gfiAttributes")
+                    && clickFeature.primitive.olLayer?.get("gfiAttributes") !== "ignore"
+                ) {
+                    featuresAtPixel.push(createGfiFeature(
+                        clickFeature.primitive?.olLayer,
+                        "",
+                        clickFeature.primitive?.olFeature
+                    ));
+                }
+            });
         }
-
         return featuresAtPixel;
     },
     /**
@@ -117,49 +113,12 @@ const getters = {
      * @returns {Array} Returns the projected bbox.
      */
     getProjectedBBox: () => (epsgCode) => {
-        const map = getters.get2DMap(),
+        const map = mapCollection.getMap("2D"),
             bbox = getters.getView().calculateExtent(map.getSize),
             firstCoordTransform = transformFromMapProjection(map, epsgCode, [bbox[0], bbox[1]]),
             secondCoordTransform = transformFromMapProjection(map, epsgCode, [bbox[2], bbox[3]]);
 
         return [firstCoordTransform[0], firstCoordTransform[1], secondCoordTransform[0], secondCoordTransform[1]];
-    },
-    /**
-     * Returns the camera of the 3D map
-     * @returns {Object} Returns the camera of the 3D map
-     */
-    getCamera: () => {
-        return getters.get3DMap().getCamera();
-    },
-    /**
-     * Returns the globe of Cesium scene
-     * @returns {Object} Returns the 3D globe object.
-     */
-    getGlobe: () => {
-        return getters.get3DMap().getCesiumScene().globe;
-    },
-    /**
-     * Returns the Cesium scene
-     * @returns {Object} Returns the cesium scene.
-     */
-    getCesiumScene: () => {
-        return getters.get3DMap().getCesiumScene();
-    },
-    /**
-     * Returns the shadowMap of the cesium scene
-     * @returns {Object} Returns the shadowMap.
-     */
-    getShadowMap: () => {
-        return getters.get3DMap().getCesiumScene().shadowMap;
-    },
-    /**
-     * Cesium time function.
-     * @param {Object} state the state
-     * @param {Object} getter getters
-     * @returns {Cesium.JulianDate} - shadow time in julian date format.
-     */
-    getShadowTime: (state, getter) => {
-        return getter.get3DMap().time || Cesium.JulianDate.fromDate(new Date());
     },
     /**
      * Reverse the gfi features
@@ -233,10 +192,9 @@ const getters = {
      * @returns {String} pretty-printed mouse coordinate (in 3d with height).
      */
     prettyMouseCoord: (state, {mouseCoordinate}) => {
-        let prettyMouseCoord = mouseCoordinate ? `${mouseCoordinate[0].toString().substr(0, 9)}, ${mouseCoordinate[1].toString().substr(0, 10)}` : "";
+        let prettyMouseCoord = mouseCoordinate ? `${mouseCoordinate[0].toFixed(2).toString()}, ${mouseCoordinate[1].toFixed(2).toString()}` : "";
 
         prettyMouseCoord = mouseCoordinate?.length === 3 ? `${prettyMouseCoord}, ${mouseCoordinate[2].toFixed(1)}` : prettyMouseCoord;
-
         return prettyMouseCoord;
 
     },
@@ -253,7 +211,7 @@ const getters = {
      * @returns {Object} Returns the layerlist.
      */
     getLayerList: () => {
-        return getters.get2DMap().getLayers().getArray();
+        return mapCollection.getMap("2D").getLayers().getArray();
     },
     /**
      * Gets all visible layers from map
@@ -323,7 +281,7 @@ const getters = {
     getLayerById: () => ({layerId, searchInGroupLayers = true}) => {
         let returnLayer = null;
 
-        getters.get2DMap().getLayers().getArray().forEach(layer => {
+        mapCollection.getMap("2D").getLayers().getArray().forEach(layer => {
             if (searchInGroupLayers && layer instanceof LayerGroup) {
                 const groupLayer = layer.getLayers().getArray().find(childLayer => childLayer.get("id") === layerId);
 
@@ -342,7 +300,7 @@ const getters = {
     * @return {module:ol/layer/Base~BaseLayer} The layer found by name.
     */
     getLayerByName: () => (layerName) => {
-        return getters.get2DMap().getLayers().getArray().find(layer => layer.get("name") === layerName);
+        return mapCollection.getMap("2D").getLayers().getArray().find(layer => layer.get("name") === layerName);
     }
 };
 

@@ -85,6 +85,7 @@ describe("src/modules/tools/print/utils/buildSpec.buildStyle", function () {
                 // stylingRule: bewirtschaftungsart='Parkschein, Bewohner mit Ausweis frei_0'
             const stylingRule = "bewirtschaftungsart=" + polygonFeatures[0].values_.bewirtschaftungsart + "_0";
 
+            buildSpec.getStyleModel = sinon.spy();
             buildSpec.getStylingRules = () => stylingRule;
             buildSpec.getFeatureStyle = () => [style];
             buildSpec.getStyleAttributes = () => ["bewirtschaftungsart"];

@@ -257,10 +257,9 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
             this.$("#3d-titel-close").show();
             Radio.trigger("Filter", "disable");
             Radio.trigger("ModelList", "toggleWfsCluster", false);
+            this.open3dCatalog();
             store.dispatch("Maps/activateMap3D");
             this.model.setButtonTitle("2D");
-
-            this.open3dCatalog();
         }, 200);
     },
 

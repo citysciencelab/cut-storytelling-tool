@@ -21,8 +21,8 @@
     top: 0;
     .bootstrap-icon {
         color: $secondary;
-        background-color: $primary_red;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+        background-color: $light_grey;
+        box-shadow: 0 6px 12px $black;
 
         &:hover {
             cursor: pointer;
@@ -30,7 +30,7 @@
         }
     }
     >.toggleButtonPressed {
-        background-color: $secondary_hover;
+        background-color: $light_blue;
     }
 }
 .toggleButton {
@@ -76,7 +76,7 @@
 .geolocation_marker {
     color: $secondary;
     padding: 2px 3px 2px 2px;
-    background: none repeat scroll #D42132;
+    background: none repeat scroll $primary;
     border-radius: 50px;
     font-size: 20px;
 }
@@ -223,7 +223,6 @@
 }
 .control-box-btn{
     display: inline-block;
-    border: 1px solid #5F5F5F;
     background-color: rgba(49, 49, 49, 0.61);
     background-position: center;
     background-repeat: no-repeat;
@@ -277,13 +276,25 @@
     font-size: 17px;
     margin-top: 4px;
     padding: 10px 6px 6px 6px;
-    font-family: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
+    font-family: $font_family_accent;
     border: 0;
+    /* pseudo-class state effects */
+    &:hover {
+        background-color: lighten($primary, 10%);;
+    }
     &:focus {
-        background-color: $primary_red_focus;
-        outline: 1px solid $primary_red_outline;
+        background-color: lighten($primary, 15%);
+        outline: 1px solid lighten($primary, 15%);
+    }
+    &:active {
+        background-color: lighten($primary, 5%);
     }
 
+    &:disabled {
+        background-color: $light-grey;
+        color: $dark_grey;
+        cursor: default;
+    }
 }
 /***** Oblique *****/
 .buttonOblique {
@@ -294,11 +305,6 @@
     margin-top: 4px;
     padding: 6px 7px 3px 7px;
     border: 0;
-    &:focus {
-        background-color: $primary_red_focus;
-        outline: 1px solid $primary_red_outline;
-    }
-
 }
 
 @media (max-width: 767px) {

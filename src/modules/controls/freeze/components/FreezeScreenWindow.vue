@@ -96,6 +96,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    @import "~variables";
 
     .freeze-view.freeze-activated {
         z-index: 10000;
@@ -118,8 +119,8 @@ export default {
         height: 60px;
         line-height: 60px;
         text-align: center;
-        background-color: #646262;
-        color: #ffffff;
+        background-color: $dark_grey;
+        color: $white;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
         &.table {
             left: var(--leftValue);

@@ -296,6 +296,7 @@ export default {
 
 <style lang="scss" scoped>
 /* Loader CSS based on https://codepen.io/lopis/pen/zwprzP  */
+@import "~variables";
 
 $length: 1.5em;
 
@@ -316,7 +317,7 @@ $length: 1.5em;
         width: 100%;
         height: 100%;
         border-width: 0.15em;
-        border-color: #333 #333 transparent transparent;
+        border-color: $dark_grey $dark_grey transparent transparent;
         border-style: solid;
         border-radius: 1em;
         box-sizing: border-box;

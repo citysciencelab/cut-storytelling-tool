@@ -7,7 +7,6 @@ import MultiLine from "ol/geom/MultiLineString.js";
 import MultiPoint from "ol/geom/MultiPoint.js";
 import MultiPolygon from "ol/geom/MultiPolygon.js";
 import * as setters from "./settersDraw";
-import mapCollection from "../../../../../core/maps/mapCollection";
 
 /**
  * Resets and deactivates the Draw Tool.
@@ -194,7 +193,7 @@ function editFeaturesWithoutGUI ({dispatch}) {
  * @param {Boolean} prmObject.zoomToExtent The map will be zoomed to the extent of the GeoJson if set to true.
  * @returns {String} GeoJSON of all Features as a String
  */
-function initializeWithoutGUI ({state, commit, dispatch, getters, rootGetters}, {drawType, color, opacity, maxFeatures, initialJSON, transformWGS, zoomToExtent}) {
+async function initializeWithoutGUI ({state, commit, dispatch, getters, rootState}, {drawType, color, opacity, maxFeatures, initialJSON, transformWGS, zoomToExtent}) {
     const collection = Radio.request("ModelList", "getCollection"),
         drawTypeId = getDrawId(drawType);
     let featJSON,
@@ -229,7 +228,7 @@ function initializeWithoutGUI ({state, commit, dispatch, getters, rootGetters}, 
             setters.setStyleSettings({getters, commit}, styleSettings);
         }
 
-        commit("setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer"));
+        commit("setLayer", await Radio.request("Map", "createLayerIfNotExists", "import_draw_layer"));
 
         dispatch("createDrawInteractionAndAddToMap", {active: true, maxFeatures});
         dispatch("createSelectInteractionAndAddToMap", false);
@@ -238,13 +237,15 @@ function initializeWithoutGUI ({state, commit, dispatch, getters, rootGetters}, 
         if (initialJSON) {
             try {
                 if (transformWGS) {
+                    const mapProjection = getMapProjection(mapCollection.getMap(rootState.Maps.mode));
+
                     format = new GeoJSON({
                         defaultDataProjection: "EPSG:4326"
                     });
                     // read GeoJSON and transform the coordiantes from WGS84 to the projection of the map
                     featJSON = format.readFeatures(initialJSON, {
                         dataProjection: "EPSG:4326",
-                        featureProjection: rootGetters["Map/projectionCode"]
+                        featureProjection: mapProjection
                     });
                 }
                 else {

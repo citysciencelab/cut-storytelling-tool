@@ -101,7 +101,7 @@ export default {
             >
                 <button
                     :id="'timeSlider-activate-layerSwiper-' + layerId"
-                    class="btn btn-sm btn-lgv-grey"
+                    class="btn btn-sm btn-secondary"
                     @click="toggleSwiper(layerId)"
                 >
                     {{ $t(`common:modules.wmsTime.timeSlider.buttons.${minWidth && layerSwiper.active ? "deactivateL" : "l"}ayerSwiper`) }}
@@ -110,7 +110,7 @@ export default {
             <div class="timeSlider-innerWrapper-interactions">
                 <button
                     :id="'timeSlider-button-backward-' + layerId"
-                    class="btn btn-sm btn-lgv-grey"
+                    class="btn btn-sm btn-secondary"
                     :aria-label="$t('common:modules.wmsTime.timeSlider.buttons.backward')"
                     :disabled="nextIndex(false) === -1"
                     @click="moveOne(false)"
@@ -119,7 +119,7 @@ export default {
                 </button>
                 <button
                     :id="'timeSlider-button-play-' + layerId"
-                    class="btn btn-sm btn-lgv-grey"
+                    class="btn btn-sm btn-secondary"
                     :aria-label="$t('common:modules.wmsTime.timeSlider.buttons.play')"
                     @click="play"
                 >
@@ -129,7 +129,7 @@ export default {
                 </button>
                 <button
                     :id="'timeSlider-button-forward-' + layerId"
-                    class="btn btn-sm btn-lgv-grey"
+                    class="btn btn-sm btn-secondary"
                     :aria-label="$t('common:modules.wmsTime.timeSlider.buttons.forward')"
                     :disabled="nextIndex() === timeRange.length"
                     @click="moveOne(true)"

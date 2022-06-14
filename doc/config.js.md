@@ -64,6 +64,9 @@ In the following, all configuration options are described. For all configuration
 
 ## cameraParameter
 
+Cesium Scene camera settings in 3D mode.
+_Deprecated in the next major release. Please use **[cesiumParameter](#markdown-header-cesiumParameter)** instead._
+
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
 |heading|no|Number||Camera's initial heading in radians|
@@ -73,14 +76,106 @@ In the following, all configuration options are described. For all configuration
 ***
 
 ## cesiumParameter
+
+Cesium Scene settings in 3D mode.
+For more attributes see **[Scene](https://cesium.com/learn/cesiumjs/ref-doc/Scene.html?classFilter=scene)**
+
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
-|fog|no|Object||Fog options. See [fog documentation](https://cesiumjs.org/Cesium/Build/Documentation/Fog.html) for details.|
-|enableLighting|no|Boolean|`false`|Activates light effects on the map based on the sun's position.|
-|maximumScreenSpaceError|no|Number|`2.0`|Detail level in which terrain/raster tiles are fetched. 4/3 is the highest quality level.|
+|camera|no|**[camera](#markdown-header-cesiumParametercamera)**||Cesium Scene camera settings in 3D mode.|
+|fog|no|**[fog](#markdown-header-cesiumParameterfog)**||Cesium Scene fog settings in 3D mode.|
 |fxaa|no|Boolean|`true`|activates *fast approximate anti-aliasing*|
+|globe|no|**[globe](#markdown-header-cesiumParameterglobe)**||Cesium Scene globe settings in 3D mode.|
+|maximumScreenSpaceError|no|Number|`2.0`|Detail level in which terrain/raster tiles are fetched. 4/3 is the highest quality level.|
 |tileCacheSize|no|Number|`100`|terrain/raster tile cache size|
 
+**Example**
+
+```json
+{
+    "camera": {
+        "altitude": 127,
+        "heading": -1.2502079000000208,
+        "tilt": 45
+    },
+    "fog": {
+        "enabled": true
+    },
+    "fxaa": true,
+    "globe": {
+        "enableLighting": true
+    },
+    "maximumScreenSpaceError": 2,
+    "tileCacheSize": 20,
+}
+```
+***
+
+### cesiumParameter.camera
+
+Cesium Scene camera settings in 3D mode.
+The camera is defined by a position, orientation, and view frustum.
+For more attributes see **[Scene](https://cesium.com/learn/cesiumjs/ref-doc/Camera.html)**
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|altitude|no|Number||Camera's initial height in meters|
+|heading|no|Number||Camera's initial heading in radians|
+|tilt|no|Number||Camera's initial tile in radians|
+
+**Example**
+
+```json
+{
+    "camera": {
+        "altitude": 127,
+        "heading": -1.2502079000000208,
+        "tilt": 45
+    }
+}
+```
+***
+
+### cesiumParameter.fog
+
+Cesium Scene fog settings in 3D mode.
+Blends the atmosphere to geometry far from the camera for horizon views.
+For more attributes see **[Scene](https://cesium.com/learn/cesiumjs/ref-doc/Fog.html)**
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|enabled|no|Boolean|`false`|True if fog is enabled.|
+
+**Example**
+
+```json
+{
+    "fog": {
+        "enabled": true
+    }
+}
+```
+***
+
+### cesiumParameter.globe
+
+Cesium Scene globe settings in 3D mode.
+The globe rendered in the scene, including its terrain and imagery layers.
+For more attributes see **[Scene](https://cesium.com/learn/cesiumjs/ref-doc/Globe.html)**
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|enableLighting|no|Boolean|`false`|Activates light effects on the map based on the sun's position.|
+
+**Example**
+
+```json
+{
+    "globe": {
+        "enableLighting": true
+    }
+}
+```
 ***
 
 ## footer
@@ -156,6 +251,7 @@ In the following, all configuration options are described. For all configuration
 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
+|minShift|no|Integer|`5`|Minimum mouse position movement required to render a new tooltip; in pixels.|
 |numFeaturesToShow|no|Integer|`2`|Maximum amount of element information per tooltip; when exceeded, an information text informs the user of cut content.|
 |infoText|no|String|`"(Further objects. Please zoom.)"`|Information text shown when `numFeaturesToShow` is exceeded.|
 

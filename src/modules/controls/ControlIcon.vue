@@ -88,8 +88,8 @@ export default {
     }
 
     .control-icon {
-        background-color: $primary_red;
-        color: $primary_red_contrast;
+        background-color: $primary;
+        color: $white;
 
         pointer-events: all;
         cursor: pointer;
@@ -107,24 +107,24 @@ export default {
 
         /* pseudo-class state effects */
         &:hover {
-            background-color: $primary_red_hover;
+            background-color: lighten($primary, 10%);;
         }
         &:focus {
-            background-color: $primary_red_focus;
-            outline: 1px solid $primary_red_outline;
+            background-color: lighten($primary, 15%);
+            outline: 1px solid lighten($primary, 15%);
         }
         &:active {
-            background-color: $primary_red_active;
+            background-color: lighten($primary, 5%);
         }
 
         &:disabled {
-            background-color: $primary_red_inactive;
-            color: $primary_red_inactive_contrast;
+            background-color: $light-grey;
+            color: $dark_grey;
             cursor: default;
         }
     }
     .bi-plus-icon {
-        content: url("data:image/svg+xml, %3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-plus-lg' viewBox='0 0 16 16'%3e%3cpath fill-rule='evenodd' d='M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z' stroke='white' stroke-width='1'/%3e%3c/svg%3e");
+        content: url("data:image/svg+xml, %3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-plus-lg' viewBox='0 0 16 16'%3e%3cpath fill-rule='evenodd' d='M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z' stroke='white'/%3e%3c/svg%3e");
         height: 28px;
     }
     .bi-minus-icon {

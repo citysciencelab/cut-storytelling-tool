@@ -84,7 +84,7 @@ export default {
                         :download="download.file"
                     >
                         <button
-                            class="btn btn-sm btn-lgv-grey"
+                            class="btn btn-sm btn-secondary"
                             :disabled="disableFileDownload"
                             type="button"
                             @click="fileDownloaded"
@@ -105,11 +105,9 @@ export default {
 @import "~variables";
 
 a {
-    color: #000;
+    color: $black;
 }
-.bold {
-    font-weight: bold;
-}
+
 .disabled {
     cursor: not-allowed;
 }
