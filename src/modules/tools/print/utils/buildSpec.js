@@ -1173,11 +1173,13 @@ const BuildSpecModel = {
                         metaDataLayerList.push(legendObj.name);
                     }
                     if (legendContainsPdf) {
-                        Radio.trigger("Alert", "alert", {
-                            kategorie: "alert-info",
-                            text: "<b>The layer \"" + legendObj.name + "\" contains a pre-defined Legend. " +
-                                "This legens cannot be added to the print.</b><br>" +
-                                "You can download the pre-defined legend from the download menu seperately."
+                        store.dispatch("Alerting/addSingleAlert", {
+                            category: i18next.t("common:modules.alerting.categories.info"),
+                            content: "<b>The layer \"" + legendObj.name + "\" contains a pre-defined Legend. " +
+                            "This legens cannot be added to the print.</b><br>" +
+                            "You can download the pre-defined legend from the download menu seperately.",
+                            displayClass: "info",
+                            kategorie: "alert-info"
                         });
                     }
                     else {
