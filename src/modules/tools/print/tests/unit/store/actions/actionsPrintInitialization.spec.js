@@ -261,17 +261,12 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                     setVisible: () => true
                 },
                 scale = 40000,
-                options = {
-                    resolution: 15.874991427504629,
-                    scale: 60000,
-                    zoomLevel: 2
-                },
                 state = {
                     active: true,
                     visibleLayerList: [
                         TileLayer
                     ],
-                    eventListener: undefined,
+                    eventListener: {abc: 123},
                     layoutList: [
                         {
                             name: "A4 Hochformat"
@@ -286,18 +281,14 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                             name: "A3 Querformat"
                         }
                     ]
-                },
-                request = sinon.spy(() => ({
-                    getOptions: () => options
-                }));
+                };
 
             Canvas.getCanvasLayer = sinon.spy(() => ({
                 on: () => "postrender"
             }));
 
-            sinon.stub(Radio, "request").callsFake(request);
-            // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
             testAction(updateCanvasLayer, scale, state, {}, [
+                {type: "Maps/unregisterListener", payload: {type: state.eventListener}, dispatch: true},
                 {type: "chooseCurrentLayout", payload: state.layoutList, dispatch: true},
                 {type: "setEventListener", payload: "postrender", commit: true}
             ], {}, done);

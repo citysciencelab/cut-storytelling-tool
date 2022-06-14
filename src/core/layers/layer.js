@@ -344,7 +344,7 @@ Layer.prototype.setIsSelected = function (newValue) {
     this.setIsVisibleInMap(newValue);
 
     if (newValue) {
-        bridge.addLayerToIndex(this.layer, this.get("selectionIDX"));
+        store.dispatch("Maps/addLayerToIndex", {layer: this.layer, zIndex: this.get("selectionIDX")});
     }
     else {
         map.removeLayer(this.layer);

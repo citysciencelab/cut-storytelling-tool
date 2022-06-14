@@ -257,7 +257,7 @@ async function initializeWithoutGUI ({state, commit, dispatch, getters, rootStat
                     state.layer.getSource().addFeatures(featJSON);
                 }
                 if (featJSON.length > 0 && zoomToExtent) {
-                    Radio.trigger("Map", "zoomToExtent", {extent: state.layer.getSource().getExtent()});
+                    dispatch("Maps/zoomToExtent", {extent: state.layer.getSource().getExtent()}, {root: true});
                 }
             }
             catch (e) {

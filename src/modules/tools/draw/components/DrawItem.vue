@@ -290,7 +290,6 @@ export default {
     methods: {
         ...mapMutations("Tools/Draw", constants.keyStore.mutations),
         ...mapActions("Tools/Draw", constants.keyStore.actions),
-        ...mapActions("Alerting", ["addSingleAlert"]),
 
         /**
          * Sets the focus to the first control

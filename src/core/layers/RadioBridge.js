@@ -51,18 +51,6 @@ export function listenToChangeSLDBody (layerModel) {
     });
 }
 
-/* ******************* Map ******************* */
-/**
- * Triggers adding layer at given index in modelList.
- * Can be done directly or is no longer needed if modelList is refactored.
- * @param {ol/Layer} layer the layer of the layerModel
- * @param {Number} selectionIDX index to insert into list
- * @returns {void}
- */
-export function addLayerToIndex (layer, selectionIDX) {
-    Radio.trigger("Map", "addLayerToIndex", [layer, selectionIDX]);
-}
-
 /* ******************* MapView ******************* */
 /**
  * Returns the corresponding resolution for the scale.

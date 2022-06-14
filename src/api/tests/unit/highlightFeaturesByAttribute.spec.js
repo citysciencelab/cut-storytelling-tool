@@ -161,9 +161,10 @@ describe("api/highlightFeaturesByAttribute", () => {
                         }),
                         getProperties: () => []
                     }
-                ];
+                ],
+                dispatch = sinon.spy();
 
-            highlightFeaturesByAttribute.highlightPointFeature("defaultHighlightFeaturesPoint", "highlight_point_layer", "highlightPoint", layer.gfiAttributes, features);
+            highlightFeaturesByAttribute.highlightPointFeature("defaultHighlightFeaturesPoint", "highlight_point_layer", "highlightPoint", layer.gfiAttributes, features, dispatch);
             expect(request.calledOnce).to.be.true;
             expect(request.firstCall.args).to.deep.equals(["StyleList", "returnModelById", "defaultHighlightFeaturesPoint"]);
             expect(await highlightVector.getSource().getFeatures()).to.be.an("array").with.lengthOf(2);
@@ -185,9 +186,10 @@ describe("api/highlightFeaturesByAttribute", () => {
                         getGeometry: () => new Polygon([[[565086.1948534324, 5934664.461947621], [565657.6945448224, 5934738.54524095], [565625.9445619675, 5934357.545446689], [565234.3614400891, 5934346.962119071], [565086.1948534324, 5934664.461947621]]]),
                         getProperties: () => []
                     }
-                ];
+                ],
+                dispatch = sinon.spy();
 
-            highlightFeaturesByAttribute.highlightLineOrPolygonFeature("defaultHighlightFeaturesPolygon", "highlight_polygon_layer", "highlightPolygon", "Polygon", layer.gfiAttributes, features);
+            highlightFeaturesByAttribute.highlightLineOrPolygonFeature("defaultHighlightFeaturesPolygon", "highlight_polygon_layer", "highlightPolygon", "Polygon", layer.gfiAttributes, features, dispatch);
             expect(request.calledOnce).to.be.true;
             expect(request.firstCall.args).to.deep.equals(["StyleList", "returnModelById", "defaultHighlightFeaturesPolygon"]);
             expect(await highlightVector.getSource().getFeatures()).to.be.an("array").with.lengthOf(2);
@@ -209,9 +211,10 @@ describe("api/highlightFeaturesByAttribute", () => {
                         getGeometry: () => new LineString([[0, 0], [1000, 0]]),
                         getProperties: () => []
                     }
-                ];
+                ],
+                dispatch = sinon.spy();
 
-            highlightFeaturesByAttribute.highlightLineOrPolygonFeature("defaultHighlightFeaturesLine", "highlight_line_layer", "highlightLine", "LineString", layer.gfiAttributes, features);
+            highlightFeaturesByAttribute.highlightLineOrPolygonFeature("defaultHighlightFeaturesLine", "highlight_line_layer", "highlightLine", "LineString", layer.gfiAttributes, features, dispatch);
             expect(request.calledOnce).to.be.true;
             expect(request.firstCall.args).to.deep.equals(["StyleList", "returnModelById", "defaultHighlightFeaturesLine"]);
             expect(await highlightVector.getSource().getFeatures()).to.be.an("array").with.lengthOf(2);

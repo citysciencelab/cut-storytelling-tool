@@ -144,7 +144,7 @@ export default function ({layers, epsg, zoomTo}) {
                 return;
             }
             if (typeof zoomTo !== "undefined" && (zoomTo === layerId || zoomTo.indexOf(layerId) !== -1)) {
-                Radio.trigger("Map", "zoomToFilteredFeatures", getFeatureIds(layerId), layerId);
+                store.dispatch("Maps/zoomToFilteredFeatures", {ids: getFeatureIds(layerId), layerId: layerId});
             }
         });
     }, {deep: true, immediate: true});

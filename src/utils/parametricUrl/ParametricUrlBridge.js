@@ -125,12 +125,11 @@ export function doSpecialBackboneHandling (key, value) {
         setLayersVisible(layers);
     }
     else if (key === "Maps/zoomToExtent") {
-        Radio.trigger("Map", "zoomToProjExtent", {data: {
+        store.dispatch("Maps/zoomToProjExtent", {data: {
             extent: convert(value),
             options: {duration: 0},
             projection: store.state.urlParams?.projection || store.state.Maps?.projection?.getCode()
-        }
-        });
+        }});
     }
     else if (key === "style") {
         const resultUpperCase = value.toUpperCase();

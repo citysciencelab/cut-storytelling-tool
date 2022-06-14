@@ -18,7 +18,8 @@ describe("src/modules/tools/Print/components/PrintMap.vue", () => {
             getView: sinon.stub()
         },
         mockMapActions = {
-            setResolutionByIndex: sinon.stub()
+            setResolutionByIndex: sinon.stub(),
+            unregisterListener: sinon.stub()
         },
         mockGfiGetters = {
             currentFeature: () => sinon.stub()
@@ -31,7 +32,8 @@ describe("src/modules/tools/Print/components/PrintMap.vue", () => {
         map = {
             id: "ol",
             mode: "2D",
-            render: sinon.spy()
+            render: sinon.spy(),
+            updateSize: sinon.spy()
         };
 
         mapCollection.clear();

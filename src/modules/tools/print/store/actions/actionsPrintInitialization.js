@@ -188,7 +188,7 @@ export default {
             commit("setEventListener", canvasLayer.on("postrender", evt => dispatch("createPrintMask", evt)));
         }
         else if (!state.active) {
-            Radio.trigger("Map", "unregisterListener", state.eventListener);
+            dispatch("Maps/unregisterListener", {type: state.eventListener}, {root: true});
             commit("setEventListener", undefined);
             if (state.invisibleLayer) {
                 dispatch("setOriginalPrintLayer");
@@ -281,7 +281,7 @@ export default {
         const visibleLayerList = state.visibleLayerList;
         let canvasLayer = {};
 
-        Radio.trigger("Map", "unregisterListener", state.eventListener);
+        dispatch("Maps/unregisterListener", {type: state.eventListener}, {root: true});
         canvasLayer = Canvas.getCanvasLayer(visibleLayerList);
         dispatch("chooseCurrentLayout", state.layoutList);
         if (Object.keys(canvasLayer).length) {

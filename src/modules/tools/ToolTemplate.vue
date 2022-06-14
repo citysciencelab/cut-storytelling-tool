@@ -157,7 +157,7 @@ export default {
             if (this.renderToWindow) {
                 return;
             }
-            Radio.trigger("Map", "updateSize");
+            mapCollection.getMap("2D").updateSize();
             this.onEndResizing(event);
         },
         /**

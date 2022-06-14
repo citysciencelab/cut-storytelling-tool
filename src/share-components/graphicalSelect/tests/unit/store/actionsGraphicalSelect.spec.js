@@ -100,20 +100,6 @@ describe("src/share-components/graphicalSelect/store/actionsGraphicalSelect", ()
         expect(state.tooltipOverlay.getPosition()).to.eql(rootState.Maps.mouseCoordinate);
 
     });
-    it("toggleOverlay adds overlayCircle for type Circle with Radio.trigger", () => {
-        const payload = {
-                type: "Circle",
-                overlayCircle: {},
-                overlayTool: {}
-            },
-            radioTrigger = sinon.spy(Radio, "trigger");
-
-        actions.toggleOverlay(context, payload);
-
-        expect(radioTrigger.calledWithExactly("Map", "addOverlay", payload.overlayCircle)).to.be.true;
-        expect(radioTrigger.calledWithExactly("Map", "addOverlay", payload.overlayTool)).to.be.true;
-
-    });
     it("createDomOverlay creates div with id", () => {
         const payload = {
             id: "1",
