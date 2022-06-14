@@ -536,7 +536,7 @@ export default {
                     :multiple="multiselect"
                     :placeholder="placeholder"
                     :show-labels="false"
-                    open-direction="bottom"
+                    open-direction="auto"
                     :options-limit="optionsLimit"
                     :hide-selected="true"
                     :close-on-select="true"
