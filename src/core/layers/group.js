@@ -155,21 +155,21 @@ GroupedLayers.prototype.showLayerInformation = function () {
 
     store.dispatch("LayerInformation/layerInfo", {
         "id": this.get("id"),
-        "metaID": metaID.find(x => x),
+        "metaID": metaID.find(x => x) || metaID[0],
         "metaIdArray": metaID,
         "layername": name,
         "layerNames": layerNames,
         "url": null,
         "typ": null,
-        "cswUrl": cswUrls.find(x => x),
-        "showDocUrl": showDocUrls.find(x => x),
+        "cswUrl": cswUrls.find(x => x) || cswUrls[0],
+        "showDocUrl": showDocUrls.find(x => x) || showDocUrls[0],
         "urlIsVisible": this.get("urlIsVisible")
     });
 
     store.dispatch("LayerInformation/activate", true);
-    store.dispatch("LayerInformation/setCurrentLayerName", layerNames[0]);
+    store.dispatch("LayerInformation/setCurrentLayerName", layerNames.find(x => x) || layerNames[0]);
     store.dispatch("LayerInformation/additionalSingleLayerInfo");
-    store.dispatch("LayerInformation/setMetadataURL", metaID[0]);
+    store.dispatch("LayerInformation/setMetadataURL", metaID.find(x => x) || metaID[0]);
     store.dispatch("LayerInformation/setAdditionalLayer", additionalLayers);
     store.dispatch("Legend/setLayerIdForLayerInfo", this.get("id"));
     store.dispatch("Legend/setLayerCounterIdForLayerInfo", Date.now());
