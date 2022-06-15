@@ -46,8 +46,8 @@ export default {
             return this.layerInfo.typ === "OAF" ? this.layerInfo.url : this.layerInfo.url + "?SERVICE=" + this.layerInfo.typ + "&REQUEST=GetCapabilities";
         },
         showMoreLayers () {
-            if (this.displayableMetaIdArray) {
-                return this.displayableMetaIdArray.length > 1;
+            if (this.layerInfo.metaIdArray) {
+                return this.layerInfo.metaIdArray.length > 1 && !this.layerInfo.metaIdArray.every(item => item === null);
             }
             return false;
         },
@@ -199,7 +199,7 @@ export default {
                         :class="{ show: openDropdown }"
                     >
                         <li
-                            v-for="name in displayableLayerNames"
+                            v-for="name in layerInfo.layerNames"
                             :key="name"
                         >
                             <a
