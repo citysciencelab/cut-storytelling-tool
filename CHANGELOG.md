@@ -17,6 +17,7 @@
 - api/highlightFeaturesByAttribute URL mechanism to query WFS data by parameters and configuration
 
 ### Changed
+- WMTS feature is now realized via masterportalAPI functions.
 
 ### Deprecated
 
