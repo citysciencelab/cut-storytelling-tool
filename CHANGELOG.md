@@ -7,27 +7,6 @@
 
 ---
 
-## v2.22.2 - 2022-06-15
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-- Addons: Fixed tool Commuter flows.
-
----
-
-## v2.22.1 - 2202-06-08
-### Fixed
-- The light grey color in Search and transparency are now dark
-- Issue #790: Resolve import of isObject util failed was fixed.
-
----
-
 ## Unreleased - in development
 ### __Breaking Changes__
 
@@ -51,6 +30,20 @@
 - Issue #778: Fixed layer information display selection in metadata window that now always has names options in its select input.
 - Issue #788: Legend not updating correctly
 - Download print Buttons will now be blue at first and grey once the button was clicked.
+
+---
+
+## v2.22.2 - 2022-06-15
+
+### Fixed
+- Addons: Fixed tool Commuter flows.
+
+---
+
+## v2.22.1 - 2202-06-08
+### Fixed
+- The light grey color in Search and transparency are now dark
+- Issue #790: Resolve import of isObject util failed was fixed.
 
 ---
 
