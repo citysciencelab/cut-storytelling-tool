@@ -258,6 +258,7 @@ export default {
                     :on-row-click-callback="setShowResultList.bind(this, false)"
                     :max-zoom="zoomLevel"
                     :results-per-page="resultsPerPage"
+                    :multi-select="multiSelect"
                 />
             </template>
             <template v-else>

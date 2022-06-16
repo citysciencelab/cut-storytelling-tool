@@ -53,6 +53,8 @@ describe("src/share-components/list/components/ListItem.vue", () => {
         sinon.stub(Radio, "trigger").callsFake(trigger);
     });
 
+    afterEach(sinon.restore);
+
     it("should zoom to extent of a given feature", async () => {
         const wrapper = shallowMount(ListItem, {
                 store,
@@ -62,9 +64,63 @@ describe("src/share-components/list/components/ListItem.vue", () => {
             feature = new Feature();
 
         feature.setGeometry(new Point([583805.011, 5923760.691]));
-        wrapper.vm.setCenter(feature);
+        wrapper.vm.setCenter([feature]);
 
         expect(trigger.calledOnce).to.be.true;
-        expect(trigger.firstCall.args).to.eql(["Map", "zoomToExtent", {extent: feature.getGeometry(), options: {maxZoom: 5}}]);
+        expect(trigger.firstCall.args).to.eql([
+            "Map",
+            "zoomToExtent",
+            {
+                extent: [583805.011, 5923760.691, 583805.011, 5923760.691],
+                options: {
+                    maxZoom: 5,
+                    padding: [
+                        5,
+                        5,
+                        5,
+                        5
+                    ]
+                }
+            }
+        ]);
+    });
+
+    it("should zoom to combined extent of given features in multiSelect mode", async () => {
+        const wrapper = shallowMount(ListItem, {
+                store,
+                propsData: props,
+                localVue
+            }),
+            featureOne = new Feature(),
+            featureTwo = new Feature(),
+            coordsOne = [583805.011, 5923760.691],
+            coordsTwo = [683804.011, 6923761.691];
+
+        featureOne.setGeometry(new Point(coordsOne));
+        featureTwo.setGeometry(new Point(coordsTwo));
+        wrapper.vm.setCenter([featureOne, featureTwo]);
+
+        expect(trigger.calledOnce).to.be.true;
+        expect(trigger.firstCall.args).to.eql([
+            "Map",
+            "zoomToExtent",
+            {
+                extent: [
+                    583805.011,
+                    5923760.691,
+                    683804.011,
+                    6923761.691
+                ],
+                options: {
+                    maxZoom: 5,
+                    padding: [
+                        5,
+                        5,
+                        5,
+                        5
+                    ]
+                }
+            }
+        ]);
     });
 });

@@ -15,6 +15,7 @@
 - FilterModule:
     - A new attribute clearAll for clearing all the filtered results after clicking button "Reset All"
 - api/highlightFeaturesByAttribute URL mechanism to query WFS data by parameters and configuration
+- WfsSearch: A `multiSelect` mode has been added where multiple search results can be selected and viewn on the map.
 
 ### Changed
 

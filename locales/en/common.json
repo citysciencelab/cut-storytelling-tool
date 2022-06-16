@@ -1156,7 +1156,9 @@
               "No": "no"
             },
             "zoomToResult": "Zoom to result",
-            "pagination": "Pagination"
+            "zoomToResults": "Zoom to selection",
+            "pagination": "Pagination",
+            "selection": "Row selection"
         }
     }
 }
