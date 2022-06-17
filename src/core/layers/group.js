@@ -129,24 +129,22 @@ GroupedLayers.prototype.showLayerInformation = function () {
     this.get("children").forEach(layer => {
         let cswUrl = null,
             showDocUrl = null,
-            layerMetaId = null,
-            layerName = null;
+            layerMetaId = null;
 
         if (layer.datasets && Array.isArray(layer.datasets) && layer.datasets[0] !== null && typeof layer.datasets[0] === "object") {
             cswUrl = Object.prototype.hasOwnProperty.call(layer.datasets[0], "csw_url") ? layer.datasets[0].csw_url : null;
             showDocUrl = Object.prototype.hasOwnProperty.call(layer.datasets[0], "show_doc_url") ? layer.datasets[0].show_doc_url : null;
             layerMetaId = Object.prototype.hasOwnProperty.call(layer.datasets[0], "md_id") ? layer.datasets[0].md_id : null;
-            layerName = layer.name;
         }
 
         metaID.push(layerMetaId);
         cswUrls.push(cswUrl);
         showDocUrls.push(showDocUrl);
-        layerNames.push(layerName);
+        layerNames.push(layer.name || null);
 
         const layerInfo = {
             "metaID": layerMetaId,
-            "layerName": layerName,
+            "layerName": layer.name || null,
             "cswUrl": cswUrl
         };
 
