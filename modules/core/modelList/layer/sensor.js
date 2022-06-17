@@ -129,6 +129,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         const state = this.getLayerState(this.get("isOutOfRange"), this.get("isSelected"), this.get("isSubscribed"));
 
         if (state === true) {
+            this.createLegend();
             this.startsSubscription(this.get("layer").getSource().getFeatures());
         }
         else if (state === false) {
@@ -146,12 +147,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         if (!this.get("loadThingsOnlyInCurrentExtent") && Array.isArray(features) && !features.length) {
             this.initializeConnection(function () {
                 this.updateSubscription();
-                this.setMoveendListener(store.dispatch("Maps/registerListener", {event: "moveend", callback: this.updateSubscription.bind(this)}));
+                this.setMoveendListener(store.dispatch("Maps/registerListener", {type: "moveend", listener: this.updateSubscription.bind(this)}));
             }.bind(this));
         }
         else {
             this.updateSubscription();
-            this.setMoveendListener(store.dispatch("Maps/registerListener", {event: "moveend", callback: this.updateSubscription.bind(this)}));
+            this.setMoveendListener(store.dispatch("Maps/registerListener", {type: "moveend", listener: this.updateSubscription.bind(this)}));
         }
     },
 
@@ -167,7 +168,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             client = this.get("mqttClient");
 
         this.setIsSubscribed(false);
-        store.dispatch("Maps/unregisterListener", {event: "moveend", callback: this.updateSubscription.bind(this)});
+        store.dispatch("Maps/unregisterListener", {type: "moveend", listener: this.updateSubscription.bind(this)});
         this.setMoveendListener(null);
         this.unsubscribeFromSensorThings(datastreamIds, subscriptionTopics, version, isSelected, client);
     },
@@ -219,7 +220,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             "change:isVisibleInMap": this.toggleSubscriptionsOnMapChanges,
             "change:isOutOfRange": this.toggleSubscriptionsOnMapChanges
         });
-        this.createLegend();
     },
 
     /**
