@@ -72,10 +72,12 @@ export default {
     methods: {
         ...mapActions("MapMarker", ["placingPointMarker"]),
         /**
-         * @param {Number} index index to toggle in selection set
+         * @param {String[]} data to toggle in selection set
          * @returns {void}
          */
-        toggleSelection (index) {
+        toggleSelection (data) {
+            const index = this.tableData.findIndex(entry => entry === data);
+
             this.lastInteractedIndex = index;
             if (this.selected.has(index)) {
                 const setWithoutIndex = new Set(this.selected);
@@ -88,6 +90,15 @@ export default {
             }
         },
         /**
+         * @param {Object} data to check whether it is selected
+         * @returns {Boolean} whether data is selected
+         */
+        isSelected (data) {
+            const index = this.tableData.findIndex(entry => entry === data);
+
+            return this.selected.has(index);
+        },
+        /**
          * Executes row click effects. When multiSelect is on, windows-like file
          * selection behaviour is available; that is, holding STRG will toggle a
          * file selection, shift will select a range from the last interacted
@@ -98,7 +109,7 @@ export default {
          */
         onRowClick (data, event) {
             if (this.multiSelect) {
-                const index = this.tableData.findIndex(e => e === data);
+                const index = this.tableData.findIndex(entry => entry === data);
 
                 if (event.ctrlKey) {
                     this.toggleSelection(index);
@@ -124,6 +135,11 @@ export default {
                 this.zoomToResult(data);
             }
         },
+        /**
+         * Either zooms to given data object or to all selected data objects.
+         * @param {String[]} [data] list entry to zoom to
+         * @returns {void}
+         */
         zoomToResult (data) {
             const zoomData = data
                 ? [data]
@@ -212,7 +228,7 @@ export default {
                 <tr
                     v-for="(data, i) in visibleTableData"
                     :key="data + i"
-                    :class="selected.has(i) ? 'bg-primary text-light' : ''"
+                    :class="isSelected(data) ? 'bg-primary text-light' : ''"
                     @click="onRowClick(data, $event)"
                 >
                     <td
@@ -224,8 +240,8 @@ export default {
                                 :aria-label="$t('common:share-components.list.selection')"
                                 type="checkbox"
                                 value=""
-                                :checked="selected.has(i)"
-                                @click.stop="toggleSelection(i, $event)"
+                                :checked="isSelected(data)"
+                                @click.stop="toggleSelection(data, $event)"
                             >
                         </div>
                     </td>
@@ -276,16 +292,25 @@ export default {
         <nav
             v-if="pageCount > 1"
             :aria-label="$t('common:share-components.list.pagination')"
+            class="mt-2"
         >
-            <ul class="pagination">
+            <ul class="pagination justify-content-center flex-wrap">
                 <li
                     v-for="(_, index) of Array.from({length: pageCount})"
                     :key="index"
-                    class="page-item"
+                    :class="{
+                        'page-item': true,
+                        'active': visiblePage === index
+                    }"
                     @click="setVisiblePage(index)"
                     @keyup.space.stop="setVisiblePage(index)"
                 >
-                    <a href="#">{{ index + 1 }}</a>
+                    <a
+                        class="page-link"
+                        href="#"
+                    >
+                        {{ index + 1 }}
+                    </a>
                 </li>
             </ul>
         </nav>
