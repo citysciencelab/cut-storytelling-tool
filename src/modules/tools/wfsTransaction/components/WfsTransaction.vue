@@ -123,8 +123,7 @@ export default {
         layerChanged (index) {
             this.setCurrentLayerIndex(index);
             this.setFeatureProperties();
-            this.setSelectedInteraction(null);
-            // TODO(roehlipa): If formular open, deactivate it and remove all stuff from map (should also happen on close, save and discard)
+            this.reset();
         },
         getInputType (type) {
             if (type === "string") {
