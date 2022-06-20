@@ -27,7 +27,7 @@
 ul#tree {
     border: none;
     font-family: $font_family_accent;
-    padding: 0 0;
+    padding: 0;
     min-width: 380px;
 
     &.fixed {
@@ -57,7 +57,7 @@ ul#tree {
     }
     ul {
         list-style: none;
-        padding: 0 0 0 0;
+        padding: 0;
         -webkit-padding-start: 0;
         overflow-y: auto;
         overflow-x: auto;
